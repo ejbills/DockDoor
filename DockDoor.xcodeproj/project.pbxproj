@@ -14,6 +14,9 @@
 		BB157B792C0E330100997315 /* WindowUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB157B782C0E330100997315 /* WindowUtil.swift */; };
 		BB157B7B2C0E343000997315 /* SystemPreferencesHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB157B7A2C0E343000997315 /* SystemPreferencesHelper.swift */; };
 		BB157B802C0E8E6700997315 /* MessageUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB157B7F2C0E8E6700997315 /* MessageUtil.swift */; };
+		BB157B822C0EB29E00997315 /* DockObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB157B812C0EB29E00997315 /* DockObserver.swift */; };
+		BB157B842C0EC39D00997315 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB157B832C0EC39D00997315 /* AppDelegate.swift */; };
+		BB2567C62C10C5F000C0C93E /* DockUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2567C52C10C5F000C0C93E /* DockUtils.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +29,9 @@
 		BB157B782C0E330100997315 /* WindowUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowUtil.swift; sourceTree = "<group>"; };
 		BB157B7A2C0E343000997315 /* SystemPreferencesHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemPreferencesHelper.swift; sourceTree = "<group>"; };
 		BB157B7F2C0E8E6700997315 /* MessageUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageUtil.swift; sourceTree = "<group>"; };
+		BB157B812C0EB29E00997315 /* DockObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockObserver.swift; sourceTree = "<group>"; };
+		BB157B832C0EC39D00997315 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		BB2567C52C10C5F000C0C93E /* DockUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DockUtils.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -42,6 +48,7 @@
 		BB157B5C2C0E31CE00997315 = {
 			isa = PBXGroup;
 			children = (
+				BB157B832C0EC39D00997315 /* AppDelegate.swift */,
 				BB157B672C0E31CE00997315 /* DockDoor */,
 				BB157B662C0E31CE00997315 /* Products */,
 			);
@@ -79,9 +86,11 @@
 		BB157B772C0E32EF00997315 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				BB2567C52C10C5F000C0C93E /* DockUtils.swift */,
 				BB157B782C0E330100997315 /* WindowUtil.swift */,
 				BB157B7A2C0E343000997315 /* SystemPreferencesHelper.swift */,
 				BB157B7F2C0E8E6700997315 /* MessageUtil.swift */,
+				BB157B812C0EB29E00997315 /* DockObserver.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -102,6 +111,8 @@
 			dependencies = (
 			);
 			name = DockDoor;
+			packageProductDependencies = (
+			);
 			productName = DockDoor;
 			productReference = BB157B652C0E31CE00997315 /* DockDoor.app */;
 			productType = "com.apple.product-type.application";
@@ -130,6 +141,8 @@
 				Base,
 			);
 			mainGroup = BB157B5C2C0E31CE00997315;
+			packageReferences = (
+			);
 			productRefGroup = BB157B662C0E31CE00997315 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -158,7 +171,10 @@
 			files = (
 				BB157B6B2C0E31CE00997315 /* ContentView.swift in Sources */,
 				BB157B802C0E8E6700997315 /* MessageUtil.swift in Sources */,
+				BB157B822C0EB29E00997315 /* DockObserver.swift in Sources */,
 				BB157B692C0E31CE00997315 /* DockDoorApp.swift in Sources */,
+				BB2567C62C10C5F000C0C93E /* DockUtils.swift in Sources */,
+				BB157B842C0EC39D00997315 /* AppDelegate.swift in Sources */,
 				BB157B792C0E330100997315 /* WindowUtil.swift in Sources */,
 				BB157B7B2C0E343000997315 /* SystemPreferencesHelper.swift in Sources */,
 			);
