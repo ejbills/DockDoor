@@ -15,49 +15,40 @@ enum DockPosition {
 
 class DockUtils {
     static let shared = DockUtils()
-
-    private init() {}
     
-    private func getDockDefaults() -> UserDefaults? {
-        if let defaults = UserDefaults(suiteName: "com.apple.dock") {
-            return defaults
-        }
-        
-        return nil
+    private let dockDefaults: UserDefaults? // Store a single instance
+
+    private init() {
+        dockDefaults = UserDefaults(suiteName: "com.apple.dock")
+    }
+
+    private func tileSize() -> CGFloat {
+        return dockDefaults?.object(forKey: "tilesize") as? CGFloat ?? 0
     }
     
-    private func tileSize() -> CGFloat {
-        guard let defaults = getDockDefaults(), let tileSize = defaults.object(forKey: "tilesize") as? CGFloat else {
-            return 0
-        }
-        
-        return tileSize
+    func isMagnificationEnabled() -> Bool {
+        return dockDefaults?.bool(forKey: "magnification") ?? false
     }
     
     func countIcons() -> (Int, Int) {
-        guard let defaults = getDockDefaults() else { return (0, 0) }
-        let persistentAppsCount = defaults.array(forKey: "persistent-apps")?.count ?? 0
-        let recentAppsCount = defaults.array(forKey: "recent-apps")?.count ?? 0
+        let persistentAppsCount = dockDefaults?.array(forKey: "persistent-apps")?.count ?? 0
+        let recentAppsCount = dockDefaults?.array(forKey: "recent-apps")?.count ?? 0
         return (persistentAppsCount + recentAppsCount, (persistentAppsCount > 0 && recentAppsCount > 0) ? 1 : 0)
     }
 
     func calculateDockWidth() -> CGFloat {
         let countIcons = countIcons()
-        
         let iconCount = countIcons.0
         let numberOfDividers = countIcons.1
         let tileSize = tileSize()
-        
+
         let baseWidth = tileSize * CGFloat(iconCount)
-        
-        // Estimate the width of dividers
         let dividerWidth: CGFloat = 10.0
         let totalDividerWidth = CGFloat(numberOfDividers) * dividerWidth
 
-        // Consider magnification only if enabled
-        if let defaults = getDockDefaults(), defaults.bool(forKey: "magnification"),
-           let largeSize = defaults.object(forKey: "largesize") as? CGFloat {
-            let extraWidth = (largeSize - tileSize) * CGFloat(iconCount) * 0.5 // Assume half of the icons might be magnified at any time
+        if self.isMagnificationEnabled(),
+           let largeSize = dockDefaults?.object(forKey: "largesize") as? CGFloat {
+            let extraWidth = (largeSize - tileSize) * CGFloat(iconCount) * 0.5
             return baseWidth + extraWidth + totalDividerWidth
         }
         
@@ -65,30 +56,18 @@ class DockUtils {
     }
 
     func calculateDockHeight() -> CGFloat {
-        guard let screen = NSScreen.main else { return 0 }
-        let dockPosition = getDockPosition()
-
-        switch dockPosition {
-        case .right, .left:
-            // Subtracting the visible width from the total width to get the thickness of the dock
-            let dockThickness = abs(screen.frame.width - screen.visibleFrame.width)
-            return dockThickness
-        case .bottom:
-            // Subtracting the visible height from the total height to get the height of the dock
-            let statusBarHeight = NSStatusBar.system.thickness // Consider status bar height if it might affect calculation
-            let dockHeight = abs(screen.frame.height - screen.visibleFrame.height) - statusBarHeight
-            return dockHeight
-        case .unknown:
-            return 0
-        }
+        return dockDefaults?.double(forKey: "tilesize") ?? 0
     }
-    
+
     func getDockPosition() -> DockPosition {
-        guard let screen = NSScreen.main else { return .bottom }
-        if screen.visibleFrame.origin.y == 0 {
-            return screen.visibleFrame.origin.x == 0 ? .right : .left
-        } else {
-            return .bottom
+        guard let orientation = dockDefaults?.string(forKey: "orientation")?.lowercased() else {
+            return .unknown
+        }
+        switch orientation {
+        case "left":   return .left
+        case "bottom": return .bottom
+        case "right":  return .right
+        default:       return .unknown
         }
     }
 }

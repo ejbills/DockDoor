@@ -7,22 +7,21 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		BB157B692C0E31CE00997315 /* DockDoorApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB157B682C0E31CE00997315 /* DockDoorApp.swift */; };
-		BB157B6B2C0E31CE00997315 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB157B6A2C0E31CE00997315 /* ContentView.swift */; };
 		BB157B6D2C0E31CF00997315 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BB157B6C2C0E31CF00997315 /* Assets.xcassets */; };
 		BB157B702C0E31CF00997315 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BB157B6F2C0E31CF00997315 /* Preview Assets.xcassets */; };
 		BB157B792C0E330100997315 /* WindowUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB157B782C0E330100997315 /* WindowUtil.swift */; };
 		BB157B7B2C0E343000997315 /* SystemPreferencesHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB157B7A2C0E343000997315 /* SystemPreferencesHelper.swift */; };
 		BB157B802C0E8E6700997315 /* MessageUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB157B7F2C0E8E6700997315 /* MessageUtil.swift */; };
 		BB157B822C0EB29E00997315 /* DockObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB157B812C0EB29E00997315 /* DockObserver.swift */; };
-		BB157B842C0EC39D00997315 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB157B832C0EC39D00997315 /* AppDelegate.swift */; };
 		BB2567C62C10C5F000C0C93E /* DockUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2567C52C10C5F000C0C93E /* DockUtils.swift */; };
+		BBA153F62C115DDA00119C02 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA153F52C115DDA00119C02 /* AppDelegate.swift */; };
+		BBA153F82C11604400119C02 /* HoverWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA153F72C11604400119C02 /* HoverWindow.swift */; };
+		BBA153FA2C11FFD500119C02 /* consts.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA153F92C11FFD500119C02 /* consts.swift */; };
+		BBA153FC2C12356100119C02 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA153FB2C12356100119C02 /* main.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		BB157B652C0E31CE00997315 /* DockDoor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DockDoor.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		BB157B682C0E31CE00997315 /* DockDoorApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockDoorApp.swift; sourceTree = "<group>"; };
-		BB157B6A2C0E31CE00997315 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		BB157B6C2C0E31CF00997315 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BB157B6F2C0E31CF00997315 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		BB157B712C0E31CF00997315 /* DockDoor.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DockDoor.entitlements; sourceTree = "<group>"; };
@@ -30,8 +29,11 @@
 		BB157B7A2C0E343000997315 /* SystemPreferencesHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemPreferencesHelper.swift; sourceTree = "<group>"; };
 		BB157B7F2C0E8E6700997315 /* MessageUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageUtil.swift; sourceTree = "<group>"; };
 		BB157B812C0EB29E00997315 /* DockObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockObserver.swift; sourceTree = "<group>"; };
-		BB157B832C0EC39D00997315 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BB2567C52C10C5F000C0C93E /* DockUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DockUtils.swift; sourceTree = "<group>"; };
+		BBA153F52C115DDA00119C02 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		BBA153F72C11604400119C02 /* HoverWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoverWindow.swift; sourceTree = "<group>"; };
+		BBA153F92C11FFD500119C02 /* consts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = consts.swift; sourceTree = "<group>"; };
+		BBA153FB2C12356100119C02 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -48,7 +50,6 @@
 		BB157B5C2C0E31CE00997315 = {
 			isa = PBXGroup;
 			children = (
-				BB157B832C0EC39D00997315 /* AppDelegate.swift */,
 				BB157B672C0E31CE00997315 /* DockDoor */,
 				BB157B662C0E31CE00997315 /* Products */,
 			);
@@ -65,9 +66,11 @@
 		BB157B672C0E31CE00997315 /* DockDoor */ = {
 			isa = PBXGroup;
 			children = (
+				BBA153F92C11FFD500119C02 /* consts.swift */,
+				BBA153FB2C12356100119C02 /* main.swift */,
+				BBA153F52C115DDA00119C02 /* AppDelegate.swift */,
+				BBA153FD2C12358600119C02 /* Views */,
 				BB157B772C0E32EF00997315 /* Utilities */,
-				BB157B682C0E31CE00997315 /* DockDoorApp.swift */,
-				BB157B6A2C0E31CE00997315 /* ContentView.swift */,
 				BB157B6C2C0E31CF00997315 /* Assets.xcassets */,
 				BB157B712C0E31CF00997315 /* DockDoor.entitlements */,
 				BB157B6E2C0E31CF00997315 /* Preview Content */,
@@ -93,6 +96,14 @@
 				BB157B812C0EB29E00997315 /* DockObserver.swift */,
 			);
 			path = Utilities;
+			sourceTree = "<group>";
+		};
+		BBA153FD2C12358600119C02 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				BBA153F72C11604400119C02 /* HoverWindow.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -169,12 +180,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BB157B6B2C0E31CE00997315 /* ContentView.swift in Sources */,
 				BB157B802C0E8E6700997315 /* MessageUtil.swift in Sources */,
 				BB157B822C0EB29E00997315 /* DockObserver.swift in Sources */,
-				BB157B692C0E31CE00997315 /* DockDoorApp.swift in Sources */,
+				BBA153FA2C11FFD500119C02 /* consts.swift in Sources */,
+				BBA153F62C115DDA00119C02 /* AppDelegate.swift in Sources */,
+				BBA153F82C11604400119C02 /* HoverWindow.swift in Sources */,
+				BBA153FC2C12356100119C02 /* main.swift in Sources */,
 				BB2567C62C10C5F000C0C93E /* DockUtils.swift in Sources */,
-				BB157B842C0EC39D00997315 /* AppDelegate.swift in Sources */,
 				BB157B792C0E330100997315 /* WindowUtil.swift in Sources */,
 				BB157B7B2C0E343000997315 /* SystemPreferencesHelper.swift in Sources */,
 			);

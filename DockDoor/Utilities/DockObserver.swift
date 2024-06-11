@@ -7,41 +7,164 @@
 import Cocoa
 import ApplicationServices
 
-class DockObserver: NSView {
+class DockObserver {
     private var dockIcons: [AXUIElement] = []
     private var iconFrames: [AXUIElement: CGRect] = [:]
     private var iconNames: [AXUIElement: String] = [:]
-    private var dockTrackingMonitor: Any?
+    private var hoverWindow: HoverWindow?
+    private var lastAppName: String?
+    private var lastMouseLocation: CGPoint = .zero
+    private let mouseMoveThreshold: CGFloat = 1.0
+    private var timer: Timer?
+    private var eventTap: CFMachPort?
+    private var activeAppMonitor: Any?
+    private var refreshInterval: TimeInterval = 3
     
-    override init(frame frameRect: NSRect) {
-        super.init(frame: frameRect)
-        setupDockObserver()
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        setupDockObserver()
-    }
-    
-    private func setupDockObserver() {
-        // Initially fetch icons for active applications in the Dock
+    init() {
+        setupEventTap()
+        monitorActiveApp()
+        setupDockRefreshTimer()
         refreshDockIcons()
-        
-        // Add global monitor for mouse movements
-        dockTrackingMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.mouseMoved, .mouseEntered, .mouseExited]) { [weak self] event in
-            self?.handleMouseEvent(event)
+    }
+    
+    private func setupEventTap() {
+        func eventTapCallback(proxy: CGEventTapProxy, type: CGEventType, event: CGEvent, refcon: UnsafeMutableRawPointer?) -> Unmanaged<CGEvent>? {
+            let observer = Unmanaged<DockObserver>.fromOpaque(refcon!).takeUnretainedValue()
+            
+            if type == .mouseMoved {
+                let mouseLocation = event.unflippedLocation
+                observer.handleMouseEvent(mouseLocation: mouseLocation)
+            }
+            
+            return Unmanaged.passRetained(event)
         }
         
-        print("Global mouse event monitor set up")
+        eventTap = CGEvent.tapCreate(
+            tap: .cghidEventTap,
+            place: .headInsertEventTap,
+            options: .defaultTap,
+            eventsOfInterest: CGEventMask((1 << CGEventType.mouseMoved.rawValue)),
+            callback: eventTapCallback,
+            userInfo: Unmanaged.passUnretained(self).toOpaque()
+        )
         
-        // Observe application notifications for add/remove
-        let notificationCenter = NSWorkspace.shared.notificationCenter
-        notificationCenter.addObserver(self, selector: #selector(applicationDidChange(_:)), name: NSWorkspace.didLaunchApplicationNotification, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(applicationDidChange(_:)), name: NSWorkspace.didTerminateApplicationNotification, object: nil)
+        if let eventTap = eventTap {
+            let runLoopSource = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, eventTap, 0)
+            CFRunLoopAddSource(CFRunLoopGetCurrent(), runLoopSource, CFRunLoopMode.commonModes)
+            CGEvent.tapEnable(tap: eventTap, enable: true)
+        } else {
+            print("Failed to create CGEvent tap.")
+        }
+    }
+    
+    private func monitorActiveApp() {
+        activeAppMonitor = NSWorkspace.shared.notificationCenter.addObserver(
+            forName: NSWorkspace.didActivateApplicationNotification,
+            object: nil,
+            queue: nil
+        ) { [weak self] _ in
+            if NSRunningApplication.current.bundleIdentifier == Bundle.main.bundleIdentifier {
+                self?.handleAppActivated()
+            }
+        }
+    }
+    
+    private func handleAppActivated() {
+        if let eventTap = eventTap {
+            CGEvent.tapEnable(tap: eventTap, enable: true)
+        }
+    }
+    
+    @objc private func handleMouseEvent(mouseLocation: CGPoint) {
+        let magnificationEnabled = DockUtils.shared.isMagnificationEnabled()
+        var hoveredOverIcon = false
+
+        for (appElement, frame) in iconFrames {
+            let adjustedFrame = adjustFrame(frame, magnificationEnabled: magnificationEnabled)
+            
+            if adjustedFrame.contains(mouseLocation) {
+                if let appName = iconNames[appElement], appName != lastAppName {
+                    lastAppName = appName
+                    hoveredOverIcon = true
+                    
+                    Task {
+                        let activeWindows = await WindowUtil.activeWindows(for: appName)
+                        DispatchQueue.main.async {
+                            self.showHoverWindow(for: appName, windows: activeWindows, mouseLocation: mouseLocation)
+                        }
+                    }
+                } else if let appName = iconNames[appElement], appName == lastAppName {
+                    hoveredOverIcon = true
+                }
+                
+                break
+            }
+        }
+        
+        if !hoveredOverIcon, let hoverWindow = hoverWindow, !hoverWindow.frame.contains(mouseLocation) {
+            lastAppName = nil
+            hideHoverWindow()
+        }
+    }
+    
+    private func adjustFrame(_ frame: CGRect, magnificationEnabled: Bool) -> CGRect {
+        var adjustedFrame = frame
+        let expansionFactor: CGFloat = magnificationEnabled ? 1.5 : 1.0 // Adjust this factor as needed
+        adjustedFrame = adjustedFrame.insetBy(dx: -frame.width * (expansionFactor - 1.0) / 2, dy: -frame.height * (expansionFactor - 1.0) / 2)
+        return adjustedFrame
+    }
+
+    private func showHoverWindow(for appName: String, windows: [WindowInfo], mouseLocation: CGPoint) {
+        if hoverWindow == nil || hoverWindow?.appName != appName {
+            hideHoverWindow()
+            hoverWindow = HoverWindow(appName: appName, windows: windows, onWindowTap: { self.hideHoverWindow() })
+            
+            guard let hoverWindow = hoverWindow else { return }
+            guard let screen = NSScreen.main else { return }
+            
+            let screenFrame = screen.frame
+            let hoverWindowSize = hoverWindow.frame.size
+            hoverWindow.level = .floating
+            
+            let dockPosition = DockUtils.shared.getDockPosition()
+            var newOrigin: CGPoint = mouseLocation
+            let dockHeight = DockUtils.shared.calculateDockHeight()
+            
+            switch dockPosition {
+            case .bottom:
+                newOrigin.x = mouseLocation.x - hoverWindowSize.width / 2
+                newOrigin.y = dockHeight * 2
+                hoverWindow.setFrameOrigin(newOrigin)
+            case .left:
+                newOrigin.x = dockHeight / 2
+                newOrigin.y = mouseLocation.y - hoverWindowSize.height / 2
+                hoverWindow.setFrameOrigin(newOrigin)
+            case .right:
+                newOrigin.x = screenFrame.maxX - roughWidthCap - (dockHeight / 1.5)
+                newOrigin.y = mouseLocation.y - hoverWindowSize.height / 2
+                hoverWindow.setFrameOrigin(newOrigin)
+            case .unknown:
+                newOrigin = mouseLocation
+                hoverWindow.setFrameOrigin(newOrigin)
+            }
+            
+            hoverWindow.setFrameOrigin(newOrigin)
+            hoverWindow.makeKeyAndOrderFront(nil)
+        }
+    }
+    
+    private func hideHoverWindow() {
+        hoverWindow?.orderOut(nil)
+        hoverWindow = nil
+    }
+
+    private func setupDockRefreshTimer() {
+        self.timer = Timer.scheduledTimer(withTimeInterval: refreshInterval, repeats: true, block: { _ in
+            self.refreshDockIcons()
+        })
     }
     
     @objc private func applicationDidChange(_ notification: Notification) {
-        // Refresh the dock icons when applications are launched or terminated
         refreshDockIcons()
     }
     
@@ -49,104 +172,99 @@ class DockObserver: NSView {
         dockIcons.removeAll()
         iconFrames.removeAll()
         iconNames.removeAll()
-
+        
         guard let dockApp = NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.dock").first else {
             print("Dock application not found.")
             return
         }
-
-        let runningApps = Set(NSWorkspace.shared.runningApplications.filter { $0.activationPolicy == .regular }.map { $0.processIdentifier })
         
         let dockAXUIElement = AXUIElementCreateApplication(dockApp.processIdentifier)
+        let dockPosition = DockUtils.shared.getDockPosition()
         
-        // Determine Dock position
-        let dockPosition = getDockPosition()
-
-        // Fetch children (i.e., the icons in the Dock)
         var children: CFArray?
         if AXUIElementCopyAttributeValues(dockAXUIElement, kAXChildrenAttribute as CFString, 0, 999, &children) == .success,
            let dockElements = children as? [AXUIElement] {
-            for element in dockElements {
-                processDockElement(element, dockPosition: dockPosition, runningApps: runningApps)
+            
+            Task {
+                await withTaskGroup(of: Void.self) { group in
+                    for element in dockElements {
+                        group.addTask {
+                            await self.processDockElement(element, dockPosition: dockPosition)
+                        }
+                    }
+                }
             }
-            print("Total number of dock icons: \(dockIcons.count)")
+            
+            print("processed dock icons")
         } else {
             print("Failed to get dock icons")
         }
     }
-
-    private func processDockElement(_ element: AXUIElement, dockPosition: DockPosition, runningApps: Set<pid_t>) {
+    
+    private func processDockElement(_ element: AXUIElement, dockPosition: DockPosition) async {
         var children: CFArray?
-
         if AXUIElementCopyAttributeValues(element, kAXChildrenAttribute as CFString, 0, 999, &children) == .success,
            let childElements = children as? [AXUIElement] {
-            print("Found child elements under current dock item: \(childElements.count)")
-            for child in childElements {
-                var roleValue: CFTypeRef?
-                var subroleValue: CFTypeRef?
-
-                let roleSuccess = AXUIElementCopyAttributeValue(child, kAXRoleAttribute as CFString, &roleValue)
-                let subroleSuccess = AXUIElementCopyAttributeValue(child, kAXSubroleAttribute as CFString, &subroleValue)
-
-                if roleSuccess == .success, subroleSuccess == .success,
-                   let role = roleValue as? String, role == kAXDockItemRole,
-                   let subrole = subroleValue as? String, subrole == kAXApplicationDockItemSubrole {
-
-                    var isRunningValue: CFTypeRef?
-                    let isRunningSuccess = AXUIElementCopyAttributeValue(child, kAXIsApplicationRunningAttribute as CFString, &isRunningValue)
-                    let isRunning = (isRunningValue as? Bool) == true
-
-                    print("Child Element Role: \(role), Subrole: \(subrole), Is Running Retrieval Success: \(isRunningSuccess), Is Running: \(isRunning)")
-
-                    if isRunningSuccess == .success, isRunning {
-                        // Only process elements that are actually running applications
-                        print("Processing child element as running application")
-                        processDockIcon(child, dockPosition: dockPosition)
+            await withTaskGroup(of: Void.self) { group in
+                for child in childElements {
+                    group.addTask {
+                        await self.processChildElement(child, dockPosition: dockPosition)
                     }
-                } else {
-                    print("Skipping child element with role: \(roleValue ?? "unknown role" as CFTypeRef), subrole: \(subroleValue ?? "unknown subrole" as CFTypeRef)")
                 }
             }
-        } else {
-            var roleValue: CFTypeRef?
-            var subroleValue: CFTypeRef?
-
-            let roleSuccess = AXUIElementCopyAttributeValue(element, kAXRoleAttribute as CFString, &roleValue)
-            let subroleSuccess = AXUIElementCopyAttributeValue(element, kAXSubroleAttribute as CFString, &subroleValue)
-
-            if roleSuccess == .success, subroleSuccess == .success,
-               let role = roleValue as? String, role == kAXDockItemRole,
-               let subrole = subroleValue as? String, subrole == kAXApplicationDockItemSubrole {
-
-                var isRunningValue: CFTypeRef?
-                let isRunningSuccess = AXUIElementCopyAttributeValue(element, kAXIsApplicationRunningAttribute as CFString, &isRunningValue)
-                let isRunning = (isRunningValue as? Bool) == true
-
-                print("Element Role: \(role), Subrole: \(subrole), Is Running Retrieval Success: \(isRunningSuccess), Is Running: \(isRunning)")
-
-                if isRunningSuccess == .success, isRunning {
-                    // Process the element as a running application icon
-                    print("Processing element as running application")
-                    processDockIcon(element, dockPosition: dockPosition)
-                }
-            } else {
-                print("Skipping element with role: \(roleValue ?? "unknown role" as CFTypeRef), subrole: \(subroleValue ?? "unknown subrole" as CFTypeRef)")
-            }
         }
-    }
-
-    private func processDockIcon(_ element: AXUIElement, dockPosition: DockPosition) {
-        if let frame = getFrame(of: element) {
-            let adjustedFrame = adjustFrame(frame, for: dockPosition)
-            dockIcons.append(element)
-            iconFrames[element] = adjustedFrame
-            if let name = getAppName(of: element) {
-                iconNames[element] = name
-            }
-        }
-        print("Updated dock icons for active applications.")
     }
     
+    private func processChildElement(_ child: AXUIElement, dockPosition: DockPosition) async {
+        var roleValue: CFTypeRef?
+        var subroleValue: CFTypeRef?
+        
+        let roleSuccess = AXUIElementCopyAttributeValue(child, kAXRoleAttribute as CFString, &roleValue)
+        let subroleSuccess = AXUIElementCopyAttributeValue(child, kAXSubroleAttribute as CFString, &subroleValue)
+        
+        if roleSuccess == .success, subroleSuccess == .success,
+           let role = roleValue as? String, role == kAXDockItemRole,
+           let subrole = subroleValue as? String, subrole == kAXApplicationDockItemSubrole {
+            
+            var isRunningValue: CFTypeRef?
+            let isRunningSuccess = AXUIElementCopyAttributeValue(child, kAXIsApplicationRunningAttribute as CFString, &isRunningValue)
+            let isRunning = (isRunningValue as? Bool) == true
+            
+            if isRunningSuccess == .success, isRunning {
+                await self.processDockIcon(child, dockPosition: dockPosition)
+            }
+        }
+    }
+    
+    private func processDockIcon(_ element: AXUIElement, dockPosition: DockPosition) async {
+        if let frame = getFrame(of: element) {
+            let adjustedFrame = adjustFrame(frame, dockPosition: dockPosition)
+            DispatchQueue.main.async {
+                self.dockIcons.append(element)
+                self.iconFrames[element] = adjustedFrame
+                if let name = self.getAppName(of: element) {
+                    self.iconNames[element] = name
+                }
+            }
+        }
+    }
+    
+    private func adjustFrame(_ frame: CGRect, dockPosition: DockPosition) -> CGRect {
+        var adjustedFrame = frame
+        
+        if dockPosition == .bottom {
+            if let mainScreen = NSScreen.screens.first {
+                adjustedFrame.origin.y = mainScreen.frame.height - frame.maxY
+            }
+        } else if dockPosition == .left || dockPosition == .right {
+            if let mainScreen = NSScreen.main {
+                adjustedFrame.origin.y = mainScreen.frame.height - frame.origin.y - frame.height
+            }
+        }
+        
+        return adjustedFrame
+    }
+
     private func getFrame(of element: AXUIElement) -> CGRect? {
         var position: CFTypeRef?
         var size: CFTypeRef?
@@ -162,52 +280,15 @@ class DockObserver: NSView {
                 AXValueGetValue(posValue as! AXValue, .cgPoint, &pos)
                 AXValueGetValue(sizeValueCF as! AXValue, .cgSize, &sizeValue)
                 
-                // Adjust position if negative (e.g., dock is hidden)
                 if pos.x < 0 || pos.y < 0 {
                     pos.x = max(pos.x, 0)
                     pos.y = max(pos.y, 0)
                 }
                 
-                // Debug Print for position and size
-                print("Element Position: \(pos), Size: \(sizeValue)")
-                
                 return CGRect(origin: pos, size: sizeValue)
             }
         }
         return nil
-    }
-    
-    private func adjustFrame(_ frame: CGRect, for dockPosition: DockPosition) -> CGRect {
-        var adjustedFrame = frame
-        
-        if dockPosition == .bottom {
-            if let mainScreen = NSScreen.screens.first {
-                let screenY = mainScreen.frame.minY
-                let screenHeight = mainScreen.frame.height
-                adjustedFrame.origin.y = screenHeight + screenY - frame.maxY
-            }
-        } else if dockPosition == .left || dockPosition == .right {
-            let mainScreenHeight = NSScreen.main?.frame.height ?? 0
-            adjustedFrame.origin.y = mainScreenHeight - frame.origin.y - frame.height
-        }
-        
-        return adjustedFrame
-    }
-    
-    private func getDockPosition() -> DockPosition {
-        let dockDefaults = UserDefaults(suiteName: "com.apple.dock")
-        let orientation = dockDefaults?.string(forKey: "orientation") ?? "bottom"
-        
-        switch orientation {
-        case "bottom":
-            return .bottom
-        case "left":
-            return .left
-        case "right":
-            return .right
-        default:
-            return .unknown
-        }
     }
     
     private func getAppName(of element: AXUIElement) -> String? {
@@ -220,30 +301,11 @@ class DockObserver: NSView {
         return nil
     }
     
-    // Handle mouse events to detect hover over dock icons
-    private func handleMouseEvent(_ event: NSEvent) {
-        let mouseLocation = NSEvent.mouseLocation
-        
-        var hoveredOverIcon = false
-        for (appElement, frame) in iconFrames {
-            if frame.contains(mouseLocation) {
-                if let appName = iconNames[appElement] {
-                    print("Hovered over: \(appName)")
-                    hoveredOverIcon = true
-                    break
-                }
-            }
-        }
-        
-        if !hoveredOverIcon {
-            print("Not hovering over any dock icon")
-        }
-    }
-    
     deinit {
         NotificationCenter.default.removeObserver(self)
-        if let monitor = dockTrackingMonitor {
-            NSEvent.removeMonitor(monitor)
+        if let eventTap = eventTap {
+            CGEvent.tapEnable(tap: eventTap, enable: false)
         }
+        timer?.invalidate()
     }
 }
