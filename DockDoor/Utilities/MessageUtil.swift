@@ -18,7 +18,7 @@ struct MessageUtil {
         let alert = NSAlert()
         alert.messageText = title
         alert.informativeText = message
-        alert.alertStyle = .warning // You can change the style as needed
+        alert.alertStyle = .warning
         alert.addButton(withTitle: "OK")
         alert.addButton(withTitle: "Cancel")
 
