@@ -99,7 +99,7 @@ class HoverWindow: NSWindow {
         
         // Center the window horizontally if the dock is at the bottom
         if dockPosition == .bottom {
-            hoverWindowOrigin.x -= hoverWindowSize.width / 2 - 25
+            hoverWindowOrigin.x -= hoverWindowSize.width / 2
         }
         
         // Ensure the window stays within screen bounds

@@ -97,8 +97,18 @@ class DockUtils {
     
     func getDockPosition() -> DockPosition {
         guard let orientation = dockDefaults?.string(forKey: "orientation")?.lowercased() else {
-            return .unknown
+            print("Dock location wasnt found, bailing to best guess method.")
+            if NSScreen.main!.visibleFrame.origin.y == 0 {
+                if NSScreen.main!.visibleFrame.origin.x == 0 {
+                    return .right
+                } else {
+                    return .left
+                }
+            } else {
+                return .bottom
+            }
         }
+        
         switch orientation {
         case "left":   return .left
         case "bottom": return .bottom
