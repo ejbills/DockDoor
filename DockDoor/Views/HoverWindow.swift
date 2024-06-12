@@ -136,9 +136,7 @@ struct HoverView: View {
 struct WindowPreview: View {
     let windowInfo: WindowInfo
     let onTap: (() -> Void)?
-    @State private var image: Image? = nil
-    @State private var imageSize: CGSize = .zero
-
+    
     var body: some View {
         VStack {
             if let cgImage = windowInfo.image {
@@ -157,11 +155,8 @@ struct WindowPreview: View {
             } else {
                 ProgressView()
                     .frame(width: 300, height: 200)  // Placeholder size
-//                    .onAppear {
-//                        loadWindowImage()
-//                    }
             }
-
+            
             if let name = windowInfo.windowName {
                 Text(name)
                     .padding(4)
@@ -170,27 +165,4 @@ struct WindowPreview: View {
         }
         .cornerRadius(5)
     }
-
-//    private func loadWindowImage() {
-//        Task {
-//            do {
-//                let cgImage = try await WindowUtil().captureWindowImage(windowInfo: windowInfo)
-//                print("Captured Image Size in WindowPreview: \(cgImage.width) x \(cgImage.height)")  // Debug print
-//                DispatchQueue.main.async {
-//                    image = Image(decorative: cgImage, scale: 1.0)
-//                    imageSize = CGSize(width: cgImage.width, height: cgImage.height)
-//                }
-//            } catch {
-//                print("Error capturing window image: \(error)")
-//            }
-//        }
-//    }
-
-//    private func updateWindowSize(_ size: CGSize) {
-//        DispatchQueue.main.async {
-//            if let window = NSApplication.shared.windows.first(where: { $0 is HoverWindow }) {
-//                window.setContentSize(size)
-//            }
-//        }
-//    }
 }
