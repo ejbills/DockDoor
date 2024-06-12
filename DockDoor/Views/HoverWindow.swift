@@ -61,6 +61,10 @@ class HoverWindow: NSWindow {
     // Calculate hover window's size and position based on content and mouse location
     private func updateContentViewSizeAndPosition(mouseLocation: CGPoint) {
         guard let contentView = contentView else { return }
+        guard !self.windows.isEmpty else {
+            hideWindow()
+            return
+        }
         
         // Update content view based on new data
         let hoverView = contentView as! NSHostingView<HoverView>
@@ -71,7 +75,7 @@ class HoverWindow: NSWindow {
         // Calculate hover window origin
         var hoverWindowOrigin = mouseLocation
         let screen = screenContainingPoint(mouseLocation)
-        let screenFrame = screenContainingPoint(mouseLocation)?.frame ?? .zero // Get the full screen area of the screen containing the mouse
+        let screenFrame = screen?.frame ?? .zero // Get the full screen area of the screen containing the mouse
         let dockPosition = DockUtils.shared.getDockPosition() // Get dock position
         let dockHeight = DockUtils.shared.calculateDockHeight(screen) // Get dock height
                 
