@@ -8,7 +8,6 @@ import Cocoa
 import ApplicationServices
 
 class DockObserver {
-    private var hoverWindow: HoverWindow?
     private var lastAppName: String?
     private var eventTap: CFMachPort?
     
@@ -55,66 +54,34 @@ class DockObserver {
     }
     
     @objc private func handleMouseEvent(mouseLocation: CGPoint) {
-        if let hoveredOverAppName = self.getDockIconAtLocation(mouseLocation) {
-            if hoveredOverAppName != lastAppName {
-                lastAppName = hoveredOverAppName
-                
-                Task {
-                    let activeWindows = await WindowUtil.activeWindows(for: hoveredOverAppName)
-                    DispatchQueue.main.async {
-                        self.showHoverWindow(for: hoveredOverAppName, windows: activeWindows, mouseLocation: mouseLocation)
+            if let hoveredOverAppName = self.getDockIconAtLocation(mouseLocation) {
+                if hoveredOverAppName != lastAppName {
+                    lastAppName = hoveredOverAppName
+                    
+                    Task {
+                        let activeWindows = await WindowUtil.activeWindows(for: hoveredOverAppName)
+                        
+                        DispatchQueue.main.async {
+                            // Show HoverWindow (using shared instance)
+                            HoverWindow.shared.showWindow(
+                                appName: hoveredOverAppName,
+                                windows: activeWindows,
+                                mouseLocation: mouseLocation,
+                                onWindowTap: { self.hideHoverWindow() } // Pass the hideWindow function
+                            )
+                        }
                     }
                 }
+            } else if HoverWindow.shared.frame.contains(mouseLocation) == false {
+                lastAppName = nil
+                hideHoverWindow()
             }
-        } else if let hoverWindow = hoverWindow, !hoverWindow.frame.contains(mouseLocation) {
-            lastAppName = nil
-            hideHoverWindow()
         }
-    }
-    
-    private func showHoverWindow(for appName: String, windows: [WindowInfo], mouseLocation: CGPoint) {
-        if hoverWindow == nil || hoverWindow?.appName != appName {
-            hideHoverWindow()
-            hoverWindow = HoverWindow(appName: appName, windows: windows, onWindowTap: { self.hideHoverWindow() })
-            
-            guard let hoverWindow = hoverWindow else { return }
-            guard let screen = NSScreen.main else { return }
-            
-            let screenFrame = screen.frame
-            let hoverWindowSize = hoverWindow.frame.size
-            hoverWindow.level = .floating
-            
-            let dockPosition = DockUtils.shared.getDockPosition()
-            var newOrigin: CGPoint = mouseLocation
-            let dockHeight = DockUtils.shared.calculateDockHeight()
-            
-            switch dockPosition {
-            case .bottom:
-                newOrigin.x = mouseLocation.x - hoverWindowSize.width / 2
-                newOrigin.y = dockHeight * 2
-                hoverWindow.setFrameOrigin(newOrigin)
-            case .left:
-                newOrigin.x = dockHeight / 2
-                newOrigin.y = mouseLocation.y - hoverWindowSize.height / 2
-                hoverWindow.setFrameOrigin(newOrigin)
-            case .right:
-                newOrigin.x = screenFrame.maxX - hoverWindowSize.width - (dockHeight / 1.5)
-                newOrigin.y = mouseLocation.y - hoverWindowSize.height / 2
-                hoverWindow.setFrameOrigin(newOrigin)
-            case .unknown:
-                newOrigin = mouseLocation
-                hoverWindow.setFrameOrigin(newOrigin)
-            }
-            
-            hoverWindow.setFrameOrigin(newOrigin)
-            hoverWindow.makeKeyAndOrderFront(nil)
-        }
-    }
     
     private func hideHoverWindow() {
-        hoverWindow?.orderOut(nil)
-        hoverWindow = nil
+        HoverWindow.shared.hideWindow() // Hide the shared HoverWindow
     }
+
     
     private func getDockIconAtLocation(_ mouseLocation: CGPoint) -> String? {
         guard let dockApp = NSWorkspace.shared.runningApplications.first(where: { $0.bundleIdentifier == "com.apple.dock" }) else {
@@ -197,3 +164,13 @@ class DockObserver {
     }
 }
 
+extension Sequence {
+    func asyncMap<T>(_ transform: @escaping (Element) async throws -> T) async rethrows -> [T] {
+        return try await withThrowingTaskGroup(of: T.self) { group in
+            for element in self {
+                group.addTask { try await transform(element) }
+            }
+            return try await group.reduce(into: []) { $0.append($1) }
+        }
+    }
+}

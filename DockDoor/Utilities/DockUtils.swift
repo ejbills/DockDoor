@@ -22,12 +22,12 @@ class DockUtils {
         dockDefaults = UserDefaults(suiteName: "com.apple.dock")
     }
     
-    private func tileSize() -> CGFloat {
-        return dockDefaults?.object(forKey: "tilesize") as? CGFloat ?? 0
-    }
-    
-    func isMagnificationEnabled() -> Bool {
-        return dockDefaults?.bool(forKey: "magnification") ?? false
+    func isDockHidingEnabled() -> Bool {
+        if let dockAutohide = dockDefaults?.bool(forKey: "autohide") {
+            return dockAutohide
+        }
+        
+        return false
     }
     
     func countIcons() -> (Int, Int) {
@@ -55,8 +55,44 @@ class DockUtils {
         return baseWidth + totalDividerWidth
     }
     
-    func calculateDockHeight() -> CGFloat {
+    private func tileSize() -> CGFloat {
         return dockDefaults?.double(forKey: "tilesize") ?? 0
+    }
+    
+    private func largeSize() -> CGFloat {
+        return dockDefaults?.double(forKey: "largesize") ?? 0
+    }
+    
+    func isMagnificationEnabled() -> Bool {
+        return dockDefaults?.bool(forKey: "magnification") ?? false
+    }
+    
+    func calculateDockHeight(_ forScreen: NSScreen?) -> CGFloat {
+        if self.isDockHidingEnabled() {
+            return abs(largeSize() - tileSize())
+        } else {
+            if let currentScreen = forScreen {
+                switch self.getDockPosition() {
+                case .right, .left:
+                    let size = abs(currentScreen.frame.width - currentScreen.visibleFrame.width)
+                    return size
+                case .bottom:
+                    let size = currentScreen.frame.height - currentScreen.visibleFrame.height - getStatusBarHeight(screen: currentScreen) - 1
+                    return size
+                default:
+                    break
+                }
+            }
+            return 0.0
+        }
+    }
+    
+    func getStatusBarHeight(screen: NSScreen?) -> CGFloat {
+        var statusBarHeight = 0.0
+        if let screen = screen {
+            statusBarHeight = screen.frame.height - screen.visibleFrame.height - (screen.visibleFrame.origin.y - screen.frame.origin.y) - 1
+        }
+        return statusBarHeight
     }
     
     func getDockPosition() -> DockPosition {
