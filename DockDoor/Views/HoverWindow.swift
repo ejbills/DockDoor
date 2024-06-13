@@ -160,6 +160,7 @@ struct WindowPreview: View {
                     .aspectRatio(aspectRatio, contentMode: .fit)
                     .frame(maxWidth: roughWidthCap, maxHeight: roughHeightCap)
                     .scaleEffect(isHovering ? 0.95 : 1.0)
+                    .shadow(radius: 4.0)
                     .overlay(
                         VStack {
                             if let name = windowInfo.windowName, !name.isEmpty {
