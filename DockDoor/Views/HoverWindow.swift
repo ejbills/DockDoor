@@ -155,41 +155,46 @@ struct WindowPreview: View {
                 let image = Image(decorative: cgImage, scale: 1.0)
                 let aspectRatio = CGFloat(cgImage.width) / CGFloat(cgImage.height)
                 
-                image
-                    .resizable()
-                    .aspectRatio(aspectRatio, contentMode: .fit)
-                    .frame(maxWidth: roughWidthCap, maxHeight: roughHeightCap)
-                    .scaleEffect(isHovering ? 0.95 : 1.0)
-                    .shadow(radius: 4.0)
-                    .overlay(
-                        VStack {
-                            if let name = windowInfo.windowName, !name.isEmpty {
-                                Text(name)
-                                    .padding(4)
-                                    .background(.ultraThinMaterial)
-                                    .foregroundColor(.white)
-                                    .cornerRadius(8)
-                                    .padding(8)
-                                    .lineLimit(1)
-                            }
-                        },
-                        alignment: .topTrailing
-                    )
-                    .padding()
+                ZStack {
+                    image
+                        .resizable()
+                        .aspectRatio(aspectRatio, contentMode: .fit)
+                        .frame(maxWidth: roughWidthCap, maxHeight: roughHeightCap)
+                        .scaleEffect(isHovering ? 0.95 : 1.0)
+                        .shadow(radius: 4.0)
+                        .overlay(
+                            VStack {
+                                if let name = windowInfo.windowName, !name.isEmpty {
+                                    Text(name)
+                                        .padding(4)
+                                        .background(.ultraThinMaterial)
+                                        .foregroundColor(.white)
+                                        .cornerRadius(8)
+                                        .padding(8)
+                                        .lineLimit(1)
+                                }
+                            },
+                            alignment: .topTrailing
+                        )
+                    
+                    if isHovering {
+                        AnimatedGradientOverlay()
+                            .clipShape(RoundedRectangle(cornerRadius: 16))
+                    }
+                }
+                .padding()
             } else {
                 ProgressView()
             }
         }
         .background(.thinMaterial)
         .cornerRadius(16)
-        .opacity(isHovering ? 0.75 : 1.0)
         .onHover { over in
-            withAnimation(.smooth) { isHovering = over }
+            withAnimation(.easeInOut) { isHovering = over }
         }
         .onTapGesture {
             WindowUtil.bringWindowToFront(windowInfo: windowInfo)
             onTap?()
         }
-        
     }
 }
