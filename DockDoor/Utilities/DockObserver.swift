@@ -8,11 +8,20 @@ import Cocoa
 import ApplicationServices
 
 class DockObserver {
+    static let shared = DockObserver()
+    
     private var lastAppName: String?
     private var eventTap: CFMachPort?
     
     init() {
         setupEventTap()
+    }
+    
+    deinit {
+        NSWorkspace.shared.notificationCenter.removeObserver(self)
+        if let eventTap = eventTap {
+            CGEvent.tapEnable(tap: eventTap, enable: false)
+        }
     }
     
     private func setupEventTap() {
@@ -155,12 +164,6 @@ class DockObserver {
         }
         
         return nil
-    }
-    
-    deinit {
-        if let eventTap = eventTap {
-            CGEvent.tapEnable(tap: eventTap, enable: false)
-        }
     }
 }
 

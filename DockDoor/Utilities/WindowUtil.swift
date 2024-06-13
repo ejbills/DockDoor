@@ -18,9 +18,9 @@ struct WindowInfo: Identifiable, Hashable {
 }
 
 struct WindowUtil {
-
+    
     private static var cachedShareableContent: SCShareableContent? = nil
-
+    
     // MARK: - Helper Functions
     
     private static func isDockApplication(pid: Int32) -> Bool {
@@ -37,19 +37,19 @@ struct WindowUtil {
                                     completion: { _ in SystemPreferencesHelper.openScreenRecordingPreferences() })
             throw NSError(domain: "com.dockdoor.permission", code: 2, userInfo: [NSLocalizedDescriptionKey: "Screen recording permission not granted"])
         }
-
+        
         let id = windowInfo.window.windowID
         let frame = windowInfo.window.frame
-
+        
         guard let image = CGWindowListCreateImage(frame, .optionIncludingWindow, id, [.boundsIgnoreFraming, .bestResolution]) else {
             throw NSError(domain: "com.dockdoor.error", code: 1, userInfo: [NSLocalizedDescriptionKey: "Failed to capture window image"])
         }
-
+        
         return image
     }
     
     // MARK: - Window Manipulation Functions
-
+    
     static func bringWindowToFront(windowInfo: WindowInfo) {
         guard let pid = windowInfo.window.owningApplication?.processID else {
             print("Debug: Failed to get PID from windowInfo")
@@ -65,7 +65,7 @@ struct WindowUtil {
             print("Error getting windows: \(result.rawValue)")
             return
         }
-
+        
         var foundWindow: AXUIElement?
         if let windows = windowList as? [AXUIElement] {
             for windowRef in windows {
@@ -77,13 +77,13 @@ struct WindowUtil {
                 }
             }
         }
-
+        
         if let windowRef = foundWindow {
             let raiseResult = AXUIElementPerformAction(windowRef, kAXRaiseAction as CFString)
             let focusResult = AXUIElementSetAttributeValue(windowRef, kAXFocusedAttribute as CFString, kCFBooleanTrue)
             let frontmostResult = AXUIElementSetAttributeValue(appRef, kAXFrontmostAttribute as CFString, kCFBooleanTrue)
             let activateResult = NSRunningApplication(processIdentifier: pid)?.activate()
-
+            
             if raiseResult == .success && focusResult == .success && frontmostResult == .success && activateResult == true {
                 print("Debug: Successfully raised, focused, and activated window")
             } else {
@@ -95,7 +95,7 @@ struct WindowUtil {
             NSRunningApplication(processIdentifier: pid)?.activate(options: [.activateAllWindows])
         }
     }
-
+    
     static func resetCache() {
         cachedShareableContent = nil
     }
@@ -110,7 +110,10 @@ struct WindowUtil {
         var windowInfos: [WindowInfo] = []
         
         for window in content.windows {
-            if let app = window.owningApplication, app.applicationName == applicationName {
+            // Check if the app name matches OR if applicationName is empty (which is used to get all active windows on device)
+            if let app = window.owningApplication,
+                applicationName.isEmpty || (app.applicationName.contains(applicationName) && !applicationName.isEmpty),
+               self.isDockApplication(pid: app.processID) {
                 var windowInfo = WindowInfo(
                     id: window.windowID,
                     window: window,

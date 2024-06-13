@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct AnimatedGradientOverlay: View {
-    @Binding var shouldDisplay: Bool
+    let shouldDisplay: Bool
     @State private var animate = false
     
     // Start with shuffled colors
