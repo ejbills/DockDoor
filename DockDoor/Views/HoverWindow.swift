@@ -34,14 +34,16 @@ class HoverWindow: NSWindow {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             
+            let previousWindowCount = self.windows.count
+            
             self.appName = appName
             self.windows = windows
             self.onWindowTap = onWindowTap
-            
+                        
             let hoverView = NSHostingView(rootView: HoverView(appName: appName, windows: windows, onWindowTap: onWindowTap))
             self.contentView = hoverView
-            
-            self.updateContentViewSizeAndPosition(mouseLocation: mouseLocation) // Recalculate size and position
+                        
+            self.updateContentViewSizeAndPosition(mouseLocation: mouseLocation, animated: previousWindowCount != 0) // Recalculate size and position with animation
             self.makeKeyAndOrderFront(nil)
         }
     }
@@ -50,6 +52,7 @@ class HoverWindow: NSWindow {
     func hideWindow() {
         DispatchQueue.main.async { [weak self] in
             self?.orderOut(nil)
+            self?.windows.removeAll()
         }
     }
     
@@ -59,7 +62,7 @@ class HoverWindow: NSWindow {
     }
     
     // Calculate hover window's size and position based on content and mouse location
-    private func updateContentViewSizeAndPosition(mouseLocation: CGPoint) {
+    private func updateContentViewSizeAndPosition(mouseLocation: CGPoint, animated: Bool) {
         guard let contentView = contentView else { return }
         guard !self.windows.isEmpty else {
             hideWindow()
@@ -110,8 +113,17 @@ class HoverWindow: NSWindow {
         hoverWindowOrigin.x = max(screenFrame.minX, min(hoverWindowOrigin.x, screenFrame.maxX - hoverWindowSize.width))
         hoverWindowOrigin.y = max(screenFrame.minY, min(hoverWindowOrigin.y, screenFrame.maxY - hoverWindowSize.height))
         
-        setFrameOrigin(hoverWindowOrigin)
-        setContentSize(hoverWindowSize)
+        let finalFrame = NSRect(origin: hoverWindowOrigin, size: hoverWindowSize)
+                
+        if animated {
+            NSAnimationContext.runAnimationGroup({ context in
+                context.duration = 0.2
+                context.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+                self.animator().setFrame(finalFrame, display: true, animate: true)
+            }, completionHandler: nil)
+        } else {
+            setFrame(finalFrame, display: true)
+        }
     }
     
     // Helper method to find the screen containing a given point
@@ -153,12 +165,11 @@ struct WindowPreview: View {
         VStack {
             if let cgImage = windowInfo.image {
                 let image = Image(decorative: cgImage, scale: 1.0)
-                let aspectRatio = CGFloat(cgImage.width) / CGFloat(cgImage.height)
                 
                 ZStack {
                     image
                         .resizable()
-                        .aspectRatio(aspectRatio, contentMode: .fit)
+                        .scaledToFit()
                         .frame(maxWidth: roughWidthCap, maxHeight: roughHeightCap)
                         .scaleEffect(isHovering ? 0.95 : 1.0)
                         .shadow(radius: 4.0)
@@ -167,7 +178,7 @@ struct WindowPreview: View {
                                 if let name = windowInfo.windowName, !name.isEmpty {
                                     Text(name)
                                         .padding(4)
-                                        .background(.ultraThinMaterial)
+                                        .background(.thickMaterial)
                                         .foregroundColor(.white)
                                         .cornerRadius(8)
                                         .padding(8)
@@ -177,10 +188,7 @@ struct WindowPreview: View {
                             alignment: .topTrailing
                         )
                     
-                    if isHovering {
-                        AnimatedGradientOverlay()
-                            .clipShape(RoundedRectangle(cornerRadius: 16))
-                    }
+                    AnimatedGradientOverlay(shouldDisplay: $isHovering)
                 }
                 .padding()
             } else {

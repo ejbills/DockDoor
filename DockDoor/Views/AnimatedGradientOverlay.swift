@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct AnimatedGradientOverlay: View {
+    @Binding var shouldDisplay: Bool
     @State private var animate = false
     
     // Start with shuffled colors
@@ -15,30 +16,33 @@ struct AnimatedGradientOverlay: View {
     @State private var angularColors: [Color] = [.red, .orange, .pink, .blue, .purple].shuffled()
 
     var body: some View {
-        ZStack {
-            // Linear Gradient
-            LinearGradient(gradient: Gradient(colors: linearColors),
-                           startPoint: animate ? .topLeading : .bottomTrailing,
-                           endPoint: animate ? .bottomTrailing : .topLeading)
-            .blendMode(.overlay)
-            .blur(radius: 50)
-            .animation(.linear(duration: 5.0).repeatForever(autoreverses: false), value: animate)
-
-            // Angular Gradient
-            AngularGradient(gradient: Gradient(colors: angularColors),
-                           center: .center,
-                           startAngle: .degrees(animate ? 0 : 360),
-                           endAngle: .degrees(animate ? 360 : 0))
-            .blendMode(.overlay)
-            .opacity(0.3)
-            .blur(radius: 50)
-            .animation(.linear(duration: 7.0).repeatForever(autoreverses: false), value: animate)
+        if shouldDisplay {
+            ZStack {
+                // Linear Gradient
+                LinearGradient(gradient: Gradient(colors: linearColors),
+                               startPoint: animate ? .topLeading : .bottomTrailing,
+                               endPoint: animate ? .bottomTrailing : .topLeading)
+                .blendMode(.overlay)
+                .blur(radius: 50)
+                .animation(.linear(duration: 5.0).repeatForever(autoreverses: false), value: animate)
+                
+                // Angular Gradient
+                AngularGradient(gradient: Gradient(colors: angularColors),
+                                center: .center,
+                                startAngle: .degrees(animate ? Double.random(in: -45...45) : Double.random(in: 300...360)),
+                                endAngle: .degrees(animate ? Double.random(in: 300...360) : Double.random(in: -45...45)))
+                .blendMode(.overlay)
+                .opacity(0.3)
+                .blur(radius: 50)
+                .animation(.linear(duration: 7.0).repeatForever(autoreverses: false), value: animate)
+            }
+            .onAppear {
+                self.animate = true
+                randomizeColors(delay: 5.0) // Initial delay
+            }
+            .opacity(0.15)
+            .clipShape(RoundedRectangle(cornerRadius: 16))
         }
-        .onAppear {
-            self.animate = true
-            randomizeColors(delay: 5.0) // Initial delay
-        }
-        .opacity(0.3)
     }
 
     private func randomizeColors(delay: TimeInterval) {
