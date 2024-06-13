@@ -13,7 +13,7 @@ struct AnimatedGradientOverlay: View {
     var body: some View {
         ZStack {
             LinearGradient(
-                gradient: Gradient(colors: [.purple, .blue, .green, .yellow, .red, .purple]),
+                gradient: Gradient(colors: [.purple, .blue, .green, .yellow, .red, .purple].shuffled()),
                 startPoint: animate ? .topLeading : .bottomTrailing,
                 endPoint: animate ? .bottomTrailing : .topLeading
             )
@@ -21,7 +21,7 @@ struct AnimatedGradientOverlay: View {
             .blur(radius: 50)
             
             AngularGradient(
-                gradient: Gradient(colors: [.red, .orange, .pink, .blue, .purple]),
+                gradient: Gradient(colors: [.red, .orange, .pink, .blue, .purple].shuffled()),
                 center: .center,
                 startAngle: .degrees(animate ? 0 : 360),
                 endAngle: .degrees(animate ? 360 : 0)
