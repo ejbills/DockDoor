@@ -304,7 +304,6 @@ struct WindowPreview: View {
             }
         }
         .onHover { over in
-            print("hovering")
             if !CurrentWindow.shared.showingTabMenu { withAnimation(.easeInOut) { isHovering = over }}
         }
         .onTapGesture {
