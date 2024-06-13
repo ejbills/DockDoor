@@ -40,7 +40,7 @@ struct AnimatedGradientOverlay: View {
                 self.animate = true
                 randomizeColors(delay: 5.0) // Initial delay
             }
-            .opacity(0.15)
+            .opacity(0.10)
             .clipShape(RoundedRectangle(cornerRadius: 16))
         }
     }
