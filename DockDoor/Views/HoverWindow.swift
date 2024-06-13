@@ -10,11 +10,11 @@ import SwiftUI
 
 class HoverWindow: NSWindow {
     static let shared = HoverWindow()
-
+    
     private var appName: String = ""
     private var windows: [WindowInfo] = []
     private var onWindowTap: (() -> Void)?
-
+    
     private init() {
         super.init(contentRect: .zero, styleMask: .borderless, backing: .buffered, defer: false)
         level = .floating
@@ -22,42 +22,42 @@ class HoverWindow: NSWindow {
         collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary] // Show in all spaces and on top of fullscreen apps
         backgroundColor = .clear // Make window background transparent
         hasShadow = false // Remove shadow
-
+        
         // Set up tracking area for mouse exit detection
         let options: NSTrackingArea.Options = [.mouseEnteredAndExited, .activeAlways]
         let trackingArea = NSTrackingArea(rect: self.frame, options: options, owner: self, userInfo: nil)
         contentView?.addTrackingArea(trackingArea)
     }
-
+    
     // Method to configure and show the window
     func showWindow(appName: String, windows: [WindowInfo], mouseLocation: CGPoint, onWindowTap: (() -> Void)? = nil) {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
-
+            
             self.appName = appName
             self.windows = windows
             self.onWindowTap = onWindowTap
-
+            
             let hoverView = NSHostingView(rootView: HoverView(appName: appName, windows: windows, onWindowTap: onWindowTap))
             self.contentView = hoverView
-
+            
             self.updateContentViewSizeAndPosition(mouseLocation: mouseLocation) // Recalculate size and position
             self.makeKeyAndOrderFront(nil)
         }
     }
-
+    
     // Method to hide the window
     func hideWindow() {
         DispatchQueue.main.async { [weak self] in
             self?.orderOut(nil)
         }
     }
-
+    
     // Mouse exited tracking area - hide the window
     override func mouseExited(with event: NSEvent) {
         hideWindow()
     }
-
+    
     // Calculate hover window's size and position based on content and mouse location
     private func updateContentViewSizeAndPosition(mouseLocation: CGPoint) {
         guard let contentView = contentView else { return }
@@ -78,7 +78,7 @@ class HoverWindow: NSWindow {
         let screenFrame = screen?.frame ?? .zero // Get the full screen area of the screen containing the mouse
         let dockPosition = DockUtils.shared.getDockPosition() // Get dock position
         let dockHeight = DockUtils.shared.calculateDockHeight(screen) // Get dock height
-                
+        
         // Position window above/below dock depending on position
         switch dockPosition {
         case .bottom:
@@ -113,7 +113,7 @@ class HoverWindow: NSWindow {
         setFrameOrigin(hoverWindowOrigin)
         setContentSize(hoverWindowSize)
     }
-
+    
     // Helper method to find the screen containing a given point
     private func screenContainingPoint(_ point: CGPoint) -> NSScreen? {
         return NSScreen.screens.first { NSMouseInRect(point, $0.frame, false) }
@@ -124,16 +124,22 @@ struct HoverView: View {
     let appName: String
     let windows: [WindowInfo]
     let onWindowTap: (() -> Void)?
-
+    
+    @State private var showWindows: Bool = false
+    
     var body: some View {
         HStack {
-            ForEach(windows) { window in
-                WindowPreview(windowInfo: window, onTap: onWindowTap)
+            ForEach(windows.indices, id: \.self) { index in
+                WindowPreview(windowInfo: windows[index], onTap: onWindowTap)
             }
         }
-        .padding()
-        .background(.thinMaterial)
-        .cornerRadius(10)
+        .onAppear {
+            withAnimation(.spring(response: 0.3, dampingFraction: 0.3)) {
+                showWindows = true
+            }
+        }
+        .scaleEffect(showWindows ? 1 : 0.90)
+        .opacity(showWindows ? 1 : 0.8)
     }
 }
 
@@ -141,32 +147,48 @@ struct WindowPreview: View {
     let windowInfo: WindowInfo
     let onTap: (() -> Void)?
     
+    @State private var isHovering = false
+    
     var body: some View {
         VStack {
             if let cgImage = windowInfo.image {
                 let image = Image(decorative: cgImage, scale: 1.0)
-                let imageSize = CGSize(width: cgImage.width, height: cgImage.height)
+                let aspectRatio = CGFloat(cgImage.width) / CGFloat(cgImage.height)
                 
-                Button(action: {
-                    WindowUtil.bringWindowToFront(windowInfo: windowInfo)
-                    onTap?()
-                }) {
-                    image
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: min(imageSize.width, roughWidthCap), height: min(imageSize.height, roughHeightCap), alignment: .center)
-                }
+                image
+                    .resizable()
+                    .aspectRatio(aspectRatio, contentMode: .fit)
+                    .frame(maxWidth: roughWidthCap, maxHeight: roughHeightCap)
+                    .scaleEffect(isHovering ? 0.95 : 1.0)
+                    .overlay(
+                        VStack {
+                            if let name = windowInfo.windowName, !name.isEmpty {
+                                Text(name)
+                                    .padding(4)
+                                    .background(.ultraThinMaterial)
+                                    .foregroundColor(.white)
+                                    .cornerRadius(8)
+                                    .padding(8)
+                                    .lineLimit(1)
+                            }
+                        },
+                        alignment: .topTrailing
+                    )
+                    .padding()
             } else {
                 ProgressView()
-                    .frame(width: 300, height: 200)  // Placeholder size
-            }
-            
-            if let name = windowInfo.windowName {
-                Text(name)
-                    .padding(4)
-                    .cornerRadius(5)
             }
         }
-        .cornerRadius(5)
+        .background(.thinMaterial)
+        .cornerRadius(16)
+        .opacity(isHovering ? 0.75 : 1.0)
+        .onHover { over in
+            withAnimation(.smooth) { isHovering = over }
+        }
+        .onTapGesture {
+            WindowUtil.bringWindowToFront(windowInfo: windowInfo)
+            onTap?()
+        }
+        
     }
 }

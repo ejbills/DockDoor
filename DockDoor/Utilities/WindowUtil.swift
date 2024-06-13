@@ -21,41 +21,6 @@ struct WindowUtil {
 
     private static var cachedShareableContent: SCShareableContent? = nil
 
-    // MARK: - Window Listing Functions
-    
-    static func listDockApplicationWindows() async -> [String: [WindowInfo]] {
-        var result = [String: [WindowInfo]]()
-        
-        // Fetch shareable content only once if it hasn't been cached
-        if cachedShareableContent == nil {
-            cachedShareableContent = try? await SCShareableContent.excludingDesktopWindows(
-                false, onScreenWindowsOnly: true
-            )
-        }
-        
-        guard let content = cachedShareableContent else { return result } // Return empty result if no content
-        
-        let windows = content.windows.filter { window in
-            if let pid = window.owningApplication?.processID {
-                return isDockApplication(pid: pid)
-            }
-            return false
-        }
-        
-        for window in windows {
-            guard let app = window.owningApplication else { continue }
-            let info = WindowInfo(
-                id: window.windowID,
-                window: window,
-                appName: app.applicationName,
-                windowName: window.title,
-                image: nil // We'll capture the image later
-            )
-            result[app.applicationName, default: []].append(info)
-        }
-        return result
-    }
-
     // MARK: - Helper Functions
     
     private static func isDockApplication(pid: Int32) -> Bool {
@@ -64,7 +29,7 @@ struct WindowUtil {
         }
     }
     
-    func captureWindowImage(windowInfo: WindowInfo) async throws -> CGImage {
+    func captureWindowImage(windowInfo: WindowInfo) throws -> CGImage {
         guard CGPreflightScreenCaptureAccess() else {
             print("Debug: Screen recording permission not granted")
             MessageUtil.showMessage(title: "Permission error",
@@ -72,13 +37,16 @@ struct WindowUtil {
                                     completion: { _ in SystemPreferencesHelper.openScreenRecordingPreferences() })
             throw NSError(domain: "com.dockdoor.permission", code: 2, userInfo: [NSLocalizedDescriptionKey: "Screen recording permission not granted"])
         }
-        
-        
-        let filter = SCContentFilter(desktopIndependentWindow: windowInfo.window)
-        let config = SCStreamConfiguration()
-        return try await SCScreenshotManager.captureImage(contentFilter: filter, configuration: config)
-    }
 
+        let id = windowInfo.window.windowID
+        let frame = windowInfo.window.frame
+
+        guard let image = CGWindowListCreateImage(frame, .optionIncludingWindow, id, [.boundsIgnoreFraming, .bestResolution]) else {
+            throw NSError(domain: "com.dockdoor.error", code: 1, userInfo: [NSLocalizedDescriptionKey: "Failed to capture window image"])
+        }
+
+        return image
+    }
     
     // MARK: - Window Manipulation Functions
 
@@ -151,7 +119,7 @@ struct WindowUtil {
                     image: nil
                 )
                 do {
-                    windowInfo.image = try await WindowUtil().captureWindowImage(windowInfo: windowInfo)
+                    windowInfo.image = try WindowUtil().captureWindowImage(windowInfo: windowInfo)
                 } catch {
                     print("Error capturing window image: \(error)")
                 }
