@@ -8,6 +8,7 @@
 import Cocoa
 import SwiftUI									
 import KeyboardShortcuts
+import Defaults
 
 @Observable class CurrentWindow {
     static let shared = CurrentWindow()
@@ -41,6 +42,7 @@ class HoverWindow: NSWindow {
     private var hostingView: NSHostingView<HoverView>?
     
     var bestGuessMonitor: NSScreen? = NSScreen.main
+    var windowSize: CGSize = getWindowSize(NSScreen.main)
     
     private init() {
         super.init(contentRect: .zero, styleMask: .borderless, backing: .buffered, defer: false)
@@ -89,6 +91,8 @@ class HoverWindow: NSWindow {
         if centerOnScreen {
             // Center the window on the screen
             guard let screen = self.bestGuessMonitor else { return }
+            
+            self.windowSize = getWindowSize(screen)
             let screenFrame = screen.frame
             hoverWindowOrigin = CGPoint(
                 x: screenFrame.midX - (hoverWindowSize.width / 2),
@@ -98,6 +102,7 @@ class HoverWindow: NSWindow {
             // Use mouse location for initial placement
             hoverWindowOrigin = mouseLocation
             
+            self.windowSize = getWindowSize(screen)
             let screenFrame = screen.frame
             let dockPosition = DockUtils.shared.getDockPosition()
             let dockHeight = DockUtils.shared.calculateDockHeight(screen)
@@ -186,7 +191,6 @@ class HoverWindow: NSWindow {
 
         let newIndex = CurrentWindow.shared.currIndex + 1
         CurrentWindow.shared.setIndex(to: newIndex >= windows.count ? 0 : newIndex)
-        print(CurrentWindow.shared.currIndex)
     }
 
     private func updateWindowDisplay() {
@@ -261,7 +265,7 @@ struct HoverView: View {
 struct WindowPreview: View {
     let windowInfo: WindowInfo
     let onTap: (() -> Void)?
-    let index: Int									
+    let index: Int
     
     @State private var isHovering = false
     
@@ -276,8 +280,8 @@ struct WindowPreview: View {
                         .resizable()
                         .scaledToFit()
                         .padding()
-                        .frame(width: roughWidthCap)
-                        .frame(maxHeight: roughHeightCap)
+                        .frame(width: HoverWindow.shared.windowSize.width)
+                        .frame(maxHeight: HoverWindow.shared.windowSize.height)
                         .overlay(
                             VStack {
                                 if let name = windowInfo.windowName, !name.isEmpty {

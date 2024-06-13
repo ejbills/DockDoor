@@ -13,6 +13,8 @@
 		BB157B7B2C0E343000997315 /* SystemPreferencesHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB157B7A2C0E343000997315 /* SystemPreferencesHelper.swift */; };
 		BB157B802C0E8E6700997315 /* MessageUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB157B7F2C0E8E6700997315 /* MessageUtil.swift */; };
 		BB157B822C0EB29E00997315 /* DockObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB157B812C0EB29E00997315 /* DockObserver.swift */; };
+		BB1CBD582C1BA800003969BC /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB1CBD572C1BA800003969BC /* SettingsView.swift */; };
+		BB1CBD5B2C1BA8DC003969BC /* Defaults in Frameworks */ = {isa = PBXBuildFile; productRef = BB1CBD5A2C1BA8DC003969BC /* Defaults */; };
 		BB2567C62C10C5F000C0C93E /* DockUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2567C52C10C5F000C0C93E /* DockUtils.swift */; };
 		BBA153F62C115DDA00119C02 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA153F52C115DDA00119C02 /* AppDelegate.swift */; };
 		BBA153F82C11604400119C02 /* HoverWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA153F72C11604400119C02 /* HoverWindow.swift */; };
@@ -31,6 +33,7 @@
 		BB157B7A2C0E343000997315 /* SystemPreferencesHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemPreferencesHelper.swift; sourceTree = "<group>"; };
 		BB157B7F2C0E8E6700997315 /* MessageUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageUtil.swift; sourceTree = "<group>"; };
 		BB157B812C0EB29E00997315 /* DockObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockObserver.swift; sourceTree = "<group>"; };
+		BB1CBD572C1BA800003969BC /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		BB2567C52C10C5F000C0C93E /* DockUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DockUtils.swift; sourceTree = "<group>"; };
 		BBA153F52C115DDA00119C02 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BBA153F72C11604400119C02 /* HoverWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoverWindow.swift; sourceTree = "<group>"; };
@@ -45,6 +48,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BB1CBD5B2C1BA8DC003969BC /* Defaults in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -108,6 +112,7 @@
 			children = (
 				BBA153F72C11604400119C02 /* HoverWindow.swift */,
 				BBF6C6212C1A9B4300BF1D40 /* AnimatedGradientOverlay.swift */,
+				BB1CBD572C1BA800003969BC /* SettingsView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -129,6 +134,7 @@
 			);
 			name = DockDoor;
 			packageProductDependencies = (
+				BB1CBD5A2C1BA8DC003969BC /* Defaults */,
 			);
 			productName = DockDoor;
 			productReference = BB157B652C0E31CE00997315 /* DockDoor.app */;
@@ -159,6 +165,7 @@
 			);
 			mainGroup = BB157B5C2C0E31CE00997315;
 			packageReferences = (
+				BB1CBD592C1BA8DC003969BC /* XCRemoteSwiftPackageReference "Defaults" */,
 			);
 			productRefGroup = BB157B662C0E31CE00997315 /* Products */;
 			projectDirPath = "";
@@ -195,6 +202,7 @@
 				BBA153FC2C12356100119C02 /* main.swift in Sources */,
 				BBF6C6242C1B4B4400BF1D40 /* KeybindHelper.swift in Sources */,
 				BB2567C62C10C5F000C0C93E /* DockUtils.swift in Sources */,
+				BB1CBD582C1BA800003969BC /* SettingsView.swift in Sources */,
 				BB157B792C0E330100997315 /* WindowUtil.swift in Sources */,
 				BB157B7B2C0E343000997315 /* SystemPreferencesHelper.swift in Sources */,
 			);
@@ -399,6 +407,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		BB1CBD592C1BA8DC003969BC /* XCRemoteSwiftPackageReference "Defaults" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sindresorhus/Defaults";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		BB1CBD5A2C1BA8DC003969BC /* Defaults */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BB1CBD592C1BA8DC003969BC /* XCRemoteSwiftPackageReference "Defaults" */;
+			productName = Defaults;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = BB157B5D2C0E31CE00997315 /* Project object */;
 }
