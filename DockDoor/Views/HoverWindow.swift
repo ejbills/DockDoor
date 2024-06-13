@@ -187,7 +187,7 @@ struct WindowPreview: View {
                 ProgressView()
             }
         }
-        .background(.ultraThinMaterial.opacity(0.7))
+        .background(.ultraThinMaterial)
         .cornerRadius(16)
         .onHover { over in
             withAnimation(.easeInOut) { isHovering = over }
