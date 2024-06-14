@@ -154,7 +154,7 @@ class HoverWindow: NSWindow {
     
     // Helper method to find the screen containing a given point
     private func screenContainingPoint(_ point: CGPoint) -> NSScreen? {
-        self.bestGuessMonitor = NSScreen.screens.first { NSMouseInRect(point, $0.frame, false) }
+        self.bestGuessMonitor = DockObserver.screenContainingPoint(point)
         return self.bestGuessMonitor
     }
     
@@ -220,6 +220,7 @@ struct HoverView: View {
     let onWindowTap: (() -> Void)?
 
     @State private var showWindows: Bool = false
+    @State private var hasAppeared: Bool = false
 
     var body: some View {
         ScrollViewReader { scrollProxy in
@@ -231,7 +232,10 @@ struct HoverView: View {
                     }
                 }
                 .onAppear {
-                    self.runAnimation()
+                    if !hasAppeared {
+                        hasAppeared.toggle()
+                        self.runAnimation()
+                    }
                 }
                 .onChange(of: CurrentWindow.shared.currIndex) { _, newIndex in
                     // Smoothly scroll to the new index
