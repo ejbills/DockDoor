@@ -16,11 +16,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var settingsWindow: NSWindow?
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
-        self.configureMenuBar()
-        dockObserver = DockObserver.shared
-        keybindHelper = KeybindHelper.shared
-        
-        if !Defaults[.launched] { handleFirstTimeLaunch() }
+        if !Defaults[.launched] { handleFirstTimeLaunch() } else {
+            self.configureMenuBar()
+            dockObserver = DockObserver.shared
+            keybindHelper = KeybindHelper.shared
+        }
     }
 
     private func configureMenuBar() {
