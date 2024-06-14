@@ -245,7 +245,6 @@ struct HoverView: View {
     
     var body: some View {
         let dockSide = DockUtils.shared.getDockPosition()
-        let appIcon = getAppIcon(byName: appName)
         ZStack {
             ScrollViewReader { scrollProxy in
                 ScrollView(.horizontal, showsIndicators: false) {
@@ -282,9 +281,9 @@ struct HoverView: View {
 //        .animation(.smooth, value: windows)
         .dockStyle()
         .overlay(alignment: .topLeading) {
-            if !windows.isEmpty {
+            if !windows.isEmpty && !CurrentWindow.shared.showingTabMenu {
                 HStack(spacing: 4) {
-                    if let appIcon {
+                    if let appIcon = windows.first?.appIcon {
                         Image(nsImage: appIcon).resizable()
                             .scaledToFit()
                             .frame(width: 24, height: 24)
