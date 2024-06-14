@@ -61,23 +61,25 @@ class KeybindHelper {
 
         switch type {
         case .flagsChanged:
+            // This section (only for Ctrl key changes) remains the same
             let modifierFlags = event.flags
             let controlKeyCurrentlyPressed = modifierFlags.contains(.maskControl)
 
-            if controlKeyCurrentlyPressed != isControlKeyPressed { // If the state changed
+            if controlKeyCurrentlyPressed != isControlKeyPressed {
                 isControlKeyPressed = controlKeyCurrentlyPressed
-
-                if isControlKeyPressed {
-                    showHoverWindow()
-                } else {
-                    HoverWindow.shared.hideWindow()
+                if !isControlKeyPressed { // If Ctrl was released
+                    HoverWindow.shared.hideWindow() // Hide the HoverWindow
                     HoverWindow.shared.selectAndBringToFrontCurrentWindow()
                 }
             }
 
         case .keyDown:
-            if isControlKeyPressed && keyCode == 48 { // '48' is the keyCode for Tab
-                HoverWindow.shared.cycleWindows()
+            if isControlKeyPressed && keyCode == 48 { // Tab key
+                if HoverWindow.shared.isVisible { // Check if HoverWindow is already shown
+                    HoverWindow.shared.cycleWindows() // Cycle windows if it's open
+                } else {
+                    showHoverWindow() // Initialize HoverWindow if it's not open
+                }
                 return nil // Suppress the Tab key event
             }
 
@@ -88,6 +90,7 @@ class KeybindHelper {
         return Unmanaged.passUnretained(event)
     }
 
+    
     private func showHoverWindow() {
         Task {
             let windows = await WindowUtil.activeWindows(for: "")

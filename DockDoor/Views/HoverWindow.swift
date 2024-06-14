@@ -244,7 +244,7 @@ struct HoverView: View {
                 }
             }
             .frame(
-                maxWidth: HoverWindow.shared.bestGuessMonitor?.visibleFrame.width ?? 800
+                maxWidth: HoverWindow.shared.bestGuessMonitor?.visibleFrame.width ?? 2000
             )
             .scaledToFit()
             .padding()
@@ -256,7 +256,7 @@ struct HoverView: View {
     private func runAnimation() {
         self.showWindows = false
         
-        withAnimation(.spring(response: 0.3, dampingFraction: 0.3)) {
+        withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
             showWindows = true
         }
     }
