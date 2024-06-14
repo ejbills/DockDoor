@@ -121,7 +121,7 @@ struct WindowUtil {
                     appName: app.applicationName,
                     windowName: window.title,
                     image: nil,
-                    appIcon: getAppIcon(byName: app.applicationName)
+                    appIcon: DockUtils.shared.getAppIcon(byName: app.applicationName)
                 )
                 do {
                     windowInfo.image = try WindowUtil().captureWindowImage(windowInfo: windowInfo)
