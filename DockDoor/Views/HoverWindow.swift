@@ -185,6 +185,7 @@ class HoverWindow: NSWindow {
     }
     
     func selectAndBringToFrontCurrentWindow() {
+        guard !windows.isEmpty else { return }
         let selectedWindow = windows[CurrentWindow.shared.currIndex]
         WindowUtil.bringWindowToFront(windowInfo: selectedWindow)
         hideWindow()
