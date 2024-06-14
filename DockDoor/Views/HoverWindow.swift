@@ -324,21 +324,20 @@ struct WindowPreview: View {
                 image
                     .resizable()
                     .scaledToFit()
+//                    .frame(
+//                        width: dockSide == .bottom ? nil : 150,
+//                        height:  dockSide != .bottom ? nil : 150
+//                    )
                     .frame(
-                        width: dockSide == .bottom ? nil : 150,
-                        height:  dockSide != .bottom ? nil : 150
+                        height:  HoverWindow.shared.windowSize.height
                     )
-                //                    .frame(
-                //                        width: dockSide == .bottom ? nil : HoverWindow.shared.windowSize.height,
-                //                        height:  dockSide != .bottom ? nil : HoverWindow.shared.windowSize.height
-                //                    )
                     .overlay {
                         AnimatedGradientOverlay(shouldDisplay: selected)
                     }
                     .clipShape(RoundedRectangle(cornerRadius: 3, style: .continuous))
                     .background {
                         RoundedRectangle(cornerRadius: 3, style: .continuous)
-                            .fill(.black.shadow(.drop(
+                            .fill(.clear.shadow(.drop(
                                 color: .black.opacity(selected ? 0.35 : 0.25),
                                 radius: selected ? 12 : 8,
                                 y: selected ? 6 : 4
