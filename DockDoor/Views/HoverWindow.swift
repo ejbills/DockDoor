@@ -6,7 +6,7 @@
 //
 
 import Cocoa
-import SwiftUI									
+import SwiftUI
 import Defaults
 
 @Observable class CurrentWindow {
@@ -61,13 +61,13 @@ class HoverWindow: NSWindow {
     func hideWindow() {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
-
+            
             // Remove the hostingView from the window's content view
             self.contentView = nil  // Clear the content view to release hostingView
-
+            
             // Set the hostingView property to nil for proper deallocation
             self.hostingView = nil
-
+            
             // Ensure other resources are released
             self.appName = ""
             self.windows.removeAll()
@@ -76,7 +76,7 @@ class HoverWindow: NSWindow {
             self.orderOut(nil) // Hide the window
         }
     }
-
+    
     // Mouse exited tracking area - hide the window
     override func mouseExited(with event: NSEvent) {
         if !CurrentWindow.shared.showingTabMenu { hideWindow() }
@@ -89,9 +89,9 @@ class HoverWindow: NSWindow {
             hideWindow()
             return
         }
-
+        
         CurrentWindow.shared.setShowing(toState: centerOnScreen)
-
+        
         // 1. Check if window size needs updating
         let newHoverWindowSize = hostingView.fittingSize
         let sizeChanged = newHoverWindowSize != frame.size // Compare new and current size
@@ -100,11 +100,11 @@ class HoverWindow: NSWindow {
         }
         
         var hoverWindowOrigin: CGPoint
-
+        
         if centerOnScreen {
             // Center the window on the screen
             guard let screen = self.bestGuessMonitor else { return }
-
+            
             let screenFrame = screen.frame
             hoverWindowOrigin = CGPoint(
                 x: screenFrame.midX - (newHoverWindowSize.width / 2),
@@ -113,45 +113,45 @@ class HoverWindow: NSWindow {
         } else if let mouseLocation = mouseLocation, let screen = screenContainingPoint(mouseLocation) {
             // Use mouse location for initial placement
             hoverWindowOrigin = mouseLocation
-
+            
             let screenFrame = screen.frame
             let dockPosition = DockUtils.shared.getDockPosition()
             let dockHeight = DockUtils.shared.calculateDockHeight(screen)
-
+            
             // Position window above/below dock depending on position
             switch dockPosition {
-            case .bottom:
-                hoverWindowOrigin.y = screenFrame.minY + dockHeight
-            case .left, .right:
-                hoverWindowOrigin.y -= newHoverWindowSize.height / 2
-                if dockPosition == .left {
-                    hoverWindowOrigin.x = screenFrame.minX + dockHeight
-                } else { // dockPosition == .right
-                    hoverWindowOrigin.x = screenFrame.maxX - newHoverWindowSize.width - dockHeight
-                }
-            case .unknown:
-                break
+                case .bottom:
+                    hoverWindowOrigin.y = screenFrame.minY + dockHeight
+                case .left, .right:
+                    hoverWindowOrigin.y -= newHoverWindowSize.height / 2
+                    if dockPosition == .left {
+                        hoverWindowOrigin.x = screenFrame.minX + dockHeight
+                    } else { // dockPosition == .right
+                        hoverWindowOrigin.x = screenFrame.maxX - newHoverWindowSize.width - dockHeight
+                    }
+                case .unknown:
+                    break
             }
-
+            
             // Adjust horizontal position if the window is wider than the screen and the dock is on the side
             if dockPosition == .left || dockPosition == .right, newHoverWindowSize.width > screenFrame.width - dockHeight {
                 hoverWindowOrigin.x = dockPosition == .left ? screenFrame.minX : screenFrame.maxX - newHoverWindowSize.width
             }
-
+            
             // Center the window horizontally if the dock is at the bottom
             if dockPosition == .bottom {
                 hoverWindowOrigin.x -= newHoverWindowSize.width / 2
             }
-
+            
             // Ensure the window stays within screen bounds
             hoverWindowOrigin.x = max(screenFrame.minX, min(hoverWindowOrigin.x, screenFrame.maxX - newHoverWindowSize.width))
             hoverWindowOrigin.y = max(screenFrame.minY, min(hoverWindowOrigin.y, screenFrame.maxY - newHoverWindowSize.height))
         } else {
             return
         }
-
+        
         let finalFrame = NSRect(origin: hoverWindowOrigin, size: newHoverWindowSize)
-
+        
         // 2. Only animate if necessary (size or position change)
         if animated && (sizeChanged || finalFrame != frame) { // Animate only if there's a change
             NSAnimationContext.runAnimationGroup({ context in
@@ -173,11 +173,11 @@ class HoverWindow: NSWindow {
     func showWindow(appName: String, windows: [WindowInfo], mouseLocation: CGPoint, onWindowTap: (() -> Void)? = nil) {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
-
+            
             self.appName = appName
             self.windows = windows
             self.onWindowTap = onWindowTap
-
+            
             if self.hostingView == nil {
                 // Create a new hosting view if we don't have one
                 let hoverView = HoverView(appName: appName, windows: windows, onWindowTap: onWindowTap)
@@ -188,7 +188,7 @@ class HoverWindow: NSWindow {
                 // Update the existing hostingView's rootView
                 self.hostingView?.rootView = HoverView(appName: appName, windows: windows, onWindowTap: onWindowTap)
             }
-
+            
             let isMouseEvent = mouseLocation != .zero
             
             CurrentWindow.shared.setShowing(toState: !isMouseEvent)
@@ -197,20 +197,20 @@ class HoverWindow: NSWindow {
             self.makeKeyAndOrderFront(nil)
         }
     }
-
+    
     func cycleWindows() {
         guard !windows.isEmpty else { return }
-
+        
         let newIndex = CurrentWindow.shared.currIndex + 1
         CurrentWindow.shared.setIndex(to: newIndex >= windows.count ? 0 : newIndex)
     }
-
+    
     private func updateWindowDisplay() {
         guard !windows.isEmpty else { return }
-
+        
         // Update the rootView of the existing hostingView
         hostingView?.rootView = HoverView(appName: self.appName, windows: self.windows, onWindowTap: self.onWindowTap)
-
+        
         // Do not use mouse location, center on screen only for cycling
         updateContentViewSizeAndPosition(animated: false, centerOnScreen: true)
         makeKeyAndOrderFront(nil)
@@ -219,7 +219,7 @@ class HoverWindow: NSWindow {
     // Method to select and bring the current window to the front
     func selectAndBringToFrontCurrentWindow() {
         guard !windows.isEmpty else { return }
-
+        
         let selectedWindow = windows[CurrentWindow.shared.currIndex]
         WindowUtil.bringWindowToFront(windowInfo: selectedWindow)
         hideWindow()
@@ -230,10 +230,19 @@ struct HoverView: View {
     let appName: String
     let windows: [WindowInfo]
     let onWindowTap: (() -> Void)?
-
+    
     @State private var showWindows: Bool = false
     @State private var hasAppeared: Bool = false
-
+    
+    var scaleAnchor: UnitPoint {
+        switch DockUtils.shared.getDockPosition() {
+            case .bottom: .bottom
+            case .left: .leading
+            case .right: .trailing
+            case .unknown: .bottom
+        }
+    }
+    
     var body: some View {
         let dockSide = DockUtils.shared.getDockPosition()
         let appIcon = getAppIcon(byName: appName)
@@ -266,10 +275,11 @@ struct HoverView: View {
                 .frame(
                     maxWidth: HoverWindow.shared.bestGuessMonitor?.visibleFrame.width ?? 2000
                 )
-                .scaleEffect(showWindows ? 1 : 0.90)
+//                .scaleEffect(showWindows ? 1 : 0.90, anchor: scaleAnchor)
                 .opacity(showWindows ? 1 : 0.8)
             }
         }
+//        .animation(.smooth, value: windows)
         .dockStyle()
         .overlay(alignment: .topLeading) {
             HStack(spacing: 4) {
@@ -278,7 +288,7 @@ struct HoverView: View {
                         .scaledToFit()
                         .frame(width: 24, height: 24)
                 }
-                    Text(appName)
+                Text(appName)
             }
             .shadow(color: .black.opacity(0.35), radius: 12, y: 8)
             .padding(EdgeInsets(top: -10, leading: 12, bottom: 0, trailing: 0))
@@ -310,44 +320,44 @@ struct WindowPreview: View {
                 let image = Image(decorative: cgImage, scale: 1.0)
                 let selected = isHovering || isHighlighted
                 
-                    image
+                image
                     .resizable()
                     .scaledToFit()
                     .frame(
                         width: dockSide == .bottom ? nil : 150,
                         height:  dockSide != .bottom ? nil : 150
                     )
-//                    .frame(
-//                        width: dockSide == .bottom ? nil : HoverWindow.shared.windowSize.height,
-//                        height:  dockSide != .bottom ? nil : HoverWindow.shared.windowSize.height
-//                    )
+                //                    .frame(
+                //                        width: dockSide == .bottom ? nil : HoverWindow.shared.windowSize.height,
+                //                        height:  dockSide != .bottom ? nil : HoverWindow.shared.windowSize.height
+                //                    )
                     .overlay {
                         AnimatedGradientOverlay(shouldDisplay: selected)
                     }
                     .clipShape(RoundedRectangle(cornerRadius: 3, style: .continuous))
-                        .background {
-                            RoundedRectangle(cornerRadius: 3, style: .continuous)
-                                .fill(.black.shadow(.drop(
-                                    color: .black.opacity(selected ? 0.35 : 0.25),
-                                    radius: selected ? 12 : 8,
-                                    y: selected ? 6 : 4
-                                )))
-                        }
-                        .scaleEffect(selected ? 1.05 : 1)
-//                        .overlay(
-//                            VStack {
-//                                if let name = windowInfo.windowName, !name.isEmpty {
-//                                    Text(name)
-//                                        .padding(4)
-//                                        .background(.thickMaterial)
-//                                        .foregroundColor(.white)
-//                                        .cornerRadius(8)
-//                                        .padding(8)
-//                                        .lineLimit(1)
-//                                }
-//                            },
-//                            alignment: .topTrailing
-//                        )
+                    .background {
+                        RoundedRectangle(cornerRadius: 3, style: .continuous)
+                            .fill(.black.shadow(.drop(
+                                color: .black.opacity(selected ? 0.35 : 0.25),
+                                radius: selected ? 12 : 8,
+                                y: selected ? 6 : 4
+                            )))
+                    }
+                    .scaleEffect(selected ? 1.05 : 1)
+                //                        .overlay(
+                //                            VStack {
+                //                                if let name = windowInfo.windowName, !name.isEmpty {
+                //                                    Text(name)
+                //                                        .padding(4)
+                //                                        .background(.thickMaterial)
+                //                                        .foregroundColor(.white)
+                //                                        .cornerRadius(8)
+                //                                        .padding(8)
+                //                                        .lineLimit(1)
+                //                                }
+                //                            },
+                //                            alignment: .topTrailing
+                //                        )
                 
             } else {
                 ProgressView()
