@@ -235,38 +235,55 @@ struct HoverView: View {
     @State private var hasAppeared: Bool = false
 
     var body: some View {
-        ScrollViewReader { scrollProxy in
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack {
-                    ForEach(windows.indices, id: \.self) { index in
-                        WindowPreview(windowInfo: windows[index], onTap: onWindowTap, index: index)
-                            .id(index)
+        let dockSide = DockUtils.shared.getDockPosition()
+        let appIcon = getAppIcon(byName: appName)
+        ZStack {
+            ScrollViewReader { scrollProxy in
+                ScrollView(.horizontal, showsIndicators: false) {
+                    DynStack(direction: dockSide == .bottom ? .horizontal : .vertical, spacing: 16) {
+                        ForEach(windows.indices, id: \.self) { index in
+                            WindowPreview(windowInfo: windows[index], onTap: onWindowTap, index: index)
+                                .id(index)
+                        }
                     }
-                }
-                .onAppear {
-                    if !hasAppeared {
-                        hasAppeared.toggle()
+                    .padding(20)
+                    .onAppear {
+                        if !hasAppeared {
+                            hasAppeared.toggle()
+                            self.runAnimation()
+                        }
+                    }
+                    .onChange(of: CurrentWindow.shared.currIndex) { _, newIndex in
+                        // Smoothly scroll to the new index
+                        withAnimation {
+                            scrollProxy.scrollTo(newIndex, anchor: .center)
+                        }
+                    }
+                    .onChange(of: self.windows) { _, _ in
                         self.runAnimation()
                     }
                 }
-                .onChange(of: CurrentWindow.shared.currIndex) { _, newIndex in
-                    // Smoothly scroll to the new index
-                    withAnimation {
-                        scrollProxy.scrollTo(newIndex, anchor: .center)
-                    }
-                }
-                .onChange(of: self.windows) { _, _ in
-                    self.runAnimation()
-                }
+                .frame(
+                    maxWidth: HoverWindow.shared.bestGuessMonitor?.visibleFrame.width ?? 2000
+                )
+                .scaleEffect(showWindows ? 1 : 0.90)
+                .opacity(showWindows ? 1 : 0.8)
             }
-            .frame(
-                maxWidth: HoverWindow.shared.bestGuessMonitor?.visibleFrame.width ?? 2000
-            )
-            .scaledToFit()
-            .padding()
-            .scaleEffect(showWindows ? 1 : 0.90)
-            .opacity(showWindows ? 1 : 0.8)
         }
+        .dockStyle()
+        .overlay(alignment: .topLeading) {
+            HStack(spacing: 4) {
+                if let appIcon {
+                    Image(nsImage: appIcon).resizable()
+                        .scaledToFit()
+                        .frame(width: 24, height: 24)
+                }
+                    Text(appName)
+            }
+            .shadow(color: .black.opacity(0.35), radius: 12, y: 8)
+            .padding(EdgeInsets(top: -10, leading: 12, bottom: 0, trailing: 0))
+        }
+        .padding(.all, 24)
     }
     
     private func runAnimation() {
@@ -286,45 +303,58 @@ struct WindowPreview: View {
     @State private var isHovering = false
     
     var body: some View {
+        let dockSide = DockUtils.shared.getDockPosition()
         let isHighlighted = (index == CurrentWindow.shared.currIndex && CurrentWindow.shared.showingTabMenu)
         VStack {
             if let cgImage = windowInfo.image {
                 let image = Image(decorative: cgImage, scale: 1.0)
+                let selected = isHovering || isHighlighted
                 
-                ZStack {
                     image
-                        .resizable()
-                        .scaledToFit()
-                        .padding()
-                        .frame(width: HoverWindow.shared.windowSize.width)
-                        .frame(maxHeight: HoverWindow.shared.windowSize.height)
-                        .overlay(
-                            VStack {
-                                if let name = windowInfo.windowName, !name.isEmpty {
-                                    Text(name)
-                                        .padding(4)
-                                        .background(.thickMaterial)
-                                        .foregroundColor(.white)
-                                        .cornerRadius(8)
-                                        .padding(8)
-                                        .lineLimit(1)
-                                }
-                            },
-                            alignment: .topTrailing
-                        )
-                    
-                    AnimatedGradientOverlay(shouldDisplay: isHovering || isHighlighted)
-                }
-                .background(.ultraThinMaterial)
-                .shadow(radius: 4.0)
-                .cornerRadius(16)
-                .scaleEffect(isHovering || isHighlighted ? 0.95 : 1.0)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(
+                        width: dockSide == .bottom ? nil : 150,
+                        height:  dockSide != .bottom ? nil : 150
+                    )
+//                    .frame(
+//                        width: dockSide == .bottom ? nil : HoverWindow.shared.windowSize.height,
+//                        height:  dockSide != .bottom ? nil : HoverWindow.shared.windowSize.height
+//                    )
+                    .overlay {
+                        AnimatedGradientOverlay(shouldDisplay: selected)
+                    }
+                    .clipShape(RoundedRectangle(cornerRadius: 3, style: .continuous))
+                        .background {
+                            RoundedRectangle(cornerRadius: 3, style: .continuous)
+                                .fill(.black.shadow(.drop(
+                                    color: .black.opacity(selected ? 0.35 : 0.25),
+                                    radius: selected ? 12 : 8,
+                                    y: selected ? 6 : 4
+                                )))
+                        }
+                        .scaleEffect(selected ? 1.05 : 1)
+//                        .overlay(
+//                            VStack {
+//                                if let name = windowInfo.windowName, !name.isEmpty {
+//                                    Text(name)
+//                                        .padding(4)
+//                                        .background(.thickMaterial)
+//                                        .foregroundColor(.white)
+//                                        .cornerRadius(8)
+//                                        .padding(8)
+//                                        .lineLimit(1)
+//                                }
+//                            },
+//                            alignment: .topTrailing
+//                        )
+                
             } else {
                 ProgressView()
             }
         }
         .onHover { over in
-            if !CurrentWindow.shared.showingTabMenu { withAnimation(.easeInOut) { isHovering = over }}
+            if !CurrentWindow.shared.showingTabMenu { withAnimation(.smooth(duration: 0.225, extraBounce: 0.35)) { isHovering = over }}
         }
         .onTapGesture {
             WindowUtil.bringWindowToFront(windowInfo: windowInfo)
