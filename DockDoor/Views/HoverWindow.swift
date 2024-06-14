@@ -7,7 +7,6 @@
 
 import Cocoa
 import SwiftUI									
-import KeyboardShortcuts
 import Defaults
 
 @Observable class CurrentWindow {
@@ -61,12 +60,23 @@ class HoverWindow: NSWindow {
     // Method to hide the window
     func hideWindow() {
         DispatchQueue.main.async { [weak self] in
-            self?.orderOut(nil)
-            self?.windows.removeAll()
+            guard let self = self else { return }
+
+            // Remove the hostingView from the window's content view
+            self.contentView = nil  // Clear the content view to release hostingView
+
+            // Set the hostingView property to nil for proper deallocation
+            self.hostingView = nil
+
+            // Ensure other resources are released
+            self.appName = ""
+            self.windows.removeAll()
             CurrentWindow.shared.setIndex(to: 0)
+            
+            self.orderOut(nil) // Hide the window
         }
     }
-    
+
     // Mouse exited tracking area - hide the window
     override func mouseExited(with event: NSEvent) {
         if !CurrentWindow.shared.showingTabMenu { hideWindow() }
@@ -75,77 +85,81 @@ class HoverWindow: NSWindow {
     // Calculate hover window's size and position based on content and mouse location
     private func updateContentViewSizeAndPosition(mouseLocation: CGPoint? = nil, animated: Bool, centerOnScreen: Bool = false) {
         guard let hostingView = hostingView else { return }
-        guard !self.windows.isEmpty else {
+        guard !windows.isEmpty else {
             hideWindow()
             return
         }
-        
+
         CurrentWindow.shared.setShowing(toState: centerOnScreen)
 
-        // Update content view based on new data
-        hostingView.rootView = HoverView(appName: self.appName, windows: self.windows, onWindowTap: self.onWindowTap)
+        // 1. Check if window size needs updating
+        let newHoverWindowSize = hostingView.fittingSize
+        let sizeChanged = newHoverWindowSize != frame.size // Compare new and current size
+        if sizeChanged {
+            hostingView.rootView = HoverView(appName: self.appName, windows: self.windows, onWindowTap: self.onWindowTap) // Only update if size has changed
+        }
         
-        let hoverWindowSize = hostingView.fittingSize
         var hoverWindowOrigin: CGPoint
-        
+
         if centerOnScreen {
             // Center the window on the screen
             guard let screen = self.bestGuessMonitor else { return }
-            
+
             let screenFrame = screen.frame
             hoverWindowOrigin = CGPoint(
-                x: screenFrame.midX - (hoverWindowSize.width / 2),
-                y: screenFrame.midY - (hoverWindowSize.height / 2)
+                x: screenFrame.midX - (newHoverWindowSize.width / 2),
+                y: screenFrame.midY - (newHoverWindowSize.height / 2)
             )
         } else if let mouseLocation = mouseLocation, let screen = screenContainingPoint(mouseLocation) {
             // Use mouse location for initial placement
             hoverWindowOrigin = mouseLocation
-            
+
             let screenFrame = screen.frame
             let dockPosition = DockUtils.shared.getDockPosition()
             let dockHeight = DockUtils.shared.calculateDockHeight(screen)
-            
+
             // Position window above/below dock depending on position
             switch dockPosition {
             case .bottom:
                 hoverWindowOrigin.y = screenFrame.minY + dockHeight
             case .left, .right:
-                hoverWindowOrigin.y -= hoverWindowSize.height / 2
+                hoverWindowOrigin.y -= newHoverWindowSize.height / 2
                 if dockPosition == .left {
                     hoverWindowOrigin.x = screenFrame.minX + dockHeight
                 } else { // dockPosition == .right
-                    hoverWindowOrigin.x = screenFrame.maxX - hoverWindowSize.width - dockHeight
+                    hoverWindowOrigin.x = screenFrame.maxX - newHoverWindowSize.width - dockHeight
                 }
             case .unknown:
                 break
             }
-            
+
             // Adjust horizontal position if the window is wider than the screen and the dock is on the side
-            if dockPosition == .left || dockPosition == .right, hoverWindowSize.width > screenFrame.width - dockHeight {
-                hoverWindowOrigin.x = dockPosition == .left ? screenFrame.minX : screenFrame.maxX - hoverWindowSize.width
+            if dockPosition == .left || dockPosition == .right, newHoverWindowSize.width > screenFrame.width - dockHeight {
+                hoverWindowOrigin.x = dockPosition == .left ? screenFrame.minX : screenFrame.maxX - newHoverWindowSize.width
             }
-            
+
             // Center the window horizontally if the dock is at the bottom
             if dockPosition == .bottom {
-                hoverWindowOrigin.x -= hoverWindowSize.width / 2
+                hoverWindowOrigin.x -= newHoverWindowSize.width / 2
             }
 
             // Ensure the window stays within screen bounds
-            hoverWindowOrigin.x = max(screenFrame.minX, min(hoverWindowOrigin.x, screenFrame.maxX - hoverWindowSize.width))
-            hoverWindowOrigin.y = max(screenFrame.minY, min(hoverWindowOrigin.y, screenFrame.maxY - hoverWindowSize.height))
+            hoverWindowOrigin.x = max(screenFrame.minX, min(hoverWindowOrigin.x, screenFrame.maxX - newHoverWindowSize.width))
+            hoverWindowOrigin.y = max(screenFrame.minY, min(hoverWindowOrigin.y, screenFrame.maxY - newHoverWindowSize.height))
         } else {
             return
         }
 
-        let finalFrame = NSRect(origin: hoverWindowOrigin, size: hoverWindowSize)
-        
-        if animated {
+        let finalFrame = NSRect(origin: hoverWindowOrigin, size: newHoverWindowSize)
+
+        // 2. Only animate if necessary (size or position change)
+        if animated && (sizeChanged || finalFrame != frame) { // Animate only if there's a change
             NSAnimationContext.runAnimationGroup({ context in
                 context.duration = 0.2
                 context.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
                 self.animator().setFrame(finalFrame, display: true)
             }, completionHandler: nil)
-        } else {
+        } else { // Directly set the frame if not animated or no change
             setFrame(finalFrame, display: true)
         }
     }
