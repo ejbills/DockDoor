@@ -46,60 +46,43 @@ class HoverWindow: NSWindow {
     private init() {
         super.init(contentRect: .zero, styleMask: .borderless, backing: .buffered, defer: false)
         level = .floating
-        isMovableByWindowBackground = true // Allow dragging from anywhere
-        collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary] // Show in all spaces and on top of fullscreen apps
-        backgroundColor = .clear // Make window background transparent
-        hasShadow = false // Remove shadow
+        isMovableByWindowBackground = true
+        collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary]
+        backgroundColor = .clear
+        hasShadow = false
         
-        // Set up tracking area for mouse exit detection
         let options: NSTrackingArea.Options = [.mouseEnteredAndExited, .activeAlways]
         let trackingArea = NSTrackingArea(rect: self.frame, options: options, owner: self, userInfo: nil)
         contentView?.addTrackingArea(trackingArea)
     }
     
-    // Method to hide the window
     func hideWindow() {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
-            
-            // Remove the hostingView from the window's content view
-            self.contentView = nil  // Clear the content view to release hostingView
-            
-            // Set the hostingView property to nil for proper deallocation
+            self.contentView = nil
             self.hostingView = nil
-            
-            // Ensure other resources are released
             self.appName = ""
             self.windows.removeAll()
             CurrentWindow.shared.setIndex(to: 0)
-            
-            self.orderOut(nil) // Hide the window
+            CurrentWindow.shared.setShowing(toState: false)
+            self.orderOut(nil)
         }
     }
     
-    // Mouse exited tracking area - hide the window
-    override func mouseExited(with event: NSEvent) {
-        if !CurrentWindow.shared.showingTabMenu { hideWindow() }
-    }
+    override func mouseExited(with event: NSEvent) { if !CurrentWindow.shared.showingTabMenu { hideWindow() }}
     
-    // Calculate hover window's size and position based on content and mouse location
     private func updateContentViewSizeAndPosition(mouseLocation: CGPoint? = nil, animated: Bool, centerOnScreen: Bool = false) {
         guard let hostingView = hostingView else { return }
-        guard !windows.isEmpty else {
-            hideWindow()
-            return
-        }
         
         CurrentWindow.shared.setShowing(toState: centerOnScreen)
         
-        // 1. Check if window size needs updating
         let newHoverWindowSize = hostingView.fittingSize
-        let sizeChanged = newHoverWindowSize != frame.size // Compare new and current size
+        let sizeChanged = newHoverWindowSize != frame.size
         if sizeChanged {
-            hostingView.rootView = HoverView(appName: self.appName, windows: self.windows, onWindowTap: self.onWindowTap) // Only update if size has changed
+            hostingView.rootView = HoverView(appName: self.appName, windows: self.windows, onWindowTap: self.onWindowTap, dockPosition: DockUtils.shared.getDockPosition())
         }
         
-        var hoverWindowOrigin: CGPoint
+        var hoverWindowOrigin: CGPoint = .zero
         
         if centerOnScreen {
             // Center the window on the screen
@@ -152,26 +135,27 @@ class HoverWindow: NSWindow {
         
         let finalFrame = NSRect(origin: hoverWindowOrigin, size: newHoverWindowSize)
         
-        // 2. Only animate if necessary (size or position change)
-        if animated && (sizeChanged || finalFrame != frame) { // Animate only if there's a change
+        if animated && (sizeChanged || finalFrame != frame) {
             NSAnimationContext.runAnimationGroup({ context in
                 context.duration = 0.2
                 context.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
                 self.animator().setFrame(finalFrame, display: true)
             }, completionHandler: nil)
-        } else { // Directly set the frame if not animated or no change
+        } else {
             setFrame(finalFrame, display: true)
         }
     }
     
-    // Helper method to find the screen containing a given point
     private func screenContainingPoint(_ point: CGPoint) -> NSScreen? {
-        self.bestGuessMonitor = DockObserver.screenContainingPoint(point)
-        return self.bestGuessMonitor
+        return NSScreen.screens.first { $0.frame.contains(point) }
     }
     
-    func showWindow(appName: String, windows: [WindowInfo], mouseLocation: CGPoint, onWindowTap: (() -> Void)? = nil) {
+    func showWindow(appName: String, windows: [WindowInfo], mouseLocation: CGPoint? = nil, onWindowTap: (() -> Void)? = nil) {
+        let isMouseEvent = mouseLocation != nil
+        CurrentWindow.shared.setShowing(toState: !isMouseEvent)
+        
         guard !windows.isEmpty else { return }
+        
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             
@@ -180,19 +164,13 @@ class HoverWindow: NSWindow {
             self.onWindowTap = onWindowTap
             
             if self.hostingView == nil {
-                // Create a new hosting view if we don't have one
-                let hoverView = HoverView(appName: appName, windows: windows, onWindowTap: onWindowTap)
+                let hoverView = HoverView(appName: appName, windows: windows, onWindowTap: onWindowTap, dockPosition: DockUtils.shared.getDockPosition())
                 let hostingView = NSHostingView(rootView: hoverView)
                 self.contentView = hostingView
                 self.hostingView = hostingView
             } else {
-                // Update the existing hostingView's rootView
-                self.hostingView?.rootView = HoverView(appName: appName, windows: windows, onWindowTap: onWindowTap)
+                self.hostingView?.rootView = HoverView(appName: appName, windows: windows, onWindowTap: onWindowTap, dockPosition: DockUtils.shared.getDockPosition())
             }
-            
-            let isMouseEvent = mouseLocation != .zero
-            
-            CurrentWindow.shared.setShowing(toState: !isMouseEvent)
             
             self.updateContentViewSizeAndPosition(mouseLocation: mouseLocation, animated: true, centerOnScreen: !isMouseEvent)
             self.makeKeyAndOrderFront(nil)
@@ -203,13 +181,10 @@ class HoverWindow: NSWindow {
         guard !windows.isEmpty else { return }
         
         let newIndex = CurrentWindow.shared.currIndex + 1
-        CurrentWindow.shared.setIndex(to: newIndex >= windows.count ? 0 : newIndex)
+        CurrentWindow.shared.setIndex(to: newIndex % windows.count)
     }
-        
-    // Method to select and bring the current window to the front
+    
     func selectAndBringToFrontCurrentWindow() {
-        guard !windows.isEmpty else { return }
-        
         let selectedWindow = windows[CurrentWindow.shared.currIndex]
         WindowUtil.bringWindowToFront(windowInfo: selectedWindow)
         hideWindow()
@@ -220,12 +195,13 @@ struct HoverView: View {
     let appName: String
     let windows: [WindowInfo]
     let onWindowTap: (() -> Void)?
+    let dockPosition: DockPosition
     
     @State private var showWindows: Bool = false
     @State private var hasAppeared: Bool = false
     
     var scaleAnchor: UnitPoint {
-        switch DockUtils.shared.getDockPosition() {
+        switch dockPosition {
             case .bottom: .bottom
             case .left: .leading
             case .right: .trailing
@@ -234,13 +210,12 @@ struct HoverView: View {
     }
     
     var body: some View {
-        let dockSide = DockUtils.shared.getDockPosition()
         ZStack {
             ScrollViewReader { scrollProxy in
                 ScrollView(.horizontal, showsIndicators: false) {
-                    DynStack(direction: CurrentWindow.shared.showingTabMenu ? .horizontal : (dockSide == .bottom ? .horizontal : .vertical), spacing: 16) {
+                    DynStack(direction: CurrentWindow.shared.showingTabMenu ? .horizontal : (dockPosition == .bottom ? .horizontal : .vertical), spacing: 16) {
                         ForEach(windows.indices, id: \.self) { index in
-                            WindowPreview(windowInfo: windows[index], onTap: onWindowTap, index: index)
+                            WindowPreview(windowInfo: windows[index], onTap: onWindowTap, index: index, dockPosition: dockPosition)
                                 .id(index)
                         }
                     }
@@ -271,7 +246,7 @@ struct HoverView: View {
 //        .animation(.smooth, value: windows)
         .dockStyle()
         .overlay(alignment: .topLeading) {
-            if !windows.isEmpty && !CurrentWindow.shared.showingTabMenu {
+            if !CurrentWindow.shared.showingTabMenu {
                 HStack(spacing: 4) {
                     if let appIcon = windows.first?.appIcon {
                         Image(nsImage: appIcon).resizable()
@@ -300,6 +275,7 @@ struct WindowPreview: View {
     let windowInfo: WindowInfo
     let onTap: (() -> Void)?
     let index: Int
+    let dockPosition: DockPosition
     
     @State private var isHovering = false
     
