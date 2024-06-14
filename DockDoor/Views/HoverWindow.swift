@@ -282,16 +282,18 @@ struct HoverView: View {
 //        .animation(.smooth, value: windows)
         .dockStyle()
         .overlay(alignment: .topLeading) {
-            HStack(spacing: 4) {
-                if let appIcon {
-                    Image(nsImage: appIcon).resizable()
-                        .scaledToFit()
-                        .frame(width: 24, height: 24)
+            if !windows.isEmpty {
+                HStack(spacing: 4) {
+                    if let appIcon {
+                        Image(nsImage: appIcon).resizable()
+                            .scaledToFit()
+                            .frame(width: 24, height: 24)
+                    }
+                    Text(appName)
                 }
-                Text(appName)
+                .shadow(color: .black.opacity(0.35), radius: 12, y: 8)
+                .padding(EdgeInsets(top: -10, leading: 12, bottom: 0, trailing: 0))
             }
-            .shadow(color: .black.opacity(0.35), radius: 12, y: 8)
-            .padding(EdgeInsets(top: -10, leading: 12, bottom: 0, trailing: 0))
         }
         .padding(.all, 24)
     }
