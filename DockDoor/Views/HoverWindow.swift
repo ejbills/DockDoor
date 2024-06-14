@@ -171,6 +171,7 @@ class HoverWindow: NSWindow {
     }
     
     func showWindow(appName: String, windows: [WindowInfo], mouseLocation: CGPoint, onWindowTap: (() -> Void)? = nil) {
+        guard !windows.isEmpty else { return }
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             
@@ -204,18 +205,7 @@ class HoverWindow: NSWindow {
         let newIndex = CurrentWindow.shared.currIndex + 1
         CurrentWindow.shared.setIndex(to: newIndex >= windows.count ? 0 : newIndex)
     }
-    
-    private func updateWindowDisplay() {
-        guard !windows.isEmpty else { return }
         
-        // Update the rootView of the existing hostingView
-        hostingView?.rootView = HoverView(appName: self.appName, windows: self.windows, onWindowTap: self.onWindowTap)
-        
-        // Do not use mouse location, center on screen only for cycling
-        updateContentViewSizeAndPosition(animated: false, centerOnScreen: true)
-        makeKeyAndOrderFront(nil)
-    }
-    
     // Method to select and bring the current window to the front
     func selectAndBringToFrontCurrentWindow() {
         guard !windows.isEmpty else { return }
@@ -248,7 +238,7 @@ struct HoverView: View {
         ZStack {
             ScrollViewReader { scrollProxy in
                 ScrollView(.horizontal, showsIndicators: false) {
-                    DynStack(direction: dockSide == .bottom ? .horizontal : .vertical, spacing: 16) {
+                    DynStack(direction: CurrentWindow.shared.showingTabMenu ? .horizontal : (dockSide == .bottom ? .horizontal : .vertical), spacing: 16) {
                         ForEach(windows.indices, id: \.self) { index in
                             WindowPreview(windowInfo: windows[index], onTap: onWindowTap, index: index)
                                 .id(index)
@@ -314,7 +304,6 @@ struct WindowPreview: View {
     @State private var isHovering = false
     
     var body: some View {
-        let dockSide = DockUtils.shared.getDockPosition()
         let isHighlighted = (index == CurrentWindow.shared.currIndex && CurrentWindow.shared.showingTabMenu)
         VStack {
             if let cgImage = windowInfo.image {
