@@ -70,7 +70,6 @@ class DockObserver {
             abs(mouseLocation.y - lastMouseLocation.y) < mouseUpdateThreshold {
             return
         }
-        
         lastMouseLocation = mouseLocation
         
         if let hoveredOverAppName = getDockIconAtLocation(mouseLocation) {
@@ -106,37 +105,47 @@ class DockObserver {
             print("Dock application not found.")
             return nil
         }
-        
+
         let axDockApp = AXUIElementCreateApplication(dockApp.processIdentifier)
         
         var dockItems: CFTypeRef?
         let dockItemsResult = AXUIElementCopyAttributeValue(axDockApp, kAXChildrenAttribute as CFString, &dockItems)
-        
+
         guard dockItemsResult == .success, let items = dockItems as? [AXUIElement] else {
             print("Failed to get dock items")
             return nil
         }
         
+        // Directly access the dock list element (index 1)
+        // Find the list element within the Dock items
         let axList = items.first { (element) -> Bool in
             var role: CFTypeRef?
             AXUIElementCopyAttributeValue(element, kAXRoleAttribute as CFString, &role)
             return (role as? String) == kAXListRole
         }
-        
+
+        guard axList != nil else {
+            print("Failed to find the Dock list")
+            return nil
+        }
+
         var axChildren: CFTypeRef?
         AXUIElementCopyAttributeValue(axList!, kAXChildrenAttribute as CFString, &axChildren)
-        
+
         guard let children = axChildren as? [AXUIElement] else {
             print("Failed to get children")
             return nil
         }
+
+        // Convert mouseLocation to flipped coordinates
+        let flippedMouseLocation = CGPoint(x: mouseLocation.x, y: NSScreen.main!.frame.height - mouseLocation.y)
         
         for element in children {
             var positionValue: CFTypeRef?
             var sizeValue: CFTypeRef?
             let positionResult = AXUIElementCopyAttributeValue(element, kAXPositionAttribute as CFString, &positionValue)
             let sizeResult = AXUIElementCopyAttributeValue(element, kAXSizeAttribute as CFString, &sizeValue)
-            
+
             if positionResult == .success, sizeResult == .success {
                 let position = positionValue as! AXValue
                 let size = sizeValue as! AXValue
@@ -144,27 +153,17 @@ class DockObserver {
                 AXValueGetValue(position, .cgPoint, &positionPoint)
                 var sizeCGSize = CGSize.zero
                 AXValueGetValue(size, .cgSize, &sizeCGSize)
-                
-                if let screen = NSScreen.screens.first(where: {
-                    $0.frame.contains(CGPoint(x: positionPoint.x + sizeCGSize.width / 2, y: positionPoint.y + sizeCGSize.height / 2))
-                }) {
-                    // Adjust for the correct screen
-                    let iconRect = CGRect(
-                        x: positionPoint.x,
-                        y: screen.frame.height - positionPoint.y - sizeCGSize.height,
-                        width: sizeCGSize.width,
-                        height: sizeCGSize.height
-                    )
+
+                let iconRect = CGRect(origin: positionPoint, size: sizeCGSize)
+                if iconRect.contains(flippedMouseLocation) {
+                    var value: CFTypeRef?
+                    let titleResult = AXUIElementCopyAttributeValue(element, kAXTitleAttribute as CFString, &value)
                     
-                    if iconRect.contains(mouseLocation) {
-                        var value: CFTypeRef?
-                        let titleResult = AXUIElementCopyAttributeValue(element, kAXTitleAttribute as CFString, &value)
-                        
+                    if titleResult == .success, let title = value as? String {
+                        // Check if the app is running before returning the title.
                         var isRunningValue: CFTypeRef?
-                        _ = AXUIElementCopyAttributeValue(element, kAXIsApplicationRunningAttribute as CFString, &isRunningValue)
-                        let isRunning = (isRunningValue as? Bool) == true
-                        
-                        if titleResult == .success, let title = value as? String, isRunning {
+                        AXUIElementCopyAttributeValue(element, kAXIsApplicationRunningAttribute as CFString, &isRunningValue)
+                        if (isRunningValue as? Bool) == true {
                             return title
                         }
                     }
@@ -175,7 +174,7 @@ class DockObserver {
         return nil
     }
 
-    private func screenContainingPoint(_ point: CGPoint) -> NSScreen? {
+    static func screenContainingPoint(_ point: CGPoint) -> NSScreen? {
         return NSScreen.screens.first { NSMouseInRect(point, $0.frame, false) }
     }
 }

@@ -42,7 +42,7 @@ class HoverWindow: NSWindow {
     private var hostingView: NSHostingView<HoverView>?
     
     var bestGuessMonitor: NSScreen? = NSScreen.main
-    var windowSize: CGSize = getWindowSize(NSScreen.main)
+    var windowSize: CGSize = getWindowSize()
     
     private init() {
         super.init(contentRect: .zero, styleMask: .borderless, backing: .buffered, defer: false)
@@ -92,7 +92,6 @@ class HoverWindow: NSWindow {
             // Center the window on the screen
             guard let screen = self.bestGuessMonitor else { return }
             
-            self.windowSize = getWindowSize(screen)
             let screenFrame = screen.frame
             hoverWindowOrigin = CGPoint(
                 x: screenFrame.midX - (hoverWindowSize.width / 2),
@@ -102,7 +101,6 @@ class HoverWindow: NSWindow {
             // Use mouse location for initial placement
             hoverWindowOrigin = mouseLocation
             
-            self.windowSize = getWindowSize(screen)
             let screenFrame = screen.frame
             let dockPosition = DockUtils.shared.getDockPosition()
             let dockHeight = DockUtils.shared.calculateDockHeight(screen)
@@ -110,7 +108,7 @@ class HoverWindow: NSWindow {
             // Position window above/below dock depending on position
             switch dockPosition {
             case .bottom:
-                hoverWindowOrigin.y = dockHeight
+                hoverWindowOrigin.y = screenFrame.minY + dockHeight
             case .left, .right:
                 hoverWindowOrigin.y -= hoverWindowSize.height / 2
                 if dockPosition == .left {

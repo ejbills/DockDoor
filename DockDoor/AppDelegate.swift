@@ -29,13 +29,40 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let iconView = NSHostingView(rootView: icon)
         iconView.frame = NSRect(x: 0, y: 0, width: 20, height: 23)
 
+        // Create Menu Items
+        let openSettingsMenuItem = NSMenuItem(title: "Open Settings", action: #selector(openSettingsWindow(_:)), keyEquivalent: "")
+        openSettingsMenuItem.target = self
+        let quitMenuItem = NSMenuItem(title: "Quit DockDoor", action: #selector(quitAppWrapper), keyEquivalent: "q")
+        quitMenuItem.target = self
+
+        // Create the Menu
+        let menu = NSMenu()
+        menu.addItem(openSettingsMenuItem)
+        menu.addItem(NSMenuItem.separator())
+        menu.addItem(quitMenuItem)
+
         statusBarItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         if let button = statusBarItem?.button {
             button.addSubview(iconView)
             button.frame = iconView.frame
-            button.action = #selector(openSettingsWindow(_:))
-            button.sendAction(on: [.leftMouseUp, .rightMouseUp])
+            button.action = #selector(statusBarButtonClicked(_:))
+            button.target = self
+            button.sendAction(on: [.leftMouseUp])
+
+            button.menu = menu
         }
+    }
+
+    // Add new function to handle button clicks
+    @objc func statusBarButtonClicked(_ sender: Any?) {
+        // Show the menu
+        if let button = statusBarItem?.button {
+            button.menu?.popUp(positioning: nil, at: NSPoint(x: 0, y: button.bounds.maxY), in: button)
+        }
+    }
+    
+    @objc private func quitAppWrapper() {
+        quitApp()
     }
 
     @objc private func openSettingsWindow(_ sender: Any?) {
@@ -57,6 +84,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         settingsWindow?.makeKeyAndOrderFront(nil)
         NSApp.activate(ignoringOtherApps: true)
+    }
+    
+    @objc func quitApp() { // Now an instance method
+        NSApplication.shared.terminate(nil)
     }
 }
 
