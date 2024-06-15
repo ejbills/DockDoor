@@ -18,9 +18,22 @@ struct WindowInfo: Identifiable, Hashable {
     var appIcon: NSImage?
 }
 
+// Cache item structure
+struct CachedImage {
+    let image: CGImage
+    let timestamp: Date
+}
+
 struct WindowUtil {
     
     private static var cachedShareableContent: SCShareableContent? = nil
+    
+    private static var imageCache: [CGWindowID: CachedImage] = [:]
+    
+    static func clearExpiredCache() {
+        let now = Date()
+        imageCache = imageCache.filter { now.timeIntervalSince($0.value.timestamp) <= 60 }
+    }
     
     // MARK: - Helper Functions
     
@@ -31,6 +44,13 @@ struct WindowUtil {
     }
     
     func captureWindowImage(windowInfo: WindowInfo) throws -> CGImage {
+        WindowUtil.clearExpiredCache()
+        
+        if let cachedImage = WindowUtil.imageCache[windowInfo.id],
+           Date().timeIntervalSince(cachedImage.timestamp) <= 60 {
+            return cachedImage.image
+        }
+        
         guard CGPreflightScreenCaptureAccess() else {
             print("Debug: Screen recording permission not granted")
             MessageUtil.showMessage(title: "Permission error",
@@ -42,9 +62,12 @@ struct WindowUtil {
         let id = windowInfo.window.windowID
         let frame = windowInfo.window.frame
         
-        guard let image = CGWindowListCreateImage(frame, .optionIncludingWindow, id, [.boundsIgnoreFraming, .bestResolution]) else {
+        guard let image = CGWindowListCreateImage(frame, .optionIncludingWindow, id, [.boundsIgnoreFraming, .nominalResolution]) else {
             throw NSError(domain: "com.dockdoor.error", code: 1, userInfo: [NSLocalizedDescriptionKey: "Failed to capture window image"])
         }
+        
+        let cachedImage = CachedImage(image: image, timestamp: Date())
+        WindowUtil.imageCache[windowInfo.id] = cachedImage
         
         return image
     }
@@ -99,6 +122,7 @@ struct WindowUtil {
     
     static func resetCache() {
         cachedShareableContent = nil
+        imageCache.removeAll()
     }
     
     // Utility function to list active windows for a specific application

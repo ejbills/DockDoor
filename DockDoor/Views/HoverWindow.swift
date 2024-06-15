@@ -281,8 +281,9 @@ struct HoverView: View {
                             .frame(width: 24, height: 24)
                     }
                     Text(appName)
+                        .padding(6)
+                        .dockStyle()
                 }
-                .shadow(color: .black.opacity(0.35), radius: 12, y: 8)
                 .padding(EdgeInsets(top: -10, leading: 12, bottom: 0, trailing: 0))
             }
         }
@@ -345,8 +346,8 @@ struct WindowPreview: View {
                 let screenFrame = bestGuessMonitor.visibleFrame
                 
                 // Check if the width or height exceeds the screen size
-                let violatedWidth: Bool = cgSize.width > screenFrame.width
-                let violatedHeight: Bool = cgSize.height > screenFrame.height
+                let violatedWidth: Bool = cgSize.width > screenFrame.width * 0.75
+                let violatedHeight: Bool = cgSize.height > screenFrame.height * 0.75
                 
                 // Final dimensions clamped based on screen size violations
                 let finalWidth = violatedWidth ? maxAllowedWidth : inFlightFinalWidth
