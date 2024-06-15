@@ -287,6 +287,8 @@ struct WindowPreview: View {
                 let image = Image(decorative: cgImage, scale: 1.0)
                 let selected = isHovering || isHighlighted
                 
+                let fill = false
+                
                 // The value we want the height, for horizontal dock, and the width, for vertical dock, to have
                 let thickness = HoverWindow.shared.windowSize.height
                 
@@ -299,7 +301,7 @@ struct WindowPreview: View {
                 let oppositeDimension = dockPosition == .bottom ? (cgSize.width * thickness) / cgSize.height : (cgSize.height * thickness) / cgSize.width
                 
                 // The limit for the opposite dimension to have
-                let maxOppositeDimension = thickness * 2
+                let maxOppositeDimension = thickness / 2
                 
                 let idealWidth = dockPosition == .bottom ? nil : thickness
                 let maxWidth = dockPosition == .bottom ? oppositeDimension > maxOppositeDimension ? maxOppositeDimension : nil : thickness
@@ -307,13 +309,13 @@ struct WindowPreview: View {
                 let maxHeight = dockPosition != .bottom ? oppositeDimension > maxOppositeDimension ? maxOppositeDimension : nil : thickness
                 image
                     .resizable()
-                    .aspectRatio(contentMode: oppositeDimension > maxOppositeDimension ? .fill : .fit)
+                    .aspectRatio(contentMode: oppositeDimension > maxOppositeDimension && fill ? .fill : .fit)
                     .frame(
                         idealWidth: idealWidth,
                         maxWidth: maxWidth,
                         idealHeight: idealHeight,
                         maxHeight: maxHeight,
-                        alignment: .topLeading
+                        alignment: fill ? .topLeading : .center
                     )
                     .overlay {
                         AnimatedGradientOverlay(shouldDisplay: selected)
