@@ -79,7 +79,7 @@ class HoverWindow: NSWindow {
         let newHoverWindowSize = hostingView.fittingSize
         let sizeChanged = newHoverWindowSize != frame.size
         if sizeChanged {
-            hostingView.rootView = HoverView(appName: self.appName, windows: self.windows, onWindowTap: self.onWindowTap, dockPosition: DockUtils.shared.getDockPosition())
+            hostingView.rootView = HoverView(appName: self.appName, windows: self.windows, onWindowTap: self.onWindowTap, dockPosition: DockUtils.shared.getDockPosition(), bestGuessMonitor: self.bestGuessMonitor ?? NSScreen.main!)
         }
         
         var hoverWindowOrigin: CGPoint = .zero
@@ -103,17 +103,17 @@ class HoverWindow: NSWindow {
             
             // Position window above/below dock depending on position
             switch dockPosition {
-                case .bottom:
-                    hoverWindowOrigin.y = screenFrame.minY + dockHeight
-                case .left, .right:
-                    hoverWindowOrigin.y -= newHoverWindowSize.height / 2
-                    if dockPosition == .left {
-                        hoverWindowOrigin.x = screenFrame.minX + dockHeight
-                    } else { // dockPosition == .right
-                        hoverWindowOrigin.x = screenFrame.maxX - newHoverWindowSize.width - dockHeight
-                    }
-                case .unknown:
-                    break
+            case .bottom:
+                hoverWindowOrigin.y = screenFrame.minY + dockHeight
+            case .left, .right:
+                hoverWindowOrigin.y -= newHoverWindowSize.height / 2
+                if dockPosition == .left {
+                    hoverWindowOrigin.x = screenFrame.minX + dockHeight
+                } else { // dockPosition == .right
+                    hoverWindowOrigin.x = screenFrame.maxX - newHoverWindowSize.width - dockHeight
+                }
+            case .unknown:
+                break
             }
             
             // Adjust horizontal position if the window is wider than the screen and the dock is on the side
@@ -164,12 +164,12 @@ class HoverWindow: NSWindow {
             self.onWindowTap = onWindowTap
             
             if self.hostingView == nil {
-                let hoverView = HoverView(appName: appName, windows: windows, onWindowTap: onWindowTap, dockPosition: DockUtils.shared.getDockPosition())
+                let hoverView = HoverView(appName: appName, windows: windows, onWindowTap: onWindowTap, dockPosition: DockUtils.shared.getDockPosition(), bestGuessMonitor: self.bestGuessMonitor ?? NSScreen.main!)
                 let hostingView = NSHostingView(rootView: hoverView)
                 self.contentView = hostingView
                 self.hostingView = hostingView
             } else {
-                self.hostingView?.rootView = HoverView(appName: appName, windows: windows, onWindowTap: onWindowTap, dockPosition: DockUtils.shared.getDockPosition())
+                self.hostingView?.rootView = HoverView(appName: appName, windows: windows, onWindowTap: onWindowTap, dockPosition: DockUtils.shared.getDockPosition(), bestGuessMonitor: self.bestGuessMonitor ?? NSScreen.main!)
             }
             
             self.updateContentViewSizeAndPosition(mouseLocation: mouseLocation, animated: true, centerOnScreen: !isMouseEvent)
@@ -197,16 +197,17 @@ struct HoverView: View {
     let windows: [WindowInfo]
     let onWindowTap: (() -> Void)?
     let dockPosition: DockPosition
+    let bestGuessMonitor: NSScreen
     
     @State private var showWindows: Bool = false
     @State private var hasAppeared: Bool = false
     
     var scaleAnchor: UnitPoint {
         switch dockPosition {
-            case .bottom: return .bottom
-            case .left: return .leading
-            case .right: return .trailing
-            default: return .bottom
+        case .bottom: return .bottom
+        case .left: return .leading
+        case .right: return .trailing
+        default: return .bottom
         }
     }
     
@@ -230,7 +231,7 @@ struct HoverView: View {
                 ScrollView(dockPosition == .bottom || CurrentWindow.shared.showingTabMenu ? .horizontal : .vertical, showsIndicators: false) {
                     DynStack(direction: CurrentWindow.shared.showingTabMenu ? .horizontal : (dockPosition == .bottom ? .horizontal : .vertical), spacing: 16) {
                         ForEach(windows.indices, id: \.self) { index in
-                            WindowPreview(windowInfo: windows[index], onTap: onWindowTap, index: index, dockPosition: dockPosition, maxWindowDimension: maxWindowDimension)
+                            WindowPreview(windowInfo: windows[index], onTap: onWindowTap, index: index, dockPosition: dockPosition, maxWindowDimension: maxWindowDimension, bestGuessMonitor: bestGuessMonitor)
                                 .id("\(appName)-\(index)")
                         }
                     }
@@ -250,7 +251,7 @@ struct HoverView: View {
                         self.runAnimation()
                     }
                 }
-                .frame(maxWidth: HoverWindow.shared.bestGuessMonitor?.visibleFrame.width ?? 2000)
+                .frame(maxWidth: bestGuessMonitor.visibleFrame.width)
                 .opacity(showWindows ? 1 : 0.8)
             }
         }
@@ -287,44 +288,56 @@ struct WindowPreview: View {
     let index: Int
     let dockPosition: DockPosition
     let maxWindowDimension: CGFloat
+    let bestGuessMonitor: NSScreen
     
     @State private var isHovering = false
     
     var body: some View {
+        // Determine if the current preview is highlighted
         let isHighlighted = (index == CurrentWindow.shared.currIndex && CurrentWindow.shared.showingTabMenu)
         let selected = isHovering || isHighlighted
         
+        // Determine if height scaling should be favored
         let favorHeightScaling: Bool = CurrentWindow.shared.showingTabMenu || dockPosition == .bottom
         
         VStack {
             if let cgImage = windowInfo.image {
                 let image = Image(decorative: cgImage, scale: 1.0)
                 
-                // The value we want the height, for horizontal dock, and the width, for vertical dock, to have
+                // Desired height for horizontal dock and width for vertical dock
                 let thickness = HoverWindow.shared.windowSize.height
                 
-                // An util var of the size of CGImage with Double values
+                // Get the size of CGImage with Double values
                 let cgSize = CGSize(width: Double(cgImage.width), height: Double(cgImage.height))
                 
-                // The proportional value for the opposite dimension of the thickness (which means
-                // the width for horizontal dock and the height for vertical dock) maintaining the
-                // CGImage aspect ratio.
+                // Calculate the proportional value maintaining the aspect ratio
                 let oppositeDimension = favorHeightScaling ? (cgSize.width * thickness) / cgSize.height : (cgSize.height * thickness) / cgSize.width
                 
-                // Define the maximum width and height constraints for docks
+                // Maximum width and height constraints for docks
                 let maxAllowedWidth: CGFloat = HoverWindow.shared.windowSize.width
                 let maxAllowedHeight: CGFloat = HoverWindow.shared.windowSize.height
                 
-                // Calculate the final width and height based on constraints
-                let finalWidth = favorHeightScaling ? min(max(oppositeDimension, thickness), maxAllowedWidth) : min(thickness, maxAllowedWidth)
-                let finalHeight = favorHeightScaling ? min(max(oppositeDimension, thickness), maxAllowedHeight) : min(thickness, maxAllowedHeight)
+                // Calculate the initial width and height based on constraints
+                let inFlightFinalWidth = favorHeightScaling ? min(max(oppositeDimension, thickness), maxAllowedWidth) : min(thickness, maxAllowedWidth)
+                let inFlightFinalHeight = favorHeightScaling ? min(max(oppositeDimension, thickness), maxAllowedHeight) : min(thickness, maxAllowedHeight)
                 
+                // Get the screen size
+                let screenFrame = bestGuessMonitor.visibleFrame
+                
+                // Check if the width or height exceeds the screen size
+                let violatedWidth: Bool = cgSize.width > screenFrame.width
+                let violatedHeight: Bool = cgSize.height > screenFrame.height
+                
+                // Final dimensions clamped based on screen size violations
+                let finalWidth = violatedWidth ? maxAllowedWidth : inFlightFinalWidth
+                let finalHeight = violatedHeight ? maxAllowedHeight : inFlightFinalHeight
+
                 image
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(
-                        width: favorHeightScaling ? nil : finalWidth,
-                        height: favorHeightScaling ? finalHeight : nil,
+                        width: favorHeightScaling ? (violatedWidth ? finalWidth : nil) : finalWidth,
+                        height: favorHeightScaling ? finalHeight : (violatedHeight ? finalHeight : nil),
                         alignment: .center
                     )
                     .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
@@ -337,7 +350,7 @@ struct WindowPreview: View {
                             )))
                     }
                     .scaleEffect(selected ? 0.95 : 1)
-                    
+                
             } else {
                 ProgressView()
             }
@@ -346,7 +359,11 @@ struct WindowPreview: View {
             AnimatedGradientOverlay(shouldDisplay: selected)
         }
         .onHover { over in
-            if !CurrentWindow.shared.showingTabMenu { withAnimation(.snappy(duration: 0.175)) { isHovering = over }}
+            if !CurrentWindow.shared.showingTabMenu {
+                withAnimation(.snappy(duration: 0.175)) {
+                    isHovering = over
+                }
+            }
         }
         .onTapGesture {
             WindowUtil.bringWindowToFront(windowInfo: windowInfo)
