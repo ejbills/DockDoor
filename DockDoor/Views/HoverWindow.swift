@@ -271,6 +271,10 @@ struct HoverView: View {
             }
         }
         .padding(.all, 24)
+        .frame(
+            maxWidth: HoverWindow.shared.bestGuessMonitor?.visibleFrame.width ?? 2000, 
+            maxHeight: HoverWindow.shared.bestGuessMonitor?.visibleFrame.height ?? 1500
+        )
     }
     
     private func runAnimation() {
