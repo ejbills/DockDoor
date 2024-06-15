@@ -291,6 +291,7 @@ struct WindowPreview: View {
     let bestGuessMonitor: NSScreen
     
     @State private var isHovering = false
+    @State private var isClicking = false
     
     var body: some View {
         // Determine if the current preview is highlighted
@@ -349,7 +350,7 @@ struct WindowPreview: View {
                                 y: selected ? 6 : 4
                             )))
                     }
-                    .scaleEffect(selected ? 0.95 : 1)
+                    .scaleEffect(selected ? isClicking ? 1.05 : 0.95 : 1)
                 
             } else {
                 ProgressView()
@@ -365,9 +366,13 @@ struct WindowPreview: View {
                 }
             }
         }
-        .onTapGesture {
-            WindowUtil.bringWindowToFront(windowInfo: windowInfo)
-            onTap?()
-        }
+        .onLongPressGesture(minimumDuration: .infinity, maximumDistance: 10, perform: {}, onPressingChanged: { pressing in
+            withAnimation(.snappy(duration: 0.15)) {
+                isClicking = pressing
+                
+                WindowUtil.bringWindowToFront(windowInfo: windowInfo)
+                onTap?()
+            }
+        })
     }
 }
