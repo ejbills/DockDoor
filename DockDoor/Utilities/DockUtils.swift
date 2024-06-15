@@ -97,7 +97,6 @@ class DockUtils {
     
     func getDockPosition() -> DockPosition {
         guard let orientation = dockDefaults?.string(forKey: "orientation")?.lowercased() else {
-            print("Dock location wasnt found, bailing to best guess method.")
             if NSScreen.main!.visibleFrame.origin.y == 0 && !self.isDockHidingEnabled() {
                 if NSScreen.main!.visibleFrame.origin.x == 0 {
                     return .right
@@ -115,5 +114,18 @@ class DockUtils {
         case "right":  return .right
         default:       return .unknown
         }
+    }
+    
+    func getAppIcon(byName appName: String) -> NSImage? {
+        let workspace = NSWorkspace.shared
+        let apps = workspace.runningApplications
+        
+        for app in apps {
+            if let appLocalizedName = app.localizedName, appLocalizedName.caseInsensitiveCompare(appName) == .orderedSame {
+                return workspace.icon(forFile: app.bundleURL!.path)
+            }
+        }
+        
+        return nil
     }
 }

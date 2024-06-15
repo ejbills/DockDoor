@@ -16,4 +16,6 @@ let roughWidthCap = optimisticScreenSizeWidth / 3
 
 extension Defaults.Keys {
     static let sizingMultiplier = Key<CGFloat>("sizingMultiplier") { 3 }
+    
+    static let launched = Key<Bool>("launched") { false }
 }

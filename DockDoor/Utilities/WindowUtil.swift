@@ -15,6 +15,7 @@ struct WindowInfo: Identifiable, Hashable {
     let appName: String
     let windowName: String?
     var image: CGImage?
+    var appIcon: NSImage?
 }
 
 struct WindowUtil {
@@ -119,7 +120,8 @@ struct WindowUtil {
                     window: window,
                     appName: app.applicationName,
                     windowName: window.title,
-                    image: nil
+                    image: nil,
+                    appIcon: DockUtils.shared.getAppIcon(byName: app.applicationName)
                 )
                 do {
                     windowInfo.image = try WindowUtil().captureWindowImage(windowInfo: windowInfo)

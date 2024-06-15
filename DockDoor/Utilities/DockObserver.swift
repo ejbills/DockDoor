@@ -79,14 +79,16 @@ class DockObserver {
                 Task {
                     let activeWindows = await WindowUtil.activeWindows(for: hoveredOverAppName)
                     
-                    DispatchQueue.main.async {
-                        // Show HoverWindow (using shared instance)
-                        HoverWindow.shared.showWindow(
-                            appName: hoveredOverAppName,
-                            windows: activeWindows,
-                            mouseLocation: mouseLocation,
-                            onWindowTap: { self.hideHoverWindow() } // Pass the hideWindow function
-                        )
+                    if activeWindows.isEmpty { hideHoverWindow() } else {
+                        DispatchQueue.main.async {
+                            // Show HoverWindow (using shared instance)
+                            HoverWindow.shared.showWindow(
+                                appName: hoveredOverAppName,
+                                windows: activeWindows,
+                                mouseLocation: mouseLocation,
+                                onWindowTap: { self.hideHoverWindow() } // Pass the hideWindow function
+                            )
+                        }
                     }
                 }
             }

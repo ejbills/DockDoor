@@ -7,6 +7,7 @@
 
 import Cocoa
 import SwiftUI
+import Defaults
 
 class AppDelegate: NSObject, NSApplicationDelegate {
     private var dockObserver: DockObserver?
@@ -15,9 +16,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var settingsWindow: NSWindow?
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
-        self.configureMenuBar()
-        dockObserver = DockObserver.shared
-        keybindHelper = KeybindHelper.shared
+        if !Defaults[.launched] { handleFirstTimeLaunch() } else {
+            self.configureMenuBar()
+            dockObserver = DockObserver.shared
+            keybindHelper = KeybindHelper.shared
+        }
     }
 
     private func configureMenuBar() {
@@ -88,6 +91,22 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     @objc func quitApp() { // Now an instance method
         NSApplication.shared.terminate(nil)
+    }
+    
+    private func handleFirstTimeLaunch() {
+        let contentView = PermView()
+        
+        Defaults[.launched] = true
+        
+        settingsWindow = NSWindow(
+            contentRect: NSRect(x: 0, y: 0, width: 400, height: 200),
+            styleMask: [.titled, .closable, .resizable],
+            backing: .buffered, defer: false)
+        settingsWindow?.center()
+        settingsWindow?.setFrameAutosaveName("DockDoor Permissions")
+        settingsWindow?.contentView = NSHostingView(rootView: contentView)
+        settingsWindow?.title = "DockDoor Permissions"
+        settingsWindow?.makeKeyAndOrderFront(nil)
     }
 }
 
