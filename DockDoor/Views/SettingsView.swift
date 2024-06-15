@@ -26,7 +26,7 @@ struct SizePickerView: View {
                 .font(.headline)
 
             HStack(spacing: 10) {
-                ForEach(1...5, id: \.self) { size in
+                ForEach(1...7, id: \.self) { size in
                     Button(action: {
                         sizingMultiplier = CGFloat(size)
                         MessageUtil.showMessage(title: "Restart required.", message: "Please restart the application to apply your changes. Click OK to quit the app.", completion: { _ in quitApp() })
