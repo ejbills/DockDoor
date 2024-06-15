@@ -203,20 +203,34 @@ struct HoverView: View {
     
     var scaleAnchor: UnitPoint {
         switch dockPosition {
-            case .bottom: .bottom
-            case .left: .leading
-            case .right: .trailing
-            case .unknown: .bottom
+            case .bottom: return .bottom
+            case .left: return .leading
+            case .right: return .trailing
+            default: return .bottom
         }
+    }
+    
+    var maxWindowDimension: CGFloat {
+        let thickness = HoverWindow.shared.windowSize.height
+        var maxDimension: CGFloat = 0
+        
+        for window in windows {
+            if let cgImage = window.image {
+                let cgSize = CGSize(width: Double(cgImage.width), height: Double(cgImage.height))
+                let oppositeDimension = dockPosition == .bottom ? (cgSize.width * thickness) / cgSize.height : (cgSize.height * thickness) / cgSize.width
+                maxDimension = max(maxDimension, oppositeDimension)
+            }
+        }
+        return maxDimension
     }
     
     var body: some View {
         ZStack {
             ScrollViewReader { scrollProxy in
-                ScrollView(.horizontal, showsIndicators: false) {
+                ScrollView(dockPosition == .bottom || CurrentWindow.shared.showingTabMenu ? .horizontal : .vertical, showsIndicators: false) {
                     DynStack(direction: CurrentWindow.shared.showingTabMenu ? .horizontal : (dockPosition == .bottom ? .horizontal : .vertical), spacing: 16) {
                         ForEach(windows.indices, id: \.self) { index in
-                            WindowPreview(windowInfo: windows[index], onTap: onWindowTap, index: index, dockPosition: dockPosition)
+                            WindowPreview(windowInfo: windows[index], onTap: onWindowTap, index: index, dockPosition: dockPosition, maxWindowDimension: maxWindowDimension)
                                 .id("\(appName)-\(index)")
                         }
                     }
@@ -228,7 +242,6 @@ struct HoverView: View {
                         }
                     }
                     .onChange(of: CurrentWindow.shared.currIndex) { _, newIndex in
-                        // Smoothly scroll to the new index
                         withAnimation {
                             scrollProxy.scrollTo("\(appName)-\(newIndex)", anchor: .center)
                         }
@@ -237,15 +250,11 @@ struct HoverView: View {
                         self.runAnimation()
                     }
                 }
-                .frame(
-                    maxWidth: HoverWindow.shared.bestGuessMonitor?.visibleFrame.width ?? 2000
-                )
-//                .scaleEffect(showWindows ? 1 : 0.90, anchor: scaleAnchor)
+                .frame(maxWidth: HoverWindow.shared.bestGuessMonitor?.visibleFrame.width ?? 2000)
                 .opacity(showWindows ? 1 : 0.8)
             }
         }
-//        .animation(.smooth, value: windows)
-        .dockStyle()
+        .dockStyle(cornerRadius: 26)
         .overlay(alignment: .topLeading) {
             if !CurrentWindow.shared.showingTabMenu {
                 HStack(spacing: 4) {
@@ -277,17 +286,19 @@ struct WindowPreview: View {
     let onTap: (() -> Void)?
     let index: Int
     let dockPosition: DockPosition
+    let maxWindowDimension: CGFloat
     
     @State private var isHovering = false
     
     var body: some View {
         let isHighlighted = (index == CurrentWindow.shared.currIndex && CurrentWindow.shared.showingTabMenu)
+        let selected = isHovering || isHighlighted
+        
+        let favorHeightScaling: Bool = CurrentWindow.shared.showingTabMenu || dockPosition == .bottom
+        
         VStack {
             if let cgImage = windowInfo.image {
                 let image = Image(decorative: cgImage, scale: 1.0)
-                let selected = isHovering || isHighlighted
-                
-                let fill = false
                 
                 // The value we want the height, for horizontal dock, and the width, for vertical dock, to have
                 let thickness = HoverWindow.shared.windowSize.height
@@ -298,59 +309,44 @@ struct WindowPreview: View {
                 // The proportional value for the opposite dimension of the thickness (which means
                 // the width for horizontal dock and the height for vertical dock) maintaining the
                 // CGImage aspect ratio.
-                let oppositeDimension = dockPosition == .bottom ? (cgSize.width * thickness) / cgSize.height : (cgSize.height * thickness) / cgSize.width
+                let oppositeDimension = favorHeightScaling ? (cgSize.width * thickness) / cgSize.height : (cgSize.height * thickness) / cgSize.width
                 
-                // The limit for the opposite dimension to have
-                let maxOppositeDimension = dockPosition == .bottom ? thickness * 2 : thickness / 2
+                // Define the maximum width and height constraints for docks
+                let maxAllowedWidth: CGFloat = HoverWindow.shared.windowSize.width
+                let maxAllowedHeight: CGFloat = HoverWindow.shared.windowSize.height
                 
-                let idealWidth = dockPosition == .bottom ? nil : thickness
-                let maxWidth = dockPosition == .bottom ? oppositeDimension > maxOppositeDimension ? maxOppositeDimension : nil : thickness
-                let idealHeight = dockPosition != .bottom ? nil : thickness
-                let maxHeight = dockPosition != .bottom ? oppositeDimension > maxOppositeDimension ? maxOppositeDimension : nil : thickness
+                // Calculate the final width and height based on constraints
+                let finalWidth = favorHeightScaling ? min(max(oppositeDimension, thickness), maxAllowedWidth) : min(thickness, maxAllowedWidth)
+                let finalHeight = favorHeightScaling ? min(max(oppositeDimension, thickness), maxAllowedHeight) : min(thickness, maxAllowedHeight)
+                
                 image
                     .resizable()
-                    .aspectRatio(contentMode: oppositeDimension > maxOppositeDimension && fill ? .fill : .fit)
+                    .aspectRatio(contentMode: .fit)
                     .frame(
-                        idealWidth: idealWidth,
-                        maxWidth: maxWidth,
-                        idealHeight: idealHeight,
-                        maxHeight: maxHeight,
-                        alignment: fill ? .topLeading : .center
+                        width: favorHeightScaling ? nil : finalWidth,
+                        height: favorHeightScaling ? finalHeight : nil,
+                        alignment: .center
                     )
-                    .overlay {
-                        AnimatedGradientOverlay(shouldDisplay: selected)
-                    }
-                    .clipShape(RoundedRectangle(cornerRadius: 3, style: .continuous))
+                    .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
                     .background {
-                        RoundedRectangle(cornerRadius: 3, style: .continuous)
+                        RoundedRectangle(cornerRadius: 6, style: .continuous)
                             .fill(.clear.shadow(.drop(
                                 color: .black.opacity(selected ? 0.35 : 0.25),
                                 radius: selected ? 12 : 8,
                                 y: selected ? 6 : 4
                             )))
                     }
-                    .scaleEffect(selected ? 1.05 : 1)
-                //                        .overlay(
-                //                            VStack {
-                //                                if let name = windowInfo.windowName, !name.isEmpty {
-                //                                    Text(name)
-                //                                        .padding(4)
-                //                                        .background(.thickMaterial)
-                //                                        .foregroundColor(.white)
-                //                                        .cornerRadius(8)
-                //                                        .padding(8)
-                //                                        .lineLimit(1)
-                //                                }
-                //                            },
-                //                            alignment: .topTrailing
-                //                        )
-                
+                    .scaleEffect(selected ? 0.95 : 1)
+                    
             } else {
                 ProgressView()
             }
         }
+        .overlay {
+            AnimatedGradientOverlay(shouldDisplay: selected)
+        }
         .onHover { over in
-            if !CurrentWindow.shared.showingTabMenu { withAnimation(.smooth(duration: 0.225, extraBounce: 0.35)) { isHovering = over }}
+            if !CurrentWindow.shared.showingTabMenu { withAnimation(.snappy(duration: 0.175)) { isHovering = over }}
         }
         .onTapGesture {
             WindowUtil.bringWindowToFront(windowInfo: windowInfo)
