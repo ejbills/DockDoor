@@ -287,15 +287,33 @@ struct WindowPreview: View {
                 let image = Image(decorative: cgImage, scale: 1.0)
                 let selected = isHovering || isHighlighted
                 
+                // The value we want the height, for horizontal dock, and the width, for vertical dock, to have
+                let thickness = HoverWindow.shared.windowSize.height
+                
+                // An util var of the size of CGImage with Double values
+                let cgSize = CGSize(width: Double(cgImage.width), height: Double(cgImage.height))
+                
+                // The proportional value for the opposite dimension of the thickness (which means
+                // the width for horizontal dock and the height for vertical dock) maintaining the
+                // CGImage aspect ratio.
+                let oppositeDimension = dockPosition == .bottom ? (cgSize.width * thickness) / cgSize.height : (cgSize.height * thickness) / cgSize.width
+                
+                // The limit for the opposite dimension to have
+                let maxOppositeDimension = thickness * 2
+                
+                let idealWidth = dockPosition == .bottom ? nil : thickness
+                let maxWidth = dockPosition == .bottom ? oppositeDimension > maxOppositeDimension ? maxOppositeDimension : nil : thickness
+                let idealHeight = dockPosition != .bottom ? nil : thickness
+                let maxHeight = dockPosition != .bottom ? oppositeDimension > maxOppositeDimension ? maxOppositeDimension : nil : thickness
                 image
                     .resizable()
-                    .scaledToFit()
-//                    .frame(
-//                        width: dockSide == .bottom ? nil : 150,
-//                        height:  dockSide != .bottom ? nil : 150
-//                    )
+                    .aspectRatio(contentMode: oppositeDimension > maxOppositeDimension ? .fill : .fit)
                     .frame(
-                        height:  HoverWindow.shared.windowSize.height
+                        idealWidth: idealWidth,
+                        maxWidth: maxWidth,
+                        idealHeight: idealHeight,
+                        maxHeight: maxHeight,
+                        alignment: .topLeading
                     )
                     .overlay {
                         AnimatedGradientOverlay(shouldDisplay: selected)
