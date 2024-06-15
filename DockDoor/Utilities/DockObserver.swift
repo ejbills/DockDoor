@@ -86,7 +86,7 @@ class DockObserver {
                                 appName: hoveredOverAppName,
                                 windows: activeWindows,
                                 mouseLocation: mouseLocation,
-                                onWindowTap: { self.hideHoverWindow() } // Pass the hideWindow function
+                                onWindowTap: { self.hideHoverWindow() }
                             )
                         }
                     }
@@ -139,8 +139,14 @@ class DockObserver {
             return nil
         }
 
-        // Convert mouseLocation to flipped coordinates
-        let flippedMouseLocation = CGPoint(x: mouseLocation.x, y: NSScreen.main!.frame.height - mouseLocation.y)
+        // Determine the screen that the mouse is currently on
+        guard let screen = DockObserver.screenContainingPoint(mouseLocation) else {
+            return nil
+        }
+
+        // Convert mouseLocation to flipped coordinates for the specific screen
+        let screenFrame = screen.frame
+        let flippedMouseLocation = CGPoint(x: mouseLocation.x, y: screenFrame.maxY - mouseLocation.y)
         
         for element in children {
             var positionValue: CFTypeRef?
@@ -177,7 +183,13 @@ class DockObserver {
     }
 
     static func screenContainingPoint(_ point: CGPoint) -> NSScreen? {
-        return NSScreen.screens.first { NSMouseInRect(point, $0.frame, false) }
+        for screen in NSScreen.screens {
+            let screenFrame = screen.frame
+            if screenFrame.contains(point) {
+                return screen
+            }
+        }
+        return nil
     }
 }
 

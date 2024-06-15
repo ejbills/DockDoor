@@ -93,7 +93,7 @@ class HoverWindow: NSWindow {
                 x: screenFrame.midX - (newHoverWindowSize.width / 2),
                 y: screenFrame.midY - (newHoverWindowSize.height / 2)
             )
-        } else if let mouseLocation = mouseLocation, let screen = screenContainingPoint(mouseLocation) {
+        } else if let mouseLocation = mouseLocation, let screen = DockObserver.screenContainingPoint(mouseLocation) {
             // Use mouse location for initial placement
             hoverWindowOrigin = mouseLocation
             
@@ -145,11 +145,7 @@ class HoverWindow: NSWindow {
             setFrame(finalFrame, display: true)
         }
     }
-    
-    private func screenContainingPoint(_ point: CGPoint) -> NSScreen? {
-        return NSScreen.screens.first { $0.frame.contains(point) }
-    }
-    
+        
     func showWindow(appName: String, windows: [WindowInfo], mouseLocation: CGPoint? = nil, onWindowTap: (() -> Void)? = nil) {
         let isMouseEvent = mouseLocation != nil
         CurrentWindow.shared.setShowing(toState: !isMouseEvent)
