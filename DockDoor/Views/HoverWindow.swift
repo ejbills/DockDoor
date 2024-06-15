@@ -301,7 +301,7 @@ struct WindowPreview: View {
                 let oppositeDimension = dockPosition == .bottom ? (cgSize.width * thickness) / cgSize.height : (cgSize.height * thickness) / cgSize.width
                 
                 // The limit for the opposite dimension to have
-                let maxOppositeDimension = thickness / 2
+                let maxOppositeDimension = dockPosition == .bottom ? thickness * 2 : thickness / 2
                 
                 let idealWidth = dockPosition == .bottom ? nil : thickness
                 let maxWidth = dockPosition == .bottom ? oppositeDimension > maxOppositeDimension ? maxOppositeDimension : nil : thickness
