@@ -217,7 +217,7 @@ struct HoverView: View {
                     DynStack(direction: CurrentWindow.shared.showingTabMenu ? .horizontal : (dockPosition == .bottom ? .horizontal : .vertical), spacing: 16) {
                         ForEach(windows.indices, id: \.self) { index in
                             WindowPreview(windowInfo: windows[index], onTap: onWindowTap, index: index, dockPosition: dockPosition)
-                                .id(index)
+                                .id("\(appName)-\(index)")
                         }
                     }
                     .padding(20)
@@ -230,7 +230,7 @@ struct HoverView: View {
                     .onChange(of: CurrentWindow.shared.currIndex) { _, newIndex in
                         // Smoothly scroll to the new index
                         withAnimation {
-                            scrollProxy.scrollTo(newIndex, anchor: .center)
+                            scrollProxy.scrollTo("\(appName)-\(newIndex)", anchor: .center)
                         }
                     }
                     .onChange(of: self.windows) { _, _ in
