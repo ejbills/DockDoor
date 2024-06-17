@@ -71,12 +71,6 @@ class HoverWindow: NSWindow {
         }
     }
     
-    override func mouseExited(with event: NSEvent) {
-        if !CurrentWindow.shared.showingTabMenu {
-            hideWindow()
-        }
-    }
-    
     private func updateContentViewSizeAndPosition(mouseLocation: CGPoint? = nil, animated: Bool, centerOnScreen: Bool = false) {
         guard let hostingView else { return }
         
