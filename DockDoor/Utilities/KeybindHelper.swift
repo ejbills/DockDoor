@@ -12,6 +12,7 @@ class KeybindHelper {
     static let shared = KeybindHelper()
 
     private var isControlKeyPressed = false
+    private var isShiftKeyPressed = false
     private var eventTap: CFMachPort?
     private var runLoopSource: CFRunLoopSource?
 
@@ -61,26 +62,32 @@ class KeybindHelper {
 
         switch type {
         case .flagsChanged:
-            // This section (only for Ctrl key changes) remains the same
             let modifierFlags = event.flags
             let controlKeyCurrentlyPressed = modifierFlags.contains(.maskControl)
+            let shiftKeyCurrentlyPressed = modifierFlags.contains(.maskShift)
 
             if controlKeyCurrentlyPressed != isControlKeyPressed {
                 isControlKeyPressed = controlKeyCurrentlyPressed
-                if !isControlKeyPressed { // If Ctrl was released
-                    HoverWindow.shared.hideWindow() // Hide the HoverWindow
-                    HoverWindow.shared.selectAndBringToFrontCurrentWindow()
-                }
+            }
+            
+            // Update the state of Shift key
+            if shiftKeyCurrentlyPressed != isShiftKeyPressed {
+                isShiftKeyPressed = shiftKeyCurrentlyPressed
+            }
+
+            if !isControlKeyPressed && !isShiftKeyPressed {  // If both Ctrl and Shift were released
+                HoverWindow.shared.hideWindow()  // Hide the HoverWindow
+                HoverWindow.shared.selectAndBringToFrontCurrentWindow()
             }
 
         case .keyDown:
-            if isControlKeyPressed && keyCode == 48 { // Tab key
-                if HoverWindow.shared.isVisible { // Check if HoverWindow is already shown
-                    HoverWindow.shared.cycleWindows() // Cycle windows if it's open
+            if isControlKeyPressed && keyCode == 48 {  // Tab key
+                if HoverWindow.shared.isVisible {  // Check if HoverWindow is already shown
+                    HoverWindow.shared.cycleWindows(goBackwards: isShiftKeyPressed)  // Cycle windows based on Shift key state
                 } else {
-                    showHoverWindow() // Initialize HoverWindow if it's not open
+                    showHoverWindow()  // Initialize HoverWindow if it's not open
                 }
-                return nil // Suppress the Tab key event
+                return nil  // Suppress the Tab key event
             }
 
         default:
@@ -90,7 +97,6 @@ class KeybindHelper {
         return Unmanaged.passUnretained(event)
     }
 
-    
     private func showHoverWindow() {
         Task {
             let windows = await WindowUtil.activeWindows(for: "")

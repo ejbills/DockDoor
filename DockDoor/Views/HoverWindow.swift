@@ -83,7 +83,7 @@ class HoverWindow: NSWindow {
         if centerOnScreen {
             CurrentWindow.shared.setShowing(toState: true)
             guard let bestGuessMonitor = self.bestGuessMonitor else { return }
-                        
+            
             let newHoverWindowSize = hostingView.fittingSize
             let position = CGPoint(
                 x: bestGuessMonitor.frame.midX - (newHoverWindowSize.width / 2),
@@ -176,7 +176,6 @@ class HoverWindow: NSWindow {
     
     func showWindow(appName: String, windows: [WindowInfo], mouseLocation: CGPoint? = nil, onWindowTap: (() -> Void)? = nil) {
         let isMouseEvent = mouseLocation != nil
-        print("is this a mouse event? :\(isMouseEvent)")
         CurrentWindow.shared.setShowing(toState: !isMouseEvent)
         
         guard !windows.isEmpty else { return }
@@ -202,11 +201,19 @@ class HoverWindow: NSWindow {
         }
     }
     
-    func cycleWindows() {
+    func cycleWindows(goBackwards: Bool) {
         guard !windows.isEmpty else { return }
         
-        let newIndex = CurrentWindow.shared.currIndex + 1
-        CurrentWindow.shared.setIndex(to: newIndex % windows.count)
+        let newIndex: Int
+        if goBackwards {
+            newIndex = CurrentWindow.shared.currIndex - 1
+        } else {
+            newIndex = CurrentWindow.shared.currIndex + 1
+        }
+        
+        // Ensure the index wraps around
+        let wrappedIndex = (newIndex + windows.count) % windows.count
+        CurrentWindow.shared.setIndex(to: wrappedIndex)
     }
     
     func selectAndBringToFrontCurrentWindow() {
@@ -227,27 +234,30 @@ struct HoverView: View {
     @State private var showWindows: Bool = false
     @State private var hasAppeared: Bool = false
     
-    var scaleAnchor: UnitPoint {
-        switch dockPosition {
-        case .bottom: return .bottom
-        case .left: return .leading
-        case .right: return .trailing
-        default: return .bottom
-        }
-    }
-    
-    var maxWindowDimension: CGFloat {
+    var maxWindowDimension: CGPoint {
         let thickness = HoverWindow.shared.windowSize.height
-        var maxDimension: CGFloat = 0
-        
+        var maxWidth: CGFloat = 0
+        var maxHeight: CGFloat = 0
+
         for window in windows {
             if let cgImage = window.image {
                 let cgSize = CGSize(width: Double(cgImage.width), height: Double(cgImage.height))
-                let oppositeDimension = dockPosition == .bottom ? (cgSize.width * thickness) / cgSize.height : (cgSize.height * thickness) / cgSize.width
-                maxDimension = max(maxDimension, oppositeDimension)
+                
+                // Calculate the dimensions based on the dock position
+                let widthBasedOnHeight = (cgSize.width * thickness) / cgSize.height
+                let heightBasedOnWidth = (cgSize.height * thickness) / cgSize.width
+                
+                if dockPosition == .bottom || CurrentWindow.shared.showingTabMenu {
+                    maxWidth = max(maxWidth, widthBasedOnHeight)
+                    maxHeight = thickness  // consistent height if dock is on the bottom
+                } else {
+                    maxHeight = max(maxHeight, heightBasedOnWidth)
+                    maxWidth = thickness  // consistent width if dock is on the sides
+                }
             }
         }
-        return maxDimension
+
+        return CGPoint(x: maxWidth, y: maxHeight)
     }
     
     var body: some View {
@@ -317,63 +327,55 @@ struct WindowPreview: View {
     let onTap: (() -> Void)?
     let index: Int
     let dockPosition: DockPosition
-    let maxWindowDimension: CGFloat
+    let maxWindowDimension: CGPoint
     let bestGuessMonitor: NSScreen
     
     @State private var isHovering = false
+
+    private var calculatedMaxDimensions: CGSize? {
+        guard let screen = HoverWindow.shared.bestGuessMonitor else { return nil }
+        return CGSize(width: screen.frame.width * 0.75, height: screen.frame.height * 0.75)
+    }
     
+    var calculatedSize: CGSize {
+        guard let cgImage = windowInfo.image else { return .zero }
+        
+        let cgSize = CGSize(width: cgImage.width, height: cgImage.height)
+        let aspectRatio = cgSize.width / cgSize.height
+        let maxAllowedWidth = maxWindowDimension.x
+        let maxAllowedHeight = maxWindowDimension.y
+
+        var targetWidth = maxAllowedWidth
+        var targetHeight = targetWidth / aspectRatio
+        
+        if targetHeight > maxAllowedHeight {
+            targetHeight = maxAllowedHeight
+            targetWidth = aspectRatio * targetHeight
+        }
+        
+        return CGSize(width: targetWidth, height: targetHeight)
+    }
+
     var body: some View {
         // Determine if the current preview is highlighted
         let isHighlighted = (index == CurrentWindow.shared.currIndex && CurrentWindow.shared.showingTabMenu)
         let selected = isHovering || isHighlighted
         
-        // Determine if height scaling should be favored
-        let favorHeightScaling: Bool = CurrentWindow.shared.showingTabMenu || dockPosition == .bottom
-        
         VStack {
             if let cgImage = windowInfo.image {
-                let image = Image(decorative: cgImage, scale: 1.0)
-                
-                // Desired height for horizontal dock and width for vertical dock
-                let thickness = HoverWindow.shared.windowSize.height
-                
-                // Get the size of CGImage with Double values
-                let cgSize = CGSize(width: Double(cgImage.width), height: Double(cgImage.height))
-                
-                // Calculate the proportional value maintaining the aspect ratio
-                let oppositeDimension = favorHeightScaling ? (cgSize.width * thickness) / cgSize.height : (cgSize.height * thickness) / cgSize.width
-                
-                // Maximum width and height constraints for docks
-                let maxAllowedWidth: CGFloat = HoverWindow.shared.windowSize.width
-                let maxAllowedHeight: CGFloat = HoverWindow.shared.windowSize.height
-                
-                // Calculate the initial width and height based on constraints
-                let inFlightFinalWidth = favorHeightScaling ? min(max(oppositeDimension, thickness), maxAllowedWidth) : min(thickness, maxAllowedWidth)
-                let inFlightFinalHeight = favorHeightScaling ? min(max(oppositeDimension, thickness), maxAllowedHeight) : min(thickness, maxAllowedHeight)
-                
-                // Get the screen size
-                let screenFrame = bestGuessMonitor.visibleFrame
-                
-                // Check if the width or height exceeds the screen size
-                let violatedWidth: Bool = cgSize.width > screenFrame.width * 0.75
-                let violatedHeight: Bool = cgSize.height > screenFrame.height * 0.75
-                
-                // Final dimensions clamped based on screen size violations
-                let finalWidth = violatedWidth ? maxAllowedWidth : inFlightFinalWidth
-                let finalHeight = violatedHeight ? maxAllowedHeight : inFlightFinalHeight
-                
-                image
+                Image(decorative: cgImage, scale: 1.0)
                     .resizable()
-                    .aspectRatio(contentMode: .fit)
+                    .aspectRatio(contentMode: .fill)
                     .frame(
-                        width: favorHeightScaling ? (violatedWidth ? finalWidth : nil) : finalWidth,
-                        height: favorHeightScaling ? finalHeight : (violatedHeight ? finalHeight : nil),
+                        width: calculatedSize.width,
+                        height: calculatedSize.height,
                         alignment: .center
                     )
+                    .frame(maxWidth: calculatedMaxDimensions?.width, maxHeight: calculatedMaxDimensions?.height)
                     .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
                     .background {
                         RoundedRectangle(cornerRadius: 6, style: .continuous)
-                            .fill(.clear.shadow(.drop(
+                            .fill(Color.clear.shadow(.drop(
                                 color: .black.opacity(selected ? 0.35 : 0.25),
                                 radius: selected ? 12 : 8,
                                 y: selected ? 6 : 4
@@ -385,6 +387,7 @@ struct WindowPreview: View {
                 ProgressView()
             }
         }
+        .contentShape(Rectangle())
         .overlay {
             AnimatedGradientOverlay(shouldDisplay: selected)
         }

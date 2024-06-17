@@ -201,7 +201,7 @@ class DockObserver {
             return NSPoint(x: point.x, y: point.y)
         }
         
-        let (offsetLeft, offsetTop) = computeOffsets(for: screen, primaryScreen: primaryScreen)
+        let (_, offsetTop) = computeOffsets(for: screen, primaryScreen: primaryScreen)
         
         let y: CGFloat
         if screen == primaryScreen {
