@@ -34,17 +34,17 @@ import Defaults
 
 class HoverWindow: NSWindow {
     static let shared = HoverWindow()
-
+    
     private var appName: String = ""
     private var windows: [WindowInfo] = []
     private var onWindowTap: (() -> Void)?
     private var hostingView: NSHostingView<HoverView>?
-
+    
     var bestGuessMonitor: NSScreen? = NSScreen.main
     var windowSize: CGSize = getWindowSize()
-
+    
     private var previousHoverWindowOrigin: CGPoint? // Store previous origin
-
+    
     private init() {
         super.init(contentRect: .zero, styleMask: .borderless, backing: .buffered, defer: false)
         level = .floating
@@ -52,12 +52,12 @@ class HoverWindow: NSWindow {
         collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary]
         backgroundColor = .clear
         hasShadow = false
-
+        
         let options: NSTrackingArea.Options = [.mouseEnteredAndExited, .activeAlways]
         let trackingArea = NSTrackingArea(rect: self.frame, options: options, owner: self, userInfo: nil)
         contentView?.addTrackingArea(trackingArea)
     }
-
+    
     func hideWindow() {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
@@ -70,7 +70,7 @@ class HoverWindow: NSWindow {
             self.orderOut(nil)
         }
     }
-
+    
     override func mouseExited(with event: NSEvent) {
         if !CurrentWindow.shared.showingTabMenu {
             hideWindow()
@@ -78,14 +78,32 @@ class HoverWindow: NSWindow {
     }
     
     private func updateContentViewSizeAndPosition(mouseLocation: CGPoint? = nil, animated: Bool, centerOnScreen: Bool = false) {
-        guard let hostingView, let mouseLocation else { return }
+        guard let hostingView else { return }
         
-        self.bestGuessMonitor = DockUtils.shared.dockScreen()
+        if centerOnScreen {
+            CurrentWindow.shared.setShowing(toState: true)
+            guard let bestGuessMonitor = self.bestGuessMonitor else { return }
+                        
+            let newHoverWindowSize = hostingView.fittingSize
+            let position = CGPoint(
+                x: bestGuessMonitor.frame.midX - (newHoverWindowSize.width / 2),
+                y: bestGuessMonitor.frame.midY - (newHoverWindowSize.height / 2)
+            )
+            let finalFrame = CGRect(origin: position, size: newHoverWindowSize)
+            
+            setFrame(finalFrame, display: true)
+            previousHoverWindowOrigin = position
+            return
+        }
         
-        guard let dockScreen = self.bestGuessMonitor else { return }
-
+        guard let mouseLocation else { return }
+        
+        self.bestGuessMonitor = DockObserver.screenContainingPoint(mouseLocation)
+        
+        guard let screenWithMouse = self.bestGuessMonitor else { return }
+        
         CurrentWindow.shared.setShowing(toState: centerOnScreen)
-
+        
         let newHoverWindowSize = hostingView.fittingSize
         let sizeChanged = newHoverWindowSize != frame.size
         if sizeChanged {
@@ -94,60 +112,52 @@ class HoverWindow: NSWindow {
                 windows: self.windows,
                 onWindowTap: self.onWindowTap,
                 dockPosition: DockUtils.shared.getDockPosition(),
-                bestGuessMonitor: self.bestGuessMonitor ?? NSScreen.main!)
+                bestGuessMonitor: screenWithMouse)
         }
-
+        
         // Detect the screen where the dock is positioned
-        let screenFrame = dockScreen.frame
+        let screenFrame = screenWithMouse.frame
         let dockPosition = DockUtils.shared.getDockPosition()
-        let dockHeight = DockUtils.shared.calculateDockHeight(dockScreen)
+        let dockHeight = DockUtils.shared.calculateDockHeight(screenWithMouse)
         
         var position = CGPoint.zero
-
-        // Convert icon position to the dock screen's coordinate system
-        let globalIconPosition = DockObserver.nsPointFromCGPoint(mouseLocation, dockScreen)
         
-        if centerOnScreen {
-            // Center the window on the screen            
-            position = CGPoint(
-                x: screenFrame.midX - (newHoverWindowSize.width / 2),
-                y: screenFrame.midY - (newHoverWindowSize.height / 2)
-            )
-        } else {
-            var xPosition: CGFloat = globalIconPosition.x
-            var yPosition: CGFloat = globalIconPosition.y
-            
-            // Adjust the window position based on dock position
-            switch dockPosition {
-            case .bottom:
-                yPosition = screenFrame.minY + dockHeight
-                xPosition -= (newHoverWindowSize.width / 2)
-            case .left:
-                xPosition = screenFrame.minX + dockHeight
-                yPosition -= (newHoverWindowSize.height / 2)
-            case .right:
-                xPosition = screenFrame.maxX - dockHeight - newHoverWindowSize.width
-                yPosition -= (newHoverWindowSize.height / 2)
-            default:
-                xPosition -= (newHoverWindowSize.width / 2)
-                yPosition -= (newHoverWindowSize.height / 2)
-            }
-            
-            // Ensure the hover window stays within the dock screen bounds
-            xPosition = max(screenFrame.minX, min(xPosition, screenFrame.maxX - newHoverWindowSize.width))
-            yPosition = max(screenFrame.minY, min(yPosition, screenFrame.maxY - newHoverWindowSize.height))
-            
-            position = CGPoint(x: xPosition, y: yPosition)
+        // Convert icon position to the dock screen's coordinate system
+        let convertedMouseLocation = DockObserver.nsPointFromCGPoint(mouseLocation, forScreen: screenWithMouse)
+        
+        var xPosition: CGFloat = convertedMouseLocation.x
+        var yPosition: CGFloat = convertedMouseLocation.y
+        
+        // Adjust the window position based on dock position
+        switch dockPosition {
+        case .bottom:
+            yPosition = screenFrame.minY + dockHeight
+            xPosition -= (newHoverWindowSize.width / 2)
+        case .left:
+            xPosition = screenFrame.minX + dockHeight
+            yPosition -= (newHoverWindowSize.height / 2)
+        case .right:
+            xPosition = screenFrame.maxX - dockHeight - newHoverWindowSize.width
+            yPosition -= (newHoverWindowSize.height / 2)
+        default:
+            xPosition -= (newHoverWindowSize.width / 2)
+            yPosition -= (newHoverWindowSize.height / 2)
         }
         
+        // Ensure the hover window stays within the dock screen bounds
+        xPosition = max(screenFrame.minX, min(xPosition, screenFrame.maxX - newHoverWindowSize.width))
+        yPosition = max(screenFrame.minY, min(yPosition, screenFrame.maxY - newHoverWindowSize.height))
+        
+        position = CGPoint(x: xPosition, y: yPosition)
+        
         let finalFrame = CGRect(origin: position, size: newHoverWindowSize)
-
+        
         let shouldAnimate = animated && (sizeChanged || finalFrame != frame)
-
+        
         if shouldAnimate {
             let distanceThreshold: CGFloat = 1800
             let distance = previousHoverWindowOrigin.map { position.distance(to: $0) } ?? distanceThreshold + 1
-
+            
             if distance > distanceThreshold {
                 setFrame(finalFrame, display: true)
             } else {
@@ -160,24 +170,24 @@ class HoverWindow: NSWindow {
         } else {
             setFrame(finalFrame, display: true)
         }
-
+        
         previousHoverWindowOrigin = position
     }
-
-
+    
     func showWindow(appName: String, windows: [WindowInfo], mouseLocation: CGPoint? = nil, onWindowTap: (() -> Void)? = nil) {
         let isMouseEvent = mouseLocation != nil
+        print("is this a mouse event? :\(isMouseEvent)")
         CurrentWindow.shared.setShowing(toState: !isMouseEvent)
-
+        
         guard !windows.isEmpty else { return }
-
+        
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
-
+            
             self.appName = appName
             self.windows = windows
             self.onWindowTap = onWindowTap
-
+            
             if self.hostingView == nil {
                 let hoverView = HoverView(appName: appName, windows: windows, onWindowTap: onWindowTap, dockPosition: DockUtils.shared.getDockPosition(), bestGuessMonitor: self.bestGuessMonitor ?? NSScreen.main!)
                 let hostingView = NSHostingView(rootView: hoverView)
@@ -186,19 +196,19 @@ class HoverWindow: NSWindow {
             } else {
                 self.hostingView?.rootView = HoverView(appName: appName, windows: windows, onWindowTap: onWindowTap, dockPosition: DockUtils.shared.getDockPosition(), bestGuessMonitor: self.bestGuessMonitor ?? NSScreen.main!)
             }
-
+            
             self.updateContentViewSizeAndPosition(mouseLocation: mouseLocation, animated: true, centerOnScreen: !isMouseEvent)
             self.makeKeyAndOrderFront(nil)
         }
     }
-   
+    
     func cycleWindows() {
         guard !windows.isEmpty else { return }
-
+        
         let newIndex = CurrentWindow.shared.currIndex + 1
         CurrentWindow.shared.setIndex(to: newIndex % windows.count)
     }
-
+    
     func selectAndBringToFrontCurrentWindow() {
         guard !windows.isEmpty else { return }
         let selectedWindow = windows[CurrentWindow.shared.currIndex]
@@ -288,7 +298,7 @@ struct HoverView: View {
         }
         .padding(.all, 24)
         .frame(
-            maxWidth: HoverWindow.shared.bestGuessMonitor?.visibleFrame.width ?? 2000, 
+            maxWidth: HoverWindow.shared.bestGuessMonitor?.visibleFrame.width ?? 2000,
             maxHeight: HoverWindow.shared.bestGuessMonitor?.visibleFrame.height ?? 1500
         )
     }
@@ -351,7 +361,7 @@ struct WindowPreview: View {
                 // Final dimensions clamped based on screen size violations
                 let finalWidth = violatedWidth ? maxAllowedWidth : inFlightFinalWidth
                 let finalHeight = violatedHeight ? maxAllowedHeight : inFlightFinalHeight
-
+                
                 image
                     .resizable()
                     .aspectRatio(contentMode: .fit)

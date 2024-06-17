@@ -7,24 +7,6 @@
 import Cocoa
 import ApplicationServices
 
-class MonitorObserver {
-    static let shared = MonitorObserver()
-    
-    private init() {
-        setupDisplayReconfigurationCallback()
-    }
-    
-    private func setupDisplayReconfigurationCallback() {
-        CGDisplayRegisterReconfigurationCallback(displayReconfigurationCallback, nil)
-    }
-    
-    // Callback function for display reconfiguration
-    let displayReconfigurationCallback: CGDisplayReconfigurationCallBack = { _, _, _ in
-        // Invoke a method on DockObserver to handle display reconfiguration
-        DockObserver.shared.updateCurrentDockScreen()
-    }
-}
-
 class DockObserver {
     static let shared = DockObserver()
     
@@ -37,10 +19,6 @@ class DockObserver {
     
     private init() {
         setupEventTap()
-        updateCurrentDockScreen()  // Initial setup for the dock screen
-        
-        // Initialize the MonitorObserver to start listening for display changes
-        _ = MonitorObserver.shared
     }
     
     deinit {
@@ -48,7 +26,6 @@ class DockObserver {
         if let eventTap = eventTap {
             CGEvent.tapEnable(tap: eventTap, enable: false)
         }
-        CGDisplayRemoveReconfigurationCallback(MonitorObserver.shared.displayReconfigurationCallback, nil)
     }
     
     private func setupEventTap() {
@@ -203,42 +180,62 @@ class DockObserver {
     }
     
     static func screenContainingPoint(_ point: CGPoint) -> NSScreen? {
-        return NSScreen.screens.first { $0.frame.contains(point) }
+        let screens = NSScreen.screens
+        guard let primaryScreen = screens.first else { return nil }
+        
+        for screen in screens {
+            let (offsetLeft, offsetTop) = computeOffsets(for: screen, primaryScreen: primaryScreen)
+            
+            if point.x >= offsetLeft && point.x <= offsetLeft + screen.frame.size.width &&
+                point.y >= offsetTop && point.y <= offsetTop + screen.frame.size.height {
+                return screen
+            }
+        }
+        
+        return primaryScreen
     }
     
-    static func nsPointFromCGPoint(_ point: CGPoint, _ forScreen: NSScreen?) -> NSPoint {
+    static func nsPointFromCGPoint(_ point: CGPoint, forScreen: NSScreen?) -> NSPoint {
         guard let screen = forScreen,
               let primaryScreen = NSScreen.screens.first else {
             return NSPoint(x: point.x, y: point.y)
         }
         
-        let screentopoffset = screen.frame.origin.y
-        let screenbottomoffset = primaryScreen.frame.size.height - (screen.frame.size.height + screentopoffset)
+        let (offsetLeft, offsetTop) = computeOffsets(for: screen, primaryScreen: primaryScreen)
         
         let y: CGFloat
         if screen == primaryScreen {
             y = screen.frame.size.height - point.y
         } else {
-            y = screen.frame.size.height + screenbottomoffset - (point.y - screentopoffset)
+            let screenbottomoffset = primaryScreen.frame.size.height - (screen.frame.size.height + offsetTop)
+            y = screen.frame.size.height + screenbottomoffset - (point.y - offsetTop)
         }
         
         return NSPoint(x: point.x, y: y)
     }
     
-    static func cgPointFromNSPoint(_ point: CGPoint, _ forScreen: NSScreen?) -> CGPoint {
+    static func cgPointFromNSPoint(_ point: CGPoint, forScreen: NSScreen?) -> CGPoint {
         guard let screen = forScreen,
               let primaryScreen = NSScreen.screens.first else {
             return CGPoint(x: point.x, y: point.y)
         }
         
-        let offsetTop = primaryScreen.frame.size.height - (screen.frame.origin.y + screen.frame.size.height)
+        let (_, offsetTop) = computeOffsets(for: screen, primaryScreen: primaryScreen)
         let menuScreenHeight = screen.frame.maxY
         
         return CGPoint(x: point.x, y: menuScreenHeight - point.y + offsetTop)
     }
     
-    func updateCurrentDockScreen() {
-        currentDockScreen = DockUtils.shared.dockScreen()
+    private static func computeOffsets(for screen: NSScreen, primaryScreen: NSScreen) -> (CGFloat, CGFloat) {
+        var offsetLeft = screen.frame.origin.x
+        var offsetTop = primaryScreen.frame.size.height - (screen.frame.origin.y + screen.frame.size.height)
+        
+        if screen == primaryScreen {
+            offsetTop = 0
+            offsetLeft = 0
+        }
+        
+        return (offsetLeft, offsetTop)
     }
 }
 
