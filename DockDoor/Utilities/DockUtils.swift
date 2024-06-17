@@ -128,4 +128,54 @@ class DockUtils {
         
         return nil
     }
+    
+    func dockScreen() -> NSScreen {
+        // Get the Dock application
+        guard let dockApp = NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.dock").first else {
+            print("Dock application not found.")
+            return NSScreen.main!
+        }
+        
+        // Use Accessibility API to get the Dock element
+        let dockElement = AXUIElementCreateApplication(dockApp.processIdentifier)
+        var children: CFTypeRef?
+        // Get children elements of the Dock
+        AXUIElementCopyAttributeValue(dockElement, kAXChildrenAttribute as CFString, &children)
+        
+        guard let childElements = children as? [AXUIElement] else {
+            print("Failed to get children of dock element.")
+            return NSScreen.main!
+        }
+        
+        // Find Dock icons and their positions and print titles
+        let dockIcons = childElements.compactMap { element -> CGPoint? in
+            var position: CFTypeRef?
+            var title: CFTypeRef?
+            let posResult = AXUIElementCopyAttributeValue(element, kAXPositionAttribute as CFString, &position)
+            let titleResult = AXUIElementCopyAttributeValue(element, kAXTitleAttribute as CFString, &title)
+            
+            if titleResult == .success, let titleValue = title as? String {
+                print("Dock Icon Title: \(titleValue)")
+            }
+            
+            if posResult == .success, let posValue = position {
+                var point = CGPoint.zero
+                if AXValueGetValue(posValue as! AXValue, .cgPoint, &point) {
+                    return point
+                }
+            }
+            return nil
+        }
+        
+        // Determine which screen contains the dock and print the monitor name
+        for point in dockIcons {
+            if let screen = NSScreen.screens.first(where: { $0.frame.contains(point) }) {
+                print("Dock is on monitor: \(screen.localizedName)")
+                return screen
+            }
+        }
+        
+        // Default to main screen if not found
+        return NSScreen.main!
+    }
 }

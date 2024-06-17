@@ -76,81 +76,79 @@ class HoverWindow: NSWindow {
             hideWindow()
         }
     }
-
+    
     private func updateContentViewSizeAndPosition(mouseLocation: CGPoint? = nil, animated: Bool, centerOnScreen: Bool = false) {
-        guard let hostingView = hostingView else { return }
+        guard let hostingView, let mouseLocation else { return }
+        
+        self.bestGuessMonitor = DockUtils.shared.dockScreen()
+        
+        guard let dockScreen = self.bestGuessMonitor else { return }
 
         CurrentWindow.shared.setShowing(toState: centerOnScreen)
 
         let newHoverWindowSize = hostingView.fittingSize
         let sizeChanged = newHoverWindowSize != frame.size
         if sizeChanged {
-            hostingView.rootView = HoverView(appName: self.appName, windows: self.windows, onWindowTap: self.onWindowTap, dockPosition: DockUtils.shared.getDockPosition(), bestGuessMonitor: self.bestGuessMonitor ?? NSScreen.main!)
+            hostingView.rootView = HoverView(
+                appName: self.appName,
+                windows: self.windows,
+                onWindowTap: self.onWindowTap,
+                dockPosition: DockUtils.shared.getDockPosition(),
+                bestGuessMonitor: self.bestGuessMonitor ?? NSScreen.main!)
         }
 
-        var hoverWindowOrigin: CGPoint = .zero
+        // Detect the screen where the dock is positioned
+        let screenFrame = dockScreen.frame
+        let dockPosition = DockUtils.shared.getDockPosition()
+        let dockHeight = DockUtils.shared.calculateDockHeight(dockScreen)
+        
+        var position = CGPoint.zero
 
+        // Convert icon position to the dock screen's coordinate system
+        let globalIconPosition = DockObserver.nsPointFromCGPoint(mouseLocation, dockScreen)
+        
         if centerOnScreen {
-            // Center the window on the screen
-            guard let screen = self.bestGuessMonitor else { return }
-
-            let screenFrame = screen.frame
-            hoverWindowOrigin = CGPoint(
+            // Center the window on the screen            
+            position = CGPoint(
                 x: screenFrame.midX - (newHoverWindowSize.width / 2),
                 y: screenFrame.midY - (newHoverWindowSize.height / 2)
             )
-        } else if let mouseLocation = mouseLocation, let screen = DockObserver.screenContainingPoint(mouseLocation) {
-            // Use mouse location for initial placement
-            hoverWindowOrigin = mouseLocation
-
-            let screenFrame = screen.frame
-            let dockPosition = DockUtils.shared.getDockPosition()
-            let dockHeight = DockUtils.shared.calculateDockHeight(screen)
-
-            // Position window above/below dock depending on position
+        } else {
+            var xPosition: CGFloat = globalIconPosition.x
+            var yPosition: CGFloat = globalIconPosition.y
+            
+            // Adjust the window position based on dock position
             switch dockPosition {
             case .bottom:
-                hoverWindowOrigin.y = screenFrame.minY + dockHeight
-            case .left, .right:
-                hoverWindowOrigin.y -= newHoverWindowSize.height / 2
-                if dockPosition == .left {
-                    hoverWindowOrigin.x = screenFrame.minX + dockHeight
-                } else { // dockPosition == .right
-                    hoverWindowOrigin.x = screenFrame.maxX - newHoverWindowSize.width - dockHeight
-                }
-            case .unknown:
-                break
+                yPosition = screenFrame.minY + dockHeight
+                xPosition -= (newHoverWindowSize.width / 2)
+            case .left:
+                xPosition = screenFrame.minX + dockHeight
+                yPosition -= (newHoverWindowSize.height / 2)
+            case .right:
+                xPosition = screenFrame.maxX - dockHeight - newHoverWindowSize.width
+                yPosition -= (newHoverWindowSize.height / 2)
+            default:
+                xPosition -= (newHoverWindowSize.width / 2)
+                yPosition -= (newHoverWindowSize.height / 2)
             }
-
-            // Adjust horizontal position if the window is wider than the screen and the dock is on the side
-            if dockPosition == .left || dockPosition == .right, newHoverWindowSize.width > screenFrame.width - dockHeight {
-                hoverWindowOrigin.x = dockPosition == .left ? screenFrame.minX : screenFrame.maxX - newHoverWindowSize.width
-            }
-
-            // Center the window horizontally if the dock is at the bottom
-            if dockPosition == .bottom {
-                hoverWindowOrigin.x -= newHoverWindowSize.width / 2
-            }
-
-            // Ensure the window stays within screen bounds
-            hoverWindowOrigin.x = max(screenFrame.minX, min(hoverWindowOrigin.x, screenFrame.maxX - newHoverWindowSize.width))
-            hoverWindowOrigin.y = max(screenFrame.minY, min(hoverWindowOrigin.y, screenFrame.maxY - newHoverWindowSize.height))
-        } else {
-            return
+            
+            // Ensure the hover window stays within the dock screen bounds
+            xPosition = max(screenFrame.minX, min(xPosition, screenFrame.maxX - newHoverWindowSize.width))
+            yPosition = max(screenFrame.minY, min(yPosition, screenFrame.maxY - newHoverWindowSize.height))
+            
+            position = CGPoint(x: xPosition, y: yPosition)
         }
-
-        let finalFrame = NSRect(origin: hoverWindowOrigin, size: newHoverWindowSize)
+        
+        let finalFrame = CGRect(origin: position, size: newHoverWindowSize)
 
         let shouldAnimate = animated && (sizeChanged || finalFrame != frame)
-        let distanceThreshold: CGFloat = 1800
 
         if shouldAnimate {
-            let distance = previousHoverWindowOrigin.map {
-                hoverWindowOrigin.distance(to: $0)
-            } ?? distanceThreshold + 1 // Force animation if there's no previous origin
+            let distanceThreshold: CGFloat = 1800
+            let distance = previousHoverWindowOrigin.map { position.distance(to: $0) } ?? distanceThreshold + 1
 
             if distance > distanceThreshold {
-                // Skip animation if the distance is too large
                 setFrame(finalFrame, display: true)
             } else {
                 NSAnimationContext.runAnimationGroup({ context in
@@ -163,8 +161,9 @@ class HoverWindow: NSWindow {
             setFrame(finalFrame, display: true)
         }
 
-        previousHoverWindowOrigin = hoverWindowOrigin // Store for next update
+        previousHoverWindowOrigin = position
     }
+
 
     func showWindow(appName: String, windows: [WindowInfo], mouseLocation: CGPoint? = nil, onWindowTap: (() -> Void)? = nil) {
         let isMouseEvent = mouseLocation != nil
