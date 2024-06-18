@@ -370,7 +370,7 @@ struct WindowPreview: View {
                                 y: selected ? 6 : 4
                             )))
                     }
-                    .scaleEffect(selected ? 0.95 : 1)
+                    .scaleEffect(selected ? 1.025 : 1)
                 
             } else {
                 ProgressView()
