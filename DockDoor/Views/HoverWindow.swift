@@ -40,7 +40,6 @@ class HoverWindow: NSWindow {
     private var onWindowTap: (() -> Void)?
     private var hostingView: NSHostingView<HoverView>?
     
-//    var bestGuessMonitor: NSScreen? = NSScreen.main
     var windowSize: CGSize = getWindowSize()
     
     private var previousHoverWindowOrigin: CGPoint? // Store previous origin
@@ -183,7 +182,7 @@ class HoverWindow: NSWindow {
                 self.contentView = hostingView
                 self.hostingView = hostingView
             } else {
-                self.hostingView?.rootView = HoverView(appName: appName, windows: windows, onWindowTap: onWindowTap, 
+                self.hostingView?.rootView = HoverView(appName: appName, windows: windows, onWindowTap: onWindowTap,
                                                        dockPosition: DockUtils.shared.getDockPosition(), bestGuessMonitor: screen)
             }
             

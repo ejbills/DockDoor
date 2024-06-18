@@ -15,7 +15,8 @@ class DockObserver {
     private let mouseUpdateThreshold: CGFloat = 5.0
     private var eventTap: CFMachPort?
     
-    private var currentDockScreen: NSScreen?
+    private var hoverProcessingTask: DispatchWorkItem?
+    private var isProcessing: Bool = false
     
     private init() {
         setupEventTap()
@@ -67,28 +68,46 @@ class DockObserver {
     }
     
     @objc private func handleMouseEvent(mouseLocation: CGPoint) {
+        // Cancel any ongoing processing
+        hoverProcessingTask?.cancel()
+        
+        // Create a new task for hover processing
+        hoverProcessingTask = DispatchWorkItem { [weak self] in
+            self?.processMouseEvent(mouseLocation: mouseLocation)
+        }
+        
+        // Execute the new task
+        DispatchQueue.main.async(execute: hoverProcessingTask!)
+    }
+    
+    private func processMouseEvent(mouseLocation: CGPoint) {
+        guard !isProcessing else { return }
+        isProcessing = true
+        
         guard let lastMouseLocation = lastMouseLocation else {
             self.lastMouseLocation = mouseLocation
+            isProcessing = false
             return
         }
-
+        
         // Ignore minor movements
         if abs(mouseLocation.x - lastMouseLocation.x) < mouseUpdateThreshold &&
             abs(mouseLocation.y - lastMouseLocation.y) < mouseUpdateThreshold {
+            isProcessing = false
             return
         }
         self.lastMouseLocation = mouseLocation
-
+        
         // Capture the current mouseLocation
         let currentMouseLocation = mouseLocation
-
+        
         Task {
             if let dockIconAppName = getDockIconAtLocation(currentMouseLocation) {
                 if dockIconAppName != lastAppName {
                     lastAppName = dockIconAppName
-
+                    
                     let activeWindows = await WindowUtil.activeWindows(for: dockIconAppName)
-
+                    
                     if activeWindows.isEmpty {
                         hideHoverWindow()
                     } else {
@@ -118,9 +137,9 @@ class DockObserver {
                     }
                 }
             }
+            isProcessing = false
         }
     }
-
     
     private func hideHoverWindow() {
         HoverWindow.shared.hideWindow() // Hide the shared HoverWindow
