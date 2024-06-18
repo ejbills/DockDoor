@@ -25,6 +25,8 @@
 		BBA153F82C11604400119C02 /* HoverWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA153F72C11604400119C02 /* HoverWindow.swift */; };
 		BBA153FA2C11FFD500119C02 /* consts.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA153F92C11FFD500119C02 /* consts.swift */; };
 		BBA153FC2C12356100119C02 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA153FB2C12356100119C02 /* main.swift */; };
+		BBE7CC8F2C22421900AB8F4D /* Settings in Frameworks */ = {isa = PBXBuildFile; productRef = BBE7CC8E2C22421900AB8F4D /* Settings */; };
+		BBE7CC912C22429A00AB8F4D /* settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE7CC902C22429A00AB8F4D /* settings.swift */; };
 		BBF6C6222C1A9B4300BF1D40 /* AnimatedGradientOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF6C6212C1A9B4300BF1D40 /* AnimatedGradientOverlay.swift */; };
 		BBF6C6242C1B4B4400BF1D40 /* KeybindHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF6C6232C1B4B4400BF1D40 /* KeybindHelper.swift */; };
 /* End PBXBuildFile section */
@@ -49,6 +51,7 @@
 		BBA153F72C11604400119C02 /* HoverWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoverWindow.swift; sourceTree = "<group>"; };
 		BBA153F92C11FFD500119C02 /* consts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = consts.swift; sourceTree = "<group>"; };
 		BBA153FB2C12356100119C02 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		BBE7CC902C22429A00AB8F4D /* settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = settings.swift; sourceTree = "<group>"; };
 		BBF6C6212C1A9B4300BF1D40 /* AnimatedGradientOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedGradientOverlay.swift; sourceTree = "<group>"; };
 		BBF6C6232C1B4B4400BF1D40 /* KeybindHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeybindHelper.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -59,6 +62,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BB1CBD5B2C1BA8DC003969BC /* Defaults in Frameworks */,
+				BBE7CC8F2C22421900AB8F4D /* Settings in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -140,12 +144,21 @@
 		BBA153FD2C12358600119C02 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				BBE7CC922C2244A600AB8F4D /* Settings */,
 				BBA153F72C11604400119C02 /* HoverWindow.swift */,
 				BBF6C6212C1A9B4300BF1D40 /* AnimatedGradientOverlay.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		BBE7CC922C2244A600AB8F4D /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				BBE7CC902C22429A00AB8F4D /* settings.swift */,
 				BB1CBD572C1BA800003969BC /* SettingsView.swift */,
 				BB6A4F1B2C1CFCFF00CB4C9E /* PermView.swift */,
 			);
-			path = Views;
+			path = Settings;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -166,6 +179,7 @@
 			name = DockDoor;
 			packageProductDependencies = (
 				BB1CBD5A2C1BA8DC003969BC /* Defaults */,
+				BBE7CC8E2C22421900AB8F4D /* Settings */,
 			);
 			productName = DockDoor;
 			productReference = BB157B652C0E31CE00997315 /* DockDoor.app */;
@@ -197,6 +211,7 @@
 			mainGroup = BB157B5C2C0E31CE00997315;
 			packageReferences = (
 				BB1CBD592C1BA8DC003969BC /* XCRemoteSwiftPackageReference "Defaults" */,
+				BBE7CC8D2C22421900AB8F4D /* XCRemoteSwiftPackageReference "Settings" */,
 			);
 			productRefGroup = BB157B662C0E31CE00997315 /* Products */;
 			projectDirPath = "";
@@ -238,6 +253,7 @@
 				BBF6C6242C1B4B4400BF1D40 /* KeybindHelper.swift in Sources */,
 				3A105FDD2C1C0EE20015EC66 /* DynStack.swift in Sources */,
 				BB2567C62C10C5F000C0C93E /* DockUtils.swift in Sources */,
+				BBE7CC912C22429A00AB8F4D /* settings.swift in Sources */,
 				BB1CBD582C1BA800003969BC /* SettingsView.swift in Sources */,
 				BB157B792C0E330100997315 /* WindowUtil.swift in Sources */,
 				BB157B7B2C0E343000997315 /* SystemPreferencesHelper.swift in Sources */,
@@ -459,6 +475,14 @@
 				kind = branch;
 			};
 		};
+		BBE7CC8D2C22421900AB8F4D /* XCRemoteSwiftPackageReference "Settings" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sindresorhus/Settings";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.1.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -466,6 +490,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = BB1CBD592C1BA8DC003969BC /* XCRemoteSwiftPackageReference "Defaults" */;
 			productName = Defaults;
+		};
+		BBE7CC8E2C22421900AB8F4D /* Settings */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BBE7CC8D2C22421900AB8F4D /* XCRemoteSwiftPackageReference "Settings" */;
+			productName = Settings;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
