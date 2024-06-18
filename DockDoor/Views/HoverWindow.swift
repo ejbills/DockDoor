@@ -361,6 +361,7 @@ struct WindowPreview: View {
                         alignment: .center
                     )
                     .frame(maxWidth: calculatedMaxDimensions?.width, maxHeight: calculatedMaxDimensions?.height)
+                    .overlay { AnimatedGradientOverlay(shouldDisplay: selected) }
                     .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
                     .background {
                         RoundedRectangle(cornerRadius: 6, style: .continuous)
@@ -377,9 +378,6 @@ struct WindowPreview: View {
             }
         }
         .contentShape(Rectangle())
-        .overlay {
-            AnimatedGradientOverlay(shouldDisplay: selected)
-        }
         .onHover { over in
             if !CurrentWindow.shared.showingTabMenu {
                 withAnimation(.snappy(duration: 0.175)) {
