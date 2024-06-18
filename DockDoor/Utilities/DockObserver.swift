@@ -71,41 +71,56 @@ class DockObserver {
             self.lastMouseLocation = mouseLocation
             return
         }
-        
+
         // Ignore minor movements
         if abs(mouseLocation.x - lastMouseLocation.x) < mouseUpdateThreshold &&
             abs(mouseLocation.y - lastMouseLocation.y) < mouseUpdateThreshold {
             return
         }
         self.lastMouseLocation = mouseLocation
-        
-        if let dockIconAppName = getDockIconAtLocation(mouseLocation) {
-            if dockIconAppName != lastAppName {
-                lastAppName = dockIconAppName
-                
-                Task {
+
+        // Capture the current mouseLocation
+        let currentMouseLocation = mouseLocation
+
+        Task {
+            if let dockIconAppName = getDockIconAtLocation(currentMouseLocation) {
+                if dockIconAppName != lastAppName {
+                    lastAppName = dockIconAppName
+
                     let activeWindows = await WindowUtil.activeWindows(for: dockIconAppName)
-                    
+
                     if activeWindows.isEmpty {
                         hideHoverWindow()
                     } else {
-                        DispatchQueue.main.async {
+                        // Execute UI updates on the main thread
+                        await MainActor.run {
+                            let mouseScreen = DockObserver.screenContainingPoint(currentMouseLocation) ?? NSScreen.main!
+                            let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
                             // Show HoverWindow (using shared instance)
                             HoverWindow.shared.showWindow(
                                 appName: dockIconAppName,
                                 windows: activeWindows,
-                                mouseLocation: mouseLocation,
+                                mouseLocation: convertedMouseLocation,
+                                mouseScreen: mouseScreen,
                                 onWindowTap: { self.hideHoverWindow() }
                             )
                         }
                     }
                 }
+            } else {
+                await MainActor.run {
+                    // Perform conversion on main thread
+                    let mouseScreen = DockObserver.screenContainingPoint(currentMouseLocation) ?? NSScreen.main!
+                    let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
+                    if !HoverWindow.shared.frame.contains(convertedMouseLocation) {
+                        lastAppName = nil
+                        hideHoverWindow()
+                    }
+                }
             }
-        } else if !HoverWindow.shared.frame.contains(mouseLocation) {
-            lastAppName = nil
-            hideHoverWindow()
         }
     }
+
     
     private func hideHoverWindow() {
         HoverWindow.shared.hideWindow() // Hide the shared HoverWindow

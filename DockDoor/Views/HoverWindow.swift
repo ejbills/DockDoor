@@ -40,7 +40,7 @@ class HoverWindow: NSWindow {
     private var onWindowTap: (() -> Void)?
     private var hostingView: NSHostingView<HoverView>?
     
-    var bestGuessMonitor: NSScreen? = NSScreen.main
+//    var bestGuessMonitor: NSScreen? = NSScreen.main
     var windowSize: CGSize = getWindowSize()
     
     private var previousHoverWindowOrigin: CGPoint? // Store previous origin
@@ -59,6 +59,8 @@ class HoverWindow: NSWindow {
     }
     
     func hideWindow() {
+        guard self.hostingView != nil else { return }
+        
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             self.contentView = nil
@@ -71,17 +73,15 @@ class HoverWindow: NSWindow {
         }
     }
     
-    private func updateContentViewSizeAndPosition(mouseLocation: CGPoint? = nil, animated: Bool, centerOnScreen: Bool = false) {
+    private func updateContentViewSizeAndPosition(mouseLocation: CGPoint? = nil, mouseScreen: NSScreen, animated: Bool, centerOnScreen: Bool = false) {
         guard let hostingView else { return }
         
         if centerOnScreen {
             CurrentWindow.shared.setShowing(toState: true)
-            guard let bestGuessMonitor = self.bestGuessMonitor else { return }
-            
             let newHoverWindowSize = hostingView.fittingSize
             let position = CGPoint(
-                x: bestGuessMonitor.frame.midX - (newHoverWindowSize.width / 2),
-                y: bestGuessMonitor.frame.midY - (newHoverWindowSize.height / 2)
+                x: mouseScreen.frame.midX - (newHoverWindowSize.width / 2),
+                y: mouseScreen.frame.midY - (newHoverWindowSize.height / 2)
             )
             let finalFrame = CGRect(origin: position, size: newHoverWindowSize)
             
@@ -91,11 +91,7 @@ class HoverWindow: NSWindow {
         }
         
         guard let mouseLocation else { return }
-        
-        self.bestGuessMonitor = DockObserver.screenContainingPoint(mouseLocation)
-        
-        guard let screenWithMouse = self.bestGuessMonitor else { return }
-        
+                
         CurrentWindow.shared.setShowing(toState: centerOnScreen)
         
         let newHoverWindowSize = hostingView.fittingSize
@@ -106,21 +102,18 @@ class HoverWindow: NSWindow {
                 windows: self.windows,
                 onWindowTap: self.onWindowTap,
                 dockPosition: DockUtils.shared.getDockPosition(),
-                bestGuessMonitor: screenWithMouse)
+                bestGuessMonitor: mouseScreen)
         }
         
         // Detect the screen where the dock is positioned
-        let screenFrame = screenWithMouse.frame
+        let screenFrame = mouseScreen.frame
         let dockPosition = DockUtils.shared.getDockPosition()
-        let dockHeight = DockUtils.shared.calculateDockHeight(screenWithMouse)
+        let dockHeight = DockUtils.shared.calculateDockHeight(mouseScreen)
         
         var position = CGPoint.zero
         
-        // Convert icon position to the dock screen's coordinate system
-        let convertedMouseLocation = DockObserver.nsPointFromCGPoint(mouseLocation, forScreen: screenWithMouse)
-        
-        var xPosition: CGFloat = convertedMouseLocation.x
-        var yPosition: CGFloat = convertedMouseLocation.y
+        var xPosition: CGFloat = mouseLocation.x
+        var yPosition: CGFloat = mouseLocation.y
         
         // Adjust the window position based on dock position
         switch dockPosition {
@@ -168,7 +161,7 @@ class HoverWindow: NSWindow {
         previousHoverWindowOrigin = position
     }
     
-    func showWindow(appName: String, windows: [WindowInfo], mouseLocation: CGPoint? = nil, onWindowTap: (() -> Void)? = nil) {
+    func showWindow(appName: String, windows: [WindowInfo], mouseLocation: CGPoint? = nil, mouseScreen: NSScreen? = nil, onWindowTap: (() -> Void)? = nil) {
         let isMouseEvent = mouseLocation != nil
         CurrentWindow.shared.setShowing(toState: !isMouseEvent)
         
@@ -181,16 +174,20 @@ class HoverWindow: NSWindow {
             self.windows = windows
             self.onWindowTap = onWindowTap
             
+            let screen = mouseScreen ?? NSScreen.main!
+            
             if self.hostingView == nil {
-                let hoverView = HoverView(appName: appName, windows: windows, onWindowTap: onWindowTap, dockPosition: DockUtils.shared.getDockPosition(), bestGuessMonitor: self.bestGuessMonitor ?? NSScreen.main!)
+                let hoverView = HoverView(appName: appName, windows: windows, onWindowTap: onWindowTap,
+                                          dockPosition: DockUtils.shared.getDockPosition(), bestGuessMonitor: screen)
                 let hostingView = NSHostingView(rootView: hoverView)
                 self.contentView = hostingView
                 self.hostingView = hostingView
             } else {
-                self.hostingView?.rootView = HoverView(appName: appName, windows: windows, onWindowTap: onWindowTap, dockPosition: DockUtils.shared.getDockPosition(), bestGuessMonitor: self.bestGuessMonitor ?? NSScreen.main!)
+                self.hostingView?.rootView = HoverView(appName: appName, windows: windows, onWindowTap: onWindowTap, 
+                                                       dockPosition: DockUtils.shared.getDockPosition(), bestGuessMonitor: screen)
             }
             
-            self.updateContentViewSizeAndPosition(mouseLocation: mouseLocation, animated: true, centerOnScreen: !isMouseEvent)
+            self.updateContentViewSizeAndPosition(mouseLocation: mouseLocation, mouseScreen: screen, animated: true, centerOnScreen: !isMouseEvent)
             self.makeKeyAndOrderFront(nil)
         }
     }
@@ -302,8 +299,8 @@ struct HoverView: View {
         }
         .padding(.all, 24)
         .frame(
-            maxWidth: HoverWindow.shared.bestGuessMonitor?.visibleFrame.width ?? 2000,
-            maxHeight: HoverWindow.shared.bestGuessMonitor?.visibleFrame.height ?? 1500
+            maxWidth: self.bestGuessMonitor.visibleFrame.width,
+            maxHeight: self.bestGuessMonitor.visibleFrame.height
         )
     }
     
@@ -327,8 +324,7 @@ struct WindowPreview: View {
     @State private var isHovering = false
 
     private var calculatedMaxDimensions: CGSize? {
-        guard let screen = HoverWindow.shared.bestGuessMonitor else { return nil }
-        return CGSize(width: screen.frame.width * 0.75, height: screen.frame.height * 0.75)
+        return CGSize(width: self.bestGuessMonitor.frame.width * 0.75, height: self.bestGuessMonitor.frame.height * 0.75)
     }
     
     var calculatedSize: CGSize {
