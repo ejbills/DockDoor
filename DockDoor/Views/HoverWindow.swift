@@ -295,8 +295,7 @@ struct HoverView: View {
                             .frame(width: 24, height: 24)
                     }
                     Text(appName)
-                        .padding(6)
-                        .dockStyle()
+                        .padding(3)
                 }
                 .padding(EdgeInsets(top: -10, leading: 12, bottom: 0, trailing: 0))
             }
