@@ -18,17 +18,60 @@ class DockObserver {
     private var hoverProcessingTask: DispatchWorkItem?
     private var isProcessing: Bool = false
     
+    static var runningApplications: [String: NSRunningApplication] = [:]
+
     private init() {
+        setupRunningApplications()
         setupEventTap()
+        setupNotifications()
     }
     
     deinit {
-        NSWorkspace.shared.notificationCenter.removeObserver(self)
+        NSWorkspace.shared.notificationCenter.removeObserver(self, name: NSWorkspace.didLaunchApplicationNotification, object: nil)
+        NSWorkspace.shared.notificationCenter.removeObserver(self, name: NSWorkspace.didTerminateApplicationNotification, object: nil)
+        
         if let eventTap = eventTap {
             CGEvent.tapEnable(tap: eventTap, enable: false)
+            CFMachPortInvalidate(eventTap)
+            CFRunLoopRemoveSource(CFRunLoopGetCurrent(), CFMachPortCreateRunLoopSource(kCFAllocatorDefault, eventTap, 0), CFRunLoopMode.commonModes)
         }
     }
     
+    private func setupRunningApplications() {
+        let applications = NSWorkspace.shared.runningApplications
+        var seenBundleIdentifiers = Set<String>()
+        
+        DockObserver.runningApplications = applications.reduce(into: [String: NSRunningApplication]()) { result, app in
+            if let bundleIdentifier = app.bundleIdentifier, !seenBundleIdentifiers.contains(bundleIdentifier) {
+                result[bundleIdentifier] = app
+                seenBundleIdentifiers.insert(bundleIdentifier)
+            }
+        }
+    }
+
+    private func setupNotifications() {
+        let notificationCenter = NSWorkspace.shared.notificationCenter
+        
+        notificationCenter.addObserver(self, selector: #selector(applicationDidLaunch(_:)), name: NSWorkspace.didLaunchApplicationNotification, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(applicationDidTerminate(_:)), name: NSWorkspace.didTerminateApplicationNotification, object: nil)
+    }
+    
+    @objc private func applicationDidLaunch(_ notification: Notification) {
+        if let userInfo = notification.userInfo,
+           let application = userInfo[NSWorkspace.applicationUserInfoKey] as? NSRunningApplication,
+           let bundleIdentifier = application.bundleIdentifier {
+            DockObserver.runningApplications[bundleIdentifier] = application
+        }
+    }
+    
+    @objc private func applicationDidTerminate(_ notification: Notification) {
+        if let userInfo = notification.userInfo,
+           let application = userInfo[NSWorkspace.applicationUserInfoKey] as? NSRunningApplication,
+           let bundleIdentifier = application.bundleIdentifier {
+            DockObserver.runningApplications.removeValue(forKey: bundleIdentifier)
+        }
+    }
+
     private func setupEventTap() {
         guard AXIsProcessTrusted() else {
             print("Debug: Accessibility permission not granted")
@@ -146,7 +189,7 @@ class DockObserver {
     }
     
     func getDockIconAtLocation(_ mouseLocation: CGPoint) -> String? {
-        guard let dockApp = NSWorkspace.shared.runningApplications.first(where: { $0.bundleIdentifier == "com.apple.dock" }) else {
+        guard let dockApp = DockObserver.runningApplications["com.apple.dock"] else {
             print("Dock application not found.")
             return nil
         }

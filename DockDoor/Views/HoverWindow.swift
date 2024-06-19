@@ -223,6 +223,7 @@ struct HoverView: View {
     
     @State private var showWindows: Bool = false
     @State private var hasAppeared: Bool = false
+    @State private var appIcon: NSImage? = nil
     
     var maxWindowDimension: CGPoint {
         let thickness = HoverWindow.shared.windowSize.height
@@ -264,7 +265,7 @@ struct HoverView: View {
                     .onAppear {
                         if !hasAppeared {
                             hasAppeared.toggle()
-                            self.runAnimation()
+                            self.runUIUpdates()
                         }
                     }
                     .onChange(of: CurrentWindow.shared.currIndex) { _, newIndex in
@@ -273,7 +274,7 @@ struct HoverView: View {
                         }
                     }
                     .onChange(of: self.windows) { _, _ in
-                        self.runAnimation()
+                        self.runUIUpdates()
                     }
                 }
                 .frame(maxWidth: bestGuessMonitor.visibleFrame.width)
@@ -284,9 +285,13 @@ struct HoverView: View {
         .overlay(alignment: .topLeading) {
             if !CurrentWindow.shared.showingTabMenu {
                 HStack(spacing: 4) {
-                    if let appIcon = windows.first?.appIcon {
-                        Image(nsImage: appIcon).resizable()
+                    if let appIcon = appIcon {
+                        Image(nsImage: appIcon)
+                            .resizable()
                             .scaledToFit()
+                            .frame(width: 24, height: 24)
+                    } else {
+                        ProgressView()
                             .frame(width: 24, height: 24)
                     }
                     Text(appName)
@@ -303,6 +308,11 @@ struct HoverView: View {
         )
     }
     
+    private func runUIUpdates() {
+        self.runAnimation()
+        self.loadAppIcon()
+    }
+    
     private func runAnimation() {
         self.showWindows = false
         
@@ -310,7 +320,17 @@ struct HoverView: View {
             showWindows = true
         }
     }
+    
+    private func loadAppIcon() {
+        if let bundleID = windows.first?.window.owningApplication?.bundleIdentifier,
+           let icon = getIcon(bundleID: bundleID) {
+            DispatchQueue.main.async {
+                self.appIcon = icon
+            }
+        }
+    }
 }
+
 
 struct WindowPreview: View {
     let windowInfo: WindowInfo

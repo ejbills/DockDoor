@@ -27,6 +27,7 @@
 		BBA153FC2C12356100119C02 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA153FB2C12356100119C02 /* main.swift */; };
 		BBE7CC8F2C22421900AB8F4D /* Settings in Frameworks */ = {isa = PBXBuildFile; productRef = BBE7CC8E2C22421900AB8F4D /* Settings */; };
 		BBE7CC912C22429A00AB8F4D /* settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE7CC902C22429A00AB8F4D /* settings.swift */; };
+		BBE7CC942C225D9700AB8F4D /* App Icon.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE7CC932C225D9700AB8F4D /* App Icon.swift */; };
 		BBF6C6222C1A9B4300BF1D40 /* AnimatedGradientOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF6C6212C1A9B4300BF1D40 /* AnimatedGradientOverlay.swift */; };
 		BBF6C6242C1B4B4400BF1D40 /* KeybindHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF6C6232C1B4B4400BF1D40 /* KeybindHelper.swift */; };
 /* End PBXBuildFile section */
@@ -52,6 +53,7 @@
 		BBA153F92C11FFD500119C02 /* consts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = consts.swift; sourceTree = "<group>"; };
 		BBA153FB2C12356100119C02 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		BBE7CC902C22429A00AB8F4D /* settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = settings.swift; sourceTree = "<group>"; };
+		BBE7CC932C225D9700AB8F4D /* App Icon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "App Icon.swift"; sourceTree = "<group>"; };
 		BBF6C6212C1A9B4300BF1D40 /* AnimatedGradientOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedGradientOverlay.swift; sourceTree = "<group>"; };
 		BBF6C6232C1B4B4400BF1D40 /* KeybindHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeybindHelper.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -137,6 +139,7 @@
 				BB157B812C0EB29E00997315 /* DockObserver.swift */,
 				BBF6C6232C1B4B4400BF1D40 /* KeybindHelper.swift */,
 				BB1CBD5C2C1BCA4F003969BC /* Misc Utils.swift */,
+				BBE7CC932C225D9700AB8F4D /* App Icon.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -244,6 +247,7 @@
 				3A105FD62C1BED660015EC66 /* BlurView.swift in Sources */,
 				BB1CBD5D2C1BCA4F003969BC /* Misc Utils.swift in Sources */,
 				3A105FD92C1C049E0015EC66 /* dockStyle.swift in Sources */,
+				BBE7CC942C225D9700AB8F4D /* App Icon.swift in Sources */,
 				BB157B822C0EB29E00997315 /* DockObserver.swift in Sources */,
 				BBA153FA2C11FFD500119C02 /* consts.swift in Sources */,
 				BBA153F62C115DDA00119C02 /* AppDelegate.swift in Sources */,

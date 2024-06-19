@@ -15,7 +15,6 @@ struct WindowInfo: Identifiable, Hashable {
     let appName: String
     let windowName: String?
     var image: CGImage?
-    var appIcon: NSImage?
 }
 
 // Cache item structure
@@ -24,21 +23,30 @@ struct CachedImage {
     let timestamp: Date
 }
 
+struct CachedAppIcon {
+    let icon: NSImage
+    let timestamp: Date
+}
+
 struct WindowUtil {
     
     private static var cachedShareableContent: SCShareableContent? = nil
     
     private static var imageCache: [CGWindowID: CachedImage] = [:]
+    private static var iconCache: [String: CachedAppIcon] = [:]
+    
+    private static var cacheExpirySeconds: Double = 600 // 10 mins
     
     static func clearExpiredCache() {
         let now = Date()
-        imageCache = imageCache.filter { now.timeIntervalSince($0.value.timestamp) <= 60 }
+        imageCache = imageCache.filter { now.timeIntervalSince($0.value.timestamp) <= cacheExpirySeconds }
+        iconCache = iconCache.filter { now.timeIntervalSince($0.value.timestamp) <= cacheExpirySeconds }
     }
     
     // MARK: - Helper Functions
     
     private static func isDockApplication(pid: Int32) -> Bool {
-        return NSWorkspace.shared.runningApplications.contains {
+        return DockObserver.runningApplications.values.contains {
             $0.processIdentifier == pid && $0.activationPolicy == .regular
         }
     }
@@ -53,7 +61,7 @@ struct WindowUtil {
         WindowUtil.clearExpiredCache()
         
         if let cachedImage = WindowUtil.imageCache[windowInfo.id],
-           Date().timeIntervalSince(cachedImage.timestamp) <= 60 {
+           Date().timeIntervalSince(cachedImage.timestamp) <= WindowUtil.cacheExpirySeconds {
             return cachedImage.image
         }
         
@@ -129,6 +137,7 @@ struct WindowUtil {
     static func resetCache() {
         cachedShareableContent = nil
         imageCache.removeAll()
+        iconCache.removeAll()
     }
     
     // Utility function to list active windows for a specific application
@@ -155,9 +164,9 @@ struct WindowUtil {
                     window: window,
                     appName: app.applicationName,
                     windowName: window.title,
-                    image: nil,
-                    appIcon: DockUtils.shared.getAppIcon(byName: app.applicationName)
+                    image: nil
                 )
+                
                 do {
                     windowInfo.image = try WindowUtil().captureWindowImage(windowInfo: windowInfo)
                 } catch {
