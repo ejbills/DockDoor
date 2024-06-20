@@ -50,13 +50,7 @@ struct WindowUtil {
             $0.processIdentifier == pid && $0.activationPolicy == .regular
         }
     }
-    
-    private static func isFinderDesktopWindow(_ window: SCWindow) -> Bool {
-        return window.owningApplication?.bundleIdentifier == "com.apple.finder" &&
-        window.title == "" ||
-        !window.isOnScreen // Finder desktop windows generally have no title and may not be on screen
-    }
-    
+        
     func captureWindowImage(windowInfo: WindowInfo) throws -> CGImage {
         WindowUtil.clearExpiredCache()
         
@@ -142,7 +136,7 @@ struct WindowUtil {
     
     // Utility function to list active windows for a specific application
     static func activeWindows(for applicationName: String) async -> [WindowInfo] {
-        guard let content = try? await SCShareableContent.excludingDesktopWindows(false, onScreenWindowsOnly: true) else {
+        guard let content = try? await SCShareableContent.excludingDesktopWindows(true, onScreenWindowsOnly: true) else {
             print("Debug: Failed to fetch shareable content")
             return []
         }
@@ -150,11 +144,6 @@ struct WindowUtil {
         var windowInfos: [WindowInfo] = []
         
         for window in content.windows {
-            // Filter out Finder desktop windows
-            if isFinderDesktopWindow(window) {
-                continue
-            }
-            
             // Check if the app name matches OR if applicationName is empty (which is used to get all active windows on device)
             if let app = window.owningApplication,
                applicationName.isEmpty || (app.applicationName.contains(applicationName) && !applicationName.isEmpty),
