@@ -20,6 +20,7 @@
 		BB1CBD5B2C1BA8DC003969BC /* Defaults in Frameworks */ = {isa = PBXBuildFile; productRef = BB1CBD5A2C1BA8DC003969BC /* Defaults */; };
 		BB1CBD5D2C1BCA4F003969BC /* Misc Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB1CBD5C2C1BCA4F003969BC /* Misc Utils.swift */; };
 		BB2567C62C10C5F000C0C93E /* DockUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2567C52C10C5F000C0C93E /* DockUtils.swift */; };
+		BB33E68C2C24C72F00A21D69 /* LaunchAtLogin in Frameworks */ = {isa = PBXBuildFile; productRef = BB33E68B2C24C72F00A21D69 /* LaunchAtLogin */; };
 		BB6A4F1C2C1CFCFF00CB4C9E /* PermView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6A4F1B2C1CFCFF00CB4C9E /* PermView.swift */; };
 		BBA153F62C115DDA00119C02 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA153F52C115DDA00119C02 /* AppDelegate.swift */; };
 		BBA153F82C11604400119C02 /* HoverWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA153F72C11604400119C02 /* HoverWindow.swift */; };
@@ -63,6 +64,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BB33E68C2C24C72F00A21D69 /* LaunchAtLogin in Frameworks */,
 				BB1CBD5B2C1BA8DC003969BC /* Defaults in Frameworks */,
 				BBE7CC8F2C22421900AB8F4D /* Settings in Frameworks */,
 			);
@@ -183,6 +185,7 @@
 			packageProductDependencies = (
 				BB1CBD5A2C1BA8DC003969BC /* Defaults */,
 				BBE7CC8E2C22421900AB8F4D /* Settings */,
+				BB33E68B2C24C72F00A21D69 /* LaunchAtLogin */,
 			);
 			productName = DockDoor;
 			productReference = BB157B652C0E31CE00997315 /* DockDoor.app */;
@@ -215,6 +218,7 @@
 			packageReferences = (
 				BB1CBD592C1BA8DC003969BC /* XCRemoteSwiftPackageReference "Defaults" */,
 				BBE7CC8D2C22421900AB8F4D /* XCRemoteSwiftPackageReference "Settings" */,
+				BB33E68A2C24C72F00A21D69 /* XCRemoteSwiftPackageReference "LaunchAtLogin-Modern" */,
 			);
 			productRefGroup = BB157B662C0E31CE00997315 /* Products */;
 			projectDirPath = "";
@@ -479,6 +483,14 @@
 				kind = branch;
 			};
 		};
+		BB33E68A2C24C72F00A21D69 /* XCRemoteSwiftPackageReference "LaunchAtLogin-Modern" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sindresorhus/LaunchAtLogin-Modern";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 		BBE7CC8D2C22421900AB8F4D /* XCRemoteSwiftPackageReference "Settings" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/sindresorhus/Settings";
@@ -494,6 +506,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = BB1CBD592C1BA8DC003969BC /* XCRemoteSwiftPackageReference "Defaults" */;
 			productName = Defaults;
+		};
+		BB33E68B2C24C72F00A21D69 /* LaunchAtLogin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BB33E68A2C24C72F00A21D69 /* XCRemoteSwiftPackageReference "LaunchAtLogin-Modern" */;
+			productName = LaunchAtLogin;
 		};
 		BBE7CC8E2C22421900AB8F4D /* Settings */ = {
 			isa = XCSwiftPackageProductDependency;
