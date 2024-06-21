@@ -322,6 +322,8 @@ struct HoverView: View {
     
     private func loadAppIcon() {
         if let bundleID = windows.first?.window.owningApplication?.bundleIdentifier,
+        if let pid = windows.first?.pid,
+           let bundleID = NSRunningApplication(processIdentifier: pid)?.bundleIdentifier,
            let icon = getIcon(bundleID: bundleID) {
             DispatchQueue.main.async {
                 self.appIcon = icon

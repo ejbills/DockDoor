@@ -44,10 +44,52 @@ struct WindowUtil {
     }
     
     // MARK: - Helper Functions
-    
-    private static func isDockApplication(pid: Int32) -> Bool {
-        return DockObserver.runningApplications.values.contains {
-            $0.processIdentifier == pid && $0.activationPolicy == .regular
+        
+    func captureWindowImage(windowInfo: WindowInfo, completion: @escaping (Result<CGImage, Error>) -> Void) {
+        DispatchQueue.global(qos: .userInitiated).async {
+            do {
+                WindowUtil.clearExpiredCache()
+                
+                if let cachedImage = WindowUtil.imageCache[windowInfo.id],
+                   Date().timeIntervalSince(cachedImage.timestamp) <= WindowUtil.cacheExpirySeconds {
+                    DispatchQueue.main.async {
+                        completion(.success(cachedImage.image))
+                    }
+                    return
+                }
+                
+                guard CGPreflightScreenCaptureAccess() else {
+                    DispatchQueue.main.async {
+                        print("Debug: Screen recording permission not granted")
+                        MessageUtil.showMessage(title: "Permission error",
+                                                message: "You need to give DockDoor access to Screen Recording in Security & Privacy for it to function.",
+                                                completion: { _ in SystemPreferencesHelper.openScreenRecordingPreferences() })
+                        completion(.failure(NSError(domain: "com.dockdoor.permission", code: 2, userInfo: [NSLocalizedDescriptionKey: "Screen recording permission not granted"])))
+                    }
+                    return
+                }
+                
+                let id = windowInfo.id
+                let frame = windowInfo.windowBounds
+                
+                guard let image = CGWindowListCreateImage(frame, .optionIncludingWindow, id, [.boundsIgnoreFraming, .bestResolution]) else {
+                    DispatchQueue.main.async {
+                        completion(.failure(NSError(domain: "com.dockdoor.error", code: 1, userInfo: [NSLocalizedDescriptionKey: "Failed to capture window image"])))
+                    }
+                    return
+                }
+                
+                let cachedImage = CachedImage(image: image, timestamp: Date())
+                WindowUtil.imageCache[windowInfo.id] = cachedImage
+                
+                DispatchQueue.main.async {
+                    completion(.success(image))
+                }
+            } catch {
+                DispatchQueue.main.async {
+                    completion(.failure(error))
+                }
+            }
         }
     }
         
@@ -139,9 +181,17 @@ struct WindowUtil {
         guard let content = try? await SCShareableContent.excludingDesktopWindows(true, onScreenWindowsOnly: true) else {
             print("Debug: Failed to fetch shareable content")
             return []
+    static func activeWindows(for applicationName: String, completion: @escaping ([WindowInfo]) -> Void) {
+        // Use CGWindowListCopyWindowInfo to get windows across all spaces
+        let options: CGWindowListOption = [.optionAll, .excludeDesktopElements]
+        guard let windowListInfo = CGWindowListCopyWindowInfo(options, kCGNullWindowID) as NSArray? as? [[String: AnyObject]] else {
+            print("Debug: Failed to fetch window list info")
+            completion([])
+            return
         }
         
         var windowInfos: [WindowInfo] = []
+        let group = DispatchGroup()
         
         for window in content.windows {
             // Check if the app name matches OR if applicationName is empty (which is used to get all active windows on device)
@@ -160,11 +210,39 @@ struct WindowUtil {
                     windowInfo.image = try WindowUtil().captureWindowImage(windowInfo: windowInfo)
                 } catch {
                     print("Error capturing window image: \(error)")
+                group.enter()
+                WindowUtil().captureWindowImage(windowInfo: windowInfo) { result in
+                    switch result {
+                    case .success(let image):
+                        windowInfo.image = image
+                        windowInfos.append(windowInfo)
+                    case .failure(let error):
+                        print("Error capturing window image: \(error)")
+                        windowBlacklist.insert(windowID)
+                    }
+                    group.leave()
                 }
                 windowInfos.append(windowInfo)
             }
         }
         
-        return windowInfos
+        group.notify(queue: .main) {
+            completion(windowInfos)
+        }
+    }
+    
+    private static func filterValidWindows(_ windowListInfo: [[String: AnyObject]]) -> [[String: AnyObject]] {
+        return windowListInfo.filter { windowInfo in
+            guard let windowID = windowInfo[kCGWindowNumber as String] as? CGWindowID,
+                  let windowLayer = windowInfo[kCGWindowLayer as String] as? Int else {
+                return false
+            }
+            
+            // Additional filtering criteria
+            let isBlacklisted = windowBlacklist.contains(windowID)
+            let isUserSpace = windowLayer == 0
+                        
+            return !isBlacklisted && isUserSpace
+        }
     }
 }

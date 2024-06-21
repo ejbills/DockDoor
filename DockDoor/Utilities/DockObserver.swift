@@ -20,16 +20,14 @@ class DockObserver {
     
     static var runningApplications: [String: NSRunningApplication] = [:]
 
+    private var dockAppProcessIdentifier: pid_t? = nil
+    
     private init() {
-        setupRunningApplications()
         setupEventTap()
-        setupNotifications()
+        setupDockApp()
     }
     
     deinit {
-        NSWorkspace.shared.notificationCenter.removeObserver(self, name: NSWorkspace.didLaunchApplicationNotification, object: nil)
-        NSWorkspace.shared.notificationCenter.removeObserver(self, name: NSWorkspace.didTerminateApplicationNotification, object: nil)
-        
         if let eventTap = eventTap {
             CGEvent.tapEnable(tap: eventTap, enable: false)
             CFMachPortInvalidate(eventTap)
@@ -69,6 +67,9 @@ class DockObserver {
            let application = userInfo[NSWorkspace.applicationUserInfoKey] as? NSRunningApplication,
            let bundleIdentifier = application.bundleIdentifier {
             DockObserver.runningApplications.removeValue(forKey: bundleIdentifier)
+    private func setupDockApp() {
+        if let dockAppPid = NSWorkspace.shared.runningApplications.first(where: { $0.bundleIdentifier == "com.apple.dock" })?.processIdentifier {
+            self.dockAppProcessIdentifier = dockAppPid
         }
     }
 
@@ -144,18 +145,16 @@ class DockObserver {
         // Capture the current mouseLocation
         let currentMouseLocation = mouseLocation
         
-        Task {
-            if let dockIconAppName = getDockIconAtLocation(currentMouseLocation) {
-                if dockIconAppName != lastAppName {
-                    lastAppName = dockIconAppName
-                    
-                    let activeWindows = await WindowUtil.activeWindows(for: dockIconAppName)
-                    
-                    if activeWindows.isEmpty {
-                        hideHoverWindow()
-                    } else {
-                        // Execute UI updates on the main thread
-                        await MainActor.run {
+        if let dockIconAppName = getDockIconAtLocation(currentMouseLocation) {
+            if dockIconAppName != lastAppName {
+                lastAppName = dockIconAppName
+                
+                WindowUtil.activeWindows(for: dockIconAppName) { activeWindows in
+                    DispatchQueue.main.async {
+                        if activeWindows.isEmpty {
+                            self.hideHoverWindow()
+                        } else {
+                            // Execute UI updates on the main thread
                             let mouseScreen = DockObserver.screenContainingPoint(currentMouseLocation) ?? NSScreen.main!
                             let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
                             // Show HoverWindow (using shared instance)
@@ -167,20 +166,23 @@ class DockObserver {
                                 onWindowTap: { self.hideHoverWindow() }
                             )
                         }
+                        self.isProcessing = false
                     }
                 }
             } else {
-                await MainActor.run {
-                    // Perform conversion on main thread
-                    let mouseScreen = DockObserver.screenContainingPoint(currentMouseLocation) ?? NSScreen.main!
-                    let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
-                    if !HoverWindow.shared.frame.contains(convertedMouseLocation) {
-                        lastAppName = nil
-                        hideHoverWindow()
-                    }
-                }
+                isProcessing = false
             }
-            isProcessing = false
+        } else {
+            DispatchQueue.main.async {
+                // Perform conversion on main thread
+                let mouseScreen = DockObserver.screenContainingPoint(currentMouseLocation) ?? NSScreen.main!
+                let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
+                if !HoverWindow.shared.frame.contains(convertedMouseLocation) {
+                    self.lastAppName = nil
+                    self.hideHoverWindow()
+                }
+                self.isProcessing = false
+            }
         }
     }
     
@@ -195,6 +197,8 @@ class DockObserver {
         }
         
         let axDockApp = AXUIElementCreateApplication(dockApp.processIdentifier)
+        guard let dockAppProcessIdentifier else { return nil }
+        let axDockApp = AXUIElementCreateApplication(dockAppProcessIdentifier)
         
         var dockItems: CFTypeRef?
         let dockItemsResult = AXUIElementCopyAttributeValue(axDockApp, kAXChildrenAttribute as CFString, &dockItems)
