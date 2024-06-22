@@ -417,7 +417,6 @@ struct WindowPreview: View {
                                     y: selected ? 6 : 4
                                 )))
                         }
-                        .scaleEffect(selected ? 1.025 : 1)
                     
                     if !CurrentWindow.shared.showingTabMenu {
                         Button(action: {
@@ -426,12 +425,13 @@ struct WindowPreview: View {
                         }) {
                             HStack {
                                 Image(systemName: "xmark.circle.fill")
-                                Text("Close")
                             }
                         }
+                        .buttonBorderShape(.roundedRectangle)
                         .padding([.top, .trailing], 8)
                     }
                 }
+                .scaleEffect(selected ? 1.025 : 1)
                 
             } else {
                 ProgressView()
