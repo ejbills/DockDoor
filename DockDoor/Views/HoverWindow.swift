@@ -261,7 +261,7 @@ struct HoverView: View {
                                 .id("\(appName)-\(index)")
                         }
                     }
-                    .padding(20)
+                    .padding(14)
                     .onAppear {
                         if !hasAppeared {
                             hasAppeared.toggle()
@@ -281,7 +281,7 @@ struct HoverView: View {
                 .opacity(showWindows ? 1 : 0.8)
             }
         }
-        .dockStyle(cornerRadius: 26)
+        .dockStyle(cornerRadius: 16)
         .overlay(alignment: .topLeading) {
             if !CurrentWindow.shared.showingTabMenu {
                 HStack(spacing: 4) {
@@ -296,6 +296,8 @@ struct HoverView: View {
                     }
                     Text(appName)
                         .padding(3)
+                        .bold()
+                        .shadow(radius: 4)
                 }
                 .padding(EdgeInsets(top: -10, leading: 12, bottom: 0, trailing: 0))
             }
@@ -322,8 +324,6 @@ struct HoverView: View {
     
     private func loadAppIcon() {
         if let bundleID = windows.first?.window.owningApplication?.bundleIdentifier,
-        if let pid = windows.first?.pid,
-           let bundleID = NSRunningApplication(processIdentifier: pid)?.bundleIdentifier,
            let icon = getIcon(bundleID: bundleID) {
             DispatchQueue.main.async {
                 self.appIcon = icon

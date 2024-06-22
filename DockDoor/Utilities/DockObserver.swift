@@ -17,9 +17,7 @@ class DockObserver {
     
     private var hoverProcessingTask: DispatchWorkItem?
     private var isProcessing: Bool = false
-    
-    static var runningApplications: [String: NSRunningApplication] = [:]
-
+        
     private var dockAppProcessIdentifier: pid_t? = nil
     
     private init() {
@@ -35,44 +33,12 @@ class DockObserver {
         }
     }
     
-    private func setupRunningApplications() {
-        let applications = NSWorkspace.shared.runningApplications
-        var seenBundleIdentifiers = Set<String>()
-        
-        DockObserver.runningApplications = applications.reduce(into: [String: NSRunningApplication]()) { result, app in
-            if let bundleIdentifier = app.bundleIdentifier, !seenBundleIdentifiers.contains(bundleIdentifier) {
-                result[bundleIdentifier] = app
-                seenBundleIdentifiers.insert(bundleIdentifier)
-            }
-        }
-    }
-
-    private func setupNotifications() {
-        let notificationCenter = NSWorkspace.shared.notificationCenter
-        
-        notificationCenter.addObserver(self, selector: #selector(applicationDidLaunch(_:)), name: NSWorkspace.didLaunchApplicationNotification, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(applicationDidTerminate(_:)), name: NSWorkspace.didTerminateApplicationNotification, object: nil)
-    }
-    
-    @objc private func applicationDidLaunch(_ notification: Notification) {
-        if let userInfo = notification.userInfo,
-           let application = userInfo[NSWorkspace.applicationUserInfoKey] as? NSRunningApplication,
-           let bundleIdentifier = application.bundleIdentifier {
-            DockObserver.runningApplications[bundleIdentifier] = application
-        }
-    }
-    
-    @objc private func applicationDidTerminate(_ notification: Notification) {
-        if let userInfo = notification.userInfo,
-           let application = userInfo[NSWorkspace.applicationUserInfoKey] as? NSRunningApplication,
-           let bundleIdentifier = application.bundleIdentifier {
-            DockObserver.runningApplications.removeValue(forKey: bundleIdentifier)
     private func setupDockApp() {
         if let dockAppPid = NSWorkspace.shared.runningApplications.first(where: { $0.bundleIdentifier == "com.apple.dock" })?.processIdentifier {
             self.dockAppProcessIdentifier = dockAppPid
         }
     }
-
+    
     private func setupEventTap() {
         guard AXIsProcessTrusted() else {
             print("Debug: Accessibility permission not granted")
@@ -149,7 +115,8 @@ class DockObserver {
             if dockIconAppName != lastAppName {
                 lastAppName = dockIconAppName
                 
-                WindowUtil.activeWindows(for: dockIconAppName) { activeWindows in
+                Task {
+                    let activeWindows = await WindowUtil.activeWindows(for: dockIconAppName)
                     DispatchQueue.main.async {
                         if activeWindows.isEmpty {
                             self.hideHoverWindow()
@@ -191,13 +158,8 @@ class DockObserver {
     }
     
     func getDockIconAtLocation(_ mouseLocation: CGPoint) -> String? {
-        guard let dockApp = DockObserver.runningApplications["com.apple.dock"] else {
-            print("Dock application not found.")
-            return nil
-        }
-        
-        let axDockApp = AXUIElementCreateApplication(dockApp.processIdentifier)
         guard let dockAppProcessIdentifier else { return nil }
+        
         let axDockApp = AXUIElementCreateApplication(dockAppProcessIdentifier)
         
         var dockItems: CFTypeRef?
@@ -245,7 +207,6 @@ class DockObserver {
                 if iconRect.contains(mouseLocation) {
                     var value: CFTypeRef?
                     let titleResult = AXUIElementCopyAttributeValue(element, kAXTitleAttribute as CFString, &value)
-                    
                     if titleResult == .success, let title = value as? String {
                         var isRunningValue: CFTypeRef?
                         AXUIElementCopyAttributeValue(element, kAXIsApplicationRunningAttribute as CFString, &isRunningValue)
@@ -317,17 +278,5 @@ class DockObserver {
         }
         
         return (offsetLeft, offsetTop)
-    }
-}
-
-
-extension Sequence {
-    func asyncMap<T>(_ transform: @escaping (Element) async throws -> T) async rethrows -> [T] {
-        return try await withThrowingTaskGroup(of: T.self) { group in
-            for element in self {
-                group.addTask { try await transform(element) }
-            }
-            return try await group.reduce(into: []) { $0.append($1) }
-        }
     }
 }

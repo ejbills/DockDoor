@@ -98,7 +98,8 @@ class KeybindHelper {
     }
 
     private func showHoverWindow() {
-        WindowUtil.activeWindows(for: "") { windows in
+        Task {
+            let windows = await WindowUtil.activeWindows(for: "")
             DispatchQueue.main.async {
                 HoverWindow.shared.showWindow(appName: "Alt-Tab", windows: windows, onWindowTap: nil)
             }
