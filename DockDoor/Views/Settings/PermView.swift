@@ -82,7 +82,7 @@ struct PermView: View {
                     Text("Open Accessibility Settings")
                 }
             }
-            .buttonStyle(PrimaryButtonStyle())
+            .buttonStyle(.bordered)
             
             Button(action: openScreenRecordingPreferences) {
                 HStack {
@@ -90,13 +90,13 @@ struct PermView: View {
                     Text("Open Screen Recording Settings")
                 }
             }
-            .buttonStyle(PrimaryButtonStyle())
+            .buttonStyle(.bordered)
             
             Text("Please Quit the App to Apply Changes! :)")
                 .font(.footnote)
                 .foregroundColor(.secondary)
             Button("Quit App", action: quitApp)
-                .buttonStyle(PrimaryButtonStyle())
+                .buttonStyle(.bordered)
 
             Spacer()
         }
@@ -109,15 +109,5 @@ struct PermView: View {
     
     private func openScreenRecordingPreferences() {
         SystemPreferencesHelper.openScreenRecordingPreferences()
-    }
-}
-
-struct PrimaryButtonStyle: ButtonStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .padding()
-            .background(RoundedRectangle(cornerRadius: 10).fill(Color.blue))
-            .foregroundColor(.white)
-            .scaleEffect(configuration.isPressed ? 0.95 : 1.0)
     }
 }
