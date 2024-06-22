@@ -44,14 +44,14 @@ struct WindowUtil {
     }
     
     // MARK: - Helper Functions
-        
-    func captureWindowImage(windowInfo: WindowInfo, completion: @escaping (Result<CGImage, Error>) -> Void) {
+    
+    static func captureWindowImage(windowInfo: WindowInfo, completion: @escaping (Result<CGImage, Error>) -> Void) {
         DispatchQueue.global(qos: .userInitiated).async {
             do {
-                WindowUtil.clearExpiredCache()
+                clearExpiredCache()
                 
-                if let cachedImage = WindowUtil.imageCache[windowInfo.id],
-                   Date().timeIntervalSince(cachedImage.timestamp) <= WindowUtil.cacheExpirySeconds {
+                if let cachedImage = imageCache[windowInfo.id],
+                   Date().timeIntervalSince(cachedImage.timestamp) <= cacheExpirySeconds {
                     DispatchQueue.main.async {
                         completion(.success(cachedImage.image))
                     }
@@ -80,7 +80,7 @@ struct WindowUtil {
                 }
                 
                 let cachedImage = CachedImage(image: image, timestamp: Date())
-                WindowUtil.imageCache[windowInfo.id] = cachedImage
+                imageCache[windowInfo.id] = cachedImage
                 
                 DispatchQueue.main.async {
                     completion(.success(image))
@@ -157,33 +157,7 @@ struct WindowUtil {
                 if let app = window.owningApplication,
                    applicationName.isEmpty || (app.applicationName.contains(applicationName) && !applicationName.isEmpty) {
                     group.addTask {
-                        // Check if the window is in the default user space layer and is not fully transparent
-                        let windowID = window.windowID
-                        guard let windowInfoDict = CGWindowListCopyWindowInfo(.optionIncludingWindow, windowID) as? [[String: AnyObject]],
-                              let windowLayer = windowInfoDict.first?[kCGWindowLayer as String] as? Int,
-                              windowLayer == 0,
-                              let windowAlpha = windowInfoDict.first?[kCGWindowAlpha as String] as? Double,
-                              windowAlpha > 0 else {
-                            return nil
-                        }
-
-                        var windowInfo = WindowInfo(
-                            id: windowID,
-                            window: window,
-                            appName: app.applicationName,
-                            windowName: window.title,
-                            image: nil
-                        )
-
-                        let result = await WindowUtil().captureWindowImageAsync(windowInfo: windowInfo)
-                        switch result {
-                        case .success(let image):
-                            windowInfo.image = image
-                            return windowInfo
-                        case .failure(let error):
-                            print("Error capturing window image: \(error)")
-                            return nil
-                        }
+                        return await fetchWindowInfo(window: window, applicationName: applicationName)
                     }
                 }
             }
@@ -197,12 +171,40 @@ struct WindowUtil {
 
         return windowInfos
     }
-}
+    
+    private static func fetchWindowInfo(window: SCWindow, applicationName: String) async -> WindowInfo? {
+        // Check if the window is in the default user space layer and is not fully transparent
+        let windowID = window.windowID
+        guard let windowInfoDict = CGWindowListCopyWindowInfo(.optionIncludingWindow, windowID) as? [[String: AnyObject]],
+              let windowLayer = windowInfoDict.first?[kCGWindowLayer as String] as? Int,
+              windowLayer == 0,
+              let windowAlpha = windowInfoDict.first?[kCGWindowAlpha as String] as? Double,
+              windowAlpha > 0 else {
+            return nil
+        }
 
-extension WindowUtil {
-    func captureWindowImageAsync(windowInfo: WindowInfo) async -> Result<CGImage, Error> {
+        var windowInfo = WindowInfo(
+            id: windowID,
+            window: window,
+            appName: window.owningApplication?.applicationName ?? "",
+            windowName: window.title,
+            image: nil
+        )
+
+        let result = await captureWindowImageAsync(windowInfo: windowInfo)
+        switch result {
+        case .success(let image):
+            windowInfo.image = image
+            return windowInfo
+        case .failure(let error):
+            print("Error capturing window image: \(error)")
+            return nil
+        }
+    }
+
+    static func captureWindowImageAsync(windowInfo: WindowInfo) async -> Result<CGImage, Error> {
         await withCheckedContinuation { continuation in
-            self.captureWindowImage(windowInfo: windowInfo) { result in
+            captureWindowImage(windowInfo: windowInfo) { result in
                 continuation.resume(returning: result)
             }
         }
