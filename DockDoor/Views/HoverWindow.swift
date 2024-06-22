@@ -428,6 +428,7 @@ struct WindowPreview: View {
                             }
                         }
                         .buttonBorderShape(.roundedRectangle)
+                        .buttonStyle(.plain)
                         .padding([.top, .trailing], 8)
                     }
                 }
