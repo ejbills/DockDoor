@@ -384,6 +384,7 @@ struct WindowPreview: View {
                     .frame(maxWidth: calculatedMaxDimensions?.width, maxHeight: calculatedMaxDimensions?.height)
                     .overlay { AnimatedGradientOverlay(shouldDisplay: selected) }
                     .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
+                    .shadow(radius: selected ? 0 : 2)
                     .background {
                         RoundedRectangle(cornerRadius: 6, style: .continuous)
                             .fill(Color.clear.shadow(.drop(
