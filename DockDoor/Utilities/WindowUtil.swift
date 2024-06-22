@@ -40,7 +40,7 @@ struct WindowUtil {
     static func clearExpiredCache() {
         let now = Date()
         cacheQueue.async(flags: .barrier) {
-            imageCache = imageCache.filter { now.timeIntervalSince($0.value.timestamp) <= cacheExpirySeconds }
+            imageCache = imageCache.filter { now.timeIntervalSince($0.value.timestamp) <= cacheExpirySeconds / 10 }
             iconCache = iconCache.filter { now.timeIntervalSince($0.value.timestamp) <= cacheExpirySeconds }
         }
     }
