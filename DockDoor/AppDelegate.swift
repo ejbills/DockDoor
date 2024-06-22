@@ -82,19 +82,32 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     private func handleFirstTimeLaunch() {
-        let contentView = PermView()
-
+        let contentView = FirstTimeView()
+        
+        // Save that the app has launched
         Defaults[.launched] = true
-
+        
+        // Create a hosting controller
+        let hostingController = NSHostingController(rootView: contentView)
+        
+        // Create the settings window
         settingsWindow = NSWindow(
-            contentRect: NSRect(x: 0, y: 0, width: 400, height: 200),
+            contentRect: NSRect(origin: .zero, size: NSSize(width: 400, height: 400)), // Initial arbitrary size
             styleMask: [.titled, .closable, .resizable],
             backing: .buffered, defer: false)
         settingsWindow?.center()
         settingsWindow?.setFrameAutosaveName("DockDoor Permissions")
-        settingsWindow?.contentView = NSHostingView(rootView: contentView)
+        settingsWindow?.contentView = hostingController.view
         settingsWindow?.title = "DockDoor Permissions"
+        
+        // Make the window key and order it front
         settingsWindow?.makeKeyAndOrderFront(nil)
+        
+        // Calculate the preferred size of the SwiftUI view
+        let preferredSize = hostingController.view.fittingSize
+        
+        // Resize the window to fit the content view
+        settingsWindow?.setContentSize(preferredSize)
     }
 }
 

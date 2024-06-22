@@ -26,6 +26,7 @@
 		BBA153F82C11604400119C02 /* HoverWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA153F72C11604400119C02 /* HoverWindow.swift */; };
 		BBA153FA2C11FFD500119C02 /* consts.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA153F92C11FFD500119C02 /* consts.swift */; };
 		BBA153FC2C12356100119C02 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA153FB2C12356100119C02 /* main.swift */; };
+		BBCFAE402C266234002E1516 /* FirstTimeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBCFAE3F2C266234002E1516 /* FirstTimeView.swift */; };
 		BBE7CC8F2C22421900AB8F4D /* Settings in Frameworks */ = {isa = PBXBuildFile; productRef = BBE7CC8E2C22421900AB8F4D /* Settings */; };
 		BBE7CC912C22429A00AB8F4D /* settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE7CC902C22429A00AB8F4D /* settings.swift */; };
 		BBE7CC942C225D9700AB8F4D /* App Icon.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE7CC932C225D9700AB8F4D /* App Icon.swift */; };
@@ -53,6 +54,7 @@
 		BBA153F72C11604400119C02 /* HoverWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoverWindow.swift; sourceTree = "<group>"; };
 		BBA153F92C11FFD500119C02 /* consts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = consts.swift; sourceTree = "<group>"; };
 		BBA153FB2C12356100119C02 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		BBCFAE3F2C266234002E1516 /* FirstTimeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstTimeView.swift; sourceTree = "<group>"; };
 		BBE7CC902C22429A00AB8F4D /* settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = settings.swift; sourceTree = "<group>"; };
 		BBE7CC932C225D9700AB8F4D /* App Icon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "App Icon.swift"; sourceTree = "<group>"; };
 		BBF6C6212C1A9B4300BF1D40 /* AnimatedGradientOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedGradientOverlay.swift; sourceTree = "<group>"; };
@@ -152,6 +154,7 @@
 				BBE7CC922C2244A600AB8F4D /* Settings */,
 				BBA153F72C11604400119C02 /* HoverWindow.swift */,
 				BBF6C6212C1A9B4300BF1D40 /* AnimatedGradientOverlay.swift */,
+				BBCFAE3F2C266234002E1516 /* FirstTimeView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -262,6 +265,7 @@
 				3A105FDD2C1C0EE20015EC66 /* DynStack.swift in Sources */,
 				BB2567C62C10C5F000C0C93E /* DockUtils.swift in Sources */,
 				BBE7CC912C22429A00AB8F4D /* settings.swift in Sources */,
+				BBCFAE402C266234002E1516 /* FirstTimeView.swift in Sources */,
 				BB1CBD582C1BA800003969BC /* SettingsView.swift in Sources */,
 				BB157B792C0E330100997315 /* WindowUtil.swift in Sources */,
 				BB157B7B2C0E343000997315 /* SystemPreferencesHelper.swift in Sources */,

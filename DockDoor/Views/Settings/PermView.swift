@@ -53,36 +53,71 @@ class PermissionsChecker: ObservableObject {
 
 struct PermView: View {
     @StateObject private var permissionsChecker = PermissionsChecker()
-
+    
     var body: some View {
-        if true { // As requested, the block to render the view
-            VStack(alignment: .leading, spacing: 20) {
-                HStack {
-                    Text("Accessibility Permissions:")
-                    Spacer()
-                    Image(systemName: permissionsChecker.accessibilityPermission ? "checkmark.circle.fill" : "xmark.circle.fill")
-                        .foregroundColor(permissionsChecker.accessibilityPermission ? .green : .red)
-                }
-                HStack {
-                    Text("Screen Recording Permissions:")
-                    Spacer()
-                    Image(systemName: permissionsChecker.screenRecordingPermission ? "checkmark.circle.fill" : "xmark.circle.fill")
-                        .foregroundColor(permissionsChecker.screenRecordingPermission ? .green : .red)
-                }
-                Button("Open Accessibility Settings", action: openAccessibilityPreferences)
-                Button("Open Screen Recording Settings", action: openScreenRecordingPreferences)
-                Button("Quit App to Apply Settings", action: quitApp)
-                Spacer()
+        VStack(alignment: .leading, spacing: 20) {
+            HStack {
+                Image(systemName: permissionsChecker.accessibilityPermission ? "checkmark.circle.fill" : "xmark.circle.fill")
+                    .foregroundColor(permissionsChecker.accessibilityPermission ? .green : .red)
+                    .scaleEffect(permissionsChecker.accessibilityPermission ? 1.2 : 1.0)
+                    .padding(10)
+                
+                Text("Accessibility Permissions")
+                    .font(.headline)
             }
-            .padding()
-        }
-    }
+            
+            HStack {
+                Image(systemName: permissionsChecker.screenRecordingPermission ? "checkmark.circle.fill" : "xmark.circle.fill")
+                    .foregroundColor(permissionsChecker.screenRecordingPermission ? .green : .red)
+                    .scaleEffect(permissionsChecker.screenRecordingPermission ? 1.2 : 1.0)
+                    .padding(10)
 
+                Text("Screen Recording Permissions")
+                    .font(.headline)
+            }
+            
+            Button(action: openAccessibilityPreferences) {
+                HStack {
+                    Image(systemName: "hand.raised.fill")
+                    Text("Open Accessibility Settings")
+                }
+            }
+            .buttonStyle(PrimaryButtonStyle())
+            
+            Button(action: openScreenRecordingPreferences) {
+                HStack {
+                    Image(systemName: "video.fill")
+                    Text("Open Screen Recording Settings")
+                }
+            }
+            .buttonStyle(PrimaryButtonStyle())
+            
+            Text("Please Quit the App to Apply Changes! :)")
+                .font(.footnote)
+                .foregroundColor(.secondary)
+            Button("Quit App", action: quitApp)
+                .buttonStyle(PrimaryButtonStyle())
+
+            Spacer()
+        }
+        .padding(20)
+    }
+    
     private func openAccessibilityPreferences() {
         SystemPreferencesHelper.openAccessibilityPreferences()
     }
-
+    
     private func openScreenRecordingPreferences() {
         SystemPreferencesHelper.openScreenRecordingPreferences()
+    }
+}
+
+struct PrimaryButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .padding()
+            .background(RoundedRectangle(cornerRadius: 10).fill(Color.blue))
+            .foregroundColor(.white)
+            .scaleEffect(configuration.isPressed ? 0.95 : 1.0)
     }
 }
