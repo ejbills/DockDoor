@@ -94,7 +94,7 @@ class HoverWindow: NSWindow {
         }
         
         guard let mouseLocation else { return }
-                
+        
         CurrentWindow.shared.setShowing(toState: centerOnScreen)
         
         let newHoverWindowSize = hostingView.fittingSize
@@ -252,7 +252,7 @@ struct HoverView: View {
         let thickness = HoverWindow.shared.windowSize.height
         var maxWidth: CGFloat = 0
         var maxHeight: CGFloat = 0
-
+        
         for window in windows {
             if let cgImage = window.image {
                 let cgSize = CGSize(width: Double(cgImage.width), height: Double(cgImage.height))
@@ -270,7 +270,7 @@ struct HoverView: View {
                 }
             }
         }
-
+        
         return CGPoint(x: maxWidth, y: maxHeight)
     }
     
@@ -365,7 +365,7 @@ struct WindowPreview: View {
     let bestGuessMonitor: NSScreen
     
     @State private var isHovering = false
-
+    
     private var calculatedMaxDimensions: CGSize? {
         return CGSize(width: self.bestGuessMonitor.frame.width * 0.75, height: self.bestGuessMonitor.frame.height * 0.75)
     }
@@ -377,7 +377,7 @@ struct WindowPreview: View {
         let aspectRatio = cgSize.width / cgSize.height
         let maxAllowedWidth = maxWindowDimension.x
         let maxAllowedHeight = maxWindowDimension.y
-
+        
         var targetWidth = maxAllowedWidth
         var targetHeight = targetWidth / aspectRatio
         
@@ -388,7 +388,7 @@ struct WindowPreview: View {
         
         return CGSize(width: targetWidth, height: targetHeight)
     }
-
+    
     var body: some View {
         // Determine if the current preview is highlighted
         let isHighlighted = (index == CurrentWindow.shared.currIndex && CurrentWindow.shared.showingTabMenu)
@@ -396,27 +396,42 @@ struct WindowPreview: View {
         
         VStack {
             if let cgImage = windowInfo.image {
-                Image(decorative: cgImage, scale: 1.0)
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(
-                        width: calculatedSize.width,
-                        height: calculatedSize.height,
-                        alignment: .center
-                    )
-                    .frame(maxWidth: calculatedMaxDimensions?.width, maxHeight: calculatedMaxDimensions?.height)
-                    .overlay { AnimatedGradientOverlay(shouldDisplay: selected) }
-                    .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
-                    .shadow(radius: selected ? 0 : 2)
-                    .background {
-                        RoundedRectangle(cornerRadius: 6, style: .continuous)
-                            .fill(Color.clear.shadow(.drop(
-                                color: .black.opacity(selected ? 0.35 : 0.25),
-                                radius: selected ? 12 : 8,
-                                y: selected ? 6 : 4
-                            )))
+                ZStack(alignment: .topTrailing) {
+                    Image(decorative: cgImage, scale: 1.0)
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(
+                            width: calculatedSize.width,
+                            height: calculatedSize.height,
+                            alignment: .center
+                        )
+                        .frame(maxWidth: calculatedMaxDimensions?.width, maxHeight: calculatedMaxDimensions?.height)
+                        .overlay { AnimatedGradientOverlay(shouldDisplay: selected) }
+                        .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
+                        .shadow(radius: selected ? 0 : 2)
+                        .background {
+                            RoundedRectangle(cornerRadius: 6, style: .continuous)
+                                .fill(Color.clear.shadow(.drop(
+                                    color: .black.opacity(selected ? 0.35 : 0.25),
+                                    radius: selected ? 12 : 8,
+                                    y: selected ? 6 : 4
+                                )))
+                        }
+                        .scaleEffect(selected ? 1.025 : 1)
+                    
+                    if !CurrentWindow.shared.showingTabMenu {
+                        Button(action: {
+                            WindowUtil.closeWindow(windowInfo: windowInfo)
+                            onTap?()
+                        }) {
+                            HStack {
+                                Image(systemName: "xmark.circle.fill")
+                                Text("Close")
+                            }
+                        }
+                        .padding([.top, .trailing], 8)
                     }
-                    .scaleEffect(selected ? 1.025 : 1)
+                }
                 
             } else {
                 ProgressView()

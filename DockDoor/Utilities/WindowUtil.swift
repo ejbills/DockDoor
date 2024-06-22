@@ -30,12 +30,12 @@ struct CachedAppIcon {
 }
 
 struct WindowUtil {
-        
+    
     private static var imageCache: [CGWindowID: CachedImage] = [:]
     private static var iconCache: [String: CachedAppIcon] = [:]
     
     private static var cacheExpirySeconds: Double = 600 // 10 mins
-        
+    
     static func clearExpiredCache() {
         let now = Date()
         imageCache = imageCache.filter { now.timeIntervalSince($0.value.timestamp) <= cacheExpirySeconds }
@@ -62,7 +62,7 @@ struct WindowUtil {
         
         let id = windowInfo.id
         let frame = windowInfo.window.frame
-
+        
         guard let image = CGWindowListCreateImage(frame, .optionIncludingWindow, id, [.boundsIgnoreFraming, .bestResolution]) else {
             throw NSError(domain: "com.dockdoor.error", code: 1, userInfo: [NSLocalizedDescriptionKey: "Failed to capture window image"])
         }
@@ -73,6 +73,43 @@ struct WindowUtil {
         return image
     }
     
+    static func createAXUIElement(for pid: pid_t) -> AXUIElement {
+        return AXUIElementCreateApplication(pid)
+    }
+    
+    static func getAXWindows(for appRef: AXUIElement) -> [AXUIElement]? {
+        var windowList: AnyObject?
+        let result = AXUIElementCopyAttributeValue(appRef, kAXWindowsAttribute as CFString, &windowList)
+        
+        if result != .success {
+            print("Error getting windows: \(result.rawValue)")
+            return nil
+        }
+        
+        return windowList as? [AXUIElement]
+    }
+    
+    static func findWindow(byName windowName: String, in windows: [AXUIElement]) -> AXUIElement? {
+        for windowRef in windows {
+            var windowTitleValue: AnyObject?
+            AXUIElementCopyAttributeValue(windowRef, kAXTitleAttribute as CFString, &windowTitleValue)
+            if let windowTitle = windowTitleValue as? String, windowTitle == windowName {
+                return windowRef
+            }
+        }
+        return nil
+    }
+    
+    static func getCloseButton(for windowRef: AXUIElement) -> AXUIElement? {
+        var closeButton: AnyObject?
+        let result = AXUIElementCopyAttributeValue(windowRef, kAXCloseButtonAttribute as CFString, &closeButton)
+        if result == .success {
+            let closeButtonUIElement = closeButton as! AXUIElement
+            return closeButtonUIElement
+        }
+        return nil
+    }
+    
     // MARK: - Window Manipulation Functions
     
     static func bringWindowToFront(windowInfo: WindowInfo) {
@@ -81,29 +118,13 @@ struct WindowUtil {
             return
         }
         
-        let appRef = AXUIElementCreateApplication(pid)
+        let appRef = createAXUIElement(for: pid)
         
-        var windowList: AnyObject?
-        let result = AXUIElementCopyAttributeValue(appRef, kAXWindowsAttribute as CFString, &windowList)
-        
-        if result != .success {
-            print("Error getting windows: \(result.rawValue)")
+        guard let windows = getAXWindows(for: appRef) else {
             return
         }
         
-        var foundWindow: AXUIElement?
-        if let windows = windowList as? [AXUIElement] {
-            for windowRef in windows {
-                var windowTitleValue: AnyObject?
-                AXUIElementCopyAttributeValue(windowRef, kAXTitleAttribute as CFString, &windowTitleValue)
-                if let windowTitle = windowTitleValue as? String, windowTitle == windowInfo.windowName {
-                    foundWindow = windowRef
-                    break
-                }
-            }
-        }
-        
-        if let windowRef = foundWindow {
+        if let windowRef = findWindow(byName: windowInfo.windowName ?? "", in: windows) {
             let raiseResult = AXUIElementPerformAction(windowRef, kAXRaiseAction as CFString)
             let focusResult = AXUIElementSetAttributeValue(windowRef, kAXFocusedAttribute as CFString, kCFBooleanTrue)
             let frontmostResult = AXUIElementSetAttributeValue(appRef, kAXFrontmostAttribute as CFString, kCFBooleanTrue)
@@ -121,6 +142,31 @@ struct WindowUtil {
         }
     }
     
+    static func closeWindow(windowInfo: WindowInfo) {
+        guard let pid = windowInfo.window.owningApplication?.processID else {
+            print("Debug: Failed to get PID from windowInfo")
+            return
+        }
+        
+        let appRef = createAXUIElement(for: pid)
+        
+        guard let windows = getAXWindows(for: appRef) else {
+            return
+        }
+        
+        if let windowRef = findWindow(byName: windowInfo.windowName ?? "", in: windows),
+           let closeButton = getCloseButton(for: windowRef) {
+            let closeResult = AXUIElementPerformAction(closeButton, kAXPressAction as CFString)
+            if closeResult == .success {
+                print("Debug: Successfully closed window")
+            } else {
+                print("Error closing window: \(closeResult.rawValue)")
+            }
+        } else {
+            print("Debug: No matching window or close button found.")
+        }
+    }
+    
     static func resetCache() {
         imageCache.removeAll()
         iconCache.removeAll()
@@ -130,7 +176,7 @@ struct WindowUtil {
     static func activeWindows(for applicationName: String) async throws -> [WindowInfo] {
         let content = try await SCShareableContent.excludingDesktopWindows(true, onScreenWindowsOnly: true)
         let group = LimitedTaskGroup<WindowInfo?>(maxConcurrentTasks: 4) // Adjust this number as needed
-
+        
         for window in content.windows {
             if let app = window.owningApplication,
                applicationName.isEmpty || (app.applicationName.contains(applicationName) && !applicationName.isEmpty) {
@@ -139,11 +185,11 @@ struct WindowUtil {
                 }
             }
         }
-
+        
         let results = try await group.waitForAll()
         return results.compactMap { $0 }
     }
-
+    
     private static func fetchWindowInfo(window: SCWindow, applicationName: String) async throws -> WindowInfo? {
         // Check if the window is in the default user space layer and is not fully transparent
         let windowID = window.windowID
@@ -155,7 +201,7 @@ struct WindowUtil {
               let owningApplication = window.owningApplication else {
             return nil
         }
-
+        
         var windowInfo = WindowInfo(
             id: windowID,
             window: window,
@@ -164,7 +210,7 @@ struct WindowUtil {
             windowName: window.title,
             image: nil
         )
-
+        
         do {
             windowInfo.image = try await captureWindowImage(windowInfo: windowInfo)
             return windowInfo
