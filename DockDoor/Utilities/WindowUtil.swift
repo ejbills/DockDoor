@@ -33,13 +33,16 @@ struct WindowUtil {
     
     private static var imageCache: [CGWindowID: CachedImage] = [:]
     private static var iconCache: [String: CachedAppIcon] = [:]
-    
+    private static let cacheQueue = DispatchQueue(label: "com.dockdoor.cacheQueue", attributes: .concurrent)
+
     private static var cacheExpirySeconds: Double = 600 // 10 mins
     
     static func clearExpiredCache() {
         let now = Date()
-        imageCache = imageCache.filter { now.timeIntervalSince($0.value.timestamp) <= cacheExpirySeconds }
-        iconCache = iconCache.filter { now.timeIntervalSince($0.value.timestamp) <= cacheExpirySeconds }
+        cacheQueue.async(flags: .barrier) {
+            imageCache = imageCache.filter { now.timeIntervalSince($0.value.timestamp) <= cacheExpirySeconds }
+            iconCache = iconCache.filter { now.timeIntervalSince($0.value.timestamp) <= cacheExpirySeconds }
+        }
     }
     
     // MARK: - Helper Functions
@@ -47,30 +50,32 @@ struct WindowUtil {
     static func captureWindowImage(windowInfo: WindowInfo) async throws -> CGImage {
         clearExpiredCache()
         
-        if let cachedImage = imageCache[windowInfo.id],
-           Date().timeIntervalSince(cachedImage.timestamp) <= cacheExpirySeconds {
-            return cachedImage.image
+        return try cacheQueue.sync(flags: .barrier) {
+            if let cachedImage = imageCache[windowInfo.id],
+               Date().timeIntervalSince(cachedImage.timestamp) <= cacheExpirySeconds {
+                return cachedImage.image
+            }
+            
+            guard CGPreflightScreenCaptureAccess() else {
+                print("Debug: Screen recording permission not granted")
+                MessageUtil.showMessage(title: "Permission error",
+                                        message: "You need to give DockDoor access to Screen Recording in Security & Privacy for it to function.",
+                                        completion: { _ in SystemPreferencesHelper.openScreenRecordingPreferences() })
+                throw NSError(domain: "com.dockdoor.permission", code: 2, userInfo: [NSLocalizedDescriptionKey: "Screen recording permission not granted"])
+            }
+            
+            let id = windowInfo.id
+            let frame = windowInfo.window.frame
+            
+            guard let image = CGWindowListCreateImage(frame, .optionIncludingWindow, id, [.boundsIgnoreFraming, .bestResolution]) else {
+                throw NSError(domain: "com.dockdoor.error", code: 1, userInfo: [NSLocalizedDescriptionKey: "Failed to capture window image"])
+            }
+            
+            let cachedImage = CachedImage(image: image, timestamp: Date())
+            imageCache[windowInfo.id] = cachedImage
+            
+            return image
         }
-        
-        guard CGPreflightScreenCaptureAccess() else {
-            print("Debug: Screen recording permission not granted")
-            MessageUtil.showMessage(title: "Permission error",
-                                    message: "You need to give DockDoor access to Screen Recording in Security & Privacy for it to function.",
-                                    completion: { _ in SystemPreferencesHelper.openScreenRecordingPreferences() })
-            throw NSError(domain: "com.dockdoor.permission", code: 2, userInfo: [NSLocalizedDescriptionKey: "Screen recording permission not granted"])
-        }
-        
-        let id = windowInfo.id
-        let frame = windowInfo.window.frame
-        
-        guard let image = CGWindowListCreateImage(frame, .optionIncludingWindow, id, [.boundsIgnoreFraming, .bestResolution]) else {
-            throw NSError(domain: "com.dockdoor.error", code: 1, userInfo: [NSLocalizedDescriptionKey: "Failed to capture window image"])
-        }
-        
-        let cachedImage = CachedImage(image: image, timestamp: Date())
-        imageCache[windowInfo.id] = cachedImage
-        
-        return image
     }
     
     static func createAXUIElement(for pid: pid_t) -> AXUIElement {

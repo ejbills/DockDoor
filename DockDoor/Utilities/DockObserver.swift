@@ -91,7 +91,7 @@ class DockObserver {
     }
     
     private func processMouseEvent(mouseLocation: CGPoint) {
-        guard !isProcessing else { return }
+        guard !isProcessing, !CurrentWindow.shared.showingTabMenu else { return }
         isProcessing = true
         
         guard let lastMouseLocation = lastMouseLocation else {
@@ -120,7 +120,7 @@ class DockObserver {
                         let activeWindows = try await WindowUtil.activeWindows(for: dockIconAppName)
                         await MainActor.run {
                             if activeWindows.isEmpty {
-                                self.hideHoverWindow()
+                                HoverWindow.shared.hideWindow()
                             } else {
                                 // Execute UI updates on the main thread
                                 let mouseScreen = DockObserver.screenContainingPoint(currentMouseLocation) ?? NSScreen.main!
@@ -131,7 +131,7 @@ class DockObserver {
                                     windows: activeWindows,
                                     mouseLocation: convertedMouseLocation,
                                     mouseScreen: mouseScreen,
-                                    onWindowTap: { self.hideHoverWindow() }
+                                    onWindowTap: { HoverWindow.shared.hideWindow() }
                                 )
                             }
                             self.isProcessing = false
@@ -153,15 +153,11 @@ class DockObserver {
                 let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
                 if !HoverWindow.shared.frame.contains(convertedMouseLocation) {
                     self.lastAppName = nil
-                    self.hideHoverWindow()
+                    HoverWindow.shared.hideWindow()
                 }
                 self.isProcessing = false
             }
         }
-    }
-    
-    private func hideHoverWindow() {
-        HoverWindow.shared.hideWindow() // Hide the shared HoverWindow
     }
     
     func getDockIconAtLocation(_ mouseLocation: CGPoint) -> String? {

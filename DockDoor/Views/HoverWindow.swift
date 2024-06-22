@@ -365,6 +365,7 @@ struct WindowPreview: View {
     let bestGuessMonitor: NSScreen
     
     @State private var isHovering = false
+    @State private var isHoveringOverTabMenu = false
     
     private var calculatedMaxDimensions: CGSize? {
         return CGSize(width: self.bestGuessMonitor.frame.width * 0.75, height: self.bestGuessMonitor.frame.height * 0.75)
@@ -407,8 +408,9 @@ struct WindowPreview: View {
                         )
                         .frame(maxWidth: calculatedMaxDimensions?.width, maxHeight: calculatedMaxDimensions?.height)
                         .overlay { AnimatedGradientOverlay(shouldDisplay: selected) }
+                        .overlay { Color.white.opacity(isHoveringOverTabMenu ?  0.1 : 0) }
                         .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
-                        .shadow(radius: selected ? 0 : 3)
+                        .shadow(radius: selected || isHoveringOverTabMenu    ? 0 : 3)
                         .background {
                             RoundedRectangle(cornerRadius: 6, style: .continuous)
                                 .fill(Color.clear.shadow(.drop(
@@ -418,22 +420,20 @@ struct WindowPreview: View {
                                 )))
                         }
                     
-                    if !CurrentWindow.shared.showingTabMenu {
-                        Button(action: {
-                            WindowUtil.closeWindow(windowInfo: windowInfo)
-                            onTap?()
-                        }) {
-                            HStack {
-                                Image(systemName: "xmark.circle.fill")
-                            }
+                    Button(action: {
+                        WindowUtil.closeWindow(windowInfo: windowInfo)
+                        onTap?()
+                    }) {
+                        HStack {
+                            Image(systemName: "xmark.circle.fill")
                         }
-                        .buttonBorderShape(.roundedRectangle)
-                        .buttonStyle(.plain)
-                        .font(.system(size: 14))
-                        .padding([.top, .trailing], 8)
                     }
+                    .buttonBorderShape(.roundedRectangle)
+                    .buttonStyle(.plain)
+                    .font(.system(size: 14))
+                    .padding([.top, .trailing], 8)
                 }
-                .scaleEffect(selected ? 1.025 : 1)
+                .scaleEffect(selected ? 1.025 : (isHoveringOverTabMenu ? 0.975 : 1))
                 
             } else {
                 ProgressView()
@@ -441,9 +441,11 @@ struct WindowPreview: View {
         }
         .contentShape(Rectangle())
         .onHover { over in
-            if !CurrentWindow.shared.showingTabMenu {
-                withAnimation(.snappy(duration: 0.175)) {
+            withAnimation(.snappy(duration: 0.175)) {
+                if !CurrentWindow.shared.showingTabMenu {
                     isHovering = over
+                } else {
+                    isHoveringOverTabMenu = over
                 }
             }
         }

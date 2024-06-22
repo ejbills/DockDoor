@@ -75,7 +75,7 @@ class KeybindHelper {
                 isShiftKeyPressed = shiftKeyCurrentlyPressed
             }
 
-            if !isControlKeyPressed && !isShiftKeyPressed {  // If both Ctrl and Shift were released
+            if !isControlKeyPressed {  // If Ctrl was released
                 HoverWindow.shared.hideWindow()  // Hide the HoverWindow
                 HoverWindow.shared.selectAndBringToFrontCurrentWindow()
             }
@@ -102,7 +102,9 @@ class KeybindHelper {
             do {
                 let windows = try await WindowUtil.activeWindows(for: "")
                 await MainActor.run {
-                    HoverWindow.shared.showWindow(appName: "Alt-Tab", windows: windows, onWindowTap: nil)
+                    if isControlKeyPressed {  // Check if Ctrl key is still pressed
+                        HoverWindow.shared.showWindow(appName: "Alt-Tab", windows: windows, onWindowTap: { HoverWindow.shared.hideWindow() })
+                    }
                 }
             } catch {
                 print("Error fetching active windows: \(error)")
