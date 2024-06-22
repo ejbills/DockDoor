@@ -44,6 +44,10 @@ class HoverWindow: NSWindow {
     
     private var previousHoverWindowOrigin: CGPoint? // Store previous origin
     
+    private let debounceDelay: TimeInterval = 0.1
+    private var debounceWorkItem: DispatchWorkItem?
+    private var lastShowTime: Date?
+    
     private init() {
         super.init(contentRect: .zero, styleMask: .borderless, backing: .buffered, defer: false)
         level = .floating
@@ -161,6 +165,25 @@ class HoverWindow: NSWindow {
     }
     
     func showWindow(appName: String, windows: [WindowInfo], mouseLocation: CGPoint? = nil, mouseScreen: NSScreen? = nil, onWindowTap: (() -> Void)? = nil) {
+        let now = Date()
+        
+        if let lastShowTime = lastShowTime, now.timeIntervalSince(lastShowTime) < debounceDelay {
+            debounceWorkItem?.cancel()
+            
+            let workItem = DispatchWorkItem { [weak self] in
+                self?.performShowWindow(appName: appName, windows: windows, mouseLocation: mouseLocation, mouseScreen: mouseScreen, onWindowTap: onWindowTap)
+            }
+            
+            debounceWorkItem = workItem
+            DispatchQueue.main.asyncAfter(deadline: .now() + debounceDelay, execute: workItem)
+        } else {
+            performShowWindow(appName: appName, windows: windows, mouseLocation: mouseLocation, mouseScreen: mouseScreen, onWindowTap: onWindowTap)
+        }
+        
+        lastShowTime = now
+    }
+    
+    private func performShowWindow(appName: String, windows: [WindowInfo], mouseLocation: CGPoint?, mouseScreen: NSScreen?, onWindowTap: (() -> Void)?) {
         let isMouseEvent = mouseLocation != nil
         CurrentWindow.shared.setShowing(toState: !isMouseEvent)
         
@@ -323,8 +346,8 @@ struct HoverView: View {
     }
     
     private func loadAppIcon() {
-        if let bundleID = windows.first?.window.owningApplication?.bundleIdentifier,
-           let icon = getIcon(bundleID: bundleID) {
+        if let bundleID = windows.first?.bundleID,
+           let icon = AppIconUtil.getIcon(bundleID: bundleID) {
             DispatchQueue.main.async {
                 self.appIcon = icon
             }

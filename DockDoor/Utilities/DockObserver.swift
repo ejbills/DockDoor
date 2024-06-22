@@ -116,31 +116,38 @@ class DockObserver {
                 lastAppName = dockIconAppName
                 
                 Task {
-                    let activeWindows = await WindowUtil.activeWindows(for: dockIconAppName)
-                    DispatchQueue.main.async {
-                        if activeWindows.isEmpty {
-                            self.hideHoverWindow()
-                        } else {
-                            // Execute UI updates on the main thread
-                            let mouseScreen = DockObserver.screenContainingPoint(currentMouseLocation) ?? NSScreen.main!
-                            let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
-                            // Show HoverWindow (using shared instance)
-                            HoverWindow.shared.showWindow(
-                                appName: dockIconAppName,
-                                windows: activeWindows,
-                                mouseLocation: convertedMouseLocation,
-                                mouseScreen: mouseScreen,
-                                onWindowTap: { self.hideHoverWindow() }
-                            )
+                    do {
+                        let activeWindows = try await WindowUtil.activeWindows(for: dockIconAppName)
+                        await MainActor.run {
+                            if activeWindows.isEmpty {
+                                self.hideHoverWindow()
+                            } else {
+                                // Execute UI updates on the main thread
+                                let mouseScreen = DockObserver.screenContainingPoint(currentMouseLocation) ?? NSScreen.main!
+                                let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
+                                // Show HoverWindow (using shared instance)
+                                HoverWindow.shared.showWindow(
+                                    appName: dockIconAppName,
+                                    windows: activeWindows,
+                                    mouseLocation: convertedMouseLocation,
+                                    mouseScreen: mouseScreen,
+                                    onWindowTap: { self.hideHoverWindow() }
+                                )
+                            }
+                            self.isProcessing = false
                         }
-                        self.isProcessing = false
+                    } catch {
+                        await MainActor.run {
+                            print("Error fetching active windows: \(error)")
+                            self.isProcessing = false
+                        }
                     }
                 }
             } else {
                 isProcessing = false
             }
         } else {
-            DispatchQueue.main.async {
+            Task { @MainActor in
                 // Perform conversion on main thread
                 let mouseScreen = DockObserver.screenContainingPoint(currentMouseLocation) ?? NSScreen.main!
                 let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
