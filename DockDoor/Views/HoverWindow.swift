@@ -102,7 +102,7 @@ class HoverWindow: NSWindow {
         if sizeChanged {
             hostingView.rootView = HoverView(
                 appName: self.appName,
-                windows: self.windows,
+                viewModel: HoverViewModel(windows: self.windows),
                 onWindowTap: self.onWindowTap,
                 dockPosition: DockUtils.shared.getDockPosition(),
                 bestGuessMonitor: mouseScreen)
@@ -199,13 +199,13 @@ class HoverWindow: NSWindow {
             let screen = mouseScreen ?? NSScreen.main!
             
             if self.hostingView == nil {
-                let hoverView = HoverView(appName: appName, windows: windows, onWindowTap: onWindowTap,
+                let hoverView = HoverView(appName: appName, viewModel: HoverViewModel(windows: windows), onWindowTap: onWindowTap,
                                           dockPosition: DockUtils.shared.getDockPosition(), bestGuessMonitor: screen)
                 let hostingView = NSHostingView(rootView: hoverView)
                 self.contentView = hostingView
                 self.hostingView = hostingView
             } else {
-                self.hostingView?.rootView = HoverView(appName: appName, windows: windows, onWindowTap: onWindowTap,
+                self.hostingView?.rootView = HoverView(appName: appName, viewModel: HoverViewModel(windows: windows), onWindowTap: onWindowTap,
                                                        dockPosition: DockUtils.shared.getDockPosition(), bestGuessMonitor: screen)
             }
             
@@ -237,30 +237,53 @@ class HoverWindow: NSWindow {
     }
 }
 
+class HoverViewModel: ObservableObject {
+    @Published var windows: [WindowInfo]
+    @Published var appIcon: NSImage?
+
+    init(windows: [WindowInfo]) {
+        self.windows = windows
+        self.loadAppIcon()
+    }
+
+    func removeWindow(at index: Int) {
+        guard windows.count > 1 else { return }
+        windows.remove(at: index)
+    }
+
+    func loadAppIcon() {
+        if let bundleID = windows.first?.bundleID,
+           let icon = AppIconUtil.getIcon(bundleID: bundleID) {
+            DispatchQueue.main.async {
+                self.appIcon = icon
+            }
+        }
+    }
+}
+
 struct HoverView: View {
     let appName: String
-    let windows: [WindowInfo]
+    @ObservedObject var viewModel: HoverViewModel
     let onWindowTap: (() -> Void)?
     let dockPosition: DockPosition
     let bestGuessMonitor: NSScreen
-    
+
     @State private var showWindows: Bool = false
     @State private var hasAppeared: Bool = false
-    @State private var appIcon: NSImage? = nil
-    
+
     var maxWindowDimension: CGPoint {
         let thickness = HoverWindow.shared.windowSize.height
         var maxWidth: CGFloat = 0
         var maxHeight: CGFloat = 0
-        
-        for window in windows {
+
+        for window in viewModel.windows {
             if let cgImage = window.image {
                 let cgSize = CGSize(width: Double(cgImage.width), height: Double(cgImage.height))
-                
+
                 // Calculate the dimensions based on the dock position
                 let widthBasedOnHeight = (cgSize.width * thickness) / cgSize.height
                 let heightBasedOnWidth = (cgSize.height * thickness) / cgSize.width
-                
+
                 if dockPosition == .bottom || CurrentWindow.shared.showingTabMenu {
                     maxWidth = max(maxWidth, widthBasedOnHeight)
                     maxHeight = thickness  // consistent height if dock is on the bottom
@@ -270,17 +293,20 @@ struct HoverView: View {
                 }
             }
         }
-        
+
         return CGPoint(x: maxWidth, y: maxHeight)
     }
-    
+
     var body: some View {
         ZStack {
             ScrollViewReader { scrollProxy in
                 ScrollView(dockPosition == .bottom || CurrentWindow.shared.showingTabMenu ? .horizontal : .vertical, showsIndicators: false) {
                     DynStack(direction: CurrentWindow.shared.showingTabMenu ? .horizontal : (dockPosition == .bottom ? .horizontal : .vertical), spacing: 16) {
-                        ForEach(windows.indices, id: \.self) { index in
-                            WindowPreview(windowInfo: windows[index], onTap: onWindowTap, index: index, dockPosition: dockPosition, maxWindowDimension: maxWindowDimension, bestGuessMonitor: bestGuessMonitor)
+                        ForEach(viewModel.windows.indices, id: \.self) { index in
+                            WindowPreview(windowInfo: viewModel.windows[index], onTap: onWindowTap, onClose: {
+                                if viewModel.windows.count <= 1 { onWindowTap?() }
+                                viewModel.removeWindow(at: index)
+                            }, index: index, dockPosition: dockPosition, maxWindowDimension: maxWindowDimension, bestGuessMonitor: bestGuessMonitor)
                                 .id("\(appName)-\(index)")
                         }
                     }
@@ -296,7 +322,7 @@ struct HoverView: View {
                             scrollProxy.scrollTo("\(appName)-\(newIndex)", anchor: .center)
                         }
                     }
-                    .onChange(of: self.windows) { _, _ in
+                    .onChange(of: viewModel.windows) { _, _ in
                         self.runUIUpdates()
                     }
                 }
@@ -308,7 +334,7 @@ struct HoverView: View {
         .overlay(alignment: .topLeading) {
             if !CurrentWindow.shared.showingTabMenu {
                 HStack(spacing: 4) {
-                    if let appIcon = appIcon {
+                    if let appIcon = viewModel.appIcon {
                         Image(nsImage: appIcon)
                             .resizable()
                             .scaledToFit()
@@ -331,34 +357,25 @@ struct HoverView: View {
             maxHeight: self.bestGuessMonitor.visibleFrame.height
         )
     }
-    
+
     private func runUIUpdates() {
         self.runAnimation()
-        self.loadAppIcon()
+        viewModel.loadAppIcon()
     }
-    
+
     private func runAnimation() {
         self.showWindows = false
-        
+
         withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
             showWindows = true
         }
     }
-    
-    private func loadAppIcon() {
-        if let bundleID = windows.first?.bundleID,
-           let icon = AppIconUtil.getIcon(bundleID: bundleID) {
-            DispatchQueue.main.async {
-                self.appIcon = icon
-            }
-        }
-    }
 }
-
 
 struct WindowPreview: View {
     let windowInfo: WindowInfo
     let onTap: (() -> Void)?
+    let onClose: (() -> Void)?
     let index: Int
     let dockPosition: DockPosition
     let maxWindowDimension: CGPoint
@@ -421,7 +438,7 @@ struct WindowPreview: View {
                     if !CurrentWindow.shared.showingTabMenu {
                         Button(action: {
                             WindowUtil.closeWindow(windowInfo: windowInfo)
-                            onTap?()
+                            onClose?()
                         }) {
                             HStack {
                                 Image(systemName: "xmark.circle.fill")
