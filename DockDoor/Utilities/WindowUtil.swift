@@ -129,7 +129,8 @@ struct WindowUtil {
             return
         }
         
-        if let windowRef = findWindow(byName: windowInfo.windowName ?? "", in: windows) {
+        if let windowName = windowInfo.windowName, !windowName.isEmpty,
+            let windowRef = findWindow(byName: windowInfo.windowName ?? "", in: windows) {
             let raiseResult = AXUIElementPerformAction(windowRef, kAXRaiseAction as CFString)
             let focusResult = AXUIElementSetAttributeValue(windowRef, kAXFocusedAttribute as CFString, kCFBooleanTrue)
             let frontmostResult = AXUIElementSetAttributeValue(appRef, kAXFrontmostAttribute as CFString, kCFBooleanTrue)
