@@ -2,7 +2,7 @@
 
 DockDoor is a macOS application developed with Swift and SwiftUI that allows users to manage and interact with application windows on their desktop. It emphasizes ease of use and seamless integration with the macOS environment. This project is open-source, inviting contributions from developers to enhance its functionality and user experience.
 
-[Download the latest release here](https://github.com/ejbills/DockDoor/releases/tag/releases).
+[Download the latest release here](https://github.com/ejbills/DockDoor/releases).
 
 ## Usage
 
