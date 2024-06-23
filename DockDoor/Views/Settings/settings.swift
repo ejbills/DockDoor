@@ -7,10 +7,12 @@
 
 import Cocoa
 import Settings
+import Sparkle
 
 extension Settings.PaneIdentifier {
     static let general = Self("general")
     static let permissions = Self("permissions")
+    static let updates = Self("updates")
 }
 
 let GeneralSettingsViewController: () -> SettingsPane = {
@@ -32,6 +34,18 @@ let PermissionsSettingsViewController: () -> SettingsPane = {
         toolbarIcon: NSImage(systemSymbolName: "lock.shield", accessibilityDescription: "Permissions settings")!
     ) {
         PermView()
+    }
+
+    return Settings.PaneHostingController(pane: paneView)
+}
+
+func UpdatesSettingsViewController(updater: SPUUpdater) -> SettingsPane {
+    let paneView = Settings.Pane(
+        identifier: .updates,
+        title: "Updates",
+        toolbarIcon: NSImage(systemSymbolName: "arrow.triangle.2.circlepath", accessibilityDescription: "Update settings")!
+    ) {
+        CheckForUpdatesView(updater: updater)
     }
 
     return Settings.PaneHostingController(pane: paneView)

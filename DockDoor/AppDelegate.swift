@@ -9,20 +9,30 @@ import Cocoa
 import SwiftUI
 import Defaults
 import Settings
+import Sparkle
 
 class AppDelegate: NSObject, NSApplicationDelegate {
     private var dockObserver: DockObserver?
     private var keybindHelper: KeybindHelper?
     private var statusBarItem: NSStatusItem?
     
+    private var  updaterController: SPUStandardUpdaterController
+    
     // settings
     private var settingsWindow: NSWindow?
     private lazy var settingsWindowController = SettingsWindowController(
         panes: [
             GeneralSettingsViewController(),
-            PermissionsSettingsViewController()
+            PermissionsSettingsViewController(),
+            UpdatesSettingsViewController(updater: updaterController.updater)
         ]
     )
+    
+    override init() {
+        self.updaterController = SPUStandardUpdaterController(startingUpdater: true, updaterDelegate: nil, userDriverDelegate: nil)
+        self.updaterController.startUpdater()
+        super.init()
+    }
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         if !Defaults[.launched] {
