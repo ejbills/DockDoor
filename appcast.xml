@@ -8,7 +8,7 @@
             <sparkle:version>1.0</sparkle:version>
             <sparkle:shortVersionString>1.0</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/ejbills/dockdoor-updates/releases/download/release/DockDoor.dmg" length="243864619" type="application/octet-stream" sparkle:edSignature="TEsx+IjRlKuW1Ortm7Aj/438Uq84CCnOjyiQJGELGIdiKE7nYgDtMWUotO/BCg9CDm2ZPxu+tnj+cs67vDPNDQ=="/>
+            <enclosure url="https://github.com/ejbills/DockDoor/releases/download/releases/DockDoor.dmg" length="243864619" type="application/octet-stream" sparkle:edSignature="TEsx+IjRlKuW1Ortm7Aj/438Uq84CCnOjyiQJGELGIdiKE7nYgDtMWUotO/BCg9CDm2ZPxu+tnj+cs67vDPNDQ=="/>
         </item>
     </channel>
 </rss>
