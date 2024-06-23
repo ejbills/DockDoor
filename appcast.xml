@@ -1,0 +1,14 @@
+<?xml version="1.0" standalone="yes"?>
+<rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
+    <channel>
+        <title>DockDoor</title>
+        <item>
+            <title>1.0</title>
+            <pubDate>Sun, 23 Jun 2024 10:42:09 -0700</pubDate>
+            <sparkle:version>1.0</sparkle:version>
+            <sparkle:shortVersionString>1.0</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/ejbills/dockdoor-updates/releases/download/release/DockDoor.dmg" length="243864619" type="application/octet-stream" sparkle:edSignature="TEsx+IjRlKuW1Ortm7Aj/438Uq84CCnOjyiQJGELGIdiKE7nYgDtMWUotO/BCg9CDm2ZPxu+tnj+cs67vDPNDQ=="/>
+        </item>
+    </channel>
+</rss>
