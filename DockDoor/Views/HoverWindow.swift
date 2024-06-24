@@ -319,10 +319,16 @@ struct HoverView: View {
                     }
                     Text(appName)
                         .padding(3)
-                        .bold()
-                        .shadow(stacked: 2, radius: 4)
+                        .font(.system(size: 13,weight: .medium))
                 }
-                .padding(EdgeInsets(top: -10, leading: 12, bottom: 0, trailing: 0))
+                .padding(.horizontal, 3)
+                .padding(.vertical, 1.5)
+                .background(
+                    RoundedRectangle(cornerRadius: 7)
+                        .foregroundStyle(.thinMaterial)
+                )
+                .shadow(radius: 5)
+                .padding(EdgeInsets(top: -15, leading: 12, bottom: 0, trailing: 0))
             }
         }
         .padding(.all, 24)
@@ -395,6 +401,7 @@ struct WindowPreview: View {
         let isHighlighted = (index == CurrentWindow.shared.currIndex && CurrentWindow.shared.showingTabMenu)
         let selected = isHovering || isHighlighted
         
+        
         VStack {
             if let cgImage = windowInfo.image {
                 ZStack(alignment: .topTrailing) {
@@ -428,7 +435,13 @@ struct WindowPreview: View {
                             Image(systemName: "xmark.circle.fill")
                         }
                     }
+                    .padding(2)
+                    .background(
+                        Circle()
+                            .foregroundStyle(.thinMaterial)
+                    )
                     .buttonBorderShape(.roundedRectangle)
+                    .shadow(radius: 5)
                     .buttonStyle(.plain)
                     .font(.system(size: 14))
                     .padding([.top, .trailing], 8)
@@ -441,6 +454,7 @@ struct WindowPreview: View {
         }
         .contentShape(Rectangle())
         .onHover { over in
+            
             withAnimation(.snappy(duration: 0.175)) {
                 if !CurrentWindow.shared.showingTabMenu {
                     isHovering = over
