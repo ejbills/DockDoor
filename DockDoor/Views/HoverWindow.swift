@@ -320,7 +320,7 @@ struct HoverView: View {
                     Text(appName)
                         .padding(3)
                         .bold()
-                        .shadow(radius: 4)
+                        .shadow(stacked: 2, radius: 4)
                 }
                 .padding(EdgeInsets(top: -10, leading: 12, bottom: 0, trailing: 0))
             }
