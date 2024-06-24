@@ -16,6 +16,8 @@ struct WindowInfo: Identifiable, Hashable {
     let bundleID: String
     let windowName: String?
     var image: CGImage?
+    var axElement: AXUIElement
+    var closeButton: AXUIElement?
 }
 
 // Cache item structure
@@ -118,58 +120,26 @@ struct WindowUtil {
     // MARK: - Window Manipulation Functions
     
     static func bringWindowToFront(windowInfo: WindowInfo) {
-        guard let pid = windowInfo.window.owningApplication?.processID else {
-            print("Debug: Failed to get PID from windowInfo")
-            return
-        }
+        let raiseResult = AXUIElementPerformAction(windowInfo.axElement, kAXRaiseAction as CFString)
+        let focusResult = AXUIElementSetAttributeValue(windowInfo.axElement, kAXFocusedAttribute as CFString, kCFBooleanTrue)
+        let frontmostResult = AXUIElementSetAttributeValue(windowInfo.axElement, kAXFrontmostAttribute as CFString, kCFBooleanTrue)
+        let activateResult = NSRunningApplication(processIdentifier: windowInfo.window.owningApplication?.processID ?? 0)?.activate()
         
-        let appRef = createAXUIElement(for: pid)
-        
-        guard let windows = getAXWindows(for: appRef) else {
-            return
-        }
-        
-        if let windowName = windowInfo.windowName, !windowName.isEmpty,
-            let windowRef = findWindow(byName: windowInfo.windowName ?? "", in: windows) {
-            let raiseResult = AXUIElementPerformAction(windowRef, kAXRaiseAction as CFString)
-            let focusResult = AXUIElementSetAttributeValue(windowRef, kAXFocusedAttribute as CFString, kCFBooleanTrue)
-            let frontmostResult = AXUIElementSetAttributeValue(appRef, kAXFrontmostAttribute as CFString, kCFBooleanTrue)
-            let activateResult = NSRunningApplication(processIdentifier: pid)?.activate()
-            
-            if raiseResult == .success && focusResult == .success && frontmostResult == .success && activateResult == true {
-                print("Debug: Successfully raised, focused, and activated window")
-            } else {
-                print("Error bringing window to front. Raise result: \(raiseResult.rawValue), Focus result: \(focusResult.rawValue), Frontmost result: \(frontmostResult), Activate result: \(String(describing: activateResult))")
-            }
+        if raiseResult == .success && focusResult == .success && frontmostResult == .success && activateResult == true {
+            print("Debug: Successfully raised, focused, and activated window")
         } else {
-            print("Debug: No matching window found. Attempting closest match fallback.")
-            AXUIElementSetAttributeValue(appRef, kAXFrontmostAttribute as CFString, kCFBooleanTrue)
-            NSRunningApplication(processIdentifier: pid)?.activate(options: [.activateAllWindows])
+            print("Error bringing window to front. Raise result: \(raiseResult.rawValue), Focus result: \(focusResult.rawValue), Frontmost result: \(frontmostResult), Activate result: \(String(describing: activateResult))")
+            AXUIElementSetAttributeValue(windowInfo.axElement, kAXFrontmostAttribute as CFString, kCFBooleanTrue)
+            NSRunningApplication(processIdentifier: windowInfo.window.owningApplication?.processID ?? 0)?.activate(options: [.activateAllWindows])
         }
     }
     
-    static func closeWindow(windowInfo: WindowInfo) {
-        guard let pid = windowInfo.window.owningApplication?.processID else {
-            print("Debug: Failed to get PID from windowInfo")
-            return
-        }
-        
-        let appRef = createAXUIElement(for: pid)
-        
-        guard let windows = getAXWindows(for: appRef) else {
-            return
-        }
-        
-        if let windowRef = findWindow(byName: windowInfo.windowName ?? "", in: windows),
-           let closeButton = getCloseButton(for: windowRef) {
-            let closeResult = AXUIElementPerformAction(closeButton, kAXPressAction as CFString)
-            if closeResult == .success {
-                print("Debug: Successfully closed window")
-            } else {
-                print("Error closing window: \(closeResult.rawValue)")
-            }
+    static func closeWindow(closeButton: AXUIElement) {
+        let closeResult = AXUIElementPerformAction(closeButton, kAXPressAction as CFString)
+        if closeResult == .success {
+            print("Debug: Successfully closed window")
         } else {
-            print("Debug: No matching window or close button found.")
+            print("Error closing window: \(closeResult.rawValue)")
         }
     }
     
@@ -213,13 +183,25 @@ struct WindowUtil {
             return nil
         }
         
+        let pid = owningApplication.processID
+        let appRef = createAXUIElement(for: pid)
+        guard let windows = getAXWindows(for: appRef),
+              let title = window.title,
+              let windowRef = findWindow(byName: title, in: windows) else {
+            return nil
+        }
+        
+        let closeButton = getCloseButton(for: windowRef)
+        
         var windowInfo = WindowInfo(
             id: windowID,
             window: window,
             appName: owningApplication.applicationName,
             bundleID: owningApplication.bundleIdentifier,
             windowName: window.title,
-            image: nil
+            image: nil,
+            axElement: windowRef,
+            closeButton: closeButton
         )
         
         do {

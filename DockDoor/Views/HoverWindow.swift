@@ -339,12 +339,8 @@ struct HoverView: View {
                 }
                 .padding(.horizontal, 3)
                 .padding(.vertical, 1.5)
-                .background(
-                    RoundedRectangle(cornerRadius: 7)
-                        .foregroundStyle(.thinMaterial)
-                )
-                .shadow(radius: 5)
-                .padding(EdgeInsets(top: -15, leading: 12, bottom: 0, trailing: 0))
+                .dockStyle(cornerRadius: 16)
+                .padding(EdgeInsets(top: -30, leading: 6, bottom: 0, trailing: 0))
             }
         }
         .padding(.all, 24)
@@ -443,24 +439,21 @@ struct WindowPreview: View {
                                 )))
                         }
                     
-                    Button(action: {
-                        WindowUtil.closeWindow(windowInfo: windowInfo)
-                        onTap?()
-                    }) {
-                        HStack {
-                            Image(systemName: "xmark.circle.fill")
+                    if let closeButton = windowInfo.closeButton {
+                        Button(action: {
+                            WindowUtil.closeWindow(closeButton: closeButton)
+                            onTap?()
+                        }) {
+                            HStack {
+                                Image(systemName: "xmark.circle.fill")
+                            }
                         }
+                        .buttonBorderShape(.roundedRectangle)
+                        .shadow(radius: 3)
+                        .padding([.top, .trailing], 8)
+                        .buttonStyle(.plain)
+                        .font(.system(size: 14))
                     }
-                    .padding(2)
-                    .background(
-                        Circle()
-                            .foregroundStyle(.thinMaterial)
-                    )
-                    .buttonBorderShape(.roundedRectangle)
-                    .shadow(radius: 5)
-                    .buttonStyle(.plain)
-                    .font(.system(size: 14))
-                    .padding([.top, .trailing], 8)
                 }
                 .scaleEffect(selected ? 1.025 : (isHoveringOverTabMenu ? 0.975 : 1))
                 
