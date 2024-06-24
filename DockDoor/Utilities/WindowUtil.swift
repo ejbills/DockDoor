@@ -193,9 +193,14 @@ struct WindowUtil {
         }
         
         let results = try await group.waitForAll()
-        return results.compactMap { $0 }
+        return results.compactMap { $0 }.filter { windowInfo in
+            // Filter out windows that have no appName or bundleID, which are likely system windows like the location services icon
+            let isSystemWindow = windowInfo.appName.isEmpty || windowInfo.bundleID.isEmpty
+                        
+            return !isSystemWindow
+        }
     }
-    
+
     private static func fetchWindowInfo(window: SCWindow, applicationName: String) async throws -> WindowInfo? {
         // Check if the window is in the default user space layer and is not fully transparent
         let windowID = window.windowID
