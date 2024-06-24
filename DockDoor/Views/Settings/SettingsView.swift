@@ -11,10 +11,15 @@ import LaunchAtLogin
 
 struct SettingsView: View {
     @Default(.openDelay) var openDelay
+    @Default(.showAnimations) var showAnimations
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 5) {
+        VStack(alignment: .leading, spacing: 10) {
             LaunchAtLogin.Toggle("Launch DockDoor at login")
+            Toggle(isOn: $showAnimations, label: {
+                Text("Enable Hover Window Sliding Animation")
+            })
+
             SizePickerView()
             
             HStack {
@@ -46,7 +51,6 @@ struct SizePickerView: View {
                 })
             }
         }
-        .padding(.vertical, 20)
     }
     
     private func getLabel(for size: CGFloat) -> String {

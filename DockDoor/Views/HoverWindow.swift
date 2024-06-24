@@ -148,7 +148,7 @@ class HoverWindow: NSWindow {
             let distanceThreshold: CGFloat = 1800
             let distance = previousHoverWindowOrigin.map { position.distance(to: $0) } ?? distanceThreshold + 1
             
-            if distance > distanceThreshold {
+            if distance > distanceThreshold || !Defaults[.showAnimations] {
                 setFrame(finalFrame, display: true)
             } else {
                 NSAnimationContext.runAnimationGroup({ context in
