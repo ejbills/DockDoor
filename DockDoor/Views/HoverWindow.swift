@@ -47,7 +47,7 @@ class HoverWindow: NSWindow {
     private let debounceDelay: TimeInterval = 0.1
     private var debounceWorkItem: DispatchWorkItem?
     private var lastShowTime: Date?
-    
+        
     private init() {
         super.init(contentRect: .zero, styleMask: .borderless, backing: .buffered, defer: false)
         level = .floating
@@ -164,12 +164,18 @@ class HoverWindow: NSWindow {
         previousHoverWindowOrigin = position
     }
     
-    func showWindow(appName: String, windows: [WindowInfo], mouseLocation: CGPoint? = nil, mouseScreen: NSScreen? = nil, onWindowTap: (() -> Void)? = nil) {
+    func showWindow(appName: String, windows: [WindowInfo], mouseLocation: CGPoint? = nil, mouseScreen: NSScreen? = nil, overrideDelay: Bool = false, onWindowTap: (() -> Void)? = nil) {
         let now = Date()
+        let delay = overrideDelay ? 0.0 : Defaults[.openDelay]
         
+        // Cancel any existing debounce work item
+        debounceWorkItem?.cancel()
+        
+        // Check if the hover window is already showing
+        let isHoverWindowShowing = self.isVisible
+        
+        // Check if the current time is within the debounce delay period
         if let lastShowTime = lastShowTime, now.timeIntervalSince(lastShowTime) < debounceDelay {
-            debounceWorkItem?.cancel()
-            
             let workItem = DispatchWorkItem { [weak self] in
                 self?.performShowWindow(appName: appName, windows: windows, mouseLocation: mouseLocation, mouseScreen: mouseScreen, onWindowTap: onWindowTap)
             }
@@ -177,7 +183,17 @@ class HoverWindow: NSWindow {
             debounceWorkItem = workItem
             DispatchQueue.main.asyncAfter(deadline: .now() + debounceDelay, execute: workItem)
         } else {
-            performShowWindow(appName: appName, windows: windows, mouseLocation: mouseLocation, mouseScreen: mouseScreen, onWindowTap: onWindowTap)
+            // Handle the open delay only if the hover window is not already showing
+            if isHoverWindowShowing || delay == 0.0 {
+                performShowWindow(appName: appName, windows: windows, mouseLocation: mouseLocation, mouseScreen: mouseScreen, onWindowTap: onWindowTap)
+            } else {
+                let workItem = DispatchWorkItem { [weak self] in
+                    self?.performShowWindow(appName: appName, windows: windows, mouseLocation: mouseLocation, mouseScreen: mouseScreen, onWindowTap: onWindowTap)
+                }
+                
+                debounceWorkItem = workItem
+                DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: workItem)
+            }
         }
         
         lastShowTime = now

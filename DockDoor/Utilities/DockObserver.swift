@@ -122,7 +122,6 @@ class DockObserver {
                             if activeWindows.isEmpty {
                                 HoverWindow.shared.hideWindow()
                             } else {
-                                // Execute UI updates on the main thread
                                 let mouseScreen = DockObserver.screenContainingPoint(currentMouseLocation) ?? NSScreen.main!
                                 let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
                                 // Show HoverWindow (using shared instance)
@@ -148,7 +147,6 @@ class DockObserver {
             }
         } else {
             Task { @MainActor in
-                // Perform conversion on main thread
                 let mouseScreen = DockObserver.screenContainingPoint(currentMouseLocation) ?? NSScreen.main!
                 let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
                 if !HoverWindow.shared.frame.contains(convertedMouseLocation) {

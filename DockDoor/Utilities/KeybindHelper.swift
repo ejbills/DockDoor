@@ -103,7 +103,7 @@ class KeybindHelper {
                 let windows = try await WindowUtil.activeWindows(for: "")
                 await MainActor.run {
                     if isControlKeyPressed {  // Check if Ctrl key is still pressed
-                        HoverWindow.shared.showWindow(appName: "Alt-Tab", windows: windows, onWindowTap: { HoverWindow.shared.hideWindow() })
+                        HoverWindow.shared.showWindow(appName: "Alt-Tab", windows: windows, overrideDelay: true, onWindowTap: { HoverWindow.shared.hideWindow() })
                     }
                 }
             } catch {

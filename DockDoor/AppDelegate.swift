@@ -102,7 +102,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         // Create the settings window
         settingsWindow = NSWindow(
-            contentRect: NSRect(origin: .zero, size: NSSize(width: 400, height: 400)), // Initial arbitrary size
+            contentRect: NSRect(origin: .zero, size: NSSize(width: 400, height: 400)),
             styleMask: [.titled, .closable, .resizable],
             backing: .buffered, defer: false)
         settingsWindow?.center()

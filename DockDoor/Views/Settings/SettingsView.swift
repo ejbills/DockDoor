@@ -10,12 +10,21 @@ import Defaults
 import LaunchAtLogin
 
 struct SettingsView: View {
+    @Default(.openDelay) var openDelay
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 5) {
             LaunchAtLogin.Toggle("Launch DockDoor at login")
             SizePickerView()
+            
+            HStack {
+                Text("Hover Window Open Delay: \(openDelay, specifier: "%.2f") seconds")
+                Spacer()
+                Slider(value: $openDelay, in: 0...2, step: 0.1)
+            }
         }
         .padding(20)
+        .frame(minWidth: 600)
     }
 }
 
