@@ -92,7 +92,7 @@ struct WindowUtil {
     }
     
     /// Finds a window by its name in the provided AXUIElement windows.
-    static func findWindow(matchingWindow window: SCWindow, in axWindows: [AXUIElement]) -> AXUIElement? {        
+    static func findWindow(matchingWindow window: SCWindow, in axWindows: [AXUIElement]) -> AXUIElement? {
         for axWindow in axWindows {
             var axTitle: CFTypeRef?
             AXUIElementCopyAttributeValue(axWindow, kAXTitleAttribute as CFString, &axTitle)
@@ -105,7 +105,7 @@ struct WindowUtil {
             var axSize: CFTypeRef?
             AXUIElementCopyAttributeValue(axWindow, kAXSizeAttribute as CFString, &axSize)
             let axSizeValue = axSize as? CGSize
-                        
+            
             // Enhanced fuzzy title matching
             if let windowTitle = window.title {
                 let axTitleWords = axTitleString.lowercased().split(separator: " ")
@@ -134,10 +134,10 @@ struct WindowUtil {
                 let sizeThreshold: CGFloat = 10  // Allow for small discrepancies in size
                 
                 let positionMatch = abs(axPositionValue.x - window.frame.origin.x) <= positionThreshold &&
-                                    abs(axPositionValue.y - window.frame.origin.y) <= positionThreshold
+                abs(axPositionValue.y - window.frame.origin.y) <= positionThreshold
                 
                 let sizeMatch = abs(axSizeValue.width - window.frame.size.width) <= sizeThreshold &&
-                                abs(axSizeValue.height - window.frame.size.height) <= sizeThreshold
+                abs(axSizeValue.height - window.frame.size.height) <= sizeThreshold
                 
                 if positionMatch && sizeMatch {
                     return axWindow
@@ -153,12 +153,12 @@ struct WindowUtil {
     static func getCloseButton(for windowRef: AXUIElement) -> AXUIElement? {
         var closeButton: AnyObject?
         let result = AXUIElementCopyAttributeValue(windowRef, kAXCloseButtonAttribute as CFString, &closeButton)
-
+        
         // Ensure the result is success and closeButton is not nil
         guard result == .success, let closeButtonElement = closeButton else {
             return nil
         }
-
+        
         return (closeButtonElement as! AXUIElement)
     }
     
@@ -241,19 +241,33 @@ struct WindowUtil {
     
     /// Retrieves the active windows for a given application name.
     static func activeWindows(for applicationName: String) async throws -> [WindowInfo] {
+        func getNonLocalizedAppName(for app: NSRunningApplication) -> String? {
+            guard let bundleURL = app.bundleURL else {
+                return nil
+            }
+            
+            let bundle = Bundle(url: bundleURL)
+            let appName = bundle?.object(forInfoDictionaryKey: "CFBundleName") as? String
+            
+            return appName
+        }
+        
         let content = try await SCShareableContent.excludingDesktopWindows(true, onScreenWindowsOnly: true)
         let group = LimitedTaskGroup<WindowInfo?>(maxConcurrentTasks: 4)
         var foundApp: SCRunningApplication?
         var potentialMatches: [SCRunningApplication] = []
-
+        
         for window in content.windows {
-            if let app = window.owningApplication {
+            if let app = window.owningApplication,
+               let tempApp = NSRunningApplication.runningApplications(withBundleIdentifier: app.bundleIdentifier).first,
+               let nonLocalName = getNonLocalizedAppName(for: tempApp){
+                
                 // Collect potential matches
                 if applicationName.contains(app.applicationName) {
                     potentialMatches.append(app)
                 }
                 
-                if applicationName.isEmpty || (app.applicationName == applicationName) {
+                if applicationName.isEmpty || (app.applicationName == applicationName) || (nonLocalName == applicationName) {
                     await group.addTask {
                         return try await fetchWindowInfo(window: window, applicationName: applicationName)
                     }
@@ -261,11 +275,11 @@ struct WindowUtil {
                 }
             }
         }
-
+        
         // If no exact match is found, use the best guess from potential matches
         if foundApp == nil, !applicationName.isEmpty, let bestGuessApp = potentialMatches.first {
             foundApp = bestGuessApp
-
+            
             // Loop again to fetch window info for the best guess application
             for window in content.windows {
                 if let app = window.owningApplication, app == bestGuessApp {
@@ -275,7 +289,7 @@ struct WindowUtil {
                 }
             }
         }
-
+        
         if let app = foundApp, !applicationName.isEmpty {
             let minimizedWindowsInfo = getMinimizedWindows(pid: app.processID, bundleID: app.bundleIdentifier, appName: applicationName)
             for windowInfo in minimizedWindowsInfo {
@@ -287,7 +301,7 @@ struct WindowUtil {
                 await group.addTask { return windowInfo }
             }
         }
-
+        
         let results = try await group.waitForAll()
         return results.compactMap { $0 }.filter { !$0.appName.isEmpty && !$0.bundleID.isEmpty }
     }
@@ -295,7 +309,7 @@ struct WindowUtil {
     /// Fetches detailed information for a given SCWindow.
     private static func fetchWindowInfo(window: SCWindow, applicationName: String) async throws -> WindowInfo? {
         let windowID = window.windowID
-
+        
         guard let windowInfoDict = CGWindowListCopyWindowInfo(.optionIncludingWindow, windowID) as? [[String: AnyObject]],
               let windowLayer = windowInfoDict.first?[kCGWindowLayer as String] as? Int,
               let windowAlpha = windowInfoDict.first?[kCGWindowAlpha as String] as? Double,
@@ -306,7 +320,7 @@ struct WindowUtil {
         if windowLayer > 1 || windowAlpha <= 0 {
             return nil
         }
-
+        
         let pid = owningApplication.processID
         
         let appRef = createAXUIElement(for: pid)
@@ -314,11 +328,11 @@ struct WindowUtil {
         guard let axWindows = getAXWindows(for: appRef) else {
             return nil
         }
-                
+        
         if axWindows.isEmpty {
             return nil
         }
-
+        
         guard let windowRef = findWindow(matchingWindow: window, in: axWindows) else {
             print("Failed to find matching AX window")
             return nil
