@@ -92,15 +92,67 @@ struct WindowUtil {
     }
     
     /// Finds a window by its name in the provided AXUIElement windows.
-    static func findWindow(matchingProcessID processID: pid_t, in windows: [AXUIElement]) -> AXUIElement? {
-        for windowRef in windows {
-            var windowPID: pid_t = 0
-            let result = AXUIElementGetPid(windowRef, &windowPID)
+    static func findWindow(matchingWindow window: SCWindow, in axWindows: [AXUIElement]) -> AXUIElement? {
+        print("Searching for window: \(window.title ?? "N/A") at position: \(window.frame.origin), size: \(window.frame.size)")
+        
+        for (index, axWindow) in axWindows.enumerated() {
+            var axTitle: CFTypeRef?
+            AXUIElementCopyAttributeValue(axWindow, kAXTitleAttribute as CFString, &axTitle)
+            let axTitleString = (axTitle as? String) ?? ""
             
-            if result == .success, windowPID == processID {
-                return windowRef
+            var axPosition: CFTypeRef?
+            AXUIElementCopyAttributeValue(axWindow, kAXPositionAttribute as CFString, &axPosition)
+            let axPositionValue = axPosition as? CGPoint
+            
+            var axSize: CFTypeRef?
+            AXUIElementCopyAttributeValue(axWindow, kAXSizeAttribute as CFString, &axSize)
+            let axSizeValue = axSize as? CGSize
+            
+            print("Checking AX window \(index): Title: \(axTitleString), Position: \(axPositionValue ?? .zero), Size: \(axSizeValue ?? .zero)")
+            
+            // Enhanced fuzzy title matching
+            if let windowTitle = window.title, !windowTitle.isEmpty {
+                let axTitleWords = axTitleString.lowercased().split(separator: " ")
+                let windowTitleWords = windowTitle.lowercased().split(separator: " ")
+                
+                let matchingWords = axTitleWords.filter { windowTitleWords.contains($0) }
+                let matchPercentage = Double(matchingWords.count) / Double(windowTitleWords.count)
+                
+                if matchPercentage >= 0.90 {  // At least 90% of words match
+                    print("Match found by fuzzy title matching!")
+                    return axWindow
+                }
+                
+                // Additional check for suffixes/prefixes often added by browsers
+                if axTitleString.lowercased().contains(windowTitle.lowercased()) {
+                    print("Match found by title containment!")
+                    return axWindow
+                }
+            }
+            
+            // Position and size matching (if available and non-zero)
+            if let axPositionValue = axPositionValue,
+               let axSizeValue = axSizeValue,
+               axPositionValue != .zero,
+               axSizeValue != .zero {
+                
+                let positionThreshold: CGFloat = 10  // Allow for small discrepancies in position
+                let sizeThreshold: CGFloat = 10  // Allow for small discrepancies in size
+                
+                let positionMatch = abs(axPositionValue.x - window.frame.origin.x) <= positionThreshold &&
+                                    abs(axPositionValue.y - window.frame.origin.y) <= positionThreshold
+                
+                let sizeMatch = abs(axSizeValue.width - window.frame.size.width) <= sizeThreshold &&
+                                abs(axSizeValue.height - window.frame.size.height) <= sizeThreshold
+                
+                if positionMatch && sizeMatch {
+                    print("Match found by position and size!")
+                    return axWindow
+                }
             }
         }
+        
+        print("No matching AX window found")
         return nil
     }
     
@@ -108,8 +160,13 @@ struct WindowUtil {
     static func getCloseButton(for windowRef: AXUIElement) -> AXUIElement? {
         var closeButton: AnyObject?
         let result = AXUIElementCopyAttributeValue(windowRef, kAXCloseButtonAttribute as CFString, &closeButton)
-        let closeButtonElement = closeButton as! AXUIElement
-        return result == .success ? closeButtonElement : nil
+
+        // Ensure the result is success and closeButton is not nil
+        guard result == .success, let closeButtonElement = closeButton else {
+            return nil
+        }
+
+        return (closeButtonElement as! AXUIElement)
     }
     
     /// Retrieves the running application by its name.
@@ -134,7 +191,7 @@ struct WindowUtil {
     static func bringWindowToFront(windowInfo: WindowInfo) {
         let raiseResult = AXUIElementPerformAction(windowInfo.axElement, kAXRaiseAction as CFString)
         let focusResult = AXUIElementSetAttributeValue(windowInfo.axElement, kAXFocusedAttribute as CFString, kCFBooleanTrue)
-        let frontmostResult = AXUIElementSetAttributeValue(windowInfo.axElement, kAXFrontmostAttribute as CFString, kCFBooleanTrue)
+        AXUIElementSetAttributeValue(windowInfo.axElement, kAXFrontmostAttribute as CFString, kCFBooleanTrue) // set frontmost window
         let activateResult = NSRunningApplication(processIdentifier: windowInfo.window?.owningApplication?.processID ?? 0)?.activate()
         
         if activateResult != true || raiseResult != .success || focusResult != .success {
@@ -226,34 +283,54 @@ struct WindowUtil {
     /// Fetches detailed information for a given SCWindow.
     private static func fetchWindowInfo(window: SCWindow, applicationName: String) async throws -> WindowInfo? {
         let windowID = window.windowID
+
         guard let windowInfoDict = CGWindowListCopyWindowInfo(.optionIncludingWindow, windowID) as? [[String: AnyObject]],
-              let windowLayer = windowInfoDict.first?[kCGWindowLayer as String] as? Int, windowLayer == 0,
-              let windowAlpha = windowInfoDict.first?[kCGWindowAlpha as String] as? Double, windowAlpha > 0,
+              let windowLayer = windowInfoDict.first?[kCGWindowLayer as String] as? Int,
+              let windowAlpha = windowInfoDict.first?[kCGWindowAlpha as String] as? Double,
               let owningApplication = window.owningApplication else {
             return nil
         }
+
         
-        let pid = owningApplication.processID
-        let appRef = createAXUIElement(for: pid)
-        
-        guard let windows = getAXWindows(for: appRef), !windows.isEmpty else {
+        // Be more lenient with the layer check
+        if windowLayer > 1 || windowAlpha <= 0 {
             return nil
         }
+
+        let pid = owningApplication.processID
         
-        guard let windowRef = findWindow(matchingProcessID: pid, in: windows) else {
+        let appRef = createAXUIElement(for: pid)
+        
+        guard let axWindows = getAXWindows(for: appRef) else {
             return nil
         }
                 
+        if axWindows.isEmpty {
+            return nil
+        }
+
+        guard let windowRef = findWindow(matchingWindow: window, in: axWindows) else {
+            print("Failed to find matching AX window")
+            return nil
+        }
+        
+        
         let closeButton = getCloseButton(for: windowRef)
         
-        var windowInfo = WindowInfo(id: windowID, window: window, appName: owningApplication.applicationName, bundleID: owningApplication.bundleIdentifier,
-                                    windowName: window.title, image: nil, axElement: windowRef, closeButton: closeButton, isMinimized: false)
+        var windowInfo = WindowInfo(id: windowID,
+                                    window: window,
+                                    appName: owningApplication.applicationName,
+                                    bundleID: owningApplication.bundleIdentifier,
+                                    windowName: window.title,
+                                    image: nil,
+                                    axElement: windowRef,
+                                    closeButton: closeButton,
+                                    isMinimized: false)
         
         do {
             windowInfo.image = try await captureWindowImage(windowInfo: windowInfo)
             return windowInfo
         } catch {
-            print("Error capturing window image: \(error)")
             return nil
         }
     }
