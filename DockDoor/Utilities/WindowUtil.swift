@@ -92,10 +92,8 @@ struct WindowUtil {
     }
     
     /// Finds a window by its name in the provided AXUIElement windows.
-    static func findWindow(matchingWindow window: SCWindow, in axWindows: [AXUIElement]) -> AXUIElement? {
-        print("Searching for window: \(window.title ?? "N/A") at position: \(window.frame.origin), size: \(window.frame.size)")
-        
-        for (index, axWindow) in axWindows.enumerated() {
+    static func findWindow(matchingWindow window: SCWindow, in axWindows: [AXUIElement]) -> AXUIElement? {        
+        for axWindow in axWindows {
             var axTitle: CFTypeRef?
             AXUIElementCopyAttributeValue(axWindow, kAXTitleAttribute as CFString, &axTitle)
             let axTitleString = (axTitle as? String) ?? ""
@@ -107,25 +105,21 @@ struct WindowUtil {
             var axSize: CFTypeRef?
             AXUIElementCopyAttributeValue(axWindow, kAXSizeAttribute as CFString, &axSize)
             let axSizeValue = axSize as? CGSize
-            
-            print("Checking AX window \(index): Title: \(axTitleString), Position: \(axPositionValue ?? .zero), Size: \(axSizeValue ?? .zero)")
-            
+                        
             // Enhanced fuzzy title matching
-            if let windowTitle = window.title, !windowTitle.isEmpty {
+            if let windowTitle = window.title {
                 let axTitleWords = axTitleString.lowercased().split(separator: " ")
                 let windowTitleWords = windowTitle.lowercased().split(separator: " ")
                 
                 let matchingWords = axTitleWords.filter { windowTitleWords.contains($0) }
                 let matchPercentage = Double(matchingWords.count) / Double(windowTitleWords.count)
                 
-                if matchPercentage >= 0.90 {  // At least 90% of words match
-                    print("Match found by fuzzy title matching!")
+                if matchPercentage >= 0.90 || matchPercentage.isNaN {  // At least 90% of words match
                     return axWindow
                 }
                 
                 // Additional check for suffixes/prefixes often added by browsers
                 if axTitleString.lowercased().contains(windowTitle.lowercased()) {
-                    print("Match found by title containment!")
                     return axWindow
                 }
             }
@@ -146,7 +140,6 @@ struct WindowUtil {
                                 abs(axSizeValue.height - window.frame.size.height) <= sizeThreshold
                 
                 if positionMatch && sizeMatch {
-                    print("Match found by position and size!")
                     return axWindow
                 }
             }
@@ -309,9 +302,7 @@ struct WindowUtil {
               let owningApplication = window.owningApplication else {
             return nil
         }
-
         
-        // Be more lenient with the layer check
         if windowLayer > 1 || windowAlpha <= 0 {
             return nil
         }
