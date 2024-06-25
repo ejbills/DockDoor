@@ -15,6 +15,15 @@ struct SettingsView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
+            Section {
+                HStack {
+                    Text("Want to support development?")
+                    Link("Buy me a coffee here, thank you!", destination: URL(string: "https://www.buymeacoffee.com/keplercafe")!)
+                }
+            }
+            
+            Divider()
+            
             LaunchAtLogin.Toggle("Launch DockDoor at login")
             Toggle(isOn: $showAnimations, label: {
                 Text("Enable Hover Window Sliding Animation")
@@ -39,7 +48,7 @@ struct SizePickerView: View {
     var body: some View {
         VStack(spacing: 20) {
             Picker("Window Size", selection: $sizingMultiplier) {
-                ForEach(2...7, id: \.self) { size in
+                ForEach(2...9, id: \.self) { size in
                     Text(getLabel(for: CGFloat(size))).tag(CGFloat(size))
                 }
             }
@@ -67,6 +76,10 @@ struct SizePickerView: View {
             return "Extra Small"
         case 7:
             return "Extra Extra Small"
+        case 8:
+            return "What is this? A window for ANTS?"
+        case 9:
+            return "Subatomic"
         default:
             return "Unknown Size"
         }
