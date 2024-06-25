@@ -241,8 +241,8 @@ struct WindowUtil {
     
     /// Retrieves the active windows for a given application name.
     static func activeWindows(for applicationName: String) async throws -> [WindowInfo] {
-        func getNonLocalizedAppName(for app: NSRunningApplication) -> String? {
-            guard let bundleURL = app.bundleURL else {
+        func getNonLocalizedAppName(forBundleIdentifier bundleIdentifier: String) -> String? {
+            guard let bundleURL = NSWorkspace.shared.urlForApplication(withBundleIdentifier: bundleIdentifier) else {
                 return nil
             }
             
@@ -259,8 +259,7 @@ struct WindowUtil {
         
         for window in content.windows {
             if let app = window.owningApplication,
-               let tempApp = NSRunningApplication.runningApplications(withBundleIdentifier: app.bundleIdentifier).first,
-               let nonLocalName = getNonLocalizedAppName(for: tempApp){
+               let nonLocalName = getNonLocalizedAppName(forBundleIdentifier: app.bundleIdentifier) {
                 
                 // Collect potential matches
                 if applicationName.contains(app.applicationName) {
