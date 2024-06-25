@@ -259,44 +259,46 @@ struct HoverView: View {
     let onWindowTap: (() -> Void)?
     let dockPosition: DockPosition
     let bestGuessMonitor: NSScreen
-    
+
     @State private var showWindows: Bool = false
     @State private var hasAppeared: Bool = false
     @State private var appIcon: NSImage? = nil
-    
+
     var maxWindowDimension: CGPoint {
         let thickness = HoverWindow.shared.windowSize.height
-        var maxWidth: CGFloat = 0
-        var maxHeight: CGFloat = 0
-        
+        var maxWidth: CGFloat = 300
+        var maxHeight: CGFloat = 300
+
         for window in windows {
             if let cgImage = window.image {
-                let cgSize = CGSize(width: Double(cgImage.width), height: Double(cgImage.height))
-                
-                // Calculate the dimensions based on the dock position
+                let cgSize = CGSize(width: cgImage.width, height: cgImage.height)
                 let widthBasedOnHeight = (cgSize.width * thickness) / cgSize.height
                 let heightBasedOnWidth = (cgSize.height * thickness) / cgSize.width
-                
+
                 if dockPosition == .bottom || CurrentWindow.shared.showingTabMenu {
                     maxWidth = max(maxWidth, widthBasedOnHeight)
-                    maxHeight = thickness  // consistent height if dock is on the bottom
+                    maxHeight = thickness
                 } else {
                     maxHeight = max(maxHeight, heightBasedOnWidth)
-                    maxWidth = thickness  // consistent width if dock is on the sides
+                    maxWidth = thickness
                 }
             }
         }
-        
+
         return CGPoint(x: maxWidth, y: maxHeight)
     }
-    
+
     var body: some View {
         ZStack {
             ScrollViewReader { scrollProxy in
                 ScrollView(dockPosition == .bottom || CurrentWindow.shared.showingTabMenu ? .horizontal : .vertical, showsIndicators: false) {
                     DynStack(direction: CurrentWindow.shared.showingTabMenu ? .horizontal : (dockPosition == .bottom ? .horizontal : .vertical), spacing: 16) {
-                        ForEach(windows.indices, id: \.self) { index in
-                            WindowPreview(windowInfo: windows[index], onTap: onWindowTap, index: index, dockPosition: dockPosition, maxWindowDimension: maxWindowDimension, bestGuessMonitor: bestGuessMonitor)
+                        if !minimizedWindows.isEmpty {
+                            minimizedWindowsView
+                        }
+
+                        ForEach(nonMinimizedWindows.indices, id: \.self) { index in
+                            WindowPreview(windowInfo: nonMinimizedWindows[index], onTap: onWindowTap, index: index, dockPosition: dockPosition, maxWindowDimension: maxWindowDimension, bestGuessMonitor: bestGuessMonitor)
                                 .id("\(appName)-\(index)")
                         }
                     }
@@ -335,44 +337,65 @@ struct HoverView: View {
                     }
                     Text(appName)
                         .padding(3)
-                        .font(.system(size: 13,weight: .medium))
+                        .font(.system(size: 13, weight: .medium))
                 }
                 .padding(.horizontal, 3)
                 .padding(.vertical, 1.5)
                 .dockStyle(cornerRadius: 16)
-                .padding(EdgeInsets(top: -30, leading: 6, bottom: 0, trailing: 0))
+                .padding(EdgeInsets(top: -25, leading: 6, bottom: 0, trailing: 0))
             }
         }
         .padding(.all, 24)
-        .frame(
-            maxWidth: self.bestGuessMonitor.visibleFrame.width,
-            maxHeight: self.bestGuessMonitor.visibleFrame.height
-        )
+        .frame(maxWidth: self.bestGuessMonitor.visibleFrame.width, maxHeight: self.bestGuessMonitor.visibleFrame.height)
     }
-    
+
+    private var minimizedWindows: [WindowInfo] {
+        windows.filter { $0.isMinimized }
+    }
+
+    private var nonMinimizedWindows: [WindowInfo] {
+        windows.filter { !$0.isMinimized }
+    }
+
+    private var minimizedWindowsView: some View {
+        ScrollView(dockPosition == .bottom ? .vertical : .horizontal) {
+            DynStack(direction: dockPosition == .bottom ? .vertical : .horizontal, spacing: 4) {
+                ForEach(minimizedWindows.indices, id: \.self) { index in
+                    WindowPreview(
+                        windowInfo: minimizedWindows[index],
+                        onTap: onWindowTap,
+                        index: index,
+                        dockPosition: dockPosition,
+                        maxWindowDimension: maxWindowDimension,
+                        bestGuessMonitor: bestGuessMonitor
+                    )
+                }
+            }
+        }
+        .frame(maxWidth: dockPosition != .bottom ? maxWindowDimension.x : nil, maxHeight: dockPosition == .bottom ? maxWindowDimension.y : nil)
+    }
+
     private func runUIUpdates() {
         self.runAnimation()
         self.loadAppIcon()
     }
-    
+
     private func runAnimation() {
         self.showWindows = false
-        
+
         withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
             showWindows = true
         }
     }
-    
+
     private func loadAppIcon() {
-        if let bundleID = windows.first?.bundleID,
-           let icon = AppIconUtil.getIcon(bundleID: bundleID) {
+        if let bundleID = windows.first?.bundleID, let icon = AppIconUtil.getIcon(bundleID: bundleID) {
             DispatchQueue.main.async {
                 self.appIcon = icon
             }
         }
     }
 }
-
 
 struct WindowPreview: View {
     let windowInfo: WindowInfo
@@ -381,89 +404,94 @@ struct WindowPreview: View {
     let dockPosition: DockPosition
     let maxWindowDimension: CGPoint
     let bestGuessMonitor: NSScreen
-    
+
     @State private var isHovering = false
     @State private var isHoveringOverTabMenu = false
-    
+
     private var calculatedMaxDimensions: CGSize? {
-        return CGSize(width: self.bestGuessMonitor.frame.width * 0.75, height: self.bestGuessMonitor.frame.height * 0.75)
+        CGSize(width: self.bestGuessMonitor.frame.width * 0.75, height: self.bestGuessMonitor.frame.height * 0.75)
     }
-    
+
     var calculatedSize: CGSize {
         guard let cgImage = windowInfo.image else { return .zero }
-        
+
         let cgSize = CGSize(width: cgImage.width, height: cgImage.height)
         let aspectRatio = cgSize.width / cgSize.height
         let maxAllowedWidth = maxWindowDimension.x
         let maxAllowedHeight = maxWindowDimension.y
-        
+
         var targetWidth = maxAllowedWidth
         var targetHeight = targetWidth / aspectRatio
-        
+
         if targetHeight > maxAllowedHeight {
             targetHeight = maxAllowedHeight
             targetWidth = aspectRatio * targetHeight
         }
-        
+
         return CGSize(width: targetWidth, height: targetHeight)
     }
-    
-    var body: some View {
-        // Determine if the current preview is highlighted
-        let isHighlighted = (index == CurrentWindow.shared.currIndex && CurrentWindow.shared.showingTabMenu)
-        let selected = isHovering || isHighlighted
-        
-        
-        VStack {
-            if let cgImage = windowInfo.image {
-                ZStack(alignment: .topTrailing) {
-                    Image(decorative: cgImage, scale: 1.0)
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(
-                            width: calculatedSize.width,
-                            height: calculatedSize.height,
-                            alignment: .center
-                        )
-                        .frame(maxWidth: calculatedMaxDimensions?.width, maxHeight: calculatedMaxDimensions?.height)
-                        .overlay { AnimatedGradientOverlay(shouldDisplay: selected) }
-                        .overlay { Color.white.opacity(isHoveringOverTabMenu ?  0.1 : 0) }
-                        .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
-                        .shadow(radius: selected || isHoveringOverTabMenu    ? 0 : 3)
-                        .background {
-                            RoundedRectangle(cornerRadius: 6, style: .continuous)
-                                .fill(Color.clear.shadow(.drop(
-                                    color: .black.opacity(selected ? 0.35 : 0.25),
-                                    radius: selected ? 12 : 8,
-                                    y: selected ? 6 : 4
-                                )))
-                        }
-                    
-                    if let closeButton = windowInfo.closeButton {
-                        Button(action: {
-                            WindowUtil.closeWindow(closeButton: closeButton)
-                            onTap?()
-                        }) {
-                            HStack {
-                                Image(systemName: "xmark.circle.fill")
-                            }
-                        }
-                        .buttonBorderShape(.roundedRectangle)
-                        .shadow(radius: 3)
-                        .padding([.top, .trailing], 8)
-                        .buttonStyle(.plain)
-                        .font(.system(size: 14))
-                    }
+
+    private func windowContent(isMinimized: Bool) -> some View {
+        Group {
+            if isMinimized {
+                HStack(spacing: 16) {
+                    Image(systemName: "eye.slash.fill")
+                        .font(.system(size: 24))
+                        .foregroundColor(.secondary)
+
+                    Divider()
+                    Spacer()
+                    Text(windowInfo.windowName ?? "Hidden window")
+                        .font(.system(size: 12, weight: .medium))
+                        .foregroundColor(.primary)
+                        .multilineTextAlignment(.center)
+                    Spacer()
                 }
-                .scaleEffect(selected ? 1.025 : (isHoveringOverTabMenu ? 0.975 : 1))
-                
-            } else {
-                ProgressView()
+                .padding()
+                .frame(width: 300)
+                .frame(height: 60)
+            } else if let cgImage = windowInfo.image {
+                Image(decorative: cgImage, scale: 1.0)
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
             }
         }
+        .frame(width: isMinimized ? nil : calculatedSize.width, height: isMinimized ? nil : calculatedSize.height, alignment: .center)
+        .frame(maxWidth: calculatedMaxDimensions?.width, maxHeight: calculatedMaxDimensions?.height)
+    }
+
+    var body: some View {
+        let isHighlighted = (index == CurrentWindow.shared.currIndex && CurrentWindow.shared.showingTabMenu)
+        let selected = isHovering || isHighlighted
+
+        ZStack(alignment: .topTrailing) {
+            windowContent(isMinimized: windowInfo.isMinimized)
+                .overlay { AnimatedGradientOverlay(shouldDisplay: selected) }
+                .overlay { Color.white.opacity(isHoveringOverTabMenu ? 0.1 : 0) }
+                .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
+                .shadow(radius: selected || isHoveringOverTabMenu ? 0 : 3)
+                .background {
+                    RoundedRectangle(cornerRadius: 6, style: .continuous)
+                        .fill(Color.clear.shadow(.drop(color: .black.opacity(selected ? 0.35 : 0.25), radius: selected ? 12 : 8, y: selected ? 6 : 4)))
+                }
+
+            if !windowInfo.isMinimized, let closeButton = windowInfo.closeButton {
+                Button(action: {
+                    WindowUtil.closeWindow(closeButton: closeButton)
+                    onTap?()
+                }) {
+                    Image(systemName: "xmark.circle.fill")
+                }
+                .buttonBorderShape(.roundedRectangle)
+                .shadow(radius: 3)
+                .padding([.top, .trailing], 8)
+                .buttonStyle(.plain)
+                .font(.system(size: 14))
+            }
+        }
+        .scaleEffect(selected ? 1.025 : (isHoveringOverTabMenu ? 0.975 : 1))
         .contentShape(Rectangle())
         .onHover { over in
-            
             withAnimation(.snappy(duration: 0.175)) {
                 if !CurrentWindow.shared.showingTabMenu {
                     isHovering = over
@@ -473,7 +501,11 @@ struct WindowPreview: View {
             }
         }
         .onTapGesture {
-            WindowUtil.bringWindowToFront(windowInfo: windowInfo)
+            if windowInfo.isMinimized {
+                WindowUtil.toggleMinimize(windowInfo: windowInfo)
+            } else {
+                WindowUtil.bringWindowToFront(windowInfo: windowInfo)
+            }
             onTap?()
         }
     }
