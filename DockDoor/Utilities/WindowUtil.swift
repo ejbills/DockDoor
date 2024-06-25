@@ -251,11 +251,16 @@ struct WindowUtil {
         let content = try await SCShareableContent.excludingDesktopWindows(true, onScreenWindowsOnly: true)
         let group = LimitedTaskGroup<WindowInfo?>(maxConcurrentTasks: 4)
         var foundApp: SCRunningApplication?
-        
+        var potentialMatches: [SCRunningApplication] = []
+
         for window in content.windows {
             if let app = window.owningApplication {
-                // Debug log to check application name
-                if applicationName.isEmpty || (app.applicationName.contains(applicationName) && !applicationName.isEmpty) {
+                // Collect potential matches
+                if applicationName.contains(app.applicationName) {
+                    potentialMatches.append(app)
+                }
+                
+                if applicationName.isEmpty || (app.applicationName == applicationName) {
                     await group.addTask {
                         return try await fetchWindowInfo(window: window, applicationName: applicationName)
                     }
@@ -263,7 +268,21 @@ struct WindowUtil {
                 }
             }
         }
-        
+
+        // If no exact match is found, use the best guess from potential matches
+        if foundApp == nil, !applicationName.isEmpty, let bestGuessApp = potentialMatches.first {
+            foundApp = bestGuessApp
+
+            // Loop again to fetch window info for the best guess application
+            for window in content.windows {
+                if let app = window.owningApplication, app == bestGuessApp {
+                    await group.addTask {
+                        return try await fetchWindowInfo(window: window, applicationName: applicationName)
+                    }
+                }
+            }
+        }
+
         if let app = foundApp, !applicationName.isEmpty {
             let minimizedWindowsInfo = getMinimizedWindows(pid: app.processID, bundleID: app.bundleIdentifier, appName: applicationName)
             for windowInfo in minimizedWindowsInfo {
@@ -275,7 +294,7 @@ struct WindowUtil {
                 await group.addTask { return windowInfo }
             }
         }
-        
+
         let results = try await group.waitForAll()
         return results.compactMap { $0 }.filter { !$0.appName.isEmpty && !$0.bundleID.isEmpty }
     }
