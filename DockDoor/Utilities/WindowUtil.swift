@@ -70,7 +70,7 @@ struct WindowUtil {
                 throw NSError(domain: "com.dockdoor.permission", code: 2, userInfo: [NSLocalizedDescriptionKey: "Screen recording permission not granted"])
             }
             guard let frame = windowInfo.window?.frame,
-                let image = CGWindowListCreateImage(frame, .optionIncludingWindow, windowInfo.id, [.boundsIgnoreFraming, .bestResolution]) else {
+                  let image = CGWindowListCreateImage(frame, .optionIncludingWindow, windowInfo.id, [.boundsIgnoreFraming, .bestResolution]) else {
                 throw NSError(domain: "com.dockdoor.error", code: 1, userInfo: [NSLocalizedDescriptionKey: "Failed to capture window image"])
             }
             let cachedImage = CachedImage(image: image, timestamp: Date())
@@ -92,11 +92,12 @@ struct WindowUtil {
     }
     
     /// Finds a window by its name in the provided AXUIElement windows.
-    static func findWindow(byName windowName: String, in windows: [AXUIElement]) -> AXUIElement? {
+    static func findWindow(matchingProcessID processID: pid_t, in windows: [AXUIElement]) -> AXUIElement? {
         for windowRef in windows {
-            var windowTitleValue: AnyObject?
-            AXUIElementCopyAttributeValue(windowRef, kAXTitleAttribute as CFString, &windowTitleValue)
-            if let windowTitle = windowTitleValue as? String, windowTitle == windowName {
+            var windowPID: pid_t = 0
+            let result = AXUIElementGetPid(windowRef, &windowPID)
+            
+            if result == .success, windowPID == processID {
                 return windowRef
             }
         }
@@ -121,8 +122,8 @@ struct WindowUtil {
     /// Toggles the minimize state of a window.
     static func toggleMinimize(windowInfo: WindowInfo) {
         let minimizeResult: AXError = windowInfo.isMinimized ?
-            AXUIElementSetAttributeValue(windowInfo.axElement, kAXMinimizedAttribute as CFString, kCFBooleanFalse) :
-            AXUIElementSetAttributeValue(windowInfo.axElement, kAXMinimizedAttribute as CFString, kCFBooleanTrue)
+        AXUIElementSetAttributeValue(windowInfo.axElement, kAXMinimizedAttribute as CFString, kCFBooleanFalse) :
+        AXUIElementSetAttributeValue(windowInfo.axElement, kAXMinimizedAttribute as CFString, kCFBooleanTrue)
         
         if minimizeResult != .success {
             print("Error toggling minimized state of window: \(minimizeResult.rawValue)")
@@ -162,7 +163,7 @@ struct WindowUtil {
         let appElement = AXUIElementCreateApplication(pid)
         var value: AnyObject?
         let result = AXUIElementCopyAttributeValue(appElement, kAXWindowsAttribute as CFString, &value)
-
+        
         if result == .success, let windows = value as? [AXUIElement] {
             for (index, window) in windows.enumerated() {
                 var minimizedValue: AnyObject?
@@ -185,7 +186,7 @@ struct WindowUtil {
         let result = AXUIElementCopyAttributeValue(element, attribute, &value)
         return result == .success ? value as? T : nil
     }
-   
+    
     // MARK: - Active Window Handling
     
     /// Retrieves the active windows for a given application name.
@@ -195,11 +196,14 @@ struct WindowUtil {
         var foundApp: SCRunningApplication?
         
         for window in content.windows {
-            if let app = window.owningApplication, applicationName.isEmpty || (app.applicationName.contains(applicationName) && !applicationName.isEmpty) {
-                await group.addTask {
-                    return try await fetchWindowInfo(window: window, applicationName: applicationName)
+            if let app = window.owningApplication {
+                // Debug log to check application name
+                if applicationName.isEmpty || (app.applicationName.contains(applicationName) && !applicationName.isEmpty) {
+                    await group.addTask {
+                        return try await fetchWindowInfo(window: window, applicationName: applicationName)
+                    }
+                    foundApp = app
                 }
-                foundApp = app
             }
         }
         
@@ -232,10 +236,14 @@ struct WindowUtil {
         let pid = owningApplication.processID
         let appRef = createAXUIElement(for: pid)
         
-        guard let windows = getAXWindows(for: appRef), let title = window.title, let windowRef = findWindow(byName: title, in: windows) else {
+        guard let windows = getAXWindows(for: appRef), !windows.isEmpty else {
             return nil
         }
         
+        guard let windowRef = findWindow(matchingProcessID: pid, in: windows) else {
+            return nil
+        }
+                
         let closeButton = getCloseButton(for: windowRef)
         
         var windowInfo = WindowInfo(id: windowID, window: window, appName: owningApplication.applicationName, bundleID: owningApplication.bundleIdentifier,
