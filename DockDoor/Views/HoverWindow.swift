@@ -434,21 +434,30 @@ struct WindowPreview: View {
     private func windowContent(isMinimized: Bool) -> some View {
         Group {
             if isMinimized {
+                let width = maxWindowDimension.x > 300 ? maxWindowDimension.x : 300
+                
                 HStack(spacing: 16) {
                     Image(systemName: "eye.slash.fill")
-                        .font(.system(size: 24))
+                        .font(.system(size: 20))
                         .foregroundColor(.secondary)
 
                     Divider()
-                    Spacer()
-                    Text(windowInfo.windowName ?? "Hidden window")
-                        .font(.system(size: 12, weight: .medium))
-                        .foregroundColor(.primary)
-                        .multilineTextAlignment(.center)
-                    Spacer()
+                    
+                    VStack(alignment: .leading) {
+                        Text("Minimized")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                        
+                        TheMarquee(width: width - 100, secsBeforeLooping: 2, speedPtsPerSec: 30, nonMovingAlignment: .leading) {
+                            Text(windowInfo.windowName ?? "Hidden window")
+                                .font(.system(size: 12, weight: .medium))
+                                .foregroundStyle(.primary)
+                        }
+                    }
                 }
+                .padding(.horizontal, 8)
                 .padding()
-                .frame(width: 300)
+                .frame(width: width)
                 .frame(height: 60)
             } else if let cgImage = windowInfo.image {
                 Image(decorative: cgImage, scale: 1.0)
