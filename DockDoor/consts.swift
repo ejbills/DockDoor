@@ -18,6 +18,7 @@ extension Defaults.Keys {
     static let sizingMultiplier = Key<CGFloat>("sizingMultiplier") { 3 }
     static let openDelay = Key<CGFloat>("openDelay") { 0 }
     static let showAnimations = Key<Bool>("showAnimations") { true }
+    static let showWindowSwitcher = Key<Bool>("showWindowSwitcher"){ true }
     
     static let launched = Key<Bool>("launched") { false }
 }

@@ -37,6 +37,7 @@
 		BBF6C6242C1B4B4400BF1D40 /* KeybindHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF6C6232C1B4B4400BF1D40 /* KeybindHelper.swift */; };
 		BBFAD73A2C287A9C0092F5F1 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = BBFAD7392C287A9C0092F5F1 /* Sparkle */; };
 		BBFAD73C2C287C770092F5F1 /* UpdateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBFAD73B2C287C770092F5F1 /* UpdateView.swift */; };
+		C119BDF22C2AFA7600E06E18 /* WindowSwitcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = C119BDF12C2AFA7600E06E18 /* WindowSwitcher.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -68,6 +69,8 @@
 		BBF6C6212C1A9B4300BF1D40 /* AnimatedGradientOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedGradientOverlay.swift; sourceTree = "<group>"; };
 		BBF6C6232C1B4B4400BF1D40 /* KeybindHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeybindHelper.swift; sourceTree = "<group>"; };
 		BBFAD73B2C287C770092F5F1 /* UpdateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateView.swift; sourceTree = "<group>"; };
+		C119BDF02C2AEDBA00E06E18 /* DockDoorDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DockDoorDebug.entitlements; sourceTree = "<group>"; };
+		C119BDF12C2AFA7600E06E18 /* WindowSwitcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowSwitcher.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -124,6 +127,7 @@
 		BB157B672C0E31CE00997315 /* DockDoor */ = {
 			isa = PBXGroup;
 			children = (
+				C119BDF02C2AEDBA00E06E18 /* DockDoorDebug.entitlements */,
 				BB8247792C288FD30098A440 /* Updates */,
 				BB8247782C2889B20098A440 /* Info.plist */,
 				BBA153F92C11FFD500119C02 /* consts.swift */,
@@ -188,6 +192,7 @@
 				BB1CBD572C1BA800003969BC /* SettingsView.swift */,
 				BB6A4F1B2C1CFCFF00CB4C9E /* PermView.swift */,
 				BBFAD73B2C287C770092F5F1 /* UpdateView.swift */,
+				C119BDF12C2AFA7600E06E18 /* WindowSwitcher.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -292,6 +297,7 @@
 				BBA153FC2C12356100119C02 /* main.swift in Sources */,
 				BBF6C6242C1B4B4400BF1D40 /* KeybindHelper.swift in Sources */,
 				3A105FDD2C1C0EE20015EC66 /* DynStack.swift in Sources */,
+				C119BDF22C2AFA7600E06E18 /* WindowSwitcher.swift in Sources */,
 				BB2567C62C10C5F000C0C93E /* DockUtils.swift in Sources */,
 				BBE7CC912C22429A00AB8F4D /* settings.swift in Sources */,
 				BBCFAE402C266234002E1516 /* FirstTimeView.swift in Sources */,
@@ -428,13 +434,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = DockDoor/DockDoor.entitlements;
+				CODE_SIGN_ENTITLEMENTS = DockDoor/DockDoorDebug.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1.0.5;
 				DEVELOPMENT_ASSET_PATHS = "\"DockDoor/Preview Content\"";
-				DEVELOPMENT_TEAM = 2Q775S63Q3;
+				DEVELOPMENT_TEAM = 8M7864P9XP;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
