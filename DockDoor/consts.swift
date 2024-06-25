@@ -13,9 +13,9 @@ let optimisticScreenSizeHeight = NSScreen.main!.frame.height
 
 let roughHeightCap = optimisticScreenSizeHeight / 3
 let roughWidthCap = optimisticScreenSizeWidth / 3
-
 extension Defaults.Keys {
     static let sizingMultiplier = Key<CGFloat>("sizingMultiplier") { 3 }
+    static let windowPadding = Key<CGFloat>("windowPadding") { 0 }
     static let openDelay = Key<CGFloat>("openDelay") { 0 }
     static let showAnimations = Key<Bool>("showAnimations") { true }
     

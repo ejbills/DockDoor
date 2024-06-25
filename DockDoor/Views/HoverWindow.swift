@@ -135,7 +135,7 @@ class HoverWindow: NSWindow {
         }
         
         // Ensure the hover window stays within the dock screen bounds
-        xPosition = max(screenFrame.minX, min(xPosition, screenFrame.maxX - newHoverWindowSize.width))
+        xPosition = max(screenFrame.minX, min(xPosition, screenFrame.maxX - newHoverWindowSize.width)) + Defaults[.windowPadding]
         yPosition = max(screenFrame.minY, min(yPosition, screenFrame.maxY - newHoverWindowSize.height))
         
         position = CGPoint(x: xPosition, y: yPosition)
