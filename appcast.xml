@@ -3,12 +3,12 @@
     <channel>
         <title>DockDoor</title>
         <item>
-            <title>1.0.6</title>
-            <pubDate>Tue, 25 Jun 2024 17:16:32 -0700</pubDate>
-            <sparkle:version>1.0.6</sparkle:version>
-            <sparkle:shortVersionString>1.0.6</sparkle:shortVersionString>
+            <title>1.0.7</title>
+            <pubDate>Wed, 26 Jun 2024 09:24:11 -0700</pubDate>
+            <sparkle:version>1.0.7</sparkle:version>
+            <sparkle:shortVersionString>1.0.7</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/ejbills/DockDoor/releases/download/v1.0.6/DockDoor.dmg" length="1859005" type="application/octet-stream" sparkle:edSignature="tgG1iOPDP+dRxGgZFUzt5NUZn7w4RjfhAShcViVASPXErq/zaOB/H8Irutz1dIgFj+ZY4ND7EJnJcZgKyNf7BQ=="/>
+            <enclosure url="https://github.com/ejbills/DockDoor/releases/download/v1.0.7/DockDoor.dmg" length="1862667" type="application/octet-stream" sparkle:edSignature="qy187OjlB7uhNJpa7/wNJHUpWHQShh6AvBKJj6T+4gC/HtOz695CPGtpa+EhRdNFmpmLqZ1vrf732ynPLWjlAg=="/>
         </item>
     </channel>
 </rss>
