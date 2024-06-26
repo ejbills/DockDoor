@@ -90,10 +90,8 @@ fastlane/test_output
 iOSInjectionProject/
 
 # Custom Gitignore
-/.DS_Store
+.DS_Store
 /xcuserdata
-
-*.DS_Store
 
 node_modules/
 
