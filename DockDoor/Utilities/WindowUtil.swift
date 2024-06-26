@@ -198,10 +198,16 @@ struct WindowUtil {
     }
     
     /// Closes a window using its close button.
-    static func closeWindow(closeButton: AXUIElement) {
+    static func closeWindow(closeButton: AXUIElement?) {
+        guard let closeButton = closeButton else {
+            print("Error: closeButton is nil.")
+            return
+        }
+        
         let closeResult = AXUIElementPerformAction(closeButton, kAXPressAction as CFString)
         if closeResult != .success {
             print("Error closing window: \(closeResult.rawValue)")
+            return
         }
     }
     
@@ -263,7 +269,7 @@ struct WindowUtil {
                let nonLocalName = getNonLocalizedAppName(for: tempApp){
                 
                 // Collect potential matches
-                if applicationName.contains(app.applicationName) {
+                if applicationName.contains(app.applicationName) || app.applicationName.contains(applicationName) {
                     potentialMatches.append(app)
                 }
                 
