@@ -10,15 +10,17 @@ import AppKit
 struct AppIconUtil {
     // MARK: - Properties
     
-    private static var iconCache: [String: NSImage] = [:]
+    private static var iconCache: [String: (image: NSImage, timestamp: Date)] = [:]
+    private static let cacheExpiryInterval: TimeInterval = 3600 // 1 hour
     
     // MARK: - App Icons
     
     static func getIcon(file path: URL) -> NSImage? {
         let cacheKey = path.path
+        removeExpiredCacheEntries()
         
-        if let cachedIcon = iconCache[cacheKey] {
-            return cachedIcon
+        if let cachedEntry = iconCache[cacheKey], Date().timeIntervalSince(cachedEntry.timestamp) < cacheExpiryInterval {
+            return cachedEntry.image
         }
         
         guard FileManager.default.fileExists(atPath: path.path) else {
@@ -26,13 +28,15 @@ struct AppIconUtil {
         }
         
         let icon = NSWorkspace.shared.icon(forFile: path.path)
-        iconCache[cacheKey] = icon
+        iconCache[cacheKey] = (image: icon, timestamp: Date())
         return icon
     }
     
     static func getIcon(bundleID: String) -> NSImage? {
-        if let cachedIcon = iconCache[bundleID] {
-            return cachedIcon
+        removeExpiredCacheEntries()
+        
+        if let cachedEntry = iconCache[bundleID], Date().timeIntervalSince(cachedEntry.timestamp) < cacheExpiryInterval {
+            return cachedEntry.image
         }
         
         guard let path = NSWorkspace.shared.urlForApplication(withBundleIdentifier: bundleID) else {
@@ -40,7 +44,7 @@ struct AppIconUtil {
         }
         
         let icon = getIcon(file: path)
-        iconCache[bundleID] = icon
+        iconCache[bundleID] = (image: icon!, timestamp: Date())
         return icon
     }
     
@@ -62,5 +66,10 @@ struct AppIconUtil {
     
     static func clearCache() {
         iconCache.removeAll()
+    }
+    
+    private static func removeExpiredCacheEntries() {
+        let now = Date()
+        iconCache = iconCache.filter { now.timeIntervalSince($0.value.timestamp) < cacheExpiryInterval }
     }
 }

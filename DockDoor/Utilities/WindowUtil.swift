@@ -34,11 +34,10 @@ struct CachedAppIcon {
     let timestamp: Date
 }
 
-struct WindowUtil {
+final class WindowUtil {
     private static var imageCache: [CGWindowID: CachedImage] = [:]
-    private static var iconCache: [String: CachedAppIcon] = [:]
     private static let cacheQueue = DispatchQueue(label: "com.dockdoor.cacheQueue", attributes: .concurrent)
-    private static var cacheExpirySeconds: Double = 600 // 10 mins
+    private static var cacheExpirySeconds: Double = 60 // 1 min
     
     // MARK: - Cache Management
     
@@ -47,14 +46,14 @@ struct WindowUtil {
         let now = Date()
         cacheQueue.async(flags: .barrier) {
             imageCache = imageCache.filter { now.timeIntervalSince($0.value.timestamp) <= cacheExpirySeconds }
-            iconCache = iconCache.filter { now.timeIntervalSince($0.value.timestamp) <= cacheExpirySeconds }
         }
     }
     
     /// Resets the image and icon cache.
     static func resetCache() {
-        imageCache.removeAll()
-        iconCache.removeAll()
+        cacheQueue.async(flags: .barrier) {
+            imageCache.removeAll()
+        }
     }
     
     // MARK: - Helper Functions
@@ -300,8 +299,8 @@ struct WindowUtil {
             for windowInfo in minimizedWindowsInfo {
                 await group.addTask { return windowInfo }
             }
-        } else if !applicationName.isEmpty, let app = getRunningApplication(named: applicationName) {
-            let minimizedWindowsInfo = getMinimizedWindows(pid: app.processIdentifier, bundleID: app.bundleIdentifier!, appName: applicationName)
+        } else if !applicationName.isEmpty, let app = getRunningApplication(named: applicationName), let bundleID = app.bundleIdentifier {
+            let minimizedWindowsInfo = getMinimizedWindows(pid: app.processIdentifier, bundleID: bundleID, appName: applicationName)
             for windowInfo in minimizedWindowsInfo {
                 await group.addTask { return windowInfo }
             }
@@ -369,34 +368,65 @@ actor LimitedTaskGroup<T> {
     private var tasks: [Task<T, Error>] = []
     private let maxConcurrentTasks: Int
     private var runningTasks = 0
+    private let semaphore: AsyncSemaphore
     
     init(maxConcurrentTasks: Int) {
         self.maxConcurrentTasks = maxConcurrentTasks
+        self.semaphore = AsyncSemaphore(value: maxConcurrentTasks)
     }
     
     func addTask(_ operation: @escaping () async throws -> T) {
         let task = Task {
-            while self.runningTasks >= self.maxConcurrentTasks {
-                try await Task.sleep(nanoseconds: 10_000_000) // 10ms
-            }
-            self.runningTasks += 1
-            defer { self.runningTasks -= 1 }
+            await semaphore.wait()
+            defer { Task { await semaphore.signal() } }
             return try await operation()
         }
         tasks.append(task)
     }
     
     func waitForAll() async throws -> [T] {
-        var results: [T] = []
-        for task in tasks {
-            do {
-                let result = try await task.value
+        defer { tasks.removeAll() }
+        
+        return try await withThrowingTaskGroup(of: T.self) { group in
+            for task in tasks {
+                group.addTask {
+                    try await task.value
+                }
+            }
+            
+            var results: [T] = []
+            for try await result in group {
                 results.append(result)
-            } catch {
-                print("Task failed with error: \(error)")
+            }
+            return results
+        }
+    }
+}
+
+actor AsyncSemaphore {
+    private var value: Int
+    private var waiters: [CheckedContinuation<Void, Never>] = []
+    
+    init(value: Int) {
+        self.value = value
+    }
+    
+    func wait() async {
+        if value > 0 {
+            value -= 1
+        } else {
+            await withCheckedContinuation { continuation in
+                waiters.append(continuation)
             }
         }
-        tasks.removeAll()
-        return results
+    }
+    
+    func signal() {
+        if let waiter = waiters.first {
+            waiters.removeFirst()
+            waiter.resume()
+        } else {
+            value += 1
+        }
     }
 }

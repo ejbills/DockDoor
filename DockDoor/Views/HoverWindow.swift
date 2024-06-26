@@ -32,7 +32,7 @@ import Defaults
     }
 }
 
-class HoverWindow: NSWindow {
+final class HoverWindow: NSWindow {
     static let shared = HoverWindow()
     
     private var appName: String = ""
@@ -62,8 +62,6 @@ class HoverWindow: NSWindow {
     }
     
     func hideWindow() {
-        guard self.hostingView != nil else { return }
-        
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             self.contentView = nil
@@ -77,7 +75,7 @@ class HoverWindow: NSWindow {
     }
     
     private func updateContentViewSizeAndPosition(mouseLocation: CGPoint? = nil, mouseScreen: NSScreen, animated: Bool, centerOnScreen: Bool = false) {
-        guard let hostingView else { return }
+        guard let hostingView = hostingView else { return }
         
         if centerOnScreen {
             CurrentWindow.shared.setShowing(toState: true)
@@ -135,8 +133,8 @@ class HoverWindow: NSWindow {
         }
         
         // Ensure the hover window stays within the dock screen bounds
-        xPosition = max(screenFrame.minX, min(xPosition, screenFrame.maxX - newHoverWindowSize.width)) + Defaults[.windowPadding]
-        yPosition = max(screenFrame.minY, min(yPosition, screenFrame.maxY - newHoverWindowSize.height))
+        xPosition = max(screenFrame.minX, min(xPosition, screenFrame.maxX - newHoverWindowSize.width)) + (dockPosition != .bottom ? Defaults[.windowPadding] : 0)
+        yPosition = max(screenFrame.minY, min(yPosition, screenFrame.maxY - newHoverWindowSize.height)) + (dockPosition == .bottom ? Defaults[.windowPadding] : 0)
         
         position = CGPoint(x: xPosition, y: yPosition)
         
@@ -207,13 +205,13 @@ class HoverWindow: NSWindow {
         
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
-            
+
             self.appName = appName
             self.windows = windows
             self.onWindowTap = onWindowTap
-            
+
             let screen = mouseScreen ?? NSScreen.main!
-            
+
             if self.hostingView == nil {
                 let hoverView = HoverView(appName: appName, windows: windows, onWindowTap: onWindowTap,
                                           dockPosition: DockUtils.shared.getDockPosition(), bestGuessMonitor: screen)
@@ -224,7 +222,7 @@ class HoverWindow: NSWindow {
                 self.hostingView?.rootView = HoverView(appName: appName, windows: windows, onWindowTap: onWindowTap,
                                                        dockPosition: DockUtils.shared.getDockPosition(), bestGuessMonitor: screen)
             }
-            
+
             self.updateContentViewSizeAndPosition(mouseLocation: mouseLocation, mouseScreen: screen, animated: true, centerOnScreen: !isMouseEvent)
             self.makeKeyAndOrderFront(nil)
         }

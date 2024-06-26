@@ -98,11 +98,13 @@ class KeybindHelper {
     }
 
     private func showHoverWindow() {
-        Task {
+        Task { [weak self] in
             do {
+                guard let self = self else { return }
                 let windows = try await WindowUtil.activeWindows(for: "")
-                await MainActor.run {
-                    if isControlKeyPressed {  // Check if Ctrl key is still pressed
+                await MainActor.run { [weak self] in
+                    guard let self = self else { return }
+                    if self.isControlKeyPressed {
                         HoverWindow.shared.showWindow(appName: "Alt-Tab", windows: windows, overrideDelay: true, onWindowTap: { HoverWindow.shared.hideWindow() })
                     }
                 }

@@ -7,7 +7,7 @@
 import Cocoa
 import ApplicationServices
 
-class DockObserver {
+final class DockObserver {
     static let shared = DockObserver()
     
     private var lastAppName: String?
@@ -15,7 +15,7 @@ class DockObserver {
     private let mouseUpdateThreshold: CGFloat = 5.0
     private var eventTap: CFMachPort?
     
-    private var hoverProcessingTask: DispatchWorkItem?
+    private var hoverProcessingTask: Task<Void, Error>?
     private var isProcessing: Bool = false
         
     private var dockAppProcessIdentifier: pid_t? = nil
@@ -50,13 +50,13 @@ class DockObserver {
         
         func eventTapCallback(proxy: CGEventTapProxy, type: CGEventType, event: CGEvent, refcon: UnsafeMutableRawPointer?) -> Unmanaged<CGEvent>? {
             let observer = Unmanaged<DockObserver>.fromOpaque(refcon!).takeUnretainedValue()
-            
+
             if type == .mouseMoved {
                 let mouseLocation = event.location
                 observer.handleMouseEvent(mouseLocation: mouseLocation)
             }
-            
-            return Unmanaged.passRetained(event)
+
+            return Unmanaged.passUnretained(event)
         }
         
         eventTap = CGEvent.tapCreate(
@@ -77,33 +77,32 @@ class DockObserver {
         }
     }
     
-    @objc private func handleMouseEvent(mouseLocation: CGPoint) {
-        // Cancel any ongoing processing
+    private func handleMouseEvent(mouseLocation: CGPoint) {
         hoverProcessingTask?.cancel()
         
-        // Create a new task for hover processing
-        hoverProcessingTask = DispatchWorkItem { [weak self] in
-            self?.processMouseEvent(mouseLocation: mouseLocation)
+        hoverProcessingTask = Task { [weak self] in
+            guard let self = self else { return }
+            try Task.checkCancellation()
+            self.processMouseEvent(mouseLocation: mouseLocation)
         }
-        
-        // Execute the new task
-        DispatchQueue.main.async(execute: hoverProcessingTask!)
     }
     
     private func processMouseEvent(mouseLocation: CGPoint) {
         guard !isProcessing, !CurrentWindow.shared.showingTabMenu else { return }
         isProcessing = true
         
+        defer {
+            isProcessing = false
+        }
+        
         guard let lastMouseLocation = lastMouseLocation else {
             self.lastMouseLocation = mouseLocation
-            isProcessing = false
             return
         }
         
         // Ignore minor movements
         if abs(mouseLocation.x - lastMouseLocation.x) < mouseUpdateThreshold &&
             abs(mouseLocation.y - lastMouseLocation.y) < mouseUpdateThreshold {
-            isProcessing = false
             return
         }
         self.lastMouseLocation = mouseLocation
@@ -115,7 +114,8 @@ class DockObserver {
             if dockIconAppName != lastAppName {
                 lastAppName = dockIconAppName
                 
-                Task {
+                Task { [weak self] in
+                    guard let self = self else { return }
                     do {
                         let activeWindows = try await WindowUtil.activeWindows(for: dockIconAppName)
                         await MainActor.run {
@@ -130,30 +130,29 @@ class DockObserver {
                                     windows: activeWindows,
                                     mouseLocation: convertedMouseLocation,
                                     mouseScreen: mouseScreen,
-                                    onWindowTap: { HoverWindow.shared.hideWindow() }
+                                    onWindowTap: { [weak self] in
+                                        HoverWindow.shared.hideWindow()
+                                        self?.lastAppName = nil
+                                    }
                                 )
                             }
-                            self.isProcessing = false
                         }
                     } catch {
                         await MainActor.run {
                             print("Error fetching active windows: \(error)")
-                            self.isProcessing = false
                         }
                     }
                 }
-            } else {
-                isProcessing = false
             }
         } else {
-            Task { @MainActor in
+            Task { @MainActor [weak self] in
+                guard let self = self else { return }
                 let mouseScreen = DockObserver.screenContainingPoint(currentMouseLocation) ?? NSScreen.main!
                 let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
                 if !HoverWindow.shared.frame.contains(convertedMouseLocation) {
                     self.lastAppName = nil
                     HoverWindow.shared.hideWindow()
                 }
-                self.isProcessing = false
             }
         }
     }
