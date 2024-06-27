@@ -9,6 +9,8 @@ import Cocoa
 import ApplicationServices
 import ScreenCaptureKit
 
+let filteredBundleIdentifiers: [String] = ["com.apple.notificationcenterui"] // filters widgets
+
 /// Struct representing window information.
 struct WindowInfo: Identifiable, Hashable {
     let id: CGWindowID
@@ -321,7 +323,7 @@ final class WindowUtil {
             return nil
         }
         
-        if windowLayer > 1 || windowAlpha <= 0 {
+        if windowLayer > 1 || windowAlpha <= 0 || filteredBundleIdentifiers.contains(owningApplication.bundleIdentifier) {
             return nil
         }
         
