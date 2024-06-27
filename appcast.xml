@@ -3,12 +3,12 @@
     <channel>
         <title>DockDoor</title>
         <item>
-            <title>1.0.7patch2</title>
-            <pubDate>Thu, 27 Jun 2024 07:53:46 -0700</pubDate>
-            <sparkle:version>1.0.7patch2</sparkle:version>
-            <sparkle:shortVersionString>1.0.7patch2</sparkle:shortVersionString>
+            <title>1.0.8</title>
+            <pubDate>Thu, 27 Jun 2024 08:02:06 -0700</pubDate>
+            <sparkle:version>1.0.8</sparkle:version>
+            <sparkle:shortVersionString>1.0.8</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/ejbills/DockDoor/releases/download/v1.0.7patch2/DockDoor.dmg" length="1863509" type="application/octet-stream" sparkle:edSignature="iYbxd9tcKYGmuM/abcNxWZ5gfFfsSy+XVLDwOoZmia4TcJGwbfUM9Zxl11Nl+nHJm8zDdkY8QgU0jLrJM/+mAQ=="/>
+            <enclosure url="https://github.com/ejbills/DockDoor/releases/download/v1.0.7patch2/DockDoor.dmg" length="1863507" type="application/octet-stream" sparkle:edSignature="U7VSkvTP9iP6LJcFcnH/LPCVLsrdtF2rpFcQD5zpIP66eojaM97GJpt1ybxsIUax8+LOIeObMZvWL80F3Md3Bw=="/>
         </item>
     </channel>
 </rss>
