@@ -323,7 +323,9 @@ struct HoverView: View {
         .dockStyle(cornerRadius: 16)
         .overlay(alignment: .topLeading) {
             if !CurrentWindow.shared.showingTabMenu {
-                HStack(spacing: 4) {
+                let appNameLabelSize = measureString(appName, fontSize: 14)
+                
+                HStack(spacing: 2) {
                     if let appIcon = appIcon {
                         Image(nsImage: appIcon)
                             .resizable()
@@ -335,12 +337,36 @@ struct HoverView: View {
                     }
                     Text(appName)
                         .padding(3)
-                        .font(.system(size: 13, weight: .medium))
+                        .fontWeight(.medium)
+                        .font(.system(size: 14))
+                        .padding(.horizontal, 4)
+                        .shadow(stacked: 2, radius: 6)
+                        .background(
+                            ZStack {
+                                MaterialBlurView(material: .hudWindow)
+                                    .mask(
+                                        Ellipse()
+                                            .fill(
+                                                LinearGradient(
+                                                    gradient: Gradient(
+                                                        colors: [
+                                                            Color.white.opacity(1.0),
+                                                            Color.white.opacity(0.35)
+                                                        ]
+                                                    ),
+                                                    startPoint: .top,
+                                                    endPoint: .bottom
+                                                )
+                                            )
+                                    )
+                                    .blur(radius: 5)
+                            }
+                                .frame(width: appNameLabelSize.width + 30)
+                        )
                 }
                 .padding(.horizontal, 3)
                 .padding(.vertical, 1.5)
-                .dockStyle(cornerRadius: 16)
-                .padding(EdgeInsets(top: -25, leading: 6, bottom: 0, trailing: 0))
+                .padding(EdgeInsets(top: -13, leading: 6, bottom: 0, trailing: 0))
             }
         }
         .padding(.all, 24)

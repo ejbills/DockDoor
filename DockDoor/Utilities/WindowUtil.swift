@@ -165,7 +165,9 @@ final class WindowUtil {
     
     /// Retrieves the running application by its name.
     static func getRunningApplication(named applicationName: String) -> NSRunningApplication? {
-        return NSWorkspace.shared.runningApplications.first { $0.localizedName == applicationName }
+        return NSWorkspace.shared.runningApplications.first {
+            applicationName.contains($0.localizedName ?? "") || ($0.localizedName?.contains(applicationName) ?? false)
+        }
     }
     
     // MARK: - Window Manipulation Functions
