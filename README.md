@@ -48,3 +48,7 @@ Contributions to DockDoor are welcome! Here’s how you can get started:
 4. **Testing:**
     - Write unit tests for new features or changes.
     - Ensure existing tests pass before submitting a pull request.
+
+**Help**
+- I disabled the menu bar icon and now I can't access settings
+- - When DockDoor initially opens, the menu icon will be visible for 10 seconds, until it disappears. This way, you can access the settings even with the icon disabled. Just relaunch the app and click it before it disappears.
