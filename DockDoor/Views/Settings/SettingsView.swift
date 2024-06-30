@@ -12,6 +12,7 @@ import LaunchAtLogin
 struct SettingsView: View {
     @Default(.openDelay) var openDelay
     @Default(.showAnimations) var showAnimations
+    @Default(.showMenuBarIcon) var showMenuBarIcon
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -28,6 +29,11 @@ struct SettingsView: View {
             Toggle(isOn: $showAnimations, label: {
                 Text("Enable Hover Window Sliding Animation")
             })
+            
+            Toggle(isOn: $showMenuBarIcon, label: {
+                Text("Show Menu Bar Icon")
+            })
+            .onChange(of: showMenuBarIcon) { _, _ in restartApplication() }
 
             SizePickerView()
             
@@ -53,7 +59,7 @@ struct SizePickerView: View {
             }.buttonStyle(PlainButtonStyle())
             
             Picker("Window Size", selection: $sizingMultiplier) {
-                ForEach(2...9, id: \.self) { size in
+                ForEach(2...10, id: \.self) { size in
                     Text(getLabel(for: CGFloat(size))).tag(CGFloat(size))
                 }
             }
@@ -81,6 +87,8 @@ struct SizePickerView: View {
             return "What is this? A window for ANTS?"
         case 9:
             return "Subatomic"
+        case 10:
+            return "Can you even see this?"
         default:
             return "Unknown Size"
         }

@@ -19,6 +19,7 @@ extension Defaults.Keys {
     static let openDelay = Key<CGFloat>("openDelay") { 0 }
     static let showAnimations = Key<Bool>("showAnimations") { true }
     static let showWindowSwitcher = Key<Bool>("showWindowSwitcher"){ true }
+    static let showMenuBarIcon = Key<Bool>("showMenuBarIcon", default: true)
     
     static let launched = Key<Bool>("launched") { false }
 }
