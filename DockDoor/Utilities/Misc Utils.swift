@@ -32,3 +32,12 @@ extension CGPoint {
         return sqrt(dx * dx + dy * dy)
     }
 }
+
+// Measure string length in px
+func measureString(_ string: String, fontSize: CGFloat, fontWeight: NSFont.Weight = .regular) -> CGSize {
+    let font = NSFont.systemFont(ofSize: fontSize, weight: fontWeight)
+    let attributes: [NSAttributedString.Key: Any] = [.font: font]
+    let attributedString = NSAttributedString(string: string, attributes: attributes)
+    let size = attributedString.size()
+    return size
+}

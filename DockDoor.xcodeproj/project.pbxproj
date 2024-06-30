@@ -25,6 +25,7 @@
 		BB3968002C2A6C44004F1AB6 /* SmoothGradient in Frameworks */ = {isa = PBXBuildFile; productRef = BB3967FF2C2A6C44004F1AB6 /* SmoothGradient */; };
 		BB3968022C2A6CC2004F1AB6 /* Marquee.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3968012C2A6CC2004F1AB6 /* Marquee.swift */; };
 		BB6A4F1C2C1CFCFF00CB4C9E /* PermView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6A4F1B2C1CFCFF00CB4C9E /* PermView.swift */; };
+		BB7CA33D2C31F1B00012E303 /* WindowClosureObservers.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB7CA33C2C31F1B00012E303 /* WindowClosureObservers.swift */; };
 		BBA153F62C115DDA00119C02 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA153F52C115DDA00119C02 /* AppDelegate.swift */; };
 		BBA153F82C11604400119C02 /* HoverWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA153F72C11604400119C02 /* HoverWindow.swift */; };
 		BBA153FA2C11FFD500119C02 /* consts.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA153F92C11FFD500119C02 /* consts.swift */; };
@@ -58,6 +59,7 @@
 		BB3967FC2C291D5A004F1AB6 /* StackedShadow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackedShadow.swift; sourceTree = "<group>"; };
 		BB3968012C2A6CC2004F1AB6 /* Marquee.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Marquee.swift; sourceTree = "<group>"; };
 		BB6A4F1B2C1CFCFF00CB4C9E /* PermView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermView.swift; sourceTree = "<group>"; };
+		BB7CA33C2C31F1B00012E303 /* WindowClosureObservers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowClosureObservers.swift; sourceTree = "<group>"; };
 		BB8247782C2889B20098A440 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		BBA153F52C115DDA00119C02 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BBA153F72C11604400119C02 /* HoverWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoverWindow.swift; sourceTree = "<group>"; };
@@ -163,6 +165,7 @@
 				BBF6C6232C1B4B4400BF1D40 /* KeybindHelper.swift */,
 				BB1CBD5C2C1BCA4F003969BC /* Misc Utils.swift */,
 				BBE7CC932C225D9700AB8F4D /* App Icon.swift */,
+				BB7CA33C2C31F1B00012E303 /* WindowClosureObservers.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -283,6 +286,7 @@
 			files = (
 				BB6A4F1C2C1CFCFF00CB4C9E /* PermView.swift in Sources */,
 				BB3967FD2C291D5A004F1AB6 /* StackedShadow.swift in Sources */,
+				BB7CA33D2C31F1B00012E303 /* WindowClosureObservers.swift in Sources */,
 				BB157B802C0E8E6700997315 /* MessageUtil.swift in Sources */,
 				3A105FD62C1BED660015EC66 /* BlurView.swift in Sources */,
 				BB1CBD5D2C1BCA4F003969BC /* Misc Utils.swift in Sources */,
