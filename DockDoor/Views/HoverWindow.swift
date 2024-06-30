@@ -510,6 +510,39 @@ struct WindowPreview: View {
             
             if !windowInfo.isMinimized, let closeButton = windowInfo.closeButton {
                 HStack(spacing: 6) {
+                    Button(action: {
+                        WindowUtil.closeWindow(closeButton: closeButton)
+                        onTap?()
+                    }) {
+                        ZStack {
+                            Image(systemName: "circle.fill")
+                                .foregroundStyle(.secondary)
+                            Image(systemName: "xmark.circle.fill")
+                        }
+                    }
+                    .buttonBorderShape(.roundedRectangle)
+                    .foregroundStyle(.red)
+                    .buttonStyle(.plain)
+                    .font(.system(size: 14))
+                    
+                    Button(action: {
+                        WindowUtil.toggleMinimize(windowInfo: windowInfo)
+                        onTap?()
+                    }) {
+                        ZStack {
+                            Image(systemName: "circle.fill")
+                                .foregroundStyle(.secondary)
+                            Image(systemName: "minus.circle.fill")
+                        }
+                    }
+                    .buttonBorderShape(.roundedRectangle)
+                    .foregroundStyle(.yellow)
+                    .shadow(radius: 3)
+                    .buttonStyle(.plain)
+                    .font(.system(size: 14))
+                    
+                    Spacer()
+                    
                     if let windowTitle = windowInfo.window?.title, !windowTitle.isEmpty {
                         let maxLabelWidth = calculatedSize.width - 150
                         let stringMeasurementWidth = measureString(windowTitle, fontSize: 12).width + 5
@@ -523,31 +556,6 @@ struct WindowPreview: View {
                         .padding(4)
                         .dockStyle(cornerRadius: 6)
                     }
-                    
-                    Spacer()
-                    
-                    Button(action: {
-                        WindowUtil.toggleMinimize(windowInfo: windowInfo)
-                        onTap?()
-                    }) {
-                        Image(systemName: "minus.circle.fill")
-                    }
-                    .buttonBorderShape(.roundedRectangle)
-                    .foregroundStyle(.yellow)
-                    .shadow(radius: 3)
-                    .buttonStyle(.plain)
-                    .font(.system(size: 14))
-                    
-                    Button(action: {
-                        WindowUtil.closeWindow(closeButton: closeButton)
-                        onTap?()
-                    }) {
-                        Image(systemName: "xmark.circle.fill")
-                    }
-                    .buttonBorderShape(.roundedRectangle)
-                    .foregroundStyle(.red)
-                    .buttonStyle(.plain)
-                    .font(.system(size: 14))
                 }
                 .frame(alignment: .leading)
                 .padding(.horizontal, 6)
