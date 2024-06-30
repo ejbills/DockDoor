@@ -495,7 +495,7 @@ struct WindowPreview: View {
                                 .foregroundStyle(.primary)
                         }
                         .padding(4)
-                        .dockStyle(cornerRadius: 4)
+                        .dockStyle(cornerRadius: 6)
                     }
                     
                     Spacer()
