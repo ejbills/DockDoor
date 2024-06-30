@@ -13,6 +13,7 @@ import Sparkle
 
 class AppDelegate: NSObject, NSApplicationDelegate {
     private var dockObserver: DockObserver?
+    private var appClosureObserver: AppClosureObserver?
     private var keybindHelper: KeybindHelper?
     private var statusBarItem: NSStatusItem?
     
@@ -42,13 +43,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             self.setupMenuBar()
             
             // Schedule a timer to remove the menu bar icon after 10 seconds if it's turned off
-            if !Defaults[.showMenuBarIcon], let statusBarItem = statusBarItem {
+            if !Defaults[.showMenuBarIcon] {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
                     self.updateMenuBarIconStatus()
                 }
             }
             
             dockObserver = DockObserver.shared
+            appClosureObserver = AppClosureObserver.shared
             if Defaults[.showWindowSwitcher] {
                 keybindHelper = KeybindHelper.shared
             }

@@ -47,7 +47,7 @@ final class HoverWindow: NSWindow {
     private let debounceDelay: TimeInterval = 0.1
     private var debounceWorkItem: DispatchWorkItem?
     private var lastShowTime: Date?
-        
+    
     private init() {
         super.init(contentRect: .zero, styleMask: .borderless, backing: .buffered, defer: false)
         level = .floating
@@ -205,13 +205,13 @@ final class HoverWindow: NSWindow {
         
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
-
+            
             self.appName = appName
             self.windows = windows
             self.onWindowTap = onWindowTap
-
+            
             let screen = mouseScreen ?? NSScreen.main!
-
+            
             if self.hostingView == nil {
                 let hoverView = HoverView(appName: appName, windows: windows, onWindowTap: onWindowTap,
                                           dockPosition: DockUtils.shared.getDockPosition(), bestGuessMonitor: screen)
@@ -222,7 +222,7 @@ final class HoverWindow: NSWindow {
                 self.hostingView?.rootView = HoverView(appName: appName, windows: windows, onWindowTap: onWindowTap,
                                                        dockPosition: DockUtils.shared.getDockPosition(), bestGuessMonitor: screen)
             }
-
+            
             self.updateContentViewSizeAndPosition(mouseLocation: mouseLocation, mouseScreen: screen, animated: true, centerOnScreen: !isMouseEvent)
             self.makeKeyAndOrderFront(nil)
         }
@@ -257,22 +257,22 @@ struct HoverView: View {
     let onWindowTap: (() -> Void)?
     let dockPosition: DockPosition
     let bestGuessMonitor: NSScreen
-
+    
     @State private var showWindows: Bool = false
     @State private var hasAppeared: Bool = false
     @State private var appIcon: NSImage? = nil
-
+    
     var maxWindowDimension: CGPoint {
         let thickness = HoverWindow.shared.windowSize.height
         var maxWidth: CGFloat = 300
         var maxHeight: CGFloat = 300
-
+        
         for window in windows {
             if let cgImage = window.image {
                 let cgSize = CGSize(width: cgImage.width, height: cgImage.height)
                 let widthBasedOnHeight = (cgSize.width * thickness) / cgSize.height
                 let heightBasedOnWidth = (cgSize.height * thickness) / cgSize.width
-
+                
                 if dockPosition == .bottom || CurrentWindow.shared.showingTabMenu {
                     maxWidth = max(maxWidth, widthBasedOnHeight)
                     maxHeight = thickness
@@ -282,10 +282,10 @@ struct HoverView: View {
                 }
             }
         }
-
+        
         return CGPoint(x: maxWidth, y: maxHeight)
     }
-
+    
     var body: some View {
         ZStack {
             ScrollViewReader { scrollProxy in
@@ -294,7 +294,7 @@ struct HoverView: View {
                         if !minimizedWindows.isEmpty {
                             minimizedWindowsView
                         }
-
+                        
                         ForEach(nonMinimizedWindows.indices, id: \.self) { index in
                             WindowPreview(windowInfo: nonMinimizedWindows[index], onTap: onWindowTap, index: index, dockPosition: dockPosition, maxWindowDimension: maxWindowDimension, bestGuessMonitor: bestGuessMonitor)
                                 .id("\(appName)-\(index)")
@@ -346,15 +346,15 @@ struct HoverView: View {
         .padding(.all, 24)
         .frame(maxWidth: self.bestGuessMonitor.visibleFrame.width, maxHeight: self.bestGuessMonitor.visibleFrame.height)
     }
-
+    
     private var minimizedWindows: [WindowInfo] {
         windows.filter { $0.isMinimized }
     }
-
+    
     private var nonMinimizedWindows: [WindowInfo] {
         windows.filter { !$0.isMinimized }
     }
-
+    
     private var minimizedWindowsView: some View {
         ScrollView(dockPosition == .bottom ? .vertical : .horizontal) {
             DynStack(direction: dockPosition == .bottom ? .vertical : .horizontal, spacing: 4) {
@@ -372,20 +372,20 @@ struct HoverView: View {
         }
         .frame(maxWidth: dockPosition != .bottom ? maxWindowDimension.x : nil, maxHeight: dockPosition == .bottom ? maxWindowDimension.y : nil)
     }
-
+    
     private func runUIUpdates() {
         self.runAnimation()
         self.loadAppIcon()
     }
-
+    
     private func runAnimation() {
         self.showWindows = false
-
+        
         withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
             showWindows = true
         }
     }
-
+    
     private func loadAppIcon() {
         if let bundleID = windows.first?.bundleID, let icon = AppIconUtil.getIcon(bundleID: bundleID) {
             DispatchQueue.main.async {
@@ -402,33 +402,33 @@ struct WindowPreview: View {
     let dockPosition: DockPosition
     let maxWindowDimension: CGPoint
     let bestGuessMonitor: NSScreen
-
+    
     @State private var isHovering = false
     @State private var isHoveringOverTabMenu = false
-
+    
     private var calculatedMaxDimensions: CGSize? {
         CGSize(width: self.bestGuessMonitor.frame.width * 0.75, height: self.bestGuessMonitor.frame.height * 0.75)
     }
-
+    
     var calculatedSize: CGSize {
         guard let cgImage = windowInfo.image else { return .zero }
-
+        
         let cgSize = CGSize(width: cgImage.width, height: cgImage.height)
         let aspectRatio = cgSize.width / cgSize.height
         let maxAllowedWidth = maxWindowDimension.x
         let maxAllowedHeight = maxWindowDimension.y
-
+        
         var targetWidth = maxAllowedWidth
         var targetHeight = targetWidth / aspectRatio
-
+        
         if targetHeight > maxAllowedHeight {
             targetHeight = maxAllowedHeight
             targetWidth = aspectRatio * targetHeight
         }
-
+        
         return CGSize(width: targetWidth, height: targetHeight)
     }
-
+    
     private func windowContent(isMinimized: Bool) -> some View {
         Group {
             if isMinimized {
@@ -438,7 +438,7 @@ struct WindowPreview: View {
                     Image(systemName: "eye.slash.fill")
                         .font(.system(size: 20))
                         .foregroundColor(.secondary)
-
+                    
                     Divider()
                     
                     VStack(alignment: .leading) {
@@ -466,11 +466,11 @@ struct WindowPreview: View {
         .frame(width: isMinimized ? nil : calculatedSize.width, height: isMinimized ? nil : calculatedSize.height, alignment: .center)
         .frame(maxWidth: calculatedMaxDimensions?.width, maxHeight: calculatedMaxDimensions?.height)
     }
-
+    
     var body: some View {
         let isHighlighted = (index == CurrentWindow.shared.currIndex && CurrentWindow.shared.showingTabMenu)
         let selected = isHovering || isHighlighted
-
+        
         ZStack(alignment: .topTrailing) {
             windowContent(isMinimized: windowInfo.isMinimized)
                 .overlay { AnimatedGradientOverlay(shouldDisplay: selected) }
@@ -481,19 +481,51 @@ struct WindowPreview: View {
                     RoundedRectangle(cornerRadius: 6, style: .continuous)
                         .fill(Color.clear.shadow(.drop(color: .black.opacity(selected ? 0.35 : 0.25), radius: selected ? 12 : 8, y: selected ? 6 : 4)))
                 }
-
+            
             if !windowInfo.isMinimized, let closeButton = windowInfo.closeButton {
-                Button(action: {
-                    WindowUtil.closeWindow(closeButton: closeButton)
-                    onTap?()
-                }) {
-                    Image(systemName: "xmark.circle.fill")
+                HStack(spacing: 6) {
+                    if let windowTitle = windowInfo.window?.title, !windowTitle.isEmpty {
+                        let maxLabelWidth = calculatedSize.width - 150
+                        let stringMeasurementWidth = measureString(windowTitle, fontSize: 12).width + 5
+                        let width = maxLabelWidth > stringMeasurementWidth ? stringMeasurementWidth : maxLabelWidth
+                        
+                        TheMarquee(width: width, secsBeforeLooping: 3, speedPtsPerSec: 30, nonMovingAlignment: .leading) {
+                            Text(windowInfo.windowName ?? "Hidden window")
+                                .font(.system(size: 12, weight: .medium))
+                                .foregroundStyle(.primary)
+                        }
+                        .padding(4)
+                        .dockStyle(cornerRadius: 4)
+                    }
+                    
+                    Spacer()
+                    
+                    Button(action: {
+                        WindowUtil.toggleMinimize(windowInfo: windowInfo)
+                        onTap?()
+                    }) {
+                        Image(systemName: "minus.circle.fill")
+                    }
+                    .buttonBorderShape(.roundedRectangle)
+                    .foregroundStyle(.yellow)
+                    .shadow(radius: 3)
+                    .buttonStyle(.plain)
+                    .font(.system(size: 14))
+                    
+                    Button(action: {
+                        WindowUtil.closeWindow(closeButton: closeButton)
+                        onTap?()
+                    }) {
+                        Image(systemName: "xmark.circle.fill")
+                    }
+                    .buttonBorderShape(.roundedRectangle)
+                    .foregroundStyle(.red)
+                    .buttonStyle(.plain)
+                    .font(.system(size: 14))
                 }
-                .buttonBorderShape(.roundedRectangle)
-                .shadow(radius: 3)
-                .padding([.top, .trailing], 8)
-                .buttonStyle(.plain)
-                .font(.system(size: 14))
+                .frame(alignment: .leading)
+                .padding(.horizontal, 6)
+                .padding(.top, 4)
             }
         }
         .scaleEffect(selected ? 1.025 : (isHoveringOverTabMenu ? 0.975 : 1))

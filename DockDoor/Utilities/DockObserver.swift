@@ -54,16 +54,22 @@ final class DockObserver {
             if type == .mouseMoved {
                 let mouseLocation = event.location
                 observer.handleMouseEvent(mouseLocation: mouseLocation)
+            } else if type == .rightMouseDown || type == .otherMouseDown {
+                HoverWindow.shared.hideWindow()
             }
 
             return Unmanaged.passUnretained(event)
         }
         
+        let eventsOfInterest: CGEventMask = (1 << CGEventType.mouseMoved.rawValue) |
+                                            (1 << CGEventType.rightMouseDown.rawValue) |
+                                            (1 << CGEventType.otherMouseDown.rawValue)
+        
         eventTap = CGEvent.tapCreate(
             tap: .cghidEventTap,
             place: .headInsertEventTap,
             options: .defaultTap,
-            eventsOfInterest: CGEventMask(1 << CGEventType.mouseMoved.rawValue),
+            eventsOfInterest: eventsOfInterest,
             callback: eventTapCallback,
             userInfo: Unmanaged.passUnretained(self).toOpaque()
         )
