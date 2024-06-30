@@ -13,6 +13,7 @@ extension Settings.PaneIdentifier {
     static let general = Self("general")
     static let permissions = Self("permissions")
     static let updates = Self("updates")
+    static let alttab = Self("alttab")
 }
 
 let GeneralSettingsViewController: () -> SettingsPane = {
@@ -22,6 +23,18 @@ let GeneralSettingsViewController: () -> SettingsPane = {
         toolbarIcon: NSImage(systemSymbolName: "gearshape.fill", accessibilityDescription: "General settings")!
     ) {
         SettingsView()
+    }
+
+    return Settings.PaneHostingController(pane: paneView)
+}
+
+let WindowSwitcherSettingsViewController: () -> SettingsPane = {
+    let paneView = Settings.Pane(
+        identifier: .alttab,
+        title: "Window Switcher",
+        toolbarIcon: NSImage(systemSymbolName: "text.and.command.macwindow", accessibilityDescription: "Windows switching settings")!
+    ) {
+        WindowSwitcherSettingsView()
     }
 
     return Settings.PaneHostingController(pane: paneView)

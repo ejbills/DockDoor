@@ -58,11 +58,7 @@ struct SizePickerView: View {
                 }
             }
             .onChange(of: sizingMultiplier) { _, newValue in
-                MessageUtil.showMessage(title: "Restart required.", message: "Please restart the application to apply your changes. Click OK to quit the app.", completion: { result in
-                    if result == .ok {
-                        quitApp()
-                    }
-                })
+                restartApplication()
             }
         }
     }

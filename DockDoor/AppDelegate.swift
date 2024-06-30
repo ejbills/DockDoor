@@ -23,6 +23,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private lazy var settingsWindowController = SettingsWindowController(
         panes: [
             GeneralSettingsViewController(),
+            WindowSwitcherSettingsViewController(),
             PermissionsSettingsViewController(),
             UpdatesSettingsViewController(updater: updaterController.updater)
         ]
@@ -40,7 +41,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         } else {
             self.configureMenuBar()
             dockObserver = DockObserver.shared
-            keybindHelper = KeybindHelper.shared
+            if Defaults[.showWindowSwitcher] {
+                keybindHelper = KeybindHelper.shared
+            }
         }
     }
 
