@@ -33,7 +33,7 @@ struct SettingsView: View {
             Toggle(isOn: $showMenuBarIcon, label: {
                 Text("Show Menu Bar Icon")
             })
-            .onChange(of: showMenuBarIcon) { _, _ in restartApplication() }
+            .onChange(of: showMenuBarIcon) { _, _ in restartApplication("If you need to access the menu bar icon, launch the app to reveal it for 10 seconds.") }
 
             SizePickerView()
             
