@@ -33,8 +33,17 @@ struct SettingsView: View {
             Toggle(isOn: $showMenuBarIcon, label: {
                 Text("Show Menu Bar Icon")
             })
-            .onChange(of: showMenuBarIcon) { _, _ in restartApplication() }
-
+            .onChange(of: showMenuBarIcon) { _, isOn in
+                if !isOn {
+                    let alert = NSAlert()
+                    alert.messageText = "Menu Bar Icon Hidden"
+                    alert.informativeText = "If you need to access the menu bar icon, launch the app to reveal it for 10 seconds."
+                    alert.alertStyle = .informational
+                    alert.runModal()
+                }
+                restartApplication()
+            }
+            
             SizePickerView()
             
             HStack {
