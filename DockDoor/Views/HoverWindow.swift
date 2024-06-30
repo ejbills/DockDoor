@@ -523,7 +523,7 @@ struct WindowPreview: View {
                     .buttonBorderShape(.roundedRectangle)
                     .foregroundStyle(.red)
                     .buttonStyle(.plain)
-                    .font(.system(size: 14))
+                    .font(.system(size: 13))
                     
                     Button(action: {
                         WindowUtil.toggleMinimize(windowInfo: windowInfo)
@@ -539,7 +539,7 @@ struct WindowPreview: View {
                     .foregroundStyle(.yellow)
                     .shadow(radius: 3)
                     .buttonStyle(.plain)
-                    .font(.system(size: 14))
+                    .font(.system(size: 13))
                     
                     Spacer()
                     
