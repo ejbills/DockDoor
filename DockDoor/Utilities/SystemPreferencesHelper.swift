@@ -13,6 +13,6 @@ class SystemPreferencesHelper {
     }
 
     static func openScreenRecordingPreferences() {
-        NSWorkspace.shared.open(URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_ScreenRecording")!)
+        NSWorkspace.shared.open(URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_ScreenCapture")!)
     }
 }
