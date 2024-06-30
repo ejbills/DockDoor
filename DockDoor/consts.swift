@@ -24,12 +24,8 @@ extension Defaults.Keys {
     static let showMenuBarIcon = Key<Bool>("showMenuBarIcon", default: true)
     static let defaultCMDTABKeybind = Key<Bool>("defaultCMDTABKeybind") { true }
     static let launched = Key<Bool>("launched") { false }
-}
-
-
-extension CGEventFlags {
-    static let Int64maskCommand: Int = 1048840
-    static let Int64maskControl: Int = 262401
-    static let Int64maskAlternate: Int = 524576
-    static let Int64maskAlphaShift: Int = 65792
+    static let Int64maskCommand = Key<Int>("Int64maskCommand") { 1048840 }
+    static let Int64maskControl = Key<Int>("Int64maskControl") { 262401 }
+    static let Int64maskAlternate = Key<Int>("Int64maskAlternate") { 524576 }
+    
 }

@@ -39,6 +39,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         if !Defaults[.launched] {
             handleFirstTimeLaunch()
+            UserDefaults.standard.registerDefaultShortcut()
         } else {
             self.setupMenuBar()
             

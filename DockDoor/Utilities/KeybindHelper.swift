@@ -12,24 +12,24 @@ import Defaults
 struct UserKeyboardShortcut: Codable {
     var keyCode: UInt16
     var modifierFlags: Int
-
+    
     enum CodingKeys: String, CodingKey {
         case keyCode
         case modifierFlags
     }
-
+    
     init(keyCode: UInt16, modifierFlags: Int) {
-        self.keyCode = !Defaults[.defaultCMDTABKeybind] ? keyCode : 48
-        self.modifierFlags = !Defaults[.defaultCMDTABKeybind] ? modifierFlags : CGEventFlags.Int64maskAlphaShift
+        self.keyCode = keyCode
+        self.modifierFlags = modifierFlags
     }
-
+    
     // Encoder
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(keyCode, forKey: .keyCode)
         try container.encode(modifierFlags, forKey: .modifierFlags)
     }
-
+    
     // Decoder
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -40,7 +40,7 @@ struct UserKeyboardShortcut: Codable {
 }
 extension UserDefaults {
     private enum Keys {
-        static let keyboardShortcut = "Some shortcut"
+        static let keyboardShortcut = "None"
     }
     
     func saveKeyboardShortcut(_ shortcut: UserKeyboardShortcut) {
@@ -59,26 +59,33 @@ extension UserDefaults {
         }
         return nil
     }
+    
+    func registerDefaultShortcut() {
+        if Keys.keyboardShortcut == "None" {
+            let defaultShortcut = UserKeyboardShortcut(keyCode: 48, modifierFlags: Defaults[.Int64maskControl])
+            self.saveKeyboardShortcut(defaultShortcut)
+        }
+    }
 }
 
 
 class KeybindHelper {
     static let shared = KeybindHelper()
-
+    
     private var isCommandKeyPressed = false
     private var isShiftKeyPressed = false
     private var isUserDefinedModifierPressed = false
     private var eventTap: CFMachPort?
     private var runLoopSource: CFRunLoopSource?
-
+    
     private init() {
         setupEventTap()
     }
-
+    
     deinit {
         removeEventTap()
     }
-
+    
     private func setupEventTap() {
         let eventMask = (1 << CGEventType.keyDown.rawValue) | (1 << CGEventType.keyUp.rawValue) | (1 << CGEventType.flagsChanged.rawValue)
         
@@ -102,7 +109,7 @@ class KeybindHelper {
         CFRunLoopAddSource(CFRunLoopGetCurrent(), runLoopSource, .commonModes)
         CGEvent.tapEnable(tap: eventTap, enable: true)
     }
-
+    
     private func removeEventTap() {
         if let eventTap = eventTap, let runLoopSource = runLoopSource {
             CGEvent.tapEnable(tap: eventTap, enable: false)
@@ -111,16 +118,16 @@ class KeybindHelper {
             self.runLoopSource = nil
         }
     }
-
+    
     private func handleEvent(proxy: CGEventTapProxy, type: CGEventType, event: CGEvent) -> Unmanaged<CGEvent>? {
         let keyCode = event.getIntegerValueField(.keyboardEventKeycode)
         let keyBoardShortcutSaved: UserKeyboardShortcut = UserDefaults.standard.getKeyboardShortcut()!
         let modifierFlags = event.flags.rawValue //NSEvent.ModifierFlags(rawValue: UInt(event.flags.rawValue))
-
-            if ((type == .flagsChanged) && (!Defaults[.defaultCMDTABKeybind])){
+        
+        if ((type == .flagsChanged) && (!Defaults[.defaultCMDTABKeybind])){
             // New Keybind that the user has enforced, includes the modifier keys
             let userDefinedKeyCurrentlyPressed = event.flags.contains(.maskControl) ||
-            event.flags.contains(.maskAlphaShift) ||			
+            event.flags.contains(.maskAlphaShift) ||
             event.flags.contains(.maskAlternate)
             let shiftKeyCurrentlyPressed = event.flags.contains(.maskShift)
             
@@ -139,11 +146,11 @@ class KeybindHelper {
         }
         else if ((type == .flagsChanged) && (Defaults[.defaultCMDTABKeybind])){
             // Default MacOS CMD + TAB keybind replaced
-        
+            
             let modifierFlags = event.flags
             let commandKeyCurrentlyPressed = modifierFlags.contains(.maskCommand)
             let shiftKeyCurrentlyPressed = modifierFlags.contains(.maskShift)
-
+            
             if commandKeyCurrentlyPressed != isCommandKeyPressed {
                 isCommandKeyPressed = commandKeyCurrentlyPressed
             }
@@ -152,14 +159,14 @@ class KeybindHelper {
             if shiftKeyCurrentlyPressed != isShiftKeyPressed {
                 isShiftKeyPressed = shiftKeyCurrentlyPressed
             }
-
+            
             if !isCommandKeyPressed {  // If CMD was released
                 HoverWindow.shared.hideWindow()  // Hide the HoverWindow
                 HoverWindow.shared.selectAndBringToFrontCurrentWindow()
             }
         }
         else if (type == .keyDown){
-                if (((keyBoardShortcutSaved.modifierFlags == modifierFlags) && (keyCode == keyBoardShortcutSaved.keyCode)) || (Defaults[.defaultCMDTABKeybind] && keyCode == 48)) {  // Tab key
+            if (((keyBoardShortcutSaved.modifierFlags == modifierFlags) && (keyCode == keyBoardShortcutSaved.keyCode)) || (Defaults[.defaultCMDTABKeybind] && keyCode == 48)) {  // Tab key
                 if HoverWindow.shared.isVisible {  // Check if HoverWindow is already shown
                     HoverWindow.shared.cycleWindows(goBackwards: isShiftKeyPressed)  // Cycle windows based on Shift key state
                 } else {
@@ -168,10 +175,10 @@ class KeybindHelper {
                 return nil  // Suppress the Tab key event
             }
         }
-
+        
         return Unmanaged.passUnretained(event)
     }
-
+    
     private func showHoverWindow() {
         Task { [weak self] in
             do {

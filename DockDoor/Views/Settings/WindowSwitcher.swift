@@ -40,7 +40,7 @@ struct WindowSwitcherSettingsView: View {
 }
 
 struct ModifierKeyPickerView : View {
-    @State var modifierKey : Int = CGEventFlags.Int64maskAlphaShift //NSEvent.ModifierFlags.RawValue = NSEvent.ModifierFlags.command.rawValue
+    @State var modifierKey : Int = Defaults[.Int64maskControl] //NSEvent.ModifierFlags.RawValue = NSEvent.ModifierFlags.command.rawValue
     @State var isRecording : Bool = false
     @State private var currentShortcut : UserKeyboardShortcut? {
         didSet {
@@ -54,10 +54,9 @@ struct ModifierKeyPickerView : View {
     var body: some View {
         VStack(spacing: 20) {
             Picker("Modifier Key", selection: $modifierKey) {
-                Text("Control (⌃)").tag(CGEventFlags.Int64maskControl)
-                Text("Option (⌥)").tag(CGEventFlags.Int64maskAlternate)
-                Text("Caps Lock").tag(CGEventFlags.Int64maskAlphaShift)
-                Text("Command (⌘)").tag(CGEventFlags.Int64maskCommand)
+                Text("Control (⌃)").tag(Defaults[.Int64maskControl])
+                Text("Option (⌥)").tag(Defaults[.Int64maskAlternate])
+                Text("Command (⌘)").tag(Defaults[.Int64maskCommand])
             }
             .pickerStyle(SegmentedPickerStyle())
             Text("Press any key combination to set the keybind").padding()
@@ -79,17 +78,14 @@ struct ModifierKeyPickerView : View {
         
         var parts: [String] = []
         
-        if shortcut.modifierFlags == CGEventFlags.Int64maskCommand {
+        if shortcut.modifierFlags == Defaults[.Int64maskCommand] {
             parts.append("⌘")
         }
-        if shortcut.modifierFlags == Int(CGEventFlags.Int64maskAlternate) {
+        if shortcut.modifierFlags == Int(Defaults[.Int64maskAlternate]) {
             parts.append("⌥")
         }
-        if shortcut.modifierFlags == CGEventFlags.Int64maskControl {
+        if shortcut.modifierFlags == Defaults[.Int64maskControl] {
             parts.append("⌃")
-        }
-        if shortcut.modifierFlags == CGEventFlags.Int64maskAlphaShift {
-            parts.append("Caps Lock")
         }
         
         parts.append(String(describing: KeyCodeConverter.string(from: shortcut.keyCode)))
@@ -111,10 +107,10 @@ struct ShortcutCaptureView: NSViewRepresentable {
                 return event
             }
             self.isRecording = false
-            if (event.keyCode == 48) && ( modifierKey == 1048840){
+            if (event.keyCode == 48) && ( modifierKey == Defaults[.Int64maskCommand]){
                 // Set the default CMDTAB
                 Defaults[.defaultCMDTABKeybind] = true
-                let newShortcut = UserKeyboardShortcut(keyCode: 48, modifierFlags: 65792)
+                let newShortcut = UserKeyboardShortcut(keyCode: 48, modifierFlags: Defaults[.Int64maskControl])
                 self.currentShortcut = newShortcut
                 UserDefaults.standard.saveKeyboardShortcut(newShortcut)
                 return event
