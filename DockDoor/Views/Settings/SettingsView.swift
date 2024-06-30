@@ -33,7 +33,11 @@ struct SettingsView: View {
             Toggle(isOn: $showMenuBarIcon, label: {
                 Text("Show Menu Bar Icon")
             })
-            .onChange(of: showMenuBarIcon) { _, _ in restartApplication("If you need to access the menu bar icon, launch the app to reveal it for 10 seconds.") }
+            .onChange(of: showMenuBarIcon) { _, isOn in 
+                if !isOn {
+                    MessageUtil.showMessage(title: "Menu Bar Icon Hidden", message: "If you need to access the menu bar icon, launch the app to reveal it for 10 seconds. Will take effect on next launch.", completion: { _ in })
+                }
+            }
 
             SizePickerView()
             

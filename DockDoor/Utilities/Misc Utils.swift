@@ -13,8 +13,8 @@ func quitApp() {
     NSApplication.shared.terminate(nil)
 }
 
-func restartApplication (_ withBeginning: String = "")-> Void {
-    MessageUtil.showMessage(title: "Restart required.", message: "\(withBeginning) Please restart the application to apply your changes. Click OK to quit the app.", completion: { result in
+func restartApplication ()-> Void {
+    MessageUtil.showMessage(title: "Restart required.", message: "Please restart the application to apply your changes. Click OK to quit the app.", completion: { result in
         if result == .ok {
             quitApp()
         }})
