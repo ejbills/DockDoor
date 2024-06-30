@@ -39,7 +39,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if !Defaults[.launched] {
             handleFirstTimeLaunch()
         } else {
-            self.configureMenuBar()
+            self.setupMenuBar()
+            
+            // Schedule a timer to remove the menu bar icon after 10 seconds if it's turned off
+            if !Defaults[.showMenuBarIcon], let statusBarItem = statusBarItem {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
+                    self.updateMenuBarIconStatus()
+                }
+            }
+            
             dockObserver = DockObserver.shared
             if Defaults[.showWindowSwitcher] {
                 keybindHelper = KeybindHelper.shared
@@ -47,11 +55,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
     
-    private func configureMenuBar() {
+    private func setupMenuBar() {
+        guard statusBarItem == nil else { return }
         // Show the menu bar icon initially
         NSApp.setActivationPolicy(.accessory)
         NSApp.activate(ignoringOtherApps: false)
-        NSApp.hide(nil)
         
         let icon = NSImage(systemSymbolName: "door.right.hand.open", accessibilityDescription: nil)!
         statusBarItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
@@ -73,11 +81,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             menu.addItem(quitMenuItem)
             
             button.menu = menu
-        }
-        
-        // Schedule a timer to remove the menu bar icon after 10 seconds if it's turned off
-        DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
-            self.removeMenuBarIconIfNeeded()
         }
     }
     
@@ -129,10 +132,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         settingsWindow?.setContentSize(preferredSize)
     }
     
-    private func removeMenuBarIconIfNeeded() {
-        if !Defaults[.showMenuBarIcon], let statusBarItem = statusBarItem {
-            NSStatusBar.system.removeStatusItem(statusBarItem)
-            self.statusBarItem = nil
+    private func removeMenuBarIcon() {
+        guard let statusBarItem = statusBarItem else { return }
+        NSStatusBar.system.removeStatusItem(statusBarItem)
+        self.statusBarItem = nil
+    }
+    
+    func updateMenuBarIconStatus(){
+        if Defaults[.showMenuBarIcon] {
+            setupMenuBar()
+        } else {
+            removeMenuBarIcon()
         }
     }
 }
