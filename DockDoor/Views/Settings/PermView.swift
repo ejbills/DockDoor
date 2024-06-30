@@ -100,7 +100,8 @@ struct PermView: View {
 
             Spacer()
         }
-        .padding(20)
+        .padding([.top, .leading, .trailing], 20)
+        .frame(minWidth: 600)
     }
     
     private func openAccessibilityPreferences() {

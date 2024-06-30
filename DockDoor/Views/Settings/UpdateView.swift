@@ -56,5 +56,6 @@ struct CheckForUpdatesView: View {
             Spacer()
         }
         .padding(20)
+        .frame(minWidth: 600)
     }
 }
