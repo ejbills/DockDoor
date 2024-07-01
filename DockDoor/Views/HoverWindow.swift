@@ -541,6 +541,23 @@ struct WindowPreview: View {
                     .buttonStyle(.plain)
                     .font(.system(size: 13))
                     
+                    Button(action: {
+                        WindowUtil.toggleFullScreen(windowInfo: windowInfo)
+                        onTap?()
+                    }) {
+                        ZStack {
+                            Image(systemName: "circle.fill")
+                                .foregroundStyle(.secondary)
+                            Image(systemName: "arrow.up.left.and.arrow.down.right.circle")
+                        }
+                    }
+                    .buttonBorderShape(.roundedRectangle)
+                    .foregroundStyle(.green)
+                    .shadow(radius: 3)
+                    .buttonStyle(.plain)
+                    .font(.system(size: 13))
+                    
+                    
                     Spacer()
                     
                     if let windowTitle = windowInfo.window?.title, !windowTitle.isEmpty {
