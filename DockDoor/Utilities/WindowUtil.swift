@@ -183,6 +183,19 @@ final class WindowUtil {
         }
     }
     
+    /// Toggles the full-screen state of a window.
+    static func toggleFullScreen(windowInfo: WindowInfo) {
+        let kAXFullscreenAttribute = "AXFullScreen" as CFString
+        var isCurrentlyInFullScreen: CFTypeRef?
+        
+        let currentState = AXUIElementCopyAttributeValue(windowInfo.axElement, kAXFullscreenAttribute, &isCurrentlyInFullScreen)
+        if currentState == .success {
+            if let isFullScreen = isCurrentlyInFullScreen as? Bool {
+                AXUIElementSetAttributeValue(windowInfo.axElement, kAXFullscreenAttribute, !isFullScreen as CFBoolean)
+            }
+        }
+    }
+    
     /// Brings a window to the front and focuses it.
     static func bringWindowToFront(windowInfo: WindowInfo) {
         let raiseResult = AXUIElementPerformAction(windowInfo.axElement, kAXRaiseAction as CFString)
