@@ -543,7 +543,7 @@ struct WindowPreview: View {
                     
                     Spacer()
                     
-                    if let windowTitle = windowInfo.window?.title, !windowTitle.isEmpty {
+                    if let windowTitle = windowInfo.window?.title, !windowTitle.isEmpty, windowTitle != windowInfo.appName {
                         let maxLabelWidth = calculatedSize.width - 150
                         let stringMeasurementWidth = measureString(windowTitle, fontSize: 12).width + 5
                         let width = maxLabelWidth > stringMeasurementWidth ? stringMeasurementWidth : maxLabelWidth
