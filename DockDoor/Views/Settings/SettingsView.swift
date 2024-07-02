@@ -56,7 +56,7 @@ struct SettingsView: View {
             }
             
             HStack {
-                Text("Window Cache Lifespan: \(screenCaptureCacheLifespan, specifier: "%.2f") seconds")
+                Text("Window Cache Lifespan: \(screenCaptureCacheLifespan, specifier: "%.0f") seconds")
                 Spacer()
                 Slider(value: $screenCaptureCacheLifespan, in: 0...60, step: 5)
             }
