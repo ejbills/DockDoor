@@ -82,7 +82,7 @@ struct SizePickerView: View {
                 }
             }
             .onChange(of: sizingMultiplier) { _, newValue in
-                restartApplication()
+                HoverWindow.shared.windowSize = getWindowSize()
             }
         }
     }
