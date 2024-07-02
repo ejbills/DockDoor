@@ -68,11 +68,7 @@ final class WindowUtil {
         if let cachedImage = getCachedImage(window: window) {
             return cachedImage
         }
-        
-        guard CGPreflightScreenCaptureAccess() else {
-            throw NSError(domain: "com.dockdoor.permission", code: 2, userInfo: [NSLocalizedDescriptionKey: "Screen recording permission not granted"])
-        }
-        
+
         let filter = SCContentFilter(desktopIndependentWindow: window)
         let config = SCStreamConfiguration()
         
