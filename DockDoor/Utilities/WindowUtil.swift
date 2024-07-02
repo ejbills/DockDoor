@@ -8,6 +8,7 @@
 import Cocoa
 import ApplicationServices
 import ScreenCaptureKit
+import Defaults
 
 let filteredBundleIdentifiers: [String] = ["com.apple.notificationcenterui"] // filters widgets
 
@@ -39,7 +40,7 @@ struct CachedAppIcon {
 final class WindowUtil {
     private static var imageCache: [CGWindowID: CachedImage] = [:]
     private static let cacheQueue = DispatchQueue(label: "com.dockdoor.cacheQueue", attributes: .concurrent)
-    private static var cacheExpirySeconds: Double = 60 // 1 min
+    private static var cacheExpirySeconds: Double = Defaults[.screenCaptureCacheLifespan]
     
     // MARK: - Cache Management
     
@@ -61,23 +62,39 @@ final class WindowUtil {
     // MARK: - Helper Functions
     
     /// Captures the image of a given window.
-    static func captureWindowImage(windowInfo: WindowInfo) async throws -> CGImage {
+    static func captureWindowImage(window: SCWindow) async throws -> CGImage {
         clearExpiredCache()
-        return try cacheQueue.sync(flags: .barrier) {
-            if let cachedImage = imageCache[windowInfo.id], Date().timeIntervalSince(cachedImage.timestamp) <= cacheExpirySeconds {
-                return cachedImage.image
-            }
-            guard CGPreflightScreenCaptureAccess() else {
-                throw NSError(domain: "com.dockdoor.permission", code: 2, userInfo: [NSLocalizedDescriptionKey: "Screen recording permission not granted"])
-            }
-            guard let frame = windowInfo.window?.frame,
-                  let image = CGWindowListCreateImage(frame, .optionIncludingWindow, windowInfo.id, [.boundsIgnoreFraming, .bestResolution]) else {
-                throw NSError(domain: "com.dockdoor.error", code: 1, userInfo: [NSLocalizedDescriptionKey: "Failed to capture window image"])
-            }
-            let cachedImage = CachedImage(image: image, timestamp: Date())
-            imageCache[windowInfo.id] = cachedImage
-            return image
+        
+        if let cachedImage = getCachedImage(window: window) {
+            return cachedImage
         }
+        
+        guard CGPreflightScreenCaptureAccess() else {
+            throw NSError(domain: "com.dockdoor.permission", code: 2, userInfo: [NSLocalizedDescriptionKey: "Screen recording permission not granted"])
+        }
+        
+        let filter = SCContentFilter(desktopIndependentWindow: window)
+        let config = SCStreamConfiguration()
+        
+        // Configure the stream to capture only the window content
+        config.width = Int(window.frame.width)
+        config.height = Int(window.frame.height)
+        config.showsCursor = false
+        config.captureResolution = .best
+        
+        let image = try await SCScreenshotManager.captureImage(contentFilter: filter, configuration: config)
+        
+        let cachedImage = CachedImage(image: image, timestamp: Date())
+        imageCache[window.windowID] = cachedImage
+        
+        return image
+    }
+    
+    private static func getCachedImage(window: SCWindow) -> CGImage? {
+        if let cachedImage = imageCache[window.windowID], Date().timeIntervalSince(cachedImage.timestamp) <= cacheExpirySeconds {
+            return cachedImage.image
+        }
+        return nil
     }
     
     /// Creates an AXUIElement for a given process ID.
@@ -373,10 +390,8 @@ final class WindowUtil {
                                     isMinimized: false)
         
         do {
-            windowInfo.image = try await captureWindowImage(windowInfo: windowInfo)
+            windowInfo.image = try await captureWindowImage(window: window)
             return windowInfo
-        } catch {
-            return nil
         }
     }
 }

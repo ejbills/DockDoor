@@ -548,7 +548,7 @@ struct WindowPreview: View {
                         ZStack {
                             Image(systemName: "circle.fill")
                                 .foregroundStyle(.secondary)
-                            Image(systemName: "arrow.up.left.and.arrow.down.right.circle")
+                            Image(systemName: "arrow.up.left.and.arrow.down.right.circle.fill")
                         }
                     }
                     .buttonBorderShape(.roundedRectangle)

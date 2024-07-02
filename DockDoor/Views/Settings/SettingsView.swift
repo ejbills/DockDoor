@@ -11,6 +11,7 @@ import LaunchAtLogin
 
 struct SettingsView: View {
     @Default(.openDelay) var openDelay
+    @Default(.screenCaptureCacheLifespan) var screenCaptureCacheLifespan
     @Default(.showAnimations) var showAnimations
     @Default(.showMenuBarIcon) var showMenuBarIcon
     
@@ -52,6 +53,12 @@ struct SettingsView: View {
                 Text("Hover Window Open Delay: \(openDelay, specifier: "%.2f") seconds")
                 Spacer()
                 Slider(value: $openDelay, in: 0...2, step: 0.1)
+            }
+            
+            HStack {
+                Text("Window Cache Lifespan: \(screenCaptureCacheLifespan, specifier: "%.2f") seconds")
+                Spacer()
+                Slider(value: $screenCaptureCacheLifespan, in: 0...60, step: 5)
             }
         }
         .padding(20)
