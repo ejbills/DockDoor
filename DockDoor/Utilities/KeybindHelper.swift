@@ -56,15 +56,21 @@ extension UserDefaults {
             if let savedShortcut = try? decoder.decode(UserKeyboardShortcut.self, from: savedShortcutData){
                 return savedShortcut
             }
+        } else {
+            return self.registerDefaultShortcut()
         }
+        
         return nil
     }
     
-    func registerDefaultShortcut() {
+    func registerDefaultShortcut() -> UserKeyboardShortcut? {
         if Keys.keyboardShortcut == "None" {
             let defaultShortcut = UserKeyboardShortcut(keyCode: 48, modifierFlags: Defaults[.Int64maskControl])
             self.saveKeyboardShortcut(defaultShortcut)
+            return defaultShortcut
         }
+        
+        return nil
     }
 }
 
