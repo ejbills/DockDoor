@@ -509,7 +509,7 @@ struct WindowPreview: View {
                 }
             
             if !windowInfo.isMinimized, let closeButton = windowInfo.closeButton {
-                HStack(spacing: 6) {
+                HStack(alignment:.top, spacing: 6) {
                     Button(action: {
                         WindowUtil.closeWindow(closeButton: closeButton)
                         onTap?()
@@ -557,10 +557,9 @@ struct WindowPreview: View {
                     .buttonStyle(.plain)
                     .font(.system(size: 13))
                     
-                    
                     Spacer()
                     
-                    if let windowTitle = windowInfo.window?.title, !windowTitle.isEmpty, windowTitle != windowInfo.appName {
+                    if selected, let windowTitle = windowInfo.window?.title, !windowTitle.isEmpty, windowTitle != windowInfo.appName {
                         let maxLabelWidth = calculatedSize.width - 150
                         let stringMeasurementWidth = measureString(windowTitle, fontSize: 12).width + 5
                         let width = maxLabelWidth > stringMeasurementWidth ? stringMeasurementWidth : maxLabelWidth
@@ -575,11 +574,9 @@ struct WindowPreview: View {
                     }
                 }
                 .frame(alignment: .leading)
-                .padding(.horizontal, 6)
-                .padding(.top, 4)
+                .padding([.horizontal, .top], 6)
             }
         }
-        .scaleEffect(selected ? 1.025 : (isHoveringOverTabMenu ? 0.975 : 1))
         .contentShape(Rectangle())
         .onHover { over in
             withAnimation(.snappy(duration: 0.175)) {
