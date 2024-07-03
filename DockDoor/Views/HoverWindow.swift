@@ -520,8 +520,8 @@ struct WindowPreview: View {
                             Image(systemName: "power.circle.fill")
                         }
                     }
-                    .buttonBorderShape(.roundedRectangle)
                     .foregroundStyle(.purple)
+                    .shadow(radius: 3)
                     .buttonStyle(.plain)
                     .font(.system(size: 13))
                     
@@ -529,14 +529,11 @@ struct WindowPreview: View {
                         WindowUtil.closeWindow(closeButton: closeButton)
                         onTap?()
                     }) {
-                        ZStack {
-                            Image(systemName: "circle.fill")
-                                .foregroundStyle(.secondary)
-                            Image(systemName: "xmark.circle.fill")
-                        }
+                        Image(systemName: "xmark.circle.fill")
+                            .contentShape(Rectangle())
                     }
-                    .buttonBorderShape(.roundedRectangle)
                     .foregroundStyle(.red)
+                    .shadow(radius: 3)
                     .buttonStyle(.plain)
                     .font(.system(size: 13))
                     
@@ -544,13 +541,9 @@ struct WindowPreview: View {
                         WindowUtil.toggleMinimize(windowInfo: windowInfo)
                         onTap?()
                     }) {
-                        ZStack {
-                            Image(systemName: "circle.fill")
-                                .foregroundStyle(.secondary)
-                            Image(systemName: "minus.circle.fill")
-                        }
+                        Image(systemName: "minus.circle.fill")
+                            .contentShape(Rectangle())
                     }
-                    .buttonBorderShape(.roundedRectangle)
                     .foregroundStyle(.yellow)
                     .shadow(radius: 3)
                     .buttonStyle(.plain)
@@ -560,13 +553,9 @@ struct WindowPreview: View {
                         WindowUtil.toggleFullScreen(windowInfo: windowInfo)
                         onTap?()
                     }) {
-                        ZStack {
-                            Image(systemName: "circle.fill")
-                                .foregroundStyle(.secondary)
-                            Image(systemName: "arrow.up.left.and.arrow.down.right.circle.fill")
-                        }
+                        Image(systemName: "arrow.up.left.and.arrow.down.right.circle.fill")
+                            .contentShape(Rectangle())
                     }
-                    .buttonBorderShape(.roundedRectangle)
                     .foregroundStyle(.green)
                     .shadow(radius: 3)
                     .buttonStyle(.plain)
