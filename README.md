@@ -12,7 +12,12 @@ DockDoor is a macOS application developed with Swift and SwiftUI that allows use
   - Ctrl + Tab to open the menu, continue pressing tab to increment forwards, shift + tab to go back. Letting go of control will select the window.
 - **How do I use the dock peeking functionality?**
   - Simply hover over any application with active windows in the dock.
-
+- **What are the traffic light buttons that appear in the preview window?**
+  - 🟣 Quit the window's app. You can hold the Option (⌥) key while clicking to **force** quit.
+  - 🔴 Close the window
+  - 🟡 Minimize the window
+  - 🟢 Enter the window to full screen
+  
 ## Installation (for contributors)
 
 ### Prerequisites
@@ -51,4 +56,6 @@ Contributions to DockDoor are welcome! Here’s how you can get started:
 
 **Help**
 - I disabled the menu bar icon and now I can't access settings
-- - When DockDoor initially opens, the menu icon will be visible for 10 seconds, until it disappears. This way, you can access the settings even with the icon disabled. Just relaunch the app and click it before it disappears.
+  - When DockDoor initially opens, the menu icon will be visible for 10 seconds, until it disappears. This way, you can access the settings even with the icon disabled. Just relaunch the app and click it before it disappears.
+- I click on the purple quit button in the preview and the app doesn't close
+  - You can hold the Option (⌥) key while clicking to force quit.
