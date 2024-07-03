@@ -64,6 +64,12 @@ final class HoverWindow: NSWindow {
     func hideWindow() {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
+            
+            // Check if the window is already hidden
+            if !self.isVisible {
+                return
+            }
+            
             self.contentView = nil
             self.hostingView = nil
             self.appName = ""
