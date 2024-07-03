@@ -73,6 +73,11 @@ final class WindowUtil {
         let config = SCStreamConfiguration()
         
         // Configure the stream to capture only the window content
+        config.scalesToFit = true
+        config.ignoreGlobalClipDisplay = true
+        config.ignoreShadowsDisplay = true
+        config.shouldBeOpaque = true
+        if #available(macOS 14.2, *) { config.includeChildWindows = false }
         config.width = Int(window.frame.width)
         config.height = Int(window.frame.height)
         config.showsCursor = false
@@ -364,18 +369,19 @@ final class WindowUtil {
     /// Fetches detailed information for a given SCWindow.
     private static func fetchWindowInfo(window: SCWindow, applicationName: String) async throws -> WindowInfo? {
         let windowID = window.windowID
-        
-        guard let windowInfoDict = CGWindowListCopyWindowInfo(.optionIncludingWindow, windowID) as? [[String: AnyObject]],
-              let windowLayer = windowInfoDict.first?[kCGWindowLayer as String] as? Int,
-              let windowAlpha = windowInfoDict.first?[kCGWindowAlpha as String] as? Double,
-              let owningApplication = window.owningApplication else {
+                
+        guard let owningApplication = window.owningApplication,
+              let title = window.title, !title.isEmpty,
+              window.isOnScreen,
+              window.windowLayer == 0,
+              window.frame.origin.x >= 0,
+              window.frame.origin.y >= 0,
+              window.frame.size.width >= 0,
+              window.frame.size.height >= 0,
+              !filteredBundleIdentifiers.contains(owningApplication.bundleIdentifier) else {
             return nil
         }
-        
-        if windowLayer > 1 || windowAlpha <= 0 || filteredBundleIdentifiers.contains(owningApplication.bundleIdentifier) {
-            return nil
-        }
-        
+                
         let pid = owningApplication.processID
         
         let appRef = createAXUIElement(for: pid)
@@ -392,7 +398,6 @@ final class WindowUtil {
             print("Failed to find matching AX window")
             return nil
         }
-        
         
         let closeButton = getCloseButton(for: windowRef)
         
