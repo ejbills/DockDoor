@@ -8,6 +8,7 @@
 import Cocoa
 import SwiftUI
 import Defaults
+import FluidGradient
 
 @Observable class CurrentWindow {
     static let shared = CurrentWindow()
@@ -505,7 +506,11 @@ struct WindowPreview: View {
         
         ZStack(alignment: .topTrailing) {
             windowContent(isMinimized: windowInfo.isMinimized)
-                .overlay { AnimatedGradientOverlay(shouldDisplay: selected) }
+                .overlay { if selected { FluidGradient(blobs: [.purple, .blue, .green, .yellow, .red, .purple].shuffled(),
+                                                       highlights: [.red, .orange, .pink, .blue, .purple].shuffled(),
+                                                       speed: 0.45,
+                                                       blur: 0.75).opacity(0.125)
+                }}
                 .overlay { Color.white.opacity(isHoveringOverTabMenu ? 0.1 : 0) }
                 .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
                 .shadow(radius: selected || isHoveringOverTabMenu ? 0 : 3)

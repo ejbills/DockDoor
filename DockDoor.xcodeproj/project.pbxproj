@@ -25,6 +25,7 @@
 		BB3968002C2A6C44004F1AB6 /* SmoothGradient in Frameworks */ = {isa = PBXBuildFile; productRef = BB3967FF2C2A6C44004F1AB6 /* SmoothGradient */; };
 		BB3968022C2A6CC2004F1AB6 /* Marquee.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3968012C2A6CC2004F1AB6 /* Marquee.swift */; };
 		BB6A4F1C2C1CFCFF00CB4C9E /* PermView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6A4F1B2C1CFCFF00CB4C9E /* PermView.swift */; };
+		BB77F2282C35D27D00BD315A /* FluidGradient in Frameworks */ = {isa = PBXBuildFile; productRef = BB77F2272C35D27D00BD315A /* FluidGradient */; };
 		BB7CA33D2C31F1B00012E303 /* WindowClosureObservers.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB7CA33C2C31F1B00012E303 /* WindowClosureObservers.swift */; };
 		BBA153F62C115DDA00119C02 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA153F52C115DDA00119C02 /* AppDelegate.swift */; };
 		BBA153F82C11604400119C02 /* HoverWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA153F72C11604400119C02 /* HoverWindow.swift */; };
@@ -34,7 +35,6 @@
 		BBE7CC8F2C22421900AB8F4D /* Settings in Frameworks */ = {isa = PBXBuildFile; productRef = BBE7CC8E2C22421900AB8F4D /* Settings */; };
 		BBE7CC912C22429A00AB8F4D /* settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE7CC902C22429A00AB8F4D /* settings.swift */; };
 		BBE7CC942C225D9700AB8F4D /* App Icon.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE7CC932C225D9700AB8F4D /* App Icon.swift */; };
-		BBF6C6222C1A9B4300BF1D40 /* AnimatedGradientOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF6C6212C1A9B4300BF1D40 /* AnimatedGradientOverlay.swift */; };
 		BBF6C6242C1B4B4400BF1D40 /* KeybindHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF6C6232C1B4B4400BF1D40 /* KeybindHelper.swift */; };
 		BBFAD73A2C287A9C0092F5F1 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = BBFAD7392C287A9C0092F5F1 /* Sparkle */; };
 		BBFAD73C2C287C770092F5F1 /* UpdateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBFAD73B2C287C770092F5F1 /* UpdateView.swift */; };
@@ -68,7 +68,6 @@
 		BBCFAE3F2C266234002E1516 /* FirstTimeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstTimeView.swift; sourceTree = "<group>"; };
 		BBE7CC902C22429A00AB8F4D /* settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = settings.swift; sourceTree = "<group>"; };
 		BBE7CC932C225D9700AB8F4D /* App Icon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "App Icon.swift"; sourceTree = "<group>"; };
-		BBF6C6212C1A9B4300BF1D40 /* AnimatedGradientOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedGradientOverlay.swift; sourceTree = "<group>"; };
 		BBF6C6232C1B4B4400BF1D40 /* KeybindHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeybindHelper.swift; sourceTree = "<group>"; };
 		BBFAD73B2C287C770092F5F1 /* UpdateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateView.swift; sourceTree = "<group>"; };
 		C119BDF02C2AEDBA00E06E18 /* DockDoorDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DockDoorDebug.entitlements; sourceTree = "<group>"; };
@@ -81,6 +80,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BB33E68C2C24C72F00A21D69 /* LaunchAtLogin in Frameworks */,
+				BB77F2282C35D27D00BD315A /* FluidGradient in Frameworks */,
 				BBFAD73A2C287A9C0092F5F1 /* Sparkle in Frameworks */,
 				BB3968002C2A6C44004F1AB6 /* SmoothGradient in Frameworks */,
 				BB1CBD5B2C1BA8DC003969BC /* Defaults in Frameworks */,
@@ -182,7 +182,6 @@
 			children = (
 				BBE7CC922C2244A600AB8F4D /* Settings */,
 				BBA153F72C11604400119C02 /* HoverWindow.swift */,
-				BBF6C6212C1A9B4300BF1D40 /* AnimatedGradientOverlay.swift */,
 				BBCFAE3F2C266234002E1516 /* FirstTimeView.swift */,
 			);
 			path = Views;
@@ -222,6 +221,7 @@
 				BB33E68B2C24C72F00A21D69 /* LaunchAtLogin */,
 				BBFAD7392C287A9C0092F5F1 /* Sparkle */,
 				BB3967FF2C2A6C44004F1AB6 /* SmoothGradient */,
+				BB77F2272C35D27D00BD315A /* FluidGradient */,
 			);
 			productName = DockDoor;
 			productReference = BB157B652C0E31CE00997315 /* DockDoor.app */;
@@ -257,6 +257,7 @@
 				BB33E68A2C24C72F00A21D69 /* XCRemoteSwiftPackageReference "LaunchAtLogin-Modern" */,
 				BBFAD7382C287A9C0092F5F1 /* XCRemoteSwiftPackageReference "Sparkle" */,
 				BB3967FE2C2A6C44004F1AB6 /* XCRemoteSwiftPackageReference "SmoothGradient" */,
+				BB77F2262C35D27D00BD315A /* XCRemoteSwiftPackageReference "FluidGradient" */,
 			);
 			productRefGroup = BB157B662C0E31CE00997315 /* Products */;
 			projectDirPath = "";
@@ -297,7 +298,6 @@
 				BBA153FA2C11FFD500119C02 /* consts.swift in Sources */,
 				BBA153F62C115DDA00119C02 /* AppDelegate.swift in Sources */,
 				BBA153F82C11604400119C02 /* HoverWindow.swift in Sources */,
-				BBF6C6222C1A9B4300BF1D40 /* AnimatedGradientOverlay.swift in Sources */,
 				BBA153FC2C12356100119C02 /* main.swift in Sources */,
 				BBF6C6242C1B4B4400BF1D40 /* KeybindHelper.swift in Sources */,
 				3A105FDD2C1C0EE20015EC66 /* DynStack.swift in Sources */,
@@ -545,6 +545,14 @@
 				minimumVersion = 1.0.0;
 			};
 		};
+		BB77F2262C35D27D00BD315A /* XCRemoteSwiftPackageReference "FluidGradient" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Cindori/FluidGradient";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
 		BBE7CC8D2C22421900AB8F4D /* XCRemoteSwiftPackageReference "Settings" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/sindresorhus/Settings";
@@ -578,6 +586,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = BB3967FE2C2A6C44004F1AB6 /* XCRemoteSwiftPackageReference "SmoothGradient" */;
 			productName = SmoothGradient;
+		};
+		BB77F2272C35D27D00BD315A /* FluidGradient */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BB77F2262C35D27D00BD315A /* XCRemoteSwiftPackageReference "FluidGradient" */;
+			productName = FluidGradient;
 		};
 		BBE7CC8E2C22421900AB8F4D /* Settings */ = {
 			isa = XCSwiftPackageProductDependency;
