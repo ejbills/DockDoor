@@ -511,6 +511,21 @@ struct WindowPreview: View {
             if !windowInfo.isMinimized, let closeButton = windowInfo.closeButton {
                 HStack(alignment:.top, spacing: 6) {
                     Button(action: {
+                        WindowUtil.quitApp(windowInfo: windowInfo, force: NSEvent.modifierFlags.contains(.option))
+                        onTap?()
+                    }) {
+                        ZStack {
+                            Image(systemName: "circle.fill")
+                                .foregroundStyle(.secondary)
+                            Image(systemName: "power.circle.fill")
+                        }
+                    }
+                    .buttonBorderShape(.roundedRectangle)
+                    .foregroundStyle(.purple)
+                    .buttonStyle(.plain)
+                    .font(.system(size: 13))
+                    
+                    Button(action: {
                         WindowUtil.closeWindow(closeButton: closeButton)
                         onTap?()
                     }) {

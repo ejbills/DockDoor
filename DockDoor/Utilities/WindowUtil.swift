@@ -240,6 +240,27 @@ final class WindowUtil {
         }
     }
     
+    /// Terminates the window's application.
+    static func quitApp(windowInfo: WindowInfo, force: Bool) {
+        guard let pid = windowInfo.window?.owningApplication?.processID else {
+            print("Application not found")
+            NSSound.beep()
+            return
+        }
+        
+        guard let app = NSRunningApplication(processIdentifier: pid) else {
+            print("No running application associated with PID \(pid)")
+            NSSound.beep()
+            return
+        }
+        
+        if force {
+            app.forceTerminate()
+        } else {
+            app.terminate()
+        }
+    }
+    
     // MARK: - Minimized Window Handling
     
     /// Retrieves minimized windows' information for a given process ID, bundle ID, and app name.
