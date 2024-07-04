@@ -105,10 +105,10 @@ jobs:
         with:
           ref: ${{ steps.comment-branch.outputs.head_ref }}
           token: ${{ secrets.REPO_TOKEN }}
-      - name: Install latest Swift
-        uses: swift-actions/setup-swift@v2
-        with:
-          swift-version: '5.10.0'
+      - name: Switch Xcode version
+        run: |
+          sudo xcode-select -s "/Applications/Xcode_15.3.app"
+          /usr/bin/xcodebuild -version
       - name: Override versions in project
         run: |
           sed -i '' "s/_VERSION = $(xcrun agvtool what-version -terse)/_VERSION = ${{ steps.info.outputs.new_version }}/g" ${{ env.projname }}.xcodeproj/project.pbxproj;
