@@ -48,9 +48,16 @@ jobs:
         with:
           ref: ${{ steps.comment-branch.outputs.head_ref }}
           token: ${{ secrets.REPO_TOKEN }}
+      - name: Set up Python and Install Dependencies
+        run: |
+          python3 -m venv venv
+          source venv/bin/activate
+          pip install --upgrade pip
+          pip install -r Configuration/requirements.txt
       - name: Extract latest changes
         id: latest_changes
         run: |
+          source venv/bin/activate
           python3 ./Configuration/generate_latest_changes.py
       - name: Check if version already released
         run: |
@@ -71,6 +78,11 @@ jobs:
             new_version
             title
             latest_changes
+      - name: Save virtual environment
+        uses: actions/upload-artifact@v2
+        with:
+          name: python-venv
+          path: venv
       - name: Clean up generated files for sync
         run: |
           rm latest_changes
@@ -92,6 +104,10 @@ jobs:
       - uses: actions/download-artifact@master
         with:
           path: artifacts
+      - uses: actions/download-artifact@master
+        name: Download virtual environment
+        with:
+          name: python-venv
       - name: Parse info generated in preparation job
         id: info
         run: |
@@ -171,6 +187,12 @@ jobs:
       - uses: actions/download-artifact@master
         with:
           path: artifacts
+      - uses: actions/download-artifact@master
+        name: Download virtual environment
+        with:
+          name: python-venv
+      - name: Activate virtual environment
+        run: source venv/bin/activate
       - name: Parse info generated in preparation job
         id: info
         run: |
@@ -188,11 +210,14 @@ jobs:
           echo -n "$PRIVATE_SPARKLE_KEY" > ./Configuration/sparkle_private_key
       - name: Generate Sparkle notes
         run: |
-          pip3 install -r Configuration/requirements.txt
+          source venv/bin/activate
+          pip install --upgrade pip
+          pip install -r Configuration/requirements.txt
           python3 ./Configuration/generate_html_for_sparkle_release.py
           mv Release/latest_changes.html Release/${{ env.projname }}.html
       - name: Update appcast
         run: |
+          source venv/bin/activate
           ./Configuration/generate_appcast \
               --ed-key-file Configuration/sparkle_private_key \
               --link https://github.com/${{ github.repository_owner }}/${{ github.event.repository.name }}/releases \
@@ -252,6 +277,12 @@ jobs:
       - uses: actions/download-artifact@master
         with:
           path: artifacts
+      - uses: actions/download-artifact@master
+        name: Download virtual environment
+        with:
+          name: python-venv
+      - name: Activate virtual environment
+        run: source venv/bin/activate
       - name: Parse info generated in preparation job
         id: info
         run: |
@@ -262,10 +293,6 @@ jobs:
           mv artifacts/artifact/latest_changes latest_changes
           mkdir Release
           mv artifacts/app/${{ env.projname }}.zip Release/
-      - name: Install latest Swift
-        uses: swift-actions/setup-swift@v2
-        with:
-          swift-version: '5.10.0'
       - name: Prepare Sparkle update creation
         env:
           PRIVATE_SPARKLE_KEY: ${{ secrets.PRIVATE_SPARKLE_KEY }}
@@ -274,14 +301,17 @@ jobs:
           rm -rf Release/*.app
           rm -rf Release/*.log
           rm -rf Release/*.plist
-      - name: Preparate Sparkle
+      - name: Generate Sparkle notes
         run: |
-          pip3 install -r Configuration/requirements.txt
+          source venv/bin/activate
+          pip install --upgrade pip
+          pip install -r Configuration/requirements.txt
           python3 ./Configuration/generate_html_for_sparkle_release.py
           mv Release/latest_changes.html Release/${{ env.projname }}.html
           python3 ./Configuration/remove_last_item_appcast.py
       - name: Update appcast
         run: |
+          source venv/bin/activate
           ./Configuration/generate_appcast \
               --ed-key-file Configuration/sparkle_private_key \
               --link https://github.com/${{ github.repository_owner }}/${{ github.event.repository.name }}/releases \
