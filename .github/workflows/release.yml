@@ -137,10 +137,6 @@ jobs:
           security list-keychain -d user -s $KEYCHAIN_PATH
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
-      - name: Switch Xcode version
-        run: |
-          sudo xcode-select -s "/Applications/Xcode.app"
-          /usr/bin/xcodebuild -version
       - name: Build and archive
         run: xcodebuild clean archive -project ${{ env.projname }}.xcodeproj -scheme ${{ env.projname }} -archivePath ${{ env.projname }}
       - name: Export app
