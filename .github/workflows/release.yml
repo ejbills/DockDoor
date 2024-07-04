@@ -85,7 +85,7 @@ jobs:
 
   archive:
     name: Build and export app
-    runs-on: macos-latest
+    runs-on: macos-latest # Ensure we run on macOS to install the correct Xcode and Swift
     needs: preparation
     steps:
       - uses: actions/download-artifact@master
@@ -105,6 +105,10 @@ jobs:
         with:
           ref: ${{ steps.comment-branch.outputs.head_ref }}
           token: ${{ secrets.REPO_TOKEN }}
+      - name: Install Swift 5.10.0
+        uses: fwal/setup-swift@v0.8.2
+        with:
+          swift-version: '5.10.0'
       - name: Override versions in project
         run: |
           sed -i '' "s/_VERSION = $(xcrun agvtool what-version -terse)/_VERSION = ${{ steps.info.outputs.new_version }}/g" ${{ env.projname }}.xcodeproj/project.pbxproj;
@@ -261,6 +265,10 @@ jobs:
           mv artifacts/artifact/latest_changes latest_changes
           mkdir Release
           mv artifacts/app/${{ env.projname }}.zip Release/
+      - name: Install Swift 5.10.0
+        uses: fwal/setup-swift@v0.8.2
+        with:
+          swift-version: '5.10.0'
       - name: Prepare Sparkle update creation
         env:
           PRIVATE_SPARKLE_KEY: ${{ secrets.PRIVATE_SPARKLE_KEY }}
@@ -288,7 +296,7 @@ jobs:
         with:
           name: v${{ steps.info.outputs.new_version }} - ${{ steps.info.outputs.title }}
           tag_name: v${{ steps.info.outputs.new_version }}
-          fail_on_unmatched_files: true
+          fail_on_unmatched-files: true
           body_path: latest_changes
           files: Release/${{ env.projname }}.zip
           prerelease: false
