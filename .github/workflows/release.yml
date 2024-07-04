@@ -109,6 +109,10 @@ jobs:
         uses: swift-actions/setup-swift@v2
         with:
           swift-version: '5.10.0'
+      - name: Switch Xcode version and select toolchain
+        run: |
+          sudo xcode-select -s "/Applications/Xcode_15.0.1.app"
+          sudo xcrun --toolchain swift-5.10 --run swift --version
       - name: Override versions in project
         run: |
           sed -i '' "s/_VERSION = $(xcrun agvtool what-version -terse)/_VERSION = ${{ steps.info.outputs.new_version }}/g" ${{ env.projname }}.xcodeproj/project.pbxproj;
@@ -137,10 +141,6 @@ jobs:
           security list-keychain -d user -s $KEYCHAIN_PATH
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
-      - name: Switch Xcode version
-        run: |
-          sudo xcode-select -s "/Applications/Xcode_14.2.app"
-          /usr/bin/xcodebuild -version
       - name: Build and archive
         run: xcodebuild clean archive -project ${{ env.projname }}.xcodeproj -scheme ${{ env.projname }} -archivePath ${{ env.projname }}
       - name: Export app
@@ -269,6 +269,10 @@ jobs:
         uses: swift-actions/setup-swift@v2
         with:
           swift-version: '5.10.0'
+      - name: Switch Xcode version and select toolchain
+        run: |
+          sudo xcode-select -s "/Applications/Xcode_15.0.1.app"
+          sudo xcrun --toolchain swift-5.10 --run swift --version
       - name: Prepare Sparkle update creation
         env:
           PRIVATE_SPARKLE_KEY: ${{ secrets.PRIVATE_SPARKLE_KEY }}
@@ -296,7 +300,7 @@ jobs:
         with:
           name: v${{ steps.info.outputs.new_version }} - ${{ steps.info.outputs.title }}
           tag_name: v${{ steps.info.outputs.new_version }}
-          fail_on_unmatched files: true
+          fail on unmatched files: true
           body_path: latest_changes
           files: Release/${{ env.projname }}.zip
           prerelease: false
@@ -338,13 +342,13 @@ jobs:
         with:
           name: "*"
       - name: Add success reactions
-        if: ${{ needs.archive.result == 'success' && needs.release.result == 'success'  && (needs.pre-release.result == 'success' || needs.pre-release.result == 'skipped') }}
+        if: ${{ needs.archive.result == 'success' && needs.release.result == 'success'  && (needs.pre-release.result == 'success' or needs.pre-release.result == 'skipped') }}
         uses: peter-evans/create-or-update-comment@v2
         with:
           comment-id: ${{ github.event.comment.id }}
           reactions: rocket
       - name: Add negative reaction
-        if: ${{ !(needs.archive.result == 'success' && needs.release.result == 'success'  && (needs.pre-release.result == 'success' || needs.pre-release.result == 'skipped')) }}
+        if: ${{ !(needs.archive.result == 'success' && needs.release.result == 'success'  && (needs.pre-release.result == 'success' or needs.pre-release.result == 'skipped')) }}
         uses: peter-evans/create-or-update-comment@v2
         with:
           comment-id: ${{ github.event.comment.id }}
