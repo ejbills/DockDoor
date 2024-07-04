@@ -115,6 +115,8 @@ jobs:
       - name: Delete Package.resolved to fix dependency issues
         run: |
           rm -f ${{ env.projname }}.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
+      - name: Setup Swift for Package Dependencies
+        run: swift -version 5.10.0
       - name: Resolve package dependencies
         run: |
           xcodebuild -resolvePackageDependencies -project ${{ env.projname }}.xcodeproj
