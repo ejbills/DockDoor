@@ -23,7 +23,7 @@ jobs:
       ${{ 
         github.event.issue.pull_request &&
         contains(github.event.comment.body, '/release') &&
-        github.event.comment.user.login == 'YOUR_GITHUB_USERNAME' 
+        github.event.comment.user.login == 'ejbills' 
       }}
     runs-on: ubuntu-latest
     steps:
