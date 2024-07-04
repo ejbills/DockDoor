@@ -12,7 +12,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  projname: DockDoor
+  projname: testSparkleRelease
   beta-channel-name: "beta"
 
 jobs:
@@ -62,7 +62,6 @@ jobs:
           if [[ $(cat latest_changes) == "" ]]; then
             echo "Release notes are empty" >> $GITHUB_STEP_SUMMARY
             exit 1
-          fi
       - name: Save generated info
         uses: actions/upload-artifact@master
         with:
@@ -108,6 +107,15 @@ jobs:
       - name: Override versions in project # set new version in project
         run: |
           sed -i '' "s/_VERSION = $(xcrun agvtool what-version -terse)/_VERSION = ${{ steps.info.outputs.new_version }}/g" ${{ env.projname }}.xcodeproj/project.pbxproj;
+
+      - name: Delete Package.resolved to fix dependency issues
+        run: |
+          rm -f ${{ env.projname }}.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
+
+      - name: Resolve package dependencies
+        run: |
+          xcodebuild -resolvePackageDependencies -project ${{ env.projname }}.xcodeproj
+      
       - name: Install the Apple certificate and provisioning profile
         env:
           BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
@@ -295,7 +303,7 @@ jobs:
           fail_on_unmatched_files: true
           body_path: latest_changes
           files: Release/${{ env.projname }}.zip
-          prerelease: ${{ steps.channel.outputs.prerelease }}
+          prerelease: false
       - name: Saving changes # commits changes to branch (version bump, appcast.xml)
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
@@ -322,6 +330,7 @@ jobs:
           ref: ${{ steps.comment-branch.outputs.head_ref }}
           token: ${{ secrets.REPO_TOKEN }}
       - name: Merge PR # merge PR
+        if: ${{ needs.archive.result == 'success' && needs.release.result == 'success'  && (needs.pre-release.result == 'success' || needs.pre-release.result == 'skipped') }}
         uses: devmasx/merge-branch@master
         with:
           type: now
@@ -333,13 +342,13 @@ jobs:
         with:
           name: "*"
       - name: Add success reactions # Adding reactions to comment depending on result
-        if: ${{ contains(join(needs.*.result, ','), 'success') }}
+        if: ${{ needs.archive.result == 'success' && needs.release.result == 'success'  && (needs.pre-release.result == 'success' || needs.pre-release.result == 'skipped') }}
         uses: peter-evans/create-or-update-comment@v2
         with:
           comment-id: ${{ github.event.comment.id }}
           reactions: rocket
       - name: Add negative reaction
-        if: ${{ contains(join(needs.*.result, ','), 'failure') }}
+        if: ${{ !(needs.archive.result == 'success' && needs.release.result == 'success'  && (needs.pre-release.result == 'success' || needs.pre-release.result == 'skipped')) }}
         uses: peter-evans/create-or-update-comment@v2
         with:
           comment-id: ${{ github.event.comment.id }}
