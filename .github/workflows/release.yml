@@ -21,12 +21,12 @@ jobs:
     if: ${{ github.event.issue.pull_request && contains(github.event.comment.body, '/release') && github.event.comment.user.login == github.repository_owner }}
     runs-on: ubuntu-latest
     steps:
-      - name: Add reactions # adding reactions to the comment to show that the action is running
+      - name: Add reactions
         uses: peter-evans/create-or-update-comment@v2
         with:
           comment-id: ${{ github.event.comment.id }}
           reactions: eyes
-      - uses: actions/github-script@v6 # check if the PR is ready to be merged
+      - uses: actions/github-script@v6
         with:
           result-encoding: string
           script: |
@@ -38,7 +38,7 @@ jobs:
             if (pr.data.draft || pr.data.mergeable_state !== "clean") {
               core.setFailed("PR is not ready to be merged");
             }
-      - uses: xt0rted/pull-request-comment-branch@v1 # check out branch of PR
+      - uses: xt0rted/pull-request-comment-branch@v1
         id: comment-branch
         with:
           repo-token: ${{ secrets.REPO_TOKEN }}
@@ -47,17 +47,17 @@ jobs:
         with:
           ref: ${{ steps.comment-branch.outputs.head_ref }}
           token: ${{ secrets.REPO_TOKEN }}
-      - name: Extract latest changes # generate release notes, version and title to use in the release
+      - name: Extract latest changes
         id: latest_changes
         run: |
           python3 ./Configuration/generate_latest_changes.py
-      - name: Check if version already released # prevent releasing the same version twice
+      - name: Check if version already released
         run: |
           if [[ $(xcrun agvtool what-version -terse) == $(cat new_version) ]]; then
             echo "Version already released" >> $GITHUB_STEP_SUMMARY
             exit 1
           fi
-      - name: Check if release notes are empty # prevent releasing without release notes
+      - name: Check if release notes are empty
         run: |
           if [[ -z $(cat latest_changes) ]]; then
             echo "Release notes are empty" >> $GITHUB_STEP_SUMMARY
@@ -88,7 +88,7 @@ jobs:
     runs-on: macos-12
     needs: preparation
     steps:
-      - uses: actions/download-artifact@master # download all previously generated artifacts
+      - uses: actions/download-artifact@master
         with:
           path: artifacts
       - name: Parse info generated in preparation job
@@ -96,7 +96,7 @@ jobs:
         run: |
           echo "new_version=$(cat artifacts/artifact/new_version)" >> $GITHUB_OUTPUT
           echo "title=$(cat artifacts/artifact/title)" >> $GITHUB_OUTPUT
-      - uses: xt0rted/pull-request-comment-branch@v1 # check out branch of PR
+      - uses: xt0rted/pull-request-comment-branch@v1
         id: comment-branch
         with:
           repo-token: ${{ secrets.REPO_TOKEN }}
@@ -105,17 +105,15 @@ jobs:
         with:
           ref: ${{ steps.comment-branch.outputs.head_ref }}
           token: ${{ secrets.REPO_TOKEN }}
-      - name: Override versions in project # set new version in project
+      - name: Override versions in project
         run: |
           sed -i '' "s/_VERSION = $(xcrun agvtool what-version -terse)/_VERSION = ${{ steps.info.outputs.new_version }}/g" ${{ env.projname }}.xcodeproj/project.pbxproj;
-
       - name: Delete Package.resolved to fix dependency issues
         run: |
           rm -f ${{ env.projname }}.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
       - name: Resolve package dependencies
         run: |
           xcodebuild -resolvePackageDependencies -project ${{ env.projname }}.xcodeproj
-      
       - name: Install the Apple certificate and provisioning profile
         env:
           BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
@@ -123,40 +121,31 @@ jobs:
           BUILD_PROVISION_PROFILE_BASE64: ${{ secrets.BUILD_PROVISION_PROFILE_BASE64 }}
           KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
         run: |
-          # create variables
           CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
           PP_PATH=$RUNNER_TEMP/build_pp.mobileprovision
           KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
-
-          # import certificate and provisioning profile from secrets
           echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode --output $CERTIFICATE_PATH
           echo -n "$BUILD_PROVISION_PROFILE_BASE64" | base64 --decode --output $PP_PATH
-
-          # create temporary keychain
           security create-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
           security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
           security unlock-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
-
-          # import certificate to keychain
           security import $CERTIFICATE_PATH -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
           security list-keychain -d user -s $KEYCHAIN_PATH
-
-          # apply provisioning profile
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
-      - name: Switch Xcode version # Force Xcode version (macOS runner has multiple Xcode versions installed)
+      - name: Switch Xcode version
         run: |
           sudo xcode-select -s "/Applications/Xcode_14.2.app"
           /usr/bin/xcodebuild -version
-      - name: Build and archive # create archive
+      - name: Build and archive
         run: xcodebuild clean archive -project ${{ env.projname }}.xcodeproj -scheme ${{ env.projname }} -archivePath ${{ env.projname }}
-      - name: Export app # create .app
+      - name: Export app
         run: xcodebuild -exportArchive -archivePath "${{ env.projname }}.xcarchive" -exportPath Release -exportOptionsPlist "Configuration/export_options.plist"
-      - name: Zip app # zip .app
+      - name: Zip app
         run: |
           cd Release
-          ditto -c -k --sequesterRsrc --keepParent ${{ env.projname }}.app ${{ env.projname }}.zip # todo check perhaps cd .. missing
-      - name: Upload achived app
+          ditto -c -k --sequesterRsrc --keepParent ${{ env.projname }}.app ${{ env.projname }}.zip
+      - name: Upload archived app
         uses: actions/upload-artifact@master
         with:
           name: app
@@ -169,7 +158,7 @@ jobs:
     needs: archive
     if: ${{ contains(github.event.comment.body, 'beta') }}
     steps:
-      - uses: xt0rted/pull-request-comment-branch@v1 # check out branch of PR
+      - uses: xt0rted/pull-request-comment-branch@v1
         id: comment-branch
         with:
           repo-token: ${{ secrets.REPO_TOKEN }}
@@ -178,7 +167,7 @@ jobs:
         with:
           ref: ${{ steps.comment-branch.outputs.head_ref }}
           token: ${{ secrets.REPO_TOKEN }}
-      - uses: actions/download-artifact@master # download all previously generated artifacts
+      - uses: actions/download-artifact@master
         with:
           path: artifacts
       - name: Parse info generated in preparation job
@@ -191,17 +180,17 @@ jobs:
           mv artifacts/artifact/latest_changes latest_changes
           mkdir Release
           mv artifacts/app/${{ env.projname }}.zip Release/
-      - name: Prepare Sparkle update creation # Import Sparkle private key, remove unnecessary files in Release folder
+      - name: Prepare Sparkle update creation
         env:
           PRIVATE_SPARKLE_KEY: ${{ secrets.PRIVATE_SPARKLE_KEY }}
         run: |
           echo -n "$PRIVATE_SPARKLE_KEY" > ./Configuration/sparkle_private_key
-      - name: Generate Sparkle notes # generate Sparkle release notes (convert Markdown to HTML)
+      - name: Generate Sparkle notes
         run: |
           pip3 install -r Configuration/requirements.txt
           python3 ./Configuration/generate_html_for_sparkle_release.py
           mv Release/latest_changes.html Release/${{ env.projname }}.html
-      - name: Update appcast # generate / update appcast.xml with edDSA key
+      - name: Update appcast
         run: |
           ./Configuration/generate_appcast \
               --ed-key-file Configuration/sparkle_private_key \
@@ -215,7 +204,7 @@ jobs:
         with:
           name: appcast
           path: docs/Support/appcast.xml
-      - name: Create GitHub beta release # Upload .zip to GitHub release
+      - name: Create GitHub beta release
         uses: softprops/action-gh-release@v1
         with:
           name: v${{ steps.info.outputs.new_version }}b - ${{ steps.info.outputs.title }}
@@ -224,20 +213,19 @@ jobs:
           body_path: latest_changes
           files: Release/${{ env.projname }}.zip
           prerelease: true
-      - name: Create summary # create summary for PR
+      - name: Create summary
         run: |
           echo "Beta Release v${{ steps.info.outputs.new_version }} created" > $GITHUB_STEP_SUMMARY
-
-      - uses: actions/checkout@v3 # checkout again, directly on the main branch, as it's a prerelease
+      - uses: actions/checkout@v3
         if: success()
-      - name: Remove old appcast # remove old appcast
+      - name: Remove old appcast
         run: rm -rf docs/Support/appcast.xml
       - name: Retrieve previously generated appcast
         uses: actions/download-artifact@master
         with:
           name: appcast
           path: docs/Support
-      - name: Saving appcast # commits only appcast to main
+      - name: Saving appcast
         uses: stefanzweifel/git-auto-commit-action@v4
         id: commit-appcast
         with:
@@ -251,7 +239,7 @@ jobs:
     needs: archive
     if: ${{ !contains(github.event.comment.body, 'beta') }}
     steps:
-      - uses: xt0rted/pull-request-comment-branch@v1 # check out branch of PR
+      - uses: xt0rted/pull-request-comment-branch@v1
         id: comment-branch
         with:
           repo-token: ${{ secrets.REPO_TOKEN }}
@@ -260,7 +248,7 @@ jobs:
         with:
           ref: ${{ steps.comment-branch.outputs.head_ref }}
           token: ${{ secrets.REPO_TOKEN }}
-      - uses: actions/download-artifact@master # download all previously generated artifacts
+      - uses: actions/download-artifact@master
         with:
           path: artifacts
       - name: Parse info generated in preparation job
@@ -273,7 +261,7 @@ jobs:
           mv artifacts/artifact/latest_changes latest_changes
           mkdir Release
           mv artifacts/app/${{ env.projname }}.zip Release/
-      - name: Prepare Sparkle update creation # Import Sparkle private key, remove unnecessary files in Release folder
+      - name: Prepare Sparkle update creation
         env:
           PRIVATE_SPARKLE_KEY: ${{ secrets.PRIVATE_SPARKLE_KEY }}
         run: |
@@ -281,13 +269,13 @@ jobs:
           rm -rf Release/*.app
           rm -rf Release/*.log
           rm -rf Release/*.plist
-      - name: Preparate Sparkle # generate Sparkle release notes (convert Markdown to HTML), remove beta item if present
+      - name: Preparate Sparkle
         run: |
           pip3 install -r Configuration/requirements.txt
           python3 ./Configuration/generate_html_for_sparkle_release.py
           mv Release/latest_changes.html Release/${{ env.projname }}.html
           python3 ./Configuration/remove_last_item_appcast.py
-      - name: Update appcast # generate / update appcast.xml with edDSA key
+      - name: Update appcast
         run: |
           ./Configuration/generate_appcast \
               --ed-key-file Configuration/sparkle_private_key \
@@ -295,7 +283,7 @@ jobs:
               --download-url-prefix https://github.com/${{ github.repository_owner }}/${{ github.event.repository.name }}/releases/download/v${{ steps.info.outputs.new_version }}/ \
               -o docs/Support/appcast.xml \
               Release/
-      - name: Create GitHub release # Upload .zip to GitHub release
+      - name: Create GitHub release
         uses: softprops/action-gh-release@v1
         with:
           name: v${{ steps.info.outputs.new_version }} - ${{ steps.info.outputs.title }}
@@ -304,14 +292,14 @@ jobs:
           body_path: latest_changes
           files: Release/${{ env.projname }}.zip
           prerelease: false
-      - name: Saving changes # commits changes to branch (version bump, appcast.xml)
+      - name: Saving changes
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           file_pattern: |
             docs/Support/appcast.xml
             ${{ env.projname }}.xcodeproj/project.pbxproj
           commit_message: "Update version to v${{ steps.info.outputs.new_version }}"
-      - name: Create summary # create summary for PR
+      - name: Create summary
         run: |
           echo "Release v${{ steps.info.outputs.new_version }} created." > $GITHUB_STEP_SUMMARY
 
@@ -321,15 +309,15 @@ jobs:
     runs-on: ubuntu-latest
     needs: [pre-release, release]
     steps:
-      - uses: xt0rted/pull-request-comment-branch@v1 # check out branch of PR
+      - uses: xt0rted/pull-request-comment-branch@v1
         id: comment-branch
         with:
           repo-token: ${{ secrets.REPO_TOKEN }}
-      - uses: actions/checkout@v3 # checkout again, because the previous checkout is detached
+      - uses: actions/checkout@v3
         with:
           ref: ${{ steps.comment-branch.outputs.head_ref }}
           token: ${{ secrets.REPO_TOKEN }}
-      - name: Merge PR # merge PR
+      - name: Merge PR
         if: ${{ needs.archive.result == 'success' && needs.release.result == 'success'  && (needs.pre-release.result == 'success' || needs.pre-release.result == 'skipped') }}
         uses: devmasx/merge-branch@master
         with:
@@ -341,7 +329,7 @@ jobs:
       - uses: geekyeggo/delete-artifact@v2
         with:
           name: "*"
-      - name: Add success reactions # Adding reactions to comment depending on result
+      - name: Add success reactions
         if: ${{ needs.archive.result == 'success' && needs.release.result == 'success'  && (needs.pre-release.result == 'success' || needs.pre-release.result == 'skipped') }}
         uses: peter-evans/create-or-update-comment@v2
         with:
