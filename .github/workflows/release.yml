@@ -85,7 +85,7 @@ jobs:
 
   archive:
     name: Build and export app
-    runs-on: macos-12
+    runs-on: macos-latest
     needs: preparation
     steps:
       - uses: actions/download-artifact@master
@@ -153,7 +153,7 @@ jobs:
 
   pre-release:
     name: Create pre-release
-    runs-on: macos-12
+    runs-on: macos-latest
     environment: deploy-beta
     needs: archive
     if: ${{ contains(github.event.comment.body, 'beta') }}
