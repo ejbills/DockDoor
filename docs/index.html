@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,58 +10,73 @@
             margin: 0;
             padding: 0;
             background-color: #f4f4f4;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        h1, h2, h3 {
             color: #333;
         }
-
+        header, footer {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 20px;
+            text-align: center;
+        }
+        main {
+            padding: 20px;
+            max-width: 800px;
+            margin: 20px auto;
+            background: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1, h2, h3 {
+            color: #444;
+        }
         a {
             color: #3498db;
             text-decoration: none;
         }
-
-        pre {
-            background-color: #f9f9f9;
-            padding: 10px;
-            border-radius: 5px;
-            overflow-x: auto;
+        a:hover {
+            text-decoration: underline;
         }
-
-        ul {
-            padding-left: 20px;
-        }
-
-        ul li {
+        .faq-item {
             margin-bottom: 10px;
         }
     </style>
 </head>
-
 <body>
-    <div class="container">
+    <header>
         <h1>DockDoor</h1>
+    </header>
+    <main>
+        <p>Want to support development? <a href="https://www.buymeacoffee.com/keplercafe" target="_blank">Buy me a coffee here, thank you!</a></p>
         <p>DockDoor is a macOS application developed with Swift and SwiftUI that allows users to manage and interact with application windows on their desktop. It emphasizes ease of use and seamless integration with the macOS environment. This project is open-source, inviting contributions from developers to enhance its functionality and user experience.</p>
-        <p><a href="https://github.com/ejbills/DockDoor/releases">Download the latest release here</a>.</p>
+        <p><a href="https://github.com/ejbills/DockDoor/releases" target="_blank">Download the latest release here</a>.</p>
 
         <h2>Usage</h2>
-        <h3>How do I use the alt-tab functionality?</h3>
         <ul>
-            <li>Ctrl + Tab to open the menu, continue pressing tab to increment forwards, shift + tab to go back. Letting go of control will select the window.</li>
+            <li><strong>How do I use the alt-tab functionality?</strong>
+                <p>Ctrl + Tab to open the menu, continue pressing tab to increment forwards, shift + tab to go back. Letting go of control will select the window.</p>
+            </li>
+            <li><strong>How do I use the dock peeking functionality?</strong>
+                <p>Simply hover over any application with active windows in the dock.</p>
+            </li>
+            <li><strong>What are the traffic light buttons that appear in the preview window?</strong>
+                <ul>
+                    <li>🟣 Quit the window's app. You can hold the Option (⌥) key while clicking to <strong>force</strong> quit.</li>
+                    <li>🔴 Close the window</li>
+                    <li>🟡 Minimize the window</li>
+                    <li>🟢 Enter the window to full screen</li>
+                </ul>
+            </li>
         </ul>
-        <h3>How do I use the dock peeking functionality?</h3>
-        <ul>
-            <li>Simply hover over any application with active windows in the dock.</li>
-        </ul>
+
+        <h2>FAQ</h2>
+        <div class="faq-item">
+            <strong>I disabled the menu bar icon and now I can't access settings</strong>
+            <p>When DockDoor initially opens, the menu icon will be visible for 10 seconds, until it disappears. This way, you can access the settings even with the icon disabled. Just relaunch the app and click it before it disappears.</p>
+        </div>
+        <div class="faq-item">
+            <strong>I click on the purple quit button in the preview and the app doesn't close</strong>
+            <p>You can hold the Option (⌥) key while clicking to force quit.</p>
+        </div>
 
         <h2>Installation (for contributors)</h2>
         <h3>Prerequisites</h3>
@@ -70,7 +84,6 @@
             <li>macOS 14.0 or later.</li>
             <li>Xcode installed on your machine.</li>
         </ul>
-
         <h3>Setting Up the Project</h3>
         <ol>
             <li>Fork the repository.</li>
@@ -80,32 +93,35 @@
         </ol>
 
         <h2>How to Contribute</h2>
+        <p>Contributions to DockDoor are welcome! Here’s how you can get started:</p>
         <h3>Prerequisites</h3>
-        <ul>
-            <li>Basic knowledge of Swift and SwiftUI.</li>
-        </ul>
-
+        <p>Basic knowledge of Swift and SwiftUI.</p>
         <h3>Contribution Guide</h3>
-        <h4>Branching:</h4>
-        <ul>
-            <li>Base all new features off of <code>main</code>.</li>
-            <li>Create a new branch for each feature or bug fix: <code>git checkout -b feature/your-feature-name</code>.</li>
-        </ul>
-        <h4>Coding Standards:</h4>
-        <ul>
-            <li>Follow Swift coding conventions and style guidelines.</li>
-            <li>Aim for clear, concise, and expressive code.</li>
-        </ul>
-        <h4>Documentation:</h4>
-        <ul>
-            <li>Document your code using comments to explain complex logic or functionality.</li>
-        </ul>
-        <h4>Testing:</h4>
-        <ul>
-            <li>Write unit tests for new features or changes.</li>
-            <li>Ensure existing tests pass before submitting a pull request.</li>
-        </ul>
-    </div>
+        <ol>
+            <li><strong>Branching:</strong>
+                <ul>
+                    <li>Base all new features off of <code>main</code>.</li>
+                    <li>Create a new branch for each feature or bug fix: <code>git checkout -b feature/your-feature-name</code>.</li>
+                </ul>
+            </li>
+            <li><strong>Coding Standards:</strong>
+                <ul>
+                    <li>Follow Swift coding conventions and style guidelines.</li>
+                    <li>Aim for clear, concise, and expressive code.</li>
+                </ul>
+            </li>
+            <li><strong>Documentation:</strong>
+                <ul>
+                    <li>Document your code using comments to explain complex logic or functionality.</li>
+                </ul>
+            </li>
+            <li><strong>Testing:</strong>
+                <ul>
+                    <li>Write unit tests for new features or changes.</li>
+                    <li>Ensure existing tests pass before submitting a pull request.</li>
+                </ul>
+            </li>
+        </ol>
+    </main>
 </body>
-
 </html>
