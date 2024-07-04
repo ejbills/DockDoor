@@ -9,8 +9,8 @@ permissions:
   pull-requests: write
 
 concurrency:
-  group: publish-release-${{ github.ref }}
-  cancel-in-progress: true
+  group: ${{ github.workflow }}-${{ github.event.issue.number }}
+  cancel-in-progress: false
 
 env:
   projname: DockDoor
@@ -19,9 +19,21 @@ env:
 jobs:
   preparation:
     name: Preparation job
-    if: ${{ github.event.issue.pull_request && contains(github.event.comment.body, '/release') && github.event.comment.user.login == github.event.repository.owner.login }}
+    if: >-
+      ${{ 
+        github.event.issue.pull_request &&
+        contains(github.event.comment.body, '/release') &&
+        github.event.comment.user.login == 'ejbills' 
+      }}
     runs-on: ubuntu-latest
     steps:
+      - name: Check Event Details
+        run: |
+          echo "Event Action: ${{ github.event.action }}"
+          echo "Is PR: ${{ github.event.issue.pull_request }}"
+          echo "Comment Body: ${{ github.event.comment.body }}"
+          echo "Comment User: ${{ github.event.comment.user.login }}"
+          echo "Repo Owner: ${{ github.repository.owner }}"
       - name: Add reactions
         uses: peter-evans/create-or-update-comment@v2
         with:
@@ -198,6 +210,11 @@ jobs:
         with:
           name: python-venv
           path: python-venv
+      - uses: actions/download-artifact@v2
+        name: Download archived app
+        with:
+          name: app
+          path: Release
       - name: Activate virtual environment
         run: source python-venv/bin/activate
       - name: Parse info generated in preparation job
@@ -208,8 +225,6 @@ jobs:
           mv artifacts/new_version new_version
           mv artifacts/title title
           mv artifacts/latest_changes latest_changes
-          mkdir Release
-          mv artifacts/app/${{ env.projname }}.zip Release/
       - name: Prepare Sparkle update creation
         env:
           PRIVATE_SPARKLE_KEY: ${{ secrets.PRIVATE_SPARKLE_KEY }}
@@ -289,6 +304,11 @@ jobs:
         with:
           name: python-venv
           path: python-venv
+      - uses: actions/download-artifact@v2
+        name: Download archived app
+        with:
+          name: app
+          path: Release
       - name: Activate virtual environment
         run: source python-venv/bin/activate
       - name: Parse info generated in preparation job
@@ -299,8 +319,6 @@ jobs:
           mv artifacts/new_version new_version
           mv artifacts/title title
           mv artifacts/latest_changes latest_changes
-          mkdir Release
-          mv artifacts/app/${{ env.projname }}.zip Release/
       - name: Prepare Sparkle update creation
         env:
           PRIVATE_SPARKLE_KEY: ${{ secrets.PRIVATE_SPARKLE_KEY }}
@@ -366,7 +384,7 @@ jobs:
           from_branch: ${{ steps.comment-branch.outputs.head_ref }}
           target_branch: ${{ steps.comment-branch.outputs.base_ref }}
           github_token: ${{ secrets.REPO_TOKEN }}
-          message: "Release version v{{ steps.info.outputs.new_version }}"
+          message: "Release version v${{ steps.info.outputs.new_version }}"
       - uses: geekyeggo/delete-artifact@v2
         with:
           name: "*"
