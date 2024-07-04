@@ -55,35 +55,34 @@ struct UpdateView: View {
     }
     
     var body: some View {
-        HStack {
-            updateStatusView
-            Spacer()
-
-            Divider()
+        VStack(alignment: .center) {
+            updateStatusView.bold().padding(1)
             
-            Spacer()
-            VStack(alignment: .leading) {
-                VStack(alignment: .leading) {
-                    Text("Current Version: \(viewModel.currentVersion)")
+            HStack(alignment: .center) {
+                VStack(alignment: .center) {
+                    HStack(alignment: .center) {
+                        Text("Current Version: \(viewModel.currentVersion)").foregroundStyle(.gray)
+                    }
                     if let lastCheck = viewModel.lastUpdateCheckDate {
-                        Text("Last checked: \(lastCheck, formatter: dateFormatter)")
+                        HStack(alignment: .center) {
+                            Text("Last checked: \(lastCheck, formatter: dateFormatter)").foregroundStyle(.gray)
+                        }
                     }
                 }
-                
-                Divider()
-                Button(action: viewModel.checkForUpdates) {
-                    Label("Check for Updates", systemImage: "arrow.triangle.2.circlepath")
-                }
-                .disabled(!viewModel.canCheckForUpdates)
-                
-                Toggle("Automatically check for updates", isOn: $viewModel.isAutomaticChecksEnabled)
-                    .onChange(of: viewModel.isAutomaticChecksEnabled) { _, _ in
-                        viewModel.toggleAutomaticChecks()
-                    }
             }
+            
+            Button(action: viewModel.checkForUpdates) {
+                Label("Check for Updates", systemImage: "arrow.triangle.2.circlepath")
+            }
+            .disabled(!viewModel.canCheckForUpdates)
+            
+            Toggle("Automatically check for updates", isOn: $viewModel.isAutomaticChecksEnabled)
+                .onChange(of: viewModel.isAutomaticChecksEnabled) { _, _ in
+                    viewModel.toggleAutomaticChecks()
+                }
+            
         }
-        .padding()
-        .frame(width: 600)
+        .frame(width: 600).padding(10)
     }
     
     private var updateStatusView: some View {
