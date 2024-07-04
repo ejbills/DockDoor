@@ -12,7 +12,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  projname: testSparkleRelease
+  projname: DockDoor
   beta-channel-name: "beta"
 
 jobs:
@@ -59,9 +59,10 @@ jobs:
           fi
       - name: Check if release notes are empty # prevent releasing without release notes
         run: |
-          if [[ $(cat latest_changes) == "" ]]; then
+          if [[ -z $(cat latest_changes) ]]; then
             echo "Release notes are empty" >> $GITHUB_STEP_SUMMARY
             exit 1
+          fi
       - name: Save generated info
         uses: actions/upload-artifact@master
         with:
@@ -111,7 +112,6 @@ jobs:
       - name: Delete Package.resolved to fix dependency issues
         run: |
           rm -f ${{ env.projname }}.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
-
       - name: Resolve package dependencies
         run: |
           xcodebuild -resolvePackageDependencies -project ${{ env.projname }}.xcodeproj
