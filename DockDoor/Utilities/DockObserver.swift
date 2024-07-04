@@ -50,12 +50,15 @@ final class DockObserver {
         
         func eventTapCallback(proxy: CGEventTapProxy, type: CGEventType, event: CGEvent, refcon: UnsafeMutableRawPointer?) -> Unmanaged<CGEvent>? {
             let observer = Unmanaged<DockObserver>.fromOpaque(refcon!).takeUnretainedValue()
-
+            
             if type == .mouseMoved {
                 let mouseLocation = event.location
                 observer.handleMouseEvent(mouseLocation: mouseLocation)
-            } else if type == .rightMouseDown || type == .otherMouseDown {
-                HoverWindow.shared.hideWindow()
+            } else if type == .rightMouseDown || type == .leftMouseDown || type == .otherMouseDown {
+                let mouseLocation = event.location
+                if observer.isMouseWithinDock(mouseLocation) { // Required to allow clicking the traffic light buttons in the preview
+                    HoverWindow.shared.hideWindow()
+                }
             }
 
             return Unmanaged.passUnretained(event)
@@ -63,6 +66,7 @@ final class DockObserver {
         
         let eventsOfInterest: CGEventMask = (1 << CGEventType.mouseMoved.rawValue) |
                                             (1 << CGEventType.rightMouseDown.rawValue) |
+                                            (1 << CGEventType.leftMouseDown.rawValue) |
                                             (1 << CGEventType.otherMouseDown.rawValue)
         
         eventTap = CGEvent.tapCreate(
@@ -227,6 +231,10 @@ final class DockObserver {
         return nil
     }
     
+    func isMouseWithinDock(_ mouseLocation: CGPoint) -> Bool {
+        return getDockIconAtLocation(mouseLocation) != nil
+    }
+    
     static func screenContainingPoint(_ point: CGPoint) -> NSScreen? {
         let screens = NSScreen.screens
         guard let primaryScreen = screens.first else { return nil }
@@ -255,8 +263,8 @@ final class DockObserver {
         if screen == primaryScreen {
             y = screen.frame.size.height - point.y
         } else {
-            let screenbottomoffset = primaryScreen.frame.size.height - (screen.frame.size.height + offsetTop)
-            y = screen.frame.size.height + screenbottomoffset - (point.y - offsetTop)
+            let screenBottomOffset = primaryScreen.frame.size.height - (screen.frame.size.height + offsetTop)
+            y = screen.frame.size.height + screenBottomOffset - (point.y - offsetTop)
         }
         
         return NSPoint(x: point.x, y: y)
