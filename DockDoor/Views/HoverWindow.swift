@@ -520,87 +520,93 @@ struct WindowPreview: View {
                 }
             
             if !windowInfo.isMinimized, let closeButton = windowInfo.closeButton {
-                HStack(alignment:.top, spacing: 6) {
-                    Button(action: {
-                        WindowUtil.quitApp(windowInfo: windowInfo, force: NSEvent.modifierFlags.contains(.option))
-                        onTap?()
-                    }) {
-                        ZStack {
-                            Image(systemName: "circle.fill")
-                                .foregroundStyle(.secondary)
-                            Image(systemName: "power.circle.fill")
+                VStack(alignment: .leading) {
+                    HStack(alignment: .top, spacing: 6) {
+                        Button(action: {
+                            WindowUtil.quitApp(windowInfo: windowInfo, force: NSEvent.modifierFlags.contains(.option))
+                            onTap?()
+                        }) {
+                            ZStack {
+                                Image(systemName: "circle.fill")
+                                    .foregroundStyle(.secondary)
+                                Image(systemName: "power.circle.fill")
+                            }
                         }
-                    }
-                    .buttonBorderShape(.roundedRectangle)
-                    .foregroundStyle(.purple)
-                    .buttonStyle(.plain)
-                    .font(.system(size: 13))
-                    
-                    Button(action: {
-                        WindowUtil.closeWindow(closeButton: closeButton)
-                        onTap?()
-                    }) {
-                        ZStack {
-                            Image(systemName: "circle.fill")
-                                .foregroundStyle(.secondary)
-                            Image(systemName: "xmark.circle.fill")
+                        .buttonBorderShape(.roundedRectangle)
+                        .foregroundStyle(.purple)
+                        .buttonStyle(.plain)
+                        .font(.system(size: 13))
+                        
+                        Button(action: {
+                            WindowUtil.closeWindow(closeButton: closeButton)
+                            onTap?()
+                        }) {
+                            ZStack {
+                                Image(systemName: "circle.fill")
+                                    .foregroundStyle(.secondary)
+                                Image(systemName: "xmark.circle.fill")
+                            }
                         }
-                    }
-                    .buttonBorderShape(.roundedRectangle)
-                    .foregroundStyle(.red)
-                    .buttonStyle(.plain)
-                    .font(.system(size: 13))
-                    
-                    Button(action: {
-                        WindowUtil.toggleMinimize(windowInfo: windowInfo)
-                        onTap?()
-                    }) {
-                        ZStack {
-                            Image(systemName: "circle.fill")
-                                .foregroundStyle(.secondary)
-                            Image(systemName: "minus.circle.fill")
+                        .buttonBorderShape(.roundedRectangle)
+                        .foregroundStyle(.red)
+                        .buttonStyle(.plain)
+                        .font(.system(size: 13))
+                        
+                        Button(action: {
+                            WindowUtil.toggleMinimize(windowInfo: windowInfo)
+                            onTap?()
+                        }) {
+                            ZStack {
+                                Image(systemName: "circle.fill")
+                                    .foregroundStyle(.secondary)
+                                Image(systemName: "minus.circle.fill")
+                            }
                         }
-                    }
-                    .buttonBorderShape(.roundedRectangle)
-                    .foregroundStyle(.yellow)
-                    .shadow(radius: 3)
-                    .buttonStyle(.plain)
-                    .font(.system(size: 13))
-                    
-                    Button(action: {
-                        WindowUtil.toggleFullScreen(windowInfo: windowInfo)
-                        onTap?()
-                    }) {
-                        ZStack {
-                            Image(systemName: "circle.fill")
-                                .foregroundStyle(.secondary)
-                            Image(systemName: "arrow.up.left.and.arrow.down.right.circle.fill")
+                        .buttonBorderShape(.roundedRectangle)
+                        .foregroundStyle(.yellow)
+                        .shadow(radius: 3)
+                        .buttonStyle(.plain)
+                        .font(.system(size: 13))
+                        
+                        Button(action: {
+                            WindowUtil.toggleFullScreen(windowInfo: windowInfo)
+                            onTap?()
+                        }) {
+                            ZStack {
+                                Image(systemName: "circle.fill")
+                                    .foregroundStyle(.secondary)
+                                Image(systemName: "arrow.up.left.and.arrow.down.right.circle.fill")
+                            }
                         }
+                        .buttonBorderShape(.roundedRectangle)
+                        .foregroundStyle(.green)
+                        .shadow(radius: 3)
+                        .buttonStyle(.plain)
+                        .font(.system(size: 13))
+                        
+                        Spacer()
                     }
-                    .buttonBorderShape(.roundedRectangle)
-                    .foregroundStyle(.green)
-                    .shadow(radius: 3)
-                    .buttonStyle(.plain)
-                    .font(.system(size: 13))
+                    .padding(6)
                     
                     Spacer()
                     
-                    if selected, let windowTitle = windowInfo.window?.title, !windowTitle.isEmpty, windowTitle != windowInfo.appName {
-                        let maxLabelWidth = calculatedSize.width - 150
-                        let stringMeasurementWidth = measureString(windowTitle, fontSize: 12).width + 5
-                        let width = maxLabelWidth > stringMeasurementWidth ? stringMeasurementWidth : maxLabelWidth
-                        
-                        TheMarquee(width: width, secsBeforeLooping: 3, speedPtsPerSec: 30, nonMovingAlignment: .leading) {
-                            Text(windowInfo.windowName ?? "Hidden window")
-                                .font(.system(size: 12, weight: .medium))
-                                .foregroundStyle(.primary)
+                    HStack {
+                        if selected, let windowTitle = windowInfo.window?.title, !windowTitle.isEmpty, windowTitle != windowInfo.appName {
+                            let maxLabelWidth = calculatedSize.width - 150
+                            let stringMeasurementWidth = measureString(windowTitle, fontSize: 12).width + 5
+                            let width = maxLabelWidth > stringMeasurementWidth ? stringMeasurementWidth : maxLabelWidth
+                            
+                            TheMarquee(width: width, secsBeforeLooping: 3, speedPtsPerSec: 20, nonMovingAlignment: .leading) {
+                                Text(windowInfo.windowName ?? "Hidden window")
+                                    .font(.system(size: 12, weight: .medium))
+                                    .foregroundStyle(.primary)
+                            }
+                            .padding(4)
+                            .dockStyle(cornerRadius: 6)
                         }
-                        .padding(4)
-                        .dockStyle(cornerRadius: 6)
                     }
+                    .padding(6)
                 }
-                .frame(alignment: .leading)
-                .padding([.horizontal, .top], 6)
             }
         }
         .contentShape(Rectangle())

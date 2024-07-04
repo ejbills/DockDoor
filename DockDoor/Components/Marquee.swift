@@ -22,16 +22,18 @@ struct TheMarquee<C: View>: View {
     @State private var containerSize: CGSize = .zero
     @State private var offset: Double = 0
     @State private var animating = false
-        
+
     var measured: Bool { contentSize != .zero && containerSize != .zero }
     var shouldMove: Bool { measured && contentSize.width > containerSize.width }
-    
+
     func startAnimation() {
         if !measured || !shouldMove || animating { return }
         animating = true
-        animLoop()
+        doAfter(secsBeforeLooping) {
+            self.animLoop()
+        }
     }
-    
+
     func animLoop() {
         if !animating { return }
         let offsetAmount = contentSize.width + spacingBetweenElements
@@ -47,13 +49,13 @@ struct TheMarquee<C: View>: View {
             }
         }
     }
-    
+
     var body: some View {
         ScrollView(.horizontal) {
             HStack(spacing: spacingBetweenElements) {
                 content()
                     .measure($contentSize)
-                
+
                 if measured && shouldMove {
                     content()
                 }
