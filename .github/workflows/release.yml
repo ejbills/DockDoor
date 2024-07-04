@@ -19,9 +19,21 @@ env:
 jobs:
   preparation:
     name: Preparation job
-    if: ${{ github.event.issue.pull_request && contains(github.event.comment.body, '/release') && github.event.comment.user.login == 'YOUR_GITHUB_USERNAME' }}
+    if: >-
+      ${{ 
+        github.event.issue.pull_request &&
+        contains(github.event.comment.body, '/release') &&
+        github.event.comment.user.login == 'YOUR_GITHUB_USERNAME' 
+      }}
     runs-on: ubuntu-latest
     steps:
+      - name: Check Event Details
+        run: |
+          echo "Event Action: ${{ github.event.action }}"
+          echo "Is PR: ${{ github.event.issue.pull_request }}"
+          echo "Comment Body: ${{ github.event.comment.body }}"
+          echo "Comment User: ${{ github.event.comment.user.login }}"
+          echo "Repo Owner: ${{ github.repository.owner }}"
       - name: Add reactions
         uses: peter-evans/create-or-update-comment@v2
         with:
