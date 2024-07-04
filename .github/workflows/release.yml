@@ -19,12 +19,10 @@ env:
 jobs:
   preparation:
     name: Preparation job
-    if: >-
-      ${{ 
-        github.event.issue.pull_request &&
-        contains(github.event.comment.body, '/release') &&
-        github.event.comment.user.login == 'ejbills' 
-      }}
+    if: >
+      ${{ github.event.issue.pull_request }} &&
+      ${{ contains(github.event.comment.body, '/release') }} &&
+      ${{ github.event.comment.user.login == github.event.repository.owner.login }}
     runs-on: ubuntu-latest
     steps:
       - name: Check Event Details
@@ -66,6 +64,7 @@ jobs:
           source venv/bin/activate
           pip install --upgrade pip
           pip install -r Configuration/requirements.txt
+          pip freeze  # Verify installed dependencies
       - name: Extract latest changes
         id: latest_changes
         run: |
@@ -73,12 +72,14 @@ jobs:
           python3 ./Configuration/generate_latest_changes.py
       - name: Check if version already released
         run: |
+          source venv/bin/activate
           if [[ $(xcrun agvtool what-version -terse) == $(cat new_version) ]]; then
             echo "Version already released" >> $GITHUB_STEP_SUMMARY
             exit 1
           fi
       - name: Check if release notes are empty
         run: |
+          source venv/bin/activate
           if [[ -z $(cat latest_changes) ]]; then
             echo "Release notes are empty" >> $GITHUB_STEP_SUMMARY
             exit 1
@@ -109,6 +110,7 @@ jobs:
           target_branch: ${{ steps.comment-branch.outputs.head_ref }}
           github_token: ${{ secrets.REPO_TOKEN }}
 
+  # Activate virtual environment in subsequent jobs 
   archive:
     name: Build and export app
     runs-on: macos-latest # Ensure we run on macOS to install the correct Xcode and Swift
@@ -124,6 +126,10 @@ jobs:
         with:
           name: python-venv
           path: python-venv
+      - name: Activate and check virtual environment
+        run: |
+          source python-venv/bin/activate
+          pip list  # Optional: Check installed packages
       - name: Parse info generated in preparation job
         id: info
         run: |
@@ -217,24 +223,15 @@ jobs:
           path: Release
       - name: Activate virtual environment
         run: source python-venv/bin/activate
-      - name: Parse info generated in preparation job
-        id: info
-        run: |
-          echo "new_version=$(cat artifacts/new_version)" >> $GITHUB_OUTPUT
-          echo "title=$(cat artifacts/title)" >> $GITHUB_OUTPUT
-          mv artifacts/new_version new_version
-          mv artifacts/title title
-          mv artifacts/latest_changes latest_changes
-      - name: Prepare Sparkle update creation
-        env:
-          PRIVATE_SPARKLE_KEY: ${{ secrets.PRIVATE_SPARKLE_KEY }}
-        run: |
-          echo -n "$PRIVATE_SPARKLE_KEY" > ./Configuration/sparkle_private_key
-      - name: Generate Sparkle notes
+      - name: Validate Environment and Run Script
         run: |
           source python-venv/bin/activate
+          pip list  # Check installed packages
+          which python  # Check python path
           python3 ./Configuration/generate_html_for_sparkle_release.py
-          mv Release/latest_changes.html Release/${{ env.projname }}.html
+      - name: Create summary
+        run: |
+          echo "Beta Release v${{ steps.info.outputs.new_version }} created" > $GITHUB_STEP_SUMMARY
       - name: Update appcast
         run: |
           source python-venv/bin/activate
@@ -259,11 +256,7 @@ jobs:
           body_path: latest_changes
           files: Release/${{ env.projname }}.zip
           prerelease: true
-      - name: Create summary
-        run: |
-          echo "Beta Release v${{ steps.info.outputs.new_version }} created" > $GITHUB_STEP_SUMMARY
       - uses: actions/checkout@v3
-        if: success()
       - name: Remove old appcast
         run: rm -rf docs/Support/appcast.xml
       - name: Retrieve previously generated appcast
@@ -271,9 +264,8 @@ jobs:
         with:
           name: appcast
           path: docs/Support
-      - name: Saving appcast
+      - name: Save appcast
         uses: stefanzweifel/git-auto-commit-action@v4
-        id: commit-appcast
         with:
           file_pattern: docs/Support/appcast.xml
           commit_message: "Update appcast with beta release for v${{ steps.info.outputs.new_version }}"
@@ -311,25 +303,11 @@ jobs:
           path: Release
       - name: Activate virtual environment
         run: source python-venv/bin/activate
-      - name: Parse info generated in preparation job
-        id: info
-        run: |
-          echo "new_version=$(cat artifacts/new_version)" >> $GITHUB_OUTPUT
-          echo "title=$(cat artifacts/title)" >> $GITHUB_OUTPUT
-          mv artifacts/new_version new_version
-          mv artifacts/title title
-          mv artifacts/latest_changes latest_changes
-      - name: Prepare Sparkle update creation
-        env:
-          PRIVATE_SPARKLE_KEY: ${{ secrets.PRIVATE_SPARKLE_KEY }}
-        run: |
-          echo -n "$PRIVATE_SPARKLE_KEY" > ./Configuration/sparkle_private_key
-          rm -rf Release/*.app
-          rm -rf Release/*.log
-          rm -rf Release/*.plist
-      - name: Generate Sparkle notes
+      - name: Validate Environment and Run Script
         run: |
           source python-venv/bin/activate
+          pip list  # Check installed packages
+          which python  # Check python path
           python3 ./Configuration/generate_html_for_sparkle_release.py
           mv Release/latest_changes.html Release/${{ env.projname }}.html
           python3 ./Configuration/remove_last_item_appcast.py
@@ -351,7 +329,7 @@ jobs:
           body_path: latest_changes
           files: Release/${{ env.projname }}.zip
           prerelease: false
-      - name: Saving changes
+      - name: Save changes
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           file_pattern: |
