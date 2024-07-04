@@ -8,7 +8,7 @@ permissions:
   pull-requests: write
 
 concurrency:
-  group: publish-release${{ github.ref }}
+  group: publish-release-${{ github.ref }}
   cancel-in-progress: true
 
 env:
@@ -18,7 +18,7 @@ env:
 jobs:
   preparation:
     name: Preparation job
-    if: ${{ github.event.issue.pull_request && contains(github.event.comment.body, '/release') && github.event.comment.user.login == github.repository_owner }}
+    if: ${{ github.event.issue.pull_request && contains(github.event.comment.body, '/release') && github.event.comment.user.login == github.repository.owner.login }}
     runs-on: ubuntu-latest
     steps:
       - name: Add reactions
