@@ -72,8 +72,9 @@ jobs:
             exit 1
           fi
       - name: Save generated info
-        uses: actions/upload-artifact@master
+        uses: actions/upload-artifact@v2
         with:
+          name: generated-info
           path: |
             new_version
             title
@@ -101,18 +102,21 @@ jobs:
     runs-on: macos-latest # Ensure we run on macOS to install the correct Xcode and Swift
     needs: preparation
     steps:
-      - uses: actions/download-artifact@master
+      - uses: actions/download-artifact@v2
+        name: Download generated info
         with:
+          name: generated-info
           path: artifacts
-      - uses: actions/download-artifact@master
+      - uses: actions/download-artifact@v2
         name: Download virtual environment
         with:
           name: python-venv
+          path: python-venv
       - name: Parse info generated in preparation job
         id: info
         run: |
-          echo "new_version=$(cat artifacts/artifact/new_version)" >> $GITHUB_OUTPUT
-          echo "title=$(cat artifacts/artifact/title)" >> $GITHUB_OUTPUT
+          echo "new_version=$(cat artifacts/new_version)" >> $GITHUB_OUTPUT
+          echo "title=$(cat artifacts/title)" >> $GITHUB_OUTPUT
       - uses: xt0rted/pull-request-comment-branch@v1
         id: comment-branch
         with:
@@ -163,7 +167,7 @@ jobs:
           cd Release
           ditto -c -k --sequesterRsrc --keepParent ${{ env.projname }}.app ${{ env.projname }}.zip
       - name: Upload archived app
-        uses: actions/upload-artifact@master
+        uses: actions/upload-artifact@v2
         with:
           name: app
           path: Release/${{ env.projname }}.zip
@@ -184,23 +188,26 @@ jobs:
         with:
           ref: ${{ steps.comment-branch.outputs.head_ref }}
           token: ${{ secrets.REPO_TOKEN }}
-      - uses: actions/download-artifact@master
+      - uses: actions/download-artifact@v2
+        name: Download generated info
         with:
+          name: generated-info
           path: artifacts
-      - uses: actions/download-artifact@master
+      - uses: actions/download-artifact@v2
         name: Download virtual environment
         with:
           name: python-venv
+          path: python-venv
       - name: Activate virtual environment
-        run: source venv/bin/activate
+        run: source python-venv/bin/activate
       - name: Parse info generated in preparation job
         id: info
         run: |
-          echo "new_version=$(cat artifacts/artifact/new_version)" >> $GITHUB_OUTPUT
-          echo "title=$(cat artifacts/artifact/title)" >> $GITHUB_OUTPUT
-          mv artifacts/artifact/new_version new_version
-          mv artifacts/artifact/title title
-          mv artifacts/artifact/latest_changes latest_changes
+          echo "new_version=$(cat artifacts/new_version)" >> $GITHUB_OUTPUT
+          echo "title=$(cat artifacts/title)" >> $GITHUB_OUTPUT
+          mv artifacts/new_version new_version
+          mv artifacts/title title
+          mv artifacts/latest_changes latest_changes
           mkdir Release
           mv artifacts/app/${{ env.projname }}.zip Release/
       - name: Prepare Sparkle update creation
@@ -210,14 +217,12 @@ jobs:
           echo -n "$PRIVATE_SPARKLE_KEY" > ./Configuration/sparkle_private_key
       - name: Generate Sparkle notes
         run: |
-          source venv/bin/activate
-          pip install --upgrade pip
-          pip install -r Configuration/requirements.txt
+          source python-venv/bin/activate
           python3 ./Configuration/generate_html_for_sparkle_release.py
           mv Release/latest_changes.html Release/${{ env.projname }}.html
       - name: Update appcast
         run: |
-          source venv/bin/activate
+          source python-venv/bin/activate
           ./Configuration/generate_appcast \
               --ed-key-file Configuration/sparkle_private_key \
               --link https://github.com/${{ github.repository_owner }}/${{ github.event.repository.name }}/releases \
@@ -226,7 +231,7 @@ jobs:
               -o docs/Support/appcast.xml \
               Release/
       - name: Save generated appcast
-        uses: actions/upload-artifact@master
+        uses: actions/upload-artifact@v2
         with:
           name: appcast
           path: docs/Support/appcast.xml
@@ -247,7 +252,7 @@ jobs:
       - name: Remove old appcast
         run: rm -rf docs/Support/appcast.xml
       - name: Retrieve previously generated appcast
-        uses: actions/download-artifact@master
+        uses: actions/download-artifact@v2
         with:
           name: appcast
           path: docs/Support
@@ -274,23 +279,26 @@ jobs:
         with:
           ref: ${{ steps.comment-branch.outputs.head_ref }}
           token: ${{ secrets.REPO_TOKEN }}
-      - uses: actions/download-artifact@master
+      - uses: actions/download-artifact@v2
+        name: Download generated info
         with:
+          name: generated-info
           path: artifacts
-      - uses: actions/download-artifact@master
+      - uses: actions/download-artifact@v2
         name: Download virtual environment
         with:
           name: python-venv
+          path: python-venv
       - name: Activate virtual environment
-        run: source venv/bin/activate
+        run: source python-venv/bin/activate
       - name: Parse info generated in preparation job
         id: info
         run: |
-          echo "new_version=$(cat artifacts/artifact/new_version)" >> $GITHUB_OUTPUT
-          echo "title=$(cat artifacts/artifact/title)" >> $GITHUB_OUTPUT
-          mv artifacts/artifact/new_version new_version
-          mv artifacts/artifact/title title
-          mv artifacts/artifact/latest_changes latest_changes
+          echo "new_version=$(cat artifacts/new_version)" >> $GITHUB_OUTPUT
+          echo "title=$(cat artifacts/title)" >> $GITHUB_OUTPUT
+          mv artifacts/new_version new_version
+          mv artifacts/title title
+          mv artifacts/latest_changes latest_changes
           mkdir Release
           mv artifacts/app/${{ env.projname }}.zip Release/
       - name: Prepare Sparkle update creation
@@ -303,15 +311,13 @@ jobs:
           rm -rf Release/*.plist
       - name: Generate Sparkle notes
         run: |
-          source venv/bin/activate
-          pip install --upgrade pip
-          pip install -r Configuration/requirements.txt
+          source python-venv/bin/activate
           python3 ./Configuration/generate_html_for_sparkle_release.py
           mv Release/latest_changes.html Release/${{ env.projname }}.html
           python3 ./Configuration/remove_last_item_appcast.py
       - name: Update appcast
         run: |
-          source venv/bin/activate
+          source python-venv/bin/activate
           ./Configuration/generate_appcast \
               --ed-key-file Configuration/sparkle_private_key \
               --link https://github.com/${{ github.repository_owner }}/${{ github.event.repository.name }}/releases \
@@ -360,7 +366,7 @@ jobs:
           from_branch: ${{ steps.comment-branch.outputs.head_ref }}
           target_branch: ${{ steps.comment-branch.outputs.base_ref }}
           github_token: ${{ secrets.REPO_TOKEN }}
-          message: "Release version v${{ steps.info.outputs.new_version }}"
+          message: "Release version v{{ steps.info.outputs.new_version }}"
       - uses: geekyeggo/delete-artifact@v2
         with:
           name: "*"
