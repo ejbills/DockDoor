@@ -105,18 +105,16 @@ jobs:
         with:
           ref: ${{ steps.comment-branch.outputs.head_ref }}
           token: ${{ secrets.REPO_TOKEN }}
-      - name: Install Swift 5.10.0
+      - name: Install latest Swift
         uses: swift-actions/setup-swift@v2
         with:
-          swift-version: '5.10.0'
+          swift-version: 'latest'
       - name: Override versions in project
         run: |
           sed -i '' "s/_VERSION = $(xcrun agvtool what-version -terse)/_VERSION = ${{ steps.info.outputs.new_version }}/g" ${{ env.projname }}.xcodeproj/project.pbxproj;
       - name: Delete Package.resolved to fix dependency issues
         run: |
           rm -f ${{ env.projname }}.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
-      - name: Setup Swift for Package Dependencies
-        run: swift -version 5.10.0
       - name: Resolve package dependencies
         run: |
           xcodebuild -resolvePackageDependencies -project ${{ env.projname }}.xcodeproj
@@ -141,7 +139,7 @@ jobs:
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
       - name: Switch Xcode version
         run: |
-          sudo xcode-select -s "/Applications/Xcode_14.2.app"
+          sudo xcode-select -s "/Applications/Xcode.app"
           /usr/bin/xcodebuild -version
       - name: Build and archive
         run: xcodebuild clean archive -project ${{ env.projname }}.xcodeproj -scheme ${{ env.projname }} -archivePath ${{ env.projname }}
@@ -267,10 +265,10 @@ jobs:
           mv artifacts/artifact/latest_changes latest_changes
           mkdir Release
           mv artifacts/app/${{ env.projname }}.zip Release/
-      - name: Install Swift 5.10.0
+      - name: Install latest Swift
         uses: swift-actions/setup-swift@v2
         with:
-          swift-version: '5.10.0'
+          swift-version: 'latest'
       - name: Prepare Sparkle update creation
         env:
           PRIVATE_SPARKLE_KEY: ${{ secrets.PRIVATE_SPARKLE_KEY }}
