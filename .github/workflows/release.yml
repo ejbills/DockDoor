@@ -341,8 +341,10 @@ jobs:
       - uses: geekyeggo/delete-artifact@v2
         with:
           name: "*"
+      - name: Add negative reaction
+        if: ${{ !(needs.archive.result == 'success' && needs.release.result == 'success'  && (needs.pre-release.result == 'success' || needs.pre-release.result == 'skipped')) }}
       - name: Add success reactions
-        if: ${{ needs.archive.result == 'success' && needs.release.result == 'success'  && (needs.pre-release.result == 'success' or needs.pre-release.result == 'skipped') }}
+        if: ${{ needs.archive.result == 'success' && needs.release.result == 'success'  && (needs.pre-release.result == 'success' || needs.pre-release.result == 'skipped') }}
         uses: peter-evans/create-or-update-comment@v2
         with:
           comment-id: ${{ github.event.comment.id }}
