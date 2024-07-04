@@ -108,7 +108,7 @@ jobs:
       - name: Install latest Swift
         uses: swift-actions/setup-swift@v2
         with:
-          swift-version: 'latest'
+          swift-version: '5.10.0'
       - name: Override versions in project
         run: |
           sed -i '' "s/_VERSION = $(xcrun agvtool what-version -terse)/_VERSION = ${{ steps.info.outputs.new_version }}/g" ${{ env.projname }}.xcodeproj/project.pbxproj;
@@ -268,7 +268,7 @@ jobs:
       - name: Install latest Swift
         uses: swift-actions/setup-swift@v2
         with:
-          swift-version: 'latest'
+          swift-version: '5.10.0'
       - name: Prepare Sparkle update creation
         env:
           PRIVATE_SPARKLE_KEY: ${{ secrets.PRIVATE_SPARKLE_KEY }}
