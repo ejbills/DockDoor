@@ -1,0 +1,135 @@
+name: "Manual Release"
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version number (e.g., 1.0.13)"
+        required: true
+      changelog:
+        description: "Changelog for the release"
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Build and Release
+    runs-on: macos-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Xcode 15.3
+        run: |
+          sudo xcode-select -s /Applications/Xcode_15.3.app
+          xcodebuild -version
+
+      - name: Override versions in project
+        run: |
+          sed -i '' "s/^MARKETING_VERSION = .*/MARKETING_VERSION = ${{ github.event.inputs.version }}/" DockDoor.xcodeproj/project.pbxproj
+
+      - name: Delete Package.resolved to fix dependency issues
+        run: |
+          rm -f DockDoor.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
+
+      - name: Resolve package dependencies
+        run: xcodebuild -resolvePackageDependencies -project DockDoor.xcodeproj
+
+      - name: Install the Apple certificate and provisioning profile
+        env:
+          BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
+          P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
+          BUILD_PROVISION_PROFILE_BASE64: ${{ secrets.BUILD_PROVISION_PROFILE_BASE64 }}
+          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+        run: |
+          CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
+          PP_PATH=$RUNNER_TEMP/build_pp.mobileprovision
+          KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
+
+          echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode --output $CERTIFICATE_PATH
+          echo -n "$BUILD_PROVISION_PROFILE_BASE64" | base64 --decode --output $PP_PATH
+
+          security create-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+          security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+
+          security import $CERTIFICATE_PATH -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
+          security list-keychain -d user -s $KEYCHAIN_PATH
+
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
+
+      - name: Build and archive
+        run: xcodebuild clean archive -project DockDoor.xcodeproj -scheme DockDoor -archivePath DockDoor.xcarchive
+
+      - name: Create export_options.plist
+        run: |
+          cat <<EOF > export_options.plist
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+            <key>method</key>
+            <string>developer-id</string>
+            <key>signingCertificate</key>
+            <string>Apple Development</string>
+            <key>signingStyle</key>
+            <string>manual</string>
+          </dict>
+          </plist>
+          EOF
+
+      - name: Export app
+        run: xcodebuild -exportArchive -archivePath DockDoor.xcarchive -exportPath Release -exportOptionsPlist export_options.plist
+
+      - name: Create DMG
+        run: |
+          mkdir -p Release/dmg
+          hdiutil create -volname DockDoor -srcfolder Release/DockDoor.app -ov -format UDZO Release/dmg/DockDoor.dmg
+
+      - name: List DMG directory contents
+        run: ls -al Release/dmg
+
+      - name: Ensure DMG file exists
+        run: |
+          if [ ! -f Release/dmg/DockDoor.dmg ]; then
+            echo "DMG file not found!"
+            exit 1
+          fi
+
+      - name: Zip the DMG
+        run: |
+          cd Release/dmg
+          ditto -c -k --sequesterRsrc --keepParent DockDoor.dmg DockDoor.zip
+
+      - name: Create GitHub Release
+        id: create_release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: Release/dmg/DockDoor.zip
+          tag_name: "v${{ github.event.inputs.version }}"
+          release_name: "v${{ github.event.inputs.version }}"
+          body: ${{ github.event.inputs.changelog }}
+          draft: false
+          prerelease: false
+
+      - name: Prepare Sparkle private key
+        env:
+          PRIVATE_SPARKLE_KEY: ${{ secrets.PRIVATE_SPARKLE_KEY }}
+        run: |
+          echo -n "$PRIVATE_SPARKLE_KEY" > ./sparkle_private_key
+
+      - name: Generate appcast
+        run: |
+          DOWNLOAD_URL="https://github.com/${{ github.repository_owner }}/${{ github.event.repository.name }}/releases/download/v${{ github.event.inputs.version }}/DockDoor.zip"
+          ./Sparkle/generate_appcast --ed-key-file ./sparkle_private_key --link $DOWNLOAD_URL --output appcast.xml Release/
+
+      - name: Commit updated appcast
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add appcast.xml
+          git commit -m "Update appcast for version ${{ github.event.inputs.version }}"
+          git push origin HEAD
