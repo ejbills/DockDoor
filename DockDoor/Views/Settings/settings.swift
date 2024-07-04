@@ -58,7 +58,7 @@ func UpdatesSettingsViewController(updater: SPUUpdater) -> SettingsPane {
         title: "Updates",
         toolbarIcon: NSImage(systemSymbolName: "arrow.triangle.2.circlepath", accessibilityDescription: "Update settings")!
     ) {
-        CheckForUpdatesView(updater: updater)
+        UpdateView(updater: updater)
     }
 
     return Settings.PaneHostingController(pane: paneView)

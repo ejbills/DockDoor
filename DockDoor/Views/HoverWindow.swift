@@ -337,12 +337,14 @@ struct HoverView: View {
                         Image(nsImage: appIcon)
                             .resizable()
                             .scaledToFit()
+                            .zIndex(1)
                             .frame(width: 24, height: 24)
                     } else {
                         ProgressView()
                             .frame(width: 24, height: 24)
                     }
                     Text(appName)
+                        .lineLimit(1)
                         .padding(3)
                         .fontWeight(.medium)
                         .font(.system(size: 14))
@@ -462,7 +464,7 @@ struct WindowPreview: View {
         return CGSize(width: targetWidth, height: targetHeight)
     }
     
-    private func windowContent(isMinimized: Bool) -> some View {
+    private func windowContent(isMinimized: Bool, isSelected: Bool) -> some View {
         Group {
             if isMinimized {
                 let width = maxWindowDimension.x > 300 ? maxWindowDimension.x : 300
@@ -496,6 +498,11 @@ struct WindowPreview: View {
                     .aspectRatio(contentMode: .fill)
             }
         }
+        .overlay { if isSelected { FluidGradient(blobs: [.purple, .blue, .green, .yellow, .red, .purple].shuffled(),
+                                               highlights: [.red, .orange, .pink, .blue, .purple].shuffled(),
+                                               speed: 0.45,
+                                               blur: 0.75).opacity(0.125)
+        }}
         .frame(width: isMinimized ? nil : calculatedSize.width, height: isMinimized ? nil : calculatedSize.height, alignment: .center)
         .frame(maxWidth: calculatedMaxDimensions?.width, maxHeight: calculatedMaxDimensions?.height)
     }
@@ -505,19 +512,32 @@ struct WindowPreview: View {
         let selected = isHovering || isHighlighted
         
         ZStack(alignment: .topTrailing) {
-            windowContent(isMinimized: windowInfo.isMinimized)
-                .overlay { if selected { FluidGradient(blobs: [.purple, .blue, .green, .yellow, .red, .purple].shuffled(),
-                                                       highlights: [.red, .orange, .pink, .blue, .purple].shuffled(),
-                                                       speed: 0.45,
-                                                       blur: 0.75).opacity(0.125)
-                }}
-                .overlay { Color.white.opacity(isHoveringOverTabMenu ? 0.1 : 0) }
-                .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
-                .shadow(radius: selected || isHoveringOverTabMenu ? 0 : 3)
-                .background {
-                    RoundedRectangle(cornerRadius: 6, style: .continuous)
-                        .fill(Color.clear.shadow(.drop(color: .black.opacity(selected ? 0.35 : 0.25), radius: selected ? 12 : 8, y: selected ? 6 : 4)))
+            VStack(spacing: 0) {
+                windowContent(isMinimized: windowInfo.isMinimized, isSelected: selected)
+                    .overlay { Color.white.opacity(isHoveringOverTabMenu ? 0.1 : 0) }
+                    .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
+                    .shadow(radius: selected || isHoveringOverTabMenu ? 0 : 3)
+                    .background {
+                        RoundedRectangle(cornerRadius: 6, style: .continuous)
+                            .fill(Color.clear.shadow(.drop(color: .black.opacity(selected ? 0.35 : 0.25), radius: selected ? 12 : 8, y: selected ? 6 : 4)))
+                    }
+            }
+            .overlay(alignment: .bottomLeading) {
+                if selected, let windowTitle = windowInfo.window?.title, !windowTitle.isEmpty, windowTitle != windowInfo.appName {
+                    let maxLabelWidth = calculatedSize.width - 50
+                    let stringMeasurementWidth = measureString(windowTitle, fontSize: 12).width + 5
+                    let width = maxLabelWidth > stringMeasurementWidth ? stringMeasurementWidth : maxLabelWidth
+                    
+                    TheMarquee(width: width, secsBeforeLooping: 3, speedPtsPerSec: 20, nonMovingAlignment: .leading) {
+                        Text(windowInfo.windowName ?? "Hidden window")
+                            .font(.system(size: 12, weight: .medium))
+                            .foregroundStyle(.primary)
+                    }
+                    .padding(4)
+                    .dockStyle(cornerRadius: 6)
+                    .padding(4)
                 }
+            }
             
             if !windowInfo.isMinimized, let closeButton = windowInfo.closeButton {
                 VStack(alignment: .leading) {
@@ -586,26 +606,7 @@ struct WindowPreview: View {
                         
                         Spacer()
                     }
-                    .padding(6)
-                    
-                    Spacer()
-                    
-                    HStack {
-                        if selected, let windowTitle = windowInfo.window?.title, !windowTitle.isEmpty, windowTitle != windowInfo.appName {
-                            let maxLabelWidth = calculatedSize.width - 150
-                            let stringMeasurementWidth = measureString(windowTitle, fontSize: 12).width + 5
-                            let width = maxLabelWidth > stringMeasurementWidth ? stringMeasurementWidth : maxLabelWidth
-                            
-                            TheMarquee(width: width, secsBeforeLooping: 3, speedPtsPerSec: 20, nonMovingAlignment: .leading) {
-                                Text(windowInfo.windowName ?? "Hidden window")
-                                    .font(.system(size: 12, weight: .medium))
-                                    .foregroundStyle(.primary)
-                            }
-                            .padding(4)
-                            .dockStyle(cornerRadius: 6)
-                        }
-                    }
-                    .padding(6)
+                    .padding(4)
                 }
             }
         }

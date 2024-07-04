@@ -8,54 +8,111 @@
 import SwiftUI
 import Sparkle
 
-// This view model class publishes when new updates can be checked by the user
-final class CheckForUpdatesViewModel: ObservableObject {
+final class UpdaterViewModel: ObservableObject {
     @Published var canCheckForUpdates = false
-
-    init(updater: SPUUpdater) {
-        updater.publisher(for: \.canCheckForUpdates)
-            .assign(to: &$canCheckForUpdates)
-    }
-}
-
-// This is the view for the Check for Updates menu item
-// Note this intermediate view is necessary for the disabled state on the menu item to work properly before Monterey.
-// See https://stackoverflow.com/questions/68553092/menu-not-updating-swiftui-bug for more info
-struct CheckForUpdatesView: View {
-    @ObservedObject private var checkForUpdatesViewModel: CheckForUpdatesViewModel
+    @Published var lastUpdateCheckDate: Date?
+    @Published var currentVersion: String
+    @Published var isAutomaticChecksEnabled: Bool
+    @Published var updateStatus: UpdateStatus = .noUpdates
+    
     private let updater: SPUUpdater
+    
+    enum UpdateStatus {
+        case noUpdates
+        case checking
+        case available(version: String)
+        case error(String)
+    }
     
     init(updater: SPUUpdater) {
         self.updater = updater
+        self.currentVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "Unknown"
+        self.isAutomaticChecksEnabled = updater.automaticallyChecksForUpdates
         
-        // Create our view model for our CheckForUpdatesView
-        self.checkForUpdatesViewModel = CheckForUpdatesViewModel(updater: updater)
+        updater.publisher(for: \.canCheckForUpdates)
+            .assign(to: &$canCheckForUpdates)
+        
+        updater.publisher(for: \.lastUpdateCheckDate)
+            .assign(to: &$lastUpdateCheckDate)
+    }
+    
+    func checkForUpdates() {
+        updateStatus = .checking
+        updater.checkForUpdates()
+    }
+    
+    func toggleAutomaticChecks() {
+        isAutomaticChecksEnabled.toggle()
+        updater.automaticallyChecksForUpdates = isAutomaticChecksEnabled
+    }
+}
+
+struct UpdateView: View {
+    @StateObject private var viewModel: UpdaterViewModel
+    
+    init(updater: SPUUpdater) {
+        _viewModel = StateObject(wrappedValue: UpdaterViewModel(updater: updater))
     }
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 20) {
-            HStack {
-                Image(systemName: checkForUpdatesViewModel.canCheckForUpdates ? "checkmark.circle.fill" : "xmark.circle.fill")
-                    .foregroundColor(checkForUpdatesViewModel.canCheckForUpdates ? .green : .red)
-                    .scaleEffect(checkForUpdatesViewModel.canCheckForUpdates ? 1.2 : 1.0)
-                    .padding(10)
-                
-                Text("Can check for updates")
-                    .font(.headline)
-            }
-            
-            Button(action: updater.checkForUpdates) {
-                HStack {
-                    Image(systemName: "arrow.triangle.2.circlepath")
-                    Text("Check for Updates…")
-                }
-            }
-            .buttonStyle(.bordered)
-            .disabled(!checkForUpdatesViewModel.canCheckForUpdates)
+        HStack {
+            updateStatusView
+            Spacer()
+
+            Divider()
             
             Spacer()
+            VStack(alignment: .leading) {
+                VStack(alignment: .leading) {
+                    Text("Current Version: \(viewModel.currentVersion)")
+                    if let lastCheck = viewModel.lastUpdateCheckDate {
+                        Text("Last checked: \(lastCheck, formatter: dateFormatter)")
+                    }
+                }
+                
+                Divider()
+                Button(action: viewModel.checkForUpdates) {
+                    Label("Check for Updates", systemImage: "arrow.triangle.2.circlepath")
+                }
+                .disabled(!viewModel.canCheckForUpdates)
+                
+                Toggle("Automatically check for updates", isOn: $viewModel.isAutomaticChecksEnabled)
+                    .onChange(of: viewModel.isAutomaticChecksEnabled) { _, _ in
+                        viewModel.toggleAutomaticChecks()
+                    }
+            }
         }
-        .padding(20)
-        .frame(minWidth: 600)
+        .padding()
+        .frame(width: 600)
     }
+    
+    private var updateStatusView: some View {
+        Group {
+            switch viewModel.updateStatus {
+            case .noUpdates:
+                Label("Up to date", systemImage: "checkmark.circle.fill")
+                    .foregroundColor(.green)
+            case .checking:
+                ProgressView()
+                    .scaleEffect(0.7)
+            case .available(let version):
+                VStack {
+                    Label("Update available", systemImage: "arrow.down.circle.fill")
+                        .foregroundColor(.blue)
+                    Text("Version \(version)")
+                        .font(.caption)
+                }
+            case .error(let message):
+                Label(message, systemImage: "exclamationmark.triangle.fill")
+                    .foregroundColor(.red)
+            }
+        }
+    }
+    
+    private let dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .short
+        return formatter
+    }()
 }

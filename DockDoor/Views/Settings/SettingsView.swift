@@ -72,10 +72,6 @@ struct SizePickerView: View {
     
     var body: some View {
         VStack(spacing: 20) {
-            Slider(value: $windowPadding, in: -200...200, step: 20) {
-                Text("Window Buffer (adjust if hover window is misaligned with dock)")
-            }.buttonStyle(PlainButtonStyle())
-            
             Picker("Window Size", selection: $sizingMultiplier) {
                 ForEach(2...10, id: \.self) { size in
                     Text(getLabel(for: CGFloat(size))).tag(CGFloat(size))
@@ -84,6 +80,10 @@ struct SizePickerView: View {
             .onChange(of: sizingMultiplier) { _, newValue in
                 HoverWindow.shared.windowSize = getWindowSize()
             }
+            
+            Slider(value: $windowPadding, in: -200...200, step: 20) {
+                Text("Window Buffer (if misaligned with dock)")
+            }.buttonStyle(PlainButtonStyle())
         }
     }
     
