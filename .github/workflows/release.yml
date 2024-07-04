@@ -17,22 +17,9 @@ env:
   beta-channel-name: "beta"
 
 jobs:
-  diag:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Print event details
-        run: |
-          echo "Event action: ${{ github.event.action }}"
-          echo "Is PR: ${{ github.event.issue.pull_request }}"
-          echo "Comment body: ${{ github.event.comment.body }}"
-          echo "Comment user: ${{ github.event.comment.user.login }}"
-          echo "Repo owner: ${{ github.repository.owner }}"
-          echo "PR number: ${{ github.event.issue.number }}"
-          cat ${{ github.event_path }}
-  
   preparation:
     name: Preparation job
-    if: ${{ github.event.issue.pull_request && contains(github.event.comment.body, '/release') && github.event.comment.user.login == github.repository.owner }}
+    if: ${{ github.event.issue.pull_request && contains(github.event.comment.body, '/release') && github.event.comment.user.login == github.event.repository.owner.login }}
     runs-on: ubuntu-latest
     steps:
       - name: Add reactions
