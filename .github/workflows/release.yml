@@ -106,7 +106,7 @@ jobs:
           ref: ${{ steps.comment-branch.outputs.head_ref }}
           token: ${{ secrets.REPO_TOKEN }}
       - name: Install Swift 5.10.0
-        uses: fwal/setup-swift@v0.8.2
+        uses: swift-actions/setup-swift@v2
         with:
           swift-version: '5.10.0'
       - name: Override versions in project
@@ -266,7 +266,7 @@ jobs:
           mkdir Release
           mv artifacts/app/${{ env.projname }}.zip Release/
       - name: Install Swift 5.10.0
-        uses: fwal/setup-swift@v0.8.2
+        uses: swift-actions/setup-swift@v2
         with:
           swift-version: '5.10.0'
       - name: Prepare Sparkle update creation
@@ -296,7 +296,7 @@ jobs:
         with:
           name: v${{ steps.info.outputs.new_version }} - ${{ steps.info.outputs.title }}
           tag_name: v${{ steps.info.outputs.new_version }}
-          fail_on_unmatched-files: true
+          fail_on_unmatched files: true
           body_path: latest_changes
           files: Release/${{ env.projname }}.zip
           prerelease: false
