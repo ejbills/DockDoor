@@ -3,6 +3,10 @@ on:
   issue_comment:
     types: [created]
 
+permissions:
+  contents: write
+  pull-requests: write
+
 concurrency:
   group: publish-release${{ github.ref }}
   cancel-in-progress: true
@@ -36,10 +40,13 @@ jobs:
             }
       - uses: xt0rted/pull-request-comment-branch@v1 # check out branch of PR
         id: comment-branch
+        with:
+          repo-token: ${{ secrets.REPO_TOKEN }}
       - uses: actions/checkout@v3
         if: success()
         with:
           ref: ${{ steps.comment-branch.outputs.head_ref }}
+          token: ${{ secrets.REPO_TOKEN }}
       - name: Extract latest changes # generate release notes, version and title to use in the release
         id: latest_changes
         run: |
@@ -74,7 +81,7 @@ jobs:
           type: now
           from_branch: ${{ steps.comment-branch.outputs.base_ref }}
           target_branch: ${{ steps.comment-branch.outputs.head_ref }}
-          github_token: ${{ github.token }}
+          github_token: ${{ secrets.REPO_TOKEN }}
 
   archive:
     name: Build and export app
@@ -91,16 +98,17 @@ jobs:
           echo "title=$(cat artifacts/artifact/title)" >> $GITHUB_OUTPUT
       - uses: xt0rted/pull-request-comment-branch@v1 # check out branch of PR
         id: comment-branch
+        with:
+          repo-token: ${{ secrets.REPO_TOKEN }}
       - uses: actions/checkout@v3
         if: success()
         with:
           ref: ${{ steps.comment-branch.outputs.head_ref }}
+          token: ${{ secrets.REPO_TOKEN }}
       - name: Override versions in project # set new version in project
         run: |
           sed -i '' "s/_VERSION = $(xcrun agvtool what-version -terse)/_VERSION = ${{ steps.info.outputs.new_version }}/g" ${{ env.projname }}.xcodeproj/project.pbxproj;
       - name: Install the Apple certificate and provisioning profile
-          # install the Apple certificate and provisioning profile
-          # following https://docs.github.com/en/actions/deployment/deploying-xcode-applications/installing-an-apple-certificate-on-macos-runners-for-xcode-development
         env:
           BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
           P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
@@ -155,10 +163,13 @@ jobs:
     steps:
       - uses: xt0rted/pull-request-comment-branch@v1 # check out branch of PR
         id: comment-branch
+        with:
+          repo-token: ${{ secrets.REPO_TOKEN }}
       - uses: actions/checkout@v3
         if: success()
         with:
           ref: ${{ steps.comment-branch.outputs.head_ref }}
+          token: ${{ secrets.REPO_TOKEN }}
       - uses: actions/download-artifact@master # download all previously generated artifacts
         with:
           path: artifacts
@@ -234,10 +245,13 @@ jobs:
     steps:
       - uses: xt0rted/pull-request-comment-branch@v1 # check out branch of PR
         id: comment-branch
+        with:
+          repo-token: ${{ secrets.REPO_TOKEN }}
       - uses: actions/checkout@v3
         if: success()
         with:
           ref: ${{ steps.comment-branch.outputs.head_ref }}
+          token: ${{ secrets.REPO_TOKEN }}
       - uses: actions/download-artifact@master # download all previously generated artifacts
         with:
           path: artifacts
@@ -301,16 +315,19 @@ jobs:
     steps:
       - uses: xt0rted/pull-request-comment-branch@v1 # check out branch of PR
         id: comment-branch
+        with:
+          repo-token: ${{ secrets.REPO_TOKEN }}
       - uses: actions/checkout@v3 # checkout again, because the previous checkout is detached
         with:
           ref: ${{ steps.comment-branch.outputs.head_ref }}
+          token: ${{ secrets.REPO_TOKEN }}
       - name: Merge PR # merge PR
         uses: devmasx/merge-branch@master
         with:
           type: now
           from_branch: ${{ steps.comment-branch.outputs.head_ref }}
           target_branch: ${{ steps.comment-branch.outputs.base_ref }}
-          github_token: ${{ github.token }}
+          github_token: ${{ secrets.REPO_TOKEN }}
           message: "Release version v${{ steps.info.outputs.new_version }}"
       - uses: geekyeggo/delete-artifact@v2
         with:
