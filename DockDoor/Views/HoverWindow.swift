@@ -298,12 +298,14 @@ struct HoverView: View {
             ScrollViewReader { scrollProxy in
                 ScrollView(dockPosition == .bottom || CurrentWindow.shared.showingTabMenu ? .horizontal : .vertical, showsIndicators: false) {
                     DynStack(direction: CurrentWindow.shared.showingTabMenu ? .horizontal : (dockPosition == .bottom ? .horizontal : .vertical), spacing: 16) {
-                        if !minimizedWindows.isEmpty {
-                            minimizedWindowsView
+                        if !minimizedOrHiddenWindows.isEmpty {
+                            minimizedOrHiddenWindowsView
                         }
                         
-                        ForEach(nonMinimizedWindows.indices, id: \.self) { index in
-                            WindowPreview(windowInfo: nonMinimizedWindows[index], onTap: onWindowTap, index: index, dockPosition: dockPosition, maxWindowDimension: maxWindowDimension, bestGuessMonitor: bestGuessMonitor)
+                        ForEach(activeWindows.indices, id: \.self) { index in
+                            WindowPreview(windowInfo: activeWindows[index], onTap: onWindowTap, index: index,
+                                          dockPosition: dockPosition, maxWindowDimension: maxWindowDimension,
+                                          bestGuessMonitor: bestGuessMonitor)
                                 .id("\(appName)-\(index)")
                         }
                     }
@@ -382,20 +384,20 @@ struct HoverView: View {
         .frame(maxWidth: self.bestGuessMonitor.visibleFrame.width, maxHeight: self.bestGuessMonitor.visibleFrame.height)
     }
     
-    private var minimizedWindows: [WindowInfo] {
-        windows.filter { $0.isMinimized }
+    private var minimizedOrHiddenWindows: [WindowInfo] {
+        windows.filter { $0.isMinimized || $0.isHidden }
+    }
+
+    private var activeWindows: [WindowInfo] {
+        windows.filter { !$0.isMinimized && !$0.isHidden }
     }
     
-    private var nonMinimizedWindows: [WindowInfo] {
-        windows.filter { !$0.isMinimized }
-    }
-    
-    private var minimizedWindowsView: some View {
+    private var minimizedOrHiddenWindowsView: some View {
         ScrollView(dockPosition == .bottom ? .vertical : .horizontal) {
             DynStack(direction: dockPosition == .bottom ? .vertical : .horizontal, spacing: 4) {
-                ForEach(minimizedWindows.indices, id: \.self) { index in
+                ForEach(minimizedOrHiddenWindows.indices, id: \.self) { index in
                     WindowPreview(
-                        windowInfo: minimizedWindows[index],
+                        windowInfo: minimizedOrHiddenWindows[index],
                         onTap: onWindowTap,
                         index: index,
                         dockPosition: dockPosition,
@@ -464,10 +466,11 @@ struct WindowPreview: View {
         return CGSize(width: targetWidth, height: targetHeight)
     }
     
-    private func windowContent(isMinimized: Bool, isSelected: Bool) -> some View {
+    private func windowContent(isMinimized: Bool, isHidden: Bool, isSelected: Bool) -> some View {
         Group {
-            if isMinimized {
+            if isMinimized || isHidden {
                 let width = maxWindowDimension.x > 300 ? maxWindowDimension.x : 300
+                let labelText = isMinimized ? "Minimized" : "Hidden"
                 
                 HStack(spacing: 16) {
                     Image(systemName: "eye.slash.fill")
@@ -477,12 +480,12 @@ struct WindowPreview: View {
                     Divider()
                     
                     VStack(alignment: .leading) {
-                        Text("Minimized")
+                        Text(labelText)
                             .font(.caption)
                             .foregroundStyle(.secondary)
                         
                         TheMarquee(width: width - 100, secsBeforeLooping: 2, speedPtsPerSec: 30, nonMovingAlignment: .leading) {
-                            Text(windowInfo.windowName ?? "Hidden window")
+                            Text(windowInfo.windowName ?? "\(labelText) window")
                                 .font(.system(size: 12, weight: .medium))
                                 .foregroundStyle(.primary)
                         }
@@ -503,7 +506,9 @@ struct WindowPreview: View {
                                                speed: 0.45,
                                                blur: 0.75).opacity(0.125)
         }}
-        .frame(width: isMinimized ? nil : calculatedSize.width, height: isMinimized ? nil : calculatedSize.height, alignment: .center)
+        .frame(width: isMinimized || isHidden ? nil : calculatedSize.width, 
+               height: isMinimized || isHidden ? nil : calculatedSize.height,
+               alignment: .center)
         .frame(maxWidth: calculatedMaxDimensions?.width, maxHeight: calculatedMaxDimensions?.height)
     }
     
@@ -513,7 +518,7 @@ struct WindowPreview: View {
         
         ZStack(alignment: .topTrailing) {
             VStack(spacing: 0) {
-                windowContent(isMinimized: windowInfo.isMinimized, isSelected: selected)
+                windowContent(isMinimized: windowInfo.isMinimized, isHidden: windowInfo.isHidden, isSelected: selected)
                     .overlay { Color.white.opacity(isHoveringOverTabMenu ? 0.1 : 0) }
                     .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
                     .shadow(radius: selected || isHoveringOverTabMenu ? 0 : 3)
@@ -623,6 +628,8 @@ struct WindowPreview: View {
         .onTapGesture {
             if windowInfo.isMinimized {
                 WindowUtil.toggleMinimize(windowInfo: windowInfo)
+            } else if windowInfo.isHidden {
+                WindowUtil.toggleHidden(windowInfo: windowInfo)
             } else {
                 WindowUtil.bringWindowToFront(windowInfo: windowInfo)
             }

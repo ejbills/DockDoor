@@ -18,11 +18,13 @@ struct WindowInfo: Identifiable, Hashable {
     let window: SCWindow?
     let appName: String
     let bundleID: String
+    let pid: pid_t
     let windowName: String?
     var image: CGImage?
     var axElement: AXUIElement
     var closeButton: AXUIElement?
     let isMinimized: Bool
+    let isHidden: Bool
 }
 
 /// Cache item structure for storing captured window images.
@@ -125,22 +127,9 @@ final class WindowUtil {
             AXUIElementCopyAttributeValue(axWindow, kAXSizeAttribute as CFString, &axSize)
             let axSizeValue = axSize as? CGSize
             
-            // Enhanced fuzzy title matching
-            if let windowTitle = window.title {
-                let axTitleWords = axTitleString.lowercased().split(separator: " ")
-                let windowTitleWords = windowTitle.lowercased().split(separator: " ")
-                
-                let matchingWords = axTitleWords.filter { windowTitleWords.contains($0) }
-                let matchPercentage = Double(matchingWords.count) / Double(windowTitleWords.count)
-                
-                if matchPercentage >= 0.90 || matchPercentage.isNaN {  // At least 90% of words match
-                    return axWindow
-                }
-                
-                // Additional check for suffixes/prefixes often added by browsers
-                if axTitleString.lowercased().contains(windowTitle.lowercased()) {
-                    return axWindow
-                }
+            // Use the new isFuzzyMatch function for title matching
+            if let windowTitle = window.title, isFuzzyMatch(windowTitle: windowTitle, axTitleString: axTitleString) {
+                return axWindow
             }
             
             // Position and size matching (if available and non-zero)
@@ -168,6 +157,17 @@ final class WindowUtil {
         return nil
     }
     
+    /// Fuzzy title matching
+    static func isFuzzyMatch(windowTitle: String, axTitleString: String) -> Bool {
+        let axTitleWords = axTitleString.lowercased().split(separator: " ")
+        let windowTitleWords = windowTitle.lowercased().split(separator: " ")
+        
+        let matchingWords = axTitleWords.filter { windowTitleWords.contains($0) }
+        let matchPercentage = Double(matchingWords.count) / Double(windowTitleWords.count)
+        
+        return matchPercentage >= 0.90 || matchPercentage.isNaN || axTitleString.lowercased().contains(windowTitle.lowercased())
+    }
+    
     /// Retrieves the close button for a given window reference.
     static func getCloseButton(for windowRef: AXUIElement) -> AXUIElement? {
         var closeButton: AnyObject?
@@ -192,15 +192,74 @@ final class WindowUtil {
     
     /// Toggles the minimize state of a window.
     static func toggleMinimize(windowInfo: WindowInfo) {
-        let minimizeResult: AXError = windowInfo.isMinimized ?
-        AXUIElementSetAttributeValue(windowInfo.axElement, kAXMinimizedAttribute as CFString, kCFBooleanFalse) :
-        AXUIElementSetAttributeValue(windowInfo.axElement, kAXMinimizedAttribute as CFString, kCFBooleanTrue)
-        
-        if minimizeResult != .success {
-            print("Error toggling minimized state of window: \(minimizeResult.rawValue)")
+        if windowInfo.isMinimized {
+            // Check if the parent app is hidden
+            if let app = NSRunningApplication(processIdentifier: windowInfo.pid), app.isHidden {
+                // Unhide the entire app
+                app.unhide()
+            }
+            
+            // Un-minimize the window
+            let minimizeResult = AXUIElementSetAttributeValue(windowInfo.axElement, kAXMinimizedAttribute as CFString, kCFBooleanFalse)
+            
+            if minimizeResult != .success {
+                print("Error un-minimizing window: \(minimizeResult.rawValue)")
+            }
+        } else {
+            // Minimize the window
+            let minimizeResult = AXUIElementSetAttributeValue(windowInfo.axElement, kAXMinimizedAttribute as CFString, kCFBooleanTrue)
+            
+            if minimizeResult != .success {
+                print("Error minimizing window: \(minimizeResult.rawValue)")
+            }
         }
     }
     
+    /// Toggles the hidden state of a window.
+    static func toggleHidden(windowInfo: WindowInfo) {
+        let appElement = AXUIElementCreateApplication(windowInfo.pid)
+        
+        // Toggle the hidden state
+        let newHiddenState = !windowInfo.isHidden
+        
+        // Set the new hidden state
+        let setResult = AXUIElementSetAttributeValue(appElement, kAXHiddenAttribute as CFString, newHiddenState as CFTypeRef)
+        
+        if setResult != .success {
+            print("Error toggling hidden state of application: \(setResult.rawValue)")
+            return
+        }
+        
+        // If we're unhiding the app, focus on the specific window
+        if !newHiddenState {
+            // Activate the application and specific window with best guess
+            NSRunningApplication(processIdentifier: windowInfo.pid)?.activate()
+            focusOnSpecificWindow(windowInfo: windowInfo)
+        }
+    }
+
+    static func focusOnSpecificWindow(windowInfo: WindowInfo) {
+        let appElement = AXUIElementCreateApplication(windowInfo.pid)
+        var windowsRef: CFTypeRef?
+        let result = AXUIElementCopyAttributeValue(appElement, kAXWindowsAttribute as CFString, &windowsRef)
+        
+        guard result == .success, let windows = windowsRef as? [AXUIElement] else {
+            print("Failed to get windows for the application")
+            return
+        }
+        
+        for window in windows {
+            var titleRef: CFTypeRef?
+            AXUIElementCopyAttributeValue(window, kAXTitleAttribute as CFString, &titleRef)
+            if let title = titleRef as? String, isFuzzyMatch(windowTitle: windowInfo.windowName ?? "", axTitleString: title) {
+                AXUIElementPerformAction(window, kAXRaiseAction as CFString)
+                AXUIElementSetAttributeValue(window, kAXFocusedAttribute as CFString, kCFBooleanTrue)
+                return
+            }
+        }
+        
+        print("Failed to find and focus on the specific window")
+    }
     /// Toggles the full-screen state of a window.
     static func toggleFullScreen(windowInfo: WindowInfo) {
         let kAXFullscreenAttribute = "AXFullScreen" as CFString
@@ -219,10 +278,10 @@ final class WindowUtil {
         let raiseResult = AXUIElementPerformAction(windowInfo.axElement, kAXRaiseAction as CFString)
         let focusResult = AXUIElementSetAttributeValue(windowInfo.axElement, kAXFocusedAttribute as CFString, kCFBooleanTrue)
         AXUIElementSetAttributeValue(windowInfo.axElement, kAXFrontmostAttribute as CFString, kCFBooleanTrue) // set frontmost window
-        let activateResult = NSRunningApplication(processIdentifier: windowInfo.window?.owningApplication?.processID ?? 0)?.activate()
+        let activateResult = NSRunningApplication(processIdentifier: windowInfo.pid)?.activate()
         
         if activateResult != true || raiseResult != .success || focusResult != .success {
-            let fallbackActivateResult = NSRunningApplication(processIdentifier: windowInfo.window?.owningApplication?.processID ?? 0)?.activate(options: [.activateAllWindows])
+            let fallbackActivateResult = NSRunningApplication(processIdentifier: windowInfo.pid)?.activate(options: [.activateAllWindows])
             let fallbackResult = AXUIElementSetAttributeValue(windowInfo.axElement, kAXFrontmostAttribute as CFString, kCFBooleanTrue)
             
             if fallbackActivateResult != true || fallbackResult != .success {
@@ -247,14 +306,8 @@ final class WindowUtil {
     
     /// Terminates the window's application.
     static func quitApp(windowInfo: WindowInfo, force: Bool) {
-        guard let pid = windowInfo.window?.owningApplication?.processID else {
-            print("Application not found")
-            NSSound.beep()
-            return
-        }
-        
-        guard let app = NSRunningApplication(processIdentifier: pid) else {
-            print("No running application associated with PID \(pid)")
+        guard let app = NSRunningApplication(processIdentifier: windowInfo.pid) else {
+            print("No running application associated with PID \(windowInfo.pid)")
             NSSound.beep()
             return
         }
@@ -269,26 +322,27 @@ final class WindowUtil {
     // MARK: - Minimized Window Handling
     
     /// Retrieves minimized windows' information for a given process ID, bundle ID, and app name.
-    static func getMinimizedWindows(pid: pid_t, bundleID: String, appName: String) -> [WindowInfo] {
-        var minimizedWindowsInfo: [WindowInfo] = []
+    static func getMinimizedOrHiddenWindows(pid: pid_t, bundleID: String, appName: String, isParentAppHidden: Bool) -> [WindowInfo] {
+        var minimizedOrHiddenWindowsInfo: [WindowInfo] = []
         let appElement = AXUIElementCreateApplication(pid)
         var value: AnyObject?
         let result = AXUIElementCopyAttributeValue(appElement, kAXWindowsAttribute as CFString, &value)
         
         if result == .success, let windows = value as? [AXUIElement] {
             for (index, window) in windows.enumerated() {
-                var minimizedValue: AnyObject?
-                let minimizedResult = AXUIElementCopyAttributeValue(window, kAXMinimizedAttribute as CFString, &minimizedValue)
-                if minimizedResult == .success, let isMinimized = minimizedValue as? Bool, isMinimized {
-                    let windowName: String? = getAXAttribute(element: window, attribute: kAXTitleAttribute as CFString)
+                let isMinimized: Bool = getAXAttribute(element: window, attribute: kAXMinimizedAttribute as CFString) ?? false
+                                
+                let windowName: String? = getAXAttribute(element: window, attribute: kAXTitleAttribute as CFString)
+                
+                if isMinimized || isParentAppHidden {
                     let windowInfo = WindowInfo(id: UInt32(index), window: nil, appName: appName, bundleID: bundleID,
-                                                windowName: windowName, image: nil, axElement: window,
-                                                closeButton: nil, isMinimized: true)
-                    minimizedWindowsInfo.append(windowInfo)
+                                                pid: pid, windowName: windowName, image: nil, axElement: window,
+                                                closeButton: nil, isMinimized: isMinimized, isHidden: isParentAppHidden)
+                    minimizedOrHiddenWindowsInfo.append(windowInfo)
                 }
             }
         }
-        return minimizedWindowsInfo
+        return minimizedOrHiddenWindowsInfo
     }
     
     /// Retrieves a value for a given AXUIElement attribute.
@@ -350,14 +404,18 @@ final class WindowUtil {
             }
         }
         
-        if let app = foundApp, !applicationName.isEmpty {
-            let minimizedWindowsInfo = getMinimizedWindows(pid: app.processID, bundleID: app.bundleIdentifier, appName: applicationName)
-            for windowInfo in minimizedWindowsInfo {
+        if let app = foundApp, !applicationName.isEmpty,
+           let isAppHidden = NSRunningApplication(processIdentifier: app.processID)?.isHidden {
+            let minimizedOrHiddenWindowsInfo = getMinimizedOrHiddenWindows(pid: app.processID, bundleID: app.bundleIdentifier,
+                                                                           appName: applicationName, isParentAppHidden: isAppHidden)
+            for windowInfo in minimizedOrHiddenWindowsInfo {
                 await group.addTask { return windowInfo }
             }
-        } else if !applicationName.isEmpty, let app = getRunningApplication(named: applicationName), let bundleID = app.bundleIdentifier {
-            let minimizedWindowsInfo = getMinimizedWindows(pid: app.processIdentifier, bundleID: bundleID, appName: applicationName)
-            for windowInfo in minimizedWindowsInfo {
+        } else if !applicationName.isEmpty, let app = getRunningApplication(named: applicationName), let bundleID = app.bundleIdentifier,
+                  let isAppHidden = NSRunningApplication(processIdentifier: app.processIdentifier)?.isHidden {
+            let minimizedOrHiddenWindowsInfo = getMinimizedOrHiddenWindows(pid: app.processIdentifier, bundleID: bundleID, 
+                                                                           appName: applicationName, isParentAppHidden: isAppHidden)
+            for windowInfo in minimizedOrHiddenWindowsInfo {
                 await group.addTask { return windowInfo }
             }
         }
@@ -404,12 +462,14 @@ final class WindowUtil {
         var windowInfo = WindowInfo(id: windowID,
                                     window: window,
                                     appName: owningApplication.applicationName,
-                                    bundleID: owningApplication.bundleIdentifier,
+                                    bundleID: owningApplication.bundleIdentifier, 
+                                    pid: pid,
                                     windowName: window.title,
                                     image: nil,
                                     axElement: windowRef,
                                     closeButton: closeButton,
-                                    isMinimized: false)
+                                    isMinimized: false,
+                                    isHidden: false)
         
         do {
             windowInfo.image = try await captureWindowImage(window: window)
