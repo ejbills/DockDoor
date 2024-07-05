@@ -99,16 +99,11 @@ jobs:
             exit 1
           fi
 
-      - name: Zip the DMG
-        run: |
-          cd Release/dmg
-          ditto -c -k --sequesterRsrc --keepParent DockDoor.dmg DockDoor.zip
-
       - name: Create GitHub Release
         id: create_release
         uses: softprops/action-gh-release@v1
         with:
-          files: Release/dmg/DockDoor.zip
+          files: Release/dmg/DockDoor.dmg
           tag_name: "v${{ github.event.inputs.version }}"
           release_name: "v${{ github.event.inputs.version }}"
           body: ${{ github.event.inputs.changelog }}
@@ -126,8 +121,8 @@ jobs:
 
       - name: Generate appcast
         run: |
-          DOWNLOAD_URL="https://github.com/${{ github.repository_owner }}/${{ github.event.repository.name }}/releases/download/v${{ github.event.inputs.version }}/DockDoor.zip"
-          ./Sparkle/generate_appcast --ed-key-file ./sparkle_private_key --link $DOWNLOAD_URL --output appcast.xml Release/
+          DOWNLOAD_URL="https://github.com/ejbills/DockDoor/releases/download/v${{ github.event.inputs.version }}/DockDoor.dmg"
+          ./Sparkle/generate_appcast --ed-key-file ./sparkle_private_key --link $DOWNLOAD_URL Release/
 
       - name: Commit updated appcast
         run: |
