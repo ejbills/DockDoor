@@ -113,11 +113,9 @@ jobs:
       - name: Set executable permissions for generate_appcast
         run: chmod +x ./Sparkle/generate_appcast
 
-      - name: Prepare Sparkle update creation # Import Sparkle private key, remove unnecessary files in Release folder
-        env:
-          PRIVATE_SPARKLE_KEY: ${{ secrets.PRIVATE_SPARKLE_KEY }}
+      - name: Prepare Sparkle private key
         run: |
-          echo -n "$PRIVATE_SPARKLE_KEY" > ./sparkle_private_key
+          echo -n "${{ secrets.PRIVATE_SPARKLE_KEY }}" | base64 --decode > ./sparkle_private_key
 
       - name: Generate appcast
         run: |
@@ -128,6 +126,6 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add appcast.xml
+          git add Release/appcast.xml
           git commit -m "Update appcast for version ${{ github.event.inputs.version }}"
           git push origin HEAD
