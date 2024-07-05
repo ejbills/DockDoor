@@ -121,6 +121,9 @@ jobs:
         run: |
           echo -n "$PRIVATE_SPARKLE_KEY" > ./sparkle_private_key
 
+      - name: Set executable permissions for generate_appcast
+        run: chmod +x ./Sparkle/generate_appcast
+
       - name: Generate appcast
         run: |
           DOWNLOAD_URL="https://github.com/${{ github.repository_owner }}/${{ github.event.repository.name }}/releases/download/v${{ github.event.inputs.version }}/DockDoor.zip"
