@@ -39,7 +39,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         if !Defaults[.launched] {
             handleFirstTimeLaunch()
-            UserDefaults.standard.registerDefaultShortcut()
+            _ = UserDefaults.standard.registerDefaultKeybind()
         } else {
             self.setupMenuBar()
             
@@ -52,7 +52,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             
             dockObserver = DockObserver.shared
             appClosureObserver = AppClosureObserver.shared
-            if Defaults[.showWindowSwitcher] {
+            if Defaults[.enableWindowSwitcher] {
                 keybindHelper = KeybindHelper.shared
             }
         }

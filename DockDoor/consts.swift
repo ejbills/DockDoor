@@ -20,7 +20,7 @@ extension Defaults.Keys {
     static let openDelay = Key<CGFloat>("openDelay") { 0 }
     static let screenCaptureCacheLifespan = Key<CGFloat>("screenCaptureCacheLifespan") { 60 }
     static let showAnimations = Key<Bool>("showAnimations") { true }
-    static let showWindowSwitcher = Key<Bool>("showWindowSwitcher"){ true }
+    static let enableWindowSwitcher = Key<Bool>("enableWindowSwitcher"){ true }
     static let showMenuBarIcon = Key<Bool>("showMenuBarIcon", default: true)
     static let defaultCMDTABKeybind = Key<Bool>("defaultCMDTABKeybind") { true }
     static let launched = Key<Bool>("launched") { false }

@@ -11,24 +11,22 @@ import Defaults
 import Carbon
 
 struct WindowSwitcherSettingsView: View {
-    @Default(.showWindowSwitcher) var showWindowSwitcher
+    @Default(.enableWindowSwitcher) var enableWindowSwitcher
     @Default(.defaultCMDTABKeybind) var defaultCMDTABKeybind
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Toggle(isOn: $showWindowSwitcher, label: {
+            Toggle(isOn: $enableWindowSwitcher, label: {
                 Text("Enable Window Switcher")
-            }).onChange(of: showWindowSwitcher){
+            }).onChange(of: enableWindowSwitcher){
                 _, newValue in
                 restartApplication()
             }
             // Default CMD + TAB implementation checkbox
-            if (Defaults[.showWindowSwitcher]){
+            if Defaults[.enableWindowSwitcher] {
                 Toggle(isOn: $defaultCMDTABKeybind, label: {
-                    Text("Use Default MacOS keybind ⌘ + Tab")
-                }).onChange(of: defaultCMDTABKeybind){
-                    _, newValue in
-                }
-                // If default is not enabled
+                    Text("Use default MacOS keybind ⌘ + ⇥")
+                })
+                // If default CMD Tab is not enabled
                 if !Defaults[.defaultCMDTABKeybind]{
                     ModifierKeyPickerView()
                 }
@@ -40,11 +38,11 @@ struct WindowSwitcherSettingsView: View {
 }
 
 struct ModifierKeyPickerView : View {
-    @State var modifierKey : Int = Defaults[.Int64maskControl] //NSEvent.ModifierFlags.RawValue = NSEvent.ModifierFlags.command.rawValue
+    @State var modifierKey : Int = Defaults[.Int64maskControl]
     @State var isRecording : Bool = false
-    @State private var currentShortcut : UserKeyboardShortcut? {
+    @State private var currentKeybind : UserKeyBind? {
         didSet {
-            if let shortcut = currentShortcut {
+            if let shortcut = currentKeybind {
                 modifierKey = shortcut.modifierFlags
             }
         }
@@ -61,42 +59,30 @@ struct ModifierKeyPickerView : View {
             .pickerStyle(SegmentedPickerStyle())
             Text("Press any key combination to set the keybind").padding()
             Button(action: {self.isRecording = true}){
-                Text(isRecording ? "Press shortcut ..." : "Record shortcut")
+                Text(isRecording ? "Press key ..." : "Record keybind")
             }.keyboardShortcut(.defaultAction)
-            if let shortcut = currentShortcut {
-                Text("Current Keybind: \(shortcutDescription(shortcut))").padding()
+            if let keybind = currentKeybind {
+                Text("Current Keybind: \(printCurrentKeybind(keybind))").padding()
             }
         }
-        .background(ShortcutCaptureView(currentShortcut: $currentShortcut, isRecording: $isRecording, modifierKey: $modifierKey))
+        .background(ShortcutCaptureView(currentKeybind: $currentKeybind, isRecording: $isRecording, modifierKey: $modifierKey))
         .onAppear{
-            currentShortcut = UserDefaults.standard.getKeyboardShortcut()
+            currentKeybind = UserDefaults.standard.getKeybind()
         }
         .frame(alignment: .leading)
     }
     
-    func shortcutDescription(_ shortcut: UserKeyboardShortcut) -> String {
-        
+    func printCurrentKeybind(_ shortcut: UserKeyBind) -> String {
         var parts: [String] = []
-        
-        if shortcut.modifierFlags == Defaults[.Int64maskCommand] {
-            parts.append("⌘")
-        }
-        if shortcut.modifierFlags == Int(Defaults[.Int64maskAlternate]) {
-            parts.append("⌥")
-        }
-        if shortcut.modifierFlags == Defaults[.Int64maskControl] {
-            parts.append("⌃")
-        }
-        
-        parts.append(String(describing: KeyCodeConverter.string(from: shortcut.keyCode)))
-        
+        parts.append(modifierConverter.toString(shortcut.modifierFlags))
+        parts.append(KeyCodeConverter.toString(shortcut.keyCode))
         return parts.joined(separator: " ")
     }
     
 }
 
 struct ShortcutCaptureView: NSViewRepresentable {
-    @Binding var currentShortcut: UserKeyboardShortcut?
+    @Binding var currentKeybind: UserKeyBind?
     @Binding var isRecording: Bool
     @Binding var modifierKey: Int
     
@@ -107,17 +93,17 @@ struct ShortcutCaptureView: NSViewRepresentable {
                 return event
             }
             self.isRecording = false
-            if (event.keyCode == 48) && ( modifierKey == Defaults[.Int64maskCommand]){
+            if event.keyCode == 48 && modifierKey == Defaults[.Int64maskCommand] {
                 // Set the default CMDTAB
                 Defaults[.defaultCMDTABKeybind] = true
-                let newShortcut = UserKeyboardShortcut(keyCode: 48, modifierFlags: Defaults[.Int64maskControl])
-                self.currentShortcut = newShortcut
-                UserDefaults.standard.saveKeyboardShortcut(newShortcut)
+                let newKeybind = UserKeyBind(keyCode: 48, modifierFlags: Defaults[.Int64maskControl])
+                self.currentKeybind = newKeybind
+                UserDefaults.standard.saveKeybind(newKeybind)
                 return event
             }
-            let newShortcut = UserKeyboardShortcut(keyCode: event.keyCode, modifierFlags: modifierKey)
-            self.currentShortcut = newShortcut
-            UserDefaults.standard.saveKeyboardShortcut(newShortcut)
+            let newKeybind = UserKeyBind(keyCode: event.keyCode, modifierFlags: modifierKey)
+            self.currentKeybind = newKeybind
+            UserDefaults.standard.saveKeybind(newKeybind)
             return nil
         }
         return view
@@ -125,52 +111,4 @@ struct ShortcutCaptureView: NSViewRepresentable {
     
     
     func updateNSView(_ nsView: NSView, context: Context) {}
-}
-
-
-struct KeyCodeConverter {
-    static func string(from keyCode: UInt16) -> String {
-        switch keyCode {
-        case 48:
-            return "⇥" // Tab symbol
-        case 51:
-            return "⌫" // Delete symbol
-        case 53:
-            return "⎋" // Escape symbol
-        case 36:
-            return "↩︎" // Return symbol
-        default:
-            
-            let source = TISCopyCurrentKeyboardInputSource().takeUnretainedValue()
-            let layoutData = TISGetInputSourceProperty(source, kTISPropertyUnicodeKeyLayoutData)
-            
-            guard let data = layoutData else {
-                return "?"
-            }
-            
-            let layout = unsafeBitCast(data, to: CFData.self)
-            let keyboardLayout = unsafeBitCast(CFDataGetBytePtr(layout), to: UnsafePointer<UCKeyboardLayout>.self)
-            
-            var keysDown: UInt32 = 0
-            var chars = [UniChar](repeating: 0, count: 4)
-            var realLength: Int = 0
-            
-            let result = UCKeyTranslate(keyboardLayout,
-                                        keyCode,
-                                        UInt16(kUCKeyActionDisplay),
-                                        0,
-                                        UInt32(LMGetKbdType()),
-                                        UInt32(kUCKeyTranslateNoDeadKeysBit),
-                                        &keysDown,
-                                        chars.count,
-                                        &realLength,
-                                        &chars)
-            
-            if result == noErr {
-                return String(utf16CodeUnits: chars, count: realLength)
-            } else {
-                return "?"
-            }
-        }
-    }
 }

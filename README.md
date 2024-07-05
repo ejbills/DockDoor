@@ -9,7 +9,14 @@ DockDoor is a macOS application developed with Swift and SwiftUI that allows use
 ## Usage
 
 - **How do I use the alt-tab functionality?**
-  - Ctrl + Tab to open the menu, continue pressing tab to increment forwards, shift + tab to go back. Letting go of control will select the window.
+  - By default, use Cmd + Tab to open the window switcher, continue pressing Tab to increment forwards, Shift + Tab to go back. Letting go of command will select the window.
+  - Disabling the default Cmd + Tab keybind, will allow a user to set a custom keybind
+      - User selects one of the modifiers presented on the screen
+      - User presses `Record Keybind` button
+      - User presses a singular key on the keyboard
+      - Keybind is now set! 
+
+      ![Set keybind](./resources/setKeybind.gif)
 - **How do I use the dock peeking functionality?**
   - Simply hover over any application with active windows in the dock.
 - **What are the traffic light buttons that appear in the preview window?**
