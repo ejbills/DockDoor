@@ -111,10 +111,8 @@ jobs:
           prerelease: false
 
       - name: Prepare Sparkle private key
-        env:
-          PRIVATE_SPARKLE_KEY: ${{ secrets.PRIVATE_SPARKLE_KEY }}
         run: |
-          echo -n "$PRIVATE_SPARKLE_KEY" > ./sparkle_private_key
+          echo "${{ secrets.PRIVATE_SPARKLE_KEY }}" > sparkle_private_key
 
       - name: Set executable permissions for generate_appcast
         run: chmod +x ./Sparkle/generate_appcast
