@@ -110,9 +110,11 @@ jobs:
           draft: false
           prerelease: false
 
-      - name: Prepare Sparkle private key
+      - name: Prepare Sparkle update creation # Import Sparkle private key, remove unnecessary files in Release folder
+        env:
+          PRIVATE_SPARKLE_KEY: ${{ secrets.PRIVATE_SPARKLE_KEY }}
         run: |
-          echo "${{ secrets.PRIVATE_SPARKLE_KEY }}" > sparkle_private_key
+          echo -n "$PRIVATE_SPARKLE_KEY" > ./Configuration/sparkle_private_key
 
       - name: Set executable permissions for generate_appcast
         run: chmod +x ./Sparkle/generate_appcast
@@ -120,7 +122,7 @@ jobs:
       - name: Generate appcast
         run: |
           DOWNLOAD_URL="https://github.com/ejbills/DockDoor/releases/download/v${{ github.event.inputs.version }}/DockDoor.dmg"
-          ./Sparkle/generate_appcast --ed-key-file ./sparkle_private_key --link $DOWNLOAD_URL Release/
+          ./Sparkle/generate_appcast --ed-key-file ./Configuration/sparkle_private_key --link $DOWNLOAD_URL Release/
 
       - name: Commit updated appcast
         run: |
