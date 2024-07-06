@@ -350,33 +350,11 @@ struct HoverView: View {
                         .fontWeight(.medium)
                         .font(.system(size: 14))
                         .padding(.horizontal, 4)
-                        .shadow(stacked: 2, radius: 6)
-                        .background(
-                            ZStack {
-                                MaterialBlurView(material: .hudWindow)
-                                    .mask(
-                                        Ellipse()
-                                            .fill(
-                                                LinearGradient(
-                                                    gradient: Gradient(
-                                                        colors: [
-                                                            Color.white.opacity(1.0),
-                                                            Color.white.opacity(0.35)
-                                                        ]
-                                                    ),
-                                                    startPoint: .top,
-                                                    endPoint: .bottom
-                                                )
-                                            )
-                                    )
-                                    .blur(radius: 5)
-                            }
-                                .frame(width: appNameLabelSize.width + 30)
-                        )
                 }
                 .padding(.horizontal, 3)
                 .padding(.vertical, 1.5)
                 .padding(EdgeInsets(top: -13, leading: 6, bottom: 0, trailing: 0))
+                .shadow(stacked: 2, radius: 6)
             }
         }
         .padding(.all, 24)
