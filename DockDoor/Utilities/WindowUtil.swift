@@ -75,7 +75,7 @@ final class WindowUtil {
         let config = SCStreamConfiguration()
         
         // Configure the stream to capture only the window content
-        config.scalesToFit = true
+        config.scalesToFit = false
         config.ignoreGlobalClipDisplay = true
         config.ignoreShadowsDisplay = true
         config.shouldBeOpaque = true
@@ -432,8 +432,6 @@ final class WindowUtil {
               let title = window.title, !title.isEmpty,
               window.isOnScreen,
               window.windowLayer == 0,
-              window.frame.origin.x >= 0,
-              window.frame.origin.y >= 0,
               window.frame.size.width >= 0,
               window.frame.size.height >= 0,
               !filteredBundleIdentifiers.contains(owningApplication.bundleIdentifier) else {
