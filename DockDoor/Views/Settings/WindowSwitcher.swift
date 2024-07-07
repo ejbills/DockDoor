@@ -10,6 +10,18 @@ import SwiftUI
 import Defaults
 import Carbon
 
+class KeybindModel: ObservableObject {
+    @Published var modifierKey: Int
+    @Published var isRecording: Bool = false
+    @Published var currentKeybind: UserKeyBind?
+
+    init() {
+        self.modifierKey = Defaults[.UserKeybind].modifierFlags
+        self.currentKeybind = Defaults[.UserKeybind]
+    }
+
+}
+
 struct WindowSwitcherSettingsView: View {
     @Default(.enableWindowSwitcher) var enableWindowSwitcher
     @Default(.defaultCMDTABKeybind) var defaultCMDTABKeybind
@@ -27,7 +39,7 @@ struct WindowSwitcherSettingsView: View {
                     Text("Use default MacOS keybind ⌘ + ⇥")
                 })
                 // If default CMD Tab is not enabled
-                if !Defaults[.defaultCMDTABKeybind]{
+                if !Defaults[.defaultCMDTABKeybind] {
                     ModifierKeyPickerView()
                 }
             }
@@ -38,36 +50,27 @@ struct WindowSwitcherSettingsView: View {
 }
 
 struct ModifierKeyPickerView : View {
-    @State var modifierKey : Int = Defaults[.Int64maskControl]
-    @State var isRecording : Bool = false
-    @State private var currentKeybind : UserKeyBind? {
-        didSet {
-            if let shortcut = currentKeybind {
-                modifierKey = shortcut.modifierFlags
-            }
-        }
-    }
-    
+    @ObservedObject var viewModel = KeybindModel()
     
     var body: some View {
         VStack(spacing: 20) {
-            Picker("Modifier Key", selection: $modifierKey) {
+            Picker("Modifier Key", selection: $viewModel.modifierKey) {
                 Text("Control (⌃)").tag(Defaults[.Int64maskControl])
                 Text("Option (⌥)").tag(Defaults[.Int64maskAlternate])
                 Text("Command (⌘)").tag(Defaults[.Int64maskCommand])
             }
             .pickerStyle(SegmentedPickerStyle())
             Text("Press any key combination to set the keybind").padding()
-            Button(action: {self.isRecording = true}){
-                Text(isRecording ? "Press key ..." : "Record keybind")
+            Button(action: {viewModel.isRecording = true}){
+            Text(viewModel.isRecording ? "Press key ..." : "Record keybind")
             }.keyboardShortcut(.defaultAction)
-            if let keybind = currentKeybind {
+            if let keybind = viewModel.currentKeybind {
                 Text("Current Keybind: \(printCurrentKeybind(keybind))").padding()
             }
         }
-        .background(ShortcutCaptureView(currentKeybind: $currentKeybind, isRecording: $isRecording, modifierKey: $modifierKey))
+        .background(ShortcutCaptureView(currentKeybind: $viewModel.currentKeybind, isRecording: $viewModel.isRecording, modifierKey: $viewModel.modifierKey))
         .onAppear{
-            currentKeybind = UserDefaults.standard.getKeybind()
+            viewModel.currentKeybind = Defaults[.UserKeybind]
         }
         .frame(alignment: .leading)
     }
@@ -93,17 +96,15 @@ struct ShortcutCaptureView: NSViewRepresentable {
                 return event
             }
             self.isRecording = false
-            if event.keyCode == 48 && modifierKey == Defaults[.Int64maskCommand] {
+            if event.keyCode == 48 && modifierKey == Defaults[.Int64maskCommand] { // User has chosen the default Mac OS window switcher keybind
                 // Set the default CMDTAB
                 Defaults[.defaultCMDTABKeybind] = true
-                let newKeybind = UserKeyBind(keyCode: 48, modifierFlags: Defaults[.Int64maskControl])
-                self.currentKeybind = newKeybind
-                UserDefaults.standard.saveKeybind(newKeybind)
+                Defaults[.UserKeybind] = UserKeyBind(keyCode: 48, modifierFlags: Defaults[.Int64maskControl])
+                self.currentKeybind = Defaults[.UserKeybind]
                 return event
             }
-            let newKeybind = UserKeyBind(keyCode: event.keyCode, modifierFlags: modifierKey)
-            self.currentKeybind = newKeybind
-            UserDefaults.standard.saveKeybind(newKeybind)
+            Defaults[.UserKeybind] = UserKeyBind(keyCode: event.keyCode, modifierFlags: modifierKey)
+            self.currentKeybind = Defaults[.UserKeybind]
             return nil
         }
         return view

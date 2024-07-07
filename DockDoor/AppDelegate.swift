@@ -39,7 +39,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         if !Defaults[.launched] {
             handleFirstTimeLaunch()
-            _ = UserDefaults.standard.registerDefaultKeybind()
         } else {
             self.setupMenuBar()
             

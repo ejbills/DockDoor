@@ -9,69 +9,10 @@ import AppKit
 import Carbon
 import Defaults
 
-struct UserKeyBind: Codable {
+struct UserKeyBind: Codable, Defaults.Serializable {
     var keyCode: UInt16
     var modifierFlags: Int
-    
-    enum CodingKeys: String, CodingKey {
-        case keyCode
-        case modifierFlags
-    }
-    
-    init(keyCode: UInt16, modifierFlags: Int) {
-        self.keyCode = keyCode
-        self.modifierFlags = modifierFlags
-    }
-    
-    // Encoder
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(keyCode, forKey: .keyCode)
-        try container.encode(modifierFlags, forKey: .modifierFlags)
-    }
-    
-    // Decoder
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        keyCode = try container.decode(UInt16.self, forKey: .keyCode)
-        let rawModifierFlags = try container.decode(UInt.self, forKey: .modifierFlags)
-        self.modifierFlags = Int(rawModifierFlags)
-    }
 }
-extension UserDefaults {
-    private enum Keys {
-        static let keyboardShortcut = "None"
-    }
-    
-    func saveKeybind(_ shortcut: UserKeyBind) {
-        let encoder = JSONEncoder()
-        if let encoded = try? encoder.encode(shortcut) {
-            self.set(encoded, forKey: Keys.keyboardShortcut)
-        }
-    }
-    
-    func getKeybind() -> UserKeyBind?{
-        if let savedShortcutData = self.data(forKey: Keys.keyboardShortcut){
-            let decoder = JSONDecoder()
-            if let savedShortcut = try? decoder.decode(UserKeyBind.self, from: savedShortcutData){
-                return savedShortcut
-            }
-        } else {
-            return self.registerDefaultKeybind()
-        }
-        return nil
-    }
-    
-    func registerDefaultKeybind() -> UserKeyBind? {
-        if Keys.keyboardShortcut == "None" {
-            let defaultShortcut = UserKeyBind(keyCode: 48, modifierFlags: Defaults[.Int64maskControl])
-            self.saveKeybind(defaultShortcut)
-            return defaultShortcut
-        }
-        return nil
-    }
-}
-
 
 class KeybindHelper {
     static let shared = KeybindHelper()
@@ -79,6 +20,7 @@ class KeybindHelper {
     private var isShiftKeyPressed = false
     private var eventTap: CFMachPort?
     private var runLoopSource: CFRunLoopSource?
+    private var modifierValue: Int = 0	
     
     private init() {
         setupEventTap()
@@ -123,24 +65,30 @@ class KeybindHelper {
     
     private func handleEvent(proxy: CGEventTapProxy, type: CGEventType, event: CGEvent) -> Unmanaged<CGEvent>? {
         let keyCode = event.getIntegerValueField(.keyboardEventKeycode)
-        let keyBoardShortcutSaved: UserKeyBind = UserDefaults.standard.getKeybind()!
-        let userDefinedKeyCurrentlyPressed = event.flags.contains(.maskCommand) ||
-        event.flags.contains(.maskControl) ||
-        event.flags.contains(.maskAlternate)
+        let keyBoardShortcutSaved: UserKeyBind = Defaults[.UserKeybind] // UserDefaults.standard.getKeybind()!
         let shiftKeyCurrentlyPressed = event.flags.contains(.maskShift)
-        
+        var userDefinedKeyCurrentlyPressed = false
+
         if ((type == .flagsChanged) && (!Defaults[.defaultCMDTABKeybind])){
             // New Keybind that the user has enforced, includes the modifier keys
+            if event.flags.contains(.maskControl) {
+                modifierValue = Defaults[.Int64maskControl]
+                userDefinedKeyCurrentlyPressed = true
+            }
+            else if event.flags.contains(.maskAlternate) {
+                modifierValue = Defaults[.Int64maskAlternate]
+                userDefinedKeyCurrentlyPressed = true
+            }
             handleModifierEvent(modifierKeyPressed: userDefinedKeyCurrentlyPressed, shiftKeyPressed: shiftKeyCurrentlyPressed)
         }
         
         else if ((type == .flagsChanged) && (Defaults[.defaultCMDTABKeybind])){
             // Default MacOS CMD + TAB keybind replaced
-            handleModifierEvent(modifierKeyPressed: userDefinedKeyCurrentlyPressed, shiftKeyPressed: shiftKeyCurrentlyPressed)
+            handleModifierEvent(modifierKeyPressed: event.flags.contains(.maskCommand), shiftKeyPressed: shiftKeyCurrentlyPressed)
         }
         
         else if (type == .keyDown){
-            if (isModifierKeyPressed && keyCode == keyBoardShortcutSaved.keyCode) || (Defaults[.defaultCMDTABKeybind] && keyCode == 48) {  // Tab key
+            if (isModifierKeyPressed && keyCode == keyBoardShortcutSaved.keyCode && modifierValue == keyBoardShortcutSaved.modifierFlags) || (Defaults[.defaultCMDTABKeybind] && keyCode == 48) {  // Tab key
                 if HoverWindow.shared.isVisible {  // Check if HoverWindow is already shown
                     HoverWindow.shared.cycleWindows(goBackwards: isShiftKeyPressed)  // Cycle windows based on Shift key state
                 } else {
