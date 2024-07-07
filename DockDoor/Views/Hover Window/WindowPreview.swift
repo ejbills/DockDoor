@@ -97,7 +97,7 @@ struct WindowPreview: View {
             VStack(spacing: 0) {
                 windowContent(isMinimized: windowInfo.isMinimized, isHidden: windowInfo.isHidden, isSelected: selected)
                     .overlay { Color.white.opacity(isHoveringOverTabMenu ? 0.1 : 0) }
-                    .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
+                    .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
                     .shadow(radius: selected || isHoveringOverTabMenu ? 0 : 3)
                     .background {
                         RoundedRectangle(cornerRadius: 6, style: .continuous)
