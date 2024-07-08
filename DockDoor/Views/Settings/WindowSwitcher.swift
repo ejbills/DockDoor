@@ -40,7 +40,7 @@ struct WindowSwitcherSettingsView: View {
                 })
                 // If default CMD Tab is not enabled
                 if !Defaults[.defaultCMDTABKeybind] {
-                    ModifierKeyPickerView()
+                    InitializationKeyPickerView()
                 }
             }
         }
@@ -49,30 +49,50 @@ struct WindowSwitcherSettingsView: View {
     }
 }
 
-struct ModifierKeyPickerView : View {
+struct InitializationKeyPickerView: View {
     @ObservedObject var viewModel = KeybindModel()
     
     var body: some View {
         VStack(spacing: 20) {
-            Picker("Modifier Key", selection: $viewModel.modifierKey) {
+            Text("Set Initialization Key and Keybind")
+                .font(.headline)
+                .padding(.top, 20)
+            
+            Picker("Initialization Key", selection: $viewModel.modifierKey) {
                 Text("Control (⌃)").tag(Defaults[.Int64maskControl])
                 Text("Option (⌥)").tag(Defaults[.Int64maskAlternate])
                 Text("Command (⌘)").tag(Defaults[.Int64maskCommand])
             }
             .pickerStyle(SegmentedPickerStyle())
-            Text("Press any key combination to set the keybind").padding()
-            Button(action: {viewModel.isRecording = true}){
-            Text(viewModel.isRecording ? "Press key ..." : "Record keybind")
-            }.keyboardShortcut(.defaultAction)
+            .padding(.horizontal)
+            
+            Text("Press any key combination after holding the initialization key to set the keybind.")
+                .multilineTextAlignment(.center)
+                .padding(.horizontal)
+            
+            Button(action: { viewModel.isRecording = true }) {
+                Text(viewModel.isRecording ? "Press the key combination..." : "Start Recording Keybind")
+            }
+            .keyboardShortcut(.defaultAction)
+            .padding(.bottom, 20)
+            
             if let keybind = viewModel.currentKeybind {
-                Text("Current Keybind: \(printCurrentKeybind(keybind))").padding()
+                Text("Current Keybind: \(printCurrentKeybind(keybind))")
+                    .padding()
             }
         }
-        .background(ShortcutCaptureView(currentKeybind: $viewModel.currentKeybind, isRecording: $viewModel.isRecording, modifierKey: $viewModel.modifierKey))
-        .onAppear{
+        .background(
+            ShortcutCaptureView(
+                currentKeybind: $viewModel.currentKeybind,
+                isRecording: $viewModel.isRecording,
+                modifierKey: $viewModel.modifierKey
+            )
+        )
+        .onAppear {
             viewModel.currentKeybind = Defaults[.UserKeybind]
         }
-        .frame(alignment: .leading)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding()
     }
     
     func printCurrentKeybind(_ shortcut: UserKeyBind) -> String {
@@ -81,7 +101,6 @@ struct ModifierKeyPickerView : View {
         parts.append(KeyCodeConverter.toString(shortcut.keyCode))
         return parts.joined(separator: " ")
     }
-    
 }
 
 struct ShortcutCaptureView: NSViewRepresentable {
