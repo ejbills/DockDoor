@@ -76,9 +76,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             button.target = self
             
             // Create Menu Items
-            let openSettingsMenuItem = NSMenuItem(title: "Open Settings", action: #selector(openSettingsWindow(_:)), keyEquivalent: "")
+            let openSettingsMenuItem = NSMenuItem(title: String(localized: "Open Settings"), action: #selector(openSettingsWindow(_:)), keyEquivalent: "")
             openSettingsMenuItem.target = self
-            let quitMenuItem = NSMenuItem(title: "Quit DockDoor", action: #selector(quitAppWrapper), keyEquivalent: "q")
+            let quitMenuItem = NSMenuItem(title: String(localized: "Quit DockDoor"), action: #selector(quitAppWrapper), keyEquivalent: "q")
             quitMenuItem.target = self
             
             // Create the Menu

@@ -27,7 +27,7 @@ struct SettingsView: View {
             
             Divider()
             
-            LaunchAtLogin.Toggle("Launch DockDoor at login")
+            LaunchAtLogin.Toggle(String(localized: "Launch DockDoor at login"))
             Toggle(isOn: $showAnimations, label: {
                 Text("Enable Hover Window Sliding Animation")
             })
@@ -95,23 +95,23 @@ struct SizePickerView: View {
     private func getLabel(for size: CGFloat) -> String {
         switch size {
         case 2:
-            return "Large"
+            return String(localized: "Large", comment: "Window Size Option")
         case 3:
-            return "Default (Medium Large)"
+            return String(localized: "Default (Medium Large)", comment: "Window Size Option")
         case 4:
-            return "Medium"
+            return String(localized:"Medium", comment: "Window Size Option")
         case 5:
-            return "Small"
+            return String(localized:"Small", comment: "Window Size Option")
         case 6:
-            return "Extra Small"
+            return String(localized:"Extra Small", comment: "Window Size Option")
         case 7:
-            return "Extra Extra Small"
+            return String(localized:"Extra Extra Small", comment: "Window Size Option")
         case 8:
-            return "What is this? A window for ANTS?"
+            return String(localized:"What is this? A window for ANTS?", comment: "Window Size Option")
         case 9:
-            return "Subatomic"
+            return String(localized:"Subatomic", comment: "Window Size Option")
         case 10:
-            return "Can you even see this?"
+            return String(localized:"Can you even see this?", comment: "Window Size Option")
         default:
             return "Unknown Size"
         }
