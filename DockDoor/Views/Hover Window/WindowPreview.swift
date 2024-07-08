@@ -110,13 +110,13 @@ struct WindowPreview: View {
                     let stringMeasurementWidth = measureString(windowTitle, fontSize: 12).width + 5
                     let width = maxLabelWidth > stringMeasurementWidth ? stringMeasurementWidth : maxLabelWidth
                     
-                    TheMarquee(width: width, secsBeforeLooping: 3, speedPtsPerSec: 20, nonMovingAlignment: .leading) {
+                    TheMarquee(width: width, secsBeforeLooping: 1, speedPtsPerSec: 20, nonMovingAlignment: .leading) {
                         Text(windowInfo.windowName ?? "Hidden window")
                             .font(.system(size: 12, weight: .medium))
                             .foregroundStyle(.primary)
                     }
                     .padding(4)
-                    .dockStyle(cornerRadius: 6)
+                    .background(RoundedRectangle(cornerRadius: 6, style: .continuous).fill(.ultraThinMaterial))
                     .padding(4)
                 }
             }
