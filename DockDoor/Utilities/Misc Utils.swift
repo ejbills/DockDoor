@@ -7,6 +7,7 @@
 
 import Cocoa
 import Defaults
+import Carbon
 
 func quitApp() {
     // Terminate the current application
@@ -40,4 +41,68 @@ func measureString(_ string: String, fontSize: CGFloat, fontWeight: NSFont.Weigh
     let attributedString = NSAttributedString(string: string, attributes: attributes)
     let size = attributedString.size()
     return size
+}
+
+struct modifierConverter {
+    static func toString(_ modifierIntValue: Int) -> String {
+        if modifierIntValue == Defaults[.Int64maskCommand] {
+            return "⌘"
+        }
+        else if modifierIntValue == Defaults[.Int64maskAlternate] {
+            return "⌥"
+        }
+        else if modifierIntValue == Defaults[.Int64maskControl] {
+            return "⌃"
+        }
+        else {
+            return " "
+        }
+    }
+}
+
+struct KeyCodeConverter {
+    static func toString(_ keyCode: UInt16) -> String {
+        switch keyCode {
+        case 48:
+            return "⇥" // Tab symbol
+        case 51:
+            return "⌫" // Delete symbol
+        case 53:
+            return "⎋" // Escape symbol
+        case 36:
+            return "↩︎" // Return symbol
+        default:
+            
+            let source = TISCopyCurrentKeyboardInputSource().takeUnretainedValue()
+            let layoutData = TISGetInputSourceProperty(source, kTISPropertyUnicodeKeyLayoutData)
+            
+            guard let data = layoutData else {
+                return "?"
+            }
+            
+            let layout = unsafeBitCast(data, to: CFData.self)
+            let keyboardLayout = unsafeBitCast(CFDataGetBytePtr(layout), to: UnsafePointer<UCKeyboardLayout>.self)
+            
+            var keysDown: UInt32 = 0
+            var chars = [UniChar](repeating: 0, count: 4)
+            var realLength: Int = 0
+            
+            let result = UCKeyTranslate(keyboardLayout,
+                                        keyCode,
+                                        UInt16(kUCKeyActionDisplay),
+                                        0,
+                                        UInt32(LMGetKbdType()),
+                                        UInt32(kUCKeyTranslateNoDeadKeysBit),
+                                        &keysDown,
+                                        chars.count,
+                                        &realLength,
+                                        &chars)
+            
+            if result == noErr {
+                return String(utf16CodeUnits: chars, count: realLength)
+            } else {
+                return "?"
+            }
+        }
+    }
 }

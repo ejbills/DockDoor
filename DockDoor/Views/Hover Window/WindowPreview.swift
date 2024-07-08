@@ -97,7 +97,7 @@ struct WindowPreview: View {
             VStack(spacing: 0) {
                 windowContent(isMinimized: windowInfo.isMinimized, isHidden: windowInfo.isHidden, isSelected: selected)
                     .overlay { Color.white.opacity(isHoveringOverTabMenu ? 0.1 : 0) }
-                    .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
+                    .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
                     .shadow(radius: selected || isHoveringOverTabMenu ? 0 : 3)
                     .background {
                         RoundedRectangle(cornerRadius: 6, style: .continuous)
@@ -110,13 +110,13 @@ struct WindowPreview: View {
                     let stringMeasurementWidth = measureString(windowTitle, fontSize: 12).width + 5
                     let width = maxLabelWidth > stringMeasurementWidth ? stringMeasurementWidth : maxLabelWidth
                     
-                    TheMarquee(width: width, secsBeforeLooping: 3, speedPtsPerSec: 20, nonMovingAlignment: .leading) {
+                    TheMarquee(width: width, secsBeforeLooping: 1, speedPtsPerSec: 20, nonMovingAlignment: .leading) {
                         Text(windowInfo.windowName ?? "Hidden window")
                             .font(.system(size: 12, weight: .medium))
                             .foregroundStyle(.primary)
                     }
                     .padding(4)
-                    .dockStyle(cornerRadius: 6)
+                    .background(RoundedRectangle(cornerRadius: 6, style: .continuous).fill(.ultraThinMaterial))
                     .padding(4)
                 }
             }
