@@ -132,7 +132,6 @@
 			isa = PBXGroup;
 			children = (
 				C119BDF02C2AEDBA00E06E18 /* DockDoorDebug.entitlements */,
-				BB8247792C288FD30098A440 /* Updates */,
 				BB8247782C2889B20098A440 /* Info.plist */,
 				BBA153F92C11FFD500119C02 /* consts.swift */,
 				BBA153FB2C12356100119C02 /* main.swift */,
@@ -179,13 +178,6 @@
 				BB4B444A2C372A4C006680DC /* WindowPreview.swift */,
 			);
 			path = "Hover Window";
-			sourceTree = "<group>";
-		};
-		BB8247792C288FD30098A440 /* Updates */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Updates;
 			sourceTree = "<group>";
 		};
 		BBA153FD2C12358600119C02 /* Views */ = {
