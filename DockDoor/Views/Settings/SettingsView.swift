@@ -15,6 +15,7 @@ struct SettingsView: View {
     @Default(.showAnimations) var showAnimations
     @Default(.showMenuBarIcon) var showMenuBarIcon
     @Default(.uniformCardRadius) var uniformCardRadius
+    @Default(.hoverTitleStyle) var hoverTitleStyle
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -53,6 +54,13 @@ struct SettingsView: View {
             }
 
             SizePickerView()
+            
+            Picker("Hover Window Title Style", selection: $hoverTitleStyle) {
+                ForEach(HoverView.TitleStyle.allCases, id: \.self) { style in
+                    Text(style.titleString)
+                        .tag(style.rawValue)
+                }
+            }
             
             HStack {
                 Text("Hover Window Open Delay: \(openDelay, specifier: "%.2f") seconds")
