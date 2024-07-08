@@ -37,24 +37,29 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
+        self.setupMenuBar()
+        if !Defaults[.showMenuBarIcon] {
+            self.scheduleMenuBarIconVisibilityUpdate()
+        }
+        
         if !Defaults[.launched] {
             handleFirstTimeLaunch()
         } else {
-            self.setupMenuBar()
-            
-            // Schedule a timer to remove the menu bar icon after 10 seconds if it's turned off
-            if !Defaults[.showMenuBarIcon] {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
-                    self.updateMenuBarIconStatus()
-                }
-            }
-            
             dockObserver = DockObserver.shared
             appClosureObserver = AppClosureObserver.shared
             if Defaults[.enableWindowSwitcher] {
                 keybindHelper = KeybindHelper.shared
             }
         }
+    }
+    
+    func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
+        self.setupMenuBar()
+        if !Defaults[.showMenuBarIcon] {
+            self.scheduleMenuBarIconVisibilityUpdate()
+        }
+        
+        return false
     }
     
     private func setupMenuBar() {
@@ -83,6 +88,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             menu.addItem(quitMenuItem)
             
             button.menu = menu
+        }
+    }
+    
+    private func scheduleMenuBarIconVisibilityUpdate() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
+            self.updateMenuBarIconStatus()
         }
     }
     
