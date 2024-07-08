@@ -43,6 +43,16 @@ struct WindowPreview: View {
         return CGSize(width: targetWidth, height: targetHeight)
     }
     
+    private func fluidGradient() -> some View {
+        FluidGradient(
+            blobs: [.purple, .blue, .green, .yellow, .red, .purple].shuffled(),
+            highlights: [.red, .orange, .pink, .blue, .purple].shuffled(),
+            speed: 0.45,
+            blur: 0.75
+        )
+        .opacity(0.125)
+    }
+    
     private func windowContent(isMinimized: Bool, isHidden: Bool, isSelected: Bool) -> some View {
         Group {
             if isMinimized || isHidden {
@@ -72,35 +82,11 @@ struct WindowPreview: View {
                 .padding()
                 .frame(width: width)
                 .frame(height: 60)
-                .overlay {
-                    if isSelected {
-                        FluidGradient(
-                            blobs: [.purple, .blue, .green, .yellow, .red, .purple].shuffled(),
-                            highlights: [.red, .orange, .pink, .blue, .purple].shuffled(),
-                            speed: 0.45,
-                            blur: 0.75
-                        ).opacity(0.125)
-                    }
-                }
+                .overlay { if isSelected { fluidGradient() }}
+                .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
             } else if let cgImage = windowInfo.image {
-                Image(decorative: cgImage, scale: 1.0)
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .overlay {
-                        if isSelected {
-                            FluidGradient(
-                                blobs: [.purple, .blue, .green, .yellow, .red, .purple].shuffled(),
-                                highlights: [.red, .orange, .pink, .blue, .purple].shuffled(),
-                                speed: 0.45,
-                                blur: 0.75
-                            ).opacity(0.125)
-                            .mask(
-                                Image(decorative: cgImage, scale: 1.0)
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fill)
-                            )
-                        }
-                    }
+                let image = Image(decorative: cgImage, scale: 1.0).resizable().aspectRatio(contentMode: .fill)
+                image.overlay(!isSelected ? nil : fluidGradient().mask(image))
             }
         }
         .frame(width: isMinimized || isHidden ? nil : calculatedSize.width,
@@ -214,7 +200,7 @@ struct WindowPreview: View {
         .contentShape(Rectangle())
         .onHover { over in
             withAnimation(.snappy(duration: 0.175)) {
-                if !CurrentWindow.shared.showingTabMenu {
+                if (!CurrentWindow.shared.showingTabMenu) {
                     isHovering = over
                 } else {
                     isHoveringOverTabMenu = over
@@ -222,9 +208,9 @@ struct WindowPreview: View {
             }
         }
         .onTapGesture {
-            if windowInfo.isMinimized {
+            if (windowInfo.isMinimized) {
                 WindowUtil.toggleMinimize(windowInfo: windowInfo)
-            } else if windowInfo.isHidden {
+            } else if (windowInfo.isHidden) {
                 WindowUtil.toggleHidden(windowInfo: windowInfo)
             } else {
                 WindowUtil.bringWindowToFront(windowInfo: windowInfo)
