@@ -7,23 +7,29 @@
 
 import AppKit
 import Carbon
+import Defaults
+
+struct UserKeyBind: Codable, Defaults.Serializable {
+    var keyCode: UInt16
+    var modifierFlags: Int
+}
 
 class KeybindHelper {
     static let shared = KeybindHelper()
-
-    private var isControlKeyPressed = false
+    private var isModifierKeyPressed = false
     private var isShiftKeyPressed = false
     private var eventTap: CFMachPort?
     private var runLoopSource: CFRunLoopSource?
-
+    private var modifierValue: Int = 0	
+    
     private init() {
         setupEventTap()
     }
-
+    
     deinit {
         removeEventTap()
     }
-
+    
     private func setupEventTap() {
         let eventMask = (1 << CGEventType.keyDown.rawValue) | (1 << CGEventType.keyUp.rawValue) | (1 << CGEventType.flagsChanged.rawValue)
         
@@ -47,7 +53,7 @@ class KeybindHelper {
         CFRunLoopAddSource(CFRunLoopGetCurrent(), runLoopSource, .commonModes)
         CGEvent.tapEnable(tap: eventTap, enable: true)
     }
-
+    
     private func removeEventTap() {
         if let eventTap = eventTap, let runLoopSource = runLoopSource {
             CGEvent.tapEnable(tap: eventTap, enable: false)
@@ -56,32 +62,33 @@ class KeybindHelper {
             self.runLoopSource = nil
         }
     }
-
+    
     private func handleEvent(proxy: CGEventTapProxy, type: CGEventType, event: CGEvent) -> Unmanaged<CGEvent>? {
         let keyCode = event.getIntegerValueField(.keyboardEventKeycode)
+        let keyBoardShortcutSaved: UserKeyBind = Defaults[.UserKeybind] // UserDefaults.standard.getKeybind()!
+        let shiftKeyCurrentlyPressed = event.flags.contains(.maskShift)
+        var userDefinedKeyCurrentlyPressed = false
 
-        switch type {
-        case .flagsChanged:
-            let modifierFlags = event.flags
-            let controlKeyCurrentlyPressed = modifierFlags.contains(.maskControl)
-            let shiftKeyCurrentlyPressed = modifierFlags.contains(.maskShift)
-
-            if controlKeyCurrentlyPressed != isControlKeyPressed {
-                isControlKeyPressed = controlKeyCurrentlyPressed
+        if ((type == .flagsChanged) && (!Defaults[.defaultCMDTABKeybind])){
+            // New Keybind that the user has enforced, includes the modifier keys
+            if event.flags.contains(.maskControl) {
+                modifierValue = Defaults[.Int64maskControl]
+                userDefinedKeyCurrentlyPressed = true
             }
-            
-            // Update the state of Shift key
-            if shiftKeyCurrentlyPressed != isShiftKeyPressed {
-                isShiftKeyPressed = shiftKeyCurrentlyPressed
+            else if event.flags.contains(.maskAlternate) {
+                modifierValue = Defaults[.Int64maskAlternate]
+                userDefinedKeyCurrentlyPressed = true
             }
-
-            if !isControlKeyPressed {  // If Ctrl was released
-                HoverWindow.shared.hideWindow()  // Hide the HoverWindow
-                HoverWindow.shared.selectAndBringToFrontCurrentWindow()
-            }
-
-        case .keyDown:
-            if isControlKeyPressed && keyCode == 48 {  // Tab key
+            handleModifierEvent(modifierKeyPressed: userDefinedKeyCurrentlyPressed, shiftKeyPressed: shiftKeyCurrentlyPressed)
+        }
+        
+        else if ((type == .flagsChanged) && (Defaults[.defaultCMDTABKeybind])){
+            // Default MacOS CMD + TAB keybind replaced
+            handleModifierEvent(modifierKeyPressed: event.flags.contains(.maskCommand), shiftKeyPressed: shiftKeyCurrentlyPressed)
+        }
+        
+        else if (type == .keyDown){
+            if (isModifierKeyPressed && keyCode == keyBoardShortcutSaved.keyCode && modifierValue == keyBoardShortcutSaved.modifierFlags) || (Defaults[.defaultCMDTABKeybind] && keyCode == 48) {  // Tab key
                 if HoverWindow.shared.isVisible {  // Check if HoverWindow is already shown
                     HoverWindow.shared.cycleWindows(goBackwards: isShiftKeyPressed)  // Cycle windows based on Shift key state
                 } else {
@@ -89,14 +96,26 @@ class KeybindHelper {
                 }
                 return nil  // Suppress the Tab key event
             }
-
-        default:
-            break
         }
-
+        
         return Unmanaged.passUnretained(event)
     }
-
+    
+    private func handleModifierEvent(modifierKeyPressed : Bool, shiftKeyPressed : Bool){
+        if modifierKeyPressed != isModifierKeyPressed {
+            isModifierKeyPressed = modifierKeyPressed
+        }
+        // Update the state of Shift key
+        if shiftKeyPressed != isShiftKeyPressed {
+            isShiftKeyPressed = shiftKeyPressed
+        }
+        
+        if !isModifierKeyPressed {
+            HoverWindow.shared.hideWindow()  // Hide the HoverWindow
+            HoverWindow.shared.selectAndBringToFrontCurrentWindow()
+        }
+    }
+    
     private func showHoverWindow() {
         Task { [weak self] in
             do {
@@ -104,7 +123,7 @@ class KeybindHelper {
                 let windows = try await WindowUtil.activeWindows(for: "")
                 await MainActor.run { [weak self] in
                     guard let self = self else { return }
-                    if self.isControlKeyPressed {
+                    if self.isModifierKeyPressed {
                         HoverWindow.shared.showWindow(appName: "Alt-Tab", windows: windows, overrideDelay: true, onWindowTap: { HoverWindow.shared.hideWindow() })
                     }
                 }

@@ -42,7 +42,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         } else {
             dockObserver = DockObserver.shared
             appClosureObserver = AppClosureObserver.shared
-            if Defaults[.showWindowSwitcher] {
+            if Defaults[.enableWindowSwitcher] {
                 keybindHelper = KeybindHelper.shared
             }
         }
