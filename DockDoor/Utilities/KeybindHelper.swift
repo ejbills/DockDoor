@@ -88,7 +88,7 @@ class KeybindHelper {
         }
         
         else if (type == .keyDown){
-            if (isModifierKeyPressed && keyCode == keyBoardShortcutSaved.keyCode && modifierValue == keyBoardShortcutSaved.modifierFlags) || (Defaults[.defaultCMDTABKeybind] && keyCode == 48) {  // Tab key
+            if (isModifierKeyPressed && keyCode == keyBoardShortcutSaved.keyCode && modifierValue == keyBoardShortcutSaved.modifierFlags) || (Defaults[.defaultCMDTABKeybind] && event.flags.contains(.maskCommand) && keyCode == 48) {  // Tab key
                 if HoverWindow.shared.isVisible {  // Check if HoverWindow is already shown
                     HoverWindow.shared.cycleWindows(goBackwards: isShiftKeyPressed)  // Cycle windows based on Shift key state
                 } else {
