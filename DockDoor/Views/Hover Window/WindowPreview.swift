@@ -72,17 +72,37 @@ struct WindowPreview: View {
                 .padding()
                 .frame(width: width)
                 .frame(height: 60)
+                .overlay {
+                    if isSelected {
+                        FluidGradient(
+                            blobs: [.purple, .blue, .green, .yellow, .red, .purple].shuffled(),
+                            highlights: [.red, .orange, .pink, .blue, .purple].shuffled(),
+                            speed: 0.45,
+                            blur: 0.75
+                        ).opacity(0.125)
+                    }
+                }
             } else if let cgImage = windowInfo.image {
                 Image(decorative: cgImage, scale: 1.0)
                     .resizable()
                     .aspectRatio(contentMode: .fill)
+                    .overlay {
+                        if isSelected {
+                            FluidGradient(
+                                blobs: [.purple, .blue, .green, .yellow, .red, .purple].shuffled(),
+                                highlights: [.red, .orange, .pink, .blue, .purple].shuffled(),
+                                speed: 0.45,
+                                blur: 0.75
+                            ).opacity(0.125)
+                            .mask(
+                                Image(decorative: cgImage, scale: 1.0)
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                            )
+                        }
+                    }
             }
         }
-        .overlay { if isSelected { FluidGradient(blobs: [.purple, .blue, .green, .yellow, .red, .purple].shuffled(),
-                                               highlights: [.red, .orange, .pink, .blue, .purple].shuffled(),
-                                               speed: 0.45,
-                                               blur: 0.75).opacity(0.125)
-        }}
         .frame(width: isMinimized || isHidden ? nil : calculatedSize.width,
                height: isMinimized || isHidden ? nil : calculatedSize.height,
                alignment: .center)
@@ -97,7 +117,6 @@ struct WindowPreview: View {
             VStack(spacing: 0) {
                 windowContent(isMinimized: windowInfo.isMinimized, isHidden: windowInfo.isHidden, isSelected: selected)
                     .overlay { Color.white.opacity(isHoveringOverTabMenu ? 0.1 : 0) }
-                    .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
                     .shadow(radius: selected || isHoveringOverTabMenu ? 0 : 3)
                     .background {
                         RoundedRectangle(cornerRadius: 6, style: .continuous)
