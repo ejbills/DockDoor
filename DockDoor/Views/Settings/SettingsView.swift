@@ -14,6 +14,7 @@ struct SettingsView: View {
     @Default(.screenCaptureCacheLifespan) var screenCaptureCacheLifespan
     @Default(.showAnimations) var showAnimations
     @Default(.showMenuBarIcon) var showMenuBarIcon
+    @Default(.uniformCardRadius) var uniformCardRadius
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -29,6 +30,10 @@ struct SettingsView: View {
             LaunchAtLogin.Toggle("Launch DockDoor at login")
             Toggle(isOn: $showAnimations, label: {
                 Text("Enable Hover Window Sliding Animation")
+            })
+            
+            Toggle(isOn: $uniformCardRadius, label: {
+                Text("Use Uniform Image Preview Radius")
             })
             
             Toggle(isOn: $showMenuBarIcon, label: {

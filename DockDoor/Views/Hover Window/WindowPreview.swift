@@ -16,6 +16,7 @@ struct WindowPreview: View {
     let dockPosition: DockPosition
     let maxWindowDimension: CGPoint
     let bestGuessMonitor: NSScreen
+    let uniformCardRadius: Bool
     
     @State private var isHovering = false
     @State private var isHoveringOverTabMenu = false
@@ -41,6 +42,16 @@ struct WindowPreview: View {
         }
         
         return CGSize(width: targetWidth, height: targetHeight)
+    }
+    
+    private func fluidGradient() -> some View {
+        FluidGradient(
+            blobs: [.purple, .blue, .green, .yellow, .red, .purple].shuffled(),
+            highlights: [.red, .orange, .pink, .blue, .purple].shuffled(),
+            speed: 0.45,
+            blur: 0.75
+        )
+        .opacity(0.125)
     }
     
     private func windowContent(isMinimized: Bool, isHidden: Bool, isSelected: Bool) -> some View {
@@ -72,17 +83,12 @@ struct WindowPreview: View {
                 .padding()
                 .frame(width: width)
                 .frame(height: 60)
+                .overlay { if isSelected { fluidGradient() }}
             } else if let cgImage = windowInfo.image {
-                Image(decorative: cgImage, scale: 1.0)
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
+                let image = Image(decorative: cgImage, scale: 1.0).resizable().aspectRatio(contentMode: .fill)
+                image.overlay(!isSelected ? nil : fluidGradient().mask(image))
             }
         }
-        .overlay { if isSelected { FluidGradient(blobs: [.purple, .blue, .green, .yellow, .red, .purple].shuffled(),
-                                               highlights: [.red, .orange, .pink, .blue, .purple].shuffled(),
-                                               speed: 0.45,
-                                               blur: 0.75).opacity(0.125)
-        }}
         .frame(width: isMinimized || isHidden ? nil : calculatedSize.width,
                height: isMinimized || isHidden ? nil : calculatedSize.height,
                alignment: .center)
@@ -97,12 +103,12 @@ struct WindowPreview: View {
             VStack(spacing: 0) {
                 windowContent(isMinimized: windowInfo.isMinimized, isHidden: windowInfo.isHidden, isSelected: selected)
                     .overlay { Color.white.opacity(isHoveringOverTabMenu ? 0.1 : 0) }
-                    .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
                     .shadow(radius: selected || isHoveringOverTabMenu ? 0 : 3)
                     .background {
                         RoundedRectangle(cornerRadius: 6, style: .continuous)
                             .fill(Color.clear.shadow(.drop(color: .black.opacity(selected ? 0.35 : 0.25), radius: selected ? 12 : 8, y: selected ? 6 : 4)))
                     }
+                    .clipShape(uniformCardRadius ? AnyShape(RoundedRectangle(cornerRadius: 6, style: .continuous)) : AnyShape(Rectangle()))
             }
             .overlay(alignment: .bottomLeading) {
                 if selected, let windowTitle = windowInfo.window?.title, !windowTitle.isEmpty, windowTitle != windowInfo.appName {
@@ -195,7 +201,7 @@ struct WindowPreview: View {
         .contentShape(Rectangle())
         .onHover { over in
             withAnimation(.snappy(duration: 0.175)) {
-                if !CurrentWindow.shared.showingTabMenu {
+                if (!CurrentWindow.shared.showingTabMenu) {
                     isHovering = over
                 } else {
                     isHoveringOverTabMenu = over
@@ -203,9 +209,9 @@ struct WindowPreview: View {
             }
         }
         .onTapGesture {
-            if windowInfo.isMinimized {
+            if (windowInfo.isMinimized) {
                 WindowUtil.toggleMinimize(windowInfo: windowInfo)
-            } else if windowInfo.isHidden {
+            } else if (windowInfo.isHidden) {
                 WindowUtil.toggleHidden(windowInfo: windowInfo)
             } else {
                 WindowUtil.bringWindowToFront(windowInfo: windowInfo)

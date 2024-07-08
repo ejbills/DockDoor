@@ -76,9 +76,10 @@ final class WindowUtil {
         
         // Configure the stream to capture only the window content
         config.scalesToFit = false
+        config.backgroundColor = .clear
         config.ignoreGlobalClipDisplay = true
         config.ignoreShadowsDisplay = true
-        config.shouldBeOpaque = true
+        config.shouldBeOpaque = false
         if #available(macOS 14.2, *) { config.includeChildWindows = false }
         config.width = Int(window.frame.width)
         config.height = Int(window.frame.height)
