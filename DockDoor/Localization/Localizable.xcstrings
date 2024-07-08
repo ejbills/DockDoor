@@ -1,0 +1,426 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "• Allows for enhanced visual information in the dock" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• מאפשר מידע חזותי משופר ב-Dock"
+          }
+        }
+      }
+    },
+    "• Enables real-time interaction with dock items" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• מאפשר אינטראקציה בזמן אמת עם פריטי ה-Dock"
+          }
+        }
+      }
+    },
+    "• To capture previews of images and windows" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• כדי להציג תמונת תצוגה מקדימה של החלונות"
+          }
+        }
+      }
+    },
+    "• To detect when you hover over the dock" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• כדי לזהות מתי אתה מרחף מעל ה-Dock"
+          }
+        }
+      }
+    },
+    "Accessibility Permissions" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "הרשאות נגישות:"
+          }
+        }
+      }
+    },
+    "Accessibility:" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "נגישות:"
+          }
+        }
+      }
+    },
+    "Automatically check for updates" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "בדוק אוטומטית אם יש עדכונים"
+          }
+        }
+      }
+    },
+    "Buy me a coffee here, thank you!" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "קנה לי קפה כאן, תודה!"
+          }
+        }
+      }
+    },
+    "Check for Updates" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "חיפוש עדכונים"
+          }
+        }
+      }
+    },
+    "Command (⌘)" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Command (⌘)"
+          }
+        }
+      }
+    },
+    "Control (⌃)" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Control (⌃)"
+          }
+        }
+      }
+    },
+    "Current Keybind: %@" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "קיצור מקשים נוכחי: %@"
+          }
+        }
+      }
+    },
+    "Current Version: %@" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "גרסה נוכחית: %@"
+          }
+        }
+      }
+    },
+    "Enable Hover Window Sliding Animation" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "הפעל אנימציית הזזה של חלון ריחוף"
+          }
+        }
+      }
+    },
+    "Enable Window Switcher" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "הפעל את מחליף החלונות"
+          }
+        }
+      }
+    },
+    "Enhance your dock experience!" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "שפר את חווית ה-Dock שלך!"
+          }
+        }
+      }
+    },
+    "Get Started" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "בוא נתחיל"
+          }
+        }
+      }
+    },
+    "Hover Window Open Delay: %.2f seconds" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "השהיית ריחוף לפני פתיחת תצוגה מקדימה: %.2f שניות"
+          }
+        }
+      }
+    },
+    "Initialization Key" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "מקש אתחול"
+          }
+        }
+      }
+    },
+    "Last checked: %@" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "בדיקה אחרונה: %@"
+          }
+        }
+      }
+    },
+    "Open Accessibility Settings" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "פתח הגדרות נגישות"
+          }
+        }
+      }
+    },
+    "Open Screen Recording Settings" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "פתח הגדרות הקלטת מסך"
+          }
+        }
+      }
+    },
+    "Option (⌥)" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Option (⌥)"
+          }
+        }
+      }
+    },
+    "Please Quit the App to Apply Changes! :)" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "אנא צא מהיישום כדי להחיל שינויים! :)"
+          }
+        }
+      }
+    },
+    "Press any key combination after holding the initialization key to set the keybind." : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "לחץ על צירוף מקשים כלשהו לאחר החזקת מקש האתחול כדי להגדיר את חיבור המקשים."
+          }
+        }
+      }
+    },
+    "Press the key combination..." : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "לחץ על צירוף המקשים..."
+          }
+        }
+      }
+    },
+    "Quit App" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "צא מהיישום"
+          }
+        }
+      }
+    },
+    "Screen Capturing:" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "הקלטת מסך:"
+          }
+        }
+      }
+    },
+    "Screen Recording Permissions" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "הרשאות הקלטת מסך"
+          }
+        }
+      }
+    },
+    "Set Initialization Key and Keybind" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "הגדר מפתח אתחול וצירוף מקשים"
+          }
+        }
+      }
+    },
+    "Show Menu Bar Icon" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "הצג סמל בשורת התפריטים"
+          }
+        }
+      }
+    },
+    "Start Recording Keybind" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "התחל להקליט צירוף מקשים"
+          }
+        }
+      }
+    },
+    "Up to date" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "מעודכן"
+          }
+        }
+      }
+    },
+    "Update available" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "זמין עדכון"
+          }
+        }
+      }
+    },
+    "Use default MacOS keybind ⌘ + ⇥" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "השתמש בקיצור המקשים ברירת המחדל של macOS ⇥ + ⌘"
+          }
+        }
+      }
+    },
+    "Version %@" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "גרסה %@"
+          }
+        }
+      }
+    },
+    "Want to support development?" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "רוצה לתמוך בפיתוח?"
+          }
+        }
+      }
+    },
+    "Welcome to DockDoor!" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ברוכים הבאים ל-DockDoor!"
+          }
+        }
+      }
+    },
+    "Why we need permissions" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "למה אנחנו צריכים הרשאות"
+          }
+        }
+      }
+    },
+    "Window Buffer (if misaligned with dock)" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "מרווח חלון (אם היישור עם ה-Dock אינו תקין)"
+          }
+        }
+      }
+    },
+    "Window Cache Lifespan: %.0f seconds" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "אורך חיים של מטמון תמונת חלון: %.0f שניות"
+          }
+        }
+      }
+    },
+    "Window Size" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "גודל חלון"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}
