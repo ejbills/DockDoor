@@ -16,6 +16,7 @@ struct WindowPreview: View {
     let dockPosition: DockPosition
     let maxWindowDimension: CGPoint
     let bestGuessMonitor: NSScreen
+    let uniformCardRadius: Bool
     
     @State private var isHovering = false
     @State private var isHoveringOverTabMenu = false
@@ -83,7 +84,6 @@ struct WindowPreview: View {
                 .frame(width: width)
                 .frame(height: 60)
                 .overlay { if isSelected { fluidGradient() }}
-                .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
             } else if let cgImage = windowInfo.image {
                 let image = Image(decorative: cgImage, scale: 1.0).resizable().aspectRatio(contentMode: .fill)
                 image.overlay(!isSelected ? nil : fluidGradient().mask(image))
@@ -108,6 +108,7 @@ struct WindowPreview: View {
                         RoundedRectangle(cornerRadius: 6, style: .continuous)
                             .fill(Color.clear.shadow(.drop(color: .black.opacity(selected ? 0.35 : 0.25), radius: selected ? 12 : 8, y: selected ? 6 : 4)))
                     }
+                    .clipShape(uniformCardRadius ? AnyShape(RoundedRectangle(cornerRadius: 6, style: .continuous)) : AnyShape(Rectangle()))
             }
             .overlay(alignment: .bottomLeading) {
                 if selected, let windowTitle = windowInfo.window?.title, !windowTitle.isEmpty, windowTitle != windowInfo.appName {

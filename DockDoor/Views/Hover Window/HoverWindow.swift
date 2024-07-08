@@ -264,6 +264,8 @@ struct HoverView: View {
     let dockPosition: DockPosition
     let bestGuessMonitor: NSScreen
     
+    @Default(.uniformCardRadius) var uniformCardRadius
+    
     @State private var showWindows: Bool = false
     @State private var hasAppeared: Bool = false
     @State private var appIcon: NSImage? = nil
@@ -304,7 +306,7 @@ struct HoverView: View {
                         ForEach(activeWindows.indices, id: \.self) { index in
                             WindowPreview(windowInfo: activeWindows[index], onTap: onWindowTap, index: index,
                                           dockPosition: dockPosition, maxWindowDimension: maxWindowDimension,
-                                          bestGuessMonitor: bestGuessMonitor)
+                                          bestGuessMonitor: bestGuessMonitor, uniformCardRadius: uniformCardRadius)
                                 .id("\(appName)-\(index)")
                         }
                     }
@@ -401,7 +403,8 @@ struct HoverView: View {
                         index: index,
                         dockPosition: dockPosition,
                         maxWindowDimension: maxWindowDimension,
-                        bestGuessMonitor: bestGuessMonitor
+                        bestGuessMonitor: bestGuessMonitor, 
+                        uniformCardRadius: true // force it to be rounded, since these have no image previews
                     )
                 }
             }
