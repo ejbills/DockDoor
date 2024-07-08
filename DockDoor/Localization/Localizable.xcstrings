@@ -1,0 +1,132 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "• Allows for enhanced visual information in the dock" : {
+
+    },
+    "• Enables real-time interaction with dock items" : {
+
+    },
+    "• To capture previews of images and windows" : {
+
+    },
+    "• To detect when you hover over the dock" : {
+
+    },
+    "Accessibility Permissions" : {
+
+    },
+    "Accessibility:" : {
+
+    },
+    "Automatically check for updates" : {
+
+    },
+    "Buy me a coffee here, thank you!" : {
+
+    },
+    "Check for Updates" : {
+
+    },
+    "Command (⌘)" : {
+
+    },
+    "Control (⌃)" : {
+
+    },
+    "Current Keybind: %@" : {
+
+    },
+    "Current Version: %@" : {
+
+    },
+    "Enable Hover Window Sliding Animation" : {
+
+    },
+    "Enable Window Switcher" : {
+
+    },
+    "Enhance your dock experience!" : {
+
+    },
+    "Get Started" : {
+
+    },
+    "Hover Window Open Delay: %.2f seconds" : {
+
+    },
+    "Initialization Key" : {
+
+    },
+    "Last checked: %@" : {
+
+    },
+    "Open Accessibility Settings" : {
+
+    },
+    "Open Screen Recording Settings" : {
+
+    },
+    "Option (⌥)" : {
+
+    },
+    "Please Quit the App to Apply Changes! :)" : {
+
+    },
+    "Press any key combination after holding the initialization key to set the keybind." : {
+
+    },
+    "Press the key combination..." : {
+
+    },
+    "Quit App" : {
+
+    },
+    "Screen Capturing:" : {
+
+    },
+    "Screen Recording Permissions" : {
+
+    },
+    "Set Initialization Key and Keybind" : {
+
+    },
+    "Show Menu Bar Icon" : {
+
+    },
+    "Start Recording Keybind" : {
+
+    },
+    "Up to date" : {
+
+    },
+    "Update available" : {
+
+    },
+    "Use default MacOS keybind ⌘ + ⇥" : {
+
+    },
+    "Version %@" : {
+
+    },
+    "Want to support development?" : {
+
+    },
+    "Welcome to DockDoor!" : {
+
+    },
+    "Why we need permissions" : {
+
+    },
+    "Window Buffer (if misaligned with dock)" : {
+
+    },
+    "Window Cache Lifespan: %.0f seconds" : {
+
+    },
+    "Window Size" : {
+
+    }
+  },
+  "version" : "1.0"
+}
