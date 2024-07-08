@@ -55,7 +55,7 @@ struct SettingsView: View {
             SizePickerView()
             
             HStack {
-                Text("Hover Window Open Delay: \(openDelay, specifier: "%.2f") seconds")
+                Text("Hover Window Open Delay: \(openDelay, specifier: "%.1f") seconds")
                 Spacer()
                 Slider(value: $openDelay, in: 0...2, step: 0.1)
             }
