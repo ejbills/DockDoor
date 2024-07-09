@@ -3,6 +3,12 @@
   "strings" : {
     "• Allows for enhanced visual information in the dock" : {
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Permet une information visuelle améliorée dans le Dock"
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13,6 +19,12 @@
     },
     "• Enables real-time interaction with dock items" : {
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Permet une interaction en temps réel avec les éléments du Dock"
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -23,6 +35,12 @@
     },
     "• To capture previews of images and windows" : {
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Pour capturer les aperçus des images et fenêtres"
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -33,6 +51,12 @@
     },
     "• To detect when you hover over the dock" : {
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Pour détecter lorsque vous survolez le Dock"
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -43,6 +67,12 @@
     },
     "Accessibility Permissions" : {
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autorisation d’accessibilité"
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -53,6 +83,12 @@
     },
     "Accessibility:" : {
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Accessibilité :"
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -64,6 +100,12 @@
     "Appearance" : {
       "comment" : "Settings Tab",
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apparence"
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -74,6 +116,12 @@
     },
     "Appearance settings" : {
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Réglages de l’apparence"
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -84,6 +132,12 @@
     },
     "Automatically check for updates" : {
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vérifier automatiquement les mises à jour"
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -94,6 +148,12 @@
     },
     "Buy me a coffee here, thank you!" : {
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Achetez-moi un café ici, merci !"
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -105,6 +165,12 @@
     "Can you even see this?" : {
       "comment" : "Window size option",
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comment arrivez-vous à voir ça ?"
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -115,6 +181,12 @@
     },
     "Cancel" : {
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Annuler"
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -125,6 +197,12 @@
     },
     "Check for Updates" : {
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vérifier les mises à jour"
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -135,6 +213,12 @@
     },
     "Command (⌘)" : {
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Commande (⌘)"
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -145,6 +229,12 @@
     },
     "Control (⌃)" : {
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Contrôle (⌃)"
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -155,6 +245,12 @@
     },
     "Current Keybind: %@" : {
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Raccourci clavier actuel : %@"
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -165,6 +261,12 @@
     },
     "Current Version: %@" : {
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Version actuelle : %@"
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -176,6 +278,12 @@
     "Default" : {
       "comment" : "Preview title style option",
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Par défaut"
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -187,6 +295,12 @@
     "Default (Medium Large)" : {
       "comment" : "Window size option",
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Par défaut (moyennement grand)"
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -198,6 +312,12 @@
     "Embedded" : {
       "comment" : "Preview title style option",
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Intégré"
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -208,6 +328,12 @@
     },
     "Enable Hover Window Sliding Animation" : {
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Activer l’animation de glissement de l’aperçu au survol"
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -218,6 +344,12 @@
     },
     "Enable Window Switcher" : {
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Activer le sélecteur d’applications"
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -228,6 +360,12 @@
     },
     "Enhance your dock experience!" : {
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Améliorez votre expérience du Dock !"
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -239,6 +377,12 @@
     "Extra Extra Small" : {
       "comment" : "Window size option",
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Très, très petit"
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -250,6 +394,12 @@
     "Extra Small" : {
       "comment" : "Window size option",
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Très petit"
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -261,6 +411,12 @@
     "General" : {
       "comment" : "Settings tab title",
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Général"
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -271,6 +427,12 @@
     },
     "General settings" : {
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Réglages généraux"
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -281,6 +443,12 @@
     },
     "Get Started" : {
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Commencer"
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -292,6 +460,12 @@
     "Hidden" : {
       "comment" : "Preview title style option",
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Masqué"
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -302,6 +476,12 @@
     },
     "Hover Window Open Delay: %.1f seconds" : {
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Délai d’ouverture de l’aperçu au survol : %.1f secondes"
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -312,6 +492,12 @@
     },
     "Hover Window Title Style" : {
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Style du titre de l’aperçu"
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -322,6 +508,12 @@
     },
     "If you need to access the menu bar icon, launch the app to reveal it for 10 seconds." : {
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Si vous avez besoin d’accéder à l’icône de la barre des menus, lancez l’application afin d’afficher l’icône pour 10 secondes."
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -332,6 +524,12 @@
     },
     "Initialization Key" : {
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Touche d’initialisation"
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -343,6 +541,12 @@
     "Large" : {
       "comment" : "Window size option",
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Grand"
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -353,6 +557,12 @@
     },
     "Last checked: %@" : {
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dernière vérification : %@"
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -363,6 +573,12 @@
     },
     "Launch DockDoor at login" : {
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lancer DockDoor au démarrage"
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -372,11 +588,24 @@
       }
     },
     "Left" : {
-
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gauche"
+          }
+        }
+      }
     },
     "Medium" : {
       "comment" : "Window size option",
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Moyen"
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -387,6 +616,12 @@
     },
     "Menu Bar Icon Hidden" : {
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Icône de la barre des menus masquée"
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -397,6 +632,12 @@
     },
     "OK" : {
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -407,6 +648,12 @@
     },
     "Open Accessibility Settings" : {
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ouvrir les réglages d’accessibilité"
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -417,6 +664,12 @@
     },
     "Open Screen Recording Settings" : {
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ouvrir les réglages d’enregistrement de l’écran"
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -427,6 +680,12 @@
     },
     "Open Settings" : {
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ouvrir les réglages"
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -437,6 +696,12 @@
     },
     "Option (⌥)" : {
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Option (⌥)"
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -447,6 +712,12 @@
     },
     "Permission error" : {
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erreur d’autorisations"
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -458,6 +729,12 @@
     "Permissions" : {
       "comment" : "Settings tab title",
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autorisations"
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -468,6 +745,12 @@
     },
     "Permissions settings" : {
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Réglages d’autorisations"
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -478,6 +761,12 @@
     },
     "Please Quit the App to Apply Changes! :)" : {
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Merci de quitter l’application pour appliquer les modifications ! :)"
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -489,6 +778,12 @@
     "Popover" : {
       "comment" : "Preview title style option",
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En infobulle"
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -499,6 +794,12 @@
     },
     "Press any key combination after holding the initialization key to set the keybind." : {
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pressez la touche à associer à la touche d’initialisation pour former le raccourci clavier."
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -509,6 +810,12 @@
     },
     "Press the key combination..." : {
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pressez la combinaison de touches..."
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -519,6 +826,12 @@
     },
     "Quit App" : {
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quitter l’application"
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -529,6 +842,12 @@
     },
     "Quit DockDoor" : {
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quitter DockDoor"
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -538,10 +857,23 @@
       }
     },
     "Right" : {
-
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Droite"
+          }
+        }
+      }
     },
     "Screen Capturing:" : {
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enregistrement de l’écran :"
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -552,6 +884,12 @@
     },
     "Screen Recording Permissions" : {
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autorisation d’enregistrement de l’écran"
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -562,6 +900,12 @@
     },
     "Set Initialization Key and Keybind" : {
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Configurez la touche d’initialisation et le raccourci clavier"
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -572,6 +916,12 @@
     },
     "Show Menu Bar Icon" : {
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afficher l’icône dans la barre des menus"
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -583,6 +933,12 @@
     "Small" : {
       "comment" : "Window size option",
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Petit"
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -593,6 +949,12 @@
     },
     "Start Recording Keybind" : {
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enregistrer le raccourci clavier"
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -604,6 +966,12 @@
     "Subatomic" : {
       "comment" : "Window size option",
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Subatomique"
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -614,6 +982,12 @@
     },
     "Up to date" : {
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DockDoor est à jour"
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -624,6 +998,12 @@
     },
     "Update available" : {
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mise à jour disponible"
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -634,6 +1014,12 @@
     },
     "Update settings" : {
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mettre à jour les réglages"
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -645,6 +1031,12 @@
     "Updates" : {
       "comment" : "Settings tab title",
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mise à jour"
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -655,6 +1047,12 @@
     },
     "Use default MacOS keybind ⌘ + ⇥" : {
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Utiliser le raccourci MacOS par défaut ⌘ + ⇥"
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -665,6 +1063,12 @@
     },
     "Use Uniform Image Preview Radius" : {
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Utiliser le même rayon pour tous les coins des aperçus"
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -675,6 +1079,12 @@
     },
     "Version %@" : {
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Version %@"
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -685,6 +1095,12 @@
     },
     "Want to support development?" : {
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vous voulez soutenir le développement ?"
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -695,6 +1111,12 @@
     },
     "Welcome to DockDoor!" : {
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bienvenue dans DockDoor !"
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -706,6 +1128,12 @@
     "What is this? A window for ANTS?" : {
       "comment" : "Window size option",
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Qu’est-ce ? Un aperçu pour les FOURMIS ?"
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -716,6 +1144,12 @@
     },
     "Why we need permissions" : {
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pourquoi DockDoor a besoin des autorisations"
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -726,6 +1160,12 @@
     },
     "Window Buffer (if misaligned with dock)" : {
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Distance par rapport au Dock (en cas de conflit avec celui-ci)"
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -736,6 +1176,12 @@
     },
     "Window Cache Lifespan: %.0f seconds" : {
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Durée de vie du cache de l’aperçu : %.0f secondes"
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -746,6 +1192,12 @@
     },
     "Window Size" : {
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Taille de l’aperçu"
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -757,6 +1209,12 @@
     "Window Switcher" : {
       "comment" : "Settings tab title",
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sélecteur d’applications"
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -766,10 +1224,23 @@
       }
     },
     "Window Title Alignment" : {
-
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alignement du titre de la fenêtre"
+          }
+        }
+      }
     },
     "Windows switching settings" : {
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Réglages du sélecteur d’applications"
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
@@ -780,6 +1251,12 @@
     },
     "You need to give DockDoor access to the accessibility API in order for it to function." : {
       "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pour garantir le bon fonctionnement de DockDoor, vous devez garantir à l’application l’accès à l’API d’accessibilité."
+          }
+        },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
