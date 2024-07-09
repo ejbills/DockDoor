@@ -8,6 +8,7 @@
             <sparkle:version>1.1.0</sparkle:version>
             <sparkle:shortVersionString>1.1.0</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <sparkle:releaseNotesLink>https://dockdoor.kepler.cafe/CHANGELOG.html</sparkle:releaseNotesLink>
             <enclosure url="https://github.com/ejbills/DockDoor/releases/download/v1.1.0/DockDoor.dmg" length="1979462" type="application/octet-stream" sparkle:edSignature="Aw+Iqi7HkYDAX5f8nMGWijDuUVgVb8MaTyGsKcHTpkbSpoqlAolTy5h1W2qrV28NmlOEg2uWS4qTUEw7JuMBDA=="/>
         </item>
     </channel>
