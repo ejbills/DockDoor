@@ -24,6 +24,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private lazy var settingsWindowController = SettingsWindowController(
         panes: [
             GeneralSettingsViewController(),
+            AppearanceViewController(),
             WindowSwitcherSettingsViewController(),
             PermissionsSettingsViewController(),
             UpdatesSettingsViewController(updater: updaterController.updater)

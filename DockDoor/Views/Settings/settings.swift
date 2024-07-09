@@ -11,6 +11,7 @@ import Sparkle
 
 extension Settings.PaneIdentifier {
     static let general = Self("general")
+    static let appearance = Self("appearance")
     static let permissions = Self("permissions")
     static let updates = Self("updates")
     static let alttab = Self("alttab")
@@ -23,6 +24,18 @@ let GeneralSettingsViewController: () -> SettingsPane = {
         toolbarIcon: NSImage(systemSymbolName: "gearshape.fill", accessibilityDescription: String(localized: "General settings"))!
     ) {
         SettingsView()
+    }
+
+    return Settings.PaneHostingController(pane: paneView)
+}
+
+let AppearanceViewController: () -> SettingsPane = {
+    let paneView = Settings.Pane(
+        identifier: .appearance,
+        title: String(localized:"Appearance", comment: "Settings Tab"),
+        toolbarIcon: NSImage(systemSymbolName: "wand.and.stars.inverse", accessibilityDescription: String(localized: "Appearance settings"))!
+    ) {
+        AppearanceView()
     }
 
     return Settings.PaneHostingController(pane: paneView)

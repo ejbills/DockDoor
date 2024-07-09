@@ -61,6 +61,27 @@
         }
       }
     },
+    "Appearance" : {
+      "comment" : "Settings Tab",
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "מראה"
+          }
+        }
+      }
+    },
+    "Appearance settings" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "הגדרות מראה"
+          }
+        }
+      }
+    },
     "Automatically check for updates" : {
       "localizations" : {
         "he" : {
