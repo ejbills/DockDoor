@@ -381,7 +381,7 @@
         }
       }
     },
-    "None" : {
+    "Hidden" : {
       "comment" : "Preview title style option",
       "localizations" : {
         "he" : {

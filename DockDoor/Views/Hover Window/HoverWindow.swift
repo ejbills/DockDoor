@@ -275,7 +275,7 @@ struct HoverView: View {
         case `default` = 0
         case embedded = 1
         case popover = 2
-        case none = -1
+        case hidden = -1
         
         var titleString: String {
             switch self {
@@ -285,8 +285,8 @@ struct HoverView: View {
                 return String(localized: "Embedded", comment: "Preview title style option")
             case .popover:
                 return String(localized: "Popover", comment: "Preview title style option")
-            case .none:
-                return String(localized: "None", comment: "Preview title style option")
+            case .hidden:
+                return String(localized: "Hidden", comment: "Preview title style option")
             }
         }
     }
