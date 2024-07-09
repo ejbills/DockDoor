@@ -266,6 +266,7 @@ struct HoverView: View {
     
     @Default(.uniformCardRadius) var uniformCardRadius
     @Default(.hoverTitleStyle) var hoverTitleStyle
+    @Default(.windowTitleAlignment) var windowTitleAlignment
     
     @State private var showWindows: Bool = false
     @State private var hasAppeared: Bool = false
@@ -327,7 +328,8 @@ struct HoverView: View {
                         ForEach(activeWindows.indices, id: \.self) { index in
                             WindowPreview(windowInfo: activeWindows[index], onTap: onWindowTap, index: index,
                                           dockPosition: dockPosition, maxWindowDimension: maxWindowDimension,
-                                          bestGuessMonitor: bestGuessMonitor, uniformCardRadius: uniformCardRadius)
+                                          bestGuessMonitor: bestGuessMonitor, uniformCardRadius: uniformCardRadius, 
+                                          windowTitleAlignment: windowTitleAlignment)
                                 .id("\(appName)-\(index)")
                         }
                     }
@@ -483,7 +485,8 @@ struct HoverView: View {
                         dockPosition: dockPosition,
                         maxWindowDimension: maxWindowDimension,
                         bestGuessMonitor: bestGuessMonitor, 
-                        uniformCardRadius: true // force it to be rounded, since these have no image previews
+                        uniformCardRadius: true, // force it to be rounded, since these have no image previews
+                        windowTitleAlignment: windowTitleAlignment
                     )
                 }
             }

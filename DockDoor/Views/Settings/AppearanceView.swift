@@ -14,6 +14,7 @@ struct AppearanceView: View {
     @Default(.uniformCardRadius) var uniformCardRadius
     @Default(.hoverTitleStyle) var hoverTitleStyle
     @Default(.windowPadding) var windowPadding
+    @Default(.windowTitleAlignment) var windowTitleAlignment
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -37,6 +38,12 @@ struct AppearanceView: View {
                         .tag(style.rawValue)
                 }
             }
+            
+            Picker("Window Title Alignment", selection: $windowTitleAlignment) {
+                Text("Left").tag(true)
+                Text("Right").tag(false)
+            }
+            .pickerStyle(SegmentedPickerStyle())
         }
         .padding(20)
         .frame(minWidth: 600)

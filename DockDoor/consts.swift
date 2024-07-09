@@ -18,6 +18,7 @@ extension Defaults.Keys {
     static let sizingMultiplier = Key<CGFloat>("sizingMultiplier") { 3 }
     static let windowPadding = Key<CGFloat>("windowPadding") { 0 }
     static let openDelay = Key<CGFloat>("openDelay") { 0 }
+    static let windowTitleAlignment = Key<Bool>("windowTitleAlignment") { true } // true = left side, false = right side alignment
     
     static let screenCaptureCacheLifespan = Key<CGFloat>("screenCaptureCacheLifespan") { 60 }
     static let uniformCardRadius = Key<Bool>("uniformCardRadius") { true }

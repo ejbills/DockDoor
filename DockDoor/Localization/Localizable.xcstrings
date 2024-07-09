@@ -289,6 +289,17 @@
         }
       }
     },
+    "Hidden" : {
+      "comment" : "Preview title style option",
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ללא"
+          }
+        }
+      }
+    },
     "Hover Window Open Delay: %.1f seconds" : {
       "localizations" : {
         "he" : {
@@ -360,6 +371,9 @@
         }
       }
     },
+    "Left" : {
+
+    },
     "Medium" : {
       "comment" : "Window size option",
       "localizations" : {
@@ -377,17 +391,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "סמל שורת התפריטים הוסתר"
-          }
-        }
-      }
-    },
-    "Hidden" : {
-      "comment" : "Preview title style option",
-      "localizations" : {
-        "he" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ללא"
           }
         }
       }
@@ -533,6 +536,9 @@
           }
         }
       }
+    },
+    "Right" : {
+
     },
     "Screen Capturing:" : {
       "localizations" : {
@@ -758,6 +764,9 @@
           }
         }
       }
+    },
+    "Window Title Alignment" : {
+
     },
     "Windows switching settings" : {
       "localizations" : {

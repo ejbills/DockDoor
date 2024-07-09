@@ -17,6 +17,7 @@ struct WindowPreview: View {
     let maxWindowDimension: CGPoint
     let bestGuessMonitor: NSScreen
     let uniformCardRadius: Bool
+    let windowTitleAlignment: Bool
     
     @State private var isHovering = false
     @State private var isHoveringOverTabMenu = false
@@ -110,7 +111,7 @@ struct WindowPreview: View {
                     }
                     .clipShape(uniformCardRadius ? AnyShape(RoundedRectangle(cornerRadius: 6, style: .continuous)) : AnyShape(Rectangle()))
             }
-            .overlay(alignment: .bottomLeading) {
+            .overlay(alignment: windowTitleAlignment ? .bottomLeading : .bottomTrailing) {
                 windowTitleOverlay(selected: selected)
             }
             .overlay(alignment: .topLeading) {
