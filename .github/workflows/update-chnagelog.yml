@@ -26,6 +26,9 @@ jobs:
               .my-5 {
                   margin: unset !important;
               }
+              .markdown-body img {
+                 max-width: 50%;
+              }
               
               @media (prefers-color-scheme: dark) {
                   body {
