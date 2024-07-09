@@ -205,6 +205,9 @@ final class WindowUtil {
             
             if minimizeResult != .success {
                 print("Error un-minimizing window: \(minimizeResult.rawValue)")
+            } else {
+                NSRunningApplication(processIdentifier: windowInfo.pid)?.activate()
+                focusOnSpecificWindow(windowInfo: windowInfo)
             }
         } else {
             // Minimize the window
