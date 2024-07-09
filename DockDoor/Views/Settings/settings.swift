@@ -19,7 +19,7 @@ extension Settings.PaneIdentifier {
 let GeneralSettingsViewController: () -> SettingsPane = {
     let paneView = Settings.Pane(
         identifier: .general,
-        title: "General",
+        title: String(localized:"General", comment: "Settings Tab"),
         toolbarIcon: NSImage(systemSymbolName: "gearshape.fill", accessibilityDescription: "General settings")!
     ) {
         SettingsView()
@@ -31,7 +31,7 @@ let GeneralSettingsViewController: () -> SettingsPane = {
 let WindowSwitcherSettingsViewController: () -> SettingsPane = {
     let paneView = Settings.Pane(
         identifier: .alttab,
-        title: "Window Switcher",
+        title: String(localized: "Window Switcher", comment: "Settings Tab"),
         toolbarIcon: NSImage(systemSymbolName: "text.and.command.macwindow", accessibilityDescription: "Windows switching settings")!
     ) {
         WindowSwitcherSettingsView()
@@ -43,7 +43,7 @@ let WindowSwitcherSettingsViewController: () -> SettingsPane = {
 let PermissionsSettingsViewController: () -> SettingsPane = {
     let paneView = Settings.Pane(
         identifier: .permissions,
-        title: "Permissions",
+        title: String(localized:"Permissions", comment: "Settings Tab"),
         toolbarIcon: NSImage(systemSymbolName: "lock.shield", accessibilityDescription: "Permissions settings")!
     ) {
         PermView()
@@ -55,7 +55,7 @@ let PermissionsSettingsViewController: () -> SettingsPane = {
 func UpdatesSettingsViewController(updater: SPUUpdater) -> SettingsPane {
     let paneView = Settings.Pane(
         identifier: .updates,
-        title: "Updates",
+        title: String(localized:"Updates", comment: "Settings Tab"),
         toolbarIcon: NSImage(systemSymbolName: "arrow.triangle.2.circlepath", accessibilityDescription: "Update settings")!
     ) {
         UpdateView(updater: updater)

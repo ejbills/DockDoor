@@ -81,6 +81,17 @@
         }
       }
     },
+    "Can you even see this?" : {
+      "comment" : "Window Size Option",
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "אתה בכלל יכול לראות את זה?"
+          }
+        }
+      }
+    },
     "Check for Updates" : {
       "localizations" : {
         "he" : {
@@ -131,6 +142,17 @@
         }
       }
     },
+    "Default (Medium Large)" : {
+      "comment" : "Window Size Option",
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ברירת מחדל (בינוני גדול)"
+          }
+        }
+      }
+    },
     "Enable Hover Window Sliding Animation" : {
       "localizations" : {
         "he" : {
@@ -161,6 +183,39 @@
         }
       }
     },
+    "Extra Extra Small" : {
+      "comment" : "Window Size Option",
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "קטן מאוד מאוד"
+          }
+        }
+      }
+    },
+    "Extra Small" : {
+      "comment" : "Window Size Option",
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "קטן במיוחד"
+          }
+        }
+      }
+    },
+    "General" : {
+      "comment" : "Settings Tab",
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ראשי"
+          }
+        }
+      }
+    },
     "Get Started" : {
       "localizations" : {
         "he" : {
@@ -171,12 +226,12 @@
         }
       }
     },
-    "Hover Window Open Delay: %.2f seconds" : {
+    "Hover Window Open Delay: %.1f seconds" : {
       "localizations" : {
         "he" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "השהיית ריחוף לפני פתיחת תצוגה מקדימה: %.2f שניות"
+            "value" : "השהיית ריחוף לפני פתיחת תצוגה מקדימה: %.1f שניות"
           }
         }
       }
@@ -191,12 +246,44 @@
         }
       }
     },
+    "Large" : {
+      "comment" : "Window Size Option",
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "אתה בכלל יכול לראות את זה?"
+          }
+        }
+      }
+    },
     "Last checked: %@" : {
       "localizations" : {
         "he" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "בדיקה אחרונה: %@"
+          }
+        }
+      }
+    },
+    "Launch DockDoor at login" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "הפעל את DockDoor בכניסה"
+          }
+        }
+      }
+    },
+    "Medium" : {
+      "comment" : "Window Size Option",
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "בינוני"
           }
         }
       }
@@ -221,12 +308,33 @@
         }
       }
     },
+    "Open Settings" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "פתח את ההגדרות"
+          }
+        }
+      }
+    },
     "Option (⌥)" : {
       "localizations" : {
         "he" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Option (⌥)"
+          }
+        }
+      }
+    },
+    "Permissions" : {
+      "comment" : "Settings Tab",
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "הרשאות"
           }
         }
       }
@@ -271,6 +379,16 @@
         }
       }
     },
+    "Quit DockDoor" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "צא מ-DockDoor"
+          }
+        }
+      }
+    },
     "Screen Capturing:" : {
       "localizations" : {
         "he" : {
@@ -311,12 +429,34 @@
         }
       }
     },
+    "Small" : {
+      "comment" : "Window Size Option",
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "קטן"
+          }
+        }
+      }
+    },
     "Start Recording Keybind" : {
       "localizations" : {
         "he" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "התחל להקליט צירוף מקשים"
+          }
+        }
+      }
+    },
+    "Subatomic" : {
+      "comment" : "Window Size Option",
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "תת-אטומי"
           }
         }
       }
@@ -336,7 +476,18 @@
         "he" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "זמין עדכון"
+            "value" : "עדכון זמין"
+          }
+        }
+      }
+    },
+    "Updates" : {
+      "comment" : "Settings Tab",
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "עדכונים"
           }
         }
       }
@@ -347,6 +498,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "השתמש בקיצור המקשים ברירת המחדל של macOS ⇥ + ⌘"
+          }
+        }
+      }
+    },
+    "Use Uniform Image Preview Radius" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "כפה עיגול פינות אחיד לתצוגה המקדימה"
           }
         }
       }
@@ -377,6 +538,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ברוכים הבאים ל-DockDoor!"
+          }
+        }
+      }
+    },
+    "What is this? A window for ANTS?" : {
+      "comment" : "Window Size Option",
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "מה זה? חלון לנמלים?"
           }
         }
       }
@@ -417,6 +589,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "גודל חלון"
+          }
+        }
+      }
+    },
+    "Window Switcher" : {
+      "comment" : "Settings Tab",
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "מחליף חלונות"
           }
         }
       }
