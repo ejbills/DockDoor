@@ -82,12 +82,22 @@
       }
     },
     "Can you even see this?" : {
-      "comment" : "Window Size Option",
+      "comment" : "Window size option",
       "localizations" : {
         "he" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "אתה בכלל יכול לראות את זה?"
+          }
+        }
+      }
+    },
+    "Cancel" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ביטול"
           }
         }
       }
@@ -142,8 +152,19 @@
         }
       }
     },
+    "Default" : {
+      "comment" : "Preview title style option",
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ברירת מחדל"
+          }
+        }
+      }
+    },
     "Default (Medium Large)" : {
-      "comment" : "Window Size Option",
+      "comment" : "Window size option",
       "localizations" : {
         "he" : {
           "stringUnit" : {
@@ -153,12 +174,23 @@
         }
       }
     },
+    "Embedded" : {
+      "comment" : "Preview title style option",
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "מוטבע"
+          }
+        }
+      }
+    },
     "Enable Hover Window Sliding Animation" : {
       "localizations" : {
         "he" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "הפעל אנימציית הזזה של חלון ריחוף"
+            "value" : "הצג אנימציית הופעה עבור חלון התצוגה מקדימה"
           }
         }
       }
@@ -184,7 +216,7 @@
       }
     },
     "Extra Extra Small" : {
-      "comment" : "Window Size Option",
+      "comment" : "Window size option",
       "localizations" : {
         "he" : {
           "stringUnit" : {
@@ -195,7 +227,7 @@
       }
     },
     "Extra Small" : {
-      "comment" : "Window Size Option",
+      "comment" : "Window size option",
       "localizations" : {
         "he" : {
           "stringUnit" : {
@@ -206,12 +238,22 @@
       }
     },
     "General" : {
-      "comment" : "Settings Tab",
+      "comment" : "Settings tab title",
       "localizations" : {
         "he" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "ראשי"
+          }
+        }
+      }
+    },
+    "General settings" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "הגדרות כלליות"
           }
         }
       }
@@ -236,6 +278,26 @@
         }
       }
     },
+    "Hover Window Title Style" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "עיצוב כותרת חלון התצוגה מקדימה"
+          }
+        }
+      }
+    },
+    "If you need to access the menu bar icon, launch the app to reveal it for 10 seconds." : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "אם אתה צריך לגשת לסמל שורת התפריטים, הפעל את האפליקציה כדי לחשוף אותו למשך 10 שניות."
+          }
+        }
+      }
+    },
     "Initialization Key" : {
       "localizations" : {
         "he" : {
@@ -247,12 +309,12 @@
       }
     },
     "Large" : {
-      "comment" : "Window Size Option",
+      "comment" : "Window size option",
       "localizations" : {
         "he" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "אתה בכלל יכול לראות את זה?"
+            "value" : "גדול"
           }
         }
       }
@@ -278,12 +340,43 @@
       }
     },
     "Medium" : {
-      "comment" : "Window Size Option",
+      "comment" : "Window size option",
       "localizations" : {
         "he" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "בינוני"
+          }
+        }
+      }
+    },
+    "Menu Bar Icon Hidden" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "סמל שורת התפריטים הוסתר"
+          }
+        }
+      }
+    },
+    "None" : {
+      "comment" : "Preview title style option",
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ללא"
+          }
+        }
+      }
+    },
+    "OK" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "אישור"
           }
         }
       }
@@ -328,13 +421,33 @@
         }
       }
     },
+    "Permission error" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "שגיאת הרשאה"
+          }
+        }
+      }
+    },
     "Permissions" : {
-      "comment" : "Settings Tab",
+      "comment" : "Settings tab title",
       "localizations" : {
         "he" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "הרשאות"
+          }
+        }
+      }
+    },
+    "Permissions settings" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "הגדרות הרשאות"
           }
         }
       }
@@ -345,6 +458,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "אנא צא מהיישום כדי להחיל שינויים! :)"
+          }
+        }
+      }
+    },
+    "Popover" : {
+      "comment" : "Preview title style option",
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "צף"
           }
         }
       }
@@ -430,7 +554,7 @@
       }
     },
     "Small" : {
-      "comment" : "Window Size Option",
+      "comment" : "Window size option",
       "localizations" : {
         "he" : {
           "stringUnit" : {
@@ -451,7 +575,7 @@
       }
     },
     "Subatomic" : {
-      "comment" : "Window Size Option",
+      "comment" : "Window size option",
       "localizations" : {
         "he" : {
           "stringUnit" : {
@@ -481,8 +605,18 @@
         }
       }
     },
+    "Update settings" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "הגדרות עדכונים"
+          }
+        }
+      }
+    },
     "Updates" : {
-      "comment" : "Settings Tab",
+      "comment" : "Settings tab title",
       "localizations" : {
         "he" : {
           "stringUnit" : {
@@ -543,7 +677,7 @@
       }
     },
     "What is this? A window for ANTS?" : {
-      "comment" : "Window Size Option",
+      "comment" : "Window size option",
       "localizations" : {
         "he" : {
           "stringUnit" : {
@@ -594,12 +728,32 @@
       }
     },
     "Window Switcher" : {
-      "comment" : "Settings Tab",
+      "comment" : "Settings tab title",
       "localizations" : {
         "he" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "מחליף חלונות"
+          }
+        }
+      }
+    },
+    "Windows switching settings" : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "הגדרות מחליף החלונות"
+          }
+        }
+      }
+    },
+    "You need to give DockDoor access to the accessibility API in order for it to function." : {
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "עליך להעניק ל-DockDoor גישה ל-API הנגישות כדי שהוא יוכל לפעול."
           }
         }
       }
