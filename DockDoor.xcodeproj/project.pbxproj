@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0531F8D22C3CC04600327808 /* AppearanceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0531F8D12C3CC04600327808 /* AppearanceView.swift */; };
 		3A105FD62C1BED660015EC66 /* BlurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A105FD52C1BED660015EC66 /* BlurView.swift */; };
 		3A105FD92C1C049E0015EC66 /* dockStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A105FD82C1C049E0015EC66 /* dockStyle.swift */; };
 		3A105FDD2C1C0EE20015EC66 /* DynStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A105FDC2C1C0EE20015EC66 /* DynStack.swift */; };
@@ -44,6 +45,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0531F8D12C3CC04600327808 /* AppearanceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceView.swift; sourceTree = "<group>"; };
+		0531F8E22C3CC0E200327808 /* AppearanceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppearanceView.swift; path = DockDoor/Views/Settings/AppearanceView.swift; sourceTree = "<group>"; };
 		3A105FD52C1BED660015EC66 /* BlurView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurView.swift; sourceTree = "<group>"; };
 		3A105FD82C1C049E0015EC66 /* dockStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dockStyle.swift; sourceTree = "<group>"; };
 		3A105FDC2C1C0EE20015EC66 /* DynStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynStack.swift; sourceTree = "<group>"; };
@@ -117,6 +120,7 @@
 		BB157B5C2C0E31CE00997315 = {
 			isa = PBXGroup;
 			children = (
+				0531F8E22C3CC0E200327808 /* AppearanceView.swift */,
 				BB157B672C0E31CE00997315 /* DockDoor */,
 				BB157B662C0E31CE00997315 /* Products */,
 			);
@@ -209,6 +213,7 @@
 				BB6A4F1B2C1CFCFF00CB4C9E /* PermView.swift */,
 				BBFAD73B2C287C770092F5F1 /* UpdateView.swift */,
 				C119BDF12C2AFA7600E06E18 /* WindowSwitcher.swift */,
+				0531F8D12C3CC04600327808 /* AppearanceView.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -301,6 +306,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0531F8D22C3CC04600327808 /* AppearanceView.swift in Sources */,
 				BB6A4F1C2C1CFCFF00CB4C9E /* PermView.swift in Sources */,
 				BB3967FD2C291D5A004F1AB6 /* StackedShadow.swift in Sources */,
 				BB7CA33D2C31F1B00012E303 /* WindowClosureObservers.swift in Sources */,
