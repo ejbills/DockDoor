@@ -42,8 +42,8 @@ final class DockObserver {
     private func setupEventTap() {
         guard AXIsProcessTrusted() else {
             print("Debug: Accessibility permission not granted")
-            MessageUtil.showMessage(title: "Permission error",
-                                    message: "You need to give DockDoor access to the accessibility API in order for it to function.",
+            MessageUtil.showMessage(title: String(localized: "Permission error"),
+                                    message: String(localized: "You need to give DockDoor access to the accessibility API in order for it to function."),
                                     completion: { _ in SystemPreferencesHelper.openAccessibilityPreferences() })
             return
         }

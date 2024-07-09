@@ -280,13 +280,13 @@ struct HoverView: View {
         var titleString: String {
             switch self {
             case .default:
-                "Default"
+                return String(localized: "Default", comment: "Preview title style option")
             case .embedded:
-                "Embedded"
+                return String(localized: "Embedded", comment: "Preview title style option")
             case .popover:
-                "Popover"
+                return String(localized: "Popover", comment: "Preview title style option")
             case .none:
-                "None"
+                return String(localized: "None", comment: "Preview title style option")
             }
         }
     }
