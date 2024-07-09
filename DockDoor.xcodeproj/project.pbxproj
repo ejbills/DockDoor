@@ -272,6 +272,7 @@
 				en,
 				Base,
 				he,
+				fr,
 			);
 			mainGroup = BB157B5C2C0E31CE00997315;
 			packageReferences = (
