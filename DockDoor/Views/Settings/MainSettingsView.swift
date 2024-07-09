@@ -1,5 +1,5 @@
 //
-//  SettingsView.swift
+//  MainSettingsView.swift
 //  DockDoor
 //
 //  Created by Ethan Bills on 6/13/24.
@@ -9,7 +9,7 @@ import SwiftUI
 import Defaults
 import LaunchAtLogin
 
-struct SettingsView: View {
+struct MainSettingsView: View {
     @Default(.openDelay) var openDelay
     @Default(.screenCaptureCacheLifespan) var screenCaptureCacheLifespan
     @Default(.showMenuBarIcon) var showMenuBarIcon

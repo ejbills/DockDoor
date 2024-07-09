@@ -1,5 +1,5 @@
 //
-//  AppearanceView.swift
+//  AppearanceSettingsView.swift
 //  DockDoor
 //
 //  Created by ShlomoCode on 09/07/2024.
@@ -9,7 +9,7 @@ import SwiftUI
 import Defaults
 import LaunchAtLogin
 
-struct AppearanceView: View {
+struct AppearanceSettingsView: View {
     @Default(.showAnimations) var showAnimations
     @Default(.uniformCardRadius) var uniformCardRadius
     @Default(.hoverTitleStyle) var hoverTitleStyle

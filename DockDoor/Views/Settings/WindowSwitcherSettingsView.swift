@@ -1,5 +1,5 @@
 //
-//  WindowSwitcher.swift
+//  WindowSwitcherSettingsView.swift
 //  DockDoor
 //
 //  Created by Hasan Sultan on 6/25/24.

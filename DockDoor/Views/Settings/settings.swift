@@ -23,19 +23,19 @@ let GeneralSettingsViewController: () -> SettingsPane = {
         title: String(localized:"General", comment: "Settings tab title"),
         toolbarIcon: NSImage(systemSymbolName: "gearshape.fill", accessibilityDescription: String(localized: "General settings"))!
     ) {
-        SettingsView()
+        MainSettingsView()
     }
 
     return Settings.PaneHostingController(pane: paneView)
 }
 
-let AppearanceViewController: () -> SettingsPane = {
+let AppearanceSettingsViewController: () -> SettingsPane = {
     let paneView = Settings.Pane(
         identifier: .appearance,
         title: String(localized:"Appearance", comment: "Settings Tab"),
         toolbarIcon: NSImage(systemSymbolName: "wand.and.stars.inverse", accessibilityDescription: String(localized: "Appearance settings"))!
     ) {
-        AppearanceView()
+        AppearanceSettingsView()
     }
 
     return Settings.PaneHostingController(pane: paneView)
@@ -59,7 +59,7 @@ let PermissionsSettingsViewController: () -> SettingsPane = {
         title: String(localized:"Permissions", comment: "Settings tab title"),
         toolbarIcon: NSImage(systemSymbolName: "lock.shield", accessibilityDescription: String(localized: "Permissions settings"))!
     ) {
-        PermView()
+        PermissionsSettingsView()
     }
 
     return Settings.PaneHostingController(pane: paneView)
@@ -71,7 +71,7 @@ func UpdatesSettingsViewController(updater: SPUUpdater) -> SettingsPane {
         title: String(localized:"Updates", comment: "Settings tab title"),
         toolbarIcon: NSImage(systemSymbolName: "arrow.triangle.2.circlepath", accessibilityDescription: String(localized: "Update settings"))!
     ) {
-        UpdateView(updater: updater)
+        UpdateSettingsView(updater: updater)
     }
 
     return Settings.PaneHostingController(pane: paneView)
