@@ -265,10 +265,31 @@ struct HoverView: View {
     let bestGuessMonitor: NSScreen
     
     @Default(.uniformCardRadius) var uniformCardRadius
+    @Default(.hoverTitleStyle) var hoverTitleStyle
     
     @State private var showWindows: Bool = false
     @State private var hasAppeared: Bool = false
     @State private var appIcon: NSImage? = nil
+    
+    enum TitleStyle: Int, CaseIterable {
+        case `default` = 0
+        case embedded = 1
+        case popover = 2
+        case none = -1
+        
+        var titleString: String {
+            switch self {
+            case .default:
+                "Default"
+            case .embedded:
+                "Embedded"
+            case .popover:
+                "Popover"
+            case .none:
+                "None"
+            }
+        }
+    }
     
     var maxWindowDimension: CGPoint {
         let thickness = HoverWindow.shared.windowSize.height
@@ -330,57 +351,12 @@ struct HoverView: View {
                 .opacity(showWindows ? 1 : 0.8)
             }
         }
+        .padding(.top, (!CurrentWindow.shared.showingTabMenu && hoverTitleStyle == 1) ? 25 : 0) // Provide space above the window preview for the Embedded title style when hovering over the Dock.
         .dockStyle(cornerRadius: 16)
         .overlay(alignment: .topLeading) {
-            if !CurrentWindow.shared.showingTabMenu {
-                let appNameLabelSize = measureString(appName, fontSize: 14)
-                
-                HStack(spacing: 2) {
-                    if let appIcon = appIcon {
-                        Image(nsImage: appIcon)
-                            .resizable()
-                            .scaledToFit()
-                            .zIndex(1)
-                            .frame(width: 24, height: 24)
-                    } else {
-                        ProgressView()
-                            .frame(width: 24, height: 24)
-                    }
-                    Text(appName)
-                        .lineLimit(1)
-                        .padding(3)
-                        .fontWeight(.medium)
-                        .font(.system(size: 14))
-                        .padding(.horizontal, 4)
-                        .shadow(stacked: 2, radius: 6)
-                        .background(
-                            ZStack {
-                                MaterialBlurView(material: .hudWindow)
-                                    .mask(
-                                        Ellipse()
-                                            .fill(
-                                                LinearGradient(
-                                                    gradient: Gradient(
-                                                        colors: [
-                                                            Color.white.opacity(1.0),
-                                                            Color.white.opacity(0.35)
-                                                        ]
-                                                    ),
-                                                    startPoint: .top,
-                                                    endPoint: .bottom
-                                                )
-                                            )
-                                    )
-                                    .blur(radius: 5)
-                            }
-                                .frame(width: appNameLabelSize.width + 30)
-                        )
-                }
-                .padding(.horizontal, 3)
-                .padding(.vertical, 1.5)
-                .padding(EdgeInsets(top: -13, leading: 6, bottom: 0, trailing: 0))
-            }
+            hoverTitleBaseView(labelSize: measureString(appName, fontSize: 14))
         }
+        .padding(.top, (!CurrentWindow.shared.showingTabMenu && hoverTitleStyle == 2) ? 30 : 0) // Provide empty space above the window preview for the Popover title style when hovering over the Dock
         .padding(.all, 24)
         .frame(maxWidth: self.bestGuessMonitor.visibleFrame.width, maxHeight: self.bestGuessMonitor.visibleFrame.height)
     }
@@ -393,6 +369,109 @@ struct HoverView: View {
         windows.filter { !$0.isMinimized && !$0.isHidden }
     }
     
+    @ViewBuilder
+    private func hoverTitleBaseView(labelSize: CGSize) -> some View {
+        if !CurrentWindow.shared.showingTabMenu {
+            switch hoverTitleStyle {
+            case 0: // Default
+                HStack(spacing: 2) {
+                    if let appIcon = appIcon {
+                        Image(nsImage: appIcon)
+                            .resizable()
+                            .scaledToFit()
+                            .zIndex(1)
+                            .frame(width: 24, height: 24)
+                    } else {
+                        ProgressView()
+                            .frame(width: 24, height: 24)
+                    }
+                    hoverTitleLabelView(labelSize: labelSize)
+                }
+                .padding(EdgeInsets(top: -11.5, leading: 15, bottom: -1.5, trailing: 1.5))
+            case 1: // Embedded
+                HStack(spacing: 2) {
+                    if let appIcon = appIcon {
+                        Image(nsImage: appIcon)
+                            .resizable()
+                            .scaledToFit()
+                            .zIndex(1)
+                            .frame(width: 24, height: 24)
+                    } else {
+                        ProgressView()
+                            .frame(width: 24, height: 24)
+                    }
+                    hoverTitleLabelView(labelSize: labelSize)
+                }
+                .padding(.top, 10)
+                .padding(.leading)
+            case 2: // Popover
+                HStack {
+                    Spacer()
+                    HStack(spacing: 2) {
+                        if let appIcon = appIcon {
+                            Image(nsImage: appIcon)
+                                .resizable()
+                                .scaledToFit()
+                                .zIndex(1)
+                                .frame(width: 24, height: 24)
+                        } else {
+                            ProgressView()
+                                .frame(width: 24, height: 24)
+                        }
+                        hoverTitleLabelView(labelSize: labelSize)
+                    }
+                    .padding(.vertical, 5)
+                    .padding(.horizontal, 10)
+                    .dockStyle(cornerRadius: 10)
+                    Spacer()
+                }
+                .offset(y: -30)
+            default:
+                EmptyView()
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private func hoverTitleLabelView(labelSize: CGSize) -> some View {
+        switch hoverTitleStyle {
+        case 0: // Default
+            Text(appName)
+                .lineLimit(1)
+                .padding(3)
+                .fontWeight(.medium)
+                .font(.system(size: 14))
+                .padding(.horizontal, 4)
+                .shadow(stacked: 2, radius: 6)
+                .background(
+                    ZStack {
+                        MaterialBlurView(material: .hudWindow)
+                            .mask(
+                                Ellipse()
+                                    .fill(
+                                        LinearGradient(
+                                            gradient: Gradient(
+                                                colors: [
+                                                    Color.white.opacity(1.0),
+                                                    Color.white.opacity(0.35)
+                                                ]
+                                            ),
+                                            startPoint: .top,
+                                            endPoint: .bottom
+                                        )
+                                    )
+                            )
+                            .blur(radius: 5)
+                    }
+                        .frame(width: labelSize.width + 30)
+                )
+        case 1, 2: // Embed + Popover
+            Text(appName)
+        default:
+            EmptyView()
+        }
+    }
+
     private var minimizedOrHiddenWindowsView: some View {
         ScrollView(dockPosition == .bottom ? .vertical : .horizontal) {
             DynStack(direction: dockPosition == .bottom ? .vertical : .horizontal, spacing: 4) {

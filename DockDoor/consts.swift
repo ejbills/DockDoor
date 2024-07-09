@@ -31,4 +31,5 @@ extension Defaults.Keys {
     static let Int64maskControl = Key<Int>("Int64maskControl") { 262401 }
     static let Int64maskAlternate = Key<Int>("Int64maskAlternate") { 524576 }
     static let UserKeybind = Key<UserKeyBind>("UserKeybind", default: UserKeyBind(keyCode: 48, modifierFlags: Defaults[.Int64maskControl]))
+    static let hoverTitleStyle = Key<Int>("hoverTitleStyle") { 0 }
 }
