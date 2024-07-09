@@ -2,130 +2,424 @@
   "sourceLanguage" : "en",
   "strings" : {
     "• Allows for enhanced visual information in the dock" : {
-
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Permet une information visuelle améliorée dans le Dock"
+          }
+        }
+      }
     },
     "• Enables real-time interaction with dock items" : {
-
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Permet une interaction en temps réel avec les éléments du Dock"
+          }
+        }
+      }
     },
     "• To capture previews of images and windows" : {
-
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Pour capturer les aperçus des images et fenêtres"
+          }
+        }
+      }
     },
     "• To detect when you hover over the dock" : {
-
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Pour détecter lorsque vous survolez le Dock"
+          }
+        }
+      }
     },
     "Accessibility Permissions" : {
-
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autorisation d’accessibilité"
+          }
+        }
+      }
     },
     "Accessibility:" : {
-
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Accessibilité :"
+          }
+        }
+      }
     },
     "Automatically check for updates" : {
-
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vérifier automatiquement les mises à jour"
+          }
+        }
+      }
     },
     "Buy me a coffee here, thank you!" : {
-
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Achetez-moi un café ici, merci !"
+          }
+        }
+      }
     },
     "Check for Updates" : {
-
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vérifier les mises à jour"
+          }
+        }
+      }
     },
     "Command (⌘)" : {
-
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Commande (⌘)"
+          }
+        }
+      }
     },
     "Control (⌃)" : {
-
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Contrôle (⌃)"
+          }
+        }
+      }
     },
     "Current Keybind: %@" : {
-
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Raccourci clavier actuel : %@"
+          }
+        }
+      }
     },
     "Current Version: %@" : {
-
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Version actuelle : %@"
+          }
+        }
+      }
     },
     "Enable Hover Window Sliding Animation" : {
-
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Activer l’animation de glissement de l’aperçu au survol"
+          }
+        }
+      }
     },
     "Enable Window Switcher" : {
-
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Activer le sélecteur d’applications"
+          }
+        }
+      }
     },
     "Enhance your dock experience!" : {
-
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Améliorez votre expérience avec le Dock !"
+          }
+        }
+      }
     },
     "Get Started" : {
-
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Commencer"
+          }
+        }
+      }
     },
     "Hover Window Open Delay: %.2f seconds" : {
-
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Délai d’ouverture de l’aperçu au survol : %.2f secondes"
+          }
+        }
+      }
     },
     "Initialization Key" : {
-
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Touche d’initialisation"
+          }
+        }
+      }
     },
     "Last checked: %@" : {
-
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dernière vérification : %@"
+          }
+        }
+      }
     },
     "Open Accessibility Settings" : {
-
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ouvrir les paramètres d’accessibilité"
+          }
+        }
+      }
     },
     "Open Screen Recording Settings" : {
-
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ouvrir les paramètres d’enregistrement de l’écran"
+          }
+        }
+      }
     },
     "Option (⌥)" : {
-
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Option (⌥)"
+          }
+        }
+      }
     },
     "Please Quit the App to Apply Changes! :)" : {
-
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Merci de quitter l’application pour appliquer les changements ! :)"
+          }
+        }
+      }
     },
     "Press any key combination after holding the initialization key to set the keybind." : {
-
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Composez n’importe quelle combinaison de touches "
+          }
+        }
+      }
     },
     "Press the key combination..." : {
-
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Composez la combinaison de touches..."
+          }
+        }
+      }
     },
     "Quit App" : {
-
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quitter l’application"
+          }
+        }
+      }
     },
     "Screen Capturing:" : {
-
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enregistrement de l’écran :"
+          }
+        }
+      }
     },
     "Screen Recording Permissions" : {
-
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autorisation d’enregistrement de l’écran"
+          }
+        }
+      }
     },
     "Set Initialization Key and Keybind" : {
-
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Configurez la touche d’initialisation et le raccourci clavier"
+          }
+        }
+      }
     },
     "Show Menu Bar Icon" : {
-
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afficher l’icône dans la barre des menus"
+          }
+        }
+      }
     },
     "Start Recording Keybind" : {
-
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enregistrer le raccourci clavier"
+          }
+        }
+      }
     },
     "Up to date" : {
-
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DockDoor est à jour"
+          }
+        }
+      }
     },
     "Update available" : {
-
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mise à jour disponible"
+          }
+        }
+      }
     },
     "Use default MacOS keybind ⌘ + ⇥" : {
-
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Utiliser le raccourci MacOS par défaut ⌘ + ⇥"
+          }
+        }
+      }
     },
     "Version %@" : {
-
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Version %@"
+          }
+        }
+      }
     },
     "Want to support development?" : {
-
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vous voulez soutenir le développement ?"
+          }
+        }
+      }
     },
     "Welcome to DockDoor!" : {
-
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bienvenue dans DockDoor !"
+          }
+        }
+      }
     },
     "Why we need permissions" : {
-
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pourquoi DockDoor a besoin des autorisations"
+          }
+        }
+      }
     },
     "Window Buffer (if misaligned with dock)" : {
-
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Distance par rapport au Dock (en cas de conflit avec celui-ci)"
+          }
+        }
+      }
     },
     "Window Cache Lifespan: %.0f seconds" : {
-
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Durée de vie du cache de l’aperçu : %.0f secondes"
+          }
+        }
+      }
     },
     "Window Size" : {
-
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Taille de l’aperçu"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"
