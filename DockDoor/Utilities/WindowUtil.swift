@@ -206,7 +206,8 @@ final class WindowUtil {
             if minimizeResult != .success {
                 print("Error un-minimizing window: \(minimizeResult.rawValue)")
             } else {
-                // Taken from the toggleHidden function, Focus on the specific window with best guess
+                // Taken from the toggleHidden function, Activate and focus on the specific window with best guess
+                NSRunningApplication(processIdentifier: windowInfo.pid)?.activate()
                 focusOnSpecificWindow(windowInfo: windowInfo)
             }
         } else {
