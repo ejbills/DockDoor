@@ -198,6 +198,7 @@ struct WindowPreview: View {
                 }
             }
         }
+        .scaleEffect(selected ? 1.015 : 1)
         .contentShape(Rectangle())
         .onHover { over in
             withAnimation(.snappy(duration: 0.175)) {
