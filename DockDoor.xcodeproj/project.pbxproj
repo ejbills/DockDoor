@@ -27,6 +27,7 @@
 		BB3968022C2A6CC2004F1AB6 /* Marquee.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3968012C2A6CC2004F1AB6 /* Marquee.swift */; };
 		BB4B444B2C372A4E006680DC /* WindowPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB4B444A2C372A4C006680DC /* WindowPreview.swift */; };
 		BB4ED9072C3C75CA00BBDD16 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = BB4ED9062C3C75CA00BBDD16 /* Localizable.xcstrings */; };
+		BB4ED9092C3CD97400BBDD16 /* Traffic Light Buttons.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB4ED9082C3CD96D00BBDD16 /* Traffic Light Buttons.swift */; };
 		BB6A4F1C2C1CFCFF00CB4C9E /* PermView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6A4F1B2C1CFCFF00CB4C9E /* PermView.swift */; };
 		BB77F2282C35D27D00BD315A /* FluidGradient in Frameworks */ = {isa = PBXBuildFile; productRef = BB77F2272C35D27D00BD315A /* FluidGradient */; };
 		BB7CA33D2C31F1B00012E303 /* WindowClosureObservers.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB7CA33C2C31F1B00012E303 /* WindowClosureObservers.swift */; };
@@ -65,6 +66,7 @@
 		BB3968012C2A6CC2004F1AB6 /* Marquee.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Marquee.swift; sourceTree = "<group>"; };
 		BB4B444A2C372A4C006680DC /* WindowPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowPreview.swift; sourceTree = "<group>"; };
 		BB4ED9062C3C75CA00BBDD16 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		BB4ED9082C3CD96D00BBDD16 /* Traffic Light Buttons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Traffic Light Buttons.swift"; sourceTree = "<group>"; };
 		BB6A4F1B2C1CFCFF00CB4C9E /* PermView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermView.swift; sourceTree = "<group>"; };
 		BB7CA33C2C31F1B00012E303 /* WindowClosureObservers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowClosureObservers.swift; sourceTree = "<group>"; };
 		BB8247782C2889B20098A440 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -181,6 +183,7 @@
 		BB4B44492C372A42006680DC /* Hover Window */ = {
 			isa = PBXGroup;
 			children = (
+				BB4ED9082C3CD96D00BBDD16 /* Traffic Light Buttons.swift */,
 				BBA153F72C11604400119C02 /* HoverWindow.swift */,
 				BB4B444A2C372A4C006680DC /* WindowPreview.swift */,
 			);
@@ -323,6 +326,7 @@
 				BBA153FC2C12356100119C02 /* main.swift in Sources */,
 				BBF6C6242C1B4B4400BF1D40 /* KeybindHelper.swift in Sources */,
 				3A105FDD2C1C0EE20015EC66 /* DynStack.swift in Sources */,
+				BB4ED9092C3CD97400BBDD16 /* Traffic Light Buttons.swift in Sources */,
 				C119BDF22C2AFA7600E06E18 /* WindowSwitcher.swift in Sources */,
 				BB2567C62C10C5F000C0C93E /* DockUtils.swift in Sources */,
 				BBE7CC912C22429A00AB8F4D /* settings.swift in Sources */,

@@ -111,90 +111,11 @@ struct WindowPreview: View {
                     .clipShape(uniformCardRadius ? AnyShape(RoundedRectangle(cornerRadius: 6, style: .continuous)) : AnyShape(Rectangle()))
             }
             .overlay(alignment: .bottomLeading) {
-                if selected, let windowTitle = windowInfo.window?.title, !windowTitle.isEmpty, windowTitle != windowInfo.appName {
-                    let maxLabelWidth = calculatedSize.width - 50
-                    let stringMeasurementWidth = measureString(windowTitle, fontSize: 12).width + 5
-                    let width = maxLabelWidth > stringMeasurementWidth ? stringMeasurementWidth : maxLabelWidth
-                    
-                    TheMarquee(width: width, secsBeforeLooping: 1, speedPtsPerSec: 20, nonMovingAlignment: .leading) {
-                        Text(windowInfo.windowName ?? "Hidden window")
-                            .font(.system(size: 12, weight: .medium))
-                            .foregroundStyle(.primary)
-                    }
-                    .padding(4)
-                    .background(RoundedRectangle(cornerRadius: 6, style: .continuous).fill(.ultraThinMaterial))
-                    .padding(4)
-                }
+                windowTitleOverlay(selected: selected)
             }
-            
-            if !windowInfo.isMinimized, let closeButton = windowInfo.closeButton {
-                VStack(alignment: .leading) {
-                    HStack(alignment: .top, spacing: 6) {
-                        Button(action: {
-                            WindowUtil.quitApp(windowInfo: windowInfo, force: NSEvent.modifierFlags.contains(.option))
-                            onTap?()
-                        }) {
-                            ZStack {
-                                Image(systemName: "circle.fill")
-                                    .foregroundStyle(.secondary)
-                                Image(systemName: "power.circle.fill")
-                            }
-                        }
-                        .buttonBorderShape(.roundedRectangle)
-                        .foregroundStyle(.purple)
-                        .buttonStyle(.plain)
-                        .font(.system(size: 13))
-                        
-                        Button(action: {
-                            WindowUtil.closeWindow(closeButton: closeButton)
-                            onTap?()
-                        }) {
-                            ZStack {
-                                Image(systemName: "circle.fill")
-                                    .foregroundStyle(.secondary)
-                                Image(systemName: "xmark.circle.fill")
-                            }
-                        }
-                        .buttonBorderShape(.roundedRectangle)
-                        .foregroundStyle(.red)
-                        .buttonStyle(.plain)
-                        .font(.system(size: 13))
-                        
-                        Button(action: {
-                            WindowUtil.toggleMinimize(windowInfo: windowInfo)
-                            onTap?()
-                        }) {
-                            ZStack {
-                                Image(systemName: "circle.fill")
-                                    .foregroundStyle(.secondary)
-                                Image(systemName: "minus.circle.fill")
-                            }
-                        }
-                        .buttonBorderShape(.roundedRectangle)
-                        .foregroundStyle(.yellow)
-                        .shadow(radius: 3)
-                        .buttonStyle(.plain)
-                        .font(.system(size: 13))
-                        
-                        Button(action: {
-                            WindowUtil.toggleFullScreen(windowInfo: windowInfo)
-                            onTap?()
-                        }) {
-                            ZStack {
-                                Image(systemName: "circle.fill")
-                                    .foregroundStyle(.secondary)
-                                Image(systemName: "arrow.up.left.and.arrow.down.right.circle.fill")
-                            }
-                        }
-                        .buttonBorderShape(.roundedRectangle)
-                        .foregroundStyle(.green)
-                        .shadow(radius: 3)
-                        .buttonStyle(.plain)
-                        .font(.system(size: 13))
-                        
-                        Spacer()
-                    }
-                    .padding(4)
+            .overlay(alignment: .topLeading) {
+                if !windowInfo.isMinimized, !windowInfo.isHidden, let _ = windowInfo.closeButton, selected || CurrentWindow.shared.showingTabMenu {
+                    TrafficLightButtons(windowInfo: windowInfo, onAction: { onTap?() })
                 }
             }
         }
@@ -210,14 +131,36 @@ struct WindowPreview: View {
             }
         }
         .onTapGesture {
-            if (windowInfo.isMinimized) {
-                WindowUtil.toggleMinimize(windowInfo: windowInfo)
-            } else if (windowInfo.isHidden) {
-                WindowUtil.toggleHidden(windowInfo: windowInfo)
-            } else {
-                WindowUtil.bringWindowToFront(windowInfo: windowInfo)
+            handleWindowTap()
+        }
+    }
+    
+    private func handleWindowTap() {
+        if (windowInfo.isMinimized) {
+            WindowUtil.toggleMinimize(windowInfo: windowInfo)
+        } else if (windowInfo.isHidden) {
+            WindowUtil.toggleHidden(windowInfo: windowInfo)
+        } else {
+            WindowUtil.bringWindowToFront(windowInfo: windowInfo)
+        }
+        onTap?()
+    }
+    
+    @ViewBuilder
+    private func windowTitleOverlay(selected: Bool) -> some View {
+        if selected, let windowTitle = windowInfo.window?.title, !windowTitle.isEmpty, windowTitle != windowInfo.appName {
+            let maxLabelWidth = calculatedSize.width - 50
+            let stringMeasurementWidth = measureString(windowTitle, fontSize: 12).width + 5
+            let width = maxLabelWidth > stringMeasurementWidth ? stringMeasurementWidth : maxLabelWidth
+            
+            TheMarquee(width: width, secsBeforeLooping: 1, speedPtsPerSec: 20, nonMovingAlignment: .leading) {
+                Text(windowInfo.windowName ?? "Hidden window")
+                    .font(.system(size: 12, weight: .medium))
+                    .foregroundStyle(.primary)
             }
-            onTap?()
+            .padding(4)
+            .background(RoundedRectangle(cornerRadius: 6, style: .continuous).fill(.ultraThinMaterial))
+            .padding(4)
         }
     }
 }
