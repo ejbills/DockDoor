@@ -930,6 +930,12 @@
         }
       }
     },
+    "Show Window Titles" : {
+
+    },
+    "Show Window Titles on Previews" : {
+
+    },
     "Small" : {
       "comment" : "Window size option",
       "localizations" : {
