@@ -33,11 +33,11 @@ struct WindowPreview: View {
         var titleString: String {
             switch self {
             case .windowSwitcherOnly:
-                "When Using Window Switcher"
+                String(localized: "When Using Window Switcher")
             case .dockPreviewsOnly:
-                "When Previewing Dock Tiles"
+                String(localized: "When Showing Dock Tile Previews")
             case .always:
-                "Always"
+                String(localized: "Always")
             }
         }
     }

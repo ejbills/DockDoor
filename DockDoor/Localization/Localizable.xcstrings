@@ -97,6 +97,9 @@
         }
       }
     },
+    "Always" : {
+
+    },
     "Appearance" : {
       "comment" : "Settings Tab",
       "localizations" : {
@@ -328,15 +331,21 @@
     },
     "Enable Hover Window Sliding Animation" : {
       "localizations" : {
-        "fr" : {
+        "en" : {
           "stringUnit" : {
             "state" : "translated",
+            "value" : "Enable Dock Tile Preview Sliding Animation"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "needs_review",
             "value" : "Activer l’animation de glissement de l’aperçu au survol"
           }
         },
         "he" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "הצג אנימציית הופעה עבור חלון התצוגה מקדימה"
           }
         }
@@ -492,15 +501,21 @@
     },
     "Hover Window Title Style" : {
       "localizations" : {
-        "fr" : {
+        "en" : {
           "stringUnit" : {
             "state" : "translated",
+            "value" : "Application Title Style for Dock Tiles"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "needs_review",
             "value" : "Style du titre de l’aperçu"
           }
         },
         "he" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "עיצוב כותרת חלון התצוגה מקדימה"
           }
         }
@@ -588,10 +603,17 @@
       }
     },
     "Left" : {
+      "comment" : "Window title alignment option",
       "localizations" : {
-        "fr" : {
+        "en" : {
           "stringUnit" : {
             "state" : "translated",
+            "value" : "Bottom Left"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "needs_review",
             "value" : "À gauche"
           }
         }
@@ -857,10 +879,17 @@
       }
     },
     "Right" : {
+      "comment" : "Window title alignment option",
       "localizations" : {
-        "fr" : {
+        "en" : {
           "stringUnit" : {
             "state" : "translated",
+            "value" : "Bottom Right"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "needs_review",
             "value" : "À droite"
           }
         }
@@ -1148,6 +1177,12 @@
         }
       }
     },
+    "When Showing Dock Tile Previews" : {
+
+    },
+    "When Using Window Switcher" : {
+
+    },
     "Why we need permissions" : {
       "localizations" : {
         "fr" : {
@@ -1231,9 +1266,15 @@
     },
     "Window Title Alignment" : {
       "localizations" : {
-        "fr" : {
+        "en" : {
           "stringUnit" : {
             "state" : "translated",
+            "value" : "Window Titles Appear in"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "needs_review",
             "value" : "Alignement du titre de la fenêtre"
           }
         }
