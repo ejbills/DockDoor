@@ -349,7 +349,6 @@ struct HoverView: View {
                         self.runUIUpdates()
                     }
                 }
-                .frame(maxWidth: bestGuessMonitor.visibleFrame.width)
                 .opacity(showWindows ? 1 : 0.8)
             }
         }
