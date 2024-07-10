@@ -15,10 +15,10 @@ struct TrafficLightButtons: View {
     
     var body: some View {
         HStack(spacing: 6) {
-            buttonFor(action: .quit, symbol: "power", color: .purple)
-            buttonFor(action: .close, symbol: "xmark", color: .red)
-            buttonFor(action: .minimize, symbol: "minus", color: .yellow)
-            buttonFor(action: .toggleFullScreen, symbol: "arrow.up.left.and.arrow.down.right", color: .green)
+            buttonFor(action: .quit, symbol: "power", color: Color(hex: "290133"), fillColor: .purple)
+            buttonFor(action: .close, symbol: "xmark", color: Color(hex: "7e0609"), fillColor: .red)
+            buttonFor(action: .minimize, symbol: "minus", color: Color(hex: "985712"), fillColor: .yellow)
+            buttonFor(action: .toggleFullScreen, symbol: "arrow.up.left.and.arrow.down.right", color: Color(hex: "0d650d"), fillColor: .green)
         }
         .padding(4)
         .opacity(isHovering ? 1 : 0.25)
@@ -29,7 +29,7 @@ struct TrafficLightButtons: View {
         }
     }
     
-    private func buttonFor(action: WindowAction, symbol: String, color: Color) -> some View {
+    private func buttonFor(action: WindowAction, symbol: String, color: Color, fillColor: Color) -> some View {
         Button(action: {
             performAction(action)
             onAction()
@@ -41,7 +41,7 @@ struct TrafficLightButtons: View {
             }
         }
         .buttonBorderShape(.roundedRectangle)
-        .foregroundStyle(color)
+        .foregroundStyle(color, fillColor)
         .buttonStyle(.plain)
         .font(.system(size: 13))
     }
