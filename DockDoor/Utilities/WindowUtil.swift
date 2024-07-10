@@ -116,6 +116,12 @@ final class WindowUtil {
     /// Finds a window by its name in the provided AXUIElement windows.
     static func findWindow(matchingWindow window: SCWindow, in axWindows: [AXUIElement]) -> AXUIElement? {
         for axWindow in axWindows {
+            var cgWindowId: CGWindowID = 0
+            let windowIDStatus = _AXUIElementGetWindow(axWindow, &cgWindowId)
+            if windowIDStatus == .success && window.windowID == cgWindowId {
+                return axWindow
+            }
+            
             var axTitle: CFTypeRef?
             AXUIElementCopyAttributeValue(axWindow, kAXTitleAttribute as CFString, &axTitle)
             let axTitleString = (axTitle as? String) ?? ""
