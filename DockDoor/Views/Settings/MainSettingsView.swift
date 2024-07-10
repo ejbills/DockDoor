@@ -10,7 +10,7 @@ import Defaults
 import LaunchAtLogin
 
 struct MainSettingsView: View {
-    @Default(.openDelay) var openDelay
+    @Default(.hoverWindowOpenDelay) var hoverWindowOpenDelay
     @Default(.screenCaptureCacheLifespan) var screenCaptureCacheLifespan
     @Default(.showMenuBarIcon) var showMenuBarIcon
     
@@ -44,9 +44,9 @@ struct MainSettingsView: View {
             }
             
             HStack {
-                Text("Hover Window Open Delay: \(openDelay, specifier: "%.1f") seconds")
+                Text("Hover Window Open Delay: \(hoverWindowOpenDelay, specifier: "%.1f") seconds")
                 Spacer()
-                Slider(value: $openDelay, in: 0...2, step: 0.1)
+                Slider(value: $hoverWindowOpenDelay, in: 0...2, step: 0.1)
             }
             
             HStack {

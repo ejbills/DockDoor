@@ -139,8 +139,8 @@ final class HoverWindow: NSWindow {
         }
         
         // Ensure the hover window stays within the dock screen bounds
-        xPosition = max(screenFrame.minX, min(xPosition, screenFrame.maxX - newHoverWindowSize.width)) + (dockPosition != .bottom ? Defaults[.windowPadding] : 0)
-        yPosition = max(screenFrame.minY, min(yPosition, screenFrame.maxY - newHoverWindowSize.height)) + (dockPosition == .bottom ? Defaults[.windowPadding] : 0)
+        xPosition = max(screenFrame.minX, min(xPosition, screenFrame.maxX - newHoverWindowSize.width)) + (dockPosition != .bottom ? Defaults[.bufferFromDock] : 0)
+        yPosition = max(screenFrame.minY, min(yPosition, screenFrame.maxY - newHoverWindowSize.height)) + (dockPosition == .bottom ? Defaults[.bufferFromDock] : 0)
         
         position = CGPoint(x: xPosition, y: yPosition)
         
@@ -170,7 +170,7 @@ final class HoverWindow: NSWindow {
     
     func showWindow(appName: String, windows: [WindowInfo], mouseLocation: CGPoint? = nil, mouseScreen: NSScreen? = nil, overrideDelay: Bool = false, onWindowTap: (() -> Void)? = nil) {
         let now = Date()
-        let delay = overrideDelay ? 0.0 : Defaults[.openDelay]
+        let delay = overrideDelay ? 0.0 : Defaults[.hoverWindowOpenDelay]
         
         // Cancel any existing debounce work item
         debounceWorkItem?.cancel()
@@ -265,32 +265,12 @@ struct HoverView: View {
     let bestGuessMonitor: NSScreen
     
     @Default(.uniformCardRadius) var uniformCardRadius
-    @Default(.hoverTitleStyle) var hoverTitleStyle
-    @Default(.windowTitleAlignment) var windowTitleAlignment
+    @Default(.windowTitleStyle) var windowTitleStyle
+    @Default(.windowTitlePosition) var windowTitlePosition
     
     @State private var showWindows: Bool = false
     @State private var hasAppeared: Bool = false
     @State private var appIcon: NSImage? = nil
-    
-    enum TitleStyle: Int, CaseIterable {
-        case `default` = 0
-        case embedded = 1
-        case popover = 2
-        case hidden = -1
-        
-        var titleString: String {
-            switch self {
-            case .default:
-                return String(localized: "Default", comment: "Preview title style option")
-            case .embedded:
-                return String(localized: "Embedded", comment: "Preview title style option")
-            case .popover:
-                return String(localized: "Popover", comment: "Preview title style option")
-            case .hidden:
-                return String(localized: "Hidden", comment: "Preview title style option")
-            }
-        }
-    }
     
     var maxWindowDimension: CGPoint {
         let thickness = HoverWindow.shared.windowSize.height
@@ -351,12 +331,12 @@ struct HoverView: View {
                 .opacity(showWindows ? 1 : 0.8)
             }
         }
-        .padding(.top, (!CurrentWindow.shared.showingTabMenu && hoverTitleStyle == 1) ? 25 : 0) // Provide space above the window preview for the Embedded title style when hovering over the Dock.
+        .padding(.top, (!CurrentWindow.shared.showingTabMenu && windowTitleStyle == .embedded) ? 25 : 0) // Provide space above the window preview for the Embedded title style when hovering over the Dock.
         .dockStyle(cornerRadius: 16)
         .overlay(alignment: .topLeading) {
             hoverTitleBaseView(labelSize: measureString(appName, fontSize: 14))
         }
-        .padding(.top, (!CurrentWindow.shared.showingTabMenu && hoverTitleStyle == 2) ? 30 : 0) // Provide empty space above the window preview for the Popover title style when hovering over the Dock
+        .padding(.top, (!CurrentWindow.shared.showingTabMenu && windowTitleStyle == .popover) ? 30 : 0) // Provide empty space above the window preview for the Popover title style when hovering over the Dock
         .padding(.all, 24)
         .frame(maxWidth: self.bestGuessMonitor.visibleFrame.width, maxHeight: self.bestGuessMonitor.visibleFrame.height)
     }
@@ -372,8 +352,8 @@ struct HoverView: View {
     @ViewBuilder
     private func hoverTitleBaseView(labelSize: CGSize) -> some View {
         if !CurrentWindow.shared.showingTabMenu {
-            switch hoverTitleStyle {
-            case 0: // Default
+            switch windowTitleStyle {
+            case .default:
                 HStack(spacing: 2) {
                     if let appIcon = appIcon {
                         Image(nsImage: appIcon)
@@ -388,7 +368,7 @@ struct HoverView: View {
                     hoverTitleLabelView(labelSize: labelSize)
                 }
                 .padding(EdgeInsets(top: -11.5, leading: 15, bottom: -1.5, trailing: 1.5))
-            case 1: // Embedded
+            case .embedded:
                 HStack(spacing: 2) {
                     if let appIcon = appIcon {
                         Image(nsImage: appIcon)
@@ -404,7 +384,7 @@ struct HoverView: View {
                 }
                 .padding(.top, 10)
                 .padding(.leading)
-            case 2: // Popover
+            case .popover:
                 HStack {
                     Spacer()
                     HStack(spacing: 2) {
@@ -434,8 +414,8 @@ struct HoverView: View {
     
     @ViewBuilder
     private func hoverTitleLabelView(labelSize: CGSize) -> some View {
-        switch hoverTitleStyle {
-        case 0: // Default
+        switch windowTitleStyle {
+        case .default:
             Text(appName)
                 .lineLimit(1)
                 .padding(3)
@@ -465,7 +445,7 @@ struct HoverView: View {
                     }
                         .frame(width: labelSize.width + 30)
                 )
-        case 1, 2: // Embed + Popover
+        case .embedded, .popover:
             Text(appName)
         default:
             EmptyView()
