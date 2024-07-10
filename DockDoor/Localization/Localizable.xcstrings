@@ -100,6 +100,9 @@
     "Always" : {
 
     },
+    "Always visible; Full opacity" : {
+
+    },
     "Appearance" : {
       "comment" : "Settings Tab",
       "localizations" : {
@@ -652,6 +655,9 @@
         }
       }
     },
+    "Never visible" : {
+
+    },
     "OK" : {
       "localizations" : {
         "fr" : {
@@ -667,6 +673,12 @@
           }
         }
       }
+    },
+    "On window hover; Dimmed until button hover" : {
+
+    },
+    "On window hover; Full opacity" : {
+
     },
     "Open Accessibility Settings" : {
       "localizations" : {
@@ -1014,6 +1026,9 @@
           }
         }
       }
+    },
+    "Traffic Light Buttons Visibility" : {
+
     },
     "Up to date" : {
       "localizations" : {

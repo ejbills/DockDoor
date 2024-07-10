@@ -9,6 +9,8 @@ import SwiftUI
 
 struct TrafficLightButtons: View {
     let windowInfo: WindowInfo
+    let displayMode: WindowPreview.TrafficLightButtonsVisibility
+    let hoveringOverParentWindow: Bool
     let onAction: () -> Void
     
     @State private var isHovering = false
@@ -21,11 +23,25 @@ struct TrafficLightButtons: View {
             buttonFor(action: .toggleFullScreen, symbol: "arrow.up.left.and.arrow.down.right", color: Color(hex: "0d650d"), fillColor: .green)
         }
         .padding(4)
-        .opacity(isHovering ? 1 : 0.25)
+        .opacity(opacity)
+        .allowsHitTesting(opacity != 0)
         .onHover { over in
             withAnimation(.snappy(duration: 0.175)) {
                 isHovering = over
             }
+        }
+    }
+    
+    private var opacity: Double {
+        switch displayMode {
+        case .dimmedOnWindowHover:
+            return (hoveringOverParentWindow && isHovering) ? 1.0 : 0.25
+        case .fullOpacityOnWindowHover:
+            return hoveringOverParentWindow ? 1 : 0
+        case .alwaysVisible:
+            return 1
+        case .never:
+            return 0
         }
     }
     

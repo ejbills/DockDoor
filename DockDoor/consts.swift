@@ -35,4 +35,5 @@ extension Defaults.Keys {
     static let hoverTitleStyle = Key<Int>("hoverTitleStyle") { 0 }
     static let showTitlesOnWindows = Key<Bool>("showTitlesOnWindows") { true }
     static let windowTitlesDisplayMode = Key<Int>("windowTitlesDisplayMode") { 1 }
+    static let trafficButtonsDisplayMode = Key<Int>("trafficButtonsDisplayMode") { 1 }
 }

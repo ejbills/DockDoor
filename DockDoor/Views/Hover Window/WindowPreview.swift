@@ -17,10 +17,11 @@ struct WindowPreview: View {
     let maxWindowDimension: CGPoint
     let bestGuessMonitor: NSScreen
     let uniformCardRadius: Bool
-    let windowTitleAlignment: Bool
     
+    @Default(.windowTitleAlignment) var windowTitleAlignment
     @Default(.showTitlesOnWindows) var showTitlesOnTiles
     @Default(.windowTitlesDisplayMode) var tileTitlesDisplayMode
+    @Default(.trafficButtonsDisplayMode) var trafficButtonsDisplayMode
     
     @State private var isHovering = false
     @State private var isHoveringOverTabMenu = false
@@ -38,6 +39,26 @@ struct WindowPreview: View {
                 String(localized: "When Showing Dock Tile Previews")
             case .always:
                 String(localized: "Always")
+            }
+        }
+    }
+    
+    enum TrafficLightButtonsVisibility: Int, CaseIterable {
+        case dimmedOnWindowHover = 1
+        case fullOpacityOnWindowHover = 2
+        case alwaysVisible = 3
+        case never = 4
+        
+        var descriptionString: String {
+            switch self {
+            case .dimmedOnWindowHover:
+                String(localized: "On window hover; Dimmed until button hover")
+            case .fullOpacityOnWindowHover:
+                String(localized: "On window hover; Full opacity")
+            case .alwaysVisible:
+                String(localized: "Always visible; Full opacity")
+            case .never:
+                String(localized: "Never visible")
             }
         }
     }
@@ -137,8 +158,11 @@ struct WindowPreview: View {
                 }
             }
             .overlay(alignment: .topLeading) {
-                if !windowInfo.isMinimized, !windowInfo.isHidden, let _ = windowInfo.closeButton, selected || CurrentWindow.shared.showingTabMenu {
-                    TrafficLightButtons(windowInfo: windowInfo, onAction: { onTap?() })
+                if !windowInfo.isMinimized, !windowInfo.isHidden, let _ = windowInfo.closeButton {
+                    TrafficLightButtons(windowInfo: windowInfo,
+                                        displayMode: TrafficLightButtonsVisibility(rawValue: trafficButtonsDisplayMode) ?? .dimmedOnWindowHover,
+                                        hoveringOverParentWindow: selected || isHoveringOverTabMenu,
+                                        onAction: { onTap?() })
                 }
             }
         }

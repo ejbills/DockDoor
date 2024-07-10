@@ -328,8 +328,7 @@ struct HoverView: View {
                         ForEach(activeWindows.indices, id: \.self) { index in
                             WindowPreview(windowInfo: activeWindows[index], onTap: onWindowTap, index: index,
                                           dockPosition: dockPosition, maxWindowDimension: maxWindowDimension,
-                                          bestGuessMonitor: bestGuessMonitor, uniformCardRadius: uniformCardRadius, 
-                                          windowTitleAlignment: windowTitleAlignment)
+                                          bestGuessMonitor: bestGuessMonitor, uniformCardRadius: uniformCardRadius)
                                 .id("\(appName)-\(index)")
                         }
                     }
@@ -484,8 +483,7 @@ struct HoverView: View {
                         dockPosition: dockPosition,
                         maxWindowDimension: maxWindowDimension,
                         bestGuessMonitor: bestGuessMonitor, 
-                        uniformCardRadius: true, // force it to be rounded, since these have no image previews
-                        windowTitleAlignment: windowTitleAlignment
+                        uniformCardRadius: true // force it to be rounded, since these have no image previews
                     )
                 }
             }

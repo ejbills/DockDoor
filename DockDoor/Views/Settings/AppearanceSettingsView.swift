@@ -17,6 +17,7 @@ struct AppearanceSettingsView: View {
     @Default(.windowTitleAlignment) var windowTitleAlignment
     @Default(.showTitlesOnWindows) var showTitlesOnTiles
     @Default(.windowTitlesDisplayMode) var tileTitlesDisplayMode
+    @Default(.trafficButtonsDisplayMode) var trafficButtonsDisplayMode
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -64,6 +65,13 @@ struct AppearanceSettingsView: View {
                     Text("Right").tag(false)
                 }
                 .pickerStyle(SegmentedPickerStyle())
+                
+                Picker("Traffic Light Buttons Visibility", selection: $trafficButtonsDisplayMode) {
+                    ForEach(WindowPreview.TrafficLightButtonsVisibility.allCases, id: \.self) { visibility in
+                        Text(visibility.descriptionString)
+                            .tag(visibility.rawValue)
+                    }
+                }
             }
             .disabled(!showTitlesOnTiles)
         }
