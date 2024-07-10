@@ -51,7 +51,7 @@ final class HoverWindow: NSWindow {
     private init() {
         super.init(contentRect: .zero, styleMask: .borderless, backing: .buffered, defer: false)
         level = .floating
-        isMovableByWindowBackground = true
+        isMovableByWindowBackground = false
         collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary]
         backgroundColor = .clear
         hasShadow = false
