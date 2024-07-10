@@ -6,7 +6,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "• Permet une information visuelle améliorée dans le Dock"
+            "value" : "• Permet une communication visuelle améliorée dans le Dock"
           }
         },
         "he" : {
@@ -22,7 +22,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "• Permet une interaction en temps réel avec les éléments du Dock"
+            "value" : "• Permet une interaction en temps réel avec les icônes du Dock"
           }
         },
         "he" : {
@@ -38,7 +38,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "• Pour capturer les aperçus des images et fenêtres"
+            "value" : "• Pour capturer les aperçus des fenêtres"
           }
         },
         "he" : {
@@ -98,10 +98,24 @@
       }
     },
     "Always" : {
-
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toujours"
+          }
+        }
+      }
     },
     "Always visible; Full opacity" : {
-
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toujours visible ; opacité maximale"
+          }
+        }
+      }
     },
     "Appearance" : {
       "comment" : "Settings Tab",
@@ -342,8 +356,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Activer l’animation de glissement de l’aperçu au survol"
+            "state" : "translated",
+            "value" : "Activer une animation de glissement de l’aperçu au survol"
           }
         },
         "he" : {
@@ -513,7 +527,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "needs_review",
-            "value" : "Style du titre de l’aperçu"
+            "value" : "Style du titre de la fenêtre dans les aperçus"
           }
         },
         "he" : {
@@ -616,8 +630,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "À gauche"
+            "state" : "translated",
+            "value" : "Gauche"
           }
         }
       }
@@ -656,7 +670,14 @@
       }
     },
     "Never visible" : {
-
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jamais visible"
+          }
+        }
+      }
     },
     "OK" : {
       "localizations" : {
@@ -675,10 +696,24 @@
       }
     },
     "On window hover; Dimmed until button hover" : {
-
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Au survol de l’aperçu ; grisé jusqu’au survol des boutons"
+          }
+        }
+      }
     },
     "On window hover; Full opacity" : {
-
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Au survol de l’aperçu ; opacité maximale"
+          }
+        }
+      }
     },
     "Open Accessibility Settings" : {
       "localizations" : {
@@ -901,8 +936,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "À droite"
+            "state" : "translated",
+            "value" : "Droite"
           }
         }
       }
@@ -972,10 +1007,24 @@
       }
     },
     "Show Window Titles" : {
-
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afficher les titres des fenêtres"
+          }
+        }
+      }
     },
     "Show Window Titles on Previews" : {
-
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afficher les titres des fenêtres sur les aperçus"
+          }
+        }
+      }
     },
     "Small" : {
       "comment" : "Window size option",
@@ -1028,7 +1077,14 @@
       }
     },
     "Traffic Light Buttons Visibility" : {
-
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Visibilité des boutons tricolores"
+          }
+        }
+      }
     },
     "Up to date" : {
       "localizations" : {
@@ -1100,7 +1156,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Utiliser le raccourci MacOS par défaut ⌘ + ⇥"
+            "value" : "Utiliser le raccourci macOS par défaut ⌘ + ⇥"
           }
         },
         "he" : {
@@ -1193,10 +1249,24 @@
       }
     },
     "When Showing Dock Tile Previews" : {
-
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En affichant les aperçus dans le Dock"
+          }
+        }
+      }
     },
     "When Using Window Switcher" : {
-
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En utilisant le sélecteur d’applications"
+          }
+        }
+      }
     },
     "Why we need permissions" : {
       "localizations" : {
@@ -1289,8 +1359,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Alignement du titre de la fenêtre"
+            "state" : "translated",
+            "value" : "Les titres des fenêtres apparaissent à"
           }
         }
       }
