@@ -12,12 +12,12 @@ import LaunchAtLogin
 struct AppearanceSettingsView: View {
     @Default(.showAnimations) var showAnimations
     @Default(.uniformCardRadius) var uniformCardRadius
-    @Default(.hoverTitleStyle) var hoverTitleStyle
-    @Default(.windowPadding) var windowPadding
-    @Default(.windowTitleAlignment) var windowTitleAlignment
-    @Default(.showTitlesOnWindows) var showTitlesOnTiles
-    @Default(.windowTitlesDisplayMode) var tileTitlesDisplayMode
-    @Default(.trafficButtonsDisplayMode) var trafficButtonsDisplayMode
+    @Default(.windowTitleStyle) var windowTitleStyle
+    @Default(.windowBuffer) var windowBuffer
+    @Default(.windowTitlePosition) var windowTitlePosition
+    @Default(.showWindowTitle) var showWindowTitle
+    @Default(.windowTitleDisplayCondition) var windowTitleDisplayCondition
+    @Default(.trafficLightButtonsVisibility) var trafficLightButtonsVisibility
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -29,51 +29,49 @@ struct AppearanceSettingsView: View {
                 Text("Use Uniform Image Preview Radius")
             })
             
-            Slider(value: $windowPadding, in: -200...200, step: 20) {
+            Slider(value: $windowBuffer, in: -200...200, step: 20) {
                 Text("Window Buffer (if misaligned with dock)")
             }.buttonStyle(PlainButtonStyle())
             
             SizePickerView()
             
-            Picker("Hover Window Title Style", selection: $hoverTitleStyle) {
-                ForEach(HoverView.TitleStyle.allCases, id: \.self) { style in
-                    Text(style.titleString)
+            Picker("Hover Window Title Style", selection: $windowTitleStyle) {
+                ForEach(WindowTitleStyle.allCases, id: \.self) { style in
+                    Text(style.localizedName)
                         .tag(style.rawValue)
                 }
             }
             
-            Toggle(isOn: $showTitlesOnTiles) {
+            Toggle(isOn: $showWindowTitle) {
                 Text("Show Window Titles on Previews")
             }
             Group {
-                Picker("Show Window Titles", selection: $tileTitlesDisplayMode) {
-                    ForEach(WindowPreview.TileTitleDisplayMode.allCases, id: \.self) { style in
-                        if style == .always {
-                            Text(style.titleString)
-                                .tag(style.rawValue)
+                Picker("Show Window Titles", selection: $windowTitleDisplayCondition) {
+                    ForEach(WindowTitleDisplayCondition.allCases, id: \.self) { condtion in
+                        if condtion == .always {
+                            Text(condtion.localizedName).tag(condtion)
                             Divider() // Separate from Window Switcher & Dock Previews
                         } else {
-                            Text(style.titleString)
-                                .tag(style.rawValue)
+                            Text(condtion.localizedName).tag(condtion)
                         }
-                        
                     }
                 }
                 
-                Picker("Window Title Alignment", selection: $windowTitleAlignment) {
-                    Text("Left").tag(true)
-                    Text("Right").tag(false)
+                Picker("Window Title Position", selection: $windowTitlePosition) {
+                    ForEach(WindowTitlePosition.allCases, id: \.self) { position in
+                        Text(position.localizedName).tag(position)
+                    }
                 }
                 .pickerStyle(SegmentedPickerStyle())
                 
-                Picker("Traffic Light Buttons Visibility", selection: $trafficButtonsDisplayMode) {
-                    ForEach(WindowPreview.TrafficLightButtonsVisibility.allCases, id: \.self) { visibility in
-                        Text(visibility.descriptionString)
+                Picker("Traffic Light Buttons Visibility", selection: $trafficLightButtonsVisibility) {
+                    ForEach(TrafficLightButtonsVisibility.allCases, id: \.self) { visibility in
+                        Text(visibility.localizedName)
                             .tag(visibility.rawValue)
                     }
                 }
             }
-            .disabled(!showTitlesOnTiles)
+            .disabled(!showWindowTitle)
         }
         .padding(20)
         .frame(minWidth: 600)
@@ -82,7 +80,7 @@ struct AppearanceSettingsView: View {
 
 struct SizePickerView: View {
     @Default(.sizingMultiplier) var sizingMultiplier
-    @Default(.windowPadding) var windowPadding
+    @Default(.windowBuffer) var windowBuffer
     
     var body: some View {
         VStack(spacing: 20) {

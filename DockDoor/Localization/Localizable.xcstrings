@@ -98,10 +98,10 @@
       }
     },
     "Always" : {
-
+      "comment" : "Preview window title condition option"
     },
     "Always visible; Full opacity" : {
-
+      "comment" : "Traffic light buttons visibility option"
     },
     "Appearance" : {
       "comment" : "Settings Tab",
@@ -151,6 +151,12 @@
           }
         }
       }
+    },
+    "Bottom Left" : {
+      "comment" : "Preview window title position option"
+    },
+    "Bottom Right" : {
+      "comment" : "Preview window title position option"
     },
     "Buy me a coffee here, thank you!" : {
       "localizations" : {
@@ -607,6 +613,7 @@
     },
     "Left" : {
       "comment" : "Window title alignment option",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -656,7 +663,7 @@
       }
     },
     "Never visible" : {
-
+      "comment" : "Traffic light buttons visibility option"
     },
     "OK" : {
       "localizations" : {
@@ -675,10 +682,10 @@
       }
     },
     "On window hover; Dimmed until button hover" : {
-
+      "comment" : "Traffic light buttons visibility option"
     },
     "On window hover; Full opacity" : {
-
+      "comment" : "Traffic light buttons visibility option"
     },
     "Open Accessibility Settings" : {
       "localizations" : {
@@ -892,6 +899,7 @@
     },
     "Right" : {
       "comment" : "Window title alignment option",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1193,10 +1201,10 @@
       }
     },
     "When Showing Dock Tile Previews" : {
-
+      "comment" : "Preview window title condition option"
     },
     "When Using Window Switcher" : {
-
+      "comment" : "Preview window title condition option"
     },
     "Why we need permissions" : {
       "localizations" : {
@@ -1280,6 +1288,7 @@
       }
     },
     "Window Title Alignment" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1294,6 +1303,9 @@
           }
         }
       }
+    },
+    "Window Title Position" : {
+
     },
     "Windows switching settings" : {
       "localizations" : {

@@ -18,50 +18,13 @@ struct WindowPreview: View {
     let bestGuessMonitor: NSScreen
     let uniformCardRadius: Bool
     
-    @Default(.windowTitleAlignment) var windowTitleAlignment
-    @Default(.showTitlesOnWindows) var showTitlesOnTiles
-    @Default(.windowTitlesDisplayMode) var tileTitlesDisplayMode
-    @Default(.trafficButtonsDisplayMode) var trafficButtonsDisplayMode
+    @Default(.windowTitlePosition) var windowTitlePosition
+    @Default(.showWindowTitle) var showWindowTitle
+    @Default(.windowTitleDisplayCondition) var windowTitleDisplayCondition
+    @Default(.trafficLightButtonsVisibility) var trafficLightButtonsVisibility
     
     @State private var isHovering = false
     @State private var isHoveringOverTabMenu = false
-    
-    enum TileTitleDisplayMode: Int, CaseIterable {
-        case always = 1
-        case windowSwitcherOnly = 2
-        case dockPreviewsOnly = 3
-        
-        var titleString: String {
-            switch self {
-            case .windowSwitcherOnly:
-                String(localized: "When Using Window Switcher")
-            case .dockPreviewsOnly:
-                String(localized: "When Showing Dock Tile Previews")
-            case .always:
-                String(localized: "Always")
-            }
-        }
-    }
-    
-    enum TrafficLightButtonsVisibility: Int, CaseIterable {
-        case dimmedOnWindowHover = 1
-        case fullOpacityOnWindowHover = 2
-        case alwaysVisible = 3
-        case never = 4
-        
-        var descriptionString: String {
-            switch self {
-            case .dimmedOnWindowHover:
-                String(localized: "On window hover; Dimmed until button hover")
-            case .fullOpacityOnWindowHover:
-                String(localized: "On window hover; Full opacity")
-            case .alwaysVisible:
-                String(localized: "Always visible; Full opacity")
-            case .never:
-                String(localized: "Never visible")
-            }
-        }
-    }
     
     private var calculatedMaxDimensions: CGSize? {
         CGSize(width: self.bestGuessMonitor.frame.width * 0.75, height: self.bestGuessMonitor.frame.height * 0.75)
@@ -152,15 +115,15 @@ struct WindowPreview: View {
                     }
                     .clipShape(uniformCardRadius ? AnyShape(RoundedRectangle(cornerRadius: 6, style: .continuous)) : AnyShape(Rectangle()))
             }
-            .overlay(alignment: windowTitleAlignment ? .bottomLeading : .bottomTrailing) {
-                if  showTitlesOnTiles && ((tileTitlesDisplayMode == 1) || (tileTitlesDisplayMode == 2 && CurrentWindow.shared.showingTabMenu) || (tileTitlesDisplayMode == 3 && !CurrentWindow.shared.showingTabMenu)) {
-                        windowTitleOverlay(selected: selected)
+            .overlay(alignment: windowTitlePosition == .bottomLeft ? .bottomLeading : .bottomTrailing) {
+                if  showWindowTitle && ((windowTitleDisplayCondition == .always) || (windowTitleDisplayCondition == .windowSwitcherOnly && CurrentWindow.shared.showingTabMenu) || (windowTitleDisplayCondition == .dockPreviewsOnly && !CurrentWindow.shared.showingTabMenu)) {
+                    windowTitleOverlay(selected: selected)
                 }
             }
             .overlay(alignment: .topLeading) {
                 if !windowInfo.isMinimized, !windowInfo.isHidden, let _ = windowInfo.closeButton {
                     TrafficLightButtons(windowInfo: windowInfo,
-                                        displayMode: TrafficLightButtonsVisibility(rawValue: trafficButtonsDisplayMode) ?? .dimmedOnWindowHover,
+                                        displayMode: trafficLightButtonsVisibility,
                                         hoveringOverParentWindow: selected || isHoveringOverTabMenu,
                                         onAction: { onTap?() })
                 }

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct TrafficLightButtons: View {
     let windowInfo: WindowInfo
-    let displayMode: WindowPreview.TrafficLightButtonsVisibility
+    let displayMode: TrafficLightButtonsVisibility
     let hoveringOverParentWindow: Bool
     let onAction: () -> Void
     
