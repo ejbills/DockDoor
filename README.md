@@ -1,10 +1,18 @@
 # DockDoor
 
-Want to support development? [Buy me a coffee here, thank you!](https://www.buymeacoffee.com/keplercafe)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/ejbills/DockDoor)](https://github.com/ejbills/DockDoor/releases/latest/download/DockDoor.dmg)
+![GitHub All Releases](https://img.shields.io/github/downloads/ejbills/DockDoor/total?label=Total%20Downloads)
+[![GitHub stars](https://img.shields.io/github/stars/ejbills/DockDoor)](https://github.com/ejbills/DockDoor/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/ejbills/DockDoor)](https://github.com/ejbills/DockDoor/network/members)
+[![GitHub issues](https://img.shields.io/github/issues/ejbills/DockDoor)](https://github.com/ejbills/DockDoor/issues)
+[![GitHub license](https://img.shields.io/github/license/ejbills/DockDoor)](https://github.com/ejbills/DockDoor/blob/main/LICENSE)
+[![Contributors](https://img.shields.io/github/contributors/ejbills/DockDoor)](https://github.com/ejbills/DockDoor/graphs/contributors)
+
+Want to support development? [![Buy Me a Coffee](https://img.shields.io/badge/Buy%20me%20a%20coffee-ffdd00?style=flat&logo=buy-me-a-coffee&logoColor=black)](https://www.buymeacoffee.com/keplercafe)
 
 DockDoor is a macOS application developed with Swift and SwiftUI that allows users to manage and interact with application windows on their desktop. It emphasizes ease of use and seamless integration with the macOS environment. This project is open-source, inviting contributions from developers to enhance its functionality and user experience.
 
-[Download the latest release here](https://github.com/ejbills/DockDoor/releases/latest/download/DockDoor.dmg).
+[Download the latest release here]().
 
 ## Usage
 
