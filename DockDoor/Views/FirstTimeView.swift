@@ -61,7 +61,7 @@ struct FirstTimeView: View {
     }
     
     private func openPermissionsWindow() {
-        let contentView = PermView()
+        let contentView = PermissionsSettingsView()
         
         // Create the hosting controller with the PermView
         let hostingController = NSHostingController(rootView: contentView)

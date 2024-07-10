@@ -19,8 +19,28 @@ struct WindowPreview: View {
     let uniformCardRadius: Bool
     let windowTitleAlignment: Bool
     
+    @Default(.showTitlesOnWindows) var showTitlesOnTiles
+    @Default(.windowTitlesDisplayMode) var tileTitlesDisplayMode
+    
     @State private var isHovering = false
     @State private var isHoveringOverTabMenu = false
+    
+    enum TileTitleDisplayMode: Int, CaseIterable {
+        case always = 1
+        case windowSwitcherOnly = 2
+        case dockPreviewsOnly = 3
+        
+        var titleString: String {
+            switch self {
+            case .windowSwitcherOnly:
+                String(localized: "When Using Window Switcher")
+            case .dockPreviewsOnly:
+                String(localized: "When Showing Dock Tile Previews")
+            case .always:
+                String(localized: "Always")
+            }
+        }
+    }
     
     private var calculatedMaxDimensions: CGSize? {
         CGSize(width: self.bestGuessMonitor.frame.width * 0.75, height: self.bestGuessMonitor.frame.height * 0.75)
@@ -112,7 +132,9 @@ struct WindowPreview: View {
                     .clipShape(uniformCardRadius ? AnyShape(RoundedRectangle(cornerRadius: 6, style: .continuous)) : AnyShape(Rectangle()))
             }
             .overlay(alignment: windowTitleAlignment ? .bottomLeading : .bottomTrailing) {
-                windowTitleOverlay(selected: selected)
+                if  showTitlesOnTiles && ((tileTitlesDisplayMode == 1) || (tileTitlesDisplayMode == 2 && CurrentWindow.shared.showingTabMenu) || (tileTitlesDisplayMode == 3 && !CurrentWindow.shared.showingTabMenu)) {
+                        windowTitleOverlay(selected: selected)
+                }
             }
             .overlay(alignment: .topLeading) {
                 if !windowInfo.isMinimized, !windowInfo.isHidden, let _ = windowInfo.closeButton, selected || CurrentWindow.shared.showingTabMenu {

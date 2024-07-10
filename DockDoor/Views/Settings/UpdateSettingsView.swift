@@ -1,5 +1,5 @@
 //
-//  UpdateView.swift
+//  UpdateSettingsView.swift
 //  DockDoor
 //
 //  Created by Ethan Bills on 6/23/24.
@@ -47,7 +47,7 @@ final class UpdaterViewModel: ObservableObject {
     }
 }
 
-struct UpdateView: View {
+struct UpdateSettingsView: View {
     @StateObject private var viewModel: UpdaterViewModel
     
     init(updater: SPUUpdater) {

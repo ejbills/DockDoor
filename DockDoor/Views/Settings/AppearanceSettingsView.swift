@@ -1,5 +1,5 @@
 //
-//  AppearanceView.swift
+//  AppearanceSettingsView.swift
 //  DockDoor
 //
 //  Created by ShlomoCode on 09/07/2024.
@@ -9,12 +9,14 @@ import SwiftUI
 import Defaults
 import LaunchAtLogin
 
-struct AppearanceView: View {
+struct AppearanceSettingsView: View {
     @Default(.showAnimations) var showAnimations
     @Default(.uniformCardRadius) var uniformCardRadius
     @Default(.hoverTitleStyle) var hoverTitleStyle
     @Default(.windowPadding) var windowPadding
     @Default(.windowTitleAlignment) var windowTitleAlignment
+    @Default(.showTitlesOnWindows) var showTitlesOnTiles
+    @Default(.windowTitlesDisplayMode) var tileTitlesDisplayMode
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -39,11 +41,31 @@ struct AppearanceView: View {
                 }
             }
             
-            Picker("Window Title Alignment", selection: $windowTitleAlignment) {
-                Text("Left").tag(true)
-                Text("Right").tag(false)
+            Toggle(isOn: $showTitlesOnTiles) {
+                Text("Show Window Titles on Previews")
             }
-            .pickerStyle(SegmentedPickerStyle())
+            Group {
+                Picker("Show Window Titles", selection: $tileTitlesDisplayMode) {
+                    ForEach(WindowPreview.TileTitleDisplayMode.allCases, id: \.self) { style in
+                        if style == .always {
+                            Text(style.titleString)
+                                .tag(style.rawValue)
+                            Divider() // Separate from Window Switcher & Dock Previews
+                        } else {
+                            Text(style.titleString)
+                                .tag(style.rawValue)
+                        }
+                        
+                    }
+                }
+                
+                Picker("Window Title Alignment", selection: $windowTitleAlignment) {
+                    Text("Left").tag(true)
+                    Text("Right").tag(false)
+                }
+                .pickerStyle(SegmentedPickerStyle())
+            }
+            .disabled(!showTitlesOnTiles)
         }
         .padding(20)
         .frame(minWidth: 600)

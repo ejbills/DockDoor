@@ -1,5 +1,5 @@
 //
-//  PermView.swift
+//  PermissionsSettingsView.swift
 //  DockDoor
 //
 //  Created by Ethan Bills on 6/14/24.
@@ -51,7 +51,7 @@ class PermissionsChecker: ObservableObject {
     }
 }
 
-struct PermView: View {
+struct PermissionsSettingsView: View {
     @StateObject private var permissionsChecker = PermissionsChecker()
     
     var body: some View {
