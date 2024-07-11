@@ -1,34 +1,11 @@
+project_id_env: CROWDIN_PROJECT_ID
+api_token_env: CROWDIN_PERSONAL_TOKEN
+base_path: "."
+base_url: "https://api.crowdin.com"
+
+preserve_hierarchy: true
+
 files:
-  - source: '/DockDoor/DockDoor/Localization/Localizable.xcstrings'
-    translation: '/DockDoor/DockDoor/Localization/%locale%/Localizable.xcstrings'
-    languages_mapping:
-      locale:
-        af: af-ZA
-        ar: ar
-        ca: ca-ES
-        zh-CN: zh-Hans
-        zh-TW: zh-Hant
-        cs: cs-CZ
-        da: da-DK
-        nl: nl-NL
-        fi: fi-FI
-        fr: fr-FR
-        de: de-DE
-        el: el-GR
-        he: he-IL
-        hu: hu-HU
-        it: it-IT
-        ja: ja-JP
-        ko: ko-KR
-        no: no-NO
-        pl: pl-PL
-        pt: pt-PT
-        pt-BR: pt-BR
-        ro: ro-RO
-        ru: ru-RU
-        sr-Cyrl: sr-Cyrl
-        es: es-ES
-        sv: sv-SE
-        tr: tr-TR
-        uk: uk-UA
-        vi: vi-VN
+  - source: '/DockDoor/Localizable.xcstrings'
+    translation: '/DockDoor/Localizable.xcstrings'
+    multilingual: 1

@@ -60,20 +60,4 @@ jobs:
       - name: Push changes
         run: |
           git push origin HEAD || echo "No changes to push"
-
-      - name: Create Pull Request
-        id: cpr
-        uses: peter-evans/create-pull-request@v4
-        with:
-          token: ${{ secrets.REPO_TOKEN }}
-          commit-message: "chore: update changelog for ${{ github.event.release.tag_name }}"
-          committer: GitHub <noreply@github.com>
-          author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
-          signoff: false
-          branch: update-changelog-${{ github.event.release.tag_name }}
-          delete-branch: true
-          title: "chore: update changelog for ${{ github.event.release.tag_name }}"
-          body: |
-            This PR updates the changelog for release ${{ github.event.release.tag_name }}.
-          labels: |
-            chore
+          

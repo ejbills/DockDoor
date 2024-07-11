@@ -141,9 +141,9 @@
 		BB157B672C0E31CE00997315 /* DockDoor */ = {
 			isa = PBXGroup;
 			children = (
-				BB4ED9042C3C759B00BBDD16 /* Localization */,
 				C119BDF02C2AEDBA00E06E18 /* DockDoorDebug.entitlements */,
 				BB8247782C2889B20098A440 /* Info.plist */,
+				BB4ED9062C3C75CA00BBDD16 /* Localizable.xcstrings */,
 				BBA153F92C11FFD500119C02 /* consts.swift */,
 				BBA153FB2C12356100119C02 /* main.swift */,
 				BBA153F52C115DDA00119C02 /* AppDelegate.swift */,
@@ -192,14 +192,6 @@
 				BB4B444A2C372A4C006680DC /* WindowPreview.swift */,
 			);
 			path = "Hover Window";
-			sourceTree = "<group>";
-		};
-		BB4ED9042C3C759B00BBDD16 /* Localization */ = {
-			isa = PBXGroup;
-			children = (
-				BB4ED9062C3C75CA00BBDD16 /* Localizable.xcstrings */,
-			);
-			path = Localization;
 			sourceTree = "<group>";
 		};
 		BBA153FD2C12358600119C02 /* Views */ = {
