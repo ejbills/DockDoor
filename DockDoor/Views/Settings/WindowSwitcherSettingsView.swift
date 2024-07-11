@@ -65,6 +65,7 @@ struct InitializationKeyPickerView: View {
             }
             .pickerStyle(SegmentedPickerStyle())
             .padding(.horizontal)
+            .scaledToFit()
             
             Text("Press any key combination after holding the initialization key to set the keybind.")
                 .multilineTextAlignment(.center)
