@@ -1,3 +1,28 @@
+<style>
+  h1:first-of-type {
+    display: none;
+  }
+  .my-5 {
+    margin: unset !important;
+  }
+  .markdown-body img {
+    max-width: 50%;
+  }
+  @media (prefers-color-scheme: dark) {
+    body {
+      color-scheme: dark;
+      color: white;
+      background: transparent;
+    }
+    a, :link {
+      color: #419cff;
+    }
+    a:active, link:active {
+      color: #ff1919;
+    }
+  }
+</style>
+
 <a name="v1.1.1"></a>
 # [v1.1.1](https://github.com/ejbills/DockDoor/releases/tag/v1.1.1) - 11 Jul 2024
 
