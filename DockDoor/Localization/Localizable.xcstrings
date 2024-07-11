@@ -76,7 +76,7 @@
         "he" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "הרשאות נגישות:"
+            "value" : "הרשאת נגישות"
           }
         }
       }
@@ -98,10 +98,26 @@
       }
     },
     "Always" : {
-
+      "comment" : "Preview window title condition option",
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "תמיד"
+          }
+        }
+      }
     },
     "Always visible; Full opacity" : {
-
+      "comment" : "Traffic light buttons visibility option",
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "מוצג תמיד; אטימות מלאה"
+          }
+        }
+      }
     },
     "Appearance" : {
       "comment" : "Settings Tab",
@@ -148,6 +164,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "בדוק אוטומטית אם יש עדכונים"
+          }
+        }
+      }
+    },
+    "Bottom Left" : {
+      "comment" : "Preview window title position option",
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "בצד שמאל למטה"
+          }
+        }
+      }
+    },
+    "Bottom Right" : {
+      "comment" : "Preview window title position option",
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "בצד ימין למטה"
           }
         }
       }
@@ -334,12 +372,6 @@
     },
     "Enable Hover Window Sliding Animation" : {
       "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Enable Dock Tile Preview Sliding Animation"
-          }
-        },
         "fr" : {
           "stringUnit" : {
             "state" : "needs_review",
@@ -348,7 +380,7 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "הצג אנימציית הופעה עבור חלון התצוגה מקדימה"
           }
         }
@@ -504,12 +536,6 @@
     },
     "Hover Window Title Style" : {
       "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Application Title Style for Dock Tiles"
-          }
-        },
         "fr" : {
           "stringUnit" : {
             "state" : "needs_review",
@@ -518,8 +544,8 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "עיצוב כותרת חלון התצוגה מקדימה"
+            "state" : "translated",
+            "value" : "עיצוב כותרת חלון בתצוגה המקדימה"
           }
         }
       }
@@ -605,23 +631,6 @@
         }
       }
     },
-    "Left" : {
-      "comment" : "Window title alignment option",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bottom Left"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "À gauche"
-          }
-        }
-      }
-    },
     "Medium" : {
       "comment" : "Window size option",
       "localizations" : {
@@ -656,7 +665,15 @@
       }
     },
     "Never visible" : {
-
+      "comment" : "Traffic light buttons visibility option",
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "לעולם לא"
+          }
+        }
+      }
     },
     "OK" : {
       "localizations" : {
@@ -675,10 +692,26 @@
       }
     },
     "On window hover; Dimmed until button hover" : {
-
+      "comment" : "Traffic light buttons visibility option",
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "בריחוף על התצוגה המקדימה; מעומעם עד לריחוף על הכפתור"
+          }
+        }
+      }
     },
     "On window hover; Full opacity" : {
-
+      "comment" : "Traffic light buttons visibility option",
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "בריחוף על התצוגה המקדימה; אטימות מלאה"
+          }
+        }
+      }
     },
     "Open Accessibility Settings" : {
       "localizations" : {
@@ -890,23 +923,6 @@
         }
       }
     },
-    "Right" : {
-      "comment" : "Window title alignment option",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bottom Right"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "À droite"
-          }
-        }
-      }
-    },
     "Screen Capturing:" : {
       "localizations" : {
         "fr" : {
@@ -934,7 +950,7 @@
         "he" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "הרשאות הקלטת מסך"
+            "value" : "הרשאת הקלטת מסך"
           }
         }
       }
@@ -972,10 +988,24 @@
       }
     },
     "Show Window Titles" : {
-
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "הצג כותרת חלונות"
+          }
+        }
+      }
     },
     "Show Window Titles on Previews" : {
-
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "הצג כותרת חלונות בתצוגה המקדימה"
+          }
+        }
+      }
     },
     "Small" : {
       "comment" : "Window size option",
@@ -1028,7 +1058,14 @@
       }
     },
     "Traffic Light Buttons Visibility" : {
-
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "נראות כפתורי רמזור"
+          }
+        }
+      }
     },
     "Up to date" : {
       "localizations" : {
@@ -1193,10 +1230,26 @@
       }
     },
     "When Showing Dock Tile Previews" : {
-
+      "comment" : "Preview window title condition option",
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "בעת ריחוף על ה-Dock"
+          }
+        }
+      }
     },
     "When Using Window Switcher" : {
-
+      "comment" : "Preview window title condition option",
+      "localizations" : {
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "בעת שימוש במחליף החלונות"
+          }
+        }
+      }
     },
     "Why we need permissions" : {
       "localizations" : {
@@ -1250,7 +1303,7 @@
       "localizations" : {
         "fr" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Taille de l’aperçu"
           }
         },
@@ -1279,18 +1332,12 @@
         }
       }
     },
-    "Window Title Alignment" : {
+    "Window Title Position" : {
       "localizations" : {
-        "en" : {
+        "he" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Window Titles Appear in"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Alignement du titre de la fenêtre"
+            "value" : "מיקום כותרת חלון"
           }
         }
       }
