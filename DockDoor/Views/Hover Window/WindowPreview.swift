@@ -23,8 +23,8 @@ struct WindowPreview: View {
     @Default(.windowTitleDisplayCondition) var windowTitleDisplayCondition
     @Default(.trafficLightButtonsVisibility) var trafficLightButtonsVisibility
     
-    @State private var isHovering = false
-    @State private var isHoveringOverTabMenu = false
+    @State private var isHoveringOverDockPeekPreview = false
+    @State private var isHoveringOverWindowSwitcherPreview = false
     
     private var calculatedMaxDimensions: CGSize? {
         CGSize(width: self.bestGuessMonitor.frame.width * 0.75, height: self.bestGuessMonitor.frame.height * 0.75)
@@ -101,14 +101,14 @@ struct WindowPreview: View {
     }
     
     var body: some View {
-        let isHighlighted = (index == ScreenCenteredFloatingWindow.shared.currIndex && ScreenCenteredFloatingWindow.shared.windowSwitcherActive)
-        let selected = isHovering || isHighlighted
+        let isHighlightedInWindowSwitcher = (index == ScreenCenteredFloatingWindow.shared.currIndex && ScreenCenteredFloatingWindow.shared.windowSwitcherActive)
+        let selected = isHoveringOverDockPeekPreview || isHighlightedInWindowSwitcher
         
         ZStack(alignment: .topTrailing) {
             VStack(spacing: 0) {
                 windowContent(isMinimized: windowInfo.isMinimized, isHidden: windowInfo.isHidden, isSelected: selected)
-                    .overlay { Color.white.opacity(isHoveringOverTabMenu ? 0.1 : 0) }
-                    .shadow(radius: selected || isHoveringOverTabMenu ? 0 : 3)
+                    .overlay { Color.white.opacity(isHoveringOverWindowSwitcherPreview ? 0.1 : 0) }
+                    .shadow(radius: selected || isHoveringOverWindowSwitcherPreview ? 0 : 3)
                     .background {
                         RoundedRectangle(cornerRadius: 6, style: .continuous)
                             .fill(Color.clear.shadow(.drop(color: .black.opacity(selected ? 0.35 : 0.25), radius: selected ? 12 : 8, y: selected ? 6 : 4)))
@@ -133,7 +133,7 @@ struct WindowPreview: View {
                 if !windowInfo.isMinimized, !windowInfo.isHidden, let _ = windowInfo.closeButton {
                     TrafficLightButtons(windowInfo: windowInfo,
                                         displayMode: trafficLightButtonsVisibility,
-                                        hoveringOverParentWindow: selected || isHoveringOverTabMenu,
+                                        hoveringOverParentWindow: selected || isHoveringOverWindowSwitcherPreview,
                                         onAction: { onTap?() })
                 }
             }
@@ -143,9 +143,9 @@ struct WindowPreview: View {
         .onHover { over in
             withAnimation(.snappy(duration: 0.175)) {
                 if (!ScreenCenteredFloatingWindow.shared.windowSwitcherActive) {
-                    isHovering = over
+                    isHoveringOverDockPeekPreview = over
                 } else {
-                    isHoveringOverTabMenu = over
+                    isHoveringOverWindowSwitcherPreview = over
                 }
             }
         }
