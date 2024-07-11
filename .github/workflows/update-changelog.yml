@@ -12,8 +12,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-        with:
-          ref: main
 
       - name: Update changelog from release
         uses: rhysd/changelog-from-release/action@v3
@@ -48,22 +46,31 @@ jobs:
               }
             </style>
 
-      - name: Configure Git
+      - name: Get the latest release title
+        id: get_release
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          latest_release=$(curl -s https://api.github.com/repos/${{ github.repository }}/releases/latest)
+          release_title=$(echo $latest_release | jq -r '.name')
+          echo "release_title=$release_title" >> $GITHUB_ENV
 
       - name: Commit changes
         run: |
           git add CHANGELOG.md
-          git commit -m "chore: update changelog for ${{ github.event.release.tag_name }}"
+          git commit -m "chore: update changelog for ${{ env.release_title }}"
 
       - name: Create Pull Request
+        id: cpr
         uses: peter-evans/create-pull-request@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: "chore: update changelog for ${{ github.event.release.tag_name }}"
+          commit-message: "chore: update changelog for ${{ env.release_title }}"
+          committer: GitHub <noreply@github.com>
+          author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
+          signoff: false
           branch: update-changelog-${{ github.event.release.tag_name }}
-          title: "chore: update changelog for ${{ github.event.release.tag_name }}"
-          body: "This PR updates the changelog for release ${{ github.event.release.tag_name }}."
-          labels: "chore"
+          delete-branch: true
+          title: "chore: update changelog for ${{ env.release_title }}"
+          body: |
+            This PR updates the changelog for release ${{ env.release_title }}.
+          labels: |
+            chore
