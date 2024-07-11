@@ -58,14 +58,12 @@ struct MainSettingsView: View {
             }
             
             HStack {
-                Text("Tap Equivalent Interval: \(tapEquivalentInterval, specifier: "%.1f") seconds")
+                Text("Preview Hover Delay: \(tapEquivalentInterval, specifier: "%.1f") seconds")
                 Spacer()
                 Slider(value: $tapEquivalentInterval, in: 0...2, step: 0.1)
             }
             
             HStack {
-                Text("Preview Hover Action")
-                Spacer()
                 Picker("Preview Hover Action", selection: $previewHoverAction) {
                     ForEach(HoverTimerActions.allCases, id: \.self) { action in
                         Text(action.localizedName).tag(action)
