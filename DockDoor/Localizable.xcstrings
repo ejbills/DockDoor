@@ -60,7 +60,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "• Permet une information visuelle améliorée dans le Dock"
+            "value" : "• Permet une communication visuelle améliorée dans le Dock"
           }
         },
         "he" : {
@@ -1128,8 +1128,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Always"
+            "state" : "translated",
+            "value" : "Toujours"
           }
         },
         "he" : {
@@ -1307,8 +1307,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Always visible; Full opacity"
+            "state" : "translated",
+            "value" : "Toujours visible ; opacité complète"
           }
         },
         "he" : {
@@ -2021,8 +2021,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Bottom Left"
+            "state" : "translated",
+            "value" : "En bas à gauche"
           }
         },
         "he" : {
@@ -2200,8 +2200,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Bottom Right"
+            "state" : "translated",
+            "value" : "En bas à droite"
           }
         },
         "he" : {
@@ -3097,7 +3097,7 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Command (⌘)"
           }
         },
@@ -3275,7 +3275,7 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Control (⌃)"
           }
         },
@@ -7551,8 +7551,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Never visible"
+            "state" : "translated",
+            "value" : "Jamais visible"
           }
         },
         "he" : {
@@ -7729,7 +7729,7 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "OK"
           }
         },
@@ -7908,8 +7908,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "On window hover; Dimmed until button hover"
+            "state" : "translated",
+            "value" : "Au survol de la fenêtre ; couleurs atténuées jusqu'au survol des boutons"
           }
         },
         "he" : {
@@ -8087,8 +8087,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "On window hover; Full opacity"
+            "state" : "translated",
+            "value" : "Au survol de la fenêtre ; pleine opacité"
           }
         },
         "he" : {
@@ -8799,13 +8799,13 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Option (⌥)"
           }
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Option (⌥)"
           }
         },
@@ -11293,8 +11293,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Window Titles"
+            "state" : "translated",
+            "value" : "Afficher les titres des fenêtres"
           }
         },
         "he" : {
@@ -11471,8 +11471,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Window Titles on Previews"
+            "state" : "translated",
+            "value" : "Afficher les titres des fenêtres sur les aperçus"
           }
         },
         "he" : {
@@ -12185,8 +12185,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Traffic Light Buttons Visibility"
+            "state" : "translated",
+            "value" : "Visibilité des boutons « feu tricolore »"
           }
         },
         "he" : {
@@ -13432,7 +13432,7 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Version %@"
           }
         },
@@ -14146,8 +14146,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When Showing Dock Tile Previews"
+            "state" : "translated",
+            "value" : "En affichant les aperçus dans le Dock"
           }
         },
         "he" : {
@@ -14325,8 +14325,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When Using Window Switcher"
+            "state" : "translated",
+            "value" : "En utilisant le sélecteur d'applications"
           }
         },
         "he" : {
@@ -15394,8 +15394,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Title Position"
+            "state" : "translated",
+            "value" : "Position des titres des fenêtres"
           }
         },
         "he" : {
