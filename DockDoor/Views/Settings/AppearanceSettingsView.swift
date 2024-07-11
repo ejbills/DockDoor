@@ -91,7 +91,7 @@ struct SizePickerView: View {
                 }
             }
             .onChange(of: sizingMultiplier) { _, newValue in
-                HoverWindow.shared.windowSize = getWindowSize()
+                SharedPreviewWindowCoordinator.shared.windowSize = getWindowSize()
             }
         }
     }

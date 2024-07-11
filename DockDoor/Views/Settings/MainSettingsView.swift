@@ -13,6 +13,8 @@ struct MainSettingsView: View {
     @Default(.hoverWindowOpenDelay) var hoverWindowOpenDelay
     @Default(.screenCaptureCacheLifespan) var screenCaptureCacheLifespan
     @Default(.showMenuBarIcon) var showMenuBarIcon
+    @Default(.tapEquivalentInterval) var tapEquivalentInterval
+    @Default(.previewHoverAction) var previewHoverAction
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -53,6 +55,23 @@ struct MainSettingsView: View {
                 Text("Window Cache Lifespan: \(screenCaptureCacheLifespan, specifier: "%.0f") seconds")
                 Spacer()
                 Slider(value: $screenCaptureCacheLifespan, in: 0...60, step: 5)
+            }
+            
+            HStack {
+                Text("Tap Equivalent Interval: \(tapEquivalentInterval, specifier: "%.1f") seconds")
+                Spacer()
+                Slider(value: $tapEquivalentInterval, in: 0...2, step: 0.1)
+            }
+            
+            HStack {
+                Text("Preview Hover Action")
+                Spacer()
+                Picker("Preview Hover Action", selection: $previewHoverAction) {
+                    ForEach(HoverTimerActions.allCases, id: \.self) { action in
+                        Text(action.localizedName).tag(action)
+                    }
+                }
+                .pickerStyle(MenuPickerStyle())
             }
         }
         .padding(20)

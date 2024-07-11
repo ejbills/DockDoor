@@ -57,7 +57,7 @@ final class DockObserver {
             } else if type == .rightMouseDown || type == .leftMouseDown || type == .otherMouseDown {
                 let mouseLocation = event.location
                 if observer.isMouseWithinDock(mouseLocation) { // Required to allow clicking the traffic light buttons in the preview
-                    HoverWindow.shared.hideWindow()
+                    SharedPreviewWindowCoordinator.shared.hideWindow()
                 }
             }
 
@@ -130,18 +130,18 @@ final class DockObserver {
                         let activeWindows = try await WindowUtil.activeWindows(for: dockIconAppName)
                         await MainActor.run {
                             if activeWindows.isEmpty {
-                                HoverWindow.shared.hideWindow()
+                                SharedPreviewWindowCoordinator.shared.hideWindow()
                             } else {
                                 let mouseScreen = DockObserver.screenContainingPoint(currentMouseLocation) ?? NSScreen.main!
                                 let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
                                 // Show HoverWindow (using shared instance)
-                                HoverWindow.shared.showWindow(
+                                SharedPreviewWindowCoordinator.shared.showWindow(
                                     appName: dockIconAppName,
                                     windows: activeWindows,
                                     mouseLocation: convertedMouseLocation,
                                     mouseScreen: mouseScreen,
                                     onWindowTap: { [weak self] in
-                                        HoverWindow.shared.hideWindow()
+                                        SharedPreviewWindowCoordinator.shared.hideWindow()
                                         self?.lastAppName = nil
                                     }
                                 )
@@ -159,9 +159,9 @@ final class DockObserver {
                 guard let self = self else { return }
                 let mouseScreen = DockObserver.screenContainingPoint(currentMouseLocation) ?? NSScreen.main!
                 let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
-                if !HoverWindow.shared.frame.contains(convertedMouseLocation) {
+                if !SharedPreviewWindowCoordinator.shared.frame.contains(convertedMouseLocation) {
                     self.lastAppName = nil
-                    HoverWindow.shared.hideWindow()
+                    SharedPreviewWindowCoordinator.shared.hideWindow()
                 }
             }
         }
