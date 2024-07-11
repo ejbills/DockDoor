@@ -115,7 +115,16 @@ struct WindowPreview: View {
                     }
                     .clipShape(uniformCardRadius ? AnyShape(RoundedRectangle(cornerRadius: 6, style: .continuous)) : AnyShape(Rectangle()))
             }
-            .overlay(alignment: windowTitlePosition == .bottomLeft ? .bottomLeading : .bottomTrailing) {
+            .overlay(alignment: {
+                switch windowTitlePosition {
+                case .bottomLeft:
+                    return .bottomLeading
+                case .bottomRight:
+                    return .bottomTrailing
+                case .topRight:
+                    return .topTrailing
+                }
+            }()) {
                 if  showWindowTitle && ((windowTitleDisplayCondition == .always) || (windowTitleDisplayCondition == .windowSwitcherOnly && CurrentWindow.shared.showingTabMenu) || (windowTitleDisplayCondition == .dockPreviewsOnly && !CurrentWindow.shared.showingTabMenu)) {
                     windowTitleOverlay(selected: selected)
                 }

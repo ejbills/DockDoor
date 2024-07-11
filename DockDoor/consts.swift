@@ -60,6 +60,7 @@ enum WindowTitleDisplayCondition: String, CaseIterable, Defaults.Serializable {
 enum WindowTitlePosition: String, CaseIterable, Defaults.Serializable {
     case bottomLeft
     case bottomRight
+    case topRight
     
     var localizedName: String {
         switch self {
@@ -67,6 +68,8 @@ enum WindowTitlePosition: String, CaseIterable, Defaults.Serializable {
             String(localized: "Bottom Left", comment: "Preview window title position option")
         case .bottomRight:
             String(localized: "Bottom Right", comment: "Preview window title position option")
+        case .topRight:
+            String(localized: "Top Right", comment: "Preview window title position option")
         }
     }
 }
