@@ -50,7 +50,7 @@ jobs:
           author: ejbills <ejbills@users.noreply.github.com>
           signoff: false
           branch: crowdin-localization
-          delete-branch: true
+          delete-branch: false
           base: main
           title: "chore: update translations from Crowdin"
           body: |
