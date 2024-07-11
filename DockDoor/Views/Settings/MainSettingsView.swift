@@ -9,6 +9,13 @@ import SwiftUI
 import Defaults
 import LaunchAtLogin
 
+var decimalFormatter: NumberFormatter {
+    let formatter = NumberFormatter()
+    formatter.numberStyle = .decimal
+    formatter.maximumFractionDigits = 1
+    return formatter
+}
+
 struct MainSettingsView: View {
     @Default(.hoverWindowOpenDelay) var hoverWindowOpenDelay
     @Default(.screenCaptureCacheLifespan) var screenCaptureCacheLifespan
@@ -44,15 +51,25 @@ struct MainSettingsView: View {
             }
             
             HStack {
-                Text("Hover Window Open Delay: \(hoverWindowOpenDelay, specifier: "%.1f") seconds")
+                Text("Hover Window Open Delay")
+                    .layoutPriority(1)
                 Spacer()
                 Slider(value: $hoverWindowOpenDelay, in: 0...2, step: 0.1)
+                TextField("", value: $hoverWindowOpenDelay, formatter: decimalFormatter)
+                .frame(width: 40)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+                Text("seconds")
             }
             
             HStack {
-                Text("Window Cache Lifespan: \(screenCaptureCacheLifespan, specifier: "%.0f") seconds")
+                Text("Window Cache Lifespan")
+                    .layoutPriority(1)
                 Spacer()
                 Slider(value: $screenCaptureCacheLifespan, in: 0...60, step: 5)
+                TextField("", value: $screenCaptureCacheLifespan, formatter: NumberFormatter())
+                .frame(width: 35)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+                Text("seconds")
             }
         }
         .padding(20)

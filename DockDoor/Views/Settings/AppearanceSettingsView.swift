@@ -29,9 +29,21 @@ struct AppearanceSettingsView: View {
                 Text("Use Uniform Image Preview Radius")
             })
             
-            Slider(value: $bufferFromDock, in: -200...200, step: 20) {
-                Text("Window Buffer (if misaligned with dock)")
-            }.buttonStyle(PlainButtonStyle())
+            VStack(alignment: .leading){
+                HStack {
+                    Slider(value: $bufferFromDock, in: -200...200, step: 20) {
+                        Text("Window Buffer")
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                    .frame(width: 400)
+                    TextField("", value: $bufferFromDock, formatter: NumberFormatter())
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .frame(width: 50)
+                }
+                Text("Adjust this if the preview is misaligned with dock")
+                    .font(.footnote)
+                    .foregroundColor(.gray)
+            }
             
             SizePickerView()
             
@@ -41,6 +53,7 @@ struct AppearanceSettingsView: View {
                         .tag(style.rawValue)
                 }
             }
+            .scaledToFit()
             
             Toggle(isOn: $showWindowTitle) {
                 Text("Show Window Titles on Previews")
@@ -57,10 +70,11 @@ struct AppearanceSettingsView: View {
                         }
                     }
                 }
+                .scaledToFit()
                 
                 Picker("Window Title Position", selection: $windowTitlePosition) {
                     ForEach(WindowTitlePosition.allCases, id: \.self) { position in
-                        Text(position.localizedName).tag(position)
+                        Text(position.localizedName).tag(position).scaledToFit()
                     }
                 }
                 .pickerStyle(SegmentedPickerStyle())
@@ -73,6 +87,7 @@ struct AppearanceSettingsView: View {
                         .tag(visibility.rawValue)
                 }
             }
+            .scaledToFit()
         }
         .padding(20)
         .frame(minWidth: 600)
@@ -90,6 +105,7 @@ struct SizePickerView: View {
                     Text(getLabel(for: CGFloat(size))).tag(CGFloat(size))
                 }
             }
+            .scaledToFit()
             .onChange(of: sizingMultiplier) { _, newValue in
                 HoverWindow.shared.windowSize = getWindowSize()
             }
