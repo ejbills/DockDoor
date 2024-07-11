@@ -4,6 +4,11 @@ on:
   release:
     types: [published]
   workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch to run the workflow on'
+        required: true
+        default: 'main'
 
 jobs:
   changelog:
@@ -12,6 +17,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.inputs.branch }}
 
       - name: Update changelog from release
         uses: rhysd/changelog-from-release/action@v3
@@ -67,7 +74,7 @@ jobs:
           committer: GitHub <noreply@github.com>
           author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
           signoff: false
-          branch: update-changelog-${{ github.event.release.tag_name }}
+          branch: update-changelog-${{ github.event.inputs.branch }}
           delete-branch: true
           title: "chore: update changelog for ${{ env.release_title }}"
           body: |
