@@ -6,6 +6,6 @@ base_url: "https://api.crowdin.com"
 preserve_hierarchy: true
 
 files:
-  - source: '/DockDoor/DockDoor/Localization/Localizable.xcstrings'
-    translation: '/DockDoor/DockDoor/Localization/%locale%/Localizable.xcstrings'
+  - source: '/DockDoor/Localization/Localizable.xcstrings'
+    translation: '/DockDoor/Localization/%locale%/Localizable.xcstrings'
     multilingual: 1
