@@ -7,13 +7,13 @@
 [![GitHub issues](https://img.shields.io/github/issues/ejbills/DockDoor)](https://github.com/ejbills/DockDoor/issues)
 [![GitHub license](https://img.shields.io/github/license/ejbills/DockDoor)](https://github.com/ejbills/DockDoor/blob/main/LICENSE)
 [![Contributors](https://img.shields.io/github/contributors/ejbills/DockDoor)](https://github.com/ejbills/DockDoor/graphs/contributors)
-[![Translation status](https://badges.crowdin.net/dockdoor/localized.svg)](https://crowdin.com/project/dockdoor/invite?h=895e3c085646d3c07fa36a97044668e02149115)
 
 Want to support development? [![Buy Me a Coffee](https://img.shields.io/badge/Buy%20me%20a%20coffee-ffdd00?style=flat&logo=buy-me-a-coffee&logoColor=black)](https://www.buymeacoffee.com/keplercafe)
 
 DockDoor is a macOS application developed with Swift and SwiftUI that allows users to manage and interact with application windows on their desktop. It emphasizes ease of use and seamless integration with the macOS environment. This project is open-source, inviting contributions from developers to enhance its functionality and user experience.
 
 [Download the latest release here](https://github.com/ejbills/DockDoor/releases/latest/download/DockDoor.dmg).
+[Help translate the app here](https://crowdin.com/project/dockdoor/invite?h=895e3c085646d3c07fa36a97044668e02149115)
 
 ## Usage
 
