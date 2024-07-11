@@ -747,8 +747,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Accessibility Permissions"
+            "state" : "translated",
+            "value" : "Einstellungen Bedienungshilfen"
           }
         },
         "el" : {
@@ -925,8 +925,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Accessibility:"
+            "state" : "translated",
+            "value" : "Bedienungshilfen:"
           }
         },
         "el" : {
@@ -1104,8 +1104,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Always"
+            "state" : "translated",
+            "value" : "Immer"
           }
         },
         "el" : {
@@ -1283,8 +1283,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Always visible; Full opacity"
+            "state" : "translated",
+            "value" : "Immer sichtbar; volle Deckkraft"
           }
         },
         "el" : {
@@ -1462,8 +1462,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Appearance"
+            "state" : "translated",
+            "value" : "Erscheinungsbild"
           }
         },
         "el" : {
@@ -1640,8 +1640,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Appearance settings"
+            "state" : "translated",
+            "value" : "Einstellungen Erscheinungsbild"
           }
         },
         "el" : {
@@ -1818,8 +1818,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Automatically check for updates"
+            "state" : "translated",
+            "value" : "Automatisch nach Updates suchen"
           }
         },
         "el" : {
@@ -1997,8 +1997,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Bottom Left"
+            "state" : "translated",
+            "value" : "Unten links"
           }
         },
         "el" : {
@@ -2176,8 +2176,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Bottom Right"
+            "state" : "translated",
+            "value" : "Unten rechts"
           }
         },
         "el" : {
@@ -2354,8 +2354,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Buy me a coffee here, thank you!"
+            "state" : "translated",
+            "value" : "Kaufen Sie mir hier einen Kaffee, danke!"
           }
         },
         "el" : {
@@ -2533,8 +2533,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Can you even see this?"
+            "state" : "translated",
+            "value" : "Können Sie das überhaupt erkennen?"
           }
         },
         "el" : {
@@ -2711,8 +2711,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Cancel"
+            "state" : "translated",
+            "value" : "Abbrechen"
           }
         },
         "el" : {
@@ -2889,8 +2889,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check for Updates"
+            "state" : "translated",
+            "value" : "Nach Updates suchen"
           }
         },
         "el" : {
@@ -3067,8 +3067,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Command (⌘)"
+            "state" : "translated",
+            "value" : "Befehl (⌘)"
           }
         },
         "el" : {
@@ -3245,7 +3245,7 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Control (⌃)"
           }
         },
