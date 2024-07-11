@@ -4,11 +4,6 @@ on:
   release:
     types: [published]
   workflow_dispatch:
-    inputs:
-      branch:
-        description: 'Branch to run the workflow on'
-        required: true
-        default: 'main'
 
 jobs:
   changelog:
@@ -18,7 +13,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
-          ref: ${{ github.event.inputs.branch }}
+          ref: ${{ github.ref }}
 
       - name: Update changelog from release
         uses: rhysd/changelog-from-release/action@v3
@@ -62,7 +57,7 @@ jobs:
         id: cpr
         uses: peter-evans/create-pull-request@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.REPO_TOKEN }}
           commit-message: "chore: update changelog for ${{ github.event.release.tag_name }}"
           committer: GitHub <noreply@github.com>
           author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
