@@ -4,6 +4,11 @@ on:
   release:
     types: [published]
   workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch to run the workflow on'
+        required: true
+        default: 'main'
 
 jobs:
   changelog:
@@ -12,6 +17,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.inputs.branch }}
 
       - name: Update changelog from release
         uses: rhysd/changelog-from-release/action@v3
@@ -46,31 +53,24 @@ jobs:
               }
             </style>
 
-      - name: Get the latest release title
-        id: get_release
-        run: |
-          latest_release=$(curl -s https://api.github.com/repos/${{ github.repository }}/releases/latest)
-          release_title=$(echo $latest_release | jq -r '.name')
-          echo "release_title=$release_title" >> $GITHUB_ENV
-
       - name: Commit changes
         run: |
           git add CHANGELOG.md
-          git commit -m "chore: update changelog for ${{ env.release_title }}"
+          git commit -m "chore: update changelog for ${{ github.event.release.tag_name }}"
 
       - name: Create Pull Request
         id: cpr
         uses: peter-evans/create-pull-request@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: "chore: update changelog for ${{ env.release_title }}"
+          commit-message: "chore: update changelog for ${{ github.event.release.tag_name }}"
           committer: GitHub <noreply@github.com>
           author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
           signoff: false
           branch: update-changelog-${{ github.event.release.tag_name }}
           delete-branch: true
-          title: "chore: update changelog for ${{ env.release_title }}"
+          title: "chore: update changelog for ${{ github.event.release.tag_name }}"
           body: |
-            This PR updates the changelog for release ${{ env.release_title }}.
+            This PR updates the changelog for release ${{ github.event.release.tag_name }}.
           labels: |
             chore
