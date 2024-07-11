@@ -9,3 +9,4 @@ files:
   - source: '/DockDoor/Localization/Localizable.xcstrings'
     translation: '/DockDoor/Localization/%locale%/Localizable.xcstrings'
     multilingual: 1
+    
