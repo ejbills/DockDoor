@@ -45,17 +45,19 @@ struct MainSettingsView: View {
             
             HStack {
                 Text("Hover Window Open Delay: \(hoverWindowOpenDelay, specifier: "%.1f") seconds")
+                    .layoutPriority(1)
                 Spacer()
                 Slider(value: $hoverWindowOpenDelay, in: 0...2, step: 0.1)
             }
             
             HStack {
                 Text("Window Cache Lifespan: \(screenCaptureCacheLifespan, specifier: "%.0f") seconds")
+                    .layoutPriority(1)
                 Spacer()
                 Slider(value: $screenCaptureCacheLifespan, in: 0...60, step: 5)
             }
         }
         .padding(20)
-        .frame(minWidth: 600)
+        .frame(minWidth: 650)
     }
 }

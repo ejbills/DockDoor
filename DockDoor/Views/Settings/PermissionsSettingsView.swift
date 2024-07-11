@@ -101,7 +101,7 @@ struct PermissionsSettingsView: View {
             Spacer()
         }
         .padding([.top, .leading, .trailing], 20)
-        .frame(minWidth: 600)
+        .frame(minWidth: 650)
     }
     
     private func openAccessibilityPreferences() {
