@@ -21,6 +21,7 @@ jobs:
           file: CHANGELOG.md
           github_token: ${{ secrets.GITHUB_TOKEN }}
           commit_summary_template: "chore: update changelog for %s"
+          pull_request: true
           header: |
             <style>
               h1:first-of-type {
@@ -47,23 +48,3 @@ jobs:
                   }
               }
             </style>
-
-      - name: Configure Git
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-
-      - name: Commit changes
-        run: |
-          git add CHANGELOG.md
-          git commit -m "chore: update changelog for ${{ github.event.release.tag_name }}"
-
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: "chore: update changelog for ${{ github.event.release.tag_name }}"
-          branch: update-changelog-${{ github.event.release.tag_name }}
-          title: "chore: update changelog for ${{ github.event.release.tag_name }}"
-          body: "This PR updates the changelog for release ${{ github.event.release.tag_name }}."
-          labels: "chore"
