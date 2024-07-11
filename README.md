@@ -14,7 +14,7 @@ DockDoor is a macOS application developed with Swift and SwiftUI that allows use
 
 [Download the latest release here](https://github.com/ejbills/DockDoor/releases/latest/download/DockDoor.dmg).
 
-[Help translate the app here](https://crowdin.com/project/dockdoor/invite?h=895e3c085646d3c07fa36a97044668e02149115)
+[Help translate the app here](https://crowdin.com/project/dockdoor/invite?h=895e3c085646d3c07fa36a97044668e02149115).
 
 ## Usage
 
