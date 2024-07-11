@@ -7,6 +7,5 @@ preserve_hierarchy: true
 
 files:
   - source: '/DockDoor/Localization/Localizable.xcstrings'
-    translation: '/DockDoor/Localization/%locale%/Localizable.xcstrings'
+    translation: '/DockDoor/Localization/Localizable.xcstrings'
     multilingual: 1
-    
