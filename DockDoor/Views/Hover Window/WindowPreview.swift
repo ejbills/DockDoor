@@ -101,7 +101,7 @@ struct WindowPreview: View {
     }
     
     var body: some View {
-        let isHighlighted = (index == CurrentWindow.shared.currIndex && CurrentWindow.shared.showingTabMenu)
+        let isHighlighted = (index == ScreenCenteredFloatingWindow.shared.currIndex && ScreenCenteredFloatingWindow.shared.windowSwitcherActive)
         let selected = isHovering || isHighlighted
         
         ZStack(alignment: .topTrailing) {
@@ -125,7 +125,7 @@ struct WindowPreview: View {
                     return .topTrailing
                 }
             }()) {
-                if  showWindowTitle && ((windowTitleDisplayCondition == .always) || (windowTitleDisplayCondition == .windowSwitcherOnly && CurrentWindow.shared.showingTabMenu) || (windowTitleDisplayCondition == .dockPreviewsOnly && !CurrentWindow.shared.showingTabMenu)) {
+                if  showWindowTitle && ((windowTitleDisplayCondition == .always) || (windowTitleDisplayCondition == .windowSwitcherOnly && ScreenCenteredFloatingWindow.shared.windowSwitcherActive) || (windowTitleDisplayCondition == .dockPreviewsOnly && !ScreenCenteredFloatingWindow.shared.windowSwitcherActive)) {
                     windowTitleOverlay(selected: selected)
                 }
             }
@@ -142,7 +142,7 @@ struct WindowPreview: View {
         .contentShape(Rectangle())
         .onHover { over in
             withAnimation(.snappy(duration: 0.175)) {
-                if (!CurrentWindow.shared.showingTabMenu) {
+                if (!ScreenCenteredFloatingWindow.shared.windowSwitcherActive) {
                     isHovering = over
                 } else {
                     isHoveringOverTabMenu = over

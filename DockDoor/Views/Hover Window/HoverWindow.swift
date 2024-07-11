@@ -9,16 +9,33 @@ import SwiftUI
 import Defaults
 import FluidGradient
 
-@Observable class CurrentWindow {
-    static let shared = CurrentWindow()
+@Observable class ScreenCenteredFloatingWindow {
+    static let shared = ScreenCenteredFloatingWindow()
     
     var currIndex: Int = 0
-    var showingTabMenu: Bool = false
+    var windowSwitcherActive: Bool = false
+    var fullWindowPreviewActive: Bool = false
     
-    func setShowing(toState: Bool) {
+    enum WindowState {
+        case windowSwitcher
+        case fullWindowPreview
+        case both
+    }
+    
+    func setShowing(_ state: WindowState? = .both, toState: Bool) {
         DispatchQueue.main.async {
             withAnimation(.easeInOut) {
-                self.showingTabMenu = toState
+                switch state {
+                case .windowSwitcher:
+                    self.windowSwitcherActive = toState
+                case .fullWindowPreview:
+                    self.fullWindowPreviewActive = toState
+                case .both:
+                    self.windowSwitcherActive = toState
+                    self.fullWindowPreviewActive = toState
+                case .none:
+                    return
+                }
             }
         }
     }
@@ -74,17 +91,19 @@ final class HoverWindow: NSWindow {
             self.hostingView = nil
             self.appName = ""
             self.windows.removeAll()
-            CurrentWindow.shared.setIndex(to: 0)
-            CurrentWindow.shared.setShowing(toState: false)
+            ScreenCenteredFloatingWindow.shared.setIndex(to: 0)
+            ScreenCenteredFloatingWindow.shared.setShowing(.both, toState: false)
             self.orderOut(nil)
         }
     }
     
-    private func updateContentViewSizeAndPosition(mouseLocation: CGPoint? = nil, mouseScreen: NSScreen, animated: Bool, centerOnScreen: Bool = false) {
+    private func updateContentViewSizeAndPosition(mouseLocation: CGPoint? = nil, mouseScreen: NSScreen,
+                                                  animated: Bool, centerOnScreen: Bool = false,
+                                                  centeredHoverWindowState: ScreenCenteredFloatingWindow.WindowState? = nil) {
         guard let hostingView = hostingView else { return }
         
         if centerOnScreen {
-            CurrentWindow.shared.setShowing(toState: true)
+            ScreenCenteredFloatingWindow.shared.setShowing(centeredHoverWindowState, toState: true)
             let newHoverWindowSize = hostingView.fittingSize
             let position = CGPoint(
                 x: mouseScreen.frame.midX - (newHoverWindowSize.width / 2),
@@ -99,7 +118,7 @@ final class HoverWindow: NSWindow {
         
         guard let mouseLocation else { return }
         
-        CurrentWindow.shared.setShowing(toState: centerOnScreen)
+        ScreenCenteredFloatingWindow.shared.setShowing(centeredHoverWindowState, toState: centerOnScreen)
         
         let newHoverWindowSize = hostingView.fittingSize
         let sizeChanged = newHoverWindowSize != frame.size
@@ -168,7 +187,9 @@ final class HoverWindow: NSWindow {
         previousHoverWindowOrigin = position
     }
     
-    func showWindow(appName: String, windows: [WindowInfo], mouseLocation: CGPoint? = nil, mouseScreen: NSScreen? = nil, overrideDelay: Bool = false, onWindowTap: (() -> Void)? = nil) {
+    func showWindow(appName: String, windows: [WindowInfo], mouseLocation: CGPoint? = nil, mouseScreen: NSScreen? = nil, 
+                    overrideDelay: Bool = false, centeredHoverWindowState: ScreenCenteredFloatingWindow.WindowState? = nil,
+                    onWindowTap: (() -> Void)? = nil) {
         let now = Date()
         let delay = overrideDelay ? 0.0 : Defaults[.hoverWindowOpenDelay]
         
@@ -181,7 +202,7 @@ final class HoverWindow: NSWindow {
         // Check if the current time is within the debounce delay period
         if let lastShowTime = lastShowTime, now.timeIntervalSince(lastShowTime) < debounceDelay {
             let workItem = DispatchWorkItem { [weak self] in
-                self?.performShowWindow(appName: appName, windows: windows, mouseLocation: mouseLocation, mouseScreen: mouseScreen, onWindowTap: onWindowTap)
+                self?.performShowWindow(appName: appName, windows: windows, mouseLocation: mouseLocation, mouseScreen: mouseScreen, centeredHoverWindowState: centeredHoverWindowState, onWindowTap: onWindowTap)
             }
             
             debounceWorkItem = workItem
@@ -189,10 +210,10 @@ final class HoverWindow: NSWindow {
         } else {
             // Handle the open delay only if the hover window is not already showing
             if isHoverWindowShowing || delay == 0.0 {
-                performShowWindow(appName: appName, windows: windows, mouseLocation: mouseLocation, mouseScreen: mouseScreen, onWindowTap: onWindowTap)
+                performShowWindow(appName: appName, windows: windows, mouseLocation: mouseLocation, mouseScreen: mouseScreen, centeredHoverWindowState: centeredHoverWindowState, onWindowTap: onWindowTap)
             } else {
                 let workItem = DispatchWorkItem { [weak self] in
-                    self?.performShowWindow(appName: appName, windows: windows, mouseLocation: mouseLocation, mouseScreen: mouseScreen, onWindowTap: onWindowTap)
+                    self?.performShowWindow(appName: appName, windows: windows, mouseLocation: mouseLocation, mouseScreen: mouseScreen, centeredHoverWindowState: centeredHoverWindowState, onWindowTap: onWindowTap)
                 }
                 
                 debounceWorkItem = workItem
@@ -203,9 +224,11 @@ final class HoverWindow: NSWindow {
         lastShowTime = now
     }
     
-    private func performShowWindow(appName: String, windows: [WindowInfo], mouseLocation: CGPoint?, mouseScreen: NSScreen?, onWindowTap: (() -> Void)?) {
+    private func performShowWindow(appName: String, windows: [WindowInfo], mouseLocation: CGPoint?, mouseScreen: NSScreen?,
+                                   centeredHoverWindowState: ScreenCenteredFloatingWindow.WindowState? = nil,
+                                   onWindowTap: (() -> Void)?) {
         let isMouseEvent = mouseLocation != nil
-        CurrentWindow.shared.setShowing(toState: !isMouseEvent)
+        ScreenCenteredFloatingWindow.shared.setShowing(centeredHoverWindowState, toState: !isMouseEvent)
         
         guard !windows.isEmpty else { return }
         
@@ -229,7 +252,8 @@ final class HoverWindow: NSWindow {
                                                        dockPosition: DockUtils.shared.getDockPosition(), bestGuessMonitor: screen)
             }
             
-            self.updateContentViewSizeAndPosition(mouseLocation: mouseLocation, mouseScreen: screen, animated: true, centerOnScreen: !isMouseEvent)
+            self.updateContentViewSizeAndPosition(mouseLocation: mouseLocation, mouseScreen: screen, animated: true,
+                                                  centerOnScreen: !isMouseEvent, centeredHoverWindowState: centeredHoverWindowState)
             self.makeKeyAndOrderFront(nil)
         }
     }
@@ -239,19 +263,19 @@ final class HoverWindow: NSWindow {
         
         let newIndex: Int
         if goBackwards {
-            newIndex = CurrentWindow.shared.currIndex - 1
+            newIndex = ScreenCenteredFloatingWindow.shared.currIndex - 1
         } else {
-            newIndex = CurrentWindow.shared.currIndex + 1
+            newIndex = ScreenCenteredFloatingWindow.shared.currIndex + 1
         }
         
         // Ensure the index wraps around
         let wrappedIndex = (newIndex + windows.count) % windows.count
-        CurrentWindow.shared.setIndex(to: wrappedIndex)
+        ScreenCenteredFloatingWindow.shared.setIndex(to: wrappedIndex)
     }
     
     func selectAndBringToFrontCurrentWindow() {
         guard !windows.isEmpty else { return }
-        let selectedWindow = windows[CurrentWindow.shared.currIndex]
+        let selectedWindow = windows[ScreenCenteredFloatingWindow.shared.currIndex]
         WindowUtil.bringWindowToFront(windowInfo: selectedWindow)
         hideWindow()
     }
@@ -283,7 +307,7 @@ struct HoverView: View {
                 let widthBasedOnHeight = (cgSize.width * thickness) / cgSize.height
                 let heightBasedOnWidth = (cgSize.height * thickness) / cgSize.width
                 
-                if dockPosition == .bottom || CurrentWindow.shared.showingTabMenu {
+                if dockPosition == .bottom || ScreenCenteredFloatingWindow.shared.windowSwitcherActive {
                     maxWidth = max(maxWidth, widthBasedOnHeight)
                     maxHeight = thickness
                 } else {
@@ -299,8 +323,8 @@ struct HoverView: View {
     var body: some View {
         ZStack {
             ScrollViewReader { scrollProxy in
-                ScrollView(dockPosition == .bottom || CurrentWindow.shared.showingTabMenu ? .horizontal : .vertical, showsIndicators: false) {
-                    DynStack(direction: CurrentWindow.shared.showingTabMenu ? .horizontal : (dockPosition == .bottom ? .horizontal : .vertical), spacing: 16) {
+                ScrollView(dockPosition == .bottom || ScreenCenteredFloatingWindow.shared.windowSwitcherActive ? .horizontal : .vertical, showsIndicators: false) {
+                    DynStack(direction: ScreenCenteredFloatingWindow.shared.windowSwitcherActive ? .horizontal : (dockPosition == .bottom ? .horizontal : .vertical), spacing: 16) {
                         if !minimizedOrHiddenWindows.isEmpty {
                             minimizedOrHiddenWindowsView
                         }
@@ -319,7 +343,7 @@ struct HoverView: View {
                             self.runUIUpdates()
                         }
                     }
-                    .onChange(of: CurrentWindow.shared.currIndex) { _, newIndex in
+                    .onChange(of: ScreenCenteredFloatingWindow.shared.currIndex) { _, newIndex in
                         withAnimation {
                             scrollProxy.scrollTo("\(appName)-\(newIndex)", anchor: .center)
                         }
@@ -331,12 +355,12 @@ struct HoverView: View {
                 .opacity(showWindows ? 1 : 0.8)
             }
         }
-        .padding(.top, (!CurrentWindow.shared.showingTabMenu && windowTitleStyle == .embedded) ? 25 : 0) // Provide space above the window preview for the Embedded title style when hovering over the Dock.
+        .padding(.top, (!ScreenCenteredFloatingWindow.shared.windowSwitcherActive && windowTitleStyle == .embedded) ? 25 : 0) // Provide space above the window preview for the Embedded title style when hovering over the Dock.
         .dockStyle(cornerRadius: 16)
         .overlay(alignment: .topLeading) {
             hoverTitleBaseView(labelSize: measureString(appName, fontSize: 14))
         }
-        .padding(.top, (!CurrentWindow.shared.showingTabMenu && windowTitleStyle == .popover) ? 30 : 0) // Provide empty space above the window preview for the Popover title style when hovering over the Dock
+        .padding(.top, (!ScreenCenteredFloatingWindow.shared.windowSwitcherActive && windowTitleStyle == .popover) ? 30 : 0) // Provide empty space above the window preview for the Popover title style when hovering over the Dock
         .padding(.all, 24)
         .frame(maxWidth: self.bestGuessMonitor.visibleFrame.width, maxHeight: self.bestGuessMonitor.visibleFrame.height)
     }
@@ -351,7 +375,7 @@ struct HoverView: View {
     
     @ViewBuilder
     private func hoverTitleBaseView(labelSize: CGSize) -> some View {
-        if !CurrentWindow.shared.showingTabMenu {
+        if !ScreenCenteredFloatingWindow.shared.windowSwitcherActive {
             switch windowTitleStyle {
             case .default:
                 HStack(spacing: 2) {
