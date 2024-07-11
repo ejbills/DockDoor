@@ -35,9 +35,7 @@ jobs:
         run: |
           git config --global user.name "ejbills"
           git config --global user.email "ejbills@users.noreply.github.com"
-          git checkout main
-          git pull origin main
-          git checkout -B crowdin-localization
+          git checkout crowdin-localization
           git add .
           git commit -m "chore: update translations from Crowdin" || echo "No changes to commit"
           git push origin crowdin-localization --force
