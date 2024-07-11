@@ -1,40 +1,44 @@
-"project_id_env": "CROWDIN_PROJECT_ID"
-"api_token_env": "CROWDIN_PERSONAL_TOKEN"
-"base_path": "."
-"base_url": "https://api.crowdin.com"
-"preserve_hierarchy": true
+project_id_env: "CROWDIN_PROJECT_ID"
+api_token_env: "CROWDIN_PERSONAL_TOKEN"
+base_path: "."
+base_url: "https://api.crowdin.com"
+preserve_hierarchy: true
 
 files:
-  - source: '/DockDoor/DockDoor/Localization/Localizable.xcstrings'
-    translation: '/DockDoor/DockDoor/Localization/%locale%/Localizable.xcstrings'
+  - source: '/DockDoor/Localization/Localizable.xcstrings'
+    translation: '/DockDoor/Localization/%two_letters_code%.lproj/Localizable.xcstrings'
+    type: "ios"
+    content_segmentation: 0
+    translatable_elements:
+      - "/dict/*/dict/key[. = 'stringUnit']/following-sibling::dict/string[@key='value']"
     languages_mapping:
-      locale:
-        af: af-ZA
+      two_letters_code:
+        af: af
         ar: ar
-        ca: ca-ES
+        ca: ca
         zh-CN: zh-Hans
         zh-TW: zh-Hant
-        cs: cs-CZ
-        da: da-DK
-        nl: nl-NL
-        fi: fi-FI
-        fr: fr-FR
-        de: de-DE
-        el: el-GR
-        he: he-IL
-        hu: hu-HU
-        it: it-IT
-        ja: ja-JP
-        ko: ko-KR
-        no: no-NO
-        pl: pl-PL
+        cs: cs
+        da: da
+        nl: nl
+        fi: fi
+        fr: fr
+        de: de
+        el: el
+        he: he
+        hu: hu
+        it: it
+        ja: ja
+        ko: ko
+        no: nb  # Norwegian Bokmål
+        pl: pl
         pt: pt-PT
         pt-BR: pt-BR
-        ro: ro-RO
-        ru: ru-RU
+        ro: ro
+        ru: ru
         sr-Cyrl: sr-Cyrl
-        es: es-ES
-        sv: sv-SE
-        tr: tr-TR
-        uk: uk-UA
-        vi: vi-VN
+        es: es
+        sv: sv
+        tr: tr
+        uk: uk
+        vi: vi
