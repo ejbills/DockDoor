@@ -31,17 +31,16 @@ jobs:
       - name: Set file permissions
         run: sudo chown -R $(whoami) .
 
-      - name: Commit changes
+      - name: Create or update crowdin-localization branch
         run: |
           git config --global user.name "ejbills"
           git config --global user.email "ejbills@users.noreply.github.com"
-          git checkout -b crowdin-localization
+          git checkout main
+          git pull origin main
+          git checkout -B crowdin-localization
           git add .
           git commit -m "chore: update translations from Crowdin" || echo "No changes to commit"
-
-      - name: Push changes
-        run: |
-          git push origin crowdin-localization || echo "No changes to push"
+          git push origin crowdin-localization --force
 
       - name: Create Pull Request
         id: cpr
@@ -54,6 +53,7 @@ jobs:
           signoff: false
           branch: crowdin-localization
           delete-branch: true
+          base: main
           title: "chore: update translations from Crowdin"
           body: |
             This PR updates the translations from Crowdin.
