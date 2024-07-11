@@ -19,41 +19,11 @@ jobs:
         uses: crowdin/github-action@v2
         with:
           upload_sources: true
-          upload_translations: false
+          upload_translations: true
           download_translations: true
           localization_branch_name: crowdin-localization
-          create_pull_request: false
+          create_pull_request: true
         env:
           GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
           CROWDIN_PROJECT_ID: ${{ secrets.CROWDIN_PROJECT_ID }}
           CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
-
-      - name: Set file permissions
-        run: sudo chown -R $(whoami) .
-
-      - name: Create or update crowdin-localization branch
-        run: |
-          git config --global user.name "ejbills"
-          git config --global user.email "ejbills@users.noreply.github.com"
-          git checkout crowdin-localization
-          git add .
-          git commit -m "chore: update translations from Crowdin" || echo "No changes to commit"
-          git push origin crowdin-localization --force
-
-      - name: Create Pull Request
-        id: cpr
-        uses: peter-evans/create-pull-request@v4
-        with:
-          token: ${{ secrets.REPO_TOKEN }}
-          commit-message: "chore: update translations from Crowdin"
-          committer: GitHub <noreply@github.com>
-          author: ejbills <ejbills@users.noreply.github.com>
-          signoff: false
-          branch: crowdin-localization
-          delete-branch: false
-          base: main
-          title: "chore: update translations from Crowdin"
-          body: |
-            This PR updates the translations from Crowdin.
-          labels: |
-            chore
