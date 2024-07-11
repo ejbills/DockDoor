@@ -54,7 +54,7 @@ jobs:
         run: |
           git config --global user.name "ejbills"
           git config --global user.email "ejbills@users.noreply.github.com"
-          git commit -m "chore: update changelog for ${{ github.event.release.tag_name }}"
+          git push
 
       - name: Create Pull Request
         id: cpr
