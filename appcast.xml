@@ -5,7 +5,7 @@
         <item>
             <title>1.1.1</title>
             <pubDate>Wed, 10 Jul 2024 18:25:45 -0700</pubDate>
-            <sparkle:fullReleaseNotesLink>https://dockdoor.kepler.cafe/CHANGELOG.html</sparkle:fullReleaseNotesLink>
+            <sparkle:releaseNotesLink>https://dockdoor.kepler.cafe/CHANGELOG.html</sparkle:releaseNotesLink>
             <sparkle:version>1.1.1</sparkle:version>
             <sparkle:shortVersionString>1.1.1</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
