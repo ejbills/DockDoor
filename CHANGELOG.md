@@ -1,64 +1,3 @@
-<style>
-  h1:first-of-type {
-      display: none;
-  }
-  .my-5 {
-      margin: unset !important;
-  }
-  .markdown-body img {
-     max-width: 50%;
-  }
-  
-  @media (prefers-color-scheme: dark) {
-      body {
-          color-scheme: dark;
-          color: white;
-          background: transparent;
-      }
-      a, :link {
-          color: #419cff;
-      }
-      a:active, link:active {
-          color: #ff1919;
-      }
-  }
-</style>
-
-<a name="v1.1.1"></a>
-# [v1.1.1](https://github.com/ejbills/DockDoor/releases/tag/v1.1.1) - 11 Jul 2024
-
-# Changelog
-
-## Features
-- Update app icon to new design (Thanks to the awesome artwork by [@VisualisationExpo](https://github.com/VisualisationExpo))
-- Traffic light button display customization options
-- Make traffic lights symbols dark in light theme ([#135](https://github.com/ejbills/DockDoor/issues/135)) [@ShlomoCode](https://github.com/ShlomoCode)
-- Added customization options for Window Titles ([#128](https://github.com/ejbills/DockDoor/issues/128)) [@chrisharper22](https://github.com/chrisharper22)
-- Improve release notes style ([#125](https://github.com/ejbills/DockDoor/issues/125)) [@ShlomoCode](https://github.com/ShlomoCode)
-- Show changelog in in-app update ([#120](https://github.com/ejbills/DockDoor/issues/120)) [@ShlomoCode](https://github.com/ShlomoCode)
-- Localize to FR ([#115](https://github.com/ejbills/DockDoor/issues/115)) [@illavoluntas](https://github.com/illavoluntas)
-- Focus when unminimized ([#118](https://github.com/ejbills/DockDoor/issues/118)) [@UnknownCrafts](https://github.com/UnknownCrafts)
-
-## Fixes
-- Incorrect placement of traffic light setting
-- Window should not be draggable
-- Accidentally deleted download link from readme
-- Chrome PWA's ([#126](https://github.com/ejbills/DockDoor/issues/126)) [@ShlomoCode](https://github.com/ShlomoCode)
-- Sparkle release notes in dark mode ([#124](https://github.com/ejbills/DockDoor/issues/124)) [@ShlomoCode](https://github.com/ShlomoCode)
-
-## Refactor
-- Replace numeric enums with named enums; reword keys and variables ([#141](https://github.com/ejbills/DockDoor/issues/141)) [@ShlomoCode](https://github.com/ShlomoCode)
-
-## Chore
-- Update he localization ([#143](https://github.com/ejbills/DockDoor/issues/143)) [@ShlomoCode](https://github.com/ShlomoCode)
-- Add readme badges
-- Remove useless maxwidth
-- Create xcscheme file ([#127](https://github.com/ejbills/DockDoor/issues/127)) [@ShlomoCode](https://github.com/ShlomoCode)
-- Create pr-lint.yml ([#122](https://github.com/ejbills/DockDoor/issues/122)) [@ShlomoCode](https://github.com/ShlomoCode)
-
-[Changes][v1.1.1]
-
-
 <a name="v1.1.0"></a>
 # [v1.1.0](https://github.com/ejbills/DockDoor/releases/tag/v1.1.0) - 09 Jul 2024
 
@@ -267,7 +206,6 @@ v1.0
 [Changes][releases]
 
 
-[v1.1.1]: https://github.com/ejbills/DockDoor/compare/v1.1.0...v1.1.1
 [v1.1.0]: https://github.com/ejbills/DockDoor/compare/v1.0.17...v1.1.0
 [v1.0.17]: https://github.com/ejbills/DockDoor/compare/v1.0.16...v1.0.17
 [v1.0.16]: https://github.com/ejbills/DockDoor/compare/v1.0.15...v1.0.16
