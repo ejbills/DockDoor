@@ -21,7 +21,7 @@ jobs:
           upload_sources: true
           upload_translations: false
           download_translations: true
-          localization_branch_name: l10n_crowdin_translations
+          localization_branch_name: crowdin-localization
           create_pull_request: false
         env:
           GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
@@ -35,9 +35,27 @@ jobs:
         run: |
           git config --global user.name "ejbills"
           git config --global user.email "ejbills@users.noreply.github.com"
+          git checkout -b crowdin-localization
           git add .
           git commit -m "chore: update translations from Crowdin" || echo "No changes to commit"
 
       - name: Push changes
         run: |
-          git push origin main || echo "No changes to push"
+          git push origin crowdin-localization || echo "No changes to push"
+
+      - name: Create Pull Request
+        id: cpr
+        uses: peter-evans/create-pull-request@v4
+        with:
+          token: ${{ secrets.REPO_TOKEN }}
+          commit-message: "chore: update translations from Crowdin"
+          committer: GitHub <noreply@github.com>
+          author: ejbills <ejbills@users.noreply.github.com>
+          signoff: false
+          branch: crowdin-localization
+          delete-branch: true
+          title: "chore: update translations from Crowdin"
+          body: |
+            This PR updates the translations from Crowdin.
+          labels: |
+            chore
