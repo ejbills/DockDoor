@@ -3,6 +3,7 @@ name: Update changelog on release published
 on:
   release:
     types: [published]
+  workflow_dispatch:
 
 jobs:
   changelog:
