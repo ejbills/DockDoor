@@ -13,57 +13,67 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
-          ref: main
+          token: ${{ secrets.REPO_TOKEN }}
 
       - name: Update changelog from release
         uses: rhysd/changelog-from-release/action@v3
         with:
           file: CHANGELOG.md
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.REPO_TOKEN }}
           commit_summary_template: "chore: update changelog for %s"
           header: |
             <style>
               h1:first-of-type {
-                  display: none;
+                display: none;
               }
               .my-5 {
-                  margin: unset !important;
+                margin: unset !important;
               }
               .markdown-body img {
-                 max-width: 50%;
+                max-width: 50%;
               }
-              
               @media (prefers-color-scheme: dark) {
-                  body {
-                      color-scheme: dark;
-                      color: white;
-                      background: transparent;
-                  }
-                  a, :link {
-                      color: #419cff;
-                  }
-                  a:active, link:active {
-                      color: #ff1919;
-                  }
+                body {
+                  color-scheme: dark;
+                  color: white;
+                  background: transparent;
+                }
+                a, :link {
+                  color: #419cff;
+                }
+                a:active, link:active {
+                  color: #ff1919;
+                }
               }
             </style>
 
-      - name: Configure Git
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+      - name: Set file permissions
+        run: sudo chown -R $(whoami) .
 
       - name: Commit changes
         run: |
+          git config --global user.name "ejbills"
+          git config --global user.email "ejbills@users.noreply.github.com"
           git add CHANGELOG.md
-          git commit -m "chore: update changelog for ${{ github.event.release.tag_name }}"
+          git commit -m "chore: update changelog for ${{ github.event.release.tag_name }}" || echo "No changes to commit"
+
+      - name: Push changes
+        run: |
+          git push origin HEAD || echo "No changes to push"
 
       - name: Create Pull Request
+        id: cpr
         uses: peter-evans/create-pull-request@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.REPO_TOKEN }}
           commit-message: "chore: update changelog for ${{ github.event.release.tag_name }}"
+          committer: GitHub <noreply@github.com>
+          author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
+          signoff: false
           branch: update-changelog-${{ github.event.release.tag_name }}
+          delete-branch: true
           title: "chore: update changelog for ${{ github.event.release.tag_name }}"
-          body: "This PR updates the changelog for release ${{ github.event.release.tag_name }}."
-          labels: "chore"
+          body: |
+            This PR updates the changelog for release ${{ github.event.release.tag_name }}.
+          labels: |
+            chore
