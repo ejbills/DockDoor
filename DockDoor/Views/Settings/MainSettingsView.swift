@@ -82,7 +82,7 @@ struct MainSettingsView: View {
             
             HStack {
                 Picker("Preview Hover Action", selection: $previewHoverAction) {
-                    ForEach(HoverTimerActions.allCases, id: \.self) { action in
+                    ForEach(PreviewHoverAction.allCases, id: \.self) { action in
                         Text(action.localizedName).tag(action)
                     }
                 }
