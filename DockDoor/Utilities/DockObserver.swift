@@ -205,7 +205,7 @@ final class DockObserver {
         // Adjust mouse location to match the coordinate system of the dock icons
         let adjustedMouseLocation = CGPoint(
             x: mouseLocation.x,
-            y: NSScreen.main!.frame.height - mouseLocation.y
+            y: (DockObserver.screenContainingPoint(mouseLocation)?.frame.height ?? NSScreen.main!.frame.height) - mouseLocation.y
         )
         
         for element in children {
