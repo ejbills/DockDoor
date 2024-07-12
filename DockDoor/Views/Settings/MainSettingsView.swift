@@ -90,7 +90,7 @@ struct MainSettingsView: View {
             SizePickerView()
             
             HStack {
-                Text("Window Cache Lifespan")
+                Text("Window Image Cache Lifespan")
                     .layoutPriority(1)
                 Spacer()
                 Slider(value: $screenCaptureCacheLifespan, in: 0...60, step: 5)
