@@ -31,6 +31,11 @@ struct MainSettingsView: View {
                     Text("Want to support development?")
                     Link("Buy me a coffee here, thank you!", destination: URL(string: "https://www.buymeacoffee.com/keplercafe")!)
                 }
+                
+                HStack {
+                    Text("Want to see the app in your language?")
+                    Link("Contribute translation here!", destination: URL(string: "https://crowdin.com/project/dockdoor/invite?h=895e3c085646d3c07fa36a97044668e02149115")!)
+                }
             }
             
             Divider()
