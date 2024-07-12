@@ -268,7 +268,7 @@
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "• 독(Dock)에서의 향상된 시각 효과를 위해 허용합니다"
+            "value" : "윈도우 스위쳐"
           }
         },
         "nl" : {
@@ -309,8 +309,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "• Allows for enhanced visual information in the dock"
+            "state" : "translated",
+            "value" : "• Позволяет получать расширенную визуальную информацию в док-станции"
           }
         },
         "sr" : {
@@ -487,8 +487,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "• Enables real-time interaction with dock items"
+            "state" : "translated",
+            "value" : "• Включает взаимодействие в реальном времени с элементами док-станции"
           }
         },
         "sr" : {
@@ -665,8 +665,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "• To capture previews of images and windows"
+            "state" : "translated",
+            "value" : "• Чтобы сделать предварительный просмотр изображений и окон"
           }
         },
         "sr" : {
@@ -843,8 +843,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "• To detect when you hover over the dock"
+            "state" : "translated",
+            "value" : "• Определять при наведении курсора на док-станцию"
           }
         },
         "sr" : {
@@ -1021,8 +1021,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Accessibility Permissions"
+            "state" : "translated",
+            "value" : "Права доступа"
           }
         },
         "sr" : {
@@ -1199,8 +1199,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Accessibility:"
+            "state" : "translated",
+            "value" : "Универсальный доступ:"
           }
         },
         "sr" : {
@@ -1305,14 +1305,14 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Adjust this if the preview is misaligned with dock"
+            "state" : "translated",
+            "value" : "Ajustez ce paramètre si mal aligné par rapport au Dock"
           }
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Adjust this if the preview is misaligned with dock"
+            "state" : "translated",
+            "value" : "התאם זאת אם התצוגה המקדימה לא מיושרת כראוי עם ה-Dock"
           }
         },
         "hu" : {
@@ -1335,8 +1335,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Adjust this if the preview is misaligned with dock"
+            "state" : "translated",
+            "value" : "프리뷰가 도크와 맞지 않으면 이것을 조정하세요"
           }
         },
         "nl" : {
@@ -1377,8 +1377,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Adjust this if the preview is misaligned with dock"
+            "state" : "translated",
+            "value" : "Отрегулируйте это, если превью не совпадает с док-станцией"
           }
         },
         "sr" : {
@@ -1556,8 +1556,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Always"
+            "state" : "translated",
+            "value" : "Всегда"
           }
         },
         "sr" : {
@@ -1735,8 +1735,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Always visible; Full opacity"
+            "state" : "translated",
+            "value" : "Всегда видимый; Не прозрачный"
           }
         },
         "sr" : {
@@ -1914,8 +1914,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Appearance"
+            "state" : "translated",
+            "value" : "Внешний вид"
           }
         },
         "sr" : {
@@ -2092,8 +2092,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Appearance settings"
+            "state" : "translated",
+            "value" : "Настройки внешнего вида"
           }
         },
         "sr" : {
@@ -2270,8 +2270,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Automatically check for updates"
+            "state" : "translated",
+            "value" : "Автоматически проверять наличие обновлений"
           }
         },
         "sr" : {
@@ -2384,7 +2384,7 @@
         "he" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "בצד שמאל למטה"
+            "value" : "שמאל למטה"
           }
         },
         "hu" : {
@@ -2449,8 +2449,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Bottom Left"
+            "state" : "translated",
+            "value" : "Внизу слева"
           }
         },
         "sr" : {
@@ -2563,7 +2563,7 @@
         "he" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "בצד ימין למטה"
+            "value" : "ימין למטה"
           }
         },
         "hu" : {
@@ -2628,8 +2628,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Bottom Right"
+            "state" : "translated",
+            "value" : "Снизу справа"
           }
         },
         "sr" : {
@@ -2806,8 +2806,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Buy me a coffee here, thank you!"
+            "state" : "translated",
+            "value" : "Купите мне кофе, спасибо!"
           }
         },
         "sr" : {
@@ -2985,8 +2985,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Can you even see this?"
+            "state" : "translated",
+            "value" : "Можете ли вы увидеть это?"
           }
         },
         "sr" : {
@@ -3163,8 +3163,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Cancel"
+            "state" : "translated",
+            "value" : "Отмена"
           }
         },
         "sr" : {
@@ -3341,8 +3341,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check for Updates"
+            "state" : "translated",
+            "value" : "Проверять обновления"
           }
         },
         "sr" : {
@@ -3519,7 +3519,7 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Command (⌘)"
           }
         },
@@ -3697,7 +3697,7 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Control (⌃)"
           }
         },
@@ -3875,8 +3875,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Current Keybind: %@"
+            "state" : "translated",
+            "value" : "Текущая клавиша: %@"
           }
         },
         "sr" : {
@@ -4053,8 +4053,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Current Version: %@"
+            "state" : "translated",
+            "value" : "Текущая версия: %@"
           }
         },
         "sr" : {
@@ -4232,8 +4232,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Default"
+            "state" : "translated",
+            "value" : "По-умолчанию"
           }
         },
         "sr" : {
@@ -4369,8 +4369,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Default (Medium Large)"
+            "state" : "translated",
+            "value" : "기본값(중간 크기)"
           }
         },
         "nl" : {
@@ -4411,8 +4411,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Default (Medium Large)"
+            "state" : "translated",
+            "value" : "По умолчанию (Средний большой)"
           }
         },
         "sr" : {
@@ -4548,8 +4548,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Embedded"
+            "state" : "translated",
+            "value" : "임베디드"
           }
         },
         "nl" : {
@@ -4590,8 +4590,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Embedded"
+            "state" : "translated",
+            "value" : "Встроенный"
           }
         },
         "sr" : {
@@ -4726,8 +4726,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable Hover Window Sliding Animation"
+            "state" : "translated",
+            "value" : "호버 창 슬라이딩 애니메이션 활성화"
           }
         },
         "nl" : {
@@ -4768,8 +4768,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable Hover Window Sliding Animation"
+            "state" : "translated",
+            "value" : "Включить анимацию прокрутки окна"
           }
         },
         "sr" : {
@@ -4904,8 +4904,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable Window Switcher"
+            "state" : "translated",
+            "value" : "윈도우 스위치 활성화"
           }
         },
         "nl" : {
@@ -4946,8 +4946,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable Window Switcher"
+            "state" : "translated",
+            "value" : "Включить переключатель окон"
           }
         },
         "sr" : {
@@ -5082,8 +5082,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enhance your dock experience!"
+            "state" : "translated",
+            "value" : "도크 경험을 향상하세요!"
           }
         },
         "nl" : {
@@ -5124,8 +5124,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enhance your dock experience!"
+            "state" : "translated",
+            "value" : "Повысьте удобство работы с Crm!"
           }
         },
         "sr" : {
@@ -5261,8 +5261,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Extra Extra Small"
+            "state" : "translated",
+            "value" : "매무 매우 작음"
           }
         },
         "nl" : {
@@ -5303,8 +5303,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Extra Extra Small"
+            "state" : "translated",
+            "value" : "Очень очень маленький"
           }
         },
         "sr" : {
@@ -5440,8 +5440,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Extra Small"
+            "state" : "translated",
+            "value" : "매우 작음"
           }
         },
         "nl" : {
@@ -5482,8 +5482,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Extra Small"
+            "state" : "translated",
+            "value" : "Очень маленький"
           }
         },
         "sr" : {
@@ -5661,8 +5661,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "General"
+            "state" : "translated",
+            "value" : "Общее"
           }
         },
         "sr" : {
@@ -5839,8 +5839,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "General settings"
+            "state" : "translated",
+            "value" : "Общие параметры"
           }
         },
         "sr" : {
@@ -6017,8 +6017,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Get Started"
+            "state" : "translated",
+            "value" : "Приступить к работе"
           }
         },
         "sr" : {
@@ -6196,8 +6196,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hidden"
+            "state" : "translated",
+            "value" : "Скрыто"
           }
         },
         "sr" : {
@@ -6308,8 +6308,8 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hover Window Open Delay"
+            "state" : "translated",
+            "value" : "זמן ריחוף לפתיחת תצוגה מקדימה"
           }
         },
         "hu" : {
@@ -6332,8 +6332,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hover Window Open Delay"
+            "state" : "translated",
+            "value" : "호버 창 열기 지연"
           }
         },
         "nl" : {
@@ -6374,8 +6374,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hover Window Open Delay"
+            "state" : "translated",
+            "value" : "Задержка открытия окна при наведении курсора"
           }
         },
         "sr" : {
@@ -6510,8 +6510,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hover Window Title Style"
+            "state" : "translated",
+            "value" : "호버 창 제목 스타일"
           }
         },
         "nl" : {
@@ -6552,8 +6552,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hover Window Title Style"
+            "state" : "translated",
+            "value" : "Стиль заголовка окна при наведении"
           }
         },
         "sr" : {
@@ -6730,8 +6730,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "If you need to access the menu bar icon, launch the app to reveal it for 10 seconds."
+            "state" : "translated",
+            "value" : "Если вам нужно получить доступ к значку в строке меню, запустите приложение, чтобы открыть его в течение 10 секунд."
           }
         },
         "sr" : {
@@ -6866,8 +6866,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Initialization Key"
+            "state" : "translated",
+            "value" : "초기화 키"
           }
         },
         "nl" : {
@@ -6908,8 +6908,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Initialization Key"
+            "state" : "translated",
+            "value" : "Ключ инициализации"
           }
         },
         "sr" : {
@@ -7045,8 +7045,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Large"
+            "state" : "translated",
+            "value" : "크게"
           }
         },
         "nl" : {
@@ -7087,8 +7087,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Large"
+            "state" : "translated",
+            "value" : "Большой"
           }
         },
         "sr" : {
@@ -7265,8 +7265,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Last checked: %@"
+            "state" : "translated",
+            "value" : "Последняя проверка: %@"
           }
         },
         "sr" : {
@@ -7443,8 +7443,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Launch DockDoor at login"
+            "state" : "translated",
+            "value" : "Запустить DockDoor при входе в систему"
           }
         },
         "sr" : {
@@ -7580,8 +7580,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Medium"
+            "state" : "translated",
+            "value" : "중간"
           }
         },
         "nl" : {
@@ -7622,8 +7622,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Medium"
+            "state" : "translated",
+            "value" : "Средний"
           }
         },
         "sr" : {
@@ -7758,8 +7758,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Menu Bar Icon Hidden"
+            "state" : "translated",
+            "value" : "메뉴바 아이콘 숨김"
           }
         },
         "nl" : {
@@ -7800,8 +7800,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Menu Bar Icon Hidden"
+            "state" : "translated",
+            "value" : "Значок в строке меню скрыт"
           }
         },
         "sr" : {
@@ -7979,8 +7979,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Never visible"
+            "state" : "translated",
+            "value" : "Никогда не видно"
           }
         },
         "sr" : {
@@ -8157,8 +8157,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "OK"
+            "state" : "translated",
+            "value" : "ОК"
           }
         },
         "sr" : {
@@ -8294,8 +8294,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "On window hover; Dimmed until button hover"
+            "state" : "translated",
+            "value" : "창을 가리키면; 버튼이 가리킬 때까지 어둡게 표시됨"
           }
         },
         "nl" : {
@@ -8336,8 +8336,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "On window hover; Dimmed until button hover"
+            "state" : "translated",
+            "value" : "При наведении на окно; затемненная кнопка при наведении курсора"
           }
         },
         "sr" : {
@@ -8515,8 +8515,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "On window hover; Full opacity"
+            "state" : "translated",
+            "value" : "При наведении на окно; Полная прозрачность"
           }
         },
         "sr" : {
@@ -8693,8 +8693,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open Accessibility Settings"
+            "state" : "translated",
+            "value" : "Открыть настройки специальных возможностей"
           }
         },
         "sr" : {
@@ -8871,8 +8871,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open Screen Recording Settings"
+            "state" : "translated",
+            "value" : "Открыть настройки записи экрана"
           }
         },
         "sr" : {
@@ -9049,8 +9049,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open Settings"
+            "state" : "translated",
+            "value" : "Открыть настройки"
           }
         },
         "sr" : {
@@ -9227,7 +9227,7 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Option (⌥)"
           }
         },
@@ -9405,8 +9405,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Permission error"
+            "state" : "translated",
+            "value" : "Ошибка доступа"
           }
         },
         "sr" : {
@@ -9584,8 +9584,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Permissions"
+            "state" : "translated",
+            "value" : "Права доступа"
           }
         },
         "sr" : {
@@ -9762,8 +9762,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Permissions settings"
+            "state" : "translated",
+            "value" : "Настройки доступа"
           }
         },
         "sr" : {
@@ -9940,8 +9940,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Please Quit the App to Apply Changes! :)"
+            "state" : "translated",
+            "value" : "Пожалуйста, выйдите из приложения, чтобы применить изменения! :)"
           }
         },
         "sr" : {
@@ -10077,8 +10077,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Popover"
+            "state" : "translated",
+            "value" : "팝오버"
           }
         },
         "nl" : {
@@ -10119,8 +10119,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Popover"
+            "state" : "translated",
+            "value" : "Всплывающее окно"
           }
         },
         "sr" : {
@@ -10255,8 +10255,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Press any key combination after holding the initialization key to set the keybind."
+            "state" : "translated",
+            "value" : "초기화 키를 누른 상태에서 아무 키 조합이나 눌러 키 바인딩을 설정하세요."
           }
         },
         "nl" : {
@@ -10297,8 +10297,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Press any key combination after holding the initialization key to set the keybind."
+            "state" : "translated",
+            "value" : "Нажмите любую комбинацию клавиш, удерживая клавишу инициализации, чтобы установить сочетание клавиш."
           }
         },
         "sr" : {
@@ -10475,8 +10475,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Press the key combination..."
+            "state" : "translated",
+            "value" : "Нажмите комбинацию клавиш..."
           }
         },
         "sr" : {
@@ -10653,8 +10653,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Quit App"
+            "state" : "translated",
+            "value" : "Закрыть приложение"
           }
         },
         "sr" : {
@@ -10831,8 +10831,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Quit DockDoor"
+            "state" : "translated",
+            "value" : "Выйти из DockDoor"
           }
         },
         "sr" : {
@@ -11009,8 +11009,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Screen Capturing:"
+            "state" : "translated",
+            "value" : "Скриншот страницы:"
           }
         },
         "sr" : {
@@ -11187,8 +11187,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Screen Recording Permissions"
+            "state" : "translated",
+            "value" : "Разрешения на запись с экрана"
           }
         },
         "sr" : {
@@ -11299,8 +11299,8 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "seconds"
+            "state" : "translated",
+            "value" : "שניות"
           }
         },
         "hu" : {
@@ -11323,8 +11323,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "seconds"
+            "state" : "translated",
+            "value" : "초"
           }
         },
         "nl" : {
@@ -11365,8 +11365,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "seconds"
+            "state" : "translated",
+            "value" : "секунды"
           }
         },
         "sr" : {
@@ -11501,8 +11501,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Set Initialization Key and Keybind"
+            "state" : "translated",
+            "value" : "초기화 키와 키 바인딩 설정"
           }
         },
         "nl" : {
@@ -11543,8 +11543,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Set Initialization Key and Keybind"
+            "state" : "translated",
+            "value" : "Установите клавишу инициализации и комбинацию клавиш"
           }
         },
         "sr" : {
@@ -11721,8 +11721,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Menu Bar Icon"
+            "state" : "translated",
+            "value" : "Показывать значок в строке меню"
           }
         },
         "sr" : {
@@ -11899,8 +11899,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Window Titles"
+            "state" : "translated",
+            "value" : "Показать заголовки окна"
           }
         },
         "sr" : {
@@ -12077,8 +12077,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Window Titles on Previews"
+            "state" : "translated",
+            "value" : "Показывать заголовки окон на предпросмотре"
           }
         },
         "sr" : {
@@ -12214,8 +12214,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Small"
+            "state" : "translated",
+            "value" : "작게"
           }
         },
         "nl" : {
@@ -12256,8 +12256,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Small"
+            "state" : "translated",
+            "value" : "Маленький"
           }
         },
         "sr" : {
@@ -12434,8 +12434,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Start Recording Keybind"
+            "state" : "translated",
+            "value" : "Начать запись клавиш"
           }
         },
         "sr" : {
@@ -12571,8 +12571,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Subatomic"
+            "state" : "translated",
+            "value" : "아원자"
           }
         },
         "nl" : {
@@ -12613,8 +12613,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Subatomic"
+            "state" : "translated",
+            "value" : "Субатомный"
           }
         },
         "sr" : {
@@ -12726,8 +12726,8 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Top Right"
+            "state" : "translated",
+            "value" : "ימין למעלה"
           }
         },
         "hu" : {
@@ -12750,8 +12750,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Top Right"
+            "state" : "translated",
+            "value" : "오른쪽 상단"
           }
         },
         "nl" : {
@@ -12792,8 +12792,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Top Right"
+            "state" : "translated",
+            "value" : "Вверху справа"
           }
         },
         "sr" : {
@@ -12928,8 +12928,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Traffic Light Buttons Visibility"
+            "state" : "translated",
+            "value" : "신호등 버튼 가시성"
           }
         },
         "nl" : {
@@ -12970,8 +12970,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Traffic Light Buttons Visibility"
+            "state" : "translated",
+            "value" : "Видимость кнопок светофора"
           }
         },
         "sr" : {
@@ -13148,8 +13148,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Up to date"
+            "state" : "translated",
+            "value" : "Последняя версия"
           }
         },
         "sr" : {
@@ -13326,8 +13326,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update available"
+            "state" : "translated",
+            "value" : "Доступно обновление"
           }
         },
         "sr" : {
@@ -13504,8 +13504,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update settings"
+            "state" : "translated",
+            "value" : "Настройки обновления"
           }
         },
         "sr" : {
@@ -13683,8 +13683,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Updates"
+            "state" : "translated",
+            "value" : "Обновления"
           }
         },
         "sr" : {
@@ -13819,8 +13819,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use default MacOS keybind ⌘ + ⇥"
+            "state" : "translated",
+            "value" : "기본 MacOS 키 바인드 ⌘ + ⇥ 사용"
           }
         },
         "nl" : {
@@ -13861,8 +13861,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use default MacOS keybind ⌘ + ⇥"
+            "state" : "translated",
+            "value" : "Использовать стандартные клавишь MacOS ⌘ + ⇥"
           }
         },
         "sr" : {
@@ -13997,8 +13997,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use Uniform Image Preview Radius"
+            "state" : "translated",
+            "value" : "균일한 이미지 미리보기 반경 사용"
           }
         },
         "nl" : {
@@ -14039,8 +14039,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use Uniform Image Preview Radius"
+            "state" : "translated",
+            "value" : "Используйте одинаковый радиус предварительного просмотра изображений"
           }
         },
         "sr" : {
@@ -14217,8 +14217,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version %@"
+            "state" : "translated",
+            "value" : "Версия %@"
           }
         },
         "sr" : {
@@ -14395,8 +14395,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Want to support development?"
+            "state" : "translated",
+            "value" : "Хотите поддержать разработку?"
           }
         },
         "sr" : {
@@ -14573,8 +14573,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Welcome to DockDoor!"
+            "state" : "translated",
+            "value" : "Добро пожаловать в DockDoor!"
           }
         },
         "sr" : {
@@ -14710,8 +14710,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "What is this? A window for ANTS?"
+            "state" : "translated",
+            "value" : "이게 뭐야? 개미를 위한 창문인가?"
           }
         },
         "nl" : {
@@ -14752,8 +14752,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "What is this? A window for ANTS?"
+            "state" : "translated",
+            "value" : "Что это? Окно для ANTS?"
           }
         },
         "sr" : {
@@ -14889,8 +14889,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When Showing Dock Tile Previews"
+            "state" : "translated",
+            "value" : "도크 타일 미리 보기를 표시할 때"
           }
         },
         "nl" : {
@@ -14931,8 +14931,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When Showing Dock Tile Previews"
+            "state" : "translated",
+            "value" : "При отображении превью док-станции"
           }
         },
         "sr" : {
@@ -15068,8 +15068,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When Using Window Switcher"
+            "state" : "translated",
+            "value" : "윈도우 스위쳐를 사용하는 경우"
           }
         },
         "nl" : {
@@ -15110,8 +15110,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When Using Window Switcher"
+            "state" : "translated",
+            "value" : "При использовании переключателя окон"
           }
         },
         "sr" : {
@@ -15288,8 +15288,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Why we need permissions"
+            "state" : "translated",
+            "value" : "Зачем нам нужны разрешения"
           }
         },
         "sr" : {
@@ -15400,8 +15400,8 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Buffer"
+            "state" : "translated",
+            "value" : "סטיית חלון מה-Dock"
           }
         },
         "hu" : {
@@ -15424,8 +15424,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Buffer"
+            "state" : "translated",
+            "value" : "윈도우 버퍼"
           }
         },
         "nl" : {
@@ -15466,8 +15466,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Buffer"
+            "state" : "translated",
+            "value" : "Буфер окна"
           }
         },
         "sr" : {
@@ -15578,8 +15578,8 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Cache Lifespan"
+            "state" : "translated",
+            "value" : "זמן מטמון תמונת חלון"
           }
         },
         "hu" : {
@@ -15602,8 +15602,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Cache Lifespan"
+            "state" : "translated",
+            "value" : "윈도우 캐시 수명"
           }
         },
         "nl" : {
@@ -15644,8 +15644,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Cache Lifespan"
+            "state" : "translated",
+            "value" : "Продолжительность жизни кэша окна"
           }
         },
         "sr" : {
@@ -15822,8 +15822,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Size"
+            "state" : "translated",
+            "value" : "Размер Окна"
           }
         },
         "sr" : {
@@ -15959,8 +15959,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Switcher"
+            "state" : "translated",
+            "value" : "윈도우 스위쳐"
           }
         },
         "nl" : {
@@ -16001,8 +16001,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Switcher"
+            "state" : "translated",
+            "value" : "Переключатель окон"
           }
         },
         "sr" : {
@@ -16179,8 +16179,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Title Position"
+            "state" : "translated",
+            "value" : "Позиция заголовка окна"
           }
         },
         "sr" : {
@@ -16357,8 +16357,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Windows switching settings"
+            "state" : "translated",
+            "value" : "Настройки переключения Windows"
           }
         },
         "sr" : {
@@ -16535,8 +16535,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "You need to give DockDoor access to the accessibility API in order for it to function."
+            "state" : "translated",
+            "value" : "Вам необходимо предоставить приложению DockDoor доступ к API специальных возможностей, чтобы оно могло работать."
           }
         },
         "sr" : {
