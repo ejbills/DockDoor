@@ -146,7 +146,7 @@ final class SharedPreviewWindowCoordinator: NSWindow {
         fullPreviewWindow?.makeKeyAndOrderFront(nil)
     }
     
-    private func hideFullPreviewWindow() {
+    func hideFullPreviewWindow() {
         fullPreviewWindow?.orderOut(nil)
         fullPreviewWindow = nil
     }
