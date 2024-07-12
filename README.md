@@ -1,4 +1,8 @@
-# DockDoor
+<p align="center">
+<img height="256" src="https://github.com/ejbills/DockDoor/raw/main/DockDoor/Assets.xcassets/AppIcon.appiconset/icon_256x256@2x.png">
+</p>
+
+<h1 align="center">DockDoor</h1>
 
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/ejbills/DockDoor)](https://github.com/ejbills/DockDoor/releases/latest/download/DockDoor.dmg)
 ![GitHub All Releases](https://img.shields.io/github/downloads/ejbills/DockDoor/total?label=Total%20Downloads)
