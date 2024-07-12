@@ -146,7 +146,7 @@ final class SharedPreviewWindowCoordinator: NSWindow {
         fullPreviewWindow?.makeKeyAndOrderFront(nil)
     }
     
-    func hideFullPreviewWindow() {
+    private func hideFullPreviewWindow() {
         fullPreviewWindow?.orderOut(nil)
         fullPreviewWindow = nil
     }
@@ -263,6 +263,8 @@ final class SharedPreviewWindowCoordinator: NSWindow {
             guard let self = self else { return }
             
             let screen = mouseScreen ?? NSScreen.main!
+            
+            hideFullPreviewWindow() // clean up any lingering fullscreen previews before presenting a new one
 
             // If in full window preview mode, show the full preview window and return early
             if centeredHoverWindowState == .fullWindowPreview, let windowInfo = windows.first {
