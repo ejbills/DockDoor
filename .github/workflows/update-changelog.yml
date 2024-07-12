@@ -59,5 +59,4 @@ jobs:
 
       - name: Push changes
         run: |
-          git push origin HEAD || echo "No changes to push"
-          
+          git push origin HEAD:main || echo "No changes to push"
