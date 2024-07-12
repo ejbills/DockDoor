@@ -149,7 +149,7 @@ struct WindowPreview: View {
         }
     }
 
-    private func handleFullPreviewHover(isHovering: Bool, action: HoverTimerActions) {
+    private func handleFullPreviewHover(isHovering: Bool, action: PreviewHoverAction) {
         if isHovering && !ScreenCenteredFloatingWindow.shared.windowSwitcherActive {
             switch action {
             case .none:

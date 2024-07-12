@@ -23,7 +23,7 @@ extension Defaults.Keys {
     static let screenCaptureCacheLifespan = Key<CGFloat>("screenCaptureCacheLifespan", default: 60 )
     static let uniformCardRadius = Key<Bool>("uniformCardRadius", default: true )
     static let tapEquivalentInterval = Key<CGFloat>("tapEquivalentInterval", default: 1.5 )
-    static let previewHoverAction = Key<HoverTimerActions>("previewHoverAction", default: HoverTimerActions.none )
+    static let previewHoverAction = Key<PreviewHoverAction>("previewHoverAction", default: PreviewHoverAction.none )
     
     static let showAnimations = Key<Bool>("showAnimations", default: true )
     static let enableWindowSwitcher = Key<Bool>("enableWindowSwitcher", default: true )
@@ -116,7 +116,7 @@ enum TrafficLightButtonsVisibility: String, CaseIterable, Defaults.Serializable 
     }
 }
 
-enum HoverTimerActions: String, CaseIterable, Defaults.Serializable {
+enum PreviewHoverAction: String, CaseIterable, Defaults.Serializable {
     case none
     case tap
     case previewFullSize
