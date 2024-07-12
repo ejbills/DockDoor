@@ -189,8 +189,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "• Allows for enhanced visual information in the dock"
+            "state" : "translated",
+            "value" : "• يسمح بتحسين المعلومات البصرية في شريط Dock"
           }
         },
         "ca" : {
@@ -367,8 +367,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "• Enables real-time interaction with dock items"
+            "state" : "translated",
+            "value" : "• تمكين التفاعل في الوقت الحقيقي مع عناصر شريط Dock"
           }
         },
         "ca" : {
@@ -545,8 +545,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "• To capture previews of images and windows"
+            "state" : "translated",
+            "value" : "•لالتقاط المعاينات للصور والنوافذ"
           }
         },
         "ca" : {
@@ -723,8 +723,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "• To detect when you hover over the dock"
+            "state" : "translated",
+            "value" : "• للكشف عن الوقت الذي تحوم فيه فوق شريط Dock"
           }
         },
         "ca" : {
@@ -901,8 +901,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Accessibility Permissions"
+            "state" : "translated",
+            "value" : "صلاحيات الوصول"
           }
         },
         "ca" : {
@@ -1079,8 +1079,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Accessibility:"
+            "state" : "translated",
+            "value" : "امكانية الوصول:"
           }
         },
         "ca" : {
@@ -1257,8 +1257,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Adjust this if the preview is misaligned with dock"
+            "state" : "translated",
+            "value" : "ضبط هذا إذا كانت المعاينة غير متوائمة مع شريط Dock"
           }
         },
         "ca" : {
@@ -1436,8 +1436,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Always"
+            "state" : "translated",
+            "value" : "دائماً"
           }
         },
         "ca" : {
@@ -1615,8 +1615,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Always visible; Full opacity"
+            "state" : "translated",
+            "value" : "مرئي دائماً؛ تعتيم كامل"
           }
         },
         "ca" : {
@@ -1794,8 +1794,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Appearance"
+            "state" : "translated",
+            "value" : "المظهر"
           }
         },
         "ca" : {
@@ -1972,8 +1972,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Appearance settings"
+            "state" : "translated",
+            "value" : "إعدادات المظهر"
           }
         },
         "ca" : {
@@ -2150,8 +2150,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Automatically check for updates"
+            "state" : "translated",
+            "value" : "التحقق تلقائياً من وجود تحديثات"
           }
         },
         "ca" : {
@@ -2329,8 +2329,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Bottom Left"
+            "state" : "translated",
+            "value" : "أسفل اليسار"
           }
         },
         "ca" : {
@@ -2508,8 +2508,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Bottom Right"
+            "state" : "translated",
+            "value" : "أسفل اليمين"
           }
         },
         "ca" : {
@@ -2686,8 +2686,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Buy me a coffee here, thank you!"
+            "state" : "translated",
+            "value" : "اشتري لي قهوة هنا، شكرا لك!"
           }
         },
         "ca" : {
@@ -2865,8 +2865,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Can you even see this?"
+            "state" : "translated",
+            "value" : "هل يمكنك حتى أن ترى هذا؟"
           }
         },
         "ca" : {
@@ -3043,8 +3043,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Cancel"
+            "state" : "translated",
+            "value" : "إلغاء"
           }
         },
         "ca" : {
@@ -3221,8 +3221,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check for Updates"
+            "state" : "translated",
+            "value" : "التحقق من وجود تحديثات"
           }
         },
         "ca" : {
@@ -3399,7 +3399,7 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Command (⌘)"
           }
         },
@@ -3577,7 +3577,7 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Control (⌃)"
           }
         },
@@ -3755,8 +3755,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Current Keybind: %@"
+            "state" : "translated",
+            "value" : "المفتاح الحالي: %@"
           }
         },
         "ca" : {
@@ -3933,8 +3933,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Current Version: %@"
+            "state" : "translated",
+            "value" : "الإصدار الحالي: %@"
           }
         },
         "ca" : {
@@ -4112,8 +4112,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Default"
+            "state" : "translated",
+            "value" : "افتراضي"
           }
         },
         "ca" : {
@@ -4291,8 +4291,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Default (Medium Large)"
+            "state" : "translated",
+            "value" : "افتراضي (كبير متوسط)"
           }
         },
         "ca" : {
@@ -4470,8 +4470,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Embedded"
+            "state" : "translated",
+            "value" : "مضمّن"
           }
         },
         "ca" : {
@@ -4648,8 +4648,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable Hover Window Sliding Animation"
+            "state" : "translated",
+            "value" : "تمكين الرسوم المتحركة المنزلقة لنافذة التحويم"
           }
         },
         "ca" : {
@@ -4826,8 +4826,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable Window Switcher"
+            "state" : "translated",
+            "value" : "تمكين مبدل النوافذ"
           }
         },
         "ca" : {
@@ -5004,8 +5004,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enhance your dock experience!"
+            "state" : "translated",
+            "value" : "قم بتعزيز تجربة شريط Dock الخاص بك!"
           }
         },
         "ca" : {
@@ -5183,8 +5183,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Extra Extra Small"
+            "state" : "translated",
+            "value" : "صغير للغاية"
           }
         },
         "ca" : {
@@ -5362,8 +5362,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Extra Small"
+            "state" : "translated",
+            "value" : "صغير جداً"
           }
         },
         "ca" : {
@@ -5541,8 +5541,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "General"
+            "state" : "translated",
+            "value" : "عام"
           }
         },
         "ca" : {
@@ -5719,8 +5719,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "General settings"
+            "state" : "translated",
+            "value" : "الإعدادات العامة"
           }
         },
         "ca" : {
@@ -5897,8 +5897,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Get Started"
+            "state" : "translated",
+            "value" : "ابدأ الآن"
           }
         },
         "ca" : {
@@ -6076,8 +6076,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hidden"
+            "state" : "translated",
+            "value" : "مخفي"
           }
         },
         "ca" : {
@@ -6254,8 +6254,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hover Window Open Delay"
+            "state" : "translated",
+            "value" : "تأخير فتح نافذة التحويم"
           }
         },
         "ca" : {
@@ -6432,8 +6432,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hover Window Title Style"
+            "state" : "translated",
+            "value" : "نمط عنوان نافذة التحويم"
           }
         },
         "ca" : {
@@ -6610,8 +6610,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "If you need to access the menu bar icon, launch the app to reveal it for 10 seconds."
+            "state" : "translated",
+            "value" : "إذا كنت بحاجة للوصول إلى أيقونة شريط القائمة، قم بتشغيل التطبيق للكشف عنه لمدة 10 ثواني."
           }
         },
         "ca" : {
@@ -6788,8 +6788,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Initialization Key"
+            "state" : "translated",
+            "value" : "مفتاح التهيئة"
           }
         },
         "ca" : {
@@ -6967,8 +6967,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Large"
+            "state" : "translated",
+            "value" : "كبير"
           }
         },
         "ca" : {
@@ -7145,8 +7145,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Last checked: %@"
+            "state" : "translated",
+            "value" : "آخر تحقق: %@"
           }
         },
         "ca" : {
@@ -7323,8 +7323,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Launch DockDoor at login"
+            "state" : "translated",
+            "value" : "تشغيل DockDoor عند تسجيل الدخول"
           }
         },
         "ca" : {
@@ -7502,8 +7502,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Medium"
+            "state" : "translated",
+            "value" : "متوسط"
           }
         },
         "ca" : {
@@ -7680,8 +7680,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Menu Bar Icon Hidden"
+            "state" : "translated",
+            "value" : "إخفاء أيقونة شريط القائمة"
           }
         },
         "ca" : {
@@ -7859,8 +7859,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Never visible"
+            "state" : "translated",
+            "value" : "عدم الإظهار مطلقاً"
           }
         },
         "ca" : {
@@ -8037,8 +8037,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "OK"
+            "state" : "translated",
+            "value" : "حسناً"
           }
         },
         "ca" : {
@@ -8216,8 +8216,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "On window hover; Dimmed until button hover"
+            "state" : "translated",
+            "value" : "على تحويم النافذة. خافتة حتى تحوم الزر"
           }
         },
         "ca" : {
@@ -8395,8 +8395,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "On window hover; Full opacity"
+            "state" : "translated",
+            "value" : "على تحويم النافذة؛ تعتيم كامل"
           }
         },
         "ca" : {
@@ -8573,8 +8573,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open Accessibility Settings"
+            "state" : "translated",
+            "value" : "فتح إعدادات إمكانية الوصول"
           }
         },
         "ca" : {
@@ -8751,8 +8751,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open Screen Recording Settings"
+            "state" : "translated",
+            "value" : "فتح إعدادات تسجيل الشاشة"
           }
         },
         "ca" : {
@@ -8929,8 +8929,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open Settings"
+            "state" : "translated",
+            "value" : "فتح الإعدادات"
           }
         },
         "ca" : {
@@ -9107,7 +9107,7 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Option (⌥)"
           }
         },
@@ -9285,8 +9285,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Permission error"
+            "state" : "translated",
+            "value" : "خطأ في الأذونات"
           }
         },
         "ca" : {
@@ -9464,8 +9464,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Permissions"
+            "state" : "translated",
+            "value" : "أذونات"
           }
         },
         "ca" : {
@@ -9642,8 +9642,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Permissions settings"
+            "state" : "translated",
+            "value" : "إعدادات الأذونات"
           }
         },
         "ca" : {
@@ -9820,8 +9820,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Please Quit the App to Apply Changes! :)"
+            "state" : "translated",
+            "value" : "الرجاء الخروج من التطبيق لتطبيق التغييرات! :)"
           }
         },
         "ca" : {
@@ -9999,8 +9999,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Popover"
+            "state" : "translated",
+            "value" : "قائمة منبثقة"
           }
         },
         "ca" : {
@@ -10177,8 +10177,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Press any key combination after holding the initialization key to set the keybind."
+            "state" : "translated",
+            "value" : "اضغط على أي مجموعة مفاتيح بعد الضغط على مفتاح التهيئة لتعيين ربط المفتاح."
           }
         },
         "ca" : {
@@ -10355,8 +10355,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Press the key combination..."
+            "state" : "translated",
+            "value" : "اضغط على مجموعة المفاتيح..."
           }
         },
         "ca" : {
@@ -10533,8 +10533,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Quit App"
+            "state" : "translated",
+            "value" : "الخروج من التطبيق"
           }
         },
         "ca" : {
@@ -10711,8 +10711,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Quit DockDoor"
+            "state" : "translated",
+            "value" : "الخروج من DockDoor"
           }
         },
         "ca" : {
@@ -10889,8 +10889,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Screen Capturing:"
+            "state" : "translated",
+            "value" : "التقاط الشاشة:"
           }
         },
         "ca" : {
@@ -11067,8 +11067,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Screen Recording Permissions"
+            "state" : "translated",
+            "value" : "أذونات تسجيل الشاشة"
           }
         },
         "ca" : {
@@ -11245,8 +11245,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "seconds"
+            "state" : "translated",
+            "value" : "ثوان"
           }
         },
         "ca" : {
@@ -11423,8 +11423,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Set Initialization Key and Keybind"
+            "state" : "translated",
+            "value" : "تعيين مفتاح التهيئة وربط المفتاح"
           }
         },
         "ca" : {
@@ -11601,8 +11601,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Menu Bar Icon"
+            "state" : "translated",
+            "value" : "إظهار أيقونة شريط القائمة"
           }
         },
         "ca" : {
@@ -11779,8 +11779,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Window Titles"
+            "state" : "translated",
+            "value" : "إظهار عناوين النافذة"
           }
         },
         "ca" : {
@@ -11957,8 +11957,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Window Titles on Previews"
+            "state" : "translated",
+            "value" : "إظهار عناوين النافذة في المعاينات"
           }
         },
         "ca" : {
@@ -12136,8 +12136,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Small"
+            "state" : "translated",
+            "value" : "صغير"
           }
         },
         "ca" : {
@@ -12314,8 +12314,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Start Recording Keybind"
+            "state" : "translated",
+            "value" : "بدء ربط مفتاح التسجيل"
           }
         },
         "ca" : {
@@ -12493,8 +12493,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Subatomic"
+            "state" : "translated",
+            "value" : "دون الذري"
           }
         },
         "ca" : {
@@ -12672,8 +12672,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Top Right"
+            "state" : "translated",
+            "value" : "أعلى اليمين"
           }
         },
         "ca" : {
@@ -12850,8 +12850,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Traffic Light Buttons Visibility"
+            "state" : "translated",
+            "value" : "رؤية أزرار إشارة المرور"
           }
         },
         "ca" : {
@@ -13028,8 +13028,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Up to date"
+            "state" : "translated",
+            "value" : "مُحدث"
           }
         },
         "ca" : {
@@ -13206,8 +13206,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update available"
+            "state" : "translated",
+            "value" : "تحديث متاح"
           }
         },
         "ca" : {
@@ -13384,8 +13384,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update settings"
+            "state" : "translated",
+            "value" : "اعدادات التحديث"
           }
         },
         "ca" : {
@@ -13563,8 +13563,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Updates"
+            "state" : "translated",
+            "value" : "التحديثات"
           }
         },
         "ca" : {
@@ -13741,8 +13741,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use default MacOS keybind ⌘ + ⇥"
+            "state" : "translated",
+            "value" : "استخدام ربط مفتاح MacOS الافتراضي ⌘ + ⇥"
           }
         },
         "ca" : {
@@ -13919,8 +13919,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use Uniform Image Preview Radius"
+            "state" : "translated",
+            "value" : "استخدام نصف قطر معاينة الصور موحد"
           }
         },
         "ca" : {
@@ -14097,8 +14097,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version %@"
+            "state" : "translated",
+            "value" : "إصدار %@"
           }
         },
         "ca" : {
@@ -14275,8 +14275,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Want to support development?"
+            "state" : "translated",
+            "value" : "هل تريد دعم التطوير؟"
           }
         },
         "ca" : {
@@ -14453,8 +14453,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Welcome to DockDoor!"
+            "state" : "translated",
+            "value" : "مرحباً بك في DockDoor!"
           }
         },
         "ca" : {
@@ -14632,8 +14632,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "What is this? A window for ANTS?"
+            "state" : "translated",
+            "value" : "ما هذا؟ نافذة لـANTS ؟"
           }
         },
         "ca" : {
@@ -14811,8 +14811,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When Showing Dock Tile Previews"
+            "state" : "translated",
+            "value" : "عند عرض معاينات شريط Dock"
           }
         },
         "ca" : {
@@ -14990,8 +14990,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When Using Window Switcher"
+            "state" : "translated",
+            "value" : "عند استخدام مبدل النوافذ"
           }
         },
         "ca" : {
@@ -15168,8 +15168,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Why we need permissions"
+            "state" : "translated",
+            "value" : "لماذا نحتاج إلى أذونات"
           }
         },
         "ca" : {
@@ -15346,8 +15346,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Buffer"
+            "state" : "translated",
+            "value" : "مخزن النافذة المؤقت"
           }
         },
         "ca" : {
@@ -15524,8 +15524,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Cache Lifespan"
+            "state" : "translated",
+            "value" : "عمر ذاكرة التخزين المؤقت للنافذة"
           }
         },
         "ca" : {
@@ -15702,8 +15702,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Size"
+            "state" : "translated",
+            "value" : "حجم النافذة"
           }
         },
         "ca" : {
@@ -15881,8 +15881,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Switcher"
+            "state" : "translated",
+            "value" : "مبدل النوافذ"
           }
         },
         "ca" : {
@@ -16059,8 +16059,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Title Position"
+            "state" : "translated",
+            "value" : "موضع عنوان النافذة"
           }
         },
         "ca" : {
@@ -16237,8 +16237,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Windows switching settings"
+            "state" : "translated",
+            "value" : "إعدادات تبديل النوافذ"
           }
         },
         "ca" : {
@@ -16415,8 +16415,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "You need to give DockDoor access to the accessibility API in order for it to function."
+            "state" : "translated",
+            "value" : "تحتاج إلى منح DockDoor الوصول إلى إمكانية الوصول API من أجل تشغيله."
           }
         },
         "ca" : {
