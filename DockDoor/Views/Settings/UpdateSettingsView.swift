@@ -82,7 +82,8 @@ struct UpdateSettingsView: View {
                 }
             
         }
-        .frame(width: 600).padding(10)
+        .padding(10)
+        .frame(width: 650)
     }
     
     private var updateStatusView: some View {

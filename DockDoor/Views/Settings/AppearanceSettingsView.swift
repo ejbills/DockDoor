@@ -90,7 +90,7 @@ struct AppearanceSettingsView: View {
             .scaledToFit()
         }
         .padding(20)
-        .frame(minWidth: 600)
+        .frame(minWidth: 650)
     }
 }
 

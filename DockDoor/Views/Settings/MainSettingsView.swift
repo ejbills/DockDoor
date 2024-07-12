@@ -1,10 +1,3 @@
-//
-//  MainSettingsView.swift
-//  DockDoor
-//
-//  Created by Ethan Bills on 6/13/24.
-//
-
 import SwiftUI
 import Defaults
 import LaunchAtLogin
@@ -58,8 +51,8 @@ struct MainSettingsView: View {
                 Spacer()
                 Slider(value: $hoverWindowOpenDelay, in: 0...2, step: 0.1)
                 TextField("", value: $hoverWindowOpenDelay, formatter: decimalFormatter)
-                .frame(width: 40)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .frame(width: 40)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
                 Text("seconds")
             }
             
@@ -69,8 +62,8 @@ struct MainSettingsView: View {
                 Spacer()
                 Slider(value: $screenCaptureCacheLifespan, in: 0...60, step: 5)
                 TextField("", value: $screenCaptureCacheLifespan, formatter: NumberFormatter())
-                .frame(width: 35)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .frame(width: 35)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
                 Text("seconds")
             }
             
@@ -90,6 +83,6 @@ struct MainSettingsView: View {
             }
         }
         .padding(20)
-        .frame(minWidth: 600)
+        .frame(minWidth: 650)
     }
 }

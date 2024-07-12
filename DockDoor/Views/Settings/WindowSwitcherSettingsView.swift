@@ -45,7 +45,7 @@ struct WindowSwitcherSettingsView: View {
             }
         }
         .padding(20)
-        .frame(minWidth: 600)
+        .frame(minWidth: 650)
     }
 }
 
