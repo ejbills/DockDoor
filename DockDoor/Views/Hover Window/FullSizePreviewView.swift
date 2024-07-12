@@ -26,13 +26,13 @@ struct FullSizePreviewView: View {
                     }
                 }
             }
-            .background {
-                RoundedRectangle(cornerRadius: 6, style: .continuous)
-                    .fill(Color.clear.shadow(.drop(color: .black.opacity(0.25), radius: 8, y: 4)))
-            }
-            .clipShape(uniformCardRadius ? AnyShape(RoundedRectangle(cornerRadius: 6, style: .continuous)) : AnyShape(Rectangle()))
         }
         .frame(idealHeight: maxSize.height)
+        .background {
+            RoundedRectangle(cornerRadius: 6, style: .continuous)
+                .fill(Color.clear.shadow(.drop(color: .black.opacity(0.25), radius: 8, y: 4)))
+        }
+        .clipShape(uniformCardRadius ? AnyShape(RoundedRectangle(cornerRadius: 6, style: .continuous)) : AnyShape(Rectangle()))
         .padding(.all, 24)
         .dockStyle(cornerRadius: 16)
     }

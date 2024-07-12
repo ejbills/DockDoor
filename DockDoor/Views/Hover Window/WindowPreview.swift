@@ -170,20 +170,9 @@ struct WindowPreview: View {
                 }
                 
             case .previewFullSize:
-                // If the interval is 0, show the full window preview immediately
-                if tapEquivalentInterval == 0 {
-                    DispatchQueue.main.async {
-                        SharedPreviewWindowCoordinator.shared.showWindow(
-                            appName: windowInfo.appName,
-                            windows: [windowInfo],
-                            mouseScreen: bestGuessMonitor,
-                            overrideDelay: true,
-                            centeredHoverWindowState: .fullWindowPreview
-                        )
-                    }
-                } else {
-                    // If the interval is greater than 0, set a timer to show the full window preview after the specified interval
-                    fullPreviewTimer = Timer.scheduledTimer(withTimeInterval: tapEquivalentInterval, repeats: false) { [self] _ in
+                if !windowInfo.isMinimized && !windowInfo.isHidden {
+                    // If the interval is 0, show the full window preview immediately
+                    if tapEquivalentInterval == 0 {
                         DispatchQueue.main.async {
                             SharedPreviewWindowCoordinator.shared.showWindow(
                                 appName: windowInfo.appName,
@@ -193,7 +182,22 @@ struct WindowPreview: View {
                                 centeredHoverWindowState: .fullWindowPreview
                             )
                         }
+                    } else {
+                        // If the interval is greater than 0, set a timer to show the full window preview after the specified interval
+                        fullPreviewTimer = Timer.scheduledTimer(withTimeInterval: tapEquivalentInterval, repeats: false) { [self] _ in
+                            DispatchQueue.main.async {
+                                SharedPreviewWindowCoordinator.shared.showWindow(
+                                    appName: windowInfo.appName,
+                                    windows: [windowInfo],
+                                    mouseScreen: bestGuessMonitor,
+                                    overrideDelay: true,
+                                    centeredHoverWindowState: .fullWindowPreview
+                                )
+                            }
+                        }
                     }
+                } else {
+                    SharedPreviewWindowCoordinator.shared.hideFullPreviewWindow()
                 }
             }
         } else {
