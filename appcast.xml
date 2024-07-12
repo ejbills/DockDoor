@@ -3,13 +3,13 @@
     <channel>
         <title>DockDoor</title>
         <item>
-            <title>1.1.1</title>
-            <pubDate>Wed, 10 Jul 2024 18:25:45 -0700</pubDate>
+            <title>1.1.2</title>
+            <pubDate>Thu, 11 Jul 2024 17:07:03 -0700</pubDate>
             <sparkle:releaseNotesLink>https://dockdoor.kepler.cafe/CHANGELOG.html</sparkle:releaseNotesLink>
-            <sparkle:version>1.1.1</sparkle:version>
-            <sparkle:shortVersionString>1.1.1</sparkle:shortVersionString>
+            <sparkle:version>1.1.2</sparkle:version>
+            <sparkle:shortVersionString>1.1.2</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/ejbills/DockDoor/releases/latest/download/DockDoor.dmg" length="2457791" type="application/octet-stream" sparkle:edSignature="yTZHQBikDCHedzFbUePw6aDdMi1n/CryvXFpj1D6etE7VnbvuWuXW4EVUxk0q8Hy7CPcS0onRgWbcbn3ojvhBw=="/>
+            <enclosure url="https://github.com/ejbills/DockDoor/releases/latest/download/DockDoor.dmg" length="2502197" type="application/octet-stream" sparkle:edSignature="8j9my4iROBTix5L3W1ZQuPfq4JR2+SC83MscCnDfxA0pEAuqE2Zp5S4Sw+8nGxoZ0AO558Vgzwo0/N8MKh1TBg=="/>
         </item>
     </channel>
 </rss>
