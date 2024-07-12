@@ -20,7 +20,7 @@ class KeybindHelper {
     private var isShiftKeyPressed = false
     private var eventTap: CFMachPort?
     private var runLoopSource: CFRunLoopSource?
-    private var modifierValue: Int = 0	
+    private var modifierValue: Int = 0
     
     private init() {
         setupEventTap()
@@ -68,7 +68,7 @@ class KeybindHelper {
         let keyBoardShortcutSaved: UserKeyBind = Defaults[.UserKeybind] // UserDefaults.standard.getKeybind()!
         let shiftKeyCurrentlyPressed = event.flags.contains(.maskShift)
         var userDefinedKeyCurrentlyPressed = false
-
+        
         if ((type == .flagsChanged) && (!Defaults[.defaultCMDTABKeybind])){
             // New Keybind that the user has enforced, includes the modifier keys
             if event.flags.contains(.maskControl) {
@@ -89,8 +89,8 @@ class KeybindHelper {
         
         else if (type == .keyDown){
             if (isModifierKeyPressed && keyCode == keyBoardShortcutSaved.keyCode && modifierValue == keyBoardShortcutSaved.modifierFlags) || (Defaults[.defaultCMDTABKeybind] && event.flags.contains(.maskCommand) && keyCode == 48) {  // Tab key
-                if HoverWindow.shared.isVisible {  // Check if HoverWindow is already shown
-                    HoverWindow.shared.cycleWindows(goBackwards: isShiftKeyPressed)  // Cycle windows based on Shift key state
+                if SharedPreviewWindowCoordinator.shared.isVisible {  // Check if HoverWindow is already shown
+                    SharedPreviewWindowCoordinator.shared.cycleWindows(goBackwards: isShiftKeyPressed)  // Cycle windows based on Shift key state
                 } else {
                     showHoverWindow()  // Initialize HoverWindow if it's not open
                 }
@@ -111,8 +111,8 @@ class KeybindHelper {
         }
         
         if !isModifierKeyPressed {
-            HoverWindow.shared.hideWindow()  // Hide the HoverWindow
-            HoverWindow.shared.selectAndBringToFrontCurrentWindow()
+            SharedPreviewWindowCoordinator.shared.hideWindow()
+            SharedPreviewWindowCoordinator.shared.selectAndBringToFrontCurrentWindow()
         }
     }
     
@@ -124,7 +124,8 @@ class KeybindHelper {
                 await MainActor.run { [weak self] in
                     guard let self = self else { return }
                     if self.isModifierKeyPressed {
-                        HoverWindow.shared.showWindow(appName: "Alt-Tab", windows: windows, overrideDelay: true, onWindowTap: { HoverWindow.shared.hideWindow() })
+                        SharedPreviewWindowCoordinator.shared.showWindow(appName: "Alt-Tab", windows: windows, overrideDelay: true,
+                                                                         centeredHoverWindowState: .windowSwitcher, onWindowTap: { SharedPreviewWindowCoordinator.shared.hideWindow() })
                     }
                 }
             } catch {

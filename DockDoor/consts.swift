@@ -22,6 +22,8 @@ extension Defaults.Keys {
     
     static let screenCaptureCacheLifespan = Key<CGFloat>("screenCaptureCacheLifespan", default: 60 )
     static let uniformCardRadius = Key<Bool>("uniformCardRadius", default: true )
+    static let tapEquivalentInterval = Key<CGFloat>("tapEquivalentInterval", default: 1.5 )
+    static let previewHoverAction = Key<HoverTimerActions>("previewHoverAction", default: HoverTimerActions.none )
     
     static let showAnimations = Key<Bool>("showAnimations", default: true )
     static let enableWindowSwitcher = Key<Bool>("enableWindowSwitcher", default: true )
@@ -60,6 +62,7 @@ enum WindowTitleDisplayCondition: String, CaseIterable, Defaults.Serializable {
 enum WindowTitlePosition: String, CaseIterable, Defaults.Serializable {
     case bottomLeft
     case bottomRight
+    case topRight
     
     var localizedName: String {
         switch self {
@@ -67,6 +70,8 @@ enum WindowTitlePosition: String, CaseIterable, Defaults.Serializable {
             String(localized: "Bottom Left", comment: "Preview window title position option")
         case .bottomRight:
             String(localized: "Bottom Right", comment: "Preview window title position option")
+        case .topRight:
+            String(localized: "Top Right", comment: "Preview window title position option")
         }
     }
 }
@@ -107,6 +112,23 @@ enum TrafficLightButtonsVisibility: String, CaseIterable, Defaults.Serializable 
             String(localized: "On window hover; Full opacity", comment: "Traffic light buttons visibility option")
         case .alwaysVisible:
             String(localized: "Always visible; Full opacity", comment: "Traffic light buttons visibility option")
+        }
+    }
+}
+
+enum HoverTimerActions: String, CaseIterable, Defaults.Serializable {
+    case none
+    case tap
+    case previewFullSize
+    
+    var localizedName: String {
+        switch self {
+        case .none:
+            String(localized: "No hover action", comment: "Window popup hover action option")
+        case .tap:
+            String(localized: "Simulate a click", comment: "Window popup hover action option")
+        case .previewFullSize:
+            String(localized: "See a preview of the window", comment: "Window popup hover action option")
         }
     }
 }
