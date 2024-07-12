@@ -159,32 +159,33 @@ final class SharedPreviewWindowCoordinator: NSWindow {
         )
     }
     
-    // Calculate window position based on mouse location and dock position
+    // Calculate window position based on the given dock icon frame and dock position
     private func calculateWindowPosition(mouseLocation: CGPoint?, windowSize: CGSize, screen: NSScreen) -> CGPoint {
         guard let mouseLocation = mouseLocation else { return .zero }
+        guard let dockIconFrame = DockObserver.shared.getDockIconFrameAtLocation(mouseLocation) else { return .zero }
         
         let screenFrame = screen.frame
         let dockPosition = DockUtils.shared.getDockPosition()
         let dockHeight = DockUtils.shared.calculateDockHeight(screen)
         
-        var xPosition = mouseLocation.x
-        var yPosition = mouseLocation.y
+        var xPosition = dockIconFrame.midX
+        var yPosition = dockIconFrame.midY
         
         // Adjust position based on dock position
-        switch dockPosition {
-        case .bottom:
-            yPosition = screenFrame.minY + dockHeight
-            xPosition -= (windowSize.width / 2)
-        case .left:
-            xPosition = screenFrame.minX + dockHeight
-            yPosition -= (windowSize.height / 2)
-        case .right:
-            xPosition = screenFrame.maxX - dockHeight - windowSize.width
-            yPosition -= (windowSize.height / 2)
-        default:
-            xPosition -= (windowSize.width / 2)
-            yPosition -= (windowSize.height / 2)
-        }
+           switch dockPosition {
+           case .bottom:
+               yPosition = screenFrame.minY + dockHeight
+               xPosition -= (windowSize.width / 2)
+           case .left:
+               xPosition = screenFrame.minX + dockHeight
+               yPosition = screenFrame.height - yPosition - (windowSize.height / 2)
+           case .right:
+               xPosition = screenFrame.maxX - dockHeight - windowSize.width
+               yPosition = screenFrame.height - yPosition - (windowSize.height / 2)
+           default:
+               xPosition -= (windowSize.width / 2)
+               yPosition -= (windowSize.height / 2)
+           }
         
         // Ensure window stays within screen bounds
         xPosition = max(screenFrame.minX, min(xPosition, screenFrame.maxX - windowSize.width)) + (dockPosition != .bottom ? Defaults[.bufferFromDock] : 0)
@@ -192,6 +193,7 @@ final class SharedPreviewWindowCoordinator: NSWindow {
         
         return CGPoint(x: xPosition, y: yPosition)
     }
+    
     
     // Apply window frame with optional animation
     private func applyWindowFrame(_ frame: CGRect, animated: Bool) {
@@ -277,7 +279,7 @@ final class SharedPreviewWindowCoordinator: NSWindow {
                 self.updateContentViewSizeAndPosition(mouseLocation: mouseLocation, mouseScreen: screen, animated: true,
                                                       centerOnScreen: shouldCenterOnScreen, centeredHoverWindowState: centeredHoverWindowState)
             }
-            
+                        
             self.makeKeyAndOrderFront(nil)
         }
     }

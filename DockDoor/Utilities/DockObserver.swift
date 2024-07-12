@@ -167,6 +167,77 @@ final class DockObserver {
         }
     }
     
+    func getDockIconFrameAtLocation(_ mouseLocation: CGPoint) -> CGRect? {
+        guard let dockAppProcessIdentifier else {
+            print("Dock app process identifier is nil")
+            return nil
+        }
+        
+        let axDockApp = AXUIElementCreateApplication(dockAppProcessIdentifier)
+        
+        var dockItems: CFTypeRef?
+        let dockItemsResult = AXUIElementCopyAttributeValue(axDockApp, kAXChildrenAttribute as CFString, &dockItems)
+        
+        guard dockItemsResult == .success, let items = dockItems as? [AXUIElement] else {
+            print("Failed to get dock items: \(dockItemsResult.rawValue)")
+            return nil
+        }
+        
+        let axList = items.first { element in
+            var role: CFTypeRef?
+            let roleResult = AXUIElementCopyAttributeValue(element, kAXRoleAttribute as CFString, &role)
+            return roleResult == .success && (role as? String) == kAXListRole
+        }
+        
+        guard let list = axList else {
+            print("Failed to find the Dock list")
+            return nil
+        }
+        
+        var axChildren: CFTypeRef?
+        let childrenResult = AXUIElementCopyAttributeValue(list, kAXChildrenAttribute as CFString, &axChildren)
+        
+        guard childrenResult == .success, let children = axChildren as? [AXUIElement] else {
+            print("Failed to get children: \(childrenResult.rawValue)")
+            return nil
+        }
+        
+        // Adjust mouse location to match the coordinate system of the dock icons
+        let adjustedMouseLocation = CGPoint(
+            x: mouseLocation.x,
+            y: (DockObserver.screenContainingPoint(mouseLocation)?.frame.height ?? NSScreen.main!.frame.height) - mouseLocation.y
+        )
+        
+        for element in children {
+            var positionValue: CFTypeRef?
+            var sizeValue: CFTypeRef?
+            let positionResult = AXUIElementCopyAttributeValue(element, kAXPositionAttribute as CFString, &positionValue)
+            let sizeResult = AXUIElementCopyAttributeValue(element, kAXSizeAttribute as CFString, &sizeValue)
+            
+            if positionResult == .success, sizeResult == .success {
+                let position = positionValue as! AXValue
+                let size = sizeValue as! AXValue
+                var positionPoint = CGPoint.zero
+                AXValueGetValue(position, .cgPoint, &positionPoint)
+                var sizeCGSize = CGSize.zero
+                AXValueGetValue(size, .cgSize, &sizeCGSize)
+                
+                let iconRect = CGRect(origin: positionPoint, size: sizeCGSize)
+                print("Checking icon rect: \(iconRect) with adjusted mouse location: \(adjustedMouseLocation)")
+                
+                if iconRect.contains(adjustedMouseLocation) {
+                    print("Matched icon rect: \(iconRect)")
+                    return iconRect
+                }
+            } else {
+                print("Failed to get position or size for element")
+            }
+        }
+        
+        print("No matching icon rect found")
+        return nil
+    }
+
     func getDockIconAtLocation(_ mouseLocation: CGPoint) -> String? {
         guard let dockAppProcessIdentifier else { return nil }
         
