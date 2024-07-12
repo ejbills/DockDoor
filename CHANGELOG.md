@@ -23,6 +23,38 @@
   }
 </style>
 
+<a name="v1.1.2"></a>
+# [v1.1.2](https://github.com/ejbills/DockDoor/releases/tag/v1.1.2) - 12 Jul 2024
+
+# Changelog
+
+## Features
+- # Preview window hover actions, with time and action customizations ([#171](https://github.com/ejbills/DockDoor/issues/171))
+- - ![popup preview](https://github.com/user-attachments/assets/bd6ee1c8-3cff-492a-8d60-b4c40157f908)
+- Make more strings localizable ([#168](https://github.com/ejbills/DockDoor/issues/168)) [@ShlomoCode](https://github.com/ShlomoCode)
+- Settings: scale pickers and add number fields next to sliders ([#170](https://github.com/ejbills/DockDoor/issues/170)) [@ShlomoCode](https://github.com/ShlomoCode)
+- Add top right window title position option ([#150](https://github.com/ejbills/DockDoor/issues/150)) [@ShlomoCode](https://github.com/ShlomoCode)
+- Crowdin localization and automation ([#155](https://github.com/ejbills/DockDoor/issues/155))
+- Add Crowdin localization support and actions ([#151](https://github.com/ejbills/DockDoor/issues/151))
+
+## Fixes
+- Local labels are cutting ([#169](https://github.com/ejbills/DockDoor/issues/169)) [@ShlomoCode](https://github.com/ShlomoCode) [@ejbills](https://github.com/ejbills)
+- Better setting names for preview hover action items
+- Release notes loading ([#148](https://github.com/ejbills/DockDoor/issues/148)) [@ShlomoCode](https://github.com/ShlomoCode)
+- Invalid formatting in changelog ([#147](https://github.com/ejbills/DockDoor/issues/147)) [@ShlomoCode](https://github.com/ShlomoCode)
+
+## Chore
+- Sync localizations with Crowdin ([#172](https://github.com/ejbills/DockDoor/issues/172)) [@ejbills](https://github.com/ejbills) [@crowdin-bot](https://github.com/crowdin-bot)
+- Sync localizations with Crowdin ([#165](https://github.com/ejbills/DockDoor/issues/165)) [@ejbills](https://github.com/ejbills) [@crowdin-bot](https://github.com/crowdin-bot)
+- Set commit_message in crowdin-sync.yml ([#158](https://github.com/ejbills/DockDoor/issues/158)) [@ShlomoCode](https://github.com/ShlomoCode)
+- Initialize workflow file on main branch
+- Revert "fix: invalid formatting in changelog ([#147](https://github.com/ejbills/DockDoor/issues/147))" ([#149](https://github.com/ejbills/DockDoor/issues/149))
+- Patch: Update crowdin-sync.yml to not run based on push to main (was creating loop) ([#167](https://github.com/ejbills/DockDoor/issues/167))
+- New Crowdin translations by GitHub Action ([#156](https://github.com/ejbills/DockDoor/issues/156)) [@ejbills](https://github.com/ejbills) [@crowdin-bot](https://github.com/crowdin-bot)
+
+[Changes][v1.1.2]
+
+
 <a name="v1.1.1"></a>
 # [v1.1.1](https://github.com/ejbills/DockDoor/releases/tag/v1.1.1) - 11 Jul 2024
 
@@ -266,6 +298,7 @@ v1.0
 [Changes][releases]
 
 
+[v1.1.2]: https://github.com/ejbills/DockDoor/compare/v1.1.1...v1.1.2
 [v1.1.1]: https://github.com/ejbills/DockDoor/compare/v1.1.0...v1.1.1
 [v1.1.0]: https://github.com/ejbills/DockDoor/compare/v1.0.17...v1.1.0
 [v1.0.17]: https://github.com/ejbills/DockDoor/compare/v1.0.16...v1.0.17
