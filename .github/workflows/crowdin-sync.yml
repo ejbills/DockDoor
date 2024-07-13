@@ -4,6 +4,9 @@ on:
   schedule:
     - cron: '0 0 * * 0'  # This runs the action every Sunday at midnight UTC
   workflow_dispatch:
+  release:
+    types:
+      - published
 
 jobs:
   synchronize-with-crowdin:
