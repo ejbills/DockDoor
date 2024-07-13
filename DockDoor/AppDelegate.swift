@@ -13,7 +13,7 @@ import Sparkle
 
 class AppDelegate: NSObject, NSApplicationDelegate {
     private var dockObserver: DockObserver?
-    private var appClosureObserver: AppClosureObserver?
+    private var appClosureObserver: WindowManipulationObservers?
     private var keybindHelper: KeybindHelper?
     private var statusBarItem: NSStatusItem?
     
@@ -56,7 +56,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             handleFirstTimeLaunch()
         } else {
             dockObserver = DockObserver.shared
-            appClosureObserver = AppClosureObserver.shared
+            appClosureObserver = WindowManipulationObservers.shared
             if Defaults[.enableWindowSwitcher] {
                 keybindHelper = KeybindHelper.shared
             }

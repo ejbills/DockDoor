@@ -121,13 +121,14 @@ final class DockObserver {
         let currentMouseLocation = mouseLocation
         
         if let dockIconAppName = getDockIconAtLocation(currentMouseLocation) {
+            print("dock icon: \(dockIconAppName)")
             if dockIconAppName != lastAppName {
                 lastAppName = dockIconAppName
                 
                 Task { [weak self] in
                     guard let self = self else { return }
                     do {
-                        let activeWindows = WindowUtil.returnListOfActiveWindowsOfApplication(applicationName: dockIconAppName)
+                        let activeWindows = try await WindowUtil.activeWindows(for: dockIconAppName)
                         await MainActor.run {
                             if activeWindows.isEmpty {
                                 SharedPreviewWindowCoordinator.shared.hideWindow()
@@ -169,7 +170,6 @@ final class DockObserver {
     
     func getDockIconFrameAtLocation(_ mouseLocation: CGPoint) -> CGRect? {
         guard let dockAppProcessIdentifier else {
-            print("Dock app process identifier is nil")
             return nil
         }
         
@@ -179,7 +179,6 @@ final class DockObserver {
         let dockItemsResult = AXUIElementCopyAttributeValue(axDockApp, kAXChildrenAttribute as CFString, &dockItems)
         
         guard dockItemsResult == .success, let items = dockItems as? [AXUIElement] else {
-            print("Failed to get dock items: \(dockItemsResult.rawValue)")
             return nil
         }
         
@@ -190,7 +189,6 @@ final class DockObserver {
         }
         
         guard let list = axList else {
-            print("Failed to find the Dock list")
             return nil
         }
         
@@ -198,7 +196,6 @@ final class DockObserver {
         let childrenResult = AXUIElementCopyAttributeValue(list, kAXChildrenAttribute as CFString, &axChildren)
         
         guard childrenResult == .success, let children = axChildren as? [AXUIElement] else {
-            print("Failed to get children: \(childrenResult.rawValue)")
             return nil
         }
         
@@ -223,18 +220,13 @@ final class DockObserver {
                 AXValueGetValue(size, .cgSize, &sizeCGSize)
                 
                 let iconRect = CGRect(origin: positionPoint, size: sizeCGSize)
-                print("Checking icon rect: \(iconRect) with adjusted mouse location: \(adjustedMouseLocation)")
                 
                 if iconRect.contains(adjustedMouseLocation) {
-                    print("Matched icon rect: \(iconRect)")
                     return iconRect
                 }
-            } else {
-                print("Failed to get position or size for element")
             }
         }
         
-        print("No matching icon rect found")
         return nil
     }
 
@@ -247,7 +239,6 @@ final class DockObserver {
         let dockItemsResult = AXUIElementCopyAttributeValue(axDockApp, kAXChildrenAttribute as CFString, &dockItems)
         
         guard dockItemsResult == .success, let items = dockItems as? [AXUIElement] else {
-            print("Failed to get dock items")
             return nil
         }
         
@@ -258,7 +249,6 @@ final class DockObserver {
         }
         
         guard axList != nil else {
-            print("Failed to find the Dock list")
             return nil
         }
         
@@ -266,7 +256,6 @@ final class DockObserver {
         AXUIElementCopyAttributeValue(axList!, kAXChildrenAttribute as CFString, &axChildren)
         
         guard let children = axChildren as? [AXUIElement] else {
-            print("Failed to get children")
             return nil
         }
         

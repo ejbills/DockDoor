@@ -43,21 +43,8 @@ final class WindowUtil {
     private static var imageCache: [CGWindowID: CachedImage] = [:]
     private static let cacheQueue = DispatchQueue(label: "com.dockdoor.cacheQueue", attributes: .concurrent)
     private static var cacheExpirySeconds: Double = Defaults[.screenCaptureCacheLifespan]
-    static var listOfAllWindowsInAllSpaces: [String: [WindowInfo]] = [:]
+    private static var desktopSpaceWindowCache: [String: Set<WindowInfo>] = [:]
     
-    static func returnListOfActiveWindowsOfApplication (applicationName: String) -> [WindowInfo] {
-        return listOfAllWindowsInAllSpaces.values.flatMap {$0}.compactMap { windowInfo in
-            return windowInfo.appName == applicationName ? windowInfo : nil
-        }
-    }
-    
-    static func getAllWindowInfosAsList() -> [WindowInfo] {
-        var returnArray:[WindowInfo] = []
-        for (key, _) in listOfAllWindowsInAllSpaces {
-            returnArray.append(contentsOf: listOfAllWindowsInAllSpaces[key]!)
-        }
-        return returnArray
-    }
     // MARK: - Cache Management
     
     /// Clears expired cache items based on cache expiry time.
@@ -209,6 +196,10 @@ final class WindowUtil {
         }
     }
     
+    private static func getAllWindowInfosAsList() -> [WindowInfo] {
+        return Array(desktopSpaceWindowCache.values.joined())
+    }
+    
     // MARK: - Window Manipulation Functions
     
     /// Toggles the minimize state of a window.
@@ -330,9 +321,8 @@ final class WindowUtil {
         }
         
         let closeResult = AXUIElementPerformAction(closeButton, kAXPressAction as CFString)
-        if let (key, index) = findKeyAndIndex(for: windowInfo.id) {
-            deleteWindowFromListUsingKeyIndex(key, index)
-        }
+        removeWindowFromDesktopSpaceCache(with: windowInfo.id, in: windowInfo.bundleID)
+
         if closeResult != .success {
             print("Error closing window: \(closeResult.rawValue)")
             return
@@ -391,6 +381,11 @@ final class WindowUtil {
     
     /// Retrieves the active windows for a given application name.
     static func activeWindows(for applicationName: String) async throws -> [WindowInfo] {
+        // If the application name is empty, return all windows
+        if applicationName.isEmpty {
+            return getAllWindowInfosAsList()
+        }
+
         func getNonLocalizedAppName(forBundleIdentifier bundleIdentifier: String) -> String? {
             guard let bundleURL = NSWorkspace.shared.urlForApplication(withBundleIdentifier: bundleIdentifier) else {
                 return nil
@@ -416,7 +411,7 @@ final class WindowUtil {
                     potentialMatches.append(app)
                 }
                 
-                if applicationName.isEmpty || (app.applicationName == applicationName) || (nonLocalName == applicationName) {
+                if (app.applicationName == applicationName) || (nonLocalName == applicationName) {
                     await group.addTask {
                         return try await fetchWindowInfo(window: window, applicationName: applicationName)
                     }
@@ -424,9 +419,9 @@ final class WindowUtil {
                 }
             }
         }
-        
+                
         // If no exact match is found, use the best guess from potential matches
-        if foundApp == nil, !applicationName.isEmpty, let bestGuessApp = potentialMatches.first {
+        if foundApp == nil, let bestGuessApp = potentialMatches.first {
             foundApp = bestGuessApp
             
             // Loop again to fetch window info for the best guess application
@@ -439,24 +434,36 @@ final class WindowUtil {
             }
         }
         
-        if let app = foundApp, !applicationName.isEmpty,
+        if let app = foundApp,
            let isAppHidden = NSRunningApplication(processIdentifier: app.processID)?.isHidden {
             let minimizedOrHiddenWindowsInfo = getMinimizedOrHiddenWindows(pid: app.processID, bundleID: app.bundleIdentifier,
                                                                            appName: applicationName, isParentAppHidden: isAppHidden)
             for windowInfo in minimizedOrHiddenWindowsInfo {
                 await group.addTask { return windowInfo }
             }
-        } else if !applicationName.isEmpty, let app = getRunningApplication(named: applicationName), let bundleID = app.bundleIdentifier,
-                  let isAppHidden = NSRunningApplication(processIdentifier: app.processIdentifier)?.isHidden {
-            let minimizedOrHiddenWindowsInfo = getMinimizedOrHiddenWindows(pid: app.processIdentifier, bundleID: bundleID,
-                                                                           appName: applicationName, isParentAppHidden: isAppHidden)
-            for windowInfo in minimizedOrHiddenWindowsInfo {
-                await group.addTask { return windowInfo }
-            }
+        }
+                
+        let results = try await group.waitForAll()
+        let activeWindows = results.compactMap { $0 }.filter { !$0.appName.isEmpty && !$0.bundleID.isEmpty }
+        
+        if foundApp == nil {
+            // this is where we need to inject some logic to get the app bundle identifier, foundApp is always nil when the app is running in another space becuase we are relying on the SCShareableContent.excludingDesktopWindows loop, which is current space limited. we cannot rely on the app name like we initially assumed. we will need to discuss this further.
+//            foundApp =
         }
         
-        let results = try await group.waitForAll()
-        return results.compactMap { $0 }.filter { !$0.appName.isEmpty && !$0.bundleID.isEmpty }
+        if let app = foundApp {
+            let storedWindows = desktopSpaceWindowCache[app.bundleIdentifier] ?? []
+                
+            let activeWindowsSet = Set(activeWindows)
+            let combinedWindowsSet = activeWindowsSet.union(storedWindows)
+            
+            print("HELLO THIS IS BULLSHIT IM IN HERE FOR \(app.bundleIdentifier)")
+            
+            return Array(combinedWindowsSet)
+        } else {
+            // If no app was found, return just the active windows
+            return activeWindows
+        }
     }
     
     /// Fetches detailed information for a given SCWindow.
@@ -477,11 +484,7 @@ final class WindowUtil {
         
         let appRef = createAXUIElement(for: pid)
         
-        guard let axWindows = getAXWindows(for: appRef) else {
-            return nil
-        }
-        
-        if axWindows.isEmpty {
+        guard let axWindows = getAXWindows(for: appRef), !axWindows.isEmpty else {
             return nil
         }
         
@@ -506,48 +509,42 @@ final class WindowUtil {
         
         do {
             windowInfo.image = try await captureWindowImage(window: window)
-            if listOfAllWindowsInAllSpaces[windowInfo.appName] != nil {
-                // Presence of an already existing window in another space or the same space
-                if let (key, index) = findKeyAndIndex(for: windowInfo.id) {
-                    // Window exists, replace the preview
-                    var AllApplicationWindows = WindowUtil.listOfAllWindowsInAllSpaces[key] ?? []
-                    AllApplicationWindows[index] = windowInfo
-                    WindowUtil.listOfAllWindowsInAllSpaces.updateValue(AllApplicationWindows, forKey: key)
-                } else {
-                    // Add this newly discovered window
-                    WindowUtil.listOfAllWindowsInAllSpaces[windowInfo.appName]?.append(windowInfo)
-                }
-                
-            } else {
-                // First window for the application key (appName) provided
-                WindowUtil.listOfAllWindowsInAllSpaces[windowInfo.appName] = [windowInfo]
-            }
+            
+            updateDesktopSpaceWindowCache(with: windowInfo)
+            
             return windowInfo
+        } catch {
+            print("Error capturing window image: \(error)")
+            return nil
         }
     }
-    static func findKeyAndIndex(for windowID: CGWindowID) -> (String, Int)? {
-        for (key, windows) in listOfAllWindowsInAllSpaces {
-            if let index = windows.firstIndex(where: { $0.id == windowID }) {
-                return (key, index)
-            }
-        }
-        return nil
-    }
-    static func deleteWindowFromListUsingKeyIndex(_ key: String, _ index: Int) {
-        // Find how many entries exist
-        if var allWindowsForKeys = WindowUtil.listOfAllWindowsInAllSpaces[key] {
-            if allWindowsForKeys.count > 1 {
-                // Only delete the window at the index
-                allWindowsForKeys.remove(at: index)
-                WindowUtil.listOfAllWindowsInAllSpaces[key] = allWindowsForKeys
+
+    static func updateDesktopSpaceWindowCache(with windowInfo: WindowInfo) {
+        if var windowSet = desktopSpaceWindowCache[windowInfo.bundleID] {
+            if let existingWindow = windowSet.first(where: { $0.id == windowInfo.id }) {
+                windowSet.remove(existingWindow)
+                windowSet.insert(windowInfo)  // This will update the image
             } else {
-                // Delete the whole key and value
-                WindowUtil.listOfAllWindowsInAllSpaces.removeValue(forKey: key)
+                windowSet.insert(windowInfo)  // Add newly discovered window
             }
+            desktopSpaceWindowCache[windowInfo.bundleID] = windowSet
+        } else {
+            desktopSpaceWindowCache[windowInfo.bundleID] = Set([windowInfo])
         }
     }
-    static func updateWindowinListUsingKeyIndex(_ key: String, _ index: Int){
+
+    static func findWindowInDesktopSpaceCache(for windowID: CGWindowID, in bundleID: String) -> WindowInfo? {
+        return desktopSpaceWindowCache[bundleID]?.first { $0.id == windowID }
+    }
+
+    static func removeWindowFromDesktopSpaceCache(with id: CGWindowID, in bundleID: String) {
+        if let windowToRemove = findWindowInDesktopSpaceCache(for: id, in: bundleID) {
+            desktopSpaceWindowCache[bundleID]?.remove(windowToRemove)
+        }
         
+        if desktopSpaceWindowCache[bundleID]?.isEmpty == true {
+            desktopSpaceWindowCache.removeValue(forKey: bundleID)
+        }
     }
 }
 
