@@ -67,7 +67,7 @@ struct TrafficLightButtons: View {
         case .quit:
             WindowUtil.quitApp(windowInfo: windowInfo, force: NSEvent.modifierFlags.contains(.option))
         case .close:
-            WindowUtil.closeWindow(closeButton: windowInfo.closeButton!)
+            WindowUtil.closeWindow(windowInfo: windowInfo)
         case .minimize:
             WindowUtil.toggleMinimize(windowInfo: windowInfo)
         case .toggleFullScreen:

@@ -19,10 +19,17 @@ class AppClosureObserver {
         let notificationCenter = NSWorkspace.shared.notificationCenter
         notificationCenter.addObserver(self, selector: #selector(appDidTerminate(_:)), name: NSWorkspace.didTerminateApplicationNotification, object: nil)
         notificationCenter.addObserver(self, selector: #selector(appDidActivate(_:)), name: NSWorkspace.didActivateApplicationNotification, object: nil)
+        notificationCenter.addObserver(
+            self,
+            selector: #selector(self.applicationDidLaunch(_:)),
+            name: NSWorkspace.didLaunchApplicationNotification,
+            object: nil
+        )
     }
     
     @objc private func appDidTerminate(_ notification: Notification) {
         SharedPreviewWindowCoordinator.shared.hideWindow()
+        self.applicationDidTerminate(notification)
     }
     
     @objc private func appDidActivate(_ notification: Notification) {

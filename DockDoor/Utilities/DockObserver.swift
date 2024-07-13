@@ -127,7 +127,7 @@ final class DockObserver {
                 Task { [weak self] in
                     guard let self = self else { return }
                     do {
-                        let activeWindows = try await WindowUtil.activeWindows(for: dockIconAppName)
+                        let activeWindows = WindowUtil.returnListOfActiveWindowsOfApplication(applicationName: dockIconAppName)
                         await MainActor.run {
                             if activeWindows.isEmpty {
                                 SharedPreviewWindowCoordinator.shared.hideWindow()

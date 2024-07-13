@@ -37,6 +37,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         super.init()
     }
     
+    private func applicationWillFinishLaunching(_ notification: Notification) async {
+        do {
+            _ = try await WindowUtil.activeWindows(for: "")
+        }
+        catch {
+            print("Error dumped")
+        }
+    }
+    
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         self.setupMenuBar()
         if !Defaults[.showMenuBarIcon] {

@@ -43,7 +43,21 @@ final class WindowUtil {
     private static var imageCache: [CGWindowID: CachedImage] = [:]
     private static let cacheQueue = DispatchQueue(label: "com.dockdoor.cacheQueue", attributes: .concurrent)
     private static var cacheExpirySeconds: Double = Defaults[.screenCaptureCacheLifespan]
+    static var listOfAllWindowsInAllSpaces: [String: [WindowInfo]] = [:]
     
+    static func returnListOfActiveWindowsOfApplication (applicationName: String) -> [WindowInfo] {
+        return listOfAllWindowsInAllSpaces.values.flatMap {$0}.compactMap { windowInfo in
+            return windowInfo.appName == applicationName ? windowInfo : nil
+        }
+    }
+    
+    static func getAllWindowInfosAsList() -> [WindowInfo] {
+        var returnArray:[WindowInfo] = []
+        for (key, _) in listOfAllWindowsInAllSpaces {
+            returnArray.append(contentsOf: listOfAllWindowsInAllSpaces[key]!)
+        }
+        return returnArray
+    }
     // MARK: - Cache Management
     
     /// Clears expired cache items based on cache expiry time.
@@ -70,7 +84,7 @@ final class WindowUtil {
         if let cachedImage = getCachedImage(window: window) {
             return cachedImage
         }
-
+        
         let filter = SCContentFilter(desktopIndependentWindow: window)
         let config = SCStreamConfiguration()
         
@@ -211,6 +225,9 @@ final class WindowUtil {
             
             if minimizeResult != .success {
                 print("Error un-minimizing window: \(minimizeResult.rawValue)")
+                //                if let (key, index) = findKeyAndIndex(for: windowInfo.id) {
+                //                    deleteWindowFromListUsingKeyIndex(key, index)
+                //                }
             } else {
                 NSRunningApplication(processIdentifier: windowInfo.pid)?.activate()
                 focusOnSpecificWindow(windowInfo: windowInfo)
@@ -247,7 +264,7 @@ final class WindowUtil {
             focusOnSpecificWindow(windowInfo: windowInfo)
         }
     }
-
+    
     static func focusOnSpecificWindow(windowInfo: WindowInfo) {
         let appElement = AXUIElementCreateApplication(windowInfo.pid)
         var windowsRef: CFTypeRef?
@@ -280,6 +297,7 @@ final class WindowUtil {
             if let isFullScreen = isCurrentlyInFullScreen as? Bool {
                 AXUIElementSetAttributeValue(windowInfo.axElement, kAXFullscreenAttribute, !isFullScreen as CFBoolean)
             }
+            
         }
     }
     
@@ -295,19 +313,26 @@ final class WindowUtil {
             let fallbackResult = AXUIElementSetAttributeValue(windowInfo.axElement, kAXFrontmostAttribute as CFString, kCFBooleanTrue)
             
             if fallbackActivateResult != true || fallbackResult != .success {
+                //                    if let (key, index) = findKeyAndIndex(for: windowInfo.id) {
+                //                        deleteWindowFromListUsingKeyIndex(key, index)
+                //                    } else {
                 print("Failed to bring window to front with fallback attempts.")
+                //                    }
             }
         }
     }
     
     /// Closes a window using its close button.
-    static func closeWindow(closeButton: AXUIElement?) {
-        guard let closeButton = closeButton else {
+    static func closeWindow(windowInfo: WindowInfo) {
+        guard let closeButton = windowInfo.closeButton else {
             print("Error: closeButton is nil.")
             return
         }
         
         let closeResult = AXUIElementPerformAction(closeButton, kAXPressAction as CFString)
+        if let (key, index) = findKeyAndIndex(for: windowInfo.id) {
+            deleteWindowFromListUsingKeyIndex(key, index)
+        }
         if closeResult != .success {
             print("Error closing window: \(closeResult.rawValue)")
             return
@@ -341,7 +366,7 @@ final class WindowUtil {
         if result == .success, let windows = value as? [AXUIElement] {
             for (index, window) in windows.enumerated() {
                 let isMinimized: Bool = getAXAttribute(element: window, attribute: kAXMinimizedAttribute as CFString) ?? false
-                                
+                
                 let windowName: String? = getAXAttribute(element: window, attribute: kAXTitleAttribute as CFString)
                 
                 if isMinimized || isParentAppHidden {
@@ -423,7 +448,7 @@ final class WindowUtil {
             }
         } else if !applicationName.isEmpty, let app = getRunningApplication(named: applicationName), let bundleID = app.bundleIdentifier,
                   let isAppHidden = NSRunningApplication(processIdentifier: app.processIdentifier)?.isHidden {
-            let minimizedOrHiddenWindowsInfo = getMinimizedOrHiddenWindows(pid: app.processIdentifier, bundleID: bundleID, 
+            let minimizedOrHiddenWindowsInfo = getMinimizedOrHiddenWindows(pid: app.processIdentifier, bundleID: bundleID,
                                                                            appName: applicationName, isParentAppHidden: isAppHidden)
             for windowInfo in minimizedOrHiddenWindowsInfo {
                 await group.addTask { return windowInfo }
@@ -437,7 +462,7 @@ final class WindowUtil {
     /// Fetches detailed information for a given SCWindow.
     private static func fetchWindowInfo(window: SCWindow, applicationName: String) async throws -> WindowInfo? {
         let windowID = window.windowID
-                
+        
         guard let owningApplication = window.owningApplication,
               let title = window.title, !title.isEmpty,
               window.isOnScreen,
@@ -447,7 +472,7 @@ final class WindowUtil {
               !filteredBundleIdentifiers.contains(owningApplication.bundleIdentifier) else {
             return nil
         }
-                
+        
         let pid = owningApplication.processID
         
         let appRef = createAXUIElement(for: pid)
@@ -470,7 +495,7 @@ final class WindowUtil {
         var windowInfo = WindowInfo(id: windowID,
                                     window: window,
                                     appName: owningApplication.applicationName,
-                                    bundleID: owningApplication.bundleIdentifier, 
+                                    bundleID: owningApplication.bundleIdentifier,
                                     pid: pid,
                                     windowName: window.title,
                                     image: nil,
@@ -481,8 +506,48 @@ final class WindowUtil {
         
         do {
             windowInfo.image = try await captureWindowImage(window: window)
+            if listOfAllWindowsInAllSpaces[windowInfo.appName] != nil {
+                // Presence of an already existing window in another space or the same space
+                if let (key, index) = findKeyAndIndex(for: windowInfo.id) {
+                    // Window exists, replace the preview
+                    var AllApplicationWindows = WindowUtil.listOfAllWindowsInAllSpaces[key] ?? []
+                    AllApplicationWindows[index] = windowInfo
+                    WindowUtil.listOfAllWindowsInAllSpaces.updateValue(AllApplicationWindows, forKey: key)
+                } else {
+                    // Add this newly discovered window
+                    WindowUtil.listOfAllWindowsInAllSpaces[windowInfo.appName]?.append(windowInfo)
+                }
+                
+            } else {
+                // First window for the application key (appName) provided
+                WindowUtil.listOfAllWindowsInAllSpaces[windowInfo.appName] = [windowInfo]
+            }
             return windowInfo
         }
+    }
+    static func findKeyAndIndex(for windowID: CGWindowID) -> (String, Int)? {
+        for (key, windows) in listOfAllWindowsInAllSpaces {
+            if let index = windows.firstIndex(where: { $0.id == windowID }) {
+                return (key, index)
+            }
+        }
+        return nil
+    }
+    static func deleteWindowFromListUsingKeyIndex(_ key: String, _ index: Int) {
+        // Find how many entries exist
+        if var allWindowsForKeys = WindowUtil.listOfAllWindowsInAllSpaces[key] {
+            if allWindowsForKeys.count > 1 {
+                // Only delete the window at the index
+                allWindowsForKeys.remove(at: index)
+                WindowUtil.listOfAllWindowsInAllSpaces[key] = allWindowsForKeys
+            } else {
+                // Delete the whole key and value
+                WindowUtil.listOfAllWindowsInAllSpaces.removeValue(forKey: key)
+            }
+        }
+    }
+    static func updateWindowinListUsingKeyIndex(_ key: String, _ index: Int){
+        
     }
 }
 
