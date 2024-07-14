@@ -44,6 +44,7 @@ final class WindowUtil {
     private static let cacheQueue = DispatchQueue(label: "com.dockdoor.cacheQueue", attributes: .concurrent)
     private static var cacheExpirySeconds: Double = Defaults[.screenCaptureCacheLifespan]
     private static var desktopSpaceWindowCache: [String: Set<WindowInfo>] = [:]
+    private static var appNameBundleIdTracker: [String: String] = [:]
     
     // MARK: - Cache Management
     
@@ -416,6 +417,9 @@ final class WindowUtil {
                         return try await fetchWindowInfo(window: window, applicationName: applicationName)
                     }
                     foundApp = app
+                    if let bundleId = foundApp?.bundleIdentifier {
+                        appNameBundleIdTracker[applicationName] = bundleId
+                    }
                 }
             }
         }
@@ -423,6 +427,10 @@ final class WindowUtil {
         // If no exact match is found, use the best guess from potential matches
         if foundApp == nil, let bestGuessApp = potentialMatches.first {
             foundApp = bestGuessApp
+            
+            if let bundleId = foundApp?.bundleIdentifier {
+                appNameBundleIdTracker[applicationName] = bundleId
+            }
             
             // Loop again to fetch window info for the best guess application
             for window in content.windows {
@@ -442,28 +450,24 @@ final class WindowUtil {
                 await group.addTask { return windowInfo }
             }
         }
-                
+                        
         let results = try await group.waitForAll()
         let activeWindows = results.compactMap { $0 }.filter { !$0.appName.isEmpty && !$0.bundleID.isEmpty }
         
-        if foundApp == nil {
+        if foundApp == nil, let bundleId = appNameBundleIdTracker[applicationName] { // app does not have any active windows in space
             // this is where we need to inject some logic to get the app bundle identifier, foundApp is always nil when the app is running in another space becuase we are relying on the SCShareableContent.excludingDesktopWindows loop, which is current space limited. we cannot rely on the app name like we initially assumed. we will need to discuss this further.
-//            foundApp =
-        }
-        
-        if let app = foundApp {
-            let storedWindows = desktopSpaceWindowCache[app.bundleIdentifier] ?? []
+
+            // for now i am tracking all of the app name to bundle identifers that are came across in the liftime of the app, and then using that to assume the bundle identifier.
+            
+            let storedWindows = desktopSpaceWindowCache[bundleId] ?? []
                 
             let activeWindowsSet = Set(activeWindows)
             let combinedWindowsSet = activeWindowsSet.union(storedWindows)
-            
-            print("HELLO THIS IS BULLSHIT IM IN HERE FOR \(app.bundleIdentifier)")
-            
+                        
             return Array(combinedWindowsSet)
-        } else {
-            // If no app was found, return just the active windows
-            return activeWindows
         }
+        
+        return activeWindows
     }
     
     /// Fetches detailed information for a given SCWindow.
