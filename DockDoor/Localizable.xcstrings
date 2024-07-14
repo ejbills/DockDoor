@@ -261,8 +261,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "• Allows for enhanced visual information in the dock"
+            "state" : "translated",
+            "value" : "• ドック内の視覚効果を強調する"
           }
         },
         "ko" : {
@@ -403,8 +403,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "• Enables real-time interaction with dock items"
+            "state" : "translated",
+            "value" : "Habilita la interacción en tiempo real con los elementos del dock"
           }
         },
         "fi" : {
@@ -439,8 +439,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "• Enables real-time interaction with dock items"
+            "state" : "translated",
+            "value" : "• ドックアイテムとのリアルタイムのやり取りを有効にする"
           }
         },
         "ko" : {
@@ -617,8 +617,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "• To capture previews of images and windows"
+            "state" : "translated",
+            "value" : "• 画像とウィンドウのプレビューをキャプチャする"
           }
         },
         "ko" : {
@@ -795,8 +795,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "• To detect when you hover over the dock"
+            "state" : "translated",
+            "value" : "• ドックの上にカーソルを合わせたことを検知する"
           }
         },
         "ko" : {
@@ -926,7 +926,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Einstellungen Bedienungshilfen"
+            "value" : "Berechtigungen für Bedienungshilfen"
           }
         },
         "el" : {
@@ -973,8 +973,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Accessibility Permissions"
+            "state" : "translated",
+            "value" : "アクセシビリティの許可"
           }
         },
         "ko" : {
@@ -1151,8 +1151,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Accessibility:"
+            "state" : "translated",
+            "value" : "アクセシビリティ"
           }
         },
         "ko" : {
@@ -1281,8 +1281,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Adjust this if the preview is misaligned with dock"
+            "state" : "translated",
+            "value" : "Passen Sie dies an, wenn die Vorschau falsch zum Dock ausgerichtet ist"
           }
         },
         "el" : {
@@ -1329,8 +1329,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Adjust this if the preview is misaligned with dock"
+            "state" : "translated",
+            "value" : "プレビューがドックと揃えられない場合に調整する"
           }
         },
         "ko" : {
@@ -1508,8 +1508,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Always"
+            "state" : "translated",
+            "value" : "常時"
           }
         },
         "ko" : {
@@ -1687,8 +1687,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Always visible; Full opacity"
+            "state" : "translated",
+            "value" : "常に表示; 透過を無効"
           }
         },
         "ko" : {
@@ -1866,8 +1866,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Appearance"
+            "state" : "translated",
+            "value" : "外観"
           }
         },
         "ko" : {
@@ -2044,8 +2044,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Appearance settings"
+            "state" : "translated",
+            "value" : "外観の設定"
           }
         },
         "ko" : {
@@ -2222,8 +2222,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Automatically check for updates"
+            "state" : "translated",
+            "value" : "アップデートを自動的に確認する"
           }
         },
         "ko" : {
@@ -2401,8 +2401,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Bottom Left"
+            "state" : "translated",
+            "value" : "左下"
           }
         },
         "ko" : {
@@ -2580,8 +2580,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Bottom Right"
+            "state" : "translated",
+            "value" : "右下"
           }
         },
         "ko" : {
@@ -2758,8 +2758,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Buy me a coffee here, thank you!"
+            "state" : "translated",
+            "value" : "ここで私にコーヒーを買ってくれるとうれしいです。"
           }
         },
         "ko" : {
@@ -2937,8 +2937,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Can you even see this?"
+            "state" : "translated",
+            "value" : "これが見えますか?"
           }
         },
         "ko" : {
@@ -3115,8 +3115,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Cancel"
+            "state" : "translated",
+            "value" : "キャンセル"
           }
         },
         "ko" : {
@@ -3293,8 +3293,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check for Updates"
+            "state" : "translated",
+            "value" : "アップデートの確認"
           }
         },
         "ko" : {
@@ -3471,7 +3471,7 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Command (⌘)"
           }
         },
@@ -3649,7 +3649,7 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Control (⌃)"
           }
         },
@@ -3827,8 +3827,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Current Keybind: %@"
+            "state" : "translated",
+            "value" : "現在のキーバインド: %@"
           }
         },
         "ko" : {
@@ -4005,8 +4005,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Current Version: %@"
+            "state" : "translated",
+            "value" : "現在のバージョン: %@"
           }
         },
         "ko" : {
@@ -4184,8 +4184,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Default"
+            "state" : "translated",
+            "value" : "デフォルト"
           }
         },
         "ko" : {
@@ -4363,8 +4363,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Default (Medium Large)"
+            "state" : "translated",
+            "value" : "デフォルト (中くらい)"
           }
         },
         "ko" : {
@@ -4542,8 +4542,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Embedded"
+            "state" : "translated",
+            "value" : "埋め込み"
           }
         },
         "ko" : {
@@ -4720,8 +4720,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable Hover Window Sliding Animation"
+            "state" : "translated",
+            "value" : "ウィンドウスライドアニメーションを有効にする"
           }
         },
         "ko" : {
@@ -4898,8 +4898,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable Window Switcher"
+            "state" : "translated",
+            "value" : "ウィンドウスイッチャーを有効にする"
           }
         },
         "ko" : {
@@ -5076,8 +5076,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enhance your dock experience!"
+            "state" : "translated",
+            "value" : "ドック体験を強化しましょう！"
           }
         },
         "ko" : {
@@ -5255,8 +5255,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Extra Extra Small"
+            "state" : "translated",
+            "value" : "かなりかなり小さい"
           }
         },
         "ko" : {
@@ -5434,8 +5434,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Extra Small"
+            "state" : "translated",
+            "value" : "かなり小さい"
           }
         },
         "ko" : {
@@ -5613,8 +5613,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "General"
+            "state" : "translated",
+            "value" : "一般"
           }
         },
         "ko" : {
@@ -5791,8 +5791,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "General settings"
+            "state" : "translated",
+            "value" : "一般設定"
           }
         },
         "ko" : {
@@ -5969,8 +5969,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Get Started"
+            "state" : "translated",
+            "value" : "始めましょう"
           }
         },
         "ko" : {
@@ -6148,8 +6148,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hidden"
+            "state" : "translated",
+            "value" : "非表示"
           }
         },
         "ko" : {
@@ -6278,8 +6278,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hover Window Open Delay"
+            "state" : "translated",
+            "value" : "Verzögerung beim Öffnen des Hover-Fensters"
           }
         },
         "el" : {
@@ -6326,8 +6326,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hover Window Open Delay"
+            "state" : "translated",
+            "value" : "ホバーウィンドウが表示されるまでの遅延"
           }
         },
         "ko" : {
@@ -6504,8 +6504,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hover Window Title Style"
+            "state" : "translated",
+            "value" : "ホバーウィンドウのタイトルの表示方法"
           }
         },
         "ko" : {
@@ -6682,8 +6682,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "If you need to access the menu bar icon, launch the app to reveal it for 10 seconds."
+            "state" : "translated",
+            "value" : "メニューバーのアイコンはアプリを起動から10秒間表示されます。"
           }
         },
         "ko" : {
@@ -6860,8 +6860,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Initialization Key"
+            "state" : "translated",
+            "value" : "初期化キー"
           }
         },
         "ko" : {
@@ -7039,8 +7039,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Large"
+            "state" : "translated",
+            "value" : "大きい"
           }
         },
         "ko" : {
@@ -7217,8 +7217,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Last checked: %@"
+            "state" : "translated",
+            "value" : "最終確認: %@"
           }
         },
         "ko" : {
@@ -7395,8 +7395,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Launch DockDoor at login"
+            "state" : "translated",
+            "value" : "ログイン時に DockDoor を起動する"
           }
         },
         "ko" : {
@@ -7574,8 +7574,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Medium"
+            "state" : "translated",
+            "value" : "中くらい"
           }
         },
         "ko" : {
@@ -7752,8 +7752,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Menu Bar Icon Hidden"
+            "state" : "translated",
+            "value" : "メニューバーのアイコンを非表示"
           }
         },
         "ko" : {
@@ -7931,8 +7931,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Never visible"
+            "state" : "translated",
+            "value" : "見えねー"
           }
         },
         "ko" : {
@@ -8109,7 +8109,7 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "OK"
           }
         },
@@ -8288,8 +8288,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "On window hover; Dimmed until button hover"
+            "state" : "translated",
+            "value" : "ウィンドウホバー時; ボタンホバーまで暗くする"
           }
         },
         "ko" : {
@@ -8467,8 +8467,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "On window hover; Full opacity"
+            "state" : "translated",
+            "value" : "ウィンドウホバリング時; 透過しない"
           }
         },
         "ko" : {
@@ -8645,8 +8645,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open Accessibility Settings"
+            "state" : "translated",
+            "value" : "アクセシビリティの設定を開く"
           }
         },
         "ko" : {
@@ -8823,8 +8823,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open Screen Recording Settings"
+            "state" : "translated",
+            "value" : "画面収録の設定を開く"
           }
         },
         "ko" : {
@@ -8965,8 +8965,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open Settings"
+            "state" : "translated",
+            "value" : "Abrir Ajustes"
           }
         },
         "fi" : {
@@ -9001,8 +9001,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open Settings"
+            "state" : "translated",
+            "value" : "設定を開く"
           }
         },
         "ko" : {
@@ -9179,7 +9179,7 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Option (⌥)"
           }
         },
@@ -9357,8 +9357,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Permission error"
+            "state" : "translated",
+            "value" : "権限エラー"
           }
         },
         "ko" : {
@@ -9536,8 +9536,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Permissions"
+            "state" : "translated",
+            "value" : "権限"
           }
         },
         "ko" : {
@@ -9714,8 +9714,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Permissions settings"
+            "state" : "translated",
+            "value" : "権限の設定"
           }
         },
         "ko" : {
@@ -9892,8 +9892,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Please Quit the App to Apply Changes! :)"
+            "state" : "translated",
+            "value" : "変更を適用するにはアプリを終了してください! :)"
           }
         },
         "ko" : {
@@ -10071,8 +10071,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Popover"
+            "state" : "translated",
+            "value" : "ポップオーバー"
           }
         },
         "ko" : {
@@ -10249,8 +10249,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Press any key combination after holding the initialization key to set the keybind."
+            "state" : "translated",
+            "value" : "初期化キーを押した後、任意のキーの組み合わせを押して、キーバインドを設定します。"
           }
         },
         "ko" : {
@@ -10427,8 +10427,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Press the key combination..."
+            "state" : "translated",
+            "value" : "キーの組み合わせを押してください..."
           }
         },
         "ko" : {
@@ -10605,8 +10605,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Quit App"
+            "state" : "translated",
+            "value" : "アプリを終了"
           }
         },
         "ko" : {
@@ -10783,8 +10783,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Quit DockDoor"
+            "state" : "translated",
+            "value" : "DockDoorを終了"
           }
         },
         "ko" : {
@@ -10961,8 +10961,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Screen Capturing:"
+            "state" : "translated",
+            "value" : "画面キャプチャ:"
           }
         },
         "ko" : {
@@ -11092,7 +11092,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Berechtigungen zur Bildschirmaufnahme"
+            "value" : "Berechtigungen für Bildschirmaufnahme"
           }
         },
         "el" : {
@@ -11139,8 +11139,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Screen Recording Permissions"
+            "state" : "translated",
+            "value" : "画面の収録権限"
           }
         },
         "ko" : {
@@ -11269,8 +11269,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "seconds"
+            "state" : "translated",
+            "value" : "Sekunden"
           }
         },
         "el" : {
@@ -11317,8 +11317,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "seconds"
+            "state" : "translated",
+            "value" : "秒"
           }
         },
         "ko" : {
@@ -11495,8 +11495,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Set Initialization Key and Keybind"
+            "state" : "translated",
+            "value" : "初期化キーとキー割り当てを設定"
           }
         },
         "ko" : {
@@ -11673,8 +11673,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Menu Bar Icon"
+            "state" : "translated",
+            "value" : "メニューバーアイコンを表示"
           }
         },
         "ko" : {
@@ -11851,8 +11851,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Window Titles"
+            "state" : "translated",
+            "value" : "ウィンドウのタイトルを表示"
           }
         },
         "ko" : {
@@ -12029,8 +12029,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Window Titles on Previews"
+            "state" : "translated",
+            "value" : "プレビューの上にウィンドウタイトルを表示"
           }
         },
         "ko" : {
@@ -12208,8 +12208,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Small"
+            "state" : "translated",
+            "value" : "小さい"
           }
         },
         "ko" : {
@@ -12386,8 +12386,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Start Recording Keybind"
+            "state" : "translated",
+            "value" : "キー割り当ての記録を開始"
           }
         },
         "ko" : {
@@ -12565,8 +12565,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Subatomic"
+            "state" : "translated",
+            "value" : "原子よりも小さい"
           }
         },
         "ko" : {
@@ -12696,8 +12696,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Top Right"
+            "state" : "translated",
+            "value" : "Oben rechts"
           }
         },
         "el" : {
@@ -12744,8 +12744,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Top Right"
+            "state" : "translated",
+            "value" : "右上"
           }
         },
         "ko" : {
@@ -12922,8 +12922,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Traffic Light Buttons Visibility"
+            "state" : "translated",
+            "value" : "ウィンドウボタンの表示"
           }
         },
         "ko" : {
@@ -13100,8 +13100,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Up to date"
+            "state" : "translated",
+            "value" : "最新"
           }
         },
         "ko" : {
@@ -13278,8 +13278,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update available"
+            "state" : "translated",
+            "value" : "利用可能なアップデート"
           }
         },
         "ko" : {
@@ -13456,8 +13456,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update settings"
+            "state" : "translated",
+            "value" : "アップデートの設定"
           }
         },
         "ko" : {
@@ -13635,8 +13635,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Updates"
+            "state" : "translated",
+            "value" : "アップデート"
           }
         },
         "ko" : {
@@ -13813,8 +13813,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use default MacOS keybind ⌘ + ⇥"
+            "state" : "translated",
+            "value" : "MacOS デフォルトのキーバインド（⌘ + ⇥）を使用する"
           }
         },
         "ko" : {
@@ -13991,8 +13991,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use Uniform Image Preview Radius"
+            "state" : "translated",
+            "value" : "画像プレビューのサイズを統一する"
           }
         },
         "ko" : {
@@ -14169,8 +14169,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version %@"
+            "state" : "translated",
+            "value" : "バージョン %@"
           }
         },
         "ko" : {
@@ -14347,8 +14347,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Want to support development?"
+            "state" : "translated",
+            "value" : "開発を支援したいですか?"
           }
         },
         "ko" : {
@@ -14525,8 +14525,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Welcome to DockDoor!"
+            "state" : "translated",
+            "value" : "DockDoor へようこそ！"
           }
         },
         "ko" : {
@@ -14704,8 +14704,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "What is this? A window for ANTS?"
+            "state" : "translated",
+            "value" : "なにこの小ささ？アリさんが外をのぞくための窓かな？"
           }
         },
         "ko" : {
@@ -14883,8 +14883,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When Showing Dock Tile Previews"
+            "state" : "translated",
+            "value" : "ドックタイルプレビューを表示するとき"
           }
         },
         "ko" : {
@@ -15062,8 +15062,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When Using Window Switcher"
+            "state" : "translated",
+            "value" : "ウィンドウスイッチャーを使用するとき"
           }
         },
         "ko" : {
@@ -15240,8 +15240,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Why we need permissions"
+            "state" : "translated",
+            "value" : "権限が必要な理由"
           }
         },
         "ko" : {
@@ -15370,8 +15370,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Buffer"
+            "state" : "translated",
+            "value" : "Fenster-Puffer"
           }
         },
         "el" : {
@@ -15418,8 +15418,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Buffer"
+            "state" : "translated",
+            "value" : "ウィンドウのバッファー"
           }
         },
         "ko" : {
@@ -15548,8 +15548,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Cache Lifespan"
+            "state" : "translated",
+            "value" : "Lebensdauer Fenster-Cache"
           }
         },
         "el" : {
@@ -15596,8 +15596,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Cache Lifespan"
+            "state" : "translated",
+            "value" : "ウィンドウキャッシュの有効期間"
           }
         },
         "ko" : {
@@ -15774,8 +15774,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Size"
+            "state" : "translated",
+            "value" : "ウィンドウサイズ"
           }
         },
         "ko" : {
@@ -15953,8 +15953,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Switcher"
+            "state" : "translated",
+            "value" : "ウィンドウスイッチャー"
           }
         },
         "ko" : {
@@ -16131,8 +16131,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Title Position"
+            "state" : "translated",
+            "value" : "ウィンドウタイトルの位置"
           }
         },
         "ko" : {
@@ -16309,8 +16309,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Windows switching settings"
+            "state" : "translated",
+            "value" : "ウィンドウの切り替え設定"
           }
         },
         "ko" : {
@@ -16487,8 +16487,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "You need to give DockDoor access to the accessibility API in order for it to function."
+            "state" : "translated",
+            "value" : "DockDoor がアクセシビリティ API にアクセスできるようにする必要があります。"
           }
         },
         "ko" : {
