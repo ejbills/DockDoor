@@ -87,7 +87,6 @@ struct WindowPreview: View {
 
         ZStack(alignment: .topTrailing) {
             VStack(spacing: 0) {
-                Text("window info is present here")
                 windowContent(isMinimized: windowInfo.isMinimized, isHidden: windowInfo.isHidden, isSelected: selected)
                     .overlay { Color.white.opacity(isHoveringOverWindowSwitcherPreview ? 0.1 : 0) }
                     .shadow(radius: selected || isHoveringOverWindowSwitcherPreview ? 0 : 3)
