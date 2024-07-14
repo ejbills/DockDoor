@@ -454,19 +454,17 @@ final class WindowUtil {
         let results = try await group.waitForAll()
         let activeWindows = results.compactMap { $0 }.filter { !$0.appName.isEmpty && !$0.bundleID.isEmpty }
         
-        if foundApp == nil, let bundleId = appNameBundleIdTracker[applicationName] { // app does not have any active windows in space
+        if let bundleId = appNameBundleIdTracker[applicationName] ?? foundApp?.bundleIdentifier {
             // this is where we need to inject some logic to get the app bundle identifier, foundApp is always nil when the app is running in another space becuase we are relying on the SCShareableContent.excludingDesktopWindows loop, which is current space limited. we cannot rely on the app name like we initially assumed. we will need to discuss this further.
 
             // for now i am tracking all of the app name to bundle identifers that are came across in the liftime of the app, and then using that to assume the bundle identifier.
-            
+
             let storedWindows = desktopSpaceWindowCache[bundleId] ?? []
-                
             let activeWindowsSet = Set(activeWindows)
             let combinedWindowsSet = activeWindowsSet.union(storedWindows)
-                        
             return Array(combinedWindowsSet)
         }
-        
+
         return activeWindows
     }
     
