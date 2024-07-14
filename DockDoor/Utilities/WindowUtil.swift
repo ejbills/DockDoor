@@ -23,8 +23,8 @@ struct WindowInfo: Identifiable, Hashable {
     var image: CGImage?
     var axElement: AXUIElement
     var closeButton: AXUIElement?
-    let isMinimized: Bool
-    let isHidden: Bool
+    var isMinimized: Bool
+    var isHidden: Bool
 }
 
 /// Cache item structure for storing captured window images.
@@ -305,11 +305,7 @@ final class WindowUtil {
             let fallbackResult = AXUIElementSetAttributeValue(windowInfo.axElement, kAXFrontmostAttribute as CFString, kCFBooleanTrue)
             
             if fallbackActivateResult != true || fallbackResult != .success {
-                //                    if let (key, index) = findKeyAndIndex(for: windowInfo.id) {
-                //                        deleteWindowFromListUsingKeyIndex(key, index)
-                //                    } else {
                 print("Failed to bring window to front with fallback attempts.")
-                //                    }
             }
         }
     }
@@ -323,7 +319,7 @@ final class WindowUtil {
         
         let closeResult = AXUIElementPerformAction(closeButton, kAXPressAction as CFString)
         removeWindowFromDesktopSpaceCache(with: windowInfo.id, in: windowInfo.bundleID)
-
+        
         if closeResult != .success {
             print("Error closing window: \(closeResult.rawValue)")
             return
@@ -348,27 +344,49 @@ final class WindowUtil {
     // MARK: - Minimized Window Handling
     
     /// Retrieves minimized windows' information for a given process ID, bundle ID, and app name.
-    static func getMinimizedOrHiddenWindows(pid: pid_t, bundleID: String, appName: String, isParentAppHidden: Bool) -> [WindowInfo] {
-        var minimizedOrHiddenWindowsInfo: [WindowInfo] = []
+    static func updateStatusOfWindowCache(pid: pid_t, bundleID: String, isParentAppHidden: Bool) {
         let appElement = AXUIElementCreateApplication(pid)
         var value: AnyObject?
         let result = AXUIElementCopyAttributeValue(appElement, kAXWindowsAttribute as CFString, &value)
         
         if result == .success, let windows = value as? [AXUIElement] {
-            for (index, window) in windows.enumerated() {
+            for (_, window) in windows.enumerated() {
                 let isMinimized: Bool = getAXAttribute(element: window, attribute: kAXMinimizedAttribute as CFString) ?? false
                 
                 let windowName: String? = getAXAttribute(element: window, attribute: kAXTitleAttribute as CFString)
                 
                 if isMinimized || isParentAppHidden {
-                    let windowInfo = WindowInfo(id: UInt32(index), window: nil, appName: appName, bundleID: bundleID,
-                                                pid: pid, windowName: windowName, image: nil, axElement: window,
-                                                closeButton: nil, isMinimized: isMinimized, isHidden: isParentAppHidden)
-                    minimizedOrHiddenWindowsInfo.append(windowInfo)
+                    if let windowName = windowName,
+                       var cachedWindows = desktopSpaceWindowCache[bundleID] {
+                        cachedWindows = Set(cachedWindows.map { windowInfo in
+                            var updatedWindow = windowInfo
+                            if windowInfo.windowName == windowName {
+                                if isMinimized {
+                                    updatedWindow.isMinimized = true
+                                }
+                                if isParentAppHidden {
+                                    updatedWindow.isHidden = true
+                                }
+                            }
+                            return updatedWindow
+                        })
+                        desktopSpaceWindowCache[bundleID] = cachedWindows
+                    }
                 }
             }
         }
-        return minimizedOrHiddenWindowsInfo
+        
+        // If the parent app is hidden, update all windows for this bundle ID
+        if isParentAppHidden {
+            if var cachedWindows = desktopSpaceWindowCache[bundleID] {
+                cachedWindows = Set(cachedWindows.map { windowInfo in
+                    var updatedWindow = windowInfo
+                    updatedWindow.isHidden = true
+                    return updatedWindow
+                })
+                desktopSpaceWindowCache[bundleID] = cachedWindows
+            }
+        }
     }
     
     /// Retrieves a value for a given AXUIElement attribute.
@@ -386,7 +404,7 @@ final class WindowUtil {
         if applicationName.isEmpty {
             return getAllWindowInfosAsList()
         }
-
+        
         func getNonLocalizedAppName(forBundleIdentifier bundleIdentifier: String) -> String? {
             guard let bundleURL = NSWorkspace.shared.urlForApplication(withBundleIdentifier: bundleIdentifier) else {
                 return nil
@@ -423,7 +441,7 @@ final class WindowUtil {
                 }
             }
         }
-                
+        
         // If no exact match is found, use the best guess from potential matches
         if foundApp == nil, let bestGuessApp = potentialMatches.first {
             foundApp = bestGuessApp
@@ -442,29 +460,24 @@ final class WindowUtil {
             }
         }
         
-        if let app = foundApp,
-           let isAppHidden = NSRunningApplication(processIdentifier: app.processID)?.isHidden {
-            let minimizedOrHiddenWindowsInfo = getMinimizedOrHiddenWindows(pid: app.processID, bundleID: app.bundleIdentifier,
-                                                                           appName: applicationName, isParentAppHidden: isAppHidden)
-            for windowInfo in minimizedOrHiddenWindowsInfo {
-                await group.addTask { return windowInfo }
-            }
+        if let app = foundApp, let isAppHidden = NSRunningApplication(processIdentifier: app.processID)?.isHidden {
+            updateStatusOfWindowCache(pid: app.processID, bundleID: app.bundleIdentifier, isParentAppHidden: isAppHidden)
         }
-                        
+        
         let results = try await group.waitForAll()
         let activeWindows = results.compactMap { $0 }.filter { !$0.appName.isEmpty && !$0.bundleID.isEmpty }
         
         if let bundleId = appNameBundleIdTracker[applicationName] ?? foundApp?.bundleIdentifier {
             // this is where we need to inject some logic to get the app bundle identifier, foundApp is always nil when the app is running in another space becuase we are relying on the SCShareableContent.excludingDesktopWindows loop, which is current space limited. we cannot rely on the app name like we initially assumed. we will need to discuss this further.
-
+            
             // for now i am tracking all of the app name to bundle identifers that are came across in the liftime of the app, and then using that to assume the bundle identifier.
-
+            
             let storedWindows = desktopSpaceWindowCache[bundleId] ?? []
             let activeWindowsSet = Set(activeWindows)
             let combinedWindowsSet = activeWindowsSet.union(storedWindows)
             return Array(combinedWindowsSet)
         }
-
+        
         return activeWindows
     }
     
@@ -520,7 +533,7 @@ final class WindowUtil {
             return nil
         }
     }
-
+    
     static func updateDesktopSpaceWindowCache(with windowInfo: WindowInfo) {
         if var windowSet = desktopSpaceWindowCache[windowInfo.bundleID] {
             if let existingWindow = windowSet.first(where: { $0.id == windowInfo.id }) {
@@ -534,11 +547,11 @@ final class WindowUtil {
             desktopSpaceWindowCache[windowInfo.bundleID] = Set([windowInfo])
         }
     }
-
+    
     static func findWindowInDesktopSpaceCache(for windowID: CGWindowID, in bundleID: String) -> WindowInfo? {
         return desktopSpaceWindowCache[bundleID]?.first { $0.id == windowID }
     }
-
+    
     static func removeWindowFromDesktopSpaceCache(with id: CGWindowID, in bundleID: String) {
         if let windowToRemove = findWindowInDesktopSpaceCache(for: id, in: bundleID) {
             desktopSpaceWindowCache[bundleID]?.remove(windowToRemove)

@@ -21,6 +21,7 @@ class WindowManipulationObservers {
         notificationCenter.addObserver(self, selector: #selector(appDidLaunch(_:)), name: NSWorkspace.didLaunchApplicationNotification, object: nil)
         notificationCenter.addObserver(self, selector: #selector(appDidTerminate(_:)), name: NSWorkspace.didTerminateApplicationNotification, object: nil)
         notificationCenter.addObserver(self, selector: #selector(appDidActivate(_:)), name: NSWorkspace.didActivateApplicationNotification, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(appDidHide(_:)), name: NSApplication.didHideNotification, object: nil)
         
         // Set up observers for already running applications
         NSWorkspace.shared.runningApplications.forEach { app in
@@ -66,10 +67,20 @@ class WindowManipulationObservers {
         AXObserverAddNotification(observer, appElement, kAXUIElementDestroyedNotification as CFString, UnsafeMutableRawPointer(bitPattern: Int(pid)))
         AXObserverAddNotification(observer, appElement, kAXWindowMiniaturizedNotification as CFString, UnsafeMutableRawPointer(bitPattern: Int(pid)))
         AXObserverAddNotification(observer, appElement, kAXWindowDeminiaturizedNotification as CFString, UnsafeMutableRawPointer(bitPattern: Int(pid)))
+        AXObserverAddNotification(observer, appElement, kAXApplicationHiddenNotification as CFString, UnsafeMutableRawPointer(bitPattern: Int(pid)))
+        AXObserverAddNotification(observer, appElement, kAXApplicationShownNotification as CFString, UnsafeMutableRawPointer(bitPattern: Int(pid)))
         
         CFRunLoopAddSource(CFRunLoopGetMain(), AXObserverGetRunLoopSource(observer), .defaultMode)
         
         observers[pid] = observer
+    }
+    
+    @objc private func appDidHide(_ notification: Notification) {
+        guard let app = notification.object as? NSRunningApplication else { return }
+        let pid = app.processIdentifier
+        let bundleID = app.bundleIdentifier ?? ""
+        
+        WindowUtil.updateStatusOfWindowCache(pid: pid, bundleID: bundleID, isParentAppHidden: true)
     }
     
     private func removeObserverForApp(_ app: NSRunningApplication) {
@@ -110,8 +121,14 @@ func axObserverCallback(observer: AXObserver, element: AXUIElement, notification
                 print("Window closed for app: \(app.localizedName ?? "Unknown")")
             case kAXWindowMiniaturizedNotification:
                 print("Window minimized for app: \(app.localizedName ?? "Unknown")")
+                WindowUtil.updateStatusOfWindowCache(pid: pid_t(pid), bundleID: app.bundleIdentifier ?? "", isParentAppHidden: false)
             case kAXWindowDeminiaturizedNotification:
                 print("Window restored for app: \(app.localizedName ?? "Unknown")")
+            case kAXApplicationHiddenNotification:
+                print("Application hidden: \(app.localizedName ?? "Unknown")")
+                WindowUtil.updateStatusOfWindowCache(pid: pid_t(pid), bundleID: app.bundleIdentifier ?? "", isParentAppHidden: true)
+            case kAXApplicationShownNotification:
+                print("Application shown: \(app.localizedName ?? "Unknown")")
             default:
                 break
             }

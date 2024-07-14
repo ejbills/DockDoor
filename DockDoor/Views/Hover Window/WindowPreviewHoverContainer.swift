@@ -53,12 +53,8 @@ struct WindowPreviewHoverContainer: View {
             ScrollViewReader { scrollProxy in
                 ScrollView(orientationIsHorizontal ? .horizontal : .vertical, showsIndicators: false) {
                     DynStack(direction: orientationIsHorizontal ? .horizontal : .vertical, spacing: 16) {
-                        if !minimizedOrHiddenWindows.isEmpty {
-                            minimizedOrHiddenWindowsView
-                        }
-                        
-                        ForEach(activeWindows.indices, id: \.self) { index in
-                            WindowPreview(windowInfo: activeWindows[index], onTap: onWindowTap, index: index,
+                        ForEach(windows.indices, id: \.self) { index in
+                            WindowPreview(windowInfo: windows[index], onTap: onWindowTap, index: index,
                                           dockPosition: dockPosition, maxWindowDimension: maxWindowDimension,
                                           bestGuessMonitor: bestGuessMonitor, uniformCardRadius: uniformCardRadius)
                             .id("\(appName)-\(index)")
@@ -92,15 +88,7 @@ struct WindowPreviewHoverContainer: View {
         .padding(.all, 24)
         .frame(maxWidth: self.bestGuessMonitor.visibleFrame.width, maxHeight: self.bestGuessMonitor.visibleFrame.height)
     }
-    
-    private var minimizedOrHiddenWindows: [WindowInfo] {
-        windows.filter { $0.isMinimized || $0.isHidden }
-    }
-    
-    private var activeWindows: [WindowInfo] {
-        windows.filter { !$0.isMinimized && !$0.isHidden }
-    }
-    
+        
     @ViewBuilder
     private func hoverTitleBaseView(labelSize: CGSize) -> some View {
         if !ScreenCenteredFloatingWindow.shared.windowSwitcherActive {
@@ -203,26 +191,7 @@ struct WindowPreviewHoverContainer: View {
             EmptyView()
         }
     }
-    
-    private var minimizedOrHiddenWindowsView: some View {
-        ScrollView(dockPosition == .bottom ? .vertical : .horizontal) {
-            DynStack(direction: dockPosition == .bottom ? .vertical : .horizontal, spacing: 4) {
-                ForEach(minimizedOrHiddenWindows.indices, id: \.self) { index in
-                    WindowPreview(
-                        windowInfo: minimizedOrHiddenWindows[index],
-                        onTap: onWindowTap,
-                        index: index,
-                        dockPosition: dockPosition,
-                        maxWindowDimension: maxWindowDimension,
-                        bestGuessMonitor: bestGuessMonitor,
-                        uniformCardRadius: true // force it to be rounded, since these have no image previews
-                    )
-                }
-            }
-        }
-        .frame(maxWidth: dockPosition != .bottom ? maxWindowDimension.x : nil, maxHeight: dockPosition == .bottom ? maxWindowDimension.y : nil)
-    }
-    
+        
     private func runUIUpdates() {
         self.runAnimation()
         self.loadAppIcon()

@@ -7851,6 +7851,9 @@
         }
       }
     },
+    "Minimized" : {
+
+    },
     "Never visible" : {
       "comment" : "Traffic light buttons visibility option",
       "localizations" : {
@@ -15721,6 +15724,9 @@
       }
     },
     "Window Image Cache Lifespan" : {
+
+    },
+    "window info is present here" : {
 
     },
     "Window Size" : {

@@ -55,51 +55,39 @@ struct WindowPreview: View {
 
     private func windowContent(isMinimized: Bool, isHidden: Bool, isSelected: Bool) -> some View {
         Group {
-            if isMinimized || isHidden {
-                let width = maxWindowDimension.x > 300 ? maxWindowDimension.x : 300
-                let labelText = isMinimized ? "Minimized" : "Hidden"
-
-                HStack(spacing: 16) {
-                    Image(systemName: "eye.slash.fill")
-                        .font(.system(size: 20))
-                        .foregroundColor(.secondary)
-
-                    Divider()
-
-                    VStack(alignment: .leading) {
-                        Text(labelText)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-
-                        TheMarquee(width: width - 100, secsBeforeLooping: 2, speedPtsPerSec: 30, nonMovingAlignment: .leading) {
-                            Text(windowInfo.windowName ?? "\(labelText) window")
-                                .font(.system(size: 12, weight: .medium))
-                                .foregroundStyle(.primary)
+            if let cgImage = windowInfo.image {
+                Image(decorative: cgImage, scale: 1.0)
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .overlay(
+                        Group {
+                            if isMinimized || isHidden {
+                                fluidGradient().opacity(0.225)
+                                VStack {
+                                    Image(systemName: "eye.slash.fill")
+                                        .font(.system(size: 24))
+                                        .foregroundColor(.white)
+                                    Text(isMinimized ? "Minimized" : "Hidden")
+                                        .font(.caption)
+                                        .foregroundColor(.white)
+                                }
+                            }
                         }
-                    }
-                }
-                .padding(.horizontal, 8)
-                .padding()
-                .frame(width: width)
-                .frame(height: 60)
-                .overlay { if isSelected { fluidGradient().opacity(0.125) }}
-            } else if let cgImage = windowInfo.image {
-                let image = Image(decorative: cgImage, scale: 1.0).resizable().aspectRatio(contentMode: .fill)
-                image.overlay(!isSelected ? nil : fluidGradient().opacity(0.125).mask(image))
+                    )
+                    .overlay(isSelected ? fluidGradient().opacity(0.125) : nil)
             }
         }
-        .frame(width: isMinimized || isHidden ? nil : calculatedSize.width,
-               height: isMinimized || isHidden ? nil : calculatedSize.height,
-               alignment: .center)
+        .frame(width: calculatedSize.width, height: calculatedSize.height, alignment: .center)
         .frame(maxWidth: calculatedMaxDimensions.width, maxHeight: calculatedMaxDimensions.height)
     }
-
+    
     var body: some View {
         let isHighlightedInWindowSwitcher = (index == ScreenCenteredFloatingWindow.shared.currIndex && ScreenCenteredFloatingWindow.shared.windowSwitcherActive)
         let selected = isHoveringOverDockPeekPreview || isHighlightedInWindowSwitcher
 
         ZStack(alignment: .topTrailing) {
             VStack(spacing: 0) {
+                Text("window info is present here")
                 windowContent(isMinimized: windowInfo.isMinimized, isHidden: windowInfo.isHidden, isSelected: selected)
                     .overlay { Color.white.opacity(isHoveringOverWindowSwitcherPreview ? 0.1 : 0) }
                     .shadow(radius: selected || isHoveringOverWindowSwitcherPreview ? 0 : 3)
