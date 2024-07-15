@@ -119,8 +119,15 @@ struct WindowPreview: View {
                     return .topTrailing
                 }
             }()) {
-                if  showWindowTitle && ((windowTitleDisplayCondition == .always) || (windowTitleDisplayCondition == .windowSwitcherOnly && ScreenCenteredFloatingWindow.shared.windowSwitcherActive) || (windowTitleDisplayCondition == .dockPreviewsOnly && !ScreenCenteredFloatingWindow.shared.windowSwitcherActive)) {
-                    windowTitleOverlay(selected: selected)
+                let shouldShowTitleOverlay = showWindowTitle && (
+                    windowTitleDisplayCondition == .always ||
+                    (windowTitleDisplayCondition == .hoverOnly) ||
+                    (windowTitleDisplayCondition == .windowSwitcherOnly && ScreenCenteredFloatingWindow.shared.windowSwitcherActive) ||
+                    (windowTitleDisplayCondition == .dockPreviewsOnly && !ScreenCenteredFloatingWindow.shared.windowSwitcherActive)
+                )
+
+                if shouldShowTitleOverlay {
+                    windowTitleOverlay(selected: windowTitleDisplayCondition == .always ? true : selected)
                 }
             }
             .overlay(alignment: .topLeading) {
@@ -220,7 +227,7 @@ struct WindowPreview: View {
 
     @ViewBuilder
     private func windowTitleOverlay(selected: Bool) -> some View {
-        if selected, let windowTitle = windowInfo.window?.title, !windowTitle.isEmpty, windowTitle != windowInfo.appName {
+        if selected, let windowTitle = windowInfo.window?.title, !windowTitle.isEmpty, (windowTitle != windowInfo.appName || (windowTitle == windowInfo.appName && ScreenCenteredFloatingWindow.shared.windowSwitcherActive && (windowTitleDisplayCondition == .always || windowTitleDisplayCondition == .windowSwitcherOnly || windowTitleDisplayCondition == .hoverOnly))) {
             let maxLabelWidth = calculatedSize.width - 50
             let stringMeasurementWidth = measureString(windowTitle, fontSize: 12).width + 5
             let width = maxLabelWidth > stringMeasurementWidth ? stringMeasurementWidth : maxLabelWidth

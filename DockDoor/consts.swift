@@ -44,6 +44,7 @@ extension Defaults.Keys {
 
 enum WindowTitleDisplayCondition: String, CaseIterable, Defaults.Serializable {
     case always = "always"
+    case hoverOnly = "hoverOnly"
     case dockPreviewsOnly = "dockPreviewsOnly"
     case windowSwitcherOnly = "windowSwitcherOnly"
     
@@ -51,10 +52,12 @@ enum WindowTitleDisplayCondition: String, CaseIterable, Defaults.Serializable {
         switch self {
         case .always:
             String(localized: "Always", comment: "Preview window title condition option")
+        case .hoverOnly:
+            String(localized: "When Hovering", comment: "Preview window title condition option")
         case .dockPreviewsOnly:
-            String(localized: "When Showing Dock Tile Previews", comment: "Preview window title condition option")
+            String(localized: "When Hovering Dock Tile Previews Only", comment: "Preview window title condition option")
         case .windowSwitcherOnly:
-            String(localized: "When Using Window Switcher", comment: "Preview window title condition option")
+            String(localized: "When Hovering Window Switcher Previews Only", comment: "Preview window title condition option")
         }
     }
 }
