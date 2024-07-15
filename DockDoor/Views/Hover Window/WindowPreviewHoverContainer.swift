@@ -16,7 +16,8 @@ struct WindowPreviewHoverContainer: View {
     let bestGuessMonitor: NSScreen
     
     @Default(.uniformCardRadius) var uniformCardRadius
-    @Default(.windowTitleStyle) var windowTitleStyle
+    @Default(.showAppName) var showAppName
+    @Default(.appNameStyle) var appNameStyle
     @Default(.windowTitlePosition) var windowTitlePosition
     
     @State private var showWindows: Bool = false
@@ -83,12 +84,12 @@ struct WindowPreviewHoverContainer: View {
                 .opacity(showWindows ? 1 : 0.8)
             }
         }
-        .padding(.top, (!ScreenCenteredFloatingWindow.shared.windowSwitcherActive && windowTitleStyle == .embedded) ? 25 : 0) // Provide space above the window preview for the Embedded title style when hovering over the Dock.
+        .padding(.top, (!ScreenCenteredFloatingWindow.shared.windowSwitcherActive && appNameStyle == .embedded) ? 25 : 0) // Provide space above the window preview for the Embedded title style when hovering over the Dock.
         .dockStyle(cornerRadius: 16)
         .overlay(alignment: .topLeading) {
             hoverTitleBaseView(labelSize: measureString(appName, fontSize: 14))
         }
-        .padding(.top, (!ScreenCenteredFloatingWindow.shared.windowSwitcherActive && windowTitleStyle == .popover) ? 30 : 0) // Provide empty space above the window preview for the Popover title style when hovering over the Dock
+        .padding(.top, (!ScreenCenteredFloatingWindow.shared.windowSwitcherActive && appNameStyle == .popover) ? 30 : 0) // Provide empty space above the window preview for the Popover title style when hovering over the Dock
         .padding(.all, 24)
         .frame(maxWidth: self.bestGuessMonitor.visibleFrame.width, maxHeight: self.bestGuessMonitor.visibleFrame.height)
     }
@@ -103,8 +104,8 @@ struct WindowPreviewHoverContainer: View {
     
     @ViewBuilder
     private func hoverTitleBaseView(labelSize: CGSize) -> some View {
-        if !ScreenCenteredFloatingWindow.shared.windowSwitcherActive {
-            switch windowTitleStyle {
+        if !ScreenCenteredFloatingWindow.shared.windowSwitcherActive && showAppName {
+            switch appNameStyle {
             case .default:
                 HStack(spacing: 2) {
                     if let appIcon = appIcon {
@@ -158,15 +159,13 @@ struct WindowPreviewHoverContainer: View {
                     Spacer()
                 }
                 .offset(y: -30)
-            default:
-                EmptyView()
             }
         }
     }
     
     @ViewBuilder
     private func hoverTitleLabelView(labelSize: CGSize) -> some View {
-        switch windowTitleStyle {
+        switch appNameStyle {
         case .default:
             Text(appName)
                 .lineLimit(1)
@@ -199,8 +198,6 @@ struct WindowPreviewHoverContainer: View {
                 )
         case .embedded, .popover:
             Text(appName)
-        default:
-            EmptyView()
         }
     }
     

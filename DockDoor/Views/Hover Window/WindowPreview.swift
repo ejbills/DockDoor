@@ -20,6 +20,7 @@ struct WindowPreview: View {
     @Default(.windowTitlePosition) var windowTitlePosition
     @Default(.showWindowTitle) var showWindowTitle
     @Default(.windowTitleDisplayCondition) var windowTitleDisplayCondition
+    @Default(.windowTitleVisibility) var windowTitleVisibility
     @Default(.trafficLightButtonsVisibility) var trafficLightButtonsVisibility
     
     // preview popup action handlers
@@ -119,7 +120,7 @@ struct WindowPreview: View {
                     return .topTrailing
                 }
             }()) {
-                if  showWindowTitle && ((windowTitleDisplayCondition == .always) || (windowTitleDisplayCondition == .windowSwitcherOnly && ScreenCenteredFloatingWindow.shared.windowSwitcherActive) || (windowTitleDisplayCondition == .dockPreviewsOnly && !ScreenCenteredFloatingWindow.shared.windowSwitcherActive)) {
+                if  showWindowTitle && (windowTitleDisplayCondition == .all || (windowTitleDisplayCondition == .windowSwitcherOnly && ScreenCenteredFloatingWindow.shared.windowSwitcherActive) || (windowTitleDisplayCondition == .dockPreviewsOnly && !ScreenCenteredFloatingWindow.shared.windowSwitcherActive)) {
                     windowTitleOverlay(selected: selected)
                 }
             }
@@ -220,7 +221,7 @@ struct WindowPreview: View {
 
     @ViewBuilder
     private func windowTitleOverlay(selected: Bool) -> some View {
-        if selected, let windowTitle = windowInfo.window?.title, !windowTitle.isEmpty, windowTitle != windowInfo.appName {
+        if (windowTitleVisibility == .alwaysVisible || selected), let windowTitle = windowInfo.window?.title, !windowTitle.isEmpty, (windowTitle != windowInfo.appName || ScreenCenteredFloatingWindow.shared.windowSwitcherActive) {
             let maxLabelWidth = calculatedSize.width - 50
             let stringMeasurementWidth = measureString(windowTitle, fontSize: 12).width + 5
             let width = maxLabelWidth > stringMeasurementWidth ? stringMeasurementWidth : maxLabelWidth
