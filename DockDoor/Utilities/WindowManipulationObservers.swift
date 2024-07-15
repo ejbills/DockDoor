@@ -133,15 +133,15 @@ func axObserverCallback(observer: AXObserver, element: AXUIElement, notification
                 break
             }
             
-            if var appName = app.localizedName {
-                Task {
-                    do {
-                        _ = try await WindowUtil.activeWindows(for: appName)
-                    } catch {
-                        print("Error updating active windows: \(error)")
-                    }
-                }
-            }
+//            if var appName = app.localizedName {
+//                Task(priority: .background) {
+//                    do {
+//                        _ = try await WindowUtil.activeWindows(for: appName)
+//                    } catch {
+//                        print("Error updating active windows: \(error)")
+//                    }
+//                }
+//            }
         }
     }
 }

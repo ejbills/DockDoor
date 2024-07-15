@@ -340,55 +340,7 @@ final class WindowUtil {
             app.terminate()
         }
     }
-    
-    // MARK: - Minimized Window Handling
-    
-    /// Retrieves minimized windows' information for a given process ID, bundle ID, and app name.
-    static func updateStatusOfWindowCache(pid: pid_t, bundleID: String, isParentAppHidden: Bool) {
-        let appElement = AXUIElementCreateApplication(pid)
-        var value: AnyObject?
-        let result = AXUIElementCopyAttributeValue(appElement, kAXWindowsAttribute as CFString, &value)
-        
-        if result == .success, let windows = value as? [AXUIElement] {
-            for (_, window) in windows.enumerated() {
-                let isMinimized: Bool = getAXAttribute(element: window, attribute: kAXMinimizedAttribute as CFString) ?? false
-                
-                let windowName: String? = getAXAttribute(element: window, attribute: kAXTitleAttribute as CFString)
-                
-                if isMinimized || isParentAppHidden {
-                    if let windowName = windowName,
-                       var cachedWindows = desktopSpaceWindowCache[bundleID] {
-                        cachedWindows = Set(cachedWindows.map { windowInfo in
-                            var updatedWindow = windowInfo
-                            if windowInfo.windowName == windowName {
-                                if isMinimized {
-                                    updatedWindow.isMinimized = true
-                                }
-                                if isParentAppHidden {
-                                    updatedWindow.isHidden = true
-                                }
-                            }
-                            return updatedWindow
-                        })
-                        desktopSpaceWindowCache[bundleID] = cachedWindows
-                    }
-                }
-            }
-        }
-        
-        // If the parent app is hidden, update all windows for this bundle ID
-        if isParentAppHidden {
-            if var cachedWindows = desktopSpaceWindowCache[bundleID] {
-                cachedWindows = Set(cachedWindows.map { windowInfo in
-                    var updatedWindow = windowInfo
-                    updatedWindow.isHidden = true
-                    return updatedWindow
-                })
-                desktopSpaceWindowCache[bundleID] = cachedWindows
-            }
-        }
-    }
-    
+            
     /// Retrieves a value for a given AXUIElement attribute.
     static func getAXAttribute<T>(element: AXUIElement, attribute: CFString) -> T? {
         var value: CFTypeRef?
@@ -555,6 +507,52 @@ final class WindowUtil {
         
         if desktopSpaceWindowCache[bundleID]?.isEmpty == true {
             desktopSpaceWindowCache.removeValue(forKey: bundleID)
+        }
+    }
+    
+    /// Retrieves and updates windows' information for a given process ID, bundle ID, and app name.
+    static func updateStatusOfWindowCache(pid: pid_t, bundleID: String, isParentAppHidden: Bool) {
+        let appElement = AXUIElementCreateApplication(pid)
+        var value: AnyObject?
+        let result = AXUIElementCopyAttributeValue(appElement, kAXWindowsAttribute as CFString, &value)
+        
+        if result == .success, let windows = value as? [AXUIElement] {
+            for (_, window) in windows.enumerated() {
+                let isMinimized: Bool = getAXAttribute(element: window, attribute: kAXMinimizedAttribute as CFString) ?? false
+                
+                let windowName: String? = getAXAttribute(element: window, attribute: kAXTitleAttribute as CFString)
+                
+                if isMinimized || isParentAppHidden {
+                    if let windowName = windowName,
+                       var cachedWindows = desktopSpaceWindowCache[bundleID] {
+                        cachedWindows = Set(cachedWindows.map { windowInfo in
+                            var updatedWindow = windowInfo
+                            if windowInfo.windowName == windowName {
+                                if isMinimized {
+                                    updatedWindow.isMinimized = true
+                                }
+                                if isParentAppHidden {
+                                    updatedWindow.isHidden = true
+                                }
+                            }
+                            return updatedWindow
+                        })
+                        desktopSpaceWindowCache[bundleID] = cachedWindows
+                    }
+                }
+            }
+        }
+        
+        // If the parent app is hidden, update all windows for this bundle ID
+        if isParentAppHidden {
+            if var cachedWindows = desktopSpaceWindowCache[bundleID] {
+                cachedWindows = Set(cachedWindows.map { windowInfo in
+                    var updatedWindow = windowInfo
+                    updatedWindow.isHidden = true
+                    return updatedWindow
+                })
+                desktopSpaceWindowCache[bundleID] = cachedWindows
+            }
         }
     }
 }
