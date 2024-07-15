@@ -121,7 +121,6 @@ final class DockObserver {
         let currentMouseLocation = mouseLocation
         
         if let dockIconAppName = getDockIconAtLocation(currentMouseLocation) {
-            print("dock icon: \(dockIconAppName)")
             if dockIconAppName != lastAppName {
                 lastAppName = dockIconAppName
                 

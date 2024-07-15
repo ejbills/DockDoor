@@ -400,11 +400,6 @@ final class WindowUtil {
     
     /// Retrieves the active windows for a given application name.
     static func activeWindows(for applicationName: String) async throws -> [WindowInfo] {
-        // If the application name is empty, return all windows
-        if applicationName.isEmpty {
-            return getAllWindowInfosAsList()
-        }
-        
         func getNonLocalizedAppName(forBundleIdentifier bundleIdentifier: String) -> String? {
             guard let bundleURL = NSWorkspace.shared.urlForApplication(withBundleIdentifier: bundleIdentifier) else {
                 return nil
@@ -467,15 +462,16 @@ final class WindowUtil {
         let results = try await group.waitForAll()
         let activeWindows = results.compactMap { $0 }.filter { !$0.appName.isEmpty && !$0.bundleID.isEmpty }
         
-        if let bundleId = appNameBundleIdTracker[applicationName] ?? foundApp?.bundleIdentifier {
-            // this is where we need to inject some logic to get the app bundle identifier, foundApp is always nil when the app is running in another space becuase we are relying on the SCShareableContent.excludingDesktopWindows loop, which is current space limited. we cannot rely on the app name like we initially assumed. we will need to discuss this further.
-            
-            // for now i am tracking all of the app name to bundle identifers that are came across in the liftime of the app, and then using that to assume the bundle identifier.
-            
+        if applicationName.isEmpty { // window switcher is being used, return all windows.
+            let storedWindows = getAllWindowInfosAsList()
+            let combinedWindows = Set(activeWindows).union(storedWindows)
+            return Array(combinedWindows)
+        }
+        
+        if let bundleId = appNameBundleIdTracker[applicationName] ?? foundApp?.bundleIdentifier { // window isn't in current space, return stored windows.
             let storedWindows = desktopSpaceWindowCache[bundleId] ?? []
-            let activeWindowsSet = Set(activeWindows)
-            let combinedWindowsSet = activeWindowsSet.union(storedWindows)
-            return Array(combinedWindowsSet)
+            let combinedWindows = Set(activeWindows).union(storedWindows)
+            return Array(combinedWindows)
         }
         
         return activeWindows
