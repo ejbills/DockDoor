@@ -35,26 +35,30 @@ extension Defaults.Keys {
     static let Int64maskAlternate = Key<Int>("Int64maskAlternate", default: 524576 )
     static let UserKeybind = Key<UserKeyBind>("UserKeybind", default: UserKeyBind(keyCode: 48, modifierFlags: Defaults[.Int64maskControl]))
     
+    static let showAppName = Key<Bool>("showAppName", default: true)
+    static let appNameStyle = Key<AppNameStyle>("appNameStyle", default: .default )
+    
     static let showWindowTitle = Key<Bool>("showWindowTitle", default: true )
-    static let windowTitleDisplayCondition = Key<WindowTitleDisplayCondition>("windowTitleDisplayCondition", default: .always )
+    static let windowTitleDisplayCondition = Key<WindowTitleDisplayCondition>("windowTitleDisplayCondition", default: .all)
+    static let windowTitleVisibility = Key<WindowTitleVisibility>("windowTitleVisibility", default: .whenOveringPreview)
     static let windowTitlePosition = Key<WindowTitlePosition>("windowTitlePosition", default: WindowTitlePosition.bottomLeft )
-    static let windowTitleStyle = Key<WindowTitleStyle>("windowTitleStyle", default: .default )
-    static let trafficLightButtonsVisibility = Key<TrafficLightButtonsVisibility>("trafficLightButtonsVisibility", default: .dimmedOnWindowHover )
+    
+    static let trafficLightButtonsVisibility = Key<TrafficLightButtonsVisibility>("trafficLightButtonsVisibility", default: .dimmedOnPreviewHover )
 }
 
 enum WindowTitleDisplayCondition: String, CaseIterable, Defaults.Serializable {
-    case always = "always"
+    case all = "all"
     case dockPreviewsOnly = "dockPreviewsOnly"
     case windowSwitcherOnly = "windowSwitcherOnly"
     
     var localizedName: String {
         switch self {
-        case .always:
-            String(localized: "Always", comment: "Preview window title condition option")
+        case .all:
+            String(localized: "Dock Previews & Window Switcher", comment: "Preview window title display condition option")
         case .dockPreviewsOnly:
-            String(localized: "When Showing Dock Tile Previews", comment: "Preview window title condition option")
+            String(localized: "Dock Previews only", comment: "Preview window title condition display option")
         case .windowSwitcherOnly:
-            String(localized: "When Using Window Switcher", comment: "Preview window title condition option")
+            String(localized: "Window Switcher only", comment: "Preview window title condition display option")
         }
     }
 }
@@ -76,16 +80,13 @@ enum WindowTitlePosition: String, CaseIterable, Defaults.Serializable {
     }
 }
 
-enum WindowTitleStyle: String, CaseIterable, Defaults.Serializable {
-    case hidden
+enum AppNameStyle: String, CaseIterable, Defaults.Serializable {
     case `default`
     case embedded
     case popover
     
     var localizedName: String {
         switch self {
-        case .hidden:
-            String(localized: "Hidden", comment: "Preview title style option")
         case .default:
             String(localized: "Default", comment: "Preview title style option")
         case .embedded:
@@ -96,19 +97,33 @@ enum WindowTitleStyle: String, CaseIterable, Defaults.Serializable {
     }
 }
 
+enum WindowTitleVisibility: String, CaseIterable, Defaults.Serializable {
+    case whenOveringPreview
+    case alwaysVisible
+    
+    var localizedName: String {
+        switch self {
+        case .whenOveringPreview:
+            String(localized: "When hovering over the preview", comment: "Window title visibility option")
+        case .alwaysVisible:
+            String(localized: "Always visible", comment: "Window title visibility option")
+        }
+    }
+}
+
 enum TrafficLightButtonsVisibility: String, CaseIterable, Defaults.Serializable {
     case never
-    case dimmedOnWindowHover
-    case fullOpacityOnWindowHover
+    case dimmedOnPreviewHover
+    case fullOpacityOnPreviewHover
     case alwaysVisible
     
     var localizedName: String {
         switch self {
         case .never:
             String(localized: "Never visible", comment: "Traffic light buttons visibility option")
-        case .dimmedOnWindowHover:
+        case .dimmedOnPreviewHover:
             String(localized: "On window hover; Dimmed until button hover", comment: "Traffic light buttons visibility option")
-        case .fullOpacityOnWindowHover:
+        case .fullOpacityOnPreviewHover:
             String(localized: "On window hover; Full opacity", comment: "Traffic light buttons visibility option")
         case .alwaysVisible:
             String(localized: "Always visible; Full opacity", comment: "Traffic light buttons visibility option")
