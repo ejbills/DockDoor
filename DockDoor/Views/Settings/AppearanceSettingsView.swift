@@ -38,6 +38,7 @@ struct AppearanceSettingsView: View {
             }
             .pickerStyle(MenuPickerStyle())
             .scaledToFit()
+            .layoutPriority(1)
             
             Divider()
             
