@@ -9,7 +9,7 @@ import SwiftUI
 import Defaults
 import FluidGradient
 
-class ScreenCenteredFloatingWindow {
+@Observable class ScreenCenteredFloatingWindow {
     static let shared = ScreenCenteredFloatingWindow()
     
     var currIndex: Int = 0
