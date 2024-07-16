@@ -1664,8 +1664,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Always visible"
+            "state" : "translated",
+            "value" : "Toujours visible"
           }
         },
         "he" : {
@@ -2021,8 +2021,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "App Name Style"
+            "state" : "translated",
+            "value" : "Style du nom de l’application"
           }
         },
         "he" : {
@@ -3983,8 +3983,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Contribute translation here!"
+            "state" : "translated",
+            "value" : "Contribuez à la traduction ici !"
           }
         },
         "he" : {
@@ -5054,8 +5054,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Previews & Window Switcher"
+            "state" : "translated",
+            "value" : "Aperçus du Dock et Sélecteur d’applications"
           }
         },
         "he" : {
@@ -5233,8 +5233,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Previews only"
+            "state" : "translated",
+            "value" : "Seulement les aperçus du Dock"
           }
         },
         "he" : {
@@ -8982,8 +8982,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No hover action"
+            "state" : "translated",
+            "value" : "Pas d’action au survol"
           }
         },
         "he" : {
@@ -11121,8 +11121,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Please restart the application to apply your changes. Click OK to quit the app."
+            "state" : "translated",
+            "value" : "Merci de redémarrer l’application pour appliquer les changements. Cliquez sur OK pour quitter l’application."
           }
         },
         "he" : {
@@ -11834,8 +11834,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Hover Action"
+            "state" : "translated",
+            "value" : "Action au survol des aperçus"
           }
         },
         "he" : {
@@ -12012,8 +12012,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Hover Delay"
+            "state" : "translated",
+            "value" : "Délai de l’aperçu au survol"
           }
         },
         "he" : {
@@ -12546,8 +12546,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Restart required"
+            "state" : "translated",
+            "value" : "Redémarrage requis"
           }
         },
         "he" : {
@@ -13259,8 +13259,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "See a preview of the window"
+            "state" : "translated",
+            "value" : "Afficher un aperçu de la fenêtre"
           }
         },
         "he" : {
@@ -13615,8 +13615,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show App Name in Dock Previews"
+            "state" : "translated",
+            "value" : "Afficher le nom de l’application dans les aperçus du Dock"
           }
         },
         "he" : {
@@ -13971,8 +13971,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Window Title in"
+            "state" : "translated",
+            "value" : "Afficher les titres des fenêtres sur"
           }
         },
         "he" : {
@@ -14149,8 +14149,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Window Title in Previews"
+            "state" : "translated",
+            "value" : "Afficher les titres des fenêtres sur les aperçus"
           }
         },
         "he" : {
@@ -14686,8 +14686,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Simulate a click"
+            "state" : "translated",
+            "value" : "Simuler un clic"
           }
         },
         "he" : {
@@ -17004,8 +17004,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Want to see the app in your language?"
+            "state" : "translated",
+            "value" : "Vous voulez utiliser l’application dans votre langue ?"
           }
         },
         "he" : {
@@ -17718,8 +17718,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When hovering over the preview"
+            "state" : "translated",
+            "value" : "En survolant l’aperçu"
           }
         },
         "he" : {
@@ -18791,8 +18791,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Image Cache Lifespan"
+            "state" : "translated",
+            "value" : "Durée de vie du cache des aperçus des fenêtres"
           }
         },
         "he" : {
@@ -19327,8 +19327,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Switcher only"
+            "state" : "translated",
+            "value" : "Sélecteur d’applications uniquement"
           }
         },
         "he" : {
@@ -19683,8 +19683,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Title Visibility"
+            "state" : "translated",
+            "value" : "Visibilité des titres des fenêtres"
           }
         },
         "he" : {
