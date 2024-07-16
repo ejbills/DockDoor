@@ -441,7 +441,6 @@ final class WindowUtil {
         let windowID = window.windowID
                 
         guard let owningApplication = window.owningApplication,
-              let title = window.title, !title.isEmpty,
               window.isOnScreen,
               window.windowLayer == 0,
               window.frame.size.width >= 0,
