@@ -190,7 +190,7 @@
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "• يسمح بتحسين المعلومات البصرية في شريط Dock"
+            "value" : "• السماح بتحسين المعلومات البصرية في النوافذ"
           }
         },
         "ca" : {
@@ -225,8 +225,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "• Allows for enhanced visual information in the dock"
+            "state" : "translated",
+            "value" : "Permite una información visual mejorada en el dock"
           }
         },
         "fi" : {
@@ -368,7 +368,7 @@
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "• تمكين التفاعل في الوقت الحقيقي مع عناصر شريط Dock"
+            "value" : "• تمكين التفاعل في الوقت الحقيقي مع عناصر شريط النوافذ"
           }
         },
         "ca" : {
@@ -546,7 +546,7 @@
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "•لالتقاط المعاينات للصور والنوافذ"
+            "value" : "• لالتقاط معاينات للصور والنوافذ"
           }
         },
         "ca" : {
@@ -581,8 +581,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "• To capture previews of images and windows"
+            "state" : "translated",
+            "value" : "Para capturar vistas previas de imágenes y ventanas"
           }
         },
         "fi" : {
@@ -724,7 +724,7 @@
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "• للكشف عن الوقت الذي تحوم فيه فوق شريط Dock"
+            "value" : "• للكشف عن الوقت الذي تريد المعاينة فوق شريط النوافذ"
           }
         },
         "ca" : {
@@ -759,8 +759,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "• To detect when you hover over the dock"
+            "state" : "translated",
+            "value" : "Para detectar cuando pasas el cursor sobre el dock"
           }
         },
         "fi" : {
@@ -937,8 +937,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Accessibility Permissions"
+            "state" : "translated",
+            "value" : "Permisos de accesibilidad"
           }
         },
         "fi" : {
@@ -1080,7 +1080,7 @@
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "امكانية الوصول:"
+            "value" : "إمكانيات الوصول:"
           }
         },
         "ca" : {
@@ -1115,8 +1115,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Accessibility:"
+            "state" : "translated",
+            "value" : "Accesibilidad:"
           }
         },
         "fi" : {
@@ -1258,7 +1258,7 @@
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "ضبط هذا إذا كانت المعاينة غير متوائمة مع شريط Dock"
+            "value" : "ضبط هذا إذا كانت المعاينة غير متوائمة مع شريط النوافذ"
           }
         },
         "ca" : {
@@ -1293,8 +1293,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Adjust this if the preview is misaligned with dock"
+            "state" : "translated",
+            "value" : "Ajusta esto si la vista previa está desalineada con el dock"
           }
         },
         "fi" : {
@@ -1473,8 +1473,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Always"
+            "state" : "translated",
+            "value" : "Siempre"
           }
         },
         "fi" : {
@@ -1616,8 +1616,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Always visible"
+            "state" : "translated",
+            "value" : "مرئي دائماً"
           }
         },
         "ca" : {
@@ -1640,8 +1640,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Always visible"
+            "state" : "translated",
+            "value" : "Immer sichtbar"
           }
         },
         "el" : {
@@ -1652,8 +1652,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Always visible"
+            "state" : "translated",
+            "value" : "Siempre visible"
           }
         },
         "fi" : {
@@ -1688,8 +1688,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Always visible"
+            "state" : "translated",
+            "value" : "常に表示"
           }
         },
         "ko" : {
@@ -1736,8 +1736,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Always visible"
+            "state" : "translated",
+            "value" : "Всегда видимый"
           }
         },
         "sr" : {
@@ -1831,8 +1831,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Always visible; Full opacity"
+            "state" : "translated",
+            "value" : "Siempre visible; Opacidad completa"
           }
         },
         "fi" : {
@@ -1868,7 +1868,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "常に表示; 透過を無効"
+            "value" : "常に表示、透過を無効"
           }
         },
         "ko" : {
@@ -1973,8 +1973,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "App Name Style"
+            "state" : "translated",
+            "value" : "نمط إسم التطبيق"
           }
         },
         "ca" : {
@@ -1997,8 +1997,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "App Name Style"
+            "state" : "translated",
+            "value" : "App-Namensstil"
           }
         },
         "el" : {
@@ -2009,8 +2009,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "App Name Style"
+            "state" : "translated",
+            "value" : "Estilo de nombre de aplicación"
           }
         },
         "fi" : {
@@ -2045,8 +2045,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "App Name Style"
+            "state" : "translated",
+            "value" : "アプリ名のスタイル"
           }
         },
         "ko" : {
@@ -2093,8 +2093,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "App Name Style"
+            "state" : "translated",
+            "value" : "Стиль названия приложения"
           }
         },
         "sr" : {
@@ -2188,8 +2188,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Appearance"
+            "state" : "translated",
+            "value" : "Apariencia"
           }
         },
         "fi" : {
@@ -2366,8 +2366,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Appearance settings"
+            "state" : "translated",
+            "value" : "Ajustes de apariencia"
           }
         },
         "fi" : {
@@ -2544,8 +2544,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Automatically check for updates"
+            "state" : "translated",
+            "value" : "Automáticamente chequear actualizaciones"
           }
         },
         "fi" : {
@@ -2723,8 +2723,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Bottom Left"
+            "state" : "translated",
+            "value" : "Abajo a la izquierda"
           }
         },
         "fi" : {
@@ -2902,8 +2902,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Bottom Right"
+            "state" : "translated",
+            "value" : "Abajo a la derecha"
           }
         },
         "fi" : {
@@ -3080,8 +3080,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Buy me a coffee here, thank you!"
+            "state" : "translated",
+            "value" : "Comprarme un café aquí, ¡gracias!"
           }
         },
         "fi" : {
@@ -3117,7 +3117,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "ここで私にコーヒーを買ってくれるとうれしいです。"
+            "value" : "そんな方は、私にコーヒーを買ってくれるとうれしいです。"
           }
         },
         "ko" : {
@@ -3224,7 +3224,7 @@
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "هل يمكنك حتى أن ترى هذا؟"
+            "value" : "هل يمكنك أن ترى هذا؟"
           }
         },
         "ca" : {
@@ -3259,8 +3259,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Can you even see this?"
+            "state" : "translated",
+            "value" : "¿Puede incluso verlo?"
           }
         },
         "fi" : {
@@ -3437,8 +3437,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Cancel"
+            "state" : "translated",
+            "value" : "Cancelar"
           }
         },
         "fi" : {
@@ -3615,8 +3615,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check for Updates"
+            "state" : "translated",
+            "value" : "Buscar actualizaciones"
           }
         },
         "fi" : {
@@ -3652,7 +3652,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "アップデートの確認"
+            "value" : "アップデートを確認"
           }
         },
         "ko" : {
@@ -3758,7 +3758,7 @@
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Command (⌘)"
+            "value" : "زر كوماند (⌘)"
           }
         },
         "ca" : {
@@ -3793,8 +3793,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Command (⌘)"
+            "state" : "translated",
+            "value" : "Comando (⌘)"
           }
         },
         "fi" : {
@@ -3935,8 +3935,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Contribute translation here!"
+            "state" : "translated",
+            "value" : "ساهم بالترجمة هنا!"
           }
         },
         "ca" : {
@@ -3959,8 +3959,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Contribute translation here!"
+            "state" : "translated",
+            "value" : "Hier Übersetzung beitragen!"
           }
         },
         "el" : {
@@ -3971,8 +3971,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Contribute translation here!"
+            "state" : "translated",
+            "value" : "¡Contribuye con la traducción aquí!"
           }
         },
         "fi" : {
@@ -4007,8 +4007,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Contribute translation here!"
+            "state" : "translated",
+            "value" : "こちらから翻訳に貢献してください！"
           }
         },
         "ko" : {
@@ -4055,8 +4055,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Contribute translation here!"
+            "state" : "translated",
+            "value" : "Внесите свой вклад в перевод!"
           }
         },
         "sr" : {
@@ -4114,7 +4114,7 @@
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Control (⌃)"
+            "value" : "زر كنترول (⌃)"
           }
         },
         "ca" : {
@@ -4149,8 +4149,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Control (⌃)"
+            "state" : "translated",
+            "value" : "Controles (^)"
           }
         },
         "fi" : {
@@ -4327,8 +4327,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Current Keybind: %@"
+            "state" : "translated",
+            "value" : "Teclado actual: %@"
           }
         },
         "fi" : {
@@ -4505,8 +4505,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Current Version: %@"
+            "state" : "translated",
+            "value" : "Versión actual: %@"
           }
         },
         "fi" : {
@@ -4684,8 +4684,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Default"
+            "state" : "translated",
+            "value" : "Predeterminado"
           }
         },
         "fi" : {
@@ -4863,8 +4863,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Default (Medium Large)"
+            "state" : "translated",
+            "value" : "Predeterminado (mediano grande)"
           }
         },
         "fi" : {
@@ -4900,7 +4900,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "デフォルト (中くらい)"
+            "value" : "デフォルト (ちょっと大きい)"
           }
         },
         "ko" : {
@@ -5006,8 +5006,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Previews & Window Switcher"
+            "state" : "translated",
+            "value" : "معاينة النافذة & مبدل النافذة"
           }
         },
         "ca" : {
@@ -5030,8 +5030,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Previews & Window Switcher"
+            "state" : "translated",
+            "value" : "Dock-Vorschau & Fensterwechsler"
           }
         },
         "el" : {
@@ -5042,8 +5042,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Previews & Window Switcher"
+            "state" : "translated",
+            "value" : "Interruptor de ventana y vista previa"
           }
         },
         "fi" : {
@@ -5078,8 +5078,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Previews & Window Switcher"
+            "state" : "translated",
+            "value" : "Dockプレビューとウィンドウスイッチャー"
           }
         },
         "ko" : {
@@ -5126,8 +5126,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Previews & Window Switcher"
+            "state" : "translated",
+            "value" : "Превью в доке и переключатель окон"
           }
         },
         "sr" : {
@@ -5185,8 +5185,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Previews only"
+            "state" : "translated",
+            "value" : "معاينة النافذة فقط"
           }
         },
         "ca" : {
@@ -5209,8 +5209,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Previews only"
+            "state" : "translated",
+            "value" : "Nur Dock-Vorschau"
           }
         },
         "el" : {
@@ -5221,8 +5221,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Previews only"
+            "state" : "translated",
+            "value" : "Sólo previsualizaciones de Dock"
           }
         },
         "fi" : {
@@ -5257,8 +5257,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Previews only"
+            "state" : "translated",
+            "value" : "Dock プレビューのみ"
           }
         },
         "ko" : {
@@ -5305,8 +5305,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Previews only"
+            "state" : "translated",
+            "value" : "Только в превью в доке"
           }
         },
         "sr" : {
@@ -5365,7 +5365,7 @@
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "مضمّن"
+            "value" : "متضمّن"
           }
         },
         "ca" : {
@@ -5400,8 +5400,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Embedded"
+            "state" : "translated",
+            "value" : "Insertadas"
           }
         },
         "fi" : {
@@ -5543,7 +5543,7 @@
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "تمكين الرسوم المتحركة المنزلقة لنافذة التحويم"
+            "value" : "رسوم متحركة عند معاينة النوافذ"
           }
         },
         "ca" : {
@@ -5578,8 +5578,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable Hover Window Sliding Animation"
+            "state" : "translated",
+            "value" : "Habilitar Animación Diapositiva de Ventana Hover"
           }
         },
         "fi" : {
@@ -5756,8 +5756,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable Window Switcher"
+            "state" : "translated",
+            "value" : "Activar Switch de Ventana"
           }
         },
         "fi" : {
@@ -5899,7 +5899,7 @@
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "قم بتعزيز تجربة شريط Dock الخاص بك!"
+            "value" : "قم بتعزيز التجربة الخاصة بك!"
           }
         },
         "ca" : {
@@ -5934,8 +5934,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enhance your dock experience!"
+            "state" : "translated",
+            "value" : "Potencia tu experiencia Crm!"
           }
         },
         "fi" : {
@@ -6113,8 +6113,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Extra Extra Small"
+            "state" : "translated",
+            "value" : "Extra extra pequeño"
           }
         },
         "fi" : {
@@ -6292,8 +6292,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Extra Small"
+            "state" : "translated",
+            "value" : "Extra pequeña"
           }
         },
         "fi" : {
@@ -6471,7 +6471,7 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "General"
           }
         },
@@ -6649,8 +6649,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "General settings"
+            "state" : "translated",
+            "value" : "Configuraciones Generales"
           }
         },
         "fi" : {
@@ -6827,8 +6827,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Get Started"
+            "state" : "translated",
+            "value" : "Iniciación"
           }
         },
         "fi" : {
@@ -7007,8 +7007,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hidden"
+            "state" : "translated",
+            "value" : "Oculto"
           }
         },
         "fi" : {
@@ -7185,8 +7185,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hover Window Open Delay"
+            "state" : "translated",
+            "value" : "Retraso abierto de ventana"
           }
         },
         "fi" : {
@@ -7364,8 +7364,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hover Window Title Style"
+            "state" : "translated",
+            "value" : "Estilo de Ventana"
           }
         },
         "fi" : {
@@ -7507,7 +7507,7 @@
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "إذا كنت بحاجة للوصول إلى أيقونة شريط القائمة، قم بتشغيل التطبيق للكشف عنه لمدة 10 ثواني."
+            "value" : "إذا كنت بحاجة للوصول إلى أيقونة شريط القائمة، شَغِّل التطبيق للكشف عنه لمدة 10 ثوانٍ."
           }
         },
         "ca" : {
@@ -7542,8 +7542,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "If you need to access the menu bar icon, launch the app to reveal it for 10 seconds."
+            "state" : "translated",
+            "value" : "Si necesitas acceder al icono de la barra de menú, inicia la aplicación para revelarla durante 10 segundos."
           }
         },
         "fi" : {
@@ -7720,8 +7720,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Initialization Key"
+            "state" : "translated",
+            "value" : "Clave de inicio"
           }
         },
         "fi" : {
@@ -7899,8 +7899,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Large"
+            "state" : "translated",
+            "value" : "Grande"
           }
         },
         "fi" : {
@@ -8077,8 +8077,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Last checked: %@"
+            "state" : "translated",
+            "value" : "Última comprobación: %@"
           }
         },
         "fi" : {
@@ -8220,7 +8220,7 @@
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "تشغيل DockDoor عند تسجيل الدخول"
+            "value" : "تشغيل البرنامَج عند تسجيل الدخول"
           }
         },
         "ca" : {
@@ -8255,8 +8255,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Launch DockDoor at login"
+            "state" : "translated",
+            "value" : "Iniciar DockDoor al iniciar sesión"
           }
         },
         "fi" : {
@@ -8434,8 +8434,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Medium"
+            "state" : "translated",
+            "value" : "Mediano"
           }
         },
         "fi" : {
@@ -8612,8 +8612,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Menu Bar Icon Hidden"
+            "state" : "translated",
+            "value" : "Icono de barra de menú oculto"
           }
         },
         "fi" : {
@@ -8791,8 +8791,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Never visible"
+            "state" : "translated",
+            "value" : "Nunca visible"
           }
         },
         "fi" : {
@@ -8934,8 +8934,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No hover action"
+            "state" : "translated",
+            "value" : "من دون معاينة"
           }
         },
         "ca" : {
@@ -8958,8 +8958,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No hover action"
+            "state" : "translated",
+            "value" : "Keine Hover-Aktion"
           }
         },
         "el" : {
@@ -8970,8 +8970,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No hover action"
+            "state" : "translated",
+            "value" : "Ninguna acción con botón Inicio"
           }
         },
         "fi" : {
@@ -9006,8 +9006,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No hover action"
+            "state" : "translated",
+            "value" : "ホバーアクションなし"
           }
         },
         "ko" : {
@@ -9054,8 +9054,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No hover action"
+            "state" : "translated",
+            "value" : "Без действия при наведении"
           }
         },
         "sr" : {
@@ -9148,8 +9148,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "OK"
+            "state" : "translated",
+            "value" : "Aceptar"
           }
         },
         "fi" : {
@@ -9316,7 +9316,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Beim Verweilen im Fenster; abgeblendet bis zum Verweilen über der Schaltfläche"
+            "value" : "Beim Schweben über dem Fenster; abgeblendet bis zum Schweben über der Schaltfläche"
           }
         },
         "el" : {
@@ -9495,7 +9495,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Beim Verweilen im Fenster; volle Deckkraft"
+            "value" : "Beim Schweben über dem Fenster; volle Deckkraft"
           }
         },
         "el" : {
@@ -10183,7 +10183,7 @@
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Option (⌥)"
+            "value" : "زر أوبشن (⌥)"
           }
         },
         "ca" : {
@@ -10361,7 +10361,7 @@
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "خطأ في الأذونات"
+            "value" : "خطأ بإعطاء الصلاحيات"
           }
         },
         "ca" : {
@@ -10540,7 +10540,7 @@
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "أذونات"
+            "value" : "صلاحيات"
           }
         },
         "ca" : {
@@ -10718,7 +10718,7 @@
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "إعدادات الأذونات"
+            "value" : "إعداد الصلاحيات"
           }
         },
         "ca" : {
@@ -10896,7 +10896,7 @@
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "الرجاء الخروج من التطبيق لتطبيق التغييرات! :)"
+            "value" : "الرجاء الخروج من البرنامَج لتطبيق التغييرات! :)"
           }
         },
         "ca" : {
@@ -11073,8 +11073,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Please restart the application to apply your changes. Click OK to quit the app."
+            "state" : "translated",
+            "value" : "يرجى إعادة تشغيل البرنامَج لتطبيق التغييرات الخاصة بك. اضغط حسناً للخروج."
           }
         },
         "ca" : {
@@ -11097,8 +11097,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Please restart the application to apply your changes. Click OK to quit the app."
+            "state" : "translated",
+            "value" : "Bitte starten Sie die App neu, um Ihre Änderungen zu übernehmen. Klicken Sie auf OK, um die App zu beenden."
           }
         },
         "el" : {
@@ -11145,8 +11145,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Please restart the application to apply your changes. Click OK to quit the app."
+            "state" : "translated",
+            "value" : "変更を適用するには、アプリケーションを再起動してください。OK をクリックしてアプリを終了します。"
           }
         },
         "ko" : {
@@ -11193,8 +11193,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Please restart the application to apply your changes. Click OK to quit the app."
+            "state" : "translated",
+            "value" : "Пожалуйста, перезапустите приложение, чтобы применить изменения. Нажмите OK, чтобы выйти из приложения."
           }
         },
         "sr" : {
@@ -11253,7 +11253,7 @@
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "قائمة منبثقة"
+            "value" : "قائِمة منبثقة"
           }
         },
         "ca" : {
@@ -11786,8 +11786,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Hover Action"
+            "state" : "translated",
+            "value" : "عند معاينة النافذة"
           }
         },
         "ca" : {
@@ -11810,8 +11810,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Hover Action"
+            "state" : "translated",
+            "value" : "Vorschau Hover-Aktion"
           }
         },
         "el" : {
@@ -11858,8 +11858,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Hover Action"
+            "state" : "translated",
+            "value" : "ホバーアクションをプレビュー"
           }
         },
         "ko" : {
@@ -11906,8 +11906,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Hover Action"
+            "state" : "translated",
+            "value" : "Действие при наведении на превью"
           }
         },
         "sr" : {
@@ -11964,8 +11964,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Hover Delay"
+            "state" : "translated",
+            "value" : "معدل التأخير عند المعاينة"
           }
         },
         "ca" : {
@@ -11988,8 +11988,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Hover Delay"
+            "state" : "translated",
+            "value" : "Vorschau Hover-Verzögerung"
           }
         },
         "el" : {
@@ -12036,8 +12036,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Hover Delay"
+            "state" : "translated",
+            "value" : "ホバーアクションの遅延"
           }
         },
         "ko" : {
@@ -12084,8 +12084,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Hover Delay"
+            "state" : "translated",
+            "value" : "Задержка при наведении на превью"
           }
         },
         "sr" : {
@@ -12498,8 +12498,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Restart required"
+            "state" : "translated",
+            "value" : "مطلوب إعادة التشغيل البرنامَج"
           }
         },
         "ca" : {
@@ -12522,8 +12522,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Restart required"
+            "state" : "translated",
+            "value" : "Neustart erforderlich"
           }
         },
         "el" : {
@@ -12570,8 +12570,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Restart required"
+            "state" : "translated",
+            "value" : "再起動が必要"
           }
         },
         "ko" : {
@@ -12618,8 +12618,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Restart required"
+            "state" : "translated",
+            "value" : "Требуется перезапуск"
           }
         },
         "sr" : {
@@ -13211,8 +13211,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "See a preview of the window"
+            "state" : "translated",
+            "value" : "مشاهدة النافذة"
           }
         },
         "ca" : {
@@ -13235,8 +13235,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "See a preview of the window"
+            "state" : "translated",
+            "value" : "Vorschau des Fensters ansehen"
           }
         },
         "el" : {
@@ -13283,8 +13283,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "See a preview of the window"
+            "state" : "translated",
+            "value" : "ウィンドウのプレビューを見る"
           }
         },
         "ko" : {
@@ -13331,8 +13331,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "See a preview of the window"
+            "state" : "translated",
+            "value" : "Просмотр окна"
           }
         },
         "sr" : {
@@ -13567,8 +13567,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show App Name in Dock Previews"
+            "state" : "translated",
+            "value" : "إظهار اسم التطبيق عند المعاينة"
           }
         },
         "ca" : {
@@ -13591,8 +13591,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show App Name in Dock Previews"
+            "state" : "translated",
+            "value" : "App-Name in Dock-Vorschauen anzeigen"
           }
         },
         "el" : {
@@ -13639,8 +13639,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show App Name in Dock Previews"
+            "state" : "translated",
+            "value" : "Dock プレビューにアプリ名を表示する"
           }
         },
         "ko" : {
@@ -13687,8 +13687,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show App Name in Dock Previews"
+            "state" : "translated",
+            "value" : "Показывать имя приложения в превью Dock"
           }
         },
         "sr" : {
@@ -13923,8 +13923,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Window Title in"
+            "state" : "translated",
+            "value" : "إظهار عنوان النافذة في"
           }
         },
         "ca" : {
@@ -13947,8 +13947,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Window Title in"
+            "state" : "translated",
+            "value" : "Fenstertitel anzeigen in"
           }
         },
         "el" : {
@@ -13995,8 +13995,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Window Title in"
+            "state" : "translated",
+            "value" : "ウィンドウのタイトルを表示する場所"
           }
         },
         "ko" : {
@@ -14043,8 +14043,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Window Title in"
+            "state" : "translated",
+            "value" : "Показать заголовок окна в"
           }
         },
         "sr" : {
@@ -14101,8 +14101,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Window Title in Previews"
+            "state" : "translated",
+            "value" : "إظهار عنوان النافذة عند المعاينة"
           }
         },
         "ca" : {
@@ -14125,8 +14125,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Window Title in Previews"
+            "state" : "translated",
+            "value" : "Fenstertitel in Vorschau anzeigen"
           }
         },
         "el" : {
@@ -14173,8 +14173,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Window Title in Previews"
+            "state" : "translated",
+            "value" : "プレビューの上にウィンドウタイトルを表示"
           }
         },
         "ko" : {
@@ -14221,8 +14221,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Window Title in Previews"
+            "state" : "translated",
+            "value" : "Показывать заголовок окна в предпросмотре"
           }
         },
         "sr" : {
@@ -14638,8 +14638,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Simulate a click"
+            "state" : "translated",
+            "value" : "محاكاة النقر"
           }
         },
         "ca" : {
@@ -14662,8 +14662,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Simulate a click"
+            "state" : "translated",
+            "value" : "Klick simulieren"
           }
         },
         "el" : {
@@ -14710,8 +14710,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Simulate a click"
+            "state" : "translated",
+            "value" : "クリックをシミュレートする"
           }
         },
         "ko" : {
@@ -14758,8 +14758,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Simulate a click"
+            "state" : "translated",
+            "value" : "Симулировать нажатие левой кнопки мыши"
           }
         },
         "sr" : {
@@ -16956,8 +16956,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Want to see the app in your language?"
+            "state" : "translated",
+            "value" : "هل ترغب برؤية البرنامَج بلغتك؟"
           }
         },
         "ca" : {
@@ -16980,8 +16980,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Want to see the app in your language?"
+            "state" : "translated",
+            "value" : "Möchten Sie die App in Ihrer Sprache sehen?"
           }
         },
         "el" : {
@@ -17028,8 +17028,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Want to see the app in your language?"
+            "state" : "translated",
+            "value" : "なんかここ日本語おかしくない？他の言語に対応したい！"
           }
         },
         "ko" : {
@@ -17076,8 +17076,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Want to see the app in your language?"
+            "state" : "translated",
+            "value" : "Хотите увидеть приложение на вашем языке?"
           }
         },
         "sr" : {
@@ -17207,7 +17207,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "開発を支援したいですか?"
+            "value" : "開発を支援したい！"
           }
         },
         "ko" : {
@@ -17670,8 +17670,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When hovering over the preview"
+            "state" : "translated",
+            "value" : "عند معاينة النافذة"
           }
         },
         "ca" : {
@@ -17694,8 +17694,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When hovering over the preview"
+            "state" : "translated",
+            "value" : "Beim Schweben über der Vorschau"
           }
         },
         "el" : {
@@ -17742,8 +17742,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When hovering over the preview"
+            "state" : "translated",
+            "value" : "プレビューにカーソルを合わせたとき"
           }
         },
         "ko" : {
@@ -17790,8 +17790,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When hovering over the preview"
+            "state" : "translated",
+            "value" : "При наведении на предпросмотр"
           }
         },
         "sr" : {
@@ -18422,8 +18422,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Buffer"
+            "state" : "translated",
+            "value" : "Búfer de Ventana"
           }
         },
         "fi" : {
@@ -18601,8 +18601,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Cache Lifespan"
+            "state" : "translated",
+            "value" : "Caché de Ventana Vida"
           }
         },
         "fi" : {
@@ -18743,8 +18743,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Image Cache Lifespan"
+            "state" : "translated",
+            "value" : "عُمر تخزين معاينة النافذة"
           }
         },
         "ca" : {
@@ -18767,8 +18767,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Image Cache Lifespan"
+            "state" : "translated",
+            "value" : "Lebensdauer Fensterbild-Cache"
           }
         },
         "el" : {
@@ -18779,8 +18779,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Image Cache Lifespan"
+            "state" : "translated",
+            "value" : "Caché de Ventana Vida"
           }
         },
         "fi" : {
@@ -18815,8 +18815,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Image Cache Lifespan"
+            "state" : "translated",
+            "value" : "ウィンドウイメージのキャッシュ期間"
           }
         },
         "ko" : {
@@ -18863,8 +18863,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Image Cache Lifespan"
+            "state" : "translated",
+            "value" : "Время жизни кэша изображений окна"
           }
         },
         "sr" : {
@@ -18957,8 +18957,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Size"
+            "state" : "translated",
+            "value" : "Tamaño de la Ventana"
           }
         },
         "fi" : {
@@ -19136,8 +19136,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Switcher"
+            "state" : "translated",
+            "value" : "Cambiador de ventana"
           }
         },
         "fi" : {
@@ -19279,8 +19279,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Switcher only"
+            "state" : "translated",
+            "value" : "مبدل النافذة فقط"
           }
         },
         "ca" : {
@@ -19303,8 +19303,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Switcher only"
+            "state" : "translated",
+            "value" : "Nur Fensterwechsler"
           }
         },
         "el" : {
@@ -19315,8 +19315,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Switcher only"
+            "state" : "translated",
+            "value" : "Sólo cambiador de ventana"
           }
         },
         "fi" : {
@@ -19351,8 +19351,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Switcher only"
+            "state" : "translated",
+            "value" : "ウィンドウスイッチャーのみ"
           }
         },
         "ko" : {
@@ -19399,8 +19399,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Switcher only"
+            "state" : "translated",
+            "value" : "Только переключатель окон"
           }
         },
         "sr" : {
@@ -19493,8 +19493,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Title Position"
+            "state" : "translated",
+            "value" : "Posición del Título de Ventana"
           }
         },
         "fi" : {
@@ -19635,8 +19635,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Title Visibility"
+            "state" : "translated",
+            "value" : "رؤية عنوان النافذة"
           }
         },
         "ca" : {
@@ -19659,8 +19659,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Title Visibility"
+            "state" : "translated",
+            "value" : "Sichtbarkeit des Fenstertitel"
           }
         },
         "el" : {
@@ -19671,8 +19671,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Title Visibility"
+            "state" : "translated",
+            "value" : "Visibilidad del título de la ventana"
           }
         },
         "fi" : {
@@ -19707,8 +19707,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Title Visibility"
+            "state" : "translated",
+            "value" : "ウィンドウタイトルの表示"
           }
         },
         "ko" : {
@@ -19755,8 +19755,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Title Visibility"
+            "state" : "translated",
+            "value" : "Видимость заголовка окна"
           }
         },
         "sr" : {
@@ -19849,8 +19849,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Windows switching settings"
+            "state" : "translated",
+            "value" : "Ajustes de cambio de Windows"
           }
         },
         "fi" : {
@@ -20027,8 +20027,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "You need to give DockDoor access to the accessibility API in order for it to function."
+            "state" : "translated",
+            "value" : "Necesitas dar acceso a DockDoor a la API de accesibilidad para que funcione."
           }
         },
         "fi" : {
