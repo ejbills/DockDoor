@@ -70,7 +70,6 @@ final class WindowUtil {
         if let cachedImage = getCachedImage(window: window) {
             return cachedImage
         }
-
         let filter = SCContentFilter(desktopIndependentWindow: window)
         let config = SCStreamConfiguration()
         
@@ -81,8 +80,11 @@ final class WindowUtil {
         config.ignoreShadowsDisplay = true
         config.shouldBeOpaque = false
         if #available(macOS 14.2, *) { config.includeChildWindows = false }
-        config.width = Int(window.frame.width)
-        config.height = Int(window.frame.height)
+        
+        // Double the width and height for higher resolution capture
+        config.width = Int(window.frame.width) * 2
+        config.height = Int(window.frame.height) * 2
+        
         config.showsCursor = false
         config.captureResolution = .best
         
