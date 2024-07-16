@@ -23,7 +23,7 @@ extension Defaults.Keys {
     static let screenCaptureCacheLifespan = Key<CGFloat>("screenCaptureCacheLifespan", default: 60 )
     static let uniformCardRadius = Key<Bool>("uniformCardRadius", default: true )
     static let tapEquivalentInterval = Key<CGFloat>("tapEquivalentInterval", default: 1.5 )
-    static let previewHoverAction = Key<PreviewHoverAction>("previewHoverAction", default: PreviewHoverAction.none )
+    static let previewHoverAction = Key<PreviewHoverAction>("previewHoverAction", default: .none )
     
     static let showAnimations = Key<Bool>("showAnimations", default: true )
     static let enableWindowSwitcher = Key<Bool>("enableWindowSwitcher", default: true )
@@ -40,8 +40,8 @@ extension Defaults.Keys {
     
     static let showWindowTitle = Key<Bool>("showWindowTitle", default: true )
     static let windowTitleDisplayCondition = Key<WindowTitleDisplayCondition>("windowTitleDisplayCondition", default: .all)
-    static let windowTitleVisibility = Key<WindowTitleVisibility>("windowTitleVisibility", default: .whenOveringPreview)
-    static let windowTitlePosition = Key<WindowTitlePosition>("windowTitlePosition", default: WindowTitlePosition.bottomLeft )
+    static let windowTitleVisibility = Key<WindowTitleVisibility>("windowTitleVisibility", default: .whenHoveringPreview)
+    static let windowTitlePosition = Key<WindowTitlePosition>("windowTitlePosition", default: .bottomLeft )
     
     static let trafficLightButtonsVisibility = Key<TrafficLightButtonsVisibility>("trafficLightButtonsVisibility", default: .dimmedOnPreviewHover )
 }
@@ -98,12 +98,12 @@ enum AppNameStyle: String, CaseIterable, Defaults.Serializable {
 }
 
 enum WindowTitleVisibility: String, CaseIterable, Defaults.Serializable {
-    case whenOveringPreview
+    case whenHoveringPreview
     case alwaysVisible
     
     var localizedName: String {
         switch self {
-        case .whenOveringPreview:
+        case .whenHoveringPreview:
             String(localized: "When hovering over the preview", comment: "Window title visibility option")
         case .alwaysVisible:
             String(localized: "Always visible", comment: "Window title visibility option")
