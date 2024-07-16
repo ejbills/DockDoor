@@ -70,6 +70,7 @@ final class WindowUtil {
         if let cachedImage = getCachedImage(window: window) {
             return cachedImage
         }
+        
         let filter = SCContentFilter(desktopIndependentWindow: window)
         let config = SCStreamConfiguration()
         
@@ -81,9 +82,12 @@ final class WindowUtil {
         config.shouldBeOpaque = false
         if #available(macOS 14.2, *) { config.includeChildWindows = false }
         
-        // Double the width and height for higher resolution capture
-        config.width = Int(window.frame.width) * 2
-        config.height = Int(window.frame.height) * 2
+        // Get the scale factor of the display containing the window
+        let scaleFactor = await getScaleFactorForWindow(windowID: window.windowID)
+        
+        // Convert points to pixels
+        config.width = Int(window.frame.width * scaleFactor)
+        config.height = Int(window.frame.height * scaleFactor)
         
         config.showsCursor = false
         config.captureResolution = .best
@@ -94,6 +98,23 @@ final class WindowUtil {
         imageCache[window.windowID] = cachedImage
         
         return image
+    }
+
+    // Helper function to get the scale factor for a given window
+    private static func getScaleFactorForWindow(windowID: CGWindowID) async -> CGFloat {
+        return await MainActor.run {
+            guard let window = NSApplication.shared.window(withWindowNumber: Int(windowID)) else {
+                return NSScreen.main?.backingScaleFactor ?? 2.0
+            }
+            
+            if NSScreen.screens.count > 1 {
+                if let currentScreen = window.screen {
+                    return currentScreen.backingScaleFactor
+                }
+            }
+            
+            return NSScreen.main?.backingScaleFactor ?? 2.0
+        }
     }
     
     private static func getCachedImage(window: SCWindow) -> CGImage? {
