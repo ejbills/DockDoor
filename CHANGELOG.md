@@ -23,6 +23,23 @@
   }
 </style>
 
+<a name="v1.1.4"></a>
+# [v1.1.4](https://github.com/ejbills/DockDoor/releases/tag/v1.1.4) - 16 Jul 2024
+
+# Changelog
+
+## Fixes
+- No longer filter out windows with empty titles
+- Blurry window preview images
+- Traffic light buttons visibility picker width ([#193](https://github.com/ejbills/DockDoor/issues/193)) [@ShlomoCode](https://github.com/ShlomoCode)
+
+## Chore
+- Clearer wording in settings ([#194](https://github.com/ejbills/DockDoor/issues/194)) [@ShlomoCode](https://github.com/ShlomoCode)
+- Typo in settings ([#197](https://github.com/ejbills/DockDoor/issues/197)) [@ShlomoCode](https://github.com/ShlomoCode)
+
+[Changes][v1.1.4]
+
+
 <a name="v1.1.3"></a>
 # [v1.1.3](https://github.com/ejbills/DockDoor/releases/tag/v1.1.3) - 16 Jul 2024
 
@@ -327,6 +344,7 @@ v1.0
 [Changes][releases]
 
 
+[v1.1.4]: https://github.com/ejbills/DockDoor/compare/v1.1.3...v1.1.4
 [v1.1.3]: https://github.com/ejbills/DockDoor/compare/v1.1.2...v1.1.3
 [v1.1.2]: https://github.com/ejbills/DockDoor/compare/v1.1.1...v1.1.2
 [v1.1.1]: https://github.com/ejbills/DockDoor/compare/v1.1.0...v1.1.1
