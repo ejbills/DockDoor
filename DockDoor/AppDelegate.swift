@@ -37,12 +37,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         super.init()
     }
     
-    private func applicationWillFinishLaunching(_ notification: Notification) async {
-        do {
+    func applicationWillFinishLaunching(_ notification: Notification)  {
+        Task.detached {
             _ = try await WindowUtil.activeWindows(for: "")
-        }
-        catch {
-            print("Error dumped")
         }
     }
     

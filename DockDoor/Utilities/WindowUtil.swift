@@ -197,7 +197,7 @@ final class WindowUtil {
         }
     }
     
-    private static func getAllWindowInfosAsList() -> [WindowInfo] {
+    static func getAllWindowInfosAsList() -> [WindowInfo] {
         return Array(desktopSpaceWindowCache.values.joined())
     }
     
@@ -377,7 +377,7 @@ final class WindowUtil {
                     potentialMatches.append(app)
                 }
                 
-                if (app.applicationName == applicationName) || (nonLocalName == applicationName) {
+                if applicationName.isEmpty || (app.applicationName == applicationName) || (nonLocalName == applicationName) {
                     await group.addTask {
                         return try await fetchWindowInfo(window: window, applicationName: applicationName)
                     }
@@ -554,6 +554,67 @@ final class WindowUtil {
                 desktopSpaceWindowCache[bundleID] = cachedWindows
             }
         }
+    }
+    
+    static func addWindowToDesktopCache(pid: pid_t, bundleID: String) {
+        let appElement = AXUIElementCreateApplication(pid)
+        if let windowRef = WindowUtil.getAXWindows(for: appElement), !windowRef.isEmpty
+        {
+            var validWindows:[CGWindowID] = []
+            for window in windowRef {
+                var cgWindowId: CGWindowID = 0
+                let windowIDStatus = _AXUIElementGetWindow(window, &cgWindowId)
+                if windowIDStatus == .success {
+                    validWindows.append(cgWindowId)
+                }
+            }
+            if let windowSet = desktopSpaceWindowCache[bundleID] {
+                
+            } else {
+                // First time discovering this window
+            }
+            let set = desktopSpaceWindowCache[bundleID]?.filter{
+                validWindows.contains($0.id)
+            }
+            if ((set?.isEmpty) != nil) {
+                desktopSpaceWindowCache.removeValue(forKey: bundleID)
+            }
+        }
+    }
+    static func funnyBundleIDs (_ input: String) -> Bool {
+        let bundleIDsknownToBeFunky = [
+        "com.apple.MobileSMS"]
+        return bundleIDsknownToBeFunky.contains(input)
+    }
+    
+    static func removeWindowFromDesktopCache(pid: pid_t, bundleID: String) {
+        let appElement = AXUIElementCreateApplication(pid)
+        if let windowRef = WindowUtil.getAXWindows(for: appElement),
+           !windowRef.isEmpty
+        {
+            var validWindows:[CGWindowID] = []
+            for window in windowRef {
+               
+            }
+            let set = desktopSpaceWindowCache[bundleID]?.filter{
+                validWindows.contains($0.id)
+            }
+//            if ((set?.isEmpty) != nil) {
+//                desktopSpaceWindowCache.removeValue(forKey: bundleID)
+//            }
+        }
+        else {            
+            // This is the only window of the application, delete the whole entry
+            if funnyBundleIDs(bundleID) {
+                // do not delete the whole list
+            }
+            else {
+                // Delete the whole list
+                desktopSpaceWindowCache.removeValue(forKey: bundleID)
+            }
+        }
+        
+        
     }
 }
 

@@ -120,7 +120,12 @@ class KeybindHelper {
         Task { [weak self] in
             do {
                 guard let self = self else { return }
-                let windows = try await WindowUtil.activeWindows(for: "")
+    
+                Task.detached {
+                    _ = try await WindowUtil.activeWindows(for: "")
+                }
+                let windows = WindowUtil.getAllWindowInfosAsList()
+
                 await MainActor.run { [weak self] in
                     guard let self = self else { return }
                     if self.isModifierKeyPressed {

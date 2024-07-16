@@ -22,12 +22,20 @@ class WindowManipulationObservers {
         notificationCenter.addObserver(self, selector: #selector(appDidTerminate(_:)), name: NSWorkspace.didTerminateApplicationNotification, object: nil)
         notificationCenter.addObserver(self, selector: #selector(appDidActivate(_:)), name: NSWorkspace.didActivateApplicationNotification, object: nil)
         notificationCenter.addObserver(self, selector: #selector(appDidHide(_:)), name: NSApplication.didHideNotification, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(spaceChanged(_:)), name: NSWorkspace.activeSpaceDidChangeNotification, object: nil)
         
         // Set up observers for already running applications
         NSWorkspace.shared.runningApplications.forEach { app in
             if app.activationPolicy == .regular {
                 createObserverForApp(app)
             }
+        }
+    }
+    
+    @objc private func spaceChanged(_ notification: Notification) {
+        Task.detached {
+            // Start finding windows and updating the list
+            _ = try await WindowUtil.activeWindows(for: "")
         }
     }
     
@@ -43,6 +51,7 @@ class WindowManipulationObservers {
         guard let app = notification.userInfo?[NSWorkspace.applicationUserInfoKey] as? NSRunningApplication else {
             return
         }
+        WindowUtil.removeWindowFromDesktopCache(pid: app.processIdentifier, bundleID: app.bundleIdentifier ?? "")
         removeObserverForApp(app)
         SharedPreviewWindowCoordinator.shared.hideWindow()
     }
@@ -113,35 +122,40 @@ func axObserverCallback(observer: AXObserver, element: AXUIElement, notification
     let pid = Int(bitPattern: userData)
     
     DispatchQueue.main.async {
-        if let app = NSRunningApplication(processIdentifier: pid_t(pid)) {
+        if let app = NSRunningApplication(processIdentifier: pid_t(pid)){
             switch notificationName as String {
             case kAXWindowCreatedNotification:
                 print("Window created for app: \(app.localizedName ?? "Unknown")")
+                Task.detached { [applicationName = app.localizedName ?? "" ] in
+                    do {
+                        _ = try await WindowUtil.activeWindows(for: applicationName)
+                    }
+                    catch {
+                        print(error)
+                    }
+                }
+                break
             case kAXUIElementDestroyedNotification:
                 print("Window closed for app: \(app.localizedName ?? "Unknown")")
+                WindowUtil.removeWindowFromDesktopCache(pid: pid_t(pid), bundleID: app.bundleIdentifier ?? "")
+                break
             case kAXWindowMiniaturizedNotification:
                 print("Window minimized for app: \(app.localizedName ?? "Unknown")")
                 WindowUtil.updateStatusOfWindowCache(pid: pid_t(pid), bundleID: app.bundleIdentifier ?? "", isParentAppHidden: false)
+                break
             case kAXWindowDeminiaturizedNotification:
                 print("Window restored for app: \(app.localizedName ?? "Unknown")")
             case kAXApplicationHiddenNotification:
                 print("Application hidden: \(app.localizedName ?? "Unknown")")
                 WindowUtil.updateStatusOfWindowCache(pid: pid_t(pid), bundleID: app.bundleIdentifier ?? "", isParentAppHidden: true)
+                break
             case kAXApplicationShownNotification:
                 print("Application shown: \(app.localizedName ?? "Unknown")")
+                break
             default:
                 break
             }
             
-//            if var appName = app.localizedName {
-//                Task(priority: .background) {
-//                    do {
-//                        _ = try await WindowUtil.activeWindows(for: appName)
-//                    } catch {
-//                        print("Error updating active windows: \(error)")
-//                    }
-//                }
-//            }
         }
     }
 }
