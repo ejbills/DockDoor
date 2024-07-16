@@ -22,13 +22,13 @@ class AppClosureObserver {
     }
     
     @objc private func appDidTerminate(_ notification: Notification) {
-        SharedPreviewWindowCoordinator.shared.hideWindow()
+        SharedPreviewWindowCoordinator.shared.hidePreviewWindow()
     }
     
     @objc private func appDidActivate(_ notification: Notification) {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { // add a delay to prevent interference with button clicks, which hide the window on their own
             if SharedPreviewWindowCoordinator.shared.isVisible {
-                SharedPreviewWindowCoordinator.shared.hideWindow()
+                SharedPreviewWindowCoordinator.shared.hidePreviewWindow()
             }
         }
     }

@@ -111,25 +111,24 @@ class KeybindHelper {
         }
         
         if !isModifierKeyPressed {
-            SharedPreviewWindowCoordinator.shared.hideWindow()
+            SharedPreviewWindowCoordinator.shared.hidePreviewWindow()
             SharedPreviewWindowCoordinator.shared.selectAndBringToFrontCurrentWindow()
         }
     }
     
     private func showHoverWindow() {
         Task { [weak self] in
-            do {
+            guard let self = self else { return }
+            let apps = NSWorkspace.shared.runningApplications
+            let windows = apps.compactMap { app in
+                return try? WindowsUtil.getRunningAppWindows(for: app)
+            }.flatMap { $0 }
+            await MainActor.run { [weak self] in
                 guard let self = self else { return }
-                let windows = try await WindowUtil.activeWindows(for: "")
-                await MainActor.run { [weak self] in
-                    guard let self = self else { return }
-                    if self.isModifierKeyPressed {
-                        SharedPreviewWindowCoordinator.shared.showWindow(appName: "Alt-Tab", windows: windows, overrideDelay: true,
-                                                                         centeredHoverWindowState: .windowSwitcher, onWindowTap: { SharedPreviewWindowCoordinator.shared.hideWindow() })
-                    }
+                if self.isModifierKeyPressed {
+                    SharedPreviewWindowCoordinator.shared.showPreviewWindow(appName: "Alt-Tab", windows: windows, overrideDelay: true,
+                                                                            centeredHoverWindowState: .windowSwitcher, onWindowTap: { SharedPreviewWindowCoordinator.shared.hidePreviewWindow() })
                 }
-            } catch {
-                print("Error fetching active windows: \(error)")
             }
         }
     }

@@ -9,7 +9,7 @@ import SwiftUI
 import Defaults
 
 struct FullSizePreviewView: View {
-    let windowInfo: WindowInfo
+    let window: Window
     let maxSize: CGSize
     
     @Default(.uniformCardRadius) var uniformCardRadius
@@ -18,7 +18,7 @@ struct FullSizePreviewView: View {
         VStack(alignment: .center) {
             Group {
                 HStack(alignment: .center) {
-                    if let image = windowInfo.image {
+                    if let image = window.image {
                         Image(decorative: image, scale: 1.0)
                             .resizable()
                             .aspectRatio(contentMode: .fit)

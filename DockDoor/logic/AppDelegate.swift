@@ -21,6 +21,8 @@ class SettingsWindowControllerDelegate: NSObject, NSWindowDelegate {
     }
 }
 
+let cgsMainConnectionId = CGSMainConnectionID()
+
 class AppDelegate: NSObject, NSApplicationDelegate {
     private var dockObserver: DockObserver?
     private var appClosureObserver: AppClosureObserver?
