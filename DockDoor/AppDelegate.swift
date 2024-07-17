@@ -20,8 +20,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var updaterController: SPUStandardUpdaterController
     
     // settings
-    private var settingsWindow: NSWindow?
-    private lazy var settingsWindowController = SettingsWindowController(
+    private var firstTimeWindow: NSWindow?
+    lazy var settingsWindowController = SettingsWindowController(
         panes: [
             GeneralSettingsViewController(),
             AppearanceSettingsViewController(),
@@ -38,9 +38,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
-        self.setupMenuBar()
-        if !Defaults[.showMenuBarIcon] {
-            self.scheduleMenuBarIconVisibilityUpdate()
+        if Defaults[.showMenuBarIcon] {
+            self.setupMenuBar()
+        } else {
+            self.removeMenuBar()
         }
         
         if !Defaults[.launched] {
@@ -55,15 +56,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
-        self.setupMenuBar()
-        if !Defaults[.showMenuBarIcon] {
-            self.scheduleMenuBarIconVisibilityUpdate()
-        }
-        
+        self.openSettingsWindow(nil)
         return false
     }
     
-    private func setupMenuBar() {
+    func setupMenuBar() {
         guard statusBarItem == nil else { return }
         // Show the menu bar icon initially
         NSApp.setActivationPolicy(.accessory)
@@ -92,10 +89,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
     
-    private func scheduleMenuBarIconVisibilityUpdate() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
-            self.updateMenuBarIconStatus()
-        }
+    func removeMenuBar() {
+        NSApplication.shared.setActivationPolicy(.prohibited) // hide the dock icon
+        
+        guard let statusBarItem = statusBarItem else { return }
+        NSStatusBar.system.removeStatusItem(statusBarItem)
+        self.statusBarItem = nil
     }
     
     @objc func statusBarButtonClicked(_ sender: Any?) {
@@ -109,7 +108,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         quitApp()
     }
     
-    @objc private func openSettingsWindow(_ sender: Any?) {
+    @objc func openSettingsWindow(_ sender: Any?) {
         settingsWindowController.show()
     }
     
@@ -119,7 +118,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func restartApp() {
         // we use -n to open a new instance, to avoid calling applicationShouldHandleReopen
-        // we use Bundle.main.bundlePath in case of multiple AltTab versions on the machine
+        // we use Bundle.main.bundlePath in case of multiple DockDoor versions on the machine
         Process.launchedProcess(launchPath: "/usr/bin/open", arguments: ["-n", Bundle.main.bundlePath])
         self.quitApp()
     }
@@ -134,44 +133,30 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let hostingController = NSHostingController(rootView: contentView)
         
         // Create the settings window
-        settingsWindow = NSWindow(
+        firstTimeWindow = NSWindow(
             contentRect: NSRect(origin: .zero, size: NSSize(width: 400, height: 400)),
             styleMask: [.titled, .closable, .resizable],
             backing: .buffered, defer: false)
-        settingsWindow?.center()
-        settingsWindow?.setFrameAutosaveName("DockDoor Permissions")
-        settingsWindow?.contentView = hostingController.view
-        settingsWindow?.title = "DockDoor Permissions"
+        firstTimeWindow?.center()
+        firstTimeWindow?.setFrameAutosaveName("DockDoor Permissions")
+        firstTimeWindow?.contentView = hostingController.view
+        firstTimeWindow?.title = "DockDoor Permissions"
         
         // Make the window key and order it front
-        settingsWindow?.makeKeyAndOrderFront(nil)
+        firstTimeWindow?.makeKeyAndOrderFront(nil)
         
         // Calculate the preferred size of the SwiftUI view
         let preferredSize = hostingController.view.fittingSize
         
         // Resize the window to fit the content view
-        settingsWindow?.setContentSize(preferredSize)
-    }
-    
-    private func removeMenuBarIcon() {
-        guard let statusBarItem = statusBarItem else { return }
-        NSStatusBar.system.removeStatusItem(statusBarItem)
-        self.statusBarItem = nil
-    }
-    
-    func updateMenuBarIconStatus(){
-        if Defaults[.showMenuBarIcon] {
-            setupMenuBar()
-        } else {
-            removeMenuBarIcon()
-        }
+        firstTimeWindow?.setContentSize(preferredSize)
     }
 }
 
 extension AppDelegate: NSWindowDelegate {
     func windowWillClose(_ notification: Notification) {
-        if let window = notification.object as? NSWindow, window == settingsWindow {
-            settingsWindow = nil
+        if let window = notification.object as? NSWindow, window == firstTimeWindow {
+            firstTimeWindow = nil
         }
     }
 }
