@@ -23,6 +23,7 @@
 		BB1CBD5B2C1BA8DC003969BC /* Defaults in Frameworks */ = {isa = PBXBuildFile; productRef = BB1CBD5A2C1BA8DC003969BC /* Defaults */; };
 		BB1CBD5D2C1BCA4F003969BC /* Misc Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB1CBD5C2C1BCA4F003969BC /* Misc Utils.swift */; };
 		BB2567C62C10C5F000C0C93E /* DockUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2567C52C10C5F000C0C93E /* DockUtils.swift */; };
+		BB2CBB092C481295004502C5 /* SpaceWindowCacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2CBB082C48128D004502C5 /* SpaceWindowCacheManager.swift */; };
 		BB33E68C2C24C72F00A21D69 /* LaunchAtLogin in Frameworks */ = {isa = PBXBuildFile; productRef = BB33E68B2C24C72F00A21D69 /* LaunchAtLogin */; };
 		BB3967FD2C291D5A004F1AB6 /* StackedShadow.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3967FC2C291D5A004F1AB6 /* StackedShadow.swift */; };
 		BB3968002C2A6C44004F1AB6 /* SmoothGradient in Frameworks */ = {isa = PBXBuildFile; productRef = BB3967FF2C2A6C44004F1AB6 /* SmoothGradient */; };
@@ -68,6 +69,7 @@
 		BB1CBD572C1BA800003969BC /* MainSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainSettingsView.swift; sourceTree = "<group>"; };
 		BB1CBD5C2C1BCA4F003969BC /* Misc Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Misc Utils.swift"; sourceTree = "<group>"; };
 		BB2567C52C10C5F000C0C93E /* DockUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DockUtils.swift; sourceTree = "<group>"; };
+		BB2CBB082C48128D004502C5 /* SpaceWindowCacheManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceWindowCacheManager.swift; sourceTree = "<group>"; };
 		BB3967FC2C291D5A004F1AB6 /* StackedShadow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackedShadow.swift; sourceTree = "<group>"; };
 		BB3968012C2A6CC2004F1AB6 /* Marquee.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Marquee.swift; sourceTree = "<group>"; };
 		BB4B444A2C372A4C006680DC /* WindowPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowPreview.swift; sourceTree = "<group>"; };
@@ -176,6 +178,7 @@
 		BB157B772C0E32EF00997315 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				BB2CBB082C48128D004502C5 /* SpaceWindowCacheManager.swift */,
 				0596C2C22C3E060D00DCABEF /* PrivateApis.swift */,
 				BB2567C52C10C5F000C0C93E /* DockUtils.swift */,
 				BB157B782C0E330100997315 /* WindowUtil.swift */,
@@ -326,6 +329,7 @@
 				05A25B912C3EF28E002AC594 /* Extensions.swift in Sources */,
 				3A105FD92C1C049E0015EC66 /* dockStyle.swift in Sources */,
 				BBE7CC942C225D9700AB8F4D /* App Icon.swift in Sources */,
+				BB2CBB092C481295004502C5 /* SpaceWindowCacheManager.swift in Sources */,
 				BB3968022C2A6CC2004F1AB6 /* Marquee.swift in Sources */,
 				BB157B822C0EB29E00997315 /* DockObserver.swift in Sources */,
 				BBA153FA2C11FFD500119C02 /* consts.swift in Sources */,
@@ -484,7 +488,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1.1.2;
 				DEVELOPMENT_ASSET_PATHS = "\"DockDoor/Preview Content\"";
-				DEVELOPMENT_TEAM = 8M7864P9XP;
+				DEVELOPMENT_TEAM = 2Q775S63Q3;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;

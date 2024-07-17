@@ -26,6 +26,15 @@ struct WindowInfo: Identifiable, Hashable {
     var isMinimized: Bool
     var isHidden: Bool
     var lastUsed: Date
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+        hasher.combine(bundleID)
+    }
+
+    static func == (lhs: WindowInfo, rhs: WindowInfo) -> Bool {
+        return lhs.id == rhs.id && lhs.bundleID == rhs.bundleID // Two WindowInfo instances are considered equal if they have the same id and bundleID
+    }
 }
 
 /// Cache item structure for storing captured window images.
@@ -44,7 +53,9 @@ final class WindowUtil {
     private static var imageCache: [CGWindowID: CachedImage] = [:]
     private static let cacheQueue = DispatchQueue(label: "com.dockdoor.cacheQueue", attributes: .concurrent)
     private static var cacheExpirySeconds: Double = Defaults[.screenCaptureCacheLifespan]
-    private static var desktopSpaceWindowCache: [String: Set<WindowInfo>] = [:]
+    
+    private static let desktopSpaceWindowCacheManager = SpaceWindowCacheManager()
+    
     private static var appNameBundleIdTracker: [String: String] = [:]
     
     // MARK: - Cache Management
@@ -63,7 +74,7 @@ final class WindowUtil {
             imageCache.removeAll()
         }
     }
-    
+        
     // MARK: - Helper Functions
     
     /// Captures the image of a given window.
@@ -206,17 +217,15 @@ final class WindowUtil {
     }
     
     static func getAllWindowInfosAsList() -> [WindowInfo] {
-        return Array(desktopSpaceWindowCache.values.joined()).sorted(by: {$0.lastUsed > $1.lastUsed})
+        return desktopSpaceWindowCacheManager.getAllWindows()
     }
-    
-    static func findAllWindowsInDesktopCacheForApplication (for applicationName: String) -> [WindowInfo]? {
-        // find bundleID
-        if let bundleID = appNameBundleIdTracker[applicationName],
-           desktopSpaceWindowCache[bundleID] != nil {
-            return Array(desktopSpaceWindowCache[bundleID]!).sorted(by: {$0.lastUsed > $1.lastUsed})
-        } else {
+
+    static func findAllWindowsInDesktopCacheForApplication(for applicationName: String) -> [WindowInfo]? {
+        guard let bundleID = appNameBundleIdTracker[applicationName] else {
             return nil
         }
+        let windowSet = desktopSpaceWindowCacheManager.readCache(bundleId: bundleID)
+        return windowSet.isEmpty ? nil : Array(windowSet).sorted(by: { $0.lastUsed > $1.lastUsed })
     }
     
     // MARK: - Window Manipulation Functions
@@ -329,10 +338,14 @@ final class WindowUtil {
         }
     }
     
-    static func updateWindowDateTime (_ windowInfo: WindowInfo) {
-        if var windowInDesktopCache = desktopSpaceWindowCache[windowInfo.bundleID]?.first(where: { $0.id == windowInfo.id}) {
-            windowInDesktopCache.lastUsed = Date.now
-            desktopSpaceWindowCache[windowInfo.bundleID] = Set(arrayLiteral: windowInDesktopCache)
+    static func updateWindowDateTime(_ windowInfo: WindowInfo) {
+        desktopSpaceWindowCacheManager.updateCache(bundleId: windowInfo.bundleID) { windowSet in
+            if let index = windowSet.firstIndex(where: { $0.id == windowInfo.id }) {
+                var updatedWindow = windowSet[index]
+                updatedWindow.lastUsed = Date()
+                windowSet.remove(at: index)
+                windowSet.insert(updatedWindow)
+            }
         }
     }
     
@@ -442,13 +455,13 @@ final class WindowUtil {
         let activeWindows = results.compactMap { $0 }.filter { !$0.appName.isEmpty && !$0.bundleID.isEmpty }
         
         if applicationName.isEmpty { // window switcher is being used, return all windows.
-            let storedWindows = getAllWindowInfosAsList()
+            let storedWindows = desktopSpaceWindowCacheManager.getAllWindows()
             let combinedWindows = Set(activeWindows).union(storedWindows)
             return Array(combinedWindows)
         }
         
         if let bundleId = appNameBundleIdTracker[applicationName] ?? foundApp?.bundleIdentifier { // window isn't in current space, return stored windows.
-            let storedWindows = desktopSpaceWindowCache[bundleId] ?? []
+            let storedWindows = desktopSpaceWindowCacheManager.readCache(bundleId: bundleId)
             let combinedWindows = Set(activeWindows).union(storedWindows)
             return Array(combinedWindows)
         }
@@ -511,87 +524,62 @@ final class WindowUtil {
     }
     
     static func updateDesktopSpaceWindowCache(with windowInfo: WindowInfo) {
-        if var windowSet = desktopSpaceWindowCache[windowInfo.bundleID] {
-            if let existingWindow = windowSet.first(where: { $0.id == windowInfo.id }) {
-                windowSet.remove(existingWindow)
-                windowSet.insert(windowInfo)  // This will update the image
-            } else {
-                windowSet.insert(windowInfo)  // Add newly discovered window
-            }
-            desktopSpaceWindowCache[windowInfo.bundleID] = windowSet
-        } else {
-            desktopSpaceWindowCache[windowInfo.bundleID] = Set([windowInfo])
+        desktopSpaceWindowCacheManager.updateCache(bundleId: windowInfo.bundleID) { windowSet in
+            windowSet.remove(windowInfo)
+            windowSet.insert(windowInfo)
         }
     }
-    
+
     static func findWindowInDesktopSpaceCache(for windowID: CGWindowID, in bundleID: String) -> WindowInfo? {
-        return desktopSpaceWindowCache[bundleID]?.first { $0.id == windowID }
+        return desktopSpaceWindowCacheManager.readCache(bundleId: bundleID).first { $0.id == windowID }
     }
-    
+
     static func removeWindowFromDesktopSpaceCache(with id: CGWindowID, in bundleID: String) {
-        if let windowToRemove = findWindowInDesktopSpaceCache(for: id, in: bundleID) {
-            desktopSpaceWindowCache[bundleID]?.remove(windowToRemove)
-        }
-        
-        if desktopSpaceWindowCache[bundleID]?.isEmpty == true {
-            desktopSpaceWindowCache.removeValue(forKey: bundleID)
-        }
+        desktopSpaceWindowCacheManager.removeFromCache(bundleId: bundleID, windowId: id)
     }
-    
-    static func removeWindowFromDesktopSpaceCache(with pid: pid_t, bundleID: String, removeAll: Bool) -> Void {
+
+    static func removeWindowFromDesktopSpaceCache(with pid: pid_t, bundleID: String, removeAll: Bool) {
         if removeAll {
-            // Terminate signal came through
-            desktopSpaceWindowCache.removeValue(forKey: bundleID)
-            return
+            desktopSpaceWindowCacheManager.writeCache(bundleId: bundleID, windowSet: [])
+        } else {
+            // Implementation for partial removal not provided
         }
-        // Find window from the SCWindow property and see what doesnt exist in there anymore compared to the desktop cache
     }
-    
-    /// Retrieves and updates windows' information for a given process ID, bundle ID, and app name.
+
     static func updateStatusOfWindowCache(pid: pid_t, bundleID: String, isParentAppHidden: Bool) {
         let appElement = AXUIElementCreateApplication(pid)
         var value: AnyObject?
         let result = AXUIElementCopyAttributeValue(appElement, kAXWindowsAttribute as CFString, &value)
         
         if result == .success, let windows = value as? [AXUIElement] {
-            for (_, window) in windows.enumerated() {
-                let isMinimized: Bool = getAXAttribute(element: window, attribute: kAXMinimizedAttribute as CFString) ?? false
-                
-                let windowName: String? = getAXAttribute(element: window, attribute: kAXTitleAttribute as CFString)
-                
-                if isMinimized || isParentAppHidden {
-                    if let windowName = windowName,
-                       var cachedWindows = desktopSpaceWindowCache[bundleID] {
+            desktopSpaceWindowCacheManager.updateCache(bundleId: bundleID) { cachedWindows in
+                for window in windows {
+                    let isMinimized: Bool = getAXAttribute(element: window, attribute: kAXMinimizedAttribute as CFString) ?? false
+                    let windowName: String? = getAXAttribute(element: window, attribute: kAXTitleAttribute as CFString)
+                    
+                    if isMinimized || isParentAppHidden, let windowName = windowName {
                         cachedWindows = Set(cachedWindows.map { windowInfo in
                             var updatedWindow = windowInfo
                             if windowInfo.windowName == windowName {
-                                if isMinimized {
-                                    updatedWindow.isMinimized = true
-                                }
-                                if isParentAppHidden {
-                                    updatedWindow.isHidden = true
-                                }
+                                updatedWindow.isMinimized = isMinimized
+                                updatedWindow.isHidden = isParentAppHidden
                             }
                             return updatedWindow
                         })
-                        desktopSpaceWindowCache[bundleID] = cachedWindows
                     }
+                }
+                
+                if isParentAppHidden {
+                    cachedWindows = Set(cachedWindows.map { windowInfo in
+                        var updatedWindow = windowInfo
+                        updatedWindow.isHidden = true
+                        return updatedWindow
+                    })
                 }
             }
         }
-        
-        // If the parent app is hidden, update all windows for this bundle ID
-        if isParentAppHidden {
-            if var cachedWindows = desktopSpaceWindowCache[bundleID] {
-                cachedWindows = Set(cachedWindows.map { windowInfo in
-                    var updatedWindow = windowInfo
-                    updatedWindow.isHidden = true
-                    return updatedWindow
-                })
-                desktopSpaceWindowCache[bundleID] = cachedWindows
-            }
-        }
     }
+    
     static func funnyBundleIDs (_ input: String) -> Bool {
         let bundleIDsknownToBeFunky = [
             "com.apple.MobileSMS"]
