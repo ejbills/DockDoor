@@ -47,6 +47,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         self.updaterController.startUpdater()
         super.init()
         
+        if let zoomButton = settingsWindowController.window?.standardWindowButton(.zoomButton) {
+            zoomButton.isEnabled = false
+        }
+        
         settingsWindowController.window?.delegate = settingsWindowControllerDelegate
     }
     
