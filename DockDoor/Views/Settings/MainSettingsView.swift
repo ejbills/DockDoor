@@ -54,14 +54,10 @@ struct MainSettingsView: View {
             })
             .onChange(of: showMenuBarIcon) { _, isOn in
                 let delegate = NSApplication.shared.delegate as! AppDelegate
-                delegate.updateMenuBarIconStatus()
-                
-                if !isOn {
-                    MessageUtil.showMessage(title: String(localized: "Menu Bar Icon Hidden"), message: String(localized: "If you need to access the menu bar icon, launch the app to reveal it for 10 seconds."), completion: { result in
-                        if result == .cancel {
-                            showMenuBarIcon = true
-                        }
-                    })
+                if isOn {
+                    delegate.setupMenuBar()
+                } else {
+                    delegate.removeMenuBar()
                 }
             }
             
