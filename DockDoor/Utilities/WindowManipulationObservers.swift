@@ -12,6 +12,26 @@ import AppKit
 class WindowManipulationObservers {
     static let shared = WindowManipulationObservers()
     private var observers: [pid_t: AXObserver] = [:]
+    private static var tempLogger: [pid_t: Bool] = [:]
+    
+    static func ToggleLogger(with pid: pid_t, val: Bool) -> Void {
+        if val {
+            tempLogger[pid] = val
+        } else if tempLogger [pid] == nil {
+            // First instance of the application spawning
+            return
+        } else {
+            tempLogger.removeValue(forKey: pid)
+        }
+    }
+    
+    static func ApplicationHasLogged (with pid: pid_t) -> Bool {
+        if tempLogger[pid] != nil  {
+            return true
+        } else {
+            return false
+        }
+    }
     
     private init() {
         setupObservers()
@@ -34,7 +54,7 @@ class WindowManipulationObservers {
     }
     
     @objc private func spaceChanged(_ notification: Notification) {
-        Task.detached {
+        Task {
             // Start finding windows and updating the list
             _ = try await WindowUtil.activeWindows(for: "")
         }
@@ -49,7 +69,7 @@ class WindowManipulationObservers {
             _ = try await WindowUtil.activeWindows(for: "")
         }
         createObserverForApp(app)
-
+        
     }
     
     @objc private func appDidTerminate(_ notification: Notification) {
@@ -76,7 +96,7 @@ class WindowManipulationObservers {
         let result = AXObserverCreate(pid, axObserverCallback, &observer)
         guard result == .success, let observer = observer else { return }
         WindowUtil.addToBundleIDTracker(applicationName:app.localizedName ?? "", bundleID: app.bundleIdentifier ?? "")
-    
+        
         let appElement = AXUIElementCreateApplication(pid)
         AXObserverAddNotification(observer, appElement, kAXWindowCreatedNotification as CFString, UnsafeMutableRawPointer(bitPattern: Int(pid)))
         AXObserverAddNotification(observer, appElement, kAXUIElementDestroyedNotification as CFString, UnsafeMutableRawPointer(bitPattern: Int(pid)))
@@ -125,20 +145,25 @@ class WindowManipulationObservers {
 
 func axObserverCallback(observer: AXObserver, element: AXUIElement, notificationName: CFString, userData: UnsafeMutableRawPointer?) -> Void {
     guard let userData = userData else { return }
-    let pid = Int(bitPattern: userData)
+    let pid = pid_t(Int(bitPattern: userData))
     
     DispatchQueue.main.async {
-        if let app = NSRunningApplication(processIdentifier: pid_t(pid)){
+        if let app = NSRunningApplication(processIdentifier: pid){
             switch notificationName as String {
             case kAXWindowCreatedNotification:
                 print("Window created for app: \(app.localizedName ?? "Unknown")")
+                WindowManipulationObservers.ToggleLogger(with: pid, val: false)
                 Task {
                     _ = try await WindowUtil.activeWindows(for: app.localizedName ?? "")
                 }
                 break
             case kAXUIElementDestroyedNotification:
+                if WindowManipulationObservers.ApplicationHasLogged(with: pid) {
+                    break
+                }
                 print("Window closed for app: \(app.localizedName ?? "Unknown")")
-//                WindowUtil.removeWindowFromDesktopSpaceCache(with: pid_t(pid), bundleID: app.localizedName ?? "" , removeAll: false)
+                WindowUtil.removeWindowFromDesktopSpaceCache(with: pid_t(pid), bundleID: app.localizedName ?? "" , removeAll: false)
+                WindowManipulationObservers.ToggleLogger(with: pid, val: true)
                 break
             case kAXWindowMiniaturizedNotification:
                 print("Window minimized for app: \(app.localizedName ?? "Unknown")")

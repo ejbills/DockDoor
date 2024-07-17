@@ -26,12 +26,12 @@ struct WindowInfo: Identifiable, Hashable {
     var isMinimized: Bool
     var isHidden: Bool
     var lastUsed: Date
-
+    
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
         hasher.combine(bundleID)
     }
-
+    
     static func == (lhs: WindowInfo, rhs: WindowInfo) -> Bool {
         return lhs.id == rhs.id && lhs.bundleID == rhs.bundleID // Two WindowInfo instances are considered equal if they have the same id and bundleID
     }
@@ -74,7 +74,7 @@ final class WindowUtil {
             imageCache.removeAll()
         }
     }
-        
+    
     // MARK: - Helper Functions
     
     /// Captures the image of a given window.
@@ -219,7 +219,7 @@ final class WindowUtil {
     static func getAllWindowInfosAsList() -> [WindowInfo] {
         return desktopSpaceWindowCacheManager.getAllWindows()
     }
-
+    
     static func findAllWindowsInDesktopCacheForApplication(for applicationName: String) -> [WindowInfo]? {
         guard let bundleID = appNameBundleIdTracker[applicationName] else {
             return nil
@@ -525,27 +525,60 @@ final class WindowUtil {
     
     static func updateDesktopSpaceWindowCache(with windowInfo: WindowInfo) {
         desktopSpaceWindowCacheManager.updateCache(bundleId: windowInfo.bundleID) { windowSet in
-            windowSet.remove(windowInfo)
-            windowSet.insert(windowInfo)
+            
+            if let existingWindowInfo = windowSet.first(where: {$0.id == windowInfo.id && $0.window == windowInfo.window}){
+                // No need to update this window
+                return
+            } else {
+                // This is a new window
+                windowSet.remove(windowInfo)
+                windowSet.insert(windowInfo)
+            }
         }
     }
-
+    
     static func findWindowInDesktopSpaceCache(for windowID: CGWindowID, in bundleID: String) -> WindowInfo? {
         return desktopSpaceWindowCacheManager.readCache(bundleId: bundleID).first { $0.id == windowID }
     }
-
+    
     static func removeWindowFromDesktopSpaceCache(with id: CGWindowID, in bundleID: String) {
         desktopSpaceWindowCacheManager.removeFromCache(bundleId: bundleID, windowId: id)
     }
-
+    
     static func removeWindowFromDesktopSpaceCache(with pid: pid_t, bundleID: String, removeAll: Bool) {
+        func getNonLocalizedAppName(forBundleIdentifier bundleIdentifier: String) -> String? {
+            guard let bundleURL = NSWorkspace.shared.urlForApplication(withBundleIdentifier: bundleIdentifier) else {
+                return nil
+            }
+            
+            let bundle = Bundle(url: bundleURL)
+            let appName = bundle?.object(forInfoDictionaryKey: "CFBundleName") as? String
+            
+            return appName
+        }
         if removeAll {
             desktopSpaceWindowCacheManager.writeCache(bundleId: bundleID, windowSet: [])
         } else {
             // Implementation for partial removal not provided
+            Task {
+                do {
+                    let content = try await SCShareableContent.excludingDesktopWindows(true, onScreenWindowsOnly: true)
+                    let app = NSRunningApplication(processIdentifier: pid_t(pid))
+                    for window in content.windows {
+                        if window.owningApplication?.applicationName != app?.localizedName {
+                            continue
+                        }
+                        desktopSpaceWindowCacheManager.removeFromCache(bundleId: window.owningApplication?.bundleIdentifier ?? "", windowId: window.windowID)
+                        return
+                    }
+                } catch {
+                    print("Could not find windows")
+                    return
+                }
+            }
         }
     }
-
+    
     static func updateStatusOfWindowCache(pid: pid_t, bundleID: String, isParentAppHidden: Bool) {
         let appElement = AXUIElementCreateApplication(pid)
         var value: AnyObject?
@@ -579,13 +612,6 @@ final class WindowUtil {
             }
         }
     }
-    
-    static func funnyBundleIDs (_ input: String) -> Bool {
-        let bundleIDsknownToBeFunky = [
-            "com.apple.MobileSMS"]
-        return bundleIDsknownToBeFunky.contains(input)
-    }
-    
 }
 
 actor LimitedTaskGroup<T> {
