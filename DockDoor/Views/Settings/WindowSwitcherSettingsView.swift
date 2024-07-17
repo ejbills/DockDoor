@@ -31,7 +31,7 @@ struct WindowSwitcherSettingsView: View {
                 Text("Enable Window Switcher")
             }).onChange(of: enableWindowSwitcher){
                 _, newValue in
-                restartApplication()
+                askUserToRestartApplication()
             }
             // Default CMD + TAB implementation checkbox
             if Defaults[.enableWindowSwitcher] {

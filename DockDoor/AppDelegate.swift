@@ -117,6 +117,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         NSApplication.shared.terminate(nil)
     }
     
+    func restartApp() {
+        // we use -n to open a new instance, to avoid calling applicationShouldHandleReopen
+        // we use Bundle.main.bundlePath in case of multiple AltTab versions on the machine
+        Process.launchedProcess(launchPath: "/usr/bin/open", arguments: ["-n", Bundle.main.bundlePath])
+        self.quitApp()
+    }
+    
     private func handleFirstTimeLaunch() {
         let contentView = FirstTimeView()
         
