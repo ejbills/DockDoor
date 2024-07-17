@@ -17,7 +17,7 @@ final class DockObserver {
     
     private var hoverProcessingTask: Task<Void, Error>?
     private var isProcessing: Bool = false
-        
+    
     private var dockAppProcessIdentifier: pid_t? = nil
     
     private init() {
@@ -60,14 +60,14 @@ final class DockObserver {
                     SharedPreviewWindowCoordinator.shared.hideWindow()
                 }
             }
-
+            
             return Unmanaged.passUnretained(event)
         }
         
         let eventsOfInterest: CGEventMask = (1 << CGEventType.mouseMoved.rawValue) |
-                                            (1 << CGEventType.rightMouseDown.rawValue) |
-                                            (1 << CGEventType.leftMouseDown.rawValue) |
-                                            (1 << CGEventType.otherMouseDown.rawValue)
+        (1 << CGEventType.rightMouseDown.rawValue) |
+        (1 << CGEventType.leftMouseDown.rawValue) |
+        (1 << CGEventType.otherMouseDown.rawValue)
         
         eventTap = CGEvent.tapCreate(
             tap: .cghidEventTap,
@@ -127,24 +127,29 @@ final class DockObserver {
                 Task { [weak self] in
                     guard let self = self else { return }
                     do {
-                        let activeWindows = try await WindowUtil.activeWindows(for: dockIconAppName)
-                        await MainActor.run {
-                            if activeWindows.isEmpty {
-                                SharedPreviewWindowCoordinator.shared.hideWindow()
-                            } else {
-                                let mouseScreen = DockObserver.screenContainingPoint(currentMouseLocation) ?? NSScreen.main!
-                                let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
-                                // Show HoverWindow (using shared instance)
-                                SharedPreviewWindowCoordinator.shared.showWindow(
-                                    appName: dockIconAppName,
-                                    windows: activeWindows,
-                                    mouseLocation: convertedMouseLocation,
-                                    mouseScreen: mouseScreen,
-                                    onWindowTap: { [weak self] in
-                                        SharedPreviewWindowCoordinator.shared.hideWindow()
-                                        self?.lastAppName = nil
-                                    }
-                                )
+                        Task.detached {
+                            _ = try await WindowUtil.activeWindows(for: dockIconAppName)
+                        }
+                        if let activeWindows = WindowUtil.findAllWindowsInDesktopCacheForApplication(for: dockIconAppName) {
+                            
+                            await MainActor.run {
+                                if activeWindows.isEmpty {
+                                    SharedPreviewWindowCoordinator.shared.hideWindow()
+                                } else {
+                                    let mouseScreen = DockObserver.screenContainingPoint(currentMouseLocation) ?? NSScreen.main!
+                                    let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
+                                    // Show HoverWindow (using shared instance)
+                                    SharedPreviewWindowCoordinator.shared.showWindow(
+                                        appName: dockIconAppName,
+                                        windows: activeWindows,
+                                        mouseLocation: convertedMouseLocation,
+                                        mouseScreen: mouseScreen,
+                                        onWindowTap: { [weak self] in
+                                            SharedPreviewWindowCoordinator.shared.hideWindow()
+                                            self?.lastAppName = nil
+                                        }
+                                    )
+                                }
                             }
                         }
                     } catch {
@@ -228,7 +233,7 @@ final class DockObserver {
         
         return nil
     }
-
+    
     func getDockIconAtLocation(_ mouseLocation: CGPoint) -> String? {
         guard let dockAppProcessIdentifier else { return nil }
         

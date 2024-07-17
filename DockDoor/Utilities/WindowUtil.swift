@@ -25,6 +25,7 @@ struct WindowInfo: Identifiable, Hashable {
     var closeButton: AXUIElement?
     var isMinimized: Bool
     var isHidden: Bool
+    var lastUsed: Date
 }
 
 /// Cache item structure for storing captured window images.
@@ -197,8 +198,25 @@ final class WindowUtil {
         }
     }
     
+    // MARK: - Desktop Cache Retrievers
+    static func addToBundleIDTracker(applicationName: String, bundleID: String ) {
+        if !appNameBundleIdTracker.contains(where: {$0.key == applicationName}) {
+            appNameBundleIdTracker[applicationName] = bundleID
+        }
+    }
+    
     static func getAllWindowInfosAsList() -> [WindowInfo] {
-        return Array(desktopSpaceWindowCache.values.joined())
+        return Array(desktopSpaceWindowCache.values.joined()).sorted(by: {$0.lastUsed > $1.lastUsed})
+    }
+    
+    static func findAllWindowsInDesktopCacheForApplication (for applicationName: String) -> [WindowInfo]? {
+        // find bundleID
+        if let bundleID = appNameBundleIdTracker[applicationName],
+           desktopSpaceWindowCache[bundleID] != nil {
+            return Array(desktopSpaceWindowCache[bundleID]!).sorted(by: {$0.lastUsed > $1.lastUsed})
+        } else {
+            return nil
+        }
     }
     
     // MARK: - Window Manipulation Functions
@@ -217,9 +235,6 @@ final class WindowUtil {
             
             if minimizeResult != .success {
                 print("Error un-minimizing window: \(minimizeResult.rawValue)")
-                //                if let (key, index) = findKeyAndIndex(for: windowInfo.id) {
-                //                    deleteWindowFromListUsingKeyIndex(key, index)
-                //                }
             } else {
                 NSRunningApplication(processIdentifier: windowInfo.pid)?.activate()
                 focusOnSpecificWindow(windowInfo: windowInfo)
@@ -232,6 +247,7 @@ final class WindowUtil {
                 print("Error minimizing window: \(minimizeResult.rawValue)")
             }
         }
+        updateWindowDateTime(windowInfo)
     }
     
     /// Toggles the hidden state of a window.
@@ -255,6 +271,7 @@ final class WindowUtil {
             NSRunningApplication(processIdentifier: windowInfo.pid)?.activate()
             focusOnSpecificWindow(windowInfo: windowInfo)
         }
+        updateWindowDateTime(windowInfo)
     }
     
     static func focusOnSpecificWindow(windowInfo: WindowInfo) {
@@ -299,14 +316,23 @@ final class WindowUtil {
         let focusResult = AXUIElementSetAttributeValue(windowInfo.axElement, kAXFocusedAttribute as CFString, kCFBooleanTrue)
         AXUIElementSetAttributeValue(windowInfo.axElement, kAXFrontmostAttribute as CFString, kCFBooleanTrue) // set frontmost window
         let activateResult = NSRunningApplication(processIdentifier: windowInfo.pid)?.activate()
+        updateWindowDateTime(windowInfo)
         
         if activateResult != true || raiseResult != .success || focusResult != .success {
             let fallbackActivateResult = NSRunningApplication(processIdentifier: windowInfo.pid)?.activate(options: [.activateAllWindows])
             let fallbackResult = AXUIElementSetAttributeValue(windowInfo.axElement, kAXFrontmostAttribute as CFString, kCFBooleanTrue)
             
             if fallbackActivateResult != true || fallbackResult != .success {
+                removeWindowFromDesktopSpaceCache(with: windowInfo.id, in: windowInfo.bundleID)
                 print("Failed to bring window to front with fallback attempts.")
             }
+        }
+    }
+    
+    static func updateWindowDateTime (_ windowInfo: WindowInfo) {
+        if var windowInDesktopCache = desktopSpaceWindowCache[windowInfo.bundleID]?.first(where: { $0.id == windowInfo.id}) {
+            windowInDesktopCache.lastUsed = Date.now
+            desktopSpaceWindowCache[windowInfo.bundleID] = Set(arrayLiteral: windowInDesktopCache)
         }
     }
     
@@ -334,13 +360,14 @@ final class WindowUtil {
             return
         }
         
+        removeWindowFromDesktopSpaceCache(with: windowInfo.pid, bundleID: windowInfo.bundleID, removeAll: true)
         if force {
             app.forceTerminate()
         } else {
             app.terminate()
         }
     }
-            
+    
     /// Retrieves a value for a given AXUIElement attribute.
     static func getAXAttribute<T>(element: AXUIElement, attribute: CFString) -> T? {
         var value: CFTypeRef?
@@ -468,7 +495,8 @@ final class WindowUtil {
                                     axElement: windowRef,
                                     closeButton: closeButton,
                                     isMinimized: false,
-                                    isHidden: false)
+                                    isHidden: false,
+                                    lastUsed: Date.now)
         
         do {
             windowInfo.image = try await captureWindowImage(window: window)
@@ -508,6 +536,15 @@ final class WindowUtil {
         if desktopSpaceWindowCache[bundleID]?.isEmpty == true {
             desktopSpaceWindowCache.removeValue(forKey: bundleID)
         }
+    }
+    
+    static func removeWindowFromDesktopSpaceCache(with pid: pid_t, bundleID: String, removeAll: Bool) -> Void {
+        if removeAll {
+            // Terminate signal came through
+            desktopSpaceWindowCache.removeValue(forKey: bundleID)
+            return
+        }
+        // Find window from the SCWindow property and see what doesnt exist in there anymore compared to the desktop cache
     }
     
     /// Retrieves and updates windows' information for a given process ID, bundle ID, and app name.
@@ -555,67 +592,12 @@ final class WindowUtil {
             }
         }
     }
-    
-    static func addWindowToDesktopCache(pid: pid_t, bundleID: String) {
-        let appElement = AXUIElementCreateApplication(pid)
-        if let windowRef = WindowUtil.getAXWindows(for: appElement), !windowRef.isEmpty
-        {
-            var validWindows:[CGWindowID] = []
-            for window in windowRef {
-                var cgWindowId: CGWindowID = 0
-                let windowIDStatus = _AXUIElementGetWindow(window, &cgWindowId)
-                if windowIDStatus == .success {
-                    validWindows.append(cgWindowId)
-                }
-            }
-            if let windowSet = desktopSpaceWindowCache[bundleID] {
-                
-            } else {
-                // First time discovering this window
-            }
-            let set = desktopSpaceWindowCache[bundleID]?.filter{
-                validWindows.contains($0.id)
-            }
-            if ((set?.isEmpty) != nil) {
-                desktopSpaceWindowCache.removeValue(forKey: bundleID)
-            }
-        }
-    }
     static func funnyBundleIDs (_ input: String) -> Bool {
         let bundleIDsknownToBeFunky = [
-        "com.apple.MobileSMS"]
+            "com.apple.MobileSMS"]
         return bundleIDsknownToBeFunky.contains(input)
     }
     
-    static func removeWindowFromDesktopCache(pid: pid_t, bundleID: String) {
-        let appElement = AXUIElementCreateApplication(pid)
-        if let windowRef = WindowUtil.getAXWindows(for: appElement),
-           !windowRef.isEmpty
-        {
-            var validWindows:[CGWindowID] = []
-            for window in windowRef {
-               
-            }
-            let set = desktopSpaceWindowCache[bundleID]?.filter{
-                validWindows.contains($0.id)
-            }
-//            if ((set?.isEmpty) != nil) {
-//                desktopSpaceWindowCache.removeValue(forKey: bundleID)
-//            }
-        }
-        else {            
-            // This is the only window of the application, delete the whole entry
-            if funnyBundleIDs(bundleID) {
-                // do not delete the whole list
-            }
-            else {
-                // Delete the whole list
-                desktopSpaceWindowCache.removeValue(forKey: bundleID)
-            }
-        }
-        
-        
-    }
 }
 
 actor LimitedTaskGroup<T> {
