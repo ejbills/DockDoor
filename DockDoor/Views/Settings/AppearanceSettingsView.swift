@@ -19,6 +19,7 @@ struct AppearanceSettingsView: View {
     @Default(.windowTitleVisibility) var windowTitleVisibility
     @Default(.windowTitlePosition) var windowTitlePosition
     @Default(.trafficLightButtonsVisibility) var trafficLightButtonsVisibility
+    @Default(.trafficLightButtonsPosition) var trafficLightButtonsPosition
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -37,6 +38,29 @@ struct AppearanceSettingsView: View {
                 }
             }
             .pickerStyle(MenuPickerStyle())
+            .scaledToFit()
+            .layoutPriority(1)
+            
+            Picker("Traffic Light Buttons Position", selection: $trafficLightButtonsPosition) {
+                ForEach(TrafficLightButtonsPosition.allCases, id: \.self) { position in
+                    Text(position.localizedName)
+                        .tag(position)
+                }
+            }
+            .onChange(of: trafficLightButtonsPosition) { oldValue, newValue in
+                if newValue.rawValue == windowTitlePosition.rawValue {
+                    MessageUtil.showMessage(
+                        title: String(localized: "Elements Overlap"),
+                        message: String(localized: "The selected positions for Traffic Light Buttons and Window Title will overlap."),
+                        completion: { result in
+                            if result == .cancel {
+                                trafficLightButtonsPosition = oldValue
+                            }
+                        }
+                    )
+                }
+            }
+            .pickerStyle(SegmentedPickerStyle())
             .scaledToFit()
             .layoutPriority(1)
             
@@ -80,18 +104,31 @@ struct AppearanceSettingsView: View {
                 .scaledToFit()
                 
                 Picker("Window Title Visibility", selection: $windowTitleVisibility) {
-                                    ForEach(WindowTitleVisibility.allCases, id: \.self) { visibility in
-                                        Text(visibility.localizedName)
-                                            .tag(visibility)
-                                    }
-                                }
-                                .scaledToFit()
-                                .pickerStyle(MenuPickerStyle())
+                    ForEach(WindowTitleVisibility.allCases, id: \.self) { visibility in
+                        Text(visibility.localizedName)
+                            .tag(visibility)
+                    }
+                }
+                .scaledToFit()
+                .pickerStyle(MenuPickerStyle())
                 
                 Picker("Window Title Position", selection: $windowTitlePosition) {
                     ForEach(WindowTitlePosition.allCases, id: \.self) { position in
                         Text(position.localizedName)
                             .tag(position)
+                    }
+                }
+                .onChange(of: windowTitlePosition) { oldValue, newValue in
+                    if newValue.rawValue == trafficLightButtonsPosition.rawValue {
+                        MessageUtil.showMessage(
+                            title: String(localized: "Elements Overlap"),
+                            message: String(localized: "The selected positions for Traffic Light Buttons and Window Title will overlap."),
+                            completion: { result in
+                                if result == .cancel {
+                                    windowTitlePosition = oldValue
+                                }
+                            }
+                        )
                     }
                 }
                 .scaledToFit()

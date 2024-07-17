@@ -22,6 +22,7 @@ struct WindowPreview: View {
     @Default(.windowTitleDisplayCondition) var windowTitleDisplayCondition
     @Default(.windowTitleVisibility) var windowTitleVisibility
     @Default(.trafficLightButtonsVisibility) var trafficLightButtonsVisibility
+    @Default(.trafficLightButtonsPosition) var trafficLightButtonsPosition
     
     // preview popup action handlers
     @Default(.tapEquivalentInterval) var tapEquivalentInterval
@@ -118,13 +119,26 @@ struct WindowPreview: View {
                     return .bottomTrailing
                 case .topRight:
                     return .topTrailing
+                case .topLeft:
+                    return .topLeading
                 }
             }()) {
                 if  showWindowTitle && (windowTitleDisplayCondition == .all || (windowTitleDisplayCondition == .windowSwitcherOnly && ScreenCenteredFloatingWindow.shared.windowSwitcherActive) || (windowTitleDisplayCondition == .dockPreviewsOnly && !ScreenCenteredFloatingWindow.shared.windowSwitcherActive)) {
                     windowTitleOverlay(selected: selected)
                 }
             }
-            .overlay(alignment: .topLeading) {
+            .overlay(alignment: {
+                switch trafficLightButtonsPosition {
+                case .bottomLeft:
+                    return .bottomLeading
+                case .bottomRight:
+                    return .bottomTrailing
+                case .topRight:
+                    return .topTrailing
+                case .topLeft:
+                    return .topLeading
+                }
+            }()) {
                 if !windowInfo.isMinimized, !windowInfo.isHidden, let _ = windowInfo.closeButton {
                     TrafficLightButtons(windowInfo: windowInfo,
                                         displayMode: trafficLightButtonsVisibility,
