@@ -128,8 +128,8 @@ struct MainSettingsView: View {
     
     private func showResetConfirmation() {
         MessageUtil.showMessage(
-            title: "Reset to Defaults",
-            message: "Are you sure you want to reset all settings to their default values?"
+            title: String(localized: "Reset to Defaults"),
+            message: String(localized: "Are you sure you want to reset all settings to their default values?")
         ) { action in
             switch action {
             case .ok:
