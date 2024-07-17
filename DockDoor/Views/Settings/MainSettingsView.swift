@@ -40,6 +40,13 @@ struct MainSettingsView: View {
             
             Divider()
             
+            HStack {
+                Text("Reset All Settings")
+                Button("Reset") {
+                    showResetConfirmation()
+                }
+            }
+            
             LaunchAtLogin.Toggle(String(localized: "Launch DockDoor at login"))
             
             Toggle(isOn: $showMenuBarIcon, label: {
@@ -121,6 +128,21 @@ struct MainSettingsView: View {
         }
         .padding(20)
         .frame(minWidth: 650)
+    }
+    
+    private func showResetConfirmation() {
+        MessageUtil.showMessage(
+            title: "Reset to Defaults",
+            message: "Are you sure you want to reset all settings to their default values?"
+        ) { action in
+            switch action {
+            case .ok:
+                resetDefaultsToDefaultValues()
+            case .cancel:
+                // Do nothing
+                break
+            }
+        }
     }
 }
 

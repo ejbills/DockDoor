@@ -17,6 +17,13 @@ func askUserToRestartApplication () -> Void {
         }})
 }
 
+func resetDefaultsToDefaultValues() {
+    Defaults.removeAll()
+    
+    // reset the launched value
+    Defaults[.launched] = true
+}
+
 func getWindowSize() -> CGSize {
     return CGSize(width: optimisticScreenSizeWidth / Defaults[.sizingMultiplier], height: optimisticScreenSizeHeight / Defaults[.sizingMultiplier])
 }
