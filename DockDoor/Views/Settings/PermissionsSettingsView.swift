@@ -96,8 +96,8 @@ struct PermissionsSettingsView: View {
                 .font(.footnote)
                 .foregroundColor(.secondary)
             Button("Restart App", action: {
-                let delegate = NSApplication.shared.delegate as! AppDelegate
-                delegate.restartApp()
+                let appDelegate = NSApplication.shared.delegate as! AppDelegate
+                appDelegate.restartApp()
             })
                 .buttonStyle(.bordered)
 

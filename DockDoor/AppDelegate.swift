@@ -121,7 +121,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         settingsWindowController.show()
     }
     
-    @objc func quitApp() {
+    func quitApp() {
         NSApplication.shared.terminate(nil)
     }
     

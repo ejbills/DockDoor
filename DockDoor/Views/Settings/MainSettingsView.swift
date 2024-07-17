@@ -40,25 +40,26 @@ struct MainSettingsView: View {
             
             Divider()
             
-            HStack {
-                Text("Reset All Settings")
-                Button("Reset") {
-                    showResetConfirmation()
-                }
-            }
-            
             LaunchAtLogin.Toggle(String(localized: "Launch DockDoor at login"))
             
             Toggle(isOn: $showMenuBarIcon, label: {
                 Text("Show Menu Bar Icon")
             })
             .onChange(of: showMenuBarIcon) { _, isOn in
-                let delegate = NSApplication.shared.delegate as! AppDelegate
+                let appDelegate = NSApplication.shared.delegate as! AppDelegate
                 if isOn {
-                    delegate.setupMenuBar()
+                    appDelegate.setupMenuBar()
                 } else {
-                    delegate.removeMenuBar()
+                    appDelegate.removeMenuBar()
                 }
+            }
+            
+            Button("Reset All Settings to Defaults") {
+                showResetConfirmation()
+            }
+            Button("Quit DockDoor") {
+                let appDelegate = NSApplication.shared.delegate as! AppDelegate
+                appDelegate.quitApp()
             }
             
             Divider()
