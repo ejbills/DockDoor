@@ -44,6 +44,7 @@ extension Defaults.Keys {
     static let windowTitlePosition = Key<WindowTitlePosition>("windowTitlePosition", default: .bottomLeft )
     
     static let trafficLightButtonsVisibility = Key<TrafficLightButtonsVisibility>("trafficLightButtonsVisibility", default: .dimmedOnPreviewHover )
+    static let trafficLightButtonsPosition = Key<TrafficLightButtonsPosition>("trafficLightButtonsPosition", default: .topLeft)
 }
 
 enum WindowTitleDisplayCondition: String, CaseIterable, Defaults.Serializable {
@@ -67,6 +68,7 @@ enum WindowTitlePosition: String, CaseIterable, Defaults.Serializable {
     case bottomLeft
     case bottomRight
     case topRight
+    case topLeft
     
     var localizedName: String {
         switch self {
@@ -76,6 +78,8 @@ enum WindowTitlePosition: String, CaseIterable, Defaults.Serializable {
             String(localized: "Bottom Right", comment: "Preview window title position option")
         case .topRight:
             String(localized: "Top Right", comment: "Preview window title position option")
+        case .topLeft:
+            String(localized: "Top Left", comment: "Preview window title position option")
         }
     }
 }
@@ -127,6 +131,26 @@ enum TrafficLightButtonsVisibility: String, CaseIterable, Defaults.Serializable 
             String(localized: "On window hover; Full opacity", comment: "Traffic light buttons visibility option")
         case .alwaysVisible:
             String(localized: "Always visible; Full opacity", comment: "Traffic light buttons visibility option")
+        }
+    }
+}
+
+enum TrafficLightButtonsPosition: String, CaseIterable, Defaults.Serializable {
+    case topLeft
+    case topRight
+    case bottomRight
+    case bottomLeft
+    
+    var localizedName: String {
+        switch self {
+        case .topLeft:
+            String(localized: "Top Left", comment: "Traffic light buttons position option")
+        case .topRight:
+            String(localized: "Top Right", comment: "Traffic light buttons position option")
+        case .bottomRight:
+            String(localized: "Bottom Right", comment: "Traffic light buttons position option")
+        case .bottomLeft:
+            String(localized: "Bottom Left", comment: "Traffic light buttons position option")
         }
     }
 }
