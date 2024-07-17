@@ -11,6 +11,16 @@ import Defaults
 import Settings
 import Sparkle
 
+class SettingsWindowControllerDelegate: NSObject, NSWindowDelegate {
+    func windowDidBecomeKey(_ notification: Notification) {
+        NSApp.setActivationPolicy(.regular) // Show dock icon on open settings window
+    }
+    
+    func windowWillClose(_ notification: Notification) {
+        NSApp.setActivationPolicy(.accessory) // Hide dock icon back
+    }
+}
+
 class AppDelegate: NSObject, NSApplicationDelegate {
     private var dockObserver: DockObserver?
     private var appClosureObserver: AppClosureObserver?
@@ -21,7 +31,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     // settings
     private var firstTimeWindow: NSWindow?
-    lazy var settingsWindowController = SettingsWindowController(
+    private lazy var settingsWindowController = SettingsWindowController(
         panes: [
             GeneralSettingsViewController(),
             AppearanceSettingsViewController(),
@@ -30,14 +40,19 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             UpdatesSettingsViewController(updater: updaterController.updater)
         ]
     )
+    private let settingsWindowControllerDelegate = SettingsWindowControllerDelegate()
     
     override init() {
         self.updaterController = SPUStandardUpdaterController(startingUpdater: true, updaterDelegate: nil, userDriverDelegate: nil)
         self.updaterController.startUpdater()
         super.init()
+        
+        settingsWindowController.window?.delegate = settingsWindowControllerDelegate
     }
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
+        NSApplication.shared.setActivationPolicy(.accessory) // Hide the menubar and dock icons
+        
         if Defaults[.showMenuBarIcon] {
             self.setupMenuBar()
         } else {
@@ -62,10 +77,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func setupMenuBar() {
         guard statusBarItem == nil else { return }
-        // Show the menu bar icon initially
-        NSApp.setActivationPolicy(.accessory)
-        NSApp.activate(ignoringOtherApps: false)
-        
         let icon = NSImage(systemSymbolName: "door.right.hand.open", accessibilityDescription: nil)!
         statusBarItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
         if let button = statusBarItem?.button {
@@ -90,8 +101,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func removeMenuBar() {
-        NSApplication.shared.setActivationPolicy(.prohibited) // hide the dock icon
-        
         guard let statusBarItem = statusBarItem else { return }
         NSStatusBar.system.removeStatusItem(statusBarItem)
         self.statusBarItem = nil

@@ -51,11 +51,6 @@ struct MainSettingsView: View {
                     delegate.setupMenuBar()
                 } else {
                     delegate.removeMenuBar()
-                    if let settingsWindow = delegate.settingsWindowController.window {
-                        // re-front the settings window after removeMenuBar's setActivationPolicy
-                        settingsWindow.makeKeyAndOrderFront(nil)
-                        NSApp.activate(ignoringOtherApps: false)
-                    }
                 }
             }
             
