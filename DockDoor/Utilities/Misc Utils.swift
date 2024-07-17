@@ -12,8 +12,8 @@ import Carbon
 func askUserToRestartApplication () -> Void {
     MessageUtil.showMessage(title: String(localized: "Restart required"), message: String(localized: "Please restart the application to apply your changes. Click OK to quit the app."), completion: { result in
         if result == .ok {
-            let delegate = NSApplication.shared.delegate as! AppDelegate
-            delegate.restartApp()
+            let appDelegate = NSApplication.shared.delegate as! AppDelegate
+            appDelegate.restartApp()
         }})
 }
 
