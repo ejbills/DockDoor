@@ -116,7 +116,7 @@ struct MainSettingsView: View {
                 Text("Preview Hover Delay")
                 Spacer()
                 Slider(value: $tapEquivalentInterval, in: 0...2, step: 0.1)
-                TextField("", value: $tapEquivalentInterval, formatter: NumberFormatter())
+                TextField("", value: $tapEquivalentInterval, formatter: decimalFormatter)
                     .frame(width: 38)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                 Text("seconds")
