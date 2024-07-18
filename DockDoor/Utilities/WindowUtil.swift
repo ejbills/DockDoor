@@ -526,7 +526,7 @@ final class WindowUtil {
     static func updateDesktopSpaceWindowCache(with windowInfo: WindowInfo) {
         desktopSpaceWindowCacheManager.updateCache(bundleId: windowInfo.bundleID) { windowSet in
             
-            if let existingWindowInfo = windowSet.first(where: {$0.id == windowInfo.id && $0.window == windowInfo.window}){
+            if let existingWindowInfo = windowSet.first(where: {$0.id == windowInfo.id}){
                 // No need to update this window
                 return
             } else {
@@ -546,26 +546,16 @@ final class WindowUtil {
     }
     
     static func removeWindowFromDesktopSpaceCache(with pid: pid_t, bundleID: String, removeAll: Bool) {
-        func getNonLocalizedAppName(forBundleIdentifier bundleIdentifier: String) -> String? {
-            guard let bundleURL = NSWorkspace.shared.urlForApplication(withBundleIdentifier: bundleIdentifier) else {
-                return nil
-            }
-            
-            let bundle = Bundle(url: bundleURL)
-            let appName = bundle?.object(forInfoDictionaryKey: "CFBundleName") as? String
-            
-            return appName
-        }
         if removeAll {
             desktopSpaceWindowCacheManager.writeCache(bundleId: bundleID, windowSet: [])
         } else {
-            // Implementation for partial removal not provided
             Task {
                 do {
                     let content = try await SCShareableContent.excludingDesktopWindows(true, onScreenWindowsOnly: true)
                     let app = NSRunningApplication(processIdentifier: pid_t(pid))
                     for window in content.windows {
-                        if window.owningApplication?.applicationName != app?.localizedName {
+                        if window.owningApplication?.applicationName != app?.localizedName
+                        {
                             continue
                         }
                         desktopSpaceWindowCacheManager.removeFromCache(bundleId: window.owningApplication?.bundleIdentifier ?? "", windowId: window.windowID)

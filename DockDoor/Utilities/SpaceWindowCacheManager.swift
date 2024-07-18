@@ -37,8 +37,12 @@ class SpaceWindowCacheManager {
                 if windowSet.isEmpty {
                     self.desktopSpaceWindowCache.removeValue(forKey: bundleId)
                 } else {
-                    windowSet.remove(windowSet.first(where: { $0.id == windowId })!)
-                    self.desktopSpaceWindowCache[bundleId] = windowSet
+                    if let windowToRemove = windowSet.first(where: { $0.id == windowId}) {
+                        windowSet.remove(windowToRemove)
+                        self.desktopSpaceWindowCache[bundleId] = windowSet
+                    } else {
+                        return
+                    }
                 }
             }
         }

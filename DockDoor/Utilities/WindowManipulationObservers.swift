@@ -12,26 +12,8 @@ import AppKit
 class WindowManipulationObservers {
     static let shared = WindowManipulationObservers()
     private var observers: [pid_t: AXObserver] = [:]
-    private static var tempLogger: [pid_t: Bool] = [:]
-    
-    static func ToggleLogger(with pid: pid_t, val: Bool) -> Void {
-        if val {
-            tempLogger[pid] = val
-        } else if tempLogger [pid] == nil {
-            // First instance of the application spawning
-            return
-        } else {
-            tempLogger.removeValue(forKey: pid)
-        }
-    }
-    
-    static func ApplicationHasLogged (with pid: pid_t) -> Bool {
-        if tempLogger[pid] != nil  {
-            return true
-        } else {
-            return false
-        }
-    }
+    static var trackedElements: Set<AXUIElement> = []
+    static var debounceWorkItem: DispatchWorkItem?
     
     private init() {
         setupObservers()
@@ -55,7 +37,7 @@ class WindowManipulationObservers {
     
     @objc private func spaceChanged(_ notification: Notification) {
         Task {
-            // Start finding windows and updating the list
+            // Discover new windows and update the list
             _ = try await WindowUtil.activeWindows(for: "")
         }
     }
@@ -152,18 +134,20 @@ func axObserverCallback(observer: AXObserver, element: AXUIElement, notification
             switch notificationName as String {
             case kAXWindowCreatedNotification:
                 print("Window created for app: \(app.localizedName ?? "Unknown")")
-                WindowManipulationObservers.ToggleLogger(with: pid, val: false)
                 Task {
                     _ = try await WindowUtil.activeWindows(for: app.localizedName ?? "")
                 }
                 break
             case kAXUIElementDestroyedNotification:
-                if WindowManipulationObservers.ApplicationHasLogged(with: pid) {
-                    break
+                guard !WindowManipulationObservers.trackedElements.contains(element) else { return }
+                WindowManipulationObservers.trackedElements.insert(element)
+                WindowManipulationObservers.debounceWorkItem?.cancel()
+                WindowManipulationObservers.debounceWorkItem = DispatchWorkItem {
+                    WindowUtil.removeWindowFromDesktopSpaceCache(with: pid_t(pid), bundleID: app.localizedName ?? "" , removeAll: false)
+                    print("Window closed for app: \(app.localizedName ?? "Unknown")")
+                    WindowManipulationObservers.trackedElements.remove(element)
                 }
-                print("Window closed for app: \(app.localizedName ?? "Unknown")")
-                WindowUtil.removeWindowFromDesktopSpaceCache(with: pid_t(pid), bundleID: app.localizedName ?? "" , removeAll: false)
-                WindowManipulationObservers.ToggleLogger(with: pid, val: true)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.01, execute: WindowManipulationObservers.debounceWorkItem!)
                 break
             case kAXWindowMiniaturizedNotification:
                 print("Window minimized for app: \(app.localizedName ?? "Unknown")")
