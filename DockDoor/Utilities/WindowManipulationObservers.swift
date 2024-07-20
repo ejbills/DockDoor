@@ -14,6 +14,8 @@ class WindowManipulationObservers {
     private var observers: [pid_t: AXObserver] = [:]
     static var trackedElements: Set<AXUIElement> = []
     static var debounceWorkItem: DispatchWorkItem?
+    private var knownUserSpaces: [CGSSpaceID] = []
+    private let connectionID: CGSConnectionID = CGSConnectionID()
     
     private init() {
         setupObservers()
@@ -36,9 +38,18 @@ class WindowManipulationObservers {
     }
     
     @objc private func spaceChanged(_ notification: Notification) {
+        let displayUUID = CGSCopyActiveMenuBarDisplayIdentifier(self.connectionID)
+        let currentSpace = CGSManagedDisplayGetCurrentSpace(self.connectionID, displayUUID)
+        if self.knownUserSpaces.contains(currentSpace) {
+            // ignore the space change notification, we have already kept track of the windows from this space
+            return
+        }
         Task {
+            [weak self] in
             // Discover new windows and update the list
             _ = try await WindowUtil.activeWindows(for: "")
+            guard let self = self else { return }
+            self.knownUserSpaces.append(currentSpace)
         }
     }
     
@@ -135,7 +146,7 @@ func axObserverCallback(observer: AXObserver, element: AXUIElement, notification
             case kAXWindowCreatedNotification:
                 print("Window created for app: \(app.localizedName ?? "Unknown")")
                 Task {
-                    _ = try await WindowUtil.activeWindows(for: app.localizedName ?? "")
+                    _ = try await WindowUtil.activeWindows(for: app.localizedName ?? "Unknown")
                 }
                 break
             case kAXUIElementDestroyedNotification:
