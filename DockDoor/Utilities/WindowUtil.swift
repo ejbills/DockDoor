@@ -126,6 +126,11 @@ final class WindowUtil {
         let result = AXUIElementCopyAttributeValue(appRef, kAXWindowsAttribute as CFString, &windowList)
         return result == .success ? windowList as? [AXUIElement] : nil
     }
+    static func isElementValid(_ element: AXUIElement) -> Bool {
+        var role: AnyObject?
+        let result = AXUIElementCopyAttributeValue(element, kAXRoleAttribute as CFString, &role)
+        return result == .success
+    }
     
     /// Finds a window by its name in the provided AXUIElement windows.
     static func findWindow(matchingWindow window: SCWindow, in axWindows: [AXUIElement]) -> AXUIElement? {
@@ -373,7 +378,7 @@ final class WindowUtil {
             return
         }
         
-        removeWindowFromDesktopSpaceCache(with: windowInfo.pid, bundleID: windowInfo.bundleID, removeAll: true)
+        removeWindowFromDesktopSpaceCache(with: windowInfo.bundleID, removeAll: true)
         if force {
             app.forceTerminate()
         } else {
@@ -545,25 +550,20 @@ final class WindowUtil {
         desktopSpaceWindowCacheManager.removeFromCache(bundleId: bundleID, windowId: id)
     }
     
-    static func removeWindowFromDesktopSpaceCache(with pid: pid_t, bundleID: String, removeAll: Bool) {
+    static func removeWindowFromDesktopSpaceCache(with bundleID: String, removeAll: Bool) {
         if removeAll {
             desktopSpaceWindowCacheManager.writeCache(bundleId: bundleID, windowSet: [])
         } else {
             Task {
-                do {
-                    let content = try await SCShareableContent.excludingDesktopWindows(true, onScreenWindowsOnly: true)
-                    let app = NSRunningApplication(processIdentifier: pid_t(pid))
-                    for window in content.windows {
-                        if window.owningApplication?.applicationName != app?.localizedName
-                        {
-                            continue
-                        }
-                        desktopSpaceWindowCacheManager.removeFromCache(bundleId: window.owningApplication?.bundleIdentifier ?? "", windowId: window.windowID)
+                let existingWindowsSet = desktopSpaceWindowCacheManager.readCache(bundleId: bundleID)
+                if existingWindowsSet.isEmpty {
+                    return
+                }
+                for window in existingWindowsSet {
+                    if !isElementValid(window.axElement) {
+                        desktopSpaceWindowCacheManager.removeFromCache(bundleId: window.bundleID, windowId: window.id)
                         return
                     }
-                } catch {
-                    print("Could not find windows")
-                    return
                 }
             }
         }

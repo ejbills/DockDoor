@@ -15,7 +15,7 @@ class WindowManipulationObservers {
     static var trackedElements: Set<AXUIElement> = []
     static var debounceWorkItem: DispatchWorkItem?
     private var knownUserSpaces: [CGSSpaceID] = []
-    private let connectionID: CGSConnectionID = CGSConnectionID()
+    private let connectionID: CGSConnectionID = CGSMainConnectionID()
     
     private init() {
         setupObservers()
@@ -69,7 +69,7 @@ class WindowManipulationObservers {
         guard let app = notification.userInfo?[NSWorkspace.applicationUserInfoKey] as? NSRunningApplication else {
             return
         }
-        WindowUtil.removeWindowFromDesktopSpaceCache(with: app.processIdentifier, bundleID: app.bundleIdentifier ?? "", removeAll: true)
+        WindowUtil.removeWindowFromDesktopSpaceCache(with: app.bundleIdentifier ?? "", removeAll: true)
         removeObserverForApp(app)
         SharedPreviewWindowCoordinator.shared.hideWindow()
     }
@@ -154,8 +154,7 @@ func axObserverCallback(observer: AXObserver, element: AXUIElement, notification
                 WindowManipulationObservers.trackedElements.insert(element)
                 WindowManipulationObservers.debounceWorkItem?.cancel()
                 WindowManipulationObservers.debounceWorkItem = DispatchWorkItem {
-                    WindowUtil.removeWindowFromDesktopSpaceCache(with: pid_t(pid), bundleID: app.localizedName ?? "" , removeAll: false)
-                    print("Window closed for app: \(app.localizedName ?? "Unknown")")
+                    WindowUtil.removeWindowFromDesktopSpaceCache(with: app.bundleIdentifier ?? "" , removeAll: false)
                     WindowManipulationObservers.trackedElements.remove(element)
                 }
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.01, execute: WindowManipulationObservers.debounceWorkItem!)
@@ -180,3 +179,39 @@ func axObserverCallback(observer: AXObserver, element: AXUIElement, notification
         }
     }
 }
+
+func printTitle(of element: AXUIElement) {
+    var title: AnyObject?
+    let result = AXUIElementCopyAttributeValue(element, kAXTitleAttribute as CFString, &title)
+    
+    if result == .success, let titleString = title as? String {
+        print("Title: \(titleString)")
+    } else {
+        print("Unable to retrieve title")
+    }
+}
+
+enum AxError: Error {
+    case runtimeError
+}
+
+func axCallWhichCanThrow<T>(_ result: AXError, _ successValue: inout T) throws -> T? {
+    switch result {
+    case .success:
+        print(successValue)
+        return successValue
+    case .cannotComplete:
+        print("error")
+        throw AxError.runtimeError
+    default:
+        return nil
+    }
+}
+
+func cgWindowId(appElement: AXUIElement) throws -> CGWindowID? {
+    var id : CGWindowID = 0
+    let result = _AXUIElementGetWindow(appElement, &id)
+    return try axCallWhichCanThrow(result, &id)
+}
+
+
