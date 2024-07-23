@@ -411,25 +411,26 @@ final class WindowUtil {
         let content = try await SCShareableContent.excludingDesktopWindows(true, onScreenWindowsOnly: true)
         let group = LimitedTaskGroup<WindowInfo?>(maxConcurrentTasks: 4)
         var foundApp: SCRunningApplication?
+        var nonLocalName: String?
         var potentialMatches: [SCRunningApplication] = []
         
         for window in content.windows {
             if let app = window.owningApplication,
-               let nonLocalName = getNonLocalizedAppName(forBundleIdentifier: app.bundleIdentifier) {
+               let tempNonLocalName = getNonLocalizedAppName(forBundleIdentifier: app.bundleIdentifier) {
                 
                 // Collect potential matches
                 if applicationName.contains(app.applicationName) || app.applicationName.contains(applicationName) {
                     potentialMatches.append(app)
                 }
                 
-                if applicationName.isEmpty || (app.applicationName == applicationName) || (nonLocalName == applicationName) {
+                if applicationName.isEmpty || (app.applicationName == applicationName) || (tempNonLocalName == applicationName) {
                     await group.addTask {
                         return try await fetchWindowInfo(window: window, applicationName: applicationName)
                     }
                     foundApp = app
-                    if let bundleId = foundApp?.bundleIdentifier {
-                        appNameBundleIdTracker[applicationName] = bundleId
-                    }
+                    nonLocalName = tempNonLocalName
+                    
+                    appNameBundleIdTracker[tempNonLocalName] = app.bundleIdentifier
                 }
             }
         }
@@ -438,8 +439,10 @@ final class WindowUtil {
         if foundApp == nil, let bestGuessApp = potentialMatches.first {
             foundApp = bestGuessApp
             
-            if let bundleId = foundApp?.bundleIdentifier {
-                appNameBundleIdTracker[applicationName] = bundleId
+            if let bundleId = foundApp?.bundleIdentifier, let tempNonLocalName = getNonLocalizedAppName(forBundleIdentifier: bundleId) {
+                appNameBundleIdTracker[tempNonLocalName] = bundleId
+                
+                nonLocalName = tempNonLocalName
             }
             
             // Loop again to fetch window info for the best guess application
@@ -465,7 +468,8 @@ final class WindowUtil {
             return Array(combinedWindows)
         }
         
-        if let bundleId = appNameBundleIdTracker[applicationName] ?? foundApp?.bundleIdentifier { // window isn't in current space, return stored windows.
+        if let nonLocalName,
+            let bundleId = appNameBundleIdTracker[nonLocalName] ?? foundApp?.bundleIdentifier { // window isn't in current space, return stored windows.
             let storedWindows = desktopSpaceWindowCacheManager.readCache(bundleId: bundleId)
             let combinedWindows = Set(activeWindows).union(storedWindows)
             return Array(combinedWindows)
@@ -489,6 +493,8 @@ final class WindowUtil {
         }
         
         let pid = owningApplication.processID
+        
+        print(window.owningApplication, window.title)
         
         let appRef = createAXUIElement(for: pid)
         
