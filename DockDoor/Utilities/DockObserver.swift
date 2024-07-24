@@ -127,9 +127,6 @@ final class DockObserver {
                 Task { [weak self] in
                     guard let self = self else { return }
                     do {
-//                        Task.detached {
-//                            _ = try await WindowUtil.activeWindows(for: dockIconAppName)
-//                        }
                         if let activeWindows = WindowUtil.findAllWindowsInDesktopCacheForApplication(for: dockIconAppName) {
                             
                             await MainActor.run {
