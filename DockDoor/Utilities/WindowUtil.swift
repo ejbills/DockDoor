@@ -18,7 +18,7 @@ struct WindowInfo: Identifiable, Hashable {
     let appName: String
     let bundleID: String
     let pid: pid_t
-    let windowName: String?
+    var windowName: String?
     var image: CGImage?
     var axElement: AXUIElement
     var closeButton: AXUIElement?
@@ -411,7 +411,7 @@ final class WindowUtil {
         
         if applicationName.isEmpty {
             let storedWindows = desktopSpaceWindowCacheManager.getAllWindows()
-            return Array(Set(activeWindows).union(storedWindows))
+            return storedWindows
         }
         
         if let nonLocalName,
@@ -452,16 +452,7 @@ final class WindowUtil {
         
         print("Failed to detect new window for \(appName) after \(maxRetries) attempts")
     }
-
-    func getCachedWindowCount(for appName: String) -> Int {
-        guard let bundleID = WindowUtil.appNameBundleIdTracker[appName] else {
-            print("No bundle ID found for app: \(appName)")
-            return 0
-        }
-        
-        let cachedWindows = WindowUtil.desktopSpaceWindowCacheManager.readCache(bundleId: bundleID)
-        return cachedWindows.count
-    }
+    
     
     private static func fetchWindowInfo(window: SCWindow, applicationName: String) async throws -> WindowInfo? {
         let windowID = window.windowID
@@ -475,7 +466,7 @@ final class WindowUtil {
               !filteredBundleIdentifiers.contains(owningApplication.bundleIdentifier) else {
             return nil
         }
-                
+        
         let pid = owningApplication.processID
         let appRef = createAXUIElement(for: pid)
         
@@ -517,6 +508,14 @@ final class WindowUtil {
             if !windowSet.contains(where: { $0.id == windowInfo.id }) {
                 windowSet.remove(windowInfo)
                 windowSet.insert(windowInfo)
+            }
+            else {
+                if let matchingWindow = windowSet.first(where: { $0.id == windowInfo.id }) {
+                    var matchingWindowCopy = matchingWindow
+                    matchingWindowCopy.windowName = windowInfo.windowName
+                    windowSet.remove(matchingWindow)
+                    windowSet.insert(matchingWindowCopy)
+                }
             }
         }
     }
