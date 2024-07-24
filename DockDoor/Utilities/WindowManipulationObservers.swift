@@ -146,7 +146,9 @@ func axObserverCallback(observer: AXObserver, element: AXUIElement, notification
             case kAXWindowCreatedNotification:
                 print("Window created for app: \(app.localizedName ?? "Unknown")")
                 Task {
-                    _ = try await WindowUtil.activeWindows(for: app.localizedName ?? "")
+                    if let appName = app.localizedName {
+                        await WindowUtil.retryWindowCreation(for: appName, maxRetries: 5, delay: 0.2)
+                    }
                 }
                 break
             case kAXUIElementDestroyedNotification:

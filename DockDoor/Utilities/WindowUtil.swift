@@ -10,7 +10,7 @@ import ApplicationServices
 import ScreenCaptureKit
 import Defaults
 
-let filteredBundleIdentifiers: [String] = ["com.apple.notificationcenterui"]
+let filteredBundleIdentifiers: [String] = ["com.apple.notificationcenterui"]  // filters desktop widgets
 
 struct WindowInfo: Identifiable, Hashable {
     let id: CGWindowID
@@ -420,7 +420,47 @@ final class WindowUtil {
             return Array(Set(activeWindows).union(storedWindows))
         }
         
+        // Fallback to findAllWindowsInDesktopCacheForApplication if no SCRunningApplication is found and applicationName isn't empty
+        if foundApp == nil && !applicationName.isEmpty {
+            if let cachedWindows = findAllWindowsInDesktopCacheForApplication(for: applicationName) {
+                return cachedWindows
+            }
+        }
+        
         return activeWindows
+    }
+    
+    static func retryWindowCreation(for appName: String, maxRetries: Int, delay: TimeInterval) async {
+        let initialCount = findAllWindowsInDesktopCacheForApplication(for: appName)?.count ?? 0
+        
+        for attempt in 1...maxRetries {
+            do {
+                let refreshedWindowCount = try await WindowUtil.activeWindows(for: appName).count
+                
+                if refreshedWindowCount > initialCount {
+                    return
+                }
+            } catch {
+                print("Error retrieving windows for \(appName) on attempt \(attempt): \(error)")
+            }
+            
+            if attempt < maxRetries {
+                print("No new windows detected for \(appName) on attempt \(attempt). Retrying...")
+                try? await Task.sleep(nanoseconds: UInt64(delay * 1_000_000_000))
+            }
+        }
+        
+        print("Failed to detect new window for \(appName) after \(maxRetries) attempts")
+    }
+
+    func getCachedWindowCount(for appName: String) -> Int {
+        guard let bundleID = WindowUtil.appNameBundleIdTracker[appName] else {
+            print("No bundle ID found for app: \(appName)")
+            return 0
+        }
+        
+        let cachedWindows = WindowUtil.desktopSpaceWindowCacheManager.readCache(bundleId: bundleID)
+        return cachedWindows.count
     }
     
     private static func fetchWindowInfo(window: SCWindow, applicationName: String) async throws -> WindowInfo? {
@@ -435,7 +475,7 @@ final class WindowUtil {
               !filteredBundleIdentifiers.contains(owningApplication.bundleIdentifier) else {
             return nil
         }
-        
+                
         let pid = owningApplication.processID
         let appRef = createAXUIElement(for: pid)
         
