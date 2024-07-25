@@ -37,11 +37,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         super.init()
     }
     
-    func applicationWillFinishLaunching(_ notification: Notification)  {
-        Task.detached {
-            _ = try await WindowUtil.activeWindows(for: "")
-        }
-    }
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         self.setupMenuBar()

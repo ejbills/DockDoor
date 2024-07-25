@@ -140,6 +140,8 @@ func axObserverCallback(observer: AXObserver, element: AXUIElement, notification
                 WindowManipulationObservers.debounceWorkItem = DispatchWorkItem {
                     WindowUtil.removeWindowFromDesktopSpaceCache(with: app.bundleIdentifier ?? "" , removeAll: false)
                     WindowManipulationObservers.trackedElements.remove(element)
+                    print("Window minimized for app: \(app.localizedName ?? "Unknown")")
+
                 }
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.01, execute: WindowManipulationObservers.debounceWorkItem!)
                 break

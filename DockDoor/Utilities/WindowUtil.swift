@@ -39,6 +39,7 @@ struct WindowInfo: Identifiable, Hashable {
 struct CachedImage {
     let image: CGImage
     let timestamp: Date
+    let windowname: String?
 }
 
 struct CachedAppIcon {
@@ -95,14 +96,14 @@ final class WindowUtil {
         
         let image = try await SCScreenshotManager.captureImage(contentFilter: filter, configuration: config)
         
-        let cachedImage = CachedImage(image: image, timestamp: Date())
+        let cachedImage = CachedImage(image: image, timestamp: Date(), windowname: window.title)
         imageCache[window.windowID] = cachedImage
         
         return image
     }
     
     private static func getCachedImage(window: SCWindow) -> CGImage? {
-        if let cachedImage = imageCache[window.windowID], Date().timeIntervalSince(cachedImage.timestamp) <= cacheExpirySeconds {
+        if let cachedImage = imageCache[window.windowID], cachedImage.windowname == window.title, Date().timeIntervalSince(cachedImage.timestamp) <= cacheExpirySeconds {
             return cachedImage.image
         }
         return nil
@@ -505,17 +506,15 @@ final class WindowUtil {
     
     static func updateDesktopSpaceWindowCache(with windowInfo: WindowInfo) {
         desktopSpaceWindowCacheManager.updateCache(bundleId: windowInfo.bundleID) { windowSet in
-            if !windowSet.contains(where: { $0.id == windowInfo.id }) {
-                windowSet.remove(windowInfo)
-                windowSet.insert(windowInfo)
+            if let matchingWindow = windowSet.first(where: { $0.id == windowInfo.id && $0.windowName != windowInfo.windowName }) {
+                var matchingWindowCopy = matchingWindow
+                matchingWindowCopy.windowName = windowInfo.windowName
+                matchingWindowCopy.image = windowInfo.image
+                windowSet.remove(matchingWindow)
+                windowSet.insert(matchingWindowCopy)
             }
             else {
-                if let matchingWindow = windowSet.first(where: { $0.id == windowInfo.id }) {
-                    var matchingWindowCopy = matchingWindow
-                    matchingWindowCopy.windowName = windowInfo.windowName
-                    windowSet.remove(matchingWindow)
-                    windowSet.insert(matchingWindowCopy)
-                }
+                windowSet.insert(windowInfo)
             }
         }
     }
