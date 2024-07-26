@@ -319,6 +319,33 @@ final class WindowUtil {
         }
     }
     
+    static func updateWindowDateTime(with bundleID: String, pid: pid_t) {
+        desktopSpaceWindowCacheManager.updateCache(bundleId: bundleID) {
+            windowSet in
+            if windowSet.isEmpty {
+                return
+            }
+            let application = createAXUIElement(for: pid)
+            var value: AnyObject?
+            let result = AXUIElementCopyAttributeValue(application, kAXWindowsAttribute as CFString, &value)
+            if result == .success, let windows = value as? [AXUIElement] {
+                for window in windows {
+                    var cgWindowId: CGWindowID = 0
+                    let windowIDStatus = _AXUIElementGetWindow(window, &cgWindowId)
+                    if windowIDStatus == .success, 
+                        let index = windowSet.firstIndex(where: { $0.id == cgWindowId })
+                    {
+                        var updatedWindow = windowSet[index]
+                        updatedWindow.lastUsed = Date()
+                        windowSet.remove(at: index)
+                        windowSet.insert(updatedWindow)
+                        return
+                    }
+                }
+            }
+        }
+    }
+    
     static func closeWindow(windowInfo: WindowInfo) {
         guard let closeButton = windowInfo.closeButton else {
             print("Error: closeButton is nil.")

@@ -40,9 +40,6 @@ class WindowManipulationObservers {
               app.activationPolicy == .regular else {
             return
         }
-        Task.detached {
-            _ = try await WindowUtil.activeWindows(for: "")
-        }
         createObserverForApp(app)
         
     }
@@ -79,6 +76,7 @@ class WindowManipulationObservers {
         AXObserverAddNotification(observer, appElement, kAXWindowDeminiaturizedNotification as CFString, UnsafeMutableRawPointer(bitPattern: Int(pid)))
         AXObserverAddNotification(observer, appElement, kAXApplicationHiddenNotification as CFString, UnsafeMutableRawPointer(bitPattern: Int(pid)))
         AXObserverAddNotification(observer, appElement, kAXApplicationShownNotification as CFString, UnsafeMutableRawPointer(bitPattern: Int(pid)))
+        AXObserverAddNotification(observer, appElement, kAXFocusedUIElementChangedNotification as CFString, UnsafeMutableRawPointer(bitPattern: Int(pid)))
         
         CFRunLoopAddSource(CFRunLoopGetMain(), AXObserverGetRunLoopSource(observer), .defaultMode)
         
@@ -102,6 +100,8 @@ class WindowManipulationObservers {
         AXObserverRemoveNotification(observer, appElement, kAXUIElementDestroyedNotification as CFString)
         AXObserverRemoveNotification(observer, appElement, kAXWindowMiniaturizedNotification as CFString)
         AXObserverRemoveNotification(observer, appElement, kAXWindowDeminiaturizedNotification as CFString)
+        AXObserverRemoveNotification(observer, appElement, kAXFocusedUIElementChangedNotification as CFString)
+
         
         observers.removeValue(forKey: pid)
     }
@@ -113,6 +113,8 @@ class WindowManipulationObservers {
             AXObserverRemoveNotification(observer, appElement, kAXUIElementDestroyedNotification as CFString)
             AXObserverRemoveNotification(observer, appElement, kAXWindowMiniaturizedNotification as CFString)
             AXObserverRemoveNotification(observer, appElement, kAXWindowDeminiaturizedNotification as CFString)
+            AXObserverRemoveNotification(observer, appElement, kAXFocusedUIElementChangedNotification as CFString)
+
         }
         observers.removeAll()
     }
@@ -125,6 +127,16 @@ func axObserverCallback(observer: AXObserver, element: AXUIElement, notification
     DispatchQueue.main.async {
         if let app = NSRunningApplication(processIdentifier: pid){
             switch notificationName as String {
+            case kAXFocusedUIElementChangedNotification:
+                guard !WindowManipulationObservers.trackedElements.contains(element) else {return}
+                WindowManipulationObservers.trackedElements.insert(element)
+                WindowManipulationObservers.debounceWorkItem?.cancel()
+                WindowManipulationObservers.debounceWorkItem = DispatchWorkItem {
+                    WindowUtil.updateWindowDateTime(with: app.bundleIdentifier ?? "", pid: pid)
+                    WindowManipulationObservers.trackedElements.remove(element)
+                    print("Focused Window has changed: \(app.localizedName ?? "")")
+                }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: WindowManipulationObservers.debounceWorkItem!)
             case kAXWindowCreatedNotification:
                 print("Window created for app: \(app.localizedName ?? "Unknown")")
                 Task {
@@ -140,8 +152,8 @@ func axObserverCallback(observer: AXObserver, element: AXUIElement, notification
                 WindowManipulationObservers.debounceWorkItem = DispatchWorkItem {
                     WindowUtil.removeWindowFromDesktopSpaceCache(with: app.bundleIdentifier ?? "" , removeAll: false)
                     WindowManipulationObservers.trackedElements.remove(element)
-                    print("Window minimized for app: \(app.localizedName ?? "Unknown")")
-
+                    print("Window destroyed for app: \(app.localizedName ?? "Unknown")")
+                    
                 }
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.01, execute: WindowManipulationObservers.debounceWorkItem!)
                 break
