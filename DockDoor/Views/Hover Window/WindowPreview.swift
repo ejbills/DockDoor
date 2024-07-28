@@ -63,14 +63,13 @@ struct WindowPreview: View {
                         Group {
                             if isMinimized || isHidden {
                                 fluidGradient().opacity(0.225)
-                                VStack {
+                                HStack {
                                     Image(systemName: "eye.slash.fill")
-                                        .font(.system(size: 24))
-                                        .foregroundColor(.white)
                                     Text(isMinimized ? "Minimized" : "Hidden")
-                                        .font(.caption)
-                                        .foregroundColor(.white)
                                 }
+                                .font(.caption)
+                                .italic()
+                                .foregroundStyle(.secondary)
                             }
                         }
                     )
