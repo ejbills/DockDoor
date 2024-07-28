@@ -535,7 +535,7 @@ final class WindowUtil {
     
     static func updateDesktopSpaceWindowCache(with windowInfo: WindowInfo) {
         desktopSpaceWindowCacheManager.updateCache(bundleId: windowInfo.bundleID) { windowSet in
-            if let matchingWindow = windowSet.first(where: { $0.id == windowInfo.id && $0.windowName != windowInfo.windowName }) {
+            if let matchingWindow = windowSet.first(where: { $0.id == windowInfo.id }) {
                 var matchingWindowCopy = matchingWindow
                 matchingWindowCopy.windowName = windowInfo.windowName
                 matchingWindowCopy.image = windowInfo.image
