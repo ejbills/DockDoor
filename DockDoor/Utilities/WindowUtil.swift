@@ -537,6 +537,8 @@ final class WindowUtil {
                 var matchingWindowCopy = matchingWindow
                 matchingWindowCopy.windowName = windowInfo.windowName
                 matchingWindowCopy.image = windowInfo.image
+                matchingWindowCopy.isHidden = windowInfo.isHidden
+                matchingWindowCopy.isMinimized = windowInfo.isMinimized
                 windowSet.remove(matchingWindow)
                 windowSet.insert(matchingWindowCopy)
             }
