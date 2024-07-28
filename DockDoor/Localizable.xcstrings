@@ -427,8 +427,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "• Enables real-time interaction with dock items"
+            "state" : "translated",
+            "value" : "Valós idejű interakció a dock elemeivel"
           }
         },
         "it" : {
@@ -523,8 +523,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "• Enables real-time interaction with dock items"
+            "state" : "translated",
+            "value" : "• 实现与任务栏项目的实时互动"
           }
         },
         "zh-Hant" : {
@@ -605,8 +605,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "• To capture previews of images and windows"
+            "state" : "translated",
+            "value" : "Előnézetet készíteni képekről és az ablakokról"
           }
         },
         "it" : {
@@ -701,8 +701,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "• To capture previews of images and windows"
+            "state" : "translated",
+            "value" : "• 截取图像和窗口的预览图"
           }
         },
         "zh-Hant" : {
@@ -783,8 +783,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "• To detect when you hover over the dock"
+            "state" : "translated",
+            "value" : "Érzékelni, hogy a dock fölé húzod az egeret"
           }
         },
         "it" : {
@@ -879,8 +879,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "• To detect when you hover over the dock"
+            "state" : "translated",
+            "value" : "• 检测你鼠标悬停在任务栏上的时候"
           }
         },
         "zh-Hant" : {
@@ -961,8 +961,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Accessibility Permissions"
+            "state" : "translated",
+            "value" : "Hozzáférhetőségi engedélyek"
           }
         },
         "it" : {
@@ -1057,8 +1057,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Accessibility Permissions"
+            "state" : "translated",
+            "value" : "辅助功能权限"
           }
         },
         "zh-Hant" : {
@@ -1139,8 +1139,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Accessibility:"
+            "state" : "translated",
+            "value" : "Kisegítő lehetőségek:"
           }
         },
         "it" : {
@@ -1235,8 +1235,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Accessibility:"
+            "state" : "translated",
+            "value" : "辅助功能:"
           }
         },
         "zh-Hant" : {
@@ -1317,8 +1317,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Adjust this if the preview is misaligned with dock"
+            "state" : "translated",
+            "value" : "Finomhangolja, amennyiben az előnézet nem megfelelő helyen jelenik meg"
           }
         },
         "it" : {
@@ -1413,8 +1413,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Adjust this if the preview is misaligned with dock"
+            "state" : "translated",
+            "value" : "如果预览图与任务栏对不齐，请调整此设置"
           }
         },
         "zh-Hant" : {
@@ -1497,8 +1497,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Always"
+            "state" : "translated",
+            "value" : "Mindig"
           }
         },
         "it" : {
@@ -1593,8 +1593,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Always"
+            "state" : "translated",
+            "value" : "始终"
           }
         },
         "zh-Hant" : {
@@ -1676,8 +1676,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Always visible"
+            "state" : "translated",
+            "value" : "Mindig látható"
           }
         },
         "it" : {
@@ -1772,8 +1772,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Always visible"
+            "state" : "translated",
+            "value" : "始终可见"
           }
         },
         "zh-Hant" : {
@@ -1855,8 +1855,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Always visible; Full opacity"
+            "state" : "translated",
+            "value" : "Mindig látható; Teljes átlátszatlanság"
           }
         },
         "it" : {
@@ -1951,8 +1951,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Always visible; Full opacity"
+            "state" : "translated",
+            "value" : "始终可见; 完全不透明"
           }
         },
         "zh-Hant" : {
@@ -2033,8 +2033,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "App Name Style"
+            "state" : "translated",
+            "value" : "Alkalmazásnév stílus"
           }
         },
         "it" : {
@@ -2129,8 +2129,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "App Name Style"
+            "state" : "translated",
+            "value" : "应用名称样式"
           }
         },
         "zh-Hant" : {
@@ -2212,8 +2212,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Appearance"
+            "state" : "translated",
+            "value" : "Kinézet"
           }
         },
         "it" : {
@@ -2308,8 +2308,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Appearance"
+            "state" : "translated",
+            "value" : "外观样式"
           }
         },
         "zh-Hant" : {
@@ -2390,8 +2390,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Appearance settings"
+            "state" : "translated",
+            "value" : "Kinézet beállítások"
           }
         },
         "it" : {
@@ -2486,8 +2486,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Appearance settings"
+            "state" : "translated",
+            "value" : "外观样式设置"
           }
         },
         "zh-Hant" : {
@@ -2508,8 +2508,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Are you sure you want to reset all settings to their default values?"
+            "state" : "translated",
+            "value" : "هل أنت متأكد من أنك تريد إعادة تعيين الإعدادات إلى حالتها الإفتراضية؟"
           }
         },
         "ca" : {
@@ -2532,8 +2532,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Are you sure you want to reset all settings to their default values?"
+            "state" : "translated",
+            "value" : "Sind Sie sicher, dass Sie alle Einstellungen auf ihre Standardwerte zurücksetzen möchten?"
           }
         },
         "el" : {
@@ -2544,8 +2544,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Are you sure you want to reset all settings to their default values?"
+            "state" : "translated",
+            "value" : "¿Estás seguro de que deseas restablecer todos los ajustes a sus valores predeterminados?"
           }
         },
         "fi" : {
@@ -2568,8 +2568,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Are you sure you want to reset all settings to their default values?"
+            "state" : "translated",
+            "value" : "Biztosan alaphelyzetbe szeretné állítani a beállításokat?"
           }
         },
         "it" : {
@@ -2664,8 +2664,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Are you sure you want to reset all settings to their default values?"
+            "state" : "translated",
+            "value" : "您确定要将所有设置恢复为默认值吗?"
           }
         },
         "zh-Hant" : {
@@ -2746,8 +2746,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Automatically check for updates"
+            "state" : "translated",
+            "value" : "Automatikus frissítések keresése"
           }
         },
         "it" : {
@@ -2842,8 +2842,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Automatically check for updates"
+            "state" : "translated",
+            "value" : "自动检测更新"
           }
         },
         "zh-Hant" : {
@@ -2925,8 +2925,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Bottom Left"
+            "state" : "translated",
+            "value" : "Bal, alsó sarok"
           }
         },
         "it" : {
@@ -3021,8 +3021,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Bottom Left"
+            "state" : "translated",
+            "value" : "左下角"
           }
         },
         "zh-Hant" : {
@@ -3104,8 +3104,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Bottom Right"
+            "state" : "translated",
+            "value" : "Jobb, alsó sarok"
           }
         },
         "it" : {
@@ -3200,8 +3200,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Bottom Right"
+            "state" : "translated",
+            "value" : "右下角"
           }
         },
         "zh-Hant" : {
@@ -3282,8 +3282,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Buy me a coffee here, thank you!"
+            "state" : "translated",
+            "value" : "Vegyél nekem egy kávét, köszönöm!"
           }
         },
         "it" : {
@@ -3378,8 +3378,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Buy me a coffee here, thank you!"
+            "state" : "translated",
+            "value" : "请我喝咖啡吧，谢谢!"
           }
         },
         "zh-Hant" : {
@@ -3461,8 +3461,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Can you even see this?"
+            "state" : "translated",
+            "value" : "Biztosan látható így?"
           }
         },
         "it" : {
@@ -3557,8 +3557,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Can you even see this?"
+            "state" : "translated",
+            "value" : "你能看到这个吗?"
           }
         },
         "zh-Hant" : {
@@ -3639,8 +3639,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Cancel"
+            "state" : "translated",
+            "value" : "Mégse"
           }
         },
         "it" : {
@@ -3735,8 +3735,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Cancel"
+            "state" : "translated",
+            "value" : "取消"
           }
         },
         "zh-Hant" : {
@@ -3817,8 +3817,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check for Updates"
+            "state" : "translated",
+            "value" : "Frissítések keresése"
           }
         },
         "it" : {
@@ -3913,8 +3913,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check for Updates"
+            "state" : "translated",
+            "value" : "检查更新"
           }
         },
         "zh-Hant" : {
@@ -3995,7 +3995,7 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Command (⌘)"
           }
         },
@@ -4091,8 +4091,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Command (⌘)"
+            "state" : "translated",
+            "value" : "Command键 (⌘)"
           }
         },
         "zh-Hant" : {
@@ -4173,8 +4173,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Contribute translation here!"
+            "state" : "translated",
+            "value" : "Segítsen a fordításban itt!"
           }
         },
         "it" : {
@@ -4269,8 +4269,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Contribute translation here!"
+            "state" : "translated",
+            "value" : "在此提交翻译!"
           }
         },
         "zh-Hant" : {
@@ -4351,7 +4351,7 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Control (⌃)"
           }
         },
@@ -4447,8 +4447,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Control (⌃)"
+            "state" : "translated",
+            "value" : "Control键(⌃)"
           }
         },
         "zh-Hant" : {
@@ -4529,8 +4529,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Current Keybind: %@"
+            "state" : "translated",
+            "value" : "Aktuális gyorsgomb: %@"
           }
         },
         "it" : {
@@ -4625,8 +4625,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Current Keybind: %@"
+            "state" : "translated",
+            "value" : "当前快捷键: %@"
           }
         },
         "zh-Hant" : {
@@ -4707,8 +4707,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Current Version: %@"
+            "state" : "translated",
+            "value" : "Jelenlegi verzió: %@"
           }
         },
         "it" : {
@@ -4803,8 +4803,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Current Version: %@"
+            "state" : "translated",
+            "value" : "当前版本: %@"
           }
         },
         "zh-Hant" : {
@@ -4886,8 +4886,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Default"
+            "state" : "translated",
+            "value" : "Alapértelmezett"
           }
         },
         "it" : {
@@ -4982,8 +4982,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Default"
+            "state" : "translated",
+            "value" : "默认"
           }
         },
         "zh-Hant" : {
@@ -5065,8 +5065,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Default (Medium Large)"
+            "state" : "translated",
+            "value" : "Alapértelmezett (Közepesen nagy)"
           }
         },
         "it" : {
@@ -5161,8 +5161,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Default (Medium Large)"
+            "state" : "translated",
+            "value" : "默认(中大号)"
           }
         },
         "zh-Hant" : {
@@ -5244,8 +5244,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Previews & Window Switcher"
+            "state" : "translated",
+            "value" : "Dock előnézeket és Ablakváltó"
           }
         },
         "it" : {
@@ -5340,8 +5340,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Previews & Window Switcher"
+            "state" : "translated",
+            "value" : "任务栏预览 & 窗口切换器"
           }
         },
         "zh-Hant" : {
@@ -5423,8 +5423,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Previews only"
+            "state" : "translated",
+            "value" : "Csak dock előnézetek"
           }
         },
         "it" : {
@@ -5519,8 +5519,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Previews only"
+            "state" : "translated",
+            "value" : "仅任务栏预览"
           }
         },
         "zh-Hant" : {
@@ -5541,8 +5541,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Elements Overlap"
+            "state" : "translated",
+            "value" : "تداخل العناصر"
           }
         },
         "ca" : {
@@ -5565,8 +5565,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Elements Overlap"
+            "state" : "translated",
+            "value" : "Elemente überschneiden sich"
           }
         },
         "el" : {
@@ -5577,8 +5577,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Elements Overlap"
+            "state" : "translated",
+            "value" : "Superposición de Elementos"
           }
         },
         "fi" : {
@@ -5601,8 +5601,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Elements Overlap"
+            "state" : "translated",
+            "value" : "Egymást átfedő elemek"
           }
         },
         "it" : {
@@ -5697,8 +5697,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Elements Overlap"
+            "state" : "translated",
+            "value" : "元素重叠"
           }
         },
         "zh-Hant" : {
@@ -5780,8 +5780,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Embedded"
+            "state" : "translated",
+            "value" : "Beágyazott"
           }
         },
         "it" : {
@@ -5876,8 +5876,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Embedded"
+            "state" : "translated",
+            "value" : "嵌入式"
           }
         },
         "zh-Hant" : {
@@ -6054,8 +6054,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable Hover Window Sliding Animation"
+            "state" : "translated",
+            "value" : "启用鼠标悬停时窗口滑动动画"
           }
         },
         "zh-Hant" : {
@@ -6136,8 +6136,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable Window Switcher"
+            "state" : "translated",
+            "value" : "Ablakváltó engedélyezése"
           }
         },
         "it" : {
@@ -6232,8 +6232,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable Window Switcher"
+            "state" : "translated",
+            "value" : "启用窗口切换功能"
           }
         },
         "zh-Hant" : {
@@ -6410,8 +6410,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enhance your dock experience!"
+            "state" : "translated",
+            "value" : "提升你的任务栏体验!"
           }
         },
         "zh-Hant" : {
@@ -6493,8 +6493,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Extra Extra Small"
+            "state" : "translated",
+            "value" : "Nagyon, nagyon kicsi"
           }
         },
         "it" : {
@@ -6589,8 +6589,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Extra Extra Small"
+            "state" : "translated",
+            "value" : "极小号"
           }
         },
         "zh-Hant" : {
@@ -6672,8 +6672,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Extra Small"
+            "state" : "translated",
+            "value" : "Nagyon kicsi"
           }
         },
         "it" : {
@@ -6768,8 +6768,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Extra Small"
+            "state" : "translated",
+            "value" : "特小号"
           }
         },
         "zh-Hant" : {
@@ -6851,8 +6851,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "General"
+            "state" : "translated",
+            "value" : "Általános"
           }
         },
         "it" : {
@@ -6947,8 +6947,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "General"
+            "state" : "translated",
+            "value" : "通用"
           }
         },
         "zh-Hant" : {
@@ -7029,8 +7029,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "General settings"
+            "state" : "translated",
+            "value" : "Általános beállítások"
           }
         },
         "it" : {
@@ -7125,8 +7125,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "General settings"
+            "state" : "translated",
+            "value" : "通用设置"
           }
         },
         "zh-Hant" : {
@@ -7207,8 +7207,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Get Started"
+            "state" : "translated",
+            "value" : "Kezdj bele"
           }
         },
         "it" : {
@@ -7303,8 +7303,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Get Started"
+            "state" : "translated",
+            "value" : "开始"
           }
         },
         "zh-Hant" : {
@@ -7387,8 +7387,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hidden"
+            "state" : "translated",
+            "value" : "Elrejtve"
           }
         },
         "it" : {
@@ -7483,8 +7483,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hidden"
+            "state" : "translated",
+            "value" : "隐藏"
           }
         },
         "zh-Hant" : {
@@ -7661,8 +7661,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hover Window Open Delay"
+            "state" : "translated",
+            "value" : "鼠标悬停时窗口打开延迟"
           }
         },
         "zh-Hant" : {
@@ -7840,8 +7840,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hover Window Title Style"
+            "state" : "translated",
+            "value" : "鼠标悬停窗口标题样式"
           }
         },
         "zh-Hant" : {
@@ -7923,8 +7923,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "If you need to access the menu bar icon, launch the app to reveal it for 10 seconds."
+            "state" : "translated",
+            "value" : "Amennyiben szüksége van a menüsorban található ikonra, indítsa el az alkalmazást ismételten, hogy 10 másodpercig látható legyen."
           }
         },
         "it" : {
@@ -8019,8 +8019,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "If you need to access the menu bar icon, launch the app to reveal it for 10 seconds."
+            "state" : "translated",
+            "value" : "如需访问菜单栏图标，请启动应用程序，该图标将显示10秒."
           }
         },
         "zh-Hant" : {
@@ -8197,8 +8197,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Initialization Key"
+            "state" : "translated",
+            "value" : "初始化键"
           }
         },
         "zh-Hant" : {
@@ -8280,8 +8280,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Large"
+            "state" : "translated",
+            "value" : "Nagy"
           }
         },
         "it" : {
@@ -8376,8 +8376,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Large"
+            "state" : "translated",
+            "value" : "大号"
           }
         },
         "zh-Hant" : {
@@ -8458,8 +8458,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Last checked: %@"
+            "state" : "translated",
+            "value" : "Utoljára ellenőrizve: %@"
           }
         },
         "it" : {
@@ -8554,8 +8554,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Last checked: %@"
+            "state" : "translated",
+            "value" : "上次检查: %@"
           }
         },
         "zh-Hant" : {
@@ -8636,8 +8636,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Launch DockDoor at login"
+            "state" : "translated",
+            "value" : "DockDoor indítása a rendszerrel"
           }
         },
         "it" : {
@@ -8732,8 +8732,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Launch DockDoor at login"
+            "state" : "translated",
+            "value" : "登录时启动DockDoor"
           }
         },
         "zh-Hant" : {
@@ -8815,8 +8815,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Medium"
+            "state" : "translated",
+            "value" : "Közepes"
           }
         },
         "it" : {
@@ -8911,8 +8911,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Medium"
+            "state" : "translated",
+            "value" : "中号"
           }
         },
         "zh-Hant" : {
@@ -8994,8 +8994,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Menu Bar Icon Hidden"
+            "state" : "translated",
+            "value" : "Menüsori ikon elrejtése"
           }
         },
         "it" : {
@@ -9090,8 +9090,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Menu Bar Icon Hidden"
+            "state" : "translated",
+            "value" : "隐藏菜单栏图标"
           }
         },
         "zh-Hant" : {
@@ -9173,8 +9173,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Never visible"
+            "state" : "translated",
+            "value" : "Soha sem látható"
           }
         },
         "it" : {
@@ -9269,8 +9269,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Never visible"
+            "state" : "translated",
+            "value" : "从不显示"
           }
         },
         "zh-Hant" : {
@@ -9292,8 +9292,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No action"
+            "state" : "translated",
+            "value" : "بلا إجراء"
           }
         },
         "ca" : {
@@ -9316,8 +9316,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No action"
+            "state" : "translated",
+            "value" : "Keine Aktion"
           }
         },
         "el" : {
@@ -9328,8 +9328,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No action"
+            "state" : "translated",
+            "value" : "No acción"
           }
         },
         "fi" : {
@@ -9352,8 +9352,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No action"
+            "state" : "translated",
+            "value" : "Ne tegyen semmit"
           }
         },
         "it" : {
@@ -9395,7 +9395,7 @@
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sem ação"
+            "value" : "Nenhuma ação"
           }
         },
         "pt-PT" : {
@@ -9448,8 +9448,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No action"
+            "state" : "translated",
+            "value" : "无操作"
           }
         },
         "zh-Hant" : {
@@ -9628,8 +9628,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No hover action"
+            "state" : "translated",
+            "value" : "无悬停操作"
           }
         },
         "zh-Hant" : {
@@ -9710,7 +9710,7 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "OK"
           }
         },
@@ -9753,7 +9753,7 @@
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Aceitar"
+            "value" : "OK"
           }
         },
         "pt-PT" : {
@@ -9806,8 +9806,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "OK"
+            "state" : "translated",
+            "value" : "确定"
           }
         },
         "zh-Hant" : {
@@ -9865,8 +9865,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "On window hover; Dimmed until button hover"
+            "state" : "translated",
+            "value" : "Al pasar el mouse por la ventana; Oscurecido hasta que se pasa el mouse por el botón"
           }
         },
         "fi" : {
@@ -9985,8 +9985,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "On window hover; Dimmed until button hover"
+            "state" : "translated",
+            "value" : "在窗口上悬停时；变暗，直至按钮悬停"
           }
         },
         "zh-Hant" : {
@@ -10044,8 +10044,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "On window hover; Full opacity"
+            "state" : "translated",
+            "value" : "Al pasar el mouse por la ventana; Opacidad completa"
           }
         },
         "fi" : {
@@ -10164,8 +10164,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "On window hover; Full opacity"
+            "state" : "translated",
+            "value" : "在窗口上悬停；完全不透明"
           }
         },
         "zh-Hant" : {
@@ -10246,8 +10246,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open Accessibility Settings"
+            "state" : "translated",
+            "value" : "Kisegítő lehetőségek beállításainak megnyitása"
           }
         },
         "it" : {
@@ -10342,8 +10342,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open Accessibility Settings"
+            "state" : "translated",
+            "value" : "打开【辅助功能】"
           }
         },
         "zh-Hant" : {
@@ -10424,8 +10424,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open Screen Recording Settings"
+            "state" : "translated",
+            "value" : "Képernyőfelvétel beállításainak megnyitása"
           }
         },
         "it" : {
@@ -10520,8 +10520,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open Screen Recording Settings"
+            "state" : "translated",
+            "value" : "打开【录屏与系统录音】"
           }
         },
         "zh-Hant" : {
@@ -10602,8 +10602,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open Settings"
+            "state" : "translated",
+            "value" : "Beállítások megnyitása"
           }
         },
         "it" : {
@@ -10698,8 +10698,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open Settings"
+            "state" : "translated",
+            "value" : "打开【系统设置】"
           }
         },
         "zh-Hant" : {
@@ -10756,8 +10756,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Option (⌥)"
+            "state" : "translated",
+            "value" : "Opción (⌥)"
           }
         },
         "fi" : {
@@ -10780,7 +10780,7 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Option (⌥)"
           }
         },
@@ -10876,8 +10876,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Option (⌥)"
+            "state" : "translated",
+            "value" : "使用 Option (⌥) 按键"
           }
         },
         "zh-Hant" : {
@@ -10958,8 +10958,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Permission error"
+            "state" : "translated",
+            "value" : "Engedély hiba"
           }
         },
         "it" : {
@@ -11054,8 +11054,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Permission error"
+            "state" : "translated",
+            "value" : "权限许可错误"
           }
         },
         "zh-Hant" : {
@@ -11137,8 +11137,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Permissions"
+            "state" : "translated",
+            "value" : "Engedélyek"
           }
         },
         "it" : {
@@ -11233,8 +11233,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Permissions"
+            "state" : "translated",
+            "value" : "权限管理"
           }
         },
         "zh-Hant" : {
@@ -11315,8 +11315,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Permissions settings"
+            "state" : "translated",
+            "value" : "Engedély beállítások"
           }
         },
         "it" : {
@@ -11411,8 +11411,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Permissions settings"
+            "state" : "translated",
+            "value" : "权限设置"
           }
         },
         "zh-Hant" : {
@@ -11590,8 +11590,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Please Quit the App to Apply Changes! :)"
+            "state" : "translated",
+            "value" : "请退出应用程序使变更生效！:)"
           }
         },
         "zh-Hant" : {
@@ -11612,8 +11612,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Please Restart the App to Apply Changes! :)"
+            "state" : "translated",
+            "value" : "الرجاء إعادة تشغيل التطبيق لتطبيق التغييرات! :)"
           }
         },
         "ca" : {
@@ -11636,8 +11636,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Please Restart the App to Apply Changes! :)"
+            "state" : "translated",
+            "value" : "Bitte starten Sie die App neu, um die Änderungen anzuwenden! :)"
           }
         },
         "el" : {
@@ -11648,8 +11648,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Please Restart the App to Apply Changes! :)"
+            "state" : "translated",
+            "value" : "Por favor, reinicia la aplicación para aplicar cambios :)"
           }
         },
         "fi" : {
@@ -11768,8 +11768,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Please Restart the App to Apply Changes! :)"
+            "state" : "translated",
+            "value" : "请重新启动应用程序使变更生效！:)"
           }
         },
         "zh-Hant" : {
@@ -11946,8 +11946,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Please restart the application to apply your changes. Click OK to quit the app."
+            "state" : "translated",
+            "value" : "请重新启动应用程序来确保变更生效。单击确定以退出应用程序。"
           }
         },
         "zh-Hant" : {
@@ -12005,8 +12005,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Popover"
+            "state" : "translated",
+            "value" : "Emergente"
           }
         },
         "fi" : {
@@ -12029,8 +12029,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Popover"
+            "state" : "translated",
+            "value" : "Felugró ablak"
           }
         },
         "it" : {
@@ -12125,8 +12125,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Popover"
+            "state" : "translated",
+            "value" : "弹出框"
           }
         },
         "zh-Hant" : {
@@ -12303,8 +12303,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Press any key combination after holding the initialization key to set the keybind."
+            "state" : "translated",
+            "value" : "按住初始化键后按任意键组合来设置键盘绑定。"
           }
         },
         "zh-Hant" : {
@@ -12481,8 +12481,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Press the key combination..."
+            "state" : "translated",
+            "value" : "按下组合键..."
           }
         },
         "zh-Hant" : {
@@ -12659,8 +12659,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Hover Action"
+            "state" : "translated",
+            "value" : "预览悬停动作"
           }
         },
         "zh-Hant" : {
@@ -12717,8 +12717,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Hover Delay"
+            "state" : "translated",
+            "value" : "Retraso de desplazamiento de vista previa"
           }
         },
         "fi" : {
@@ -12837,8 +12837,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Hover Delay"
+            "state" : "translated",
+            "value" : "预览悬停延迟"
           }
         },
         "zh-Hant" : {
@@ -12920,8 +12920,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Quit App"
+            "state" : "translated",
+            "value" : "Alkalmazás bezárása"
           }
         },
         "it" : {
@@ -13016,8 +13016,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Quit App"
+            "state" : "translated",
+            "value" : "退出应用"
           }
         },
         "zh-Hant" : {
@@ -13074,8 +13074,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Quit DockDoor"
+            "state" : "translated",
+            "value" : "Salir de DockDoor"
           }
         },
         "fi" : {
@@ -13098,8 +13098,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Quit DockDoor"
+            "state" : "translated",
+            "value" : "DockDoor bezárása"
           }
         },
         "it" : {
@@ -13194,8 +13194,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Quit DockDoor"
+            "state" : "translated",
+            "value" : "退出 DockDoor"
           }
         },
         "zh-Hant" : {
@@ -13217,8 +13217,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reset"
+            "state" : "translated",
+            "value" : "إعادة تعيين"
           }
         },
         "ca" : {
@@ -13241,8 +13241,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reset"
+            "state" : "translated",
+            "value" : "Zurücksetzen"
           }
         },
         "el" : {
@@ -13253,8 +13253,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reset"
+            "state" : "translated",
+            "value" : "Reiniciar"
           }
         },
         "fi" : {
@@ -13277,8 +13277,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reset"
+            "state" : "translated",
+            "value" : "Alaphelyzet"
           }
         },
         "it" : {
@@ -13373,8 +13373,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reset"
+            "state" : "translated",
+            "value" : "重启"
           }
         },
         "zh-Hant" : {
@@ -13396,8 +13396,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reset All Settings"
+            "state" : "translated",
+            "value" : "إعادة تعيين جميع الإعدادات"
           }
         },
         "ca" : {
@@ -13420,8 +13420,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reset All Settings"
+            "state" : "translated",
+            "value" : "Alle Einstellungen zurücksetzen"
           }
         },
         "el" : {
@@ -13432,8 +13432,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reset All Settings"
+            "state" : "translated",
+            "value" : "Resetear todos los ajustes"
           }
         },
         "fi" : {
@@ -13456,8 +13456,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reset All Settings"
+            "state" : "translated",
+            "value" : "Minden beállítás visszaállítása"
           }
         },
         "it" : {
@@ -13552,8 +13552,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reset All Settings"
+            "state" : "translated",
+            "value" : "重置所有设置"
           }
         },
         "zh-Hant" : {
@@ -13574,8 +13574,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reset All Settings to Defaults"
+            "state" : "translated",
+            "value" : "إعادة تعيين كافة الإعدادات إلى الوضع الافتراضي"
           }
         },
         "ca" : {
@@ -13598,8 +13598,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reset All Settings to Defaults"
+            "state" : "translated",
+            "value" : "Alle Einstellungen auf Standardwerte zurücksetzen"
           }
         },
         "el" : {
@@ -13610,8 +13610,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reset All Settings to Defaults"
+            "state" : "translated",
+            "value" : "Reiniciar todos los ajustes a valores predeterminados"
           }
         },
         "fi" : {
@@ -13634,8 +13634,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reset All Settings to Defaults"
+            "state" : "translated",
+            "value" : "Beállítások visszaállítása alaphelyzetbe"
           }
         },
         "it" : {
@@ -13730,8 +13730,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reset All Settings to Defaults"
+            "state" : "translated",
+            "value" : "重置所有参数为默认值"
           }
         },
         "zh-Hant" : {
@@ -13752,8 +13752,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reset to Defaults"
+            "state" : "translated",
+            "value" : "إعادة التعيين إلى الوضع الافتراضي"
           }
         },
         "ca" : {
@@ -13776,8 +13776,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reset to Defaults"
+            "state" : "translated",
+            "value" : "Auf Standardwerte zurücksetzen"
           }
         },
         "el" : {
@@ -13788,8 +13788,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reset to Defaults"
+            "state" : "translated",
+            "value" : "Resetear a Valores Predeterminados"
           }
         },
         "fi" : {
@@ -13812,8 +13812,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reset to Defaults"
+            "state" : "translated",
+            "value" : "Visszaállítás alapértelmezettre"
           }
         },
         "it" : {
@@ -13908,8 +13908,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reset to Defaults"
+            "state" : "translated",
+            "value" : "重置为默认状态"
           }
         },
         "zh-Hant" : {
@@ -13930,8 +13930,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Restart App"
+            "state" : "translated",
+            "value" : "إعادة تشغيل التطبيق"
           }
         },
         "ca" : {
@@ -13954,8 +13954,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Restart App"
+            "state" : "translated",
+            "value" : "App neu starten"
           }
         },
         "el" : {
@@ -13966,8 +13966,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Restart App"
+            "state" : "translated",
+            "value" : "Reiniciar App"
           }
         },
         "fi" : {
@@ -13990,8 +13990,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Restart App"
+            "state" : "translated",
+            "value" : "Alkalmazás újraindítása"
           }
         },
         "it" : {
@@ -14086,8 +14086,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Restart App"
+            "state" : "translated",
+            "value" : "重启应用"
           }
         },
         "zh-Hant" : {
@@ -14144,8 +14144,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Restart required"
+            "state" : "translated",
+            "value" : "Se requiere reinicio"
           }
         },
         "fi" : {
@@ -14168,8 +14168,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Restart required"
+            "state" : "translated",
+            "value" : "Újraindítás szükséges"
           }
         },
         "it" : {
@@ -14264,8 +14264,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Restart required"
+            "state" : "translated",
+            "value" : "需要重新启动"
           }
         },
         "zh-Hant" : {
@@ -14322,8 +14322,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Screen Capturing:"
+            "state" : "translated",
+            "value" : "Captura de pantalla:"
           }
         },
         "fi" : {
@@ -14346,8 +14346,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Screen Capturing:"
+            "state" : "translated",
+            "value" : "Képernyőfelvétel:"
           }
         },
         "it" : {
@@ -14442,8 +14442,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Screen Capturing:"
+            "state" : "translated",
+            "value" : "屏幕捕获："
           }
         },
         "zh-Hant" : {
@@ -14500,8 +14500,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Screen Recording Permissions"
+            "state" : "translated",
+            "value" : "Permiso de Grabación de Pantalla"
           }
         },
         "fi" : {
@@ -14620,8 +14620,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Screen Recording Permissions"
+            "state" : "translated",
+            "value" : "屏幕录制权限"
           }
         },
         "zh-Hant" : {
@@ -14678,8 +14678,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "seconds"
+            "state" : "translated",
+            "value" : "segundos"
           }
         },
         "fi" : {
@@ -14702,8 +14702,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "seconds"
+            "state" : "translated",
+            "value" : "másodperc"
           }
         },
         "it" : {
@@ -14798,8 +14798,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "seconds"
+            "state" : "translated",
+            "value" : "秒"
           }
         },
         "zh-Hant" : {
@@ -14821,8 +14821,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "See a large preview of the window"
+            "state" : "translated",
+            "value" : "شاهد معاينة كبيرة للنافذة"
           }
         },
         "ca" : {
@@ -14845,8 +14845,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "See a large preview of the window"
+            "state" : "translated",
+            "value" : "Große Vorschau des Fensters anzeigen"
           }
         },
         "el" : {
@@ -14857,8 +14857,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "See a large preview of the window"
+            "state" : "translated",
+            "value" : "Ver una vista previa grande de la ventana"
           }
         },
         "fi" : {
@@ -14881,8 +14881,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "See a large preview of the window"
+            "state" : "translated",
+            "value" : "Nagy előnézet mutatása az ablakról"
           }
         },
         "it" : {
@@ -14977,8 +14977,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "See a large preview of the window"
+            "state" : "translated",
+            "value" : "查看窗口的正常模式预览"
           }
         },
         "zh-Hant" : {
@@ -15037,8 +15037,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "See a preview of the window"
+            "state" : "translated",
+            "value" : "Ver una vista previa de la ventana"
           }
         },
         "fi" : {
@@ -15061,8 +15061,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "See a preview of the window"
+            "state" : "translated",
+            "value" : "Előnézet mutatása az ablakról"
           }
         },
         "it" : {
@@ -15157,8 +15157,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "See a preview of the window"
+            "state" : "translated",
+            "value" : "查看窗口预览"
           }
         },
         "zh-Hant" : {
@@ -15215,8 +15215,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Set Initialization Key and Keybind"
+            "state" : "translated",
+            "value" : "Establecer clave de inicialización y enlace de tecla"
           }
         },
         "fi" : {
@@ -15335,8 +15335,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Set Initialization Key and Keybind"
+            "state" : "translated",
+            "value" : "设置初始化键和按键绑定"
           }
         },
         "zh-Hant" : {
@@ -15393,8 +15393,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show App Name in Dock Previews"
+            "state" : "translated",
+            "value" : "Mostrar nombre de la aplicación en vistas previas del dock"
           }
         },
         "fi" : {
@@ -15417,8 +15417,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show App Name in Dock Previews"
+            "state" : "translated",
+            "value" : "Alkalmazásnevek mutatása a dock előnézetekben"
           }
         },
         "it" : {
@@ -15513,8 +15513,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show App Name in Dock Previews"
+            "state" : "translated",
+            "value" : "在 Dock 预览中显示应用名称"
           }
         },
         "zh-Hant" : {
@@ -15571,8 +15571,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Menu Bar Icon"
+            "state" : "translated",
+            "value" : "Mostrar Icono de Barra de Menú"
           }
         },
         "fi" : {
@@ -15595,8 +15595,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Menu Bar Icon"
+            "state" : "translated",
+            "value" : "Menüsori ikon mutatása"
           }
         },
         "it" : {
@@ -15691,8 +15691,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Menu Bar Icon"
+            "state" : "translated",
+            "value" : "显示菜单栏图标"
           }
         },
         "zh-Hant" : {
@@ -15749,8 +15749,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Window Title in"
+            "state" : "translated",
+            "value" : "Mostrar título de ventana en"
           }
         },
         "fi" : {
@@ -15773,8 +15773,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Window Title in"
+            "state" : "translated",
+            "value" : "Ablak címének mutatása"
           }
         },
         "it" : {
@@ -15869,8 +15869,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Window Title in"
+            "state" : "translated",
+            "value" : "显示窗口标题"
           }
         },
         "zh-Hant" : {
@@ -15927,8 +15927,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Window Title in Previews"
+            "state" : "translated",
+            "value" : "Mostrar Título de Ventana en Previsualizaciones"
           }
         },
         "fi" : {
@@ -15951,8 +15951,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Window Title in Previews"
+            "state" : "translated",
+            "value" : "Ablak címének mutatása az előnézetekben"
           }
         },
         "it" : {
@@ -16047,8 +16047,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Window Title in Previews"
+            "state" : "translated",
+            "value" : "在预览中显示窗口标题"
           }
         },
         "zh-Hant" : {
@@ -16106,8 +16106,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Window Titles"
+            "state" : "translated",
+            "value" : "Mostrar Títulos de Ventanas"
           }
         },
         "fi" : {
@@ -16130,8 +16130,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Window Titles"
+            "state" : "translated",
+            "value" : "Ablak címek mutatása"
           }
         },
         "it" : {
@@ -16226,8 +16226,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Window Titles"
+            "state" : "translated",
+            "value" : "显示窗口标题"
           }
         },
         "zh-Hant" : {
@@ -16285,8 +16285,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Window Titles on Previews"
+            "state" : "translated",
+            "value" : "Mostrar títulos de ventana en vistas previas"
           }
         },
         "fi" : {
@@ -16309,8 +16309,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Window Titles on Previews"
+            "state" : "translated",
+            "value" : "Ablak címek mutatása az előnézetekben"
           }
         },
         "it" : {
@@ -16405,8 +16405,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Window Titles on Previews"
+            "state" : "translated",
+            "value" : "在预览中显示窗口标题"
           }
         },
         "zh-Hant" : {
@@ -16465,8 +16465,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Simulate a click"
+            "state" : "translated",
+            "value" : "Simular un clic"
           }
         },
         "fi" : {
@@ -16489,8 +16489,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Simulate a click"
+            "state" : "translated",
+            "value" : "Kattintás szimulálása"
           }
         },
         "it" : {
@@ -16585,8 +16585,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Simulate a click"
+            "state" : "translated",
+            "value" : "模拟一次点击"
           }
         },
         "zh-Hant" : {
@@ -16608,8 +16608,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Simulate a click (open the window)"
+            "state" : "translated",
+            "value" : "محاكاة النقرة (فتح النافذة)"
           }
         },
         "ca" : {
@@ -16632,8 +16632,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Simulate a click (open the window)"
+            "state" : "translated",
+            "value" : "Einen Klick simulieren (Fenster öffnen)"
           }
         },
         "el" : {
@@ -16644,8 +16644,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Simulate a click (open the window)"
+            "state" : "translated",
+            "value" : "Simular un clic (abrir la ventana)"
           }
         },
         "fi" : {
@@ -16668,8 +16668,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Simulate a click (open the window)"
+            "state" : "translated",
+            "value" : "Kattintás szimulálása (ablak megnyitása)"
           }
         },
         "it" : {
@@ -16764,8 +16764,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Simulate a click (open the window)"
+            "state" : "translated",
+            "value" : "模拟一次点击 (打开窗口)"
           }
         },
         "zh-Hant" : {
@@ -16823,8 +16823,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Small"
+            "state" : "translated",
+            "value" : "Pequeño"
           }
         },
         "fi" : {
@@ -16847,8 +16847,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Small"
+            "state" : "translated",
+            "value" : "Kicsi"
           }
         },
         "it" : {
@@ -16943,8 +16943,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Small"
+            "state" : "translated",
+            "value" : "小"
           }
         },
         "zh-Hant" : {
@@ -17001,8 +17001,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Start Recording Keybind"
+            "state" : "translated",
+            "value" : "Tecla de inicio de grabación"
           }
         },
         "fi" : {
@@ -17025,8 +17025,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Start Recording Keybind"
+            "state" : "translated",
+            "value" : "Felvétel indítása gyorsgomb"
           }
         },
         "it" : {
@@ -17121,8 +17121,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Start Recording Keybind"
+            "state" : "translated",
+            "value" : "开始录制键绑定"
           }
         },
         "zh-Hant" : {
@@ -17180,8 +17180,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Subatomic"
+            "state" : "translated",
+            "value" : "Subatómico"
           }
         },
         "fi" : {
@@ -17204,8 +17204,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Subatomic"
+            "state" : "translated",
+            "value" : "Mikroszkópikus"
           }
         },
         "it" : {
@@ -17322,8 +17322,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "The selected positions for Traffic Light Buttons and Window Title will overlap."
+            "state" : "translated",
+            "value" : "المواقع المحددة لأزرار ضوء إشارة المرور وعنوان النافذة سوف تتداخل."
           }
         },
         "ca" : {
@@ -17346,8 +17346,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "The selected positions for Traffic Light Buttons and Window Title will overlap."
+            "state" : "translated",
+            "value" : "Die ausgewählten Positionen für Ampeltasten und Fenstertitel werden sich überlappen."
           }
         },
         "el" : {
@@ -17358,8 +17358,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "The selected positions for Traffic Light Buttons and Window Title will overlap."
+            "state" : "translated",
+            "value" : "Las posiciones seleccionadas para los botones de semáforo y título de ventana se superpondrán."
           }
         },
         "fi" : {
@@ -17478,8 +17478,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "The selected positions for Traffic Light Buttons and Window Title will overlap."
+            "state" : "translated",
+            "value" : "窗口开关处按钮和窗口标题所选择的位置将重叠。"
           }
         },
         "zh-Hant" : {
@@ -17501,8 +17501,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Top Left"
+            "state" : "translated",
+            "value" : "أعلى اليسار"
           }
         },
         "ca" : {
@@ -17525,8 +17525,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Top Left"
+            "state" : "translated",
+            "value" : "Oben links"
           }
         },
         "el" : {
@@ -17537,8 +17537,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Top Left"
+            "state" : "translated",
+            "value" : "Arriba Izquierda"
           }
         },
         "fi" : {
@@ -17561,8 +17561,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Top Left"
+            "state" : "translated",
+            "value" : "Bal, felső sarok"
           }
         },
         "it" : {
@@ -17657,8 +17657,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Top Left"
+            "state" : "translated",
+            "value" : "左上"
           }
         },
         "zh-Hant" : {
@@ -17716,8 +17716,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Top Right"
+            "state" : "translated",
+            "value" : "Arriba Derecha"
           }
         },
         "fi" : {
@@ -17740,8 +17740,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Top Right"
+            "state" : "translated",
+            "value" : "Jobb, felső sarok"
           }
         },
         "it" : {
@@ -17836,8 +17836,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Top Right"
+            "state" : "translated",
+            "value" : "右上方"
           }
         },
         "zh-Hant" : {
@@ -17858,8 +17858,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Traffic Light Buttons Position"
+            "state" : "translated",
+            "value" : "وضع أزرار إشارة المرور"
           }
         },
         "ca" : {
@@ -17882,8 +17882,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Traffic Light Buttons Position"
+            "state" : "translated",
+            "value" : "Position der Ampeltasten"
           }
         },
         "el" : {
@@ -17894,8 +17894,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Traffic Light Buttons Position"
+            "state" : "translated",
+            "value" : "Posición de botones de semáforo"
           }
         },
         "fi" : {
@@ -17918,8 +17918,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Traffic Light Buttons Position"
+            "state" : "translated",
+            "value" : "Ablakvezérlő gombok pozíciója"
           }
         },
         "it" : {
@@ -18014,8 +18014,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Traffic Light Buttons Position"
+            "state" : "translated",
+            "value" : "窗口开关处按钮位置"
           }
         },
         "zh-Hant" : {
@@ -18072,8 +18072,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Traffic Light Buttons Visibility"
+            "state" : "translated",
+            "value" : "Visibilidad de Botones de Semáforo"
           }
         },
         "fi" : {
@@ -18096,8 +18096,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Traffic Light Buttons Visibility"
+            "state" : "translated",
+            "value" : "Ablakvezérlő gombok láthatósága"
           }
         },
         "it" : {
@@ -18192,8 +18192,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Traffic Light Buttons Visibility"
+            "state" : "translated",
+            "value" : "窗口开关处按钮可见度"
           }
         },
         "zh-Hant" : {
@@ -18250,8 +18250,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Up to date"
+            "state" : "translated",
+            "value" : "Al día"
           }
         },
         "fi" : {
@@ -18274,8 +18274,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Up to date"
+            "state" : "translated",
+            "value" : "Naprakész"
           }
         },
         "it" : {
@@ -18370,8 +18370,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Up to date"
+            "state" : "translated",
+            "value" : "已是最新版本"
           }
         },
         "zh-Hant" : {
@@ -18428,8 +18428,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update available"
+            "state" : "translated",
+            "value" : "Actualización disponible"
           }
         },
         "fi" : {
@@ -18452,8 +18452,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update available"
+            "state" : "translated",
+            "value" : "Frissítés elérhető"
           }
         },
         "it" : {
@@ -18548,8 +18548,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update available"
+            "state" : "translated",
+            "value" : "有可用更新"
           }
         },
         "zh-Hant" : {
@@ -18606,8 +18606,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update settings"
+            "state" : "translated",
+            "value" : "Actualizar configuración"
           }
         },
         "fi" : {
@@ -18726,8 +18726,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update settings"
+            "state" : "translated",
+            "value" : "更新设置"
           }
         },
         "zh-Hant" : {
@@ -18785,8 +18785,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Updates"
+            "state" : "translated",
+            "value" : "Actualizaciones"
           }
         },
         "fi" : {
@@ -18809,8 +18809,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Updates"
+            "state" : "translated",
+            "value" : "Frissítések"
           }
         },
         "it" : {
@@ -18905,8 +18905,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Updates"
+            "state" : "translated",
+            "value" : "更新"
           }
         },
         "zh-Hant" : {
@@ -18963,8 +18963,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use default MacOS keybind ⌘ + ⇥"
+            "state" : "translated",
+            "value" : "Usar combinación de teclas predeterminada de MacOS ⌘ + ⇥"
           }
         },
         "fi" : {
@@ -18987,8 +18987,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use default MacOS keybind ⌘ + ⇥"
+            "state" : "translated",
+            "value" : "A MacOS alapértelmezett gyorsgombjának használata ⌘ + ⇥"
           }
         },
         "it" : {
@@ -19083,8 +19083,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use default MacOS keybind ⌘ + ⇥"
+            "state" : "translated",
+            "value" : "使用默认的 MacOS 组合键：Command+Tab"
           }
         },
         "zh-Hant" : {
@@ -19141,8 +19141,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use Uniform Image Preview Radius"
+            "state" : "translated",
+            "value" : "Usar Radio de Previsualización de Imagen Uniforme"
           }
         },
         "fi" : {
@@ -19319,8 +19319,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version %@"
+            "state" : "translated",
+            "value" : "Versión %@"
           }
         },
         "fi" : {
@@ -19343,8 +19343,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version %@"
+            "state" : "translated",
+            "value" : "%@ verzió"
           }
         },
         "it" : {
@@ -19497,8 +19497,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Want to see the app in your language?"
+            "state" : "translated",
+            "value" : "¿Quieres ver la aplicación en tu idioma?"
           }
         },
         "fi" : {
@@ -19675,8 +19675,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Want to support development?"
+            "state" : "translated",
+            "value" : "¿Quieres apoyar el desarrollo?"
           }
         },
         "fi" : {
@@ -19853,8 +19853,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Welcome to DockDoor!"
+            "state" : "translated",
+            "value" : "Bienvenido a DockDoor!"
           }
         },
         "fi" : {
@@ -20032,8 +20032,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "What is this? A window for ANTS?"
+            "state" : "translated",
+            "value" : "¿Qué es esto? Una ventana para HORMIGAS?"
           }
         },
         "fi" : {
@@ -20211,8 +20211,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When hovering over the preview"
+            "state" : "translated",
+            "value" : "Cuando se pasa el cursor sobre la vista previa"
           }
         },
         "fi" : {
@@ -20391,8 +20391,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When Showing Dock Tile Previews"
+            "state" : "translated",
+            "value" : "Cuando Mostrar Previsualizaciones de Mosaicos de Dock"
           }
         },
         "fi" : {
@@ -20571,8 +20571,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When Using Window Switcher"
+            "state" : "translated",
+            "value" : "Cuando se utiliza el conmutador de ventanas"
           }
         },
         "fi" : {
@@ -20749,8 +20749,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Why we need permissions"
+            "state" : "translated",
+            "value" : "Por qué necesitamos permisos"
           }
         },
         "fi" : {
@@ -21486,8 +21486,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Size"
+            "state" : "translated",
+            "value" : "Ablak mérete"
           }
         },
         "it" : {
@@ -21665,8 +21665,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Switcher"
+            "state" : "translated",
+            "value" : "Ablakváltó"
           }
         },
         "it" : {
@@ -21844,8 +21844,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Switcher only"
+            "state" : "translated",
+            "value" : "Csak ablakváltó"
           }
         },
         "it" : {
@@ -22022,8 +22022,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Title Position"
+            "state" : "translated",
+            "value" : "Ablakok címének pozíciója"
           }
         },
         "it" : {
@@ -22200,8 +22200,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Title Visibility"
+            "state" : "translated",
+            "value" : "Ablakok címének láthatósága"
           }
         },
         "it" : {
@@ -22378,8 +22378,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Windows switching settings"
+            "state" : "translated",
+            "value" : "Ablakok közötti váltás beállításai"
           }
         },
         "it" : {
@@ -22556,8 +22556,8 @@
         },
         "hu" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "You need to give DockDoor access to the accessibility API in order for it to function."
+            "state" : "translated",
+            "value" : "A DockDoor-nak engedélyt kell adni a Kisegítő lehetőségek API-hoz, hogy működni tudjon."
           }
         },
         "it" : {
