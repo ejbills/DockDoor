@@ -442,10 +442,12 @@ final class WindowUtil {
             return storedWindows
         }
         
-        if let nonLocalName,
-           let bundleId = appNameBundleIdTracker[nonLocalName] ?? foundApp?.bundleIdentifier {
-            let storedWindows = desktopSpaceWindowCacheManager.readCache(bundleId: bundleId)
-            return Array(Set(activeWindows).union(storedWindows))
+        if let nonLocalName {
+            let bundleId = appNameBundleIdTracker[nonLocalName] ?? foundApp?.bundleIdentifier
+            if let bundleId {
+                let storedWindows = desktopSpaceWindowCacheManager.readCache(bundleId: bundleId)
+                return Array(Set(activeWindows).union(storedWindows))
+            }
         }
         
         // Fallback to findAllWindowsInDesktopCacheForApplication if no SCRunningApplication is found and applicationName isn't empty
