@@ -430,10 +430,6 @@ final class WindowUtil {
             }
         }
         
-        if let app = foundApp, let isAppHidden = NSRunningApplication(processIdentifier: app.processID)?.isHidden {
-            updateStatusOfWindowCache(pid: app.processID, bundleID: app.bundleIdentifier, isParentAppHidden: isAppHidden)
-        }
-        
         let results = try await group.waitForAll()
         let activeWindows = results.compactMap { $0 }.filter { !$0.appName.isEmpty && !$0.bundleID.isEmpty }
         
