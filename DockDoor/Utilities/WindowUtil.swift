@@ -438,15 +438,13 @@ final class WindowUtil {
         let activeWindows = results.compactMap { $0 }.filter { !$0.appName.isEmpty && !$0.bundleID.isEmpty }
         
         if applicationName.isEmpty {
-            let storedWindows = desktopSpaceWindowCacheManager.getAllWindows()
-            return storedWindows
+            return desktopSpaceWindowCacheManager.getAllWindows()
         }
         
         if let nonLocalName {
             let bundleId = appNameBundleIdTracker[nonLocalName] ?? foundApp?.bundleIdentifier
             if let bundleId {
-                let storedWindows = desktopSpaceWindowCacheManager.readCache(bundleId: bundleId)
-                return Array(Set(activeWindows).union(storedWindows))
+                return Array(desktopSpaceWindowCacheManager.readCache(bundleId: bundleId))
             }
         }
         
