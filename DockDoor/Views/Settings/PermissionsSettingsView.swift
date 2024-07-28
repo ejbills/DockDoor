@@ -92,10 +92,13 @@ struct PermissionsSettingsView: View {
             }
             .buttonStyle(.bordered)
             
-            Text("Please Quit the App to Apply Changes! :)")
+            Text("Please Restart the App to Apply Changes! :)")
                 .font(.footnote)
                 .foregroundColor(.secondary)
-            Button("Quit App", action: quitApp)
+            Button("Restart App", action: {
+                let appDelegate = NSApplication.shared.delegate as! AppDelegate
+                appDelegate.restartApp()
+            })
                 .buttonStyle(.bordered)
 
             Spacer()

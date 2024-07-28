@@ -162,14 +162,15 @@ final class SharedPreviewWindowCoordinator: NSWindow {
     // Calculate window position based on the given dock icon frame and dock position
     private func calculateWindowPosition(mouseLocation: CGPoint?, windowSize: CGSize, screen: NSScreen) -> CGPoint {
         guard let mouseLocation = mouseLocation else { return .zero }
-        guard let dockIconFrame = DockObserver.shared.getDockIconFrameAtLocation(mouseLocation) else { return .zero }
+        
+        let dockIconFrame = DockObserver.shared.getDockIconFrameAtLocation(mouseLocation) ?? .zero
+        
+        var xPosition = dockIconFrame.isEmpty ? mouseLocation.x : dockIconFrame.midX
+        var yPosition = dockIconFrame.isEmpty ? mouseLocation.y : dockIconFrame.midY
         
         let screenFrame = screen.frame
         let dockPosition = DockUtils.shared.getDockPosition()
         let dockHeight = DockUtils.shared.calculateDockHeight(screen)
-        
-        var xPosition = dockIconFrame.midX
-        var yPosition = dockIconFrame.midY
         
         // Adjust position based on dock position
            switch dockPosition {

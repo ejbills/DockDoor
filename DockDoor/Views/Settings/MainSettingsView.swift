@@ -46,16 +46,20 @@ struct MainSettingsView: View {
                 Text("Show Menu Bar Icon")
             })
             .onChange(of: showMenuBarIcon) { _, isOn in
-                let delegate = NSApplication.shared.delegate as! AppDelegate
-                delegate.updateMenuBarIconStatus()
-                
-                if !isOn {
-                    MessageUtil.showMessage(title: String(localized: "Menu Bar Icon Hidden"), message: String(localized: "If you need to access the menu bar icon, launch the app to reveal it for 10 seconds."), completion: { result in
-                        if result == .cancel {
-                            showMenuBarIcon = true
-                        }
-                    })
+                let appDelegate = NSApplication.shared.delegate as! AppDelegate
+                if isOn {
+                    appDelegate.setupMenuBar()
+                } else {
+                    appDelegate.removeMenuBar()
                 }
+            }
+            
+            Button("Reset All Settings to Defaults") {
+                showResetConfirmation()
+            }
+            Button("Quit DockDoor") {
+                let appDelegate = NSApplication.shared.delegate as! AppDelegate
+                appDelegate.quitApp()
             }
             
             Divider()
@@ -112,7 +116,7 @@ struct MainSettingsView: View {
                 Text("Preview Hover Delay")
                 Spacer()
                 Slider(value: $tapEquivalentInterval, in: 0...2, step: 0.1)
-                TextField("", value: $tapEquivalentInterval, formatter: NumberFormatter())
+                TextField("", value: $tapEquivalentInterval, formatter: decimalFormatter)
                     .frame(width: 38)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                 Text("seconds")
@@ -121,6 +125,21 @@ struct MainSettingsView: View {
         }
         .padding(20)
         .frame(minWidth: 650)
+    }
+    
+    private func showResetConfirmation() {
+        MessageUtil.showMessage(
+            title: String(localized: "Reset to Defaults"),
+            message: String(localized: "Are you sure you want to reset all settings to their default values?")
+        ) { action in
+            switch action {
+            case .ok:
+                resetDefaultsToDefaultValues()
+            case .cancel:
+                // Do nothing
+                break
+            }
+        }
     }
 }
 

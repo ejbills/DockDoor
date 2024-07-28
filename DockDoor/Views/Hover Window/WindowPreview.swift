@@ -20,7 +20,9 @@ struct WindowPreview: View {
     @Default(.windowTitlePosition) var windowTitlePosition
     @Default(.showWindowTitle) var showWindowTitle
     @Default(.windowTitleDisplayCondition) var windowTitleDisplayCondition
+    @Default(.windowTitleVisibility) var windowTitleVisibility
     @Default(.trafficLightButtonsVisibility) var trafficLightButtonsVisibility
+    @Default(.trafficLightButtonsPosition) var trafficLightButtonsPosition
     
     // preview popup action handlers
     @Default(.tapEquivalentInterval) var tapEquivalentInterval
@@ -103,13 +105,26 @@ struct WindowPreview: View {
                     return .bottomTrailing
                 case .topRight:
                     return .topTrailing
+                case .topLeft:
+                    return .topLeading
                 }
             }()) {
-                if  showWindowTitle && ((windowTitleDisplayCondition == .always) || (windowTitleDisplayCondition == .windowSwitcherOnly && ScreenCenteredFloatingWindow.shared.windowSwitcherActive) || (windowTitleDisplayCondition == .dockPreviewsOnly && !ScreenCenteredFloatingWindow.shared.windowSwitcherActive)) {
+                if  showWindowTitle && (windowTitleDisplayCondition == .all || (windowTitleDisplayCondition == .windowSwitcherOnly && ScreenCenteredFloatingWindow.shared.windowSwitcherActive) || (windowTitleDisplayCondition == .dockPreviewsOnly && !ScreenCenteredFloatingWindow.shared.windowSwitcherActive)) {
                     windowTitleOverlay(selected: selected)
                 }
             }
-            .overlay(alignment: .topLeading) {
+            .overlay(alignment: {
+                switch trafficLightButtonsPosition {
+                case .bottomLeft:
+                    return .bottomLeading
+                case .bottomRight:
+                    return .bottomTrailing
+                case .topRight:
+                    return .topTrailing
+                case .topLeft:
+                    return .topLeading
+                }
+            }()) {
                 if !windowInfo.isMinimized, !windowInfo.isHidden, let _ = windowInfo.closeButton {
                     TrafficLightButtons(windowInfo: windowInfo,
                                         displayMode: trafficLightButtonsVisibility,
@@ -202,7 +217,7 @@ struct WindowPreview: View {
 
     @ViewBuilder
     private func windowTitleOverlay(selected: Bool) -> some View {
-        if selected, let windowTitle = windowInfo.window?.title, !windowTitle.isEmpty, windowTitle != windowInfo.appName {
+        if (windowTitleVisibility == .alwaysVisible || selected), let windowTitle = windowInfo.window?.title, !windowTitle.isEmpty, (windowTitle != windowInfo.appName || ScreenCenteredFloatingWindow.shared.windowSwitcherActive) {
             let maxLabelWidth = calculatedSize.width - 50
             let stringMeasurementWidth = measureString(windowTitle, fontSize: 12).width + 5
             let width = maxLabelWidth > stringMeasurementWidth ? stringMeasurementWidth : maxLabelWidth

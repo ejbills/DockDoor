@@ -23,6 +23,52 @@
   }
 </style>
 
+<a name="v1.1.4"></a>
+# [v1.1.4](https://github.com/ejbills/DockDoor/releases/tag/v1.1.4) - 16 Jul 2024
+
+# Changelog
+
+## Fixes
+- No longer filter out windows with empty titles
+- Blurry window preview images
+- Traffic light buttons visibility picker width ([#193](https://github.com/ejbills/DockDoor/issues/193)) [@ShlomoCode](https://github.com/ShlomoCode)
+
+## Chore
+- Clearer wording in settings ([#194](https://github.com/ejbills/DockDoor/issues/194)) [@ShlomoCode](https://github.com/ShlomoCode)
+- Typo in settings ([#197](https://github.com/ejbills/DockDoor/issues/197)) [@ShlomoCode](https://github.com/ShlomoCode)
+
+[Changes][v1.1.4]
+
+
+<a name="v1.1.3"></a>
+# [v1.1.3](https://github.com/ejbills/DockDoor/releases/tag/v1.1.3) - 16 Jul 2024
+
+# Changelog
+
+## Features
+- Add option to select window title visibility (whenOveringPreview/alwaysVisible) ([#188](https://github.com/ejbills/DockDoor/issues/188)) [@ShlomoCode](https://github.com/ShlomoCode)
+- [SharedPreviewWindowCoordinator] add fall back ([#186](https://github.com/ejbills/DockDoor/issues/186)) [@chrisharper22](https://github.com/chrisharper22)
+- Center Dock Tile Preview horizontally/vertically to icon ([#182](https://github.com/ejbills/DockDoor/issues/182)) [@chrisharper22](https://github.com/chrisharper22)
+- Clearer wording ([#181](https://github.com/ejbills/DockDoor/issues/181)) [@ShlomoCode](https://github.com/ShlomoCode)
+- Suggest users contribute translations ([#178](https://github.com/ejbills/DockDoor/issues/178)) [@ShlomoCode](https://github.com/ShlomoCode)
+- Improve settings layout ([#175](https://github.com/ejbills/DockDoor/issues/175)) [@ShlomoCode](https://github.com/ShlomoCode)
+- Add app icon to readme ([#176](https://github.com/ejbills/DockDoor/issues/176)) [@ShlomoCode](https://github.com/ShlomoCode)
+
+## Fixes
+- Lingering full screen preview in certain scenarios
+- Minimized and hidden windows showing empty squircle
+
+## Refactor
+- HoverTimerActions -> PreviewHoverAction ([#173](https://github.com/ejbills/DockDoor/issues/173))
+
+## Chore
+- License change from MIT to GPL-3.0 ([#191](https://github.com/ejbills/DockDoor/issues/191))
+- Add release publish to crowdin sync action
+- Sync localizations with Crowdin [@ejbills](https://github.com/ejbills) [@crowdin-bot](https://github.com/crowdin-bot)
+
+[Changes][v1.1.3]
+
+
 <a name="v1.1.2"></a>
 # [v1.1.2](https://github.com/ejbills/DockDoor/releases/tag/v1.1.2) - 12 Jul 2024
 
@@ -298,6 +344,8 @@ v1.0
 [Changes][releases]
 
 
+[v1.1.4]: https://github.com/ejbills/DockDoor/compare/v1.1.3...v1.1.4
+[v1.1.3]: https://github.com/ejbills/DockDoor/compare/v1.1.2...v1.1.3
 [v1.1.2]: https://github.com/ejbills/DockDoor/compare/v1.1.1...v1.1.2
 [v1.1.1]: https://github.com/ejbills/DockDoor/compare/v1.1.0...v1.1.1
 [v1.1.0]: https://github.com/ejbills/DockDoor/compare/v1.0.17...v1.1.0

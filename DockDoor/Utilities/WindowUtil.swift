@@ -89,8 +89,14 @@ final class WindowUtil {
         config.ignoreShadowsDisplay = true
         config.shouldBeOpaque = false
         if #available(macOS 14.2, *) { config.includeChildWindows = false }
-        config.width = Int(window.frame.width)
-        config.height = Int(window.frame.height)
+        
+        // Get the scale factor of the display containing the window
+        let scaleFactor = await getScaleFactorForWindow(windowID: window.windowID)
+        
+        // Convert points to pixels
+        config.width = Int(window.frame.width * scaleFactor)
+        config.height = Int(window.frame.height * scaleFactor)
+        
         config.showsCursor = false
         config.captureResolution = .best
         
@@ -100,6 +106,23 @@ final class WindowUtil {
         imageCache[window.windowID] = cachedImage
         
         return image
+    }
+
+    // Helper function to get the scale factor for a given window
+    private static func getScaleFactorForWindow(windowID: CGWindowID) async -> CGFloat {
+        return await MainActor.run {
+            guard let window = NSApplication.shared.window(withWindowNumber: Int(windowID)) else {
+                return NSScreen.main?.backingScaleFactor ?? 2.0
+            }
+            
+            if NSScreen.screens.count > 1 {
+                if let currentScreen = window.screen {
+                    return currentScreen.backingScaleFactor
+                }
+            }
+            
+            return NSScreen.main?.backingScaleFactor ?? 2.0
+        }
     }
     
     private static func getCachedImage(window: SCWindow) -> CGImage? {
@@ -482,7 +505,6 @@ final class WindowUtil {
         let windowID = window.windowID
         
         guard let owningApplication = window.owningApplication,
-              let title = window.title, !title.isEmpty,
               window.isOnScreen,
               window.windowLayer == 0,
               window.frame.size.width >= 0,

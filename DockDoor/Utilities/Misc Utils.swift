@@ -9,16 +9,19 @@ import Cocoa
 import Defaults
 import Carbon
 
-func quitApp() {
-    // Terminate the current application
-    NSApplication.shared.terminate(nil)
-}
-
-func restartApplication ()-> Void {
+func askUserToRestartApplication () -> Void {
     MessageUtil.showMessage(title: String(localized: "Restart required"), message: String(localized: "Please restart the application to apply your changes. Click OK to quit the app."), completion: { result in
         if result == .ok {
-            quitApp()
+            let appDelegate = NSApplication.shared.delegate as! AppDelegate
+            appDelegate.restartApp()
         }})
+}
+
+func resetDefaultsToDefaultValues() {
+    Defaults.removeAll()
+    
+    // reset the launched value
+    Defaults[.launched] = true
 }
 
 func getWindowSize() -> CGSize {
