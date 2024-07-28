@@ -14,6 +14,8 @@ class WindowManipulationObservers {
     private var observers: [pid_t: AXObserver] = [:]
     static var trackedElements: Set<AXUIElement> = []
     static var debounceWorkItem: DispatchWorkItem?
+    static var lastWindowCreationTime: [String: Date] = [:]
+    static let windowCreationDebounceInterval: TimeInterval = 1.0  // 1 second debounce
     
     private init() {
         setupObservers()
@@ -34,14 +36,12 @@ class WindowManipulationObservers {
         }
     }
     
-    
     @objc private func appDidLaunch(_ notification: Notification) {
         guard let app = notification.userInfo?[NSWorkspace.applicationUserInfoKey] as? NSRunningApplication,
               app.activationPolicy == .regular else {
             return
         }
         createObserverForApp(app)
-        
     }
     
     @objc private func appDidTerminate(_ notification: Notification) {
@@ -101,7 +101,6 @@ class WindowManipulationObservers {
         AXObserverRemoveNotification(observer, appElement, kAXWindowMiniaturizedNotification as CFString)
         AXObserverRemoveNotification(observer, appElement, kAXWindowDeminiaturizedNotification as CFString)
         AXObserverRemoveNotification(observer, appElement, kAXFocusedUIElementChangedNotification as CFString)
-
         
         observers.removeValue(forKey: pid)
     }
@@ -114,7 +113,6 @@ class WindowManipulationObservers {
             AXObserverRemoveNotification(observer, appElement, kAXWindowMiniaturizedNotification as CFString)
             AXObserverRemoveNotification(observer, appElement, kAXWindowDeminiaturizedNotification as CFString)
             AXObserverRemoveNotification(observer, appElement, kAXFocusedUIElementChangedNotification as CFString)
-
         }
         observers.removeAll()
     }
@@ -125,10 +123,10 @@ func axObserverCallback(observer: AXObserver, element: AXUIElement, notification
     let pid = pid_t(Int(bitPattern: userData))
     
     DispatchQueue.main.async {
-        if let app = NSRunningApplication(processIdentifier: pid){
+        if let app = NSRunningApplication(processIdentifier: pid) {
             switch notificationName as String {
             case kAXFocusedUIElementChangedNotification:
-                guard !WindowManipulationObservers.trackedElements.contains(element) else {return}
+                guard !WindowManipulationObservers.trackedElements.contains(element) else { return }
                 WindowManipulationObservers.trackedElements.insert(element)
                 WindowManipulationObservers.debounceWorkItem?.cancel()
                 WindowManipulationObservers.debounceWorkItem = DispatchWorkItem {
@@ -138,13 +136,25 @@ func axObserverCallback(observer: AXObserver, element: AXUIElement, notification
                 }
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: WindowManipulationObservers.debounceWorkItem!)
             case kAXWindowCreatedNotification:
-                print("Window created for app: \(app.localizedName ?? "Unknown")")
-                Task {
-                    if let appName = app.localizedName {
-                        await WindowUtil.retryWindowCreation(for: appName, maxRetries: 5, delay: 0.2)
+                let appName = app.localizedName ?? "Unknown"
+                let currentTime = Date()
+                
+                if let lastCreationTime = WindowManipulationObservers.lastWindowCreationTime[appName] {
+                    let timeSinceLastCreation = currentTime.timeIntervalSince(lastCreationTime)
+                    guard timeSinceLastCreation >= WindowManipulationObservers.windowCreationDebounceInterval else {
+                        print("Ignoring notification for \(appName). Too many windows being created.")
+                        // If the time since the last creation is less than the debounce interval, ignore this notification
+                        return
                     }
                 }
-                break
+                
+                // Update the last creation time for this app
+                WindowManipulationObservers.lastWindowCreationTime[appName] = currentTime
+                
+                print("Window created for app: \(appName)")
+                Task {
+                    await WindowUtil.retryWindowCreation(for: appName, maxRetries: 5, delay: 0.2)
+                }
             case kAXUIElementDestroyedNotification:
                 guard !WindowManipulationObservers.trackedElements.contains(element) else { return }
                 WindowManipulationObservers.trackedElements.insert(element)
@@ -153,27 +163,21 @@ func axObserverCallback(observer: AXObserver, element: AXUIElement, notification
                     WindowUtil.removeWindowFromDesktopSpaceCache(with: app.bundleIdentifier ?? "" , removeAll: false)
                     WindowManipulationObservers.trackedElements.remove(element)
                     print("Window destroyed for app: \(app.localizedName ?? "Unknown")")
-                    
                 }
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.01, execute: WindowManipulationObservers.debounceWorkItem!)
-                break
             case kAXWindowMiniaturizedNotification:
                 print("Window minimized for app: \(app.localizedName ?? "Unknown")")
                 WindowUtil.updateStatusOfWindowCache(pid: pid_t(pid), bundleID: app.bundleIdentifier ?? "", isParentAppHidden: false)
-                break
             case kAXWindowDeminiaturizedNotification:
                 print("Window restored for app: \(app.localizedName ?? "Unknown")")
             case kAXApplicationHiddenNotification:
                 print("Application hidden: \(app.localizedName ?? "Unknown")")
                 WindowUtil.updateStatusOfWindowCache(pid: pid_t(pid), bundleID: app.bundleIdentifier ?? "", isParentAppHidden: true)
-                break
             case kAXApplicationShownNotification:
                 print("Application shown: \(app.localizedName ?? "Unknown")")
-                break
             default:
                 break
             }
-            
         }
     }
 }
@@ -207,9 +211,7 @@ func axCallWhichCanThrow<T>(_ result: AXError, _ successValue: inout T) throws -
 }
 
 func cgWindowId(appElement: AXUIElement) throws -> CGWindowID? {
-    var id : CGWindowID = 0
+    var id: CGWindowID = 0
     let result = _AXUIElementGetWindow(appElement, &id)
     return try axCallWhichCanThrow(result, &id)
 }
-
-
