@@ -88,6 +88,12 @@ struct WindowPreviewHoverContainer: View {
         .padding(.top, (!ScreenCenteredFloatingWindow.shared.windowSwitcherActive && appNameStyle == .popover  && showAppName) ? 30 : 0) // Provide empty space above the window preview for the Popover title style when hovering over the Dock
         .padding(.all, 24)
         .frame(maxWidth: self.bestGuessMonitor.visibleFrame.width, maxHeight: self.bestGuessMonitor.visibleFrame.height)
+        .onHover { isHovering in
+            if !isHovering && DockObserver.shared.gethoveredDockItem() == nil { // TODO: instead, check if mouse inside the dock item element
+                SharedPreviewWindowCoordinator.shared.hidePreviewWindow()
+                DockObserver.shared.lastAppUnderMouse = nil
+            }
+        }
     }
     
     @ViewBuilder

@@ -84,7 +84,7 @@ final class WindowsUtil {
     static func getRunningAppWindows(for app: NSRunningApplication) throws -> [Window] {
         let appElement = AXUIElementCreateApplication(app.processIdentifier)
         
-        guard let windows = try appElement.attribute(kAXWindowsAttribute, [AXUIElement].self) else {
+        guard let windows = try appElement.windows() else {
             return []
         }
         return windows.compactMap { window in

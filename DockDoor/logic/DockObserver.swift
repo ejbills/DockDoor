@@ -7,152 +7,115 @@
 import Cocoa
 import ApplicationServices
 
+func handleSelectedDockItemChangedNotification(observer: AXObserver, element: AXUIElement, notificationName: CFString, _: UnsafeMutableRawPointer?) -> Void {
+    DockObserver.shared.processSelectedDockItemChanged()
+}
+
 final class DockObserver {
     static let shared = DockObserver()
     
-    private var lastAppUnderMouse: NSRunningApplication?
-    private var lastMouseLocation: CGPoint?
-    private let mouseUpdateThreshold: CGFloat = 5.0
-    private var eventTap: CFMachPort?
-    
+    var axObserver: AXObserver?
+    var lastAppUnderMouse: NSRunningApplication?
     private var hoverProcessingTask: Task<Void, Error>?
     private var isProcessing: Bool = false
     
-    private var dockAppProcessIdentifier: pid_t? = nil
-    
     private init() {
-        setupEventTap()
+        setupSelectedDockItemObserver()
     }
     
-    deinit {
-        if let eventTap = eventTap {
-            CGEvent.tapEnable(tap: eventTap, enable: false)
-            CFMachPortInvalidate(eventTap)
-            CFRunLoopRemoveSource(CFRunLoopGetCurrent(), CFMachPortCreateRunLoopSource(kCFAllocatorDefault, eventTap, 0), CFRunLoopMode.commonModes)
+    static func getMousePosition() -> NSPoint {
+        guard let event = CGEvent(source: nil) else {
+            fatalError("Unable to get mouse event")
         }
+        
+        let mouseLocation = event.location
+        
+        let mousePosition = NSPoint(x: mouseLocation.x, y: mouseLocation.y)
+        
+        return mousePosition
     }
     
-    private func setupEventTap() {
-        guard AXIsProcessTrusted() else {
-            print("Debug: Accessibility permission not granted")
-            MessageUtil.showMessage(title: String(localized: "Permission error"),
-                                    message: String(localized: "You need to give DockDoor access to the accessibility API in order for it to function."),
-                                    completion: { _ in SystemPreferencesHelper.openAccessibilityPreferences() })
-            return
+    private func setupSelectedDockItemObserver() {
+        guard let dockAppPID = NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.dock").first?.processIdentifier else {
+            fatalError("Dock does found in running applications")
         }
         
-        func eventTapCallback(proxy: CGEventTapProxy, type: CGEventType, event: CGEvent, refcon: UnsafeMutableRawPointer?) -> Unmanaged<CGEvent>? {
-            let observer = Unmanaged<DockObserver>.fromOpaque(refcon!).takeUnretainedValue()
-            
-            if type == .mouseMoved {
-                let mouseLocation = event.location
-                observer.handleMouseEvent(mouseLocation: mouseLocation)
-            } else if type == .rightMouseDown || type == .leftMouseDown || type == .otherMouseDown {
-                if observer.getCurrentAppUnderMouse() != nil { // Required to allow clicking the traffic light buttons in the preview
-                    SharedPreviewWindowCoordinator.shared.hidePreviewWindow()
-                }
-            }
-            
-            return Unmanaged.passUnretained(event)
+        let dockAppElement = AXUIElementCreateApplication(dockAppPID)
+        
+        guard let children = try? dockAppElement.children(), let axList = children.first(where: { element in
+            return try! element.role() == kAXListRole
+        }) else {
+            fatalError("can't get dock items list element")
         }
         
-        let eventTypes: [CGEventType] = [.mouseMoved, .rightMouseDown, .leftMouseDown, .otherMouseDown, .leftMouseUp]
-        let eventsOfInterest: CGEventMask = eventTypes
-            .reduce(CGEventMask(0)) { $0 | (1 << $1.rawValue) }
+        AXObserverCreate(dockAppPID, handleSelectedDockItemChangedNotification, &axObserver)
+        guard let axObserver = axObserver else { return }
         
-        eventTap = CGEvent.tapCreate(
-            tap: .cghidEventTap,
-            place: .headInsertEventTap,
-            options: .defaultTap,
-            eventsOfInterest: eventsOfInterest,
-            callback: eventTapCallback,
-            userInfo: Unmanaged.passUnretained(self).toOpaque()
-        )
-        
-        if let eventTap = eventTap {
-            let runLoopSource = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, eventTap, 0)
-            CFRunLoopAddSource(CFRunLoopGetCurrent(), runLoopSource, CFRunLoopMode.commonModes)
-            CGEvent.tapEnable(tap: eventTap, enable: true)
-        } else {
-            print("Failed to create CGEvent tap.")
+        do {
+            try axList.subscribeToNotification(axObserver, kAXSelectedChildrenChangedNotification, {
+                CFRunLoopAddSource(CFRunLoopGetCurrent(), AXObserverGetRunLoopSource(axObserver), .commonModes)
+            })
+        } catch {
+            fatalError("Failed to subscribe to notification: \(error)")
         }
     }
     
-    private func handleMouseEvent(mouseLocation: CGPoint) {
+    func processSelectedDockItemChanged() {
         hoverProcessingTask?.cancel()
-        
         hoverProcessingTask = Task { [weak self] in
             guard let self = self else { return }
             try Task.checkCancellation()
-            self.processMouseEvent(mouseLocation: mouseLocation)
-        }
-    }
-    
-    private func processMouseEvent(mouseLocation: CGPoint) {
-        guard !isProcessing, !ScreenCenteredFloatingWindow.shared.windowSwitcherActive else { return }
-        isProcessing = true
-        
-        defer {
-            isProcessing = false
-        }
-        
-        guard let lastMouseLocation = lastMouseLocation else {
-            self.lastMouseLocation = mouseLocation
-            return
-        }
-        
-        // Ignore minor movements
-        if abs(mouseLocation.x - lastMouseLocation.x) < mouseUpdateThreshold &&
-            abs(mouseLocation.y - lastMouseLocation.y) < mouseUpdateThreshold {
-            return
-        }
-        self.lastMouseLocation = mouseLocation
-        
-        // Capture the current mouseLocation
-        let currentMouseLocation = mouseLocation
-        
-        if let currentAppUnderMouse = getCurrentAppUnderMouse() {
-            if currentAppUnderMouse != lastAppUnderMouse {
-                lastAppUnderMouse = currentAppUnderMouse
-                
-                Task { [weak self] in
-                    guard let self = self else { return }
-                    do {
-                        let appWindows = try WindowsUtil.getRunningAppWindows(for: currentAppUnderMouse)
-                        await MainActor.run {
-                            if appWindows.isEmpty {
-                                SharedPreviewWindowCoordinator.shared.hidePreviewWindow()
-                            } else {
-                                let mouseScreen = DockObserver.screenContainingPoint(currentMouseLocation) ?? NSScreen.main!
-                                let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
-                                // Show HoverWindow (using shared instance)
-                                SharedPreviewWindowCoordinator.shared.showPreviewWindow(
-                                    appName: currentAppUnderMouse.localizedName!,
-                                    windows: appWindows,
-                                    mouseLocation: convertedMouseLocation,
-                                    mouseScreen: mouseScreen,
-                                    onWindowTap: { [weak self] in
-                                        SharedPreviewWindowCoordinator.shared.hidePreviewWindow()
-                                        self?.lastAppUnderMouse = nil
-                                    }
-                                )
+            guard !isProcessing, !ScreenCenteredFloatingWindow.shared.windowSwitcherActive else { return }
+            isProcessing = true
+            
+            defer {
+                isProcessing = false
+            }
+            
+            let currentMouseLocation = DockObserver.getMousePosition()
+            if let currentAppUnderMouse = getCurrentAppUnderMouse() {
+                if currentAppUnderMouse != lastAppUnderMouse {
+                    lastAppUnderMouse = currentAppUnderMouse
+                    
+                    Task { [weak self] in
+                        guard let self = self else { return }
+                        do {
+                            let appWindows = try WindowsUtil.getRunningAppWindows(for: currentAppUnderMouse)
+                            await MainActor.run {
+                                if appWindows.isEmpty {
+                                    SharedPreviewWindowCoordinator.shared.hidePreviewWindow()
+                                } else {
+                                    let mouseScreen = DockObserver.screenContainingPoint(currentMouseLocation) ?? NSScreen.main!
+                                    let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
+                                    // Show HoverWindow (using shared instance)
+                                    SharedPreviewWindowCoordinator.shared.showPreviewWindow(
+                                        appName: currentAppUnderMouse.localizedName!,
+                                        windows: appWindows,
+                                        mouseLocation: convertedMouseLocation,
+                                        mouseScreen: mouseScreen,
+                                        onWindowTap: { [weak self] in
+                                            SharedPreviewWindowCoordinator.shared.hidePreviewWindow()
+                                            self?.lastAppUnderMouse = nil
+                                        }
+                                    )
+                                }
                             }
-                        }
-                    } catch {
-                        await MainActor.run {
-                            print("Error fetching active windows: \(error)")
+                        } catch {
+                            await MainActor.run {
+                                print("Error fetching active windows: \(error)")
+                            }
                         }
                     }
                 }
-            }
-        } else {
-            Task { @MainActor [weak self] in
-                guard let self = self else { return }
-                let mouseScreen = DockObserver.screenContainingPoint(currentMouseLocation) ?? NSScreen.main!
-                let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
-                if !SharedPreviewWindowCoordinator.shared.frame.contains(convertedMouseLocation) {
-                    self.lastAppUnderMouse = nil
-                    SharedPreviewWindowCoordinator.shared.hidePreviewWindow()
+            } else {
+                Task { @MainActor [weak self] in
+                    guard let self = self else { return }
+                    let mouseScreen = DockObserver.screenContainingPoint(currentMouseLocation) ?? NSScreen.main!
+                    let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
+                    if !SharedPreviewWindowCoordinator.shared.frame.contains(convertedMouseLocation) {
+                        self.lastAppUnderMouse = nil
+                        SharedPreviewWindowCoordinator.shared.hidePreviewWindow()
+                    }
                 }
             }
         }
@@ -200,12 +163,7 @@ final class DockObserver {
         return nil
     }
     
-    //                          var role: CFTypeRef?
-    //                        AXUIElementCopyAttributeValue(element, kAXRoleAttribute as CFString, &role)
-    //                        return role as? String ?? ""
-    //                       let dockListRole = getRole(element: dockItems.first!)
-    
-    private func gethoveredDockItem() -> AXUIElement? {
+    func gethoveredDockItem() -> AXUIElement? {
         guard let dockAppPID = NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.dock").first?.processIdentifier else {
             print("Dock does found in running applications")
             return nil
