@@ -524,7 +524,8 @@ final class WindowUtil {
             return nil
         }
         
-        let closeButton = getCloseButton(for: windowRef)
+        guard let closeButton = getCloseButton(for: windowRef) else { return nil }
+        
         
         var windowInfo = WindowInfo(id: windowID,
                                     window: window,

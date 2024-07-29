@@ -153,7 +153,7 @@ func axObserverCallback(observer: AXObserver, element: AXUIElement, notification
                 
                 print("Window created for app: \(appName)")
                 Task {
-                    await WindowUtil.retryWindowCreation(for: appName, maxRetries: 5, delay: 0.2)
+                    await WindowUtil.retryWindowCreation(for: appName, maxRetries: 3, delay: 0.2)
                 }
             case kAXUIElementDestroyedNotification:
                 guard !WindowManipulationObservers.trackedElements.contains(element) else { return }
