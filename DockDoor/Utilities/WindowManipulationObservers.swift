@@ -135,26 +135,6 @@ func axObserverCallback(observer: AXObserver, element: AXUIElement, notification
                     print("Focused Window has changed: \(app.localizedName ?? "")")
                 }
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: WindowManipulationObservers.debounceWorkItem!)
-            case kAXWindowCreatedNotification:
-                let appName = app.localizedName ?? "Unknown"
-                let currentTime = Date()
-                
-                if let lastCreationTime = WindowManipulationObservers.lastWindowCreationTime[appName] {
-                    let timeSinceLastCreation = currentTime.timeIntervalSince(lastCreationTime)
-                    guard timeSinceLastCreation >= WindowManipulationObservers.windowCreationDebounceInterval else {
-                        print("Ignoring notification for \(appName). Too many windows being created.")
-                        // If the time since the last creation is less than the debounce interval, ignore this notification
-                        return
-                    }
-                }
-                
-                // Update the last creation time for this app
-                WindowManipulationObservers.lastWindowCreationTime[appName] = currentTime
-                
-                print("Window created for app: \(appName)")
-                Task {
-                    await WindowUtil.retryWindowCreation(for: appName, maxRetries: 3, delay: 0.2)
-                }
             case kAXUIElementDestroyedNotification:
                 guard !WindowManipulationObservers.trackedElements.contains(element) else { return }
                 WindowManipulationObservers.trackedElements.insert(element)
