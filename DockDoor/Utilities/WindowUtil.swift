@@ -480,30 +480,7 @@ final class WindowUtil {
         
         return activeWindows
     }
-    
-    static func retryWindowCreation(for appName: String, maxRetries: Int, delay: TimeInterval) async {
-        let initialCount = findAllWindowsInDesktopCacheForApplication(for: appName)?.count ?? 0
         
-        for attempt in 1...maxRetries {
-            do {
-                let refreshedWindowCount = try await WindowUtil.activeWindows(for: appName).count
-                
-                if refreshedWindowCount > initialCount {
-                    return
-                }
-            } catch {
-                print("Error retrieving windows for \(appName) on attempt \(attempt): \(error)")
-            }
-            
-            if attempt < maxRetries {
-                print("No new windows detected for \(appName) on attempt \(attempt). Retrying...")
-                try? await Task.sleep(nanoseconds: UInt64(delay * 1_000_000_000))
-            }
-        }
-        
-        print("Failed to detect new window for \(appName) after \(maxRetries) attempts")
-    }
-    
     private static func fetchWindowInfo(window: SCWindow, applicationName: String) async throws -> WindowInfo? {
         let windowID = window.windowID
         
