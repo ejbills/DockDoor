@@ -6,10 +6,12 @@
 //
 
 import Cocoa
+import ScreenCaptureKit
 
 class SpaceWindowCacheManager {
     private let queue = DispatchQueue(label: "com.dockdoor.cacheQueue", attributes: .concurrent)
     private var desktopSpaceWindowCache: [String: Set<WindowInfo>] = [:]
+    private var appNameBundleIdTracker: [String: String] = [:]
     
     func readCache(bundleId: String) -> Set<WindowInfo> {
         queue.sync {
@@ -61,5 +63,55 @@ class SpaceWindowCacheManager {
                 return sortedWindows
             }
         }
+    }
+    
+    // New functions for appNameBundleIdTracker
+    
+    func updateAppNameBundleIdTracker(app: SCRunningApplication, nonLocalName: String) {
+        queue.async(flags: .barrier) {
+            self.appNameBundleIdTracker[app.applicationName] = app.bundleIdentifier
+            self.appNameBundleIdTracker[nonLocalName] = app.bundleIdentifier
+        }
+    }
+    
+    func addToBundleIDTracker(applicationName: String, bundleID: String) {
+        queue.async(flags: .barrier) {
+            if !self.appNameBundleIdTracker.contains(where: {$0.key == applicationName}) {
+                self.appNameBundleIdTracker[applicationName] = bundleID
+            }
+        }
+    }
+    
+    func findBundleID(for applicationName: String) -> String? {
+        return queue.sync {
+            // First, try to get the bundle ID directly from the tracker
+            if let bundleID = self.appNameBundleIdTracker[applicationName] {
+                return bundleID
+            }
+            
+            // If not found, try to find a matching application
+            for (appName, bundleId) in self.appNameBundleIdTracker {
+                if applicationName.contains(appName) || appName.contains(applicationName) {
+                    return bundleId
+                }
+                
+                // Check non-localized name
+                if let nonLocalizedName = self.getNonLocalizedAppName(forBundleIdentifier: bundleId),
+                   applicationName.contains(nonLocalizedName) || nonLocalizedName.contains(applicationName) {
+                    return bundleId
+                }
+            }
+            
+            return nil
+        }
+    }
+    
+    private func getNonLocalizedAppName(forBundleIdentifier bundleIdentifier: String) -> String? {
+        guard let bundleURL = NSWorkspace.shared.urlForApplication(withBundleIdentifier: bundleIdentifier) else {
+            return nil
+        }
+        
+        let bundle = Bundle(url: bundleURL)
+        return bundle?.object(forInfoDictionaryKey: "CFBundleName") as? String
     }
 }

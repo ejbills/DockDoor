@@ -48,7 +48,7 @@ class WindowManipulationObservers {
         guard let app = notification.userInfo?[NSWorkspace.applicationUserInfoKey] as? NSRunningApplication else {
             return
         }
-        WindowUtil.removeWindowFromDesktopSpaceCache(with: app.bundleIdentifier ?? "", removeAll: true)
+        WindowUtil.clearWindowCache(for: app.bundleIdentifier ?? "")
         removeObserverForApp(app)
         SharedPreviewWindowCoordinator.shared.hideWindow()
     }
@@ -67,7 +67,7 @@ class WindowManipulationObservers {
         var observer: AXObserver?
         let result = AXObserverCreate(pid, axObserverCallback, &observer)
         guard result == .success, let observer = observer else { return }
-        WindowUtil.addToBundleIDTracker(applicationName:app.localizedName ?? "", bundleID: app.bundleIdentifier ?? "")
+        WindowUtil.addAppToBundleIDTracker(applicationName: app.localizedName ?? "", bundleID: app.bundleIdentifier ?? "")
         
         let appElement = AXUIElementCreateApplication(pid)
         AXObserverAddNotification(observer, appElement, kAXWindowCreatedNotification as CFString, UnsafeMutableRawPointer(bitPattern: Int(pid)))
@@ -160,7 +160,9 @@ func axObserverCallback(observer: AXObserver, element: AXUIElement, notification
                 WindowManipulationObservers.trackedElements.insert(element)
                 WindowManipulationObservers.debounceWorkItem?.cancel()
                 WindowManipulationObservers.debounceWorkItem = DispatchWorkItem {
-                    WindowUtil.removeWindowFromDesktopSpaceCache(with: app.bundleIdentifier ?? "" , removeAll: false)
+                    WindowUtil.updateWindowCache(for: app.bundleIdentifier ?? "") { windowSet in
+                        windowSet = windowSet.filter { WindowUtil.isElementValid($0.axElement) }
+                    }
                     WindowManipulationObservers.trackedElements.remove(element)
                     print("Window destroyed for app: \(app.localizedName ?? "Unknown")")
                 }

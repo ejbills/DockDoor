@@ -54,8 +54,6 @@ final class WindowUtil {
     
     private static let desktopSpaceWindowCacheManager = SpaceWindowCacheManager()
     
-    private static var appNameBundleIdTracker: [String: String] = [:]
-    
     // MARK: - Cache Management
     
     static func clearExpiredCache() {
@@ -69,6 +67,18 @@ final class WindowUtil {
         cacheQueue.async(flags: .barrier) {
             imageCache.removeAll()
         }
+    }
+    
+    static func clearWindowCache(for bundleId: String) {
+        desktopSpaceWindowCacheManager.writeCache(bundleId: bundleId, windowSet: [])
+    }
+
+    static func addAppToBundleIDTracker(applicationName: String, bundleID: String) {
+        desktopSpaceWindowCacheManager.addToBundleIDTracker(applicationName: applicationName, bundleID: bundleID)
+    }
+
+    static func updateWindowCache(for bundleId: String, update: @escaping (inout Set<WindowInfo>) -> Void) {
+        desktopSpaceWindowCacheManager.updateCache(bundleId: bundleId, update: update)
     }
     
     // MARK: - Helper Functions
@@ -223,12 +233,6 @@ final class WindowUtil {
     }
     
     // MARK: - Desktop Cache Retrievers
-    static func addToBundleIDTracker(applicationName: String, bundleID: String ) {
-        if !appNameBundleIdTracker.contains(where: {$0.key == applicationName}) {
-            appNameBundleIdTracker[applicationName] = bundleID
-        }
-    }
-    
     static func getAllWindowInfosAsList() -> [WindowInfo] {
         return desktopSpaceWindowCacheManager.getAllWindows()
     }
@@ -356,7 +360,7 @@ final class WindowUtil {
                     var cgWindowId: CGWindowID = 0
                     let windowIDStatus = _AXUIElementGetWindow(window, &cgWindowId)
                     if windowIDStatus == .success,
-                        let index = windowSet.firstIndex(where: { $0.id == cgWindowId })
+                       let index = windowSet.firstIndex(where: { $0.id == cgWindowId })
                     {
                         var updatedWindow = windowSet[index]
                         updatedWindow.lastUsed = Date()
@@ -419,7 +423,7 @@ final class WindowUtil {
             if let app = window.owningApplication,
                let tempNonLocalName = getNonLocalizedAppName(forBundleIdentifier: app.bundleIdentifier) {
                 
-                updateAppNameBundleIdTracker(app: app, nonLocalName: tempNonLocalName)
+                desktopSpaceWindowCacheManager.updateAppNameBundleIdTracker(app: app, nonLocalName: tempNonLocalName)
                 
                 if applicationName.contains(app.applicationName) || app.applicationName.contains(applicationName) {
                     potentialMatches.append(app)
@@ -440,7 +444,7 @@ final class WindowUtil {
             
             if let bundleId = foundApp?.bundleIdentifier,
                let tempNonLocalName = getNonLocalizedAppName(forBundleIdentifier: bundleId) {
-                updateAppNameBundleIdTracker(app: bestGuessApp, nonLocalName: tempNonLocalName)
+                desktopSpaceWindowCacheManager.updateAppNameBundleIdTracker(app: bestGuessApp, nonLocalName: tempNonLocalName)
                 nonLocalName = tempNonLocalName
             }
             
@@ -461,7 +465,7 @@ final class WindowUtil {
         }
         
         if let nonLocalName {
-            let bundleId = appNameBundleIdTracker[nonLocalName] ?? foundApp?.bundleIdentifier
+            let bundleId = desktopSpaceWindowCacheManager.findBundleID(for: nonLocalName) ?? foundApp?.bundleIdentifier
             if let bundleId {
                 return Array(desktopSpaceWindowCacheManager.readCache(bundleId: bundleId))
             }
@@ -500,7 +504,6 @@ final class WindowUtil {
         print("Failed to detect new window for \(appName) after \(maxRetries) attempts")
     }
     
-    
     private static func fetchWindowInfo(window: SCWindow, applicationName: String) async throws -> WindowInfo? {
         let windowID = window.windowID
         
@@ -510,7 +513,7 @@ final class WindowUtil {
               window.frame.size.width >= 0,
               window.frame.size.height >= 0,
               !filteredBundleIdentifiers.contains(owningApplication.bundleIdentifier),
-              !(window.frame.size.width < 50 || window.frame.size.height < 50) || window.title?.isEmpty == false else {
+              !(window.frame.size.width < 100 || window.frame.size.height < 100) || window.title?.isEmpty == false else {
             return nil
         }
         
@@ -637,39 +640,12 @@ final class WindowUtil {
         return bundle?.object(forInfoDictionaryKey: "CFBundleName") as? String
     }
     
-    private static func updateAppNameBundleIdTracker(app: SCRunningApplication, nonLocalName: String) {
-        appNameBundleIdTracker[app.applicationName] = app.bundleIdentifier
-        appNameBundleIdTracker[nonLocalName] = app.bundleIdentifier
-    }
-    
     static func findAllWindowsInDesktopCacheForApplication(for applicationName: String) -> [WindowInfo]? {
-        let bundleID = findBundleID(for: applicationName)
+        let bundleID = desktopSpaceWindowCacheManager.findBundleID(for: applicationName)
         
         if let bundleID = bundleID {
             let windowSet = desktopSpaceWindowCacheManager.readCache(bundleId: bundleID)
             return windowSet.isEmpty ? nil : Array(windowSet).sorted(by: { $0.lastUsed > $1.lastUsed })
-        }
-        
-        return nil
-    }
-    
-    private static func findBundleID(for applicationName: String) -> String? {
-        // First, try to get the bundle ID directly from the tracker
-        if let bundleID = appNameBundleIdTracker[applicationName] {
-            return bundleID
-        }
-        
-        // If not found, try to find a matching application
-        for (appName, bundleId) in appNameBundleIdTracker {
-            if applicationName.contains(appName) || appName.contains(applicationName) {
-                return bundleId
-            }
-            
-            // Check non-localized name
-            if let nonLocalizedName = getNonLocalizedAppName(forBundleIdentifier: bundleId),
-               applicationName.contains(nonLocalizedName) || nonLocalizedName.contains(applicationName) {
-                return bundleId
-            }
         }
         
         return nil
