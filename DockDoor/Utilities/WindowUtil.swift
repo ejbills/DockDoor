@@ -94,8 +94,8 @@ final class WindowUtil {
         let scaleFactor = await getScaleFactorForWindow(windowID: window.windowID)
         
         // Convert points to pixels
-        config.width = Int(window.frame.width * scaleFactor)
-        config.height = Int(window.frame.height * scaleFactor)
+        config.width = Int(window.frame.width * scaleFactor) / 2
+        config.height = Int(window.frame.height * scaleFactor) / 2
         
         config.showsCursor = false
         config.captureResolution = .best
@@ -107,7 +107,7 @@ final class WindowUtil {
         
         return image
     }
-
+    
     // Helper function to get the scale factor for a given window
     private static func getScaleFactorForWindow(windowID: CGWindowID) async -> CGFloat {
         return await MainActor.run {
@@ -355,7 +355,7 @@ final class WindowUtil {
                 for window in windows {
                     var cgWindowId: CGWindowID = 0
                     let windowIDStatus = _AXUIElementGetWindow(window, &cgWindowId)
-                    if windowIDStatus == .success, 
+                    if windowIDStatus == .success,
                         let index = windowSet.firstIndex(where: { $0.id == cgWindowId })
                     {
                         var updatedWindow = windowSet[index]
@@ -505,6 +505,7 @@ final class WindowUtil {
         let windowID = window.windowID
         
         guard let owningApplication = window.owningApplication,
+              window.title != "",
               window.isOnScreen,
               window.windowLayer == 0,
               window.frame.size.width >= 0,
