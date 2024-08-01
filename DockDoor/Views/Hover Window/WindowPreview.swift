@@ -61,20 +61,7 @@ struct WindowPreview: View {
                 Image(decorative: cgImage, scale: 1.0)
                     .resizable()
                     .aspectRatio(contentMode: .fill)
-                    .overlay(
-                        Group {
-                            if isMinimized || isHidden {
-                                fluidGradient().opacity(0.225)
-                                HStack {
-                                    Image(systemName: "eye.slash.fill")
-                                    Text(isMinimized ? "Minimized" : "Hidden")
-                                }
-                                .font(.caption)
-                                .italic()
-                                .foregroundStyle(.secondary)
-                            }
-                        }
-                    )
+                    .markHidden(isHidden: isMinimized || isHidden)
                     .overlay(isSelected ? fluidGradient().opacity(0.125) : nil)
             }
         }
