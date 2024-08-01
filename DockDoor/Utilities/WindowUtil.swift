@@ -505,12 +505,12 @@ final class WindowUtil {
         let windowID = window.windowID
         
         guard let owningApplication = window.owningApplication,
-              window.title != "",
               window.isOnScreen,
               window.windowLayer == 0,
               window.frame.size.width >= 0,
               window.frame.size.height >= 0,
-              !filteredBundleIdentifiers.contains(owningApplication.bundleIdentifier) else {
+              !filteredBundleIdentifiers.contains(owningApplication.bundleIdentifier),
+              !(window.frame.size.width < 50 || window.frame.size.height < 50) || window.title?.isEmpty == false else {
             return nil
         }
         
@@ -525,8 +525,7 @@ final class WindowUtil {
             return nil
         }
         
-        guard let closeButton = getCloseButton(for: windowRef) else { return nil }
-        
+        let closeButton = getCloseButton(for: windowRef)
         
         var windowInfo = WindowInfo(id: windowID,
                                     window: window,
