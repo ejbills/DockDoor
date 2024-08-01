@@ -21,6 +21,8 @@ extension Defaults.Keys {
     static let hoverWindowOpenDelay = Key<CGFloat>("openDelay", default: 0 )
     
     static let screenCaptureCacheLifespan = Key<CGFloat>("screenCaptureCacheLifespan", default: 60 )
+    static let windowPreviewImageScale = Key<CGFloat>("windowPreviewImageScale", default: 1 )
+    
     static let uniformCardRadius = Key<Bool>("uniformCardRadius", default: true )
     static let tapEquivalentInterval = Key<CGFloat>("tapEquivalentInterval", default: 1.5 )
     static let previewHoverAction = Key<PreviewHoverAction>("previewHoverAction", default: .none )

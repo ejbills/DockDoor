@@ -23,6 +23,7 @@ struct MainSettingsView: View {
     @Default(.tapEquivalentInterval) var tapEquivalentInterval
     @Default(.previewHoverAction) var previewHoverAction
     @Default(.bufferFromDock) var bufferFromDock
+    @Default(.windowPreviewImageScale) var windowPreviewImageScale
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -102,6 +103,16 @@ struct MainSettingsView: View {
                     .frame(width: 38)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                 Text("seconds")
+            }
+            
+            HStack {
+                Text("Window Image Resolution Scale (higher means lower resolution)")
+                    .layoutPriority(1)
+                Spacer()
+                Slider(value: $windowPreviewImageScale, in: 1...4, step: 1)
+                TextField("", value: $windowPreviewImageScale, formatter: NumberFormatter())
+                    .frame(width: 38)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
             }
             
             Picker("Preview Hover Action", selection: $previewHoverAction) {

@@ -94,8 +94,8 @@ final class WindowUtil {
         let scaleFactor = await getScaleFactorForWindow(windowID: window.windowID)
         
         // Convert points to pixels
-        config.width = Int(window.frame.width * scaleFactor) / 2
-        config.height = Int(window.frame.height * scaleFactor) / 2
+        config.width = Int(window.frame.width * scaleFactor) / Int(Defaults[.windowPreviewImageScale])
+        config.height = Int(window.frame.height * scaleFactor) / Int(Defaults[.windowPreviewImageScale])
         
         config.showsCursor = false
         config.captureResolution = .best
