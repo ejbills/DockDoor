@@ -327,8 +327,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "• Allows for enhanced visual information in the dock"
+            "state" : "translated",
+            "value" : "• Dock'ta gelişmiş görsel bilgilerine izin ver"
           }
         },
         "uk" : {
@@ -351,8 +351,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "• Allows for enhanced visual information in the dock"
+            "state" : "translated",
+            "value" : "讓Dock顯示更多詳細的圖像資訊"
           }
         }
       }
@@ -505,8 +505,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "• Enables real-time interaction with dock items"
+            "state" : "translated",
+            "value" : "Dock öğeleriyle gerçek zamanlı etkileşimi Aktif Et"
           }
         },
         "uk" : {
@@ -529,8 +529,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "• Enables real-time interaction with dock items"
+            "state" : "translated",
+            "value" : "允許與 Dock 項目進行即時互動"
           }
         }
       }
@@ -707,8 +707,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "• To capture previews of images and windows"
+            "state" : "translated",
+            "value" : "擷取圖片和視窗的縮圖預覽"
           }
         }
       }
@@ -885,8 +885,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "• To detect when you hover over the dock"
+            "state" : "translated",
+            "value" : "偵測滑鼠懸停在 Dock 上時"
           }
         }
       }
@@ -1063,8 +1063,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Accessibility Permissions"
+            "state" : "translated",
+            "value" : "系統輔助存取權限"
           }
         }
       }
@@ -1217,8 +1217,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Accessibility:"
+            "state" : "translated",
+            "value" : "Erişilebilirlik:"
           }
         },
         "uk" : {
@@ -1241,8 +1241,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Accessibility:"
+            "state" : "translated",
+            "value" : "輔助功能"
           }
         }
       }
@@ -1419,8 +1419,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Adjust this if the preview is misaligned with dock"
+            "state" : "translated",
+            "value" : "預覽未對齊 Dock 時調整"
           }
         }
       }
@@ -1575,8 +1575,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Always"
+            "state" : "translated",
+            "value" : "Her zaman"
           }
         },
         "uk" : {
@@ -1599,8 +1599,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Always"
+            "state" : "translated",
+            "value" : "一律使用"
           }
         }
       }
@@ -1778,8 +1778,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Always visible"
+            "state" : "translated",
+            "value" : "一律顯示"
           }
         }
       }
@@ -1957,8 +1957,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Always visible; Full opacity"
+            "state" : "translated",
+            "value" : "一律顯示; 完全不透明"
           }
         }
       }
@@ -2135,8 +2135,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "App Name Style"
+            "state" : "translated",
+            "value" : "應用程式名稱樣式"
           }
         }
       }
@@ -2290,8 +2290,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Appearance"
+            "state" : "translated",
+            "value" : "Görünüm"
           }
         },
         "uk" : {
@@ -2314,8 +2314,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Appearance"
+            "state" : "translated",
+            "value" : "外觀"
           }
         }
       }
@@ -2468,8 +2468,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Appearance settings"
+            "state" : "translated",
+            "value" : "Görünüm ayarları"
           }
         },
         "uk" : {
@@ -2492,8 +2492,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Appearance settings"
+            "state" : "translated",
+            "value" : "外觀設定"
           }
         }
       }
@@ -2646,8 +2646,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Are you sure you want to reset all settings to their default values?"
+            "state" : "translated",
+            "value" : "Ayarları varsayılan durumlarına sıfırlamak istediğinizden emin misiniz?"
           }
         },
         "uk" : {
@@ -2670,8 +2670,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Are you sure you want to reset all settings to their default values?"
+            "state" : "translated",
+            "value" : "您確定要將所有設定重置為預設值嗎？"
           }
         }
       }
@@ -2824,8 +2824,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Automatically check for updates"
+            "state" : "translated",
+            "value" : "Güncellemeleri otomatik olarak denetle"
           }
         },
         "uk" : {
@@ -2848,8 +2848,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Automatically check for updates"
+            "state" : "translated",
+            "value" : "自動檢查更新"
           }
         }
       }
@@ -3003,8 +3003,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Bottom Left"
+            "state" : "translated",
+            "value" : "Sol Alt"
           }
         },
         "uk" : {
@@ -3027,8 +3027,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Bottom Left"
+            "state" : "translated",
+            "value" : "左下角"
           }
         }
       }
@@ -3182,8 +3182,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Bottom Right"
+            "state" : "translated",
+            "value" : "Sağ Alt"
           }
         },
         "uk" : {
@@ -3206,8 +3206,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Bottom Right"
+            "state" : "translated",
+            "value" : "右下角"
           }
         }
       }
@@ -3384,8 +3384,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Buy me a coffee here, thank you!"
+            "state" : "translated",
+            "value" : "請這裡請我喝咖啡，謝謝！"
           }
         }
       }
@@ -3563,8 +3563,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Can you even see this?"
+            "state" : "translated",
+            "value" : "你看得到這個嗎？"
           }
         }
       }
@@ -3717,8 +3717,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Cancel"
+            "state" : "translated",
+            "value" : "İptal"
           }
         },
         "uk" : {
@@ -3741,8 +3741,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Cancel"
+            "state" : "translated",
+            "value" : "取消"
           }
         }
       }
@@ -3895,8 +3895,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check for Updates"
+            "state" : "translated",
+            "value" : "Güncellemeleri Denetleyin"
           }
         },
         "uk" : {
@@ -3919,8 +3919,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check for Updates"
+            "state" : "translated",
+            "value" : "檢查更新"
           }
         }
       }
@@ -4097,7 +4097,7 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Command (⌘)"
           }
         }
@@ -4275,8 +4275,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Contribute translation here!"
+            "state" : "translated",
+            "value" : "在此協助翻譯！"
           }
         }
       }
@@ -4453,7 +4453,7 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Control (⌃)"
           }
         }
@@ -4631,8 +4631,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Current Keybind: %@"
+            "state" : "translated",
+            "value" : "目前快速鍵：%@"
           }
         }
       }
@@ -4809,8 +4809,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Current Version: %@"
+            "state" : "translated",
+            "value" : "目前版本：%@"
           }
         }
       }
@@ -4964,8 +4964,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Default"
+            "state" : "translated",
+            "value" : "Varsayılan"
           }
         },
         "uk" : {
@@ -4988,8 +4988,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Default"
+            "state" : "translated",
+            "value" : "預設"
           }
         }
       }
@@ -5143,8 +5143,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Default (Medium Large)"
+            "state" : "translated",
+            "value" : "Varsayılan (Orta Büyük)"
           }
         },
         "uk" : {
@@ -5167,8 +5167,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Default (Medium Large)"
+            "state" : "translated",
+            "value" : "預設(中大型)"
           }
         }
       }
@@ -5346,8 +5346,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Previews & Window Switcher"
+            "state" : "translated",
+            "value" : "Dock 預覽與視窗切換"
           }
         }
       }
@@ -5525,8 +5525,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Previews only"
+            "state" : "translated",
+            "value" : "僅限 Dock 預覽"
           }
         }
       }
@@ -5703,8 +5703,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Elements Overlap"
+            "state" : "translated",
+            "value" : "元件重疊"
           }
         }
       }
@@ -5858,8 +5858,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Embedded"
+            "state" : "translated",
+            "value" : "Gömülü"
           }
         },
         "uk" : {
@@ -5882,8 +5882,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Embedded"
+            "state" : "translated",
+            "value" : "內嵌"
           }
         }
       }
@@ -6060,8 +6060,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable Hover Window Sliding Animation"
+            "state" : "translated",
+            "value" : "啟用懸停視窗滑行動畫"
           }
         }
       }
@@ -6238,8 +6238,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable Window Switcher"
+            "state" : "translated",
+            "value" : "啟用視窗切換"
           }
         }
       }
@@ -6392,8 +6392,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enhance your dock experience!"
+            "state" : "translated",
+            "value" : "Dock deneyiminizi geliştirin!"
           }
         },
         "uk" : {
@@ -6416,8 +6416,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enhance your dock experience!"
+            "state" : "translated",
+            "value" : "提升你的 Dock 使用體驗!"
           }
         }
       }
@@ -6571,8 +6571,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Extra Extra Small"
+            "state" : "translated",
+            "value" : "Ekstra Ekstra Small"
           }
         },
         "uk" : {
@@ -6595,8 +6595,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Extra Extra Small"
+            "state" : "translated",
+            "value" : "特極小"
           }
         }
       }
@@ -6750,8 +6750,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Extra Small"
+            "state" : "translated",
+            "value" : "Ekstra Small"
           }
         },
         "uk" : {
@@ -6774,8 +6774,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Extra Small"
+            "state" : "translated",
+            "value" : "極小"
           }
         }
       }
@@ -6929,8 +6929,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "General"
+            "state" : "translated",
+            "value" : "Genel"
           }
         },
         "uk" : {
@@ -6953,8 +6953,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "General"
+            "state" : "translated",
+            "value" : "一般"
           }
         }
       }
@@ -7107,8 +7107,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "General settings"
+            "state" : "translated",
+            "value" : "Genel ayarlar"
           }
         },
         "uk" : {
@@ -7131,8 +7131,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "General settings"
+            "state" : "translated",
+            "value" : "一般設定"
           }
         }
       }
@@ -7285,8 +7285,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Get Started"
+            "state" : "translated",
+            "value" : "Başla"
           }
         },
         "uk" : {
@@ -7309,8 +7309,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Get Started"
+            "state" : "translated",
+            "value" : "開始使用"
           }
         }
       }
@@ -7465,8 +7465,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hidden"
+            "state" : "translated",
+            "value" : "Gizli"
           }
         },
         "uk" : {
@@ -7489,8 +7489,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hidden"
+            "state" : "translated",
+            "value" : "隱藏"
           }
         }
       }
@@ -7667,8 +7667,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hover Window Open Delay"
+            "state" : "translated",
+            "value" : "懸停視窗開啟延遲"
           }
         }
       }
@@ -7846,8 +7846,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hover Window Title Style"
+            "state" : "translated",
+            "value" : "懸停視窗標題樣式"
           }
         }
       }
@@ -8025,8 +8025,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "If you need to access the menu bar icon, launch the app to reveal it for 10 seconds."
+            "state" : "translated",
+            "value" : "如果需要存取選單列圖示, 請啟動應用程式以顯示該圖示10秒｡"
           }
         }
       }
@@ -8203,8 +8203,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Initialization Key"
+            "state" : "translated",
+            "value" : "初始化金鑰"
           }
         }
       }
@@ -8358,8 +8358,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Large"
+            "state" : "translated",
+            "value" : "Büyük"
           }
         },
         "uk" : {
@@ -8382,8 +8382,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Large"
+            "state" : "translated",
+            "value" : "大"
           }
         }
       }
@@ -8536,8 +8536,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Last checked: %@"
+            "state" : "translated",
+            "value" : "Son kontrol tarihi: %@"
           }
         },
         "uk" : {
@@ -8560,8 +8560,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Last checked: %@"
+            "state" : "translated",
+            "value" : "上次檢查時間：%@"
           }
         }
       }
@@ -8738,8 +8738,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Launch DockDoor at login"
+            "state" : "translated",
+            "value" : "登入時啟動 DockDoor"
           }
         }
       }
@@ -8893,8 +8893,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Medium"
+            "state" : "translated",
+            "value" : "Orta"
           }
         },
         "uk" : {
@@ -8917,8 +8917,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Medium"
+            "state" : "translated",
+            "value" : "中"
           }
         }
       }
@@ -9096,8 +9096,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Menu Bar Icon Hidden"
+            "state" : "translated",
+            "value" : "選單列圖示已隱藏"
           }
         }
       }
@@ -9275,8 +9275,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Never visible"
+            "state" : "translated",
+            "value" : "永不顯示"
           }
         }
       }
@@ -9454,8 +9454,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No action"
+            "state" : "translated",
+            "value" : "無動作"
           }
         }
       }
@@ -9634,8 +9634,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No hover action"
+            "state" : "translated",
+            "value" : "無懸停動作"
           }
         }
       }
@@ -9812,8 +9812,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "OK"
+            "state" : "translated",
+            "value" : "確定"
           }
         }
       }
@@ -9991,8 +9991,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "On window hover; Dimmed until button hover"
+            "state" : "translated",
+            "value" : "懸停於視窗時顯示; 按鈕懸停前為暗色"
           }
         }
       }
@@ -10170,8 +10170,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "On window hover; Full opacity"
+            "state" : "translated",
+            "value" : "懸停於視窗時顯示; 不透明"
           }
         }
       }
@@ -10348,8 +10348,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open Accessibility Settings"
+            "state" : "translated",
+            "value" : "開啟輔助功能設定"
           }
         }
       }
@@ -10526,8 +10526,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open Screen Recording Settings"
+            "state" : "translated",
+            "value" : "開啟螢幕錄製設定"
           }
         }
       }
@@ -10704,8 +10704,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open Settings"
+            "state" : "translated",
+            "value" : "開啟設定"
           }
         }
       }
@@ -10882,7 +10882,7 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Option (⌥)"
           }
         }
@@ -11060,8 +11060,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Permission error"
+            "state" : "translated",
+            "value" : "權限錯誤"
           }
         }
       }
@@ -11239,8 +11239,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Permissions"
+            "state" : "translated",
+            "value" : "權限"
           }
         }
       }
@@ -11417,8 +11417,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Permissions settings"
+            "state" : "translated",
+            "value" : "權限設定"
           }
         }
       }
@@ -11596,8 +11596,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Please Quit the App to Apply Changes! :)"
+            "state" : "translated",
+            "value" : "請退出應用程式以套用變更！ :)"
           }
         }
       }
@@ -11774,8 +11774,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Please Restart the App to Apply Changes! :)"
+            "state" : "translated",
+            "value" : "請重新啟動應用程式以套用變更！ :)"
           }
         }
       }
@@ -11952,8 +11952,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Please restart the application to apply your changes. Click OK to quit the app."
+            "state" : "translated",
+            "value" : "請重新啟動應用程式以套用您的變更。點擊「確定」以退出應用程式。"
           }
         }
       }
@@ -12131,8 +12131,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Popover"
+            "state" : "translated",
+            "value" : "彈出視窗"
           }
         }
       }
@@ -12309,8 +12309,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Press any key combination after holding the initialization key to set the keybind."
+            "state" : "translated",
+            "value" : "按住啟動鍵後，再按下任意按鍵組合來設定快速鍵。"
           }
         }
       }
@@ -12487,8 +12487,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Press the key combination..."
+            "state" : "translated",
+            "value" : "請按下快速鍵組合..."
           }
         }
       }
@@ -12665,8 +12665,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Hover Action"
+            "state" : "translated",
+            "value" : "預覽懸停動作"
           }
         }
       }
@@ -12843,8 +12843,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Hover Delay"
+            "state" : "translated",
+            "value" : "預覽懸停延遲"
           }
         }
       }
@@ -13022,8 +13022,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Quit App"
+            "state" : "translated",
+            "value" : "退出"
           }
         }
       }
@@ -13200,8 +13200,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Quit DockDoor"
+            "state" : "translated",
+            "value" : "退出 DockDoor"
           }
         }
       }
@@ -13379,8 +13379,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reset"
+            "state" : "translated",
+            "value" : "重置"
           }
         }
       }
@@ -13558,8 +13558,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reset All Settings"
+            "state" : "translated",
+            "value" : "重置所有設定"
           }
         }
       }
@@ -13736,8 +13736,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reset All Settings to Defaults"
+            "state" : "translated",
+            "value" : "重置所有設定為預設值"
           }
         }
       }
@@ -13914,8 +13914,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reset to Defaults"
+            "state" : "translated",
+            "value" : "重置為預設值"
           }
         }
       }
@@ -14092,8 +14092,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Restart App"
+            "state" : "translated",
+            "value" : "重新啟動程式"
           }
         }
       }
@@ -14270,8 +14270,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Restart required"
+            "state" : "translated",
+            "value" : "需要重啟"
           }
         }
       }
@@ -14448,8 +14448,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Screen Capturing:"
+            "state" : "translated",
+            "value" : "螢幕截圖："
           }
         }
       }
@@ -14626,8 +14626,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Screen Recording Permissions"
+            "state" : "translated",
+            "value" : "螢幕錄製權限"
           }
         }
       }
@@ -14804,8 +14804,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "seconds"
+            "state" : "translated",
+            "value" : "秒"
           }
         }
       }
@@ -14983,8 +14983,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "See a large preview of the window"
+            "state" : "translated",
+            "value" : "顯示視窗的大型預覽"
           }
         }
       }
@@ -15163,8 +15163,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "See a preview of the window"
+            "state" : "translated",
+            "value" : "顯示視窗預覽"
           }
         }
       }
@@ -15341,8 +15341,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Set Initialization Key and Keybind"
+            "state" : "translated",
+            "value" : "設定啟動鍵與快捷鍵"
           }
         }
       }
@@ -15519,8 +15519,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show App Name in Dock Previews"
+            "state" : "translated",
+            "value" : "在 Dock 預覽中顯示應用程式名稱"
           }
         }
       }
@@ -15697,8 +15697,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Menu Bar Icon"
+            "state" : "translated",
+            "value" : "顯示選單列圖示"
           }
         }
       }
@@ -15875,8 +15875,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Window Title in"
+            "state" : "translated",
+            "value" : "以下顯示視窗標題"
           }
         }
       }
@@ -16053,8 +16053,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Window Title in Previews"
+            "state" : "translated",
+            "value" : "在預覽中顯示視窗標題"
           }
         }
       }
@@ -16232,8 +16232,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Window Titles"
+            "state" : "translated",
+            "value" : "顯示視窗標題"
           }
         }
       }
@@ -16411,8 +16411,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Window Titles on Previews"
+            "state" : "translated",
+            "value" : "在預覽中顯示視窗標題"
           }
         }
       }
@@ -16591,8 +16591,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Simulate a click"
+            "state" : "translated",
+            "value" : "模擬點擊"
           }
         }
       }
@@ -16770,8 +16770,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Simulate a click (open the window)"
+            "state" : "translated",
+            "value" : "模擬點擊(開啟視窗)"
           }
         }
       }
@@ -16949,8 +16949,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Small"
+            "state" : "translated",
+            "value" : "小"
           }
         }
       }
@@ -17127,8 +17127,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Start Recording Keybind"
+            "state" : "translated",
+            "value" : "開始錄製快捷鍵"
           }
         }
       }
@@ -17300,14 +17300,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Subatomic"
+            "state" : "translated",
+            "value" : "子原子的"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Subatomic"
+            "state" : "translated",
+            "value" : "小"
           }
         }
       }
@@ -17484,8 +17484,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "The selected positions for Traffic Light Buttons and Window Title will overlap."
+            "state" : "translated",
+            "value" : "您所選的視窗控制按鈕位置和視窗標題位置會發生重疊。"
           }
         }
       }
@@ -17663,8 +17663,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Top Left"
+            "state" : "translated",
+            "value" : "左上角"
           }
         }
       }
@@ -17842,8 +17842,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Top Right"
+            "state" : "translated",
+            "value" : "右上角"
           }
         }
       }
@@ -18020,8 +18020,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Traffic Light Buttons Position"
+            "state" : "translated",
+            "value" : "視窗控制按鈕位置"
           }
         }
       }
@@ -18198,8 +18198,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Traffic Light Buttons Visibility"
+            "state" : "translated",
+            "value" : "視窗控制按鈕顯示狀態"
           }
         }
       }
@@ -18376,8 +18376,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Up to date"
+            "state" : "translated",
+            "value" : "最新"
           }
         }
       }
@@ -18554,8 +18554,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update available"
+            "state" : "translated",
+            "value" : "有可用更新"
           }
         }
       }
@@ -18732,8 +18732,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update settings"
+            "state" : "translated",
+            "value" : "更新設定"
           }
         }
       }
@@ -18911,8 +18911,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Updates"
+            "state" : "translated",
+            "value" : "更新"
           }
         }
       }
@@ -19089,8 +19089,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use default MacOS keybind ⌘ + ⇥"
+            "state" : "translated",
+            "value" : "使用預設的 macOS 快捷鍵 ⌘ + ⇥"
           }
         }
       }
@@ -19261,14 +19261,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use Uniform Image Preview Radius"
+            "state" : "translated",
+            "value" : "使用统一图像预览半径"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use Uniform Image Preview Radius"
+            "state" : "translated",
+            "value" : "圖片預覽使用一致的圓角邊框"
           }
         }
       }
@@ -19439,14 +19439,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version %@"
+            "state" : "translated",
+            "value" : "版本：%@"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version %@"
+            "state" : "translated",
+            "value" : "版本 %@"
           }
         }
       }
@@ -19617,14 +19617,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Want to see the app in your language?"
+            "state" : "translated",
+            "value" : "想要在您的语言中看到应用吗？"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Want to see the app in your language?"
+            "state" : "translated",
+            "value" : "想用您的語言來檢視這個應用程式嗎？"
           }
         }
       }
@@ -19795,14 +19795,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Want to support development?"
+            "state" : "translated",
+            "value" : "通过捐献来支持开发"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Want to support development?"
+            "state" : "translated",
+            "value" : "想要協助這個應用程式的開發嗎？"
           }
         }
       }
@@ -19973,14 +19973,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Welcome to DockDoor!"
+            "state" : "translated",
+            "value" : "欢迎使用 DockDoor ！"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Welcome to DockDoor!"
+            "state" : "translated",
+            "value" : "歡迎使用 DockDoor!"
           }
         }
       }
@@ -20152,14 +20152,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "What is this? A window for ANTS?"
+            "state" : "translated",
+            "value" : "这是什么？ANTS的窗口？"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "What is this? A window for ANTS?"
+            "state" : "translated",
+            "value" : "這是什麼？ 給螞蟻用的視窗嗎？"
           }
         }
       }
@@ -20331,14 +20331,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When hovering over the preview"
+            "state" : "translated",
+            "value" : "当在预览上悬停时"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When hovering over the preview"
+            "state" : "translated",
+            "value" : "當滑鼠移到預覽上時"
           }
         }
       }
@@ -20511,14 +20511,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When Showing Dock Tile Previews"
+            "state" : "translated",
+            "value" : "显示 Dock 磁盘预览"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When Showing Dock Tile Previews"
+            "state" : "translated",
+            "value" : "顯示 Dock 圖示預覽時"
           }
         }
       }
@@ -20691,14 +20691,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When Using Window Switcher"
+            "state" : "translated",
+            "value" : "使用窗口切换器时"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When Using Window Switcher"
+            "state" : "translated",
+            "value" : "使用視窗切換器時"
           }
         }
       }
@@ -20869,14 +20869,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Why we need permissions"
+            "state" : "translated",
+            "value" : "为什么我们需要权限"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Why we need permissions"
+            "state" : "translated",
+            "value" : "為什麼我們需要這些權限"
           }
         }
       }
@@ -21047,14 +21047,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Buffer"
+            "state" : "translated",
+            "value" : "窗口缓存"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Buffer"
+            "state" : "translated",
+            "value" : "視窗緩衝區"
           }
         }
       }
@@ -21226,14 +21226,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Cache Lifespan"
+            "state" : "translated",
+            "value" : "窗口缓存寿命"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Cache Lifespan"
+            "state" : "translated",
+            "value" : "視窗快取有效期限"
           }
         }
       }
@@ -21404,14 +21404,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Image Cache Lifespan"
+            "state" : "translated",
+            "value" : "窗口图像缓存寿命"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Image Cache Lifespan"
+            "state" : "translated",
+            "value" : "視窗圖片快取有效期限"
           }
         }
       }
@@ -21582,14 +21582,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Size"
+            "state" : "translated",
+            "value" : "窗口大小"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Size"
+            "state" : "translated",
+            "value" : "視窗大小"
           }
         }
       }
@@ -21761,14 +21761,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Switcher"
+            "state" : "translated",
+            "value" : "窗口切换器"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Switcher"
+            "state" : "translated",
+            "value" : "視窗切換功能"
           }
         }
       }
@@ -21940,14 +21940,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Switcher only"
+            "state" : "translated",
+            "value" : "仅窗口切换器"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Switcher only"
+            "state" : "translated",
+            "value" : "僅限視窗切換"
           }
         }
       }
@@ -22118,14 +22118,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Title Position"
+            "state" : "translated",
+            "value" : "窗口标题位置"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Title Position"
+            "state" : "translated",
+            "value" : "視窗標題位置"
           }
         }
       }
@@ -22296,14 +22296,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Title Visibility"
+            "state" : "translated",
+            "value" : "窗口标题可见性"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Title Visibility"
+            "state" : "translated",
+            "value" : "視窗標題顯示"
           }
         }
       }
@@ -22474,14 +22474,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Windows switching settings"
+            "state" : "translated",
+            "value" : "窗口切换设置"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Windows switching settings"
+            "state" : "translated",
+            "value" : "視窗切換設定"
           }
         }
       }
@@ -22652,14 +22652,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "You need to give DockDoor access to the accessibility API in order for it to function."
+            "state" : "translated",
+            "value" : "您需要给予DockDoor访问辅助API以使其能够运行。"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "You need to give DockDoor access to the accessibility API in order for it to function."
+            "state" : "translated",
+            "value" : "你需要允許 DockDoor 存取輔助功能才能正常運作。"
           }
         }
       }
