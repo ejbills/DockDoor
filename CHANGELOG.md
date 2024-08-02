@@ -23,6 +23,32 @@
   }
 </style>
 
+<a name="v1.1.5"></a>
+# [v1.1.5](https://github.com/ejbills/DockDoor/releases/tag/v1.1.5) - 02 Aug 2024
+
+# Changelog
+## Features
+- Introducing ability to track & navigate to windows from all applications across all spaces, along with support for window previews on minimized and hidden windows. [@hasansultan92](https://github.com/hasansultan92) & [@ejbills](https://github.com/ejbills) 
+- - Note: This is the initial rollout of this feature and things may be buggy. Please report any bugs you encounter. It works as follows: as you navigate, window states are tracked and stored across spaces, allowing support for windows in other spaces, along with tracking minimized and hidden windows (which are displayed in a faded-greyed out look in the window preview).
+- Restart the app when needed instead of just quitting [@ShlomoCode](https://github.com/ShlomoCode)
+- Open app settings by relaunch [@ShlomoCode](https://github.com/ShlomoCode)
+- Add ability to choose traffic light buttons position [@ShlomoCode](https://github.com/ShlomoCode)
+- Add quit button [@ShlomoCode](https://github.com/ShlomoCode)
+## Fixes
+- Disable fullscreen button in settings window [@ShlomoCode](https://github.com/ShlomoCode)
+- Use decimalFormatter in 'preview hover delay' setting [@ShlomoCode](https://github.com/ShlomoCode)
+## Chore
+- Sync localizations with Crowdin [@ejbills](https://github.com/ejbills)
+- Clearer wording in settings [@ShlomoCode](https://github.com/ShlomoCode)
+- GitHub issue template enforcement [@ejbills](https://github.com/ejbills)
+- Add manual run ability to stale issues action [@ejbills](https://github.com/ejbills)
+- Create pull request template [@ejbills](https://github.com/ejbills)
+- Add Homebrew installation instructions [@ejbills](https://github.com/ejbills)
+- Show copy button for brew command [@ShlomoCode](https://github.com/ShlomoCode)
+
+[Changes][v1.1.5]
+
+
 <a name="v1.1.4"></a>
 # [v1.1.4](https://github.com/ejbills/DockDoor/releases/tag/v1.1.4) - 16 Jul 2024
 
@@ -344,6 +370,7 @@ v1.0
 [Changes][releases]
 
 
+[v1.1.5]: https://github.com/ejbills/DockDoor/compare/v1.1.4...v1.1.5
 [v1.1.4]: https://github.com/ejbills/DockDoor/compare/v1.1.3...v1.1.4
 [v1.1.3]: https://github.com/ejbills/DockDoor/compare/v1.1.2...v1.1.3
 [v1.1.2]: https://github.com/ejbills/DockDoor/compare/v1.1.1...v1.1.2
