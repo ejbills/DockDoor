@@ -8,14 +8,15 @@ final class WindowsUtil {
     let filteredBundleIdentifiers: [String] = ["com.apple.notificationcenterui"] // filters widgets
     
     /// Captures the image of a given window.
-    static func getWindowImage(windowID: CGWindowID, bestResolution: Bool) -> CGImage {
+    static func getWindowImage(windowID: CGWindowID, bestResolution: Bool) -> CGImage? {
         CacheUtil.clearExpiredCache()
         
         if let cachedImage = CacheUtil.getCachedImage(for: windowID) {
             return cachedImage
         }
         
-        let image = windowID.screenshot(bestResolution: true)!
+        let image = windowID.screenshot(bestResolution: true)
+        guard let image = image else { return nil }
         
         CacheUtil.setCachedImage(for: windowID, image: image)
         
