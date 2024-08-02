@@ -57,45 +57,18 @@ struct WindowPreview: View {
 
     private func windowContent(isMinimized: Bool, isHidden: Bool, isSelected: Bool) -> some View {
         Group {
-            if isMinimized || isHidden {
-                let width = maxWindowDimension.x > 300 ? maxWindowDimension.x : 300
-                let labelText = isMinimized ? "Minimized" : "Hidden"
-
-                HStack(spacing: 16) {
-                    Image(systemName: "eye.slash.fill")
-                        .font(.system(size: 20))
-                        .foregroundColor(.secondary)
-
-                    Divider()
-
-                    VStack(alignment: .leading) {
-                        Text(labelText)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-
-                        TheMarquee(width: width - 100, secsBeforeLooping: 2, speedPtsPerSec: 30, nonMovingAlignment: .leading) {
-                            Text(windowInfo.windowName ?? "\(labelText) window")
-                                .font(.system(size: 12, weight: .medium))
-                                .foregroundStyle(.primary)
-                        }
-                    }
-                }
-                .padding(.horizontal, 8)
-                .padding()
-                .frame(width: width)
-                .frame(height: 60)
-                .overlay { if isSelected { fluidGradient().opacity(0.125) }}
-            } else if let cgImage = windowInfo.image {
-                let image = Image(decorative: cgImage, scale: 1.0).resizable().aspectRatio(contentMode: .fill)
-                image.overlay(!isSelected ? nil : fluidGradient().opacity(0.125).mask(image))
+            if let cgImage = windowInfo.image {
+                Image(decorative: cgImage, scale: 1.0)
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .markHidden(isHidden: isMinimized || isHidden)
+                    .overlay(isSelected ? fluidGradient().opacity(0.125) : nil)
             }
         }
-        .frame(width: isMinimized || isHidden ? nil : calculatedSize.width,
-               height: isMinimized || isHidden ? nil : calculatedSize.height,
-               alignment: .center)
+        .frame(width: calculatedSize.width, height: calculatedSize.height, alignment: .center)
         .frame(maxWidth: calculatedMaxDimensions.width, maxHeight: calculatedMaxDimensions.height)
     }
-
+    
     var body: some View {
         let isHighlightedInWindowSwitcher = (index == ScreenCenteredFloatingWindow.shared.currIndex && ScreenCenteredFloatingWindow.shared.windowSwitcherActive)
         let selected = isHoveringOverDockPeekPreview || isHighlightedInWindowSwitcher
@@ -185,9 +158,20 @@ struct WindowPreview: View {
                 }
                 
             case .previewFullSize:
-                if !windowInfo.isMinimized && !windowInfo.isHidden {
-                    // If the interval is 0, show the full window preview immediately
-                    if tapEquivalentInterval == 0 {
+                // If the interval is 0, show the full window preview immediately
+                if tapEquivalentInterval == 0 {
+                    DispatchQueue.main.async {
+                        SharedPreviewWindowCoordinator.shared.showWindow(
+                            appName: windowInfo.appName,
+                            windows: [windowInfo],
+                            mouseScreen: bestGuessMonitor,
+                            overrideDelay: true,
+                            centeredHoverWindowState: .fullWindowPreview
+                        )
+                    }
+                } else {
+                    // If the interval is greater than 0, set a timer to show the full window preview after the specified interval
+                    fullPreviewTimer = Timer.scheduledTimer(withTimeInterval: tapEquivalentInterval, repeats: false) { [self] _ in
                         DispatchQueue.main.async {
                             SharedPreviewWindowCoordinator.shared.showWindow(
                                 appName: windowInfo.appName,
@@ -197,22 +181,7 @@ struct WindowPreview: View {
                                 centeredHoverWindowState: .fullWindowPreview
                             )
                         }
-                    } else {
-                        // If the interval is greater than 0, set a timer to show the full window preview after the specified interval
-                        fullPreviewTimer = Timer.scheduledTimer(withTimeInterval: tapEquivalentInterval, repeats: false) { [self] _ in
-                            DispatchQueue.main.async {
-                                SharedPreviewWindowCoordinator.shared.showWindow(
-                                    appName: windowInfo.appName,
-                                    windows: [windowInfo],
-                                    mouseScreen: bestGuessMonitor,
-                                    overrideDelay: true,
-                                    centeredHoverWindowState: .fullWindowPreview
-                                )
-                            }
-                        }
                     }
-                } else {
-                    SharedPreviewWindowCoordinator.shared.hideFullPreviewWindow()
                 }
             }
         } else {
