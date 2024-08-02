@@ -582,13 +582,15 @@ final class WindowUtil {
         if result == .success, let windows = value as? [AXUIElement] {
             desktopSpaceWindowCacheManager.updateCache(bundleId: bundleID) { cachedWindows in
                 for window in windows {
-                    let isMinimized: Bool = getAXAttribute(element: window, attribute: kAXMinimizedAttribute as CFString) ?? false
-                    let windowName: String? = getAXAttribute(element: window, attribute: kAXTitleAttribute as CFString)
+                    var cgWindowId: CGWindowID = 0
+                    let windowIDStatus = _AXUIElementGetWindow(window, &cgWindowId)
                     
-                    if isMinimized || isParentAppHidden, let windowName = windowName {
+                    if windowIDStatus == .success {
+                        let isMinimized: Bool = getAXAttribute(element: window, attribute: kAXMinimizedAttribute as CFString) ?? false
+                        
                         cachedWindows = Set(cachedWindows.map { windowInfo in
                             var updatedWindow = windowInfo
-                            if windowInfo.windowName == windowName {
+                            if windowInfo.id == cgWindowId {
                                 updatedWindow.isMinimized = isMinimized
                                 updatedWindow.isHidden = isParentAppHidden
                             }
