@@ -23,18 +23,6 @@ final class DockObserver {
         setupSelectedDockItemObserver()
     }
     
-    static func getMousePosition() -> NSPoint {
-        guard let event = CGEvent(source: nil) else {
-            fatalError("Unable to get mouse event")
-        }
-        
-        let mouseLocation = event.location
-        
-        let mousePosition = NSPoint(x: mouseLocation.x, y: mouseLocation.y)
-        
-        return mousePosition
-    }
-    
     private func setupSelectedDockItemObserver() {
         guard let dockAppPID = NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.dock").first?.processIdentifier else {
             fatalError("Dock does found in running applications")
@@ -72,7 +60,6 @@ final class DockObserver {
                 isProcessing = false
             }
             
-            let currentMouseLocation = DockObserver.getMousePosition()
             if let currentAppUnderMouse = getCurrentAppUnderMouse() {
                 if currentAppUnderMouse != lastAppUnderMouse {
                     lastAppUnderMouse = currentAppUnderMouse
@@ -85,13 +72,12 @@ final class DockObserver {
                                 if appWindows.isEmpty {
                                     SharedPreviewWindowCoordinator.shared.hidePreviewWindow()
                                 } else {
-                                    let mouseScreen = DockObserver.screenContainMouse(currentMouseLocation) ?? NSScreen.main!
-                                    let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
+                                    let mouseScreen = DockObserver.screenContainMouse(NSEvent.mouseLocation) ?? NSScreen.main!
                                     // Show HoverWindow (using shared instance)
                                     SharedPreviewWindowCoordinator.shared.showPreviewWindow(
                                         appName: currentAppUnderMouse.localizedName!,
                                         windows: appWindows,
-                                        mouseLocation: convertedMouseLocation,
+                                        mouseLocation: NSEvent.mouseLocation,
                                         mouseScreen: mouseScreen,
                                         onWindowTap: { [weak self] in
                                             SharedPreviewWindowCoordinator.shared.hidePreviewWindow()
@@ -110,9 +96,8 @@ final class DockObserver {
             } else {
                 Task { @MainActor [weak self] in
                     guard let self = self else { return }
-                    let mouseScreen = DockObserver.screenContainMouse(currentMouseLocation) ?? NSScreen.main!
-                    let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
-                    if !SharedPreviewWindowCoordinator.shared.frame.contains(convertedMouseLocation) {
+                    let mouseScreen = DockObserver.screenContainMouse(NSEvent.mouseLocation) ?? NSScreen.main!
+                    if !SharedPreviewWindowCoordinator.shared.frame.contains(NSEvent.mouseLocation) {
                         self.lastAppUnderMouse = nil
                         SharedPreviewWindowCoordinator.shared.hidePreviewWindow()
                     }
@@ -237,37 +222,6 @@ final class DockObserver {
         }
         
         return primaryScreen
-    }
-    
-    static func nsPointFromCGPoint(_ point: CGPoint, forScreen: NSScreen?) -> NSPoint {
-        guard let screen = forScreen,
-              let primaryScreen = NSScreen.screens.first else {
-            return NSPoint(x: point.x, y: point.y)
-        }
-        
-        let (_, offsetTop) = computeOffsets(for: screen, primaryScreen: primaryScreen)
-        
-        let y: CGFloat
-        if screen == primaryScreen {
-            y = screen.frame.size.height - point.y
-        } else {
-            let screenBottomOffset = primaryScreen.frame.size.height - (screen.frame.size.height + offsetTop)
-            y = screen.frame.size.height + screenBottomOffset - (point.y - offsetTop)
-        }
-        
-        return NSPoint(x: point.x, y: y)
-    }
-    
-    static func cgPointFromNSPoint(_ point: CGPoint, forScreen: NSScreen?) -> CGPoint {
-        guard let screen = forScreen,
-              let primaryScreen = NSScreen.screens.first else {
-            return CGPoint(x: point.x, y: point.y)
-        }
-        
-        let (_, offsetTop) = computeOffsets(for: screen, primaryScreen: primaryScreen)
-        let menuScreenHeight = screen.frame.maxY
-        
-        return CGPoint(x: point.x, y: menuScreenHeight - point.y + offsetTop)
     }
     
     private static func computeOffsets(for screen: NSScreen, primaryScreen: NSScreen) -> (CGFloat, CGFloat) {
