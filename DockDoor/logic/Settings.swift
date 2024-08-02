@@ -1,10 +1,3 @@
-//
-//  consts.swift
-//  DockDoor
-//
-//  Created by Ethan Bills on 6/6/24.
-//
-
 import Cocoa
 import Defaults
 import Foundation

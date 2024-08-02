@@ -47,7 +47,7 @@ final class SharedPreviewWindowCoordinator: NSWindow {
     static let shared = SharedPreviewWindowCoordinator()
     
     private var appName: String = ""
-    private var windows: [WindowInfo] = []
+    private var windows: [Window] = []
     private var onWindowTap: (() -> Void)?
     private var hostingView: NSHostingView<WindowPreviewHoverContainer>?
     private var fullPreviewWindow: NSWindow?
@@ -79,7 +79,7 @@ final class SharedPreviewWindowCoordinator: NSWindow {
     }
     
     // Hide the window and reset its state
-    func hideWindow() {
+    func hidePreviewWindow() {
         DispatchQueue.main.async { [weak self] in
             guard let self = self, self.isVisible else { return }
             
@@ -121,8 +121,8 @@ final class SharedPreviewWindowCoordinator: NSWindow {
         previousHoverWindowOrigin = position
     }
 
-    // Show full preview window for a given WindowInfo
-    private func showFullPreviewWindow(for windowInfo: WindowInfo, on screen: NSScreen) {
+    // Show full preview window for a given window
+    private func showFullPreviewWindow(for window: Window, on screen: NSScreen) {
         if fullPreviewWindow == nil {
             fullPreviewWindow = NSWindow(contentRect: .zero, styleMask: .borderless, backing: .buffered, defer: false)
             fullPreviewWindow?.level = .floating
@@ -137,7 +137,7 @@ final class SharedPreviewWindowCoordinator: NSWindow {
             height: screen.visibleFrame.height - padding * 2
         )
         
-        let previewView = FullSizePreviewView(windowInfo: windowInfo, maxSize: maxSize)
+        let previewView = FullSizePreviewView(window: window, maxSize: maxSize)
         let hostingView = NSHostingView(rootView: previewView)
         fullPreviewWindow?.contentView = hostingView
         
@@ -219,7 +219,7 @@ final class SharedPreviewWindowCoordinator: NSWindow {
     }
     
     // Show window with debounce logic
-    func showWindow(appName: String, windows: [WindowInfo], mouseLocation: CGPoint? = nil, mouseScreen: NSScreen? = nil,
+    func showPreviewWindow(appName: String, windows: [Window], mouseLocation: CGPoint? = nil, mouseScreen: NSScreen? = nil,
                     overrideDelay: Bool = false, centeredHoverWindowState: ScreenCenteredFloatingWindow.WindowState? = nil,
                     onWindowTap: (() -> Void)? = nil) {
         let now = Date()
@@ -253,7 +253,7 @@ final class SharedPreviewWindowCoordinator: NSWindow {
     }
     
     // Perform the actual window showing
-    private func performShowWindow(appName: String, windows: [WindowInfo], mouseLocation: CGPoint?, mouseScreen: NSScreen?,
+    private func performShowWindow(appName: String, windows: [Window], mouseLocation: CGPoint?, mouseScreen: NSScreen?,
                                    centeredHoverWindowState: ScreenCenteredFloatingWindow.WindowState? = nil,
                                    onWindowTap: (() -> Void)?) {
         let shouldCenterOnScreen = centeredHoverWindowState != .none
@@ -268,8 +268,8 @@ final class SharedPreviewWindowCoordinator: NSWindow {
             hideFullPreviewWindow() // clean up any lingering fullscreen previews before presenting a new one
 
             // If in full window preview mode, show the full preview window and return early
-            if centeredHoverWindowState == .fullWindowPreview, let windowInfo = windows.first {
-                showFullPreviewWindow(for: windowInfo, on: screen)
+            if centeredHoverWindowState == .fullWindowPreview, let window = windows.first {
+                showFullPreviewWindow(for: window, on: screen)
             } else {
                 self.appName = appName
                 self.windows = windows
@@ -286,7 +286,7 @@ final class SharedPreviewWindowCoordinator: NSWindow {
     }
     
     // Update or create the hosting view
-    private func updateHostingView(appName: String, windows: [WindowInfo], onWindowTap: (() -> Void)?, screen: NSScreen) {
+    private func updateHostingView(appName: String, windows: [Window], onWindowTap: (() -> Void)?, screen: NSScreen) {
         let hoverView = WindowPreviewHoverContainer(appName: appName, windows: windows, onWindowTap: onWindowTap,
                                                     dockPosition: DockUtils.shared.getDockPosition(), bestGuessMonitor: screen)
         
@@ -312,7 +312,7 @@ final class SharedPreviewWindowCoordinator: NSWindow {
     func selectAndBringToFrontCurrentWindow() {
         guard !windows.isEmpty else { return }
         let selectedWindow = windows[ScreenCenteredFloatingWindow.shared.currIndex]
-        WindowUtil.bringWindowToFront(windowInfo: selectedWindow)
-        hideWindow()
+        selectedWindow.focus()
+        hidePreviewWindow()
     }
 }

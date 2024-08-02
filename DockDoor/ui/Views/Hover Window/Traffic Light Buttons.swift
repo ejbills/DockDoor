@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct TrafficLightButtons: View {
-    let windowInfo: WindowInfo
+    let window: Window
     let displayMode: TrafficLightButtonsVisibility
     let hoveringOverParentWindow: Bool
     let onAction: () -> Void
@@ -65,13 +65,13 @@ struct TrafficLightButtons: View {
     private func performAction(_ action: WindowAction) {
         switch action {
         case .quit:
-            WindowUtil.quitApp(windowInfo: windowInfo, force: NSEvent.modifierFlags.contains(.option))
+            window.quitApp(force: NSEvent.modifierFlags.contains(.option))
         case .close:
-            WindowUtil.closeWindow(closeButton: windowInfo.closeButton!)
+            window.close()
         case .minimize:
-            WindowUtil.toggleMinimize(windowInfo: windowInfo)
+            window.toggleMinimize()
         case .toggleFullScreen:
-            WindowUtil.toggleFullScreen(windowInfo: windowInfo)
+            window.toggleFullScreen()
         }
     }
     
