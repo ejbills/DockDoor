@@ -91,8 +91,7 @@ struct WindowPreviewHoverContainer: View {
         .onHover { isHovering in
 //        .whenHovered { isHovering in
             let currentDockItem = DockObserver.shared.gethoveredDockItem()
-            let currentMouseLocation = DockObserver.getMousePosition()
-            let dockIconFrame = DockObserver.shared.getDockIconFrameAtLocation(currentMouseLocation)
+            let dockIconFrame = DockObserver.shared.getDockIconFrameAtLocation(NSEvent.mouseLocation)
             print("isHovering: \(isHovering), Item: \(currentDockItem), dockIconFrame: \(dockIconFrame)")
             if !isHovering && dockIconFrame == nil { // TODO: instead, check if mouse inside the dock item element
                 SharedPreviewWindowCoordinator.shared.hidePreviewWindow()
