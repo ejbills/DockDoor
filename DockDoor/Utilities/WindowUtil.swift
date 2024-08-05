@@ -21,6 +21,7 @@ struct WindowInfo: Identifiable, Hashable {
     var windowName: String?
     var image: CGImage?
     var axElement: AXUIElement
+    var appAxElement: AXUIElement
     var closeButton: AXUIElement?
     var isMinimized: Bool
     var isHidden: Bool
@@ -142,59 +143,38 @@ final class WindowUtil {
         return nil
     }
     
-    static func createAXUIElement(for pid: pid_t) -> AXUIElement {
-        return AXUIElementCreateApplication(pid)
-    }
-    
-    static func getAXWindows(for appRef: AXUIElement) -> [AXUIElement]? {
-        var windowList: AnyObject?
-        let result = AXUIElementCopyAttributeValue(appRef, kAXWindowsAttribute as CFString, &windowList)
-        return result == .success ? windowList as? [AXUIElement] : nil
-    }
-    
-    static func isElementValid(_ element: AXUIElement) -> Bool {
-        var role: AnyObject?
-        let result = AXUIElementCopyAttributeValue(element, kAXRoleAttribute as CFString, &role)
-        return result == .success
+    static func isValidElement(_ element: AXUIElement) -> Bool {
+        do {
+            let _ = try element.role()
+            return true
+        } catch {
+            return false
+        }
     }
     
     static func findWindow(matchingWindow window: SCWindow, in axWindows: [AXUIElement]) -> AXUIElement? {
         for axWindow in axWindows {
-            var cgWindowId: CGWindowID = 0
-            let windowIDStatus = _AXUIElementGetWindow(axWindow, &cgWindowId)
-            if windowIDStatus == .success && window.windowID == cgWindowId {
+            if let cgWindowId = try? axWindow.cgWindowId(), window.windowID == cgWindowId {
+                return axWindow
+            }
+
+            // Fallback metohd
+            // TODO: May never be needed
+            
+            if let windowTitle = window.title, let axTitle = try? axWindow.title(), isFuzzyMatch(windowTitle: windowTitle, axTitleString: axTitle) {
                 return axWindow
             }
             
-            var axTitle: CFTypeRef?
-            AXUIElementCopyAttributeValue(axWindow, kAXTitleAttribute as CFString, &axTitle)
-            let axTitleString = (axTitle as? String) ?? ""
-            
-            var axPosition: CFTypeRef?
-            AXUIElementCopyAttributeValue(axWindow, kAXPositionAttribute as CFString, &axPosition)
-            let axPositionValue = axPosition as? CGPoint
-            
-            var axSize: CFTypeRef?
-            AXUIElementCopyAttributeValue(axWindow, kAXSizeAttribute as CFString, &axSize)
-            let axSizeValue = axSize as? CGSize
-            
-            if let windowTitle = window.title, isFuzzyMatch(windowTitle: windowTitle, axTitleString: axTitleString) {
-                return axWindow
-            }
-            
-            if let axPositionValue = axPositionValue,
-               let axSizeValue = axSizeValue,
-               axPositionValue != .zero,
-               axSizeValue != .zero {
+            if let axPosition = try? axWindow.position(), let axSize = try? axWindow.size(), axPosition != .zero, axSize != .zero {
                 
                 let positionThreshold: CGFloat = 10
                 let sizeThreshold: CGFloat = 10
                 
-                let positionMatch = abs(axPositionValue.x - window.frame.origin.x) <= positionThreshold &&
-                abs(axPositionValue.y - window.frame.origin.y) <= positionThreshold
+                let positionMatch = abs(axPosition.x - window.frame.origin.x) <= positionThreshold &&
+                abs(axPosition.y - window.frame.origin.y) <= positionThreshold
                 
-                let sizeMatch = abs(axSizeValue.width - window.frame.size.width) <= sizeThreshold &&
-                abs(axSizeValue.height - window.frame.size.height) <= sizeThreshold
+                let sizeMatch = abs(axSize.width - window.frame.size.width) <= sizeThreshold &&
+                abs(axSize.height - window.frame.size.height) <= sizeThreshold
                 
                 if positionMatch && sizeMatch {
                     return axWindow
@@ -213,17 +193,6 @@ final class WindowUtil {
         let matchPercentage = Double(matchingWords.count) / Double(windowTitleWords.count)
         
         return matchPercentage >= 0.90 || matchPercentage.isNaN || axTitleString.lowercased().contains(windowTitle.lowercased())
-    }
-    
-    static func getCloseButton(for windowRef: AXUIElement) -> AXUIElement? {
-        var closeButton: AnyObject?
-        let result = AXUIElementCopyAttributeValue(windowRef, kAXCloseButtonAttribute as CFString, &closeButton)
-        
-        guard result == .success, let closeButtonElement = closeButton else {
-            return nil
-        }
-        
-        return (closeButtonElement as! AXUIElement)
     }
     
     static func getRunningApplication(named applicationName: String) -> NSRunningApplication? {
@@ -245,33 +214,30 @@ final class WindowUtil {
                 app.unhide()
             }
             
-            let minimizeResult = AXUIElementSetAttributeValue(windowInfo.axElement, kAXMinimizedAttribute as CFString, kCFBooleanFalse)
-            
-            if minimizeResult != .success {
-                print("Error un-minimizing window: \(minimizeResult.rawValue)")
-            } else {
+            do {
+                try windowInfo.axElement.setAttribute(kAXMinimizedAttribute, false)
                 NSRunningApplication(processIdentifier: windowInfo.pid)?.activate()
                 focusOnSpecificWindow(windowInfo: windowInfo)
+            } catch {
+                print("Error un-minimizing window")
             }
         } else {
-            let minimizeResult = AXUIElementSetAttributeValue(windowInfo.axElement, kAXMinimizedAttribute as CFString, kCFBooleanTrue)
-            
-            if minimizeResult != .success {
-                print("Error minimizing window: \(minimizeResult.rawValue)")
+            do {
+                try windowInfo.axElement.setAttribute(kAXMinimizedAttribute, true)
+            } catch {
+                print("Error minimizing window")
             }
         }
         updateWindowDateTime(windowInfo)
     }
     
     static func toggleHidden(windowInfo: WindowInfo) {
-        let appElement = AXUIElementCreateApplication(windowInfo.pid)
-        
         let newHiddenState = !windowInfo.isHidden
         
-        let setResult = AXUIElementSetAttributeValue(appElement, kAXHiddenAttribute as CFString, newHiddenState as CFTypeRef)
-        
-        if setResult != .success {
-            print("Error toggling hidden state of application: \(setResult.rawValue)")
+        do {
+            try windowInfo.appAxElement.setAttribute(kAXHiddenAttribute, newHiddenState)
+        } catch {
+            print("Error toggling hidden state of application")
             return
         }
         
@@ -283,21 +249,15 @@ final class WindowUtil {
     }
     
     static func focusOnSpecificWindow(windowInfo: WindowInfo) {
-        let appElement = AXUIElementCreateApplication(windowInfo.pid)
-        var windowsRef: CFTypeRef?
-        let result = AXUIElementCopyAttributeValue(appElement, kAXWindowsAttribute as CFString, &windowsRef)
-        
-        guard result == .success, let windows = windowsRef as? [AXUIElement] else {
+        guard let windows = try? windowInfo.appAxElement.windows() else {
             print("Failed to get windows for the application")
             return
         }
         
         for window in windows {
-            var titleRef: CFTypeRef?
-            AXUIElementCopyAttributeValue(window, kAXTitleAttribute as CFString, &titleRef)
-            if let title = titleRef as? String, isFuzzyMatch(windowTitle: windowInfo.windowName ?? "", axTitleString: title) {
-                AXUIElementPerformAction(window, kAXRaiseAction as CFString)
-                AXUIElementSetAttributeValue(window, kAXFocusedAttribute as CFString, kCFBooleanTrue)
+            if let title = try? window.title(), isFuzzyMatch(windowTitle: windowInfo.windowName ?? "", axTitleString: title) {
+                try? window.performAction(kAXRaiseAction)
+                try? window.setAttribute(kAXFocusedAttribute, true)
                 return
             }
         }
@@ -306,33 +266,39 @@ final class WindowUtil {
     }
     
     static func toggleFullScreen(windowInfo: WindowInfo) {
-        let kAXFullscreenAttribute = "AXFullScreen" as CFString
-        var isCurrentlyInFullScreen: CFTypeRef?
-        
-        let currentState = AXUIElementCopyAttributeValue(windowInfo.axElement, kAXFullscreenAttribute, &isCurrentlyInFullScreen)
-        if currentState == .success {
-            if let isFullScreen = isCurrentlyInFullScreen as? Bool {
-                AXUIElementSetAttributeValue(windowInfo.axElement, kAXFullscreenAttribute, !isFullScreen as CFBoolean)
+        if let isCurrentlyInFullScreen = try? windowInfo.axElement.isFullscreen() {
+            do {
+                try windowInfo.axElement.setAttribute(kAXFullscreenAttribute, !isCurrentlyInFullScreen)
+            } catch {
+                print("Fialed to toggle full screen")
             }
+        } else {
+            print("Failed to determine current full screen state")
         }
     }
     
     static func bringWindowToFront(windowInfo: WindowInfo) {
-        let raiseResult = AXUIElementPerformAction(windowInfo.axElement, kAXRaiseAction as CFString)
-        let focusResult = AXUIElementSetAttributeValue(windowInfo.axElement, kAXFocusedAttribute as CFString, kCFBooleanTrue)
-        AXUIElementSetAttributeValue(windowInfo.axElement, kAXFrontmostAttribute as CFString, kCFBooleanTrue)
-        let activateResult = NSRunningApplication(processIdentifier: windowInfo.pid)?.activate()
-        updateWindowDateTime(windowInfo)
-        
-        if activateResult != true || raiseResult != .success || focusResult != .success {
-            let fallbackActivateResult = NSRunningApplication(processIdentifier: windowInfo.pid)?.activate(options: [.activateAllWindows])
-            let fallbackResult = AXUIElementSetAttributeValue(windowInfo.axElement, kAXFrontmostAttribute as CFString, kCFBooleanTrue)
-            
-            if fallbackActivateResult != true || fallbackResult != .success {
-                removeWindowFromDesktopSpaceCache(with: windowInfo.id, in: windowInfo.bundleID)
-                print("Failed to bring window to front with fallback attempts.")
+        do {
+            try windowInfo.axElement.performAction(kAXRaiseAction)
+            try windowInfo.axElement.setAttribute(kAXFocusedAttribute, true)
+            try? windowInfo.axElement.setAttribute(kAXFrontmostAttribute, true)
+            if let application = NSRunningApplication(processIdentifier: windowInfo.pid) {
+                if !application.activate(options: [.activateAllWindows]) {
+                    throw NSError(domain: "FailedToActivate", code: 1, userInfo: [NSLocalizedDescriptionKey: "Failed to activate application with PID \(windowInfo.pid)"])
+                }
+            } else {
+                throw NSError(domain: "ApplicationNotFound", code: 2, userInfo: [NSLocalizedDescriptionKey: "No running application found with PID \(windowInfo.pid)"])
             }
+            
+            updateWindowDateTime(windowInfo)
+        } catch {
+            guard NSRunningApplication(processIdentifier: windowInfo.pid)?.activate(options: [.activateAllWindows]) == true, (try? windowInfo.axElement.setAttribute(kAXFrontmostAttribute, true)) != nil else {
+                print("Failed to bring window to front with fallback attempts.")
+                return
+            }
+            
         }
+        removeWindowFromDesktopSpaceCache(with: windowInfo.id, in: windowInfo.bundleID)
     }
     
     static func updateWindowDateTime(_ windowInfo: WindowInfo) {
@@ -352,16 +318,10 @@ final class WindowUtil {
             if windowSet.isEmpty {
                 return
             }
-            let application = createAXUIElement(for: pid)
-            var value: AnyObject?
-            let result = AXUIElementCopyAttributeValue(application, kAXWindowsAttribute as CFString, &value)
-            if result == .success, let windows = value as? [AXUIElement] {
+            let appElement = AXUIElementCreateApplication(pid)
+            if let windows = try? appElement.windows() {
                 for window in windows {
-                    var cgWindowId: CGWindowID = 0
-                    let windowIDStatus = _AXUIElementGetWindow(window, &cgWindowId)
-                    if windowIDStatus == .success,
-                       let index = windowSet.firstIndex(where: { $0.id == cgWindowId })
-                    {
+                    if let cgWindowId = try? window.cgWindowId(), let index = windowSet.firstIndex(where: { $0.id == cgWindowId }) {
                         var updatedWindow = windowSet[index]
                         updatedWindow.lastUsed = Date()
                         windowSet.remove(at: index)
@@ -374,16 +334,16 @@ final class WindowUtil {
     }
     
     static func closeWindow(windowInfo: WindowInfo) {
-        guard let closeButton = windowInfo.closeButton else {
+        guard windowInfo.closeButton != nil else {
             print("Error: closeButton is nil.")
             return
         }
         
-        let closeResult = AXUIElementPerformAction(closeButton, kAXPressAction as CFString)
-        removeWindowFromDesktopSpaceCache(with: windowInfo.id, in: windowInfo.bundleID)
-        
-        if closeResult != .success {
-            print("Error closing window: \(closeResult.rawValue)")
+        do {
+            try windowInfo.closeButton?.performAction(kAXPressAction)
+            removeWindowFromDesktopSpaceCache(with: windowInfo.id, in: windowInfo.bundleID)
+        } catch {
+            print("Error closing window")
             return
         }
     }
@@ -401,12 +361,6 @@ final class WindowUtil {
         } else {
             app.terminate()
         }
-    }
-    
-    static func getAXAttribute<T>(element: AXUIElement, attribute: CFString) -> T? {
-        var value: CFTypeRef?
-        let result = AXUIElementCopyAttributeValue(element, attribute, &value)
-        return result == .success ? value as? T : nil
     }
     
     // MARK: - Active Window Handling
@@ -495,9 +449,9 @@ final class WindowUtil {
         }
         
         let pid = owningApplication.processID
-        let appRef = createAXUIElement(for: pid)
+        let appElement = AXUIElementCreateApplication(pid)
         
-        guard let axWindows = getAXWindows(for: appRef), !axWindows.isEmpty else {
+        guard let axWindows = try? appElement.windows(), !axWindows.isEmpty else {
             return nil
         }
         
@@ -505,7 +459,7 @@ final class WindowUtil {
             return nil
         }
         
-        let closeButton = getCloseButton(for: windowRef)
+        let closeButton = try? windowRef.closeButton()
         
         var windowInfo = WindowInfo(id: windowID,
                                     window: window,
@@ -515,10 +469,12 @@ final class WindowUtil {
                                     windowName: window.title,
                                     image: nil,
                                     axElement: windowRef,
+                                    appAxElement: AXUIElementCreateApplication(pid),
                                     closeButton: closeButton,
                                     isMinimized: false,
                                     isHidden: false,
-                                    lastUsed: Date())
+                                    lastUsed: Date()
+        )
         
         do {
             windowInfo.image = try await captureWindowImage(window: window)
@@ -565,7 +521,7 @@ final class WindowUtil {
                     return
                 }
                 for window in existingWindowsSet {
-                    if !isElementValid(window.axElement) {
+                    if !isValidElement(window.axElement) {
                         desktopSpaceWindowCacheManager.removeFromCache(bundleId: window.bundleID, windowId: window.id)
                         return
                     }
@@ -576,18 +532,12 @@ final class WindowUtil {
     
     static func updateStatusOfWindowCache(pid: pid_t, bundleID: String, isParentAppHidden: Bool) {
         let appElement = AXUIElementCreateApplication(pid)
-        var value: AnyObject?
-        let result = AXUIElementCopyAttributeValue(appElement, kAXWindowsAttribute as CFString, &value)
-        
-        if result == .success, let windows = value as? [AXUIElement] {
+        if let windows = try? appElement.windows() {
             desktopSpaceWindowCacheManager.updateCache(bundleId: bundleID) { cachedWindows in
                 for window in windows {
-                    var cgWindowId: CGWindowID = 0
-                    let windowIDStatus = _AXUIElementGetWindow(window, &cgWindowId)
-                    
-                    if windowIDStatus == .success {
-                        let isMinimized: Bool = getAXAttribute(element: window, attribute: kAXMinimizedAttribute as CFString) ?? false
-                        
+                    if let cgWindowId = try? window.cgWindowId() {
+                        let isMinimized: Bool = (try? window.isMinimized()) ?? false
+
                         cachedWindows = Set(cachedWindows.map { windowInfo in
                             var updatedWindow = windowInfo
                             if windowInfo.id == cgWindowId {
