@@ -141,7 +141,7 @@ func axObserverCallback(observer: AXObserver, element: AXUIElement, notification
                 WindowManipulationObservers.debounceWorkItem?.cancel()
                 WindowManipulationObservers.debounceWorkItem = DispatchWorkItem {
                     WindowUtil.updateWindowCache(for: app.bundleIdentifier ?? "") { windowSet in
-                        windowSet = windowSet.filter { WindowUtil.isElementValid($0.axElement) }
+                        windowSet = windowSet.filter { WindowUtil.isValidElement($0.axElement) }
                     }
                     WindowManipulationObservers.trackedElements.remove(element)
                     print("Window destroyed for app: \(app.localizedName ?? "Unknown")")
@@ -162,38 +162,4 @@ func axObserverCallback(observer: AXObserver, element: AXUIElement, notification
             }
         }
     }
-}
-
-func printTitle(of element: AXUIElement) {
-    var title: AnyObject?
-    let result = AXUIElementCopyAttributeValue(element, kAXTitleAttribute as CFString, &title)
-    
-    if result == .success, let titleString = title as? String {
-        print("Title: \(titleString)")
-    } else {
-        print("Unable to retrieve title")
-    }
-}
-
-enum AxError: Error {
-    case runtimeError
-}
-
-func axCallWhichCanThrow<T>(_ result: AXError, _ successValue: inout T) throws -> T? {
-    switch result {
-    case .success:
-        print(successValue)
-        return successValue
-    case .cannotComplete:
-        print("error")
-        throw AxError.runtimeError
-    default:
-        return nil
-    }
-}
-
-func cgWindowId(appElement: AXUIElement) throws -> CGWindowID? {
-    var id: CGWindowID = 0
-    let result = _AXUIElementGetWindow(appElement, &id)
-    return try axCallWhichCanThrow(result, &id)
 }
