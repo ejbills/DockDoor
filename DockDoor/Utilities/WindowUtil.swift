@@ -283,7 +283,7 @@ final class WindowUtil {
             try windowInfo.axElement.setAttribute(kAXFocusedAttribute, true)
             try? windowInfo.axElement.setAttribute(kAXFrontmostAttribute, true)
             if let application = NSRunningApplication(processIdentifier: windowInfo.pid) {
-                if !application.activate(options: [.activateAllWindows]) {
+                if !application.activate() {
                     throw NSError(domain: "FailedToActivate", code: 1, userInfo: [NSLocalizedDescriptionKey: "Failed to activate application with PID \(windowInfo.pid)"])
                 }
             } else {
@@ -292,13 +292,11 @@ final class WindowUtil {
             
             updateWindowDateTime(windowInfo)
         } catch {
-            guard NSRunningApplication(processIdentifier: windowInfo.pid)?.activate(options: [.activateAllWindows]) == true, (try? windowInfo.axElement.setAttribute(kAXFrontmostAttribute, true)) != nil else {
+            if NSRunningApplication(processIdentifier: windowInfo.pid)?.activate(options: [.activateAllWindows]) != true || (try? windowInfo.axElement.setAttribute(kAXFrontmostAttribute, true)) == nil {
                 print("Failed to bring window to front with fallback attempts.")
-                return
-            }
-            
+                removeWindowFromDesktopSpaceCache(with: windowInfo.id, in: windowInfo.bundleID)
+            } 
         }
-        removeWindowFromDesktopSpaceCache(with: windowInfo.id, in: windowInfo.bundleID)
     }
     
     static func updateWindowDateTime(_ windowInfo: WindowInfo) {
