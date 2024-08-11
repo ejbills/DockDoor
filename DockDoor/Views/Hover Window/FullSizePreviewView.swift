@@ -5,15 +5,15 @@
 //  Created by Ethan Bills on 7/11/24.
 //
 
-import SwiftUI
 import Defaults
+import SwiftUI
 
 struct FullSizePreviewView: View {
     let windowInfo: WindowInfo
     let maxSize: CGSize
-    
+
     @Default(.uniformCardRadius) var uniformCardRadius
-    
+
     var body: some View {
         VStack(alignment: .center) {
             Group {

@@ -20,7 +20,7 @@ extension Settings.PaneIdentifier {
 let GeneralSettingsViewController: () -> SettingsPane = {
     let paneView = Settings.Pane(
         identifier: .general,
-        title: String(localized:"General", comment: "Settings tab title"),
+        title: String(localized: "General", comment: "Settings tab title"),
         toolbarIcon: NSImage(systemSymbolName: "gearshape.fill", accessibilityDescription: String(localized: "General settings"))!
     ) {
         MainSettingsView()
@@ -32,7 +32,7 @@ let GeneralSettingsViewController: () -> SettingsPane = {
 let AppearanceSettingsViewController: () -> SettingsPane = {
     let paneView = Settings.Pane(
         identifier: .appearance,
-        title: String(localized:"Appearance", comment: "Settings Tab"),
+        title: String(localized: "Appearance", comment: "Settings Tab"),
         toolbarIcon: NSImage(systemSymbolName: "wand.and.stars.inverse", accessibilityDescription: String(localized: "Appearance settings"))!
     ) {
         AppearanceSettingsView()
@@ -56,7 +56,7 @@ let WindowSwitcherSettingsViewController: () -> SettingsPane = {
 let PermissionsSettingsViewController: () -> SettingsPane = {
     let paneView = Settings.Pane(
         identifier: .permissions,
-        title: String(localized:"Permissions", comment: "Settings tab title"),
+        title: String(localized: "Permissions", comment: "Settings tab title"),
         toolbarIcon: NSImage(systemSymbolName: "lock.shield", accessibilityDescription: String(localized: "Permissions settings"))!
     ) {
         PermissionsSettingsView()
@@ -68,7 +68,7 @@ let PermissionsSettingsViewController: () -> SettingsPane = {
 func UpdatesSettingsViewController(updater: SPUUpdater) -> SettingsPane {
     let paneView = Settings.Pane(
         identifier: .updates,
-        title: String(localized:"Updates", comment: "Settings tab title"),
+        title: String(localized: "Updates", comment: "Settings tab title"),
         toolbarIcon: NSImage(systemSymbolName: "arrow.triangle.2.circlepath", accessibilityDescription: String(localized: "Update settings"))!
     ) {
         UpdateSettingsView(updater: updater)

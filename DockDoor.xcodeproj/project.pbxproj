@@ -245,6 +245,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = BB157B742C0E31CF00997315 /* Build configuration list for PBXNativeTarget "DockDoor" */;
 			buildPhases = (
+				054B715D2C69264800E662F3 /* Run Script */,
 				BB157B612C0E31CE00997315 /* Sources */,
 				BB157B622C0E31CE00997315 /* Frameworks */,
 				BB157B632C0E31CE00997315 /* Resources */,
@@ -321,6 +322,28 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		054B715D2C69264800E662F3 /* Run Script */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Run Script";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cd BuildTools\nSDKROOT=(xcrun --sdk macosx --show-sdk-path)\n#swift package update #Uncomment this line temporarily to update the version used to the latest matching your BuildTools/Package.swift file\nswift run -c release swiftformat \"$SRCROOT\" --swiftversion 5.0\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		BB157B612C0E31CE00997315 /* Sources */ = {
@@ -503,6 +526,7 @@
 				DEVELOPMENT_TEAM = 2Q775S63Q3;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DockDoor/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = DockDoor;
@@ -535,6 +559,7 @@
 				DEVELOPMENT_TEAM = 2Q775S63Q3;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DockDoor/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = DockDoor;

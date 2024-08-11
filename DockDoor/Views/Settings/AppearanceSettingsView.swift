@@ -5,9 +5,9 @@
 //  Created by ShlomoCode on 09/07/2024.
 //
 
-import SwiftUI
 import Defaults
 import LaunchAtLogin
+import SwiftUI
 
 struct AppearanceSettingsView: View {
     @Default(.showAnimations) var showAnimations
@@ -20,17 +20,17 @@ struct AppearanceSettingsView: View {
     @Default(.windowTitlePosition) var windowTitlePosition
     @Default(.trafficLightButtonsVisibility) var trafficLightButtonsVisibility
     @Default(.trafficLightButtonsPosition) var trafficLightButtonsPosition
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             Toggle(isOn: $showAnimations, label: {
                 Text("Enable Hover Window Sliding Animation")
             })
-            
+
             Toggle(isOn: $uniformCardRadius, label: {
                 Text("Use Uniform Image Preview Radius")
             })
-            
+
             Picker("Traffic Light Buttons Visibility", selection: $trafficLightButtonsVisibility) {
                 ForEach(TrafficLightButtonsVisibility.allCases, id: \.self) { visibility in
                     Text(visibility.localizedName)
@@ -40,7 +40,7 @@ struct AppearanceSettingsView: View {
             .pickerStyle(MenuPickerStyle())
             .scaledToFit()
             .layoutPriority(1)
-            
+
             Picker("Traffic Light Buttons Position", selection: $trafficLightButtonsPosition) {
                 ForEach(TrafficLightButtonsPosition.allCases, id: \.self) { position in
                     Text(position.localizedName)
@@ -63,13 +63,13 @@ struct AppearanceSettingsView: View {
             .pickerStyle(SegmentedPickerStyle())
             .scaledToFit()
             .layoutPriority(1)
-            
+
             Divider()
-            
+
             Toggle(isOn: $showAppName) {
                 Text("Show App Name in Dock Previews")
             }
-            
+
             Picker(String(localized: "App Name Style"), selection: $appNameStyle) {
                 ForEach(AppNameStyle.allCases, id: \.self) { style in
                     Text(style.localizedName)
@@ -80,13 +80,13 @@ struct AppearanceSettingsView: View {
             .scaledToFit()
             .layoutPriority(1)
             .disabled(!showAppName)
-            
+
             Divider()
-            
+
             Toggle(isOn: $showWindowTitle) {
                 Text("Show Window Title in Previews")
             }
-            
+
             Group {
                 Picker("Show Window Title in", selection: $windowTitleDisplayCondition) {
                     ForEach(WindowTitleDisplayCondition.allCases, id: \.self) { condtion in
@@ -102,7 +102,7 @@ struct AppearanceSettingsView: View {
                 }
                 .pickerStyle(MenuPickerStyle())
                 .scaledToFit()
-                
+
                 Picker("Window Title Visibility", selection: $windowTitleVisibility) {
                     ForEach(WindowTitleVisibility.allCases, id: \.self) { visibility in
                         Text(visibility.localizedName)
@@ -111,7 +111,7 @@ struct AppearanceSettingsView: View {
                 }
                 .scaledToFit()
                 .pickerStyle(MenuPickerStyle())
-                
+
                 Picker("Window Title Position", selection: $windowTitlePosition) {
                     ForEach(WindowTitlePosition.allCases, id: \.self) { position in
                         Text(position.localizedName)

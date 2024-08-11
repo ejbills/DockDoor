@@ -1,5 +1,5 @@
 //
-//  Extensions.swift
+//  ColorHex.swift
 //  DockDoor
 //
 //  Created by ShlomoCode on 10/07/2024.
@@ -28,7 +28,7 @@ extension Color {
             .sRGB,
             red: Double(r) / 255,
             green: Double(g) / 255,
-            blue:  Double(b) / 255,
+            blue: Double(b) / 255,
             opacity: Double(a) / 255
         )
     }

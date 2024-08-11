@@ -9,7 +9,7 @@ import SwiftUI
 
 struct DockStyleModifier: ViewModifier {
     let cornerRadius: Double
-    
+
     func body(content: Content) -> some View {
         content
             .background {
@@ -32,7 +32,6 @@ struct DockStyleModifier: ViewModifier {
 
 extension View {
     func dockStyle(cornerRadius: Double = 19) -> some View {
-        self
-            .modifier(DockStyleModifier(cornerRadius: cornerRadius))
+        modifier(DockStyleModifier(cornerRadius: cornerRadius))
     }
 }

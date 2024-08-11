@@ -7,8 +7,7 @@
 
 import Cocoa
 
-struct MessageUtil {
-    
+enum MessageUtil {
     enum ButtonAction {
         case ok
         case cancel

@@ -5,8 +5,8 @@
 //  Created by Ethan Bills on 7/4/24.
 //
 
-import SwiftUI
 import Defaults
+import SwiftUI
 
 struct WindowPreview: View {
     let windowInfo: WindowInfo
@@ -23,7 +23,7 @@ struct WindowPreview: View {
     @Default(.windowTitleVisibility) var windowTitleVisibility
     @Default(.trafficLightButtonsVisibility) var trafficLightButtonsVisibility
     @Default(.trafficLightButtonsPosition) var trafficLightButtonsPosition
-    
+
     // preview popup action handlers
     @Default(.tapEquivalentInterval) var tapEquivalentInterval
     @Default(.previewHoverAction) var previewHoverAction
@@ -33,7 +33,7 @@ struct WindowPreview: View {
     @State private var fullPreviewTimer: Timer?
 
     private var calculatedMaxDimensions: CGSize {
-        CGSize(width: self.bestGuessMonitor.frame.width * 0.75, height: self.bestGuessMonitor.frame.height * 0.75)
+        CGSize(width: bestGuessMonitor.frame.width * 0.75, height: bestGuessMonitor.frame.height * 0.75)
     }
 
     var calculatedSize: CGSize {
@@ -68,7 +68,7 @@ struct WindowPreview: View {
         .frame(width: calculatedSize.width, height: calculatedSize.height, alignment: .center)
         .frame(maxWidth: calculatedMaxDimensions.width, maxHeight: calculatedMaxDimensions.height)
     }
-    
+
     var body: some View {
         let isHighlightedInWindowSwitcher = (index == ScreenCenteredFloatingWindow.shared.currIndex && ScreenCenteredFloatingWindow.shared.windowSwitcherActive)
         let selected = isHoveringOverDockPeekPreview || isHighlightedInWindowSwitcher
@@ -96,7 +96,7 @@ struct WindowPreview: View {
                     return .topLeading
                 }
             }()) {
-                if  showWindowTitle && (windowTitleDisplayCondition == .all || (windowTitleDisplayCondition == .windowSwitcherOnly && ScreenCenteredFloatingWindow.shared.windowSwitcherActive) || (windowTitleDisplayCondition == .dockPreviewsOnly && !ScreenCenteredFloatingWindow.shared.windowSwitcherActive)) {
+                if showWindowTitle, windowTitleDisplayCondition == .all || (windowTitleDisplayCondition == .windowSwitcherOnly && ScreenCenteredFloatingWindow.shared.windowSwitcherActive) || (windowTitleDisplayCondition == .dockPreviewsOnly && !ScreenCenteredFloatingWindow.shared.windowSwitcherActive) {
                     windowTitleOverlay(selected: selected)
                 }
             }
@@ -124,7 +124,7 @@ struct WindowPreview: View {
         .contentShape(Rectangle())
         .onHover { over in
             withAnimation(.snappy(duration: 0.175)) {
-                if (!ScreenCenteredFloatingWindow.shared.windowSwitcherActive) {
+                if !ScreenCenteredFloatingWindow.shared.windowSwitcherActive {
                     isHoveringOverDockPeekPreview = over
                     handleFullPreviewHover(isHovering: over, action: previewHoverAction)
                 } else {
@@ -138,12 +138,12 @@ struct WindowPreview: View {
     }
 
     private func handleFullPreviewHover(isHovering: Bool, action: PreviewHoverAction) {
-        if isHovering && !ScreenCenteredFloatingWindow.shared.windowSwitcherActive {
+        if isHovering, !ScreenCenteredFloatingWindow.shared.windowSwitcherActive {
             switch action {
             case .none:
                 // Do nothing for .none
                 break
-                
+
             case .tap:
                 // If the interval is 0, immediately trigger the tap action
                 if tapEquivalentInterval == 0 {
@@ -156,7 +156,7 @@ struct WindowPreview: View {
                         }
                     }
                 }
-                
+
             case .previewFullSize:
                 // If the interval is 0, show the full window preview immediately
                 if tapEquivalentInterval == 0 {
@@ -190,11 +190,11 @@ struct WindowPreview: View {
             fullPreviewTimer = nil
         }
     }
-    
+
     private func handleWindowTap() {
-        if (windowInfo.isMinimized) {
+        if windowInfo.isMinimized {
             WindowUtil.toggleMinimize(windowInfo: windowInfo)
-        } else if (windowInfo.isHidden) {
+        } else if windowInfo.isHidden {
             WindowUtil.toggleHidden(windowInfo: windowInfo)
         } else {
             WindowUtil.bringWindowToFront(windowInfo: windowInfo)
@@ -204,7 +204,7 @@ struct WindowPreview: View {
 
     @ViewBuilder
     private func windowTitleOverlay(selected: Bool) -> some View {
-        if (windowTitleVisibility == .alwaysVisible || selected), let windowTitle = windowInfo.window?.title, !windowTitle.isEmpty, (windowTitle != windowInfo.appName || ScreenCenteredFloatingWindow.shared.windowSwitcherActive) {
+        if windowTitleVisibility == .alwaysVisible || selected, let windowTitle = windowInfo.window?.title, !windowTitle.isEmpty, windowTitle != windowInfo.appName || ScreenCenteredFloatingWindow.shared.windowSwitcherActive {
             let maxLabelWidth = calculatedSize.width - 50
             let stringMeasurementWidth = measureString(windowTitle, fontSize: 12).width + 5
             let width = maxLabelWidth > stringMeasurementWidth ? stringMeasurementWidth : maxLabelWidth
