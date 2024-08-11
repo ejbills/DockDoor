@@ -5,8 +5,8 @@
 //  Created by Ethan Bills on 7/4/24.
 //
 
-import SwiftUI
 import Defaults
+import SwiftUI
 
 struct WindowPreview: View {
     let window: Window
@@ -16,45 +16,45 @@ struct WindowPreview: View {
     let maxWindowDimension: CGPoint
     let bestGuessMonitor: NSScreen
     let uniformCardRadius: Bool
-    
+
     @Default(.windowTitlePosition) var windowTitlePosition
     @Default(.showWindowTitle) var showWindowTitle
     @Default(.windowTitleDisplayCondition) var windowTitleDisplayCondition
     @Default(.windowTitleVisibility) var windowTitleVisibility
     @Default(.trafficLightButtonsVisibility) var trafficLightButtonsVisibility
     @Default(.trafficLightButtonsPosition) var trafficLightButtonsPosition
-    
+
     // preview popup action handlers
     @Default(.tapEquivalentInterval) var tapEquivalentInterval
     @Default(.previewHoverAction) var previewHoverAction
-    
+
     @State private var isHoveringOverDockPeekPreview = false
     @State private var isHoveringOverWindowSwitcherPreview = false
     @State private var fullPreviewTimer: Timer?
-    
+
     private var calculatedMaxDimensions: CGSize {
-        CGSize(width: self.bestGuessMonitor.frame.width * 0.75, height: self.bestGuessMonitor.frame.height * 0.75)
+        CGSize(width: bestGuessMonitor.frame.width * 0.75, height: bestGuessMonitor.frame.height * 0.75)
     }
-    
+
     var calculatedSize: CGSize {
         guard let cgImage = window.image else { return .zero }
-        
+
         let cgSize = CGSize(width: cgImage.width, height: cgImage.height)
         let aspectRatio = cgSize.width / cgSize.height
         let maxAllowedWidth = maxWindowDimension.x
         let maxAllowedHeight = maxWindowDimension.y
-        
+
         var targetWidth = maxAllowedWidth
         var targetHeight = targetWidth / aspectRatio
-        
+
         if targetHeight > maxAllowedHeight {
             targetHeight = maxAllowedHeight
             targetWidth = aspectRatio * targetHeight
         }
-        
+
         return CGSize(width: targetWidth, height: targetHeight)
     }
-    
+
     private func windowContent(isSelected: Bool) -> some View {
         Group {
             if let cgImage = window.image {
@@ -67,11 +67,11 @@ struct WindowPreview: View {
                alignment: .center)
         .frame(maxWidth: calculatedMaxDimensions.width, maxHeight: calculatedMaxDimensions.height)
     }
-    
+
     var body: some View {
         let isHighlightedInWindowSwitcher = (index == ScreenCenteredFloatingWindow.shared.currIndex && ScreenCenteredFloatingWindow.shared.windowSwitcherActive)
         let selected = isHoveringOverDockPeekPreview || isHighlightedInWindowSwitcher
-        
+
         ZStack(alignment: .topTrailing) {
             VStack(spacing: 0) {
                 windowContent(isSelected: selected)
@@ -95,7 +95,7 @@ struct WindowPreview: View {
                     return .topLeading
                 }
             }()) {
-                if  showWindowTitle && (windowTitleDisplayCondition == .all || (windowTitleDisplayCondition == .windowSwitcherOnly && ScreenCenteredFloatingWindow.shared.windowSwitcherActive) || (windowTitleDisplayCondition == .dockPreviewsOnly && !ScreenCenteredFloatingWindow.shared.windowSwitcherActive)) {
+                if showWindowTitle && (windowTitleDisplayCondition == .all || (windowTitleDisplayCondition == .windowSwitcherOnly && ScreenCenteredFloatingWindow.shared.windowSwitcherActive) || (windowTitleDisplayCondition == .dockPreviewsOnly && !ScreenCenteredFloatingWindow.shared.windowSwitcherActive)) {
                     windowTitleOverlay(selected: selected)
                 }
             }
@@ -127,7 +127,7 @@ struct WindowPreview: View {
         .contentShape(Rectangle())
         .onHover { over in
             withAnimation(.snappy(duration: 0.175)) {
-                if (!ScreenCenteredFloatingWindow.shared.windowSwitcherActive) {
+                if !ScreenCenteredFloatingWindow.shared.windowSwitcherActive {
                     isHoveringOverDockPeekPreview = over
                     handleFullPreviewHover(isHovering: over, action: previewHoverAction)
                 } else {
@@ -139,14 +139,14 @@ struct WindowPreview: View {
             handleWindowTap()
         }
     }
-    
+
     private func handleFullPreviewHover(isHovering: Bool, action: PreviewHoverAction) {
         if isHovering && !ScreenCenteredFloatingWindow.shared.windowSwitcherActive {
             switch action {
             case .none:
                 // Do nothing for .none
                 break
-                
+
             case .tap:
                 // If the interval is 0, immediately trigger the tap action
                 if tapEquivalentInterval == 0 {
@@ -159,7 +159,7 @@ struct WindowPreview: View {
                         }
                     }
                 }
-                
+
             case .previewFullSize:
                 // If the interval is 0, show the full window preview immediately
                 if tapEquivalentInterval == 0 {
@@ -193,22 +193,22 @@ struct WindowPreview: View {
             fullPreviewTimer = nil
         }
     }
-    
+
     private func handleWindowTap() {
-        if (window.isMinimized) {
+        if window.isMinimized {
             window.toggleMinimize()
         }
         window.focus()
         onTap?()
     }
-    
+
     @ViewBuilder
     private func windowTitleOverlay(selected: Bool) -> some View {
-        if (windowTitleVisibility == .alwaysVisible || selected), let windowTitle = window.title, !windowTitle.isEmpty, (windowTitle != window.appName || ScreenCenteredFloatingWindow.shared.windowSwitcherActive) {
+        if windowTitleVisibility == .alwaysVisible || selected, let windowTitle = window.title, !windowTitle.isEmpty, windowTitle != window.appName || ScreenCenteredFloatingWindow.shared.windowSwitcherActive {
             let maxLabelWidth = calculatedSize.width - 50
             let stringMeasurementWidth = measureString(windowTitle, fontSize: 12).width + 5
             let width = maxLabelWidth > stringMeasurementWidth ? stringMeasurementWidth : maxLabelWidth
-            
+
             TheMarquee(width: width, secsBeforeLooping: 1, speedPtsPerSec: 20, nonMovingAlignment: .leading) {
                 Text(window.title ?? "Hidden window")
                     .font(.system(size: 12, weight: .medium))

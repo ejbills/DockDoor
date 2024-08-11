@@ -1,12 +1,12 @@
 //
-//  TheMarquee.swift
+//  Marquee.swift
 //  NotchNook
 //
 //  Created by Igor Marcossi on 16/06/24.
 //
 
-import SwiftUI
 import SmoothGradient
+import SwiftUI
 
 struct TheMarquee<C: View>: View {
     var width: Double
@@ -79,60 +79,58 @@ struct TheMarquee<C: View>: View {
 
 extension View {
     func fadeOnEdges(axis: Axis, fadeLength: Double, disable: Bool = false) -> some View {
-        self
-            .mask {
-                if (!disable) {
-                    GeometryReader { geo in
-                        DynStack(direction: axis, spacing: 0) {
-                            SmoothLinearGradient(
-                                from: .black.opacity(0),
-                                to: .black.opacity(1),
-                                startPoint: axis == .horizontal ? .leading : .top,
-                                endPoint: axis == .horizontal ? .trailing : .bottom,
-                                curve: .easeInOut
-                            )
-                            .frame(width: axis == .horizontal ? fadeLength : nil, height: axis == .vertical ? fadeLength : nil)
-                            Color.black.frame(maxWidth: .infinity)
-                            SmoothLinearGradient(
-                                from: .black.opacity(0),
-                                to: .black.opacity(1),
-                                startPoint: axis == .horizontal ? .trailing : .bottom,
-                                endPoint: axis == .horizontal ? .leading : .top,
-                                curve: .easeInOut
-                            )
-                            .frame(width: axis == .horizontal ? fadeLength : nil, height: axis == .vertical ? fadeLength : nil)
-                        }
+        mask {
+            if !disable {
+                GeometryReader { _ in
+                    DynStack(direction: axis, spacing: 0) {
+                        SmoothLinearGradient(
+                            from: .black.opacity(0),
+                            to: .black.opacity(1),
+                            startPoint: axis == .horizontal ? .leading : .top,
+                            endPoint: axis == .horizontal ? .trailing : .bottom,
+                            curve: .easeInOut
+                        )
+                        .frame(width: axis == .horizontal ? fadeLength : nil, height: axis == .vertical ? fadeLength : nil)
+                        Color.black.frame(maxWidth: .infinity)
+                        SmoothLinearGradient(
+                            from: .black.opacity(0),
+                            to: .black.opacity(1),
+                            startPoint: axis == .horizontal ? .trailing : .bottom,
+                            endPoint: axis == .horizontal ? .leading : .top,
+                            curve: .easeInOut
+                        )
+                        .frame(width: axis == .horizontal ? fadeLength : nil, height: axis == .vertical ? fadeLength : nil)
                     }
-                } else {
-                    Color.black
                 }
+            } else {
+                Color.black
             }
+        }
     }
 }
 
 extension View {
     func measure(_ sizeBinding: Binding<CGSize>) -> some View {
-        self
-            .background {
-                Color.clear
-                    .background(
-                        GeometryReader { geometry in
-                            Color.clear
-                                .preference(key: ViewSizeKey.self, value: geometry.size)
-                        }
-                    )
-                    .onPreferenceChange(ViewSizeKey.self) { size in
-                        sizeBinding.wrappedValue = size
+        background {
+            Color.clear
+                .background(
+                    GeometryReader { geometry in
+                        Color.clear
+                            .preference(key: ViewSizeKey.self, value: geometry.size)
                     }
-            }
+                )
+                .onPreferenceChange(ViewSizeKey.self) { size in
+                    sizeBinding.wrappedValue = size
+                }
+        }
     }
 }
 
 struct ViewSizeKey: PreferenceKey {
-  static var defaultValue: CGSize = .zero
-  static func reduce(value: inout CGSize, nextValue: () -> CGSize) {
-    value = value + nextValue()
-  }
+    static var defaultValue: CGSize = .zero
+    static func reduce(value: inout CGSize, nextValue: () -> CGSize) {
+        value = value + nextValue()
+    }
 }
 
 func doAfter(_ seconds: Double, action: @escaping () -> Void) {

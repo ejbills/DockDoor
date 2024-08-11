@@ -1,10 +1,10 @@
-import Cocoa
-import ApplicationServices.HIServices.AXUIElement
-import ApplicationServices.HIServices.AXValue
+import ApplicationServices.HIServices.AXActionConstants
+import ApplicationServices.HIServices.AXAttributeConstants
 import ApplicationServices.HIServices.AXError
 import ApplicationServices.HIServices.AXRoleConstants
-import ApplicationServices.HIServices.AXAttributeConstants
-import ApplicationServices.HIServices.AXActionConstants
+import ApplicationServices.HIServices.AXUIElement
+import ApplicationServices.HIServices.AXValue
+import Cocoa
 
 extension AXUIElement {
     static let globalTimeoutInSeconds = Float(120)
@@ -20,11 +20,11 @@ extension AXUIElement {
 
     func axCallWhichCanThrow<T>(_ result: AXError, _ successValue: inout T) throws -> T? {
         switch result {
-            case .success: return successValue
-            // .cannotComplete can happen if the app is unresponsive; we throw in that case to retry until the call succeeds
-            case .cannotComplete: throw AxError.runtimeError
-            // for other errors it's pointless to retry
-            default: return nil
+        case .success: return successValue
+        // .cannotComplete can happen if the app is unresponsive; we throw in that case to retry until the call succeeds
+        case .cannotComplete: throw AxError.runtimeError
+        // for other errors it's pointless to retry
+        default: return nil
         }
     }
 
@@ -62,41 +62,41 @@ extension AXUIElement {
 
         // Some non-windows have cgWindowId == 0 (e.g. windows of apps starting at login with the checkbox "Hidden" checked)
         return wid != 0 &&
-                // Finder's file copy dialogs are wide but < 100 height (see https://github.com/lwouis/alt-tab-macos/issues/1466)
-                // Sonoma introduced a bug: a caps-lock indicator shows as a small window. We try to hide it by filtering out tiny windows
-                size != nil && (size!.width > 100 || size!.height > 100) && (
-            (
-                books(runningApp) ||
-                    keynote(runningApp) ||
-                    preview(runningApp, subrole) ||
-                    iina(runningApp) ||
-                    openFlStudio(runningApp, title) ||
-                    crossoverWindow(runningApp, role, subrole, level) ||
-                    isAlwaysOnTopScrcpy(runningApp, level, role, subrole)
-            ) || (
-                // CGWindowLevel == .normalWindow helps filter out iStats Pro and other top-level pop-overs, and floating windows
-                level == CGWindow.normalLevel && (
-                    [kAXStandardWindowSubrole, kAXDialogSubrole].contains(subrole) ||
-                        openBoard(runningApp) ||
-                        adobeAudition(runningApp, subrole) ||
-                        adobeAfterEffects(runningApp, subrole) ||
-                        steam(runningApp, title, role) ||
-                        worldOfWarcraft(runningApp, role) ||
-                        battleNetBootstrapper(runningApp, role) ||
-                        firefox(runningApp, role, size) ||
-                        vlcFullscreenVideo(runningApp, role) ||
-                        sanGuoShaAirWD(runningApp) ||
-                        dvdFab(runningApp) ||
-                        drBetotte(runningApp) ||
-                        androidEmulator(runningApp, title) ||
-                        autocad(runningApp, subrole)
-                ) && (
-                    mustHaveIfJetbrainApp(runningApp, title, subrole, size!) &&
-                        mustHaveIfSteam(runningApp, title, role) &&
-                        mustHaveIfColorSlurp(runningApp, title, subrole)
+            // Finder's file copy dialogs are wide but < 100 height (see https://github.com/lwouis/alt-tab-macos/issues/1466)
+            // Sonoma introduced a bug: a caps-lock indicator shows as a small window. We try to hide it by filtering out tiny windows
+            size != nil && (size!.width > 100 || size!.height > 100) && (
+                (
+                    books(runningApp) ||
+                        keynote(runningApp) ||
+                        preview(runningApp, subrole) ||
+                        iina(runningApp) ||
+                        openFlStudio(runningApp, title) ||
+                        crossoverWindow(runningApp, role, subrole, level) ||
+                        isAlwaysOnTopScrcpy(runningApp, level, role, subrole)
+                ) || (
+                    // CGWindowLevel == .normalWindow helps filter out iStats Pro and other top-level pop-overs, and floating windows
+                    level == CGWindow.normalLevel && (
+                        [kAXStandardWindowSubrole, kAXDialogSubrole].contains(subrole) ||
+                            openBoard(runningApp) ||
+                            adobeAudition(runningApp, subrole) ||
+                            adobeAfterEffects(runningApp, subrole) ||
+                            steam(runningApp, title, role) ||
+                            worldOfWarcraft(runningApp, role) ||
+                            battleNetBootstrapper(runningApp, role) ||
+                            firefox(runningApp, role, size) ||
+                            vlcFullscreenVideo(runningApp, role) ||
+                            sanGuoShaAirWD(runningApp) ||
+                            dvdFab(runningApp) ||
+                            drBetotte(runningApp) ||
+                            androidEmulator(runningApp, title) ||
+                            autocad(runningApp, subrole)
+                    ) && (
+                        mustHaveIfJetbrainApp(runningApp, title, subrole, size!) &&
+                            mustHaveIfSteam(runningApp, title, role) &&
+                            mustHaveIfColorSlurp(runningApp, title, subrole)
+                    )
                 )
             )
-        )
     }
 
     private static func mustHaveIfJetbrainApp(_ runningApp: NSRunningApplication, _ title: String?, _ subrole: String?, _ size: NSSize) -> Bool {
@@ -109,7 +109,7 @@ extension AXUIElement {
         )
     }
 
-    private static func mustHaveIfColorSlurp(_ runningApp: NSRunningApplication, _ title: String?, _ subrole: String?) -> Bool {
+    private static func mustHaveIfColorSlurp(_ runningApp: NSRunningApplication, _: String?, _ subrole: String?) -> Bool {
         return runningApp.bundleIdentifier != "com.IdeaPunch.ColorSlurp" || subrole == kAXStandardWindowSubrole
     }
 
@@ -197,11 +197,12 @@ extension AXUIElement {
         // VLC fullscreen video have subrole == AXUnknown if fullscreen'ed
         return (runningApp.bundleIdentifier?.hasPrefix("org.videolan.vlc") ?? false) && role == kAXWindowRole
     }
-    
+
     static func isAndroidEmulator(_ app: NSRunningApplication) -> Bool {
         // NSRunningApplication provides no way to identify the emulator; we pattern match on its KERN_PROCARGS
         if app.bundleIdentifier == nil,
-           let executablePath = Sysctl.run([CTL_KERN, KERN_PROCARGS, app.processIdentifier]) {
+           let executablePath = Sysctl.run([CTL_KERN, KERN_PROCARGS, app.processIdentifier])
+        {
             // example path: ~/Library/Android/sdk/emulator/qemu/darwin-x86_64/qemu-system-x86_64
             return executablePath.range(of: "qemu-system[^/]*$", options: .regularExpression, range: nil, locale: nil) != nil
         }
@@ -289,7 +290,7 @@ extension AXUIElement {
         let result = AXObserverAddNotification(axObserver, self, notification as CFString, nil)
         if result == .success || result == .notificationAlreadyRegistered {
             callback?()
-        } else if result != .notificationUnsupported && result != .notImplemented {
+        } else if result != .notificationUnsupported, result != .notImplemented {
             throw AxError.runtimeError
         }
     }

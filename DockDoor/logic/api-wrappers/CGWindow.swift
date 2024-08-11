@@ -39,7 +39,7 @@ extension CGWindow {
         return value(kCGWindowName, String.self)
     }
 
-    private func value<T>(_ key: CFString, _ type: T.Type) -> T? {
+    private func value<T>(_ key: CFString, _: T.Type) -> T? {
         return self[key] as? T
     }
 }

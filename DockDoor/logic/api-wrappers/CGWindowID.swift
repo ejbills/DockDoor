@@ -22,7 +22,7 @@ extension CGWindowID {
         return list.first
     }
 
-    private func cgProperty<T>(_ key: String, _ type: T.Type) -> T? {
+    private func cgProperty<T>(_ key: String, _: T.Type) -> T? {
         var value: AnyObject?
         CGSCopyWindowProperty(cgsMainConnectionId, self, key as CFString, &value)
         return value as? T

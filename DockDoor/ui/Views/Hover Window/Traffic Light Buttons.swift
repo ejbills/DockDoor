@@ -12,9 +12,9 @@ struct TrafficLightButtons: View {
     let displayMode: TrafficLightButtonsVisibility
     let hoveringOverParentWindow: Bool
     let onAction: () -> Void
-    
+
     @State private var isHovering = false
-    
+
     var body: some View {
         HStack(spacing: 6) {
             buttonFor(action: .quit, symbol: "power", color: Color(hex: "290133"), fillColor: .purple)
@@ -31,7 +31,7 @@ struct TrafficLightButtons: View {
             }
         }
     }
-    
+
     private var opacity: Double {
         switch displayMode {
         case .dimmedOnPreviewHover:
@@ -44,7 +44,7 @@ struct TrafficLightButtons: View {
             return 0
         }
     }
-    
+
     private func buttonFor(action: WindowAction, symbol: String, color: Color, fillColor: Color) -> some View {
         Button(action: {
             performAction(action)
@@ -61,7 +61,7 @@ struct TrafficLightButtons: View {
         .buttonStyle(.plain)
         .font(.system(size: 13))
     }
-    
+
     private func performAction(_ action: WindowAction) {
         switch action {
         case .quit:
@@ -74,7 +74,7 @@ struct TrafficLightButtons: View {
             window.toggleFullScreen()
         }
     }
-    
+
     private enum WindowAction {
         case quit, close, minimize, toggleFullScreen
     }

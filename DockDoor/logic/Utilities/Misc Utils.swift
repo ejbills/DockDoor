@@ -5,21 +5,22 @@
 //  Created by Ethan Bills on 6/13/24.
 //
 
+import Carbon
 import Cocoa
 import Defaults
-import Carbon
 
-func askUserToRestartApplication () -> Void {
+func askUserToRestartApplication() {
     MessageUtil.showMessage(title: String(localized: "Restart required"), message: String(localized: "Please restart the application to apply your changes. Click OK to quit the app."), completion: { result in
         if result == .ok {
             let appDelegate = NSApplication.shared.delegate as! AppDelegate
             appDelegate.restartApp()
-        }})
+        }
+    })
 }
 
 func resetDefaultsToDefaultValues() {
     Defaults.removeAll()
-    
+
     // reset the launched value
     Defaults[.launched] = true
 }
@@ -46,24 +47,21 @@ func measureString(_ string: String, fontSize: CGFloat, fontWeight: NSFont.Weigh
     return size
 }
 
-struct modifierConverter {
+enum modifierConverter {
     static func toString(_ modifierIntValue: Int) -> String {
         if modifierIntValue == Defaults[.Int64maskCommand] {
             return "⌘"
-        }
-        else if modifierIntValue == Defaults[.Int64maskAlternate] {
+        } else if modifierIntValue == Defaults[.Int64maskAlternate] {
             return "⌥"
-        }
-        else if modifierIntValue == Defaults[.Int64maskControl] {
+        } else if modifierIntValue == Defaults[.Int64maskControl] {
             return "⌃"
-        }
-        else {
+        } else {
             return " "
         }
     }
 }
 
-struct KeyCodeConverter {
+enum KeyCodeConverter {
     static func toString(_ keyCode: UInt16) -> String {
         switch keyCode {
         case 48:
@@ -75,21 +73,21 @@ struct KeyCodeConverter {
         case 36:
             return "↩︎" // Return symbol
         default:
-            
+
             let source = TISCopyCurrentKeyboardInputSource().takeUnretainedValue()
             let layoutData = TISGetInputSourceProperty(source, kTISPropertyUnicodeKeyLayoutData)
-            
+
             guard let data = layoutData else {
                 return "?"
             }
-            
+
             let layout = unsafeBitCast(data, to: CFData.self)
             let keyboardLayout = unsafeBitCast(CFDataGetBytePtr(layout), to: UnsafePointer<UCKeyboardLayout>.self)
-            
+
             var keysDown: UInt32 = 0
             var chars = [UniChar](repeating: 0, count: 4)
-            var realLength: Int = 0
-            
+            var realLength = 0
+
             let result = UCKeyTranslate(keyboardLayout,
                                         keyCode,
                                         UInt16(kUCKeyActionDisplay),
@@ -100,7 +98,7 @@ struct KeyCodeConverter {
                                         chars.count,
                                         &realLength,
                                         &chars)
-            
+
             if result == noErr {
                 return String(utf16CodeUnits: chars, count: realLength)
             } else {

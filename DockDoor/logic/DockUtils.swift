@@ -15,64 +15,65 @@ enum DockPosition {
 
 class DockUtils {
     static let shared = DockUtils()
-    
+
     private let dockDefaults: UserDefaults? // Store a single instance
-    
+
     private init() {
         dockDefaults = UserDefaults(suiteName: "com.apple.dock")
     }
-    
+
     func isDockHidingEnabled() -> Bool {
         if let dockAutohide = dockDefaults?.bool(forKey: "autohide") {
             return dockAutohide
         }
-        
+
         return false
     }
-    
+
     func countIcons() -> (Int, Int) {
         let persistentAppsCount = dockDefaults?.array(forKey: "persistent-apps")?.count ?? 0
         let recentAppsCount = dockDefaults?.array(forKey: "recent-apps")?.count ?? 0
         return (persistentAppsCount + recentAppsCount, (persistentAppsCount > 0 && recentAppsCount > 0) ? 1 : 0)
     }
-    
+
     func calculateDockWidth() -> CGFloat {
         let countIcons = countIcons()
         let iconCount = countIcons.0
         let numberOfDividers = countIcons.1
         let tileSize = tileSize()
-        
+
         let baseWidth = tileSize * CGFloat(iconCount)
         let dividerWidth: CGFloat = 10.0
         let totalDividerWidth = CGFloat(numberOfDividers) * dividerWidth
-        
-        if self.isMagnificationEnabled(),
-           let largeSize = dockDefaults?.object(forKey: "largesize") as? CGFloat {
+
+        if isMagnificationEnabled(),
+           let largeSize = dockDefaults?.object(forKey: "largesize") as? CGFloat
+        {
             let extraWidth = (largeSize - tileSize) * CGFloat(iconCount) * 0.5
             return baseWidth + extraWidth + totalDividerWidth
         }
-        
+
         return baseWidth + totalDividerWidth
     }
-    
+
     private func tileSize() -> CGFloat {
         return dockDefaults?.double(forKey: "tilesize") ?? 0
     }
-    
+
     private func largeSize() -> CGFloat {
         return dockDefaults?.double(forKey: "largesize") ?? 0
     }
-    
+
     func isMagnificationEnabled() -> Bool {
         return dockDefaults?.bool(forKey: "magnification") ?? false
     }
-    
+
     func calculateDockHeight(_ forScreen: NSScreen?) -> CGFloat {
-        if self.isDockHidingEnabled() {
+        if isDockHidingEnabled() {
             return abs(largeSize() - tileSize())
         } else {
             if let currentScreen = forScreen {
-                switch self.getDockPosition() {
+                switch getDockPosition() {
                 case .right, .left:
                     let size = abs(currentScreen.frame.width - currentScreen.visibleFrame.width)
                     return size
@@ -86,7 +87,7 @@ class DockUtils {
             return 0.0
         }
     }
-    
+
     func getStatusBarHeight(screen: NSScreen?) -> CGFloat {
         var statusBarHeight = 0.0
         if let screen = screen {
@@ -94,10 +95,10 @@ class DockUtils {
         }
         return statusBarHeight
     }
-    
+
     func getDockPosition() -> DockPosition {
         guard let orientation = dockDefaults?.string(forKey: "orientation")?.lowercased() else {
-            if NSScreen.main!.visibleFrame.origin.y == 0 && !self.isDockHidingEnabled() {
+            if NSScreen.main!.visibleFrame.origin.y == 0 && !isDockHidingEnabled() {
                 if NSScreen.main!.visibleFrame.origin.x == 0 {
                     return .right
                 } else {
@@ -107,12 +108,12 @@ class DockUtils {
                 return .bottom
             }
         }
-        
+
         switch orientation {
-        case "left":   return .left
+        case "left": return .left
         case "bottom": return .bottom
-        case "right":  return .right
-        default:       return .unknown
+        case "right": return .right
+        default: return .unknown
         }
     }
 }

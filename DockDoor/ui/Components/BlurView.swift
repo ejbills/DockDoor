@@ -8,21 +8,20 @@
 import SwiftUI
 
 struct BlurView: NSViewRepresentable {
-    func makeNSView(context: Context) -> NSVisualEffectView {
+    func makeNSView(context _: Context) -> NSVisualEffectView {
         let effectView = NSVisualEffectView()
         effectView.state = .active
         effectView.material = .popover
         return effectView
     }
 
-    func updateNSView(_ nsView: NSVisualEffectView, context: Context) {
-    }
+    func updateNSView(_: NSVisualEffectView, context _: Context) {}
 }
 
 struct MaterialBlurView: NSViewRepresentable {
     var material: NSVisualEffectView.Material
 
-    func makeNSView(context: Context) -> NSVisualEffectView {
+    func makeNSView(context _: Context) -> NSVisualEffectView {
         let view = NSVisualEffectView()
         view.material = material
         view.blendingMode = .behindWindow
@@ -30,5 +29,5 @@ struct MaterialBlurView: NSViewRepresentable {
         return view
     }
 
-    func updateNSView(_ nsView: NSVisualEffectView, context: Context) {}
+    func updateNSView(_: NSVisualEffectView, context _: Context) {}
 }
