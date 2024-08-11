@@ -5,9 +5,9 @@
 //  Created by Ethan Bills on 6/14/24.
 //
 
-import SwiftUI
-import Combine
 import AppKit
+import Combine
+import SwiftUI
 
 class PermissionsChecker: ObservableObject {
     @Published var accessibilityPermission: Bool = false
@@ -53,7 +53,7 @@ class PermissionsChecker: ObservableObject {
 
 struct PermissionsSettingsView: View {
     @StateObject private var permissionsChecker = PermissionsChecker()
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
             HStack {
@@ -61,11 +61,11 @@ struct PermissionsSettingsView: View {
                     .foregroundColor(permissionsChecker.accessibilityPermission ? .green : .red)
                     .scaleEffect(permissionsChecker.accessibilityPermission ? 1.2 : 1.0)
                     .padding(10)
-                
+
                 Text("Accessibility Permissions")
                     .font(.headline)
             }
-            
+
             HStack {
                 Image(systemName: permissionsChecker.screenRecordingPermission ? "checkmark.circle.fill" : "xmark.circle.fill")
                     .foregroundColor(permissionsChecker.screenRecordingPermission ? .green : .red)
@@ -75,7 +75,7 @@ struct PermissionsSettingsView: View {
                 Text("Screen Recording Permissions")
                     .font(.headline)
             }
-            
+
             Button(action: openAccessibilityPreferences) {
                 HStack {
                     Image(systemName: "hand.raised.fill")
@@ -83,7 +83,7 @@ struct PermissionsSettingsView: View {
                 }
             }
             .buttonStyle(.bordered)
-            
+
             Button(action: openScreenRecordingPreferences) {
                 HStack {
                     Image(systemName: "video.fill")
@@ -91,7 +91,7 @@ struct PermissionsSettingsView: View {
                 }
             }
             .buttonStyle(.bordered)
-            
+
             Text("Please Restart the App to Apply Changes! :)")
                 .font(.footnote)
                 .foregroundColor(.secondary)
@@ -99,18 +99,18 @@ struct PermissionsSettingsView: View {
                 let appDelegate = NSApplication.shared.delegate as! AppDelegate
                 appDelegate.restartApp()
             })
-                .buttonStyle(.bordered)
+            .buttonStyle(.bordered)
 
             Spacer()
         }
         .padding([.top, .leading, .trailing], 20)
         .frame(minWidth: 650)
     }
-    
+
     private func openAccessibilityPreferences() {
         SystemPreferencesHelper.openAccessibilityPreferences()
     }
-    
+
     private func openScreenRecordingPreferences() {
         SystemPreferencesHelper.openScreenRecordingPreferences()
     }

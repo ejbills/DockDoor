@@ -1,12 +1,12 @@
 //
-//  HoverView.swift
+//  WindowPreviewHoverContainer.swift
 //  DockDoor
 //
 //  Created by Ethan Bills on 7/11/24.
 //
 
-import SwiftUI
 import Defaults
+import SwiftUI
 
 struct WindowPreviewHoverContainer: View {
     let appName: String
@@ -14,27 +14,27 @@ struct WindowPreviewHoverContainer: View {
     let onWindowTap: (() -> Void)?
     let dockPosition: DockPosition
     let bestGuessMonitor: NSScreen
-    
+
     @Default(.uniformCardRadius) var uniformCardRadius
     @Default(.showAppName) var showAppName
     @Default(.appNameStyle) var appNameStyle
     @Default(.windowTitlePosition) var windowTitlePosition
-    
+
     @State private var showWindows: Bool = false
     @State private var hasAppeared: Bool = false
     @State private var appIcon: NSImage? = nil
-    
+
     var maxWindowDimension: CGPoint {
         let thickness = SharedPreviewWindowCoordinator.shared.windowSize.height
         var maxWidth: CGFloat = 300
         var maxHeight: CGFloat = 300
-        
+
         for window in windows {
             if let cgImage = window.image {
                 let cgSize = CGSize(width: cgImage.width, height: cgImage.height)
                 let widthBasedOnHeight = (cgSize.width * thickness) / cgSize.height
                 let heightBasedOnWidth = (cgSize.height * thickness) / cgSize.width
-                
+
                 if dockPosition == .bottom || ScreenCenteredFloatingWindow.shared.windowSwitcherActive {
                     maxWidth = max(maxWidth, widthBasedOnHeight)
                     maxHeight = thickness
@@ -44,10 +44,10 @@ struct WindowPreviewHoverContainer: View {
                 }
             }
         }
-        
+
         return CGPoint(x: maxWidth, y: maxHeight)
     }
-    
+
     var body: some View {
         let orientationIsHorizontal = dockPosition == .bottom || ScreenCenteredFloatingWindow.shared.windowSwitcherActive
         ZStack {
@@ -58,14 +58,14 @@ struct WindowPreviewHoverContainer: View {
                             WindowPreview(windowInfo: windows[index], onTap: onWindowTap, index: index,
                                           dockPosition: dockPosition, maxWindowDimension: maxWindowDimension,
                                           bestGuessMonitor: bestGuessMonitor, uniformCardRadius: uniformCardRadius)
-                            .id("\(appName)-\(index)")
+                                .id("\(appName)-\(index)")
                         }
                     }
                     .padding(14)
                     .onAppear {
                         if !hasAppeared {
                             hasAppeared.toggle()
-                            self.runUIUpdates()
+                            runUIUpdates()
                         }
                     }
                     .onChange(of: ScreenCenteredFloatingWindow.shared.currIndex) { _, newIndex in
@@ -73,8 +73,8 @@ struct WindowPreviewHoverContainer: View {
                             scrollProxy.scrollTo("\(appName)-\(newIndex)", anchor: .center)
                         }
                     }
-                    .onChange(of: self.windows) { _, _ in
-                        self.runUIUpdates()
+                    .onChange(of: windows) { _, _ in
+                        runUIUpdates()
                     }
                 }
                 .opacity(showWindows ? 1 : 0.8)
@@ -85,18 +85,18 @@ struct WindowPreviewHoverContainer: View {
         .overlay(alignment: .topLeading) {
             hoverTitleBaseView(labelSize: measureString(appName, fontSize: 14))
         }
-        .padding(.top, (!ScreenCenteredFloatingWindow.shared.windowSwitcherActive && appNameStyle == .popover  && showAppName) ? 30 : 0) // Provide empty space above the window preview for the Popover title style when hovering over the Dock
+        .padding(.top, (!ScreenCenteredFloatingWindow.shared.windowSwitcherActive && appNameStyle == .popover && showAppName) ? 30 : 0) // Provide empty space above the window preview for the Popover title style when hovering over the Dock
         .padding(.all, 24)
-        .frame(maxWidth: self.bestGuessMonitor.visibleFrame.width, maxHeight: self.bestGuessMonitor.visibleFrame.height)
+        .frame(maxWidth: bestGuessMonitor.visibleFrame.width, maxHeight: bestGuessMonitor.visibleFrame.height)
     }
-        
+
     @ViewBuilder
     private func hoverTitleBaseView(labelSize: CGSize) -> some View {
-        if !ScreenCenteredFloatingWindow.shared.windowSwitcherActive && showAppName {
+        if !ScreenCenteredFloatingWindow.shared.windowSwitcherActive, showAppName {
             switch appNameStyle {
             case .default:
                 HStack(spacing: 2) {
-                    if let appIcon = appIcon {
+                    if let appIcon {
                         Image(nsImage: appIcon)
                             .resizable()
                             .scaledToFit()
@@ -111,7 +111,7 @@ struct WindowPreviewHoverContainer: View {
                 .padding(EdgeInsets(top: -11.5, leading: 15, bottom: -1.5, trailing: 1.5))
             case .embedded:
                 HStack(spacing: 2) {
-                    if let appIcon = appIcon {
+                    if let appIcon {
                         Image(nsImage: appIcon)
                             .resizable()
                             .scaledToFit()
@@ -129,7 +129,7 @@ struct WindowPreviewHoverContainer: View {
                 HStack {
                     Spacer()
                     HStack(spacing: 2) {
-                        if let appIcon = appIcon {
+                        if let appIcon {
                             Image(nsImage: appIcon)
                                 .resizable()
                                 .scaledToFit()
@@ -150,7 +150,7 @@ struct WindowPreviewHoverContainer: View {
             }
         }
     }
-    
+
     @ViewBuilder
     private func hoverTitleLabelView(labelSize: CGSize) -> some View {
         switch appNameStyle {
@@ -172,7 +172,7 @@ struct WindowPreviewHoverContainer: View {
                                             gradient: Gradient(
                                                 colors: [
                                                     Color.white.opacity(1.0),
-                                                    Color.white.opacity(0.35)
+                                                    Color.white.opacity(0.35),
                                                 ]
                                             ),
                                             startPoint: .top,
@@ -182,30 +182,30 @@ struct WindowPreviewHoverContainer: View {
                             )
                             .blur(radius: 5)
                     }
-                        .frame(width: labelSize.width + 30)
+                    .frame(width: labelSize.width + 30)
                 )
         case .embedded, .popover:
             Text(appName)
         }
     }
-        
+
     private func runUIUpdates() {
-        self.runAnimation()
-        self.loadAppIcon()
+        runAnimation()
+        loadAppIcon()
     }
-    
+
     private func runAnimation() {
-        self.showWindows = false
-        
+        showWindows = false
+
         withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
             showWindows = true
         }
     }
-    
+
     private func loadAppIcon() {
         if let bundleID = windows.first?.bundleID, let icon = AppIconUtil.getIcon(bundleID: bundleID) {
             DispatchQueue.main.async {
-                self.appIcon = icon
+                appIcon = icon
             }
         }
     }

@@ -5,8 +5,8 @@
 //  Created by Ethan Bills on 7/11/24.
 //
 
-import SwiftUI
 import FluidGradient
+import SwiftUI
 
 func fluidGradient() -> some View {
     FluidGradient(
@@ -20,7 +20,7 @@ func fluidGradient() -> some View {
 struct FluidGradientBorder: ViewModifier {
     let cornerRadius: CGFloat
     let lineWidth: CGFloat
-    
+
     func body(content: Content) -> some View {
         content
             .overlay(

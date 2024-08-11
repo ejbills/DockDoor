@@ -1,5 +1,5 @@
 //
-//  ReadModifier.swift
+//  HiddenModifier.swift
 //  OpenArtemis
 //
 //  Created by Ethan Bills on 1/1/24.
@@ -17,6 +17,6 @@ struct HiddenModifier: ViewModifier {
 
 extension View {
     func markHidden(isHidden: Bool) -> some View {
-        self.modifier(HiddenModifier(isHidden: isHidden))
+        modifier(HiddenModifier(isHidden: isHidden))
     }
 }
