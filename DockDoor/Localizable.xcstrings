@@ -9932,7 +9932,7 @@
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "No foco da janela; Escurecido até o botão passar o mouse"
+            "value" : "Na janela em foco; Escurecido até passar o mouse"
           }
         },
         "pt-PT" : {
@@ -10111,7 +10111,7 @@
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "No foco da janela; Opacidade total"
+            "value" : "Na janela em foco; Opacidade total"
           }
         },
         "pt-PT" : {
@@ -12606,7 +12606,7 @@
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pré-visualizar ação em foco"
+            "value" : "Ação do Pré-visualizar em foco"
           }
         },
         "pt-PT" : {
