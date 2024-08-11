@@ -1,10 +1,3 @@
-//
-//  HiddenModifier.swift
-//  OpenArtemis
-//
-//  Created by Ethan Bills on 1/1/24.
-//
-
 import SwiftUI
 
 struct HiddenModifier: ViewModifier {

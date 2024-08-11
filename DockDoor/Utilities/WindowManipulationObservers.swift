@@ -1,10 +1,3 @@
-//
-//  WindowManipulationObservers.swift
-//  DockDoor
-//
-//  Created by Ethan Bills on 6/30/24.
-//
-
 import AppKit
 import ApplicationServices
 import Cocoa

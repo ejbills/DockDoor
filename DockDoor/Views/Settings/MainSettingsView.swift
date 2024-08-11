@@ -1,10 +1,3 @@
-//
-//  MainSettingsView.swift
-//  DockDoor
-//
-//  Created by Ethan Bills on 6/13/24.
-//
-
 import Defaults
 import LaunchAtLogin
 import SwiftUI

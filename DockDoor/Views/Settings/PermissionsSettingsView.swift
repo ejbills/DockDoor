@@ -1,10 +1,3 @@
-//
-//  PermissionsSettingsView.swift
-//  DockDoor
-//
-//  Created by Ethan Bills on 6/14/24.
-//
-
 import AppKit
 import Combine
 import SwiftUI

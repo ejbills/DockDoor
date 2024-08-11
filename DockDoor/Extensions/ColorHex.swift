@@ -1,10 +1,3 @@
-//
-//  ColorHex.swift
-//  DockDoor
-//
-//  Created by ShlomoCode on 10/07/2024.
-//
-
 import SwiftUI
 
 extension Color {

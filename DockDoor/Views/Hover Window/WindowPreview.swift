@@ -1,10 +1,3 @@
-//
-//  WindowPreview.swift
-//  DockDoor
-//
-//  Created by Ethan Bills on 7/4/24.
-//
-
 import Defaults
 import SwiftUI
 
