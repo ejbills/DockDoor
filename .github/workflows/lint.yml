@@ -7,4 +7,4 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: SwiftFormat
-        run: swiftformat --lint --swiftversion 5.0 --header strip . --reporter github-actions-log 
+        run: swiftformat --lint . --reporter github-actions-log 
