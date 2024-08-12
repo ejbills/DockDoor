@@ -74,16 +74,16 @@ final class SharedPreviewWindowCoordinator: NSWindow {
     // Hide the window and reset its state
     func hideWindow() {
         DispatchQueue.main.async { [weak self] in
-            guard let self, self.isVisible else { return }
+            guard let self, isVisible else { return }
 
-            self.hideFullPreviewWindow()
-            self.contentView = nil
-            self.hostingView = nil
-            self.appName = ""
-            self.windows.removeAll()
+            hideFullPreviewWindow()
+            contentView = nil
+            hostingView = nil
+            appName = ""
+            windows.removeAll()
             ScreenCenteredFloatingWindow.shared.setIndex(to: 0)
             ScreenCenteredFloatingWindow.shared.setShowing(.both, toState: false)
-            self.orderOut(nil)
+            orderOut(nil)
         }
     }
 
@@ -270,13 +270,13 @@ final class SharedPreviewWindowCoordinator: NSWindow {
                 self.windows = windows
                 self.onWindowTap = onWindowTap
 
-                self.updateHostingView(appName: appName, windows: windows, onWindowTap: onWindowTap, screen: screen)
+                updateHostingView(appName: appName, windows: windows, onWindowTap: onWindowTap, screen: screen)
 
-                self.updateContentViewSizeAndPosition(mouseLocation: mouseLocation, mouseScreen: screen, animated: true,
-                                                      centerOnScreen: shouldCenterOnScreen, centeredHoverWindowState: centeredHoverWindowState)
+                updateContentViewSizeAndPosition(mouseLocation: mouseLocation, mouseScreen: screen, animated: true,
+                                                 centerOnScreen: shouldCenterOnScreen, centeredHoverWindowState: centeredHoverWindowState)
             }
 
-            self.makeKeyAndOrderFront(nil)
+            makeKeyAndOrderFront(nil)
         }
     }
 

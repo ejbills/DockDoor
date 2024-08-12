@@ -24,9 +24,9 @@ class PermissionsChecker: ObservableObject {
     private func hasPermissions(for type: PermissionType) -> Bool {
         switch type {
         case .accessibility:
-            return AXIsProcessTrusted()
+            AXIsProcessTrusted()
         case .screenRecording:
-            return CGPreflightScreenCaptureAccess()
+            CGPreflightScreenCaptureAccess()
         }
     }
 

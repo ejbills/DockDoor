@@ -43,13 +43,13 @@ func measureString(_ string: String, fontSize: CGFloat, fontWeight: NSFont.Weigh
 enum modifierConverter {
     static func toString(_ modifierIntValue: Int) -> String {
         if modifierIntValue == Defaults[.Int64maskCommand] {
-            return "⌘"
+            "⌘"
         } else if modifierIntValue == Defaults[.Int64maskAlternate] {
-            return "⌥"
+            "⌥"
         } else if modifierIntValue == Defaults[.Int64maskControl] {
-            return "⌃"
+            "⌃"
         } else {
-            return " "
+            " "
         }
     }
 }

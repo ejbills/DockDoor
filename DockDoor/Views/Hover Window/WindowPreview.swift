@@ -80,13 +80,13 @@ struct WindowPreview: View {
             .overlay(alignment: {
                 switch windowTitlePosition {
                 case .bottomLeft:
-                    return .bottomLeading
+                    .bottomLeading
                 case .bottomRight:
-                    return .bottomTrailing
+                    .bottomTrailing
                 case .topRight:
-                    return .topTrailing
+                    .topTrailing
                 case .topLeft:
-                    return .topLeading
+                    .topLeading
                 }
             }()) {
                 if showWindowTitle, windowTitleDisplayCondition == .all || (windowTitleDisplayCondition == .windowSwitcherOnly && ScreenCenteredFloatingWindow.shared.windowSwitcherActive) || (windowTitleDisplayCondition == .dockPreviewsOnly && !ScreenCenteredFloatingWindow.shared.windowSwitcherActive) {
@@ -96,13 +96,13 @@ struct WindowPreview: View {
             .overlay(alignment: {
                 switch trafficLightButtonsPosition {
                 case .bottomLeft:
-                    return .bottomLeading
+                    .bottomLeading
                 case .bottomRight:
-                    return .bottomTrailing
+                    .bottomTrailing
                 case .topRight:
-                    return .topTrailing
+                    .topTrailing
                 case .topLeft:
-                    return .topLeading
+                    .topLeading
                 }
             }()) {
                 if !windowInfo.isMinimized, !windowInfo.isHidden, let _ = windowInfo.closeButton {

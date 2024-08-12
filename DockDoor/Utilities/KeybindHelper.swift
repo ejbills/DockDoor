@@ -115,7 +115,7 @@ class KeybindHelper {
                 let windows = try await WindowUtil.activeWindows(for: "")
                 await MainActor.run { [weak self] in
                     guard let self else { return }
-                    if self.isModifierKeyPressed {
+                    if isModifierKeyPressed {
                         SharedPreviewWindowCoordinator.shared.showWindow(appName: "Alt-Tab", windows: windows, overrideDelay: true,
                                                                          centeredHoverWindowState: .windowSwitcher, onWindowTap: { SharedPreviewWindowCoordinator.shared.hideWindow() })
                     }
