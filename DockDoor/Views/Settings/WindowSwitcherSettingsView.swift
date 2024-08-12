@@ -1,10 +1,3 @@
-//
-//  WindowSwitcherSettingsView.swift
-//  DockDoor
-//
-//  Created by Hasan Sultan on 6/25/24.
-//
-
 import Carbon
 import Defaults
 import SwiftUI

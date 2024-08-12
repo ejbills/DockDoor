@@ -1,10 +1,3 @@
-//
-//  SpaceWindowCacheManager.swift
-//  DockDoor
-//
-//  Created by Ethan Bills on 7/17/24.
-//
-
 import Cocoa
 import ScreenCaptureKit
 

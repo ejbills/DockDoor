@@ -1,10 +1,3 @@
-//
-//  StackedShadow.swift
-//  DockDoor
-//
-//  Created by Ethan Bills on 6/23/24.
-//
-
 import SwiftUI
 
 struct StackedShadow: ViewModifier {

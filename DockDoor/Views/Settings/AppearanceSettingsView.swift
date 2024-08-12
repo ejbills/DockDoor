@@ -1,10 +1,3 @@
-//
-//  AppearanceSettingsView.swift
-//  DockDoor
-//
-//  Created by ShlomoCode on 09/07/2024.
-//
-
 import Defaults
 import LaunchAtLogin
 import SwiftUI

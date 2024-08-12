@@ -1,10 +1,3 @@
-//
-//  Misc Utils.swift
-//  DockDoor
-//
-//  Created by Ethan Bills on 6/13/24.
-//
-
 import Carbon
 import Cocoa
 import Defaults

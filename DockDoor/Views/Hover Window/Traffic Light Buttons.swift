@@ -1,10 +1,3 @@
-//
-//  Traffic Light Buttons.swift
-//  DockDoor
-//
-//  Created by Ethan Bills on 7/8/24.
-//
-
 import SwiftUI
 
 struct TrafficLightButtons: View {

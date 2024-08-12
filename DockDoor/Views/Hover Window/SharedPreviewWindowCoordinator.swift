@@ -1,10 +1,3 @@
-//
-//  SharedPreviewWindowCoordinator.swift
-//  DockDoor
-//
-//  Created by Ethan Bills on 6/5/24.
-//
-
 import Defaults
 import FluidGradient
 import SwiftUI

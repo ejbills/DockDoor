@@ -1,10 +1,3 @@
-//
-//  LimitedTaskGroup.swift
-//  DockDoor
-//
-//  Created by Ethan Bills on 7/23/24.
-//
-
 actor LimitedTaskGroup<T> {
     private var tasks: [Task<T, Error>] = []
     private let maxConcurrentTasks: Int
