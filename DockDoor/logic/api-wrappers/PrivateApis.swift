@@ -1,10 +1,3 @@
-//
-//  PrivateApis.swift
-//  DockDoor
-//
-//  Created by ShlomoCode on 10/07/2024.
-//
-
 import Cocoa
 
 typealias CGSConnectionID = UInt32

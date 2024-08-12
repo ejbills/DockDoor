@@ -1,10 +1,3 @@
-//
-//  settings.swift
-//  DockDoor
-//
-//  Created by Ethan Bills on 6/18/24.
-//
-
 import Cocoa
 import Settings
 import Sparkle

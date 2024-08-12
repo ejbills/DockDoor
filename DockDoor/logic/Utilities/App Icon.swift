@@ -1,10 +1,3 @@
-//
-//  App Icon.swift
-//  DockDoor
-//
-//  Created by Ethan Bills on 6/18/24.
-//
-
 import AppKit
 
 enum AppIconUtil {

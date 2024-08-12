@@ -1,10 +1,3 @@
-//
-//  BlurView.swift
-//  DockDoor
-//
-//  Created by Igor Marcossi on 14/06/24.
-//
-
 import SwiftUI
 
 struct BlurView: NSViewRepresentable {

@@ -1,10 +1,3 @@
-//
-//  FullSizePreviewView.swift
-//  DockDoor
-//
-//  Created by Ethan Bills on 7/11/24.
-//
-
 import Defaults
 import SwiftUI
 

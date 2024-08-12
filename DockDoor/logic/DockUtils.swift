@@ -1,9 +1,3 @@
-//
-//  DockUtils.swift
-//  DockDoor
-//
-//
-
 import Cocoa
 
 enum DockPosition {

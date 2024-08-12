@@ -1,10 +1,3 @@
-//
-//  Marquee.swift
-//  NotchNook
-//
-//  Created by Igor Marcossi on 16/06/24.
-//
-
 import SmoothGradient
 import SwiftUI
 

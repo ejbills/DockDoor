@@ -1,10 +1,3 @@
-//
-//  FirstTimeView.swift
-//  DockDoor
-//
-//  Created by Ethan Bills on 6/21/24.
-//
-
 import SwiftUI
 
 struct FirstTimeView: View {
