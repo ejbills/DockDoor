@@ -8,7 +8,7 @@ struct BlurView: NSViewRepresentable {
         return effectView
     }
 
-    func updateNSView(_: NSVisualEffectView, context _: Context) {}
+    func updateNSView(_ nsView: NSVisualEffectView, context: Context) {}
 }
 
 struct MaterialBlurView: NSViewRepresentable {
