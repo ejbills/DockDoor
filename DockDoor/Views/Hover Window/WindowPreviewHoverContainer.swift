@@ -81,6 +81,20 @@ struct WindowPreviewHoverContainer: View {
         .padding(.top, (!ScreenCenteredFloatingWindow.shared.windowSwitcherActive && appNameStyle == .popover && showAppName) ? 30 : 0) // Provide empty space above the window preview for the Popover title style when hovering over the Dock
         .padding(.all, 24)
         .frame(maxWidth: bestGuessMonitor.visibleFrame.width, maxHeight: bestGuessMonitor.visibleFrame.height)
+        .onHover { isHovering in
+            let currentMouseLocation = DockObserver.getMousePosition()
+            let dockIconFrame = DockObserver.shared.getDockIconFrameAtLocation(currentMouseLocation)
+
+            let currentAppUnderMouse = DockObserver.shared.getCurrentAppUnderMouse()
+            let lastAppUnderMouse = DockObserver.shared.lastAppUnderMouse
+
+            print("isHovering: \(isHovering), Item: \(DockObserver.shared.getHoveredApplicationDockItem() != nil), current app: \(currentAppUnderMouse != nil), last app: \(lastAppUnderMouse != nil), dockIconFrame:  \(String(describing: dockIconFrame))")
+
+            if !isHovering, currentAppUnderMouse == nil || currentAppUnderMouse != lastAppUnderMouse {
+                SharedPreviewWindowCoordinator.shared.hideWindow()
+                DockObserver.shared.lastAppUnderMouse = nil
+            }
+        }
     }
 
     @ViewBuilder
@@ -196,7 +210,7 @@ struct WindowPreviewHoverContainer: View {
     }
 
     private func loadAppIcon() {
-        if let bundleID = windows.first?.bundleID, let icon = AppIconUtil.getIcon(bundleID: bundleID) {
+        if let app = windows.first?.app, let icon = app.icon {
             DispatchQueue.main.async {
                 appIcon = icon
             }

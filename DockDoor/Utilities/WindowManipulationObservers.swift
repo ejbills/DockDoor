@@ -42,7 +42,7 @@ class WindowManipulationObservers {
         guard let app = notification.userInfo?[NSWorkspace.applicationUserInfoKey] as? NSRunningApplication else {
             return
         }
-        WindowUtil.clearWindowCache(for: app.bundleIdentifier ?? "")
+        WindowUtil.clearWindowCache(for: app)
         removeObserverForApp(app)
         SharedPreviewWindowCoordinator.shared.hideWindow()
     }
@@ -61,7 +61,6 @@ class WindowManipulationObservers {
         var observer: AXObserver?
         let result = AXObserverCreate(pid, axObserverCallback, &observer)
         guard result == .success, let observer else { return }
-        WindowUtil.addAppToBundleIDTracker(applicationName: app.localizedName ?? "", bundleID: app.bundleIdentifier ?? "")
 
         let appElement = AXUIElementCreateApplication(pid)
         AXObserverAddNotification(observer, appElement, kAXWindowCreatedNotification as CFString, UnsafeMutableRawPointer(bitPattern: Int(pid)))
@@ -79,10 +78,7 @@ class WindowManipulationObservers {
 
     @objc private func appDidHide(_ notification: Notification) {
         guard let app = notification.object as? NSRunningApplication else { return }
-        let pid = app.processIdentifier
-        let bundleID = app.bundleIdentifier ?? ""
-
-        WindowUtil.updateStatusOfWindowCache(pid: pid, bundleID: bundleID, isParentAppHidden: true)
+        WindowUtil.updateStatusOfWindowCache(pid: app.processIdentifier, isParentAppHidden: true)
     }
 
     private func removeObserverForApp(_ app: NSRunningApplication) {
@@ -124,7 +120,7 @@ func axObserverCallback(observer: AXObserver, element: AXUIElement, notification
                 WindowManipulationObservers.trackedElements.insert(element)
                 WindowManipulationObservers.debounceWorkItem?.cancel()
                 WindowManipulationObservers.debounceWorkItem = DispatchWorkItem {
-                    WindowUtil.updateWindowDateTime(with: app.bundleIdentifier ?? "", pid: pid)
+                    WindowUtil.updateWindowDateTime(for: app)
                     WindowManipulationObservers.trackedElements.remove(element)
                     print("Focused Window has changed: \(app.localizedName ?? "")")
                 }
@@ -134,7 +130,7 @@ func axObserverCallback(observer: AXObserver, element: AXUIElement, notification
                 WindowManipulationObservers.trackedElements.insert(element)
                 WindowManipulationObservers.debounceWorkItem?.cancel()
                 WindowManipulationObservers.debounceWorkItem = DispatchWorkItem {
-                    WindowUtil.updateWindowCache(for: app.bundleIdentifier ?? "") { windowSet in
+                    WindowUtil.updateWindowCache(for: app) { windowSet in
                         windowSet = windowSet.filter { WindowUtil.isValidElement($0.axElement) }
                     }
                     WindowManipulationObservers.trackedElements.remove(element)
@@ -143,12 +139,12 @@ func axObserverCallback(observer: AXObserver, element: AXUIElement, notification
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.01, execute: WindowManipulationObservers.debounceWorkItem!)
             case kAXWindowMiniaturizedNotification:
                 print("Window minimized for app: \(app.localizedName ?? "Unknown")")
-                WindowUtil.updateStatusOfWindowCache(pid: pid_t(pid), bundleID: app.bundleIdentifier ?? "", isParentAppHidden: false)
+                WindowUtil.updateStatusOfWindowCache(pid: pid_t(pid), isParentAppHidden: false)
             case kAXWindowDeminiaturizedNotification:
                 print("Window restored for app: \(app.localizedName ?? "Unknown")")
             case kAXApplicationHiddenNotification:
                 print("Application hidden: \(app.localizedName ?? "Unknown")")
-                WindowUtil.updateStatusOfWindowCache(pid: pid_t(pid), bundleID: app.bundleIdentifier ?? "", isParentAppHidden: true)
+                WindowUtil.updateStatusOfWindowCache(pid: pid_t(pid), isParentAppHidden: true)
             case kAXApplicationShownNotification:
                 print("Application shown: \(app.localizedName ?? "Unknown")")
             default:

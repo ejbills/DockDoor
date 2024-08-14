@@ -115,13 +115,13 @@ struct WindowPreview: View {
         }
         .scaleEffect(selected ? 1.015 : 1)
         .contentShape(Rectangle())
-        .onHover { over in
+        .onHover { isHovering in
             withAnimation(.snappy(duration: 0.175)) {
                 if !ScreenCenteredFloatingWindow.shared.windowSwitcherActive {
-                    isHoveringOverDockPeekPreview = over
-                    handleFullPreviewHover(isHovering: over, action: previewHoverAction)
+                    isHoveringOverDockPeekPreview = isHovering
+                    handleFullPreviewHover(isHovering: isHovering, action: previewHoverAction)
                 } else {
-                    isHoveringOverWindowSwitcherPreview = over
+                    isHoveringOverWindowSwitcherPreview = isHovering
                 }
             }
         }
@@ -155,7 +155,7 @@ struct WindowPreview: View {
                 if tapEquivalentInterval == 0 {
                     DispatchQueue.main.async {
                         SharedPreviewWindowCoordinator.shared.showWindow(
-                            appName: windowInfo.appName,
+                            appName: windowInfo.app.localizedName ?? "Unknown",
                             windows: [windowInfo],
                             mouseScreen: bestGuessMonitor,
                             overrideDelay: true,
@@ -167,7 +167,7 @@ struct WindowPreview: View {
                     fullPreviewTimer = Timer.scheduledTimer(withTimeInterval: tapEquivalentInterval, repeats: false) { [self] _ in
                         DispatchQueue.main.async {
                             SharedPreviewWindowCoordinator.shared.showWindow(
-                                appName: windowInfo.appName,
+                                appName: windowInfo.app.localizedName ?? "Unknown",
                                 windows: [windowInfo],
                                 mouseScreen: bestGuessMonitor,
                                 overrideDelay: true,
@@ -197,7 +197,7 @@ struct WindowPreview: View {
 
     @ViewBuilder
     private func windowTitleOverlay(selected: Bool) -> some View {
-        if windowTitleVisibility == .alwaysVisible || selected, let windowTitle = windowInfo.window?.title, !windowTitle.isEmpty, windowTitle != windowInfo.appName || ScreenCenteredFloatingWindow.shared.windowSwitcherActive {
+        if windowTitleVisibility == .alwaysVisible || selected, let windowTitle = windowInfo.window.title, !windowTitle.isEmpty, windowTitle != windowInfo.app.localizedName || ScreenCenteredFloatingWindow.shared.windowSwitcherActive {
             let maxLabelWidth = calculatedSize.width - 50
             let stringMeasurementWidth = measureString(windowTitle, fontSize: 12).width + 5
             let width = maxLabelWidth > stringMeasurementWidth ? stringMeasurementWidth : maxLabelWidth

@@ -44,7 +44,6 @@
 		BBCFAE402C266234002E1516 /* FirstTimeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBCFAE3F2C266234002E1516 /* FirstTimeView.swift */; };
 		BBE7CC8F2C22421900AB8F4D /* Settings in Frameworks */ = {isa = PBXBuildFile; productRef = BBE7CC8E2C22421900AB8F4D /* Settings */; };
 		BBE7CC912C22429A00AB8F4D /* settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE7CC902C22429A00AB8F4D /* settings.swift */; };
-		BBE7CC942C225D9700AB8F4D /* App Icon.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE7CC932C225D9700AB8F4D /* App Icon.swift */; };
 		BBF413922C40618D00AA6733 /* FullSizePreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF413912C40618800AA6733 /* FullSizePreviewView.swift */; };
 		BBF413942C40978400AA6733 /* WindowPreviewHoverContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF413932C40977F00AA6733 /* WindowPreviewHoverContainer.swift */; };
 		BBF4139A2C40A64A00AA6733 /* FluidGradient.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF413992C40A64000AA6733 /* FluidGradient.swift */; };
@@ -90,7 +89,6 @@
 		BBA153FB2C12356100119C02 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		BBCFAE3F2C266234002E1516 /* FirstTimeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstTimeView.swift; sourceTree = "<group>"; };
 		BBE7CC902C22429A00AB8F4D /* settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = settings.swift; sourceTree = "<group>"; };
-		BBE7CC932C225D9700AB8F4D /* App Icon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "App Icon.swift"; sourceTree = "<group>"; };
 		BBF413912C40618800AA6733 /* FullSizePreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullSizePreviewView.swift; sourceTree = "<group>"; };
 		BBF413932C40977F00AA6733 /* WindowPreviewHoverContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowPreviewHoverContainer.swift; sourceTree = "<group>"; };
 		BBF413992C40A64000AA6733 /* FluidGradient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FluidGradient.swift; sourceTree = "<group>"; };
@@ -197,7 +195,6 @@
 				BB157B812C0EB29E00997315 /* DockObserver.swift */,
 				BBF6C6232C1B4B4400BF1D40 /* KeybindHelper.swift */,
 				BB1CBD5C2C1BCA4F003969BC /* Misc Utils.swift */,
-				BBE7CC932C225D9700AB8F4D /* App Icon.swift */,
 				BB7CA33C2C31F1B00012E303 /* WindowManipulationObservers.swift */,
 			);
 			path = Utilities;
@@ -361,7 +358,6 @@
 				BB1CBD5D2C1BCA4F003969BC /* Misc Utils.swift in Sources */,
 				05A25B912C3EF28E002AC594 /* ColorHex.swift in Sources */,
 				3A105FD92C1C049E0015EC66 /* dockStyle.swift in Sources */,
-				BBE7CC942C225D9700AB8F4D /* App Icon.swift in Sources */,
 				BB2CBB092C481295004502C5 /* SpaceWindowCacheManager.swift in Sources */,
 				BB3968022C2A6CC2004F1AB6 /* Marquee.swift in Sources */,
 				BB52EDF02C5BEFE3006A64A4 /* HiddenModifier.swift in Sources */,

@@ -115,18 +115,14 @@ class KeybindHelper {
 
     private func showHoverWindow() {
         Task { [weak self] in
-            do {
+            guard let self else { return }
+            await MainActor.run { [weak self] in
                 guard let self else { return }
-                let windows = try await WindowUtil.activeWindows(for: "")
-                await MainActor.run { [weak self] in
-                    guard let self else { return }
-                    if isModifierKeyPressed {
-                        SharedPreviewWindowCoordinator.shared.showWindow(appName: "Alt-Tab", windows: windows, overrideDelay: true,
-                                                                         centeredHoverWindowState: .windowSwitcher, onWindowTap: { SharedPreviewWindowCoordinator.shared.hideWindow() })
-                    }
+                let windows = WindowUtil.getAllWindowsOfAllApps()
+                if isModifierKeyPressed {
+                    SharedPreviewWindowCoordinator.shared.showWindow(appName: "Alt-Tab", windows: windows, overrideDelay: true,
+                                                                     centeredHoverWindowState: .windowSwitcher, onWindowTap: { SharedPreviewWindowCoordinator.shared.hideWindow() })
                 }
-            } catch {
-                print("Error fetching active windows: \(error)")
             }
         }
     }

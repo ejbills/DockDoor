@@ -1,310 +1,219 @@
 import ApplicationServices
 import Cocoa
 
+func handleSelectedDockItemChangedNotification(observer _: AXObserver, element _: AXUIElement, notificationName _: CFString, _: UnsafeMutableRawPointer?) {
+    DockObserver.shared.processSelectedDockItemChanged()
+}
+
 final class DockObserver {
     static let shared = DockObserver()
 
-    private var lastAppName: String?
-    private var lastMouseLocation: CGPoint?
-    private let mouseUpdateThreshold: CGFloat = 5.0
-    private var eventTap: CFMachPort?
-
+    var axObserver: AXObserver?
+    var lastAppUnderMouse: NSRunningApplication?
     private var hoverProcessingTask: Task<Void, Error>?
     private var isProcessing: Bool = false
 
-    private var dockAppProcessIdentifier: pid_t?
-
     private init() {
-        setupEventTap()
-        setupDockApp()
+        setupSelectedDockItemObserver()
     }
 
-    deinit {
-        if let eventTap {
-            CGEvent.tapEnable(tap: eventTap, enable: false)
-            CFMachPortInvalidate(eventTap)
-            CFRunLoopRemoveSource(CFRunLoopGetCurrent(), CFMachPortCreateRunLoopSource(kCFAllocatorDefault, eventTap, 0), CFRunLoopMode.commonModes)
-        }
-    }
-
-    private func setupDockApp() {
-        if let dockAppPid = NSWorkspace.shared.runningApplications.first(where: { $0.bundleIdentifier == "com.apple.dock" })?.processIdentifier {
-            dockAppProcessIdentifier = dockAppPid
-        }
-    }
-
-    private func setupEventTap() {
-        guard AXIsProcessTrusted() else {
-            print("Debug: Accessibility permission not granted")
-            MessageUtil.showMessage(title: String(localized: "Permission error"),
-                                    message: String(localized: "You need to give DockDoor access to the accessibility API in order for it to function."),
-                                    completion: { _ in SystemPreferencesHelper.openAccessibilityPreferences() })
-            return
+    private func setupSelectedDockItemObserver() {
+        guard let dockAppPID = NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.dock").first?.processIdentifier else {
+            fatalError("Dock does found in running applications")
         }
 
-        func eventTapCallback(proxy _: CGEventTapProxy, type: CGEventType, event: CGEvent, refcon: UnsafeMutableRawPointer?) -> Unmanaged<CGEvent>? {
-            let observer = Unmanaged<DockObserver>.fromOpaque(refcon!).takeUnretainedValue()
+        let dockAppElement = AXUIElementCreateApplication(dockAppPID)
 
-            if type == .mouseMoved {
-                let mouseLocation = event.location
-                observer.handleMouseEvent(mouseLocation: mouseLocation)
-            } else if type == .rightMouseDown || type == .leftMouseDown || type == .otherMouseDown {
-                let mouseLocation = event.location
-                if observer.isMouseWithinDock(mouseLocation) { // Required to allow clicking the traffic light buttons in the preview
-                    SharedPreviewWindowCoordinator.shared.hideWindow()
-                }
+        guard let children = try? dockAppElement.children(), let axList = children.first(where: { element in
+            try! element.role() == kAXListRole
+        }) else {
+            fatalError("can't get dock items list element")
+        }
+
+        AXObserverCreate(dockAppPID, handleSelectedDockItemChangedNotification, &axObserver)
+        guard let axObserver else { return }
+
+        do {
+            try axList.subscribeToNotification(axObserver, kAXSelectedChildrenChangedNotification) {
+                CFRunLoopAddSource(CFRunLoopGetCurrent(), AXObserverGetRunLoopSource(axObserver), .commonModes)
             }
-
-            return Unmanaged.passUnretained(event)
-        }
-
-        let eventsOfInterest: CGEventMask = (1 << CGEventType.mouseMoved.rawValue) |
-            (1 << CGEventType.rightMouseDown.rawValue) |
-            (1 << CGEventType.leftMouseDown.rawValue) |
-            (1 << CGEventType.otherMouseDown.rawValue)
-
-        eventTap = CGEvent.tapCreate(
-            tap: .cghidEventTap,
-            place: .headInsertEventTap,
-            options: .defaultTap,
-            eventsOfInterest: eventsOfInterest,
-            callback: eventTapCallback,
-            userInfo: Unmanaged.passUnretained(self).toOpaque()
-        )
-
-        if let eventTap {
-            let runLoopSource = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, eventTap, 0)
-            CFRunLoopAddSource(CFRunLoopGetCurrent(), runLoopSource, CFRunLoopMode.commonModes)
-            CGEvent.tapEnable(tap: eventTap, enable: true)
-        } else {
-            print("Failed to create CGEvent tap.")
+        } catch {
+            fatalError("Failed to subscribe to notification: \(error)")
         }
     }
 
-    private func handleMouseEvent(mouseLocation: CGPoint) {
+    func processSelectedDockItemChanged() {
         hoverProcessingTask?.cancel()
-
         hoverProcessingTask = Task { [weak self] in
             guard let self else { return }
             try Task.checkCancellation()
-            processMouseEvent(mouseLocation: mouseLocation)
-        }
-    }
+            guard !isProcessing, !ScreenCenteredFloatingWindow.shared.windowSwitcherActive else { return }
+            isProcessing = true
 
-    private func processMouseEvent(mouseLocation: CGPoint) {
-        guard !isProcessing, !ScreenCenteredFloatingWindow.shared.windowSwitcherActive else { return }
-        isProcessing = true
+            defer {
+                isProcessing = false
+            }
 
-        defer {
-            isProcessing = false
-        }
+            let currentMouseLocation = DockObserver.getMousePosition()
+            if let currentAppUnderMouse = getCurrentAppUnderMouse() {
+                if currentAppUnderMouse != lastAppUnderMouse {
+                    lastAppUnderMouse = currentAppUnderMouse
 
-        guard let lastMouseLocation else {
-            self.lastMouseLocation = mouseLocation
-            return
-        }
+                    Task { [weak self] in
+                        guard let self else { return }
+                        do {
+                            let appWindows = try await WindowUtil.getActiveWindows(of: currentAppUnderMouse)
+                            await MainActor.run {
+                                if appWindows.isEmpty {
+                                    SharedPreviewWindowCoordinator.shared.hideWindow()
+                                } else {
+                                    let mouseScreen = DockObserver.screenContainMouse(currentMouseLocation) ?? NSScreen.main!
+                                    let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
 
-        // Ignore minor movements
-        if abs(mouseLocation.x - lastMouseLocation.x) < mouseUpdateThreshold,
-           abs(mouseLocation.y - lastMouseLocation.y) < mouseUpdateThreshold
-        {
-            return
-        }
-        self.lastMouseLocation = mouseLocation
-
-        // Capture the current mouseLocation
-        let currentMouseLocation = mouseLocation
-
-        if let dockIconAppName = getDockIconAtLocation(currentMouseLocation) {
-            if dockIconAppName != lastAppName {
-                lastAppName = dockIconAppName
-
-                Task { [weak self] in
-                    guard let self else { return }
-                    do {
-                        let activeWindows = try await WindowUtil.activeWindows(for: dockIconAppName)
-
-                        await MainActor.run {
-                            if activeWindows.isEmpty {
-                                SharedPreviewWindowCoordinator.shared.hideWindow()
-                            } else {
-                                let mouseScreen = DockObserver.screenContainingPoint(currentMouseLocation) ?? NSScreen.main!
-                                let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
-                                // Show HoverWindow (using shared instance)
-                                SharedPreviewWindowCoordinator.shared.showWindow(
-                                    appName: dockIconAppName,
-                                    windows: activeWindows,
-                                    mouseLocation: convertedMouseLocation,
-                                    mouseScreen: mouseScreen,
-                                    onWindowTap: { [weak self] in
-                                        SharedPreviewWindowCoordinator.shared.hideWindow()
-                                        self?.lastAppName = nil
-                                    }
-                                )
+                                    // Show HoverWindow (using shared instance)
+                                    SharedPreviewWindowCoordinator.shared.showWindow(
+                                        appName: currentAppUnderMouse.localizedName!,
+                                        windows: appWindows,
+                                        mouseLocation: convertedMouseLocation,
+                                        mouseScreen: mouseScreen,
+                                        onWindowTap: { [weak self] in
+                                            SharedPreviewWindowCoordinator.shared.hideWindow()
+                                            self?.lastAppUnderMouse = nil
+                                        }
+                                    )
+                                }
                             }
-                        }
-                    } catch {
-                        await MainActor.run {
-                            print("Error fetching active windows: \(error)")
+                        } catch {
+                            await MainActor.run {
+                                print("Error fetching active windows: \(error)")
+                            }
                         }
                     }
                 }
-            }
-        } else {
-            Task { @MainActor [weak self] in
-                guard let self else { return }
-                let mouseScreen = DockObserver.screenContainingPoint(currentMouseLocation) ?? NSScreen.main!
-                let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
-                if !SharedPreviewWindowCoordinator.shared.frame.contains(convertedMouseLocation) {
-                    lastAppName = nil
-                    SharedPreviewWindowCoordinator.shared.hideWindow()
+            } else {
+                Task { @MainActor [weak self] in
+                    guard let self else { return }
+                    let mouseScreen = DockObserver.screenContainMouse(currentMouseLocation) ?? NSScreen.main!
+                    let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
+                    if !SharedPreviewWindowCoordinator.shared.frame.contains(convertedMouseLocation) {
+                        lastAppUnderMouse = nil
+                        SharedPreviewWindowCoordinator.shared.hideWindow()
+                    }
                 }
             }
         }
     }
 
     func getDockIconFrameAtLocation(_ mouseLocation: CGPoint) -> CGRect? {
-        guard let dockAppProcessIdentifier else {
+        guard let hoveredDockItem = getHoveredApplicationDockItem() else {
+            print("No selected dock item found")
             return nil
         }
 
-        let axDockApp = AXUIElementCreateApplication(dockAppProcessIdentifier)
+        var positionValue: CFTypeRef?
+        var sizeValue: CFTypeRef?
+        let positionResult = AXUIElementCopyAttributeValue(hoveredDockItem, kAXPositionAttribute as CFString, &positionValue)
+        let sizeResult = AXUIElementCopyAttributeValue(hoveredDockItem, kAXSizeAttribute as CFString, &sizeValue)
 
-        var dockItems: CFTypeRef?
-        let dockItemsResult = AXUIElementCopyAttributeValue(axDockApp, kAXChildrenAttribute as CFString, &dockItems)
-
-        guard dockItemsResult == .success, let items = dockItems as? [AXUIElement] else {
+        guard positionResult == .success, sizeResult == .success else {
+            print("Failed to get position or size for selected dock item")
             return nil
         }
 
-        let axList = items.first { element in
-            var role: CFTypeRef?
-            let roleResult = AXUIElementCopyAttributeValue(element, kAXRoleAttribute as CFString, &role)
-            return roleResult == .success && (role as? String) == kAXListRole
-        }
+        let position = positionValue as! AXValue
+        let size = sizeValue as! AXValue
+        var positionPoint = CGPoint.zero
+        var sizeCGSize = CGSize.zero
+        AXValueGetValue(position, .cgPoint, &positionPoint)
+        AXValueGetValue(size, .cgSize, &sizeCGSize)
 
-        guard let list = axList else {
-            return nil
-        }
-
-        var axChildren: CFTypeRef?
-        let childrenResult = AXUIElementCopyAttributeValue(list, kAXChildrenAttribute as CFString, &axChildren)
-
-        guard childrenResult == .success, let children = axChildren as? [AXUIElement] else {
-            return nil
-        }
+        let iconRect = CGRect(origin: positionPoint, size: sizeCGSize)
 
         // Adjust mouse location to match the coordinate system of the dock icons
         let adjustedMouseLocation = CGPoint(
             x: mouseLocation.x,
-            y: (DockObserver.screenContainingPoint(mouseLocation)?.frame.height ?? NSScreen.main!.frame.height) - mouseLocation.y
+            y: (DockObserver.screenContainMouse(mouseLocation)?.frame.height ?? NSScreen.main!.frame.height) - mouseLocation.y
         )
 
-        for element in children {
-            var positionValue: CFTypeRef?
-            var sizeValue: CFTypeRef?
-            let positionResult = AXUIElementCopyAttributeValue(element, kAXPositionAttribute as CFString, &positionValue)
-            let sizeResult = AXUIElementCopyAttributeValue(element, kAXSizeAttribute as CFString, &sizeValue)
+        print("Checking icon rect: \(iconRect) with adjusted mouse location: \(adjustedMouseLocation)")
 
-            if positionResult == .success, sizeResult == .success {
-                let position = positionValue as! AXValue
-                let size = sizeValue as! AXValue
-                var positionPoint = CGPoint.zero
-                AXValueGetValue(position, .cgPoint, &positionPoint)
-                var sizeCGSize = CGSize.zero
-                AXValueGetValue(size, .cgSize, &sizeCGSize)
-
-                let iconRect = CGRect(origin: positionPoint, size: sizeCGSize)
-
-                if iconRect.contains(adjustedMouseLocation) {
-                    return iconRect
-                }
-            }
+        if iconRect.contains(adjustedMouseLocation) {
+            print("Matched icon rect: \(iconRect)")
+            return iconRect
         }
 
+        print("No matching icon rect found")
         return nil
     }
 
-    func getDockIconAtLocation(_ mouseLocation: CGPoint) -> String? {
-        guard let dockAppProcessIdentifier else { return nil }
+    func getHoveredApplicationDockItem() -> AXUIElement? {
+        guard let dockAppPID = NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.dock").first?.processIdentifier else {
+            print("Dock does found in running applications")
+            return nil
+        }
 
-        let axDockApp = AXUIElementCreateApplication(dockAppProcessIdentifier)
+        let dockAppElement = AXUIElementCreateApplication(dockAppPID)
 
         var dockItems: CFTypeRef?
-        let dockItemsResult = AXUIElementCopyAttributeValue(axDockApp, kAXChildrenAttribute as CFString, &dockItems)
-
-        guard dockItemsResult == .success, let items = dockItems as? [AXUIElement] else {
+        guard AXUIElementCopyAttributeValue(dockAppElement, kAXChildrenAttribute as CFString, &dockItems) == .success, let dockItems = dockItems as? [AXUIElement], !dockItems.isEmpty else {
+            print("Failed to get dock items or no dock items found")
             return nil
         }
 
-        let axList = items.first { element in
-            var role: CFTypeRef?
-            AXUIElementCopyAttributeValue(element, kAXRoleAttribute as CFString, &role)
-            return (role as? String) == kAXListRole
-        }
-
-        guard axList != nil else {
+        var hoveredDockItem: CFTypeRef?
+        guard AXUIElementCopyAttributeValue(dockItems.first!, kAXSelectedChildrenAttribute as CFString, &hoveredDockItem) == .success, !dockItems.isEmpty, let hoveredDockItem = (hoveredDockItem as! [AXUIElement]).first else {
+            // no app under nouse
             return nil
         }
 
-        var axChildren: CFTypeRef?
-        AXUIElementCopyAttributeValue(axList!, kAXChildrenAttribute as CFString, &axChildren)
-
-        guard let children = axChildren as? [AXUIElement] else {
+        let subrole = try? hoveredDockItem.subrole()
+        guard subrole == "AXApplicationDockItem" else {
+            print("The hovered item is a \(subrole ?? "Unknown"), not AXApplicationDockItem")
             return nil
         }
 
-        for element in children {
-            var positionValue: CFTypeRef?
-            var sizeValue: CFTypeRef?
-            let positionResult = AXUIElementCopyAttributeValue(element, kAXPositionAttribute as CFString, &positionValue)
-            let sizeResult = AXUIElementCopyAttributeValue(element, kAXSizeAttribute as CFString, &sizeValue)
+        return hoveredDockItem
+    }
 
-            if positionResult == .success, sizeResult == .success {
-                let position = positionValue as! AXValue
-                let size = sizeValue as! AXValue
-                var positionPoint = CGPoint.zero
-                AXValueGetValue(position, .cgPoint, &positionPoint)
-                var sizeCGSize = CGSize.zero
-                AXValueGetValue(size, .cgSize, &sizeCGSize)
+    func getCurrentAppUnderMouse() -> NSRunningApplication? {
+        guard let hoveredDockItem = getHoveredApplicationDockItem() else {
+            return nil
+        }
 
-                let iconRect = CGRect(origin: positionPoint, size: sizeCGSize)
-                if iconRect.contains(mouseLocation) {
-                    var value: CFTypeRef?
-                    let titleResult = AXUIElementCopyAttributeValue(element, kAXTitleAttribute as CFString, &value)
-                    if titleResult == .success, let title = value as? String {
-                        var isRunningValue: CFTypeRef?
-                        AXUIElementCopyAttributeValue(element, kAXIsApplicationRunningAttribute as CFString, &isRunningValue)
-                        if (isRunningValue as? Bool) == true {
-                            return title
-                        }
-                    }
-                }
+        var appURL: CFTypeRef?
+        guard AXUIElementCopyAttributeValue(hoveredDockItem, kAXURLAttribute as CFString, &appURL) == .success, let appURL = appURL as? NSURL as? URL else {
+            print("Failed to get app URL or convert NSURL to URL")
+            return nil
+        }
+
+        let budle = Bundle(url: appURL)
+        guard let bundleIdentifier = budle?.bundleIdentifier else {
+            print("App has no valid bundle. app url: \(appURL.path)") // For example: scrcpy, Android studio emulator
+
+            // MARK: fallback method
+
+            var dockItemTitle: CFTypeRef?
+            guard AXUIElementCopyAttributeValue(hoveredDockItem, kAXTitleAttribute as CFString, &dockItemTitle) == .success, let dockItemTitle = dockItemTitle as? String else {
+                print("Failed to get dock item title")
+                return nil
+            }
+
+            if let app = WindowUtil.findRunningApplicationByName(named: dockItemTitle) {
+                print("Found app by name for dock item: \(dockItemTitle)")
+                return app
+            } else {
+                print("Not Found app by name for dock item: \(dockItemTitle)")
+                return nil
             }
         }
 
-        return nil
-    }
-
-    func isMouseWithinDock(_ mouseLocation: CGPoint) -> Bool {
-        getDockIconAtLocation(mouseLocation) != nil
-    }
-
-    static func screenContainingPoint(_ point: CGPoint) -> NSScreen? {
-        let screens = NSScreen.screens
-        guard let primaryScreen = screens.first else { return nil }
-
-        for screen in screens {
-            let (offsetLeft, offsetTop) = computeOffsets(for: screen, primaryScreen: primaryScreen)
-
-            if point.x >= offsetLeft, point.x <= offsetLeft + screen.frame.size.width,
-               point.y >= offsetTop, point.y <= offsetTop + screen.frame.size.height
-            {
-                return screen
-            }
+        guard let runningApp = NSRunningApplication.runningApplications(withBundleIdentifier: bundleIdentifier).first else {
+            print("Current App is not running (\(bundleIdentifier))")
+            return nil
         }
 
-        return primaryScreen
+        print("Current App is running (\(runningApp.localizedName ?? "Unknown"))")
+        return runningApp
     }
 
     static func nsPointFromCGPoint(_ point: CGPoint, forScreen: NSScreen?) -> NSPoint {
@@ -338,6 +247,35 @@ final class DockObserver {
         let menuScreenHeight = screen.frame.maxY
 
         return CGPoint(x: point.x, y: menuScreenHeight - point.y + offsetTop)
+    }
+
+    static func getMousePosition() -> NSPoint {
+        guard let event = CGEvent(source: nil) else {
+            fatalError("Unable to get mouse event")
+        }
+
+        let mouseLocation = event.location
+
+        let mousePosition = NSPoint(x: mouseLocation.x, y: mouseLocation.y)
+
+        return mousePosition
+    }
+
+    static func screenContainMouse(_ point: CGPoint) -> NSScreen? {
+        let screens = NSScreen.screens
+        guard let primaryScreen = screens.first else { return nil }
+
+        for screen in screens {
+            let (offsetLeft, offsetTop) = computeOffsets(for: screen, primaryScreen: primaryScreen)
+
+            if point.x >= offsetLeft, point.x <= offsetLeft + screen.frame.size.width,
+               point.y >= offsetTop, point.y <= offsetTop + screen.frame.size.height
+            {
+                return screen
+            }
+        }
+
+        return primaryScreen
     }
 
     private static func computeOffsets(for screen: NSScreen, primaryScreen: NSScreen) -> (CGFloat, CGFloat) {

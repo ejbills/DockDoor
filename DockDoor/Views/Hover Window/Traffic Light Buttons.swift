@@ -18,9 +18,9 @@ struct TrafficLightButtons: View {
         .padding(4)
         .opacity(opacity)
         .allowsHitTesting(opacity != 0)
-        .onHover { over in
+        .onHover { isHovering in
             withAnimation(.snappy(duration: 0.175)) {
-                isHovering = over
+                self.isHovering = isHovering
             }
         }
     }
