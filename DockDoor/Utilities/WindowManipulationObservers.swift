@@ -47,7 +47,7 @@ class WindowManipulationObservers {
         SharedPreviewWindowCoordinator.shared.hideWindow()
     }
 
-    @objc private func appDidActivate(_: Notification) {
+    @objc private func appDidActivate(_ notification: Notification) {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             if SharedPreviewWindowCoordinator.shared.isVisible {
                 SharedPreviewWindowCoordinator.shared.hideWindow()
@@ -112,7 +112,7 @@ class WindowManipulationObservers {
     }
 }
 
-func axObserverCallback(observer _: AXObserver, element: AXUIElement, notificationName: CFString, userData: UnsafeMutableRawPointer?) {
+func axObserverCallback(observer: AXObserver, element: AXUIElement, notificationName: CFString, userData: UnsafeMutableRawPointer?) {
     guard let userData else { return }
     let pid = pid_t(Int(bitPattern: userData))
 

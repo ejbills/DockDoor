@@ -74,7 +74,7 @@ extension View {
     func fadeOnEdges(axis: Axis, fadeLength: Double, disable: Bool = false) -> some View {
         mask {
             if !disable {
-                GeometryReader { _ in
+                GeometryReader { geo in
                     DynStack(direction: axis, spacing: 0) {
                         SmoothLinearGradient(
                             from: .black.opacity(0),

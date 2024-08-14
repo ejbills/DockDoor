@@ -1,2 +1,3 @@
---swiftversion 5.0
+--swiftversion 5.10
 --header strip
+--disable unusedArguments

@@ -87,7 +87,7 @@ final class DockObserver {
         hoverProcessingTask = Task { [weak self] in
             guard let self else { return }
             try Task.checkCancellation()
-            self.processMouseEvent(mouseLocation: mouseLocation)
+            processMouseEvent(mouseLocation: mouseLocation)
         }
     }
 
@@ -156,7 +156,7 @@ final class DockObserver {
                 let mouseScreen = DockObserver.screenContainingPoint(currentMouseLocation) ?? NSScreen.main!
                 let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
                 if !SharedPreviewWindowCoordinator.shared.frame.contains(convertedMouseLocation) {
-                    self.lastAppName = nil
+                    lastAppName = nil
                     SharedPreviewWindowCoordinator.shared.hideWindow()
                 }
             }
