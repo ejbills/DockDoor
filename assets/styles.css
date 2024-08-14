@@ -1,0 +1,51 @@
+body {
+    font-family: system-ui;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    color: #000000;
+}
+
+header, footer {
+    background-color: #333;
+    color: #fff !important;
+    padding: 10px 20px;
+    text-align: center;
+}
+
+main {
+    padding: 20px;
+    max-width: 800px;
+    margin: 20px auto;
+    background: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+a {
+    /* color: #3498db; */
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.faq-item {
+    margin-bottom: 10px;
+}
+
+pre {
+    position: relative;
+}
+
+.copy-button {
+    position: absolute;
+    inset: 5px 5px auto auto;
+    width: 1em; height: 1em;
+    border: 1px solid;
+    border-radius: 5px;
+    box-shadow: -3px 3px #999;
+    display: inline-block;
+    cursor: pointer;
+  }
