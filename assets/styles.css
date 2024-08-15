@@ -39,6 +39,10 @@ pre {
     position: relative;
 }
 
+pre.inline {
+    display: inline;
+}
+
 .copy-button {
     position: absolute;
     inset: 5px 5px auto auto;
@@ -48,4 +52,9 @@ pre {
     box-shadow: -3px 3px #999;
     display: inline-block;
     cursor: pointer;
-  }
+}
+
+li, ul {
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
