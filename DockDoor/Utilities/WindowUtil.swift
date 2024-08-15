@@ -427,7 +427,7 @@ enum WindowUtil {
         return activeWindows
     }
 
-    private static func fetchWindowInfo(window: SCWindow, applicationName _: String) async throws -> WindowInfo? {
+    private static func fetchWindowInfo(window: SCWindow, applicationName: String) async throws -> WindowInfo? {
         let windowID = window.windowID
 
         guard let owningApplication = window.owningApplication,

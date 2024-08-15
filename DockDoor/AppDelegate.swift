@@ -5,11 +5,11 @@ import Sparkle
 import SwiftUI
 
 class SettingsWindowControllerDelegate: NSObject, NSWindowDelegate {
-    func windowDidBecomeKey(_: Notification) {
+    func windowDidBecomeKey(_ notification: Notification) {
         NSApp.setActivationPolicy(.regular) // Show dock icon on open settings window
     }
 
-    func windowWillClose(_: Notification) {
+    func windowWillClose(_ notification: Notification) {
         NSApp.setActivationPolicy(.accessory) // Hide dock icon back
     }
 }
@@ -47,7 +47,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         settingsWindowController.window?.delegate = settingsWindowControllerDelegate
     }
 
-    func applicationDidFinishLaunching(_: Notification) {
+    func applicationDidFinishLaunching(_ notification: Notification) {
         NSApplication.shared.setActivationPolicy(.accessory) // Hide the menubar and dock icons
 
         if Defaults[.showMenuBarIcon] {
@@ -67,7 +67,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
-    func applicationShouldHandleReopen(_: NSApplication, hasVisibleWindows _: Bool) -> Bool {
+    func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
         openSettingsWindow(nil)
         return false
     }
@@ -103,7 +103,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         self.statusBarItem = nil
     }
 
-    @objc func statusBarButtonClicked(_: Any?) {
+    @objc func statusBarButtonClicked(_ sender: Any?) {
         // Show the menu
         if let button = statusBarItem?.button {
             button.menu?.popUp(positioning: nil, at: NSPoint(x: 0, y: button.bounds.maxY), in: button)
@@ -114,7 +114,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         quitApp()
     }
 
-    @objc func openSettingsWindow(_: Any?) {
+    @objc func openSettingsWindow(_ sender: Any?) {
         settingsWindowController.show()
     }
 

@@ -168,25 +168,25 @@ struct SizePickerView: View {
     private func getLabel(for size: CGFloat) -> String {
         switch size {
         case 2:
-            return String(localized: "Large", comment: "Window size option")
+            String(localized: "Large", comment: "Window size option")
         case 3:
-            return String(localized: "Default (Medium Large)", comment: "Window size option")
+            String(localized: "Default (Medium Large)", comment: "Window size option")
         case 4:
-            return String(localized: "Medium", comment: "Window size option")
+            String(localized: "Medium", comment: "Window size option")
         case 5:
-            return String(localized: "Small", comment: "Window size option")
+            String(localized: "Small", comment: "Window size option")
         case 6:
-            return String(localized: "Extra Small", comment: "Window size option")
+            String(localized: "Extra Small", comment: "Window size option")
         case 7:
-            return String(localized: "Extra Extra Small", comment: "Window size option")
+            String(localized: "Extra Extra Small", comment: "Window size option")
         case 8:
-            return String(localized: "What is this? A window for ANTS?", comment: "Window size option")
+            String(localized: "What is this? A window for ANTS?", comment: "Window size option")
         case 9:
-            return String(localized: "Subatomic", comment: "Window size option")
+            String(localized: "Subatomic", comment: "Window size option")
         case 10:
-            return String(localized: "Can you even see this?", comment: "Window size option")
+            String(localized: "Can you even see this?", comment: "Window size option")
         default:
-            return "Unknown Size"
+            "Unknown Size"
         }
     }
 }

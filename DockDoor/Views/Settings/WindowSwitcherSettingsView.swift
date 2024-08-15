@@ -21,7 +21,7 @@ struct WindowSwitcherSettingsView: View {
             Toggle(isOn: $enableWindowSwitcher, label: {
                 Text("Enable Window Switcher")
             }).onChange(of: enableWindowSwitcher) {
-                _, _ in
+                _, newValue in
                 askUserToRestartApplication()
             }
             // Default CMD + TAB implementation checkbox
@@ -100,7 +100,7 @@ struct ShortcutCaptureView: NSViewRepresentable {
     @Binding var isRecording: Bool
     @Binding var modifierKey: Int
 
-    func makeNSView(context _: Context) -> NSView {
+    func makeNSView(context: Context) -> NSView {
         let view = NSView()
         NSEvent.addLocalMonitorForEvents(matching: .keyDown) { event in
             guard isRecording else {
@@ -121,5 +121,5 @@ struct ShortcutCaptureView: NSViewRepresentable {
         return view
     }
 
-    func updateNSView(_: NSView, context _: Context) {}
+    func updateNSView(_ nsView: NSView, context: Context) {}
 }

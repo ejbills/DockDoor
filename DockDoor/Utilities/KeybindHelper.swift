@@ -31,7 +31,7 @@ class KeybindHelper {
             place: .headInsertEventTap,
             options: .defaultTap,
             eventsOfInterest: CGEventMask(eventMask),
-            callback: { proxy, type, event, _ -> Unmanaged<CGEvent>? in
+            callback: { proxy, type, event, refcon -> Unmanaged<CGEvent>? in
                 return KeybindHelper.shared.handleEvent(proxy: proxy, type: type, event: event)
             },
             userInfo: nil
@@ -56,7 +56,7 @@ class KeybindHelper {
         }
     }
 
-    private func handleEvent(proxy _: CGEventTapProxy, type: CGEventType, event: CGEvent) -> Unmanaged<CGEvent>? {
+    private func handleEvent(proxy: CGEventTapProxy, type: CGEventType, event: CGEvent) -> Unmanaged<CGEvent>? {
         let keyCode = event.getIntegerValueField(.keyboardEventKeycode)
         let keyBoardShortcutSaved: UserKeyBind = Defaults[.UserKeybind] // UserDefaults.standard.getKeybind()!
         let shiftKeyCurrentlyPressed = event.flags.contains(.maskShift)
@@ -115,7 +115,7 @@ class KeybindHelper {
                 let windows = try await WindowUtil.activeWindows(for: "")
                 await MainActor.run { [weak self] in
                     guard let self else { return }
-                    if self.isModifierKeyPressed {
+                    if isModifierKeyPressed {
                         SharedPreviewWindowCoordinator.shared.showWindow(appName: "Alt-Tab", windows: windows, overrideDelay: true,
                                                                          centeredHoverWindowState: .windowSwitcher, onWindowTap: { SharedPreviewWindowCoordinator.shared.hideWindow() })
                     }
