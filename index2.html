@@ -52,6 +52,16 @@
     </main>
 
     <script>
+    document.getElementById('languageButton').addEventListener('click', function() {
+        var dropdownContent = document.getElementById('dropdownContent');
+        // Toggle display of the dropdown menu
+        if (dropdownContent.style.display === 'block') {
+            dropdownContent.style.display = 'none';
+        } else {
+            dropdownContent.style.display = 'block';
+        }
+    });
+
     function showthis(nation) {
         // Cacher tous les contenus
         var contents = document.querySelectorAll('div[id^="content"]');
@@ -61,6 +71,9 @@
         
         // Afficher le contenu correspondant
         document.getElementById(nation).style.display = "block";
+
+        // Cacher le menu déroulant après avoir sélectionné une langue
+        document.getElementById('dropdownContent').style.display = 'none';
     }
     </script>
 </body>
