@@ -15,17 +15,53 @@
     <main>
         <!-- For those who haven't activated JavaScript in their browser. -->
         <!-- The link points to a method on how to activate JavaScript. -->
-        <!-- Here, JavaScript is needed to activate the copy button for command-line Homebrew installation. -->
+        <!-- Here, JavaScript is needed to activate the copy button for command-line Homebrew installation and language change. -->
         <noscript>
             It looks like you do not have JavaScript activated. You can activate it using this <a href="https://www.enable-javascript.com">tutorial</a>.
         </noscript>
 
-        <h1 style="font-size: xxx-large; text-align: center;">A new way to work with the Dock.</h1>
-        <video width="100%" autoplay loop playsinline muted>
-            <source src="resources/dockPeekDemo1920.mp4" type="video/mp4">
-        </video>
-        <hr>
-        <h1 style="font-size: xx-large; text-align: center;">Download DockDoor now!</h1>
+        <!-- To add a language, add a <a> tag with ISO code for language in href. Follow existing English and French. -->
+
+        <div class="dropdown">
+            <button class="dropbtn">Language</button>
+            <div class="dropdown-content">
+                <a href="#en" onclick="showthis('contenten')">English</a>
+                <a href="#fr" onclick="showthis('contentfr')">Français</a>
+                <a href="#he" dir="rtl" onclick="showthis('contenthe')">עברית</a>
+            </div>
+        </div>
+
+        <div id="contenten">
+            <h1 style="font-size: xxx-large; text-align: center;">A new way to work with the Dock.</h1>
+            <video width="100%" autoplay loop playsinline muted>
+                <source src="resources/dockPeekDemo1920.mp4" type="video/mp4">
+            </video>
+            <hr>
+            <h1 style="font-size: xx-large; text-align: center;">Download DockDoor now!</h1>
+        </div>
+
+        <div id="contentfr" style="display:none">
+            <h1 style="font-size: xxx-large; text-align: center;">Une nouvelle façon d’utiliser le Dock.</h1>
+            <video width="100%" autoplay loop playsinline muted>
+                <source src="resources/dockPeekDemo1920.mp4" type="video/mp4">
+            </video>
+            <hr>
+            <h1 style="font-size: xx-large; text-align: center;">Téléchargez DockDoor maintenant !</h1>
+        </div>
+
     </main>
+
+    <script>
+    function showthis(nation) {
+        // Cacher tous les contenus
+        var contents = document.querySelectorAll('div[id^="content"]');
+        contents.forEach(function(content) {
+            content.style.display = "none";
+        });
+        
+        // Afficher le contenu correspondant
+        document.getElementById(nation).style.display = "block";
+    }
+    </script>
 </body>
 </html>

@@ -20,6 +20,7 @@ main {
     background: #fff;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    position: relative;
 }
 
 a {
@@ -57,4 +58,52 @@ pre.inline {
 li, ul {
     margin-bottom: 10px;
     margin-top: 10px;
+}
+
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+    border-radius: 10px;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    border-radius: 10px;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    border-radius: 10px;
+}
+
+.dropdown-content a:hover {background-color: #f1f1f1;}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+    border-radius: 10px;
+}
+
+.dropdown:hover .dropbtn {
+    background-color: #333;
+    border-radius: 10px;
+}
+
+/* Style du bouton */
+.dropbtn {
+    background-color: #555;
+    color: white;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    border-radius: 10px;
 }
