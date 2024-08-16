@@ -58,7 +58,7 @@ class KeybindHelper {
 
     private func handleEvent(proxy: CGEventTapProxy, type: CGEventType, event: CGEvent) -> Unmanaged<CGEvent>? {
         let keyCode = event.getIntegerValueField(.keyboardEventKeycode)
-        let keyBoardShortcutSaved: UserKeyBind = Defaults[.UserKeybind] // UserDefaults.standard.getKeybind()!
+        let keyBoardShortcutSaved: UserKeyBind = Defaults[.UserKeybind]
         let shiftKeyCurrentlyPressed = event.flags.contains(.maskShift)
         var userDefinedKeyCurrentlyPressed = false
 
@@ -80,6 +80,11 @@ class KeybindHelper {
         }
 
         else if type == .keyDown {
+            if SharedPreviewWindowCoordinator.shared.isVisible && keyCode == 53 { // Escape key
+                SharedPreviewWindowCoordinator.shared.hideWindow()
+                return nil // Suppress the Escape key event
+            }
+
             if (isModifierKeyPressed && keyCode == keyBoardShortcutSaved.keyCode && modifierValue == keyBoardShortcutSaved.modifierFlags) || (Defaults[.defaultCMDTABKeybind] && event.flags.contains(.maskCommand) && keyCode == 48) { // Tab key
                 if SharedPreviewWindowCoordinator.shared.isVisible { // Check if HoverWindow is already shown
                     SharedPreviewWindowCoordinator.shared.cycleWindows(goBackwards: isShiftKeyPressed) // Cycle windows based on Shift key state
