@@ -113,6 +113,7 @@ struct WindowPreview: View {
                 }
             }
         }
+        .environment(\.layoutDirection, .leftToRight)
         .scaleEffect(selected ? 1.015 : 1)
         .contentShape(Rectangle())
         .onHover { over in
