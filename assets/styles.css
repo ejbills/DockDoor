@@ -87,7 +87,7 @@ li, ul {
 
 .dropdown-content a:hover {background-color: #f1f1f1;}
 
-.dropdown:hover .dropdown-content {
+/*.dropdown:hover .dropdown-content {
     display: block;
     border-radius: 10px;
 }
@@ -95,7 +95,7 @@ li, ul {
 .dropdown:hover .dropbtn {
     background-color: #333;
     border-radius: 10px;
-}
+} */
 
 /* Style du bouton */
 .dropbtn {
