@@ -6,12 +6,19 @@ body {
     color: #000000;
 }
 
-header, footer {
-    background-color: #333;
+header /*, footer */ {
+    background-color: #002244;
     color: #fff !important;
     padding: 10px 20px;
     text-align: center;
 }
+
+.sticky {
+    position: fixed;
+    top: 0;
+    width: 100%;
+}
+
 
 main {
     padding: 20px;
@@ -21,6 +28,10 @@ main {
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     position: relative;
+}
+
+.sticky + .main {
+    padding-top: 102px;
 }
 
 a {
@@ -99,11 +110,60 @@ li, ul {
 
 /* Style du bouton */
 .dropbtn {
-    background-color: #555;
+    background-color: #002244;
     color: white;
     padding: 16px;
     font-size: 16px;
     border: none;
     cursor: pointer;
     border-radius: 10px;
+}
+
+.centered {
+    text-align: center;
+}
+
+.intro {
+    font-size: xxx-large;
+}
+
+.s-intro {
+    font-size: xx-large;
+}
+
+.explanation {
+    font-size: large;
+}
+
+.quick-links {
+    text-align: right;
+}
+
+
+.purple-highlight {
+    background-color: #a845d6;
+    color: white !important;
+    border-radius: 5px;
+    padding: 4px;
+}
+
+.red-highlight {
+    background-color: #ff362f;
+    color: white !important;
+    border-radius: 5px;
+    padding: 4px;
+}
+
+.yellow-highlight {
+    background-color: #ffc72a;
+    color: black;
+    border-radius: 5px;
+    padding: 4px;
+}
+
+.green-highlight {
+    background-color: #13c055;
+    color: black;
+    border-radius: 5px;
+    padding: 4px;
 }

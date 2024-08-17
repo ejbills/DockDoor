@@ -20,23 +20,50 @@
             It looks like you do not have JavaScript activated. You can activate it using this <a href="https://www.enable-javascript.com">tutorial</a>.
         </noscript>
 
-        <!-- To add a language, add a <a> tag with ISO code for language in href. Follow existing English and French. -->
+        <!-- To add your language, please add follow the tutorial comments. Variables in brackets [] have to be replaced. If your language uses Right to Left -->
 
         <div class="dropdown">
             <button id="languageButton" class="dropbtn">Language</button>
             <div id="dropdownContent" class="dropdown-content">
                 <a href="#en" onclick="showthis('contenten')">English</a>
-                <a href="#fr" onclick="showthis('contentfr')">Français</a>
-                <a href="#he" dir="rtl" onclick="showthis('contenthe')">עברית</a>
+                <a href="#fr" onclick="showthis('contentfr')">Français</a> <!-- French -->
+                <a href="#he" dir="rtl" onclick="showthis('contenthe')">עברית</a> <!-- Hebrew -->
+
+                <!-- Add your language here -->
+                <!-- <a href="#[ISO 639-1:2002 (2 letters)]" [dir="rtl" (IF Right To Left LANGUAGE)] onclick="showthis('content[ISO 639-1:2002]')">[Language ENDONYM]</a> -->
+
+                <a href="#">Help translate this page!</a>
             </div>
         </div>
 
-        <div id="contenten">
-            <h1 style="font-size: xxx-large; text-align: center;">A new way of interacting with the Dock.</h1>
+        <div id="contenten" class="centered">
+            <h1 class="intro" id="en1">A new way of interacting with the Dock.</h1>
+            <p class="explanation">DockDoor lets you easily switch between windows on macOS.</p>
+            <p><em>Available for macOS 14 and newer.</em></p>
             <video width="100%" autoplay loop playsinline muted>
                 <source src="resources/dockPeekDemo1920.mp4" type="video/mp4">
+                <p>Video demonstration of DockDoor while running.</p>
             </video>
+
             <hr>
+
+            <h1 class="s-intro" id="en2">Manage windows and applications directly from the previews.</h1>
+            <p class="explanation">You can <span class="red-highlight"><strong>close</strong></span>, <span class="yellow-highlight"><strong>minimize</strong></span>, <span class="green-highlight"><strong>maximize</strong></span> windows, and <span class="purple-highlight"><strong>quit</strong></span> applications.</p>
+            <p>DockDoor supports multiple windows per app.</p>
+            <img src="resources/dockPeek.png" alt="An example of use of DockDoor: traffic light buttons allow users to manage their windows and applications." width="100%">
+            <p class="explanation">Hold <strong>&#8997; (Option key)</strong> while clicking the <span class="purple-highlight"><strong>Quit</strong></span> button to <strong>force quit</strong> the currently previewed app.</p>
+            <img src="resources/previewDefaultCommented.png" alt="Description of the controls on window previews." width="50%">
+
+            <hr>
+
+            <h1 class="s-intro" id="en3">Customize everything you want.</h1>
+            <p class="explanation">You can customize </p>
+            <video width="75%" autoplay loop playsinline muted>
+                <source src="resources/variations/compilation.mp4" type="video/mp4">
+            </video>
+
+            <hr>
+
             <h1 style="font-size: xx-large; text-align: center;">Download DockDoor now!</h1>
         </div>
 
@@ -46,35 +73,45 @@
                 <source src="resources/dockPeekDemo1920.mp4" type="video/mp4">
             </video>
             <hr>
-            <h1 style="font-size: xx-large; text-align: center;">Téléchargez DockDoor maintenant !</h1>
+            <h1 style="font-size: xx-large; text-align: center;">Téléchargez DockDoor maintenant&nbsp;!</h1>
+        </div>
+
+        <div id="contenthe" dir="rtl" style="display:none">
+            <p style="text-align: center;"><em>Translation of this page is 0% completed.</em></p>
+            <h1 style="font-size: xxx-large; text-align: center;">A new way of interacting with the Dock.</h1>
+            <video width="100%" autoplay loop playsinline muted>
+                <source src="resources/dockPeekDemo1920.mp4" type="video/mp4">
+            </video>
+            <hr>
+            <h1 style="font-size: xx-large; text-align: center;">Download DockDoor now!</h1>
         </div>
 
     </main>
 
     <script>
-document.getElementById('languageButton').addEventListener('click', function() {
-    var dropdownContent = document.getElementById('dropdownContent');
-    // Toggle display of the dropdown menu
-    if (dropdownContent.style.display === 'block') {
-        dropdownContent.style.display = 'none';
-    } else {
-        dropdownContent.style.display = 'block';
-    }
-});
+        document.getElementById('languageButton').addEventListener('click', function() {
+            var dropdownContent = document.getElementById('dropdownContent');
+            // Toggle display of the dropdown menu
+            if (dropdownContent.style.display === 'block') {
+                dropdownContent.style.display = 'none';
+            } else {
+                dropdownContent.style.display = 'block';
+            }
+        });
 
-function showthis(nation) {
-    // Cacher tous les contenus
-    var contents = document.querySelectorAll('div[id^="content"]');
-    contents.forEach(function(content) {
-        content.style.display = "none";
-    });
-    
-    // Afficher le contenu correspondant
-    document.getElementById(nation).style.display = "block";
+        function showthis(nation) {
+            // Cacher tous les contenus
+            var contents = document.querySelectorAll('div[id^="content"]');
+            contents.forEach(function(content) {
+                content.style.display = "none";
+            });
+            
+            // Afficher le contenu correspondant
+            document.getElementById(nation).style.display = "block";
 
-    // Cacher le menu déroulant après avoir sélectionné une langue
-    document.getElementById('dropdownContent').style.display = 'none';
-}
+            // Cacher le menu déroulant après avoir sélectionné une langue
+            document.getElementById('dropdownContent').style.display = 'none';
+        }
 
     </script>
 </body>
