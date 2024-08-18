@@ -37,6 +37,12 @@
         </div>
 
         <div id="contenten" class="centered">
+            <p class="quick-links">
+                <span><a href="">Home</a></span>
+                <span style="margin-left: 20px;"><a href="#en-down">Download</a></span>
+                <span style="margin-left: 20px;"><a href="#en-faq">FAQ</a></span>
+                <span style="margin-left: 20px;"><a href="https://github.com/ejbills/DockDoor">View on GitHub</a></span>
+            </p>
             <h1 class="intro" id="en1">A new way of interacting with the Dock.</h1>
             <p class="explanation">DockDoor lets you easily switch between windows on macOS.</p>
             <p><em>Available for macOS 14 and newer.</em></p>
@@ -57,23 +63,39 @@
             <hr>
 
             <h1 class="s-intro" id="en3">Customize everything you want.</h1>
-            <p class="explanation">You can customize </p>
-            <video width="75%" autoplay loop playsinline muted>
-                <source src="resources/variations/compilation.mp4" type="video/mp4">
-            </video>
+            <p class="explanation">Choose where you want to see the <span class="red-highlight">traffic</span> <span class="yellow-highlight">light</span> <span class="green-highlight">buttons</span> and the window title.</p>
+            <img src="" id="variations" width="50%">
+            <p>DockDoor also provides options for the app title style.</p>
+            <img src="" id="apptitle">
 
             <hr>
 
             <h1 style="font-size: xx-large; text-align: center;">Download DockDoor now!</h1>
+            <p><em>DockDoor is open-source. Its source code is available on GitHub. <a href="https://github.com/ejbills/DockDoor">View it here</a>.</em></p>
+            <p>
+                <a href="https://github.com/ejbills/DockDoor/releases/latest/download/DockDoor.dmg"><img src="https://img.shields.io/github/v/release/ejbills/DockDoor" alt="Latest release"></a>
+                <img src="https://img.shields.io/github/downloads/ejbills/DockDoor/total?label=total%20downloads" alt="Total downloads">
+                <a href="https://github.com/ejbills/DockDoor/stargazers"><img src="https://img.shields.io/github/stars/ejbills/DockDoor" alt="Stars"></a>
+                <a href="https://github.com/ejbills/DockDoor/network/members"><img src="https://img.shields.io/github/forks/ejbills/DockDoor" alt="Forks"></a>
+                <a href="https://github.com/ejbills/DockDoor/issues"><img src="https://img.shields.io/github/issues/ejbills/DockDoor" alt="Issues"></a>
+                <a href="https://github.com/ejbills/DockDoor/blob/main/LICENSE"><img src="https://img.shields.io/github/license/ejbills/DockDoor"alt="License"></a>
+                <a href="https://github.com/ejbills/DockDoor/graphs/contributors"><img src="https://img.shields.io/github/contributors/ejbills/DockDoor" alt="Contributors"></a>
+            </p>
         </div>
 
         <div id="contentfr" style="display:none">
-            <h1 style="font-size: xxx-large; text-align: center;">Une nouvelle façon d’interagir avec le Dock.</h1>
+            <p class="quick-links">
+                <span><a href="">Accueil</a></span>
+                <span style="margin-left: 20px;"><a href="#fr2">Test</a></span>
+                <span style="margin-left: 20px;"><a href="#en-faq">FAQ</a></span>
+                <span style="margin-left: 20px;"><a href="https://github.com/ejbills/DockDoor">View on GitHub</a></span>
+            </p>
+            <h1 style="font-size: xxx-large; text-align: center;" id="fr1">Une nouvelle façon d’interagir avec le Dock.</h1>
             <video width="100%" autoplay loop playsinline muted>
                 <source src="resources/dockPeekDemo1920.mp4" type="video/mp4">
             </video>
             <hr>
-            <h1 style="font-size: xx-large; text-align: center;">Téléchargez DockDoor maintenant&nbsp;!</h1>
+            <h1 style="font-size: xx-large; text-align: center;" id="fr2">Téléchargez DockDoor maintenant&nbsp;!</h1>
         </div>
 
         <div id="contenthe" dir="rtl" style="display:none">
@@ -88,7 +110,7 @@
 
     </main>
 
-    <script>
+    <script type="text/JavaScript">
         document.getElementById('languageButton').addEventListener('click', function() {
             var dropdownContent = document.getElementById('dropdownContent');
             // Toggle display of the dropdown menu
@@ -111,8 +133,25 @@
 
             // Cacher le menu déroulant après avoir sélectionné une langue
             document.getElementById('dropdownContent').style.display = 'none';
-        }
+        };
 
+        let variationsimage = document.getElementById('variations');
+        let variationsimages = ['resources/variations/bl-br.png', 'resources/variations/bl-tl.png', 'resources/variations/bl-tr.png', 'resources/variations/br-bl.png', 'resources/variations/br-tl.png', 'resources/variations/br-tr.png', 'resources/variations/tl-bl.png', 'resources/variations/tl-br.png', 'resources/variations/tl-tr.png', 'resources/variations/tr-bl.png', 'resources/variations/tr-br.png', 'resources/variations/tr-tl.png']
+
+        let variationsIndex = 0;
+        setInterval(function(){
+            variationsIndex = (variationsIndex + 1)  % variationsimages.length;
+            variationsimage.src = variationsimages[variationsIndex];
+        }, 500);
+
+        let apptitleimage = document.getElementById('apptitle');
+        let apptitleimages = ['resources/previewDefault.png', 'resources/previewEmbedded.png', 'resources/previewPopover.png']
+
+        let apptitleIndex = 0;
+        setInterval(function(){
+            apptitleIndex = (apptitleIndex + 1) % apptitleimages.length;
+            apptitleimage.src = apptitleimages[apptitleIndex];
+        }, 1000);
     </script>
 </body>
 </html>

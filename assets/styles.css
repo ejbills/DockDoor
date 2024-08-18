@@ -139,6 +139,12 @@ li, ul {
     text-align: right;
 }
 
+#apptitle {
+    width: 630px;
+    height: 500px;
+    max-width: 100%;
+    object-fit: contain;
+}
 
 .purple-highlight {
     background-color: #a845d6;
