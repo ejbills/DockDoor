@@ -166,14 +166,19 @@ li, ul {
 
 button {
     background-color: #002244;
-    color: white;
+    color: white !important;
     padding: 16px;
     font-size: 16px;
     border: none;
     cursor: pointer;
     border-radius: 10px;
+    box-sizing: border-box;
 }
 
 button:hover {
     background-color: #00152b;
+}
+
+button a {
+    text-decoration: none !important;
 }
