@@ -13,13 +13,6 @@ header /*, footer */ {
     text-align: center;
 }
 
-.sticky {
-    position: fixed;
-    top: 0;
-    width: 100%;
-}
-
-
 main {
     padding: 20px;
     max-width: 1200px;
@@ -30,9 +23,6 @@ main {
     position: relative;
 }
 
-.sticky + .main {
-    padding-top: 102px;
-}
 
 a {
     /* color: #3498db; */
@@ -108,7 +98,7 @@ li, ul {
     border-radius: 10px;
 } */
 
-/* Style du bouton */
+/* Button for dropdown */
 .dropbtn {
     background-color: #002244;
     color: white;
@@ -172,4 +162,14 @@ li, ul {
     color: black;
     border-radius: 5px;
     padding: 4px;
+}
+
+.button {
+    background-color: #002244;
+    color: white;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    border-radius: 10px;
 }
