@@ -164,7 +164,7 @@ li, ul {
     padding: 4px;
 }
 
-button {
+.button {
     background-color: #002244;
     color: white !important;
     padding: 16px;
@@ -175,10 +175,10 @@ button {
     box-sizing: border-box;
 }
 
-button:hover {
+.button:hover {
     background-color: #00152b;
 }
 
-button a {
+.button a {
     text-decoration: none !important;
 }
