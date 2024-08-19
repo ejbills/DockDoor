@@ -43,6 +43,7 @@ pre {
 
 pre.inline {
     display: inline;
+    white-space: pre-wrap;
 }
 
 .copy-button {
@@ -107,6 +108,11 @@ li, ul {
     border: none;
     cursor: pointer;
     border-radius: 10px;
+    font-family: inherit;
+}
+
+.dropbtn:hover {
+    background-color: #00152b;
 }
 
 .centered {
@@ -126,7 +132,7 @@ li, ul {
 }
 
 .quick-links {
-    text-align: right;
+    text-align: end;
 }
 
 #apptitle {
@@ -173,6 +179,7 @@ li, ul {
     cursor: pointer;
     border-radius: 10px;
     box-sizing: border-box;
+    font-family: inherit;
 }
 
 .button:hover {
@@ -182,4 +189,52 @@ li, ul {
 .button a {
     text-decoration: none !important;
     color: inherit !important;
+}
+
+.dark-box {
+    width: 100%;
+    height: auto;
+    background-color: #000;
+    color: white;
+    box-sizing: border-box;
+    padding: 10px;
+}
+
+details {
+    background-color: #002244;
+    color: #fff;
+    font-size: 1.25rem;
+    text-align: start;
+}
+  
+summary {
+    padding: .5em 1.3rem;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;  
+    transition: height 1s ease;
+    text-align: start;
+    font-weight: bold;
+    background-color: #00152b;
+}
+  
+summary::-webkit-details-marker {
+    display: none;
+}
+  
+summary:after {
+    content: "\25BC";
+}
+  
+details[open] summary {
+    border-bottom: 1px solid #aaa;
+}
+  
+details[open] summary:after {
+    content: "\25B2";
+}
+  
+details[open] div {
+    padding: .5em 1em;
+    border-bottom: 3px solid #aaa;
 }
