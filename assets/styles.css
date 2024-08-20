@@ -136,10 +136,8 @@ li, ul {
 }
 
 #apptitle {
-    width: 630px;
-    height: 500px;
-    max-width: 100%;
-    object-fit: contain;
+    width: 50%;
+    height: auto;
 }
 
 .purple-highlight {
