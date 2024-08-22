@@ -128,6 +128,8 @@ struct AppearanceSettingsView: View {
                 .pickerStyle(SegmentedPickerStyle())
             }
             .disabled(!showWindowTitle)
+
+            GradientColorPaletteSettingsView()
         }
         .padding(20)
         .frame(minWidth: 650)

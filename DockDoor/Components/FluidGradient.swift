@@ -1,12 +1,14 @@
+import Defaults
 import FluidGradient
 import SwiftUI
 
 func fluidGradient() -> some View {
-    FluidGradient(
-        blobs: [.purple, .blue, .green, .yellow, .red, .purple].shuffled(),
-        highlights: [.red, .orange, .pink, .blue, .purple].shuffled(),
-        speed: 0.45,
-        blur: 0.75
+    let gradientColorPalette = Defaults[.gradientColorPalette]
+    return FluidGradient(
+        blobs: gradientColorPalette.blobs.shuffled(),
+        highlights: gradientColorPalette.highlights.shuffled(),
+        speed: gradientColorPalette.speed,
+        blur: gradientColorPalette.blur
     )
 }
 
