@@ -11,52 +11,55 @@ struct GradientColorPaletteSettingsView: View {
     @State private var colorUpdatePublisher = PassthroughSubject<Color, Never>()
     @State private var cancellables = Set<AnyCancellable>()
 
+    let maxColors = 8
+
     var body: some View {
-        VStack(alignment: .leading, spacing: 20) {
-            HStack {
-                ForEach(storedSettings.colors.indices, id: \.self) { index in
-                    colorShape(for: storedSettings.colors[index], index: index)
+        HStack {
+            Text("Colors")
+                .layoutPriority(1)
+            ForEach(storedSettings.colors.indices, id: \.self) { index in
+                colorShape(for: storedSettings.colors[index], index: index)
+            }
+            Spacer()
+            Button(action: addRandomColor) {
+                Image(systemName: "plus")
+                    .frame(width: 30, height: 30)
+                    .buttonBorderShape(.roundedRectangle)
+            }
+        }
+
+        if editingIndex != nil {
+            ColorPicker("Edit Color", selection: $tempColor)
+                .labelsHidden()
+                .onChange(of: tempColor) { _, newValue in
+                    colorUpdatePublisher.send(newValue)
                 }
+        }
 
-                Button(action: addRandomColor) {
-                    Image(systemName: "plus")
-                        .frame(width: 30, height: 30)
-                }
-            }
+        Text("Right click colors to remove it.")
+            .font(.caption)
+            .foregroundColor(.gray)
 
-            if let editingIndex {
-                ColorPicker("Edit Color", selection: $tempColor)
-                    .labelsHidden()
-                    .onChange(of: tempColor) { _, newValue in
-                        colorUpdatePublisher.send(newValue)
-                    }
-            }
+        HStack {
+            Text("Animation speed")
+                .layoutPriority(1)
+            Spacer()
+            Slider(value: $storedSettings.speed, in: 0.1 ... 1.0, step: 0.05)
+            TextField("", value: $storedSettings.speed, formatter: decimalFormatter)
+                .frame(width: 38)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+            Text("seconds")
+        }
 
-            Text("Right click colors to remove it.")
-                .font(.caption)
-                .foregroundColor(.gray)
-
-            HStack {
-                Text("Animation speed")
-                    .layoutPriority(1)
-                Spacer()
-                Slider(value: $storedSettings.speed, in: 0.1 ... 1.0, step: 0.05)
-                TextField("", value: $storedSettings.speed, formatter: decimalFormatter)
-                    .frame(width: 38)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                Text("seconds")
-            }
-
-            HStack {
-                Text("Blur amount")
-                    .layoutPriority(1)
-                Spacer()
-                Slider(value: $storedSettings.blur, in: 0 ... 1.0, step: 0.05)
-                TextField("", value: $storedSettings.blur, formatter: decimalFormatter)
-                    .frame(width: 38)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                Text("amount")
-            }
+        HStack {
+            Text("Blur amount")
+                .layoutPriority(1)
+            Spacer()
+            Slider(value: $storedSettings.blur, in: 0 ... 1.0, step: 0.05)
+            TextField("", value: $storedSettings.blur, formatter: decimalFormatter)
+                .frame(width: 38)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+            Text("amount")
         }
         .onAppear {
             setupColorDebounce()
@@ -90,6 +93,10 @@ struct GradientColorPaletteSettingsView: View {
             blue: .random(in: 0 ... 1)
         )
         if let hex = newColor.toHex() {
+            guard storedSettings.colors.count < maxColors else {
+                showMaximumColorsAlert()
+                return
+            }
             storedSettings.colors.append(hex)
         }
     }
@@ -117,6 +124,20 @@ struct GradientColorPaletteSettingsView: View {
                 print("User acknowledged the minimum colors alert")
             case .cancel:
                 print("User cancelled the minimum colors alert")
+            }
+        }
+    }
+
+    private func showMaximumColorsAlert() {
+        MessageUtil.showMessage(
+            title: "Cannot Add Color",
+            message: "Maximum number of colors (\(maxColors)) reached."
+        ) { action in
+            switch action {
+            case .ok:
+                print("User acknowledged the maximum colors alert")
+            case .cancel:
+                print("User cancelled the maximum colors alert")
             }
         }
     }
