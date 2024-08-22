@@ -129,6 +129,8 @@ struct AppearanceSettingsView: View {
             }
             .disabled(!showWindowTitle)
 
+            Divider()
+
             GradientColorPaletteSettingsView()
         }
         .padding(20)

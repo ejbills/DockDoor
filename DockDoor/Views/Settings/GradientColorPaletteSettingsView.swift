@@ -1,72 +1,136 @@
-import Defaults
-import SwiftUI
-
+import Cocoa
+import Combine
 import Defaults
 import SwiftUI
 
 struct GradientColorPaletteSettingsView: View {
     @Default(.gradientColorPalette) var storedSettings
-    @State private var localSettings: GradientColorPaletteSettings
-
-    init() {
-        _localSettings = State(initialValue: Defaults[.gradientColorPalette])
-    }
+    @State private var editingColor: String?
+    @State private var editingIndex: Int?
+    @State private var tempColor: Color = .black
+    @State private var colorUpdatePublisher = PassthroughSubject<Color, Never>()
+    @State private var cancellables = Set<AnyCancellable>()
 
     var body: some View {
-        VStack {
-            Form {
-                Section(header: Text("Blob Colors")) {
-                    HStack {
-                        ForEach(0 ..< localSettings.blobs.count, id: \.self) { index in
-                            ColorPicker("Blob \(index + 1)", selection: $localSettings.blobs[index])
-                        }
-                    }
-                    HStack {
-                        Button("Add Blob Color") {
-                            localSettings.blobs.append(.white)
-                        }
-                        .disabled(localSettings.blobs.count >= 10)
-                        Button("Remove Last Blob Color") {
-                            _ = localSettings.blobs.popLast()
-                        }
-                        .disabled(localSettings.blobs.count <= 2)
-                    }
+        VStack(alignment: .leading, spacing: 20) {
+            HStack {
+                ForEach(storedSettings.colors.indices, id: \.self) { index in
+                    colorShape(for: storedSettings.colors[index], index: index)
                 }
-                Section(header: Text("Highlight Colors")) {
-                    HStack {
-                        ForEach(0 ..< localSettings.highlights.count, id: \.self) { index in
-                            ColorPicker("Highlight \(index + 1)", selection: $localSettings.highlights[index])
-                        }
-                    }
-                    HStack {
-                        Button("Add Highlight Color") {
-                            localSettings.highlights.append(.white)
-                        }
-                        .disabled(localSettings.highlights.count >= 10)
-                        Button("Remove Last Highlight Color") {
-                            _ = localSettings.highlights.popLast()
-                        }
-                        .disabled(localSettings.highlights.count <= 2)
-                    }
-                }
-                Section(header: Text("Animation Settings")) {
-                    Slider(value: $localSettings.speed, in: 0.1 ... 1.0, step: 0.05) {
-                        Text("Animation Speed: \(localSettings.speed, specifier: "%.2f")")
-                    }
 
-                    Slider(value: $localSettings.blur, in: 0.0 ... 1.0, step: 0.05) {
-                        Text("Blur Amount: \(localSettings.blur, specifier: "%.2f")")
-                    }
+                Button(action: addRandomColor) {
+                    Image(systemName: "plus")
+                        .frame(width: 30, height: 30)
                 }
             }
+
+            if let editingIndex {
+                ColorPicker("Edit Color", selection: $tempColor)
+                    .labelsHidden()
+                    .onChange(of: tempColor) { _, newValue in
+                        colorUpdatePublisher.send(newValue)
+                    }
+            }
+
+            Text("Right click colors to remove it.")
+                .font(.caption)
+                .foregroundColor(.gray)
+
+            HStack {
+                Text("Animation speed")
+                    .layoutPriority(1)
+                Spacer()
+                Slider(value: $storedSettings.speed, in: 0.1 ... 1.0, step: 0.05)
+                TextField("", value: $storedSettings.speed, formatter: decimalFormatter)
+                    .frame(width: 38)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                Text("seconds")
+            }
+
+            HStack {
+                Text("Blur amount")
+                    .layoutPriority(1)
+                Spacer()
+                Slider(value: $storedSettings.blur, in: 0 ... 1.0, step: 0.05)
+                TextField("", value: $storedSettings.blur, formatter: decimalFormatter)
+                    .frame(width: 38)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                Text("amount")
+            }
         }
-        .onChange(of: localSettings) { _, _ in saveChanges() }
+        .onAppear {
+            setupColorDebounce()
+        }
     }
 
-    private func saveChanges() {
-        Defaults[.gradientColorPalette] = localSettings
-        storedSettings = localSettings
-        print("Saved settings - Blobs: \(storedSettings.blobs)")
-        print("Local settings - Blobs: \(localSettings.blobs)")
+    private func colorShape(for hexColor: String, index: Int) -> some View {
+        Circle()
+            .fill(Color(hex: hexColor))
+            .frame(width: 30, height: 30)
+            .overlay(
+                Circle()
+                    .stroke(editingIndex == index ? Color.white : Color.clear, lineWidth: 2)
+            )
+            .onTapGesture {
+                editingColor = hexColor
+                editingIndex = index
+                tempColor = Color(hex: hexColor)
+            }
+            .contextMenu {
+                Button("Remove") {
+                    removeColor(at: index)
+                }
+            }
+    }
+
+    private func addRandomColor() {
+        let newColor = Color(
+            red: .random(in: 0 ... 1),
+            green: .random(in: 0 ... 1),
+            blue: .random(in: 0 ... 1)
+        )
+        if let hex = newColor.toHex() {
+            storedSettings.colors.append(hex)
+        }
+    }
+
+    private func removeColor(at index: Int) {
+        guard storedSettings.colors.count > 1 else {
+            showMinimumColorsAlert()
+            return
+        }
+        storedSettings.colors.remove(at: index)
+
+        if editingIndex == index {
+            editingColor = nil
+            editingIndex = nil
+        }
+    }
+
+    private func showMinimumColorsAlert() {
+        MessageUtil.showMessage(
+            title: "Cannot Remove Color",
+            message: "Minimum number of colors reached."
+        ) { action in
+            switch action {
+            case .ok:
+                print("User acknowledged the minimum colors alert")
+            case .cancel:
+                print("User cancelled the minimum colors alert")
+            }
+        }
+    }
+
+    private func setupColorDebounce() {
+        colorUpdatePublisher
+            .debounce(for: .milliseconds(100), scheduler: DispatchQueue.main)
+            .sink { newColor in
+                guard let editingIndex else { return }
+                if let newHex = newColor.toHex() {
+                    editingColor = newHex
+                    storedSettings.colors[editingIndex] = newHex
+                }
+            }
+            .store(in: &cancellables)
     }
 }

@@ -5,8 +5,8 @@ import SwiftUI
 func fluidGradient() -> some View {
     let gradientColorPalette = Defaults[.gradientColorPalette]
     return FluidGradient(
-        blobs: gradientColorPalette.blobs.shuffled(),
-        highlights: gradientColorPalette.highlights.shuffled(),
+        blobs: gradientColorPalette.colors.map { Color(hex: $0) }.shuffled(),
+        highlights: gradientColorPalette.colors.map { Color(hex: $0) }.shuffled(),
         speed: gradientColorPalette.speed,
         blur: gradientColorPalette.blur
     )

@@ -1247,12 +1247,6 @@
         }
       }
     },
-    "Add Blob Color" : {
-
-    },
-    "Add Highlight Color" : {
-
-    },
     "Adjust this if the preview is misaligned with dock" : {
       "localizations" : {
         "af" : {
@@ -1969,10 +1963,10 @@
         }
       }
     },
-    "Animation Settings" : {
+    "amount" : {
 
     },
-    "Animation Speed: %.2f" : {
+    "Animation speed" : {
 
     },
     "App Name Style" : {
@@ -2866,13 +2860,7 @@
         }
       }
     },
-    "Blob %lld" : {
-
-    },
-    "Blob Colors" : {
-
-    },
-    "Blur Amount: %.2f" : {
+    "Blur amount" : {
 
     },
     "Bottom Left" : {
@@ -5552,6 +5540,9 @@
         }
       }
     },
+    "Edit Color" : {
+
+    },
     "Elements Overlap" : {
       "localizations" : {
         "af" : {
@@ -7515,12 +7506,6 @@
           }
         }
       }
-    },
-    "Highlight %lld" : {
-
-    },
-    "Highlight Colors" : {
-
     },
     "Hover Window Open Delay" : {
       "localizations" : {
@@ -13233,10 +13218,7 @@
         }
       }
     },
-    "Remove Last Blob Color" : {
-
-    },
-    "Remove Last Highlight Color" : {
+    "Remove" : {
 
     },
     "Reset" : {
@@ -14308,6 +14290,9 @@
           }
         }
       }
+    },
+    "Right click colors to remove it." : {
+
     },
     "Screen Capturing:" : {
       "localizations" : {
