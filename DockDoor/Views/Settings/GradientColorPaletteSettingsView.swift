@@ -35,7 +35,7 @@ struct GradientColorPaletteSettingsView: View {
             if editingIndex != nil, editingColor != nil {
                 ColorPicker("Edit Color", selection: $tempColor)
                     .labelsHidden()
-                    .onChange(of: tempColor) { _, newValue in
+                    .onChange(of: tempColor) { newValue in
                         colorUpdatePublisher.send(newValue)
                     }
             }
@@ -127,9 +127,10 @@ struct GradientColorPaletteSettingsView: View {
     }
 
     private func showMinimumColorsAlert() {
-        MessageUtil.showMessage(
+        MessageUtil.showAlert(
             title: "Cannot Remove Color",
-            message: "Minimum number of colors reached."
+            message: "Minimum number of colors reached.",
+            actions: [.ok, .cancel]
         ) { action in
             switch action {
             case .ok:
@@ -141,9 +142,10 @@ struct GradientColorPaletteSettingsView: View {
     }
 
     private func showMaximumColorsAlert() {
-        MessageUtil.showMessage(
+        MessageUtil.showAlert(
             title: "Cannot Add Color",
-            message: "Maximum number of colors (\(maxColors)) reached."
+            message: "Maximum number of colors (\(maxColors)) reached.",
+            actions: [.ok, .cancel]
         ) { action in
             switch action {
             case .ok:

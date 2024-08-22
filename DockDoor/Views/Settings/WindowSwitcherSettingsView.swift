@@ -20,8 +20,7 @@ struct WindowSwitcherSettingsView: View {
         VStack(alignment: .leading, spacing: 10) {
             Toggle(isOn: $enableWindowSwitcher, label: {
                 Text("Enable Window Switcher")
-            }).onChange(of: enableWindowSwitcher) {
-                _, newValue in
+            }).onChange(of: enableWindowSwitcher) { newValue in
                 askUserToRestartApplication()
             }
             // Default CMD + TAB implementation checkbox

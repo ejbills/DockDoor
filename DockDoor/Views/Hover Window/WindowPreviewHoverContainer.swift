@@ -61,12 +61,12 @@ struct WindowPreviewHoverContainer: View {
                             runUIUpdates()
                         }
                     }
-                    .onChange(of: ScreenCenteredFloatingWindow.shared.currIndex) { _, newIndex in
+                    .onChange(of: ScreenCenteredFloatingWindow.shared.currIndex) { newIndex in
                         withAnimation {
                             scrollProxy.scrollTo("\(appName)-\(newIndex)", anchor: .center)
                         }
                     }
-                    .onChange(of: windows) { _, _ in
+                    .onChange(of: windows) { _ in
                         runUIUpdates()
                     }
                 }

@@ -39,7 +39,7 @@ struct MainSettingsView: View {
             Toggle(isOn: $showMenuBarIcon, label: {
                 Text("Show Menu Bar Icon")
             })
-            .onChange(of: showMenuBarIcon) { _, isOn in
+            .onChange(of: showMenuBarIcon) { isOn in
                 let appDelegate = NSApplication.shared.delegate as! AppDelegate
                 if isOn {
                     appDelegate.setupMenuBar()
@@ -132,9 +132,10 @@ struct MainSettingsView: View {
     }
 
     private func showResetConfirmation() {
-        MessageUtil.showMessage(
+        MessageUtil.showAlert(
             title: String(localized: "Reset to Defaults"),
-            message: String(localized: "Are you sure you want to reset all settings to their default values?")
+            message: String(localized: "Are you sure you want to reset all settings to their default values?"),
+            actions: [.ok, .cancel]
         ) { action in
             switch action {
             case .ok:
@@ -159,7 +160,7 @@ struct SizePickerView: View {
                 }
             }
             .scaledToFit()
-            .onChange(of: sizingMultiplier) { _, _ in
+            .onChange(of: sizingMultiplier) { _ in
                 SharedPreviewWindowCoordinator.shared.windowSize = getWindowSize()
             }
         }

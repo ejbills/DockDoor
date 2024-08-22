@@ -2,12 +2,12 @@ import Defaults
 import FluidGradient
 import SwiftUI
 
-@Observable class ScreenCenteredFloatingWindow {
+class ScreenCenteredFloatingWindow: ObservableObject {
     static let shared = ScreenCenteredFloatingWindow()
 
-    var currIndex: Int = 0
-    var windowSwitcherActive: Bool = false
-    var fullWindowPreviewActive: Bool = false
+    @Published var currIndex: Int = 0
+    @Published var windowSwitcherActive: Bool = false
+    @Published var fullWindowPreviewActive: Bool = false
 
     enum WindowState {
         case windowSwitcher
