@@ -16,6 +16,7 @@ struct WindowPreviewHoverContainer: View {
     @State private var showWindows: Bool = false
     @State private var hasAppeared: Bool = false
     @State private var appIcon: NSImage? = nil
+    @ObservedObject private var screenCenteredFloatingWindow = ScreenCenteredFloatingWindow.shared
 
     var maxWindowDimension: CGPoint {
         let thickness = SharedPreviewWindowCoordinator.shared.windowSize.height
@@ -28,7 +29,7 @@ struct WindowPreviewHoverContainer: View {
                 let widthBasedOnHeight = (cgSize.width * thickness) / cgSize.height
                 let heightBasedOnWidth = (cgSize.height * thickness) / cgSize.width
 
-                if dockPosition == .bottom || ScreenCenteredFloatingWindow.shared.windowSwitcherActive {
+                if dockPosition == .bottom || screenCenteredFloatingWindow.windowSwitcherActive {
                     maxWidth = max(maxWidth, widthBasedOnHeight)
                     maxHeight = thickness
                 } else {
@@ -42,7 +43,7 @@ struct WindowPreviewHoverContainer: View {
     }
 
     var body: some View {
-        let orientationIsHorizontal = dockPosition == .bottom || ScreenCenteredFloatingWindow.shared.windowSwitcherActive
+        let orientationIsHorizontal = dockPosition == .bottom || screenCenteredFloatingWindow.windowSwitcherActive
         ZStack {
             ScrollViewReader { scrollProxy in
                 ScrollView(orientationIsHorizontal ? .horizontal : .vertical, showsIndicators: false) {
@@ -61,31 +62,31 @@ struct WindowPreviewHoverContainer: View {
                             runUIUpdates()
                         }
                     }
-                    .onChange(of: ScreenCenteredFloatingWindow.shared.currIndex) { _, newIndex in
+                    .onChange(of: screenCenteredFloatingWindow.currIndex) { newIndex in
                         withAnimation {
                             scrollProxy.scrollTo("\(appName)-\(newIndex)", anchor: .center)
                         }
                     }
-                    .onChange(of: windows) { _, _ in
+                    .onChange(of: windows) { _ in
                         runUIUpdates()
                     }
                 }
                 .opacity(showWindows ? 1 : 0.8)
             }
         }
-        .padding(.top, (!ScreenCenteredFloatingWindow.shared.windowSwitcherActive && appNameStyle == .embedded && showAppName) ? 25 : 0) // Provide space above the window preview for the Embedded title style when hovering over the Dock.
+        .padding(.top, (!screenCenteredFloatingWindow.windowSwitcherActive && appNameStyle == .embedded && showAppName) ? 25 : 0) // Provide space above the window preview for the Embedded title style when hovering over the Dock.
         .dockStyle(cornerRadius: 16)
         .overlay(alignment: .topLeading) {
             hoverTitleBaseView(labelSize: measureString(appName, fontSize: 14))
         }
-        .padding(.top, (!ScreenCenteredFloatingWindow.shared.windowSwitcherActive && appNameStyle == .popover && showAppName) ? 30 : 0) // Provide empty space above the window preview for the Popover title style when hovering over the Dock
+        .padding(.top, (!screenCenteredFloatingWindow.windowSwitcherActive && appNameStyle == .popover && showAppName) ? 30 : 0) // Provide empty space above the window preview for the Popover title style when hovering over the Dock
         .padding(.all, 24)
         .frame(maxWidth: bestGuessMonitor.visibleFrame.width, maxHeight: bestGuessMonitor.visibleFrame.height)
     }
 
     @ViewBuilder
     private func hoverTitleBaseView(labelSize: CGSize) -> some View {
-        if !ScreenCenteredFloatingWindow.shared.windowSwitcherActive, showAppName {
+        if !screenCenteredFloatingWindow.windowSwitcherActive, showAppName {
             switch appNameStyle {
             case .default:
                 HStack(spacing: 2) {

@@ -31,9 +31,13 @@ struct TheMarquee<C: View>: View {
         if !animating { return }
         let offsetAmount = contentSize.width + spacingBetweenElements
         let duration = offsetAmount / speedPtsPerSec
+
         withAnimation(.linear(duration: duration)) {
             offset = -offsetAmount
-        } completion: {
+        }
+
+        // Simulate the completion handler taht only available on macOS 14.0+
+        doAfter(duration) {
             offset = 0
             doAfter(secsBeforeLooping) {
                 if animating {
@@ -63,8 +67,8 @@ struct TheMarquee<C: View>: View {
         .measure($containerSize)
         .compositingGroup()
         .opacity(measured ? 1 : 0)
-        .onChange(of: containerSize) { _, _ in startAnimation() }
-        .onChange(of: contentSize) { _, _ in startAnimation() }
+        .onChange(of: containerSize) { _ in startAnimation() }
+        .onChange(of: contentSize) { _ in startAnimation() }
         .onAppear { startAnimation() }
         .onDisappear { animating = false }
     }
@@ -76,23 +80,25 @@ extension View {
             if !disable {
                 GeometryReader { geo in
                     DynStack(direction: axis, spacing: 0) {
-                        SmoothLinearGradient(
-                            from: .black.opacity(0),
-                            to: .black.opacity(1),
-                            startPoint: axis == .horizontal ? .leading : .top,
-                            endPoint: axis == .horizontal ? .trailing : .bottom,
-                            curve: .easeInOut
-                        )
-                        .frame(width: axis == .horizontal ? fadeLength : nil, height: axis == .vertical ? fadeLength : nil)
-                        Color.black.frame(maxWidth: .infinity)
-                        SmoothLinearGradient(
-                            from: .black.opacity(0),
-                            to: .black.opacity(1),
-                            startPoint: axis == .horizontal ? .trailing : .bottom,
-                            endPoint: axis == .horizontal ? .leading : .top,
-                            curve: .easeInOut
-                        )
-                        .frame(width: axis == .horizontal ? fadeLength : nil, height: axis == .vertical ? fadeLength : nil)
+                        if #available(macOS 14.0, *) {
+                            SmoothLinearGradient(
+                                from: .black.opacity(0),
+                                to: .black.opacity(1),
+                                startPoint: axis == .horizontal ? .leading : .top,
+                                endPoint: axis == .horizontal ? .trailing : .bottom,
+                                curve: .easeInOut
+                            )
+                            .frame(width: axis == .horizontal ? fadeLength : nil, height: axis == .vertical ? fadeLength : nil)
+                            Color.black.frame(maxWidth: .infinity)
+                            SmoothLinearGradient(
+                                from: .black.opacity(0),
+                                to: .black.opacity(1),
+                                startPoint: axis == .horizontal ? .trailing : .bottom,
+                                endPoint: axis == .horizontal ? .leading : .top,
+                                curve: .easeInOut
+                            )
+                            .frame(width: axis == .horizontal ? fadeLength : nil, height: axis == .vertical ? fadeLength : nil)
+                        }
                     }
                 }
             } else {
