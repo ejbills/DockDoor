@@ -221,8 +221,6 @@ final class SharedPreviewWindowCoordinator: NSWindow {
 
         debounceWorkItem?.cancel()
 
-        let isHoverWindowShowing = isVisible
-
         if let lastShowTime, now.timeIntervalSince(lastShowTime) < debounceDelay {
             let workItem = DispatchWorkItem { [weak self] in
                 self?.performShowWindow(appName: appName, windows: windows, mouseLocation: mouseLocation, mouseScreen: mouseScreen, centeredHoverWindowState: centeredHoverWindowState, onWindowTap: onWindowTap)
@@ -231,7 +229,7 @@ final class SharedPreviewWindowCoordinator: NSWindow {
             debounceWorkItem = workItem
             DispatchQueue.main.asyncAfter(deadline: .now() + debounceDelay, execute: workItem)
         } else {
-            if isHoverWindowShowing || delay == 0.0 {
+            if delay == 0.0 {
                 performShowWindow(appName: appName, windows: windows, mouseLocation: mouseLocation, mouseScreen: mouseScreen, centeredHoverWindowState: centeredHoverWindowState, onWindowTap: onWindowTap)
             } else {
                 let workItem = DispatchWorkItem { [weak self] in
