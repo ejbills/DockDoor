@@ -14,31 +14,36 @@ struct GradientColorPaletteSettingsView: View {
     let maxColors = 8
 
     var body: some View {
-        HStack {
+        HStack(alignment: .top) {
             Text("Colors")
                 .layoutPriority(1)
-            ForEach(storedSettings.colors.indices, id: \.self) { index in
-                colorShape(for: storedSettings.colors[index], index: index)
+
+            VStack(alignment: .leading, spacing: 4) {
+                HStack(spacing: 4) {
+                    ForEach(storedSettings.colors.indices, id: \.self) { index in
+                        colorShape(for: storedSettings.colors[index], index: index)
+                    }
+                }
+
+                Text("Right click a color to remove it.")
+                    .font(.caption)
+                    .foregroundColor(.gray)
             }
+
             Spacer()
+
+            if editingIndex != nil, editingColor != nil {
+                ColorPicker("Edit Color", selection: $tempColor)
+                    .labelsHidden()
+                    .onChange(of: tempColor) { _, newValue in
+                        colorUpdatePublisher.send(newValue)
+                    }
+            }
             Button(action: addRandomColor) {
                 Image(systemName: "plus")
                     .frame(width: 30, height: 30)
-                    .buttonBorderShape(.roundedRectangle)
             }
         }
-
-        if editingIndex != nil {
-            ColorPicker("Edit Color", selection: $tempColor)
-                .labelsHidden()
-                .onChange(of: tempColor) { _, newValue in
-                    colorUpdatePublisher.send(newValue)
-                }
-        }
-
-        Text("Right click colors to remove it.")
-            .font(.caption)
-            .foregroundColor(.gray)
 
         HStack {
             Text("Animation speed")
@@ -69,15 +74,22 @@ struct GradientColorPaletteSettingsView: View {
     private func colorShape(for hexColor: String, index: Int) -> some View {
         Circle()
             .fill(Color(hex: hexColor))
-            .frame(width: 30, height: 30)
+            .frame(width: 20, height: 20)
             .overlay(
                 Circle()
                     .stroke(editingIndex == index ? Color.white : Color.clear, lineWidth: 2)
             )
             .onTapGesture {
-                editingColor = hexColor
-                editingIndex = index
-                tempColor = Color(hex: hexColor)
+                withAnimation(.snappy(duration: 0.125)) {
+                    if editingColor == hexColor, editingIndex == index { // no change, remove selection
+                        editingColor = nil
+                        editingIndex = nil
+                    } else {
+                        editingColor = hexColor
+                        editingIndex = index
+                        tempColor = Color(hex: hexColor)
+                    }
+                }
             }
             .contextMenu {
                 Button("Remove") {
