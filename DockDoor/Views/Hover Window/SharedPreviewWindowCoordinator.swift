@@ -60,15 +60,11 @@ final class SharedPreviewWindowCoordinator: NSWindow {
 
     // Setup window properties
     private func setupWindow() {
-        level = .floating
+        level = NSWindow.Level(rawValue: 19)
         isMovableByWindowBackground = false
-        collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary]
+        collectionBehavior = [.canJoinAllSpaces]
         backgroundColor = .clear
         hasShadow = false
-
-        let options: NSTrackingArea.Options = [.mouseEnteredAndExited, .activeAlways]
-        let trackingArea = NSTrackingArea(rect: frame, options: options, owner: self, userInfo: nil)
-        contentView?.addTrackingArea(trackingArea)
     }
 
     // Hide the window and reset its state
