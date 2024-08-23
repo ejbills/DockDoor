@@ -83,12 +83,46 @@ enum WindowUtil {
         let windowRect = CGRect(
             x: window.frame.origin.x,
             y: window.frame.origin.y,
-            width: CGFloat(window.frame.width),
-            height: CGFloat(window.frame.height)
+            width: window.frame.width,
+            height: window.frame.height
         )
 
-        guard let cgImage = CGWindowListCreateImage(windowRect, .optionIncludingWindow, window.windowID, [.boundsIgnoreFraming, .bestResolution]) else {
+        let options: CGWindowImageOption = [
+            .bestResolution,
+            .nominalResolution,
+        ]
+
+        guard var cgImage = CGWindowListCreateImage(windowRect, .optionIncludingWindow, window.windowID, options) else {
             throw NSError(domain: "WindowCaptureError", code: 1, userInfo: [NSLocalizedDescriptionKey: "Failed to create image for window"])
+        }
+
+        let previewScale = Int(Defaults[.windowPreviewImageScale])
+
+        // Only scale down if previewScale is greater than 1
+        if previewScale > 1 {
+            let newWidth = Int(cgImage.width) / previewScale
+            let newHeight = Int(cgImage.height) / previewScale
+
+            let colorSpace = cgImage.colorSpace ?? CGColorSpaceCreateDeviceRGB()
+            let bitmapInfo = cgImage.bitmapInfo
+
+            guard let context = CGContext(data: nil,
+                                          width: newWidth,
+                                          height: newHeight,
+                                          bitsPerComponent: cgImage.bitsPerComponent,
+                                          bytesPerRow: 0,
+                                          space: colorSpace,
+                                          bitmapInfo: bitmapInfo.rawValue)
+            else {
+                throw NSError(domain: "WindowCaptureError", code: 2, userInfo: [NSLocalizedDescriptionKey: "Failed to create graphics context for resizing"])
+            }
+
+            context.interpolationQuality = .high
+            context.draw(cgImage, in: CGRect(x: 0, y: 0, width: newWidth, height: newHeight))
+
+            if let resizedImage = context.makeImage() {
+                cgImage = resizedImage
+            }
         }
 
         return cgImage

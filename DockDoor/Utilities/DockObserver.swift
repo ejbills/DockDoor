@@ -95,7 +95,7 @@ final class DockObserver {
     }
 
     private func processMouseEvent(mouseLocation: CGPoint) {
-        guard !isProcessing, !ScreenCenteredFloatingWindow.shared.windowSwitcherActive else { return }
+        guard !isProcessing, !SharedPreviewWindowCoordinator.shared.windowSwitcherCoordinator.windowSwitcherActive else { return }
         isProcessing = true
 
         defer {

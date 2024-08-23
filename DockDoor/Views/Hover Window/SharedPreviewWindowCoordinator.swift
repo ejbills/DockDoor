@@ -2,9 +2,7 @@ import Defaults
 import FluidGradient
 import SwiftUI
 
-class ScreenCenteredFloatingWindow: ObservableObject {
-    static let shared = ScreenCenteredFloatingWindow()
-
+class ScreenCenteredFloatingWindowCoordinator: ObservableObject {
     @Published var currIndex: Int = 0
     @Published var windowSwitcherActive: Bool = false
     @Published var fullWindowPreviewActive: Bool = false
@@ -38,6 +36,8 @@ class ScreenCenteredFloatingWindow: ObservableObject {
 
 final class SharedPreviewWindowCoordinator: NSWindow {
     static let shared = SharedPreviewWindowCoordinator()
+
+    let windowSwitcherCoordinator = ScreenCenteredFloatingWindowCoordinator()
 
     private var appName: String = ""
     private var windows: [WindowInfo] = []
@@ -81,8 +81,8 @@ final class SharedPreviewWindowCoordinator: NSWindow {
             hostingView = nil
             appName = ""
             windows.removeAll()
-            ScreenCenteredFloatingWindow.shared.setIndex(to: 0)
-            ScreenCenteredFloatingWindow.shared.setShowing(.both, toState: false)
+            windowSwitcherCoordinator.setIndex(to: 0)
+            windowSwitcherCoordinator.setShowing(.both, toState: false)
             orderOut(nil)
         }
     }
@@ -90,15 +90,16 @@ final class SharedPreviewWindowCoordinator: NSWindow {
     // Update the content view size and position
     private func updateContentViewSizeAndPosition(mouseLocation: CGPoint? = nil, mouseScreen: NSScreen,
                                                   animated: Bool, centerOnScreen: Bool = false,
-                                                  centeredHoverWindowState: ScreenCenteredFloatingWindow.WindowState? = nil)
+                                                  centeredHoverWindowState: ScreenCenteredFloatingWindowCoordinator.WindowState? = nil)
     {
         guard hostingView != nil else { return }
 
-        ScreenCenteredFloatingWindow.shared.setShowing(centeredHoverWindowState, toState: centerOnScreen)
+        windowSwitcherCoordinator.setShowing(centeredHoverWindowState, toState: centerOnScreen)
 
         // Reset the hosting view
         let hoverView = WindowPreviewHoverContainer(appName: appName, windows: windows, onWindowTap: onWindowTap,
-                                                    dockPosition: DockUtils.shared.getDockPosition(), bestGuessMonitor: mouseScreen)
+                                                    dockPosition: DockUtils.shared.getDockPosition(), bestGuessMonitor: mouseScreen,
+                                                    windowSwitcherCoordinator: windowSwitcherCoordinator)
         let newHostingView = NSHostingView(rootView: hoverView)
         contentView = newHostingView
         hostingView = newHostingView
@@ -213,7 +214,7 @@ final class SharedPreviewWindowCoordinator: NSWindow {
 
     // Show window with debounce logic
     func showWindow(appName: String, windows: [WindowInfo], mouseLocation: CGPoint? = nil, mouseScreen: NSScreen? = nil,
-                    overrideDelay: Bool = false, centeredHoverWindowState: ScreenCenteredFloatingWindow.WindowState? = nil,
+                    overrideDelay: Bool = false, centeredHoverWindowState: ScreenCenteredFloatingWindowCoordinator.WindowState? = nil,
                     onWindowTap: (() -> Void)? = nil)
     {
         let now = Date()
@@ -248,7 +249,7 @@ final class SharedPreviewWindowCoordinator: NSWindow {
 
     // Perform the actual window showing
     private func performShowWindow(appName: String, windows: [WindowInfo], mouseLocation: CGPoint?, mouseScreen: NSScreen?,
-                                   centeredHoverWindowState: ScreenCenteredFloatingWindow.WindowState? = nil,
+                                   centeredHoverWindowState: ScreenCenteredFloatingWindowCoordinator.WindowState? = nil,
                                    onWindowTap: (() -> Void)?)
     {
         let shouldCenterOnScreen = centeredHoverWindowState != .none
@@ -283,7 +284,8 @@ final class SharedPreviewWindowCoordinator: NSWindow {
     // Update or create the hosting view
     private func updateHostingView(appName: String, windows: [WindowInfo], onWindowTap: (() -> Void)?, screen: NSScreen) {
         let hoverView = WindowPreviewHoverContainer(appName: appName, windows: windows, onWindowTap: onWindowTap,
-                                                    dockPosition: DockUtils.shared.getDockPosition(), bestGuessMonitor: screen)
+                                                    dockPosition: DockUtils.shared.getDockPosition(), bestGuessMonitor: screen,
+                                                    windowSwitcherCoordinator: windowSwitcherCoordinator)
 
         if let existingHostingView = hostingView {
             existingHostingView.rootView = hoverView
@@ -298,15 +300,15 @@ final class SharedPreviewWindowCoordinator: NSWindow {
     func cycleWindows(goBackwards: Bool) {
         guard !windows.isEmpty else { return }
 
-        let currentIndex = ScreenCenteredFloatingWindow.shared.currIndex
+        let currentIndex = windowSwitcherCoordinator.currIndex
         let newIndex = (currentIndex + (goBackwards ? -1 : 1) + windows.count) % windows.count
-        ScreenCenteredFloatingWindow.shared.setIndex(to: newIndex)
+        windowSwitcherCoordinator.setIndex(to: newIndex)
     }
 
     // Select and bring to front the current window
     func selectAndBringToFrontCurrentWindow() {
         guard !windows.isEmpty else { return }
-        let selectedWindow = windows[ScreenCenteredFloatingWindow.shared.currIndex]
+        let selectedWindow = windows[windowSwitcherCoordinator.currIndex]
         WindowUtil.bringWindowToFront(windowInfo: selectedWindow)
         hideWindow()
     }
