@@ -9,11 +9,14 @@
 /* Begin PBXBuildFile section */
 		0531F8D22C3CC04600327808 /* AppearanceSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0531F8D12C3CC04600327808 /* AppearanceSettingsView.swift */; };
 		0596C2C32C3E060D00DCABEF /* PrivateApis.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0596C2C22C3E060D00DCABEF /* PrivateApis.swift */; };
-		05A25B912C3EF28E002AC594 /* ColorHex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A25B902C3EF28E002AC594 /* ColorHex.swift */; };
 		05C0C7182C60629C000ADAC6 /* AXUIElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C0C7172C60629C000ADAC6 /* AXUIElement.swift */; };
 		3A105FD62C1BED660015EC66 /* BlurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A105FD52C1BED660015EC66 /* BlurView.swift */; };
 		3A105FD92C1C049E0015EC66 /* dockStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A105FD82C1C049E0015EC66 /* dockStyle.swift */; };
 		3A105FDD2C1C0EE20015EC66 /* DynStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A105FDC2C1C0EE20015EC66 /* DynStack.swift */; };
+		BB04405B2C77A013009F1D33 /* GradientColorPaletteSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB04405A2C77A011009F1D33 /* GradientColorPaletteSettings.swift */; };
+		BB04405E2C77A87F009F1D33 /* PreferencesProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB04405D2C77A87E009F1D33 /* PreferencesProtocol.swift */; };
+		BB0440602C77AD2C009F1D33 /* CodableColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB04405F2C77AD27009F1D33 /* CodableColor.swift */; };
+		BB0440622C77AE8D009F1D33 /* GradientColorPaletteSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0440612C77AE85009F1D33 /* GradientColorPaletteSettingsView.swift */; };
 		BB157B6D2C0E31CF00997315 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BB157B6C2C0E31CF00997315 /* Assets.xcassets */; };
 		BB157B702C0E31CF00997315 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BB157B6F2C0E31CF00997315 /* Preview Assets.xcassets */; };
 		BB157B792C0E330100997315 /* WindowUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB157B782C0E330100997315 /* WindowUtil.swift */; };
@@ -57,11 +60,14 @@
 /* Begin PBXFileReference section */
 		0531F8D12C3CC04600327808 /* AppearanceSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceSettingsView.swift; sourceTree = "<group>"; };
 		0596C2C22C3E060D00DCABEF /* PrivateApis.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateApis.swift; sourceTree = "<group>"; };
-		05A25B902C3EF28E002AC594 /* ColorHex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorHex.swift; sourceTree = "<group>"; };
 		05C0C7172C60629C000ADAC6 /* AXUIElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AXUIElement.swift; sourceTree = "<group>"; };
 		3A105FD52C1BED660015EC66 /* BlurView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurView.swift; sourceTree = "<group>"; };
 		3A105FD82C1C049E0015EC66 /* dockStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dockStyle.swift; sourceTree = "<group>"; };
 		3A105FDC2C1C0EE20015EC66 /* DynStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynStack.swift; sourceTree = "<group>"; };
+		BB04405A2C77A011009F1D33 /* GradientColorPaletteSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientColorPaletteSettings.swift; sourceTree = "<group>"; };
+		BB04405D2C77A87E009F1D33 /* PreferencesProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesProtocol.swift; sourceTree = "<group>"; };
+		BB04405F2C77AD27009F1D33 /* CodableColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodableColor.swift; sourceTree = "<group>"; };
+		BB0440612C77AE85009F1D33 /* GradientColorPaletteSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientColorPaletteSettingsView.swift; sourceTree = "<group>"; };
 		BB157B652C0E31CE00997315 /* DockDoor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DockDoor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB157B6C2C0E31CF00997315 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BB157B6F2C0E31CF00997315 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -120,6 +126,7 @@
 		3A105FD42C1BED5B0015EC66 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				BB04405C2C77A878009F1D33 /* Defaults */,
 				BBF413992C40A64000AA6733 /* FluidGradient.swift */,
 				3A105FD52C1BED660015EC66 /* BlurView.swift */,
 				3A105FDC2C1C0EE20015EC66 /* DynStack.swift */,
@@ -133,11 +140,20 @@
 		3A105FD72C1BF11D0015EC66 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				BB04405F2C77AD27009F1D33 /* CodableColor.swift */,
 				05C0C7172C60629C000ADAC6 /* AXUIElement.swift */,
-				05A25B902C3EF28E002AC594 /* ColorHex.swift */,
 				3A105FD82C1C049E0015EC66 /* dockStyle.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		BB04405C2C77A878009F1D33 /* Defaults */ = {
+			isa = PBXGroup;
+			children = (
+				BB04405D2C77A87E009F1D33 /* PreferencesProtocol.swift */,
+				BB04405A2C77A011009F1D33 /* GradientColorPaletteSettings.swift */,
+			);
+			path = Defaults;
 			sourceTree = "<group>";
 		};
 		BB157B5C2C0E31CE00997315 = {
@@ -234,6 +250,7 @@
 				BBFAD73B2C287C770092F5F1 /* UpdateSettingsView.swift */,
 				C119BDF12C2AFA7600E06E18 /* WindowSwitcherSettingsView.swift */,
 				0531F8D12C3CC04600327808 /* AppearanceSettingsView.swift */,
+				BB0440612C77AE85009F1D33 /* GradientColorPaletteSettingsView.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -358,14 +375,16 @@
 				BB157B802C0E8E6700997315 /* MessageUtil.swift in Sources */,
 				05C0C7182C60629C000ADAC6 /* AXUIElement.swift in Sources */,
 				3A105FD62C1BED660015EC66 /* BlurView.swift in Sources */,
+				BB0440622C77AE8D009F1D33 /* GradientColorPaletteSettingsView.swift in Sources */,
 				BB1CBD5D2C1BCA4F003969BC /* Misc Utils.swift in Sources */,
-				05A25B912C3EF28E002AC594 /* ColorHex.swift in Sources */,
 				3A105FD92C1C049E0015EC66 /* dockStyle.swift in Sources */,
 				BBE7CC942C225D9700AB8F4D /* App Icon.swift in Sources */,
 				BB2CBB092C481295004502C5 /* SpaceWindowCacheManager.swift in Sources */,
 				BB3968022C2A6CC2004F1AB6 /* Marquee.swift in Sources */,
+				BB0440602C77AD2C009F1D33 /* CodableColor.swift in Sources */,
 				BB52EDF02C5BEFE3006A64A4 /* HiddenModifier.swift in Sources */,
 				BB44474F2C507F950047EB92 /* LimitedTaskGroup.swift in Sources */,
+				BB04405E2C77A87F009F1D33 /* PreferencesProtocol.swift in Sources */,
 				BB157B822C0EB29E00997315 /* DockObserver.swift in Sources */,
 				BBA153FA2C11FFD500119C02 /* consts.swift in Sources */,
 				BBA153F62C115DDA00119C02 /* AppDelegate.swift in Sources */,
@@ -382,6 +401,7 @@
 				BBF413922C40618D00AA6733 /* FullSizePreviewView.swift in Sources */,
 				BBCFAE402C266234002E1516 /* FirstTimeView.swift in Sources */,
 				BB4B444B2C372A4E006680DC /* WindowPreview.swift in Sources */,
+				BB04405B2C77A013009F1D33 /* GradientColorPaletteSettings.swift in Sources */,
 				BB1CBD582C1BA800003969BC /* MainSettingsView.swift in Sources */,
 				BB157B792C0E330100997315 /* WindowUtil.swift in Sources */,
 				BBFAD73C2C287C770092F5F1 /* UpdateSettingsView.swift in Sources */,
