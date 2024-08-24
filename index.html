@@ -17,6 +17,7 @@
         <!-- The link points to a method on how to activate JavaScript. -->
         <noscript>
             It looks like you do not have JavaScript activated. You can activate it using this <a href="https://www.enable-javascript.com">tutorial</a>.
+            If you find yourself unable to activate JavaScript, try on another computer or browser.
         </noscript>
 
         <div class="dropdown">
@@ -25,7 +26,7 @@
                 <a href="#" class="lang-option" data-lang="en">English</a>
                 <a href="#" class="lang-option" data-lang="fr">Français</a> <!-- French -->
                 <a href="#" class="lang-option" data-lang="he" dir="rtl">עברית</a> <!-- Hebrew -->
-                <a href="#" target="_blank" data-translate="helpTranslate">Help translate this page!</a>
+                <a href="https://dockdoor.miraheze.org/wiki/How_to_contribute" target="_blank" data-translate="helpTranslate"></a>
             </div>
         </div>
 
@@ -34,12 +35,13 @@
                 <a href="#" data-translate="home"></a>
                 <span class="margin"><a href="#download" data-translate="download"></a></span>
                 <span class="margin"><a href="#faq" data-translate="faq"></a></span>
-                <span class="margin"><a href="https://github.com/ejbills/DockDoor" data-translate="viewGit"></a></span>
+                <span class="margin"><a href="https://github.com/ejbills/DockDoor" data-translate="viewGit" target="_blank"></a></span>
+                <span class="margin"><a href="#contribute" data-translate="contribute"></a></span>
             </p>
 
-            <h1 class="intro" id="1">A new way of interacting with the Dock.</h1>
-            <p class="explanation">DockDoor is the only <strong><u>free and open-source</u></strong> application that lets you easily switch between windows on <strong>macOS</strong>.</p>
-            <p><em>Available for <strong>macOS 14 and newer</strong>.</em></p>
+            <h1 class="intro" id="1" data-translate="introHeading"></h1>
+            <p class="explanation" data-translate="introText"></p>
+            <p><em data-translate="introSmall"></em></p>
             <video width="100%" autoplay loop playsinline muted>
                 <source src="/resources/dockPeekDemo1920.mp4" type="video/mp4">
                 <p>Video demonstration of DockDoor while running.</p>
@@ -47,37 +49,35 @@
 
             <hr>
 
-            <h1 class="s-intro" id="2">Manage windows and applications directly from the previews.</h1>
-            <p class="explanation" style="line-height: 2;">You can <span class="red-highlight"><strong>close</strong></span>, <span class="yellow-highlight"><strong>minimize</strong></span>, <span class="green-highlight"><strong>maximize</strong></span> windows, and <span class="purple-highlight"><strong>quit</strong></span> applications.</p>
-            <p>DockDoor supports multiple windows per app.</p>
+            <h1 class="s-intro" id="2" data-translate="2Heading"></h1>
+            <p class="explanation" style="line-height: 2;" data-translate="2Text"></p>
+            <p data-translate="2Small"></p>
             <img src="/resources/dockPeek.png" alt="An example of use of DockDoor: traffic light buttons allow users to manage their windows and applications." width="100%">
-            <p class="explanation" style="line-height: 2;">Hold <strong>&#8997; (Option key)</strong> while clicking the <span class="purple-highlight"><strong>Quit</strong></span> button to <strong>force quit</strong> the currently previewed app.</p>
+            <p class="explanation" style="line-height: 2;" data-translate="2Text2"></p>
             <img src="/resources/previewDefaultCommented.png" alt="Description of the controls on window previews." width="50%">
 
             <hr>
 
-            <h1 class="s-intro" id="3">Customize everything you want.</h1>
-            <p class="explanation" style="line-height: 2;">Choose where you want to see the <span class="red-highlight">traffic</span> <span class="yellow-highlight">light</span> <span class="green-highlight">buttons</span> and the window title.</p>
+            <h1 class="s-intro" id="3" data-translate="3Heading"></h1>
+            <p class="explanation" style="line-height: 2;" data-translate="3Text"></p>
             <img src="" id="variations" width="50%" alt="A series of images showing the customization options for traffic light buttons and window titles.">
-            <p>DockDoor also provides options for the app title style.</p>
+            <p data-translate="3Small"></p>
             <img src="" id="apptitle" alt="A series of images showing the customization options for application titles." width="50%">
             <div class="dark-box">
-                <p class="explanation">
-                    &#127764; Also available in <strong>dark mode</strong>. &#129417;
-                </p>
+                <p class="explanation" data-translate="3Text2"></p>
                 <img src="/resources/variations/dark-mode.png" alt="A screenshot of the dark mode" width="50%">
             </div>
 
             <hr>
 
-            <h1 class="s-intro" id="4">That’s not all.</h1>
-            <p class="explanation">DockDoor also provides a <strong>window switcher</strong>, a feature similar to Microsoft Windows’s Alt + Tab.</p>
-            <p>More information available in the <a href="https://dockdoor.miraheze.org/wiki/#">documentation</a>.</p>
+            <h1 class="s-intro" id="4" data-translate="4Heading"></h1>
+            <p class="explanation" data-translate="4Text"></p>
+            <p data-translate="4Small"></p>
             <img src="/resources/windowSwitcherDemo.png" alt="Demonstration of the window switcher." width="50%">
             <hr>
 
-            <h1 class="s-intro" id="download">Download DockDoor now!</h1>
-            <p><em>DockDoor is <strong>free <u>and</u> open-source</strong>. Its source code is available on GitHub. <a href="https://github.com/ejbills/DockDoor">View it <strong>here</strong></a>.</em></p>
+            <h1 class="s-intro" id="download" data-translate="downloadHeading"></h1>
+            <p><em data-translate="downloadSmall"></em></p>
             <p>
                 <a href="https://github.com/ejbills/DockDoor/releases/latest/download/DockDoor.dmg"><img src="https://img.shields.io/github/v/release/ejbills/DockDoor" alt="Latest release"></a>
                 <img src="https://img.shields.io/github/downloads/ejbills/DockDoor/total?label=total%20downloads" alt="Total downloads">
@@ -88,66 +88,58 @@
                 <a href="https://github.com/ejbills/DockDoor/graphs/contributors"><img src="https://img.shields.io/github/contributors/ejbills/DockDoor" alt="Contributors"></a>
             </p>
             <button class="button" onclick="window.location.href='https://github.com/ejbills/DockDoor/releases/latest/download/DockDoor.dmg';">
-                <strong>Download DMG file</strong>
+                <strong data-translate="downloadDownload"></strong>
             </button>
             <button class="button" onclick="window.location.href='https://formulae.brew.sh/cask/dockdoor';">
-                <strong>Use Homebrew</strong>
+                <strong data-translate="downloadHomebrew"></strong>
             </button>
-            <p class="explanation">
-                Thanks to you, DockDoor is already available in <strong>more than 10 languages</strong>! If you want to contribute translating the app in yours, do not hesitate!
-            </p>
+            <p class="explanation" data-translate="downloadTranslateText"></p>
             <button class="button" onclick="window.location.href='https://crowdin.com/project/dockdoor/invite?h=895e3c085646d3c07fa36a97044668e02149115';">
-                <strong>Help translating here</strong>
+                <strong data-translate="downloadTranslate"></strong>
             </button>
-            <p class="explanation">
-                If you like this application, please consider <strong>donating</strong> to the developer. Thank you!
-            </p>
+            <p class="explanation" data-translate="downloadDonateText"></p>
             <button class="button" onclick="window.location.href='https://www.buymeacoffee.com/keplercafe';">
-                <strong>Buy me a coffee!</strong>
+                <strong data-translate="downloadDonate"></strong>
             </button>
             
             <hr>
 
-            <h1 class="s-intro" id="faq">Frequently Asked Questions</h1>
+            <h1 class="s-intro" id="contribute" data-translate="contributeHeading"></h1>
+            <p class="explanation" data-translate="contributeText"></p>
+            <hr>
+
+            <h1 class="s-intro" id="faq" data-translate="faqHeading"></h1>
+            <div class="details-container">
             <details>
-                <summary>
-                    How to use the Dock peek feature?
-                </summary>
-                <div>
-                    Simply hover over any application’s icon on the Dock with at least one window open. Previews of the application’s opened, minimized and hidden windows will be displayed. Take control of the windows by using the <strong>traffic light buttons</strong>.
-                </div>
+                <summary data-translate="faqQ1"></summary>
+                <div data-translate="faqA1"></div>
             </details>
             <details>
-                <summary>
-                    How to force quit an application?
-                </summary>
-                <div>
-                    Hold the Option key (<strong>&#8997;</strong>) when clicking the purple button to force quit the app.
-                </div>
+                <summary data-translate="faqQ2"></summary>
+                <div data-translate="faqA2"></div>
             </details>
             <details>
-                <summary>
-                    What is the window switcher?
+                <summary data-translate="faqQ3">
+                    
                 </summary>
                 <div>
-                    The default behavior of DockDoor assigns Command (<strong>&#8984;</strong>) + Tab (<strong>&RightArrowBar;</strong>) as the shortcut for the window switcher, a feature similar to the Alt + Tab (<strong>&RightArrowBar;</strong>) shortcut in Microsoft Windows.
+                    <span data-translate="faqA3-1"></span>
                     <br><br>
-                    To switch between windows, hold down the Command (<strong>&#8984;</strong>) key and press the Tab (<strong>&RightArrowBar;</strong>) key repeatedly until the desired window is highlighted. Release both keys to switch to the selected window.
+                    <span data-translate="faqA3-2"></span>
                     <br><br>
-                    If you want to set your own keybind, you can disable the <pre class="inline"><strong><em>Use default macOS keybind &#8984; + &RightArrowBar;</em></strong></pre> option in the <pre class="inline"><strong><em>Window Switcher</em></strong></pre> tab. Then, choose one of modifier keys (<strong>&#8963;, &#8997;, or &#8984;</strong>), click on <pre class="inline"><strong><em>Record keybind</em></strong></pre> and press the key you want to associate with the previously selected modifier key.
+                    <span data-translate="faqA3-3"></span>
                 </div>
             </details>
             <details>
-                <summary>
-                    How to access DockDoor’s settings window?
-                </summary>
+                <summary data-translate="faqQ4"></summary>
                 <div>
-                    If you have disabled the <pre class="inline"><strong><em>Show Menu Bar Icon</em></strong></pre> option in the <pre class="inline"><strong><em>General</em></strong></pre> tab, search for "DockDoor" using Spotlight and select the application. The settings window should appear.
+                    <span data-translate="faqA4-1"></span>
                     <br>
-                    If not, simply click on the menu bar icon and select <pre class="inline"><em><strong>Open Settings</strong></em></pre>. The settings window should appear.
+                    <span data-translate="faqA4-2"></span>
                 </div>
             </details>
-            <p>Didn’t find an anwser? Check the <a href="https://dockdoor.miraheze.org/wiki">DockDoor</a> wiki for more information.</p>
+        </div>
+            <p data-translate="faqDocumentation"></p>
         </div>
 
     </main>
