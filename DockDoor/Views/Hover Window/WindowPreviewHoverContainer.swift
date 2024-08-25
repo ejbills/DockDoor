@@ -18,6 +18,7 @@ struct WindowPreviewHoverContainer: View {
     @State private var showWindows: Bool = false
     @State private var hasAppeared: Bool = false
     @State private var appIcon: NSImage? = nil
+    @ObservedObject private var screenCenteredFloatingWindow = ScreenCenteredFloatingWindow.shared
 
     var maxWindowDimension: CGPoint {
         let thickness = SharedPreviewWindowCoordinator.shared.windowSize.height
