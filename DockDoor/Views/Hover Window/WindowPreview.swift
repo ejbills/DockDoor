@@ -9,6 +9,8 @@ struct WindowPreview: View {
     let maxWindowDimension: CGPoint
     let bestGuessMonitor: NSScreen
     let uniformCardRadius: Bool
+    var currIndex: Int
+    var windowSwitcherActive: Bool
 
     @Default(.windowTitlePosition) var windowTitlePosition
     @Default(.showWindowTitle) var showWindowTitle
@@ -63,7 +65,7 @@ struct WindowPreview: View {
     }
 
     var body: some View {
-        let isHighlightedInWindowSwitcher = (index == ScreenCenteredFloatingWindow.shared.currIndex && ScreenCenteredFloatingWindow.shared.windowSwitcherActive)
+        let isHighlightedInWindowSwitcher = (index == currIndex && windowSwitcherActive)
         let selected = isHoveringOverDockPeekPreview || isHighlightedInWindowSwitcher
 
         ZStack(alignment: .topTrailing) {
@@ -89,7 +91,7 @@ struct WindowPreview: View {
                     .topLeading
                 }
             }()) {
-                if showWindowTitle, windowTitleDisplayCondition == .all || (windowTitleDisplayCondition == .windowSwitcherOnly && ScreenCenteredFloatingWindow.shared.windowSwitcherActive) || (windowTitleDisplayCondition == .dockPreviewsOnly && !ScreenCenteredFloatingWindow.shared.windowSwitcherActive) {
+                if showWindowTitle, windowTitleDisplayCondition == .all || (windowTitleDisplayCondition == .windowSwitcherOnly && windowSwitcherActive) || (windowTitleDisplayCondition == .dockPreviewsOnly && !windowSwitcherActive) {
                     windowTitleOverlay(selected: selected)
                 }
             }
@@ -118,7 +120,7 @@ struct WindowPreview: View {
         .contentShape(Rectangle())
         .onHover { over in
             withAnimation(.snappy(duration: 0.175)) {
-                if !ScreenCenteredFloatingWindow.shared.windowSwitcherActive {
+                if !windowSwitcherActive {
                     isHoveringOverDockPeekPreview = over
                     handleFullPreviewHover(isHovering: over, action: previewHoverAction)
                 } else {
@@ -132,7 +134,7 @@ struct WindowPreview: View {
     }
 
     private func handleFullPreviewHover(isHovering: Bool, action: PreviewHoverAction) {
-        if isHovering, !ScreenCenteredFloatingWindow.shared.windowSwitcherActive {
+        if isHovering, !windowSwitcherActive {
             switch action {
             case .none:
                 // Do nothing for .none
@@ -198,7 +200,7 @@ struct WindowPreview: View {
 
     @ViewBuilder
     private func windowTitleOverlay(selected: Bool) -> some View {
-        if windowTitleVisibility == .alwaysVisible || selected, let windowTitle = windowInfo.window?.title, !windowTitle.isEmpty, windowTitle != windowInfo.appName || ScreenCenteredFloatingWindow.shared.windowSwitcherActive {
+        if windowTitleVisibility == .alwaysVisible || selected, let windowTitle = windowInfo.window?.title, !windowTitle.isEmpty, windowTitle != windowInfo.appName || windowSwitcherActive {
             let maxLabelWidth = calculatedSize.width - 50
             let stringMeasurementWidth = measureString(windowTitle, fontSize: 12).width + 5
             let width = maxLabelWidth > stringMeasurementWidth ? stringMeasurementWidth : maxLabelWidth
