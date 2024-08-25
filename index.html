@@ -6,6 +6,9 @@
     <link rel="stylesheet" href="/styles.css">
     <link rel="icon" href="/DockDoor/Assets.xcassets/AppIcon.appiconset/icon_128x128.png">
     <title>DockDoor</title>
+    <script type="text/JavaScript" src="https://raw.githubusercontent.com/cure53/DOMPurify/main/dist/purify.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/i18next@latest/dist/umd/i18next.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/i18next-xhr-backend@latest/dist/umd/i18nextXHRBackend.min.js"></script>
 </head>
 <body>
     <header>
@@ -77,7 +80,7 @@
             <hr>
 
             <h1 class="s-intro" id="download" data-translate="downloadHeading"></h1>
-            <p><em data-translate="downloadSmall"></em></p>
+            <p><em data-translate="downloadSmall"></em> <em><strong><a href="https://github.com/ejbills/DockDoor" data-translate="viewGit"></a></strong></em>.</p>
             <p>
                 <a href="https://github.com/ejbills/DockDoor/releases/latest/download/DockDoor.dmg"><img src="https://img.shields.io/github/v/release/ejbills/DockDoor" alt="Latest release"></a>
                 <img src="https://img.shields.io/github/downloads/ejbills/DockDoor/total?label=total%20downloads" alt="Total downloads">
@@ -105,7 +108,7 @@
             <hr>
 
             <h1 class="s-intro" id="contribute" data-translate="contributeHeading"></h1>
-            <p class="explanation" data-translate="contributeText"></p>
+            <p class="explanation"><span data-translate="contributeText"></span> <a href="/contribute"><img src="https://upload.wikimedia.org/wikipedia/commons/b/b3/Echo_link-blue_icon.svg" alt="Chainlink icon" style="display:inline;" width="auto"></a></p>
             <hr>
 
             <h1 class="s-intro" id="faq" data-translate="faqHeading"></h1>
@@ -173,6 +176,7 @@
             apptitleimage.src = apptitleimages[apptitleIndex];
         }, 1000);
     </script>
+
 
     <script src="/translate.js"></script> <!-- Script inclusion -->
 </body>

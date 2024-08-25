@@ -1,58 +1,70 @@
-// List of RTL languages
-const rtlLanguages = ['ar', 'he'];
+// Importation des modules nécessaires (si tu utilises des modules ES6)
+// Assure-toi que les scripts i18next et i18next-xhr-backend sont inclus dans ton HTML si tu ne fais pas d'importation
+// <script src="https://cdn.jsdelivr.net/npm/i18next@latest/dist/umd/i18next.min.js"></script>
+// <script src="https://cdn.jsdelivr.net/npm/i18next-xhr-backend@latest/dist/umd/i18nextXHRBackend.min.js"></script>
 
-// Function to load translations
-async function loadTranslations(lang) {
-    try {
-        const response = await fetch(`/translations/${lang}/translations.json`);
-        if (!response.ok) {
-            throw new Error(`Translation not found for language: ${lang}`);
-        }
-        const translations = await response.json();
-        document.querySelectorAll('[data-translate]').forEach(element => {
-            const key = element.getAttribute('data-translate');
-            if (translations[key]) {
-                element.innerHTML = translations[key]; // Uses innerHTML to manage JSON values and HTML tags inside
-            }
-        });
-
-        // Verifies whether language is RTL and applies fix
-        if (rtlLanguages.includes(lang.split('-')[0])) {
-            document.documentElement.setAttribute('dir', 'rtl');
-        } else {
-            document.documentElement.setAttribute('dir', 'ltr');
-        }
-    } catch (error) {
-        return console.error(error.message);
+// Initialize i18next with options
+i18next
+  .use(i18nextXHRBackend) // Utilise le backend pour charger les fichiers JSON
+  .init({
+    lng: 'en', // Langue par défaut
+    fallbackLng: 'en', // Langue de secours si la traduction n'est pas trouvée
+    debug: true, // Mode débogage pour le développement
+    backend: {
+      loadPath: '/locales/{{lng}}/translation.json' // Chemin pour charger les fichiers de traduction
+    },
+    react: {
+      useSuspense: false // Si tu utilises React, désactive le suspense pour les traductions (optionnel)
     }
-}
+  })
+  .then(() => {
+    // Détecte la langue et applique les traductions lors du chargement de la page
+    detectLanguageAndTranslate();
+  })
+  .catch(error => {
+    console.error('Erreur lors de l\'initialisation de i18next:', error);
+  });
 
-// Function to detect browser language and apply it to website
-function detectLanguageAndTranslate() {
-    const userLang = navigator.language || navigator.userLanguage;
-    let langCode = userLang.toLowerCase(); // The whole language code
-    let primaryLangCode = langCode.split('-')[0]; // Language code without regional indicator
-
-    // Tries without regional indicator first
-    loadTranslations(primaryLangCode)
-        .catch(() => {
-            // If error, check with the language code.
-            return loadTranslations(langCode);
-        })
-        .catch(() => {
-            // If no translation is found, switch to default English
-            return loadTranslations('en');
-        });
-}
-
-// Calls function when loading page
-detectLanguageAndTranslate();
-
-// Managing language switching with dropdown menu
-document.querySelectorAll('.lang-option').forEach(option => {
-    option.addEventListener('click', function(event) {
-        event.preventDefault(); // Prevents page refreshing
-        const selectedLang = option.getAttribute('data-lang');
-        loadTranslations(selectedLang);
+// Fonction pour charger les traductions en utilisant i18next
+async function loadTranslations(lang) {
+  try {
+    await i18next.changeLanguage(lang); // Change la langue
+    document.querySelectorAll('[data-translate]').forEach(element => {
+      const key = element.getAttribute('data-translate');
+      element.innerHTML = i18next.t(key); // Utilise i18next pour obtenir le texte traduit
     });
+
+    // Vérifie si la langue est RTL et applique la direction du texte
+    const isRtlLang = i18next.dir() === 'rtl';
+    document.documentElement.setAttribute('dir', isRtlLang ? 'rtl' : 'ltr');
+  } catch (error) {
+    console.error('Erreur lors du chargement des traductions:', error);
+  }
+}
+
+// Fonction pour détecter la langue du navigateur et appliquer les traductions
+function detectLanguageAndTranslate() {
+  const userLang = navigator.language || navigator.userLanguage;
+  const langCode = userLang.toLowerCase(); // Code langue complet
+  const primaryLangCode = langCode.split('-')[0]; // Code langue sans indicateur régional
+
+  // Tente de charger les traductions avec le code langue principal d'abord
+  loadTranslations(primaryLangCode)
+    .catch(() => {
+      // Si une erreur se produit, vérifie avec le code langue complet
+      return loadTranslations(langCode);
+    })
+    .catch(() => {
+      // Si aucune traduction n'est trouvée, passe à l'anglais par défaut
+      return loadTranslations('en');
+    });
+}
+
+// Gère le changement de langue avec le menu déroulant
+document.querySelectorAll('.lang-option').forEach(option => {
+  option.addEventListener('click', function(event) {
+    event.preventDefault(); // Empêche le rafraîchissement de la page
+    const selectedLang = option.getAttribute('data-lang');
+    loadTranslations(selectedLang);
+  });
 });
