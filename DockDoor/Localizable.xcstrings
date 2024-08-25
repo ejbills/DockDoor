@@ -207,8 +207,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "• Allows for enhanced visual information in the dock"
+            "state" : "translated",
+            "value" : "Tillader forbedret visuel information i docken"
           }
         },
         "de" : {
@@ -385,8 +385,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "• Enables real-time interaction with dock items"
+            "state" : "translated",
+            "value" : "Muliggør interaktion i realtid med elementer i docken"
           }
         },
         "de" : {
@@ -563,8 +563,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "• To capture previews of images and windows"
+            "state" : "translated",
+            "value" : "For at fange forhåndsvisninger af billeder og vinduer"
           }
         },
         "de" : {
@@ -741,8 +741,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "• To detect when you hover over the dock"
+            "state" : "translated",
+            "value" : "For at registrere, når du svæver over proceslinje"
           }
         },
         "de" : {
@@ -2021,14 +2021,14 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "amount"
+            "state" : "translated",
+            "value" : "quantité"
           }
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "amount"
+            "state" : "translated",
+            "value" : "כמות"
           }
         },
         "hu" : {
@@ -2075,8 +2075,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "amount"
+            "state" : "translated",
+            "value" : "quantidade"
           }
         },
         "pt-PT" : {
@@ -2199,14 +2199,14 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Animation speed"
+            "state" : "translated",
+            "value" : "Vitesse de l’animation"
           }
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Animation speed"
+            "state" : "translated",
+            "value" : "מהירות הנפשה"
           }
         },
         "hu" : {
@@ -3268,14 +3268,14 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Blur amount"
+            "state" : "translated",
+            "value" : "Taux de floutage"
           }
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Blur amount"
+            "state" : "translated",
+            "value" : "כמות טשטוש"
           }
         },
         "hu" : {
@@ -3596,8 +3596,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Bottom Right"
+            "state" : "translated",
+            "value" : "Nederst til højre"
           }
         },
         "de" : {
@@ -4517,14 +4517,14 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Colors"
+            "state" : "translated",
+            "value" : "Couleurs"
           }
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Colors"
+            "state" : "translated",
+            "value" : "צבעים"
           }
         },
         "hu" : {
@@ -6301,14 +6301,14 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Edit Color"
+            "state" : "translated",
+            "value" : "Modifier la couleur"
           }
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Edit Color"
+            "state" : "translated",
+            "value" : "ערוך צבע"
           }
         },
         "hu" : {
@@ -8771,8 +8771,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "If you need to access the menu bar icon, launch the app to reveal it for 10 seconds."
+            "state" : "translated",
+            "value" : "Hvis du har brug for at få adgang til linjenummeret, skal du åbne appen for at vise det i 10 sekunder."
           }
         },
         "de" : {
@@ -8949,8 +8949,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Initialization Key"
+            "state" : "translated",
+            "value" : "Opsætnings tast"
           }
         },
         "de" : {
@@ -9128,8 +9128,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Large"
+            "state" : "translated",
+            "value" : "Stor"
           }
         },
         "de" : {
@@ -9306,8 +9306,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Last checked: %@"
+            "state" : "translated",
+            "value" : "Sidst kontrolleret"
           }
         },
         "de" : {
@@ -10916,8 +10916,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "On window hover; Full opacity"
+            "state" : "translated",
+            "value" : "Ved vinduessvævning; Fuld opacitet"
           }
         },
         "de" : {
@@ -14154,14 +14154,14 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Remove"
+            "state" : "translated",
+            "value" : "Supprimer"
           }
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Remove"
+            "state" : "translated",
+            "value" : "הסר"
           }
         },
         "hu" : {
@@ -15402,14 +15402,14 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Right click a color to remove it."
+            "state" : "translated",
+            "value" : "Faites un clic droit sur une couleur pour la supprimer."
           }
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Right click a color to remove it."
+            "state" : "translated",
+            "value" : "לחץ לחיצה ימנית על צבע כדי להסיר אותו."
           }
         },
         "hu" : {
@@ -18813,8 +18813,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Top Left"
+            "state" : "translated",
+            "value" : ""
           }
         },
         "ja" : {
@@ -20222,7 +20222,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Utiliser le raccourci MacOS par défaut ⌘ + ⇥"
+            "value" : "Utiliser le raccourci macOS par défaut ⌘ + ⇥"
           }
         },
         "he" : {
