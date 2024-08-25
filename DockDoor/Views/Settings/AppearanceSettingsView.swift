@@ -57,6 +57,8 @@ struct AppearanceSettingsView: View {
                         completion: { result in
                             if result == .cancel {
                                 trafficLightButtonsPosition = previousTrafficLightButtonsPosition
+                            } else {
+                                previousTrafficLightButtonsPosition = newValue
                             }
                         }
                     )
@@ -131,6 +133,8 @@ struct AppearanceSettingsView: View {
                             completion: { result in
                                 if result == .cancel {
                                     windowTitlePosition = previousWindowTitlePosition
+                                } else {
+                                    previousWindowTitlePosition = newValue
                                 }
                             }
                         )
