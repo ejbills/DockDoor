@@ -36,9 +36,12 @@ final class DockObserver {
     private func setupEventTap() {
         guard AXIsProcessTrusted() else {
             print("Debug: Accessibility permission not granted")
-            MessageUtil.showMessage(title: String(localized: "Permission error"),
-                                    message: String(localized: "You need to give DockDoor access to the accessibility API in order for it to function."),
-                                    completion: { _ in SystemPreferencesHelper.openAccessibilityPreferences() })
+            MessageUtil.showAlert(
+                title: String(localized: "Permission error"),
+                message: String(localized: "You need to give DockDoor access to the accessibility API in order for it to function."),
+                actions: [.ok],
+                completion: { _ in SystemPreferencesHelper.openAccessibilityPreferences() }
+            )
             return
         }
 
@@ -92,7 +95,7 @@ final class DockObserver {
     }
 
     private func processMouseEvent(mouseLocation: CGPoint) {
-        guard !isProcessing, !ScreenCenteredFloatingWindow.shared.windowSwitcherActive else { return }
+        guard !isProcessing, !SharedPreviewWindowCoordinator.shared.windowSwitcherCoordinator.windowSwitcherActive else { return }
         isProcessing = true
 
         defer {

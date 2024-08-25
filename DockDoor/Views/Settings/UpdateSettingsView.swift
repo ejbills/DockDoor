@@ -70,7 +70,7 @@ struct UpdateSettingsView: View {
             .disabled(!viewModel.canCheckForUpdates)
 
             Toggle("Automatically check for updates", isOn: $viewModel.isAutomaticChecksEnabled)
-                .onChange(of: viewModel.isAutomaticChecksEnabled) { _, _ in
+                .onChange(of: viewModel.isAutomaticChecksEnabled) { _ in
                     viewModel.toggleAutomaticChecks()
                 }
         }

@@ -77,6 +77,87 @@ enum WindowUtil {
 
     // MARK: - Helper Functions
 
+    /// Captures an image of a window using legacy methods for macOS versions earlier than 14.0.
+    /// This function is used as a fallback when the ScreenCaptureKit's captureScreenshot API are not available.
+    private static func captureImageLegacy(of window: SCWindow) async throws -> CGImage {
+        let windowRect = CGRect(
+            x: window.frame.origin.x,
+            y: window.frame.origin.y,
+            width: window.frame.width,
+            height: window.frame.height
+        )
+
+        let options: CGWindowImageOption = [
+            .bestResolution,
+            .nominalResolution,
+        ]
+
+        guard var cgImage = CGWindowListCreateImage(windowRect, .optionIncludingWindow, window.windowID, options) else {
+            throw NSError(domain: "WindowCaptureError", code: 1, userInfo: [NSLocalizedDescriptionKey: "Failed to create image for window"])
+        }
+
+        let previewScale = Int(Defaults[.windowPreviewImageScale])
+
+        // Only scale down if previewScale is greater than 1
+        if previewScale > 1 {
+            let newWidth = Int(cgImage.width) / previewScale
+            let newHeight = Int(cgImage.height) / previewScale
+
+            let colorSpace = cgImage.colorSpace ?? CGColorSpaceCreateDeviceRGB()
+            let bitmapInfo = cgImage.bitmapInfo
+
+            guard let context = CGContext(data: nil,
+                                          width: newWidth,
+                                          height: newHeight,
+                                          bitsPerComponent: cgImage.bitsPerComponent,
+                                          bytesPerRow: 0,
+                                          space: colorSpace,
+                                          bitmapInfo: bitmapInfo.rawValue)
+            else {
+                throw NSError(domain: "WindowCaptureError", code: 2, userInfo: [NSLocalizedDescriptionKey: "Failed to create graphics context for resizing"])
+            }
+
+            context.interpolationQuality = .high
+            context.draw(cgImage, in: CGRect(x: 0, y: 0, width: newWidth, height: newHeight))
+
+            if let resizedImage = context.makeImage() {
+                cgImage = resizedImage
+            }
+        }
+
+        return cgImage
+    }
+
+    /// Captures an image of a window using ScreenCaptureKit's for macOS versions 14.0 and later.
+    @available(macOS 14.0, *)
+    private static func captureImageModern(of window: SCWindow) async throws -> CGImage {
+        let filter = SCContentFilter(desktopIndependentWindow: window)
+        let config = SCStreamConfiguration()
+
+        // Get the scale factor of the display containing the window
+        let scaleFactor = await getScaleFactorForWindow(windowID: window.windowID)
+        // Convert points to pixels
+        let width = Int(window.frame.width * scaleFactor) / Int(Defaults[.windowPreviewImageScale])
+        let height = Int(window.frame.height * scaleFactor) / Int(Defaults[.windowPreviewImageScale])
+
+        config.width = width
+        config.height = height
+        config.scalesToFit = false
+        config.backgroundColor = .clear
+        config.captureResolution = .best
+        config.ignoreGlobalClipDisplay = true
+        config.ignoreShadowsDisplay = true
+        config.shouldBeOpaque = false
+        config.showsCursor = false
+
+        if #available(macOS 14.2, *) {
+            config.includeChildWindows = false
+        }
+
+        return try await SCScreenshotManager.captureImage(contentFilter: filter, configuration: config)
+    }
+
+    /// Main function to capture a window image using ScreenCaptureKit, with fallback to legacy methods for older macOS versions.
     static func captureWindowImage(window: SCWindow) async throws -> CGImage {
         clearExpiredCache()
 
@@ -84,27 +165,12 @@ enum WindowUtil {
             return cachedImage
         }
 
-        let filter = SCContentFilter(desktopIndependentWindow: window)
-        let config = SCStreamConfiguration()
-
-        config.scalesToFit = false
-        config.backgroundColor = .clear
-        config.ignoreGlobalClipDisplay = true
-        config.ignoreShadowsDisplay = true
-        config.shouldBeOpaque = false
-        if #available(macOS 14.2, *) { config.includeChildWindows = false }
-
-        // Get the scale factor of the display containing the window
-        let scaleFactor = await getScaleFactorForWindow(windowID: window.windowID)
-
-        // Convert points to pixels
-        config.width = Int(window.frame.width * scaleFactor) / Int(Defaults[.windowPreviewImageScale])
-        config.height = Int(window.frame.height * scaleFactor) / Int(Defaults[.windowPreviewImageScale])
-
-        config.showsCursor = false
-        config.captureResolution = .best
-
-        let image = try await SCScreenshotManager.captureImage(contentFilter: filter, configuration: config)
+        // Use ScreenCaptureKit's API if available, otherwise fall back to a legacy (deprecated) API
+        let image: CGImage = if #available(macOS 14.0, *) {
+            try await captureImageModern(of: window)
+        } else {
+            try await captureImageLegacy(of: window)
+        }
 
         let cachedImage = CachedImage(image: image, timestamp: Date(), windowname: window.title)
         imageCache[window.windowID] = cachedImage
