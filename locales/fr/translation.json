@@ -19,9 +19,9 @@
     "3Text2": "&#127764; Également disponible en <strong>mode sombre</strong>. &#129417;",
     "4Heading": "Ce n’est pas tout.",
     "4Text": "DockDoor fournit également un <strong>sélecteur d’applications</strong>, une fonctionnalité similaire à Alt + Tab de Microsoft Windows.",
-    "4Small": "Plus d’informations sont disponibles dans la <a href='https://dockdoor.miraheze.org/wiki/'>documentation</a>.",
+    "4Small": "More information available in the documentation.",
     "downloadHeading": "Téléchargez DockDoor maintenant&nbsp;!",
-    "downloadSmall": "DockDoor is <strong>free <u>and</u> open-source</strong>. Its source code is available on GitHub.",
+    "downloadSmall": "DockDoor est <strong>gratuit <u>et</u> open-source</strong>. Son code source est disponible sur GitHub.",
     "downloadDownload": "Télécharger le fichier DMG",
     "downloadHomebrew": "Utiliser Homebrew",
     "downloadTranslateText": "Grâce à vous, DockDoor est déjà disponible dans <strong>plus de 10 langues</strong>&nbsp;! Si vous voulez contribuer à traduire l’application dans votre langue, n’hésitez pas&nbsp;!",
@@ -42,5 +42,5 @@
     "faqQ4": "Comment accéder aux paramètres de DockDoor&nbsp;?",
     "faqA4-1": "Si vous avez désactivé l’option <pre class='inline'><strong><em>Afficher l’icône dans la barre des menus</em></strong></pre> dans l’onglet <pre class='inline'><strong><em>Général</em></strong></pre>, cherchez «&nbsp;DockDoor&nbsp;» avec Spotlight et sélectionnez l’application. Les paramètres devraient alors s’afficher.",
     "faqA4-2": "Si non, cliquez simplement sur l’icône de la barre des menus et sélectionnez <pre class='inline'><em><strong>Ouvrir les réglages</strong></em></pre>. Les paramètres devraient alors s’afficher.",
-    "faqDocumentation": "Vous n’avez pas trouvé de réponse&nbsp;? Consultez la <a href='https://dockdoor.miraheze.org/wiki/Home'>documentation</a> de DockDoor pour plus d’informations."
+    "faqDocumentation": "Didn’t find your answer? Check the documentation for more information."
 }

@@ -24,7 +24,7 @@
         </noscript>
 
         <div class="dropdown">
-            <button id="languageButton" class="dropbtn" data-translate="languageButton"></button>
+            <button id="languageButton" class="button" data-translate="languageButton"></button>
             <div id="dropdownContent" class="dropdown-content">
                 <a href="#" class="lang-option" data-lang="en">English</a>
                 <a href="#" class="lang-option" data-lang="fr">Français</a> <!-- French -->
@@ -32,6 +32,10 @@
                 <a href="https://dockdoor.miraheze.org/wiki/How_to_contribute" target="_blank" data-translate="helpTranslate"></a>
             </div>
         </div>
+
+        <button id="toggleDarkMode" class="button">
+            <span id="darkModeIcon">🌙</span>
+        </button>
 
         <div class="centered">
             <p class="quick-links">
@@ -178,6 +182,7 @@
     </script>
 
 
-    <script src="/translate.js"></script> <!-- Script inclusion -->
+    <script src="/translate.js"></script>
+    <script src="/dark-mode.js"></script>
 </body>
 </html>

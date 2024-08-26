@@ -6,9 +6,14 @@ body {
     color: #000000;
 }
 
+body.dark-mode {
+    background-color: #181818 !important;
+    color: #fff !important;
+}
+
 header /*, footer */ {
     background-color: #002244;
-    color: #fff !important;
+    color: white;
     padding: 10px 20px;
     text-align: center;
 }
@@ -22,15 +27,26 @@ main {
     padding: 20px;
     max-width: 1200px;
     margin: 20px auto;
-    background: #fff;
+    background-color: white;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     position: relative;
 }
 
+body.dark-mode main {
+    background-color: #000 !important;
+    color: inherit;
+}
+
+body.dark-mode a {
+    color: lightskyblue;
+}
+
+body.dark-mode a:visited {
+    color: lightslategray;
+}
 
 a {
-    /* color: #3498db; */
     text-decoration: none;
 }
 
@@ -49,17 +65,6 @@ pre {
 pre.inline {
     display: inline;
     white-space: pre-wrap;
-}
-
-.copy-button {
-    position: absolute;
-    inset: 5px 5px auto auto;
-    width: 1em; height: 1em;
-    border: 1px solid;
-    border-radius: 5px;
-    box-shadow: -3px 3px #999;
-    display: inline-block;
-    cursor: pointer;
 }
 
 li, ul {
@@ -84,40 +89,29 @@ li, ul {
     border-radius: 10px;
 }
 
+body.dark-mode .dropdown-content {
+    background-color: #181818;
+    color: inherit;
+}
+
 .dropdown-content a {
-    color: black;
+    color: inherit;
     padding: 12px 16px;
     text-decoration: none;
     display: block;
     border-radius: 10px;
 }
 
-.dropdown-content a:hover {background-color: #f1f1f1;}
-
-/*.dropdown:hover .dropdown-content {
-    display: block;
-    border-radius: 10px;
+body.dark-mode .dropdown-content a {
+    color: inherit;
 }
 
-.dropdown:hover .dropbtn {
-    background-color: #333;
-    border-radius: 10px;
-} */
-
-/* Button for dropdown */
-.dropbtn {
-    background-color: #002244;
-    color: white;
-    padding: 16px;
-    font-size: 16px;
-    border: none;
-    cursor: pointer;
-    border-radius: 10px;
-    font-family: inherit;
+.dropdown-content a:hover {
+    background-color: #f1f1f1;
 }
 
-.dropbtn:hover {
-    background-color: #00152b;
+body.dark-mode .dropdown-content a:hover {
+    background-color: #0f0f0f;
 }
 
 .centered {
@@ -138,10 +132,11 @@ li, ul {
 
 .quick-links {
     text-align: end;
+    line-height: 2em;
 }
 
 .quick-links .margin {
-    margin-left: 20px;
+    margin-left: 25px;
 }
 
 #apptitle {
@@ -191,6 +186,7 @@ li, ul {
     border-radius: 10px;
     box-sizing: border-box;
     font-family: inherit;
+    margin: 5px;
 }
 
 .button:hover {
@@ -213,20 +209,9 @@ li, ul {
 
 details {
     background-color: #002244;
-    color: #fff;
+    color: white;
     font-size: 1.25rem;
     text-align: start;
-    border-radius: 10px;
-}
-
-details .top {
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-}
-
-details .bottom {
-    border-bottom-left-radius: 10px !important;
-    border-bottom-right-radius: 10px !important;
 }
   
 summary {
@@ -238,6 +223,7 @@ summary {
     text-align: start;
     font-weight: bold;
     background-color: #00152b;
+    cursor: pointer;
 }
   
 summary::-webkit-details-marker {
@@ -262,7 +248,7 @@ details[open] div {
 }
 
 .details-container {
-    border-radius: 10px; /* Coins arrondis pour la boîte */
-    overflow: hidden; /* Assure que les coins arrondis sont bien visibles */
-    background-color: #002244; /* Même fond que <details> pour se fondre parfaitement */
+    border-radius: 10px; /* Rounded corners for container */
+    overflow: hidden; /* Ensures rounded corners are visible */
+    background-color: #002244; /* Same background as details */
 }
