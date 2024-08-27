@@ -28,7 +28,7 @@ main {
     max-width: 1200px;
     margin: 20px auto;
     background-color: white;
-    border-radius: 5px;
+    border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     position: relative;
 }
@@ -72,6 +72,15 @@ li, ul {
     margin-top: 10px;
 }
 
+video {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+img {
+    border-radius: 10px;
+    overflow: hidden;
+}
 
 .dropdown {
     position: relative;
@@ -205,6 +214,7 @@ body.dark-mode .dropdown-content a:hover {
     color: white;
     box-sizing: border-box;
     padding: 10px;
+    border-radius: 10px;
 }
 
 details {
