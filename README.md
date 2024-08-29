@@ -39,7 +39,7 @@ brew install --cask dockdoor
       - User presses the key they want to associate with the previously selected modifier key;
       - Keybind is now set!
 
-      ![Set keybind demonstration](https://illavoluntas.github.io/resources/setKeybind.mp4)
+      https://illavoluntas.github.io/resources/setKeybind.mp4
 - **How to use the dock peeking feature?**
   - Simply hover over any application with active windows in the Dock.
 - **What are the traffic light buttons that appear in the preview window?**
