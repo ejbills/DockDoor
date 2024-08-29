@@ -18,7 +18,7 @@ Want to support development? [![Buy Me a Coffee](https://img.shields.io/badge/Bu
 
 DockDoor is a macOS application developed with Swift and SwiftUI that allows users to manage and interact with application windows on their desktop. It emphasizes ease of use and seamless integration with the macOS environment. This project is open-source, inviting contributions from developers to enhance its functionality and user experience.
 
-Website: https://dockdoor.net
+Visit DockDoor’s website here: https://dockdoor.net
 
 ## Installation
 
