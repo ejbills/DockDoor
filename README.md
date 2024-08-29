@@ -2,7 +2,8 @@
 <img height="256" src="https://github.com/ejbills/DockDoor/raw/main/DockDoor/Assets.xcassets/AppIcon.appiconset/icon_256x256@2x.png">
 </p>
 
-<h1 align="center">DockDoor</h1>
+<h1 align="center"><a href="https://dockdoor.net">DockDoor</a></h1>
+<h2 align="center"><i>A new way of interacting with the Dock.</i></h1>
 
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/ejbills/DockDoor)](https://github.com/ejbills/DockDoor/releases/latest/download/DockDoor.dmg)
 ![GitHub All Releases](https://img.shields.io/github/downloads/ejbills/DockDoor/total?label=Total%20Downloads)
@@ -12,13 +13,12 @@
 [![GitHub license](https://img.shields.io/github/license/ejbills/DockDoor)](https://github.com/ejbills/DockDoor/blob/main/LICENSE)
 [![Contributors](https://img.shields.io/github/contributors/ejbills/DockDoor)](https://github.com/ejbills/DockDoor/graphs/contributors)
 
-Want to support development? [![Buy Me a Coffee](https://img.shields.io/badge/Buy%20me%20a%20coffee-ffdd00?style=flat&logo=buy-me-a-coffee&logoColor=black)](https://www.buymeacoffee.com/keplercafe)
+Want to support development? [![Buy Me a Coffee](https://img.shields.io/badge/Buy%20me%20a%20coffee!-ffdd00?style=flat&logo=buy-me-a-coffee&logoColor=black)](https://www.buymeacoffee.com/keplercafe)
 
-[Help translate the app here](https://crowdin.com/project/dockdoor/invite?h=895e3c085646d3c07fa36a97044668e02149115).
+Want to translate the app in your own language? [![Help translate the app here](https://img.shields.io/badge/Help%20translate%20here!-lightskyblue?style=flat)](https://crowdin.com/project/dockdoor/invite?h=895e3c085646d3c07fa36a97044668e02149115)
 
 DockDoor is a macOS application developed with Swift and SwiftUI that allows users to manage and interact with application windows on their desktop. It emphasizes ease of use and seamless integration with the macOS environment. This project is open-source, inviting contributions from developers to enhance its functionality and user experience.
 
-Visit DockDoor’s website here: https://dockdoor.net
 
 ## Installation
 
