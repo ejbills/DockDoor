@@ -31,35 +31,37 @@ brew install --cask dockdoor
 
 ## Usage
 
-- **How do I use the alt-tab functionality?**
-  - By default, use Cmd + Tab to open the window switcher, continue pressing Tab to increment forwards, Shift + Tab to go back. Letting go of command will select the window.
-  - Disabling the default Cmd + Tab keybind, will allow a user to set a custom keybind
-      - User selects one of the modifiers presented on the screen
-      - User presses `Record Keybind` button
-      - User presses a singular key on the keyboard
-      - Keybind is now set! 
+- **How to use the Alt-Tab feature?**
+  - To switch between windows, hold down the `Command` key (<strong>&#8984;</strong>) and press the `Tab` key (<strong>&RightArrowBar;</strong>) repeatedly until the desired window is highlighted. To go back, press `Shift` in addition to `Tab`. Release both keys to switch to the selected window.
+  - Disabling the default `Cmd + Tab` keybind will allow the user to set a custom keybind.
+      - User chooses one of the modifier keys presented on the screen (`Command`, `Option` or `Control`);
+      - User clicks on `Start Recording Keybind`;
+      - User presses the key they want to associate with the previously selected modifier key;
+      - Keybind is now set!
 
-      ![Set keybind](./resources/setKeybind.gif)
-- **How do I use the dock peeking functionality?**
-  - Simply hover over any application with active windows in the dock.
+      <video autoplay loop playsinline muted>
+        <source src="/resources/setKeybind.mp4" type="video/mp4">
+      </video>
+- **How to use the dock peeking feature?**
+  - Simply hover over any application with active windows in the Dock.
 - **What are the traffic light buttons that appear in the preview window?**
-  - 🟣 Quit the window's app. You can hold the Option (⌥) key while clicking to **force** quit.
-  - 🔴 Close the window
-  - 🟡 Minimize the window
-  - 🟢 Enter the window to full screen
+  - 🟣 **Quit** the window’s app. You can hold the Option (⌥) key while clicking to **force quit**.
+  - 🔴 **Close** the window
+  - 🟡 **Minimize** the window
+  - 🟢 Enter the window to **full screen**
 
 ### FAQ
 
-- I disabled the menu bar icon and now I can't access settings
-  - When DockDoor initially opens, the menu icon will be visible for 10 seconds, until it disappears. This way, you can access the settings even with the icon disabled. Just relaunch the app and click it before it disappears.
-- I click on the purple quit button in the preview and the app doesn't close
-  - You can hold the Option (⌥) key while clicking to force quit.
+- I disabled the menu bar icon and now I can’t access settings
+  - Simply search for "DockDoor" using the macOS built-in Spotlight and open the application. The settings window should appear.
+- I click on the purple quit button in the preview and the app doesn’t close
+  - You can hold the Option (⌥) key while clicking to **force quit**.
  
 ## Installation (for contributors)
 
 ### Prerequisites
 
-- macOS 14.0 or later.
+- macOS 13.0 or later.
 - Xcode installed on your machine.
 
 ### Setting Up the Project

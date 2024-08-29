@@ -229,6 +229,10 @@ body.dark-mode .dropdown-content a:hover {
     border-radius: 10px;
 }
 
+body.dark-mode .dark-box {
+    background-color: #00152b;
+}
+
 details {
     background-color: #002244;
     color: white;
