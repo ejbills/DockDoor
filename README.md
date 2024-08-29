@@ -39,7 +39,8 @@ brew install --cask dockdoor
       - User presses the key they want to associate with the previously selected modifier key;
       - Keybind is now set!
 
-      <video loop src="/resources/setKeybind.mp4">
+      <video autoplay loop playsinline muted>
+        <source src="https://github.com/illavoluntas/illavoluntas.github.io/blob/af707711aed793e86ab63ddbda7ec83b20c90a14/resources/setKeybind.mp4" type="video/mp4">
       </video>
 - **How to use the dock peeking feature?**
   - Simply hover over any application with active windows in the Dock.
