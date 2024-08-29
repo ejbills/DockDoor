@@ -18,6 +18,8 @@ Want to support development? [![Buy Me a Coffee](https://img.shields.io/badge/Bu
 
 DockDoor is a macOS application developed with Swift and SwiftUI that allows users to manage and interact with application windows on their desktop. It emphasizes ease of use and seamless integration with the macOS environment. This project is open-source, inviting contributions from developers to enhance its functionality and user experience.
 
+Website: https://dockdoor.net
+
 ## Installation
 
 [Download the latest release here](https://github.com/ejbills/DockDoor/releases/latest/download/DockDoor.dmg).
@@ -39,7 +41,6 @@ brew install --cask dockdoor
       - User presses the key they want to associate with the previously selected modifier key;
       - Keybind is now set!
 
-      https://illavoluntas.github.io/resources/setKeybind.mp4
 - **How to use the dock peeking feature?**
   - Simply hover over any application with active windows in the Dock.
 - **What are the traffic light buttons that appear in the preview window?**
