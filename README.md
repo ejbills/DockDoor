@@ -39,8 +39,7 @@ brew install --cask dockdoor
       - User presses the key they want to associate with the previously selected modifier key;
       - Keybind is now set!
 
-      <video autoplay loop playsinline muted>
-        <source src="/resources/setKeybind.mp4" type="video/mp4">
+      <video loop src="/resources/setKeybind.mp4">
       </video>
 - **How to use the dock peeking feature?**
   - Simply hover over any application with active windows in the Dock.
