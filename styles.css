@@ -3,7 +3,7 @@ body {
     margin: 0;
     padding: 0;
     background-color: #f4f4f4;
-    color: #000000;
+    color: black;
 }
 
 body.dark-mode {
@@ -82,6 +82,23 @@ img {
     overflow: hidden;
 }
 
+.responsive-img {
+    width: 100%;
+    height: auto;
+}
+
+@media only screen and (min-width: 600px) and (max-width: 1024px) {
+    .responsive-img {
+        width: 75%;
+    }
+}
+
+@media only screen and (min-width: 1025px) {
+    .responsive-img {
+        width: 50%;
+    }
+}
+
 .dropdown {
     position: relative;
     display: inline-block;
@@ -148,11 +165,6 @@ body.dark-mode .dropdown-content a:hover {
     margin-left: 25px;
 }
 
-#apptitle {
-    width: 50%;
-    height: auto;
-}
-
 .purple-highlight {
     background-color: #a845d6;
     color: white !important;
@@ -210,7 +222,7 @@ body.dark-mode .dropdown-content a:hover {
 .dark-box {
     width: 100%;
     height: auto;
-    background-color: #000;
+    background-color: black;
     color: white;
     box-sizing: border-box;
     padding: 10px;

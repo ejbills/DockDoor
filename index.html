@@ -9,6 +9,7 @@
     <script type="text/JavaScript" src="https://raw.githubusercontent.com/cure53/DOMPurify/main/dist/purify.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/i18next@latest/dist/umd/i18next.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/i18next-xhr-backend@latest/dist/umd/i18nextXHRBackend.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dompurify/dist/purify.min.js"></script>
 </head>
 <body>
     <header>
@@ -29,7 +30,7 @@
                 <a href="#" class="lang-option" data-lang="en">English</a>
                 <a href="#" class="lang-option" data-lang="fr">Français</a> <!-- French -->
                 <a href="#" class="lang-option" data-lang="he" dir="rtl">עברית</a> <!-- Hebrew -->
-                <a href="https://dockdoor.miraheze.org/wiki/How_to_contribute" target="_blank" data-translate="helpTranslate"></a>
+                <a href="/contribute#translate" target="_blank" data-translate="helpTranslate"></a>
             </div>
         </div>
 
@@ -61,18 +62,24 @@
             <p data-translate="2Small"></p>
             <img src="/resources/dockPeek.png" alt="An example of use of DockDoor: traffic light buttons allow users to manage their windows and applications." width="100%">
             <p class="explanation" style="line-height: 2;" data-translate="2Text2"></p>
-            <img src="/resources/previewDefaultCommented.png" alt="Description of the controls on window previews." width="50%">
+            <img src="/resources/dockPeekCommented.png" alt="Description of the controls on window previews." class="responsive-img">
+
+            <hr>
+
+            <h1 class="s-intro" id="5" data-translate="5Heading"></h1>
+            <p class="explanation" data-translate="5Text"></p>
+            <img src="/resources/largePreviewDemo.png" alt="A screenshot showing the large preview option." class="responsive-img">
 
             <hr>
 
             <h1 class="s-intro" id="3" data-translate="3Heading"></h1>
             <p class="explanation" style="line-height: 2;" data-translate="3Text"></p>
-            <img src="" id="variations" width="50%" alt="A series of images showing the customization options for traffic light buttons and window titles.">
-            <p data-translate="3Small"></p>
-            <img src="" id="apptitle" alt="A series of images showing the customization options for application titles." width="50%">
+            <img src="" id="variations" class="responsive-img" alt="A series of images showing the customization options for traffic light buttons and window titles.">
+            <p class="explanation" data-translate="3Small"></p>
+            <img src="" id="apptitle" class="responsive-img" alt="A series of images showing the customization options for application titles.">
             <div class="dark-box">
                 <p class="explanation" data-translate="3Text2"></p>
-                <img src="/resources/variations/dark-mode.png" alt="A screenshot of the dark mode" width="50%">
+                <img src="/resources/variations/dark-mode.png" alt="A screenshot of the dark mode" class="responsive-img">
             </div>
 
             <hr>
@@ -80,7 +87,9 @@
             <h1 class="s-intro" id="4" data-translate="4Heading"></h1>
             <p class="explanation" data-translate="4Text"></p>
             <p data-translate="4Small"></p>
-            <img src="/resources/windowSwitcherDemo.png" alt="Demonstration of the window switcher." width="50%">
+            <video width="75%" autoplay loop playsinline muted>
+                <source src="/resources/windowSwitcherDemo1920.mp4" type="video/mp4">
+            </video>
             <hr>
 
             <h1 class="s-intro" id="download" data-translate="downloadHeading"></h1>
@@ -112,7 +121,7 @@
             <hr>
 
             <h1 class="s-intro" id="contribute" data-translate="contributeHeading"></h1>
-            <p class="explanation"><span data-translate="contributeText"></span> <a href="/contribute"><img src="https://upload.wikimedia.org/wikipedia/commons/b/b3/Echo_link-blue_icon.svg" alt="Chainlink icon" style="display:inline;" width="auto"></a></p>
+            <p class="explanation"><span data-translate="contributeText1"></span><br><span data-translate="contributeText2"></span> <a href="/contribute"><img src="https://upload.wikimedia.org/wikipedia/commons/b/b3/Echo_link-blue_icon.svg" alt="Chainlink icon" style="display:inline;" width="auto"></a></p>
             <hr>
 
             <h1 class="s-intro" id="faq" data-translate="faqHeading"></h1>
@@ -146,7 +155,7 @@
                 </div>
             </details>
         </div>
-            <p data-translate="faqDocumentation"></p>
+            <p><span data-translate="faqDocumentation"></span> <a href="/docs"><img src="https://upload.wikimedia.org/wikipedia/commons/b/b3/Echo_link-blue_icon.svg" alt="Chainlink icon" style="display:inline;" width="auto"></a></p>
         </div>
 
     </main>

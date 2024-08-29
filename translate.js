@@ -17,20 +17,23 @@ i18next
     console.error('Error while loading i18next:', error);
   });
 
-// Function to load i18next translations
+// Function to load translations using i18next
 async function loadTranslations(lang) {
   try {
-    await i18next.changeLanguage(lang); // Changes language
-    document.querySelectorAll('[data-translate]').forEach(element => {
-      const key = element.getAttribute('data-translate');
-      element.innerHTML = i18next.t(key); // Uses i18next to get translated strings
-    });
+      await i18next.changeLanguage(lang); // Change language
+      document.querySelectorAll('[data-translate]').forEach(element => {
+          const key = element.getAttribute('data-translate');
+          let translation = i18next.t(key); // Use i18next to get translated text
+          
+          // Purify the translation before injecting it into the DOM
+          element.innerHTML = DOMPurify.sanitize(translation);
+      });
 
-    // Verifies if language is RTL
-    const isRtlLang = i18next.dir() === 'rtl';
-    document.documentElement.setAttribute('dir', isRtlLang ? 'rtl' : 'ltr');
+      // Verifies whether language is RTL and applies fix
+      const isRtlLang = i18next.dir().toLowerCase() === 'rtl';
+      document.documentElement.setAttribute('dir', isRtlLang ? 'rtl' : 'ltr');
   } catch (error) {
-    console.error('Error while loading translations:', error);
+      console.error(error);
   }
 }
 
