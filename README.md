@@ -4,6 +4,10 @@
 <h2><i>A new way of interacting with the Dock.</i></h2>
 </div>
 
+<p align="center">
+  <img width="100%" height="auto" src="./resources/dockPeek.png">
+</p>
+
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/ejbills/DockDoor?style=flat-square)](https://github.com/ejbills/DockDoor/releases/latest/download/DockDoor.dmg)
 ![GitHub All Releases](https://img.shields.io/github/downloads/ejbills/DockDoor/total?label=Total%20Downloads&style=flat-square)
 [![GitHub stars](https://img.shields.io/github/stars/ejbills/DockDoor)](https://github.com/ejbills/DockDoor/stargazers)
@@ -26,7 +30,7 @@ If you appreciate this application, please consider **donating** to the develope
 If you encounter a bug or have a feature request, please **open an issue** on this repository. The developers will do their best to address the bug or fulfill your request!
 
 > [!NOTE]
-> You can help translating this application in your own language. This is a crucial step in making DockDoor accessible to everyone, regardless of their knowledge level in English. [![Help translate the app here](https://img.shields.io/badge/Help%20translate%20here!-blue?style=flat-square)](https://crowdin.com/project/dockdoor)
+> You can help translating this application in your own language. This is a crucial step in making DockDoor accessible to everyone, regardless of their knowledge level in English. [![Help translate the app here](https://img.shields.io/badge/Help%20translate%20here!-blue?style=flat-square)](#translating)
 
 ## Install
 
@@ -70,6 +74,7 @@ You can customize the default keybind by disabling the option `Use default macOS
 
 ### How to access DockDoor settings?
 If you disabled `Show Menu Bar Icon` in `General`, search for `DockDoor` using the built-in Spotlight or another searching app. Open DockDoor and the settings should open automatically.
+
 If this option is enabled, click on *door* icon on the menu bar and select `Open Settings` in the contextual menu.
 
 ### The application I want to quit does not respond.
@@ -118,6 +123,10 @@ Contributions to DockDoor are welcome! Here’s how you can get started:
 
 ### Translating
 
-Open the following link to contribute by translating DockDoor. You will need to create a Crowdin account. You can link it to your GitHub account.
+Open the following link to contribute by translating DockDoor. You will need to create a Crowdin account, but you can link it to your GitHub account.
 
 https://crowdin.com/project/dockdoor
+
+### Translating the website (https://dockdoor.net)
+
+To enhance web communication, we invite you to help translating the project’s website, https://dockdoor.net, 

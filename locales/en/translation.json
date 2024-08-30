@@ -31,8 +31,9 @@
     "downloadDonateText": "If you like this application, please consider <strong>donating</strong> to the developer. Thank you!",
     "downloadDonate": "Buy me a coffee!",
     "contributeHeading": "Contribute to this project.",
-    "contributeText1": "If you have basic knowledge of Swift and Swift UI, you are welcome to contribute to this open-source project! Please follow the guide on our documentation wiki for more information.",
+    "contributeText1": "If you have basic knowledge of Swift and Swift UI, you are welcome to contribute to this open-source project!",
     "contributeText2": "Contribution does not stop there. If you find a bug or want to request a feature, do not hesitate to open an issue on the GitHub repository!",
+    "contributeText3": "Please read the quick guide on the GitHub repository for more information.",
     "faqHeading": "Frequently Asked Questions",
     "faqQ1": "How to use the Dock peek feature?",
     "faqA1": "Simply hover over any application’s icon on the Dock with at least one window open. Previews of the application’s opened, minimized and hidden windows will be displayed. Take control of the windows by using the <strong>traffic light buttons</strong>.",
@@ -45,5 +46,5 @@
     "faqQ4": "How to access DockDoor’s settings window?",
     "faqA4-1": "If you have disabled the <pre class='inline'><strong><em>Show Menu Bar Icon</em></strong></pre> option in the <pre class='inline'><strong><em>General</em></strong></pre> tab, search for \"DockDoor\" using Spotlight and select the application. The settings window should then appear.",
     "faqA4-2": "If not, simply click on the menu bar icon and select <pre class='inline'><em><strong>Open Settings</strong></em></pre>. The settings window should now appear.",
-    "faqDocumentation": "Didn’t find your answer? Check the documentation for more information."
+    "faqDocumentation": "Didn’t find your answer? Please search in the issues on the GitHub repository, and in a last resort open a new one describing your problem."
 }
