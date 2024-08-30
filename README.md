@@ -1,25 +1,37 @@
-<div align="center">
+<div text-align="center">
 <img height="256" src="https://github.com/ejbills/DockDoor/raw/main/DockDoor/Assets.xcassets/AppIcon.appiconset/icon_256x256@2x.png">
 <h1>DockDoor</h1>
 <h2><i>A new way of interacting with the Dock.</i></h2>
 </div>
 
-**DockDoor** is a macOS application that adds a much-needed feature to your Mac: Dock previews. Developed with Swift and SwiftUI, it offers seamless integration with macOS. DockDoor is designed for ease of use and intuitive interactions. As an open-source project, it welcomes contributions from developers to enhance the application’s functionality, performance and user experience.
+**DockDoor** is a macOS application that adds a much-needed feature to your Mac: Dock previews.
+Developed with Swift and SwiftUI, it offers seamless integration with macOS. DockDoor is designed for ease of use and intuitive interactions.
+As an open-source project, it welcomes contributions from developers to enhance the application’s functionality, performance and user experience.
+
+Minimum macOS version:
+- 1.1.5 and below: **macOS 14 Sonoma**
+- 1.1.6 and later: **macOS 13 Ventura**
+
+> [!IMPORTANT]
+> DockDoor is still in active development. Please make sure you keep your copy of the application up-to-date to benefit from all the new features.
+
+> [!TIP]
+> If you encounter a bug or want to request a feature, open an issue on this repository. Make sure you are not creating a duplicate issue defore 
 
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/ejbills/DockDoor?style=flat-square)](https://github.com/ejbills/DockDoor/releases/latest/download/DockDoor.dmg)
 ![GitHub All Releases](https://img.shields.io/github/downloads/ejbills/DockDoor/total?label=Total%20Downloads&style=flat-square)
-[![GitHub stars](https://img.shields.io/github/stars/ejbills/DockDoor?style=flat-square)](https://github.com/ejbills/DockDoor/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/ejbills/DockDoor?style=flat-square)](https://github.com/ejbills/DockDoor/network/members)
+[![GitHub stars](https://img.shields.io/github/stars/ejbills/DockDoor)](https://github.com/ejbills/DockDoor/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/ejbills/DockDoor)](https://github.com/ejbills/DockDoor/network/members)
 [![GitHub issues](https://img.shields.io/github/issues/ejbills/DockDoor?style=flat-square)](https://github.com/ejbills/DockDoor/issues)
 [![GitHub license](https://img.shields.io/github/license/ejbills/DockDoor?style=flat-square)](https://github.com/ejbills/DockDoor/blob/main/LICENSE)
 [![Contributors](https://img.shields.io/github/contributors/ejbills/DockDoor?style=flat-square)](https://github.com/ejbills/DockDoor/graphs/contributors)
 
-Want to support development? [![Buy Me a Coffee](https://img.shields.io/badge/Buy%20me%20a%20coffee!-ffdd00?style=flat&logo=buy-me-a-coffee&logoColor=black&style=flat-square)](https://www.buymeacoffee.com/keplercafe)
+<a href="https://www.buymeacoffee.com/keplercafe" target="_blank">
+    <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;">
+</a>
 
-Want to translate the app in your own language? [![Help translate the app here](https://img.shields.io/badge/Help%20translate%20here!-lightskyblue?style=flat-square)](https://crowdin.com/project/dockdoor/invite?h=895e3c085646d3c07fa36a97044668e02149115)
-
-DockDoor is a macOS application developed with Swift and SwiftUI that allows users to manage and interact with application windows on their desktop. It emphasizes ease of use and seamless integration with the macOS environment. This project is open-source, inviting contributions from developers to enhance its functionality and user experience.
-
+> [!TIP]
+> You can help translating this application in your own language. This is a crucial step in making DockDoor accessible to everyone, regardless of their knowledge level in English. [![Help translate the app here](https://img.shields.io/badge/Help%20translate%20here!-lightskyblue?style=flat-square)](https://crowdin.com/project/dockdoor/invite?h=895e3c085646d3c07fa36a97044668e02149115)
 
 ## Installation
 
