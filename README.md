@@ -1,9 +1,10 @@
-<p align="center">
+<div align="center">
 <img height="256" src="https://github.com/ejbills/DockDoor/raw/main/DockDoor/Assets.xcassets/AppIcon.appiconset/icon_256x256@2x.png">
-</p>
+<h1>DockDoor</h1>
+<h2><i>A new way of interacting with the Dock.</i></h2>
+</div>
 
-<h1 align="center"><a href="https://dockdoor.net">DockDoor</a></h1>
-<h2 align="center"><i>A new way of interacting with the Dock.</i></h1>
+**DockDoor** is a macOS application that adds a much-needed feature to your Mac: Dock previews. Developed with Swift and SwiftUI, it offers seamless integration with macOS. DockDoor is designed for ease of use and intuitive interactions. As an open-source project, it welcomes contributions from developers to enhance the application’s functionality, performance and user experience.
 
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/ejbills/DockDoor)](https://github.com/ejbills/DockDoor/releases/latest/download/DockDoor.dmg)
 ![GitHub All Releases](https://img.shields.io/github/downloads/ejbills/DockDoor/total?label=Total%20Downloads)
