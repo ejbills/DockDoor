@@ -11,6 +11,7 @@
 [![GitHub issues](https://img.shields.io/github/issues/ejbills/DockDoor?style=flat-square)](https://github.com/ejbills/DockDoor/issues)
 [![GitHub license](https://img.shields.io/github/license/ejbills/DockDoor?style=flat-square)](https://github.com/ejbills/DockDoor/blob/main/LICENSE)
 [![Contributors](https://img.shields.io/github/contributors/ejbills/DockDoor?style=flat-square)](https://github.com/ejbills/DockDoor/graphs/contributors)
+[![Website](https://img.shields.io/badge/Website-015FBA?style=flat-square)](https://dockdoor.net)
 
 **DockDoor** is a macOS application that adds a much-needed feature to your Mac: Dock previews.
 Developed with Swift and SwiftUI, it offers seamless integration with macOS. DockDoor is designed for ease of use and intuitive interactions.
@@ -20,10 +21,10 @@ Minimum macOS version:
 - 1.1.5 and older: **macOS 14 Sonoma**
 - 1.1.6 and newer: **macOS 13 Ventura**
 
+If you appreciate this application, please consider **donating** to the developer. Any amount is appreciated! [![Buy Me a Coffee](https://img.shields.io/badge/Buy%20me%20a%20coffee-ffdd00?style=flat&logo=buy-me-a-coffee&logoColor=black)](https://www.buymeacoffee.com/keplercafe)
+
 > [!TIP]
 > If you encounter a bug or have a feature request, please open an issue on this repository. The developers will do their best to address the bug or fulfill your request!
-
-If you appreciate this application, please consider **donating** to the developer. Any amount is appreciated! [![Buy Me a Coffee](https://img.shields.io/badge/Buy%20me%20a%20coffee-ffdd00?style=flat&logo=buy-me-a-coffee&logoColor=black)](https://www.buymeacoffee.com/keplercafe)
 
 > [!NOTE]
 > You can help translating this application in your own language. This is a crucial step in making DockDoor accessible to everyone, regardless of their knowledge level in English. [![Help translate the app here](https://img.shields.io/badge/Help%20translate%20here!-blue?style=flat-square)](https://crowdin.com/project/dockdoor/invite?h=895e3c085646d3c07fa36a97044668e02149115)
@@ -48,33 +49,32 @@ brew install --cask dockdoor
 
 ### Dock Peek feature
 Hover over any application’s icon in the Dock to see its open windows.
-Each traffic light button you see serves an intuitive function. Hold **`Option`** (⌥) to **force quit** the window’s application.
-![Set keybind](./resources/dockPeekCommented.png)
+Each traffic light button you see serves an intuitive function. Hold **`Option`** (⌥) while clicking the **`Quit`** button to **force quit** the window’s application.
+<p align="center">
+  <img width="400" height="auto" src="./resources/dockPeekCommented.png">
+</p>
 
-- **How to use the Alt-Tab feature?**
-  - To switch between windows, hold down the `Command` key (<strong>&#8984;</strong>) and press the `Tab` key (<strong>&RightArrowBar;</strong>) repeatedly until the desired window is highlighted. To go back, press `Shift` in addition to `Tab`. Release both keys to switch to the selected window.
-  - Disabling the default `Cmd + Tab` keybind will allow the user to set a custom keybind.
-      - User chooses one of the modifier keys presented on the screen (`Command`, `Option` or `Control`);
-      - User clicks on `Start Recording Keybind`;
-      - User presses the key they want to associate with the previously selected modifier key;
-      - Keybind is now set!
-      
-      ![Set keybind](./resources/setKeybind.gif)
+### Windows-like `Alt` + `Tab` window switcher
+With the default settings, hold down `Command` (⌘) and press `Tab` (⇥) repeatedly until the desired window is highlighted. To go back, press `Shift` (⇧) in addition to `Tab`.
+Release both keys to switch to the selected window.
 
-- **How to use the dock peeking feature?**
-  - Simply hover over any application with active windows in the Dock.
-- **What are the traffic light buttons that appear in the preview window?**
-  - 🟣 **Quit** the window’s app. You can hold the `Option` **(⌥)** key while clicking to **force quit**.
-  - 🔴 **Close** the window
-  - 🟡 **Minimize** the window
-  - 🟢 Enter the window to **full screen**
+#### Customization
+You can customize the default keybind by disabling the option `Use default macOS keybind ⌘ + ⇥`.
+- Select one of the initialization keys (`Control`, `Option` or `Command`)
+- Click on `Start Recording Keybind`
+- Press a single key on your keyboard
+- Custom keybind is set!
+![Set keybind](./resources/setKeybind.gif)
 
-### FAQ
 
-- I disabled the menu bar icon and now I can’t access settings
-  - Simply search for "DockDoor" using the macOS built-in Spotlight and open the application. The settings window should appear.
-- I clicked on the purple quit button in the preview and the app doesn’t close
-  - You can hold the `Option` **(⌥)** key while clicking to **force quit**.
+## Frequently Asked Questions
+
+### How to access DockDoor settings?
+If you disabled `Show Menu Bar Icon` in `General`, search for `DockDoor` using the built-in Spotlight or another searching app. Open DockDoor and the settings should open automatically.
+If this option is enabled, click on *door* icon on the menu bar and select `Open Settings` in the contextual menu.
+
+### The application I want to quit does not respond.
+You can either wait for the application to become responsive again, or force quit it. To do this, hold **`Option`** (⌥) while clicking the `Quit` button.
  
 ## Installation (for contributors)
 
