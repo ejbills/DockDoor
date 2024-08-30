@@ -23,8 +23,7 @@ Minimum macOS version:
 
 If you appreciate this application, please consider **donating** to the developer. Any amount is appreciated! [![Buy Me a Coffee](https://img.shields.io/badge/Buy%20me%20a%20coffee-ffdd00?style=flat&logo=buy-me-a-coffee&logoColor=black)](https://www.buymeacoffee.com/keplercafe)
 
-> [!TIP]
-> If you encounter a bug or have a feature request, please open an issue on this repository. The developers will do their best to address the bug or fulfill your request!
+If you encounter a bug or have a feature request, please **open an issue** on this repository. The developers will do their best to address the bug or fulfill your request!
 
 > [!NOTE]
 > You can help translating this application in your own language. This is a crucial step in making DockDoor accessible to everyone, regardless of their knowledge level in English. [![Help translate the app here](https://img.shields.io/badge/Help%20translate%20here!-blue?style=flat-square)](https://crowdin.com/project/dockdoor/invite?h=895e3c085646d3c07fa36a97044668e02149115)
@@ -75,30 +74,38 @@ If this option is enabled, click on *door* icon on the menu bar and select `Open
 
 ### The application I want to quit does not respond.
 You can either wait for the application to become responsive again, or force quit it. To do this, hold **`Option`** (⌥) while clicking the `Quit` button.
- 
-## Installation (for contributors)
 
-### Prerequisites
+### Why is DockDoor only for macOS 13 and newer?
+DockDoor uses a system API to capture previews of windows which is macOS 14.0+. It has been adapted for macOS 13 in https://github.com/ejbills/DockDoor/pull/267.
+There are plans for minimum support for macOS 12.3.
+ 
+## Contributing
+
+You can either contribute to DockDoor’s code, or help translating the application.
+
+### DockDoor’s code
+
+#### Prerequisites
 
 - **macOS 13.0** or later.
 - **Xcode** installed on your machine.
 
-### Setting Up the Project
+#### Setting Up the Project
 
 1. **Fork** the repository.
-2. **Clone** your forked repository to your local machine.
+2. **Clone** your forked repository to your local machine using `git`.
 3. **Open** the project in Xcode.
 4. **Build** and **run** the project.
 
-## How to Contribute
+#### How to Contribute
 
 Contributions to DockDoor are welcome! Here’s how you can get started:
 
-### Prerequisites
+#### Prerequisites
 
 - Basic knowledge of **Swift** and **SwiftUI**.
 
-### Contribution Guide
+#### Contribution Guide
 
 1. **Branching**
     - Base all new features off of `main`.
@@ -113,4 +120,9 @@ Contributions to DockDoor are welcome! Here’s how you can get started:
     - Ensure existing tests pass before submitting a pull request.
 5. **Open a pull request**
     - Do a self-review of your code.
-6. **Enjoy!**
+
+### Translating
+
+Open the following link to contribute by translating DockDoor. You will need to create a Crowdin account. You can link it to your GitHub account.
+
+https://crowdin.com/project/dockdoor/invite?h=895e3c085646d3c07fa36a97044668e02149115
