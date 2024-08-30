@@ -75,22 +75,6 @@ enum WindowUtil {
         desktopSpaceWindowCacheManager.updateCache(bundleId: bundleId, update: update)
     }
 
-//    static func removeWindowFromCache(windowInfo: WindowInfo) {
-//        // First, check if the window is still valid
-//        if !isValidElement(windowInfo.axElement) {
-//            // If the window is not valid, remove it from the cache
-//            desktopSpaceWindowCacheManager.removeFromCache(bundleId: windowInfo.bundleID, windowId: windowInfo.id)
-//        } else {
-//            // If the window is still valid, we should check if it's actually closed
-//            let appElement = AXUIElementCreateApplication(windowInfo.pid)
-//            if let windows = try? appElement.windows(),
-//               !windows.contains(where: { (try? $0.cgWindowId()) == windowInfo.id }) {
-//                // The window is not in the application's window list, so remove it from the cache
-//                desktopSpaceWindowCacheManager.removeFromCache(bundleId: windowInfo.bundleID, windowId: windowInfo.id)
-//            }
-//        }
-//    }
-
     // MARK: - Helper Functions
 
     /// Captures an image of a window using legacy methods for macOS versions earlier than 14.0.
