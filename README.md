@@ -6,17 +6,17 @@
 
 **DockDoor** is a macOS application that adds a much-needed feature to your Mac: Dock previews. Developed with Swift and SwiftUI, it offers seamless integration with macOS. DockDoor is designed for ease of use and intuitive interactions. As an open-source project, it welcomes contributions from developers to enhance the application’s functionality, performance and user experience.
 
-[![GitHub release (latest by date)](https://img.shields.io/github/v/release/ejbills/DockDoor)](https://github.com/ejbills/DockDoor/releases/latest/download/DockDoor.dmg)
-![GitHub All Releases](https://img.shields.io/github/downloads/ejbills/DockDoor/total?label=Total%20Downloads)
-[![GitHub stars](https://img.shields.io/github/stars/ejbills/DockDoor)](https://github.com/ejbills/DockDoor/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/ejbills/DockDoor)](https://github.com/ejbills/DockDoor/network/members)
-[![GitHub issues](https://img.shields.io/github/issues/ejbills/DockDoor)](https://github.com/ejbills/DockDoor/issues)
-[![GitHub license](https://img.shields.io/github/license/ejbills/DockDoor)](https://github.com/ejbills/DockDoor/blob/main/LICENSE)
-[![Contributors](https://img.shields.io/github/contributors/ejbills/DockDoor)](https://github.com/ejbills/DockDoor/graphs/contributors)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/ejbills/DockDoor?style=flat-square)](https://github.com/ejbills/DockDoor/releases/latest/download/DockDoor.dmg)
+![GitHub All Releases](https://img.shields.io/github/downloads/ejbills/DockDoor/total?label=Total%20Downloads&style=flat-square)
+[![GitHub stars](https://img.shields.io/github/stars/ejbills/DockDoor?style=flat-square)](https://github.com/ejbills/DockDoor/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/ejbills/DockDoor?style=flat-square)](https://github.com/ejbills/DockDoor/network/members)
+[![GitHub issues](https://img.shields.io/github/issues/ejbills/DockDoor?style=flat-square)](https://github.com/ejbills/DockDoor/issues)
+[![GitHub license](https://img.shields.io/github/license/ejbills/DockDoor?style=flat-square)](https://github.com/ejbills/DockDoor/blob/main/LICENSE)
+[![Contributors](https://img.shields.io/github/contributors/ejbills/DockDoor?style=flat-square)](https://github.com/ejbills/DockDoor/graphs/contributors)
 
-Want to support development? [![Buy Me a Coffee](https://img.shields.io/badge/Buy%20me%20a%20coffee!-ffdd00?style=flat&logo=buy-me-a-coffee&logoColor=black)](https://www.buymeacoffee.com/keplercafe)
+Want to support development? [![Buy Me a Coffee](https://img.shields.io/badge/Buy%20me%20a%20coffee!-ffdd00?style=flat&logo=buy-me-a-coffee&logoColor=black&style=flat-square)](https://www.buymeacoffee.com/keplercafe)
 
-Want to translate the app in your own language? [![Help translate the app here](https://img.shields.io/badge/Help%20translate%20here!-lightskyblue?style=flat)](https://crowdin.com/project/dockdoor/invite?h=895e3c085646d3c07fa36a97044668e02149115)
+Want to translate the app in your own language? [![Help translate the app here](https://img.shields.io/badge/Help%20translate%20here!-lightskyblue?style=flat-square)](https://crowdin.com/project/dockdoor/invite?h=895e3c085646d3c07fa36a97044668e02149115)
 
 DockDoor is a macOS application developed with Swift and SwiftUI that allows users to manage and interact with application windows on their desktop. It emphasizes ease of use and seamless integration with the macOS environment. This project is open-source, inviting contributions from developers to enhance its functionality and user experience.
 
@@ -41,6 +41,8 @@ brew install --cask dockdoor
       - User clicks on `Start Recording Keybind`;
       - User presses the key they want to associate with the previously selected modifier key;
       - Keybind is now set!
+      
+      ![Set keybind](./resources/setKeybind.gif)
 
 - **How to use the dock peeking feature?**
   - Simply hover over any application with active windows in the Dock.
