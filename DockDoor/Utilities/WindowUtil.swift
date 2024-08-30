@@ -203,12 +203,16 @@ enum WindowUtil {
     }
 
     static func isValidElement(_ element: AXUIElement) -> Bool {
-        do {
-            let _ = try element.role()
-            return true
-        } catch {
-            return false
-        }
+        // Check if we can get the window's position
+        var position: CFTypeRef?
+        let positionResult = AXUIElementCopyAttributeValue(element, kAXPositionAttribute as CFString, &position)
+
+        // Check if we can get the window's size
+        var size: CFTypeRef?
+        let sizeResult = AXUIElementCopyAttributeValue(element, kAXSizeAttribute as CFString, &size)
+
+        // If we can get both position and size, the window likely still exists
+        return positionResult == .success && sizeResult == .success
     }
 
     static func findWindow(matchingWindow window: SCWindow, in axWindows: [AXUIElement]) -> AXUIElement? {
