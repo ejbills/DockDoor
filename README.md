@@ -26,7 +26,7 @@ If you appreciate this application, please consider **donating** to the develope
 If you encounter a bug or have a feature request, please **open an issue** on this repository. The developers will do their best to address the bug or fulfill your request!
 
 > [!NOTE]
-> You can help translating this application in your own language. This is a crucial step in making DockDoor accessible to everyone, regardless of their knowledge level in English. [![Help translate the app here](https://img.shields.io/badge/Help%20translate%20here!-blue?style=flat-square)](https://crowdin.com/project/dockdoor/invite?h=895e3c085646d3c07fa36a97044668e02149115)
+> You can help translating this application in your own language. This is a crucial step in making DockDoor accessible to everyone, regardless of their knowledge level in English. [![Help translate the app here](https://img.shields.io/badge/Help%20translate%20here!-blue?style=flat-square)](https://crowdin.com/project/dockdoor)
 
 ## Install
 
@@ -89,6 +89,7 @@ You can either contribute to DockDoor’s code, or help translating the applicat
 
 - **macOS 13.0** or later.
 - **Xcode** installed on your machine.
+- Basic knowledge of **Swift** and **SwiftUI**.
 
 #### Setting Up the Project
 
@@ -100,12 +101,6 @@ You can either contribute to DockDoor’s code, or help translating the applicat
 #### How to Contribute
 
 Contributions to DockDoor are welcome! Here’s how you can get started:
-
-#### Prerequisites
-
-- Basic knowledge of **Swift** and **SwiftUI**.
-
-#### Contribution Guide
 
 1. **Branching**
     - Base all new features off of `main`.
@@ -119,10 +114,10 @@ Contributions to DockDoor are welcome! Here’s how you can get started:
     - Write unit tests for new features or changes.
     - Ensure existing tests pass before submitting a pull request.
 5. **Open a pull request**
-    - Do a self-review of your code.
+    - Perform a self-review of your code.
 
 ### Translating
 
 Open the following link to contribute by translating DockDoor. You will need to create a Crowdin account. You can link it to your GitHub account.
 
-https://crowdin.com/project/dockdoor/invite?h=895e3c085646d3c07fa36a97044668e02149115
+https://crowdin.com/project/dockdoor
