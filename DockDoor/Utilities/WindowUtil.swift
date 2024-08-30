@@ -75,6 +75,22 @@ enum WindowUtil {
         desktopSpaceWindowCacheManager.updateCache(bundleId: bundleId, update: update)
     }
 
+//    static func removeWindowFromCache(windowInfo: WindowInfo) {
+//        // First, check if the window is still valid
+//        if !isValidElement(windowInfo.axElement) {
+//            // If the window is not valid, remove it from the cache
+//            desktopSpaceWindowCacheManager.removeFromCache(bundleId: windowInfo.bundleID, windowId: windowInfo.id)
+//        } else {
+//            // If the window is still valid, we should check if it's actually closed
+//            let appElement = AXUIElementCreateApplication(windowInfo.pid)
+//            if let windows = try? appElement.windows(),
+//               !windows.contains(where: { (try? $0.cgWindowId()) == windowInfo.id }) {
+//                // The window is not in the application's window list, so remove it from the cache
+//                desktopSpaceWindowCacheManager.removeFromCache(bundleId: windowInfo.bundleID, windowId: windowInfo.id)
+//            }
+//        }
+//    }
+
     // MARK: - Helper Functions
 
     /// Captures an image of a window using legacy methods for macOS versions earlier than 14.0.
@@ -203,16 +219,22 @@ enum WindowUtil {
     }
 
     static func isValidElement(_ element: AXUIElement) -> Bool {
-        // Check if we can get the window's position
-        var position: CFTypeRef?
-        let positionResult = AXUIElementCopyAttributeValue(element, kAXPositionAttribute as CFString, &position)
+        do {
+            // Try to get the window's position
+            let position = try element.position()
 
-        // Check if we can get the window's size
-        var size: CFTypeRef?
-        let sizeResult = AXUIElementCopyAttributeValue(element, kAXSizeAttribute as CFString, &size)
+            // Try to get the window's size
+            let size = try element.size()
 
-        // If we can get both position and size, the window likely still exists
-        return positionResult == .success && sizeResult == .success
+            // If we can get both position and size, the window likely still exists
+            return position != nil && size != nil
+        } catch AxError.runtimeError {
+            // If we get a runtime error, the app might be unresponsive, so we consider the element invalid
+            return false
+        } catch {
+            // For any other errors, we also consider the element invalid
+            return false
+        }
     }
 
     static func findWindow(matchingWindow window: SCWindow, in axWindows: [AXUIElement]) -> AXUIElement? {
