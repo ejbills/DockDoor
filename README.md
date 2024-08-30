@@ -5,7 +5,7 @@
 </div>
 
 <p align="center">
-  <img width="100%" height="auto" src="./resources/dockPeek.png">
+  <img width="100%" height="auto" src="./resources/dockPeek1920.png">
 </p>
 
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/ejbills/DockDoor?style=flat-square)](https://github.com/ejbills/DockDoor/releases/latest/download/DockDoor.dmg)
