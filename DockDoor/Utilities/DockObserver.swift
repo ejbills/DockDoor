@@ -48,7 +48,7 @@ final class DockObserver {
 
     private func setupSelectedDockItemObserver() {
         guard let dockAppPID = NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.dock").first?.processIdentifier else {
-            fatalError("Dock does found in running applications")
+            fatalError("Dock not found in running applications")
         }
 
         let dockAppElement = AXUIElementCreateApplication(dockAppPID)
@@ -56,7 +56,7 @@ final class DockObserver {
         guard let children = try? dockAppElement.children(), let axList = children.first(where: { element in
             try! element.role() == kAXListRole
         }) else {
-            fatalError("can't get dock items list element")
+            fatalError("Can't get dock items list element")
         }
 
         AXObserverCreate(dockAppPID, handleSelectedDockItemChangedNotification, &axObserver)
