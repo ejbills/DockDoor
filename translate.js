@@ -26,7 +26,10 @@ async function loadTranslations(lang) {
           let translation = i18next.t(key); // Use i18next to get translated text
           
           // Purify the translation before injecting it into the DOM
-          element.innerHTML = DOMPurify.sanitize(translation);
+          element.innerHTML = DOMPurify.sanitize(translation, {
+            ALLOWED_TAGS: ['strong', 'em', 'u', 'span', 'pre'],
+            ALLOWED_ATTR: ['class'] // Allow class attribute in general, restricted by the hook
+          });
       });
 
       // Verifies whether language is RTL and applies fix
