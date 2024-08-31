@@ -60,7 +60,7 @@ struct MainSettingsView: View {
             Divider()
 
             HStack {
-                Text("Hover Window Open Delay")
+                Text("Preview Window Open Delay")
                     .layoutPriority(1)
                 Spacer()
                 Slider(value: $hoverWindowOpenDelay, in: 0 ... 2, step: 0.1)
@@ -71,7 +71,7 @@ struct MainSettingsView: View {
             }
 
             HStack {
-                Text("Hover Window Fade Out Duration")
+                Text("Preview Window Fade Out Duration")
                     .layoutPriority(1)
                 Spacer()
                 Slider(value: $fadeOutDuration, in: 0 ... 2, step: 0.1)

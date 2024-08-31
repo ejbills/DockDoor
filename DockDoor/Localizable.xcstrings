@@ -3389,7 +3389,7 @@
       }
     },
     "Bottom Left" : {
-      "comment" : "Preview window title position option\nTraffic light buttons position option",
+      "comment" : "Preview window title position option",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -3568,7 +3568,7 @@
       }
     },
     "Bottom Right" : {
-      "comment" : "Preview window title position option\nTraffic light buttons position option",
+      "comment" : "Preview window title position option",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -8564,10 +8564,8 @@
         }
       }
     },
-    "Hover Window Fade Out Duration" : {
-
-    },
     "Hover Window Open Delay" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -13922,6 +13920,12 @@
         }
       }
     },
+    "Preview Window Fade Out Duration" : {
+
+    },
+    "Preview Window Open Delay" : {
+
+    },
     "Quit App" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -18920,7 +18924,7 @@
       }
     },
     "Top Left" : {
-      "comment" : "Preview window title position option\nTraffic light buttons position option",
+      "comment" : "Preview window title position option",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -19099,7 +19103,7 @@
       }
     },
     "Top Right" : {
-      "comment" : "Preview window title position option\nTraffic light buttons position option",
+      "comment" : "Preview window title position option",
       "localizations" : {
         "af" : {
           "stringUnit" : {
