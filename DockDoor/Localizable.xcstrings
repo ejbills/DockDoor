@@ -214,7 +214,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "• Ermöglicht verbesserte Informationsvisualisierung im Dock"
+            "value" : "• Ermöglicht verbesserte visuelle Informationen im Dock"
           }
         },
         "el" : {
@@ -1694,8 +1694,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Always visible"
+            "state" : "translated",
+            "value" : "항상 표시"
           }
         },
         "nl" : {
@@ -1973,8 +1973,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "amount"
+            "state" : "translated",
+            "value" : "كمية"
           }
         },
         "ca" : {
@@ -1997,8 +1997,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "amount"
+            "state" : "translated",
+            "value" : "Betrag"
           }
         },
         "el" : {
@@ -2051,8 +2051,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "amount"
+            "state" : "translated",
+            "value" : "금액"
           }
         },
         "nl" : {
@@ -2151,8 +2151,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Animation speed"
+            "state" : "translated",
+            "value" : "سرعة الرسوم المتحركة"
           }
         },
         "ca" : {
@@ -2175,8 +2175,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Animation speed"
+            "state" : "translated",
+            "value" : "Animationsgeschwindigkeit"
           }
         },
         "el" : {
@@ -2229,8 +2229,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Animation speed"
+            "state" : "translated",
+            "value" : "애니메이션 속도"
           }
         },
         "nl" : {
@@ -2407,8 +2407,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "App Name Style"
+            "state" : "translated",
+            "value" : "앱명 스타일"
           }
         },
         "nl" : {
@@ -2942,8 +2942,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Are you sure you want to reset all settings to their default values?"
+            "state" : "translated",
+            "value" : "모든 설정을 기본값으로 초기화하시겠습니까?"
           }
         },
         "nl" : {
@@ -3220,8 +3220,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Blur amount"
+            "state" : "translated",
+            "value" : "كمية التضليل"
           }
         },
         "ca" : {
@@ -3244,8 +3244,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Blur amount"
+            "state" : "translated",
+            "value" : "Stärke des Unschärfeeffekts"
           }
         },
         "el" : {
@@ -3298,8 +3298,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Blur amount"
+            "state" : "translated",
+            "value" : "블러 정도"
           }
         },
         "nl" : {
@@ -3781,7 +3781,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Kaufen Sie mir hier einen Kaffee, danke!"
+            "value" : "Mir einen Kaffee spendieren. Danke!"
           }
         },
         "el" : {
@@ -4460,6 +4460,7 @@
       }
     },
     "Colors" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -4469,8 +4470,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Colors"
+            "state" : "translated",
+            "value" : "ألوان"
           }
         },
         "ca" : {
@@ -4493,8 +4494,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Colors"
+            "state" : "translated",
+            "value" : "Farben"
           }
         },
         "el" : {
@@ -4547,8 +4548,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Colors"
+            "state" : "translated",
+            "value" : "색상"
           }
         },
         "nl" : {
@@ -4903,8 +4904,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Contribute translation here!"
+            "state" : "translated",
+            "value" : "여기에서 번역에 기여하세요!"
           }
         },
         "nl" : {
@@ -6253,8 +6254,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Edit Color"
+            "state" : "translated",
+            "value" : "تعديل الألوان"
           }
         },
         "ca" : {
@@ -6277,8 +6278,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Edit Color"
+            "state" : "translated",
+            "value" : "Farbe bearbeiten"
           }
         },
         "el" : {
@@ -8381,6 +8382,184 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "隱藏"
+          }
+        }
+      }
+    },
+    "Highlight Gradient Colors" : {
+      "localizations" : {
+        "af" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Highlight Gradient Colors"
+          }
+        },
+        "ar" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Highlight Gradient Colors"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Highlight Gradient Colors"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Highlight Gradient Colors"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Highlight Gradient Colors"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Highlight Gradient Colors"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Highlight Gradient Colors"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Highlight Gradient Colors"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Highlight Gradient Colors"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Highlight Gradient Colors"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Highlight Gradient Colors"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Highlight Gradient Colors"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Highlight Gradient Colors"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Highlight Gradient Colors"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Highlight Gradient Colors"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Highlight Gradient Colors"
+          }
+        },
+        "no" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Highlight Gradient Colors"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Highlight Gradient Colors"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Highlight Gradient Colors"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Highlight Gradient Colors"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Highlight Gradient Colors"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Highlight Gradient Colors"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Highlight Gradient Colors"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Highlight Gradient Colors"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Highlight Gradient Colors"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Highlight Gradient Colors"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Highlight Gradient Colors"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Highlight Gradient Colors"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Highlight Gradient Colors"
           }
         }
       }
@@ -11457,7 +11636,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Einstellungen öffnen"
+            "value" : "Einstellungen …"
           }
         },
         "el" : {
@@ -12349,7 +12528,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bitte beenden Sie die App um Änderungen anzuwenden! :)"
+            "value" : "Bitte App beenden, um Änderungen anzuwenden! :)"
           }
         },
         "el" : {
@@ -12527,7 +12706,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bitte starten Sie die App neu, um die Änderungen anzuwenden! :)"
+            "value" : "Bitte App neu starten, um die Änderungen anzuwenden! :)"
           }
         },
         "el" : {
@@ -12705,7 +12884,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bitte starten Sie die App neu, um Ihre Änderungen zu übernehmen. Klicken Sie auf OK, um die App zu beenden."
+            "value" : "Bitte starten Sie die App neu, um Ihre Änderungen zu übernehmen. Klicken Sie auf OK, um Beenden der App."
           }
         },
         "el" : {
@@ -13626,7 +13805,7 @@
         "he" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "עיכוב תצוגה מקדימה"
+            "value" : "עיכוב לפני ביצוע הפעולה"
           }
         },
         "hu" : {
@@ -14106,8 +14285,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Remove"
+            "state" : "translated",
+            "value" : "إزالة"
           }
         },
         "ca" : {
@@ -14130,8 +14309,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Remove"
+            "state" : "translated",
+            "value" : "Entfernen"
           }
         },
         "el" : {
@@ -15354,8 +15533,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Right click a color to remove it."
+            "state" : "translated",
+            "value" : "انقر بزر الماوس الأيمن على لون لإزالته."
           }
         },
         "ca" : {
@@ -15378,8 +15557,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Right click a color to remove it."
+            "state" : "translated",
+            "value" : "Rechtsklick auf eine Farbe, um sie zu entfernen."
           }
         },
         "el" : {
@@ -20376,7 +20555,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Einheitlichen Bildvorschau-Radius verwenden"
+            "value" : "Einheitlichen Bildvorschauradius verwenden"
           }
         },
         "el" : {
@@ -22162,7 +22341,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Fenster-Puffer"
+            "value" : "Fensterpuffer"
           }
         },
         "el" : {
@@ -22672,8 +22851,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Image Resolution Scale (higher means lower resolution)"
+            "state" : "translated",
+            "value" : "مقياس دقة صورة النافذة (الأعلى يعني دقة أقل)"
           }
         },
         "ca" : {
@@ -22696,8 +22875,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Image Resolution Scale (higher means lower resolution)"
+            "state" : "translated",
+            "value" : "Skalierung der Fensterauflösung (höher bedeutet niedrigere Auflösung)"
           }
         },
         "el" : {

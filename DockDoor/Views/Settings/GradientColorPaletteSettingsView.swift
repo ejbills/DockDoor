@@ -15,7 +15,7 @@ struct GradientColorPaletteSettingsView: View {
 
     var body: some View {
         HStack(alignment: .top) {
-            Text("Colors")
+            Text("Highlight Gradient Colors")
                 .layoutPriority(1)
 
             VStack(alignment: .leading, spacing: 4) {

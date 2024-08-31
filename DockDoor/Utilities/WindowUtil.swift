@@ -204,9 +204,19 @@ enum WindowUtil {
 
     static func isValidElement(_ element: AXUIElement) -> Bool {
         do {
-            let _ = try element.role()
-            return true
+            // Try to get the window's position
+            let position = try element.position()
+
+            // Try to get the window's size
+            let size = try element.size()
+
+            // If we can get both position and size, the window likely still exists
+            return position != nil && size != nil
+        } catch AxError.runtimeError {
+            // If we get a runtime error, the app might be unresponsive, so we consider the element invalid
+            return false
         } catch {
+            // For any other errors, we also consider the element invalid
             return false
         }
     }
