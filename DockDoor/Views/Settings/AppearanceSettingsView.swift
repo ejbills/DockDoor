@@ -14,6 +14,14 @@ struct AppearanceSettingsView: View {
     @Default(.trafficLightButtonsVisibility) var trafficLightButtonsVisibility
     @Default(.trafficLightButtonsPosition) var trafficLightButtonsPosition
 
+    @State private var previousTrafficLightButtonsPosition: TrafficLightButtonsPosition
+    @State private var previousWindowTitlePosition: WindowTitlePosition
+
+    init() {
+        _previousTrafficLightButtonsPosition = State(initialValue: Defaults[.trafficLightButtonsPosition])
+        _previousWindowTitlePosition = State(initialValue: Defaults[.windowTitlePosition])
+    }
+
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             Toggle(isOn: $showAnimations, label: {
@@ -40,17 +48,22 @@ struct AppearanceSettingsView: View {
                         .tag(position)
                 }
             }
-            .onChange(of: trafficLightButtonsPosition) { oldValue, newValue in
+            .onChange(of: trafficLightButtonsPosition) { newValue in
                 if newValue.rawValue == windowTitlePosition.rawValue {
-                    MessageUtil.showMessage(
+                    MessageUtil.showAlert(
                         title: String(localized: "Elements Overlap"),
                         message: String(localized: "The selected positions for Traffic Light Buttons and Window Title will overlap."),
+                        actions: [.ok, .cancel],
                         completion: { result in
                             if result == .cancel {
-                                trafficLightButtonsPosition = oldValue
+                                trafficLightButtonsPosition = previousTrafficLightButtonsPosition
+                            } else {
+                                previousTrafficLightButtonsPosition = newValue
                             }
                         }
                     )
+                } else {
+                    previousTrafficLightButtonsPosition = newValue
                 }
             }
             .pickerStyle(SegmentedPickerStyle())
@@ -111,23 +124,32 @@ struct AppearanceSettingsView: View {
                             .tag(position)
                     }
                 }
-                .onChange(of: windowTitlePosition) { oldValue, newValue in
+                .onChange(of: windowTitlePosition) { newValue in
                     if newValue.rawValue == trafficLightButtonsPosition.rawValue {
-                        MessageUtil.showMessage(
+                        MessageUtil.showAlert(
                             title: String(localized: "Elements Overlap"),
                             message: String(localized: "The selected positions for Traffic Light Buttons and Window Title will overlap."),
+                            actions: [.ok, .cancel],
                             completion: { result in
                                 if result == .cancel {
-                                    windowTitlePosition = oldValue
+                                    windowTitlePosition = previousWindowTitlePosition
+                                } else {
+                                    previousWindowTitlePosition = newValue
                                 }
                             }
                         )
+                    } else {
+                        previousWindowTitlePosition = newValue
                     }
                 }
                 .scaledToFit()
                 .pickerStyle(SegmentedPickerStyle())
             }
             .disabled(!showWindowTitle)
+
+            Divider()
+
+            GradientColorPaletteSettingsView()
         }
         .padding(20)
         .frame(minWidth: 650)

@@ -65,10 +65,10 @@ class WindowManipulationObservers {
         let appElement = AXUIElementCreateApplication(pid)
         AXObserverAddNotification(observer, appElement, kAXWindowCreatedNotification as CFString, UnsafeMutableRawPointer(bitPattern: Int(pid)))
         AXObserverAddNotification(observer, appElement, kAXUIElementDestroyedNotification as CFString, UnsafeMutableRawPointer(bitPattern: Int(pid)))
+        AXObserverAddNotification(observer, appElement, kAXMainWindowChangedNotification as CFString, UnsafeMutableRawPointer(bitPattern: Int(pid)))
         AXObserverAddNotification(observer, appElement, kAXWindowMiniaturizedNotification as CFString, UnsafeMutableRawPointer(bitPattern: Int(pid)))
         AXObserverAddNotification(observer, appElement, kAXWindowDeminiaturizedNotification as CFString, UnsafeMutableRawPointer(bitPattern: Int(pid)))
         AXObserverAddNotification(observer, appElement, kAXApplicationHiddenNotification as CFString, UnsafeMutableRawPointer(bitPattern: Int(pid)))
-        AXObserverAddNotification(observer, appElement, kAXApplicationShownNotification as CFString, UnsafeMutableRawPointer(bitPattern: Int(pid)))
         AXObserverAddNotification(observer, appElement, kAXFocusedUIElementChangedNotification as CFString, UnsafeMutableRawPointer(bitPattern: Int(pid)))
 
         CFRunLoopAddSource(CFRunLoopGetMain(), AXObserverGetRunLoopSource(observer), .defaultMode)
@@ -88,8 +88,10 @@ class WindowManipulationObservers {
         let appElement = AXUIElementCreateApplication(pid)
         AXObserverRemoveNotification(observer, appElement, kAXWindowCreatedNotification as CFString)
         AXObserverRemoveNotification(observer, appElement, kAXUIElementDestroyedNotification as CFString)
+        AXObserverRemoveNotification(observer, appElement, kAXMainWindowChangedNotification as CFString)
         AXObserverRemoveNotification(observer, appElement, kAXWindowMiniaturizedNotification as CFString)
         AXObserverRemoveNotification(observer, appElement, kAXWindowDeminiaturizedNotification as CFString)
+        AXObserverRemoveNotification(observer, appElement, kAXApplicationHiddenNotification as CFString)
         AXObserverRemoveNotification(observer, appElement, kAXFocusedUIElementChangedNotification as CFString)
 
         observers.removeValue(forKey: pid)
@@ -100,8 +102,10 @@ class WindowManipulationObservers {
             let appElement = AXUIElementCreateApplication(pid)
             AXObserverRemoveNotification(observer, appElement, kAXWindowCreatedNotification as CFString)
             AXObserverRemoveNotification(observer, appElement, kAXUIElementDestroyedNotification as CFString)
+            AXObserverRemoveNotification(observer, appElement, kAXMainWindowChangedNotification as CFString)
             AXObserverRemoveNotification(observer, appElement, kAXWindowMiniaturizedNotification as CFString)
             AXObserverRemoveNotification(observer, appElement, kAXWindowDeminiaturizedNotification as CFString)
+            AXObserverRemoveNotification(observer, appElement, kAXApplicationHiddenNotification as CFString)
             AXObserverRemoveNotification(observer, appElement, kAXFocusedUIElementChangedNotification as CFString)
         }
         observers.removeAll()
@@ -116,27 +120,11 @@ func axObserverCallback(observer: AXObserver, element: AXUIElement, notification
         if let app = NSRunningApplication(processIdentifier: pid) {
             switch notificationName as String {
             case kAXFocusedUIElementChangedNotification:
-                guard !WindowManipulationObservers.trackedElements.contains(element) else { return }
-                WindowManipulationObservers.trackedElements.insert(element)
-                WindowManipulationObservers.debounceWorkItem?.cancel()
-                WindowManipulationObservers.debounceWorkItem = DispatchWorkItem {
-                    WindowUtil.updateWindowDateTime(for: app)
-                    WindowManipulationObservers.trackedElements.remove(element)
-                    print("Focused Window has changed: \(app.localizedName ?? "")")
-                }
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: WindowManipulationObservers.debounceWorkItem!)
+                handleFocusedUIElementChanged(element: element, app: app, pid: pid)
             case kAXUIElementDestroyedNotification:
-                guard !WindowManipulationObservers.trackedElements.contains(element) else { return }
-                WindowManipulationObservers.trackedElements.insert(element)
-                WindowManipulationObservers.debounceWorkItem?.cancel()
-                WindowManipulationObservers.debounceWorkItem = DispatchWorkItem {
-                    WindowUtil.updateWindowCache(for: app) { windowSet in
-                        windowSet = windowSet.filter { WindowUtil.isValidElement($0.axElement) }
-                    }
-                    WindowManipulationObservers.trackedElements.remove(element)
-                    print("Window destroyed for app: \(app.localizedName ?? "Unknown")")
-                }
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.01, execute: WindowManipulationObservers.debounceWorkItem!)
+                handleWindowStateChange(element: element, app: app, notificationType: "destroyed")
+            case kAXMainWindowChangedNotification:
+                handleWindowStateChange(element: element, app: app, notificationType: "focus changed")
             case kAXWindowMiniaturizedNotification:
                 print("Window minimized for app: \(app.localizedName ?? "Unknown")")
                 WindowUtil.updateStatusOfWindowCache(pid: pid_t(pid), isParentAppHidden: false)
@@ -152,4 +140,30 @@ func axObserverCallback(observer: AXObserver, element: AXUIElement, notification
             }
         }
     }
+}
+
+private func handleFocusedUIElementChanged(element: AXUIElement, app: NSRunningApplication, pid: pid_t) {
+    guard !WindowManipulationObservers.trackedElements.contains(element) else { return }
+    WindowManipulationObservers.trackedElements.insert(element)
+    WindowManipulationObservers.debounceWorkItem?.cancel()
+    WindowManipulationObservers.debounceWorkItem = DispatchWorkItem {
+        WindowUtil.updateWindowDateTime(with: app.bundleIdentifier ?? "", pid: pid)
+        WindowManipulationObservers.trackedElements.remove(element)
+        print("Focused Window has changed: \(app.localizedName ?? "")")
+    }
+    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: WindowManipulationObservers.debounceWorkItem!)
+}
+
+private func handleWindowStateChange(element: AXUIElement, app: NSRunningApplication, notificationType: String) {
+    guard !WindowManipulationObservers.trackedElements.contains(element) else { return }
+    WindowManipulationObservers.trackedElements.insert(element)
+    WindowManipulationObservers.debounceWorkItem?.cancel()
+    WindowManipulationObservers.debounceWorkItem = DispatchWorkItem {
+        WindowUtil.updateWindowCache(for: app.bundleIdentifier ?? "") { windowSet in
+            windowSet = windowSet.filter { WindowUtil.isValidElement($0.axElement) }
+        }
+        WindowManipulationObservers.trackedElements.remove(element)
+        print("Window \(notificationType) for app: \(app.localizedName ?? "Unknown")")
+    }
+    DispatchQueue.main.asyncAfter(deadline: .now() + 0.01, execute: WindowManipulationObservers.debounceWorkItem!)
 }

@@ -114,15 +114,28 @@ class KeybindHelper {
     }
 
     private func showHoverWindow() {
-        Task { [weak self] in
-            guard let self else { return }
-            await MainActor.run { [weak self] in
-                guard let self else { return }
-                let windows = WindowUtil.getAllWindowsOfAllApps()
-                if isModifierKeyPressed {
-                    SharedPreviewWindowCoordinator.shared.showWindow(appName: "Alt-Tab", windows: windows, overrideDelay: true,
-                                                                     centeredHoverWindowState: .windowSwitcher, onWindowTap: { SharedPreviewWindowCoordinator.shared.hideWindow() })
-                }
+        // Show window immediately on the main thread
+        DispatchQueue.main.async { [weak self] in
+            guard let self, isModifierKeyPressed else { return }
+
+            let windows = WindowUtil.getAllWindowsOfAllApps()
+
+            SharedPreviewWindowCoordinator.shared.showWindow(
+                appName: "Alt-Tab",
+                windows: windows,
+                overrideDelay: true,
+                centeredHoverWindowState: .windowSwitcher,
+                onWindowTap: { SharedPreviewWindowCoordinator.shared.hideWindow() }
+            )
+        }
+
+        // fetch active windows for all apps (empty string) to update space window cache
+        Task(priority: .background) { [weak self] in
+            guard self != nil else { return }
+            do {
+                _ = try await WindowUtil.activeWindows(for: "")
+            } catch {
+                print("Failed to update windows from keybind helper.")
             }
         }
     }

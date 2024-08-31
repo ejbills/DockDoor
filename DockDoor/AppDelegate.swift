@@ -17,6 +17,7 @@ class SettingsWindowControllerDelegate: NSObject, NSWindowDelegate {
 class AppDelegate: NSObject, NSApplicationDelegate {
     private var dockObserver: DockObserver?
     private var appClosureObserver: WindowManipulationObservers?
+    private var sharedPreviewWindowCoordinator: SharedPreviewWindowCoordinator?
     private var keybindHelper: KeybindHelper?
     private var statusBarItem: NSStatusItem?
 
@@ -61,6 +62,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         } else {
             dockObserver = DockObserver.shared
             appClosureObserver = WindowManipulationObservers.shared
+            sharedPreviewWindowCoordinator = SharedPreviewWindowCoordinator.shared
             if Defaults[.enableWindowSwitcher] {
                 keybindHelper = KeybindHelper.shared
             }
