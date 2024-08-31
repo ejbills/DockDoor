@@ -52,7 +52,9 @@ brew install --cask dockdoor
 
 ### Dock Peek feature
 Hover over any application’s icon in the Dock to see its open windows.
-Each traffic light button you see serves an intuitive function. Hold **`Option`** (⌥) while clicking the **`Quit`** button to **force quit** the window’s application.
+Each traffic light button you see serves an intuitive function.
+> [!TIP]
+> Hold **`Option`** (⌥) while clicking the **`Quit`** button to **force quit** the window’s application.
 <p align="center">
   <img width="400" height="auto" src="./resources/dockPeekCommented.png">
 </p>
@@ -86,7 +88,7 @@ There are plans for minimum support for macOS 12.3.
  
 ## Contributing
 
-You can either contribute to DockDoor’s code, or help translating the application.
+You can either contribute to DockDoor’s code, or help translating the application or the website.
 
 ### DockDoor’s code
 
@@ -134,5 +136,5 @@ To enhance web communication, we invite you to help translating the project’s 
 - The strings contain **basic HTML tags**. It is recommended to have **some familiarity** with HTML. You can find many tutorials online, and HTML is particularly easy to learn.
 - As a consequence, please respect the markup indicated on the source language. For a word surrounded by `<bold>` tags, add `<bold>` (and `</bold>` to close it) around the equivalent word in your language.
 - A few strings contain special codes such as `&#8984;` or `&RightArrowBar;`. If you hover over them on Crowdin on the English version, you can know what character it represents. **The semicolon here is crucial. Do not omit it.**
-- > [!TIP]
-  > **Click on the tags** to paste them on your translation. The same process also works for **special codes**.
+> [!TIP]
+> **Click on the tags** to paste them on your translation. The same process also works for **special codes**.
