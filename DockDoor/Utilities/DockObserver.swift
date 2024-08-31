@@ -11,6 +11,16 @@ struct ApplicationInfo: Sendable {
     }
 }
 
+struct ApplicationReturnType {
+    enum Status {
+        case success(NSRunningApplication)
+        case notRunning(bundleIdentifier: String)
+        case notFound
+    }
+
+    let status: Status
+}
+
 func handleSelectedDockItemChangedNotification(observer _: AXObserver, element _: AXUIElement, notificationName _: CFString, _: UnsafeMutableRawPointer?) {
     DockObserver.shared.processSelectedDockItemChanged()
 }
@@ -20,11 +30,20 @@ final class DockObserver {
 
     var axObserver: AXObserver?
     var lastAppUnderMouse: ApplicationInfo?
+    private var previousStatus: ApplicationReturnType.Status?
     private var hoverProcessingTask: Task<Void, Error>?
     private var isProcessing: Bool = false
 
     private init() {
         setupSelectedDockItemObserver()
+    }
+
+    private func hideWindowAndResetLastApp() {
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            lastAppUnderMouse = nil
+            SharedPreviewWindowCoordinator.shared.hideWindow()
+        }
     }
 
     private func setupSelectedDockItemObserver() {
@@ -61,11 +80,14 @@ final class DockObserver {
             isProcessing = true
 
             defer {
-                isProcessing = false
+                self.isProcessing = false
             }
 
             let currentMouseLocation = DockObserver.getMousePosition()
-            if let currentAppUnderMouse = getCurrentAppUnderMouse() {
+            let appReturnType = getDockItemAppStatusUnderMouse()
+
+            switch appReturnType.status {
+            case let .success(currentAppUnderMouse):
                 let currentAppInfo = ApplicationInfo(
                     processIdentifier: currentAppUnderMouse.processIdentifier,
                     bundleIdentifier: currentAppUnderMouse.bundleIdentifier,
@@ -78,7 +100,6 @@ final class DockObserver {
                     Task { [weak self] in
                         guard let self else { return }
                         do {
-                            // Fetch the NSRunningApplication object using the pid
                             guard let app = currentAppInfo.app() else {
                                 print("Failed to get NSRunningApplication for pid: \(currentAppInfo.processIdentifier)")
                                 return
@@ -88,19 +109,16 @@ final class DockObserver {
 
                             await MainActor.run {
                                 if appWindows.isEmpty {
-                                    SharedPreviewWindowCoordinator.shared.hideWindow()
+                                    self.hideWindowAndResetLastApp()
                                 } else {
                                     let mouseScreen = DockObserver.screenContainingMouse(currentMouseLocation) ?? NSScreen.main!
-
-                                    // Show HoverWindow (using shared instance)
                                     SharedPreviewWindowCoordinator.shared.showWindow(
                                         appName: currentAppInfo.localizedName ?? "Unknown",
                                         windows: appWindows,
                                         mouseLocation: currentMouseLocation,
                                         mouseScreen: mouseScreen,
                                         onWindowTap: { [weak self] in
-                                            SharedPreviewWindowCoordinator.shared.hideWindow()
-                                            self?.lastAppUnderMouse = nil
+                                            self?.hideWindowAndResetLastApp()
                                         }
                                     )
                                 }
@@ -112,14 +130,18 @@ final class DockObserver {
                         }
                     }
                 }
-            } else {
-                Task { @MainActor [weak self] in
-                    guard let self else { return }
-                    if !SharedPreviewWindowCoordinator.shared.frame.contains(currentMouseLocation) {
-                        lastAppUnderMouse = nil
-                        SharedPreviewWindowCoordinator.shared.hideWindow()
-                    }
+                previousStatus = .success(currentAppUnderMouse)
+            case let .notRunning(bundleIdentifier):
+                print("App with bundle identifier \(bundleIdentifier) is not running")
+                if case .notRunning = previousStatus {
+                    hideWindowAndResetLastApp()
                 }
+                previousStatus = .notRunning(bundleIdentifier: bundleIdentifier)
+            case .notFound:
+                if await !SharedPreviewWindowCoordinator.shared.frame.contains(currentMouseLocation) {
+                    hideWindowAndResetLastApp()
+                }
+                previousStatus = .notFound
             }
         }
     }
@@ -195,19 +217,19 @@ final class DockObserver {
         return hoveredDockItem
     }
 
-    func getCurrentAppUnderMouse() -> NSRunningApplication? {
+    func getDockItemAppStatusUnderMouse() -> ApplicationReturnType {
         guard let hoveredDockItem = getHoveredApplicationDockItem() else {
-            return nil
+            return ApplicationReturnType(status: .notFound)
         }
 
         var appURL: CFTypeRef?
         guard AXUIElementCopyAttributeValue(hoveredDockItem, kAXURLAttribute as CFString, &appURL) == .success, let appURL = appURL as? NSURL as? URL else {
             print("Failed to get app URL or convert NSURL to URL")
-            return nil
+            return ApplicationReturnType(status: .notFound)
         }
 
-        let budle = Bundle(url: appURL)
-        guard let bundleIdentifier = budle?.bundleIdentifier else {
+        let bundle = Bundle(url: appURL)
+        guard let bundleIdentifier = bundle?.bundleIdentifier else {
             print("App has no valid bundle. app url: \(appURL.path)") // For example: scrcpy, Android studio emulator
 
             // MARK: fallback method
@@ -215,25 +237,25 @@ final class DockObserver {
             var dockItemTitle: CFTypeRef?
             guard AXUIElementCopyAttributeValue(hoveredDockItem, kAXTitleAttribute as CFString, &dockItemTitle) == .success, let dockItemTitle = dockItemTitle as? String else {
                 print("Failed to get dock item title")
-                return nil
+                return ApplicationReturnType(status: .notFound)
             }
 
             if let app = WindowUtil.findRunningApplicationByName(named: dockItemTitle) {
                 print("Found app by name for dock item: \(dockItemTitle)")
-                return app
+                return ApplicationReturnType(status: .success(app))
             } else {
                 print("Not Found app by name for dock item: \(dockItemTitle)")
-                return nil
+                return ApplicationReturnType(status: .notFound)
             }
         }
 
-        guard let runningApp = NSRunningApplication.runningApplications(withBundleIdentifier: bundleIdentifier).first else {
+        if let runningApp = NSRunningApplication.runningApplications(withBundleIdentifier: bundleIdentifier).first {
+            print("Current App is running (\(runningApp.localizedName ?? "Unknown"))")
+            return ApplicationReturnType(status: .success(runningApp))
+        } else {
             print("Current App is not running (\(bundleIdentifier))")
-            return nil
+            return ApplicationReturnType(status: .notRunning(bundleIdentifier: bundleIdentifier))
         }
-
-        print("Current App is running (\(runningApp.localizedName ?? "Unknown"))")
-        return runningApp
     }
 
     static func getMousePosition() -> NSPoint {

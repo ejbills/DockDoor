@@ -85,16 +85,27 @@ class MouseTrackingNSView: NSView {
     }
 
     private func hideWindow() {
-        let currentAppUnderMouse = DockObserver.shared.getCurrentAppUnderMouse()
+        let currentAppReturnType = DockObserver.shared.getDockItemAppStatusUnderMouse()
         let lastAppUnderMouse = DockObserver.shared.lastAppUnderMouse?.app()
 
-        if currentAppUnderMouse == nil || currentAppUnderMouse != lastAppUnderMouse {
+        switch currentAppReturnType.status {
+        case .notFound:
             DispatchQueue.main.async {
                 SharedPreviewWindowCoordinator.shared.hideWindow()
                 DockObserver.shared.lastAppUnderMouse = nil
             }
-        } else {
-            resetOpacity()
+        case let .success(currentApp):
+            if currentApp.processIdentifier != lastAppUnderMouse?.processIdentifier {
+                DispatchQueue.main.async {
+                    SharedPreviewWindowCoordinator.shared.hideWindow()
+                    DockObserver.shared.lastAppUnderMouse = nil
+                }
+            } else {
+                resetOpacity()
+            }
+        case .notRunning:
+            // Do nothing for .notRunning case
+            break
         }
     }
 }
