@@ -17,6 +17,7 @@ struct MainSettingsView: View {
     @Default(.previewHoverAction) var previewHoverAction
     @Default(.bufferFromDock) var bufferFromDock
     @Default(.windowPreviewImageScale) var windowPreviewImageScale
+    @Default(.fadeOutDuration) var fadeOutDuration
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -64,6 +65,17 @@ struct MainSettingsView: View {
                 Spacer()
                 Slider(value: $hoverWindowOpenDelay, in: 0 ... 2, step: 0.1)
                 TextField("", value: $hoverWindowOpenDelay, formatter: decimalFormatter)
+                    .frame(width: 38)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                Text("seconds")
+            }
+
+            HStack {
+                Text("Hover Window Fade Out Duration")
+                    .layoutPriority(1)
+                Spacer()
+                Slider(value: $fadeOutDuration, in: 0 ... 2, step: 0.1)
+                TextField("", value: $fadeOutDuration, formatter: decimalFormatter)
                     .frame(width: 38)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                 Text("seconds")

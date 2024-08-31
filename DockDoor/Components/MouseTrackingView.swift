@@ -1,4 +1,5 @@
 import AppKit
+import Defaults
 import SwiftUI
 
 struct MouseTrackingView: NSViewRepresentable {
@@ -15,7 +16,7 @@ struct MouseTrackingView: NSViewRepresentable {
 
 class MouseTrackingNSView: NSView {
     private var fadeOutTimer: Timer?
-    private let fadeOutDuration: TimeInterval = 1.0
+    @Default(.fadeOutDuration) var fadeOutDuration
 
     override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
@@ -58,13 +59,12 @@ class MouseTrackingNSView: NSView {
         cancelFadeOut()
         setWindowOpacity(to: 0.0, duration: fadeOutDuration) {
             if self.window?.alphaValue == 0.0 {
-                SharedPreviewWindowCoordinator.shared.hideWindow()
-                DockObserver.shared.lastAppUnderMouse = nil
+                self.hideWindow()
             }
         }
 
         fadeOutTimer = Timer.scheduledTimer(withTimeInterval: fadeOutDuration, repeats: false) { [weak self] _ in
-            self?.forceHideWindow()
+            self?.hideWindow()
         }
     }
 
@@ -84,7 +84,7 @@ class MouseTrackingNSView: NSView {
         }
     }
 
-    private func forceHideWindow() {
+    private func hideWindow() {
         DispatchQueue.main.async {
             SharedPreviewWindowCoordinator.shared.hideWindow()
             DockObserver.shared.lastAppUnderMouse = nil

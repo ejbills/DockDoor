@@ -18,6 +18,7 @@ extension Defaults.Keys {
 
     static let uniformCardRadius = Key<Bool>("uniformCardRadius", default: true)
     static let tapEquivalentInterval = Key<CGFloat>("tapEquivalentInterval", default: 1.5)
+    static let fadeOutDuration = Key<CGFloat>("fadeOutDuration", default: 0.4)
     static let previewHoverAction = Key<PreviewHoverAction>("previewHoverAction", default: .none)
 
     static let showAnimations = Key<Bool>("showAnimations", default: true)
