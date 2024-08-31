@@ -112,10 +112,12 @@ final class DockObserver {
                                     self.hideWindowAndResetLastApp()
                                 } else {
                                     let mouseScreen = DockObserver.screenContainingMouse(currentMouseLocation) ?? NSScreen.main!
+                                    let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
+
                                     SharedPreviewWindowCoordinator.shared.showWindow(
                                         appName: currentAppInfo.localizedName ?? "Unknown",
                                         windows: appWindows,
-                                        mouseLocation: currentMouseLocation,
+                                        mouseLocation: convertedMouseLocation,
                                         mouseScreen: mouseScreen,
                                         onWindowTap: { [weak self] in
                                             self?.hideWindowAndResetLastApp()
@@ -297,5 +299,38 @@ final class DockObserver {
         }
 
         return (offsetLeft, offsetTop)
+    }
+
+    private static func nsPointFromCGPoint(_ point: CGPoint, forScreen: NSScreen?) -> NSPoint {
+        guard let screen = forScreen,
+              let primaryScreen = NSScreen.screens.first
+        else {
+            return NSPoint(x: point.x, y: point.y)
+        }
+
+        let (_, offsetTop) = computeOffsets(for: screen, primaryScreen: primaryScreen)
+
+        let y: CGFloat
+        if screen == primaryScreen {
+            y = screen.frame.size.height - point.y
+        } else {
+            let screenBottomOffset = primaryScreen.frame.size.height - (screen.frame.size.height + offsetTop)
+            y = screen.frame.size.height + screenBottomOffset - (point.y - offsetTop)
+        }
+
+        return NSPoint(x: point.x, y: y)
+    }
+
+    static func cgPointFromNSPoint(_ point: CGPoint, forScreen: NSScreen?) -> CGPoint {
+        guard let screen = forScreen,
+              let primaryScreen = NSScreen.screens.first
+        else {
+            return CGPoint(x: point.x, y: point.y)
+        }
+
+        let (_, offsetTop) = computeOffsets(for: screen, primaryScreen: primaryScreen)
+        let menuScreenHeight = screen.frame.maxY
+
+        return CGPoint(x: point.x, y: menuScreenHeight - point.y + offsetTop)
     }
 }

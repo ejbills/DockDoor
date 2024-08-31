@@ -155,9 +155,10 @@ final class SharedPreviewWindowCoordinator: NSWindow {
         guard let mouseLocation else { return .zero }
 
         let dockIconFrame = DockObserver.shared.getDockIconFrameAtLocation(mouseLocation) ?? .zero
+        let tempMouseLocation = DockObserver.cgPointFromNSPoint(mouseLocation, forScreen: screen)
 
-        var xPosition = dockIconFrame.isEmpty ? mouseLocation.x : dockIconFrame.midX
-        var yPosition = dockIconFrame.isEmpty ? mouseLocation.y : dockIconFrame.midY
+        var xPosition = dockIconFrame.isEmpty ? tempMouseLocation.x : dockIconFrame.midX
+        var yPosition = dockIconFrame.isEmpty ? tempMouseLocation.y : dockIconFrame.midY
 
         let screenFrame = screen.frame
         let dockPosition = DockUtils.shared.getDockPosition()

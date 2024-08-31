@@ -3389,7 +3389,7 @@
       }
     },
     "Bottom Left" : {
-      "comment" : "Preview window title position option",
+      "comment" : "Preview window title position option\nTraffic light buttons position option",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -3568,7 +3568,7 @@
       }
     },
     "Bottom Right" : {
-      "comment" : "Preview window title position option",
+      "comment" : "Preview window title position option\nTraffic light buttons position option",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -18928,7 +18928,7 @@
       }
     },
     "Top Left" : {
-      "comment" : "Preview window title position option",
+      "comment" : "Preview window title position option\nTraffic light buttons position option",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -19107,7 +19107,7 @@
       }
     },
     "Top Right" : {
-      "comment" : "Preview window title position option",
+      "comment" : "Preview window title position option\nTraffic light buttons position option",
       "localizations" : {
         "af" : {
           "stringUnit" : {
