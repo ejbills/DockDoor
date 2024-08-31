@@ -133,12 +133,13 @@ final class DockObserver {
                     }
                 }
                 previousStatus = .success(currentAppUnderMouse)
+
             case let .notRunning(bundleIdentifier):
-                print("App with bundle identifier \(bundleIdentifier) is not running")
                 if case .notRunning = previousStatus {
                     hideWindowAndResetLastApp()
                 }
                 previousStatus = .notRunning(bundleIdentifier: bundleIdentifier)
+
             case .notFound:
                 if await !SharedPreviewWindowCoordinator.shared.frame.contains(currentMouseLocation) {
                     hideWindowAndResetLastApp()
@@ -179,14 +180,10 @@ final class DockObserver {
             y: (DockObserver.screenContainingMouse(mouseLocation)?.frame.height ?? NSScreen.main!.frame.height) - mouseLocation.y
         )
 
-        print("Checking icon rect: \(iconRect) with adjusted mouse location: \(adjustedMouseLocation)")
-
         if iconRect.contains(adjustedMouseLocation) {
-            print("Matched icon rect: \(iconRect)")
             return iconRect
         }
 
-        print("No matching icon rect found")
         return nil
     }
 
