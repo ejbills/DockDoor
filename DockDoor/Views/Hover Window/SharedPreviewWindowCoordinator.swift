@@ -64,7 +64,7 @@ final class SharedPreviewWindowCoordinator: NSWindow {
         isMovableByWindowBackground = false
         collectionBehavior = [.canJoinAllSpaces]
         backgroundColor = .clear
-        hasShadow = false
+        hasShadow = true
     }
 
     // Hide the window and reset its state
@@ -116,7 +116,7 @@ final class SharedPreviewWindowCoordinator: NSWindow {
     private func showFullPreviewWindow(for windowInfo: WindowInfo, on screen: NSScreen) {
         if fullPreviewWindow == nil {
             fullPreviewWindow = NSWindow(contentRect: .zero, styleMask: .borderless, backing: .buffered, defer: false)
-            fullPreviewWindow?.level = .floating
+            fullPreviewWindow?.level = NSWindow.Level(rawValue: 18)
             fullPreviewWindow?.isOpaque = false
             fullPreviewWindow?.backgroundColor = .clear
             fullPreviewWindow?.hasShadow = true
