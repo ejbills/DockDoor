@@ -131,18 +131,6 @@ https://crowdin.com/project/dockdoor
 
 ### Translating the website (https://dockdoor.net)
 
-To enhance web communication, we invite you to help translating the project’s website, https://dockdoor.net, with the following link: https://crowdin.com/project/dockdoornet.
-**But before you begin translating**, please consider the following points:
-- The strings contain **basic HTML tags**. It is recommended to have **some familiarity** with HTML. You can find many tutorials online, and HTML is particularly easy to learn.
-- As a consequence, please **respect the markup** indicated on the source language. For a word surrounded by `<strong>` tags, add `<strong>` (and `</strong>` to close it) around the equivalent word in your language.
-- A few strings contain special codes such as `&#8984;` or `&RightArrowBar;`. If you hover over them on Crowdin on the English version, you can know what character it represents. **The semicolon here is crucial. Do not omit it.**
-- Other strings contain `&nbsp;` between words. These are no-break spaces. **They are not substitutable with regular spaces**. Use them as much as they are used on the source language.
-> [!TIP]
-> **Click on the tags** to paste them directly into your translation. The same process also works for **special codes**.
-- There are a few `<span>` tags (`<span class='yellow-highlight'>` `</span>` for example). Copy them exactly as they are on the source language.
-- **Escape your quotation marks** using `\` before them! If you don’t, the translations might fail to render.
-
-
 To enhance web communication, we invite you to help translate the project’s website, https://dockdoor.net, with the following link: https://crowdin.com/project/dockdoornet.
 
 **But before you begin translating**, please consider the following points:
