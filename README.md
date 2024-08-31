@@ -77,7 +77,7 @@ You can customize the default keybind by disabling the option `Use default macOS
 ### How to access DockDoor settings?
 If you disabled `Show Menu Bar Icon` in `General`, search for `DockDoor` using the built-in Spotlight or another searching app. Open DockDoor and the settings should open automatically.
 
-If this option is enabled, click on *door* icon on the menu bar and select `Open Settings` in the contextual menu.
+If this option is enabled, click on the *door* icon in the menu bar and select `Open Settings` in the contextual menu.
 
 ### The application I want to quit does not respond.
 You can either wait for the application to become responsive again, or force quit it. To do this, hold **`Option`** (⌥) while clicking the `Quit` button.
