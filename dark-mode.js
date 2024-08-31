@@ -7,13 +7,13 @@ document.addEventListener('DOMContentLoaded', function () {
     // If user already has saved setting
     if (savedTheme) {
         document.body.classList.toggle('dark-mode', savedTheme === 'dark');
-        darkModeIcon.textContent = savedTheme === 'dark' ? '🌙' : '☀️';
+        darkModeIcon.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
     } else if (prefersDarkMode) {
         // Else, use system setting
         document.body.classList.add('dark-mode');
-        darkModeIcon.textContent = '🌙';
-    } else {
         darkModeIcon.textContent = '☀️';
+    } else {
+        darkModeIcon.textContent = '🌙';
     }
 
     toggleDarkModeButton.addEventListener('click', function () {
@@ -22,6 +22,6 @@ document.addEventListener('DOMContentLoaded', function () {
         localStorage.setItem('theme', theme);
     
         // Change icon according to current theme
-        darkModeIcon.textContent = theme === 'dark' ? '🌙' : '☀️';
+        darkModeIcon.textContent = theme === 'dark' ? '☀️' : '🌙';
     });
 });
