@@ -16,7 +16,7 @@ struct MouseTrackingView: NSViewRepresentable {
 
 class MouseTrackingNSView: NSView {
     private var fadeOutTimer: Timer?
-    @Default(.fadeOutDuration) var fadeOutDuration
+    private var fadeOutDuration = Defaults[.fadeOutDuration]
 
     override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
