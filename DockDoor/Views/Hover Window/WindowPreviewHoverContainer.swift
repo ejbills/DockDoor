@@ -46,6 +46,7 @@ struct WindowPreviewHoverContainer: View {
     var body: some View {
         let orientationIsHorizontal = dockPosition == .bottom || windowSwitcherCoordinator.windowSwitcherActive
         ZStack {
+            MouseTrackingView()
             ScrollViewReader { scrollProxy in
                 ScrollView(orientationIsHorizontal ? .horizontal : .vertical, showsIndicators: false) {
                     DynStack(direction: orientationIsHorizontal ? .horizontal : .vertical, spacing: 16) {
@@ -84,20 +85,6 @@ struct WindowPreviewHoverContainer: View {
         .padding(.top, (!windowSwitcherCoordinator.windowSwitcherActive && appNameStyle == .popover && showAppName) ? 30 : 0) // Provide empty space above the window preview for the Popover title style when hovering over the Dock
         .padding(.all, 24)
         .frame(maxWidth: bestGuessMonitor.visibleFrame.width, maxHeight: bestGuessMonitor.visibleFrame.height)
-        .onHover { isHovering in
-            let currentMouseLocation = DockObserver.getMousePosition()
-            let dockIconFrame = DockObserver.shared.getDockIconFrameAtLocation(currentMouseLocation)
-
-            let currentAppUnderMouse = DockObserver.shared.getCurrentAppUnderMouse()
-            let lastAppUnderMouse = DockObserver.shared.lastAppUnderMouse?.app()
-
-            print("isHovering: \(isHovering), Item: \(DockObserver.shared.getHoveredApplicationDockItem() != nil), current app: \(currentAppUnderMouse != nil), last app: \(lastAppUnderMouse != nil), dockIconFrame:  \(String(describing: dockIconFrame))")
-
-            if !isHovering, currentAppUnderMouse == nil || currentAppUnderMouse != lastAppUnderMouse {
-                SharedPreviewWindowCoordinator.shared.hideWindow()
-                DockObserver.shared.lastAppUnderMouse = nil
-            }
-        }
     }
 
     @ViewBuilder
