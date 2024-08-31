@@ -25,7 +25,7 @@ struct AppearanceSettingsView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             Toggle(isOn: $showAnimations, label: {
-                Text("Enable Hover Window Sliding Animation")
+                Text("Enable Preview Window Sliding Animation")
             })
 
             Toggle(isOn: $uniformCardRadius, label: {

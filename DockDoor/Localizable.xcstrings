@@ -6780,6 +6780,7 @@
       }
     },
     "Enable Hover Window Sliding Animation" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -6956,6 +6957,9 @@
           }
         }
       }
+    },
+    "Enable Preview Window Sliding Animation" : {
+
     },
     "Enable Window Switcher" : {
       "localizations" : {
