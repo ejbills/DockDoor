@@ -81,10 +81,6 @@ If this option is enabled, click on the *door* icon in the menu bar and select `
 
 ### The application I want to quit does not respond.
 You can either wait for the application to become responsive again, or force quit it. To do this, hold **`Option`** (⌥) while clicking the `Quit` button.
-
-### Why is DockDoor only for macOS 13 and newer?
-DockDoor uses a system API to capture previews of windows which is macOS 14.0+. It has been adapted for macOS 13 in https://github.com/ejbills/DockDoor/pull/267.
-There are plans for minimum support for macOS 12.3.
  
 ## Contributing
 
