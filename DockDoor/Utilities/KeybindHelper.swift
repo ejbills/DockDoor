@@ -129,14 +129,9 @@ class KeybindHelper {
             )
         }
 
-        // fetch active windows for all apps (empty string) to update space window cache
         Task(priority: .background) { [weak self] in
             guard self != nil else { return }
-            do {
-                _ = try await WindowUtil.activeWindows(for: "")
-            } catch {
-                print("Failed to update windows from keybind helper.")
-            }
+            await WindowUtil.updateAllWindowsInCurrentSpace()
         }
     }
 }

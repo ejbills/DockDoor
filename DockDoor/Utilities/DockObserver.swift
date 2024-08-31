@@ -1,6 +1,16 @@
 import ApplicationServices
 import Cocoa
 
+struct ApplicationInfo: Sendable {
+    let processIdentifier: pid_t
+    let bundleIdentifier: String?
+    let localizedName: String?
+
+    func app() -> NSRunningApplication? {
+        NSRunningApplication(processIdentifier: processIdentifier)
+    }
+}
+
 func handleSelectedDockItemChangedNotification(observer _: AXObserver, element _: AXUIElement, notificationName _: CFString, _: UnsafeMutableRawPointer?) {
     DockObserver.shared.processSelectedDockItemChanged()
 }
@@ -9,7 +19,7 @@ final class DockObserver {
     static let shared = DockObserver()
 
     var axObserver: AXObserver?
-    var lastAppUnderMouse: NSRunningApplication?
+    var lastAppUnderMouse: ApplicationInfo?
     private var hoverProcessingTask: Task<Void, Error>?
     private var isProcessing: Bool = false
 
@@ -47,7 +57,7 @@ final class DockObserver {
         hoverProcessingTask = Task { [weak self] in
             guard let self else { return }
             try Task.checkCancellation()
-            guard !isProcessing, !ScreenCenteredFloatingWindow.shared.windowSwitcherActive else { return }
+            guard !isProcessing, await !SharedPreviewWindowCoordinator.shared.windowSwitcherCoordinator.windowSwitcherActive else { return }
             isProcessing = true
 
             defer {
@@ -56,13 +66,26 @@ final class DockObserver {
 
             let currentMouseLocation = DockObserver.getMousePosition()
             if let currentAppUnderMouse = getCurrentAppUnderMouse() {
-                if currentAppUnderMouse != lastAppUnderMouse {
-                    lastAppUnderMouse = currentAppUnderMouse
+                let currentAppInfo = ApplicationInfo(
+                    processIdentifier: currentAppUnderMouse.processIdentifier,
+                    bundleIdentifier: currentAppUnderMouse.bundleIdentifier,
+                    localizedName: currentAppUnderMouse.localizedName
+                )
+
+                if currentAppInfo.processIdentifier != lastAppUnderMouse?.processIdentifier {
+                    lastAppUnderMouse = currentAppInfo
 
                     Task { [weak self] in
                         guard let self else { return }
                         do {
-                            let appWindows = try await WindowUtil.getActiveWindows(of: currentAppUnderMouse)
+                            // Fetch the NSRunningApplication object using the pid
+                            guard let app = currentAppInfo.app() else {
+                                print("Failed to get NSRunningApplication for pid: \(currentAppInfo.processIdentifier)")
+                                return
+                            }
+
+                            let appWindows = try await WindowUtil.getActiveWindows(of: app)
+
                             await MainActor.run {
                                 if appWindows.isEmpty {
                                     SharedPreviewWindowCoordinator.shared.hideWindow()
@@ -72,7 +95,7 @@ final class DockObserver {
 
                                     // Show HoverWindow (using shared instance)
                                     SharedPreviewWindowCoordinator.shared.showWindow(
-                                        appName: currentAppUnderMouse.localizedName!,
+                                        appName: currentAppInfo.localizedName ?? "Unknown",
                                         windows: appWindows,
                                         mouseLocation: convertedMouseLocation,
                                         mouseScreen: mouseScreen,

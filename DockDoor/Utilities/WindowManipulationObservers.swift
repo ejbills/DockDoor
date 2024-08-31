@@ -147,7 +147,7 @@ private func handleFocusedUIElementChanged(element: AXUIElement, app: NSRunningA
     WindowManipulationObservers.trackedElements.insert(element)
     WindowManipulationObservers.debounceWorkItem?.cancel()
     WindowManipulationObservers.debounceWorkItem = DispatchWorkItem {
-        WindowUtil.updateWindowDateTime(with: app.bundleIdentifier ?? "", pid: pid)
+        WindowUtil.updateWindowDateTime(for: app)
         WindowManipulationObservers.trackedElements.remove(element)
         print("Focused Window has changed: \(app.localizedName ?? "")")
     }
@@ -159,11 +159,11 @@ private func handleWindowStateChange(element: AXUIElement, app: NSRunningApplica
     WindowManipulationObservers.trackedElements.insert(element)
     WindowManipulationObservers.debounceWorkItem?.cancel()
     WindowManipulationObservers.debounceWorkItem = DispatchWorkItem {
-        WindowUtil.updateWindowCache(for: app.bundleIdentifier ?? "") { windowSet in
+        WindowUtil.updateWindowCache(for: app) { windowSet in
             windowSet = windowSet.filter { WindowUtil.isValidElement($0.axElement) }
         }
         WindowManipulationObservers.trackedElements.remove(element)
-        print("Window \(notificationType) for app: \(app.localizedName ?? "Unknown")")
+        print("Window destroyed for app: \(app.localizedName ?? "Unknown")")
     }
     DispatchQueue.main.asyncAfter(deadline: .now() + 0.01, execute: WindowManipulationObservers.debounceWorkItem!)
 }

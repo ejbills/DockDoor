@@ -89,7 +89,7 @@ struct WindowPreviewHoverContainer: View {
             let dockIconFrame = DockObserver.shared.getDockIconFrameAtLocation(currentMouseLocation)
 
             let currentAppUnderMouse = DockObserver.shared.getCurrentAppUnderMouse()
-            let lastAppUnderMouse = DockObserver.shared.lastAppUnderMouse
+            let lastAppUnderMouse = DockObserver.shared.lastAppUnderMouse?.app()
 
             print("isHovering: \(isHovering), Item: \(DockObserver.shared.getHoveredApplicationDockItem() != nil), current app: \(currentAppUnderMouse != nil), last app: \(lastAppUnderMouse != nil), dockIconFrame:  \(String(describing: dockIconFrame))")
 

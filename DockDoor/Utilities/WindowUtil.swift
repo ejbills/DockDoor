@@ -466,6 +466,37 @@ enum WindowUtil {
         return combinedWindows.sorted(by: { $0.lastUsed > $1.lastUsed })
     }
 
+    static func updateAllWindowsInCurrentSpace() async {
+        do {
+            let content = try await SCShareableContent.excludingDesktopWindows(true, onScreenWindowsOnly: true)
+
+            let group = LimitedTaskGroup<Void>(maxConcurrentTasks: 4)
+
+            for window in content.windows {
+                guard let scApp = window.owningApplication,
+                      !filteredBundleIdentifiers.contains(scApp.bundleIdentifier)
+                else {
+                    continue
+                }
+
+                // Convert SCRunningApplication to NSRunningApplication
+                if let nsApp = NSRunningApplication(processIdentifier: scApp.processID) {
+                    await group.addTask {
+                        if let windowInfo = try? await fetchWindowInfo(window: window, app: nsApp) {
+                            updateDesktopSpaceWindowCache(with: windowInfo)
+                        }
+                    }
+                }
+            }
+
+            // Wait for all tasks to complete
+            _ = try await group.waitForAll()
+
+        } catch {
+            print("Error updating windows: \(error)")
+        }
+    }
+
     static func fetchWindowInfo(window: SCWindow, app: NSRunningApplication) async throws -> WindowInfo? {
         let windowID = window.windowID
 
