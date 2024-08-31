@@ -90,7 +90,7 @@ final class DockObserver {
                                 if appWindows.isEmpty {
                                     SharedPreviewWindowCoordinator.shared.hideWindow()
                                 } else {
-                                    let mouseScreen = DockObserver.screenContainMouse(currentMouseLocation) ?? NSScreen.main!
+                                    let mouseScreen = DockObserver.screenContainingMouse(currentMouseLocation) ?? NSScreen.main!
                                     let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
 
                                     // Show HoverWindow (using shared instance)
@@ -116,7 +116,7 @@ final class DockObserver {
             } else {
                 Task { @MainActor [weak self] in
                     guard let self else { return }
-                    let mouseScreen = DockObserver.screenContainMouse(currentMouseLocation) ?? NSScreen.main!
+                    let mouseScreen = DockObserver.screenContainingMouse(currentMouseLocation) ?? NSScreen.main!
                     let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
                     if !SharedPreviewWindowCoordinator.shared.frame.contains(convertedMouseLocation) {
                         lastAppUnderMouse = nil
@@ -155,7 +155,7 @@ final class DockObserver {
         // Adjust mouse location to match the coordinate system of the dock icons
         let adjustedMouseLocation = CGPoint(
             x: mouseLocation.x,
-            y: (DockObserver.screenContainMouse(mouseLocation)?.frame.height ?? NSScreen.main!.frame.height) - mouseLocation.y
+            y: (DockObserver.screenContainingMouse(mouseLocation)?.frame.height ?? NSScreen.main!.frame.height) - mouseLocation.y
         )
 
         print("Checking icon rect: \(iconRect) with adjusted mouse location: \(adjustedMouseLocation)")
@@ -284,7 +284,7 @@ final class DockObserver {
         return mousePosition
     }
 
-    static func screenContainMouse(_ point: CGPoint) -> NSScreen? {
+    static func screenContainingMouse(_ point: CGPoint) -> NSScreen? {
         let screens = NSScreen.screens
         guard let primaryScreen = screens.first else { return nil }
 
