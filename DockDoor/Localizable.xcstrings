@@ -1306,7 +1306,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ajustez ce paramètre si mal aligné par rapport au Dock"
+            "value" : "Ajustez ce paramètre si l’aperçu est mal aligné par rapport au Dock"
           }
         },
         "he" : {
@@ -1420,7 +1420,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "預覽未對齊 Dock 時調整"
+            "value" : "預覽視窗調整Dock之間的距離"
           }
         }
       }
@@ -2135,8 +2135,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "amount"
+            "state" : "translated",
+            "value" : "數量"
           }
         }
       }
@@ -2313,8 +2313,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Animation speed"
+            "state" : "translated",
+            "value" : "動畫速度"
           }
         }
       }
@@ -3382,8 +3382,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Blur amount"
+            "state" : "translated",
+            "value" : "模糊程度"
           }
         }
       }
@@ -4632,8 +4632,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Colors"
+            "state" : "translated",
+            "value" : "顏色"
           }
         }
       }
@@ -6416,8 +6416,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Edit Color"
+            "state" : "translated",
+            "value" : "編輯顏色"
           }
         }
       }
@@ -7373,7 +7373,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Très, très petit"
+            "value" : "Extrêmement petit"
           }
         },
         "he" : {
@@ -8444,8 +8444,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Highlight Gradient Colors"
+            "state" : "translated",
+            "value" : "Couleurs du dégradé de surbrillance"
           }
         },
         "he" : {
@@ -8558,8 +8558,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Highlight Gradient Colors"
+            "state" : "translated",
+            "value" : "漸層醒目色"
           }
         }
       }
@@ -8802,7 +8802,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Style du titre de l’aperçu"
+            "value" : "Style du titre de la fenêtre prévisualisée"
           }
         },
         "he" : {
@@ -12552,7 +12552,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Merci de quitter l’application pour appliquer les modifications ! :)"
+            "value" : "Veuillez quitter l’application pour appliquer les modifications ! :)"
           }
         },
         "he" : {
@@ -12908,7 +12908,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Merci de redémarrer l’application pour appliquer les changements. Cliquez sur OK pour quitter l’application."
+            "value" : "Veuillez redémarrer l’application pour appliquer les changements. Cliquez sur OK pour quitter l’application."
           }
         },
         "he" : {
@@ -14447,8 +14447,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Remove"
+            "state" : "translated",
+            "value" : "移除"
           }
         }
       }
@@ -15695,8 +15695,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Right click a color to remove it."
+            "state" : "translated",
+            "value" : "點擊右鍵刪除顏色。"
           }
         }
       }
@@ -21113,7 +21113,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Vous voulez soutenir le développement ?"
+            "value" : "Vous souhaitez soutenir le développement ?"
           }
         },
         "he" : {
@@ -21470,7 +21470,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Qu’est-ce ? Un aperçu pour les FOURMIS ?"
+            "value" : "Qu’est-ce ? Une fenêtre pour les FOURMIS ?"
           }
         },
         "he" : {
@@ -22479,7 +22479,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "視窗緩衝區"
+            "value" : "視窗顯示調整"
           }
         }
       }
