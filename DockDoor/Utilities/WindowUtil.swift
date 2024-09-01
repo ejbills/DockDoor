@@ -125,9 +125,24 @@ enum WindowUtil {
 
         // Get the scale factor of the display containing the window
         let scaleFactor = await getScaleFactorForWindow(windowID: window.windowID)
-        // Convert points to pixels
-        let width = Int(window.frame.width * scaleFactor) / Int(Defaults[.windowPreviewImageScale])
-        let height = Int(window.frame.height * scaleFactor) / Int(Defaults[.windowPreviewImageScale])
+
+        // Get the screen containing the window
+        let windowFrame = window.frame
+        let screenContainingWindow = NSScreen.screens.first { screen in
+            screen.frame.intersects(windowFrame)
+        } ?? NSScreen.main!
+
+        // Adjust the window frame relative to the screen
+        let adjustedFrame = CGRect(
+            x: windowFrame.origin.x - screenContainingWindow.frame.origin.x,
+            y: windowFrame.origin.y - screenContainingWindow.frame.origin.y,
+            width: windowFrame.width,
+            height: windowFrame.height
+        )
+
+        // Convert points to pixels, accounting for screen position
+        let width = Int(adjustedFrame.width * scaleFactor) / Int(Defaults[.windowPreviewImageScale])
+        let height = Int(adjustedFrame.height * scaleFactor) / Int(Defaults[.windowPreviewImageScale])
 
         config.width = width
         config.height = height
@@ -143,6 +158,7 @@ enum WindowUtil {
             config.includeChildWindows = false
         }
 
+        // Capture the image
         return try await SCScreenshotManager.captureImage(contentFilter: filter, configuration: config)
     }
 

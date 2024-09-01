@@ -111,7 +111,7 @@ final class DockObserver {
                                 if appWindows.isEmpty {
                                     self.hideWindowAndResetLastApp()
                                 } else {
-                                    let mouseScreen = DockObserver.screenContainingMouse(currentMouseLocation) ?? NSScreen.main!
+                                    let mouseScreen = NSScreen.screenContainingMouse(currentMouseLocation)
                                     let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
 
                                     SharedPreviewWindowCoordinator.shared.showWindow(
@@ -147,44 +147,6 @@ final class DockObserver {
                 previousStatus = .notFound
             }
         }
-    }
-
-    func getDockIconFrameAtLocation(_ mouseLocation: CGPoint) -> CGRect? {
-        guard let hoveredDockItem = getHoveredApplicationDockItem() else {
-            print("No selected dock item found")
-            return nil
-        }
-
-        var positionValue: CFTypeRef?
-        var sizeValue: CFTypeRef?
-        let positionResult = AXUIElementCopyAttributeValue(hoveredDockItem, kAXPositionAttribute as CFString, &positionValue)
-        let sizeResult = AXUIElementCopyAttributeValue(hoveredDockItem, kAXSizeAttribute as CFString, &sizeValue)
-
-        guard positionResult == .success, sizeResult == .success else {
-            print("Failed to get position or size for selected dock item")
-            return nil
-        }
-
-        let position = positionValue as! AXValue
-        let size = sizeValue as! AXValue
-        var positionPoint = CGPoint.zero
-        var sizeCGSize = CGSize.zero
-        AXValueGetValue(position, .cgPoint, &positionPoint)
-        AXValueGetValue(size, .cgSize, &sizeCGSize)
-
-        let iconRect = CGRect(origin: positionPoint, size: sizeCGSize)
-
-        // Adjust mouse location to match the coordinate system of the dock icons
-        let adjustedMouseLocation = CGPoint(
-            x: mouseLocation.x,
-            y: (DockObserver.screenContainingMouse(mouseLocation)?.frame.height ?? NSScreen.main!.frame.height) - mouseLocation.y
-        )
-
-        if iconRect.contains(adjustedMouseLocation) {
-            return iconRect
-        }
-
-        return nil
     }
 
     func getHoveredApplicationDockItem() -> AXUIElement? {
@@ -267,23 +229,6 @@ final class DockObserver {
         let mousePosition = NSPoint(x: mouseLocation.x, y: mouseLocation.y)
 
         return mousePosition
-    }
-
-    static func screenContainingMouse(_ point: CGPoint) -> NSScreen? {
-        let screens = NSScreen.screens
-        guard let primaryScreen = screens.first else { return nil }
-
-        for screen in screens {
-            let (offsetLeft, offsetTop) = computeOffsets(for: screen, primaryScreen: primaryScreen)
-
-            if point.x >= offsetLeft, point.x <= offsetLeft + screen.frame.size.width,
-               point.y >= offsetTop, point.y <= offsetTop + screen.frame.size.height
-            {
-                return screen
-            }
-        }
-
-        return primaryScreen
     }
 
     private static func computeOffsets(for screen: NSScreen, primaryScreen: NSScreen) -> (CGFloat, CGFloat) {
