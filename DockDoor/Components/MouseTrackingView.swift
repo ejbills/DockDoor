@@ -41,11 +41,6 @@ class MouseTrackingNSView: NSView {
         setWindowOpacity(to: 1.0, duration: 0.0)
     }
 
-    override func viewDidMoveToWindow() {
-        super.viewDidMoveToWindow()
-        resetOpacity()
-    }
-
     override func mouseExited(with event: NSEvent) {
         startFadeOut()
     }
@@ -104,8 +99,6 @@ class MouseTrackingNSView: NSView {
                     SharedPreviewWindowCoordinator.shared.hideWindow()
                     DockObserver.shared.lastAppUnderMouse = nil
                 }
-            } else {
-                resetOpacity()
             }
         case .notRunning:
             // Do nothing for .notRunning case
