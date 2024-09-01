@@ -59,10 +59,7 @@ class MouseTrackingNSView: NSView {
         cancelFadeOut()
 
         if fadeOutDuration == 0 {
-            // Immediately hide the window without animation or timer
-            setWindowOpacity(to: 0.0, duration: 0.0) {
-                self.hideWindow()
-            }
+            hideWindow()
         } else {
             setWindowOpacity(to: 0.0, duration: fadeOutDuration) {
                 if self.window?.alphaValue == 0.0 {
