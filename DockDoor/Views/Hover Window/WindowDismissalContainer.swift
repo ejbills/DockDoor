@@ -122,7 +122,7 @@ class MouseTrackingNSView: NSView {
                 let currentMousePosition = DockObserver.getMousePosition()
                 if currentMousePosition.distance(to: mouseLocation) > 100 {
                     performHideWindow()
-                } else if window?.alphaValue != 1 {
+                } else if window?.alphaValue != 1 { // app was re-hovered while a fade out was in progress, reset the opacity
                     resetOpacity()
                 }
             }
