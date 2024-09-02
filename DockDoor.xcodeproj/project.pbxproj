@@ -32,7 +32,7 @@
 		BB3967FD2C291D5A004F1AB6 /* StackedShadow.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3967FC2C291D5A004F1AB6 /* StackedShadow.swift */; };
 		BB3968002C2A6C44004F1AB6 /* SmoothGradient in Frameworks */ = {isa = PBXBuildFile; productRef = BB3967FF2C2A6C44004F1AB6 /* SmoothGradient */; };
 		BB3968022C2A6CC2004F1AB6 /* Marquee.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3968012C2A6CC2004F1AB6 /* Marquee.swift */; };
-		BB3D6EAE2C82E4B400FFE584 /* MouseTrackingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3D6EAD2C82E4AE00FFE584 /* MouseTrackingView.swift */; };
+		BB3D6EAE2C82E4B400FFE584 /* WindowDismissalContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3D6EAD2C82E4AE00FFE584 /* WindowDismissalContainer.swift */; };
 		BB3D6EB02C84E58400FFE584 /* NSScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3D6EAF2C84E58000FFE584 /* NSScreen.swift */; };
 		BB44474F2C507F950047EB92 /* LimitedTaskGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB44474E2C507F920047EB92 /* LimitedTaskGroup.swift */; };
 		BB4B444B2C372A4E006680DC /* WindowPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB4B444A2C372A4C006680DC /* WindowPreview.swift */; };
@@ -83,7 +83,7 @@
 		BB2CBB082C48128D004502C5 /* SpaceWindowCacheManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceWindowCacheManager.swift; sourceTree = "<group>"; };
 		BB3967FC2C291D5A004F1AB6 /* StackedShadow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackedShadow.swift; sourceTree = "<group>"; };
 		BB3968012C2A6CC2004F1AB6 /* Marquee.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Marquee.swift; sourceTree = "<group>"; };
-		BB3D6EAD2C82E4AE00FFE584 /* MouseTrackingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MouseTrackingView.swift; sourceTree = "<group>"; };
+		BB3D6EAD2C82E4AE00FFE584 /* WindowDismissalContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowDismissalContainer.swift; sourceTree = "<group>"; };
 		BB3D6EAF2C84E58000FFE584 /* NSScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSScreen.swift; sourceTree = "<group>"; };
 		BB44474E2C507F920047EB92 /* LimitedTaskGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LimitedTaskGroup.swift; sourceTree = "<group>"; };
 		BB4B444A2C372A4C006680DC /* WindowPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowPreview.swift; sourceTree = "<group>"; };
@@ -129,7 +129,6 @@
 			isa = PBXGroup;
 			children = (
 				BB3D6EAF2C84E58000FFE584 /* NSScreen.swift */,
-				BB3D6EAD2C82E4AE00FFE584 /* MouseTrackingView.swift */,
 				BB04405C2C77A878009F1D33 /* Defaults */,
 				BBF413992C40A64000AA6733 /* FluidGradient.swift */,
 				3A105FD52C1BED660015EC66 /* BlurView.swift */,
@@ -225,6 +224,7 @@
 		BB4B44492C372A42006680DC /* Hover Window */ = {
 			isa = PBXGroup;
 			children = (
+				BB3D6EAD2C82E4AE00FFE584 /* WindowDismissalContainer.swift */,
 				BBF413932C40977F00AA6733 /* WindowPreviewHoverContainer.swift */,
 				BB4B444A2C372A4C006680DC /* WindowPreview.swift */,
 				BBF413912C40618800AA6733 /* FullSizePreviewView.swift */,
@@ -373,7 +373,7 @@
 				0531F8D22C3CC04600327808 /* AppearanceSettingsView.swift in Sources */,
 				BB6A4F1C2C1CFCFF00CB4C9E /* PermissionsSettingsView.swift in Sources */,
 				BB3D6EB02C84E58400FFE584 /* NSScreen.swift in Sources */,
-				BB3D6EAE2C82E4B400FFE584 /* MouseTrackingView.swift in Sources */,
+				BB3D6EAE2C82E4B400FFE584 /* WindowDismissalContainer.swift in Sources */,
 				BB3967FD2C291D5A004F1AB6 /* StackedShadow.swift in Sources */,
 				BBF4139A2C40A64A00AA6733 /* FluidGradient.swift in Sources */,
 				BB7CA33D2C31F1B00012E303 /* WindowManipulationObservers.swift in Sources */,

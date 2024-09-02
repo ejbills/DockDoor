@@ -2,9 +2,11 @@ import AppKit
 import Defaults
 import SwiftUI
 
-struct MouseTrackingView: NSViewRepresentable {
+struct WindowDismissalContainer: NSViewRepresentable {
+    let appName: String
+
     func makeNSView(context: Context) -> MouseTrackingNSView {
-        let view = MouseTrackingNSView()
+        let view = MouseTrackingNSView(appName: appName)
         view.resetOpacity()
         return view
     }
@@ -15,16 +17,19 @@ struct MouseTrackingView: NSViewRepresentable {
 }
 
 class MouseTrackingNSView: NSView {
+    let appName: String
     private var fadeOutTimer: Timer?
     private var fadeOutDuration = Defaults[.fadeOutDuration]
 
-    override init(frame frameRect: NSRect) {
+    init(appName: String, frame frameRect: NSRect = .zero) {
+        self.appName = appName
         super.init(frame: frameRect)
         setupTrackingArea()
         resetOpacity()
     }
 
     required init?(coder: NSCoder) {
+        appName = "" // Default value, consider passing appName if using Interface Builder
         super.init(coder: coder)
         setupTrackingArea()
         resetOpacity()
@@ -52,7 +57,6 @@ class MouseTrackingNSView: NSView {
 
     private func startFadeOut() {
         cancelFadeOut()
-
         if fadeOutDuration == 0 {
             hideWindow()
         } else {
@@ -81,12 +85,18 @@ class MouseTrackingNSView: NSView {
 
     private func hideWindow() {
         let currentAppReturnType = DockObserver.shared.getDockItemAppStatusUnderMouse()
-
         switch currentAppReturnType.status {
-        case .notFound, .success:
+        case .notFound:
             DispatchQueue.main.async {
                 SharedPreviewWindowCoordinator.shared.hideWindow()
                 DockObserver.shared.lastAppUnderMouse = nil
+            }
+        case let .success(currApp):
+            if currApp.localizedName == appName {
+                DispatchQueue.main.async {
+                    SharedPreviewWindowCoordinator.shared.hideWindow()
+                    DockObserver.shared.lastAppUnderMouse = nil
+                }
             }
         case .notRunning:
             // Do nothing for .notRunning case

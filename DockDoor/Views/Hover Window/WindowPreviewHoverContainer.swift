@@ -46,7 +46,7 @@ struct WindowPreviewHoverContainer: View {
     var body: some View {
         let orientationIsHorizontal = dockPosition == .bottom || windowSwitcherCoordinator.windowSwitcherActive
         ZStack {
-            MouseTrackingView()
+            WindowDismissalContainer(appName: appName)
             ScrollViewReader { scrollProxy in
                 ScrollView(orientationIsHorizontal ? .horizontal : .vertical, showsIndicators: false) {
                     DynStack(direction: orientationIsHorizontal ? .horizontal : .vertical, spacing: 16) {
