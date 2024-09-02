@@ -6,6 +6,7 @@ struct WindowPreviewHoverContainer: View {
     let windows: [WindowInfo]
     let onWindowTap: (() -> Void)?
     let dockPosition: DockPosition
+    let mouseLocation: CGPoint?
     let bestGuessMonitor: NSScreen
 
     @ObservedObject var windowSwitcherCoordinator: ScreenCenteredFloatingWindowCoordinator
@@ -45,8 +46,13 @@ struct WindowPreviewHoverContainer: View {
 
     var body: some View {
         let orientationIsHorizontal = dockPosition == .bottom || windowSwitcherCoordinator.windowSwitcherActive
+
         ZStack {
-            WindowDismissalContainer(appName: appName)
+            if let mouseLocation {
+                let initMouseLocation = DockObserver.cgPointFromNSPoint(mouseLocation, forScreen: bestGuessMonitor)
+                WindowDismissalContainer(appName: appName, initMouseLocation: initMouseLocation)
+            }
+
             ScrollViewReader { scrollProxy in
                 ScrollView(orientationIsHorizontal ? .horizontal : .vertical, showsIndicators: false) {
                     DynStack(direction: orientationIsHorizontal ? .horizontal : .vertical, spacing: 16) {

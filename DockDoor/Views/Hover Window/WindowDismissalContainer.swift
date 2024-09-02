@@ -1,12 +1,12 @@
-import AppKit
 import Defaults
 import SwiftUI
 
 struct WindowDismissalContainer: NSViewRepresentable {
     let appName: String
+    let initMouseLocation: CGPoint
 
     func makeNSView(context: Context) -> MouseTrackingNSView {
-        let view = MouseTrackingNSView(appName: appName)
+        let view = MouseTrackingNSView(appName: appName, initMouseLocation: initMouseLocation)
         view.resetOpacity()
         return view
     }
@@ -17,22 +17,21 @@ struct WindowDismissalContainer: NSViewRepresentable {
 }
 
 class MouseTrackingNSView: NSView {
-    let appName: String
+    private let appName: String
+    private let initMouseLocation: CGPoint
     private var fadeOutTimer: Timer?
-    private var fadeOutDuration = Defaults[.fadeOutDuration]
+    private let fadeOutDuration: TimeInterval
 
-    init(appName: String, frame frameRect: NSRect = .zero) {
+    init(appName: String, initMouseLocation: CGPoint, frame frameRect: NSRect = .zero) {
         self.appName = appName
+        self.initMouseLocation = initMouseLocation
+        self.fadeOutDuration = Defaults[.fadeOutDuration]
         super.init(frame: frameRect)
         setupTrackingArea()
-        resetOpacity()
     }
 
     required init?(coder: NSCoder) {
-        appName = ""
-        super.init(coder: coder)
-        setupTrackingArea()
-        resetOpacity()
+        fatalError("init(coder:) has not been implemented")
     }
 
     private func setupTrackingArea() {
@@ -73,12 +72,11 @@ class MouseTrackingNSView: NSView {
     }
 
     private func setWindowOpacity(to value: CGFloat, duration: TimeInterval) {
-        DispatchQueue.main.async {
-            if let window = self.window {
-                NSAnimationContext.runAnimationGroup({ context in
-                    context.duration = duration
-                    window.animator().alphaValue = value
-                }, completionHandler: nil)
+        DispatchQueue.main.async { [weak self] in
+            guard let window = self?.window else { return }
+            NSAnimationContext.runAnimationGroup { context in
+                context.duration = duration
+                window.animator().alphaValue = value
             }
         }
     }
@@ -87,20 +85,27 @@ class MouseTrackingNSView: NSView {
         let currentAppReturnType = DockObserver.shared.getDockItemAppStatusUnderMouse()
         switch currentAppReturnType.status {
         case .notFound:
-            DispatchQueue.main.async {
-                SharedPreviewWindowCoordinator.shared.hideWindow()
-                DockObserver.shared.lastAppUnderMouse = nil
-            }
+            performHideWindow()
         case let .success(currApp):
+            // Prevent accidental window hiding when quickly moving the mouse:
+            // Only hide the window if the mouse has moved significantly (>100px)
+            // from its initial position. This accounts for cases where the mouse
+            // quickly leaves the dock, which can trigger a duplicate hover event.
             if currApp.localizedName == appName {
-                DispatchQueue.main.async {
-                    SharedPreviewWindowCoordinator.shared.hideWindow()
-                    DockObserver.shared.lastAppUnderMouse = nil
+                let currentMousePosition = DockObserver.getMousePosition()
+                if currentMousePosition.distance(to: initMouseLocation) > 100 {
+                    performHideWindow()
                 }
             }
         case .notRunning:
-            // Do nothing for .notRunning case
             break
+        }
+    }
+
+    private func performHideWindow() {
+        DispatchQueue.main.async {
+            SharedPreviewWindowCoordinator.shared.hideWindow()
+            DockObserver.shared.lastAppUnderMouse = nil
         }
     }
 }

@@ -94,8 +94,8 @@ final class SharedPreviewWindowCoordinator: NSWindow {
 
         // Reset the hosting view
         let hoverView = WindowPreviewHoverContainer(appName: appName, windows: windows, onWindowTap: onWindowTap,
-                                                    dockPosition: DockUtils.shared.getDockPosition(), bestGuessMonitor: mouseScreen,
-                                                    windowSwitcherCoordinator: windowSwitcherCoordinator)
+                                                    dockPosition: DockUtils.shared.getDockPosition(), mouseLocation: mouseLocation,
+                                                    bestGuessMonitor: mouseScreen, windowSwitcherCoordinator: windowSwitcherCoordinator)
         let newHostingView = NSHostingView(rootView: hoverView)
         contentView = newHostingView
         hostingView = newHostingView
@@ -258,7 +258,7 @@ final class SharedPreviewWindowCoordinator: NSWindow {
                 self.windows = windows
                 self.onWindowTap = onWindowTap
 
-                updateHostingView(appName: appName, windows: windows, onWindowTap: onWindowTap, screen: screen)
+                updateHostingView(appName: appName, windows: windows, onWindowTap: onWindowTap, screen: screen, mouseLocation: mouseLocation)
 
                 updateContentViewSizeAndPosition(mouseLocation: mouseLocation, mouseScreen: screen, animated: true,
                                                  centerOnScreen: shouldCenterOnScreen, centeredHoverWindowState: centeredHoverWindowState)
@@ -269,10 +269,10 @@ final class SharedPreviewWindowCoordinator: NSWindow {
     }
 
     // Update or create the hosting view
-    private func updateHostingView(appName: String, windows: [WindowInfo], onWindowTap: (() -> Void)?, screen: NSScreen) {
+    private func updateHostingView(appName: String, windows: [WindowInfo], onWindowTap: (() -> Void)?, screen: NSScreen, mouseLocation: CGPoint? = nil) {
         let hoverView = WindowPreviewHoverContainer(appName: appName, windows: windows, onWindowTap: onWindowTap,
-                                                    dockPosition: DockUtils.shared.getDockPosition(), bestGuessMonitor: screen,
-                                                    windowSwitcherCoordinator: windowSwitcherCoordinator)
+                                                    dockPosition: DockUtils.shared.getDockPosition(), mouseLocation: mouseLocation,
+                                                    bestGuessMonitor: screen, windowSwitcherCoordinator: windowSwitcherCoordinator)
 
         if let existingHostingView = hostingView {
             existingHostingView.rootView = hoverView

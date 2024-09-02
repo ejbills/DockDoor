@@ -243,7 +243,7 @@ final class DockObserver {
         return (offsetLeft, offsetTop)
     }
 
-    private static func nsPointFromCGPoint(_ point: CGPoint, forScreen: NSScreen?) -> NSPoint {
+    static func nsPointFromCGPoint(_ point: CGPoint, forScreen: NSScreen?) -> NSPoint {
         guard let screen = forScreen,
               let primaryScreen = NSScreen.screens.first
         else {
