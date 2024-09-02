@@ -56,11 +56,7 @@ class MouseTrackingNSView: NSView {
         if fadeOutDuration == 0 {
             hideWindow()
         } else {
-            setWindowOpacity(to: 0.0, duration: fadeOutDuration) {
-                if self.window?.alphaValue == 0.0 {
-                    self.hideWindow()
-                }
-            }
+            setWindowOpacity(to: 0.0, duration: fadeOutDuration)
             fadeOutTimer = Timer.scheduledTimer(withTimeInterval: fadeOutDuration, repeats: false) { [weak self] _ in
                 self?.hideWindow()
             }
@@ -72,13 +68,13 @@ class MouseTrackingNSView: NSView {
         fadeOutTimer = nil
     }
 
-    private func setWindowOpacity(to value: CGFloat, duration: TimeInterval, completion: (() -> Void)? = nil) {
+    private func setWindowOpacity(to value: CGFloat, duration: TimeInterval) {
         DispatchQueue.main.async {
             if let window = self.window {
                 NSAnimationContext.runAnimationGroup({ context in
                     context.duration = duration
                     window.animator().alphaValue = value
-                }, completionHandler: completion)
+                }, completionHandler: nil)
             }
         }
     }
