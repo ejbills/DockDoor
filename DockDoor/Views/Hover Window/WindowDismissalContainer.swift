@@ -3,10 +3,10 @@ import SwiftUI
 
 struct WindowDismissalContainer: NSViewRepresentable {
     let appName: String
-    let initMouseLocation: CGPoint
-
+    let mouseLocation: CGPoint
+    let bestGuessMonitor: NSScreen
     func makeNSView(context: Context) -> MouseTrackingNSView {
-        let view = MouseTrackingNSView(appName: appName, initMouseLocation: initMouseLocation)
+        let view = MouseTrackingNSView(appName: appName, mouseLocation: mouseLocation, bestGuessMonitor: bestGuessMonitor)
         view.resetOpacity()
         return view
     }
@@ -18,18 +18,23 @@ struct WindowDismissalContainer: NSViewRepresentable {
 
 class MouseTrackingNSView: NSView {
     private let appName: String
-    private let initMouseLocation: CGPoint
+    private let mouseLocation: CGPoint
+    private let bestGuessMonitor: NSScreen
     private var fadeOutTimer: Timer?
     private let fadeOutDuration: TimeInterval
+    private var trackingTimer: Timer?
 
-    init(appName: String, initMouseLocation: CGPoint, frame frameRect: NSRect = .zero) {
+    init(appName: String, mouseLocation: CGPoint, bestGuessMonitor: NSScreen, frame frameRect: NSRect = .zero) {
         self.appName = appName
-        self.initMouseLocation = initMouseLocation
-        self.fadeOutDuration = Defaults[.fadeOutDuration]
+        self.bestGuessMonitor = bestGuessMonitor
+        self.mouseLocation = DockObserver.cgPointFromNSPoint(mouseLocation, forScreen: bestGuessMonitor)
+        fadeOutDuration = Defaults[.fadeOutDuration]
         super.init(frame: frameRect)
         setupTrackingArea()
+        setupMouseMonitors()
     }
 
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -38,6 +43,29 @@ class MouseTrackingNSView: NSView {
         let options: NSTrackingArea.Options = [.mouseEnteredAndExited, .activeAlways, .inVisibleRect]
         let trackingArea = NSTrackingArea(rect: bounds, options: options, owner: self, userInfo: nil)
         addTrackingArea(trackingArea)
+    }
+
+    private func setupMouseMonitors() {
+        // The trackingTimer is used to track any lingering cases where the user does not interact with the window at all.
+        // In such cases, we hide the window if it goes a decent distance from the initial location of the dock icon.
+        // We use a timer to poll the mosue location as global and local mouse listeners are unreliable inside views.
+        trackingTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak self] _ in
+            self?.checkMouseDistance()
+        }
+    }
+
+    private func checkMouseDistance() {
+        let currentMousePosition = DockObserver.cgPointFromNSPoint(NSEvent.mouseLocation, forScreen: bestGuessMonitor)
+        print(currentMousePosition.distance(to: mouseLocation))
+        if currentMousePosition.distance(to: mouseLocation) > 800 {
+            DispatchQueue.main.async { [weak self] in
+                self?.hideWindow()
+            }
+        }
+    }
+
+    deinit {
+        trackingTimer?.invalidate()
     }
 
     func resetOpacity() {
@@ -93,7 +121,7 @@ class MouseTrackingNSView: NSView {
             // quickly leaves the dock, which can trigger a duplicate hover event.
             if currApp.localizedName == appName {
                 let currentMousePosition = DockObserver.getMousePosition()
-                if currentMousePosition.distance(to: initMouseLocation) > 100 {
+                if currentMousePosition.distance(to: mouseLocation) > 100 {
                     performHideWindow()
                 }
             }
