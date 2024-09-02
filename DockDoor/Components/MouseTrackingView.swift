@@ -85,7 +85,6 @@ class MouseTrackingNSView: NSView {
 
     private func hideWindow() {
         let currentAppReturnType = DockObserver.shared.getDockItemAppStatusUnderMouse()
-//        let lastAppUnderMouse = DockObserver.shared.lastAppUnderMouse?.app()
 
         switch currentAppReturnType.status {
         case .notFound, .success:
