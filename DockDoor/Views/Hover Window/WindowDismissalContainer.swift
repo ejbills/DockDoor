@@ -29,7 +29,7 @@ class MouseTrackingNSView: NSView {
     }
 
     required init?(coder: NSCoder) {
-        appName = "" // Default value, consider passing appName if using Interface Builder
+        appName = ""
         super.init(coder: coder)
         setupTrackingArea()
         resetOpacity()

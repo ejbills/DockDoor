@@ -210,8 +210,6 @@ final class SharedPreviewWindowCoordinator: NSWindow {
                     overrideDelay: Bool = false, centeredHoverWindowState: ScreenCenteredFloatingWindowCoordinator.WindowState? = nil,
                     onWindowTap: (() -> Void)? = nil)
     {
-        if let hostingView, let window = hostingView.window, window.isVisible, centeredHoverWindowState == .none { hideWindow() }
-
         let now = Date()
         let delay = overrideDelay ? 0.0 : Defaults[.hoverWindowOpenDelay]
 
