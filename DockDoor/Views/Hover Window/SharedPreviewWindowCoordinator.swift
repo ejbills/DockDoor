@@ -210,9 +210,6 @@ final class SharedPreviewWindowCoordinator: NSWindow {
                     overrideDelay: Bool = false, centeredHoverWindowState: ScreenCenteredFloatingWindowCoordinator.WindowState? = nil,
                     onWindowTap: (() -> Void)? = nil)
     {
-        // ensure view isn't transparent
-        alphaValue = 1.0
-
         let now = Date()
         let delay = overrideDelay ? 0.0 : Defaults[.hoverWindowOpenDelay]
 
@@ -242,6 +239,9 @@ final class SharedPreviewWindowCoordinator: NSWindow {
                                    centeredHoverWindowState: ScreenCenteredFloatingWindowCoordinator.WindowState? = nil,
                                    onWindowTap: (() -> Void)?)
     {
+        // ensure view isn't transparent
+        alphaValue = 1.0
+
         let shouldCenterOnScreen = centeredHoverWindowState != .none
 
         guard !windows.isEmpty else { return }
