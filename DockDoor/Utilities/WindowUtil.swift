@@ -61,7 +61,6 @@ enum WindowUtil {
     }
 
     static func updateWindowCache(for app: NSRunningApplication, update: @escaping (inout Set<WindowInfo>) -> Void) {
-        guard app.processIdentifier != NSRunningApplication.current.processIdentifier else { return }
         desktopSpaceWindowCacheManager.updateCache(pid: app.processIdentifier, update: update)
     }
 
@@ -344,17 +343,28 @@ enum WindowUtil {
 
     static func bringWindowToFront(windowInfo: WindowInfo) {
         do {
-            try windowInfo.axElement.performAction(kAXRaiseAction)
+            // Attempt to raise and focus the specific window
+            try windowInfo.axElement.performAction(kAXPressAction)
+            try windowInfo.axElement.setAttribute(kAXMainAttribute, true)
             try windowInfo.axElement.setAttribute(kAXFocusedAttribute, true)
-            try? windowInfo.axElement.setAttribute(kAXFrontmostAttribute, true)
+            try windowInfo.axElement.setAttribute(kAXFrontmostAttribute, true)
+
             if !windowInfo.app.activate() {
+                // if individual windows cannot be activated, we activate and order forward the entire application
+                try windowInfo.appAxElement.setAttribute(kAXFocusedAttribute, true)
+                try windowInfo.appAxElement.setAttribute(kAXFrontmostAttribute, true)
                 throw NSError(domain: "FailedToActivate", code: 1, userInfo: [NSLocalizedDescriptionKey: "Failed to activate application"])
             }
 
+            // If we've reached this point without throwing an error, consider it a success
             updateWindowDateTime(windowInfo)
+
         } catch {
             print("Failed to bring window to front: \(error)")
-            removeWindowFromDesktopSpaceCache(with: windowInfo.id, in: windowInfo.app.processIdentifier)
+            // Check if the error is AxError.runtimeError
+            if error is AxError {
+                removeWindowFromDesktopSpaceCache(with: windowInfo.id, in: windowInfo.app.processIdentifier)
+            }
         }
     }
 
