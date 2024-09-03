@@ -79,6 +79,8 @@ class MouseTrackingNSView: NSView {
     override func mouseEntered(with event: NSEvent) {
         cancelFadeOut()
         setWindowOpacity(to: 1.0, duration: 0.2)
+
+        SharedPreviewWindowCoordinator.shared.cancelDebounceWorkItem()
     }
 
     private func startFadeOut() {

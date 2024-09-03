@@ -83,6 +83,12 @@ final class SharedPreviewWindowCoordinator: NSWindow {
         }
     }
 
+    func cancelDebounceWorkItem() {
+        DispatchQueue.main.async { [weak self] in
+            self?.debounceWorkItem?.cancel()
+        }
+    }
+
     // Update the content view size and position
     private func updateContentViewSizeAndPosition(mouseLocation: CGPoint? = nil, mouseScreen: NSScreen,
                                                   animated: Bool, centerOnScreen: Bool = false,
@@ -216,7 +222,8 @@ final class SharedPreviewWindowCoordinator: NSWindow {
         debounceWorkItem?.cancel()
 
         let workItem = DispatchWorkItem { [weak self] in
-            self?.performShowWindow(appName: appName, windows: windows, mouseLocation: mouseLocation, mouseScreen: mouseScreen, centeredHoverWindowState: centeredHoverWindowState, onWindowTap: onWindowTap)
+            self?.performShowWindow(appName: appName, windows: windows, mouseLocation: mouseLocation, mouseScreen: mouseScreen,
+                                    centeredHoverWindowState: centeredHoverWindowState, onWindowTap: onWindowTap)
         }
 
         if let lastShowTime, now.timeIntervalSince(lastShowTime) < debounceDelay {
@@ -224,7 +231,8 @@ final class SharedPreviewWindowCoordinator: NSWindow {
             DispatchQueue.main.asyncAfter(deadline: .now() + debounceDelay, execute: workItem)
         } else {
             if delay == 0.0 {
-                performShowWindow(appName: appName, windows: windows, mouseLocation: mouseLocation, mouseScreen: mouseScreen, centeredHoverWindowState: centeredHoverWindowState, onWindowTap: onWindowTap)
+                performShowWindow(appName: appName, windows: windows, mouseLocation: mouseLocation, mouseScreen: mouseScreen,
+                                  centeredHoverWindowState: centeredHoverWindowState, onWindowTap: onWindowTap)
             } else {
                 debounceWorkItem = workItem
                 DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: workItem)
