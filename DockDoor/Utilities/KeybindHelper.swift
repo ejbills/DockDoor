@@ -129,7 +129,7 @@ class KeybindHelper {
             )
         }
 
-        Task(priority: .background) { [weak self] in
+        Task(priority: .high) { [weak self] in
             guard self != nil else { return }
             await WindowUtil.updateAllWindowsInCurrentSpace()
         }

@@ -3,7 +3,7 @@ import Cocoa
 import Defaults
 import ScreenCaptureKit
 
-let filteredBundleIdentifiers: [String] = ["com.apple.notificationcenterui"] // filters desktop widgets
+let filteredBundleIdentifiers: [String] = ["com.apple.notificationcenterui", NSRunningApplication.current.bundleIdentifier!] // filters desktop widgets
 
 struct WindowInfo: Identifiable, Hashable {
     let id: CGWindowID
@@ -61,6 +61,7 @@ enum WindowUtil {
     }
 
     static func updateWindowCache(for app: NSRunningApplication, update: @escaping (inout Set<WindowInfo>) -> Void) {
+        guard app.processIdentifier != NSRunningApplication.current.processIdentifier else { return }
         desktopSpaceWindowCacheManager.updateCache(pid: app.processIdentifier, update: update)
     }
 
@@ -484,7 +485,7 @@ enum WindowUtil {
 
     static func updateAllWindowsInCurrentSpace() async {
         do {
-            let content = try await SCShareableContent.excludingDesktopWindows(true, onScreenWindowsOnly: true)
+            let content = try await SCShareableContent.excludingDesktopWindows(true, onScreenWindowsOnly: false)
 
             let group = LimitedTaskGroup<Void>(maxConcurrentTasks: 4)
 
