@@ -227,14 +227,14 @@ enum WindowUtil {
     }
 
     static func findWindow(matchingWindow window: SCWindow, in axWindows: [AXUIElement]) -> AXUIElement? {
+        if let matchedWindow = axWindows.first(where: { axWindow in
+            (try? axWindow.cgWindowId()) == window.windowID
+        }) {
+            return matchedWindow
+        }
+
+        // Fallback metohd
         for axWindow in axWindows {
-            if let cgWindowId = try? axWindow.cgWindowId(), window.windowID == cgWindowId {
-                return axWindow
-            }
-
-            // Fallback metohd
-            // TODO: May never be needed
-
             if let windowTitle = window.title, let axTitle = try? axWindow.title(), isFuzzyMatch(windowTitle: windowTitle, axTitleString: axTitle) {
                 return axWindow
             }
@@ -344,6 +344,7 @@ enum WindowUtil {
     static func bringWindowToFront(windowInfo: WindowInfo) {
         do {
             // Attempt to raise and focus the specific window
+            try windowInfo.axElement.performAction(kAXRaiseAction)
             try windowInfo.axElement.performAction(kAXPressAction)
             try windowInfo.axElement.setAttribute(kAXMainAttribute, true)
             try windowInfo.axElement.setAttribute(kAXFocusedAttribute, true)
