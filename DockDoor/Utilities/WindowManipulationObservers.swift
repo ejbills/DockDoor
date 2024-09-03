@@ -19,7 +19,6 @@ class WindowManipulationObservers {
         notificationCenter.addObserver(self, selector: #selector(appDidLaunch(_:)), name: NSWorkspace.didLaunchApplicationNotification, object: nil)
         notificationCenter.addObserver(self, selector: #selector(appDidTerminate(_:)), name: NSWorkspace.didTerminateApplicationNotification, object: nil)
         notificationCenter.addObserver(self, selector: #selector(appDidActivate(_:)), name: NSWorkspace.didActivateApplicationNotification, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(appDidHide(_:)), name: NSApplication.didHideNotification, object: nil)
 
         // Set up observers for already running applications
         for app in NSWorkspace.shared.runningApplications {
@@ -67,20 +66,15 @@ class WindowManipulationObservers {
         AXObserverAddNotification(observer, appElement, kAXUIElementDestroyedNotification as CFString, UnsafeMutableRawPointer(bitPattern: Int(pid)))
         AXObserverAddNotification(observer, appElement, kAXMainWindowChangedNotification as CFString, UnsafeMutableRawPointer(bitPattern: Int(pid)))
         AXObserverAddNotification(observer, appElement, kAXWindowMiniaturizedNotification as CFString, UnsafeMutableRawPointer(bitPattern: Int(pid)))
-        AXObserverAddNotification(observer, appElement, kAXWindowDeminiaturizedNotification as CFString, UnsafeMutableRawPointer(bitPattern: Int(pid)))
         AXObserverAddNotification(observer, appElement, kAXApplicationHiddenNotification as CFString, UnsafeMutableRawPointer(bitPattern: Int(pid)))
         AXObserverAddNotification(observer, appElement, kAXFocusedUIElementChangedNotification as CFString, UnsafeMutableRawPointer(bitPattern: Int(pid)))
+        AXObserverAddNotification(observer, appElement, kAXFocusedWindowChangedNotification as CFString, UnsafeMutableRawPointer(bitPattern: Int(pid)))
         AXObserverAddNotification(observer, appElement, kAXWindowResizedNotification as CFString, UnsafeMutableRawPointer(bitPattern: Int(pid)))
         AXObserverAddNotification(observer, appElement, kAXWindowMovedNotification as CFString, UnsafeMutableRawPointer(bitPattern: Int(pid)))
 
         CFRunLoopAddSource(CFRunLoopGetMain(), AXObserverGetRunLoopSource(observer), .defaultMode)
 
         observers[pid] = observer
-    }
-
-    @objc private func appDidHide(_ notification: Notification) {
-        guard let app = notification.object as? NSRunningApplication else { return }
-        WindowUtil.updateStatusOfWindowCache(pid: app.processIdentifier, isParentAppHidden: true)
     }
 
     private func removeObserverForApp(_ app: NSRunningApplication) {
@@ -92,9 +86,9 @@ class WindowManipulationObservers {
         AXObserverRemoveNotification(observer, appElement, kAXUIElementDestroyedNotification as CFString)
         AXObserverRemoveNotification(observer, appElement, kAXMainWindowChangedNotification as CFString)
         AXObserverRemoveNotification(observer, appElement, kAXWindowMiniaturizedNotification as CFString)
-        AXObserverRemoveNotification(observer, appElement, kAXWindowDeminiaturizedNotification as CFString)
         AXObserverRemoveNotification(observer, appElement, kAXApplicationHiddenNotification as CFString)
         AXObserverRemoveNotification(observer, appElement, kAXFocusedUIElementChangedNotification as CFString)
+        AXObserverRemoveNotification(observer, appElement, kAXFocusedWindowChangedNotification as CFString)
         AXObserverRemoveNotification(observer, appElement, kAXWindowResizedNotification as CFString)
         AXObserverRemoveNotification(observer, appElement, kAXWindowMovedNotification as CFString)
 
@@ -108,9 +102,9 @@ class WindowManipulationObservers {
             AXObserverRemoveNotification(observer, appElement, kAXUIElementDestroyedNotification as CFString)
             AXObserverRemoveNotification(observer, appElement, kAXMainWindowChangedNotification as CFString)
             AXObserverRemoveNotification(observer, appElement, kAXWindowMiniaturizedNotification as CFString)
-            AXObserverRemoveNotification(observer, appElement, kAXWindowDeminiaturizedNotification as CFString)
             AXObserverRemoveNotification(observer, appElement, kAXApplicationHiddenNotification as CFString)
             AXObserverRemoveNotification(observer, appElement, kAXFocusedUIElementChangedNotification as CFString)
+            AXObserverRemoveNotification(observer, appElement, kAXFocusedWindowChangedNotification as CFString)
             AXObserverRemoveNotification(observer, appElement, kAXWindowResizedNotification as CFString)
             AXObserverRemoveNotification(observer, appElement, kAXWindowMovedNotification as CFString)
         }
@@ -125,24 +119,18 @@ func axObserverCallback(observer: AXObserver, element: AXUIElement, notification
     DispatchQueue.main.async {
         if let app = NSRunningApplication(processIdentifier: pid) {
             switch notificationName as String {
-            case kAXFocusedUIElementChangedNotification:
+            case kAXFocusedUIElementChangedNotification, kAXFocusedWindowChangedNotification:
                 handleFocusedUIElementChanged(element: element, app: app, pid: pid)
             case kAXUIElementDestroyedNotification:
-                handleWindowStateChange(element: element, app: app, notificationType: "destroyed")
+                handleWindowStateChange(element: element, app: app)
             case kAXMainWindowChangedNotification:
-                handleWindowStateChange(element: element, app: app, notificationType: "focus changed")
+                handleWindowStateChange(element: element, app: app)
             case kAXWindowMiniaturizedNotification:
-                print("Window minimized for app: \(app.localizedName ?? "Unknown")")
                 WindowUtil.updateStatusOfWindowCache(pid: pid_t(pid), isParentAppHidden: false)
-            case kAXWindowDeminiaturizedNotification:
-                print("Window restored for app: \(app.localizedName ?? "Unknown")")
             case kAXApplicationHiddenNotification:
-                print("Application hidden: \(app.localizedName ?? "Unknown")")
                 WindowUtil.updateStatusOfWindowCache(pid: pid_t(pid), isParentAppHidden: true)
-            case kAXApplicationShownNotification:
-                print("Application shown: \(app.localizedName ?? "Unknown")")
             case kAXWindowResizedNotification, kAXWindowMovedNotification:
-                handleWindowStateChange(element: element, app: app, notificationType: "modified")
+                handleWindowStateChange(element: element, app: app)
             default:
                 break
             }
@@ -162,7 +150,7 @@ private func handleFocusedUIElementChanged(element: AXUIElement, app: NSRunningA
     DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: WindowManipulationObservers.debounceWorkItem!)
 }
 
-private func handleWindowStateChange(element: AXUIElement, app: NSRunningApplication, notificationType: String) {
+private func handleWindowStateChange(element: AXUIElement, app: NSRunningApplication) {
     guard !WindowManipulationObservers.trackedElements.contains(element) else { return }
     WindowManipulationObservers.trackedElements.insert(element)
     WindowManipulationObservers.debounceWorkItem?.cancel()
