@@ -56,7 +56,7 @@ class MouseTrackingNSView: NSView {
 
     private func checkMouseDistance() {
         let currentMousePosition = DockObserver.cgPointFromNSPoint(NSEvent.mouseLocation, forScreen: bestGuessMonitor)
-        if currentMousePosition.distance(to: mouseLocation) > 800 {
+        if currentMousePosition.distance(to: mouseLocation) > 500 {
             DispatchQueue.main.async { [weak self] in
                 self?.hideWindow()
             }
