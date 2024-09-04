@@ -49,7 +49,8 @@ struct WindowPreviewHoverContainer: View {
 
         ZStack {
             if let mouseLocation {
-                WindowDismissalContainer(appName: appName, mouseLocation: mouseLocation, bestGuessMonitor: bestGuessMonitor)
+                WindowDismissalContainer(appName: appName, mouseLocation: mouseLocation,
+                                         bestGuessMonitor: bestGuessMonitor, dockPosition: dockPosition)
             }
 
             ScrollViewReader { scrollProxy in
