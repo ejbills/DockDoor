@@ -32,6 +32,8 @@
 		BB3967FD2C291D5A004F1AB6 /* StackedShadow.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3967FC2C291D5A004F1AB6 /* StackedShadow.swift */; };
 		BB3968002C2A6C44004F1AB6 /* SmoothGradient in Frameworks */ = {isa = PBXBuildFile; productRef = BB3967FF2C2A6C44004F1AB6 /* SmoothGradient */; };
 		BB3968022C2A6CC2004F1AB6 /* Marquee.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3968012C2A6CC2004F1AB6 /* Marquee.swift */; };
+		BB3D6EAE2C82E4B400FFE584 /* WindowDismissalContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3D6EAD2C82E4AE00FFE584 /* WindowDismissalContainer.swift */; };
+		BB3D6EB02C84E58400FFE584 /* NSScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3D6EAF2C84E58000FFE584 /* NSScreen.swift */; };
 		BB44474F2C507F950047EB92 /* LimitedTaskGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB44474E2C507F920047EB92 /* LimitedTaskGroup.swift */; };
 		BB4B444B2C372A4E006680DC /* WindowPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB4B444A2C372A4C006680DC /* WindowPreview.swift */; };
 		BB4ED9072C3C75CA00BBDD16 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = BB4ED9062C3C75CA00BBDD16 /* Localizable.xcstrings */; };
@@ -47,7 +49,6 @@
 		BBCFAE402C266234002E1516 /* FirstTimeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBCFAE3F2C266234002E1516 /* FirstTimeView.swift */; };
 		BBE7CC8F2C22421900AB8F4D /* Settings in Frameworks */ = {isa = PBXBuildFile; productRef = BBE7CC8E2C22421900AB8F4D /* Settings */; };
 		BBE7CC912C22429A00AB8F4D /* settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE7CC902C22429A00AB8F4D /* settings.swift */; };
-		BBE7CC942C225D9700AB8F4D /* App Icon.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE7CC932C225D9700AB8F4D /* App Icon.swift */; };
 		BBF413922C40618D00AA6733 /* FullSizePreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF413912C40618800AA6733 /* FullSizePreviewView.swift */; };
 		BBF413942C40978400AA6733 /* WindowPreviewHoverContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF413932C40977F00AA6733 /* WindowPreviewHoverContainer.swift */; };
 		BBF4139A2C40A64A00AA6733 /* FluidGradient.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF413992C40A64000AA6733 /* FluidGradient.swift */; };
@@ -82,6 +83,8 @@
 		BB2CBB082C48128D004502C5 /* SpaceWindowCacheManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceWindowCacheManager.swift; sourceTree = "<group>"; };
 		BB3967FC2C291D5A004F1AB6 /* StackedShadow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackedShadow.swift; sourceTree = "<group>"; };
 		BB3968012C2A6CC2004F1AB6 /* Marquee.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Marquee.swift; sourceTree = "<group>"; };
+		BB3D6EAD2C82E4AE00FFE584 /* WindowDismissalContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowDismissalContainer.swift; sourceTree = "<group>"; };
+		BB3D6EAF2C84E58000FFE584 /* NSScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSScreen.swift; sourceTree = "<group>"; };
 		BB44474E2C507F920047EB92 /* LimitedTaskGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LimitedTaskGroup.swift; sourceTree = "<group>"; };
 		BB4B444A2C372A4C006680DC /* WindowPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowPreview.swift; sourceTree = "<group>"; };
 		BB4ED9062C3C75CA00BBDD16 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
@@ -96,7 +99,6 @@
 		BBA153FB2C12356100119C02 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		BBCFAE3F2C266234002E1516 /* FirstTimeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstTimeView.swift; sourceTree = "<group>"; };
 		BBE7CC902C22429A00AB8F4D /* settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = settings.swift; sourceTree = "<group>"; };
-		BBE7CC932C225D9700AB8F4D /* App Icon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "App Icon.swift"; sourceTree = "<group>"; };
 		BBF413912C40618800AA6733 /* FullSizePreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullSizePreviewView.swift; sourceTree = "<group>"; };
 		BBF413932C40977F00AA6733 /* WindowPreviewHoverContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowPreviewHoverContainer.swift; sourceTree = "<group>"; };
 		BBF413992C40A64000AA6733 /* FluidGradient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FluidGradient.swift; sourceTree = "<group>"; };
@@ -126,6 +128,7 @@
 		3A105FD42C1BED5B0015EC66 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				BB3D6EAF2C84E58000FFE584 /* NSScreen.swift */,
 				BB04405C2C77A878009F1D33 /* Defaults */,
 				BBF413992C40A64000AA6733 /* FluidGradient.swift */,
 				3A105FD52C1BED660015EC66 /* BlurView.swift */,
@@ -213,7 +216,6 @@
 				BB157B812C0EB29E00997315 /* DockObserver.swift */,
 				BBF6C6232C1B4B4400BF1D40 /* KeybindHelper.swift */,
 				BB1CBD5C2C1BCA4F003969BC /* Misc Utils.swift */,
-				BBE7CC932C225D9700AB8F4D /* App Icon.swift */,
 				BB7CA33C2C31F1B00012E303 /* WindowManipulationObservers.swift */,
 			);
 			path = Utilities;
@@ -222,6 +224,7 @@
 		BB4B44492C372A42006680DC /* Hover Window */ = {
 			isa = PBXGroup;
 			children = (
+				BB3D6EAD2C82E4AE00FFE584 /* WindowDismissalContainer.swift */,
 				BBF413932C40977F00AA6733 /* WindowPreviewHoverContainer.swift */,
 				BB4B444A2C372A4C006680DC /* WindowPreview.swift */,
 				BBF413912C40618800AA6733 /* FullSizePreviewView.swift */,
@@ -369,6 +372,8 @@
 			files = (
 				0531F8D22C3CC04600327808 /* AppearanceSettingsView.swift in Sources */,
 				BB6A4F1C2C1CFCFF00CB4C9E /* PermissionsSettingsView.swift in Sources */,
+				BB3D6EB02C84E58400FFE584 /* NSScreen.swift in Sources */,
+				BB3D6EAE2C82E4B400FFE584 /* WindowDismissalContainer.swift in Sources */,
 				BB3967FD2C291D5A004F1AB6 /* StackedShadow.swift in Sources */,
 				BBF4139A2C40A64A00AA6733 /* FluidGradient.swift in Sources */,
 				BB7CA33D2C31F1B00012E303 /* WindowManipulationObservers.swift in Sources */,
@@ -378,7 +383,6 @@
 				BB0440622C77AE8D009F1D33 /* GradientColorPaletteSettingsView.swift in Sources */,
 				BB1CBD5D2C1BCA4F003969BC /* Misc Utils.swift in Sources */,
 				3A105FD92C1C049E0015EC66 /* dockStyle.swift in Sources */,
-				BBE7CC942C225D9700AB8F4D /* App Icon.swift in Sources */,
 				BB2CBB092C481295004502C5 /* SpaceWindowCacheManager.swift in Sources */,
 				BB3968022C2A6CC2004F1AB6 /* Marquee.swift in Sources */,
 				BB0440602C77AD2C009F1D33 /* CodableColor.swift in Sources */,
@@ -541,7 +545,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1.1.6;
+				CURRENT_PROJECT_VERSION = 1.2.0;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"DockDoor/Preview Content\"";
 				DEVELOPMENT_TEAM = 2Q775S63Q3;
@@ -558,7 +562,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				MARKETING_VERSION = 1.1.6;
+				MARKETING_VERSION = 1.2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ethanbills.DockDoor;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -575,7 +579,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1.1.6;
+				CURRENT_PROJECT_VERSION = 1.2.0;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"DockDoor/Preview Content\"";
 				DEVELOPMENT_TEAM = 2Q775S63Q3;
@@ -592,7 +596,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				MARKETING_VERSION = 1.1.6;
+				MARKETING_VERSION = 1.2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ethanbills.DockDoor;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

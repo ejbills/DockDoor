@@ -23,6 +23,54 @@
   }
 </style>
 
+<a name="v1.2.1"></a>
+# [v1.2.1](https://github.com/ejbills/DockDoor/releases/tag/v1.2.1) - 04 Sep 2024
+
+- Fixes windows having wrong size while they are not in the main screen [#288](https://github.com/ejbills/DockDoor/issues/288) 
+
+[Changes][v1.2.1]
+
+
+<a name="v1.2.0"></a>
+# [v1.2.0](https://github.com/ejbills/DockDoor/releases/tag/v1.2.0) - 04 Sep 2024
+
+# Changelog
+
+## 🚀 New Features
+
+- **Efficient Dock Item Detection and Improved Window Management**: [@ShlomoCode](https://github.com/ShlomoCode), [@ejbills](https://github.com/ejbills) 
+  - **Dock Item Detection**: The current Dock item is now detected using macOS Dock's native detection (`kAXSelectedChildrenChangedNotification` and `kAXSelectedChildrenAttribute`) instead of relying on mouse position calculations.
+  - **Performance Improvement**: Removed the global listener for mouse events, which significantly reduces CPU usage to 0% when not interacting or hovering with the Dock.
+  - **Window Cache Management**: Windows are now cached by PID instead of BundleID, improving compatibility with apps like scrcpy that do not have a BundleID.
+  - **Window State Management**: Enhanced logic for managing window states, including addressing window switcher update inconsistencies.
+  - **Window Fade Out Animations**: Introduced window fade-out animations and added configuration options for customization.
+
+## 🛠️ Fixes
+
+- **Fix Window Close Update**: Resolved an issue where the window was not updating its state upon closing. - [@ejbills](https://github.com/ejbills)
+- **Window Placement and Configuration**: Fixed inaccurate window placement and configuration when using SCWindow. - [@ejbills](https://github.com/ejbills)
+- **Invisible Window Switcher**: Corrected an issue where the window switcher would become invisible under certain conditions. - [@ejbills](https://github.com/ejbills)
+- **Window Raise and Matching Logic**: Addressed problems with the logic that raises windows and matches them correctly. - [@ejbills](https://github.com/ejbills)
+- **Window Switcher Update Inconsistency**: Fixed inconsistencies when updating the window switcher. - [@ejbills](https://github.com/ejbills)
+
+## 🧹 Chores
+
+- **Localization Sync**: Regular synchronization of localizations with Crowdin. [[#286](https://github.com/ejbills/DockDoor/issues/286), [#287](https://github.com/ejbills/DockDoor/issues/287)] - [@ejbills](https://github.com/ejbills), [@crowdin-bot](https://github.com/crowdin-bot)
+- **Remove Unused Methods and Code**: Cleaned up the codebase by removing unused methods and outdated logic. - [@ejbills](https://github.com/ejbills)
+- **Update Appcast for 1.1.6**: Updated the appcast to point to the patched version 1.1.6. - [@ejbills](https://github.com/ejbills)
+- **Improve Button Reliability**: Enhancements were made to improve the reliability of buttons within the application. - [@ejbills](https://github.com/ejbills)
+
+## 🎨 Refactor
+
+- **Window Dismissal Improvements**: Applied debounce cancellation logic and refined mouse position checks to improve window dismissal. - [@ejbills](https://github.com/ejbills)
+- **Smart Distance Threshold**: Implemented a smart distance threshold for hiding lingering windows. - [@ejbills](https://github.com/ejbills)
+
+### Shoutout to [@ShlomoCode](https://github.com/ShlomoCode) for his amazing contributions!
+
+
+[Changes][v1.2.0]
+
+
 <a name="v1.1.6"></a>
 # [v1.1.6](https://github.com/ejbills/DockDoor/releases/tag/v1.1.6) - 30 Aug 2024
 
@@ -36,7 +84,7 @@
 
 ## 🚀 New Features
 
-- **macOS 13 Ventura Support**: Added full support for macOS 13 Ventura, ensuring compatibility with the latest macOS release. [[#267](https://github.com/ejbills/DockDoor/issues/267)] - [@ShlomoCode](https://github.com/ShlomoCode), [@ejbills](https://github.com/ejbills)
+- **macOS 13 Ventura Support**: Added full support for macOS 13 Ventura. [[#267](https://github.com/ejbills/DockDoor/issues/267)] - [@ShlomoCode](https://github.com/ShlomoCode), [@ejbills](https://github.com/ejbills)
 - **Customizable Highlight Gradient Colors**: Introduced customizable highlight gradient colors for enhanced user interface personalization. [[#265](https://github.com/ejbills/DockDoor/issues/265)] - [@ejbills](https://github.com/ejbills)
 - **Escape to Close Preview**: Added the ability to press the Escape key to close the preview window, streamlining user interactions. [[#255](https://github.com/ejbills/DockDoor/issues/255)] - [@ShlomoCode](https://github.com/ShlomoCode)
 
@@ -404,6 +452,8 @@ v1.0
 [Changes][releases]
 
 
+[v1.2.1]: https://github.com/ejbills/DockDoor/compare/v1.2.0...v1.2.1
+[v1.2.0]: https://github.com/ejbills/DockDoor/compare/v1.1.6...v1.2.0
 [v1.1.6]: https://github.com/ejbills/DockDoor/compare/v1.1.5...v1.1.6
 [v1.1.5]: https://github.com/ejbills/DockDoor/compare/v1.1.4...v1.1.5
 [v1.1.4]: https://github.com/ejbills/DockDoor/compare/v1.1.3...v1.1.4

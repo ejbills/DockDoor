@@ -64,7 +64,7 @@ final class SharedPreviewWindowCoordinator: NSWindow {
         isMovableByWindowBackground = false
         collectionBehavior = [.canJoinAllSpaces]
         backgroundColor = .clear
-        hasShadow = false
+        hasShadow = true
     }
 
     // Hide the window and reset its state
@@ -83,6 +83,12 @@ final class SharedPreviewWindowCoordinator: NSWindow {
         }
     }
 
+    func cancelDebounceWorkItem() {
+        DispatchQueue.main.async { [weak self] in
+            self?.debounceWorkItem?.cancel()
+        }
+    }
+
     // Update the content view size and position
     private func updateContentViewSizeAndPosition(mouseLocation: CGPoint? = nil, mouseScreen: NSScreen,
                                                   animated: Bool, centerOnScreen: Bool = false,
@@ -94,8 +100,8 @@ final class SharedPreviewWindowCoordinator: NSWindow {
 
         // Reset the hosting view
         let hoverView = WindowPreviewHoverContainer(appName: appName, windows: windows, onWindowTap: onWindowTap,
-                                                    dockPosition: DockUtils.shared.getDockPosition(), bestGuessMonitor: mouseScreen,
-                                                    windowSwitcherCoordinator: windowSwitcherCoordinator)
+                                                    dockPosition: DockUtils.shared.getDockPosition(), mouseLocation: mouseLocation,
+                                                    bestGuessMonitor: mouseScreen, windowSwitcherCoordinator: windowSwitcherCoordinator)
         let newHostingView = NSHostingView(rootView: hoverView)
         contentView = newHostingView
         hostingView = newHostingView
@@ -116,7 +122,7 @@ final class SharedPreviewWindowCoordinator: NSWindow {
     private func showFullPreviewWindow(for windowInfo: WindowInfo, on screen: NSScreen) {
         if fullPreviewWindow == nil {
             fullPreviewWindow = NSWindow(contentRect: .zero, styleMask: .borderless, backing: .buffered, defer: false)
-            fullPreviewWindow?.level = .floating
+            fullPreviewWindow?.level = NSWindow.Level(rawValue: 18)
             fullPreviewWindow?.isOpaque = false
             fullPreviewWindow?.backgroundColor = .clear
             fullPreviewWindow?.hasShadow = true
@@ -154,26 +160,23 @@ final class SharedPreviewWindowCoordinator: NSWindow {
     private func calculateWindowPosition(mouseLocation: CGPoint?, windowSize: CGSize, screen: NSScreen) -> CGPoint {
         guard let mouseLocation else { return .zero }
 
-        let dockIconFrame = DockObserver.shared.getDockIconFrameAtLocation(mouseLocation) ?? .zero
-
-        var xPosition = dockIconFrame.isEmpty ? mouseLocation.x : dockIconFrame.midX
-        var yPosition = dockIconFrame.isEmpty ? mouseLocation.y : dockIconFrame.midY
+        var xPosition = mouseLocation.x
+        var yPosition = mouseLocation.y
 
         let screenFrame = screen.frame
         let dockPosition = DockUtils.shared.getDockPosition()
         let dockHeight = DockUtils.shared.calculateDockHeight(screen)
 
-        // Adjust position based on dock position
         switch dockPosition {
         case .bottom:
             yPosition = screenFrame.minY + dockHeight
             xPosition -= (windowSize.width / 2)
         case .left:
             xPosition = screenFrame.minX + dockHeight
-            yPosition = screenFrame.height - yPosition - (windowSize.height / 2)
+            yPosition -= (windowSize.height / 2)
         case .right:
             xPosition = screenFrame.maxX - dockHeight - windowSize.width
-            yPosition = screenFrame.height - yPosition - (windowSize.height / 2)
+            yPosition -= (windowSize.height / 2)
         default:
             xPosition -= (windowSize.width / 2)
             yPosition -= (windowSize.height / 2)
@@ -218,23 +221,19 @@ final class SharedPreviewWindowCoordinator: NSWindow {
 
         debounceWorkItem?.cancel()
 
-        let isHoverWindowShowing = isVisible
+        let workItem = DispatchWorkItem { [weak self] in
+            self?.performShowWindow(appName: appName, windows: windows, mouseLocation: mouseLocation, mouseScreen: mouseScreen,
+                                    centeredHoverWindowState: centeredHoverWindowState, onWindowTap: onWindowTap)
+        }
 
         if let lastShowTime, now.timeIntervalSince(lastShowTime) < debounceDelay {
-            let workItem = DispatchWorkItem { [weak self] in
-                self?.performShowWindow(appName: appName, windows: windows, mouseLocation: mouseLocation, mouseScreen: mouseScreen, centeredHoverWindowState: centeredHoverWindowState, onWindowTap: onWindowTap)
-            }
-
             debounceWorkItem = workItem
             DispatchQueue.main.asyncAfter(deadline: .now() + debounceDelay, execute: workItem)
         } else {
-            if isHoverWindowShowing || delay == 0.0 {
-                performShowWindow(appName: appName, windows: windows, mouseLocation: mouseLocation, mouseScreen: mouseScreen, centeredHoverWindowState: centeredHoverWindowState, onWindowTap: onWindowTap)
+            if delay == 0.0 {
+                performShowWindow(appName: appName, windows: windows, mouseLocation: mouseLocation, mouseScreen: mouseScreen,
+                                  centeredHoverWindowState: centeredHoverWindowState, onWindowTap: onWindowTap)
             } else {
-                let workItem = DispatchWorkItem { [weak self] in
-                    self?.performShowWindow(appName: appName, windows: windows, mouseLocation: mouseLocation, mouseScreen: mouseScreen, centeredHoverWindowState: centeredHoverWindowState, onWindowTap: onWindowTap)
-                }
-
                 debounceWorkItem = workItem
                 DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: workItem)
             }
@@ -248,6 +247,9 @@ final class SharedPreviewWindowCoordinator: NSWindow {
                                    centeredHoverWindowState: ScreenCenteredFloatingWindowCoordinator.WindowState? = nil,
                                    onWindowTap: (() -> Void)?)
     {
+        // ensure view isn't transparent
+        alphaValue = 1.0
+
         let shouldCenterOnScreen = centeredHoverWindowState != .none
 
         guard !windows.isEmpty else { return }
@@ -267,7 +269,7 @@ final class SharedPreviewWindowCoordinator: NSWindow {
                 self.windows = windows
                 self.onWindowTap = onWindowTap
 
-                updateHostingView(appName: appName, windows: windows, onWindowTap: onWindowTap, screen: screen)
+                updateHostingView(appName: appName, windows: windows, onWindowTap: onWindowTap, screen: screen, mouseLocation: mouseLocation)
 
                 updateContentViewSizeAndPosition(mouseLocation: mouseLocation, mouseScreen: screen, animated: true,
                                                  centerOnScreen: shouldCenterOnScreen, centeredHoverWindowState: centeredHoverWindowState)
@@ -278,10 +280,10 @@ final class SharedPreviewWindowCoordinator: NSWindow {
     }
 
     // Update or create the hosting view
-    private func updateHostingView(appName: String, windows: [WindowInfo], onWindowTap: (() -> Void)?, screen: NSScreen) {
+    private func updateHostingView(appName: String, windows: [WindowInfo], onWindowTap: (() -> Void)?, screen: NSScreen, mouseLocation: CGPoint? = nil) {
         let hoverView = WindowPreviewHoverContainer(appName: appName, windows: windows, onWindowTap: onWindowTap,
-                                                    dockPosition: DockUtils.shared.getDockPosition(), bestGuessMonitor: screen,
-                                                    windowSwitcherCoordinator: windowSwitcherCoordinator)
+                                                    dockPosition: DockUtils.shared.getDockPosition(), mouseLocation: mouseLocation,
+                                                    bestGuessMonitor: screen, windowSwitcherCoordinator: windowSwitcherCoordinator)
 
         if let existingHostingView = hostingView {
             existingHostingView.rootView = hoverView
