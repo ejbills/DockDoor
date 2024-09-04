@@ -23,6 +23,14 @@
   }
 </style>
 
+<a name="v1.2.1"></a>
+# [v1.2.1](https://github.com/ejbills/DockDoor/releases/tag/v1.2.1) - 04 Sep 2024
+
+- Fixes windows having wrong size while they are not in the main screen [#288](https://github.com/ejbills/DockDoor/issues/288) 
+
+[Changes][v1.2.1]
+
+
 <a name="v1.2.0"></a>
 # [v1.2.0](https://github.com/ejbills/DockDoor/releases/tag/v1.2.0) - 04 Sep 2024
 
@@ -444,6 +452,7 @@ v1.0
 [Changes][releases]
 
 
+[v1.2.1]: https://github.com/ejbills/DockDoor/compare/v1.2.0...v1.2.1
 [v1.2.0]: https://github.com/ejbills/DockDoor/compare/v1.1.6...v1.2.0
 [v1.1.6]: https://github.com/ejbills/DockDoor/compare/v1.1.5...v1.1.6
 [v1.1.5]: https://github.com/ejbills/DockDoor/compare/v1.1.4...v1.1.5
