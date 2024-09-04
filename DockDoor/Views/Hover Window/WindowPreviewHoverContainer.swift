@@ -6,6 +6,7 @@ struct WindowPreviewHoverContainer: View {
     let windows: [WindowInfo]
     let onWindowTap: (() -> Void)?
     let dockPosition: DockPosition
+    let mouseLocation: CGPoint?
     let bestGuessMonitor: NSScreen
 
     @ObservedObject var windowSwitcherCoordinator: ScreenCenteredFloatingWindowCoordinator
@@ -45,7 +46,13 @@ struct WindowPreviewHoverContainer: View {
 
     var body: some View {
         let orientationIsHorizontal = dockPosition == .bottom || windowSwitcherCoordinator.windowSwitcherActive
+
         ZStack {
+            if let mouseLocation {
+                WindowDismissalContainer(appName: appName, mouseLocation: mouseLocation,
+                                         bestGuessMonitor: bestGuessMonitor, dockPosition: dockPosition)
+            }
+
             ScrollViewReader { scrollProxy in
                 ScrollView(orientationIsHorizontal ? .horizontal : .vertical, showsIndicators: false) {
                     DynStack(direction: orientationIsHorizontal ? .horizontal : .vertical, spacing: 16) {
@@ -199,7 +206,7 @@ struct WindowPreviewHoverContainer: View {
     }
 
     private func loadAppIcon() {
-        if let bundleID = windows.first?.bundleID, let icon = AppIconUtil.getIcon(bundleID: bundleID) {
+        if let app = windows.first?.app, let icon = app.icon {
             DispatchQueue.main.async {
                 appIcon = icon
             }

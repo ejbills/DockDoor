@@ -93,13 +93,13 @@
             "value" : ""
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : ""
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : ""
@@ -271,13 +271,13 @@
             "value" : "• 독(Dock)에서의 향상된 시각 정보를 위해 허용합니다"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "• Allows for enhanced visual information in the dock"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "• Allows for enhanced visual information in the dock"
@@ -449,13 +449,13 @@
             "value" : "• 독(Dock)에 있는 항목과의 실시간 상호작용을 가능하게 합니다"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "• Enables real-time interaction with dock items"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "• Enables real-time interaction with dock items"
@@ -627,13 +627,13 @@
             "value" : "• 이미지와 창의 미리보기를 생성합니다"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "• To capture previews of images and windows"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "• To capture previews of images and windows"
@@ -805,13 +805,13 @@
             "value" : "• 독에 마우스를 올렸는지 감지합니다"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "• To detect when you hover over the dock"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "• To detect when you hover over the dock"
@@ -983,16 +983,16 @@
             "value" : "손쉬운 사용 권한"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Accessibility Permissions"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Toegankelijkheidsmachtigingen"
-          }
-        },
-        "no" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Accessibility Permissions"
           }
         },
         "pl" : {
@@ -1161,16 +1161,16 @@
             "value" : "손쉬운사용:"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Accessibility:"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Toegankelijkheid:"
-          }
-        },
-        "no" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Accessibility:"
           }
         },
         "pl" : {
@@ -1339,13 +1339,13 @@
             "value" : "프리뷰가 도크와 맞지 않으면 이것을 조정하세요"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Adjust this if the preview is misaligned with dock"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Adjust this if the preview is misaligned with dock"
@@ -1519,16 +1519,16 @@
             "value" : "항상"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Always"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Altijd"
-          }
-        },
-        "no" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Always"
           }
         },
         "pl" : {
@@ -1698,16 +1698,16 @@
             "value" : "항상 표시"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Always visible"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Altijd zichtbaar"
-          }
-        },
-        "no" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Always visible"
           }
         },
         "pl" : {
@@ -1877,13 +1877,13 @@
             "value" : "항상 보기; 불투명도 최대"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Always visible; Full opacity"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Always visible; Full opacity"
@@ -2055,13 +2055,13 @@
             "value" : "금액"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "amount"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "amount"
@@ -2233,13 +2233,13 @@
             "value" : "애니메이션 속도"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Animation speed"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Animation speed"
@@ -2411,16 +2411,16 @@
             "value" : "앱명 스타일"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "App Name Style"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "App Naam Stijl"
-          }
-        },
-        "no" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "App Name Style"
           }
         },
         "pl" : {
@@ -2590,16 +2590,16 @@
             "value" : "모양"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Appearance"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Uiterlijk"
-          }
-        },
-        "no" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Appearance"
           }
         },
         "pl" : {
@@ -2768,16 +2768,16 @@
             "value" : "모양 설정"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Appearance settings"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Uiterlijk Instellingen"
-          }
-        },
-        "no" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Appearance settings"
           }
         },
         "pl" : {
@@ -2946,13 +2946,13 @@
             "value" : "모든 설정을 기본값으로 초기화하시겠습니까?"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Are you sure you want to reset all settings to their default values?"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Are you sure you want to reset all settings to their default values?"
@@ -3124,13 +3124,13 @@
             "value" : "자동으로 업데이트 확인"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Automatically check for updates"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Automatically check for updates"
@@ -3302,13 +3302,13 @@
             "value" : "블러 정도"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Blur amount"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Blur amount"
@@ -3481,16 +3481,16 @@
             "value" : "왼쪽 하단"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Bottom Left"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Linksonderaan"
-          }
-        },
-        "no" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Bottom Left"
           }
         },
         "pl" : {
@@ -3660,16 +3660,16 @@
             "value" : "오른쪽 하단"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Bottom Right"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Rechtsonderaan"
-          }
-        },
-        "no" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Bottom Right"
           }
         },
         "pl" : {
@@ -3838,16 +3838,16 @@
             "value" : "따듯한 커피 한 잔 감사합니다"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Buy me a coffee here, thank you!"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Koop hier een koffie voor me, bedankt!"
-          }
-        },
-        "no" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Buy me a coffee here, thank you!"
           }
         },
         "pl" : {
@@ -4017,16 +4017,16 @@
             "value" : "이것도 볼 수 있나요?"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Can you even see this?"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Kan je dit zien?"
-          }
-        },
-        "no" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Can you even see this?"
           }
         },
         "pl" : {
@@ -4195,16 +4195,16 @@
             "value" : "취소"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Cancel"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Annuleer"
-          }
-        },
-        "no" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Cancel"
           }
         },
         "pl" : {
@@ -4373,16 +4373,16 @@
             "value" : "업데이트 확인"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Check for Updates"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Controleer op Updates"
-          }
-        },
-        "no" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Check for Updates"
           }
         },
         "pl" : {
@@ -4552,13 +4552,13 @@
             "value" : "색상"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Colors"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Colors"
@@ -4730,15 +4730,15 @@
             "value" : "커맨드키 (⌘)"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "new",
             "value" : "Command (⌘)"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Command (⌘)"
           }
         },
@@ -4908,13 +4908,13 @@
             "value" : "여기에서 번역에 기여하세요!"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Contribute translation here!"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Contribute translation here!"
@@ -5086,15 +5086,15 @@
             "value" : "컨트롤키 (⌃)"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "new",
             "value" : "Control (⌃)"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Control (⌃)"
           }
         },
@@ -5264,16 +5264,16 @@
             "value" : "현재 키 조합: %@"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Current Keybind: %@"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Huidige Toetscombinatie: %@"
-          }
-        },
-        "no" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Current Keybind: %@"
           }
         },
         "pl" : {
@@ -5442,16 +5442,16 @@
             "value" : "현재 버전: %@"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Current Version: %@"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Huidige Versie: %@"
-          }
-        },
-        "no" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Current Version: %@"
           }
         },
         "pl" : {
@@ -5621,16 +5621,16 @@
             "value" : "기본값"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Default"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Standaard"
-          }
-        },
-        "no" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Default"
           }
         },
         "pl" : {
@@ -5800,16 +5800,16 @@
             "value" : "기본값(중간 크기)"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Default (Medium Large)"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Standaard (Medium Groot)"
-          }
-        },
-        "no" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Default (Medium Large)"
           }
         },
         "pl" : {
@@ -5979,13 +5979,13 @@
             "value" : "Dock Previews & Window Switcher"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Dock Previews & Window Switcher"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Dock Previews & Window Switcher"
@@ -6158,13 +6158,13 @@
             "value" : "Dock Previews only"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Dock Previews only"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Dock Previews only"
@@ -6336,13 +6336,13 @@
             "value" : "Edit Color"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Edit Color"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Edit Color"
@@ -6514,13 +6514,13 @@
             "value" : "Elements Overlap"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Elements Overlap"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Elements Overlap"
@@ -6693,13 +6693,13 @@
             "value" : "임베디드"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Embedded"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Embedded"
@@ -6780,6 +6780,7 @@
       }
     },
     "Enable Hover Window Sliding Animation" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -6871,13 +6872,13 @@
             "value" : "호버 창 슬라이딩 애니메이션 활성화"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Enable Hover Window Sliding Animation"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Enable Hover Window Sliding Animation"
@@ -6956,6 +6957,9 @@
           }
         }
       }
+    },
+    "Enable Preview Window Sliding Animation" : {
+
     },
     "Enable Window Switcher" : {
       "localizations" : {
@@ -7049,13 +7053,13 @@
             "value" : "윈도우 스위치 활성화"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Enable Window Switcher"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Enable Window Switcher"
@@ -7227,13 +7231,13 @@
             "value" : "도크 경험을 향상하세요!"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Enhance your dock experience!"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Enhance your dock experience!"
@@ -7406,16 +7410,16 @@
             "value" : "매무 매우 작음"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Extra Extra Small"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Extra Extra Klein"
-          }
-        },
-        "no" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Extra Extra Small"
           }
         },
         "pl" : {
@@ -7585,16 +7589,16 @@
             "value" : "매우 작음"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Extra Small"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Extra Klein"
-          }
-        },
-        "no" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Extra Small"
           }
         },
         "pl" : {
@@ -7764,16 +7768,16 @@
             "value" : "일반"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "General"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Algemeen"
-          }
-        },
-        "no" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "General"
           }
         },
         "pl" : {
@@ -7942,16 +7946,16 @@
             "value" : "일반 설정"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "General settings"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Algemene Instellingen"
-          }
-        },
-        "no" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "General settings"
           }
         },
         "pl" : {
@@ -8120,16 +8124,16 @@
             "value" : "시작하기"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Get Started"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Begin"
-          }
-        },
-        "no" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Get Started"
           }
         },
         "pl" : {
@@ -8300,16 +8304,16 @@
             "value" : "숨김"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Hidden"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Verborgen"
-          }
-        },
-        "no" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Hidden"
           }
         },
         "pl" : {
@@ -8478,13 +8482,13 @@
             "value" : "Highlight Gradient Colors"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Highlight Gradient Colors"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Highlight Gradient Colors"
@@ -8565,6 +8569,7 @@
       }
     },
     "Hover Window Open Delay" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -8656,13 +8661,13 @@
             "value" : "호버 창 열기 지연"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Hover Window Open Delay"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Hover Window Open Delay"
@@ -8835,13 +8840,13 @@
             "value" : "호버 창 제목 스타일"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Hover Window Title Style"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Hover Window Title Style"
@@ -9014,13 +9019,13 @@
             "value" : "메뉴 막대의 아이콘에 접근하려면 앱을 실행하여 10초 간 노출시킬 수 있습니다."
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "If you need to access the menu bar icon, launch the app to reveal it for 10 seconds."
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "If you need to access the menu bar icon, launch the app to reveal it for 10 seconds."
@@ -9192,13 +9197,13 @@
             "value" : "초기화 키"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Initialization Key"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Initialization Key"
@@ -9371,16 +9376,16 @@
             "value" : "크게"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Large"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Groot"
-          }
-        },
-        "no" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Large"
           }
         },
         "pl" : {
@@ -9549,16 +9554,16 @@
             "value" : "마지막으로 확인함: %@"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Last checked: %@"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Laatst Gecontroleerd: %@"
-          }
-        },
-        "no" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Last checked: %@"
           }
         },
         "pl" : {
@@ -9727,16 +9732,16 @@
             "value" : "로그인할 때 DockDoor 실행"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Launch DockDoor at login"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Start DockDoor bij het inloggen"
-          }
-        },
-        "no" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Launch DockDoor at login"
           }
         },
         "pl" : {
@@ -9906,15 +9911,15 @@
             "value" : "중간"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "new",
             "value" : "Medium"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Medium"
           }
         },
@@ -10085,13 +10090,13 @@
             "value" : "메뉴바 아이콘 숨김"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Menu Bar Icon Hidden"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Menu Bar Icon Hidden"
@@ -10264,16 +10269,16 @@
             "value" : "항상 보이지 않음"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Never visible"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Nooit zichtbaar"
-          }
-        },
-        "no" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Never visible"
           }
         },
         "pl" : {
@@ -10443,16 +10448,16 @@
             "value" : "No action"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "No action"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Geen Actie"
-          }
-        },
-        "no" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "No action"
           }
         },
         "pl" : {
@@ -10623,13 +10628,13 @@
             "value" : "No hover action"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "No hover action"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "No hover action"
@@ -10801,15 +10806,15 @@
             "value" : "확인"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "new",
             "value" : "OK"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "OK"
           }
         },
@@ -10980,13 +10985,13 @@
             "value" : "창을 가리키면; 버튼이 가리킬 때까지 어둡게 표시됨"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "On window hover; Dimmed until button hover"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "On window hover; Dimmed until button hover"
@@ -11159,13 +11164,13 @@
             "value" : "창에 마우스를 올렸을 때; 불투명도 최대"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "On window hover; Full opacity"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "On window hover; Full opacity"
@@ -11337,16 +11342,16 @@
             "value" : "손쉬운 사용 설정 열기"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Open Accessibility Settings"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Open Toegankelijkheids Instellingen"
-          }
-        },
-        "no" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Open Accessibility Settings"
           }
         },
         "pl" : {
@@ -11515,16 +11520,16 @@
             "value" : "화면 기록 설정 열기"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Open Screen Recording Settings"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Open Schermopname Instellingen"
-          }
-        },
-        "no" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Open Screen Recording Settings"
           }
         },
         "pl" : {
@@ -11693,16 +11698,16 @@
             "value" : "설정 열기"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Open Settings"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Open instellingen"
-          }
-        },
-        "no" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Open Settings"
           }
         },
         "pl" : {
@@ -11871,15 +11876,15 @@
             "value" : "옵션 키 (⌥)"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "new",
             "value" : "Option (⌥)"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Option (⌥)"
           }
         },
@@ -11958,6 +11963,7 @@
       }
     },
     "Permission error" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -12049,16 +12055,16 @@
             "value" : "권한 오류"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Permission error"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Machtigingsfout"
-          }
-        },
-        "no" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Permission error"
           }
         },
         "pl" : {
@@ -12228,16 +12234,16 @@
             "value" : "권한"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Permissions"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Machtigingen"
-          }
-        },
-        "no" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Permissions"
           }
         },
         "pl" : {
@@ -12406,16 +12412,16 @@
             "value" : "권한 설정"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Permissions settings"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Machtigingsinstellingen"
-          }
-        },
-        "no" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Permissions settings"
           }
         },
         "pl" : {
@@ -12585,16 +12591,16 @@
             "value" : "변경사항을 적용하기 위해 앱을 종료하세요! :)"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Please Quit the App to Apply Changes! :)"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sluit de app om de wijzigingen toe te passen! :)"
-          }
-        },
-        "no" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Please Quit the App to Apply Changes! :)"
           }
         },
         "pl" : {
@@ -12763,16 +12769,16 @@
             "value" : "Please Restart the App to Apply Changes! :)"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Please Restart the App to Apply Changes! :)"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Start de app opnieuw op om de wijzigingen toe te passen! :)"
-          }
-        },
-        "no" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Please Restart the App to Apply Changes! :)"
           }
         },
         "pl" : {
@@ -12941,16 +12947,16 @@
             "value" : "Please restart the application to apply your changes. Click OK to quit the app."
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Please restart the application to apply your changes. Click OK to quit the app."
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Herstart de app om je veranderingen op te slaan. Druk OK om te app af te sluiten."
-          }
-        },
-        "no" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Please restart the application to apply your changes. Click OK to quit the app."
           }
         },
         "pl" : {
@@ -13120,13 +13126,13 @@
             "value" : "팝오버"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Popover"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Popover"
@@ -13298,13 +13304,13 @@
             "value" : "초기화 키를 누른 상태에서 아무 키 조합이나 눌러 키 바인딩을 설정하세요."
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Press any key combination after holding the initialization key to set the keybind."
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Press any key combination after holding the initialization key to set the keybind."
@@ -13476,16 +13482,16 @@
             "value" : "키 조합 입력..."
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Press the key combination..."
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Druk de toetscombinatie in..."
-          }
-        },
-        "no" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Press the key combination..."
           }
         },
         "pl" : {
@@ -13654,13 +13660,13 @@
             "value" : "Preview Hover Action"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Preview Hover Action"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Preview Hover Action"
@@ -13832,13 +13838,13 @@
             "value" : "Preview Hover Delay"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Preview Hover Delay"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Preview Hover Delay"
@@ -13917,6 +13923,12 @@
           }
         }
       }
+    },
+    "Preview Window Fade Out Duration" : {
+
+    },
+    "Preview Window Open Delay" : {
+
     },
     "Quit App" : {
       "extractionState" : "stale",
@@ -14011,16 +14023,16 @@
             "value" : "앱 종료"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Quit App"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sluit App"
-          }
-        },
-        "no" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Quit App"
           }
         },
         "pl" : {
@@ -14189,16 +14201,16 @@
             "value" : "DockDoor 종료"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Quit DockDoor"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sluit DockDoor"
-          }
-        },
-        "no" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Quit DockDoor"
           }
         },
         "pl" : {
@@ -14367,13 +14379,13 @@
             "value" : "Remove"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Remove"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Remove"
@@ -14546,15 +14558,15 @@
             "value" : "Reset"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "new",
             "value" : "Reset"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Reset"
           }
         },
@@ -14725,16 +14737,16 @@
             "value" : "Reset All Settings"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Reset All Settings"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Reset Alle Instellingen"
-          }
-        },
-        "no" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Reset All Settings"
           }
         },
         "pl" : {
@@ -14903,16 +14915,16 @@
             "value" : "Reset All Settings to Defaults"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Reset All Settings to Defaults"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Reset Alle Instellingen naar Standaard"
-          }
-        },
-        "no" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Reset All Settings to Defaults"
           }
         },
         "pl" : {
@@ -15081,16 +15093,16 @@
             "value" : "Reset to Defaults"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Reset to Defaults"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Reset naar Standaard"
-          }
-        },
-        "no" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Reset to Defaults"
           }
         },
         "pl" : {
@@ -15259,16 +15271,16 @@
             "value" : "Restart App"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Restart App"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Herstart app"
-          }
-        },
-        "no" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Restart App"
           }
         },
         "pl" : {
@@ -15437,16 +15449,16 @@
             "value" : "Restart required"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Restart required"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Herstart nodig"
-          }
-        },
-        "no" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Restart required"
           }
         },
         "pl" : {
@@ -15615,13 +15627,13 @@
             "value" : "Right click a color to remove it."
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Right click a color to remove it."
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Right click a color to remove it."
@@ -15793,16 +15805,16 @@
             "value" : "화면 기록:"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Screen Capturing:"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Scherm Vastleggen:"
-          }
-        },
-        "no" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Screen Capturing:"
           }
         },
         "pl" : {
@@ -15971,16 +15983,16 @@
             "value" : "화면 기록 권한"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Screen Recording Permissions"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Schermopname Machtigingen"
-          }
-        },
-        "no" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Screen Recording Permissions"
           }
         },
         "pl" : {
@@ -16149,16 +16161,16 @@
             "value" : "초"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "seconds"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "seconden"
-          }
-        },
-        "no" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "seconds"
           }
         },
         "pl" : {
@@ -16328,16 +16340,16 @@
             "value" : "See a large preview of the window"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "See a large preview of the window"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Zie een grote voorvertoning van het scherm"
-          }
-        },
-        "no" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "See a large preview of the window"
           }
         },
         "pl" : {
@@ -16508,16 +16520,16 @@
             "value" : "See a preview of the window"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "See a preview of the window"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Zie een voorvertoning van het scherm"
-          }
-        },
-        "no" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "See a preview of the window"
           }
         },
         "pl" : {
@@ -16686,13 +16698,13 @@
             "value" : "초기화 키와 키 바인딩 설정"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Set Initialization Key and Keybind"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Set Initialization Key and Keybind"
@@ -16864,13 +16876,13 @@
             "value" : "Show App Name in Dock Previews"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Show App Name in Dock Previews"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Show App Name in Dock Previews"
@@ -17042,16 +17054,16 @@
             "value" : "메뉴 막대에 아이콘 표시"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Show Menu Bar Icon"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Laat Menu Bar Icon Zien"
-          }
-        },
-        "no" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Menu Bar Icon"
           }
         },
         "pl" : {
@@ -17220,16 +17232,16 @@
             "value" : "Show Window Title in"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Show Window Title in"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Laat de Schermnaam Zien in"
-          }
-        },
-        "no" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Window Title in"
           }
         },
         "pl" : {
@@ -17398,16 +17410,16 @@
             "value" : "Show Window Title in Previews"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Show Window Title in Previews"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Laat de Schermnaam Zien in Voorvertoning"
-          }
-        },
-        "no" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Window Title in Previews"
           }
         },
         "pl" : {
@@ -17577,16 +17589,16 @@
             "value" : "창 제목 표시"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Show Window Titles"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Laat de Schermnaam Zien"
-          }
-        },
-        "no" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Window Titles"
           }
         },
         "pl" : {
@@ -17756,13 +17768,13 @@
             "value" : "미리보기에서 창 제목 표시"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Show Window Titles on Previews"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Show Window Titles on Previews"
@@ -17936,16 +17948,16 @@
             "value" : "Simulate a click"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Simulate a click"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Simuleer een klik"
-          }
-        },
-        "no" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Simulate a click"
           }
         },
         "pl" : {
@@ -18115,16 +18127,16 @@
             "value" : "Simulate a click (open the window)"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Simulate a click (open the window)"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Simuleer een klik (open het scherm)"
-          }
-        },
-        "no" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Simulate a click (open the window)"
           }
         },
         "pl" : {
@@ -18294,16 +18306,16 @@
             "value" : "작게"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Small"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Klein"
-          }
-        },
-        "no" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Small"
           }
         },
         "pl" : {
@@ -18472,13 +18484,13 @@
             "value" : "키 입력 기록 시작"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Start Recording Keybind"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Start Recording Keybind"
@@ -18651,13 +18663,13 @@
             "value" : "아원자"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Subatomic"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Subatomic"
@@ -18829,13 +18841,13 @@
             "value" : "The selected positions for Traffic Light Buttons and Window Title will overlap."
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "The selected positions for Traffic Light Buttons and Window Title will overlap."
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "The selected positions for Traffic Light Buttons and Window Title will overlap."
@@ -19008,16 +19020,16 @@
             "value" : "Top Left"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Top Left"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Linksboven"
-          }
-        },
-        "no" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Top Left"
           }
         },
         "pl" : {
@@ -19187,16 +19199,16 @@
             "value" : "오른쪽 상단"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Top Right"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Rechtsboven"
-          }
-        },
-        "no" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Top Right"
           }
         },
         "pl" : {
@@ -19365,13 +19377,13 @@
             "value" : "Traffic Light Buttons Position"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Traffic Light Buttons Position"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Traffic Light Buttons Position"
@@ -19543,13 +19555,13 @@
             "value" : "신호등 버튼 가시성"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Traffic Light Buttons Visibility"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Traffic Light Buttons Visibility"
@@ -19721,16 +19733,16 @@
             "value" : "최신 버전입니다"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Up to date"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Actueel"
-          }
-        },
-        "no" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Up to date"
           }
         },
         "pl" : {
@@ -19899,16 +19911,16 @@
             "value" : "업데이트 사용 가능"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Update available"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Update beschikbaar"
-          }
-        },
-        "no" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Update available"
           }
         },
         "pl" : {
@@ -20077,16 +20089,16 @@
             "value" : "업데이트 설정"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Update settings"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Update instellingen"
-          }
-        },
-        "no" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Update settings"
           }
         },
         "pl" : {
@@ -20256,15 +20268,15 @@
             "value" : "업데이트"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "new",
             "value" : "Updates"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Updates"
           }
         },
@@ -20434,13 +20446,13 @@
             "value" : "기본 MacOS 키 바인드 ⌘ + ⇥ 사용"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Use default MacOS keybind ⌘ + ⇥"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Use default MacOS keybind ⌘ + ⇥"
@@ -20612,13 +20624,13 @@
             "value" : "균일한 이미지 미리보기 반경 사용"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Use Uniform Image Preview Radius"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Use Uniform Image Preview Radius"
@@ -20790,16 +20802,16 @@
             "value" : "버전 %@"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Version %@"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Versie %@"
-          }
-        },
-        "no" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Version %@"
           }
         },
         "pl" : {
@@ -20968,13 +20980,13 @@
             "value" : "Want to see the app in your language?"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Want to see the app in your language?"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Want to see the app in your language?"
@@ -21146,13 +21158,13 @@
             "value" : "개발 후원하기"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Want to support development?"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Want to support development?"
@@ -21324,13 +21336,13 @@
             "value" : "DockDoor에 오신 것을 환영합니다!"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Welcome to DockDoor!"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Welcome to DockDoor!"
@@ -21503,13 +21515,13 @@
             "value" : "이게 뭐야? 개미를 위한 창문인가?"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "What is this? A window for ANTS?"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "What is this? A window for ANTS?"
@@ -21682,13 +21694,13 @@
             "value" : "When hovering over the preview"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "When hovering over the preview"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "When hovering over the preview"
@@ -21862,13 +21874,13 @@
             "value" : "도크 타일 미리 보기를 표시할 때"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "When Showing Dock Tile Previews"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "When Showing Dock Tile Previews"
@@ -22042,13 +22054,13 @@
             "value" : "윈도우 스위쳐를 사용하는 경우"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "When Using Window Switcher"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "When Using Window Switcher"
@@ -22220,13 +22232,13 @@
             "value" : "권한이 필요한 이유"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Why we need permissions"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Why we need permissions"
@@ -22398,16 +22410,16 @@
             "value" : "윈도우 버퍼"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Window Buffer"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Scherm Buffer"
-          }
-        },
-        "no" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Buffer"
           }
         },
         "pl" : {
@@ -22577,13 +22589,13 @@
             "value" : "윈도우 캐시 수명"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Window Cache Lifespan"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Window Cache Lifespan"
@@ -22755,13 +22767,13 @@
             "value" : "Window Image Cache Lifespan"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Window Image Cache Lifespan"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Window Image Cache Lifespan"
@@ -22933,13 +22945,13 @@
             "value" : "Window Image Resolution Scale (higher means lower resolution)"
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Window Image Resolution Scale (higher means lower resolution)"
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Window Image Resolution Scale (higher means lower resolution)"
@@ -23111,16 +23123,16 @@
             "value" : "창 크기"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Window Size"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Scherm Formaat"
-          }
-        },
-        "no" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Size"
           }
         },
         "pl" : {
@@ -23290,16 +23302,16 @@
             "value" : "윈도우 스위쳐"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Window Switcher"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Scherm Wisseler"
-          }
-        },
-        "no" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Switcher"
           }
         },
         "pl" : {
@@ -23469,16 +23481,16 @@
             "value" : "Window Switcher only"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Window Switcher only"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Alleen Scherm Wisseler"
-          }
-        },
-        "no" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Switcher only"
           }
         },
         "pl" : {
@@ -23647,16 +23659,16 @@
             "value" : "창 제목 위치"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Window Title Position"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Schermnaam Positie"
-          }
-        },
-        "no" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Title Position"
           }
         },
         "pl" : {
@@ -23825,16 +23837,16 @@
             "value" : "Window Title Visibility"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Window Title Visibility"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Schermnaam Zichtbaarheid"
-          }
-        },
-        "no" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Title Visibility"
           }
         },
         "pl" : {
@@ -24003,16 +24015,16 @@
             "value" : "창 전환 설정"
           }
         },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Windows switching settings"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Scherm wisselings instellingen"
-          }
-        },
-        "no" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Windows switching settings"
           }
         },
         "pl" : {
@@ -24090,6 +24102,7 @@
       }
     },
     "You need to give DockDoor access to the accessibility API in order for it to function." : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -24181,13 +24194,13 @@
             "value" : "DockDoor의 작동을 위해 손쉬운 사용 권한을 허용해야 합니다."
           }
         },
-        "nl" : {
+        "nb" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "You need to give DockDoor access to the accessibility API in order for it to function."
           }
         },
-        "no" : {
+        "nl" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "You need to give DockDoor access to the accessibility API in order for it to function."

@@ -18,9 +18,9 @@ struct TrafficLightButtons: View {
         .padding(4)
         .opacity(opacity)
         .allowsHitTesting(opacity != 0)
-        .onHover { over in
+        .onHover { isHovering in
             withAnimation(.snappy(duration: 0.175)) {
-                isHovering = over
+                self.isHovering = isHovering
             }
         }
     }
@@ -39,20 +39,19 @@ struct TrafficLightButtons: View {
     }
 
     private func buttonFor(action: WindowAction, symbol: String, color: Color, fillColor: Color) -> some View {
-        Button(action: {
-            performAction(action)
-            onAction()
-        }) {
-            ZStack {
-                Image(systemName: "circle.fill")
-                    .foregroundStyle(.secondary)
-                Image(systemName: "\(symbol).circle.fill")
-            }
+        ZStack {
+            Image(systemName: "circle.fill")
+                .foregroundStyle(.secondary)
+            Image(systemName: "\(symbol).circle.fill")
         }
-        .buttonBorderShape(.roundedRectangle)
         .foregroundStyle(color, fillColor)
-        .buttonStyle(.plain)
         .font(.system(size: 13))
+        .onLongPressGesture(minimumDuration: .infinity, maximumDistance: 10, perform: {}, onPressingChanged: { pressing in
+            if pressing {
+                performAction(action)
+                onAction()
+            }
+        })
     }
 
     private func performAction(_ action: WindowAction) {

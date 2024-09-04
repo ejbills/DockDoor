@@ -118,7 +118,7 @@ class KeybindHelper {
         DispatchQueue.main.async { [weak self] in
             guard let self, isModifierKeyPressed else { return }
 
-            let windows = WindowUtil.getAllWindowInfosAsList()
+            let windows = WindowUtil.getAllWindowsOfAllApps()
 
             SharedPreviewWindowCoordinator.shared.showWindow(
                 appName: "Alt-Tab",
@@ -129,13 +129,9 @@ class KeybindHelper {
             )
         }
 
-        Task(priority: .background) { [weak self] in
+        Task(priority: .high) { [weak self] in
             guard self != nil else { return }
-            do {
-                _ = try await WindowUtil.activeWindows(for: "")
-            } catch {
-                print("Failed to update windows from keybind helper.")
-            }
+            await WindowUtil.updateAllWindowsInCurrentSpace()
         }
     }
 }
