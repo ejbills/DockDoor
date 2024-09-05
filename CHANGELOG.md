@@ -23,6 +23,14 @@
   }
 </style>
 
+<a name="v1.2.3"></a>
+# [v1.2.3](https://github.com/ejbills/DockDoor/releases/tag/v1.2.3) - 05 Sep 2024
+
+- Adds option to disable window sorting - [#292](https://github.com/ejbills/DockDoor/issues/292) 
+
+[Changes][v1.2.3]
+
+
 <a name="v1.2.2"></a>
 # [v1.2.2](https://github.com/ejbills/DockDoor/releases/tag/v1.2.2) - 04 Sep 2024
 
@@ -460,6 +468,7 @@ v1.0
 [Changes][releases]
 
 
+[v1.2.3]: https://github.com/ejbills/DockDoor/compare/v1.2.2...v1.2.3
 [v1.2.2]: https://github.com/ejbills/DockDoor/compare/v1.2.1...v1.2.2
 [v1.2.1]: https://github.com/ejbills/DockDoor/compare/v1.2.0...v1.2.1
 [v1.2.0]: https://github.com/ejbills/DockDoor/compare/v1.1.6...v1.2.0
