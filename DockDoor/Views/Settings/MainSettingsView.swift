@@ -18,6 +18,7 @@ struct MainSettingsView: View {
     @Default(.bufferFromDock) var bufferFromDock
     @Default(.windowPreviewImageScale) var windowPreviewImageScale
     @Default(.fadeOutDuration) var fadeOutDuration
+    @Default(.sortWindowsByDate) var sortWindowsByDate
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -119,6 +120,10 @@ struct MainSettingsView: View {
                     .frame(width: 38)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
             }
+
+            Toggle(isOn: $sortWindowsByDate, label: {
+                Text("Sort Window Previews by Date")
+            })
 
             Picker("Preview Hover Action", selection: $previewHoverAction) {
                 ForEach(PreviewHoverAction.allCases, id: \.self) { action in

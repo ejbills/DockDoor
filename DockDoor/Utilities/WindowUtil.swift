@@ -435,15 +435,15 @@ enum WindowUtil {
     // MARK: - Active Window Handling
 
     static func getAllWindowsOfAllApps() -> [WindowInfo] {
-        let sortedWindows = desktopSpaceWindowCacheManager.getAllWindows()
+        let windows = desktopSpaceWindowCacheManager.getAllWindows()
 
         // If there are at least two windows, swap the first and second
-        if sortedWindows.count >= 2 {
-            var modifiedWindows = sortedWindows
+        if windows.count >= 2, Defaults[.sortWindowsByDate] {
+            var modifiedWindows = windows
             modifiedWindows.swapAt(0, 1)
             return modifiedWindows
         } else {
-            return sortedWindows
+            return windows
         }
     }
 
@@ -468,7 +468,7 @@ enum WindowUtil {
             }
         }
 
-        return combinedWindows.sorted(by: { $0.lastUsed > $1.lastUsed })
+        return Defaults[.sortWindowsByDate] ? combinedWindows.sorted(by: { $0.lastUsed > $1.lastUsed }) : combinedWindows
     }
 
     static func updateAllWindowsInCurrentSpace() async {
