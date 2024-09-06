@@ -48,22 +48,22 @@ jobs:
                   color: #ff1919;
                 }
               }
-              .donation-link {
-                display: block;
-                margin-top: 20px;
-                padding: 10px 20px;
-                background-color: #FFDD00;
-                color: #000000;
-                text-align: center;
-                text-decoration: none;
-                font-weight: bold;
-                border-radius: 5px;
-              }
-              .donation-link:hover {
-                background-color: #E5C700;
-              }
+               .donation-link {
+                  display: inline-block;
+                  margin-top: 10px;
+                  padding: 5px 10px;
+                  background-color: #FFDD00;
+                  color: #000000 !important;
+                  text-decoration: none;
+                  font-size: 0.9em;
+                  font-weight: bold;
+                  border-radius: 3px;
+                }
+                .donation-link:hover {
+                  background-color: #E5C700;
+                }
             </style>
-            <a href="https://buymeacoffee.com/keplercafe" class="donation-link" target="_blank">☕ Support Kepler.cafe</a>
+            <a href="https://buymeacoffee.com/keplercafe" class="donation-link" target="_blank">☕ Support kepler.cafe</a>
 
       - name: Set file permissions
         run: sudo chown -R $(whoami) .
