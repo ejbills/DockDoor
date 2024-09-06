@@ -21,7 +21,22 @@
       color: #ff1919;
     }
   }
+  .donation-link {
+    display: block;
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #FFDD00;
+    color: #000000;
+    text-align: center;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 5px;
+  }
+  .donation-link:hover {
+    background-color: #E5C700;
+  }
 </style>
+<a href="https://buymeacoffee.com/keplercafe" class="donation-link" target="_blank">☕ Support Kepler.cafe</a>
 
 <a name="v1.2.3"></a>
 # [v1.2.3](https://github.com/ejbills/DockDoor/releases/tag/v1.2.3) - 05 Sep 2024
