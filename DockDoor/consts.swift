@@ -24,6 +24,7 @@ extension Defaults.Keys {
     static let showAnimations = Key<Bool>("showAnimations", default: true)
     static let gradientColorPalette = Key<GradientColorPaletteSettings>("gradientColorPalette", default: .init())
     static let enableWindowSwitcher = Key<Bool>("enableWindowSwitcher", default: true)
+    static let sortWindowsByDate = Key<Bool>("sortWindowsByDate", default: true)
     static let showMenuBarIcon = Key<Bool>("showMenuBarIcon", default: true)
     static let defaultCMDTABKeybind = Key<Bool>("defaultCMDTABKeybind", default: true)
     static let launched = Key<Bool>("launched", default: false)

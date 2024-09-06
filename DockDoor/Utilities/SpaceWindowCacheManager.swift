@@ -1,4 +1,5 @@
 import Cocoa
+import Defaults
 import ScreenCaptureKit
 
 class SpaceWindowCacheManager {
@@ -40,7 +41,9 @@ class SpaceWindowCacheManager {
 
     func getAllWindows() -> [WindowInfo] {
         queue.sync {
-            self.desktopSpaceWindowCache.values.flatMap { $0 }.sorted(by: { $0.lastUsed > $1.lastUsed })
+            Defaults[.sortWindowsByDate] ?
+                self.desktopSpaceWindowCache.values.flatMap { $0 }.sorted(by: { $0.lastUsed > $1.lastUsed }) :
+                self.desktopSpaceWindowCache.values.flatMap { $0 }
         }
     }
 }

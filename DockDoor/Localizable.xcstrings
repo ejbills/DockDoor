@@ -1545,8 +1545,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Always"
+            "state" : "translated",
+            "value" : "Sempre"
           }
         },
         "ro" : {
@@ -6992,8 +6992,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable Preview Window Sliding Animation"
+            "state" : "translated",
+            "value" : "Schiebeanimation für Vorschaufenster aktivieren"
           }
         },
         "el" : {
@@ -7130,8 +7130,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable Preview Window Sliding Animation"
+            "state" : "translated",
+            "value" : "啟用預覽視窗滑動效果"
           }
         }
       }
@@ -8599,8 +8599,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Highlight Gradient Colors"
+            "state" : "translated",
+            "value" : "Farbverlauf hervorheben"
           }
         },
         "el" : {
@@ -14133,8 +14133,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Window Fade Out Duration"
+            "state" : "translated",
+            "value" : "Ausblendungsdauer des Vorschaufensters"
           }
         },
         "el" : {
@@ -14271,8 +14271,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Window Fade Out Duration"
+            "state" : "translated",
+            "value" : "預覽視窗淡出持續時間"
           }
         }
       }
@@ -14311,8 +14311,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Window Open Delay"
+            "state" : "translated",
+            "value" : "Öffnungsverzögerung Vorschaufenster"
           }
         },
         "el" : {
@@ -14449,8 +14449,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Window Open Delay"
+            "state" : "translated",
+            "value" : "預覽視窗開啟延遲"
           }
         }
       }
@@ -18917,6 +18917,184 @@
         }
       }
     },
+    "Sort Window Previews by Date" : {
+      "localizations" : {
+        "af" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Sort Window Previews by Date"
+          }
+        },
+        "ar" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Sort Window Previews by Date"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Sort Window Previews by Date"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Sort Window Previews by Date"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Sort Window Previews by Date"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Sort Window Previews by Date"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Sort Window Previews by Date"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Sort Window Previews by Date"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Sort Window Previews by Date"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Sort Window Previews by Date"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Sort Window Previews by Date"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Sort Window Previews by Date"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Sort Window Previews by Date"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Sort Window Previews by Date"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Sort Window Previews by Date"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Sort Window Previews by Date"
+          }
+        },
+        "no" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Sort Window Previews by Date"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Sort Window Previews by Date"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Sort Window Previews by Date"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Sort Window Previews by Date"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Sort Window Previews by Date"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Sort Window Previews by Date"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Sort Window Previews by Date"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Sort Window Previews by Date"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Sort Window Previews by Date"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Sort Window Previews by Date"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Sort Window Previews by Date"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Sort Window Previews by Date"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Sort Window Previews by Date"
+          }
+        }
+      }
+    },
     "Start Recording Keybind" : {
       "localizations" : {
         "af" : {
@@ -19269,7 +19447,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "小"
+            "value" : "蟻人才看的到..."
           }
         }
       }

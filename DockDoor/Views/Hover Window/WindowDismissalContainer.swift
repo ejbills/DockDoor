@@ -72,6 +72,10 @@ class MouseTrackingNSView: NSView {
     }
 
     deinit {
+        clearTimer()
+    }
+
+    private func clearTimer() {
         trackingTimer?.invalidate()
     }
 
@@ -88,6 +92,7 @@ class MouseTrackingNSView: NSView {
         cancelFadeOut()
         setWindowOpacity(to: 1.0, duration: 0.2)
 
+        clearTimer()
         SharedPreviewWindowCoordinator.shared.cancelDebounceWorkItem()
     }
 
