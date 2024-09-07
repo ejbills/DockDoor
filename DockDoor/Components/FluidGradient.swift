@@ -2,14 +2,16 @@ import Defaults
 import FluidGradient
 import SwiftUI
 
-func fluidGradient() -> some View {
-    let gradientColorPalette = Defaults[.gradientColorPalette]
-    return FluidGradient(
-        blobs: gradientColorPalette.colors.map { Color(hex: $0) }.shuffled(),
-        highlights: gradientColorPalette.colors.map { Color(hex: $0) }.shuffled(),
-        speed: gradientColorPalette.speed,
-        blur: gradientColorPalette.blur
-    )
+struct FluidGradientSample: View {
+    @Default(.gradientColorPalette) private var gradientColorPalette
+    var body: some View {
+        FluidGradient(
+            blobs: gradientColorPalette.colors.map { Color(hex: $0) }.shuffled(),
+            highlights: gradientColorPalette.colors.map { Color(hex: $0) }.shuffled(),
+            speed: gradientColorPalette.speed,
+            blur: gradientColorPalette.blur
+        )
+    }
 }
 
 struct FluidGradientBorder: ViewModifier {
@@ -19,7 +21,7 @@ struct FluidGradientBorder: ViewModifier {
     func body(content: Content) -> some View {
         content
             .overlay(
-                fluidGradient()
+                FluidGradientSample()
                     .mask(
                         RoundedRectangle(cornerRadius: cornerRadius)
                             .strokeBorder(lineWidth: lineWidth)

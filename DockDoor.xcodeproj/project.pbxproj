@@ -14,6 +14,13 @@
 		3A105FD92C1C049E0015EC66 /* dockStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A105FD82C1C049E0015EC66 /* dockStyle.swift */; };
 		3A105FDD2C1C0EE20015EC66 /* DynStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A105FDC2C1C0EE20015EC66 /* DynStack.swift */; };
 		3A1622962C8BEA4B00D318EE /* WhyWeNeedPermisionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A1622952C8BEA4B00D318EE /* WhyWeNeedPermisionsView.swift */; };
+		3A1622982C8BF71000D318EE /* SwiftUIWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A1622972C8BF71000D318EE /* SwiftUIWindow.swift */; };
+		3A1622A32C8BFF3800D318EE /* Pow in Frameworks */ = {isa = PBXBuildFile; productRef = 3A1622A22C8BFF3800D318EE /* Pow */; };
+		3A1622AE2C8C06F600D318EE /* mouse-up.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 3A1622AC2C8C06F600D318EE /* mouse-up.mp3 */; };
+		3A1622B12C8C090C00D318EE /* mouse-down.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 3A1622B02C8C090C00D318EE /* mouse-down.mp3 */; };
+		3A1622B52C8C09A700D318EE /* AccentButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A1622B42C8C09A700D318EE /* AccentButton.swift */; };
+		3A1622B82C8C0EE200D318EE /* Kroma in Frameworks */ = {isa = PBXBuildFile; productRef = 3A1622B72C8C0EE200D318EE /* Kroma */; };
+		3A1622BA2C8C0FF100D318EE /* NoBtnStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A1622B92C8C0FF100D318EE /* NoBtnStyle.swift */; };
 		BB04405B2C77A013009F1D33 /* GradientColorPaletteSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB04405A2C77A011009F1D33 /* GradientColorPaletteSettings.swift */; };
 		BB04405E2C77A87F009F1D33 /* PreferencesProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB04405D2C77A87E009F1D33 /* PreferencesProtocol.swift */; };
 		BB0440602C77AD2C009F1D33 /* CodableColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB04405F2C77AD27009F1D33 /* CodableColor.swift */; };
@@ -67,6 +74,11 @@
 		3A105FD82C1C049E0015EC66 /* dockStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dockStyle.swift; sourceTree = "<group>"; };
 		3A105FDC2C1C0EE20015EC66 /* DynStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynStack.swift; sourceTree = "<group>"; };
 		3A1622952C8BEA4B00D318EE /* WhyWeNeedPermisionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhyWeNeedPermisionsView.swift; sourceTree = "<group>"; };
+		3A1622972C8BF71000D318EE /* SwiftUIWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIWindow.swift; sourceTree = "<group>"; };
+		3A1622AC2C8C06F600D318EE /* mouse-up.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "mouse-up.mp3"; sourceTree = "<group>"; };
+		3A1622B02C8C090C00D318EE /* mouse-down.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "mouse-down.mp3"; sourceTree = "<group>"; };
+		3A1622B42C8C09A700D318EE /* AccentButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccentButton.swift; sourceTree = "<group>"; };
+		3A1622B92C8C0FF100D318EE /* NoBtnStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoBtnStyle.swift; sourceTree = "<group>"; };
 		BB04405A2C77A011009F1D33 /* GradientColorPaletteSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientColorPaletteSettings.swift; sourceTree = "<group>"; };
 		BB04405D2C77A87E009F1D33 /* PreferencesProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesProtocol.swift; sourceTree = "<group>"; };
 		BB04405F2C77AD27009F1D33 /* CodableColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodableColor.swift; sourceTree = "<group>"; };
@@ -116,11 +128,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				BB33E68C2C24C72F00A21D69 /* LaunchAtLogin in Frameworks */,
+				3A1622A32C8BFF3800D318EE /* Pow in Frameworks */,
 				BB77F2282C35D27D00BD315A /* FluidGradient in Frameworks */,
 				BBFAD73A2C287A9C0092F5F1 /* Sparkle in Frameworks */,
 				BB3968002C2A6C44004F1AB6 /* SmoothGradient in Frameworks */,
 				BB1CBD5B2C1BA8DC003969BC /* Defaults in Frameworks */,
 				BBE7CC8F2C22421900AB8F4D /* Settings in Frameworks */,
+				3A1622B82C8C0EE200D318EE /* Kroma in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -145,11 +159,38 @@
 		3A105FD72C1BF11D0015EC66 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				3A1622B32C8C099200D318EE /* Button Styles */,
 				BB04405F2C77AD27009F1D33 /* CodableColor.swift */,
 				05C0C7172C60629C000ADAC6 /* AXUIElement.swift */,
 				3A105FD82C1C049E0015EC66 /* dockStyle.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		3A1622992C8BFCE800D318EE /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				3A16229A2C8BFCF100D318EE /* audios */,
+			);
+			path = Assets;
+			sourceTree = "<group>";
+		};
+		3A16229A2C8BFCF100D318EE /* audios */ = {
+			isa = PBXGroup;
+			children = (
+				3A1622B02C8C090C00D318EE /* mouse-down.mp3 */,
+				3A1622AC2C8C06F600D318EE /* mouse-up.mp3 */,
+			);
+			path = audios;
+			sourceTree = "<group>";
+		};
+		3A1622B32C8C099200D318EE /* Button Styles */ = {
+			isa = PBXGroup;
+			children = (
+				3A1622B42C8C09A700D318EE /* AccentButton.swift */,
+				3A1622B92C8C0FF100D318EE /* NoBtnStyle.swift */,
+			);
+			path = "Button Styles";
 			sourceTree = "<group>";
 		};
 		BB04405C2C77A878009F1D33 /* Defaults */ = {
@@ -186,6 +227,7 @@
 				BBA153F92C11FFD500119C02 /* consts.swift */,
 				BBA153FB2C12356100119C02 /* main.swift */,
 				BBA153F52C115DDA00119C02 /* AppDelegate.swift */,
+				3A1622992C8BFCE800D318EE /* Assets */,
 				3A105FD42C1BED5B0015EC66 /* Components */,
 				3A105FD72C1BF11D0015EC66 /* Extensions */,
 				BBA153FD2C12358600119C02 /* Views */,
@@ -219,6 +261,7 @@
 				BBF6C6232C1B4B4400BF1D40 /* KeybindHelper.swift */,
 				BB1CBD5C2C1BCA4F003969BC /* Misc Utils.swift */,
 				BB7CA33C2C31F1B00012E303 /* WindowManipulationObservers.swift */,
+				3A1622972C8BF71000D318EE /* SwiftUIWindow.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -293,6 +336,8 @@
 				BBFAD7392C287A9C0092F5F1 /* Sparkle */,
 				BB3967FF2C2A6C44004F1AB6 /* SmoothGradient */,
 				BB77F2272C35D27D00BD315A /* FluidGradient */,
+				3A1622A22C8BFF3800D318EE /* Pow */,
+				3A1622B72C8C0EE200D318EE /* Kroma */,
 			);
 			productName = DockDoor;
 			productReference = BB157B652C0E31CE00997315 /* DockDoor.app */;
@@ -331,6 +376,8 @@
 				BBFAD7382C287A9C0092F5F1 /* XCRemoteSwiftPackageReference "Sparkle" */,
 				BB3967FE2C2A6C44004F1AB6 /* XCRemoteSwiftPackageReference "SmoothGradient" */,
 				BB77F2262C35D27D00BD315A /* XCRemoteSwiftPackageReference "FluidGradient" */,
+				3A1622A12C8BFF3800D318EE /* XCRemoteSwiftPackageReference "Pow" */,
+				3A1622B62C8C0EE200D318EE /* XCRemoteSwiftPackageReference "Kroma" */,
 			);
 			productRefGroup = BB157B662C0E31CE00997315 /* Products */;
 			projectDirPath = "";
@@ -347,6 +394,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				BB157B702C0E31CF00997315 /* Preview Assets.xcassets in Resources */,
+				3A1622B12C8C090C00D318EE /* mouse-down.mp3 in Resources */,
+				3A1622AE2C8C06F600D318EE /* mouse-up.mp3 in Resources */,
 				BB157B6D2C0E31CF00997315 /* Assets.xcassets in Resources */,
 				BB4ED9072C3C75CA00BBDD16 /* Localizable.xcstrings in Resources */,
 			);
@@ -382,11 +431,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				0531F8D22C3CC04600327808 /* AppearanceSettingsView.swift in Sources */,
+				3A1622982C8BF71000D318EE /* SwiftUIWindow.swift in Sources */,
 				BB6A4F1C2C1CFCFF00CB4C9E /* PermissionsSettingsView.swift in Sources */,
 				BB3D6EB02C84E58400FFE584 /* NSScreen.swift in Sources */,
 				BB3D6EAE2C82E4B400FFE584 /* WindowDismissalContainer.swift in Sources */,
+				3A1622BA2C8C0FF100D318EE /* NoBtnStyle.swift in Sources */,
 				BB3967FD2C291D5A004F1AB6 /* StackedShadow.swift in Sources */,
 				BBF4139A2C40A64A00AA6733 /* FluidGradient.swift in Sources */,
+				3A1622B52C8C09A700D318EE /* AccentButton.swift in Sources */,
 				BB7CA33D2C31F1B00012E303 /* WindowManipulationObservers.swift in Sources */,
 				BB157B802C0E8E6700997315 /* MessageUtil.swift in Sources */,
 				05C0C7182C60629C000ADAC6 /* AXUIElement.swift in Sources */,
@@ -733,6 +785,22 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		3A1622A12C8BFF3800D318EE /* XCRemoteSwiftPackageReference "Pow" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/EmergeTools/Pow.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.4;
+			};
+		};
+		3A1622B62C8C0EE200D318EE /* XCRemoteSwiftPackageReference "Kroma" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kaishin/Kroma.git";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 		BB1CBD592C1BA8DC003969BC /* XCRemoteSwiftPackageReference "Defaults" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/sindresorhus/Defaults";
@@ -784,6 +852,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		3A1622A22C8BFF3800D318EE /* Pow */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3A1622A12C8BFF3800D318EE /* XCRemoteSwiftPackageReference "Pow" */;
+			productName = Pow;
+		};
+		3A1622B72C8C0EE200D318EE /* Kroma */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3A1622B62C8C0EE200D318EE /* XCRemoteSwiftPackageReference "Kroma" */;
+			productName = Kroma;
+		};
 		BB1CBD5A2C1BA8DC003969BC /* Defaults */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = BB1CBD592C1BA8DC003969BC /* XCRemoteSwiftPackageReference "Defaults" */;

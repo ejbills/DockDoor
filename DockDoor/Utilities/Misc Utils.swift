@@ -105,9 +105,3 @@ enum KeyCodeConverter {
         }
     }
 }
-
-func doAsync(_ after: CGFloat = 0, callback: @escaping () -> Void) {
-    return DispatchQueue.main.asyncAfter(deadline: .now() + after) {
-        callback()
-    }
-}

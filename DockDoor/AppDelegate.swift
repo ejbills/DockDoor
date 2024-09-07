@@ -134,28 +134,25 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private func handleFirstTimeLaunch() {
         guard let screen = NSScreen.main else { return }
 
-        let contentView = FirstTimeView()
         Defaults[.launched] = true
 
-        let hostingController = NSHostingController(rootView: contentView)
-
-        let newWindow = NSWindow(
-            contentRect: NSRect(origin: .zero, size: NSSize(width: 600, height: 400)),
+        let newWindow = SwiftUIWindow(
             styleMask: [.titled, .closable, .fullSizeContentView],
-            backing: .buffered,
-            defer: false
+            content: {
+                FirstTimeView()
+            }
         )
 
-        newWindow.contentView = hostingController.view
         newWindow.isReleasedWhenClosed = false
 
-        // Set the background color to match the dark theme of your content
-        newWindow.backgroundColor = NSColor(red: 0.15, green: 0.15, blue: 0.2, alpha: 1.0)
-
-        // Configure the title bar
+        let customToolbar = NSToolbar()
+        customToolbar.showsBaselineSeparator = false
         newWindow.titlebarAppearsTransparent = true
         newWindow.titleVisibility = .hidden
-        newWindow.styleMask.insert(.fullSizeContentView)
+        newWindow.toolbarStyle = .unified
+        newWindow.styleMask.insert(.titled)
+        newWindow.toolbar = customToolbar
+        newWindow.isOpaque = false
 
         // Ensure the close button is visible
         newWindow.standardWindowButton(.closeButton)?.isHidden = false
@@ -163,15 +160,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         newWindow.standardWindowButton(.zoomButton)?.isHidden = true
 
         // Position the window
-        newWindow.setFrameTopLeftPoint(NSPoint(x: screen.visibleFrame.maxX - 20, y: screen.visibleFrame.maxY - 20))
         newWindow.isMovableByWindowBackground = true
-
-        // Set the content size
-        let contentSize = hostingController.sizeThatFits(in: CGSize(width: 600, height: 400))
-        newWindow.setContentSize(contentSize)
 
         firstTimeWindow = newWindow
 
+        newWindow.show()
         newWindow.makeKeyAndOrderFront(nil)
     }
 }

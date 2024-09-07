@@ -57,7 +57,7 @@ struct WindowPreview: View {
                     .resizable()
                     .aspectRatio(contentMode: .fill)
                     .markHidden(isHidden: isMinimized || isHidden)
-                    .overlay(isSelected ? fluidGradient().opacity(0.125) : nil)
+                    .overlay(isSelected ? FluidGradientSample().opacity(0.125) : nil)
             }
         }
         .frame(width: calculatedSize.width, height: calculatedSize.height, alignment: .center)

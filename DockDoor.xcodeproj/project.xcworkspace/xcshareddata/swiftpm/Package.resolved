@@ -1,5 +1,5 @@
 {
-  "originHash" : "0743ea18450626ccbed0f00edc95fa521bbb10cf8f16d1ab27dd24a3243cab12",
+  "originHash" : "2c1295421e6a2efa747da07e0529a1121b53e6a27999418dd81f6fccc8efb5fb",
   "pins" : [
     {
       "identity" : "defaults",
@@ -20,12 +20,30 @@
       }
     },
     {
+      "identity" : "kroma",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/kaishin/Kroma.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "b67827e4b746eef1bb0b42adc241ca245b195edd"
+      }
+    },
+    {
       "identity" : "launchatlogin-modern",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/sindresorhus/LaunchAtLogin-Modern",
       "state" : {
         "branch" : "main",
         "revision" : "a04ec1c363be3627734f6dad757d82f5d4fa8fcc"
+      }
+    },
+    {
+      "identity" : "pow",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/EmergeTools/Pow.git",
+      "state" : {
+        "revision" : "f0d0f3e72d42beaf2b01f1cb798e1b55902814eb",
+        "version" : "1.0.4"
       }
     },
     {

@@ -1,10 +1,3 @@
-//
-//  WhyWeNeedPermisionsView.swift
-//  DockDoor
-//
-//  Created by Igor Marcossi on 06/09/24.
-//
-
 import SwiftUI
 
 struct WhyWeNeedPermisionsView: View {
