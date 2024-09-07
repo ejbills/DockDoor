@@ -237,11 +237,19 @@
 		BBA153FD2C12358600119C02 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				BBBD4AF12C8BDDC70074FFCF /* Intro */,
 				BB4B44492C372A42006680DC /* Hover Window */,
 				BBE7CC922C2244A600AB8F4D /* Settings */,
-				BBCFAE3F2C266234002E1516 /* FirstTimeView.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		BBBD4AF12C8BDDC70074FFCF /* Intro */ = {
+			isa = PBXGroup;
+			children = (
+				BBCFAE3F2C266234002E1516 /* FirstTimeView.swift */,
+			);
+			path = Intro;
 			sourceTree = "<group>";
 		};
 		BBE7CC922C2244A600AB8F4D /* Settings */ = {

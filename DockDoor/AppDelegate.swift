@@ -57,16 +57,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             removeMenuBar()
         }
 
-        if !Defaults[.launched] {
-            handleFirstTimeLaunch()
-        } else {
-            dockObserver = DockObserver.shared
-            appClosureObserver = WindowManipulationObservers.shared
-            sharedPreviewWindowCoordinator = SharedPreviewWindowCoordinator.shared
-            if Defaults[.enableWindowSwitcher] {
-                keybindHelper = KeybindHelper.shared
-            }
-        }
+//        if !Defaults[.launched] {
+        handleFirstTimeLaunch()
+//        } else {
+//            dockObserver = DockObserver.shared
+//            appClosureObserver = WindowManipulationObservers.shared
+//            sharedPreviewWindowCoordinator = SharedPreviewWindowCoordinator.shared
+//            if Defaults[.enableWindowSwitcher] {
+//                keybindHelper = KeybindHelper.shared
+//            }
+//        }
     }
 
     func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
@@ -132,33 +132,47 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     private func handleFirstTimeLaunch() {
-        let contentView = FirstTimeView()
+        guard let screen = NSScreen.main else { return }
 
-        // Save that the app has launched
+        let contentView = FirstTimeView()
         Defaults[.launched] = true
 
-        // Create a hosting controller
         let hostingController = NSHostingController(rootView: contentView)
 
-        // Create the settings window
-        firstTimeWindow = NSWindow(
-            contentRect: NSRect(origin: .zero, size: NSSize(width: 400, height: 400)),
-            styleMask: [.titled, .closable, .resizable],
-            backing: .buffered, defer: false
+        let newWindow = NSWindow(
+            contentRect: NSRect(origin: .zero, size: NSSize(width: 600, height: 400)),
+            styleMask: [.titled, .closable, .fullSizeContentView],
+            backing: .buffered,
+            defer: false
         )
-        firstTimeWindow?.center()
-        firstTimeWindow?.setFrameAutosaveName("DockDoor Permissions")
-        firstTimeWindow?.contentView = hostingController.view
-        firstTimeWindow?.title = "DockDoor Permissions"
 
-        // Make the window key and order it front
-        firstTimeWindow?.makeKeyAndOrderFront(nil)
+        newWindow.contentView = hostingController.view
+        newWindow.isReleasedWhenClosed = false
 
-        // Calculate the preferred size of the SwiftUI view
-        let preferredSize = hostingController.view.fittingSize
+        // Set the background color to match the dark theme of your content
+        newWindow.backgroundColor = NSColor(red: 0.15, green: 0.15, blue: 0.2, alpha: 1.0)
 
-        // Resize the window to fit the content view
-        firstTimeWindow?.setContentSize(preferredSize)
+        // Configure the title bar
+        newWindow.titlebarAppearsTransparent = true
+        newWindow.titleVisibility = .hidden
+        newWindow.styleMask.insert(.fullSizeContentView)
+
+        // Ensure the close button is visible
+        newWindow.standardWindowButton(.closeButton)?.isHidden = false
+        newWindow.standardWindowButton(.miniaturizeButton)?.isHidden = true
+        newWindow.standardWindowButton(.zoomButton)?.isHidden = true
+
+        // Position the window
+        newWindow.setFrameTopLeftPoint(NSPoint(x: screen.visibleFrame.maxX - 20, y: screen.visibleFrame.maxY - 20))
+        newWindow.isMovableByWindowBackground = true
+
+        // Set the content size
+        let contentSize = hostingController.sizeThatFits(in: CGSize(width: 600, height: 400))
+        newWindow.setContentSize(contentSize)
+
+        firstTimeWindow = newWindow
+
+        newWindow.makeKeyAndOrderFront(nil)
     }
 }
 
