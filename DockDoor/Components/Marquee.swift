@@ -132,8 +132,12 @@ struct ViewSizeKey: PreferenceKey {
     }
 }
 
-func doAfter(_ seconds: Double, action: @escaping () -> Void) {
+func doAfter(_ seconds: Double = 0, action: @escaping () -> Void) {
     DispatchQueue.main.asyncAfter(deadline: .now() + seconds, execute: action)
+}
+
+func timer(_ seconds: Double = 0, action: @escaping (Timer) -> Void) -> Timer {
+    Timer.scheduledTimer(withTimeInterval: seconds, repeats: false, block: action)
 }
 
 extension CGSize {
