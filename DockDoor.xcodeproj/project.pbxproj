@@ -13,6 +13,7 @@
 		3A105FD62C1BED660015EC66 /* BlurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A105FD52C1BED660015EC66 /* BlurView.swift */; };
 		3A105FD92C1C049E0015EC66 /* dockStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A105FD82C1C049E0015EC66 /* dockStyle.swift */; };
 		3A105FDD2C1C0EE20015EC66 /* DynStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A105FDC2C1C0EE20015EC66 /* DynStack.swift */; };
+		3A1622962C8BEA4B00D318EE /* WhyWeNeedPermisionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A1622952C8BEA4B00D318EE /* WhyWeNeedPermisionsView.swift */; };
 		BB04405B2C77A013009F1D33 /* GradientColorPaletteSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB04405A2C77A011009F1D33 /* GradientColorPaletteSettings.swift */; };
 		BB04405E2C77A87F009F1D33 /* PreferencesProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB04405D2C77A87E009F1D33 /* PreferencesProtocol.swift */; };
 		BB0440602C77AD2C009F1D33 /* CodableColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB04405F2C77AD27009F1D33 /* CodableColor.swift */; };
@@ -65,6 +66,7 @@
 		3A105FD52C1BED660015EC66 /* BlurView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurView.swift; sourceTree = "<group>"; };
 		3A105FD82C1C049E0015EC66 /* dockStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dockStyle.swift; sourceTree = "<group>"; };
 		3A105FDC2C1C0EE20015EC66 /* DynStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynStack.swift; sourceTree = "<group>"; };
+		3A1622952C8BEA4B00D318EE /* WhyWeNeedPermisionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhyWeNeedPermisionsView.swift; sourceTree = "<group>"; };
 		BB04405A2C77A011009F1D33 /* GradientColorPaletteSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientColorPaletteSettings.swift; sourceTree = "<group>"; };
 		BB04405D2C77A87E009F1D33 /* PreferencesProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesProtocol.swift; sourceTree = "<group>"; };
 		BB04405F2C77AD27009F1D33 /* CodableColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodableColor.swift; sourceTree = "<group>"; };
@@ -240,6 +242,7 @@
 				BBBD4AF12C8BDDC70074FFCF /* Intro */,
 				BB4B44492C372A42006680DC /* Hover Window */,
 				BBE7CC922C2244A600AB8F4D /* Settings */,
+				3A1622952C8BEA4B00D318EE /* WhyWeNeedPermisionsView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -388,6 +391,7 @@
 				BB157B802C0E8E6700997315 /* MessageUtil.swift in Sources */,
 				05C0C7182C60629C000ADAC6 /* AXUIElement.swift in Sources */,
 				3A105FD62C1BED660015EC66 /* BlurView.swift in Sources */,
+				3A1622962C8BEA4B00D318EE /* WhyWeNeedPermisionsView.swift in Sources */,
 				BB0440622C77AE8D009F1D33 /* GradientColorPaletteSettingsView.swift in Sources */,
 				BB1CBD5D2C1BCA4F003969BC /* Misc Utils.swift in Sources */,
 				3A105FD92C1C049E0015EC66 /* dockStyle.swift in Sources */,
@@ -556,7 +560,7 @@
 				CURRENT_PROJECT_VERSION = 1.2.3;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"DockDoor/Preview Content\"";
-				DEVELOPMENT_TEAM = 2Q775S63Q3;
+				DEVELOPMENT_TEAM = Z2NNLU4F7U;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
@@ -590,7 +594,7 @@
 				CURRENT_PROJECT_VERSION = 1.2.3;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"DockDoor/Preview Content\"";
-				DEVELOPMENT_TEAM = 2Q775S63Q3;
+				DEVELOPMENT_TEAM = Z2NNLU4F7U;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
