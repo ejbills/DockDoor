@@ -42,9 +42,8 @@ struct FirstTimeView: View {
                 .padding()
             }
         }
-        .padding(.bottom, 51) // To composate navbar
+        .padding(.bottom, 51) // To compensate navbar
         .frame(width: 600, height: 320)
-//        .scaleEffect(1)
         .background {
             FluidGradientSample().opacity(lightsOn ? 0.125 : 0)
                 .ignoresSafeArea(.all)

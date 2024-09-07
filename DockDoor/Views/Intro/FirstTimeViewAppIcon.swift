@@ -26,8 +26,9 @@ struct FirstTimeViewAppIcon: View {
                     .shadow(color: .black.opacity(hovering ? 0.5 : 0.25), radius: hovering ? 32 : 16, y: hovering ? 24 : 12)
                     .contentTransition(.identity)
                     .overlay {
-                        FluidGradientSample().opacity(hovering ? lightsOn ? 0.5 : 0.75 : 0)
+                        FluidGradientSample().opacity(hovering ? lightsOn ? 0.75 : 1 : 0)
                             .clipShape(RoundedRectangle(cornerRadius: 31))
+                            .blendMode(.overlay)
                     }
                     .scaleEffect(iconScale)
                     .rotation3DEffect(
@@ -101,7 +102,7 @@ struct FirstTimeViewAppIcon: View {
     var iconScale: Double {
         if clicking {
             if lightsOn {
-                0.95
+                0.935
             } else {
                 0.8
             }
