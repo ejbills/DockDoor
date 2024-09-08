@@ -67,16 +67,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             removeMenuBar()
         }
 
-        //        if !Defaults[.launched] {
-        handleFirstTimeLaunch()
-        //        } else {
-        //            dockObserver = DockObserver.shared
-        //            appClosureObserver = WindowManipulationObservers.shared
-        //            sharedPreviewWindowCoordinator = SharedPreviewWindowCoordinator.shared
-        //            if Defaults[.enableWindowSwitcher] {
-        //                keybindHelper = KeybindHelper.shared
-        //            }
-        //        }
+        if !Defaults[.launched] {
+            handleFirstTimeLaunch()
+        } else {
+            dockObserver = DockObserver.shared
+            appClosureObserver = WindowManipulationObservers.shared
+            sharedPreviewWindowCoordinator = SharedPreviewWindowCoordinator.shared
+            if Defaults[.enableWindowSwitcher] {
+                keybindHelper = KeybindHelper.shared
+            }
+        }
     }
 
     func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {

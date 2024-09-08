@@ -6,6 +6,7 @@ struct PermissionRowView: View {
     var isGranted: Bool
     var iconName: String
     var action: () -> Void
+    var disableShine: Bool = false
 
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
@@ -38,7 +39,15 @@ struct PermissionRowView: View {
             }
         }
         .padding(EdgeInsets(top: 12, leading: 16, bottom: 14, trailing: 16))
-        .background(FluidGradientView().opacity(0.125))
+        .background(
+            Group {
+                if disableShine {
+                    Color.gray.opacity(0.25)
+                } else {
+                    FluidGradientView().opacity(0.125)
+                }
+            }
+        )
         .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
         .overlay(alignment: .bottomTrailing) {
             Button(action: action) {

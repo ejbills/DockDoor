@@ -2,24 +2,27 @@ import SwiftUI
 
 struct PermissionsView: View {
     var nextTab: (() -> Void)? = nil
+    var disableShine: Bool = false
     @StateObject private var permissionsChecker = PermissionsChecker()
 
     var body: some View {
         VStack(alignment: .center, spacing: 24) {
             PermissionRowView(
-                title: "Accessibility",
-                description: "Required for dock hover detection and window switcher hotkeys",
+                title: String(localized: "Accessibility"),
+                description: String(localized: "Required for dock hover detection and window switcher hotkeys"),
                 isGranted: permissionsChecker.accessibilityPermission,
                 iconName: "accessibility",
-                action: openAccessibilityPreferences
+                action: openAccessibilityPreferences,
+                disableShine: disableShine
             )
 
             PermissionRowView(
-                title: "Screen recording",
-                description: "Required for capturing window previews of other apps",
+                title: String(localized: "Screen recording"),
+                description: String(localized: "Required for capturing window previews of other apps"),
                 isGranted: permissionsChecker.screenRecordingPermission,
                 iconName: "video.fill",
-                action: openScreenRecordingPreferences
+                action: openScreenRecordingPreferences,
+                disableShine: disableShine
             )
 
             if let nextTab {

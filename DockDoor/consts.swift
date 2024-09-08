@@ -84,15 +84,15 @@ enum WindowTitlePosition: String, CaseIterable, Defaults.Serializable {
 
 enum AppNameStyle: String, CaseIterable, Defaults.Serializable {
     case `default`
-    case embedded
+    case shadowed
     case popover
 
     var localizedName: String {
         switch self {
         case .default:
             String(localized: "Default", comment: "Preview title style option")
-        case .embedded:
-            String(localized: "Embedded", comment: "Preview title style option")
+        case .shadowed:
+            String(localized: "Shadowed", comment: "Preview title style option")
         case .popover:
             String(localized: "Popover", comment: "Preview title style option")
         }

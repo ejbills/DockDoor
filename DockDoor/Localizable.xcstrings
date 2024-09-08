@@ -895,6 +895,9 @@
         }
       }
     },
+    "Accessibility" : {
+
+    },
     "Accessibility Permissions" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -6608,6 +6611,7 @@
     },
     "Embedded" : {
       "comment" : "Preview title style option",
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -15014,6 +15018,12 @@
         }
       }
     },
+    "Required for capturing window previews of other apps" : {
+
+    },
+    "Required for dock hover detection and window switcher hotkeys" : {
+
+    },
     "Reset" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -16445,6 +16455,9 @@
         }
       }
     },
+    "Screen recording" : {
+
+    },
     "Screen Recording Permissions" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -17338,6 +17351,9 @@
           }
         }
       }
+    },
+    "Shadowed" : {
+      "comment" : "Preview title style option"
     },
     "Show App Name in Dock Previews" : {
       "localizations" : {
