@@ -5,6 +5,7 @@ struct PermissionRowView: View {
     var description: String
     var isGranted: Bool
     var iconName: String
+    var disableShine = false
     var action: () -> Void
 
     var body: some View {
@@ -38,7 +39,7 @@ struct PermissionRowView: View {
             }
         }
         .padding(EdgeInsets(top: 12, leading: 16, bottom: 14, trailing: 16))
-        .background(FluidGradientView().opacity(isGranted ? 0.125 : 0))
+        .background(FluidGradientView().opacity(isGranted && !disableShine ? 0.125 : 0))
         .background((isGranted ? Color.green : .primary).opacity(isGranted ? 0.15 : 0.1))
         .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
         .overlay(alignment: .bottomTrailing) {

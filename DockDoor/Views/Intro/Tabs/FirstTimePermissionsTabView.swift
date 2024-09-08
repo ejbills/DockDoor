@@ -7,7 +7,7 @@ struct FirstTimePermissionsTabView: View {
             Text("Let's set things up")
                 .font(.largeTitle)
                 .fontWeight(.bold)
-            PermissionsView()
+            PermissionsView(disableShine: true)
         }
         .padding(32)
     }
