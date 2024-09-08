@@ -13416,6 +13416,7 @@
       }
     },
     "Press any key combination after holding the initialization key to set the keybind." : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -13593,7 +13594,14 @@
         }
       }
     },
+    "Press any key to set the keybind." : {
+
+    },
+    "Press any key..." : {
+
+    },
     "Press the key combination..." : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -21107,6 +21115,7 @@
       }
     },
     "Use default MacOS keybind ⌘ + ⇥" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {

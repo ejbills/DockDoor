@@ -1,3 +1,4 @@
+import AppKit
 import Carbon
 import Defaults
 import SwiftUI
@@ -15,23 +16,17 @@ class KeybindModel: ObservableObject {
 
 struct WindowSwitcherSettingsView: View {
     @Default(.enableWindowSwitcher) var enableWindowSwitcher
-    @Default(.defaultCMDTABKeybind) var defaultCMDTABKeybind
+
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Toggle(isOn: $enableWindowSwitcher, label: {
+            Toggle(isOn: $enableWindowSwitcher) {
                 Text("Enable Window Switcher")
-            }).onChange(of: enableWindowSwitcher) { newValue in
+            }.onChange(of: enableWindowSwitcher) { newValue in
                 askUserToRestartApplication()
             }
-            // Default CMD + TAB implementation checkbox
-            if Defaults[.enableWindowSwitcher] {
-                Toggle(isOn: $defaultCMDTABKeybind, label: {
-                    Text("Use default MacOS keybind ⌘ + ⇥")
-                })
-                // If default CMD Tab is not enabled
-                if !Defaults[.defaultCMDTABKeybind] {
-                    InitializationKeyPickerView()
-                }
+
+            if enableWindowSwitcher {
+                InitializationKeyPickerView()
             }
         }
         .padding(20)
@@ -40,7 +35,7 @@ struct WindowSwitcherSettingsView: View {
 }
 
 struct InitializationKeyPickerView: View {
-    @ObservedObject var viewModel = KeybindModel()
+    @StateObject var viewModel = KeybindModel()
 
     var body: some View {
         VStack(spacing: 20) {
@@ -57,12 +52,12 @@ struct InitializationKeyPickerView: View {
             .padding(.horizontal)
             .scaledToFit()
 
-            Text("Press any key combination after holding the initialization key to set the keybind.")
+            Text("Press any key to set the keybind.")
                 .multilineTextAlignment(.center)
                 .padding(.horizontal)
 
             Button(action: { viewModel.isRecording = true }) {
-                Text(viewModel.isRecording ? "Press the key combination..." : "Start Recording Keybind")
+                Text(viewModel.isRecording ? "Press any key..." : "Start Recording Keybind")
             }
             .keyboardShortcut(.defaultAction)
             .padding(.bottom, 20)
@@ -94,31 +89,70 @@ struct InitializationKeyPickerView: View {
     }
 }
 
-struct ShortcutCaptureView: NSViewRepresentable {
+class ShortcutCaptureViewController: NSViewController {
+    weak var coordinator: ShortcutCaptureView.Coordinator?
+
+    override func loadView() {
+        view = NSView()
+    }
+
+    override func viewDidAppear() {
+        super.viewDidAppear()
+        view.window?.makeFirstResponder(view)
+    }
+
+    override func keyDown(with event: NSEvent) {
+        coordinator?.handleKeyEvent(event)
+    }
+
+    override func flagsChanged(with event: NSEvent) {
+        coordinator?.handleKeyEvent(event)
+    }
+}
+
+struct ShortcutCaptureView: NSViewControllerRepresentable {
     @Binding var currentKeybind: UserKeyBind?
     @Binding var isRecording: Bool
     @Binding var modifierKey: Int
 
-    func makeNSView(context: Context) -> NSView {
-        let view = NSView()
-        NSEvent.addLocalMonitorForEvents(matching: .keyDown) { event in
-            guard isRecording else {
-                return event
-            }
-            isRecording = false
-            if event.keyCode == 48, modifierKey == Defaults[.Int64maskCommand] { // User has chosen the default Mac OS window switcher keybind
-                // Set the default CMDTAB
-                Defaults[.defaultCMDTABKeybind] = true
-                Defaults[.UserKeybind] = UserKeyBind(keyCode: 48, modifierFlags: Defaults[.Int64maskControl])
-                currentKeybind = Defaults[.UserKeybind]
-                return event
-            }
-            Defaults[.UserKeybind] = UserKeyBind(keyCode: event.keyCode, modifierFlags: modifierKey)
-            currentKeybind = Defaults[.UserKeybind]
-            return nil
+    class Coordinator: NSObject {
+        var parent: ShortcutCaptureView
+
+        init(_ parent: ShortcutCaptureView) {
+            self.parent = parent
         }
-        return view
+
+        func handleKeyEvent(_ event: NSEvent) {
+            guard parent.isRecording else { return }
+
+            if event.type == .keyDown {
+                parent.isRecording = false
+                let newKeybind = UserKeyBind(keyCode: UInt16(event.keyCode), modifierFlags: parent.modifierKey)
+                Defaults[.UserKeybind] = newKeybind
+                parent.currentKeybind = newKeybind
+            } else if event.type == .flagsChanged {
+                if event.modifierFlags.contains(.control) {
+                    parent.modifierKey = Defaults[.Int64maskControl]
+                } else if event.modifierFlags.contains(.option) {
+                    parent.modifierKey = Defaults[.Int64maskAlternate]
+                } else if event.modifierFlags.contains(.command) {
+                    parent.modifierKey = Defaults[.Int64maskCommand]
+                }
+            }
+        }
     }
 
-    func updateNSView(_ nsView: NSView, context: Context) {}
+    func makeCoordinator() -> Coordinator {
+        Coordinator(self)
+    }
+
+    func makeNSViewController(context: Context) -> ShortcutCaptureViewController {
+        let viewController = ShortcutCaptureViewController()
+        viewController.coordinator = context.coordinator
+        return viewController
+    }
+
+    func updateNSViewController(_ nsViewController: ShortcutCaptureViewController, context: Context) {
+        nsViewController.view.window?.makeFirstResponder(nsViewController.view)
+    }
 }

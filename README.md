@@ -31,13 +31,14 @@ brew install --cask dockdoor
 
 ## Usage
 
-- **How do I use the alt-tab functionality?**
-  - By default, use Cmd + Tab to open the window switcher, continue pressing Tab to increment forwards, Shift + Tab to go back. Letting go of command will select the window.
-  - Disabling the default Cmd + Tab keybind, will allow a user to set a custom keybind
-      - User selects one of the modifiers presented on the screen
-      - User presses `Record Keybind` button
-      - User presses a singular key on the keyboard
-      - Keybind is now set! 
+- **How do I use the window switcher functionality?**
+  - By default, use Control + Tab to open the window switcher, continue pressing Tab to cycle forward through windows, Shift + Tab to go backward. Releasing the Control key will select and switch to the highlighted window.
+  - To set a custom keybind:
+    - Navigate to the settings menu and find the window switcher section
+    - Select one of the modifier keys presented on the screen (e.g., Command, Option, Control, Shift)
+    - Click the `Record Keybind` button
+    - Press a single key on your keyboard to combine with the chosen modifier
+    - The new keybind is now set and ready to use!
 
       ![Set keybind](./resources/setKeybind.gif)
 - **How do I use the dock peeking functionality?**

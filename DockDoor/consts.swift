@@ -26,7 +26,6 @@ extension Defaults.Keys {
     static let enableWindowSwitcher = Key<Bool>("enableWindowSwitcher", default: true)
     static let sortWindowsByDate = Key<Bool>("sortWindowsByDate", default: true)
     static let showMenuBarIcon = Key<Bool>("showMenuBarIcon", default: true)
-    static let defaultCMDTABKeybind = Key<Bool>("defaultCMDTABKeybind", default: true)
     static let launched = Key<Bool>("launched", default: false)
     static let Int64maskCommand = Key<Int>("Int64maskCommand", default: 1_048_840)
     static let Int64maskControl = Key<Int>("Int64maskControl", default: 262_401)
