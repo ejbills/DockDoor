@@ -4,7 +4,7 @@ struct FirstTimePermissionsTabView: View {
     var nextTab: () -> Void
     var body: some View {
         VStack(spacing: 16) {
-            Text("May I have some permissions?")
+            Text("Let's set things up")
                 .font(.largeTitle)
                 .fontWeight(.bold)
             PermissionsView()

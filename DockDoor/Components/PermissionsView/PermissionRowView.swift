@@ -11,7 +11,7 @@ struct PermissionRowView: View {
         HStack(alignment: .top, spacing: 12) {
             Image(systemName: iconName)
                 .font(.system(size: 24))
-                .foregroundColor(isGranted ? .green : .accentColor)
+                .foregroundColor(.accentColor)
                 .frame(width: 32, height: 32)
 
             VStack(alignment: .leading, spacing: 2) {
@@ -48,11 +48,7 @@ struct PermissionRowView: View {
             }
             .padding(.trailing, 16)
             .offset(y: 9)
-            .buttonStyle(AccentButtonStyle(color: .purple, small: true))
+            .buttonStyle(AccentButtonStyle(color: .accentColor, small: true))
         }
     }
 }
-
-// #Preview {
-//    PermissionRowView()
-// }
