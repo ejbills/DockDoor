@@ -10005,6 +10005,9 @@
         }
       }
     },
+    "May I have some permissions?" : {
+
+    },
     "Medium" : {
       "comment" : "Window size option",
       "localizations" : {
