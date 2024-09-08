@@ -57,16 +57,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             removeMenuBar()
         }
 
-//        if !Defaults[.launched] {
+        //        if !Defaults[.launched] {
         handleFirstTimeLaunch()
-//        } else {
-//            dockObserver = DockObserver.shared
-//            appClosureObserver = WindowManipulationObservers.shared
-//            sharedPreviewWindowCoordinator = SharedPreviewWindowCoordinator.shared
-//            if Defaults[.enableWindowSwitcher] {
-//                keybindHelper = KeybindHelper.shared
-//            }
-//        }
+        //        } else {
+        //            dockObserver = DockObserver.shared
+        //            appClosureObserver = WindowManipulationObservers.shared
+        //            sharedPreviewWindowCoordinator = SharedPreviewWindowCoordinator.shared
+        //            if Defaults[.enableWindowSwitcher] {
+        //                keybindHelper = KeybindHelper.shared
+        //            }
+        //        }
     }
 
     func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
@@ -76,27 +76,31 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func setupMenuBar() {
         guard statusBarItem == nil else { return }
-        let icon = NSImage(resource: .ddMiniIcon)
+
         statusBarItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
-        if let button = statusBarItem?.button {
-            button.image = icon
-            button.action = #selector(statusBarButtonClicked(_:))
-            button.target = self
-
-            // Create Menu Items
-            let openSettingsMenuItem = NSMenuItem(title: String(localized: "Open Settings"), action: #selector(openSettingsWindow(_:)), keyEquivalent: "")
-            openSettingsMenuItem.target = self
-            let quitMenuItem = NSMenuItem(title: String(localized: "Quit DockDoor"), action: #selector(quitAppWrapper), keyEquivalent: "q")
-            quitMenuItem.target = self
-
-            // Create the Menu
-            let menu = NSMenu()
-            menu.addItem(openSettingsMenuItem)
-            menu.addItem(NSMenuItem.separator())
-            menu.addItem(quitMenuItem)
-
-            button.menu = menu
+        guard let button = statusBarItem?.button else {
+            print("Failed to create status bar button")
+            return
         }
+
+        if let icon = NSImage(named: .logo) {
+            let iconSize = NSStatusBar.system.thickness * 0.9 // Adjust multiplier as needed
+            let resizedIcon = icon.resizedToFit(in: NSSize(width: iconSize, height: iconSize))
+            resizedIcon.isTemplate = true
+            button.image = resizedIcon
+            print("Resized icon set to button")
+        } else {
+            print("Failed to load icon")
+        }
+
+        button.action = #selector(statusBarButtonClicked(_:))
+        button.target = self
+
+        let menu = NSMenu()
+        menu.addItem(NSMenuItem(title: String(localized: "Open Settings"), action: #selector(openSettingsWindow(_:)), keyEquivalent: ""))
+        menu.addItem(NSMenuItem.separator())
+        menu.addItem(NSMenuItem(title: String(localized: "Quit DockDoor"), action: #selector(quitAppWrapper), keyEquivalent: "q"))
+        button.menu = menu
     }
 
     func removeMenuBar() {
