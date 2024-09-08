@@ -32,7 +32,7 @@ brew install --cask dockdoor
 ## Usage
 
 - **How do I use the window switcher functionality?**
-  - By default, use Control + Tab to open the window switcher, continue pressing Tab to cycle forward through windows, Shift + Tab to go backward. Releasing the Control key will select and switch to the highlighted window.
+  - By default, use Option + Tab to open the window switcher, continue pressing Tab to cycle forward through windows, Shift + Tab to go backward. Releasing the Control key will select and switch to the highlighted window.
   - To set a custom keybind:
     - Navigate to the settings menu and find the window switcher section
     - Select one of the modifier keys presented on the screen (e.g., Command, Option, Control, Shift)

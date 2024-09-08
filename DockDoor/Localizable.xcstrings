@@ -19149,7 +19149,11 @@
         }
       }
     },
+    "Start recording keybind" : {
+
+    },
     "Start Recording Keybind" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {

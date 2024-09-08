@@ -30,7 +30,7 @@ extension Defaults.Keys {
     static let Int64maskCommand = Key<Int>("Int64maskCommand", default: 1_048_840)
     static let Int64maskControl = Key<Int>("Int64maskControl", default: 262_401)
     static let Int64maskAlternate = Key<Int>("Int64maskAlternate", default: 524_576)
-    static let UserKeybind = Key<UserKeyBind>("UserKeybind", default: UserKeyBind(keyCode: 48, modifierFlags: Defaults[.Int64maskControl]))
+    static let UserKeybind = Key<UserKeyBind>("UserKeybind", default: UserKeyBind(keyCode: 48, modifierFlags: Defaults[.Int64maskAlternate]))
 
     static let showAppName = Key<Bool>("showAppName", default: true)
     static let appNameStyle = Key<AppNameStyle>("appNameStyle", default: .default)
