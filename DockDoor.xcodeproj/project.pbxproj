@@ -28,7 +28,7 @@
 		3A1622CA2C8D5E4600D318EE /* FirstTimeIntroTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A1622C92C8D5E4600D318EE /* FirstTimeIntroTabView.swift */; };
 		3A1622CC2C8D5F5B00D318EE /* FirstTimePermissionsTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A1622CB2C8D5F5B00D318EE /* FirstTimePermissionsTabView.swift */; };
 		3A1622CE2C8D5F8500D318EE /* FirstTimeCongratsTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A1622CD2C8D5F8500D318EE /* FirstTimeCongratsTabView.swift */; };
-		3A1622D02C8D691700D318EE /* CuteDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A1622CF2C8D691700D318EE /* CuteDivider.swift */; };
+		3A1622D02C8D691700D318EE /* SquiggleDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A1622CF2C8D691700D318EE /* SquiggleDivider.swift */; };
 		BB04405B2C77A013009F1D33 /* GradientColorPaletteSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB04405A2C77A011009F1D33 /* GradientColorPaletteSettings.swift */; };
 		BB04405E2C77A87F009F1D33 /* PreferencesProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB04405D2C77A87E009F1D33 /* PreferencesProtocol.swift */; };
 		BB0440602C77AD2C009F1D33 /* CodableColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB04405F2C77AD27009F1D33 /* CodableColor.swift */; };
@@ -95,7 +95,7 @@
 		3A1622C92C8D5E4600D318EE /* FirstTimeIntroTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstTimeIntroTabView.swift; sourceTree = "<group>"; };
 		3A1622CB2C8D5F5B00D318EE /* FirstTimePermissionsTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstTimePermissionsTabView.swift; sourceTree = "<group>"; };
 		3A1622CD2C8D5F8500D318EE /* FirstTimeCongratsTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstTimeCongratsTabView.swift; sourceTree = "<group>"; };
-		3A1622CF2C8D691700D318EE /* CuteDivider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CuteDivider.swift; sourceTree = "<group>"; };
+		3A1622CF2C8D691700D318EE /* SquiggleDivider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SquiggleDivider.swift; sourceTree = "<group>"; };
 		BB04405A2C77A011009F1D33 /* GradientColorPaletteSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientColorPaletteSettings.swift; sourceTree = "<group>"; };
 		BB04405D2C77A87E009F1D33 /* PreferencesProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesProtocol.swift; sourceTree = "<group>"; };
 		BB04405F2C77AD27009F1D33 /* CodableColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodableColor.swift; sourceTree = "<group>"; };
@@ -171,7 +171,7 @@
 				BB3967FC2C291D5A004F1AB6 /* StackedShadow.swift */,
 				BB3968012C2A6CC2004F1AB6 /* Marquee.swift */,
 				BB52EDEF2C5BEFE3006A64A4 /* HiddenModifier.swift */,
-				3A1622CF2C8D691700D318EE /* CuteDivider.swift */,
+				3A1622CF2C8D691700D318EE /* SquiggleDivider.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -502,7 +502,7 @@
 				BBBD4AF52C8D671C0074FFCF /* NSImage.swift in Sources */,
 				BB04405E2C77A87F009F1D33 /* PreferencesProtocol.swift in Sources */,
 				3A1622C72C8D5A5C00D318EE /* PermissionRowView.swift in Sources */,
-				3A1622D02C8D691700D318EE /* CuteDivider.swift in Sources */,
+				3A1622D02C8D691700D318EE /* SquiggleDivider.swift in Sources */,
 				BB157B822C0EB29E00997315 /* DockObserver.swift in Sources */,
 				BBA153FA2C11FFD500119C02 /* consts.swift in Sources */,
 				BBA153F62C115DDA00119C02 /* AppDelegate.swift in Sources */,

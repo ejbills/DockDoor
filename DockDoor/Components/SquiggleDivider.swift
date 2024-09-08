@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct CuteDivider: View {
+struct SquiggleDivider: View {
     var color: Color = .primary
     var body: some View {
         Image(.cuteDivider)
@@ -12,5 +12,5 @@ struct CuteDivider: View {
 }
 
 #Preview {
-    CuteDivider()
+    SquiggleDivider()
 }

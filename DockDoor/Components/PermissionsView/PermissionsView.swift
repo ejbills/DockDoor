@@ -22,7 +22,7 @@ struct PermissionsView: View {
             )
 
             VStack(alignment: .center, spacing: 12) {
-                CuteDivider().opacity(0.5)
+                SquiggleDivider().opacity(0.5)
 
                 Text("Oh, changes to permissions require an application restart")
                     .font(.system(size: 12))
