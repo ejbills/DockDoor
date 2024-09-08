@@ -2253,8 +2253,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Animation speed"
+            "state" : "translated",
+            "value" : "Velocidade da animação"
           }
         },
         "pt-PT" : {
@@ -3322,8 +3322,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Blur amount"
+            "state" : "translated",
+            "value" : "Quantidade de desfoque"
           }
         },
         "pt-PT" : {
@@ -4572,8 +4572,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Colors"
+            "state" : "translated",
+            "value" : "Cores"
           }
         },
         "pt-PT" : {
@@ -6356,8 +6356,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Edit Color"
+            "state" : "translated",
+            "value" : "Editar cores"
           }
         },
         "pt-PT" : {
@@ -7016,8 +7016,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable Preview Window Sliding Animation"
+            "state" : "translated",
+            "value" : "Activer l’animation de glissement"
           }
         },
         "he" : {
@@ -7070,8 +7070,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable Preview Window Sliding Animation"
+            "state" : "translated",
+            "value" : "Habilitar animação de deslizamento na pré-visualização"
           }
         },
         "pt-PT" : {
@@ -8677,8 +8677,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Highlight Gradient Colors"
+            "state" : "translated",
+            "value" : "Destacar cores gradientes"
           }
         },
         "pt-PT" : {
@@ -14157,8 +14157,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Window Fade Out Duration"
+            "state" : "translated",
+            "value" : "Durée du fondu de l’aperçu"
           }
         },
         "he" : {
@@ -14211,8 +14211,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Window Fade Out Duration"
+            "state" : "translated",
+            "value" : "Duração do fade out na pré-visualização"
           }
         },
         "pt-PT" : {
@@ -14335,8 +14335,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Window Open Delay"
+            "state" : "translated",
+            "value" : "Délai d’ouverture de l’aperçu"
           }
         },
         "he" : {
@@ -14389,8 +14389,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Window Open Delay"
+            "state" : "translated",
+            "value" : "Atraso para Abrir Janela Flutuante"
           }
         },
         "pt-PT" : {
@@ -14924,8 +14924,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Remove"
+            "state" : "translated",
+            "value" : "Remover"
           }
         },
         "pt-PT" : {
@@ -16172,8 +16172,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Right click a color to remove it."
+            "state" : "translated",
+            "value" : "Clique com o botão direito para removê-lo."
           }
         },
         "pt-PT" : {
@@ -18975,8 +18975,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Sort Window Previews by Date"
+            "state" : "translated",
+            "value" : "Trier les aperçus chronologiquement"
           }
         },
         "he" : {
@@ -19029,8 +19029,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Sort Window Previews by Date"
+            "state" : "translated",
+            "value" : "Ordenar Pré-visualizações de Janelas por Data"
           }
         },
         "pt-PT" : {
@@ -19089,8 +19089,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Sort Window Previews by Date"
+            "state" : "translated",
+            "value" : "按日期排序視窗預覽"
           }
         }
       }
