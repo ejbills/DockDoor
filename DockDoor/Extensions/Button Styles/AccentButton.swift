@@ -2,13 +2,15 @@ import Kroma
 import SwiftUI
 
 struct AccentButtonStyle: ButtonStyle {
+    var color: Color = .accentColor
+    var small = false
     @State private var hovering = false
     func makeBody(configuration: Self.Configuration) -> some View {
         configuration.label
-            .padding(.horizontal, 16)
-            .padding(.vertical, 8)
+            .padding(.horizontal, small ? 12 : 16)
+            .padding(.vertical, small ? 6 : 8)
             .background(
-                .blue.lighter(by: hovering && !configuration.isPressed ? 0.05 : 0),
+                color.lighter(by: hovering && !configuration.isPressed ? 0.05 : 0),
                 in: RoundedRectangle(cornerRadius: 12, style: .continuous)
             )
             .contentShape(Rectangle())
@@ -16,6 +18,6 @@ struct AccentButtonStyle: ButtonStyle {
                 hovering = newHovering
             }
             .foregroundStyle(.white)
-            .font(.system(size: 14, weight: .medium))
+            .font(.system(size: small ? 13 : 14, weight: .medium))
     }
 }

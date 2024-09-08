@@ -3,52 +3,39 @@ import SwiftUI
 
 struct FirstTimeView: View {
     static let transition: AnyTransition = .offset(y: 24).combined(with: .opacity)
-    @State private var phrasesSteps = 0
     @State private var lightsOn = false
-    @State private var timers = [Timer]()
+    @State private var tabIndex = 0
 
     var body: some View {
-        NavigationStack {
-            ZStack {
-                HStack {
-                    VStack(spacing: 24) {
-                        FirstTimeViewAppIcon(lightsOn: lightsOn, action: toggleAnimation)
-                        FirstTimeViewInstructionsView(step: phrasesSteps)
-                    }
-                    .padding()
+        ZStack {
+            Group {
+                switch tabIndex {
+                case 0: FirstTimeIntroTabView(nextTab: nextTab, lightsOn: $lightsOn)
+                case 1: FirstTimePermissionsTabView(nextTab: nextTab)
+                case 2: FirstTimeCongratsTabView(nextTab: nextTab)
+                default: EmptyView()
                 }
             }
-            .padding(.bottom, 51) // To compensate navbar
-            .frame(width: 600, height: 320)
-            .background {
-                FluidGradientView().opacity(lightsOn ? 0.125 : 0)
-                    .ignoresSafeArea(.all)
-            }
-            .background {
-                BlurView()
-                    .ignoresSafeArea(.all)
-            }
+            .transition(.asymmetric(insertion: .offset(x: 600), removal: .offset(x: -600)).combined(with: .opacity))
+        }
+        .padding(.bottom, 51) // To compensate navbar
+        .frame(width: 600, height: 320)
+        .background {
+            FluidGradientView().opacity(lightsOn ? 0.125 : 0)
+                .ignoresSafeArea(.all)
+        }
+        .background {
+            BlurView()
+                .ignoresSafeArea(.all)
         }
     }
 
-    func toggleAnimation() {
-        timers.forEach { $0.invalidate() }
-        timers.removeAll()
-        if !lightsOn {
-            timers.append(timer(0.25) { _ in
-                withAnimation(.smooth(extraBounce: 0.25)) { phrasesSteps = 1 }
-                timers.append(timer(0.25) { _ in
-                    withAnimation(.smooth(extraBounce: 0.25)) { phrasesSteps = 2 }
-                    timers.append(timer(0.25) { _ in
-                        withAnimation(.smooth(extraBounce: 0.25)) { phrasesSteps = 3 }
-                    })
-                })
-            })
-        } else {
-            withAnimation(.smooth(extraBounce: 0.25)) { phrasesSteps = 0 }
-        }
-        withAnimation {
-            lightsOn.toggle()
+    func nextTab() {
+        let tabsCount = 3
+        if tabIndex < (tabsCount - 1) {
+            withAnimation {
+                tabIndex += 1
+            }
         }
     }
 }

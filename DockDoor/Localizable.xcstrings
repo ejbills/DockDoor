@@ -180,6 +180,7 @@
       }
     },
     "• Allows for enhanced visual information in the dock" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -358,6 +359,7 @@
       }
     },
     "• Enables real-time interaction with dock items" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -536,6 +538,7 @@
       }
     },
     "• To capture previews of images and windows" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -714,6 +717,7 @@
       }
     },
     "• To detect when you hover over the dock" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -1071,6 +1075,7 @@
       }
     },
     "Accessibility:" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -4281,9 +4286,6 @@
           }
         }
       }
-    },
-    "Changes to permissions require an application restart" : {
-
     },
     "Check for Updates" : {
       "localizations" : {
@@ -8392,6 +8394,9 @@
     "Granted" : {
 
     },
+    "Hello, World!" : {
+
+    },
     "Hidden" : {
       "comment" : "Preview title style option",
       "extractionState" : "stale",
@@ -10897,6 +10902,9 @@
       }
     },
     "Not granted" : {
+
+    },
+    "Oh, changes to permissions require an application restart" : {
 
     },
     "OK" : {
@@ -16256,6 +16264,7 @@
       }
     },
     "Screen Capturing:" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -22862,6 +22871,7 @@
       }
     },
     "Why we need permissions" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {

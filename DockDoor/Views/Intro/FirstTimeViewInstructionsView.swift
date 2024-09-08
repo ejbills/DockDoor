@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct FirstTimeViewInstructionsView: View {
+    var nextTab: () -> Void
     var step: Int = 0
 
     var body: some View {
@@ -23,9 +24,9 @@ struct FirstTimeViewInstructionsView: View {
         .scaleEffect(1)
 
         if step >= 3 {
-            NavigationLink(destination: PermissionsSettingsView(), label: {
+            Button(action: nextTab) {
                 Text("Get Started")
-            })
+            }
             .buttonStyle(AccentButtonStyle())
             .transition(FirstTimeView.transition)
         }
@@ -33,5 +34,5 @@ struct FirstTimeViewInstructionsView: View {
 }
 
 #Preview {
-    FirstTimeViewInstructionsView()
+    FirstTimeViewInstructionsView(nextTab: {})
 }
