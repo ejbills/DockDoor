@@ -1,0 +1,78 @@
+{
+  "originHash" : "a9b98044f3c5c1c6a362a29d24edca020c56b73808a907cb1c5680a6c2031e93",
+  "pins" : [
+    {
+      "identity" : "defaults",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/sindresorhus/Defaults",
+      "state" : {
+        "branch" : "main",
+        "revision" : "4c009d5c2496e7aa126e922c94dd3d6ae049efa2"
+      }
+    },
+    {
+      "identity" : "fluidgradient",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Cindori/FluidGradient",
+      "state" : {
+        "revision" : "9ddda4cf23671ef0228e88681ec6210cb3e0d7f7",
+        "version" : "1.0.0"
+      }
+    },
+    {
+      "identity" : "kroma",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/kaishin/Kroma.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "b67827e4b746eef1bb0b42adc241ca245b195edd"
+      }
+    },
+    {
+      "identity" : "launchatlogin-modern",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/sindresorhus/LaunchAtLogin-Modern",
+      "state" : {
+        "branch" : "main",
+        "revision" : "a04ec1c363be3627734f6dad757d82f5d4fa8fcc"
+      }
+    },
+    {
+      "identity" : "pow",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/EmergeTools/Pow.git",
+      "state" : {
+        "revision" : "f0d0f3e72d42beaf2b01f1cb798e1b55902814eb",
+        "version" : "1.0.4"
+      }
+    },
+    {
+      "identity" : "settings",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/sindresorhus/Settings",
+      "state" : {
+        "revision" : "879ea83a7bbc6dbebf62bed8c547f090146372a6",
+        "version" : "3.1.1"
+      }
+    },
+    {
+      "identity" : "smoothgradient",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/raymondjavaxx/SmoothGradient",
+      "state" : {
+        "revision" : "61bf248fad31c7921c9985b418e6e9297cd7b861",
+        "version" : "1.0.0"
+      }
+    },
+    {
+      "identity" : "sparkle",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/sparkle-project/Sparkle",
+      "state" : {
+        "revision" : "0ef1ee0220239b3776f433314515fd849025673f",
+        "version" : "2.6.4"
+      }
+    }
+  ],
+  "version" : 3
+}

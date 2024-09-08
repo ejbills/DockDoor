@@ -13,29 +13,7 @@ struct FirstTimeView: View {
                 HStack {
                     VStack(spacing: 24) {
                         FirstTimeViewAppIcon(lightsOn: lightsOn, action: toggleAnimation)
-                        VStack(spacing: 8) {
-                            if phrasesSteps >= 1 {
-                                Text("Welcome to DockDoor!")
-                                    .font(.largeTitle)
-                                    .fontWeight(.bold)
-                                    .transition(Self.transition)
-                            }
-                            if phrasesSteps >= 2 {
-                                Text("Enhance your dock experience!")
-                                    .font(.system(size: 16))
-                                    .foregroundColor(.secondary)
-                                    .transition(Self.transition)
-                            }
-                        }
-                        .frame(maxWidth: .infinity)
-                        .scaleEffect(1)
-                        if phrasesSteps >= 3 {
-                            NavigationLink(destination: PermissionsSettingsView(), label: {
-                                Text("Get Started")
-                            })
-                            .buttonStyle(AccentButtonStyle())
-                            .transition(Self.transition)
-                        }
+                        FirstTimeViewInstructionsView(step: phrasesSteps)
                     }
                     .padding()
                 }

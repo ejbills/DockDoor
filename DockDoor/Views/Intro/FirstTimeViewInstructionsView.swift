@@ -2,7 +2,7 @@ import SwiftUI
 
 struct FirstTimeViewInstructionsView: View {
     var step: Int = 0
-    var action: () -> Void = {}
+
     var body: some View {
         VStack(spacing: 8) {
             if step >= 1 {
@@ -23,9 +23,9 @@ struct FirstTimeViewInstructionsView: View {
         .scaleEffect(1)
 
         if step >= 3 {
-            Button("Get Started") {
-                action()
-            }
+            NavigationLink(destination: PermissionsSettingsView(), label: {
+                Text("Get Started")
+            })
             .buttonStyle(AccentButtonStyle())
             .transition(FirstTimeView.transition)
         }

@@ -23,6 +23,7 @@ struct FirstTimeViewAppIcon: View {
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 140, height: 140)
+                    .brightness(hovering ? lightsOn ? 0.05 : 0.125 : 0)
                     .shadow(color: .black.opacity(hovering ? 0.5 : 0.25), radius: hovering ? 32 : 16, y: hovering ? 24 : 12)
                     .contentTransition(.identity)
                     .overlay {
@@ -45,33 +46,7 @@ struct FirstTimeViewAppIcon: View {
                         },
                         value: zzz
                     )
-                    .onHover { newHovering in
-                        rotatingTimer?.invalidate()
-                        if newHovering {
-                            withAnimation(.easeInOut(duration: 1)) {
-                                rotating = false
-                                rotating2 = false
-                            }
-                            rotatingTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { _ in
-                                withAnimation(.easeInOut(duration: 2).repeatForever(autoreverses: true)) {
-                                    rotating = true
-                                }
-                                withAnimation(.easeInOut(duration: 2).repeatForever(autoreverses: true).delay(1)) {
-                                    rotating2 = true
-                                }
-                            }
-                        } else {
-                            withAnimation(.spring) {
-                                rotating = nil
-                            }
-                            withAnimation(.spring) {
-                                rotating2 = nil
-                            }
-                        }
-                        withAnimation(.smooth(extraBounce: 0.1)) {
-                            hovering = newHovering
-                        }
-                    }
+                    .onHover(perform: onHover)
             }
         }
         .onLongPressGesture(minimumDuration: 300, maximumDistance: 10, perform: {}) { newClicking in
@@ -120,6 +95,34 @@ struct FirstTimeViewAppIcon: View {
                     0.8
                 }
             }
+        }
+    }
+    
+    func onHover(_ newHovering: Bool) {
+        rotatingTimer?.invalidate()
+        if newHovering {
+            withAnimation(.easeInOut(duration: 1)) {
+                rotating = false
+                rotating2 = false
+            }
+            rotatingTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { _ in
+                withAnimation(.easeInOut(duration: 2).repeatForever(autoreverses: true)) {
+                    rotating = true
+                }
+                withAnimation(.easeInOut(duration: 2).repeatForever(autoreverses: true).delay(1)) {
+                    rotating2 = true
+                }
+            }
+        } else {
+            withAnimation(.spring) {
+                rotating = nil
+            }
+            withAnimation(.spring) {
+                rotating2 = nil
+            }
+        }
+        withAnimation(.smooth(extraBounce: 0.1)) {
+            hovering = newHovering
         }
     }
 }

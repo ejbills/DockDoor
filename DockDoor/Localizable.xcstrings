@@ -3390,7 +3390,7 @@
       }
     },
     "Bottom Left" : {
-      "comment" : "Preview window title position option\nTraffic light buttons position option",
+      "comment" : "Preview window title position option",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -3569,7 +3569,7 @@
       }
     },
     "Bottom Right" : {
-      "comment" : "Preview window title position option\nTraffic light buttons position option",
+      "comment" : "Preview window title position option",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -4282,7 +4282,7 @@
         }
       }
     },
-    "Changes may require a restart" : {
+    "Changes to permissions require an application restart" : {
 
     },
     "Check for Updates" : {
@@ -15717,7 +15717,11 @@
         }
       }
     },
+    "Restart app" : {
+
+    },
     "Restart App" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -19645,7 +19649,7 @@
       }
     },
     "Top Left" : {
-      "comment" : "Preview window title position option\nTraffic light buttons position option",
+      "comment" : "Preview window title position option",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -19824,7 +19828,7 @@
       }
     },
     "Top Right" : {
-      "comment" : "Preview window title position option\nTraffic light buttons position option",
+      "comment" : "Preview window title position option",
       "localizations" : {
         "af" : {
           "stringUnit" : {
