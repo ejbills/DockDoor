@@ -21,24 +21,34 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var keybindHelper: KeybindHelper?
     private var statusBarItem: NSStatusItem?
 
-    private var updaterController: SPUStandardUpdaterController
+    #if !APPSTORE_BUILD
+        private var updaterController: SPUStandardUpdaterController
+    #endif
 
     // settings
     private var firstTimeWindow: NSWindow?
-    private lazy var settingsWindowController = SettingsWindowController(
-        panes: [
+    private lazy var settingsWindowController: SettingsWindowController = {
+        var panes: [SettingsPane] = [
             GeneralSettingsViewController(),
             AppearanceSettingsViewController(),
             WindowSwitcherSettingsViewController(),
             PermissionsSettingsViewController(),
-            UpdatesSettingsViewController(updater: updaterController.updater),
         ]
-    )
+
+        #if !APPSTORE_BUILD
+            panes.append(UpdatesSettingsViewController(updater: updaterController.updater))
+        #endif
+
+        return SettingsWindowController(panes: panes)
+    }()
+
     private let settingsWindowControllerDelegate = SettingsWindowControllerDelegate()
 
     override init() {
-        updaterController = SPUStandardUpdaterController(startingUpdater: true, updaterDelegate: nil, userDriverDelegate: nil)
-        updaterController.startUpdater()
+        #if !APPSTORE_BUILD
+            updaterController = SPUStandardUpdaterController(startingUpdater: true, updaterDelegate: nil, userDriverDelegate: nil)
+            updaterController.startUpdater()
+        #endif
         super.init()
 
         if let zoomButton = settingsWindowController.window?.standardWindowButton(.zoomButton) {
@@ -76,27 +86,30 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func setupMenuBar() {
         guard statusBarItem == nil else { return }
-        let icon = NSImage(systemSymbolName: "door.right.hand.open", accessibilityDescription: nil)!
+
         statusBarItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
-        if let button = statusBarItem?.button {
-            button.image = icon
-            button.action = #selector(statusBarButtonClicked(_:))
-            button.target = self
-
-            // Create Menu Items
-            let openSettingsMenuItem = NSMenuItem(title: String(localized: "Open Settings"), action: #selector(openSettingsWindow(_:)), keyEquivalent: "")
-            openSettingsMenuItem.target = self
-            let quitMenuItem = NSMenuItem(title: String(localized: "Quit DockDoor"), action: #selector(quitAppWrapper), keyEquivalent: "q")
-            quitMenuItem.target = self
-
-            // Create the Menu
-            let menu = NSMenu()
-            menu.addItem(openSettingsMenuItem)
-            menu.addItem(NSMenuItem.separator())
-            menu.addItem(quitMenuItem)
-
-            button.menu = menu
+        guard let button = statusBarItem?.button else {
+            print("Failed to create status bar button")
+            return
         }
+
+        if let icon = NSImage(named: .logo) {
+            let iconSize = NSStatusBar.system.thickness * 0.9 // Adjust multiplier as needed
+            let resizedIcon = icon.resizedToFit(in: NSSize(width: iconSize, height: iconSize))
+            resizedIcon.isTemplate = true
+            button.image = resizedIcon
+        } else {
+            print("Failed to load icon")
+        }
+
+        button.action = #selector(statusBarButtonClicked(_:))
+        button.target = self
+
+        let menu = NSMenu()
+        menu.addItem(NSMenuItem(title: String(localized: "Open Settings"), action: #selector(openSettingsWindow(_:)), keyEquivalent: ""))
+        menu.addItem(NSMenuItem.separator())
+        menu.addItem(NSMenuItem(title: String(localized: "Quit DockDoor"), action: #selector(quitAppWrapper), keyEquivalent: "q"))
+        button.menu = menu
     }
 
     func removeMenuBar() {
@@ -132,33 +145,43 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     private func handleFirstTimeLaunch() {
-        let contentView = FirstTimeView()
-
-        // Save that the app has launched
+        guard let screen = NSScreen.main else { return }
         Defaults[.launched] = true
 
-        // Create a hosting controller
-        let hostingController = NSHostingController(rootView: contentView)
-
-        // Create the settings window
-        firstTimeWindow = NSWindow(
-            contentRect: NSRect(origin: .zero, size: NSSize(width: 400, height: 400)),
-            styleMask: [.titled, .closable, .resizable],
-            backing: .buffered, defer: false
+        let newWindow = SwiftUIWindow(
+            styleMask: [.titled, .closable, .fullSizeContentView],
+            content: {
+                FirstTimeView()
+            }
         )
-        firstTimeWindow?.center()
-        firstTimeWindow?.setFrameAutosaveName("DockDoor Permissions")
-        firstTimeWindow?.contentView = hostingController.view
-        firstTimeWindow?.title = "DockDoor Permissions"
+        newWindow.isReleasedWhenClosed = false
 
-        // Make the window key and order it front
-        firstTimeWindow?.makeKeyAndOrderFront(nil)
+        let customToolbar = NSToolbar()
+        customToolbar.showsBaselineSeparator = false
+        newWindow.titlebarAppearsTransparent = true
+        newWindow.titleVisibility = .hidden
+        newWindow.toolbarStyle = .unified
+        newWindow.styleMask.insert(.titled)
+        newWindow.toolbar = customToolbar
+        newWindow.isOpaque = false
 
-        // Calculate the preferred size of the SwiftUI view
-        let preferredSize = hostingController.view.fittingSize
+        // Ensure the close button is visible
+        newWindow.standardWindowButton(.closeButton)?.isHidden = false
+        newWindow.standardWindowButton(.miniaturizeButton)?.isHidden = true
+        newWindow.standardWindowButton(.zoomButton)?.isHidden = true
 
-        // Resize the window to fit the content view
-        firstTimeWindow?.setContentSize(preferredSize)
+        // Position the window in the center of the main screen
+        let screenFrame = screen.visibleFrame
+        let windowOrigin = NSPoint(
+            x: screenFrame.midX - newWindow.frame.width / 2,
+            y: screenFrame.midY - newWindow.frame.height / 2
+        )
+        newWindow.setFrameOrigin(windowOrigin)
+
+        newWindow.isMovableByWindowBackground = true
+        firstTimeWindow = newWindow
+        newWindow.show()
+        newWindow.makeKeyAndOrderFront(nil)
     }
 }
 

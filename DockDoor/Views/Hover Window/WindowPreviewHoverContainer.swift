@@ -83,7 +83,7 @@ struct WindowPreviewHoverContainer: View {
                 .opacity(showWindows ? 1 : 0.8)
             }
         }
-        .padding(.top, (!windowSwitcherCoordinator.windowSwitcherActive && appNameStyle == .embedded && showAppName) ? 25 : 0) // Provide space above the window preview for the Embedded title style when hovering over the Dock.
+        .padding(.top, (!windowSwitcherCoordinator.windowSwitcherActive && appNameStyle == .default && showAppName) ? 25 : 0) // Provide space above the window preview for the Embedded (default) title style when hovering over the Dock.
         .dockStyle(cornerRadius: 16)
         .overlay(alignment: .topLeading) {
             hoverTitleBaseView(labelSize: measureString(appName, fontSize: 14))
@@ -111,8 +111,9 @@ struct WindowPreviewHoverContainer: View {
                     }
                     hoverTitleLabelView(labelSize: labelSize)
                 }
-                .padding(EdgeInsets(top: -11.5, leading: 15, bottom: -1.5, trailing: 1.5))
-            case .embedded:
+                .padding(.top, 10)
+                .padding(.leading)
+            case .shadowed:
                 HStack(spacing: 2) {
                     if let appIcon {
                         Image(nsImage: appIcon)
@@ -126,8 +127,7 @@ struct WindowPreviewHoverContainer: View {
                     }
                     hoverTitleLabelView(labelSize: labelSize)
                 }
-                .padding(.top, 10)
-                .padding(.leading)
+                .padding(EdgeInsets(top: -11.5, leading: 15, bottom: -1.5, trailing: 1.5))
             case .popover:
                 HStack {
                     Spacer()
@@ -157,7 +157,7 @@ struct WindowPreviewHoverContainer: View {
     @ViewBuilder
     private func hoverTitleLabelView(labelSize: CGSize) -> some View {
         switch appNameStyle {
-        case .default:
+        case .shadowed:
             Text(appName)
                 .lineLimit(1)
                 .padding(3)
@@ -187,7 +187,7 @@ struct WindowPreviewHoverContainer: View {
                     }
                     .frame(width: labelSize.width + 30)
                 )
-        case .embedded, .popover:
+        case .default, .popover:
             Text(appName)
         }
     }

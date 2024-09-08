@@ -258,7 +258,7 @@ enum WindowUtil {
             do {
                 try windowInfo.axElement.setAttribute(kAXMinimizedAttribute, false)
                 windowInfo.app.activate()
-                focusOnSpecificWindow(windowInfo: windowInfo)
+                bringWindowToFront(windowInfo: windowInfo)
             } catch {
                 print("Error un-minimizing window")
             }
@@ -284,26 +284,9 @@ enum WindowUtil {
 
         if !newHiddenState {
             windowInfo.app.activate()
-            focusOnSpecificWindow(windowInfo: windowInfo)
+            bringWindowToFront(windowInfo: windowInfo)
         }
         updateWindowDateTime(windowInfo)
-    }
-
-    static func focusOnSpecificWindow(windowInfo: WindowInfo) {
-        guard let windows = try? windowInfo.appAxElement.windows() else {
-            print("Failed to get windows for the application")
-            return
-        }
-
-        for window in windows {
-            if let title = try? window.title(), isFuzzyMatch(windowTitle: windowInfo.windowName ?? "", axTitleString: title) {
-                try? window.performAction(kAXRaiseAction)
-                try? window.setAttribute(kAXFocusedAttribute, true)
-                return
-            }
-        }
-
-        print("Failed to find and focus on the specific window")
     }
 
     static func toggleFullScreen(windowInfo: WindowInfo) {
@@ -379,12 +362,11 @@ enum WindowUtil {
 
     static func updateStatusOfWindowCache(pid: pid_t, isParentAppHidden: Bool) {
         let appElement = AXUIElementCreateApplication(pid)
-        if let windows = try? appElement.windows() {
-            desktopSpaceWindowCacheManager.updateCache(pid: pid) { cachedWindows in
+        desktopSpaceWindowCacheManager.updateCache(pid: pid) { cachedWindows in
+            if let windows = try? appElement.windows() {
                 for window in windows {
                     if let cgWindowId = try? window.cgWindowId() {
                         let isMinimized: Bool = (try? window.isMinimized()) ?? false
-
                         cachedWindows = Set(cachedWindows.map { windowInfo in
                             var updatedWindow = windowInfo
                             if windowInfo.id == cgWindowId {
@@ -395,15 +377,14 @@ enum WindowUtil {
                         })
                     }
                 }
-
-                if isParentAppHidden {
-                    cachedWindows = Set(cachedWindows.map { windowInfo in
-                        var updatedWindow = windowInfo
-                        updatedWindow.isHidden = true
-                        return updatedWindow
-                    })
-                }
             }
+
+            // Always update for parent app hidden status, which can be blanket applied
+            cachedWindows = Set(cachedWindows.map { windowInfo in
+                var updatedWindow = windowInfo
+                updatedWindow.isHidden = isParentAppHidden
+                return updatedWindow
+            })
         }
     }
 

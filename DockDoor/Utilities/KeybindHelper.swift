@@ -62,7 +62,7 @@ class KeybindHelper {
         let shiftKeyCurrentlyPressed = event.flags.contains(.maskShift)
         var userDefinedKeyCurrentlyPressed = false
 
-        if type == .flagsChanged, !Defaults[.defaultCMDTABKeybind] {
+        if type == .flagsChanged {
             // New Keybind that the user has enforced, includes the modifier keys
             if event.flags.contains(.maskControl) {
                 modifierValue = Defaults[.Int64maskControl]
@@ -70,22 +70,18 @@ class KeybindHelper {
             } else if event.flags.contains(.maskAlternate) {
                 modifierValue = Defaults[.Int64maskAlternate]
                 userDefinedKeyCurrentlyPressed = true
+            } else if event.flags.contains(.maskCommand) {
+                modifierValue = Defaults[.Int64maskCommand]
+                userDefinedKeyCurrentlyPressed = true
             }
             handleModifierEvent(modifierKeyPressed: userDefinedKeyCurrentlyPressed, shiftKeyPressed: shiftKeyCurrentlyPressed)
-        }
-
-        else if type == .flagsChanged, Defaults[.defaultCMDTABKeybind] {
-            // Default MacOS CMD + TAB keybind replaced
-            handleModifierEvent(modifierKeyPressed: event.flags.contains(.maskCommand), shiftKeyPressed: shiftKeyCurrentlyPressed)
-        }
-
-        else if type == .keyDown {
-            if SharedPreviewWindowCoordinator.shared.isVisible && keyCode == 53 { // Escape key
+        } else if type == .keyDown {
+            if SharedPreviewWindowCoordinator.shared.isVisible, keyCode == 53 { // Escape key
                 SharedPreviewWindowCoordinator.shared.hideWindow()
                 return nil // Suppress the Escape key event
             }
 
-            if (isModifierKeyPressed && keyCode == keyBoardShortcutSaved.keyCode && modifierValue == keyBoardShortcutSaved.modifierFlags) || (Defaults[.defaultCMDTABKeybind] && event.flags.contains(.maskCommand) && keyCode == 48) { // Tab key
+            if isModifierKeyPressed, keyCode == keyBoardShortcutSaved.keyCode, modifierValue == keyBoardShortcutSaved.modifierFlags { // Tab key
                 if SharedPreviewWindowCoordinator.shared.isVisible { // Check if HoverWindow is already shown
                     SharedPreviewWindowCoordinator.shared.cycleWindows(goBackwards: isShiftKeyPressed) // Cycle windows based on Shift key state
                 } else {

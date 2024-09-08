@@ -22,6 +22,7 @@ class WindowManipulationObservers {
             AXObserverRemoveNotification(observer, appElement, kAXMainWindowChangedNotification as CFString)
             AXObserverRemoveNotification(observer, appElement, kAXWindowMiniaturizedNotification as CFString)
             AXObserverRemoveNotification(observer, appElement, kAXApplicationHiddenNotification as CFString)
+            AXObserverRemoveNotification(observer, appElement, kAXApplicationShownNotification as CFString)
             AXObserverRemoveNotification(observer, appElement, kAXFocusedUIElementChangedNotification as CFString)
             AXObserverRemoveNotification(observer, appElement, kAXFocusedWindowChangedNotification as CFString)
             AXObserverRemoveNotification(observer, appElement, kAXWindowResizedNotification as CFString)
@@ -89,6 +90,7 @@ class WindowManipulationObservers {
         AXObserverAddNotification(observer, appElement, kAXUIElementDestroyedNotification as CFString, UnsafeMutableRawPointer(bitPattern: Int(pid)))
         AXObserverAddNotification(observer, appElement, kAXWindowMiniaturizedNotification as CFString, UnsafeMutableRawPointer(bitPattern: Int(pid)))
         AXObserverAddNotification(observer, appElement, kAXApplicationHiddenNotification as CFString, UnsafeMutableRawPointer(bitPattern: Int(pid)))
+        AXObserverAddNotification(observer, appElement, kAXApplicationShownNotification as CFString, UnsafeMutableRawPointer(bitPattern: Int(pid)))
         AXObserverAddNotification(observer, appElement, kAXWindowResizedNotification as CFString, UnsafeMutableRawPointer(bitPattern: Int(pid)))
         AXObserverAddNotification(observer, appElement, kAXWindowMovedNotification as CFString, UnsafeMutableRawPointer(bitPattern: Int(pid)))
         AXObserverAddNotification(observer, appElement, kAXFocusedUIElementChangedNotification as CFString, UnsafeMutableRawPointer(bitPattern: Int(pid)))
@@ -109,6 +111,7 @@ class WindowManipulationObservers {
         AXObserverRemoveNotification(observer, appElement, kAXUIElementDestroyedNotification as CFString)
         AXObserverRemoveNotification(observer, appElement, kAXWindowMiniaturizedNotification as CFString)
         AXObserverRemoveNotification(observer, appElement, kAXApplicationHiddenNotification as CFString)
+        AXObserverRemoveNotification(observer, appElement, kAXApplicationShownNotification as CFString)
         AXObserverRemoveNotification(observer, appElement, kAXFocusedUIElementChangedNotification as CFString)
         AXObserverRemoveNotification(observer, appElement, kAXFocusedWindowChangedNotification as CFString)
         AXObserverRemoveNotification(observer, appElement, kAXWindowResizedNotification as CFString)
@@ -133,6 +136,8 @@ func axObserverCallback(observer: AXObserver, element: AXUIElement, notification
                 WindowUtil.updateStatusOfWindowCache(pid: pid_t(pid), isParentAppHidden: false)
             case kAXApplicationHiddenNotification:
                 WindowUtil.updateStatusOfWindowCache(pid: pid_t(pid), isParentAppHidden: true)
+            case kAXApplicationShownNotification:
+                WindowUtil.updateStatusOfWindowCache(pid: pid_t(pid), isParentAppHidden: false)
             case kAXWindowResizedNotification, kAXWindowMovedNotification:
                 handleWindowStateChange(element: element, app: app)
             default:
