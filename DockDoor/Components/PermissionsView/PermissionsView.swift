@@ -1,7 +1,6 @@
 import SwiftUI
 
 struct PermissionsView: View {
-    var disableShine = false
     @StateObject private var permissionsChecker = PermissionsChecker()
 
     var body: some View {
