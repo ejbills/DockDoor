@@ -22,6 +22,7 @@
 		3A1622B82C8C0EE200D318EE /* Kroma in Frameworks */ = {isa = PBXBuildFile; productRef = 3A1622B72C8C0EE200D318EE /* Kroma */; };
 		3A1622BA2C8C0FF100D318EE /* NoBtnStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A1622B92C8C0FF100D318EE /* NoBtnStyle.swift */; };
 		3A1622BC2C8C1B8600D318EE /* FirstTimeViewAppIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A1622BB2C8C1B8600D318EE /* FirstTimeViewAppIcon.swift */; };
+		3A1622BE2C8C218500D318EE /* FirstTimeViewInstructionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A1622BD2C8C218400D318EE /* FirstTimeViewInstructionsView.swift */; };
 		BB04405B2C77A013009F1D33 /* GradientColorPaletteSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB04405A2C77A011009F1D33 /* GradientColorPaletteSettings.swift */; };
 		BB04405E2C77A87F009F1D33 /* PreferencesProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB04405D2C77A87E009F1D33 /* PreferencesProtocol.swift */; };
 		BB0440602C77AD2C009F1D33 /* CodableColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB04405F2C77AD27009F1D33 /* CodableColor.swift */; };
@@ -81,6 +82,7 @@
 		3A1622B42C8C09A700D318EE /* AccentButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccentButton.swift; sourceTree = "<group>"; };
 		3A1622B92C8C0FF100D318EE /* NoBtnStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoBtnStyle.swift; sourceTree = "<group>"; };
 		3A1622BB2C8C1B8600D318EE /* FirstTimeViewAppIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstTimeViewAppIcon.swift; sourceTree = "<group>"; };
+		3A1622BD2C8C218400D318EE /* FirstTimeViewInstructionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstTimeViewInstructionsView.swift; sourceTree = "<group>"; };
 		BB04405A2C77A011009F1D33 /* GradientColorPaletteSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientColorPaletteSettings.swift; sourceTree = "<group>"; };
 		BB04405D2C77A87E009F1D33 /* PreferencesProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesProtocol.swift; sourceTree = "<group>"; };
 		BB04405F2C77AD27009F1D33 /* CodableColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodableColor.swift; sourceTree = "<group>"; };
@@ -287,7 +289,6 @@
 				BBBD4AF12C8BDDC70074FFCF /* Intro */,
 				BB4B44492C372A42006680DC /* Hover Window */,
 				BBE7CC922C2244A600AB8F4D /* Settings */,
-				3A1622952C8BEA4B00D318EE /* WhyWeNeedPermisionsView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -295,8 +296,10 @@
 		BBBD4AF12C8BDDC70074FFCF /* Intro */ = {
 			isa = PBXGroup;
 			children = (
+				3A1622952C8BEA4B00D318EE /* WhyWeNeedPermisionsView.swift */,
 				BBCFAE3F2C266234002E1516 /* FirstTimeView.swift */,
 				3A1622BB2C8C1B8600D318EE /* FirstTimeViewAppIcon.swift */,
+				3A1622BD2C8C218400D318EE /* FirstTimeViewInstructionsView.swift */,
 			);
 			path = Intro;
 			sourceTree = "<group>";
@@ -441,6 +444,7 @@
 				3A1622BA2C8C0FF100D318EE /* NoBtnStyle.swift in Sources */,
 				BB3967FD2C291D5A004F1AB6 /* StackedShadow.swift in Sources */,
 				BBF4139A2C40A64A00AA6733 /* FluidGradient.swift in Sources */,
+				3A1622BE2C8C218500D318EE /* FirstTimeViewInstructionsView.swift in Sources */,
 				3A1622BC2C8C1B8600D318EE /* FirstTimeViewAppIcon.swift in Sources */,
 				3A1622B52C8C09A700D318EE /* AccentButton.swift in Sources */,
 				BB7CA33D2C31F1B00012E303 /* WindowManipulationObservers.swift in Sources */,
