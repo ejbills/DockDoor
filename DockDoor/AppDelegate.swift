@@ -98,7 +98,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             let resizedIcon = icon.resizedToFit(in: NSSize(width: iconSize, height: iconSize))
             resizedIcon.isTemplate = true
             button.image = resizedIcon
-            print("Resized icon set to button")
         } else {
             print("Failed to load icon")
         }
