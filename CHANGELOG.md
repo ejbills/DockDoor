@@ -38,6 +38,36 @@
 </style>
 <a href="https://buymeacoffee.com/keplercafe" class="donation-link" target="_blank">☕ Support kepler.cafe</a>
 
+<a name="v1.2.4"></a>
+# [v1.2.4](https://github.com/ejbills/DockDoor/releases/tag/v1.2.4) - 08 Sep 2024
+
+*⚠️ Note: This update sets the default app name label style to "embedded" and changes the window switcher keybind to Option + Tab. You can customize these settings if preferred.*
+
+# Changelog
+
+## 🚀 New Features
+
+- **Custom Menu Bar Icon**: Introduced a custom menu bar icon for DockDoor, offering a fresh, distinct look for users.
+- **Embedded App Title Style**: The embedded app title style is now set as the default, providing a more cohesive visual experience for light and dark mode.
+
+## 🎨 Redesigns
+
+- **First-Time Launch Experience**: Completely redesigned the first-time launch flow of DockDoor for a more intuitive and modern onboarding experience.
+- **Permissions View**: Redesigned the permissions view.
+
+## 🛠️ Changes
+
+- **Window Switcher Keybind Change**: The window switcher now defaults to `Option + Tab` instead of `Command + Tab`.
+
+## 🎨 Visual Updates
+
+- **New App Icon**: Introduced another new icon, giving DockDoor a fresh, updated look.
+
+Thank you to [@Kinark](https://github.com/Kinark) for help with UI design and animation.
+
+[Changes][v1.2.4]
+
+
 <a name="v1.2.3"></a>
 # [v1.2.3](https://github.com/ejbills/DockDoor/releases/tag/v1.2.3) - 05 Sep 2024
 
@@ -483,6 +513,7 @@ v1.0
 [Changes][releases]
 
 
+[v1.2.4]: https://github.com/ejbills/DockDoor/compare/v1.2.3...v1.2.4
 [v1.2.3]: https://github.com/ejbills/DockDoor/compare/v1.2.2...v1.2.3
 [v1.2.2]: https://github.com/ejbills/DockDoor/compare/v1.2.1...v1.2.2
 [v1.2.1]: https://github.com/ejbills/DockDoor/compare/v1.2.0...v1.2.1
