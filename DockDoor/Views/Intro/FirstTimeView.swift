@@ -33,7 +33,7 @@ struct FirstTimeView: View {
     func nextTab() {
         let tabsCount = 3
         if tabIndex < (tabsCount - 1) {
-            withAnimation {
+            withAnimation(.smooth(extraBounce: 0.15)) {
                 tabIndex += 1
             }
         }
