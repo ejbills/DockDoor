@@ -37,6 +37,8 @@ struct FirstTimeView: View {
                 tabIndex += 1
             }
         }
+
+        if lightsOn { withAnimation(.snappy) { lightsOn = false } }
     }
 }
 

@@ -3395,7 +3395,7 @@
       }
     },
     "Bottom Left" : {
-      "comment" : "Preview window title position option",
+      "comment" : "Preview window title position option\nTraffic light buttons position option",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -3574,7 +3574,7 @@
       }
     },
     "Bottom Right" : {
-      "comment" : "Preview window title position option",
+      "comment" : "Preview window title position option\nTraffic light buttons position option",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -7498,6 +7498,9 @@
         }
       }
     },
+    "Everything is now set up!" : {
+
+    },
     "Extra Extra Small" : {
       "comment" : "Window size option",
       "localizations" : {
@@ -8392,9 +8395,6 @@
       }
     },
     "Granted" : {
-
-    },
-    "Hello, World!" : {
 
     },
     "Hidden" : {
@@ -10005,7 +10005,7 @@
         }
       }
     },
-    "May I have some permissions?" : {
+    "Let's set things up" : {
 
     },
     "Medium" : {
@@ -10545,6 +10545,9 @@
         }
       }
     },
+    "Next page" : {
+
+    },
     "No action" : {
       "comment" : "Window popup hover action option",
       "localizations" : {
@@ -10905,9 +10908,6 @@
       }
     },
     "Not granted" : {
-
-    },
-    "Oh, changes to permissions require an application restart" : {
 
     },
     "OK" : {
@@ -19482,6 +19482,9 @@
         }
       }
     },
+    "The changes to permissions will take effect after restarting." : {
+
+    },
     "The selected positions for Traffic Light Buttons and Window Title will overlap." : {
       "localizations" : {
         "af" : {
@@ -19661,7 +19664,7 @@
       }
     },
     "Top Left" : {
-      "comment" : "Preview window title position option",
+      "comment" : "Preview window title position option\nTraffic light buttons position option",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -19840,7 +19843,7 @@
       }
     },
     "Top Right" : {
-      "comment" : "Preview window title position option",
+      "comment" : "Preview window title position option\nTraffic light buttons position option",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -22872,6 +22875,9 @@
           }
         }
       }
+    },
+    "When you click the button below, DockDoor will restart and move to the menu bar to run in the background." : {
+
     },
     "Why we need permissions" : {
       "extractionState" : "stale",

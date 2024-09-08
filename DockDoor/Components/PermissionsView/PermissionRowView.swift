@@ -38,8 +38,7 @@ struct PermissionRowView: View {
             }
         }
         .padding(EdgeInsets(top: 12, leading: 16, bottom: 14, trailing: 16))
-        .background(FluidGradientView().opacity(isGranted ? 0.125 : 0))
-        .background((isGranted ? Color.green : .primary).opacity(isGranted ? 0.15 : 0.1))
+        .background(FluidGradientView().opacity(0.125))
         .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
         .overlay(alignment: .bottomTrailing) {
             Button(action: action) {

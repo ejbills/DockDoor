@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct PermissionsView: View {
+    var nextTab: (() -> Void)? = nil
     @StateObject private var permissionsChecker = PermissionsChecker()
 
     var body: some View {
@@ -15,24 +16,21 @@ struct PermissionsView: View {
 
             PermissionRowView(
                 title: "Screen recording",
-                description: "Needed to capture window previews of other apps",
+                description: "Required for capturing window previews of other apps",
                 isGranted: permissionsChecker.screenRecordingPermission,
                 iconName: "video.fill",
                 action: openScreenRecordingPreferences
             )
 
-            VStack(alignment: .center, spacing: 12) {
-                SquiggleDivider().opacity(0.5)
+            if let nextTab {
+                VStack(alignment: .center, spacing: 12) {
+                    SquiggleDivider().opacity(0.5)
 
-                Text("Changes to permissions require an application restart")
-                    .font(.system(size: 12))
-                    .foregroundColor(.secondary)
-                    .multilineTextAlignment(.center)
-
-                Button(action: restartApp) {
-                    Text("Restart app")
+                    Button(action: nextTab) {
+                        Text("Next page")
+                    }
+                    .buttonStyle(AccentButtonStyle())
                 }
-                .buttonStyle(AccentButtonStyle())
             }
         }
     }
@@ -43,11 +41,6 @@ struct PermissionsView: View {
 
     private func openScreenRecordingPreferences() {
         SystemPreferencesHelper.openScreenRecordingPreferences()
-    }
-
-    private func restartApp() {
-        let appDelegate = NSApplication.shared.delegate as! AppDelegate
-        appDelegate.restartApp()
     }
 }
 
