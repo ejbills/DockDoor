@@ -76,7 +76,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func setupMenuBar() {
         guard statusBarItem == nil else { return }
-        let icon = NSImage(systemSymbolName: "door.right.hand.open", accessibilityDescription: nil)!
+        let icon = NSImage(resource: .ddMiniIcon)
         statusBarItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
         if let button = statusBarItem?.button {
             button.image = icon

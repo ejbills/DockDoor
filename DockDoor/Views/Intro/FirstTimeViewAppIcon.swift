@@ -97,7 +97,7 @@ struct FirstTimeViewAppIcon: View {
             }
         }
     }
-    
+
     func onHover(_ newHovering: Bool) {
         rotatingTimer?.invalidate()
         if newHovering {
