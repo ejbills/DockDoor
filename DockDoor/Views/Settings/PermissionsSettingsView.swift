@@ -17,17 +17,29 @@ class PermissionsChecker: ObservableObject {
     }
 
     func checkPermissions() {
-        accessibilityPermission = hasPermissions(for: .accessibility)
-        screenRecordingPermission = hasPermissions(for: .screenRecording)
+        accessibilityPermission = checkAccessibilityPermission()
+        screenRecordingPermission = checkScreenRecordingPermission()
     }
 
-    private func hasPermissions(for type: PermissionType) -> Bool {
-        switch type {
-        case .accessibility:
-            AXIsProcessTrusted()
-        case .screenRecording:
-            CGPreflightScreenCaptureAccess()
-        }
+    private func checkAccessibilityPermission() -> Bool {
+        let checkOptPrompt = kAXTrustedCheckOptionPrompt.takeUnretainedValue() as NSString
+        let options = [checkOptPrompt: false]
+        return AXIsProcessTrustedWithOptions(options as CFDictionary)
+    }
+
+    private func checkScreenRecordingPermission() -> Bool {
+        let stream = CGDisplayStream(
+            dispatchQueueDisplay: CGMainDisplayID(),
+            outputWidth: 1,
+            outputHeight: 1,
+            pixelFormat: Int32(kCVPixelFormatType_32BGRA),
+            properties: nil,
+            queue: DispatchQueue.main,
+            handler: { _, _, _, _ in }
+        )
+        let hasPermission = (stream != nil)
+        stream?.stop()
+        return hasPermission
     }
 
     private func startTimer() {
@@ -36,11 +48,6 @@ class PermissionsChecker: ObservableObject {
             .sink { [weak self] _ in
                 self?.checkPermissions()
             }
-    }
-
-    enum PermissionType {
-        case accessibility
-        case screenRecording
     }
 }
 
