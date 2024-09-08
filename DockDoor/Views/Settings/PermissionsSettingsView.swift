@@ -22,9 +22,7 @@ class PermissionsChecker: ObservableObject {
     }
 
     private func checkAccessibilityPermission() -> Bool {
-        let checkOptPrompt = kAXTrustedCheckOptionPrompt.takeUnretainedValue() as NSString
-        let options = [checkOptPrompt: false]
-        return AXIsProcessTrustedWithOptions(options as CFDictionary)
+        AXIsProcessTrusted()
     }
 
     private func checkScreenRecordingPermission() -> Bool {
@@ -55,56 +53,87 @@ struct PermissionsSettingsView: View {
     @StateObject private var permissionsChecker = PermissionsChecker()
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 20) {
-            HStack {
-                Image(systemName: permissionsChecker.accessibilityPermission ? "checkmark.circle.fill" : "xmark.circle.fill")
-                    .foregroundColor(permissionsChecker.accessibilityPermission ? .green : .red)
-                    .scaleEffect(permissionsChecker.accessibilityPermission ? 1.2 : 1.0)
-                    .padding(10)
+        VStack(alignment: .leading, spacing: 24) {
+            permissionRow(
+                title: "Accessibility",
+                description: "Required for dock hover detection and window switcher hotkeys",
+                isGranted: permissionsChecker.accessibilityPermission,
+                iconName: "accessibility",
+                action: openAccessibilityPreferences
+            )
 
-                Text("Accessibility Permissions")
-                    .font(.headline)
-            }
+            Divider()
 
-            HStack {
-                Image(systemName: permissionsChecker.screenRecordingPermission ? "checkmark.circle.fill" : "xmark.circle.fill")
-                    .foregroundColor(permissionsChecker.screenRecordingPermission ? .green : .red)
-                    .scaleEffect(permissionsChecker.screenRecordingPermission ? 1.2 : 1.0)
-                    .padding(10)
+            permissionRow(
+                title: "Screen recording",
+                description: "Needed to capture window previews of other apps",
+                isGranted: permissionsChecker.screenRecordingPermission,
+                iconName: "video.fill",
+                action: openScreenRecordingPreferences
+            )
 
-                Text("Screen Recording Permissions")
-                    .font(.headline)
-            }
+            Divider()
 
-            Button(action: openAccessibilityPreferences) {
-                HStack {
-                    Image(systemName: "hand.raised.fill")
-                    Text("Open Accessibility Settings")
-                }
-            }
-            .buttonStyle(.bordered)
-
-            Button(action: openScreenRecordingPreferences) {
-                HStack {
-                    Image(systemName: "video.fill")
-                    Text("Open Screen Recording Settings")
-                }
-            }
-            .buttonStyle(.bordered)
-
-            Text("Please Restart the App to Apply Changes! :)")
-                .font(.footnote)
+            Text("Changes to permissions require an application restart")
+                .font(.system(size: 12))
                 .foregroundColor(.secondary)
-            Button("Restart App", action: {
-                let appDelegate = NSApplication.shared.delegate as! AppDelegate
-                appDelegate.restartApp()
-            })
-            .buttonStyle(.bordered)
+                .padding(.top, 16)
 
-            Spacer()
+            Button(action: restartApp) {
+                Text("Restart app")
+                    .frame(maxWidth: .infinity)
+            }
+            .buttonStyle(.borderedProminent)
+            .controlSize(.large)
+            .padding(.top, 8)
         }
-        .padding([.top, .leading, .trailing], 20)
-        .frame(minWidth: 650)
+        .navigationBarBackButtonHidden(true)
+        .padding(32)
+        .background {
+            BlurView()
+                .ignoresSafeArea(.all)
+        }
+    }
+
+    private func permissionRow(title: String, description: String, isGranted: Bool, iconName: String, action: @escaping () -> Void) -> some View {
+        HStack(spacing: 16) {
+            Image(systemName: iconName)
+                .font(.system(size: 24))
+                .foregroundColor(.accentColor)
+                .frame(width: 32, height: 32)
+            VStack(alignment: .leading, spacing: 4) {
+                Text(title)
+                    .font(.headline)
+                Text(description)
+                    .font(.body)
+                    .foregroundColor(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            .padding(16)
+            .background(FluidGradientView().opacity(0.125))
+            .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+            .frame(width: 300)
+            Spacer()
+            VStack(alignment: .trailing, spacing: 4) {
+                HStack {
+                    Image(systemName: isGranted ? "checkmark.circle.fill" : "xmark.circle.fill")
+                        .foregroundColor(isGranted ? .green : .red)
+                        .font(.system(size: 20))
+                    Text(isGranted ? "Granted" : "Not granted")
+                }
+                .padding(16)
+                .background(isGranted ? .green.opacity(0.25) : .red.opacity(0.25))
+                .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+                Button(action: action) {
+                    Text("Open Settings")
+                        .font(.system(size: 12, weight: .medium))
+                }
+                .buttonStyle(.plain)
+                .foregroundColor(.accentColor)
+            }
+        }
+        .frame(maxHeight: 50)
+        .padding(.vertical, 8)
     }
 
     private func openAccessibilityPreferences() {
@@ -113,5 +142,10 @@ struct PermissionsSettingsView: View {
 
     private func openScreenRecordingPreferences() {
         SystemPreferencesHelper.openScreenRecordingPreferences()
+    }
+
+    private func restartApp() {
+        let appDelegate = NSApplication.shared.delegate as! AppDelegate
+        appDelegate.restartApp()
     }
 }

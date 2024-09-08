@@ -892,6 +892,7 @@
       }
     },
     "Accessibility Permissions" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -4280,6 +4281,9 @@
           }
         }
       }
+    },
+    "Changes may require a restart" : {
+
     },
     "Check for Updates" : {
       "localizations" : {
@@ -8385,6 +8389,9 @@
         }
       }
     },
+    "Granted" : {
+
+    },
     "Hidden" : {
       "comment" : "Preview title style option",
       "extractionState" : "stale",
@@ -10889,6 +10896,9 @@
         }
       }
     },
+    "Not granted" : {
+
+    },
     "OK" : {
       "localizations" : {
         "af" : {
@@ -11426,6 +11436,7 @@
       }
     },
     "Open Accessibility Settings" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -11604,6 +11615,7 @@
       }
     },
     "Open Screen Recording Settings" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -12853,6 +12865,7 @@
       }
     },
     "Please Restart the App to Apply Changes! :)" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -16417,6 +16430,7 @@
       }
     },
     "Screen Recording Permissions" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {

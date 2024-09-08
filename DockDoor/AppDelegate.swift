@@ -133,7 +133,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     private func handleFirstTimeLaunch() {
         guard let screen = NSScreen.main else { return }
-
         Defaults[.launched] = true
 
         let newWindow = SwiftUIWindow(
@@ -142,7 +141,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 FirstTimeView()
             }
         )
-
         newWindow.isReleasedWhenClosed = false
 
         let customToolbar = NSToolbar()
@@ -159,11 +157,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         newWindow.standardWindowButton(.miniaturizeButton)?.isHidden = true
         newWindow.standardWindowButton(.zoomButton)?.isHidden = true
 
-        // Position the window
+        // Position the window in the center of the main screen
+        let screenFrame = screen.visibleFrame
+        let windowOrigin = NSPoint(
+            x: screenFrame.midX - newWindow.frame.width / 2,
+            y: screenFrame.midY - newWindow.frame.height / 2
+        )
+        newWindow.setFrameOrigin(windowOrigin)
+
         newWindow.isMovableByWindowBackground = true
-
         firstTimeWindow = newWindow
-
         newWindow.show()
         newWindow.makeKeyAndOrderFront(nil)
     }
