@@ -21,24 +21,34 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var keybindHelper: KeybindHelper?
     private var statusBarItem: NSStatusItem?
 
-    private var updaterController: SPUStandardUpdaterController
+    #if !APPSTORE_BUILD
+        private var updaterController: SPUStandardUpdaterController
+    #endif
 
     // settings
     private var firstTimeWindow: NSWindow?
-    private lazy var settingsWindowController = SettingsWindowController(
-        panes: [
+    private lazy var settingsWindowController: SettingsWindowController = {
+        var panes: [SettingsPane] = [
             GeneralSettingsViewController(),
             AppearanceSettingsViewController(),
             WindowSwitcherSettingsViewController(),
             PermissionsSettingsViewController(),
-            UpdatesSettingsViewController(updater: updaterController.updater),
         ]
-    )
+
+        #if !APPSTORE_BUILD
+            panes.append(UpdatesSettingsViewController(updater: updaterController.updater))
+        #endif
+
+        return SettingsWindowController(panes: panes)
+    }()
+
     private let settingsWindowControllerDelegate = SettingsWindowControllerDelegate()
 
     override init() {
-        updaterController = SPUStandardUpdaterController(startingUpdater: true, updaterDelegate: nil, userDriverDelegate: nil)
-        updaterController.startUpdater()
+        #if !APPSTORE_BUILD
+            updaterController = SPUStandardUpdaterController(startingUpdater: true, updaterDelegate: nil, userDriverDelegate: nil)
+            updaterController.startUpdater()
+        #endif
         super.init()
 
         if let zoomButton = settingsWindowController.window?.standardWindowButton(.zoomButton) {

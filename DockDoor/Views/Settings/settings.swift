@@ -6,7 +6,9 @@ extension Settings.PaneIdentifier {
     static let general = Self("general")
     static let appearance = Self("appearance")
     static let permissions = Self("permissions")
-    static let updates = Self("updates")
+    #if !APPSTORE_BUILD
+        static let updates = Self("updates")
+    #endif
     static let alttab = Self("alttab")
 }
 
@@ -58,14 +60,16 @@ let PermissionsSettingsViewController: () -> SettingsPane = {
     return Settings.PaneHostingController(pane: paneView)
 }
 
-func UpdatesSettingsViewController(updater: SPUUpdater) -> SettingsPane {
-    let paneView = Settings.Pane(
-        identifier: .updates,
-        title: String(localized: "Updates", comment: "Settings tab title"),
-        toolbarIcon: NSImage(systemSymbolName: "arrow.triangle.2.circlepath", accessibilityDescription: String(localized: "Update settings"))!
-    ) {
-        UpdateSettingsView(updater: updater)
-    }
+#if !APPSTORE_BUILD
+    func UpdatesSettingsViewController(updater: SPUUpdater) -> SettingsPane {
+        let paneView = Settings.Pane(
+            identifier: .updates,
+            title: String(localized: "Updates", comment: "Settings tab title"),
+            toolbarIcon: NSImage(systemSymbolName: "arrow.triangle.2.circlepath", accessibilityDescription: String(localized: "Update settings"))!
+        ) {
+            UpdateSettingsView(updater: updater)
+        }
 
-    return Settings.PaneHostingController(pane: paneView)
-}
+        return Settings.PaneHostingController(pane: paneView)
+    }
+#endif
