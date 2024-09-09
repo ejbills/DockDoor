@@ -39,6 +39,10 @@
 		BB157B7B2C0E343000997315 /* SystemPreferencesHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB157B7A2C0E343000997315 /* SystemPreferencesHelper.swift */; };
 		BB157B802C0E8E6700997315 /* MessageUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB157B7F2C0E8E6700997315 /* MessageUtil.swift */; };
 		BB157B822C0EB29E00997315 /* DockObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB157B812C0EB29E00997315 /* DockObserver.swift */; };
+		BB15E1E22C8E9435002ECFB9 /* FluidGradient.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB15E1DF2C8E9435002ECFB9 /* FluidGradient.swift */; };
+		BB15E1E32C8E9435002ECFB9 /* ResizableLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB15E1E12C8E9435002ECFB9 /* ResizableLayer.swift */; };
+		BB15E1E42C8E9435002ECFB9 /* FluidGradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB15E1E02C8E9435002ECFB9 /* FluidGradientView.swift */; };
+		BB15E1E52C8E9435002ECFB9 /* BlobLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB15E1DE2C8E9435002ECFB9 /* BlobLayer.swift */; };
 		BB1CBD582C1BA800003969BC /* MainSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB1CBD572C1BA800003969BC /* MainSettingsView.swift */; };
 		BB1CBD5B2C1BA8DC003969BC /* Defaults in Frameworks */ = {isa = PBXBuildFile; productRef = BB1CBD5A2C1BA8DC003969BC /* Defaults */; };
 		BB1CBD5D2C1BCA4F003969BC /* Misc Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB1CBD5C2C1BCA4F003969BC /* Misc Utils.swift */; };
@@ -56,7 +60,6 @@
 		BB4ED9092C3CD97400BBDD16 /* Traffic Light Buttons.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB4ED9082C3CD96D00BBDD16 /* Traffic Light Buttons.swift */; };
 		BB52EDF02C5BEFE3006A64A4 /* HiddenModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB52EDEF2C5BEFE3006A64A4 /* HiddenModifier.swift */; };
 		BB6A4F1C2C1CFCFF00CB4C9E /* PermissionsSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6A4F1B2C1CFCFF00CB4C9E /* PermissionsSettingsView.swift */; };
-		BB77F2282C35D27D00BD315A /* FluidGradient in Frameworks */ = {isa = PBXBuildFile; productRef = BB77F2272C35D27D00BD315A /* FluidGradient */; };
 		BB7CA33D2C31F1B00012E303 /* WindowManipulationObservers.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB7CA33C2C31F1B00012E303 /* WindowManipulationObservers.swift */; };
 		BBA153F62C115DDA00119C02 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA153F52C115DDA00119C02 /* AppDelegate.swift */; };
 		BBA153F82C11604400119C02 /* SharedPreviewWindowCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA153F72C11604400119C02 /* SharedPreviewWindowCoordinator.swift */; };
@@ -69,7 +72,7 @@
 		BBE7CC912C22429A00AB8F4D /* settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE7CC902C22429A00AB8F4D /* settings.swift */; };
 		BBF413922C40618D00AA6733 /* FullSizePreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF413912C40618800AA6733 /* FullSizePreviewView.swift */; };
 		BBF413942C40978400AA6733 /* WindowPreviewHoverContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF413932C40977F00AA6733 /* WindowPreviewHoverContainer.swift */; };
-		BBF4139A2C40A64A00AA6733 /* FluidGradient.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF413992C40A64000AA6733 /* FluidGradient.swift */; };
+		BBF4139A2C40A64A00AA6733 /* CustomizableFluidGradient.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF413992C40A64000AA6733 /* CustomizableFluidGradient.swift */; };
 		BBF6C6242C1B4B4400BF1D40 /* KeybindHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF6C6232C1B4B4400BF1D40 /* KeybindHelper.swift */; };
 		BBFAD73A2C287A9C0092F5F1 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = BBFAD7392C287A9C0092F5F1 /* Sparkle */; };
 		BBFAD73C2C287C770092F5F1 /* UpdateSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBFAD73B2C287C770092F5F1 /* UpdateSettingsView.swift */; };
@@ -109,6 +112,10 @@
 		BB157B7A2C0E343000997315 /* SystemPreferencesHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemPreferencesHelper.swift; sourceTree = "<group>"; };
 		BB157B7F2C0E8E6700997315 /* MessageUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageUtil.swift; sourceTree = "<group>"; };
 		BB157B812C0EB29E00997315 /* DockObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockObserver.swift; sourceTree = "<group>"; };
+		BB15E1DE2C8E9435002ECFB9 /* BlobLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlobLayer.swift; sourceTree = "<group>"; };
+		BB15E1DF2C8E9435002ECFB9 /* FluidGradient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FluidGradient.swift; sourceTree = "<group>"; };
+		BB15E1E02C8E9435002ECFB9 /* FluidGradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FluidGradientView.swift; sourceTree = "<group>"; };
+		BB15E1E12C8E9435002ECFB9 /* ResizableLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResizableLayer.swift; sourceTree = "<group>"; };
 		BB1CBD572C1BA800003969BC /* MainSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainSettingsView.swift; sourceTree = "<group>"; };
 		BB1CBD5C2C1BCA4F003969BC /* Misc Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Misc Utils.swift"; sourceTree = "<group>"; };
 		BB2567C52C10C5F000C0C93E /* DockUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DockUtils.swift; sourceTree = "<group>"; };
@@ -134,7 +141,7 @@
 		BBE7CC902C22429A00AB8F4D /* settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = settings.swift; sourceTree = "<group>"; };
 		BBF413912C40618800AA6733 /* FullSizePreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullSizePreviewView.swift; sourceTree = "<group>"; };
 		BBF413932C40977F00AA6733 /* WindowPreviewHoverContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowPreviewHoverContainer.swift; sourceTree = "<group>"; };
-		BBF413992C40A64000AA6733 /* FluidGradient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FluidGradient.swift; sourceTree = "<group>"; };
+		BBF413992C40A64000AA6733 /* CustomizableFluidGradient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomizableFluidGradient.swift; sourceTree = "<group>"; };
 		BBF6C6232C1B4B4400BF1D40 /* KeybindHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeybindHelper.swift; sourceTree = "<group>"; };
 		BBFAD73B2C287C770092F5F1 /* UpdateSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateSettingsView.swift; sourceTree = "<group>"; };
 		C119BDF02C2AEDBA00E06E18 /* DockDoorDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DockDoorDebug.entitlements; sourceTree = "<group>"; };
@@ -149,7 +156,6 @@
 				BBBD4AF82C8D71560074FFCF /* ConfettiSwiftUI in Frameworks */,
 				BB33E68C2C24C72F00A21D69 /* LaunchAtLogin in Frameworks */,
 				3A1622A32C8BFF3800D318EE /* Pow in Frameworks */,
-				BB77F2282C35D27D00BD315A /* FluidGradient in Frameworks */,
 				BBFAD73A2C287A9C0092F5F1 /* Sparkle in Frameworks */,
 				BB3968002C2A6C44004F1AB6 /* SmoothGradient in Frameworks */,
 				BB1CBD5B2C1BA8DC003969BC /* Defaults in Frameworks */,
@@ -164,10 +170,10 @@
 		3A105FD42C1BED5B0015EC66 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				BB750D232C8E939A00245E3E /* FluidGradient */,
 				3A1622BF2C8D579F00D318EE /* PermissionsView */,
 				BB3D6EAF2C84E58000FFE584 /* NSScreen.swift */,
 				BB04405C2C77A878009F1D33 /* Defaults */,
-				BBF413992C40A64000AA6733 /* FluidGradient.swift */,
 				3A105FD52C1BED660015EC66 /* BlurView.swift */,
 				3A105FDC2C1C0EE20015EC66 /* DynStack.swift */,
 				BB3967FC2C291D5A004F1AB6 /* StackedShadow.swift */,
@@ -322,6 +328,18 @@
 			path = "Hover Window";
 			sourceTree = "<group>";
 		};
+		BB750D232C8E939A00245E3E /* FluidGradient */ = {
+			isa = PBXGroup;
+			children = (
+				BB15E1DE2C8E9435002ECFB9 /* BlobLayer.swift */,
+				BB15E1DF2C8E9435002ECFB9 /* FluidGradient.swift */,
+				BB15E1E02C8E9435002ECFB9 /* FluidGradientView.swift */,
+				BB15E1E12C8E9435002ECFB9 /* ResizableLayer.swift */,
+				BBF413992C40A64000AA6733 /* CustomizableFluidGradient.swift */,
+			);
+			path = FluidGradient;
+			sourceTree = "<group>";
+		};
 		BBA153FD2C12358600119C02 /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -380,7 +398,6 @@
 				BB33E68B2C24C72F00A21D69 /* LaunchAtLogin */,
 				BBFAD7392C287A9C0092F5F1 /* Sparkle */,
 				BB3967FF2C2A6C44004F1AB6 /* SmoothGradient */,
-				BB77F2272C35D27D00BD315A /* FluidGradient */,
 				3A1622A22C8BFF3800D318EE /* Pow */,
 				3A1622B72C8C0EE200D318EE /* Kroma */,
 				BBBD4AF72C8D71560074FFCF /* ConfettiSwiftUI */,
@@ -421,7 +438,6 @@
 				BB33E68A2C24C72F00A21D69 /* XCRemoteSwiftPackageReference "LaunchAtLogin-Modern" */,
 				BBFAD7382C287A9C0092F5F1 /* XCRemoteSwiftPackageReference "Sparkle" */,
 				BB3967FE2C2A6C44004F1AB6 /* XCRemoteSwiftPackageReference "SmoothGradient" */,
-				BB77F2262C35D27D00BD315A /* XCRemoteSwiftPackageReference "FluidGradient" */,
 				3A1622A12C8BFF3800D318EE /* XCRemoteSwiftPackageReference "Pow" */,
 				3A1622B62C8C0EE200D318EE /* XCRemoteSwiftPackageReference "Kroma" */,
 				BBBD4AF62C8D71560074FFCF /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */,
@@ -486,7 +502,7 @@
 				BB3967FD2C291D5A004F1AB6 /* StackedShadow.swift in Sources */,
 				3A1622CE2C8D5F8500D318EE /* FirstTimeCongratsTabView.swift in Sources */,
 				3A1622C32C8D586900D318EE /* PermissionsView.swift in Sources */,
-				BBF4139A2C40A64A00AA6733 /* FluidGradient.swift in Sources */,
+				BBF4139A2C40A64A00AA6733 /* CustomizableFluidGradient.swift in Sources */,
 				3A1622BE2C8C218500D318EE /* FirstTimeViewInstructionsView.swift in Sources */,
 				3A1622BC2C8C1B8600D318EE /* FirstTimeViewAppIcon.swift in Sources */,
 				3A1622B52C8C09A700D318EE /* AccentButton.swift in Sources */,
@@ -515,6 +531,10 @@
 				BBA153FC2C12356100119C02 /* main.swift in Sources */,
 				BBF6C6242C1B4B4400BF1D40 /* KeybindHelper.swift in Sources */,
 				0596C2C32C3E060D00DCABEF /* PrivateApis.swift in Sources */,
+				BB15E1E22C8E9435002ECFB9 /* FluidGradient.swift in Sources */,
+				BB15E1E32C8E9435002ECFB9 /* ResizableLayer.swift in Sources */,
+				BB15E1E42C8E9435002ECFB9 /* FluidGradientView.swift in Sources */,
+				BB15E1E52C8E9435002ECFB9 /* BlobLayer.swift in Sources */,
 				3A1622CC2C8D5F5B00D318EE /* FirstTimePermissionsTabView.swift in Sources */,
 				3A105FDD2C1C0EE20015EC66 /* DynStack.swift in Sources */,
 				BB4ED9092C3CD97400BBDD16 /* Traffic Light Buttons.swift in Sources */,
@@ -881,14 +901,6 @@
 				minimumVersion = 1.0.0;
 			};
 		};
-		BB77F2262C35D27D00BD315A /* XCRemoteSwiftPackageReference "FluidGradient" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/Cindori/FluidGradient";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.0;
-			};
-		};
 		BBBD4AF62C8D71560074FFCF /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/simibac/ConfettiSwiftUI";
@@ -940,11 +952,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = BB3967FE2C2A6C44004F1AB6 /* XCRemoteSwiftPackageReference "SmoothGradient" */;
 			productName = SmoothGradient;
-		};
-		BB77F2272C35D27D00BD315A /* FluidGradient */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = BB77F2262C35D27D00BD315A /* XCRemoteSwiftPackageReference "FluidGradient" */;
-			productName = FluidGradient;
 		};
 		BBBD4AF72C8D71560074FFCF /* ConfettiSwiftUI */ = {
 			isa = XCSwiftPackageProductDependency;

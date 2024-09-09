@@ -21,7 +21,7 @@ struct FirstTimeView: View {
         .padding(.bottom, 51) // To compensate navbar
         .frame(width: 600, height: 320)
         .background {
-            FluidGradientView().opacity(lightsOn ? 0.125 : 0)
+            CustomizableFluidGradientView().opacity(lightsOn ? 0.125 : 0)
                 .ignoresSafeArea(.all)
         }
         .background {

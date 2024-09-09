@@ -27,7 +27,7 @@ struct FirstTimeViewAppIcon: View {
                     .shadow(color: .black.opacity(hovering ? 0.5 : 0.25), radius: hovering ? 32 : 16, y: hovering ? 24 : 12)
                     .contentTransition(.identity)
                     .overlay {
-                        FluidGradientView().opacity(hovering ? lightsOn ? 0.75 : 1 : 0)
+                        CustomizableFluidGradientView().opacity(hovering ? lightsOn ? 0.75 : 1 : 0)
                             .clipShape(RoundedRectangle(cornerRadius: 31))
                             .blendMode(.overlay)
                     }

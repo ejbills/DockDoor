@@ -1,5 +1,5 @@
 {
-  "originHash" : "c96de4c92fd792039b1dafb4e816bdf618ec8c8b059d78d4252381e2384b8b31",
+  "originHash" : "16c460e453b9e3c076d7bd4fb8b97fe398f32c8d60d31adeccd83d0077a7ab37",
   "pins" : [
     {
       "identity" : "confettiswiftui",
@@ -17,15 +17,6 @@
       "state" : {
         "branch" : "main",
         "revision" : "4c009d5c2496e7aa126e922c94dd3d6ae049efa2"
-      }
-    },
-    {
-      "identity" : "fluidgradient",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/Cindori/FluidGradient",
-      "state" : {
-        "revision" : "9ddda4cf23671ef0228e88681ec6210cb3e0d7f7",
-        "version" : "1.0.0"
       }
     },
     {

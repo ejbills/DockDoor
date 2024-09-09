@@ -44,7 +44,7 @@ struct PermissionRowView: View {
                 if disableShine {
                     Color.gray.opacity(0.25)
                 } else {
-                    FluidGradientView().opacity(0.125)
+                    CustomizableFluidGradientView().opacity(0.125)
                 }
             }
         )

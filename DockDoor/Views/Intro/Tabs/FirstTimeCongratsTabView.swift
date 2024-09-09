@@ -11,7 +11,7 @@ struct FirstTimeCongratsTabView: View {
                 .font(.title2)
                 .fontWeight(.semibold)
 
-            FluidGradientView()
+            CustomizableFluidGradientView()
                 .mask(
                     Image(nsImage: NSImage(named: .logo) ?? NSImage())
                         .resizable()

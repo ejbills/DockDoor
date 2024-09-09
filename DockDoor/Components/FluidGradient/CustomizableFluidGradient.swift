@@ -1,8 +1,7 @@
 import Defaults
-import FluidGradient
 import SwiftUI
 
-struct FluidGradientView: View {
+struct CustomizableFluidGradientView: View {
     @Default(.gradientColorPalette) private var gradientColorPalette
     var body: some View {
         FluidGradient(
@@ -21,7 +20,7 @@ struct FluidGradientBorder: ViewModifier {
     func body(content: Content) -> some View {
         content
             .overlay(
-                FluidGradientView()
+                CustomizableFluidGradientView()
                     .mask(
                         RoundedRectangle(cornerRadius: cornerRadius)
                             .strokeBorder(lineWidth: lineWidth)
