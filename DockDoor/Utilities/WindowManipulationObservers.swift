@@ -2,13 +2,14 @@ import AppKit
 import ApplicationServices
 import Cocoa
 
+let windowProcessingDebounceInterval: TimeInterval = 0.3
+
 class WindowManipulationObservers {
     static let shared = WindowManipulationObservers()
     private var observers: [pid_t: AXObserver] = [:]
     static var trackedElements: Set<AXUIElement> = []
     static var debounceWorkItem: DispatchWorkItem?
     static var lastWindowCreationTime: [String: Date] = [:]
-    static let windowCreationDebounceInterval: TimeInterval = 1.0 // 1 second debounce
 
     private init() {
         setupObservers()
@@ -130,16 +131,14 @@ func axObserverCallback(observer: AXObserver, element: AXUIElement, notification
             switch notificationName as String {
             case kAXFocusedUIElementChangedNotification, kAXFocusedWindowChangedNotification:
                 handleFocusedUIElementChanged(element: element, app: app, pid: pid)
-            case kAXUIElementDestroyedNotification:
+            case kAXUIElementDestroyedNotification, kAXWindowResizedNotification, kAXWindowMovedNotification:
                 handleWindowStateChange(element: element, app: app)
             case kAXWindowMiniaturizedNotification:
-                WindowUtil.updateStatusOfWindowCache(pid: pid_t(pid), isParentAppHidden: false)
+                WindowUtil.updateStatusOfWindowCache(pid: pid, isParentAppHidden: false)
             case kAXApplicationHiddenNotification:
-                WindowUtil.updateStatusOfWindowCache(pid: pid_t(pid), isParentAppHidden: true)
+                WindowUtil.updateStatusOfWindowCache(pid: pid, isParentAppHidden: true)
             case kAXApplicationShownNotification:
-                WindowUtil.updateStatusOfWindowCache(pid: pid_t(pid), isParentAppHidden: false)
-            case kAXWindowResizedNotification, kAXWindowMovedNotification:
-                handleWindowStateChange(element: element, app: app)
+                WindowUtil.updateStatusOfWindowCache(pid: pid, isParentAppHidden: false)
             default:
                 break
             }
@@ -147,28 +146,26 @@ func axObserverCallback(observer: AXObserver, element: AXUIElement, notification
     }
 }
 
-private func handleFocusedUIElementChanged(element: AXUIElement, app: NSRunningApplication, pid: pid_t) {
+private func handleWindowEvent(element: AXUIElement, app: NSRunningApplication, updateDateTime: Bool = false) {
     guard !WindowManipulationObservers.trackedElements.contains(element) else { return }
     WindowManipulationObservers.trackedElements.insert(element)
     WindowManipulationObservers.debounceWorkItem?.cancel()
     WindowManipulationObservers.debounceWorkItem = DispatchWorkItem {
-        WindowUtil.updateWindowDateTime(for: app)
-        WindowManipulationObservers.trackedElements.remove(element)
-        print("Focused Window has changed: \(app.localizedName ?? "")")
-    }
-    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: WindowManipulationObservers.debounceWorkItem!)
-}
-
-private func handleWindowStateChange(element: AXUIElement, app: NSRunningApplication) {
-    guard !WindowManipulationObservers.trackedElements.contains(element) else { return }
-    WindowManipulationObservers.trackedElements.insert(element)
-    WindowManipulationObservers.debounceWorkItem?.cancel()
-    WindowManipulationObservers.debounceWorkItem = DispatchWorkItem {
+        if updateDateTime {
+            WindowUtil.updateWindowDateTime(for: app)
+        }
         WindowUtil.updateWindowCache(for: app) { windowSet in
             windowSet = windowSet.filter { WindowUtil.isValidElement($0.axElement) }
         }
         WindowManipulationObservers.trackedElements.remove(element)
-        print("Window destroyed for app: \(app.localizedName ?? "Unknown")")
     }
-    DispatchQueue.main.asyncAfter(deadline: .now() + 0.01, execute: WindowManipulationObservers.debounceWorkItem!)
+    DispatchQueue.main.asyncAfter(deadline: .now() + windowProcessingDebounceInterval, execute: WindowManipulationObservers.debounceWorkItem!)
+}
+
+private func handleFocusedUIElementChanged(element: AXUIElement, app: NSRunningApplication, pid: pid_t) {
+    handleWindowEvent(element: element, app: app, updateDateTime: true)
+}
+
+private func handleWindowStateChange(element: AXUIElement, app: NSRunningApplication) {
+    handleWindowEvent(element: element, app: app)
 }
