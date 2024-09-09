@@ -26,12 +26,11 @@ extension Defaults.Keys {
     static let enableWindowSwitcher = Key<Bool>("enableWindowSwitcher", default: true)
     static let sortWindowsByDate = Key<Bool>("sortWindowsByDate", default: true)
     static let showMenuBarIcon = Key<Bool>("showMenuBarIcon", default: true)
-    static let defaultCMDTABKeybind = Key<Bool>("defaultCMDTABKeybind", default: true)
     static let launched = Key<Bool>("launched", default: false)
     static let Int64maskCommand = Key<Int>("Int64maskCommand", default: 1_048_840)
     static let Int64maskControl = Key<Int>("Int64maskControl", default: 262_401)
     static let Int64maskAlternate = Key<Int>("Int64maskAlternate", default: 524_576)
-    static let UserKeybind = Key<UserKeyBind>("UserKeybind", default: UserKeyBind(keyCode: 48, modifierFlags: Defaults[.Int64maskControl]))
+    static let UserKeybind = Key<UserKeyBind>("UserKeybind", default: UserKeyBind(keyCode: 48, modifierFlags: Defaults[.Int64maskAlternate]))
 
     static let showAppName = Key<Bool>("showAppName", default: true)
     static let appNameStyle = Key<AppNameStyle>("appNameStyle", default: .default)
@@ -84,15 +83,15 @@ enum WindowTitlePosition: String, CaseIterable, Defaults.Serializable {
 
 enum AppNameStyle: String, CaseIterable, Defaults.Serializable {
     case `default`
-    case embedded
+    case shadowed
     case popover
 
     var localizedName: String {
         switch self {
         case .default:
             String(localized: "Default", comment: "Preview title style option")
-        case .embedded:
-            String(localized: "Embedded", comment: "Preview title style option")
+        case .shadowed:
+            String(localized: "Shadowed", comment: "Preview title style option")
         case .popover:
             String(localized: "Popover", comment: "Preview title style option")
         }

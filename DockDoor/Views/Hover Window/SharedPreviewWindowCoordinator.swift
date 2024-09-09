@@ -1,5 +1,4 @@
 import Defaults
-import FluidGradient
 import SwiftUI
 
 class ScreenCenteredFloatingWindowCoordinator: ObservableObject {

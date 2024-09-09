@@ -53,6 +53,15 @@ final class DockObserver {
 
         let dockAppElement = AXUIElementCreateApplication(dockAppPID)
 
+        guard AXIsProcessTrusted() else {
+            MessageUtil.showAlert(
+                title: "Accessibility Permissions Required",
+                message: "Please enable accessibility permissions in System Preferences > Security & Privacy > Privacy > Accessibility.",
+                actions: [.ok]
+            )
+            return
+        }
+
         guard let children = try? dockAppElement.children(), let axList = children.first(where: { element in
             try! element.role() == kAXListRole
         }) else {
