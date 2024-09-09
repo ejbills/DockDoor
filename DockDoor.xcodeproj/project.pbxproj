@@ -46,6 +46,7 @@
 		BB15E1E82C8F8C9C002ECFB9 /* ScreenRecordWarningView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB15E1E72C8F8C93002ECFB9 /* ScreenRecordWarningView.swift */; };
 		BB15E1EA2C8F8DB4002ECFB9 /* HelpSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB15E1E92C8F8DB1002ECFB9 /* HelpSettingsView.swift */; };
 		BB15E1EC2C8F8F13002ECFB9 /* CardModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB15E1EB2C8F8F0F002ECFB9 /* CardModifier.swift */; };
+		BB15E1EF2C8FB70C002ECFB9 /* Glur in Frameworks */ = {isa = PBXBuildFile; productRef = BB15E1EE2C8FB70C002ECFB9 /* Glur */; };
 		BB1CBD582C1BA800003969BC /* MainSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB1CBD572C1BA800003969BC /* MainSettingsView.swift */; };
 		BB1CBD5B2C1BA8DC003969BC /* Defaults in Frameworks */ = {isa = PBXBuildFile; productRef = BB1CBD5A2C1BA8DC003969BC /* Defaults */; };
 		BB1CBD5D2C1BCA4F003969BC /* Misc Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB1CBD5C2C1BCA4F003969BC /* Misc Utils.swift */; };
@@ -161,6 +162,7 @@
 			files = (
 				BBBD4AF82C8D71560074FFCF /* ConfettiSwiftUI in Frameworks */,
 				BB33E68C2C24C72F00A21D69 /* LaunchAtLogin in Frameworks */,
+				BB15E1EF2C8FB70C002ECFB9 /* Glur in Frameworks */,
 				3A1622A32C8BFF3800D318EE /* Pow in Frameworks */,
 				BBFAD73A2C287A9C0092F5F1 /* Sparkle in Frameworks */,
 				BB3968002C2A6C44004F1AB6 /* SmoothGradient in Frameworks */,
@@ -418,6 +420,7 @@
 				3A1622A22C8BFF3800D318EE /* Pow */,
 				3A1622B72C8C0EE200D318EE /* Kroma */,
 				BBBD4AF72C8D71560074FFCF /* ConfettiSwiftUI */,
+				BB15E1EE2C8FB70C002ECFB9 /* Glur */,
 			);
 			productName = DockDoor;
 			productReference = BB157B652C0E31CE00997315 /* DockDoor.app */;
@@ -458,6 +461,7 @@
 				3A1622A12C8BFF3800D318EE /* XCRemoteSwiftPackageReference "Pow" */,
 				3A1622B62C8C0EE200D318EE /* XCRemoteSwiftPackageReference "Kroma" */,
 				BBBD4AF62C8D71560074FFCF /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */,
+				BB15E1ED2C8FB70C002ECFB9 /* XCRemoteSwiftPackageReference "Glur" */,
 			);
 			productRefGroup = BB157B662C0E31CE00997315 /* Products */;
 			projectDirPath = "";
@@ -897,6 +901,14 @@
 				kind = branch;
 			};
 		};
+		BB15E1ED2C8FB70C002ECFB9 /* XCRemoteSwiftPackageReference "Glur" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/joogps/Glur";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.4;
+			};
+		};
 		BB1CBD592C1BA8DC003969BC /* XCRemoteSwiftPackageReference "Defaults" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/sindresorhus/Defaults";
@@ -957,6 +969,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 3A1622B62C8C0EE200D318EE /* XCRemoteSwiftPackageReference "Kroma" */;
 			productName = Kroma;
+		};
+		BB15E1EE2C8FB70C002ECFB9 /* Glur */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BB15E1ED2C8FB70C002ECFB9 /* XCRemoteSwiftPackageReference "Glur" */;
+			productName = Glur;
 		};
 		BB1CBD5A2C1BA8DC003969BC /* Defaults */ = {
 			isa = XCSwiftPackageProductDependency;
