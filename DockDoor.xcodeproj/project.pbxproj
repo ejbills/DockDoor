@@ -43,6 +43,9 @@
 		BB15E1E32C8E9435002ECFB9 /* ResizableLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB15E1E12C8E9435002ECFB9 /* ResizableLayer.swift */; };
 		BB15E1E42C8E9435002ECFB9 /* FluidGradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB15E1E02C8E9435002ECFB9 /* FluidGradientView.swift */; };
 		BB15E1E52C8E9435002ECFB9 /* BlobLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB15E1DE2C8E9435002ECFB9 /* BlobLayer.swift */; };
+		BB15E1E82C8F8C9C002ECFB9 /* ScreenRecordWarningView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB15E1E72C8F8C93002ECFB9 /* ScreenRecordWarningView.swift */; };
+		BB15E1EA2C8F8DB4002ECFB9 /* HelpSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB15E1E92C8F8DB1002ECFB9 /* HelpSettingsView.swift */; };
+		BB15E1EC2C8F8F13002ECFB9 /* CardModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB15E1EB2C8F8F0F002ECFB9 /* CardModifier.swift */; };
 		BB1CBD582C1BA800003969BC /* MainSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB1CBD572C1BA800003969BC /* MainSettingsView.swift */; };
 		BB1CBD5B2C1BA8DC003969BC /* Defaults in Frameworks */ = {isa = PBXBuildFile; productRef = BB1CBD5A2C1BA8DC003969BC /* Defaults */; };
 		BB1CBD5D2C1BCA4F003969BC /* Misc Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB1CBD5C2C1BCA4F003969BC /* Misc Utils.swift */; };
@@ -116,6 +119,9 @@
 		BB15E1DF2C8E9435002ECFB9 /* FluidGradient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FluidGradient.swift; sourceTree = "<group>"; };
 		BB15E1E02C8E9435002ECFB9 /* FluidGradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FluidGradientView.swift; sourceTree = "<group>"; };
 		BB15E1E12C8E9435002ECFB9 /* ResizableLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResizableLayer.swift; sourceTree = "<group>"; };
+		BB15E1E72C8F8C93002ECFB9 /* ScreenRecordWarningView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenRecordWarningView.swift; sourceTree = "<group>"; };
+		BB15E1E92C8F8DB1002ECFB9 /* HelpSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpSettingsView.swift; sourceTree = "<group>"; };
+		BB15E1EB2C8F8F0F002ECFB9 /* CardModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardModifier.swift; sourceTree = "<group>"; };
 		BB1CBD572C1BA800003969BC /* MainSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainSettingsView.swift; sourceTree = "<group>"; };
 		BB1CBD5C2C1BCA4F003969BC /* Misc Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Misc Utils.swift"; sourceTree = "<group>"; };
 		BB2567C52C10C5F000C0C93E /* DockUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DockUtils.swift; sourceTree = "<group>"; };
@@ -170,6 +176,7 @@
 		3A105FD42C1BED5B0015EC66 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				BB15E1EB2C8F8F0F002ECFB9 /* CardModifier.swift */,
 				BB750D232C8E939A00245E3E /* FluidGradient */,
 				3A1622BF2C8D579F00D318EE /* PermissionsView */,
 				BB3D6EAF2C84E58000FFE584 /* NSScreen.swift */,
@@ -315,6 +322,15 @@
 			path = Utilities;
 			sourceTree = "<group>";
 		};
+		BB15E1E62C8F8C8D002ECFB9 /* Help */ = {
+			isa = PBXGroup;
+			children = (
+				BB15E1E92C8F8DB1002ECFB9 /* HelpSettingsView.swift */,
+				BB15E1E72C8F8C93002ECFB9 /* ScreenRecordWarningView.swift */,
+			);
+			path = Help;
+			sourceTree = "<group>";
+		};
 		BB4B44492C372A42006680DC /* Hover Window */ = {
 			isa = PBXGroup;
 			children = (
@@ -364,6 +380,7 @@
 		BBE7CC922C2244A600AB8F4D /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				BB15E1E62C8F8C8D002ECFB9 /* Help */,
 				BBE7CC902C22429A00AB8F4D /* settings.swift */,
 				BB1CBD572C1BA800003969BC /* MainSettingsView.swift */,
 				BB6A4F1B2C1CFCFF00CB4C9E /* PermissionsSettingsView.swift */,
@@ -507,6 +524,7 @@
 				3A1622BC2C8C1B8600D318EE /* FirstTimeViewAppIcon.swift in Sources */,
 				3A1622B52C8C09A700D318EE /* AccentButton.swift in Sources */,
 				BB7CA33D2C31F1B00012E303 /* WindowManipulationObservers.swift in Sources */,
+				BB15E1E82C8F8C9C002ECFB9 /* ScreenRecordWarningView.swift in Sources */,
 				BB157B802C0E8E6700997315 /* MessageUtil.swift in Sources */,
 				05C0C7182C60629C000ADAC6 /* AXUIElement.swift in Sources */,
 				3A1622C12C8D57AF00D318EE /* PermissionsChecker.swift in Sources */,
@@ -518,6 +536,7 @@
 				BB3968022C2A6CC2004F1AB6 /* Marquee.swift in Sources */,
 				BB0440602C77AD2C009F1D33 /* CodableColor.swift in Sources */,
 				BB52EDF02C5BEFE3006A64A4 /* HiddenModifier.swift in Sources */,
+				BB15E1EC2C8F8F13002ECFB9 /* CardModifier.swift in Sources */,
 				BB44474F2C507F950047EB92 /* LimitedTaskGroup.swift in Sources */,
 				BBBD4AF52C8D671C0074FFCF /* NSImage.swift in Sources */,
 				BB04405E2C77A87F009F1D33 /* PreferencesProtocol.swift in Sources */,
@@ -548,6 +567,7 @@
 				BB04405B2C77A013009F1D33 /* GradientColorPaletteSettings.swift in Sources */,
 				BB1CBD582C1BA800003969BC /* MainSettingsView.swift in Sources */,
 				BB157B792C0E330100997315 /* WindowUtil.swift in Sources */,
+				BB15E1EA2C8F8DB4002ECFB9 /* HelpSettingsView.swift in Sources */,
 				BBFAD73C2C287C770092F5F1 /* UpdateSettingsView.swift in Sources */,
 				BB157B7B2C0E343000997315 /* SystemPreferencesHelper.swift in Sources */,
 			);

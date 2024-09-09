@@ -33,6 +33,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             AppearanceSettingsViewController(),
             WindowSwitcherSettingsViewController(),
             PermissionsSettingsViewController(),
+            HelpSettingsViewController(),
         ]
 
         #if !APPSTORE_BUILD

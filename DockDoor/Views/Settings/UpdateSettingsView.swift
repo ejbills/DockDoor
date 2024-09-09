@@ -74,8 +74,8 @@ struct UpdateSettingsView: View {
                     viewModel.toggleAutomaticChecks()
                 }
         }
-        .padding(10)
-        .frame(width: 650)
+        .padding(20)
+        .frame(minWidth: 650)
     }
 
     private var updateStatusView: some View {
