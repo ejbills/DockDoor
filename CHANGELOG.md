@@ -38,6 +38,24 @@
 </style>
 <a href="https://buymeacoffee.com/keplercafe" class="donation-link" target="_blank">☕ Support kepler.cafe</a>
 
+<a name="v1.2.6"></a>
+# [v1.2.6](https://github.com/ejbills/DockDoor/releases/tag/v1.2.6) - 10 Sep 2024
+
+# Changelog
+
+## 🚀 New Features
+
+- **Help Settings**: Introduced a new section in the settings to provide help and support to users.
+
+## 🛠️ Fixes
+
+- **Window Validation**: Fixed an issue where windows were not properly validated when a window UI element was changed ([#310](https://github.com/ejbills/DockDoor/issues/310)).
+- **Fluid Gradient Package Removal**: Removed the fluid gradient package in favor of a custom implementation to fix a small memory leak.
+
+
+[Changes][v1.2.6]
+
+
 <a name="v1.2.5"></a>
 # [v1.2.5](https://github.com/ejbills/DockDoor/releases/tag/v1.2.5) - 08 Sep 2024
 
@@ -513,6 +531,7 @@ v1.0
 [Changes][releases]
 
 
+[v1.2.6]: https://github.com/ejbills/DockDoor/compare/v1.2.5...v1.2.6
 [v1.2.5]: https://github.com/ejbills/DockDoor/compare/v1.2.3...v1.2.5
 [v1.2.3]: https://github.com/ejbills/DockDoor/compare/v1.2.2...v1.2.3
 [v1.2.2]: https://github.com/ejbills/DockDoor/compare/v1.2.1...v1.2.2
