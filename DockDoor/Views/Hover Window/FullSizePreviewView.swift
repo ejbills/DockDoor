@@ -15,7 +15,7 @@ struct FullSizePreviewView: View {
                         Image(decorative: image, scale: 1.0)
                             .resizable()
                             .aspectRatio(contentMode: .fit)
-                            .modifier(FluidGradientBorder(cornerRadius: 6, lineWidth: 2))
+                            .modifier(FluidGradientBorder(cornerRadius: uniformCardRadius ? 12 : 6, lineWidth: 2))
                     }
                 }
             }
@@ -25,7 +25,7 @@ struct FullSizePreviewView: View {
             RoundedRectangle(cornerRadius: 6, style: .continuous)
                 .fill(Color.clear.shadow(.drop(color: .black.opacity(0.25), radius: 8, y: 4)))
         }
-        .clipShape(uniformCardRadius ? AnyShape(RoundedRectangle(cornerRadius: 6, style: .continuous)) : AnyShape(Rectangle()))
+        .clipShape(uniformCardRadius ? AnyShape(RoundedRectangle(cornerRadius: 12, style: .continuous)) : AnyShape(Rectangle()))
         .padding(.all, 24)
         .dockStyle(cornerRadius: 16)
     }

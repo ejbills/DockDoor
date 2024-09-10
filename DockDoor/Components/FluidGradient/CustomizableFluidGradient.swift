@@ -25,6 +25,7 @@ struct FluidGradientBorder: ViewModifier {
                         RoundedRectangle(cornerRadius: cornerRadius)
                             .strokeBorder(lineWidth: lineWidth)
                     )
+                    .allowsHitTesting(false)
             )
     }
 }

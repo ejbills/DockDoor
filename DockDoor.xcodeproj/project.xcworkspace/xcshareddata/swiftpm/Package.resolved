@@ -1,5 +1,5 @@
 {
-  "originHash" : "16c460e453b9e3c076d7bd4fb8b97fe398f32c8d60d31adeccd83d0077a7ab37",
+  "originHash" : "ac2868386ab6776d80de6af6aa5949fa2229023c2a3b46577b5e1b3127a1d970",
   "pins" : [
     {
       "identity" : "confettiswiftui",
@@ -17,6 +17,15 @@
       "state" : {
         "branch" : "main",
         "revision" : "4c009d5c2496e7aa126e922c94dd3d6ae049efa2"
+      }
+    },
+    {
+      "identity" : "glur",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/joogps/Glur",
+      "state" : {
+        "revision" : "9e00ff79da318f2c78b749b1027e54a9d4de2e33",
+        "version" : "1.0.4"
       }
     },
     {

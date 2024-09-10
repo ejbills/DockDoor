@@ -8,6 +8,7 @@ struct SquiggleDivider: View {
             .scaledToFit()
             .frame(width: 51, height: 7)
             .foregroundStyle(color)
+            .opacity(0.5)
     }
 }
 
