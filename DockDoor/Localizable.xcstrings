@@ -905,8 +905,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Accessibility"
+            "state" : "translated",
+            "value" : "إمكانية الوصول"
           }
         },
         "ca" : {
@@ -959,8 +959,8 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Accessibility"
+            "state" : "translated",
+            "value" : "נגישות"
           }
         },
         "hu" : {
@@ -1007,8 +1007,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Accessibility"
+            "state" : "translated",
+            "value" : "Acessibilidade"
           }
         },
         "pt-PT" : {
@@ -1067,8 +1067,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Accessibility"
+            "state" : "translated",
+            "value" : "協助工具"
           }
         }
       }
@@ -6428,6 +6428,362 @@
         }
       }
     },
+    "DockDoor does not record your screen or audio. It only captures static window previews. No information is stored or shared; all processing occurs privately on your device." : {
+      "localizations" : {
+        "af" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor does not record your screen or audio. It only captures static window previews. No information is stored or shared; all processing occurs privately on your device."
+          }
+        },
+        "ar" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor does not record your screen or audio. It only captures static window previews. No information is stored or shared; all processing occurs privately on your device."
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor does not record your screen or audio. It only captures static window previews. No information is stored or shared; all processing occurs privately on your device."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor does not record your screen or audio. It only captures static window previews. No information is stored or shared; all processing occurs privately on your device."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor does not record your screen or audio. It only captures static window previews. No information is stored or shared; all processing occurs privately on your device."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor does not record your screen or audio. It only captures static window previews. No information is stored or shared; all processing occurs privately on your device."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor does not record your screen or audio. It only captures static window previews. No information is stored or shared; all processing occurs privately on your device."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor does not record your screen or audio. It only captures static window previews. No information is stored or shared; all processing occurs privately on your device."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor does not record your screen or audio. It only captures static window previews. No information is stored or shared; all processing occurs privately on your device."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor does not record your screen or audio. It only captures static window previews. No information is stored or shared; all processing occurs privately on your device."
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor does not record your screen or audio. It only captures static window previews. No information is stored or shared; all processing occurs privately on your device."
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor does not record your screen or audio. It only captures static window previews. No information is stored or shared; all processing occurs privately on your device."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor does not record your screen or audio. It only captures static window previews. No information is stored or shared; all processing occurs privately on your device."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor does not record your screen or audio. It only captures static window previews. No information is stored or shared; all processing occurs privately on your device."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor does not record your screen or audio. It only captures static window previews. No information is stored or shared; all processing occurs privately on your device."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor does not record your screen or audio. It only captures static window previews. No information is stored or shared; all processing occurs privately on your device."
+          }
+        },
+        "no" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor does not record your screen or audio. It only captures static window previews. No information is stored or shared; all processing occurs privately on your device."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor does not record your screen or audio. It only captures static window previews. No information is stored or shared; all processing occurs privately on your device."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor does not record your screen or audio. It only captures static window previews. No information is stored or shared; all processing occurs privately on your device."
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor does not record your screen or audio. It only captures static window previews. No information is stored or shared; all processing occurs privately on your device."
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor does not record your screen or audio. It only captures static window previews. No information is stored or shared; all processing occurs privately on your device."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor does not record your screen or audio. It only captures static window previews. No information is stored or shared; all processing occurs privately on your device."
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor does not record your screen or audio. It only captures static window previews. No information is stored or shared; all processing occurs privately on your device."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor does not record your screen or audio. It only captures static window previews. No information is stored or shared; all processing occurs privately on your device."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor does not record your screen or audio. It only captures static window previews. No information is stored or shared; all processing occurs privately on your device."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor does not record your screen or audio. It only captures static window previews. No information is stored or shared; all processing occurs privately on your device."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor does not record your screen or audio. It only captures static window previews. No information is stored or shared; all processing occurs privately on your device."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor does not record your screen or audio. It only captures static window previews. No information is stored or shared; all processing occurs privately on your device."
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor does not record your screen or audio. It only captures static window previews. No information is stored or shared; all processing occurs privately on your device."
+          }
+        }
+      }
+    },
+    "DockDoor needs screen recording access. In macOS Sequoia, you'll see this prompt every week or month and after reboots. This is a new system-wide security policy for all screen capture apps." : {
+      "localizations" : {
+        "af" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor needs screen recording access. In macOS Sequoia, you'll see this prompt every week or month and after reboots. This is a new system-wide security policy for all screen capture apps."
+          }
+        },
+        "ar" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor needs screen recording access. In macOS Sequoia, you'll see this prompt every week or month and after reboots. This is a new system-wide security policy for all screen capture apps."
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor needs screen recording access. In macOS Sequoia, you'll see this prompt every week or month and after reboots. This is a new system-wide security policy for all screen capture apps."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor needs screen recording access. In macOS Sequoia, you'll see this prompt every week or month and after reboots. This is a new system-wide security policy for all screen capture apps."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor needs screen recording access. In macOS Sequoia, you'll see this prompt every week or month and after reboots. This is a new system-wide security policy for all screen capture apps."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor needs screen recording access. In macOS Sequoia, you'll see this prompt every week or month and after reboots. This is a new system-wide security policy for all screen capture apps."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor needs screen recording access. In macOS Sequoia, you'll see this prompt every week or month and after reboots. This is a new system-wide security policy for all screen capture apps."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor needs screen recording access. In macOS Sequoia, you'll see this prompt every week or month and after reboots. This is a new system-wide security policy for all screen capture apps."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor needs screen recording access. In macOS Sequoia, you'll see this prompt every week or month and after reboots. This is a new system-wide security policy for all screen capture apps."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor needs screen recording access. In macOS Sequoia, you'll see this prompt every week or month and after reboots. This is a new system-wide security policy for all screen capture apps."
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor needs screen recording access. In macOS Sequoia, you'll see this prompt every week or month and after reboots. This is a new system-wide security policy for all screen capture apps."
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor needs screen recording access. In macOS Sequoia, you'll see this prompt every week or month and after reboots. This is a new system-wide security policy for all screen capture apps."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor needs screen recording access. In macOS Sequoia, you'll see this prompt every week or month and after reboots. This is a new system-wide security policy for all screen capture apps."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor needs screen recording access. In macOS Sequoia, you'll see this prompt every week or month and after reboots. This is a new system-wide security policy for all screen capture apps."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor needs screen recording access. In macOS Sequoia, you'll see this prompt every week or month and after reboots. This is a new system-wide security policy for all screen capture apps."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor needs screen recording access. In macOS Sequoia, you'll see this prompt every week or month and after reboots. This is a new system-wide security policy for all screen capture apps."
+          }
+        },
+        "no" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor needs screen recording access. In macOS Sequoia, you'll see this prompt every week or month and after reboots. This is a new system-wide security policy for all screen capture apps."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor needs screen recording access. In macOS Sequoia, you'll see this prompt every week or month and after reboots. This is a new system-wide security policy for all screen capture apps."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor needs screen recording access. In macOS Sequoia, you'll see this prompt every week or month and after reboots. This is a new system-wide security policy for all screen capture apps."
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor needs screen recording access. In macOS Sequoia, you'll see this prompt every week or month and after reboots. This is a new system-wide security policy for all screen capture apps."
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor needs screen recording access. In macOS Sequoia, you'll see this prompt every week or month and after reboots. This is a new system-wide security policy for all screen capture apps."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor needs screen recording access. In macOS Sequoia, you'll see this prompt every week or month and after reboots. This is a new system-wide security policy for all screen capture apps."
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor needs screen recording access. In macOS Sequoia, you'll see this prompt every week or month and after reboots. This is a new system-wide security policy for all screen capture apps."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor needs screen recording access. In macOS Sequoia, you'll see this prompt every week or month and after reboots. This is a new system-wide security policy for all screen capture apps."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor needs screen recording access. In macOS Sequoia, you'll see this prompt every week or month and after reboots. This is a new system-wide security policy for all screen capture apps."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor needs screen recording access. In macOS Sequoia, you'll see this prompt every week or month and after reboots. This is a new system-wide security policy for all screen capture apps."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor needs screen recording access. In macOS Sequoia, you'll see this prompt every week or month and after reboots. This is a new system-wide security policy for all screen capture apps."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor needs screen recording access. In macOS Sequoia, you'll see this prompt every week or month and after reboots. This is a new system-wide security policy for all screen capture apps."
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor needs screen recording access. In macOS Sequoia, you'll see this prompt every week or month and after reboots. This is a new system-wide security policy for all screen capture apps."
+          }
+        }
+      }
+    },
     "Edit Color" : {
       "localizations" : {
         "af" : {
@@ -7153,8 +7509,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable Preview Window Sliding Animation"
+            "state" : "translated",
+            "value" : "تمكين معاينة انزلاق النافذة"
           }
         },
         "ca" : {
@@ -7207,8 +7563,8 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable Preview Window Sliding Animation"
+            "state" : "translated",
+            "value" : "הפעל אנימציית החלקה בתצוגה מקדימה של ה-Dock"
           }
         },
         "hu" : {
@@ -7687,8 +8043,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Everything is now set up!"
+            "state" : "translated",
+            "value" : "كل شيء تم إعداده الآن!"
           }
         },
         "ca" : {
@@ -7741,8 +8097,8 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Everything is now set up!"
+            "state" : "translated",
+            "value" : "עכשיו הכל מוכן!"
           }
         },
         "hu" : {
@@ -7789,8 +8145,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Everything is now set up!"
+            "state" : "translated",
+            "value" : "Está tudo configurado agora!"
           }
         },
         "pt-PT" : {
@@ -7849,8 +8205,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Everything is now set up!"
+            "state" : "translated",
+            "value" : "設置完成!"
           }
         }
       }
@@ -8209,6 +8565,184 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "極小"
+          }
+        }
+      }
+    },
+    "Found a Bug?" : {
+      "localizations" : {
+        "af" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Found a Bug?"
+          }
+        },
+        "ar" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Found a Bug?"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Found a Bug?"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Found a Bug?"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Found a Bug?"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Found a Bug?"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Found a Bug?"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Found a Bug?"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Found a Bug?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Found a Bug?"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Found a Bug?"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Found a Bug?"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Found a Bug?"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Found a Bug?"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Found a Bug?"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Found a Bug?"
+          }
+        },
+        "no" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Found a Bug?"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Found a Bug?"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Found a Bug?"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Found a Bug?"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Found a Bug?"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Found a Bug?"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Found a Bug?"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Found a Bug?"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Found a Bug?"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Found a Bug?"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Found a Bug?"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Found a Bug?"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Found a Bug?"
           }
         }
       }
@@ -8758,8 +9292,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Granted"
+            "state" : "translated",
+            "value" : "تم المنح"
           }
         },
         "ca" : {
@@ -8812,8 +9346,8 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Granted"
+            "state" : "translated",
+            "value" : "הוענקה"
           }
         },
         "hu" : {
@@ -8860,8 +9394,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Granted"
+            "state" : "translated",
+            "value" : "Concedida"
           }
         },
         "pt-PT" : {
@@ -8920,8 +9454,721 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
+            "state" : "translated",
+            "value" : "已允許"
+          }
+        }
+      }
+    },
+    "Have an Idea?" : {
+      "localizations" : {
+        "af" : {
+          "stringUnit" : {
             "state" : "new",
-            "value" : "Granted"
+            "value" : "Have an Idea?"
+          }
+        },
+        "ar" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Have an Idea?"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Have an Idea?"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Have an Idea?"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Have an Idea?"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Have an Idea?"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Have an Idea?"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Have an Idea?"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Have an Idea?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Have an Idea?"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Have an Idea?"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Have an Idea?"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Have an Idea?"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Have an Idea?"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Have an Idea?"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Have an Idea?"
+          }
+        },
+        "no" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Have an Idea?"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Have an Idea?"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Have an Idea?"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Have an Idea?"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Have an Idea?"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Have an Idea?"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Have an Idea?"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Have an Idea?"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Have an Idea?"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Have an Idea?"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Have an Idea?"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Have an Idea?"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Have an Idea?"
+          }
+        }
+      }
+    },
+    "Help" : {
+      "comment" : "Settings tab title",
+      "localizations" : {
+        "af" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help"
+          }
+        },
+        "ar" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help"
+          }
+        },
+        "no" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help"
+          }
+        }
+      }
+    },
+    "Help and questions settings" : {
+      "localizations" : {
+        "af" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help and questions settings"
+          }
+        },
+        "ar" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help and questions settings"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help and questions settings"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help and questions settings"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help and questions settings"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help and questions settings"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help and questions settings"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help and questions settings"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help and questions settings"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help and questions settings"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help and questions settings"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help and questions settings"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help and questions settings"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help and questions settings"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help and questions settings"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help and questions settings"
+          }
+        },
+        "no" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help and questions settings"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help and questions settings"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help and questions settings"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help and questions settings"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help and questions settings"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help and questions settings"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help and questions settings"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help and questions settings"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help and questions settings"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help and questions settings"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help and questions settings"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help and questions settings"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help and questions settings"
+          }
+        }
+      }
+    },
+    "Help us improve DockDoor by reporting any issues you encounter." : {
+      "localizations" : {
+        "af" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help us improve DockDoor by reporting any issues you encounter."
+          }
+        },
+        "ar" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help us improve DockDoor by reporting any issues you encounter."
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help us improve DockDoor by reporting any issues you encounter."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help us improve DockDoor by reporting any issues you encounter."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help us improve DockDoor by reporting any issues you encounter."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help us improve DockDoor by reporting any issues you encounter."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help us improve DockDoor by reporting any issues you encounter."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help us improve DockDoor by reporting any issues you encounter."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help us improve DockDoor by reporting any issues you encounter."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help us improve DockDoor by reporting any issues you encounter."
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help us improve DockDoor by reporting any issues you encounter."
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help us improve DockDoor by reporting any issues you encounter."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help us improve DockDoor by reporting any issues you encounter."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help us improve DockDoor by reporting any issues you encounter."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help us improve DockDoor by reporting any issues you encounter."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help us improve DockDoor by reporting any issues you encounter."
+          }
+        },
+        "no" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help us improve DockDoor by reporting any issues you encounter."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help us improve DockDoor by reporting any issues you encounter."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help us improve DockDoor by reporting any issues you encounter."
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help us improve DockDoor by reporting any issues you encounter."
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help us improve DockDoor by reporting any issues you encounter."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help us improve DockDoor by reporting any issues you encounter."
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help us improve DockDoor by reporting any issues you encounter."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help us improve DockDoor by reporting any issues you encounter."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help us improve DockDoor by reporting any issues you encounter."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help us improve DockDoor by reporting any issues you encounter."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help us improve DockDoor by reporting any issues you encounter."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help us improve DockDoor by reporting any issues you encounter."
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help us improve DockDoor by reporting any issues you encounter."
           }
         }
       }
@@ -9116,8 +10363,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Highlight Gradient Colors"
+            "state" : "translated",
+            "value" : "إبراز الألوان المتدرجة"
           }
         },
         "ca" : {
@@ -9638,6 +10885,184 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "懸停視窗標題樣式"
+          }
+        }
+      }
+    },
+    "If you find DockDoor useful, consider donating. Your support helps keep the project going!" : {
+      "localizations" : {
+        "af" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "If you find DockDoor useful, consider donating. Your support helps keep the project going!"
+          }
+        },
+        "ar" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "If you find DockDoor useful, consider donating. Your support helps keep the project going!"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "If you find DockDoor useful, consider donating. Your support helps keep the project going!"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "If you find DockDoor useful, consider donating. Your support helps keep the project going!"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "If you find DockDoor useful, consider donating. Your support helps keep the project going!"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "If you find DockDoor useful, consider donating. Your support helps keep the project going!"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "If you find DockDoor useful, consider donating. Your support helps keep the project going!"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "If you find DockDoor useful, consider donating. Your support helps keep the project going!"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "If you find DockDoor useful, consider donating. Your support helps keep the project going!"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "If you find DockDoor useful, consider donating. Your support helps keep the project going!"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "If you find DockDoor useful, consider donating. Your support helps keep the project going!"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "If you find DockDoor useful, consider donating. Your support helps keep the project going!"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "If you find DockDoor useful, consider donating. Your support helps keep the project going!"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "If you find DockDoor useful, consider donating. Your support helps keep the project going!"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "If you find DockDoor useful, consider donating. Your support helps keep the project going!"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "If you find DockDoor useful, consider donating. Your support helps keep the project going!"
+          }
+        },
+        "no" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "If you find DockDoor useful, consider donating. Your support helps keep the project going!"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "If you find DockDoor useful, consider donating. Your support helps keep the project going!"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "If you find DockDoor useful, consider donating. Your support helps keep the project going!"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "If you find DockDoor useful, consider donating. Your support helps keep the project going!"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "If you find DockDoor useful, consider donating. Your support helps keep the project going!"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "If you find DockDoor useful, consider donating. Your support helps keep the project going!"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "If you find DockDoor useful, consider donating. Your support helps keep the project going!"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "If you find DockDoor useful, consider donating. Your support helps keep the project going!"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "If you find DockDoor useful, consider donating. Your support helps keep the project going!"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "If you find DockDoor useful, consider donating. Your support helps keep the project going!"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "If you find DockDoor useful, consider donating. Your support helps keep the project going!"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "If you find DockDoor useful, consider donating. Your support helps keep the project going!"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "If you find DockDoor useful, consider donating. Your support helps keep the project going!"
           }
         }
       }
@@ -10544,8 +11969,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Let's set things up"
+            "state" : "translated",
+            "value" : "لنقم بإعداد الأشياء"
           }
         },
         "ca" : {
@@ -10598,8 +12023,8 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Let's set things up"
+            "state" : "translated",
+            "value" : "בואו נגדיר כמה דברים"
           }
         },
         "hu" : {
@@ -10646,8 +12071,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Let's set things up"
+            "state" : "translated",
+            "value" : "Vamos configurar as coisas"
           }
         },
         "pt-PT" : {
@@ -10706,8 +12131,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Let's set things up"
+            "state" : "translated",
+            "value" : "開始設定"
           }
         }
       }
@@ -11259,8 +12684,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Next page"
+            "state" : "translated",
+            "value" : "الصفحة التالية"
           }
         },
         "ca" : {
@@ -11313,8 +12738,8 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Next page"
+            "state" : "translated",
+            "value" : "הדף הבא"
           }
         },
         "hu" : {
@@ -11361,8 +12786,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Next page"
+            "state" : "translated",
+            "value" : "Próxima página"
           }
         },
         "pt-PT" : {
@@ -11421,8 +12846,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Next page"
+            "state" : "translated",
+            "value" : "下一頁"
           }
         }
       }
@@ -11796,8 +13221,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Not granted"
+            "state" : "translated",
+            "value" : "لم يتم المنح"
           }
         },
         "ca" : {
@@ -11850,8 +13275,8 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Not granted"
+            "state" : "translated",
+            "value" : "לא הוענקה"
           }
         },
         "hu" : {
@@ -11898,8 +13323,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Not granted"
+            "state" : "translated",
+            "value" : "Não concedida"
           }
         },
         "pt-PT" : {
@@ -11958,8 +13383,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Not granted"
+            "state" : "translated",
+            "value" : "未允許"
           }
         }
       }
@@ -14654,8 +16079,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Press any key to set the keybind."
+            "state" : "translated",
+            "value" : "اضغط على أي مفتاح لتعيين ربط المفتاح."
           }
         },
         "ca" : {
@@ -14708,8 +16133,8 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Press any key to set the keybind."
+            "state" : "translated",
+            "value" : "הקש על מקש כלשהו כדי להגדיר את צירוף המקשים."
           }
         },
         "hu" : {
@@ -14756,8 +16181,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Press any key to set the keybind."
+            "state" : "translated",
+            "value" : "Pressione qualquer tecla para definir a atribuição de teclas."
           }
         },
         "pt-PT" : {
@@ -14816,8 +16241,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Press any key to set the keybind."
+            "state" : "translated",
+            "value" : "按下任意鍵設定快捷鍵"
           }
         }
       }
@@ -14832,8 +16257,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Press any key..."
+            "state" : "translated",
+            "value" : "اضغط على أي مفتاح..."
           }
         },
         "ca" : {
@@ -14886,8 +16311,8 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Press any key..."
+            "state" : "translated",
+            "value" : "הקש על מקש כלשהו..."
           }
         },
         "hu" : {
@@ -14934,8 +16359,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Press any key..."
+            "state" : "translated",
+            "value" : "Pressione qualquer tecla..."
           }
         },
         "pt-PT" : {
@@ -14994,8 +16419,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Press any key..."
+            "state" : "translated",
+            "value" : "按下任意鍵..."
           }
         }
       }
@@ -15545,8 +16970,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Window Fade Out Duration"
+            "state" : "translated",
+            "value" : "معاينة فترة تلاشي النافذة"
           }
         },
         "ca" : {
@@ -15599,8 +17024,8 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Window Fade Out Duration"
+            "state" : "translated",
+            "value" : "משך דהייה של חלון תצוגה מקדימה"
           }
         },
         "hu" : {
@@ -15723,8 +17148,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Window Open Delay"
+            "state" : "translated",
+            "value" : "معاينة نافذة التأخير المفتوح"
           }
         },
         "ca" : {
@@ -15777,8 +17202,8 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Window Open Delay"
+            "state" : "translated",
+            "value" : "משך דהייה של התצוגה המקדימה"
           }
         },
         "hu" : {
@@ -16426,6 +17851,362 @@
         }
       }
     },
+    "Report a Bug" : {
+      "localizations" : {
+        "af" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Report a Bug"
+          }
+        },
+        "ar" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Report a Bug"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Report a Bug"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Report a Bug"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Report a Bug"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Report a Bug"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Report a Bug"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Report a Bug"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Report a Bug"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Report a Bug"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Report a Bug"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Report a Bug"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Report a Bug"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Report a Bug"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Report a Bug"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Report a Bug"
+          }
+        },
+        "no" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Report a Bug"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Report a Bug"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Report a Bug"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Report a Bug"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Report a Bug"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Report a Bug"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Report a Bug"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Report a Bug"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Report a Bug"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Report a Bug"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Report a Bug"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Report a Bug"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Report a Bug"
+          }
+        }
+      }
+    },
+    "Request a Feature" : {
+      "localizations" : {
+        "af" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Request a Feature"
+          }
+        },
+        "ar" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Request a Feature"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Request a Feature"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Request a Feature"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Request a Feature"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Request a Feature"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Request a Feature"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Request a Feature"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Request a Feature"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Request a Feature"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Request a Feature"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Request a Feature"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Request a Feature"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Request a Feature"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Request a Feature"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Request a Feature"
+          }
+        },
+        "no" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Request a Feature"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Request a Feature"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Request a Feature"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Request a Feature"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Request a Feature"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Request a Feature"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Request a Feature"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Request a Feature"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Request a Feature"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Request a Feature"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Request a Feature"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Request a Feature"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Request a Feature"
+          }
+        }
+      }
+    },
     "Required for capturing window previews of other apps" : {
       "localizations" : {
         "af" : {
@@ -16436,8 +18217,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Required for capturing window previews of other apps"
+            "state" : "translated",
+            "value" : "مطلوب لالتقاط معاينات النافذة للتطبيقات الأخرى"
           }
         },
         "ca" : {
@@ -16490,8 +18271,8 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Required for capturing window previews of other apps"
+            "state" : "translated",
+            "value" : "נדרש לצילום תמונות של חלונות היישומים האחרים"
           }
         },
         "hu" : {
@@ -16538,8 +18319,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Required for capturing window previews of other apps"
+            "state" : "translated",
+            "value" : "Necessário para capturar prévias de janelas de outros aplicativos"
           }
         },
         "pt-PT" : {
@@ -16598,8 +18379,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Required for capturing window previews of other apps"
+            "state" : "translated",
+            "value" : "需要允許權限才能擷取其他 App 的視窗預覽"
           }
         }
       }
@@ -16614,8 +18395,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Required for dock hover detection and window switcher hotkeys"
+            "state" : "translated",
+            "value" : "مطلوب لشريط Dock الكشف عن الوعود والمفاتيح الساخنة لمبدل النوافذ"
           }
         },
         "ca" : {
@@ -16668,8 +18449,8 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Required for dock hover detection and window switcher hotkeys"
+            "state" : "translated",
+            "value" : "נדרש עבור זיהוי רחף על ה-Dock ועבור מקשי הקיצור של מחליף החלונות"
           }
         },
         "hu" : {
@@ -16776,8 +18557,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Required for dock hover detection and window switcher hotkeys"
+            "state" : "translated",
+            "value" : "需要此權限來偵測 Dock 懸停和使用視窗切換快捷鍵"
           }
         }
       }
@@ -17506,8 +19287,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Restart app"
+            "state" : "translated",
+            "value" : "إعادة تشغيل التطبيق"
           }
         },
         "ca" : {
@@ -17560,8 +19341,8 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Restart app"
+            "state" : "translated",
+            "value" : "הפעל מחדש את היישום"
           }
         },
         "hu" : {
@@ -17668,8 +19449,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Restart app"
+            "state" : "translated",
+            "value" : "重新啟動應用程式"
           }
         }
       }
@@ -18398,8 +20179,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Screen recording"
+            "state" : "translated",
+            "value" : "تسجيل الشاشة"
           }
         },
         "ca" : {
@@ -18452,8 +20233,8 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Screen recording"
+            "state" : "translated",
+            "value" : "הקלטת מסך"
           }
         },
         "hu" : {
@@ -18560,8 +20341,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Screen recording"
+            "state" : "translated",
+            "value" : "錄製螢幕畫面"
           }
         }
       }
@@ -19282,6 +21063,184 @@
         }
       }
     },
+    "See more..." : {
+      "localizations" : {
+        "af" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "See more..."
+          }
+        },
+        "ar" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "See more..."
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "See more..."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "See more..."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "See more..."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "See more..."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "See more..."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "See more..."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "See more..."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "See more..."
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "See more..."
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "See more..."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "See more..."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "See more..."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "See more..."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "See more..."
+          }
+        },
+        "no" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "See more..."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "See more..."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "See more..."
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "See more..."
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "See more..."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "See more..."
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "See more..."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "See more..."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "See more..."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "See more..."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "See more..."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "See more..."
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "See more..."
+          }
+        }
+      }
+    },
     "Set Initialization Key and Keybind" : {
       "localizations" : {
         "af" : {
@@ -19471,8 +21430,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Shadowed"
+            "state" : "translated",
+            "value" : "مظلل"
           }
         },
         "ca" : {
@@ -19525,8 +21484,8 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Shadowed"
+            "state" : "translated",
+            "value" : "עם צל"
           }
         },
         "hu" : {
@@ -19633,8 +21592,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Shadowed"
+            "state" : "translated",
+            "value" : "陰影效果"
           }
         }
       }
@@ -21257,8 +23216,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Sort Window Previews by Date"
+            "state" : "translated",
+            "value" : "ترتيب معاينات النافذة حسب التاريخ"
           }
         },
         "ca" : {
@@ -21311,8 +23270,8 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Sort Window Previews by Date"
+            "state" : "translated",
+            "value" : "מיין תצוגות מקדימות של חלונות לפי שימוש אחרון"
           }
         },
         "hu" : {
@@ -21435,8 +23394,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Start recording keybind"
+            "state" : "translated",
+            "value" : "بدء ربط مفتاح التسجيل"
           }
         },
         "ca" : {
@@ -21489,8 +23448,8 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Start recording keybind"
+            "state" : "translated",
+            "value" : "התחל הקלטת צירוף מקשים"
           }
         },
         "hu" : {
@@ -21597,8 +23556,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Start recording keybind"
+            "state" : "translated",
+            "value" : "錄製快捷鍵"
           }
         }
       }
@@ -21961,6 +23920,362 @@
         }
       }
     },
+    "Suggest new features to make DockDoor even better." : {
+      "localizations" : {
+        "af" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Suggest new features to make DockDoor even better."
+          }
+        },
+        "ar" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Suggest new features to make DockDoor even better."
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Suggest new features to make DockDoor even better."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Suggest new features to make DockDoor even better."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Suggest new features to make DockDoor even better."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Suggest new features to make DockDoor even better."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Suggest new features to make DockDoor even better."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Suggest new features to make DockDoor even better."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Suggest new features to make DockDoor even better."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Suggest new features to make DockDoor even better."
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Suggest new features to make DockDoor even better."
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Suggest new features to make DockDoor even better."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Suggest new features to make DockDoor even better."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Suggest new features to make DockDoor even better."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Suggest new features to make DockDoor even better."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Suggest new features to make DockDoor even better."
+          }
+        },
+        "no" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Suggest new features to make DockDoor even better."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Suggest new features to make DockDoor even better."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Suggest new features to make DockDoor even better."
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Suggest new features to make DockDoor even better."
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Suggest new features to make DockDoor even better."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Suggest new features to make DockDoor even better."
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Suggest new features to make DockDoor even better."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Suggest new features to make DockDoor even better."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Suggest new features to make DockDoor even better."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Suggest new features to make DockDoor even better."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Suggest new features to make DockDoor even better."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Suggest new features to make DockDoor even better."
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Suggest new features to make DockDoor even better."
+          }
+        }
+      }
+    },
+    "Support DockDoor" : {
+      "localizations" : {
+        "af" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Support DockDoor"
+          }
+        },
+        "ar" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Support DockDoor"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Support DockDoor"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Support DockDoor"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Support DockDoor"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Support DockDoor"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Support DockDoor"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Support DockDoor"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Support DockDoor"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Support DockDoor"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Support DockDoor"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Support DockDoor"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Support DockDoor"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Support DockDoor"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Support DockDoor"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Support DockDoor"
+          }
+        },
+        "no" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Support DockDoor"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Support DockDoor"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Support DockDoor"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Support DockDoor"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Support DockDoor"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Support DockDoor"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Support DockDoor"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Support DockDoor"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Support DockDoor"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Support DockDoor"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Support DockDoor"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Support DockDoor"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Support DockDoor"
+          }
+        }
+      }
+    },
     "The changes to permissions will take effect after restarting." : {
       "localizations" : {
         "af" : {
@@ -21971,8 +24286,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "The changes to permissions will take effect after restarting."
+            "state" : "translated",
+            "value" : "ستصبح التغييرات على الأذونات سارية المفعول بعد إعادة التشغيل."
           }
         },
         "ca" : {
@@ -22025,8 +24340,8 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "The changes to permissions will take effect after restarting."
+            "state" : "translated",
+            "value" : "השינויים בהרשאות ייכנסו לתוקף לאחר הפעלת היישום מחדש."
           }
         },
         "hu" : {
@@ -22133,8 +24448,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "The changes to permissions will take effect after restarting."
+            "state" : "translated",
+            "value" : "權限變更將在重新啟動後生效。"
           }
         }
       }
@@ -24279,6 +26594,184 @@
         }
       }
     },
+    "Want to see for yourself? Review our source code" : {
+      "localizations" : {
+        "af" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Want to see for yourself? Review our source code"
+          }
+        },
+        "ar" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Want to see for yourself? Review our source code"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Want to see for yourself? Review our source code"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Want to see for yourself? Review our source code"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Want to see for yourself? Review our source code"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Want to see for yourself? Review our source code"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Want to see for yourself? Review our source code"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Want to see for yourself? Review our source code"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Want to see for yourself? Review our source code"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Want to see for yourself? Review our source code"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Want to see for yourself? Review our source code"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Want to see for yourself? Review our source code"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Want to see for yourself? Review our source code"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Want to see for yourself? Review our source code"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Want to see for yourself? Review our source code"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Want to see for yourself? Review our source code"
+          }
+        },
+        "no" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Want to see for yourself? Review our source code"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Want to see for yourself? Review our source code"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Want to see for yourself? Review our source code"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Want to see for yourself? Review our source code"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Want to see for yourself? Review our source code"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Want to see for yourself? Review our source code"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Want to see for yourself? Review our source code"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Want to see for yourself? Review our source code"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Want to see for yourself? Review our source code"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Want to see for yourself? Review our source code"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Want to see for yourself? Review our source code"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Want to see for yourself? Review our source code"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Want to see for yourself? Review our source code"
+          }
+        }
+      }
+    },
     "Want to see the app in your language?" : {
       "localizations" : {
         "af" : {
@@ -25541,8 +28034,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When you click the button below, DockDoor will restart and move to the menu bar to run in the background."
+            "state" : "translated",
+            "value" : "عند النقر على الزر أدناه، سيقوم DockDoor بإعادة تشغيل ونقل إلى شريط القائمة لتشغيله في الخلفية."
           }
         },
         "ca" : {
@@ -25595,8 +28088,8 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When you click the button below, DockDoor will restart and move to the menu bar to run in the background."
+            "state" : "translated",
+            "value" : "כאשר תלחץ על הכפתור למטה, DockDoor יופעל מחדש ויעבור לשורת התפריטים כדי לפעול ברקע."
           }
         },
         "hu" : {
@@ -25703,8 +28196,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When you click the button below, DockDoor will restart and move to the menu bar to run in the background."
+            "state" : "translated",
+            "value" : "點擊下方按鈕後，DockDoor 將重新啟動並移至選單列在背景執行。"
           }
         }
       }
@@ -27860,7 +30353,7 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Z"
           }
         },
@@ -28022,7 +30515,7 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Z"
           }
         }

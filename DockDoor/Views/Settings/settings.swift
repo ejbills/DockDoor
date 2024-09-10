@@ -10,6 +10,7 @@ extension Settings.PaneIdentifier {
         static let updates = Self("updates")
     #endif
     static let alttab = Self("alttab")
+    static let help = Self("help")
 }
 
 let GeneralSettingsViewController: () -> SettingsPane = {
@@ -73,3 +74,15 @@ let PermissionsSettingsViewController: () -> SettingsPane = {
         return Settings.PaneHostingController(pane: paneView)
     }
 #endif
+
+let HelpSettingsViewController: () -> SettingsPane = {
+    let paneView = Settings.Pane(
+        identifier: .help,
+        title: String(localized: "Help", comment: "Settings tab title"),
+        toolbarIcon: NSImage(systemSymbolName: "questionmark.circle.fill", accessibilityDescription: String(localized: "Help and questions settings"))!
+    ) {
+        HelpSettingsView()
+    }
+
+    return Settings.PaneHostingController(pane: paneView)
+}

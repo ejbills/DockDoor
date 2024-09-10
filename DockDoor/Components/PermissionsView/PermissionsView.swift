@@ -27,7 +27,7 @@ struct PermissionsView: View {
 
             if let nextTab {
                 VStack(alignment: .center, spacing: 12) {
-                    SquiggleDivider().opacity(0.5)
+                    SquiggleDivider()
 
                     Button(action: nextTab) {
                         Text("Next page")
