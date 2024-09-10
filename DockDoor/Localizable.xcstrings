@@ -6428,7 +6428,10 @@
         }
       }
     },
-    "DockDoor requires screen recording access. In macOS Sequoia, you'll see this prompt weekly and after reboots for security. It's not a bug, but a new system-wide policy for all apps using screen capture." : {
+    "DockDoor does not record your screen or audio. It only captures static window previews. No information is stored or shared; all processing occurs privately on your device." : {
+
+    },
+    "DockDoor needs screen recording access. In macOS Sequoia, you'll see this prompt every week or month and after reboots. This is a new system-wide security policy for all screen capture apps." : {
 
     },
     "Edit Color" : {
@@ -8216,6 +8219,9 @@
         }
       }
     },
+    "Found a Bug?" : {
+
+    },
     "General" : {
       "comment" : "Settings tab title",
       "localizations" : {
@@ -8929,10 +8935,16 @@
         }
       }
     },
+    "Have an Idea?" : {
+
+    },
     "Help" : {
       "comment" : "Settings tab title"
     },
     "Help and questions settings" : {
+
+    },
+    "Help us improve DockDoor by reporting any issues you encounter." : {
 
     },
     "Hidden" : {
@@ -9650,6 +9662,9 @@
           }
         }
       }
+    },
+    "If you find DockDoor useful, consider donating. Your support helps keep the project going!" : {
+
     },
     "If you need to access the menu bar icon, launch the app to reveal it for 10 seconds." : {
       "extractionState" : "stale",
@@ -16435,6 +16450,12 @@
         }
       }
     },
+    "Report a Bug" : {
+
+    },
+    "Request a Feature" : {
+
+    },
     "Required for capturing window previews of other apps" : {
       "localizations" : {
         "af" : {
@@ -18575,9 +18596,6 @@
         }
       }
     },
-    "Screen Recording Permission" : {
-
-    },
     "Screen Recording Permissions" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -19293,6 +19311,9 @@
           }
         }
       }
+    },
+    "See more..." : {
+
     },
     "Set Initialization Key and Keybind" : {
       "localizations" : {
@@ -21973,6 +21994,12 @@
         }
       }
     },
+    "Suggest new features to make DockDoor even better." : {
+
+    },
+    "Support DockDoor" : {
+
+    },
     "The changes to permissions will take effect after restarting." : {
       "localizations" : {
         "af" : {
@@ -24290,6 +24317,9 @@
           }
         }
       }
+    },
+    "Want to see for yourself? Review our source code" : {
+
     },
     "Want to see the app in your language?" : {
       "localizations" : {

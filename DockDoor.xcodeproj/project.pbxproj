@@ -47,6 +47,9 @@
 		BB15E1EA2C8F8DB4002ECFB9 /* HelpSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB15E1E92C8F8DB1002ECFB9 /* HelpSettingsView.swift */; };
 		BB15E1EC2C8F8F13002ECFB9 /* CardModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB15E1EB2C8F8F0F002ECFB9 /* CardModifier.swift */; };
 		BB15E1EF2C8FB70C002ECFB9 /* Glur in Frameworks */ = {isa = PBXBuildFile; productRef = BB15E1EE2C8FB70C002ECFB9 /* Glur */; };
+		BB15E1F12C8FBCD4002ECFB9 /* BugAndFeatureReporting.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB15E1F02C8FBCCD002ECFB9 /* BugAndFeatureReporting.swift */; };
+		BB15E1F52C8FBEAB002ECFB9 /* DonationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB15E1F42C8FBEA4002ECFB9 /* DonationView.swift */; };
+		BB15E1F72C8FC05A002ECFB9 /* UniformCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB15E1F62C8FC056002ECFB9 /* UniformCardView.swift */; };
 		BB1CBD582C1BA800003969BC /* MainSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB1CBD572C1BA800003969BC /* MainSettingsView.swift */; };
 		BB1CBD5B2C1BA8DC003969BC /* Defaults in Frameworks */ = {isa = PBXBuildFile; productRef = BB1CBD5A2C1BA8DC003969BC /* Defaults */; };
 		BB1CBD5D2C1BCA4F003969BC /* Misc Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB1CBD5C2C1BCA4F003969BC /* Misc Utils.swift */; };
@@ -123,6 +126,9 @@
 		BB15E1E72C8F8C93002ECFB9 /* ScreenRecordWarningView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenRecordWarningView.swift; sourceTree = "<group>"; };
 		BB15E1E92C8F8DB1002ECFB9 /* HelpSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpSettingsView.swift; sourceTree = "<group>"; };
 		BB15E1EB2C8F8F0F002ECFB9 /* CardModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardModifier.swift; sourceTree = "<group>"; };
+		BB15E1F02C8FBCCD002ECFB9 /* BugAndFeatureReporting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BugAndFeatureReporting.swift; sourceTree = "<group>"; };
+		BB15E1F42C8FBEA4002ECFB9 /* DonationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DonationView.swift; sourceTree = "<group>"; };
+		BB15E1F62C8FC056002ECFB9 /* UniformCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UniformCardView.swift; sourceTree = "<group>"; };
 		BB1CBD572C1BA800003969BC /* MainSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainSettingsView.swift; sourceTree = "<group>"; };
 		BB1CBD5C2C1BCA4F003969BC /* Misc Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Misc Utils.swift"; sourceTree = "<group>"; };
 		BB2567C52C10C5F000C0C93E /* DockUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DockUtils.swift; sourceTree = "<group>"; };
@@ -327,7 +333,10 @@
 		BB15E1E62C8F8C8D002ECFB9 /* Help */ = {
 			isa = PBXGroup;
 			children = (
+				BB15E1F62C8FC056002ECFB9 /* UniformCardView.swift */,
 				BB15E1E92C8F8DB1002ECFB9 /* HelpSettingsView.swift */,
+				BB15E1F42C8FBEA4002ECFB9 /* DonationView.swift */,
+				BB15E1F02C8FBCCD002ECFB9 /* BugAndFeatureReporting.swift */,
 				BB15E1E72C8F8C93002ECFB9 /* ScreenRecordWarningView.swift */,
 			);
 			path = Help;
@@ -550,6 +559,7 @@
 				BBA153FA2C11FFD500119C02 /* consts.swift in Sources */,
 				BBA153F62C115DDA00119C02 /* AppDelegate.swift in Sources */,
 				3A1622CA2C8D5E4600D318EE /* FirstTimeIntroTabView.swift in Sources */,
+				BB15E1F72C8FC05A002ECFB9 /* UniformCardView.swift in Sources */,
 				BBA153F82C11604400119C02 /* SharedPreviewWindowCoordinator.swift in Sources */,
 				BBA153FC2C12356100119C02 /* main.swift in Sources */,
 				BBF6C6242C1B4B4400BF1D40 /* KeybindHelper.swift in Sources */,
@@ -566,6 +576,8 @@
 				BBE7CC912C22429A00AB8F4D /* settings.swift in Sources */,
 				BBF413942C40978400AA6733 /* WindowPreviewHoverContainer.swift in Sources */,
 				BBF413922C40618D00AA6733 /* FullSizePreviewView.swift in Sources */,
+				BB15E1F12C8FBCD4002ECFB9 /* BugAndFeatureReporting.swift in Sources */,
+				BB15E1F52C8FBEAB002ECFB9 /* DonationView.swift in Sources */,
 				BBCFAE402C266234002E1516 /* FirstTimeView.swift in Sources */,
 				BB4B444B2C372A4E006680DC /* WindowPreview.swift in Sources */,
 				BB04405B2C77A013009F1D33 /* GradientColorPaletteSettings.swift in Sources */,

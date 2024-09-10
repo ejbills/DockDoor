@@ -26,7 +26,7 @@ struct FirstTimeCongratsTabView: View {
                 .fixedSize(horizontal: false, vertical: true)
 
             VStack(alignment: .center, spacing: 12) {
-                SquiggleDivider().opacity(0.5)
+                SquiggleDivider()
                 Text("The changes to permissions will take effect after restarting.")
                     .font(.callout)
                     .foregroundColor(.secondary)
