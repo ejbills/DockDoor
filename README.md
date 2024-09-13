@@ -15,6 +15,7 @@
 [![GitHub issues](https://img.shields.io/github/issues/ejbills/DockDoor?style=flat-square)](https://github.com/ejbills/DockDoor/issues)
 [![GitHub license](https://img.shields.io/github/license/ejbills/DockDoor?style=flat-square)](https://github.com/ejbills/DockDoor/blob/main/LICENSE)
 [![Contributors](https://img.shields.io/github/contributors/ejbills/DockDoor?style=flat-square)](https://github.com/ejbills/DockDoor/graphs/contributors)
+[![Crowdin](https://badges.crowdin.net/dockdoor/localized.svg)](https://crowdin.com/project/dockdoor)
 [![Website](https://img.shields.io/badge/Website-015FBA?style=flat-square)](https://dockdoor.net)
 
 **DockDoor** is a macOS application that adds a much-needed feature to your Mac: Dock previews.

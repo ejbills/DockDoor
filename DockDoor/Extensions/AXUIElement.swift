@@ -17,66 +17,11 @@ extension AXUIElement {
         }
     }
 
-    #if !APPSTORE_BUILD
-        func cgWindowId() throws -> CGWindowID? {
-            var id = CGWindowID(0)
-            return try axCallWhichCanThrow(_AXUIElementGetWindow(self, &id), &id)
-        }
-    #else
-        func cgWindowId() -> CGWindowID? {
-            // First, try to get the window ID using position and size
-            if let windowId = getCGWindowIdByFrame() {
-                return windowId
-            }
+    func cgWindowId() throws -> CGWindowID? {
+        var id = CGWindowID(0)
+        return try axCallWhichCanThrow(_AXUIElementGetWindow(self, &id), &id)
+    }
 
-            // If that fails (possibly due to minimization), try to match based on other properties
-            return getCGWindowIdByProperties()
-        }
-
-        private func getCGWindowIdByFrame() -> CGWindowID? {
-            guard let pid = try? pid(),
-                  let position = try? position(),
-                  let size = try? size()
-            else {
-                return nil
-            }
-
-            let frame = CGRect(origin: position, size: size)
-            let windowList = CGWindowListCopyWindowInfo([.optionOnScreenOnly, .excludeDesktopElements], kCGNullWindowID) as? [[String: Any]] ?? []
-
-            return windowList.first { windowInfo in
-                guard let windowPid = windowInfo[kCGWindowOwnerPID as String] as? pid_t,
-                      windowPid == pid,
-                      let windowBounds = windowInfo[kCGWindowBounds as String] as? [String: CGFloat]
-                else {
-                    return false
-                }
-
-                let windowFrame = CGRect(x: windowBounds["X"] ?? 0,
-                                         y: windowBounds["Y"] ?? 0,
-                                         width: windowBounds["Width"] ?? 0,
-                                         height: windowBounds["Height"] ?? 0)
-
-                return windowFrame == frame
-            }?[kCGWindowNumber as String] as? CGWindowID
-        }
-
-        private func getCGWindowIdByProperties() -> CGWindowID? {
-            guard let pid = try? pid(),
-                  let title = try? title()
-            else {
-                return nil
-            }
-
-            let windowList = CGWindowListCopyWindowInfo([.optionAll, .excludeDesktopElements], kCGNullWindowID) as? [[String: Any]] ?? []
-
-            return windowList.first { windowInfo in
-                let windowPid = windowInfo[kCGWindowOwnerPID as String] as? pid_t
-                let windowTitle = windowInfo[kCGWindowName as String] as? String
-                return windowPid == pid && windowTitle == title
-            }?[kCGWindowNumber as String] as? CGWindowID
-        }
-    #endif
     func pid() throws -> pid_t? {
         var pid = pid_t(0)
         return try axCallWhichCanThrow(AXUIElementGetPid(self, &pid), &pid)
