@@ -1,7 +1,7 @@
 name: Crowdin Action
 on:
   schedule:
-    - cron: '0 0 * *0'  # This runs the action every Sunday at midnight UTC
+    - cron: '0 0 * * 0'  # This runs the action every Sunday at midnight UTC
   workflow_dispatch:
 
 jobs:
