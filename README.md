@@ -128,7 +128,7 @@ https://crowdin.com/project/dockdoor
 
 ### Translating the website (https://dockdoor.net)
 
-To enhance web communication, we invite you to help translate the project’s website, https://dockdoor.net, with the following link: https://crowdin.com/project/dockdoornet.
+To enhance web communication, we invite you to help translate the project’s website, https://dockdoor.net, with the following link: https://crowdin.com/project/dockdoor-website.
 
 **But before you begin translating**, please consider the following points:
 - The strings contain **basic HTML tags**. It is recommended to have **some familiarity with HTML**. You can find many tutorials online, and HTML is particularly easy to learn.
