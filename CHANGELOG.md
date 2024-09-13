@@ -38,6 +38,21 @@
 </style>
 <a href="https://buymeacoffee.com/keplercafe" class="donation-link" target="_blank">☕ Support kepler.cafe</a>
 
+<a name="v1.2.7"></a>
+# [v1.2.7](https://github.com/ejbills/DockDoor/releases/tag/v1.2.7) - 13 Sep 2024
+
+# Changelog
+
+No more dock alignment issues. It will now be placed accurately 100% of the time.
+
+## 🛠️ Fixes
+
+- **Dock Item Hover Preview**: The hover preview is now placed using the Dock item’s Accessibility (AX) element, ensuring accurate positioning even on multi-monitor setups ([#277](https://github.com/ejbills/DockDoor/issues/277)).
+
+
+[Changes][v1.2.7]
+
+
 <a name="v1.2.6"></a>
 # [v1.2.6](https://github.com/ejbills/DockDoor/releases/tag/v1.2.6) - 10 Sep 2024
 
@@ -531,6 +546,7 @@ v1.0
 [Changes][releases]
 
 
+[v1.2.7]: https://github.com/ejbills/DockDoor/compare/v1.2.6...v1.2.7
 [v1.2.6]: https://github.com/ejbills/DockDoor/compare/v1.2.5...v1.2.6
 [v1.2.5]: https://github.com/ejbills/DockDoor/compare/v1.2.3...v1.2.5
 [v1.2.3]: https://github.com/ejbills/DockDoor/compare/v1.2.2...v1.2.3
