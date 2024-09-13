@@ -11261,6 +11261,9 @@
         }
       }
     },
+    "Ignore Apps with One Window" : {
+
+    },
     "Initialization Key" : {
       "localizations" : {
         "af" : {

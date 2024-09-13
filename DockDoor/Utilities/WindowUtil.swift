@@ -444,6 +444,8 @@ enum WindowUtil {
 
         let windows = desktopSpaceWindowCacheManager.readCache(pid: app.processIdentifier)
 
+        guard !Defaults[.ignoreAppsWithSingleWindow] || windows.count > 1 else { return [] }
+
         return windows.sorted(by: { $0.date > $1.date })
     }
 

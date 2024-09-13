@@ -19,6 +19,7 @@ struct MainSettingsView: View {
     @Default(.windowPreviewImageScale) var windowPreviewImageScale
     @Default(.fadeOutDuration) var fadeOutDuration
     @Default(.sortWindowsByDate) var sortWindowsByDate
+    @Default(.ignoreAppsWithSingleWindow) var ignoreAppsWithSingleWindow
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -104,6 +105,10 @@ struct MainSettingsView: View {
 
             Toggle(isOn: $sortWindowsByDate, label: {
                 Text("Sort Window Previews by Date")
+            })
+
+            Toggle(isOn: $ignoreAppsWithSingleWindow, label: {
+                Text("Ignore Apps with One Window")
             })
 
             Picker("Preview Hover Action", selection: $previewHoverAction) {

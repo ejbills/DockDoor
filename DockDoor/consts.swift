@@ -25,6 +25,7 @@ extension Defaults.Keys {
     static let gradientColorPalette = Key<GradientColorPaletteSettings>("gradientColorPalette", default: .init())
     static let enableWindowSwitcher = Key<Bool>("enableWindowSwitcher", default: true)
     static let sortWindowsByDate = Key<Bool>("sortWindowsByDate", default: true)
+    static let ignoreAppsWithSingleWindow = Key<Bool>("ignoreAppsWithSingleWindow", default: false)
     static let showMenuBarIcon = Key<Bool>("showMenuBarIcon", default: true)
     static let launched = Key<Bool>("launched", default: false)
     static let Int64maskCommand = Key<Int>("Int64maskCommand", default: 1_048_840)
