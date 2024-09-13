@@ -6540,8 +6540,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "DockDoor does not record your screen or audio. It only captures static window previews. No information is stored or shared; all processing occurs privately on your device."
+            "state" : "translated",
+            "value" : "DockDoor não grava sua tela ou áudio. Apenas captura pré-visualizações estáticas das janelas."
           }
         },
         "pt-PT" : {
