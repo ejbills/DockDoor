@@ -38,6 +38,37 @@
 </style>
 <a href="https://buymeacoffee.com/keplercafe" class="donation-link" target="_blank">☕ Support kepler.cafe</a>
 
+<a name="v1.2.8"></a>
+# [v1.2.8](https://github.com/ejbills/DockDoor/releases/tag/v1.2.8) - 13 Sep 2024
+
+We now have a website, it was created by the wonderful [@illavoluntas](https://github.com/illavoluntas)! https://dockdoor.net
+
+# Changelog
+
+## 🚀 New Features
+
+- **Ignore Single-Window Apps**: Added an option to ignore apps that only have one window, improving focus on multi-window applications.
+
+## 🎨 Redesigns
+
+- **Update Page**: Redesigned the update page for a more modern and intuitive user experience.
+
+## 🛠️ Fixes
+
+- **Date Window Sorting**: Fixed an issue with sorting windows by date, ensuring correct chronological order.
+- **Window Info Fetching**: Refactored the `fetchWindowInfo` method for improved performance and reliability.
+- **Resizable Settings Pane**: Enabled the settings pane to be resized and adjusted the layout for slider settings to improve usability.
+- **Localized Strings**: Fixed an issue where localized strings sometimes did not fit properly within UI elements.
+
+## 🛠️ Chores
+
+- **Localization Sync**: Synced macOS app localizations with Crowdin, keeping translations up to date ([#318](https://github.com/ejbills/DockDoor/issues/318)).
+- **Website Localization Sync**: Updated website localizations using Crowdin ([#316](https://github.com/ejbills/DockDoor/issues/316)).
+
+
+[Changes][v1.2.8]
+
+
 <a name="v1.2.7"></a>
 # [v1.2.7](https://github.com/ejbills/DockDoor/releases/tag/v1.2.7) - 13 Sep 2024
 
@@ -546,6 +577,7 @@ v1.0
 [Changes][releases]
 
 
+[v1.2.8]: https://github.com/ejbills/DockDoor/compare/v1.2.7...v1.2.8
 [v1.2.7]: https://github.com/ejbills/DockDoor/compare/v1.2.6...v1.2.7
 [v1.2.6]: https://github.com/ejbills/DockDoor/compare/v1.2.5...v1.2.6
 [v1.2.5]: https://github.com/ejbills/DockDoor/compare/v1.2.3...v1.2.5
