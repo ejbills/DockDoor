@@ -41,9 +41,7 @@ class SpaceWindowCacheManager {
 
     func getAllWindows() -> [WindowInfo] {
         queue.sync {
-            Defaults[.sortWindowsByDate] ?
-                self.desktopSpaceWindowCache.values.flatMap { $0 }.sorted(by: { $0.lastUsed > $1.lastUsed }) :
-                self.desktopSpaceWindowCache.values.flatMap { $0 }
+            self.desktopSpaceWindowCache.values.flatMap { $0 }.sorted(by: { $0.date > $1.date })
         }
     }
 }

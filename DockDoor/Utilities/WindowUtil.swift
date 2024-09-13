@@ -16,7 +16,7 @@ struct WindowInfo: Identifiable, Hashable {
     var closeButton: AXUIElement?
     var isMinimized: Bool
     var isHidden: Bool
-    var lastUsed: Date
+    var date: Date
 
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
@@ -330,10 +330,11 @@ enum WindowUtil {
     }
 
     static func updateWindowDateTime(_ windowInfo: WindowInfo) {
+        guard Defaults[.sortWindowsByDate] else { return }
         desktopSpaceWindowCacheManager.updateCache(pid: windowInfo.app.processIdentifier) { windowSet in
             if let index = windowSet.firstIndex(where: { $0.id == windowInfo.id }) {
                 var updatedWindow = windowSet[index]
-                updatedWindow.lastUsed = Date()
+                updatedWindow.date = Date()
                 windowSet.remove(at: index)
                 windowSet.insert(updatedWindow)
             }
@@ -341,6 +342,7 @@ enum WindowUtil {
     }
 
     static func updateWindowDateTime(for app: NSRunningApplication) {
+        guard Defaults[.sortWindowsByDate] else { return }
         desktopSpaceWindowCacheManager.updateCache(pid: app.processIdentifier) { windowSet in
             if windowSet.isEmpty {
                 return
@@ -350,7 +352,7 @@ enum WindowUtil {
                 for window in windows {
                     if let cgWindowId = try? window.cgWindowId(), let index = windowSet.firstIndex(where: { $0.id == cgWindowId }) {
                         var updatedWindow = windowSet[index]
-                        updatedWindow.lastUsed = Date()
+                        updatedWindow.date = Date()
                         windowSet.remove(at: index)
                         windowSet.insert(updatedWindow)
                         return
@@ -431,25 +433,18 @@ enum WindowUtil {
     static func getActiveWindows(of app: NSRunningApplication) async throws -> [WindowInfo] {
         let content = try await SCShareableContent.excludingDesktopWindows(true, onScreenWindowsOnly: true)
 
-        let group = LimitedTaskGroup<WindowInfo?>(maxConcurrentTasks: 4)
+        let group = LimitedTaskGroup<Void>(maxConcurrentTasks: 4)
 
         for window in content.windows where window.owningApplication?.processID == app.processIdentifier {
-            await group.addTask {
-                try await fetchWindowInfo(window: window, app: app)
-            }
-        }
-        let results = try await group.waitForAll()
-        let activeWindows = results.compactMap { $0 }
-
-        let cachedWindows = desktopSpaceWindowCacheManager.readCache(pid: app.processIdentifier)
-        var combinedWindows = activeWindows
-        for cachedWindow in cachedWindows {
-            if !combinedWindows.contains(where: { $0.id == cachedWindow.id }) {
-                combinedWindows.append(cachedWindow)
-            }
+            await group.addTask { try await captureAndCacheWindowInfo(window: window, app: app) }
         }
 
-        return Defaults[.sortWindowsByDate] ? combinedWindows.sorted(by: { $0.lastUsed > $1.lastUsed }) : combinedWindows
+        // Wait for all tasks to complete
+        _ = try await group.waitForAll()
+
+        let windows = desktopSpaceWindowCacheManager.readCache(pid: app.processIdentifier)
+
+        return windows.sorted(by: { $0.date > $1.date })
     }
 
     static func updateAllWindowsInCurrentSpace() async {
@@ -467,11 +462,7 @@ enum WindowUtil {
 
                 // Convert SCRunningApplication to NSRunningApplication
                 if let nsApp = NSRunningApplication(processIdentifier: scApp.processID) {
-                    await group.addTask {
-                        if let windowInfo = try? await fetchWindowInfo(window: window, app: nsApp) {
-                            updateDesktopSpaceWindowCache(with: windowInfo)
-                        }
-                    }
+                    await group.addTask { try? await captureAndCacheWindowInfo(window: window, app: nsApp) }
                 }
             }
 
@@ -483,7 +474,7 @@ enum WindowUtil {
         }
     }
 
-    static func fetchWindowInfo(window: SCWindow, app: NSRunningApplication) async throws -> WindowInfo? {
+    static func captureAndCacheWindowInfo(window: SCWindow, app: NSRunningApplication) async throws {
         let windowID = window.windowID
 
         guard window.owningApplication != nil,
@@ -494,17 +485,17 @@ enum WindowUtil {
               app.bundleIdentifier == nil || !filteredBundleIdentifiers.contains(app.bundleIdentifier!),
               !(window.frame.size.width < 100 || window.frame.size.height < 100) || window.title?.isEmpty == false
         else {
-            return nil
+            return
         }
 
         let appElement = AXUIElementCreateApplication(app.processIdentifier)
 
         guard let axWindows = try? appElement.windows(), !axWindows.isEmpty else {
-            return nil
+            return
         }
 
         guard let windowRef = findWindow(matchingWindow: window, in: axWindows) else {
-            return nil
+            return
         }
 
         let closeButton = try? windowRef.closeButton()
@@ -519,15 +510,13 @@ enum WindowUtil {
                                     closeButton: closeButton,
                                     isMinimized: false,
                                     isHidden: false,
-                                    lastUsed: Date())
+                                    date: Date.now)
 
         do {
             windowInfo.image = try await captureWindowImage(window: window)
             updateDesktopSpaceWindowCache(with: windowInfo)
-            return windowInfo
         } catch {
             print("Error capturing window image: \(error)")
-            return nil
         }
     }
 
