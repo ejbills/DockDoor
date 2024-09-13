@@ -953,8 +953,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Accessibility"
+            "state" : "translated",
+            "value" : "Accessibilité"
           }
         },
         "he" : {
@@ -6438,8 +6438,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "DockDoor does not record your screen or audio. It only captures static window previews. No information is stored or shared; all processing occurs privately on your device."
+            "state" : "translated",
+            "value" : "لا يقوم DockDoor بتسجيل شاشتك أو صوتك. فهو يلتقط معاينات النوافذ الثابتة فقط. ولا يتم تخزين أي معلومات أو مشاركتها; حيث تتم جميع عمليات المعالجة بشكل خاص على جهازك."
           }
         },
         "ca" : {
@@ -6486,8 +6486,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "DockDoor does not record your screen or audio. It only captures static window previews. No information is stored or shared; all processing occurs privately on your device."
+            "state" : "translated",
+            "value" : "DockDoor n’enregistre pas votre écran ni votre audio. L’application ne fait que capturer des aperçus statiques de fenêtres. Aucune donnée n’est stockée ni partagée ; tout traitement s’effectue en privé, sur votre ordinateur."
           }
         },
         "he" : {
@@ -6600,8 +6600,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "DockDoor does not record your screen or audio. It only captures static window previews. No information is stored or shared; all processing occurs privately on your device."
+            "state" : "translated",
+            "value" : "DockDoor 這個程式很注重你的隱私，它不會偷偷錄下你的螢幕畫面或聲音。它只會拍個快照，就像是幫你的視窗拍張照片一樣。"
           }
         }
       }
@@ -6616,8 +6616,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "DockDoor needs screen recording access. In macOS Sequoia, you'll see this prompt every week or month and after reboots. This is a new system-wide security policy for all screen capture apps."
+            "state" : "translated",
+            "value" : "يحتاج DockDoor إلى الوصول إلى تسجيل الشاشة. في نظام التشغيل macOS Sequoia، سترى هذه المطالبة كل أسبوع أو شهر وبعد إعادة التشغيل. هذه سياسة أمان جديدة على مستوى النظام لجميع تطبيقات التقاط الشاشة."
           }
         },
         "ca" : {
@@ -6664,8 +6664,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "DockDoor needs screen recording access. In macOS Sequoia, you'll see this prompt every week or month and after reboots. This is a new system-wide security policy for all screen capture apps."
+            "state" : "translated",
+            "value" : "DockDoor a besoin des permissions d’enregistrement de l’écran. Sur macOS Sequoia, vous verrez ce message toutes les semaines ou tous les mois, ainsi qu’après un redémarrage. Il s’agit d’une nouvelle politique de sécurité appliquée à l’échelle du système pour toutes les applications demandant les permissions d’enregistrement de l’écran."
           }
         },
         "he" : {
@@ -6778,8 +6778,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "DockDoor needs screen recording access. In macOS Sequoia, you'll see this prompt every week or month and after reboots. This is a new system-wide security policy for all screen capture apps."
+            "state" : "translated",
+            "value" : "DockDoor 這個程式需要你給它權限，讓它可以看到你的螢幕。這是因為它需要知道你開了哪些視窗，才能幫你整理。"
           }
         }
       }
@@ -8091,8 +8091,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Everything is now set up!"
+            "state" : "translated",
+            "value" : "Tout est réglé !"
           }
         },
         "he" : {
@@ -8579,8 +8579,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Found a Bug?"
+            "state" : "translated",
+            "value" : "وجدت خطأ؟"
           }
         },
         "ca" : {
@@ -8627,8 +8627,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Found a Bug?"
+            "state" : "translated",
+            "value" : "Vous avez trouvé un bogue ?"
           }
         },
         "he" : {
@@ -8741,8 +8741,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Found a Bug?"
+            "state" : "translated",
+            "value" : "發現程式有問題嗎？"
           }
         }
       }
@@ -9340,8 +9340,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Granted"
+            "state" : "translated",
+            "value" : "Accordée"
           }
         },
         "he" : {
@@ -9470,8 +9470,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Have an Idea?"
+            "state" : "translated",
+            "value" : "هل لديك فكرة؟"
           }
         },
         "ca" : {
@@ -9518,8 +9518,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Have an Idea?"
+            "state" : "translated",
+            "value" : "Vous avez une idée ?"
           }
         },
         "he" : {
@@ -9632,8 +9632,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Have an Idea?"
+            "state" : "translated",
+            "value" : "有什麼好點子嗎？"
           }
         }
       }
@@ -9649,8 +9649,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Help"
+            "state" : "translated",
+            "value" : "مساعدة"
           }
         },
         "ca" : {
@@ -9697,8 +9697,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Help"
+            "state" : "translated",
+            "value" : "Aide"
           }
         },
         "he" : {
@@ -9811,8 +9811,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Help"
+            "state" : "translated",
+            "value" : "幫助"
           }
         }
       }
@@ -9827,8 +9827,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Help and questions settings"
+            "state" : "translated",
+            "value" : "إعدادات المساعدة والأسئلة"
           }
         },
         "ca" : {
@@ -9875,8 +9875,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Help and questions settings"
+            "state" : "translated",
+            "value" : "Paramètres de l’aide et des questions"
           }
         },
         "he" : {
@@ -9989,8 +9989,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Help and questions settings"
+            "state" : "translated",
+            "value" : "幫助和問題設定"
           }
         }
       }
@@ -10005,8 +10005,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Help us improve DockDoor by reporting any issues you encounter."
+            "state" : "translated",
+            "value" : "ساعدنا على تحسين DockDoor من خلال الإبلاغ عن أي مشكلات تواجهها."
           }
         },
         "ca" : {
@@ -10053,8 +10053,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Help us improve DockDoor by reporting any issues you encounter."
+            "state" : "translated",
+            "value" : "Aidez-nous à améliorer DockDoor en signalant les bogues que vous rencontrez."
           }
         },
         "he" : {
@@ -10167,8 +10167,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Help us improve DockDoor by reporting any issues you encounter."
+            "state" : "translated",
+            "value" : "幫我們讓 DockDoor 變得更棒！有碰到什麼問題都可以跟我們說喔！"
           }
         }
       }
@@ -10899,8 +10899,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "If you find DockDoor useful, consider donating. Your support helps keep the project going!"
+            "state" : "translated",
+            "value" : "إذا وجدت أن DockDoor مفيد، ففكر في التبرع. فدعمك يساعد في استمرار المشروع!"
           }
         },
         "ca" : {
@@ -10947,8 +10947,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "If you find DockDoor useful, consider donating. Your support helps keep the project going!"
+            "state" : "translated",
+            "value" : "Si vous trouvez DockDoor utile, pensez à faire un don. Votre soutien contribue à poursuivre le projet !"
           }
         },
         "he" : {
@@ -11061,8 +11061,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "If you find DockDoor useful, consider donating. Your support helps keep the project going!"
+            "state" : "translated",
+            "value" : "覺得 DockDoor 很好用嗎？要不要考慮贊助一下？你的支持就是我們繼續努力的動力！"
           }
         }
       }
@@ -12017,8 +12017,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Let's set things up"
+            "state" : "translated",
+            "value" : "Configurons les paramètres"
           }
         },
         "he" : {
@@ -12732,8 +12732,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Next page"
+            "state" : "translated",
+            "value" : "Page suivante"
           }
         },
         "he" : {
@@ -13269,8 +13269,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Not granted"
+            "state" : "translated",
+            "value" : "Refusée"
           }
         },
         "he" : {
@@ -16127,8 +16127,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Press any key to set the keybind."
+            "state" : "translated",
+            "value" : "Appuyez sur n’importe quelle touche pour configurer le raccourci clavier."
           }
         },
         "he" : {
@@ -16305,8 +16305,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Press any key..."
+            "state" : "translated",
+            "value" : "Appuyez sur une touche…"
           }
         },
         "he" : {
@@ -17861,8 +17861,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Report a Bug"
+            "state" : "translated",
+            "value" : "الإبلاغ عن خطأ"
           }
         },
         "ca" : {
@@ -17909,8 +17909,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Report a Bug"
+            "state" : "translated",
+            "value" : "Signaler un bogue"
           }
         },
         "he" : {
@@ -18023,8 +18023,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Report a Bug"
+            "state" : "translated",
+            "value" : "回報錯誤"
           }
         }
       }
@@ -18039,8 +18039,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Request a Feature"
+            "state" : "translated",
+            "value" : "أطلب ميزة"
           }
         },
         "ca" : {
@@ -18087,8 +18087,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Request a Feature"
+            "state" : "translated",
+            "value" : "Suggérer une fonctionnalité"
           }
         },
         "he" : {
@@ -18201,8 +18201,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Request a Feature"
+            "state" : "translated",
+            "value" : "請求新功能"
           }
         }
       }
@@ -18265,8 +18265,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Required for capturing window previews of other apps"
+            "state" : "translated",
+            "value" : "Requis pour capturer les aperçus des fenêtres d’autres applications"
           }
         },
         "he" : {
@@ -18443,8 +18443,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Required for dock hover detection and window switcher hotkeys"
+            "state" : "translated",
+            "value" : "Requis pour la détection du survol du Dock et les raccourcis clavier du Sélecteur d’applications"
           }
         },
         "he" : {
@@ -19335,8 +19335,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Restart app"
+            "state" : "translated",
+            "value" : "Redémarrer l’application"
           }
         },
         "he" : {
@@ -20227,8 +20227,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Screen recording"
+            "state" : "translated",
+            "value" : "Enregistrement de l’écran"
           }
         },
         "he" : {
@@ -21073,8 +21073,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "See more..."
+            "state" : "translated",
+            "value" : "عرض المزيد..."
           }
         },
         "ca" : {
@@ -21121,8 +21121,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "See more..."
+            "state" : "translated",
+            "value" : "Voir plus…"
           }
         },
         "he" : {
@@ -21235,8 +21235,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "See more..."
+            "state" : "translated",
+            "value" : "查看更多..."
           }
         }
       }
@@ -21478,8 +21478,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Shadowed"
+            "state" : "translated",
+            "value" : "Ombré"
           }
         },
         "he" : {
@@ -23442,8 +23442,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Start recording keybind"
+            "state" : "translated",
+            "value" : "Commencer à enregistrer le raccourci clavier"
           }
         },
         "he" : {
@@ -23930,8 +23930,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Suggest new features to make DockDoor even better."
+            "state" : "translated",
+            "value" : "اقترح ميزات جديدة لجعل DockDoor أفضل."
           }
         },
         "ca" : {
@@ -23978,8 +23978,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Suggest new features to make DockDoor even better."
+            "state" : "translated",
+            "value" : "Suggérez de nouvelles fonctionnalités pour rendre DockDoor encore mieux."
           }
         },
         "he" : {
@@ -24092,8 +24092,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Suggest new features to make DockDoor even better."
+            "state" : "translated",
+            "value" : "提出一些新功能建議，讓 DockDoor 變得更好。"
           }
         }
       }
@@ -24108,8 +24108,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Support DockDoor"
+            "state" : "translated",
+            "value" : "دعم DockDoor"
           }
         },
         "ca" : {
@@ -24156,8 +24156,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Support DockDoor"
+            "state" : "translated",
+            "value" : "Supportez DockDoor"
           }
         },
         "he" : {
@@ -24270,8 +24270,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Support DockDoor"
+            "state" : "translated",
+            "value" : "支援 DockDoor"
           }
         }
       }
@@ -24334,8 +24334,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "The changes to permissions will take effect after restarting."
+            "state" : "translated",
+            "value" : "Les changements appliqués sur les permissions prendront effet après le redémarrage de l’application."
           }
         },
         "he" : {
@@ -26604,8 +26604,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Want to see for yourself? Review our source code"
+            "state" : "translated",
+            "value" : "هل تريد أن ترى بنفسك؟ راجع كود المصدر الخاص بنا"
           }
         },
         "ca" : {
@@ -26652,8 +26652,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Want to see for yourself? Review our source code"
+            "state" : "translated",
+            "value" : "Vous voulez voir par vous-même ? Consultez notre code source"
           }
         },
         "he" : {
@@ -26766,8 +26766,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Want to see for yourself? Review our source code"
+            "state" : "translated",
+            "value" : "想親自看看嗎？檢視我們的原始碼"
           }
         }
       }
@@ -28082,8 +28082,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When you click the button below, DockDoor will restart and move to the menu bar to run in the background."
+            "state" : "translated",
+            "value" : "Quand vous cliquez sur le bouton ci-dessous, DockDoor va redémarrer et se déplacer vers la barre des menus pour s’exécuter en arrière-plan."
           }
         },
         "he" : {
@@ -30401,7 +30401,7 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Z"
           }
         },
