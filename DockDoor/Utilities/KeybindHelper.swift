@@ -117,8 +117,9 @@ class KeybindHelper {
             let windows = WindowUtil.getAllWindowsOfAllApps()
 
             SharedPreviewWindowCoordinator.shared.showWindow(
-                appName: "Alt-Tab",
+                appName: "Window Switcher",
                 windows: windows,
+                iconRect: nil,
                 overrideDelay: true,
                 centeredHoverWindowState: .windowSwitcher,
                 onWindowTap: { SharedPreviewWindowCoordinator.shared.hideWindow() }

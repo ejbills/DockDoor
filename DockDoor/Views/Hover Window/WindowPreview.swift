@@ -161,6 +161,7 @@ struct WindowPreview: View {
                             appName: windowInfo.app.localizedName ?? "Unknown",
                             windows: [windowInfo],
                             mouseScreen: bestGuessMonitor,
+                            iconRect: nil,
                             overrideDelay: true,
                             centeredHoverWindowState: .fullWindowPreview
                         )
@@ -173,6 +174,7 @@ struct WindowPreview: View {
                                 appName: windowInfo.app.localizedName ?? "Unknown",
                                 windows: [windowInfo],
                                 mouseScreen: bestGuessMonitor,
+                                iconRect: nil,
                                 overrideDelay: true,
                                 centeredHoverWindowState: .fullWindowPreview
                             )

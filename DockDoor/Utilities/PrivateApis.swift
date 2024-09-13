@@ -7,3 +7,7 @@ func _AXUIElementGetWindow(_ axUiElement: AXUIElement, _ wid: inout CGWindowID) 
 
 // for some reason, these attributes are missing from AXAttributeConstants
 let kAXFullscreenAttribute = "AXFullScreen"
+
+// returns CoreDock orientation and pinning state
+@_silgen_name("CoreDockGetOrientationAndPinning")
+func CoreDockGetOrientationAndPinning(_ outOrientation: UnsafeMutablePointer<Int32>, _ outPinning: UnsafeMutablePointer<Int32>)
