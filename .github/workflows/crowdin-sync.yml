@@ -1,34 +1,46 @@
 name: Crowdin Action
-
 on:
   schedule:
-    - cron: '0 0 * * 0'  # This runs the action every Sunday at midnight UTC
+    - cron: '0 0 * *0'  # This runs the action every Sunday at midnight UTC
   workflow_dispatch:
-  release:
-    types:
-      - published
 
 jobs:
   synchronize-with-crowdin:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.REPO_TOKEN }}
-
-      - name: Crowdin action
+      
+      - name: Crowdin action for macOS app
         uses: crowdin/github-action@v2
         with:
+          config: 'crowdin.yml'
           upload_sources: true
           upload_translations: true
           download_translations: true
-          localization_branch_name: crowdin-localization
+          localization_branch_name: crowdin-localization-macos
           create_pull_request: true
-          pull_request_title: "chore: sync localizations with Crowdin"
-          commit_message: "chore: sync localizations with Crowdin"
+          pull_request_title: "chore: sync macOS app localizations with Crowdin"
+          commit_message: "chore: sync macOS app localizations with Crowdin"
         env:
           GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
           CROWDIN_PROJECT_ID: ${{ secrets.CROWDIN_PROJECT_ID }}
+          CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
+      
+      - name: Crowdin action for website
+        uses: crowdin/github-action@v2
+        with:
+          config: 'crowdin-website.yml'
+          upload_sources: true
+          upload_translations: true
+          download_translations: true
+          localization_branch_name: crowdin-localization-website
+          create_pull_request: true
+          pull_request_title: "chore: sync website localizations with Crowdin"
+          commit_message: "chore: sync website localizations with Crowdin"
+        env:
+          GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
+          CROWDIN_PROJECT_ID: ${{ secrets.CROWDIN_SITE_PROJECT_ID }}
           CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
