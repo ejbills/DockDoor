@@ -60,27 +60,17 @@ struct MainSettingsView: View {
 
             Divider()
 
-            HStack {
-                Text("Preview Window Open Delay")
-                    .layoutPriority(1)
-                Spacer()
-                Slider(value: $hoverWindowOpenDelay, in: 0 ... 2, step: 0.1)
-                TextField("", value: $hoverWindowOpenDelay, formatter: decimalFormatter)
-                    .frame(width: 38)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                Text("seconds")
-            }
+            sliderSetting(title: String(localized: "Preview Window Open Delay"),
+                          value: $hoverWindowOpenDelay,
+                          range: 0 ... 2,
+                          step: 0.1,
+                          unit: String(localized: "seconds"))
 
-            HStack {
-                Text("Preview Window Fade Out Duration")
-                    .layoutPriority(1)
-                Spacer()
-                Slider(value: $fadeOutDuration, in: 0 ... 2, step: 0.1)
-                TextField("", value: $fadeOutDuration, formatter: decimalFormatter)
-                    .frame(width: 38)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                Text("seconds")
-            }
+            sliderSetting(title: String(localized: "Preview Window Fade Out Duration"),
+                          value: $fadeOutDuration,
+                          range: 0 ... 2,
+                          step: 0.1,
+                          unit: String(localized: "seconds"))
 
             VStack(alignment: .leading) {
                 HStack {
@@ -100,26 +90,17 @@ struct MainSettingsView: View {
 
             SizePickerView()
 
-            HStack {
-                Text("Window Image Cache Lifespan")
-                    .layoutPriority(1)
-                Spacer()
-                Slider(value: $screenCaptureCacheLifespan, in: 0 ... 60, step: 5)
-                TextField("", value: $screenCaptureCacheLifespan, formatter: NumberFormatter())
-                    .frame(width: 38)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                Text("seconds")
-            }
+            sliderSetting(title: String(localized: "Window Image Cache Lifespan"),
+                          value: $screenCaptureCacheLifespan,
+                          range: 0 ... 60,
+                          step: 5,
+                          unit: String(localized: "seconds"))
 
-            HStack {
-                Text("Window Image Resolution Scale (higher means lower resolution)")
-                    .layoutPriority(1)
-                Spacer()
-                Slider(value: $windowPreviewImageScale, in: 1 ... 4, step: 1)
-                TextField("", value: $windowPreviewImageScale, formatter: NumberFormatter())
-                    .frame(width: 38)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-            }
+            sliderSetting(title: String(localized: "Window Image Resolution Scale (higher means lower resolution)"),
+                          value: $windowPreviewImageScale,
+                          range: 1 ... 4,
+                          step: 1,
+                          unit: "")
 
             Toggle(isOn: $sortWindowsByDate, label: {
                 Text("Sort Window Previews by Date")
@@ -133,16 +114,12 @@ struct MainSettingsView: View {
             .pickerStyle(MenuPickerStyle())
             .scaledToFit()
 
-            HStack {
-                Text("Preview Hover Delay")
-                Spacer()
-                Slider(value: $tapEquivalentInterval, in: 0 ... 2, step: 0.1)
-                TextField("", value: $tapEquivalentInterval, formatter: decimalFormatter)
-                    .frame(width: 38)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                Text("seconds")
-            }
-            .disabled(previewHoverAction == .none)
+            sliderSetting(title: String(localized: "Preview Hover Delay"),
+                          value: $tapEquivalentInterval,
+                          range: 0 ... 2,
+                          step: 0.1,
+                          unit: String(localized: "seconds"))
+                .disabled(previewHoverAction == .none)
         }
         .padding(20)
         .frame(minWidth: 650)

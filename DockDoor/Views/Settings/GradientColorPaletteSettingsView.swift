@@ -45,30 +45,20 @@ struct GradientColorPaletteSettingsView: View {
             }
         }
 
-        HStack {
-            Text("Animation speed")
-                .layoutPriority(1)
-            Spacer()
-            Slider(value: $storedSettings.speed, in: 0.1 ... 1.0, step: 0.05)
-            TextField("", value: $storedSettings.speed, formatter: decimalFormatter)
-                .frame(width: 38)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-            Text("seconds")
-        }
+        sliderSetting(title: String(localized: "Animation speed"),
+                      value: $storedSettings.speed,
+                      range: 0.1 ... 1.0,
+                      step: 0.05,
+                      unit: String(localized: "seconds"))
 
-        HStack {
-            Text("Blur amount")
-                .layoutPriority(1)
-            Spacer()
-            Slider(value: $storedSettings.blur, in: 0 ... 1.0, step: 0.05)
-            TextField("", value: $storedSettings.blur, formatter: decimalFormatter)
-                .frame(width: 38)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-            Text("amount")
-        }
-        .onAppear {
-            setupColorDebounce()
-        }
+        sliderSetting(title: String(localized: "Blur amount"),
+                      value: $storedSettings.blur,
+                      range: 0 ... 1.0,
+                      step: 0.05,
+                      unit: String(localized: "amount"))
+            .onAppear {
+                setupColorDebounce()
+            }
     }
 
     private func colorShape(for hexColor: String, index: Int) -> some View {

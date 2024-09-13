@@ -7,7 +7,7 @@ struct PermissionsView: View {
 
     var body: some View {
         VStack(alignment: .center, spacing: 24) {
-            PermissionRowView(
+            EnabledActionRowView(
                 title: String(localized: "Accessibility"),
                 description: String(localized: "Required for dock hover detection and window switcher hotkeys"),
                 isGranted: permissionsChecker.accessibilityPermission,
@@ -16,7 +16,7 @@ struct PermissionsView: View {
                 disableShine: disableShine
             )
 
-            PermissionRowView(
+            EnabledActionRowView(
                 title: String(localized: "Screen recording"),
                 description: String(localized: "Required for capturing window previews of other apps"),
                 isGranted: permissionsChecker.screenRecordingPermission,

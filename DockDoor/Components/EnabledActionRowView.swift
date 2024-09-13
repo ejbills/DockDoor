@@ -1,12 +1,16 @@
 import SwiftUI
 
-struct PermissionRowView: View {
+struct EnabledActionRowView: View {
     var title: String
     var description: String
     var isGranted: Bool
     var iconName: String
-    var action: () -> Void
+    var action: (() -> Void)?
     var disableShine: Bool = false
+    var buttonText: String = "Open Settings"
+    var statusText: String = "Granted"
+    var customStatusView: AnyView?
+    var hideStatus: Bool = false
 
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
@@ -14,7 +18,6 @@ struct PermissionRowView: View {
                 .font(.system(size: 24))
                 .foregroundColor(.accentColor)
                 .frame(width: 32, height: 32)
-
             VStack(alignment: .leading, spacing: 2) {
                 Text(title)
                     .font(.headline)
@@ -24,17 +27,21 @@ struct PermissionRowView: View {
                     .foregroundColor(.secondary)
             }
             .frame(maxWidth: .infinity, alignment: .topLeading)
-
             Spacer()
-
-            VStack(alignment: .trailing, spacing: 4) {
-                HStack {
-                    Text(isGranted ? "Granted" : "Not granted")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                    Image(systemName: isGranted ? "checkmark.circle.fill" : "xmark.circle.fill")
-                        .foregroundColor(isGranted ? .green : .red)
-                        .font(.system(size: 20))
+            if !hideStatus {
+                if let customStatusView {
+                    customStatusView
+                } else {
+                    VStack(alignment: .trailing, spacing: 4) {
+                        HStack {
+                            Text(isGranted ? statusText : "Not \(statusText.lowercased())")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                            Image(systemName: isGranted ? "checkmark.circle.fill" : "xmark.circle.fill")
+                                .foregroundColor(isGranted ? .green : .red)
+                                .font(.system(size: 20))
+                        }
+                    }
                 }
             }
         }
@@ -50,13 +57,15 @@ struct PermissionRowView: View {
         )
         .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
         .overlay(alignment: .bottomTrailing) {
-            Button(action: action) {
-                Text("Open Settings")
-                    .font(.system(size: 12, weight: .medium))
+            if let action {
+                Button(action: action) {
+                    Text(buttonText)
+                        .font(.system(size: 12, weight: .medium))
+                }
+                .padding(.trailing, 16)
+                .offset(y: 9)
+                .buttonStyle(AccentButtonStyle(color: .accentColor, small: true))
             }
-            .padding(.trailing, 16)
-            .offset(y: 9)
-            .buttonStyle(AccentButtonStyle(color: .accentColor, small: true))
         }
     }
 }

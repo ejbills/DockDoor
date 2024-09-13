@@ -34,7 +34,18 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             UpdatesSettingsViewController(updater: updaterController.updater),
         ]
 
-        return SettingsWindowController(panes: panes)
+        let controller = SettingsWindowController(panes: panes)
+        controller.window?.delegate = self.settingsWindowControllerDelegate
+
+        if let window = controller.window {
+            window.styleMask.insert(.resizable)
+
+            if let zoomButton = window.standardWindowButton(.zoomButton) {
+                zoomButton.isEnabled = true
+            }
+        }
+
+        return controller
     }()
 
     private let settingsWindowControllerDelegate = SettingsWindowControllerDelegate()
@@ -43,10 +54,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         updaterController = SPUStandardUpdaterController(startingUpdater: true, updaterDelegate: nil, userDriverDelegate: nil)
         updaterController.startUpdater()
         super.init()
-
-        if let zoomButton = settingsWindowController.window?.standardWindowButton(.zoomButton) {
-            zoomButton.isEnabled = false
-        }
 
         settingsWindowController.window?.delegate = settingsWindowControllerDelegate
     }
