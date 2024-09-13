@@ -1,0 +1,12 @@
+# Crowdin configuration file for DockDoor website project
+
+project_id_env: CROWDIN_SITE_PROJECT_ID
+api_token_env: CROWDIN_PERSONAL_TOKEN
+base_path: "."
+base_url: "https://api.crowdin.com"
+
+preserve_hierarchy: true
+
+files:
+  - source: '/locales/en/translation.json'
+    translation: '/locales/%two_letters_code%/translation.json'
