@@ -61,7 +61,7 @@ Each traffic light button you see serves an intuitive function.
 </p>
 
 ### Windows-like `Alt` + `Tab` window switcher
-With the default settings, hold down `Command` (⌘) and press `Tab` (⇥) repeatedly until the desired window is highlighted. To go back, press `Shift` (⇧) in addition to `Tab`.
+With the default settings, hold down `Option` (⌥) and press `Tab` (⇥) repeatedly until the desired window is highlighted. To go back, press `Shift` (⇧) in addition to `Tab`.
 Release both keys to switch to the selected window.
 
 #### Customization
