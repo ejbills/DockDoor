@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,187 +11,218 @@
     <script src="https://cdn.jsdelivr.net/npm/i18next-xhr-backend@latest/dist/umd/i18nextXHRBackend.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/dompurify/dist/purify.min.js"></script>
 </head>
+
 <body>
     <header>
-        <img src="https://github.com/ejbills/DockDoor/raw/main/DockDoor/Assets.xcassets/AppIcon.appiconset/icon_256x256@2x.png" width="200px" alt="DockDoor logotype">
-        <h1>DockDoor</h1>
+        <div class="logo">
+            <img src="https://github.com/ejbills/DockDoor/raw/main/DockDoor/Assets.xcassets/AppIcon.appiconset/icon_256x256@2x.png"
+                alt="DockDoor logotype">
+            <span>DockDoor</span>
+        </div>
+        <nav>
+            <a href="#" data-translate="home">Home</a>
+            <a href="#faq" data-translate="faq">FAQ</a>
+            <a href="https://github.com/ejbills/DockDoor" data-translate="viewGit" target="_blank">GitHub</a>
+            <a href="#contribute" data-translate="contribute">Contribute</a>
+            <div class="dropdown">
+                <button class="dropbtn" data-translate="download">Download</button>
+                <div class="dropdown-content">
+                    <a href="https://github.com/ejbills/DockDoor/releases/latest/download/DockDoor.dmg"
+                        data-translate="download">Direct Download</a>
+                    <a href="https://formulae.brew.sh/cask/dockdoor" data-translate="downloadHomebrew">Use Homebrew</a>
+                    <a href="https://crowdin.com/project/dockdoor" data-translate="downloadTranslate">Help Translate</a>
+                    <a href="https://www.buymeacoffee.com/keplercafe" data-translate="downloadDonate">Donate</a>
+                </div>
+            </div>
+        </nav>
+        <div class="header-controls">
+            <button id="toggleDarkMode" class="button">
+                <span id="darkModeIcon">🌓</span>
+            </button>
+            <div class="dropdown">
+                <button id="languageButton" class="button" data-translate="languageButton">Language</button>
+                <div id="dropdownContent" class="dropdown-content">
+                </div>
+            </div>
+        </div>
     </header>
     <main>
-        <!-- For those who haven't activated JavaScript in their browser. -->
-        <!-- The link points to a method on how to activate JavaScript. -->
         <noscript>
-            It looks like you do not have JavaScript activated. You can activate it using this <a href="https://www.enable-javascript.com">tutorial</a>.
+            It looks like you do not have JavaScript activated. You can activate it using this <a
+                href="https://www.enable-javascript.com">tutorial</a>.
             If you find yourself unable to activate JavaScript, try on another computer or browser.
         </noscript>
 
-        <div class="dropdown">
-            <button id="languageButton" class="button" data-translate="languageButton"></button>
-            <div id="dropdownContent" class="dropdown-content">
-                <a href="#" class="lang-option" data-lang="en">English</a>
-                <a href="#" class="lang-option" data-lang="fr">Français</a> <!-- French -->
-                <a href="#" class="lang-option" data-lang="he" dir="rtl">עברית</a> <!-- Hebrew -->
-                <a href="https://github.com/ejbills/DockDoor?tab=readme-ov-file#translating-the-website-httpsdockdoornet" target="_blank" data-translate="helpTranslate"></a>
-            </div>
+        <h1 class="intro" id="1" data-translate="introHeading">Welcome to DockDoor</h1>
+        <h2 class="introSub" data-translate="introSubHeading">Personal, private, powerful.</h2>
+        <p class="explanation" data-translate="introText">DockDoor is an innovative app that enhances your macOS
+            experience by providing quick previews of windows right from your dock.</p>
+        <p><em data-translate="introSmall">Experience a new level of productivity with DockDoor.</em></p>
+        <video width="100%" autoplay loop playsinline muted>
+            <source src="/resources/dockPeekDemo1920.mp4" type="video/mp4">
+            <p>Video demonstration of DockDoor while running.</p>
+        </video>
+
+        <hr>
+
+        <h1 class="s-intro" id="2" data-translate="2Heading">How It Works</h1>
+        <p class="explanation" data-translate="2Text">DockDoor seamlessly integrates with your macOS dock, allowing you
+            to preview and manage windows with ease.</p>
+        <p data-translate="2Small">Efficient window management at your fingertips.</p>
+        <img src="/resources/dockPeek1920.png"
+            alt="An example of use of DockDoor: traffic light buttons allow users to manage their windows and applications.">
+        <p class="explanation" data-translate="2Text2">The intuitive interface provides quick access to window controls,
+            enhancing your productivity.</p>
+        <img src="/resources/dockPeekCommented.png" alt="Description of the controls on window previews."
+            class="responsive-img">
+
+        <hr>
+
+        <h1 class="s-intro" id="5" data-translate="5Heading">Large Preview Mode</h1>
+        <p class="explanation" data-translate="5Text">Get a closer look at your windows with our large preview mode.</p>
+        <img src="/resources/largePreviewDemo.png" alt="A screenshot showing the large preview option."
+            class="responsive-img">
+
+        <hr>
+
+        <h1 class="s-intro" id="3" data-translate="3Heading">Customization Options</h1>
+        <p class="explanation" data-translate="3Text">Tailor DockDoor to your preferences with our range of
+            customization options.</p>
+        <img src="" id="variations" class="responsive-img"
+            alt="A series of images showing the customization options for traffic light buttons and window titles.">
+        <p class="explanation" data-translate="3Small">Personalize your DockDoor experience.</p>
+        <img src="" id="apptitle" class="responsive-img"
+            alt="A series of images showing the customization options for application titles.">
+        <div class="dark-box">
+            <p class="explanation" data-translate="3Text2">DockDoor seamlessly adapts to your system's dark mode
+                settings.</p>
+            <img src="/resources/variations/dark-mode.png" alt="A screenshot of the dark mode" class="responsive-img">
         </div>
 
-        <button id="toggleDarkMode" class="button">
-            <span id="darkModeIcon"></span>
-        </button>
+        <hr>
 
-        <div class="centered">
-            <p class="quick-links">
-                <a href="#" data-translate="home"></a>
-                <span class="margin"><a href="#download" data-translate="download"></a></span>
-                <span class="margin"><a href="#faq" data-translate="faq"></a></span>
-                <span class="margin"><a href="https://github.com/ejbills/DockDoor" data-translate="viewGit" target="_blank"></a></span>
-                <span class="margin"><a href="#contribute" data-translate="contribute"></a></span>
-            </p>
+        <h1 class="s-intro" id="4" data-translate="4Heading">Window Switcher</h1>
+        <p class="explanation" data-translate="4Text">Quickly switch between windows using our intuitive window
+            switcher.</p>
+        <p><span data-translate="4Small">Learn more about our window switcher</span> <a
+                href="https://github.com/ejbills/DockDoor?tab=readme-ov-file#windows-like-alt--tab-window-switcher"><img
+                    src="https://upload.wikimedia.org/wikipedia/commons/b/b3/Echo_link-blue_icon.svg"
+                    alt="Chainlink icon" class="chain-icon"></a></p>
+        <video width="100%" autoplay loop playsinline muted>
+            <source src="/resources/windowSwitcherDemo1920.mp4" type="video/mp4">
+        </video>
 
-            <h1 class="intro" id="1" data-translate="introHeading"></h1>
-            <p class="explanation" data-translate="introText"></p>
-            <p><em data-translate="introSmall"></em></p>
-            <video width="100%" autoplay loop playsinline muted>
-                <source src="/resources/dockPeekDemo1920.mp4" type="video/mp4">
-                <p>Video demonstration of DockDoor while running.</p>
-            </video>
+        <h1 class="s-intro" id="contribute" data-translate="contributeHeading">Contribute to DockDoor</h1>
+        <p class="explanation">
+            <span data-translate="contributeText1">We welcome contributions from the community!</span><br>
+            <span data-translate="contributeText2">Whether you're a developer, designer, or translator, your skills can
+                help improve DockDoor.</span><br>
+            <span data-translate="contributeText3">Check out our contribution guidelines</span>
+            <a href="https://github.com/ejbills/DockDoor?tab=readme-ov-file#contributing">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/b/b3/Echo_link-blue_icon.svg"
+                    alt="Chainlink icon" class="chain-icon">
+            </a>
+        </p>
 
-            <hr>
+        <hr>
 
-            <h1 class="s-intro" id="2" data-translate="2Heading"></h1>
-            <p class="explanation" style="line-height: 2;" data-translate="2Text"></p>
-            <p data-translate="2Small"></p>
-            <img src="/resources/dockPeek1920.png" alt="An example of use of DockDoor: traffic light buttons allow users to manage their windows and applications." width="100%">
-            <p class="explanation" style="line-height: 2;" data-translate="2Text2"></p>
-            <img src="/resources/dockPeekCommented.png" alt="Description of the controls on window previews." class="responsive-img">
-
-            <hr>
-
-            <h1 class="s-intro" id="5" data-translate="5Heading"></h1>
-            <p class="explanation" data-translate="5Text"></p>
-            <img src="/resources/largePreviewDemo.png" alt="A screenshot showing the large preview option." class="responsive-img">
-
-            <hr>
-
-            <h1 class="s-intro" id="3" data-translate="3Heading"></h1>
-            <p class="explanation" style="line-height: 2;" data-translate="3Text"></p>
-            <img src="" id="variations" class="responsive-img" alt="A series of images showing the customization options for traffic light buttons and window titles.">
-            <p class="explanation" data-translate="3Small"></p>
-            <img src="" id="apptitle" class="responsive-img" alt="A series of images showing the customization options for application titles.">
-            <div class="dark-box">
-                <p class="explanation" data-translate="3Text2" style="margin-top: 5px;"></p>
-                <img src="/resources/variations/dark-mode.png" alt="A screenshot of the dark mode" class="responsive-img">
-            </div>
-
-            <hr>
-
-            <h1 class="s-intro" id="4" data-translate="4Heading"></h1>
-            <p class="explanation" data-translate="4Text"></p>
-            <p><span data-translate="4Small"></span> <a href="https://github.com/ejbills/DockDoor?tab=readme-ov-file#windows-like-alt--tab-window-switcher"><img src="https://upload.wikimedia.org/wikipedia/commons/b/b3/Echo_link-blue_icon.svg" alt="Chainlink icon" style="display:inline;" width="auto"></a></p>
-            <video width="100%" autoplay loop playsinline muted>
-                <source src="/resources/windowSwitcherDemo1920.mp4" type="video/mp4">
-            </video>
-            <hr>
-
-            <h1 class="s-intro" id="download" data-translate="downloadHeading"></h1>
-            <p><em data-translate="downloadSmall"></em> <em><strong><a href="https://github.com/ejbills/DockDoor" data-translate="viewGit"></a></strong></em>.</p>
-            <p>
-                <a href="https://github.com/ejbills/DockDoor/releases/latest/download/DockDoor.dmg"><img src="https://img.shields.io/github/v/release/ejbills/DockDoor?style=flat-square" alt="Latest release"></a>
-                <img src="https://img.shields.io/github/downloads/ejbills/DockDoor/total?label=total%20downloads&style=flat-square" alt="Total downloads">
-                <a href="https://github.com/ejbills/DockDoor/stargazers"><img src="https://img.shields.io/github/stars/ejbills/DockDoor" alt="Stars"></a>
-                <a href="https://github.com/ejbills/DockDoor/network/members"><img src="https://img.shields.io/github/forks/ejbills/DockDoor" alt="Forks"></a>
-                <a href="https://github.com/ejbills/DockDoor/issues"><img src="https://img.shields.io/github/issues/ejbills/DockDoor?style=flat-square" alt="Issues"></a>
-                <a href="https://github.com/ejbills/DockDoor/blob/main/LICENSE"><img src="https://img.shields.io/github/license/ejbills/DockDoor?style=flat-square"alt="License"></a>
-                <a href="https://github.com/ejbills/DockDoor/graphs/contributors"><img src="https://img.shields.io/github/contributors/ejbills/DockDoor?style=flat-square" alt="Contributors"></a>
-            </p>
-            <button class="button" onclick="window.location.href='https://github.com/ejbills/DockDoor/releases/latest/download/DockDoor.dmg';">
-                <strong data-translate="downloadDownload"></strong>
-            </button>
-            <button class="button" onclick="window.location.href='https://formulae.brew.sh/cask/dockdoor';">
-                <strong data-translate="downloadHomebrew"></strong>
-            </button>
-            <p class="explanation" data-translate="downloadTranslateText"></p>
-            <button class="button" onclick="window.location.href='https://crowdin.com/project/dockdoor';">
-                <strong data-translate="downloadTranslate"></strong>
-            </button>
-            <p class="explanation" data-translate="downloadDonateText"></p>
-            <button class="button" onclick="window.location.href='https://www.buymeacoffee.com/keplercafe';">
-                <strong data-translate="downloadDonate"></strong>
-            </button>
-            
-            <hr>
-
-            <h1 class="s-intro" id="contribute" data-translate="contributeHeading"></h1>
-            <p class="explanation"><span data-translate="contributeText1"></span><br><span data-translate="contributeText2"></span><br><span data-translate="contributeText3"></span> <a href="https://github.com/ejbills/DockDoor?tab=readme-ov-file#contributing"><img src="https://upload.wikimedia.org/wikipedia/commons/b/b3/Echo_link-blue_icon.svg" alt="Chainlink icon" style="display:inline;" width="auto"></a></p>
-            <hr>
-
-            <h1 class="s-intro" id="faq" data-translate="faqHeading"></h1>
-            <div class="details-container">
+        <h1 class="s-intro" id="faq" data-translate="faqHeading">Frequently Asked Questions</h1>
+        <div class="details-container">
             <details>
-                <summary data-translate="faqQ1"></summary>
-                <div data-translate="faqA1"></div>
+                <summary data-translate="faqQ1">What is DockDoor?</summary>
+                <div data-translate="faqA1">DockDoor is an application for macOS that enhances your dock by providing
+                    quick previews and management of windows directly from the dock.</div>
             </details>
             <details>
-                <summary data-translate="faqQ2"></summary>
-                <div data-translate="faqA2"></div>
+                <summary data-translate="faqQ2">Is DockDoor compatible with my macOS version?</summary>
+                <div data-translate="faqA2">DockDoor is designed to work with recent versions of macOS. Please check the
+                    system requirements on our GitHub page for specific compatibility information.</div>
             </details>
             <details>
-                <summary data-translate="faqQ3">
-                    
-                </summary>
+                <summary data-translate="faqQ3">How do I install DockDoor?</summary>
                 <div>
-                    <span data-translate="faqA3-1"></span>
+                    <span data-translate="faqA3-1">You can download the latest version of DockDoor from our GitHub
+                        releases page.</span>
                     <br><br>
-                    <span data-translate="faqA3-2"></span>
+                    <span data-translate="faqA3-2">Alternatively, if you use Homebrew, you can install DockDoor using
+                        the command: brew install --cask dockdoor</span>
                     <br><br>
-                    <span data-translate="faqA3-3"></span>
+                    <span data-translate="faqA3-3">After installation, simply launch the application, and it will
+                        integrate with your dock.</span>
                 </div>
             </details>
             <details>
-                <summary data-translate="faqQ4"></summary>
+                <summary data-translate="faqQ4">How can I customize DockDoor?</summary>
                 <div>
-                    <span data-translate="faqA4-1"></span>
+                    <span data-translate="faqA4-1">DockDoor offers various customization options through its preferences
+                        menu.</span>
                     <br>
-                    <span data-translate="faqA4-2"></span>
+                    <span data-translate="faqA4-2">You can adjust settings such as preview size, appearance, and
+                        behavior to suit your workflow.</span>
                 </div>
             </details>
         </div>
-            <p><span data-translate="faqDocumentation"></span> <a href="https://github.com/ejbills/DockDoor/issues"><img src="https://upload.wikimedia.org/wikipedia/commons/b/b3/Echo_link-blue_icon.svg" alt="Chainlink icon" style="display:inline;" width="auto"></a></p>
-        </div>
-
+        <p>
+            <span data-translate="faqDocumentation">For more detailed information, please refer to our
+                documentation</span>
+            <a href="https://github.com/ejbills/DockDoor/issues">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/b/b3/Echo_link-blue_icon.svg"
+                    alt="Chainlink icon" class="chain-icon">
+            </a>
+        </p>
     </main>
 
-    <script type="text/JavaScript">
-        document.getElementById('languageButton').addEventListener('click', function() {
-            var dropdownContent = document.getElementById('dropdownContent');
-            // Toggle display of the dropdown menu
-            if (dropdownContent.style.display === 'block') {
-                dropdownContent.style.display = 'none';
-            } else {
-                dropdownContent.style.display = 'block';
-            }
-        });
-
+    <script>
+        // Variations image slideshow
         let variationsimage = document.getElementById('variations');
         let variationsimages = ['/resources/variations/bl-br.png', '/resources/variations/bl-tl.png', '/resources/variations/bl-tr.png', '/resources/variations/br-bl.png', '/resources/variations/br-tl.png', '/resources/variations/br-tr.png', '/resources/variations/tl-bl.png', '/resources/variations/tl-br.png', '/resources/variations/tl-tr.png', '/resources/variations/tr-bl.png', '/resources/variations/tr-br.png', '/resources/variations/tr-tl.png']
 
         let variationsIndex = 0;
-        setInterval(function(){
-            variationsIndex = (variationsIndex + 1)  % variationsimages.length;
+        setInterval(function () {
+            variationsIndex = (variationsIndex + 1) % variationsimages.length;
             variationsimage.src = variationsimages[variationsIndex];
         }, 500);
 
+        // App title image slideshow
         let apptitleimage = document.getElementById('apptitle');
         let apptitleimages = ['/resources/adjusted/previewDefault.png', '/resources/adjusted/previewEmbedded.png', '/resources/adjusted/previewPopover.png']
 
         let apptitleIndex = 0;
-        setInterval(function(){
+        setInterval(function () {
             apptitleIndex = (apptitleIndex + 1) % apptitleimages.length;
             apptitleimage.src = apptitleimages[apptitleIndex];
         }, 1000);
+
+        // Dark mode toggle
+        const darkModeToggle = document.getElementById('toggleDarkMode');
+        const darkModeIcon = document.getElementById('darkModeIcon');
+
+        function setDarkMode(isDark) {
+            document.body.classList.toggle('dark-mode', isDark);
+            darkModeIcon.textContent = isDark ? '☀️' : '🌙';
+            localStorage.setItem('darkMode', isDark);
+        }
+
+        // Check for saved dark mode preference
+        const savedDarkMode = localStorage.getItem('darkMode');
+        if (savedDarkMode !== null) {
+            setDarkMode(savedDarkMode === 'true');
+        } else {
+            // If no saved preference, use system preference
+            setDarkMode(window.matchMedia('(prefers-color-scheme: dark)').matches);
+        }
+
+        darkModeToggle.addEventListener('click', () => {
+            setDarkMode(!document.body.classList.contains('dark-mode'));
+        });
+
+        // Listen for system dark mode changes
+        window.matchMedia('(prefers-color-scheme: dark)').addListener((e) => {
+            setDarkMode(e.matches);
+        });
     </script>
 
-
     <script src="/translate.js"></script>
-    <script src="/dark-mode.js"></script>
 </body>
+
 </html>
