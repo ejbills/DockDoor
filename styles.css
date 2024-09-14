@@ -1,229 +1,280 @@
-:root {
-    --text-color: #1d1d1f;
-    --background-color: #ffffff;
-    --content-background: #f5f5f7;
-    --accent-color: #0071e3;
-    --secondary-bg: #e5e5e7;
+body {
+    font-family: system-ui;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    color: black;
 }
 
 body.dark-mode {
-    --text-color: #f5f5f7;
-    --background-color: #000000;
-    --content-background: #1d1d1f;
-    --secondary-bg: #2d2d2f;
+    background-color: #181818 !important;
+    color: #fff !important;
 }
 
-body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
-    line-height: 1.47059;
-    font-weight: 400;
-    letter-spacing: -0.022em;
-    color: var(--text-color);
-    background-color: var(--background-color);
-    margin: 0;
-    padding: 0;
+header /*, footer */ {
+    background-color: #002244;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
 }
 
-header {
-    background-color: rgba(255, 255, 255, 0.8);
-    backdrop-filter: saturate(180%) blur(10px);
-    -webkit-backdrop-filter: saturate(180%) blur(10px);
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 22px;
-    height: 44px;
-    font-size: 14px;
+header h1 {
+    margin-top: 0px;
+    margin-bottom: 5px;
 }
 
-body.dark-mode header {
-    background-color: rgba(29, 29, 31, 0.8);
+main {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 20px auto;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    position: relative;
 }
 
-.logo {
-    display: flex;
-    align-items: center;
+body.dark-mode main {
+    background-color: #000 !important;
+    color: inherit;
 }
 
-.logo img {
-    width: 20px;
-    height: auto;
-    margin-right: 8px;
+body.dark-mode a {
+    color: lightskyblue;
 }
 
-.logo span {
-    font-size: 16px;
-    font-weight: 600;
+body.dark-mode a:visited {
+    color: lightslategray;
 }
 
-nav {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-}
-
-nav a, .dropbtn {
-    color: var(--text-color);
+a {
     text-decoration: none;
-    font-weight: 300;
 }
 
-nav a:hover, .dropbtn:hover {
-    color: var(--accent-color);
+a:hover {
+    text-decoration: underline;
 }
 
-.header-controls {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+.faq-item {
+    margin-bottom: 10px;
+}
+
+pre {
+    position: relative;
+}
+
+pre.inline {
+    display: inline;
+    white-space: pre-wrap;
+}
+
+li, ul {
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+video {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+img {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.responsive-img {
+    width: 100%;
+    height: auto;
+}
+
+@media only screen and (min-width: 600px) and (max-width: 1024px) {
+    .responsive-img {
+        width: 75%;
+    }
+}
+
+@media only screen and (min-width: 1025px) {
+    .responsive-img {
+        width: 50%;
+    }
 }
 
 .dropdown {
     position: relative;
-}
-
-.dropbtn {
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    font-size: 14px;
+    display: inline-block;
+    border-radius: 10px;
 }
 
 .dropdown-content {
-    max-height: 300px;
-    overflow-y: auto;
     display: none;
     position: absolute;
-    background-color: var(--content-background);
+    background-color: #f9f9f9;
     min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 1;
-    border-radius: 12px;
-    right: 0;
-    top: 100%;
+    border-radius: 10px;
+}
+
+body.dark-mode .dropdown-content {
+    background-color: #181818;
+    color: inherit;
 }
 
 .dropdown-content a {
-    color: var(--text-color);
+    color: inherit;
     padding: 12px 16px;
     text-decoration: none;
     display: block;
+    border-radius: 10px;
+}
+
+body.dark-mode .dropdown-content a {
+    color: inherit;
 }
 
 .dropdown-content a:hover {
-    background-color: var(--secondary-bg);
+    background-color: #f1f1f1;
 }
 
-.dropdown:hover .dropdown-content {
-    display: block;
+body.dark-mode .dropdown-content a:hover {
+    background-color: #0f0f0f;
 }
 
-.button {
-    background-color: transparent;
-    color: var(--text-color);
-    font-size: 14px;
-    font-weight: 300;
-    border: none;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.button:hover {
-    color: var(--accent-color);
-}
-
-main {
-max-width: 980px;
-margin: 20px auto 0;
-padding: 20px 20px 40px;
-background-color: var(--content-background);
-border-radius: 20px;
-box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-text-align: center;
-}
-
-
-h1 {
-    font-size: 56px;
-    line-height: 1.07143;
-    font-weight: 600;
-    letter-spacing: -0.005em;
+.centered {
+    text-align: center;
 }
 
 .intro {
-    font-size: 80px;
-    line-height: 1.05;
-    font-weight: 700;
-    letter-spacing: -0.015em;
-    padding: 0px;
-    margin-top: 10px;
-    margin-bottom: 0px;
+    font-size: xxx-large;
 }
 
-.introSub {
-font-size: 32px;
-line-height: 1.2;
-font-weight: 400;
-letter-spacing: -0.008em;
-color: #86868b;
+.s-intro {
+    font-size: xx-large;
 }
 
-p {
-    font-size: 21px;
-    line-height: 1.381;
-    font-weight: 400;
-    letter-spacing: .011em;
+.explanation {
+    font-size: large;
 }
 
-video,
-img {
-    width: 70%;
-    max-width: 700px;
-    border-radius: 18px;
-    margin: 20px auto;
-    display: block;
+.quick-links {
+    text-align: end;
+    line-height: 2em;
+}
+
+.quick-links .margin {
+    margin-left: 25px;
+}
+
+.purple-highlight {
+    background-color: #a845d6;
+    color: white !important;
+    border-radius: 5px;
+    padding: 4px;
+    font-weight: bold;
+}
+
+.red-highlight {
+    background-color: #ff362f;
+    color: white !important;
+    border-radius: 5px;
+    padding: 4px;
+    font-weight: bold;
+}
+
+.yellow-highlight {
+    background-color: #ffc72a;
+    color: black;
+    border-radius: 5px;
+    padding: 4px;
+    font-weight: bold;
+}
+
+.green-highlight {
+    background-color: #13c055;
+    color: black;
+    border-radius: 5px;
+    padding: 4px;
+    font-weight: bold;
+}
+
+.button {
+    background-color: #002244;
+    color: white !important;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    border-radius: 10px;
+    box-sizing: border-box;
+    font-family: inherit;
+    margin: 5px;
+}
+
+.button:hover {
+    background-color: #00152b;
+}
+
+.button a {
+    text-decoration: none !important;
+    color: inherit !important;
+}
+
+.dark-box {
+    width: 100%;
+    height: auto;
+    background-color: black;
+    color: white;
+    box-sizing: border-box;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+body.dark-mode .dark-box {
+    background-color: #00152b;
 }
 
 details {
-    margin-bottom: 20px;
-    border-bottom: 1px solid var(--secondary-bg);
-    padding-bottom: 20px;
-    text-align: left;
+    background-color: #002244;
+    color: white;
+    font-size: 1.25rem;
+    text-align: start;
 }
-
+  
 summary {
-    font-size: 24px;
-    font-weight: 600;
+    padding: .5em 1.3rem;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;  
+    transition: height 1s ease;
+    text-align: start;
+    font-weight: bold;
+    background-color: #00152b;
     cursor: pointer;
 }
-
-hr {
-    border: none;
-    height: 1px;
-    background-color: var(--secondary-bg);
-    margin: 40px 0;
+  
+summary::-webkit-details-marker {
+    display: none;
+}
+  
+summary:after {
+    content: "\25BC";
+}
+  
+details[open] summary {
+    border-bottom: 1px solid #aaa;
+}
+  
+details[open] summary:after {
+    content: "\25B2";
+}
+  
+details[open] div {
+    padding: .5em 1em;
+    border-bottom: 3px solid #aaa;
 }
 
-.github-stats {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-bottom: 20px;
-    justify-content: center;
-}
-
-.github-stats img {
-    height: 20px;
-    width: auto;
-    margin: 0;
-}
-
-.chain-icon {
-    width: 16px;
-    height: 16px;
-    vertical-align: middle;
-    display: inline-block;
+.details-container {
+    border-radius: 10px; /* Rounded corners for container */
+    overflow: hidden; /* Ensures rounded corners are visible */
+    background-color: #002244; /* Same background as details */
 }
