@@ -138,4 +138,4 @@ To enhance web communication, we invite you to help translate the project’s we
 > Click on the tags to paste them directly into your translation. The same process also works for special codes.
 
 - There are a few `<span>` tags (e.g., `<span class='yellow-highlight'>` `</span>`). Copy them **exactly** as they appear in the source language.
-- **Escape your quotation marks** using `\` before them! If you don’t, the translations might fail to render.
+- **Escape your quotation marks** using `\` before them! If you don’t, translations might fail to render.
