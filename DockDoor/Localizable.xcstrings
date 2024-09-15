@@ -3274,8 +3274,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Automatic Updates"
+            "state" : "translated",
+            "value" : "Mises à jour automatiques"
           }
         },
         "he" : {
@@ -3328,8 +3328,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Automatic Updates"
+            "state" : "translated",
+            "value" : "Atualizações automáticas"
           }
         },
         "pt-PT" : {
@@ -5771,8 +5771,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Current Version"
+            "state" : "translated",
+            "value" : "Version actuelle"
           }
         },
         "he" : {
@@ -5825,8 +5825,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Current Version"
+            "state" : "translated",
+            "value" : "Versão Atual"
           }
         },
         "pt-PT" : {
@@ -7076,8 +7076,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "DockDoor needs screen recording access. In macOS Sequoia, you'll see this prompt every week or month and after reboots. This is a new system-wide security policy for all screen capture apps."
+            "state" : "translated",
+            "value" : "O DockDoor precisa de acesso à gravação de tela. No macOS Sequoia, você verá isso aviso toda semana ou mês após reiniciar. Esta é uma nova política de segurança em todo o sistema para todos os aplicativos de captura de tela."
           }
         },
         "pt-PT" : {
@@ -7736,8 +7736,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable automatic checking for updates"
+            "state" : "translated",
+            "value" : "Activer la vérification automatique des mises à jour"
           }
         },
         "he" : {
@@ -7790,8 +7790,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable automatic checking for updates"
+            "state" : "translated",
+            "value" : "Ativar verificação automática de atualizações"
           }
         },
         "pt-PT" : {
@@ -8449,8 +8449,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enabled"
+            "state" : "translated",
+            "value" : "Activé"
           }
         },
         "he" : {
@@ -8503,8 +8503,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enabled"
+            "state" : "translated",
+            "value" : "Habilitado"
           }
         },
         "pt-PT" : {
@@ -9395,8 +9395,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Found a Bug?"
+            "state" : "translated",
+            "value" : "Encontrou um bug?"
           }
         },
         "pt-PT" : {
@@ -10287,8 +10287,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Have an Idea?"
+            "state" : "translated",
+            "value" : "Tem uma ideia?"
           }
         },
         "pt-PT" : {
@@ -10466,8 +10466,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Help"
+            "state" : "translated",
+            "value" : "Ajuda"
           }
         },
         "pt-PT" : {
@@ -10644,8 +10644,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Help and questions settings"
+            "state" : "translated",
+            "value" : "Ajuda e dúvidas sobre configurações"
           }
         },
         "pt-PT" : {
@@ -10822,8 +10822,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Help us improve DockDoor by reporting any issues you encounter."
+            "state" : "translated",
+            "value" : "Ajude-nos a melhorar a DockDoor relatando quaisquer problemas que você encontrar."
           }
         },
         "pt-PT" : {
@@ -11716,8 +11716,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "If you find DockDoor useful, consider donating. Your support helps keep the project going!"
+            "state" : "translated",
+            "value" : "Se você achar a DockDoor útil, considere doar. Seu apoio ajuda a manter o projeto em andamento!"
           }
         },
         "pt-PT" : {
@@ -12019,8 +12019,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Ignore Apps with One Window"
+            "state" : "translated",
+            "value" : "Ignorer les applications avec une fenêtre"
           }
         },
         "he" : {
@@ -12073,8 +12073,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Ignore Apps with One Window"
+            "state" : "translated",
+            "value" : "Ignorar aplicativos com uma janela"
           }
         },
         "pt-PT" : {
@@ -14162,8 +14162,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No recent checks"
+            "state" : "translated",
+            "value" : "Pas de vérification récente"
           }
         },
         "he" : {
@@ -14216,8 +14216,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No recent checks"
+            "state" : "translated",
+            "value" : "Nenhuma verificação recente"
           }
         },
         "pt-PT" : {
@@ -19035,8 +19035,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Report a Bug"
+            "state" : "translated",
+            "value" : "Reporte um Bug"
           }
         },
         "pt-PT" : {
@@ -19213,8 +19213,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Request a Feature"
+            "state" : "translated",
+            "value" : "Solicitar um Recurso"
           }
         },
         "pt-PT" : {
@@ -19569,8 +19569,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Required for dock hover detection and window switcher hotkeys"
+            "state" : "translated",
+            "value" : "Necessário para detecção de hover e atalhos do alternador de janela"
           }
         },
         "pt-PT" : {
@@ -20461,8 +20461,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Restart app"
+            "state" : "translated",
+            "value" : "Reiniciar aplicativo"
           }
         },
         "pt-PT" : {
@@ -21353,8 +21353,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Screen recording"
+            "state" : "translated",
+            "value" : "Gravação de tela"
           }
         },
         "pt-PT" : {
@@ -22247,8 +22247,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "See more..."
+            "state" : "translated",
+            "value" : "Ver mais..."
           }
         },
         "pt-PT" : {
@@ -22604,8 +22604,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Shadowed"
+            "state" : "translated",
+            "value" : "Sombreado"
           }
         },
         "pt-PT" : {
@@ -24568,8 +24568,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Start recording keybind"
+            "state" : "translated",
+            "value" : "Iniciar Gravação de Teclas"
           }
         },
         "pt-PT" : {
@@ -25104,8 +25104,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Suggest new features to make DockDoor even better."
+            "state" : "translated",
+            "value" : "Sugira novos recursos para tornar o DockDoor ainda melhor."
           }
         },
         "pt-PT" : {
@@ -25282,8 +25282,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Support DockDoor"
+            "state" : "translated",
+            "value" : "Apoie o DockDoor"
           }
         },
         "pt-PT" : {
@@ -25460,8 +25460,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "The changes to permissions will take effect after restarting."
+            "state" : "translated",
+            "value" : "As alterações nas permissões terão efeito após reiniciar."
           }
         },
         "pt-PT" : {
@@ -25762,8 +25762,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Toggle"
+            "state" : "translated",
+            "value" : "Activer"
           }
         },
         "he" : {
@@ -25816,8 +25816,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Toggle"
+            "state" : "translated",
+            "value" : "Alternar"
           }
         },
         "pt-PT" : {
@@ -26832,8 +26832,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Up to Date"
+            "state" : "translated",
+            "value" : "À jour"
           }
         },
         "he" : {
@@ -26886,8 +26886,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Up to Date"
+            "state" : "translated",
+            "value" : "Atualizado"
           }
         },
         "pt-PT" : {
@@ -28134,8 +28134,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Want to see for yourself? Review our source code"
+            "state" : "translated",
+            "value" : "Quer ver você mesmo? Confira nosso código-fonte"
           }
         },
         "pt-PT" : {
@@ -29564,8 +29564,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When you click the button below, DockDoor will restart and move to the menu bar to run in the background."
+            "state" : "translated",
+            "value" : "Quando você clicar no botão abaixo, a DockDoor irá reiniciar e mover para a barra de menu para ser executada em segundo plano."
           }
         },
         "pt-PT" : {
@@ -31829,8 +31829,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Your app is on version %@"
+            "state" : "translated",
+            "value" : "Vous avez la version %@"
           }
         },
         "he" : {
@@ -31883,8 +31883,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Your app is on version %@"
+            "state" : "translated",
+            "value" : "Seu aplicativo está na versão %@"
           }
         },
         "pt-PT" : {
@@ -31943,8 +31943,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Your app is on version %@"
+            "state" : "translated",
+            "value" : "您的應用程式版本是 %@"
           }
         }
       }
@@ -32061,7 +32061,7 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Z"
           }
         },
