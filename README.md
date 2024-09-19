@@ -23,8 +23,8 @@ Developed with Swift and SwiftUI, it offers seamless integration with macOS. Doc
 As an open-source project, it welcomes contributions from developers to enhance the application’s functionality, performance and user experience.
 
 Minimum macOS version:
-- 1.1.5 and older: **macOS 14 Sonoma**
-- 1.1.6 and newer: **macOS 13 Ventura**
+- 1.1.5 and older: **macOS 13 Ventura**
+- 1.1.6 and newer: **macOS 14 Sonoma**
 
 If you appreciate this application, please consider **donating** to the developer. Any amount is appreciated! [![Buy Me a Coffee](https://img.shields.io/badge/Buy%20me%20a%20coffee-ffdd00?style=flat&logo=buy-me-a-coffee&logoColor=black)](https://www.buymeacoffee.com/keplercafe)
 
