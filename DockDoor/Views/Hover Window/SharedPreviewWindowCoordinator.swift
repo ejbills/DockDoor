@@ -164,10 +164,8 @@ final class SharedPreviewWindowCoordinator: NSWindow {
 
         // Flip the coordinate space from the accessibility API (origin is bottom-left)
         let flippedIconRect = CGRect(
-            x: iconRect.origin.x,
-            y: screenFrame.height - iconRect.origin.y - iconRect.height,
-            width: iconRect.width,
-            height: iconRect.height
+            origin: DockObserver.cgPointFromNSPoint(iconRect.origin, forScreen: screen),
+            size: iconRect.size
         )
 
         var xPosition: CGFloat
@@ -178,17 +176,17 @@ final class SharedPreviewWindowCoordinator: NSWindow {
             // Horizontally center the preview to the hovered dock icon
             xPosition = flippedIconRect.midX - (windowSize.width / 2)
             // Position the preview just above the dock icon
-            yPosition = screenFrame.minY + flippedIconRect.minY + flippedIconRect.height
+            yPosition = screenFrame.minY + flippedIconRect.minY
 
         case .left:
             // Vertically center the preview to the hovered dock icon
             xPosition = screenFrame.minX + flippedIconRect.maxX
-            yPosition = flippedIconRect.midY - (windowSize.height / 2)
+            yPosition = flippedIconRect.midY - (windowSize.height / 2) - flippedIconRect.height
 
         case .right:
             // Vertically center the preview to the hovered dock icon
             xPosition = screenFrame.maxX - flippedIconRect.width - windowSize.width
-            yPosition = flippedIconRect.midY - (windowSize.height / 2)
+            yPosition = flippedIconRect.minY - (windowSize.height / 2)
 
         default:
             xPosition = mouseLocation.x - (windowSize.width / 2)
