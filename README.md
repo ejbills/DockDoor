@@ -8,15 +8,15 @@
   <img width="100%" height="auto" src="./resources/dockPeek1920.png">
 </p>
 
-[![GitHub release (latest by date)](https://img.shields.io/github/v/release/ejbills/DockDoor?style=flat-square)](https://github.com/ejbills/DockDoor/releases/latest/download/DockDoor.dmg)
-![GitHub All Releases](https://img.shields.io/github/downloads/ejbills/DockDoor/total?label=Total%20Downloads&style=flat-square)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/ejbills/DockDoor)](https://github.com/ejbills/DockDoor/releases/latest/download/DockDoor.dmg)
+![GitHub All Releases](https://img.shields.io/github/downloads/ejbills/DockDoor/total?label=Total%20Downloads)
 [![GitHub stars](https://img.shields.io/github/stars/ejbills/DockDoor)](https://github.com/ejbills/DockDoor/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/ejbills/DockDoor)](https://github.com/ejbills/DockDoor/network/members)
-[![GitHub issues](https://img.shields.io/github/issues/ejbills/DockDoor?style=flat-square)](https://github.com/ejbills/DockDoor/issues)
-[![GitHub license](https://img.shields.io/github/license/ejbills/DockDoor?style=flat-square)](https://github.com/ejbills/DockDoor/blob/main/LICENSE)
-[![Contributors](https://img.shields.io/github/contributors/ejbills/DockDoor?style=flat-square)](https://github.com/ejbills/DockDoor/graphs/contributors)
+[![GitHub issues](https://img.shields.io/github/issues/ejbills/DockDoor)](https://github.com/ejbills/DockDoor/issues)
+[![GitHub license](https://img.shields.io/github/license/ejbills/DockDoor)](https://github.com/ejbills/DockDoor/blob/main/LICENSE)
+[![Contributors](https://img.shields.io/github/contributors/ejbills/DockDoor)](https://github.com/ejbills/DockDoor/graphs/contributors)
 [![Crowdin](https://badges.crowdin.net/dockdoor/localized.svg)](https://crowdin.com/project/dockdoor)
-[![Website](https://img.shields.io/badge/Website-015FBA?style=flat-square)](https://dockdoor.net)
+[![Website](https://img.shields.io/badge/Website-015FBA)](https://dockdoor.net)
 
 **DockDoor** is a macOS application that adds a much-needed feature to your Mac: Dock previews.
 Developed with Swift and SwiftUI, it offers seamless integration with macOS. DockDoor is designed for ease of use and intuitive interactions.
@@ -61,11 +61,10 @@ Each traffic light button you see serves an intuitive function.
 </p>
 
 ### Windows-like `Alt` + `Tab` window switcher
-With the default settings, hold down `Command` (⌘) and press `Tab` (⇥) repeatedly until the desired window is highlighted. To go back, press `Shift` (⇧) in addition to `Tab`.
+With the default settings, hold down `Option` (⌥) and press `Tab` (⇥) repeatedly until the desired window is highlighted. To go back, press `Shift` (⇧) in addition to `Tab`.
 Release both keys to switch to the selected window.
 
 #### Customization
-You can customize the default keybind by disabling the option `Use default macOS keybind ⌘ + ⇥`.
 - Select one of the initialization keys (`Control`, `Option` or `Command`)
 - Click on `Start Recording Keybind`
 - Press a single key on your keyboard
@@ -139,4 +138,4 @@ To enhance web communication, we invite you to help translate the project’s we
 > Click on the tags to paste them directly into your translation. The same process also works for special codes.
 
 - There are a few `<span>` tags (e.g., `<span class='yellow-highlight'>` `</span>`). Copy them **exactly** as they appear in the source language.
-- **Escape your quotation marks** using `\` before them! If you don’t, the translations might fail to render.
+- **Escape your quotation marks** using `\` before them! If you don’t, translations might fail to render.

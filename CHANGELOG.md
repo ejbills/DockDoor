@@ -38,6 +38,14 @@
 </style>
 <a href="https://buymeacoffee.com/keplercafe" class="donation-link" target="_blank">☕ Support kepler.cafe</a>
 
+<a name="v1.2.9"></a>
+# [v1.2.9](https://github.com/ejbills/DockDoor/releases/tag/v1.2.9) - 17 Sep 2024
+
+- Fixes a bug where windows in the cache were not being properly updated
+
+[Changes][v1.2.9]
+
+
 <a name="v1.2.8"></a>
 # [v1.2.8](https://github.com/ejbills/DockDoor/releases/tag/v1.2.8) - 13 Sep 2024
 
@@ -577,6 +585,7 @@ v1.0
 [Changes][releases]
 
 
+[v1.2.9]: https://github.com/ejbills/DockDoor/compare/v1.2.8...v1.2.9
 [v1.2.8]: https://github.com/ejbills/DockDoor/compare/v1.2.7...v1.2.8
 [v1.2.7]: https://github.com/ejbills/DockDoor/compare/v1.2.6...v1.2.7
 [v1.2.6]: https://github.com/ejbills/DockDoor/compare/v1.2.5...v1.2.6

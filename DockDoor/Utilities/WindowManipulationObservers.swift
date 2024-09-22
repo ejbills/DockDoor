@@ -147,19 +147,19 @@ func axObserverCallback(observer: AXObserver, element: AXUIElement, notification
 }
 
 private func handleWindowEvent(element: AXUIElement, app: NSRunningApplication, updateDateTime: Bool = false) {
-    guard !WindowManipulationObservers.trackedElements.contains(element) else { return }
-    WindowManipulationObservers.trackedElements.insert(element)
     WindowManipulationObservers.debounceWorkItem?.cancel()
-    WindowManipulationObservers.debounceWorkItem = DispatchWorkItem {
+
+    let workItem = DispatchWorkItem {
         if updateDateTime {
             WindowUtil.updateWindowDateTime(for: app)
         }
         WindowUtil.updateWindowCache(for: app) { windowSet in
             windowSet = windowSet.filter { WindowUtil.isValidElement($0.axElement) }
         }
-        WindowManipulationObservers.trackedElements.remove(element)
     }
-    DispatchQueue.main.asyncAfter(deadline: .now() + windowProcessingDebounceInterval, execute: WindowManipulationObservers.debounceWorkItem!)
+
+    WindowManipulationObservers.debounceWorkItem = workItem
+    DispatchQueue.main.asyncAfter(deadline: .now() + windowProcessingDebounceInterval, execute: workItem)
 }
 
 private func handleFocusedUIElementChanged(element: AXUIElement, app: NSRunningApplication, pid: pid_t) {
