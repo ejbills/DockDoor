@@ -215,7 +215,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "• Ermöglicht verbesserte visuelle Informationen im Dock"
+            "value" : "• Ermöglicht verbesserte Informationsvisualisierung im Dock"
           }
         },
         "el" : {
@@ -286,8 +286,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "• Allows for enhanced visual information in the dock"
+            "state" : "translated",
+            "value" : "- Umożliwia rozszerzenie informacji wizualnych w docku"
           }
         },
         "pt-BR" : {
@@ -465,8 +465,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "• Enables real-time interaction with dock items"
+            "state" : "translated",
+            "value" : "- Umożliwia interakcję w czasie rzeczywistym z elementami docka"
           }
         },
         "pt-BR" : {
@@ -644,8 +644,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "• To capture previews of images and windows"
+            "state" : "translated",
+            "value" : "- Przechwytywanie podglądu obrazów i okien"
           }
         },
         "pt-BR" : {
@@ -823,8 +823,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "• To detect when you hover over the dock"
+            "state" : "translated",
+            "value" : "- Aby wykryć najechanie kursorem na dock"
           }
         },
         "pt-BR" : {
@@ -935,14 +935,14 @@
         },
         "el" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Accessibility"
+            "state" : "translated",
+            "value" : "Προσβασιμότητα"
           }
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Accessibility"
+            "state" : "translated",
+            "value" : "Accesibilidad"
           }
         },
         "fi" : {
@@ -971,8 +971,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Accessibility"
+            "state" : "translated",
+            "value" : "Accessibilità"
           }
         },
         "ja" : {
@@ -983,14 +983,14 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Accessibility"
+            "state" : "translated",
+            "value" : "손쉬운 사용"
           }
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Accessibility"
+            "state" : "translated",
+            "value" : "Toegankelijkheid"
           }
         },
         "no" : {
@@ -1001,8 +1001,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Accessibility"
+            "state" : "translated",
+            "value" : "Dostępność"
           }
         },
         "pt-BR" : {
@@ -1061,8 +1061,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Accessibility"
+            "state" : "translated",
+            "value" : "辅助功能"
           }
         },
         "zh-Hant" : {
@@ -1114,8 +1114,8 @@
         },
         "el" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Accessibility Permissions"
+            "state" : "translated",
+            "value" : "Δικαιώματα προσβασιμότητας"
           }
         },
         "es" : {
@@ -1180,8 +1180,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Accessibility Permissions"
+            "state" : "translated",
+            "value" : "Uprawnienia dostępności"
           }
         },
         "pt-BR" : {
@@ -1293,8 +1293,8 @@
         },
         "el" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Accessibility:"
+            "state" : "translated",
+            "value" : "Προσβασιμότητα:"
           }
         },
         "es" : {
@@ -1359,8 +1359,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Accessibility:"
+            "state" : "translated",
+            "value" : "Dostępność:"
           }
         },
         "pt-BR" : {
@@ -1471,8 +1471,8 @@
         },
         "el" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Adjust this if the preview is misaligned with dock"
+            "state" : "translated",
+            "value" : "Ρυθμίστε εάν η προεπισκόπηση δεν είναι ευθυγραμμισμένη με τον πίνακα"
           }
         },
         "es" : {
@@ -1537,8 +1537,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Adjust this if the preview is misaligned with dock"
+            "state" : "translated",
+            "value" : "Dostosuj, jeśli podgląd nie jest wyrównany z dockiem"
           }
         },
         "pt-BR" : {
@@ -1651,8 +1651,8 @@
         },
         "el" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Always"
+            "state" : "translated",
+            "value" : "Πάντα"
           }
         },
         "es" : {
@@ -1717,8 +1717,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Always"
+            "state" : "translated",
+            "value" : "Zawsze"
           }
         },
         "pt-BR" : {
@@ -1830,8 +1830,8 @@
         },
         "el" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Always visible"
+            "state" : "translated",
+            "value" : "Πάντοτε ορατό"
           }
         },
         "es" : {
@@ -1866,8 +1866,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Always visible"
+            "state" : "translated",
+            "value" : "Sempre visibile"
           }
         },
         "ja" : {
@@ -1896,8 +1896,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Always visible"
+            "state" : "translated",
+            "value" : "Zawsze widoczne"
           }
         },
         "pt-BR" : {
@@ -2009,8 +2009,8 @@
         },
         "el" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Always visible; Full opacity"
+            "state" : "translated",
+            "value" : ""
           }
         },
         "es" : {
@@ -2063,8 +2063,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Always visible; Full opacity"
+            "state" : "translated",
+            "value" : "Altijd zichtbaar; volle doorzichtigheid"
           }
         },
         "no" : {
@@ -2075,8 +2075,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Always visible; Full opacity"
+            "state" : "translated",
+            "value" : "Zawsze widoczny; Pełne krycie"
           }
         },
         "pt-BR" : {
@@ -2187,8 +2187,8 @@
         },
         "el" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "amount"
+            "state" : "translated",
+            "value" : "ποσότητα"
           }
         },
         "es" : {
@@ -2223,8 +2223,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "amount"
+            "state" : "translated",
+            "value" : "Quantità"
           }
         },
         "ja" : {
@@ -2241,8 +2241,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "amount"
+            "state" : "translated",
+            "value" : "aantal"
           }
         },
         "no" : {
@@ -2253,8 +2253,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "amount"
+            "state" : "translated",
+            "value" : "wysokość"
           }
         },
         "pt-BR" : {
@@ -2365,8 +2365,8 @@
         },
         "el" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Animation speed"
+            "state" : "translated",
+            "value" : "Ταχύτητα κινήσεων"
           }
         },
         "es" : {
@@ -2401,8 +2401,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Animation speed"
+            "state" : "translated",
+            "value" : "Velocità d'animazione"
           }
         },
         "ja" : {
@@ -2431,8 +2431,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Animation speed"
+            "state" : "translated",
+            "value" : "Prędkość animacji"
           }
         },
         "pt-BR" : {
@@ -2491,8 +2491,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Animation speed"
+            "state" : "translated",
+            "value" : "动画速度"
           }
         },
         "zh-Hant" : {
@@ -2609,8 +2609,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "App Name Style"
+            "state" : "translated",
+            "value" : "Styl nazwy aplikacji"
           }
         },
         "pt-BR" : {
@@ -2788,8 +2788,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Appearance"
+            "state" : "translated",
+            "value" : "Wygląd"
           }
         },
         "pt-BR" : {
@@ -2966,8 +2966,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Appearance settings"
+            "state" : "translated",
+            "value" : "Ustawienia wyglądu"
           }
         },
         "pt-BR" : {
@@ -3132,8 +3132,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Are you sure you want to reset all settings to their default values?"
+            "state" : "translated",
+            "value" : "Weet je zeker dat je alle instellingen wil resetten naar de standaard waarden?"
           }
         },
         "no" : {
@@ -3144,8 +3144,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Are you sure you want to reset all settings to their default values?"
+            "state" : "translated",
+            "value" : "Czy na pewno chcesz zresetować wszystkie ustawienia do ich wartości domyślnych?"
           }
         },
         "pt-BR" : {
@@ -3226,8 +3226,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Automatic Updates"
+            "state" : "translated",
+            "value" : "تحديثات تلقائية"
           }
         },
         "ca" : {
@@ -3250,8 +3250,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Automatic Updates"
+            "state" : "translated",
+            "value" : "Automatische Updates"
           }
         },
         "el" : {
@@ -3262,8 +3262,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Automatic Updates"
+            "state" : "translated",
+            "value" : "Actualizaciones automáticas"
           }
         },
         "fi" : {
@@ -3274,8 +3274,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Automatic Updates"
+            "state" : "translated",
+            "value" : "Mises à jour automatiques"
           }
         },
         "he" : {
@@ -3292,8 +3292,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Automatic Updates"
+            "state" : "translated",
+            "value" : "Aggiornamenti automatici"
           }
         },
         "ja" : {
@@ -3304,14 +3304,14 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Automatic Updates"
+            "state" : "translated",
+            "value" : "자동 업데이트"
           }
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Automatic Updates"
+            "state" : "translated",
+            "value" : "Automatische Updates"
           }
         },
         "no" : {
@@ -3322,14 +3322,14 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Automatic Updates"
+            "state" : "translated",
+            "value" : "Automatyczne aktualizacje"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Automatic Updates"
+            "state" : "translated",
+            "value" : "Atualizações automáticas"
           }
         },
         "pt-PT" : {
@@ -3382,14 +3382,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Automatic Updates"
+            "state" : "translated",
+            "value" : "自动更新"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Automatic Updates"
+            "state" : "translated",
+            "value" : "自動更新"
           }
         }
       }
@@ -3489,8 +3489,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Automatically check for updates"
+            "state" : "translated",
+            "value" : "Controleer automatisch voor updates"
           }
         },
         "no" : {
@@ -3501,8 +3501,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Automatically check for updates"
+            "state" : "translated",
+            "value" : "Automatyczne sprawdzania aktualizacji"
           }
         },
         "pt-BR" : {
@@ -3679,8 +3679,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Blur amount"
+            "state" : "translated",
+            "value" : "Ilość rozmycia"
           }
         },
         "pt-BR" : {
@@ -3739,8 +3739,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Blur amount"
+            "state" : "translated",
+            "value" : "模糊程度"
           }
         },
         "zh-Hant" : {
@@ -3858,8 +3858,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Bottom Left"
+            "state" : "translated",
+            "value" : "Dolny lewy"
           }
         },
         "pt-BR" : {
@@ -4037,8 +4037,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Bottom Right"
+            "state" : "translated",
+            "value" : "Dolny prawy"
           }
         },
         "pt-BR" : {
@@ -4215,8 +4215,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Buy me a coffee here, thank you!"
+            "state" : "translated",
+            "value" : "W podziękowaniu kup mi kawę!"
           }
         },
         "pt-BR" : {
@@ -4394,8 +4394,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Can you even see this?"
+            "state" : "translated",
+            "value" : "Czy ty coś tam widzisz?"
           }
         },
         "pt-BR" : {
@@ -4572,8 +4572,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Cancel"
+            "state" : "translated",
+            "value" : "Anuluj"
           }
         },
         "pt-BR" : {
@@ -4750,8 +4750,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check for Updates"
+            "state" : "translated",
+            "value" : "Sprawdź aktualizację"
           }
         },
         "pt-BR" : {
@@ -4899,8 +4899,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Colors"
+            "state" : "translated",
+            "value" : "Colori"
           }
         },
         "ja" : {
@@ -4917,8 +4917,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Colors"
+            "state" : "translated",
+            "value" : "Kleuren"
           }
         },
         "no" : {
@@ -4929,8 +4929,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Colors"
+            "state" : "translated",
+            "value" : "Kolor"
           }
         },
         "pt-BR" : {
@@ -4989,8 +4989,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Colors"
+            "state" : "translated",
+            "value" : "颜色"
           }
         },
         "zh-Hant" : {
@@ -5107,7 +5107,7 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Command (⌘)"
           }
         },
@@ -5255,8 +5255,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Contribute translation here!"
+            "state" : "translated",
+            "value" : "Contribuisci alla traduzione!"
           }
         },
         "ja" : {
@@ -5285,8 +5285,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Contribute translation here!"
+            "state" : "translated",
+            "value" : "Pomóż w tłumaczeniu tutaj!"
           }
         },
         "pt-BR" : {
@@ -5463,7 +5463,7 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Control (⌃)"
           }
         },
@@ -5641,8 +5641,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Current Keybind: %@"
+            "state" : "translated",
+            "value" : "Aktualny skrót klawiszy %@"
           }
         },
         "pt-BR" : {
@@ -5723,8 +5723,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Current Version"
+            "state" : "translated",
+            "value" : "الإصدار الحالي"
           }
         },
         "ca" : {
@@ -5747,8 +5747,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Current Version"
+            "state" : "translated",
+            "value" : "Aktuelle Version"
           }
         },
         "el" : {
@@ -5759,8 +5759,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Current Version"
+            "state" : "translated",
+            "value" : "Versión actual"
           }
         },
         "fi" : {
@@ -5771,8 +5771,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Current Version"
+            "state" : "translated",
+            "value" : "Version actuelle"
           }
         },
         "he" : {
@@ -5789,8 +5789,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Current Version"
+            "state" : "translated",
+            "value" : "Versione corrente"
           }
         },
         "ja" : {
@@ -5801,14 +5801,14 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Current Version"
+            "state" : "translated",
+            "value" : "현재 버전"
           }
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Current Version"
+            "state" : "translated",
+            "value" : "Huidige Versie"
           }
         },
         "no" : {
@@ -5819,14 +5819,14 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Current Version"
+            "state" : "translated",
+            "value" : "Aktualna wersja"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Current Version"
+            "state" : "translated",
+            "value" : "Versão Atual"
           }
         },
         "pt-PT" : {
@@ -5879,14 +5879,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Current Version"
+            "state" : "translated",
+            "value" : "当前版本"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Current Version"
+            "state" : "translated",
+            "value" : "目前版本"
           }
         }
       }
@@ -5998,8 +5998,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Current Version: %@"
+            "state" : "translated",
+            "value" : "Aktualna wersja: %@"
           }
         },
         "pt-BR" : {
@@ -6177,8 +6177,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Default"
+            "state" : "translated",
+            "value" : "Domyślne"
           }
         },
         "pt-BR" : {
@@ -6356,8 +6356,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Default (Medium Large)"
+            "state" : "translated",
+            "value" : "Domyślne (Średnie Duże)"
           }
         },
         "pt-BR" : {
@@ -6517,8 +6517,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Previews & Window Switcher"
+            "state" : "translated",
+            "value" : "Dock 미리보기 & 창 전환"
           }
         },
         "nl" : {
@@ -6535,8 +6535,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Previews & Window Switcher"
+            "state" : "translated",
+            "value" : "Podgląd doku i przełączania okien"
           }
         },
         "pt-BR" : {
@@ -6655,7 +6655,7 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sólo previsualizaciones de Dock"
+            "value" : "Solo previsualizaciones de Dock"
           }
         },
         "fi" : {
@@ -6684,8 +6684,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Previews only"
+            "state" : "translated",
+            "value" : "Solo anteprima del dock"
           }
         },
         "ja" : {
@@ -6696,8 +6696,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Previews only"
+            "state" : "translated",
+            "value" : "Dock 미리보기만"
           }
         },
         "nl" : {
@@ -6714,8 +6714,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Previews only"
+            "state" : "translated",
+            "value" : "Tylko podgląd Docka"
           }
         },
         "pt-BR" : {
@@ -6821,7 +6821,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "DockDoor nimmt Ihren Bildschirminhalt oder Ton nicht auf. Es erfasst nur statische Vorschaubilder der Programmfenster. Es werden keine Informationen gespeichert oder freigegeben; die gesamte Verarbeitung erfolgt privat auf Ihrem Gerät."
+            "value" : "DockDoor zeichnet weder Bildschirminhalte noch Ton auf. Es werden lediglich statische Vorschaubilder der Programmfenster erfasst. Es werden keine Informationen gespeichert oder weitergegeben; die gesamte Verarbeitung findet ausschließlich auf dem Gerät statt."
           }
         },
         "el" : {
@@ -6832,8 +6832,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "DockDoor does not record your screen or audio. It only captures static window previews. No information is stored or shared; all processing occurs privately on your device."
+            "state" : "translated",
+            "value" : "La aplicación no graba tu pantalla o audio. Únicamente realiza capturas de pantalla de forma estática. Ninguna información es almacenada o compartida; todo el procesamiento ocurre de forma privada en tu dispositivo."
           }
         },
         "fi" : {
@@ -6862,8 +6862,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "DockDoor does not record your screen or audio. It only captures static window previews. No information is stored or shared; all processing occurs privately on your device."
+            "state" : "translated",
+            "value" : "DockDoor non registra lo schermo o l'audio. Cattura solo le anteprime delle finestre statiche. Nessuna informazione viene archiviata o condivisa; tutta l'elaborazione avviene in privato sul tuo dispositivo."
           }
         },
         "ja" : {
@@ -6874,8 +6874,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "DockDoor does not record your screen or audio. It only captures static window previews. No information is stored or shared; all processing occurs privately on your device."
+            "state" : "translated",
+            "value" : "DockDoor는 컴퓨터의 화면 및 오디오를 녹화하지 않으며, 창 미리보기 화면만 띄웁니다. 모든 정보는 저장 및 공유하지 않으며, 모든 작업은 본 기기에서 안전하게 이루어집니다."
           }
         },
         "nl" : {
@@ -6892,8 +6892,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "DockDoor does not record your screen or audio. It only captures static window previews. No information is stored or shared; all processing occurs privately on your device."
+            "state" : "translated",
+            "value" : "DockDoor nie nagrywa ekranu ani dźwięku. Przechwytuje jedynie statyczne podglądy okien. Żadne informacje nie są przechowywane ani udostępniane; całe przetwarzanie odbywa się prywatnie na urządzeniu."
           }
         },
         "pt-BR" : {
@@ -6952,8 +6952,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "DockDoor does not record your screen or audio. It only captures static window previews. No information is stored or shared; all processing occurs privately on your device."
+            "state" : "translated",
+            "value" : "DockDoor不会录制您的屏幕或音频。它只会捕捉静态窗口预览。没有信息被存储或共享；所有处理都在您的设备上私密进行。"
           }
         },
         "zh-Hant" : {
@@ -6999,7 +6999,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "DockDoor benötigt Zugang zur Bildschirmaufnahme. In macOS Sequoia werden Sie diesen Dialog wöchentlich oder monatlich und nach einem Neustart sehen. Dies ist eine neue systemweite Sicherheitsrichtlinie für alle Apps, die Aufnahmen vom Bildschirm erstellen."
+            "value" : "DockDoor benötigt Zugriff auf die Bildschirmaufzeichnung. In macOS Sequoia sehen Sie diese Aufforderung jede Woche oder jeden Monat und nach einem Neustart. Dies ist eine neue systemweite Sicherheitsrichtlinie von Apple für alle Bildschirmaufnahme-Apps."
           }
         },
         "el" : {
@@ -7010,8 +7010,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "DockDoor needs screen recording access. In macOS Sequoia, you'll see this prompt every week or month and after reboots. This is a new system-wide security policy for all screen capture apps."
+            "state" : "translated",
+            "value" : "La aplicación requiere permisos de grabación de pantalla. En macOS Sequoya verás este cartel todas las semanas, meses y luego de los reinicios. Esta es una nueva política de seguridad de Apple para las aplicaciones que capturen pantalla."
           }
         },
         "fi" : {
@@ -7040,8 +7040,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "DockDoor needs screen recording access. In macOS Sequoia, you'll see this prompt every week or month and after reboots. This is a new system-wide security policy for all screen capture apps."
+            "state" : "translated",
+            "value" : "DockDoor necessita dell'accesso alla registrazione dello schermo. In macOS Sequoia vedrai questo messaggio ogni settimana o mese e dopo i riavvii. Si tratta di una nuova politica di sicurezza a livello di sistema per tutte le app di acquisizione dello schermo."
           }
         },
         "ja" : {
@@ -7052,8 +7052,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "DockDoor needs screen recording access. In macOS Sequoia, you'll see this prompt every week or month and after reboots. This is a new system-wide security policy for all screen capture apps."
+            "state" : "translated",
+            "value" : "DockDoor는 화면 녹화 권한이 필요합니다. macOS Sequoia를 사용하신다면, 새로운 시스템 보안 정책으로 인해 설치하신 모든 캡처 앱에서 이 창을 매주, 매달, 혹은 재부팅 후에 보시게 될 겁니다."
           }
         },
         "nl" : {
@@ -7070,14 +7070,14 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "DockDoor needs screen recording access. In macOS Sequoia, you'll see this prompt every week or month and after reboots. This is a new system-wide security policy for all screen capture apps."
+            "state" : "translated",
+            "value" : "DockDoor wymaga dostępu do nagrywania ekranu. W systemie macOS Sequoia ten monit będzie wyświetlany co tydzień lub miesiąc oraz po ponownym uruchomieniu systemu. Jest to nowa ogólnosystemowa polityka bezpieczeństwa dla wszystkich aplikacji do przechwytywania ekranu."
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "DockDoor needs screen recording access. In macOS Sequoia, you'll see this prompt every week or month and after reboots. This is a new system-wide security policy for all screen capture apps."
+            "state" : "translated",
+            "value" : "O DockDoor precisa de acesso à gravação de tela. No macOS Sequoia, você verá isso aviso toda semana ou mês após reiniciar. Esta é uma nova política de segurança em todo o sistema para todos os aplicativos de captura de tela."
           }
         },
         "pt-PT" : {
@@ -7130,8 +7130,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "DockDoor needs screen recording access. In macOS Sequoia, you'll see this prompt every week or month and after reboots. This is a new system-wide security policy for all screen capture apps."
+            "state" : "translated",
+            "value" : "DockDoor需要屏幕录制权限。在macOS Sequoia中，您将会每周或者每月以及在重启以后看到此提示。这是一项针对所有屏幕录制应用的系统级的新安全策略。"
           }
         },
         "zh-Hant" : {
@@ -7218,8 +7218,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Edit Color"
+            "state" : "translated",
+            "value" : "Modifica colore"
           }
         },
         "ja" : {
@@ -7230,14 +7230,14 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Edit Color"
+            "state" : "translated",
+            "value" : "색 편집"
           }
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Edit Color"
+            "state" : "translated",
+            "value" : "Bewerk Kleur"
           }
         },
         "no" : {
@@ -7248,8 +7248,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Edit Color"
+            "state" : "translated",
+            "value" : "Edytuj kolor"
           }
         },
         "pt-BR" : {
@@ -7308,8 +7308,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Edit Color"
+            "state" : "translated",
+            "value" : "编辑颜色"
           }
         },
         "zh-Hant" : {
@@ -7408,8 +7408,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Elements Overlap"
+            "state" : "translated",
+            "value" : "요소 중첩"
           }
         },
         "nl" : {
@@ -7426,8 +7426,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Elements Overlap"
+            "state" : "translated",
+            "value" : "Elementy nakładają się"
           }
         },
         "pt-BR" : {
@@ -7606,8 +7606,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Embedded"
+            "state" : "translated",
+            "value" : "Osadzone"
           }
         },
         "pt-BR" : {
@@ -7688,8 +7688,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable automatic checking for updates"
+            "state" : "translated",
+            "value" : "تمكين التحقق التلقائي من التحديثات"
           }
         },
         "ca" : {
@@ -7712,8 +7712,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable automatic checking for updates"
+            "state" : "translated",
+            "value" : "Automatische Überprüfung auf Updates aktivieren"
           }
         },
         "el" : {
@@ -7724,8 +7724,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable automatic checking for updates"
+            "state" : "translated",
+            "value" : "Habilitar búsqueda automática de actualizaciones"
           }
         },
         "fi" : {
@@ -7736,8 +7736,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable automatic checking for updates"
+            "state" : "translated",
+            "value" : "Activer la vérification automatique des mises à jour"
           }
         },
         "he" : {
@@ -7754,8 +7754,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable automatic checking for updates"
+            "state" : "translated",
+            "value" : "Abilita controlli regolari per aggiornamenti"
           }
         },
         "ja" : {
@@ -7766,8 +7766,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable automatic checking for updates"
+            "state" : "translated",
+            "value" : "자동으로 업데이트 확인하기"
           }
         },
         "nl" : {
@@ -7784,14 +7784,14 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable automatic checking for updates"
+            "state" : "translated",
+            "value" : "Włącz automatyczne sprawdzanie aktualizacji"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable automatic checking for updates"
+            "state" : "translated",
+            "value" : "Ativar verificação automática de atualizações"
           }
         },
         "pt-PT" : {
@@ -7844,14 +7844,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable automatic checking for updates"
+            "state" : "translated",
+            "value" : "启用自动检测更新"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable automatic checking for updates"
+            "state" : "translated",
+            "value" : "啟用自動檢查更新"
           }
         }
       }
@@ -7904,7 +7904,7 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Habilitar Animación Diapositiva de Ventana Hover"
+            "value" : "Habilitar animación de diapositiva de ventana deslizante"
           }
         },
         "fi" : {
@@ -7963,8 +7963,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable Hover Window Sliding Animation"
+            "state" : "translated",
+            "value" : "Włącz animację przesuwania najechanego okna"
           }
         },
         "pt-BR" : {
@@ -8081,8 +8081,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable Preview Window Sliding Animation"
+            "state" : "translated",
+            "value" : "Habilitar animación de deslizamiento de vista previa"
           }
         },
         "fi" : {
@@ -8123,8 +8123,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable Preview Window Sliding Animation"
+            "state" : "translated",
+            "value" : "창 미리보기 슬라이딩 애니메이션 활성화"
           }
         },
         "nl" : {
@@ -8141,8 +8141,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable Preview Window Sliding Animation"
+            "state" : "translated",
+            "value" : "Włącz animację przesuwania okna podglądu"
           }
         },
         "pt-BR" : {
@@ -8260,7 +8260,7 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Activar Switch de Ventana"
+            "value" : "Activar cambio de ventana"
           }
         },
         "fi" : {
@@ -8319,8 +8319,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable Window Switcher"
+            "state" : "translated",
+            "value" : "Włącz przełączanie okien"
           }
         },
         "pt-BR" : {
@@ -8401,8 +8401,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enabled"
+            "state" : "translated",
+            "value" : "مفعّل"
           }
         },
         "ca" : {
@@ -8425,8 +8425,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enabled"
+            "state" : "translated",
+            "value" : "Eingeschaltet"
           }
         },
         "el" : {
@@ -8437,8 +8437,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enabled"
+            "state" : "translated",
+            "value" : "Habilitado"
           }
         },
         "fi" : {
@@ -8449,8 +8449,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enabled"
+            "state" : "translated",
+            "value" : "Activé"
           }
         },
         "he" : {
@@ -8479,14 +8479,14 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enabled"
+            "state" : "translated",
+            "value" : "활성화됨"
           }
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enabled"
+            "state" : "translated",
+            "value" : "Aan"
           }
         },
         "no" : {
@@ -8497,14 +8497,14 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enabled"
+            "state" : "translated",
+            "value" : "Włączony"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enabled"
+            "state" : "translated",
+            "value" : "Habilitado"
           }
         },
         "pt-PT" : {
@@ -8563,8 +8563,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enabled"
+            "state" : "translated",
+            "value" : "已啟用"
           }
         }
       }
@@ -8616,7 +8616,7 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Potencia tu experiencia Crm!"
+            "value" : "¡Potencia tu experiencia!"
           }
         },
         "fi" : {
@@ -8675,8 +8675,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enhance your dock experience!"
+            "state" : "translated",
+            "value" : "Zwiększ swoje doświadczenia w Docku!"
           }
         },
         "pt-BR" : {
@@ -8793,8 +8793,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Everything is now set up!"
+            "state" : "translated",
+            "value" : "¡Ya has configurado todo!"
           }
         },
         "fi" : {
@@ -8835,14 +8835,14 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Everything is now set up!"
+            "state" : "translated",
+            "value" : "이제 모든 준비가 끝났어요!"
           }
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Everything is now set up!"
+            "state" : "translated",
+            "value" : "Alles is nu ingesteld!"
           }
         },
         "no" : {
@@ -8853,8 +8853,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Everything is now set up!"
+            "state" : "translated",
+            "value" : "Wszystko zostało ustawione!"
           }
         },
         "pt-BR" : {
@@ -8973,7 +8973,7 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Extra extra pequeño"
+            "value" : "Extra pequeño x 2"
           }
         },
         "fi" : {
@@ -9032,8 +9032,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Extra Extra Small"
+            "state" : "translated",
+            "value" : "Bardzo bardzo małe"
           }
         },
         "pt-BR" : {
@@ -9211,8 +9211,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Extra Small"
+            "state" : "translated",
+            "value" : "Bardzo mała"
           }
         },
         "pt-BR" : {
@@ -9329,8 +9329,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Found a Bug?"
+            "state" : "translated",
+            "value" : "¿Encontraste algún error?"
           }
         },
         "fi" : {
@@ -9371,14 +9371,14 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Found a Bug?"
+            "state" : "translated",
+            "value" : "버그가 있나요?"
           }
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Found a Bug?"
+            "state" : "translated",
+            "value" : "Een bug gevonden?"
           }
         },
         "no" : {
@@ -9389,14 +9389,14 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Found a Bug?"
+            "state" : "translated",
+            "value" : "Znalazłeś błąd?"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Found a Bug?"
+            "state" : "translated",
+            "value" : "Encontrou um bug?"
           }
         },
         "pt-PT" : {
@@ -9449,8 +9449,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Found a Bug?"
+            "state" : "translated",
+            "value" : "遇到了Bug？"
           }
         },
         "zh-Hant" : {
@@ -9568,8 +9568,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "General"
+            "state" : "translated",
+            "value" : "Ogólne"
           }
         },
         "pt-BR" : {
@@ -9746,8 +9746,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "General settings"
+            "state" : "translated",
+            "value" : "Ogólne ustawienia"
           }
         },
         "pt-BR" : {
@@ -9924,8 +9924,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Get Started"
+            "state" : "translated",
+            "value" : "Zaczynamy"
           }
         },
         "pt-BR" : {
@@ -10043,8 +10043,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Granted"
+            "state" : "translated",
+            "value" : "Permitido"
           }
         },
         "fi" : {
@@ -10085,8 +10085,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Granted"
+            "state" : "translated",
+            "value" : "허용"
           }
         },
         "nl" : {
@@ -10103,8 +10103,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Granted"
+            "state" : "translated",
+            "value" : "Przyznaj"
           }
         },
         "pt-BR" : {
@@ -10163,8 +10163,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Granted"
+            "state" : "translated",
+            "value" : "已授权"
           }
         },
         "zh-Hant" : {
@@ -10221,8 +10221,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Have an Idea?"
+            "state" : "translated",
+            "value" : "¿Tienes alguna idea?"
           }
         },
         "fi" : {
@@ -10263,14 +10263,14 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Have an Idea?"
+            "state" : "translated",
+            "value" : "아이디어가 있나요?"
           }
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Have an Idea?"
+            "state" : "translated",
+            "value" : "Heb je een idee?"
           }
         },
         "no" : {
@@ -10281,14 +10281,14 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Have an Idea?"
+            "state" : "translated",
+            "value" : "Masz jakiś pomysł?"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Have an Idea?"
+            "state" : "translated",
+            "value" : "Tem uma ideia?"
           }
         },
         "pt-PT" : {
@@ -10400,8 +10400,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Help"
+            "state" : "translated",
+            "value" : "Ayuda"
           }
         },
         "fi" : {
@@ -10442,14 +10442,14 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Help"
+            "state" : "translated",
+            "value" : "도움말"
           }
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Help"
+            "state" : "translated",
+            "value" : "Hulp"
           }
         },
         "no" : {
@@ -10460,14 +10460,14 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Help"
+            "state" : "translated",
+            "value" : "Pomoc"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Help"
+            "state" : "translated",
+            "value" : "Ajuda"
           }
         },
         "pt-PT" : {
@@ -10520,8 +10520,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Help"
+            "state" : "translated",
+            "value" : "帮助"
           }
         },
         "zh-Hant" : {
@@ -10578,8 +10578,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Help and questions settings"
+            "state" : "translated",
+            "value" : "Ayuda y preguntas acerca de configuración"
           }
         },
         "fi" : {
@@ -10626,8 +10626,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Help and questions settings"
+            "state" : "translated",
+            "value" : "Instellingen voor hulp en vragen"
           }
         },
         "no" : {
@@ -10638,14 +10638,14 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Help and questions settings"
+            "state" : "translated",
+            "value" : "Pomoc i pytania dotyczące ustawień"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Help and questions settings"
+            "state" : "translated",
+            "value" : "Ajuda e dúvidas sobre configurações"
           }
         },
         "pt-PT" : {
@@ -10756,8 +10756,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Help us improve DockDoor by reporting any issues you encounter."
+            "state" : "translated",
+            "value" : "Ayúdanos a mejorar la aplicación reportando cualquier problema que encuentres."
           }
         },
         "fi" : {
@@ -10798,14 +10798,14 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Help us improve DockDoor by reporting any issues you encounter."
+            "state" : "translated",
+            "value" : "버그와 같은 이슈들을 제보하여 DockDoor를 개선해 주세요."
           }
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Help us improve DockDoor by reporting any issues you encounter."
+            "state" : "translated",
+            "value" : "Help ons DockDoor verbeteren door problemen die je ervaart te rapporteren."
           }
         },
         "no" : {
@@ -10816,14 +10816,14 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Help us improve DockDoor by reporting any issues you encounter."
+            "state" : "translated",
+            "value" : "Pomóż nam ulepszyć DockDoor, zgłaszając wszelkie problemy, które napotkasz."
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Help us improve DockDoor by reporting any issues you encounter."
+            "state" : "translated",
+            "value" : "Ajude-nos a melhorar a DockDoor relatando quaisquer problemas que você encontrar."
           }
         },
         "pt-PT" : {
@@ -10876,8 +10876,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Help us improve DockDoor by reporting any issues you encounter."
+            "state" : "translated",
+            "value" : "反馈您遇到的问题来帮助我们改进DockDoor。"
           }
         },
         "zh-Hant" : {
@@ -10996,8 +10996,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hidden"
+            "state" : "translated",
+            "value" : "Ukryj"
           }
         },
         "pt-BR" : {
@@ -11156,8 +11156,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Highlight Gradient Colors"
+            "state" : "translated",
+            "value" : "하이라이트 그라데이션 색상"
           }
         },
         "nl" : {
@@ -11174,8 +11174,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Highlight Gradient Colors"
+            "state" : "translated",
+            "value" : "Podkreśl kolory gradientu"
           }
         },
         "pt-BR" : {
@@ -11353,8 +11353,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hover Window Open Delay"
+            "state" : "translated",
+            "value" : "Opóźnienie otwarcia okna pod kursorem"
           }
         },
         "pt-BR" : {
@@ -11532,8 +11532,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hover Window Title Style"
+            "state" : "translated",
+            "value" : "Styl tytułu okna po najechaniu kursorem"
           }
         },
         "pt-BR" : {
@@ -11650,8 +11650,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "If you find DockDoor useful, consider donating. Your support helps keep the project going!"
+            "state" : "translated",
+            "value" : "Si DockDoor te parece útil, puedes realizar una donación. ¡Tu contribución nos ayuda a mantener el proyecto en marcha!"
           }
         },
         "fi" : {
@@ -11680,8 +11680,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "If you find DockDoor useful, consider donating. Your support helps keep the project going!"
+            "state" : "translated",
+            "value" : "Se trovi Doockdoor utile, considera una donazione. Il tuo supporto aiuterebbe il progetto ad andare avanti!"
           }
         },
         "ja" : {
@@ -11692,8 +11692,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "If you find DockDoor useful, consider donating. Your support helps keep the project going!"
+            "state" : "translated",
+            "value" : "DockDoor를 유용하게 사용하고 계신다면, 저희 팀을 후원해 주세요!"
           }
         },
         "nl" : {
@@ -11710,14 +11710,14 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "If you find DockDoor useful, consider donating. Your support helps keep the project going!"
+            "state" : "translated",
+            "value" : "Jeśli uważasz DockDoor za przydatne, rozważ darowiznę. Twoje wsparcie pomaga utrzymać projekt w rozbudowie!"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "If you find DockDoor useful, consider donating. Your support helps keep the project going!"
+            "state" : "translated",
+            "value" : "Se você achar a DockDoor útil, considere doar. Seu apoio ajuda a manter o projeto em andamento!"
           }
         },
         "pt-PT" : {
@@ -11770,8 +11770,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "If you find DockDoor useful, consider donating. Your support helps keep the project going!"
+            "state" : "translated",
+            "value" : "如果您觉得DockDoor有用，请考虑捐赠。您的支持有助于项目的持续发展！"
           }
         },
         "zh-Hant" : {
@@ -11889,8 +11889,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "If you need to access the menu bar icon, launch the app to reveal it for 10 seconds."
+            "state" : "translated",
+            "value" : "Jeśli chcesz uzyskać dostęp do ikony paska menu, uruchom aplikację, aby pokazać ją na 10 sekund."
           }
         },
         "pt-BR" : {
@@ -11971,8 +11971,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Ignore Apps with One Window"
+            "state" : "translated",
+            "value" : "تجاهل التطبيقات ذات نافذة واحدة"
           }
         },
         "ca" : {
@@ -11995,8 +11995,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Ignore Apps with One Window"
+            "state" : "translated",
+            "value" : "Apps mit einem Fenster ignorieren"
           }
         },
         "el" : {
@@ -12007,8 +12007,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Ignore Apps with One Window"
+            "state" : "translated",
+            "value" : "Ignorar aplicaciones con una sola ventana"
           }
         },
         "fi" : {
@@ -12019,8 +12019,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Ignore Apps with One Window"
+            "state" : "translated",
+            "value" : "Ignorer les applications avec une fenêtre"
           }
         },
         "he" : {
@@ -12037,8 +12037,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Ignore Apps with One Window"
+            "state" : "translated",
+            "value" : "Ignora app con una sola finestra"
           }
         },
         "ja" : {
@@ -12049,14 +12049,14 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Ignore Apps with One Window"
+            "state" : "translated",
+            "value" : "하나의 창만 있는 앱 무시"
           }
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Ignore Apps with One Window"
+            "state" : "translated",
+            "value" : "Negeer apps met één venster"
           }
         },
         "no" : {
@@ -12067,14 +12067,14 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Ignore Apps with One Window"
+            "state" : "translated",
+            "value" : "Ignoruj aplikacje w jednym oknie"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Ignore Apps with One Window"
+            "state" : "translated",
+            "value" : "Ignorar aplicativos com uma janela"
           }
         },
         "pt-PT" : {
@@ -12127,14 +12127,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Ignore Apps with One Window"
+            "state" : "translated",
+            "value" : "忽略只有一个窗口的应用程序"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Ignore Apps with One Window"
+            "state" : "translated",
+            "value" : "忽略單一視窗的應用程式"
           }
         }
       }
@@ -12245,8 +12245,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Initialization Key"
+            "state" : "translated",
+            "value" : "Klawisz skrótu"
           }
         },
         "pt-BR" : {
@@ -12424,8 +12424,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Large"
+            "state" : "translated",
+            "value" : "Wielki"
           }
         },
         "pt-BR" : {
@@ -12602,8 +12602,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Last checked: %@"
+            "state" : "translated",
+            "value" : "Ostatnio sprawdzane: %@"
           }
         },
         "pt-BR" : {
@@ -12721,7 +12721,7 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Iniciar DockDoor al iniciar sesión"
+            "value" : "Lanzar la aplicación al iniciar sesión"
           }
         },
         "fi" : {
@@ -12780,8 +12780,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Launch DockDoor at login"
+            "state" : "translated",
+            "value" : "Uruchamiaj DockDoor podczas logowania"
           }
         },
         "pt-BR" : {
@@ -12898,8 +12898,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Let's set things up"
+            "state" : "translated",
+            "value" : "Configuremos las opciones"
           }
         },
         "fi" : {
@@ -12940,8 +12940,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Let's set things up"
+            "state" : "translated",
+            "value" : "준비를 시작해봐요"
           }
         },
         "nl" : {
@@ -12958,8 +12958,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Let's set things up"
+            "state" : "translated",
+            "value" : "Przygotujmy wszystko"
           }
         },
         "pt-BR" : {
@@ -13137,8 +13137,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Medium"
+            "state" : "translated",
+            "value" : "Średni"
           }
         },
         "pt-BR" : {
@@ -13316,8 +13316,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Menu Bar Icon Hidden"
+            "state" : "translated",
+            "value" : "Ikony na pasku ukryte"
           }
         },
         "pt-BR" : {
@@ -13495,8 +13495,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Never visible"
+            "state" : "translated",
+            "value" : "Nigdy widoczne"
           }
         },
         "pt-BR" : {
@@ -13613,8 +13613,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Next page"
+            "state" : "translated",
+            "value" : "Siguiente página"
           }
         },
         "fi" : {
@@ -13643,8 +13643,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Next page"
+            "state" : "translated",
+            "value" : "Prossima pagina"
           }
         },
         "ja" : {
@@ -13655,14 +13655,14 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Next page"
+            "state" : "translated",
+            "value" : "다음"
           }
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Next page"
+            "state" : "translated",
+            "value" : "Volgende pagina"
           }
         },
         "no" : {
@@ -13673,8 +13673,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Next page"
+            "state" : "translated",
+            "value" : "Następna strona"
           }
         },
         "pt-BR" : {
@@ -13733,8 +13733,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Next page"
+            "state" : "translated",
+            "value" : "下一页"
           }
         },
         "zh-Hant" : {
@@ -13822,8 +13822,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No action"
+            "state" : "translated",
+            "value" : "Nessuna azione"
           }
         },
         "ja" : {
@@ -13834,8 +13834,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No action"
+            "state" : "translated",
+            "value" : "동작 없음"
           }
         },
         "nl" : {
@@ -13852,8 +13852,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No action"
+            "state" : "translated",
+            "value" : "Brak akcji"
           }
         },
         "pt-BR" : {
@@ -14014,8 +14014,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No hover action"
+            "state" : "translated",
+            "value" : "호버 동작 없음"
           }
         },
         "nl" : {
@@ -14032,8 +14032,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No hover action"
+            "state" : "translated",
+            "value" : "Brak akcji najechania kursorem"
           }
         },
         "pt-BR" : {
@@ -14114,8 +14114,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No recent checks"
+            "state" : "translated",
+            "value" : "لا توجد تحققات حالية"
           }
         },
         "ca" : {
@@ -14138,8 +14138,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No recent checks"
+            "state" : "translated",
+            "value" : "Keine kürzlich durchgeführten Prüfungen"
           }
         },
         "el" : {
@@ -14150,8 +14150,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No recent checks"
+            "state" : "translated",
+            "value" : "No hay chequeos recientes"
           }
         },
         "fi" : {
@@ -14162,8 +14162,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No recent checks"
+            "state" : "translated",
+            "value" : "Pas de vérification récente"
           }
         },
         "he" : {
@@ -14180,8 +14180,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No recent checks"
+            "state" : "translated",
+            "value" : "Nessun controllo recente"
           }
         },
         "ja" : {
@@ -14198,8 +14198,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No recent checks"
+            "state" : "translated",
+            "value" : "Geen recente checks"
           }
         },
         "no" : {
@@ -14210,14 +14210,14 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No recent checks"
+            "state" : "translated",
+            "value" : "Brak ostatnich kontroli"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No recent checks"
+            "state" : "translated",
+            "value" : "Nenhuma verificação recente"
           }
         },
         "pt-PT" : {
@@ -14276,8 +14276,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No recent checks"
+            "state" : "translated",
+            "value" : "待更新檢查"
           }
         }
       }
@@ -14329,8 +14329,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Not granted"
+            "state" : "translated",
+            "value" : "No permitido"
           }
         },
         "fi" : {
@@ -14359,8 +14359,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Not granted"
+            "state" : "translated",
+            "value" : "Non garantito"
           }
         },
         "ja" : {
@@ -14371,8 +14371,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Not granted"
+            "state" : "translated",
+            "value" : "허용되지 않음"
           }
         },
         "nl" : {
@@ -14389,8 +14389,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Not granted"
+            "state" : "translated",
+            "value" : "Nie przyznano"
           }
         },
         "pt-BR" : {
@@ -14449,8 +14449,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Not granted"
+            "state" : "translated",
+            "value" : "未授权"
           }
         },
         "zh-Hant" : {
@@ -14556,7 +14556,7 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "OK"
+            "value" : "Ok"
           }
         },
         "no" : {
@@ -14567,7 +14567,7 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "OK"
           }
         },
@@ -14687,7 +14687,7 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Al pasar el mouse por la ventana; Oscurecido hasta que se pasa el mouse por el botón"
+            "value" : "Al pasar el ratón por la ventana; Oscurecido hasta que se pasa el ratón por el botón"
           }
         },
         "fi" : {
@@ -14746,8 +14746,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "On window hover; Dimmed until button hover"
+            "state" : "translated",
+            "value" : "Po najechaniu na okno; Przyciemnione do momentu najechania na przycisk"
           }
         },
         "pt-BR" : {
@@ -14866,7 +14866,7 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Al pasar el mouse por la ventana; Opacidad completa"
+            "value" : "Al pasar el ratón por la ventana; Opacidad completa"
           }
         },
         "fi" : {
@@ -14925,8 +14925,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "On window hover; Full opacity"
+            "state" : "translated",
+            "value" : "Po najechaniu na okno; Pełne krycie"
           }
         },
         "pt-BR" : {
@@ -15093,7 +15093,7 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Open Toegankelijkheids Instellingen"
+            "value" : "Open Toegankelijkheidsinstellingen"
           }
         },
         "no" : {
@@ -15104,8 +15104,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open Accessibility Settings"
+            "state" : "translated",
+            "value" : "Otwórz ustawienia dostępności"
           }
         },
         "pt-BR" : {
@@ -15283,8 +15283,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open Screen Recording Settings"
+            "state" : "translated",
+            "value" : "Otwórz ustawienia nagrywania ekranu"
           }
         },
         "pt-BR" : {
@@ -15450,7 +15450,7 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Open instellingen"
+            "value" : "Open Instellingen"
           }
         },
         "no" : {
@@ -15461,8 +15461,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open Settings"
+            "state" : "translated",
+            "value" : "Otwórz ustawienia"
           }
         },
         "pt-BR" : {
@@ -15639,7 +15639,7 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Option (⌥)"
           }
         },
@@ -15818,8 +15818,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Permission error"
+            "state" : "translated",
+            "value" : "Błąd uprawnień"
           }
         },
         "pt-BR" : {
@@ -15997,8 +15997,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Permissions"
+            "state" : "translated",
+            "value" : "Uprawnienia"
           }
         },
         "pt-BR" : {
@@ -16175,8 +16175,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Permissions settings"
+            "state" : "translated",
+            "value" : "Ustawienia uprawnień"
           }
         },
         "pt-BR" : {
@@ -16354,8 +16354,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Please Quit the App to Apply Changes! :)"
+            "state" : "translated",
+            "value" : "Zamknij aplikację, aby wprowadzić zmiany :)"
           }
         },
         "pt-BR" : {
@@ -16503,8 +16503,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Please Restart the App to Apply Changes! :)"
+            "state" : "translated",
+            "value" : "Per favore riavvia l'app per applicare i cambiamenti! "
           }
         },
         "ja" : {
@@ -16515,8 +16515,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Please Restart the App to Apply Changes! :)"
+            "state" : "translated",
+            "value" : "변경사항을 적용하기 위해 앱을 껐다가 켜주세요! :)"
           }
         },
         "nl" : {
@@ -16533,8 +16533,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Please Restart the App to Apply Changes! :)"
+            "state" : "translated",
+            "value" : "Zrestartuj aplikacje, aby wprowadzić zmiany :)"
           }
         },
         "pt-BR" : {
@@ -16681,8 +16681,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Please restart the application to apply your changes. Click OK to quit the app."
+            "state" : "translated",
+            "value" : "Per favore riavvia l'app per applicare i cambiamenti. Clicca Ok per chiudere l'applicazione"
           }
         },
         "ja" : {
@@ -16693,8 +16693,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Please restart the application to apply your changes. Click OK to quit the app."
+            "state" : "translated",
+            "value" : "변경사항을 적용하기 위해 앱을 껐다 켜주세요. OK를 누르면 앱이 종료됩니다."
           }
         },
         "nl" : {
@@ -16711,8 +16711,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Please restart the application to apply your changes. Click OK to quit the app."
+            "state" : "translated",
+            "value" : "Zrestartuj aplikację, aby zastosować zmiany. Kliknij OK, aby zamknąć aplikację."
           }
         },
         "pt-BR" : {
@@ -16890,8 +16890,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Popover"
+            "state" : "translated",
+            "value" : "Wyskakujące"
           }
         },
         "pt-BR" : {
@@ -17010,7 +17010,7 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pulse cualquier combinación de teclas después de mantener presionada la tecla de inicialización para establecer el keybind."
+            "value" : "Pulse cualquier combinación de teclas después de mantener presionada la tecla de inicialización para asociar la tecla."
           }
         },
         "fi" : {
@@ -17069,8 +17069,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Press any key combination after holding the initialization key to set the keybind."
+            "state" : "translated",
+            "value" : "Naciśnij dowolną kombinację klawiszy po przytrzymaniu klawisza inicjalizacji, aby ustawić skrót klawiszowy."
           }
         },
         "pt-BR" : {
@@ -17187,8 +17187,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Press any key to set the keybind."
+            "state" : "translated",
+            "value" : "Presiona una tecla para realizar la asociación."
           }
         },
         "fi" : {
@@ -17229,8 +17229,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Press any key to set the keybind."
+            "state" : "translated",
+            "value" : "아무 키나 눌러서 단축키를 설정하세요"
           }
         },
         "nl" : {
@@ -17247,8 +17247,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Press any key to set the keybind."
+            "state" : "translated",
+            "value" : "Naciśnij dowolny klawisz, aby ustawić skrót."
           }
         },
         "pt-BR" : {
@@ -17365,8 +17365,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Press any key..."
+            "state" : "translated",
+            "value" : "Presiona cualquier tecla..."
           }
         },
         "fi" : {
@@ -17407,14 +17407,14 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Press any key..."
+            "state" : "translated",
+            "value" : "아무 키나 누르세요"
           }
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Press any key..."
+            "state" : "translated",
+            "value" : "Druk op een toets..."
           }
         },
         "no" : {
@@ -17425,8 +17425,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Press any key..."
+            "state" : "translated",
+            "value" : "Naciśnij dowolny klawisz..."
           }
         },
         "pt-BR" : {
@@ -17604,8 +17604,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Press the key combination..."
+            "state" : "translated",
+            "value" : "Naciśnij dowolną kombinację klawiszy..."
           }
         },
         "pt-BR" : {
@@ -17723,7 +17723,7 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Previsualizar acción de Hover"
+            "value" : "Previsualizar la acción de deslizamiento del ratón"
           }
         },
         "fi" : {
@@ -17764,8 +17764,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Hover Action"
+            "state" : "translated",
+            "value" : "호버 동작 미리보기"
           }
         },
         "nl" : {
@@ -17782,8 +17782,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Hover Action"
+            "state" : "translated",
+            "value" : "Podgląd po najechaniu kursorem"
           }
         },
         "pt-BR" : {
@@ -17942,8 +17942,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Hover Delay"
+            "state" : "translated",
+            "value" : "호버 딜레이 미리보기"
           }
         },
         "nl" : {
@@ -17960,8 +17960,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Hover Delay"
+            "state" : "translated",
+            "value" : "Opóźnienie wyświetlenia podglądu"
           }
         },
         "pt-BR" : {
@@ -18078,8 +18078,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Window Fade Out Duration"
+            "state" : "translated",
+            "value" : "Duración del desvanecimiento de vista previa"
           }
         },
         "fi" : {
@@ -18138,8 +18138,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Window Fade Out Duration"
+            "state" : "translated",
+            "value" : "Czas wygaszania okna podglądu"
           }
         },
         "pt-BR" : {
@@ -18198,8 +18198,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Window Fade Out Duration"
+            "state" : "translated",
+            "value" : "预览窗口淡出时间"
           }
         },
         "zh-Hant" : {
@@ -18256,8 +18256,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Window Open Delay"
+            "state" : "translated",
+            "value" : "Retraso de apertura de vista previa"
           }
         },
         "fi" : {
@@ -18286,8 +18286,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Window Open Delay"
+            "state" : "translated",
+            "value" : "Ritardo apertura finestra dell'anteprima"
           }
         },
         "ja" : {
@@ -18316,8 +18316,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Window Open Delay"
+            "state" : "translated",
+            "value" : "Opóźnienie otwierania okna podglądu"
           }
         },
         "pt-BR" : {
@@ -18376,8 +18376,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Window Open Delay"
+            "state" : "translated",
+            "value" : "预览窗口打开时间"
           }
         },
         "zh-Hant" : {
@@ -18495,8 +18495,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Quit App"
+            "state" : "translated",
+            "value" : "Zamknij aplikacje"
           }
         },
         "pt-BR" : {
@@ -18614,7 +18614,7 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Salir de DockDoor"
+            "value" : "Salir de la aplicación"
           }
         },
         "fi" : {
@@ -18673,8 +18673,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Quit DockDoor"
+            "state" : "translated",
+            "value" : "Zamknij DockDoor"
           }
         },
         "pt-BR" : {
@@ -18821,8 +18821,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Remove"
+            "state" : "translated",
+            "value" : "Rimuovi"
           }
         },
         "ja" : {
@@ -18851,8 +18851,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Remove"
+            "state" : "translated",
+            "value" : "Usuń"
           }
         },
         "pt-BR" : {
@@ -18911,8 +18911,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Remove"
+            "state" : "translated",
+            "value" : "移除"
           }
         },
         "zh-Hant" : {
@@ -18969,8 +18969,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Report a Bug"
+            "state" : "translated",
+            "value" : "Reportar un error"
           }
         },
         "fi" : {
@@ -18999,8 +18999,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Report a Bug"
+            "state" : "translated",
+            "value" : "Segnala un bug"
           }
         },
         "ja" : {
@@ -19029,14 +19029,14 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Report a Bug"
+            "state" : "translated",
+            "value" : "Zgłoś błąd"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Report a Bug"
+            "state" : "translated",
+            "value" : "Reporte um Bug"
           }
         },
         "pt-PT" : {
@@ -19089,8 +19089,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Report a Bug"
+            "state" : "translated",
+            "value" : "报告一个Bug"
           }
         },
         "zh-Hant" : {
@@ -19147,8 +19147,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Request a Feature"
+            "state" : "translated",
+            "value" : "Solicitar una funcionalidad"
           }
         },
         "fi" : {
@@ -19177,8 +19177,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Request a Feature"
+            "state" : "translated",
+            "value" : "Richiedi "
           }
         },
         "ja" : {
@@ -19207,14 +19207,14 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Request a Feature"
+            "state" : "translated",
+            "value" : "Poproś o funkcje"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Request a Feature"
+            "state" : "translated",
+            "value" : "Solicitar um Recurso"
           }
         },
         "pt-PT" : {
@@ -19267,8 +19267,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Request a Feature"
+            "state" : "translated",
+            "value" : "请求功能"
           }
         },
         "zh-Hant" : {
@@ -19325,8 +19325,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Required for capturing window previews of other apps"
+            "state" : "translated",
+            "value" : "Requerido para capturar vistas previas de otras aplicaciones"
           }
         },
         "fi" : {
@@ -19385,8 +19385,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Required for capturing window previews of other apps"
+            "state" : "translated",
+            "value" : "Wymagane do przechwytywania podglądu okien innych aplikacji"
           }
         },
         "pt-BR" : {
@@ -19503,8 +19503,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Required for dock hover detection and window switcher hotkeys"
+            "state" : "translated",
+            "value" : "Requerido para y teclas"
           }
         },
         "fi" : {
@@ -19563,14 +19563,14 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Required for dock hover detection and window switcher hotkeys"
+            "state" : "translated",
+            "value" : "Wymagane do wykrywania najechania na dok i klawiszy skrótu przełącznika okien"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Required for dock hover detection and window switcher hotkeys"
+            "state" : "translated",
+            "value" : "Necessário para detecção de hover e atalhos do alternador de janela"
           }
         },
         "pt-PT" : {
@@ -19742,7 +19742,7 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Reset"
           }
         },
@@ -19921,8 +19921,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reset All Settings"
+            "state" : "translated",
+            "value" : "Zresetuj wszystkie ustawienia"
           }
         },
         "pt-BR" : {
@@ -20099,8 +20099,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reset All Settings to Defaults"
+            "state" : "translated",
+            "value" : "Przywróć do ustawień domyślnych"
           }
         },
         "pt-BR" : {
@@ -20277,8 +20277,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reset to Defaults"
+            "state" : "translated",
+            "value" : "Przywróć ustawienia domyślne"
           }
         },
         "pt-BR" : {
@@ -20395,8 +20395,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Restart app"
+            "state" : "translated",
+            "value" : "Reiniciar aplicación"
           }
         },
         "fi" : {
@@ -20455,14 +20455,14 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Restart app"
+            "state" : "translated",
+            "value" : "Uruchom ponownie aplikacje"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Restart app"
+            "state" : "translated",
+            "value" : "Reiniciar aplicativo"
           }
         },
         "pt-PT" : {
@@ -20515,8 +20515,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Restart app"
+            "state" : "translated",
+            "value" : "重庆应用"
           }
         },
         "zh-Hant" : {
@@ -20634,8 +20634,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Restart App"
+            "state" : "translated",
+            "value" : "Uruchom ponownie aplikacje"
           }
         },
         "pt-BR" : {
@@ -20812,8 +20812,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Restart required"
+            "state" : "translated",
+            "value" : "Wymagany restart"
           }
         },
         "pt-BR" : {
@@ -20990,8 +20990,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Right click a color to remove it."
+            "state" : "translated",
+            "value" : "Kliknij kolor prawym przyciskiem myszy, aby go usunąć."
           }
         },
         "pt-BR" : {
@@ -21050,8 +21050,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Right click a color to remove it."
+            "state" : "translated",
+            "value" : "右键来移除颜色。"
           }
         },
         "zh-Hant" : {
@@ -21169,8 +21169,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Screen Capturing:"
+            "state" : "translated",
+            "value" : "Przechwytywanie ekranu:"
           }
         },
         "pt-BR" : {
@@ -21287,8 +21287,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Screen recording"
+            "state" : "translated",
+            "value" : "Grabación de pantalla"
           }
         },
         "fi" : {
@@ -21347,14 +21347,14 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Screen recording"
+            "state" : "translated",
+            "value" : "Nagrywanie ekranu"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Screen recording"
+            "state" : "translated",
+            "value" : "Gravação de tela"
           }
         },
         "pt-PT" : {
@@ -21407,8 +21407,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Screen recording"
+            "state" : "translated",
+            "value" : "屏幕录制"
           }
         },
         "zh-Hant" : {
@@ -21526,8 +21526,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Screen Recording Permissions"
+            "state" : "translated",
+            "value" : "Uprawnienia nagrywania ekranu"
           }
         },
         "pt-BR" : {
@@ -21704,8 +21704,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "seconds"
+            "state" : "translated",
+            "value" : "sekundy"
           }
         },
         "pt-BR" : {
@@ -21883,8 +21883,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "See a large preview of the window"
+            "state" : "translated",
+            "value" : "Zobacz duży podgląd okna"
           }
         },
         "pt-BR" : {
@@ -21907,8 +21907,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "See a large preview of the window"
+            "state" : "translated",
+            "value" : ""
           }
         },
         "sr" : {
@@ -22063,8 +22063,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "See a preview of the window"
+            "state" : "translated",
+            "value" : "Zobacz podgląd okna"
           }
         },
         "pt-BR" : {
@@ -22181,8 +22181,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "See more..."
+            "state" : "translated",
+            "value" : "Ver más..."
           }
         },
         "fi" : {
@@ -22241,14 +22241,14 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "See more..."
+            "state" : "translated",
+            "value" : "Wkrótce..."
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "See more..."
+            "state" : "translated",
+            "value" : "Ver mais..."
           }
         },
         "pt-PT" : {
@@ -22301,8 +22301,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "See more..."
+            "state" : "translated",
+            "value" : "查看更多…"
           }
         },
         "zh-Hant" : {
@@ -22419,8 +22419,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Set Initialization Key and Keybind"
+            "state" : "translated",
+            "value" : "Ustawianie klucza inicjującego i powiązania klawiszy"
           }
         },
         "pt-BR" : {
@@ -22538,8 +22538,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Shadowed"
+            "state" : "translated",
+            "value" : "Ensombrecido"
           }
         },
         "fi" : {
@@ -22598,14 +22598,14 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Shadowed"
+            "state" : "translated",
+            "value" : "Zacieniony"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Shadowed"
+            "state" : "translated",
+            "value" : "Sombreado"
           }
         },
         "pt-PT" : {
@@ -22776,8 +22776,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show App Name in Dock Previews"
+            "state" : "translated",
+            "value" : "Wyświetlanie nazwy aplikacji w podglądzie Docka"
           }
         },
         "pt-BR" : {
@@ -22954,8 +22954,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Menu Bar Icon"
+            "state" : "translated",
+            "value" : "Pokaż ikonę na pasku"
           }
         },
         "pt-BR" : {
@@ -23132,8 +23132,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Window Title in"
+            "state" : "translated",
+            "value" : "Pokaż tytuł okna"
           }
         },
         "pt-BR" : {
@@ -23310,8 +23310,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Window Title in Previews"
+            "state" : "translated",
+            "value" : "Wyświetlanie tytułu okna w podglądzie"
           }
         },
         "pt-BR" : {
@@ -23489,8 +23489,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Window Titles"
+            "state" : "translated",
+            "value" : "Pokaż tytuły okien"
           }
         },
         "pt-BR" : {
@@ -23668,8 +23668,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Window Titles on Previews"
+            "state" : "translated",
+            "value" : "Wyświetlanie tytułów okien w podglądzie"
           }
         },
         "pt-BR" : {
@@ -23848,8 +23848,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Simulate a click"
+            "state" : "translated",
+            "value" : "Symulacja kliknięcia"
           }
         },
         "pt-BR" : {
@@ -24027,8 +24027,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Simulate a click (open the window)"
+            "state" : "translated",
+            "value" : "Symulacja kliknięcia (otwarcie okna)"
           }
         },
         "pt-BR" : {
@@ -24206,8 +24206,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Small"
+            "state" : "translated",
+            "value" : "Małe"
           }
         },
         "pt-BR" : {
@@ -24324,8 +24324,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Sort Window Previews by Date"
+            "state" : "translated",
+            "value" : "Ordenar vistas previas por fecha"
           }
         },
         "fi" : {
@@ -24384,8 +24384,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Sort Window Previews by Date"
+            "state" : "translated",
+            "value" : "Sortuj podglądy okien według daty"
           }
         },
         "pt-BR" : {
@@ -24444,8 +24444,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Sort Window Previews by Date"
+            "state" : "translated",
+            "value" : "窗口预览按时间排序"
           }
         },
         "zh-Hant" : {
@@ -24502,8 +24502,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Start recording keybind"
+            "state" : "translated",
+            "value" : "Inicia grabación de asociación de tecla"
           }
         },
         "fi" : {
@@ -24562,14 +24562,14 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Start recording keybind"
+            "state" : "translated",
+            "value" : "Zacznij nagrywanie skrótu"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Start recording keybind"
+            "state" : "translated",
+            "value" : "Iniciar Gravação de Teclas"
           }
         },
         "pt-PT" : {
@@ -24622,8 +24622,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Start recording keybind"
+            "state" : "translated",
+            "value" : "开始录制键绑定"
           }
         },
         "zh-Hant" : {
@@ -24741,8 +24741,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Start Recording Keybind"
+            "state" : "translated",
+            "value" : "Zacznij nagrywanie skrótu"
           }
         },
         "pt-BR" : {
@@ -24920,8 +24920,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Subatomic"
+            "state" : "translated",
+            "value" : "Subatomowy"
           }
         },
         "pt-BR" : {
@@ -25038,8 +25038,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Suggest new features to make DockDoor even better."
+            "state" : "translated",
+            "value" : "Sugiere nuevas funcionalidades para mejorar la aplicación."
           }
         },
         "fi" : {
@@ -25098,14 +25098,14 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Suggest new features to make DockDoor even better."
+            "state" : "translated",
+            "value" : "Zaproponuj nowe funkcje, aby uczynić DockDoor jeszcze lepszym."
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Suggest new features to make DockDoor even better."
+            "state" : "translated",
+            "value" : "Sugira novos recursos para tornar o DockDoor ainda melhor."
           }
         },
         "pt-PT" : {
@@ -25158,8 +25158,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Suggest new features to make DockDoor even better."
+            "state" : "translated",
+            "value" : "向我们提供意见来让DockDoor变得更好。"
           }
         },
         "zh-Hant" : {
@@ -25216,8 +25216,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Support DockDoor"
+            "state" : "translated",
+            "value" : "Contribuye con la aplicación"
           }
         },
         "fi" : {
@@ -25276,14 +25276,14 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Support DockDoor"
+            "state" : "translated",
+            "value" : "Wsparcie dla DockDoor"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Support DockDoor"
+            "state" : "translated",
+            "value" : "Apoie o DockDoor"
           }
         },
         "pt-PT" : {
@@ -25336,8 +25336,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Support DockDoor"
+            "state" : "translated",
+            "value" : "支持DockDoor"
           }
         },
         "zh-Hant" : {
@@ -25394,8 +25394,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "The changes to permissions will take effect after restarting."
+            "state" : "translated",
+            "value" : "Las modificaciones de permisos tendrán efecto luego del reinicio."
           }
         },
         "fi" : {
@@ -25454,14 +25454,14 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "The changes to permissions will take effect after restarting."
+            "state" : "translated",
+            "value" : "Zmiany uprawnień zaczną obowiązywać po ponownym uruchomieniu."
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "The changes to permissions will take effect after restarting."
+            "state" : "translated",
+            "value" : "As alterações nas permissões terão efeito após reiniciar."
           }
         },
         "pt-PT" : {
@@ -25514,8 +25514,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "The changes to permissions will take effect after restarting."
+            "state" : "translated",
+            "value" : "权限修改将在重新启动后生效。"
           }
         },
         "zh-Hant" : {
@@ -25632,8 +25632,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "The selected positions for Traffic Light Buttons and Window Title will overlap."
+            "state" : "translated",
+            "value" : "Wybrane pozycje przycisków sygnalizacji świetlnej i tytułu okna będą się pokrywać."
           }
         },
         "pt-BR" : {
@@ -25714,8 +25714,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Toggle"
+            "state" : "translated",
+            "value" : "تبديل"
           }
         },
         "ca" : {
@@ -25738,8 +25738,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Toggle"
+            "state" : "translated",
+            "value" : "Umschalten"
           }
         },
         "el" : {
@@ -25750,8 +25750,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Toggle"
+            "state" : "translated",
+            "value" : "Cambiar"
           }
         },
         "fi" : {
@@ -25762,8 +25762,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Toggle"
+            "state" : "translated",
+            "value" : "Activer"
           }
         },
         "he" : {
@@ -25810,14 +25810,14 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Toggle"
+            "state" : "translated",
+            "value" : "Przełącz"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Toggle"
+            "state" : "translated",
+            "value" : "Alternar"
           }
         },
         "pt-PT" : {
@@ -25870,14 +25870,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Toggle"
+            "state" : "translated",
+            "value" : "切换"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Toggle"
+            "state" : "translated",
+            "value" : "切換"
           }
         }
       }
@@ -25960,7 +25960,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : ""
+            "value" : "Alto a sinistra"
           }
         },
         "ja" : {
@@ -25989,8 +25989,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Top Left"
+            "state" : "translated",
+            "value" : "Górny lewy"
           }
         },
         "pt-BR" : {
@@ -26168,8 +26168,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Top Right"
+            "state" : "translated",
+            "value" : "Górny prawy"
           }
         },
         "pt-BR" : {
@@ -26346,8 +26346,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Traffic Light Buttons Position"
+            "state" : "translated",
+            "value" : "Pozycja przycisków sygnalizacji świetlnej"
           }
         },
         "pt-BR" : {
@@ -26524,8 +26524,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Traffic Light Buttons Visibility"
+            "state" : "translated",
+            "value" : "Widoczność przycisków sygnalizacji świetlnej"
           }
         },
         "pt-BR" : {
@@ -26702,8 +26702,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Up to date"
+            "state" : "translated",
+            "value" : "Aktualna"
           }
         },
         "pt-BR" : {
@@ -26784,8 +26784,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Up to Date"
+            "state" : "translated",
+            "value" : "محدث"
           }
         },
         "ca" : {
@@ -26808,8 +26808,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Up to Date"
+            "state" : "translated",
+            "value" : "Aktuell"
           }
         },
         "el" : {
@@ -26820,8 +26820,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Up to Date"
+            "state" : "translated",
+            "value" : "Actualizado"
           }
         },
         "fi" : {
@@ -26832,8 +26832,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Up to Date"
+            "state" : "translated",
+            "value" : "À jour"
           }
         },
         "he" : {
@@ -26880,14 +26880,14 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Up to Date"
+            "state" : "translated",
+            "value" : "Aktualna"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Up to Date"
+            "state" : "translated",
+            "value" : "Atualizado"
           }
         },
         "pt-PT" : {
@@ -26946,8 +26946,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Up to Date"
+            "state" : "translated",
+            "value" : "您當前已是最新版本"
           }
         }
       }
@@ -27058,8 +27058,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update available"
+            "state" : "translated",
+            "value" : "Dostępna aktualizacja"
           }
         },
         "pt-BR" : {
@@ -27236,8 +27236,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update settings"
+            "state" : "translated",
+            "value" : "Dostępna aktualizacja"
           }
         },
         "pt-BR" : {
@@ -27415,8 +27415,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Updates"
+            "state" : "translated",
+            "value" : "Aktualizacja"
           }
         },
         "pt-BR" : {
@@ -27535,7 +27535,7 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Usar combinación de teclas predeterminada de MacOS ⌘ + ⇥"
+            "value" : "Usar combinación de teclas predeterminada de macOS ⌘ + ⇥"
           }
         },
         "fi" : {
@@ -27594,8 +27594,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use default MacOS keybind ⌘ + ⇥"
+            "state" : "translated",
+            "value" : "Użyj domyślnego powiązania klawiszy MacOS ⌘ + ⇥"
           }
         },
         "pt-BR" : {
@@ -27772,8 +27772,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use Uniform Image Preview Radius"
+            "state" : "translated",
+            "value" : "Użycie jednolitego promienia podglądu obrazu"
           }
         },
         "pt-BR" : {
@@ -27950,8 +27950,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version %@"
+            "state" : "translated",
+            "value" : "Wersja %@"
           }
         },
         "pt-BR" : {
@@ -28068,8 +28068,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Want to see for yourself? Review our source code"
+            "state" : "translated",
+            "value" : "Revisa nuestro código fuente"
           }
         },
         "fi" : {
@@ -28128,14 +28128,14 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Want to see for yourself? Review our source code"
+            "state" : "translated",
+            "value" : "Chcesz przekonać się sam? Przejrzyj nasz kod źródłowy"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Want to see for yourself? Review our source code"
+            "state" : "translated",
+            "value" : "Quer ver você mesmo? Confira nosso código-fonte"
           }
         },
         "pt-PT" : {
@@ -28306,8 +28306,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Want to see the app in your language?"
+            "state" : "translated",
+            "value" : "Chcesz zobaczyć aplikację w swoim języku?"
           }
         },
         "pt-BR" : {
@@ -28367,7 +28367,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "想要在您的语言中看到应用吗？"
+            "value" : "想要在应用中看到您的语言吗？"
           }
         },
         "zh-Hant" : {
@@ -28484,8 +28484,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Want to support development?"
+            "state" : "translated",
+            "value" : "Chcesz wspierać rozwój?"
           }
         },
         "pt-BR" : {
@@ -28603,7 +28603,7 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bienvenido a DockDoor!"
+            "value" : "¡Bienvenido!"
           }
         },
         "fi" : {
@@ -28662,8 +28662,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Welcome to DockDoor!"
+            "state" : "translated",
+            "value" : "Witaj w DockDoor!"
           }
         },
         "pt-BR" : {
@@ -28782,7 +28782,7 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "¿Qué es esto? Una ventana para HORMIGAS?"
+            "value" : "¿Qué es esto? ¿Una ventana para HORMIGAS?"
           }
         },
         "fi" : {
@@ -28841,8 +28841,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "What is this? A window for ANTS?"
+            "state" : "translated",
+            "value" : "Co to jest? Okno dla mrówek?"
           }
         },
         "pt-BR" : {
@@ -29020,8 +29020,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When hovering over the preview"
+            "state" : "translated",
+            "value" : "Po najechaniu kursorem myszy na podgląd"
           }
         },
         "pt-BR" : {
@@ -29200,8 +29200,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When Showing Dock Tile Previews"
+            "state" : "translated",
+            "value" : "Podczas wyświetlania podglądu kafelka Docka"
           }
         },
         "pt-BR" : {
@@ -29380,8 +29380,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When Using Window Switcher"
+            "state" : "translated",
+            "value" : "Podczas używania przełącznika okien"
           }
         },
         "pt-BR" : {
@@ -29498,8 +29498,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When you click the button below, DockDoor will restart and move to the menu bar to run in the background."
+            "state" : "translated",
+            "value" : "Cuando hagas clic en el botón de abajo, la aplicación se reiniciará y moverá a la barra de menú para ejecutarse en segundo plano."
           }
         },
         "fi" : {
@@ -29558,14 +29558,14 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When you click the button below, DockDoor will restart and move to the menu bar to run in the background."
+            "state" : "translated",
+            "value" : "Po kliknięciu poniższego przycisku DockDoor uruchomi się ponownie i przejdzie do paska menu, aby działać w tle."
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When you click the button below, DockDoor will restart and move to the menu bar to run in the background."
+            "state" : "translated",
+            "value" : "Quando você clicar no botão abaixo, a DockDoor irá reiniciar e mover para a barra de menu para ser executada em segundo plano."
           }
         },
         "pt-PT" : {
@@ -29737,8 +29737,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Why we need permissions"
+            "state" : "translated",
+            "value" : "Potrzebne uprawnienia"
           }
         },
         "pt-BR" : {
@@ -29915,8 +29915,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Buffer"
+            "state" : "translated",
+            "value" : "Bufor okien"
           }
         },
         "pt-BR" : {
@@ -30094,8 +30094,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Cache Lifespan"
+            "state" : "translated",
+            "value" : "Długość życia pamięci podręcznej okna"
           }
         },
         "pt-BR" : {
@@ -30272,8 +30272,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Image Cache Lifespan"
+            "state" : "translated",
+            "value" : "Żywotność pamięci podręcznej obrazów w oknie"
           }
         },
         "pt-BR" : {
@@ -30450,8 +30450,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Image Resolution Scale (higher means lower resolution)"
+            "state" : "translated",
+            "value" : "Skala rozdzielczości obrazu w oknie (wyższa oznacza niższą rozdzielczość)"
           }
         },
         "pt-BR" : {
@@ -30510,8 +30510,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Image Resolution Scale (higher means lower resolution)"
+            "state" : "translated",
+            "value" : "窗口图像分辨率比例（数值越高，分辨率越低）"
           }
         },
         "zh-Hant" : {
@@ -30628,8 +30628,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Size"
+            "state" : "translated",
+            "value" : "Rozmiar okienka"
           }
         },
         "pt-BR" : {
@@ -30807,8 +30807,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Switcher"
+            "state" : "translated",
+            "value" : "Przełącznik okien"
           }
         },
         "pt-BR" : {
@@ -30927,7 +30927,7 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sólo cambiador de ventana"
+            "value" : "Cambiador de ventana"
           }
         },
         "fi" : {
@@ -30986,8 +30986,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Switcher only"
+            "state" : "translated",
+            "value" : "Tylko przełącznik okien"
           }
         },
         "pt-BR" : {
@@ -31164,8 +31164,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Title Position"
+            "state" : "translated",
+            "value" : "Pozycja tytułu okna"
           }
         },
         "pt-BR" : {
@@ -31342,8 +31342,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Title Visibility"
+            "state" : "translated",
+            "value" : "Widoczność tytułu okna"
           }
         },
         "pt-BR" : {
@@ -31520,8 +31520,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Windows switching settings"
+            "state" : "translated",
+            "value" : "Ustawienia przełączania okna"
           }
         },
         "pt-BR" : {
@@ -31640,7 +31640,7 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Necesitas dar acceso a DockDoor a la API de accesibilidad para que funcione."
+            "value" : "La aplicación requiere acceso a la API de accesibilidad para que funcione."
           }
         },
         "fi" : {
@@ -31699,8 +31699,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "You need to give DockDoor access to the accessibility API in order for it to function."
+            "state" : "translated",
+            "value" : "Aby DockDoor działał, należy zapewnić mu dostęp do interfejsu API ."
           }
         },
         "pt-BR" : {
@@ -31781,8 +31781,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Your app is on version %@"
+            "state" : "translated",
+            "value" : "التطبيق الخاص بك على إصدار %@"
           }
         },
         "ca" : {
@@ -31805,8 +31805,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Your app is on version %@"
+            "state" : "translated",
+            "value" : "Ihre App ist auf Version %@"
           }
         },
         "el" : {
@@ -31817,8 +31817,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Your app is on version %@"
+            "state" : "translated",
+            "value" : "Tu aplicación se encuentra en versión %@"
           }
         },
         "fi" : {
@@ -31829,8 +31829,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Your app is on version %@"
+            "state" : "translated",
+            "value" : "Vous avez la version %@"
           }
         },
         "he" : {
@@ -31877,14 +31877,14 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Your app is on version %@"
+            "state" : "translated",
+            "value" : "Wersja aplikacji %@"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Your app is on version %@"
+            "state" : "translated",
+            "value" : "Seu aplicativo está na versão %@"
           }
         },
         "pt-PT" : {
@@ -31937,14 +31937,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Your app is on version %@"
+            "state" : "translated",
+            "value" : "您的应用版本为%@"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Your app is on version %@"
+            "state" : "translated",
+            "value" : "您的應用程式版本是 %@"
           }
         }
       }
@@ -31995,7 +31995,7 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Z"
           }
         },
@@ -32055,13 +32055,13 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Z"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Z"
           }
         },
@@ -32115,7 +32115,7 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Z"
           }
         },
