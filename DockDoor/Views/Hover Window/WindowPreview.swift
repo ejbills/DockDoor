@@ -55,13 +55,12 @@ struct WindowPreview: View {
             if let cgImage = windowInfo.image {
                 Image(decorative: cgImage, scale: 1.0)
                     .resizable()
-                    .aspectRatio(contentMode: .fill)
+                    .aspectRatio(contentMode: .fit)
                     .markHidden(isHidden: isMinimized || isHidden)
                     .overlay(isSelected ? CustomizableFluidGradientView().opacity(0.125) : nil)
             }
         }
-        .frame(width: calculatedSize.width, height: calculatedSize.height, alignment: .center)
-        .frame(maxWidth: calculatedMaxDimensions.width, maxHeight: calculatedMaxDimensions.height)
+        .frame(width: calculatedSize.width, height: calculatedSize.height, alignment: .leading)
     }
 
     var body: some View {

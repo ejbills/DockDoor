@@ -24,6 +24,7 @@ struct WindowPreviewHoverContainer: View {
         let thickness = SharedPreviewWindowCoordinator.shared.windowSize.height
         var maxWidth: CGFloat = 300
         var maxHeight: CGFloat = 300
+        let isHorizontal = dockPosition == .bottom || windowSwitcherCoordinator.windowSwitcherActive
 
         for window in windows {
             if let cgImage = window.image {
@@ -31,7 +32,7 @@ struct WindowPreviewHoverContainer: View {
                 let widthBasedOnHeight = (cgSize.width * thickness) / cgSize.height
                 let heightBasedOnWidth = (cgSize.height * thickness) / cgSize.width
 
-                if dockPosition == .bottom || windowSwitcherCoordinator.windowSwitcherActive {
+                if isHorizontal {
                     maxWidth = max(maxWidth, widthBasedOnHeight)
                     maxHeight = thickness
                 } else {
@@ -45,26 +46,37 @@ struct WindowPreviewHoverContainer: View {
     }
 
     var body: some View {
-        let orientationIsHorizontal = dockPosition == .bottom || windowSwitcherCoordinator.windowSwitcherActive
-
         ZStack {
             if let mouseLocation {
                 WindowDismissalContainer(appName: appName, mouseLocation: mouseLocation,
                                          bestGuessMonitor: bestGuessMonitor, dockPosition: dockPosition)
             }
+            gridContainer()
+        }
+        .padding(.top, (!windowSwitcherCoordinator.windowSwitcherActive && appNameStyle == .default && showAppName) ? 25 : 0) // Provide space above the window preview for the Embedded (default) title style when hovering over the Dock.
+        .dockStyle(cornerRadius: 16)
+        .overlay(alignment: .topLeading) {
+            hoverTitleBaseView(labelSize: measureString(appName, fontSize: 14))
+        }
+        .padding(.top, (!windowSwitcherCoordinator.windowSwitcherActive && appNameStyle == .popover && showAppName) ? 30 : 0) // Provide empty space above the window preview for the Popover title style when hovering over the Dock
+        .padding(.all, 24)
+        .frame(maxWidth: bestGuessMonitor.visibleFrame.width - 15, maxHeight: bestGuessMonitor.visibleFrame.height - 15)
+    }
 
-            ScrollViewReader { scrollProxy in
-                ScrollView(orientationIsHorizontal ? .horizontal : .vertical, showsIndicators: false) {
-                    DynStack(direction: orientationIsHorizontal ? .horizontal : .vertical, spacing: 16) {
-                        ForEach(windows.indices, id: \.self) { index in
-                            WindowPreview(windowInfo: windows[index], onTap: onWindowTap, index: index,
-                                          dockPosition: dockPosition, maxWindowDimension: maxWindowDimension,
-                                          bestGuessMonitor: bestGuessMonitor, uniformCardRadius: uniformCardRadius,
-                                          currIndex: windowSwitcherCoordinator.currIndex, windowSwitcherActive: windowSwitcherCoordinator.windowSwitcherActive)
-                                .id("\(appName)-\(index)")
+    private func gridContainer() -> some View {
+        ScrollViewReader { scrollProxy in
+            ScrollView(.vertical, showsIndicators: false) {
+                Group {
+                    if GridLayoutVertical() {
+                        LazyHGrid(rows: calculateGridInfo(), spacing: 25) {
+                            gridContent
+                        }
+                    } else {
+                        LazyVGrid(columns: calculateGridInfo(), spacing: 25) {
+                            gridContent
                         }
                     }
-                    .padding(14)
+                }.padding(14)
                     .onAppear {
                         if !hasAppeared {
                             hasAppeared.toggle()
@@ -79,18 +91,24 @@ struct WindowPreviewHoverContainer: View {
                     .onChange(of: windows) { _ in
                         runUIUpdates()
                     }
-                }
-                .opacity(showWindows ? 1 : 0.8)
             }
+            .opacity(showWindows ? 1 : 0.8)
         }
-        .padding(.top, (!windowSwitcherCoordinator.windowSwitcherActive && appNameStyle == .default && showAppName) ? 25 : 0) // Provide space above the window preview for the Embedded (default) title style when hovering over the Dock.
-        .dockStyle(cornerRadius: 16)
-        .overlay(alignment: .topLeading) {
-            hoverTitleBaseView(labelSize: measureString(appName, fontSize: 14))
+    }
+
+    private var gridContent: some View {
+        ForEach(windows.indices, id: \.self) { index in
+            WindowPreview(windowInfo: windows[index],
+                          onTap: onWindowTap,
+                          index: index,
+                          dockPosition: dockPosition,
+                          maxWindowDimension: maxWindowDimension,
+                          bestGuessMonitor: bestGuessMonitor,
+                          uniformCardRadius: uniformCardRadius,
+                          currIndex: windowSwitcherCoordinator.currIndex,
+                          windowSwitcherActive: windowSwitcherCoordinator.windowSwitcherActive)
+                .id("\(appName)-\(index)")
         }
-        .padding(.top, (!windowSwitcherCoordinator.windowSwitcherActive && appNameStyle == .popover && showAppName) ? 30 : 0) // Provide empty space above the window preview for the Popover title style when hovering over the Dock
-        .padding(.all, 24)
-        .frame(maxWidth: bestGuessMonitor.visibleFrame.width, maxHeight: bestGuessMonitor.visibleFrame.height)
     }
 
     @ViewBuilder
@@ -211,5 +229,32 @@ struct WindowPreviewHoverContainer: View {
                 appIcon = icon
             }
         }
+    }
+
+    private func GridLayoutVertical() -> Bool {
+        var isVerticalGrid = false
+        if windowSwitcherCoordinator.windowSwitcherActive {
+            isVerticalGrid = false
+        } else if mouseLocation != nil, dockPosition == .left || dockPosition == .right {
+            isVerticalGrid = true
+        } else if mouseLocation != nil, dockPosition == .bottom || dockPosition == .top {
+            isVerticalGrid = false
+        }
+        return isVerticalGrid
+    }
+
+    private func calculateGridInfo() -> [GridItem] {
+        let isVerticalGrid = GridLayoutVertical()
+        let availablePixels = isVerticalGrid ? bestGuessMonitor.visibleFrame.height - 15 : bestGuessMonitor.visibleFrame.width - 15
+        let maxColumnWidth = isVerticalGrid ? maxWindowDimension.y : maxWindowDimension.x
+        var numberOfColumns = 0
+        let maxNumberOfColumns = Int(availablePixels / maxColumnWidth)
+        if windows.count < maxNumberOfColumns {
+            numberOfColumns = windows.count
+        } else {
+            numberOfColumns = maxNumberOfColumns
+        }
+        return mouseLocation == nil ? Array(repeating: GridItem(.fixed(maxColumnWidth), spacing: 16), count: numberOfColumns) :
+            Array(repeating: GridItem(.flexible(), spacing: 16), count: numberOfColumns)
     }
 }
