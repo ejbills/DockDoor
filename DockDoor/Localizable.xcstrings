@@ -257,7 +257,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "• Permette di migliorare le informazioni visive nel dock"
+            "value" : "• Migliora l'usabilità e la versatilità del Dock"
           }
         },
         "ja" : {
@@ -311,7 +311,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "• Позволяет получать расширенную визуальную информацию в док-станции"
+            "value" : "• Позволяет получать расширенную визуальную информацию в Dock"
           }
         },
         "sr" : {
@@ -340,8 +340,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "• Allows for enhanced visual information in the dock"
+            "state" : "translated",
+            "value" : "Cho phép cung cấp thông tin trực quan nâng cao trong thanh công cụ"
           }
         },
         "zh-Hans" : {
@@ -436,7 +436,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "• Abilita l'interazione in tempo reale con gli elementi nel dock"
+            "value" : "• Abilita l'interazione in tempo reale con gli elementi nel Dock"
           }
         },
         "ja" : {
@@ -490,7 +490,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "• Включает взаимодействие в реальном времени с элементами док-станции"
+            "value" : "• Включает взаимодействие в реальном времени с элементами в Dock"
           }
         },
         "sr" : {
@@ -615,7 +615,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "• Catturare anteprime di immagini e finestre"
+            "value" : "• Abilita le anteprime delle finestre sullo schermo"
           }
         },
         "ja" : {
@@ -669,7 +669,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "• Чтобы сделать предварительный просмотр изображений и окон"
+            "value" : "• Для захвата превью изображений и окон"
           }
         },
         "sr" : {
@@ -698,8 +698,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "• To capture previews of images and windows"
+            "state" : "translated",
+            "value" : "Hiển thị hình ảnh xem trước trong cửa sổ"
           }
         },
         "zh-Hans" : {
@@ -794,7 +794,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "• Riconosce quando si passa sopra il dock"
+            "value" : "• Riconosce quando si passa con la freccia del mouse sulle icone del Dock"
           }
         },
         "ja" : {
@@ -848,7 +848,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "• Определять при наведении курсора на док-станцию"
+            "value" : "• Определять при наведении курсора на Dock"
           }
         },
         "sr" : {
@@ -977,8 +977,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Accessibility"
+            "state" : "translated",
+            "value" : "アクセシビリティ"
           }
         },
         "ko" : {
@@ -1025,8 +1025,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Accessibility"
+            "state" : "translated",
+            "value" : "Права"
           }
         },
         "sr" : {
@@ -1151,7 +1151,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Permessi d'accesso"
+            "value" : "Autorizzazione di Accessibilità"
           }
         },
         "ja" : {
@@ -1384,7 +1384,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Универсальный доступ:"
+            "value" : "Права:"
           }
         },
         "sr" : {
@@ -1507,8 +1507,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Adjust this if the preview is misaligned with dock"
+            "state" : "translated",
+            "value" : "Modifica il valore per regolare la distanza dell'anteprima dal Dock"
           }
         },
         "ja" : {
@@ -1562,7 +1562,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Отрегулируйте это, если превью не совпадает с док-станцией"
+            "value" : "Отрегулируйте, если расположение превью не совпадает c Dock"
           }
         },
         "sr" : {
@@ -1867,7 +1867,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sempre visibile"
+            "value" : "Mostra sempre"
           }
         },
         "ja" : {
@@ -2229,8 +2229,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "amount"
+            "state" : "translated",
+            "value" : "量"
           }
         },
         "ko" : {
@@ -2277,8 +2277,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "amount"
+            "state" : "translated",
+            "value" : "радиус"
           }
         },
         "sr" : {
@@ -2313,8 +2313,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "amount"
+            "state" : "translated",
+            "value" : "量"
           }
         },
         "zh-Hant" : {
@@ -2402,13 +2402,13 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Velocità d'animazione"
+            "value" : "Velocità dell'animazione"
           }
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Animation speed"
+            "state" : "translated",
+            "value" : "アニメーションの速度"
           }
         },
         "ko" : {
@@ -2455,8 +2455,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Animation speed"
+            "state" : "translated",
+            "value" : "Скорость анимации"
           }
         },
         "sr" : {
@@ -2485,8 +2485,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Animation speed"
+            "state" : "translated",
+            "value" : "Tốc độ hiệu ứng"
           }
         },
         "zh-Hans" : {
@@ -2579,8 +2579,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "App Name Style"
+            "state" : "translated",
+            "value" : "Stile del nome dell'app"
           }
         },
         "ja" : {
@@ -2759,7 +2759,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tema"
+            "value" : "Aspetto"
           }
         },
         "ja" : {
@@ -2842,8 +2842,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Appearance"
+            "state" : "translated",
+            "value" : "Giao diện"
           }
         },
         "zh-Hans" : {
@@ -2937,7 +2937,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Impostazioni tema"
+            "value" : "Personalizzazione"
           }
         },
         "ja" : {
@@ -3020,8 +3020,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Appearance settings"
+            "state" : "translated",
+            "value" : "Thiết lập giao diện"
           }
         },
         "zh-Hans" : {
@@ -3114,8 +3114,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Are you sure you want to reset all settings to their default values?"
+            "state" : "translated",
+            "value" : "Vuoi davvero ripristinare i valori predefiniti per tutte le impostazioni?"
           }
         },
         "ja" : {
@@ -3168,8 +3168,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Are you sure you want to reset all settings to their default values?"
+            "state" : "translated",
+            "value" : "Вы действительно хотите восстановить все настройки по умолчанию?"
           }
         },
         "sr" : {
@@ -3198,8 +3198,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Are you sure you want to reset all settings to their default values?"
+            "state" : "translated",
+            "value" : "Bạn có chắc chắn muốn khôi phục tất cả cài đặt về giá trị mặc định không?"
           }
         },
         "zh-Hans" : {
@@ -3298,8 +3298,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Automatic Updates"
+            "state" : "translated",
+            "value" : "自動アップデート"
           }
         },
         "ko" : {
@@ -3346,8 +3346,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Automatic Updates"
+            "state" : "translated",
+            "value" : "Автоматические обновления"
           }
         },
         "sr" : {
@@ -3472,7 +3472,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Verifica automatica aggiornamenti"
+            "value" : "Verifica automatica degli aggiornamenti"
           }
         },
         "ja" : {
@@ -3649,8 +3649,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Blur amount"
+            "state" : "translated",
+            "value" : "Entità della sfocatura"
           }
         },
         "ja" : {
@@ -3703,8 +3703,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Blur amount"
+            "state" : "translated",
+            "value" : "Степень размытия"
           }
         },
         "sr" : {
@@ -3829,7 +3829,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Basso a Sinistra"
+            "value" : "↙ In basso a sinistra"
           }
         },
         "ja" : {
@@ -4008,7 +4008,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Basso a Destra"
+            "value" : "↘ In basso a destra"
           }
         },
         "ja" : {
@@ -4186,7 +4186,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Comprami un caffè qui, grazie!"
+            "value" : "Se ti va, puoi offrirmi un caffè!"
           }
         },
         "ja" : {
@@ -4269,8 +4269,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Buy me a coffee here, thank you!"
+            "state" : "translated",
+            "value" : "Mời tôi một ly coffee, cám ơn!"
           }
         },
         "zh-Hans" : {
@@ -4365,7 +4365,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Riesci a vedere questo?"
+            "value" : "Infinitesimo"
           }
         },
         "ja" : {
@@ -4448,8 +4448,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Can you even see this?"
+            "state" : "translated",
+            "value" : "Bạn có thể nhìn thấy điều này không?"
           }
         },
         "zh-Hans" : {
@@ -4626,8 +4626,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Cancel"
+            "state" : "translated",
+            "value" : "Hủy"
           }
         },
         "zh-Hans" : {
@@ -4721,7 +4721,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Controlla Aggiornamenti"
+            "value" : "Controllo aggiornamenti"
           }
         },
         "ja" : {
@@ -4775,7 +4775,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Проверять обновления"
+            "value" : "Проверить обновления"
           }
         },
         "sr" : {
@@ -4905,8 +4905,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Colors"
+            "state" : "translated",
+            "value" : "色"
           }
         },
         "ko" : {
@@ -4953,8 +4953,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Colors"
+            "state" : "translated",
+            "value" : "Цвета"
           }
         },
         "sr" : {
@@ -5078,7 +5078,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Command (⌘)"
+            "value" : "⌘"
           }
         },
         "ja" : {
@@ -5161,8 +5161,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Command (⌘)"
+            "state" : "translated",
+            "value" : "Lệnh (⌘)"
           }
         },
         "zh-Hans" : {
@@ -5339,8 +5339,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Contribute translation here!"
+            "state" : "translated",
+            "value" : "Đóng góp dịch thuật ở đây!"
           }
         },
         "zh-Hans" : {
@@ -5434,7 +5434,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Control (⌃)"
+            "value" : "ctrl"
           }
         },
         "ja" : {
@@ -5666,7 +5666,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Текущая клавиша: %@"
+            "value" : "Текущая привязка клавиш: %@"
           }
         },
         "sr" : {
@@ -5795,8 +5795,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Current Version"
+            "state" : "translated",
+            "value" : "現在のバージョン"
           }
         },
         "ko" : {
@@ -5843,8 +5843,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Current Version"
+            "state" : "translated",
+            "value" : "Текущая версия"
           }
         },
         "sr" : {
@@ -5969,7 +5969,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Versione attuale: %@"
+            "value" : "Versione installata: %@"
           }
         },
         "ja" : {
@@ -6202,7 +6202,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "По-умолчанию"
+            "value" : "По умолчанию"
           }
         },
         "sr" : {
@@ -6327,7 +6327,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Predefinito (Medio)"
+            "value" : "Molto grande"
           }
         },
         "ja" : {
@@ -6381,7 +6381,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "По умолчанию (Средний большой)"
+            "value" : "По умолчанию (Средне-большой)"
           }
         },
         "sr" : {
@@ -6505,8 +6505,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Previews & Window Switcher"
+            "state" : "translated",
+            "value" : "Anteprime del Dock e del Selettore finestre"
           }
         },
         "ja" : {
@@ -6560,7 +6560,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Превью в доке и переключатель окон"
+            "value" : "Превью Dock & Переключатель окон"
           }
         },
         "sr" : {
@@ -6685,7 +6685,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Solo anteprima del dock"
+            "value" : "Solo anteprime del Dock"
           }
         },
         "ja" : {
@@ -6739,7 +6739,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Только в превью в доке"
+            "value" : "Только превью Dock"
           }
         },
         "sr" : {
@@ -6863,7 +6863,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "DockDoor non registra lo schermo o l'audio. Cattura solo le anteprime delle finestre statiche. Nessuna informazione viene archiviata o condivisa; tutta l'elaborazione avviene in privato sul tuo dispositivo."
+            "value" : "DockDoor non registra video né salva l'audio del Mac: cattura solo delle schermate statiche per poter mostrare le anteprime sul Dock. Nessuna informazione è archiviata o condivisa; tutta l'elaborazione avviene in privato sul tuo dispositivo."
           }
         },
         "ja" : {
@@ -6916,8 +6916,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "DockDoor does not record your screen or audio. It only captures static window previews. No information is stored or shared; all processing occurs privately on your device."
+            "state" : "translated",
+            "value" : "DockDoor не записывает ваш экран или звук. Он захватывает только статические превью окон. Никакая информация не сохраняется и не передается; вся обработка происходит конфиденциально на вашем устройстве."
           }
         },
         "sr" : {
@@ -7041,7 +7041,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "DockDoor necessita dell'accesso alla registrazione dello schermo. In macOS Sequoia vedrai questo messaggio ogni settimana o mese e dopo i riavvii. Si tratta di una nuova politica di sicurezza a livello di sistema per tutte le app di acquisizione dello schermo."
+            "value" : "È necessario concedere l'accesso alla registrazione dello schermo. Da macOS Sequoia, un messaggio di conferma è visualizzato periodicamente per confermare l'autorizzazione. Si tratta di una nuova politica di sicurezza a livello di sistema per tutte le app che catturano porzioni dello schermo."
           }
         },
         "ja" : {
@@ -7058,8 +7058,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "DockDoor needs screen recording access. In macOS Sequoia, you'll see this prompt every week or month and after reboots. This is a new system-wide security policy for all screen capture apps."
+            "state" : "translated",
+            "value" : "Dackdoor heeft toestemming nodig om schermopname te maken. In macOS Sequoia, zie je deze pop-up elke week of maand wanneer het is heropgestart. Dit is een nieuwe systeem weide veiligheids-beleid voor alle schermopnemende apps."
           }
         },
         "no" : {
@@ -7094,8 +7094,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "DockDoor needs screen recording access. In macOS Sequoia, you'll see this prompt every week or month and after reboots. This is a new system-wide security policy for all screen capture apps."
+            "state" : "translated",
+            "value" : "DockDoor требуется доступ к захвату экрана. В macOS Sequoia, вы будете видеть этот запрос каждую неделю или месяц, а также после перезагрузки. Это новая системная политика безопасности для всех приложений с захватом экрана."
           }
         },
         "sr" : {
@@ -7124,8 +7124,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "DockDoor needs screen recording access. In macOS Sequoia, you'll see this prompt every week or month and after reboots. This is a new system-wide security policy for all screen capture apps."
+            "state" : "translated",
+            "value" : "DockDoor cần quyền truy cập ghi màn hình. Trong macOS Sequoia, bạn sẽ thấy lời nhắc này mỗi tuần hoặc mỗi tháng và sau khi khởi động lại. Đây là chính sách bảo mật toàn hệ thống mới cho tất cả các ứng dụng chụp màn hình."
           }
         },
         "zh-Hans" : {
@@ -7272,8 +7272,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Edit Color"
+            "state" : "translated",
+            "value" : "Редактировать Цвет"
           }
         },
         "sr" : {
@@ -7396,8 +7396,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Elements Overlap"
+            "state" : "translated",
+            "value" : "Sovrapposizione elementi"
           }
         },
         "ja" : {
@@ -7450,8 +7450,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Elements Overlap"
+            "state" : "translated",
+            "value" : "Перекрытие элементов"
           }
         },
         "sr" : {
@@ -7755,7 +7755,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Abilita controlli regolari per aggiornamenti"
+            "value" : "Abilita il controllo automatico degli aggiornamenti"
           }
         },
         "ja" : {
@@ -7808,8 +7808,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable automatic checking for updates"
+            "state" : "translated",
+            "value" : "Включить автоматическую проверку обновлений"
           }
         },
         "sr" : {
@@ -7934,7 +7934,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Abilita l'animazione di scorrimento della finestra \"Hover\""
+            "value" : "Anteprima con animazione a scorrimento"
           }
         },
         "ja" : {
@@ -7988,7 +7988,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Включить анимацию прокрутки окна"
+            "value" : "Включить анимацию прокрутки превью"
           }
         },
         "sr" : {
@@ -8017,8 +8017,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable Hover Window Sliding Animation"
+            "state" : "translated",
+            "value" : "Bật hiệu ứng trượt cửa sổ di chuột"
           }
         },
         "zh-Hans" : {
@@ -8111,8 +8111,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable Preview Window Sliding Animation"
+            "state" : "translated",
+            "value" : "Sovrapposizione con animazione a scorrimento"
           }
         },
         "ja" : {
@@ -8165,8 +8165,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable Preview Window Sliding Animation"
+            "state" : "translated",
+            "value" : "Включить анимацию скольжения превью"
           }
         },
         "sr" : {
@@ -8195,14 +8195,14 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable Preview Window Sliding Animation"
+            "state" : "translated",
+            "value" : "Bật hiệu ứng trượt cửa sổ xem trước"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable Preview Window Sliding Animation"
+            "state" : "translated",
+            "value" : "启用预览窗口滑动动画"
           }
         },
         "zh-Hant" : {
@@ -8290,7 +8290,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Abilita il selettore di finestre"
+            "value" : "Abilita il selettore finestre"
           }
         },
         "ja" : {
@@ -8307,8 +8307,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable Window Switcher"
+            "state" : "translated",
+            "value" : "Sta venster schakelaar toe"
           }
         },
         "no" : {
@@ -8467,8 +8467,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enabled"
+            "state" : "translated",
+            "value" : "Attivato"
           }
         },
         "ja" : {
@@ -8521,8 +8521,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enabled"
+            "state" : "translated",
+            "value" : "Включено"
           }
         },
         "sr" : {
@@ -8557,8 +8557,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enabled"
+            "state" : "translated",
+            "value" : "启用"
           }
         },
         "zh-Hant" : {
@@ -8646,7 +8646,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Migliora la tua esperienza del dock!"
+            "value" : "Migliora la tua esperienza del Dock!"
           }
         },
         "ja" : {
@@ -8700,7 +8700,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Повысьте удобство работы с Crm!"
+            "value" : "Повысьте удобство работы с Dock!"
           }
         },
         "sr" : {
@@ -8729,8 +8729,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enhance your dock experience!"
+            "state" : "translated",
+            "value" : "Nâng cao trải nghiệm thanh công cụ của bạn!"
           }
         },
         "zh-Hans" : {
@@ -8823,8 +8823,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Everything is now set up!"
+            "state" : "translated",
+            "value" : "Tutto pronto!"
           }
         },
         "ja" : {
@@ -8877,8 +8877,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Everything is now set up!"
+            "state" : "translated",
+            "value" : "Всё настроено!"
           }
         },
         "sr" : {
@@ -8913,8 +8913,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Everything is now set up!"
+            "state" : "translated",
+            "value" : "一切都已设置！"
           }
         },
         "zh-Hant" : {
@@ -9003,7 +9003,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Molto Molto Piccolo"
+            "value" : "Molto piccola"
           }
         },
         "ja" : {
@@ -9057,7 +9057,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Очень очень маленький"
+            "value" : "Очень-очень маленький"
           }
         },
         "sr" : {
@@ -9182,7 +9182,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Molto Piccolo"
+            "value" : "Piccola"
           }
         },
         "ja" : {
@@ -9359,8 +9359,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Found a Bug?"
+            "state" : "translated",
+            "value" : "Hai scoperto un bug?"
           }
         },
         "ja" : {
@@ -9413,8 +9413,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Found a Bug?"
+            "state" : "translated",
+            "value" : "Нашли ошибку?"
           }
         },
         "sr" : {
@@ -9593,7 +9593,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Общее"
+            "value" : "Общие"
           }
         },
         "sr" : {
@@ -9895,7 +9895,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Inizia"
+            "value" : "Per iniziare"
           }
         },
         "ja" : {
@@ -10073,8 +10073,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Granted"
+            "state" : "translated",
+            "value" : "OK"
           }
         },
         "ja" : {
@@ -10127,8 +10127,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Granted"
+            "state" : "translated",
+            "value" : "Получены"
           }
         },
         "sr" : {
@@ -10157,8 +10157,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Granted"
+            "state" : "translated",
+            "value" : "Đã cấp quyền"
           }
         },
         "zh-Hans" : {
@@ -10251,8 +10251,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Have an Idea?"
+            "state" : "translated",
+            "value" : "Hai un'idea per migliorare l'app?"
           }
         },
         "ja" : {
@@ -10305,8 +10305,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Have an Idea?"
+            "state" : "translated",
+            "value" : "Есть идея?"
           }
         },
         "sr" : {
@@ -10335,14 +10335,14 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Have an Idea?"
+            "state" : "translated",
+            "value" : "Bạn có ý tưởng?"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Have an Idea?"
+            "state" : "translated",
+            "value" : "有想法吗？"
           }
         },
         "zh-Hant" : {
@@ -10430,8 +10430,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Help"
+            "state" : "translated",
+            "value" : "Aiuto"
           }
         },
         "ja" : {
@@ -10484,8 +10484,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Help"
+            "state" : "translated",
+            "value" : "Справка"
           }
         },
         "sr" : {
@@ -10608,8 +10608,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Help and questions settings"
+            "state" : "translated",
+            "value" : "Aiuto e Domande Frequenti"
           }
         },
         "ja" : {
@@ -10662,8 +10662,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Help and questions settings"
+            "state" : "translated",
+            "value" : "Градиентные цвета выделения"
           }
         },
         "sr" : {
@@ -10692,14 +10692,14 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Help and questions settings"
+            "state" : "translated",
+            "value" : "Giúp đỡ và hỗ trợ cài đặt cấu hình"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Help and questions settings"
+            "state" : "translated",
+            "value" : "帮助与问题设置"
           }
         },
         "zh-Hant" : {
@@ -10786,8 +10786,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Help us improve DockDoor by reporting any issues you encounter."
+            "state" : "translated",
+            "value" : "Aiutaci a migliorare DockDoor segnalando eventuali problemi."
           }
         },
         "ja" : {
@@ -10840,8 +10840,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Help us improve DockDoor by reporting any issues you encounter."
+            "state" : "translated",
+            "value" : "Помогите нам улучшить DockDoor, сообщив о любых проблемах, с которыми вы столкнулись."
           }
         },
         "sr" : {
@@ -10870,8 +10870,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Help us improve DockDoor by reporting any issues you encounter."
+            "state" : "translated",
+            "value" : "Hãy giúp chúng tôi cải thiện DockDoor bằng cách báo cáo mọi vấn đề bạn gặp phải."
           }
         },
         "zh-Hans" : {
@@ -11144,8 +11144,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Highlight Gradient Colors"
+            "state" : "translated",
+            "value" : "Colori della sfumatura di selezione"
           }
         },
         "ja" : {
@@ -11198,8 +11198,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Highlight Gradient Colors"
+            "state" : "translated",
+            "value" : "Градиентные цвета выделения"
           }
         },
         "sr" : {
@@ -11234,8 +11234,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Highlight Gradient Colors"
+            "state" : "translated",
+            "value" : "突出显示渐变颜色"
           }
         },
         "zh-Hant" : {
@@ -11323,8 +11323,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hover Window Open Delay"
+            "state" : "translated",
+            "value" : "Ritardo dell'anteprima"
           }
         },
         "ja" : {
@@ -11378,7 +11378,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Задержка открытия окна при наведении курсора"
+            "value" : "Задержка открытия превью при наведении курсора"
           }
         },
         "sr" : {
@@ -11503,7 +11503,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Stile Titolo Finestra \"Hover\""
+            "value" : "Stile del titolo"
           }
         },
         "ja" : {
@@ -11557,7 +11557,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Стиль заголовка окна при наведении"
+            "value" : "Стиль заголовка превью при наведении"
           }
         },
         "sr" : {
@@ -11681,7 +11681,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Se trovi Doockdoor utile, considera una donazione. Il tuo supporto aiuterebbe il progetto ad andare avanti!"
+            "value" : "Se apprezzi DoockDoor, considera una donazione! Il tuo supporto aiuterà il progetto e contribuirà a migliorare l'app."
           }
         },
         "ja" : {
@@ -11734,8 +11734,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "If you find DockDoor useful, consider donating. Your support helps keep the project going!"
+            "state" : "translated",
+            "value" : "Если вы считаете DockDoor полезным, рассмотрите возможность пожертвования. Ваша поддержка помогает улучшать проект!"
           }
         },
         "sr" : {
@@ -11860,7 +11860,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Se è necessario accedere all'icona della barra dei menu, avviare l'applicazione per visualizzarla per 10 secondi."
+            "value" : "Se l'icona di DockDoor non è visibile nella barra dei menu, rilancia l'app e apparirà per 10 secondi."
           }
         },
         "ja" : {
@@ -12038,7 +12038,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ignora app con una sola finestra"
+            "value" : "Ignora le applicazioni con una sola finestra"
           }
         },
         "ja" : {
@@ -12091,8 +12091,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Ignore Apps with One Window"
+            "state" : "translated",
+            "value" : "Игнорировать приложения с одним окном"
           }
         },
         "sr" : {
@@ -12216,7 +12216,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tasto d'Inizializzazione"
+            "value" : "Tasto modificatore"
           }
         },
         "ja" : {
@@ -12395,7 +12395,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Grande"
+            "value" : "Massima"
           }
         },
         "ja" : {
@@ -12928,8 +12928,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Let's set things up"
+            "state" : "translated",
+            "value" : "Configurazione rapida"
           }
         },
         "ja" : {
@@ -12982,8 +12982,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Let's set things up"
+            "state" : "translated",
+            "value" : "Давайте разберемся, что к чему"
           }
         },
         "sr" : {
@@ -13018,8 +13018,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Let's set things up"
+            "state" : "translated",
+            "value" : "让我们去做一些事情。"
           }
         },
         "zh-Hant" : {
@@ -13108,7 +13108,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Medio"
+            "value" : "Grande"
           }
         },
         "ja" : {
@@ -13287,7 +13287,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Icona Barra Nascosta"
+            "value" : "Nascondi l'icona dalla barra dei menu"
           }
         },
         "ja" : {
@@ -13466,7 +13466,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Mai Visibile"
+            "value" : "Mai"
           }
         },
         "ja" : {
@@ -13644,7 +13644,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Prossima pagina"
+            "value" : "Pagina successiva"
           }
         },
         "ja" : {
@@ -13697,8 +13697,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Next page"
+            "state" : "translated",
+            "value" : "Следующая страница"
           }
         },
         "sr" : {
@@ -13876,8 +13876,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No action"
+            "state" : "translated",
+            "value" : "Не задано"
           }
         },
         "sr" : {
@@ -14002,8 +14002,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No hover action"
+            "state" : "translated",
+            "value" : "Nessuna azione"
           }
         },
         "ja" : {
@@ -14234,8 +14234,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No recent checks"
+            "state" : "translated",
+            "value" : "Нет свежих проверок"
           }
         },
         "sr" : {
@@ -14270,8 +14270,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No recent checks"
+            "state" : "translated",
+            "value" : "没有最近的检查"
           }
         },
         "zh-Hant" : {
@@ -14360,7 +14360,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Non garantito"
+            "value" : "In attesa"
           }
         },
         "ja" : {
@@ -14413,8 +14413,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Not granted"
+            "state" : "translated",
+            "value" : "Не получены"
           }
         },
         "sr" : {
@@ -14443,8 +14443,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Not granted"
+            "state" : "translated",
+            "value" : "Không cấp quyền"
           }
         },
         "zh-Hans" : {
@@ -14717,7 +14717,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Al passaggio della finestra; oscurato fino al passaggio del pulsante"
+            "value" : "Al passaggio sulla finestra; attenuati fino all'interazione"
           }
         },
         "ja" : {
@@ -14896,7 +14896,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Al passaggio della finestra; 100% opacità"
+            "value" : "Al passaggio sulla finestra; opacità 100%"
           }
         },
         "ja" : {
@@ -15075,7 +15075,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Apri impostazioni di accessibilità"
+            "value" : "Vai alle preferenze Accessibilità"
           }
         },
         "ja" : {
@@ -15254,7 +15254,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Apri Impostazioni Registrazione Schermo"
+            "value" : "Vai alle preferenze Registrazione schermo"
           }
         },
         "ja" : {
@@ -15308,7 +15308,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Открыть настройки записи экрана"
+            "value" : "Открыть настройки захвата экрана"
           }
         },
         "sr" : {
@@ -15432,7 +15432,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Apri Impostazioni"
+            "value" : "Impostazioni"
           }
         },
         "ja" : {
@@ -15610,7 +15610,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Option (⌥)"
+            "value" : "⌥"
           }
         },
         "ja" : {
@@ -15789,7 +15789,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Errore permessi"
+            "value" : "Errore autorizzazioni"
           }
         },
         "ja" : {
@@ -15968,7 +15968,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Permessi"
+            "value" : "Autorizzazioni"
           }
         },
         "ja" : {
@@ -16146,7 +16146,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Impostazioni permessi"
+            "value" : "Impostazioni autorizzazioni"
           }
         },
         "ja" : {
@@ -16325,7 +16325,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Esci dall'app per applicare le modifiche! :)"
+            "value" : "Esci dall'app per salvare le autorizzazioni."
           }
         },
         "ja" : {
@@ -16408,8 +16408,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Please Quit the App to Apply Changes! :)"
+            "state" : "translated",
+            "value" : "Vui lòng thoát khỏi ứng dụng để áp dụng thay đổi! :)"
           }
         },
         "zh-Hans" : {
@@ -16504,7 +16504,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Per favore riavvia l'app per applicare i cambiamenti! "
+            "value" : "Riavvia DockDoor per rendere effettive le modifiche!"
           }
         },
         "ja" : {
@@ -16557,8 +16557,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Please Restart the App to Apply Changes! :)"
+            "state" : "translated",
+            "value" : "Пожалуйста, перезапустите приложение, чтобы применить изменения! :)"
           }
         },
         "sr" : {
@@ -16587,8 +16587,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Please Restart the App to Apply Changes! :)"
+            "state" : "translated",
+            "value" : "Vui lòng khởi động lại ứng dụng để áp dụng thay đổi! :)"
           }
         },
         "zh-Hans" : {
@@ -16682,7 +16682,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Per favore riavvia l'app per applicare i cambiamenti. Clicca Ok per chiudere l'applicazione"
+            "value" : "Clicca su 'OK' per uscire, poi riavvia DockDoor per rendere effettive le modifiche."
           }
         },
         "ja" : {
@@ -16765,8 +16765,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Please restart the application to apply your changes. Click OK to quit the app."
+            "state" : "translated",
+            "value" : "Vui lòng khởi động lại ứng dụng để áp dụng các thay đổi của bạn. Nhấp vào OK để thoát ứng dụng"
           }
         },
         "zh-Hans" : {
@@ -16861,7 +16861,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Popover"
+            "value" : "Finestra di anteprima"
           }
         },
         "ja" : {
@@ -17040,7 +17040,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Premere una qualsiasi combinazione di tasti dopo aver tenuto premuto il tasto d'inizializzazione per impostare la combinazione di tasti."
+            "value" : "Premi la combinazione di tasti desiderata, incluso il tasto modificatore."
           }
         },
         "ja" : {
@@ -17123,8 +17123,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Press any key combination after holding the initialization key to set the keybind."
+            "state" : "translated",
+            "value" : "Nhấn bất kỳ tổ hợp phím sau khi giữ phím khởi tạo để cài đặt phím tắt."
           }
         },
         "zh-Hans" : {
@@ -17217,8 +17217,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Press any key to set the keybind."
+            "state" : "translated",
+            "value" : "Premi i tasti della combinazione da assegnare."
           }
         },
         "ja" : {
@@ -17271,8 +17271,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Press any key to set the keybind."
+            "state" : "translated",
+            "value" : "Нажмите любую клавишу, чтобы установить комбинацию."
           }
         },
         "sr" : {
@@ -17301,14 +17301,14 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Press any key to set the keybind."
+            "state" : "translated",
+            "value" : "Nhấn phím bất kỳ để cài đặt phím tắt."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Press any key to set the keybind."
+            "state" : "translated",
+            "value" : "按任意键设置键绑定。"
           }
         },
         "zh-Hant" : {
@@ -17395,8 +17395,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Press any key..."
+            "state" : "translated",
+            "value" : "Premi i tasti..."
           }
         },
         "ja" : {
@@ -17449,8 +17449,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Press any key..."
+            "state" : "translated",
+            "value" : "Нажмите любую клавишу..."
           }
         },
         "sr" : {
@@ -17479,14 +17479,14 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Press any key..."
+            "state" : "translated",
+            "value" : "Nhấn phím bất kỳ..."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Press any key..."
+            "state" : "translated",
+            "value" : "按任意键继续……"
           }
         },
         "zh-Hant" : {
@@ -17575,7 +17575,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Premere la combinazione di tasti..."
+            "value" : "Premi la combinazione di tasti..."
           }
         },
         "ja" : {
@@ -17752,8 +17752,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Hover Action"
+            "state" : "translated",
+            "value" : "Azione al passaggio del mouse"
           }
         },
         "ja" : {
@@ -17930,8 +17930,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Hover Delay"
+            "state" : "translated",
+            "value" : "Ritardo al passaggio del mouse"
           }
         },
         "ja" : {
@@ -18108,8 +18108,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Window Fade Out Duration"
+            "state" : "translated",
+            "value" : "Durata della dissolvenza in uscita"
           }
         },
         "ja" : {
@@ -18162,8 +18162,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Window Fade Out Duration"
+            "state" : "translated",
+            "value" : "Длительность исчезновения окна"
           }
         },
         "sr" : {
@@ -18287,7 +18287,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ritardo apertura finestra dell'anteprima"
+            "value" : "Ritardo della finestra di anteprima"
           }
         },
         "ja" : {
@@ -18340,8 +18340,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Window Open Delay"
+            "state" : "translated",
+            "value" : "Задержка открытия окна при наведении курсора"
           }
         },
         "sr" : {
@@ -18644,7 +18644,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Esci Da DockDoor"
+            "value" : "Esci da DockDoor"
           }
         },
         "ja" : {
@@ -18833,8 +18833,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Remove"
+            "state" : "translated",
+            "value" : "제거"
           }
         },
         "nl" : {
@@ -18875,8 +18875,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Remove"
+            "state" : "translated",
+            "value" : "Удалить"
           }
         },
         "sr" : {
@@ -19011,8 +19011,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Report a Bug"
+            "state" : "translated",
+            "value" : "버그 제보하기"
           }
         },
         "nl" : {
@@ -19053,8 +19053,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Report a Bug"
+            "state" : "translated",
+            "value" : "Сообщить об ошибке"
           }
         },
         "sr" : {
@@ -19178,7 +19178,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Richiedi "
+            "value" : "Invia una richiesta"
           }
         },
         "ja" : {
@@ -19231,8 +19231,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Request a Feature"
+            "state" : "translated",
+            "value" : "Предложить идею"
           }
         },
         "sr" : {
@@ -19355,8 +19355,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Required for capturing window previews of other apps"
+            "state" : "translated",
+            "value" : "Necessaria per acquisire le anteprime delle finestre"
           }
         },
         "ja" : {
@@ -19409,8 +19409,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Required for capturing window previews of other apps"
+            "state" : "translated",
+            "value" : "Требуется для захвата превью окон других приложений"
           }
         },
         "sr" : {
@@ -19445,8 +19445,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Required for capturing window previews of other apps"
+            "state" : "translated",
+            "value" : "捕获其他应用的窗口预览"
           }
         },
         "zh-Hant" : {
@@ -19533,8 +19533,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Required for dock hover detection and window switcher hotkeys"
+            "state" : "translated",
+            "value" : "Necessaria per rilevare il passaggio del mouse sul Dock e per impostare scorciatoie di tasti"
           }
         },
         "ja" : {
@@ -19587,8 +19587,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Required for dock hover detection and window switcher hotkeys"
+            "state" : "translated",
+            "value" : "Требуется для обнаружения наведения курсора на Dock и горячих клавиш переключения"
           }
         },
         "sr" : {
@@ -19617,14 +19617,14 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Required for dock hover detection and window switcher hotkeys"
+            "state" : "translated",
+            "value" : "Cần thiết để phát hiện di chuột trên thanh dock và phím tắt chuyển đổi cửa sổ"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Required for dock hover detection and window switcher hotkeys"
+            "state" : "translated",
+            "value" : "用于 dock 悬停检测和窗口切换热键"
           }
         },
         "zh-Hant" : {
@@ -19712,8 +19712,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reset"
+            "state" : "translated",
+            "value" : "Ripristina"
           }
         },
         "ja" : {
@@ -19724,8 +19724,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reset"
+            "state" : "translated",
+            "value" : "초기화"
           }
         },
         "nl" : {
@@ -19766,8 +19766,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reset"
+            "state" : "translated",
+            "value" : "Сбросить"
           }
         },
         "sr" : {
@@ -19891,8 +19891,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reset All Settings"
+            "state" : "translated",
+            "value" : "Ripristina tutte le impostazioni"
           }
         },
         "ja" : {
@@ -19903,8 +19903,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reset All Settings"
+            "state" : "translated",
+            "value" : "모든 설정 초기화"
           }
         },
         "nl" : {
@@ -19945,8 +19945,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reset All Settings"
+            "state" : "translated",
+            "value" : "Сбросить все настройки"
           }
         },
         "sr" : {
@@ -20069,8 +20069,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reset All Settings to Defaults"
+            "state" : "translated",
+            "value" : "Ripristina tutte le impostazioni"
           }
         },
         "ja" : {
@@ -20081,8 +20081,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reset All Settings to Defaults"
+            "state" : "translated",
+            "value" : "모든 설정을 기본값으로 초기화"
           }
         },
         "nl" : {
@@ -20123,8 +20123,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reset All Settings to Defaults"
+            "state" : "translated",
+            "value" : "Восстановить все настройки по умолчанию"
           }
         },
         "sr" : {
@@ -20247,8 +20247,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reset to Defaults"
+            "state" : "translated",
+            "value" : "Ripristina i valori predefiniti"
           }
         },
         "ja" : {
@@ -20259,8 +20259,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reset to Defaults"
+            "state" : "translated",
+            "value" : "기본 설정으로 초기화"
           }
         },
         "nl" : {
@@ -20301,8 +20301,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reset to Defaults"
+            "state" : "translated",
+            "value" : "Восстановить по умолчанию"
           }
         },
         "sr" : {
@@ -20425,8 +20425,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Restart app"
+            "state" : "translated",
+            "value" : "Riavvia l'app"
           }
         },
         "ja" : {
@@ -20437,8 +20437,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Restart app"
+            "state" : "translated",
+            "value" : "앱 다시 시작하기"
           }
         },
         "nl" : {
@@ -20479,8 +20479,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Restart app"
+            "state" : "translated",
+            "value" : "Перезапустить приложение"
           }
         },
         "sr" : {
@@ -20604,8 +20604,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Restart App"
+            "state" : "translated",
+            "value" : "Riavvia l'app"
           }
         },
         "ja" : {
@@ -20616,8 +20616,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Restart App"
+            "state" : "translated",
+            "value" : "앱 다시 시작하기"
           }
         },
         "nl" : {
@@ -20658,8 +20658,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Restart App"
+            "state" : "translated",
+            "value" : "Перезапустить Приложение"
           }
         },
         "sr" : {
@@ -20782,8 +20782,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Restart required"
+            "state" : "translated",
+            "value" : "È necessario il riavvio"
           }
         },
         "ja" : {
@@ -20794,8 +20794,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Restart required"
+            "state" : "translated",
+            "value" : "재시작 필요합니다"
           }
         },
         "nl" : {
@@ -20960,8 +20960,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Right click a color to remove it."
+            "state" : "translated",
+            "value" : "Clicca con il tasto destro su un colore per rimuoverlo."
           }
         },
         "ja" : {
@@ -20972,8 +20972,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Right click a color to remove it."
+            "state" : "translated",
+            "value" : "색을 우클릭하여 삭제하세요."
           }
         },
         "nl" : {
@@ -21014,8 +21014,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Right click a color to remove it."
+            "state" : "translated",
+            "value" : "Щелкните правой кнопкой мыши по цвету, чтобы удалить его."
           }
         },
         "sr" : {
@@ -21140,7 +21140,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Cattura Schermo:"
+            "value" : "Cattura lo schermo:"
           }
         },
         "ja" : {
@@ -21317,8 +21317,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Screen recording"
+            "state" : "translated",
+            "value" : "Registrazione schermo"
           }
         },
         "ja" : {
@@ -21329,8 +21329,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Screen recording"
+            "state" : "translated",
+            "value" : "화면 녹화"
           }
         },
         "nl" : {
@@ -21371,8 +21371,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Screen recording"
+            "state" : "translated",
+            "value" : "Захват экрана"
           }
         },
         "sr" : {
@@ -21497,7 +21497,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Permessi Registrazione Schermo"
+            "value" : "Permessi 'Registrazione schermo'"
           }
         },
         "ja" : {
@@ -21551,7 +21551,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Разрешения на запись с экрана"
+            "value" : "Разрешения на захват экрана"
           }
         },
         "sr" : {
@@ -21674,8 +21674,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "seconds"
+            "state" : "translated",
+            "value" : "secondi"
           }
         },
         "ja" : {
@@ -21853,8 +21853,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "See a large preview of the window"
+            "state" : "translated",
+            "value" : "Mostra un'anteprima a tutto schermo"
           }
         },
         "ja" : {
@@ -22033,8 +22033,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "See a preview of the window"
+            "state" : "translated",
+            "value" : "Mostra l'anteprima"
           }
         },
         "ja" : {
@@ -22211,8 +22211,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "See more..."
+            "state" : "translated",
+            "value" : "Altro..."
           }
         },
         "ja" : {
@@ -22223,14 +22223,14 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "See more..."
+            "state" : "translated",
+            "value" : "더 보기..."
           }
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "See more..."
+            "state" : "translated",
+            "value" : "Zie meer..."
           }
         },
         "no" : {
@@ -22265,8 +22265,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "See more..."
+            "state" : "translated",
+            "value" : "Еще..."
           }
         },
         "sr" : {
@@ -22390,7 +22390,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Imposta la tasta d'inizializzazione e combinazione di tasti"
+            "value" : "Imposta il tasto modificatore"
           }
         },
         "ja" : {
@@ -22473,8 +22473,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Set Initialization Key and Keybind"
+            "state" : "translated",
+            "value" : "Đặt phím khởi tạo và phím tắt"
           }
         },
         "zh-Hans" : {
@@ -22568,8 +22568,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Shadowed"
+            "state" : "translated",
+            "value" : "Sfumato"
           }
         },
         "ja" : {
@@ -22622,8 +22622,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Shadowed"
+            "state" : "translated",
+            "value" : "Затененный"
           }
         },
         "sr" : {
@@ -22658,8 +22658,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Shadowed"
+            "state" : "translated",
+            "value" : "阴影"
           }
         },
         "zh-Hant" : {
@@ -22746,8 +22746,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show App Name in Dock Previews"
+            "state" : "translated",
+            "value" : "Mostra il nome dell'app insieme alle anteprime"
           }
         },
         "ja" : {
@@ -22925,7 +22925,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Mostra icona nella barra del menu"
+            "value" : "Mostra l'icona nella barra dei menu"
           }
         },
         "ja" : {
@@ -23102,8 +23102,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Window Title in"
+            "state" : "translated",
+            "value" : "Mostra il titolo della finestra su"
           }
         },
         "ja" : {
@@ -23280,8 +23280,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Window Title in Previews"
+            "state" : "translated",
+            "value" : "Mostra il titolo della finestra nell'anteprima"
           }
         },
         "ja" : {
@@ -23460,7 +23460,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Mostra Titoli Della Finestra"
+            "value" : "Mostra i titoli delle finestre"
           }
         },
         "ja" : {
@@ -23818,8 +23818,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Simulate a click"
+            "state" : "translated",
+            "value" : "Simula un clic"
           }
         },
         "ja" : {
@@ -23997,8 +23997,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Simulate a click (open the window)"
+            "state" : "translated",
+            "value" : "Simula un clic (apri la finestra)"
           }
         },
         "ja" : {
@@ -24051,8 +24051,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Simulate a click (open the window)"
+            "state" : "translated",
+            "value" : "Имитация клика (открыть окно)"
           }
         },
         "sr" : {
@@ -24177,7 +24177,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Piccolo"
+            "value" : "Media"
           }
         },
         "ja" : {
@@ -24354,8 +24354,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Sort Window Previews by Date"
+            "state" : "translated",
+            "value" : "Ordina le anteprime per data"
           }
         },
         "ja" : {
@@ -24408,8 +24408,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Sort Window Previews by Date"
+            "state" : "translated",
+            "value" : "Сортировать превью по времени"
           }
         },
         "sr" : {
@@ -24532,8 +24532,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Start recording keybind"
+            "state" : "translated",
+            "value" : "Registra la combinazione di tasti"
           }
         },
         "ja" : {
@@ -24586,8 +24586,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Start recording keybind"
+            "state" : "translated",
+            "value" : "Начать захват горячих клавиш"
           }
         },
         "sr" : {
@@ -24712,7 +24712,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Combinazione di tasti per Avviamento della registrazione"
+            "value" : "Registra la scorciatoia"
           }
         },
         "ja" : {
@@ -24766,7 +24766,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Начать запись клавиш"
+            "value" : "Начать Захват Горячих Клавиш"
           }
         },
         "sr" : {
@@ -24891,7 +24891,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Subatomico"
+            "value" : "Microscopico"
           }
         },
         "ja" : {
@@ -25068,8 +25068,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Suggest new features to make DockDoor even better."
+            "state" : "translated",
+            "value" : "Inviaci un suggerimento per migliorare DockDoor."
           }
         },
         "ja" : {
@@ -25122,8 +25122,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Suggest new features to make DockDoor even better."
+            "state" : "translated",
+            "value" : "Предлагайте новые идеи, чтобы сделать DockDoor еще лучше."
           }
         },
         "sr" : {
@@ -25246,8 +25246,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Support DockDoor"
+            "state" : "translated",
+            "value" : "Supporta DockDoor"
           }
         },
         "ja" : {
@@ -25300,8 +25300,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Support DockDoor"
+            "state" : "translated",
+            "value" : "Поддержать DockDoor"
           }
         },
         "sr" : {
@@ -25424,8 +25424,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "The changes to permissions will take effect after restarting."
+            "state" : "translated",
+            "value" : "Le autorizzazioni avranno effetto dopo un riavvio dell'app."
           }
         },
         "ja" : {
@@ -25478,8 +25478,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "The changes to permissions will take effect after restarting."
+            "state" : "translated",
+            "value" : "Измененные права доступа вступят в силу после перезапуска."
           }
         },
         "sr" : {
@@ -25508,8 +25508,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "The changes to permissions will take effect after restarting."
+            "state" : "translated",
+            "value" : "Những thay đổi về quyền sẽ có hiệu lực sau khi khởi động lại."
           }
         },
         "zh-Hans" : {
@@ -25602,8 +25602,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "The selected positions for Traffic Light Buttons and Window Title will overlap."
+            "state" : "translated",
+            "value" : "Con le attuali impostazioni, i tasti funzione e i titoli delle finestre sono sovrapposti."
           }
         },
         "ja" : {
@@ -25656,8 +25656,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "The selected positions for Traffic Light Buttons and Window Title will overlap."
+            "state" : "translated",
+            "value" : "Выбранные позиции для кнопок переключения и заголовка окна будут пересекаться."
           }
         },
         "sr" : {
@@ -25686,8 +25686,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "The selected positions for Traffic Light Buttons and Window Title will overlap."
+            "state" : "translated",
+            "value" : "Các vị trí được chọn cho các nút cửa sổ và Tiêu đề cửa sổ sẽ chồng lên nhau."
           }
         },
         "zh-Hans" : {
@@ -25780,8 +25780,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Toggle"
+            "state" : "translated",
+            "value" : "Attiva/disattiva"
           }
         },
         "ja" : {
@@ -25834,8 +25834,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Toggle"
+            "state" : "translated",
+            "value" : "Переключить"
           }
         },
         "sr" : {
@@ -25960,7 +25960,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Alto a sinistra"
+            "value" : "↖ In alto a sinistra"
           }
         },
         "ja" : {
@@ -25971,8 +25971,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Top Left"
+            "state" : "translated",
+            "value" : "왼쪽 상단"
           }
         },
         "nl" : {
@@ -26013,8 +26013,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Top Left"
+            "state" : "translated",
+            "value" : "Вверху слева"
           }
         },
         "sr" : {
@@ -26138,8 +26138,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Top Right"
+            "state" : "translated",
+            "value" : "↗ In alto a destra"
           }
         },
         "ja" : {
@@ -26316,8 +26316,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Traffic Light Buttons Position"
+            "state" : "translated",
+            "value" : "Posizione dei tasti"
           }
         },
         "ja" : {
@@ -26370,8 +26370,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Traffic Light Buttons Position"
+            "state" : "translated",
+            "value" : "Позиция кнопок переключения"
           }
         },
         "sr" : {
@@ -26495,7 +26495,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Visibilità Dei Pulsanti Del Traffico"
+            "value" : "Mostra i tasti azione"
           }
         },
         "ja" : {
@@ -26850,8 +26850,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Up to Date"
+            "state" : "translated",
+            "value" : "Aggiornato"
           }
         },
         "ja" : {
@@ -26862,8 +26862,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Up to Date"
+            "state" : "translated",
+            "value" : "최신 버전입니다"
           }
         },
         "nl" : {
@@ -26904,8 +26904,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Up to Date"
+            "state" : "translated",
+            "value" : "Последняя версия"
           }
         },
         "sr" : {
@@ -26940,8 +26940,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Up to Date"
+            "state" : "translated",
+            "value" : "已是最新版本"
           }
         },
         "zh-Hant" : {
@@ -27207,7 +27207,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Aggiorna le impostazioni"
+            "value" : "Modifica le impostazioni"
           }
         },
         "ja" : {
@@ -27261,7 +27261,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Настройки обновления"
+            "value" : "Настройки обновлений"
           }
         },
         "sr" : {
@@ -27565,7 +27565,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Usa la combinazione di tasti di MacOS predefinito ⌘ + ⇥"
+            "value" : "Sovrascrivi la combinazione di tasti di macOS: ⌘⇥"
           }
         },
         "ja" : {
@@ -27743,7 +27743,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Usa Raggio Di Anteprima Dell'Immagine Uniforme"
+            "value" : "Stondatura uniforme dell'anteprima"
           }
         },
         "ja" : {
@@ -27797,7 +27797,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Используйте одинаковый радиус предварительного просмотра изображений"
+            "value" : "Используйте одинаковый радиус превью изображений"
           }
         },
         "sr" : {
@@ -28098,8 +28098,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Want to see for yourself? Review our source code"
+            "state" : "translated",
+            "value" : "Puoi fidarti di noi. Ma se vuoi, puoi anche vedere il codice sorgente!"
           }
         },
         "ja" : {
@@ -28152,8 +28152,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Want to see for yourself? Review our source code"
+            "state" : "translated",
+            "value" : "Хотите убедиться в этом сами? Просмотрите наш исходный код"
           }
         },
         "sr" : {
@@ -28182,14 +28182,14 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Want to see for yourself? Review our source code"
+            "state" : "translated",
+            "value" : "Bạn muốn thấy mình trong này không? Hỗ trợ duyệt mã nguồn"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Want to see for yourself? Review our source code"
+            "state" : "translated",
+            "value" : "想亲眼看看吗？请检查我们的源代码。"
           }
         },
         "zh-Hant" : {
@@ -28276,8 +28276,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Want to see the app in your language?"
+            "state" : "translated",
+            "value" : "Vorresti goderti DockDoor nella tua lingua?"
           }
         },
         "ja" : {
@@ -28360,8 +28360,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Want to see the app in your language?"
+            "state" : "translated",
+            "value" : "Bạn muốn xem ứng dụng bằng ngôn ngữ của mình không?"
           }
         },
         "zh-Hans" : {
@@ -28455,7 +28455,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Vuoi sostenere lo sviluppo?"
+            "value" : "Vuoi sostenere lo sviluppo dell'app?"
           }
         },
         "ja" : {
@@ -28538,8 +28538,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Want to support development?"
+            "state" : "translated",
+            "value" : "Bạn muốn hỗ trợ phát triển?"
           }
         },
         "zh-Hans" : {
@@ -28633,7 +28633,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Benvenuto a DockDoor!"
+            "value" : "DockDoor ti dà il benvenuto!"
           }
         },
         "ja" : {
@@ -28812,7 +28812,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Cos'è questo? Una finestra per FORMICHE?"
+            "value" : "Minuscolo"
           }
         },
         "ja" : {
@@ -28895,8 +28895,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "What is this? A window for ANTS?"
+            "state" : "translated",
+            "value" : "Đây là gì? Cửa sổ cho ANTS à?"
           }
         },
         "zh-Hans" : {
@@ -28990,8 +28990,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When hovering over the preview"
+            "state" : "translated",
+            "value" : "Mostra quando passi con la freccia del mouse sull'anteprima"
           }
         },
         "ja" : {
@@ -29171,7 +29171,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Quando Mostri Le Anteprime Piastrelle Di Dock"
+            "value" : "Sulle anteprime del Dock"
           }
         },
         "ja" : {
@@ -29351,7 +29351,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Quando Si Utilizza Il Selettore Delle Finestre"
+            "value" : "Nel selettore delle finestre"
           }
         },
         "ja" : {
@@ -29528,8 +29528,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When you click the button below, DockDoor will restart and move to the menu bar to run in the background."
+            "state" : "translated",
+            "value" : "Clicca sul tasto qui sotto: DockDoor si riavvierà e si sposterà nella barra dei menu per l'esecuzione in background."
           }
         },
         "ja" : {
@@ -29582,8 +29582,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When you click the button below, DockDoor will restart and move to the menu bar to run in the background."
+            "state" : "translated",
+            "value" : "Когда вы нажмете на кнопку ниже, DockDoor перезагрузится и переместится на панель меню, чтобы работать в фоновом режиме."
           }
         },
         "sr" : {
@@ -29612,14 +29612,14 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When you click the button below, DockDoor will restart and move to the menu bar to run in the background."
+            "state" : "translated",
+            "value" : "Khi bạn nhấp vào nút bên dưới, ứng dụng sẽ khởi động lạ vài di chuyển đến thanh thực đơn để chạy ở chế độ nền."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When you click the button below, DockDoor will restart and move to the menu bar to run in the background."
+            "state" : "translated",
+            "value" : "当您点击下面的按钮时，DockDoor 将重启并移动到菜单栏以在后台运行。"
           }
         },
         "zh-Hant" : {
@@ -29708,7 +29708,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Perché abbiamo bisogno di permessi"
+            "value" : "Perché sono richieste le autorizzazioni?"
           }
         },
         "ja" : {
@@ -29885,8 +29885,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Buffer"
+            "state" : "translated",
+            "value" : "Aggiustamento verticale"
           }
         },
         "ja" : {
@@ -29940,7 +29940,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Буфер окна"
+            "value" : "Расположение окна"
           }
         },
         "sr" : {
@@ -30064,8 +30064,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Cache Lifespan"
+            "state" : "translated",
+            "value" : "Durata della cache delle anteprime"
           }
         },
         "ja" : {
@@ -30148,8 +30148,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Cache Lifespan"
+            "state" : "translated",
+            "value" : "Thờ gian lưu bộ nhớ đệm cửa sổ"
           }
         },
         "zh-Hans" : {
@@ -30242,8 +30242,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Image Cache Lifespan"
+            "state" : "translated",
+            "value" : "Durata della cache delle immagini"
           }
         },
         "ja" : {
@@ -30297,7 +30297,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Время жизни кэша изображений окна"
+            "value" : "Продолжительность жизни кэша изображения окна"
           }
         },
         "sr" : {
@@ -30326,8 +30326,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Image Cache Lifespan"
+            "state" : "translated",
+            "value" : "Thờ gian lưu bộ nhớ đệm hình ảnh cửa sổ"
           }
         },
         "zh-Hans" : {
@@ -30420,8 +30420,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Image Resolution Scale (higher means lower resolution)"
+            "state" : "translated",
+            "value" : "Compressione delle immagini di anteprima (valore più alto = qualità inferiore)"
           }
         },
         "ja" : {
@@ -30474,8 +30474,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Image Resolution Scale (higher means lower resolution)"
+            "state" : "translated",
+            "value" : "Масштаб разрешения окон (Чем выше, тем ниже разрешение)"
           }
         },
         "sr" : {
@@ -30504,8 +30504,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Image Resolution Scale (higher means lower resolution)"
+            "state" : "translated",
+            "value" : "Tỷ lệ độ phân giải hình ảnh cửa sổ (cao hơn có nghĩa là độ phân giải thấp hơn)"
           }
         },
         "zh-Hans" : {
@@ -30778,7 +30778,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Selettore Finestre"
+            "value" : "Selettore finestre"
           }
         },
         "ja" : {
@@ -30956,8 +30956,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Switcher only"
+            "state" : "translated",
+            "value" : "Solo selettore finestre"
           }
         },
         "ja" : {
@@ -31135,7 +31135,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Posizione Titolo Finestra"
+            "value" : "Posizione del titolo"
           }
         },
         "ja" : {
@@ -31312,8 +31312,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Title Visibility"
+            "state" : "translated",
+            "value" : "Titolo della finestra"
           }
         },
         "ja" : {
@@ -31491,7 +31491,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Impostazioni per selettore di finestre"
+            "value" : "Impostazioni del selettore di finestre"
           }
         },
         "ja" : {
@@ -31670,7 +31670,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Devi dare a DockDoor l'accesso all'API di accessibilità affinché possa funzionare."
+            "value" : "DockDoor funziona solo se l'interazione con le funzioni di Accessibilità è autorizzata."
           }
         },
         "ja" : {
@@ -31847,8 +31847,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Your app is on version %@"
+            "state" : "translated",
+            "value" : "La tua versione dell'app è %@"
           }
         },
         "ja" : {
@@ -31859,8 +31859,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Your app is on version %@"
+            "state" : "translated",
+            "value" : "앱 버전: %@"
           }
         },
         "nl" : {
@@ -31901,8 +31901,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Your app is on version %@"
+            "state" : "translated",
+            "value" : "Ваше приложение имеет версию %@"
           }
         },
         "sr" : {
@@ -32025,7 +32025,7 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Z"
           }
         },
@@ -32037,7 +32037,7 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Z"
           }
         },
@@ -32079,7 +32079,7 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Z"
           }
         },
