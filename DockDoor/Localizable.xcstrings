@@ -347,7 +347,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "• 支持在停靠栏中显示更丰富的视觉信息"
+            "value" : "• Allows for enhanced visual information in the dock"
           }
         },
         "zh-Hant" : {
