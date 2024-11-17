@@ -3655,8 +3655,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Blur amount"
+            "state" : "translated",
+            "value" : "ぼかしの強さ"
           }
         },
         "ko" : {
@@ -6868,8 +6868,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "DockDoor does not record your screen or audio. It only captures static window previews. No information is stored or shared; all processing occurs privately on your device."
+            "state" : "translated",
+            "value" : "DockDoor は画面や音声を記録しません。静的なウィンドウプレビューのみをキャプチャします。情報は保存されず、共有されません。すべての処理はこのデバイス上でプライベートに行われます。"
           }
         },
         "ko" : {
@@ -7046,8 +7046,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "DockDoor needs screen recording access. In macOS Sequoia, you'll see this prompt every week or month and after reboots. This is a new system-wide security policy for all screen capture apps."
+            "state" : "translated",
+            "value" : "DockDoor は画面収録とシステムオーディオ録音へのアクセス権限が必要です。macOS Sequoia では、毎週もしくは毎月の再起動後にプロンプトが表示されます。これは、画面収録とシステムオーディオ録音へのアクセス権限が必要なアプリケーションに対する新しいシステム全体のセキュリティポリシーです。"
           }
         },
         "ko" : {
@@ -7224,8 +7224,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Edit Color"
+            "state" : "translated",
+            "value" : "色を編集"
           }
         },
         "ko" : {
@@ -7760,8 +7760,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable automatic checking for updates"
+            "state" : "translated",
+            "value" : "自動アップデートチェックを有効にする"
           }
         },
         "ko" : {
@@ -8117,8 +8117,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable Preview Window Sliding Animation"
+            "state" : "translated",
+            "value" : "プレビューウィンドウ表示時のスライドアニメーションを有効にする"
           }
         },
         "ko" : {
@@ -8473,8 +8473,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enabled"
+            "state" : "translated",
+            "value" : "有効"
           }
         },
         "ko" : {
@@ -8829,8 +8829,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Everything is now set up!"
+            "state" : "translated",
+            "value" : "すべての準備が整いました！"
           }
         },
         "ko" : {
@@ -9365,8 +9365,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Found a Bug?"
+            "state" : "translated",
+            "value" : "バグを見つけましたか？"
           }
         },
         "ko" : {
@@ -10079,8 +10079,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Granted"
+            "state" : "translated",
+            "value" : "許可済"
           }
         },
         "ko" : {
@@ -10257,8 +10257,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Have an Idea?"
+            "state" : "translated",
+            "value" : "アイデアがありますか？"
           }
         },
         "ko" : {
@@ -10436,8 +10436,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Help"
+            "state" : "translated",
+            "value" : "ヘルプ"
           }
         },
         "ko" : {
@@ -10792,8 +10792,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Help us improve DockDoor by reporting any issues you encounter."
+            "state" : "translated",
+            "value" : "DockDoorの改善にご協力をお願いします。問題が発生した場合は些細なことでもご報告をお願いします。"
           }
         },
         "ko" : {
@@ -11150,8 +11150,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Highlight Gradient Colors"
+            "state" : "translated",
+            "value" : "ハイライト時のグラデーション色"
           }
         },
         "ko" : {
@@ -11686,8 +11686,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "If you find DockDoor useful, consider donating. Your support helps keep the project going!"
+            "state" : "translated",
+            "value" : "DockDoor が役に立つと感じたら、寄付の検討をお願いします。あなたのサポートがプロジェクトの継続に役立ちます！"
           }
         },
         "ko" : {
@@ -12043,8 +12043,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Ignore Apps with One Window"
+            "state" : "translated",
+            "value" : "ウィンドウが1つのみの場合は表示しない"
           }
         },
         "ko" : {
@@ -12934,8 +12934,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Let's set things up"
+            "state" : "translated",
+            "value" : "準備を始めましょう"
           }
         },
         "ko" : {
@@ -13649,8 +13649,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Next page"
+            "state" : "translated",
+            "value" : "次のページ"
           }
         },
         "ko" : {
@@ -14365,8 +14365,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Not granted"
+            "state" : "translated",
+            "value" : "未許可"
           }
         },
         "ko" : {
@@ -17223,8 +17223,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Press any key to set the keybind."
+            "state" : "translated",
+            "value" : "キーバインドを割り当てるには任意のキーを押下してください。"
           }
         },
         "ko" : {
@@ -17401,8 +17401,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Press any key..."
+            "state" : "translated",
+            "value" : "任意のキーを押下してください..."
           }
         },
         "ko" : {
@@ -18114,8 +18114,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Window Fade Out Duration"
+            "state" : "translated",
+            "value" : "プレビューウィンドウのフェードアウト時間"
           }
         },
         "ko" : {
@@ -18292,8 +18292,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Window Open Delay"
+            "state" : "translated",
+            "value" : "プレビューウィンドウの表示までの遅延時間"
           }
         },
         "ko" : {
@@ -18827,8 +18827,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Remove"
+            "state" : "translated",
+            "value" : "削除"
           }
         },
         "ko" : {
@@ -19005,8 +19005,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Report a Bug"
+            "state" : "translated",
+            "value" : "バグを報告する"
           }
         },
         "ko" : {
@@ -19183,8 +19183,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Request a Feature"
+            "state" : "translated",
+            "value" : "新機能をリクエストする"
           }
         },
         "ko" : {
@@ -19361,8 +19361,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Required for capturing window previews of other apps"
+            "state" : "translated",
+            "value" : "他のウィンドウをキャプチャーするために必要です"
           }
         },
         "ko" : {
@@ -19539,8 +19539,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Required for dock hover detection and window switcher hotkeys"
+            "state" : "translated",
+            "value" : "Dock へのカーソルホバーとホットキーによるウィンドウ切り替えを検知するために必要です"
           }
         },
         "ko" : {
@@ -20431,8 +20431,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Restart app"
+            "state" : "translated",
+            "value" : "アプリを再起動"
           }
         },
         "ko" : {
@@ -20966,8 +20966,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Right click a color to remove it."
+            "state" : "translated",
+            "value" : "右クリックで色を削除します。"
           }
         },
         "ko" : {
@@ -21323,8 +21323,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Screen recording"
+            "state" : "translated",
+            "value" : "画面収録"
           }
         },
         "ko" : {
@@ -22217,8 +22217,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "See more..."
+            "state" : "translated",
+            "value" : "もっと..."
           }
         },
         "ko" : {
@@ -22574,8 +22574,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Shadowed"
+            "state" : "translated",
+            "value" : "影をつけて表示"
           }
         },
         "ko" : {
@@ -24360,8 +24360,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Sort Window Previews by Date"
+            "state" : "translated",
+            "value" : "ウィンドウプレビューを日付順に並び替える"
           }
         },
         "ko" : {
@@ -24538,8 +24538,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Start recording keybind"
+            "state" : "translated",
+            "value" : "キーバインドを登録する"
           }
         },
         "ko" : {
@@ -25074,8 +25074,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Suggest new features to make DockDoor even better."
+            "state" : "translated",
+            "value" : "DockDoor をさらに良くするための新機能を提案してください。"
           }
         },
         "ko" : {
@@ -25252,8 +25252,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Support DockDoor"
+            "state" : "translated",
+            "value" : "DockDoor をサポートする"
           }
         },
         "ko" : {
@@ -25430,8 +25430,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "The changes to permissions will take effect after restarting."
+            "state" : "translated",
+            "value" : "権限の変更は再起動後に有効になります。"
           }
         },
         "ko" : {
@@ -25786,8 +25786,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Toggle"
+            "state" : "translated",
+            "value" : "切り替え"
           }
         },
         "ko" : {
@@ -30426,8 +30426,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Image Resolution Scale (higher means lower resolution)"
+            "state" : "translated",
+            "value" : "ウィンドウプレビュー画像の解像度 (値が大きいほど解像度が低い)"
           }
         },
         "ko" : {
@@ -31853,8 +31853,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Your app is on version %@"
+            "state" : "translated",
+            "value" : "現在使用中のアプリバージョン: %@"
           }
         },
         "ko" : {
