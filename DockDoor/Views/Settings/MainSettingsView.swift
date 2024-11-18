@@ -99,7 +99,7 @@ struct MainSettingsView: View {
                     .foregroundColor(.gray)
             }
 
-            SizePickerView()
+            WindowSizeSliderView()
 
             sliderSetting(title: String(localized: "Window Image Cache Lifespan"),
                           value: $screenCaptureCacheLifespan,
@@ -157,46 +157,29 @@ struct MainSettingsView: View {
     }
 }
 
-struct SizePickerView: View {
+struct WindowSizeSliderView: View {
     @Default(.sizingMultiplier) var sizingMultiplier
-    @Default(.bufferFromDock) var bufferFromDock
 
     var body: some View {
-        VStack(spacing: 20) {
-            Picker("Window Size", selection: $sizingMultiplier) {
-                ForEach(2 ... 10, id: \.self) { size in
-                    Text(getLabel(for: CGFloat(size))).tag(CGFloat(size))
+        VStack(alignment: .leading) {
+            HStack {
+                Slider(value: $sizingMultiplier, in: 2 ... 10, step: 1) {
+                    Text("Window Preview Size")
                 }
-            }
-            .scaledToFit()
-            .onChange(of: sizingMultiplier) { _ in
-                SharedPreviewWindowCoordinator.shared.windowSize = getWindowSize()
-            }
-        }
-    }
+                .buttonStyle(PlainButtonStyle())
+                .frame(width: 400)
 
-    private func getLabel(for size: CGFloat) -> String {
-        switch size {
-        case 2:
-            String(localized: "Large", comment: "Window size option")
-        case 3:
-            String(localized: "Default (Medium Large)", comment: "Window size option")
-        case 4:
-            String(localized: "Medium", comment: "Window size option")
-        case 5:
-            String(localized: "Small", comment: "Window size option")
-        case 6:
-            String(localized: "Extra Small", comment: "Window size option")
-        case 7:
-            String(localized: "Extra Extra Small", comment: "Window size option")
-        case 8:
-            String(localized: "What is this? A window for ANTS?", comment: "Window size option")
-        case 9:
-            String(localized: "Subatomic", comment: "Window size option")
-        case 10:
-            String(localized: "Can you even see this?", comment: "Window size option")
-        default:
-            "Unknown Size"
+                Text("1/\(Int(sizingMultiplier))x")
+                    .frame(width: 50)
+                    .foregroundColor(.gray)
+            }
+
+            Text("Preview windows are sized to 1/\(Int(sizingMultiplier)) of your screen dimensions")
+                .font(.footnote)
+                .foregroundColor(.gray)
+        }
+        .onChange(of: sizingMultiplier) { _ in
+            SharedPreviewWindowCoordinator.shared.windowSize = getWindowSize()
         }
     }
 }

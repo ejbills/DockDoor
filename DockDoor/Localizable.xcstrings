@@ -895,6 +895,9 @@
         }
       }
     },
+    "1/%lldx" : {
+
+    },
     "Accessibility" : {
       "localizations" : {
         "af" : {
@@ -4289,6 +4292,7 @@
     },
     "Can you even see this?" : {
       "comment" : "Window size option",
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -6251,6 +6255,7 @@
     },
     "Default (Medium Large)" : {
       "comment" : "Window size option",
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -8927,6 +8932,7 @@
     },
     "Extra Extra Small" : {
       "comment" : "Window size option",
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -9106,6 +9112,7 @@
     },
     "Extra Small" : {
       "comment" : "Window size option",
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -12322,6 +12329,7 @@
     },
     "Large" : {
       "comment" : "Window size option",
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -13035,6 +13043,7 @@
     },
     "Medium" : {
       "comment" : "Window size option",
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -18393,6 +18402,9 @@
           }
         }
       }
+    },
+    "Preview windows are sized to 1/%lld of your screen dimensions" : {
+
     },
     "Quit App" : {
       "extractionState" : "stale",
@@ -24107,6 +24119,7 @@
     },
     "Small" : {
       "comment" : "Window size option",
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -24821,6 +24834,7 @@
     },
     "Subatomic" : {
       "comment" : "Window size option",
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -28742,6 +28756,7 @@
     },
     "What is this? A window for ANTS?" : {
       "comment" : "Window size option",
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -30528,7 +30543,11 @@
         }
       }
     },
+    "Window Preview Size" : {
+
+    },
     "Window Size" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
