@@ -12,6 +12,7 @@ extension Defaults.Keys {
     static let sizingMultiplier = Key<CGFloat>("sizingMultiplier", default: 3)
     static let bufferFromDock = Key<CGFloat>("bufferFromDock", default: 0)
     static let hoverWindowOpenDelay = Key<CGFloat>("openDelay", default: 0)
+    static let lateralMovement = Key<Bool>("lateralMovement", default: true)
 
     static let screenCaptureCacheLifespan = Key<CGFloat>("screenCaptureCacheLifespan", default: 60)
     static let windowPreviewImageScale = Key<CGFloat>("windowPreviewImageScale", default: 1)

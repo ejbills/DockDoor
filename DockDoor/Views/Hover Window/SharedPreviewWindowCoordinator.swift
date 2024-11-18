@@ -229,7 +229,8 @@ final class SharedPreviewWindowCoordinator: NSWindow {
                     onWindowTap: (() -> Void)? = nil)
     {
         let now = Date()
-        let delay = overrideDelay ? 0.0 : Defaults[.hoverWindowOpenDelay]
+        let naturalDelay = Defaults[.lateralMovement] ? 0.25 : Defaults[.hoverWindowOpenDelay]
+        let delay = overrideDelay ? 0.0 : naturalDelay
 
         debounceWorkItem?.cancel()
 

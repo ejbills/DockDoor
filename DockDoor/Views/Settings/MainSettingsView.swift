@@ -20,6 +20,7 @@ struct MainSettingsView: View {
     @Default(.fadeOutDuration) var fadeOutDuration
     @Default(.sortWindowsByDate) var sortWindowsByDate
     @Default(.ignoreAppsWithSingleWindow) var ignoreAppsWithSingleWindow
+    @Default(.lateralMovement) var lateralMovement
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -60,6 +61,15 @@ struct MainSettingsView: View {
             }
 
             Divider()
+
+            VStack(alignment: .leading) {
+                Toggle(isOn: $lateralMovement, label: {
+                    Text("Keep previews visible during lateral movement")
+                })
+                Text("Prevents previews from disappearing when moving sideways to adjacent windows")
+                    .font(.footnote)
+                    .foregroundColor(.gray)
+            }
 
             sliderSetting(title: String(localized: "Preview Window Open Delay"),
                           value: $hoverWindowOpenDelay,

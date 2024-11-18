@@ -1,5 +1,6 @@
 import ApplicationServices
 import Cocoa
+import Defaults
 
 struct ApplicationInfo: Sendable {
     let processIdentifier: pid_t
@@ -110,6 +111,7 @@ final class DockObserver {
                         localizedName: currentAppUnderMouse.localizedName
                     )
 
+                    let allowInstantShowWindow = lastAppUnderMouse == nil && Defaults[.hoverWindowOpenDelay] == 0
                     if currentAppInfo.processIdentifier != lastAppUnderMouse?.processIdentifier {
                         lastAppUnderMouse = currentAppInfo
 
@@ -136,6 +138,7 @@ final class DockObserver {
                                             mouseLocation: convertedMouseLocation,
                                             mouseScreen: mouseScreen,
                                             iconRect: iconRect,
+                                            overrideDelay: allowInstantShowWindow,
                                             onWindowTap: { [weak self] in
                                                 self?.hideWindowAndResetLastApp()
                                             }
