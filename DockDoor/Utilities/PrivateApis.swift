@@ -11,11 +11,3 @@ let kAXFullscreenAttribute = "AXFullScreen"
 // returns CoreDock orientation and pinning state
 @_silgen_name("CoreDockGetOrientationAndPinning")
 func CoreDockGetOrientationAndPinning(_ outOrientation: UnsafeMutablePointer<Int32>, _ outPinning: UnsafeMutablePointer<Int32>)
-
-@_silgen_name("CoreDockGetRect")
-func CoreDockGetRect(_ outRect: UnsafeMutablePointer<CGRect>)
-func getDockRect() -> CGRect {
-    var rect = CGRect.zero
-    CoreDockGetRect(&rect)
-    return rect
-}

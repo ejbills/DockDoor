@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0531F8D22C3CC04600327808 /* AppearanceSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0531F8D12C3CC04600327808 /* AppearanceSettingsView.swift */; };
+		0596C2C32C3E060D00DCABEF /* PrivateApis.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0596C2C22C3E060D00DCABEF /* PrivateApis.swift */; };
 		05C0C7182C60629C000ADAC6 /* AXUIElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C0C7172C60629C000ADAC6 /* AXUIElement.swift */; };
 		3A105FD62C1BED660015EC66 /* BlurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A105FD52C1BED660015EC66 /* BlurView.swift */; };
 		3A105FD92C1C049E0015EC66 /* dockStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A105FD82C1C049E0015EC66 /* dockStyle.swift */; };
@@ -37,6 +38,7 @@
 		BB157B792C0E330100997315 /* WindowUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB157B782C0E330100997315 /* WindowUtil.swift */; };
 		BB157B7B2C0E343000997315 /* SystemPreferencesHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB157B7A2C0E343000997315 /* SystemPreferencesHelper.swift */; };
 		BB157B802C0E8E6700997315 /* MessageUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB157B7F2C0E8E6700997315 /* MessageUtil.swift */; };
+		BB157B822C0EB29E00997315 /* DockObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB157B812C0EB29E00997315 /* DockObserver.swift */; };
 		BB15E1E22C8E9435002ECFB9 /* FluidGradient.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB15E1DF2C8E9435002ECFB9 /* FluidGradient.swift */; };
 		BB15E1E32C8E9435002ECFB9 /* ResizableLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB15E1E12C8E9435002ECFB9 /* ResizableLayer.swift */; };
 		BB15E1E42C8E9435002ECFB9 /* FluidGradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB15E1E02C8E9435002ECFB9 /* FluidGradientView.swift */; };
@@ -64,13 +66,10 @@
 		BB4ED9072C3C75CA00BBDD16 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = BB4ED9062C3C75CA00BBDD16 /* Localizable.xcstrings */; };
 		BB4ED9092C3CD97400BBDD16 /* Traffic Light Buttons.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB4ED9082C3CD96D00BBDD16 /* Traffic Light Buttons.swift */; };
 		BB52EDF02C5BEFE3006A64A4 /* HiddenModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB52EDEF2C5BEFE3006A64A4 /* HiddenModifier.swift */; };
-		BB5600052CEC042800AD616D /* DockObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB5600042CEC042800AD616D /* DockObserver.swift */; };
-		BB5600072CEC044500AD616D /* SharedPreviewWindowCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB5600062CEC044500AD616D /* SharedPreviewWindowCoordinator.swift */; };
-		BB5600092CEC045200AD616D /* CGRect.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB5600082CEC045200AD616D /* CGRect.swift */; };
-		BB56000B2CEC046B00AD616D /* PrivateApis.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB56000A2CEC046B00AD616D /* PrivateApis.swift */; };
 		BB6A4F1C2C1CFCFF00CB4C9E /* PermissionsSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6A4F1B2C1CFCFF00CB4C9E /* PermissionsSettingsView.swift */; };
 		BB7CA33D2C31F1B00012E303 /* WindowManipulationObservers.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB7CA33C2C31F1B00012E303 /* WindowManipulationObservers.swift */; };
 		BBA153F62C115DDA00119C02 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA153F52C115DDA00119C02 /* AppDelegate.swift */; };
+		BBA153F82C11604400119C02 /* SharedPreviewWindowCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA153F72C11604400119C02 /* SharedPreviewWindowCoordinator.swift */; };
 		BBA153FA2C11FFD500119C02 /* consts.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA153F92C11FFD500119C02 /* consts.swift */; };
 		BBA153FC2C12356100119C02 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA153FB2C12356100119C02 /* main.swift */; };
 		BBBD4AF52C8D671C0074FFCF /* NSImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBBD4AF42C8D671A0074FFCF /* NSImage.swift */; };
@@ -90,6 +89,7 @@
 
 /* Begin PBXFileReference section */
 		0531F8D12C3CC04600327808 /* AppearanceSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceSettingsView.swift; sourceTree = "<group>"; };
+		0596C2C22C3E060D00DCABEF /* PrivateApis.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateApis.swift; sourceTree = "<group>"; };
 		05C0C7172C60629C000ADAC6 /* AXUIElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AXUIElement.swift; sourceTree = "<group>"; };
 		3A105FD52C1BED660015EC66 /* BlurView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurView.swift; sourceTree = "<group>"; };
 		3A105FD82C1C049E0015EC66 /* dockStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dockStyle.swift; sourceTree = "<group>"; };
@@ -119,6 +119,7 @@
 		BB157B782C0E330100997315 /* WindowUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowUtil.swift; sourceTree = "<group>"; };
 		BB157B7A2C0E343000997315 /* SystemPreferencesHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemPreferencesHelper.swift; sourceTree = "<group>"; };
 		BB157B7F2C0E8E6700997315 /* MessageUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageUtil.swift; sourceTree = "<group>"; };
+		BB157B812C0EB29E00997315 /* DockObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockObserver.swift; sourceTree = "<group>"; };
 		BB15E1DE2C8E9435002ECFB9 /* BlobLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlobLayer.swift; sourceTree = "<group>"; };
 		BB15E1DF2C8E9435002ECFB9 /* FluidGradient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FluidGradient.swift; sourceTree = "<group>"; };
 		BB15E1E02C8E9435002ECFB9 /* FluidGradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FluidGradientView.swift; sourceTree = "<group>"; };
@@ -142,14 +143,11 @@
 		BB4ED9062C3C75CA00BBDD16 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		BB4ED9082C3CD96D00BBDD16 /* Traffic Light Buttons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Traffic Light Buttons.swift"; sourceTree = "<group>"; };
 		BB52EDEF2C5BEFE3006A64A4 /* HiddenModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HiddenModifier.swift; sourceTree = "<group>"; };
-		BB5600042CEC042800AD616D /* DockObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockObserver.swift; sourceTree = "<group>"; };
-		BB5600062CEC044500AD616D /* SharedPreviewWindowCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedPreviewWindowCoordinator.swift; sourceTree = "<group>"; };
-		BB5600082CEC045200AD616D /* CGRect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGRect.swift; sourceTree = "<group>"; };
-		BB56000A2CEC046B00AD616D /* PrivateApis.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateApis.swift; sourceTree = "<group>"; };
 		BB6A4F1B2C1CFCFF00CB4C9E /* PermissionsSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionsSettingsView.swift; sourceTree = "<group>"; };
 		BB7CA33C2C31F1B00012E303 /* WindowManipulationObservers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowManipulationObservers.swift; sourceTree = "<group>"; };
 		BB8247782C2889B20098A440 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		BBA153F52C115DDA00119C02 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		BBA153F72C11604400119C02 /* SharedPreviewWindowCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedPreviewWindowCoordinator.swift; sourceTree = "<group>"; };
 		BBA153F92C11FFD500119C02 /* consts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = consts.swift; sourceTree = "<group>"; };
 		BBA153FB2C12356100119C02 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		BBBD4AF42C8D671A0074FFCF /* NSImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSImage.swift; sourceTree = "<group>"; };
@@ -208,7 +206,6 @@
 		3A105FD72C1BF11D0015EC66 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				BB5600082CEC045200AD616D /* CGRect.swift */,
 				BBBD4AF42C8D671A0074FFCF /* NSImage.swift */,
 				3A1622B32C8C099200D318EE /* Button Styles */,
 				BB04405F2C77AD27009F1D33 /* CodableColor.swift */,
@@ -322,12 +319,12 @@
 			children = (
 				BB44474E2C507F920047EB92 /* LimitedTaskGroup.swift */,
 				BB2CBB082C48128D004502C5 /* SpaceWindowCacheManager.swift */,
-				BB56000A2CEC046B00AD616D /* PrivateApis.swift */,
+				0596C2C22C3E060D00DCABEF /* PrivateApis.swift */,
 				BB2567C52C10C5F000C0C93E /* DockUtils.swift */,
 				BB157B782C0E330100997315 /* WindowUtil.swift */,
 				BB157B7A2C0E343000997315 /* SystemPreferencesHelper.swift */,
 				BB157B7F2C0E8E6700997315 /* MessageUtil.swift */,
-				BB5600042CEC042800AD616D /* DockObserver.swift */,
+				BB157B812C0EB29E00997315 /* DockObserver.swift */,
 				BBF6C6232C1B4B4400BF1D40 /* KeybindHelper.swift */,
 				BB1CBD5C2C1BCA4F003969BC /* Misc Utils.swift */,
 				BB7CA33C2C31F1B00012E303 /* WindowManipulationObservers.swift */,
@@ -356,7 +353,7 @@
 				BB4B444A2C372A4C006680DC /* WindowPreview.swift */,
 				BBF413912C40618800AA6733 /* FullSizePreviewView.swift */,
 				BB4ED9082C3CD96D00BBDD16 /* Traffic Light Buttons.swift */,
-				BB5600062CEC044500AD616D /* SharedPreviewWindowCoordinator.swift */,
+				BBA153F72C11604400119C02 /* SharedPreviewWindowCoordinator.swift */,
 			);
 			path = "Hover Window";
 			sourceTree = "<group>";
@@ -546,7 +543,6 @@
 				BB15E1E82C8F8C9C002ECFB9 /* ScreenRecordWarningView.swift in Sources */,
 				BBF383972C94A26200B39A23 /* sliderSetting.swift in Sources */,
 				BB157B802C0E8E6700997315 /* MessageUtil.swift in Sources */,
-				BB5600052CEC042800AD616D /* DockObserver.swift in Sources */,
 				05C0C7182C60629C000ADAC6 /* AXUIElement.swift in Sources */,
 				3A1622C12C8D57AF00D318EE /* PermissionsChecker.swift in Sources */,
 				3A105FD62C1BED660015EC66 /* BlurView.swift in Sources */,
@@ -563,16 +559,17 @@
 				BB04405E2C77A87F009F1D33 /* PreferencesProtocol.swift in Sources */,
 				3A1622C72C8D5A5C00D318EE /* EnabledActionRowView.swift in Sources */,
 				3A1622D02C8D691700D318EE /* SquiggleDivider.swift in Sources */,
+				BB157B822C0EB29E00997315 /* DockObserver.swift in Sources */,
 				BBA153FA2C11FFD500119C02 /* consts.swift in Sources */,
 				BBA153F62C115DDA00119C02 /* AppDelegate.swift in Sources */,
 				3A1622CA2C8D5E4600D318EE /* FirstTimeIntroTabView.swift in Sources */,
-				BB5600072CEC044500AD616D /* SharedPreviewWindowCoordinator.swift in Sources */,
 				BB15E1F72C8FC05A002ECFB9 /* UniformCardView.swift in Sources */,
+				BBA153F82C11604400119C02 /* SharedPreviewWindowCoordinator.swift in Sources */,
 				BBA153FC2C12356100119C02 /* main.swift in Sources */,
 				BBF6C6242C1B4B4400BF1D40 /* KeybindHelper.swift in Sources */,
+				0596C2C32C3E060D00DCABEF /* PrivateApis.swift in Sources */,
 				BB15E1E22C8E9435002ECFB9 /* FluidGradient.swift in Sources */,
 				BB15E1E32C8E9435002ECFB9 /* ResizableLayer.swift in Sources */,
-				BB56000B2CEC046B00AD616D /* PrivateApis.swift in Sources */,
 				BB15E1E42C8E9435002ECFB9 /* FluidGradientView.swift in Sources */,
 				BB15E1E52C8E9435002ECFB9 /* BlobLayer.swift in Sources */,
 				3A1622CC2C8D5F5B00D318EE /* FirstTimePermissionsTabView.swift in Sources */,
@@ -581,7 +578,6 @@
 				C119BDF22C2AFA7600E06E18 /* WindowSwitcherSettingsView.swift in Sources */,
 				BB2567C62C10C5F000C0C93E /* DockUtils.swift in Sources */,
 				BBE7CC912C22429A00AB8F4D /* settings.swift in Sources */,
-				BB5600092CEC045200AD616D /* CGRect.swift in Sources */,
 				BBF413942C40978400AA6733 /* WindowPreviewHoverContainer.swift in Sources */,
 				BBF413922C40618D00AA6733 /* FullSizePreviewView.swift in Sources */,
 				BB15E1F12C8FBCD4002ECFB9 /* BugAndFeatureReporting.swift in Sources */,

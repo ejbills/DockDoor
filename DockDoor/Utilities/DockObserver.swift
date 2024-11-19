@@ -161,7 +161,7 @@ final class DockObserver {
                     previousStatus = .notRunning(bundleIdentifier: bundleIdentifier)
 
                 case .notFound:
-                    if await !SharedPreviewWindowCoordinator.shared.frame.containsWithBuffer(currentMouseLocation) {
+                    if await !SharedPreviewWindowCoordinator.shared.frame.contains(currentMouseLocation) {
                         hideWindowAndResetLastApp()
                     }
                     previousStatus = .notFound
