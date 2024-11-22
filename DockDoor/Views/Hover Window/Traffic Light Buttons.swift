@@ -4,8 +4,7 @@ struct TrafficLightButtons: View {
     let windowInfo: WindowInfo
     let displayMode: TrafficLightButtonsVisibility
     let hoveringOverParentWindow: Bool
-    let onAction: () -> Void
-
+    let onWindowAction: (WindowAction) -> Void
     @State private var isHovering = false
 
     var body: some View {
@@ -18,6 +17,7 @@ struct TrafficLightButtons: View {
         .padding(4)
         .opacity(opacity)
         .allowsHitTesting(opacity != 0)
+        .simultaneousGesture(TapGesture())
         .onHover { isHovering in
             withAnimation(.snappy(duration: 0.175)) {
                 self.isHovering = isHovering
@@ -48,26 +48,8 @@ struct TrafficLightButtons: View {
         .font(.system(size: 13))
         .onLongPressGesture(minimumDuration: .infinity, maximumDistance: 10, perform: {}, onPressingChanged: { pressing in
             if pressing {
-                performAction(action)
-                onAction()
+                onWindowAction(action)
             }
         })
-    }
-
-    private func performAction(_ action: WindowAction) {
-        switch action {
-        case .quit:
-            WindowUtil.quitApp(windowInfo: windowInfo, force: NSEvent.modifierFlags.contains(.option))
-        case .close:
-            WindowUtil.closeWindow(windowInfo: windowInfo)
-        case .minimize:
-            WindowUtil.toggleMinimize(windowInfo: windowInfo)
-        case .toggleFullScreen:
-            WindowUtil.toggleFullScreen(windowInfo: windowInfo)
-        }
-    }
-
-    private enum WindowAction {
-        case quit, close, minimize, toggleFullScreen
     }
 }
