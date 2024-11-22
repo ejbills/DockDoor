@@ -28,8 +28,10 @@ class SpaceWindowCacheManager {
 
     func removeFromCache(pid: pid_t, windowId: CGWindowID) {
         queue.async(flags: .barrier) {
-            if var windowSet = self.desktopSpaceWindowCache[pid] {
-                windowSet.remove(windowSet.first(where: { $0.id == windowId })!)
+            if var windowSet = self.desktopSpaceWindowCache[pid],
+               let windowToRemove = windowSet.first(where: { $0.id == windowId })
+            {
+                windowSet.remove(windowToRemove)
                 if windowSet.isEmpty {
                     self.desktopSpaceWindowCache.removeValue(forKey: pid)
                 } else {

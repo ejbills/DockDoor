@@ -24,8 +24,15 @@ struct WindowInfo: Identifiable, Hashable {
     }
 
     static func == (lhs: WindowInfo, rhs: WindowInfo) -> Bool {
-        lhs.id == rhs.id && lhs.app.processIdentifier == rhs.app.processIdentifier
+        lhs.id == rhs.id &&
+            lhs.app.processIdentifier == rhs.app.processIdentifier &&
+            lhs.isMinimized == rhs.isMinimized &&
+            lhs.isHidden == rhs.isHidden
     }
+}
+
+enum WindowAction {
+    case quit, close, minimize, toggleFullScreen, hide
 }
 
 struct CachedImage {
@@ -249,44 +256,48 @@ enum WindowUtil {
         NSWorkspace.shared.runningApplications.first { $0.localizedName == applicationName }
     }
 
-    static func toggleMinimize(windowInfo: WindowInfo) {
+    static func toggleMinimize(windowInfo: WindowInfo) -> Bool? {
         if windowInfo.isMinimized {
             if windowInfo.app.isHidden {
                 windowInfo.app.unhide()
             }
-
             do {
                 try windowInfo.axElement.setAttribute(kAXMinimizedAttribute, false)
                 windowInfo.app.activate()
                 bringWindowToFront(windowInfo: windowInfo)
+                updateWindowDateTime(windowInfo)
+                return false // Successfully un-minimized
             } catch {
                 print("Error un-minimizing window")
+                return nil
             }
         } else {
             do {
                 try windowInfo.axElement.setAttribute(kAXMinimizedAttribute, true)
+                updateWindowDateTime(windowInfo)
+                return true // Successfully minimized
             } catch {
                 print("Error minimizing window")
+                return nil
             }
         }
-        updateWindowDateTime(windowInfo)
     }
 
-    static func toggleHidden(windowInfo: WindowInfo) {
+    static func toggleHidden(windowInfo: WindowInfo) -> Bool? {
         let newHiddenState = !windowInfo.isHidden
 
         do {
             try windowInfo.appAxElement.setAttribute(kAXHiddenAttribute, newHiddenState)
+            if !newHiddenState {
+                windowInfo.app.activate()
+                bringWindowToFront(windowInfo: windowInfo)
+            }
+            updateWindowDateTime(windowInfo)
+            return newHiddenState // Successfully toggled hidden state
         } catch {
             print("Error toggling hidden state of application")
-            return
+            return nil // Failed to toggle hidden state
         }
-
-        if !newHiddenState {
-            windowInfo.app.activate()
-            bringWindowToFront(windowInfo: windowInfo)
-        }
-        updateWindowDateTime(windowInfo)
     }
 
     static func toggleFullScreen(windowInfo: WindowInfo) {

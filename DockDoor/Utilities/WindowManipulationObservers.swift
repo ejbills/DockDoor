@@ -70,12 +70,6 @@ class WindowManipulationObservers {
         }
 
         WindowUtil.updateWindowDateTime(for: app)
-
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            if SharedPreviewWindowCoordinator.shared.isVisible {
-                SharedPreviewWindowCoordinator.shared.hideWindow()
-            }
-        }
     }
 
     private func createObserverForApp(_ app: NSRunningApplication) {
