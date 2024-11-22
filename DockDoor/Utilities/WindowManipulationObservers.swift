@@ -40,7 +40,7 @@ class WindowManipulationObservers {
 
         // Set up observers for already running applications
         for app in NSWorkspace.shared.runningApplications {
-            if app.activationPolicy == .regular {
+            if app.activationPolicy == .regular, app.processIdentifier != ProcessInfo.processInfo.processIdentifier {
                 createObserverForApp(app)
             }
         }
@@ -133,6 +133,12 @@ func axObserverCallback(observer: AXObserver, element: AXUIElement, notification
                 WindowUtil.updateStatusOfWindowCache(pid: pid, isParentAppHidden: true)
             case kAXApplicationShownNotification:
                 WindowUtil.updateStatusOfWindowCache(pid: pid, isParentAppHidden: false)
+            case kAXWindowCreatedNotification:
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    if SharedPreviewWindowCoordinator.shared.isVisible {
+                        SharedPreviewWindowCoordinator.shared.hideWindow()
+                    }
+                }
             default:
                 break
             }

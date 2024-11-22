@@ -422,8 +422,7 @@ enum WindowUtil {
         } else {
             windowInfo.app.terminate()
         }
-
-        removeWindowFromDesktopSpaceCache(with: windowInfo.app.processIdentifier, removeAll: true)
+        purgeAppCache(with: windowInfo.app.processIdentifier)
     }
 
     // MARK: - Active Window Handling
@@ -453,11 +452,13 @@ enum WindowUtil {
         // Wait for all tasks to complete
         _ = try await group.waitForAll()
 
-        let windows = desktopSpaceWindowCacheManager.readCache(pid: app.processIdentifier)
+        if let purifiedWindows = await WindowUtil.purifyAppCache(with: app.processIdentifier, removeAll: false) {
+            let windows = purifiedWindows.sorted(by: { $0.date > $1.date })
+            guard !Defaults[.ignoreAppsWithSingleWindow] || windows.count > 1 else { return [] }
+            return windows
+        }
 
-        guard !Defaults[.ignoreAppsWithSingleWindow] || windows.count > 1 else { return [] }
-
-        return windows.sorted(by: { $0.date > $1.date })
+        return []
     }
 
     static func updateAllWindowsInCurrentSpace() async {
@@ -553,22 +554,28 @@ enum WindowUtil {
         desktopSpaceWindowCacheManager.removeFromCache(pid: pid, windowId: windowId)
     }
 
-    static func removeWindowFromDesktopSpaceCache(with pid: pid_t, removeAll: Bool) {
+    static func purifyAppCache(with pid: pid_t, removeAll: Bool) async -> Set<WindowInfo>? {
         if removeAll {
             desktopSpaceWindowCacheManager.writeCache(pid: pid, windowSet: [])
+            return nil
         } else {
-            Task {
-                let existingWindowsSet = desktopSpaceWindowCacheManager.readCache(pid: pid)
-                if existingWindowsSet.isEmpty {
-                    return
-                }
-                for window in existingWindowsSet {
-                    if !isValidElement(window.axElement) {
-                        desktopSpaceWindowCacheManager.removeFromCache(pid: pid, windowId: window.id)
-                        return
-                    }
+            let existingWindowsSet = desktopSpaceWindowCacheManager.readCache(pid: pid)
+            if existingWindowsSet.isEmpty {
+                return nil
+            }
+
+            var purifiedSet = existingWindowsSet
+            for window in existingWindowsSet {
+                if !isValidElement(window.axElement) {
+                    purifiedSet.remove(window)
+                    desktopSpaceWindowCacheManager.removeFromCache(pid: pid, windowId: window.id)
                 }
             }
+            return purifiedSet
         }
+    }
+
+    static func purgeAppCache(with pid: pid_t) {
+        desktopSpaceWindowCacheManager.writeCache(pid: pid, windowSet: [])
     }
 }
