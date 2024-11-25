@@ -96,7 +96,7 @@ struct WindowPreviewHoverContainer: View {
                             .id("\(appName)-\(index)")
                         }
                     }
-                    .padding(14)
+                    .padding(20)
                     .onAppear {
                         if !hasAppeared {
                             hasAppeared.toggle()

@@ -72,7 +72,6 @@ struct WindowPreview: View {
         ZStack(alignment: .topTrailing) {
             VStack(spacing: 0) {
                 windowContent(isMinimized: windowInfo.isMinimized, isHidden: windowInfo.isHidden, isSelected: selected)
-                    .overlay { Color.white.opacity(isHoveringOverWindowSwitcherPreview ? 0.1 : 0) }
                     .shadow(radius: selected || isHoveringOverWindowSwitcherPreview ? 0 : 3)
                     .background {
                         RoundedRectangle(cornerRadius: 6, style: .continuous)
@@ -117,9 +116,15 @@ struct WindowPreview: View {
                     )
                 }
             }
+            .background {
+                if selected || isHoveringOverWindowSwitcherPreview {
+                    RoundedRectangle(cornerRadius: uniformCardRadius ? 8 : 0)
+                        .fill(Color.gray.opacity(0.3))
+                        .padding(-6)
+                }
+            }
         }
         .environment(\.layoutDirection, .leftToRight)
-        .scaleEffect(selected ? 1.015 : 1)
         .contentShape(Rectangle())
         .onHover { isHovering in
             withAnimation(.snappy(duration: 0.175)) {
