@@ -428,7 +428,18 @@ enum WindowUtil {
     // MARK: - Active Window Handling
 
     static func getAllWindowsOfAllApps() -> [WindowInfo] {
-        let windows = desktopSpaceWindowCacheManager.getAllWindows()
+        var windows = desktopSpaceWindowCacheManager.getAllWindows()
+
+        if !Defaults[.includeHiddenWindowsInSwitcher] {
+            var windowsCopy: [WindowInfo] = []
+            for window in windows {
+                if !window.isHidden, !window.isMinimized {
+                    windowsCopy.append(window)
+                }
+            }
+
+            windows = windowsCopy
+        }
 
         // If there are at least two windows, swap the first and second
         if windows.count >= 2, Defaults[.sortWindowsByDate] {
