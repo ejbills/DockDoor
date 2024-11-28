@@ -37,6 +37,7 @@ final class SharedPreviewWindowCoordinator: NSWindow {
     static let shared = SharedPreviewWindowCoordinator()
 
     let windowSwitcherCoordinator = ScreenCenteredFloatingWindowCoordinator()
+    private let dockManager = DockAutoHideManager()
 
     private var appName: String = ""
     private var windows: [WindowInfo] = []
@@ -55,6 +56,10 @@ final class SharedPreviewWindowCoordinator: NSWindow {
     private init() {
         super.init(contentRect: .zero, styleMask: .borderless, backing: .buffered, defer: false)
         setupWindow()
+    }
+
+    deinit {
+        dockManager.cleanup()
     }
 
     // Setup window properties
@@ -78,6 +83,7 @@ final class SharedPreviewWindowCoordinator: NSWindow {
             windows.removeAll()
             windowSwitcherCoordinator.setIndex(to: 0)
             windowSwitcherCoordinator.setShowing(.both, toState: false)
+            dockManager.restoreDockState()
             orderOut(nil)
         }
     }
@@ -260,6 +266,8 @@ final class SharedPreviewWindowCoordinator: NSWindow {
                                    iconRect: CGRect?, centeredHoverWindowState: ScreenCenteredFloatingWindowCoordinator.WindowState? = nil,
                                    onWindowTap: (() -> Void)?)
     {
+        dockManager.preventDockHiding()
+
         // ensure view isn't transparent
         alphaValue = 1.0
 

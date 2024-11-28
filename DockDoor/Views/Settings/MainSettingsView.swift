@@ -22,6 +22,7 @@ struct MainSettingsView: View {
     @Default(.includeHiddenWindowsInSwitcher) var includeHiddenWindowsInSwitcher
     @Default(.ignoreAppsWithSingleWindow) var ignoreAppsWithSingleWindow
     @Default(.lateralMovement) var lateralMovement
+    @Default(.preventDockHide) var preventDockHide
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -68,6 +69,15 @@ struct MainSettingsView: View {
                     Text("Keep previews visible during lateral movement")
                 })
                 Text("Prevents previews from disappearing when moving sideways to adjacent windows")
+                    .font(.footnote)
+                    .foregroundColor(.gray)
+            }
+
+            VStack(alignment: .leading) {
+                Toggle(isOn: $preventDockHide, label: {
+                    Text("Prevent dock from hiding during previews")
+                })
+                Text("Only takes effect when dock auto-hide is enabled")
                     .font(.footnote)
                     .foregroundColor(.gray)
             }

@@ -15896,6 +15896,9 @@
         }
       }
     },
+    "Only takes effect when dock auto-hide is enabled" : {
+
+    },
     "Open Accessibility Settings" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -18574,6 +18577,9 @@
           }
         }
       }
+    },
+    "Prevent dock from hiding during previews" : {
+
     },
     "Prevents previews from disappearing when moving sideways to adjacent windows" : {
       "localizations" : {
