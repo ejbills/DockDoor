@@ -219,7 +219,7 @@ final class SharedPreviewWindowCoordinator: NSWindow {
                 setFrame(frame, display: true)
             } else {
                 NSAnimationContext.runAnimationGroup({ context in
-                    context.duration = 0.2
+                    context.duration = 0.15
                     context.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
                     self.animator().setFrame(frame, display: true)
                 }, completionHandler: nil)

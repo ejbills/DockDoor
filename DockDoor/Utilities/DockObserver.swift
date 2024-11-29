@@ -36,6 +36,14 @@ final class DockObserver {
     private var hoverProcessingTask: Task<Void, Error>?
     private var isProcessing: Bool = false
 
+    private var lastNotificationTime: TimeInterval = 0
+    private var lastNotificationId: String = ""
+    private let artifactTimeThreshold: TimeInterval = 0.05
+    private var pendingShows: Set<pid_t> = []
+
+    private var consecutiveNotRunningCount: Int = 0
+    private let maxConsecutiveNotRunning: Int = 3
+
     private init() {
         setupSelectedDockItemObserver()
     }
@@ -44,6 +52,10 @@ final class DockObserver {
         Task { @MainActor [weak self] in
             guard let self else { return }
             lastAppUnderMouse = nil
+            lastNotificationTime = 0
+            lastNotificationId = ""
+            consecutiveNotRunningCount = 0
+            pendingShows.removeAll()
             SharedPreviewWindowCoordinator.shared.hideWindow()
         }
     }
@@ -84,97 +96,131 @@ final class DockObserver {
 
     func processSelectedDockItemChanged() {
         hoverProcessingTask?.cancel()
-        hoverProcessingTask = Task { [weak self] in
+
+        pendingShows.removeAll()
+        Task { @MainActor in
+            SharedPreviewWindowCoordinator.shared.cancelDebounceWorkItem()
+        }
+
+        hoverProcessingTask = Task { @MainActor [weak self] in
             guard let self else { return }
             do {
                 try Task.checkCancellation()
-                guard !isProcessing,
-                      await !SharedPreviewWindowCoordinator.shared.windowSwitcherCoordinator.windowSwitcherActive else { return }
-                isProcessing = true
-                defer {
-                    self.isProcessing = false
-                }
 
+                let currentTime = ProcessInfo.processInfo.systemUptime
                 let currentMouseLocation = DockObserver.getMousePosition()
+
                 let appUnderMouseElement = getDockItemAppStatusUnderMouse()
 
-                switch appUnderMouseElement.status {
-                case let .success(currentAppUnderMouse):
-                    guard let iconRect = appUnderMouseElement.iconRect else {
-                        print("Icon rect is nil, cannot show window")
+                guard case let .success(currentApp) = appUnderMouseElement.status else {
+                    if case .notFound = appUnderMouseElement.status {
+                        consecutiveNotRunningCount = 0
+                        let mouseScreen = NSScreen.screenContainingMouse(currentMouseLocation)
+                        let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
+
+                        if !SharedPreviewWindowCoordinator.shared.frame.extended(by: abs(Defaults[.bufferFromDock])).contains(convertedMouseLocation) {
+                            hideWindowAndResetLastApp()
+                        }
+                    } else if case let .notRunning(bundleIdentifier) = appUnderMouseElement.status {
+                        consecutiveNotRunningCount += 1
+
+                        if lastNotificationId == bundleIdentifier {
+                            let timeSinceLastNotification = currentTime - lastNotificationTime
+                            if timeSinceLastNotification < artifactTimeThreshold {
+                                return
+                            }
+                        }
+
+                        lastNotificationTime = currentTime
+                        lastNotificationId = bundleIdentifier
+
+                        if consecutiveNotRunningCount >= maxConsecutiveNotRunning {
+                            hideWindowAndResetLastApp()
+                        } else if case .notRunning = previousStatus {
+                            let timeSinceLastNotification = currentTime - lastNotificationTime
+                            if timeSinceLastNotification < artifactTimeThreshold {
+                                return
+                            }
+                            hideWindowAndResetLastApp()
+                        }
+                    }
+                    previousStatus = appUnderMouseElement.status
+                    return
+                }
+
+                consecutiveNotRunningCount = 0
+                let pid = currentApp.processIdentifier
+
+                if lastNotificationId == String(pid) {
+                    let timeSinceLastNotification = currentTime - lastNotificationTime
+                    if timeSinceLastNotification < artifactTimeThreshold {
+                        pendingShows.remove(pid)
+                        return
+                    }
+                }
+
+                lastNotificationTime = currentTime
+                lastNotificationId = String(pid)
+
+                guard !isProcessing, !SharedPreviewWindowCoordinator.shared.windowSwitcherCoordinator.windowSwitcherActive
+                else {
+                    return
+                }
+
+                isProcessing = true
+                defer { isProcessing = false }
+
+                guard let iconRect = appUnderMouseElement.iconRect else {
+                    return
+                }
+
+                let currentAppInfo = ApplicationInfo(
+                    processIdentifier: currentApp.processIdentifier,
+                    bundleIdentifier: currentApp.bundleIdentifier,
+                    localizedName: currentApp.localizedName
+                )
+
+                let isWindowVisible = SharedPreviewWindowCoordinator.shared.isVisible && SharedPreviewWindowCoordinator.shared.alphaValue == 1.0
+
+                if currentAppInfo.processIdentifier != lastAppUnderMouse?.processIdentifier || !isWindowVisible {
+                    pendingShows.insert(currentAppInfo.processIdentifier)
+                    lastAppUnderMouse = currentAppInfo
+
+                    guard let app = currentAppInfo.app() else {
+                        pendingShows.remove(currentAppInfo.processIdentifier)
                         return
                     }
 
-                    let currentAppInfo = ApplicationInfo(
-                        processIdentifier: currentAppUnderMouse.processIdentifier,
-                        bundleIdentifier: currentAppUnderMouse.bundleIdentifier,
-                        localizedName: currentAppUnderMouse.localizedName
+                    let appWindows = try await WindowUtil.getActiveWindows(of: app)
+
+                    if !pendingShows.contains(currentAppInfo.processIdentifier) {
+                        return
+                    }
+
+                    let mouseScreen = NSScreen.screenContainingMouse(currentMouseLocation)
+                    let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
+
+                    SharedPreviewWindowCoordinator.shared.showWindow(
+                        appName: currentAppInfo.localizedName ?? "Unknown",
+                        windows: appWindows,
+                        mouseLocation: convertedMouseLocation,
+                        mouseScreen: mouseScreen,
+                        iconRect: iconRect,
+                        overrideDelay: lastAppUnderMouse == nil && Defaults[.hoverWindowOpenDelay] == 0,
+                        onWindowTap: { [weak self] in
+                            self?.hideWindowAndResetLastApp()
+                        }
                     )
 
-                    let allowInstantShowWindow = lastAppUnderMouse == nil && Defaults[.hoverWindowOpenDelay] == 0
-                    if currentAppInfo.processIdentifier != lastAppUnderMouse?.processIdentifier {
-                        lastAppUnderMouse = currentAppInfo
-
-                        Task { [weak self] in
-                            guard let self else { return }
-                            do {
-                                guard let app = currentAppInfo.app() else {
-                                    print("Failed to get NSRunningApplication for pid: \(currentAppInfo.processIdentifier)")
-                                    return
-                                }
-
-                                let appWindows = try await WindowUtil.getActiveWindows(of: app)
-
-                                await MainActor.run {
-                                    if appWindows.isEmpty {
-                                        self.hideWindowAndResetLastApp()
-                                    } else {
-                                        let mouseScreen = NSScreen.screenContainingMouse(currentMouseLocation)
-                                        let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
-
-                                        SharedPreviewWindowCoordinator.shared.showWindow(
-                                            appName: currentAppInfo.localizedName ?? "Unknown",
-                                            windows: appWindows,
-                                            mouseLocation: convertedMouseLocation,
-                                            mouseScreen: mouseScreen,
-                                            iconRect: iconRect,
-                                            overrideDelay: allowInstantShowWindow,
-                                            onWindowTap: { [weak self] in
-                                                self?.hideWindowAndResetLastApp()
-                                            }
-                                        )
-                                    }
-                                }
-                            } catch {
-                                await MainActor.run {
-                                    print("Error fetching active windows: \(error)")
-                                }
-                            }
-                        }
-                    }
-                    previousStatus = .success(currentAppUnderMouse)
-
-                case let .notRunning(bundleIdentifier):
-                    if case .notRunning = previousStatus {
-                        hideWindowAndResetLastApp()
-                    }
-                    previousStatus = .notRunning(bundleIdentifier: bundleIdentifier)
-
-                case .notFound:
-                    if await !SharedPreviewWindowCoordinator.shared.frame.contains(currentMouseLocation) {
-                        hideWindowAndResetLastApp()
-                    }
-                    previousStatus = .notFound
+                    pendingShows.remove(currentAppInfo.processIdentifier)
                 }
-            } catch {
-                print("Task cancelled or error occurred: \(error)")
+                previousStatus = .success(currentApp)
             }
         }
     }
 
     func getHoveredApplicationDockItem() -> AXUIElement? {
         guard let dockAppPID = NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.dock").first?.processIdentifier else {
-            print("Dock does found in running applications")
             return nil
         }
 
@@ -182,19 +228,16 @@ final class DockObserver {
 
         var dockItems: CFTypeRef?
         guard AXUIElementCopyAttributeValue(dockAppElement, kAXChildrenAttribute as CFString, &dockItems) == .success, let dockItems = dockItems as? [AXUIElement], !dockItems.isEmpty else {
-            print("Failed to get dock items or no dock items found")
             return nil
         }
 
         var hoveredDockItem: CFTypeRef?
         guard AXUIElementCopyAttributeValue(dockItems.first!, kAXSelectedChildrenAttribute as CFString, &hoveredDockItem) == .success, !dockItems.isEmpty, let hoveredDockItem = (hoveredDockItem as! [AXUIElement]).first else {
-            // no app under nouse
             return nil
         }
 
         let subrole = try? hoveredDockItem.subrole()
         guard subrole == "AXApplicationDockItem" else {
-            print("The hovered item is a \(subrole ?? "Unknown"), not AXApplicationDockItem")
             return nil
         }
 
@@ -215,18 +258,14 @@ final class DockObserver {
 
             let bundle = Bundle(url: appURL)
             guard let bundleIdentifier = bundle?.bundleIdentifier else {
-                print("App has no valid bundle. App URL: \(appURL.path)")
-
                 // Fallback method
                 guard let dockItemTitle = try hoveredDockItem.title() else {
-                    print("Failed to get dock item title")
                     return ApplicationReturnType(status: .notFound, iconRect: iconRect)
                 }
 
                 if let app = WindowUtil.findRunningApplicationByName(named: dockItemTitle) {
                     return ApplicationReturnType(status: .success(app), iconRect: iconRect)
                 } else {
-                    print("Did not find app by name for dock item: \(dockItemTitle)")
                     return ApplicationReturnType(status: .notFound, iconRect: iconRect)
                 }
             }
@@ -237,7 +276,6 @@ final class DockObserver {
                 return ApplicationReturnType(status: .notRunning(bundleIdentifier: bundleIdentifier), iconRect: iconRect)
             }
         } catch {
-            print("Error getting application status: \(error)")
             return ApplicationReturnType(status: .notFound, iconRect: iconRect)
         }
     }
@@ -251,7 +289,6 @@ final class DockObserver {
             }
             return CGRect(origin: position, size: size)
         } catch {
-            print("Error getting icon rect: \(error)")
             return nil
         }
     }
@@ -264,7 +301,6 @@ final class DockObserver {
         let mouseLocation = event.location
 
         let mousePosition = NSPoint(x: mouseLocation.x, y: mouseLocation.y)
-
         return mousePosition
     }
 
