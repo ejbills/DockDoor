@@ -38,6 +38,31 @@
 </style>
 <a href="https://buymeacoffee.com/keplercafe" class="donation-link" target="_blank">☕ Support kepler.cafe</a>
 
+<a id="v1.3.1"></a>
+# [v1.3.1](https://github.com/ejbills/DockDoor/releases/tag/v1.3.1) - 2024-11-29
+
+# 🦃 Changelog
+
+## Features
+- Dock will now remain open when interacting with window previews (changable in settings)
+- Window switcher now has option to exclude hidden and minimized windows
+- Window selection is now more visually prominent
+
+## Fixes
+- Window previews now work properly with custom dock animation speeds ([#297](https://github.com/ejbills/DockDoor/issues/297))
+- Window previews no longer disappear when moving between windows/apps ([#364](https://github.com/ejbills/DockDoor/issues/364))
+- - This fixes the frustrating behavior where previews would vanish during normal window navigation.
+- Windows can now be activated correctly when dock is set to auto-hide ([#371](https://github.com/ejbills/DockDoor/issues/371))
+- Window previews now properly dismiss when moving cursor away ([#374](https://github.com/ejbills/DockDoor/issues/374))
+- Slider fields now show decimal values for more precise control
+
+## Chores
+- Added Portuguese (Brazil) translation to https://dockdoor.net ([#383](https://github.com/ejbills/DockDoor/issues/383))
+- Updated all system translations via Crowdin ([#377](https://github.com/ejbills/DockDoor/issues/377), [#386](https://github.com/ejbills/DockDoor/issues/386))
+
+[Changes][v1.3.1]
+
+
 <a id="v1.3"></a>
 # [v1.3](https://github.com/ejbills/DockDoor/releases/tag/v1.3) - 2024-11-22
 
@@ -610,6 +635,7 @@ v1.0
 [Changes][releases]
 
 
+[v1.3.1]: https://github.com/ejbills/DockDoor/compare/v1.3...v1.3.1
 [v1.3]: https://github.com/ejbills/DockDoor/compare/v1.2.9...v1.3
 [v1.2.9]: https://github.com/ejbills/DockDoor/compare/v1.2.8...v1.2.9
 [v1.2.8]: https://github.com/ejbills/DockDoor/compare/v1.2.7...v1.2.8
