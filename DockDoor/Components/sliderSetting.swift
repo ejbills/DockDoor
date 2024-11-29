@@ -5,7 +5,8 @@ func sliderSetting<T: BinaryFloatingPoint>(
     value: Binding<T>,
     range: ClosedRange<T>,
     step: T.Stride,
-    unit: String
+    unit: String,
+    formatter: NumberFormatter = NumberFormatter.defaultFormatter
 ) -> some View where T.Stride: BinaryFloatingPoint {
     VStack(alignment: .leading, spacing: 5) {
         Text(title)
@@ -16,16 +17,9 @@ func sliderSetting<T: BinaryFloatingPoint>(
                 in: range,
                 step: step
             )
-            TextField("", text: Binding(
-                get: { String(describing: value.wrappedValue) },
-                set: { str in
-                    if let newValue = Double(str) {
-                        value.wrappedValue = T(newValue)
-                    }
-                }
-            ))
-            .textFieldStyle(RoundedBorderTextFieldStyle())
-            .frame(width: 50)
+            TextField("", value: value, formatter: formatter)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .frame(width: 50)
             Text(unit)
                 .font(.footnote)
         }

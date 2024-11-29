@@ -2,13 +2,6 @@ import Defaults
 import LaunchAtLogin
 import SwiftUI
 
-var decimalFormatter: NumberFormatter {
-    let formatter = NumberFormatter()
-    formatter.numberStyle = .decimal
-    formatter.maximumFractionDigits = 1
-    return formatter
-}
-
 struct MainSettingsView: View {
     @Default(.hoverWindowOpenDelay) var hoverWindowOpenDelay
     @Default(.screenCaptureCacheLifespan) var screenCaptureCacheLifespan
@@ -86,13 +79,15 @@ struct MainSettingsView: View {
                           value: $hoverWindowOpenDelay,
                           range: 0 ... 2,
                           step: 0.1,
-                          unit: String(localized: "seconds"))
+                          unit: String(localized: "seconds"),
+                          formatter: NumberFormatter.oneDecimalFormatter)
 
             sliderSetting(title: String(localized: "Preview Window Fade Out Duration"),
                           value: $fadeOutDuration,
                           range: 0 ... 2,
                           step: 0.1,
-                          unit: String(localized: "seconds"))
+                          unit: String(localized: "seconds"),
+                          formatter: NumberFormatter.oneDecimalFormatter)
 
             VStack(alignment: .leading) {
                 HStack {
@@ -148,7 +143,8 @@ struct MainSettingsView: View {
                           value: $tapEquivalentInterval,
                           range: 0 ... 2,
                           step: 0.1,
-                          unit: String(localized: "seconds"))
+                          unit: String(localized: "seconds"),
+                          formatter: NumberFormatter.oneDecimalFormatter)
                 .disabled(previewHoverAction == .none)
         }
         .padding(20)
