@@ -16,9 +16,16 @@ func sliderSetting<T: BinaryFloatingPoint>(
                 in: range,
                 step: step
             )
-            TextField("", value: value, formatter: NumberFormatter())
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .frame(width: 50)
+            TextField("", text: Binding(
+                get: { String(describing: value.wrappedValue) },
+                set: { str in
+                    if let newValue = Double(str) {
+                        value.wrappedValue = T(newValue)
+                    }
+                }
+            ))
+            .textFieldStyle(RoundedBorderTextFieldStyle())
+            .frame(width: 50)
             Text(unit)
                 .font(.footnote)
         }
