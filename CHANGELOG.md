@@ -44,7 +44,7 @@
 # 🦃 Changelog
 
 ## Features
-- Dock will now remain open when interacting with window previews (changable in settings)
+- Dock with auto-hide enabled will now remain open when interacting with window previews (changable in settings)
 - Window switcher now has option to exclude hidden and minimized windows
 - Window selection is now more visually prominent
 
