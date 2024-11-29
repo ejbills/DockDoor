@@ -10,6 +10,7 @@
 		0531F8D22C3CC04600327808 /* AppearanceSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0531F8D12C3CC04600327808 /* AppearanceSettingsView.swift */; };
 		0596C2C32C3E060D00DCABEF /* PrivateApis.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0596C2C22C3E060D00DCABEF /* PrivateApis.swift */; };
 		05C0C7182C60629C000ADAC6 /* AXUIElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C0C7172C60629C000ADAC6 /* AXUIElement.swift */; };
+		27DC8C172CFA4DA7005F8F31 /* NumberFormatter+Convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27DC8C152CFA4DA7005F8F31 /* NumberFormatter+Convenience.swift */; };
 		3A105FD62C1BED660015EC66 /* BlurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A105FD52C1BED660015EC66 /* BlurView.swift */; };
 		3A105FD92C1C049E0015EC66 /* dockStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A105FD82C1C049E0015EC66 /* dockStyle.swift */; };
 		3A105FDD2C1C0EE20015EC66 /* DynStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A105FDC2C1C0EE20015EC66 /* DynStack.swift */; };
@@ -92,6 +93,7 @@
 		0531F8D12C3CC04600327808 /* AppearanceSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceSettingsView.swift; sourceTree = "<group>"; };
 		0596C2C22C3E060D00DCABEF /* PrivateApis.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateApis.swift; sourceTree = "<group>"; };
 		05C0C7172C60629C000ADAC6 /* AXUIElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AXUIElement.swift; sourceTree = "<group>"; };
+		27DC8C152CFA4DA7005F8F31 /* NumberFormatter+Convenience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NumberFormatter+Convenience.swift"; sourceTree = "<group>"; };
 		3A105FD52C1BED660015EC66 /* BlurView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurView.swift; sourceTree = "<group>"; };
 		3A105FD82C1C049E0015EC66 /* dockStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dockStyle.swift; sourceTree = "<group>"; };
 		3A105FDC2C1C0EE20015EC66 /* DynStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynStack.swift; sourceTree = "<group>"; };
@@ -185,6 +187,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		27DC8C162CFA4DA7005F8F31 /* Formatters */ = {
+			isa = PBXGroup;
+			children = (
+				27DC8C152CFA4DA7005F8F31 /* NumberFormatter+Convenience.swift */,
+			);
+			path = Formatters;
+			sourceTree = "<group>";
+		};
 		3A105FD42C1BED5B0015EC66 /* Components */ = {
 			isa = PBXGroup;
 			children = (
@@ -208,6 +218,7 @@
 			isa = PBXGroup;
 			children = (
 				BB918BB42CF7613200931236 /* CGRect.swift */,
+				27DC8C162CFA4DA7005F8F31 /* Formatters */,
 				BB3D6EAF2C84E58000FFE584 /* NSScreen.swift */,
 				BBBD4AF42C8D671A0074FFCF /* NSImage.swift */,
 				3A1622B32C8C099200D318EE /* Button Styles */,
@@ -560,6 +571,7 @@
 				BB44474F2C507F950047EB92 /* LimitedTaskGroup.swift in Sources */,
 				BBBD4AF52C8D671C0074FFCF /* NSImage.swift in Sources */,
 				BB04405E2C77A87F009F1D33 /* PreferencesProtocol.swift in Sources */,
+				27DC8C172CFA4DA7005F8F31 /* NumberFormatter+Convenience.swift in Sources */,
 				3A1622C72C8D5A5C00D318EE /* EnabledActionRowView.swift in Sources */,
 				3A1622D02C8D691700D318EE /* SquiggleDivider.swift in Sources */,
 				BB157B822C0EB29E00997315 /* DockObserver.swift in Sources */,
