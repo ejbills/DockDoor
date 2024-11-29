@@ -266,7 +266,7 @@ final class SharedPreviewWindowCoordinator: NSWindow {
                                    iconRect: CGRect?, centeredHoverWindowState: ScreenCenteredFloatingWindowCoordinator.WindowState? = nil,
                                    onWindowTap: (() -> Void)?)
     {
-        dockManager.preventDockHiding()
+        dockManager.preventDockHiding(centeredHoverWindowState != nil)
 
         // ensure view isn't transparent
         alphaValue = 1.0

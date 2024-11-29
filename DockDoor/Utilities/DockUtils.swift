@@ -28,8 +28,8 @@ final class DockAutoHideManager {
     private var wasAutoHideEnabled: Bool?
     private var isManagingDock: Bool = false
 
-    func preventDockHiding() {
-        guard Defaults[.preventDockHide] else { return }
+    func preventDockHiding(_ windowSwitcherActive: Bool = false) {
+        guard Defaults[.preventDockHide], !windowSwitcherActive else { return }
         // Only manage dock if auto-hide is currently enabled
         let currentAutoHideState = CoreDockGetAutoHideEnabled()
 
