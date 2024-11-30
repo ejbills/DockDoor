@@ -38,6 +38,15 @@
 </style>
 <a href="https://buymeacoffee.com/keplercafe" class="donation-link" target="_blank">☕ Support kepler.cafe</a>
 
+<a id="v1.3.2"></a>
+# [v1.3.2](https://github.com/ejbills/DockDoor/releases/tag/v1.3.2) - 2024-11-30
+
+- Fixes issue where dock stays visible when not invoking previews when '_Ignore Apps with One Window_' option is checked
+- Moved '_Include Hidden and Minimized Windows in the Window Switcher_' option to Window Switcher category
+
+[Changes][v1.3.2]
+
+
 <a id="v1.3.1"></a>
 # [v1.3.1](https://github.com/ejbills/DockDoor/releases/tag/v1.3.1) - 2024-11-29
 
@@ -635,6 +644,7 @@ v1.0
 [Changes][releases]
 
 
+[v1.3.2]: https://github.com/ejbills/DockDoor/compare/v1.3.1...v1.3.2
 [v1.3.1]: https://github.com/ejbills/DockDoor/compare/v1.3...v1.3.1
 [v1.3]: https://github.com/ejbills/DockDoor/compare/v1.2.9...v1.3
 [v1.2.9]: https://github.com/ejbills/DockDoor/compare/v1.2.8...v1.2.9
