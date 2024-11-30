@@ -266,14 +266,13 @@ final class SharedPreviewWindowCoordinator: NSWindow {
                                    iconRect: CGRect?, centeredHoverWindowState: ScreenCenteredFloatingWindowCoordinator.WindowState? = nil,
                                    onWindowTap: (() -> Void)?)
     {
-        dockManager.preventDockHiding(centeredHoverWindowState != nil)
-
         // ensure view isn't transparent
         alphaValue = 1.0
+        guard !windows.isEmpty else { return }
+
+        dockManager.preventDockHiding(centeredHoverWindowState != nil)
 
         let shouldCenterOnScreen = centeredHoverWindowState != .none
-
-        guard !windows.isEmpty else { return }
 
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }
