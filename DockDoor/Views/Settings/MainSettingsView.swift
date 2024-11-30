@@ -12,7 +12,6 @@ struct MainSettingsView: View {
     @Default(.windowPreviewImageScale) var windowPreviewImageScale
     @Default(.fadeOutDuration) var fadeOutDuration
     @Default(.sortWindowsByDate) var sortWindowsByDate
-    @Default(.includeHiddenWindowsInSwitcher) var includeHiddenWindowsInSwitcher
     @Default(.ignoreAppsWithSingleWindow) var ignoreAppsWithSingleWindow
     @Default(.lateralMovement) var lateralMovement
     @Default(.preventDockHide) var preventDockHide
@@ -121,10 +120,6 @@ struct MainSettingsView: View {
 
             Toggle(isOn: $sortWindowsByDate, label: {
                 Text("Sort Window Previews by Date")
-            })
-
-            Toggle(isOn: $includeHiddenWindowsInSwitcher, label: {
-                Text("Include Hidden and Minimized Windows in the Window Switcher")
             })
 
             Toggle(isOn: $ignoreAppsWithSingleWindow, label: {

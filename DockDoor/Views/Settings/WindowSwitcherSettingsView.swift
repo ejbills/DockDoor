@@ -16,6 +16,7 @@ class KeybindModel: ObservableObject {
 
 struct WindowSwitcherSettingsView: View {
     @Default(.enableWindowSwitcher) var enableWindowSwitcher
+    @Default(.includeHiddenWindowsInSwitcher) var includeHiddenWindowsInSwitcher
     @StateObject private var viewModel = KeybindModel()
 
     var body: some View {
@@ -32,6 +33,10 @@ struct WindowSwitcherSettingsView: View {
 
             if enableWindowSwitcher {
                 Divider()
+
+                Toggle(isOn: $includeHiddenWindowsInSwitcher, label: {
+                    Text("Include Hidden and Minimized Windows in the Window Switcher")
+                })
 
                 Text("Set Initialization Key and Keybind")
                     .font(.headline)
