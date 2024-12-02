@@ -313,6 +313,10 @@ enum WindowUtil {
     }
 
     static func bringWindowToFront(windowInfo: WindowInfo) {
+        if let appDelegate = NSApplication.shared.delegate as? AppDelegate {  // clean up lingering settings pane windows which interfere with AX actions
+                appDelegate.settingsWindowController.close()
+            }
+
         do {
             // Attempt to raise and focus the specific window
             try windowInfo.axElement.performAction(kAXRaiseAction)

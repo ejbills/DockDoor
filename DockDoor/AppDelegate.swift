@@ -24,7 +24,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     // settings
     private var firstTimeWindow: NSWindow?
-    private lazy var settingsWindowController: SettingsWindowController = {
+    lazy var settingsWindowController: SettingsWindowController = {
         var panes: [SettingsPane] = [
             GeneralSettingsViewController(),
             AppearanceSettingsViewController(),
