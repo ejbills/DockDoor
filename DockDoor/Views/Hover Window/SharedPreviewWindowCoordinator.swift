@@ -245,7 +245,8 @@ final class SharedPreviewWindowCoordinator: NSWindow {
         debounceWorkItem?.cancel()
 
         let workItem = DispatchWorkItem { [weak self] in
-            guard let mouseLocation, mouseLocation.distance(to: NSEvent.mouseLocation) < 100 else {
+            // prevent preview from showing if mouse has moved significantly from original position
+            if let mouseLocation, mouseLocation.distance(to: NSEvent.mouseLocation) > 100 {
                 return
             }
 
