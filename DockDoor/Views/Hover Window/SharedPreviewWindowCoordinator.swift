@@ -235,12 +235,20 @@ final class SharedPreviewWindowCoordinator: NSWindow {
                     onWindowTap: (() -> Void)? = nil)
     {
         let now = Date()
-        let naturalDelay = Defaults[.lateralMovement] ? 0.25 : Defaults[.hoverWindowOpenDelay]
+        let naturalDelay = if Defaults[.lateralMovement] {
+            Defaults[.hoverWindowOpenDelay] == 0 ? 0.2 : Defaults[.hoverWindowOpenDelay]
+        } else {
+            Defaults[.hoverWindowOpenDelay]
+        }
         let delay = overrideDelay ? 0.0 : naturalDelay
 
         debounceWorkItem?.cancel()
 
         let workItem = DispatchWorkItem { [weak self] in
+            guard let mouseLocation, mouseLocation.distance(to: NSEvent.mouseLocation) < 100 else {
+                return
+            }
+
             self?.performShowWindow(appName: appName, windows: windows, mouseLocation: mouseLocation, mouseScreen: mouseScreen,
                                     iconRect: iconRect, centeredHoverWindowState: centeredHoverWindowState, onWindowTap: onWindowTap)
         }
