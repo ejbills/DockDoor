@@ -5167,8 +5167,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Close"
+            "state" : "translated",
+            "value" : ""
           }
         },
         "zh-Hant" : {
@@ -9809,8 +9809,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Force Quit"
+            "state" : "translated",
+            "value" : "强制退出"
           }
         },
         "zh-Hant" : {
@@ -12843,8 +12843,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Include Hidden and Minimized Windows in the Window Switcher"
+            "state" : "translated",
+            "value" : "在窗口切换器中包含隐藏和最小化窗口"
           }
         },
         "zh-Hant" : {
@@ -14450,8 +14450,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Minimize"
+            "state" : "translated",
+            "value" : "最小化"
           }
         },
         "zh-Hant" : {
@@ -16237,8 +16237,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Only takes effect when dock auto-hide is enabled"
+            "state" : "translated",
+            "value" : "仅启用基座自动隐藏时生效"
           }
         },
         "zh-Hant" : {
@@ -19094,8 +19094,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Prevent dock from hiding during previews"
+            "state" : "translated",
+            "value" : "阻止码头在预览时隐藏"
           }
         },
         "zh-Hant" : {
@@ -20340,8 +20340,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Quit"
+            "state" : "translated",
+            "value" : "退出"
           }
         },
         "zh-Hant" : {
@@ -22480,7 +22480,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "重庆应用"
+            "value" : "重启应用"
           }
         },
         "zh-Hant" : {
@@ -28014,8 +28014,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Toggle Full Screen"
+            "state" : "translated",
+            "value" : "切换全屏模式"
           }
         },
         "zh-Hant" : {
@@ -28906,7 +28906,7 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Un-minimize"
           }
         },
