@@ -86,9 +86,7 @@ struct WindowPreviewHoverContainer: View {
                                 bestGuessMonitor: bestGuessMonitor,
                                 uniformCardRadius: uniformCardRadius,
                                 handleWindowAction: { action in
-                                    withAnimation(.snappy(duration: 0.175)) {
-                                        handleWindowAction(action, at: index)
-                                    }
+                                    handleWindowAction(action, at: index)
                                 },
                                 currIndex: windowSwitcherCoordinator.currIndex,
                                 windowSwitcherActive: windowSwitcherCoordinator.windowSwitcherActive
@@ -249,31 +247,35 @@ struct WindowPreviewHoverContainer: View {
         guard index < windowStates.count else { return }
         var window = windowStates[index]
 
-        switch action {
-        case .quit:
-            WindowUtil.quitApp(windowInfo: window, force: NSEvent.modifierFlags.contains(.option))
-            onWindowTap?()
-
-        case .close:
-            WindowUtil.closeWindow(windowInfo: window)
-            windowStates.remove(at: index)
-            if windowStates.isEmpty {
+        withAnimation(.snappy(duration: 0.175)) {
+            switch action {
+            case .quit:
+                WindowUtil.quitApp(windowInfo: window, force: NSEvent.modifierFlags.contains(.option))
                 onWindowTap?()
-            }
 
-        case .minimize:
-            if let newMinimizedState = WindowUtil.toggleMinimize(windowInfo: window) {
-                window.isMinimized = newMinimizedState
-                windowStates[index] = window
-            }
+            case .close:
+                WindowUtil.closeWindow(windowInfo: window)
+                windowStates.remove(at: index)
 
-        case .toggleFullScreen:
-            WindowUtil.toggleFullScreen(windowInfo: window)
+                if windowStates.isEmpty {
+                    onWindowTap?()
+                }
 
-        case .hide:
-            if let newHiddenState = WindowUtil.toggleHidden(windowInfo: window) {
-                window.isHidden = newHiddenState
-                windowStates[index] = window
+            case .minimize:
+                if let newMinimizedState = WindowUtil.toggleMinimize(windowInfo: window) {
+                    window.isMinimized = newMinimizedState
+                    windowStates[index] = window
+                }
+
+            case .toggleFullScreen:
+                WindowUtil.toggleFullScreen(windowInfo: window)
+                onWindowTap?()
+
+            case .hide:
+                if let newHiddenState = WindowUtil.toggleHidden(windowInfo: window) {
+                    window.isHidden = newHiddenState
+                    windowStates[index] = window
+                }
             }
         }
     }
