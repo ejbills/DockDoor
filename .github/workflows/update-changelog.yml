@@ -63,7 +63,7 @@ jobs:
                   background-color: #E5C700;
                 }
             </style>
-            <a href="https://buymeacoffee.com/keplercafe" class="donation-link" target="_blank">☕ Support kepler.cafe</a>
+            <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://buymeacoffee.com/keplercafe</div>
 
       - name: Set file permissions
         run: sudo chown -R $(whoami) .
