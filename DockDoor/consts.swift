@@ -13,7 +13,7 @@ extension Defaults.Keys {
     static let bufferFromDock = Key<CGFloat>("bufferFromDock", default: 0)
     static let hoverWindowOpenDelay = Key<CGFloat>("openDelay", default: 0)
     static let lateralMovement = Key<Bool>("lateralMovement", default: true)
-    static let preventDockHide = Key<Bool>("preventDockHide", default: true)
+    static let preventDockHide = Key<Bool>("preventDockHide", default: false)
 
     static let screenCaptureCacheLifespan = Key<CGFloat>("screenCaptureCacheLifespan", default: 60)
     static let windowPreviewImageScale = Key<CGFloat>("windowPreviewImageScale", default: 1)
