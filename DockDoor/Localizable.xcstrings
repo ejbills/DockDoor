@@ -353,7 +353,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "讓Dock顯示更多詳細的圖像資訊"
+            "value" : "• 讓 Dock 顯示更多詳細的圖像資訊"
           }
         }
       }
@@ -532,7 +532,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "允許與 Dock 項目進行即時互動"
+            "value" : "• 允許與 Dock 項目進行即時互動"
           }
         }
       }
@@ -711,7 +711,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "擷取圖片和視窗的縮圖預覽"
+            "value" : "• 擷取圖片和視窗的縮圖預覽"
           }
         }
       }
@@ -890,7 +890,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "偵測滑鼠懸停在 Dock 上時"
+            "value" : "• 偵測滑鼠懸停在 Dock 上時"
           }
         }
       }
@@ -929,7 +929,7 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "1/%lldx"
           }
         },
@@ -1067,7 +1067,7 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "1/%lldx"
           }
         }
@@ -4460,7 +4460,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "請這裡請我喝咖啡，謝謝！"
+            "value" : "在這裡請我喝咖啡，謝謝！"
           }
         }
       }
@@ -5035,8 +5035,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Close"
+            "state" : "translated",
+            "value" : "Schließen"
           }
         },
         "el" : {
@@ -5047,8 +5047,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Close"
+            "state" : "translated",
+            "value" : "Cerrar"
           }
         },
         "fi" : {
@@ -5168,13 +5168,13 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : ""
+            "value" : "关闭"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Close"
+            "state" : "translated",
+            "value" : "關閉"
           }
         }
       }
@@ -9677,8 +9677,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Force Quit"
+            "state" : "translated",
+            "value" : "Schließen erzwingen"
           }
         },
         "el" : {
@@ -9689,8 +9689,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Force Quit"
+            "state" : "translated",
+            "value" : "Forzar Salida"
           }
         },
         "fi" : {
@@ -9815,8 +9815,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Force Quit"
+            "state" : "translated",
+            "value" : "強制結束"
           }
         }
       }
@@ -12711,8 +12711,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Include Hidden and Minimized Windows in the Window Switcher"
+            "state" : "translated",
+            "value" : "Versteckte und minimierte Fenster in den Fensterschalter einbeziehen"
           }
         },
         "el" : {
@@ -12723,8 +12723,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Include Hidden and Minimized Windows in the Window Switcher"
+            "state" : "translated",
+            "value" : "Incluir Ventanas Ocultas y Minimizadas en el Cambiador de Ventanas"
           }
         },
         "fi" : {
@@ -12849,8 +12849,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Include Hidden and Minimized Windows in the Window Switcher"
+            "state" : "translated",
+            "value" : "在視窗切換器中包含隱藏和最小化視窗"
           }
         }
       }
@@ -13067,8 +13067,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Keep previews visible during lateral movement"
+            "state" : "translated",
+            "value" : "Vorschau während der seitlichen Bewegung sichtbar halten"
           }
         },
         "el" : {
@@ -13079,8 +13079,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Keep previews visible during lateral movement"
+            "state" : "translated",
+            "value" : "Mantener vista previa visible durante movimiento lateral"
           }
         },
         "fi" : {
@@ -13205,8 +13205,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Keep previews visible during lateral movement"
+            "state" : "translated",
+            "value" : "在橫向移動期間保持預覽可見"
           }
         }
       }
@@ -14318,8 +14318,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Minimize"
+            "state" : "translated",
+            "value" : "Minimieren"
           }
         },
         "el" : {
@@ -14330,8 +14330,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Minimize"
+            "state" : "translated",
+            "value" : "Minimizar"
           }
         },
         "fi" : {
@@ -14456,8 +14456,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Minimize"
+            "state" : "translated",
+            "value" : "最小化"
           }
         }
       }
@@ -16105,8 +16105,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Only takes effect when dock auto-hide is enabled"
+            "state" : "translated",
+            "value" : "Wird nur wirksam, wenn Auto-Verstecken aktiviert ist"
           }
         },
         "el" : {
@@ -16243,8 +16243,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Only takes effect when dock auto-hide is enabled"
+            "state" : "translated",
+            "value" : "僅當啟用 Dock 自動隱藏時才生效"
           }
         }
       }
@@ -18962,8 +18962,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Prevent dock from hiding during previews"
+            "state" : "translated",
+            "value" : "Dock während der Vorschau nicht verstecken"
           }
         },
         "el" : {
@@ -19100,8 +19100,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Prevent dock from hiding during previews"
+            "state" : "translated",
+            "value" : "防止 Dock 在預覽期間隱藏"
           }
         }
       }
@@ -19140,8 +19140,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Prevents previews from disappearing when moving sideways to adjacent windows"
+            "state" : "translated",
+            "value" : "Verhindert das Verschwinden von Vorschaubildern beim Verschieben von seitlichen zu benachbarten Fenstern"
           }
         },
         "el" : {
@@ -19278,8 +19278,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Prevents previews from disappearing when moving sideways to adjacent windows"
+            "state" : "translated",
+            "value" : "防止預覽在橫向移動到相鄰視窗時消失"
           }
         }
       }
@@ -20030,8 +20030,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview windows are sized to 1/%lld of your screen dimensions"
+            "state" : "translated",
+            "value" : "Die Vorschaufenster sind geöffnet 1/%lld Ihrer Bildschirmgröße groß"
           }
         },
         "el" : {
@@ -20168,8 +20168,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview windows are sized to 1/%lld of your screen dimensions"
+            "state" : "translated",
+            "value" : "預覽視窗大小設為您螢幕尺寸的 1/%lld"
           }
         }
       }
@@ -20208,8 +20208,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Quit"
+            "state" : "translated",
+            "value" : "Beenden"
           }
         },
         "el" : {
@@ -20220,8 +20220,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Quit"
+            "state" : "translated",
+            "value" : "Salir"
           }
         },
         "fi" : {
@@ -20346,8 +20346,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Quit"
+            "state" : "translated",
+            "value" : "結束"
           }
         }
       }
@@ -20526,7 +20526,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "退出"
+            "value" : "結束應用程式"
           }
         }
       }
@@ -20704,7 +20704,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "退出 DockDoor"
+            "value" : "結束 DockDoor"
           }
         }
       }
@@ -26058,7 +26058,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "模擬點擊(開啟視窗)"
+            "value" : "模擬點擊（開啟視窗）"
           }
         }
       }
@@ -27882,8 +27882,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Toggle Full Screen"
+            "state" : "translated",
+            "value" : "Vollbildmodus ein-/ausschalten"
           }
         },
         "el" : {
@@ -27894,8 +27894,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Toggle Full Screen"
+            "state" : "translated",
+            "value" : "Alternar a pantalla completa"
           }
         },
         "fi" : {
@@ -28020,8 +28020,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Toggle Full Screen"
+            "state" : "translated",
+            "value" : "切換全螢幕"
           }
         }
       }
@@ -28774,8 +28774,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Un-minimize"
+            "state" : "translated",
+            "value" : "Expandieren"
           }
         },
         "el" : {
@@ -28912,8 +28912,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Un-minimize"
+            "state" : "translated",
+            "value" : "取消最小化"
           }
         }
       }
@@ -32879,8 +32879,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Preview Size"
+            "state" : "translated",
+            "value" : "Fenstervorschau Größe"
           }
         },
         "el" : {
@@ -32891,8 +32891,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Preview Size"
+            "state" : "translated",
+            "value" : "Tamaño vista previa"
           }
         },
         "fi" : {
@@ -33017,8 +33017,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Preview Size"
+            "state" : "translated",
+            "value" : "視窗預覽大小"
           }
         }
       }
