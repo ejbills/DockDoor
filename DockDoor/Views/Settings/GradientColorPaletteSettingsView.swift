@@ -120,8 +120,8 @@ struct GradientColorPaletteSettingsView: View {
 
     private func showMinimumColorsAlert() {
         MessageUtil.showAlert(
-            title: "Cannot Remove Color",
-            message: "Minimum number of colors reached.",
+            title: String(localized: "Cannot Remove Color"),
+            message: String(localized: "Minimum number of colors reached."),
             actions: [.ok, .cancel]
         ) { action in
             switch action {
@@ -135,8 +135,8 @@ struct GradientColorPaletteSettingsView: View {
 
     private func showMaximumColorsAlert() {
         MessageUtil.showAlert(
-            title: "Cannot Add Color",
-            message: "Maximum number of colors (\(maxColors)) reached.",
+            title: String(localized: "Cannot Add Color"),
+            message: String(localized: "Maximum number of colors (\(maxColors)) reached."),
             actions: [.ok, .cancel]
         ) { action in
             switch action {
