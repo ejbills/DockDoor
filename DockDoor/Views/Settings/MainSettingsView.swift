@@ -14,6 +14,7 @@ struct MainSettingsView: View {
     @Default(.sortWindowsByDate) var sortWindowsByDate
     @Default(.lateralMovement) var lateralMovement
     @Default(.preventDockHide) var preventDockHide
+    @Default(.useClassicWindowOrdering) private var useClassicWindowOrdering
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -120,6 +121,15 @@ struct MainSettingsView: View {
             Toggle(isOn: $sortWindowsByDate, label: {
                 Text("Sort Window Previews by Date")
             })
+
+            VStack(alignment: .leading) {
+                Toggle(isOn: $useClassicWindowOrdering) {
+                    Text("Use classic window ordering")
+                }
+                Text("When enabled, shows the last active window first instead of the current window")
+                    .font(.footnote)
+                    .foregroundColor(.gray)
+            }
 
             Picker("Preview Hover Action", selection: $previewHoverAction) {
                 ForEach(PreviewHoverAction.allCases, id: \.self) { action in

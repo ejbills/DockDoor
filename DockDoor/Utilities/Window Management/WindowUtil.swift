@@ -482,24 +482,19 @@ enum WindowUtil {
         var windows = desktopSpaceWindowCacheManager.getAllWindows()
 
         if !Defaults[.includeHiddenWindowsInSwitcher] {
-            var windowsCopy: [WindowInfo] = []
-            for window in windows {
-                if !window.isHidden, !window.isMinimized {
-                    windowsCopy.append(window)
-                }
-            }
-
-            windows = windowsCopy
+            windows = windows.filter { !$0.isHidden && !$0.isMinimized }
         }
 
-        // If there are at least two windows, swap the first and second
-        if windows.count >= 2, Defaults[.sortWindowsByDate] {
+        // If classic ordering is enabled and there are at least two windows,
+        // swap the first and second windows
+        if Defaults[.useClassicWindowOrdering], windows.count >= 2 {
             var modifiedWindows = windows
             modifiedWindows.swapAt(0, 1)
             return modifiedWindows
-        } else {
-            return windows
         }
+
+        // Otherwise return natural date-based ordering
+        return windows
     }
 
     static func getActiveWindows(of app: NSRunningApplication) async throws -> [WindowInfo] {

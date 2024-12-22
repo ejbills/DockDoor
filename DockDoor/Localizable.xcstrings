@@ -29860,6 +29860,9 @@
         }
       }
     },
+    "Use classic window ordering" : {
+
+    },
     "Use default MacOS keybind ⌘ + ⇥" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -31286,6 +31289,9 @@
           }
         }
       }
+    },
+    "When enabled, shows the last active window first instead of the current window" : {
+
     },
     "When hovering over the preview" : {
       "comment" : "Window title visibility option",
