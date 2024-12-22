@@ -78,6 +78,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 keybindHelper = KeybindHelper.shared
             }
         }
+
+        Task(priority: .high) { [weak self] in
+            guard self != nil else { return }
+
+            await WindowUtil.updateAllWindowsInCurrentSpace()
+        }
     }
 
     func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
