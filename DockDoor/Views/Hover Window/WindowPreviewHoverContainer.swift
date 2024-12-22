@@ -158,9 +158,6 @@ struct WindowPreviewHoverContainer: View {
         guard index < windowStates.count else { return }
         let window = windowStates[index]
 
-        // Get the current window size
-        guard let windowSize = try? window.axElement.size() else { return }
-
         // Get the screen containing the drop location
         let currentScreen = NSScreen.screenContainingMouse(location)
 
