@@ -11,6 +11,10 @@ body.dark-mode {
     color: #fff !important;
 }
 
+body, main, header, .dropdown-content, .dark-box {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
 header /*, footer */ {
     background-color: #002244;
     color: white;
