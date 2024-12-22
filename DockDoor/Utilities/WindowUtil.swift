@@ -130,10 +130,16 @@ enum WindowUtil {
         let filter = SCContentFilter(desktopIndependentWindow: window)
         let config = SCStreamConfiguration()
 
-        let scaleFactor = getScaleFactorForWindow(window: window)
+        let nativeScaleFactor = getScaleFactorForWindow(window: window)
+        let previewScale = Int(Defaults[.windowPreviewImageScale])
 
-        let width = Int(window.frame.width * scaleFactor) / Int(Defaults[.windowPreviewImageScale])
-        let height = Int(window.frame.height * scaleFactor) / Int(Defaults[.windowPreviewImageScale])
+        // Calculate the window's true dimensions in its native screen space
+        let nativeWidth = window.frame.width * nativeScaleFactor
+        let nativeHeight = window.frame.height * nativeScaleFactor
+
+        // Apply the user's preview scale while preserving the window's native proportions
+        let width = Int(nativeWidth) / previewScale
+        let height = Int(nativeHeight) / previewScale
 
         config.width = width
         config.height = height
@@ -162,11 +168,8 @@ enum WindowUtil {
         }
 
         // Use ScreenCaptureKit's API if available, otherwise fall back to a legacy (deprecated) API
-        let image: CGImage = if #available(macOS 14.0, *) {
-            try await captureImageModern(of: window)
-        } else {
-            try await captureImageLegacy(of: window)
-        }
+
+        let image = try await captureImageLegacy(of: window)
 
         let cachedImage = CachedImage(image: image, timestamp: Date(), windowname: window.title)
         imageCache[window.windowID] = cachedImage
@@ -177,11 +180,16 @@ enum WindowUtil {
     // Helper function to get the scale factor for a given window
     private static func getScaleFactorForWindow(window: SCWindow) -> CGFloat {
         let windowFrame = window.frame
-        let containingScreen = NSScreen.screens.first { screen in
-            screen.frame.intersects(windowFrame)
-        } ?? NSScreen.main
 
-        return containingScreen?.backingScaleFactor ?? 2.0
+        // Find the specific screen containing this window
+        guard let containingScreen = NSScreen.screens.first(where: { screen in
+            screen.frame.intersects(windowFrame)
+        }) else {
+            return NSScreen.main?.backingScaleFactor ?? 2.0
+        }
+
+        // Get this screen's native backing scale factor
+        return containingScreen.backingScaleFactor
     }
 
     private static func getCachedImage(window: SCWindow) -> CGImage? {
