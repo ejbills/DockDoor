@@ -164,7 +164,7 @@ struct WindowPreviewHoverContainer: View {
         // Convert drop location to global coordinates
         let globalLocation = DockObserver.cgPointFromNSPoint(location, forScreen: currentScreen)
 
-        // Calculate position (placing from bottom left corner)
+        // Calculate position (placing from top left corner)
         let finalPosition = CGPoint(
             x: globalLocation.x,
             y: globalLocation.y
