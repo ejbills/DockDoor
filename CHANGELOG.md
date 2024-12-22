@@ -44,12 +44,13 @@
 # Changelog v1.4 🎄
 
 ## New Features
-- **Window Title Filters and Application Filters**:
-  - Exclude windows or applications from being captured based on title or app name.
-  - Example: Filtering "google" prevents windows containing "google" in their title from being managed.
 - **Window Dragging**:
   - Drag and reposition windows directly from DockDoor previews onto your macOS desktop.
   - ![window drag](https://github.com/user-attachments/assets/772ba9ad-84fd-41c5-9599-4069f6e80288)
+- **Window Title Filters and Application Filters**:
+  - Exclude windows or applications from being captured based on title or app name.
+  - Example: Filtering "google" prevents windows containing "google" in their title from being managed.
+  - ![CleanShot 2024-12-21 at 22 53 17](https://github.com/user-attachments/assets/b81df915-f082-49ff-8324-817bebce9e03)
 - **Window Switcher option**:
   - Holding `Command` and pressing `Tab` twice now switches to the second last used window, addressing usability feedback.
   - ![image](https://github.com/user-attachments/assets/ae9e2221-5dd9-4676-9e13-b5f541eb1a04)
