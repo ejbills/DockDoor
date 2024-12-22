@@ -78,7 +78,7 @@ struct WindowPreviewHoverContainer: View {
 
             ScrollViewReader { scrollProxy in
                 ScrollView(orientationIsHorizontal ? .horizontal : .vertical, showsIndicators: false) {
-                    DynStack(direction: orientationIsHorizontal ? .horizontal : .vertical, spacing: 16) {
+                    DynStack(direction: orientationIsHorizontal ? .horizontal : .vertical, spacing: -20) {
                         ForEach(windowStates.indices, id: \.self) { index in
                             WindowPreview(
                                 windowInfo: windowStates[index],
@@ -195,7 +195,6 @@ struct WindowPreviewHoverContainer: View {
                             .frame(width: 24, height: 24)
                     }
                     hoverTitleLabelView(labelSize: labelSize)
-                    newWindowControlView()
                 }
                 .padding(.top, 10)
                 .padding(.leading)
@@ -212,7 +211,6 @@ struct WindowPreviewHoverContainer: View {
                             .frame(width: 24, height: 24)
                     }
                     hoverTitleLabelView(labelSize: labelSize)
-                    newWindowControlView()
                 }
                 .padding(EdgeInsets(top: -11.5, leading: 15, bottom: -1.5, trailing: 1.5))
             case .popover:
@@ -230,7 +228,6 @@ struct WindowPreviewHoverContainer: View {
                                 .frame(width: 24, height: 24)
                         }
                         hoverTitleLabelView(labelSize: labelSize)
-                        newWindowControlView()
                     }
                     .padding(.vertical, 5)
                     .padding(.horizontal, 10)
@@ -277,28 +274,6 @@ struct WindowPreviewHoverContainer: View {
                 )
         case .default, .popover:
             Text(appName)
-        }
-    }
-
-    @ViewBuilder
-    private func newWindowControlView() -> some View {
-        if let app = windows.first?.app, hoveringWindowTitle {
-            Button(action: {
-                WindowUtil.openNewWindow(app: app)
-            }) {
-                Image(systemName: "plus")
-                    .fontWeight(.medium)
-                    .foregroundColor(.primary.opacity(0.85))
-                    .frame(width: 24, height: 24)
-                    .background(
-                        RoundedRectangle(cornerRadius: 6, style: .continuous)
-                            .fill(.regularMaterial)
-                    )
-                    .contentShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
-            }
-            .help("Open new window")
-            .padding(2)
-            .buttonStyle(.plain)
         }
     }
 
