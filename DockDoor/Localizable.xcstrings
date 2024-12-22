@@ -14501,6 +14501,9 @@
     "Minimum number of colors reached." : {
 
     },
+    "Navigate to Settings → Privacy & Security" : {
+
+    },
     "Never visible" : {
       "comment" : "Traffic light buttons visibility option",
       "localizations" : {

@@ -20,7 +20,7 @@ struct PermissionsView: View {
                 title: String(localized: "Screen recording"),
                 description: String(localized: "Required for capturing window previews of other apps"),
                 isGranted: permissionsChecker.screenRecordingPermission,
-                iconName: "video.fill",
+                iconName: "record.circle",
                 action: openScreenRecordingPreferences,
                 disableShine: disableShine
             )
@@ -28,7 +28,6 @@ struct PermissionsView: View {
             if let nextTab {
                 VStack(alignment: .center, spacing: 12) {
                     SquiggleDivider()
-
                     Button(action: nextTab) {
                         Text("Next page")
                     }
@@ -45,8 +44,4 @@ struct PermissionsView: View {
     private func openScreenRecordingPreferences() {
         SystemPreferencesHelper.openScreenRecordingPreferences()
     }
-}
-
-#Preview {
-    PermissionsView()
 }

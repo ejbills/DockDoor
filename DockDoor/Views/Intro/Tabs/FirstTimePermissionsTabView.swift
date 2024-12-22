@@ -7,6 +7,11 @@ struct FirstTimePermissionsTabView: View {
             Text("Let's set things up")
                 .font(.largeTitle)
                 .fontWeight(.bold)
+
+            Text("Navigate to Settings → Privacy & Security")
+                .font(.body)
+                .foregroundColor(.secondary)
+
             PermissionsView(nextTab: nextTab)
         }
         .padding(32)
