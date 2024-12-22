@@ -51,12 +51,12 @@ struct WindowSwitcherSettingsView: View {
                 .scaledToFit()
                 .layoutPriority(1)
 
-                Text("Press any key to set the keybind.")
+                Text("Important: When recording, press ONLY the trigger key (e.g. just press Tab if you want command + Tab). Do not press the initialization key during recording.")
                     .font(.subheadline)
                     .foregroundColor(.secondary)
 
                 Button(action: { viewModel.isRecording.toggle() }) {
-                    Text(viewModel.isRecording ? "Press any key..." : "Start recording keybind")
+                    Text(viewModel.isRecording ? String(localized: "Press any key...") : String(localized: "Start recording trigger key"))
                 }
                 .keyboardShortcut(.defaultAction)
 
@@ -64,6 +64,29 @@ struct WindowSwitcherSettingsView: View {
                     Text("Current Keybind: \(stringForCurrentKeybind(keybind))")
                         .font(.subheadline)
                         .padding(.top, 5)
+                }
+
+                Divider()
+
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Example:")
+                        .font(.body)
+
+                    Text("1. Select \"Command (⌘)\" as the initialization key.")
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+
+                    Text("2. Click \"Start Recording Trigger Key\".")
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+
+                    Text("3. Press ONLY the Tab key (not Command+Tab).")
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+
+                    Text("4. Your keybind will be set to Command+Tab.")
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
                 }
             }
         }

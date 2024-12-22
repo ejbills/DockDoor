@@ -895,6 +895,9 @@
         }
       }
     },
+    "1. Select \"Command (⌘)\" as the initialization key." : {
+
+    },
     "1/%lldx" : {
       "localizations" : {
         "af" : {
@@ -1072,6 +1075,15 @@
           }
         }
       }
+    },
+    "2. Click \"Start Recording Trigger Key\"." : {
+
+    },
+    "3. Press ONLY the Tab key (not Command+Tab)." : {
+
+    },
+    "4. Your keybind will be set to Command+Tab." : {
+
     },
     "Accessibility" : {
       "localizations" : {
@@ -9307,6 +9319,9 @@
         }
       }
     },
+    "Example:" : {
+
+    },
     "Exclude windows from capture by filtering specific text in their titles" : {
 
     },
@@ -12709,6 +12724,9 @@
           }
         }
       }
+    },
+    "Important: When recording, press ONLY the trigger key (e.g. just press Tab if you want command + Tab). Do not press the initialization key during recording." : {
+
     },
     "Include Hidden and Minimized Windows in the Window Switcher" : {
       "localizations" : {
@@ -18439,6 +18457,7 @@
       }
     },
     "Press any key to set the keybind." : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -26473,6 +26492,7 @@
       }
     },
     "Start recording keybind" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -26828,6 +26848,9 @@
           }
         }
       }
+    },
+    "Start recording trigger key" : {
+
     },
     "Subatomic" : {
       "comment" : "Window size option",
