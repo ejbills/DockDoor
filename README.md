@@ -64,7 +64,7 @@ Each traffic light button you see serves an intuitive function.
 DockDoor allows you to directly drag windows from their previews to reposition them on your desktop:
 
 <p align="center">
-  <img width="400" height="auto" src="./resources/window drag.gif">
+  <img width="400" height="auto" src="./resources/window-drag.gif">
 </p>
 
 Key features:
