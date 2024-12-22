@@ -28,6 +28,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         var panes: [SettingsPane] = [
             GeneralSettingsViewController(),
             AppearanceSettingsViewController(),
+            FiltersSettingsViewController(),
             WindowSwitcherSettingsViewController(),
             PermissionsSettingsViewController(),
             HelpSettingsViewController(),

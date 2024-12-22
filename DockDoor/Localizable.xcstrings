@@ -1609,6 +1609,12 @@
         }
       }
     },
+    "Add" : {
+
+    },
+    "Add Filter" : {
+
+    },
     "Adjust this if the preview is misaligned with dock" : {
       "localizations" : {
         "af" : {
@@ -3215,6 +3221,12 @@
           }
         }
       }
+    },
+    "Application filters" : {
+
+    },
+    "Are you sure you want to proceed?" : {
+
     },
     "Are you sure you want to reset all settings to their default values?" : {
       "localizations" : {
@@ -5541,6 +5553,9 @@
           }
         }
       }
+    },
+    "Confirm" : {
+
     },
     "Contribute translation here!" : {
       "localizations" : {
@@ -9111,6 +9126,9 @@
         }
       }
     },
+    "Enter text to filter" : {
+
+    },
     "Everything is now set up!" : {
       "localizations" : {
         "af" : {
@@ -9288,6 +9306,9 @@
           }
         }
       }
+    },
+    "Exclude windows from capture by filtering specific text in their titles" : {
+
     },
     "Extra Extra Small" : {
       "comment" : "Window size option",
@@ -9648,6 +9669,12 @@
           }
         }
       }
+    },
+    "Filters" : {
+      "comment" : "Filters tab title"
+    },
+    "Filters settings" : {
+
     },
     "Force Quit" : {
       "localizations" : {
@@ -15010,6 +15037,9 @@
         }
       }
     },
+    "No filters added" : {
+
+    },
     "No hover action" : {
       "comment" : "Window popup hover action option",
       "extractionState" : "stale",
@@ -16439,6 +16469,9 @@
           }
         }
       }
+    },
+    "Open new window" : {
+
     },
     "Open Screen Recording Settings" : {
       "extractionState" : "stale",
@@ -20899,6 +20932,9 @@
         }
       }
     },
+    "Remove All" : {
+
+    },
     "Report a Bug" : {
       "localizations" : {
         "af" : {
@@ -24288,6 +24324,9 @@
           }
         }
       }
+    },
+    "Select which applications can be captured and previewed" : {
+
     },
     "Set Initialization Key and Keybind" : {
       "localizations" : {
@@ -33571,6 +33610,9 @@
           }
         }
       }
+    },
+    "Window title filters" : {
+
     },
     "Window Title Position" : {
       "localizations" : {

@@ -27,7 +27,8 @@ struct WindowInfo: Identifiable, Hashable {
         lhs.id == rhs.id &&
             lhs.app.processIdentifier == rhs.app.processIdentifier &&
             lhs.isMinimized == rhs.isMinimized &&
-            lhs.isHidden == rhs.isHidden
+            lhs.isHidden == rhs.isHidden &&
+            lhs.axElement == rhs.axElement
     }
 }
 
@@ -149,7 +150,6 @@ enum WindowUtil {
             config.includeChildWindows = false
         }
 
-        // Capture the image
         return try await SCScreenshotManager.captureImage(contentFilter: filter, configuration: config)
     }
 
@@ -344,10 +344,25 @@ enum WindowUtil {
         }
     }
 
+    static func openNewWindow(app: NSRunningApplication) {
+        let source = CGEventSource(stateID: .combinedSessionState)
+        // Create keydown event for 'N'
+        let keyDown = CGEvent(keyboardEventSource: source, virtualKey: 0x2D, keyDown: true)
+        // Add Command modifier
+        keyDown?.flags = .maskCommand
+        // Post the event to the application
+        keyDown?.postToPid(app.processIdentifier)
+
+        // Create keyup event
+        let keyUp = CGEvent(keyboardEventSource: source, virtualKey: 0x2D, keyDown: false)
+        keyUp?.flags = .maskCommand
+        keyUp?.postToPid(app.processIdentifier)
+    }
+
     static func updateWindowDateTime(_ windowInfo: WindowInfo) {
         guard Defaults[.sortWindowsByDate] else { return }
         desktopSpaceWindowCacheManager.updateCache(pid: windowInfo.app.processIdentifier) { windowSet in
-            if let index = windowSet.firstIndex(where: { $0.id == windowInfo.id }) {
+            if let index = windowSet.firstIndex(where: { $0.axElement == windowInfo.axElement }) {
                 var updatedWindow = windowSet[index]
                 updatedWindow.date = Date()
                 windowSet.remove(at: index)
@@ -506,15 +521,65 @@ enum WindowUtil {
     static func captureAndCacheWindowInfo(window: SCWindow, app: NSRunningApplication) async throws {
         let windowID = window.windowID
 
+        // Check basic window validity
         guard window.owningApplication != nil,
               window.isOnScreen,
               window.windowLayer == 0,
               window.frame.size.width >= 0,
               window.frame.size.height >= 0,
-              app.bundleIdentifier == nil || !filteredBundleIdentifiers.contains(app.bundleIdentifier!),
               !(window.frame.size.width < 100 || window.frame.size.height < 100) || window.title?.isEmpty == false
         else {
             return
+        }
+
+        // Check if app bundle ID is in filtered list
+        if let bundleId = app.bundleIdentifier {
+            if filteredBundleIdentifiers.contains(bundleId) {
+                purgeAppCache(with: app.processIdentifier)
+                return
+            }
+        }
+
+        // Check if app name matches any filters
+        if let appName = app.localizedName {
+            let appNameFilters = Defaults[.appNameFilters]
+            if !appNameFilters.isEmpty {
+                for filter in appNameFilters {
+                    if appName.lowercased().contains(filter.lowercased()) {
+                        purgeAppCache(with: app.processIdentifier)
+                        return
+                    }
+                }
+            }
+        }
+
+        // Check window title against filters and remove if matched
+        if let windowTitle = window.title {
+            let windowTitleFilters = Defaults[.windowTitleFilters]
+            if !windowTitleFilters.isEmpty {
+                for filter in windowTitleFilters {
+                    if windowTitle.lowercased().contains(filter.lowercased()) {
+                        // Remove this specific window if it exists in cache
+                        removeWindowFromDesktopSpaceCache(with: windowID, in: app.processIdentifier)
+                        return
+                    }
+                }
+            }
+        }
+
+        // Additional check for existing windows in cache that might match filters
+        desktopSpaceWindowCacheManager.updateCache(pid: app.processIdentifier) { windowSet in
+            windowSet = windowSet.filter { cachedWindow in
+                // Keep window only if it passes all filters
+                if let cachedTitle = cachedWindow.windowName {
+                    for filter in Defaults[.windowTitleFilters] {
+                        if cachedTitle.lowercased().contains(filter.lowercased()) {
+                            return false
+                        }
+                    }
+                }
+                return true
+            }
         }
 
         let appElement = AXUIElementCreateApplication(app.processIdentifier)
@@ -551,7 +616,7 @@ enum WindowUtil {
 
     static func updateDesktopSpaceWindowCache(with windowInfo: WindowInfo) {
         desktopSpaceWindowCacheManager.updateCache(pid: windowInfo.app.processIdentifier) { windowSet in
-            if let matchingWindow = windowSet.first(where: { $0.id == windowInfo.id }) {
+            if let matchingWindow = windowSet.first(where: { $0.axElement == windowInfo.axElement }) {
                 var matchingWindowCopy = matchingWindow
                 matchingWindowCopy.windowName = windowInfo.windowName
                 matchingWindowCopy.image = windowInfo.image
