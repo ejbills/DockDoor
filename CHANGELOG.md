@@ -38,6 +38,42 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://buymeacoffee.com/keplercafe</div>
 
+<a id="v1.4"></a>
+# [v1.4](https://github.com/ejbills/DockDoor/releases/tag/v1.4) - 2024-12-22
+
+# Changelog v1.4 🎄
+
+## New Features
+- **Window Title Filters and Application Filters**:
+  - Exclude windows or applications from being captured based on title or app name.
+  - Example: Filtering "google" prevents windows containing "google" in their title from being managed.
+- **Window Dragging**:
+  - Drag and reposition windows directly from DockDoor previews onto your macOS desktop.
+  - ![window drag](https://github.com/user-attachments/assets/772ba9ad-84fd-41c5-9599-4069f6e80288)
+- **Window Switcher option**:
+  - Holding `Command` and pressing `Tab` twice now switches to the second last used window, addressing usability feedback.
+  - ![image](https://github.com/user-attachments/assets/ae9e2221-5dd9-4676-9e13-b5f541eb1a04)
+
+## Enhancements
+- Less lingering windows!
+  - Auto-dismissal of inactive window previews after 10 seconds to avoid clutter.
+  - Improved preview dismissal logic when clicking outside the window area.
+- Centered window previews relative to the current Dock icon for more reliable window placements.
+- Improved user experience in keybind recording view.
+- Refined settings placements for better navigation and discoverability.
+- Enhanced permission messaging for clearer instructions.
+- Synchronized localizations for both the macOS app and website with Crowdin.
+
+## Bug Fixes
+- Resolved window preview sizing issues across multiple displays.
+- Fixed scaling for windows intersecting multiple screens.
+- Dismissal of hover containers now properly occurs when interacting outside the window.
+- Fixed gradient alerts to ensure proper localization.
+- Addressed issues with window switcher behavior during initial app launch and desktop space switches.
+
+[Changes][v1.4]
+
+
 <a id="v1.3.3"></a>
 # [v1.3.3](https://github.com/ejbills/DockDoor/releases/tag/v1.3.3) - 2024-12-07
 
@@ -664,6 +700,7 @@ v1.0
 [Changes][releases]
 
 
+[v1.4]: https://github.com/ejbills/DockDoor/compare/v1.3.3...v1.4
 [v1.3.3]: https://github.com/ejbills/DockDoor/compare/v1.3.2...v1.3.3
 [v1.3.2]: https://github.com/ejbills/DockDoor/compare/v1.3.1...v1.3.2
 [v1.3.1]: https://github.com/ejbills/DockDoor/compare/v1.3...v1.3.1
