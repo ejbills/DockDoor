@@ -12,7 +12,6 @@ struct MainSettingsView: View {
     @Default(.windowPreviewImageScale) var windowPreviewImageScale
     @Default(.fadeOutDuration) var fadeOutDuration
     @Default(.sortWindowsByDate) var sortWindowsByDate
-    @Default(.ignoreAppsWithSingleWindow) var ignoreAppsWithSingleWindow
     @Default(.lateralMovement) var lateralMovement
     @Default(.preventDockHide) var preventDockHide
 
@@ -120,10 +119,6 @@ struct MainSettingsView: View {
 
             Toggle(isOn: $sortWindowsByDate, label: {
                 Text("Sort Window Previews by Date")
-            })
-
-            Toggle(isOn: $ignoreAppsWithSingleWindow, label: {
-                Text("Ignore Apps with One Window")
             })
 
             Picker("Preview Hover Action", selection: $previewHoverAction) {

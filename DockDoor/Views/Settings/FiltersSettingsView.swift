@@ -5,6 +5,8 @@ import SwiftUI
 struct FiltersSettingsView: View {
     @Default(.appNameFilters) var appNameFilters
     @Default(.windowTitleFilters) var windowTitleFilters
+    @Default(.ignoreAppsWithSingleWindow) var ignoreAppsWithSingleWindow
+
     @State private var showingAddFilterSheet = false
     @State private var newFilter = FilterEntry(text: "")
 
@@ -58,6 +60,10 @@ struct FiltersSettingsView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
+            Toggle(isOn: $ignoreAppsWithSingleWindow, label: {
+                Text("Ignore Apps with One Window")
+            })
+
             // App Filters Section
             VStack(alignment: .leading, spacing: 8) {
                 Text("Application filters")
@@ -166,7 +172,7 @@ struct FiltersSettingsView: View {
             }
         }
         .padding(16)
-        .frame(minWidth: 500)
+        .frame(minWidth: 650)
         .sheet(isPresented: $showingAddFilterSheet) {
             AddFilterSheet(
                 isPresented: $showingAddFilterSheet,
