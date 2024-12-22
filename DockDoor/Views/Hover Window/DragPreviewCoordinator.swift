@@ -1,6 +1,6 @@
 import SwiftUI
 
-class DragPreviewCoordinator {
+final class DragPreviewCoordinator {
     static let shared = DragPreviewCoordinator()
     private var previewWindow: NSWindow?
     private var initialWindowFrame: CGRect?
@@ -10,6 +10,8 @@ class DragPreviewCoordinator {
     private let previewOpacity: CGFloat = 0.5
 
     func startDragging(windowInfo: WindowInfo, at location: CGPoint) {
+        endDragging()
+
         initialScreenForDrag = NSScreen.screenContainingMouse(location)
         dragStartLocation = location
 

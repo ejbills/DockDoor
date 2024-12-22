@@ -76,6 +76,9 @@ final class SharedPreviewWindowCoordinator: NSWindow {
         DispatchQueue.main.async { [weak self] in
             guard let self, isVisible else { return }
 
+            // End any active drag operations
+            DragPreviewCoordinator.shared.endDragging()
+
             hideFullPreviewWindow()
             contentView = nil
             hostingView = nil
