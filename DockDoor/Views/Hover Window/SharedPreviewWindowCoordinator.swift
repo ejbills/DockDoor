@@ -164,41 +164,33 @@ final class SharedPreviewWindowCoordinator: NSWindow {
     // Calculate window position based on the given dock icon frame and dock position
     private func calculateWindowPosition(mouseLocation: CGPoint?, windowSize: CGSize, screen: NSScreen, iconRect: CGRect) -> CGPoint {
         guard let mouseLocation else { return .zero }
-
         let screenFrame = screen.frame
         let dockPosition = DockUtils.getDockPosition()
-
         // Flip the coordinate space from the accessibility API (origin is bottom-left)
         let flippedIconRect = CGRect(
             origin: DockObserver.cgPointFromNSPoint(iconRect.origin, forScreen: screen),
             size: iconRect.size
         )
-
         var xPosition: CGFloat
         var yPosition: CGFloat
-
         switch dockPosition {
         case .bottom:
             // Horizontally center the preview to the hovered dock icon
             xPosition = flippedIconRect.midX - (windowSize.width / 2)
             // Position the preview just above the dock icon
             yPosition = screenFrame.minY + flippedIconRect.minY
-
         case .left:
             // Vertically center the preview to the hovered dock icon
-            xPosition = screenFrame.minX + flippedIconRect.maxX
+            xPosition = flippedIconRect.maxX
             yPosition = flippedIconRect.midY - (windowSize.height / 2) - flippedIconRect.height
-
         case .right:
             // Vertically center the preview to the hovered dock icon
             xPosition = screenFrame.maxX - flippedIconRect.width - windowSize.width
             yPosition = flippedIconRect.minY - (windowSize.height / 2)
-
         default:
             xPosition = mouseLocation.x - (windowSize.width / 2)
             yPosition = mouseLocation.y - (windowSize.height / 2)
         }
-
         // Apply buffer
         let bufferFromDock = Defaults[.bufferFromDock]
         switch dockPosition {
@@ -211,11 +203,9 @@ final class SharedPreviewWindowCoordinator: NSWindow {
         default:
             break
         }
-
         // Ensure window stays within screen bounds
         xPosition = max(screenFrame.minX, min(xPosition, screenFrame.maxX - windowSize.width))
         yPosition = max(screenFrame.minY, min(yPosition, screenFrame.maxY - windowSize.height))
-
         return CGPoint(x: xPosition, y: yPosition)
     }
 
