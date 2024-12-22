@@ -9,6 +9,7 @@ struct WindowPreview: View {
     let maxWindowDimension: CGPoint
     let bestGuessMonitor: NSScreen
     let uniformCardRadius: Bool
+    let handleWindowAction: (WindowAction) -> Void
     var currIndex: Int
     var windowSwitcherActive: Bool
 
@@ -71,7 +72,6 @@ struct WindowPreview: View {
         ZStack(alignment: .topTrailing) {
             VStack(spacing: 0) {
                 windowContent(isMinimized: windowInfo.isMinimized, isHidden: windowInfo.isHidden, isSelected: selected)
-                    .overlay { Color.white.opacity(isHoveringOverWindowSwitcherPreview ? 0.1 : 0) }
                     .shadow(radius: selected || isHoveringOverWindowSwitcherPreview ? 0 : 3)
                     .background {
                         RoundedRectangle(cornerRadius: 6, style: .continuous)
@@ -108,15 +108,23 @@ struct WindowPreview: View {
                 }
             }()) {
                 if !windowInfo.isMinimized, !windowInfo.isHidden, let _ = windowInfo.closeButton {
-                    TrafficLightButtons(windowInfo: windowInfo,
-                                        displayMode: trafficLightButtonsVisibility,
-                                        hoveringOverParentWindow: selected || isHoveringOverWindowSwitcherPreview,
-                                        onAction: { onTap?() })
+                    TrafficLightButtons(
+                        windowInfo: windowInfo,
+                        displayMode: trafficLightButtonsVisibility,
+                        hoveringOverParentWindow: selected || isHoveringOverWindowSwitcherPreview,
+                        onWindowAction: handleWindowAction
+                    )
+                }
+            }
+            .background {
+                if selected || isHoveringOverWindowSwitcherPreview {
+                    RoundedRectangle(cornerRadius: uniformCardRadius ? 8 : 0)
+                        .fill(Color.gray.opacity(0.3))
+                        .padding(-6)
                 }
             }
         }
         .environment(\.layoutDirection, .leftToRight)
-        .scaleEffect(selected ? 1.015 : 1)
         .contentShape(Rectangle())
         .onHover { isHovering in
             withAnimation(.snappy(duration: 0.175)) {
@@ -131,6 +139,37 @@ struct WindowPreview: View {
         .onTapGesture {
             handleWindowTap()
         }
+        .contextMenu(menuItems: {
+            if windowInfo.closeButton != nil {
+                Button(action: { handleWindowAction(.minimize) }) {
+                    if windowInfo.isMinimized {
+                        Label("Un-minimize", systemImage: "arrow.up.left.and.arrow.down.right.square")
+                    } else {
+                        Label("Minimize", systemImage: "minus.square")
+                    }
+                }
+
+                Button(action: { handleWindowAction(.toggleFullScreen) }) {
+                    Label("Toggle Full Screen", systemImage: "arrow.up.left.and.arrow.down.right.square")
+                }
+
+                Divider()
+
+                Button(action: { handleWindowAction(.close) }) {
+                    Label("Close", systemImage: "xmark.square")
+                }
+
+                Button(role: .destructive, action: {
+                    handleWindowAction(.quit)
+                }) {
+                    if NSEvent.modifierFlags.contains(.option) {
+                        Label("Force Quit", systemImage: "power.square.fill")
+                    } else {
+                        Label("Quit", systemImage: "power.square")
+                    }
+                }
+            }
+        })
     }
 
     private func handleFullPreviewHover(isHovering: Bool, action: PreviewHoverAction) {
@@ -191,30 +230,62 @@ struct WindowPreview: View {
 
     private func handleWindowTap() {
         if windowInfo.isMinimized {
-            WindowUtil.toggleMinimize(windowInfo: windowInfo)
+            handleWindowAction(.minimize)
         } else if windowInfo.isHidden {
-            WindowUtil.toggleHidden(windowInfo: windowInfo)
+            handleWindowAction(.hide)
         } else {
             WindowUtil.bringWindowToFront(windowInfo: windowInfo)
+            onTap?()
         }
-        onTap?()
     }
 
     @ViewBuilder
     private func windowTitleOverlay(selected: Bool) -> some View {
-        if windowTitleVisibility == .alwaysVisible || selected, let windowTitle = windowInfo.window.title, !windowTitle.isEmpty, windowTitle != windowInfo.app.localizedName || windowSwitcherActive {
-            let maxLabelWidth = calculatedSize.width - 50
-            let stringMeasurementWidth = measureString(windowTitle, fontSize: 12).width + 5
-            let width = maxLabelWidth > stringMeasurementWidth ? stringMeasurementWidth : maxLabelWidth
-
-            TheMarquee(width: width, secsBeforeLooping: 1, speedPtsPerSec: 20, nonMovingAlignment: .leading) {
-                Text(windowInfo.windowName ?? "Hidden window")
-                    .font(.system(size: 12, weight: .medium))
-                    .foregroundStyle(.primary)
+        if windowSwitcherActive || windowTitleVisibility == .alwaysVisible || selected {
+            if windowSwitcherActive {
+                HStack(spacing: 4) {
+                    if let appIcon = windowInfo.app.icon {
+                        Image(nsImage: appIcon)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 14, height: 14)
+                    }
+                    if windowTitleVisibility == .alwaysVisible || selected {
+                        Text(windowInfo.app.localizedName ?? "Unknown")
+                            .font(.system(size: 12, weight: .medium))
+                            .foregroundStyle(.primary)
+                            .lineLimit(1)
+                        if let windowTitle = windowInfo.window.title, !windowTitle.isEmpty, windowTitle != windowInfo.app.localizedName {
+                            Divider()
+                            let stringMeasurementWidth = measureString(windowTitle, fontSize: 12).width + 5
+                            TheMarquee(width: min(stringMeasurementWidth, 200), secsBeforeLooping: 1, speedPtsPerSec: 20, nonMovingAlignment: .leading) {
+                                Text(windowInfo.windowName ?? "Hidden window")
+                                    .font(.system(size: 12, weight: .medium))
+                                    .foregroundStyle(.primary)
+                                    .lineLimit(1)
+                            }
+                        }
+                    }
+                }
+                .frame(height: 20)
+                .padding(.horizontal, 8)
+                .padding(.vertical, 4)
+                .background(RoundedRectangle(cornerRadius: 6, style: .continuous).fill(.ultraThinMaterial))
+                .padding(4)
+            } else if let windowTitle = windowInfo.window.title, !windowTitle.isEmpty, windowTitle != windowInfo.app.localizedName {
+                let stringMeasurementWidth = measureString(windowTitle, fontSize: 12).width + 5
+                let maxLabelWidth = calculatedSize.width - 50
+                let width = min(stringMeasurementWidth, maxLabelWidth)
+                TheMarquee(width: width, secsBeforeLooping: 1, speedPtsPerSec: 20, nonMovingAlignment: .leading) {
+                    Text(windowInfo.windowName ?? "Hidden window")
+                        .font(.system(size: 12, weight: .medium))
+                        .foregroundStyle(.primary)
+                        .lineLimit(1)
+                }
+                .padding(4)
+                .background(RoundedRectangle(cornerRadius: 6, style: .continuous).fill(.ultraThinMaterial))
+                .padding(4)
             }
-            .padding(4)
-            .background(RoundedRectangle(cornerRadius: 6, style: .continuous).fill(.ultraThinMaterial))
-            .padding(4)
         }
     }
 }

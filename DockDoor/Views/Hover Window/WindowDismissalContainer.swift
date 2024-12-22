@@ -6,6 +6,7 @@ struct WindowDismissalContainer: NSViewRepresentable {
     let mouseLocation: CGPoint
     let bestGuessMonitor: NSScreen
     let dockPosition: DockPosition
+
     func makeNSView(context: Context) -> MouseTrackingNSView {
         let view = MouseTrackingNSView(appName: appName, mouseLocation: mouseLocation,
                                        bestGuessMonitor: bestGuessMonitor, dockPosition: dockPosition)
@@ -26,8 +27,11 @@ class MouseTrackingNSView: NSView {
     private var fadeOutTimer: Timer?
     private let fadeOutDuration: TimeInterval
     private var trackingTimer: Timer?
+    private var globalMouseMonitor: Any?
+    private var inactivityTimer: Timer?
 
     private let baseDistanceThreshold: CGFloat = 600
+    private let inactivityTimeout: TimeInterval = 10.0
 
     init(appName: String, mouseLocation: CGPoint, bestGuessMonitor: NSScreen, dockPosition: DockPosition, frame frameRect: NSRect = .zero) {
         self.appName = appName
@@ -38,6 +42,7 @@ class MouseTrackingNSView: NSView {
         super.init(frame: frameRect)
         setupTrackingArea()
         setupMouseMonitors()
+        setupGlobalMouseMonitor()
     }
 
     @available(*, unavailable)
@@ -49,6 +54,25 @@ class MouseTrackingNSView: NSView {
         let options: NSTrackingArea.Options = [.mouseEnteredAndExited, .activeAlways, .inVisibleRect]
         let trackingArea = NSTrackingArea(rect: bounds, options: options, owner: self, userInfo: nil)
         addTrackingArea(trackingArea)
+    }
+
+    private func setupGlobalMouseMonitor() {
+        // Monitor for mouse down events globally
+        globalMouseMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.leftMouseDown, .rightMouseDown, .otherMouseDown]) { [weak self] event in
+            guard let self,
+                  let window else { return }
+
+            // Convert the click location to window coordinates
+            let clickLocation = event.locationInWindow
+            let windowFrame = window.frame
+
+            // Check if the click is outside our window
+            if !windowFrame.contains(clickLocation) {
+                DispatchQueue.main.async {
+                    self.startFadeOut()
+                }
+            }
+        }
     }
 
     private func setupMouseMonitors() {
@@ -72,16 +96,29 @@ class MouseTrackingNSView: NSView {
     }
 
     deinit {
-        clearTimer()
+        clearTimers()
+        if let monitor = globalMouseMonitor {
+            NSEvent.removeMonitor(monitor)
+        }
     }
 
-    private func clearTimer() {
+    private func clearTimers() {
         trackingTimer?.invalidate()
+        inactivityTimer?.invalidate()
+        inactivityTimer = nil
+    }
+
+    private func resetInactivityTimer() {
+        inactivityTimer?.invalidate()
+        inactivityTimer = Timer.scheduledTimer(withTimeInterval: inactivityTimeout, repeats: false) { [weak self] _ in
+            self?.startFadeOut()
+        }
     }
 
     func resetOpacity() {
         cancelFadeOut()
         setWindowOpacity(to: 1.0, duration: 0.0)
+        resetInactivityTimer()
     }
 
     override func mouseExited(with event: NSEvent) {
@@ -91,8 +128,9 @@ class MouseTrackingNSView: NSView {
     override func mouseEntered(with event: NSEvent) {
         cancelFadeOut()
         setWindowOpacity(to: 1.0, duration: 0.2)
+        resetInactivityTimer()
 
-        clearTimer()
+        clearTimers()
         SharedPreviewWindowCoordinator.shared.cancelDebounceWorkItem()
     }
 

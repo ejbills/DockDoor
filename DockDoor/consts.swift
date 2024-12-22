@@ -12,6 +12,8 @@ extension Defaults.Keys {
     static let sizingMultiplier = Key<CGFloat>("sizingMultiplier", default: 3)
     static let bufferFromDock = Key<CGFloat>("bufferFromDock", default: 0)
     static let hoverWindowOpenDelay = Key<CGFloat>("openDelay", default: 0)
+    static let lateralMovement = Key<Bool>("lateralMovement", default: true)
+    static let preventDockHide = Key<Bool>("preventDockHide", default: false)
 
     static let screenCaptureCacheLifespan = Key<CGFloat>("screenCaptureCacheLifespan", default: 60)
     static let windowPreviewImageScale = Key<CGFloat>("windowPreviewImageScale", default: 1)
@@ -25,6 +27,7 @@ extension Defaults.Keys {
     static let gradientColorPalette = Key<GradientColorPaletteSettings>("gradientColorPalette", default: .init())
     static let enableWindowSwitcher = Key<Bool>("enableWindowSwitcher", default: true)
     static let sortWindowsByDate = Key<Bool>("sortWindowsByDate", default: true)
+    static let includeHiddenWindowsInSwitcher = Key<Bool>("includeHiddenWindowsInSwitcher", default: true)
     static let ignoreAppsWithSingleWindow = Key<Bool>("ignoreAppsWithSingleWindow", default: false)
     static let showMenuBarIcon = Key<Bool>("showMenuBarIcon", default: true)
     static let launched = Key<Bool>("launched", default: false)

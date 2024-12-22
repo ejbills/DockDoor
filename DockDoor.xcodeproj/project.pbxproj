@@ -10,6 +10,7 @@
 		0531F8D22C3CC04600327808 /* AppearanceSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0531F8D12C3CC04600327808 /* AppearanceSettingsView.swift */; };
 		0596C2C32C3E060D00DCABEF /* PrivateApis.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0596C2C22C3E060D00DCABEF /* PrivateApis.swift */; };
 		05C0C7182C60629C000ADAC6 /* AXUIElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C0C7172C60629C000ADAC6 /* AXUIElement.swift */; };
+		27DC8C172CFA4DA7005F8F31 /* NumberFormatter+Convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27DC8C152CFA4DA7005F8F31 /* NumberFormatter+Convenience.swift */; };
 		3A105FD62C1BED660015EC66 /* BlurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A105FD52C1BED660015EC66 /* BlurView.swift */; };
 		3A105FD92C1C049E0015EC66 /* dockStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A105FD82C1C049E0015EC66 /* dockStyle.swift */; };
 		3A105FDD2C1C0EE20015EC66 /* DynStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A105FDC2C1C0EE20015EC66 /* DynStack.swift */; };
@@ -68,6 +69,7 @@
 		BB52EDF02C5BEFE3006A64A4 /* HiddenModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB52EDEF2C5BEFE3006A64A4 /* HiddenModifier.swift */; };
 		BB6A4F1C2C1CFCFF00CB4C9E /* PermissionsSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6A4F1B2C1CFCFF00CB4C9E /* PermissionsSettingsView.swift */; };
 		BB7CA33D2C31F1B00012E303 /* WindowManipulationObservers.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB7CA33C2C31F1B00012E303 /* WindowManipulationObservers.swift */; };
+		BB918BB52CF7613400931236 /* CGRect.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB918BB42CF7613200931236 /* CGRect.swift */; };
 		BBA153F62C115DDA00119C02 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA153F52C115DDA00119C02 /* AppDelegate.swift */; };
 		BBA153F82C11604400119C02 /* SharedPreviewWindowCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA153F72C11604400119C02 /* SharedPreviewWindowCoordinator.swift */; };
 		BBA153FA2C11FFD500119C02 /* consts.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA153F92C11FFD500119C02 /* consts.swift */; };
@@ -91,6 +93,7 @@
 		0531F8D12C3CC04600327808 /* AppearanceSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceSettingsView.swift; sourceTree = "<group>"; };
 		0596C2C22C3E060D00DCABEF /* PrivateApis.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateApis.swift; sourceTree = "<group>"; };
 		05C0C7172C60629C000ADAC6 /* AXUIElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AXUIElement.swift; sourceTree = "<group>"; };
+		27DC8C152CFA4DA7005F8F31 /* NumberFormatter+Convenience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NumberFormatter+Convenience.swift"; sourceTree = "<group>"; };
 		3A105FD52C1BED660015EC66 /* BlurView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurView.swift; sourceTree = "<group>"; };
 		3A105FD82C1C049E0015EC66 /* dockStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dockStyle.swift; sourceTree = "<group>"; };
 		3A105FDC2C1C0EE20015EC66 /* DynStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynStack.swift; sourceTree = "<group>"; };
@@ -146,6 +149,7 @@
 		BB6A4F1B2C1CFCFF00CB4C9E /* PermissionsSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionsSettingsView.swift; sourceTree = "<group>"; };
 		BB7CA33C2C31F1B00012E303 /* WindowManipulationObservers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowManipulationObservers.swift; sourceTree = "<group>"; };
 		BB8247782C2889B20098A440 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		BB918BB42CF7613200931236 /* CGRect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGRect.swift; sourceTree = "<group>"; };
 		BBA153F52C115DDA00119C02 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BBA153F72C11604400119C02 /* SharedPreviewWindowCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedPreviewWindowCoordinator.swift; sourceTree = "<group>"; };
 		BBA153F92C11FFD500119C02 /* consts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = consts.swift; sourceTree = "<group>"; };
@@ -183,6 +187,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		27DC8C162CFA4DA7005F8F31 /* Formatters */ = {
+			isa = PBXGroup;
+			children = (
+				27DC8C152CFA4DA7005F8F31 /* NumberFormatter+Convenience.swift */,
+			);
+			path = Formatters;
+			sourceTree = "<group>";
+		};
 		3A105FD42C1BED5B0015EC66 /* Components */ = {
 			isa = PBXGroup;
 			children = (
@@ -191,7 +203,6 @@
 				BB15E1EB2C8F8F0F002ECFB9 /* CardModifier.swift */,
 				BB750D232C8E939A00245E3E /* FluidGradient */,
 				3A1622BF2C8D579F00D318EE /* PermissionsView */,
-				BB3D6EAF2C84E58000FFE584 /* NSScreen.swift */,
 				BB04405C2C77A878009F1D33 /* Defaults */,
 				3A105FD52C1BED660015EC66 /* BlurView.swift */,
 				3A105FDC2C1C0EE20015EC66 /* DynStack.swift */,
@@ -206,6 +217,9 @@
 		3A105FD72C1BF11D0015EC66 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				BB918BB42CF7613200931236 /* CGRect.swift */,
+				27DC8C162CFA4DA7005F8F31 /* Formatters */,
+				BB3D6EAF2C84E58000FFE584 /* NSScreen.swift */,
 				BBBD4AF42C8D671A0074FFCF /* NSImage.swift */,
 				3A1622B32C8C099200D318EE /* Button Styles */,
 				BB04405F2C77AD27009F1D33 /* CodableColor.swift */,
@@ -557,11 +571,13 @@
 				BB44474F2C507F950047EB92 /* LimitedTaskGroup.swift in Sources */,
 				BBBD4AF52C8D671C0074FFCF /* NSImage.swift in Sources */,
 				BB04405E2C77A87F009F1D33 /* PreferencesProtocol.swift in Sources */,
+				27DC8C172CFA4DA7005F8F31 /* NumberFormatter+Convenience.swift in Sources */,
 				3A1622C72C8D5A5C00D318EE /* EnabledActionRowView.swift in Sources */,
 				3A1622D02C8D691700D318EE /* SquiggleDivider.swift in Sources */,
 				BB157B822C0EB29E00997315 /* DockObserver.swift in Sources */,
 				BBA153FA2C11FFD500119C02 /* consts.swift in Sources */,
 				BBA153F62C115DDA00119C02 /* AppDelegate.swift in Sources */,
+				BB918BB52CF7613400931236 /* CGRect.swift in Sources */,
 				3A1622CA2C8D5E4600D318EE /* FirstTimeIntroTabView.swift in Sources */,
 				BB15E1F72C8FC05A002ECFB9 /* UniformCardView.swift in Sources */,
 				BBA153F82C11604400119C02 /* SharedPreviewWindowCoordinator.swift in Sources */,
@@ -725,7 +741,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1.2.9;
+				CURRENT_PROJECT_VERSION = 1.3.3;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"DockDoor/Preview Content\"";
 				DEVELOPMENT_TEAM = 2Q775S63Q3;
@@ -742,7 +758,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				MARKETING_VERSION = 1.2.9;
+				MARKETING_VERSION = 1.3.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ethanbills.DockDoor;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -759,7 +775,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1.2.9;
+				CURRENT_PROJECT_VERSION = 1.3.3;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"DockDoor/Preview Content\"";
 				DEVELOPMENT_TEAM = 2Q775S63Q3;
@@ -776,7 +792,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				MARKETING_VERSION = 1.2.9;
+				MARKETING_VERSION = 1.3.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ethanbills.DockDoor;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

@@ -11,3 +11,11 @@ let kAXFullscreenAttribute = "AXFullScreen"
 // returns CoreDock orientation and pinning state
 @_silgen_name("CoreDockGetOrientationAndPinning")
 func CoreDockGetOrientationAndPinning(_ outOrientation: UnsafeMutablePointer<Int32>, _ outPinning: UnsafeMutablePointer<Int32>)
+
+// Toggles the Dock's auto-hide state
+@_silgen_name("CoreDockSetAutoHideEnabled")
+func CoreDockSetAutoHideEnabled(_ flag: Bool)
+
+// Retrieves the current auto-hide state of the Dock
+@_silgen_name("CoreDockGetAutoHideEnabled")
+func CoreDockGetAutoHideEnabled() -> Bool

@@ -24,8 +24,15 @@ struct WindowInfo: Identifiable, Hashable {
     }
 
     static func == (lhs: WindowInfo, rhs: WindowInfo) -> Bool {
-        lhs.id == rhs.id && lhs.app.processIdentifier == rhs.app.processIdentifier
+        lhs.id == rhs.id &&
+            lhs.app.processIdentifier == rhs.app.processIdentifier &&
+            lhs.isMinimized == rhs.isMinimized &&
+            lhs.isHidden == rhs.isHidden
     }
+}
+
+enum WindowAction {
+    case quit, close, minimize, toggleFullScreen, hide
 }
 
 struct CachedImage {
@@ -123,10 +130,16 @@ enum WindowUtil {
         let filter = SCContentFilter(desktopIndependentWindow: window)
         let config = SCStreamConfiguration()
 
-        let scaleFactor = getScaleFactorForWindow(window: window)
+        let nativeScaleFactor = getScaleFactorForWindow(window: window)
+        let previewScale = Int(Defaults[.windowPreviewImageScale])
 
-        let width = Int(window.frame.width * scaleFactor) / Int(Defaults[.windowPreviewImageScale])
-        let height = Int(window.frame.height * scaleFactor) / Int(Defaults[.windowPreviewImageScale])
+        // Calculate the window's true dimensions in its native screen space
+        let nativeWidth = window.frame.width * nativeScaleFactor
+        let nativeHeight = window.frame.height * nativeScaleFactor
+
+        // Apply the user's preview scale while preserving the window's native proportions
+        let width = Int(nativeWidth) / previewScale
+        let height = Int(nativeHeight) / previewScale
 
         config.width = width
         config.height = height
@@ -170,11 +183,37 @@ enum WindowUtil {
     // Helper function to get the scale factor for a given window
     private static func getScaleFactorForWindow(window: SCWindow) -> CGFloat {
         let windowFrame = window.frame
-        let containingScreen = NSScreen.screens.first { screen in
-            screen.frame.intersects(windowFrame)
-        } ?? NSScreen.main
+        let screens = NSScreen.screens
 
-        return containingScreen?.backingScaleFactor ?? 2.0
+        // If no screens found, return default scale factor
+        guard !screens.isEmpty else {
+            return NSScreen.main?.backingScaleFactor ?? 2.0
+        }
+
+        // Find all intersecting screens and their intersection areas
+        var screenIntersections: [(screen: NSScreen, area: CGFloat)] = []
+
+        for screen in screens {
+            let intersection = screen.frame.intersection(windowFrame)
+            if !intersection.isNull {
+                let intersectionArea = intersection.width * intersection.height
+                screenIntersections.append((screen, intersectionArea))
+            }
+        }
+
+        // If no intersecting screens found, use main screen or first available
+        if screenIntersections.isEmpty {
+            return NSScreen.main?.backingScaleFactor ?? screens[0].backingScaleFactor
+        }
+
+        // If only one screen intersects, use its scale factor
+        if screenIntersections.count == 1 {
+            return screenIntersections[0].screen.backingScaleFactor
+        }
+
+        // Multiple screens intersect - use the one with largest intersection area
+        let screenWithLargestIntersection = screenIntersections.max(by: { $0.area < $1.area })
+        return screenWithLargestIntersection?.screen.backingScaleFactor ?? NSScreen.main?.backingScaleFactor ?? 2.0
     }
 
     private static func getCachedImage(window: SCWindow) -> CGImage? {
@@ -249,44 +288,48 @@ enum WindowUtil {
         NSWorkspace.shared.runningApplications.first { $0.localizedName == applicationName }
     }
 
-    static func toggleMinimize(windowInfo: WindowInfo) {
+    static func toggleMinimize(windowInfo: WindowInfo) -> Bool? {
         if windowInfo.isMinimized {
             if windowInfo.app.isHidden {
                 windowInfo.app.unhide()
             }
-
             do {
                 try windowInfo.axElement.setAttribute(kAXMinimizedAttribute, false)
                 windowInfo.app.activate()
                 bringWindowToFront(windowInfo: windowInfo)
+                updateWindowDateTime(windowInfo)
+                return false // Successfully un-minimized
             } catch {
                 print("Error un-minimizing window")
+                return nil
             }
         } else {
             do {
                 try windowInfo.axElement.setAttribute(kAXMinimizedAttribute, true)
+                updateWindowDateTime(windowInfo)
+                return true // Successfully minimized
             } catch {
                 print("Error minimizing window")
+                return nil
             }
         }
-        updateWindowDateTime(windowInfo)
     }
 
-    static func toggleHidden(windowInfo: WindowInfo) {
+    static func toggleHidden(windowInfo: WindowInfo) -> Bool? {
         let newHiddenState = !windowInfo.isHidden
 
         do {
             try windowInfo.appAxElement.setAttribute(kAXHiddenAttribute, newHiddenState)
+            if !newHiddenState {
+                windowInfo.app.activate()
+                bringWindowToFront(windowInfo: windowInfo)
+            }
+            updateWindowDateTime(windowInfo)
+            return newHiddenState // Successfully toggled hidden state
         } catch {
             print("Error toggling hidden state of application")
-            return
+            return nil // Failed to toggle hidden state
         }
-
-        if !newHiddenState {
-            windowInfo.app.activate()
-            bringWindowToFront(windowInfo: windowInfo)
-        }
-        updateWindowDateTime(windowInfo)
     }
 
     static func toggleFullScreen(windowInfo: WindowInfo) {
@@ -302,6 +345,10 @@ enum WindowUtil {
     }
 
     static func bringWindowToFront(windowInfo: WindowInfo) {
+        if let appDelegate = NSApplication.shared.delegate as? AppDelegate { // clean up lingering settings pane windows which interfere with AX actions
+            appDelegate.settingsWindowController.close()
+        }
+
         do {
             // Attempt to raise and focus the specific window
             try windowInfo.axElement.performAction(kAXRaiseAction)
@@ -411,14 +458,24 @@ enum WindowUtil {
         } else {
             windowInfo.app.terminate()
         }
-
-        removeWindowFromDesktopSpaceCache(with: windowInfo.app.processIdentifier, removeAll: true)
+        purgeAppCache(with: windowInfo.app.processIdentifier)
     }
 
     // MARK: - Active Window Handling
 
     static func getAllWindowsOfAllApps() -> [WindowInfo] {
-        let windows = desktopSpaceWindowCacheManager.getAllWindows()
+        var windows = desktopSpaceWindowCacheManager.getAllWindows()
+
+        if !Defaults[.includeHiddenWindowsInSwitcher] {
+            var windowsCopy: [WindowInfo] = []
+            for window in windows {
+                if !window.isHidden, !window.isMinimized {
+                    windowsCopy.append(window)
+                }
+            }
+
+            windows = windowsCopy
+        }
 
         // If there are at least two windows, swap the first and second
         if windows.count >= 2, Defaults[.sortWindowsByDate] {
@@ -442,11 +499,13 @@ enum WindowUtil {
         // Wait for all tasks to complete
         _ = try await group.waitForAll()
 
-        let windows = desktopSpaceWindowCacheManager.readCache(pid: app.processIdentifier)
+        if let purifiedWindows = await WindowUtil.purifyAppCache(with: app.processIdentifier, removeAll: false) {
+            let windows = purifiedWindows.sorted(by: { $0.date > $1.date })
+            guard !Defaults[.ignoreAppsWithSingleWindow] || windows.count > 1 else { return [] }
+            return windows
+        }
 
-        guard !Defaults[.ignoreAppsWithSingleWindow] || windows.count > 1 else { return [] }
-
-        return windows.sorted(by: { $0.date > $1.date })
+        return []
     }
 
     static func updateAllWindowsInCurrentSpace() async {
@@ -542,22 +601,28 @@ enum WindowUtil {
         desktopSpaceWindowCacheManager.removeFromCache(pid: pid, windowId: windowId)
     }
 
-    static func removeWindowFromDesktopSpaceCache(with pid: pid_t, removeAll: Bool) {
+    static func purifyAppCache(with pid: pid_t, removeAll: Bool) async -> Set<WindowInfo>? {
         if removeAll {
             desktopSpaceWindowCacheManager.writeCache(pid: pid, windowSet: [])
+            return nil
         } else {
-            Task {
-                let existingWindowsSet = desktopSpaceWindowCacheManager.readCache(pid: pid)
-                if existingWindowsSet.isEmpty {
-                    return
-                }
-                for window in existingWindowsSet {
-                    if !isValidElement(window.axElement) {
-                        desktopSpaceWindowCacheManager.removeFromCache(pid: pid, windowId: window.id)
-                        return
-                    }
+            let existingWindowsSet = desktopSpaceWindowCacheManager.readCache(pid: pid)
+            if existingWindowsSet.isEmpty {
+                return nil
+            }
+
+            var purifiedSet = existingWindowsSet
+            for window in existingWindowsSet {
+                if !isValidElement(window.axElement) {
+                    purifiedSet.remove(window)
+                    desktopSpaceWindowCacheManager.removeFromCache(pid: pid, windowId: window.id)
                 }
             }
+            return purifiedSet
         }
+    }
+
+    static func purgeAppCache(with pid: pid_t) {
+        desktopSpaceWindowCacheManager.writeCache(pid: pid, windowSet: [])
     }
 }

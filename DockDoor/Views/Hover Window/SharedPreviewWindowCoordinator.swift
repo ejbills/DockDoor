@@ -37,6 +37,7 @@ final class SharedPreviewWindowCoordinator: NSWindow {
     static let shared = SharedPreviewWindowCoordinator()
 
     let windowSwitcherCoordinator = ScreenCenteredFloatingWindowCoordinator()
+    private let dockManager = DockAutoHideManager()
 
     private var appName: String = ""
     private var windows: [WindowInfo] = []
@@ -55,6 +56,10 @@ final class SharedPreviewWindowCoordinator: NSWindow {
     private init() {
         super.init(contentRect: .zero, styleMask: .borderless, backing: .buffered, defer: false)
         setupWindow()
+    }
+
+    deinit {
+        dockManager.cleanup()
     }
 
     // Setup window properties
@@ -78,6 +83,7 @@ final class SharedPreviewWindowCoordinator: NSWindow {
             windows.removeAll()
             windowSwitcherCoordinator.setIndex(to: 0)
             windowSwitcherCoordinator.setShowing(.both, toState: false)
+            dockManager.restoreDockState()
             orderOut(nil)
         }
     }
@@ -225,7 +231,7 @@ final class SharedPreviewWindowCoordinator: NSWindow {
                 setFrame(frame, display: true)
             } else {
                 NSAnimationContext.runAnimationGroup({ context in
-                    context.duration = 0.2
+                    context.duration = 0.15
                     context.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
                     self.animator().setFrame(frame, display: true)
                 }, completionHandler: nil)
@@ -241,11 +247,21 @@ final class SharedPreviewWindowCoordinator: NSWindow {
                     onWindowTap: (() -> Void)? = nil)
     {
         let now = Date()
-        let delay = overrideDelay ? 0.0 : Defaults[.hoverWindowOpenDelay]
+        let naturalDelay = if Defaults[.lateralMovement] {
+            Defaults[.hoverWindowOpenDelay] == 0 ? 0.2 : Defaults[.hoverWindowOpenDelay]
+        } else {
+            Defaults[.hoverWindowOpenDelay]
+        }
+        let delay = overrideDelay ? 0.0 : naturalDelay
 
         debounceWorkItem?.cancel()
 
         let workItem = DispatchWorkItem { [weak self] in
+            // prevent preview from showing if mouse has moved significantly from original position
+            if let mouseLocation, mouseLocation.distance(to: NSEvent.mouseLocation) > 100 {
+                return
+            }
+
             self?.performShowWindow(appName: appName, windows: windows, mouseLocation: mouseLocation, mouseScreen: mouseScreen,
                                     iconRect: iconRect, centeredHoverWindowState: centeredHoverWindowState, onWindowTap: onWindowTap)
         }
@@ -273,10 +289,11 @@ final class SharedPreviewWindowCoordinator: NSWindow {
     {
         // ensure view isn't transparent
         alphaValue = 1.0
+        guard !windows.isEmpty else { return }
+
+        dockManager.preventDockHiding(centeredHoverWindowState != nil)
 
         let shouldCenterOnScreen = centeredHoverWindowState != .none
-
-        guard !windows.isEmpty else { return }
 
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }

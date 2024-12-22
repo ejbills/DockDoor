@@ -1,4 +1,5 @@
 import Cocoa
+import Defaults
 
 enum DockPosition {
     case top
@@ -20,5 +21,35 @@ class DockUtils {
         case 4: return .right
         default: return .unknown
         }
+    }
+}
+
+final class DockAutoHideManager {
+    private var wasAutoHideEnabled: Bool?
+    private var isManagingDock: Bool = false
+
+    func preventDockHiding(_ windowSwitcherActive: Bool = false) {
+        guard Defaults[.preventDockHide], !windowSwitcherActive else { return }
+        // Only manage dock if auto-hide is currently enabled
+        let currentAutoHideState = CoreDockGetAutoHideEnabled()
+
+        if currentAutoHideState {
+            wasAutoHideEnabled = currentAutoHideState
+            isManagingDock = true
+            CoreDockSetAutoHideEnabled(false)
+        }
+    }
+
+    func restoreDockState() {
+        // Only restore if we were managing the dock
+        if isManagingDock, let wasEnabled = wasAutoHideEnabled {
+            CoreDockSetAutoHideEnabled(wasEnabled)
+            wasAutoHideEnabled = nil
+            isManagingDock = false
+        }
+    }
+
+    func cleanup() {
+        restoreDockState()
     }
 }

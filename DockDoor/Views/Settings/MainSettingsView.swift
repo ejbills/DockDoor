@@ -2,13 +2,6 @@ import Defaults
 import LaunchAtLogin
 import SwiftUI
 
-var decimalFormatter: NumberFormatter {
-    let formatter = NumberFormatter()
-    formatter.numberStyle = .decimal
-    formatter.maximumFractionDigits = 1
-    return formatter
-}
-
 struct MainSettingsView: View {
     @Default(.hoverWindowOpenDelay) var hoverWindowOpenDelay
     @Default(.screenCaptureCacheLifespan) var screenCaptureCacheLifespan
@@ -20,6 +13,8 @@ struct MainSettingsView: View {
     @Default(.fadeOutDuration) var fadeOutDuration
     @Default(.sortWindowsByDate) var sortWindowsByDate
     @Default(.ignoreAppsWithSingleWindow) var ignoreAppsWithSingleWindow
+    @Default(.lateralMovement) var lateralMovement
+    @Default(.preventDockHide) var preventDockHide
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -61,17 +56,37 @@ struct MainSettingsView: View {
 
             Divider()
 
+            VStack(alignment: .leading) {
+                Toggle(isOn: $lateralMovement, label: {
+                    Text("Keep previews visible during lateral movement")
+                })
+                Text("Prevents previews from disappearing when moving sideways to adjacent windows")
+                    .font(.footnote)
+                    .foregroundColor(.gray)
+            }
+
+            VStack(alignment: .leading) {
+                Toggle(isOn: $preventDockHide, label: {
+                    Text("Prevent dock from hiding during previews")
+                })
+                Text("Only takes effect when dock auto-hide is enabled")
+                    .font(.footnote)
+                    .foregroundColor(.gray)
+            }
+
             sliderSetting(title: String(localized: "Preview Window Open Delay"),
                           value: $hoverWindowOpenDelay,
                           range: 0 ... 2,
                           step: 0.1,
-                          unit: String(localized: "seconds"))
+                          unit: String(localized: "seconds"),
+                          formatter: NumberFormatter.oneDecimalFormatter)
 
             sliderSetting(title: String(localized: "Preview Window Fade Out Duration"),
                           value: $fadeOutDuration,
                           range: 0 ... 2,
                           step: 0.1,
-                          unit: String(localized: "seconds"))
+                          unit: String(localized: "seconds"),
+                          formatter: NumberFormatter.oneDecimalFormatter)
 
             VStack(alignment: .leading) {
                 HStack {
@@ -89,7 +104,7 @@ struct MainSettingsView: View {
                     .foregroundColor(.gray)
             }
 
-            SizePickerView()
+            WindowSizeSliderView()
 
             sliderSetting(title: String(localized: "Window Image Cache Lifespan"),
                           value: $screenCaptureCacheLifespan,
@@ -123,7 +138,8 @@ struct MainSettingsView: View {
                           value: $tapEquivalentInterval,
                           range: 0 ... 2,
                           step: 0.1,
-                          unit: String(localized: "seconds"))
+                          unit: String(localized: "seconds"),
+                          formatter: NumberFormatter.oneDecimalFormatter)
                 .disabled(previewHoverAction == .none)
         }
         .padding(20)
@@ -147,46 +163,29 @@ struct MainSettingsView: View {
     }
 }
 
-struct SizePickerView: View {
+struct WindowSizeSliderView: View {
     @Default(.sizingMultiplier) var sizingMultiplier
-    @Default(.bufferFromDock) var bufferFromDock
 
     var body: some View {
-        VStack(spacing: 20) {
-            Picker("Window Size", selection: $sizingMultiplier) {
-                ForEach(2 ... 10, id: \.self) { size in
-                    Text(getLabel(for: CGFloat(size))).tag(CGFloat(size))
+        VStack(alignment: .leading) {
+            HStack {
+                Slider(value: $sizingMultiplier, in: 2 ... 10, step: 1) {
+                    Text("Window Preview Size")
                 }
-            }
-            .scaledToFit()
-            .onChange(of: sizingMultiplier) { _ in
-                SharedPreviewWindowCoordinator.shared.windowSize = getWindowSize()
-            }
-        }
-    }
+                .buttonStyle(PlainButtonStyle())
+                .frame(width: 400)
 
-    private func getLabel(for size: CGFloat) -> String {
-        switch size {
-        case 2:
-            String(localized: "Large", comment: "Window size option")
-        case 3:
-            String(localized: "Default (Medium Large)", comment: "Window size option")
-        case 4:
-            String(localized: "Medium", comment: "Window size option")
-        case 5:
-            String(localized: "Small", comment: "Window size option")
-        case 6:
-            String(localized: "Extra Small", comment: "Window size option")
-        case 7:
-            String(localized: "Extra Extra Small", comment: "Window size option")
-        case 8:
-            String(localized: "What is this? A window for ANTS?", comment: "Window size option")
-        case 9:
-            String(localized: "Subatomic", comment: "Window size option")
-        case 10:
-            String(localized: "Can you even see this?", comment: "Window size option")
-        default:
-            "Unknown Size"
+                Text("1/\(Int(sizingMultiplier))x")
+                    .frame(width: 50)
+                    .foregroundColor(.gray)
+            }
+
+            Text("Preview windows are sized to 1/\(Int(sizingMultiplier)) of your screen dimensions")
+                .font(.footnote)
+                .foregroundColor(.gray)
+        }
+        .onChange(of: sizingMultiplier) { _ in
+            SharedPreviewWindowCoordinator.shared.windowSize = getWindowSize()
         }
     }
 }
