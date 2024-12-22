@@ -168,8 +168,11 @@ enum WindowUtil {
         }
 
         // Use ScreenCaptureKit's API if available, otherwise fall back to a legacy (deprecated) API
-
-        let image = try await captureImageLegacy(of: window)
+        let image: CGImage = if #available(macOS 14.0, *) {
+            try await captureImageModern(of: window)
+        } else {
+            try await captureImageLegacy(of: window)
+        }
 
         let cachedImage = CachedImage(image: image, timestamp: Date(), windowname: window.title)
         imageCache[window.windowID] = cachedImage
@@ -180,16 +183,37 @@ enum WindowUtil {
     // Helper function to get the scale factor for a given window
     private static func getScaleFactorForWindow(window: SCWindow) -> CGFloat {
         let windowFrame = window.frame
+        let screens = NSScreen.screens
 
-        // Find the specific screen containing this window
-        guard let containingScreen = NSScreen.screens.first(where: { screen in
-            screen.frame.intersects(windowFrame)
-        }) else {
+        // If no screens found, return default scale factor
+        guard !screens.isEmpty else {
             return NSScreen.main?.backingScaleFactor ?? 2.0
         }
 
-        // Get this screen's native backing scale factor
-        return containingScreen.backingScaleFactor
+        // Find all intersecting screens and their intersection areas
+        var screenIntersections: [(screen: NSScreen, area: CGFloat)] = []
+
+        for screen in screens {
+            let intersection = screen.frame.intersection(windowFrame)
+            if !intersection.isNull {
+                let intersectionArea = intersection.width * intersection.height
+                screenIntersections.append((screen, intersectionArea))
+            }
+        }
+
+        // If no intersecting screens found, use main screen or first available
+        if screenIntersections.isEmpty {
+            return NSScreen.main?.backingScaleFactor ?? screens[0].backingScaleFactor
+        }
+
+        // If only one screen intersects, use its scale factor
+        if screenIntersections.count == 1 {
+            return screenIntersections[0].screen.backingScaleFactor
+        }
+
+        // Multiple screens intersect - use the one with largest intersection area
+        let screenWithLargestIntersection = screenIntersections.max(by: { $0.area < $1.area })
+        return screenWithLargestIntersection?.screen.backingScaleFactor ?? NSScreen.main?.backingScaleFactor ?? 2.0
     }
 
     private static func getCachedImage(window: SCWindow) -> CGImage? {
