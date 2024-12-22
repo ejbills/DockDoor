@@ -5,6 +5,7 @@ import Sparkle
 extension Settings.PaneIdentifier {
     static let general = Self("general")
     static let appearance = Self("appearance")
+    static let filters = Self("filters")
     static let permissions = Self("permissions")
     static let updates = Self("updates")
     static let alttab = Self("alttab")
@@ -42,6 +43,18 @@ let WindowSwitcherSettingsViewController: () -> SettingsPane = {
         toolbarIcon: NSImage(systemSymbolName: "text.and.command.macwindow", accessibilityDescription: String(localized: "Windows switching settings"))!
     ) {
         WindowSwitcherSettingsView()
+    }
+
+    return Settings.PaneHostingController(pane: paneView)
+}
+
+let FiltersSettingsViewController: () -> SettingsPane = {
+    let paneView = Settings.Pane(
+        identifier: .filters,
+        title: String(localized: "Filters", comment: "Filters tab title"),
+        toolbarIcon: NSImage(systemSymbolName: "air.purifier", accessibilityDescription: String(localized: "Filters settings"))!
+    ) {
+        FiltersSettingsView()
     }
 
     return Settings.PaneHostingController(pane: paneView)

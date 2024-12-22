@@ -16,8 +16,6 @@
         <h1>DockDoor</h1>
     </header>
     <main>
-        <!-- For those who haven't activated JavaScript in their browser. -->
-        <!-- The link points to a method on how to activate JavaScript. -->
         <noscript>
             It looks like you do not have JavaScript activated. You can activate it using this <a href="https://www.enable-javascript.com">tutorial</a>.
             If you find yourself unable to activate JavaScript, try on another computer or browser.
@@ -67,6 +65,15 @@
 
             <hr>
 
+            <h1 class="s-intro" id="window-drag" data-translate="windowDragHeading"></h1>
+            <p class="explanation" data-translate="windowDragText"></p>
+            <video width="100%" autoplay loop playsinline muted>
+                <source src="/resources/window drag.gif" type="video/gif">
+                <p>Video demonstration of window dragging feature in DockDoor.</p>
+            </video>
+
+            <hr>
+
             <h1 class="s-intro" id="5" data-translate="5Heading"></h1>
             <p class="explanation" data-translate="5Text"></p>
             <img src="/resources/largePreviewDemo.png" alt="A screenshot showing the large preview option." class="responsive-img">
@@ -91,6 +98,7 @@
             <video width="100%" autoplay loop playsinline muted>
                 <source src="/resources/windowSwitcherDemo1920.mp4" type="video/mp4">
             </video>
+
             <hr>
 
             <h1 class="s-intro" id="download" data-translate="downloadHeading"></h1>
@@ -123,6 +131,7 @@
 
             <h1 class="s-intro" id="contribute" data-translate="contributeHeading"></h1>
             <p class="explanation"><span data-translate="contributeText1"></span><br><span data-translate="contributeText2"></span><br><span data-translate="contributeText3"></span> <a href="https://github.com/ejbills/DockDoor?tab=readme-ov-file#contributing"><img src="https://upload.wikimedia.org/wikipedia/commons/b/b3/Echo_link-blue_icon.svg" alt="Chainlink icon" style="display:inline;" width="auto"></a></p>
+
             <hr>
 
             <h1 class="s-intro" id="faq" data-translate="faqHeading"></h1>
@@ -158,13 +167,11 @@
         </div>
             <p><span data-translate="faqDocumentation"></span> <a href="https://github.com/ejbills/DockDoor/issues"><img src="https://upload.wikimedia.org/wikipedia/commons/b/b3/Echo_link-blue_icon.svg" alt="Chainlink icon" style="display:inline;" width="auto"></a></p>
         </div>
-
     </main>
 
     <script type="text/JavaScript">
         document.getElementById('languageButton').addEventListener('click', function() {
             var dropdownContent = document.getElementById('dropdownContent');
-            // Toggle display of the dropdown menu
             if (dropdownContent.style.display === 'block') {
                 dropdownContent.style.display = 'none';
             } else {
@@ -177,7 +184,7 @@
 
         let variationsIndex = 0;
         setInterval(function(){
-            variationsIndex = (variationsIndex + 1)  % variationsimages.length;
+            variationsIndex = (variationsIndex + 1) % variationsimages.length;
             variationsimage.src = variationsimages[variationsIndex];
         }, 500);
 
@@ -190,7 +197,6 @@
             apptitleimage.src = apptitleimages[apptitleIndex];
         }, 1000);
     </script>
-
 
     <script src="/translate.js"></script>
     <script src="/dark-mode.js"></script>

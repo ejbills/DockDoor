@@ -28,6 +28,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         var panes: [SettingsPane] = [
             GeneralSettingsViewController(),
             AppearanceSettingsViewController(),
+            FiltersSettingsViewController(),
             WindowSwitcherSettingsViewController(),
             PermissionsSettingsViewController(),
             HelpSettingsViewController(),
@@ -76,6 +77,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             if Defaults[.enableWindowSwitcher] {
                 keybindHelper = KeybindHelper.shared
             }
+        }
+
+        Task(priority: .high) { [weak self] in
+            guard self != nil else { return }
+
+            await WindowUtil.updateAllWindowsInCurrentSpace()
         }
     }
 

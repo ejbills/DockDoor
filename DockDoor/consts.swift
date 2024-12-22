@@ -46,6 +46,11 @@ extension Defaults.Keys {
 
     static let trafficLightButtonsVisibility = Key<TrafficLightButtonsVisibility>("trafficLightButtonsVisibility", default: .dimmedOnPreviewHover)
     static let trafficLightButtonsPosition = Key<TrafficLightButtonsPosition>("trafficLightButtonsPosition", default: .topLeft)
+
+    // MARK: - Filters
+
+    static let appNameFilters = Key<[String]>("appNameFilters", default: [])
+    static let windowTitleFilters = Key<[String]>("windowTitleFilters", default: [])
 }
 
 enum WindowTitleDisplayCondition: String, CaseIterable, Defaults.Serializable {

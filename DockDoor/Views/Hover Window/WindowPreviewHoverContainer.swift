@@ -17,10 +17,13 @@ struct WindowPreviewHoverContainer: View {
     @Default(.windowTitlePosition) var windowTitlePosition
 
     @State private var windowStates: [WindowInfo]
+    @State private var draggedWindowIndex: Int? = nil
+    @State private var isDragging = false
 
     @State private var showWindows: Bool = false
     @State private var hasAppeared: Bool = false
     @State private var appIcon: NSImage? = nil
+    @State private var hoveringWindowTitle: Bool = false
 
     init(appName: String,
          windows: [WindowInfo],
@@ -68,14 +71,14 @@ struct WindowPreviewHoverContainer: View {
         let orientationIsHorizontal = dockPosition == .bottom || windowSwitcherCoordinator.windowSwitcherActive
 
         ZStack {
-            if let mouseLocation {
+            if let mouseLocation, !isDragging {
                 WindowDismissalContainer(appName: appName, mouseLocation: mouseLocation,
                                          bestGuessMonitor: bestGuessMonitor, dockPosition: dockPosition)
             }
 
             ScrollViewReader { scrollProxy in
                 ScrollView(orientationIsHorizontal ? .horizontal : .vertical, showsIndicators: false) {
-                    DynStack(direction: orientationIsHorizontal ? .horizontal : .vertical, spacing: 16) {
+                    DynStack(direction: orientationIsHorizontal ? .horizontal : .vertical, spacing: -20) {
                         ForEach(windowStates.indices, id: \.self) { index in
                             WindowPreview(
                                 windowInfo: windowStates[index],
@@ -91,36 +94,88 @@ struct WindowPreviewHoverContainer: View {
                                 currIndex: windowSwitcherCoordinator.currIndex,
                                 windowSwitcherActive: windowSwitcherCoordinator.windowSwitcherActive
                             )
+                            .opacity(draggedWindowIndex == index ? 0.3 : 1.0)
                             .id("\(appName)-\(index)")
+                            .gesture(
+                                DragGesture(minimumDistance: 3, coordinateSpace: .global)
+                                    .onChanged { value in
+                                        if draggedWindowIndex == nil {
+                                            draggedWindowIndex = index
+                                            isDragging = true
+                                            DragPreviewCoordinator.shared.startDragging(
+                                                windowInfo: windowStates[index],
+                                                at: NSEvent.mouseLocation
+                                            )
+                                        }
+                                        if draggedWindowIndex == index {
+                                            DragPreviewCoordinator.shared.updatePreviewPosition(to: NSEvent.mouseLocation)
+                                        }
+                                    }
+                                    .onEnded { value in
+                                        if draggedWindowIndex == index {
+                                            handleWindowDrop(at: NSEvent.mouseLocation, for: index)
+                                            DragPreviewCoordinator.shared.endDragging()
+                                            draggedWindowIndex = nil
+                                            isDragging = false
+                                        }
+                                    }
+                            )
                         }
-                    }
-                    .padding(20)
-                    .onAppear {
-                        if !hasAppeared {
-                            hasAppeared.toggle()
+                        .padding(20)
+                        .onAppear {
+                            if !hasAppeared {
+                                hasAppeared.toggle()
+                                runUIUpdates()
+                            }
+                        }
+                        .onChange(of: windowSwitcherCoordinator.currIndex) { newIndex in
+                            withAnimation {
+                                scrollProxy.scrollTo("\(appName)-\(newIndex)", anchor: .center)
+                            }
+                        }
+                        .onChange(of: windows) { _ in
                             runUIUpdates()
                         }
                     }
-                    .onChange(of: windowSwitcherCoordinator.currIndex) { newIndex in
-                        withAnimation {
-                            scrollProxy.scrollTo("\(appName)-\(newIndex)", anchor: .center)
-                        }
-                    }
-                    .onChange(of: windows) { _ in
-                        runUIUpdates()
-                    }
+                    .opacity(showWindows ? 1 : 0.8)
                 }
-                .opacity(showWindows ? 1 : 0.8)
+                .padding(.top, (!windowSwitcherCoordinator.windowSwitcherActive && appNameStyle == .default && showAppName) ? 25 : 0)
+                .dockStyle(cornerRadius: 16)
+                .overlay(alignment: .topLeading) {
+                    hoverTitleBaseView(labelSize: measureString(appName, fontSize: 14))
+                        .onHover { isHovered in
+                            withAnimation(.snappy) { hoveringWindowTitle = isHovered }
+                        }
+                }
+                .padding(.top, (!windowSwitcherCoordinator.windowSwitcherActive && appNameStyle == .popover && showAppName) ? 30 : 0)
+                .padding(.all, 24)
+                .frame(maxWidth: bestGuessMonitor.visibleFrame.width, maxHeight: bestGuessMonitor.visibleFrame.height)
             }
         }
-        .padding(.top, (!windowSwitcherCoordinator.windowSwitcherActive && appNameStyle == .default && showAppName) ? 25 : 0) // Provide space above the window preview for the Embedded (default) title style when hovering over the Dock.
-        .dockStyle(cornerRadius: 16)
-        .overlay(alignment: .topLeading) {
-            hoverTitleBaseView(labelSize: measureString(appName, fontSize: 14))
+    }
+
+    private func handleWindowDrop(at location: CGPoint, for index: Int) {
+        guard index < windowStates.count else { return }
+        let window = windowStates[index]
+
+        // Get the screen containing the drop location
+        let currentScreen = NSScreen.screenContainingMouse(location)
+
+        // Convert drop location to global coordinates
+        let globalLocation = DockObserver.cgPointFromNSPoint(location, forScreen: currentScreen)
+
+        // Calculate position (placing from top left corner)
+        let finalPosition = CGPoint(
+            x: globalLocation.x,
+            y: globalLocation.y
+        )
+
+        // Move the window
+        if let positionValue = AXValue.from(point: finalPosition) {
+            try? window.axElement.setAttribute(kAXPositionAttribute, positionValue)
+            WindowUtil.bringWindowToFront(windowInfo: window)
+            onWindowTap?()
         }
-        .padding(.top, (!windowSwitcherCoordinator.windowSwitcherActive && appNameStyle == .popover && showAppName) ? 30 : 0) // Provide empty space above the window preview for the Popover title style when hovering over the Dock
-        .padding(.all, 24)
-        .frame(maxWidth: bestGuessMonitor.visibleFrame.width, maxHeight: bestGuessMonitor.visibleFrame.height)
     }
 
     @ViewBuilder
@@ -229,7 +284,6 @@ struct WindowPreviewHoverContainer: View {
 
     private func runAnimation() {
         showWindows = false
-
         withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
             showWindows = true
         }

@@ -16,6 +16,9 @@ class WindowManipulationObservers {
     }
 
     deinit {
+        let notificationCenter = NSWorkspace.shared.notificationCenter
+        notificationCenter.removeObserver(self)
+
         for (pid, observer) in observers {
             let appElement = AXUIElementCreateApplication(pid)
             AXObserverRemoveNotification(observer, appElement, kAXWindowCreatedNotification as CFString)
@@ -37,6 +40,8 @@ class WindowManipulationObservers {
         notificationCenter.addObserver(self, selector: #selector(appDidLaunch(_:)), name: NSWorkspace.didLaunchApplicationNotification, object: nil)
         notificationCenter.addObserver(self, selector: #selector(appDidTerminate(_:)), name: NSWorkspace.didTerminateApplicationNotification, object: nil)
         notificationCenter.addObserver(self, selector: #selector(appDidActivate(_:)), name: NSWorkspace.didActivateApplicationNotification, object: nil)
+
+        notificationCenter.addObserver(self, selector: #selector(activeSpaceDidChange(_:)), name: NSWorkspace.activeSpaceDidChangeNotification, object: nil)
 
         // Set up observers for already running applications
         for app in NSWorkspace.shared.runningApplications {
@@ -70,6 +75,13 @@ class WindowManipulationObservers {
         }
 
         WindowUtil.updateWindowDateTime(for: app)
+    }
+
+    @objc private func activeSpaceDidChange(_ notification: Notification) {
+        Task(priority: .high) { [weak self] in
+            guard self != nil else { return }
+            await WindowUtil.updateAllWindowsInCurrentSpace()
+        }
     }
 
     private func createObserverForApp(_ app: NSRunningApplication) {
