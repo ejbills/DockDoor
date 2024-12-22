@@ -20,7 +20,7 @@
 
 **DockDoor** is a macOS application that adds a much-needed feature to your Mac: Dock previews.
 Developed with Swift and SwiftUI, it offers seamless integration with macOS. DockDoor is designed for ease of use and intuitive interactions.
-As an open-source project, it welcomes contributions from developers to enhance the application’s functionality, performance and user experience.
+As an open-source project, it welcomes contributions from developers to enhance the application's functionality, performance and user experience.
 
 Minimum macOS version:
 - 1.1.5 and older: **macOS 14 Sonoma**
@@ -52,13 +52,25 @@ brew install --cask dockdoor
 ## Usage
 
 ### Dock Peek feature
-Hover over any application’s icon in the Dock to see its open windows.
+Hover over any application's icon in the Dock to see its open windows.
 Each traffic light button you see serves an intuitive function.
 > [!TIP]
-> Hold **`Option`** (⌥) while clicking the **`Quit`** button to **force quit** the window’s application.
+> Hold **`Option`** (⌥) while clicking the **`Quit`** button to **force quit** the window's application.
 <p align="center">
   <img width="400" height="auto" src="./resources/dockPeekCommented.png">
 </p>
+
+### Window Dragging
+DockDoor allows you to directly drag windows from their previews to reposition them on your desktop:
+
+<p align="center">
+  <img width="400" height="auto" src="./resources/window drag.gif">
+</p>
+
+Key features:
+- Drag windows directly from DockDoor previews to reposition them
+- Move windows without needing to activate them first
+- Seamlessly integrate with macOS's native window management
 
 ### Windows-like `Alt` + `Tab` window switcher
 With the default settings, hold down `Option` (⌥) and press `Tab` (⇥) repeatedly until the desired window is highlighted. To go back, press `Shift` (⇧) in addition to `Tab`.
@@ -70,7 +82,6 @@ Release both keys to switch to the selected window.
 - Press a single key on your keyboard
 - Custom keybind is set!
 ![Set keybind](./resources/setKeybind.gif)
-
 
 ## Frequently Asked Questions
 
@@ -84,9 +95,9 @@ You can either wait for the application to become responsive again, or force qui
  
 ## Contributing
 
-You can either contribute to DockDoor’s code, or help translating the application or the website.
+You can either contribute to DockDoor's code, or help translating the application or the website.
 
-### DockDoor’s code
+### DockDoor's code
 
 #### Prerequisites
 
@@ -103,7 +114,7 @@ You can either contribute to DockDoor’s code, or help translating the applicat
 
 #### How to Contribute
 
-Contributions to DockDoor are welcome! Here’s how you can get started:
+Contributions to DockDoor are welcome! Here's how you can get started:
 
 1. **Branching**
     - Base all new features off of `main`.
@@ -127,7 +138,7 @@ https://crowdin.com/project/dockdoor
 
 ### Translating the website (https://dockdoor.net)
 
-To enhance web communication, we invite you to help translate the project’s website, https://dockdoor.net, with the following link: https://crowdin.com/project/dockdoor-website.
+To enhance web communication, we invite you to help translate the project's website, https://dockdoor.net, with the following link: https://crowdin.com/project/dockdoor-website.
 
 **But before you begin translating**, please consider the following points:
 - The strings contain **basic HTML tags**. It is recommended to have **some familiarity with HTML**. You can find many tutorials online, and HTML is particularly easy to learn.
@@ -138,4 +149,4 @@ To enhance web communication, we invite you to help translate the project’s we
 > Click on the tags to paste them directly into your translation. The same process also works for special codes.
 
 - There are a few `<span>` tags (e.g., `<span class='yellow-highlight'>` `</span>`). Copy them **exactly** as they appear in the source language.
-- **Escape your quotation marks** using `\` before them! If you don’t, translations might fail to render.
+- **Escape your quotation marks** using `\` before them! If you don't, translations might fail to render.
