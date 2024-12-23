@@ -13,6 +13,7 @@ struct AppearanceSettingsView: View {
     @Default(.windowTitlePosition) var windowTitlePosition
     @Default(.trafficLightButtonsVisibility) var trafficLightButtonsVisibility
     @Default(.trafficLightButtonsPosition) var trafficLightButtonsPosition
+    @Default(.selectionOpacity) var selectionOpacity
 
     @State private var previousTrafficLightButtonsPosition: TrafficLightButtonsPosition
     @State private var previousWindowTitlePosition: WindowTitlePosition
@@ -31,6 +32,13 @@ struct AppearanceSettingsView: View {
             Toggle(isOn: $uniformCardRadius, label: {
                 Text("Use Uniform Image Preview Radius")
             })
+
+            sliderSetting(title: String(localized: "Window Selection Background Opacity"),
+                          value: $selectionOpacity,
+                          range: 0 ... 1,
+                          step: 0.05,
+                          unit: "",
+                          formatter: NumberFormatter.percentFormatter)
 
             Picker("Traffic Light Buttons Visibility", selection: $trafficLightButtonsVisibility) {
                 ForEach(TrafficLightButtonsVisibility.allCases, id: \.self) { visibility in
