@@ -23,12 +23,12 @@ struct DynStack<C: View>: View {
             VStack(alignment: .leading, spacing: spacing) {
                 content()
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: alignment)
+            .frame(alignment: alignment)
         } else {
             HStack(alignment: .top, spacing: spacing) {
                 content()
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: alignment)
+            .frame(alignment: alignment)
         }
     }
 }

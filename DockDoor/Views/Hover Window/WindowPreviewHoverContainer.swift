@@ -71,26 +71,19 @@ struct WindowPreviewHoverContainer: View {
     var body: some View {
         let orientationIsHorizontal = dockPosition == .bottom || windowSwitcherCoordinator.windowSwitcherActive
 
-        ZStack {
-            if let mouseLocation, !isDragging {
-                WindowDismissalContainer(appName: appName, mouseLocation: mouseLocation,
-                                         bestGuessMonitor: bestGuessMonitor, dockPosition: dockPosition)
-            }
-
-            ScrollViewReader { scrollProxy in
-                buildFlowStack(windows: windowStates, scrollProxy: scrollProxy, orientationIsHorizontal)
-                    .padding(.top, (!windowSwitcherCoordinator.windowSwitcherActive && appNameStyle == .default && showAppName) ? 25 : 0)
-                    .dockStyle(cornerRadius: 16)
-                    .overlay(alignment: .topLeading) {
-                        hoverTitleBaseView(labelSize: measureString(appName, fontSize: 14))
-                            .onHover { isHovered in
-                                withAnimation(.snappy) { hoveringWindowTitle = isHovered }
-                            }
-                    }
-                    .padding(.top, (!windowSwitcherCoordinator.windowSwitcherActive && appNameStyle == .popover && showAppName) ? 30 : 0)
-                    .padding(.all, 24)
-                    .frame(maxWidth: bestGuessMonitor.visibleFrame.width, maxHeight: bestGuessMonitor.visibleFrame.height)
-            }
+        ScrollViewReader { scrollProxy in
+            buildFlowStack(windows: windowStates, scrollProxy: scrollProxy, orientationIsHorizontal)
+                .padding(.top, (!windowSwitcherCoordinator.windowSwitcherActive && appNameStyle == .default && showAppName) ? 25 : 0)
+                .overlay(alignment: .topLeading) {
+                    hoverTitleBaseView(labelSize: measureString(appName, fontSize: 14))
+                        .onHover { isHovered in
+                            withAnimation(.snappy) { hoveringWindowTitle = isHovered }
+                        }
+                }
+                .padding(.top, (!windowSwitcherCoordinator.windowSwitcherActive && appNameStyle == .popover && showAppName) ? 30 : 0)
+                .dockStyle(cornerRadius: 16)
+                .padding(.all, 24)
+                .frame(maxWidth: bestGuessMonitor.visibleFrame.width, maxHeight: bestGuessMonitor.visibleFrame.height)
         }
     }
 
@@ -324,6 +317,13 @@ struct WindowPreviewHoverContainer: View {
         }
         .onChange(of: windows) { _ in
             runUIUpdates()
+        }
+        .overlay {
+            if let mouseLocation, !isDragging {
+                WindowDismissalContainer(appName: appName, mouseLocation: mouseLocation,
+                                         bestGuessMonitor: bestGuessMonitor, dockPosition: dockPosition)
+                    .allowsHitTesting(false)
+            }
         }
     }
 
