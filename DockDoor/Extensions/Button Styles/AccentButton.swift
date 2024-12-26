@@ -7,8 +7,8 @@ struct AccentButtonStyle: ButtonStyle {
     @State private var hovering = false
     func makeBody(configuration: Self.Configuration) -> some View {
         configuration.label
-            .padding(.horizontal, small ? 12 : 16)
-            .padding(.vertical, small ? 6 : 8)
+            .padding(.horizontal, small ? 8 : 16)
+            .padding(.vertical, small ? 4 : 8)
             .background(
                 color.lighter(by: hovering && !configuration.isPressed ? 0.05 : 0),
                 in: RoundedRectangle(cornerRadius: 12, style: .continuous)
@@ -18,6 +18,6 @@ struct AccentButtonStyle: ButtonStyle {
                 hovering = newHovering
             }
             .foregroundStyle(.white)
-            .font(.system(size: small ? 13 : 14, weight: .medium))
+            .font(.system(size: small ? 10 : 14, weight: .medium))
     }
 }

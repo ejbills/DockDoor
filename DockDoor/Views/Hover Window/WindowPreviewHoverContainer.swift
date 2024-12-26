@@ -23,6 +23,7 @@ struct WindowPreviewHoverContainer: View {
     @State private var showWindows: Bool = false
     @State private var hasAppeared: Bool = false
     @State private var appIcon: NSImage? = nil
+    @State private var hoveringAppIcon: Bool = false
     @State private var hoveringWindowTitle: Bool = false
 
     init(appName: String,
@@ -120,41 +121,35 @@ struct WindowPreviewHoverContainer: View {
     @ViewBuilder
     private func hoverTitleBaseView(labelSize: CGSize) -> some View {
         if !windowSwitcherCoordinator.windowSwitcherActive, showAppName {
-            switch appNameStyle {
-            case .default:
-                HStack(spacing: 2) {
-                    if let appIcon {
-                        Image(nsImage: appIcon)
-                            .resizable()
-                            .scaledToFit()
-                            .zIndex(1)
-                            .frame(width: 24, height: 24)
-                    } else {
-                        ProgressView()
-                            .frame(width: 24, height: 24)
+            Group {
+                switch appNameStyle {
+                case .default:
+                    HStack(alignment: .center) {
+                        if let appIcon {
+                            Image(nsImage: appIcon)
+                                .resizable()
+                                .scaledToFit()
+                                .zIndex(1)
+                                .frame(width: 24, height: 24)
+                        } else {
+                            ProgressView()
+                                .frame(width: 24, height: 24)
+                        }
+                        hoverTitleLabelView(labelSize: labelSize)
+
+                        if hoveringAppIcon {
+                            Button("Close All") {
+                                closeAllWindows()
+                            }
+                            .buttonStyle(AccentButtonStyle(color: .red, small: true))
+                            .transition(.opacity)
+                        }
                     }
-                    hoverTitleLabelView(labelSize: labelSize)
-                }
-                .padding(.top, 10)
-                .padding(.leading)
-            case .shadowed:
-                HStack(spacing: 2) {
-                    if let appIcon {
-                        Image(nsImage: appIcon)
-                            .resizable()
-                            .scaledToFit()
-                            .zIndex(1)
-                            .frame(width: 24, height: 24)
-                    } else {
-                        ProgressView()
-                            .frame(width: 24, height: 24)
-                    }
-                    hoverTitleLabelView(labelSize: labelSize)
-                }
-                .padding(EdgeInsets(top: -11.5, leading: 15, bottom: -1.5, trailing: 1.5))
-            case .popover:
-                HStack {
-                    Spacer()
+                    .padding(.top, 10)
+                    .padding(.leading)
+                    .animation(.spring(response: 0.3), value: hoveringAppIcon)
+
+                case .shadowed:
                     HStack(spacing: 2) {
                         if let appIcon {
                             Image(nsImage: appIcon)
@@ -167,13 +162,53 @@ struct WindowPreviewHoverContainer: View {
                                 .frame(width: 24, height: 24)
                         }
                         hoverTitleLabelView(labelSize: labelSize)
+
+                        if hoveringAppIcon {
+                            Button("Close All") {
+                                closeAllWindows()
+                            }
+                            .buttonStyle(AccentButtonStyle(color: .red, small: true))
+                            .transition(.opacity)
+                        }
                     }
-                    .padding(.vertical, 5)
-                    .padding(.horizontal, 10)
-                    .dockStyle(cornerRadius: 10)
-                    Spacer()
+                    .padding(EdgeInsets(top: -11.5, leading: 15, bottom: -1.5, trailing: 1.5))
+                    .animation(.spring(response: 0.3), value: hoveringAppIcon)
+
+                case .popover:
+                    HStack {
+                        Spacer()
+                        HStack(alignment: .center, spacing: 2) {
+                            if let appIcon {
+                                Image(nsImage: appIcon)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .zIndex(1)
+                                    .frame(width: 24, height: 24)
+                            } else {
+                                ProgressView()
+                                    .frame(width: 24, height: 24)
+                            }
+                            hoverTitleLabelView(labelSize: labelSize)
+
+                            if hoveringAppIcon {
+                                Button("Close All") {
+                                    closeAllWindows()
+                                }
+                                .buttonStyle(AccentButtonStyle(color: .red, small: true))
+                                .transition(.opacity)
+                            }
+                        }
+                        .padding(.vertical, 5)
+                        .padding(.horizontal, 10)
+                        .dockStyle(cornerRadius: 10)
+                        Spacer()
+                    }
+                    .offset(y: -30)
+                    .animation(.spring(response: 0.3), value: hoveringAppIcon)
                 }
-                .offset(y: -30)
+            }
+            .onHover { hover in
+                hoveringAppIcon = hover
             }
         }
     }
@@ -242,7 +277,6 @@ struct WindowPreviewHoverContainer: View {
                                     windowSwitcherActive: windowSwitcherCoordinator.windowSwitcherActive,
                                     dimensions: getDimensions(for: index, dimensionsMap: dimensionsMap)
                                 )
-                                .opacity(draggedWindowIndex == index ? 0.3 : 1.0)
                                 .id("\(appName)-\(index)")
                                 .animation(.snappy(duration: 0.175), value: windowStates)
                                 .gesture(
@@ -357,6 +391,11 @@ struct WindowPreviewHoverContainer: View {
                 appIcon = icon
             }
         }
+    }
+
+    private func closeAllWindows() {
+        windows.forEach { WindowUtil.closeWindow(windowInfo: $0) }
+        windowStates.removeAll()
     }
 
     private func handleWindowAction(_ action: WindowAction, at index: Int) {
