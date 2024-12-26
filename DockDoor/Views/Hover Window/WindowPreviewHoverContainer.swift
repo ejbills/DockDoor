@@ -452,11 +452,9 @@ extension WindowPreviewHoverContainer {
 }
 
 extension WindowPreviewHoverContainer {
-    // Calculate optimal number of stacks and window distribution
     func calculateOptimalLayout(windowDimensions: [Int: WindowDimensions], isHorizontal: Bool) -> (stackCount: Int, windowsPerStack: [Range<Int>]) {
         let activeWindowCount = windowStates.count
 
-        // Handle case when all windows are closed
         guard activeWindowCount > 0 else {
             return (1, [0 ..< 0])
         }
@@ -464,32 +462,104 @@ extension WindowPreviewHoverContainer {
         let visibleFrame = bestGuessMonitor.visibleFrame
 
         if isHorizontal {
-            let maxStackHeight = windowDimensions.values.map(\.size.height).max() ?? 0
-            let maxStacks = Int(visibleFrame.height / maxStackHeight)
-            let optimalStacks = min(max(1, maxStacks), activeWindowCount)
+            var rows: [[Int]] = [[]]
+            var currentRowWidth: CGFloat = 0
+            var currentRowIndex = 0
+            let maxWidth = visibleFrame.width
+            let maxHeight = visibleFrame.height
+            let rowHeight = maxWindowDimension.y + 16 // Single row height including spacing
+            var hasExceededWidth = false
 
-            return distributeWindows(windowCount: activeWindowCount, stackCount: optimalStacks)
-        } else {
-            let maxStackHeight = windowDimensions.values.map(\.size.height).max() ?? 0
-            let windowsPerColumn = max(1, Int(visibleFrame.height / maxStackHeight))
+            for windowIndex in 0 ..< activeWindowCount {
+                let windowWidth = windowDimensions[windowIndex]?.size.width ?? 0
+                let newWidth = currentRowWidth + windowWidth + 16
 
-            let totalColumns = Int(ceil(Double(activeWindowCount) / Double(windowsPerColumn)))
+                // Check if adding a row would exceed total available height
+                if newWidth > maxWidth {
+                    if hasExceededWidth {
+                        let newRowCount = currentRowIndex + 2 // Current + new one we'd need
+                        let totalHeightNeeded = CGFloat(newRowCount) * rowHeight
+
+                        if totalHeightNeeded > maxHeight {
+                            // If we can't fit another row, redistribute across available height
+                            let optimalRows = max(1, Int(maxHeight / rowHeight))
+                            return redistributeEvenly(windowCount: activeWindowCount, divisions: optimalRows)
+                        }
+
+                        // Start new row
+                        currentRowIndex += 1
+                        rows.append([])
+                        currentRowWidth = windowWidth + 16
+                        hasExceededWidth = false
+                    } else {
+                        hasExceededWidth = true
+                    }
+                }
+
+                rows[currentRowIndex].append(windowIndex)
+                currentRowWidth += windowWidth + 16
+            }
 
             var ranges: [Range<Int>] = []
             var startIndex = 0
 
-            for _ in 0 ..< totalColumns {
-                let windowsInThisColumn = min(
-                    windowsPerColumn,
-                    activeWindowCount - startIndex
-                )
+            for row in rows {
+                if !row.isEmpty {
+                    let endIndex = startIndex + row.count
+                    ranges.append(startIndex ..< endIndex)
+                    startIndex = endIndex
+                }
+            }
 
-                let endIndex = startIndex + windowsInThisColumn
-                ranges.append(startIndex ..< endIndex)
-                startIndex = endIndex
+            return (ranges.count, ranges)
 
-                if startIndex >= activeWindowCount {
-                    break
+        } else {
+            var columns: [[Int]] = [[]]
+            var columnHeights: [CGFloat] = [0]
+            var currentColumnIndex = 0
+            let maxHeight = visibleFrame.height
+            let maxWidth = visibleFrame.width
+            let columnWidth = maxWindowDimension.x + 16
+            var hasExceededHeight = false
+
+            for windowIndex in 0 ..< activeWindowCount {
+                let windowHeight = (windowDimensions[windowIndex]?.size.height ?? 0) + 16
+                let newHeight = columnHeights[currentColumnIndex] + windowHeight
+
+                if newHeight > maxHeight {
+                    if hasExceededHeight {
+                        // Check if adding a new column would exceed screen width
+                        let totalColumns = currentColumnIndex + 2
+                        let totalWidthNeeded = CGFloat(totalColumns) * columnWidth
+
+                        if totalWidthNeeded > maxWidth {
+                            let optimalColumns = max(1, Int(maxWidth / columnWidth))
+                            return redistributeEvenly(windowCount: activeWindowCount, divisions: optimalColumns)
+                        }
+
+                        // Start new column
+                        currentColumnIndex += 1
+                        columns.append([])
+                        columnHeights.append(0)
+                        hasExceededHeight = false
+                    } else {
+                        hasExceededHeight = true
+                    }
+                }
+
+                columns[currentColumnIndex].append(windowIndex)
+                columnHeights[currentColumnIndex] += windowHeight
+            }
+
+            // Convert to ranges
+            var ranges: [Range<Int>] = []
+            var startIndex = 0
+
+            for column in columns {
+                if !column.isEmpty {
+                    let endIndex = startIndex + column.count
+                    ranges.append(startIndex ..< endIndex)
+                    startIndex = endIndex
                 }
             }
 
@@ -497,22 +567,23 @@ extension WindowPreviewHoverContainer {
         }
     }
 
-    // Helper function to distribute windows evenly across stacks
-    private func distributeWindows(windowCount: Int, stackCount: Int) -> (stackCount: Int, windowsPerStack: [Range<Int>]) {
-        let baseWindowsPerStack = windowCount / stackCount
-        let remainingWindows = windowCount % stackCount
+    private func redistributeEvenly(windowCount: Int, divisions: Int) -> (stackCount: Int, windowsPerStack: [Range<Int>]) {
+        let baseCount = windowCount / divisions
+        let remainder = windowCount % divisions
 
         var ranges: [Range<Int>] = []
         var startIndex = 0
 
-        for stack in 0 ..< stackCount {
-            let extraWindow = stack < remainingWindows ? 1 : 0
-            let stackSize = baseWindowsPerStack + extraWindow
-            let endIndex = startIndex + stackSize
-            ranges.append(startIndex ..< endIndex)
-            startIndex = endIndex
+        for division in 0 ..< divisions {
+            let extraWindow = division < remainder ? 1 : 0
+            let count = baseCount + extraWindow
+
+            if count > 0 {
+                ranges.append(startIndex ..< (startIndex + count))
+                startIndex += count
+            }
         }
 
-        return (stackCount, ranges)
+        return (ranges.count, ranges)
     }
 }
