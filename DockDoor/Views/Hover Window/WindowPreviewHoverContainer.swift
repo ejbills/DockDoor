@@ -82,6 +82,13 @@ struct WindowPreviewHoverContainer: View {
                 }
                 .padding(.top, (!windowSwitcherCoordinator.windowSwitcherActive && appNameStyle == .popover && showAppName) ? 30 : 0)
                 .dockStyle(cornerRadius: 16)
+                .overlay {
+                    if let mouseLocation, !isDragging {
+                        WindowDismissalContainer(appName: appName, mouseLocation: mouseLocation,
+                                                 bestGuessMonitor: bestGuessMonitor, dockPosition: dockPosition)
+                            .allowsHitTesting(false)
+                    }
+                }
                 .padding(.all, 24)
                 .frame(maxWidth: bestGuessMonitor.visibleFrame.width, maxHeight: bestGuessMonitor.visibleFrame.height)
         }
@@ -317,13 +324,6 @@ struct WindowPreviewHoverContainer: View {
         }
         .onChange(of: windows) { _ in
             runUIUpdates()
-        }
-        .overlay {
-            if let mouseLocation, !isDragging {
-                WindowDismissalContainer(appName: appName, mouseLocation: mouseLocation,
-                                         bestGuessMonitor: bestGuessMonitor, dockPosition: dockPosition)
-                    .allowsHitTesting(false)
-            }
         }
     }
 
