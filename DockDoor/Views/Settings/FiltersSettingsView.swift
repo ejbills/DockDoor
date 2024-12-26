@@ -159,7 +159,7 @@ struct FiltersSettingsView: View {
                     Button(action: { showingAddFilterSheet.toggle() }) {
                         Text("Add Filter")
                     }
-                    .buttonStyle(AccentButtonStyle(color: .accentColor, small: true))
+                    .buttonStyle(AccentButtonStyle(color: .accentColor))
 
                     Spacer()
 
