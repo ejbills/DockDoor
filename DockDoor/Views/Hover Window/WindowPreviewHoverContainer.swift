@@ -314,7 +314,7 @@ struct WindowPreviewHoverContainer: View {
         .onAppear {
             if !hasAppeared {
                 hasAppeared.toggle()
-                runUIUpdates()
+                runUIUpdates(preventOpacityChange: false)
             }
         }
         .onChange(of: windowSwitcherCoordinator.currIndex) { newIndex in
@@ -323,7 +323,7 @@ struct WindowPreviewHoverContainer: View {
             }
         }
         .onChange(of: windows) { _ in
-            runUIUpdates()
+            runUIUpdates(preventOpacityChange: true)
         }
     }
 
@@ -373,8 +373,8 @@ struct WindowPreviewHoverContainer: View {
         )
     }
 
-    private func runUIUpdates() {
-        runAnimation()
+    private func runUIUpdates(preventOpacityChange: Bool) {
+        if !preventOpacityChange { runAnimation() }
         loadAppIcon()
     }
 
