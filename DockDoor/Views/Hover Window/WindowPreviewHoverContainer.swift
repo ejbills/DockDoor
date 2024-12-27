@@ -49,16 +49,27 @@ struct WindowPreviewHoverContainer: View {
         var maxWidth: CGFloat = 300
         var maxHeight: CGFloat = 300
 
+        let orientationIsHorizontal = dockPosition == .bottom || windowSwitcherCoordinator.windowSwitcherActive
+        let maxAspectRatio: CGFloat = 1.5
+
         for window in windows {
             if let cgImage = window.image {
                 let cgSize = CGSize(width: cgImage.width, height: cgImage.height)
-                let widthBasedOnHeight = (cgSize.width * thickness) / cgSize.height
-                let heightBasedOnWidth = (cgSize.height * thickness) / cgSize.width
 
-                if dockPosition == .bottom || windowSwitcherCoordinator.windowSwitcherActive {
+                if orientationIsHorizontal {
+                    // For horizontal layout (width based on height)
+                    let rawWidthBasedOnHeight = (cgSize.width * thickness) / cgSize.height
+                    // Limit width to maxAspectRatio times the height
+                    let widthBasedOnHeight = min(rawWidthBasedOnHeight, thickness * maxAspectRatio)
+
                     maxWidth = max(maxWidth, widthBasedOnHeight)
                     maxHeight = thickness
                 } else {
+                    // For vertical layout (height based on width)
+                    let rawHeightBasedOnWidth = (cgSize.height * thickness) / cgSize.width
+                    // Limit height to maxAspectRatio times the width
+                    let heightBasedOnWidth = min(rawHeightBasedOnWidth, thickness * maxAspectRatio)
+
                     maxHeight = max(maxHeight, heightBasedOnWidth)
                     maxWidth = thickness
                 }

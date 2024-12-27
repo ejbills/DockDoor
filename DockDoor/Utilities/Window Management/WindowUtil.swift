@@ -75,23 +75,45 @@ enum WindowUtil {
     // MARK: - Helper Functions
 
     /// Main function to capture a window image using ScreenCaptureKit, with fallback to legacy methods for older macOS versions.
-    static func captureWindowImage(window: SCWindow) async throws -> CGImage {
+    static func captureWindowImage(window: SCWindow, forceRefresh: Bool = false) async throws -> CGImage {
         clearExpiredCache()
-        if let cachedImage = getCachedImage(window: window) {
+        if let cachedImage = getCachedImage(window: window), !forceRefresh {
             return cachedImage
         }
 
-        guard var cgImage = CGWindowListCreateImage(
-            .null,
-            .optionIncludingWindow,
-            CGWindowID(window.windowID),
-            [.bestResolution, .boundsIgnoreFraming]
-        ) else {
-            throw NSError(
-                domain: "WindowCaptureError",
-                code: 1,
-                userInfo: [NSLocalizedDescriptionKey: "Failed to create image for window"]
-            )
+        let captureError = NSError(
+            domain: "WindowCaptureError",
+            code: 1,
+            userInfo: [NSLocalizedDescriptionKey: "Failed to create image for window"]
+        )
+
+        var cgImage: CGImage
+
+        if forceRefresh {
+            let connectionID = CGSMainConnectionID()
+            var windowID = UInt32(window.windowID)
+
+            guard let capturedWindows = CGSHWCaptureWindowList(
+                connectionID,
+                &windowID,
+                1,
+                0x0200 // kCGSWindowCaptureNominalResolution
+            ) as? [CGImage],
+                let capturedImage = capturedWindows.first
+            else {
+                throw captureError
+            }
+            cgImage = capturedImage
+        } else {
+            guard let windowImage = CGWindowListCreateImage(
+                .null,
+                .optionIncludingWindow,
+                CGWindowID(window.windowID),
+                [.bestResolution, .boundsIgnoreFraming]
+            ) else {
+                throw captureError
+            }
+            cgImage = windowImage
         }
 
         let previewScale = Int(Defaults[.windowPreviewImageScale])
@@ -110,11 +132,7 @@ enum WindowUtil {
                 space: colorSpace,
                 bitmapInfo: bitmapInfo.rawValue
             ) else {
-                throw NSError(
-                    domain: "WindowCaptureError",
-                    code: 2,
-                    userInfo: [NSLocalizedDescriptionKey: "Failed to create graphics context for resizing"]
-                )
+                throw captureError
             }
             context.interpolationQuality = .high
             context.draw(cgImage, in: CGRect(x: 0, y: 0, width: newWidth, height: newHeight))
@@ -411,20 +429,33 @@ enum WindowUtil {
 
     static func getActiveWindows(of app: NSRunningApplication) async throws -> [WindowInfo] {
         let content = try await SCShareableContent.excludingDesktopWindows(true, onScreenWindowsOnly: true)
-
         let group = LimitedTaskGroup<Void>(maxConcurrentTasks: 4)
+
+        let activeWindowIDs = content.windows.filter {
+            $0.owningApplication?.processID == app.processIdentifier
+        }.map(\.windowID)
 
         for window in content.windows where window.owningApplication?.processID == app.processIdentifier {
             await group.addTask { try await captureAndCacheWindowInfo(window: window, app: app) }
         }
 
-        // Wait for all tasks to complete
         _ = try await group.waitForAll()
 
         if let purifiedWindows = await WindowUtil.purifyAppCache(with: app.processIdentifier, removeAll: false) {
-            let windows = purifiedWindows.sorted(by: { $0.date > $1.date })
-            guard !Defaults[.ignoreAppsWithSingleWindow] || windows.count > 1 else { return [] }
-            return windows
+            guard !Defaults[.ignoreAppsWithSingleWindow] || purifiedWindows.count > 1 else { return [] }
+
+            let inactiveWindows = purifiedWindows.filter {
+                !activeWindowIDs.contains($0.id) && ($0.isMinimized || $0.isHidden)
+            }
+
+            // Process inactive windows
+            for windowInfo in inactiveWindows {
+                try await captureAndCacheWindowInfo(window: windowInfo.window, app: app, isMinimizedOrHidden: true)
+            }
+
+            // Get final window list with all updates
+            let finalWindows = await WindowUtil.purifyAppCache(with: app.processIdentifier, removeAll: false) ?? []
+            return finalWindows.sorted(by: { $0.date > $1.date })
         }
 
         return []
@@ -457,8 +488,18 @@ enum WindowUtil {
         }
     }
 
-    static func captureAndCacheWindowInfo(window: SCWindow, app: NSRunningApplication) async throws {
+    static func captureAndCacheWindowInfo(window: SCWindow, app: NSRunningApplication, isMinimizedOrHidden: Bool = false) async throws {
         let windowID = window.windowID
+
+        // If window is minimized/hidden, just take picture and update cache
+        if isMinimizedOrHidden {
+            if let existingWindow = desktopSpaceWindowCacheManager.readCache(pid: app.processIdentifier).first(where: { $0.id == windowID }) {
+                var updatedWindow = existingWindow
+                updatedWindow.image = try await captureWindowImage(window: window, forceRefresh: true)
+                updateDesktopSpaceWindowCache(with: updatedWindow)
+            }
+            return
+        }
 
         // Check basic window validity
         guard window.owningApplication != nil,

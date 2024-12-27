@@ -8756,6 +8756,9 @@
         }
       }
     },
+    "Disconnected Display" : {
+
+    },
     "Dock Previews & Window Switcher" : {
       "comment" : "Preview window title display condition option",
       "localizations" : {
@@ -21256,6 +21259,15 @@
         }
       }
     },
+    "Pin to Screen" : {
+
+    },
+    "Pinned to screen" : {
+      "comment" : "Traffic light buttons visibility option"
+    },
+    "Placement Strategy" : {
+
+    },
     "Please Quit the App to Apply Changes! :)" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -27498,6 +27510,12 @@
         }
       }
     },
+    "Screen with last active window" : {
+      "comment" : "Traffic light buttons visibility option"
+    },
+    "Screen with mouse" : {
+      "comment" : "Traffic light buttons visibility option"
+    },
     "seconds" : {
       "localizations" : {
         "af" : {
@@ -31965,6 +31983,9 @@
           }
         }
       }
+    },
+    "This display is currently disconnected. The window switcher will appear on the main display until the selected display is reconnected." : {
+      "comment" : "Message shown when a pinned display is disconnected"
     },
     "Toggle" : {
       "localizations" : {
@@ -38217,6 +38238,9 @@
           }
         }
       }
+    },
+    "Window Switcher Placement" : {
+
     },
     "Window title filters" : {
       "localizations" : {

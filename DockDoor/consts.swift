@@ -52,6 +52,9 @@ extension Defaults.Keys {
     static let trafficLightButtonsVisibility = Key<TrafficLightButtonsVisibility>("trafficLightButtonsVisibility", default: .dimmedOnPreviewHover)
     static let trafficLightButtonsPosition = Key<TrafficLightButtonsPosition>("trafficLightButtonsPosition", default: .topLeft)
 
+    static let windowSwitcherPlacementStrategy = Key<WindowSwitcherPlacementStrategy>("windowSwitcherPlacementStrategy", default: .screenWithMouse)
+    static let pinnedScreenIdentifier = Key<String>("pinnedScreenIdentifier", default: NSScreen.main?.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? String ?? "")
+
     // MARK: - Filters
 
     static let appNameFilters = Key<[String]>("appNameFilters", default: [])
@@ -179,6 +182,23 @@ enum PreviewHoverAction: String, CaseIterable, Defaults.Serializable {
             String(localized: "Simulate a click (open the window)", comment: "Window popup hover action option")
         case .previewFullSize:
             String(localized: "See a large preview of the window", comment: "Window popup hover action option")
+        }
+    }
+}
+
+enum WindowSwitcherPlacementStrategy: String, CaseIterable, Defaults.Serializable {
+    case screenWithMouse
+    case screenWithLastActiveWindow
+    case pinnedToScreen
+    
+    var localizedName: String {
+        switch self {
+        case .screenWithMouse:
+            String(localized: "Screen with mouse", comment: "Window switcher placement option")
+        case .screenWithLastActiveWindow:
+            String(localized: "Screen with last active window", comment: "Window switcher placement option")
+        case .pinnedToScreen:
+            String(localized: "Pinned to screen", comment: "Window switcher placement option")
         }
     }
 }
