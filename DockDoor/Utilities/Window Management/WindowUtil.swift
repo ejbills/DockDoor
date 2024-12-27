@@ -77,52 +77,47 @@ enum WindowUtil {
     /// Main function to capture a window image using ScreenCaptureKit, with fallback to legacy methods for older macOS versions.
     static func captureWindowImage(window: SCWindow) async throws -> CGImage {
         clearExpiredCache()
-
         if let cachedImage = getCachedImage(window: window) {
             return cachedImage
         }
 
-        let windowRect = CGRect(
-            x: window.frame.origin.x,
-            y: window.frame.origin.y,
-            width: window.frame.width,
-            height: window.frame.height
-        )
-
-        let options: CGWindowImageOption = [
-            .bestResolution,
-            .nominalResolution,
-            .boundsIgnoreFraming,
-        ]
-
-        guard var cgImage = CGWindowListCreateImage(windowRect, [.optionIncludingWindow, .excludeDesktopElements], window.windowID, options) else {
-            throw NSError(domain: "WindowCaptureError", code: 1, userInfo: [NSLocalizedDescriptionKey: "Failed to create image for window"])
+        guard var cgImage = CGWindowListCreateImage(
+            .null,
+            .optionIncludingWindow,
+            CGWindowID(window.windowID),
+            [.bestResolution, .boundsIgnoreFraming]
+        ) else {
+            throw NSError(
+                domain: "WindowCaptureError",
+                code: 1,
+                userInfo: [NSLocalizedDescriptionKey: "Failed to create image for window"]
+            )
         }
 
         let previewScale = Int(Defaults[.windowPreviewImageScale])
-
         // Only scale down if previewScale is greater than 1
         if previewScale > 1 {
             let newWidth = Int(cgImage.width) / previewScale
             let newHeight = Int(cgImage.height) / previewScale
-
             let colorSpace = cgImage.colorSpace ?? CGColorSpaceCreateDeviceRGB()
             let bitmapInfo = cgImage.bitmapInfo
-
-            guard let context = CGContext(data: nil,
-                                          width: newWidth,
-                                          height: newHeight,
-                                          bitsPerComponent: cgImage.bitsPerComponent,
-                                          bytesPerRow: 0,
-                                          space: colorSpace,
-                                          bitmapInfo: bitmapInfo.rawValue)
-            else {
-                throw NSError(domain: "WindowCaptureError", code: 2, userInfo: [NSLocalizedDescriptionKey: "Failed to create graphics context for resizing"])
+            guard let context = CGContext(
+                data: nil,
+                width: newWidth,
+                height: newHeight,
+                bitsPerComponent: cgImage.bitsPerComponent,
+                bytesPerRow: 0,
+                space: colorSpace,
+                bitmapInfo: bitmapInfo.rawValue
+            ) else {
+                throw NSError(
+                    domain: "WindowCaptureError",
+                    code: 2,
+                    userInfo: [NSLocalizedDescriptionKey: "Failed to create graphics context for resizing"]
+                )
             }
-
             context.interpolationQuality = .high
             context.draw(cgImage, in: CGRect(x: 0, y: 0, width: newWidth, height: newHeight))
-
             if let resizedImage = context.makeImage() {
                 cgImage = resizedImage
             }
@@ -130,7 +125,6 @@ enum WindowUtil {
 
         let cachedImage = CachedImage(image: cgImage, timestamp: Date(), windowname: window.title)
         imageCache[window.windowID] = cachedImage
-
         return cgImage
     }
 
