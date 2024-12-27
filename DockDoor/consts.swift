@@ -23,6 +23,9 @@ extension Defaults.Keys {
     static let fadeOutDuration = Key<CGFloat>("fadeOutDuration", default: 0.4)
     static let previewHoverAction = Key<PreviewHoverAction>("previewHoverAction", default: .none)
 
+    static let maxColumns = Key<CGFloat>("maxColumns", default: 0)
+    static let maxRows = Key<CGFloat>("maxRows", default: 0)
+
     static let showAnimations = Key<Bool>("showAnimations", default: true)
     static let gradientColorPalette = Key<GradientColorPaletteSettings>("gradientColorPalette", default: .init())
     static let enableWindowSwitcher = Key<Bool>("enableWindowSwitcher", default: true)

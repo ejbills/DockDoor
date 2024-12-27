@@ -895,6 +895,15 @@
         }
       }
     },
+    "• When hovering over the Dock at the bottom, windows flow in rows from left to right" : {
+
+    },
+    "• When hovering over the Dock on the sides, windows flow in columns from top to bottom" : {
+
+    },
+    "• When using ⌘⇥ Window Switcher, windows always flow in rows from left to right" : {
+
+    },
     "1. Select \"Command (⌘)\" as the initialization key." : {
       "localizations" : {
         "af" : {
@@ -16955,6 +16964,9 @@
         }
       }
     },
+    "Maximum Horizontal Rows" : {
+
+    },
     "Maximum number of colors (%lld) reached." : {
       "localizations" : {
         "af" : {
@@ -17132,6 +17144,9 @@
           }
         }
       }
+    },
+    "Maximum Vertical Columns" : {
+
     },
     "Medium" : {
       "comment" : "Window size option",
@@ -28554,6 +28569,9 @@
         }
       }
     },
+    "Set to 0 for unlimited" : {
+
+    },
     "Shadowed" : {
       "comment" : "Preview title style option",
       "localizations" : {
@@ -37478,6 +37496,9 @@
           }
         }
       }
+    },
+    "Window Preview Layout Limits" : {
+
     },
     "Window Preview Size" : {
       "localizations" : {

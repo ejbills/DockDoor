@@ -1,4 +1,5 @@
 import Cocoa
+import Defaults
 
 // Handles calculating rows and columns for flow container
 extension WindowPreviewHoverContainer {
@@ -20,20 +21,23 @@ extension WindowPreviewHoverContainer {
             let rowHeight = maxWindowDimension.y + 16 // Single row height including spacing
             var hasExceededWidth = false
 
+            // Calculate maximum allowed rows considering user defaults
+            let calculatedMaxRows = max(1, Int(maxHeight / rowHeight))
+            let userMaxRows = Defaults[.maxRows]
+            let effectiveMaxRows = userMaxRows > 0 ? min(Int(userMaxRows), calculatedMaxRows) : calculatedMaxRows
+
             for windowIndex in 0 ..< activeWindowCount {
                 let windowWidth = windowDimensions[windowIndex]?.size.width ?? 0
                 let newWidth = currentRowWidth + windowWidth + 16
 
-                // Check if adding a row would exceed total available height
+                // Check if adding a window would exceed width or max rows
                 if newWidth > maxWidth {
                     if hasExceededWidth {
-                        let newRowCount = currentRowIndex + 2 // Current + new one we'd need
-                        let totalHeightNeeded = CGFloat(newRowCount) * rowHeight
+                        let newRowCount = currentRowIndex + 2
 
-                        if totalHeightNeeded > maxHeight {
-                            // If we can't fit another row, redistribute across available height
-                            let optimalRows = max(1, Int(maxHeight / rowHeight))
-                            return redistributeEvenly(windowCount: activeWindowCount, divisions: optimalRows)
+                        // If we would exceed max rows, redistribute
+                        if newRowCount > effectiveMaxRows {
+                            return redistributeEvenly(windowCount: activeWindowCount, divisions: effectiveMaxRows)
                         }
 
                         // Start new row
@@ -72,19 +76,22 @@ extension WindowPreviewHoverContainer {
             let columnWidth = maxWindowDimension.x + 16
             var hasExceededHeight = false
 
+            // Calculate maximum allowed columns considering user defaults
+            let calculatedMaxColumns = max(1, Int(maxWidth / columnWidth))
+            let userMaxColumns = Defaults[.maxColumns]
+            let effectiveMaxColumns = userMaxColumns > 0 ? min(Int(userMaxColumns), calculatedMaxColumns) : calculatedMaxColumns
+
             for windowIndex in 0 ..< activeWindowCount {
                 let windowHeight = (windowDimensions[windowIndex]?.size.height ?? 0) + 16
                 let newHeight = columnHeights[currentColumnIndex] + windowHeight
 
                 if newHeight > maxHeight {
                     if hasExceededHeight {
-                        // Check if adding a new column would exceed screen width
-                        let totalColumns = currentColumnIndex + 2
-                        let totalWidthNeeded = CGFloat(totalColumns) * columnWidth
+                        let newColumnCount = currentColumnIndex + 2
 
-                        if totalWidthNeeded > maxWidth {
-                            let optimalColumns = max(1, Int(maxWidth / columnWidth))
-                            return redistributeEvenly(windowCount: activeWindowCount, divisions: optimalColumns)
+                        // If we would exceed max columns, redistribute
+                        if newColumnCount > effectiveMaxColumns {
+                            return redistributeEvenly(windowCount: activeWindowCount, divisions: effectiveMaxColumns)
                         }
 
                         // Start new column
