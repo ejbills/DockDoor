@@ -80,8 +80,8 @@ struct WindowPreviewHoverContainer: View {
                             withAnimation(.snappy) { hoveringWindowTitle = isHovered }
                         }
                 }
-                .padding(.top, (!windowSwitcherCoordinator.windowSwitcherActive && appNameStyle == .popover && showAppName) ? 30 : 0)
                 .dockStyle(cornerRadius: 16)
+                .padding(.top, (!windowSwitcherCoordinator.windowSwitcherActive && appNameStyle == .popover && showAppName) ? 30 : 0)
                 .overlay {
                     if let mouseLocation, !isDragging {
                         WindowDismissalContainer(appName: appName, mouseLocation: mouseLocation,
@@ -394,8 +394,8 @@ struct WindowPreviewHoverContainer: View {
     }
 
     private func closeAllWindows() {
-        windows.forEach { WindowUtil.closeWindow(windowInfo: $0) }
         windowStates.removeAll()
+        windows.forEach { WindowUtil.closeWindow(windowInfo: $0) }
     }
 
     private func handleWindowAction(_ action: WindowAction, at index: Int) {
