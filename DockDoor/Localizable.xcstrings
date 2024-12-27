@@ -901,7 +901,7 @@
     "• When hovering over the Dock on the sides, windows flow in columns from top to bottom" : {
 
     },
-    "• When using ⌘⇥ Window Switcher, windows always flow in rows from left to right" : {
+    "• When using the Window Switcher, windows always flow in rows from left to right" : {
 
     },
     "1. Select \"Command (⌘)\" as the initialization key." : {

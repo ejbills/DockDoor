@@ -91,6 +91,7 @@ struct WindowPreviewHoverContainer: View {
                 }
                 .padding(.all, 24)
                 .frame(maxWidth: bestGuessMonitor.visibleFrame.width, maxHeight: bestGuessMonitor.visibleFrame.height)
+                .opacity(showWindows ? 1 : 0.35)
         }
     }
 
@@ -310,7 +311,6 @@ struct WindowPreviewHoverContainer: View {
             }
             .padding(20)
         }
-        .opacity(showWindows ? 1 : 0.8)
         .onAppear {
             if !hasAppeared {
                 hasAppeared.toggle()

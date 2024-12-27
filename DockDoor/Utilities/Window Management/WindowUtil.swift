@@ -74,9 +74,14 @@ enum WindowUtil {
 
     // MARK: - Helper Functions
 
-    /// Captures an image of a window using legacy methods for macOS versions earlier than 14.0.
-    /// This function is used as a fallback when the ScreenCaptureKit's captureScreenshot API are not available.
-    private static func captureImageLegacy(of window: SCWindow) async throws -> CGImage {
+    /// Main function to capture a window image using ScreenCaptureKit, with fallback to legacy methods for older macOS versions.
+    static func captureWindowImage(window: SCWindow) async throws -> CGImage {
+        clearExpiredCache()
+
+        if let cachedImage = getCachedImage(window: window) {
+            return cachedImage
+        }
+
         let windowRect = CGRect(
             x: window.frame.origin.x,
             y: window.frame.origin.y,
@@ -87,9 +92,10 @@ enum WindowUtil {
         let options: CGWindowImageOption = [
             .bestResolution,
             .nominalResolution,
+            .boundsIgnoreFraming,
         ]
 
-        guard var cgImage = CGWindowListCreateImage(windowRect, .optionIncludingWindow, window.windowID, options) else {
+        guard var cgImage = CGWindowListCreateImage(windowRect, [.optionIncludingWindow, .excludeDesktopElements], window.windowID, options) else {
             throw NSError(domain: "WindowCaptureError", code: 1, userInfo: [NSLocalizedDescriptionKey: "Failed to create image for window"])
         }
 
@@ -122,98 +128,10 @@ enum WindowUtil {
             }
         }
 
-        return cgImage
-    }
-
-    /// Captures an image of a window using ScreenCaptureKit's for macOS versions 14.0 and later.
-    @available(macOS 14.0, *)
-    private static func captureImageModern(of window: SCWindow) async throws -> CGImage {
-        let filter = SCContentFilter(desktopIndependentWindow: window)
-        let config = SCStreamConfiguration()
-
-        let nativeScaleFactor = getScaleFactorForWindow(window: window)
-        let previewScale = Int(Defaults[.windowPreviewImageScale])
-
-        // Calculate the window's true dimensions in its native screen space
-        let nativeWidth = window.frame.width * nativeScaleFactor
-        let nativeHeight = window.frame.height * nativeScaleFactor
-
-        // Apply the user's preview scale while preserving the window's native proportions
-        let width = Int(nativeWidth) / previewScale
-        let height = Int(nativeHeight) / previewScale
-
-        config.width = width
-        config.height = height
-        config.scalesToFit = false
-        config.backgroundColor = .clear
-        config.captureResolution = .best
-        config.ignoreGlobalClipDisplay = true
-        config.ignoreShadowsDisplay = true
-        config.shouldBeOpaque = false
-        config.showsCursor = false
-
-        if #available(macOS 14.2, *) {
-            config.includeChildWindows = false
-        }
-
-        return try await SCScreenshotManager.captureImage(contentFilter: filter, configuration: config)
-    }
-
-    /// Main function to capture a window image using ScreenCaptureKit, with fallback to legacy methods for older macOS versions.
-    static func captureWindowImage(window: SCWindow) async throws -> CGImage {
-        clearExpiredCache()
-
-        if let cachedImage = getCachedImage(window: window) {
-            return cachedImage
-        }
-
-        // Use ScreenCaptureKit's API if available, otherwise fall back to a legacy (deprecated) API
-        let image: CGImage = if #available(macOS 14.0, *) {
-            try await captureImageModern(of: window)
-        } else {
-            try await captureImageLegacy(of: window)
-        }
-
-        let cachedImage = CachedImage(image: image, timestamp: Date(), windowname: window.title)
+        let cachedImage = CachedImage(image: cgImage, timestamp: Date(), windowname: window.title)
         imageCache[window.windowID] = cachedImage
 
-        return image
-    }
-
-    // Helper function to get the scale factor for a given window
-    private static func getScaleFactorForWindow(window: SCWindow) -> CGFloat {
-        let windowFrame = window.frame
-        let screens = NSScreen.screens
-
-        // If no screens found, return default scale factor
-        guard !screens.isEmpty else {
-            return NSScreen.main?.backingScaleFactor ?? 2.0
-        }
-
-        // Find all intersecting screens and their intersection areas
-        var screenIntersections: [(screen: NSScreen, area: CGFloat)] = []
-
-        for screen in screens {
-            let intersection = screen.frame.intersection(windowFrame)
-            if !intersection.isNull {
-                let intersectionArea = intersection.width * intersection.height
-                screenIntersections.append((screen, intersectionArea))
-            }
-        }
-
-        // If no intersecting screens found, use main screen or first available
-        if screenIntersections.isEmpty {
-            return NSScreen.main?.backingScaleFactor ?? screens[0].backingScaleFactor
-        }
-
-        // If only one screen intersects, use its scale factor
-        if screenIntersections.count == 1 {
-            return screenIntersections[0].screen.backingScaleFactor
-        }
-
-        // Multiple screens intersect - use the one with largest intersection area
-        let screenWithLargestIntersection = screenIntersections.max(by: { $0.area < $1.area })
-        return screenWithLargestIntersection?.screen.backingScaleFactor ?? NSScreen.main?.backingScaleFactor ?? 2.0
+        return cgImage
     }
 
     private static func getCachedImage(window: SCWindow) -> CGImage? {
