@@ -1,12 +1,5 @@
-//
-//  Window Image Sizing Calculations.swift
-//  DockDoor
-//
-//  Created by Ethan Bills on 12/26/24.
-//
-
 import Cocoa
- 
+
 // Holds logic related to precomputing image thumbnail sizes
 extension WindowPreviewHoverContainer {
     struct WindowDimensions {
@@ -60,4 +53,3 @@ extension WindowPreviewHoverContainer {
         )
     }
 }
-

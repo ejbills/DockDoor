@@ -1,10 +1,3 @@
-//
-//  Untitled.swift
-//  DockDoor
-//
-//  Created by Ethan Bills on 12/26/24.
-//
-
 import Cocoa
 
 // Handles calculating rows and columns for flow container
