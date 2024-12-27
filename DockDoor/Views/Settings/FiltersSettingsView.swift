@@ -6,9 +6,11 @@ struct FiltersSettingsView: View {
     @Default(.appNameFilters) var appNameFilters
     @Default(.windowTitleFilters) var windowTitleFilters
     @Default(.ignoreAppsWithSingleWindow) var ignoreAppsWithSingleWindow
+    @Default(.customAppDirectories) var customAppDirectories
 
     @State private var showingAddFilterSheet = false
     @State private var newFilter = FilterEntry(text: "")
+    @State private var showingDirectoryPicker = false
 
     struct FilterEntry: Identifiable, Hashable {
         let id = UUID()
@@ -17,12 +19,15 @@ struct FiltersSettingsView: View {
 
     private var installedApps: [(name: String, icon: NSImage)] {
         var apps: [(String, NSImage)] = []
-        let appLocations = [
+        var appLocations = [
             "/Applications",
             "/System/Applications",
             "/System/Applications/Utilities",
             "~/Applications",
         ]
+
+        // Add custom directories
+        appLocations.append(contentsOf: customAppDirectories)
 
         for location in appLocations {
             let expandedPath = NSString(string: location).expandingTildeInPath
@@ -63,6 +68,86 @@ struct FiltersSettingsView: View {
             Toggle(isOn: $ignoreAppsWithSingleWindow, label: {
                 Text("Ignore Apps with One Window")
             })
+
+            // Custom App Directories Section
+            VStack(alignment: .leading, spacing: 8) {
+                Text("Custom Application Directories")
+                    .font(.headline)
+
+                Text("Add additional directories to scan for applications")
+                    .foregroundColor(.secondary)
+                    .font(.body)
+
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 8) {
+                        if customAppDirectories.isEmpty {
+                            Text("No custom directories added")
+                                .foregroundColor(.secondary)
+                                .padding(.vertical, 4)
+                        } else {
+                            ForEach(customAppDirectories, id: \.self) { directory in
+                                HStack {
+                                    Text(directory)
+                                        .lineLimit(1)
+                                        .truncationMode(.middle)
+
+                                    Spacer()
+
+                                    Button(action: {
+                                        customAppDirectories.removeAll { $0 == directory }
+                                    }) {
+                                        Image(systemName: "trash")
+                                            .foregroundColor(.secondary)
+                                    }
+                                    .buttonStyle(.plain)
+                                }
+                                .padding(.vertical, 4)
+                            }
+                        }
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(8)
+                    .background(Color(.windowBackgroundColor).opacity(0.5))
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                }
+                .frame(maxHeight: 100)
+
+                HStack {
+                    Button("Add Directory") {
+                        showingDirectoryPicker = true
+                    }
+                    .fileImporter(
+                        isPresented: $showingDirectoryPicker,
+                        allowedContentTypes: [.folder],
+                        allowsMultipleSelection: false
+                    ) { result in
+                        switch result {
+                        case let .success(urls):
+                            if let url = urls.first {
+                                let path = url.path
+                                if !customAppDirectories.contains(path) {
+                                    customAppDirectories.append(path)
+                                }
+                            }
+                        case let .failure(error):
+                            print("Error selecting directory: \(error.localizedDescription)")
+                        }
+                    }
+                    .buttonStyle(AccentButtonStyle(color: .accentColor))
+
+                    Spacer()
+
+                    if !customAppDirectories.isEmpty {
+                        DangerButton(action: {
+                            customAppDirectories.removeAll()
+                        }) {
+                            Text("Remove All")
+                        }
+                    }
+                }
+            }
+
+            Divider()
 
             // App Filters Section
             VStack(alignment: .leading, spacing: 8) {

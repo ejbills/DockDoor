@@ -59,6 +59,7 @@ extension Defaults.Keys {
 
     static let appNameFilters = Key<[String]>("appNameFilters", default: [])
     static let windowTitleFilters = Key<[String]>("windowTitleFilters", default: [])
+    static let customAppDirectories = Key<[String]>("customAppDirectories", default: [])
 }
 
 enum WindowTitleDisplayCondition: String, CaseIterable, Defaults.Serializable {
@@ -190,7 +191,7 @@ enum WindowSwitcherPlacementStrategy: String, CaseIterable, Defaults.Serializabl
     case screenWithMouse
     case screenWithLastActiveWindow
     case pinnedToScreen
-    
+
     var localizedName: String {
         switch self {
         case .screenWithMouse:

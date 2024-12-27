@@ -2508,6 +2508,12 @@
         }
       }
     },
+    "Add additional directories to scan for applications" : {
+
+    },
+    "Add Directory" : {
+
+    },
     "Add Filter" : {
       "localizations" : {
         "af" : {
@@ -8396,6 +8402,9 @@
           }
         }
       }
+    },
+    "Custom Application Directories" : {
+
     },
     "Default" : {
       "comment" : "Preview title style option",
@@ -18580,6 +18589,9 @@
         }
       }
     },
+    "No custom directories added" : {
+
+    },
     "No filters added" : {
       "localizations" : {
         "af" : {
@@ -21263,7 +21275,7 @@
 
     },
     "Pinned to screen" : {
-      "comment" : "Traffic light buttons visibility option"
+      "comment" : "Window switcher placement option"
     },
     "Placement Strategy" : {
 
@@ -27511,10 +27523,10 @@
       }
     },
     "Screen with last active window" : {
-      "comment" : "Traffic light buttons visibility option"
+      "comment" : "Window switcher placement option"
     },
     "Screen with mouse" : {
-      "comment" : "Traffic light buttons visibility option"
+      "comment" : "Window switcher placement option"
     },
     "seconds" : {
       "localizations" : {
