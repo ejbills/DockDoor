@@ -56,11 +56,7 @@ struct WindowPreview: View {
             VStack(spacing: 0) {
                 windowContent(isMinimized: windowInfo.isMinimized, isHidden: windowInfo.isHidden, isSelected: selected)
                     .shadow(radius: selected || isHoveringOverWindowSwitcherPreview ? 0 : 3)
-                    .background {
-                        RoundedRectangle(cornerRadius: 6, style: .continuous)
-                            .fill(Color.clear.shadow(.drop(color: .black.opacity(selected ? 0.35 : 0.25), radius: selected ? 12 : 8, y: selected ? 6 : 4)))
-                    }
-                    .clipShape(uniformCardRadius ? AnyShape(RoundedRectangle(cornerRadius: 6, style: .continuous)) : AnyShape(Rectangle()))
+                    .clipShape(uniformCardRadius ? AnyShape(RoundedRectangle(cornerRadius: 12, style: .continuous)) : AnyShape(Rectangle()))
             }
             .overlay(alignment: {
                 switch windowTitlePosition {
@@ -101,7 +97,7 @@ struct WindowPreview: View {
             }
             .background {
                 if selected || isHoveringOverWindowSwitcherPreview {
-                    RoundedRectangle(cornerRadius: uniformCardRadius ? 8 : 0)
+                    RoundedRectangle(cornerRadius: uniformCardRadius ? 14 : 0)
                         .fill(Color.gray.opacity(selectionOpacity))
                         .padding(-6)
                 }
