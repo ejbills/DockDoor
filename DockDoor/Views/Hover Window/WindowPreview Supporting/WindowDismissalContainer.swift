@@ -30,7 +30,6 @@ class MouseTrackingNSView: NSView {
     private var globalMouseMonitor: Any?
     private var inactivityTimer: Timer?
 
-    private let baseDistanceThreshold: CGFloat = 600
     private let inactivityTimeout: TimeInterval = 10.0
 
     init(appName: String, mouseLocation: CGPoint, bestGuessMonitor: NSScreen, dockPosition: DockPosition, frame frameRect: NSRect = .zero) {
@@ -41,7 +40,6 @@ class MouseTrackingNSView: NSView {
         fadeOutDuration = Defaults[.fadeOutDuration]
         super.init(frame: frameRect)
         setupTrackingArea()
-        setupMouseMonitors()
         setupGlobalMouseMonitor()
     }
 
@@ -71,26 +69,6 @@ class MouseTrackingNSView: NSView {
                 DispatchQueue.main.async {
                     self.startFadeOut()
                 }
-            }
-        }
-    }
-
-    private func setupMouseMonitors() {
-        // The trackingTimer is used to track any lingering cases where the user does not interact with the window at all.
-        // In such cases, we hide the window if it goes a decent distance from the initial location of the dock icon.
-        // We use a timer to poll the mosue location as global and local mouse listeners are unreliable inside views.
-        let dist = dockPosition == .bottom ? bestGuessMonitor.frame.height * 0.5 : bestGuessMonitor.frame.width * 0.5
-        trackingTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { [weak self] _ in
-            guard let self else { return }
-            checkMouseDistance(dist: dist)
-        }
-    }
-
-    private func checkMouseDistance(dist: CGFloat) {
-        let currentMousePosition = DockObserver.cgPointFromNSPoint(NSEvent.mouseLocation, forScreen: bestGuessMonitor)
-        if currentMousePosition.distance(to: mouseLocation) > dist {
-            DispatchQueue.main.async { [weak self] in
-                self?.hideWindow()
             }
         }
     }
