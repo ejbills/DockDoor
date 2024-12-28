@@ -17,6 +17,8 @@ class KeybindModel: ObservableObject {
 struct WindowSwitcherSettingsView: View {
     @Default(.enableWindowSwitcher) var enableWindowSwitcher
     @Default(.includeHiddenWindowsInSwitcher) var includeHiddenWindowsInSwitcher
+    @Default(.windowSwitcherPlacementStrategy) var placementStrategy
+    @Default(.pinnedScreenIdentifier) var pinnedScreenIdentifier
     @StateObject private var viewModel = KeybindModel()
 
     var body: some View {
@@ -89,6 +91,58 @@ struct WindowSwitcherSettingsView: View {
                         .foregroundColor(.secondary)
                 }
             }
+
+            Divider()
+
+            VStack(alignment: .leading, spacing: 10) {
+                Text("Window Switcher Placement")
+                    .font(.headline)
+                    .padding(.top, 10)
+
+                Picker("Placement Strategy", selection: $placementStrategy) {
+                    ForEach(WindowSwitcherPlacementStrategy.allCases, id: \.self) { strategy in
+                        Text(strategy.localizedName).tag(strategy)
+                    }
+                }
+                .labelsHidden()
+                .onChange(of: placementStrategy) { newStrategy in
+                    if newStrategy == .pinnedToScreen, pinnedScreenIdentifier.isEmpty {
+                        // Initialize with main screen when first selecting pinned screen option
+                        pinnedScreenIdentifier = NSScreen.main?.uniqueIdentifier() ?? ""
+                    }
+                }
+
+                if placementStrategy == .pinnedToScreen {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Picker("Pin to Screen", selection: $pinnedScreenIdentifier) {
+                            // Add options for all current screens
+                            ForEach(NSScreen.screens, id: \.self) { screen in
+                                Text(screenDisplayName(screen))
+                                    .tag(screen.uniqueIdentifier())
+                            }
+
+                            // Add option for disconnected screen if the stored identifier isn't found
+                            if !pinnedScreenIdentifier.isEmpty,
+                               !NSScreen.screens.contains(where: { $0.uniqueIdentifier() == pinnedScreenIdentifier })
+                            {
+                                Text(String(localized: "Disconnected Display"))
+                                    .tag(pinnedScreenIdentifier)
+                            }
+                        }
+                        .labelsHidden()
+
+                        if !pinnedScreenIdentifier.isEmpty,
+                           !NSScreen.screens.contains(where: { $0.uniqueIdentifier() == pinnedScreenIdentifier })
+                        {
+                            Text("This display is currently disconnected. The window switcher will appear on the main display until the selected display is reconnected.",
+                                 comment: "Message shown when a pinned display is disconnected")
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                                .fixedSize(horizontal: false, vertical: true)
+                        }
+                    }
+                }
+            }
         }
         .padding(20)
         .frame(minWidth: 650)
@@ -110,6 +164,16 @@ struct WindowSwitcherSettingsView: View {
         parts.append(modifierConverter.toString(shortcut.modifierFlags))
         parts.append(KeyCodeConverter.toString(shortcut.keyCode))
         return parts.joined(separator: " ")
+    }
+
+    private func screenDisplayName(_ screen: NSScreen) -> String {
+        let isMain = screen == NSScreen.main
+
+        if !screen.localizedName.isEmpty {
+            return "\(screen.localizedName)\(isMain ? " (Main)" : "")"
+        } else {
+            return String(localized: "Disconnected Display")
+        }
     }
 }
 

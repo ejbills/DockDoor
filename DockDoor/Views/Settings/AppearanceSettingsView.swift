@@ -1,5 +1,4 @@
 import Defaults
-import LaunchAtLogin
 import SwiftUI
 
 struct AppearanceSettingsView: View {
@@ -14,6 +13,8 @@ struct AppearanceSettingsView: View {
     @Default(.trafficLightButtonsVisibility) var trafficLightButtonsVisibility
     @Default(.trafficLightButtonsPosition) var trafficLightButtonsPosition
     @Default(.selectionOpacity) var selectionOpacity
+    @Default(.maxRows) var maxRows
+    @Default(.maxColumns) var maxColumns
 
     @State private var previousTrafficLightButtonsPosition: TrafficLightButtonsPosition
     @State private var previousWindowTitlePosition: WindowTitlePosition
@@ -39,6 +40,44 @@ struct AppearanceSettingsView: View {
                           step: 0.05,
                           unit: "",
                           formatter: NumberFormatter.percentFormatter)
+
+            Divider()
+
+            Text("Window Preview Layout Limits")
+                .font(.headline)
+
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Set to 0 for unlimited")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+
+                Text("• When hovering over the Dock at the bottom, windows flow in rows from left to right")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+
+                Text("• When hovering over the Dock on the sides, windows flow in columns from top to bottom")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+
+                Text("• When using the Window Switcher, windows always flow in rows from left to right")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+            .padding(.bottom, 4)
+
+            sliderSetting(title: String(localized: "Maximum Horizontal Rows"),
+                          value: $maxRows,
+                          range: 0 ... 10,
+                          step: 1,
+                          unit: "")
+
+            sliderSetting(title: String(localized: "Maximum Vertical Columns"),
+                          value: $maxColumns,
+                          range: 0 ... 10,
+                          step: 1,
+                          unit: "")
+
+            Divider()
 
             Picker("Traffic Light Buttons Visibility", selection: $trafficLightButtonsVisibility) {
                 ForEach(TrafficLightButtonsVisibility.allCases, id: \.self) { visibility in

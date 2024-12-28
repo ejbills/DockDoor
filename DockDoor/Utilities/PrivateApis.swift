@@ -19,3 +19,20 @@ func CoreDockSetAutoHideEnabled(_ flag: Bool)
 // Retrieves the current auto-hide state of the Dock
 @_silgen_name("CoreDockGetAutoHideEnabled")
 func CoreDockGetAutoHideEnabled() -> Bool
+
+// Define the private API types
+typealias CGSConnectionID = UInt32
+typealias CGSWindowCount = UInt32
+typealias CGSWindowCaptureOptions = UInt32
+
+// Define the private API functions with @_silgen_name
+@_silgen_name("CGSMainConnectionID")
+func CGSMainConnectionID() -> CGSConnectionID
+
+@_silgen_name("CGSHWCaptureWindowList")
+func CGSHWCaptureWindowList(
+    _ cid: CGSConnectionID,
+    _ windowList: UnsafePointer<UInt32>,
+    _ count: CGSWindowCount,
+    _ options: CGSWindowCaptureOptions
+) -> CFArray?

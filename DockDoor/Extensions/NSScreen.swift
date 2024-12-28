@@ -17,3 +17,26 @@ extension NSScreen {
         return CGPoint(x: flippedPoint.x - frame.minX, y: flippedPoint.y - frame.minY)
     }
 }
+
+extension NSScreen {
+    // Generate a unique identifier string for a screen
+    func uniqueIdentifier() -> String {
+        // Combine multiple properties to create a reliable hash
+        let components = [
+            deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? NSNumber as Any,
+            frame.width,
+            frame.height,
+            deviceDescription[NSDeviceDescriptionKey("NSDeviceBitsPerSample")] as? NSNumber as Any,
+            deviceDescription[NSDeviceDescriptionKey("NSDeviceColorSpaceName")] as? String as Any,
+        ].compactMap { String(describing: $0) }
+
+        return components.joined(separator: "-")
+    }
+
+    // Look up a screen using a saved identifier
+    static func findScreen(byIdentifier identifier: String) -> NSScreen? {
+        NSScreen.screens.first { screen in
+            screen.uniqueIdentifier() == identifier
+        }
+    }
+}

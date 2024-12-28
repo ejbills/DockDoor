@@ -12,6 +12,7 @@ struct WindowPreview: View {
     let handleWindowAction: (WindowAction) -> Void
     var currIndex: Int
     var windowSwitcherActive: Bool
+    let dimensions: WindowPreviewHoverContainer.WindowDimensions
 
     @Default(.windowTitlePosition) var windowTitlePosition
     @Default(.showWindowTitle) var showWindowTitle
@@ -33,25 +34,6 @@ struct WindowPreview: View {
         CGSize(width: bestGuessMonitor.frame.width * 0.75, height: bestGuessMonitor.frame.height * 0.75)
     }
 
-    var calculatedSize: CGSize {
-        guard let cgImage = windowInfo.image else { return .zero }
-
-        let cgSize = CGSize(width: cgImage.width, height: cgImage.height)
-        let aspectRatio = cgSize.width / cgSize.height
-        let maxAllowedWidth = maxWindowDimension.x
-        let maxAllowedHeight = maxWindowDimension.y
-
-        var targetWidth = maxAllowedWidth
-        var targetHeight = targetWidth / aspectRatio
-
-        if targetHeight > maxAllowedHeight {
-            targetHeight = maxAllowedHeight
-            targetWidth = aspectRatio * targetHeight
-        }
-
-        return CGSize(width: targetWidth, height: targetHeight)
-    }
-
     private func windowContent(isMinimized: Bool, isHidden: Bool, isSelected: Bool) -> some View {
         Group {
             if let cgImage = windowInfo.image {
@@ -62,8 +44,8 @@ struct WindowPreview: View {
                     .overlay(isSelected ? CustomizableFluidGradientView().opacity(0.125) : nil)
             }
         }
-        .frame(width: calculatedSize.width, height: calculatedSize.height, alignment: .center)
-        .frame(maxWidth: calculatedMaxDimensions.width, maxHeight: calculatedMaxDimensions.height)
+        .frame(width: dimensions.size.width, height: dimensions.size.height, alignment: .center)
+        .frame(maxWidth: dimensions.maxDimensions.width, maxHeight: dimensions.maxDimensions.height)
     }
 
     var body: some View {
@@ -74,11 +56,7 @@ struct WindowPreview: View {
             VStack(spacing: 0) {
                 windowContent(isMinimized: windowInfo.isMinimized, isHidden: windowInfo.isHidden, isSelected: selected)
                     .shadow(radius: selected || isHoveringOverWindowSwitcherPreview ? 0 : 3)
-                    .background {
-                        RoundedRectangle(cornerRadius: 6, style: .continuous)
-                            .fill(Color.clear.shadow(.drop(color: .black.opacity(selected ? 0.35 : 0.25), radius: selected ? 12 : 8, y: selected ? 6 : 4)))
-                    }
-                    .clipShape(uniformCardRadius ? AnyShape(RoundedRectangle(cornerRadius: 6, style: .continuous)) : AnyShape(Rectangle()))
+                    .clipShape(uniformCardRadius ? AnyShape(RoundedRectangle(cornerRadius: 12, style: .continuous)) : AnyShape(Rectangle()))
             }
             .overlay(alignment: {
                 switch windowTitlePosition {
@@ -119,7 +97,7 @@ struct WindowPreview: View {
             }
             .background {
                 if selected || isHoveringOverWindowSwitcherPreview {
-                    RoundedRectangle(cornerRadius: uniformCardRadius ? 8 : 0)
+                    RoundedRectangle(cornerRadius: uniformCardRadius ? 14 : 0)
                         .fill(Color.gray.opacity(selectionOpacity))
                         .padding(-6)
                 }
@@ -171,6 +149,7 @@ struct WindowPreview: View {
                 }
             }
         })
+        .fixedSize()
     }
 
     private func handleFullPreviewHover(isHovering: Bool, action: PreviewHoverAction) {
@@ -275,7 +254,7 @@ struct WindowPreview: View {
                 .padding(4)
             } else if let windowTitle = windowInfo.window.title, !windowTitle.isEmpty, windowTitle != windowInfo.app.localizedName {
                 let stringMeasurementWidth = measureString(windowTitle, fontSize: 12).width + 5
-                let maxLabelWidth = calculatedSize.width - 50
+                let maxLabelWidth = dimensions.size.width - 50
                 let width = min(stringMeasurementWidth, maxLabelWidth)
                 TheMarquee(width: width, secsBeforeLooping: 1, speedPtsPerSec: 20, nonMovingAlignment: .leading) {
                     Text(windowInfo.windowName ?? "Hidden window")

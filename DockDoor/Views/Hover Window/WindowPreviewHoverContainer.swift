@@ -16,13 +16,14 @@ struct WindowPreviewHoverContainer: View {
     @Default(.appNameStyle) var appNameStyle
     @Default(.windowTitlePosition) var windowTitlePosition
 
-    @State private var windowStates: [WindowInfo]
+    @State var windowStates: [WindowInfo]
     @State private var draggedWindowIndex: Int? = nil
     @State private var isDragging = false
 
     @State private var showWindows: Bool = false
     @State private var hasAppeared: Bool = false
     @State private var appIcon: NSImage? = nil
+    @State private var hoveringAppIcon: Bool = false
     @State private var hoveringWindowTitle: Bool = false
 
     init(appName: String,
@@ -48,16 +49,27 @@ struct WindowPreviewHoverContainer: View {
         var maxWidth: CGFloat = 300
         var maxHeight: CGFloat = 300
 
+        let orientationIsHorizontal = dockPosition == .bottom || windowSwitcherCoordinator.windowSwitcherActive
+        let maxAspectRatio: CGFloat = 1.5
+
         for window in windows {
             if let cgImage = window.image {
                 let cgSize = CGSize(width: cgImage.width, height: cgImage.height)
-                let widthBasedOnHeight = (cgSize.width * thickness) / cgSize.height
-                let heightBasedOnWidth = (cgSize.height * thickness) / cgSize.width
 
-                if dockPosition == .bottom || windowSwitcherCoordinator.windowSwitcherActive {
+                if orientationIsHorizontal {
+                    // For horizontal layout (width based on height)
+                    let rawWidthBasedOnHeight = (cgSize.width * thickness) / cgSize.height
+                    // Limit width to maxAspectRatio times the height
+                    let widthBasedOnHeight = min(rawWidthBasedOnHeight, thickness * maxAspectRatio)
+
                     maxWidth = max(maxWidth, widthBasedOnHeight)
                     maxHeight = thickness
                 } else {
+                    // For vertical layout (height based on width)
+                    let rawHeightBasedOnWidth = (cgSize.height * thickness) / cgSize.width
+                    // Limit height to maxAspectRatio times the width
+                    let heightBasedOnWidth = min(rawHeightBasedOnWidth, thickness * maxAspectRatio)
+
                     maxHeight = max(maxHeight, heightBasedOnWidth)
                     maxWidth = thickness
                 }
@@ -70,87 +82,27 @@ struct WindowPreviewHoverContainer: View {
     var body: some View {
         let orientationIsHorizontal = dockPosition == .bottom || windowSwitcherCoordinator.windowSwitcherActive
 
-        ZStack {
-            if let mouseLocation, !isDragging {
-                WindowDismissalContainer(appName: appName, mouseLocation: mouseLocation,
-                                         bestGuessMonitor: bestGuessMonitor, dockPosition: dockPosition)
-            }
-
-            ScrollViewReader { scrollProxy in
-                ScrollView(orientationIsHorizontal ? .horizontal : .vertical, showsIndicators: false) {
-                    DynStack(direction: orientationIsHorizontal ? .horizontal : .vertical, spacing: -20) {
-                        ForEach(windowStates.indices, id: \.self) { index in
-                            WindowPreview(
-                                windowInfo: windowStates[index],
-                                onTap: onWindowTap,
-                                index: index,
-                                dockPosition: dockPosition,
-                                maxWindowDimension: maxWindowDimension,
-                                bestGuessMonitor: bestGuessMonitor,
-                                uniformCardRadius: uniformCardRadius,
-                                handleWindowAction: { action in
-                                    handleWindowAction(action, at: index)
-                                },
-                                currIndex: windowSwitcherCoordinator.currIndex,
-                                windowSwitcherActive: windowSwitcherCoordinator.windowSwitcherActive
-                            )
-                            .opacity(draggedWindowIndex == index ? 0.3 : 1.0)
-                            .id("\(appName)-\(index)")
-                            .gesture(
-                                DragGesture(minimumDistance: 3, coordinateSpace: .global)
-                                    .onChanged { value in
-                                        if draggedWindowIndex == nil {
-                                            draggedWindowIndex = index
-                                            isDragging = true
-                                            DragPreviewCoordinator.shared.startDragging(
-                                                windowInfo: windowStates[index],
-                                                at: NSEvent.mouseLocation
-                                            )
-                                        }
-                                        if draggedWindowIndex == index {
-                                            DragPreviewCoordinator.shared.updatePreviewPosition(to: NSEvent.mouseLocation)
-                                        }
-                                    }
-                                    .onEnded { value in
-                                        if draggedWindowIndex == index {
-                                            handleWindowDrop(at: NSEvent.mouseLocation, for: index)
-                                            DragPreviewCoordinator.shared.endDragging()
-                                            draggedWindowIndex = nil
-                                            isDragging = false
-                                        }
-                                    }
-                            )
-                        }
-                        .padding(20)
-                        .onAppear {
-                            if !hasAppeared {
-                                hasAppeared.toggle()
-                                runUIUpdates()
-                            }
-                        }
-                        .onChange(of: windowSwitcherCoordinator.currIndex) { newIndex in
-                            withAnimation {
-                                scrollProxy.scrollTo("\(appName)-\(newIndex)", anchor: .center)
-                            }
-                        }
-                        .onChange(of: windows) { _ in
-                            runUIUpdates()
-                        }
-                    }
-                    .opacity(showWindows ? 1 : 0.8)
-                }
+        ScrollViewReader { scrollProxy in
+            buildFlowStack(windows: windowStates, scrollProxy: scrollProxy, orientationIsHorizontal)
                 .padding(.top, (!windowSwitcherCoordinator.windowSwitcherActive && appNameStyle == .default && showAppName) ? 25 : 0)
-                .dockStyle(cornerRadius: 16)
                 .overlay(alignment: .topLeading) {
                     hoverTitleBaseView(labelSize: measureString(appName, fontSize: 14))
                         .onHover { isHovered in
                             withAnimation(.snappy) { hoveringWindowTitle = isHovered }
                         }
                 }
+                .dockStyle(cornerRadius: 16)
                 .padding(.top, (!windowSwitcherCoordinator.windowSwitcherActive && appNameStyle == .popover && showAppName) ? 30 : 0)
+                .overlay {
+                    if let mouseLocation, !isDragging {
+                        WindowDismissalContainer(appName: appName, mouseLocation: mouseLocation,
+                                                 bestGuessMonitor: bestGuessMonitor, dockPosition: dockPosition)
+                            .allowsHitTesting(false)
+                    }
+                }
                 .padding(.all, 24)
                 .frame(maxWidth: bestGuessMonitor.visibleFrame.width, maxHeight: bestGuessMonitor.visibleFrame.height)
-            }
+                .opacity(showWindows ? 1 : 0.35)
         }
     }
 
@@ -181,41 +133,35 @@ struct WindowPreviewHoverContainer: View {
     @ViewBuilder
     private func hoverTitleBaseView(labelSize: CGSize) -> some View {
         if !windowSwitcherCoordinator.windowSwitcherActive, showAppName {
-            switch appNameStyle {
-            case .default:
-                HStack(spacing: 2) {
-                    if let appIcon {
-                        Image(nsImage: appIcon)
-                            .resizable()
-                            .scaledToFit()
-                            .zIndex(1)
-                            .frame(width: 24, height: 24)
-                    } else {
-                        ProgressView()
-                            .frame(width: 24, height: 24)
+            Group {
+                switch appNameStyle {
+                case .default:
+                    HStack(alignment: .center) {
+                        if let appIcon {
+                            Image(nsImage: appIcon)
+                                .resizable()
+                                .scaledToFit()
+                                .zIndex(1)
+                                .frame(width: 24, height: 24)
+                        } else {
+                            ProgressView()
+                                .frame(width: 24, height: 24)
+                        }
+                        hoverTitleLabelView(labelSize: labelSize)
+
+                        if hoveringAppIcon {
+                            Button("Close All") {
+                                closeAllWindows()
+                            }
+                            .buttonStyle(AccentButtonStyle(color: .red, small: true))
+                            .transition(.opacity)
+                        }
                     }
-                    hoverTitleLabelView(labelSize: labelSize)
-                }
-                .padding(.top, 10)
-                .padding(.leading)
-            case .shadowed:
-                HStack(spacing: 2) {
-                    if let appIcon {
-                        Image(nsImage: appIcon)
-                            .resizable()
-                            .scaledToFit()
-                            .zIndex(1)
-                            .frame(width: 24, height: 24)
-                    } else {
-                        ProgressView()
-                            .frame(width: 24, height: 24)
-                    }
-                    hoverTitleLabelView(labelSize: labelSize)
-                }
-                .padding(EdgeInsets(top: -11.5, leading: 15, bottom: -1.5, trailing: 1.5))
-            case .popover:
-                HStack {
-                    Spacer()
+                    .padding(.top, 10)
+                    .padding(.leading)
+                    .animation(.spring(response: 0.3), value: hoveringAppIcon)
+
+                case .shadowed:
                     HStack(spacing: 2) {
                         if let appIcon {
                             Image(nsImage: appIcon)
@@ -228,13 +174,53 @@ struct WindowPreviewHoverContainer: View {
                                 .frame(width: 24, height: 24)
                         }
                         hoverTitleLabelView(labelSize: labelSize)
+
+                        if hoveringAppIcon {
+                            Button("Close All") {
+                                closeAllWindows()
+                            }
+                            .buttonStyle(AccentButtonStyle(color: .red, small: true))
+                            .transition(.opacity)
+                        }
                     }
-                    .padding(.vertical, 5)
-                    .padding(.horizontal, 10)
-                    .dockStyle(cornerRadius: 10)
-                    Spacer()
+                    .padding(EdgeInsets(top: -11.5, leading: 15, bottom: -1.5, trailing: 1.5))
+                    .animation(.spring(response: 0.3), value: hoveringAppIcon)
+
+                case .popover:
+                    HStack {
+                        Spacer()
+                        HStack(alignment: .center, spacing: 2) {
+                            if let appIcon {
+                                Image(nsImage: appIcon)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .zIndex(1)
+                                    .frame(width: 24, height: 24)
+                            } else {
+                                ProgressView()
+                                    .frame(width: 24, height: 24)
+                            }
+                            hoverTitleLabelView(labelSize: labelSize)
+
+                            if hoveringAppIcon {
+                                Button("Close All") {
+                                    closeAllWindows()
+                                }
+                                .buttonStyle(AccentButtonStyle(color: .red, small: true))
+                                .transition(.opacity)
+                            }
+                        }
+                        .padding(.vertical, 5)
+                        .padding(.horizontal, 10)
+                        .dockStyle(cornerRadius: 10)
+                        Spacer()
+                    }
+                    .offset(y: -30)
+                    .animation(.spring(response: 0.3), value: hoveringAppIcon)
                 }
-                .offset(y: -30)
+            }
+            .onHover { hover in
+                hoveringAppIcon = hover
             }
         }
     }
@@ -277,8 +263,129 @@ struct WindowPreviewHoverContainer: View {
         }
     }
 
-    private func runUIUpdates() {
-        runAnimation()
+    @ViewBuilder
+    private func buildFlowStack(windows: [WindowInfo], scrollProxy: ScrollViewProxy, _ isHorizontal: Bool) -> some View {
+        let dimensionsMap = precomputeWindowDimensions()
+        let layout = calculateOptimalLayout(windowDimensions: dimensionsMap, isHorizontal: isHorizontal)
+
+        ScrollView(isHorizontal ? .horizontal : .vertical, showsIndicators: false) {
+            DynStack(direction: isHorizontal ? .vertical : .horizontal, spacing: 16) {
+                ForEach(Array(layout.windowsPerStack.enumerated()), id: \.offset) { _, range in
+                    DynStack(direction: isHorizontal ? .horizontal : .vertical, spacing: 16) {
+                        ForEach(windowStates.indices, id: \.self) { index in
+                            if range.contains(index) {
+                                WindowPreview(
+                                    windowInfo: windowStates[index],
+                                    onTap: onWindowTap,
+                                    index: index,
+                                    dockPosition: dockPosition,
+                                    maxWindowDimension: maxWindowDimension,
+                                    bestGuessMonitor: bestGuessMonitor,
+                                    uniformCardRadius: uniformCardRadius,
+                                    handleWindowAction: { action in
+                                        handleWindowAction(action, at: index)
+                                    },
+                                    currIndex: windowSwitcherCoordinator.currIndex,
+                                    windowSwitcherActive: windowSwitcherCoordinator.windowSwitcherActive,
+                                    dimensions: getDimensions(for: index, dimensionsMap: dimensionsMap)
+                                )
+                                .id("\(appName)-\(index)")
+                                .animation(.snappy(duration: 0.175), value: windowStates)
+                                .gesture(
+                                    DragGesture(minimumDistance: 3, coordinateSpace: .global)
+                                        .onChanged { value in
+                                            if draggedWindowIndex == nil {
+                                                draggedWindowIndex = index
+                                                isDragging = true
+                                                DragPreviewCoordinator.shared.startDragging(
+                                                    windowInfo: windowStates[index],
+                                                    at: NSEvent.mouseLocation
+                                                )
+                                            }
+                                            if draggedWindowIndex == index {
+                                                DragPreviewCoordinator.shared.updatePreviewPosition(to: NSEvent.mouseLocation)
+                                            }
+                                        }
+                                        .onEnded { value in
+                                            if draggedWindowIndex == index {
+                                                handleWindowDrop(at: NSEvent.mouseLocation, for: index)
+                                                DragPreviewCoordinator.shared.endDragging()
+                                                draggedWindowIndex = nil
+                                                isDragging = false
+                                            }
+                                        }
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+            .padding(20)
+        }
+        .onAppear {
+            if !hasAppeared {
+                hasAppeared.toggle()
+                runUIUpdates(preventOpacityChange: false)
+            }
+        }
+        .onChange(of: windowSwitcherCoordinator.currIndex) { newIndex in
+            withAnimation {
+                scrollProxy.scrollTo("\(appName)-\(newIndex)", anchor: .center)
+            }
+        }
+        .onChange(of: windows) { _ in
+            runUIUpdates(preventOpacityChange: true)
+        }
+    }
+
+    // Helper function to create window preview with dimensions
+    @ViewBuilder
+    private func createWindowPreview(index: Int, scrollProxy: ScrollViewProxy, dimensions: WindowDimensions) -> some View {
+        WindowPreview(
+            windowInfo: windowStates[index],
+            onTap: onWindowTap,
+            index: index,
+            dockPosition: dockPosition,
+            maxWindowDimension: maxWindowDimension,
+            bestGuessMonitor: bestGuessMonitor,
+            uniformCardRadius: uniformCardRadius,
+            handleWindowAction: { action in
+                handleWindowAction(action, at: index)
+            },
+            currIndex: windowSwitcherCoordinator.currIndex,
+            windowSwitcherActive: windowSwitcherCoordinator.windowSwitcherActive,
+            dimensions: dimensions
+        )
+        .opacity(draggedWindowIndex == index ? 0.3 : 1.0)
+        .id("\(appName)-\(index)")
+        .gesture(
+            DragGesture(minimumDistance: 3, coordinateSpace: .global)
+                .onChanged { value in
+                    if draggedWindowIndex == nil {
+                        draggedWindowIndex = index
+                        isDragging = true
+                        DragPreviewCoordinator.shared.startDragging(
+                            windowInfo: windowStates[index],
+                            at: NSEvent.mouseLocation
+                        )
+                    }
+                    if draggedWindowIndex == index {
+                        DragPreviewCoordinator.shared.updatePreviewPosition(to: NSEvent.mouseLocation)
+                    }
+                }
+                .onEnded { value in
+                    if draggedWindowIndex == index {
+                        handleWindowDrop(at: NSEvent.mouseLocation, for: index)
+                        DragPreviewCoordinator.shared.endDragging()
+                        draggedWindowIndex = nil
+                        isDragging = false
+                    }
+                }
+        )
+    }
+
+    private func runUIUpdates(preventOpacityChange: Bool) {
+        if !preventOpacityChange { runAnimation() }
         loadAppIcon()
     }
 
@@ -295,6 +402,11 @@ struct WindowPreviewHoverContainer: View {
                 appIcon = icon
             }
         }
+    }
+
+    private func closeAllWindows() {
+        windowStates.removeAll()
+        windows.forEach { WindowUtil.closeWindow(windowInfo: $0) }
     }
 
     private func handleWindowAction(_ action: WindowAction, at index: Int) {

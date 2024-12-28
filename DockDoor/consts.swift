@@ -23,6 +23,9 @@ extension Defaults.Keys {
     static let fadeOutDuration = Key<CGFloat>("fadeOutDuration", default: 0.4)
     static let previewHoverAction = Key<PreviewHoverAction>("previewHoverAction", default: .none)
 
+    static let maxColumns = Key<CGFloat>("maxColumns", default: 0)
+    static let maxRows = Key<CGFloat>("maxRows", default: 0)
+
     static let showAnimations = Key<Bool>("showAnimations", default: true)
     static let gradientColorPalette = Key<GradientColorPaletteSettings>("gradientColorPalette", default: .init())
     static let enableWindowSwitcher = Key<Bool>("enableWindowSwitcher", default: true)
@@ -39,7 +42,7 @@ extension Defaults.Keys {
 
     static let showAppName = Key<Bool>("showAppName", default: true)
     static let appNameStyle = Key<AppNameStyle>("appNameStyle", default: .default)
-    static let selectionOpacity = Key<CGFloat>("selectionOpacity", default: 0.4)
+    static let selectionOpacity = Key<CGFloat>("selectionOpacity", default: 0.5)
 
     static let showWindowTitle = Key<Bool>("showWindowTitle", default: true)
     static let windowTitleDisplayCondition = Key<WindowTitleDisplayCondition>("windowTitleDisplayCondition", default: .all)
@@ -49,10 +52,14 @@ extension Defaults.Keys {
     static let trafficLightButtonsVisibility = Key<TrafficLightButtonsVisibility>("trafficLightButtonsVisibility", default: .dimmedOnPreviewHover)
     static let trafficLightButtonsPosition = Key<TrafficLightButtonsPosition>("trafficLightButtonsPosition", default: .topLeft)
 
+    static let windowSwitcherPlacementStrategy = Key<WindowSwitcherPlacementStrategy>("windowSwitcherPlacementStrategy", default: .screenWithMouse)
+    static let pinnedScreenIdentifier = Key<String>("pinnedScreenIdentifier", default: NSScreen.main?.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? String ?? "")
+
     // MARK: - Filters
 
     static let appNameFilters = Key<[String]>("appNameFilters", default: [])
     static let windowTitleFilters = Key<[String]>("windowTitleFilters", default: [])
+    static let customAppDirectories = Key<[String]>("customAppDirectories", default: [])
 }
 
 enum WindowTitleDisplayCondition: String, CaseIterable, Defaults.Serializable {
@@ -176,6 +183,23 @@ enum PreviewHoverAction: String, CaseIterable, Defaults.Serializable {
             String(localized: "Simulate a click (open the window)", comment: "Window popup hover action option")
         case .previewFullSize:
             String(localized: "See a large preview of the window", comment: "Window popup hover action option")
+        }
+    }
+}
+
+enum WindowSwitcherPlacementStrategy: String, CaseIterable, Defaults.Serializable {
+    case screenWithMouse
+    case screenWithLastActiveWindow
+    case pinnedToScreen
+
+    var localizedName: String {
+        switch self {
+        case .screenWithMouse:
+            String(localized: "Screen with mouse", comment: "Window switcher placement option")
+        case .screenWithLastActiveWindow:
+            String(localized: "Screen with last active window", comment: "Window switcher placement option")
+        case .pinnedToScreen:
+            String(localized: "Pinned to screen", comment: "Window switcher placement option")
         }
     }
 }
