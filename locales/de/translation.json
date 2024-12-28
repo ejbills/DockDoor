@@ -46,5 +46,7 @@
     "faqQ4": "Wie kann ich auf DockDoor’s Einstellungen zugreifen?",
     "faqA4-1": "If you have disabled the <pre class='inline'><strong><em>Show Menu Bar Icon</em></strong></pre> option in the <pre class='inline'><strong><em>General</em></strong></pre> tab, search for \"DockDoor\" using Spotlight and select the application. The settings window should then appear.",
     "faqA4-2": "If not, simply click on the menu bar icon and select <pre class='inline'><em><strong>Open Settings</strong></em></pre>. The settings window should now appear.",
-    "faqDocumentation": "Didn’t find your answer? Please search in the issues on the GitHub repository, and in a last resort open a new one describing your problem."
+    "faqDocumentation": "Didn’t find your answer? Please search in the issues on the GitHub repository, and in a last resort open a new one describing your problem.",
+    "windowDragHeading": "Reposition windows with ease",
+    "windowDragText": "Drag windows directly from DockDoor previews to reposition them"
 }

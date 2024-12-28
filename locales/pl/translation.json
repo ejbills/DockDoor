@@ -46,5 +46,7 @@
     "faqQ4": "Jak przejść do okna ustawień DockDoor?",
     "faqA4-1": "W przypadku wyłączenia<pre class='inline'><strong><em>Wyświetlanie ikony paska menu</em></strong></pre> w opcjach <pre class='inline'><strong><em>Ogólne</em></strong></strong></pre> wyszukaj „DockDoor” za pomocą Spotlight i wybierz aplikację. Następnie powinno pojawić się okno ustawień.",
     "faqA4-2": "Jeśli nie, wystarczy kliknąć ikonę na pasku menu i wybrać <pre class='inline'><em><strong>Otwórz ustawienia</strong></em></pre>. Powinno pojawić się okno ustawień.",
-    "faqDocumentation": "Nie znalazłeś odpowiedzi? Poszukaj w zgłoszeniach w repozytorium GitHub, a w ostateczności otwórz nowe zgłoszenie opisujące Twój problem."
+    "faqDocumentation": "Nie znalazłeś odpowiedzi? Poszukaj w zgłoszeniach w repozytorium GitHub, a w ostateczności otwórz nowe zgłoszenie opisujące Twój problem.",
+    "windowDragHeading": "Reposition windows with ease",
+    "windowDragText": "Drag windows directly from DockDoor previews to reposition them"
 }
