@@ -46,5 +46,7 @@
     "faqQ4": "Como acessar a janela de configurações do DockDoor?",
     "faqA4-1": "Se tiver desabilitado o ícone <pre class='inline'><strong><em>Mostrar ícone da barra de menu</em></strong></pre> na opção <pre class='inline'><strong><em>Geral</em></strong></pre> aba, pesquise o \"DockDoor\" usando o Spotlight e selecione a aplicação. A janela de configurações deve ser exibida.",
     "faqA4-2": "Se não, basta clicar no ícone da barra de menu e selecionar <pre class='inline'><em><strong>Abrir Configurações</strong></em></pre>. A janela de configurações deve ser exibida.",
-    "faqDocumentation": "Não encontrou sua resposta? Por favor, procure nas questões do repositório do GitHub e abra em um último recurso uma nova descrevendo seu problema."
+    "faqDocumentation": "Não encontrou sua resposta? Por favor, procure nas questões do repositório do GitHub e abra em um último recurso uma nova descrevendo seu problema.",
+    "windowDragHeading": "Reposition windows with ease",
+    "windowDragText": "Drag windows directly from DockDoor previews to reposition them"
 }

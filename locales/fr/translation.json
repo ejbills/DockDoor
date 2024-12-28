@@ -46,5 +46,7 @@
     "faqQ4": "Comment accéder aux paramètres de DockDoor&nbsp;?",
     "faqA4-1": "Si vous avez désactivé l’option <pre class='inline'><strong><em>Afficher l’icône dans la barre des menus</em></strong></pre> dans l’onglet <pre class='inline'><strong><em>Général</em></strong></pre>, cherchez «&nbsp;DockDoor&nbsp;» avec Spotlight et sélectionnez l’application. Les paramètres devraient alors s’afficher.",
     "faqA4-2": "Si non, cliquez simplement sur l’icône de la barre des menus et sélectionnez <pre class='inline'><em><strong>Ouvrir les réglages</strong></em></pre>. Les paramètres devraient alors s’afficher.",
-    "faqDocumentation": "Vous n’avez pas trouvé de réponse&nbsp;? Veuillez chercher parmi les problèmes (<em>issues</em>) sur le dépôt GitHub, et en dernier ressort, ouvrez-en un nouveau décrivant votre problème."
+    "faqDocumentation": "Vous n’avez pas trouvé de réponse&nbsp;? Veuillez chercher parmi les problèmes (<em>issues</em>) sur le dépôt GitHub, et en dernier ressort, ouvrez-en un nouveau décrivant votre problème.",
+    "windowDragHeading": "Reposition windows with ease",
+    "windowDragText": "Drag windows directly from DockDoor previews to reposition them"
 }
