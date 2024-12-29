@@ -5,6 +5,7 @@ struct TrafficLightButtons: View {
     let displayMode: TrafficLightButtonsVisibility
     let hoveringOverParentWindow: Bool
     let onWindowAction: (WindowAction) -> Void
+    let pillStyling: Bool
     @State private var isHovering = false
 
     var body: some View {
@@ -22,6 +23,9 @@ struct TrafficLightButtons: View {
             withAnimation(.snappy(duration: 0.175)) {
                 self.isHovering = isHovering
             }
+        }
+        .if(pillStyling && opacity > 0) { view in
+            view.materialPill()
         }
     }
 

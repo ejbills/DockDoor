@@ -42,7 +42,7 @@ extension Defaults.Keys {
 
     static let showAppName = Key<Bool>("showAppName", default: true)
     static let appNameStyle = Key<AppNameStyle>("appNameStyle", default: .default)
-    static let selectionOpacity = Key<CGFloat>("selectionOpacity", default: 0.5)
+    static let selectionOpacity = Key<CGFloat>("selectionOpacity", default: 0.4)
 
     static let showWindowTitle = Key<Bool>("showWindowTitle", default: true)
     static let windowTitleDisplayCondition = Key<WindowTitleDisplayCondition>("windowTitleDisplayCondition", default: .all)
@@ -53,6 +53,7 @@ extension Defaults.Keys {
     static let trafficLightButtonsPosition = Key<TrafficLightButtonsPosition>("trafficLightButtonsPosition", default: .topLeft)
 
     static let windowSwitcherPlacementStrategy = Key<WindowSwitcherPlacementStrategy>("windowSwitcherPlacementStrategy", default: .screenWithMouse)
+    static let windowSwitcherControlPosition = Key<WindowSwitcherControlPosition>("windowSwitcherControlPosition", default: .topTrailing)
     static let pinnedScreenIdentifier = Key<String>("pinnedScreenIdentifier", default: NSScreen.main?.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? String ?? "")
 
     // MARK: - Filters
@@ -200,6 +201,26 @@ enum WindowSwitcherPlacementStrategy: String, CaseIterable, Defaults.Serializabl
             String(localized: "Screen with last active window", comment: "Window switcher placement option")
         case .pinnedToScreen:
             String(localized: "Pinned to screen", comment: "Window switcher placement option")
+        }
+    }
+}
+
+enum WindowSwitcherControlPosition: String, CaseIterable, Defaults.Serializable {
+    case topLeading
+    case topTrailing
+    case bottomLeading
+    case bottomTrailing
+
+    var localizedName: String {
+        switch self {
+        case .topLeading:
+            String(localized: "At top - Title on left, controls on right")
+        case .topTrailing:
+            String(localized: "At top - Controls on left, title on right")
+        case .bottomLeading:
+            String(localized: "At bottom - Title on left, controls on right")
+        case .bottomTrailing:
+            String(localized: "At bottom - Controls on left, title on right")
         }
     }
 }

@@ -10,6 +10,7 @@ struct AppearanceSettingsView: View {
     @Default(.windowTitleDisplayCondition) var windowTitleDisplayCondition
     @Default(.windowTitleVisibility) var windowTitleVisibility
     @Default(.windowTitlePosition) var windowTitlePosition
+    @Default(.windowSwitcherControlPosition) var windowSwitcherControlPosition
     @Default(.trafficLightButtonsVisibility) var trafficLightButtonsVisibility
     @Default(.trafficLightButtonsPosition) var trafficLightButtonsPosition
     @Default(.selectionOpacity) var selectionOpacity
@@ -25,180 +26,135 @@ struct AppearanceSettingsView: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Toggle(isOn: $showAnimations, label: {
-                Text("Enable Preview Window Sliding Animation")
-            })
+        ScrollView {
+            VStack(alignment: .leading, spacing: 16) {
+                StyledGroupBox(label: "General") {
+                    VStack(alignment: .leading, spacing: 10) {
+                        Toggle(isOn: $showAnimations) {
+                            Text("Enable Preview Window Sliding Animation")
+                        }
 
-            Toggle(isOn: $uniformCardRadius, label: {
-                Text("Use Uniform Image Preview Radius")
-            })
+                        Toggle(isOn: $uniformCardRadius) {
+                            Text("Use Uniform Image Preview Radius")
+                        }
 
-            sliderSetting(title: String(localized: "Window Selection Background Opacity"),
-                          value: $selectionOpacity,
-                          range: 0 ... 1,
-                          step: 0.05,
-                          unit: "",
-                          formatter: NumberFormatter.percentFormatter)
+                        Toggle(isOn: $showWindowTitle) {
+                            Text("Show Window Title in Previews")
+                        }
 
-            Divider()
-
-            Text("Window Preview Layout Limits")
-                .font(.headline)
-
-            VStack(alignment: .leading, spacing: 4) {
-                Text("Set to 0 for unlimited")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-
-                Text("• When hovering over the Dock at the bottom, windows flow in rows from left to right")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-
-                Text("• When hovering over the Dock on the sides, windows flow in columns from top to bottom")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-
-                Text("• When using the Window Switcher, windows always flow in rows from left to right")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-            }
-            .padding(.bottom, 4)
-
-            sliderSetting(title: String(localized: "Maximum Horizontal Rows"),
-                          value: $maxRows,
-                          range: 0 ... 10,
-                          step: 1,
-                          unit: "")
-
-            sliderSetting(title: String(localized: "Maximum Vertical Columns"),
-                          value: $maxColumns,
-                          range: 0 ... 10,
-                          step: 1,
-                          unit: "")
-
-            Divider()
-
-            Picker("Traffic Light Buttons Visibility", selection: $trafficLightButtonsVisibility) {
-                ForEach(TrafficLightButtonsVisibility.allCases, id: \.self) { visibility in
-                    Text(visibility.localizedName)
-                        .tag(visibility)
-                }
-            }
-            .pickerStyle(MenuPickerStyle())
-            .scaledToFit()
-            .layoutPriority(1)
-
-            Picker("Traffic Light Buttons Position", selection: $trafficLightButtonsPosition) {
-                ForEach(TrafficLightButtonsPosition.allCases, id: \.self) { position in
-                    Text(position.localizedName)
-                        .tag(position)
-                }
-            }
-            .onChange(of: trafficLightButtonsPosition) { newValue in
-                if newValue.rawValue == windowTitlePosition.rawValue {
-                    MessageUtil.showAlert(
-                        title: String(localized: "Elements Overlap"),
-                        message: String(localized: "The selected positions for Traffic Light Buttons and Window Title will overlap."),
-                        actions: [.ok, .cancel],
-                        completion: { result in
-                            if result == .cancel {
-                                trafficLightButtonsPosition = previousTrafficLightButtonsPosition
-                            } else {
-                                previousTrafficLightButtonsPosition = newValue
+                        Picker("Show Window Title in", selection: $windowTitleDisplayCondition) {
+                            ForEach(WindowTitleDisplayCondition.allCases, id: \.self) { condition in
+                                Text(condition.localizedName)
+                                    .tag(condition)
                             }
                         }
-                    )
-                } else {
-                    previousTrafficLightButtonsPosition = newValue
-                }
-            }
-            .pickerStyle(SegmentedPickerStyle())
-            .scaledToFit()
-            .layoutPriority(1)
 
-            Divider()
-
-            Toggle(isOn: $showAppName) {
-                Text("Show App Name in Dock Previews")
-            }
-
-            Picker(String(localized: "App Name Style"), selection: $appNameStyle) {
-                ForEach(AppNameStyle.allCases, id: \.self) { style in
-                    Text(style.localizedName)
-                        .tag(style)
-                }
-            }
-            .pickerStyle(MenuPickerStyle())
-            .scaledToFit()
-            .layoutPriority(1)
-            .disabled(!showAppName)
-
-            Divider()
-
-            Toggle(isOn: $showWindowTitle) {
-                Text("Show Window Title in Previews")
-            }
-
-            Group {
-                Picker("Show Window Title in", selection: $windowTitleDisplayCondition) {
-                    ForEach(WindowTitleDisplayCondition.allCases, id: \.self) { condtion in
-                        if condtion == .all {
-                            Text(condtion.localizedName)
-                                .tag(condtion)
-                            Divider() // Separate from Window Switcher & Dock Previews
-                        } else {
-                            Text(condtion.localizedName)
-                                .tag(condtion)
+                        Picker("Traffic Light Buttons Visibility", selection: $trafficLightButtonsVisibility) {
+                            ForEach(TrafficLightButtonsVisibility.allCases, id: \.self) { visibility in
+                                Text(visibility.localizedName)
+                                    .tag(visibility)
+                            }
                         }
-                    }
-                }
-                .pickerStyle(MenuPickerStyle())
-                .scaledToFit()
 
-                Picker("Window Title Visibility", selection: $windowTitleVisibility) {
-                    ForEach(WindowTitleVisibility.allCases, id: \.self) { visibility in
-                        Text(visibility.localizedName)
-                            .tag(visibility)
+                        sliderSetting(title: String(localized: "Window Selection Background Opacity"),
+                                      value: $selectionOpacity,
+                                      range: 0 ... 1,
+                                      step: 0.05,
+                                      unit: "",
+                                      formatter: NumberFormatter.percentFormatter)
                     }
                 }
-                .scaledToFit()
-                .pickerStyle(MenuPickerStyle())
 
-                Picker("Window Title Position", selection: $windowTitlePosition) {
-                    ForEach(WindowTitlePosition.allCases, id: \.self) { position in
-                        Text(position.localizedName)
-                            .tag(position)
-                    }
-                }
-                .onChange(of: windowTitlePosition) { newValue in
-                    if newValue.rawValue == trafficLightButtonsPosition.rawValue {
-                        MessageUtil.showAlert(
-                            title: String(localized: "Elements Overlap"),
-                            message: String(localized: "The selected positions for Traffic Light Buttons and Window Title will overlap."),
-                            actions: [.ok, .cancel],
-                            completion: { result in
-                                if result == .cancel {
-                                    windowTitlePosition = previousWindowTitlePosition
-                                } else {
-                                    previousWindowTitlePosition = newValue
+                StyledGroupBox(label: "Dock Previews") {
+                    VStack(alignment: .leading, spacing: 10) {
+                        Toggle(isOn: $showAppName) {
+                            Text("Show App Name in Dock Previews")
+                        }
+
+                        Picker(String(localized: "App Name Style"), selection: $appNameStyle) {
+                            ForEach(AppNameStyle.allCases, id: \.self) { style in
+                                Text(style.localizedName)
+                                    .tag(style)
+                            }
+                        }
+                        .disabled(!showAppName)
+
+                        Group {
+                            Picker("Window Title Visibility", selection: $windowTitleVisibility) {
+                                ForEach(WindowTitleVisibility.allCases, id: \.self) { visibility in
+                                    Text(visibility.localizedName)
+                                        .tag(visibility)
                                 }
                             }
-                        )
-                    } else {
-                        previousWindowTitlePosition = newValue
+
+                            Picker("Window Title Position", selection: $windowTitlePosition) {
+                                ForEach(WindowTitlePosition.allCases, id: \.self) { position in
+                                    Text(position.localizedName)
+                                        .tag(position)
+                                }
+                            }
+                        }
+                        .disabled(!showWindowTitle)
                     }
                 }
-                .scaledToFit()
-                .pickerStyle(SegmentedPickerStyle())
+
+                // Window Switcher Group
+                StyledGroupBox(label: "Window Switcher") {
+                    VStack(alignment: .leading, spacing: 10) {
+                        Picker("Position Window Controls", selection: $windowSwitcherControlPosition) {
+                            ForEach(WindowSwitcherControlPosition.allCases, id: \.self) { position in
+                                Text(position.localizedName)
+                                    .tag(position)
+                            }
+                        }
+                        .pickerStyle(MenuPickerStyle())
+                    }
+                }
+
+                StyledGroupBox(label: "Window Preview Layout") {
+                    VStack(alignment: .leading, spacing: 10) {
+                        Text("Layout Limits")
+                            .font(.subheadline)
+
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("Set to 0 for unlimited")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+
+                            Text("• When hovering over the Dock at the bottom, windows flow in rows from left to right")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+
+                            Text("• When hovering over the Dock on the sides, windows flow in columns from top to bottom")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+
+                            Text("• When using the Window Switcher, windows always flow in rows from left to right")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                        .padding(.bottom, 4)
+
+                        sliderSetting(title: String(localized: "Maximum Horizontal Rows"),
+                                      value: $maxRows,
+                                      range: 0 ... 10,
+                                      step: 1,
+                                      unit: "")
+
+                        sliderSetting(title: String(localized: "Maximum Vertical Columns"),
+                                      value: $maxColumns,
+                                      range: 0 ... 10,
+                                      step: 1,
+                                      unit: "")
+                    }
+                }
+
+                StyledGroupBox(label: "Colors") {
+                    GradientColorPaletteSettingsView()
+                }
             }
-            .disabled(!showWindowTitle)
-
-            Divider()
-
-            GradientColorPaletteSettingsView()
+            .padding(20)
         }
-        .padding(20)
-        .frame(minWidth: 650)
+        .frame(minWidth: 650, maxHeight: 700)
     }
 }

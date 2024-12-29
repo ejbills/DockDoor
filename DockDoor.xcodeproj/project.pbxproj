@@ -82,6 +82,9 @@
 		BBBD4AF52C8D671C0074FFCF /* NSImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBBD4AF42C8D671A0074FFCF /* NSImage.swift */; };
 		BBBD4AF82C8D71560074FFCF /* ConfettiSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = BBBD4AF72C8D71560074FFCF /* ConfettiSwiftUI */; };
 		BBCFAE402C266234002E1516 /* FirstTimeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBCFAE3F2C266234002E1516 /* FirstTimeView.swift */; };
+		BBE153BE2D2126D000CD3D4A /* MaterialPill.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE153BD2D2126C000CD3D4A /* MaterialPill.swift */; };
+		BBE153C02D21FA2700CD3D4A /* StyledGroupBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE153BF2D21FA2300CD3D4A /* StyledGroupBox.swift */; };
+		BBE153C22D22024F00CD3D4A /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE153C12D22024E00CD3D4A /* View.swift */; };
 		BBE692192D17AD9E0093B4A5 /* DangerButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE692182D17AD9C0093B4A5 /* DangerButton.swift */; };
 		BBE7CC8F2C22421900AB8F4D /* Settings in Frameworks */ = {isa = PBXBuildFile; productRef = BBE7CC8E2C22421900AB8F4D /* Settings */; };
 		BBE7CC912C22429A00AB8F4D /* settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE7CC902C22429A00AB8F4D /* settings.swift */; };
@@ -167,6 +170,9 @@
 		BBAC6B442D15FA8800A0F370 /* AXValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AXValue.swift; sourceTree = "<group>"; };
 		BBBD4AF42C8D671A0074FFCF /* NSImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSImage.swift; sourceTree = "<group>"; };
 		BBCFAE3F2C266234002E1516 /* FirstTimeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstTimeView.swift; sourceTree = "<group>"; };
+		BBE153BD2D2126C000CD3D4A /* MaterialPill.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaterialPill.swift; sourceTree = "<group>"; };
+		BBE153BF2D21FA2300CD3D4A /* StyledGroupBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyledGroupBox.swift; sourceTree = "<group>"; };
+		BBE153C12D22024E00CD3D4A /* View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
 		BBE692182D17AD9C0093B4A5 /* DangerButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DangerButton.swift; sourceTree = "<group>"; };
 		BBE7CC902C22429A00AB8F4D /* settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = settings.swift; sourceTree = "<group>"; };
 		BBF383962C94A25B00B39A23 /* sliderSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = sliderSetting.swift; sourceTree = "<group>"; };
@@ -210,6 +216,8 @@
 		3A105FD42C1BED5B0015EC66 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				BBE153BF2D21FA2300CD3D4A /* StyledGroupBox.swift */,
+				BBE153BD2D2126C000CD3D4A /* MaterialPill.swift */,
 				BBE692182D17AD9C0093B4A5 /* DangerButton.swift */,
 				3A1622C62C8D5A5C00D318EE /* EnabledActionRowView.swift */,
 				BBF383962C94A25B00B39A23 /* sliderSetting.swift */,
@@ -230,6 +238,7 @@
 		3A105FD72C1BF11D0015EC66 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				BBE153C12D22024E00CD3D4A /* View.swift */,
 				BBAC6B442D15FA8800A0F370 /* AXValue.swift */,
 				BB918BB42CF7613200931236 /* CGRect.swift */,
 				27DC8C162CFA4DA7005F8F31 /* Formatters */,
@@ -582,6 +591,7 @@
 				BB6021D02D1E60EA00D47C86 /* Flow Container Calculations.swift in Sources */,
 				3A1622BA2C8C0FF100D318EE /* NoBtnStyle.swift in Sources */,
 				BB3967FD2C291D5A004F1AB6 /* StackedShadow.swift in Sources */,
+				BBE153BE2D2126D000CD3D4A /* MaterialPill.swift in Sources */,
 				3A1622CE2C8D5F8500D318EE /* FirstTimeCongratsTabView.swift in Sources */,
 				3A1622C32C8D586900D318EE /* PermissionsView.swift in Sources */,
 				BBF4139A2C40A64A00AA6733 /* CustomizableFluidGradient.swift in Sources */,
@@ -611,6 +621,7 @@
 				BB04405E2C77A87F009F1D33 /* PreferencesProtocol.swift in Sources */,
 				27DC8C172CFA4DA7005F8F31 /* NumberFormatter+Convenience.swift in Sources */,
 				3A1622C72C8D5A5C00D318EE /* EnabledActionRowView.swift in Sources */,
+				BBE153C22D22024F00CD3D4A /* View.swift in Sources */,
 				3A1622D02C8D691700D318EE /* SquiggleDivider.swift in Sources */,
 				BB157B822C0EB29E00997315 /* DockObserver.swift in Sources */,
 				BBA153FA2C11FFD500119C02 /* consts.swift in Sources */,
@@ -645,6 +656,7 @@
 				BB157B792C0E330100997315 /* WindowUtil.swift in Sources */,
 				BB15E1EA2C8F8DB4002ECFB9 /* HelpSettingsView.swift in Sources */,
 				BBFAD73C2C287C770092F5F1 /* UpdateSettingsView.swift in Sources */,
+				BBE153C02D21FA2700CD3D4A /* StyledGroupBox.swift in Sources */,
 				BB157B7B2C0E343000997315 /* SystemPreferencesHelper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

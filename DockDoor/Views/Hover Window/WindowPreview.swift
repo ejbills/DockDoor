@@ -20,6 +20,7 @@ struct WindowPreview: View {
     @Default(.windowTitleVisibility) var windowTitleVisibility
     @Default(.trafficLightButtonsVisibility) var trafficLightButtonsVisibility
     @Default(.trafficLightButtonsPosition) var trafficLightButtonsPosition
+    @Default(.windowSwitcherControlPosition) var windowSwitcherControlPosition
     @Default(.selectionOpacity) var selectionOpacity
 
     // preview popup action handlers
@@ -29,10 +30,6 @@ struct WindowPreview: View {
     @State private var isHoveringOverDockPeekPreview = false
     @State private var isHoveringOverWindowSwitcherPreview = false
     @State private var fullPreviewTimer: Timer?
-
-    private var calculatedMaxDimensions: CGSize {
-        CGSize(width: bestGuessMonitor.frame.width * 0.75, height: bestGuessMonitor.frame.height * 0.75)
-    }
 
     private func windowContent(isMinimized: Bool, isHidden: Bool, isSelected: Bool) -> some View {
         Group {
@@ -48,57 +45,146 @@ struct WindowPreview: View {
         .frame(maxWidth: dimensions.maxDimensions.width, maxHeight: dimensions.maxDimensions.height)
     }
 
+    private func windowSwitcherContent(_ selected: Bool) -> some View {
+        let shouldShowTitle = showWindowTitle && (
+            windowTitleDisplayCondition == .all ||
+                windowTitleDisplayCondition == .windowSwitcherOnly
+        )
+
+        let titleAndSubtitleContent = VStack(alignment: .leading, spacing: 0) {
+            Text(windowInfo.app.localizedName ?? "Unknown")
+                .font(.system(size: 13, weight: .medium))
+                .foregroundStyle(.primary)
+                .lineLimit(1)
+
+            if let windowTitle = windowInfo.window.title,
+               !windowTitle.isEmpty,
+               windowTitle != windowInfo.app.localizedName,
+               shouldShowTitle
+            {
+                Text(windowInfo.windowName ?? "Hidden window")
+                    .font(.system(size: 12))
+                    .foregroundStyle(.secondary)
+                    .lineLimit(1)
+            }
+        }
+        .frame(idealWidth: nil, maxWidth: dimensions.size.width * 0.60, alignment: .leading)
+        .fixedSize(horizontal: true, vertical: false)
+
+        let appIconContent = Group {
+            if let appIcon = windowInfo.app.icon {
+                Image(nsImage: appIcon)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 35, height: 35)
+            }
+        }
+
+        let controlsContent = Group {
+            if !windowInfo.isMinimized, !windowInfo.isHidden, windowInfo.closeButton != nil {
+                TrafficLightButtons(
+                    windowInfo: windowInfo,
+                    displayMode: trafficLightButtonsVisibility,
+                    hoveringOverParentWindow: selected || isHoveringOverWindowSwitcherPreview,
+                    onWindowAction: handleWindowAction,
+                    pillStyling: true
+                )
+            }
+        }
+
+        @ViewBuilder
+        func contentRow(isLeadingControls: Bool) -> some View {
+            HStack(spacing: 4) {
+                if isLeadingControls {
+                    controlsContent
+                    Spacer()
+                    appIconContent
+                    titleAndSubtitleContent
+                } else {
+                    appIconContent
+                    titleAndSubtitleContent
+                    Spacer()
+                    controlsContent
+                }
+            }
+        }
+
+        return VStack(spacing: 0) {
+            switch windowSwitcherControlPosition {
+            case .topLeading:
+                contentRow(isLeadingControls: false)
+            case .topTrailing:
+                contentRow(isLeadingControls: true)
+            case .bottomLeading:
+                contentRow(isLeadingControls: false)
+            case .bottomTrailing:
+                contentRow(isLeadingControls: true)
+            }
+        }
+        .padding(windowSwitcherControlPosition == .topLeading ||
+            windowSwitcherControlPosition == .topTrailing ?
+            .bottom : .top, 4)
+    }
+
     var body: some View {
         let isHighlightedInWindowSwitcher = (index == currIndex && windowSwitcherActive)
         let selected = isHoveringOverDockPeekPreview || isHighlightedInWindowSwitcher
 
-        ZStack(alignment: .topTrailing) {
-            VStack(spacing: 0) {
+        ZStack(alignment: .topLeading) {
+            VStack(alignment: .leading, spacing: 0) {
+                // Title and traffic lights for window switcher mode in top mode
+                if windowSwitcherActive, windowSwitcherControlPosition == .topLeading ||
+                    windowSwitcherControlPosition == .topTrailing
+                {
+                    windowSwitcherContent(selected)
+                }
+
+                // Window content with overlays for non-window switcher mode
                 windowContent(isMinimized: windowInfo.isMinimized, isHidden: windowInfo.isHidden, isSelected: selected)
                     .shadow(radius: selected || isHoveringOverWindowSwitcherPreview ? 0 : 3)
                     .clipShape(uniformCardRadius ? AnyShape(RoundedRectangle(cornerRadius: 12, style: .continuous)) : AnyShape(Rectangle()))
-            }
-            .overlay(alignment: {
-                switch windowTitlePosition {
-                case .bottomLeft:
-                    .bottomLeading
-                case .bottomRight:
-                    .bottomTrailing
-                case .topRight:
-                    .topTrailing
-                case .topLeft:
-                    .topLeading
-                }
-            }()) {
-                if showWindowTitle, windowTitleDisplayCondition == .all || (windowTitleDisplayCondition == .windowSwitcherOnly && windowSwitcherActive) || (windowTitleDisplayCondition == .dockPreviewsOnly && !windowSwitcherActive) {
-                    windowTitleOverlay(selected: selected)
-                }
-            }
-            .overlay(alignment: {
-                switch trafficLightButtonsPosition {
-                case .bottomLeft:
-                    .bottomLeading
-                case .bottomRight:
-                    .bottomTrailing
-                case .topRight:
-                    .topTrailing
-                case .topLeft:
-                    .topLeading
-                }
-            }()) {
-                if !windowInfo.isMinimized, !windowInfo.isHidden, let _ = windowInfo.closeButton {
-                    TrafficLightButtons(
-                        windowInfo: windowInfo,
-                        displayMode: trafficLightButtonsVisibility,
-                        hoveringOverParentWindow: selected || isHoveringOverWindowSwitcherPreview,
-                        onWindowAction: handleWindowAction
-                    )
+                    .overlay(alignment: {
+                        switch windowTitlePosition {
+                        case .bottomLeft: .bottomLeading
+                        case .bottomRight: .bottomTrailing
+                        case .topRight: .topTrailing
+                        case .topLeft: .topLeading
+                        }
+                    }()) {
+                        if !windowSwitcherActive {
+                            windowTitleOverlay(selected: selected)
+                        }
+                    }
+                    .overlay(alignment: {
+                        switch trafficLightButtonsPosition {
+                        case .bottomLeft: .bottomLeading
+                        case .bottomRight: .bottomTrailing
+                        case .topRight: .topTrailing
+                        case .topLeft: .topLeading
+                        }
+                    }()) {
+                        if !windowSwitcherActive, !windowInfo.isMinimized, !windowInfo.isHidden, let _ = windowInfo.closeButton {
+                            TrafficLightButtons(
+                                windowInfo: windowInfo,
+                                displayMode: trafficLightButtonsVisibility,
+                                hoveringOverParentWindow: selected || isHoveringOverWindowSwitcherPreview,
+                                onWindowAction: handleWindowAction, pillStyling: false
+                            )
+                            .padding(4)
+                        }
+                    }
+
+                // Title and traffic lights for window switcher mode in bottom mode
+                if windowSwitcherActive, windowSwitcherControlPosition == .bottomLeading ||
+                    windowSwitcherControlPosition == .bottomTrailing
+                {
+                    windowSwitcherContent(selected)
                 }
             }
             .background {
                 if selected || isHoveringOverWindowSwitcherPreview {
                     RoundedRectangle(cornerRadius: uniformCardRadius ? 14 : 0)
-                        .fill(Color.gray.opacity(selectionOpacity))
+                        .fill(Color.secondary.opacity(selectionOpacity))
                         .padding(-6)
                 }
             }
@@ -221,38 +307,17 @@ struct WindowPreview: View {
 
     @ViewBuilder
     private func windowTitleOverlay(selected: Bool) -> some View {
-        if windowSwitcherActive || windowTitleVisibility == .alwaysVisible || selected {
-            if windowSwitcherActive {
-                HStack(spacing: 4) {
-                    if let appIcon = windowInfo.app.icon {
-                        Image(nsImage: appIcon)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 14, height: 14)
-                    }
-                    if windowTitleVisibility == .alwaysVisible || selected {
-                        Text(windowInfo.app.localizedName ?? "Unknown")
-                            .font(.system(size: 12, weight: .medium))
-                            .foregroundStyle(.primary)
-                            .lineLimit(1)
-                        if let windowTitle = windowInfo.window.title, !windowTitle.isEmpty, windowTitle != windowInfo.app.localizedName {
-                            Divider()
-                            let stringMeasurementWidth = measureString(windowTitle, fontSize: 12).width + 5
-                            TheMarquee(width: min(stringMeasurementWidth, 200), secsBeforeLooping: 1, speedPtsPerSec: 20, nonMovingAlignment: .leading) {
-                                Text(windowInfo.windowName ?? "Hidden window")
-                                    .font(.system(size: 12, weight: .medium))
-                                    .foregroundStyle(.primary)
-                                    .lineLimit(1)
-                            }
-                        }
-                    }
-                }
-                .frame(height: 20)
-                .padding(.horizontal, 8)
-                .padding(.vertical, 4)
-                .background(RoundedRectangle(cornerRadius: 6, style: .continuous).fill(.ultraThinMaterial))
-                .padding(4)
-            } else if let windowTitle = windowInfo.window.title, !windowTitle.isEmpty, windowTitle != windowInfo.app.localizedName {
+        let shouldShowTitle = showWindowTitle && (
+            windowTitleDisplayCondition == .all ||
+                (windowTitleDisplayCondition == .dockPreviewsOnly && !windowSwitcherActive) ||
+                (windowTitleDisplayCondition == .windowSwitcherOnly && windowSwitcherActive)
+        )
+
+        if shouldShowTitle, windowTitleVisibility == .alwaysVisible || selected {
+            if let windowTitle = windowInfo.window.title,
+               !windowTitle.isEmpty,
+               windowTitle != windowInfo.app.localizedName
+            {
                 let stringMeasurementWidth = measureString(windowTitle, fontSize: 12).width + 5
                 let maxLabelWidth = dimensions.size.width - 50
                 let width = min(stringMeasurementWidth, maxLabelWidth)
@@ -262,8 +327,7 @@ struct WindowPreview: View {
                         .foregroundStyle(.primary)
                         .lineLimit(1)
                 }
-                .padding(4)
-                .background(RoundedRectangle(cornerRadius: 6, style: .continuous).fill(.ultraThinMaterial))
+                .materialPill()
                 .padding(4)
             }
         }

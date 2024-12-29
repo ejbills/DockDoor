@@ -107,7 +107,7 @@ struct FiltersSettingsView: View {
                     }
                     .frame(maxWidth: .infinity)
                     .padding(8)
-                    .background(Color(.windowBackgroundColor).opacity(0.5))
+                    .background(Color.gray.opacity(0.25))
                     .clipShape(RoundedRectangle(cornerRadius: 8))
                 }
                 .frame(maxHeight: 100)
@@ -188,7 +188,7 @@ struct FiltersSettingsView: View {
                     .padding(8)
                 }
                 .frame(height: 200)
-                .background(Color(.windowBackgroundColor).opacity(0.5))
+                .background(Color.gray.opacity(0.25))
                 .clipShape(RoundedRectangle(cornerRadius: 8))
             }
 
@@ -237,7 +237,7 @@ struct FiltersSettingsView: View {
                     .padding(8)
                 }
                 .frame(height: 200)
-                .background(Color(.windowBackgroundColor).opacity(0.5))
+                .background(Color.gray.opacity(0.25))
                 .clipShape(RoundedRectangle(cornerRadius: 8))
 
                 HStack {
@@ -256,7 +256,7 @@ struct FiltersSettingsView: View {
                 }
             }
         }
-        .padding(16)
+        .padding(20)
         .frame(minWidth: 650)
         .sheet(isPresented: $showingAddFilterSheet) {
             AddFilterSheet(
