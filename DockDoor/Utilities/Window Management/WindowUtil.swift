@@ -43,26 +43,11 @@ struct CachedImage {
 }
 
 enum WindowUtil {
-    private static var imageCache: [CGWindowID: CachedImage] = [:]
     private static let cacheQueue = DispatchQueue(label: "com.dockdoor.cacheQueue", attributes: .concurrent)
-    private static var cacheExpirySeconds: Double = Defaults[.screenCaptureCacheLifespan]
 
     private static let desktopSpaceWindowCacheManager = SpaceWindowCacheManager()
 
     // MARK: - Cache Management
-
-    static func clearExpiredCache() {
-        let now = Date()
-        cacheQueue.async(flags: .barrier) {
-            imageCache = imageCache.filter { now.timeIntervalSince($0.value.timestamp) <= cacheExpirySeconds }
-        }
-    }
-
-    static func resetCache() {
-        cacheQueue.async(flags: .barrier) {
-            imageCache.removeAll()
-        }
-    }
 
     static func clearWindowCache(for app: NSRunningApplication) {
         desktopSpaceWindowCacheManager.writeCache(pid: app.processIdentifier, windowSet: [])
@@ -76,9 +61,21 @@ enum WindowUtil {
 
     /// Main function to capture a window image using ScreenCaptureKit, with fallback to legacy methods for older macOS versions.
     static func captureWindowImage(window: SCWindow, forceRefresh: Bool = false) async throws -> CGImage {
-        clearExpiredCache()
-        if let cachedImage = getCachedImage(window: window), !forceRefresh {
-            return cachedImage
+        // Check cache first if not forcing refresh
+        if !forceRefresh {
+            if let pid = window.owningApplication?.processID,
+               let cachedWindow = desktopSpaceWindowCacheManager.readCache(pid: pid)
+               .first(where: { $0.id == window.windowID && $0.windowName == window.title }),
+               let cachedImage = cachedWindow.image
+            {
+                // Check if we need to refresh the image based on cache lifespan
+                let cacheLifespan = Defaults[.screenCaptureCacheLifespan]
+                if Date().timeIntervalSince(cachedWindow.date) <= cacheLifespan {
+                    return cachedImage
+                }
+                // If we reach here, the image is stale and needs refreshing
+                // but we keep the WindowInfo in cache
+            }
         }
 
         let captureError = NSError(
@@ -141,16 +138,20 @@ enum WindowUtil {
             }
         }
 
-        let cachedImage = CachedImage(image: cgImage, timestamp: Date(), windowname: window.title)
-        imageCache[window.windowID] = cachedImage
-        return cgImage
-    }
-
-    private static func getCachedImage(window: SCWindow) -> CGImage? {
-        if let cachedImage = imageCache[window.windowID], cachedImage.windowname == window.title, Date().timeIntervalSince(cachedImage.timestamp) <= cacheExpirySeconds {
-            return cachedImage.image
+        // Update the window info in the cache with the new image
+        if let pid = window.owningApplication?.processID {
+            desktopSpaceWindowCacheManager.updateCache(pid: pid) { windowSet in
+                if let index = windowSet.firstIndex(where: { $0.id == window.windowID }) {
+                    var updatedWindow = windowSet[index]
+                    updatedWindow.image = cgImage
+                    updatedWindow.date = Date() // Update timestamp when updating image
+                    windowSet.remove(at: index)
+                    windowSet.insert(updatedWindow)
+                }
+            }
         }
-        return nil
+
+        return cgImage
     }
 
     static func isValidElement(_ element: AXUIElement) -> Bool {
