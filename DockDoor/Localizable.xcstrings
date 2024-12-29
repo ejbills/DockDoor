@@ -953,8 +953,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "• When hovering over the Dock at the bottom, windows flow in rows from left to right"
+            "state" : "translated",
+            "value" : "• Lorsque vous survolez le Dock en bas, les fenêtres circulent en rangées de gauche à droite"
           }
         },
         "he" : {
@@ -1131,8 +1131,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "• When hovering over the Dock on the sides, windows flow in columns from top to bottom"
+            "state" : "translated",
+            "value" : "• Lorsque vous survolez le Dock sur les côtés, les fenêtres circulent en colonnes de haut en bas"
           }
         },
         "he" : {
@@ -1309,8 +1309,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "• When using the Window Switcher, windows always flow in rows from left to right"
+            "state" : "translated",
+            "value" : "• Lorsque vous utilisez le sélecteur d’applications, les fenêtres circulent toujours en ligne de gauche à droite"
           }
         },
         "he" : {
@@ -1487,8 +1487,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "1. Select \"Command (⌘)\" as the initialization key."
+            "state" : "translated",
+            "value" : "1. Sélectionnez \"Commande (⌘) comme touche d’initialisation."
           }
         },
         "he" : {
@@ -1843,8 +1843,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "2. Click \"Start Recording Trigger Key\"."
+            "state" : "translated",
+            "value" : "2. Cliquez sur « Enregistrer la touche de déclenchement »."
           }
         },
         "he" : {
@@ -2021,8 +2021,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "3. Press ONLY the Tab key (not Command+Tab)."
+            "state" : "translated",
+            "value" : "3. Appuyez SEULEMENT sur la touche de tabulation (pas sur Commande + Tab)."
           }
         },
         "he" : {
@@ -2199,8 +2199,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "4. Your keybind will be set to Command+Tab."
+            "state" : "translated",
+            "value" : "4. Votre raccourci sera réglé sur Commande + Tab."
           }
         },
         "he" : {
@@ -2913,8 +2913,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add"
+            "state" : "translated",
+            "value" : "Ajouter"
           }
         },
         "he" : {
@@ -3091,8 +3091,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add additional directories to scan for applications"
+            "state" : "translated",
+            "value" : "Ajouter des répertoires supplémentaires dans lesquels rechercher des applications"
           }
         },
         "he" : {
@@ -3269,8 +3269,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add Directory"
+            "state" : "translated",
+            "value" : "Ajouter un répertoire"
           }
         },
         "he" : {
@@ -3447,8 +3447,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add Filter"
+            "state" : "translated",
+            "value" : "Ajouter un filtre"
           }
         },
         "he" : {
@@ -5232,8 +5232,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Application filters"
+            "state" : "translated",
+            "value" : "Filtres d’application"
           }
         },
         "he" : {
@@ -5410,8 +5410,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Are you sure you want to proceed?"
+            "state" : "translated",
+            "value" : "Êtes-vous sûr de vouloir continuer ?"
           }
         },
         "he" : {
@@ -7195,8 +7195,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Cannot Add Color"
+            "state" : "translated",
+            "value" : "Impossible d’ajouter la couleur"
           }
         },
         "he" : {
@@ -7373,8 +7373,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Cannot Remove Color"
+            "state" : "translated",
+            "value" : "Impossible de supprimer la couleur"
           }
         },
         "he" : {
@@ -7907,8 +7907,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Close All"
+            "state" : "translated",
+            "value" : "Tout fermer"
           }
         },
         "he" : {
@@ -8442,8 +8442,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Confirm"
+            "state" : "translated",
+            "value" : "Confirmer"
           }
         },
         "he" : {
@@ -9511,8 +9511,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Custom Application Directories"
+            "state" : "translated",
+            "value" : "Répertoires d’application personnalisés"
           }
         },
         "he" : {
@@ -10048,8 +10048,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Disconnected Display"
+            "state" : "translated",
+            "value" : "Moniteur déconnecté"
           }
         },
         "he" : {
@@ -12545,8 +12545,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enter text to filter"
+            "state" : "translated",
+            "value" : "Saisissez le texte à filtrer"
           }
         },
         "he" : {
@@ -12901,8 +12901,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Example:"
+            "state" : "translated",
+            "value" : "Exemple :"
           }
         },
         "he" : {
@@ -13079,8 +13079,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Exclude windows from capture by filtering specific text in their titles"
+            "state" : "translated",
+            "value" : "Exclure les fenêtres de la capture en filtrant le texte spécifique dans leurs titres"
           }
         },
         "he" : {
@@ -13618,8 +13618,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Filters"
+            "state" : "translated",
+            "value" : "Filtres"
           }
         },
         "he" : {
@@ -13796,8 +13796,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Filters settings"
+            "state" : "translated",
+            "value" : "Réglages des filtres"
           }
         },
         "he" : {
@@ -17008,8 +17008,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Important: When recording, press ONLY the trigger key (e.g. just press Tab if you want command + Tab). Do not press the initialization key during recording."
+            "state" : "translated",
+            "value" : "Important : Lors de l’enregistrement, appuyez SEULEMENT sur la touche de déclenchement (par ex. appuyez simplement sur Tab si vous souhaitez Commande + Tab). N’appuyez pas sur la touche d’initialisation pendant l’enregistrement."
           }
         },
         "he" : {
@@ -18434,8 +18434,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Maximum Horizontal Rows"
+            "state" : "translated",
+            "value" : "Nombre maximum de lignes horizontales"
           }
         },
         "he" : {
@@ -18612,8 +18612,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Maximum number of colors (%lld) reached."
+            "state" : "translated",
+            "value" : "Nombre maximal de couleurs (%lld) atteint."
           }
         },
         "he" : {
@@ -18790,8 +18790,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Maximum Vertical Columns"
+            "state" : "translated",
+            "value" : "Nombre maximum de colonnes verticales"
           }
         },
         "he" : {
@@ -19505,8 +19505,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Minimum number of colors reached."
+            "state" : "translated",
+            "value" : "Nombre minimal de couleurs atteint."
           }
         },
         "he" : {
@@ -19683,8 +19683,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Navigate to Settings → Privacy & Security"
+            "state" : "translated",
+            "value" : "Accédez à Réglages → Confidentialité et sécurité"
           }
         },
         "he" : {
@@ -20397,8 +20397,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No custom directories added"
+            "state" : "translated",
+            "value" : "Aucun répertoire personnalisé ajouté"
           }
         },
         "he" : {
@@ -20575,8 +20575,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No filters added"
+            "state" : "translated",
+            "value" : "Aucun filtre ajouté"
           }
         },
         "he" : {
@@ -23254,8 +23254,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Pin to Screen"
+            "state" : "translated",
+            "value" : "Épingler à l’écran"
           }
         },
         "he" : {
@@ -23433,8 +23433,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Pinned to screen"
+            "state" : "translated",
+            "value" : "Épinglé à l’écran"
           }
         },
         "he" : {
@@ -23611,8 +23611,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Placement Strategy"
+            "state" : "translated",
+            "value" : "Stratégie de placement"
           }
         },
         "he" : {
@@ -27178,8 +27178,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Remove All"
+            "state" : "translated",
+            "value" : "Tout supprimer"
           }
         },
         "he" : {
@@ -30032,8 +30032,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Screen with last active window"
+            "state" : "translated",
+            "value" : "Écran avec la dernière fenêtre active"
           }
         },
         "he" : {
@@ -30211,8 +30211,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Screen with mouse"
+            "state" : "translated",
+            "value" : "Écran avec souris"
           }
         },
         "he" : {
@@ -31104,8 +31104,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Select which applications can be captured and previewed"
+            "state" : "translated",
+            "value" : "Sélectionnez quelles applications peuvent être capturées et prévisualisées"
           }
         },
         "he" : {
@@ -31460,8 +31460,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Set to 0 for unlimited"
+            "state" : "translated",
+            "value" : "Réglez à 0 pour illimité"
           }
         },
         "he" : {
@@ -33962,8 +33962,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Start recording trigger key"
+            "state" : "translated",
+            "value" : "Enregistrer la touche de déclenchement"
           }
         },
         "he" : {
@@ -35033,8 +35033,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "This display is currently disconnected. The window switcher will appear on the main display until the selected display is reconnected."
+            "state" : "translated",
+            "value" : "Ce moniteur est actuellement déconnecté. Le sélecteur d’applications apparaîtra sur l’écran principal jusqu’à ce que le moniteur sélectionné soit reconnecté."
           }
         },
         "he" : {
@@ -37350,8 +37350,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use classic window ordering"
+            "state" : "translated",
+            "value" : "Utiliser l’ordre classique des fenêtres"
           }
         },
         "he" : {
@@ -38955,8 +38955,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When enabled, shows the last active window first instead of the current window"
+            "state" : "translated",
+            "value" : "Lorsque activé, affiche la dernière fenêtre active d’abord au lieu de la fenêtre actuelle"
           }
         },
         "he" : {
@@ -40742,8 +40742,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Preview Layout Limits"
+            "state" : "translated",
+            "value" : "Limites de l’aperçu de la fenêtre"
           }
         },
         "he" : {
@@ -41098,8 +41098,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Selection Background Opacity"
+            "state" : "translated",
+            "value" : "Opacité de l’arrière-plan de la sélection de la fenêtre"
           }
         },
         "he" : {
@@ -41813,8 +41813,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Switcher Placement"
+            "state" : "translated",
+            "value" : "Placement du sélecteur d’applications"
           }
         },
         "he" : {
@@ -41991,8 +41991,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window title filters"
+            "state" : "translated",
+            "value" : "Filtres de titre de fenêtre"
           }
         },
         "he" : {
