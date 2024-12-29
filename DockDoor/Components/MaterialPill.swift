@@ -9,7 +9,7 @@ struct MaterialPillStyle: ViewModifier {
             .clipShape(Capsule(style: .continuous))
             .overlay(
                 Capsule(style: .continuous)
-                    .strokeBorder(Color.black.opacity(0.1), lineWidth: 0.5)
+                    .strokeBorder(Color.primary.opacity(0.1), lineWidth: 0.5)
             )
     }
 }
