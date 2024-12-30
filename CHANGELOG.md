@@ -38,6 +38,49 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://buymeacoffee.com/keplercafe</div>
 
+<a id="v1.5"></a>
+# [v1.5](https://github.com/ejbills/DockDoor/releases/tag/v1.5) - 2024-12-30
+
+**This is a big update, folks.** 
+这是一个重大更新。C'est une mise à jour majeure. Questo è un importante aggiornamento. Esta es una actualización importante.
+
+If you find DockDoor helpful in your daily workflow, please consider supporting its development at https://buymeacoffee.com/keplercafe. Your contribution helps keep the project alive and growing! ❤️
+
+# Changelog v1.5 🎉
+## New Features
+- **Window Switcher Enhancements**
+ - - Completely redesigned interface with app titles and customizable window controls
+ - - Screen placement options (mouse position, specific screen, or last active window)
+ - - Dimmed inactive windows option
+ - - <video src="https://github.com/user-attachments/assets/de056853-3e53-4134-af6e-428807d8079e" controls></video>
+- **Flow Container**
+ - - Multi-row window preview layout for better organization of many windows
+ - - Customizable row count for preview display
+ - - ![CleanShot 2024-12-30 at 13 33 42@2x](https://github.com/user-attachments/assets/4c83e163-77ec-4795-bf85-018190623f56)
+ - - <video src="https://github.com/user-attachments/assets/e811850a-71ab-44ae-a7ef-3c8b1a948c6a" controls></video>
+- Adjustable selection highlight color and opacity
+- Added "Close All" and "Minimize All" window management options, on hover of app title.
+- **This update has many customization options, take a look!**
+- - <video src="https://github.com/user-attachments/assets/7ee5343c-3719-49e1-85bb-cc3671edc694" controls></video>
+## Enhancements
+- Myriad of UI/UX changes
+- Optimized memory usage through removal of outdated cache code
+- Support for custom application directories in filters
+- Improved window capture system for better stability
+- Enhanced dark mode support for capsule rendering
+- Updated localizations via Crowdin integration
+- Minimized and hidden window previews will now have refreshed screenshots
+## Bug Fixes
+- Resolved minimum window sizing for edge cases
+- Fixed application filtering for apps outside `/Applications` folder
+- Addressed preview display issues with minimized windows
+- Corrected window positioning when closing windows
+- Fixed popover window title rendering
+- Many other bug fixes
+
+[Changes][v1.5]
+
+
 <a id="v1.4"></a>
 # [v1.4](https://github.com/ejbills/DockDoor/releases/tag/v1.4) - 2024-12-22
 
@@ -701,6 +744,7 @@ v1.0
 [Changes][releases]
 
 
+[v1.5]: https://github.com/ejbills/DockDoor/compare/v1.4...v1.5
 [v1.4]: https://github.com/ejbills/DockDoor/compare/v1.3.3...v1.4
 [v1.3.3]: https://github.com/ejbills/DockDoor/compare/v1.3.2...v1.3.3
 [v1.3.2]: https://github.com/ejbills/DockDoor/compare/v1.3.1...v1.3.2
