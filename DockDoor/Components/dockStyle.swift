@@ -14,9 +14,8 @@ struct DockStyleModifier: ViewModifier {
                             .blendMode(.plusLighter)
                     }
                     .overlay {
-                        RoundedRectangle(cornerRadius: cornerRadius + 1, style: .continuous)
-                            .stroke(.black.opacity(0.2), lineWidth: 1)
-                            .padding(-1)
+                        RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                            .strokeBorder(Color.primary.opacity(0.1), lineWidth: 0.5)
                     }
             }
             .padding(2)

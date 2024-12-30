@@ -149,13 +149,7 @@ struct WindowPreviewHoverContainer: View {
                         }
                         hoverTitleLabelView(labelSize: labelSize)
 
-                        if hoveringAppIcon {
-                            Button("Close All") {
-                                closeAllWindows()
-                            }
-                            .buttonStyle(AccentButtonStyle(color: .red, small: true))
-                            .transition(.opacity)
-                        }
+                        massOperations(hoveringAppIcon)
                     }
                     .padding(.top, 10)
                     .padding(.leading)
@@ -175,13 +169,7 @@ struct WindowPreviewHoverContainer: View {
                         }
                         hoverTitleLabelView(labelSize: labelSize)
 
-                        if hoveringAppIcon {
-                            Button("Close All") {
-                                closeAllWindows()
-                            }
-                            .buttonStyle(AccentButtonStyle(color: .red, small: true))
-                            .transition(.opacity)
-                        }
+                        massOperations(hoveringAppIcon)
                     }
                     .padding(EdgeInsets(top: -11.5, leading: 15, bottom: -1.5, trailing: 1.5))
                     .animation(.spring(response: 0.3), value: hoveringAppIcon)
@@ -202,13 +190,7 @@ struct WindowPreviewHoverContainer: View {
                             }
                             hoverTitleLabelView(labelSize: labelSize)
 
-                            if hoveringAppIcon {
-                                Button("Close All") {
-                                    closeAllWindows()
-                                }
-                                .buttonStyle(AccentButtonStyle(color: .red, small: true))
-                                .transition(.opacity)
-                            }
+                            massOperations(hoveringAppIcon)
                         }
                         .padding(.vertical, 5)
                         .padding(.horizontal, 10)
@@ -222,6 +204,24 @@ struct WindowPreviewHoverContainer: View {
             .onHover { hover in
                 hoveringAppIcon = hover
             }
+        }
+    }
+
+    @ViewBuilder
+    func massOperations(_ shouldDisplay: Bool) -> some View {
+        if shouldDisplay {
+            Group {
+                Button("Close All") {
+                    closeAllWindows()
+                }
+                .buttonStyle(AccentButtonStyle(small: true))
+
+                Button("Minimize All") {
+                    minimizeAllWindows()
+                }
+                .buttonStyle(AccentButtonStyle(small: true))
+            }
+            .transition(.opacity)
         }
     }
 
@@ -407,6 +407,11 @@ struct WindowPreviewHoverContainer: View {
     private func closeAllWindows() {
         windowStates.removeAll()
         windows.forEach { WindowUtil.closeWindow(windowInfo: $0) }
+    }
+
+    private func minimizeAllWindows() {
+        windowStates.removeAll()
+        windows.forEach { _ = WindowUtil.toggleMinimize(windowInfo: $0) }
     }
 
     private func handleWindowAction(_ action: WindowAction, at index: Int) {

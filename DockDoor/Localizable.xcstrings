@@ -19466,6 +19466,9 @@
         }
       }
     },
+    "Minimize All" : {
+
+    },
     "Minimum number of colors reached." : {
       "localizations" : {
         "af" : {

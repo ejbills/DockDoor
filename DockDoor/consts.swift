@@ -24,9 +24,6 @@ extension Defaults.Keys {
     static let fadeOutDuration = Key<CGFloat>("fadeOutDuration", default: 0.4)
     static let previewHoverAction = Key<PreviewHoverAction>("previewHoverAction", default: .none)
 
-    static let maxColumns = Key<CGFloat>("maxColumns", default: 0)
-    static let maxRows = Key<CGFloat>("maxRows", default: 0)
-
     static let showAnimations = Key<Bool>("showAnimations", default: true)
     static let gradientColorPalette = Key<GradientColorPaletteSettings>("gradientColorPalette", default: .init())
     static let enableWindowSwitcher = Key<Bool>("enableWindowSwitcher", default: true)
@@ -53,6 +50,9 @@ extension Defaults.Keys {
 
     static let trafficLightButtonsVisibility = Key<TrafficLightButtonsVisibility>("trafficLightButtonsVisibility", default: .dimmedOnPreviewHover)
     static let trafficLightButtonsPosition = Key<TrafficLightButtonsPosition>("trafficLightButtonsPosition", default: .topLeft)
+
+    static let maxColumns = Key<CGFloat>("maxColumns", default: 2)
+    static let maxRows = Key<CGFloat>("maxRows", default: 2)
 
     static let windowSwitcherPlacementStrategy = Key<WindowSwitcherPlacementStrategy>("windowSwitcherPlacementStrategy", default: .screenWithMouse)
     static let windowSwitcherControlPosition = Key<WindowSwitcherControlPosition>("windowSwitcherControlPosition", default: .topTrailing)

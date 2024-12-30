@@ -216,8 +216,9 @@
 		3A105FD42C1BED5B0015EC66 /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				BBE153BF2D21FA2300CD3D4A /* StyledGroupBox.swift */,
+				3A105FD82C1C049E0015EC66 /* dockStyle.swift */,
 				BBE153BD2D2126C000CD3D4A /* MaterialPill.swift */,
+				BBE153BF2D21FA2300CD3D4A /* StyledGroupBox.swift */,
 				BBE692182D17AD9C0093B4A5 /* DangerButton.swift */,
 				3A1622C62C8D5A5C00D318EE /* EnabledActionRowView.swift */,
 				BBF383962C94A25B00B39A23 /* sliderSetting.swift */,
@@ -247,7 +248,6 @@
 				3A1622B32C8C099200D318EE /* Button Styles */,
 				BB04405F2C77AD27009F1D33 /* CodableColor.swift */,
 				05C0C7172C60629C000ADAC6 /* AXUIElement.swift */,
-				3A105FD82C1C049E0015EC66 /* dockStyle.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
