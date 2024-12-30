@@ -36,15 +36,7 @@ enum WindowAction {
     case quit, close, minimize, toggleFullScreen, hide
 }
 
-struct CachedImage {
-    let image: CGImage
-    let timestamp: Date
-    let windowname: String?
-}
-
 enum WindowUtil {
-    private static let cacheQueue = DispatchQueue(label: "com.dockdoor.cacheQueue", attributes: .concurrent)
-
     private static let desktopSpaceWindowCacheManager = SpaceWindowCacheManager()
 
     // MARK: - Cache Management
