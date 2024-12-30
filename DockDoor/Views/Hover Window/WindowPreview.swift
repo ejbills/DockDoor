@@ -39,15 +39,15 @@ struct WindowPreview: View {
                 let inactive = isMinimized || isHidden
                 Image(decorative: cgImage, scale: 1.0)
                     .resizable()
-                    .aspectRatio(contentMode: .fill)
+                    .aspectRatio(contentMode: .fit)
                     .markHidden(isHidden: inactive || windowSwitcherActive && !isSelected && dimInSwitcherUntilSelected)
                     .overlay(isSelected && !inactive ? CustomizableFluidGradientView().opacity(0.125) : nil)
+                    .clipShape(uniformCardRadius ? AnyShape(RoundedRectangle(cornerRadius: 12, style: .continuous)) : AnyShape(Rectangle()))
             }
         }
-        .frame(width: dimensions.size.width, height: dimensions.size.height, alignment: .center)
+        .frame(width: max(dimensions.size.width, 50), height: dimensions.size.height, alignment: .center)
         .frame(maxWidth: dimensions.maxDimensions.width, maxHeight: dimensions.maxDimensions.height)
         .shadow(radius: isSelected ? 0 : 3)
-        .clipShape(uniformCardRadius ? AnyShape(RoundedRectangle(cornerRadius: 12, style: .continuous)) : AnyShape(Rectangle()))
         .overlay(alignment: {
             switch windowTitlePosition {
             case .bottomLeft: .bottomLeading
@@ -104,8 +104,12 @@ struct WindowPreview: View {
                     .lineLimit(1)
             }
         }
-        .frame(idealWidth: nil, maxWidth: dimensions.size.width * 0.60, alignment: .leading)
-        .fixedSize(horizontal: true, vertical: false)
+        .frame(
+            minWidth: 50,
+            idealWidth: nil,
+            maxWidth: max(dimensions.size.width * 0.6, 70),
+            alignment: .leading
+        ).fixedSize(horizontal: true, vertical: false)
 
         let appIconContent = Group {
             if let appIcon = windowInfo.app.icon {
@@ -327,7 +331,7 @@ struct WindowPreview: View {
                windowTitle != windowInfo.app.localizedName
             {
                 let stringMeasurementWidth = measureString(windowTitle, fontSize: 12).width + 5
-                let maxLabelWidth = dimensions.size.width - 50
+                let maxLabelWidth = max(dimensions.size.width - 50, 50)
                 let width = min(stringMeasurementWidth, maxLabelWidth)
                 TheMarquee(width: width, secsBeforeLooping: 1, speedPtsPerSec: 20, nonMovingAlignment: .leading) {
                     Text(windowInfo.windowName ?? "Hidden window")
