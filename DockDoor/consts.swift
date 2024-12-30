@@ -1,6 +1,7 @@
 import Cocoa
 import Defaults
 import Foundation
+import SwiftUI
 
 let optimisticScreenSizeWidth = NSScreen.main!.frame.width
 let optimisticScreenSizeHeight = NSScreen.main!.frame.height
@@ -43,6 +44,7 @@ extension Defaults.Keys {
     static let showAppName = Key<Bool>("showAppName", default: true)
     static let appNameStyle = Key<AppNameStyle>("appNameStyle", default: .default)
     static let selectionOpacity = Key<CGFloat>("selectionOpacity", default: 0.4)
+    static let selectionColor = Key<Color?>("selectionColor", default: nil)
 
     static let showWindowTitle = Key<Bool>("showWindowTitle", default: true)
     static let windowTitleDisplayCondition = Key<WindowTitleDisplayCondition>("windowTitleDisplayCondition", default: .all)

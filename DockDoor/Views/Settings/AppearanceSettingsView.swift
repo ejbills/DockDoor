@@ -14,6 +14,7 @@ struct AppearanceSettingsView: View {
     @Default(.trafficLightButtonsVisibility) var trafficLightButtonsVisibility
     @Default(.trafficLightButtonsPosition) var trafficLightButtonsPosition
     @Default(.selectionOpacity) var selectionOpacity
+    @Default(.selectionColor) var selectionColor
     @Default(.maxRows) var maxRows
     @Default(.maxColumns) var maxColumns
 
@@ -54,6 +55,19 @@ struct AppearanceSettingsView: View {
                                 Text(visibility.localizedName)
                                     .tag(visibility)
                             }
+                        }
+
+                        HStack {
+                            ColorPicker("Window Selection Color", selection: Binding(
+                                get: { selectionColor ?? .secondary },
+                                set: { selectionColor = $0 }
+                            ))
+                            Button(action: {
+                                Defaults.reset(.selectionColor)
+                            }) {
+                                Text("Reset")
+                            }
+                            .buttonStyle(AccentButtonStyle(small: true))
                         }
 
                         sliderSetting(title: String(localized: "Window Selection Background Opacity"),

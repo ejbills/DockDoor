@@ -28030,7 +28030,6 @@
       }
     },
     "Reset" : {
-      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -41239,6 +41238,9 @@
           }
         }
       }
+    },
+    "Window Selection Color" : {
+
     },
     "Window Size" : {
       "extractionState" : "stale",

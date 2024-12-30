@@ -22,6 +22,7 @@ struct WindowPreview: View {
     @Default(.trafficLightButtonsPosition) var trafficLightButtonsPosition
     @Default(.windowSwitcherControlPosition) var windowSwitcherControlPosition
     @Default(.selectionOpacity) var selectionOpacity
+    @Default(.selectionColor) var selectionColor
 
     // preview popup action handlers
     @Default(.tapEquivalentInterval) var tapEquivalentInterval
@@ -184,7 +185,7 @@ struct WindowPreview: View {
             .background {
                 if selected || isHoveringOverWindowSwitcherPreview {
                     RoundedRectangle(cornerRadius: uniformCardRadius ? 14 : 0)
-                        .fill(Color.secondary.opacity(selectionOpacity))
+                        .fill(selectionColor?.opacity(selectionOpacity) ?? Color.secondary.opacity(selectionOpacity))
                         .padding(-6)
                 }
             }
