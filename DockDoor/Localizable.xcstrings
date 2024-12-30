@@ -10002,6 +10002,9 @@
         }
       }
     },
+    "Dim Unselected Windows" : {
+
+    },
     "Disconnected Display" : {
       "localizations" : {
         "af" : {
@@ -38917,6 +38920,9 @@
         }
       }
     },
+    "When enabled, dims all windows except those currently under selected." : {
+
+    },
     "When enabled, shows the last active window first instead of the current window" : {
       "localizations" : {
         "af" : {
@@ -41061,6 +41067,9 @@
         }
       }
     },
+    "Window Selection Background Color" : {
+
+    },
     "Window Selection Background Opacity" : {
       "localizations" : {
         "af" : {
@@ -41238,9 +41247,6 @@
           }
         }
       }
-    },
-    "Window Selection Color" : {
-
     },
     "Window Size" : {
       "extractionState" : "stale",

@@ -11,6 +11,7 @@ struct AppearanceSettingsView: View {
     @Default(.windowTitleVisibility) var windowTitleVisibility
     @Default(.windowTitlePosition) var windowTitlePosition
     @Default(.windowSwitcherControlPosition) var windowSwitcherControlPosition
+    @Default(.dimInSwitcherUntilSelected) var dimInSwitcherUntilSelected
     @Default(.trafficLightButtonsVisibility) var trafficLightButtonsVisibility
     @Default(.trafficLightButtonsPosition) var trafficLightButtonsPosition
     @Default(.selectionOpacity) var selectionOpacity
@@ -58,7 +59,7 @@ struct AppearanceSettingsView: View {
                         }
 
                         HStack {
-                            ColorPicker("Window Selection Color", selection: Binding(
+                            ColorPicker("Window Selection Background Color", selection: Binding(
                                 get: { selectionColor ?? .secondary },
                                 set: { selectionColor = $0 }
                             ))
@@ -122,6 +123,15 @@ struct AppearanceSettingsView: View {
                             }
                         }
                         .pickerStyle(MenuPickerStyle())
+
+                        VStack(alignment: .leading) {
+                            Toggle(isOn: $dimInSwitcherUntilSelected) {
+                                Text("Dim Unselected Windows")
+                            }
+                            Text("When enabled, dims all windows except those currently under selected.")
+                                .font(.footnote)
+                                .foregroundColor(.gray)
+                        }
                     }
                 }
 

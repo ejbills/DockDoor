@@ -23,6 +23,7 @@ struct WindowPreview: View {
     @Default(.windowSwitcherControlPosition) var windowSwitcherControlPosition
     @Default(.selectionOpacity) var selectionOpacity
     @Default(.selectionColor) var selectionColor
+    @Default(.dimInSwitcherUntilSelected) var dimInSwitcherUntilSelected
 
     // preview popup action handlers
     @Default(.tapEquivalentInterval) var tapEquivalentInterval
@@ -35,15 +36,49 @@ struct WindowPreview: View {
     private func windowContent(isMinimized: Bool, isHidden: Bool, isSelected: Bool) -> some View {
         Group {
             if let cgImage = windowInfo.image {
+                let inactive = isMinimized || isHidden
                 Image(decorative: cgImage, scale: 1.0)
                     .resizable()
                     .aspectRatio(contentMode: .fill)
-                    .markHidden(isHidden: isMinimized || isHidden)
-                    .overlay(isSelected ? CustomizableFluidGradientView().opacity(0.125) : nil)
+                    .markHidden(isHidden: inactive || windowSwitcherActive && !isSelected && dimInSwitcherUntilSelected)
+                    .overlay(isSelected && !inactive ? CustomizableFluidGradientView().opacity(0.125) : nil)
             }
         }
         .frame(width: dimensions.size.width, height: dimensions.size.height, alignment: .center)
         .frame(maxWidth: dimensions.maxDimensions.width, maxHeight: dimensions.maxDimensions.height)
+        .shadow(radius: isSelected ? 0 : 3)
+        .clipShape(uniformCardRadius ? AnyShape(RoundedRectangle(cornerRadius: 12, style: .continuous)) : AnyShape(Rectangle()))
+        .overlay(alignment: {
+            switch windowTitlePosition {
+            case .bottomLeft: .bottomLeading
+            case .bottomRight: .bottomTrailing
+            case .topRight: .topTrailing
+            case .topLeft: .topLeading
+            }
+        }()) {
+            if !windowSwitcherActive {
+                windowTitleOverlay(selected: isSelected)
+            }
+        }
+        .overlay(alignment: {
+            switch trafficLightButtonsPosition {
+            case .bottomLeft: .bottomLeading
+            case .bottomRight: .bottomTrailing
+            case .topRight: .topTrailing
+            case .topLeft: .topLeading
+            }
+        }()) {
+            if !windowSwitcherActive, !isMinimized, !isHidden, let _ = windowInfo.closeButton {
+                TrafficLightButtons(
+                    windowInfo: windowInfo,
+                    displayMode: trafficLightButtonsVisibility,
+                    hoveringOverParentWindow: isSelected || isHoveringOverWindowSwitcherPreview,
+                    onWindowAction: handleWindowAction,
+                    pillStyling: false
+                )
+                .padding(4)
+            }
+        }
     }
 
     private func windowSwitcherContent(_ selected: Bool) -> some View {
@@ -129,7 +164,7 @@ struct WindowPreview: View {
 
     var body: some View {
         let isHighlightedInWindowSwitcher = (index == currIndex && windowSwitcherActive)
-        let selected = isHoveringOverDockPeekPreview || isHighlightedInWindowSwitcher
+        let selected = isHoveringOverDockPeekPreview || isHighlightedInWindowSwitcher || isHoveringOverWindowSwitcherPreview
 
         ZStack(alignment: .topLeading) {
             VStack(alignment: .leading, spacing: 0) {
@@ -140,40 +175,12 @@ struct WindowPreview: View {
                     windowSwitcherContent(selected)
                 }
 
-                // Window content with overlays for non-window switcher mode
-                windowContent(isMinimized: windowInfo.isMinimized, isHidden: windowInfo.isHidden, isSelected: selected)
-                    .shadow(radius: selected || isHoveringOverWindowSwitcherPreview ? 0 : 3)
-                    .clipShape(uniformCardRadius ? AnyShape(RoundedRectangle(cornerRadius: 12, style: .continuous)) : AnyShape(Rectangle()))
-                    .overlay(alignment: {
-                        switch windowTitlePosition {
-                        case .bottomLeft: .bottomLeading
-                        case .bottomRight: .bottomTrailing
-                        case .topRight: .topTrailing
-                        case .topLeft: .topLeading
-                        }
-                    }()) {
-                        if !windowSwitcherActive {
-                            windowTitleOverlay(selected: selected)
-                        }
-                    }
-                    .overlay(alignment: {
-                        switch trafficLightButtonsPosition {
-                        case .bottomLeft: .bottomLeading
-                        case .bottomRight: .bottomTrailing
-                        case .topRight: .topTrailing
-                        case .topLeft: .topLeading
-                        }
-                    }()) {
-                        if !windowSwitcherActive, !windowInfo.isMinimized, !windowInfo.isHidden, let _ = windowInfo.closeButton {
-                            TrafficLightButtons(
-                                windowInfo: windowInfo,
-                                displayMode: trafficLightButtonsVisibility,
-                                hoveringOverParentWindow: selected || isHoveringOverWindowSwitcherPreview,
-                                onWindowAction: handleWindowAction, pillStyling: false
-                            )
-                            .padding(4)
-                        }
-                    }
+                // Window content
+                windowContent(
+                    isMinimized: windowInfo.isMinimized,
+                    isHidden: windowInfo.isHidden,
+                    isSelected: selected
+                )
 
                 // Title and traffic lights for window switcher mode in bottom mode
                 if windowSwitcherActive, windowSwitcherControlPosition == .bottomLeading ||
