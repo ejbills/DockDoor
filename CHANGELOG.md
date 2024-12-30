@@ -52,16 +52,16 @@ If you find DockDoor helpful in your daily workflow, please consider supporting 
  - - Completely redesigned interface with app titles and customizable window controls
  - - Screen placement options (mouse position, specific screen, or last active window)
  - - Dimmed inactive windows option
- - - <video src="https://github.com/user-attachments/assets/de056853-3e53-4134-af6e-428807d8079e" controls></video>
+ - -  ![window switcher redesign](https://github.com/user-attachments/assets/b074d07e-7cc2-4d36-bd6a-ac571d5c0b1b)
 - **Flow Container**
  - - Multi-row window preview layout for better organization of many windows
  - - Customizable row count for preview display
  - - ![CleanShot 2024-12-30 at 13 33 42@2x](https://github.com/user-attachments/assets/4c83e163-77ec-4795-bf85-018190623f56)
- - - <video src="https://github.com/user-attachments/assets/e811850a-71ab-44ae-a7ef-3c8b1a948c6a" controls></video>
+- - ![dockdoor flow container(1)](https://github.com/user-attachments/assets/bdc373bc-a171-40fc-9dbc-c4cc2562488a)
 - Adjustable selection highlight color and opacity
 - Added "Close All" and "Minimize All" window management options, on hover of app title.
 - **This update has many customization options, take a look!**
-- - <video src="https://github.com/user-attachments/assets/7ee5343c-3719-49e1-85bb-cc3671edc694" controls></video>
+- - To see it in motion, view the video here: https://youtu.be/ReEPCWaomlY
 ## Enhancements
 - Myriad of UI/UX changes
 - Optimized memory usage through removal of outdated cache code
