@@ -34,7 +34,3 @@ struct FirstTimeIntroTabView: View {
         }
     }
 }
-
-// #Preview {
-//    FirstTimeIntroTabView()
-// }

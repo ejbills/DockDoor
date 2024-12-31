@@ -1,6 +1,41 @@
 import SmoothGradient
 import SwiftUI
 
+struct MarqueeText: View {
+    var text: String
+    var fontSize: CGFloat
+    var startDelay: Double
+    let maxWidth: Double
+    @State private var textWidth: CGFloat = 0
+
+    var body: some View {
+        GeometryReader { geometry in
+            TheMarquee(
+                width: maxWidth,
+                secsBeforeLooping: startDelay,
+                speedPtsPerSec: 30,
+                marqueeAlignment: .leading,
+                nonMovingAlignment: .leading,
+                spacingBetweenElements: 8,
+                horizontalPadding: 8,
+                fadeLength: 8
+            ) {
+                Text(text)
+                    .font(.system(size: fontSize))
+                    .lineLimit(1)
+                    .background(
+                        GeometryReader { textGeometry in
+                            Color.clear.onAppear {
+                                textWidth = textGeometry.size.width
+                            }
+                        }
+                    )
+            }
+        }
+        .frame(width: textWidth > maxWidth ? maxWidth : textWidth, height: fontSize + 4)
+    }
+}
+
 struct TheMarquee<C: View>: View {
     var width: Double
     var secsBeforeLooping: Double = 0
@@ -32,7 +67,7 @@ struct TheMarquee<C: View>: View {
         let offsetAmount = contentSize.width + spacingBetweenElements
         let duration = offsetAmount / speedPtsPerSec
 
-        withAnimation(.linear(duration: duration)) {
+        withAnimation(.easeInOut(duration: duration)) {
             offset = -offsetAmount
         }
 
@@ -108,23 +143,6 @@ extension View {
     }
 }
 
-extension View {
-    func measure(_ sizeBinding: Binding<CGSize>) -> some View {
-        background {
-            Color.clear
-                .background(
-                    GeometryReader { geometry in
-                        Color.clear
-                            .preference(key: ViewSizeKey.self, value: geometry.size)
-                    }
-                )
-                .onPreferenceChange(ViewSizeKey.self) { size in
-                    sizeBinding.wrappedValue = size
-                }
-        }
-    }
-}
-
 struct ViewSizeKey: PreferenceKey {
     static var defaultValue: CGSize = .zero
     static func reduce(value: inout CGSize, nextValue: () -> CGSize) {
@@ -138,10 +156,4 @@ func doAfter(_ seconds: Double = 0, action: @escaping () -> Void) {
 
 func timer(_ seconds: Double = 0, action: @escaping (Timer) -> Void) -> Timer {
     Timer.scheduledTimer(withTimeInterval: seconds, repeats: false, block: action)
-}
-
-extension CGSize {
-    static func + (lhs: CGSize, rhs: CGSize) -> CGSize {
-        CGSize(width: lhs.width + rhs.width, height: lhs.height + rhs.height)
-    }
 }

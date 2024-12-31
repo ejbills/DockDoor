@@ -330,17 +330,10 @@ struct WindowPreview: View {
                !windowTitle.isEmpty,
                windowTitle != windowInfo.app.localizedName
             {
-                let stringMeasurementWidth = measureString(windowTitle, fontSize: 12).width + 5
-                let maxLabelWidth = max(dimensions.size.width - 50, 50)
-                let width = min(stringMeasurementWidth, maxLabelWidth)
-                TheMarquee(width: width, secsBeforeLooping: 1, speedPtsPerSec: 20, nonMovingAlignment: .leading) {
-                    Text(windowInfo.windowName ?? "Hidden window")
-                        .font(.system(size: 12, weight: .medium))
-                        .foregroundStyle(.primary)
-                        .lineLimit(1)
-                }
-                .materialPill()
-                .padding(4)
+                MarqueeText(text: windowTitle, fontSize: 12, startDelay: 1, maxWidth: dimensions.size.width * 0.75)
+                    .lineLimit(1)
+                    .materialPill()
+                    .padding(4)
             }
         }
     }
