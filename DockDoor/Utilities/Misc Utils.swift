@@ -27,26 +27,6 @@ func getWindowSize() -> CGSize {
     CGSize(width: optimisticScreenSizeWidth / Defaults[.sizingMultiplier], height: optimisticScreenSizeHeight / Defaults[.sizingMultiplier])
 }
 
-// Helper extension to calculate distance between CGPoints
-extension CGPoint {
-    func distance(to point: CGPoint) -> CGFloat {
-        let dx = x - point.x
-        let dy = y - point.y
-        return sqrt(dx * dx + dy * dy)
-    }
-
-    func displace(by point: CGPoint = .init(x: 0.0, y: 0.0)) -> CGPoint {
-        CGPoint(x: x + point.x,
-                y: y + point.y)
-    }
-
-    /// Caps the point to the unit space
-    func capped() -> CGPoint {
-        CGPoint(x: max(min(x, 1), 0),
-                y: max(min(y, 1), 0))
-    }
-}
-
 // Measure string length in px
 func measureString(_ string: String, fontSize: CGFloat, fontWeight: NSFont.Weight = .regular) -> CGSize {
     let font = NSFont.systemFont(ofSize: fontSize, weight: fontWeight)

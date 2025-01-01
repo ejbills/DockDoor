@@ -136,18 +136,25 @@ final class SharedPreviewWindowCoordinator: NSWindow {
             fullPreviewWindow?.hasShadow = true
         }
 
-        let padding: CGFloat = 40
-        let maxSize = CGSize(
-            width: screen.visibleFrame.width - padding * 2,
-            height: screen.visibleFrame.height - padding * 2
-        )
+        let windowSize = (try? windowInfo.axElement.size()) ?? CGSize(width: screen.frame.width, height: screen.frame.height)
+        let axPosition = (try? windowInfo.axElement.position()) ?? CGPoint(x: screen.frame.midX, y: screen.frame.midY)
 
-        let previewView = FullSizePreviewView(windowInfo: windowInfo, maxSize: maxSize)
+        let convertedPosition = DockObserver.cgPointFromNSPoint(axPosition, forScreen: screen)
+        let adjustedPosition = CGPoint(x: convertedPosition.x, y: convertedPosition.y - windowSize.height)
+
+        let flippedIconRect = CGRect(origin: adjustedPosition, size: windowSize)
+        // Convert the coordinate space from the accessibility API (origin is bottom-left)
+//        let flippedPosition = DockObserver.cgPointFromNSPoint(axPosition, forScreen: screen)
+
+        print("Screen frame:", screen.frame)
+        print("AX position:", axPosition)
+        print("Flipped position:", flippedIconRect)
+
+        let previewView = FullSizePreviewView(windowInfo: windowInfo, windowSize: windowSize)
         let hostingView = NSHostingView(rootView: previewView)
         fullPreviewWindow?.contentView = hostingView
 
-        let centerPoint = centerWindowOnScreen(size: maxSize, screen: screen)
-        fullPreviewWindow?.setFrame(CGRect(origin: centerPoint, size: maxSize), display: true)
+        fullPreviewWindow?.setFrame(flippedIconRect, display: true)
         fullPreviewWindow?.makeKeyAndOrderFront(nil)
     }
 
@@ -296,8 +303,12 @@ final class SharedPreviewWindowCoordinator: NSWindow {
             hideFullPreviewWindow() // clean up any lingering fullscreen previews before presenting a new one
 
             // If in full window preview mode, show the full preview window and return early
-            if centeredHoverWindowState == .fullWindowPreview, let windowInfo = windows.first {
-                showFullPreviewWindow(for: windowInfo, on: screen)
+            if centeredHoverWindowState == .fullWindowPreview,
+               let windowInfo = windows.first,
+               let windowPosition = try? windowInfo.axElement.position(),
+               let windowScreen = windowPosition.screen()
+            {
+                showFullPreviewWindow(for: windowInfo, on: windowScreen)
             } else {
                 self.appName = appName
                 self.windows = windows
