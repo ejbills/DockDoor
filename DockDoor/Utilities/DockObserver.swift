@@ -41,20 +41,22 @@ final class DockObserver {
     private let artifactTimeThreshold: TimeInterval = 0.05
     private var pendingShows: Set<pid_t> = []
 
-    private var consecutiveNotRunningCount: Int = 0
-    private let maxConsecutiveNotRunning: Int = 3
+    private var notRunningCount: Int = 0
+    private let maxNotRunningCount: Int = 3
 
     private init() {
         setupSelectedDockItemObserver()
     }
 
+    private func resetLastAppUnderMouse() { lastAppUnderMouse = nil }
+
     private func hideWindowAndResetLastApp() {
         Task { @MainActor [weak self] in
             guard let self else { return }
-            lastAppUnderMouse = nil
+            resetLastAppUnderMouse()
             lastNotificationTime = 0
             lastNotificationId = ""
-            consecutiveNotRunningCount = 0
+            notRunningCount = 0
             pendingShows.removeAll()
             SharedPreviewWindowCoordinator.shared.hideWindow()
         }
@@ -95,62 +97,74 @@ final class DockObserver {
     }
 
     func processSelectedDockItemChanged() {
-        hoverProcessingTask?.cancel()
+        let currentTime = ProcessInfo.processInfo.systemUptime
+        let currentMouseLocation = DockObserver.getMousePosition()
+        let appUnderMouseElement = getDockItemAppStatusUnderMouse()
 
+        // Handle invalid states (notRunning or notFound)
+        if case let .notRunning(bundleIdentifier) = appUnderMouseElement.status {
+            if lastNotificationId == bundleIdentifier {
+                let timeSinceLastNotification = currentTime - lastNotificationTime
+                if timeSinceLastNotification < artifactTimeThreshold {
+                    return
+                }
+            }
+
+            lastNotificationTime = currentTime
+            lastNotificationId = bundleIdentifier
+
+            notRunningCount += 1
+            if notRunningCount >= maxNotRunningCount {
+                hideWindowAndResetLastApp()
+            } else if case .notRunning = previousStatus {
+                let timeSinceLastNotification = currentTime - lastNotificationTime
+                if timeSinceLastNotification < artifactTimeThreshold {
+                    return
+                }
+                hideWindowAndResetLastApp()
+            }
+            previousStatus = appUnderMouseElement.status
+            resetLastAppUnderMouse()
+            return
+        } else if case .notFound = appUnderMouseElement.status {
+            let mouseScreen = NSScreen.screenContainingMouse(currentMouseLocation)
+            let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
+
+            if !SharedPreviewWindowCoordinator.shared.frame.extended(by: abs(Defaults[.bufferFromDock])).contains(convertedMouseLocation) {
+                hideWindowAndResetLastApp()
+            }
+            previousStatus = appUnderMouseElement.status
+            resetLastAppUnderMouse()
+            return
+        }
+
+        // Only reset count on success
+        if case .success = appUnderMouseElement.status {
+            notRunningCount = 0
+        }
+
+        hoverProcessingTask?.cancel()
         pendingShows.removeAll()
+
         Task { @MainActor in
             SharedPreviewWindowCoordinator.shared.cancelDebounceWorkItem()
         }
 
         hoverProcessingTask = Task { @MainActor [weak self] in
             guard let self else { return }
+
             do {
                 try Task.checkCancellation()
 
-                let currentTime = ProcessInfo.processInfo.systemUptime
-                let currentMouseLocation = DockObserver.getMousePosition()
-
-                let appUnderMouseElement = getDockItemAppStatusUnderMouse()
-
-                guard case let .success(currentApp) = appUnderMouseElement.status else {
-                    if case .notFound = appUnderMouseElement.status {
-                        consecutiveNotRunningCount = 0
-                        let mouseScreen = NSScreen.screenContainingMouse(currentMouseLocation)
-                        let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
-
-                        if !SharedPreviewWindowCoordinator.shared.frame.extended(by: abs(Defaults[.bufferFromDock])).contains(convertedMouseLocation) {
-                            hideWindowAndResetLastApp()
-                        }
-                    } else if case let .notRunning(bundleIdentifier) = appUnderMouseElement.status {
-                        consecutiveNotRunningCount += 1
-
-                        if lastNotificationId == bundleIdentifier {
-                            let timeSinceLastNotification = currentTime - lastNotificationTime
-                            if timeSinceLastNotification < artifactTimeThreshold {
-                                return
-                            }
-                        }
-
-                        lastNotificationTime = currentTime
-                        lastNotificationId = bundleIdentifier
-
-                        if consecutiveNotRunningCount >= maxConsecutiveNotRunning {
-                            hideWindowAndResetLastApp()
-                        } else if case .notRunning = previousStatus {
-                            let timeSinceLastNotification = currentTime - lastNotificationTime
-                            if timeSinceLastNotification < artifactTimeThreshold {
-                                return
-                            }
-                            hideWindowAndResetLastApp()
-                        }
-                    }
-                    previousStatus = appUnderMouseElement.status
+                guard case let .success(currentApp) = appUnderMouseElement.status,
+                      let iconRect = appUnderMouseElement.iconRect
+                else {
                     return
                 }
 
-                consecutiveNotRunningCount = 0
                 let pid = currentApp.processIdentifier
 
+                // Handle repeat notifications for same app
                 if lastNotificationId == String(pid) {
                     let timeSinceLastNotification = currentTime - lastNotificationTime
                     if timeSinceLastNotification < artifactTimeThreshold {
@@ -162,17 +176,12 @@ final class DockObserver {
                 lastNotificationTime = currentTime
                 lastNotificationId = String(pid)
 
-                guard !isProcessing, !SharedPreviewWindowCoordinator.shared.windowSwitcherCoordinator.windowSwitcherActive
-                else {
+                guard !isProcessing, !SharedPreviewWindowCoordinator.shared.windowSwitcherCoordinator.windowSwitcherActive else {
                     return
                 }
 
                 isProcessing = true
                 defer { isProcessing = false }
-
-                guard let iconRect = appUnderMouseElement.iconRect else {
-                    return
-                }
 
                 let currentAppInfo = ApplicationInfo(
                     processIdentifier: currentApp.processIdentifier,
