@@ -12,23 +12,47 @@ extension WindowPreviewHoverContainer {
 
         let visibleFrame = bestGuessMonitor.visibleFrame
 
+        // Container padding
+        let outerPadding: CGFloat = 48
+        let flowStackPadding: CGFloat = 40
+        let itemSpacing: CGFloat = 16
+
+        // Additional padding based on mode
+        let additionalPadding: CGFloat = {
+            if windowSwitcherCoordinator.windowSwitcherActive {
+                return 50
+            } else if showAppName {
+                switch appNameStyle {
+                case .default: return 25
+                case .popover: return 30
+                case .shadowed: return 25
+                }
+            }
+            return 0
+        }()
+
+        // Calculate total vertical padding
+        let totalVerticalPadding = outerPadding + flowStackPadding + additionalPadding
+        let totalHorizontalPadding = outerPadding + flowStackPadding
+
         if isHorizontal {
             var rows: [[Int]] = [[]]
             var currentRowWidth: CGFloat = 0
             var currentRowIndex = 0
-            let maxWidth = visibleFrame.width
-            let maxHeight = visibleFrame.height
-            let rowHeight = maxWindowDimension.y + 16 // Single row height including spacing
+            let maxWidth = visibleFrame.width - totalHorizontalPadding
+            let maxHeight = visibleFrame.height - totalVerticalPadding
+            let rowHeight = maxWindowDimension.y + itemSpacing
             var hasExceededWidth = false
 
-            // Calculate maximum allowed rows considering user defaults
-            let calculatedMaxRows = max(1, Int(maxHeight / rowHeight))
+            // Calculate maximum allowed rows considering available height
+            let availableHeight = maxHeight - itemSpacing // Subtract last row spacing
+            let calculatedMaxRows = max(1, Int(floor(availableHeight / rowHeight)))
             let userMaxRows = Defaults[.maxRows]
             let effectiveMaxRows = userMaxRows > 0 ? min(Int(userMaxRows), calculatedMaxRows) : calculatedMaxRows
 
             for windowIndex in 0 ..< activeWindowCount {
                 let windowWidth = windowDimensions[windowIndex]?.size.width ?? 0
-                let newWidth = currentRowWidth + windowWidth + 16
+                let newWidth = currentRowWidth + windowWidth + (currentRowWidth > 0 ? itemSpacing : 0)
 
                 // Check if adding a window would exceed width or max rows
                 if newWidth > maxWidth {
@@ -43,7 +67,7 @@ extension WindowPreviewHoverContainer {
                         // Start new row
                         currentRowIndex += 1
                         rows.append([])
-                        currentRowWidth = windowWidth + 16
+                        currentRowWidth = windowWidth
                         hasExceededWidth = false
                     } else {
                         hasExceededWidth = true
@@ -51,7 +75,12 @@ extension WindowPreviewHoverContainer {
                 }
 
                 rows[currentRowIndex].append(windowIndex)
-                currentRowWidth += windowWidth + 16
+                currentRowWidth = newWidth
+            }
+
+            // Double check we haven't exceeded max rows
+            if rows.count > effectiveMaxRows {
+                return redistributeEvenly(windowCount: activeWindowCount, divisions: effectiveMaxRows)
             }
 
             var ranges: [Range<Int>] = []
@@ -71,19 +100,20 @@ extension WindowPreviewHoverContainer {
             var columns: [[Int]] = [[]]
             var columnHeights: [CGFloat] = [0]
             var currentColumnIndex = 0
-            let maxHeight = visibleFrame.height
-            let maxWidth = visibleFrame.width
-            let columnWidth = maxWindowDimension.x + 16
+            let maxHeight = visibleFrame.height - totalVerticalPadding
+            let maxWidth = visibleFrame.width - totalHorizontalPadding
+            let columnWidth = maxWindowDimension.x + itemSpacing
             var hasExceededHeight = false
 
-            // Calculate maximum allowed columns considering user defaults
-            let calculatedMaxColumns = max(1, Int(maxWidth / columnWidth))
+            // Calculate maximum allowed columns considering available width
+            let availableWidth = maxWidth - itemSpacing // Subtract last column spacing
+            let calculatedMaxColumns = max(1, Int(floor(availableWidth / columnWidth)))
             let userMaxColumns = Defaults[.maxColumns]
             let effectiveMaxColumns = userMaxColumns > 0 ? min(Int(userMaxColumns), calculatedMaxColumns) : calculatedMaxColumns
 
             for windowIndex in 0 ..< activeWindowCount {
-                let windowHeight = (windowDimensions[windowIndex]?.size.height ?? 0) + 16
-                let newHeight = columnHeights[currentColumnIndex] + windowHeight
+                let windowHeight = (windowDimensions[windowIndex]?.size.height ?? 0)
+                let newHeight = columnHeights[currentColumnIndex] + windowHeight + (columnHeights[currentColumnIndex] > 0 ? itemSpacing : 0)
 
                 if newHeight > maxHeight {
                     if hasExceededHeight {
@@ -105,10 +135,14 @@ extension WindowPreviewHoverContainer {
                 }
 
                 columns[currentColumnIndex].append(windowIndex)
-                columnHeights[currentColumnIndex] += windowHeight
+                columnHeights[currentColumnIndex] = newHeight
             }
 
-            // Convert to ranges
+            // Double check we haven't exceeded max columns
+            if columns.count > effectiveMaxColumns {
+                return redistributeEvenly(windowCount: activeWindowCount, divisions: effectiveMaxColumns)
+            }
+
             var ranges: [Range<Int>] = []
             var startIndex = 0
 
