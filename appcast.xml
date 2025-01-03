@@ -4,12 +4,12 @@
         <title>DockDoor</title>
         <item>
             <title>1.5</title>
-            <pubDate>Mon, 30 Dec 2024 13:09:01 -0800</pubDate>
+            <pubDate>Thu, 02 Jan 2025 16:40:31 -0800</pubDate>
             <sparkle:releaseNotesLink>https://dockdoor.net/CHANGELOG.html</sparkle:releaseNotesLink>
             <sparkle:version>1.5</sparkle:version>
             <sparkle:shortVersionString>1.5</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/ejbills/DockDoor/releases/latest/download/DockDoor.dmg" length="6177812" type="application/octet-stream" sparkle:edSignature="HS+7NyFVo6H41JtQtTtdAxHNA9pN5QNEhzZrrVfKjC/6bbi69933spWVTrS2ulXvC52IGwwDy0bpRDjBvlkBAw=="/>
+            <enclosure url="https://github.com/ejbills/DockDoor/releases/latest/download/DockDoor.dmg" length="6189265" type="application/octet-stream" sparkle:edSignature="/8msvnK9MLgOSontNcLz46qXFPtat9F1IgrdRXOvYiNJy1ElCNE5gI+89kg5LjG7t8Lpc4rDHLY1joBiDXvWBA=="/>
         </item>
     </channel>
 </rss>
