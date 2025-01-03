@@ -140,12 +140,6 @@ final class SharedPreviewWindowCoordinator: NSWindow {
         let adjustedPosition = CGPoint(x: convertedPosition.x, y: convertedPosition.y - windowSize.height)
 
         let flippedIconRect = CGRect(origin: adjustedPosition, size: windowSize)
-        // Convert the coordinate space from the accessibility API (origin is bottom-left)
-//        let flippedPosition = DockObserver.cgPointFromNSPoint(axPosition, forScreen: screen)
-
-        print("Screen frame:", screen.frame)
-        print("AX position:", axPosition)
-        print("Flipped position:", flippedIconRect)
 
         let previewView = FullSizePreviewView(windowInfo: windowInfo, windowSize: windowSize)
         let hostingView = NSHostingView(rootView: previewView)
