@@ -38,6 +38,16 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://buymeacoffee.com/keplercafe</div>
 
+<a id="v1.5.1"></a>
+# [v1.5.1](https://github.com/ejbills/DockDoor/releases/tag/v1.5.1) - 2025-01-03
+
+- Fixes preview intermittently failing to present when hovering over app icon
+- Reworked "See full preview" hover action to display window previews at their exact size and position on the correct monitor, matching the real window's dimensions and location for a more accurate preview experience. 
+- - This provides better context when switching between windows and eliminates scaling issues on large displays.
+
+[Changes][v1.5.1]
+
+
 <a id="v1.5"></a>
 # [v1.5](https://github.com/ejbills/DockDoor/releases/tag/v1.5) - 2024-12-30
 
@@ -744,6 +754,7 @@ v1.0
 [Changes][releases]
 
 
+[v1.5.1]: https://github.com/ejbills/DockDoor/compare/v1.5...v1.5.1
 [v1.5]: https://github.com/ejbills/DockDoor/compare/v1.4...v1.5
 [v1.4]: https://github.com/ejbills/DockDoor/compare/v1.3.3...v1.4
 [v1.3.3]: https://github.com/ejbills/DockDoor/compare/v1.3.2...v1.3.3
