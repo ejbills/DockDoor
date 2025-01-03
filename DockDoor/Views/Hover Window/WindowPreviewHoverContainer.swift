@@ -20,7 +20,6 @@ struct WindowPreviewHoverContainer: View {
     @State private var draggedWindowIndex: Int? = nil
     @State private var isDragging = false
 
-    @State private var showWindows: Bool = false
     @State private var hasAppeared: Bool = false
     @State private var appIcon: NSImage? = nil
     @State private var hoveringAppIcon: Bool = false
@@ -102,7 +101,6 @@ struct WindowPreviewHoverContainer: View {
                 }
                 .padding(.all, 24)
                 .frame(maxWidth: bestGuessMonitor.visibleFrame.width, maxHeight: bestGuessMonitor.visibleFrame.height)
-                .opacity(showWindows ? 1 : 0.35)
         }
     }
 
@@ -323,18 +321,12 @@ struct WindowPreviewHoverContainer: View {
             .padding(20)
         }
         .onAppear {
-            if !hasAppeared {
-                hasAppeared.toggle()
-                runUIUpdates(preventOpacityChange: false)
-            }
+            loadAppIcon()
         }
         .onChange(of: windowSwitcherCoordinator.currIndex) { newIndex in
             withAnimation {
                 scrollProxy.scrollTo("\(appName)-\(newIndex)", anchor: .center)
             }
-        }
-        .onChange(of: windows) { _ in
-            runUIUpdates(preventOpacityChange: true)
         }
     }
 
@@ -382,18 +374,6 @@ struct WindowPreviewHoverContainer: View {
                     }
                 }
         )
-    }
-
-    private func runUIUpdates(preventOpacityChange: Bool) {
-        if !preventOpacityChange { runAnimation() }
-        loadAppIcon()
-    }
-
-    private func runAnimation() {
-        showWindows = false
-        withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
-            showWindows = true
-        }
     }
 
     private func loadAppIcon() {
