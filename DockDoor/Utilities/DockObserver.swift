@@ -72,8 +72,12 @@ final class DockObserver {
         guard AXIsProcessTrusted() else {
             MessageUtil.showAlert(
                 title: "Accessibility Permissions Required",
-                message: "Please enable accessibility permissions in System Preferences > Security & Privacy > Privacy > Accessibility.",
-                actions: [.ok]
+                message: "You need to enable accessibility permissions for DockDoor to function, click OK to open System Preferences. A restart is required after granting permissions.",
+                actions: [.ok, .cancel],
+                completion: { _ in
+                    SystemPreferencesHelper.openAccessibilityPreferences()
+                    askUserToRestartApplication()
+                }
             )
             return
         }
