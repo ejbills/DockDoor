@@ -271,8 +271,7 @@ struct WindowPreview: View {
                 }
 
             case .previewFullSize:
-                // If the interval is 0, show the full window preview immediately
-                if tapEquivalentInterval == 0 {
+                let showFullPreview = {
                     DispatchQueue.main.async {
                         SharedPreviewWindowCoordinator.shared.showWindow(
                             appName: windowInfo.app.localizedName ?? "Unknown",
@@ -283,19 +282,15 @@ struct WindowPreview: View {
                             centeredHoverWindowState: .fullWindowPreview
                         )
                     }
+                }
+
+                if tapEquivalentInterval == 0 {
+                    showFullPreview()
                 } else {
-                    // If the interval is greater than 0, set a timer to show the full window preview after the specified interval
-                    fullPreviewTimer = Timer.scheduledTimer(withTimeInterval: tapEquivalentInterval, repeats: false) { [self] _ in
-                        DispatchQueue.main.async {
-                            SharedPreviewWindowCoordinator.shared.showWindow(
-                                appName: windowInfo.app.localizedName ?? "Unknown",
-                                windows: [windowInfo],
-                                mouseScreen: bestGuessMonitor,
-                                iconRect: nil,
-                                overrideDelay: true,
-                                centeredHoverWindowState: .fullWindowPreview
-                            )
-                        }
+                    fullPreviewTimer = Timer.scheduledTimer(withTimeInterval: tapEquivalentInterval,
+                                                            repeats: false)
+                    { _ in
+                        showFullPreview()
                     }
                 }
             }

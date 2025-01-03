@@ -186,7 +186,7 @@ enum PreviewHoverAction: String, CaseIterable, Defaults.Serializable {
         case .tap:
             String(localized: "Simulate a click (open the window)", comment: "Window popup hover action option")
         case .previewFullSize:
-            String(localized: "See a large preview of the window", comment: "Window popup hover action option")
+            String(localized: "Present a full size preview of the window", comment: "Window popup hover action option")
         }
     }
 }
