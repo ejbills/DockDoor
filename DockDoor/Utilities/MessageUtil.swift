@@ -31,6 +31,8 @@ enum MessageUtil {
             actions.last ?? .cancel
         }
 
-        completion?(buttonAction)
+        if buttonAction != .cancel {
+            completion?(buttonAction)
+        }
     }
 }

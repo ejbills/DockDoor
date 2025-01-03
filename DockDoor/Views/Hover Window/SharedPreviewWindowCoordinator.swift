@@ -42,7 +42,6 @@ final class SharedPreviewWindowCoordinator: NSWindow {
     private var appName: String = ""
     private var windows: [WindowInfo] = []
     private var onWindowTap: (() -> Void)?
-    private var hostingView: NSHostingView<WindowPreviewHoverContainer>?
     private var fullPreviewWindow: NSWindow?
 
     var windowSize: CGSize = getWindowSize()
@@ -81,7 +80,6 @@ final class SharedPreviewWindowCoordinator: NSWindow {
 
             hideFullPreviewWindow()
             contentView = nil
-            hostingView = nil
             appName = ""
             windows.removeAll()
             windowSwitcherCoordinator.setIndex(to: 0)
@@ -102,7 +100,7 @@ final class SharedPreviewWindowCoordinator: NSWindow {
                                                   iconRect: CGRect?, animated: Bool, centerOnScreen: Bool = false,
                                                   centeredHoverWindowState: ScreenCenteredFloatingWindowCoordinator.WindowState? = nil)
     {
-        guard hostingView != nil else { return }
+        guard contentView != nil else { return }
         windowSwitcherCoordinator.setShowing(centeredHoverWindowState, toState: centerOnScreen)
         // Reset the hosting view
         let hoverView = WindowPreviewHoverContainer(appName: appName, windows: windows, onWindowTap: onWindowTap,
@@ -110,7 +108,6 @@ final class SharedPreviewWindowCoordinator: NSWindow {
                                                     bestGuessMonitor: mouseScreen, windowSwitcherCoordinator: windowSwitcherCoordinator)
         let newHostingView = NSHostingView(rootView: hoverView)
         contentView = newHostingView
-        hostingView = newHostingView
         let newHoverWindowSize = newHostingView.fittingSize
         let position: CGPoint
         if centerOnScreen {
@@ -329,14 +326,7 @@ final class SharedPreviewWindowCoordinator: NSWindow {
         let hoverView = WindowPreviewHoverContainer(appName: appName, windows: windows, onWindowTap: onWindowTap,
                                                     dockPosition: DockUtils.getDockPosition(), mouseLocation: mouseLocation,
                                                     bestGuessMonitor: screen, windowSwitcherCoordinator: windowSwitcherCoordinator)
-
-        if let existingHostingView = hostingView {
-            existingHostingView.rootView = hoverView
-        } else {
-            let newHostingView = NSHostingView(rootView: hoverView)
-            contentView = newHostingView
-            hostingView = newHostingView
-        }
+        contentView = NSHostingView(rootView: hoverView)
     }
 
     // Cycle through windows

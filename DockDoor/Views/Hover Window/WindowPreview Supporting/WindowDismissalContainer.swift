@@ -109,22 +109,21 @@ class MouseTrackingNSView: NSView {
         resetInactivityTimer()
 
         clearTimers()
-        SharedPreviewWindowCoordinator.shared.cancelDebounceWorkItem()
     }
 
     private func startFadeOut() {
         cancelFadeOut()
         if fadeOutDuration == 0 {
-            hideWindow()
+            performHideWindow()
         } else {
             setWindowOpacity(to: 0.0, duration: fadeOutDuration)
             fadeOutTimer = Timer.scheduledTimer(withTimeInterval: fadeOutDuration, repeats: false) { [weak self] _ in
-                self?.hideWindow()
+                self?.performHideWindow()
             }
         }
     }
 
-    private func cancelFadeOut() {
+    func cancelFadeOut() {
         fadeOutTimer?.invalidate()
         fadeOutTimer = nil
     }
@@ -139,33 +138,21 @@ class MouseTrackingNSView: NSView {
         }
     }
 
-    private func hideWindow() {
-        let currentAppReturnType = DockObserver.shared.getDockItemAppStatusUnderMouse()
-        switch currentAppReturnType.status {
-        case .notFound:
-            performHideWindow()
-        case let .success(currApp):
-            // Prevent accidental window hiding when quickly moving the mouse:
-            // Only hide the window if the mouse has moved significantly (>100px)
-            // from its initial position. This accounts for cases where the mouse
-            // quickly leaves the dock, which can trigger a duplicate hover event.
-            if currApp.localizedName == appName {
-                let currentMousePosition = DockObserver.getMousePosition()
-                if currentMousePosition.distance(to: mouseLocation) > 100 {
-                    performHideWindow()
-                } else if window?.alphaValue != 1 { // app was re-hovered while a fade out was in progress, reset the opacity
+    private func performHideWindow() {
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            let currentAppReturnType = DockObserver.shared.getDockItemAppStatusUnderMouse()
+            switch currentAppReturnType.status {
+            case let .success(currApp):
+
+                // app was re-hovered while fade out was in progress
+                if currApp.localizedName == appName {
                     resetOpacity()
                 }
+            default:
+                SharedPreviewWindowCoordinator.shared.hideWindow()
+                DockObserver.shared.lastAppUnderMouse = nil
             }
-        case .notRunning:
-            break
-        }
-    }
-
-    private func performHideWindow() {
-        DispatchQueue.main.async {
-            SharedPreviewWindowCoordinator.shared.hideWindow()
-            DockObserver.shared.lastAppUnderMouse = nil
         }
     }
 }
