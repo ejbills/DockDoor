@@ -305,7 +305,7 @@ struct WindowPreviewHoverContainer: View {
                                             }
                                             if draggedWindowIndex == index {
                                                 let currentPoint = value.location
-                                                if checkForShakeGesture(currentPoint: currentPoint) {
+                                                if !windowSwitcherCoordinator.windowSwitcherActive, checkForShakeGesture(currentPoint: currentPoint) {
                                                     minimizeAllWindows()
                                                     DragPreviewCoordinator.shared.endDragging()
                                                     draggedWindowIndex = nil
