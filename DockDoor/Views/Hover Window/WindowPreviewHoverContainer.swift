@@ -25,6 +25,9 @@ struct WindowPreviewHoverContainer: View {
     @State private var hoveringAppIcon: Bool = false
     @State private var hoveringWindowTitle: Bool = false
 
+    @State private var dragPoints: [CGPoint] = []
+    @State private var lastShakeCheck: Date = .init()
+
     init(appName: String,
          windows: [WindowInfo],
          onWindowTap: (() -> Void)?,
@@ -301,7 +304,15 @@ struct WindowPreviewHoverContainer: View {
                                                 )
                                             }
                                             if draggedWindowIndex == index {
-                                                DragPreviewCoordinator.shared.updatePreviewPosition(to: NSEvent.mouseLocation)
+                                                let currentPoint = value.location
+                                                if checkForShakeGesture(currentPoint: currentPoint) {
+                                                    minimizeAllWindows()
+                                                    DragPreviewCoordinator.shared.endDragging()
+                                                    draggedWindowIndex = nil
+                                                    isDragging = false
+                                                } else {
+                                                    DragPreviewCoordinator.shared.updatePreviewPosition(to: NSEvent.mouseLocation)
+                                                }
                                             }
                                         }
                                         .onEnded { value in
@@ -310,6 +321,7 @@ struct WindowPreviewHoverContainer: View {
                                                 DragPreviewCoordinator.shared.endDragging()
                                                 draggedWindowIndex = nil
                                                 isDragging = false
+                                                dragPoints.removeAll()
                                             }
                                         }
                                 )
@@ -387,11 +399,13 @@ struct WindowPreviewHoverContainer: View {
     private func closeAllWindows() {
         windowStates.removeAll()
         windows.forEach { WindowUtil.closeWindow(windowInfo: $0) }
+        onWindowTap?()
     }
 
     private func minimizeAllWindows() {
         windowStates.removeAll()
         windows.forEach { _ = WindowUtil.toggleMinimize(windowInfo: $0) }
+        onWindowTap?()
     }
 
     private func handleWindowAction(_ action: WindowAction, at index: Int) {
@@ -429,5 +443,74 @@ struct WindowPreviewHoverContainer: View {
                 }
             }
         }
+    }
+
+    private func checkForShakeGesture(currentPoint: CGPoint) -> Bool {
+        let now = Date()
+        // Check at most every 50ms to maintain responsiveness
+        guard now.timeIntervalSince(lastShakeCheck) > 0.05 else { return false }
+        lastShakeCheck = now
+
+        // Add new point to tracking array
+        dragPoints.append(currentPoint)
+
+        // Keep only last 20 points to analyze recent movement
+        if dragPoints.count > 20 {
+            dragPoints.removeFirst(dragPoints.count - 20)
+        }
+
+        // Need at least 8 points to detect shake
+        guard dragPoints.count >= 8 else { return false }
+
+        var directionChanges = 0
+        var velocities: [(dx: CGFloat, dy: CGFloat)] = []
+
+        // Calculate velocities between consecutive points
+        for i in 1 ..< dragPoints.count {
+            let prev = dragPoints[i - 1]
+            let curr = dragPoints[i]
+            let dx = curr.x - prev.x
+            let dy = curr.y - prev.y
+            velocities.append((dx: dx, dy: dy))
+        }
+
+        // Look for significant direction changes in both x and y
+        for i in 1 ..< velocities.count {
+            let prev = velocities[i - 1]
+            let curr = velocities[i]
+
+            // Check for direction change in x or y
+            let significantX = abs(prev.dx) > 5 && abs(curr.dx) > 5
+            let significantY = abs(prev.dy) > 5 && abs(curr.dy) > 5
+
+            if (significantX && prev.dx.sign != curr.dx.sign) ||
+                (significantY && prev.dy.sign != curr.dy.sign)
+            {
+                directionChanges += 1
+            }
+        }
+
+        // Calculate total distance moved
+        var totalDistance: CGFloat = 0
+        for i in 1 ..< dragPoints.count {
+            let prev = dragPoints[i - 1]
+            let curr = dragPoints[i]
+            let dx = curr.x - prev.x
+            let dy = curr.y - prev.y
+            totalDistance += sqrt(dx * dx + dy * dy)
+        }
+
+        // Detect shake if:
+        // 1. We have enough direction changes (4 or more)
+        // 2. Total distance moved is significant (> 100 points)
+        // 3. Movement happened within a short time window
+        let isShake = directionChanges >= 4 && totalDistance > 100
+
+        if isShake {
+            // Clear points after detecting shake
+            dragPoints.removeAll()
+        }
+
+        return isShake
     }
 }

@@ -2,7 +2,10 @@ import AppKit
 import ApplicationServices
 import Cocoa
 
-let windowProcessingDebounceInterval: TimeInterval = 0.3
+private var windowCreationWorkItem: DispatchWorkItem?
+private let windowCreationDebounceInterval: TimeInterval = 0.5
+
+private let windowProcessingDebounceInterval: TimeInterval = 0.3
 
 class WindowManipulationObservers {
     static let shared = WindowManipulationObservers()
@@ -146,11 +149,20 @@ func axObserverCallback(observer: AXObserver, element: AXUIElement, notification
             case kAXApplicationShownNotification:
                 WindowUtil.updateStatusOfWindowCache(pid: pid, isParentAppHidden: false)
             case kAXWindowCreatedNotification:
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                    if SharedPreviewWindowCoordinator.shared.isVisible {
-                        SharedPreviewWindowCoordinator.shared.hideWindow()
+                windowCreationWorkItem?.cancel()
+
+                // register new window on creation
+                let workItem = DispatchWorkItem {
+                    Task {
+                        if let app = NSRunningApplication(processIdentifier: pid) {
+                            await WindowUtil.updateNewWindowsForApp(app)
+                        }
                     }
                 }
+
+                windowCreationWorkItem = workItem
+
+                DispatchQueue.main.asyncAfter(deadline: .now() + windowCreationDebounceInterval, execute: workItem)
             default:
                 break
             }

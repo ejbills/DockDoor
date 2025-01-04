@@ -1,19 +1,40 @@
+import Defaults
+import ScreenCaptureKit
 import SwiftUI
 
 struct TrafficLightButtons: View {
-    let windowInfo: WindowInfo
+    @Environment(\.colorScheme) var colorScheme
     let displayMode: TrafficLightButtonsVisibility
     let hoveringOverParentWindow: Bool
     let onWindowAction: (WindowAction) -> Void
     let pillStyling: Bool
     @State private var isHovering = false
+    @Default(.enabledTrafficLightButtons) private var enabledButtons
+    @Default(.useMonochromeTrafficLights) private var useMonochrome
 
     var body: some View {
+        let monochromeFillColor = colorScheme == .dark ? Color.gray.darker(by: 0.075) : Color.white
         HStack(spacing: 6) {
-            buttonFor(action: .quit, symbol: "power", color: Color(hex: "290133"), fillColor: .purple)
-            buttonFor(action: .close, symbol: "xmark", color: Color(hex: "7e0609"), fillColor: .red)
-            buttonFor(action: .minimize, symbol: "minus", color: Color(hex: "985712"), fillColor: .yellow)
-            buttonFor(action: .toggleFullScreen, symbol: "arrow.up.left.and.arrow.down.right", color: Color(hex: "0d650d"), fillColor: .green)
+            if enabledButtons.contains(.quit) {
+                buttonFor(action: .quit, symbol: "power",
+                          color: useMonochrome ? .secondary : Color(hex: "290133"),
+                          fillColor: useMonochrome ? monochromeFillColor : .purple)
+            }
+            if enabledButtons.contains(.close) {
+                buttonFor(action: .close, symbol: "xmark",
+                          color: useMonochrome ? .secondary : Color(hex: "7e0609"),
+                          fillColor: useMonochrome ? monochromeFillColor : .red)
+            }
+            if enabledButtons.contains(.minimize) {
+                buttonFor(action: .minimize, symbol: "minus",
+                          color: useMonochrome ? .secondary : Color(hex: "985712"),
+                          fillColor: useMonochrome ? monochromeFillColor : .yellow)
+            }
+            if enabledButtons.contains(.toggleFullScreen) {
+                buttonFor(action: .toggleFullScreen, symbol: "arrow.up.left.and.arrow.down.right",
+                          color: useMonochrome ? .secondary : Color(hex: "0d650d"),
+                          fillColor: useMonochrome ? monochromeFillColor : .green)
+            }
         }
         .padding(4)
         .opacity(opacity)
@@ -24,7 +45,7 @@ struct TrafficLightButtons: View {
                 self.isHovering = isHovering
             }
         }
-        .if(pillStyling && opacity > 0) { view in
+        .if(pillStyling && opacity > 0 && displayMode != .never && enabledButtons.count > 0) { view in
             view.materialPill()
         }
     }
@@ -55,5 +76,82 @@ struct TrafficLightButtons: View {
                 onWindowAction(action)
             }
         })
+    }
+}
+
+extension AppearanceSettingsView {
+    struct TrafficLightButtonsSettingsView: View {
+        @Default(.enabledTrafficLightButtons) private var enabledButtons
+        @Default(.useMonochromeTrafficLights) private var useMonochrome
+        @Default(.trafficLightButtonsVisibility) private var trafficLightButtonsVisibility
+
+        private let buttonDescriptions: [(WindowAction, String)] = [
+            (.quit, String(localized: "Quit")),
+            (.close, String(localized: "Close")),
+            (.minimize, String(localized: "Minimize")),
+            (.toggleFullScreen, String(localized: "Fullscreen")),
+        ]
+
+        var body: some View {
+            Picker("Traffic Light Buttons Visibility", selection: $trafficLightButtonsVisibility) {
+                ForEach(TrafficLightButtonsVisibility.allCases, id: \.self) { visibility in
+                    Text(visibility.localizedName)
+                        .tag(visibility)
+                }
+            }
+
+            Group {
+                Text("Enabled Buttons")
+                VStack(alignment: .leading) {
+                    if !enabledButtons.isEmpty {
+                        TrafficLightButtons(
+                            displayMode: trafficLightButtonsVisibility == .never ? .dimmedOnPreviewHover : trafficLightButtonsVisibility,
+                            hoveringOverParentWindow: true,
+                            onWindowAction: { _ in },
+                            pillStyling: true
+                        )
+                    }
+
+                    HStack(spacing: 12) {
+                        ForEach(buttonDescriptions, id: \.0) { action, label in
+                            Toggle(isOn: Binding(
+                                get: { enabledButtons.contains(action) },
+                                set: { isEnabled in
+                                    if isEnabled {
+                                        enabledButtons.insert(action)
+                                    } else {
+                                        enabledButtons.remove(action)
+
+                                        if enabledButtons.isEmpty {
+                                            MessageUtil.showAlert(
+                                                title: String(localized: "All buttons removed"),
+                                                message: String(localized: "Your traffic lights will be set to disabled automatically."),
+                                                actions: [.ok, .cancel]
+                                            ) { action in
+                                                switch action {
+                                                case .ok:
+                                                    trafficLightButtonsVisibility = .never
+                                                case .cancel:
+                                                    break
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            )) {
+                                HStack {
+                                    Text(label)
+                                }
+                            }
+                            .toggleStyle(CheckboxToggleStyle())
+                        }
+                    }
+                }
+
+                Toggle("Use Monochrome Colors", isOn: $useMonochrome)
+                    .padding(.top, 4)
+            }
+            .disabled(trafficLightButtonsVisibility == .never)
+        }
     }
 }

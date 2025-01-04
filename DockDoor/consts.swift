@@ -28,7 +28,7 @@ extension Defaults.Keys {
     static let gradientColorPalette = Key<GradientColorPaletteSettings>("gradientColorPalette", default: .init())
     static let enableWindowSwitcher = Key<Bool>("enableWindowSwitcher", default: true)
     static let sortWindowsByDate = Key<Bool>("sortWindowsByDate", default: true)
-    static let useClassicWindowOrdering = Key<Bool>("useClassicWindowOrdering", default: false)
+    static let useClassicWindowOrdering = Key<Bool>("useClassicWindowOrdering", default: true)
     static let includeHiddenWindowsInSwitcher = Key<Bool>("includeHiddenWindowsInSwitcher", default: true)
     static let ignoreAppsWithSingleWindow = Key<Bool>("ignoreAppsWithSingleWindow", default: false)
     static let showMenuBarIcon = Key<Bool>("showMenuBarIcon", default: true)
@@ -50,6 +50,8 @@ extension Defaults.Keys {
 
     static let trafficLightButtonsVisibility = Key<TrafficLightButtonsVisibility>("trafficLightButtonsVisibility", default: .dimmedOnPreviewHover)
     static let trafficLightButtonsPosition = Key<TrafficLightButtonsPosition>("trafficLightButtonsPosition", default: .topLeft)
+    static let enabledTrafficLightButtons = Key<Set<WindowAction>>("enabledTrafficLightButtons", default: [.quit, .close, .minimize, .toggleFullScreen])
+    static let useMonochromeTrafficLights = Key<Bool>("useMonochromeTrafficLights", default: false)
 
     static let maxColumns = Key<CGFloat>("maxColumns", default: 2)
     static let maxRows = Key<CGFloat>("maxRows", default: 2)

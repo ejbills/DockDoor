@@ -14,7 +14,6 @@ struct MainSettingsView: View {
     @Default(.sortWindowsByDate) var sortWindowsByDate
     @Default(.lateralMovement) var lateralMovement
     @Default(.preventDockHide) var preventDockHide
-    @Default(.useClassicWindowOrdering) private var useClassicWindowOrdering
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -123,21 +122,18 @@ struct MainSettingsView: View {
             })
 
             VStack(alignment: .leading) {
-                Toggle(isOn: $useClassicWindowOrdering) {
-                    Text("Use classic window ordering")
+                Picker("Dock Preview Window Hover Action", selection: $previewHoverAction) {
+                    ForEach(PreviewHoverAction.allCases, id: \.self) { action in
+                        Text(action.localizedName).tag(action)
+                    }
                 }
-                Text("When enabled, shows the last active window first instead of the current window")
+                .pickerStyle(MenuPickerStyle())
+                .scaledToFit()
+
+                Text("Triggers an action when hovering over a window in a dock preview")
                     .font(.footnote)
                     .foregroundColor(.gray)
             }
-
-            Picker("Preview Hover Action", selection: $previewHoverAction) {
-                ForEach(PreviewHoverAction.allCases, id: \.self) { action in
-                    Text(action.localizedName).tag(action)
-                }
-            }
-            .pickerStyle(MenuPickerStyle())
-            .scaledToFit()
 
             sliderSetting(title: String(localized: "Preview Hover Delay"),
                           value: $tapEquivalentInterval,

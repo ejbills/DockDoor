@@ -32,7 +32,7 @@ struct WindowInfo: Identifiable, Hashable {
     }
 }
 
-enum WindowAction {
+enum WindowAction: String, Hashable, CaseIterable, Defaults.Serializable {
     case quit, close, minimize, toggleFullScreen, hide
 }
 
@@ -127,19 +127,6 @@ enum WindowUtil {
             context.draw(cgImage, in: CGRect(x: 0, y: 0, width: newWidth, height: newHeight))
             if let resizedImage = context.makeImage() {
                 cgImage = resizedImage
-            }
-        }
-
-        // Update the window info in the cache with the new image
-        if let pid = window.owningApplication?.processID {
-            desktopSpaceWindowCacheManager.updateCache(pid: pid) { windowSet in
-                if let index = windowSet.firstIndex(where: { $0.id == window.windowID }) {
-                    var updatedWindow = windowSet[index]
-                    updatedWindow.image = cgImage
-                    updatedWindow.date = Date() // Update timestamp when updating image
-                    windowSet.remove(at: index)
-                    windowSet.insert(updatedWindow)
-                }
             }
         }
 
@@ -454,6 +441,31 @@ enum WindowUtil {
         return []
     }
 
+    static func updateNewWindowsForApp(_ app: NSRunningApplication) async {
+        do {
+            let content = try await SCShareableContent.excludingDesktopWindows(true, onScreenWindowsOnly: false)
+            let group = LimitedTaskGroup<Void>(maxConcurrentTasks: 4)
+
+            // Get all windows for this specific app
+            let appWindows = content.windows.filter { window in
+                guard let scApp = window.owningApplication else { return false }
+                return scApp.processID == app.processIdentifier
+            }
+
+            for window in appWindows {
+                await group.addTask {
+                    try? await captureAndCacheWindowInfo(window: window, app: app, preventDateUpdate: false)
+                }
+            }
+
+            // Wait for all tasks to complete
+            _ = try await group.waitForAll()
+
+        } catch {
+            print("Error updating windows for \(app.localizedName ?? "unknown app"): \(error)")
+        }
+    }
+
     static func updateAllWindowsInCurrentSpace() async {
         do {
             let content = try await SCShareableContent.excludingDesktopWindows(true, onScreenWindowsOnly: false)
@@ -481,7 +493,7 @@ enum WindowUtil {
         }
     }
 
-    static func captureAndCacheWindowInfo(window: SCWindow, app: NSRunningApplication, isMinimizedOrHidden: Bool = false) async throws {
+    static func captureAndCacheWindowInfo(window: SCWindow, app: NSRunningApplication, isMinimizedOrHidden: Bool = false, preventDateUpdate: Bool = true) async throws {
         let windowID = window.windowID
 
         // If window is minimized/hidden, just take picture and update cache
@@ -581,13 +593,13 @@ enum WindowUtil {
 
         do {
             windowInfo.image = try await captureWindowImage(window: window)
-            updateDesktopSpaceWindowCache(with: windowInfo)
+            updateDesktopSpaceWindowCache(with: windowInfo, preventDateUpdate)
         } catch {
             print("Error capturing window image: \(error)")
         }
     }
 
-    static func updateDesktopSpaceWindowCache(with windowInfo: WindowInfo) {
+    static func updateDesktopSpaceWindowCache(with windowInfo: WindowInfo, _ preventDateUpdate: Bool = false) {
         desktopSpaceWindowCacheManager.updateCache(pid: windowInfo.app.processIdentifier) { windowSet in
             if let matchingWindow = windowSet.first(where: { $0.axElement == windowInfo.axElement }) {
                 var matchingWindowCopy = matchingWindow
@@ -595,6 +607,11 @@ enum WindowUtil {
                 matchingWindowCopy.image = windowInfo.image
                 matchingWindowCopy.isHidden = windowInfo.isHidden
                 matchingWindowCopy.isMinimized = windowInfo.isMinimized
+
+                if !preventDateUpdate, Defaults[.sortWindowsByDate] {
+                    matchingWindowCopy.date = windowInfo.date
+                }
+
                 windowSet.remove(matchingWindow)
                 windowSet.insert(matchingWindowCopy)
             } else {

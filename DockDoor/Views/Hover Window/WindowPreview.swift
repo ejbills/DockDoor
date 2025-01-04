@@ -70,7 +70,6 @@ struct WindowPreview: View {
         }()) {
             if !windowSwitcherActive, !isMinimized, !isHidden, let _ = windowInfo.closeButton {
                 TrafficLightButtons(
-                    windowInfo: windowInfo,
                     displayMode: trafficLightButtonsVisibility,
                     hoveringOverParentWindow: isSelected || isHoveringOverWindowSwitcherPreview,
                     onWindowAction: handleWindowAction,
@@ -98,10 +97,16 @@ struct WindowPreview: View {
                windowTitle != windowInfo.app.localizedName,
                shouldShowTitle
             {
-                Text(windowInfo.windowName ?? "Hidden window")
-                    .font(.system(size: 12))
-                    .foregroundStyle(.secondary)
-                    .lineLimit(1)
+                HStack(spacing: 0) {
+                    Text(windowInfo.windowName ?? "Hidden window")
+
+                    if windowInfo.isMinimized || windowInfo.isHidden {
+                        Text(" - Inactive").italic()
+                    }
+                }
+                .font(.system(size: 12))
+                .foregroundStyle(.secondary)
+                .lineLimit(1)
             }
         }
         .frame(
@@ -123,7 +128,6 @@ struct WindowPreview: View {
         let controlsContent = Group {
             if !windowInfo.isMinimized, !windowInfo.isHidden, windowInfo.closeButton != nil {
                 TrafficLightButtons(
-                    windowInfo: windowInfo,
                     displayMode: trafficLightButtonsVisibility,
                     hoveringOverParentWindow: selected || isHoveringOverWindowSwitcherPreview,
                     onWindowAction: handleWindowAction,

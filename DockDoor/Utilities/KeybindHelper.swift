@@ -103,9 +103,11 @@ class KeybindHelper {
             isShiftKeyPressed = shiftKeyPressed
         }
 
-        if !isModifierKeyPressed {
-            SharedPreviewWindowCoordinator.shared.hideWindow()
-            SharedPreviewWindowCoordinator.shared.selectAndBringToFrontCurrentWindow()
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            if !isModifierKeyPressed, SharedPreviewWindowCoordinator.shared.isVisible {
+                SharedPreviewWindowCoordinator.shared.selectAndBringToFrontCurrentWindow()
+            }
         }
     }
 
@@ -118,48 +120,29 @@ class KeybindHelper {
             let currentMouseLocation = DockObserver.getMousePosition()
             let targetScreen = getTargetScreenForSwitcher()
 
-            switch Defaults[.windowSwitcherPlacementStrategy] {
-            case .pinnedToScreen:
-                let screenCenter = NSPoint(
-                    x: targetScreen.frame.midX,
-                    y: targetScreen.frame.midY
-                )
-
+            let showWindow = { (mouseLocation: NSPoint?, mouseScreen: NSScreen?) in
                 SharedPreviewWindowCoordinator.shared.showWindow(
                     appName: "Window Switcher",
                     windows: windows,
-                    mouseLocation: screenCenter,
-                    mouseScreen: targetScreen,
-                    iconRect: nil,
-                    overrideDelay: true,
-                    centeredHoverWindowState: .windowSwitcher,
-                    onWindowTap: { SharedPreviewWindowCoordinator.shared.hideWindow() }
-                )
-
-            case .screenWithLastActiveWindow:
-                SharedPreviewWindowCoordinator.shared.showWindow(
-                    appName: "Window Switcher",
-                    windows: windows,
-                    iconRect: nil,
-                    overrideDelay: true,
-                    centeredHoverWindowState: .windowSwitcher,
-                    onWindowTap: { SharedPreviewWindowCoordinator.shared.hideWindow() }
-                )
-
-            case .screenWithMouse:
-                let mouseScreen = NSScreen.screenContainingMouse(currentMouseLocation)
-                let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
-
-                SharedPreviewWindowCoordinator.shared.showWindow(
-                    appName: "Window Switcher",
-                    windows: windows,
-                    mouseLocation: convertedMouseLocation,
+                    mouseLocation: mouseLocation,
                     mouseScreen: mouseScreen,
                     iconRect: nil,
                     overrideDelay: true,
                     centeredHoverWindowState: .windowSwitcher,
                     onWindowTap: { SharedPreviewWindowCoordinator.shared.hideWindow() }
                 )
+            }
+
+            switch Defaults[.windowSwitcherPlacementStrategy] {
+            case .pinnedToScreen:
+                let screenCenter = NSPoint(x: targetScreen.frame.midX, y: targetScreen.frame.midY)
+                showWindow(screenCenter, targetScreen)
+            case .screenWithLastActiveWindow:
+                showWindow(nil, nil)
+            case .screenWithMouse:
+                let mouseScreen = NSScreen.screenContainingMouse(currentMouseLocation)
+                let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
+                showWindow(convertedMouseLocation, mouseScreen)
             }
         }
 

@@ -191,6 +191,9 @@
         }
       }
     },
+    " - Inactive" : {
+
+    },
     "• Allows for enhanced visual information in the dock" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -3996,6 +3999,9 @@
           }
         }
       }
+    },
+    "All buttons removed" : {
+
     },
     "Always" : {
       "comment" : "Preview window title condition option",
@@ -11802,6 +11808,9 @@
         }
       }
     },
+    "Dock Preview Window Hover Action" : {
+
+    },
     "Dock Previews & Window Switcher" : {
       "comment" : "Preview window title display condition option",
       "localizations" : {
@@ -14088,6 +14097,9 @@
         }
       }
     },
+    "Enabled Buttons" : {
+
+    },
     "Enhance your dock experience!" : {
       "localizations" : {
         "af" : {
@@ -16182,6 +16194,9 @@
           }
         }
       }
+    },
+    "Fullscreen" : {
+
     },
     "General" : {
       "comment" : "Settings tab title",
@@ -28758,6 +28773,7 @@
       }
     },
     "Preview Hover Action" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -40185,6 +40201,9 @@
         }
       }
     },
+    "Triggers an action when hovering over a window in a dock preview" : {
+
+    },
     "Un-minimize" : {
       "localizations" : {
         "af" : {
@@ -41327,6 +41346,7 @@
       }
     },
     "Use classic window ordering" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -41707,6 +41727,9 @@
         }
       }
     },
+    "Use Monochrome Colors" : {
+
+    },
     "Use Uniform Image Preview Radius" : {
       "localizations" : {
         "af" : {
@@ -41896,6 +41919,9 @@
           }
         }
       }
+    },
+    "Use Windows-style window ordering" : {
+
     },
     "Version %@" : {
       "localizations" : {
@@ -47800,6 +47826,9 @@
           }
         }
       }
+    },
+    "Your traffic lights will be set to disabled automatically." : {
+
     },
     "Z" : {
       "localizations" : {

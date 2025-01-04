@@ -12,8 +12,6 @@ struct AppearanceSettingsView: View {
     @Default(.windowTitlePosition) var windowTitlePosition
     @Default(.windowSwitcherControlPosition) var windowSwitcherControlPosition
     @Default(.dimInSwitcherUntilSelected) var dimInSwitcherUntilSelected
-    @Default(.trafficLightButtonsVisibility) var trafficLightButtonsVisibility
-    @Default(.trafficLightButtonsPosition) var trafficLightButtonsPosition
     @Default(.selectionOpacity) var selectionOpacity
     @Default(.selectionColor) var selectionColor
     @Default(.maxRows) var maxRows
@@ -51,13 +49,6 @@ struct AppearanceSettingsView: View {
                             }
                         }
 
-                        Picker("Traffic Light Buttons Visibility", selection: $trafficLightButtonsVisibility) {
-                            ForEach(TrafficLightButtonsVisibility.allCases, id: \.self) { visibility in
-                                Text(visibility.localizedName)
-                                    .tag(visibility)
-                            }
-                        }
-
                         HStack {
                             ColorPicker("Window Selection Background Color", selection: Binding(
                                 get: { selectionColor ?? .secondary },
@@ -78,6 +69,10 @@ struct AppearanceSettingsView: View {
                                       unit: "",
                                       formatter: NumberFormatter.percentFormatter)
                     }
+                }
+
+                StyledGroupBox(label: "Traffic Light Buttons") {
+                    TrafficLightButtonsSettingsView()
                 }
 
                 StyledGroupBox(label: "Dock Previews") {

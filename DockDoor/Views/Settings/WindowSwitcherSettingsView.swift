@@ -19,6 +19,7 @@ struct WindowSwitcherSettingsView: View {
     @Default(.includeHiddenWindowsInSwitcher) var includeHiddenWindowsInSwitcher
     @Default(.windowSwitcherPlacementStrategy) var placementStrategy
     @Default(.pinnedScreenIdentifier) var pinnedScreenIdentifier
+    @Default(.useClassicWindowOrdering) private var useClassicWindowOrdering
     @StateObject private var viewModel = KeybindModel()
 
     var body: some View {
@@ -141,6 +142,15 @@ struct WindowSwitcherSettingsView: View {
                                 .fixedSize(horizontal: false, vertical: true)
                         }
                     }
+                }
+
+                VStack(alignment: .leading) {
+                    Toggle(isOn: $useClassicWindowOrdering) {
+                        Text("Use Windows-style window ordering")
+                    }
+                    Text("When enabled, shows the last active window first instead of the current window")
+                        .font(.footnote)
+                        .foregroundColor(.gray)
                 }
             }
         }
