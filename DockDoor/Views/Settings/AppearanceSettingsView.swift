@@ -30,12 +30,22 @@ struct AppearanceSettingsView: View {
             VStack(alignment: .leading, spacing: 16) {
                 StyledGroupBox(label: "General") {
                     VStack(alignment: .leading, spacing: 10) {
-                        Toggle(isOn: $showAnimations) {
-                            Text("Enable Preview Window Sliding Animation")
+                        WindowSizeSliderView()
+
+                        Toggle(isOn: Binding(
+                            get: { !showAnimations },
+                            set: { showAnimations = !$0 }
+                        )) {
+                            Text("Reduce motion")
                         }
 
-                        Toggle(isOn: $uniformCardRadius) {
-                            Text("Use Uniform Image Preview Radius")
+                        VStack(alignment: .leading) {
+                            Toggle(isOn: $uniformCardRadius) {
+                                Text("Rounded image corners")
+                            }
+                            Text("When enabled, all preview images will be cropped to a rounded rectangle.")
+                                .font(.footnote)
+                                .foregroundColor(.gray)
                         }
 
                         Toggle(isOn: $showWindowTitle) {
@@ -175,5 +185,86 @@ struct AppearanceSettingsView: View {
             .padding(20)
         }
         .frame(minWidth: 650, maxHeight: 700)
+    }
+}
+
+struct WindowSizeSliderView: View {
+    @Default(.sizingMultiplier) var sizingMultiplier
+
+    private var visualScaleFactor: CGFloat {
+        let maxWidth: CGFloat = 600 // Parent box width minus padding
+        let maxHeight: CGFloat = 120 // Reasonable height within the box
+
+        let widthScale = maxWidth / optimisticScreenSizeWidth
+        let heightScale = maxHeight / optimisticScreenSizeHeight
+
+        // Use the smaller scale to ensure it fits in both dimensions
+        return min(widthScale, heightScale) * 0.9 // 0.9 to leave some margin
+    }
+
+    private var scaledPreviewSize: CGSize {
+        CGSize(
+            width: optimisticScreenSizeWidth / sizingMultiplier,
+            height: optimisticScreenSizeHeight / sizingMultiplier
+        )
+    }
+
+    private var visualScreenSize: CGSize {
+        CGSize(
+            width: optimisticScreenSizeWidth * visualScaleFactor,
+            height: optimisticScreenSizeHeight * visualScaleFactor
+        )
+    }
+
+    private var visualPreviewSize: CGSize {
+        CGSize(
+            width: scaledPreviewSize.width * visualScaleFactor,
+            height: scaledPreviewSize.height * visualScaleFactor
+        )
+    }
+
+    var body: some View {
+        VStack(alignment: .leading) {
+            ZStack(alignment: .center) {
+                // Screen outline
+                RoundedRectangle(cornerRadius: 16, style: .continuous)
+                    .stroke(Color.gray, lineWidth: 2)
+                    .frame(width: visualScreenSize.width, height: visualScreenSize.height)
+                    .overlay(
+                        Text("Screen")
+                            .font(.caption)
+                            .foregroundColor(.gray)
+                            .padding(.top, 4),
+                        alignment: .top
+                    )
+
+                // Preview window
+                Rectangle()
+                    .fill(Color.blue.opacity(0.35))
+                    .frame(width: visualPreviewSize.width, height: visualPreviewSize.height)
+                    .clipShape(RoundedRectangle(cornerRadius: 5))
+            }
+            .frame(maxWidth: visualScreenSize.width)
+            .padding(.horizontal, 4)
+
+            HStack {
+                Slider(value: $sizingMultiplier, in: 2 ... 10, step: 1) {
+                    Text("Window Preview Size")
+                }
+                .buttonStyle(PlainButtonStyle())
+                .frame(width: 400)
+
+                Text("1/\(Int(sizingMultiplier))x")
+                    .frame(width: 50)
+                    .foregroundColor(.gray)
+            }
+
+            Text("Preview windows are sized to 1/\(Int(sizingMultiplier)) of your screen dimensions")
+                .font(.footnote)
+                .foregroundColor(.gray)
+        }
+        .onChange(of: sizingMultiplier) { _ in
+            SharedPreviewWindowCoordinator.shared.windowSize = getWindowSize()
+        }
     }
 }

@@ -103,8 +103,6 @@ struct MainSettingsView: View {
                     .foregroundColor(.gray)
             }
 
-            WindowSizeSliderView()
-
             sliderSetting(title: String(localized: "Window Image Cache Lifespan"),
                           value: $screenCaptureCacheLifespan,
                           range: 0 ... 60,
@@ -160,33 +158,6 @@ struct MainSettingsView: View {
                 // Do nothing
                 break
             }
-        }
-    }
-}
-
-struct WindowSizeSliderView: View {
-    @Default(.sizingMultiplier) var sizingMultiplier
-
-    var body: some View {
-        VStack(alignment: .leading) {
-            HStack {
-                Slider(value: $sizingMultiplier, in: 2 ... 10, step: 1) {
-                    Text("Window Preview Size")
-                }
-                .buttonStyle(PlainButtonStyle())
-                .frame(width: 400)
-
-                Text("1/\(Int(sizingMultiplier))x")
-                    .frame(width: 50)
-                    .foregroundColor(.gray)
-            }
-
-            Text("Preview windows are sized to 1/\(Int(sizingMultiplier)) of your screen dimensions")
-                .font(.footnote)
-                .foregroundColor(.gray)
-        }
-        .onChange(of: sizingMultiplier) { _ in
-            SharedPreviewWindowCoordinator.shared.windowSize = getWindowSize()
         }
     }
 }
