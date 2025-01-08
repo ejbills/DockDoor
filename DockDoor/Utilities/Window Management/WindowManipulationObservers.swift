@@ -10,9 +10,7 @@ private let windowProcessingDebounceInterval: TimeInterval = 0.3
 class WindowManipulationObservers {
     static let shared = WindowManipulationObservers()
     private var observers: [pid_t: AXObserver] = [:]
-    static var trackedElements: Set<AXUIElement> = []
     static var debounceWorkItem: DispatchWorkItem?
-    static var lastWindowCreationTime: [String: Date] = [:]
 
     private init() {
         setupObservers()
@@ -61,6 +59,7 @@ class WindowManipulationObservers {
             return
         }
         createObserverForApp(app)
+        handleNewWindow(for: app.processIdentifier)
     }
 
     @objc private func appDidTerminate(_ notification: Notification) {
@@ -129,6 +128,22 @@ class WindowManipulationObservers {
 
         observers.removeValue(forKey: pid)
     }
+
+    func handleNewWindow(for pid: pid_t) {
+        windowCreationWorkItem?.cancel()
+
+        let workItem = DispatchWorkItem { [weak self] in
+            guard self != nil else { return }
+            Task {
+                if let app = NSRunningApplication(processIdentifier: pid) {
+                    await WindowUtil.updateNewWindowsForApp(app)
+                }
+            }
+        }
+
+        windowCreationWorkItem = workItem
+        DispatchQueue.main.asyncAfter(deadline: .now() + windowCreationDebounceInterval, execute: workItem)
+    }
 }
 
 func axObserverCallback(observer: AXObserver, element: AXUIElement, notificationName: CFString, userData: UnsafeMutableRawPointer?) {
@@ -149,20 +164,7 @@ func axObserverCallback(observer: AXObserver, element: AXUIElement, notification
             case kAXApplicationShownNotification:
                 WindowUtil.updateStatusOfWindowCache(pid: pid, isParentAppHidden: false)
             case kAXWindowCreatedNotification:
-                windowCreationWorkItem?.cancel()
-
-                // register new window on creation
-                let workItem = DispatchWorkItem {
-                    Task {
-                        if let app = NSRunningApplication(processIdentifier: pid) {
-                            await WindowUtil.updateNewWindowsForApp(app)
-                        }
-                    }
-                }
-
-                windowCreationWorkItem = workItem
-
-                DispatchQueue.main.asyncAfter(deadline: .now() + windowCreationDebounceInterval, execute: workItem)
+                WindowManipulationObservers.shared.handleNewWindow(for: pid)
             default:
                 break
             }
