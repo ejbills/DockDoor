@@ -15,6 +15,7 @@ struct WindowPreviewHoverContainer: View {
     @Default(.showAppName) var showAppName
     @Default(.appNameStyle) var appNameStyle
     @Default(.windowTitlePosition) var windowTitlePosition
+    @Default(.aeroShakeAction) var aeroShakeAction
 
     @State var windowStates: [WindowInfo]
     @State private var draggedWindowIndex: Int? = nil
@@ -305,11 +306,20 @@ struct WindowPreviewHoverContainer: View {
                                             }
                                             if draggedWindowIndex == index {
                                                 let currentPoint = value.location
-                                                if !windowSwitcherCoordinator.windowSwitcherActive, checkForShakeGesture(currentPoint: currentPoint) {
-                                                    minimizeAllWindows()
+                                                if !windowSwitcherCoordinator.windowSwitcherActive, aeroShakeAction != .none,
+                                                   checkForShakeGesture(currentPoint: currentPoint)
+                                                {
                                                     DragPreviewCoordinator.shared.endDragging()
                                                     draggedWindowIndex = nil
                                                     isDragging = false
+
+                                                    switch aeroShakeAction {
+                                                    case .all:
+                                                        minimizeAllWindows()
+                                                    case .except:
+                                                        minimizeAllWindows(windowStates[index])
+                                                    default: break
+                                                    }
                                                 } else {
                                                     DragPreviewCoordinator.shared.updatePreviewPosition(to: NSEvent.mouseLocation)
                                                 }
@@ -402,9 +412,20 @@ struct WindowPreviewHoverContainer: View {
         onWindowTap?()
     }
 
-    private func minimizeAllWindows() {
-        windowStates.removeAll()
-        windows.forEach { _ = WindowUtil.toggleMinimize(windowInfo: $0) }
+    private func minimizeAllWindows(_ except: WindowInfo? = nil) {
+        if let except {
+            WindowUtil.bringWindowToFront(windowInfo: except)
+
+            windowStates.removeAll { $0 != except }
+            for window in windows {
+                if window != except {
+                    _ = WindowUtil.toggleMinimize(windowInfo: window)
+                }
+            }
+        } else {
+            windowStates.removeAll()
+            windows.forEach { _ = WindowUtil.toggleMinimize(windowInfo: $0) }
+        }
         onWindowTap?()
     }
 

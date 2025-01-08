@@ -23,6 +23,7 @@ extension Defaults.Keys {
     static let tapEquivalentInterval = Key<CGFloat>("tapEquivalentInterval", default: 1.5)
     static let fadeOutDuration = Key<CGFloat>("fadeOutDuration", default: 0.4)
     static let previewHoverAction = Key<PreviewHoverAction>("previewHoverAction", default: .none)
+    static let aeroShakeAction = Key<AeroShakeAction>("aeroShakeAction", default: .none)
 
     static let showAnimations = Key<Bool>("showAnimations", default: true)
     static let gradientColorPalette = Key<GradientColorPaletteSettings>("gradientColorPalette", default: .init())
@@ -67,6 +68,8 @@ extension Defaults.Keys {
     static let windowTitleFilters = Key<[String]>("windowTitleFilters", default: [])
     static let customAppDirectories = Key<[String]>("customAppDirectories", default: [])
 }
+
+// MARK: Display Configurations
 
 enum WindowTitleDisplayCondition: String, CaseIterable, Defaults.Serializable {
     case all
@@ -176,23 +179,6 @@ enum TrafficLightButtonsPosition: String, CaseIterable, Defaults.Serializable {
     }
 }
 
-enum PreviewHoverAction: String, CaseIterable, Defaults.Serializable {
-    case none
-    case tap
-    case previewFullSize
-
-    var localizedName: String {
-        switch self {
-        case .none:
-            String(localized: "No action", comment: "Window popup hover action option")
-        case .tap:
-            String(localized: "Simulate a click (open the window)", comment: "Window popup hover action option")
-        case .previewFullSize:
-            String(localized: "Present a full size preview of the window", comment: "Window popup hover action option")
-        }
-    }
-}
-
 enum WindowSwitcherPlacementStrategy: String, CaseIterable, Defaults.Serializable {
     case screenWithMouse
     case screenWithLastActiveWindow
@@ -226,6 +212,42 @@ enum WindowSwitcherControlPosition: String, CaseIterable, Defaults.Serializable 
             String(localized: "At bottom - Title on left, controls on right")
         case .bottomTrailing:
             String(localized: "At bottom - Controls on left, title on right")
+        }
+    }
+}
+
+// MARK: Action Configurations
+
+enum PreviewHoverAction: String, CaseIterable, Defaults.Serializable {
+    case none
+    case tap
+    case previewFullSize
+
+    var localizedName: String {
+        switch self {
+        case .none:
+            String(localized: "No action", comment: "Window popup hover action option")
+        case .tap:
+            String(localized: "Simulate a click (open the window)", comment: "Window popup hover action option")
+        case .previewFullSize:
+            String(localized: "Present a full size preview of the window", comment: "Window popup hover action option")
+        }
+    }
+}
+
+enum AeroShakeAction: String, CaseIterable, Defaults.Serializable {
+    case none
+    case all
+    case except
+
+    var localizedName: String {
+        switch self {
+        case .none:
+            String(localized: "No action", comment: "Aero shake action option")
+        case .all:
+            String(localized: "Minimize all windows", comment: "Aero shake action option")
+        case .except:
+            String(localized: "Minimize all windows except the current one", comment: "Aero shake action option")
         }
     }
 }

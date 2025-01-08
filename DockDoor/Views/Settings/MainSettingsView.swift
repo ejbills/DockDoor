@@ -8,6 +8,7 @@ struct MainSettingsView: View {
     @Default(.showMenuBarIcon) var showMenuBarIcon
     @Default(.tapEquivalentInterval) var tapEquivalentInterval
     @Default(.previewHoverAction) var previewHoverAction
+    @Default(.aeroShakeAction) var aeroShakeAction
     @Default(.bufferFromDock) var bufferFromDock
     @Default(.windowPreviewImageScale) var windowPreviewImageScale
     @Default(.fadeOutDuration) var fadeOutDuration
@@ -140,6 +141,20 @@ struct MainSettingsView: View {
                           unit: String(localized: "seconds"),
                           formatter: NumberFormatter.oneDecimalFormatter)
                 .disabled(previewHoverAction == .none)
+
+            VStack(alignment: .leading) {
+                Picker("Aero Shake Action", selection: $aeroShakeAction) {
+                    ForEach(AeroShakeAction.allCases, id: \.self) { action in
+                        Text(action.localizedName).tag(action)
+                    }
+                }
+                .pickerStyle(MenuPickerStyle())
+                .scaledToFit()
+
+                Text("Triggers an action when shaking a window while it is being dragged from a dock preview")
+                    .font(.footnote)
+                    .foregroundColor(.gray)
+            }
         }
         .padding(20)
         .frame(minWidth: 650)
