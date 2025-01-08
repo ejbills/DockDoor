@@ -3,7 +3,7 @@ import ApplicationServices
 import Cocoa
 
 private var windowCreationWorkItem: DispatchWorkItem?
-private let windowCreationDebounceInterval: TimeInterval = 0.5
+private let windowCreationDebounceInterval: TimeInterval = 1
 
 private let windowProcessingDebounceInterval: TimeInterval = 0.3
 
