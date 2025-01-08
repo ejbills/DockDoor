@@ -44002,6 +44002,7 @@
       }
     },
     "Use Windows-style window ordering" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -44190,6 +44191,9 @@
           }
         }
       }
+    },
+    "Use Windows-style window ordering in the window switcher" : {
+
     },
     "Version %@" : {
       "localizations" : {

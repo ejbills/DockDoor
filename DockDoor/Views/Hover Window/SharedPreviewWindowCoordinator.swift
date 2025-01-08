@@ -27,7 +27,7 @@ class ScreenCenteredFloatingWindowCoordinator: ObservableObject {
     }
 
     func setIndex(to: Int) {
-        withAnimation(.easeInOut) {
+        withAnimation(.snappy(duration: 0.125)) {
             self.currIndex = to
         }
     }

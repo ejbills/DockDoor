@@ -146,7 +146,7 @@ struct WindowSwitcherSettingsView: View {
 
                 VStack(alignment: .leading) {
                     Toggle(isOn: $useClassicWindowOrdering) {
-                        Text("Use Windows-style window ordering")
+                        Text("Use Windows-style window ordering in the window switcher")
                     }
                     Text("When enabled, shows the last active window first instead of the current window")
                         .font(.footnote)

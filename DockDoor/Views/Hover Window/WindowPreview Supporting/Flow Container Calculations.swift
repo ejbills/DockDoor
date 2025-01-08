@@ -31,56 +31,64 @@ extension WindowPreviewHoverContainer {
             return 0
         }()
 
-        // Calculate total vertical padding
         let totalVerticalPadding = outerPadding + flowStackPadding + additionalPadding
         let totalHorizontalPadding = outerPadding + flowStackPadding
 
         if isHorizontal {
-            var rows: [[Int]] = [[]]
-            var currentRowWidth: CGFloat = 0
-            var currentRowIndex = 0
             let maxWidth = visibleFrame.width - totalHorizontalPadding
             let maxHeight = visibleFrame.height - totalVerticalPadding
             let rowHeight = maxWindowDimension.y + itemSpacing
-            var hasExceededWidth = false
+            let availableHeight = maxHeight - itemSpacing
 
-            // Calculate maximum allowed rows considering available height
-            let availableHeight = maxHeight - itemSpacing // Subtract last row spacing
+            // Calculate maximum allowed rows
             let calculatedMaxRows = max(1, Int(floor(availableHeight / rowHeight)))
             let userMaxRows = Defaults[.maxRows]
             let effectiveMaxRows = userMaxRows > 0 ? min(Int(userMaxRows), calculatedMaxRows) : calculatedMaxRows
+
+            // Calculate optimal number of rows based on window widths and available space
+            var totalWidthNeeded: CGFloat = 0
+            var maxWindowWidth: CGFloat = 0
+
+            for windowIndex in 0 ..< activeWindowCount {
+                let width = windowDimensions[windowIndex]?.size.width ?? 0
+                totalWidthNeeded += width + (totalWidthNeeded > 0 ? itemSpacing : 0)
+                maxWindowWidth = max(maxWindowWidth, width)
+            }
+
+            let avgWindowsPerRow = max(2, CGFloat(activeWindowCount) / CGFloat(effectiveMaxRows))
+            let optimalRows = max(min(effectiveMaxRows,
+                                      Int(ceil(totalWidthNeeded / maxWidth))),
+                                  Int(ceil(CGFloat(activeWindowCount) / avgWindowsPerRow)))
+
+            let targetWindowsPerRow = Int(floor(CGFloat(activeWindowCount) / CGFloat(optimalRows)))
+
+            var rows: [[Int]] = [[]]
+            var currentRowWidth: CGFloat = 0
+            var currentRowIndex = 0
+            var currentRowCount = 0
 
             for windowIndex in 0 ..< activeWindowCount {
                 let windowWidth = windowDimensions[windowIndex]?.size.width ?? 0
                 let newWidth = currentRowWidth + windowWidth + (currentRowWidth > 0 ? itemSpacing : 0)
 
-                // Check if adding a window would exceed width or max rows
-                if newWidth > maxWidth {
-                    if hasExceededWidth {
-                        let newRowCount = currentRowIndex + 2
+                let isLastRow = currentRowIndex == effectiveMaxRows - 1
+                let shouldStartNewRow = newWidth > maxWidth || (!isLastRow && currentRowCount >= targetWindowsPerRow)
 
-                        // If we would exceed max rows, redistribute
-                        if newRowCount > effectiveMaxRows {
-                            return redistributeEvenly(windowCount: activeWindowCount, divisions: effectiveMaxRows)
-                        }
-
-                        // Start new row
-                        currentRowIndex += 1
-                        rows.append([])
-                        currentRowWidth = windowWidth
-                        hasExceededWidth = false
-                    } else {
-                        hasExceededWidth = true
+                if shouldStartNewRow {
+                    if currentRowIndex + 1 >= effectiveMaxRows {
+                        return redistributeEvenly(windowCount: activeWindowCount, divisions: effectiveMaxRows)
                     }
+
+                    currentRowIndex += 1
+                    rows.append([])
+                    currentRowWidth = windowWidth
+                    currentRowCount = 1
+                } else {
+                    currentRowWidth = newWidth
+                    currentRowCount += 1
                 }
 
                 rows[currentRowIndex].append(windowIndex)
-                currentRowWidth = newWidth
-            }
-
-            // Double check we haven't exceeded max rows
-            if rows.count > effectiveMaxRows {
-                return redistributeEvenly(windowCount: activeWindowCount, divisions: effectiveMaxRows)
             }
 
             var ranges: [Range<Int>] = []
@@ -88,59 +96,67 @@ extension WindowPreviewHoverContainer {
 
             for row in rows {
                 if !row.isEmpty {
-                    let endIndex = startIndex + row.count
-                    ranges.append(startIndex ..< endIndex)
-                    startIndex = endIndex
+                    ranges.append(startIndex ..< (startIndex + row.count))
+                    startIndex += row.count
                 }
             }
 
             return (ranges.count, ranges)
 
         } else {
-            var columns: [[Int]] = [[]]
-            var columnHeights: [CGFloat] = [0]
-            var currentColumnIndex = 0
             let maxHeight = visibleFrame.height - totalVerticalPadding
             let maxWidth = visibleFrame.width - totalHorizontalPadding
             let columnWidth = maxWindowDimension.x + itemSpacing
-            var hasExceededHeight = false
+            let availableWidth = maxWidth - itemSpacing
 
-            // Calculate maximum allowed columns considering available width
-            let availableWidth = maxWidth - itemSpacing // Subtract last column spacing
             let calculatedMaxColumns = max(1, Int(floor(availableWidth / columnWidth)))
             let userMaxColumns = Defaults[.maxColumns]
             let effectiveMaxColumns = userMaxColumns > 0 ? min(Int(userMaxColumns), calculatedMaxColumns) : calculatedMaxColumns
 
+            var totalHeightNeeded: CGFloat = 0
+            var maxWindowHeight: CGFloat = 0
+
             for windowIndex in 0 ..< activeWindowCount {
-                let windowHeight = (windowDimensions[windowIndex]?.size.height ?? 0)
+                let height = windowDimensions[windowIndex]?.size.height ?? 0
+                totalHeightNeeded += height + (totalHeightNeeded > 0 ? itemSpacing : 0)
+                maxWindowHeight = max(maxWindowHeight, height)
+            }
+
+            let avgWindowsPerColumn = max(2, CGFloat(activeWindowCount) / CGFloat(effectiveMaxColumns))
+            let optimalColumns = max(min(effectiveMaxColumns,
+                                         Int(ceil(totalHeightNeeded / maxHeight))),
+                                     Int(ceil(CGFloat(activeWindowCount) / avgWindowsPerColumn)))
+
+            let targetWindowsPerColumn = Int(floor(CGFloat(activeWindowCount) / CGFloat(optimalColumns)))
+
+            var columns: [[Int]] = [[]]
+            var columnHeights: [CGFloat] = [0]
+            var currentColumnIndex = 0
+            var currentColumnCount = 0
+
+            for windowIndex in 0 ..< activeWindowCount {
+                let windowHeight = windowDimensions[windowIndex]?.size.height ?? 0
                 let newHeight = columnHeights[currentColumnIndex] + windowHeight + (columnHeights[currentColumnIndex] > 0 ? itemSpacing : 0)
 
-                if newHeight > maxHeight {
-                    if hasExceededHeight {
-                        let newColumnCount = currentColumnIndex + 2
+                let isLastColumn = currentColumnIndex == effectiveMaxColumns - 1
+                let shouldStartNewColumn = newHeight > maxHeight || (!isLastColumn && currentColumnCount >= targetWindowsPerColumn)
 
-                        // If we would exceed max columns, redistribute
-                        if newColumnCount > effectiveMaxColumns {
-                            return redistributeEvenly(windowCount: activeWindowCount, divisions: effectiveMaxColumns)
-                        }
-
-                        // Start new column
-                        currentColumnIndex += 1
-                        columns.append([])
-                        columnHeights.append(0)
-                        hasExceededHeight = false
-                    } else {
-                        hasExceededHeight = true
+                if shouldStartNewColumn {
+                    if currentColumnIndex + 1 >= effectiveMaxColumns {
+                        return redistributeEvenly(windowCount: activeWindowCount, divisions: effectiveMaxColumns)
                     }
+
+                    currentColumnIndex += 1
+                    columns.append([])
+                    columnHeights.append(0)
+                    columnHeights[currentColumnIndex] = windowHeight
+                    currentColumnCount = 1
+                } else {
+                    columnHeights[currentColumnIndex] = newHeight
+                    currentColumnCount += 1
                 }
 
                 columns[currentColumnIndex].append(windowIndex)
-                columnHeights[currentColumnIndex] = newHeight
-            }
-
-            // Double check we haven't exceeded max columns
-            if columns.count > effectiveMaxColumns {
-                return redistributeEvenly(windowCount: activeWindowCount, divisions: effectiveMaxColumns)
             }
 
             var ranges: [Range<Int>] = []
@@ -148,9 +164,8 @@ extension WindowPreviewHoverContainer {
 
             for column in columns {
                 if !column.isEmpty {
-                    let endIndex = startIndex + column.count
-                    ranges.append(startIndex ..< endIndex)
-                    startIndex = endIndex
+                    ranges.append(startIndex ..< (startIndex + column.count))
+                    startIndex += column.count
                 }
             }
 
