@@ -38,12 +38,45 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://buymeacoffee.com/keplercafe</div>
 
+<a id="v1.6"></a>
+# [v1.6](https://github.com/ejbills/DockDoor/releases/tag/v1.6) - 2025-01-09
+
+# Changelog v1.6 🎉
+
+## New Features
+- **Aero Shake**
+- - Shake window to minimize other/all windows
+- - Configurable in General settings
+- - ![aeroshake-ezgif com-speed](https://github.com/user-attachments/assets/afda2b3f-21ed-4bd0-b826-0205e02320b6)
+
+- **Traffic Light Button Customizations**
+- - New customization options for window controls in appearance settings, disable any of the buttons!
+- - ![CleanShot 2025-01-08 at 16 12 36@2x](https://github.com/user-attachments/assets/6fe2bb44-f43a-42c4-9f40-313ebd66b523)
+
+## Bug Fixes
+- Fixed window switcher ordering. Windows will no longer be erratically shuffled.
+- Fixed window flow breaking when extending off screen
+- Fixed flow container being artificially capped at 3 rows
+- Resolved lateral movement issues with non-running applications in dock
+- Corrected window registration timing on application launch
+
+## Enhancements
+- Window sizing controls visualization
+- Reworded and moved some settings options
+- Windows now registered in DockDoor upon creation
+- Quicker tabbing animation in window switcher
+- Updated localizations via Crowdin integration
+
+[Changes][v1.6]
+
+
 <a id="v1.5.1"></a>
 # [v1.5.1](https://github.com/ejbills/DockDoor/releases/tag/v1.5.1) - 2025-01-03
 
 - Fixes preview intermittently failing to present when hovering over app icon
 - Reworked "See full preview" hover action to display window previews at their exact size and position on the correct monitor, matching the real window's dimensions and location for a more accurate preview experience. 
 - - This provides better context when switching between windows and eliminates scaling issues on large displays.
+- Reduces memory usage
 
 [Changes][v1.5.1]
 
@@ -754,6 +787,7 @@ v1.0
 [Changes][releases]
 
 
+[v1.6]: https://github.com/ejbills/DockDoor/compare/v1.5.1...v1.6
 [v1.5.1]: https://github.com/ejbills/DockDoor/compare/v1.5...v1.5.1
 [v1.5]: https://github.com/ejbills/DockDoor/compare/v1.4...v1.5
 [v1.4]: https://github.com/ejbills/DockDoor/compare/v1.3.3...v1.4
