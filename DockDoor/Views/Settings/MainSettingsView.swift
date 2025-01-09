@@ -143,7 +143,7 @@ struct MainSettingsView: View {
                 .disabled(previewHoverAction == .none)
 
             VStack(alignment: .leading) {
-                Picker("Aero Shake Action", selection: $aeroShakeAction) {
+                Picker("Dock Preview Aero Shake Action", selection: $aeroShakeAction) {
                     ForEach(AeroShakeAction.allCases, id: \.self) { action in
                         Text(action.localizedName).tag(action)
                     }
