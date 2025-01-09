@@ -179,7 +179,7 @@ final class SharedPreviewWindowCoordinator: NSWindow {
             // Horizontally center the preview to the hovered dock icon
             xPosition = flippedIconRect.midX - (windowSize.width / 2)
             // Position the preview just above the dock icon
-            yPosition = screenFrame.minY + flippedIconRect.minY
+            yPosition = flippedIconRect.minY
         case .left:
             // Vertically center the preview to the hovered dock icon
             xPosition = flippedIconRect.maxX
