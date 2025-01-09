@@ -118,7 +118,7 @@ final class DockObserver {
             lastNotificationId = bundleIdentifier
 
             notRunningCount += 1
-            if notRunningCount >= maxNotRunningCount {
+            if notRunningCount >= maxNotRunningCount || !Defaults[.lateralMovement] {
                 hideWindowAndResetLastApp()
             } else if case .notRunning = previousStatus {
                 let timeSinceLastNotification = currentTime - lastNotificationTime
@@ -134,7 +134,9 @@ final class DockObserver {
             let mouseScreen = NSScreen.screenContainingMouse(currentMouseLocation)
             let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
 
-            if !SharedPreviewWindowCoordinator.shared.frame.extended(by: abs(Defaults[.bufferFromDock])).contains(convertedMouseLocation) {
+            if !SharedPreviewWindowCoordinator.shared.frame.extended(by: abs(Defaults[.bufferFromDock])).contains(convertedMouseLocation)
+                || !Defaults[.lateralMovement]
+            {
                 hideWindowAndResetLastApp()
             }
             previousStatus = appUnderMouseElement.status
