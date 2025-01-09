@@ -38,6 +38,16 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://buymeacoffee.com/keplercafe</div>
 
+<a id="v1.6.1"></a>
+# [v1.6.1](https://github.com/ejbills/DockDoor/releases/tag/v1.6.1) - 2025-01-09
+
+- Fixes dock preview rendering too high when primary monitor was oriented vertically ([#447](https://github.com/ejbills/DockDoor/issues/447))
+- Adds missing localization strings
+- Syncs translations with Crowdin
+
+[Changes][v1.6.1]
+
+
 <a id="v1.6"></a>
 # [v1.6](https://github.com/ejbills/DockDoor/releases/tag/v1.6) - 2025-01-09
 
@@ -787,6 +797,7 @@ v1.0
 [Changes][releases]
 
 
+[v1.6.1]: https://github.com/ejbills/DockDoor/compare/v1.6...v1.6.1
 [v1.6]: https://github.com/ejbills/DockDoor/compare/v1.5.1...v1.6
 [v1.5.1]: https://github.com/ejbills/DockDoor/compare/v1.5...v1.5.1
 [v1.5]: https://github.com/ejbills/DockDoor/compare/v1.4...v1.5
