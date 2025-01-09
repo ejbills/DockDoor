@@ -1,10 +1,16 @@
 import SwiftUI
 
 struct StyledGroupBox<Content: View>: View {
-    let label: String
+    let label: LocalizedStringKey
     let content: Content
 
-    init(label: String, @ViewBuilder content: () -> Content) {
+    init(label: LocalizedStringKey, @ViewBuilder content: () -> Content) {
+        self.label = label
+        self.content = content()
+    }
+
+    // Add convenience init for string literals
+    init(_ label: LocalizedStringKey, @ViewBuilder content: () -> Content) {
         self.label = label
         self.content = content()
     }

@@ -7,8 +7,8 @@ struct EnabledActionRowView: View {
     var iconName: String
     var action: (() -> Void)?
     var disableShine: Bool = false
-    var buttonText: String = "Open Settings"
-    var statusText: String = "Granted"
+    var buttonText: String = .init(localized: "Open Settings")
+    var statusText: String = .init(localized: "Granted")
     var customStatusView: AnyView?
     var hideStatus: Bool = false
 
@@ -34,7 +34,7 @@ struct EnabledActionRowView: View {
                 } else {
                     VStack(alignment: .trailing, spacing: 4) {
                         HStack {
-                            Text(isGranted ? statusText : "Not \(statusText.lowercased())")
+                            Text(isGranted ? statusText : String(localized: "Not \(statusText.lowercased())"))
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                             Image(systemName: isGranted ? "checkmark.circle.fill" : "xmark.circle.fill")

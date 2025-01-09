@@ -9899,7 +9899,6 @@
       }
     },
     "Colors" : {
-      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -12565,6 +12564,9 @@
           }
         }
       }
+    },
+    "Dock Previews" : {
+
     },
     "Dock Previews & Window Switcher" : {
       "comment" : "Preview window title display condition option",
@@ -17900,7 +17902,6 @@
       }
     },
     "Granted" : {
-      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -25326,6 +25327,9 @@
           }
         }
       }
+    },
+    "Not %@" : {
+
     },
     "Not granted" : {
       "extractionState" : "stale",
@@ -42090,6 +42094,9 @@
         }
       }
     },
+    "Traffic Light Buttons" : {
+
+    },
     "Traffic Light Buttons Position" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -48564,6 +48571,9 @@
           }
         }
       }
+    },
+    "Window Preview Layout" : {
+
     },
     "Window Preview Layout Limits" : {
       "extractionState" : "stale",
