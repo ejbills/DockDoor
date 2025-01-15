@@ -9,51 +9,106 @@ struct UserKeyBind: Codable, Defaults.Serializable {
 
 class KeybindHelper {
     static let shared = KeybindHelper()
+
+    // MARK: - Properties
+
     private var isModifierKeyPressed = false
     private var isShiftKeyPressed = false
     private var eventTap: CFMachPort?
     private var runLoopSource: CFRunLoopSource?
     private var modifierValue: Int = 0
+    private var monitorTimer: Timer?
+
+    // MARK: - Initialization
 
     private init() {
         setupEventTap()
+        startMonitoring()
     }
 
     deinit {
+        cleanup()
+    }
+
+    // MARK: - Public Methods
+
+    func reset() {
+        cleanup()
+        resetState()
+        setupEventTap()
+        startMonitoring()
+    }
+
+    // MARK: - Private Methods
+
+    private func cleanup() {
+        monitorTimer?.invalidate()
+        monitorTimer = nil
         removeEventTap()
     }
 
-    private func setupEventTap() {
-        let eventMask = (1 << CGEventType.keyDown.rawValue) | (1 << CGEventType.keyUp.rawValue) | (1 << CGEventType.flagsChanged.rawValue)
+    private func resetState() {
+        isModifierKeyPressed = false
+        isShiftKeyPressed = false
+        modifierValue = 0
+    }
 
-        eventTap = CGEvent.tapCreate(
+    private func startMonitoring() {
+        monitorTimer = Timer.scheduledTimer(withTimeInterval: 60.0, repeats: true) { [weak self] _ in
+            self?.checkEventTapStatus()
+        }
+    }
+
+    private func checkEventTapStatus() {
+        guard let eventTap else {
+            reset()
+            return
+        }
+
+        if !CGEvent.tapIsEnabled(tap: eventTap) {
+            reset()
+        }
+    }
+
+    private static let eventCallback: CGEventTapCallBack = { proxy, type, event, refcon in
+        KeybindHelper.shared.handleEvent(proxy: proxy, type: type, event: event)
+    }
+
+    private func setupEventTap() {
+        let eventMask = (1 << CGEventType.keyDown.rawValue) |
+            (1 << CGEventType.keyUp.rawValue) |
+            (1 << CGEventType.flagsChanged.rawValue)
+
+        guard let newEventTap = CGEvent.tapCreate(
             tap: .cgSessionEventTap,
             place: .headInsertEventTap,
             options: .defaultTap,
             eventsOfInterest: CGEventMask(eventMask),
-            callback: { proxy, type, event, refcon -> Unmanaged<CGEvent>? in
-                return KeybindHelper.shared.handleEvent(proxy: proxy, type: type, event: event)
-            },
+            callback: KeybindHelper.eventCallback,
             userInfo: nil
-        )
-
-        guard let eventTap else {
-            print("Failed to create event tap.")
+        ) else {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 5) { [weak self] in
+                self?.setupEventTap()
+            }
             return
         }
 
-        runLoopSource = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, eventTap, 0)
-        CFRunLoopAddSource(CFRunLoopGetCurrent(), runLoopSource, .commonModes)
-        CGEvent.tapEnable(tap: eventTap, enable: true)
+        eventTap = newEventTap
+        runLoopSource = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, newEventTap, 0)
+
+        if let runLoopSource {
+            CFRunLoopAddSource(CFRunLoopGetCurrent(), runLoopSource, .commonModes)
+            CGEvent.tapEnable(tap: newEventTap, enable: true)
+        }
     }
 
     private func removeEventTap() {
         if let eventTap, let runLoopSource {
             CGEvent.tapEnable(tap: eventTap, enable: false)
             CFRunLoopRemoveSource(CFRunLoopGetCurrent(), runLoopSource, .commonModes)
-            self.eventTap = nil
-            self.runLoopSource = nil
         }
+        eventTap = nil
+        runLoopSource = nil
     }
 
     private func handleEvent(proxy: CGEventTapProxy, type: CGEventType, event: CGEvent) -> Unmanaged<CGEvent>? {
@@ -62,46 +117,68 @@ class KeybindHelper {
         let shiftKeyCurrentlyPressed = event.flags.contains(.maskShift)
         var userDefinedKeyCurrentlyPressed = false
 
-        if type == .flagsChanged {
-            // New Keybind that the user has enforced, includes the modifier keys
-            if event.flags.contains(.maskControl) {
-                modifierValue = Defaults[.Int64maskControl]
-                userDefinedKeyCurrentlyPressed = true
-            } else if event.flags.contains(.maskAlternate) {
-                modifierValue = Defaults[.Int64maskAlternate]
-                userDefinedKeyCurrentlyPressed = true
-            } else if event.flags.contains(.maskCommand) {
-                modifierValue = Defaults[.Int64maskCommand]
-                userDefinedKeyCurrentlyPressed = true
-            }
-            handleModifierEvent(modifierKeyPressed: userDefinedKeyCurrentlyPressed, shiftKeyPressed: shiftKeyCurrentlyPressed)
-        } else if type == .keyDown {
-            if SharedPreviewWindowCoordinator.shared.isVisible, keyCode == 53 { // Escape key
-                SharedPreviewWindowCoordinator.shared.hideWindow()
-                return nil // Suppress the Escape key event
+        switch type {
+        case .flagsChanged:
+            handleFlagsChanged(event: event, userDefinedKeyCurrentlyPressed: &userDefinedKeyCurrentlyPressed)
+            handleModifierEvent(modifierKeyPressed: userDefinedKeyCurrentlyPressed,
+                                shiftKeyPressed: shiftKeyCurrentlyPressed)
+
+        case .keyDown:
+            let shouldConsumeKeyEvent = handleKeyDown(keyCode: keyCode,
+                                                      keyBoardShortcutSaved: keyBoardShortcutSaved)
+
+            if shouldConsumeKeyEvent {
+                return nil
             }
 
-            if isModifierKeyPressed, keyCode == keyBoardShortcutSaved.keyCode, modifierValue == keyBoardShortcutSaved.modifierFlags { // Tab key
-                if SharedPreviewWindowCoordinator.shared.isVisible { // Check if HoverWindow is already shown
-                    SharedPreviewWindowCoordinator.shared.cycleWindows(goBackwards: isShiftKeyPressed) // Cycle windows based on Shift key state
-                } else {
-                    showHoverWindow() // Initialize HoverWindow if it's not open
-                }
-                return nil // Suppress the Tab key event
-            }
+        default:
+            break
         }
 
         return Unmanaged.passUnretained(event)
     }
 
+    private func handleFlagsChanged(event: CGEvent, userDefinedKeyCurrentlyPressed: inout Bool) {
+        if event.flags.contains(.maskControl) {
+            modifierValue = Defaults[.Int64maskControl]
+            userDefinedKeyCurrentlyPressed = true
+        } else if event.flags.contains(.maskAlternate) {
+            modifierValue = Defaults[.Int64maskAlternate]
+            userDefinedKeyCurrentlyPressed = true
+        } else if event.flags.contains(.maskCommand) {
+            modifierValue = Defaults[.Int64maskCommand]
+            userDefinedKeyCurrentlyPressed = true
+        }
+    }
+
+    private func handleKeyDown(keyCode: Int64, keyBoardShortcutSaved: UserKeyBind) -> Bool {
+        if SharedPreviewWindowCoordinator.shared.isVisible, keyCode == 53 { // Escape key
+            SharedPreviewWindowCoordinator.shared.hideWindow()
+            return true
+        }
+
+        if isModifierKeyPressed,
+           keyCode == keyBoardShortcutSaved.keyCode,
+           modifierValue == keyBoardShortcutSaved.modifierFlags
+        {
+            handleKeybindActivation()
+            return true
+        }
+
+        return false
+    }
+
+    private func handleKeybindActivation() {
+        if SharedPreviewWindowCoordinator.shared.isVisible {
+            SharedPreviewWindowCoordinator.shared.cycleWindows(goBackwards: isShiftKeyPressed)
+        } else {
+            showHoverWindow()
+        }
+    }
+
     private func handleModifierEvent(modifierKeyPressed: Bool, shiftKeyPressed: Bool) {
-        if modifierKeyPressed != isModifierKeyPressed {
-            isModifierKeyPressed = modifierKeyPressed
-        }
-        // Update the state of Shift key
-        if shiftKeyPressed != isShiftKeyPressed {
-            isShiftKeyPressed = shiftKeyPressed
-        }
+        isModifierKeyPressed = modifierKeyPressed
+        isShiftKeyPressed = shiftKeyPressed
 
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }
@@ -112,7 +189,6 @@ class KeybindHelper {
     }
 
     private func showHoverWindow() {
-        // Show window immediately on the main thread
         DispatchQueue.main.async { [weak self] in
             guard let self, isModifierKeyPressed else { return }
 
@@ -120,35 +196,50 @@ class KeybindHelper {
             let currentMouseLocation = DockObserver.getMousePosition()
             let targetScreen = getTargetScreenForSwitcher()
 
-            let showWindow = { (mouseLocation: NSPoint?, mouseScreen: NSScreen?) in
-                SharedPreviewWindowCoordinator.shared.showWindow(
-                    appName: "Window Switcher",
-                    windows: windows,
-                    mouseLocation: mouseLocation,
-                    mouseScreen: mouseScreen,
-                    iconRect: nil,
-                    overrideDelay: true,
-                    centeredHoverWindowState: .windowSwitcher,
-                    onWindowTap: { SharedPreviewWindowCoordinator.shared.hideWindow() }
-                )
-            }
-
-            switch Defaults[.windowSwitcherPlacementStrategy] {
-            case .pinnedToScreen:
-                let screenCenter = NSPoint(x: targetScreen.frame.midX, y: targetScreen.frame.midY)
-                showWindow(screenCenter, targetScreen)
-            case .screenWithLastActiveWindow:
-                showWindow(nil, nil)
-            case .screenWithMouse:
-                let mouseScreen = NSScreen.screenContainingMouse(currentMouseLocation)
-                let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
-                showWindow(convertedMouseLocation, mouseScreen)
-            }
+            displayHoverWindow(windows: windows,
+                               currentMouseLocation: currentMouseLocation,
+                               targetScreen: targetScreen)
         }
 
         Task(priority: .high) { [weak self] in
             guard self != nil else { return }
             await WindowUtil.updateAllWindowsInCurrentSpace()
+        }
+    }
+
+    private func displayHoverWindow(windows: [WindowInfo],
+                                    currentMouseLocation: CGPoint,
+                                    targetScreen: NSScreen)
+    {
+        let showWindow = { (mouseLocation: NSPoint?, mouseScreen: NSScreen?) in
+            SharedPreviewWindowCoordinator.shared.showWindow(
+                appName: "Window Switcher",
+                windows: windows,
+                mouseLocation: mouseLocation,
+                mouseScreen: mouseScreen,
+                iconRect: nil,
+                overrideDelay: true,
+                centeredHoverWindowState: .windowSwitcher,
+                onWindowTap: {
+                    SharedPreviewWindowCoordinator.shared.hideWindow()
+                }
+            )
+        }
+
+        switch Defaults[.windowSwitcherPlacementStrategy] {
+        case .pinnedToScreen:
+            let screenCenter = NSPoint(x: targetScreen.frame.midX,
+                                       y: targetScreen.frame.midY)
+            showWindow(screenCenter, targetScreen)
+
+        case .screenWithLastActiveWindow:
+            showWindow(nil, nil)
+
+        case .screenWithMouse:
+            let mouseScreen = NSScreen.screenContainingMouse(currentMouseLocation)
+            let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation,
+                                                                         forScreen: mouseScreen)
+            showWindow(convertedMouseLocation, mouseScreen)
         }
     }
 
@@ -159,7 +250,6 @@ class KeybindHelper {
             return pinnedScreen
         }
 
-        // Fallback to mouse screen
         let mouseLocation = DockObserver.getMousePosition()
         return NSScreen.screenContainingMouse(mouseLocation)
     }
