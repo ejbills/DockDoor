@@ -369,8 +369,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : " - Inactive"
+            "state" : "translated",
+            "value" : " - 未激活"
           }
         },
         "zh-Hant" : {
@@ -561,7 +561,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "• 允许在任务栏中增强视觉信息"
+            "value" : "• 允许在Dock栏中增强视觉信息"
           }
         },
         "zh-Hant" : {
@@ -752,7 +752,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "• 实现与任务栏项目的实时互动"
+            "value" : "• 开启与Dock栏项目的实时互动"
           }
         },
         "zh-Hant" : {
@@ -1134,7 +1134,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "• 检测你鼠标悬停在任务栏上的时候"
+            "value" : "• 检测你鼠标悬停在Dock栏上的时候"
           }
         },
         "zh-Hant" : {
@@ -1323,8 +1323,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "• When hovering over the Dock at the bottom, windows flow in rows from left to right"
+            "state" : "translated",
+            "value" : "当鼠标悬停在底部的Dock上时，窗口会按行从左至右排列"
           }
         },
         "zh-Hant" : {
@@ -1513,8 +1513,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "• When hovering over the Dock on the sides, windows flow in columns from top to bottom"
+            "state" : "translated",
+            "value" : "当鼠标悬停在侧边的Dock上时，窗口会按列从上至下排列"
           }
         },
         "zh-Hant" : {
@@ -1703,8 +1703,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "• When using the Window Switcher, windows always flow in rows from left to right"
+            "state" : "translated",
+            "value" : "当使用窗口切换器时，窗口总是按行从左至右排列"
           }
         },
         "zh-Hant" : {
@@ -1893,8 +1893,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "1. Select \"Command (⌘)\" as the initialization key."
+            "state" : "translated",
+            "value" : "1. 选择 \"Command (⌘)\" 作为初始化键。"
           }
         },
         "zh-Hant" : {
@@ -2273,8 +2273,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "2. Click \"Start Recording Trigger Key\"."
+            "state" : "translated",
+            "value" : "2. 点击“开始录制触发键”。"
           }
         },
         "zh-Hant" : {
@@ -2463,8 +2463,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "3. Press ONLY the Tab key (not Command+Tab)."
+            "state" : "translated",
+            "value" : "3. 只按下Tab键(不是Command+Tab)。"
           }
         },
         "zh-Hant" : {
@@ -2653,8 +2653,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "4. Your keybind will be set to Command+Tab."
+            "state" : "translated",
+            "value" : "4. 您的按键绑定将设置为 Command+Tab。"
           }
         },
         "zh-Hant" : {
@@ -3415,8 +3415,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add"
+            "state" : "translated",
+            "value" : "添加"
           }
         },
         "zh-Hant" : {
@@ -3605,8 +3605,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add additional directories to scan for applications"
+            "state" : "translated",
+            "value" : "添加额外的目录以扫描应用程序"
           }
         },
         "zh-Hant" : {
@@ -3795,8 +3795,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add Directory"
+            "state" : "translated",
+            "value" : "添加目录"
           }
         },
         "zh-Hant" : {
@@ -3985,8 +3985,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add Filter"
+            "state" : "translated",
+            "value" : "添加筛选条件"
           }
         },
         "zh-Hant" : {
@@ -4366,8 +4366,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Aero Shake Action"
+            "state" : "translated",
+            "value" : "Aero 摇晃动作"
           }
         },
         "zh-Hant" : {
@@ -4556,8 +4556,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "All buttons removed"
+            "state" : "translated",
+            "value" : "所有按钮已删除"
           }
         },
         "zh-Hant" : {
@@ -6271,8 +6271,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Application filters"
+            "state" : "translated",
+            "value" : "应用程序筛选器"
           }
         },
         "zh-Hant" : {
@@ -6461,8 +6461,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Are you sure you want to proceed?"
+            "state" : "translated",
+            "value" : "您确定要继续吗？"
           }
         },
         "zh-Hant" : {
@@ -6841,8 +6841,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "At bottom - Controls on left, title on right"
+            "state" : "translated",
+            "value" : "在底部 — 控制按钮在左侧，标题在右侧"
           }
         },
         "zh-Hant" : {
@@ -7031,8 +7031,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "At bottom - Title on left, controls on right"
+            "state" : "translated",
+            "value" : "在底部 — 标题在左侧，控制按钮在右侧"
           }
         },
         "zh-Hant" : {
@@ -7221,8 +7221,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "At top - Controls on left, title on right"
+            "state" : "translated",
+            "value" : "在顶部 — 控制按钮在左侧，标题在右侧"
           }
         },
         "zh-Hant" : {
@@ -7411,8 +7411,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "At top - Title on left, controls on right"
+            "state" : "translated",
+            "value" : "在顶部 — 标题在左侧，控制按钮在右侧"
           }
         },
         "zh-Hant" : {
@@ -8365,7 +8365,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "右下角"
+            "value" : "右下角chen'x'g'hu'wu"
           }
         },
         "zh-Hant" : {
@@ -9126,8 +9126,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Cannot Add Color"
+            "state" : "translated",
+            "value" : "无法添加颜色"
           }
         },
         "zh-Hant" : {
@@ -9316,8 +9316,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Cannot Remove Color"
+            "state" : "translated",
+            "value" : "无法移除颜色"
           }
         },
         "zh-Hant" : {
@@ -9886,8 +9886,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Close All"
+            "state" : "translated",
+            "value" : "全部关闭"
           }
         },
         "zh-Hant" : {
@@ -10456,8 +10456,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Confirm"
+            "state" : "translated",
+            "value" : "确认"
           }
         },
         "zh-Hant" : {
@@ -11597,8 +11597,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Custom Application Directories"
+            "state" : "translated",
+            "value" : "自定义应用程序目录"
           }
         },
         "zh-Hant" : {
@@ -12170,8 +12170,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dim Unselected Windows"
+            "state" : "translated",
+            "value" : "使未选中的窗口变暗"
           }
         },
         "zh-Hant" : {
@@ -12360,8 +12360,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Disconnected Display"
+            "state" : "translated",
+            "value" : "已断开显示连接"
           }
         },
         "zh-Hant" : {
@@ -12460,8 +12460,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Preview Aero Shake Action"
+            "state" : "translated",
+            "value" : "Azione 'Aero Shake' dalle anteprime del Dock"
           }
         },
         "ja" : {
@@ -12550,8 +12550,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Preview Aero Shake Action"
+            "state" : "translated",
+            "value" : "Dock 预览Aero 摇晃动作"
           }
         },
         "zh-Hant" : {
@@ -12740,8 +12740,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Preview Window Hover Action"
+            "state" : "translated",
+            "value" : "Dock 预览窗口悬停动作"
           }
         },
         "zh-Hant" : {
@@ -12840,8 +12840,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Previews"
+            "state" : "translated",
+            "value" : "Anteprime del Dock"
           }
         },
         "ja" : {
@@ -12930,8 +12930,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Previews"
+            "state" : "translated",
+            "value" : "Dock 预览"
           }
         },
         "zh-Hant" : {
@@ -15407,8 +15407,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enabled Buttons"
+            "state" : "translated",
+            "value" : "已启用的按钮"
           }
         },
         "zh-Hant" : {
@@ -15787,8 +15787,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enter text to filter"
+            "state" : "translated",
+            "value" : "输入文本进行筛选"
           }
         },
         "zh-Hant" : {
@@ -16167,8 +16167,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Example:"
+            "state" : "translated",
+            "value" : "示例："
           }
         },
         "zh-Hant" : {
@@ -16357,8 +16357,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Exclude windows from capture by filtering specific text in their titles"
+            "state" : "translated",
+            "value" : "通过筛选标题中的特定文本从抓取中排除窗口"
           }
         },
         "zh-Hant" : {
@@ -16932,8 +16932,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Filters"
+            "state" : "translated",
+            "value" : "过滤规则"
           }
         },
         "zh-Hant" : {
@@ -17122,8 +17122,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Filters settings"
+            "state" : "translated",
+            "value" : "过滤设置"
           }
         },
         "zh-Hant" : {
@@ -17692,8 +17692,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Fullscreen"
+            "state" : "translated",
+            "value" : "全屏"
           }
         },
         "zh-Hant" : {
@@ -17794,7 +17794,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Generale"
+            "value" : "Impostazioni globali"
           }
         },
         "ja" : {
@@ -17984,7 +17984,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Impostazioni generali"
+            "value" : "Impostazioni globali"
           }
         },
         "ja" : {
@@ -20739,8 +20739,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Important: When recording, press ONLY the trigger key (e.g. just press Tab if you want command + Tab). Do not press the initialization key during recording."
+            "state" : "translated",
+            "value" : "重要提示：在录制时，仅按下触发键（例如，如果你想使用 “Command + Tab” 组合键，那就只需按下 “Tab” 键）。在录制过程中不要按下初始化键。"
           }
         },
         "zh-Hant" : {
@@ -22071,8 +22071,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Layout Limits"
+            "state" : "translated",
+            "value" : "布局约束"
           }
         },
         "zh-Hant" : {
@@ -22451,8 +22451,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Maximum Horizontal Rows"
+            "state" : "translated",
+            "value" : "最大水平行数"
           }
         },
         "zh-Hant" : {
@@ -22641,8 +22641,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Maximum number of colors (%lld) reached."
+            "state" : "translated",
+            "value" : "已达到最大颜色数量 (%lld)"
           }
         },
         "zh-Hant" : {
@@ -22831,8 +22831,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Maximum Vertical Columns"
+            "state" : "translated",
+            "value" : "最大垂直列数"
           }
         },
         "zh-Hant" : {
@@ -23594,8 +23594,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Minimize All"
+            "state" : "translated",
+            "value" : "全部最小化"
           }
         },
         "zh-Hant" : {
@@ -23785,8 +23785,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Minimize all windows"
+            "state" : "translated",
+            "value" : "最小化所有窗口"
           }
         },
         "zh-Hant" : {
@@ -23976,8 +23976,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Minimize all windows except the current one"
+            "state" : "translated",
+            "value" : "最小化除当前窗口以外的所有窗口"
           }
         },
         "zh-Hant" : {
@@ -24166,8 +24166,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Minimum number of colors reached."
+            "state" : "translated",
+            "value" : "已达到最大颜色数量"
           }
         },
         "zh-Hant" : {
@@ -24356,8 +24356,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Navigate to Settings → Privacy & Security"
+            "state" : "translated",
+            "value" : "导航至 “设置”→“隐私与安全性”"
           }
         },
         "zh-Hant" : {
@@ -25118,8 +25118,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No custom directories added"
+            "state" : "translated",
+            "value" : "未添加自定义目录"
           }
         },
         "zh-Hant" : {
@@ -25308,8 +25308,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No filters added"
+            "state" : "translated",
+            "value" : "没有添加筛选条件"
           }
         },
         "zh-Hant" : {
@@ -25790,8 +25790,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Not %@"
+            "state" : "translated",
+            "value" : "Non %@"
           }
         },
         "ja" : {
@@ -25880,8 +25880,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Not %@"
+            "state" : "translated",
+            "value" : "不是 %@"
           }
         },
         "zh-Hant" : {
@@ -28357,8 +28357,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Pin to Screen"
+            "state" : "translated",
+            "value" : "置顶到屏幕"
           }
         },
         "zh-Hant" : {
@@ -28548,8 +28548,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Pinned to screen"
+            "state" : "translated",
+            "value" : "固定到屏幕上"
           }
         },
         "zh-Hant" : {
@@ -28738,8 +28738,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Placement Strategy"
+            "state" : "translated",
+            "value" : "布局策略"
           }
         },
         "zh-Hant" : {
@@ -29691,8 +29691,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Position Window Controls"
+            "state" : "translated",
+            "value" : "窗口控制按钮位置"
           }
         },
         "zh-Hant" : {
@@ -29882,8 +29882,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Present a full size preview of the window"
+            "state" : "translated",
+            "value" : "呈现窗口的全尺寸预览"
           }
         },
         "zh-Hant" : {
@@ -30836,7 +30836,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "阻止码头在预览时隐藏"
+            "value" : "在预览期间阻止Dock栏隐藏"
           }
         },
         "zh-Hant" : {
@@ -32737,8 +32737,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reduce motion"
+            "state" : "translated",
+            "value" : "减少动画效果"
           }
         },
         "zh-Hant" : {
@@ -33117,8 +33117,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Remove All"
+            "state" : "translated",
+            "value" : "全部移除"
           }
         },
         "zh-Hant" : {
@@ -35589,8 +35589,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Rounded image corners"
+            "state" : "translated",
+            "value" : "图像圆角"
           }
         },
         "zh-Hant" : {
@@ -35779,8 +35779,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Screen"
+            "state" : "translated",
+            "value" : "屏幕"
           }
         },
         "zh-Hant" : {
@@ -36542,8 +36542,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Screen with last active window"
+            "state" : "translated",
+            "value" : "显示最后处于活动状态的窗口的屏幕"
           }
         },
         "zh-Hant" : {
@@ -36733,8 +36733,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Screen with mouse"
+            "state" : "translated",
+            "value" : "鼠标所在的屏幕"
           }
         },
         "zh-Hant" : {
@@ -37687,8 +37687,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Select which applications can be captured and previewed"
+            "state" : "translated",
+            "value" : "选择哪些应用程序可以被捕获并进行预览"
           }
         },
         "zh-Hant" : {
@@ -38067,8 +38067,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Set to 0 for unlimited"
+            "state" : "translated",
+            "value" : "设置为 0 表示无限制"
           }
         },
         "zh-Hant" : {
@@ -40737,8 +40737,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Start recording trigger key"
+            "state" : "translated",
+            "value" : "开始录制触发键"
           }
         },
         "zh-Hant" : {
@@ -41881,8 +41881,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "This display is currently disconnected. The window switcher will appear on the main display until the selected display is reconnected."
+            "state" : "translated",
+            "value" : "此显示器目前处于未连接状态。窗口切换器将显示在主显示器上，直至所选显示器重新连接为止"
           }
         },
         "zh-Hant" : {
@@ -42644,7 +42644,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "右上方"
+            "value" : "右上角"
           }
         },
         "zh-Hant" : {
@@ -42743,8 +42743,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Traffic Light Buttons"
+            "state" : "translated",
+            "value" : "Tasti azione di macOS"
           }
         },
         "ja" : {
@@ -42833,8 +42833,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Traffic Light Buttons"
+            "state" : "translated",
+            "value" : "交通灯按钮"
           }
         },
         "zh-Hant" : {
@@ -43404,8 +43404,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Triggers an action when hovering over a window in a dock preview"
+            "state" : "translated",
+            "value" : "在停靠预览中悬停于窗口上时触发某项操作"
           }
         },
         "zh-Hant" : {
@@ -43594,8 +43594,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Triggers an action when shaking a window while it is being dragged from a dock preview"
+            "state" : "translated",
+            "value" : "在从停靠预览中拖动窗口时摇晃该窗口可触发某项操作"
           }
         },
         "zh-Hant" : {
@@ -44926,8 +44926,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use classic window ordering"
+            "state" : "translated",
+            "value" : "使用经典窗口顺序"
           }
         },
         "zh-Hant" : {
@@ -45307,8 +45307,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use Monochrome Colors"
+            "state" : "translated",
+            "value" : "使用单色颜色"
           }
         },
         "zh-Hant" : {
@@ -45689,8 +45689,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use Windows-style window ordering"
+            "state" : "translated",
+            "value" : "使用 Windows 风格的窗口排序方式"
           }
         },
         "zh-Hant" : {
@@ -45879,8 +45879,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use Windows-style window ordering in the window switcher"
+            "state" : "translated",
+            "value" : "在窗口切换器中采用 Windows 风格的窗口排序方式"
           }
         },
         "zh-Hant" : {
@@ -47211,8 +47211,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When enabled, all preview images will be cropped to a rounded rectangle."
+            "state" : "translated",
+            "value" : "启用后，所有预览图像都将被裁剪成圆角矩形"
           }
         },
         "zh-Hant" : {
@@ -47401,8 +47401,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When enabled, dims all windows except those currently under selected."
+            "state" : "translated",
+            "value" : "启用后，除当前所选的窗口外，所有窗口都会变暗"
           }
         },
         "zh-Hant" : {
@@ -47591,8 +47591,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When enabled, shows the last active window first instead of the current window"
+            "state" : "translated",
+            "value" : "启用后，首先显示的是最后处于活动状态的窗口，而非当前窗口"
           }
         },
         "zh-Hant" : {
@@ -49408,8 +49408,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Preview Layout"
+            "state" : "translated",
+            "value" : "Disposizione anteprime del Dock"
           }
         },
         "ja" : {
@@ -49498,8 +49498,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Preview Layout"
+            "state" : "translated",
+            "value" : "窗口预览布局"
           }
         },
         "zh-Hant" : {
@@ -49689,8 +49689,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Preview Layout Limits"
+            "state" : "translated",
+            "value" : "窗口预览布局约束"
           }
         },
         "zh-Hant" : {
@@ -50069,8 +50069,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Selection Background Color"
+            "state" : "translated",
+            "value" : "窗口选择背景颜色"
           }
         },
         "zh-Hant" : {
@@ -50259,8 +50259,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Selection Background Opacity"
+            "state" : "translated",
+            "value" : "窗口选择背景透明度"
           }
         },
         "zh-Hant" : {
@@ -51022,8 +51022,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Switcher Placement"
+            "state" : "translated",
+            "value" : "窗口切换器位置"
           }
         },
         "zh-Hant" : {
@@ -51212,8 +51212,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window title filters"
+            "state" : "translated",
+            "value" : "窗口标题过滤器"
           }
         },
         "zh-Hant" : {
@@ -52353,8 +52353,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Your traffic lights will be set to disabled automatically."
+            "state" : "translated",
+            "value" : "你的交通灯将被自动设置为禁用状态"
           }
         },
         "zh-Hant" : {
