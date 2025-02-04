@@ -225,8 +225,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : " - Inactive"
+            "state" : "translated",
+            "value" : " - Inaktiv"
           }
         },
         "el" : {
@@ -285,8 +285,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : " - Inactive"
+            "state" : "translated",
+            "value" : " - 非アクティブ"
           }
         },
         "ko" : {
@@ -995,8 +995,8 @@
         },
         "el" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "• To detect when you hover over the dock"
+            "state" : "translated",
+            "value" : "• Για να ανιχνεύσετε όταν τοποθετείτε το ποντίκι πάνω από το dock"
           }
         },
         "es" : {
@@ -1239,8 +1239,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "• When hovering over the Dock at the bottom, windows flow in rows from left to right"
+            "state" : "translated",
+            "value" : "Dockが画面下部にある時、Dock上にカーソルを合わせるとウィンドウは左から右へ横方向に並びます"
           }
         },
         "ko" : {
@@ -1429,8 +1429,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "• When hovering over the Dock on the sides, windows flow in columns from top to bottom"
+            "state" : "translated",
+            "value" : "Dockが画面の左右にある時、Dock上にカーソルを合わせるとウィンドウは上から下へ縦方向に並びます"
           }
         },
         "ko" : {
@@ -1619,8 +1619,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "• When using the Window Switcher, windows always flow in rows from left to right"
+            "state" : "translated",
+            "value" : "ウィンドウスイッチャー使用時は、ウィンドウは常に左から右へ横方向に並びます"
           }
         },
         "ko" : {
@@ -1809,8 +1809,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "1. Select \"Command (⌘)\" as the initialization key."
+            "state" : "translated",
+            "value" : "1. 「Command (⌘)」を初期化キーとして選択する"
           }
         },
         "ko" : {
@@ -2071,7 +2071,7 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "1/%lldx"
           }
         },
@@ -2189,8 +2189,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "2. Click \"Start Recording Trigger Key\"."
+            "state" : "translated",
+            "value" : "2. 「トリガーキーの録画を開始」をクリックする"
           }
         },
         "ko" : {
@@ -2319,8 +2319,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "3. Press ONLY the Tab key (not Command+Tab)."
+            "state" : "translated",
+            "value" : "3. Drücke NUR die Tab-Taste (nicht Command + Tab)."
           }
         },
         "el" : {
@@ -2379,8 +2379,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "3. Press ONLY the Tab key (not Command+Tab)."
+            "state" : "translated",
+            "value" : "3. Tabキーのみを押す（Command+Tab は押さない）"
           }
         },
         "ko" : {
@@ -2569,8 +2569,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "4. Your keybind will be set to Command+Tab."
+            "state" : "translated",
+            "value" : "4. キーバインドがCommand+Tabに設定されます"
           }
         },
         "ko" : {
@@ -3331,8 +3331,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add"
+            "state" : "translated",
+            "value" : "追加"
           }
         },
         "ko" : {
@@ -3403,8 +3403,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add"
+            "state" : "translated",
+            "value" : "Додати"
           }
         },
         "vi" : {
@@ -3461,8 +3461,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add additional directories to scan for applications"
+            "state" : "translated",
+            "value" : "Weitere Verzeichnisse zum Durchsuchen nach Programmen auswählen"
           }
         },
         "el" : {
@@ -3521,8 +3521,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add additional directories to scan for applications"
+            "state" : "translated",
+            "value" : "アプリケーションをスキャンする追加ディレクトリを追加"
           }
         },
         "ko" : {
@@ -3711,8 +3711,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add Directory"
+            "state" : "translated",
+            "value" : "ディレクトリを追加"
           }
         },
         "ko" : {
@@ -3901,8 +3901,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add Filter"
+            "state" : "translated",
+            "value" : "フィルターを追加"
           }
         },
         "ko" : {
@@ -4282,8 +4282,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Aero Shake Action"
+            "state" : "translated",
+            "value" : "エアロシェイクアクション"
           }
         },
         "ko" : {
@@ -4412,8 +4412,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "All buttons removed"
+            "state" : "translated",
+            "value" : "Alle Buttons entfernt"
           }
         },
         "el" : {
@@ -4472,8 +4472,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "All buttons removed"
+            "state" : "translated",
+            "value" : "すべてのボタンを削除しました"
           }
         },
         "ko" : {
@@ -6187,8 +6187,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Application filters"
+            "state" : "translated",
+            "value" : "アプリケーション フィルター"
           }
         },
         "ko" : {
@@ -6377,8 +6377,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Are you sure you want to proceed?"
+            "state" : "translated",
+            "value" : "続行してもよろしいですか？"
           }
         },
         "ko" : {
@@ -6757,8 +6757,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "At bottom - Controls on left, title on right"
+            "state" : "translated",
+            "value" : "ウィンドウ下部: コントロールが左、タイトルが右"
           }
         },
         "ko" : {
@@ -6947,8 +6947,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "At bottom - Title on left, controls on right"
+            "state" : "translated",
+            "value" : "ウィンドウ下部: タイトルが左、コントロールが右"
           }
         },
         "ko" : {
@@ -7137,8 +7137,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "At top - Controls on left, title on right"
+            "state" : "translated",
+            "value" : "ウィンドウ上部: コントロールが左、タイトルが右"
           }
         },
         "ko" : {
@@ -7327,8 +7327,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "At top - Title on left, controls on right"
+            "state" : "translated",
+            "value" : "ウィンドウ下部: タイトルが左、コントロールが右"
           }
         },
         "ko" : {
@@ -8924,8 +8924,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Cancel"
+            "state" : "translated",
+            "value" : "Скасувати"
           }
         },
         "vi" : {
@@ -9042,8 +9042,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Cannot Add Color"
+            "state" : "translated",
+            "value" : "色を追加できません"
           }
         },
         "ko" : {
@@ -9172,8 +9172,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Cannot Remove Color"
+            "state" : "translated",
+            "value" : "Farbe kann nicht entfernt werden"
           }
         },
         "el" : {
@@ -9232,8 +9232,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Cannot Remove Color"
+            "state" : "translated",
+            "value" : "色を削除できません"
           }
         },
         "ko" : {
@@ -9684,8 +9684,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Close"
+            "state" : "translated",
+            "value" : "Закрити"
           }
         },
         "vi" : {
@@ -9742,8 +9742,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Close All"
+            "state" : "translated",
+            "value" : "Alle schließen"
           }
         },
         "el" : {
@@ -9802,8 +9802,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Close All"
+            "state" : "translated",
+            "value" : "全て閉じる"
           }
         },
         "ko" : {
@@ -10312,8 +10312,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Confirm"
+            "state" : "translated",
+            "value" : "Bestätigen"
           }
         },
         "el" : {
@@ -10372,8 +10372,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Confirm"
+            "state" : "translated",
+            "value" : "確認"
           }
         },
         "ko" : {
@@ -11269,8 +11269,8 @@
         },
         "el" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Current Version: %@"
+            "state" : "translated",
+            "value" : "Τρέχουσα έκδοση: %@"
           }
         },
         "es" : {
@@ -11453,8 +11453,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Custom Application Directories"
+            "state" : "translated",
+            "value" : "Benutzerdefinierte Programmverzeichnisse"
           }
         },
         "el" : {
@@ -11513,8 +11513,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Custom Application Directories"
+            "state" : "translated",
+            "value" : "カスタムアプリケーションディレクトリ"
           }
         },
         "ko" : {
@@ -12026,8 +12026,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dim Unselected Windows"
+            "state" : "translated",
+            "value" : "Ungewählte Fenster abdunkeln"
           }
         },
         "el" : {
@@ -12086,8 +12086,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dim Unselected Windows"
+            "state" : "translated",
+            "value" : "未選択のウィンドウを暗くする"
           }
         },
         "ko" : {
@@ -12216,8 +12216,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Disconnected Display"
+            "state" : "translated",
+            "value" : "Getrennter Bildschirm"
           }
         },
         "el" : {
@@ -12276,8 +12276,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Disconnected Display"
+            "state" : "translated",
+            "value" : "切断されたディスプレイ"
           }
         },
         "ko" : {
@@ -12466,8 +12466,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Preview Aero Shake Action"
+            "state" : "translated",
+            "value" : "DockプレビューのAero Shakeアクション"
           }
         },
         "ko" : {
@@ -12656,8 +12656,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Preview Window Hover Action"
+            "state" : "translated",
+            "value" : "Dockプレビューウィンドウにカーソルを合わせたときのアクション"
           }
         },
         "ko" : {
@@ -12846,8 +12846,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Previews"
+            "state" : "translated",
+            "value" : "Dock プレビュー"
           }
         },
         "ko" : {
@@ -15323,8 +15323,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enabled Buttons"
+            "state" : "translated",
+            "value" : "有効なボタン"
           }
         },
         "ko" : {
@@ -15643,8 +15643,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enter text to filter"
+            "state" : "translated",
+            "value" : "Text zum filtern eingeben"
           }
         },
         "el" : {
@@ -15703,8 +15703,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enter text to filter"
+            "state" : "translated",
+            "value" : "フィルタするテキストを入力してください"
           }
         },
         "ko" : {
@@ -16023,8 +16023,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Example:"
+            "state" : "translated",
+            "value" : "Beispiel:"
           }
         },
         "el" : {
@@ -16083,8 +16083,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Example:"
+            "state" : "translated",
+            "value" : "例："
           }
         },
         "ko" : {
@@ -16213,8 +16213,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Exclude windows from capture by filtering specific text in their titles"
+            "state" : "translated",
+            "value" : "Fenster von der Bildschirmaufnahme anhand bestimmter Titel-Texte ausschließen"
           }
         },
         "el" : {
@@ -16273,8 +16273,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Exclude windows from capture by filtering specific text in their titles"
+            "state" : "translated",
+            "value" : "タイトル内の特定のテキストをフィルタリングすることによって、キャプチャからウィンドウを除外します"
           }
         },
         "ko" : {
@@ -16788,8 +16788,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Filters"
+            "state" : "translated",
+            "value" : "Filter"
           }
         },
         "el" : {
@@ -16848,8 +16848,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Filters"
+            "state" : "translated",
+            "value" : "フィルター"
           }
         },
         "ko" : {
@@ -16978,8 +16978,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Filters settings"
+            "state" : "translated",
+            "value" : "Filtereinstellungen"
           }
         },
         "el" : {
@@ -17038,8 +17038,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Filters settings"
+            "state" : "translated",
+            "value" : "フィルター設定"
           }
         },
         "ko" : {
@@ -17104,8 +17104,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Filters settings"
+            "state" : "translated",
+            "value" : "Filtre ayarları"
           }
         },
         "uk" : {
@@ -17484,8 +17484,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Found a Bug?"
+            "state" : "translated",
+            "value" : "Bir hata mı buldunuz?"
           }
         },
         "uk" : {
@@ -17548,8 +17548,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Fullscreen"
+            "state" : "translated",
+            "value" : "Vollbild"
           }
         },
         "el" : {
@@ -17608,8 +17608,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Fullscreen"
+            "state" : "translated",
+            "value" : "フルスクリーン"
           }
         },
         "ko" : {
@@ -17674,8 +17674,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Fullscreen"
+            "state" : "translated",
+            "value" : "Tam Ekran"
           }
         },
         "uk" : {
@@ -17871,8 +17871,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "General"
+            "state" : "translated",
+            "value" : "Загальні"
           }
         },
         "vi" : {
@@ -18435,8 +18435,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Granted"
+            "state" : "translated",
+            "value" : "İzin verildi"
           }
         },
         "uk" : {
@@ -18625,8 +18625,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Have an Idea?"
+            "state" : "translated",
+            "value" : "Bir fikrin mi var?"
           }
         },
         "uk" : {
@@ -18816,8 +18816,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Help"
+            "state" : "translated",
+            "value" : "Yardım"
           }
         },
         "uk" : {
@@ -18940,8 +18940,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Help and questions settings"
+            "state" : "translated",
+            "value" : "ヘルプと質問の設定"
           }
         },
         "ko" : {
@@ -19006,8 +19006,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Help and questions settings"
+            "state" : "translated",
+            "value" : "Yardım ve soru ayarlarları"
           }
         },
         "uk" : {
@@ -19196,8 +19196,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Help us improve DockDoor by reporting any issues you encounter."
+            "state" : "translated",
+            "value" : "DockDoor'da karşılaştığınız sorunları bildirerek yardımcı olun."
           }
         },
         "uk" : {
@@ -19578,8 +19578,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Highlight Gradient Colors"
+            "state" : "translated",
+            "value" : "Gradyan renkleri vurgula"
           }
         },
         "uk" : {
@@ -19769,8 +19769,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hover Window Open Delay"
+            "state" : "translated",
+            "value" : "Pencere Gecikmesi"
           }
         },
         "uk" : {
@@ -19960,8 +19960,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hover Window Title Style"
+            "state" : "translated",
+            "value" : "Pencere stili"
           }
         },
         "uk" : {
@@ -20150,8 +20150,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "If you find DockDoor useful, consider donating. Your support helps keep the project going!"
+            "state" : "translated",
+            "value" : "Eğer DockDoor'u faydalı buluyorsanız, projeyi desteklemek için bağış yapabilirsiniz!"
           }
         },
         "uk" : {
@@ -20341,8 +20341,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "If you need to access the menu bar icon, launch the app to reveal it for 10 seconds."
+            "state" : "translated",
+            "value" : "Menü çubuğu simgesine erişmek için uygulamayı başlatın, simge 10 saniye görünür."
           }
         },
         "uk" : {
@@ -20655,8 +20655,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Important: When recording, press ONLY the trigger key (e.g. just press Tab if you want command + Tab). Do not press the initialization key during recording."
+            "state" : "translated",
+            "value" : "重要: 録画中はトリガーキーだけを押してください（たとえばCommand+Tabを設定したい場合はTabだけを押す）。録画中に初期化キーは押さないでください。"
           }
         },
         "ko" : {
@@ -20845,8 +20845,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Include Hidden and Minimized Windows in the Window Switcher"
+            "state" : "translated",
+            "value" : "ウィンドウスイッチャーに隠しウィンドウと最小化ウィンドウを含める"
           }
         },
         "ko" : {
@@ -21171,8 +21171,8 @@
         },
         "el" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Keep previews visible during lateral movement"
+            "state" : "translated",
+            "value" : "Κρατήστε τις προεπισκοπήσεις ορατές κατά την πλευρική κίνηση"
           }
         },
         "es" : {
@@ -21225,8 +21225,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Keep previews visible during lateral movement"
+            "state" : "translated",
+            "value" : "横方向に移動している間もプレビューを表示したままにする"
           }
         },
         "ko" : {
@@ -21987,8 +21987,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Layout Limits"
+            "state" : "translated",
+            "value" : "レイアウト制限"
           }
         },
         "ko" : {
@@ -22367,8 +22367,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Maximum Horizontal Rows"
+            "state" : "translated",
+            "value" : "最大水平行数"
           }
         },
         "ko" : {
@@ -22557,8 +22557,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Maximum number of colors (%lld) reached."
+            "state" : "translated",
+            "value" : "最大色数 (%lld) に達しました。"
           }
         },
         "ko" : {
@@ -22747,8 +22747,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Maximum Vertical Columns"
+            "state" : "translated",
+            "value" : "最大垂直列数"
           }
         },
         "ko" : {
@@ -23450,8 +23450,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Minimize All"
+            "state" : "translated",
+            "value" : "Alle minimieren"
           }
         },
         "el" : {
@@ -23510,8 +23510,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Minimize All"
+            "state" : "translated",
+            "value" : "すべて最小化"
           }
         },
         "ko" : {
@@ -23641,8 +23641,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Minimize all windows"
+            "state" : "translated",
+            "value" : "Alle Fenster minimieren"
           }
         },
         "el" : {
@@ -23701,8 +23701,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Minimize all windows"
+            "state" : "translated",
+            "value" : "すべてのウィンドウを最小化する"
           }
         },
         "ko" : {
@@ -23832,8 +23832,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Minimize all windows except the current one"
+            "state" : "translated",
+            "value" : "Alle Fenster außer das aktive minimieren"
           }
         },
         "el" : {
@@ -23892,8 +23892,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Minimize all windows except the current one"
+            "state" : "translated",
+            "value" : "現在のウィンドウ以外をすべて最小化する"
           }
         },
         "ko" : {
@@ -24082,8 +24082,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Minimum number of colors reached."
+            "state" : "translated",
+            "value" : "最大色数に達しました"
           }
         },
         "ko" : {
@@ -24272,8 +24272,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Navigate to Settings → Privacy & Security"
+            "state" : "translated",
+            "value" : "設定 → プライバシー & セキュリティに移動"
           }
         },
         "ko" : {
@@ -25034,8 +25034,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No custom directories added"
+            "state" : "translated",
+            "value" : "カスタムディレクトリが追加されていません"
           }
         },
         "ko" : {
@@ -25224,8 +25224,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No filters added"
+            "state" : "translated",
+            "value" : "フィルターが追加されていません"
           }
         },
         "ko" : {
@@ -25606,8 +25606,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No recent checks"
+            "state" : "translated",
+            "value" : "最近の確認はありません"
           }
         },
         "ko" : {
@@ -25796,8 +25796,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Not %@"
+            "state" : "translated",
+            "value" : "%@ ではない"
           }
         },
         "ko" : {
@@ -26249,8 +26249,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "OK"
+            "state" : "translated",
+            "value" : "ОК"
           }
         },
         "vi" : {
@@ -26749,8 +26749,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Only takes effect when dock auto-hide is enabled"
+            "state" : "translated",
+            "value" : "Dockの自動非表示が有効になっている場合のみ効果を発揮します"
           }
         },
         "ko" : {
@@ -27393,8 +27393,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open Settings"
+            "state" : "translated",
+            "value" : "Відкрити налаштування"
           }
         },
         "vi" : {
@@ -28273,8 +28273,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Pin to Screen"
+            "state" : "translated",
+            "value" : "画面に固定する"
           }
         },
         "ko" : {
@@ -28345,8 +28345,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Pin to Screen"
+            "state" : "translated",
+            "value" : "Закріпити на екрані"
           }
         },
         "vi" : {
@@ -28464,8 +28464,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Pinned to screen"
+            "state" : "translated",
+            "value" : "画面に固定する"
           }
         },
         "ko" : {
@@ -28536,8 +28536,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Pinned to screen"
+            "state" : "translated",
+            "value" : "Закріплено на екрані"
           }
         },
         "vi" : {
@@ -28654,8 +28654,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Placement Strategy"
+            "state" : "translated",
+            "value" : "配置方法"
           }
         },
         "ko" : {
@@ -29607,8 +29607,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Position Window Controls"
+            "state" : "translated",
+            "value" : "ウィンドウコントロールの配置"
           }
         },
         "ko" : {
@@ -29798,8 +29798,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Present a full size preview of the window"
+            "state" : "translated",
+            "value" : "ウィンドウのフルサイズプレビューを表示する"
           }
         },
         "ko" : {
@@ -30751,8 +30751,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Prevent dock from hiding during previews"
+            "state" : "translated",
+            "value" : "プレビュー中にDockが隠れないようにする"
           }
         },
         "ko" : {
@@ -30941,8 +30941,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Prevents previews from disappearing when moving sideways to adjacent windows"
+            "state" : "translated",
+            "value" : "隣接ウィンドウへ横方向に移動した際、プレビューが消えないようにします"
           }
         },
         "ko" : {
@@ -31892,8 +31892,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview windows are sized to 1/%lld of your screen dimensions"
+            "state" : "translated",
+            "value" : "プレビューウィンドウは画面サイズの1/%lldの大きさで表示されます"
           }
         },
         "ko" : {
@@ -32653,8 +32653,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reduce motion"
+            "state" : "translated",
+            "value" : "アニメーション効果を抑制する"
           }
         },
         "ko" : {
@@ -33033,8 +33033,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Remove All"
+            "state" : "translated",
+            "value" : "すべて削除"
           }
         },
         "ko" : {
@@ -35505,8 +35505,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Rounded image corners"
+            "state" : "translated",
+            "value" : "画像の角を丸くする"
           }
         },
         "ko" : {
@@ -35695,8 +35695,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Screen"
+            "state" : "translated",
+            "value" : "画面"
           }
         },
         "ko" : {
@@ -36458,8 +36458,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Screen with last active window"
+            "state" : "translated",
+            "value" : "最後にアクティブだったウィンドウがある画面"
           }
         },
         "ko" : {
@@ -36649,8 +36649,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Screen with mouse"
+            "state" : "translated",
+            "value" : "マウスカーソルのある画面"
           }
         },
         "ko" : {
@@ -37603,8 +37603,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Select which applications can be captured and previewed"
+            "state" : "translated",
+            "value" : "どのアプリケーションをキャプチャしてプレビューできるかを選択してください"
           }
         },
         "ko" : {
@@ -37983,8 +37983,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Set to 0 for unlimited"
+            "state" : "translated",
+            "value" : "0に設定すると無制限になります"
           }
         },
         "ko" : {
@@ -40653,8 +40653,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Start recording trigger key"
+            "state" : "translated",
+            "value" : "トリガーキーの録画を開始"
           }
         },
         "ko" : {
@@ -41797,8 +41797,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "This display is currently disconnected. The window switcher will appear on the main display until the selected display is reconnected."
+            "state" : "translated",
+            "value" : "このディスプレイは現在切断されています。選択したディスプレイが再接続されるまで、ウィンドウスイッチャーがメインディスプレイに表示されます。"
           }
         },
         "ko" : {
@@ -42177,8 +42177,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Toggle Full Screen"
+            "state" : "translated",
+            "value" : "フルスクリーンを切り替える"
           }
         },
         "ko" : {
@@ -42749,8 +42749,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Traffic Light Buttons"
+            "state" : "translated",
+            "value" : "トラフィックライトボタン"
           }
         },
         "ko" : {
@@ -43320,8 +43320,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Triggers an action when hovering over a window in a dock preview"
+            "state" : "translated",
+            "value" : "Dockプレビュー上のウィンドウにカーソルを合わせた際にアクションを実行します"
           }
         },
         "ko" : {
@@ -43510,8 +43510,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Triggers an action when shaking a window while it is being dragged from a dock preview"
+            "state" : "translated",
+            "value" : "Dockプレビューからウィンドウをドラッグ中にウィンドウを振るとアクションを実行します"
           }
         },
         "ko" : {
@@ -43700,8 +43700,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Un-minimize"
+            "state" : "translated",
+            "value" : "最小化しない"
           }
         },
         "ko" : {
@@ -44723,8 +44723,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Updates"
+            "state" : "translated",
+            "value" : "Оновлення"
           }
         },
         "vi" : {
@@ -44842,8 +44842,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use classic window ordering"
+            "state" : "translated",
+            "value" : "クラシックなウィンドウの順序を使用する"
           }
         },
         "ko" : {
@@ -45223,8 +45223,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use Monochrome Colors"
+            "state" : "translated",
+            "value" : "モノクロの色を使用する"
           }
         },
         "ko" : {
@@ -45605,8 +45605,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use Windows-style window ordering"
+            "state" : "translated",
+            "value" : "Windowsスタイルのウィンドウ順序を使用"
           }
         },
         "ko" : {
@@ -45795,8 +45795,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use Windows-style window ordering in the window switcher"
+            "state" : "translated",
+            "value" : "ウィンドウスイッチャーでWindows風のウィンドウ順序を使用する"
           }
         },
         "ko" : {
@@ -46057,8 +46057,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version %@"
+            "state" : "translated",
+            "value" : "Версія %@"
           }
         },
         "vi" : {
@@ -46175,8 +46175,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Want to see for yourself? Review our source code"
+            "state" : "translated",
+            "value" : "ご自身で確認したいですか？ソースコードを確認してください。"
           }
         },
         "ko" : {
@@ -46817,8 +46817,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Welcome to DockDoor!"
+            "state" : "translated",
+            "value" : "Вітаємо в DockDoor!"
           }
         },
         "vi" : {
@@ -47127,8 +47127,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When enabled, all preview images will be cropped to a rounded rectangle."
+            "state" : "translated",
+            "value" : "有効にすると、すべてのプレビュー画像が角丸の長方形として表示されます"
           }
         },
         "ko" : {
@@ -47317,8 +47317,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When enabled, dims all windows except those currently under selected."
+            "state" : "translated",
+            "value" : "When enabled, dims all windows except those currently under selected"
           }
         },
         "ko" : {
@@ -47507,8 +47507,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When enabled, shows the last active window first instead of the current window"
+            "state" : "translated",
+            "value" : "有効にすると、現在のウィンドウではなく、最後にアクティブだったウィンドウを先頭に表示します"
           }
         },
         "ko" : {
@@ -48272,8 +48272,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When you click the button below, DockDoor will restart and move to the menu bar to run in the background."
+            "state" : "translated",
+            "value" : "下のボタンをクリックすると、DockDoorは再起動し、メニューバーに移動してバックグラウンドで実行します。"
           }
         },
         "ko" : {
@@ -49035,7 +49035,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "ウィンドウイメージのキャッシュ期間"
+            "value" : "ウィンドウプレビューのキャッシュ期間"
           }
         },
         "ko" : {
@@ -49414,8 +49414,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Preview Layout"
+            "state" : "translated",
+            "value" : "ウィンドウプレビューのサイズ"
           }
         },
         "ko" : {
@@ -49605,8 +49605,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Preview Layout Limits"
+            "state" : "translated",
+            "value" : "ウィンドウプレビューのサイズ"
           }
         },
         "ko" : {
@@ -49795,8 +49795,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Preview Size"
+            "state" : "translated",
+            "value" : "ウィンドウプレビューのサイズ"
           }
         },
         "ko" : {
@@ -49985,8 +49985,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Selection Background Color"
+            "state" : "translated",
+            "value" : "ウィンドウ選択時の背景色"
           }
         },
         "ko" : {
@@ -50175,8 +50175,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Selection Background Opacity"
+            "state" : "translated",
+            "value" : "ウィンドウ選択時の背景の不透明度"
           }
         },
         "ko" : {
@@ -50938,8 +50938,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Switcher Placement"
+            "state" : "translated",
+            "value" : "ウィンドウスイッチャーの配置"
           }
         },
         "ko" : {
@@ -51128,8 +51128,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window title filters"
+            "state" : "translated",
+            "value" : "ウインドウタイトルのフィルタ"
           }
         },
         "ko" : {
@@ -52269,8 +52269,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Your traffic lights will be set to disabled automatically."
+            "state" : "translated",
+            "value" : "信号機は自動的に無効に設定されます。"
           }
         },
         "ko" : {
