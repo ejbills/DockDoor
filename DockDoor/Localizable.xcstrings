@@ -297,8 +297,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : " - Inactive"
+            "state" : "translated",
+            "value" : " - Inactief"
           }
         },
         "no" : {
@@ -333,8 +333,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : " - Inactive"
+            "state" : "translated",
+            "value" : " - Неактивно"
           }
         },
         "sr" : {
@@ -351,8 +351,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : " - Inactive"
+            "state" : "translated",
+            "value" : "Aktif Değil"
           }
         },
         "uk" : {
@@ -608,7 +608,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "• Ermöglicht Interaktion mit Dock-Inhalten in Echtzeit"
+            "value" : "• Ermöglicht Echtzeit-Interaktion mit Dock-Elementen"
           }
         },
         "el" : {
@@ -799,7 +799,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "• Zur Aufnahme von Vorschauen von Bildern und Fenstern"
+            "value" : "• Zur Aufnahme von Vorschaubildern und Fenstern"
           }
         },
         "el" : {
@@ -990,7 +990,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "• um zu erkennen wenn Sie über das Dock hovern"
+            "value" : "• um zu erkennen, wenn Sie das Dock berühren"
           }
         },
         "el" : {
@@ -1179,8 +1179,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "• When hovering over the Dock at the bottom, windows flow in rows from left to right"
+            "state" : "translated",
+            "value" : "• Wenn Sie sich am unteren Rand des Docks bewegen, werden die Fenster in Zeilen von links nach rechts dargestellt"
           }
         },
         "el" : {
@@ -1369,8 +1369,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "• When hovering over the Dock on the sides, windows flow in columns from top to bottom"
+            "state" : "translated",
+            "value" : "• Beim Berühren des Docks auf der Seite erscheinen Fenster in Spalten von oben nach unten"
           }
         },
         "el" : {
@@ -1559,8 +1559,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "• When using the Window Switcher, windows always flow in rows from left to right"
+            "state" : "translated",
+            "value" : "• Bei Verwendung des Fensterwechsels erscheinen Fenster immer in Zeilen von links nach rechts"
           }
         },
         "el" : {
@@ -1749,8 +1749,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "1. Select \"Command (⌘)\" as the initialization key."
+            "state" : "translated",
+            "value" : "1. Wählen Sie \"Command (⌘)\" als Initialisierungs-Taste."
           }
         },
         "el" : {
@@ -2065,7 +2065,7 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "1/%lldx"
           }
         },
@@ -2129,8 +2129,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "2. Click \"Start Recording Trigger Key\"."
+            "state" : "translated",
+            "value" : "2. Klicken Sie auf \"Aufnahme-Trigger starten\"."
           }
         },
         "el" : {
@@ -2201,8 +2201,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "2. Click \"Start Recording Trigger Key\"."
+            "state" : "translated",
+            "value" : "2. Klik op \"Start opname sneltoets\"."
           }
         },
         "no" : {
@@ -2320,7 +2320,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "3. Drücke NUR die Tab-Taste (nicht Command + Tab)."
+            "value" : "3. Drücken Sie NUR die Tab-Taste (nicht Command+Tab)."
           }
         },
         "el" : {
@@ -2391,8 +2391,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "3. Press ONLY the Tab key (not Command+Tab)."
+            "state" : "translated",
+            "value" : "3. Druk ALLEEN op de TAB toets (niet Command+Tab)."
           }
         },
         "no" : {
@@ -2509,8 +2509,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "4. Your keybind will be set to Command+Tab."
+            "state" : "translated",
+            "value" : "4. Ihre Tastenkombination wird auf Command + Tab gesetzt."
           }
         },
         "el" : {
@@ -2581,8 +2581,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "4. Your keybind will be set to Command+Tab."
+            "state" : "translated",
+            "value" : "4. De sneltoets wordt ingesteld op Command+Tab."
           }
         },
         "no" : {
@@ -3343,8 +3343,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add"
+            "state" : "translated",
+            "value" : "Toevoegen"
           }
         },
         "no" : {
@@ -3533,8 +3533,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add additional directories to scan for applications"
+            "state" : "translated",
+            "value" : "Voeg extra mappen toe om te scannen voor applicaties"
           }
         },
         "no" : {
@@ -3723,8 +3723,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add Directory"
+            "state" : "translated",
+            "value" : "Map toevoegen"
           }
         },
         "no" : {
@@ -3913,8 +3913,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add Filter"
+            "state" : "translated",
+            "value" : "Filter toevoegen"
           }
         },
         "no" : {
@@ -4103,8 +4103,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Adjust this if the preview is misaligned with dock"
+            "state" : "translated",
+            "value" : "Pas aan als de uitlijning in de Dock niet goed is"
           }
         },
         "no" : {
@@ -4222,8 +4222,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Aero Shake Action"
+            "state" : "translated",
+            "value" : "Aero Shake Aktion"
           }
         },
         "el" : {
@@ -4294,8 +4294,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Aero Shake Action"
+            "state" : "translated",
+            "value" : "Aero Schud Actie"
           }
         },
         "no" : {
@@ -4348,8 +4348,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Aero Shake Action"
+            "state" : "translated",
+            "value" : "Pencere Sallama Eylemi"
           }
         },
         "uk" : {
@@ -4484,8 +4484,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "All buttons removed"
+            "state" : "translated",
+            "value" : "Alle knoppen verwijderd"
           }
         },
         "no" : {
@@ -4520,8 +4520,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "All buttons removed"
+            "state" : "translated",
+            "value" : "Все кнопки неактивны"
           }
         },
         "sr" : {
@@ -4538,8 +4538,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "All buttons removed"
+            "state" : "translated",
+            "value" : "Tüm Düğmeler Silindi"
           }
         },
         "uk" : {
@@ -5438,8 +5438,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Animation speed"
+            "state" : "translated",
+            "value" : "Animatie snelheid"
           }
         },
         "no" : {
@@ -5682,8 +5682,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "App Name Style"
+            "state" : "translated",
+            "value" : "Uygulama İsmi Stili"
           }
         },
         "uk" : {
@@ -6199,8 +6199,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Application filters"
+            "state" : "translated",
+            "value" : "Applicatie filter"
           }
         },
         "no" : {
@@ -6253,8 +6253,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Application filters"
+            "state" : "translated",
+            "value" : "Uygulama Filtreleri"
           }
         },
         "uk" : {
@@ -6389,8 +6389,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Are you sure you want to proceed?"
+            "state" : "translated",
+            "value" : "Weet je zeker dat je wilt doorgaan?"
           }
         },
         "no" : {
@@ -6443,8 +6443,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Are you sure you want to proceed?"
+            "state" : "translated",
+            "value" : "Devam etmek istediğinizden emin misiniz?"
           }
         },
         "uk" : {
@@ -6769,8 +6769,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "At bottom - Controls on left, title on right"
+            "state" : "translated",
+            "value" : "Onderaan - Bedieningselementen links, titel rechts"
           }
         },
         "no" : {
@@ -6823,8 +6823,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "At bottom - Controls on left, title on right"
+            "state" : "translated",
+            "value" : "Altta - Kontroller solda, başlık sağda"
           }
         },
         "uk" : {
@@ -6887,8 +6887,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "At bottom - Title on left, controls on right"
+            "state" : "translated",
+            "value" : "Unten - Titel links, Steuerelemente rechts"
           }
         },
         "el" : {
@@ -7013,8 +7013,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "At bottom - Title on left, controls on right"
+            "state" : "translated",
+            "value" : "Altta - Başlık solda, kontroller sağda"
           }
         },
         "uk" : {
@@ -7077,8 +7077,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "At top - Controls on left, title on right"
+            "state" : "translated",
+            "value" : "Oben - Steuerelemente links, Titel rechts"
           }
         },
         "el" : {
@@ -7203,8 +7203,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "At top - Controls on left, title on right"
+            "state" : "translated",
+            "value" : "Yukarıda - Kontroller solda, başlık sağda"
           }
         },
         "uk" : {
@@ -7267,8 +7267,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "At top - Title on left, controls on right"
+            "state" : "translated",
+            "value" : "Oben - Titel links, Steuerelemente rechts"
           }
         },
         "el" : {
@@ -7393,8 +7393,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "At top - Title on left, controls on right"
+            "state" : "translated",
+            "value" : "Yukarıda - Başlık solda, kontroller sağda"
           }
         },
         "uk" : {
@@ -7583,8 +7583,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Automatic Updates"
+            "state" : "translated",
+            "value" : "Otomatik Güncellemeler"
           }
         },
         "uk" : {
@@ -7910,8 +7910,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Blur amount"
+            "state" : "translated",
+            "value" : "Blur hoeveelheid"
           }
         },
         "no" : {
@@ -7964,8 +7964,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Blur amount"
+            "state" : "translated",
+            "value" : "Bulanıklık miktarı"
           }
         },
         "uk" : {
@@ -8411,7 +8411,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Mir einen Kaffee spendieren. Danke!"
+            "value" : "Kaufen Sie mir hier einen Kaffee, danke!"
           }
         },
         "el" : {
@@ -8536,8 +8536,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Buy me a coffee here, thank you!"
+            "state" : "translated",
+            "value" : "Buradan bana bir kahve al, teşekkür ederim!"
           }
         },
         "uk" : {
@@ -8728,8 +8728,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Can you even see this?"
+            "state" : "translated",
+            "value" : "Bunu görebiliyor musun?"
           }
         },
         "uk" : {
@@ -8983,7 +8983,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Kann keine Farbe hinzufügen"
+            "value" : "Farbe kann nicht hinzufügen werden"
           }
         },
         "el" : {
@@ -9054,8 +9054,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Cannot Add Color"
+            "state" : "translated",
+            "value" : "Kan kleur niet toevoegen"
           }
         },
         "no" : {
@@ -9108,8 +9108,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Cannot Add Color"
+            "state" : "translated",
+            "value" : "Renk Eklenemedi"
           }
         },
         "uk" : {
@@ -9244,8 +9244,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Cannot Remove Color"
+            "state" : "translated",
+            "value" : "Kan kleur niet verwijderen"
           }
         },
         "no" : {
@@ -9298,8 +9298,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Cannot Remove Color"
+            "state" : "translated",
+            "value" : "Renk Silinemedi"
           }
         },
         "uk" : {
@@ -9624,8 +9624,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Close"
+            "state" : "translated",
+            "value" : "Sluiten"
           }
         },
         "no" : {
@@ -9678,8 +9678,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Close"
+            "state" : "translated",
+            "value" : "Kapat"
           }
         },
         "uk" : {
@@ -9814,8 +9814,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Close All"
+            "state" : "translated",
+            "value" : "Sluit alles"
           }
         },
         "no" : {
@@ -9868,8 +9868,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Close All"
+            "state" : "translated",
+            "value" : "Tümünü Kapat"
           }
         },
         "uk" : {
@@ -10058,8 +10058,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Colors"
+            "state" : "translated",
+            "value" : "Renkler"
           }
         },
         "uk" : {
@@ -10248,7 +10248,7 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Command (⌘)"
           }
         },
@@ -10384,8 +10384,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Confirm"
+            "state" : "translated",
+            "value" : "Bevestigen"
           }
         },
         "no" : {
@@ -10438,8 +10438,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Confirm"
+            "state" : "translated",
+            "value" : "Onayla"
           }
         },
         "uk" : {
@@ -10574,8 +10574,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Contribute translation here!"
+            "state" : "translated",
+            "value" : "Werk mee aan de vertaling!"
           }
         },
         "no" : {
@@ -10628,8 +10628,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Contribute translation here!"
+            "state" : "translated",
+            "value" : "Çeviriye buradan katkıda bulunun!"
           }
         },
         "uk" : {
@@ -10818,7 +10818,7 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Control (⌃)"
           }
         },
@@ -11008,8 +11008,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Current Keybind: %@"
+            "state" : "translated",
+            "value" : "Mevcut Tuş Kombinasyonu: %@"
           }
         },
         "uk" : {
@@ -11198,8 +11198,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Current Version"
+            "state" : "translated",
+            "value" : "Mevcut sürüm"
           }
         },
         "uk" : {
@@ -11389,8 +11389,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Current Version: %@"
+            "state" : "translated",
+            "value" : "Mevcut sürüm: %@"
           }
         },
         "uk" : {
@@ -11525,8 +11525,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Custom Application Directories"
+            "state" : "translated",
+            "value" : "Aangepaste applicatie mappen"
           }
         },
         "no" : {
@@ -11579,8 +11579,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Custom Application Directories"
+            "state" : "translated",
+            "value" : "Özel Uygulama Dizinleri"
           }
         },
         "uk" : {
@@ -12098,8 +12098,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dim Unselected Windows"
+            "state" : "translated",
+            "value" : "Dim niet geselecteerd venster"
           }
         },
         "no" : {
@@ -12152,8 +12152,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dim Unselected Windows"
+            "state" : "translated",
+            "value" : "Seçilmemiş Pencereleri Karart"
           }
         },
         "uk" : {
@@ -12288,8 +12288,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Disconnected Display"
+            "state" : "translated",
+            "value" : "Verbreek verbind met scherm"
           }
         },
         "no" : {
@@ -12342,8 +12342,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Disconnected Display"
+            "state" : "translated",
+            "value" : "Bağlantısı Kesilmiş Ekran"
           }
         },
         "uk" : {
@@ -12406,8 +12406,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Preview Aero Shake Action"
+            "state" : "translated",
+            "value" : "Aktion bei Aero Shake in der Dock Vorschau"
           }
         },
         "el" : {
@@ -12532,8 +12532,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Preview Aero Shake Action"
+            "state" : "translated",
+            "value" : "Dock Önizlemesinde Pencere Sallama Eylemi"
           }
         },
         "uk" : {
@@ -12596,8 +12596,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Preview Window Hover Action"
+            "state" : "translated",
+            "value" : "Aktion beim Berühren der Dock Vorschau"
           }
         },
         "el" : {
@@ -12704,8 +12704,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Preview Window Hover Action"
+            "state" : "translated",
+            "value" : "Действие наведения окна предварительного просмотра Dock"
           }
         },
         "sr" : {
@@ -12722,8 +12722,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Preview Window Hover Action"
+            "state" : "translated",
+            "value" : "Dock Önizleme Penceresi Hover Eylemi"
           }
         },
         "uk" : {
@@ -12786,8 +12786,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Previews"
+            "state" : "translated",
+            "value" : "Dock Vorschau"
           }
         },
         "el" : {
@@ -12858,8 +12858,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Previews"
+            "state" : "translated",
+            "value" : "Dock voorbeelden"
           }
         },
         "no" : {
@@ -12912,8 +12912,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Previews"
+            "state" : "translated",
+            "value" : "Dock Önizlemeleri"
           }
         },
         "uk" : {
@@ -13103,8 +13103,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Previews & Window Switcher"
+            "state" : "translated",
+            "value" : "Dock Önizlemeleri ve Pencere Değiştirici"
           }
         },
         "uk" : {
@@ -13240,8 +13240,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Previews only"
+            "state" : "translated",
+            "value" : "Alleen Dock voorbeelden"
           }
         },
         "no" : {
@@ -13294,8 +13294,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Previews only"
+            "state" : "translated",
+            "value" : "Yalnızca Dock Önizlemeleri"
           }
         },
         "uk" : {
@@ -13430,8 +13430,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "DockDoor does not record your screen or audio. It only captures static window previews. No information is stored or shared; all processing occurs privately on your device."
+            "state" : "translated",
+            "value" : "DockDoor neemt je scherm of audio niet op. Het legt alleen statische venstervoorbeelden vast. Er wordt geen informatie opgeslagen of gedeeld; alle verwerking vindt privé plaats op uw apparaat."
           }
         },
         "no" : {
@@ -13484,8 +13484,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "DockDoor does not record your screen or audio. It only captures static window previews. No information is stored or shared; all processing occurs privately on your device."
+            "state" : "translated",
+            "value" : "DockDoor ekranınızı veya sesinizi kaydetmez. Sadece statik pencere önizlemelerini yakalar. Hiçbir bilgi depolanmaz veya paylaşılmaz; tüm işlemler cihazınızda özel olarak gerçekleşir."
           }
         },
         "uk" : {
@@ -13674,8 +13674,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "DockDoor needs screen recording access. In macOS Sequoia, you'll see this prompt every week or month and after reboots. This is a new system-wide security policy for all screen capture apps."
+            "state" : "translated",
+            "value" : "DockDoor ekran kaydı erişimine ihtiyaç duyar. macOS Sequoia ile bu istemi her hafta veya ayda bir ve yeniden başlatmalardan sonra görürsünüz. Bu, tüm ekran yakalama uygulamaları için yeni bir sistem genelinde güvenlik politikasıdır."
           }
         },
         "uk" : {
@@ -13864,8 +13864,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Edit Color"
+            "state" : "translated",
+            "value" : "Rengi Düzenle"
           }
         },
         "uk" : {
@@ -14001,8 +14001,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Elements Overlap"
+            "state" : "translated",
+            "value" : "Elementen overlappen"
           }
         },
         "no" : {
@@ -14055,8 +14055,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Elements Overlap"
+            "state" : "translated",
+            "value" : "Öğeler Çakışıyor"
           }
         },
         "uk" : {
@@ -14438,7 +14438,7 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : ""
+            "value" : "Güncellemeleri otomatik olarak kontrol etmeyi etkinleştir."
           }
         },
         "uk" : {
@@ -14628,8 +14628,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable Hover Window Sliding Animation"
+            "state" : "translated",
+            "value" : "Hover Penceresi Kayan Animasyonunu Etkinleştir"
           }
         },
         "uk" : {
@@ -14819,8 +14819,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable Preview Window Sliding Animation"
+            "state" : "translated",
+            "value" : "Önizleme Penceresi Kayan Animasyonunu Etkinleştir"
           }
         },
         "uk" : {
@@ -15009,8 +15009,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable Window Switcher"
+            "state" : "translated",
+            "value" : "Pencere Değiştiriciyi Etkinleştir"
           }
         },
         "uk" : {
@@ -15199,8 +15199,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enabled"
+            "state" : "translated",
+            "value" : "Etkin"
           }
         },
         "uk" : {
@@ -15335,8 +15335,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enabled Buttons"
+            "state" : "translated",
+            "value" : "Activeer knoppen"
           }
         },
         "no" : {
@@ -15371,8 +15371,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enabled Buttons"
+            "state" : "translated",
+            "value" : "Активные кнопки"
           }
         },
         "sr" : {
@@ -15389,8 +15389,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enabled Buttons"
+            "state" : "translated",
+            "value" : "Etkin Düğmeler"
           }
         },
         "uk" : {
@@ -15525,8 +15525,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enhance your dock experience!"
+            "state" : "translated",
+            "value" : "Verbeter je Dock ervaring!"
           }
         },
         "no" : {
@@ -15769,8 +15769,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enter text to filter"
+            "state" : "translated",
+            "value" : "Filtrelemek için metin girin."
           }
         },
         "uk" : {
@@ -15959,8 +15959,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Everything is now set up!"
+            "state" : "translated",
+            "value" : "Her şeyi şimdi kur!"
           }
         },
         "uk" : {
@@ -16149,8 +16149,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Example:"
+            "state" : "translated",
+            "value" : "Örnek:"
           }
         },
         "uk" : {
@@ -16339,8 +16339,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Exclude windows from capture by filtering specific text in their titles"
+            "state" : "translated",
+            "value" : "Başlıklarındaki belirli metinleri filtreleyerek pencereleri yakalamanın dışında bırakın."
           }
         },
         "uk" : {
@@ -16532,7 +16532,7 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ekstra Ekstra Small"
+            "value" : "Ekstra Ekstra Küçük"
           }
         },
         "uk" : {
@@ -16724,7 +16724,7 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ekstra Small"
+            "value" : "Ekstra Küçük"
           }
         },
         "uk" : {
@@ -16914,8 +16914,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Filters"
+            "state" : "translated",
+            "value" : "Filtreler"
           }
         },
         "uk" : {
@@ -17294,8 +17294,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Force Quit"
+            "state" : "translated",
+            "value" : "Zorla Çıkış Yap"
           }
         },
         "uk" : {
@@ -17656,8 +17656,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Fullscreen"
+            "state" : "translated",
+            "value" : "Полноэкранный режим"
           }
         },
         "sr" : {
@@ -19007,7 +19007,7 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Yardım ve soru ayarlarları"
+            "value" : "Yardım ve soru ayarları"
           }
         },
         "uk" : {
@@ -19579,7 +19579,7 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Gradyan renkleri vurgula"
+            "value" : "Renk Geçişini Vurgula"
           }
         },
         "uk" : {
@@ -19770,7 +19770,7 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pencere Gecikmesi"
+            "value" : "Hover Penceresi Açma Gecikmesi"
           }
         },
         "uk" : {
@@ -19961,7 +19961,7 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pencere stili"
+            "value" : "Hover Penceresi Başlık Stili"
           }
         },
         "uk" : {
@@ -20151,7 +20151,7 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Eğer DockDoor'u faydalı buluyorsanız, projeyi desteklemek için bağış yapabilirsiniz!"
+            "value" : "DockDoor'u faydalı bulursanız, bağış yapmayı düşünün. Desteğiniz projenin devam etmesine yardımcı olur!"
           }
         },
         "uk" : {
@@ -20342,7 +20342,7 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Menü çubuğu simgesine erişmek için uygulamayı başlatın, simge 10 saniye görünür."
+            "value" : "Menü çubuğu simgesine erişmeniz gerekiyorsa, uygulamayı başlatıp 10 saniye boyunca görünmesini sağlayın."
           }
         },
         "uk" : {
@@ -20531,8 +20531,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Ignore Apps with One Window"
+            "state" : "translated",
+            "value" : "Tek Pencereli Uygulamaları Görmezden Gel"
           }
         },
         "uk" : {
@@ -20595,8 +20595,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Important: When recording, press ONLY the trigger key (e.g. just press Tab if you want command + Tab). Do not press the initialization key during recording."
+            "state" : "translated",
+            "value" : "Wichtig: Bei der Aufnahme nur die Trigger-Taste drücken (z.B. drücken Sie einfach Tab, wenn Sie Commad + Tab möchten). Drücken Sie nicht die Initialisierungstaste während der Aufnahme."
           }
         },
         "el" : {
@@ -20721,8 +20721,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Important: When recording, press ONLY the trigger key (e.g. just press Tab if you want command + Tab). Do not press the initialization key during recording."
+            "state" : "translated",
+            "value" : "ÖNEMLİ: Kayıt sırasında yalnızca tetikleyici tuşuna basın (örneğin, komut + sekmesi istiyorsanız sekmeye basın). Kayıt sırasında başlatma tuşuna basmayın."
           }
         },
         "uk" : {
@@ -20911,8 +20911,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Include Hidden and Minimized Windows in the Window Switcher"
+            "state" : "translated",
+            "value" : "Pencere Değiştiricisine Gizli ve Küçültülmüş Pencereleri Dahil Et"
           }
         },
         "uk" : {
@@ -20976,7 +20976,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Initialisierungs-Key"
+            "value" : "Initialisierungs-Taste"
           }
         },
         "el" : {
@@ -21102,7 +21102,7 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Başlatma Anahtarı"
+            "value" : "Başlatma Tuşu"
           }
         },
         "uk" : {
@@ -21291,8 +21291,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Keep previews visible during lateral movement"
+            "state" : "translated",
+            "value" : "Yatay hareket sırasında önizlemeleri görünür tutun"
           }
         },
         "uk" : {
@@ -21863,8 +21863,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Launch DockDoor at login"
+            "state" : "translated",
+            "value" : "Oturum Açıldığında DockDoor'u Başlat"
           }
         },
         "uk" : {
@@ -21927,8 +21927,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Layout Limits"
+            "state" : "translated",
+            "value" : "Layoutbegrenzungen"
           }
         },
         "el" : {
@@ -22035,8 +22035,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Layout Limits"
+            "state" : "translated",
+            "value" : "Лимиты макета"
           }
         },
         "sr" : {
@@ -22053,8 +22053,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Layout Limits"
+            "state" : "translated",
+            "value" : "Düzen Sınırları"
           }
         },
         "uk" : {
@@ -22243,8 +22243,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Let's set things up"
+            "state" : "translated",
+            "value" : "Hadi bir şeyler ayarlayalım."
           }
         },
         "uk" : {
@@ -22307,8 +22307,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Maximum Horizontal Rows"
+            "state" : "translated",
+            "value" : "Maximale Anzahl horizontaler Zeilen"
           }
         },
         "el" : {
@@ -22433,8 +22433,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Maximum Horizontal Rows"
+            "state" : "translated",
+            "value" : "Maksimum Yatay Satırlar"
           }
         },
         "uk" : {
@@ -22497,8 +22497,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Maximum number of colors (%lld) reached."
+            "state" : "translated",
+            "value" : "Maximale Anzahl von Farben (%lld) erreicht."
           }
         },
         "el" : {
@@ -22623,8 +22623,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Maximum number of colors (%lld) reached."
+            "state" : "translated",
+            "value" : "Maksimum renk sayısına (%lld) ulaşıldı."
           }
         },
         "uk" : {
@@ -22687,8 +22687,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Maximum Vertical Columns"
+            "state" : "translated",
+            "value" : "Maximale Anzahl vertikaler Spalten"
           }
         },
         "el" : {
@@ -22813,8 +22813,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Maximum Vertical Columns"
+            "state" : "translated",
+            "value" : "Maksimum Dikey Sütunlar"
           }
         },
         "uk" : {
@@ -23196,8 +23196,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Menu Bar Icon Hidden"
+            "state" : "translated",
+            "value" : "Menü Çubuğu İkonu Gizli"
           }
         },
         "uk" : {
@@ -23386,8 +23386,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Minimize"
+            "state" : "translated",
+            "value" : "Küçült"
           }
         },
         "uk" : {
@@ -23462,8 +23462,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Minimize All"
+            "state" : "translated",
+            "value" : "Minimizar todo"
           }
         },
         "fi" : {
@@ -23576,8 +23576,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Minimize All"
+            "state" : "translated",
+            "value" : "Hepsini Küçült"
           }
         },
         "uk" : {
@@ -23653,8 +23653,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Minimize all windows"
+            "state" : "translated",
+            "value" : "Minimizar todas las ventanas"
           }
         },
         "fi" : {
@@ -23749,8 +23749,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Minimize all windows"
+            "state" : "translated",
+            "value" : "Свернуть все окна"
           }
         },
         "sr" : {
@@ -23767,8 +23767,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Minimize all windows"
+            "state" : "translated",
+            "value" : "Tüm Pencereleri Küçült"
           }
         },
         "uk" : {
@@ -23844,8 +23844,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Minimize all windows except the current one"
+            "state" : "translated",
+            "value" : "Minimizar todas las ventanas excepto la actual"
           }
         },
         "fi" : {
@@ -23940,8 +23940,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Minimize all windows except the current one"
+            "state" : "translated",
+            "value" : "Свернуть все окна, кроме текущего"
           }
         },
         "sr" : {
@@ -23958,8 +23958,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Minimize all windows except the current one"
+            "state" : "translated",
+            "value" : "Geçerli pencere dışındaki tüm pencereleri simge durumuna küçült"
           }
         },
         "uk" : {
@@ -24022,8 +24022,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Minimum number of colors reached."
+            "state" : "translated",
+            "value" : "Maximale Anzahl an Farben erreicht."
           }
         },
         "el" : {
@@ -24034,8 +24034,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Minimum number of colors reached."
+            "state" : "translated",
+            "value" : "Se alcanzó el número mínimo de colores."
           }
         },
         "fi" : {
@@ -24148,8 +24148,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Minimum number of colors reached."
+            "state" : "translated",
+            "value" : "Maksimum renk sayısına ulaşıldı."
           }
         },
         "uk" : {
@@ -24212,8 +24212,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Navigate to Settings → Privacy & Security"
+            "state" : "translated",
+            "value" : "Gehen Sie zu Einstellungen → Privatsphäre & Sicherheit"
           }
         },
         "el" : {
@@ -24224,8 +24224,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Navigate to Settings → Privacy & Security"
+            "state" : "translated",
+            "value" : "Navega a Ajustes → Privacidad y Seguridad"
           }
         },
         "fi" : {
@@ -24338,8 +24338,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Navigate to Settings → Privacy & Security"
+            "state" : "translated",
+            "value" : "Ayarlar → Gizlilik ve Güvenlik bölümüne gidin"
           }
         },
         "uk" : {
@@ -24529,8 +24529,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Never visible"
+            "state" : "translated",
+            "value" : "Görünmez"
           }
         },
         "uk" : {
@@ -24719,8 +24719,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Next page"
+            "state" : "translated",
+            "value" : "Sonraki Sayfa"
           }
         },
         "uk" : {
@@ -24910,8 +24910,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No action"
+            "state" : "translated",
+            "value" : "Eylem Yok"
           }
         },
         "uk" : {
@@ -24974,8 +24974,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No custom directories added"
+            "state" : "translated",
+            "value" : "Keine benutzerdefinierten Ordner hinzugefügt"
           }
         },
         "el" : {
@@ -24986,8 +24986,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No custom directories added"
+            "state" : "translated",
+            "value" : "No hay directorios personalizados añadidos"
           }
         },
         "fi" : {
@@ -25164,8 +25164,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No filters added"
+            "state" : "translated",
+            "value" : "Keine Filter hinzugefügt"
           }
         },
         "el" : {
@@ -25176,8 +25176,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No filters added"
+            "state" : "translated",
+            "value" : "No hay filtros añadidos"
           }
         },
         "fi" : {
@@ -25290,8 +25290,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No filters added"
+            "state" : "translated",
+            "value" : "Filtre Eklenmedi"
           }
         },
         "uk" : {
@@ -25482,8 +25482,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No hover action"
+            "state" : "translated",
+            "value" : "Hiçbir gezinme eylemi yok"
           }
         },
         "uk" : {
@@ -25672,8 +25672,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No recent checks"
+            "state" : "translated",
+            "value" : "Son zamanlarda kontrol yapılmadı"
           }
         },
         "uk" : {
@@ -25736,8 +25736,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Not %@"
+            "state" : "translated",
+            "value" : "Nicht %@"
           }
         },
         "el" : {
@@ -25844,8 +25844,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Not %@"
+            "state" : "translated",
+            "value" : "Не %@"
           }
         },
         "sr" : {
@@ -25862,8 +25862,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Not %@"
+            "state" : "translated",
+            "value" : "%@ Değil."
           }
         },
         "uk" : {
@@ -26053,8 +26053,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Not granted"
+            "state" : "translated",
+            "value" : "Verilmedi"
           }
         },
         "uk" : {
@@ -26243,8 +26243,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "OK"
+            "state" : "translated",
+            "value" : "Tamam"
           }
         },
         "uk" : {
@@ -26434,8 +26434,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "On window hover; Dimmed until button hover"
+            "state" : "translated",
+            "value" : "Pencerede gezinirken; Düğmede gezinene kadar karartılır"
           }
         },
         "uk" : {
@@ -26625,7 +26625,7 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "On window hover; Full opacity"
           }
         },
@@ -26815,8 +26815,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Only takes effect when dock auto-hide is enabled"
+            "state" : "translated",
+            "value" : "Yalnızca dock otomatik gizleme etkinleştirildiğinde etkili olur"
           }
         },
         "uk" : {
@@ -27006,8 +27006,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open Accessibility Settings"
+            "state" : "translated",
+            "value" : "Erişebilirlik Ayarlarını Aç"
           }
         },
         "uk" : {
@@ -27197,8 +27197,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open Screen Recording Settings"
+            "state" : "translated",
+            "value" : "Ekran Kaydı Ayarlarını Aç"
           }
         },
         "uk" : {
@@ -27262,7 +27262,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Einstellungen …"
+            "value" : "Einstellungen öffnen"
           }
         },
         "el" : {
@@ -27387,8 +27387,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open Settings"
+            "state" : "translated",
+            "value" : "Ayarları Aç"
           }
         },
         "uk" : {
@@ -27577,7 +27577,7 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Option (⌥)"
           }
         },
@@ -27768,8 +27768,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Permission error"
+            "state" : "translated",
+            "value" : "İzin hatası"
           }
         },
         "uk" : {
@@ -27959,8 +27959,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Permissions"
+            "state" : "translated",
+            "value" : "İzinler"
           }
         },
         "uk" : {
@@ -28149,8 +28149,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Permissions settings"
+            "state" : "translated",
+            "value" : "İzin Ayarları"
           }
         },
         "uk" : {
@@ -28213,8 +28213,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Pin to Screen"
+            "state" : "translated",
+            "value" : "An den Bildschirm anheften"
           }
         },
         "el" : {
@@ -28339,8 +28339,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Pin to Screen"
+            "state" : "translated",
+            "value" : "Ekrana Sabitle"
           }
         },
         "uk" : {
@@ -28404,8 +28404,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Pinned to screen"
+            "state" : "translated",
+            "value" : "An dem Bildschirm angeheftet"
           }
         },
         "el" : {
@@ -28530,8 +28530,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Pinned to screen"
+            "state" : "translated",
+            "value" : "Ekrana Sabitlendi"
           }
         },
         "uk" : {
@@ -28594,8 +28594,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Placement Strategy"
+            "state" : "translated",
+            "value" : "Platzierungsstrategie"
           }
         },
         "el" : {
@@ -28720,8 +28720,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Placement Strategy"
+            "state" : "translated",
+            "value" : "Yerleşme Stratejisi"
           }
         },
         "uk" : {
@@ -28911,8 +28911,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Please Quit the App to Apply Changes! :)"
+            "state" : "translated",
+            "value" : "Değişiklikleri Uygulamak için Lütfen Uygulamadan Çıkın! :)"
           }
         },
         "uk" : {
@@ -29102,8 +29102,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Please Restart the App to Apply Changes! :)"
+            "state" : "translated",
+            "value" : "Değişiklikleri Uygulamak için Lütfen Uygulamayı Yeniden Başlatın! :)"
           }
         },
         "uk" : {
@@ -29292,8 +29292,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Please restart the application to apply your changes. Click OK to quit the app."
+            "state" : "translated",
+            "value" : "Değişikliklerinizi uygulamak için lütfen uygulamayı yeniden başlatın. Uygulamadan çıkmak için Tamam'a tıklayın."
           }
         },
         "uk" : {
@@ -29483,8 +29483,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Popover"
+            "state" : "translated",
+            "value" : "Açılır Ekran Üstü"
           }
         },
         "uk" : {
@@ -29547,8 +29547,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Position Window Controls"
+            "state" : "translated",
+            "value" : "Position der Fenstersteuerelemente"
           }
         },
         "el" : {
@@ -29673,8 +29673,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Position Window Controls"
+            "state" : "translated",
+            "value" : "Pencere Kontrollerini Konumlandırın"
           }
         },
         "uk" : {
@@ -29738,8 +29738,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Present a full size preview of the window"
+            "state" : "translated",
+            "value" : "Große Vorschau des Fensters anzeigen"
           }
         },
         "el" : {
@@ -29846,8 +29846,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Present a full size preview of the window"
+            "state" : "translated",
+            "value" : "Полноэкранный предварительный просмотр окна"
           }
         },
         "sr" : {
@@ -29864,8 +29864,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Present a full size preview of the window"
+            "state" : "translated",
+            "value" : "Pencerenin tam boyutlu bir önizlemesini göster"
           }
         },
         "uk" : {
@@ -30055,8 +30055,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Press any key combination after holding the initialization key to set the keybind."
+            "state" : "translated",
+            "value" : "Tuş kombinasyonunu ayarlamak için bir başlatma tuşuna bastıktan sonra herhangi bir tuşa basın."
           }
         },
         "uk" : {
@@ -30246,8 +30246,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Press any key to set the keybind."
+            "state" : "translated",
+            "value" : "Tuş kombinasyonunu ayarlamak için herhangi bir tuşa basın."
           }
         },
         "uk" : {
@@ -30436,8 +30436,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Press any key..."
+            "state" : "translated",
+            "value" : "Herhangi bir tuşa basın..."
           }
         },
         "uk" : {
@@ -30627,8 +30627,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Press the key combination..."
+            "state" : "translated",
+            "value" : "Bir tuş kombinasyonuna basın..."
           }
         },
         "uk" : {
@@ -30817,8 +30817,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Prevent dock from hiding during previews"
+            "state" : "translated",
+            "value" : "Önizlemeler sırasında dock'un gizlenmesini önle"
           }
         },
         "uk" : {
@@ -31007,8 +31007,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Prevents previews from disappearing when moving sideways to adjacent windows"
+            "state" : "translated",
+            "value" : "Yan yana bitişik pencerelere hareket ederken önizlemelerin kaybolmasını önler"
           }
         },
         "uk" : {
@@ -31198,8 +31198,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Hover Action"
+            "state" : "translated",
+            "value" : "Önizleme Hover Eylemi"
           }
         },
         "uk" : {
@@ -31388,8 +31388,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Hover Delay"
+            "state" : "translated",
+            "value" : "Önizleme Hover Gecikmesi"
           }
         },
         "uk" : {
@@ -31578,8 +31578,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Window Fade Out Duration"
+            "state" : "translated",
+            "value" : "Önizleme Penceresi Solma Süresi"
           }
         },
         "uk" : {
@@ -31768,8 +31768,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Window Open Delay"
+            "state" : "translated",
+            "value" : "Önizleme Penceresi Açma Gecikmesi"
           }
         },
         "uk" : {
@@ -31958,8 +31958,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview windows are sized to 1/%lld of your screen dimensions"
+            "state" : "translated",
+            "value" : "Önizleme pencereleri ekran boyutlarınızın 1/%lld'si oranında boyutlandırılır"
           }
         },
         "uk" : {
@@ -32148,8 +32148,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Quit"
+            "state" : "translated",
+            "value" : "Çık"
           }
         },
         "uk" : {
@@ -32339,8 +32339,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Quit App"
+            "state" : "translated",
+            "value" : "Uygulamadan Çık"
           }
         },
         "uk" : {
@@ -32529,8 +32529,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Quit DockDoor"
+            "state" : "translated",
+            "value" : "DockDoor'dan Çık"
           }
         },
         "uk" : {
@@ -32593,8 +32593,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reduce motion"
+            "state" : "translated",
+            "value" : "Bewegung reduzieren"
           }
         },
         "el" : {
@@ -32701,8 +32701,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reduce motion"
+            "state" : "translated",
+            "value" : "Уменьшить движение"
           }
         },
         "sr" : {
@@ -32719,8 +32719,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reduce motion"
+            "state" : "translated",
+            "value" : "Hareketi Azalt"
           }
         },
         "uk" : {
@@ -32909,8 +32909,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Remove"
+            "state" : "translated",
+            "value" : "Kaldır"
           }
         },
         "uk" : {
@@ -32973,8 +32973,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Remove All"
+            "state" : "translated",
+            "value" : "Alle entfernen"
           }
         },
         "el" : {
@@ -33099,8 +33099,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Remove All"
+            "state" : "translated",
+            "value" : "Hepsini Kaldır"
           }
         },
         "uk" : {
@@ -33289,8 +33289,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Report a Bug"
+            "state" : "translated",
+            "value" : "Bir Hata Bildir"
           }
         },
         "uk" : {
@@ -33479,8 +33479,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Request a Feature"
+            "state" : "translated",
+            "value" : "Bir Özellik İsteyin"
           }
         },
         "uk" : {
@@ -33669,8 +33669,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Required for capturing window previews of other apps"
+            "state" : "translated",
+            "value" : "Diğer uygulamaların pencere önizlemelerini yakalamak için gereklidir."
           }
         },
         "uk" : {
@@ -33859,8 +33859,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Required for dock hover detection and window switcher hotkeys"
+            "state" : "translated",
+            "value" : "Dock hover algılama ve pencere değiştirici kısayol tuşları için gereklidir."
           }
         },
         "uk" : {
@@ -34049,8 +34049,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reset"
+            "state" : "translated",
+            "value" : "Sıfırla"
           }
         },
         "uk" : {
@@ -34240,8 +34240,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reset All Settings"
+            "state" : "translated",
+            "value" : "Tüm Ayarları Sıfırla"
           }
         },
         "uk" : {
@@ -34430,8 +34430,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reset All Settings to Defaults"
+            "state" : "translated",
+            "value" : "Tüm Ayarları Varsayılanlara Sıfırla"
           }
         },
         "uk" : {
@@ -34620,8 +34620,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reset to Defaults"
+            "state" : "translated",
+            "value" : "Varsayılan'a Sıfırla"
           }
         },
         "uk" : {
@@ -34756,8 +34756,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Restart app"
+            "state" : "translated",
+            "value" : "App herstarten"
           }
         },
         "no" : {
@@ -34810,8 +34810,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Restart app"
+            "state" : "translated",
+            "value" : "Uygulamayı Yeniden Başlat"
           }
         },
         "uk" : {
@@ -35001,8 +35001,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Restart App"
+            "state" : "translated",
+            "value" : "Uygulamayı Yeniden Başlat"
           }
         },
         "uk" : {
@@ -35191,8 +35191,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Restart required"
+            "state" : "translated",
+            "value" : "Yeniden Başlatma Gerekli"
           }
         },
         "uk" : {
@@ -35327,8 +35327,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Right click a color to remove it."
+            "state" : "translated",
+            "value" : "Klik met je rechtermuisknop om een kleur te verwijderen."
           }
         },
         "no" : {
@@ -35381,8 +35381,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Right click a color to remove it."
+            "state" : "translated",
+            "value" : "Kaldırmak için bir renge sağ tıklayın."
           }
         },
         "uk" : {
@@ -35445,8 +35445,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Rounded image corners"
+            "state" : "translated",
+            "value" : "Abgerundete Bildecken"
           }
         },
         "el" : {
@@ -35553,8 +35553,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Rounded image corners"
+            "state" : "translated",
+            "value" : "Скругленные углы изображения"
           }
         },
         "sr" : {
@@ -35571,8 +35571,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Rounded image corners"
+            "state" : "translated",
+            "value" : "Yuvarlatılmış Görüntü Köşeleri"
           }
         },
         "uk" : {
@@ -35635,8 +35635,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Screen"
+            "state" : "translated",
+            "value" : "Bildschirm"
           }
         },
         "el" : {
@@ -35707,8 +35707,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Screen"
+            "state" : "translated",
+            "value" : "Scherm"
           }
         },
         "no" : {
@@ -35743,8 +35743,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Screen"
+            "state" : "translated",
+            "value" : "Экран"
           }
         },
         "sr" : {
@@ -35761,8 +35761,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Screen"
+            "state" : "translated",
+            "value" : "Ekran"
           }
         },
         "uk" : {
@@ -35952,8 +35952,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Screen Capturing:"
+            "state" : "translated",
+            "value" : "Ekran Görüntüsü:"
           }
         },
         "uk" : {
@@ -36088,8 +36088,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Screen recording"
+            "state" : "translated",
+            "value" : "Schermopname"
           }
         },
         "no" : {
@@ -36142,8 +36142,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Screen recording"
+            "state" : "translated",
+            "value" : "Ekran Kaydı"
           }
         },
         "uk" : {
@@ -36333,8 +36333,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Screen Recording Permissions"
+            "state" : "translated",
+            "value" : "Ekran Kaydı İzni"
           }
         },
         "uk" : {
@@ -36398,8 +36398,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Screen with last active window"
+            "state" : "translated",
+            "value" : "Bildschirm mit dem zuletzt aktiven Fenster"
           }
         },
         "el" : {
@@ -36524,8 +36524,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Screen with last active window"
+            "state" : "translated",
+            "value" : "Son etkin pencerenin bulunduğu ekran"
           }
         },
         "uk" : {
@@ -36589,8 +36589,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Screen with mouse"
+            "state" : "translated",
+            "value" : "Bildschirm mit der Maus"
           }
         },
         "el" : {
@@ -36715,8 +36715,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Screen with mouse"
+            "state" : "translated",
+            "value" : "Farenin bulunduğu ekran"
           }
         },
         "uk" : {
@@ -36905,8 +36905,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "seconds"
+            "state" : "translated",
+            "value" : "saniyeler"
           }
         },
         "uk" : {
@@ -37097,8 +37097,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "See a large preview of the window"
+            "state" : "translated",
+            "value" : "Pencerenin büyük bir önizlemesini görün"
           }
         },
         "uk" : {
@@ -37289,8 +37289,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "See a preview of the window"
+            "state" : "translated",
+            "value" : "Pencerenin bir önizlemesini görün"
           }
         },
         "uk" : {
@@ -37479,8 +37479,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "See more..."
+            "state" : "translated",
+            "value" : "Daha fazlasını görün..."
           }
         },
         "uk" : {
@@ -37543,8 +37543,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Select which applications can be captured and previewed"
+            "state" : "translated",
+            "value" : "Wählen Sie aus, welche Anwendungen erfasst und in der Vorschau angezeigt werden können"
           }
         },
         "el" : {
@@ -37669,8 +37669,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Select which applications can be captured and previewed"
+            "state" : "translated",
+            "value" : "Hangi uygulamaların yakalanabileceğini ve önizlenebileceğini seçin."
           }
         },
         "uk" : {
@@ -37859,8 +37859,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Set Initialization Key and Keybind"
+            "state" : "translated",
+            "value" : "Başlatma tuşunu ve tuş kombinasyonunu ayarla."
           }
         },
         "uk" : {
@@ -37923,8 +37923,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Set to 0 for unlimited"
+            "state" : "translated",
+            "value" : "Für unbegrenzt auf 0 setzen"
           }
         },
         "el" : {
@@ -38049,8 +38049,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Set to 0 for unlimited"
+            "state" : "translated",
+            "value" : "Sınırsız için 0 olarak ayarla."
           }
         },
         "uk" : {
@@ -38186,8 +38186,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Shadowed"
+            "state" : "translated",
+            "value" : "Schaduwen"
           }
         },
         "no" : {
@@ -38240,8 +38240,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Shadowed"
+            "state" : "translated",
+            "value" : "Gölgelenmiş"
           }
         },
         "uk" : {
@@ -38430,8 +38430,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show App Name in Dock Previews"
+            "state" : "translated",
+            "value" : "Dock Önizlemelerinde Uygulama Adını Göster"
           }
         },
         "uk" : {
@@ -38620,8 +38620,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Menu Bar Icon"
+            "state" : "translated",
+            "value" : "Menü Çubuğu Simgesini Göster"
           }
         },
         "uk" : {
@@ -38810,8 +38810,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Window Title in"
+            "state" : "translated",
+            "value" : "Pencere Başlığını Göster"
           }
         },
         "uk" : {
@@ -39000,8 +39000,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Window Title in Previews"
+            "state" : "translated",
+            "value" : "Önizlemelerde Pencere Başlığını Göster"
           }
         },
         "uk" : {
@@ -39191,8 +39191,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Window Titles"
+            "state" : "translated",
+            "value" : "Pencere Başlıklarını Göster"
           }
         },
         "uk" : {
@@ -39382,8 +39382,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Window Titles on Previews"
+            "state" : "translated",
+            "value" : "Önizlemelerde Pencere Başlıklarını Göster"
           }
         },
         "uk" : {
@@ -39574,8 +39574,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Simulate a click"
+            "state" : "translated",
+            "value" : "Bir tıklamayı simüle edin"
           }
         },
         "uk" : {
@@ -39765,8 +39765,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Simulate a click (open the window)"
+            "state" : "translated",
+            "value" : "Bir tıklamayı simüle edin (pencereyi açın)"
           }
         },
         "uk" : {
@@ -39957,8 +39957,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Small"
+            "state" : "translated",
+            "value" : "Küçük"
           }
         },
         "uk" : {
@@ -40147,8 +40147,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Sort Window Previews by Date"
+            "state" : "translated",
+            "value" : "Pencere Önizlemelerini Tarihe Göre Sırala"
           }
         },
         "uk" : {
@@ -40338,8 +40338,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Start recording keybind"
+            "state" : "translated",
+            "value" : "Tuş kombinasyonunu kaydetmeye başla"
           }
         },
         "uk" : {
@@ -40529,8 +40529,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Start Recording Keybind"
+            "state" : "translated",
+            "value" : "Tuş kombinasyonunu kaydetmeye başla"
           }
         },
         "uk" : {
@@ -40593,8 +40593,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Start recording trigger key"
+            "state" : "translated",
+            "value" : "Aufnahme der Trigger-Taste starten"
           }
         },
         "el" : {
@@ -40719,8 +40719,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Start recording trigger key"
+            "state" : "translated",
+            "value" : "Kayıt tetikleyici tuşunu başlat"
           }
         },
         "uk" : {
@@ -40911,8 +40911,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Subatomic"
+            "state" : "translated",
+            "value" : "Alt öğecik"
           }
         },
         "uk" : {
@@ -41101,8 +41101,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Suggest new features to make DockDoor even better."
+            "state" : "translated",
+            "value" : "DockDoor'u daha da iyi hale getirmek için yeni özellikler önerin."
           }
         },
         "uk" : {
@@ -41237,8 +41237,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Support DockDoor"
+            "state" : "translated",
+            "value" : "Steun DockDoor"
           }
         },
         "no" : {
@@ -41291,8 +41291,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Support DockDoor"
+            "state" : "translated",
+            "value" : "DockDoor'u Destekleyin."
           }
         },
         "uk" : {
@@ -41481,8 +41481,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "The changes to permissions will take effect after restarting."
+            "state" : "translated",
+            "value" : "İzinlerdeki değişiklikler yeniden başlatıldıktan sonra geçerli olacaktır."
           }
         },
         "uk" : {
@@ -41672,8 +41672,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "The selected positions for Traffic Light Buttons and Window Title will overlap."
+            "state" : "translated",
+            "value" : "Trafik Işığı Düğmeleri ve Pencere Başlığı için seçilen konumlar üst üste gelecektir."
           }
         },
         "uk" : {
@@ -41737,8 +41737,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "This display is currently disconnected. The window switcher will appear on the main display until the selected display is reconnected."
+            "state" : "translated",
+            "value" : "Diese Anzeige ist momentan nicht verbunden. Der Fensterwechsler wird auf der Hauptanzeige angezeigt, bis die ausgewählte Anzeige wieder verbunden ist."
           }
         },
         "el" : {
@@ -41863,8 +41863,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "This display is currently disconnected. The window switcher will appear on the main display until the selected display is reconnected."
+            "state" : "translated",
+            "value" : "Bu ekran şu anda bağlantısı kesilmiştir. Pencere değiştirici, seçilen ekran yeniden bağlanana kadar ana ekranda görünecektir."
           }
         },
         "uk" : {
@@ -42053,8 +42053,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Toggle"
+            "state" : "translated",
+            "value" : "Ayarla"
           }
         },
         "uk" : {
@@ -42243,8 +42243,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Toggle Full Screen"
+            "state" : "translated",
+            "value" : "Tam Ekrana Ayarla"
           }
         },
         "uk" : {
@@ -42434,8 +42434,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Top Left"
+            "state" : "translated",
+            "value" : "Sol Üst"
           }
         },
         "uk" : {
@@ -42625,8 +42625,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Top Right"
+            "state" : "translated",
+            "value" : "Sağ Üst"
           }
         },
         "uk" : {
@@ -42689,8 +42689,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Traffic Light Buttons"
+            "state" : "translated",
+            "value" : "Ampelschaltflächen"
           }
         },
         "el" : {
@@ -42797,8 +42797,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Traffic Light Buttons"
+            "state" : "translated",
+            "value" : "Кнопки управления"
           }
         },
         "sr" : {
@@ -42815,8 +42815,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Traffic Light Buttons"
+            "state" : "translated",
+            "value" : "Trafik Işıkları Düğmeleri"
           }
         },
         "uk" : {
@@ -43006,8 +43006,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Traffic Light Buttons Position"
+            "state" : "translated",
+            "value" : "Trafik Işıkları Düğmelerinin Konumu"
           }
         },
         "uk" : {
@@ -43179,7 +43179,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Видимость кнопок управления окнами"
+            "value" : "Видимость кнопок управления"
           }
         },
         "sr" : {
@@ -43196,8 +43196,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Traffic Light Buttons Visibility"
+            "state" : "translated",
+            "value" : "Trafik Işıkları Düğmelerinin Görünürlüğü"
           }
         },
         "uk" : {
@@ -43260,8 +43260,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Triggers an action when hovering over a window in a dock preview"
+            "state" : "translated",
+            "value" : "Löst eine Aktion aus, wenn du ein Fenster in einer Dockvorschau berührst"
           }
         },
         "el" : {
@@ -43386,8 +43386,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Triggers an action when hovering over a window in a dock preview"
+            "state" : "translated",
+            "value" : "Bir dock önizlemesinde bir pencerenin üzerine gelindiğinde bir eylemi tetikler."
           }
         },
         "uk" : {
@@ -43450,8 +43450,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Triggers an action when shaking a window while it is being dragged from a dock preview"
+            "state" : "translated",
+            "value" : "Löst eine Aktion aus, wenn ein Fenster geschüttelt wird, während es aus einer Dock-Vorschau gezogen wird"
           }
         },
         "el" : {
@@ -43576,8 +43576,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Triggers an action when shaking a window while it is being dragged from a dock preview"
+            "state" : "translated",
+            "value" : "Bir pencere bir dock önizlemesinden sürüklenirken sallandığında bir eylemi tetikler"
           }
         },
         "uk" : {
@@ -43766,8 +43766,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Un-minimize"
+            "state" : "translated",
+            "value" : "Küçültmeyi kaldır"
           }
         },
         "uk" : {
@@ -43956,8 +43956,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Up to date"
+            "state" : "translated",
+            "value" : "Güncel"
           }
         },
         "uk" : {
@@ -44146,8 +44146,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Up to Date"
+            "state" : "translated",
+            "value" : "Güncel"
           }
         },
         "uk" : {
@@ -44336,8 +44336,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update available"
+            "state" : "translated",
+            "value" : "Güncelleme Mevcut"
           }
         },
         "uk" : {
@@ -44526,8 +44526,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update settings"
+            "state" : "translated",
+            "value" : "Güncelleme Ayarları"
           }
         },
         "uk" : {
@@ -44717,8 +44717,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Updates"
+            "state" : "translated",
+            "value" : "Güncellemeler"
           }
         },
         "uk" : {
@@ -44782,8 +44782,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use classic window ordering"
+            "state" : "translated",
+            "value" : "Klassische Fensteranordnung"
           }
         },
         "el" : {
@@ -44908,8 +44908,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use classic window ordering"
+            "state" : "translated",
+            "value" : "Klasik Pencere Sıralamasını Kullan"
           }
         },
         "uk" : {
@@ -45099,8 +45099,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use default MacOS keybind ⌘ + ⇥"
+            "state" : "translated",
+            "value" : "Varsayılan MacOS tuş kombinasyonunu kullan ⌘ + ⇥"
           }
         },
         "uk" : {
@@ -45163,8 +45163,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use Monochrome Colors"
+            "state" : "translated",
+            "value" : "Benutze schwarz-weiß"
           }
         },
         "el" : {
@@ -45271,8 +45271,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use Monochrome Colors"
+            "state" : "translated",
+            "value" : "Использовать монохромные цвета"
           }
         },
         "sr" : {
@@ -45289,8 +45289,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use Monochrome Colors"
+            "state" : "translated",
+            "value" : "Monokrom Renkler Kullanın"
           }
         },
         "uk" : {
@@ -45480,8 +45480,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use Uniform Image Preview Radius"
+            "state" : "translated",
+            "value" : "Tekdüze Görüntü Önizleme Yarıçapını Kullan"
           }
         },
         "uk" : {
@@ -45545,8 +45545,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use Windows-style window ordering"
+            "state" : "translated",
+            "value" : "Fensteranordnung im Windows Stil benutzen"
           }
         },
         "el" : {
@@ -45653,8 +45653,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use Windows-style window ordering"
+            "state" : "translated",
+            "value" : "Использование упорядочивания окон в стиле Windows"
           }
         },
         "sr" : {
@@ -45671,8 +45671,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use Windows-style window ordering"
+            "state" : "translated",
+            "value" : "Windows tarzı pencere sıralamasını kullan"
           }
         },
         "uk" : {
@@ -45735,8 +45735,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use Windows-style window ordering in the window switcher"
+            "state" : "translated",
+            "value" : "Fensteranordnung im Windows Stil beim Fensterwechsel benutzen"
           }
         },
         "el" : {
@@ -45843,8 +45843,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use Windows-style window ordering in the window switcher"
+            "state" : "translated",
+            "value" : "Использование упорядочивания окон в стиле Windows в переключателе окон"
           }
         },
         "sr" : {
@@ -45861,8 +45861,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use Windows-style window ordering in the window switcher"
+            "state" : "translated",
+            "value" : "Pencere değiştiricide Windows tarzı pencere sıralamasını kullanın"
           }
         },
         "uk" : {
@@ -46051,8 +46051,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Version %@"
+            "state" : "translated",
+            "value" : "Sürüm: %@"
           }
         },
         "uk" : {
@@ -46241,8 +46241,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Want to see for yourself? Review our source code"
+            "state" : "translated",
+            "value" : "Kendiniz görmek ister misiniz? Kaynak kodumuzu inceleyin."
           }
         },
         "uk" : {
@@ -46431,8 +46431,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Want to see the app in your language?"
+            "state" : "translated",
+            "value" : "Uygulamayı kendi dilinizde görmek ister misiniz?"
           }
         },
         "uk" : {
@@ -46621,8 +46621,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Want to support development?"
+            "state" : "translated",
+            "value" : "Geliştirmeyi desteklemek ister misiniz?"
           }
         },
         "uk" : {
@@ -46811,8 +46811,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Welcome to DockDoor!"
+            "state" : "translated",
+            "value" : "DockDoor'a Hoş Geldiniz!"
           }
         },
         "uk" : {
@@ -47003,8 +47003,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "What is this? A window for ANTS?"
+            "state" : "translated",
+            "value" : "Bu ne? ANTS için bir pencere mi?"
           }
         },
         "uk" : {
@@ -47067,8 +47067,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When enabled, all preview images will be cropped to a rounded rectangle."
+            "state" : "translated",
+            "value" : "Wenn diese Option aktiviert ist, werden alle Vorschaubilder auf ein abgerundetes Rechteck zugeschnitten."
           }
         },
         "el" : {
@@ -47175,8 +47175,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When enabled, all preview images will be cropped to a rounded rectangle."
+            "state" : "translated",
+            "value" : "Если эта функция включена, все изображения предварительного просмотра будут обрезаны до округлого прямоугольника."
           }
         },
         "sr" : {
@@ -47193,8 +47193,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When enabled, all preview images will be cropped to a rounded rectangle."
+            "state" : "translated",
+            "value" : "Etkinleştirildiğinde, tüm önizleme görüntüleri yuvarlatılmış bir dikdörtgene kırpılır."
           }
         },
         "uk" : {
@@ -47257,8 +47257,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When enabled, dims all windows except those currently under selected."
+            "state" : "translated",
+            "value" : "Wenn aktiviert, werden alle Fenster verdunkelt außer den aktuell ausgewählten Fenstern."
           }
         },
         "el" : {
@@ -47383,8 +47383,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When enabled, dims all windows except those currently under selected."
+            "state" : "translated",
+            "value" : "Etkinleştirildiğinde, seçili olanlar hariç tüm pencereleri karartır."
           }
         },
         "uk" : {
@@ -47447,8 +47447,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When enabled, shows the last active window first instead of the current window"
+            "state" : "translated",
+            "value" : "Wenn aktiviert, wird das letzte aktive Fenster anstelle des aktuellen Fensters zuerst angezeigt"
           }
         },
         "el" : {
@@ -47573,8 +47573,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When enabled, shows the last active window first instead of the current window"
+            "state" : "translated",
+            "value" : "Etkinleştirildiğinde, geçerli pencere yerine son etkin pencereyi önce gösterir."
           }
         },
         "uk" : {
@@ -47764,8 +47764,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When hovering over the preview"
+            "state" : "translated",
+            "value" : "Önizlemenin üzerine gelindiğinde"
           }
         },
         "uk" : {
@@ -47956,8 +47956,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When Showing Dock Tile Previews"
+            "state" : "translated",
+            "value" : "Dock Simge Önizlemeleri Görüntülendiğinde"
           }
         },
         "uk" : {
@@ -48148,8 +48148,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When Using Window Switcher"
+            "state" : "translated",
+            "value" : "Pencere Değiştirici Kullanıldığında"
           }
         },
         "uk" : {
@@ -48338,8 +48338,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When you click the button below, DockDoor will restart and move to the menu bar to run in the background."
+            "state" : "translated",
+            "value" : "Aşağıdaki butona tıkladığınızda DockDoor yeniden başlatılacak ve arka planda çalışmak üzere menü çubuğuna geçecektir."
           }
         },
         "uk" : {
@@ -48529,8 +48529,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Why we need permissions"
+            "state" : "translated",
+            "value" : "Neden izinlere ihtiyacımız var"
           }
         },
         "uk" : {
@@ -48719,8 +48719,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Buffer"
+            "state" : "translated",
+            "value" : "Pencere Tamponu"
           }
         },
         "uk" : {
@@ -48910,8 +48910,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Cache Lifespan"
+            "state" : "translated",
+            "value" : "Pencere Önbelleğinin Ömrü"
           }
         },
         "uk" : {
@@ -49100,8 +49100,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Image Cache Lifespan"
+            "state" : "translated",
+            "value" : "Pencere Görüntü Önbelleğinin Ömrü"
           }
         },
         "uk" : {
@@ -49290,8 +49290,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Image Resolution Scale (higher means lower resolution)"
+            "state" : "translated",
+            "value" : "Pencere Görüntü Çözünürlük Ölçeği (daha yüksek, daha düşük çözünürlük anlamına gelir)"
           }
         },
         "uk" : {
@@ -49354,8 +49354,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Preview Layout"
+            "state" : "translated",
+            "value" : "Layout der Fenstervorschau"
           }
         },
         "el" : {
@@ -49480,8 +49480,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Preview Layout"
+            "state" : "translated",
+            "value" : "Pencere Önizleme Düzeni"
           }
         },
         "uk" : {
@@ -49545,8 +49545,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Preview Layout Limits"
+            "state" : "translated",
+            "value" : "Grenzen des Layouts der Fenstervorschau"
           }
         },
         "el" : {
@@ -49671,8 +49671,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Preview Layout Limits"
+            "state" : "translated",
+            "value" : "Pencere Önizleme Düzeni Limitleri"
           }
         },
         "uk" : {
@@ -49861,8 +49861,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Preview Size"
+            "state" : "translated",
+            "value" : "Pencere Önizleme Boyutu"
           }
         },
         "uk" : {
@@ -49925,8 +49925,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Selection Background Color"
+            "state" : "translated",
+            "value" : "Hintergrundfarbe für Fensterauswahl"
           }
         },
         "el" : {
@@ -50051,8 +50051,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Selection Background Color"
+            "state" : "translated",
+            "value" : "Pencere Seçimi Arkaplan Rengi"
           }
         },
         "uk" : {
@@ -50115,8 +50115,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Selection Background Opacity"
+            "state" : "translated",
+            "value" : "Deckkraft des Hintergrunds der Fensterauswahl"
           }
         },
         "el" : {
@@ -50241,8 +50241,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Selection Background Opacity"
+            "state" : "translated",
+            "value" : "Window Selection Background Opaklığı"
           }
         },
         "uk" : {
@@ -50432,8 +50432,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Size"
+            "state" : "translated",
+            "value" : "Pencere Boyutu"
           }
         },
         "uk" : {
@@ -50623,8 +50623,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Switcher"
+            "state" : "translated",
+            "value" : "Pencere Değiştirici"
           }
         },
         "uk" : {
@@ -50814,8 +50814,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Switcher only"
+            "state" : "translated",
+            "value" : "Yalnızca Pencere Değiştirici"
           }
         },
         "uk" : {
@@ -50878,8 +50878,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Switcher Placement"
+            "state" : "translated",
+            "value" : "Fensterwechsler Platzierung"
           }
         },
         "el" : {
@@ -51004,8 +51004,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Switcher Placement"
+            "state" : "translated",
+            "value" : "Pencere Değiştirici Yerleşimi"
           }
         },
         "uk" : {
@@ -51068,8 +51068,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window title filters"
+            "state" : "translated",
+            "value" : "Filter für Fenstertitel"
           }
         },
         "el" : {
@@ -51194,8 +51194,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window title filters"
+            "state" : "translated",
+            "value" : "Pencere Başlığı Filtreleri"
           }
         },
         "uk" : {
@@ -51384,8 +51384,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Title Position"
+            "state" : "translated",
+            "value" : "Pencere Başlığı Konumu"
           }
         },
         "uk" : {
@@ -51574,8 +51574,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Title Visibility"
+            "state" : "translated",
+            "value" : "Pencere Başlığı Görünürlüğü"
           }
         },
         "uk" : {
@@ -51764,8 +51764,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Windows switching settings"
+            "state" : "translated",
+            "value" : "Pencere Değiştirme Ayarları"
           }
         },
         "uk" : {
@@ -51955,8 +51955,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "You need to give DockDoor access to the accessibility API in order for it to function."
+            "state" : "translated",
+            "value" : "DockDoor'un çalışabilmesi için erişilebilirlik API'sine erişim izni vermeniz gerekir."
           }
         },
         "uk" : {
@@ -52091,8 +52091,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Your app is on version %@"
+            "state" : "translated",
+            "value" : "Je hebt app versie %@"
           }
         },
         "no" : {
@@ -52145,8 +52145,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Your app is on version %@"
+            "state" : "translated",
+            "value" : "Uygulamanız %@ sürümünde"
           }
         },
         "uk" : {
@@ -52209,8 +52209,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Your traffic lights will be set to disabled automatically."
+            "state" : "translated",
+            "value" : "Ihre Ampelanzeige wird automatisch deaktiviert."
           }
         },
         "el" : {
@@ -52317,8 +52317,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Your traffic lights will be set to disabled automatically."
+            "state" : "translated",
+            "value" : "Кнопки управления будут отключены автоматически."
           }
         },
         "sr" : {
@@ -52335,8 +52335,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Your traffic lights will be set to disabled automatically."
+            "state" : "translated",
+            "value" : "Trafik ışıkları düğmeleriniz otomatik olarak devre dışı bırakılacaktır."
           }
         },
         "uk" : {
@@ -52471,7 +52471,7 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Z"
           }
         },
@@ -52525,7 +52525,7 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Z"
           }
         },
