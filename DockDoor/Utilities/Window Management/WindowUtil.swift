@@ -395,15 +395,6 @@ enum WindowUtil {
             windows = windows.filter { !$0.isHidden && !$0.isMinimized }
         }
 
-        // If classic ordering is enabled and there are at least two windows,
-        // swap the first and second windows
-        if Defaults[.useClassicWindowOrdering], windows.count >= 2 {
-            var modifiedWindows = windows
-            modifiedWindows.swapAt(0, 1)
-            return modifiedWindows
-        }
-
-        // Otherwise return natural date-based ordering
         return windows
     }
 

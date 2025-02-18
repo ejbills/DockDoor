@@ -211,6 +211,15 @@ class KeybindHelper {
                                     currentMouseLocation: CGPoint,
                                     targetScreen: NSScreen)
     {
+        // If classic window ordering is enabled and there are at least two windows,
+        // set the initial focus on the second window preview (instead of the first).
+        //
+        // This behavior improves window switching speed and mimics the Windows OS
+        // experience, making it easier for users to switch between recent windows quickly.
+        if Defaults[.useClassicWindowOrdering], windows.count >= 2 {
+            SharedPreviewWindowCoordinator.shared.windowSwitcherCoordinator.setIndex(to: 1)
+        }
+
         let showWindow = { (mouseLocation: NSPoint?, mouseScreen: NSScreen?) in
             SharedPreviewWindowCoordinator.shared.showWindow(
                 appName: "Window Switcher",
