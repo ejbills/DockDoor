@@ -38,6 +38,15 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://buymeacoffee.com/keplercafe</div>
 
+<a id="v1.6.2"></a>
+# [v1.6.2](https://github.com/ejbills/DockDoor/releases/tag/v1.6.2) - 2025-02-21
+
+- Improved Window Focus Behavior: When classic ordering is enabled and there are at least two windows, the initial focus will now be set on the second window preview instead of the first for a smoother user experience. (thanks [@bestbandari](https://github.com/bestbandari))
+- Fixed window switcher keybind failing after DockDoor remained open for long periods of time
+
+[Changes][v1.6.2]
+
+
 <a id="v1.6.1"></a>
 # [v1.6.1](https://github.com/ejbills/DockDoor/releases/tag/v1.6.1) - 2025-01-09
 
@@ -797,6 +806,7 @@ v1.0
 [Changes][releases]
 
 
+[v1.6.2]: https://github.com/ejbills/DockDoor/compare/v1.6.1...v1.6.2
 [v1.6.1]: https://github.com/ejbills/DockDoor/compare/v1.6...v1.6.1
 [v1.6]: https://github.com/ejbills/DockDoor/compare/v1.5.1...v1.6
 [v1.5.1]: https://github.com/ejbills/DockDoor/compare/v1.5...v1.5.1
