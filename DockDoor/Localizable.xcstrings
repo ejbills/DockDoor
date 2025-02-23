@@ -249,8 +249,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : " - Inactive"
+            "state" : "translated",
+            "value" : " - Inactif"
           }
         },
         "he" : {
@@ -352,7 +352,7 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Aktif Değil"
+            "value" : " - Aktif Değil"
           }
         },
         "uk" : {
@@ -1876,7 +1876,7 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "1. Başlatma tuşu olarak \"Command (⌘)\" tuşunu seçin."
+            "value" : "1. Başlatma tuşu olarak \"Komut (⌘)\" tuşunu seçin."
           }
         },
         "uk" : {
@@ -2256,7 +2256,7 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "2. \n\"Tetikleme Tuşunu Kaydetmeyi Başlat\" seçeneğine tıklayın."
+            "value" : "2. \"Tetikleme Tuşunu Kaydetmeyi Başlat\" seçeneğine tıklayın."
           }
         },
         "uk" : {
@@ -2446,7 +2446,7 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "3. Sadece Tab tuşuna basın (Command+Tab değil)."
+            "value" : "3. Sadece Sekme tuşuna basın (Komut+Sekme değil)."
           }
         },
         "uk" : {
@@ -2636,7 +2636,7 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "4. Tuş atamanız Command+Tab olarak ayarlanacaktır."
+            "value" : "4. Tuş kombinasyonunuz Komut+Sekme olarak ayarlanacaktır."
           }
         },
         "uk" : {
@@ -3017,7 +3017,7 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Erişim İzinleri"
+            "value" : "Erişilebilirlik İzni"
           }
         },
         "uk" : {
@@ -4246,8 +4246,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Aero Shake Action"
+            "state" : "translated",
+            "value" : "Action de secousse Aero"
           }
         },
         "he" : {
@@ -4349,7 +4349,7 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pencere Sallama Eylemi"
+            "value" : "Aero Shake Eylemi"
           }
         },
         "uk" : {
@@ -4436,8 +4436,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "All buttons removed"
+            "state" : "translated",
+            "value" : "Tous les boutons ont été supprimés"
           }
         },
         "he" : {
@@ -4539,7 +4539,7 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tüm Düğmeler Silindi"
+            "value" : "Bütün düğmeler silindi"
           }
         },
         "uk" : {
@@ -5683,7 +5683,7 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Uygulama İsmi Stili"
+            "value" : "Uygulama adı stili"
           }
         },
         "uk" : {
@@ -9869,7 +9869,7 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tümünü Kapat"
+            "value" : "Hepsini kapat"
           }
         },
         "uk" : {
@@ -10249,7 +10249,7 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Command (⌘)"
+            "value" : "Komut (⌘)"
           }
         },
         "uk" : {
@@ -10819,7 +10819,7 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Control (⌃)"
+            "value" : "Kontrol (⌃)"
           }
         },
         "uk" : {
@@ -12723,7 +12723,7 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dock Önizleme Penceresi Hover Eylemi"
+            "value" : "Dock Önizleme Penceresi Gezinme Eylemi"
           }
         },
         "uk" : {
@@ -14438,7 +14438,7 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Güncellemeleri otomatik olarak kontrol etmeyi etkinleştir."
+            "value" : "Güncellemeleri otomatik olarak kontrol etmeyi etkinleştir"
           }
         },
         "uk" : {
@@ -14629,7 +14629,7 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Hover Penceresi Kayan Animasyonunu Etkinleştir"
+            "value" : "Gezinme Penceresi Kayan Animasyonunu Etkinleştir"
           }
         },
         "uk" : {
@@ -19770,7 +19770,7 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Hover Penceresi Açma Gecikmesi"
+            "value" : "Gezinme Penceresi Açma Gecikmesi"
           }
         },
         "uk" : {
@@ -19961,7 +19961,7 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Hover Penceresi Başlık Stili"
+            "value" : "Gezinme Penceresi Başlık Stili"
           }
         },
         "uk" : {
@@ -25100,8 +25100,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No custom directories added"
+            "state" : "translated",
+            "value" : "Özel Dizin Eklenmedi"
           }
         },
         "uk" : {
@@ -26626,7 +26626,7 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "On window hover; Full opacity"
+            "value" : "Pencere gezinirken; Tam opaklık"
           }
         },
         "uk" : {
@@ -27025,7 +27025,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "打开【辅助功能】"
+            "value" : "打开辅助功能设置"
           }
         },
         "zh-Hant" : {
@@ -27216,7 +27216,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "打开【录屏与系统录音】"
+            "value" : "打开录屏与系统录音设置"
           }
         },
         "zh-Hant" : {
@@ -27406,7 +27406,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "打开【系统设置】"
+            "value" : "打开设置"
           }
         },
         "zh-Hant" : {
@@ -28531,7 +28531,7 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ekrana Sabitlendi"
+            "value" : "Sabitlenmiş Ekran"
           }
         },
         "uk" : {
@@ -31199,7 +31199,7 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Önizleme Hover Eylemi"
+            "value" : "Gezinme Önizlemesi Eylemi"
           }
         },
         "uk" : {
@@ -31389,7 +31389,7 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Önizleme Hover Gecikmesi"
+            "value" : "Gezinme Önizlemesi Gecikmesi"
           }
         },
         "uk" : {
@@ -33860,7 +33860,7 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dock hover algılama ve pencere değiştirici kısayol tuşları için gereklidir."
+            "value" : "Dock gezinme algılama ve pencere değiştirici kısayol tuşları için gereklidir"
           }
         },
         "uk" : {
@@ -36906,7 +36906,7 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "saniyeler"
+            "value" : "saniye"
           }
         },
         "uk" : {
@@ -39575,7 +39575,7 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bir tıklamayı simüle edin"
+            "value" : "Bir tıklamayı taklit edin"
           }
         },
         "uk" : {
@@ -39766,7 +39766,7 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bir tıklamayı simüle edin (pencereyi açın)"
+            "value" : "Bir tıklamayı taklit edin (pencereyi açın)"
           }
         },
         "uk" : {
@@ -41292,7 +41292,7 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "DockDoor'u Destekleyin."
+            "value" : "DockDoor'u Destekleyin"
           }
         },
         "uk" : {
@@ -43387,7 +43387,7 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bir dock önizlemesinde bir pencerenin üzerine gelindiğinde bir eylemi tetikler."
+            "value" : "Bir dock önizlemesinde bir pencerenin üzerine gelindiğinde bir eylemi tetikler"
           }
         },
         "uk" : {
@@ -50242,7 +50242,7 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Window Selection Background Opaklığı"
+            "value" : "Pencere Seçimi Arkaplan Opaklığı"
           }
         },
         "uk" : {
