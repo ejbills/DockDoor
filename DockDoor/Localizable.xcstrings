@@ -219,8 +219,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : " - Inactive"
+            "state" : "translated",
+            "value" : " - Inaktiv"
           }
         },
         "de" : {
@@ -249,8 +249,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : " - Inactive"
+            "state" : "translated",
+            "value" : " - Inactif"
           }
         },
         "he" : {
@@ -352,7 +352,7 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Aktif Değil"
+            "value" : " - Aktif Değil"
           }
         },
         "uk" : {
@@ -398,8 +398,8 @@
         },
         "ca" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "• Allows for enhanced visual information in the dock"
+            "state" : "translated",
+            "value" : "Permet una informació visual millorada al dock"
           }
         },
         "cs" : {
@@ -411,7 +411,7 @@
         "da" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tillader forbedret visuel information i docken"
+            "value" : "• Muliggør forbedret visuel information i docken"
           }
         },
         "de" : {
@@ -602,7 +602,7 @@
         "da" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Muliggør interaktion i realtid med elementer i docken"
+            "value" : "• Muliggør realtidsinteraktion med dock-emner"
           }
         },
         "de" : {
@@ -793,7 +793,7 @@
         "da" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "For at fange forhåndsvisninger af billeder og vinduer"
+            "value" : "• For indfangelse af forhåndsvisninger af billeder og vinduer"
           }
         },
         "de" : {
@@ -984,7 +984,7 @@
         "da" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "For at registrere, når du svæver over proceslinje"
+            "value" : "• For at registrere, når der svæves over docken"
           }
         },
         "de" : {
@@ -1173,8 +1173,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "• When hovering over the Dock at the bottom, windows flow in rows from left to right"
+            "state" : "translated",
+            "value" : "• Når der svæves over doken nederst, flyder vinduerne i rækker fra venstre mod højre"
           }
         },
         "de" : {
@@ -1363,8 +1363,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "• When hovering over the Dock on the sides, windows flow in columns from top to bottom"
+            "state" : "translated",
+            "value" : "• Når der svæves over doken i siderne, flyder vinduerne i kolonner fra øverst til nederst"
           }
         },
         "de" : {
@@ -1553,8 +1553,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "• When using the Window Switcher, windows always flow in rows from left to right"
+            "state" : "translated",
+            "value" : "• Når Vinduesskifter bruges, flyder vinduerne altid i rækker fra venstre mod højre"
           }
         },
         "de" : {
@@ -1743,8 +1743,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "1. Select \"Command (⌘)\" as the initialization key."
+            "state" : "translated",
+            "value" : "1. Vælg \"Kommando (⌘)\" som initialiseringstasten."
           }
         },
         "de" : {
@@ -1876,7 +1876,7 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "1. Başlatma tuşu olarak \"Command (⌘)\" tuşunu seçin."
+            "value" : "1. Başlatma tuşu olarak \"Komut (⌘)\" tuşunu seçin."
           }
         },
         "uk" : {
@@ -1933,7 +1933,7 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "1/%lldx"
           }
         },
@@ -2123,8 +2123,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "2. Click \"Start Recording Trigger Key\"."
+            "state" : "translated",
+            "value" : "2. Klik på \"Start optagelsesudløsertast\"."
           }
         },
         "de" : {
@@ -2256,7 +2256,7 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "2. \n\"Tetikleme Tuşunu Kaydetmeyi Başlat\" seçeneğine tıklayın."
+            "value" : "2. \"Tetikleme Tuşunu Kaydetmeyi Başlat\" seçeneğine tıklayın."
           }
         },
         "uk" : {
@@ -2313,8 +2313,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "3. Press ONLY the Tab key (not Command+Tab)."
+            "state" : "translated",
+            "value" : "3. Tryk KUN på Tab-tasten (ikke Kommando+Tab)."
           }
         },
         "de" : {
@@ -2446,7 +2446,7 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "3. Sadece Tab tuşuna basın (Command+Tab değil)."
+            "value" : "3. Sadece Sekme tuşuna basın (Komut+Sekme değil)."
           }
         },
         "uk" : {
@@ -2503,8 +2503,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "4. Your keybind will be set to Command+Tab."
+            "state" : "translated",
+            "value" : "4. Tastebindingen sættes til Kommando+Tab."
           }
         },
         "de" : {
@@ -2636,7 +2636,7 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "4. Tuş atamanız Command+Tab olarak ayarlanacaktır."
+            "value" : "4. Tuş kombinasyonunuz Komut+Sekme olarak ayarlanacaktır."
           }
         },
         "uk" : {
@@ -2693,8 +2693,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Accessibility"
+            "state" : "translated",
+            "value" : "Tilgængelighed"
           }
         },
         "de" : {
@@ -2884,8 +2884,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Accessibility Permissions"
+            "state" : "translated",
+            "value" : "Tilgængelighedstilladelser"
           }
         },
         "de" : {
@@ -3017,7 +3017,7 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Erişim İzinleri"
+            "value" : "Erişilebilirlik İzni"
           }
         },
         "uk" : {
@@ -3075,8 +3075,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Accessibility:"
+            "state" : "translated",
+            "value" : "Tilgængelighed:"
           }
         },
         "de" : {
@@ -3265,8 +3265,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add"
+            "state" : "translated",
+            "value" : "Tilføj"
           }
         },
         "de" : {
@@ -3455,8 +3455,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add additional directories to scan for applications"
+            "state" : "translated",
+            "value" : "Tilføj yderligere mapper at skanne for apps"
           }
         },
         "de" : {
@@ -3645,8 +3645,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add Directory"
+            "state" : "translated",
+            "value" : "Tilføj mappe"
           }
         },
         "de" : {
@@ -3835,8 +3835,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add Filter"
+            "state" : "translated",
+            "value" : "Tilføj filter"
           }
         },
         "de" : {
@@ -4025,8 +4025,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Adjust this if the preview is misaligned with dock"
+            "state" : "translated",
+            "value" : "Justér dette, hvis forhåndsvisningen ikke flugter med docken"
           }
         },
         "de" : {
@@ -4216,8 +4216,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Aero Shake Action"
+            "state" : "translated",
+            "value" : "Aero-rystehandling"
           }
         },
         "de" : {
@@ -4246,8 +4246,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Aero Shake Action"
+            "state" : "translated",
+            "value" : "Action de secousse Aero"
           }
         },
         "he" : {
@@ -4349,7 +4349,7 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pencere Sallama Eylemi"
+            "value" : "Aero Shake Eylemi"
           }
         },
         "uk" : {
@@ -4406,8 +4406,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "All buttons removed"
+            "state" : "translated",
+            "value" : "Alle knapper fjernet"
           }
         },
         "de" : {
@@ -4436,8 +4436,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "All buttons removed"
+            "state" : "translated",
+            "value" : "Tous les boutons ont été supprimés"
           }
         },
         "he" : {
@@ -4539,7 +4539,7 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tüm Düğmeler Silindi"
+            "value" : "Bütün düğmeler silindi"
           }
         },
         "uk" : {
@@ -4598,8 +4598,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Always"
+            "state" : "translated",
+            "value" : "Altid"
           }
         },
         "de" : {
@@ -4789,8 +4789,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Always visible"
+            "state" : "translated",
+            "value" : "Altid synlig"
           }
         },
         "de" : {
@@ -4980,8 +4980,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Always visible; Full opacity"
+            "state" : "translated",
+            "value" : "Altid synlig; fuld gennemsigtighed"
           }
         },
         "de" : {
@@ -5360,8 +5360,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Animation speed"
+            "state" : "translated",
+            "value" : "Animationshastighed"
           }
         },
         "de" : {
@@ -5550,8 +5550,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "App Name Style"
+            "state" : "translated",
+            "value" : "App-navnestil"
           }
         },
         "de" : {
@@ -5683,7 +5683,7 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Uygulama İsmi Stili"
+            "value" : "Uygulama adı stili"
           }
         },
         "uk" : {
@@ -5741,8 +5741,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Appearance"
+            "state" : "translated",
+            "value" : "Udseende"
           }
         },
         "de" : {
@@ -5931,8 +5931,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Appearance settings"
+            "state" : "translated",
+            "value" : "Indstillinger for udseende"
           }
         },
         "de" : {
@@ -6121,8 +6121,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Application filters"
+            "state" : "translated",
+            "value" : "App-filtre"
           }
         },
         "de" : {
@@ -6311,8 +6311,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Are you sure you want to proceed?"
+            "state" : "translated",
+            "value" : "Sikker på at fortsætte?"
           }
         },
         "de" : {
@@ -6501,8 +6501,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Are you sure you want to reset all settings to their default values?"
+            "state" : "translated",
+            "value" : "Sikker på, at alle indstillinger skal nulstilles til deres standardværdier?"
           }
         },
         "de" : {
@@ -6691,8 +6691,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "At bottom - Controls on left, title on right"
+            "state" : "translated",
+            "value" : "Nederst - Kontroller til venstre, titel til højre"
           }
         },
         "de" : {
@@ -6881,8 +6881,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "At bottom - Title on left, controls on right"
+            "state" : "translated",
+            "value" : "Nederst - Titel til venstre, kontroller til højre"
           }
         },
         "de" : {
@@ -7071,8 +7071,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "At top - Controls on left, title on right"
+            "state" : "translated",
+            "value" : "Øverst - Kontroller til venstre, titel til højre"
           }
         },
         "de" : {
@@ -7261,8 +7261,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "At top - Title on left, controls on right"
+            "state" : "translated",
+            "value" : "Øverst - Titel til venstre, kontroller til højre"
           }
         },
         "de" : {
@@ -7451,8 +7451,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Automatic Updates"
+            "state" : "translated",
+            "value" : "Automatiske opdateringer"
           }
         },
         "de" : {
@@ -7642,8 +7642,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Automatically check for updates"
+            "state" : "translated",
+            "value" : "Søg automatisk efter opdateringer"
           }
         },
         "de" : {
@@ -7965,7 +7965,7 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bulanıklık miktarı"
+            "value" : "Bulanıklık Miktarı"
           }
         },
         "uk" : {
@@ -8023,8 +8023,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Bottom Left"
+            "state" : "translated",
+            "value" : "Nederst til venstre"
           }
         },
         "de" : {
@@ -8404,8 +8404,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Buy me a coffee here, thank you!"
+            "state" : "translated",
+            "value" : "Køb mig en kop kaffe hér, tak!"
           }
         },
         "de" : {
@@ -8596,8 +8596,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Can you even see this?"
+            "state" : "translated",
+            "value" : "Kan man overhovedet se dette?"
           }
         },
         "de" : {
@@ -8786,8 +8786,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Cancel"
+            "state" : "translated",
+            "value" : "Afbryd"
           }
         },
         "de" : {
@@ -8976,8 +8976,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Cannot Add Color"
+            "state" : "translated",
+            "value" : "Kan Ikke tilføje farve"
           }
         },
         "de" : {
@@ -9166,8 +9166,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Cannot Remove Color"
+            "state" : "translated",
+            "value" : "Kan Ikke fjerne farve"
           }
         },
         "de" : {
@@ -9356,8 +9356,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check for Updates"
+            "state" : "translated",
+            "value" : "Søg efter opdateringer"
           }
         },
         "de" : {
@@ -9546,8 +9546,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Close"
+            "state" : "translated",
+            "value" : "Luk"
           }
         },
         "de" : {
@@ -9736,8 +9736,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Close All"
+            "state" : "translated",
+            "value" : "Luk alle"
           }
         },
         "de" : {
@@ -9869,7 +9869,7 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tümünü Kapat"
+            "value" : "Hepsini kapat"
           }
         },
         "uk" : {
@@ -9926,8 +9926,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Colors"
+            "state" : "translated",
+            "value" : "Farver"
           }
         },
         "de" : {
@@ -10116,8 +10116,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Command (⌘)"
+            "state" : "translated",
+            "value" : "Kommando (⌘)"
           }
         },
         "de" : {
@@ -10249,7 +10249,7 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Command (⌘)"
+            "value" : "Komut (⌘)"
           }
         },
         "uk" : {
@@ -10306,8 +10306,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Confirm"
+            "state" : "translated",
+            "value" : "Bekræft"
           }
         },
         "de" : {
@@ -10496,8 +10496,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Contribute translation here!"
+            "state" : "translated",
+            "value" : "Bidrag med oversættelse hér!"
           }
         },
         "de" : {
@@ -10686,8 +10686,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Control (⌃)"
+            "state" : "translated",
+            "value" : "Kontrol (⌃)"
           }
         },
         "de" : {
@@ -10819,7 +10819,7 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Control (⌃)"
+            "value" : "Kontrol (⌃)"
           }
         },
         "uk" : {
@@ -10876,8 +10876,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Current Keybind: %@"
+            "state" : "translated",
+            "value" : "Aktuel tastebinding: %@"
           }
         },
         "de" : {
@@ -11066,8 +11066,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Current Version"
+            "state" : "translated",
+            "value" : "Aktuel version"
           }
         },
         "de" : {
@@ -11257,8 +11257,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Current Version: %@"
+            "state" : "translated",
+            "value" : "Aktuel version: %@"
           }
         },
         "de" : {
@@ -11447,8 +11447,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Custom Application Directories"
+            "state" : "translated",
+            "value" : "Tilpassede app-mapper"
           }
         },
         "de" : {
@@ -11638,8 +11638,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Default"
+            "state" : "translated",
+            "value" : "Standard"
           }
         },
         "de" : {
@@ -11830,8 +11830,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Default (Medium Large)"
+            "state" : "translated",
+            "value" : "Standard (mellemstor)"
           }
         },
         "de" : {
@@ -12020,8 +12020,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dim Unselected Windows"
+            "state" : "translated",
+            "value" : "Nedton ikke-valgte vinduer"
           }
         },
         "de" : {
@@ -12210,8 +12210,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Disconnected Display"
+            "state" : "translated",
+            "value" : "Afbrudt skærm"
           }
         },
         "de" : {
@@ -12400,8 +12400,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Preview Aero Shake Action"
+            "state" : "translated",
+            "value" : "Dock-forhåndsvisning Aero-rystehandling"
           }
         },
         "de" : {
@@ -12590,8 +12590,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Preview Window Hover Action"
+            "state" : "translated",
+            "value" : "Dock-forhåndsvisning vinduessvævehandling"
           }
         },
         "de" : {
@@ -12723,7 +12723,7 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dock Önizleme Penceresi Hover Eylemi"
+            "value" : "Dock Önizleme Penceresi Gezinme Eylemi"
           }
         },
         "uk" : {
@@ -12780,8 +12780,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Previews"
+            "state" : "translated",
+            "value" : "Dock-forhåndsvisninger"
           }
         },
         "de" : {
@@ -12971,8 +12971,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Previews & Window Switcher"
+            "state" : "translated",
+            "value" : "Dock-forhåndsvisninger og Vinduesskifter"
           }
         },
         "de" : {
@@ -13162,8 +13162,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Previews only"
+            "state" : "translated",
+            "value" : "Kun Dock-forhåndsvisninger"
           }
         },
         "de" : {
@@ -13352,8 +13352,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "DockDoor does not record your screen or audio. It only captures static window previews. No information is stored or shared; all processing occurs privately on your device."
+            "state" : "translated",
+            "value" : "DockDoor optager ikke brugerens skærm eller lyd. Den indfanger kun statiske vinduesforhåndsvisninger. Ingen information gemmes eller deles, da al behandling sker lokalt på brugerenheden."
           }
         },
         "de" : {
@@ -13542,8 +13542,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "DockDoor needs screen recording access. In macOS Sequoia, you'll see this prompt every week or month and after reboots. This is a new system-wide security policy for all screen capture apps."
+            "state" : "translated",
+            "value" : "DockDoor behøver adgang til skærmoptagelse. I macOS Sequoia vil man se denne prompt hver uge eller måned, samt efter genstarter. Dette er en ny systemomfattende sikkerhedspolitik for alle skærmoptagelses-apps."
           }
         },
         "de" : {
@@ -13732,8 +13732,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Edit Color"
+            "state" : "translated",
+            "value" : "Redigér farver"
           }
         },
         "de" : {
@@ -13923,8 +13923,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Elements Overlap"
+            "state" : "translated",
+            "value" : "Emneoverlapning"
           }
         },
         "de" : {
@@ -14115,8 +14115,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Embedded"
+            "state" : "translated",
+            "value" : "Indlejret"
           }
         },
         "de" : {
@@ -14305,8 +14305,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable automatic checking for updates"
+            "state" : "translated",
+            "value" : "Aktivér automatisk opdateringstjek"
           }
         },
         "de" : {
@@ -14438,7 +14438,7 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Güncellemeleri otomatik olarak kontrol etmeyi etkinleştir."
+            "value" : "Güncellemeleri otomatik olarak kontrol etmeyi etkinleştir"
           }
         },
         "uk" : {
@@ -14496,8 +14496,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable Hover Window Sliding Animation"
+            "state" : "translated",
+            "value" : "Aktivér Svævevindue, glidende animation"
           }
         },
         "de" : {
@@ -14629,7 +14629,7 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Hover Penceresi Kayan Animasyonunu Etkinleştir"
+            "value" : "Gezinme Penceresi Kayan Animasyonunu Etkinleştir"
           }
         },
         "uk" : {
@@ -14687,8 +14687,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable Preview Window Sliding Animation"
+            "state" : "translated",
+            "value" : "Aktivér Forhåndsvisning, glidende animation"
           }
         },
         "de" : {
@@ -14877,8 +14877,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable Window Switcher"
+            "state" : "translated",
+            "value" : "Aktivér Vinduesskifter"
           }
         },
         "de" : {
@@ -15067,8 +15067,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enabled"
+            "state" : "translated",
+            "value" : "Aktiveret"
           }
         },
         "de" : {
@@ -15257,8 +15257,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enabled Buttons"
+            "state" : "translated",
+            "value" : "Aktiverede knapper"
           }
         },
         "de" : {
@@ -15447,8 +15447,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enhance your dock experience!"
+            "state" : "translated",
+            "value" : "Forbedr dock-oplevelsen!"
           }
         },
         "de" : {
@@ -15637,8 +15637,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enter text to filter"
+            "state" : "translated",
+            "value" : "Angiv tekst at filtrere"
           }
         },
         "de" : {
@@ -15827,8 +15827,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Everything is now set up!"
+            "state" : "translated",
+            "value" : "Alt er nu opsat!"
           }
         },
         "de" : {
@@ -16017,8 +16017,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Example:"
+            "state" : "translated",
+            "value" : "Eks.:"
           }
         },
         "de" : {
@@ -16207,8 +16207,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Exclude windows from capture by filtering specific text in their titles"
+            "state" : "translated",
+            "value" : "Undtag vinduer fra optagelse ved at filtrere bestemt tekst i deres titler"
           }
         },
         "de" : {
@@ -16399,8 +16399,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Extra Extra Small"
+            "state" : "translated",
+            "value" : "Lillelillebitte"
           }
         },
         "de" : {
@@ -16591,8 +16591,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Extra Small"
+            "state" : "translated",
+            "value" : "Ekstra lille"
           }
         },
         "de" : {
@@ -16782,8 +16782,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Filters"
+            "state" : "translated",
+            "value" : "Filtre"
           }
         },
         "de" : {
@@ -16972,8 +16972,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Filters settings"
+            "state" : "translated",
+            "value" : "Filterindstillinger"
           }
         },
         "de" : {
@@ -17162,8 +17162,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Force Quit"
+            "state" : "translated",
+            "value" : "Tving afslutning"
           }
         },
         "de" : {
@@ -17352,8 +17352,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Found a Bug?"
+            "state" : "translated",
+            "value" : "Fundet en fejl?"
           }
         },
         "de" : {
@@ -17542,8 +17542,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Fullscreen"
+            "state" : "translated",
+            "value" : "Fuldskærm"
           }
         },
         "de" : {
@@ -17733,8 +17733,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "General"
+            "state" : "translated",
+            "value" : "Generelt"
           }
         },
         "de" : {
@@ -17923,8 +17923,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "General settings"
+            "state" : "translated",
+            "value" : "Generelle indstillinger"
           }
         },
         "de" : {
@@ -18113,8 +18113,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Get Started"
+            "state" : "translated",
+            "value" : "Kom i gang"
           }
         },
         "de" : {
@@ -18303,8 +18303,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Granted"
+            "state" : "translated",
+            "value" : "Tildelt"
           }
         },
         "de" : {
@@ -18493,8 +18493,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Have an Idea?"
+            "state" : "translated",
+            "value" : "Har en idé?"
           }
         },
         "de" : {
@@ -18684,8 +18684,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Help"
+            "state" : "translated",
+            "value" : "Hjælp"
           }
         },
         "de" : {
@@ -18874,8 +18874,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Help and questions settings"
+            "state" : "translated",
+            "value" : "Indstillinger for hjælp og spørgsmål"
           }
         },
         "de" : {
@@ -19007,7 +19007,7 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Yardım ve soru ayarları"
+            "value" : "Yardım ve ayar soruları"
           }
         },
         "uk" : {
@@ -19064,8 +19064,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Help us improve DockDoor by reporting any issues you encounter."
+            "state" : "translated",
+            "value" : "Hjælp os med at forbedre DockDoor ved at anmelde evt. problemer, som opleves."
           }
         },
         "de" : {
@@ -19256,8 +19256,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hidden"
+            "state" : "translated",
+            "value" : "Skjult"
           }
         },
         "de" : {
@@ -19446,8 +19446,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Highlight Gradient Colors"
+            "state" : "translated",
+            "value" : "Fremhæv farveforløb"
           }
         },
         "de" : {
@@ -19637,8 +19637,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hover Window Open Delay"
+            "state" : "translated",
+            "value" : "Svævevindue, åbn-forsinkelse"
           }
         },
         "de" : {
@@ -19770,7 +19770,7 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Hover Penceresi Açma Gecikmesi"
+            "value" : "Gezinme Penceresi Açma Gecikmesi"
           }
         },
         "uk" : {
@@ -19828,8 +19828,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hover Window Title Style"
+            "state" : "translated",
+            "value" : "Svævevindue, titelstil"
           }
         },
         "de" : {
@@ -19961,7 +19961,7 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Hover Penceresi Başlık Stili"
+            "value" : "Gezinme Penceresi Başlık Stili"
           }
         },
         "uk" : {
@@ -20018,8 +20018,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "If you find DockDoor useful, consider donating. Your support helps keep the project going!"
+            "state" : "translated",
+            "value" : "Finder man DockDoor nyttig, overvej at donere. Enhver støtte hjælper med at holde projektet i gang!"
           }
         },
         "de" : {
@@ -20210,7 +20210,7 @@
         "da" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Hvis du har brug for at få adgang til linjenummeret, skal du åbne appen for at vise det i 10 sekunder."
+            "value" : "Hvis man brug for at få tilgå menubjælkeikonet, start appen for at vise det i 10 sekunder."
           }
         },
         "de" : {
@@ -20399,8 +20399,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Ignore Apps with One Window"
+            "state" : "translated",
+            "value" : "Ignorér apps med ét vindue"
           }
         },
         "de" : {
@@ -20589,8 +20589,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Important: When recording, press ONLY the trigger key (e.g. just press Tab if you want command + Tab). Do not press the initialization key during recording."
+            "state" : "translated",
+            "value" : "Vigtigt: Tryk under optagelse KUN på udløsertasten (f.eks. tryk blot på Fane, hvis kommando + Fane ønskes). Tryk ikke på initialiseringstasten under optagelse."
           }
         },
         "de" : {
@@ -20779,8 +20779,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Include Hidden and Minimized Windows in the Window Switcher"
+            "state" : "translated",
+            "value" : "Inkludér skjulte og minimerede vinduer i Vinduesskifter"
           }
         },
         "de" : {
@@ -20970,7 +20970,7 @@
         "da" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Opsætnings tast"
+            "value" : "Initialiseringstast"
           }
         },
         "de" : {
@@ -21159,8 +21159,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Keep previews visible during lateral movement"
+            "state" : "translated",
+            "value" : "Hold forhåndsvisninger synlige under sideværts bevægelse"
           }
         },
         "de" : {
@@ -21542,7 +21542,7 @@
         "da" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sidst kontrolleret"
+            "value" : "Senest tjekket: %@"
           }
         },
         "de" : {
@@ -21731,8 +21731,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Launch DockDoor at login"
+            "state" : "translated",
+            "value" : "Start DockDoor ved login"
           }
         },
         "de" : {
@@ -21921,8 +21921,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Layout Limits"
+            "state" : "translated",
+            "value" : "Layoutgrænser"
           }
         },
         "de" : {
@@ -22111,8 +22111,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Let's set things up"
+            "state" : "translated",
+            "value" : "Lad os sætte tingene op"
           }
         },
         "de" : {
@@ -22301,8 +22301,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Maximum Horizontal Rows"
+            "state" : "translated",
+            "value" : "Maksimalt antal vandrette rækker"
           }
         },
         "de" : {
@@ -22491,8 +22491,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Maximum number of colors (%lld) reached."
+            "state" : "translated",
+            "value" : "Maksimalt farveantal (%lld) nået."
           }
         },
         "de" : {
@@ -22681,8 +22681,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Maximum Vertical Columns"
+            "state" : "translated",
+            "value" : "Maksimalt antal lodrette kolonner"
           }
         },
         "de" : {
@@ -22873,8 +22873,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Medium"
+            "state" : "translated",
+            "value" : "Mellem"
           }
         },
         "de" : {
@@ -23064,8 +23064,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Menu Bar Icon Hidden"
+            "state" : "translated",
+            "value" : "Menubjælkeikon skjult"
           }
         },
         "de" : {
@@ -23254,8 +23254,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Minimize"
+            "state" : "translated",
+            "value" : "Minimér"
           }
         },
         "de" : {
@@ -23444,8 +23444,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Minimize All"
+            "state" : "translated",
+            "value" : "Minimér alt"
           }
         },
         "de" : {
@@ -23635,8 +23635,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Minimize all windows"
+            "state" : "translated",
+            "value" : "Minimér alle vinduer"
           }
         },
         "de" : {
@@ -23826,8 +23826,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Minimize all windows except the current one"
+            "state" : "translated",
+            "value" : "Minimér alle vinduer undtagen det aktuelle"
           }
         },
         "de" : {
@@ -24016,8 +24016,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Minimum number of colors reached."
+            "state" : "translated",
+            "value" : "Minimum farveantal nået."
           }
         },
         "de" : {
@@ -24206,8 +24206,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Navigate to Settings → Privacy & Security"
+            "state" : "translated",
+            "value" : "Navigér til Indstillinger → Fortrolighed og Sikkerhed"
           }
         },
         "de" : {
@@ -24397,8 +24397,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Never visible"
+            "state" : "translated",
+            "value" : "Aldrig synlig"
           }
         },
         "de" : {
@@ -24587,8 +24587,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Next page"
+            "state" : "translated",
+            "value" : "Næste side"
           }
         },
         "de" : {
@@ -24778,8 +24778,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No action"
+            "state" : "translated",
+            "value" : "Ingen handling"
           }
         },
         "de" : {
@@ -24968,8 +24968,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No custom directories added"
+            "state" : "translated",
+            "value" : "Ingen tilpassede mapper tilføjet"
           }
         },
         "de" : {
@@ -25100,8 +25100,8 @@
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No custom directories added"
+            "state" : "translated",
+            "value" : "Özel Dizin Eklenmedi"
           }
         },
         "uk" : {
@@ -25158,8 +25158,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No filters added"
+            "state" : "translated",
+            "value" : "Ingen filtre tilføjet"
           }
         },
         "de" : {
@@ -25350,8 +25350,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No hover action"
+            "state" : "translated",
+            "value" : "No svævehandling"
           }
         },
         "de" : {
@@ -25540,8 +25540,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No recent checks"
+            "state" : "translated",
+            "value" : "Ingen nylige tjek"
           }
         },
         "de" : {
@@ -25730,8 +25730,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Not %@"
+            "state" : "translated",
+            "value" : "Ikke %@"
           }
         },
         "de" : {
@@ -25921,8 +25921,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Not granted"
+            "state" : "translated",
+            "value" : "Ikke tildelt"
           }
         },
         "de" : {
@@ -26111,7 +26111,7 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "OK"
           }
         },
@@ -26302,8 +26302,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "On window hover; Dimmed until button hover"
+            "state" : "translated",
+            "value" : "Ved vinduessvævning; Nedtonet, indtil knappen svæver"
           }
         },
         "de" : {
@@ -26626,7 +26626,7 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "On window hover; Full opacity"
+            "value" : "Pencere gezinirken; Tam opaklık"
           }
         },
         "uk" : {
@@ -26683,8 +26683,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Only takes effect when dock auto-hide is enabled"
+            "state" : "translated",
+            "value" : "Virker kun, når dock auto-skjul er aktiveret"
           }
         },
         "de" : {
@@ -26874,8 +26874,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open Accessibility Settings"
+            "state" : "translated",
+            "value" : "Åbn Tilgængelighedsindstillinger"
           }
         },
         "de" : {
@@ -27025,7 +27025,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "打开【辅助功能】"
+            "value" : "打开辅助功能设置"
           }
         },
         "zh-Hant" : {
@@ -27065,8 +27065,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open Screen Recording Settings"
+            "state" : "translated",
+            "value" : "Åbn Skærmoptagelsesindstillinger"
           }
         },
         "de" : {
@@ -27216,7 +27216,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "打开【录屏与系统录音】"
+            "value" : "打开录屏与系统录音设置"
           }
         },
         "zh-Hant" : {
@@ -27255,8 +27255,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open Settings"
+            "state" : "translated",
+            "value" : "Åbn Indstillinger"
           }
         },
         "de" : {
@@ -27406,7 +27406,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "打开【系统设置】"
+            "value" : "打开设置"
           }
         },
         "zh-Hant" : {
@@ -27445,8 +27445,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Option (⌥)"
+            "state" : "translated",
+            "value" : "Valgmulighed (⌥)"
           }
         },
         "de" : {
@@ -27636,8 +27636,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Permission error"
+            "state" : "translated",
+            "value" : "Tilladelsesfejl"
           }
         },
         "de" : {
@@ -27827,8 +27827,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Permissions"
+            "state" : "translated",
+            "value" : "Tilladelser"
           }
         },
         "de" : {
@@ -28017,8 +28017,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Permissions settings"
+            "state" : "translated",
+            "value" : "Tilladelsesindstillinger"
           }
         },
         "de" : {
@@ -28207,8 +28207,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Pin to Screen"
+            "state" : "translated",
+            "value" : "Fastgør til skærm"
           }
         },
         "de" : {
@@ -28398,8 +28398,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Pinned to screen"
+            "state" : "translated",
+            "value" : "Fastgjort til skærm"
           }
         },
         "de" : {
@@ -28531,7 +28531,7 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ekrana Sabitlendi"
+            "value" : "Sabitlenmiş Ekran"
           }
         },
         "uk" : {
@@ -28588,8 +28588,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Placement Strategy"
+            "state" : "translated",
+            "value" : "Placeringsstrategi"
           }
         },
         "de" : {
@@ -28779,8 +28779,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Please Quit the App to Apply Changes! :)"
+            "state" : "translated",
+            "value" : "Afslut appen for at anvende ændringerne!"
           }
         },
         "de" : {
@@ -28970,8 +28970,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Please Restart the App to Apply Changes! :)"
+            "state" : "translated",
+            "value" : "Genstart appen for at anvende ændringerne!"
           }
         },
         "de" : {
@@ -29160,8 +29160,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Please restart the application to apply your changes. Click OK to quit the app."
+            "state" : "translated",
+            "value" : "Genstart applikationen for at anvende ændringerne. Klik OK for at afslutte appen."
           }
         },
         "de" : {
@@ -29351,8 +29351,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Popover"
+            "state" : "translated",
+            "value" : "Pop-over"
           }
         },
         "de" : {
@@ -29541,8 +29541,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Position Window Controls"
+            "state" : "translated",
+            "value" : "Placér vindueskontroller"
           }
         },
         "de" : {
@@ -29732,8 +29732,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Present a full size preview of the window"
+            "state" : "translated",
+            "value" : "Præsentér en fuldstørrelses-forhåndsvisning af vinduet"
           }
         },
         "de" : {
@@ -29923,8 +29923,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Press any key combination after holding the initialization key to set the keybind."
+            "state" : "translated",
+            "value" : "Tryk på en tastekombination efter at have holdt initialiseringstasten nede for at indstille tastebindingen."
           }
         },
         "de" : {
@@ -30114,8 +30114,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Press any key to set the keybind."
+            "state" : "translated",
+            "value" : "Tryk på en vilkårlig tast for at indstille tastebindingen."
           }
         },
         "de" : {
@@ -30304,8 +30304,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Press any key..."
+            "state" : "translated",
+            "value" : "Tryk på en vilkårlig tast..."
           }
         },
         "de" : {
@@ -30495,8 +30495,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Press the key combination..."
+            "state" : "translated",
+            "value" : "Tryk på tastekombinationen ..."
           }
         },
         "de" : {
@@ -30685,8 +30685,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Prevent dock from hiding during previews"
+            "state" : "translated",
+            "value" : "Forhindr dock i at skjules under forhåndsvisninger"
           }
         },
         "de" : {
@@ -30875,8 +30875,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Prevents previews from disappearing when moving sideways to adjacent windows"
+            "state" : "translated",
+            "value" : "Forhindrer forhåndsvisninger i at forsvinde ved sidelæns flytning til tilstødende vinduer"
           }
         },
         "de" : {
@@ -31066,8 +31066,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Hover Action"
+            "state" : "translated",
+            "value" : "Forhåndsvis svævehandling"
           }
         },
         "de" : {
@@ -31199,7 +31199,7 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Önizleme Hover Eylemi"
+            "value" : "Gezinme Önizlemesi Eylemi"
           }
         },
         "uk" : {
@@ -31256,8 +31256,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Hover Delay"
+            "state" : "translated",
+            "value" : "Forhåndsvis svæveforsinkelse"
           }
         },
         "de" : {
@@ -31389,7 +31389,7 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Önizleme Hover Gecikmesi"
+            "value" : "Gezinme Önizlemesi Gecikmesi"
           }
         },
         "uk" : {
@@ -31446,8 +31446,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Window Fade Out Duration"
+            "state" : "translated",
+            "value" : "Forhåndsvisning vinduesudtoningsvarighed"
           }
         },
         "de" : {
@@ -31636,8 +31636,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Window Open Delay"
+            "state" : "translated",
+            "value" : "Forhåndsvis vinduesåbningsforsinkelse"
           }
         },
         "de" : {
@@ -31826,8 +31826,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview windows are sized to 1/%lld of your screen dimensions"
+            "state" : "translated",
+            "value" : "Forhåndsvisningsvinduer er dimensioneret til 1/%lld af skærmdimensionerne"
           }
         },
         "de" : {
@@ -32016,8 +32016,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Quit"
+            "state" : "translated",
+            "value" : "Afslut"
           }
         },
         "de" : {
@@ -32207,8 +32207,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Quit App"
+            "state" : "translated",
+            "value" : "Afslut app"
           }
         },
         "de" : {
@@ -32397,8 +32397,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Quit DockDoor"
+            "state" : "translated",
+            "value" : "Afslut DockDoor"
           }
         },
         "de" : {
@@ -32587,8 +32587,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reduce motion"
+            "state" : "translated",
+            "value" : "Reducér bevægelse"
           }
         },
         "de" : {
@@ -32777,8 +32777,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Remove"
+            "state" : "translated",
+            "value" : "Fjern"
           }
         },
         "de" : {
@@ -32967,8 +32967,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Remove All"
+            "state" : "translated",
+            "value" : "Fjern alle"
           }
         },
         "de" : {
@@ -33157,8 +33157,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Report a Bug"
+            "state" : "translated",
+            "value" : "Anmeld en fejl"
           }
         },
         "de" : {
@@ -33347,8 +33347,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Request a Feature"
+            "state" : "translated",
+            "value" : "Foreslå en funktion"
           }
         },
         "de" : {
@@ -33537,8 +33537,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Required for capturing window previews of other apps"
+            "state" : "translated",
+            "value" : "Kræves for at indfange vinduesforhåndsvisninger af andre apps"
           }
         },
         "de" : {
@@ -33727,8 +33727,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Required for dock hover detection and window switcher hotkeys"
+            "state" : "translated",
+            "value" : "Kræves til dock-svævningsdetektering og vinduesskifter-genveje"
           }
         },
         "de" : {
@@ -33860,7 +33860,7 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dock hover algılama ve pencere değiştirici kısayol tuşları için gereklidir."
+            "value" : "Dock gezinme algılama ve pencere değiştirici kısayol tuşları için gereklidir"
           }
         },
         "uk" : {
@@ -33917,8 +33917,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reset"
+            "state" : "translated",
+            "value" : "Nulstilling"
           }
         },
         "de" : {
@@ -34108,8 +34108,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reset All Settings"
+            "state" : "translated",
+            "value" : "Nulstil alle indstillinger"
           }
         },
         "de" : {
@@ -34298,8 +34298,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reset All Settings to Defaults"
+            "state" : "translated",
+            "value" : "Nulstil alle indstillinger til standarværdier"
           }
         },
         "de" : {
@@ -34488,8 +34488,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reset to Defaults"
+            "state" : "translated",
+            "value" : "Nulstil til standard"
           }
         },
         "de" : {
@@ -34678,8 +34678,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Restart app"
+            "state" : "translated",
+            "value" : "Genstart app"
           }
         },
         "de" : {
@@ -34869,8 +34869,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Restart App"
+            "state" : "translated",
+            "value" : "Genstart app"
           }
         },
         "de" : {
@@ -35059,8 +35059,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Restart required"
+            "state" : "translated",
+            "value" : "Genstart kræves"
           }
         },
         "de" : {
@@ -35249,8 +35249,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Right click a color to remove it."
+            "state" : "translated",
+            "value" : "Højreklik på en farve for at fjerne den."
           }
         },
         "de" : {
@@ -35439,8 +35439,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Rounded image corners"
+            "state" : "translated",
+            "value" : "Afrundede billedhjørner"
           }
         },
         "de" : {
@@ -35629,8 +35629,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Screen"
+            "state" : "translated",
+            "value" : "Skærm"
           }
         },
         "de" : {
@@ -35820,8 +35820,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Screen Capturing:"
+            "state" : "translated",
+            "value" : "Skærmfoto:"
           }
         },
         "de" : {
@@ -36010,8 +36010,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Screen recording"
+            "state" : "translated",
+            "value" : "Skærmoptagelse"
           }
         },
         "de" : {
@@ -36201,8 +36201,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Screen Recording Permissions"
+            "state" : "translated",
+            "value" : "Skærmoptagelsestilladelser"
           }
         },
         "de" : {
@@ -36392,8 +36392,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Screen with last active window"
+            "state" : "translated",
+            "value" : "Skærm med seneste aktive vindue"
           }
         },
         "de" : {
@@ -36583,8 +36583,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Screen with mouse"
+            "state" : "translated",
+            "value" : "Skærm med mus"
           }
         },
         "de" : {
@@ -36773,8 +36773,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "seconds"
+            "state" : "translated",
+            "value" : "sekunder"
           }
         },
         "de" : {
@@ -36906,7 +36906,7 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "saniyeler"
+            "value" : "saniye"
           }
         },
         "uk" : {
@@ -36965,8 +36965,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "See a large preview of the window"
+            "state" : "translated",
+            "value" : "Se en stor forhåndsvisning af vinduet"
           }
         },
         "de" : {
@@ -37157,8 +37157,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "See a preview of the window"
+            "state" : "translated",
+            "value" : "Se en forhåndsvisning af vinduet"
           }
         },
         "de" : {
@@ -37347,8 +37347,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "See more..."
+            "state" : "translated",
+            "value" : "Se mere..."
           }
         },
         "de" : {
@@ -37537,8 +37537,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Select which applications can be captured and previewed"
+            "state" : "translated",
+            "value" : "Vælg, hvilke programmer, som kan optages og forhåndsvises"
           }
         },
         "de" : {
@@ -37727,8 +37727,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Set Initialization Key and Keybind"
+            "state" : "translated",
+            "value" : "Sæt initialiseringstast og genvejstast"
           }
         },
         "de" : {
@@ -37917,8 +37917,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Set to 0 for unlimited"
+            "state" : "translated",
+            "value" : "Sæt til 0 for ubegrænset"
           }
         },
         "de" : {
@@ -38050,7 +38050,7 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sınırsız için 0 olarak ayarla."
+            "value" : "Sınırsız için 0'a ayarlayın"
           }
         },
         "uk" : {
@@ -38108,8 +38108,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Shadowed"
+            "state" : "translated",
+            "value" : "Skygget"
           }
         },
         "de" : {
@@ -38298,8 +38298,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show App Name in Dock Previews"
+            "state" : "translated",
+            "value" : "Vis app-navn i Dock-forhåndsvisninger"
           }
         },
         "de" : {
@@ -38488,8 +38488,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Menu Bar Icon"
+            "state" : "translated",
+            "value" : "Vis menubjælkeikon"
           }
         },
         "de" : {
@@ -38678,8 +38678,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Window Title in"
+            "state" : "translated",
+            "value" : "Vis vinduestitel i"
           }
         },
         "de" : {
@@ -38868,8 +38868,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Window Title in Previews"
+            "state" : "translated",
+            "value" : "Vis vinduestitel i forhåndsvisninger"
           }
         },
         "de" : {
@@ -39059,8 +39059,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Window Titles"
+            "state" : "translated",
+            "value" : "Vis vinduestitler"
           }
         },
         "de" : {
@@ -39250,8 +39250,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Window Titles on Previews"
+            "state" : "translated",
+            "value" : "Vis vinduestitel i forhåndsvisninger"
           }
         },
         "de" : {
@@ -39442,8 +39442,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Simulate a click"
+            "state" : "translated",
+            "value" : "Simulér et klik"
           }
         },
         "de" : {
@@ -39575,7 +39575,7 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bir tıklamayı simüle edin"
+            "value" : "Bir tıklamayı taklit edin"
           }
         },
         "uk" : {
@@ -39633,8 +39633,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Simulate a click (open the window)"
+            "state" : "translated",
+            "value" : "Simulér et klik (åbn vinduet)"
           }
         },
         "de" : {
@@ -39766,7 +39766,7 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bir tıklamayı simüle edin (pencereyi açın)"
+            "value" : "Bir tıklamayı taklit edin (pencereyi açın)"
           }
         },
         "uk" : {
@@ -39825,8 +39825,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Small"
+            "state" : "translated",
+            "value" : "Lille"
           }
         },
         "de" : {
@@ -40015,8 +40015,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Sort Window Previews by Date"
+            "state" : "translated",
+            "value" : "Sortér vinduesforhåndsvisninger efter dato"
           }
         },
         "de" : {
@@ -40206,8 +40206,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Start recording keybind"
+            "state" : "translated",
+            "value" : "Start tastetilknytningsoptagelse"
           }
         },
         "de" : {
@@ -40397,8 +40397,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Start Recording Keybind"
+            "state" : "translated",
+            "value" : "Start tastetilknytningsoptagelse"
           }
         },
         "de" : {
@@ -40530,7 +40530,7 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tuş kombinasyonunu kaydetmeye başla"
+            "value" : "Tuş Kombinasyonunu Kaydetmeye Başla"
           }
         },
         "uk" : {
@@ -40587,8 +40587,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Start recording trigger key"
+            "state" : "translated",
+            "value" : "Start udløsertasteoptagelse"
           }
         },
         "de" : {
@@ -40779,8 +40779,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Subatomic"
+            "state" : "translated",
+            "value" : "Subatomar"
           }
         },
         "de" : {
@@ -40969,8 +40969,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Suggest new features to make DockDoor even better."
+            "state" : "translated",
+            "value" : "Foreslå nye forbedrende funktioner til DockDoor."
           }
         },
         "de" : {
@@ -41159,7 +41159,7 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Support DockDoor"
           }
         },
@@ -41292,7 +41292,7 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "DockDoor'u Destekleyin."
+            "value" : "DockDoor'u Destekleyin"
           }
         },
         "uk" : {
@@ -41349,8 +41349,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "The changes to permissions will take effect after restarting."
+            "state" : "translated",
+            "value" : "Tilladelsesændringerne træder i kraft efter genstart."
           }
         },
         "de" : {
@@ -41540,8 +41540,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "The selected positions for Traffic Light Buttons and Window Title will overlap."
+            "state" : "translated",
+            "value" : "De valgte positioner for Trafiklys-knapper og vinduestitel er overlappende."
           }
         },
         "de" : {
@@ -41731,8 +41731,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "This display is currently disconnected. The window switcher will appear on the main display until the selected display is reconnected."
+            "state" : "translated",
+            "value" : "Denne skærm er p.t. frakoblet. Vinduesskifteren vises på hovedskærmen, indtil den valgte skærm er gentilsluttet."
           }
         },
         "de" : {
@@ -41921,8 +41921,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Toggle"
+            "state" : "translated",
+            "value" : "Skift"
           }
         },
         "de" : {
@@ -42111,8 +42111,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Toggle Full Screen"
+            "state" : "translated",
+            "value" : "Fuldskærm til/fra"
           }
         },
         "de" : {
@@ -42302,8 +42302,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Top Left"
+            "state" : "translated",
+            "value" : "Øverst til venstre"
           }
         },
         "de" : {
@@ -42493,8 +42493,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Top Right"
+            "state" : "translated",
+            "value" : "Øverst til højre"
           }
         },
         "de" : {
@@ -42683,8 +42683,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Traffic Light Buttons"
+            "state" : "translated",
+            "value" : "Trafiklys-knapper"
           }
         },
         "de" : {
@@ -42874,8 +42874,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Traffic Light Buttons Position"
+            "state" : "translated",
+            "value" : "Trafiklys-knappositioner"
           }
         },
         "de" : {
@@ -43064,8 +43064,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Traffic Light Buttons Visibility"
+            "state" : "translated",
+            "value" : "Trafiklys-knapsynlighed"
           }
         },
         "de" : {
@@ -43254,8 +43254,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Triggers an action when hovering over a window in a dock preview"
+            "state" : "translated",
+            "value" : "Udløser en handling, når der svæves over et vindue i en dock-forhåndsvisning"
           }
         },
         "de" : {
@@ -43387,7 +43387,7 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bir dock önizlemesinde bir pencerenin üzerine gelindiğinde bir eylemi tetikler."
+            "value" : "Bir dock önizlemesinde bir pencerenin üzerine gelindiğinde bir eylemi tetikler"
           }
         },
         "uk" : {
@@ -43444,8 +43444,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Triggers an action when shaking a window while it is being dragged from a dock preview"
+            "state" : "translated",
+            "value" : "Udløser en handling, når et vindue rystes, mens det trækkes fra en dock-forhåndsvisning"
           }
         },
         "de" : {
@@ -43634,8 +43634,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Un-minimize"
+            "state" : "translated",
+            "value" : "Gendan størrelse"
           }
         },
         "de" : {
@@ -43824,8 +43824,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Up to date"
+            "state" : "translated",
+            "value" : "Opdateret"
           }
         },
         "de" : {
@@ -44014,8 +44014,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Up to Date"
+            "state" : "translated",
+            "value" : "Opdateret"
           }
         },
         "de" : {
@@ -44204,8 +44204,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update available"
+            "state" : "translated",
+            "value" : "Opdatering tilgængelig"
           }
         },
         "de" : {
@@ -44394,8 +44394,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update settings"
+            "state" : "translated",
+            "value" : "Opdatér indstillinger"
           }
         },
         "de" : {
@@ -44585,8 +44585,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Updates"
+            "state" : "translated",
+            "value" : "Opdateringer"
           }
         },
         "de" : {
@@ -44776,8 +44776,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use classic window ordering"
+            "state" : "translated",
+            "value" : "Brug klassisk vinduesrækkefølge"
           }
         },
         "de" : {
@@ -44967,8 +44967,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use default MacOS keybind ⌘ + ⇥"
+            "state" : "translated",
+            "value" : "Brug standard MacOS-tastetilknytning ⌘ + ⇥"
           }
         },
         "de" : {
@@ -45157,8 +45157,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use Monochrome Colors"
+            "state" : "translated",
+            "value" : "Brug monokrome farver"
           }
         },
         "de" : {
@@ -45348,8 +45348,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use Uniform Image Preview Radius"
+            "state" : "translated",
+            "value" : "Brug ensartet billedforhåndsvisningsradius"
           }
         },
         "de" : {
@@ -45539,8 +45539,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use Windows-style window ordering"
+            "state" : "translated",
+            "value" : "Brug Windows-agtig vinduesrækkefølge"
           }
         },
         "de" : {
@@ -45729,8 +45729,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use Windows-style window ordering in the window switcher"
+            "state" : "translated",
+            "value" : "Brug Windows-agtig vinduesrækkefølge i vindueskifteren"
           }
         },
         "de" : {
@@ -45919,7 +45919,7 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Version %@"
           }
         },
@@ -46109,8 +46109,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Want to see for yourself? Review our source code"
+            "state" : "translated",
+            "value" : "Ønsker selv at kigge? Gennemgå vores kildekode"
           }
         },
         "de" : {
@@ -46299,8 +46299,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Want to see the app in your language?"
+            "state" : "translated",
+            "value" : "Ønsker appen på modersmålet?"
           }
         },
         "de" : {
@@ -46489,8 +46489,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Want to support development?"
+            "state" : "translated",
+            "value" : "Ønsker at støtte udviklingen?"
           }
         },
         "de" : {
@@ -46679,8 +46679,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Welcome to DockDoor!"
+            "state" : "translated",
+            "value" : "Velkommen til DockDoor!"
           }
         },
         "de" : {
@@ -46871,8 +46871,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "What is this? A window for ANTS?"
+            "state" : "translated",
+            "value" : "Hvad er dette? Et vindue til ANTS?"
           }
         },
         "de" : {
@@ -47061,8 +47061,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When enabled, all preview images will be cropped to a rounded rectangle."
+            "state" : "translated",
+            "value" : "Når aktiveret beskæres alle forhåndsvisningsbilleder til et afrundet rektangel."
           }
         },
         "de" : {
@@ -47251,8 +47251,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When enabled, dims all windows except those currently under selected."
+            "state" : "translated",
+            "value" : "Når aktiveret nedtones alle vinduer undtagen dem, som aktuelt er valgt."
           }
         },
         "de" : {
@@ -47441,8 +47441,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When enabled, shows the last active window first instead of the current window"
+            "state" : "translated",
+            "value" : "Når aktiveret vises det sidste aktive vindue først i stedet for det aktuelle vindue"
           }
         },
         "de" : {
@@ -47632,8 +47632,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When hovering over the preview"
+            "state" : "translated",
+            "value" : "Når der svæves over forhåndsvisningen"
           }
         },
         "de" : {
@@ -47824,8 +47824,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When Showing Dock Tile Previews"
+            "state" : "translated",
+            "value" : "Ved Dock-fliseforhåndsvisninger"
           }
         },
         "de" : {
@@ -48016,8 +48016,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When Using Window Switcher"
+            "state" : "translated",
+            "value" : "Ved brug af Vinduesskifter"
           }
         },
         "de" : {
@@ -48206,8 +48206,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When you click the button below, DockDoor will restart and move to the menu bar to run in the background."
+            "state" : "translated",
+            "value" : "Når man klikker på knappen nedenfor, vil DockDoor genstarte og flytte til menubjælken for at køre i baggrunden."
           }
         },
         "de" : {
@@ -48397,8 +48397,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Why we need permissions"
+            "state" : "translated",
+            "value" : "Hvorfor vi behøver tilladelser"
           }
         },
         "de" : {
@@ -48587,8 +48587,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Buffer"
+            "state" : "translated",
+            "value" : "Vinduesbuffer"
           }
         },
         "de" : {
@@ -48778,8 +48778,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Cache Lifespan"
+            "state" : "translated",
+            "value" : "Vindues-cache levetid"
           }
         },
         "de" : {
@@ -48968,8 +48968,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Image Cache Lifespan"
+            "state" : "translated",
+            "value" : "Vinduesbilled-cache levetid"
           }
         },
         "de" : {
@@ -49158,8 +49158,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Image Resolution Scale (higher means lower resolution)"
+            "state" : "translated",
+            "value" : "Vinduesbilledopløsningsskala (højere betyder lavere opløsning)"
           }
         },
         "de" : {
@@ -49348,8 +49348,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Preview Layout"
+            "state" : "translated",
+            "value" : "Vinduesforhåndsvisningslayout"
           }
         },
         "de" : {
@@ -49539,8 +49539,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Preview Layout Limits"
+            "state" : "translated",
+            "value" : "Vinduesforhåndsvisningslayoutgrænser"
           }
         },
         "de" : {
@@ -49729,8 +49729,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Preview Size"
+            "state" : "translated",
+            "value" : "Vinduesforhåndsvisningsstørrelse"
           }
         },
         "de" : {
@@ -49919,8 +49919,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Selection Background Color"
+            "state" : "translated",
+            "value" : "Vinduesmarkeringsbaggrundsfarve"
           }
         },
         "de" : {
@@ -50109,8 +50109,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Selection Background Opacity"
+            "state" : "translated",
+            "value" : "Vinduesmarkeringsbaggrundsopacitet"
           }
         },
         "de" : {
@@ -50242,7 +50242,7 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Window Selection Background Opaklığı"
+            "value" : "Pencere Seçimi Arkaplan Opaklığı"
           }
         },
         "uk" : {
@@ -50300,8 +50300,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Size"
+            "state" : "translated",
+            "value" : "Vinduesstørrelse"
           }
         },
         "de" : {
@@ -50491,8 +50491,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Switcher"
+            "state" : "translated",
+            "value" : "Vindueskifter"
           }
         },
         "de" : {
@@ -50682,8 +50682,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Switcher only"
+            "state" : "translated",
+            "value" : "Kun Vindueskifter"
           }
         },
         "de" : {
@@ -50872,8 +50872,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Switcher Placement"
+            "state" : "translated",
+            "value" : "Vinduesskifter-placering"
           }
         },
         "de" : {
@@ -51062,8 +51062,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window title filters"
+            "state" : "translated",
+            "value" : "Vinduestitelfiltre"
           }
         },
         "de" : {
@@ -51252,8 +51252,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Title Position"
+            "state" : "translated",
+            "value" : "Vinduestitelposition"
           }
         },
         "de" : {
@@ -51442,8 +51442,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Title Visibility"
+            "state" : "translated",
+            "value" : "Vinduestitelsynlighed"
           }
         },
         "de" : {
@@ -51632,8 +51632,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Windows switching settings"
+            "state" : "translated",
+            "value" : "Indstillinger for vinduesskiftning"
           }
         },
         "de" : {
@@ -51823,8 +51823,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "You need to give DockDoor access to the accessibility API in order for it to function."
+            "state" : "translated",
+            "value" : "DockDoor skal for at kunne fungere tildeles adgang til tilgængeligheds-API'en."
           }
         },
         "de" : {
@@ -52013,8 +52013,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Your app is on version %@"
+            "state" : "translated",
+            "value" : "Appen har version %@"
           }
         },
         "de" : {
@@ -52203,8 +52203,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Your traffic lights will be set to disabled automatically."
+            "state" : "translated",
+            "value" : "Trafiklys opsættes til at deaktivere automatisk."
           }
         },
         "de" : {
@@ -52393,7 +52393,7 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Z"
           }
         },
