@@ -3148,7 +3148,7 @@
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "손쉬운사용:"
+            "value" : "손쉬운 사용:"
           }
         },
         "nl" : {
@@ -3337,8 +3337,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add"
+            "state" : "translated",
+            "value" : "추가"
           }
         },
         "nl" : {
@@ -3527,8 +3527,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add additional directories to scan for applications"
+            "state" : "translated",
+            "value" : "응용 프로그램을 검색할 경로를 추가하세요"
           }
         },
         "nl" : {
@@ -3717,8 +3717,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add Directory"
+            "state" : "translated",
+            "value" : "경로 추가"
           }
         },
         "nl" : {
@@ -3907,8 +3907,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add Filter"
+            "state" : "translated",
+            "value" : "필터 추가"
           }
         },
         "nl" : {
@@ -12282,8 +12282,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Disconnected Display"
+            "state" : "translated",
+            "value" : "연결 해제된 디스플레이"
           }
         },
         "nl" : {
@@ -12852,8 +12852,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Previews"
+            "state" : "translated",
+            "value" : "독 미리 보기"
           }
         },
         "nl" : {
@@ -15329,8 +15329,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enabled Buttons"
+            "state" : "translated",
+            "value" : "활성화된 버튼"
           }
         },
         "nl" : {
@@ -17044,8 +17044,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Filters settings"
+            "state" : "translated",
+            "value" : "필터 설정"
           }
         },
         "nl" : {
@@ -17234,8 +17234,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Force Quit"
+            "state" : "translated",
+            "value" : "강제 종료"
           }
         },
         "nl" : {
@@ -17614,8 +17614,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Fullscreen"
+            "state" : "translated",
+            "value" : "전체 화면"
           }
         },
         "nl" : {
@@ -21993,8 +21993,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Layout Limits"
+            "state" : "translated",
+            "value" : "레이아웃 제한"
           }
         },
         "nl" : {
@@ -28660,8 +28660,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Placement Strategy"
+            "state" : "translated",
+            "value" : "배치 방향"
           }
         },
         "nl" : {
@@ -33419,8 +33419,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Request a Feature"
+            "state" : "translated",
+            "value" : "새로운 기능 요청"
           }
         },
         "nl" : {
@@ -40659,8 +40659,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Start recording trigger key"
+            "state" : "translated",
+            "value" : "녹화 시작 키 설정"
           }
         },
         "nl" : {
@@ -41041,8 +41041,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Suggest new features to make DockDoor even better."
+            "state" : "translated",
+            "value" : "DockDoor를 더욱 발전시키기 위한 새로운 기능을 제안해 주세요."
           }
         },
         "nl" : {
