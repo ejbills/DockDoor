@@ -25,7 +25,7 @@ body.dark-mode {
     --text-primary: #f5f5f7;
     --text-secondary: #a1a1a6;
     --background-primary: #1d1d1f;
-    --background-secondary: #2d2d2f;
+    --background-secondary: #2a2a2c;
     --accent-color: #0a84ff;
 }
 
@@ -353,6 +353,10 @@ body.dark-mode .design-img {
 .mockup-section {
     padding: 50px 0;
     text-align: center;
+    background: linear-gradient(180deg, var(--background-primary) 0%, var(--background-secondary) 100%);
+}
+
+body.dark-mode .mockup-section {
     background: linear-gradient(180deg, var(--background-primary) 0%, var(--background-secondary) 100%);
 }
 
