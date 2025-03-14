@@ -1,27 +1,45 @@
-document.addEventListener('DOMContentLoaded', function () {
-    const toggleDarkModeButton = document.getElementById('toggleDarkMode');
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleButton = document.getElementById('toggleDarkMode');
     const darkModeIcon = document.getElementById('darkModeIcon');
-    const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const savedTheme = localStorage.getItem('theme');
-
-    // If user already has saved setting
-    if (savedTheme) {
-        document.body.classList.toggle('dark-mode', savedTheme === 'dark');
-        darkModeIcon.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
-    } else if (prefersDarkMode) {
-        // Else, use system setting
-        document.body.classList.add('dark-mode');
-        darkModeIcon.textContent = '☀️';
-    } else {
-        darkModeIcon.textContent = '🌙';
-    }
-
-    toggleDarkModeButton.addEventListener('click', function () {
-        document.body.classList.toggle('dark-mode');
-        const theme = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
-        localStorage.setItem('theme', theme);
     
-        // Change icon according to current theme
-        darkModeIcon.textContent = theme === 'dark' ? '☀️' : '🌙';
+    // Check for saved dark mode preference or respect OS preference
+    const prefersDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const savedMode = localStorage.getItem('darkMode');
+    
+    // Set initial icon
+    function updateDarkModeIcon(isDarkMode) {
+        darkModeIcon.innerHTML = isDarkMode ? '☀️' : '🌙';
+    }
+    
+    // Apply dark mode if saved or OS preference is dark
+    if (savedMode === 'true' || (savedMode === null && prefersDarkMode)) {
+        document.body.classList.add('dark-mode');
+        updateDarkModeIcon(true);
+    } else {
+        updateDarkModeIcon(false);
+    }
+    
+    // Toggle dark mode on button click
+    toggleButton.addEventListener('click', function() {
+        document.body.classList.toggle('dark-mode');
+        const isDarkMode = document.body.classList.contains('dark-mode');
+        localStorage.setItem('darkMode', isDarkMode);
+        updateDarkModeIcon(isDarkMode);
     });
+    
+    // Listen for system preference changes
+    if (window.matchMedia) {
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+            // Only apply if user hasn't manually set a preference
+            if (localStorage.getItem('darkMode') === null) {
+                if (e.matches) {
+                    document.body.classList.add('dark-mode');
+                    updateDarkModeIcon(true);
+                } else {
+                    document.body.classList.remove('dark-mode');
+                    updateDarkModeIcon(false);
+                }
+            }
+        });
+    }
 });
