@@ -48,5 +48,18 @@
     "faqA4-2": "Dacă nu, pur și simplu apasă pe pictograma din bara de meniu și selectează <pre class='inline'><em><strong>Deschide Setări</strong></em></pre>. Fereastra de setări trebuie să apară acum.",
     "faqDocumentation": "Nu găsești răspunsul tău? Te rugăm să cauți în problemele din arhiva GitHub, iar într-o ultimă instanță să deschizi unul nou care să îți descrie problema.",
     "windowDragHeading": "Repoziţionează ferestrele cu uşurinţă",
-    "windowDragText": "Trage ferestrele direct din previzualizările DockDoor pentru a le repoziționa"
+    "windowDragText": "Trage ferestrele direct din previzualizările DockDoor pentru a le repoziționa",
+    "featuresHeading": "DockDoor Features",
+    "featurePreviewsTitle": "Window Previews",
+    "featurePreviewsText": "See window previews when hovering over dock icons, just like Windows 10.",
+    "featureManagementTitle": "Window Management",
+    "featureManagementText": "Close, minimize, and maximize windows directly from the dock preview.",
+    "featureSwitcherTitle": "App Switcher",
+    "featureSwitcherText": "Windows-style Alt+Tab application switching for better multitasking.",
+    "featureCustomizableTitle": "Customizable",
+    "featureCustomizableText": "Adjust preview appearance and behavior to match your workflow.",
+    "featureLightweightTitle": "Lightweight",
+    "featureLightweightText": "Minimal resource usage to keep your Mac running smoothly.",
+    "featurePrivacyTitle": "Privacy Focused",
+    "featurePrivacyText": "No tracking, no analytics, no data collection - your activity stays private."
 }

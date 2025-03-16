@@ -48,5 +48,18 @@
     "faqA4-2": "If not, simply click on the menu bar icon and select <pre class='inline'><em><strong>Open Settings</strong></em></pre>. The settings window should now appear.",
     "faqDocumentation": "Didn’t find your answer? Please search in the issues on the GitHub repository, and in a last resort open a new one describing your problem.",
     "windowDragHeading": "Reposition windows with ease",
-    "windowDragText": "Drag windows directly from DockDoor previews to reposition them"
+    "windowDragText": "Drag windows directly from DockDoor previews to reposition them",
+    "featuresHeading": "DockDoor Features",
+    "featurePreviewsTitle": "Window Previews",
+    "featurePreviewsText": "See window previews when hovering over dock icons, just like Windows 10.",
+    "featureManagementTitle": "Window Management",
+    "featureManagementText": "Close, minimize, and maximize windows directly from the dock preview.",
+    "featureSwitcherTitle": "App Switcher",
+    "featureSwitcherText": "Windows-style Alt+Tab application switching for better multitasking.",
+    "featureCustomizableTitle": "Customizable",
+    "featureCustomizableText": "Adjust preview appearance and behavior to match your workflow.",
+    "featureLightweightTitle": "Lightweight",
+    "featureLightweightText": "Minimal resource usage to keep your Mac running smoothly.",
+    "featurePrivacyTitle": "Privacy Focused",
+    "featurePrivacyText": "No tracking, no analytics, no data collection - your activity stays private."
 }
