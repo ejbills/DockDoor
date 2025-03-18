@@ -48,5 +48,18 @@
     "faqA4-2": "Si non, cliquez simplement sur l’icône de la barre des menus et sélectionnez <pre class='inline'><em><strong>Ouvrir les réglages</strong></em></pre>. Les paramètres devraient alors s’afficher.",
     "faqDocumentation": "Vous n’avez pas trouvé de réponse&nbsp;? Veuillez chercher parmi les problèmes (<em>issues</em>) sur le dépôt GitHub, et en dernier ressort, ouvrez-en un nouveau décrivant votre problème.",
     "windowDragHeading": "Repositionner facilement les fenêtres",
-    "windowDragText": "Faites glisser les fenêtres directement depuis les aperçus de DockDoor pour les repositionner"
+    "windowDragText": "Faites glisser les fenêtres directement depuis les aperçus de DockDoor pour les repositionner",
+    "featuresHeading": "DockDoor Features",
+    "featurePreviewsTitle": "Window Previews",
+    "featurePreviewsText": "See window previews when hovering over dock icons, just like Windows 10.",
+    "featureManagementTitle": "Window Management",
+    "featureManagementText": "Close, minimize, and maximize windows directly from the dock preview.",
+    "featureSwitcherTitle": "App Switcher",
+    "featureSwitcherText": "Windows-style Alt+Tab application switching for better multitasking.",
+    "featureCustomizableTitle": "Customizable",
+    "featureCustomizableText": "Adjust preview appearance and behavior to match your workflow.",
+    "featureLightweightTitle": "Lightweight",
+    "featureLightweightText": "Minimal resource usage to keep your Mac running smoothly.",
+    "featurePrivacyTitle": "Privacy Focused",
+    "featurePrivacyText": "No tracking, no analytics, no data collection - your activity stays private."
 }
