@@ -207,8 +207,8 @@
         },
         "ca" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : " - Inactive"
+            "state" : "translated",
+            "value" : "Inactiu"
           }
         },
         "cs" : {
@@ -589,8 +589,8 @@
         },
         "ca" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "• Enables real-time interaction with dock items"
+            "state" : "translated",
+            "value" : "Permet la interacció en temps real amb els elements del \"dock\""
           }
         },
         "cs" : {
@@ -780,8 +780,8 @@
         },
         "ca" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "• To capture previews of images and windows"
+            "state" : "translated",
+            "value" : "Per capturar previsualitzacions d’imatges i finestres"
           }
         },
         "cs" : {
@@ -971,8 +971,8 @@
         },
         "ca" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "• To detect when you hover over the dock"
+            "state" : "translated",
+            "value" : "Per detectar quan el cursor passa pel damunt del \"dock\""
           }
         },
         "cs" : {
@@ -1161,8 +1161,8 @@
         },
         "ca" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "• When hovering over the Dock at the bottom, windows flow in rows from left to right"
+            "state" : "translated",
+            "value" : "Quan el cursor es troba sobre el dock inferior, les finestres es mostren en files d’esquerra a dreta"
           }
         },
         "cs" : {
@@ -1351,8 +1351,8 @@
         },
         "ca" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "• When hovering over the Dock on the sides, windows flow in columns from top to bottom"
+            "state" : "translated",
+            "value" : "Quan el cursor passa pel \"dock\" situat als costats, les finestres es mostren en columnes verticals de dalt a baix"
           }
         },
         "cs" : {
@@ -1541,8 +1541,8 @@
         },
         "ca" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "• When using the Window Switcher, windows always flow in rows from left to right"
+            "state" : "translated",
+            "value" : "Quan utilitzes el commutador de finestres, les finestres sempre es disposen en files d’esquerra a dreta"
           }
         },
         "cs" : {
@@ -1731,8 +1731,8 @@
         },
         "ca" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "1. Select \"Command (⌘)\" as the initialization key."
+            "state" : "translated",
+            "value" : "1. Selecciona “Command (⌘)” com a tecla d’inicialització."
           }
         },
         "cs" : {
@@ -1921,8 +1921,8 @@
         },
         "ca" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "1/%lldx"
+            "state" : "translated",
+            "value" : ""
           }
         },
         "cs" : {
@@ -2111,8 +2111,8 @@
         },
         "ca" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "2. Click \"Start Recording Trigger Key\"."
+            "state" : "translated",
+            "value" : "2. Fes clic a “Inicia la gravació de la tecla d’activació”."
           }
         },
         "cs" : {
@@ -2301,8 +2301,8 @@
         },
         "ca" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "3. Press ONLY the Tab key (not Command+Tab)."
+            "state" : "translated",
+            "value" : "3. Prem NOMÉS la tecla Tab (no Command+Tab)."
           }
         },
         "cs" : {
@@ -2491,8 +2491,8 @@
         },
         "ca" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "4. Your keybind will be set to Command+Tab."
+            "state" : "translated",
+            "value" : "4. La teva tecla de drecera quedarà configurada com a Command+Tab."
           }
         },
         "cs" : {
@@ -2681,8 +2681,8 @@
         },
         "ca" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Accessibility"
+            "state" : "translated",
+            "value" : "Accessibilitat"
           }
         },
         "cs" : {
@@ -2872,8 +2872,8 @@
         },
         "ca" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Accessibility Permissions"
+            "state" : "translated",
+            "value" : "Permisos d’accessibilitat"
           }
         },
         "cs" : {
@@ -3063,8 +3063,8 @@
         },
         "ca" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Accessibility:"
+            "state" : "translated",
+            "value" : "Accessibilitat:"
           }
         },
         "cs" : {
@@ -3253,8 +3253,8 @@
         },
         "ca" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add"
+            "state" : "translated",
+            "value" : "Afegeix"
           }
         },
         "cs" : {
@@ -3443,8 +3443,8 @@
         },
         "ca" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add additional directories to scan for applications"
+            "state" : "translated",
+            "value" : "Afegeix directoris addicionals per escanejar aplicacions"
           }
         },
         "cs" : {
@@ -3633,8 +3633,8 @@
         },
         "ca" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add Directory"
+            "state" : "translated",
+            "value" : "Afegeix Directori"
           }
         },
         "cs" : {
@@ -3823,8 +3823,8 @@
         },
         "ca" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add Filter"
+            "state" : "translated",
+            "value" : "Afegir filtre"
           }
         },
         "cs" : {
@@ -4013,8 +4013,8 @@
         },
         "ca" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Adjust this if the preview is misaligned with dock"
+            "state" : "translated",
+            "value" : "Ajusta-ho si la previsualització no està alineada amb el \"dock\""
           }
         },
         "cs" : {
@@ -4204,8 +4204,8 @@
         },
         "ca" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Aero Shake Action"
+            "state" : "translated",
+            "value" : "Acció d’Aero Shake"
           }
         },
         "cs" : {
@@ -4394,8 +4394,8 @@
         },
         "ca" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "All buttons removed"
+            "state" : "translated",
+            "value" : "Tots els botons eliminats"
           }
         },
         "cs" : {
@@ -4586,8 +4586,8 @@
         },
         "ca" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Always"
+            "state" : "translated",
+            "value" : "Sempre"
           }
         },
         "cs" : {
@@ -4777,8 +4777,8 @@
         },
         "ca" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Always visible"
+            "state" : "translated",
+            "value" : "Sempre visible"
           }
         },
         "cs" : {
@@ -4968,8 +4968,8 @@
         },
         "ca" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Always visible; Full opacity"
+            "state" : "translated",
+            "value" : "Sempre visible; Totalment opac"
           }
         },
         "cs" : {
@@ -5158,8 +5158,8 @@
         },
         "ca" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "amount"
+            "state" : "translated",
+            "value" : "quantitat"
           }
         },
         "cs" : {
@@ -5348,8 +5348,8 @@
         },
         "ca" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Animation speed"
+            "state" : "translated",
+            "value" : "Velocitat d'animació"
           }
         },
         "cs" : {
@@ -5538,8 +5538,8 @@
         },
         "ca" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "App Name Style"
+            "state" : "translated",
+            "value" : "Estil del nom de l’aplicació"
           }
         },
         "cs" : {
@@ -5729,8 +5729,8 @@
         },
         "ca" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Appearance"
+            "state" : "translated",
+            "value" : "Aparença"
           }
         },
         "cs" : {
@@ -5919,8 +5919,8 @@
         },
         "ca" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Appearance settings"
+            "state" : "translated",
+            "value" : "Configuració de l’aparença"
           }
         },
         "cs" : {
@@ -6109,8 +6109,8 @@
         },
         "ca" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Application filters"
+            "state" : "translated",
+            "value" : "Filtres d’aplicacions"
           }
         },
         "cs" : {
@@ -6299,8 +6299,8 @@
         },
         "ca" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Are you sure you want to proceed?"
+            "state" : "translated",
+            "value" : "Estàs segur que vols procedir?"
           }
         },
         "cs" : {
@@ -6489,8 +6489,8 @@
         },
         "ca" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Are you sure you want to reset all settings to their default values?"
+            "state" : "translated",
+            "value" : "Estàs segur que vols restablir tots els paràmetres als seus valors predeterminats?"
           }
         },
         "cs" : {
@@ -6679,8 +6679,8 @@
         },
         "ca" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "At bottom - Controls on left, title on right"
+            "state" : "translated",
+            "value" : "A la part inferior – Controls a l’esquerra, títol a la dreta"
           }
         },
         "cs" : {
@@ -6869,8 +6869,8 @@
         },
         "ca" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "At bottom - Title on left, controls on right"
+            "state" : "translated",
+            "value" : "A la part inferior – Títol a l’esquerra, controls a la dreta"
           }
         },
         "cs" : {
@@ -7059,8 +7059,8 @@
         },
         "ca" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "At top - Controls on left, title on right"
+            "state" : "translated",
+            "value" : "A la part superior – Controls a l’esquerra, títol a la dreta"
           }
         },
         "cs" : {
@@ -7249,8 +7249,8 @@
         },
         "ca" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "At top - Title on left, controls on right"
+            "state" : "translated",
+            "value" : "A la part superior – Títol a l’esquerra, controls a la dreta"
           }
         },
         "cs" : {
@@ -7439,8 +7439,8 @@
         },
         "ca" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Automatic Updates"
+            "state" : "translated",
+            "value" : "Actualitzacions automàtiques"
           }
         },
         "cs" : {
@@ -7630,8 +7630,8 @@
         },
         "ca" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Automatically check for updates"
+            "state" : "translated",
+            "value" : "Comprova automàticament les actualitzacions"
           }
         },
         "cs" : {
@@ -7820,8 +7820,8 @@
         },
         "ca" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Blur amount"
+            "state" : "translated",
+            "value" : "Quantitat de difuminat"
           }
         },
         "cs" : {
@@ -8011,8 +8011,8 @@
         },
         "ca" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Bottom Left"
+            "state" : "translated",
+            "value" : "Part inferior esquerra"
           }
         },
         "cs" : {
@@ -8202,8 +8202,8 @@
         },
         "ca" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Bottom Right"
+            "state" : "translated",
+            "value" : "Part inferior dreta"
           }
         },
         "cs" : {
@@ -8392,8 +8392,8 @@
         },
         "ca" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Buy me a coffee here, thank you!"
+            "state" : "translated",
+            "value" : "Convida’m a un cafè aquí, gràcies!"
           }
         },
         "cs" : {
@@ -8584,8 +8584,8 @@
         },
         "ca" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Can you even see this?"
+            "state" : "translated",
+            "value" : "Fins i tot pots veure això?"
           }
         },
         "cs" : {
@@ -8774,8 +8774,8 @@
         },
         "ca" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Cancel"
+            "state" : "translated",
+            "value" : "Cancel·lar"
           }
         },
         "cs" : {
@@ -8964,8 +8964,8 @@
         },
         "ca" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Cannot Add Color"
+            "state" : "translated",
+            "value" : "No es pot afegir el color"
           }
         },
         "cs" : {
@@ -9154,8 +9154,8 @@
         },
         "ca" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Cannot Remove Color"
+            "state" : "translated",
+            "value" : "No es pot eliminar el color"
           }
         },
         "cs" : {
@@ -9344,8 +9344,8 @@
         },
         "ca" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Check for Updates"
+            "state" : "translated",
+            "value" : "Comprova si hi ha actualitzacions"
           }
         },
         "cs" : {
@@ -9534,8 +9534,8 @@
         },
         "ca" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Close"
+            "state" : "translated",
+            "value" : "Tancar"
           }
         },
         "cs" : {
@@ -9724,8 +9724,8 @@
         },
         "ca" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Close All"
+            "state" : "translated",
+            "value" : "Tancar-ho tot"
           }
         },
         "cs" : {
