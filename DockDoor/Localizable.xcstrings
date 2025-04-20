@@ -12810,8 +12810,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Previews"
+            "state" : "translated",
+            "value" : "Aperçu du dock"
           }
         },
         "he" : {
@@ -15287,8 +15287,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enabled Buttons"
+            "state" : "translated",
+            "value" : "Boutons activés"
           }
         },
         "he" : {
@@ -17572,8 +17572,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Fullscreen"
+            "state" : "translated",
+            "value" : "Plein écran"
           }
         },
         "he" : {
@@ -23665,8 +23665,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Minimize all windows"
+            "state" : "translated",
+            "value" : "Minimiser toutes les fenêtres"
           }
         },
         "he" : {
@@ -25760,8 +25760,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Not %@"
+            "state" : "translated",
+            "value" : "Pas %@"
           }
         },
         "he" : {
@@ -32617,8 +32617,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reduce motion"
+            "state" : "translated",
+            "value" : "Réduction des animations"
           }
         },
         "he" : {
@@ -35469,8 +35469,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Rounded image corners"
+            "state" : "translated",
+            "value" : "Coins de l'image arrondis"
           }
         },
         "he" : {
@@ -35659,8 +35659,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Screen"
+            "state" : "translated",
+            "value" : "Écran"
           }
         },
         "he" : {
@@ -42713,8 +42713,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Traffic Light Buttons"
+            "state" : "translated",
+            "value" : "Boutons feux tricolores"
           }
         },
         "he" : {
@@ -43284,8 +43284,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Triggers an action when hovering over a window in a dock preview"
+            "state" : "translated",
+            "value" : "Déclenche une action lors du survol d'une fenêtre dans un aperçu du dock"
           }
         },
         "he" : {
@@ -43474,8 +43474,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Triggers an action when shaking a window while it is being dragged from a dock preview"
+            "state" : "translated",
+            "value" : "Déclenche une action en secouant une fenêtre pendant qu'elle est déplacée depuis un aperçu du dock"
           }
         },
         "he" : {
@@ -45187,8 +45187,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use Monochrome Colors"
+            "state" : "translated",
+            "value" : "Utiliser des couleurs monochromes"
           }
         },
         "he" : {
@@ -47091,8 +47091,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When enabled, all preview images will be cropped to a rounded rectangle."
+            "state" : "translated",
+            "value" : "Lorsque cette option est activée, tous les aperçus d'images seront recadrées sur un rectangle arrondi."
           }
         },
         "he" : {
