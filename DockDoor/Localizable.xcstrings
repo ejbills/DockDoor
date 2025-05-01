@@ -237,8 +237,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : " - Inactive"
+            "state" : "translated",
+            "value" : "Inactivo"
           }
         },
         "fi" : {
@@ -1571,8 +1571,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "• When using the Window Switcher, windows always flow in rows from left to right"
+            "state" : "translated",
+            "value" : "• Cuando se utiliza el conmutador de ventanas, las ventanas siempre fluyen en registros de izquierda a derecha"
           }
         },
         "fi" : {
@@ -6709,8 +6709,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "At bottom - Controls on left, title on right"
+            "state" : "translated",
+            "value" : ""
           }
         },
         "fi" : {
@@ -17560,8 +17560,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Fullscreen"
+            "state" : "translated",
+            "value" : "Pantalla Completa"
           }
         },
         "fi" : {
@@ -29750,8 +29750,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Present a full size preview of the window"
+            "state" : "translated",
+            "value" : "Presentar una vista previa de tamaño completo de la ventana"
           }
         },
         "fi" : {
@@ -41749,8 +41749,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "This display is currently disconnected. The window switcher will appear on the main display until the selected display is reconnected."
+            "state" : "translated",
+            "value" : "Esta pantalla está actualmente desconectada. El interruptor de ventana aparecerá en la pantalla principal hasta que la pantalla seleccionada se vuelva a conectar."
           }
         },
         "fi" : {
@@ -51080,8 +51080,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window title filters"
+            "state" : "translated",
+            "value" : "Filtros de título de ventana"
           }
         },
         "fi" : {
