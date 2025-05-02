@@ -192,14 +192,11 @@ struct WindowSizeSliderView: View {
     @Default(.sizingMultiplier) var sizingMultiplier
 
     private var visualScaleFactor: CGFloat {
-        let maxWidth: CGFloat = 600 // Parent box width minus padding
-        let maxHeight: CGFloat = 120 // Reasonable height within the box
-
+        let maxWidth: CGFloat = 450
+        let maxHeight: CGFloat = 120
         let widthScale = maxWidth / optimisticScreenSizeWidth
         let heightScale = maxHeight / optimisticScreenSizeHeight
-
-        // Use the smaller scale to ensure it fits in both dimensions
-        return min(widthScale, heightScale) * 0.9 // 0.9 to leave some margin
+        return min(widthScale, heightScale) * 0.9
     }
 
     private var scaledPreviewSize: CGSize {
@@ -223,45 +220,72 @@ struct WindowSizeSliderView: View {
         )
     }
 
+    private func getSizeDescription(_ value: Int) -> String {
+        switch value {
+        case 2: String(localized: "Large (1/2)")
+        case 3, 4: String(localized: "Medium (1/\(value))")
+        case 5, 6: String(localized: "Small (1/\(value))")
+        default: String(localized: "Tiny (1/\(value))")
+        }
+    }
+
     var body: some View {
-        VStack(alignment: .leading) {
-            ZStack(alignment: .center) {
-                // Screen outline
+        HStack(alignment: .top, spacing: 24) {
+            ZStack {
                 RoundedRectangle(cornerRadius: 16, style: .continuous)
-                    .stroke(Color.gray, lineWidth: 2)
+                    .stroke(Color.gray.opacity(0.5), lineWidth: 1)
                     .frame(width: visualScreenSize.width, height: visualScreenSize.height)
                     .overlay(
-                        Text("Screen")
+                        Text(String(localized: "Screen"))
                             .font(.caption)
                             .foregroundColor(.gray)
                             .padding(.top, 4),
                         alignment: .top
                     )
 
-                // Preview window
                 Rectangle()
                     .fill(Color.blue.opacity(0.35))
                     .frame(width: visualPreviewSize.width, height: visualPreviewSize.height)
                     .clipShape(RoundedRectangle(cornerRadius: 5))
             }
-            .frame(maxWidth: visualScreenSize.width)
-            .padding(.horizontal, 4)
 
-            HStack {
-                Slider(value: $sizingMultiplier, in: 2 ... 10, step: 1) {
-                    Text("Window Preview Size")
+            VStack(alignment: .leading, spacing: 8) {
+                Text(String(localized: "Preview Size"))
+                    .foregroundColor(.secondary)
+                    .padding(.bottom, 4)
+
+                Menu {
+                    ForEach(2 ... 10, id: \.self) { value in
+                        Button(action: { sizingMultiplier = Double(value) }) {
+                            HStack {
+                                Rectangle()
+                                    .fill(Color.accentColor.opacity(0.2))
+                                    .frame(width: 60 / Double(value), height: 16)
+                                    .cornerRadius(2)
+
+                                Text(getSizeDescription(value))
+                                    .frame(width: 100, alignment: .leading)
+
+                                if sizingMultiplier == Double(value) {
+                                    Image(systemName: "checkmark")
+                                }
+                            }
+                            .padding(.horizontal, 4)
+                        }
+                    }
+                } label: {
+                    HStack(spacing: 8) {
+                        Text(getSizeDescription(Int(sizingMultiplier)))
+                            .frame(width: 100, alignment: .leading)
+                        Image(systemName: "chevron.down")
+                            .font(.caption)
+                    }
+                    .padding(.vertical, 4)
+                    .padding(.horizontal, 8)
+                    .background(Color.secondary.opacity(0.1))
+                    .cornerRadius(6)
                 }
-                .buttonStyle(PlainButtonStyle())
-                .frame(width: 400)
-
-                Text("1/\(Int(sizingMultiplier))x")
-                    .frame(width: 50)
-                    .foregroundColor(.gray)
             }
-
-            Text("Preview windows are sized to 1/\(Int(sizingMultiplier)) of your screen dimensions")
-                .font(.footnote)
-                .foregroundColor(.gray)
         }
         .onChange(of: sizingMultiplier) { _ in
             SharedPreviewWindowCoordinator.shared.windowSize = getWindowSize()

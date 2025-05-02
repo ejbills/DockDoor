@@ -1906,6 +1906,7 @@
       }
     },
     "1/%lldx" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -21513,6 +21514,9 @@
         }
       }
     },
+    "Large (1/2)" : {
+
+    },
     "Last checked: %@" : {
       "localizations" : {
         "af" : {
@@ -23034,6 +23038,9 @@
           }
         }
       }
+    },
+    "Medium (1/%lld)" : {
+
     },
     "Menu Bar Icon Hidden" : {
       "extractionState" : "stale",
@@ -31418,6 +31425,9 @@
         }
       }
     },
+    "Preview Size" : {
+
+    },
     "Preview Window Fade Out Duration" : {
       "localizations" : {
         "af" : {
@@ -31802,6 +31812,7 @@
       }
     },
     "Preview windows are sized to 1/%lld of your screen dimensions" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -39990,6 +40001,9 @@
         }
       }
     },
+    "Small (1/%lld)" : {
+
+    },
     "Sort Window Previews by Date" : {
       "localizations" : {
         "af" : {
@@ -41895,6 +41909,9 @@
           }
         }
       }
+    },
+    "Tiny (1/%lld)" : {
+
     },
     "Toggle" : {
       "localizations" : {
@@ -49705,6 +49722,7 @@
       }
     },
     "Window Preview Size" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
