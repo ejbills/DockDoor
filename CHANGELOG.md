@@ -42,13 +42,14 @@
 # [v1.7](https://github.com/ejbills/DockDoor/releases/tag/v1.7) - 2025-05-02
 
 ## What's Changed
-* chore: sync website localizations with Crowdin 
-* chore: sync macOS app localizations with Crowdin
 * chore: better ux for sizing options (closes [#513](https://github.com/ejbills/DockDoor/issues/513))
 * feat: customizable window inactivity timer
   - reworks event timeout to prevent preview flickering
   - reduces default inactivity timeout from 10 seconds to 1.5 seconds
   - closes [#472](https://github.com/ejbills/DockDoor/issues/472)
+  - ![CleanShot 2025-05-02 at 06 47 12@2x](https://github.com/user-attachments/assets/ed1a6601-5dec-4bb4-b915-a443db31e14e)
+* chore: sync website localizations with Crowdin 
+* chore: sync macOS app localizations with Crowdin
 
 **Full Changelog**: https://github.com/ejbills/DockDoor/compare/v1.6.2...v1.7
 
