@@ -217,7 +217,7 @@ struct WindowPreview: View {
                     .opacity(highlightOpacity)
             }
         }
-        .onDrop(of: [UTType.fileURL], isTargeted: $isDraggingOver) { providers in
+        .onDrop(of: [UTType.item], isTargeted: $isDraggingOver) { providers in
             if !isDraggingOver { return false }
             handleWindowTap()
             return true
