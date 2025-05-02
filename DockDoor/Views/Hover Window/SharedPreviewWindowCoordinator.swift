@@ -33,7 +33,7 @@ class ScreenCenteredFloatingWindowCoordinator: ObservableObject {
     }
 }
 
-final class SharedPreviewWindowCoordinator: NSWindow {
+final class SharedPreviewWindowCoordinator: NSPanel {
     static let shared = SharedPreviewWindowCoordinator()
 
     let windowSwitcherCoordinator = ScreenCenteredFloatingWindowCoordinator()
@@ -42,7 +42,7 @@ final class SharedPreviewWindowCoordinator: NSWindow {
     private var appName: String = ""
     private var windows: [WindowInfo] = []
     private var onWindowTap: (() -> Void)?
-    private var fullPreviewWindow: NSWindow?
+    private var fullPreviewWindow: NSPanel?
 
     var windowSize: CGSize = getWindowSize()
 
@@ -53,7 +53,8 @@ final class SharedPreviewWindowCoordinator: NSWindow {
     private var lastShowTime: Date?
 
     private init() {
-        super.init(contentRect: .zero, styleMask: .borderless, backing: .buffered, defer: false)
+        let styleMask: NSWindow.StyleMask = [.nonactivatingPanel, .fullSizeContentView, .borderless]
+        super.init(contentRect: .zero, styleMask: styleMask, backing: .buffered, defer: false)
         setupWindow()
     }
 
@@ -63,11 +64,15 @@ final class SharedPreviewWindowCoordinator: NSWindow {
 
     // Setup window properties
     private func setupWindow() {
-        level = NSWindow.Level(rawValue: 19)
-        isMovableByWindowBackground = false
-        collectionBehavior = [.canJoinAllSpaces]
+        level = .floating
+        isOpaque = false
         backgroundColor = .clear
         hasShadow = true
+        isReleasedWhenClosed = false
+        isMovableByWindowBackground = false
+        collectionBehavior = [.canJoinAllSpaces, .transient, .fullScreenAuxiliary]
+        hidesOnDeactivate = false
+        becomesKeyOnlyIfNeeded = true
     }
 
     // Hide the window and reset its state
@@ -126,11 +131,15 @@ final class SharedPreviewWindowCoordinator: NSWindow {
     // Show full preview window for a given WindowInfo
     private func showFullPreviewWindow(for windowInfo: WindowInfo, on screen: NSScreen) {
         if fullPreviewWindow == nil {
-            fullPreviewWindow = NSWindow(contentRect: .zero, styleMask: .borderless, backing: .buffered, defer: false)
-            fullPreviewWindow?.level = NSWindow.Level(rawValue: 18)
+            let styleMask: NSWindow.StyleMask = [.nonactivatingPanel, .fullSizeContentView, .borderless]
+            fullPreviewWindow = NSPanel(contentRect: .zero, styleMask: styleMask, backing: .buffered, defer: false)
+            fullPreviewWindow?.level = .floating
             fullPreviewWindow?.isOpaque = false
             fullPreviewWindow?.backgroundColor = .clear
             fullPreviewWindow?.hasShadow = true
+            fullPreviewWindow?.collectionBehavior = [.canJoinAllSpaces, .transient, .fullScreenAuxiliary]
+            fullPreviewWindow?.hidesOnDeactivate = false
+            fullPreviewWindow?.becomesKeyOnlyIfNeeded = true
         }
 
         let windowSize = (try? windowInfo.axElement.size()) ?? CGSize(width: screen.frame.width, height: screen.frame.height)
