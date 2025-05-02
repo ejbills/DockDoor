@@ -1,5 +1,6 @@
 import Defaults
 import SwiftUI
+import UniformTypeIdentifiers
 
 struct WindowPreview: View {
     let windowInfo: WindowInfo
@@ -32,6 +33,9 @@ struct WindowPreview: View {
     @State private var isHoveringOverDockPeekPreview = false
     @State private var isHoveringOverWindowSwitcherPreview = false
     @State private var fullPreviewTimer: Timer?
+    @State private var isDraggingOver = false
+    @State private var dragTimer: Timer?
+    @State private var highlightOpacity = 0.0
 
     private func windowContent(isMinimized: Bool, isHidden: Bool, isSelected: Bool) -> some View {
         Group {
@@ -205,15 +209,37 @@ struct WindowPreview: View {
                 }
             }
         }
+        .overlay {
+            if isDraggingOver {
+                RoundedRectangle(cornerRadius: uniformCardRadius ? 14 : 0)
+                    .strokeBorder(Color(nsColor: .controlAccentColor), lineWidth: 2)
+                    .padding(-2)
+                    .opacity(highlightOpacity)
+            }
+        }
+        .onDrop(of: [UTType.fileURL], isTargeted: $isDraggingOver) { providers in
+            if !isDraggingOver { return false }
+            handleWindowTap()
+            return true
+        }
+        .onChange(of: isDraggingOver) { isOver in
+            if isOver {
+                startDragTimer()
+            } else {
+                cancelDragTimer()
+            }
+        }
         .environment(\.layoutDirection, .leftToRight)
         .contentShape(Rectangle())
         .onHover { isHovering in
-            withAnimation(.snappy(duration: 0.175)) {
-                if !windowSwitcherActive {
-                    isHoveringOverDockPeekPreview = isHovering
-                    handleFullPreviewHover(isHovering: isHovering, action: previewHoverAction)
-                } else {
-                    isHoveringOverWindowSwitcherPreview = isHovering
+            if !isDraggingOver {
+                withAnimation(.snappy(duration: 0.175)) {
+                    if !windowSwitcherActive {
+                        isHoveringOverDockPeekPreview = isHovering
+                        handleFullPreviewHover(isHovering: isHovering, action: previewHoverAction)
+                    } else {
+                        isHoveringOverWindowSwitcherPreview = isHovering
+                    }
                 }
             }
         }
@@ -314,6 +340,49 @@ struct WindowPreview: View {
             WindowUtil.bringWindowToFront(windowInfo: windowInfo)
             onTap?()
         }
+    }
+
+    private func startDragTimer() {
+        dragTimer?.invalidate()
+        highlightOpacity = 1.0
+
+        dragTimer = Timer.scheduledTimer(withTimeInterval: 1.5, repeats: false) { _ in
+            // First blink
+            withAnimation(.easeInOut(duration: 0.08)) {
+                highlightOpacity = 0.0
+            }
+
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.08) {
+                withAnimation(.easeInOut(duration: 0.08)) {
+                    highlightOpacity = 1.0
+                }
+
+                // Second blink
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.08) {
+                    withAnimation(.easeInOut(duration: 0.08)) {
+                        highlightOpacity = 0.0
+                    }
+
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.08) {
+                        withAnimation(.easeInOut(duration: 0.08)) {
+                            highlightOpacity = 1.0
+                        }
+
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.08) {
+                            cancelDragTimer()
+                            handleWindowTap()
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private func cancelDragTimer() {
+        dragTimer?.invalidate()
+        dragTimer = nil
+        isDraggingOver = false
+        highlightOpacity = 0.0
     }
 
     @ViewBuilder
