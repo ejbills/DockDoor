@@ -12,6 +12,7 @@ struct MainSettingsView: View {
     @Default(.bufferFromDock) var bufferFromDock
     @Default(.windowPreviewImageScale) var windowPreviewImageScale
     @Default(.fadeOutDuration) var fadeOutDuration
+    @Default(.inactivityTimeout) var inactivityTimeout
     @Default(.sortWindowsByDate) var sortWindowsByDate
     @Default(.lateralMovement) var lateralMovement
     @Default(.preventDockHide) var preventDockHide
@@ -84,6 +85,13 @@ struct MainSettingsView: View {
             sliderSetting(title: String(localized: "Preview Window Fade Out Duration"),
                           value: $fadeOutDuration,
                           range: 0 ... 2,
+                          step: 0.1,
+                          unit: String(localized: "seconds"),
+                          formatter: NumberFormatter.oneDecimalFormatter)
+
+            sliderSetting(title: String(localized: "Preview Window Inactivity Timer"),
+                          value: $inactivityTimeout,
+                          range: 0 ... 3,
                           step: 0.1,
                           unit: String(localized: "seconds"),
                           formatter: NumberFormatter.oneDecimalFormatter)

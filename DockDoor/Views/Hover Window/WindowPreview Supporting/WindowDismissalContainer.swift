@@ -29,8 +29,7 @@ class MouseTrackingNSView: NSView {
     private var trackingTimer: Timer?
     private var globalMouseMonitor: Any?
     private var inactivityTimer: Timer?
-
-    private let inactivityTimeout: TimeInterval = 10.0
+    private let inactivityTimeout: CGFloat
 
     init(appName: String, mouseLocation: CGPoint, bestGuessMonitor: NSScreen, dockPosition: DockPosition, frame frameRect: NSRect = .zero) {
         self.appName = appName
@@ -38,6 +37,7 @@ class MouseTrackingNSView: NSView {
         self.mouseLocation = DockObserver.cgPointFromNSPoint(mouseLocation, forScreen: bestGuessMonitor)
         self.dockPosition = dockPosition
         fadeOutDuration = Defaults[.fadeOutDuration]
+        inactivityTimeout = Defaults[.inactivityTimeout]
         super.init(frame: frameRect)
         setupTrackingArea()
         setupGlobalMouseMonitor()
@@ -116,9 +116,19 @@ class MouseTrackingNSView: NSView {
         if fadeOutDuration == 0 {
             performHideWindow()
         } else {
-            setWindowOpacity(to: 0.0, duration: fadeOutDuration)
-            fadeOutTimer = Timer.scheduledTimer(withTimeInterval: fadeOutDuration, repeats: false) { [weak self] _ in
-                self?.performHideWindow()
+            let currentAppReturnType = DockObserver.shared.getDockItemAppStatusUnderMouse()
+
+            switch currentAppReturnType.status {
+            case let .success(currApp):
+                if currApp.localizedName == appName {
+                    resetOpacity()
+                }
+            default:
+                setWindowOpacity(to: 0.0, duration: fadeOutDuration)
+                fadeOutTimer = Timer.scheduledTimer(withTimeInterval: fadeOutDuration, repeats: false) { [weak self] _ in
+                    guard let self else { return }
+                    performHideWindow()
+                }
             }
         }
     }
@@ -140,19 +150,9 @@ class MouseTrackingNSView: NSView {
 
     private func performHideWindow() {
         DispatchQueue.main.async { [weak self] in
-            guard let self else { return }
-            let currentAppReturnType = DockObserver.shared.getDockItemAppStatusUnderMouse()
-            switch currentAppReturnType.status {
-            case let .success(currApp):
-
-                // app was re-hovered while fade out was in progress
-                if currApp.localizedName == appName {
-                    resetOpacity()
-                }
-            default:
-                SharedPreviewWindowCoordinator.shared.hideWindow()
-                DockObserver.shared.lastAppUnderMouse = nil
-            }
+            guard self != nil else { return }
+            SharedPreviewWindowCoordinator.shared.hideWindow()
+            DockObserver.shared.lastAppUnderMouse = nil
         }
     }
 }
