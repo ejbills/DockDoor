@@ -93,6 +93,14 @@ extension AXUIElement {
         try attribute(kAXCloseButtonAttribute, AXUIElement.self)
     }
 
+    func minimizeButton() throws -> AXUIElement? {
+        try attribute(kAXMinimizeButtonAttribute, AXUIElement.self)
+    }
+
+    func fullscreenButton() throws -> AXUIElement? {
+        try attribute(kAXFullscreenAttribute, AXUIElement.self)
+    }
+
     func subscribeToNotification(_ axObserver: AXObserver, _ notification: String, _ callback: (() -> Void)? = nil) throws {
         let result = AXObserverAddNotification(axObserver, self, notification as CFString, nil)
         if result == .success || result == .notificationAlreadyRegistered {

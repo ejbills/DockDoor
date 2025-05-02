@@ -569,24 +569,28 @@ enum WindowUtil {
         }
 
         let closeButton = try? windowRef.closeButton()
+        let minimizeButton = try? windowRef.minimizeButton()
+        let shouldWindowBeCaptured = (closeButton != nil) || (minimizeButton != nil)
 
-        var windowInfo = WindowInfo(id: windowID,
-                                    window: window,
-                                    app: app,
-                                    windowName: window.title,
-                                    image: nil,
-                                    axElement: windowRef,
-                                    appAxElement: appElement,
-                                    closeButton: closeButton,
-                                    isMinimized: false,
-                                    isHidden: false,
-                                    date: Date.now)
+        if shouldWindowBeCaptured {
+            var windowInfo = WindowInfo(id: windowID,
+                                        window: window,
+                                        app: app,
+                                        windowName: window.title,
+                                        image: nil,
+                                        axElement: windowRef,
+                                        appAxElement: appElement,
+                                        closeButton: closeButton,
+                                        isMinimized: false,
+                                        isHidden: false,
+                                        date: Date.now)
 
-        do {
-            windowInfo.image = try await captureWindowImage(window: window)
-            updateDesktopSpaceWindowCache(with: windowInfo, preventDateUpdate)
-        } catch {
-            print("Error capturing window image: \(error)")
+            do {
+                windowInfo.image = try await captureWindowImage(window: window)
+                updateDesktopSpaceWindowCache(with: windowInfo, preventDateUpdate)
+            } catch {
+                print("Error capturing window image: \(error)")
+            }
         }
     }
 
