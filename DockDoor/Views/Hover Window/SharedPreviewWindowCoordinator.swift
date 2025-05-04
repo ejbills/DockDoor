@@ -375,9 +375,10 @@ final class SharedPreviewWindowCoordinator: NSPanel {
 
     // Select and bring to front the current window
     func selectAndBringToFrontCurrentWindow() {
+        hideWindow()
+
         guard !windows.isEmpty else { return }
         let selectedWindow = windows[windowSwitcherCoordinator.currIndex]
         WindowUtil.bringWindowToFront(windowInfo: selectedWindow)
-        hideWindow()
     }
 }
