@@ -38,6 +38,19 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://buymeacoffee.com/keplercafe</div>
 
+<a id="v1.7.1"></a>
+# [v1.7.1](https://github.com/ejbills/DockDoor/releases/tag/v1.7.1) - 2025-05-04
+
+- Select windows while dragging files
+- - In apps that support it, hovering over an app or preview while dragging a file will auto select target window.
+- - ![Built-in Retina Display](https://github.com/user-attachments/assets/e85d136e-43bb-4874-abbb-7ecbfbc407f8)
+- Better window capture logic
+- - Majority of invalid windows will no longer be recorded (windows that are blank, chrome toolbars, UI elements, etc.)
+- Some minor bug fixes and clean up
+
+[Changes][v1.7.1]
+
+
 <a id="v1.7"></a>
 # [v1.7](https://github.com/ejbills/DockDoor/releases/tag/v1.7) - 2025-05-02
 
@@ -824,6 +837,7 @@ v1.0
 [Changes][releases]
 
 
+[v1.7.1]: https://github.com/ejbills/DockDoor/compare/v1.7...v1.7.1
 [v1.7]: https://github.com/ejbills/DockDoor/compare/v1.6.2...v1.7
 [v1.6.2]: https://github.com/ejbills/DockDoor/compare/v1.6.1...v1.6.2
 [v1.6.1]: https://github.com/ejbills/DockDoor/compare/v1.6...v1.6.1
