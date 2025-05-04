@@ -27,7 +27,6 @@ class MouseTrackingNSView: NSView {
     private var fadeOutTimer: Timer?
     private let fadeOutDuration: TimeInterval
     private var trackingTimer: Timer?
-    private var globalMouseMonitor: Any?
     private var inactivityTimer: Timer?
     private let inactivityTimeout: CGFloat
 
@@ -40,7 +39,6 @@ class MouseTrackingNSView: NSView {
         inactivityTimeout = Defaults[.inactivityTimeout]
         super.init(frame: frameRect)
         setupTrackingArea()
-        setupGlobalMouseMonitor()
     }
 
     @available(*, unavailable)
@@ -54,30 +52,8 @@ class MouseTrackingNSView: NSView {
         addTrackingArea(trackingArea)
     }
 
-    private func setupGlobalMouseMonitor() {
-        // Monitor for mouse down events globally
-        globalMouseMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.leftMouseDown, .rightMouseDown, .otherMouseDown]) { [weak self] event in
-            guard let self,
-                  let window else { return }
-
-            // Convert the click location to window coordinates
-            let clickLocation = event.locationInWindow
-            let windowFrame = window.frame
-
-            // Check if the click is outside our window
-            if !windowFrame.contains(clickLocation) {
-                DispatchQueue.main.async {
-                    self.startFadeOut()
-                }
-            }
-        }
-    }
-
     deinit {
         clearTimers()
-        if let monitor = globalMouseMonitor {
-            NSEvent.removeMonitor(monitor)
-        }
     }
 
     private func clearTimers() {
