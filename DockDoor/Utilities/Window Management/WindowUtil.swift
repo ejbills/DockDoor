@@ -389,13 +389,10 @@ enum WindowUtil {
     // MARK: - Active Window Handling
 
     static func getAllWindowsOfAllApps() -> [WindowInfo] {
-        var windows = desktopSpaceWindowCacheManager.getAllWindows()
-
-        if !Defaults[.includeHiddenWindowsInSwitcher] {
-            windows = windows.filter { !$0.isHidden && !$0.isMinimized }
-        }
-
-        return windows
+        let windows = desktopSpaceWindowCacheManager.getAllWindows()
+        return !Defaults[.includeHiddenWindowsInSwitcher]
+            ? windows.filter { !$0.isHidden && !$0.isMinimized }
+            : windows
     }
 
     static func getActiveWindows(of app: NSRunningApplication) async throws -> [WindowInfo] {
@@ -461,23 +458,30 @@ enum WindowUtil {
         do {
             let content = try await SCShareableContent.excludingDesktopWindows(true, onScreenWindowsOnly: false)
 
-            let group = LimitedTaskGroup<Void>(maxConcurrentTasks: 4)
+            await withTaskGroup(of: Void.self) { group in
+                var processedCount = 0
+                let maxConcurrentTasks = 4
 
-            for window in content.windows {
-                guard let scApp = window.owningApplication,
-                      !filteredBundleIdentifiers.contains(scApp.bundleIdentifier)
-                else {
-                    continue
+                for window in content.windows {
+                    guard let scApp = window.owningApplication,
+                          !filteredBundleIdentifiers.contains(scApp.bundleIdentifier)
+                    else { continue }
+
+                    if processedCount >= maxConcurrentTasks {
+                        await group.next()
+                        processedCount -= 1
+                    }
+
+                    if let nsApp = NSRunningApplication(processIdentifier: scApp.processID) {
+                        group.addTask {
+                            try? await captureAndCacheWindowInfo(window: window, app: nsApp)
+                        }
+                        processedCount += 1
+                    }
                 }
 
-                // Convert SCRunningApplication to NSRunningApplication
-                if let nsApp = NSRunningApplication(processIdentifier: scApp.processID) {
-                    await group.addTask { try? await captureAndCacheWindowInfo(window: window, app: nsApp) }
-                }
+                await group.waitForAll()
             }
-
-            // Wait for all tasks to complete
-            _ = try await group.waitForAll()
 
         } catch {
             print("Error updating windows: \(error)")
@@ -491,32 +495,33 @@ enum WindowUtil {
         if isMinimizedOrHidden {
             if let existingWindow = desktopSpaceWindowCacheManager.readCache(pid: app.processIdentifier).first(where: { $0.id == windowID }) {
                 var updatedWindow = existingWindow
-                updatedWindow.image = try await captureWindowImage(window: window, forceRefresh: true)
-                updateDesktopSpaceWindowCache(with: updatedWindow)
+                await Task.detached(priority: .userInitiated) {
+                    if let image = try? await captureWindowImage(window: window, forceRefresh: true) {
+                        updatedWindow.image = image
+                        updateDesktopSpaceWindowCache(with: updatedWindow)
+                    }
+                }.value
             }
             return
         }
 
-        // Check basic window validity
         guard window.owningApplication != nil,
               window.isOnScreen,
               window.windowLayer == 0,
-              window.frame.size.width >= 0,
-              window.frame.size.height >= 0,
-              !(window.frame.size.width < 100 || window.frame.size.height < 100) || window.title?.isEmpty == false
-        else {
+              window.frame.size.width >= 100,
+              window.frame.size.height >= 100
+        else { return }
+
+        guard let bundleId = app.bundleIdentifier else {
+            purgeAppCache(with: app.processIdentifier)
             return
         }
 
-        // Check if app bundle ID is in filtered list
-        if let bundleId = app.bundleIdentifier {
-            if filteredBundleIdentifiers.contains(bundleId) {
-                purgeAppCache(with: app.processIdentifier)
-                return
-            }
+        if filteredBundleIdentifiers.contains(bundleId) {
+            purgeAppCache(with: app.processIdentifier)
+            return
         }
 
-        // Check if app name matches any filters
         if let appName = app.localizedName {
             let appNameFilters = Defaults[.appNameFilters]
             if !appNameFilters.isEmpty {
@@ -529,7 +534,6 @@ enum WindowUtil {
             }
         }
 
-        // Check window title against filters and remove if matched
         if let windowTitle = window.title {
             let windowTitleFilters = Defaults[.windowTitleFilters]
             if !windowTitleFilters.isEmpty {
@@ -543,10 +547,8 @@ enum WindowUtil {
             }
         }
 
-        // Additional check for existing windows in cache that might match filters
         desktopSpaceWindowCacheManager.updateCache(pid: app.processIdentifier) { windowSet in
             windowSet = windowSet.filter { cachedWindow in
-                // Keep window only if it passes all filters
                 if let cachedTitle = cachedWindow.windowName {
                     for filter in Defaults[.windowTitleFilters] {
                         if cachedTitle.lowercased().contains(filter.lowercased()) {
@@ -585,12 +587,13 @@ enum WindowUtil {
                                         isHidden: false,
                                         date: Date.now)
 
-            do {
-                windowInfo.image = try await captureWindowImage(window: window)
-                updateDesktopSpaceWindowCache(with: windowInfo, preventDateUpdate)
-            } catch {
-                print("Error capturing window image: \(error)")
-            }
+            await Task.detached(priority: .userInitiated) {
+                if let image = try? await captureWindowImage(window: window) {
+                    var updatedInfo = windowInfo
+                    updatedInfo.image = image
+                    updateDesktopSpaceWindowCache(with: updatedInfo, preventDateUpdate)
+                }
+            }.value
         }
     }
 
