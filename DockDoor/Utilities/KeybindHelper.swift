@@ -201,7 +201,7 @@ class KeybindHelper {
                                targetScreen: targetScreen)
         }
 
-        Task(priority: .high) { [weak self] in
+        Task(priority: .low) { [weak self] in
             guard self != nil else { return }
             await WindowUtil.updateAllWindowsInCurrentSpace()
         }
