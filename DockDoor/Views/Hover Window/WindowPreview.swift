@@ -394,7 +394,7 @@ struct WindowPreview: View {
         )
 
         if shouldShowTitle, windowTitleVisibility == .alwaysVisible || selected {
-            if let windowTitle = windowInfo.window.title,
+            if let windowTitle = windowInfo.windowName,
                !windowTitle.isEmpty,
                windowTitle != windowInfo.app.localizedName
             {
