@@ -53,6 +53,13 @@ struct WindowSwitcherSettingsView: View {
                 .pickerStyle(SegmentedPickerStyle())
                 .scaledToFit()
                 .layoutPriority(1)
+                .onChange(of: viewModel.modifierKey) { newValue  in
+                    if let currentKeybind = viewModel.currentKeybind {
+                        let updatedKeybind = UserKeyBind(keyCode: currentKeybind.keyCode, modifierFlags: newValue)
+                        Defaults[.UserKeybind] = updatedKeybind
+                        viewModel.currentKeybind = updatedKeybind
+                    }
+                }
 
                 Text("Important: When recording, press ONLY the trigger key (e.g. just press Tab if you want command + Tab). Do not press the initialization key during recording.")
                     .font(.subheadline)
