@@ -38,6 +38,16 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://buymeacoffee.com/keplercafe</div>
 
+<a id="v1.8"></a>
+# [v1.8](https://github.com/ejbills/DockDoor/releases/tag/v1.8) - 2025-05-05
+
+- Window switcher performance improvements
+- Window switcher control settings enhancements
+- Misc. bug fixes
+
+[Changes][v1.8]
+
+
 <a id="v1.7.1"></a>
 # [v1.7.1](https://github.com/ejbills/DockDoor/releases/tag/v1.7.1) - 2025-05-04
 
@@ -837,6 +847,7 @@ v1.0
 [Changes][releases]
 
 
+[v1.8]: https://github.com/ejbills/DockDoor/compare/v1.7.1...v1.8
 [v1.7.1]: https://github.com/ejbills/DockDoor/compare/v1.7...v1.7.1
 [v1.7]: https://github.com/ejbills/DockDoor/compare/v1.6.2...v1.7
 [v1.6.2]: https://github.com/ejbills/DockDoor/compare/v1.6.1...v1.6.2
