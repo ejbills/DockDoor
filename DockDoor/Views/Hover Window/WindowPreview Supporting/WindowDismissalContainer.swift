@@ -88,22 +88,27 @@ class MouseTrackingNSView: NSView {
     }
 
     private func startFadeOut() {
-        cancelFadeOut()
-        if fadeOutDuration == 0 {
-            performHideWindow()
-        } else {
-            let currentAppReturnType = DockObserver.shared.getDockItemAppStatusUnderMouse()
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            // prevent window dismissal when using window switcher
+            guard !SharedPreviewWindowCoordinator.shared.windowSwitcherCoordinator.windowSwitcherActive else { return }
+            cancelFadeOut()
+            if fadeOutDuration == 0 {
+                performHideWindow()
+            } else {
+                let currentAppReturnType = DockObserver.shared.getDockItemAppStatusUnderMouse()
 
-            switch currentAppReturnType.status {
-            case let .success(currApp):
-                if currApp.localizedName == appName {
-                    resetOpacity()
-                }
-            default:
-                setWindowOpacity(to: 0.0, duration: fadeOutDuration)
-                fadeOutTimer = Timer.scheduledTimer(withTimeInterval: fadeOutDuration, repeats: false) { [weak self] _ in
-                    guard let self else { return }
-                    performHideWindow()
+                switch currentAppReturnType.status {
+                case let .success(currApp):
+                    if currApp.localizedName == appName {
+                        resetOpacity()
+                    }
+                default:
+                    setWindowOpacity(to: 0.0, duration: fadeOutDuration)
+                    fadeOutTimer = Timer.scheduledTimer(withTimeInterval: fadeOutDuration, repeats: false) { [weak self] _ in
+                        guard let self else { return }
+                        performHideWindow()
+                    }
                 }
             }
         }
