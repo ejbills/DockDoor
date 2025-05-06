@@ -505,11 +505,7 @@ enum WindowUtil {
             return
         }
 
-        guard window.owningApplication != nil,
-              window.isOnScreen,
-              window.windowLayer == 0,
-              window.frame.size.width >= 100,
-              window.frame.size.height >= 100
+        guard window.owningApplication != nil
         else { return }
 
         guard let bundleId = app.bundleIdentifier else {
