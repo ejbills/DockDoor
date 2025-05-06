@@ -1,4 +1,5 @@
 import Defaults
+import EventKit
 import SwiftUI
 
 class ScreenCenteredFloatingWindowCoordinator: ObservableObject {
@@ -43,6 +44,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
     private var windows: [WindowInfo] = []
     private var onWindowTap: (() -> Void)?
     private var fullPreviewWindow: NSPanel?
+    private var isShowingCalendar: Bool = false
 
     var windowSize: CGSize = getWindowSize()
 
@@ -321,11 +323,50 @@ final class SharedPreviewWindowCoordinator: NSPanel {
     {
         // ensure view isn't transparent
         alphaValue = 1.0
+
+        // Check if this is Calendar app
+        if appName == "Calendar" || windows.first?.app.bundleIdentifier == "com.apple.iCal" {
+            isShowingCalendar = true
+
+            DispatchQueue.main.async { [weak self] in
+                guard let self else { return }
+
+                let screen = mouseScreen ?? NSScreen.main!
+
+                // Create and set up calendar view with all required parameters
+                let calendarView = CalendarPreviewView(
+                    onTap: onWindowTap,
+                    mouseLocation: mouseLocation,
+                    bestGuessMonitor: screen,
+                    dockPosition: DockUtils.getDockPosition()
+                )
+                contentView = NSHostingView(rootView: calendarView)
+
+                // Position the window
+                if let newSize = contentView?.fittingSize {
+                    let position = calculateWindowPosition(
+                        mouseLocation: mouseLocation,
+                        windowSize: newSize,
+                        screen: screen,
+                        iconRect: iconRect ?? .zero
+                    )
+
+                    let finalFrame = CGRect(origin: position, size: newSize)
+                    applyWindowFrame(finalFrame, animated: centeredHoverWindowState == nil)
+                }
+
+                makeKeyAndOrderFront(nil)
+            }
+            return
+        }
+
+        isShowingCalendar = false
+        // Keep existing window preview logic for non-calendar apps...
         guard !windows.isEmpty else { return }
 
         dockManager.preventDockHiding(centeredHoverWindowState != nil)
 
-        let shouldCenterOnScreen = centeredHoverWindowState != .none
+        let shouldCenterOnScreen = centeredHoverWindowState != nil
 
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }

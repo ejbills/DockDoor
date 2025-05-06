@@ -381,6 +381,9 @@
         }
       }
     },
+    "–" : {
+
+    },
     "• Allows for enhanced visual information in the dock" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -8586,6 +8589,9 @@
         }
       }
     },
+    "Calendar Access Required" : {
+
+    },
     "Can you even see this?" : {
       "comment" : "Window size option",
       "extractionState" : "stale",
@@ -13540,6 +13546,9 @@
           }
         }
       }
+    },
+    "DockDoor needs access to display your calendar events" : {
+
     },
     "DockDoor needs screen recording access. In macOS Sequoia, you'll see this prompt every week or month and after reboots. This is a new system-wide security policy for all screen capture apps." : {
       "localizations" : {
@@ -25548,6 +25557,9 @@
         }
       }
     },
+    "No events today" : {
+
+    },
     "No filters added" : {
       "localizations" : {
         "af" : {
@@ -34310,6 +34322,12 @@
           }
         }
       }
+    },
+    "Request Access" : {
+
+    },
+    "Requesting Calendar Access..." : {
+
     },
     "Required for capturing window previews of other apps" : {
       "localizations" : {
@@ -43082,6 +43100,9 @@
           }
         }
       }
+    },
+    "Today" : {
+
     },
     "Toggle" : {
       "localizations" : {

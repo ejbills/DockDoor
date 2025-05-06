@@ -149,6 +149,34 @@ final class DockObserver {
             notRunningCount = 0
         }
 
+        // Special handling for Calendar app
+        if case let .success(app) = appUnderMouseElement.status,
+           app.bundleIdentifier == "com.apple.iCal"
+        {
+            // Show calendar preview immediately
+            hoverProcessingTask?.cancel()
+            pendingShows.removeAll()
+
+            Task { @MainActor [weak self] in
+                SharedPreviewWindowCoordinator.shared.cancelDebounceWorkItem()
+
+                guard let self else { return }
+
+                let mouseScreen = NSScreen.screenContainingMouse(currentMouseLocation)
+                let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
+
+                SharedPreviewWindowCoordinator.shared.showWindow(
+                    appName: "Calendar",
+                    windows: [], // Empty windows array for Calendar
+                    mouseLocation: convertedMouseLocation,
+                    mouseScreen: mouseScreen,
+                    iconRect: appUnderMouseElement.iconRect,
+                    overrideDelay: true
+                )
+            }
+            return
+        }
+
         hoverProcessingTask?.cancel()
         pendingShows.removeAll()
 
