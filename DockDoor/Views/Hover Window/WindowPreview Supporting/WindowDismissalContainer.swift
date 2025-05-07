@@ -6,10 +6,14 @@ struct WindowDismissalContainer: NSViewRepresentable {
     let mouseLocation: CGPoint
     let bestGuessMonitor: NSScreen
     let dockPosition: DockPosition
+    let minimizeAllWindowsCallback: () -> Void
 
     func makeNSView(context: Context) -> MouseTrackingNSView {
-        let view = MouseTrackingNSView(appName: appName, mouseLocation: mouseLocation,
-                                       bestGuessMonitor: bestGuessMonitor, dockPosition: dockPosition)
+        let view = MouseTrackingNSView(appName: appName,
+                                       mouseLocation: mouseLocation,
+                                       bestGuessMonitor: bestGuessMonitor,
+                                       dockPosition: dockPosition,
+                                       minimizeAllWindowsCallback: minimizeAllWindowsCallback)
         view.resetOpacity()
         return view
     }
@@ -24,21 +28,25 @@ class MouseTrackingNSView: NSView {
     private let mouseLocation: CGPoint
     private let bestGuessMonitor: NSScreen
     private let dockPosition: DockPosition
+    private let minimizeAllWindowsCallback: () -> Void
     private var fadeOutTimer: Timer?
     private let fadeOutDuration: TimeInterval
     private var trackingTimer: Timer?
     private var inactivityTimer: Timer?
     private let inactivityTimeout: CGFloat
+    private var eventMonitor: Any?
 
-    init(appName: String, mouseLocation: CGPoint, bestGuessMonitor: NSScreen, dockPosition: DockPosition, frame frameRect: NSRect = .zero) {
+    init(appName: String, mouseLocation: CGPoint, bestGuessMonitor: NSScreen, dockPosition: DockPosition, minimizeAllWindowsCallback: @escaping () -> Void, frame frameRect: NSRect = .zero) {
         self.appName = appName
         self.bestGuessMonitor = bestGuessMonitor
         self.mouseLocation = DockObserver.cgPointFromNSPoint(mouseLocation, forScreen: bestGuessMonitor)
         self.dockPosition = dockPosition
+        self.minimizeAllWindowsCallback = minimizeAllWindowsCallback
         fadeOutDuration = Defaults[.fadeOutDuration]
         inactivityTimeout = Defaults[.inactivityTimeout]
         super.init(frame: frameRect)
         setupTrackingArea()
+        setupGlobalClickMonitor()
     }
 
     @available(*, unavailable)
@@ -54,6 +62,9 @@ class MouseTrackingNSView: NSView {
 
     deinit {
         clearTimers()
+        if let eventMonitor {
+            NSEvent.removeMonitor(eventMonitor)
+        }
     }
 
     private func clearTimers() {
@@ -134,6 +145,26 @@ class MouseTrackingNSView: NSView {
             guard self != nil else { return }
             SharedPreviewWindowCoordinator.shared.hideWindow()
             DockObserver.shared.lastAppUnderMouse = nil
+        }
+    }
+
+    private func setupGlobalClickMonitor() {
+        eventMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.leftMouseDown]) { [weak self] event in
+            guard let self, Defaults[.shouldHideOnDockItemClick] else { return }
+
+            let currentAppReturnType = DockObserver.shared.getDockItemAppStatusUnderMouse()
+
+            switch currentAppReturnType.status {
+            case let .success(currApp):
+                if currApp.localizedName == appName {
+                    // Add a small delay to let windows raise first
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) { [weak self] in
+                        self?.minimizeAllWindowsCallback()
+                    }
+                }
+            default:
+                break
+            }
         }
     }
 }

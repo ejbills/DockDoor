@@ -53,12 +53,12 @@ final class DockObserver {
     private func hideWindowAndResetLastApp() {
         Task { @MainActor [weak self] in
             guard let self else { return }
+            SharedPreviewWindowCoordinator.shared.hideWindow()
             resetLastAppUnderMouse()
             lastNotificationTime = 0
             lastNotificationId = ""
             notRunningCount = 0
             pendingShows.removeAll()
-            SharedPreviewWindowCoordinator.shared.hideWindow()
         }
     }
 

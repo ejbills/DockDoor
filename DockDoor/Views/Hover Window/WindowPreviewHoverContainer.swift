@@ -98,8 +98,11 @@ struct WindowPreviewHoverContainer: View {
                 .padding(.top, (!windowSwitcherCoordinator.windowSwitcherActive && appNameStyle == .popover && showAppName) ? 30 : 0)
                 .overlay {
                     if let mouseLocation, !isDragging {
-                        WindowDismissalContainer(appName: appName, mouseLocation: mouseLocation,
-                                                 bestGuessMonitor: bestGuessMonitor, dockPosition: dockPosition)
+                        WindowDismissalContainer(appName: appName,
+                                                 mouseLocation: mouseLocation,
+                                                 bestGuessMonitor: bestGuessMonitor,
+                                                 dockPosition: dockPosition,
+                                                 minimizeAllWindowsCallback: { minimizeAllWindows() })
                             .allowsHitTesting(false)
                     }
                 }
@@ -407,26 +410,40 @@ struct WindowPreviewHoverContainer: View {
     }
 
     private func closeAllWindows() {
-        windowStates.removeAll()
-        windows.forEach { WindowUtil.closeWindow(windowInfo: $0) }
         onWindowTap?()
+        windowStates.removeAll()
+
+        DispatchQueue.concurrentPerform(iterations: windows.count) { index in
+            let window = windows[index]
+            WindowUtil.closeWindow(windowInfo: window)
+        }
     }
 
     private func minimizeAllWindows(_ except: WindowInfo? = nil) {
+        onWindowTap?()
+
         if let except {
             WindowUtil.bringWindowToFront(windowInfo: except)
 
             windowStates.removeAll { $0 != except }
-            for window in windows {
+
+            DispatchQueue.concurrentPerform(iterations: windows.count) { index in
+                let window = windows[index]
+                guard window.isMinimized else { return }
                 if window != except {
                     _ = WindowUtil.toggleMinimize(windowInfo: window)
                 }
             }
+
         } else {
             windowStates.removeAll()
-            windows.forEach { _ = WindowUtil.toggleMinimize(windowInfo: $0) }
+
+            DispatchQueue.concurrentPerform(iterations: windows.count) { index in
+                let window = windows[index]
+                guard !window.isMinimized else { return }
+                _ = WindowUtil.toggleMinimize(windowInfo: window)
+            }
         }
-        onWindowTap?()
     }
 
     private func handleWindowAction(_ action: WindowAction, at index: Int) {

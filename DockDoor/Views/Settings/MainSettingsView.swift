@@ -16,6 +16,7 @@ struct MainSettingsView: View {
     @Default(.sortWindowsByDate) var sortWindowsByDate
     @Default(.lateralMovement) var lateralMovement
     @Default(.preventDockHide) var preventDockHide
+    @Default(.shouldHideOnDockItemClick) var shouldHideOnDockItemClick
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -71,6 +72,15 @@ struct MainSettingsView: View {
                     Text("Prevent dock from hiding during previews")
                 })
                 Text("Only takes effect when dock auto-hide is enabled")
+                    .font(.footnote)
+                    .foregroundColor(.gray)
+            }
+
+            VStack(alignment: .leading) {
+                Toggle(isOn: $shouldHideOnDockItemClick, label: {
+                    Text("Hide all application windows when clicking on the dock icon")
+                })
+                Text("When enabled, clicking an app's Dock icon will minimize all windows of that application, similar to Windows taskbar behavior")
                     .font(.footnote)
                     .foregroundColor(.gray)
             }
