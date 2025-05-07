@@ -36,6 +36,9 @@ final class DockObserver {
     private var hoverProcessingTask: Task<Void, Error>?
     private var isProcessing: Bool = false
 
+    private var currentDockPID: pid_t?
+    private var healthCheckTimer: Timer?
+
     private var lastNotificationTime: TimeInterval = 0
     private var lastNotificationId: String = ""
     private let artifactTimeThreshold: TimeInterval = 0.05
@@ -46,26 +49,45 @@ final class DockObserver {
 
     private init() {
         setupSelectedDockItemObserver()
+        startHealthCheckTimer()
     }
 
-    private func resetLastAppUnderMouse() { lastAppUnderMouse = nil }
-
-    private func hideWindowAndResetLastApp() {
-        Task { @MainActor [weak self] in
-            guard let self else { return }
-            SharedPreviewWindowCoordinator.shared.hideWindow()
-            resetLastAppUnderMouse()
-            lastNotificationTime = 0
-            lastNotificationId = ""
-            notRunningCount = 0
-            pendingShows.removeAll()
+    private func startHealthCheckTimer() {
+        healthCheckTimer?.invalidate()
+        healthCheckTimer = Timer.scheduledTimer(withTimeInterval: 5.0, repeats: true) { [weak self] _ in
+            self?.performHealthCheck()
         }
+    }
+
+    private func performHealthCheck() {
+        guard let currentDockPID else {
+            setupSelectedDockItemObserver()
+            return
+        }
+
+        let currentDockApp = NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.dock").first
+
+        if currentDockApp?.processIdentifier != currentDockPID {
+            teardownObserver()
+            setupSelectedDockItemObserver()
+        }
+    }
+
+    private func teardownObserver() {
+        if let observer = axObserver {
+            CFRunLoopRemoveSource(CFRunLoopGetCurrent(), AXObserverGetRunLoopSource(observer), .commonModes)
+        }
+        axObserver = nil
+        currentDockPID = nil
     }
 
     private func setupSelectedDockItemObserver() {
-        guard let dockAppPID = NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.dock").first?.processIdentifier else {
-            fatalError("Dock not found in running applications")
+        guard let dockApp = NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.dock").first else {
+            return
         }
+
+        let dockAppPID = dockApp.processIdentifier
+        currentDockPID = dockAppPID
 
         let dockAppElement = AXUIElementCreateApplication(dockAppPID)
 
@@ -85,10 +107,13 @@ final class DockObserver {
         guard let children = try? dockAppElement.children(), let axList = children.first(where: { element in
             try! element.role() == kAXListRole
         }) else {
-            fatalError("Can't get dock items list element")
+            return
         }
 
-        AXObserverCreate(dockAppPID, handleSelectedDockItemChangedNotification, &axObserver)
+        if AXObserverCreate(dockAppPID, handleSelectedDockItemChangedNotification, &axObserver) != .success {
+            return
+        }
+
         guard let axObserver else { return }
 
         do {
@@ -96,7 +121,21 @@ final class DockObserver {
                 CFRunLoopAddSource(CFRunLoopGetCurrent(), AXObserverGetRunLoopSource(axObserver), .commonModes)
             }
         } catch {
-            fatalError("Failed to subscribe to notification: \(error)")
+            return
+        }
+    }
+
+    private func resetLastAppUnderMouse() { lastAppUnderMouse = nil }
+
+    private func hideWindowAndResetLastApp() {
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            SharedPreviewWindowCoordinator.shared.hideWindow()
+            resetLastAppUnderMouse()
+            lastNotificationTime = 0
+            lastNotificationId = ""
+            notRunningCount = 0
+            pendingShows.removeAll()
         }
     }
 
