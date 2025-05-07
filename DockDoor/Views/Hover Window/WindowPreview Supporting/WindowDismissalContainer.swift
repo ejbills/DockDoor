@@ -163,7 +163,17 @@ class MouseTrackingNSView: NSView {
                     }
                 }
             default:
-                break
+                guard let window else { break }
+
+                let clickLocation = event.locationInWindow
+                let windowFrame = window.frame
+
+                // Check if the click is outside our window
+                if !windowFrame.contains(clickLocation) {
+                    DispatchQueue.main.async {
+                        self.startFadeOut()
+                    }
+                }
             }
         }
     }
