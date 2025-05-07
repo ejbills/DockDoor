@@ -429,7 +429,7 @@ struct WindowPreviewHoverContainer: View {
 
             DispatchQueue.concurrentPerform(iterations: windows.count) { index in
                 let window = windows[index]
-                guard window.isMinimized else { return }
+                guard !window.isMinimized else { return }
                 if window != except {
                     _ = WindowUtil.toggleMinimize(windowInfo: window)
                 }
