@@ -150,16 +150,20 @@ class MouseTrackingNSView: NSView {
 
     private func setupGlobalClickMonitor() {
         eventMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.leftMouseDown]) { [weak self] event in
-            guard let self, Defaults[.shouldHideOnDockItemClick] else { return }
+            guard let self else { return }
 
             let currentAppReturnType = DockObserver.shared.getDockItemAppStatusUnderMouse()
 
             switch currentAppReturnType.status {
             case let .success(currApp):
                 if currApp.localizedName == appName {
-                    // Add a small delay to let windows raise first
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) { [weak self] in
-                        self?.minimizeAllWindowsCallback()
+                    if Defaults[.shouldHideOnDockItemClick] {
+                        // Add a small delay to let windows raise first
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) { [weak self] in
+                            self?.minimizeAllWindowsCallback()
+                        }
+                    } else {
+                        performHideWindow()
                     }
                 }
             default:
