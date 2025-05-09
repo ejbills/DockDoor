@@ -60,8 +60,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func applicationDidFinishLaunching(_ notification: Notification) {
-        NSApplication.shared.setActivationPolicy(.accessory) // Hide the menubar and dock icons
-
         if Defaults[.showMenuBarIcon] {
             setupMenuBar()
         } else {
