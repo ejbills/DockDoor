@@ -22,6 +22,13 @@ class DockUtils {
         default: return .unknown
         }
     }
+
+    static func getStatusBarHeight(screen: NSScreen) -> CGFloat {
+        if screen == NSScreen.main {
+            return NSStatusBar.system.thickness
+        }
+        return 0
+    }
 }
 
 final class DockAutoHideManager {
