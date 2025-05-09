@@ -39,9 +39,6 @@ final class DockObserver {
     private var currentDockPID: pid_t?
     private var healthCheckTimer: Timer?
 
-    private var cachedHeight: CGFloat = 0
-    private var cachedWidth: CGFloat = 0
-
     private var lastNotificationTime: TimeInterval = 0
     private var lastNotificationId: String = ""
     private let artifactTimeThreshold: TimeInterval = 0.05
@@ -49,9 +46,6 @@ final class DockObserver {
 
     private var notRunningCount: Int = 0
     private let maxNotRunningCount: Int = 3
-
-    private var cachedDockWidth: CGFloat = 0
-    private var cachedDockHeight: CGFloat = 0
 
     private init() {
         setupSelectedDockItemObserver()
@@ -150,6 +144,7 @@ final class DockObserver {
         let currentMouseLocation = DockObserver.getMousePosition()
         let appUnderMouseElement = getDockItemAppStatusUnderMouse()
 
+        // Handle invalid states (notRunning or notFound)
         if case let .notRunning(bundleIdentifier) = appUnderMouseElement.status {
             if lastNotificationId == bundleIdentifier {
                 let timeSinceLastNotification = currentTime - lastNotificationTime
@@ -188,6 +183,7 @@ final class DockObserver {
             return
         }
 
+        // Only reset count on success
         if case .success = appUnderMouseElement.status {
             notRunningCount = 0
         }
@@ -213,6 +209,7 @@ final class DockObserver {
 
                 let pid = currentApp.processIdentifier
 
+                // Handle repeat notifications for same app
                 if lastNotificationId == String(pid) {
                     let timeSinceLastNotification = currentTime - lastNotificationTime
                     if timeSinceLastNotification < artifactTimeThreshold {
@@ -315,6 +312,7 @@ final class DockObserver {
 
             let bundle = Bundle(url: appURL)
             guard let bundleIdentifier = bundle?.bundleIdentifier else {
+                // Fallback method
                 guard let dockItemTitle = try hoveredDockItem.title() else {
                     return ApplicationReturnType(status: .notFound, iconRect: iconRect)
                 }
@@ -343,52 +341,7 @@ final class DockObserver {
             else {
                 return nil
             }
-
-            var adjustedRect = CGRect(origin: position, size: size)
-            let pos = DockUtils.getDockPosition()
-            let isHorizontal = pos == .left || pos == .right
-
-            let currentMouseLocation = DockObserver.getMousePosition()
-            let currentScreen = NSScreen.screenContainingMouse(currentMouseLocation)
-
-            let height: CGFloat = switch pos {
-            case .right, .left:
-                abs(currentScreen.frame.width - currentScreen.visibleFrame.width)
-            case .bottom:
-                currentScreen.frame.height - currentScreen.visibleFrame.height - DockUtils.getStatusBarHeight(screen: currentScreen) - 1
-            case .top:
-                currentScreen.frame.height - currentScreen.visibleFrame.height
-            default:
-                0.0
-            }
-
-            if height > 0 {
-                switch pos {
-                case .left, .right:
-                    cachedDockWidth = height
-                case .bottom, .top:
-                    cachedDockHeight = height
-                default:
-                    break
-                }
-            }
-
-            if height == 0 {
-                switch pos {
-                case .left where cachedDockWidth > 0:
-                    adjustedRect.origin.x += cachedDockWidth
-                case .right where cachedDockWidth > 0:
-                    adjustedRect.origin.x -= cachedDockWidth
-                case .bottom where cachedDockHeight > 0:
-                    adjustedRect.origin.y -= cachedDockHeight
-                case .top where cachedDockHeight > 0:
-                    adjustedRect.origin.y += cachedDockHeight
-                default:
-                    break
-                }
-            }
-
-            return adjustedRect
+            return CGRect(origin: position, size: size)
         } catch {
             return nil
         }
