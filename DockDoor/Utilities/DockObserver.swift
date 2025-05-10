@@ -20,7 +20,7 @@ struct ApplicationReturnType {
     }
 
     let status: Status
-    let iconRect: CGRect?
+    let dockItemElement: AXUIElement?
 }
 
 func handleSelectedDockItemChangedNotification(observer _: AXObserver, element _: AXUIElement, notificationName _: CFString, _: UnsafeMutableRawPointer?) {
@@ -202,7 +202,7 @@ final class DockObserver {
                 try Task.checkCancellation()
 
                 guard case let .success(currentApp) = appUnderMouseElement.status,
-                      let iconRect = appUnderMouseElement.iconRect
+                      let dockItemElement = appUnderMouseElement.dockItemElement
                 else {
                     return
                 }
@@ -259,7 +259,7 @@ final class DockObserver {
                         windows: appWindows,
                         mouseLocation: convertedMouseLocation,
                         mouseScreen: mouseScreen,
-                        iconRect: iconRect,
+                        dockItemElement: dockItemElement,
                         overrideDelay: lastAppUnderMouse == nil && Defaults[.hoverWindowOpenDelay] == 0,
                         onWindowTap: { [weak self] in
                             self?.hideWindowAndResetLastApp()
@@ -300,10 +300,8 @@ final class DockObserver {
 
     func getDockItemAppStatusUnderMouse() -> ApplicationReturnType {
         guard let hoveredDockItem = getHoveredApplicationDockItem() else {
-            return ApplicationReturnType(status: .notFound, iconRect: nil)
+            return ApplicationReturnType(status: .notFound, dockItemElement: nil)
         }
-
-        let iconRect = getIconRect(for: hoveredDockItem)
 
         do {
             guard let appURL = try hoveredDockItem.attribute(kAXURLAttribute, NSURL.self)?.absoluteURL else {
@@ -314,36 +312,23 @@ final class DockObserver {
             guard let bundleIdentifier = bundle?.bundleIdentifier else {
                 // Fallback method
                 guard let dockItemTitle = try hoveredDockItem.title() else {
-                    return ApplicationReturnType(status: .notFound, iconRect: iconRect)
+                    return ApplicationReturnType(status: .notFound, dockItemElement: hoveredDockItem)
                 }
 
                 if let app = WindowUtil.findRunningApplicationByName(named: dockItemTitle) {
-                    return ApplicationReturnType(status: .success(app), iconRect: iconRect)
+                    return ApplicationReturnType(status: .success(app), dockItemElement: hoveredDockItem)
                 } else {
-                    return ApplicationReturnType(status: .notFound, iconRect: iconRect)
+                    return ApplicationReturnType(status: .notFound, dockItemElement: hoveredDockItem)
                 }
             }
 
             if let runningApp = NSRunningApplication.runningApplications(withBundleIdentifier: bundleIdentifier).first {
-                return ApplicationReturnType(status: .success(runningApp), iconRect: iconRect)
+                return ApplicationReturnType(status: .success(runningApp), dockItemElement: hoveredDockItem)
             } else {
-                return ApplicationReturnType(status: .notRunning(bundleIdentifier: bundleIdentifier), iconRect: iconRect)
+                return ApplicationReturnType(status: .notRunning(bundleIdentifier: bundleIdentifier), dockItemElement: hoveredDockItem)
             }
         } catch {
-            return ApplicationReturnType(status: .notFound, iconRect: iconRect)
-        }
-    }
-
-    private func getIconRect(for dockItem: AXUIElement) -> CGRect? {
-        do {
-            guard let position = try dockItem.position(),
-                  let size = try dockItem.size()
-            else {
-                return nil
-            }
-            return CGRect(origin: position, size: size)
-        } catch {
-            return nil
+            return ApplicationReturnType(status: .notFound, dockItemElement: hoveredDockItem)
         }
     }
 

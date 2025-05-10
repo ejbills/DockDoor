@@ -226,7 +226,7 @@ class KeybindHelper {
                 windows: windows,
                 mouseLocation: mouseLocation,
                 mouseScreen: mouseScreen,
-                iconRect: nil,
+                dockItemElement: nil,
                 overrideDelay: true,
                 centeredHoverWindowState: .windowSwitcher,
                 onWindowTap: {
