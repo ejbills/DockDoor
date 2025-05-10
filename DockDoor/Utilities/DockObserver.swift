@@ -1,4 +1,5 @@
 import ApplicationServices
+import ApplicationServices.HIServices.AXNotificationConstants
 import Cocoa
 import Defaults
 
@@ -46,6 +47,15 @@ final class DockObserver {
 
     private var notRunningCount: Int = 0
     private let maxNotRunningCount: Int = 3
+
+    private var lastIconRect: CGRect?
+    private var pulseWorkItem: DispatchWorkItem?
+
+    private var positionCheckTimer: Timer?
+    private var observedDockItem: AXUIElement?
+    private var lastCheckedRect: CGRect?
+
+    private(set) var isPositionMonitoringActive: Bool = false
 
     private init() {
         setupSelectedDockItemObserver()
@@ -139,13 +149,80 @@ final class DockObserver {
         }
     }
 
+    private func cancelPulseWorkItem() {
+        pulseWorkItem?.cancel()
+        pulseWorkItem = nil
+    }
+
+    deinit {
+        teardownObserver()
+        stopPositionChecking()
+    }
+
+    private func startPositionChecking(for dockItem: AXUIElement) {
+        stopPositionChecking()
+
+        observedDockItem = dockItem
+        lastCheckedRect = getIconRect(for: dockItem)
+
+        positionCheckTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { [weak self] _ in
+            guard let self,
+                  let dockItem = observedDockItem
+            else {
+                return
+            }
+
+            // Check if mouse is still over a dock item
+            guard getHoveredApplicationDockItem() != nil else {
+                stopPositionChecking()
+                return
+            }
+
+            // Check position changes
+            guard let newRect = getIconRect(for: dockItem),
+                  let lastRect = lastCheckedRect,
+                  newRect != lastRect
+            else {
+                return
+            }
+
+            lastCheckedRect = newRect
+            handlePositionChanged(element: dockItem)
+        }
+    }
+
+    private func stopPositionChecking() {
+        positionCheckTimer?.invalidate()
+        positionCheckTimer = nil
+        observedDockItem = nil
+        lastCheckedRect = nil
+    }
+
+    private func handlePositionChanged(element: AXUIElement) {
+        guard let iconRect = getIconRect(for: element) else { return }
+
+        DispatchQueue.main.async {
+            SharedPreviewWindowCoordinator.shared.updatePosition(iconRect: iconRect)
+        }
+    }
+
+    func startPositionMonitoring() {
+        guard let hoveredDockItem = getHoveredApplicationDockItem() else { return }
+        startPositionChecking(for: hoveredDockItem)
+        isPositionMonitoringActive = true
+    }
+
+    func stopPositionMonitoring() {
+        stopPositionChecking()
+        isPositionMonitoringActive = false
+    }
+
     func processSelectedDockItemChanged() {
         let currentTime = ProcessInfo.processInfo.systemUptime
         let currentMouseLocation = DockObserver.getMousePosition()
         let appUnderMouseElement = getDockItemAppStatusUnderMouse()
 
-        // Handle invalid states (notRunning or notFound)
-        if case let .notRunning(bundleIdentifier) = appUnderMouseElement.status {
+        if case let .notRunning(bundleIdentifier: bundleIdentifier) = appUnderMouseElement.status {
             if lastNotificationId == bundleIdentifier {
                 let timeSinceLastNotification = currentTime - lastNotificationTime
                 if timeSinceLastNotification < artifactTimeThreshold {
@@ -183,7 +260,6 @@ final class DockObserver {
             return
         }
 
-        // Only reset count on success
         if case .success = appUnderMouseElement.status {
             notRunningCount = 0
         }
@@ -209,7 +285,6 @@ final class DockObserver {
 
                 let pid = currentApp.processIdentifier
 
-                // Handle repeat notifications for same app
                 if lastNotificationId == String(pid) {
                     let timeSinceLastNotification = currentTime - lastNotificationTime
                     if timeSinceLastNotification < artifactTimeThreshold {
@@ -312,7 +387,6 @@ final class DockObserver {
 
             let bundle = Bundle(url: appURL)
             guard let bundleIdentifier = bundle?.bundleIdentifier else {
-                // Fallback method
                 guard let dockItemTitle = try hoveredDockItem.title() else {
                     return ApplicationReturnType(status: .notFound, iconRect: iconRect)
                 }
