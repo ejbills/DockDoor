@@ -38,6 +38,24 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://buymeacoffee.com/keplercafe</div>
 
+<a id="v1.9"></a>
+# [v1.9](https://github.com/ejbills/DockDoor/releases/tag/v1.9) - 2025-05-10
+
+## New features
+- Click app icon to minimize all windows of an app ([#505](https://github.com/ejbills/DockDoor/issues/505))
+- - https://github.com/user-attachments/assets/e6deb2c9-0468-431d-9d40-66e959fc5df2
+- - ![CleanShot 2025-05-10 at 11 22 21@2x](https://github.com/user-attachments/assets/db6105e5-9298-4bae-b7e7-6a0d2a0fd5fd)
+- Remove DockDoor icon bouncing in dock with silent startup ([#539](https://github.com/ejbills/DockDoor/issues/539) thanks [@ShlomoCode](https://github.com/ShlomoCode))
+
+## Bug fixes
+- Window preview will be hidden on app icon click 
+- Hide window when a click is outside of it's bounds
+- Window preview showing under the dock ([#542](https://github.com/ejbills/DockDoor/issues/542))
+- Ensure app re-attaches to Dock process if Dock is ever killed while DockDoor is running
+
+[Changes][v1.9]
+
+
 <a id="v1.8"></a>
 # [v1.8](https://github.com/ejbills/DockDoor/releases/tag/v1.8) - 2025-05-05
 
@@ -847,6 +865,7 @@ v1.0
 [Changes][releases]
 
 
+[v1.9]: https://github.com/ejbills/DockDoor/compare/v1.8...v1.9
 [v1.8]: https://github.com/ejbills/DockDoor/compare/v1.7.1...v1.8
 [v1.7.1]: https://github.com/ejbills/DockDoor/compare/v1.7...v1.7.1
 [v1.7]: https://github.com/ejbills/DockDoor/compare/v1.6.2...v1.7
