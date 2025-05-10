@@ -307,8 +307,7 @@ struct WindowPreview: View {
                             appName: windowInfo.app.localizedName ?? "Unknown",
                             windows: [windowInfo],
                             mouseScreen: bestGuessMonitor,
-                            iconRect: nil,
-                            overrideDelay: true,
+                            dockItemElement: nil, overrideDelay: true,
                             centeredHoverWindowState: .fullWindowPreview
                         )
                     }
