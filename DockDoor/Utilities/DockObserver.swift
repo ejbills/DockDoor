@@ -160,6 +160,7 @@ final class DockObserver {
     }
 
     private func startPositionChecking(for dockItem: AXUIElement) {
+        guard CoreDockGetAutoHideEnabled() else { return }
         stopPositionChecking()
 
         observedDockItem = dockItem
