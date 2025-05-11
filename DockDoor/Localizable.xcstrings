@@ -1146,6 +1146,7 @@
       }
     },
     "• When hovering over the Dock at the bottom, windows flow in rows from left to right" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -1336,6 +1337,7 @@
       }
     },
     "• When hovering over the Dock on the sides, windows flow in columns from top to bottom" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -1526,6 +1528,7 @@
       }
     },
     "• When using the Window Switcher, windows always flow in rows from left to right" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -1716,6 +1719,7 @@
       }
     },
     "+" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -1906,6 +1910,7 @@
       }
     },
     "1." : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -2478,6 +2483,7 @@
       }
     },
     "2." : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -2859,6 +2865,7 @@
       }
     },
     "3." : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -3240,6 +3247,7 @@
       }
     },
     "4." : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -4192,7 +4200,11 @@
         }
       }
     },
+    "Actions" : {
+
+    },
     "Add" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -4383,6 +4395,7 @@
       }
     },
     "Add additional directories to scan for applications" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -4573,6 +4586,7 @@
       }
     },
     "Add Directory" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -4763,6 +4777,7 @@
       }
     },
     "Add Filter" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -4953,6 +4968,7 @@
       }
     },
     "Adjust this if the preview is misaligned with dock" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -6098,6 +6114,7 @@
       }
     },
     "amount" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -6288,6 +6305,7 @@
       }
     },
     "Animation speed" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -6477,7 +6495,14 @@
         }
       }
     },
+    "App Name" : {
+
+    },
+    "App name style" : {
+
+    },
     "App Name Style" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -6859,6 +6884,7 @@
       }
     },
     "Appearance settings" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -7049,6 +7075,7 @@
       }
     },
     "Application filters" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -8378,7 +8405,11 @@
         }
       }
     },
+    "Automatic updates" : {
+
+    },
     "Automatic Updates" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -8759,7 +8790,11 @@
         }
       }
     },
+    "Behaviour" : {
+
+    },
     "Blur amount" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -9331,7 +9366,11 @@
         }
       }
     },
+    "Buy Me a Coffee" : {
+
+    },
     "Buy me a coffee here, thank you!" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -9904,6 +9943,7 @@
       }
     },
     "Cannot Add Color" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -10094,6 +10134,7 @@
       }
     },
     "Cannot Remove Color" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -10283,7 +10324,14 @@
         }
       }
     },
+    "Change Accessibility permissions" : {
+
+    },
+    "Change Screen Recording permissions" : {
+
+    },
     "Check for Updates" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -10473,7 +10521,14 @@
         }
       }
     },
+    "Check now" : {
+
+    },
+    "Checking for updates..." : {
+
+    },
     "Click \"Set Trigger Key\"" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -11044,6 +11099,7 @@
       }
     },
     "Colors" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -11234,6 +11290,7 @@
       }
     },
     "Command (⌘)" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -11422,6 +11479,9 @@
           }
         }
       }
+    },
+    "Configure how previews respond to mouse interactions." : {
+
     },
     "Confirm" : {
       "localizations" : {
@@ -11613,7 +11673,11 @@
         }
       }
     },
+    "Contribute a translation" : {
+
+    },
     "Contribute translation here!" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -11804,6 +11868,7 @@
       }
     },
     "Control (⌃)" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -11992,6 +12057,12 @@
           }
         }
       }
+    },
+    "Control how app names, window titles, and controls are displayed." : {
+
+    },
+    "Controls position" : {
+
     },
     "Current Keybind: %@" : {
       "extractionState" : "stale",
@@ -12185,6 +12256,7 @@
       }
     },
     "Current Shortcut" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -12375,6 +12447,7 @@
       }
     },
     "Current Version" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -12563,6 +12636,9 @@
           }
         }
       }
+    },
+    "Current version: %@" : {
+
     },
     "Current Version: %@" : {
       "extractionState" : "stale",
@@ -12756,6 +12832,7 @@
       }
     },
     "Custom Application Directories" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -13329,6 +13406,7 @@
       }
     },
     "Dim Unselected Windows" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -14089,6 +14167,7 @@
       }
     },
     "Dock Previews" : {
+      "comment" : "Settings tab title",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -14280,6 +14359,7 @@
     },
     "Dock Previews & Window Switcher" : {
       "comment" : "Preview window title display condition option",
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -14471,6 +14551,7 @@
     },
     "Dock Previews only" : {
       "comment" : "Preview window title condition display option",
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -14660,7 +14741,14 @@
         }
       }
     },
+    "Dock previews settings" : {
+
+    },
+    "DockDoor" : {
+
+    },
     "DockDoor does not record your screen or audio. It only captures static window previews. No information is stored or shared; all processing occurs privately on your device." : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -14851,6 +14939,7 @@
       }
     },
     "DockDoor needs screen recording access. In macOS Sequoia, you'll see this prompt every week or month and after reboots. This is a new system-wide security policy for all screen capture apps." : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -15040,7 +15129,11 @@
         }
       }
     },
+    "DockDoor needs the following macOS permissions to function." : {
+
+    },
     "Edit Color" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -15614,6 +15707,7 @@
       }
     },
     "Enable automatic checking for updates" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -16376,6 +16470,7 @@
       }
     },
     "Enabled" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -16566,6 +16661,7 @@
       }
     },
     "Enabled Buttons" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -16946,6 +17042,7 @@
       }
     },
     "Enter text to filter" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -17517,6 +17614,7 @@
       }
     },
     "Exclude windows from capture by filtering specific text in their titles" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -17705,6 +17803,9 @@
           }
         }
       }
+    },
+    "Explore our other apps" : {
+
     },
     "Extra Extra Small" : {
       "comment" : "Window size option",
@@ -18092,6 +18193,7 @@
     },
     "Filters" : {
       "comment" : "Filters tab title",
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -18282,6 +18384,7 @@
       }
     },
     "Filters settings" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -18662,6 +18765,7 @@
       }
     },
     "Found a Bug?" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -19612,6 +19716,9 @@
         }
       }
     },
+    "GitHub" : {
+
+    },
     "Granted" : {
       "localizations" : {
         "af" : {
@@ -19803,6 +19910,7 @@
       }
     },
     "Have an Idea?" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -19994,6 +20102,7 @@
     },
     "Help" : {
       "comment" : "Settings tab title",
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -20184,6 +20293,7 @@
       }
     },
     "Help and questions settings" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -20374,6 +20484,7 @@
       }
     },
     "Help us improve DockDoor by reporting any issues you encounter." : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -20755,10 +20866,8 @@
         }
       }
     },
-    "Hide all application windows when clicking on the dock icon" : {
-
-    },
     "Highlight Gradient Colors" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -21331,6 +21440,7 @@
       }
     },
     "How to Set Up" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -21521,6 +21631,7 @@
       }
     },
     "If you find DockDoor useful, consider donating. Your support helps keep the project going!" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -21902,6 +22013,7 @@
       }
     },
     "Ignore Apps with One Window" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -22283,6 +22395,7 @@
       }
     },
     "Include Hidden and Minimized Windows in the Window Switcher" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -22472,7 +22585,11 @@
         }
       }
     },
+    "Include hidden and minimized windows." : {
+
+    },
     "Initialization Key" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -22663,6 +22780,7 @@
       }
     },
     "Instructions" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -22853,6 +22971,7 @@
       }
     },
     "Keep previews visible during lateral movement" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -23043,6 +23162,7 @@
       }
     },
     "Keyboard Shortcut" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -23231,6 +23351,9 @@
           }
         }
       }
+    },
+    "Labels and Controls" : {
+
     },
     "Large" : {
       "comment" : "Window size option",
@@ -23425,6 +23548,7 @@
       }
     },
     "Large (1/2)" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -23805,6 +23929,7 @@
       }
     },
     "Launch DockDoor at login" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -23995,6 +24120,7 @@
       }
     },
     "Layout Limits" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -24375,6 +24501,7 @@
       }
     },
     "Maximum Horizontal Rows" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -24565,6 +24692,7 @@
       }
     },
     "Maximum number of colors (%lld) reached." : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -24755,6 +24883,7 @@
       }
     },
     "Maximum Vertical Columns" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -25137,6 +25266,7 @@
       }
     },
     "Medium (1/%lld)" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -26280,6 +26410,7 @@
       }
     },
     "Minimum number of colors reached." : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -26468,6 +26599,9 @@
           }
         }
       }
+    },
+    "Monochrome appearance" : {
+
     },
     "Navigate to Settings → Privacy & Security" : {
       "localizations" : {
@@ -27232,6 +27366,7 @@
       }
     },
     "No custom directories added" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -27422,6 +27557,7 @@
       }
     },
     "No filters added" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -28374,6 +28510,12 @@
         }
       }
     },
+    "Not Granted" : {
+
+    },
+    "Number of previews before wrapping to a new row." : {
+
+    },
     "OK" : {
       "localizations" : {
         "af" : {
@@ -28947,6 +29089,7 @@
       }
     },
     "Only takes effect when dock auto-hide is enabled" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -29709,6 +29852,7 @@
       }
     },
     "Option (⌥)" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -30281,6 +30425,7 @@
       }
     },
     "Permissions settings" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -30851,7 +30996,11 @@
         }
       }
     },
+    "Placement strategy" : {
+
+    },
     "Placement Strategy" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -31805,6 +31954,7 @@
       }
     },
     "Position Window Controls" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -32568,6 +32718,7 @@
       }
     },
     "Press any key..." : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -32758,6 +32909,7 @@
       }
     },
     "Press ONLY the trigger key (e.g. just Tab)" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -33139,6 +33291,7 @@
       }
     },
     "Prevent dock from hiding during previews" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -33329,6 +33482,7 @@
       }
     },
     "Prevents previews from disappearing when moving sideways to adjacent windows" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -33710,6 +33864,7 @@
       }
     },
     "Preview Hover Delay" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -33900,6 +34055,7 @@
       }
     },
     "Preview Size" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -34090,6 +34246,7 @@
       }
     },
     "Preview Window Fade Out Duration" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -34280,6 +34437,7 @@
       }
     },
     "Preview Window Inactivity Timer" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -34470,6 +34628,7 @@
       }
     },
     "Preview Window Open Delay" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -34849,6 +35008,12 @@
           }
         }
       }
+    },
+    "Preview wrap" : {
+
+    },
+    "Preview:" : {
+
     },
     "Quit" : {
       "localizations" : {
@@ -35422,6 +35587,7 @@
       }
     },
     "Reduce motion" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -35612,6 +35778,7 @@
       }
     },
     "Remove" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -35802,6 +35969,7 @@
       }
     },
     "Remove All" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -35992,6 +36160,7 @@
       }
     },
     "Report a Bug" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -36181,7 +36350,11 @@
         }
       }
     },
+    "Report an issue" : {
+
+    },
     "Request a Feature" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -36372,6 +36545,7 @@
       }
     },
     "Required for capturing window previews of other apps" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -36561,7 +36735,11 @@
         }
       }
     },
+    "Required for capturing window previews of other apps." : {
+
+    },
     "Required for dock hover detection and window switcher hotkeys" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -36751,7 +36929,11 @@
         }
       }
     },
+    "Required for dock hover detection and window switcher hotkeys." : {
+
+    },
     "Reset" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -36940,6 +37122,9 @@
           }
         }
       }
+    },
+    "Reset all settings" : {
+
     },
     "Reset All Settings" : {
       "extractionState" : "stale",
@@ -37133,6 +37318,7 @@
       }
     },
     "Reset All Settings to Defaults" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -37323,6 +37509,7 @@
       }
     },
     "Reset to Defaults" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -38084,6 +38271,7 @@
       }
     },
     "Right click a color to remove it." : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -38274,6 +38462,7 @@
       }
     },
     "Rounded image corners" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -38464,6 +38653,7 @@
       }
     },
     "Screen" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -38845,6 +39035,7 @@
       }
     },
     "Screen recording" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -39033,6 +39224,9 @@
           }
         }
       }
+    },
+    "Screen Recording" : {
+
     },
     "Screen Recording Permissions" : {
       "extractionState" : "stale",
@@ -39608,6 +39802,7 @@
       }
     },
     "seconds" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -40182,6 +40377,7 @@
       }
     },
     "See more..." : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -40372,6 +40568,7 @@
       }
     },
     "Select an initialization key (e.g. Command ⌘)" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -40562,6 +40759,7 @@
       }
     },
     "Select which applications can be captured and previewed" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -40943,6 +41141,7 @@
       }
     },
     "Set to 0 for unlimited" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -41133,6 +41332,7 @@
       }
     },
     "Set Trigger Key" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -41514,6 +41714,7 @@
       }
     },
     "Show App Name in Dock Previews" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -41703,7 +41904,17 @@
         }
       }
     },
+    "Show app name." : {
+
+    },
+    "Show in Menu Bar" : {
+
+    },
+    "Show last active window first (matches Windows 11 behaviour)" : {
+
+    },
     "Show Menu Bar Icon" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -41894,6 +42105,7 @@
       }
     },
     "Show Window Title in" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -42084,6 +42296,7 @@
       }
     },
     "Show Window Title in Previews" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -42655,6 +42868,12 @@
         }
       }
     },
+    "Show window titles." : {
+
+    },
+    "Show:" : {
+
+    },
     "Simulate a click" : {
       "comment" : "Window popup hover action option",
       "extractionState" : "stale",
@@ -43038,6 +43257,12 @@
         }
       }
     },
+    "Size" : {
+
+    },
+    "Size:" : {
+
+    },
     "Small" : {
       "comment" : "Window size option",
       "extractionState" : "stale",
@@ -43231,6 +43456,7 @@
       }
     },
     "Small (1/%lld)" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -43420,7 +43646,11 @@
         }
       }
     },
+    "Small is equivalent to Windows 11." : {
+
+    },
     "Sort Window Previews by Date" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -44376,6 +44606,7 @@
       }
     },
     "Suggest new features to make DockDoor even better." : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -44566,6 +44797,7 @@
       }
     },
     "Support DockDoor" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -44754,6 +44986,9 @@
           }
         }
       }
+    },
+    "Support Us" : {
+
     },
     "The changes to permissions will take effect after restarting." : {
       "localizations" : {
@@ -45328,6 +45563,7 @@
       }
     },
     "Tiny (1/%lld)" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -45518,6 +45754,7 @@
       }
     },
     "Toggle" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -46661,6 +46898,7 @@
       }
     },
     "Traffic Light Buttons Visibility" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -46851,6 +47089,7 @@
       }
     },
     "Trigger Key" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -47801,6 +48040,7 @@
       }
     },
     "Up to Date" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -47991,6 +48231,7 @@
       }
     },
     "Update available" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -48180,7 +48421,11 @@
         }
       }
     },
+    "Update available - Version %@" : {
+
+    },
     "Update settings" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -48944,6 +49189,7 @@
       }
     },
     "Use Monochrome Colors" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -49516,6 +49762,7 @@
       }
     },
     "Use Windows-style window ordering in the window switcher" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -49706,6 +49953,7 @@
       }
     },
     "Version %@" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -49895,7 +50143,14 @@
         }
       }
     },
+    "Visibility" : {
+
+    },
+    "Visit Us" : {
+
+    },
     "Want to see for yourself? Review our source code" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -50086,6 +50341,7 @@
       }
     },
     "Want to see the app in your language?" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -50276,6 +50532,7 @@
       }
     },
     "Want to support development?" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -50464,6 +50721,9 @@
           }
         }
       }
+    },
+    "Website" : {
+
     },
     "Welcome to DockDoor!" : {
       "localizations" : {
@@ -50848,6 +51108,7 @@
       }
     },
     "When enabled, all preview images will be cropped to a rounded rectangle." : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -51037,10 +51298,8 @@
         }
       }
     },
-    "When enabled, clicking an app's Dock icon will minimize all windows of that application, similar to Windows taskbar behavior" : {
-
-    },
     "When enabled, dims all windows except those currently under selected." : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -51231,6 +51490,7 @@
       }
     },
     "When enabled, shows the last active window first instead of the current window" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -52377,6 +52637,7 @@
       }
     },
     "Window Buffer" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -52758,6 +53019,7 @@
       }
     },
     "Window Image Cache Lifespan" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -52948,6 +53210,7 @@
       }
     },
     "Window Image Resolution Scale (higher means lower resolution)" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -53138,6 +53401,7 @@
       }
     },
     "Window Preview Layout" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -53710,6 +53974,7 @@
       }
     },
     "Window Selection Background Color" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -53900,6 +54165,7 @@
       }
     },
     "Window Selection Background Opacity" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -54473,6 +54739,7 @@
     },
     "Window Switcher only" : {
       "comment" : "Preview window title condition display option",
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -54663,6 +54930,7 @@
       }
     },
     "Window Switcher Placement" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -54852,7 +55120,11 @@
         }
       }
     },
+    "Window switcher settings" : {
+
+    },
     "Window title filters" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -55042,7 +55314,11 @@
         }
       }
     },
+    "Window title position" : {
+
+    },
     "Window Title Position" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -55232,7 +55508,11 @@
         }
       }
     },
+    "Window title visibility" : {
+
+    },
     "Window Title Visibility" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -55422,7 +55702,11 @@
         }
       }
     },
+    "Window Titles" : {
+
+    },
     "Windows switching settings" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -55611,6 +55895,9 @@
           }
         }
       }
+    },
+    "Wrap:" : {
+
     },
     "You need to give DockDoor access to the accessibility API in order for it to function." : {
       "extractionState" : "stale",
@@ -55804,6 +56091,7 @@
       }
     },
     "Your app is on version %@" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -55994,6 +56282,7 @@
       }
     },
     "Your shortcut will be set (e.g. ⌘ + Tab)" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {

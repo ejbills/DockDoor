@@ -26,13 +26,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var firstTimeWindow: NSWindow?
     lazy var settingsWindowController: SettingsWindowController = {
         var panes: [SettingsPane] = [
-            GeneralSettingsViewController(),
-            AppearanceSettingsViewController(),
-            FiltersSettingsViewController(),
-            WindowSwitcherSettingsViewController(),
-            PermissionsSettingsViewController(),
-            HelpSettingsViewController(),
-            UpdatesSettingsViewController(updater: updaterController.updater),
+            MainSettingsViewController(),
+            DockPreviewsViewController(),
+            WindowSwitcherViewController(),
         ]
 
         let controller = SettingsWindowController(panes: panes)

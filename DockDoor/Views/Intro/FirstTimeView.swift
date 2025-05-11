@@ -19,7 +19,7 @@ struct FirstTimeView: View {
             .transition(.asymmetric(insertion: .offset(x: 600), removal: .offset(x: -600)).combined(with: .opacity))
         }
         .padding(.bottom, 51) // To compensate navbar
-        .frame(width: 600, height: 320)
+        .frame(width: 600, height: 384)
         .background {
             CustomizableFluidGradientView().opacity(lightsOn ? 0.125 : 0)
                 .ignoresSafeArea(.all)

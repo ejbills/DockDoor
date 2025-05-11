@@ -17,7 +17,6 @@ struct WindowPreview: View {
 
     @Default(.windowTitlePosition) var windowTitlePosition
     @Default(.showWindowTitle) var showWindowTitle
-    @Default(.windowTitleDisplayCondition) var windowTitleDisplayCondition
     @Default(.windowTitleVisibility) var windowTitleVisibility
     @Default(.trafficLightButtonsVisibility) var trafficLightButtonsVisibility
     @Default(.trafficLightButtonsPosition) var trafficLightButtonsPosition
@@ -30,12 +29,22 @@ struct WindowPreview: View {
     @Default(.tapEquivalentInterval) var tapEquivalentInterval
     @Default(.previewHoverAction) var previewHoverAction
 
+    @Default(.showWindowTitleInSwitcher) var showWindowTitleInSwitcher
+
     @State private var isHoveringOverDockPeekPreview = false
     @State private var isHoveringOverWindowSwitcherPreview = false
     @State private var fullPreviewTimer: Timer?
     @State private var isDraggingOver = false
     @State private var dragTimer: Timer?
     @State private var highlightOpacity = 0.0
+
+    private var shouldShowWindowTitle: Bool {
+        if windowSwitcherActive {
+            showWindowTitleInSwitcher
+        } else {
+            showWindowTitle
+        }
+    }
 
     private func windowContent(isMinimized: Bool, isHidden: Bool, isSelected: Bool) -> some View {
         Group {
@@ -85,11 +94,6 @@ struct WindowPreview: View {
     }
 
     private func windowSwitcherContent(_ selected: Bool) -> some View {
-        let shouldShowTitle = showWindowTitle && (
-            windowTitleDisplayCondition == .all ||
-                windowTitleDisplayCondition == .windowSwitcherOnly
-        )
-
         let titleAndSubtitleContent = VStack(alignment: .leading, spacing: 0) {
             Text(windowInfo.app.localizedName ?? "Unknown")
                 .font(.system(size: 13, weight: .medium))
@@ -99,7 +103,7 @@ struct WindowPreview: View {
             if let windowTitle = windowInfo.window.title,
                !windowTitle.isEmpty,
                windowTitle != windowInfo.app.localizedName,
-               shouldShowTitle
+               showWindowTitleInSwitcher
             {
                 HStack(spacing: 0) {
                     Text(windowInfo.windowName ?? "Hidden window")
@@ -387,11 +391,7 @@ struct WindowPreview: View {
 
     @ViewBuilder
     private func windowTitleOverlay(selected: Bool) -> some View {
-        let shouldShowTitle = showWindowTitle && (
-            windowTitleDisplayCondition == .all ||
-                (windowTitleDisplayCondition == .dockPreviewsOnly && !windowSwitcherActive) ||
-                (windowTitleDisplayCondition == .windowSwitcherOnly && windowSwitcherActive)
-        )
+        let shouldShowTitle = shouldShowWindowTitle
 
         if shouldShowTitle, windowTitleVisibility == .alwaysVisible || selected {
             if let windowTitle = windowInfo.windowName,

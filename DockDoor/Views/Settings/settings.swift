@@ -4,94 +4,39 @@ import Sparkle
 
 extension Settings.PaneIdentifier {
     static let general = Self("general")
-    static let appearance = Self("appearance")
-    static let filters = Self("filters")
-    static let permissions = Self("permissions")
-    static let updates = Self("updates")
-    static let alttab = Self("alttab")
-    static let help = Self("help")
+    static let dockpreviews = Self("dockpreviews")
+    static let windowswitcher = Self("windowswitcher")
 }
 
-let GeneralSettingsViewController: () -> SettingsPane = {
+let MainSettingsViewController: () -> SettingsPane = {
     let paneView = Settings.Pane(
         identifier: .general,
         title: String(localized: "General", comment: "Settings tab title"),
-        toolbarIcon: NSImage(systemSymbolName: "gearshape.fill", accessibilityDescription: String(localized: "General settings"))!
+        toolbarIcon: NSImage(systemSymbolName: "gearshape", accessibilityDescription: String(localized: "General settings"))!
     ) {
         MainSettingsView()
     }
-
     return Settings.PaneHostingController(pane: paneView)
 }
 
-let AppearanceSettingsViewController: () -> SettingsPane = {
+let DockPreviewsViewController: () -> SettingsPane = {
     let paneView = Settings.Pane(
-        identifier: .appearance,
-        title: String(localized: "Appearance", comment: "Settings Tab"),
-        toolbarIcon: NSImage(systemSymbolName: "wand.and.stars.inverse", accessibilityDescription: String(localized: "Appearance settings"))!
+        identifier: .dockpreviews,
+        title: String(localized: "Dock Previews", comment: "Settings tab title"),
+        toolbarIcon: NSImage(systemSymbolName: "bubble.middle.bottom", accessibilityDescription: String(localized: "Dock previews settings"))!
     ) {
-        AppearanceSettingsView()
+        DockPreviewsView()
     }
-
     return Settings.PaneHostingController(pane: paneView)
 }
 
-let WindowSwitcherSettingsViewController: () -> SettingsPane = {
+let WindowSwitcherViewController: () -> SettingsPane = {
     let paneView = Settings.Pane(
-        identifier: .alttab,
+        identifier: .windowswitcher,
         title: String(localized: "Window Switcher", comment: "Settings tab title"),
-        toolbarIcon: NSImage(systemSymbolName: "text.and.command.macwindow", accessibilityDescription: String(localized: "Windows switching settings"))!
+        toolbarIcon: NSImage(systemSymbolName: "macwindow", accessibilityDescription: String(localized: "Window switcher settings"))!
     ) {
-        WindowSwitcherSettingsView()
+        WindowSwitcherView()
     }
-
-    return Settings.PaneHostingController(pane: paneView)
-}
-
-let FiltersSettingsViewController: () -> SettingsPane = {
-    let paneView = Settings.Pane(
-        identifier: .filters,
-        title: String(localized: "Filters", comment: "Filters tab title"),
-        toolbarIcon: NSImage(systemSymbolName: "air.purifier", accessibilityDescription: String(localized: "Filters settings"))!
-    ) {
-        FiltersSettingsView()
-    }
-
-    return Settings.PaneHostingController(pane: paneView)
-}
-
-let PermissionsSettingsViewController: () -> SettingsPane = {
-    let paneView = Settings.Pane(
-        identifier: .permissions,
-        title: String(localized: "Permissions", comment: "Settings tab title"),
-        toolbarIcon: NSImage(systemSymbolName: "lock.shield", accessibilityDescription: String(localized: "Permissions settings"))!
-    ) {
-        PermissionsSettingsView()
-    }
-
-    return Settings.PaneHostingController(pane: paneView)
-}
-
-func UpdatesSettingsViewController(updater: SPUUpdater) -> SettingsPane {
-    let paneView = Settings.Pane(
-        identifier: .updates,
-        title: String(localized: "Updates", comment: "Settings tab title"),
-        toolbarIcon: NSImage(systemSymbolName: "arrow.triangle.2.circlepath", accessibilityDescription: String(localized: "Update settings"))!
-    ) {
-        UpdateSettingsView(updater: updater)
-    }
-
-    return Settings.PaneHostingController(pane: paneView)
-}
-
-let HelpSettingsViewController: () -> SettingsPane = {
-    let paneView = Settings.Pane(
-        identifier: .help,
-        title: String(localized: "Help", comment: "Settings tab title"),
-        toolbarIcon: NSImage(systemSymbolName: "questionmark.circle.fill", accessibilityDescription: String(localized: "Help and questions settings"))!
-    ) {
-        HelpSettingsView()
-    }
-
     return Settings.PaneHostingController(pane: paneView)
 }

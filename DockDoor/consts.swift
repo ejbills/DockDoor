@@ -10,22 +10,22 @@ let roughHeightCap = optimisticScreenSizeHeight / 3
 let roughWidthCap = optimisticScreenSizeWidth / 3
 
 extension Defaults.Keys {
-    static let sizingMultiplier = Key<CGFloat>("sizingMultiplier", default: 3)
+    static let sizingMultiplier = Key<CGFloat>("sizingMultiplier", default: 8)
     static let bufferFromDock = Key<CGFloat>("bufferFromDock", default: 0)
     static let hoverWindowOpenDelay = Key<CGFloat>("openDelay", default: 0)
     static let lateralMovement = Key<Bool>("lateralMovement", default: true)
-    static let preventDockHide = Key<Bool>("preventDockHide", default: false)
+    static let preventDockHide = Key<Bool>("preventDockHide", default: true)
     static let shouldHideOnDockItemClick = Key<Bool>("shouldHideOnDockItemClick", default: false)
 
     static let screenCaptureCacheLifespan = Key<CGFloat>("screenCaptureCacheLifespan", default: 60)
     static let windowPreviewImageScale = Key<CGFloat>("windowPreviewImageScale", default: 1)
 
     static let uniformCardRadius = Key<Bool>("uniformCardRadius", default: true)
-    static let tapEquivalentInterval = Key<CGFloat>("tapEquivalentInterval", default: 1.5)
+    static let tapEquivalentInterval = Key<CGFloat>("tapEquivalentInterval", default: 0.3)
     static let fadeOutDuration = Key<CGFloat>("fadeOutDuration", default: 0.4)
     static let inactivityTimeout = Key<CGFloat>("inactivityTimeout", default: 1.5)
-    static let previewHoverAction = Key<PreviewHoverAction>("previewHoverAction", default: .none)
-    static let aeroShakeAction = Key<AeroShakeAction>("aeroShakeAction", default: .none)
+    static let previewHoverAction = Key<PreviewHoverAction>("previewHoverAction", default: .previewFullSize)
+    static let aeroShakeAction = Key<AeroShakeAction>("aeroShakeAction", default: .except)
 
     static let showAnimations = Key<Bool>("showAnimations", default: true)
     static let gradientColorPalette = Key<GradientColorPaletteSettings>("gradientColorPalette", default: .init())
@@ -41,23 +41,24 @@ extension Defaults.Keys {
     static let Int64maskAlternate = Key<Int>("Int64maskAlternate", default: 524_576)
     static let UserKeybind = Key<UserKeyBind>("UserKeybind", default: UserKeyBind(keyCode: 48, modifierFlags: Defaults[.Int64maskAlternate]))
 
-    static let showAppName = Key<Bool>("showAppName", default: true)
+    static let showAppName = Key<Bool>("showAppName", default: false)
     static let appNameStyle = Key<AppNameStyle>("appNameStyle", default: .default)
     static let selectionOpacity = Key<CGFloat>("selectionOpacity", default: 0.4)
     static let selectionColor = Key<Color?>("selectionColor", default: nil)
 
     static let showWindowTitle = Key<Bool>("showWindowTitle", default: true)
-    static let windowTitleDisplayCondition = Key<WindowTitleDisplayCondition>("windowTitleDisplayCondition", default: .all)
-    static let windowTitleVisibility = Key<WindowTitleVisibility>("windowTitleVisibility", default: .whenHoveringPreview)
+    static let windowTitleVisibility = Key<WindowTitleVisibility>("windowTitleVisibility", default: .alwaysVisible)
     static let windowTitlePosition = Key<WindowTitlePosition>("windowTitlePosition", default: .bottomLeft)
+    static let showWindowTitleInSwitcher = Key<Bool>("showWindowTitleInSwitcher", default: true)
 
-    static let trafficLightButtonsVisibility = Key<TrafficLightButtonsVisibility>("trafficLightButtonsVisibility", default: .dimmedOnPreviewHover)
+    static let trafficLightButtonsVisibility = Key<TrafficLightButtonsVisibility>("trafficLightButtonsVisibility", default: .fullOpacityOnPreviewHover)
     static let trafficLightButtonsPosition = Key<TrafficLightButtonsPosition>("trafficLightButtonsPosition", default: .topLeft)
-    static let enabledTrafficLightButtons = Key<Set<WindowAction>>("enabledTrafficLightButtons", default: [.quit, .close, .minimize, .toggleFullScreen])
+    static let enabledTrafficLightButtons = Key<Set<WindowAction>>("enabledTrafficLightButtons", default: [.close, .minimize, .toggleFullScreen])
     static let useMonochromeTrafficLights = Key<Bool>("useMonochromeTrafficLights", default: false)
 
-    static let maxColumns = Key<CGFloat>("maxColumns", default: 2)
-    static let maxRows = Key<CGFloat>("maxRows", default: 2)
+    static let maxColumns = Key<CGFloat>("maxColumns", default: 2) // Obsolete in favour of previewWrap
+    static let maxRows = Key<CGFloat>("maxRows", default: 2) // Obsolete in favour of previewWrap
+    static let previewWrap = Key<Int>("previewWrap", default: 2)
 
     static let windowSwitcherPlacementStrategy = Key<WindowSwitcherPlacementStrategy>("windowSwitcherPlacementStrategy", default: .screenWithMouse)
     static let windowSwitcherControlPosition = Key<WindowSwitcherControlPosition>("windowSwitcherControlPosition", default: .topTrailing)
@@ -72,23 +73,6 @@ extension Defaults.Keys {
 }
 
 // MARK: Display Configurations
-
-enum WindowTitleDisplayCondition: String, CaseIterable, Defaults.Serializable {
-    case all
-    case dockPreviewsOnly
-    case windowSwitcherOnly
-
-    var localizedName: String {
-        switch self {
-        case .all:
-            String(localized: "Dock Previews & Window Switcher", comment: "Preview window title display condition option")
-        case .dockPreviewsOnly:
-            String(localized: "Dock Previews only", comment: "Preview window title condition display option")
-        case .windowSwitcherOnly:
-            String(localized: "Window Switcher only", comment: "Preview window title condition display option")
-        }
-    }
-}
 
 enum WindowTitlePosition: String, CaseIterable, Defaults.Serializable {
     case bottomLeft

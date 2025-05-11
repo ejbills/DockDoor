@@ -79,79 +79,79 @@ struct TrafficLightButtons: View {
     }
 }
 
-extension AppearanceSettingsView {
-    struct TrafficLightButtonsSettingsView: View {
-        @Default(.enabledTrafficLightButtons) private var enabledButtons
-        @Default(.useMonochromeTrafficLights) private var useMonochrome
-        @Default(.trafficLightButtonsVisibility) private var trafficLightButtonsVisibility
+struct TrafficLightButtonsSettingsView: View {
+    @Default(.enabledTrafficLightButtons) private var enabledButtons
+    @Default(.useMonochromeTrafficLights) private var useMonochrome
+    @Default(.trafficLightButtonsVisibility) private var trafficLightButtonsVisibility
 
-        private let buttonDescriptions: [(WindowAction, String)] = [
-            (.quit, String(localized: "Quit")),
-            (.close, String(localized: "Close")),
-            (.minimize, String(localized: "Minimize")),
-            (.toggleFullScreen, String(localized: "Fullscreen")),
-        ]
+    private let buttonDescriptions: [(WindowAction, String)] = [
+        (.quit, String(localized: "Quit")),
+        (.close, String(localized: "Close")),
+        (.minimize, String(localized: "Minimize")),
+        (.toggleFullScreen, String(localized: "Fullscreen")),
+    ]
 
-        var body: some View {
-            Picker("Traffic Light Buttons Visibility", selection: $trafficLightButtonsVisibility) {
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Traffic Light Buttons").font(.headline)
+            Picker("Visibility", selection: $trafficLightButtonsVisibility) {
                 ForEach(TrafficLightButtonsVisibility.allCases, id: \.self) { visibility in
                     Text(visibility.localizedName)
                         .tag(visibility)
                 }
             }
+            .pickerStyle(MenuPickerStyle())
 
-            Group {
-                Text("Enabled Buttons")
-                VStack(alignment: .leading) {
-                    if !enabledButtons.isEmpty {
-                        TrafficLightButtons(
-                            displayMode: trafficLightButtonsVisibility == .never ? .dimmedOnPreviewHover : trafficLightButtonsVisibility,
-                            hoveringOverParentWindow: true,
-                            onWindowAction: { _ in },
-                            pillStyling: true
-                        )
-                    }
+            HStack(spacing: 12) {
+                Text("Show:")
+                ForEach(buttonDescriptions, id: \.0) { action, label in
+                    Toggle(isOn: Binding(
+                        get: { enabledButtons.contains(action) },
+                        set: { isEnabled in
+                            if isEnabled {
+                                enabledButtons.insert(action)
+                            } else {
+                                enabledButtons.remove(action)
 
-                    HStack(spacing: 12) {
-                        ForEach(buttonDescriptions, id: \.0) { action, label in
-                            Toggle(isOn: Binding(
-                                get: { enabledButtons.contains(action) },
-                                set: { isEnabled in
-                                    if isEnabled {
-                                        enabledButtons.insert(action)
-                                    } else {
-                                        enabledButtons.remove(action)
-
-                                        if enabledButtons.isEmpty {
-                                            MessageUtil.showAlert(
-                                                title: String(localized: "All buttons removed"),
-                                                message: String(localized: "Your traffic lights will be set to disabled automatically."),
-                                                actions: [.ok, .cancel]
-                                            ) { action in
-                                                switch action {
-                                                case .ok:
-                                                    trafficLightButtonsVisibility = .never
-                                                case .cancel:
-                                                    break
-                                                }
-                                            }
+                                if enabledButtons.isEmpty {
+                                    MessageUtil.showAlert(
+                                        title: String(localized: "All buttons removed"),
+                                        message: String(localized: "Your traffic lights will be set to disabled automatically."),
+                                        actions: [.ok, .cancel]
+                                    ) { action in
+                                        switch action {
+                                        case .ok:
+                                            trafficLightButtonsVisibility = .never
+                                        case .cancel:
+                                            break
                                         }
                                     }
                                 }
-                            )) {
-                                HStack {
-                                    Text(label)
-                                }
                             }
-                            .toggleStyle(CheckboxToggleStyle())
                         }
+                    )) {
+                        Text(label)
                     }
+                    .toggleStyle(CheckboxToggleStyle())
                 }
-
-                Toggle("Use Monochrome Colors", isOn: $useMonochrome)
-                    .padding(.top, 4)
             }
             .disabled(trafficLightButtonsVisibility == .never)
+
+            Toggle("Monochrome appearance", isOn: $useMonochrome)
+                .padding(.top, 4)
+                .disabled(trafficLightButtonsVisibility == .never)
+
+            HStack(spacing: 8) {
+                Text("Preview:")
+                if !enabledButtons.isEmpty {
+                    TrafficLightButtons(
+                        displayMode: trafficLightButtonsVisibility == .never ? .dimmedOnPreviewHover : trafficLightButtonsVisibility,
+                        hoveringOverParentWindow: true,
+                        onWindowAction: { _ in },
+                        pillStyling: true
+                    )
+                }
+            }
         }
     }
 }
