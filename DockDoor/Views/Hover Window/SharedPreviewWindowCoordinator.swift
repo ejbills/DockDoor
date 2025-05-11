@@ -105,7 +105,6 @@ final class SharedPreviewWindowCoordinator: NSPanel {
                                                   animated: Bool, centerOnScreen: Bool = false,
                                                   centeredHoverWindowState: ScreenCenteredFloatingWindowCoordinator.WindowState? = nil)
     {
-        lastMouseLocation = mouseLocation
         guard contentView != nil else { return }
         windowSwitcherCoordinator.setShowing(centeredHoverWindowState, toState: centerOnScreen)
         // Reset the hosting view
