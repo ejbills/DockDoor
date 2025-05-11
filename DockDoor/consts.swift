@@ -56,9 +56,8 @@ extension Defaults.Keys {
     static let enabledTrafficLightButtons = Key<Set<WindowAction>>("enabledTrafficLightButtons", default: [.close, .minimize, .toggleFullScreen])
     static let useMonochromeTrafficLights = Key<Bool>("useMonochromeTrafficLights", default: false)
 
-    static let maxColumns = Key<CGFloat>("maxColumns", default: 2) // Obsolete in favour of previewWrap
-    static let maxRows = Key<CGFloat>("maxRows", default: 2) // Obsolete in favour of previewWrap
     static let previewWrap = Key<Int>("previewWrap", default: 2)
+    static let switcherWrap = Key<Int>("switcherWrap", default: 2)
 
     static let windowSwitcherPlacementStrategy = Key<WindowSwitcherPlacementStrategy>("windowSwitcherPlacementStrategy", default: .screenWithMouse)
     static let windowSwitcherControlPosition = Key<WindowSwitcherControlPosition>("windowSwitcherControlPosition", default: .topTrailing)

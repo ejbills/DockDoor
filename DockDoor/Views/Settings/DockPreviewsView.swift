@@ -77,13 +77,15 @@ struct DockPreviewsView: View {
                     Divider()
                     Spacer(minLength: 1)
 
-                    Text("Preview wrap").font(.headline)
-                    Text("Number of previews before wrapping to a new row.")
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
+                    Text("Layout Stacking Limits").font(.headline)
+
+                    Text("Sets the maximum number of columns for arranging window previews. Previews fill each column \(DockUtils.getDockPosition().isHorizontalFlow ? "horizontally" : "vertically") before wrapping to a new column, up to this limit."
+                    )
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
                     HStack {
                         Text("Wrap:")
-                        Stepper(value: $previewWrap, in: 1 ... 100) {
+                        Stepper(value: $previewWrap, in: 1 ... 10) {
                             TextField(
                                 "",
                                 value: $previewWrap,

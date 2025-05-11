@@ -9,6 +9,7 @@ struct WindowSwitcherView: View {
     @Default(.pinnedScreenIdentifier) private var pinnedScreenIdentifier: String
     @Default(.useClassicWindowOrdering) private var useClassicWindowOrdering: Bool
     @Default(.windowSwitcherControlPosition) private var windowSwitcherControlPosition: WindowSwitcherControlPosition
+    @Default(.switcherWrap) private var switcherWrap: Int
 
     var body: some View {
         ScrollView {
@@ -37,6 +38,37 @@ struct WindowSwitcherView: View {
                     }
                     Spacer()
                 }
+
+                // Wrap section
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Layout Stacking Limits").font(.headline)
+
+                    Text("Sets the maximum number of columns for arranging window previews. Previews fill each column horizontally before wrapping to a new column, up to this limit."
+                    )
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+                    HStack {
+                        Text("Wrap:")
+                        Stepper(value: $switcherWrap, in: 1 ... 10) {
+                            TextField(
+                                "",
+                                value: $switcherWrap,
+                                formatter: NumberFormatter()
+                            )
+                            .frame(width: 40)
+                            .multilineTextAlignment(.center)
+                        }
+                    }
+                }
+                .padding()
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(
+                    Color(NSColor.windowBackgroundColor), in: RoundedRectangle(cornerRadius: 8, style: .continuous)
+                )
+                .overlay(
+                    RoundedRectangle(cornerRadius: 8, style: .continuous)
+                        .stroke(.separator)
+                )
 
                 // Appearance Settings
                 VStack(alignment: .leading, spacing: 8) {

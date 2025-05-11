@@ -16,6 +16,8 @@ struct WindowPreviewHoverContainer: View {
     @Default(.appNameStyle) var appNameStyle
     @Default(.windowTitlePosition) var windowTitlePosition
     @Default(.aeroShakeAction) var aeroShakeAction
+    @Default(.previewWrap) var previewWrap
+    @Default(.switcherWrap) var switcherWrap
 
     @State var windowStates: [WindowInfo]
     @State private var draggedWindowIndex: Int? = nil
@@ -83,7 +85,7 @@ struct WindowPreviewHoverContainer: View {
     }
 
     var body: some View {
-        let orientationIsHorizontal = dockPosition == .bottom || windowSwitcherCoordinator.windowSwitcherActive
+        let orientationIsHorizontal = dockPosition.isHorizontalFlow || windowSwitcherCoordinator.windowSwitcherActive
 
         ScrollViewReader { scrollProxy in
             buildFlowStack(windows: windowStates, scrollProxy: scrollProxy, orientationIsHorizontal)
@@ -270,7 +272,8 @@ struct WindowPreviewHoverContainer: View {
     @ViewBuilder
     private func buildFlowStack(windows: [WindowInfo], scrollProxy: ScrollViewProxy, _ isHorizontal: Bool) -> some View {
         let dimensionsMap = precomputeWindowDimensions()
-        let layout = calculateOptimalLayout(windowDimensions: dimensionsMap, isHorizontal: isHorizontal)
+        let wrap = windowSwitcherCoordinator.windowSwitcherActive ? switcherWrap : previewWrap
+        let layout = calculateOptimalLayout(windowDimensions: dimensionsMap, isHorizontal: isHorizontal, wrap: wrap)
 
         ScrollView(isHorizontal ? .horizontal : .vertical, showsIndicators: false) {
             DynStack(direction: isHorizontal ? .vertical : .horizontal, spacing: 16) {

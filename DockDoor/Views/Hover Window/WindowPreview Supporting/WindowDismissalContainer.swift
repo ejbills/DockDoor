@@ -112,7 +112,6 @@ class MouseTrackingNSView: NSView {
         setWindowOpacity(to: 1.0, duration: 0.2)
     }
 
-
     override func mouseEntered(with event: NSEvent) {
         resetOpacityVisually()
     }
