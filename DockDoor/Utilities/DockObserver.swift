@@ -20,7 +20,7 @@ struct ApplicationReturnType {
     }
 
     let status: Status
-    let iconRect: CGRect?
+    let dockItemElement: AXUIElement?
 }
 
 func handleSelectedDockItemChangedNotification(observer _: AXObserver, element _: AXUIElement, notificationName _: CFString, _: UnsafeMutableRawPointer?) {
@@ -36,6 +36,9 @@ final class DockObserver {
     private var hoverProcessingTask: Task<Void, Error>?
     private var isProcessing: Bool = false
 
+    private var currentDockPID: pid_t?
+    private var healthCheckTimer: Timer?
+
     private var lastNotificationTime: TimeInterval = 0
     private var lastNotificationId: String = ""
     private let artifactTimeThreshold: TimeInterval = 0.05
@@ -46,26 +49,45 @@ final class DockObserver {
 
     private init() {
         setupSelectedDockItemObserver()
+        startHealthCheckTimer()
     }
 
-    private func resetLastAppUnderMouse() { lastAppUnderMouse = nil }
-
-    private func hideWindowAndResetLastApp() {
-        Task { @MainActor [weak self] in
-            guard let self else { return }
-            SharedPreviewWindowCoordinator.shared.hideWindow()
-            resetLastAppUnderMouse()
-            lastNotificationTime = 0
-            lastNotificationId = ""
-            notRunningCount = 0
-            pendingShows.removeAll()
+    private func startHealthCheckTimer() {
+        healthCheckTimer?.invalidate()
+        healthCheckTimer = Timer.scheduledTimer(withTimeInterval: 5.0, repeats: true) { [weak self] _ in
+            self?.performHealthCheck()
         }
+    }
+
+    private func performHealthCheck() {
+        guard let currentDockPID else {
+            setupSelectedDockItemObserver()
+            return
+        }
+
+        let currentDockApp = NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.dock").first
+
+        if currentDockApp?.processIdentifier != currentDockPID {
+            teardownObserver()
+            setupSelectedDockItemObserver()
+        }
+    }
+
+    private func teardownObserver() {
+        if let observer = axObserver {
+            CFRunLoopRemoveSource(CFRunLoopGetCurrent(), AXObserverGetRunLoopSource(observer), .commonModes)
+        }
+        axObserver = nil
+        currentDockPID = nil
     }
 
     private func setupSelectedDockItemObserver() {
-        guard let dockAppPID = NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.dock").first?.processIdentifier else {
-            fatalError("Dock not found in running applications")
+        guard let dockApp = NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.dock").first else {
+            return
         }
+
+        let dockAppPID = dockApp.processIdentifier
+        currentDockPID = dockAppPID
 
         let dockAppElement = AXUIElementCreateApplication(dockAppPID)
 
@@ -85,10 +107,13 @@ final class DockObserver {
         guard let children = try? dockAppElement.children(), let axList = children.first(where: { element in
             try! element.role() == kAXListRole
         }) else {
-            fatalError("Can't get dock items list element")
+            return
         }
 
-        AXObserverCreate(dockAppPID, handleSelectedDockItemChangedNotification, &axObserver)
+        if AXObserverCreate(dockAppPID, handleSelectedDockItemChangedNotification, &axObserver) != .success {
+            return
+        }
+
         guard let axObserver else { return }
 
         do {
@@ -96,7 +121,21 @@ final class DockObserver {
                 CFRunLoopAddSource(CFRunLoopGetCurrent(), AXObserverGetRunLoopSource(axObserver), .commonModes)
             }
         } catch {
-            fatalError("Failed to subscribe to notification: \(error)")
+            return
+        }
+    }
+
+    private func resetLastAppUnderMouse() { lastAppUnderMouse = nil }
+
+    private func hideWindowAndResetLastApp() {
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            SharedPreviewWindowCoordinator.shared.hideWindow()
+            resetLastAppUnderMouse()
+            lastNotificationTime = 0
+            lastNotificationId = ""
+            notRunningCount = 0
+            pendingShows.removeAll()
         }
     }
 
@@ -163,7 +202,7 @@ final class DockObserver {
                 try Task.checkCancellation()
 
                 guard case let .success(currentApp) = appUnderMouseElement.status,
-                      let iconRect = appUnderMouseElement.iconRect
+                      let dockItemElement = appUnderMouseElement.dockItemElement
                 else {
                     return
                 }
@@ -220,7 +259,7 @@ final class DockObserver {
                         windows: appWindows,
                         mouseLocation: convertedMouseLocation,
                         mouseScreen: mouseScreen,
-                        iconRect: iconRect,
+                        dockItemElement: dockItemElement,
                         overrideDelay: lastAppUnderMouse == nil && Defaults[.hoverWindowOpenDelay] == 0,
                         onWindowTap: { [weak self] in
                             self?.hideWindowAndResetLastApp()
@@ -261,10 +300,8 @@ final class DockObserver {
 
     func getDockItemAppStatusUnderMouse() -> ApplicationReturnType {
         guard let hoveredDockItem = getHoveredApplicationDockItem() else {
-            return ApplicationReturnType(status: .notFound, iconRect: nil)
+            return ApplicationReturnType(status: .notFound, dockItemElement: nil)
         }
-
-        let iconRect = getIconRect(for: hoveredDockItem)
 
         do {
             guard let appURL = try hoveredDockItem.attribute(kAXURLAttribute, NSURL.self)?.absoluteURL else {
@@ -275,36 +312,23 @@ final class DockObserver {
             guard let bundleIdentifier = bundle?.bundleIdentifier else {
                 // Fallback method
                 guard let dockItemTitle = try hoveredDockItem.title() else {
-                    return ApplicationReturnType(status: .notFound, iconRect: iconRect)
+                    return ApplicationReturnType(status: .notFound, dockItemElement: hoveredDockItem)
                 }
 
                 if let app = WindowUtil.findRunningApplicationByName(named: dockItemTitle) {
-                    return ApplicationReturnType(status: .success(app), iconRect: iconRect)
+                    return ApplicationReturnType(status: .success(app), dockItemElement: hoveredDockItem)
                 } else {
-                    return ApplicationReturnType(status: .notFound, iconRect: iconRect)
+                    return ApplicationReturnType(status: .notFound, dockItemElement: hoveredDockItem)
                 }
             }
 
             if let runningApp = NSRunningApplication.runningApplications(withBundleIdentifier: bundleIdentifier).first {
-                return ApplicationReturnType(status: .success(runningApp), iconRect: iconRect)
+                return ApplicationReturnType(status: .success(runningApp), dockItemElement: hoveredDockItem)
             } else {
-                return ApplicationReturnType(status: .notRunning(bundleIdentifier: bundleIdentifier), iconRect: iconRect)
+                return ApplicationReturnType(status: .notRunning(bundleIdentifier: bundleIdentifier), dockItemElement: hoveredDockItem)
             }
         } catch {
-            return ApplicationReturnType(status: .notFound, iconRect: iconRect)
-        }
-    }
-
-    private func getIconRect(for dockItem: AXUIElement) -> CGRect? {
-        do {
-            guard let position = try dockItem.position(),
-                  let size = try dockItem.size()
-            else {
-                return nil
-            }
-            return CGRect(origin: position, size: size)
-        } catch {
-            return nil
+            return ApplicationReturnType(status: .notFound, dockItemElement: hoveredDockItem)
         }
     }
 

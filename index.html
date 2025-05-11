@@ -15,6 +15,7 @@
     <script src="https://cdn.jsdelivr.net/npm/i18next@latest/dist/umd/i18next.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/i18next-xhr-backend@latest/dist/umd/i18nextXHRBackend.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/dompurify/dist/purify.min.js"></script>
+    <link rel="preload" href="/resources/window-drag.gif" as="image">
 </head>
 <body>
     <header>
@@ -52,9 +53,9 @@
                 <p class="price">Free and Open Source Software</p>
                 <div class="badges">
                     <a href="https://github.com/ejbills/DockDoor/releases/latest/download/DockDoor.dmg"><img src="https://img.shields.io/github/v/release/ejbills/DockDoor?style=flat-square" alt="Latest release"></a>
-                    <img src="https://img.shields.io/github/downloads/ejbills/DockDoor/total?label=total%20downloads&style=flat-square" alt="Total downloads">
                     <a href="https://github.com/ejbills/DockDoor/stargazers"><img src="https://img.shields.io/github/stars/ejbills/DockDoor" alt="Stars"></a>
                 </div>
+                <a href="https://www.producthunt.com/posts/dockdoor?embed=true&utm_source=badge-featured&utm_medium=badge&utm_souce=badge-dockdoor" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=963768&theme=neutral&t=1746906135630" alt="DockDoor - &#0032;Window&#0032;peeking&#0032;and&#0032;alt&#0045;tab&#0032;functionality&#0032;for&#0032;macOS&#0032; | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54" /></a>
             </div>
         </div>
     </section>
@@ -80,7 +81,7 @@
             <p class="section-description" data-translate="windowDragText"></p>
             <div class="video-section">
                 <div class="video-container">
-                    <img src="/resources/window-drag.gif" alt="Video demonstration of window dragging feature in DockDoor." class="mockup-video">
+                    <img src="/resources/window-drag.gif" alt="Video demonstration of window dragging feature in DockDoor." class="mockup-video" loading="eager">
                 </div>
             </div>
         </div>

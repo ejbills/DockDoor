@@ -97,9 +97,8 @@ struct WindowPreviewHoverContainer: View {
                 .dockStyle(cornerRadius: 16)
                 .padding(.top, (!windowSwitcherCoordinator.windowSwitcherActive && appNameStyle == .popover && showAppName) ? 30 : 0)
                 .overlay {
-                    if let mouseLocation, !isDragging {
+                    if !isDragging {
                         WindowDismissalContainer(appName: appName,
-                                                 mouseLocation: mouseLocation,
                                                  bestGuessMonitor: bestGuessMonitor,
                                                  dockPosition: dockPosition,
                                                  minimizeAllWindowsCallback: { minimizeAllWindows() })
