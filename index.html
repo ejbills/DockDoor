@@ -1,15 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/styles.css">
     <link rel="icon" href="/DockDoor/Assets.xcassets/AppIcon.appiconset/icon_128x128.png">
     <title>DockDoor - Window Previews for macOS Dock | Personalize Your Mac Experience</title>
-    <meta name="description" content="DockDoor brings Window 10-style window previews to your macOS dock. Free, open-source app with intuitive window management. Enhance your Mac workflow.">
-    <meta name="keywords" content="mac dock window previews, macOS dock customization, window management for Mac, DockDoor app">
+    <meta name="description"
+        content="DockDoor brings Window 10-style window previews to your macOS dock. Free, open-source app with intuitive window management. Enhance your Mac workflow.">
+    <meta name="keywords"
+        content="mac dock window previews, macOS dock customization, window management for Mac, DockDoor app">
     <meta property="og:title" content="DockDoor - Window Previews for macOS Dock">
-    <meta property="og:description" content="Add Window 10-style window previews to your macOS dock. Free, open-source app with intuitive window management.">
+    <meta property="og:description"
+        content="Add Window 10-style window previews to your macOS dock. Free, open-source app with intuitive window management.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://dockdoor.net">
     <script src="https://cdn.jsdelivr.net/npm/i18next@latest/dist/umd/i18next.min.js"></script>
@@ -17,22 +21,26 @@
     <script src="https://cdn.jsdelivr.net/npm/dompurify/dist/purify.min.js"></script>
     <link rel="preload" href="/resources/window-drag.gif" as="image">
 </head>
+
 <body>
     <header>
         <div class="container">
             <a href="#" class="logo">
-                <img src="https://github.com/ejbills/DockDoor/raw/main/DockDoor/Assets.xcassets/AppIcon.appiconset/icon_128x128.png" alt="DockDoor App Icon" class="logo-icon">
+                <img src="https://github.com/ejbills/DockDoor/raw/main/DockDoor/Assets.xcassets/AppIcon.appiconset/icon_128x128.png"
+                    alt="DockDoor App Icon" class="logo-icon">
                 DockDoor
             </a>
             <div class="header-actions">
                 <div class="dropdown">
-                    <button id="languageButton" class="button button-secondary button-sm" data-translate="languageButton"></button>
+                    <button id="languageButton" class="button button-secondary button-sm"
+                        data-translate="languageButton"></button>
                     <div id="dropdownContent" class="dropdown-content">
                         <a href="#" class="lang-option" data-lang="en">English</a>
                         <a href="#" class="lang-option" data-lang="fr">Français</a>
                         <a href="#" class="lang-option" data-lang="pl">Polski</a>
                         <a href="#" class="lang-option" data-lang="pt-BR">Português do Brasil</a>
-                        <a href="https://github.com/ejbills/DockDoor?tab=readme-ov-file#translating-the-website-httpsdockdoornet" target="_blank" data-translate="helpTranslate"></a>
+                        <a href="https://github.com/ejbills/DockDoor?tab=readme-ov-file#translating-the-website-httpsdockdoornet"
+                            target="_blank" data-translate="helpTranslate"></a>
                     </div>
                 </div>
                 <button id="toggleDarkMode" class="button button-secondary button-sm">
@@ -42,20 +50,28 @@
             </div>
         </div>
     </header>
-    
+
     <section class="hero">
         <div class="container">
-            <img src="https://github.com/ejbills/DockDoor/raw/main/DockDoor/Assets.xcassets/AppIcon.appiconset/icon_256x256@2x.png" alt="DockDoor App Icon" class="app-icon">
+            <img src="https://github.com/ejbills/DockDoor/raw/main/DockDoor/Assets.xcassets/AppIcon.appiconset/icon_256x256@2x.png"
+                alt="DockDoor App Icon" class="app-icon">
             <h1 class="title" data-translate="introHeading"></h1>
             <p class="subtitle" data-translate="introText"></p>
             <div class="hero-cta">
                 <a href="#download" class="cta-button" data-translate="downloadDownload"></a>
                 <p class="price">Free and Open Source Software</p>
                 <div class="badges">
-                    <a href="https://github.com/ejbills/DockDoor/releases/latest/download/DockDoor.dmg"><img src="https://img.shields.io/github/v/release/ejbills/DockDoor?style=flat-square" alt="Latest release"></a>
-                    <a href="https://github.com/ejbills/DockDoor/stargazers"><img src="https://img.shields.io/github/stars/ejbills/DockDoor" alt="Stars"></a>
+                    <a href="https://github.com/ejbills/DockDoor/releases/latest/download/DockDoor.dmg"><img
+                            src="https://img.shields.io/github/v/release/ejbills/DockDoor?style=flat-square"
+                            alt="Latest release"></a>
+                    <a href="https://github.com/ejbills/DockDoor/stargazers"><img
+                            src="https://img.shields.io/github/stars/ejbills/DockDoor" alt="Stars"></a>
                 </div>
-                <a href="https://www.producthunt.com/posts/dockdoor?embed=true&utm_source=badge-featured&utm_medium=badge&utm_souce=badge-dockdoor" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=963768&theme=neutral&t=1746906135630" alt="DockDoor - &#0032;Window&#0032;peeking&#0032;and&#0032;alt&#0045;tab&#0032;functionality&#0032;for&#0032;macOS&#0032; | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54" /></a>
+                <a href="https://www.producthunt.com/posts/dockdoor?embed=true&utm_source=badge-featured&utm_medium=badge&utm_souce=badge-dockdoor"
+                    target="_blank"><img
+                        src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=963768&theme=neutral&t=1746906135630"
+                        alt="DockDoor - &#0032;Window&#0032;peeking&#0032;and&#0032;alt&#0045;tab&#0032;functionality&#0032;for&#0032;macOS&#0032; | Product Hunt"
+                        style="width: 250px; height: 54px;" width="250" height="54" /></a>
             </div>
         </div>
     </section>
@@ -66,11 +82,14 @@
             <p class="section-description" data-translate="2Text"></p>
             <p class="section-note" data-translate="2Small"></p>
             <div class="design-showcase">
-                <img src="/resources/dockPeek1920.png" alt="An example of use of DockDoor: traffic light buttons allow users to manage their windows and applications." class="design-img">
+                <img src="/resources/dockPeek1920.png"
+                    alt="An example of use of DockDoor: traffic light buttons allow users to manage their windows and applications."
+                    class="design-img">
             </div>
             <p class="section-description" data-translate="2Text2"></p>
             <div class="design-showcase">
-                <img src="/resources/dockPeekCommented.png" alt="Description of the controls on window previews." class="design-img">
+                <img src="/resources/dockPeekCommented.png" alt="Description of the controls on window previews."
+                    class="design-img">
             </div>
         </div>
     </section>
@@ -81,7 +100,9 @@
             <p class="section-description" data-translate="windowDragText"></p>
             <div class="video-section">
                 <div class="video-container">
-                    <img src="/resources/window-drag.gif" alt="Video demonstration of window dragging feature in DockDoor." class="mockup-video" loading="eager">
+                    <img src="/resources/window-drag.gif"
+                        alt="Video demonstration of window dragging feature in DockDoor." class="mockup-video"
+                        loading="eager">
                 </div>
             </div>
         </div>
@@ -92,7 +113,8 @@
             <h2 class="section-title" data-translate="5Heading"></h2>
             <p class="section-description" data-translate="5Text"></p>
             <div class="design-showcase">
-                <img src="/resources/largePreviewDemo.png" alt="A screenshot showing the large preview option." class="design-img">
+                <img src="/resources/largePreviewDemo.png" alt="A screenshot showing the large preview option."
+                    class="design-img">
             </div>
         </div>
     </section>
@@ -103,18 +125,21 @@
             <p class="section-description" data-translate="3Text"></p>
             <div class="video-section">
                 <div class="video-container">
-                    <img src="" id="variations" class="mockup-video" alt="A series of images showing the customization options for traffic light buttons and window titles.">
+                    <img src="" id="variations" class="mockup-video"
+                        alt="A series of images showing the customization options for traffic light buttons and window titles.">
                 </div>
             </div>
             <p class="section-description" data-translate="3Small"></p>
             <div class="video-section">
                 <div class="video-container">
-                    <img src="" id="apptitle" class="mockup-video" alt="A series of images showing the customization options for application titles.">
+                    <img src="" id="apptitle" class="mockup-video"
+                        alt="A series of images showing the customization options for application titles.">
                 </div>
             </div>
             <div class="dark-box">
                 <p class="section-description" data-translate="3Text2"></p>
-                <img src="/resources/variations/dark-mode.png" alt="A screenshot of the dark mode" class="dark-mode-img">
+                <img src="/resources/variations/dark-mode.png" alt="A screenshot of the dark mode"
+                    class="dark-mode-img">
             </div>
         </div>
     </section>
@@ -124,9 +149,10 @@
             <h2 class="section-title" data-translate="4Heading"></h2>
             <p class="section-description" data-translate="4Text"></p>
             <p class="section-note">
-                <span data-translate="4Small"></span> 
+                <span data-translate="4Small"></span>
                 <a href="https://github.com/ejbills/DockDoor?tab=readme-ov-file#windows-like-alt--tab-window-switcher">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b3/Echo_link-blue_icon.svg" alt="Chainlink icon" style="display:inline;" width="auto">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b3/Echo_link-blue_icon.svg"
+                        alt="Chainlink icon" style="display:inline;" width="auto">
                 </a>
             </p>
             <div class="video-section">
@@ -147,37 +173,43 @@
                 <div class="feature-card">
                     <div class="feature-icon">👁️</div>
                     <h3 class="feature-title" data-translate="featurePreviewsTitle">Window Previews</h3>
-                    <p data-translate="featurePreviewsText">See window previews when hovering over dock icons, just like Windows 10.</p>
+                    <p data-translate="featurePreviewsText">See window previews when hovering over dock icons, just like
+                        Windows 10.</p>
                 </div>
-                
+
                 <div class="feature-card">
                     <div class="feature-icon">🖱️</div>
                     <h3 class="feature-title" data-translate="featureManagementTitle">Window Management</h3>
-                    <p data-translate="featureManagementText">Close, minimize, and maximize windows directly from the dock preview.</p>
+                    <p data-translate="featureManagementText">Close, minimize, and maximize windows directly from the
+                        dock preview.</p>
                 </div>
-                
+
                 <div class="feature-card">
                     <div class="feature-icon">⌨️</div>
                     <h3 class="feature-title" data-translate="featureSwitcherTitle">App Switcher</h3>
-                    <p data-translate="featureSwitcherText">Windows-style Alt+Tab application switching for better multitasking.</p>
+                    <p data-translate="featureSwitcherText">Windows-style Alt+Tab application switching for better
+                        multitasking.</p>
                 </div>
-                
+
                 <div class="feature-card">
                     <div class="feature-icon">🎨</div>
                     <h3 class="feature-title" data-translate="featureCustomizableTitle">Customizable</h3>
-                    <p data-translate="featureCustomizableText">Adjust preview appearance and behavior to match your workflow.</p>
+                    <p data-translate="featureCustomizableText">Adjust preview appearance and behavior to match your
+                        workflow.</p>
                 </div>
-                
+
                 <div class="feature-card">
                     <div class="feature-icon">🚀</div>
                     <h3 class="feature-title" data-translate="featureLightweightTitle">Lightweight</h3>
-                    <p data-translate="featureLightweightText">Minimal resource usage to keep your Mac running smoothly.</p>
+                    <p data-translate="featureLightweightText">Minimal resource usage to keep your Mac running smoothly.
+                    </p>
                 </div>
-                
+
                 <div class="feature-card">
                     <div class="feature-icon">🔒</div>
                     <h3 class="feature-title" data-translate="featurePrivacyTitle">Privacy Focused</h3>
-                    <p data-translate="featurePrivacyText">No tracking, no analytics, no data collection - your activity stays private.</p>
+                    <p data-translate="featurePrivacyText">No tracking, no analytics, no data collection - your activity
+                        stays private.</p>
                 </div>
             </div>
         </div>
@@ -186,15 +218,26 @@
     <section class="download-section" id="download">
         <div class="container">
             <h2 class="section-title" data-translate="downloadHeading"></h2>
-            <p class="section-note"><em data-translate="downloadSmall"></em> <em><strong><a href="https://github.com/ejbills/DockDoor" data-translate="viewGit"></a></strong></em>.</p>
+            <p class="section-note"><em data-translate="downloadSmall"></em> <em><strong><a
+                            href="https://github.com/ejbills/DockDoor" data-translate="viewGit"></a></strong></em>.</p>
             <div class="badges-container">
-                <a href="https://github.com/ejbills/DockDoor/releases/latest/download/DockDoor.dmg"><img src="https://img.shields.io/github/v/release/ejbills/DockDoor?style=flat-square" alt="Latest release"></a>
-                <img src="https://img.shields.io/github/downloads/ejbills/DockDoor/total?label=total%20downloads&style=flat-square" alt="Total downloads">
-                <a href="https://github.com/ejbills/DockDoor/stargazers"><img src="https://img.shields.io/github/stars/ejbills/DockDoor" alt="Stars"></a>
-                <a href="https://github.com/ejbills/DockDoor/network/members"><img src="https://img.shields.io/github/forks/ejbills/DockDoor" alt="Forks"></a>
-                <a href="https://github.com/ejbills/DockDoor/issues"><img src="https://img.shields.io/github/issues/ejbills/DockDoor?style=flat-square" alt="Issues"></a>
-                <a href="https://github.com/ejbills/DockDoor/blob/main/LICENSE"><img src="https://img.shields.io/github/license/ejbills/DockDoor?style=flat-square" alt="License"></a>
-                <a href="https://github.com/ejbills/DockDoor/graphs/contributors"><img src="https://img.shields.io/github/contributors/ejbills/DockDoor?style=flat-square" alt="Contributors"></a>
+                <a href="https://github.com/ejbills/DockDoor/releases/latest/download/DockDoor.dmg"><img
+                        src="https://img.shields.io/github/v/release/ejbills/DockDoor?style=flat-square"
+                        alt="Latest release"></a>
+                <img src="https://img.shields.io/github/downloads/ejbills/DockDoor/total?label=total%20downloads&style=flat-square"
+                    alt="Total downloads">
+                <a href="https://github.com/ejbills/DockDoor/stargazers"><img
+                        src="https://img.shields.io/github/stars/ejbills/DockDoor" alt="Stars"></a>
+                <a href="https://github.com/ejbills/DockDoor/network/members"><img
+                        src="https://img.shields.io/github/forks/ejbills/DockDoor" alt="Forks"></a>
+                <a href="https://github.com/ejbills/DockDoor/issues"><img
+                        src="https://img.shields.io/github/issues/ejbills/DockDoor?style=flat-square" alt="Issues"></a>
+                <a href="https://github.com/ejbills/DockDoor/blob/main/LICENSE"><img
+                        src="https://img.shields.io/github/license/ejbills/DockDoor?style=flat-square"
+                        alt="License"></a>
+                <a href="https://github.com/ejbills/DockDoor/graphs/contributors"><img
+                        src="https://img.shields.io/github/contributors/ejbills/DockDoor?style=flat-square"
+                        alt="Contributors"></a>
             </div>
             <div class="download-options">
                 <a href="https://github.com/ejbills/DockDoor/releases/latest/download/DockDoor.dmg" class="cta-button">
@@ -212,7 +255,7 @@
                     <strong data-translate="downloadTranslate"></strong>
                 </a>
             </div>
-            
+
             <div class="contribution-card">
                 <h3 class="contribution-title">Support Development</h3>
                 <p class="contribution-text" data-translate="downloadDonateText"></p>
@@ -229,9 +272,10 @@
             <p class="section-description">
                 <span data-translate="contributeText1"></span><br>
                 <span data-translate="contributeText2"></span><br>
-                <span data-translate="contributeText3"></span> 
+                <span data-translate="contributeText3"></span>
                 <a href="https://github.com/ejbills/DockDoor?tab=readme-ov-file#contributing">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b3/Echo_link-blue_icon.svg" alt="Chainlink icon" style="display:inline;" width="auto">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b3/Echo_link-blue_icon.svg"
+                        alt="Chainlink icon" style="display:inline;" width="auto">
                 </a>
             </p>
         </div>
@@ -277,14 +321,15 @@
                 </div>
             </div>
             <p class="section-note">
-                <span data-translate="faqDocumentation"></span> 
+                <span data-translate="faqDocumentation"></span>
                 <a href="https://github.com/ejbills/DockDoor/issues">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b3/Echo_link-blue_icon.svg" alt="Chainlink icon" style="display:inline;" width="auto">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b3/Echo_link-blue_icon.svg"
+                        alt="Chainlink icon" style="display:inline;" width="auto">
                 </a>
             </p>
         </div>
     </section>
-    
+
     <footer>
         <div class="container">
             <p class="footer-text">DockDoor — Window previews for macOS dock</p>
@@ -328,5 +373,239 @@
 
     <script src="/translate.js"></script>
     <script src="/dark-mode.js"></script>
+    <div id="donation-modal-container"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.21.0/babel.min.js"></script>
+
+    <script type="text/babel">
+        const DonationModal = () => {
+            const [isOpen, setIsOpen] = useState(false);
+            const [downloadUrl, setDownloadUrl] = useState('');
+            const [isDarkMode, setIsDarkMode] = useState(false);
+            const [downloadStarted, setDownloadStarted] = useState(false);
+
+            // Check user's preferred color scheme
+            React.useEffect(() => {
+                // Check if user has a dark mode preference via browser or site toggle
+                const isDark = document.body.classList.contains('dark-mode') ||
+                    window.matchMedia('(prefers-color-scheme: dark)').matches;
+                setIsDarkMode(isDark);
+
+                // Add event listeners to all download buttons
+                const downloadButtons = document.querySelectorAll('a[href*="DockDoor.dmg"], a[href*="formulae.brew.sh/cask/dockdoor"]');
+                downloadButtons.forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        setDownloadUrl(button.href);
+                        setIsOpen(true);
+                    });
+                });
+
+                // Listen for dark mode toggle changes
+                const darkModeObserver = new MutationObserver((mutations) => {
+                    mutations.forEach((mutation) => {
+                        if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                            setIsDarkMode(document.body.classList.contains('dark-mode'));
+                        }
+                    });
+                });
+
+                darkModeObserver.observe(document.body, { attributes: true });
+
+                return () => {
+                    darkModeObserver.disconnect();
+                    downloadButtons.forEach(button => {
+                        button.removeEventListener('click', () => { });
+                    });
+                };
+            }, []);
+
+            const handleDownload = () => {
+                // Start the download
+                window.location.href = downloadUrl;
+                setDownloadStarted(true);
+                // We keep the modal open to show the thank you message
+            };
+
+            const handleClose = () => {
+                setIsOpen(false);
+                setDownloadStarted(false);
+            };
+
+            const redirectToDonate = () => {
+                window.open('https://www.buymeacoffee.com/keplercafe', '_blank');
+                handleDownload();
+            };
+
+            const redirectToTranslate = () => {
+                window.open('https://crowdin.com/project/dockdoor', '_blank');
+            };
+
+            if (!isOpen) return null;
+
+            const modalStyles = {
+                overlay: {
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    padding: '1rem',
+                    backgroundColor: isDarkMode ? 'rgba(0, 0, 0, 0.7)' : 'rgba(75, 85, 99, 0.5)',
+                    zIndex: 9999
+                },
+                modal: {
+                    position: 'relative',
+                    maxWidth: '28rem',
+                    width: '100%',
+                    borderRadius: '0.5rem',
+                    boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+                    padding: '1.5rem',
+                    backgroundColor: isDarkMode ? '#1F2937' : '#FFFFFF',
+                    color: isDarkMode ? '#FFFFFF' : '#1F2937'
+                },
+                closeButton: {
+                    position: 'absolute',
+                    top: '0.75rem',
+                    right: '0.75rem',
+                    fontSize: '1.5rem',
+                    fontWeight: '600',
+                    border: 'none',
+                    background: 'transparent',
+                    cursor: 'pointer',
+                    color: isDarkMode ? '#FFFFFF' : '#1F2937'
+                },
+                card: {
+                    padding: '1rem',
+                    borderRadius: '0.5rem',
+                    backgroundColor: isDarkMode ? '#374151' : '#F3F4F6',
+                    marginBottom: '1.5rem'
+                },
+                primaryButton: {
+                    width: '100%',
+                    padding: '0.5rem 1rem',
+                    borderRadius: '0.25rem',
+                    fontWeight: '500',
+                    backgroundColor: '#3B82F6',
+                    color: 'white',
+                    border: 'none',
+                    cursor: 'pointer',
+                    transition: 'background-color 0.2s',
+                    marginBottom: '0.75rem'
+                },
+                secondaryButton: {
+                    width: '100%',
+                    padding: '0.5rem 1rem',
+                    borderRadius: '0.25rem',
+                    fontWeight: '500',
+                    backgroundColor: isDarkMode ? '#4B5563' : '#E5E7EB',
+                    color: isDarkMode ? '#FFFFFF' : '#1F2937',
+                    border: 'none',
+                    cursor: 'pointer',
+                    transition: 'background-color 0.2s'
+                },
+                greenButton: {
+                    width: '100%',
+                    padding: '0.5rem 1rem',
+                    borderRadius: '0.25rem',
+                    fontWeight: '500',
+                    backgroundColor: '#10B981',
+                    color: 'white',
+                    border: 'none',
+                    cursor: 'pointer',
+                    transition: 'background-color 0.2s'
+                }
+            };
+
+            return (
+                <div style={modalStyles.overlay}>
+                    <div style={modalStyles.modal}>
+                        <button
+                            onClick={handleClose}
+                            style={modalStyles.closeButton}
+                            aria-label="Close"
+                        >
+                            ×
+                        </button>
+
+                        {!downloadStarted ? (
+                            <>
+                                <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
+                                    <img
+                                        src="https://github.com/ejbills/DockDoor/raw/main/DockDoor/Assets.xcassets/AppIcon.appiconset/icon_128x128.png"
+                                        alt="DockDoor icon"
+                                        style={{ margin: '0 auto', height: '4rem', width: '4rem', marginBottom: '1rem' }}
+                                    />
+                                    <h3 style={{ fontSize: '1.25rem', fontWeight: 'bold', marginBottom: '0.5rem' }}>Thanks for choosing DockDoor!</h3>
+                                    <p style={{ fontSize: '0.875rem' }}>Your download will begin momentarily</p>
+                                </div>
+
+                                <div style={{ marginBottom: '1.5rem' }}>
+                                    <div style={modalStyles.card}>
+                                        <h4 style={{ fontWeight: 'bold', marginBottom: '0.5rem' }}>Support DockDoor</h4>
+                                        <p style={{ fontSize: '0.875rem', marginBottom: '0.75rem' }}>DockDoor is free and open source. Consider supporting continued development with a small donation.</p>
+                                        <button
+                                            onClick={redirectToDonate}
+                                            style={modalStyles.primaryButton}
+                                        >
+                                            Buy me a coffee ☕
+                                        </button>
+                                    </div>
+
+                                    <div style={modalStyles.card}>
+                                        <h4 style={{ fontWeight: 'bold', marginBottom: '0.5rem' }}>Help with translations</h4>
+                                        <p style={{ fontSize: '0.875rem', marginBottom: '0.75rem' }}>Make DockDoor available in your language by contributing translations.</p>
+                                        <button
+                                            onClick={redirectToTranslate}
+                                            style={modalStyles.secondaryButton}
+                                        >
+                                            Contribute translations 🌐
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <button
+                                    onClick={handleDownload}
+                                    style={modalStyles.greenButton}
+                                >
+                                    Continue to download →
+                                </button>
+                            </>
+                        ) : (
+                            <div style={{ textAlign: 'center', padding: '1rem 0' }}>
+                                <div style={{ fontSize: '3rem', marginBottom: '0.75rem' }}>✅</div>
+                                <h3 style={{ fontSize: '1.25rem', fontWeight: 'bold', marginBottom: '0.5rem' }}>Download started!</h3>
+                                <p style={{ marginBottom: '1rem' }}>Thank you for downloading DockDoor.</p>
+                                <div>
+                                    <button
+                                        onClick={redirectToDonate}
+                                        style={modalStyles.primaryButton}
+                                    >
+                                        Support development
+                                    </button>
+                                    <button
+                                        onClick={handleClose}
+                                        style={modalStyles.secondaryButton}
+                                    >
+                                        Close
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            );
+        };
+
+        const { useState } = React;
+
+        ReactDOM.render(<DonationModal />, document.getElementById('donation-modal-container'));
+    </script>
 </body>
+
 </html>
