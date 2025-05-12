@@ -10,6 +10,7 @@
 
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/ejbills/DockDoor)](https://github.com/ejbills/DockDoor/releases/latest/download/DockDoor.dmg)
 ![GitHub All Releases](https://img.shields.io/github/downloads/ejbills/DockDoor/total?label=Total%20Downloads)
+![GitHub Release Downloads](https://img.shields.io/github/downloads/ejbills/DockDoor/latest/total)
 [![GitHub stars](https://img.shields.io/github/stars/ejbills/DockDoor)](https://github.com/ejbills/DockDoor/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/ejbills/DockDoor)](https://github.com/ejbills/DockDoor/network/members)
 [![GitHub issues](https://img.shields.io/github/issues/ejbills/DockDoor)](https://github.com/ejbills/DockDoor/issues)
