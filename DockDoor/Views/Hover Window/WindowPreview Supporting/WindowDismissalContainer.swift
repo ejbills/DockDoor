@@ -98,7 +98,7 @@ class MouseTrackingNSView: NSView {
     private func checkIfMouseIsOverDockIcon() -> Bool {
         let currentAppReturnType = DockObserver.shared.getDockItemAppStatusUnderMouse()
         // prevent the fade out timer from activating if the mouse is over a dock icon
-        if case .success(_) = currentAppReturnType.status {
+        if case .success = currentAppReturnType.status {
             return true
         }
         return false
