@@ -1,5 +1,26 @@
 import Defaults
+import ScreenCaptureKit
 import SwiftUI
+
+class MockPreviewWindow: WindowPropertiesProviding {
+    var windowID: CGWindowID
+    var frame: CGRect
+    var title: String?
+    var owningApplicationBundleIdentifier: String?
+    var owningApplicationProcessID: pid_t?
+    var isOnScreen: Bool
+    var windowLayer: Int
+
+    init(windowID: CGWindowID, frame: CGRect, title: String?, owningApplicationBundleIdentifier: String?, owningApplicationProcessID: pid_t?, isOnScreen: Bool, windowLayer: Int) {
+        self.windowID = windowID
+        self.frame = frame
+        self.title = title
+        self.owningApplicationBundleIdentifier = owningApplicationBundleIdentifier
+        self.owningApplicationProcessID = owningApplicationProcessID
+        self.isOnScreen = isOnScreen
+        self.windowLayer = windowLayer
+    }
+}
 
 struct WindowPreviewHoverContainer: View {
     let appName: String
@@ -8,6 +29,7 @@ struct WindowPreviewHoverContainer: View {
     let dockPosition: DockPosition
     let mouseLocation: CGPoint?
     let bestGuessMonitor: NSScreen
+    var mockPreviewActive: Bool
 
     @ObservedObject var windowSwitcherCoordinator: ScreenCenteredFloatingWindowCoordinator
 
@@ -16,6 +38,8 @@ struct WindowPreviewHoverContainer: View {
     @Default(.appNameStyle) var appNameStyle
     @Default(.windowTitlePosition) var windowTitlePosition
     @Default(.aeroShakeAction) var aeroShakeAction
+    @Default(.previewWrap) var previewWrap
+    @Default(.switcherWrap) var switcherWrap
 
     @State var windowStates: [WindowInfo]
     @State private var draggedWindowIndex: Int? = nil
@@ -35,7 +59,8 @@ struct WindowPreviewHoverContainer: View {
          dockPosition: DockPosition,
          mouseLocation: CGPoint?,
          bestGuessMonitor: NSScreen,
-         windowSwitcherCoordinator: ScreenCenteredFloatingWindowCoordinator)
+         windowSwitcherCoordinator: ScreenCenteredFloatingWindowCoordinator,
+         mockPreviewActive: Bool)
     {
         self.appName = appName
         self.windows = windows
@@ -45,10 +70,11 @@ struct WindowPreviewHoverContainer: View {
         self.mouseLocation = mouseLocation
         self.bestGuessMonitor = bestGuessMonitor
         self.windowSwitcherCoordinator = windowSwitcherCoordinator
+        self.mockPreviewActive = mockPreviewActive
     }
 
     var maxWindowDimension: CGPoint {
-        let thickness = SharedPreviewWindowCoordinator.shared.windowSize.height
+        let thickness = mockPreviewActive ? 200 : SharedPreviewWindowCoordinator.shared.windowSize.height
         var maxWidth: CGFloat = 300
         var maxHeight: CGFloat = 300
 
@@ -60,17 +86,13 @@ struct WindowPreviewHoverContainer: View {
                 let cgSize = CGSize(width: cgImage.width, height: cgImage.height)
 
                 if orientationIsHorizontal {
-                    // For horizontal layout (width based on height)
                     let rawWidthBasedOnHeight = (cgSize.width * thickness) / cgSize.height
-                    // Limit width to maxAspectRatio times the height
                     let widthBasedOnHeight = min(rawWidthBasedOnHeight, thickness * maxAspectRatio)
 
                     maxWidth = max(maxWidth, widthBasedOnHeight)
                     maxHeight = thickness
                 } else {
-                    // For vertical layout (height based on width)
                     let rawHeightBasedOnWidth = (cgSize.height * thickness) / cgSize.width
-                    // Limit height to maxAspectRatio times the width
                     let heightBasedOnWidth = min(rawHeightBasedOnWidth, thickness * maxAspectRatio)
 
                     maxHeight = max(maxHeight, heightBasedOnWidth)
@@ -83,7 +105,7 @@ struct WindowPreviewHoverContainer: View {
     }
 
     var body: some View {
-        let orientationIsHorizontal = dockPosition == .bottom || windowSwitcherCoordinator.windowSwitcherActive
+        let orientationIsHorizontal = dockPosition.isHorizontalFlow || windowSwitcherCoordinator.windowSwitcherActive
 
         ScrollViewReader { scrollProxy in
             buildFlowStack(windows: windowStates, scrollProxy: scrollProxy, orientationIsHorizontal)
@@ -97,7 +119,7 @@ struct WindowPreviewHoverContainer: View {
                 .dockStyle(cornerRadius: 16)
                 .padding(.top, (!windowSwitcherCoordinator.windowSwitcherActive && appNameStyle == .popover && showAppName) ? 30 : 0)
                 .overlay {
-                    if !isDragging {
+                    if !mockPreviewActive, !isDragging {
                         WindowDismissalContainer(appName: appName,
                                                  bestGuessMonitor: bestGuessMonitor,
                                                  dockPosition: dockPosition,
@@ -105,7 +127,7 @@ struct WindowPreviewHoverContainer: View {
                             .allowsHitTesting(false)
                     }
                 }
-                .padding(.all, 24)
+                .padding(.all, mockPreviewActive ? 0 : 24)
                 .frame(maxWidth: bestGuessMonitor.visibleFrame.width, maxHeight: bestGuessMonitor.visibleFrame.height)
         }
     }
@@ -114,19 +136,14 @@ struct WindowPreviewHoverContainer: View {
         guard index < windowStates.count else { return }
         let window = windowStates[index]
 
-        // Get the screen containing the drop location
         let currentScreen = NSScreen.screenContainingMouse(location)
-
-        // Convert drop location to global coordinates
         let globalLocation = DockObserver.cgPointFromNSPoint(location, forScreen: currentScreen)
 
-        // Calculate position (placing from top left corner)
         let finalPosition = CGPoint(
             x: globalLocation.x,
             y: globalLocation.y
         )
 
-        // Move the window
         if let positionValue = AXValue.from(point: finalPosition) {
             try? window.axElement.setAttribute(kAXPositionAttribute, positionValue)
             WindowUtil.bringWindowToFront(windowInfo: window)
@@ -270,7 +287,8 @@ struct WindowPreviewHoverContainer: View {
     @ViewBuilder
     private func buildFlowStack(windows: [WindowInfo], scrollProxy: ScrollViewProxy, _ isHorizontal: Bool) -> some View {
         let dimensionsMap = precomputeWindowDimensions()
-        let layout = calculateOptimalLayout(windowDimensions: dimensionsMap, isHorizontal: isHorizontal)
+        let wrap = windowSwitcherCoordinator.windowSwitcherActive ? switcherWrap : previewWrap
+        let layout = calculateOptimalLayout(windowDimensions: dimensionsMap, isHorizontal: isHorizontal, wrap: wrap)
 
         ScrollView(isHorizontal ? .horizontal : .vertical, showsIndicators: false) {
             DynStack(direction: isHorizontal ? .vertical : .horizontal, spacing: 16) {
@@ -291,7 +309,8 @@ struct WindowPreviewHoverContainer: View {
                                     },
                                     currIndex: windowSwitcherCoordinator.currIndex,
                                     windowSwitcherActive: windowSwitcherCoordinator.windowSwitcherActive,
-                                    dimensions: getDimensions(for: index, dimensionsMap: dimensionsMap)
+                                    dimensions: getDimensions(for: index, dimensionsMap: dimensionsMap),
+                                    mockPreviewActive: mockPreviewActive
                                 )
                                 .id("\(appName)-\(index)")
                                 .animation(.snappy(duration: 0.175), value: windowStates)
@@ -352,52 +371,6 @@ struct WindowPreviewHoverContainer: View {
                 scrollProxy.scrollTo("\(appName)-\(newIndex)", anchor: .center)
             }
         }
-    }
-
-    // Helper function to create window preview with dimensions
-    @ViewBuilder
-    private func createWindowPreview(index: Int, scrollProxy: ScrollViewProxy, dimensions: WindowDimensions) -> some View {
-        WindowPreview(
-            windowInfo: windowStates[index],
-            onTap: onWindowTap,
-            index: index,
-            dockPosition: dockPosition,
-            maxWindowDimension: maxWindowDimension,
-            bestGuessMonitor: bestGuessMonitor,
-            uniformCardRadius: uniformCardRadius,
-            handleWindowAction: { action in
-                handleWindowAction(action, at: index)
-            },
-            currIndex: windowSwitcherCoordinator.currIndex,
-            windowSwitcherActive: windowSwitcherCoordinator.windowSwitcherActive,
-            dimensions: dimensions
-        )
-        .opacity(draggedWindowIndex == index ? 0.3 : 1.0)
-        .id("\(appName)-\(index)")
-        .gesture(
-            DragGesture(minimumDistance: 3, coordinateSpace: .global)
-                .onChanged { value in
-                    if draggedWindowIndex == nil {
-                        draggedWindowIndex = index
-                        isDragging = true
-                        DragPreviewCoordinator.shared.startDragging(
-                            windowInfo: windowStates[index],
-                            at: NSEvent.mouseLocation
-                        )
-                    }
-                    if draggedWindowIndex == index {
-                        DragPreviewCoordinator.shared.updatePreviewPosition(to: NSEvent.mouseLocation)
-                    }
-                }
-                .onEnded { value in
-                    if draggedWindowIndex == index {
-                        handleWindowDrop(at: NSEvent.mouseLocation, for: index)
-                        DragPreviewCoordinator.shared.endDragging()
-                        draggedWindowIndex = nil
-                        isDragging = false
-                    }
-                }
-        )
     }
 
     private func loadAppIcon() {
@@ -484,25 +457,20 @@ struct WindowPreviewHoverContainer: View {
 
     private func checkForShakeGesture(currentPoint: CGPoint) -> Bool {
         let now = Date()
-        // Check at most every 50ms to maintain responsiveness
         guard now.timeIntervalSince(lastShakeCheck) > 0.05 else { return false }
         lastShakeCheck = now
 
-        // Add new point to tracking array
         dragPoints.append(currentPoint)
 
-        // Keep only last 20 points to analyze recent movement
         if dragPoints.count > 20 {
             dragPoints.removeFirst(dragPoints.count - 20)
         }
 
-        // Need at least 8 points to detect shake
         guard dragPoints.count >= 8 else { return false }
 
         var directionChanges = 0
         var velocities: [(dx: CGFloat, dy: CGFloat)] = []
 
-        // Calculate velocities between consecutive points
         for i in 1 ..< dragPoints.count {
             let prev = dragPoints[i - 1]
             let curr = dragPoints[i]
@@ -511,12 +479,10 @@ struct WindowPreviewHoverContainer: View {
             velocities.append((dx: dx, dy: dy))
         }
 
-        // Look for significant direction changes in both x and y
         for i in 1 ..< velocities.count {
             let prev = velocities[i - 1]
             let curr = velocities[i]
 
-            // Check for direction change in x or y
             let significantX = abs(prev.dx) > 5 && abs(curr.dx) > 5
             let significantY = abs(prev.dy) > 5 && abs(curr.dy) > 5
 
@@ -527,7 +493,6 @@ struct WindowPreviewHoverContainer: View {
             }
         }
 
-        // Calculate total distance moved
         var totalDistance: CGFloat = 0
         for i in 1 ..< dragPoints.count {
             let prev = dragPoints[i - 1]
@@ -537,14 +502,9 @@ struct WindowPreviewHoverContainer: View {
             totalDistance += sqrt(dx * dx + dy * dy)
         }
 
-        // Detect shake if:
-        // 1. We have enough direction changes (4 or more)
-        // 2. Total distance moved is significant (> 100 points)
-        // 3. Movement happened within a short time window
         let isShake = directionChanges >= 4 && totalDistance > 100
 
         if isShake {
-            // Clear points after detecting shake
             dragPoints.removeAll()
         }
 

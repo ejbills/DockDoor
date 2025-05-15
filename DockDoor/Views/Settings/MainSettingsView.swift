@@ -1,195 +1,467 @@
+import AppKit
 import Defaults
 import LaunchAtLogin
 import SwiftUI
 
+enum SettingsProfile: String, CaseIterable, Identifiable {
+    case `default`, snappy, relaxed
+    var id: String { rawValue }
+    var displayName: LocalizedStringKey {
+        switch self {
+        case .default: "Default"
+        case .snappy: "Snappy"
+        case .relaxed: "Relaxed"
+        }
+    }
+
+    var iconName: String {
+        switch self {
+        case .default: "slider.horizontal.3"
+        case .snappy: "hare.fill"
+        case .relaxed: "tortoise.fill"
+        }
+    }
+
+    var settings: PerformanceProfileSettingsValues {
+        switch self {
+        case .default:
+            PerformanceProfileSettingsValues(
+                hoverWindowOpenDelay: Defaults.Keys.hoverWindowOpenDelay.defaultValue,
+                fadeOutDuration: Defaults.Keys.fadeOutDuration.defaultValue,
+                inactivityTimeout: Defaults.Keys.inactivityTimeout.defaultValue,
+                tapEquivalentInterval: Defaults.Keys.tapEquivalentInterval.defaultValue,
+                lateralMovement: Defaults.Keys.lateralMovement.defaultValue,
+                preventDockHide: Defaults.Keys.preventDockHide.defaultValue
+            )
+        case .snappy:
+            PerformanceProfileSettingsValues(hoverWindowOpenDelay: CoreDockGetAutoHideEnabled() ? 0.1 : 0, fadeOutDuration: 0.15, inactivityTimeout: 0.5, tapEquivalentInterval: 0.5, lateralMovement: false, preventDockHide: false)
+        case .relaxed:
+            PerformanceProfileSettingsValues(hoverWindowOpenDelay: 0.25, fadeOutDuration: 0.5, inactivityTimeout: 2.5, tapEquivalentInterval: 1.5, lateralMovement: true, preventDockHide: true)
+        }
+    }
+}
+
+struct PerformanceProfileSettingsValues {
+    let hoverWindowOpenDelay: CGFloat
+    let fadeOutDuration: CGFloat
+    let inactivityTimeout: CGFloat
+    let tapEquivalentInterval: CGFloat
+    let lateralMovement: Bool
+    let preventDockHide: Bool
+}
+
+enum PreviewQualityProfile: String, CaseIterable, Identifiable {
+    case detailed, standard, lightweight
+    var id: String { rawValue }
+    var displayName: LocalizedStringKey {
+        switch self {
+        case .detailed: "Detailed"
+        case .standard: "Standard"
+        case .lightweight: "Lightweight"
+        }
+    }
+
+    var iconName: String {
+        switch self {
+        case .detailed: "sparkles"
+        case .standard: "eye.fill"
+        case .lightweight: "leaf.fill"
+        }
+    }
+
+    var settings: PreviewQualitySettingsValues {
+        switch self {
+        case .detailed: PreviewQualitySettingsValues(screenCaptureCacheLifespan: 0, windowPreviewImageScale: 1)
+        case .standard: PreviewQualitySettingsValues(screenCaptureCacheLifespan: Defaults.Keys.screenCaptureCacheLifespan.defaultValue, windowPreviewImageScale: 2)
+        case .lightweight: PreviewQualitySettingsValues(screenCaptureCacheLifespan: 60, windowPreviewImageScale: 4)
+        }
+    }
+}
+
+struct PreviewQualitySettingsValues {
+    let screenCaptureCacheLifespan: CGFloat
+    let windowPreviewImageScale: CGFloat
+}
+
 struct MainSettingsView: View {
-    @Default(.hoverWindowOpenDelay) var hoverWindowOpenDelay
-    @Default(.screenCaptureCacheLifespan) var screenCaptureCacheLifespan
     @Default(.showMenuBarIcon) var showMenuBarIcon
-    @Default(.tapEquivalentInterval) var tapEquivalentInterval
-    @Default(.previewHoverAction) var previewHoverAction
-    @Default(.aeroShakeAction) var aeroShakeAction
-    @Default(.bufferFromDock) var bufferFromDock
-    @Default(.windowPreviewImageScale) var windowPreviewImageScale
+    @Default(.enableWindowSwitcher) var enableWindowSwitcher
+    @Default(.includeHiddenWindowsInSwitcher) var includeHiddenWindowsInSwitcher
+    @Default(.useClassicWindowOrdering) var useClassicWindowOrdering
+
+    @State private var selectedPerformanceProfile: SettingsProfile = .default
+    @State private var selectedPreviewQualityProfile: PreviewQualityProfile = .standard
+    @State private var showAdvancedSettings: Bool = false
+    @StateObject private var keybindModel = KeybindModel()
+    @Default(.windowSwitcherPlacementStrategy) var placementStrategy
+    @Default(.pinnedScreenIdentifier) var pinnedScreenIdentifier
+
+    @Default(.hoverWindowOpenDelay) var hoverWindowOpenDelay
     @Default(.fadeOutDuration) var fadeOutDuration
     @Default(.inactivityTimeout) var inactivityTimeout
-    @Default(.sortWindowsByDate) var sortWindowsByDate
+    @Default(.tapEquivalentInterval) var tapEquivalentInterval
     @Default(.lateralMovement) var lateralMovement
     @Default(.preventDockHide) var preventDockHide
+    @Default(.screenCaptureCacheLifespan) var screenCaptureCacheLifespan
+    @Default(.windowPreviewImageScale) var windowPreviewImageScale
+    @Default(.bufferFromDock) var bufferFromDock
+    @Default(.sortWindowsByDate) var sortWindowsByDate
     @Default(.shouldHideOnDockItemClick) var shouldHideOnDockItemClick
+    @Default(.previewHoverAction) var previewHoverAction
+    @Default(.aeroShakeAction) var aeroShakeAction
+    @Default(.showAnimations) var showAnimations
+
+    private let advancedSettingsSectionID = "advancedSettingsSection"
+    private let windowSwitcherAdvancedSettingsID = "windowSwitcherAdvancedSettings"
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Section {
-                HStack {
-                    Text("Want to support development?")
-                    Link("Buy me a coffee here, thank you!", destination: URL(string: "https://www.buymeacoffee.com/keplercafe")!)
-                }
-
-                HStack {
-                    Text("Want to see the app in your language?")
-                    Link("Contribute translation here!", destination: URL(string: "https://crowdin.com/project/dockdoor/invite?h=895e3c085646d3c07fa36a97044668e02149115")!)
-                }
-            }
-
-            Divider()
-
-            LaunchAtLogin.Toggle(String(localized: "Launch DockDoor at login"))
-
-            Toggle(isOn: $showMenuBarIcon, label: {
-                Text("Show Menu Bar Icon")
-            })
-            .onChange(of: showMenuBarIcon) { isOn in
-                let appDelegate = NSApplication.shared.delegate as! AppDelegate
-                if isOn {
-                    appDelegate.setupMenuBar()
-                } else {
-                    appDelegate.removeMenuBar()
-                }
-            }
-
-            Button("Reset All Settings to Defaults") {
-                showResetConfirmation()
-            }
-            Button("Quit DockDoor") {
-                let appDelegate = NSApplication.shared.delegate as! AppDelegate
-                appDelegate.quitApp()
-            }
-
-            Divider()
-
-            VStack(alignment: .leading) {
-                Toggle(isOn: $lateralMovement, label: {
-                    Text("Keep previews visible during lateral movement")
-                })
-                Text("Prevents previews from disappearing when moving sideways to adjacent windows")
-                    .font(.footnote)
-                    .foregroundColor(.gray)
-            }
-
-            VStack(alignment: .leading) {
-                Toggle(isOn: $preventDockHide, label: {
-                    Text("Prevent dock from hiding during previews")
-                })
-                Text("Only takes effect when dock auto-hide is enabled")
-                    .font(.footnote)
-                    .foregroundColor(.gray)
-            }
-
-            VStack(alignment: .leading) {
-                Toggle(isOn: $shouldHideOnDockItemClick, label: {
-                    Text("Hide all application windows when clicking on the dock icon")
-                })
-                Text("When enabled, clicking an app's Dock icon will minimize all windows of that application, similar to Windows taskbar behavior")
-                    .font(.footnote)
-                    .foregroundColor(.gray)
-            }
-
-            sliderSetting(title: String(localized: "Preview Window Open Delay"),
-                          value: $hoverWindowOpenDelay,
-                          range: 0 ... 2,
-                          step: 0.1,
-                          unit: String(localized: "seconds"),
-                          formatter: NumberFormatter.oneDecimalFormatter)
-
-            sliderSetting(title: String(localized: "Preview Window Fade Out Duration"),
-                          value: $fadeOutDuration,
-                          range: 0 ... 2,
-                          step: 0.1,
-                          unit: String(localized: "seconds"),
-                          formatter: NumberFormatter.oneDecimalFormatter)
-
-            sliderSetting(title: String(localized: "Preview Window Inactivity Timer"),
-                          value: $inactivityTimeout,
-                          range: 0 ... 3,
-                          step: 0.1,
-                          unit: String(localized: "seconds"),
-                          formatter: NumberFormatter.oneDecimalFormatter)
-
-            VStack(alignment: .leading) {
-                HStack {
-                    Slider(value: $bufferFromDock, in: -200 ... 200, step: 20) {
-                        Text("Window Buffer")
-                    }
-                    .buttonStyle(PlainButtonStyle())
-                    .frame(width: 400)
-                    TextField("", value: $bufferFromDock, formatter: NumberFormatter())
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .frame(width: 50)
-                }
-                Text("Adjust this if the preview is misaligned with dock")
-                    .font(.footnote)
-                    .foregroundColor(.gray)
-            }
-
-            sliderSetting(title: String(localized: "Window Image Cache Lifespan"),
-                          value: $screenCaptureCacheLifespan,
-                          range: 0 ... 60,
-                          step: 5,
-                          unit: String(localized: "seconds"))
-
-            sliderSetting(title: String(localized: "Window Image Resolution Scale (higher means lower resolution)"),
-                          value: $windowPreviewImageScale,
-                          range: 1 ... 4,
-                          step: 1,
-                          unit: "")
-
-            Toggle(isOn: $sortWindowsByDate, label: {
-                Text("Sort Window Previews by Date")
-            })
-
-            VStack(alignment: .leading) {
-                Picker("Dock Preview Window Hover Action", selection: $previewHoverAction) {
-                    ForEach(PreviewHoverAction.allCases, id: \.self) { action in
-                        Text(action.localizedName).tag(action)
+        ScrollViewReader { proxy in
+            BaseSettingsView {
+                VStack(alignment: .leading, spacing: 16) {
+                    supportAndContributionsSection
+                    applicationBasicsSection
+                    performanceProfilesSection
+                    previewQualityProfilesSection
+                    advancedSettingsToggle(proxy: proxy)
+                    if showAdvancedSettings {
+                        advancedSettingsSection.id(advancedSettingsSectionID)
+                        if enableWindowSwitcher {
+                            windowSwitcherAdvancedSection.id(windowSwitcherAdvancedSettingsID)
+                        }
                     }
                 }
-                .pickerStyle(MenuPickerStyle())
-                .scaledToFit()
-
-                Text("Triggers an action when hovering over a window in a dock preview")
-                    .font(.footnote)
-                    .foregroundColor(.gray)
-            }
-
-            sliderSetting(title: String(localized: "Preview Hover Delay"),
-                          value: $tapEquivalentInterval,
-                          range: 0 ... 2,
-                          step: 0.1,
-                          unit: String(localized: "seconds"),
-                          formatter: NumberFormatter.oneDecimalFormatter)
-                .disabled(previewHoverAction == .none)
-
-            VStack(alignment: .leading) {
-                Picker("Dock Preview Aero Shake Action", selection: $aeroShakeAction) {
-                    ForEach(AeroShakeAction.allCases, id: \.self) { action in
-                        Text(action.localizedName).tag(action)
-                    }
-                }
-                .pickerStyle(MenuPickerStyle())
-                .scaledToFit()
-
-                Text("Triggers an action when shaking a window while it is being dragged from a dock preview")
-                    .font(.footnote)
-                    .foregroundColor(.gray)
+                .background(
+                    ShortcutCaptureView(
+                        currentKeybind: $keybindModel.currentKeybind,
+                        isRecording: $keybindModel.isRecording,
+                        modifierKey: $keybindModel.modifierKey
+                    )
+                    .allowsHitTesting(false)
+                    .frame(width: 0, height: 0)
+                )
             }
         }
-        .padding(20)
-        .frame(minWidth: 650)
+        .onAppear {
+            if doesCurrentSettingsMatchPerformanceProfile(.snappy) { selectedPerformanceProfile = .snappy }
+            else if doesCurrentSettingsMatchPerformanceProfile(.relaxed) { selectedPerformanceProfile = .relaxed }
+            else if doesCurrentSettingsMatchPerformanceProfile(.default) { selectedPerformanceProfile = .default }
+
+            if doesCurrentSettingsMatchPreviewQualityProfile(.detailed) { selectedPreviewQualityProfile = .detailed }
+            else if doesCurrentSettingsMatchPreviewQualityProfile(.lightweight) { selectedPreviewQualityProfile = .lightweight }
+            else if doesCurrentSettingsMatchPreviewQualityProfile(.standard) { selectedPreviewQualityProfile = .standard }
+
+            keybindModel.modifierKey = Defaults[.UserKeybind].modifierFlags
+            keybindModel.currentKeybind = Defaults[.UserKeybind]
+        }
+    }
+
+    private var supportAndContributionsSection: some View {
+        StyledGroupBox(label: "Support & Contributions") {
+            VStack(alignment: .leading, spacing: 8) {
+                HStack { Text("Want to support development?"); Link("Buy me a coffee here, thank you!", destination: URL(string: "https://www.buymeacoffee.com/keplercafe")!) }
+                HStack { Text("Want to see the app in your language?"); Link("Contribute translation here!", destination: URL(string: "https://crowdin.com/project/dockdoor/invite?h=895e3c085646d3c07fa36a97044668e02149115")!) }
+            }
+        }
+    }
+
+    private var applicationBasicsSection: some View {
+        StyledGroupBox(label: "Application Basics") {
+            VStack(alignment: .leading, spacing: 10) {
+                LaunchAtLogin.Toggle(String(localized: "Launch DockDoor at login"))
+
+                Toggle(isOn: $showMenuBarIcon, label: { Text("Show Menu Bar Icon") })
+                    .onChange(of: showMenuBarIcon) { isOn in
+                        let appDelegate = NSApplication.shared.delegate as! AppDelegate
+                        if isOn { appDelegate.setupMenuBar() } else { appDelegate.removeMenuBar() }
+                    }
+
+                Toggle(isOn: Binding(
+                    get: { !showAnimations },
+                    set: { showAnimations = !$0 }
+                )) {
+                    Text("Reduce motion")
+                }
+
+                Divider().padding(.vertical, 2)
+
+                Toggle(isOn: $enableWindowSwitcher) { Text("Enable Window Switcher") }
+                    .onChange(of: enableWindowSwitcher) { _ in askUserToRestartApplication() }
+
+                Text("The Window Switcher (often Alt/Cmd-Tab) lets you quickly cycle between open app windows with a keyboard shortcut.")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .padding(.leading, 20)
+
+                if enableWindowSwitcher {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Toggle(isOn: $includeHiddenWindowsInSwitcher) { Text("Include Hidden/Minimized Windows in Switcher") }
+                        Toggle(isOn: $useClassicWindowOrdering) { Text("Use Windows-style window ordering in switcher") }
+                        Text("Shows last active window first, instead of current window.")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                            .padding(.leading, 20)
+                    }
+                    .padding(.leading, 20)
+                    .padding(.top, 4)
+                }
+
+                Divider().padding(.vertical, 2)
+
+                HStack {
+                    Spacer()
+                    Button("Reset All Settings to Defaults") { showResetConfirmation() }
+                    Button("Quit DockDoor") { (NSApplication.shared.delegate as! AppDelegate).quitApp() }
+                    Spacer()
+                }
+                .padding(.top, 5)
+            }
+        }
+    }
+
+    private var performanceProfilesSection: some View {
+        StyledGroupBox(label: "Performance Profiles") {
+            VStack(alignment: .leading, spacing: 10) {
+                HStack(spacing: 10) {
+                    ForEach(SettingsProfile.allCases) { profile in
+                        Button {
+                            withAnimation(.smooth) { selectedPerformanceProfile = profile }
+                            applyPerformanceProfileSettings(profile)
+                        } label: {
+                            VStack(spacing: 8) {
+                                Image(systemName: profile.iconName).font(.title2).frame(height: 25)
+                                Text(profile.displayName).font(.caption).lineLimit(1)
+                            }
+                            .padding(.vertical, 10).padding(.horizontal, 5).frame(maxWidth: .infinity)
+                            .background(selectedPerformanceProfile == profile ? Color.accentColor.opacity(0.2) : Color(NSColor.controlBackgroundColor))
+                            .cornerRadius(8)
+                            .overlay(RoundedRectangle(cornerRadius: 8).stroke(selectedPerformanceProfile == profile ? Color.accentColor : Color.gray.opacity(0.3), lineWidth: selectedPerformanceProfile == profile ? 2 : 1))
+                            .contentShape(Rectangle())
+                        }.buttonStyle(.plain)
+                    }
+                }
+                Text("Adjusts how responsive the app feels and behaves during interaction.").font(.footnote).foregroundColor(.gray)
+            }
+        }
+    }
+
+    private var previewQualityProfilesSection: some View {
+        StyledGroupBox(label: "Preview Quality Profiles") {
+            VStack(alignment: .leading, spacing: 10) {
+                HStack(spacing: 10) {
+                    ForEach(PreviewQualityProfile.allCases) { profile in
+                        Button {
+                            withAnimation(.smooth) { selectedPreviewQualityProfile = profile }
+                            applyPreviewQualityProfileSettings(profile)
+                        } label: {
+                            VStack(spacing: 8) {
+                                Image(systemName: profile.iconName).font(.title2).frame(height: 25)
+                                Text(profile.displayName).font(.caption).lineLimit(1)
+                            }
+                            .padding(.vertical, 10).padding(.horizontal, 5).frame(maxWidth: .infinity)
+                            .background(selectedPreviewQualityProfile == profile ? Color.accentColor.opacity(0.2) : Color(NSColor.controlBackgroundColor))
+                            .cornerRadius(8)
+                            .overlay(RoundedRectangle(cornerRadius: 8).stroke(selectedPreviewQualityProfile == profile ? Color.accentColor : Color.gray.opacity(0.3), lineWidth: selectedPreviewQualityProfile == profile ? 2 : 1))
+                            .contentShape(Rectangle())
+                        }.buttonStyle(.plain)
+                    }
+                }
+                Text("Controls the visual detail and update frequency of window previews.").font(.footnote).foregroundColor(.gray)
+            }
+        }
+    }
+
+    private func advancedSettingsToggle(proxy: ScrollViewProxy) -> some View {
+        VStack(alignment: .center) {
+            Text("Select a profile to quickly adjust common performance settings. Choose \"Advanced\" for manual control.")
+                .font(.footnote).foregroundColor(.gray)
+            HStack {
+                Spacer()
+                Button {
+                    withAnimation(.snappy(duration: 0.1)) {
+                        showAdvancedSettings.toggle()
+                        if showAdvancedSettings { DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { withAnimation(.smooth(duration: 0.1)) { proxy.scrollTo(advancedSettingsSectionID, anchor: .top) } } }
+                    }
+                } label: { Label(showAdvancedSettings ? "Hide Advanced Settings" : "Show Advanced Settings", systemImage: showAdvancedSettings ? "chevron.up.circle" : "chevron.down.circle") }
+                    .buttonStyle(AccentButtonStyle())
+                Spacer()
+            }
+        }
+    }
+
+    private var advancedSettingsSection: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            StyledGroupBox(label: "Performance Tuning (Dock Previews)") {
+                VStack(alignment: .leading, spacing: 10) {
+                    sliderSetting(title: "Preview Window Open Delay", value: $hoverWindowOpenDelay, range: 0 ... 2, step: 0.1, unit: "seconds", formatter: NumberFormatter.oneDecimalFormatter)
+                    sliderSetting(title: "Preview Window Fade Out Duration", value: $fadeOutDuration, range: 0 ... 2, step: 0.1, unit: "seconds", formatter: NumberFormatter.oneDecimalFormatter)
+                    sliderSetting(title: "Preview Window Inactivity Timer", value: $inactivityTimeout, range: 0 ... 3, step: 0.1, unit: "seconds", formatter: NumberFormatter.oneDecimalFormatter)
+                    Toggle(isOn: $lateralMovement) { Text("Keep previews visible during lateral movement") }
+                    Toggle(isOn: $preventDockHide) { Text("Prevent dock from hiding during previews") }
+                }
+            }
+            StyledGroupBox(label: "Preview Appearance & Quality (Dock Previews)") {
+                VStack(alignment: .leading, spacing: 10) {
+                    sliderSetting(title: "Window Image Cache Lifespan", value: $screenCaptureCacheLifespan, range: 0 ... 60, step: 10, unit: "seconds")
+                    sliderSetting(title: "Window Image Resolution Scale (1=Best)", value: $windowPreviewImageScale, range: 1 ... 4, step: 1, unit: "")
+                    Toggle(isOn: $sortWindowsByDate) { Text("Sort Window Previews by Date (if multiple)") }
+                }
+            }
+            StyledGroupBox(label: "Interaction & Behavior (Dock Previews)") {
+                VStack(alignment: .leading, spacing: 10) {
+                    Picker("Dock Preview Hover Action", selection: $previewHoverAction) { ForEach(PreviewHoverAction.allCases, id: \.self) { Text($0.localizedName).tag($0) } }.pickerStyle(MenuPickerStyle())
+                    sliderSetting(title: "Preview Hover Action Delay", value: $tapEquivalentInterval, range: 0 ... 2, step: 0.1, unit: "seconds", formatter: NumberFormatter.oneDecimalFormatter).disabled(previewHoverAction == .none)
+                    Picker("Dock Preview Aero Shake Action", selection: $aeroShakeAction) { ForEach(AeroShakeAction.allCases, id: \.self) { Text($0.localizedName).tag($0) } }.pickerStyle(MenuPickerStyle())
+                    Toggle(isOn: $shouldHideOnDockItemClick) { Text("Hide all app windows on dock icon click") }
+                    sliderSetting(title: "Window Buffer from Dock (pixels)", value: $bufferFromDock, range: -100 ... 100, step: 5, unit: "px", formatter: { let f = NumberFormatter(); f.allowsFloats = false; f.minimumIntegerDigits = 1; f.maximumFractionDigits = 0; return f }())
+                }
+            }
+        }.padding(.top, 5)
+    }
+
+    private var windowSwitcherAdvancedSection: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            StyledGroupBox(label: "Window Switcher Customization") {
+                VStack(alignment: .leading, spacing: 10) {
+                    keyboardShortcutSection()
+                    Divider()
+                    Text("Window Switcher Placement").font(.headline)
+                    Picker("Placement Strategy", selection: $placementStrategy) { ForEach(WindowSwitcherPlacementStrategy.allCases, id: \.self) { Text($0.localizedName).tag($0) } }
+                        .labelsHidden()
+                        .onChange(of: placementStrategy) { newStrategy in if newStrategy == .pinnedToScreen, pinnedScreenIdentifier.isEmpty { pinnedScreenIdentifier = NSScreen.main?.uniqueIdentifier() ?? "" } }
+                    if placementStrategy == .pinnedToScreen {
+                        VStack(alignment: .leading, spacing: 4) {
+                            Picker("Pin to Screen", selection: $pinnedScreenIdentifier) {
+                                ForEach(NSScreen.screens, id: \.self) { screen in Text(screenDisplayName(screen)).tag(screen.uniqueIdentifier()) }
+                                if !pinnedScreenIdentifier.isEmpty, !NSScreen.screens.contains(where: { $0.uniqueIdentifier() == pinnedScreenIdentifier }) { Text("Disconnected Display").tag(pinnedScreenIdentifier) }
+                            }.labelsHidden()
+                            if !pinnedScreenIdentifier.isEmpty, !NSScreen.screens.contains(where: { $0.uniqueIdentifier() == pinnedScreenIdentifier }) { Text("This display is currently disconnected. The window switcher will appear on the main display until the selected display is reconnected.", comment: "Message shown when a pinned display is disconnected").font(.subheadline).foregroundColor(.secondary).fixedSize(horizontal: false, vertical: true) }
+                        }
+                    }
+                }
+            }
+        }.padding(.top, 5)
+            .onAppear { keybindModel.modifierKey = Defaults[.UserKeybind].modifierFlags; keybindModel.currentKeybind = Defaults[.UserKeybind] }
+    }
+
+    private func modifierSymbol(_ modifier: Int) -> String {
+        switch modifier {
+        case Defaults[.Int64maskControl]: "control"
+        case Defaults[.Int64maskAlternate]: "option"
+        case Defaults[.Int64maskCommand]: "command"
+        default: ""
+        }
+    }
+
+    private func keyboardShortcutSection() -> some View {
+        VStack(alignment: .leading, spacing: 16) {
+            Text("Keyboard Shortcut").font(.headline)
+            HStack(spacing: 20) {
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Initialization Key").font(.subheadline).foregroundColor(.secondary)
+                    Picker("", selection: $keybindModel.modifierKey) {
+                        Text("Control (⌃)").tag(Defaults[.Int64maskControl]); Text("Option (⌥)").tag(Defaults[.Int64maskAlternate]); Text("Command (⌘)").tag(Defaults[.Int64maskCommand])
+                    }.pickerStyle(SegmentedPickerStyle()).frame(maxWidth: 250)
+                        .onChange(of: keybindModel.modifierKey) { newValue in if let currentKeybind = keybindModel.currentKeybind, currentKeybind.keyCode != 0 { let updatedKeybind = UserKeyBind(keyCode: currentKeybind.keyCode, modifierFlags: newValue); Defaults[.UserKeybind] = updatedKeybind; keybindModel.currentKeybind = updatedKeybind } }
+                }
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Trigger Key").font(.subheadline).foregroundColor(.secondary)
+                    Button(action: { keybindModel.isRecording.toggle() }) { HStack { Image(systemName: keybindModel.isRecording ? "keyboard.fill" : "record.circle"); Text(keybindModel.isRecording ? "Press any key..." : "Set Trigger Key") }.frame(maxWidth: 150) }
+                        .buttonStyle(.borderedProminent).disabled(keybindModel.isRecording)
+                }
+            }
+            if let keybind = keybindModel.currentKeybind, keybind.keyCode != 0 {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Current Shortcut").font(.subheadline).foregroundColor(.secondary)
+                    HStack(spacing: 8) {
+                        KeyCapView(text: modifierConverter.toString(keybind.modifierFlags), symbol: modifierSymbol(keybind.modifierFlags))
+                        Text("+").foregroundColor(.secondary)
+                        KeyCapView(text: KeyCodeConverter.toString(keybind.keyCode), symbol: nil)
+                    }
+                }.padding(.top, 4)
+            }
+            StyledGroupBox(label: "Instructions") {
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("How to Set Up").font(.subheadline).bold()
+                    VStack(alignment: .leading, spacing: 4) {
+                        HStack(alignment: .top, spacing: 8) { Text("1."); Text("Select an initialization key (e.g. Command ⌘)") }
+                        HStack(alignment: .top, spacing: 8) { Text("2."); Text("Click \"Set Trigger Key\"") }
+                        HStack(alignment: .top, spacing: 8) { Text("3."); Text("Press ONLY the trigger key (e.g. just Tab)") }
+                        HStack(alignment: .top, spacing: 8) { Text("4."); Text("Your shortcut will be set (e.g. ⌘ + Tab)") }
+                    }
+                }
+            }.padding(.top, 8)
+        }
+    }
+
+    private func screenDisplayName(_ screen: NSScreen) -> String {
+        let isMain = screen == NSScreen.main
+        var name = screen.localizedName
+        if name.isEmpty {
+            if let displayID = screen.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? CGDirectDisplayID { name = String(format: NSLocalizedString("Display %u", comment: "Generic display name with CGDirectDisplayID"), displayID) }
+            else { name = String(localized: "Unknown Display") }
+        }
+        return name + (isMain ? " (Main)" : "")
+    }
+
+    private func applyPerformanceProfileSettings(_ profile: SettingsProfile) {
+        let settings = profile.settings
+        hoverWindowOpenDelay = settings.hoverWindowOpenDelay
+        fadeOutDuration = settings.fadeOutDuration
+        inactivityTimeout = settings.inactivityTimeout
+        tapEquivalentInterval = settings.tapEquivalentInterval
+        lateralMovement = settings.lateralMovement
+        preventDockHide = settings.preventDockHide
+    }
+
+    private func doesCurrentSettingsMatchPerformanceProfile(_ profile: SettingsProfile) -> Bool {
+        let settings = profile.settings
+        return hoverWindowOpenDelay == settings.hoverWindowOpenDelay &&
+            fadeOutDuration == settings.fadeOutDuration &&
+            inactivityTimeout == settings.inactivityTimeout &&
+            tapEquivalentInterval == settings.tapEquivalentInterval &&
+            lateralMovement == settings.lateralMovement &&
+            preventDockHide == settings.preventDockHide
+    }
+
+    private func applyPreviewQualityProfileSettings(_ profile: PreviewQualityProfile) {
+        let settings = profile.settings
+        screenCaptureCacheLifespan = settings.screenCaptureCacheLifespan
+        windowPreviewImageScale = settings.windowPreviewImageScale
+    }
+
+    private func doesCurrentSettingsMatchPreviewQualityProfile(_ profile: PreviewQualityProfile) -> Bool {
+        let settings = profile.settings
+        return screenCaptureCacheLifespan == settings.screenCaptureCacheLifespan &&
+            windowPreviewImageScale == settings.windowPreviewImageScale
     }
 
     private func showResetConfirmation() {
-        MessageUtil.showAlert(
-            title: String(localized: "Reset to Defaults"),
-            message: String(localized: "Are you sure you want to reset all settings to their default values?"),
-            actions: [.ok, .cancel]
-        ) { action in
-            switch action {
-            case .ok:
-                resetDefaultsToDefaultValues()
-            case .cancel:
-                // Do nothing
-                break
+        MessageUtil.showAlert(title: String(localized: "Reset to Defaults"), message: String(localized: "Are you sure you want to reset all settings to their default values? This will reset advanced settings as well."), actions: [.ok, .cancel]) { action in
+            if action == .ok {
+                Defaults.removeAll()
+                Defaults[.launched] = true
+
+                selectedPerformanceProfile = .default; applyPerformanceProfileSettings(.default)
+                selectedPreviewQualityProfile = .standard; applyPreviewQualityProfileSettings(.standard)
+
+                let perfDefault = SettingsProfile.default.settings
+                hoverWindowOpenDelay = perfDefault.hoverWindowOpenDelay; fadeOutDuration = perfDefault.fadeOutDuration; inactivityTimeout = perfDefault.inactivityTimeout; tapEquivalentInterval = perfDefault.tapEquivalentInterval; lateralMovement = perfDefault.lateralMovement; preventDockHide = perfDefault.preventDockHide
+                let qualityDefault = PreviewQualityProfile.standard.settings
+                screenCaptureCacheLifespan = qualityDefault.screenCaptureCacheLifespan; windowPreviewImageScale = qualityDefault.windowPreviewImageScale
+                bufferFromDock = Defaults.Keys.bufferFromDock.defaultValue; sortWindowsByDate = Defaults.Keys.sortWindowsByDate.defaultValue; shouldHideOnDockItemClick = Defaults.Keys.shouldHideOnDockItemClick.defaultValue; previewHoverAction = Defaults.Keys.previewHoverAction.defaultValue; aeroShakeAction = Defaults.Keys.aeroShakeAction.defaultValue
+
+                showMenuBarIcon = Defaults.Keys.showMenuBarIcon.defaultValue
+                enableWindowSwitcher = Defaults.Keys.enableWindowSwitcher.defaultValue
+                includeHiddenWindowsInSwitcher = Defaults.Keys.includeHiddenWindowsInSwitcher.defaultValue
+                useClassicWindowOrdering = Defaults.Keys.useClassicWindowOrdering.defaultValue
+
+                Defaults[.UserKeybind] = Defaults.Keys.UserKeybind.defaultValue
+                keybindModel.currentKeybind = Defaults[.UserKeybind]
+                keybindModel.modifierKey = Defaults[.UserKeybind].modifierFlags
+
+                placementStrategy = Defaults.Keys.windowSwitcherPlacementStrategy.defaultValue
+                pinnedScreenIdentifier = Defaults.Keys.pinnedScreenIdentifier.defaultValue
+                askUserToRestartApplication()
             }
         }
     }

@@ -110,7 +110,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         // Reset the hosting view
         let hoverView = WindowPreviewHoverContainer(appName: appName, windows: windows, onWindowTap: onWindowTap,
                                                     dockPosition: DockUtils.getDockPosition(), mouseLocation: mouseLocation,
-                                                    bestGuessMonitor: mouseScreen, windowSwitcherCoordinator: windowSwitcherCoordinator)
+                                                    bestGuessMonitor: mouseScreen, windowSwitcherCoordinator: windowSwitcherCoordinator, mockPreviewActive: false)
         let newHostingView = NSHostingView(rootView: hoverView)
         contentView = newHostingView
         let newHoverWindowSize = newHostingView.fittingSize
@@ -373,7 +373,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
     private func updateHostingView(appName: String, windows: [WindowInfo], onWindowTap: (() -> Void)?, screen: NSScreen, mouseLocation: CGPoint? = nil) {
         let hoverView = WindowPreviewHoverContainer(appName: appName, windows: windows, onWindowTap: onWindowTap,
                                                     dockPosition: DockUtils.getDockPosition(), mouseLocation: mouseLocation,
-                                                    bestGuessMonitor: screen, windowSwitcherCoordinator: windowSwitcherCoordinator)
+                                                    bestGuessMonitor: screen, windowSwitcherCoordinator: windowSwitcherCoordinator, mockPreviewActive: false)
         contentView = NSHostingView(rootView: hoverView)
     }
 

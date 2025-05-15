@@ -13,59 +13,52 @@ struct EnabledActionRowView: View {
     var hideStatus: Bool = false
 
     var body: some View {
-        HStack(alignment: .top, spacing: 12) {
+        HStack(alignment: .center, spacing: 12) {
             Image(systemName: iconName)
-                .font(.system(size: 24))
+                .font(.system(size: 20))
                 .foregroundColor(.accentColor)
-                .frame(width: 32, height: 32)
+                .frame(width: 28, height: 28)
             VStack(alignment: .leading, spacing: 2) {
                 Text(title)
                     .font(.headline)
                 Text(description)
-                    .font(.body)
+                    .font(.caption)
                     .fixedSize(horizontal: false, vertical: true)
                     .foregroundColor(.secondary)
             }
-            .frame(maxWidth: .infinity, alignment: .topLeading)
+            .frame(maxWidth: .infinity, alignment: .leading)
+
             Spacer()
-            if !hideStatus {
-                if let customStatusView {
-                    customStatusView
-                } else {
-                    VStack(alignment: .trailing, spacing: 4) {
-                        HStack {
+
+            HStack(spacing: 8) {
+                if !hideStatus {
+                    if let customStatusView {
+                        customStatusView
+                    } else {
+                        HStack(spacing: 4) {
                             Text(isGranted ? statusText : String(localized: "Not \(statusText.lowercased())"))
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                             Image(systemName: isGranted ? "checkmark.circle.fill" : "xmark.circle.fill")
                                 .foregroundColor(isGranted ? .green : .red)
-                                .font(.system(size: 20))
+                                .font(.system(size: 16))
                         }
                     }
                 }
+
+                if let action {
+                    Button(action: action) {
+                        Text(buttonText)
+                            .font(.system(size: 12, weight: .medium))
+                    }
+                    .buttonStyle(AccentButtonStyle(color: .accentColor, small: true))
+                }
             }
         }
-        .padding(EdgeInsets(top: 12, leading: 16, bottom: 14, trailing: 16))
+        .padding(12)
         .background(
-            Group {
-                if disableShine {
-                    Color.gray.opacity(0.25)
-                } else {
-                    CustomizableFluidGradientView().opacity(0.125)
-                }
-            }
+            Color(NSColor.controlBackgroundColor).opacity(0.5)
         )
-        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
-        .overlay(alignment: .bottomTrailing) {
-            if let action {
-                Button(action: action) {
-                    Text(buttonText)
-                        .font(.system(size: 12, weight: .medium))
-                }
-                .padding(.trailing, 16)
-                .offset(y: 9)
-                .buttonStyle(AccentButtonStyle(color: .accentColor, small: true))
-            }
-        }
+        .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
     }
 }

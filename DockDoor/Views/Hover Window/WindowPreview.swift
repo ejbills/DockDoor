@@ -14,6 +14,7 @@ struct WindowPreview: View {
     var currIndex: Int
     var windowSwitcherActive: Bool
     let dimensions: WindowPreviewHoverContainer.WindowDimensions
+    let mockPreviewActive: Bool
 
     @Default(.windowTitlePosition) var windowTitlePosition
     @Default(.showWindowTitle) var showWindowTitle
@@ -77,7 +78,8 @@ struct WindowPreview: View {
                     displayMode: trafficLightButtonsVisibility,
                     hoveringOverParentWindow: isSelected || isHoveringOverWindowSwitcherPreview,
                     onWindowAction: handleWindowAction,
-                    pillStyling: false
+                    pillStyling: false,
+                    mockPreviewActive: mockPreviewActive
                 )
                 .padding(4)
             }
@@ -96,13 +98,13 @@ struct WindowPreview: View {
                 .foregroundStyle(.primary)
                 .lineLimit(1)
 
-            if let windowTitle = windowInfo.window.title,
+            if let windowTitle = windowInfo.windowName,
                !windowTitle.isEmpty,
                windowTitle != windowInfo.app.localizedName,
                shouldShowTitle
             {
                 HStack(spacing: 0) {
-                    Text(windowInfo.windowName ?? "Hidden window")
+                    Text(windowTitle)
 
                     if windowInfo.isMinimized || windowInfo.isHidden {
                         Text(" - Inactive").italic()
@@ -135,7 +137,7 @@ struct WindowPreview: View {
                     displayMode: trafficLightButtonsVisibility,
                     hoveringOverParentWindow: selected || isHoveringOverWindowSwitcherPreview,
                     onWindowAction: handleWindowAction,
-                    pillStyling: true
+                    pillStyling: true, mockPreviewActive: mockPreviewActive
                 )
             }
         }

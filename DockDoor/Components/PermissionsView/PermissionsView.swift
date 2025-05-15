@@ -6,7 +6,7 @@ struct PermissionsView: View {
     @StateObject private var permissionsChecker = PermissionsChecker()
 
     var body: some View {
-        VStack(alignment: .center, spacing: 24) {
+        VStack(alignment: .center, spacing: 16) {
             EnabledActionRowView(
                 title: String(localized: "Accessibility"),
                 description: String(localized: "Required for dock hover detection and window switcher hotkeys"),

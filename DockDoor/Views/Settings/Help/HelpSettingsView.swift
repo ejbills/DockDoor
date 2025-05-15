@@ -2,10 +2,12 @@ import SwiftUI
 
 struct HelpSettingsView: View {
     var body: some View {
-        HStack(spacing: 8) {
+        HStack {
             ScreenRecordingWarningView()
 
-            VStack(spacing: 8) {
+            Spacer()
+
+            VStack(spacing: 12) {
                 DonationView()
                 SquiggleDivider()
                 BugReportingView()
@@ -13,8 +15,5 @@ struct HelpSettingsView: View {
                 FeatureRequestView()
             }
         }
-        .frame(alignment: .leading)
-        .padding(20)
-        .frame(minWidth: 650)
     }
 }

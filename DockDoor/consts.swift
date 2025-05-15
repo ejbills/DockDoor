@@ -11,8 +11,8 @@ let roughWidthCap = optimisticScreenSizeWidth / 3
 
 extension Defaults.Keys {
     static let sizingMultiplier = Key<CGFloat>("sizingMultiplier", default: 3)
-    static let bufferFromDock = Key<CGFloat>("bufferFromDock", default: 0)
-    static let hoverWindowOpenDelay = Key<CGFloat>("openDelay", default: 0)
+    static let bufferFromDock = Key<CGFloat>("bufferFromDock", default: -25)
+    static let hoverWindowOpenDelay = Key<CGFloat>("openDelay", default: 0.2)
     static let lateralMovement = Key<Bool>("lateralMovement", default: true)
     static let preventDockHide = Key<Bool>("preventDockHide", default: false)
     static let shouldHideOnDockItemClick = Key<Bool>("shouldHideOnDockItemClick", default: false)
@@ -56,8 +56,8 @@ extension Defaults.Keys {
     static let enabledTrafficLightButtons = Key<Set<WindowAction>>("enabledTrafficLightButtons", default: [.quit, .close, .minimize, .toggleFullScreen])
     static let useMonochromeTrafficLights = Key<Bool>("useMonochromeTrafficLights", default: false)
 
-    static let maxColumns = Key<CGFloat>("maxColumns", default: 2)
-    static let maxRows = Key<CGFloat>("maxRows", default: 2)
+    static let previewWrap = Key<Int>("previewWrap", default: 2)
+    static let switcherWrap = Key<Int>("switcherWrap", default: 2)
 
     static let windowSwitcherPlacementStrategy = Key<WindowSwitcherPlacementStrategy>("windowSwitcherPlacementStrategy", default: .screenWithMouse)
     static let windowSwitcherControlPosition = Key<WindowSwitcherControlPosition>("windowSwitcherControlPosition", default: .topTrailing)
