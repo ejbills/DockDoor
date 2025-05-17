@@ -174,7 +174,8 @@ struct WindowPreview: View {
             .bottom : .top, 4)
     }
 
-    var body: some View {
+    @ViewBuilder
+    private var previewCoreContent: some View {
         let isHighlightedInWindowSwitcher = (index == currIndex && windowSwitcherActive)
         let selected = isHoveringOverDockPeekPreview || isHighlightedInWindowSwitcher || isHoveringOverWindowSwitcherPreview
 
@@ -187,7 +188,6 @@ struct WindowPreview: View {
                     windowSwitcherContent(selected)
                 }
 
-                // Window content
                 windowContent(
                     isMinimized: windowInfo.isMinimized,
                     isHidden: windowInfo.isHidden,
@@ -277,6 +277,17 @@ struct WindowPreview: View {
                 }
             }
         })
+    }
+
+    var body: some View {
+        MiddleClickWrapper(
+            content: previewCoreContent,
+            onMiddleClick: {
+                if windowInfo.closeButton != nil {
+                    handleWindowAction(.close)
+                }
+            }
+        )
         .fixedSize()
     }
 
@@ -284,7 +295,6 @@ struct WindowPreview: View {
         if isHovering, !windowSwitcherActive {
             switch action {
             case .none:
-                // Do nothing for .none
                 break
 
             case .tap:
@@ -346,7 +356,6 @@ struct WindowPreview: View {
         highlightOpacity = 1.0
 
         dragTimer = Timer.scheduledTimer(withTimeInterval: 1.5, repeats: false) { _ in
-            // First blink
             withAnimation(.easeInOut(duration: 0.08)) {
                 highlightOpacity = 0.0
             }
@@ -356,7 +365,6 @@ struct WindowPreview: View {
                     highlightOpacity = 1.0
                 }
 
-                // Second blink
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.08) {
                     withAnimation(.easeInOut(duration: 0.08)) {
                         highlightOpacity = 0.0
