@@ -232,7 +232,7 @@ struct MainSettingsView: View {
                                 Text(profile.displayName).font(.caption).lineLimit(1)
                             }
                             .padding(.vertical, 10).padding(.horizontal, 5).frame(maxWidth: .infinity)
-                            .background(selectedPerformanceProfile == profile ? Color.accentColor.opacity(0.2) : Color(NSColor.controlBackgroundColor))
+                            .background(selectedPerformanceProfile == profile ? Color.accentColor.opacity(0.2) : Color(NSColor.controlBackgroundColor).opacity(0.5))
                             .cornerRadius(8)
                             .overlay(RoundedRectangle(cornerRadius: 8).stroke(selectedPerformanceProfile == profile ? Color.accentColor : Color.gray.opacity(0.3), lineWidth: selectedPerformanceProfile == profile ? 2 : 1))
                             .contentShape(Rectangle())
@@ -258,7 +258,7 @@ struct MainSettingsView: View {
                                 Text(profile.displayName).font(.caption).lineLimit(1)
                             }
                             .padding(.vertical, 10).padding(.horizontal, 5).frame(maxWidth: .infinity)
-                            .background(selectedPreviewQualityProfile == profile ? Color.accentColor.opacity(0.2) : Color(NSColor.controlBackgroundColor))
+                            .background(selectedPreviewQualityProfile == profile ? Color.accentColor.opacity(0.2) : Color(NSColor.controlBackgroundColor).opacity(0.5))
                             .cornerRadius(8)
                             .overlay(RoundedRectangle(cornerRadius: 8).stroke(selectedPreviewQualityProfile == profile ? Color.accentColor : Color.gray.opacity(0.3), lineWidth: selectedPreviewQualityProfile == profile ? 2 : 1))
                             .contentShape(Rectangle())
