@@ -248,7 +248,7 @@ struct WindowPreview: View {
         .onTapGesture {
             handleWindowTap()
         }
-        .contextMenu(menuItems: {
+        .contextMenu {
             if windowInfo.closeButton != nil {
                 Button(action: { handleWindowAction(.minimize) }) {
                     if windowInfo.isMinimized {
@@ -268,9 +268,7 @@ struct WindowPreview: View {
                     Label("Close", systemImage: "xmark.square")
                 }
 
-                Button(role: .destructive, action: {
-                    handleWindowAction(.quit)
-                }) {
+                Button(role: .destructive, action: { handleWindowAction(.quit) }) {
                     if NSEvent.modifierFlags.contains(.option) {
                         Label("Force Quit", systemImage: "power.square.fill")
                     } else {
@@ -278,37 +276,28 @@ struct WindowPreview: View {
                     }
                 }
             }
-        })
+        }
     }
 
     var body: some View {
-        MiddleClickWrapper(
-            content: previewCoreContent,
-            onMiddleClick: {
+        previewCoreContent
+            .onMiddleClick(perform: {
                 if windowInfo.closeButton != nil {
                     handleWindowAction(.close)
                 }
-            }
-        )
-        .fixedSize()
+            })
+            .fixedSize()
     }
 
     private func handleFullPreviewHover(isHovering: Bool, action: PreviewHoverAction) {
         if isHovering, !windowSwitcherActive {
             switch action {
-            case .none:
-                break
+            case .none: break
 
             case .tap:
-                // If the interval is 0, immediately trigger the tap action
-                if tapEquivalentInterval == 0 {
-                    handleWindowTap()
-                } else {
-                    // Set a timer to trigger the tap action after the specified interval
-                    fullPreviewTimer = Timer.scheduledTimer(withTimeInterval: tapEquivalentInterval, repeats: false) { [self] _ in
-                        DispatchQueue.main.async {
-                            handleWindowTap()
-                        }
+                if tapEquivalentInterval == 0 { handleWindowTap() } else {
+                    fullPreviewTimer = Timer.scheduledTimer(withTimeInterval: tapEquivalentInterval, repeats: false) { _ in
+                        DispatchQueue.main.async { handleWindowTap() }
                     }
                 }
 
@@ -324,19 +313,11 @@ struct WindowPreview: View {
                         )
                     }
                 }
-
-                if tapEquivalentInterval == 0 {
-                    showFullPreview()
-                } else {
-                    fullPreviewTimer = Timer.scheduledTimer(withTimeInterval: tapEquivalentInterval,
-                                                            repeats: false)
-                    { _ in
-                        showFullPreview()
-                    }
+                if tapEquivalentInterval == 0 { showFullPreview() } else {
+                    fullPreviewTimer = Timer.scheduledTimer(withTimeInterval: tapEquivalentInterval, repeats: false) { _ in showFullPreview() }
                 }
             }
         } else {
-            // If the hover state is not active or the window switcher is active, invalidate the timer
             fullPreviewTimer?.invalidate()
             fullPreviewTimer = nil
         }
@@ -356,27 +337,14 @@ struct WindowPreview: View {
     private func startDragTimer() {
         dragTimer?.invalidate()
         highlightOpacity = 1.0
-
         dragTimer = Timer.scheduledTimer(withTimeInterval: 1.5, repeats: false) { _ in
-            withAnimation(.easeInOut(duration: 0.08)) {
-                highlightOpacity = 0.0
-            }
-
+            withAnimation(.easeInOut(duration: 0.08)) { highlightOpacity = 0.0 }
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.08) {
-                withAnimation(.easeInOut(duration: 0.08)) {
-                    highlightOpacity = 1.0
-                }
-
+                withAnimation(.easeInOut(duration: 0.08)) { highlightOpacity = 1.0 }
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.08) {
-                    withAnimation(.easeInOut(duration: 0.08)) {
-                        highlightOpacity = 0.0
-                    }
-
+                    withAnimation(.easeInOut(duration: 0.08)) { highlightOpacity = 0.0 }
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.08) {
-                        withAnimation(.easeInOut(duration: 0.08)) {
-                            highlightOpacity = 1.0
-                        }
-
+                        withAnimation(.easeInOut(duration: 0.08)) { highlightOpacity = 1.0 }
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.08) {
                             cancelDragTimer()
                             handleWindowTap()
@@ -401,7 +369,6 @@ struct WindowPreview: View {
                 (windowTitleDisplayCondition == .dockPreviewsOnly && !windowSwitcherActive) ||
                 (windowTitleDisplayCondition == .windowSwitcherOnly && windowSwitcherActive)
         )
-
         if shouldShowTitle, windowTitleVisibility == .alwaysVisible || selected {
             if let windowTitle = windowInfo.windowName,
                !windowTitle.isEmpty,
