@@ -9353,7 +9353,11 @@
         }
       }
     },
+    "Buy me a coffee" : {
+
+    },
     "Buy me a coffee here, thank you!" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -11639,7 +11643,11 @@
         }
       }
     },
+    "Contribute translation" : {
+
+    },
     "Contribute translation here!" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -13739,6 +13747,9 @@
           }
         }
       }
+    },
+    "Discuss features and get help from the community" : {
+
     },
     "Display %u" : {
       "comment" : "Generic display name with CGDirectDisplayID"
@@ -20433,6 +20444,9 @@
         }
       }
     },
+    "Help make DockDoor available in your language" : {
+
+    },
     "Help us improve DockDoor by reporting any issues you encounter." : {
       "localizations" : {
         "af" : {
@@ -23111,6 +23125,9 @@
       }
     },
     "Interaction & Behavior (Dock Previews)" : {
+
+    },
+    "Join our Discord" : {
 
     },
     "Keep previews visible during lateral movement" : {
@@ -44925,6 +44942,9 @@
     "Support & Contributions" : {
 
     },
+    "Support development with a small donation" : {
+
+    },
     "Support DockDoor" : {
       "localizations" : {
         "af" : {
@@ -45116,6 +45136,12 @@
       }
     },
     "Support settings" : {
+
+    },
+    "Thank you to all contributors ❤️" : {
+
+    },
+    "Thanks for supporting DockDoor! 💖" : {
 
     },
     "The changes to permissions will take effect after restarting." : {
@@ -50466,6 +50492,7 @@
       }
     },
     "Want to see the app in your language?" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -50656,6 +50683,7 @@
       }
     },
     "Want to support development?" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {

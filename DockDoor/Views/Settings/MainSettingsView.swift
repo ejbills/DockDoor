@@ -157,9 +157,190 @@ struct MainSettingsView: View {
 
     private var supportAndContributionsSection: some View {
         StyledGroupBox(label: "Support & Contributions") {
-            VStack(alignment: .leading, spacing: 8) {
-                HStack { Text("Want to support development?"); Link("Buy me a coffee here, thank you!", destination: URL(string: "https://www.buymeacoffee.com/keplercafe")!) }
-                HStack { Text("Want to see the app in your language?"); Link("Contribute translation here!", destination: URL(string: "https://crowdin.com/project/dockdoor/invite?h=895e3c085646d3c07fa36a97044668e02149115")!) }
+            VStack(alignment: .leading, spacing: 12) {
+                Link(destination: URL(string: "https://www.buymeacoffee.com/keplercafe")!) {
+                    HStack(spacing: 14) {
+                        Image(systemName: "cup.and.saucer.fill")
+                            .font(.title2)
+                            .foregroundStyle(.white)
+                            .frame(width: 28, height: 28)
+                            .padding(8)
+                            .background(
+                                LinearGradient(
+                                    gradient: Gradient(colors: [Color.orange, Color.yellow.opacity(0.8)]),
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                )
+                            )
+                            .clipShape(RoundedRectangle(cornerRadius: 8))
+                            .shadow(color: .black.opacity(0.1), radius: 2, x: 0, y: 1)
+
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Buy me a coffee")
+                                .font(.headline)
+                                .foregroundColor(.primary)
+                            Text("Support development with a small donation")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+
+                        Spacer()
+
+                        Image(systemName: "chevron.right")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                    .padding(.vertical, 10)
+                    .padding(.horizontal, 12)
+                    .background(Color(NSColor.controlBackgroundColor).opacity(0.7))
+                    .cornerRadius(10)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 10)
+                            .stroke(
+                                LinearGradient(
+                                    gradient: Gradient(colors: [Color.orange.opacity(0.5), Color.yellow.opacity(0.3)]),
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                ),
+                                lineWidth: 1.5
+                            )
+                    )
+                }
+                .buttonStyle(PlainButtonStyle())
+
+                Link(destination: URL(string: "https://discord.gg/TZeRs73hFb")!) {
+                    HStack(spacing: 14) {
+                        Image(systemName: "bubble.left.and.bubble.right.fill")
+                            .font(.title2)
+                            .foregroundStyle(.white)
+                            .frame(width: 28, height: 28)
+                            .padding(8)
+                            .background(
+                                LinearGradient(
+                                    gradient: Gradient(colors: [Color.purple, Color.indigo.opacity(0.8)]),
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                )
+                            )
+                            .clipShape(RoundedRectangle(cornerRadius: 8))
+                            .shadow(color: .black.opacity(0.1), radius: 2, x: 0, y: 1)
+
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Join our Discord")
+                                .font(.headline)
+                                .foregroundColor(.primary)
+                            Text("Discuss features and get help from the community")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+
+                        Spacer()
+
+                        Image(systemName: "chevron.right")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                    .padding(.vertical, 10)
+                    .padding(.horizontal, 12)
+                    .background(Color(NSColor.controlBackgroundColor).opacity(0.7))
+                    .cornerRadius(10)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 10)
+                            .stroke(
+                                LinearGradient(
+                                    gradient: Gradient(colors: [Color.purple.opacity(0.5), Color.indigo.opacity(0.3)]),
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                ),
+                                lineWidth: 1.5
+                            )
+                    )
+                }
+                .buttonStyle(PlainButtonStyle())
+
+                Link(destination: URL(string: "https://crowdin.com/project/dockdoor/invite?h=895e3c085646d3c07fa36a97044668e02149115")!) {
+                    HStack(spacing: 14) {
+                        Image(systemName: "globe")
+                            .font(.title2)
+                            .foregroundStyle(.white)
+                            .frame(width: 28, height: 28)
+                            .padding(8)
+                            .background(
+                                LinearGradient(
+                                    gradient: Gradient(colors: [Color.blue, Color.teal.opacity(0.8)]),
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                )
+                            )
+                            .clipShape(RoundedRectangle(cornerRadius: 8))
+                            .shadow(color: .black.opacity(0.1), radius: 2, x: 0, y: 1)
+
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Contribute translation")
+                                .font(.headline)
+                                .foregroundColor(.primary)
+                            Text("Help make DockDoor available in your language")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+
+                        Spacer()
+
+                        Image(systemName: "chevron.right")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                    .padding(.vertical, 10)
+                    .padding(.horizontal, 12)
+                    .background(Color(NSColor.controlBackgroundColor).opacity(0.7))
+                    .cornerRadius(10)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 10)
+                            .stroke(
+                                LinearGradient(
+                                    gradient: Gradient(colors: [Color.blue.opacity(0.5), Color.teal.opacity(0.3)]),
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                ),
+                                lineWidth: 1.5
+                            )
+                    )
+                }
+                .buttonStyle(PlainButtonStyle())
+
+                Link(destination: URL(string: "https://github.com/ejbills/DockDoor/graphs/contributors")!) {
+                    HStack {
+                        Spacer()
+                        Text("Thank you to all contributors ❤️")
+                            .font(.subheadline)
+                            .foregroundColor(Color.primary.opacity(0.8))
+                        Spacer()
+                    }
+                    .padding(.vertical, 8)
+                    .background(Color(NSColor.controlBackgroundColor).opacity(0.7))
+                    .cornerRadius(8)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 8)
+                            .stroke(Color.red.opacity(0.3), lineWidth: 1)
+                    )
+                }
+                .buttonStyle(PlainButtonStyle())
+                .padding(.top, 4)
+
+                if showAnimations {
+                    Text("Thanks for supporting DockDoor! 💖")
+                        .font(.footnote)
+                        .foregroundColor(.secondary)
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        .onAppear {
+                            withAnimation(Animation.easeInOut(duration: 1.5).repeatForever(autoreverses: true)) {}
+                        }
+                } else {
+                    Text("Thanks for supporting DockDoor! 💖")
+                        .font(.footnote)
+                        .foregroundColor(.secondary)
+                        .frame(maxWidth: .infinity, alignment: .center)
+                }
             }
         }
     }
