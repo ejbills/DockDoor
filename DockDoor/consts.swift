@@ -47,6 +47,7 @@ extension Defaults.Keys {
     static let selectionColor = Key<Color?>("selectionColor", default: nil)
 
     static let showWindowTitle = Key<Bool>("showWindowTitle", default: true)
+    static let showAppIconOnly = Key<Bool>("showAppIconOnly", default: false)
     static let windowTitleDisplayCondition = Key<WindowTitleDisplayCondition>("windowTitleDisplayCondition", default: .all)
     static let windowTitleVisibility = Key<WindowTitleVisibility>("windowTitleVisibility", default: .whenHoveringPreview)
     static let windowTitlePosition = Key<WindowTitlePosition>("windowTitlePosition", default: .bottomLeft)

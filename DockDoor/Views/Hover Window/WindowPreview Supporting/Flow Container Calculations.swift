@@ -21,7 +21,7 @@ extension WindowPreviewHoverContainer {
         let additionalPadding: CGFloat = {
             if windowSwitcherCoordinator.windowSwitcherActive {
                 return 50
-            } else if showAppName {
+            } else if showAppTitleData {
                 switch appNameStyle {
                 case .default: return 25
                 case .popover: return 30

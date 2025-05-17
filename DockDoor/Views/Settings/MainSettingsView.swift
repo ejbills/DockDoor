@@ -195,7 +195,7 @@ struct MainSettingsView: View {
                 if enableWindowSwitcher {
                     VStack(alignment: .leading, spacing: 8) {
                         Toggle(isOn: $includeHiddenWindowsInSwitcher) { Text("Include Hidden/Minimized Windows in Switcher") }
-                        Toggle(isOn: $useClassicWindowOrdering) { Text("Use Windows-style window ordering in switcher") }
+                        Toggle(isOn: $useClassicWindowOrdering) { Text("Use Windows-style window ordering in Switcher") }
                         Text("Shows last active window first, instead of current window.")
                             .font(.caption)
                             .foregroundColor(.secondary)

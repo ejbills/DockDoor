@@ -34,7 +34,8 @@ struct WindowPreviewHoverContainer: View {
     @ObservedObject var windowSwitcherCoordinator: ScreenCenteredFloatingWindowCoordinator
 
     @Default(.uniformCardRadius) var uniformCardRadius
-    @Default(.showAppName) var showAppName
+    @Default(.showAppName) var showAppTitleData
+    @Default(.showAppIconOnly) var showAppIconOnly
     @Default(.appNameStyle) var appNameStyle
     @Default(.windowTitlePosition) var windowTitlePosition
     @Default(.aeroShakeAction) var aeroShakeAction
@@ -109,7 +110,7 @@ struct WindowPreviewHoverContainer: View {
 
         ScrollViewReader { scrollProxy in
             buildFlowStack(windows: windowStates, scrollProxy: scrollProxy, orientationIsHorizontal)
-                .padding(.top, (!windowSwitcherCoordinator.windowSwitcherActive && appNameStyle == .default && showAppName) ? 25 : 0)
+                .padding(.top, (!windowSwitcherCoordinator.windowSwitcherActive && appNameStyle == .default && showAppTitleData) ? 25 : 0)
                 .overlay(alignment: .topLeading) {
                     hoverTitleBaseView(labelSize: measureString(appName, fontSize: 14))
                         .onHover { isHovered in
@@ -117,7 +118,7 @@ struct WindowPreviewHoverContainer: View {
                         }
                 }
                 .dockStyle(cornerRadius: 16)
-                .padding(.top, (!windowSwitcherCoordinator.windowSwitcherActive && appNameStyle == .popover && showAppName) ? 30 : 0)
+                .padding(.top, (!windowSwitcherCoordinator.windowSwitcherActive && appNameStyle == .popover && showAppTitleData) ? 30 : 0)
                 .overlay {
                     if !mockPreviewActive, !isDragging {
                         WindowDismissalContainer(appName: appName,
@@ -153,7 +154,7 @@ struct WindowPreviewHoverContainer: View {
 
     @ViewBuilder
     private func hoverTitleBaseView(labelSize: CGSize) -> some View {
-        if !windowSwitcherCoordinator.windowSwitcherActive, showAppName {
+        if !windowSwitcherCoordinator.windowSwitcherActive, showAppTitleData {
             Group {
                 switch appNameStyle {
                 case .default:
@@ -248,39 +249,41 @@ struct WindowPreviewHoverContainer: View {
 
     @ViewBuilder
     private func hoverTitleLabelView(labelSize: CGSize) -> some View {
-        switch appNameStyle {
-        case .shadowed:
-            Text(appName)
-                .lineLimit(1)
-                .padding(3)
-                .fontWeight(.medium)
-                .font(.system(size: 14))
-                .padding(.horizontal, 4)
-                .shadow(stacked: 2, radius: 6)
-                .background(
-                    ZStack {
-                        MaterialBlurView(material: .hudWindow)
-                            .mask(
-                                Ellipse()
-                                    .fill(
-                                        LinearGradient(
-                                            gradient: Gradient(
-                                                colors: [
-                                                    Color.white.opacity(1.0),
-                                                    Color.white.opacity(0.35),
-                                                ]
-                                            ),
-                                            startPoint: .top,
-                                            endPoint: .bottom
+        if !showAppIconOnly {
+            switch appNameStyle {
+            case .shadowed:
+                Text(appName)
+                    .lineLimit(1)
+                    .padding(3)
+                    .fontWeight(.medium)
+                    .font(.system(size: 14))
+                    .padding(.horizontal, 4)
+                    .shadow(stacked: 2, radius: 6)
+                    .background(
+                        ZStack {
+                            MaterialBlurView(material: .hudWindow)
+                                .mask(
+                                    Ellipse()
+                                        .fill(
+                                            LinearGradient(
+                                                gradient: Gradient(
+                                                    colors: [
+                                                        Color.white.opacity(1.0),
+                                                        Color.white.opacity(0.35),
+                                                    ]
+                                                ),
+                                                startPoint: .top,
+                                                endPoint: .bottom
+                                            )
                                         )
-                                    )
-                            )
-                            .blur(radius: 5)
-                    }
-                    .frame(width: labelSize.width + 30)
-                )
-        case .default, .popover:
-            Text(appName)
+                                )
+                                .blur(radius: 5)
+                        }
+                        .frame(width: labelSize.width + 30)
+                    )
+            case .default, .popover:
+                Text(appName)
+            }
         }
     }
 
@@ -310,6 +313,7 @@ struct WindowPreviewHoverContainer: View {
                                     currIndex: windowSwitcherCoordinator.currIndex,
                                     windowSwitcherActive: windowSwitcherCoordinator.windowSwitcherActive,
                                     dimensions: getDimensions(for: index, dimensionsMap: dimensionsMap),
+                                    showAppIconOnly: showAppIconOnly,
                                     mockPreviewActive: mockPreviewActive
                                 )
                                 .id("\(appName)-\(index)")

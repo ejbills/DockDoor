@@ -14,6 +14,7 @@ struct WindowPreview: View {
     var currIndex: Int
     var windowSwitcherActive: Bool
     let dimensions: WindowPreviewHoverContainer.WindowDimensions
+    let showAppIconOnly: Bool
     let mockPreviewActive: Bool
 
     @Default(.windowTitlePosition) var windowTitlePosition
@@ -93,10 +94,12 @@ struct WindowPreview: View {
         )
 
         let titleAndSubtitleContent = VStack(alignment: .leading, spacing: 0) {
-            Text(windowInfo.app.localizedName ?? "Unknown")
-                .font(.system(size: 13, weight: .medium))
-                .foregroundStyle(.primary)
-                .lineLimit(1)
+            if !showAppIconOnly {
+                Text(windowInfo.app.localizedName ?? "Unknown")
+                    .font(.system(size: 13, weight: .medium))
+                    .foregroundStyle(.primary)
+                    .lineLimit(1)
+            }
 
             if let windowTitle = windowInfo.windowName,
                !windowTitle.isEmpty,

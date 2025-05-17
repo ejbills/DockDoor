@@ -89,6 +89,7 @@ struct AppearanceSettingsView: View {
     @Default(.selectionColor) var selectionColor
     @Default(.switcherWrap) var switcherWrap
     @Default(.previewWrap) var previewWrap
+    @Default(.showAppIconOnly) var showAppIconOnly
 
     @State private var showAdvancedAppearanceSettings: Bool = false
     @State private var selectedPreviewContext: PreviewContext = .dock
@@ -249,8 +250,12 @@ struct AppearanceSettingsView: View {
 
             Divider().padding(.vertical, 2)
             Text("Window Titles in Previews").font(.headline).padding(.bottom, -2)
-            Toggle(isOn: $showWindowTitle.animation(.snappy(duration: 0.1))) {
+            Toggle(isOn: $showWindowTitle) {
                 Text("Show Window Title")
+            }
+
+            Toggle(isOn: $showAppIconOnly) {
+                Text("Hide App Name")
             }
 
             if showWindowTitle {
@@ -300,10 +305,6 @@ struct AppearanceSettingsView: View {
                                       f.maximumFractionDigits = 0
                                       return f
                                   }())
-
-                    let dockContextLabel = previewWrap == 0 ?
-                        String(localized: "Dynamic Rows/Cols") :
-                        String(format: NSLocalizedString("%d Rows/Cols", comment: "Label for N rows or columns"), previewWrap)
                 }
                 Text(String(localized: "Sets the max rows (for bottom/top Dock) or columns (for side Dock) previews will use. '0' dynamically determines fit."))
                     .font(.caption)

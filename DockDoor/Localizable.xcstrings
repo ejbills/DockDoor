@@ -381,9 +381,6 @@
         }
       }
     },
-    "%d Rows/Cols" : {
-      "comment" : "Label for N rows or columns"
-    },
     "• Allows for enhanced visual information in the dock" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -15088,9 +15085,6 @@
         }
       }
     },
-    "Dynamic Rows/Cols" : {
-
-    },
     "Edit Color" : {
       "localizations" : {
         "af" : {
@@ -21020,6 +21014,9 @@
           }
         }
       }
+    },
+    "Hide App Name" : {
+
     },
     "Highlight Gradient Colors" : {
       "localizations" : {
@@ -49897,7 +49894,7 @@
         }
       }
     },
-    "Use Windows-style window ordering in switcher" : {
+    "Use Windows-style window ordering in Switcher" : {
 
     },
     "Use Windows-style window ordering in the window switcher" : {
