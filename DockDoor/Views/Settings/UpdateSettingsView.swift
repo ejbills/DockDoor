@@ -42,7 +42,6 @@ final class UpdaterViewModel: ObservableObject {
 
 struct UpdateSettingsView: View {
     @StateObject private var viewModel: UpdaterViewModel
-    var disableShine: Bool = false
 
     init(updater: SPUUpdater) {
         _viewModel = StateObject(wrappedValue: UpdaterViewModel(updater: updater))
@@ -83,8 +82,6 @@ struct UpdateSettingsView: View {
                 statusText: String(localized: "Enabled")
             )
         }
-        .padding(20)
-        .frame(minWidth: 650)
     }
 
     private var lastCheckDescription: String {

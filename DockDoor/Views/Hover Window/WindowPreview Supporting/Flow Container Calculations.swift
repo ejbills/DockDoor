@@ -3,7 +3,7 @@ import Defaults
 
 // Handles calculating rows and columns for flow container
 extension WindowPreviewHoverContainer {
-    func calculateOptimalLayout(windowDimensions: [Int: WindowDimensions], isHorizontal: Bool) -> (stackCount: Int, windowsPerStack: [Range<Int>]) {
+    func calculateOptimalLayout(windowDimensions: [Int: WindowDimensions], isHorizontal: Bool, wrap: Int) -> (stackCount: Int, windowsPerStack: [Range<Int>]) {
         let activeWindowCount = windowStates.count
 
         guard activeWindowCount > 0 else {
@@ -21,7 +21,7 @@ extension WindowPreviewHoverContainer {
         let additionalPadding: CGFloat = {
             if windowSwitcherCoordinator.windowSwitcherActive {
                 return 50
-            } else if showAppName {
+            } else if showAppTitleData {
                 switch appNameStyle {
                 case .default: return 25
                 case .popover: return 30
@@ -42,7 +42,7 @@ extension WindowPreviewHoverContainer {
 
             // Calculate maximum allowed rows
             let calculatedMaxRows = max(1, Int(floor(availableHeight / rowHeight)))
-            let userMaxRows = Defaults[.maxRows]
+            let userMaxRows = wrap
             let effectiveMaxRows = userMaxRows > 0 ? min(Int(userMaxRows), calculatedMaxRows) : calculatedMaxRows
 
             // Calculate optimal number of rows based on window widths and available space
@@ -110,7 +110,7 @@ extension WindowPreviewHoverContainer {
             let availableWidth = maxWidth - itemSpacing
 
             let calculatedMaxColumns = max(1, Int(floor(availableWidth / columnWidth)))
-            let userMaxColumns = Defaults[.maxColumns]
+            let userMaxColumns = wrap
             let effectiveMaxColumns = userMaxColumns > 0 ? min(Int(userMaxColumns), calculatedMaxColumns) : calculatedMaxColumns
 
             var totalHeightNeeded: CGFloat = 0

@@ -29,10 +29,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             GeneralSettingsViewController(),
             AppearanceSettingsViewController(),
             FiltersSettingsViewController(),
-            WindowSwitcherSettingsViewController(),
-            PermissionsSettingsViewController(),
-            HelpSettingsViewController(),
-            UpdatesSettingsViewController(updater: updaterController.updater),
+            SupportSettingsViewController(updater: updaterController.updater),
         ]
 
         let controller = SettingsWindowController(panes: panes)

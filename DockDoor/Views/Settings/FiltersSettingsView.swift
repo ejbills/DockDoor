@@ -26,9 +26,6 @@ struct FiltersSettingsView: View {
             "~/Applications",
         ]
 
-        // Add custom directories
-        appLocations.append(contentsOf: customAppDirectories)
-
         for location in appLocations {
             let expandedPath = NSString(string: location).expandingTildeInPath
             let fileManager = FileManager.default
@@ -50,224 +47,232 @@ struct FiltersSettingsView: View {
             apps.append(contentsOf: locationApps)
         }
 
-        // Remove duplicates by keeping first occurrence of each app name
-        var seenNames = Set<String>()
-        let uniqueApps = apps.filter { app in
-            if seenNames.contains(app.0) {
-                return false
-            }
-            seenNames.insert(app.0)
-            return true
-        }
-
-        return uniqueApps.sorted { $0.0 < $1.0 }
+        return apps.sorted { $0.0 < $1.0 }
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Toggle(isOn: $ignoreAppsWithSingleWindow, label: {
-                Text("Ignore Apps with One Window")
-            })
+        BaseSettingsView {
+            VStack(alignment: .leading, spacing: 16) {
+                StyledGroupBox(label: "General Exclusions") {
+                    VStack(alignment: .leading, spacing: 10) {
+                        Toggle(isOn: $ignoreAppsWithSingleWindow, label: {
+                            Text("Ignore Apps with One Window")
+                        })
+                        Text("Prevents apps that only ever have a single window from appearing in previews.")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                            .padding(.leading, 20)
+                    }
+                }
 
-            // Custom App Directories Section
-            VStack(alignment: .leading, spacing: 8) {
-                Text("Custom Application Directories")
-                    .font(.headline)
-
-                Text("Add additional directories to scan for applications")
-                    .foregroundColor(.secondary)
-                    .font(.body)
-
-                ScrollView {
+                // Custom App Directories Section
+                StyledGroupBox(label: "Custom Application Directories") {
                     VStack(alignment: .leading, spacing: 8) {
-                        if customAppDirectories.isEmpty {
-                            Text("No custom directories added")
-                                .foregroundColor(.secondary)
-                                .padding(.vertical, 4)
-                        } else {
-                            ForEach(customAppDirectories, id: \.self) { directory in
-                                HStack {
-                                    Text(directory)
-                                        .lineLimit(1)
-                                        .truncationMode(.middle)
+                        Text("Add additional directories to scan for applications. This is useful if you keep apps outside standard locations.")
+                            .font(.footnote)
+                            .foregroundColor(.secondary)
+                            .padding(.bottom, 4)
 
-                                    Spacer()
+                        ScrollView {
+                            VStack(alignment: .leading, spacing: 8) {
+                                if customAppDirectories.isEmpty {
+                                    Text("No custom directories added")
+                                        .foregroundColor(.secondary)
+                                        .padding(.vertical, 4)
+                                } else {
+                                    ForEach(customAppDirectories, id: \.self) { directory in
+                                        HStack {
+                                            Text(directory)
+                                                .lineLimit(1)
+                                                .truncationMode(.middle)
 
-                                    Button(action: {
-                                        customAppDirectories.removeAll { $0 == directory }
-                                    }) {
-                                        Image(systemName: "trash")
-                                            .foregroundColor(.secondary)
+                                            Spacer()
+
+                                            Button(action: {
+                                                customAppDirectories.removeAll { $0 == directory }
+                                            }) {
+                                                Image(systemName: "trash")
+                                                    .foregroundColor(.secondary)
+                                            }
+                                            .buttonStyle(.plain)
+                                        }
+                                        .padding(.vertical, 4)
                                     }
-                                    .buttonStyle(.plain)
-                                }
-                                .padding(.vertical, 4)
-                            }
-                        }
-                    }
-                    .frame(maxWidth: .infinity)
-                    .padding(8)
-                    .background(Color.gray.opacity(0.25))
-                    .clipShape(RoundedRectangle(cornerRadius: 8))
-                }
-                .frame(maxHeight: 100)
-
-                HStack {
-                    Button("Add Directory") {
-                        showingDirectoryPicker = true
-                    }
-                    .fileImporter(
-                        isPresented: $showingDirectoryPicker,
-                        allowedContentTypes: [.folder],
-                        allowsMultipleSelection: false
-                    ) { result in
-                        switch result {
-                        case let .success(urls):
-                            if let url = urls.first {
-                                let path = url.path
-                                if !customAppDirectories.contains(path) {
-                                    customAppDirectories.append(path)
                                 }
                             }
-                        case let .failure(error):
-                            print("Error selecting directory: \(error.localizedDescription)")
+                            .frame(maxWidth: .infinity)
+                            .padding(8)
                         }
-                    }
-                    .buttonStyle(AccentButtonStyle(color: .accentColor))
-
-                    Spacer()
-
-                    if !customAppDirectories.isEmpty {
-                        DangerButton(action: {
-                            customAppDirectories.removeAll()
-                        }) {
-                            Text("Remove All")
-                        }
-                    }
-                }
-            }
-
-            Divider()
-
-            // App Filters Section
-            VStack(alignment: .leading, spacing: 8) {
-                Text("Application filters")
-                    .font(.headline)
-
-                Text("Select which applications can be captured and previewed")
-                    .foregroundColor(.secondary)
-                    .font(.body)
-
-                ScrollView {
-                    VStack(alignment: .leading, spacing: 4) {
-                        ForEach(installedApps, id: \.name) { app in
-                            HStack(spacing: 8) {
-                                Toggle(isOn: Binding(
-                                    get: { !appNameFilters.contains(app.name) },
-                                    set: { isEnabled in
-                                        if isEnabled {
-                                            appNameFilters.removeAll { $0 == app.name }
-                                        } else {
-                                            appNameFilters.append(app.name)
+                        .frame(maxHeight: 100)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(Color.gray.opacity(0.25), lineWidth: 1)
+                        )
+                        HStack {
+                            Button("Add Directory") {
+                                showingDirectoryPicker = true
+                            }
+                            .fileImporter(
+                                isPresented: $showingDirectoryPicker,
+                                allowedContentTypes: [.folder],
+                                allowsMultipleSelection: false
+                            ) { result in
+                                switch result {
+                                case let .success(urls):
+                                    if let url = urls.first {
+                                        let path = url.path
+                                        if !customAppDirectories.contains(path) {
+                                            customAppDirectories.append(path)
                                         }
                                     }
-                                )) { EmptyView() }
-
-                                Image(nsImage: app.icon)
-                                    .resizable()
-                                    .frame(width: 16, height: 16)
-
-                                Text(app.name)
-                                    .lineLimit(1)
-
-                                Spacer()
+                                case let .failure(error):
+                                    print("Error selecting directory: \(error.localizedDescription)")
+                                }
                             }
-                            .padding(.vertical, 2)
+                            .buttonStyle(AccentButtonStyle(color: .accentColor))
+
+                            Spacer()
+
+                            if !customAppDirectories.isEmpty {
+                                DangerButton(action: {
+                                    customAppDirectories.removeAll()
+                                }) {
+                                    Text("Remove All")
+                                }
+                            }
                         }
                     }
-                    .padding(8)
                 }
-                .frame(height: 200)
-                .background(Color.gray.opacity(0.25))
-                .clipShape(RoundedRectangle(cornerRadius: 8))
-            }
 
-            Divider()
-
-            // Window Title Filters Section
-            VStack(alignment: .leading, spacing: 8) {
-                Text("Window title filters")
-                    .font(.headline)
-
-                Text("Exclude windows from capture by filtering specific text in their titles")
-                    .foregroundColor(.secondary)
-                    .font(.body)
-
-                ScrollView {
+                // App Filters Section
+                StyledGroupBox(label: "Application Filters") {
                     VStack(alignment: .leading, spacing: 8) {
-                        if !windowTitleFilters.isEmpty {
-                            ForEach(windowTitleFilters, id: \.self) { filter in
-                                HStack {
-                                    Text(filter)
-                                        .foregroundColor(.primary)
+                        Text("Select which applications DockDoor should show previews for. Unchecked apps will be ignored.")
+                            .font(.footnote)
+                            .foregroundColor(.secondary)
+                            .padding(.bottom, 4)
 
-                                    Spacer()
+                        ScrollView {
+                            VStack(alignment: .leading, spacing: 4) {
+                                if installedApps.isEmpty {
+                                    Text("No applications found or scanned yet.")
+                                        .foregroundColor(.secondary)
+                                        .padding()
+                                } else {
+                                    ForEach(installedApps, id: \.name) { app in
+                                        HStack(spacing: 8) {
+                                            Toggle(isOn: Binding(
+                                                get: { !appNameFilters.contains(app.name) },
+                                                set: { isEnabled in
+                                                    if isEnabled {
+                                                        appNameFilters.removeAll { $0 == app.name }
+                                                    } else {
+                                                        if !appNameFilters.contains(app.name) {
+                                                            appNameFilters.append(app.name)
+                                                        }
+                                                    }
+                                                }
+                                            )) { EmptyView() }
 
-                                    Button(action: {
-                                        windowTitleFilters.removeAll { $0 == filter }
-                                    }) {
-                                        Image(systemName: "trash")
-                                            .foregroundColor(.secondary)
+                                            Image(nsImage: app.icon)
+                                                .resizable()
+                                                .frame(width: 16, height: 16)
+
+                                            Text(app.name)
+                                                .lineLimit(1)
+
+                                            Spacer()
+                                        }
+                                        .padding(.vertical, 2)
                                     }
-                                    .buttonStyle(.plain)
-                                }
-                                .padding(.vertical, 4)
-
-                                if filter != windowTitleFilters.last {
-                                    Divider()
                                 }
                             }
-                        } else {
-                            Text("No filters added")
-                                .foregroundColor(.secondary)
-                                .padding(.vertical, 8)
+                            .padding(8)
                         }
+                        .frame(height: 200)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(Color.gray.opacity(0.25), lineWidth: 1)
+                        )
                     }
-                    .frame(maxWidth: .infinity)
-                    .padding(8)
                 }
-                .frame(height: 200)
-                .background(Color.gray.opacity(0.25))
-                .clipShape(RoundedRectangle(cornerRadius: 8))
 
-                HStack {
-                    Button(action: { showingAddFilterSheet.toggle() }) {
-                        Text("Add Filter")
-                    }
-                    .buttonStyle(AccentButtonStyle(color: .accentColor))
+                // Window Title Filters Section
+                StyledGroupBox(label: "Window Title Filters") {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Exclude windows from capture by filtering specific text in their titles (case-insensitive).")
+                            .font(.footnote)
+                            .foregroundColor(.secondary)
+                            .padding(.bottom, 4)
 
-                    Spacer()
+                        ScrollView {
+                            VStack(alignment: .leading, spacing: 8) {
+                                if !windowTitleFilters.isEmpty {
+                                    ForEach(windowTitleFilters, id: \.self) { filter in
+                                        HStack {
+                                            Text(filter)
+                                                .foregroundColor(.primary)
 
-                    DangerButton(action: {
-                        windowTitleFilters.removeAll()
-                    }) {
-                        Text("Remove All")
+                                            Spacer()
+
+                                            Button(action: {
+                                                windowTitleFilters.removeAll { $0 == filter }
+                                            }) {
+                                                Image(systemName: "trash")
+                                                    .foregroundColor(.secondary)
+                                            }
+                                            .buttonStyle(.plain)
+                                        }
+                                        .padding(.vertical, 4)
+
+                                        if filter != windowTitleFilters.last {
+                                            Divider()
+                                        }
+                                    }
+                                } else {
+                                    Text("No window title filters added")
+                                        .foregroundColor(.secondary)
+                                        .padding(.vertical, 8)
+                                }
+                            }
+                            .frame(maxWidth: .infinity)
+                            .padding(8)
+                        }
+                        .frame(maxHeight: 150)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(Color.gray.opacity(0.25), lineWidth: 1)
+                        )
+                        HStack {
+                            Button(action: { showingAddFilterSheet.toggle() }) {
+                                Text("Add Filter")
+                            }
+                            .buttonStyle(AccentButtonStyle(color: .accentColor))
+
+                            Spacer()
+
+                            if !windowTitleFilters.isEmpty {
+                                DangerButton(action: {
+                                    windowTitleFilters.removeAll()
+                                }) {
+                                    Text("Remove All")
+                                }
+                            }
+                        }
                     }
                 }
             }
-        }
-        .padding(20)
-        .frame(minWidth: 650)
-        .sheet(isPresented: $showingAddFilterSheet) {
-            AddFilterSheet(
-                isPresented: $showingAddFilterSheet,
-                filterToAdd: $newFilter,
-                onAdd: { filter in
-                    if !filter.text.isEmpty, !windowTitleFilters.contains(filter.text) {
-                        windowTitleFilters.append(filter.text)
+            .sheet(isPresented: $showingAddFilterSheet) {
+                AddFilterSheet(
+                    isPresented: $showingAddFilterSheet,
+                    filterToAdd: $newFilter,
+                    onAdd: { filter in
+                        if !filter.text.isEmpty, !windowTitleFilters.contains(where: { $0.caseInsensitiveCompare(filter.text) == .orderedSame }) {
+                            windowTitleFilters.append(filter.text)
+                        }
                     }
-                }
-            )
+                )
+            }
         }
     }
 }

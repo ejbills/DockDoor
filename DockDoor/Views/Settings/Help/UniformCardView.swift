@@ -30,7 +30,7 @@ struct UniformCardView: View {
             }
         }
         .padding(16)
-        .frame(width: 300)
+        .frame(maxWidth: .infinity)
         .dockStyle(cornerRadius: 16)
         .modifier(FluidGradientBorder(cornerRadius: 18, lineWidth: 2))
     }

@@ -7,6 +7,17 @@ enum DockPosition {
     case left
     case right
     case unknown
+
+    var isHorizontalFlow: Bool {
+        switch self {
+        case .top, .bottom:
+            true
+        case .left, .right:
+            false
+        case .unknown:
+            true
+        }
+    }
 }
 
 class DockUtils {
@@ -30,7 +41,6 @@ final class DockAutoHideManager {
 
     func preventDockHiding(_ windowSwitcherActive: Bool = false) {
         guard Defaults[.preventDockHide], !windowSwitcherActive else { return }
-        // Only manage dock if auto-hide is currently enabled
         let currentAutoHideState = CoreDockGetAutoHideEnabled()
 
         if currentAutoHideState {
@@ -41,7 +51,6 @@ final class DockAutoHideManager {
     }
 
     func restoreDockState() {
-        // Only restore if we were managing the dock
         if isManagingDock, let wasEnabled = wasAutoHideEnabled {
             CoreDockSetAutoHideEnabled(wasEnabled)
             wasAutoHideEnabled = nil

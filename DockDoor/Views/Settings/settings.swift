@@ -6,10 +6,7 @@ extension Settings.PaneIdentifier {
     static let general = Self("general")
     static let appearance = Self("appearance")
     static let filters = Self("filters")
-    static let permissions = Self("permissions")
-    static let updates = Self("updates")
-    static let alttab = Self("alttab")
-    static let help = Self("help")
+    static let support = Self("support")
 }
 
 let GeneralSettingsViewController: () -> SettingsPane = {
@@ -36,18 +33,6 @@ let AppearanceSettingsViewController: () -> SettingsPane = {
     return Settings.PaneHostingController(pane: paneView)
 }
 
-let WindowSwitcherSettingsViewController: () -> SettingsPane = {
-    let paneView = Settings.Pane(
-        identifier: .alttab,
-        title: String(localized: "Window Switcher", comment: "Settings tab title"),
-        toolbarIcon: NSImage(systemSymbolName: "text.and.command.macwindow", accessibilityDescription: String(localized: "Windows switching settings"))!
-    ) {
-        WindowSwitcherSettingsView()
-    }
-
-    return Settings.PaneHostingController(pane: paneView)
-}
-
 let FiltersSettingsViewController: () -> SettingsPane = {
     let paneView = Settings.Pane(
         identifier: .filters,
@@ -60,37 +45,13 @@ let FiltersSettingsViewController: () -> SettingsPane = {
     return Settings.PaneHostingController(pane: paneView)
 }
 
-let PermissionsSettingsViewController: () -> SettingsPane = {
+func SupportSettingsViewController(updater: SPUUpdater) -> SettingsPane {
     let paneView = Settings.Pane(
-        identifier: .permissions,
-        title: String(localized: "Permissions", comment: "Settings tab title"),
-        toolbarIcon: NSImage(systemSymbolName: "lock.shield", accessibilityDescription: String(localized: "Permissions settings"))!
+        identifier: .support,
+        title: String(localized: "Support", comment: "Settings tab title"),
+        toolbarIcon: NSImage(systemSymbolName: "lifepreserver.fill", accessibilityDescription: String(localized: "Support settings"))!
     ) {
-        PermissionsSettingsView()
-    }
-
-    return Settings.PaneHostingController(pane: paneView)
-}
-
-func UpdatesSettingsViewController(updater: SPUUpdater) -> SettingsPane {
-    let paneView = Settings.Pane(
-        identifier: .updates,
-        title: String(localized: "Updates", comment: "Settings tab title"),
-        toolbarIcon: NSImage(systemSymbolName: "arrow.triangle.2.circlepath", accessibilityDescription: String(localized: "Update settings"))!
-    ) {
-        UpdateSettingsView(updater: updater)
-    }
-
-    return Settings.PaneHostingController(pane: paneView)
-}
-
-let HelpSettingsViewController: () -> SettingsPane = {
-    let paneView = Settings.Pane(
-        identifier: .help,
-        title: String(localized: "Help", comment: "Settings tab title"),
-        toolbarIcon: NSImage(systemSymbolName: "questionmark.circle.fill", accessibilityDescription: String(localized: "Help and questions settings"))!
-    ) {
-        HelpSettingsView()
+        SupportSettingsView(updater: updater)
     }
 
     return Settings.PaneHostingController(pane: paneView)
