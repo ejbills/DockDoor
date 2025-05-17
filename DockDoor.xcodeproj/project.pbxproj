@@ -35,6 +35,7 @@
 		BB04405E2C77A87F009F1D33 /* PreferencesProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB04405D2C77A87E009F1D33 /* PreferencesProtocol.swift */; };
 		BB0440602C77AD2C009F1D33 /* CodableColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB04405F2C77AD27009F1D33 /* CodableColor.swift */; };
 		BB0440622C77AE8D009F1D33 /* GradientColorPaletteSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0440612C77AE85009F1D33 /* GradientColorPaletteSettingsView.swift */; };
+		BB0CBE3A2DD8179200D55437 /* MiddleClickHostingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0CBE392DD8179200D55437 /* MiddleClickHostingView.swift */; };
 		BB157B6D2C0E31CF00997315 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BB157B6C2C0E31CF00997315 /* Assets.xcassets */; };
 		BB157B702C0E31CF00997315 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BB157B6F2C0E31CF00997315 /* Preview Assets.xcassets */; };
 		BB157B792C0E330100997315 /* WindowUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB157B782C0E330100997315 /* WindowUtil.swift */; };
@@ -129,6 +130,7 @@
 		BB04405D2C77A87E009F1D33 /* PreferencesProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesProtocol.swift; sourceTree = "<group>"; };
 		BB04405F2C77AD27009F1D33 /* CodableColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodableColor.swift; sourceTree = "<group>"; };
 		BB0440612C77AE85009F1D33 /* GradientColorPaletteSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientColorPaletteSettingsView.swift; sourceTree = "<group>"; };
+		BB0CBE392DD8179200D55437 /* MiddleClickHostingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiddleClickHostingView.swift; sourceTree = "<group>"; };
 		BB157B652C0E31CE00997315 /* DockDoor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DockDoor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB157B6C2C0E31CF00997315 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BB157B6F2C0E31CF00997315 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -415,6 +417,7 @@
 		BB6021CE2D1E60C700D47C86 /* WindowPreview Supporting */ = {
 			isa = PBXGroup;
 			children = (
+				BB0CBE392DD8179200D55437 /* MiddleClickHostingView.swift */,
 				BB3D6EAD2C82E4AE00FFE584 /* WindowDismissalContainer.swift */,
 				BB6021D12D1E613100D47C86 /* Window Image Sizing Calculations.swift */,
 				BB6021CF2D1E60E100D47C86 /* Flow Container Calculations.swift */,
@@ -612,6 +615,7 @@
 				3A1622BA2C8C0FF100D318EE /* NoBtnStyle.swift in Sources */,
 				BB3967FD2C291D5A004F1AB6 /* StackedShadow.swift in Sources */,
 				BBE153BE2D2126D000CD3D4A /* MaterialPill.swift in Sources */,
+				BB0CBE3A2DD8179200D55437 /* MiddleClickHostingView.swift in Sources */,
 				3A1622CE2C8D5F8500D318EE /* FirstTimeCongratsTabView.swift in Sources */,
 				3A1622C32C8D586900D318EE /* PermissionsView.swift in Sources */,
 				BBF4139A2C40A64A00AA6733 /* CustomizableFluidGradient.swift in Sources */,
