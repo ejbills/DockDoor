@@ -15,7 +15,10 @@
 [![GitHub release](https://img.shields.io/github/v/release/ejbills/DockDoor)](https://github.com/ejbills/DockDoor/releases/latest/download/DockDoor.dmg)
 [![Downloads](https://img.shields.io/github/downloads/ejbills/DockDoor/total?label=Downloads)](https://github.com/ejbills/DockDoor/releases)
 [![Website](https://img.shields.io/badge/Website-dockdoor.net-blue)](https://dockdoor.net)
-<iframe style="width:100%;height:auto;min-width:600px;min-height:400px;" src="https://www.star-history.com/embed?secret=#ejbills/DockDoor&Date" frameBorder="0"></iframe>
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=ejbills/DockDoor&type=Date)](https://www.star-history.com/#ejbills/DockDoor&Date)
 
 ## Features
 
