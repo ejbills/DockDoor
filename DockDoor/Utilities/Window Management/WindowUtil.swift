@@ -82,17 +82,25 @@ enum WindowUtil {
         desktopSpaceWindowCacheManager.updateCache(pid: app.processIdentifier, update: update)
     }
 
+    // MARK: - Helper Functions
+
+    /// Main function to capture a window image using ScreenCaptureKit, with fallback to legacy methods for older macOS versions.
     static func captureWindowImage(window: SCWindow, forceRefresh: Bool = false) async throws -> CGImage {
+        // Check cache first if not forcing refresh
         if !forceRefresh {
             if let pid = window.owningApplication?.processID,
                let cachedWindow = desktopSpaceWindowCacheManager.readCache(pid: pid)
                .first(where: { $0.id == window.windowID && $0.windowName == window.title }),
                let cachedImage = cachedWindow.image
             {
+                // Check if we need to refresh the image based on cache lifespan
                 let cacheLifespan = Defaults[.screenCaptureCacheLifespan]
                 if Date().timeIntervalSince(cachedWindow.date) <= cacheLifespan {
                     return cachedImage
                 }
+
+                // If we reach here, the image is stale and needs refreshing
+                // but we keep the WindowInfo in cache
             }
         }
 
@@ -131,6 +139,7 @@ enum WindowUtil {
             cgImage = windowImage
         }
 
+        // Only scale down if previewScale is greater than 1
         let previewScale = Int(Defaults[.windowPreviewImageScale])
         if previewScale > 1 {
             let newWidth = Int(cgImage.width) / previewScale
@@ -160,12 +169,19 @@ enum WindowUtil {
 
     static func isValidElement(_ element: AXUIElement) -> Bool {
         do {
+            // Try to get the window's position
             let position = try element.position()
+
+            // Try to get the window's size
             let size = try element.size()
+
+            // If we can get both position and size, the window likely still exists
             return position != nil && size != nil
         } catch AxError.runtimeError {
+            // If we get a runtime error, the app might be unresponsive, so we consider the element invalid
             return false
         } catch {
+            // For any other errors, we also consider the element invalid
             return false
         }
     }
@@ -177,6 +193,7 @@ enum WindowUtil {
             return matchedWindow
         }
 
+        // Fallback metohd
         for axWindow in axWindows {
             if let windowTitle = window.title, let axTitle = try? axWindow.title(), isFuzzyMatch(windowTitle: windowTitle, axTitleString: axTitle) {
                 return axWindow
@@ -272,7 +289,7 @@ enum WindowUtil {
     }
 
     static func bringWindowToFront(windowInfo: WindowInfo) {
-        if let appDelegate = NSApplication.shared.delegate as? AppDelegate {
+        if let appDelegate = NSApplication.shared.delegate as? AppDelegate { // clean up lingering settings pane windows which interfere with AX actions
             appDelegate.settingsWindowController.close()
         }
 

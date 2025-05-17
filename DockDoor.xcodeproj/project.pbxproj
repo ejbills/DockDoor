@@ -87,6 +87,7 @@
 		BBBD4AF52C8D671C0074FFCF /* NSImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBBD4AF42C8D671A0074FFCF /* NSImage.swift */; };
 		BBBD4AF82C8D71560074FFCF /* ConfettiSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = BBBD4AF72C8D71560074FFCF /* ConfettiSwiftUI */; };
 		BBCFAE402C266234002E1516 /* FirstTimeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBCFAE3F2C266234002E1516 /* FirstTimeView.swift */; };
+		BBE033CC2DD92061006417B0 /* CGimage.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE033CB2DD92061006417B0 /* CGimage.swift */; };
 		BBE153BE2D2126D000CD3D4A /* MaterialPill.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE153BD2D2126C000CD3D4A /* MaterialPill.swift */; };
 		BBE153C02D21FA2700CD3D4A /* StyledGroupBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE153BF2D21FA2300CD3D4A /* StyledGroupBox.swift */; };
 		BBE153C22D22024F00CD3D4A /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE153C12D22024E00CD3D4A /* View.swift */; };
@@ -180,6 +181,7 @@
 		BBAC6B442D15FA8800A0F370 /* AXValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AXValue.swift; sourceTree = "<group>"; };
 		BBBD4AF42C8D671A0074FFCF /* NSImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSImage.swift; sourceTree = "<group>"; };
 		BBCFAE3F2C266234002E1516 /* FirstTimeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstTimeView.swift; sourceTree = "<group>"; };
+		BBE033CB2DD92061006417B0 /* CGimage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGimage.swift; sourceTree = "<group>"; };
 		BBE153BD2D2126C000CD3D4A /* MaterialPill.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaterialPill.swift; sourceTree = "<group>"; };
 		BBE153BF2D21FA2300CD3D4A /* StyledGroupBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyledGroupBox.swift; sourceTree = "<group>"; };
 		BBE153C12D22024E00CD3D4A /* View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
@@ -249,6 +251,7 @@
 		3A105FD72C1BF11D0015EC66 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				BBE033CB2DD92061006417B0 /* CGimage.swift */,
 				BB0036D12D24AAE60072C61E /* CoreGraphics */,
 				BBE153C12D22024E00CD3D4A /* View.swift */,
 				BBAC6B442D15FA8800A0F370 /* AXValue.swift */,
@@ -649,6 +652,7 @@
 				3A1622D02C8D691700D318EE /* SquiggleDivider.swift in Sources */,
 				BB157B822C0EB29E00997315 /* DockObserver.swift in Sources */,
 				BBA153FA2C11FFD500119C02 /* consts.swift in Sources */,
+				BBE033CC2DD92061006417B0 /* CGimage.swift in Sources */,
 				BBA153F62C115DDA00119C02 /* AppDelegate.swift in Sources */,
 				BB918BB52CF7613400931236 /* CGRect.swift in Sources */,
 				BB6021D22D1E613800D47C86 /* Window Image Sizing Calculations.swift in Sources */,

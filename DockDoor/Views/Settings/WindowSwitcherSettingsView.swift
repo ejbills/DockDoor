@@ -1,5 +1,5 @@
 import AppKit
-import Carbon // For key codes, if still used by KeyCodeConverter, though UserKeyBind uses UInt16
+import Carbon
 import Defaults
 import SwiftUI
 
@@ -45,7 +45,7 @@ class ShortcutCaptureViewController: NSViewController {
     override func viewDidAppear() {
         super.viewDidAppear()
         if coordinator?.parent.isRecording ?? false {
-            DispatchQueue.main.async { // Ensure UI updates on main thread
+            DispatchQueue.main.async {
                 self.view.window?.makeFirstResponder(self.view)
             }
         }
@@ -53,11 +53,6 @@ class ShortcutCaptureViewController: NSViewController {
 
     override func keyDown(with event: NSEvent) {
         coordinator?.handleKeyEvent(event)
-    }
-
-    override func flagsChanged(with event: NSEvent) {
-        // Modifiers are handled by the Picker in MainSettingsView
-        // coordinator?.handleKeyEvent(event)
     }
 }
 
@@ -87,7 +82,7 @@ struct ShortcutCaptureView: NSViewControllerRepresentable {
                 ) && event.charactersIgnoringModifiers?.isEmpty == true
 
                 if isModifierKeyAlone {
-                    return // Ignore modifier keys pressed alone as the trigger
+                    return
                 }
 
                 parent.isRecording = false
@@ -95,7 +90,7 @@ struct ShortcutCaptureView: NSViewControllerRepresentable {
                 Defaults[.UserKeybind] = newKeybind
                 parent.currentKeybind = newKeybind
                 DispatchQueue.main.async {
-                    event.window?.makeFirstResponder(nil) // Resign first responder
+                    event.window?.makeFirstResponder(nil)
                 }
             }
         }
