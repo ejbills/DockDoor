@@ -327,20 +327,11 @@ struct MainSettingsView: View {
                 .buttonStyle(PlainButtonStyle())
                 .padding(.top, 4)
 
-                if showAnimations {
                     Text("Thanks for supporting DockDoor! 💖")
                         .font(.footnote)
                         .foregroundColor(.secondary)
                         .frame(maxWidth: .infinity, alignment: .center)
-                        .onAppear {
-                            withAnimation(Animation.easeInOut(duration: 1.5).repeatForever(autoreverses: true)) {}
-                        }
-                } else {
-                    Text("Thanks for supporting DockDoor! 💖")
-                        .font(.footnote)
-                        .foregroundColor(.secondary)
-                        .frame(maxWidth: .infinity, alignment: .center)
-                }
+
             }
         }
     }
