@@ -327,11 +327,10 @@ struct MainSettingsView: View {
                 .buttonStyle(PlainButtonStyle())
                 .padding(.top, 4)
 
-                    Text("Thanks for supporting DockDoor! 💖")
-                        .font(.footnote)
-                        .foregroundColor(.secondary)
-                        .frame(maxWidth: .infinity, alignment: .center)
-
+                Text("Thanks for supporting DockDoor! 💖")
+                    .font(.footnote)
+                    .foregroundColor(.secondary)
+                    .frame(maxWidth: .infinity, alignment: .center)
             }
         }
     }
