@@ -16,11 +16,9 @@
 [![Downloads](https://img.shields.io/github/downloads/ejbills/DockDoor/total?label=Downloads)](https://github.com/ejbills/DockDoor/releases)
 [![Website](https://img.shields.io/badge/Website-dockdoor.net-blue)](https://dockdoor.net)
 
-<p align="center">
-  <a href="https://star-history.com/#ejbills/DockDoor&Date">
-    <img src="https://api.star-history.com/svg?repos=ejbills/DockDoor&type=Date" alt="Star History Chart" width="500">
-  </a>
-</p>
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=ejbills/DockDoor&type=Date)](https://www.star-history.com/#ejbills/DockDoor&Date)
 
 ## Features
 
