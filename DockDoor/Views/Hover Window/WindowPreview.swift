@@ -119,10 +119,7 @@ struct WindowPreview: View {
             }
         }
         .frame(
-            minWidth: 50,
-            idealWidth: nil,
             maxWidth: max(dimensions.size.width * 0.6, 70),
-            alignment: .leading
         ).fixedSize(horizontal: true, vertical: false)
 
         let appIconContent = Group {

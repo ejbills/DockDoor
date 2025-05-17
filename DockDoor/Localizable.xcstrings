@@ -21015,9 +21015,6 @@
         }
       }
     },
-    "Hide App Name" : {
-
-    },
     "Highlight Gradient Colors" : {
       "localizations" : {
         "af" : {
@@ -41851,6 +41848,9 @@
       }
     },
     "Show Advanced Settings" : {
+
+    },
+    "Show App Name" : {
 
     },
     "Show App Name in Dock Previews" : {

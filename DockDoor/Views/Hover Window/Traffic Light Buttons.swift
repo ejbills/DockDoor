@@ -15,35 +15,39 @@ struct TrafficLightButtons: View {
 
     var body: some View {
         let monochromeFillColor = colorScheme == .dark ? Color.gray.darker(by: 0.075) : Color.white
-        HStack(spacing: 6) {
-            if enabledButtons.contains(.quit) {
-                buttonFor(action: .quit, symbol: "power",
-                          color: useMonochrome ? .secondary : Color(hex: "290133"),
-                          fillColor: useMonochrome ? monochromeFillColor : .purple)
-            }
-            if enabledButtons.contains(.close) {
-                buttonFor(action: .close, symbol: "xmark",
-                          color: useMonochrome ? .secondary : Color(hex: "7e0609"),
-                          fillColor: useMonochrome ? monochromeFillColor : .red)
-            }
-            if enabledButtons.contains(.minimize) {
-                buttonFor(action: .minimize, symbol: "minus",
-                          color: useMonochrome ? .secondary : Color(hex: "985712"),
-                          fillColor: useMonochrome ? monochromeFillColor : .yellow)
-            }
-            if enabledButtons.contains(.toggleFullScreen) {
-                buttonFor(action: .toggleFullScreen, symbol: "arrow.up.left.and.arrow.down.right",
-                          color: useMonochrome ? .secondary : Color(hex: "0d650d"),
-                          fillColor: useMonochrome ? monochromeFillColor : .green)
-            }
-        }
-        .padding(4)
-        .opacity(opacity)
-        .allowsHitTesting(opacity != 0)
-        .simultaneousGesture(TapGesture())
-        .onHover { isHovering in
-            withAnimation(.snappy(duration: 0.175)) {
-                self.isHovering = isHovering
+        Group {
+            if displayMode != .never {
+                HStack(spacing: 6) {
+                    if enabledButtons.contains(.quit) {
+                        buttonFor(action: .quit, symbol: "power",
+                                  color: useMonochrome ? .secondary : Color(hex: "290133"),
+                                  fillColor: useMonochrome ? monochromeFillColor : .purple)
+                    }
+                    if enabledButtons.contains(.close) {
+                        buttonFor(action: .close, symbol: "xmark",
+                                  color: useMonochrome ? .secondary : Color(hex: "7e0609"),
+                                  fillColor: useMonochrome ? monochromeFillColor : .red)
+                    }
+                    if enabledButtons.contains(.minimize) {
+                        buttonFor(action: .minimize, symbol: "minus",
+                                  color: useMonochrome ? .secondary : Color(hex: "985712"),
+                                  fillColor: useMonochrome ? monochromeFillColor : .yellow)
+                    }
+                    if enabledButtons.contains(.toggleFullScreen) {
+                        buttonFor(action: .toggleFullScreen, symbol: "arrow.up.left.and.arrow.down.right",
+                                  color: useMonochrome ? .secondary : Color(hex: "0d650d"),
+                                  fillColor: useMonochrome ? monochromeFillColor : .green)
+                    }
+                }
+                .padding(4)
+                .opacity(opacity)
+                .allowsHitTesting(opacity != 0)
+                .simultaneousGesture(TapGesture())
+                .onHover { isHovering in
+                    withAnimation(.snappy(duration: 0.175)) {
+                        self.isHovering = isHovering
+                    }
+                }
             }
         }
         .if(pillStyling && opacity > 0 && displayMode != .never && enabledButtons.count > 0) { view in

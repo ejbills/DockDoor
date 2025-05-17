@@ -254,8 +254,11 @@ struct AppearanceSettingsView: View {
                 Text("Show Window Title")
             }
 
-            Toggle(isOn: $showAppIconOnly) {
-                Text("Hide App Name")
+            Toggle(isOn: Binding(
+                get: { !showAppIconOnly },
+                set: { showAppIconOnly = !$0 }
+            )) {
+                Text("Show App Name")
             }
 
             if showWindowTitle {
