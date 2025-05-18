@@ -1806,7 +1806,7 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "+"
           }
         },
@@ -1996,7 +1996,7 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "1."
           }
         },
@@ -2568,7 +2568,7 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "2."
           }
         },
@@ -2949,7 +2949,7 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "3."
           }
         },
@@ -3330,7 +3330,7 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "4."
           }
         },
@@ -4664,8 +4664,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add additional directories to scan for applications. This is useful if you keep apps outside standard locations."
+            "state" : "translated",
+            "value" : "Percorsi extra di cartelle con applicazioni (utile se non hai usato il percorso standard per l'installazione)."
           }
         },
         "ja" : {
@@ -5425,8 +5425,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Adjusts how responsive the app feels and behaves during interaction."
+            "state" : "translated",
+            "value" : "Imposta la velocità o 'responsività' delle anteprime."
           }
         },
         "ja" : {
@@ -7521,8 +7521,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Application Basics"
+            "state" : "translated",
+            "value" : "Impostazioni globali"
           }
         },
         "ja" : {
@@ -7902,8 +7902,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Application Filters"
+            "state" : "translated",
+            "value" : "Filtri"
           }
         },
         "ja" : {
@@ -8473,8 +8473,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Are you sure you want to reset all settings to their default values? This will reset advanced settings as well."
+            "state" : "translated",
+            "value" : "Vuoi davvero riportare le impostazioni ai valori iniziali? Anche le impostazioni avanzate saranno ripristinate."
           }
         },
         "ja" : {
@@ -10376,8 +10376,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Buy me a coffee"
+            "state" : "translated",
+            "value" : "Offrimi un caffè"
           }
         },
         "ja" : {
@@ -11709,8 +11709,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Click \"Set Trigger Key\""
+            "state" : "translated",
+            "value" : "Clicca su 'Tasto di attivazione'"
           }
         },
         "ja" : {
@@ -12279,8 +12279,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Color Customization"
+            "state" : "translated",
+            "value" : "Colori"
           }
         },
         "ja" : {
@@ -13040,8 +13040,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Contribute translation"
+            "state" : "translated",
+            "value" : "Traduci"
           }
         },
         "ja" : {
@@ -13611,8 +13611,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Controls the visual detail and update frequency of window previews."
+            "state" : "translated",
+            "value" : "Controlla il dettaglio visivo e la frequenza di aggiornamento delle anteprime."
           }
         },
         "ja" : {
@@ -13992,8 +13992,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Current Shortcut"
+            "state" : "translated",
+            "value" : "Combinazione di tasti"
           }
         },
         "ja" : {
@@ -15136,8 +15136,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Detailed"
+            "state" : "translated",
+            "value" : "Dettagliata"
           }
         },
         "ja" : {
@@ -15706,8 +15706,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Discuss features and get help from the community"
+            "state" : "translated",
+            "value" : "Proponi funzionalità e ottieni supporto dalla community"
           }
         },
         "ja" : {
@@ -15897,8 +15897,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Display %u"
+            "state" : "translated",
+            "value" : "Mostra %u"
           }
         },
         "ja" : {
@@ -16277,8 +16277,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Preview Hover Action"
+            "state" : "translated",
+            "value" : "Azione al passaggio del mouse"
           }
         },
         "ja" : {
@@ -16467,8 +16467,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Preview Settings"
+            "state" : "translated",
+            "value" : "Impostazioni delle anteprime del Dock"
           }
         },
         "ja" : {
@@ -20467,8 +20467,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Exclude windows from capture by filtering specific text in their titles (case-insensitive)."
+            "state" : "translated",
+            "value" : "Esclude le finestre con determinate parole chiave nel titolo (case-insensitive)."
           }
         },
         "ja" : {
@@ -21422,8 +21422,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Fine-tune visual details and layout options."
+            "state" : "translated",
+            "value" : "Personalizza l'aspetto e la disposizione."
           }
         },
         "ja" : {
@@ -22373,8 +22373,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "General Appearance"
+            "state" : "translated",
+            "value" : "Aspetto"
           }
         },
         "ja" : {
@@ -22563,8 +22563,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "General Exclusions"
+            "state" : "translated",
+            "value" : "Esclusioni generali"
           }
         },
         "ja" : {
@@ -23705,8 +23705,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Help & Support"
+            "state" : "translated",
+            "value" : "Aiuto e supporto"
           }
         },
         "ja" : {
@@ -24086,8 +24086,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Help make DockDoor available in your language"
+            "state" : "translated",
+            "value" : "Aiuta a tradurre DockDoor nella tua lingua"
           }
         },
         "ja" : {
@@ -24658,8 +24658,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hide Advanced Settings"
+            "state" : "translated",
+            "value" : "Nascondi le impostazioni avanzate"
           }
         },
         "ja" : {
@@ -24848,8 +24848,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hide all app windows on dock icon click"
+            "state" : "translated",
+            "value" : "Nascondi le finestre con un clic sull'icona"
           }
         },
         "ja" : {
@@ -25039,8 +25039,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hide all application windows when clicking on the dock icon"
+            "state" : "translated",
+            "value" : "Clicca sull'icona del Dock dell'applicazione attiva per nascondere tutte le sue finestre"
           }
         },
         "ja" : {
@@ -25801,8 +25801,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "How to Set Up"
+            "state" : "translated",
+            "value" : "Guida alla configurazione"
           }
         },
         "ja" : {
@@ -26944,8 +26944,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Include Hidden/Minimized Windows in Switcher"
+            "state" : "translated",
+            "value" : "Includi le finestre nascoste o minimizzate"
           }
         },
         "ja" : {
@@ -27324,8 +27324,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Instructions"
+            "state" : "translated",
+            "value" : "Istruzioni"
           }
         },
         "ja" : {
@@ -27514,8 +27514,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Interaction & Behavior (Dock Previews)"
+            "state" : "translated",
+            "value" : "Interazione e comportamento (anteprime del Dock)"
           }
         },
         "ja" : {
@@ -27704,8 +27704,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Join our Discord"
+            "state" : "translated",
+            "value" : "Unisciti al nostro Discord"
           }
         },
         "ja" : {
@@ -28084,8 +28084,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Keyboard Shortcut"
+            "state" : "translated",
+            "value" : "Combinazione di tasti"
           }
         },
         "ja" : {
@@ -28466,8 +28466,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Large (1/2)"
+            "state" : "translated",
+            "value" : "Grande (metà schermo)"
           }
         },
         "ja" : {
@@ -29417,8 +29417,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Lightweight"
+            "state" : "translated",
+            "value" : "Leggero"
           }
         },
         "ja" : {
@@ -29607,8 +29607,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Loading preview..."
+            "state" : "translated",
+            "value" : "Caricamento anteprima..."
           }
         },
         "ja" : {
@@ -29797,8 +29797,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Max Rows for Switcher Previews"
+            "state" : "translated",
+            "value" : "Numero massimo di righe per le anteprime"
           }
         },
         "ja" : {
@@ -29987,8 +29987,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Max Stacks for Dock Previews"
+            "state" : "translated",
+            "value" : "Numero massimo di colonne"
           }
         },
         "ja" : {
@@ -30941,8 +30941,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Medium (1/%lld)"
+            "state" : "translated",
+            "value" : "Medio (1/%lld)"
           }
         },
         "ja" : {
@@ -33036,8 +33036,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No applications found or scanned yet."
+            "state" : "translated",
+            "value" : "Nessuna applicazione rilevata."
           }
         },
         "ja" : {
@@ -33989,8 +33989,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No window title filters added"
+            "state" : "translated",
+            "value" : "Nessun filtro per il titolo della finestra"
           }
         },
         "ja" : {
@@ -36085,8 +36085,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Performance Profiles"
+            "state" : "translated",
+            "value" : "Profilo prestazioni"
           }
         },
         "ja" : {
@@ -36275,8 +36275,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Performance Tuning (Dock Previews)"
+            "state" : "translated",
+            "value" : "Prestazioni (anteprime del Dock)"
           }
         },
         "ja" : {
@@ -39325,8 +39325,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Press ONLY the trigger key (e.g. just Tab)"
+            "state" : "translated",
+            "value" : "Premi SOLO il tasto di attivazione (senza ⌃⌘⌥⇧)"
           }
         },
         "ja" : {
@@ -39896,8 +39896,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Prevents apps that only ever have a single window from appearing in previews."
+            "state" : "translated",
+            "value" : "Mostra le anteprime solo per le applicazioni con più di una finestra."
           }
         },
         "ja" : {
@@ -40277,8 +40277,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Appearance & Quality (Dock Previews)"
+            "state" : "translated",
+            "value" : "Aspetto e qualità delle miniature (anteprime del Dock)"
           }
         },
         "ja" : {
@@ -40849,8 +40849,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Layout (Dock)"
+            "state" : "translated",
+            "value" : "Aspetto delle anteprime del Dock"
           }
         },
         "ja" : {
@@ -41039,8 +41039,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Layout (Switcher)"
+            "state" : "translated",
+            "value" : "Aspetto delle anteprime del Dock"
           }
         },
         "ja" : {
@@ -41229,8 +41229,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Quality Profiles"
+            "state" : "translated",
+            "value" : "Profili di qualità delle anteprime"
           }
         },
         "ja" : {
@@ -41419,8 +41419,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Size"
+            "state" : "translated",
+            "value" : "Dimensioni delle anteprime"
           }
         },
         "ja" : {
@@ -41801,8 +41801,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Window Inactivity Timer"
+            "state" : "translated",
+            "value" : "Tempo di inattività delle anteprime"
           }
         },
         "ja" : {
@@ -43134,8 +43134,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Relaxed"
+            "state" : "translated",
+            "value" : "Rilassato"
           }
         },
         "ja" : {
@@ -48084,8 +48084,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Select a profile to quickly adjust common performance settings. Choose \"Advanced\" for manual control."
+            "state" : "translated",
+            "value" : "Scegli un profilo per impostare facilmente e rapidamente le opzioni di performance. Clicca su 'Impostazioni avanzate' per configurare tutto manualmente."
           }
         },
         "ja" : {
@@ -48274,8 +48274,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Select an initialization key (e.g. Command ⌘)"
+            "state" : "translated",
+            "value" : "Tasto di attivazione (es. ⌃⌘⌥⇧)"
           }
         },
         "ja" : {
@@ -48655,8 +48655,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Select which applications DockDoor should show previews for. Unchecked apps will be ignored."
+            "state" : "translated",
+            "value" : "Scegli le applicazioni che mostreranno le anteprime. Quelle non selezionate saranno ignorate."
           }
         },
         "ja" : {
@@ -48845,8 +48845,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Selection Highlight"
+            "state" : "translated",
+            "value" : "Selezione attiva"
           }
         },
         "ja" : {
@@ -49417,8 +49417,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Set Trigger Key"
+            "state" : "translated",
+            "value" : "Tasto di attivazione"
           }
         },
         "ja" : {
@@ -49607,8 +49607,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Sets the max rows (for bottom/top Dock) or columns (for side Dock) previews will use. '0' dynamically determines fit."
+            "state" : "translated",
+            "value" : "Imposta il numero massimo di righe (per Dock in basso / in alto) o di colonne (per Dock laterale) che le anteprime avranno a disposizione. Con '0' il valore è determinato automaticamente."
           }
         },
         "ja" : {
@@ -49797,8 +49797,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Sets the maximum number of rows the Window Switcher will use. '0' dynamically determines rows based on screen height."
+            "state" : "translated",
+            "value" : "Imposta il numero massimo di righe di anteprime nel selettore finestre. Con '0' il valore è determinato automaticamente."
           }
         },
         "ja" : {
@@ -50178,8 +50178,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Advanced Settings"
+            "state" : "translated",
+            "value" : "Impostazioni avanzate"
           }
         },
         "ja" : {
@@ -50368,8 +50368,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show App Name"
+            "state" : "translated",
+            "value" : "Mostra il nome dell'applicazione"
           }
         },
         "ja" : {
@@ -50938,8 +50938,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Window Title"
+            "state" : "translated",
+            "value" : "Mostra il titolo della finestra"
           }
         },
         "ja" : {
@@ -51891,8 +51891,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Shows last active window first, instead of current window."
+            "state" : "translated",
+            "value" : "Mostra prima l'ultima finestra attiva, invece della finestra corrente."
           }
         },
         "ja" : {
@@ -52656,8 +52656,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Small (1/%lld)"
+            "state" : "translated",
+            "value" : "Piccolo (1/%lld)"
           }
         },
         "ja" : {
@@ -52846,8 +52846,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Snappy"
+            "state" : "translated",
+            "value" : "Veloce"
           }
         },
         "ja" : {
@@ -53227,8 +53227,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Sort Window Previews by Date (if multiple)"
+            "state" : "translated",
+            "value" : "Ordina le anteprime della finestra per data"
           }
         },
         "ja" : {
@@ -53417,7 +53417,7 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Standard"
           }
         },
@@ -54563,8 +54563,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Support"
+            "state" : "translated",
+            "value" : "Assistenza"
           }
         },
         "ja" : {
@@ -54753,8 +54753,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Support & Contributions"
+            "state" : "translated",
+            "value" : "Supporto e contributi"
           }
         },
         "ja" : {
@@ -54943,8 +54943,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Support development with a small donation"
+            "state" : "translated",
+            "value" : "Supporta lo sviluppo di DockDoor con una piccola donazione"
           }
         },
         "ja" : {
@@ -55323,8 +55323,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Support settings"
+            "state" : "translated",
+            "value" : "Impostazioni supporto"
           }
         },
         "ja" : {
@@ -55513,8 +55513,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Thank you to all contributors ❤️"
+            "state" : "translated",
+            "value" : "Grazie per i numerosi contributi ❤️"
           }
         },
         "ja" : {
@@ -55703,8 +55703,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Thanks for supporting DockDoor! 💖"
+            "state" : "translated",
+            "value" : "Grazie per aver scelto di supportare DockDoor!"
           }
         },
         "ja" : {
@@ -56274,8 +56274,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "The Window Switcher (often Alt/Cmd-Tab) lets you quickly cycle between open app windows with a keyboard shortcut."
+            "state" : "translated",
+            "value" : "Il selettore consente di passare rapidamente da una finestra all'altra con una scorciatoia da tastiera."
           }
         },
         "ja" : {
@@ -56655,8 +56655,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Tiny (1/%lld)"
+            "state" : "translated",
+            "value" : "Molto piccolo (1/%lld)"
           }
         },
         "ja" : {
@@ -57798,8 +57798,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Traffic Light Buttons in Previews"
+            "state" : "translated",
+            "value" : "Tasti di controllo delle finestre nelle anteprime"
           }
         },
         "ja" : {
@@ -58369,8 +58369,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Trigger Key"
+            "state" : "translated",
+            "value" : "Tasto di attivazione"
           }
         },
         "ja" : {
@@ -59131,8 +59131,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Unknown Display"
+            "state" : "translated",
+            "value" : "Monitor sconosciuto"
           }
         },
         "ja" : {
@@ -61227,8 +61227,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use Windows-style window ordering in Switcher"
+            "state" : "translated",
+            "value" : "Usa l'ordinamento delle finestre in stile Windows"
           }
         },
         "ja" : {
@@ -62943,8 +62943,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When enabled, clicking an app's Dock icon will minimize all windows of that application, similar to Windows taskbar behavior"
+            "state" : "translated",
+            "value" : "Se abilitata, clicca sull'icona di un'applicazione per nascondere tutte le sue finestre"
           }
         },
         "ja" : {
@@ -66569,8 +66569,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Switcher Customization"
+            "state" : "translated",
+            "value" : "Selettore finestre"
           }
         },
         "ja" : {
@@ -67140,8 +67140,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Switcher Settings"
+            "state" : "translated",
+            "value" : "Impostazioni del selettore finestre"
           }
         },
         "ja" : {
@@ -67521,8 +67521,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Title Filters"
+            "state" : "translated",
+            "value" : "Filtra le finestre in base al titolo"
           }
         },
         "ja" : {
@@ -68091,8 +68091,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Titles in Previews"
+            "state" : "translated",
+            "value" : "Titoli delle finestre nelle anteprime"
           }
         },
         "ja" : {
@@ -68853,8 +68853,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Your shortcut will be set (e.g. ⌘ + Tab)"
+            "state" : "translated",
+            "value" : "La combinazione di tasti è stata impostata"
           }
         },
         "ja" : {
