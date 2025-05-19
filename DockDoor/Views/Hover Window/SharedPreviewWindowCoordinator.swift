@@ -64,7 +64,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
 
     // Setup window properties
     private func setupWindow() {
-        level = .floating
+        level = .statusBar
         isOpaque = false
         backgroundColor = .clear
         hasShadow = true
