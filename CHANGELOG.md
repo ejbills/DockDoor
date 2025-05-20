@@ -38,6 +38,18 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://buymeacoffee.com/keplercafe</div>
 
+<a id="v1.11"></a>
+# [v1.11](https://github.com/ejbills/DockDoor/releases/tag/v1.11) - 2025-05-20
+
+- Updates app icon
+- Adds experimental option to show hover window above app icon labels in the dock
+![CleanShot 2025-05-20 at 15 37 57@2x](https://github.com/user-attachments/assets/5aebda35-b121-4795-9bfe-d8228d7eac70)
+- Updates translations
+- Fixes no dock preview for apps with multiple instances
+
+[Changes][v1.11]
+
+
 <a id="v1.10"></a>
 # [v1.10](https://github.com/ejbills/DockDoor/releases/tag/v1.10) - 2025-05-17
 
@@ -888,6 +900,7 @@ v1.0
 [Changes][releases]
 
 
+[v1.11]: https://github.com/ejbills/DockDoor/compare/v1.10...v1.11
 [v1.10]: https://github.com/ejbills/DockDoor/compare/v1.9.1...v1.10
 [v1.9.1]: https://github.com/ejbills/DockDoor/compare/v1.9...v1.9.1
 [v1.9]: https://github.com/ejbills/DockDoor/compare/v1.8...v1.9
