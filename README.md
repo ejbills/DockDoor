@@ -1,7 +1,7 @@
 # DockDoor
 
 <p align="center">
-  <img width="100" src="https://github.com/ejbills/DockDoor/raw/main/DockDoor/Assets.xcassets/AppIcon.appiconset/icon_256x256@2x.png">
+  <img width="300" src="./DockDoor/Assets.xcassets/AppIcon.appiconset/DockDoor.png">
 </p>
 
 <p align="center">

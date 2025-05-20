@@ -19,7 +19,7 @@ struct FirstTimeViewAppIcon: View {
         Button(action: action) {
             TimelineView(.animation(minimumInterval: 0.15)) { ctx in
                 let zzz = lightsOn ? "1" : ctx.date.description
-                Image(lightsOn ? .rawAppIcon : .sleepingDockDoor)
+                Image(systemName: lightsOn ? "face.dashed.fill" : "faceid")
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 140, height: 140)
@@ -27,9 +27,8 @@ struct FirstTimeViewAppIcon: View {
                     .shadow(color: .black.opacity(hovering ? 0.5 : 0.25), radius: hovering ? 32 : 16, y: hovering ? 24 : 12)
                     .contentTransition(.identity)
                     .overlay {
-                        CustomizableFluidGradientView().opacity(hovering ? lightsOn ? 0.75 : 1 : 0)
-                            .clipShape(RoundedRectangle(cornerRadius: 31))
-                            .blendMode(.overlay)
+                        CustomizableFluidGradientView().opacity(hovering ? lightsOn ? 0 : 0.75 : 0)
+                            .blendMode(.overlay).clipShape(RoundedRectangle(cornerRadius: 31))
                     }
                     .scaleEffect(iconScale)
                     .rotation3DEffect(
