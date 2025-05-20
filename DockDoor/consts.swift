@@ -10,7 +10,7 @@ let roughHeightCap = optimisticScreenSizeHeight / 3
 let roughWidthCap = optimisticScreenSizeWidth / 3
 
 extension Defaults.Keys {
-    static let sizingMultiplier = Key<CGFloat>("sizingMultiplier", default: 3)
+    static let sizingMultiplier = Key<CGFloat>("sizingMultiplier", default: DockUtils.getDockPosition() == .bottom ? 5 : 3)
     static let bufferFromDock = Key<CGFloat>("bufferFromDock", default: -25)
     static let hoverWindowOpenDelay = Key<CGFloat>("openDelay", default: 0.2)
     static let lateralMovement = Key<Bool>("lateralMovement", default: true)
