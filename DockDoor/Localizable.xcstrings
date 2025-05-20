@@ -20569,6 +20569,9 @@
         }
       }
     },
+    "EXPERIMENTAL: Show preview above app labels" : {
+
+    },
     "Extra Extra Small" : {
       "comment" : "Window size option",
       "extractionState" : "stale",

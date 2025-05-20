@@ -35,6 +35,7 @@ extension Defaults.Keys {
     static let includeHiddenWindowsInSwitcher = Key<Bool>("includeHiddenWindowsInSwitcher", default: true)
     static let ignoreAppsWithSingleWindow = Key<Bool>("ignoreAppsWithSingleWindow", default: false)
     static let showMenuBarIcon = Key<Bool>("showMenuBarIcon", default: true)
+    static let raisedWindowLevel = Key<Bool>("raisedWindowLevel", default: false)
     static let launched = Key<Bool>("launched", default: false)
     static let Int64maskCommand = Key<Int>("Int64maskCommand", default: 1_048_840)
     static let Int64maskControl = Key<Int>("Int64maskControl", default: 262_401)
