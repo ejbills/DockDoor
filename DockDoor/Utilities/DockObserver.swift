@@ -240,14 +240,33 @@ final class DockObserver {
                     pendingShows.insert(currentAppInfo.processIdentifier)
                     lastAppUnderMouse = currentAppInfo
 
-                    guard let app = currentAppInfo.app() else {
+                    // Collect windows from all instances of this app by bundle ID
+                    var appsToFetchWindowsFrom: [NSRunningApplication] = []
+                    if let bundleId = currentApp.bundleIdentifier, !bundleId.isEmpty {
+                        let potentialApps = NSRunningApplication.runningApplications(withBundleIdentifier: bundleId)
+                        if !potentialApps.isEmpty {
+                            appsToFetchWindowsFrom = potentialApps
+                        } else {
+                            // Fallback: if bundle ID search yields nothing, but currentApp is valid.
+                            appsToFetchWindowsFrom = [currentApp]
+                        }
+                    } else {
+                        // Fallback: no bundle ID, just use the currentApp.
+                        appsToFetchWindowsFrom = [currentApp]
+                    }
+
+                    guard !appsToFetchWindowsFrom.isEmpty else { // Should always have at least currentApp if it was valid
                         pendingShows.remove(currentAppInfo.processIdentifier)
                         return
                     }
 
-                    let appWindows = try await WindowUtil.getActiveWindows(of: app)
+                    var combinedWindows: [WindowInfo] = []
+                    for appInstance in appsToFetchWindowsFrom {
+                        let windowsForInstance = try await WindowUtil.getActiveWindows(of: appInstance)
+                        combinedWindows.append(contentsOf: windowsForInstance)
+                    }
 
-                    if !pendingShows.contains(currentAppInfo.processIdentifier) {
+                    if !pendingShows.contains(currentAppInfo.processIdentifier) { // Re-check after async operations
                         return
                     }
 
@@ -255,8 +274,8 @@ final class DockObserver {
                     let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
 
                     SharedPreviewWindowCoordinator.shared.showWindow(
-                        appName: currentAppInfo.localizedName ?? "Unknown",
-                        windows: appWindows,
+                        appName: currentAppInfo.localizedName ?? "Unknown", // Name from the primary hovered app
+                        windows: combinedWindows, // Use the combined list
                         mouseLocation: convertedMouseLocation,
                         mouseScreen: mouseScreen,
                         dockItemElement: dockItemElement,
