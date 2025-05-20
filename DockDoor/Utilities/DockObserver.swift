@@ -255,7 +255,7 @@ final class DockObserver {
                         appsToFetchWindowsFrom = [currentApp]
                     }
 
-                    guard !appsToFetchWindowsFrom.isEmpty else { // Should always have at least currentApp if it was valid
+                    guard !appsToFetchWindowsFrom.isEmpty else {
                         pendingShows.remove(currentAppInfo.processIdentifier)
                         return
                     }
@@ -266,7 +266,7 @@ final class DockObserver {
                         combinedWindows.append(contentsOf: windowsForInstance)
                     }
 
-                    if !pendingShows.contains(currentAppInfo.processIdentifier) { // Re-check after async operations
+                    if !pendingShows.contains(currentAppInfo.processIdentifier) {
                         return
                     }
 
@@ -274,8 +274,8 @@ final class DockObserver {
                     let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
 
                     SharedPreviewWindowCoordinator.shared.showWindow(
-                        appName: currentAppInfo.localizedName ?? "Unknown", // Name from the primary hovered app
-                        windows: combinedWindows, // Use the combined list
+                        appName: currentAppInfo.localizedName ?? "Unknown",
+                        windows: combinedWindows,
                         mouseLocation: convertedMouseLocation,
                         mouseScreen: mouseScreen,
                         dockItemElement: dockItemElement,
