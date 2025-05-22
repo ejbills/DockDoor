@@ -73,21 +73,18 @@ class MouseTrackingNSView: NSView {
     }
 
     private func startInactivityMonitoring() {
-        inactivityCheckTimer?.invalidate() // Invalidate existing timer if any
+        inactivityCheckTimer?.invalidate()
         inactivityCheckTimer = Timer.scheduledTimer(withTimeInterval: inactivityCheckInterval, repeats: true) { [weak self] _ in
             guard let self, let window else { return }
 
-            let currentMouseLocation = NSEvent.mouseLocation // Screen coordinates
-            let windowFrame = window.frame // Screen coordinates
+            let currentMouseLocation = NSEvent.mouseLocation
+            let windowFrame = window.frame
 
             let isMouseOverDockIcon = checkIfMouseIsOverDockIcon()
 
             if windowFrame.contains(currentMouseLocation) || isMouseOverDockIcon {
-                // Mouse is inside the window or over the app's dock icon
                 resetOpacityVisually()
             } else {
-                // Mouse is outside the window and not over the app's dock icon
-                // Start fade-out only if window is fully opaque and not already fading
                 if fadeOutTimer == nil, window.alphaValue == 1.0 {
                     startFadeOut()
                 }
@@ -96,8 +93,8 @@ class MouseTrackingNSView: NSView {
     }
 
     private func checkIfMouseIsOverDockIcon() -> Bool {
-        let currentAppReturnType = DockObserver.shared.getDockItemAppStatusUnderMouse()
-        // prevent the fade out timer from activating if the mouse is over a dock icon
+        guard let activeDockObserver = DockObserver.activeInstance else { return false }
+        let currentAppReturnType = activeDockObserver.getDockItemAppStatusUnderMouse()
         if case .success = currentAppReturnType.status {
             return true
         }
@@ -120,14 +117,11 @@ class MouseTrackingNSView: NSView {
     private func startFadeOut() {
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }
-            guard !SharedPreviewWindowCoordinator.shared.windowSwitcherCoordinator.windowSwitcherActive else { return }
+            guard SharedPreviewWindowCoordinator.activeInstance?.windowSwitcherCoordinator.windowSwitcherActive == false else { return }
 
-            // Ensure we don't start a new fade if one is already in progress or completed
-            // This check is now partly handled by the caller (inactivityCheckTimer)
-            // but an additional check here for `window.alphaValue > 0` can prevent hiding an already hidden window.
             guard let window, window.alphaValue > 0 else { return }
 
-            cancelFadeOut() // Cancel any previously scheduled fade-out that hasn't completed
+            cancelFadeOut()
 
             if fadeOutDuration == 0 {
                 performHideWindow()
@@ -148,7 +142,6 @@ class MouseTrackingNSView: NSView {
     private func setWindowOpacity(to value: CGFloat, duration: TimeInterval) {
         DispatchQueue.main.async { [weak self] in
             guard let window = self?.window else { return }
-            // If already at target alpha, no need to animate
             if window.alphaValue == value { return }
             NSAnimationContext.runAnimationGroup { context in
                 context.duration = duration
@@ -160,8 +153,8 @@ class MouseTrackingNSView: NSView {
     private func performHideWindow() {
         DispatchQueue.main.async { [weak self] in
             guard self != nil else { return }
-            SharedPreviewWindowCoordinator.shared.hideWindow()
-            DockObserver.shared.lastAppUnderMouse = nil
+            SharedPreviewWindowCoordinator.activeInstance?.hideWindow()
+            DockObserver.activeInstance?.lastAppUnderMouse = nil
         }
     }
 
@@ -169,23 +162,26 @@ class MouseTrackingNSView: NSView {
         eventMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.leftMouseDown]) { [weak self] event in
             guard let self else { return }
 
-            let currentAppReturnType = DockObserver.shared.getDockItemAppStatusUnderMouse()
+            guard let activeDockObserver = DockObserver.activeInstance else {
+                handleExternalClick(event: event)
+                return
+            }
+            let currentAppReturnType = activeDockObserver.getDockItemAppStatusUnderMouse()
 
             switch currentAppReturnType.status {
             case let .success(currApp):
-                if currApp.localizedName == appName { // Clicked on OUR app's dock icon
+                if currApp.localizedName == appName {
                     if Defaults[.shouldHideOnDockItemClick] {
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) { [weak self] in
                             self?.minimizeAllWindowsCallback()
                         }
                     } else {
-                        // If not hiding on dock item click, we might want to just hide the preview window
                         performHideWindow()
                     }
-                } else { // Clicked on a DIFFERENT app's dock icon or somewhere else not on our window
+                } else {
                     handleExternalClick(event: event)
                 }
-            default: // Error getting dock item, or not on any dock item
+            default:
                 handleExternalClick(event: event)
             }
         }
@@ -196,7 +192,6 @@ class MouseTrackingNSView: NSView {
         let clickScreenLocation = NSEvent.mouseLocation
         let windowFrame = window.frame
 
-        // If the click is outside our window and not on our dock icon (already handled), fade out.
         if !windowFrame.contains(clickScreenLocation) {
             DispatchQueue.main.async {
                 self.startFadeOut()

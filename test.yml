@@ -1,0 +1,722 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Serverless Certificate Import Application with Restricted Access
+
+Parameters:
+  Owner:
+    Type: String
+    Description: Tag value for Owner on all resources.
+
+  AllowedHTTPSIPs:
+    Type: CommaDelimitedList
+    Default: 1.2.3.4/32
+    Description: Comma-separated list of CIDR blocks allowed for HTTPS access. Max
+      number 20.
+
+  NumInitialCodes:
+    Type: Number
+    Default: 10
+    Description: Number of one-time codes to generate initially.
+    MinValue: 1
+    MaxValue: 100
+
+Resources:
+  #####################################
+  # API Gateway with HTTPS Only
+  #####################################
+  ApiGateway:
+    Type: AWS::ApiGateway::RestApi
+    Properties:
+      Name: !Sub ${AWS::StackName}-CertImportApi
+      Description: API for secure certificate import with restricted access
+      EndpointConfiguration:
+        Types:
+          - REGIONAL
+      Policy:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal: '*'
+            Action: execute-api:Invoke
+            Resource: '*'
+          - Effect: Deny
+            Principal: '*'
+            Action: execute-api:Invoke
+            Resource: '*'
+            Condition:
+              NotIpAddress:
+                aws:SourceIp: !Ref AllowedHTTPSIPs
+      Tags:
+        - Key: Owner
+          Value: !Ref Owner
+
+  # API Resources and Methods
+  UiResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref ApiGateway
+      ParentId: !GetAtt ApiGateway.RootResourceId
+      PathPart: ui
+
+  ImportResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref ApiGateway
+      ParentId: !GetAtt ApiGateway.RootResourceId
+      PathPart: import
+
+  # Lambda Permissions for API Gateway
+  UIFunctionPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt UIFunction.Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${ApiGateway}/*/GET/ui
+
+  RootFunctionPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt UIFunction.Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${ApiGateway}/*/GET/
+
+  ImportFunctionPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt ImportFunction.Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${ApiGateway}/*/POST/import
+
+  # API Gateway Methods with explicit ARN references
+  UiMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref ApiGateway
+      ResourceId: !Ref UiResource
+      HttpMethod: GET
+      AuthorizationType: NONE
+      Integration:
+        Type: AWS_PROXY
+        IntegrationHttpMethod: POST
+        Uri: !Sub arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${UIFunction.Arn}/invocations
+
+  ImportMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref ApiGateway
+      ResourceId: !Ref ImportResource
+      HttpMethod: POST
+      AuthorizationType: NONE
+      Integration:
+        Type: AWS_PROXY
+        IntegrationHttpMethod: POST
+        Uri: !Sub arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${ImportFunction.Arn}/invocations
+
+  RootMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref ApiGateway
+      ResourceId: !GetAtt ApiGateway.RootResourceId
+      HttpMethod: GET
+      AuthorizationType: NONE
+      Integration:
+        Type: AWS_PROXY
+        IntegrationHttpMethod: POST
+        Uri: !Sub arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${UIFunction.Arn}/invocations
+
+  ApiDeployment:
+    Type: AWS::ApiGateway::Deployment
+    DependsOn:
+      - UiMethod
+      - ImportMethod
+      - RootMethod
+    Properties:
+      RestApiId: !Ref ApiGateway
+      StageName: prod
+
+  #####################################
+  # IAM Roles - Separate for each Lambda
+  #####################################
+  UILambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub ${AWS::StackName}-UILambdaRole
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: LoggingPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: !Sub arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/${AWS::StackName}-ui:*
+      Tags:
+        - Key: Owner
+          Value: !Ref Owner
+
+  ImportLambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub ${AWS::StackName}-ImportLambdaRole
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: LoggingPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: !Sub arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/${AWS::StackName}-import:*
+        - PolicyName: ACMImportPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - acm:ImportCertificate
+                  - acm:AddTagsToCertificate
+                Resource: '*'
+      Tags:
+        - Key: Owner
+          Value: !Ref Owner
+
+  CodeGeneratorRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub ${AWS::StackName}-CodeGeneratorRole
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: LoggingPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: !Sub arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/${AWS::StackName}-code-generator:*
+      Tags:
+        - Key: Owner
+          Value: !Ref Owner
+
+  #####################################
+  # Lambda Functions
+  #####################################
+  UIFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Sub ${AWS::StackName}-ui
+      Handler: index.handler
+      Role: !GetAtt UILambdaRole.Arn
+      Runtime: python3.9
+      Code:
+        ZipFile: |
+          import json
+          import os
+          import logging
+
+          # Set up logging
+          logger = logging.getLogger()
+          logger.setLevel(logging.INFO)
+
+          def handler(event, context):
+              logger.info(f"UI request received: {json.dumps(event)}")
+
+              # Simple HTML UI
+              html = """
+              <!DOCTYPE html>
+              <html>
+              <head>
+                  <title>Certificate Import Tool</title>
+                  <style>
+                      body { font-family: Arial, sans-serif; margin: 0; padding: 20px; }
+                      .container { max-width: 600px; margin: 0 auto; }
+                      .form-group { margin-bottom: 15px; }
+                      label { display: block; margin-bottom: 5px; font-weight: bold; }
+                      input[type="text"], input[type="password"], textarea { width: 100%; padding: 8px; box-sizing: border-box; }
+                      button { padding: 10px 15px; background-color: #0066cc; color: white; border: none; cursor: pointer; }
+                      .hidden { display: none; }
+                      .error { color: red; }
+                      .success { color: green; }
+                      pre { background-color: #f5f5f5; padding: 10px; border-radius: 5px; overflow: auto; }
+                  </style>
+              </head>
+              <body>
+                  <div class="container">
+                      <h1>Certificate Import Tool</h1>
+                      <p>This tool allows you to securely import certificates into AWS Certificate Manager.</p>
+
+                      <div id="loginForm">
+                          <h2>Login</h2>
+                          <div class="form-group">
+                              <label for="oneTimeCode">One-Time Code:</label>
+                              <input type="text" id="oneTimeCode" required>
+                          </div>
+                          <div class="form-group">
+                              <label for="ticketId">Support Case ID:</label>
+                              <input type="text" id="ticketId" required>
+                          </div>
+                          <button id="verifyButton">Verify Code</button>
+                          <p id="loginError" class="error hidden"></p>
+                          <div id="debugInfo" style="margin-top: 20px;"></div>
+                      </div>
+
+                      <div id="importForm" class="hidden">
+                          <h2>Import Certificate</h2>
+                          <div class="form-group">
+                              <label for="certificate">Certificate (PEM format):</label>
+                              <textarea id="certificate" rows="8" required></textarea>
+                          </div>
+                          <div class="form-group">
+                              <label for="privateKey">Private Key:</label>
+                              <textarea id="privateKey" rows="8" required></textarea>
+                          </div>
+                          <div class="form-group">
+                              <label for="chain">Certificate Chain (Optional):</label>
+                              <textarea id="chain" rows="4"></textarea>
+                          </div>
+                          <button id="importButton">Import Certificate</button>
+                          <p id="importError" class="error hidden"></p>
+                      </div>
+
+                      <div id="successMessage" class="hidden">
+                          <h2>Success!</h2>
+                          <p class="success">Certificate successfully imported.</p>
+                          <div id="certDetails"></div>
+                      </div>
+                  </div>
+
+                  <script>
+                      // For debugging purposes
+                      function logDebug(message, data) {
+                          console.log(message, data);
+                          const debugInfo = document.getElementById('debugInfo');
+                          const debugMsg = document.createElement('pre');
+                          debugMsg.textContent = message + (data ? ': ' + JSON.stringify(data, null, 2) : '');
+                          debugInfo.appendChild(debugMsg);
+                      }
+
+                      // Get current page URL and construct API URL
+                      const baseUrl = window.location.href.split('/').slice(0, -1).join('/');
+                      const apiUrl = baseUrl + '/import';
+                      logDebug('Using API URL', apiUrl);
+
+                      // Verify one-time code
+                      document.getElementById('verifyButton').addEventListener('click', async () => {
+                          const code = document.getElementById('oneTimeCode').value;
+                          const ticketId = document.getElementById('ticketId').value;
+
+                          if (!code || !ticketId) {
+                              showError('loginError', 'Please enter both the one-time code and ticket ID');
+                              return;
+                          }
+
+                          logDebug('Submitting verification request', { code: code, ticketId });
+                          try {
+                              const response = await fetch(apiUrl, {
+                                  method: 'POST',
+                                  headers: { 'Content-Type': 'application/json' },
+                                  body: JSON.stringify({
+                                      action: 'verify',
+                                      code: code,
+                                      ticketId: ticketId
+                                  })
+                              });
+
+                              logDebug('Response status', response.status);
+                              const result = await response.json();
+                              logDebug('Response data', result);
+
+                              if (result.success) {
+                                  // Store code and ticket ID for import
+                                  sessionStorage.setItem('code', code);
+                                  sessionStorage.setItem('ticketId', ticketId);
+
+                                  // Show import form
+                                  document.getElementById('loginForm').classList.add('hidden');
+                                  document.getElementById('importForm').classList.remove('hidden');
+                              } else {
+                                  showError('loginError', result.message || 'Verification failed');
+                              }
+                          } catch (error) {
+                              logDebug('Error during verification', { message: error.message, stack: error.stack });
+                              showError('loginError', 'Network error: ' + error.message);
+                          }
+                      });
+
+                      // Import certificate
+                      document.getElementById('importButton').addEventListener('click', async () => {
+                          const certificate = document.getElementById('certificate').value;
+                          const privateKey = document.getElementById('privateKey').value;
+                          const chain = document.getElementById('chain').value;
+                          const code = sessionStorage.getItem('code');
+                          const ticketId = sessionStorage.getItem('ticketId');
+
+                          if (!certificate || !privateKey) {
+                              showError('importError', 'Certificate and private key are required');
+                              return;
+                          }
+
+                          try {
+                              const response = await fetch(apiUrl, {
+                                  method: 'POST',
+                                  headers: { 'Content-Type': 'application/json' },
+                                  body: JSON.stringify({
+                                      action: 'import',
+                                      code: code,
+                                      ticketId: ticketId,
+                                      certificate: certificate,
+                                      privateKey: privateKey,
+                                      chain: chain || null
+                                  })
+                              });
+
+                              const result = await response.json();
+
+                              if (result.success) {
+                                  // Show success message
+                                  document.getElementById('importForm').classList.add('hidden');
+                                  document.getElementById('successMessage').classList.remove('hidden');
+                                  document.getElementById('certDetails').innerHTML = `
+                                      <p><strong>Certificate ARN:</strong> ${result.certificateArn}</p>
+                                      <p><strong>Tagged with:</strong> Ticket ${ticketId}</p>
+                                  `;
+
+                                  // Clear sensitive data
+                                  sessionStorage.removeItem('code');
+                                  sessionStorage.removeItem('ticketId');
+                                  document.getElementById('certificate').value = '';
+                                  document.getElementById('privateKey').value = '';
+                                  document.getElementById('chain').value = '';
+                              } else {
+                                  showError('importError', result.message || 'Import failed');
+                              }
+                          } catch (error) {
+                              showError('importError', 'Network error: ' + error.message);
+                              console.error(error);
+                          }
+                      });
+
+                      function showError(elementId, message) {
+                          const element = document.getElementById(elementId);
+                          element.textContent = message;
+                          element.classList.remove('hidden');
+
+                          // Hide error after 10 seconds
+                          setTimeout(() => {
+                              element.classList.add('hidden');
+                          }, 10000);
+                      }
+                  </script>
+              </body>
+              </html>
+              """
+
+              return {
+                  "statusCode": 200,
+                  "headers": {
+                      "Content-Type": "text/html",
+                      "Content-Security-Policy": "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';"
+                  },
+                  "body": html
+              }
+      MemorySize: 128
+      Timeout: 10
+      Environment:
+        Variables:
+          VALID_CODES: !GetAtt CodeGenerator.Codes
+      Tags:
+        - Key: Owner
+          Value: !Ref Owner
+
+  ImportFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Sub ${AWS::StackName}-import
+      Handler: index.handler
+      Role: !GetAtt ImportLambdaRole.Arn
+      Runtime: python3.9
+      Code:
+        ZipFile: |
+          import json
+          import boto3
+          import os
+          import time
+          import logging
+          import uuid
+
+          # Set up logging
+          logger = logging.getLogger()
+          logger.setLevel(logging.INFO)
+
+          # Initialize ACM client
+          acm = boto3.client('acm')
+
+          # Get valid codes from environment variable
+          valid_codes_str = os.environ.get('VALID_CODES', '')
+          valid_codes_list = valid_codes_str.split(',') if valid_codes_str else []
+
+          # Create a dictionary to track code usage (in-memory only)
+          # This will reset on Lambda cold starts, but the used codes
+          # are also tracked in DynamoDB parameter
+          used_codes = {}
+
+          def handler(event, context):
+              # Get client IP address for logging
+              source_ip = event.get('requestContext', {}).get('identity', {}).get('sourceIp', 'unknown')
+
+              try:
+                  logger.info(f"Request received from IP: {source_ip}")
+
+                  # Parse request body
+                  body = json.loads(event.get('body', '{}'))
+                  action = body.get('action')
+                  code = body.get('code')
+                  ticket_id = body.get('ticketId')
+
+                  logger.info(f"Action: {action}, TicketId: {ticket_id}")
+
+                  # Basic validation
+                  if not action or not code or not ticket_id:
+                      logger.warning(f"Missing parameters: action={action}, code={'present' if code else 'missing'}, ticketId={'present' if ticket_id else 'missing'}")
+                      return create_response(400, {'success': False, 'message': 'Missing required parameters'})
+
+                  # Check if code is valid
+                  if code not in valid_codes_list:
+                      logger.warning(f"Invalid code attempted: {code}")
+                      return create_response(401, {'success': False, 'message': 'Invalid one-time code'})
+
+                  # Check if code has been used
+                  if code in used_codes:
+                      logger.warning(f"Used code attempted: {code}")
+                      return create_response(401, {'success': False, 'message': 'This code has already been used'})
+
+                  # Handle different actions
+                  if action == 'verify':
+                      logger.info(f"Code verified for ticket {ticket_id}")
+                      return create_response(200, {'success': True, 'message': 'Code verified'})
+
+                  elif action == 'import':
+                      certificate = body.get('certificate')
+                      private_key = body.get('privateKey')
+                      chain = body.get('chain')
+
+                      if not certificate or not private_key:
+                          logger.warning(f"Missing certificate or private key")
+                          return create_response(400, {'success': False, 'message': 'Certificate and private key are required'})
+
+                      # Import certificate to ACM
+                      try:
+                          # Prepare import parameters - all data stays in memory
+                          import_params = {
+                              'Certificate': certificate,
+                              'PrivateKey': private_key,
+                              'Tags': [
+                                  {'Key': 'Name', 'Value': f'client-imported-CC-{ticket_id}'},
+                                  {'Key': 'TicketId', 'Value': ticket_id}
+                              ]
+                          }
+
+                          if chain:
+                              import_params['CertificateChain'] = chain
+
+                          # Import to ACM - certificate is not written to disk
+                          logger.info(f"Importing certificate to ACM for ticket {ticket_id}")
+                          result = acm.import_certificate(**import_params)
+                          certificate_arn = result['CertificateArn']
+                          logger.info(f"Certificate imported successfully: {certificate_arn}")
+
+                          # Mark code as used (in-memory only)
+                          used_codes[code] = {
+                              'used_at': time.time(),
+                              'ticket_id': ticket_id
+                          }
+
+                          return create_response(200, {
+                              'success': True,
+                              'message': 'Certificate imported successfully',
+                              'certificateArn': certificate_arn
+                          })
+
+                      except Exception as e:
+                          logger.error(f"ACM import error: {str(e)}")
+                          return create_response(500, {'success': False, 'message': f'Error importing certificate: {str(e)}'})
+                  else:
+                      logger.warning(f"Invalid action: {action}")
+                      return create_response(400, {'success': False, 'message': 'Invalid action'})
+
+              except Exception as e:
+                  logger.error(f"Unhandled exception: {str(e)}")
+                  return create_response(500, {'success': False, 'message': f'Internal server error: {str(e)}'})
+
+          def create_response(status_code, body):
+              """Create a standardized API Gateway response"""
+              return {
+                  'statusCode': status_code,
+                  'headers': {
+                      'Content-Type': 'application/json',
+                      'Access-Control-Allow-Origin': '*',
+                      'Access-Control-Allow-Headers': 'Content-Type',
+                      'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
+                  },
+                  'body': json.dumps(body)
+              }
+      MemorySize: 256
+      Timeout: 30
+      Environment:
+        Variables:
+          VALID_CODES: !GetAtt CodeGenerator.Codes
+      Tags:
+        - Key: Owner
+          Value: !Ref Owner
+
+  #####################################
+  # Custom Resource for Code Generation
+  #####################################
+  CodeGenerator:
+    Type: AWS::CloudFormation::CustomResource
+    Properties:
+      ServiceToken: !GetAtt CodeGeneratorFunction.Arn
+      NumCodes: !Ref NumInitialCodes
+
+  CodeGeneratorFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Sub ${AWS::StackName}-code-generator
+      Handler: index.handler
+      Role: !GetAtt CodeGeneratorRole.Arn
+      Runtime: python3.9
+      Code:
+        ZipFile: |
+          import json
+          import os
+          import time
+          import random
+          import string
+          import logging
+          import urllib.request
+          import urllib.error
+
+          # Set up logging
+          logger = logging.getLogger()
+          logger.setLevel(logging.INFO)
+
+          def handler(event, context):
+              try:
+                  logger.info(f"Event: {json.dumps(event)}")
+
+                  # Get CloudFormation request type
+                  request_type = event['RequestType']
+
+                  # Get properties
+                  properties = event.get('ResourceProperties', {})
+                  num_codes = int(properties.get('NumCodes', 10))
+
+                  if request_type == 'Create' or request_type == 'Update':
+                      # Generate one-time codes
+                      generated_codes = generate_codes(num_codes)
+
+                      # Return success response with the codes
+                      logger.info(f"Generated {len(generated_codes)} codes successfully")
+                      return send(event, context, SUCCESS, {
+                          'Message': f'Successfully generated {len(generated_codes)} codes',
+                          'Codes': ','.join(generated_codes)
+                      })
+
+                  elif request_type == 'Delete':
+                      # No cleanup needed
+                      logger.info("Delete request processed")
+                      return send(event, context, SUCCESS, {
+                          'Message': 'Delete request processed'
+                      })
+
+              except Exception as e:
+                  logger.error(f"Error: {str(e)}")
+                  return send(event, context, FAILED, {
+                      'Message': f'Error: {str(e)}'
+                  })
+
+          def generate_codes(num_codes):
+              """Generate random one-time codes"""
+              codes = []
+
+              for _ in range(num_codes):
+                  # Generate a random 12-character alphanumeric code
+                  code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=12))
+                  codes.append(code)
+                  logger.info(f"Generated code: {code}")
+
+              return codes
+
+          # Include cfnresponse module directly
+          def send(event, context, responseStatus, responseData, physicalResourceId=None, noEcho=False):
+              responseUrl = event['ResponseURL']
+
+              responseBody = {}
+              responseBody['Status'] = responseStatus
+              responseBody['Reason'] = 'See the details in CloudWatch Log Stream: ' + context.log_stream_name
+              responseBody['PhysicalResourceId'] = physicalResourceId or context.log_stream_name
+              responseBody['StackId'] = event['StackId']
+              responseBody['RequestId'] = event['RequestId']
+              responseBody['LogicalResourceId'] = event['LogicalResourceId']
+              responseBody['NoEcho'] = noEcho
+              responseBody['Data'] = responseData
+
+              json_responseBody = json.dumps(responseBody)
+
+              headers = {
+                  'content-type': '',
+                  'content-length': str(len(json_responseBody))
+              }
+
+              try:
+                  req = urllib.request.Request(responseUrl, json_responseBody.encode('utf-8'), headers)
+                  response = urllib.request.urlopen(req)
+                  logger.info(f"Status code: {response.reason}")
+                  return
+              except Exception as e:
+                  logger.error(f"send(..) failed executing requests.put(..): {str(e)}")
+
+          SUCCESS = "SUCCESS"
+          FAILED = "FAILED"
+      MemorySize: 128
+      Timeout: 60
+      Tags:
+        - Key: Owner
+          Value: !Ref Owner
+
+Outputs:
+  ApiEndpoint:
+    Description: API Gateway endpoint URL
+    Value: !Sub https://${ApiGateway}.execute-api.${AWS::Region}.amazonaws.com/prod/
+
+  OneTimeCodes:
+    Description: Generated one-time codes for certificate import
+    Value: !GetAtt CodeGenerator.Codes

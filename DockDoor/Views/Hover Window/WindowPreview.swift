@@ -28,7 +28,6 @@ struct WindowPreview: View {
     @Default(.selectionColor) var selectionColor
     @Default(.dimInSwitcherUntilSelected) var dimInSwitcherUntilSelected
 
-    // preview popup action handlers
     @Default(.tapEquivalentInterval) var tapEquivalentInterval
     @Default(.previewHoverAction) var previewHoverAction
 
@@ -183,7 +182,6 @@ struct WindowPreview: View {
 
         ZStack(alignment: .topLeading) {
             VStack(alignment: .leading, spacing: 0) {
-                // Title and traffic lights for window switcher mode in top mode
                 if windowSwitcherActive, windowSwitcherControlPosition == .topLeading ||
                     windowSwitcherControlPosition == .topTrailing
                 {
@@ -196,7 +194,6 @@ struct WindowPreview: View {
                     isSelected: selected
                 )
 
-                // Title and traffic lights for window switcher mode in bottom mode
                 if windowSwitcherActive, windowSwitcherControlPosition == .bottomLeading ||
                     windowSwitcherControlPosition == .bottomTrailing
                 {
@@ -304,7 +301,7 @@ struct WindowPreview: View {
             case .previewFullSize:
                 let showFullPreview = {
                     DispatchQueue.main.async {
-                        SharedPreviewWindowCoordinator.shared.showWindow(
+                        SharedPreviewWindowCoordinator.activeInstance?.showWindow(
                             appName: windowInfo.app.localizedName ?? "Unknown",
                             windows: [windowInfo],
                             mouseScreen: bestGuessMonitor,

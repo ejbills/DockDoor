@@ -2,15 +2,21 @@ import AppKit
 import Carbon
 import Defaults
 
+private class KeybindHelperUserInfo {
+    let instance: KeybindHelper
+    init(instance: KeybindHelper) {
+        self.instance = instance
+    }
+}
+
 struct UserKeyBind: Codable, Defaults.Serializable {
     var keyCode: UInt16
     var modifierFlags: Int
 }
 
 class KeybindHelper {
-    static let shared = KeybindHelper()
-
-    // MARK: - Properties
+    private let previewCoordinator: SharedPreviewWindowCoordinator
+    private let dockObserver: DockObserver
 
     private var isModifierKeyPressed = false
     private var isShiftKeyPressed = false
@@ -18,10 +24,11 @@ class KeybindHelper {
     private var runLoopSource: CFRunLoopSource?
     private var modifierValue: Int = 0
     private var monitorTimer: Timer?
+    private var unmanagedEventTapUserInfo: Unmanaged<KeybindHelperUserInfo>?
 
-    // MARK: - Initialization
-
-    private init() {
+    init(previewCoordinator: SharedPreviewWindowCoordinator, dockObserver: DockObserver) {
+        self.previewCoordinator = previewCoordinator
+        self.dockObserver = dockObserver
         setupEventTap()
         startMonitoring()
     }
@@ -30,16 +37,12 @@ class KeybindHelper {
         cleanup()
     }
 
-    // MARK: - Public Methods
-
     func reset() {
         cleanup()
         resetState()
         setupEventTap()
         startMonitoring()
     }
-
-    // MARK: - Private Methods
 
     private func cleanup() {
         monitorTimer?.invalidate()
@@ -71,7 +74,9 @@ class KeybindHelper {
     }
 
     private static let eventCallback: CGEventTapCallBack = { proxy, type, event, refcon in
-        KeybindHelper.shared.handleEvent(proxy: proxy, type: type, event: event)
+        guard let refcon else { return Unmanaged.passUnretained(event) }
+        let userInfo = Unmanaged<KeybindHelperUserInfo>.fromOpaque(refcon).takeUnretainedValue()
+        return userInfo.instance.handleEvent(proxy: proxy, type: type, event: event)
     }
 
     private func setupEventTap() {
@@ -79,14 +84,19 @@ class KeybindHelper {
             (1 << CGEventType.keyUp.rawValue) |
             (1 << CGEventType.flagsChanged.rawValue)
 
+        let userInfo = KeybindHelperUserInfo(instance: self)
+        unmanagedEventTapUserInfo = Unmanaged.passRetained(userInfo)
+
         guard let newEventTap = CGEvent.tapCreate(
             tap: .cgSessionEventTap,
             place: .headInsertEventTap,
             options: .defaultTap,
             eventsOfInterest: CGEventMask(eventMask),
             callback: KeybindHelper.eventCallback,
-            userInfo: nil
+            userInfo: unmanagedEventTapUserInfo?.toOpaque()
         ) else {
+            unmanagedEventTapUserInfo?.release()
+            unmanagedEventTapUserInfo = nil
             DispatchQueue.main.asyncAfter(deadline: .now() + 5) { [weak self] in
                 self?.setupEventTap()
             }
@@ -106,6 +116,8 @@ class KeybindHelper {
         if let eventTap, let runLoopSource {
             CGEvent.tapEnable(tap: eventTap, enable: false)
             CFRunLoopRemoveSource(CFRunLoopGetCurrent(), runLoopSource, .commonModes)
+            unmanagedEventTapUserInfo?.release()
+            unmanagedEventTapUserInfo = nil
         }
         eventTap = nil
         runLoopSource = nil
@@ -152,8 +164,8 @@ class KeybindHelper {
     }
 
     private func handleKeyDown(keyCode: Int64, keyBoardShortcutSaved: UserKeyBind) -> Bool {
-        if SharedPreviewWindowCoordinator.shared.isVisible, keyCode == 53 { // Escape key
-            SharedPreviewWindowCoordinator.shared.hideWindow()
+        if previewCoordinator.isVisible, keyCode == 53 {
+            previewCoordinator.hideWindow()
             return true
         }
 
@@ -169,8 +181,8 @@ class KeybindHelper {
     }
 
     private func handleKeybindActivation() {
-        if SharedPreviewWindowCoordinator.shared.isVisible {
-            SharedPreviewWindowCoordinator.shared.cycleWindows(goBackwards: isShiftKeyPressed)
+        if previewCoordinator.isVisible {
+            previewCoordinator.cycleWindows(goBackwards: isShiftKeyPressed)
         } else {
             showHoverWindow()
         }
@@ -182,8 +194,8 @@ class KeybindHelper {
 
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }
-            if !isModifierKeyPressed, SharedPreviewWindowCoordinator.shared.isVisible {
-                SharedPreviewWindowCoordinator.shared.selectAndBringToFrontCurrentWindow()
+            if !isModifierKeyPressed, previewCoordinator.isVisible {
+                previewCoordinator.selectAndBringToFrontCurrentWindow()
             }
         }
     }
@@ -211,17 +223,12 @@ class KeybindHelper {
                                     currentMouseLocation: CGPoint,
                                     targetScreen: NSScreen)
     {
-        // If classic window ordering is enabled and there are at least two windows,
-        // set the initial focus on the second window preview (instead of the first).
-        //
-        // This behavior improves window switching speed and mimics the Windows OS
-        // experience, making it easier for users to switch between recent windows quickly.
         if Defaults[.useClassicWindowOrdering], windows.count >= 2 {
-            SharedPreviewWindowCoordinator.shared.windowSwitcherCoordinator.setIndex(to: 1)
+            previewCoordinator.windowSwitcherCoordinator.setIndex(to: 1)
         }
 
         let showWindow = { (mouseLocation: NSPoint?, mouseScreen: NSScreen?) in
-            SharedPreviewWindowCoordinator.shared.showWindow(
+            self.previewCoordinator.showWindow(
                 appName: "Window Switcher",
                 windows: windows,
                 mouseLocation: mouseLocation,
@@ -229,8 +236,8 @@ class KeybindHelper {
                 dockItemElement: nil,
                 overrideDelay: true,
                 centeredHoverWindowState: .windowSwitcher,
-                onWindowTap: {
-                    SharedPreviewWindowCoordinator.shared.hideWindow()
+                onWindowTap: { [weak self] in
+                    self?.previewCoordinator.hideWindow()
                 }
             )
         }
@@ -258,7 +265,6 @@ class KeybindHelper {
         {
             return pinnedScreen
         }
-
         let mouseLocation = DockObserver.getMousePosition()
         return NSScreen.screenContainingMouse(mouseLocation)
     }
