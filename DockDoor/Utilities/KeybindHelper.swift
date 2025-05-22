@@ -202,7 +202,7 @@ class KeybindHelper {
             // If preventSwitcherHide is false, and modifier is released, and window is visible
             if !isModifierKeyPressed, SharedPreviewWindowCoordinator.shared.isVisible {
                 DispatchQueue.main.async { [weak self] in
-                    guard let self else { return }
+                    guard self != nil else { return }
                     // Re-check visibility as it might have been closed by other means (e.g. Escape or click)
                     if SharedPreviewWindowCoordinator.shared.isVisible {
                         SharedPreviewWindowCoordinator.shared.selectAndBringToFrontCurrentWindow()
@@ -255,7 +255,7 @@ class KeybindHelper {
                 overrideDelay: true,
                 centeredHoverWindowState: .windowSwitcher,
                 onWindowTap: {
-                    SharedPreviewWindowCoordinator.shared.selectAndBringToFrontCurrentWindow()
+                    SharedPreviewWindowCoordinator.shared.hideWindow()
                 }
             )
         }

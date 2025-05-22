@@ -3,7 +3,7 @@ import Cocoa
 import Defaults
 import ScreenCaptureKit
 
-let filteredBundleIdentifiers: [String] = ["com.apple.notificationcenterui", NSRunningApplication.current.bundleIdentifier!] // filters desktop widgets
+let filteredBundleIdentifiers: [String] = ["com.apple.notificationcenterui"] // filters desktop widgets
 
 protocol WindowPropertiesProviding {
     var windowID: CGWindowID { get }
@@ -289,9 +289,9 @@ enum WindowUtil {
     }
 
     static func bringWindowToFront(windowInfo: WindowInfo) {
-        if let appDelegate = NSApplication.shared.delegate as? AppDelegate { // clean up lingering settings pane windows which interfere with AX actions
-            appDelegate.settingsWindowController.close()
-        }
+//        if let appDelegate = NSApplication.shared.delegate as? AppDelegate { // clean up lingering settings pane windows which interfere with AX actions
+//            appDelegate.settingsWindowController.close()
+//        }
 
         do {
             try windowInfo.axElement.performAction(kAXRaiseAction)
