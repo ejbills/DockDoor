@@ -486,7 +486,7 @@ struct MainSettingsView: View {
                     Toggle(isOn: $raisedWindowLevel) { Text("EXPERIMENTAL: Show preview above app labels").onChange(of: raisedWindowLevel) { _ in askUserToRestartApplication() }}
                 }
             }
-            StyledGroupBox(label: "Preview Appearance & Quality (Dock Previews)") {
+            StyledGroupBox(label: "Preview Appearance & Quality") {
                 VStack(alignment: .leading, spacing: 10) {
                     sliderSetting(title: "Window Image Cache Lifespan", value: $screenCaptureCacheLifespan, range: 0 ... 60, step: 10, unit: "seconds")
                     sliderSetting(title: "Window Image Resolution Scale (1=Best)", value: $windowPreviewImageScale, range: 1 ... 4, step: 1, unit: "")

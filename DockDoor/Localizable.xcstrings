@@ -40388,7 +40388,11 @@
         }
       }
     },
+    "Preview Appearance & Quality" : {
+
+    },
     "Preview Appearance & Quality (Dock Previews)" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
