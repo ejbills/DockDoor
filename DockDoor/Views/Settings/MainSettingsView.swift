@@ -102,6 +102,8 @@ struct MainSettingsView: View {
     @Default(.tapEquivalentInterval) var tapEquivalentInterval
     @Default(.lateralMovement) var lateralMovement
     @Default(.preventDockHide) var preventDockHide
+    @Default(.preventSwitcherHide) var preventSwitcherHide
+    @Default(.ignoreAppsWithSingleWindow) var ignoreAppsWithSingleWindow
     @Default(.screenCaptureCacheLifespan) var screenCaptureCacheLifespan
     @Default(.windowPreviewImageScale) var windowPreviewImageScale
     @Default(.bufferFromDock) var bufferFromDock
@@ -341,7 +343,7 @@ struct MainSettingsView: View {
             VStack(alignment: .leading, spacing: 10) {
                 LaunchAtLogin.Toggle(String(localized: "Launch DockDoor at login"))
 
-                Toggle(isOn: $showMenuBarIcon, label: { Text("Show Menu Bar Icon") })
+                Toggle(isOn: $showMenuBarIcon, label: { Text("Show menu bar icon") })
                     .onChange(of: showMenuBarIcon) { isOn in
                         let appDelegate = NSApplication.shared.delegate as! AppDelegate
                         if isOn { appDelegate.setupMenuBar() } else { appDelegate.removeMenuBar() }
@@ -353,6 +355,14 @@ struct MainSettingsView: View {
                 )) {
                     Text("Reduce motion")
                 }
+
+                Toggle(isOn: $ignoreAppsWithSingleWindow, label: {
+                    Text("Ignore apps with one window")
+                })
+                Text("Prevents apps that only ever have a single window from appearing in previews.")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .padding(.leading, 20)
 
                 Divider().padding(.vertical, 2)
 
@@ -366,7 +376,11 @@ struct MainSettingsView: View {
 
                 if enableWindowSwitcher {
                     VStack(alignment: .leading, spacing: 8) {
-                        Toggle(isOn: $includeHiddenWindowsInSwitcher) { Text("Include Hidden/Minimized Windows in Switcher") }
+                        Toggle(isOn: $includeHiddenWindowsInSwitcher) { Text("Include hidden/minimized windows in Switcher") }
+                        Toggle(isOn: Binding(
+                            get: { !preventSwitcherHide },
+                            set: { preventSwitcherHide = !$0 }
+                        )) { Text("Release initializer key to select window in Switcher") }
                         Toggle(isOn: $useClassicWindowOrdering) { Text("Use Windows-style window ordering in Switcher") }
                         Text("Shows last active window first, instead of current window.")
                             .font(.caption)

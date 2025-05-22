@@ -1,5 +1,6 @@
 import AppKit
 import Carbon
+import Carbon.HIToolbox.Events
 import Defaults
 
 struct UserKeyBind: Codable, Defaults.Serializable {
@@ -152,20 +153,37 @@ class KeybindHelper {
     }
 
     private func handleKeyDown(keyCode: Int64, keyBoardShortcutSaved: UserKeyBind) -> Bool {
-        if SharedPreviewWindowCoordinator.shared.isVisible, keyCode == 53 { // Escape key
+        // 1. Escape key always hides if visible
+        if SharedPreviewWindowCoordinator.shared.isVisible, keyCode == kVK_Escape {
             SharedPreviewWindowCoordinator.shared.hideWindow()
-            return true
+            return true // Consume event
         }
 
+        // 2. Original keybind activation (e.g., Modifier + Key)
+        // This shows the switcher if not visible, or cycles if visible.
         if isModifierKeyPressed,
            keyCode == keyBoardShortcutSaved.keyCode,
            modifierValue == keyBoardShortcutSaved.modifierFlags
         {
-            handleKeybindActivation()
-            return true
+            handleKeybindActivation() // Shows or cycles
+            return true // Consume event
         }
 
-        return false
+        // 3. Cycling with the keybind's main key (e.g., Tab) if switcher is ALREADY visible
+        //    AND the main modifier key has been released.
+        //    This allows continued cycling without holding the modifier,
+        //    IF the window has remained open (e.g., due to preventSwitcherHide = true or previous interaction).
+        if SharedPreviewWindowCoordinator.shared.isVisible,
+           !isModifierKeyPressed, // Modifier is NOT currently pressed
+           keyCode == keyBoardShortcutSaved.keyCode // Key pressed is the one from the shortcut
+        {
+            // Call handleKeybindActivation, which will cycle because the window is visible.
+            // It uses self.isShiftKeyPressed, which is updated by .flagsChanged events.
+            handleKeybindActivation()
+            return true // Consume event
+        }
+
+        return false // Event not consumed
     }
 
     private func handleKeybindActivation() {
@@ -180,12 +198,19 @@ class KeybindHelper {
         isModifierKeyPressed = modifierKeyPressed
         isShiftKeyPressed = shiftKeyPressed
 
-        DispatchQueue.main.async { [weak self] in
-            guard let self else { return }
+        if !Defaults[.preventSwitcherHide] {
+            // If preventSwitcherHide is false, and modifier is released, and window is visible
             if !isModifierKeyPressed, SharedPreviewWindowCoordinator.shared.isVisible {
-                SharedPreviewWindowCoordinator.shared.selectAndBringToFrontCurrentWindow()
+                DispatchQueue.main.async { [weak self] in
+                    guard let self else { return }
+                    // Re-check visibility as it might have been closed by other means (e.g. Escape or click)
+                    if SharedPreviewWindowCoordinator.shared.isVisible {
+                        SharedPreviewWindowCoordinator.shared.selectAndBringToFrontCurrentWindow()
+                    }
+                }
             }
         }
+        // If Defaults[.preventSwitcherHide] is true, this block does nothing, and the window remains open.
     }
 
     private func showHoverWindow() {
@@ -230,7 +255,7 @@ class KeybindHelper {
                 overrideDelay: true,
                 centeredHoverWindowState: .windowSwitcher,
                 onWindowTap: {
-                    SharedPreviewWindowCoordinator.shared.hideWindow()
+                    SharedPreviewWindowCoordinator.shared.selectAndBringToFrontCurrentWindow()
                 }
             )
         }
