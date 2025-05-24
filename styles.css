@@ -635,6 +635,56 @@ header {
     font-size: 1.125rem;
 }
 
+/* DockDoor Pro section */
+.pro-badge {
+    display: inline-block;
+    background: #ef4444;
+    color: white;
+    padding: 0.375rem 0.75rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+}
+
+.pro-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    font-size: 4rem;
+    background: var(--light-dark);
+}
+
+.pro-message {
+    max-width: 600px;
+    margin: 2rem auto;
+    text-align: center;
+}
+
+.pro-message p {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--gray);
+}
+
+.pro-cta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 2rem;
+}
+
+.pro-pricing {
+    font-size: 0.875rem;
+    color: var(--gray);
+    font-style: italic;
+}
+
 /* Comments Section */
 .comments-container {
     max-width: 900px;

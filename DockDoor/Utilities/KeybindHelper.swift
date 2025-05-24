@@ -1,5 +1,6 @@
 import AppKit
 import Carbon
+import Carbon.HIToolbox.Events
 import Defaults
 
 private class KeybindHelperUserInfo {
@@ -164,20 +165,36 @@ class KeybindHelper {
     }
 
     private func handleKeyDown(keyCode: Int64, keyBoardShortcutSaved: UserKeyBind) -> Bool {
-        if previewCoordinator.isVisible, keyCode == 53 {
+        if previewCoordinator.isVisible, keyCode == kVK_Escape {
             previewCoordinator.hideWindow()
             return true
         }
 
+        // 2. Original keybind activation (e.g., Modifier + Key)
+        // This shows the switcher if not visible, or cycles if visible.
         if isModifierKeyPressed,
            keyCode == keyBoardShortcutSaved.keyCode,
            modifierValue == keyBoardShortcutSaved.modifierFlags
         {
-            handleKeybindActivation()
-            return true
+            handleKeybindActivation() // Shows or cycles
+            return true // Consume event
         }
 
-        return false
+        // 3. Cycling with the keybind's main key (e.g., Tab) if switcher is ALREADY visible
+        //    AND the main modifier key has been released.
+        //    This allows continued cycling without holding the modifier,
+        //    IF the window has remained open (e.g., due to preventSwitcherHide = true or previous interaction).
+        if previewCoordinator.isVisible,
+           !isModifierKeyPressed, // Modifier is NOT currently pressed
+           keyCode == keyBoardShortcutSaved.keyCode // Key pressed is the one from the shortcut
+        {
+            // Call handleKeybindActivation, which will cycle because the window is visible.
+            // It uses self.isShiftKeyPressed, which is updated by .flagsChanged events.
+            handleKeybindActivation()
+            return true // Consume event
+        }
+
+        return false // Event not consumed
     }
 
     private func handleKeybindActivation() {
@@ -192,12 +209,18 @@ class KeybindHelper {
         isModifierKeyPressed = modifierKeyPressed
         isShiftKeyPressed = shiftKeyPressed
 
-        DispatchQueue.main.async { [weak self] in
-            guard let self else { return }
-            if !isModifierKeyPressed, previewCoordinator.isVisible {
-                previewCoordinator.selectAndBringToFrontCurrentWindow()
+        if !Defaults[.preventSwitcherHide] {
+            // If preventSwitcherHide is false, and modifier is released, and window is visible
+            if !isModifierKeyPressed {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self else { return }
+                    if previewCoordinator.isVisible {
+                        previewCoordinator.selectAndBringToFrontCurrentWindow()
+                    }
+                }
             }
         }
+        // If Defaults[.preventSwitcherHide] is true, this block does nothing, and the window remains open.
     }
 
     private func showHoverWindow() {

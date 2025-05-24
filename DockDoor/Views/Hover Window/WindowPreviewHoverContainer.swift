@@ -250,39 +250,94 @@ struct WindowPreviewHoverContainer: View {
     @ViewBuilder
     private func hoverTitleLabelView(labelSize: CGSize) -> some View {
         if !showAppIconOnly {
-            switch appNameStyle {
-            case .shadowed:
-                Text(appName)
-                    .lineLimit(1)
-                    .padding(3)
-                    .fontWeight(.medium)
-                    .font(.system(size: 14))
-                    .padding(.horizontal, 4)
-                    .shadow(stacked: 2, radius: 6)
-                    .background(
-                        ZStack {
-                            MaterialBlurView(material: .hudWindow)
-                                .mask(
-                                    Ellipse()
-                                        .fill(
-                                            LinearGradient(
-                                                gradient: Gradient(
-                                                    colors: [
-                                                        Color.white.opacity(1.0),
-                                                        Color.white.opacity(0.35),
-                                                    ]
-                                                ),
-                                                startPoint: .top,
-                                                endPoint: .bottom
+            let trimmedAppName = appName.trimmingCharacters(in: .whitespaces)
+
+            let baseText = Text(trimmedAppName)
+
+            let rainbowGradientColors: [Color] = [.red, .orange, .yellow, .green, .blue, .purple, .pink]
+            let rainbowGradientHighlights: [Color] = [.white.opacity(0.45), .yellow.opacity(0.35), .pink.opacity(0.4)]
+            let rainbowGradientSpeed: CGFloat = 0.65
+            let defaultBlur: CGFloat = 0.5
+
+            Group {
+                switch appNameStyle {
+                case .shadowed:
+                    if trimmedAppName == "DockDoor" {
+                        FluidGradient(
+                            blobs: rainbowGradientColors,
+                            highlights: rainbowGradientHighlights,
+                            speed: rainbowGradientSpeed,
+                            blur: defaultBlur
+                        )
+                        .frame(width: labelSize.width, height: labelSize.height)
+                        .mask(baseText)
+                        .fontWeight(.medium)
+                        .padding(.leading, 4)
+                        .shadow(stacked: 2, radius: 6)
+                        .background(
+                            ZStack {
+                                MaterialBlurView(material: .hudWindow)
+                                    .mask(
+                                        Ellipse()
+                                            .fill(
+                                                LinearGradient(
+                                                    gradient: Gradient(
+                                                        colors: [
+                                                            Color.white.opacity(1.0),
+                                                            Color.white.opacity(0.35),
+                                                        ]
+                                                    ),
+                                                    startPoint: .top,
+                                                    endPoint: .bottom
+                                                )
                                             )
+                                    )
+                                    .blur(radius: 5)
+                            }
+                            .frame(width: labelSize.width + 30)
+                        )
+                    } else {
+                        baseText
+                            .foregroundStyle(Color.primary)
+                            .shadow(stacked: 2, radius: 6)
+                            .background(
+                                ZStack {
+                                    MaterialBlurView(material: .hudWindow)
+                                        .mask(
+                                            Ellipse()
+                                                .fill(
+                                                    LinearGradient(
+                                                        gradient: Gradient(
+                                                            colors: [
+                                                                Color.white.opacity(1.0),
+                                                                Color.white.opacity(0.35),
+                                                            ]
+                                                        ),
+                                                        startPoint: .top,
+                                                        endPoint: .bottom
+                                                    )
+                                                )
                                         )
-                                )
-                                .blur(radius: 5)
-                        }
-                        .frame(width: labelSize.width + 30)
-                    )
-            case .default, .popover:
-                Text(appName)
+                                        .blur(radius: 5)
+                                }
+                                .frame(width: labelSize.width + 30)
+                            )
+                    }
+                case .default, .popover:
+                    if trimmedAppName == "DockDoor" {
+                        FluidGradient(
+                            blobs: rainbowGradientColors,
+                            highlights: rainbowGradientHighlights,
+                            speed: rainbowGradientSpeed,
+                            blur: defaultBlur
+                        )
+                        .frame(width: labelSize.width, height: labelSize.height)
+                        .mask(baseText)
+                    } else {
+                        baseText
+                            .foregroundStyle(Color.primary)
+                    }
+                }
             }
         }
     }

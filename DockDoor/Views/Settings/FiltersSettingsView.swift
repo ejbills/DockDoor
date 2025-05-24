@@ -5,7 +5,6 @@ import SwiftUI
 struct FiltersSettingsView: View {
     @Default(.appNameFilters) var appNameFilters
     @Default(.windowTitleFilters) var windowTitleFilters
-    @Default(.ignoreAppsWithSingleWindow) var ignoreAppsWithSingleWindow
     @Default(.customAppDirectories) var customAppDirectories
 
     @State private var showingAddFilterSheet = false
@@ -53,18 +52,6 @@ struct FiltersSettingsView: View {
     var body: some View {
         BaseSettingsView {
             VStack(alignment: .leading, spacing: 16) {
-                StyledGroupBox(label: "General Exclusions") {
-                    VStack(alignment: .leading, spacing: 10) {
-                        Toggle(isOn: $ignoreAppsWithSingleWindow, label: {
-                            Text("Ignore Apps with One Window")
-                        })
-                        Text("Prevents apps that only ever have a single window from appearing in previews.")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                            .padding(.leading, 20)
-                    }
-                }
-
                 // Custom App Directories Section
                 StyledGroupBox(label: "Custom Application Directories") {
                     VStack(alignment: .leading, spacing: 8) {
