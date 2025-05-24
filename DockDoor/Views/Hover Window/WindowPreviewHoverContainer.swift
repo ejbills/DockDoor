@@ -75,7 +75,7 @@ struct WindowPreviewHoverContainer: View {
     }
 
     var maxWindowDimension: CGPoint {
-        let thickness = mockPreviewActive ? 200 : SharedPreviewWindowCoordinator.shared.windowSize.height
+        let thickness = mockPreviewActive ? 200 : (SharedPreviewWindowCoordinator.activeInstance?.windowSize.height ?? getWindowSize().height)
         var maxWidth: CGFloat = 300
         var maxHeight: CGFloat = 300
 

@@ -461,7 +461,7 @@ struct AppearanceSettingsView: View {
                 }
             }
             .onChange(of: sizingMultiplier) { _ in
-                SharedPreviewWindowCoordinator.shared.windowSize = getWindowSize()
+                SharedPreviewWindowCoordinator.activeInstance?.windowSize = getWindowSize()
             }
         }
     }

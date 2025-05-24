@@ -6,23 +6,22 @@ import SwiftUI
 
 class SettingsWindowControllerDelegate: NSObject, NSWindowDelegate {
     func windowDidBecomeKey(_ notification: Notification) {
-        NSApp.setActivationPolicy(.regular) // Show dock icon on open settings window
+        NSApp.setActivationPolicy(.regular)
     }
 
     func windowWillClose(_ notification: Notification) {
-        NSApp.setActivationPolicy(.accessory) // Hide dock icon back
+        NSApp.setActivationPolicy(.accessory)
     }
 }
 
 class AppDelegate: NSObject, NSApplicationDelegate {
     private var dockObserver: DockObserver?
     private var appClosureObserver: WindowManipulationObservers?
-    private var sharedPreviewWindowCoordinator: SharedPreviewWindowCoordinator?
+    private var previewCoordinator: SharedPreviewWindowCoordinator?
     private var keybindHelper: KeybindHelper?
     private var statusBarItem: NSStatusItem?
     private var updaterController: SPUStandardUpdaterController
 
-    // settings
     private var firstTimeWindow: NSWindow?
     lazy var settingsWindowController: SettingsWindowController = {
         var panes: [SettingsPane] = [
@@ -66,11 +65,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if !Defaults[.launched] {
             handleFirstTimeLaunch()
         } else {
-            dockObserver = DockObserver.shared
-            appClosureObserver = WindowManipulationObservers.shared
-            sharedPreviewWindowCoordinator = SharedPreviewWindowCoordinator.shared
+            let currentPreviewCoordinator = SharedPreviewWindowCoordinator()
+            previewCoordinator = currentPreviewCoordinator
+
+            let currentDockObserver = DockObserver(previewCoordinator: currentPreviewCoordinator)
+            dockObserver = currentDockObserver
+
+            appClosureObserver = WindowManipulationObservers(previewCoordinator: currentPreviewCoordinator)
+
             if Defaults[.enableWindowSwitcher] {
-                keybindHelper = KeybindHelper.shared
+                keybindHelper = KeybindHelper(previewCoordinator: currentPreviewCoordinator, dockObserver: currentDockObserver)
             }
         }
 
@@ -96,7 +100,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
 
         if let icon = NSImage(named: .logo) {
-            let iconSize = NSStatusBar.system.thickness * 0.9 // Adjust multiplier as needed
+            let iconSize = NSStatusBar.system.thickness * 0.9
             let resizedIcon = icon.resizedToFit(in: NSSize(width: iconSize, height: iconSize))
             resizedIcon.isTemplate = true
             button.image = resizedIcon
@@ -121,7 +125,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     @objc func statusBarButtonClicked(_ sender: Any?) {
-        // Show the menu
         if let button = statusBarItem?.button {
             button.menu?.popUp(positioning: nil, at: NSPoint(x: 0, y: button.bounds.maxY), in: button)
         }
@@ -140,8 +143,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func restartApp() {
-        // we use -n to open a new instance, to avoid calling applicationShouldHandleReopen
-        // we use Bundle.main.bundlePath in case of multiple DockDoor versions on the machine
         Process.launchedProcess(launchPath: "/usr/bin/open", arguments: ["-n", Bundle.main.bundlePath])
         quitApp()
     }
@@ -167,12 +168,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         newWindow.toolbar = customToolbar
         newWindow.isOpaque = false
 
-        // Ensure the close button is visible
         newWindow.standardWindowButton(.closeButton)?.isHidden = false
         newWindow.standardWindowButton(.miniaturizeButton)?.isHidden = true
         newWindow.standardWindowButton(.zoomButton)?.isHidden = true
 
-        // Position the window in the center of the main screen
         let screenFrame = screen.visibleFrame
         let windowOrigin = NSPoint(
             x: screenFrame.midX - newWindow.frame.width / 2,
