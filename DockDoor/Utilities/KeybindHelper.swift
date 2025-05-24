@@ -36,6 +36,7 @@ class KeybindHelper {
 
     deinit {
         cleanup()
+        print("KeybindHelper deinit")
     }
 
     func reset() {
@@ -99,6 +100,7 @@ class KeybindHelper {
             unmanagedEventTapUserInfo?.release()
             unmanagedEventTapUserInfo = nil
             DispatchQueue.main.asyncAfter(deadline: .now() + 5) { [weak self] in
+                print("Retrying KeybindHelper event tap setup...")
                 self?.setupEventTap()
             }
             return
@@ -170,31 +172,23 @@ class KeybindHelper {
             return true
         }
 
-        // 2. Original keybind activation (e.g., Modifier + Key)
-        // This shows the switcher if not visible, or cycles if visible.
         if isModifierKeyPressed,
            keyCode == keyBoardShortcutSaved.keyCode,
            modifierValue == keyBoardShortcutSaved.modifierFlags
         {
-            handleKeybindActivation() // Shows or cycles
-            return true // Consume event
-        }
-
-        // 3. Cycling with the keybind's main key (e.g., Tab) if switcher is ALREADY visible
-        //    AND the main modifier key has been released.
-        //    This allows continued cycling without holding the modifier,
-        //    IF the window has remained open (e.g., due to preventSwitcherHide = true or previous interaction).
-        if previewCoordinator.isVisible,
-           !isModifierKeyPressed, // Modifier is NOT currently pressed
-           keyCode == keyBoardShortcutSaved.keyCode // Key pressed is the one from the shortcut
-        {
-            // Call handleKeybindActivation, which will cycle because the window is visible.
-            // It uses self.isShiftKeyPressed, which is updated by .flagsChanged events.
             handleKeybindActivation()
-            return true // Consume event
+            return true
         }
 
-        return false // Event not consumed
+        if previewCoordinator.isVisible,
+           !isModifierKeyPressed,
+           keyCode == keyBoardShortcutSaved.keyCode
+        {
+            handleKeybindActivation()
+            return true
+        }
+
+        return false
     }
 
     private func handleKeybindActivation() {
@@ -206,12 +200,12 @@ class KeybindHelper {
     }
 
     private func handleModifierEvent(modifierKeyPressed: Bool, shiftKeyPressed: Bool) {
+        let oldModifierState = isModifierKeyPressed
         isModifierKeyPressed = modifierKeyPressed
         isShiftKeyPressed = shiftKeyPressed
 
         if !Defaults[.preventSwitcherHide] {
-            // If preventSwitcherHide is false, and modifier is released, and window is visible
-            if !isModifierKeyPressed {
+            if oldModifierState, !isModifierKeyPressed {
                 DispatchQueue.main.async { [weak self] in
                     guard let self else { return }
                     if previewCoordinator.isVisible {
@@ -220,20 +214,27 @@ class KeybindHelper {
                 }
             }
         }
-        // If Defaults[.preventSwitcherHide] is true, this block does nothing, and the window remains open.
     }
 
     private func showHoverWindow() {
-        DispatchQueue.main.async { [weak self] in
+        Task(priority: .userInitiated) { [weak self] in
             guard let self, isModifierKeyPressed else { return }
 
             let windows = WindowUtil.getAllWindowsOfAllApps()
+            guard !windows.isEmpty else {
+                print("No windows found for switcher.")
+                return
+            }
+
             let currentMouseLocation = DockObserver.getMousePosition()
             let targetScreen = getTargetScreenForSwitcher()
 
-            displayHoverWindow(windows: windows,
-                               currentMouseLocation: currentMouseLocation,
-                               targetScreen: targetScreen)
+            await MainActor.run { [weak self] in
+                guard let self else { return }
+                displayHoverWindow(windows: windows,
+                                   currentMouseLocation: currentMouseLocation,
+                                   targetScreen: targetScreen)
+            }
         }
 
         Task(priority: .low) { [weak self] in
