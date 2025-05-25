@@ -38,6 +38,11 @@ struct TrafficLightButtons: View {
                                   color: useMonochrome ? .secondary : Color(hex: "0d650d"),
                                   fillColor: useMonochrome ? monochromeFillColor : .green)
                     }
+                    if enabledButtons.contains(.openNewWindow) {
+                        buttonFor(action: .openNewWindow, symbol: "plus",
+                                  color: useMonochrome ? .secondary : Color(hex: "0050A0"),
+                                  fillColor: useMonochrome ? monochromeFillColor : .blue)
+                    }
                 }
                 .padding(4)
                 .opacity(opacity)
@@ -95,6 +100,7 @@ extension AppearanceSettingsView {
             (.close, String(localized: "Close")),
             (.minimize, String(localized: "Minimize")),
             (.toggleFullScreen, String(localized: "Fullscreen")),
+            (.openNewWindow, String(localized: "New Window")),
         ]
 
         var body: some View {

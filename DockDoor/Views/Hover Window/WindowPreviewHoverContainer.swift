@@ -510,6 +510,10 @@ struct WindowPreviewHoverContainer: View {
                     window.isHidden = newHiddenState
                     windowStates[index] = window
                 }
+
+            case .openNewWindow:
+                WindowUtil.openNewWindow(app: window.app)
+                onWindowTap?()
             }
         }
     }

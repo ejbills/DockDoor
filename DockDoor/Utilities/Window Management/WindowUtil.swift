@@ -68,7 +68,12 @@ struct WindowInfo: Identifiable, Hashable {
 }
 
 enum WindowAction: String, Hashable, CaseIterable, Defaults.Serializable {
-    case quit, close, minimize, toggleFullScreen, hide
+    case quit
+    case close
+    case minimize
+    case toggleFullScreen
+    case hide
+    case openNewWindow
 }
 
 enum WindowUtil {
