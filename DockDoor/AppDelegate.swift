@@ -21,6 +21,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var keybindHelper: KeybindHelper?
     private var statusBarItem: NSStatusItem?
     private var updaterController: SPUStandardUpdaterController
+    @ObservedObject public var updaterState: UpdaterState
+
+    public var updater: SPUUpdater {
+        updaterController.updater
+    }
 
     private var firstTimeWindow: NSWindow?
     lazy var settingsWindowController: SettingsWindowController = {
@@ -28,7 +33,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             GeneralSettingsViewController(),
             AppearanceSettingsViewController(),
             FiltersSettingsViewController(),
-            SupportSettingsViewController(updater: updaterController.updater),
+            SupportSettingsViewController(updaterState: updaterState),
         ]
 
         let controller = SettingsWindowController(panes: panes)
@@ -48,8 +53,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private let settingsWindowControllerDelegate = SettingsWindowControllerDelegate()
 
     override init() {
-        updaterController = SPUStandardUpdaterController(startingUpdater: true, updaterDelegate: nil, userDriverDelegate: nil)
-        updaterController.startUpdater()
+        let state = UpdaterState()
+        updaterState = state
+
+        let anUpdaterController = SPUStandardUpdaterController(startingUpdater: true, updaterDelegate: state, userDriverDelegate: nil)
+        updaterController = anUpdaterController
+
+        state.updater = anUpdaterController.updater
+
         super.init()
 
         settingsWindowController.window?.delegate = settingsWindowControllerDelegate
@@ -75,6 +86,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
             if Defaults[.enableWindowSwitcher] {
                 keybindHelper = KeybindHelper(previewCoordinator: currentPreviewCoordinator, dockObserver: currentDockObserver)
+            }
+            if updater.automaticallyChecksForUpdates {
+                print("AppDelegate: Automatic updates enabled, checking in background.")
+                updater.checkForUpdatesInBackground()
             }
         }
 

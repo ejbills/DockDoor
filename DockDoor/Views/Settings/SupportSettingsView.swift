@@ -1,11 +1,10 @@
-import Sparkle
 import SwiftUI
 
 struct SupportSettingsView: View {
-    private var updater: SPUUpdater
+    @ObservedObject var updaterState: UpdaterState
 
-    init(updater: SPUUpdater) {
-        self.updater = updater
+    init(updaterState: UpdaterState) {
+        self.updaterState = updaterState
     }
 
     var body: some View {
@@ -17,7 +16,7 @@ struct SupportSettingsView: View {
                 }
 
                 StyledGroupBox(label: "Updates") {
-                    UpdateSettingsView(updater: updater)
+                    UpdateSettingsView(updaterState: updaterState)
                         .padding(.top, 5)
                 }
 

@@ -1,6 +1,5 @@
 import Cocoa
 import Settings
-import Sparkle
 
 extension Settings.PaneIdentifier {
     static let general = Self("general")
@@ -45,13 +44,13 @@ let FiltersSettingsViewController: () -> SettingsPane = {
     return Settings.PaneHostingController(pane: paneView)
 }
 
-func SupportSettingsViewController(updater: SPUUpdater) -> SettingsPane {
+func SupportSettingsViewController(updaterState: UpdaterState) -> SettingsPane {
     let paneView = Settings.Pane(
         identifier: .support,
         title: String(localized: "Support", comment: "Settings tab title"),
         toolbarIcon: NSImage(systemSymbolName: "lifepreserver.fill", accessibilityDescription: String(localized: "Support settings"))!
     ) {
-        SupportSettingsView(updater: updater)
+        SupportSettingsView(updaterState: updaterState)
     }
 
     return Settings.PaneHostingController(pane: paneView)

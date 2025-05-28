@@ -1,57 +1,17 @@
-import Sparkle
 import SwiftUI
 
-final class UpdaterViewModel: ObservableObject {
-    @Published var canCheckForUpdates = false
-    @Published var lastUpdateCheckDate: Date?
-    @Published var currentVersion: String
-    @Published var isAutomaticChecksEnabled: Bool
-    @Published var updateStatus: UpdateStatus = .noUpdates
-
-    private let updater: SPUUpdater
-
-    enum UpdateStatus {
-        case noUpdates
-        case checking
-        case available(version: String)
-        case error(String)
-    }
-
-    init(updater: SPUUpdater) {
-        self.updater = updater
-        currentVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "Unknown"
-        isAutomaticChecksEnabled = updater.automaticallyChecksForUpdates
-
-        updater.publisher(for: \.canCheckForUpdates)
-            .assign(to: &$canCheckForUpdates)
-
-        updater.publisher(for: \.lastUpdateCheckDate)
-            .assign(to: &$lastUpdateCheckDate)
-    }
-
-    func checkForUpdates() {
-        updateStatus = .checking
-        updater.checkForUpdates()
-    }
-
-    func toggleAutomaticChecks() {
-        isAutomaticChecksEnabled.toggle()
-        updater.automaticallyChecksForUpdates = isAutomaticChecksEnabled
-    }
-}
-
 struct UpdateSettingsView: View {
-    @StateObject private var viewModel: UpdaterViewModel
+    @ObservedObject var updaterState: UpdaterState
 
-    init(updater: SPUUpdater) {
-        _viewModel = StateObject(wrappedValue: UpdaterViewModel(updater: updater))
+    init(updaterState: UpdaterState) {
+        self.updaterState = updaterState
     }
 
     var body: some View {
         VStack(alignment: .center, spacing: 16) {
             EnabledActionRowView(
                 title: String(localized: "Current Version"),
-                description: String(localized: "Your app is on version \(viewModel.currentVersion)"),
+                description: String(localized: "Your app is on version \(updaterState.currentVersion)"),
                 isGranted: true,
                 iconName: "checkmark.seal",
                 action: nil,
@@ -63,9 +23,9 @@ struct UpdateSettingsView: View {
             EnabledActionRowView(
                 title: String(localized: "Check for Updates"),
                 description: lastCheckDescription,
-                isGranted: viewModel.canCheckForUpdates,
+                isGranted: updaterState.canCheckForUpdates,
                 iconName: "arrow.triangle.2.circlepath",
-                action: viewModel.checkForUpdates,
+                action: updaterState.checkForUpdates,
                 disableShine: true,
                 buttonText: String(localized: "Check for Updates"),
                 hideStatus: true
@@ -74,9 +34,9 @@ struct UpdateSettingsView: View {
             EnabledActionRowView(
                 title: String(localized: "Automatic Updates"),
                 description: String(localized: "Enable automatic checking for updates"),
-                isGranted: viewModel.isAutomaticChecksEnabled,
+                isGranted: updaterState.isAutomaticChecksEnabled,
                 iconName: "clock.arrow.2.circlepath",
-                action: viewModel.toggleAutomaticChecks,
+                action: updaterState.toggleAutomaticChecks,
                 disableShine: true,
                 buttonText: String(localized: "Toggle"),
                 statusText: String(localized: "Enabled")
@@ -85,32 +45,39 @@ struct UpdateSettingsView: View {
     }
 
     private var lastCheckDescription: String {
-        if let lastCheck = viewModel.lastUpdateCheckDate {
+        if let lastCheck = updaterState.lastUpdateCheckDate {
             String(localized: "Last checked: \(lastCheck.formatted(date: .abbreviated, time: .shortened))")
         } else {
             String(localized: "No recent checks")
         }
     }
 
+    @ViewBuilder
     private var updateStatusView: some View {
         Group {
-            switch viewModel.updateStatus {
+            switch updaterState.updateStatus {
             case .noUpdates:
                 Label(String(localized: "Up to date"), systemImage: "checkmark.circle.fill")
                     .foregroundColor(.green)
             case .checking:
                 ProgressView()
                     .scaleEffect(0.7)
-            case let .available(version):
-                VStack(alignment: .trailing) {
-                    Label(String(localized: "Update available"), systemImage: "arrow.down.circle.fill")
+                    .frame(width: 20, height: 20)
+            case let .available(version, publishedDate, _):
+                VStack(alignment: .trailing, spacing: 2) {
+                    Label(String(localized: "Update v\(version) available"), systemImage: "arrow.down.circle.fill")
                         .foregroundColor(.blue)
-                    Text(String(localized: "Version \(version)"))
-                        .font(.caption)
+                    if let date = publishedDate {
+                        Text(date.formatted(date: .numeric, time: .omitted))
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+                    }
                 }
             case let .error(message):
                 Label(message, systemImage: "exclamationmark.triangle.fill")
                     .foregroundColor(.red)
+                    .lineLimit(2)
+                    .font(.caption2)
             }
         }
         .font(.caption)

@@ -30,6 +30,7 @@ struct WindowPreviewHoverContainer: View {
     let mouseLocation: CGPoint?
     let bestGuessMonitor: NSScreen
     var mockPreviewActive: Bool
+    let updateAvailable: Bool
 
     @ObservedObject var windowSwitcherCoordinator: ScreenCenteredFloatingWindowCoordinator
 
@@ -41,6 +42,7 @@ struct WindowPreviewHoverContainer: View {
     @Default(.aeroShakeAction) var aeroShakeAction
     @Default(.previewWrap) var previewWrap
     @Default(.switcherWrap) var switcherWrap
+    @Default(.gradientColorPalette) private var gradientColorPalette
 
     @State var windowStates: [WindowInfo]
     @State private var draggedWindowIndex: Int? = nil
@@ -61,7 +63,8 @@ struct WindowPreviewHoverContainer: View {
          mouseLocation: CGPoint?,
          bestGuessMonitor: NSScreen,
          windowSwitcherCoordinator: ScreenCenteredFloatingWindowCoordinator,
-         mockPreviewActive: Bool)
+         mockPreviewActive: Bool,
+         updateAvailable: Bool)
     {
         self.appName = appName
         self.windows = windows
@@ -72,6 +75,7 @@ struct WindowPreviewHoverContainer: View {
         self.bestGuessMonitor = bestGuessMonitor
         self.windowSwitcherCoordinator = windowSwitcherCoordinator
         self.mockPreviewActive = mockPreviewActive
+        self.updateAvailable = updateAvailable
     }
 
     var maxWindowDimension: CGPoint {
@@ -170,11 +174,13 @@ struct WindowPreviewHoverContainer: View {
                                 .frame(width: 24, height: 24)
                         }
                         hoverTitleLabelView(labelSize: labelSize)
-
-                        massOperations(hoveringAppIcon)
+                        let shouldShowUpdateElements = updateAvailable && !mockPreviewActive
+                        if shouldShowUpdateElements { Spacer() }
+                        update(shouldShowUpdateElements)
+                        massOperations(hoveringAppIcon && !updateAvailable)
                     }
                     .padding(.top, 10)
-                    .padding(.leading)
+                    .padding(.horizontal)
                     .animation(.spring(response: 0.3), value: hoveringAppIcon)
 
                 case .shadowed:
@@ -190,8 +196,10 @@ struct WindowPreviewHoverContainer: View {
                                 .frame(width: 24, height: 24)
                         }
                         hoverTitleLabelView(labelSize: labelSize)
-
-                        massOperations(hoveringAppIcon)
+                        let shouldShowUpdateElements = updateAvailable && !mockPreviewActive
+                        if shouldShowUpdateElements { Spacer() }
+                        update(shouldShowUpdateElements)
+                        massOperations(hoveringAppIcon && !updateAvailable)
                     }
                     .padding(EdgeInsets(top: -11.5, leading: 15, bottom: -1.5, trailing: 1.5))
                     .animation(.spring(response: 0.3), value: hoveringAppIcon)
@@ -211,8 +219,10 @@ struct WindowPreviewHoverContainer: View {
                                     .frame(width: 24, height: 24)
                             }
                             hoverTitleLabelView(labelSize: labelSize)
-
-                            massOperations(hoveringAppIcon)
+                            let shouldShowUpdateElements = updateAvailable && !mockPreviewActive
+                            if shouldShowUpdateElements { Spacer() }
+                            update(shouldShowUpdateElements)
+                            massOperations(hoveringAppIcon && !updateAvailable)
                         }
                         .padding(.vertical, 5)
                         .padding(.horizontal, 10)
@@ -226,6 +236,33 @@ struct WindowPreviewHoverContainer: View {
             .onHover { hover in
                 hoveringAppIcon = hover
             }
+        }
+    }
+
+    @ViewBuilder
+    func update(_ shouldDisplay: Bool) -> some View {
+        if shouldDisplay {
+            Button {
+                if let appDelegate = NSApp.delegate as? AppDelegate {
+                    appDelegate.updater.checkForUpdates()
+                }
+            } label: {
+                Label("Update available", systemImage: "arrow.down.circle.fill")
+                    .font(.system(size: 11, weight: .medium))
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 4)
+                    .background(
+                        CustomizableFluidGradientView()
+                            .opacity(appNameStyle == .shadowed ? 1 : 0.25)
+                    )
+                    .clipShape(Capsule())
+                    .shadow(radius: 2)
+                    .overlay(
+                        Capsule()
+                            .stroke(.secondary.opacity(0.4), lineWidth: 1)
+                    )
+            }
+            .buttonStyle(.plain)
         }
     }
 

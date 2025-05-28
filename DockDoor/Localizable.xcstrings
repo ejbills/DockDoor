@@ -61142,6 +61142,9 @@
         }
       }
     },
+    "Update v%@ available" : {
+
+    },
     "Updates" : {
       "comment" : "Settings tab title",
       "localizations" : {
@@ -62669,6 +62672,7 @@
       }
     },
     "Version %@" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {

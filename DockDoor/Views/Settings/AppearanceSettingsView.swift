@@ -132,7 +132,8 @@ struct AppearanceSettingsView: View {
                                 mouseLocation: .zero,
                                 bestGuessMonitor: NSScreen.main!,
                                 windowSwitcherCoordinator: selectedPreviewContext == .dock ? mockDockPreviewCoordinator : mockWindowSwitcherCoordinator,
-                                mockPreviewActive: true
+                                mockPreviewActive: true,
+                                updateAvailable: false
                             )
                             .allowsHitTesting(false)
                         } else {

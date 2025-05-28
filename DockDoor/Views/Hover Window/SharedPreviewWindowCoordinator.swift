@@ -1,4 +1,5 @@
 import Defaults
+import Sparkle
 import SwiftUI
 
 class ScreenCenteredFloatingWindowCoordinator: ObservableObject {
@@ -115,10 +116,13 @@ final class SharedPreviewWindowCoordinator: NSPanel {
     {
         windowSwitcherCoordinator.setShowing(centeredHoverWindowState, toState: centerOnScreen)
         // Reset the hosting view
+        let updateAvailable = (NSApp.delegate as? AppDelegate)?.updaterState.anUpdateIsAvailable ?? false
 
         let hoverView = WindowPreviewHoverContainer(appName: appName, windows: windows, onWindowTap: onWindowTap,
                                                     dockPosition: DockUtils.getDockPosition(), mouseLocation: mouseLocation,
-                                                    bestGuessMonitor: mouseScreen, windowSwitcherCoordinator: windowSwitcherCoordinator, mockPreviewActive: false)
+                                                    bestGuessMonitor: mouseScreen, windowSwitcherCoordinator: windowSwitcherCoordinator,
+                                                    mockPreviewActive: false,
+                                                    updateAvailable: updateAvailable)
         let newHostingView = NSHostingView(rootView: hoverView)
 
         if let oldContentView = contentView {
