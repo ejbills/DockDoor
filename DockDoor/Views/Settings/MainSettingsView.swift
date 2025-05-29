@@ -483,7 +483,7 @@ struct MainSettingsView: View {
                     sliderSetting(title: "Preview Window Inactivity Timer", value: $inactivityTimeout, range: 0 ... 3, step: 0.1, unit: "seconds", formatter: NumberFormatter.oneDecimalFormatter)
                     Toggle(isOn: $lateralMovement) { Text("Keep previews visible during lateral movement") }
                     Toggle(isOn: $preventDockHide) { Text("Prevent dock from hiding during previews") }
-                    Toggle(isOn: $raisedWindowLevel) { Text("EXPERIMENTAL: Show preview above app labels").onChange(of: raisedWindowLevel) { _ in askUserToRestartApplication() }}
+                    Toggle(isOn: $raisedWindowLevel) { Text("Show preview above app labels").onChange(of: raisedWindowLevel) { _ in askUserToRestartApplication() }}
                 }
             }
             StyledGroupBox(label: "Preview Appearance & Quality") {
