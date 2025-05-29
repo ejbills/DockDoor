@@ -20,6 +20,10 @@ func CoreDockSetAutoHideEnabled(_ flag: Bool)
 @_silgen_name("CoreDockGetAutoHideEnabled")
 func CoreDockGetAutoHideEnabled() -> Bool
 
+// Retrieves the current magnification state of the Dock
+@_silgen_name("CoreDockIsMagnificationEnabled")
+func CoreDockIsMagnificationEnabled() -> Bool
+
 // Define the private API types
 typealias CGSConnectionID = UInt32
 typealias CGSWindowCount = UInt32
