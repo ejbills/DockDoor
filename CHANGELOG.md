@@ -38,6 +38,39 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://buymeacoffee.com/keplercafe</div>
 
+<a id="v1.12"></a>
+# [v1.12](https://github.com/ejbills/DockDoor/releases/tag/v1.12) - 2025-05-29
+
+### 🆕 What's New in DockDoor
+
+* **Keep Window Switcher Open**
+  New option to keep the window switcher visible after releasing the shortcut key—great for slower switching or multitasking.
+
+  ![Window Switcher](https://github.com/user-attachments/assets/1fc40025-b273-4bef-b7ac-3672b0bec156)
+
+* **Settings Pane in Window Switcher**
+  You can now access DockDoor settings directly from the window switcher.
+
+* **Update Notification in Dock Previews**
+  When a new DockDoor version is available, a handy **"Update available"** button will appear in Dock Previews.
+
+* **"New Window" Button**
+  Adds a new button that attempts to trigger `CMD + N` in the selected app. In some apps (like Finder), this opens a new window. In others, it might do something else—depends on the app.
+
+  ![New Window Button](https://github.com/user-attachments/assets/07748c68-ac21-4b15-b93d-5e47313066db)
+
+---
+
+### 🛠 Improvements & Fixes
+
+* Restored window filter validation logic.
+* Refactored memory management for better performance.
+
+
+
+[Changes][v1.12]
+
+
 <a id="v1.11"></a>
 # [v1.11](https://github.com/ejbills/DockDoor/releases/tag/v1.11) - 2025-05-20
 
@@ -900,6 +933,7 @@ v1.0
 [Changes][releases]
 
 
+[v1.12]: https://github.com/ejbills/DockDoor/compare/v1.11...v1.12
 [v1.11]: https://github.com/ejbills/DockDoor/compare/v1.10...v1.11
 [v1.10]: https://github.com/ejbills/DockDoor/compare/v1.9.1...v1.10
 [v1.9.1]: https://github.com/ejbills/DockDoor/compare/v1.9...v1.9.1
