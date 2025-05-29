@@ -188,8 +188,8 @@ header {
 .logo {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    font-weight: 700;
+    gap: 0.25rem;
+    font-weight: 550;
     font-size: 1.5rem;
     color: var(--dark);
 }
