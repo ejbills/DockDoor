@@ -41525,6 +41525,9 @@
         }
       }
     },
+    "Preview Hover Action Delay" : {
+
+    },
     "Preview Hover Delay" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -42477,7 +42480,6 @@
       }
     },
     "Preview Window Fade Out Duration" : {
-      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -42668,7 +42670,6 @@
       }
     },
     "Preview Window Inactivity Timer" : {
-      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -42859,7 +42860,6 @@
       }
     },
     "Preview Window Open Delay" : {
-      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -66295,7 +66295,6 @@
       }
     },
     "Window Image Cache Lifespan" : {
-      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -66484,6 +66483,9 @@
           }
         }
       }
+    },
+    "Window Image Resolution Scale (1=Best)" : {
+
     },
     "Window Image Resolution Scale (higher means lower resolution)" : {
       "extractionState" : "stale",

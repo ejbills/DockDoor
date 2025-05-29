@@ -478,9 +478,9 @@ struct MainSettingsView: View {
         VStack(alignment: .leading, spacing: 16) {
             StyledGroupBox(label: "Performance Tuning (Dock Previews)") {
                 VStack(alignment: .leading, spacing: 10) {
-                    sliderSetting(title: "Preview Window Open Delay", value: $hoverWindowOpenDelay, range: 0 ... 2, step: 0.1, unit: "seconds", formatter: NumberFormatter.oneDecimalFormatter)
-                    sliderSetting(title: "Preview Window Fade Out Duration", value: $fadeOutDuration, range: 0 ... 2, step: 0.1, unit: "seconds", formatter: NumberFormatter.oneDecimalFormatter)
-                    sliderSetting(title: "Preview Window Inactivity Timer", value: $inactivityTimeout, range: 0 ... 3, step: 0.1, unit: "seconds", formatter: NumberFormatter.oneDecimalFormatter)
+                    sliderSetting(title: String(localized: "Preview Window Open Delay"), value: $hoverWindowOpenDelay, range: 0 ... 2, step: 0.1, unit: String(localized: "seconds"), formatter: NumberFormatter.oneDecimalFormatter)
+                    sliderSetting(title: String(localized: "Preview Window Fade Out Duration"), value: $fadeOutDuration, range: 0 ... 2, step: 0.1, unit: String(localized: "seconds"), formatter: NumberFormatter.oneDecimalFormatter)
+                    sliderSetting(title: String(localized: "Preview Window Inactivity Timer"), value: $inactivityTimeout, range: 0 ... 3, step: 0.1, unit: String(localized: "seconds"), formatter: NumberFormatter.oneDecimalFormatter)
                     Toggle(isOn: $lateralMovement) { Text("Keep previews visible during lateral movement") }
                     Toggle(isOn: $preventDockHide) { Text("Prevent dock from hiding during previews") }
                     Toggle(isOn: $raisedWindowLevel) { Text("Show preview above app labels").onChange(of: raisedWindowLevel) { _ in askUserToRestartApplication() }}
@@ -488,15 +488,15 @@ struct MainSettingsView: View {
             }
             StyledGroupBox(label: "Preview Appearance & Quality") {
                 VStack(alignment: .leading, spacing: 10) {
-                    sliderSetting(title: "Window Image Cache Lifespan", value: $screenCaptureCacheLifespan, range: 0 ... 60, step: 10, unit: "seconds")
-                    sliderSetting(title: "Window Image Resolution Scale (1=Best)", value: $windowPreviewImageScale, range: 1 ... 4, step: 1, unit: "")
+                    sliderSetting(title: String(localized: "Window Image Cache Lifespan"), value: $screenCaptureCacheLifespan, range: 0 ... 60, step: 10, unit: String(localized: "seconds"))
+                    sliderSetting(title: String(localized: "Window Image Resolution Scale (1=Best)"), value: $windowPreviewImageScale, range: 1 ... 4, step: 1, unit: "")
                     Toggle(isOn: $sortWindowsByDate) { Text("Sort Window Previews by Date (if multiple)") }
                 }
             }
             StyledGroupBox(label: "Interaction & Behavior (Dock Previews)") {
                 VStack(alignment: .leading, spacing: 10) {
                     Picker("Dock Preview Hover Action", selection: $previewHoverAction) { ForEach(PreviewHoverAction.allCases, id: \.self) { Text($0.localizedName).tag($0) } }.pickerStyle(MenuPickerStyle())
-                    sliderSetting(title: "Preview Hover Action Delay", value: $tapEquivalentInterval, range: 0 ... 2, step: 0.1, unit: "seconds", formatter: NumberFormatter.oneDecimalFormatter).disabled(previewHoverAction == .none)
+                    sliderSetting(title: String(localized: "Preview Hover Action Delay"), value: $tapEquivalentInterval, range: 0 ... 2, step: 0.1, unit: String(localized: "seconds"), formatter: NumberFormatter.oneDecimalFormatter).disabled(previewHoverAction == .none)
                     Picker("Dock Preview Aero Shake Action", selection: $aeroShakeAction) { ForEach(AeroShakeAction.allCases, id: \.self) { Text($0.localizedName).tag($0) } }.pickerStyle(MenuPickerStyle())
                     Toggle(isOn: $shouldHideOnDockItemClick) { Text("Hide all app windows on dock icon click") }
                     sliderSetting(title: "Window Buffer from Dock (pixels)", value: $bufferFromDock, range: -100 ... 100, step: 5, unit: "px", formatter: { let f = NumberFormatter(); f.allowsFloats = false; f.minimumIntegerDigits = 1; f.maximumFractionDigits = 0; return f }())
