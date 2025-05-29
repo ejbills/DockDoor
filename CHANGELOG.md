@@ -38,6 +38,14 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://buymeacoffee.com/keplercafe</div>
 
+<a id="v1.12.1"></a>
+# [v1.12.1](https://github.com/ejbills/DockDoor/releases/tag/v1.12.1) - 2025-05-29
+
+- Updates default dock buffer values
+
+[Changes][v1.12.1]
+
+
 <a id="v1.12"></a>
 # [v1.12](https://github.com/ejbills/DockDoor/releases/tag/v1.12) - 2025-05-29
 
@@ -933,6 +941,7 @@ v1.0
 [Changes][releases]
 
 
+[v1.12.1]: https://github.com/ejbills/DockDoor/compare/v1.12...v1.12.1
 [v1.12]: https://github.com/ejbills/DockDoor/compare/v1.11...v1.12
 [v1.11]: https://github.com/ejbills/DockDoor/compare/v1.10...v1.11
 [v1.10]: https://github.com/ejbills/DockDoor/compare/v1.9.1...v1.10
