@@ -2,6 +2,10 @@ import Defaults
 import Sparkle
 import SwiftUI
 
+enum ArrowDirection {
+    case left, right, up, down
+}
+
 class ScreenCenteredFloatingWindowCoordinator: ObservableObject {
     @Published var currIndex: Int = 0
     @Published var windowSwitcherActive: Bool = false
@@ -410,5 +414,17 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         guard !windows.isEmpty else { return }
         let selectedWindow = windows[windowSwitcherCoordinator.currIndex]
         WindowUtil.bringWindowToFront(windowInfo: selectedWindow)
+    }
+
+    func navigateWithArrowKey(direction: ArrowDirection) {
+        guard !windows.isEmpty else { return }
+
+        let goBackwards = switch direction {
+        case .left, .up:
+            true
+        case .right, .down:
+            false
+        }
+        cycleWindows(goBackwards: goBackwards)
     }
 }

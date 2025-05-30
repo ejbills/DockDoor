@@ -172,6 +172,32 @@ class KeybindHelper {
             return true
         }
 
+        if previewCoordinator.isVisible {
+            var consumed = false
+            switch keyCode {
+            case Int64(kVK_LeftArrow):
+                previewCoordinator.navigateWithArrowKey(direction: .left)
+                consumed = true
+            case Int64(kVK_RightArrow):
+                previewCoordinator.navigateWithArrowKey(direction: .right)
+                consumed = true
+            case Int64(kVK_UpArrow):
+                previewCoordinator.navigateWithArrowKey(direction: .up)
+                consumed = true
+            case Int64(kVK_DownArrow):
+                previewCoordinator.navigateWithArrowKey(direction: .down)
+                consumed = true
+            case Int64(kVK_Return):
+                previewCoordinator.selectAndBringToFrontCurrentWindow()
+                consumed = true
+            default:
+                break
+            }
+            if consumed {
+                return true
+            }
+        }
+
         if isModifierKeyPressed,
            keyCode == keyBoardShortcutSaved.keyCode,
            modifierValue == keyBoardShortcutSaved.modifierFlags
