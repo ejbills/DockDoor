@@ -15,9 +15,113 @@ struct UserKeyBind: Codable, Defaults.Serializable {
     var modifierFlags: Int
 }
 
+private class WindowSwitchingCoordinator {
+    private var isProcessingSwitcher = false
+
+    func handleWindowSwitching(
+        previewCoordinator: SharedPreviewWindowCoordinator,
+        isModifierPressed: Bool,
+        isShiftPressed: Bool
+    ) async {
+        guard !isProcessingSwitcher else { return }
+        isProcessingSwitcher = true
+
+        defer { isProcessingSwitcher = false }
+
+        if await previewCoordinator.isVisible {
+            await previewCoordinator.cycleWindows(goBackwards: isShiftPressed)
+        } else {
+            await showHoverWindow(
+                previewCoordinator: previewCoordinator,
+                isModifierPressed: isModifierPressed
+            )
+        }
+    }
+
+    private func showHoverWindow(
+        previewCoordinator: SharedPreviewWindowCoordinator,
+        isModifierPressed: Bool
+    ) async {
+        guard isModifierPressed else { return }
+
+        let windows = WindowUtil.getAllWindowsOfAllApps()
+        guard !windows.isEmpty else {
+            print("No windows found for switcher.")
+            return
+        }
+
+        let currentMouseLocation = DockObserver.getMousePosition()
+        let targetScreen = getTargetScreenForSwitcher()
+
+        displayHoverWindow(
+            previewCoordinator: previewCoordinator,
+            windows: windows,
+            currentMouseLocation: currentMouseLocation,
+            targetScreen: targetScreen
+        )
+
+        Task.detached(priority: .low) {
+            await WindowUtil.updateAllWindowsInCurrentSpace()
+        }
+    }
+
+    private func displayHoverWindow(
+        previewCoordinator: SharedPreviewWindowCoordinator,
+        windows: [WindowInfo],
+        currentMouseLocation: CGPoint,
+        targetScreen: NSScreen
+    ) {
+        if Defaults[.useClassicWindowOrdering], windows.count >= 2 {
+            previewCoordinator.windowSwitcherCoordinator.setIndex(to: 1)
+        }
+
+        let showWindow = { (mouseLocation: NSPoint?, mouseScreen: NSScreen?) in
+            previewCoordinator.showWindow(
+                appName: "Window Switcher",
+                windows: windows,
+                mouseLocation: mouseLocation,
+                mouseScreen: mouseScreen,
+                dockItemElement: nil,
+                overrideDelay: true,
+                centeredHoverWindowState: .windowSwitcher,
+                onWindowTap: {
+                    previewCoordinator.hideWindow()
+                }
+            )
+        }
+
+        switch Defaults[.windowSwitcherPlacementStrategy] {
+        case .pinnedToScreen:
+            let screenCenter = NSPoint(x: targetScreen.frame.midX,
+                                       y: targetScreen.frame.midY)
+            showWindow(screenCenter, targetScreen)
+
+        case .screenWithLastActiveWindow:
+            showWindow(nil, nil)
+
+        case .screenWithMouse:
+            let mouseScreen = NSScreen.screenContainingMouse(currentMouseLocation)
+            let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation,
+                                                                         forScreen: mouseScreen)
+            showWindow(convertedMouseLocation, mouseScreen)
+        }
+    }
+
+    private func getTargetScreenForSwitcher() -> NSScreen {
+        if Defaults[.windowSwitcherPlacementStrategy] == .pinnedToScreen,
+           let pinnedScreen = NSScreen.findScreen(byIdentifier: Defaults[.pinnedScreenIdentifier])
+        {
+            return pinnedScreen
+        }
+        let mouseLocation = DockObserver.getMousePosition()
+        return NSScreen.screenContainingMouse(mouseLocation)
+    }
+}
+
 class KeybindHelper {
     private let previewCoordinator: SharedPreviewWindowCoordinator
     private let dockObserver: DockObserver
+    private let windowSwitchingCoordinator = WindowSwitchingCoordinator()
 
     private var isModifierKeyPressed = false
     private var isShiftKeyPressed = false
@@ -172,6 +276,32 @@ class KeybindHelper {
             return true
         }
 
+        if previewCoordinator.isVisible {
+            var consumed = false
+            switch keyCode {
+            case Int64(kVK_LeftArrow):
+                previewCoordinator.navigateWithArrowKey(direction: .left)
+                consumed = true
+            case Int64(kVK_RightArrow):
+                previewCoordinator.navigateWithArrowKey(direction: .right)
+                consumed = true
+            case Int64(kVK_UpArrow):
+                previewCoordinator.navigateWithArrowKey(direction: .up)
+                consumed = true
+            case Int64(kVK_DownArrow):
+                previewCoordinator.navigateWithArrowKey(direction: .down)
+                consumed = true
+            case Int64(kVK_Return):
+                previewCoordinator.selectAndBringToFrontCurrentWindow()
+                consumed = true
+            default:
+                break
+            }
+            if consumed {
+                return true
+            }
+        }
+
         if isModifierKeyPressed,
            keyCode == keyBoardShortcutSaved.keyCode,
            modifierValue == keyBoardShortcutSaved.modifierFlags
@@ -192,10 +322,12 @@ class KeybindHelper {
     }
 
     private func handleKeybindActivation() {
-        if previewCoordinator.isVisible {
-            previewCoordinator.cycleWindows(goBackwards: isShiftKeyPressed)
-        } else {
-            showHoverWindow()
+        Task { @MainActor in
+            await windowSwitchingCoordinator.handleWindowSwitching(
+                previewCoordinator: previewCoordinator,
+                isModifierPressed: isModifierKeyPressed,
+                isShiftPressed: isShiftKeyPressed
+            )
         }
     }
 
@@ -214,82 +346,5 @@ class KeybindHelper {
                 }
             }
         }
-    }
-
-    private func showHoverWindow() {
-        Task(priority: .userInitiated) { [weak self] in
-            guard let self, isModifierKeyPressed else { return }
-
-            let windows = WindowUtil.getAllWindowsOfAllApps()
-            guard !windows.isEmpty else {
-                print("No windows found for switcher.")
-                return
-            }
-
-            let currentMouseLocation = DockObserver.getMousePosition()
-            let targetScreen = getTargetScreenForSwitcher()
-
-            await MainActor.run { [weak self] in
-                guard let self else { return }
-                displayHoverWindow(windows: windows,
-                                   currentMouseLocation: currentMouseLocation,
-                                   targetScreen: targetScreen)
-            }
-        }
-
-        Task(priority: .low) { [weak self] in
-            guard self != nil else { return }
-            await WindowUtil.updateAllWindowsInCurrentSpace()
-        }
-    }
-
-    private func displayHoverWindow(windows: [WindowInfo],
-                                    currentMouseLocation: CGPoint,
-                                    targetScreen: NSScreen)
-    {
-        if Defaults[.useClassicWindowOrdering], windows.count >= 2 {
-            previewCoordinator.windowSwitcherCoordinator.setIndex(to: 1)
-        }
-
-        let showWindow = { (mouseLocation: NSPoint?, mouseScreen: NSScreen?) in
-            self.previewCoordinator.showWindow(
-                appName: "Window Switcher",
-                windows: windows,
-                mouseLocation: mouseLocation,
-                mouseScreen: mouseScreen,
-                dockItemElement: nil,
-                overrideDelay: true,
-                centeredHoverWindowState: .windowSwitcher,
-                onWindowTap: { [weak self] in
-                    self?.previewCoordinator.hideWindow()
-                }
-            )
-        }
-
-        switch Defaults[.windowSwitcherPlacementStrategy] {
-        case .pinnedToScreen:
-            let screenCenter = NSPoint(x: targetScreen.frame.midX,
-                                       y: targetScreen.frame.midY)
-            showWindow(screenCenter, targetScreen)
-
-        case .screenWithLastActiveWindow:
-            showWindow(nil, nil)
-
-        case .screenWithMouse:
-            let mouseScreen = NSScreen.screenContainingMouse(currentMouseLocation)
-            let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation,
-                                                                         forScreen: mouseScreen)
-            showWindow(convertedMouseLocation, mouseScreen)
-        }
-    }
-
-    private func getTargetScreenForSwitcher() -> NSScreen {
-        if Defaults[.windowSwitcherPlacementStrategy] == .pinnedToScreen,
-           let pinnedScreen = NSScreen.findScreen(byIdentifier: Defaults[.pinnedScreenIdentifier])
-        {
-            return pinnedScreen
-        }
-        let mouseLocation = DockObserver.getMousePosition()
-        return NSScreen.screenContainingMouse(mouseLocation)
     }
 }
