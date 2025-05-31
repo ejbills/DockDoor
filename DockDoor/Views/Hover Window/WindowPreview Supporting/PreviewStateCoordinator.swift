@@ -1,6 +1,7 @@
 import Defaults
 import SwiftUI
 
+// Manages window element states and presentation of window switcher (and associated cycling
 class PreviewStateCoordinator: ObservableObject {
     @Published var currIndex: Int = 0
     @Published var windowSwitcherActive: Bool = false
