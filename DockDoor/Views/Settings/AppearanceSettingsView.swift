@@ -12,38 +12,10 @@ enum PreviewContext: String, CaseIterable, Identifiable {
     }
 }
 
-struct AppearanceSettingsView: View {
-    @Default(.uniformCardRadius) var uniformCardRadius
-    @Default(.showAppName) var showAppName
-    @Default(.appNameStyle) var appNameStyle
-    @Default(.showWindowTitle) var showWindowTitle
-    @Default(.windowTitleDisplayCondition) var windowTitleDisplayCondition
-    @Default(.windowTitleVisibility) var windowTitleVisibility
-    @Default(.windowTitlePosition) var windowTitlePosition
-    @Default(.windowSwitcherControlPosition) var windowSwitcherControlPosition
-    @Default(.dimInSwitcherUntilSelected) var dimInSwitcherUntilSelected
-    @Default(.selectionOpacity) var selectionOpacity
-    @Default(.selectionColor) var selectionColor
-    @Default(.switcherWrap) var switcherWrap
-    @Default(.previewWrap) var previewWrap
-    @Default(.showAppIconOnly) var showAppIconOnly
+// MARK: - Mock Data Generation
 
-    @State private var showAdvancedAppearanceSettings: Bool = false
-    @State private var selectedPreviewContext: PreviewContext = .dock
-
-    @State private var previousWindowTitlePosition: WindowTitlePosition
-    @State private var mockWindowsForPreview: [WindowInfo] = []
-    @State private var mockAppNameForPreview: String = "DockDoor (•‿•)"
-    @StateObject private var mockWindowSwitcherCoordinator = ScreenCenteredFloatingWindowCoordinator()
-    @StateObject private var mockDockPreviewCoordinator = ScreenCenteredFloatingWindowCoordinator()
-
-    private let advancedAppearanceSettingsSectionID = "advancedAppearanceSettingsSection"
-
-    init() {
-        _previousWindowTitlePosition = State(initialValue: Defaults[.windowTitlePosition])
-    }
-
-    private static func generateMockWindowsForPreview(count: Int = 2) -> [WindowInfo] {
+extension AppearanceSettingsView {
+    private static func generateMockWindowsForPreview(count: Int = 3) -> [WindowInfo] {
         guard let baseNSImage = NSImage(named: "WindowsXP") else {
             return []
         }
@@ -93,6 +65,62 @@ struct AppearanceSettingsView: View {
         return mockWindows
     }
 
+    static func getMockCoordinator(windows: [WindowInfo], windowSwitcherActive: Bool, dockPosition: DockPosition, bestGuessMonitor: NSScreen) -> PreviewStateCoordinator {
+        let coordinator = PreviewStateCoordinator()
+        coordinator.setWindows(windows, dockPosition: dockPosition, bestGuessMonitor: bestGuessMonitor, isMockPreviewActive: true)
+        coordinator.windowSwitcherActive = windowSwitcherActive
+        if !windows.isEmpty {
+            coordinator.currIndex = 0
+        }
+        return coordinator
+    }
+}
+
+struct AppearanceSettingsView: View {
+    @Default(.uniformCardRadius) var uniformCardRadius
+    @Default(.showAppName) var showAppName
+    @Default(.appNameStyle) var appNameStyle
+    @Default(.showWindowTitle) var showWindowTitle
+    @Default(.windowTitleDisplayCondition) var windowTitleDisplayCondition
+    @Default(.windowTitleVisibility) var windowTitleVisibility
+    @Default(.windowTitlePosition) var windowTitlePosition
+    @Default(.windowSwitcherControlPosition) var windowSwitcherControlPosition
+    @Default(.dimInSwitcherUntilSelected) var dimInSwitcherUntilSelected
+    @Default(.selectionOpacity) var selectionOpacity
+    @Default(.selectionColor) var selectionColor
+    @Default(.switcherWrap) var switcherWrap
+    @Default(.previewWrap) var previewWrap
+    @Default(.showAppIconOnly) var showAppIconOnly
+
+    @State private var showAdvancedAppearanceSettings: Bool = false
+    @State private var selectedPreviewContext: PreviewContext = .dock
+
+    @State private var previousWindowTitlePosition: WindowTitlePosition
+    @State private var mockAppNameForPreview: String = "DockDoor (•‿•)"
+    @StateObject private var mockWindowSwitcherCoordinator: PreviewStateCoordinator
+    @StateObject private var mockDockPreviewCoordinator: PreviewStateCoordinator
+
+    private let advancedAppearanceSettingsSectionID = "advancedAppearanceSettingsSection"
+
+    init() {
+        _previousWindowTitlePosition = State(initialValue: Defaults[.windowTitlePosition])
+
+        let initialMockWindows = AppearanceSettingsView.generateMockWindowsForPreview(count: 2)
+
+        _mockDockPreviewCoordinator = StateObject(wrappedValue: AppearanceSettingsView.getMockCoordinator(
+            windows: initialMockWindows,
+            windowSwitcherActive: false,
+            dockPosition: .bottom,
+            bestGuessMonitor: NSScreen.main!
+        ))
+        _mockWindowSwitcherCoordinator = StateObject(wrappedValue: AppearanceSettingsView.getMockCoordinator(
+            windows: initialMockWindows,
+            windowSwitcherActive: true,
+            dockPosition: .bottom,
+            bestGuessMonitor: NSScreen.main!
+        ))
+    }
+
     var body: some View {
         ScrollViewReader { proxy in
             BaseSettingsView {
@@ -123,15 +151,15 @@ struct AppearanceSettingsView: View {
                     }
 
                     VStack {
-                        if !mockWindowsForPreview.isEmpty {
+                        let currentCoordinator = selectedPreviewContext == .dock ? mockDockPreviewCoordinator : mockWindowSwitcherCoordinator
+                        if !currentCoordinator.windows.isEmpty {
                             WindowPreviewHoverContainer(
                                 appName: mockAppNameForPreview,
-                                windows: mockWindowsForPreview,
                                 onWindowTap: nil,
                                 dockPosition: .bottom,
                                 mouseLocation: .zero,
                                 bestGuessMonitor: NSScreen.main!,
-                                windowSwitcherCoordinator: selectedPreviewContext == .dock ? mockDockPreviewCoordinator : mockWindowSwitcherCoordinator,
+                                windowSwitcherCoordinator: currentCoordinator,
                                 mockPreviewActive: true,
                                 updateAvailable: false
                             )
@@ -140,14 +168,6 @@ struct AppearanceSettingsView: View {
                             Text("Loading preview...")
                                 .frame(minHeight: 150, maxHeight: 250)
                         }
-                    }
-                    .onAppear {
-                        if mockWindowsForPreview.isEmpty {
-                            mockWindowsForPreview = AppearanceSettingsView.generateMockWindowsForPreview(count: 2)
-                        }
-                        mockDockPreviewCoordinator.windowSwitcherActive = false
-                        mockWindowSwitcherCoordinator.windowSwitcherActive = true
-                        mockWindowSwitcherCoordinator.currIndex = 0
                     }
 
                     StyledGroupBox(label: selectedPreviewContext == .dock ? "Dock Preview Settings" : "Window Switcher Settings") {
