@@ -509,6 +509,7 @@ enum WindowUtil {
     static func updateAllWindowsInCurrentSpace() async {
         do {
             let content = try await SCShareableContent.excludingDesktopWindows(true, onScreenWindowsOnly: false)
+            var processedPIDs = Set<pid_t>()
 
             await withTaskGroup(of: Void.self) { group in
                 var processedCount = 0
@@ -525,14 +526,19 @@ enum WindowUtil {
                     }
 
                     if let nsApp = NSRunningApplication(processIdentifier: scApp.processID) {
+                        processedPIDs.insert(nsApp.processIdentifier)
                         group.addTask {
                             try? await captureAndCacheWindowInfo(window: window, app: nsApp)
                         }
                         processedCount += 1
                     }
                 }
-
                 await group.waitForAll()
+            }
+
+            // After processing windows, purify the cache for each app that had windows in the current space
+            for pid in processedPIDs {
+                _ = await purifyAppCache(with: pid, removeAll: false)
             }
 
         } catch {

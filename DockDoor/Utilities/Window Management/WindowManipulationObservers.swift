@@ -69,6 +69,7 @@ class WindowManipulationObservers {
         handleNewWindow(for: app.processIdentifier)
     }
 
+    @MainActor
     @objc private func appDidTerminate(_ notification: Notification) {
         guard let app = notification.userInfo?[NSWorkspace.applicationUserInfoKey] as? NSRunningApplication else {
             return

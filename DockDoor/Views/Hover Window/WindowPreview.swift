@@ -45,7 +45,7 @@ struct WindowPreview: View {
                 Image(decorative: cgImage, scale: 1.0)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
-                    .markHidden(isHidden: inactive || windowSwitcherActive && !isSelected && dimInSwitcherUntilSelected)
+                    .markHidden(isHidden: inactive || (windowSwitcherActive && !isSelected && dimInSwitcherUntilSelected))
                     .overlay(isSelected && !inactive ? CustomizableFluidGradientView().opacity(0.125) : nil)
                     .clipShape(uniformCardRadius ? AnyShape(RoundedRectangle(cornerRadius: 12, style: .continuous)) : AnyShape(Rectangle()))
             }
@@ -177,31 +177,36 @@ struct WindowPreview: View {
 
     @ViewBuilder
     private var previewCoreContent: some View {
-        let isHighlightedInWindowSwitcher = (index == currIndex && windowSwitcherActive)
-        let selected = isHoveringOverDockPeekPreview || isHighlightedInWindowSwitcher || isHoveringOverWindowSwitcherPreview
+        let isSelectedByKeyboardInDock = !windowSwitcherActive && (index == currIndex)
+        let isSelectedByKeyboardInSwitcher = windowSwitcherActive && (index == currIndex)
+
+        let finalIsSelected = isHoveringOverDockPeekPreview ||
+            isSelectedByKeyboardInSwitcher ||
+            isSelectedByKeyboardInDock ||
+            isHoveringOverWindowSwitcherPreview
 
         ZStack(alignment: .topLeading) {
             VStack(alignment: .leading, spacing: 0) {
                 if windowSwitcherActive, windowSwitcherControlPosition == .topLeading ||
                     windowSwitcherControlPosition == .topTrailing
                 {
-                    windowSwitcherContent(selected)
+                    windowSwitcherContent(finalIsSelected)
                 }
 
                 windowContent(
                     isMinimized: windowInfo.isMinimized,
                     isHidden: windowInfo.isHidden,
-                    isSelected: selected
+                    isSelected: finalIsSelected
                 )
 
                 if windowSwitcherActive, windowSwitcherControlPosition == .bottomLeading ||
                     windowSwitcherControlPosition == .bottomTrailing
                 {
-                    windowSwitcherContent(selected)
+                    windowSwitcherContent(finalIsSelected)
                 }
             }
             .background {
-                if selected || isHoveringOverWindowSwitcherPreview {
+                if finalIsSelected {
                     RoundedRectangle(cornerRadius: uniformCardRadius ? 14 : 0)
                         .fill(selectionColor?.opacity(selectionOpacity) ?? Color.secondary.opacity(selectionOpacity))
                         .padding(-6)

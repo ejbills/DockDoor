@@ -75,7 +75,6 @@ struct WindowPreviewHoverContainer: View {
     }
 
     var body: some View {
-        // Directly use dimensions from the coordinator
         let calculatedMaxDimension = previewStateCoordinator.overallMaxPreviewDimension
         let calculatedDimensionsMap = previewStateCoordinator.windowDimensionsMap
 
@@ -473,7 +472,7 @@ struct WindowPreviewHoverContainer: View {
     private func closeAllWindows() {
         onWindowTap?()
         let windowsToClose = previewStateCoordinator.windows
-        previewStateCoordinator.removeAllWindows(dockPosition: dockPosition, bestGuessMonitor: bestGuessMonitor, isMockPreviewActive: mockPreviewActive)
+        previewStateCoordinator.removeAllWindows()
 
         DispatchQueue.concurrentPerform(iterations: windowsToClose.count) { index in
             let window = windowsToClose[index]
@@ -530,12 +529,12 @@ struct WindowPreviewHoverContainer: View {
 
         case .close:
             WindowUtil.closeWindow(windowInfo: window)
-            previewStateCoordinator.removeWindow(at: index, dockPosition: dockPosition, bestGuessMonitor: bestGuessMonitor, isMockPreviewActive: mockPreviewActive)
+            previewStateCoordinator.removeWindow(at: index)
 
         case .minimize:
             if let newMinimizedState = WindowUtil.toggleMinimize(windowInfo: window) {
                 window.isMinimized = newMinimizedState
-                previewStateCoordinator.updateWindow(at: index, with: window, dockPosition: dockPosition, bestGuessMonitor: bestGuessMonitor, isMockPreviewActive: mockPreviewActive)
+                previewStateCoordinator.updateWindow(at: index, with: window)
             }
 
         case .toggleFullScreen:
@@ -545,7 +544,7 @@ struct WindowPreviewHoverContainer: View {
         case .hide:
             if let newHiddenState = WindowUtil.toggleHidden(windowInfo: window) {
                 window.isHidden = newHiddenState
-                previewStateCoordinator.updateWindow(at: index, with: window, dockPosition: dockPosition, bestGuessMonitor: bestGuessMonitor, isMockPreviewActive: mockPreviewActive)
+                previewStateCoordinator.updateWindow(at: index, with: window)
             }
 
         case .openNewWindow:
