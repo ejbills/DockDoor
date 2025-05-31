@@ -6,6 +6,10 @@ enum ArrowDirection {
     case left, right, up, down
 }
 
+enum ArrowDirection {
+    case left, right, up, down
+}
+
 final class SharedPreviewWindowCoordinator: NSPanel {
     weak static var activeInstance: SharedPreviewWindowCoordinator?
 
@@ -368,6 +372,18 @@ final class SharedPreviewWindowCoordinator: NSPanel {
 
     func navigateWithArrowKey(direction: ArrowDirection) {
         guard !windowSwitcherCoordinator.windows.isEmpty else { return }
+
+        let goBackwards = switch direction {
+        case .left, .up:
+            true
+        case .right, .down:
+            false
+        }
+        cycleWindows(goBackwards: goBackwards)
+    }
+
+    func navigateWithArrowKey(direction: ArrowDirection) {
+        guard !windows.isEmpty else { return }
 
         let goBackwards = switch direction {
         case .left, .up:
