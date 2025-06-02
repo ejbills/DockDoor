@@ -6,46 +6,13 @@ enum ArrowDirection {
     case left, right, up, down
 }
 
-class ScreenCenteredFloatingWindowCoordinator: ObservableObject {
-    @Published var currIndex: Int = 0
-    @Published var windowSwitcherActive: Bool = false
-    @Published var fullWindowPreviewActive: Bool = false
-
-    enum WindowState {
-        case windowSwitcher
-        case fullWindowPreview
-        case both
-    }
-
-    func setShowing(_ state: WindowState? = .both, toState: Bool) {
-        switch state {
-        case .windowSwitcher:
-            windowSwitcherActive = toState
-        case .fullWindowPreview:
-            fullWindowPreviewActive = toState
-        case .both:
-            windowSwitcherActive = toState
-            fullWindowPreviewActive = toState
-        case .none:
-            return
-        }
-    }
-
-    func setIndex(to: Int) {
-        withAnimation(.snappy(duration: 0.125)) {
-            self.currIndex = to
-        }
-    }
-}
-
 final class SharedPreviewWindowCoordinator: NSPanel {
     weak static var activeInstance: SharedPreviewWindowCoordinator?
 
-    let windowSwitcherCoordinator = ScreenCenteredFloatingWindowCoordinator()
+    let windowSwitcherCoordinator = PreviewStateCoordinator()
     private let dockManager = DockAutoHideManager()
 
     private var appName: String = ""
-    private var windows: [WindowInfo] = []
     private var onWindowTap: (() -> Void)?
     private var fullPreviewWindow: NSPanel?
 
@@ -84,27 +51,25 @@ final class SharedPreviewWindowCoordinator: NSPanel {
     }
 
     // Hide the window and reset its state
+    @MainActor
     func hideWindow() {
-        DispatchQueue.main.async { [weak self] in
-            guard let self, isVisible else { return }
+        guard isVisible else { return }
 
-            // End any active drag operations
-            DragPreviewCoordinator.shared.endDragging()
+        DragPreviewCoordinator.shared.endDragging()
+        hideFullPreviewWindow()
 
-            hideFullPreviewWindow()
-
-            if let currentContent = contentView {
-                currentContent.removeFromSuperview()
-            }
-            contentView = nil
-
-            appName = ""
-            windows.removeAll()
-            windowSwitcherCoordinator.setIndex(to: 0)
-            windowSwitcherCoordinator.setShowing(.both, toState: false)
-            dockManager.restoreDockState()
-            orderOut(nil)
+        if let currentContent = contentView {
+            currentContent.removeFromSuperview()
         }
+        contentView = nil
+        appName = ""
+
+        let currentDockPos = DockUtils.getDockPosition()
+        let currentScreen = NSScreen.main ?? NSScreen.screens.first!
+        windowSwitcherCoordinator.setWindows([], dockPosition: currentDockPos, bestGuessMonitor: currentScreen)
+        windowSwitcherCoordinator.setShowing(.both, toState: false)
+        dockManager.restoreDockState()
+        orderOut(nil)
     }
 
     func cancelDebounceWorkItem() {
@@ -113,16 +78,16 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         }
     }
 
-    // Update the content view size and position
+    @MainActor
     private func updateContentViewSizeAndPosition(mouseLocation: CGPoint? = nil, mouseScreen: NSScreen, dockItemElement: AXUIElement?,
                                                   animated: Bool, centerOnScreen: Bool = false,
-                                                  centeredHoverWindowState: ScreenCenteredFloatingWindowCoordinator.WindowState? = nil)
+                                                  centeredHoverWindowState: PreviewStateCoordinator.WindowState? = nil)
     {
         windowSwitcherCoordinator.setShowing(centeredHoverWindowState, toState: centerOnScreen)
-        // Reset the hosting view
+
         let updateAvailable = (NSApp.delegate as? AppDelegate)?.updaterState.anUpdateIsAvailable ?? false
 
-        let hoverView = WindowPreviewHoverContainer(appName: appName, windows: windows, onWindowTap: onWindowTap,
+        let hoverView = WindowPreviewHoverContainer(appName: appName, onWindowTap: onWindowTap,
                                                     dockPosition: DockUtils.getDockPosition(), mouseLocation: mouseLocation,
                                                     bestGuessMonitor: mouseScreen, windowSwitcherCoordinator: windowSwitcherCoordinator,
                                                     mockPreviewActive: false,
@@ -151,7 +116,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         previousHoverWindowOrigin = position
     }
 
-    // Show full preview window for a given WindowInfo
+    @MainActor
     private func showFullPreviewWindow(for windowInfo: WindowInfo, on screen: NSScreen) {
         if fullPreviewWindow == nil {
             let styleMask: NSWindow.StyleMask = [.nonactivatingPanel, .fullSizeContentView, .borderless]
@@ -185,6 +150,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         fullPreviewWindow?.makeKeyAndOrderFront(nil)
     }
 
+    @MainActor
     func hideFullPreviewWindow() {
         fullPreviewWindow?.orderOut(nil)
         if let currentFullPreviewContent = fullPreviewWindow?.contentView {
@@ -194,7 +160,6 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         fullPreviewWindow = nil
     }
 
-    // Center window on screen
     private func centerWindowOnScreen(size: CGSize, screen: NSScreen) -> CGPoint {
         CGPoint(
             x: screen.frame.midX - (size.width / 2),
@@ -202,7 +167,6 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         )
     }
 
-    // Calculate window position based on the given dock icon frame and dock position
     private func calculateWindowPosition(mouseLocation: CGPoint?, windowSize: CGSize, screen: NSScreen, dockItemElement: AXUIElement) -> CGPoint {
         guard let mouseLocation else { return .zero }
         let screenFrame = screen.frame
@@ -263,7 +227,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         return CGPoint.zero
     }
 
-    // Apply window frame with optional animation
+    @MainActor
     private func applyWindowFrame(_ frame: CGRect, animated: Bool) {
         let shouldAnimate = animated && frame != self.frame && Defaults[.showAnimations]
 
@@ -315,30 +279,26 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         }
     }
 
-    // Show window with debounce logic
     func showWindow(appName: String, windows: [WindowInfo], mouseLocation: CGPoint? = nil, mouseScreen: NSScreen? = nil,
                     dockItemElement: AXUIElement?,
-                    overrideDelay: Bool = false, centeredHoverWindowState: ScreenCenteredFloatingWindowCoordinator.WindowState? = nil,
+                    overrideDelay: Bool = false, centeredHoverWindowState: PreviewStateCoordinator.WindowState? = nil,
                     onWindowTap: (() -> Void)? = nil)
     {
         let now = Date()
-        let naturalDelay = if Defaults[.lateralMovement] {
-            Defaults[.hoverWindowOpenDelay] == 0 ? 0.2 : Defaults[.hoverWindowOpenDelay]
-        } else {
-            Defaults[.hoverWindowOpenDelay]
-        }
+        let naturalDelay = Defaults[.lateralMovement] ? (Defaults[.hoverWindowOpenDelay] == 0 ? 0.2 : Defaults[.hoverWindowOpenDelay]) : Defaults[.hoverWindowOpenDelay]
         let delay = overrideDelay ? 0.0 : naturalDelay
 
         debounceWorkItem?.cancel()
 
         let workItem = DispatchWorkItem { [weak self] in
-            // prevent preview from showing if mouse has moved significantly from original position
             if let mouseLocation, mouseLocation.distance(to: NSEvent.mouseLocation) > 100 {
                 return
             }
 
-            self?.performShowWindow(appName: appName, windows: windows, mouseLocation: mouseLocation, mouseScreen: mouseScreen,
-                                    dockItemElement: dockItemElement, centeredHoverWindowState: centeredHoverWindowState, onWindowTap: onWindowTap)
+            Task { @MainActor [weak self] in
+                self?.performShowWindow(appName: appName, windows: windows, mouseLocation: mouseLocation, mouseScreen: mouseScreen,
+                                        dockItemElement: dockItemElement, centeredHoverWindowState: centeredHoverWindowState, onWindowTap: onWindowTap)
+            }
         }
 
         if let lastShowTime, now.timeIntervalSince(lastShowTime) < debounceDelay {
@@ -346,7 +306,9 @@ final class SharedPreviewWindowCoordinator: NSPanel {
             DispatchQueue.main.asyncAfter(deadline: .now() + debounceDelay, execute: workItem)
         } else {
             if delay == 0.0 {
-                performShowWindow(appName: appName, windows: windows, mouseLocation: mouseLocation, mouseScreen: mouseScreen, dockItemElement: dockItemElement, centeredHoverWindowState: centeredHoverWindowState, onWindowTap: onWindowTap)
+                Task { @MainActor [weak self] in
+                    self?.performShowWindow(appName: appName, windows: windows, mouseLocation: mouseLocation, mouseScreen: mouseScreen, dockItemElement: dockItemElement, centeredHoverWindowState: centeredHoverWindowState, onWindowTap: onWindowTap)
+                }
             } else {
                 debounceWorkItem = workItem
                 DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: workItem)
@@ -356,75 +318,139 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         lastShowTime = now
     }
 
-    // Perform the actual window showing
+    @MainActor
     private func performShowWindow(appName: String, windows: [WindowInfo], mouseLocation: CGPoint?,
                                    mouseScreen: NSScreen?, dockItemElement: AXUIElement?,
-                                   centeredHoverWindowState: ScreenCenteredFloatingWindowCoordinator.WindowState? = nil,
+                                   centeredHoverWindowState: PreviewStateCoordinator.WindowState? = nil,
                                    onWindowTap: (() -> Void)?)
     {
-        // ensure view isn't transparent
-        alphaValue = 1.0
         guard !windows.isEmpty else { return }
 
         dockManager.preventDockHiding(centeredHoverWindowState != nil)
-
         let shouldCenterOnScreen = centeredHoverWindowState != .none
 
-        DispatchQueue.main.async { [weak self] in
-            guard let self else { return }
+        let screen = mouseScreen ?? NSScreen.main!
+        hideFullPreviewWindow()
+        alphaValue = 1.0
 
-            let screen = mouseScreen ?? NSScreen.main!
+        if centeredHoverWindowState == .fullWindowPreview,
+           let windowInfo = windows.first,
+           let windowPosition = try? windowInfo.axElement.position(),
+           let windowScreen = windowPosition.screen()
+        {
+            showFullPreviewWindow(for: windowInfo, on: windowScreen)
+        } else {
+            self.appName = appName
+            let currentDockPosition = DockUtils.getDockPosition()
 
-            hideFullPreviewWindow() // clean up any lingering fullscreen previews before presenting a new one
+            windowSwitcherCoordinator.setWindows(windows, dockPosition: currentDockPosition, bestGuessMonitor: screen)
+            self.onWindowTap = onWindowTap
 
-            // If in full window preview mode, show the full preview window and return early
-            if centeredHoverWindowState == .fullWindowPreview,
-               let windowInfo = windows.first,
-               let windowPosition = try? windowInfo.axElement.position(),
-               let windowScreen = windowPosition.screen()
-            {
-                showFullPreviewWindow(for: windowInfo, on: windowScreen)
+            updateContentViewSizeAndPosition(mouseLocation: mouseLocation, mouseScreen: screen, dockItemElement: dockItemElement, animated: !shouldCenterOnScreen,
+                                             centerOnScreen: shouldCenterOnScreen, centeredHoverWindowState: centeredHoverWindowState)
+        }
+        makeKeyAndOrderFront(nil)
+    }
+
+    @MainActor
+    func cycleWindows(goBackwards: Bool) {
+        let coordinator = windowSwitcherCoordinator
+        guard !coordinator.windows.isEmpty else { return }
+
+        var newIndex = coordinator.currIndex
+        let windowsCount = coordinator.windows.count
+
+        if !coordinator.windowSwitcherActive, coordinator.currIndex < 0 {
+            newIndex = goBackwards ? (windowsCount - 1) : 0
+            if windowsCount == 0 { newIndex = -1 }
+        } else if windowsCount > 0 {
+            newIndex = (coordinator.currIndex + (goBackwards ? -1 : 1) + windowsCount) % windowsCount
+        } else {
+            newIndex = -1
+        }
+        coordinator.setIndex(to: newIndex)
+    }
+
+    @MainActor
+    func selectAndBringToFrontCurrentWindow() {
+        let currentIndex = windowSwitcherCoordinator.currIndex
+        guard currentIndex >= 0, currentIndex < windowSwitcherCoordinator.windows.count else {
+            hideWindow()
+            return
+        }
+
+        let selectedWindow = windowSwitcherCoordinator.windows[currentIndex]
+        WindowUtil.bringWindowToFront(windowInfo: selectedWindow)
+        hideWindow()
+    }
+
+    @MainActor
+    func navigateWithArrowKey(direction: ArrowDirection) {
+        let coordinator = windowSwitcherCoordinator
+        guard !coordinator.windows.isEmpty else { return }
+
+        var newIndex = coordinator.currIndex
+        let windowsCount = coordinator.windows.count
+
+        if !coordinator.windowSwitcherActive, coordinator.currIndex < 0 {
+            switch direction {
+            case .left, .up: newIndex = windowsCount > 0 ? windowsCount - 1 : -1
+            case .right, .down: newIndex = windowsCount > 0 ? 0 : -1
+            }
+        } else {
+            let goBackwards = switch direction {
+            case .left, .up: true
+            case .right, .down: false
+            }
+            var tempCurrentIndex = coordinator.currIndex
+            if windowsCount > 0 {
+                tempCurrentIndex = (tempCurrentIndex + (goBackwards ? -1 : 1) + windowsCount) % windowsCount
             } else {
-                self.appName = appName
-                self.windows = windows
-                self.onWindowTap = onWindowTap
+                tempCurrentIndex = -1
+            }
+            newIndex = tempCurrentIndex
+        }
+        coordinator.setIndex(to: newIndex)
+    }
 
-                updateContentViewSizeAndPosition(mouseLocation: mouseLocation, mouseScreen: screen, dockItemElement: dockItemElement, animated: !shouldCenterOnScreen,
-                                                 centerOnScreen: shouldCenterOnScreen, centeredHoverWindowState: centeredHoverWindowState)
+    @MainActor
+    func performActionOnCurrentWindow(action: WindowAction) {
+        let coordinator = windowSwitcherCoordinator
+        guard coordinator.currIndex >= 0, coordinator.currIndex < coordinator.windows.count else {
+            return
+        }
+
+        var window = coordinator.windows[coordinator.currIndex]
+        let originalIndex = coordinator.currIndex
+
+        switch action {
+        case .quit:
+            WindowUtil.quitApp(windowInfo: window, force: NSEvent.modifierFlags.contains(.option))
+            hideWindow()
+
+        case .close:
+            WindowUtil.closeWindow(windowInfo: window)
+            coordinator.removeWindow(at: originalIndex)
+
+        case .minimize:
+            if let newMinimizedState = WindowUtil.toggleMinimize(windowInfo: window) {
+                window.isMinimized = newMinimizedState
+                coordinator.updateWindow(at: originalIndex, with: window)
             }
 
-            makeKeyAndOrderFront(nil)
+        case .toggleFullScreen:
+            WindowUtil.toggleFullScreen(windowInfo: window)
+            hideWindow()
+
+        case .hide:
+            if let newHiddenState = WindowUtil.toggleHidden(windowInfo: window) {
+                window.isHidden = newHiddenState
+                coordinator.updateWindow(at: originalIndex, with: window)
+            }
+
+        case .openNewWindow:
+            WindowUtil.openNewWindow(app: window.app)
+            hideWindow()
         }
-    }
-
-    // Update or create the hosting view
-    // Cycle through windows
-    func cycleWindows(goBackwards: Bool) {
-        guard !windows.isEmpty else { return }
-
-        let currentIndex = windowSwitcherCoordinator.currIndex
-        let newIndex = (currentIndex + (goBackwards ? -1 : 1) + windows.count) % windows.count
-        windowSwitcherCoordinator.setIndex(to: newIndex)
-    }
-
-    // Select and bring to front the current window
-    func selectAndBringToFrontCurrentWindow() {
-        hideWindow()
-
-        guard !windows.isEmpty else { return }
-        let selectedWindow = windows[windowSwitcherCoordinator.currIndex]
-        WindowUtil.bringWindowToFront(windowInfo: selectedWindow)
-    }
-
-    func navigateWithArrowKey(direction: ArrowDirection) {
-        guard !windows.isEmpty else { return }
-
-        let goBackwards = switch direction {
-        case .left, .up:
-            true
-        case .right, .down:
-            false
-        }
-        cycleWindows(goBackwards: goBackwards)
     }
 }

@@ -294,30 +294,57 @@ enum WindowUtil {
     }
 
     static func bringWindowToFront(windowInfo: WindowInfo) {
-//        if let appDelegate = NSApplication.shared.delegate as? AppDelegate { // clean up lingering settings pane windows which interfere with AX actions
-//            appDelegate.settingsWindowController.close()
-//        }
+        if let appDelegate = NSApplication.shared.delegate as? AppDelegate, windowInfo.app.localizedName != "DockDoor" { // clean up lingering settings pane windows which interfere with AX actions
+            appDelegate.settingsWindowController.close()
+        }
 
-        do {
-            try windowInfo.axElement.performAction(kAXRaiseAction)
-            try windowInfo.axElement.performAction(kAXPressAction)
-            try windowInfo.axElement.setAttribute(kAXMainAttribute, true)
-            try windowInfo.axElement.setAttribute(kAXFocusedAttribute, true)
-            try windowInfo.axElement.setAttribute(kAXFrontmostAttribute, true)
+        let maxRetries = 3
+        var retryCount = 0
 
-            if !windowInfo.app.activate() {
-                try windowInfo.appAxElement.setAttribute(kAXFocusedAttribute, true)
-                try windowInfo.appAxElement.setAttribute(kAXFrontmostAttribute, true)
-                throw NSError(domain: "FailedToActivate", code: 1, userInfo: [NSLocalizedDescriptionKey: "Failed to activate application"])
-            }
+        func attemptActivation() -> Bool {
+            do {
+                // First try to activate the application
+                let activationOptions: NSApplication.ActivationOptions = [.activateIgnoringOtherApps]
+                let activated = windowInfo.app.activate(options: activationOptions)
 
-            updateWindowDateTime(windowInfo)
-        } catch {
-            print("Failed to bring window to front: \(error)")
-            if error is AxError {
-                removeWindowFromDesktopSpaceCache(with: windowInfo.id, in: windowInfo.app.processIdentifier)
+                if !activated {
+                    // Try alternative activation method
+                    try windowInfo.appAxElement.setAttribute(kAXFocusedAttribute, true)
+                    try windowInfo.appAxElement.setAttribute(kAXFrontmostAttribute, true)
+                }
+
+                usleep(10000)
+
+                try windowInfo.axElement.performAction(kAXRaiseAction)
+                try windowInfo.axElement.performAction(kAXPressAction)
+                try windowInfo.axElement.setAttribute(kAXMainAttribute, true)
+                try windowInfo.axElement.setAttribute(kAXFocusedAttribute, true)
+                try windowInfo.axElement.setAttribute(kAXFrontmostAttribute, true)
+
+                updateWindowDateTime(windowInfo)
+                return true
+
+            } catch {
+                print("Attempt \(retryCount + 1) failed to bring window to front: \(error)")
+                if error is AxError {
+                    removeWindowFromDesktopSpaceCache(with: windowInfo.id, in: windowInfo.app.processIdentifier)
+                }
+                return false
             }
         }
+
+        // Try activation with retries
+        while retryCount < maxRetries {
+            if attemptActivation() {
+                return
+            }
+            retryCount += 1
+            if retryCount < maxRetries {
+                usleep(50000)
+            }
+        }
+
+        print("Failed to bring window to front after \(maxRetries) attempts")
     }
 
     static func openNewWindow(app: NSRunningApplication) {
@@ -482,6 +509,7 @@ enum WindowUtil {
     static func updateAllWindowsInCurrentSpace() async {
         do {
             let content = try await SCShareableContent.excludingDesktopWindows(true, onScreenWindowsOnly: false)
+            var processedPIDs = Set<pid_t>()
 
             await withTaskGroup(of: Void.self) { group in
                 var processedCount = 0
@@ -498,14 +526,19 @@ enum WindowUtil {
                     }
 
                     if let nsApp = NSRunningApplication(processIdentifier: scApp.processID) {
+                        processedPIDs.insert(nsApp.processIdentifier)
                         group.addTask {
                             try? await captureAndCacheWindowInfo(window: window, app: nsApp)
                         }
                         processedCount += 1
                     }
                 }
-
                 await group.waitForAll()
+            }
+
+            // After processing windows, purify the cache for each app that had windows in the current space
+            for pid in processedPIDs {
+                _ = await purifyAppCache(with: pid, removeAll: false)
             }
 
         } catch {
@@ -520,7 +553,7 @@ enum WindowUtil {
             if let existingWindow = desktopSpaceWindowCacheManager.readCache(pid: app.processIdentifier).first(where: { $0.id == windowID }),
                let actualSCWindow = existingWindow.scWindow
             {
-                var updatedWindow = existingWindow
+                let updatedWindow = existingWindow
                 await Task.detached(priority: .userInitiated) {
                     if let image = try? await captureWindowImage(window: actualSCWindow, forceRefresh: true) {
                         var mutableCopy = updatedWindow
@@ -601,7 +634,7 @@ enum WindowUtil {
         let shouldWindowBeCaptured = (closeButton != nil) || (minimizeButton != nil)
 
         if shouldWindowBeCaptured {
-            var windowInfo = WindowInfo(
+            let windowInfo = WindowInfo(
                 windowProvider: window,
                 app: app,
                 image: nil,
@@ -615,9 +648,9 @@ enum WindowUtil {
 
             await Task.detached(priority: .userInitiated) {
                 if let image = try? await captureWindowImage(window: window) {
-                    var updatedInfo = windowInfo
-                    updatedInfo.image = image
-                    updateDesktopSpaceWindowCache(with: updatedInfo, preventDateUpdate)
+                    var mutableCopy = windowInfo
+                    mutableCopy.image = image
+                    updateDesktopSpaceWindowCache(with: mutableCopy, preventDateUpdate)
                 }
             }.value
         }

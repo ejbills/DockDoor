@@ -24,7 +24,6 @@ class MockPreviewWindow: WindowPropertiesProviding {
 
 struct WindowPreviewHoverContainer: View {
     let appName: String
-    let windows: [WindowInfo]
     let onWindowTap: (() -> Void)?
     let dockPosition: DockPosition
     let mouseLocation: CGPoint?
@@ -32,7 +31,7 @@ struct WindowPreviewHoverContainer: View {
     var mockPreviewActive: Bool
     let updateAvailable: Bool
 
-    @ObservedObject var windowSwitcherCoordinator: ScreenCenteredFloatingWindowCoordinator
+    @ObservedObject var previewStateCoordinator: PreviewStateCoordinator
 
     @Default(.uniformCardRadius) var uniformCardRadius
     @Default(.showAppName) var showAppTitleData
@@ -43,8 +42,8 @@ struct WindowPreviewHoverContainer: View {
     @Default(.previewWrap) var previewWrap
     @Default(.switcherWrap) var switcherWrap
     @Default(.gradientColorPalette) private var gradientColorPalette
+    @Default(.showAnimations) var showAnimations
 
-    @State var windowStates: [WindowInfo]
     @State private var draggedWindowIndex: Int? = nil
     @State private var isDragging = false
 
@@ -57,89 +56,66 @@ struct WindowPreviewHoverContainer: View {
     @State private var lastShakeCheck: Date = .init()
 
     init(appName: String,
-         windows: [WindowInfo],
          onWindowTap: (() -> Void)?,
          dockPosition: DockPosition,
          mouseLocation: CGPoint?,
          bestGuessMonitor: NSScreen,
-         windowSwitcherCoordinator: ScreenCenteredFloatingWindowCoordinator,
+         windowSwitcherCoordinator: PreviewStateCoordinator,
          mockPreviewActive: Bool,
          updateAvailable: Bool)
     {
         self.appName = appName
-        self.windows = windows
-        _windowStates = State(initialValue: windows)
         self.onWindowTap = onWindowTap
         self.dockPosition = dockPosition
         self.mouseLocation = mouseLocation
         self.bestGuessMonitor = bestGuessMonitor
-        self.windowSwitcherCoordinator = windowSwitcherCoordinator
+        previewStateCoordinator = windowSwitcherCoordinator
         self.mockPreviewActive = mockPreviewActive
         self.updateAvailable = updateAvailable
     }
 
-    var maxWindowDimension: CGPoint {
-        let thickness = mockPreviewActive ? 200 : (SharedPreviewWindowCoordinator.activeInstance?.windowSize.height ?? getWindowSize().height)
-        var maxWidth: CGFloat = 300
-        var maxHeight: CGFloat = 300
-
-        let orientationIsHorizontal = dockPosition == .bottom || windowSwitcherCoordinator.windowSwitcherActive
-        let maxAspectRatio: CGFloat = 1.5
-
-        for window in windows {
-            if let cgImage = window.image {
-                let cgSize = CGSize(width: cgImage.width, height: cgImage.height)
-
-                if orientationIsHorizontal {
-                    let rawWidthBasedOnHeight = (cgSize.width * thickness) / cgSize.height
-                    let widthBasedOnHeight = min(rawWidthBasedOnHeight, thickness * maxAspectRatio)
-
-                    maxWidth = max(maxWidth, widthBasedOnHeight)
-                    maxHeight = thickness
-                } else {
-                    let rawHeightBasedOnWidth = (cgSize.height * thickness) / cgSize.width
-                    let heightBasedOnWidth = min(rawHeightBasedOnWidth, thickness * maxAspectRatio)
-
-                    maxHeight = max(maxHeight, heightBasedOnWidth)
-                    maxWidth = thickness
-                }
-            }
-        }
-
-        return CGPoint(x: maxWidth, y: maxHeight)
-    }
-
     var body: some View {
-        let orientationIsHorizontal = dockPosition.isHorizontalFlow || windowSwitcherCoordinator.windowSwitcherActive
+        let calculatedMaxDimension = previewStateCoordinator.overallMaxPreviewDimension
+        let calculatedDimensionsMap = previewStateCoordinator.windowDimensionsMap
+
+        let orientationIsHorizontal = dockPosition.isHorizontalFlow || previewStateCoordinator.windowSwitcherActive
 
         ScrollViewReader { scrollProxy in
-            buildFlowStack(windows: windowStates, scrollProxy: scrollProxy, orientationIsHorizontal)
-                .padding(.top, (!windowSwitcherCoordinator.windowSwitcherActive && appNameStyle == .default && showAppTitleData) ? 25 : 0)
-                .overlay(alignment: .topLeading) {
-                    hoverTitleBaseView(labelSize: measureString(appName, fontSize: 14))
-                        .onHover { isHovered in
-                            withAnimation(.snappy) { hoveringWindowTitle = isHovered }
-                        }
-                }
-                .dockStyle(cornerRadius: 16)
-                .padding(.top, (!windowSwitcherCoordinator.windowSwitcherActive && appNameStyle == .popover && showAppTitleData) ? 30 : 0)
-                .overlay {
-                    if !mockPreviewActive, !isDragging {
-                        WindowDismissalContainer(appName: appName,
-                                                 bestGuessMonitor: bestGuessMonitor,
-                                                 dockPosition: dockPosition,
-                                                 minimizeAllWindowsCallback: { minimizeAllWindows() })
-                            .allowsHitTesting(false)
+            buildFlowStack(
+                scrollProxy: scrollProxy,
+                orientationIsHorizontal,
+                currentMaxDimensionForPreviews: calculatedMaxDimension,
+                currentDimensionsMapForPreviews: calculatedDimensionsMap
+            )
+            .padding(.top, (!previewStateCoordinator.windowSwitcherActive && appNameStyle == .default && showAppTitleData) ? 25 : 0)
+            .overlay(alignment: .topLeading) {
+                hoverTitleBaseView(labelSize: measureString(appName, fontSize: 14))
+                    .onHover { isHovered in
+                        withAnimation(.snappy) { hoveringWindowTitle = isHovered }
                     }
+            }
+            .dockStyle(cornerRadius: 16)
+            .padding(.top, (!previewStateCoordinator.windowSwitcherActive && appNameStyle == .popover && showAppTitleData) ? 30 : 0)
+            .overlay {
+                if !mockPreviewActive, !isDragging {
+                    WindowDismissalContainer(appName: appName,
+                                             bestGuessMonitor: bestGuessMonitor,
+                                             dockPosition: dockPosition,
+                                             minimizeAllWindowsCallback: { minimizeAllWindows() })
+                        .allowsHitTesting(false)
                 }
-                .padding(.all, mockPreviewActive ? 0 : 24)
-                .frame(maxWidth: bestGuessMonitor.visibleFrame.width, maxHeight: bestGuessMonitor.visibleFrame.height)
+            }
+            .padding(.all, mockPreviewActive ? 0 : 24)
+            .frame(maxWidth: bestGuessMonitor.visibleFrame.width, maxHeight: bestGuessMonitor.visibleFrame.height)
+        }
+        .onAppear {
+            loadAppIcon()
         }
     }
 
     private func handleWindowDrop(at location: CGPoint, for index: Int) {
-        guard index < windowStates.count else { return }
-        let window = windowStates[index]
+        guard index < previewStateCoordinator.windows.count else { return }
+        let window = previewStateCoordinator.windows[index]
 
         let currentScreen = NSScreen.screenContainingMouse(location)
         let globalLocation = DockObserver.cgPointFromNSPoint(location, forScreen: currentScreen)
@@ -158,7 +134,7 @@ struct WindowPreviewHoverContainer: View {
 
     @ViewBuilder
     private func hoverTitleBaseView(labelSize: CGSize) -> some View {
-        if !windowSwitcherCoordinator.windowSwitcherActive, showAppTitleData {
+        if !previewStateCoordinator.windowSwitcherActive, showAppTitleData {
             Group {
                 switch appNameStyle {
                 case .default:
@@ -181,7 +157,7 @@ struct WindowPreviewHoverContainer: View {
                     }
                     .padding(.top, 10)
                     .padding(.horizontal)
-                    .animation(.spring(response: 0.3), value: hoveringAppIcon)
+                    .animation(.smooth(duration: 0.15), value: hoveringAppIcon)
 
                 case .shadowed:
                     HStack(spacing: 2) {
@@ -202,7 +178,7 @@ struct WindowPreviewHoverContainer: View {
                         massOperations(hoveringAppIcon && !updateAvailable)
                     }
                     .padding(EdgeInsets(top: -11.5, leading: 15, bottom: -1.5, trailing: 1.5))
-                    .animation(.spring(response: 0.3), value: hoveringAppIcon)
+                    .animation(.smooth(duration: 0.15), value: hoveringAppIcon)
 
                 case .popover:
                     HStack {
@@ -230,7 +206,7 @@ struct WindowPreviewHoverContainer: View {
                         Spacer()
                     }
                     .offset(y: -30)
-                    .animation(.spring(response: 0.3), value: hoveringAppIcon)
+                    .animation(.smooth(duration: 0.15), value: hoveringAppIcon)
                 }
             }
             .onHover { hover in
@@ -380,36 +356,44 @@ struct WindowPreviewHoverContainer: View {
     }
 
     @ViewBuilder
-    private func buildFlowStack(windows: [WindowInfo], scrollProxy: ScrollViewProxy, _ isHorizontal: Bool) -> some View {
-        let dimensionsMap = precomputeWindowDimensions()
-        let wrap = windowSwitcherCoordinator.windowSwitcherActive ? switcherWrap : previewWrap
-        let layout = calculateOptimalLayout(windowDimensions: dimensionsMap, isHorizontal: isHorizontal, wrap: wrap)
+    private func buildFlowStack(
+        scrollProxy: ScrollViewProxy,
+        _ isHorizontal: Bool,
+        currentMaxDimensionForPreviews: CGPoint,
+        currentDimensionsMapForPreviews: [Int: WindowDimensions]
+    ) -> some View {
+        let wrap = previewStateCoordinator.windowSwitcherActive ? switcherWrap : previewWrap
+        let layout = calculateOptimalLayout(
+            windowDimensions: currentDimensionsMapForPreviews,
+            isHorizontal: isHorizontal,
+            wrap: wrap,
+            maxDimensionForLayout: currentMaxDimensionForPreviews
+        )
 
         ScrollView(isHorizontal ? .horizontal : .vertical, showsIndicators: false) {
             DynStack(direction: isHorizontal ? .vertical : .horizontal, spacing: 16) {
                 ForEach(Array(layout.windowsPerStack.enumerated()), id: \.offset) { _, range in
                     DynStack(direction: isHorizontal ? .horizontal : .vertical, spacing: 16) {
-                        ForEach(windowStates.indices, id: \.self) { index in
+                        ForEach(previewStateCoordinator.windows.indices, id: \.self) { index in
                             if range.contains(index) {
                                 WindowPreview(
-                                    windowInfo: windowStates[index],
+                                    windowInfo: previewStateCoordinator.windows[index],
                                     onTap: onWindowTap,
                                     index: index,
                                     dockPosition: dockPosition,
-                                    maxWindowDimension: maxWindowDimension,
+                                    maxWindowDimension: currentMaxDimensionForPreviews,
                                     bestGuessMonitor: bestGuessMonitor,
                                     uniformCardRadius: uniformCardRadius,
                                     handleWindowAction: { action in
                                         handleWindowAction(action, at: index)
                                     },
-                                    currIndex: windowSwitcherCoordinator.currIndex,
-                                    windowSwitcherActive: windowSwitcherCoordinator.windowSwitcherActive,
-                                    dimensions: getDimensions(for: index, dimensionsMap: dimensionsMap),
+                                    currIndex: previewStateCoordinator.currIndex,
+                                    windowSwitcherActive: previewStateCoordinator.windowSwitcherActive,
+                                    dimensions: getDimensions(for: index, dimensionsMap: currentDimensionsMapForPreviews),
                                     showAppIconOnly: showAppIconOnly,
                                     mockPreviewActive: mockPreviewActive
                                 )
                                 .id("\(appName)-\(index)")
-                                .animation(.snappy(duration: 0.175), value: windowStates)
                                 .gesture(
                                     DragGesture(minimumDistance: 3, coordinateSpace: .global)
                                         .onChanged { value in
@@ -417,13 +401,13 @@ struct WindowPreviewHoverContainer: View {
                                                 draggedWindowIndex = index
                                                 isDragging = true
                                                 DragPreviewCoordinator.shared.startDragging(
-                                                    windowInfo: windowStates[index],
+                                                    windowInfo: previewStateCoordinator.windows[index],
                                                     at: NSEvent.mouseLocation
                                                 )
                                             }
                                             if draggedWindowIndex == index {
                                                 let currentPoint = value.location
-                                                if !windowSwitcherCoordinator.windowSwitcherActive, aeroShakeAction != .none,
+                                                if !previewStateCoordinator.windowSwitcherActive, aeroShakeAction != .none,
                                                    checkForShakeGesture(currentPoint: currentPoint)
                                                 {
                                                     DragPreviewCoordinator.shared.endDragging()
@@ -434,7 +418,7 @@ struct WindowPreviewHoverContainer: View {
                                                     case .all:
                                                         minimizeAllWindows()
                                                     case .except:
-                                                        minimizeAllWindows(windowStates[index])
+                                                        minimizeAllWindows(previewStateCoordinator.windows[index])
                                                     default: break
                                                     }
                                                 } else {
@@ -459,99 +443,113 @@ struct WindowPreviewHoverContainer: View {
             }
             .padding(20)
         }
-        .onAppear {
-            loadAppIcon()
-        }
-        .onChange(of: windowSwitcherCoordinator.currIndex) { newIndex in
-            withAnimation {
+        .animation(.smooth(duration: 0.1), value: previewStateCoordinator.windows)
+        .onChange(of: previewStateCoordinator.currIndex) { newIndex in
+            if showAnimations {
+                withAnimation(.snappy) {
+                    scrollProxy.scrollTo("\(appName)-\(newIndex)", anchor: .center)
+                }
+            } else {
                 scrollProxy.scrollTo("\(appName)-\(newIndex)", anchor: .center)
             }
         }
     }
 
     private func loadAppIcon() {
-        if let app = windows.first?.app, let icon = app.icon {
+        if let app = previewStateCoordinator.windows.first?.app, let icon = app.icon {
             DispatchQueue.main.async {
-                appIcon = icon
+                if appIcon != icon {
+                    appIcon = icon
+                }
+            }
+        } else if appIcon != nil {
+            DispatchQueue.main.async {
+                appIcon = nil
             }
         }
     }
 
     private func closeAllWindows() {
         onWindowTap?()
-        windowStates.removeAll()
+        let windowsToClose = previewStateCoordinator.windows
+        previewStateCoordinator.removeAllWindows()
 
-        DispatchQueue.concurrentPerform(iterations: windows.count) { index in
-            let window = windows[index]
+        DispatchQueue.concurrentPerform(iterations: windowsToClose.count) { index in
+            let window = windowsToClose[index]
             WindowUtil.closeWindow(windowInfo: window)
         }
     }
 
     private func minimizeAllWindows(_ except: WindowInfo? = nil) {
         onWindowTap?()
+        let originalWindows = previewStateCoordinator.windows
+        var modifiedWindows = originalWindows
+        var didMinimizeAny = false
 
-        if let except {
-            WindowUtil.bringWindowToFront(windowInfo: except)
+        if let except { WindowUtil.bringWindowToFront(windowInfo: except) }
 
-            windowStates.removeAll { $0 != except }
-
-            DispatchQueue.concurrentPerform(iterations: windows.count) { index in
-                let window = windows[index]
-                guard !window.isMinimized else { return }
-                if window != except {
-                    _ = WindowUtil.toggleMinimize(windowInfo: window)
+        for i in 0 ..< modifiedWindows.count {
+            if modifiedWindows[i] == except { continue }
+            if !modifiedWindows[i].isMinimized {
+                if WindowUtil.toggleMinimize(windowInfo: modifiedWindows[i]) == true {
+                    modifiedWindows[i].isMinimized = true
+                    didMinimizeAny = true
                 }
             }
-
-        } else {
-            windowStates.removeAll()
-
-            DispatchQueue.concurrentPerform(iterations: windows.count) { index in
-                let window = windows[index]
-                guard !window.isMinimized else { return }
-                _ = WindowUtil.toggleMinimize(windowInfo: window)
+        }
+        if didMinimizeAny || except == nil { // If we are minimizing all, or some were minimized
+            if except == nil {
+                previewStateCoordinator.setWindows([], dockPosition: dockPosition, bestGuessMonitor: bestGuessMonitor, isMockPreviewActive: mockPreviewActive)
+            } else {
+                var windowsToKeep: [WindowInfo] = []
+                for var window in originalWindows {
+                    if window == except {
+                        windowsToKeep.append(window)
+                        continue
+                    }
+                    if WindowUtil.toggleMinimize(windowInfo: window) == true {
+                        window.isMinimized = true
+                    } else {
+                        windowsToKeep.append(window)
+                    }
+                }
+                previewStateCoordinator.setWindows(windowsToKeep, dockPosition: dockPosition, bestGuessMonitor: bestGuessMonitor, isMockPreviewActive: mockPreviewActive)
             }
         }
     }
 
     private func handleWindowAction(_ action: WindowAction, at index: Int) {
-        guard index < windowStates.count else { return }
-        var window = windowStates[index]
+        guard index < previewStateCoordinator.windows.count else { return }
+        var window = previewStateCoordinator.windows[index]
 
-        withAnimation(.snappy(duration: 0.175)) {
-            switch action {
-            case .quit:
-                WindowUtil.quitApp(windowInfo: window, force: NSEvent.modifierFlags.contains(.option))
-                onWindowTap?()
+        switch action {
+        case .quit:
+            WindowUtil.quitApp(windowInfo: window, force: NSEvent.modifierFlags.contains(.option))
+            onWindowTap?()
 
-            case .close:
-                WindowUtil.closeWindow(windowInfo: window)
-                windowStates.remove(at: index)
+        case .close:
+            WindowUtil.closeWindow(windowInfo: window)
+            previewStateCoordinator.removeWindow(at: index)
 
-                if windowStates.isEmpty {
-                    onWindowTap?()
-                }
-
-            case .minimize:
-                if let newMinimizedState = WindowUtil.toggleMinimize(windowInfo: window) {
-                    window.isMinimized = newMinimizedState
-                    windowStates[index] = window
-                }
-
-            case .toggleFullScreen:
-                WindowUtil.toggleFullScreen(windowInfo: window)
-                onWindowTap?()
-
-            case .hide:
-                if let newHiddenState = WindowUtil.toggleHidden(windowInfo: window) {
-                    window.isHidden = newHiddenState
-                    windowStates[index] = window
-                }
-
-            case .openNewWindow:
-                WindowUtil.openNewWindow(app: window.app)
-                onWindowTap?()
+        case .minimize:
+            if let newMinimizedState = WindowUtil.toggleMinimize(windowInfo: window) {
+                window.isMinimized = newMinimizedState
+                previewStateCoordinator.updateWindow(at: index, with: window)
             }
+
+        case .toggleFullScreen:
+            WindowUtil.toggleFullScreen(windowInfo: window)
+            onWindowTap?()
+
+        case .hide:
+            if let newHiddenState = WindowUtil.toggleHidden(windowInfo: window) {
+                window.isHidden = newHiddenState
+                previewStateCoordinator.updateWindow(at: index, with: window)
+            }
+
+        case .openNewWindow:
+            WindowUtil.openNewWindow(app: window.app)
+            onWindowTap?()
         }
     }
 
