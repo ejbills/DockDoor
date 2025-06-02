@@ -62,7 +62,6 @@ enum KeyCodeConverter {
         case 36:
             return "↩︎" // Return symbol
         default:
-
             let source = TISCopyCurrentKeyboardInputSource().takeUnretainedValue()
             let layoutData = TISGetInputSourceProperty(source, kTISPropertyUnicodeKeyLayoutData)
 
