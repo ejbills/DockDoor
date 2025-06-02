@@ -38,6 +38,47 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://buymeacoffee.com/keplercafe</div>
 
+<a id="v1.13"></a>
+# [v1.13](https://github.com/ejbills/DockDoor/releases/tag/v1.13) - 2025-06-02
+
+It is my cat's 7th birthday 🎂
+<img src="https://github.com/user-attachments/assets/bf6cba2d-643a-42cb-aa7c-d89c6a16800e" width="200" alt="Cat's 7th birthday celebration">
+
+⚠️ This update changes a large amount of code. Be sure to report bugs if encountered.
+
+### 🆕 What's New in DockDoor
+
+* **Arrow Key Navigation**
+  Navigate through windows in both the Window Switcher and Dock Previews using arrow keys and Tab, then press Return to select your desired window—perfect for keyboard-driven workflows.
+
+* **Enhanced Keyboard Shortcuts**
+  Added essential keyboard shortcuts to selected windows in previews: use Tab or arrow keys to select a window, then press `CMD + W` to close, `CMD + Q` to quit the app, or `CMD + M` to minimize—all without touching your mouse.
+
+* **Improved Window State Management**
+  Completely redesigned the underlying window tracking system using observed objects for better memory efficiency and more reliable window state synchronization across all views.
+
+---
+
+### 🛠 Improvements & Fixes
+
+* **Performance Optimizations**
+  - Refactored memory management by removing redundant window states
+  - Implemented queued window switcher for smoother operation
+  - Enhanced flow algorithm for better responsiveness
+
+* **Window Tracking Reliability**
+  - Fixed issue where closed windows would still appear in the Window Switcher
+  - Improved window filter validation to ensure only active windows are displayed
+  - Better activation attempt handling for more consistent behavior
+
+* **Architecture Improvements**
+  - Streamlined window state orchestration between dock previews and child window views
+  - Reduced memory bloat by eliminating duplicate window object copies
+  - Enhanced cross-view communication for better action synchronization
+
+[Changes][v1.13]
+
+
 <a id="v1.12.1"></a>
 # [v1.12.1](https://github.com/ejbills/DockDoor/releases/tag/v1.12.1) - 2025-05-29
 
@@ -941,6 +982,7 @@ v1.0
 [Changes][releases]
 
 
+[v1.13]: https://github.com/ejbills/DockDoor/compare/v1.12.1...v1.13
 [v1.12.1]: https://github.com/ejbills/DockDoor/compare/v1.12...v1.12.1
 [v1.12]: https://github.com/ejbills/DockDoor/compare/v1.11...v1.12
 [v1.11]: https://github.com/ejbills/DockDoor/compare/v1.10...v1.11
