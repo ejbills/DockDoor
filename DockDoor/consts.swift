@@ -12,6 +12,7 @@ let roughWidthCap = optimisticScreenSizeWidth / 3
 extension Defaults.Keys {
     static let sizingMultiplier = Key<CGFloat>("sizingMultiplier", default: DockUtils.getDockPosition() == .bottom ? 5 : 3)
     static let bufferFromDock = Key<CGFloat>("bufferFromDock", default: CoreDockIsMagnificationEnabled() ? -25 : DockUtils.getDockPosition() == .right ? -18 : -20)
+    static let useAccentColorForSelection = Key<Bool>("useAccentColorForSelection", default: false)
     static let hoverWindowOpenDelay = Key<CGFloat>("openDelay", default: 0.2)
     static let lateralMovement = Key<Bool>("lateralMovement", default: true)
     static let preventDockHide = Key<Bool>("preventDockHide", default: false)

@@ -91,6 +91,7 @@ struct AppearanceSettingsView: View {
     @Default(.switcherWrap) var switcherWrap
     @Default(.previewWrap) var previewWrap
     @Default(.showAppIconOnly) var showAppIconOnly
+    @Default(.useAccentColorForSelection) var useAccentColorForSelection
 
     @State private var showAdvancedAppearanceSettings: Bool = false
     @State private var selectedPreviewContext: PreviewContext = .dock
@@ -353,11 +354,15 @@ struct AppearanceSettingsView: View {
         VStack(alignment: .leading, spacing: 16) {
             StyledGroupBox(label: "Selection Highlight") {
                 VStack(alignment: .leading, spacing: 10) {
+                    Toggle(isOn: $useAccentColorForSelection) {
+                        Text("Use System Accent Color for Highlight")
+                    }
                     HStack {
                         ColorPicker("Window Selection Background Color", selection: Binding(
                             get: { selectionColor ?? .secondary },
                             set: { selectionColor = $0 }
                         ))
+                        .disabled(useAccentColorForSelection)
                         Button(action: {
                             Defaults.reset(.selectionColor)
                         }) {
@@ -365,6 +370,7 @@ struct AppearanceSettingsView: View {
                         }
                         .buttonStyle(AccentButtonStyle(small: true))
                     }
+                    .disabled(useAccentColorForSelection)
 
                     sliderSetting(title: String(localized: "Window Selection Background Opacity"),
                                   value: $selectionOpacity,
@@ -372,6 +378,7 @@ struct AppearanceSettingsView: View {
                                   step: 0.05,
                                   unit: "",
                                   formatter: NumberFormatter.percentFormatter)
+                        .disabled(useAccentColorForSelection)
                 }
             }
 

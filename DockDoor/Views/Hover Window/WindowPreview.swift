@@ -26,6 +26,7 @@ struct WindowPreview: View {
     @Default(.windowSwitcherControlPosition) var windowSwitcherControlPosition
     @Default(.selectionOpacity) var selectionOpacity
     @Default(.selectionColor) var selectionColor
+    @Default(.useAccentColorForSelection) var useAccentColorForSelection
     @Default(.dimInSwitcherUntilSelected) var dimInSwitcherUntilSelected
 
     @Default(.tapEquivalentInterval) var tapEquivalentInterval
@@ -207,8 +208,13 @@ struct WindowPreview: View {
             }
             .background {
                 if finalIsSelected {
+                    let highlightColor: Color = if useAccentColorForSelection {
+                        Color(nsColor: .controlAccentColor)
+                    } else {
+                        selectionColor ?? .secondary
+                    }
                     RoundedRectangle(cornerRadius: uniformCardRadius ? 14 : 0)
-                        .fill(selectionColor?.opacity(selectionOpacity) ?? Color.secondary.opacity(selectionOpacity))
+                        .fill(highlightColor.opacity(selectionOpacity))
                         .padding(-6)
                 }
             }
