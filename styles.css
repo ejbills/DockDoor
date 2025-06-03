@@ -469,6 +469,62 @@ header {
     height: 1.25rem;
 }
 
+/* Keyboard Navigation Section */
+.keyboard-nav-content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+}
+
+.keyboard-demo {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    margin: 3rem 0;
+    flex-wrap: wrap;
+}
+
+.keyboard-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    padding: 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    max-width: 300px;
+    text-align: center;
+    transition: var(--transition);
+}
+
+.keyboard-card:hover {
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.keyboard-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.keyboard-keys {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    margin: 1rem 0;
+    flex-wrap: wrap;
+}
+
+.key {
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 6px;
+    padding: 0.5rem 0.75rem;
+    font-family: 'SF Mono', Monaco, Consolas, monospace;
+    font-size: 0.9rem;
+    font-weight: 500;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
 /* Feature Showcase Styles */
 .feature-showcase {
     padding: 5rem 0;
@@ -479,15 +535,15 @@ header {
     border-radius: var(--radius-lg);
     overflow: hidden;
     box-shadow: var(--shadow-lg);
-    max-height: 500px; /* Limit the height of video containers */
+    max-height: 500px;
 }
 
 .feature-media {
     width: 100%;
     height: auto;
     display: block;
-    max-height: 500px; /* Limit video height */
-    object-fit: contain; /* Maintain aspect ratio */
+    max-height: 500px;
+    object-fit: contain;
 }
 
 .feature-description-container {
@@ -521,7 +577,7 @@ header {
     box-shadow: var(--shadow);
     transition: var(--transition);
     border: 1px solid var(--light-dark);
-    height: 420px; /* Fixed height for consistency */
+    height: 420px;
     display: flex;
     flex-direction: column;
 }
@@ -542,7 +598,7 @@ header {
 
 .special-feature-media {
     width: 100%;
-    height: 200px; /* Fixed height for media */
+    height: 200px;
     overflow: hidden;
     flex: 0 0 auto;
 }
@@ -1012,6 +1068,13 @@ header {
     color: var(--dark);
 }
 
+/* Footer */
+footer {
+    background: #1a202c;
+    color: white;
+    padding: 3rem 0 1rem;
+}
+
 .footer-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -1032,12 +1095,12 @@ header {
 }
 
 .footer-link {
-    color: var(--gray);
+    color: #94a3b8;
     transition: var(--transition);
 }
 
 .footer-link:hover {
-    color: var(--light);
+    color: white;
 }
 
 .footer-bottom {
@@ -1045,7 +1108,7 @@ header {
     justify-content: space-between;
     align-items: center;
     padding-top: 2rem;
-    border-top: 1px solid var(--gray);
+    border-top: 1px solid #374151;
 }
 
 .footer-social {
@@ -1054,13 +1117,13 @@ header {
 }
 
 .social-icon {
-    color: var(--gray);
+    color: #94a3b8;
     font-size: 1.25rem;
     transition: var(--transition);
 }
 
 .social-icon:hover {
-    color: var(--light);
+    color: white;
 }
 
 /* Utility Classes */
@@ -1209,6 +1272,12 @@ header {
         grid-template-columns: 1fr;
     }
     
+    .keyboard-demo {
+        flex-direction: column;
+        align-items: center;
+        gap: 2rem;
+    }
+    
     .download-options {
         flex-direction: column;
         align-items: center;
@@ -1265,6 +1334,20 @@ header {
     
     .header-actions .btn {
         padding: 0.375rem 0.75rem;
+        font-size: 0.8rem;
+    }
+    
+    .keyboard-card {
+        max-width: 280px;
+        padding: 1.5rem;
+    }
+    
+    .keyboard-keys {
+        gap: 0.25rem;
+    }
+    
+    .key {
+        padding: 0.375rem 0.5rem;
         font-size: 0.8rem;
     }
 }
