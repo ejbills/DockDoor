@@ -38,6 +38,18 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://buymeacoffee.com/keplercafe</div>
 
+<a id="v1.13.1"></a>
+# [v1.13.1](https://github.com/ejbills/DockDoor/releases/tag/v1.13.1) - 2025-06-04
+
+### 🛠 Improvements & Fixes
+
+* **Real-time Preview Updates**: Window previews in both the Dock Previews and Window Switcher now update immediately when windows are closed or new windows from an already previewed application are opened. This eliminates stale previews and ensures the UI accurately reflects the current window state.
+
+
+
+[Changes][v1.13.1]
+
+
 <a id="v1.13"></a>
 # [v1.13](https://github.com/ejbills/DockDoor/releases/tag/v1.13) - 2025-06-02
 
@@ -982,6 +994,7 @@ v1.0
 [Changes][releases]
 
 
+[v1.13.1]: https://github.com/ejbills/DockDoor/compare/v1.13...v1.13.1
 [v1.13]: https://github.com/ejbills/DockDoor/compare/v1.12.1...v1.13
 [v1.12.1]: https://github.com/ejbills/DockDoor/compare/v1.12...v1.12.1
 [v1.12]: https://github.com/ejbills/DockDoor/compare/v1.11...v1.12
