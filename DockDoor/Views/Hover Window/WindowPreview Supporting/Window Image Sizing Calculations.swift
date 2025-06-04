@@ -68,17 +68,6 @@ extension WindowPreviewHoverContainer {
             var targetWidth: CGFloat
             var targetHeight: CGFloat
 
-            // This logic determines how each individual preview image is scaled *within* the bounds
-            // defined by overallMaxDimensions.
-            // If overallMaxDimensions.x is the width for horizontal items, use that.
-            // If overallMaxDimensions.y is the height for horizontal items, use that.
-
-            // If the overall container's orientation is horizontal (dock bottom or switcher mode),
-            // then 'overallMaxDimensions.y' (which is 'thickness') dictates the height of each preview,
-            // and 'overallMaxDimensions.x' is the max width *one* preview can take if it's very wide.
-            // The 'precomputeWindowDimensions' in the previous version used 'maxWindowDimension.x' and 'maxWindowDimension.y'
-            // where maxWindowDimension itself was already adjusted for orientation (one side was 'thickness').
-
             targetWidth = maxAllowedWidth
             targetHeight = targetWidth / aspectRatio
 
@@ -100,7 +89,47 @@ extension WindowPreviewHoverContainer {
         return dimensionsMap
     }
 
-    // Helper method to get dimensions for a specific window
+    static func calculateSingleWindowDimensions(
+        windowInfo: WindowInfo,
+        overallMaxDimensions: CGPoint,
+        bestGuessMonitor: NSScreen
+    ) -> WindowDimensions {
+        let cardMaxFrameDimensions = CGSize(
+            width: bestGuessMonitor.frame.width * 0.75,
+            height: bestGuessMonitor.frame.height * 0.75
+        )
+
+        guard let cgImage = windowInfo.image else {
+            return WindowDimensions(size: .zero, maxDimensions: cardMaxFrameDimensions)
+        }
+
+        let maxAllowedWidth = overallMaxDimensions.x
+        let maxAllowedHeight = overallMaxDimensions.y
+        let cgSize = CGSize(width: cgImage.width, height: cgImage.height)
+        let aspectRatio = cgSize.height > 0 ? cgSize.width / cgSize.height : 1.0
+
+        var targetWidth: CGFloat
+        var targetHeight: CGFloat
+
+        targetWidth = maxAllowedWidth
+        targetHeight = targetWidth / aspectRatio
+
+        if targetHeight > maxAllowedHeight {
+            targetHeight = maxAllowedHeight
+            targetWidth = aspectRatio * targetHeight
+        }
+
+        if targetWidth > maxAllowedWidth {
+            targetWidth = maxAllowedWidth
+            targetHeight = targetWidth / (aspectRatio > 0 ? aspectRatio : 1.0)
+        }
+
+        return WindowDimensions(
+            size: CGSize(width: max(1, targetWidth), height: max(1, targetHeight)), // Ensure positive
+            maxDimensions: cardMaxFrameDimensions
+        )
+    }
+
     func getDimensions(for index: Int, dimensionsMap: [Int: WindowDimensions]) -> WindowDimensions {
         guard index >= 0, index < previewStateCoordinator.windows.count else {
             return WindowDimensions(

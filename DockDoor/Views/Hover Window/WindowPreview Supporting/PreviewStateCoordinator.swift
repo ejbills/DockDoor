@@ -10,6 +10,7 @@ class PreviewStateCoordinator: ObservableObject {
 
     @Published var overallMaxPreviewDimension: CGPoint = .zero
     @Published var windowDimensionsMap: [Int: WindowPreviewHoverContainer.WindowDimensions] = [:]
+    private var lastKnownBestGuessMonitor: NSScreen?
 
     enum WindowState {
         case windowSwitcher
@@ -68,6 +69,7 @@ class PreviewStateCoordinator: ObservableObject {
     @MainActor
     func setWindows(_ newWindows: [WindowInfo], dockPosition: DockPosition, bestGuessMonitor: NSScreen, isMockPreviewActive: Bool = false) {
         windows = newWindows
+        lastKnownBestGuessMonitor = bestGuessMonitor
 
         if windowSwitcherActive {
             if currIndex >= windows.count || (currIndex < 0 && !windows.isEmpty) {
@@ -135,6 +137,44 @@ class PreviewStateCoordinator: ObservableObject {
         } else {
             if currIndex >= newWindowsCount {
                 currIndex = newWindowsCount - 1
+            }
+        }
+    }
+
+    @MainActor
+    func removeWindow(byAx ax: AXUIElement) {
+        guard let indexToRemove = windows.firstIndex(where: { $0.axElement == ax }) else {
+            return // Window not found
+        }
+        removeWindow(at: indexToRemove)
+    }
+
+    @MainActor
+    func addWindows(_ newWindowsToAdd: [WindowInfo]) {
+        guard !newWindowsToAdd.isEmpty else { return }
+
+        guard let monitor = lastKnownBestGuessMonitor, overallMaxPreviewDimension != .zero else {
+            // Add windows to the list but skip dimension calculation for now.
+            // They will be processed in the next full setWindows call.
+            for newWin in newWindowsToAdd {
+                if !windows.contains(where: { $0.id == newWin.id }) {
+                    windows.append(newWin)
+                }
+            }
+            return
+        }
+
+        for newWin in newWindowsToAdd {
+            if !windows.contains(where: { $0.id == newWin.id }) {
+                windows.append(newWin)
+
+                let newWindowIndex = windows.count - 1
+                let singleWindowDimensions = WindowPreviewHoverContainer.calculateSingleWindowDimensions(
+                    windowInfo: newWin,
+                    overallMaxDimensions: overallMaxPreviewDimension,
+                    bestGuessMonitor: monitor
+                )
+                windowDimensionsMap[newWindowIndex] = singleWindowDimensions
             }
         }
     }
