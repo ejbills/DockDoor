@@ -45,18 +45,18 @@ struct GradientColorPaletteSettingsView: View {
             }
         }
 
-        sliderSetting(title: String(localized: "Animation speed"),
+        sliderSetting(title: "Animation speed",
                       value: $storedSettings.speed,
                       range: 0.1 ... 1.0,
                       step: 0.05,
-                      unit: String(localized: "seconds"),
+                      unit: "seconds",
                       formatter: NumberFormatter.twoDecimalFormatter)
 
-        sliderSetting(title: String(localized: "Blur amount"),
+        sliderSetting(title: "Blur amount",
                       value: $storedSettings.blur,
                       range: 0 ... 1.0,
                       step: 0.05,
-                      unit: String(localized: "amount"),
+                      unit: "amount",
                       formatter: NumberFormatter.twoDecimalFormatter)
             .onAppear {
                 setupColorDebounce()

@@ -256,7 +256,7 @@ struct AppearanceSettingsView: View {
                         get: { Double(previewWrap) },
                         set: { previewWrap = Int($0) }
                     )
-                    sliderSetting(title: String(localized: "Max Stacks for Dock Previews"),
+                    sliderSetting(title: "Max Stacks for Dock Previews",
                                   value: previewWrapBinding,
                                   range: 0.0 ... 10.0,
                                   step: 1.0,
@@ -303,7 +303,7 @@ struct AppearanceSettingsView: View {
                         get: { Double(switcherWrap) },
                         set: { switcherWrap = Int($0) }
                     )
-                    sliderSetting(title: String(localized: "Max Rows for Switcher Previews"),
+                    sliderSetting(title: "Max Rows for Switcher Previews",
                                   value: switcherWrapBinding,
                                   range: 0.0 ... 10.0,
                                   step: 1.0,
@@ -372,7 +372,7 @@ struct AppearanceSettingsView: View {
                     }
                     .disabled(useAccentColorForSelection)
 
-                    sliderSetting(title: String(localized: "Window Selection Background Opacity"),
+                    sliderSetting(title: "Window Selection Background Opacity",
                                   value: $selectionOpacity,
                                   range: 0 ... 1,
                                   step: 0.05,

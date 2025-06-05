@@ -71,7 +71,7 @@ final class UpdaterState: NSObject, SPUUpdaterDelegate, ObservableObject {
 
     func checkForUpdates() {
         guard let updater else {
-            updateStatus = .error("Updater not configured.")
+            updateStatus = .error(String(localized: "Updater not configured."))
             return
         }
         updateStatus = .checking
@@ -102,13 +102,13 @@ final class UpdaterState: NSObject, SPUUpdaterDelegate, ObservableObject {
 
     func updater(_ updater: SPUUpdater, didAbortWithError error: Error) {
         DispatchQueue.main.async {
-            self.updateStatus = .error("Update aborted: \(error.localizedDescription)")
+            self.updateStatus = .error(String(localized: "Update aborted: \(error.localizedDescription)"))
         }
     }
 
     func updater(_ updater: SPUUpdater, failedToDownloadUpdate item: SUAppcastItem, error: Error) {
         DispatchQueue.main.async {
-            self.updateStatus = .error("Failed to download v\(item.versionString): \(error.localizedDescription)")
+            self.updateStatus = .error(String(localized: "Failed to download v\(item.versionString): \(error.localizedDescription)"))
         }
     }
 

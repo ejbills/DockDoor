@@ -21144,6 +21144,16 @@
         }
       }
     },
+    "Failed to download v%@: %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Failed to download v%1$@: %2$@"
+          }
+        }
+      }
+    },
     "Filters" : {
       "comment" : "Filters tab title",
       "localizations" : {
@@ -43427,6 +43437,9 @@
         }
       }
     },
+    "px" : {
+
+    },
     "Quit" : {
       "localizations" : {
         "af" : {
@@ -61326,6 +61339,9 @@
         }
       }
     },
+    "Update aborted: %@" : {
+
+    },
     "Update available" : {
       "localizations" : {
         "af" : {
@@ -61896,6 +61912,9 @@
           }
         }
       }
+    },
+    "Updater not configured." : {
+
     },
     "Updates" : {
       "comment" : "Settings tab title",
@@ -66479,6 +66498,9 @@
           }
         }
       }
+    },
+    "Window Buffer from Dock (pixels)" : {
+
     },
     "Window Cache Lifespan" : {
       "extractionState" : "stale",

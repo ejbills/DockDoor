@@ -1,11 +1,11 @@
 import SwiftUI
 
 func sliderSetting<T: BinaryFloatingPoint>(
-    title: String,
+    title: LocalizedStringKey,
     value: Binding<T>,
     range: ClosedRange<T>,
     step: T.Stride,
-    unit: String,
+    unit: LocalizedStringKey,
     formatter: NumberFormatter = NumberFormatter.defaultFormatter
 ) -> some View where T.Stride: BinaryFloatingPoint {
     VStack(alignment: .leading, spacing: 5) {
