@@ -42,7 +42,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         level = Defaults[.raisedWindowLevel] ? .statusBar : .floating
         isOpaque = false
         backgroundColor = .clear
-        hasShadow = true
+        hasShadow = false
         isReleasedWhenClosed = false
         isMovableByWindowBackground = false
         collectionBehavior = [.canJoinAllSpaces, .transient, .fullScreenAuxiliary]
@@ -50,8 +50,16 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         becomesKeyOnlyIfNeeded = true
     }
 
-    // Hide the window and reset its state
-    @MainActor
+    private func isMediaApp(bundleIdentifier: String?) -> Bool {
+        guard let bundleId = bundleIdentifier else { return false }
+        return bundleId == spotifyAppIdentifier || bundleId == appleMusicAppIdentifier
+    }
+
+    private func isCalendarApp(bundleIdentifier: String?) -> Bool {
+        guard let bundleId = bundleIdentifier else { return false }
+        return bundleId == calendarAppIdentifier
+    }
+
     func hideWindow() {
         guard isVisible else { return }
 
@@ -76,6 +84,37 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         DispatchQueue.main.async { [weak self] in
             self?.debounceWorkItem?.cancel()
         }
+    }
+
+    @MainActor
+    private func performShowView(_ view: some View,
+                                 mouseLocation: CGPoint?,
+                                 mouseScreen: NSScreen,
+                                 dockItemElement: AXUIElement?)
+    {
+        let hostingView = NSHostingView(rootView: view)
+
+        if let oldContentView = contentView {
+            oldContentView.removeFromSuperview()
+        }
+        contentView = hostingView
+
+        let newHoverWindowSize = hostingView.fittingSize
+        let position: CGPoint
+
+        if let validDockItemElement = dockItemElement {
+            position = calculateWindowPosition(mouseLocation: mouseLocation,
+                                               windowSize: newHoverWindowSize,
+                                               screen: mouseScreen,
+                                               dockItemElement: validDockItemElement)
+        } else {
+            print("Warning: dockItemElement is nil when showing custom view. Defaulting position to center of screen.")
+            position = centerWindowOnScreen(size: newHoverWindowSize, screen: mouseScreen)
+        }
+
+        let finalFrame = CGRect(origin: position, size: newHoverWindowSize)
+        applyWindowFrame(finalFrame, animated: true)
+        previousHoverWindowOrigin = position
     }
 
     @MainActor
@@ -277,12 +316,74 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         } else {
             setFrame(frame, display: true)
         }
+
+        alphaValue = 1.0
+        makeKeyAndOrderFront(nil)
+    }
+
+    @MainActor
+    private func performDisplay(
+        appName: String,
+        windows: [WindowInfo],
+        mouseLocation: CGPoint?,
+        mouseScreen: NSScreen?,
+        dockItemElement: AXUIElement?,
+        centeredHoverWindowState: PreviewStateCoordinator.WindowState?,
+        onWindowTap: (() -> Void)?,
+        bundleIdentifier: String?
+    ) {
+        let screen = mouseScreen ?? NSScreen.main!
+
+        if let bundleId = bundleIdentifier {
+            if isMediaApp(bundleIdentifier: bundleId) {
+                let mediaView = MediaControlsView(
+                    appName: appName,
+                    bundleIdentifier: bundleId,
+                    dockPosition: DockUtils.getDockPosition(),
+                    bestGuessMonitor: screen
+                )
+                performShowView(
+                    mediaView,
+                    mouseLocation: mouseLocation,
+                    mouseScreen: screen,
+                    dockItemElement: dockItemElement
+                )
+            } else if isCalendarApp(bundleIdentifier: bundleId) {
+                let calendarView = CalendarView(appName: appName, bundleIdentifier: bundleId, dockPosition: DockUtils.getDockPosition(), bestGuessMonitor: screen)
+                performShowView(
+                    calendarView,
+                    mouseLocation: mouseLocation,
+                    mouseScreen: screen,
+                    dockItemElement: dockItemElement
+                )
+            } else {
+                performShowWindow(
+                    appName: appName,
+                    windows: windows,
+                    mouseLocation: mouseLocation,
+                    mouseScreen: mouseScreen,
+                    dockItemElement: dockItemElement,
+                    centeredHoverWindowState: centeredHoverWindowState,
+                    onWindowTap: onWindowTap
+                )
+            }
+        } else {
+            performShowWindow(
+                appName: appName,
+                windows: windows,
+                mouseLocation: mouseLocation,
+                mouseScreen: mouseScreen,
+                dockItemElement: dockItemElement,
+                centeredHoverWindowState: centeredHoverWindowState,
+                onWindowTap: onWindowTap
+            )
+        }
     }
 
     func showWindow(appName: String, windows: [WindowInfo], mouseLocation: CGPoint? = nil, mouseScreen: NSScreen? = nil,
                     dockItemElement: AXUIElement?,
                     overrideDelay: Bool = false, centeredHoverWindowState: PreviewStateCoordinator.WindowState? = nil,
-                    onWindowTap: (() -> Void)? = nil)
+                    onWindowTap: (() -> Void)? = nil, bundleIdentifier: String? = nil)
     {
         let now = Date()
         let naturalDelay = Defaults[.lateralMovement] ? (Defaults[.hoverWindowOpenDelay] == 0 ? 0.2 : Defaults[.hoverWindowOpenDelay]) : Defaults[.hoverWindowOpenDelay]
@@ -296,8 +397,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
             }
 
             Task { @MainActor [weak self] in
-                self?.performShowWindow(appName: appName, windows: windows, mouseLocation: mouseLocation, mouseScreen: mouseScreen,
-                                        dockItemElement: dockItemElement, centeredHoverWindowState: centeredHoverWindowState, onWindowTap: onWindowTap)
+                self?.performDisplay(appName: appName, windows: windows, mouseLocation: mouseLocation, mouseScreen: mouseScreen, dockItemElement: dockItemElement, centeredHoverWindowState: centeredHoverWindowState, onWindowTap: onWindowTap, bundleIdentifier: bundleIdentifier)
             }
         }
 
@@ -307,7 +407,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         } else {
             if delay == 0.0 {
                 Task { @MainActor [weak self] in
-                    self?.performShowWindow(appName: appName, windows: windows, mouseLocation: mouseLocation, mouseScreen: mouseScreen, dockItemElement: dockItemElement, centeredHoverWindowState: centeredHoverWindowState, onWindowTap: onWindowTap)
+                    self?.performDisplay(appName: appName, windows: windows, mouseLocation: mouseLocation, mouseScreen: mouseScreen, dockItemElement: dockItemElement, centeredHoverWindowState: centeredHoverWindowState, onWindowTap: onWindowTap, bundleIdentifier: bundleIdentifier)
                 }
             } else {
                 debounceWorkItem = workItem
@@ -331,7 +431,6 @@ final class SharedPreviewWindowCoordinator: NSPanel {
 
         let screen = mouseScreen ?? NSScreen.main!
         hideFullPreviewWindow()
-        alphaValue = 1.0
 
         if centeredHoverWindowState == .fullWindowPreview,
            let windowInfo = windows.first,
@@ -349,7 +448,6 @@ final class SharedPreviewWindowCoordinator: NSPanel {
             updateContentViewSizeAndPosition(mouseLocation: mouseLocation, mouseScreen: screen, dockItemElement: dockItemElement, animated: !shouldCenterOnScreen,
                                              centerOnScreen: shouldCenterOnScreen, centeredHoverWindowState: centeredHoverWindowState)
         }
-        makeKeyAndOrderFront(nil)
     }
 
     @MainActor

@@ -2,6 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSCalendarsUsageDescription</key>
+	<string>DockDoor uses EventKit to fetch task info from Calendar.</string>
+	<key>NSAppleEventsUsageDescription</key>
+	<string>DockDoor uses AppleEvents to fetch music info from Music and Spotify.</string>
 	<key>LSUIElement</key>
 	<true/>
 	<key>SUEnableDownloaderService</key>

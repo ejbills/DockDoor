@@ -80,33 +80,32 @@ struct WindowPreviewHoverContainer: View {
 
         let orientationIsHorizontal = dockPosition.isHorizontalFlow || previewStateCoordinator.windowSwitcherActive
 
-        ScrollViewReader { scrollProxy in
-            buildFlowStack(
-                scrollProxy: scrollProxy,
-                orientationIsHorizontal,
-                currentMaxDimensionForPreviews: calculatedMaxDimension,
-                currentDimensionsMapForPreviews: calculatedDimensionsMap
-            )
-            .padding(.top, (!previewStateCoordinator.windowSwitcherActive && appNameStyle == .default && showAppTitleData) ? 25 : 0)
-            .overlay(alignment: .topLeading) {
-                hoverTitleBaseView(labelSize: measureString(appName, fontSize: 14))
-                    .onHover { isHovered in
-                        withAnimation(.snappy) { hoveringWindowTitle = isHovered }
+        BaseHoverContainer(bestGuessMonitor: bestGuessMonitor, mockPreviewActive: mockPreviewActive) {
+            ScrollViewReader { scrollProxy in
+                buildFlowStack(
+                    scrollProxy: scrollProxy,
+                    orientationIsHorizontal,
+                    currentMaxDimensionForPreviews: calculatedMaxDimension,
+                    currentDimensionsMapForPreviews: calculatedDimensionsMap
+                )
+                .padding(.top, (!previewStateCoordinator.windowSwitcherActive && appNameStyle == .default && showAppTitleData) ? 25 : 0)
+                .overlay(alignment: .topLeading) {
+                    hoverTitleBaseView(labelSize: measureString(appName, fontSize: 14))
+                        .onHover { isHovered in
+                            withAnimation(.snappy) { hoveringWindowTitle = isHovered }
+                        }
+                }
+                .padding(.top, (!previewStateCoordinator.windowSwitcherActive && appNameStyle == .popover && showAppTitleData) ? 30 : 0)
+                .overlay {
+                    if !mockPreviewActive, !isDragging {
+                        WindowDismissalContainer(appName: appName,
+                                                 bestGuessMonitor: bestGuessMonitor,
+                                                 dockPosition: dockPosition,
+                                                 minimizeAllWindowsCallback: { minimizeAllWindows() })
+                            .allowsHitTesting(false)
                     }
-            }
-            .dockStyle(cornerRadius: 16)
-            .padding(.top, (!previewStateCoordinator.windowSwitcherActive && appNameStyle == .popover && showAppTitleData) ? 30 : 0)
-            .overlay {
-                if !mockPreviewActive, !isDragging {
-                    WindowDismissalContainer(appName: appName,
-                                             bestGuessMonitor: bestGuessMonitor,
-                                             dockPosition: dockPosition,
-                                             minimizeAllWindowsCallback: { minimizeAllWindows() })
-                        .allowsHitTesting(false)
                 }
             }
-            .padding(.all, mockPreviewActive ? 0 : 24)
-            .frame(maxWidth: bestGuessMonitor.visibleFrame.width, maxHeight: bestGuessMonitor.visibleFrame.height)
         }
         .onAppear {
             loadAppIcon()

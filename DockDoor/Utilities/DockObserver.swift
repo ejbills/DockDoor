@@ -155,6 +155,19 @@ final class DockObserver {
         let currentMouseLocation = DockObserver.getMousePosition()
         let appUnderMouseElement = getDockItemAppStatusUnderMouse()
 
+        // If so, ignore this duplicate notification so we don't keep
+        // cancelling the in-flight task that will eventually show the preview.
+        if
+            case let .success(dupApp) = appUnderMouseElement.status,
+            let existingTask = hoverProcessingTask,
+            !existingTask.isCancelled,
+            lastAppUnderMouse?.processIdentifier == dupApp.processIdentifier
+        {
+            // Duplicate notification for the same PID while we're still
+            // working on it – swallow it.
+            return
+        }
+
         if case let .notRunning(bundleIdentifier) = appUnderMouseElement.status {
             if lastNotificationId == bundleIdentifier {
                 let timeSinceLastNotification = currentTime - lastNotificationTime
@@ -182,6 +195,7 @@ final class DockObserver {
         } else if case .notFound = appUnderMouseElement.status {
             let mouseScreen = NSScreen.screenContainingMouse(currentMouseLocation)
             let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
+
             if !previewCoordinator.frame.extended(by: abs(Defaults[.bufferFromDock])).contains(convertedMouseLocation)
                 || !Defaults[.lateralMovement]
             {
@@ -196,8 +210,15 @@ final class DockObserver {
             notRunningCount = 0
         }
 
-        hoverProcessingTask?.cancel()
-        pendingShows.removeAll()
+        if
+            let existingTask = hoverProcessingTask,
+            !existingTask.isCancelled,
+            case let .success(newApp) = appUnderMouseElement.status,
+            lastAppUnderMouse?.processIdentifier != newApp.processIdentifier
+        {
+            existingTask.cancel()
+            pendingShows.removeAll()
+        }
 
         Task { @MainActor in
             self.previewCoordinator.cancelDebounceWorkItem()
@@ -286,7 +307,8 @@ final class DockObserver {
                         overrideDelay: lastAppUnderMouse == nil && Defaults[.hoverWindowOpenDelay] == 0,
                         onWindowTap: { [weak self] in
                             self?.hideWindowAndResetLastApp()
-                        }
+                        },
+                        bundleIdentifier: currentAppInfo.bundleIdentifier
                     )
 
                     pendingShows.remove(currentAppInfo.processIdentifier)
