@@ -96,7 +96,6 @@ struct WindowPreview: View {
         let titleAndSubtitleContent = VStack(alignment: .leading, spacing: 0) {
             if !showAppIconOnly {
                 Text(windowInfo.app.localizedName ?? "Unknown")
-                    .font(.system(size: 13, weight: .medium))
                     .foregroundStyle(.primary)
                     .lineLimit(1)
             }
@@ -113,7 +112,6 @@ struct WindowPreview: View {
                         Text(" - Inactive").italic()
                     }
                 }
-                .font(.system(size: 12))
                 .foregroundStyle(.secondary)
                 .lineLimit(1)
             }

@@ -66,7 +66,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         settingsWindowController.window?.delegate = settingsWindowControllerDelegate
     }
 
-    func applicationDidFinishLaunching(_ notification: Notification) {
+    func applicationDidFinishLaunching(_ aNotification: Notification) {
         if Defaults[.showMenuBarIcon] {
             setupMenuBar()
         } else {
