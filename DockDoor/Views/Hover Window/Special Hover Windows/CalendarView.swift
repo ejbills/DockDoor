@@ -134,9 +134,9 @@ struct CalendarView: View {
                                 .multilineTextAlignment(.center)
                         }
                         .frame(maxWidth: .infinity, alignment: .center)
-                        .padding(.vertical, 30)
                     }
                 }
+                .frame(minHeight: 175)
             }
         }
     }
