@@ -33,7 +33,8 @@ struct CalendarView: View {
 
     private enum Layout {
         static let containerSpacing: CGFloat = 8
-        static let sectionSpacing: CGFloat = 14
+        static let sectionSpacing: CGFloat = 12
+        static let eventRowSpacing: CGFloat = 10
         static let skeletonOpacity: Double = 0.25
     }
 
