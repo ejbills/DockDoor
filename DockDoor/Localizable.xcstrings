@@ -192,7 +192,194 @@
       }
     },
     " " : {
-
+      "localizations" : {
+        "af" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : " "
+          }
+        },
+        "ar" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : " "
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : " "
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : " "
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : " "
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : " "
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : " "
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : " "
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : " "
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : " "
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : " "
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : " "
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : " "
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : " "
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : " "
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : " "
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : " "
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : " "
+          }
+        },
+        "no" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : " "
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : " "
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : " "
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : " "
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : " "
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : " "
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : " "
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : " "
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : " "
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : " "
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : " "
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : " "
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : " "
+          }
+        }
+      }
     },
     " - Inactive" : {
       "localizations" : {
@@ -385,7 +572,194 @@
       }
     },
     "-%@" : {
-
+      "localizations" : {
+        "af" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "-%@"
+          }
+        },
+        "ar" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "-%@"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "-%@"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "-%@"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "-%@"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "-%@"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "-%@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "-%@"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "-%@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "-%@"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "-%@"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "-%@"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "-%@"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "-%@"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "-%@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "-%@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "-%@"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "-%@"
+          }
+        },
+        "no" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "-%@"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "-%@"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "-%@"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "-%@"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "-%@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "-%@"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "-%@"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "-%@"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "-%@"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "-%@"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "-%@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "-%@"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "-%@"
+          }
+        }
+      }
     },
     "• Allows for enhanced visual information in the dock" : {
       "extractionState" : "stale",
@@ -494,8 +868,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "• Allows for enhanced visual information in the dock"
+            "state" : "translated",
+            "value" : "Zorgt voor verbeterde visuele informatie in het dock"
           }
         },
         "no" : {
@@ -685,8 +1059,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "• Enables real-time interaction with dock items"
+            "state" : "translated",
+            "value" : "Maakt realtime interactie met dock items mogelijk"
           }
         },
         "no" : {
@@ -876,8 +1250,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "• To capture previews of images and windows"
+            "state" : "translated",
+            "value" : "Voorvertoningen van afbeeldingen en vensters vastleggen"
           }
         },
         "no" : {
@@ -1067,8 +1441,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "• To detect when you hover over the dock"
+            "state" : "translated",
+            "value" : "Om te detecteren wanneer u boven het dock zweeft"
           }
         },
         "no" : {
@@ -1258,8 +1632,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "• When hovering over the Dock at the bottom, windows flow in rows from left to right"
+            "state" : "translated",
+            "value" : "Wanneer u met de muis over het Dock onderaan beweegt, vloeien de vensters in rijen van links naar rechts"
           }
         },
         "no" : {
@@ -1449,8 +1823,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "• When hovering over the Dock on the sides, windows flow in columns from top to bottom"
+            "state" : "translated",
+            "value" : "Wanneer u met de muis over het Dock aan de zijkanten zweeft, vloeien de vensters in kolommen van boven naar beneden"
           }
         },
         "no" : {
@@ -1640,8 +2014,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "• When using the Window Switcher, windows always flow in rows from left to right"
+            "state" : "translated",
+            "value" : "Bij gebruik van de Window Switcher lopen de vensters altijd in rijen van links naar rechts"
           }
         },
         "no" : {
@@ -1830,7 +2204,7 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "+"
           }
         },
@@ -2020,7 +2394,7 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "1."
           }
         },
@@ -2205,14 +2579,14 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "1. Select \"Command (⌘)\" as the initialization key."
+            "state" : "translated",
+            "value" : ""
           }
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "1. Select \"Command (⌘)\" as the initialization key."
+            "state" : "translated",
+            "value" : "1. Selecteer \"Command (⌘)\" als initialisatie toets."
           }
         },
         "no" : {
@@ -2402,7 +2776,7 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "1/%lldx"
           }
         },
@@ -2592,7 +2966,7 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "2."
           }
         },
@@ -2973,7 +3347,7 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "3."
           }
         },
@@ -3354,7 +3728,7 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "4."
           }
         },
@@ -3539,8 +3913,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "4. Your keybind will be set to Command+Tab."
+            "state" : "translated",
+            "value" : ""
           }
         },
         "nl" : {
@@ -3927,7 +4301,7 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Toegankelijkheidsmachtigingen"
+            "value" : "Toegankelijkheid rechten"
           }
         },
         "no" : {
@@ -4688,8 +5062,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add additional directories to scan for applications. This is useful if you keep apps outside standard locations."
+            "state" : "translated",
+            "value" : "Voeg extra mappen toe om naar applicaties te scannen. Dit is handig als u apps buiten de standaardlocaties bewaart."
           }
         },
         "no" : {
@@ -5449,8 +5823,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Adjusts how responsive the app feels and behaves during interaction."
+            "state" : "translated",
+            "value" : "Hiermee past u aan hoe responsief de app aanvoelt en zich gedraagt ​​tijdens interactie."
           }
         },
         "no" : {
@@ -6975,7 +7349,7 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "App Naam Stijl"
+            "value" : "App naam stijl"
           }
         },
         "no" : {
@@ -7545,8 +7919,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Application Basics"
+            "state" : "translated",
+            "value" : "Basisprincipes van de app"
           }
         },
         "no" : {
@@ -7926,8 +8300,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Application Filters"
+            "state" : "translated",
+            "value" : "Applicatie filters"
           }
         },
         "no" : {
@@ -8497,8 +8871,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Are you sure you want to reset all settings to their default values? This will reset advanced settings as well."
+            "state" : "translated",
+            "value" : "Weet u zeker dat u alle instellingen wilt terugzetten naar de standaardwaarden? Hiermee worden ook de geavanceerde instellingen teruggezet."
           }
         },
         "no" : {
@@ -8877,8 +9251,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "At bottom - Title on left, controls on right"
+            "state" : "translated",
+            "value" : "Onderaan - titel links, bediening rechts"
           }
         },
         "no" : {
@@ -9067,8 +9441,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "At top - Controls on left, title on right"
+            "state" : "translated",
+            "value" : "Bovenaan - bediening links, titel rechts"
           }
         },
         "no" : {
@@ -9257,8 +9631,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "At top - Title on left, controls on right"
+            "state" : "translated",
+            "value" : "Bovenaan - titel links, bediening rechts"
           }
         },
         "no" : {
@@ -10400,8 +10774,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Buy me a coffee"
+            "state" : "translated",
+            "value" : "Koop een kopje koffie voor me"
           }
         },
         "no" : {
@@ -10676,7 +11050,194 @@
       }
     },
     "Calendar Access Needed" : {
-
+      "localizations" : {
+        "af" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Calendar Access Needed"
+          }
+        },
+        "ar" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Calendar Access Needed"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Calendar Access Needed"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Calendar Access Needed"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Calendar Access Needed"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Calendar Access Needed"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Calendar Access Needed"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Calendar Access Needed"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Calendar Access Needed"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Calendar Access Needed"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Calendar Access Needed"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Calendar Access Needed"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Calendar Access Needed"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Calendar Access Needed"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Calendar Access Needed"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Calendar Access Needed"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Calendar Access Needed"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Calendar Access Needed"
+          }
+        },
+        "no" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Calendar Access Needed"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Calendar Access Needed"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Calendar Access Needed"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Calendar Access Needed"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Calendar Access Needed"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Calendar Access Needed"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Calendar Access Needed"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Calendar Access Needed"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Calendar Access Needed"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Calendar Access Needed"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Calendar Access Needed"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Calendar Access Needed"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Calendar Access Needed"
+          }
+        }
+      }
     },
     "Can you even see this?" : {
       "comment" : "Window size option",
@@ -11736,8 +12297,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Click \"Set Trigger Key\""
+            "state" : "translated",
+            "value" : "Klik op \"Set Trigger Key\""
           }
         },
         "no" : {
@@ -12306,8 +12867,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Color Customization"
+            "state" : "translated",
+            "value" : "Kleuraanpassing"
           }
         },
         "no" : {
@@ -13067,8 +13628,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Contribute translation"
+            "state" : "translated",
+            "value" : "Bijdragen aan vertalingen"
           }
         },
         "no" : {
@@ -13638,8 +14199,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Controls the visual detail and update frequency of window previews."
+            "state" : "translated",
+            "value" : "Bepaalt de visuele details en de updatefrequentie van venstervoorbeelden."
           }
         },
         "no" : {
@@ -14019,8 +14580,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Current Shortcut"
+            "state" : "translated",
+            "value" : "Huidige sneltoets"
           }
         },
         "no" : {
@@ -15163,8 +15724,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Detailed"
+            "state" : "translated",
+            "value" : "Gedetailleerd"
           }
         },
         "no" : {
@@ -15733,8 +16294,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Discuss features and get help from the community"
+            "state" : "translated",
+            "value" : "Bespreek functies en krijg hulp van de community"
           }
         },
         "no" : {
@@ -15924,8 +16485,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Display %u"
+            "state" : "translated",
+            "value" : "Weergave %u"
           }
         },
         "no" : {
@@ -16114,8 +16675,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Preview Aero Shake Action"
+            "state" : "translated",
+            "value" : "Dock voorvertoning Aero Schud Actie"
           }
         },
         "no" : {
@@ -16304,8 +16865,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Preview Hover Action"
+            "state" : "translated",
+            "value" : "Dock voorvertoning Hover Action"
           }
         },
         "no" : {
@@ -16494,8 +17055,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Preview Settings"
+            "state" : "translated",
+            "value" : "Dock voorbeeldinstellingen"
           }
         },
         "no" : {
@@ -16685,8 +17246,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Preview Window Hover Action"
+            "state" : "translated",
+            "value" : "Venster van Dock voorvertoning Hover Action"
           }
         },
         "no" : {
@@ -17066,8 +17627,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Previews & Window Switcher"
+            "state" : "translated",
+            "value" : "Dock Previews & Venster switcher"
           }
         },
         "no" : {
@@ -17448,7 +18009,7 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "DockDoor neemt je scherm of audio niet op. Het legt alleen statische venstervoorbeelden vast. Er wordt geen informatie opgeslagen of gedeeld; alle verwerking vindt privé plaats op uw apparaat."
+            "value" : "DockDoor neemt je scherm of audio niet op. Het legt alleen statische venstervoorbeelden vast. Er wordt geen informatie opgeslagen of gedeeld; alle verwerking vindt plaats op uw eigen apparaat."
           }
         },
         "no" : {
@@ -17532,7 +18093,194 @@
       }
     },
     "DockDoor needs permission to access your calendar." : {
-
+      "localizations" : {
+        "af" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor needs permission to access your calendar."
+          }
+        },
+        "ar" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor needs permission to access your calendar."
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor needs permission to access your calendar."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor needs permission to access your calendar."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor needs permission to access your calendar."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor needs permission to access your calendar."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor needs permission to access your calendar."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor needs permission to access your calendar."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor needs permission to access your calendar."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor needs permission to access your calendar."
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor needs permission to access your calendar."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor needs permission to access your calendar."
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor needs permission to access your calendar."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor needs permission to access your calendar."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor needs permission to access your calendar."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor needs permission to access your calendar."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor needs permission to access your calendar."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor needs permission to access your calendar."
+          }
+        },
+        "no" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor needs permission to access your calendar."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor needs permission to access your calendar."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor needs permission to access your calendar."
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor needs permission to access your calendar."
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor needs permission to access your calendar."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor needs permission to access your calendar."
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor needs permission to access your calendar."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor needs permission to access your calendar."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor needs permission to access your calendar."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor needs permission to access your calendar."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor needs permission to access your calendar."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor needs permission to access your calendar."
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DockDoor needs permission to access your calendar."
+          }
+        }
+      }
     },
     "DockDoor needs screen recording access. In macOS Sequoia, you'll see this prompt every week or month and after reboots. This is a new system-wide security policy for all screen capture apps." : {
       "localizations" : {
@@ -17641,7 +18389,7 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dackdoor heeft toestemming nodig om schermopname te maken. In macOS Sequoia, zie je deze pop-up elke week of maand wanneer het is heropgestart. Dit is een nieuwe systeem weide veiligheids-beleid voor alle schermopnemende apps."
+            "value" : "Dockdoor heeft toestemming nodig om schermopname te maken. In macOS Sequoia, zie je deze pop-up elke week of maand wanneer het is heropgestart. Dit is een nieuw, systeem breed, veiligheids-beleid voor alle schermopnemende apps."
           }
         },
         "no" : {
@@ -18213,8 +18961,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Embedded"
+            "state" : "translated",
+            "value" : "Ingesloten"
           }
         },
         "no" : {
@@ -18403,8 +19151,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable automatic checking for updates"
+            "state" : "translated",
+            "value" : "Automatisch controleren op updates inschakelen"
           }
         },
         "no" : {
@@ -18594,8 +19342,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable Hover Window Sliding Animation"
+            "state" : "translated",
+            "value" : "Zwevend venster schuifanimatie inschakelen"
           }
         },
         "no" : {
@@ -18785,8 +19533,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable Preview Window Sliding Animation"
+            "state" : "translated",
+            "value" : "Schuifanimatie van voorvertoningsvenster inschakelen"
           }
         },
         "no" : {
@@ -19630,7 +20378,194 @@
       }
     },
     "Enjoy your free day or add some events to your calendar." : {
-
+      "localizations" : {
+        "af" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Enjoy your free day or add some events to your calendar."
+          }
+        },
+        "ar" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Enjoy your free day or add some events to your calendar."
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Enjoy your free day or add some events to your calendar."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Enjoy your free day or add some events to your calendar."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Enjoy your free day or add some events to your calendar."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Enjoy your free day or add some events to your calendar."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Enjoy your free day or add some events to your calendar."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Enjoy your free day or add some events to your calendar."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Enjoy your free day or add some events to your calendar."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Enjoy your free day or add some events to your calendar."
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Enjoy your free day or add some events to your calendar."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Enjoy your free day or add some events to your calendar."
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Enjoy your free day or add some events to your calendar."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Enjoy your free day or add some events to your calendar."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Enjoy your free day or add some events to your calendar."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Enjoy your free day or add some events to your calendar."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Enjoy your free day or add some events to your calendar."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Enjoy your free day or add some events to your calendar."
+          }
+        },
+        "no" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Enjoy your free day or add some events to your calendar."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Enjoy your free day or add some events to your calendar."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Enjoy your free day or add some events to your calendar."
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Enjoy your free day or add some events to your calendar."
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Enjoy your free day or add some events to your calendar."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Enjoy your free day or add some events to your calendar."
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Enjoy your free day or add some events to your calendar."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Enjoy your free day or add some events to your calendar."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Enjoy your free day or add some events to your calendar."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Enjoy your free day or add some events to your calendar."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Enjoy your free day or add some events to your calendar."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Enjoy your free day or add some events to your calendar."
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Enjoy your free day or add some events to your calendar."
+          }
+        }
+      }
     },
     "Enter text to filter" : {
       "localizations" : {
@@ -19738,8 +20673,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enter text to filter"
+            "state" : "translated",
+            "value" : "Voer tekst in om te filteren"
           }
         },
         "no" : {
@@ -20119,8 +21054,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Example:"
+            "state" : "translated",
+            "value" : "Voorbeeld:"
           }
         },
         "no" : {
@@ -20310,8 +21245,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Exclude windows from capture by filtering specific text in their titles"
+            "state" : "translated",
+            "value" : "Sluit vensters uit van vastlegging door specifieke tekst in hun titels te filteren"
           }
         },
         "no" : {
@@ -20500,8 +21435,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Exclude windows from capture by filtering specific text in their titles (case-insensitive)."
+            "state" : "translated",
+            "value" : "Vensters uitsluiten van vastlegging door specifieke tekst in hun titels te filteren (hoofdlettergevoelig)."
           }
         },
         "no" : {
@@ -20691,8 +21626,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "EXPERIMENTAL: Show preview above app labels"
+            "state" : "translated",
+            "value" : "EXPERIMENTEEL: Voorbeeld weergeven boven app labels"
           }
         },
         "no" : {
@@ -20884,7 +21819,7 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Extra Extra Klein"
+            "value" : "Extra extra klein"
           }
         },
         "no" : {
@@ -21271,8 +22206,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Failed to download v%1$@: %2$@"
+            "state" : "translated",
+            "value" : "Het downloaden van v%1$@ is mislukt: %2$@"
           }
         },
         "no" : {
@@ -21462,7 +22397,7 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Filters"
           }
         },
@@ -21652,8 +22587,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Filters settings"
+            "state" : "translated",
+            "value" : "Filterinstellingen"
           }
         },
         "no" : {
@@ -21842,8 +22777,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Fine-tune visual details and layout options."
+            "state" : "translated",
+            "value" : "Verfijn visuele details en lay-outopties."
           }
         },
         "no" : {
@@ -21927,7 +22862,194 @@
       }
     },
     "For supported apps (Music, Spotify, Calendar), show interactive controls instead of window previews when hovering their Dock icons." : {
-
+      "localizations" : {
+        "af" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "For supported apps (Music, Spotify, Calendar), show interactive controls instead of window previews when hovering their Dock icons."
+          }
+        },
+        "ar" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "For supported apps (Music, Spotify, Calendar), show interactive controls instead of window previews when hovering their Dock icons."
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "For supported apps (Music, Spotify, Calendar), show interactive controls instead of window previews when hovering their Dock icons."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "For supported apps (Music, Spotify, Calendar), show interactive controls instead of window previews when hovering their Dock icons."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "For supported apps (Music, Spotify, Calendar), show interactive controls instead of window previews when hovering their Dock icons."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "For supported apps (Music, Spotify, Calendar), show interactive controls instead of window previews when hovering their Dock icons."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "For supported apps (Music, Spotify, Calendar), show interactive controls instead of window previews when hovering their Dock icons."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "For supported apps (Music, Spotify, Calendar), show interactive controls instead of window previews when hovering their Dock icons."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "For supported apps (Music, Spotify, Calendar), show interactive controls instead of window previews when hovering their Dock icons."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "For supported apps (Music, Spotify, Calendar), show interactive controls instead of window previews when hovering their Dock icons."
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "For supported apps (Music, Spotify, Calendar), show interactive controls instead of window previews when hovering their Dock icons."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "For supported apps (Music, Spotify, Calendar), show interactive controls instead of window previews when hovering their Dock icons."
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "For supported apps (Music, Spotify, Calendar), show interactive controls instead of window previews when hovering their Dock icons."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "For supported apps (Music, Spotify, Calendar), show interactive controls instead of window previews when hovering their Dock icons."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "For supported apps (Music, Spotify, Calendar), show interactive controls instead of window previews when hovering their Dock icons."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "For supported apps (Music, Spotify, Calendar), show interactive controls instead of window previews when hovering their Dock icons."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "For supported apps (Music, Spotify, Calendar), show interactive controls instead of window previews when hovering their Dock icons."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "For supported apps (Music, Spotify, Calendar), show interactive controls instead of window previews when hovering their Dock icons."
+          }
+        },
+        "no" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "For supported apps (Music, Spotify, Calendar), show interactive controls instead of window previews when hovering their Dock icons."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "For supported apps (Music, Spotify, Calendar), show interactive controls instead of window previews when hovering their Dock icons."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "For supported apps (Music, Spotify, Calendar), show interactive controls instead of window previews when hovering their Dock icons."
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "For supported apps (Music, Spotify, Calendar), show interactive controls instead of window previews when hovering their Dock icons."
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "For supported apps (Music, Spotify, Calendar), show interactive controls instead of window previews when hovering their Dock icons."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "For supported apps (Music, Spotify, Calendar), show interactive controls instead of window previews when hovering their Dock icons."
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "For supported apps (Music, Spotify, Calendar), show interactive controls instead of window previews when hovering their Dock icons."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "For supported apps (Music, Spotify, Calendar), show interactive controls instead of window previews when hovering their Dock icons."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "For supported apps (Music, Spotify, Calendar), show interactive controls instead of window previews when hovering their Dock icons."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "For supported apps (Music, Spotify, Calendar), show interactive controls instead of window previews when hovering their Dock icons."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "For supported apps (Music, Spotify, Calendar), show interactive controls instead of window previews when hovering their Dock icons."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "For supported apps (Music, Spotify, Calendar), show interactive controls instead of window previews when hovering their Dock icons."
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "For supported apps (Music, Spotify, Calendar), show interactive controls instead of window previews when hovering their Dock icons."
+          }
+        }
+      }
     },
     "Force Quit" : {
       "localizations" : {
@@ -22035,8 +23157,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Force Quit"
+            "state" : "translated",
+            "value" : "Afsluiten forceren"
           }
         },
         "no" : {
@@ -22415,8 +23537,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Fullscreen"
+            "state" : "translated",
+            "value" : "Volledig scherm"
           }
         },
         "no" : {
@@ -22796,8 +23918,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "General Appearance"
+            "state" : "translated",
+            "value" : "Algemeen uiterlijk"
           }
         },
         "no" : {
@@ -22987,8 +24109,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "General Exclusions"
+            "state" : "translated",
+            "value" : "Algemene uitsluitingen"
           }
         },
         "no" : {
@@ -23557,8 +24679,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Granted"
+            "state" : "translated",
+            "value" : "Toegekend"
           }
         },
         "no" : {
@@ -24129,8 +25251,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Help & Support"
+            "state" : "translated",
+            "value" : "Hulp en ondersteuning"
           }
         },
         "no" : {
@@ -24510,8 +25632,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Help make DockDoor available in your language"
+            "state" : "translated",
+            "value" : "Help DockDoor beschikbaar te maken in jouw taal"
           }
         },
         "no" : {
@@ -25082,8 +26204,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hide Advanced Settings"
+            "state" : "translated",
+            "value" : "Verberg geavanceerde instellingen"
           }
         },
         "no" : {
@@ -25272,8 +26394,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hide all app windows on dock icon click"
+            "state" : "translated",
+            "value" : "Verberg alle app vensters bij klikken op het dockpictogram"
           }
         },
         "no" : {
@@ -25463,8 +26585,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hide all application windows when clicking on the dock icon"
+            "state" : "translated",
+            "value" : "Verberg alle applicatievensters wanneer u op het dockpictogram klikt"
           }
         },
         "no" : {
@@ -25653,8 +26775,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Highlight Gradient Colors"
+            "state" : "translated",
+            "value" : "Markeer verloopkleuren"
           }
         },
         "no" : {
@@ -25844,8 +26966,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hover Window Open Delay"
+            "state" : "translated",
+            "value" : "Vertraging bij openen van zwevend venster"
           }
         },
         "no" : {
@@ -26035,8 +27157,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hover Window Title Style"
+            "state" : "translated",
+            "value" : "Stijl van de zwevend venster titel"
           }
         },
         "no" : {
@@ -26225,8 +27347,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "How to Set Up"
+            "state" : "translated",
+            "value" : "Hoe te configureren"
           }
         },
         "no" : {
@@ -26415,8 +27537,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "If you find DockDoor useful, consider donating. Your support helps keep the project going!"
+            "state" : "translated",
+            "value" : "Vindt u DockDoor nuttig? Overweeg dan een donatie. Uw steun helpt het project gaande te houden!"
           }
         },
         "no" : {
@@ -26606,8 +27728,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "If you need to access the menu bar icon, launch the app to reveal it for 10 seconds."
+            "state" : "translated",
+            "value" : "Als u het menubalk pictogram nodig hebt, start u de app zodat het 10 seconden lang zichtbaar is."
           }
         },
         "no" : {
@@ -26796,8 +27918,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Ignore apps with one window"
+            "state" : "translated",
+            "value" : "Negeer apps met één venster"
           }
         },
         "no" : {
@@ -27178,8 +28300,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Important: When recording, press ONLY the trigger key (e.g. just press Tab if you want command + Tab). Do not press the initialization key during recording."
+            "state" : "translated",
+            "value" : "Belangrijk: druk tijdens het opnemen ALLEEN op de trigger-toets (druk bijvoorbeeld alleen op Tab als u Command + Tab wilt). Druk tijdens het opnemen niet op de initialisatietoets."
           }
         },
         "no" : {
@@ -27369,8 +28491,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Include Hidden and Minimized Windows in the Window Switcher"
+            "state" : "translated",
+            "value" : "Verborgen en geminimaliseerde vensters opnemen in de venster wisselaar"
           }
         },
         "no" : {
@@ -27559,8 +28681,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Include hidden/minimized windows in Switcher"
+            "state" : "translated",
+            "value" : "Verborgen / geminimaliseerde vensters opnemen in de switcher"
           }
         },
         "no" : {
@@ -27750,8 +28872,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Include Hidden/Minimized Windows in Switcher"
+            "state" : "translated",
+            "value" : "Verborgen / geminimaliseerde vensters opnemen in de switcher"
           }
         },
         "no" : {
@@ -27940,8 +29062,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Initialization Key"
+            "state" : "translated",
+            "value" : "Initialisatie sleutel"
           }
         },
         "no" : {
@@ -28130,8 +29252,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Instructions"
+            "state" : "translated",
+            "value" : "Instructies"
           }
         },
         "no" : {
@@ -28320,8 +29442,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Interaction & Behavior (Dock Previews)"
+            "state" : "translated",
+            "value" : "Interactie en gedrag (Dock voorbeelden)"
           }
         },
         "no" : {
@@ -28510,8 +29632,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Join our Discord"
+            "state" : "translated",
+            "value" : "Word lid van onze Discord"
           }
         },
         "no" : {
@@ -28700,8 +29822,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Keep previews visible during lateral movement"
+            "state" : "translated",
+            "value" : "Houd previews zichtbaar tijdens zijwaartse beweging"
           }
         },
         "no" : {
@@ -28890,8 +30012,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Keyboard Shortcut"
+            "state" : "translated",
+            "value" : "Sneltoets"
           }
         },
         "no" : {
@@ -29272,8 +30394,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Large (1/2)"
+            "state" : "translated",
+            "value" : "Groot (1/2)"
           }
         },
         "no" : {
@@ -29843,8 +30965,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Layout Limits"
+            "state" : "translated",
+            "value" : "Lay-out grenzen"
           }
         },
         "no" : {
@@ -30033,8 +31155,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Let's set things up"
+            "state" : "translated",
+            "value" : "Laten we de dingen instellen"
           }
         },
         "no" : {
@@ -30223,8 +31345,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Lightweight"
+            "state" : "translated",
+            "value" : "Lichtgewicht"
           }
         },
         "no" : {
@@ -30413,8 +31535,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Loading preview..."
+            "state" : "translated",
+            "value" : "Preview aan het laden..."
           }
         },
         "no" : {
@@ -30603,8 +31725,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Max Rows for Switcher Previews"
+            "state" : "translated",
+            "value" : "Maximaal aantal rijen voor Switcher voorbeelden"
           }
         },
         "no" : {
@@ -30793,8 +31915,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Max Stacks for Dock Previews"
+            "state" : "translated",
+            "value" : "Maximale stapels voor Dock voorbeelden"
           }
         },
         "no" : {
@@ -30984,8 +32106,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Maximum Horizontal Rows"
+            "state" : "translated",
+            "value" : "Maximaal aantal horizontale rijen"
           }
         },
         "no" : {
@@ -31174,8 +32296,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Maximum number of colors (%lld) reached."
+            "state" : "translated",
+            "value" : "Maximaal aantal kleuren (%lld) bereikt."
           }
         },
         "no" : {
@@ -31365,8 +32487,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Maximum Vertical Columns"
+            "state" : "translated",
+            "value" : "Maximale verticale kolommen"
           }
         },
         "no" : {
@@ -31747,8 +32869,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Medium (1/%lld)"
+            "state" : "translated",
+            "value" : "Gemiddeld (1/%lld)"
           }
         },
         "no" : {
@@ -31938,8 +33060,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Menu Bar Icon Hidden"
+            "state" : "translated",
+            "value" : "Menubalk pictogram verborgen"
           }
         },
         "no" : {
@@ -32128,8 +33250,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Minimize"
+            "state" : "translated",
+            "value" : "Minimaliseer"
           }
         },
         "no" : {
@@ -32318,8 +33440,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Minimize All"
+            "state" : "translated",
+            "value" : "Minimaliseer alles"
           }
         },
         "no" : {
@@ -32509,8 +33631,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Minimize all windows"
+            "state" : "translated",
+            "value" : "Minimaliseer alle vensters"
           }
         },
         "no" : {
@@ -32700,8 +33822,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Minimize all windows except the current one"
+            "state" : "translated",
+            "value" : "Minimaliseer alle vensters behalve de huidige"
           }
         },
         "no" : {
@@ -32890,8 +34012,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Minimum number of colors reached."
+            "state" : "translated",
+            "value" : "Minimale aantal kleuren bereikt."
           }
         },
         "no" : {
@@ -33080,8 +34202,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Navigate to Settings → Privacy & Security"
+            "state" : "translated",
+            "value" : "Navigeer naar Instellingen → Privacy & Veiligheid"
           }
         },
         "no" : {
@@ -33461,8 +34583,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "New Window"
+            "state" : "translated",
+            "value" : "Nieuw venster"
           }
         },
         "no" : {
@@ -34032,8 +35154,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No applications found or scanned yet."
+            "state" : "translated",
+            "value" : "Nog geen toepassingen gevonden of gescand."
           }
         },
         "no" : {
@@ -34222,8 +35344,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No custom directories added"
+            "state" : "translated",
+            "value" : "Geen aangepaste mappen toegevoegd"
           }
         },
         "no" : {
@@ -34307,7 +35429,194 @@
       }
     },
     "No events scheduled for today!" : {
-
+      "localizations" : {
+        "af" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "No events scheduled for today!"
+          }
+        },
+        "ar" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "No events scheduled for today!"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "No events scheduled for today!"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "No events scheduled for today!"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "No events scheduled for today!"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "No events scheduled for today!"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "No events scheduled for today!"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "No events scheduled for today!"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "No events scheduled for today!"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "No events scheduled for today!"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "No events scheduled for today!"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "No events scheduled for today!"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "No events scheduled for today!"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "No events scheduled for today!"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "No events scheduled for today!"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "No events scheduled for today!"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "No events scheduled for today!"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "No events scheduled for today!"
+          }
+        },
+        "no" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "No events scheduled for today!"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "No events scheduled for today!"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "No events scheduled for today!"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "No events scheduled for today!"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "No events scheduled for today!"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "No events scheduled for today!"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "No events scheduled for today!"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "No events scheduled for today!"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "No events scheduled for today!"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "No events scheduled for today!"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "No events scheduled for today!"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "No events scheduled for today!"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "No events scheduled for today!"
+          }
+        }
+      }
     },
     "No filters added" : {
       "extractionState" : "stale",
@@ -34416,8 +35725,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No filters added"
+            "state" : "translated",
+            "value" : "Geen filters toegevoegd"
           }
         },
         "no" : {
@@ -34608,8 +35917,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No hover action"
+            "state" : "translated",
+            "value" : "Geen zweef actie"
           }
         },
         "no" : {
@@ -34988,8 +36297,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No window title filters added"
+            "state" : "translated",
+            "value" : "Geen venstertitel filters toegevoegd"
           }
         },
         "no" : {
@@ -35178,8 +36487,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Not %@"
+            "state" : "translated",
+            "value" : "Niet %@"
           }
         },
         "no" : {
@@ -35369,8 +36678,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Not granted"
+            "state" : "translated",
+            "value" : "Niet toegekend"
           }
         },
         "no" : {
@@ -35750,8 +37059,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "On window hover; Dimmed until button hover"
+            "state" : "translated",
+            "value" : "Bij venster zweven; gedimd tot knop zweven"
           }
         },
         "no" : {
@@ -35941,8 +37250,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "On window hover; Full opacity"
+            "state" : "translated",
+            "value" : "Bij venster zweven; volledige ondoorzichtigheid"
           }
         },
         "no" : {
@@ -36132,8 +37441,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Only takes effect when dock auto-hide is enabled"
+            "state" : "translated",
+            "value" : "Wordt alleen van kracht als automatisch verbergen van het dock is ingeschakeld"
           }
         },
         "no" : {
@@ -36789,7 +38098,194 @@
       }
     },
     "Open System Privacy Settings" : {
-
+      "localizations" : {
+        "af" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Open System Privacy Settings"
+          }
+        },
+        "ar" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Open System Privacy Settings"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Open System Privacy Settings"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Open System Privacy Settings"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Open System Privacy Settings"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Open System Privacy Settings"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Open System Privacy Settings"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Open System Privacy Settings"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Open System Privacy Settings"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Open System Privacy Settings"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Open System Privacy Settings"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Open System Privacy Settings"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Open System Privacy Settings"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Open System Privacy Settings"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Open System Privacy Settings"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Open System Privacy Settings"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Open System Privacy Settings"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Open System Privacy Settings"
+          }
+        },
+        "no" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Open System Privacy Settings"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Open System Privacy Settings"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Open System Privacy Settings"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Open System Privacy Settings"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Open System Privacy Settings"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Open System Privacy Settings"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Open System Privacy Settings"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Open System Privacy Settings"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Open System Privacy Settings"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Open System Privacy Settings"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Open System Privacy Settings"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Open System Privacy Settings"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Open System Privacy Settings"
+          }
+        }
+      }
     },
     "Option (⌥)" : {
       "localizations" : {
@@ -37087,8 +38583,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Performance Profiles"
+            "state" : "translated",
+            "value" : "Prestatie profiel"
           }
         },
         "no" : {
@@ -37277,8 +38773,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Performance Tuning (Dock Previews)"
+            "state" : "translated",
+            "value" : "Prestatie tuning (Dock voorbeelden)"
           }
         },
         "no" : {
@@ -37469,7 +38965,7 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Machtigingsfout"
+            "value" : "Machtigingsprobleem"
           }
         },
         "no" : {
@@ -38040,8 +39536,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Pin to Screen"
+            "state" : "translated",
+            "value" : "Vastzetten aan scherm"
           }
         },
         "no" : {
@@ -38231,8 +39727,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Pinned to screen"
+            "state" : "translated",
+            "value" : "Vastgezet aan scherm"
           }
         },
         "no" : {
@@ -38421,8 +39917,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Placement Strategy"
+            "state" : "translated",
+            "value" : "Plaatsingsstrategie"
           }
         },
         "no" : {
@@ -38994,7 +40490,7 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Herstart de app om je veranderingen op te slaan. Druk OK om te app af te sluiten."
+            "value" : "Herstart de app om je veranderingen op te slaan. Druk OK om de app af te sluiten."
           }
         },
         "no" : {
@@ -39184,7 +40680,7 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Popover"
           }
         },
@@ -39374,8 +40870,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Position Window Controls"
+            "state" : "translated",
+            "value" : "Positie vensterbesturing"
           }
         },
         "no" : {
@@ -39565,8 +41061,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Present a full size preview of the window"
+            "state" : "translated",
+            "value" : "Geef een voorbeeld van het venster op volledige grootte weer"
           }
         },
         "no" : {
@@ -39756,8 +41252,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Press any key combination after holding the initialization key to set the keybind."
+            "state" : "translated",
+            "value" : "Om de sneltoetsencombinatie in te stellen: druk op een willekeurige toetsencombinatie nadat u de initialisatie toets ingedrukt hebt gehouden."
           }
         },
         "no" : {
@@ -39947,8 +41443,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Press any key to set the keybind."
+            "state" : "translated",
+            "value" : "Druk op een toets om de toetscombinatie in te stellen."
           }
         },
         "no" : {
@@ -40327,8 +41823,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Press ONLY the trigger key (e.g. just Tab)"
+            "state" : "translated",
+            "value" : "Druk ALLEEN op de trigger toets (bijv. alleen Tab)"
           }
         },
         "no" : {
@@ -40708,8 +42204,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Prevent dock from hiding during previews"
+            "state" : "translated",
+            "value" : "Voorkom dat het dock tijdens previews wordt verborgen"
           }
         },
         "no" : {
@@ -40898,8 +42394,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Prevents apps that only ever have a single window from appearing in previews."
+            "state" : "translated",
+            "value" : "Voorkomt dat apps die slechts één venster hebben, in voorvertoningen worden weergegeven."
           }
         },
         "no" : {
@@ -41089,8 +42585,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Prevents previews from disappearing when moving sideways to adjacent windows"
+            "state" : "translated",
+            "value" : "Voorkomt dat voorvertoningen verdwijnen wanneer u zijwaarts naar aangrenzende vensters beweegt"
           }
         },
         "no" : {
@@ -41279,8 +42775,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Appearance & Quality"
+            "state" : "translated",
+            "value" : "Voorbeeld uiterlijk & kwaliteit"
           }
         },
         "no" : {
@@ -41470,8 +42966,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Appearance & Quality (Dock Previews)"
+            "state" : "translated",
+            "value" : "Voorbeeld uiterlijk & kwaliteit (Dock voorbeeld)"
           }
         },
         "no" : {
@@ -41661,8 +43157,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Hover Action"
+            "state" : "translated",
+            "value" : "Voorbeeld van Hover Actie"
           }
         },
         "no" : {
@@ -41851,8 +43347,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Hover Action Delay"
+            "state" : "translated",
+            "value" : "Voorbeeld van Hover Actie vertraging"
           }
         },
         "no" : {
@@ -42042,8 +43538,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Hover Delay"
+            "state" : "translated",
+            "value" : "Voorbeeld van Hover Actie"
           }
         },
         "no" : {
@@ -42802,8 +44298,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Size"
+            "state" : "translated",
+            "value" : "Grootte voorvertoning"
           }
         },
         "no" : {
@@ -43753,7 +45249,7 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "px"
           }
         },
@@ -43943,8 +45439,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Quit"
+            "state" : "translated",
+            "value" : "Afsluiten"
           }
         },
         "no" : {
@@ -44514,8 +46010,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reduce motion"
+            "state" : "translated",
+            "value" : "Beweging verminderen"
           }
         },
         "no" : {
@@ -44704,8 +46200,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Relaxed"
+            "state" : "translated",
+            "value" : "Ontspannen"
           }
         },
         "no" : {
@@ -44894,8 +46390,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Release initializer key to select window in Switcher"
+            "state" : "translated",
+            "value" : "Laat de initialisatie toets los om een ​​venster in Switcher te selecteren"
           }
         },
         "no" : {
@@ -45084,8 +46580,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Remove"
+            "state" : "translated",
+            "value" : "Verwijderen"
           }
         },
         "no" : {
@@ -45274,8 +46770,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Remove All"
+            "state" : "translated",
+            "value" : "Alles verwijderen"
           }
         },
         "no" : {
@@ -45464,8 +46960,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Report a Bug"
+            "state" : "translated",
+            "value" : "Een bug doorgeven"
           }
         },
         "no" : {
@@ -45654,8 +47150,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Request a Feature"
+            "state" : "translated",
+            "value" : "Vraag een nieuwe feature aan"
           }
         },
         "no" : {
@@ -45844,8 +47340,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Required for capturing window previews of other apps"
+            "state" : "translated",
+            "value" : "Vereist voor het vastleggen van venstervoorbeelden van andere apps"
           }
         },
         "no" : {
@@ -46034,8 +47530,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Required for dock hover detection and window switcher hotkeys"
+            "state" : "translated",
+            "value" : "Vereist voor dock hover detectie en sneltoetsen voor vensterwisseling"
           }
         },
         "no" : {
@@ -47746,8 +49242,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Rounded image corners"
+            "state" : "translated",
+            "value" : "Afbeelding met afgeronde hoeken"
           }
         },
         "no" : {
@@ -48699,8 +50195,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Screen with last active window"
+            "state" : "translated",
+            "value" : "Scherm met laatst actieve venster"
           }
         },
         "no" : {
@@ -48890,8 +50386,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Screen with mouse"
+            "state" : "translated",
+            "value" : "Scherm met muis"
           }
         },
         "no" : {
@@ -49844,8 +51340,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Select a profile to quickly adjust common performance settings. Choose \"Advanced\" for manual control."
+            "state" : "translated",
+            "value" : "Selecteer een profiel om snel algemene prestatie-instellingen aan te passen. Kies 'Geavanceerd' voor handmatige bediening."
           }
         },
         "no" : {
@@ -50034,8 +51530,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Select an initialization key (e.g. Command ⌘)"
+            "state" : "translated",
+            "value" : "Selecteer een initialisatie sleutel (bijv. Command ⌘)"
           }
         },
         "no" : {
@@ -50225,8 +51721,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Select which applications can be captured and previewed"
+            "state" : "translated",
+            "value" : "Selecteer welke applicaties vastgelegd en vooraf bekeken kunnen worden"
           }
         },
         "no" : {
@@ -50415,8 +51911,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Select which applications DockDoor should show previews for. Unchecked apps will be ignored."
+            "state" : "translated",
+            "value" : "Selecteer voor welke apps DockDoor previews moet weergeven. Niet aangevinkte apps worden genegeerd."
           }
         },
         "no" : {
@@ -50605,8 +52101,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Selection Highlight"
+            "state" : "translated",
+            "value" : "Selectie markering"
           }
         },
         "no" : {
@@ -50796,8 +52292,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Set Initialization Key and Keybind"
+            "state" : "translated",
+            "value" : "Stel initialisatie sleutel en toetscombinatie in"
           }
         },
         "no" : {
@@ -50987,8 +52483,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Set to 0 for unlimited"
+            "state" : "translated",
+            "value" : "Instellen op 0 voor onbeperkt"
           }
         },
         "no" : {
@@ -51177,8 +52673,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Set Trigger Key"
+            "state" : "translated",
+            "value" : "Trigger toets instellen"
           }
         },
         "no" : {
@@ -51367,8 +52863,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Sets the max rows (for bottom/top Dock) or columns (for side Dock) previews will use. '0' dynamically determines fit."
+            "state" : "translated",
+            "value" : "Hiermee stelt u het maximum aantal rijen (voor onderste/bovenste Dock) of kolommen (voor zij-Dock) in dat voorvertoningen worden gebruikt. '0' bepaalt dynamisch de pasvorm."
           }
         },
         "no" : {
@@ -51557,8 +53053,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Sets the maximum number of rows the Window Switcher will use. '0' dynamically determines rows based on screen height."
+            "state" : "translated",
+            "value" : "Hiermee stelt u het maximale aantal rijen in dat de venster wisselaar gebruikt. '0' bepaalt dynamisch het aantal rijen op basis van de schermhoogte."
           }
         },
         "no" : {
@@ -51938,8 +53434,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Advanced Settings"
+            "state" : "translated",
+            "value" : "Toon geavanceerde instellingen"
           }
         },
         "no" : {
@@ -52128,8 +53624,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show App Name"
+            "state" : "translated",
+            "value" : "App-naam weergeven"
           }
         },
         "no" : {
@@ -52318,8 +53814,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show App Name in Dock Previews"
+            "state" : "translated",
+            "value" : "App-naam in Dock Previews tonen"
           }
         },
         "no" : {
@@ -52403,7 +53899,194 @@
       }
     },
     "Show media/calendar controls on Dock hover" : {
-
+      "localizations" : {
+        "af" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Show media/calendar controls on Dock hover"
+          }
+        },
+        "ar" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Show media/calendar controls on Dock hover"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Show media/calendar controls on Dock hover"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Show media/calendar controls on Dock hover"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Show media/calendar controls on Dock hover"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Show media/calendar controls on Dock hover"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Show media/calendar controls on Dock hover"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Show media/calendar controls on Dock hover"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Show media/calendar controls on Dock hover"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Show media/calendar controls on Dock hover"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Show media/calendar controls on Dock hover"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Show media/calendar controls on Dock hover"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Show media/calendar controls on Dock hover"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Show media/calendar controls on Dock hover"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Show media/calendar controls on Dock hover"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Show media/calendar controls on Dock hover"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Show media/calendar controls on Dock hover"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Show media/calendar controls on Dock hover"
+          }
+        },
+        "no" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Show media/calendar controls on Dock hover"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Show media/calendar controls on Dock hover"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Show media/calendar controls on Dock hover"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Show media/calendar controls on Dock hover"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Show media/calendar controls on Dock hover"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Show media/calendar controls on Dock hover"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Show media/calendar controls on Dock hover"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Show media/calendar controls on Dock hover"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Show media/calendar controls on Dock hover"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Show media/calendar controls on Dock hover"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Show media/calendar controls on Dock hover"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Show media/calendar controls on Dock hover"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Show media/calendar controls on Dock hover"
+          }
+        }
+      }
     },
     "Show menu bar icon" : {
       "localizations" : {
@@ -52511,8 +54194,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show menu bar icon"
+            "state" : "translated",
+            "value" : "Menubalkpictogram weergeven"
           }
         },
         "no" : {
@@ -52892,8 +54575,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show preview above app labels"
+            "state" : "translated",
+            "value" : "Voorbeeld weergeven boven app-labels"
           }
         },
         "no" : {
@@ -53082,8 +54765,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Window Title"
+            "state" : "translated",
+            "value" : "Toon venstertitel"
           }
         },
         "no" : {
@@ -53845,8 +55528,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Window Titles on Previews"
+            "state" : "translated",
+            "value" : "Toon venstertitels op previews"
           }
         },
         "no" : {
@@ -54035,8 +55718,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Shows last active window first, instead of current window."
+            "state" : "translated",
+            "value" : "Toont het laatst actieve venster eerst, in plaats van het huidige venster."
           }
         },
         "no" : {
@@ -54800,8 +56483,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Small (1/%lld)"
+            "state" : "translated",
+            "value" : "Klein (1/%lld)"
           }
         },
         "no" : {
@@ -54990,8 +56673,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Snappy"
+            "state" : "translated",
+            "value" : "Vlug"
           }
         },
         "no" : {
@@ -55181,8 +56864,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Sort Window Previews by Date"
+            "state" : "translated",
+            "value" : "Sorteer venster voorvertoningen op datum"
           }
         },
         "no" : {
@@ -55371,8 +57054,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Sort Window Previews by Date (if multiple)"
+            "state" : "translated",
+            "value" : "Sorteer venster voorvertoningen op datum (indien veelvoud)"
           }
         },
         "no" : {
@@ -55561,8 +57244,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Standard"
+            "state" : "translated",
+            "value" : "Standaard"
           }
         },
         "no" : {
@@ -55752,8 +57435,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Start recording keybind"
+            "state" : "translated",
+            "value" : "Start opname toetscombinatie"
           }
         },
         "no" : {
@@ -55943,8 +57626,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Start Recording Keybind"
+            "state" : "translated",
+            "value" : "Start opname toetscombinatie"
           }
         },
         "no" : {
@@ -56134,8 +57817,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Start recording trigger key"
+            "state" : "translated",
+            "value" : "Start opname trigger toets"
           }
         },
         "no" : {
@@ -56326,8 +58009,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Subatomic"
+            "state" : "translated",
+            "value" : "Sub atomisch"
           }
         },
         "no" : {
@@ -56516,8 +58199,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Suggest new features to make DockDoor even better."
+            "state" : "translated",
+            "value" : "Stel nieuwe functies voor om DockDoor nog beter te maken."
           }
         },
         "no" : {
@@ -56707,8 +58390,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Support"
+            "state" : "translated",
+            "value" : "Ondersteuning"
           }
         },
         "no" : {
@@ -56897,8 +58580,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Support & Contributions"
+            "state" : "translated",
+            "value" : "Ondersteuning & bijdragen"
           }
         },
         "no" : {
@@ -57087,8 +58770,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Support development with a small donation"
+            "state" : "translated",
+            "value" : "Ondersteun ontwikkeling met een kleine donatie"
           }
         },
         "no" : {
@@ -57467,8 +59150,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Support settings"
+            "state" : "translated",
+            "value" : "Instellingen voor ondersteuning"
           }
         },
         "no" : {
@@ -57657,8 +59340,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Thank you to all contributors ❤️"
+            "state" : "translated",
+            "value" : "Dank aan alle bijdragers ❤️"
           }
         },
         "no" : {
@@ -57847,8 +59530,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Thanks for supporting DockDoor! 💖"
+            "state" : "translated",
+            "value" : "Bedankt voor het steunen van DockDoor! 💖"
           }
         },
         "no" : {
@@ -58037,8 +59720,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "The changes to permissions will take effect after restarting."
+            "state" : "translated",
+            "value" : "De gewijzigde machtigingen worden van kracht nadat u opnieuw bent opgestart."
           }
         },
         "no" : {
@@ -58228,8 +59911,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "The selected positions for Traffic Light Buttons and Window Title will overlap."
+            "state" : "translated",
+            "value" : "De geselecteerde posities voor verkeerslichtknoppen en venstertitels zullen elkaar overlappen."
           }
         },
         "no" : {
@@ -58418,8 +60101,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "The Window Switcher (often Alt/Cmd-Tab) lets you quickly cycle between open app windows with a keyboard shortcut."
+            "state" : "translated",
+            "value" : "Met de venster wisselaar (vaak Alt/Cmd-Tab) kunt u met een sneltoets schakelen tussen geopende app-vensters."
           }
         },
         "no" : {
@@ -58609,8 +60292,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "This display is currently disconnected. The window switcher will appear on the main display until the selected display is reconnected."
+            "state" : "translated",
+            "value" : "Dit scherm is momenteel niet verbonden. De venster schakelaar blijft op het hoofdscherm zichtbaar totdat het geselecteerde scherm weer is verbonden."
           }
         },
         "no" : {
@@ -58799,8 +60482,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Tiny (1/%lld)"
+            "state" : "translated",
+            "value" : "Klein (1/%lld)"
           }
         },
         "no" : {
@@ -58884,7 +60567,194 @@
       }
     },
     "Today" : {
-
+      "localizations" : {
+        "af" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Today"
+          }
+        },
+        "ar" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Today"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Today"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Today"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Today"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Today"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Today"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Today"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Today"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Today"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Today"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Today"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Today"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Today"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Today"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Today"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Today"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Today"
+          }
+        },
+        "no" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Today"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Today"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Today"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Today"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Today"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Today"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Today"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Today"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Today"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Today"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Today"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Today"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Today"
+          }
+        }
+      }
     },
     "Toggle" : {
       "localizations" : {
@@ -58992,8 +60862,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Toggle"
+            "state" : "translated",
+            "value" : "Omschakelen"
           }
         },
         "no" : {
@@ -59182,8 +61052,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Toggle Full Screen"
+            "state" : "translated",
+            "value" : "Volledig scherm in-/uitschakelen"
           }
         },
         "no" : {
@@ -59755,8 +61625,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Traffic Light Buttons"
+            "state" : "translated",
+            "value" : "Verkeerslichtknoppen"
           }
         },
         "no" : {
@@ -59945,8 +61815,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Traffic Light Buttons in Previews"
+            "state" : "translated",
+            "value" : "Verkeerslichtknoppen in previews"
           }
         },
         "no" : {
@@ -60136,8 +62006,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Traffic Light Buttons Position"
+            "state" : "translated",
+            "value" : "Positie van verkeerslichtknoppen"
           }
         },
         "no" : {
@@ -60326,8 +62196,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Traffic Light Buttons Visibility"
+            "state" : "translated",
+            "value" : "Zichtbaarheid van verkeerslichtknoppen"
           }
         },
         "no" : {
@@ -60516,8 +62386,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Trigger Key"
+            "state" : "translated",
+            "value" : "Trigger toets"
           }
         },
         "no" : {
@@ -60707,8 +62577,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Triggers an action when hovering over a window in a dock preview"
+            "state" : "translated",
+            "value" : "Activeert een actie wanneer u met de muis over een venster in een dock voorbeeld beweegt"
           }
         },
         "no" : {
@@ -60898,8 +62768,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Triggers an action when shaking a window while it is being dragged from a dock preview"
+            "state" : "translated",
+            "value" : "Activeert een actie wanneer een venster wordt geschud terwijl het vanuit een dock voorbeeld wordt gesleept"
           }
         },
         "no" : {
@@ -61088,8 +62958,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Un-minimize"
+            "state" : "translated",
+            "value" : "Minimaliseren ongedaan maken"
           }
         },
         "no" : {
@@ -61278,8 +63148,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Unknown Display"
+            "state" : "translated",
+            "value" : "Onbekend display"
           }
         },
         "no" : {
@@ -61658,8 +63528,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Up to Date"
+            "state" : "translated",
+            "value" : "Up-to-date"
           }
         },
         "no" : {
@@ -61848,8 +63718,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update aborted: %@"
+            "state" : "translated",
+            "value" : "Update afgebroken: %@"
           }
         },
         "no" : {
@@ -62230,7 +64100,7 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Update instellingen"
+            "value" : "Instellingen bijwerken"
           }
         },
         "no" : {
@@ -62419,8 +64289,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update v%@ available"
+            "state" : "translated",
+            "value" : "Update v%@ beschikbaar"
           }
         },
         "no" : {
@@ -62609,8 +64479,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Updater not configured."
+            "state" : "translated",
+            "value" : "Updater niet geconfigureerd."
           }
         },
         "no" : {
@@ -62991,8 +64861,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use classic window ordering"
+            "state" : "translated",
+            "value" : "Gebruik klassieke venster volgorde"
           }
         },
         "no" : {
@@ -63182,8 +65052,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use default MacOS keybind ⌘ + ⇥"
+            "state" : "translated",
+            "value" : "Gebruik standaard MacOS toetsencombinatie ⌘ + ⇥"
           }
         },
         "no" : {
@@ -63372,8 +65242,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use Monochrome Colors"
+            "state" : "translated",
+            "value" : "Gebruik monochrome kleuren"
           }
         },
         "no" : {
@@ -63562,8 +65432,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use System Accent Color for Highlight"
+            "state" : "translated",
+            "value" : "Gebruik systeem accentkleur voor markering"
           }
         },
         "no" : {
@@ -63753,8 +65623,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use Uniform Image Preview Radius"
+            "state" : "translated",
+            "value" : "Uniforme afbeelding voorvertoning-radius gebruiken"
           }
         },
         "no" : {
@@ -63944,8 +65814,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use Windows-style window ordering"
+            "state" : "translated",
+            "value" : "Gebruik venstervolgorde in Windows-stijl"
           }
         },
         "no" : {
@@ -64134,8 +66004,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use Windows-style window ordering in Switcher"
+            "state" : "translated",
+            "value" : "Gebruik venstervolgorde in Windows-stijl in Switcher"
           }
         },
         "no" : {
@@ -64325,8 +66195,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use Windows-style window ordering in the window switcher"
+            "state" : "translated",
+            "value" : "Gebruik Windows-stijl venstervolgorde in de vensterwisselaar"
           }
         },
         "no" : {
@@ -64706,8 +66576,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Want to see for yourself? Review our source code"
+            "state" : "translated",
+            "value" : "Zelf zien? Bekijk onze broncode"
           }
         },
         "no" : {
@@ -64897,8 +66767,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Want to see the app in your language?"
+            "state" : "translated",
+            "value" : "Wilt u de app in uw taal bekijken?"
           }
         },
         "no" : {
@@ -65088,8 +66958,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Want to support development?"
+            "state" : "translated",
+            "value" : "Wilt u ontwikkeling steunen?"
           }
         },
         "no" : {
@@ -65278,8 +67148,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Welcome to DockDoor!"
+            "state" : "translated",
+            "value" : "Welkom bij DockDoor!"
           }
         },
         "no" : {
@@ -65470,8 +67340,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "What is this? A window for ANTS?"
+            "state" : "translated",
+            "value" : "Wat is dit? Een raam voor MIEREN?"
           }
         },
         "no" : {
@@ -65660,8 +67530,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When enabled, all preview images will be cropped to a rounded rectangle."
+            "state" : "translated",
+            "value" : "Wanneer deze optie is ingeschakeld, worden alle voorbeeldafbeeldingen bijgesneden tot een afgeronde rechthoek."
           }
         },
         "no" : {
@@ -65851,8 +67721,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When enabled, clicking an app's Dock icon will minimize all windows of that application, similar to Windows taskbar behavior"
+            "state" : "translated",
+            "value" : "Als deze optie is ingeschakeld, worden alle vensters van die toepassing geminimaliseerd als u op het Dock pictogram van een app klikt, vergelijkbaar met het gedrag van de Windows taakbalk"
           }
         },
         "no" : {
@@ -66041,8 +67911,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When enabled, dims all windows except those currently under selected."
+            "state" : "translated",
+            "value" : "Wanneer deze optie is ingeschakeld, worden alle vensters gedimd, behalve de vensters die op dat moment zijn geselecteerd."
           }
         },
         "no" : {
@@ -66232,8 +68102,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When enabled, shows the last active window first instead of the current window"
+            "state" : "translated",
+            "value" : "Wanneer ingeschakeld, wordt het laatst actieve venster eerst weergegeven in plaats van het huidige venster"
           }
         },
         "no" : {
@@ -66423,8 +68293,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When hovering over the preview"
+            "state" : "translated",
+            "value" : "Wanneer u met de muis over de voorvertoning beweegt"
           }
         },
         "no" : {
@@ -66615,8 +68485,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When Showing Dock Tile Previews"
+            "state" : "translated",
+            "value" : "Bij het tonen van Dock tegel previews"
           }
         },
         "no" : {
@@ -66807,8 +68677,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When Using Window Switcher"
+            "state" : "translated",
+            "value" : "Bij het gebruik van de vensterschakelaar"
           }
         },
         "no" : {
@@ -66997,8 +68867,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When you click the button below, DockDoor will restart and move to the menu bar to run in the background."
+            "state" : "translated",
+            "value" : "Wanneer u op de onderstaande knop klikt, wordt DockDoor opnieuw opgestart en wordt de menubalk op de achtergrond uitgevoerd."
           }
         },
         "no" : {
@@ -67188,8 +69058,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Why we need permissions"
+            "state" : "translated",
+            "value" : "Waarom we toestemming nodig hebben"
           }
         },
         "no" : {
@@ -67569,8 +69439,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Buffer from Dock (pixels)"
+            "state" : "translated",
+            "value" : "Venster buffer van Dock (pixels)"
           }
         },
         "no" : {
@@ -67760,8 +69630,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Cache Lifespan"
+            "state" : "translated",
+            "value" : "Levensduur venster cache"
           }
         },
         "no" : {
@@ -67950,8 +69820,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Image Cache Lifespan"
+            "state" : "translated",
+            "value" : "Levensduur van de cache van de venster afbeelding"
           }
         },
         "no" : {
@@ -68140,8 +70010,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Image Resolution Scale (1=Best)"
+            "state" : "translated",
+            "value" : "Resolutieschaal van venster afbeelding (1=beste)"
           }
         },
         "no" : {
@@ -68331,8 +70201,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Image Resolution Scale (higher means lower resolution)"
+            "state" : "translated",
+            "value" : "Resolutieschaal van venster afbeelding (hoger betekent lagere resolutie)"
           }
         },
         "no" : {
@@ -68522,8 +70392,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Preview Layout"
+            "state" : "translated",
+            "value" : "Voorvertoning venster lay-out"
           }
         },
         "no" : {
@@ -68713,8 +70583,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Preview Layout Limits"
+            "state" : "translated",
+            "value" : "Voorvertoning venster lay-out limieten"
           }
         },
         "no" : {
@@ -68904,8 +70774,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Preview Size"
+            "state" : "translated",
+            "value" : "Voorvertoning venster grootte"
           }
         },
         "no" : {
@@ -69094,8 +70964,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Selection Background Color"
+            "state" : "translated",
+            "value" : "Achtergrondkleur van venster selectie"
           }
         },
         "no" : {
@@ -69284,8 +71154,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Selection Background Opacity"
+            "state" : "translated",
+            "value" : "Achtergrond dekking van venster selectie"
           }
         },
         "no" : {
@@ -69667,7 +71537,7 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Scherm Wisseler"
+            "value" : "Scherm Wisselaar"
           }
         },
         "no" : {
@@ -69856,8 +71726,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Switcher Customization"
+            "state" : "translated",
+            "value" : "Aanpassing van venster schakelaar"
           }
         },
         "no" : {
@@ -70048,7 +71918,7 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Alleen Scherm Wisseler"
+            "value" : "Alleen Scherm Wisselaar"
           }
         },
         "no" : {
@@ -70237,8 +72107,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Switcher Placement"
+            "state" : "translated",
+            "value" : "Plaatsing van de venster schakelaar"
           }
         },
         "no" : {
@@ -70427,8 +72297,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Switcher Settings"
+            "state" : "translated",
+            "value" : "Scherm wisselaar instellingen"
           }
         },
         "no" : {
@@ -70618,8 +72488,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window title filters"
+            "state" : "translated",
+            "value" : "Venstertitel filters"
           }
         },
         "no" : {
@@ -70808,8 +72678,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Title Filters"
+            "state" : "translated",
+            "value" : "Venster titel filters"
           }
         },
         "no" : {
@@ -71378,8 +73248,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Titles in Previews"
+            "state" : "translated",
+            "value" : "Venstertitels in Previews"
           }
         },
         "no" : {
@@ -71570,7 +73440,7 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Scherm wisselings instellingen"
+            "value" : "Scherm wisselaar instellingen"
           }
         },
         "no" : {
@@ -71760,8 +73630,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "You need to give DockDoor access to the accessibility API in order for it to function."
+            "state" : "translated",
+            "value" : "U moet DockDoor toegang geven tot de toegankelijkheids-API om deze te laten functioneren."
           }
         },
         "no" : {
@@ -72140,8 +74010,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Your shortcut will be set (e.g. ⌘ + Tab)"
+            "state" : "translated",
+            "value" : "Uw sneltoets wordt ingesteld (bijv. ⌘ + Tab)"
           }
         },
         "no" : {
@@ -72330,8 +74200,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Your traffic lights will be set to disabled automatically."
+            "state" : "translated",
+            "value" : "Uw verkeerslichten worden automatisch uitgeschakeld."
           }
         },
         "no" : {
