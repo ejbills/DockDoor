@@ -80,7 +80,7 @@ struct TrafficLightButtons: View {
             Image(systemName: "\(symbol).circle.fill")
         }
         .foregroundStyle(color, fillColor)
-        .font(.system(size: 13))
+        .font(.headline)
         .onLongPressGesture(minimumDuration: .infinity, maximumDistance: 10, perform: {}, onPressingChanged: { pressing in
             if pressing {
                 onWindowAction(action)

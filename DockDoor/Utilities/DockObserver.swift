@@ -45,8 +45,8 @@ final class DockObserver {
     private let artifactTimeThreshold: TimeInterval = 0.05
     private var pendingShows: Set<pid_t> = []
 
-    private var notRunningCount: Int = 0
-    private let maxNotRunningCount: Int = 3
+    private var emptyAppStreakCount: Int = 0
+    private let maxEmptyAppStreak: Int = 3
 
     init(previewCoordinator: SharedPreviewWindowCoordinator) {
         self.previewCoordinator = previewCoordinator
@@ -145,7 +145,7 @@ final class DockObserver {
             resetLastAppUnderMouse()
             lastNotificationTime = 0
             lastNotificationId = ""
-            notRunningCount = 0
+            emptyAppStreakCount = 0
             pendingShows.removeAll()
         }
     }
@@ -155,6 +155,19 @@ final class DockObserver {
         let currentMouseLocation = DockObserver.getMousePosition()
         let appUnderMouseElement = getDockItemAppStatusUnderMouse()
 
+        // If so, ignore this duplicate notification so we don't keep
+        // cancelling the in-flight task that will eventually show the preview.
+        if
+            case let .success(dupApp) = appUnderMouseElement.status,
+            let existingTask = hoverProcessingTask,
+            !existingTask.isCancelled,
+            lastAppUnderMouse?.processIdentifier == dupApp.processIdentifier
+        {
+            // Duplicate notification for the same PID while we're still
+            // working on it – swallow it.
+            return
+        }
+
         if case let .notRunning(bundleIdentifier) = appUnderMouseElement.status {
             if lastNotificationId == bundleIdentifier {
                 let timeSinceLastNotification = currentTime - lastNotificationTime
@@ -162,19 +175,16 @@ final class DockObserver {
                     return
                 }
             }
-
             lastNotificationTime = currentTime
             lastNotificationId = bundleIdentifier
 
-            notRunningCount += 1
-            if notRunningCount >= maxNotRunningCount || !Defaults[.lateralMovement] {
+            if !Defaults[.lateralMovement] {
                 hideWindowAndResetLastApp()
-            } else if case .notRunning = previousStatus {
-                let timeSinceLastNotification = currentTime - lastNotificationTime
-                if timeSinceLastNotification < artifactTimeThreshold {
-                    return
+            } else {
+                emptyAppStreakCount += 1
+                if emptyAppStreakCount >= maxEmptyAppStreak {
+                    hideWindowAndResetLastApp()
                 }
-                hideWindowAndResetLastApp()
             }
             previousStatus = appUnderMouseElement.status
             resetLastAppUnderMouse()
@@ -182,22 +192,33 @@ final class DockObserver {
         } else if case .notFound = appUnderMouseElement.status {
             let mouseScreen = NSScreen.screenContainingMouse(currentMouseLocation)
             let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
+
             if !previewCoordinator.frame.extended(by: abs(Defaults[.bufferFromDock])).contains(convertedMouseLocation)
                 || !Defaults[.lateralMovement]
             {
                 hideWindowAndResetLastApp()
+            } else if !Defaults[.lateralMovement] {
+                hideWindowAndResetLastApp()
+            } else {
+                emptyAppStreakCount += 1
+                if emptyAppStreakCount >= maxEmptyAppStreak {
+                    hideWindowAndResetLastApp()
+                }
             }
             previousStatus = appUnderMouseElement.status
             resetLastAppUnderMouse()
             return
         }
 
-        if case .success = appUnderMouseElement.status {
-            notRunningCount = 0
+        if let existingTask = hoverProcessingTask,
+           !existingTask.isCancelled,
+           case let .success(newApp) = appUnderMouseElement.status,
+           lastAppUnderMouse?.processIdentifier != newApp.processIdentifier
+        {
+            isProcessing = false
+            existingTask.cancel()
+            pendingShows.removeAll()
         }
-
-        hoverProcessingTask?.cancel()
-        pendingShows.removeAll()
 
         Task { @MainActor in
             self.previewCoordinator.cancelDebounceWorkItem()
@@ -233,7 +254,9 @@ final class DockObserver {
                 }
 
                 isProcessing = true
-                defer { isProcessing = false }
+                defer {
+                    isProcessing = false
+                }
 
                 let currentAppInfo = ApplicationInfo(
                     processIdentifier: currentApp.processIdentifier,
@@ -260,6 +283,16 @@ final class DockObserver {
                     }
 
                     guard !appsToFetchWindowsFrom.isEmpty else {
+                        // This case should ideally not be hit if currentApp is valid.
+                        // If it is, treat as "empty" for streak purposes if lateral movement is on.
+                        if Defaults[.lateralMovement] {
+                            emptyAppStreakCount += 1
+                            if emptyAppStreakCount >= maxEmptyAppStreak {
+                                hideWindowAndResetLastApp()
+                            }
+                        } else {
+                            hideWindowAndResetLastApp()
+                        }
                         pendingShows.remove(currentAppInfo.processIdentifier)
                         return
                     }
@@ -268,6 +301,26 @@ final class DockObserver {
                     for appInstance in appsToFetchWindowsFrom {
                         let windowsForInstance = try await WindowUtil.getActiveWindows(of: appInstance)
                         combinedWindows.append(contentsOf: windowsForInstance)
+                    }
+
+                    if combinedWindows.isEmpty {
+                        if !Defaults[.lateralMovement] {
+                            hideWindowAndResetLastApp()
+                            pendingShows.remove(currentAppInfo.processIdentifier)
+                            return
+                        } else {
+                            emptyAppStreakCount += 1
+                            if emptyAppStreakCount >= maxEmptyAppStreak {
+                                hideWindowAndResetLastApp()
+                                pendingShows.remove(currentAppInfo.processIdentifier)
+                                return
+                            }
+                            // If streak not maxed, proceed to showWindow (might show special view)
+                            // emptyAppStreakCount remains incremented.
+                        }
+                    } else {
+                        // Successfully found windows for the app, reset the streak.
+                        emptyAppStreakCount = 0
                     }
 
                     if !pendingShows.contains(currentAppInfo.processIdentifier) {
@@ -286,7 +339,8 @@ final class DockObserver {
                         overrideDelay: lastAppUnderMouse == nil && Defaults[.hoverWindowOpenDelay] == 0,
                         onWindowTap: { [weak self] in
                             self?.hideWindowAndResetLastApp()
-                        }
+                        },
+                        bundleIdentifier: currentAppInfo.bundleIdentifier
                     )
 
                     pendingShows.remove(currentAppInfo.processIdentifier)

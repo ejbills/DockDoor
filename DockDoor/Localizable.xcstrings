@@ -191,6 +191,9 @@
         }
       }
     },
+    " " : {
+
+    },
     " - Inactive" : {
       "localizations" : {
         "af" : {
@@ -380,6 +383,9 @@
           }
         }
       }
+    },
+    "-%@" : {
+
     },
     "• Allows for enhanced visual information in the dock" : {
       "extractionState" : "stale",
@@ -10669,6 +10675,9 @@
         }
       }
     },
+    "Calendar Access Needed" : {
+
+    },
     "Can you even see this?" : {
       "comment" : "Window size option",
       "extractionState" : "stale",
@@ -17522,6 +17531,9 @@
         }
       }
     },
+    "DockDoor needs permission to access your calendar." : {
+
+    },
     "DockDoor needs screen recording access. In macOS Sequoia, you'll see this prompt every week or month and after reboots. This is a new system-wide security policy for all screen capture apps." : {
       "localizations" : {
         "af" : {
@@ -19616,6 +19628,9 @@
           }
         }
       }
+    },
+    "Enjoy your free day or add some events to your calendar." : {
+
     },
     "Enter text to filter" : {
       "localizations" : {
@@ -21910,6 +21925,9 @@
           }
         }
       }
+    },
+    "For supported apps (Music, Spotify, Calendar), show interactive controls instead of window previews when hovering their Dock icons." : {
+
     },
     "Force Quit" : {
       "localizations" : {
@@ -34288,6 +34306,9 @@
         }
       }
     },
+    "No events scheduled for today!" : {
+
+    },
     "No filters added" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -36766,6 +36787,9 @@
           }
         }
       }
+    },
+    "Open System Privacy Settings" : {
+
     },
     "Option (⌥)" : {
       "localizations" : {
@@ -52378,6 +52402,9 @@
         }
       }
     },
+    "Show media/calendar controls on Dock hover" : {
+
+    },
     "Show menu bar icon" : {
       "localizations" : {
         "af" : {
@@ -58855,6 +58882,9 @@
           }
         }
       }
+    },
+    "Today" : {
+
     },
     "Toggle" : {
       "localizations" : {

@@ -16,9 +16,7 @@ struct WindowDismissalContainer: NSViewRepresentable {
         return view
     }
 
-    func updateNSView(_ nsView: MouseTrackingNSView, context: Context) {
-        nsView.resetOpacity()
-    }
+    func updateNSView(_ nsView: MouseTrackingNSView, context: Context) {}
 }
 
 class MouseTrackingNSView: NSView {

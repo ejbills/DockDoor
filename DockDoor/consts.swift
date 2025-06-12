@@ -9,6 +9,10 @@ let optimisticScreenSizeHeight = NSScreen.main!.frame.height
 let roughHeightCap = optimisticScreenSizeHeight / 3
 let roughWidthCap = optimisticScreenSizeWidth / 3
 
+let spotifyAppIdentifier = "com.spotify.client"
+let appleMusicAppIdentifier = "com.apple.Music"
+let calendarAppIdentifier = "com.apple.iCal"
+
 extension Defaults.Keys {
     static let sizingMultiplier = Key<CGFloat>("sizingMultiplier", default: DockUtils.getDockPosition() == .bottom ? 5 : 3)
     static let bufferFromDock = Key<CGFloat>("bufferFromDock", default: CoreDockIsMagnificationEnabled() ? -25 : DockUtils.getDockPosition() == .right ? -18 : -20)
@@ -28,6 +32,8 @@ extension Defaults.Keys {
     static let inactivityTimeout = Key<CGFloat>("inactivityTimeout", default: 1.5)
     static let previewHoverAction = Key<PreviewHoverAction>("previewHoverAction", default: .none)
     static let aeroShakeAction = Key<AeroShakeAction>("aeroShakeAction", default: .none)
+
+    static let showSpecialAppControls = Key<Bool>("showSpecialAppControls", default: true)
 
     static let showAnimations = Key<Bool>("showAnimations", default: true)
     static let gradientColorPalette = Key<GradientColorPaletteSettings>("gradientColorPalette", default: .init())

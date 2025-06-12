@@ -96,7 +96,6 @@ struct WindowPreview: View {
         let titleAndSubtitleContent = VStack(alignment: .leading, spacing: 0) {
             if !showAppIconOnly {
                 Text(windowInfo.app.localizedName ?? "Unknown")
-                    .font(.system(size: 13, weight: .medium))
                     .foregroundStyle(.primary)
                     .lineLimit(1)
             }
@@ -113,7 +112,6 @@ struct WindowPreview: View {
                         Text(" - Inactive").italic()
                     }
                 }
-                .font(.system(size: 12))
                 .foregroundStyle(.secondary)
                 .lineLimit(1)
             }
@@ -280,7 +278,7 @@ struct WindowPreview: View {
                     if NSEvent.modifierFlags.contains(.option) {
                         Label("Force Quit", systemImage: "power.square.fill")
                     } else {
-                        Label("Quit", systemImage: "power.square")
+                        Label("Quit", systemImage: "minus.square.fill")
                     }
                 }
             }
