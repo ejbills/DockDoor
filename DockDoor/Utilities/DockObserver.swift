@@ -194,8 +194,9 @@ final class DockObserver {
             let mouseScreen = NSScreen.screenContainingMouse(currentMouseLocation)
             let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
 
-            if !previewCoordinator.frame.extended(by: abs(Defaults[.bufferFromDock])).contains(convertedMouseLocation) {
-                // Mouse is too far, always hide regardless of lateral movement or streak
+            if !previewCoordinator.frame.extended(by: abs(Defaults[.bufferFromDock])).contains(convertedMouseLocation)
+                || !Defaults[.lateralMovement]
+            {
                 hideWindowAndResetLastApp()
             } else if !Defaults[.lateralMovement] {
                 hideWindowAndResetLastApp()
@@ -209,6 +210,16 @@ final class DockObserver {
             previousStatus = appUnderMouseElement.status
             resetLastAppUnderMouse()
             return
+        }
+
+        if
+            let existingTask = hoverProcessingTask,
+            !existingTask.isCancelled,
+            case let .success(newApp) = appUnderMouseElement.status,
+            lastAppUnderMouse?.processIdentifier != newApp.processIdentifier
+        {
+            existingTask.cancel()
+            pendingShows.removeAll()
         }
 
         if

@@ -23262,6 +23262,9 @@
         }
       }
     },
+    "Grant Access" : {
+
+    },
     "Granted" : {
       "localizations" : {
         "af" : {
@@ -36218,6 +36221,9 @@
         }
       }
     },
+    "Open Privacy Settings" : {
+
+    },
     "Open Screen Recording Settings" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -38887,6 +38893,9 @@
           }
         }
       }
+    },
+    "Please wait..." : {
+
     },
     "Popover" : {
       "comment" : "Preview title style option",

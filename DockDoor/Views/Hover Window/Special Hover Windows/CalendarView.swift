@@ -16,6 +16,7 @@ struct CalendarView: View {
 
     // MARK: – Defaults
 
+    @Default(.uniformCardRadius) private var uniformCardRadius
     @Default(.showAppName) private var showAppTitleData
     @Default(.showAppIconOnly) private var showAppIconOnly
     @Default(.appNameStyle) private var appNameStyle
@@ -32,8 +33,7 @@ struct CalendarView: View {
 
     private enum Layout {
         static let containerSpacing: CGFloat = 8
-        static let sectionSpacing: CGFloat = 12
-        static let eventRowSpacing: CGFloat = 10
+        static let sectionSpacing: CGFloat = 14
         static let skeletonOpacity: Double = 0.25
     }
 
