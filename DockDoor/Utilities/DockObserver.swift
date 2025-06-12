@@ -45,8 +45,8 @@ final class DockObserver {
     private let artifactTimeThreshold: TimeInterval = 0.05
     private var pendingShows: Set<pid_t> = []
 
-    private var notRunningCount: Int = 0
-    private let maxNotRunningCount: Int = 3
+    private var emptyAppStreakCount: Int = 0
+    private let maxEmptyAppStreak: Int = 3
 
     init(previewCoordinator: SharedPreviewWindowCoordinator) {
         self.previewCoordinator = previewCoordinator
@@ -145,7 +145,7 @@ final class DockObserver {
             resetLastAppUnderMouse()
             lastNotificationTime = 0
             lastNotificationId = ""
-            notRunningCount = 0
+            emptyAppStreakCount = 0
             pendingShows.removeAll()
         }
     }
@@ -175,39 +175,40 @@ final class DockObserver {
                     return
                 }
             }
-
             lastNotificationTime = currentTime
             lastNotificationId = bundleIdentifier
 
-            notRunningCount += 1
-            if notRunningCount >= maxNotRunningCount || !Defaults[.lateralMovement] {
+            if !Defaults[.lateralMovement] {
                 hideWindowAndResetLastApp()
-            } else if case .notRunning = previousStatus {
-                let timeSinceLastNotification = currentTime - lastNotificationTime
-                if timeSinceLastNotification < artifactTimeThreshold {
-                    return
+            } else { // Lateral movement ON
+                emptyAppStreakCount += 1
+                if emptyAppStreakCount >= maxEmptyAppStreak {
+                    hideWindowAndResetLastApp() // Hide due to streak limit
                 }
-                hideWindowAndResetLastApp()
+                // If streak not maxed, window stays open
             }
             previousStatus = appUnderMouseElement.status
-            resetLastAppUnderMouse()
+            resetLastAppUnderMouse() // Important if window didn't hide, to allow re-evaluation if mouse moves off and on
             return
         } else if case .notFound = appUnderMouseElement.status {
             let mouseScreen = NSScreen.screenContainingMouse(currentMouseLocation)
             let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
 
-            if !previewCoordinator.frame.extended(by: abs(Defaults[.bufferFromDock])).contains(convertedMouseLocation)
-                || !Defaults[.lateralMovement]
-            {
+            if !previewCoordinator.frame.extended(by: abs(Defaults[.bufferFromDock])).contains(convertedMouseLocation) {
+                // Mouse is too far, always hide regardless of lateral movement or streak
                 hideWindowAndResetLastApp()
+            } else if !Defaults[.lateralMovement] {
+                hideWindowAndResetLastApp()
+            } else { // Lateral movement ON and mouse is close enough
+                emptyAppStreakCount += 1
+                if emptyAppStreakCount >= maxEmptyAppStreak {
+                    hideWindowAndResetLastApp()
+                }
+                // If streak not maxed, window stays open
             }
             previousStatus = appUnderMouseElement.status
             resetLastAppUnderMouse()
             return
-        }
-
-        if case .success = appUnderMouseElement.status {
-            notRunningCount = 0
         }
 
         if
@@ -281,6 +282,16 @@ final class DockObserver {
                     }
 
                     guard !appsToFetchWindowsFrom.isEmpty else {
+                        // This case should ideally not be hit if currentApp is valid.
+                        // If it is, treat as "empty" for streak purposes if lateral movement is on.
+                        if Defaults[.lateralMovement] {
+                            emptyAppStreakCount += 1
+                            if emptyAppStreakCount >= maxEmptyAppStreak {
+                                hideWindowAndResetLastApp()
+                            }
+                        } else {
+                            hideWindowAndResetLastApp()
+                        }
                         pendingShows.remove(currentAppInfo.processIdentifier)
                         return
                     }
@@ -289,6 +300,26 @@ final class DockObserver {
                     for appInstance in appsToFetchWindowsFrom {
                         let windowsForInstance = try await WindowUtil.getActiveWindows(of: appInstance)
                         combinedWindows.append(contentsOf: windowsForInstance)
+                    }
+
+                    if combinedWindows.isEmpty {
+                        if !Defaults[.lateralMovement] {
+                            hideWindowAndResetLastApp()
+                            pendingShows.remove(currentAppInfo.processIdentifier)
+                            return
+                        } else {
+                            emptyAppStreakCount += 1
+                            if emptyAppStreakCount >= maxEmptyAppStreak {
+                                hideWindowAndResetLastApp()
+                                pendingShows.remove(currentAppInfo.processIdentifier)
+                                return
+                            }
+                            // If streak not maxed, proceed to showWindow (might show special view)
+                            // emptyAppStreakCount remains incremented.
+                        }
+                    } else {
+                        // Successfully found windows for the app, reset the streak.
+                        emptyAppStreakCount = 0
                     }
 
                     if !pendingShows.contains(currentAppInfo.processIdentifier) {
