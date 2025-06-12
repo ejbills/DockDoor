@@ -13,7 +13,7 @@ struct ApplicationInfo: Sendable {
 }
 
 struct ApplicationReturnType {
-    enum Status {
+    enum Status: Equatable {
         case success(NSRunningApplication)
         case notRunning(bundleIdentifier: String)
         case notFound

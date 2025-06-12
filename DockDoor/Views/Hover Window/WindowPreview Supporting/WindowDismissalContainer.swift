@@ -93,10 +93,7 @@ class MouseTrackingNSView: NSView {
     private func checkIfMouseIsOverDockIcon() -> Bool {
         guard let activeDockObserver = DockObserver.activeInstance else { return false }
         let currentAppReturnType = activeDockObserver.getDockItemAppStatusUnderMouse()
-        if case .success = currentAppReturnType.status {
-            return true
-        }
-        return false
+        return currentAppReturnType.status != .notFound
     }
 
     func resetOpacity() {
