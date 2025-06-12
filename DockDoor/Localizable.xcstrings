@@ -21740,6 +21740,9 @@
         }
       }
     },
+    "For supported apps (Music, Spotify, Calendar), show interactive controls instead of window previews when hovering their Dock icons." : {
+
+    },
     "Force Quit" : {
       "localizations" : {
         "af" : {
@@ -52025,6 +52028,9 @@
           }
         }
       }
+    },
+    "Show media/calendar controls on Dock hover" : {
+
     },
     "Show menu bar icon" : {
       "localizations" : {

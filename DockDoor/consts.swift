@@ -33,6 +33,8 @@ extension Defaults.Keys {
     static let previewHoverAction = Key<PreviewHoverAction>("previewHoverAction", default: .none)
     static let aeroShakeAction = Key<AeroShakeAction>("aeroShakeAction", default: .none)
 
+    static let showSpecialAppControls = Key<Bool>("showSpecialAppControls", default: true)
+
     static let showAnimations = Key<Bool>("showAnimations", default: true)
     static let gradientColorPalette = Key<GradientColorPaletteSettings>("gradientColorPalette", default: .init())
     static let enableWindowSwitcher = Key<Bool>("enableWindowSwitcher", default: true)

@@ -111,6 +111,7 @@ struct MainSettingsView: View {
     @Default(.shouldHideOnDockItemClick) var shouldHideOnDockItemClick
     @Default(.previewHoverAction) var previewHoverAction
     @Default(.aeroShakeAction) var aeroShakeAction
+    @Default(.showSpecialAppControls) var showSpecialAppControls
     @Default(.showAnimations) var showAnimations
     @Default(.raisedWindowLevel) var raisedWindowLevel
 
@@ -499,6 +500,11 @@ struct MainSettingsView: View {
                     sliderSetting(title: "Preview Hover Action Delay", value: $tapEquivalentInterval, range: 0 ... 2, step: 0.1, unit: "seconds", formatter: NumberFormatter.oneDecimalFormatter).disabled(previewHoverAction == .none)
                     Picker("Dock Preview Aero Shake Action", selection: $aeroShakeAction) { ForEach(AeroShakeAction.allCases, id: \.self) { Text($0.localizedName).tag($0) } }.pickerStyle(MenuPickerStyle())
                     Toggle(isOn: $shouldHideOnDockItemClick) { Text("Hide all app windows on dock icon click") }
+                    Toggle(isOn: $showSpecialAppControls) { Text("Show media/calendar controls on Dock hover") }
+                    Text("For supported apps (Music, Spotify, Calendar), show interactive controls instead of window previews when hovering their Dock icons.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                        .padding(.leading, 20)
                     sliderSetting(title: "Window Buffer from Dock (pixels)", value: $bufferFromDock, range: -100 ... 100, step: 5, unit: "px", formatter: { let f = NumberFormatter(); f.allowsFloats = false; f.minimumIntegerDigits = 1; f.maximumFractionDigits = 0; return f }())
                 }
             }
@@ -646,6 +652,7 @@ struct MainSettingsView: View {
                 keybindModel.currentKeybind = Defaults[.UserKeybind]
                 keybindModel.modifierKey = Defaults[.UserKeybind].modifierFlags
 
+                showSpecialAppControls = Defaults.Keys.showSpecialAppControls.defaultValue
                 placementStrategy = Defaults.Keys.windowSwitcherPlacementStrategy.defaultValue
                 pinnedScreenIdentifier = Defaults.Keys.pinnedScreenIdentifier.defaultValue
                 askUserToRestartApplication()

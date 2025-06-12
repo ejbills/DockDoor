@@ -334,7 +334,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
     ) {
         let screen = mouseScreen ?? NSScreen.main!
 
-        if let bundleId = bundleIdentifier {
+        if Defaults[.showSpecialAppControls], let bundleId = bundleIdentifier {
             if isMediaApp(bundleIdentifier: bundleId) {
                 let mediaView = MediaControlsView(
                     appName: appName,
