@@ -180,15 +180,14 @@ final class DockObserver {
 
             if !Defaults[.lateralMovement] {
                 hideWindowAndResetLastApp()
-            } else { // Lateral movement ON
+            } else {
                 emptyAppStreakCount += 1
                 if emptyAppStreakCount >= maxEmptyAppStreak {
-                    hideWindowAndResetLastApp() // Hide due to streak limit
+                    hideWindowAndResetLastApp()
                 }
-                // If streak not maxed, window stays open
             }
             previousStatus = appUnderMouseElement.status
-            resetLastAppUnderMouse() // Important if window didn't hide, to allow re-evaluation if mouse moves off and on
+            resetLastAppUnderMouse()
             return
         } else if case .notFound = appUnderMouseElement.status {
             let mouseScreen = NSScreen.screenContainingMouse(currentMouseLocation)
@@ -200,34 +199,23 @@ final class DockObserver {
                 hideWindowAndResetLastApp()
             } else if !Defaults[.lateralMovement] {
                 hideWindowAndResetLastApp()
-            } else { // Lateral movement ON and mouse is close enough
+            } else {
                 emptyAppStreakCount += 1
                 if emptyAppStreakCount >= maxEmptyAppStreak {
                     hideWindowAndResetLastApp()
                 }
-                // If streak not maxed, window stays open
             }
             previousStatus = appUnderMouseElement.status
             resetLastAppUnderMouse()
             return
         }
 
-        if
-            let existingTask = hoverProcessingTask,
-            !existingTask.isCancelled,
-            case let .success(newApp) = appUnderMouseElement.status,
-            lastAppUnderMouse?.processIdentifier != newApp.processIdentifier
+        if let existingTask = hoverProcessingTask,
+           !existingTask.isCancelled,
+           case let .success(newApp) = appUnderMouseElement.status,
+           lastAppUnderMouse?.processIdentifier != newApp.processIdentifier
         {
-            existingTask.cancel()
-            pendingShows.removeAll()
-        }
-
-        if
-            let existingTask = hoverProcessingTask,
-            !existingTask.isCancelled,
-            case let .success(newApp) = appUnderMouseElement.status,
-            lastAppUnderMouse?.processIdentifier != newApp.processIdentifier
-        {
+            isProcessing = false
             existingTask.cancel()
             pendingShows.removeAll()
         }
@@ -266,7 +254,9 @@ final class DockObserver {
                 }
 
                 isProcessing = true
-                defer { isProcessing = false }
+                defer {
+                    isProcessing = false
+                }
 
                 let currentAppInfo = ApplicationInfo(
                     processIdentifier: currentApp.processIdentifier,

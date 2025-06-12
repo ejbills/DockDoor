@@ -278,7 +278,7 @@ struct WindowPreview: View {
                     if NSEvent.modifierFlags.contains(.option) {
                         Label("Force Quit", systemImage: "power.square.fill")
                     } else {
-                        Label("Quit", systemImage: "power.square")
+                        Label("Quit", systemImage: "minus.square.fill")
                     }
                 }
             }
