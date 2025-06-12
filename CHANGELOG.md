@@ -38,6 +38,45 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://buymeacoffee.com/keplercafe</div>
 
+<a id="v1.14"></a>
+# [v1.14](https://github.com/ejbills/DockDoor/releases/tag/v1.14) - 2025-06-12
+
+## 🎵 New Features
+
+### Music Controls Integration
+- **Added music preview controls** for Spotify and Apple Music when hovering over music apps in the dock
+- **Now playing information** displays album artwork, track title, artist, and playback controls
+- **Media control buttons** allow play/pause, skip forward/backward directly from the dock preview
+- **Real-time synchronization** with current playback state and track information
+- ![image](https://github.com/user-attachments/assets/06448a31-9116-4de8-9d42-f51eaf952d1c)
+
+### Calendar Integration  
+- **Added calendar preview** when hovering over the Calendar app in the dock
+- **Daily events overview** shows upcoming events and appointments at a glance
+- **Clean, intuitive interface** displays event times, titles, and calendar information
+- **Quick schedule checking** without needing to open the Calendar app
+- ![image](https://github.com/user-attachments/assets/321926af-6f99-4ba5-aaa1-ad99a5b21b33)
+
+## 🐛 Bug Fixes
+
+### Window Preview Issues
+- **Fixed lateral movement behavior** where window previews would incorrectly persist when moving between dock items
+- **Resolved issue** where apps with zero open windows would incorrectly display previews from previously hovered apps
+- **Improved preview state management** to ensure consistent behavior when hovering over closed applications
+- **Fixed race condition** in preview processing that could cause stale previews to remain visible
+
+### Technical Improvements
+- **Enhanced task cancellation** by properly resetting `isProcessing` flag when cancelling existing preview tasks
+- **Improved preview reliability** by fixing defer block execution in cancelled operations
+- **Better state management** prevents new preview requests from being blocked by stale state from previous operations
+
+## 📝 Notes
+
+- Music controls feature supports **Apple Music and Spotify only** due to Apple's restrictions on the MRMediaRemote private API (locked down in macOS 15.4)
+
+[Changes][v1.14]
+
+
 <a id="v1.13.1"></a>
 # [v1.13.1](https://github.com/ejbills/DockDoor/releases/tag/v1.13.1) - 2025-06-04
 
@@ -994,6 +1033,7 @@ v1.0
 [Changes][releases]
 
 
+[v1.14]: https://github.com/ejbills/DockDoor/compare/v1.13.1...v1.14
 [v1.13.1]: https://github.com/ejbills/DockDoor/compare/v1.13...v1.13.1
 [v1.13]: https://github.com/ejbills/DockDoor/compare/v1.12.1...v1.13
 [v1.12.1]: https://github.com/ejbills/DockDoor/compare/v1.12...v1.12.1
