@@ -38,6 +38,15 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://buymeacoffee.com/keplercafe</div>
 
+<a id="v1.14.1"></a>
+# [v1.14.1](https://github.com/ejbills/DockDoor/releases/tag/v1.14.1) - 2025-06-12
+
+## 🐛 Bug Fixes
+- **Extended lateral movement coverage** to the dismissal container for more consistent behavior
+
+[Changes][v1.14.1]
+
+
 <a id="v1.14"></a>
 # [v1.14](https://github.com/ejbills/DockDoor/releases/tag/v1.14) - 2025-06-12
 
@@ -1033,6 +1042,7 @@ v1.0
 [Changes][releases]
 
 
+[v1.14.1]: https://github.com/ejbills/DockDoor/compare/v1.14...v1.14.1
 [v1.14]: https://github.com/ejbills/DockDoor/compare/v1.13.1...v1.14
 [v1.13.1]: https://github.com/ejbills/DockDoor/compare/v1.13...v1.13.1
 [v1.13]: https://github.com/ejbills/DockDoor/compare/v1.12.1...v1.13
