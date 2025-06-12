@@ -191,6 +191,9 @@
         }
       }
     },
+    " " : {
+
+    },
     " - Inactive" : {
       "localizations" : {
         "af" : {
@@ -17528,7 +17531,7 @@
         }
       }
     },
-    "DockDoor needs permission to display your calendar events." : {
+    "DockDoor needs permission to access your calendar." : {
 
     },
     "DockDoor needs screen recording access. In macOS Sequoia, you'll see this prompt every week or month and after reboots. This is a new system-wide security policy for all screen capture apps." : {
@@ -19625,6 +19628,9 @@
           }
         }
       }
+    },
+    "Enjoy your free day or add some events to your calendar." : {
+
     },
     "Enter text to filter" : {
       "localizations" : {
@@ -23255,9 +23261,6 @@
           }
         }
       }
-    },
-    "Grant Access" : {
-
     },
     "Granted" : {
       "localizations" : {
@@ -36215,9 +36218,6 @@
         }
       }
     },
-    "Open Privacy Settings" : {
-
-    },
     "Open Screen Recording Settings" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -36598,6 +36598,9 @@
           }
         }
       }
+    },
+    "Open System Privacy Settings" : {
+
     },
     "Option (⌥)" : {
       "localizations" : {
@@ -38884,9 +38887,6 @@
           }
         }
       }
-    },
-    "Please wait..." : {
-
     },
     "Popover" : {
       "comment" : "Preview title style option",

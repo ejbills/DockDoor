@@ -16,7 +16,6 @@ struct CalendarView: View {
 
     // MARK: – Defaults
 
-    @Default(.uniformCardRadius) private var uniformCardRadius
     @Default(.showAppName) private var showAppTitleData
     @Default(.showAppIconOnly) private var showAppIconOnly
     @Default(.appNameStyle) private var appNameStyle
@@ -33,7 +32,8 @@ struct CalendarView: View {
 
     private enum Layout {
         static let containerSpacing: CGFloat = 8
-        static let sectionSpacing: CGFloat = 14
+        static let sectionSpacing: CGFloat = 12
+        static let eventRowSpacing: CGFloat = 10
         static let skeletonOpacity: Double = 0.25
     }
 
@@ -95,43 +95,48 @@ struct CalendarView: View {
         let currentEventAuth = calendarInfo.eventAuthStatus
         let isLoadingCalendar = currentEventAuth == .notDetermined
 
-        if isLoadingCalendar {
-            VStack {
-                Spacer()
-                calendarSkeleton()
-                Spacer()
-            }
-        } else if currentEventAuth == .denied || currentEventAuth == .restricted {
-            VStack {
-                Spacer()
-                permissionNeededView()
-                Spacer()
-            }
-        } else if currentEventAuth == .authorized {
-            VStack(alignment: .leading, spacing: Layout.sectionSpacing) {
-                if !calendarInfo.events.isEmpty {
-                    Text("Today")
-                        .font(.title3)
-                        .bold()
-                    ForEach(calendarInfo.events.filter { $0.endDate >= Calendar.current.startOfDay(for: Date()) }) { event in
-                        EventRowView(event: event)
-                    }
-                } else {
-                    Text("No events scheduled for today!")
-                        .frame(maxWidth: .infinity, alignment: .center)
-                        .foregroundStyle(.secondary)
-                        .padding(.vertical, 30)
+        ScrollView(.vertical, showsIndicators: false) {
+            if isLoadingCalendar {
+                VStack {
+                    calendarSkeleton()
                 }
-            }
-        } else {
-            VStack {
-                Spacer()
-                ProgressView()
-                Text("Please wait...")
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
-                    .padding(.top, 8)
-                Spacer()
+                .frame(maxWidth: .infinity)
+            } else if currentEventAuth == .denied || currentEventAuth == .restricted {
+                VStack {
+                    permissionNeededView()
+                }
+                .frame(maxWidth: .infinity)
+            } else if currentEventAuth == .authorized {
+                VStack(alignment: .leading, spacing: Layout.sectionSpacing) {
+                    if !calendarInfo.events.isEmpty {
+                        Text("Today")
+                            .font(.title3)
+                            .fontWeight(.semibold)
+
+                        VStack(alignment: .leading, spacing: Layout.eventRowSpacing) {
+                            ForEach(calendarInfo.events) { event in
+                                EventRowView(event: event)
+                            }
+                        }
+                    } else {
+                        VStack(spacing: 12) {
+                            Image(systemName: "calendar.badge.checkmark")
+                                .font(.largeTitle)
+                                .fontWeight(.light)
+                                .imageScale(.medium)
+                                .foregroundStyle(.secondary)
+                            Text("No events scheduled for today!")
+                                .font(.headline)
+                                .foregroundStyle(.secondary)
+                            Text("Enjoy your free day or add some events to your calendar.")
+                                .font(.subheadline)
+                                .foregroundStyle(.tertiary)
+                                .multilineTextAlignment(.center)
+                        }
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        .padding(.vertical, 30)
+                    }
+                }
             }
         }
     }
@@ -140,21 +145,30 @@ struct CalendarView: View {
 
     @ViewBuilder
     private func calendarSkeleton() -> some View {
-        VStack(alignment: .leading, spacing: Layout.sectionSpacing) {
-            RoundedRectangle(cornerRadius: 6).fill(Color.primary.opacity(Layout.skeletonOpacity)).frame(width: 100, height: 20)
-            VStack(alignment: .leading, spacing: 6) {
-                RoundedRectangle(cornerRadius: 4).fill(Color.primary.opacity(Layout.skeletonOpacity)).frame(height: 16)
-                RoundedRectangle(cornerRadius: 3).fill(Color.primary.opacity(Layout.skeletonOpacity)).frame(height: 12)
-                RoundedRectangle(cornerRadius: 3).fill(Color.primary.opacity(Layout.skeletonOpacity)).frame(width: 150, height: 10)
-            }
-            .padding(.bottom, 8)
+        VStack(alignment: .leading, spacing: Layout.sectionSpacing + 8) {
+            RoundedRectangle(cornerRadius: 6).fill(Color.primary.opacity(Layout.skeletonOpacity)).frame(width: 120, height: 24)
+                .padding(.bottom, 4)
 
-            RoundedRectangle(cornerRadius: 6).fill(Color.primary.opacity(Layout.skeletonOpacity)).frame(width: 120, height: 20).padding(.top)
-            HStack(spacing: 8) {
-                Circle().fill(Color.primary.opacity(Layout.skeletonOpacity)).frame(width: 20, height: 20)
-                VStack(alignment: .leading, spacing: 6) {
-                    RoundedRectangle(cornerRadius: 3).fill(Color.primary.opacity(Layout.skeletonOpacity)).frame(height: 14)
-                    RoundedRectangle(cornerRadius: 3).fill(Color.primary.opacity(Layout.skeletonOpacity)).frame(width: 100, height: 10)
+            VStack(alignment: .leading, spacing: Layout.eventRowSpacing) {
+                ForEach(0 ..< 3) { _ in
+                    RoundedRectangle(cornerRadius: 16)
+                        .fill(Color.primary.opacity(Layout.skeletonOpacity * 0.5))
+                        .frame(height: 70)
+                        .overlay(alignment: .leading) {
+                            HStack(spacing: 8) {
+                                RoundedRectangle(cornerRadius: 3)
+                                    .fill(Color.primary.opacity(Layout.skeletonOpacity))
+                                    .frame(width: 6, height: 50)
+                                    .padding(.leading, 12)
+
+                                VStack(alignment: .leading, spacing: 6) {
+                                    RoundedRectangle(cornerRadius: 4).fill(Color.primary.opacity(Layout.skeletonOpacity)).frame(height: 16)
+                                    RoundedRectangle(cornerRadius: 3).fill(Color.primary.opacity(Layout.skeletonOpacity)).frame(height: 12)
+                                    RoundedRectangle(cornerRadius: 3).fill(Color.primary.opacity(Layout.skeletonOpacity)).frame(width: 75, height: 10)
+                                }
+                            }
+                            .padding(.trailing, 4)
+                        }
                 }
             }
         }
@@ -163,19 +177,27 @@ struct CalendarView: View {
 
     @ViewBuilder
     private func EventRowView(event: DailyCalendarInfo.Event) -> some View {
-        HStack(alignment: .top, spacing: 8) {
-            Rectangle()
-                .fill(.separator)
-                .frame(width: 2)
-                .clipShape(Capsule())
-                .padding(.vertical, 4)
+        let cornerRadius = 16.0
 
+        HStack(alignment: .center, spacing: 12) {
             VStack(alignment: .leading, spacing: 2) {
                 Text(event.title)
-                    .lineLimit(2)
+                    .fontWeight(.medium)
+                    .lineLimit(1)
+
                 Text(dateIntervalString(for: event))
+                    .font(.caption)
                     .foregroundStyle(.secondary)
-                if let location = event.location, !location.isEmpty {
+                    .lineLimit(1)
+            }
+
+            Spacer()
+
+            if let location = event.location {
+                HStack(spacing: 3) {
+                    Image(systemName: "location.fill")
+                        .font(.caption2)
+                        .foregroundStyle(.tertiary)
                     Text(location)
                         .font(.caption)
                         .foregroundStyle(.tertiary)
@@ -183,7 +205,14 @@ struct CalendarView: View {
                 }
             }
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.horizontal, 10)
+        .frame(maxWidth: .infinity, minHeight: 60, alignment: .leading)
+        .background(Color.gray.opacity(0.14))
+        .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
+        .overlay {
+            RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                .strokeBorder(Color.primary.opacity(0.1), lineWidth: 1)
+        }
     }
 
     // MARK: – Helpers
@@ -209,53 +238,32 @@ struct CalendarView: View {
 
     @ViewBuilder
     private func permissionNeededView() -> some View {
-        VStack(spacing: 16) {
-            Image(systemName: "calendar.badge.exclamationmark")
-                .font(.system(size: 44, weight: .light))
-                .foregroundStyle(.secondary)
+        VStack(spacing: 8) {
+            Label {
+                Text(" ")
+            } icon: {
+                Image(systemName: "calendar.badge.exclamationmark")
+            }
+            .labelStyle(.iconOnly)
+            .font(.largeTitle)
+            .fontWeight(.light)
+            .imageScale(.large)
+            .foregroundStyle(.orange)
+
             Text("Calendar Access Needed")
-                .font(.title3.weight(.medium))
-            Text("DockDoor needs permission to display your calendar events.")
+                .font(.title2)
+                .fontWeight(.medium)
+            Text("DockDoor needs permission to access your calendar.")
                 .font(.callout)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
-                .padding(.horizontal)
 
-            Button {
-                requestAuthorisations()
-            } label: {
-                Text("Grant Access")
-                    .padding(.horizontal)
-            }
-            .buttonStyle(.borderedProminent)
-            .controlSize(.large)
-
-            Button("Open Privacy Settings") {
+            Button("Open System Privacy Settings") {
                 if let url = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Calendars") {
                     openURL(url)
                 }
             }
-            .buttonStyle(.link)
-            .padding(.top, 4)
-        }
-        .frame(maxWidth: .infinity)
-        .padding()
-    }
-
-    private func requestAuthorisations() {
-        let store = EKEventStore()
-        var authMightHaveChanged = false
-
-        if calendarInfo.eventAuthStatus == .notDetermined {
-            store.requestAccess(to: .event) { granted, error in
-                DispatchQueue.main.async {
-                    if error == nil { authMightHaveChanged = true }
-
-                    if authMightHaveChanged {
-                        calendarInfo.reloadData()
-                    }
-                }
-            }
+            .buttonStyle(AccentButtonStyle())
         }
     }
 
