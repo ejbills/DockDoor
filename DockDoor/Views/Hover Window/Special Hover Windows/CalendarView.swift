@@ -137,7 +137,7 @@ struct CalendarView: View {
                         .frame(maxWidth: .infinity, alignment: .center)
                     }
                 }
-                .frame(minHeight: 175)
+                .frame(minHeight: 175, alignment: .topLeading)
             }
         }
     }
