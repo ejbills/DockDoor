@@ -30,6 +30,7 @@ struct WindowPreviewHoverContainer: View {
     let bestGuessMonitor: NSScreen
     var mockPreviewActive: Bool
     let updateAvailable: Bool
+    let embeddedContentType: EmbeddedContentType
 
     @ObservedObject var previewStateCoordinator: PreviewStateCoordinator
 
@@ -41,7 +42,8 @@ struct WindowPreviewHoverContainer: View {
     @Default(.aeroShakeAction) var aeroShakeAction
     @Default(.previewWrap) var previewWrap
     @Default(.switcherWrap) var switcherWrap
-    @Default(.gradientColorPalette) private var gradientColorPalette
+    @Default(.gradientColorPalette) var gradientColorPalette
+    @Default(.showSpecialAppControls) var showSpecialAppControls
     @Default(.showAnimations) var showAnimations
 
     @State private var draggedWindowIndex: Int? = nil
@@ -62,7 +64,8 @@ struct WindowPreviewHoverContainer: View {
          bestGuessMonitor: NSScreen,
          windowSwitcherCoordinator: PreviewStateCoordinator,
          mockPreviewActive: Bool,
-         updateAvailable: Bool)
+         updateAvailable: Bool,
+         embeddedContentType: EmbeddedContentType = .none)
     {
         self.appName = appName
         self.onWindowTap = onWindowTap
@@ -72,6 +75,7 @@ struct WindowPreviewHoverContainer: View {
         previewStateCoordinator = windowSwitcherCoordinator
         self.mockPreviewActive = mockPreviewActive
         self.updateAvailable = updateAvailable
+        self.embeddedContentType = embeddedContentType
     }
 
     var body: some View {
@@ -355,6 +359,32 @@ struct WindowPreviewHoverContainer: View {
     }
 
     @ViewBuilder
+    private func embeddedContentView() -> some View {
+        if showSpecialAppControls {
+            switch embeddedContentType {
+            case let .media(bundleIdentifier):
+                MediaControlsView(
+                    appName: appName,
+                    bundleIdentifier: bundleIdentifier,
+                    dockPosition: dockPosition,
+                    bestGuessMonitor: bestGuessMonitor,
+                    isEmbeddedMode: true
+                )
+            case let .calendar(bundleIdentifier):
+                CalendarView(
+                    appName: appName,
+                    bundleIdentifier: bundleIdentifier,
+                    dockPosition: dockPosition,
+                    bestGuessMonitor: bestGuessMonitor,
+                    isEmbeddedMode: true
+                )
+            case .none:
+                EmptyView()
+            }
+        }
+    }
+
+    @ViewBuilder
     private func buildFlowStack(
         scrollProxy: ScrollViewProxy,
         _ isHorizontal: Bool,
@@ -371,8 +401,13 @@ struct WindowPreviewHoverContainer: View {
 
         ScrollView(isHorizontal ? .horizontal : .vertical, showsIndicators: false) {
             DynStack(direction: isHorizontal ? .vertical : .horizontal, spacing: 16) {
-                ForEach(Array(layout.windowsPerStack.enumerated()), id: \.offset) { _, range in
+                ForEach(Array(layout.windowsPerStack.enumerated()), id: \.offset) { stackIndex, range in
                     DynStack(direction: isHorizontal ? .horizontal : .vertical, spacing: 16) {
+                        if stackIndex == 0, embeddedContentType != .none {
+                            embeddedContentView()
+                                .id("\(appName)-embedded")
+                        }
+
                         ForEach(previewStateCoordinator.windows.indices, id: \.self) { index in
                             if range.contains(index) {
                                 WindowPreview(

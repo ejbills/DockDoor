@@ -6,6 +6,12 @@ enum ArrowDirection {
     case left, right, up, down
 }
 
+enum EmbeddedContentType: Equatable {
+    case media(bundleIdentifier: String)
+    case calendar(bundleIdentifier: String)
+    case none
+}
+
 final class SharedPreviewWindowCoordinator: NSPanel {
     weak static var activeInstance: SharedPreviewWindowCoordinator?
 
@@ -58,6 +64,18 @@ final class SharedPreviewWindowCoordinator: NSPanel {
     private func isCalendarApp(bundleIdentifier: String?) -> Bool {
         guard let bundleId = bundleIdentifier else { return false }
         return bundleId == calendarAppIdentifier
+    }
+
+    private func getEmbeddedContentType(for bundleIdentifier: String?) -> EmbeddedContentType {
+        guard let bundleId = bundleIdentifier else { return .none }
+
+        if isMediaApp(bundleIdentifier: bundleId) {
+            return .media(bundleIdentifier: bundleId)
+        } else if isCalendarApp(bundleIdentifier: bundleId) {
+            return .calendar(bundleIdentifier: bundleId)
+        }
+
+        return .none
     }
 
     func hideWindow() {
@@ -120,7 +138,8 @@ final class SharedPreviewWindowCoordinator: NSPanel {
     @MainActor
     private func updateContentViewSizeAndPosition(mouseLocation: CGPoint? = nil, mouseScreen: NSScreen, dockItemElement: AXUIElement?,
                                                   animated: Bool, centerOnScreen: Bool = false,
-                                                  centeredHoverWindowState: PreviewStateCoordinator.WindowState? = nil)
+                                                  centeredHoverWindowState: PreviewStateCoordinator.WindowState? = nil,
+                                                  embeddedContentType: EmbeddedContentType = .none)
     {
         windowSwitcherCoordinator.setShowing(centeredHoverWindowState, toState: centerOnScreen)
 
@@ -130,7 +149,8 @@ final class SharedPreviewWindowCoordinator: NSPanel {
                                                     dockPosition: DockUtils.getDockPosition(), mouseLocation: mouseLocation,
                                                     bestGuessMonitor: mouseScreen, windowSwitcherCoordinator: windowSwitcherCoordinator,
                                                     mockPreviewActive: false,
-                                                    updateAvailable: updateAvailable)
+                                                    updateAvailable: updateAvailable,
+                                                    embeddedContentType: embeddedContentType)
         let newHostingView = NSHostingView(rootView: hoverView)
 
         if let oldContentView = contentView {
@@ -334,39 +354,53 @@ final class SharedPreviewWindowCoordinator: NSPanel {
     ) {
         let screen = mouseScreen ?? NSScreen.main!
 
-        if Defaults[.showSpecialAppControls], let bundleId = bundleIdentifier {
-            if isMediaApp(bundleIdentifier: bundleId) {
-                let mediaView = MediaControlsView(
-                    appName: appName,
-                    bundleIdentifier: bundleId,
-                    dockPosition: DockUtils.getDockPosition(),
-                    bestGuessMonitor: screen
-                )
-                performShowView(
-                    mediaView,
-                    mouseLocation: mouseLocation,
-                    mouseScreen: screen,
-                    dockItemElement: dockItemElement
-                )
-            } else if isCalendarApp(bundleIdentifier: bundleId) {
-                let calendarView = CalendarView(appName: appName, bundleIdentifier: bundleId, dockPosition: DockUtils.getDockPosition(), bestGuessMonitor: screen)
-                performShowView(
-                    calendarView,
-                    mouseLocation: mouseLocation,
-                    mouseScreen: screen,
-                    dockItemElement: dockItemElement
-                )
-            } else {
-                performShowWindow(
-                    appName: appName,
-                    windows: windows,
-                    mouseLocation: mouseLocation,
-                    mouseScreen: mouseScreen,
-                    dockItemElement: dockItemElement,
-                    centeredHoverWindowState: centeredHoverWindowState,
-                    onWindowTap: onWindowTap
-                )
+        if let bundleId = bundleIdentifier {
+            let embeddedContentType = getEmbeddedContentType(for: bundleId)
+
+            if Defaults[.showSpecialAppControls], windows.isEmpty || windows.allSatisfy(\.isMinimized) || windows.allSatisfy(\.isHidden) {
+                if case let .media(bundleId) = embeddedContentType {
+                    let mediaView = MediaControlsView(
+                        appName: appName,
+                        bundleIdentifier: bundleId,
+                        dockPosition: DockUtils.getDockPosition(),
+                        bestGuessMonitor: screen,
+                        isEmbeddedMode: false
+                    )
+                    performShowView(
+                        mediaView,
+                        mouseLocation: mouseLocation,
+                        mouseScreen: screen,
+                        dockItemElement: dockItemElement
+                    )
+                    return
+                } else if case let .calendar(bundleId) = embeddedContentType {
+                    let calendarView = CalendarView(
+                        appName: appName,
+                        bundleIdentifier: bundleId,
+                        dockPosition: DockUtils.getDockPosition(),
+                        bestGuessMonitor: screen,
+                        isEmbeddedMode: false
+                    )
+                    performShowView(
+                        calendarView,
+                        mouseLocation: mouseLocation,
+                        mouseScreen: screen,
+                        dockItemElement: dockItemElement
+                    )
+                    return
+                }
             }
+
+            performShowWindow(
+                appName: appName,
+                windows: windows,
+                mouseLocation: mouseLocation,
+                mouseScreen: mouseScreen,
+                dockItemElement: dockItemElement,
+                centeredHoverWindowState: centeredHoverWindowState,
+                onWindowTap: onWindowTap,
+                embeddedContentType: embeddedContentType
+            )
         } else {
             performShowWindow(
                 appName: appName,
@@ -422,7 +456,8 @@ final class SharedPreviewWindowCoordinator: NSPanel {
     private func performShowWindow(appName: String, windows: [WindowInfo], mouseLocation: CGPoint?,
                                    mouseScreen: NSScreen?, dockItemElement: AXUIElement?,
                                    centeredHoverWindowState: PreviewStateCoordinator.WindowState? = nil,
-                                   onWindowTap: (() -> Void)?)
+                                   onWindowTap: (() -> Void)?,
+                                   embeddedContentType: EmbeddedContentType = .none)
     {
         guard !windows.isEmpty else { return }
 
@@ -446,7 +481,8 @@ final class SharedPreviewWindowCoordinator: NSPanel {
             self.onWindowTap = onWindowTap
 
             updateContentViewSizeAndPosition(mouseLocation: mouseLocation, mouseScreen: screen, dockItemElement: dockItemElement, animated: !shouldCenterOnScreen,
-                                             centerOnScreen: shouldCenterOnScreen, centeredHoverWindowState: centeredHoverWindowState)
+                                             centerOnScreen: shouldCenterOnScreen, centeredHoverWindowState: centeredHoverWindowState,
+                                             embeddedContentType: embeddedContentType)
         }
     }
 

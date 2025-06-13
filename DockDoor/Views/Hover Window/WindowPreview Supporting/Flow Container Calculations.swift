@@ -39,6 +39,17 @@ extension WindowPreviewHoverContainer {
         let totalVerticalPadding = outerPadding + flowStackPadding + additionalPadding
         let totalHorizontalPadding = outerPadding + flowStackPadding
 
+        let embeddedContentSize: CGSize = switch embeddedContentType {
+        case .media:
+            // Approximate size for embedded media controls
+            CGSize(width: 200, height: 80)
+        case .calendar:
+            // Approximate size for embedded calendar
+            CGSize(width: 220, height: 100)
+        case .none:
+            .zero
+        }
+
         if isHorizontal {
             let maxWidth = visibleFrame.width - totalHorizontalPadding
             let maxHeight = visibleFrame.height - totalVerticalPadding
@@ -48,6 +59,10 @@ extension WindowPreviewHoverContainer {
             for windowIndex in 0 ..< activeWindowCount {
                 let height = windowDimensions[windowIndex]?.size.height ?? maxDimensionForLayout.y
                 actualMaxWindowHeight = max(actualMaxWindowHeight, height)
+            }
+
+            if embeddedContentType != .none {
+                actualMaxWindowHeight = max(actualMaxWindowHeight, embeddedContentSize.height)
             }
 
             // First row: actualMaxWindowHeight
@@ -64,8 +79,16 @@ extension WindowPreviewHoverContainer {
             let userMaxRows = wrap
             let effectiveMaxRows = userMaxRows > 0 ? min(Int(userMaxRows), calculatedMaxRows) : calculatedMaxRows
 
-            // Calculate total width needed for all windows
+            // Calculate total width needed for all windows plus embedded content
             var totalWidthNeeded: CGFloat = 0
+
+            if embeddedContentType != .none {
+                totalWidthNeeded += embeddedContentSize.width
+                if activeWindowCount > 0 {
+                    totalWidthNeeded += itemSpacing // space between embedded content and first window
+                }
+            }
+
             for windowIndex in 0 ..< activeWindowCount {
                 let width = windowDimensions[windowIndex]?.size.width ?? 0
                 totalWidthNeeded += width + (windowIndex > 0 ? itemSpacing : 0)
@@ -96,6 +119,10 @@ extension WindowPreviewHoverContainer {
                 actualMaxWindowWidth = max(actualMaxWindowWidth, width)
             }
 
+            if embeddedContentType != .none {
+                actualMaxWindowWidth = max(actualMaxWindowWidth, embeddedContentSize.width)
+            }
+
             let calculatedMaxColumns: Int
             if actualMaxWindowWidth > maxWidth {
                 calculatedMaxColumns = 1 // Can't even fit one column properly
@@ -108,8 +135,16 @@ extension WindowPreviewHoverContainer {
             let userMaxColumns = wrap
             let effectiveMaxColumns = userMaxColumns > 0 ? min(Int(userMaxColumns), calculatedMaxColumns) : calculatedMaxColumns
 
-            // Calculate total height needed for all windows
+            // Calculate total height needed for all windows plus embedded content
             var totalHeightNeeded: CGFloat = 0
+
+            if embeddedContentType != .none {
+                totalHeightNeeded += embeddedContentSize.height
+                if activeWindowCount > 0 {
+                    totalHeightNeeded += itemSpacing // space between embedded content and first window
+                }
+            }
+
             for windowIndex in 0 ..< activeWindowCount {
                 let height = windowDimensions[windowIndex]?.size.height ?? 0
                 totalHeightNeeded += height + (windowIndex > 0 ? itemSpacing : 0)

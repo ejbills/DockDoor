@@ -8,6 +8,7 @@ struct MediaControlsView: View {
     let bundleIdentifier: String
     let dockPosition: DockPosition
     let bestGuessMonitor: NSScreen
+    let isEmbeddedMode: Bool
 
     @Default(.uniformCardRadius) var uniformCardRadius
     @Default(.showAppName) var showAppTitleData
@@ -15,44 +16,191 @@ struct MediaControlsView: View {
     @Default(.appNameStyle) var appNameStyle
     @Default(.showAnimations) var showAnimations
     @Default(.gradientColorPalette) private var defaultGradientColorPalette
+    @Default(.hasShownEmbeddedControlsToast) var hasShownEmbeddedControlsToast
 
     @State private var appIcon: NSImage? = nil
     @State private var hoveringAppIcon: Bool = false
     @State private var hoveringWindowTitle: Bool = false
     @State private var isLoadingMediaInfo: Bool = true
     @State private var dominantArtworkColor: Color? = nil
-
-    // MARK: – Centralised layout constants
+    @State private var showToast: Bool = false
 
     private enum Layout {
-        /// Container spacing
         static let containerSpacing: CGFloat = 8
-        /// Artwork thumbnail size (width & height)
         static let artworkSize: CGFloat = 55
-        /// Corner radius used for artwork placeholders
         static let artworkCornerRadius: CGFloat = 6
-        /// Horizontal spacing between the artwork and the title / artist stack
         static let artworkTextSpacing: CGFloat = 12
-        /// Spacing between the 5 media control buttons
         static let mediaButtonsSpacing: CGFloat = 20
-        /// Height for the timeline / progress bar
         static let progressBarHeight: CGFloat = 20
-        /// Default opacity for skeleton placeholders
         static let skeletonOpacity: Double = 0.25
+        static let embeddedArtworkSize: CGFloat = 40
+        static let embeddedMediaButtonsSpacing: CGFloat = 15
+        static let embeddedProgressBarHeight: CGFloat = 16
     }
 
     init(appName: String,
          bundleIdentifier: String,
          dockPosition: DockPosition,
-         bestGuessMonitor: NSScreen)
+         bestGuessMonitor: NSScreen,
+         isEmbeddedMode: Bool = false)
     {
         self.appName = appName
         self.bundleIdentifier = bundleIdentifier
         self.dockPosition = dockPosition
         self.bestGuessMonitor = bestGuessMonitor
+        self.isEmbeddedMode = isEmbeddedMode
     }
 
     var body: some View {
+        Group {
+            if isEmbeddedMode {
+                embeddedContent()
+                    .overlay(alignment: .top) {
+                        if showToast, !hasShownEmbeddedControlsToast {
+                            EmbeddedControlsToast(
+                                appType: "media controls",
+                                onDismiss: {
+                                    showToast = false
+                                    hasShownEmbeddedControlsToast = true
+                                }
+                            )
+                            .padding(.top, 8)
+                            .transition(.move(edge: .top).combined(with: .opacity))
+                        }
+                    }
+            } else {
+                fullContent()
+            }
+        }
+        .onAppear {
+            isLoadingMediaInfo = true
+            loadAppIcon()
+            Task {
+                await mediaInfo.fetchMediaInfo(for: bundleIdentifier)
+                withAnimation(.smooth(duration: 0.125)) {
+                    isLoadingMediaInfo = false
+                }
+            }
+            if let artwork = mediaInfo.artwork {
+                dominantArtworkColor = artwork.averageColor()
+            }
+            if isEmbeddedMode {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                    withAnimation(.spring(response: 0.5, dampingFraction: 0.8)) {
+                        showToast = true
+                    }
+                }
+            }
+        }
+        .onChange(of: mediaInfo.artwork) { newArtwork in
+            if let artwork = newArtwork {
+                dominantArtworkColor = artwork.averageColor()
+            } else {
+                dominantArtworkColor = nil
+            }
+        }
+        .onDisappear {
+            mediaInfo.updateTimer?.invalidate()
+        }
+    }
+
+    @ViewBuilder
+    private func embeddedContent() -> some View {
+        Group {
+            if isLoadingMediaInfo || mediaInfo.title.isEmpty {
+                embeddedMediaControlsSkeleton()
+            } else {
+                VStack(alignment: .center, spacing: 6) {
+                    HStack(alignment: .center, spacing: Layout.artworkTextSpacing) {
+                        artworkView()
+                            .frame(width: Layout.embeddedArtworkSize, height: Layout.embeddedArtworkSize)
+                            .clipShape(RoundedRectangle(cornerRadius: Layout.artworkCornerRadius, style: .continuous))
+
+                        VStack(alignment: .leading, spacing: 1) {
+                            Text(mediaInfo.title)
+                                .font(.callout)
+                                .fontWeight(.medium)
+                                .lineLimit(1)
+
+                            if !mediaInfo.artist.isEmpty {
+                                Text(mediaInfo.artist)
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                                    .lineLimit(1)
+                            }
+                        }
+                        Spacer(minLength: 0)
+                    }
+
+                    HStack(spacing: Layout.embeddedMediaButtonsSpacing) {
+                        MediaControlButton(systemName: "backward.fill", isTitle: false, action: { mediaInfo.previousTrack() }, buttonDimension: 24)
+
+                        MediaControlButton(systemName: mediaInfo.isPlaying ? "pause.fill" : "play.fill", isTitle: true,
+                                           action: {
+                                               withAnimation(.easeInOut(duration: 0.2)) {
+                                                   mediaInfo.isPlaying.toggle()
+                                               }
+                                               mediaInfo.playPause()
+                                           }, buttonDimension: 28)
+                            .animation(.easeInOut(duration: 0.15), value: mediaInfo.isPlaying)
+
+                        MediaControlButton(systemName: "forward.fill", isTitle: false, action: { mediaInfo.nextTrack() }, buttonDimension: 24)
+                    }
+                }
+                .padding(12)
+            }
+        }
+        .background(
+            RoundedRectangle(cornerRadius: uniformCardRadius ? 12 : 0, style: .continuous)
+                .fill(.regularMaterial)
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: uniformCardRadius ? 12 : 0, style: .continuous)
+                .strokeBorder(Color.primary.opacity(0.1), lineWidth: 1)
+        )
+    }
+
+    @ViewBuilder
+    private func embeddedMediaControlsSkeleton() -> some View {
+        VStack(spacing: 6) {
+            HStack(alignment: .center, spacing: Layout.artworkTextSpacing) {
+                RoundedRectangle(cornerRadius: Layout.artworkCornerRadius, style: .continuous)
+                    .fill(Color.primary.opacity(Layout.skeletonOpacity))
+                    .frame(width: Layout.embeddedArtworkSize, height: Layout.embeddedArtworkSize)
+
+                VStack(alignment: .leading, spacing: 4) {
+                    RoundedRectangle(cornerRadius: 3)
+                        .fill(Color.primary.opacity(Layout.skeletonOpacity))
+                        .frame(width: 100, height: 13)
+                    RoundedRectangle(cornerRadius: 3)
+                        .fill(Color.primary.opacity(Layout.skeletonOpacity))
+                        .frame(width: 70, height: 11)
+                }
+                Spacer(minLength: 0)
+            }
+
+            HStack(spacing: Layout.embeddedMediaButtonsSpacing) {
+                ForEach(0 ..< 3, id: \.self) { index in
+                    Circle()
+                        .fill(Color.primary.opacity(Layout.skeletonOpacity))
+                        .frame(width: index == 1 ? 28 : 24, height: index == 1 ? 28 : 24)
+                }
+            }
+        }
+        .padding(12)
+        .background(
+            RoundedRectangle(cornerRadius: uniformCardRadius ? 12 : 0, style: .continuous)
+                .fill(.regularMaterial)
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: uniformCardRadius ? 12 : 0, style: .continuous)
+                .strokeBorder(Color.primary.opacity(0.1), lineWidth: 1)
+        )
+        .glintPlaceholder()
+    }
+
+    @ViewBuilder
+    private func fullContent() -> some View {
         BaseHoverContainer(
             bestGuessMonitor: bestGuessMonitor,
             mockPreviewActive: false,
@@ -79,29 +227,6 @@ struct MediaControlsView: View {
             },
             highlightColor: dominantArtworkColor
         )
-        .onAppear {
-            isLoadingMediaInfo = true
-            loadAppIcon()
-            Task {
-                await mediaInfo.fetchMediaInfo(for: bundleIdentifier)
-                withAnimation(.smooth(duration: 0.125)) {
-                    isLoadingMediaInfo = false
-                }
-            }
-            if let artwork = mediaInfo.artwork {
-                dominantArtworkColor = artwork.averageColor()
-            }
-        }
-        .onChange(of: mediaInfo.artwork) { newArtwork in
-            if let artwork = newArtwork {
-                dominantArtworkColor = artwork.averageColor()
-            } else {
-                dominantArtworkColor = nil
-            }
-        }
-        .onDisappear {
-            mediaInfo.updateTimer?.invalidate()
-        }
     }
 
     @ViewBuilder
@@ -239,7 +364,7 @@ struct MediaControlsView: View {
                     .fill(Color.gray.opacity(0.3))
                     .overlay(
                         Image(systemName: "music.note")
-                            .font(.system(size: 24))
+                            .font(.title2)
                     )
             }
         }
@@ -320,7 +445,7 @@ struct MediaControlsView: View {
     private func hoverTitleLabelView(labelSize: CGSize) -> some View {
         if !showAppIconOnly {
             let trimmedAppName = appName.trimmingCharacters(in: .whitespaces)
-            let baseText = Text(trimmedAppName).font(.system(size: 14, weight: .medium))
+            let baseText = Text(trimmedAppName).font(.subheadline).fontWeight(.medium)
             let rainbowGradientColors: [Color] = [.red, .orange, .yellow, .green, .blue, .purple, .pink]
             let rainbowGradientHighlights: [Color] = [.white.opacity(0.45), .yellow.opacity(0.35), .pink.opacity(0.4)]
 
@@ -330,7 +455,7 @@ struct MediaControlsView: View {
                     if trimmedAppName == "DockDoor" {
                         FluidGradient(blobs: rainbowGradientColors, highlights: rainbowGradientHighlights, speed: 0.65, blur: 0.5)
                             .frame(width: labelSize.width, height: labelSize.height)
-                            .mask(baseText.font(.system(size: 14, weight: .medium)))
+                            .mask(baseText)
                             .fontWeight(.medium)
                             .padding(.leading, 4)
                             .shadow(stacked: 2, radius: 6)
@@ -353,7 +478,7 @@ struct MediaControlsView: View {
                     if trimmedAppName == "DockDoor" {
                         FluidGradient(blobs: rainbowGradientColors, highlights: rainbowGradientHighlights, speed: 0.65, blur: 0.5)
                             .frame(width: labelSize.width, height: labelSize.height)
-                            .mask(baseText.font(.system(size: 14, weight: .medium)))
+                            .mask(baseText)
                             .animation(.easeInOut(duration: 0.2), value: trimmedAppName)
                     } else {
                         baseText.foregroundStyle(Color.primary)
@@ -387,7 +512,6 @@ struct MediaControlButton: View {
     let isTitle: Bool
     let action: () -> Void
     var buttonDimension: CGFloat = 28
-    private var iconPointSize: CGFloat { isTitle ? 18 : 13 }
 
     @State private var isHovering = false
 
@@ -395,7 +519,8 @@ struct MediaControlButton: View {
         Button(action: action) {
             Image(systemName: systemName)
                 .symbolRenderingMode(.hierarchical)
-                .font(.system(size: iconPointSize, weight: .semibold))
+                .font(isTitle ? .body : .caption)
+                .fontWeight(.semibold)
                 .frame(width: buttonDimension, height: buttonDimension)
                 .contentShape(Circle())
                 .symbolReplaceTransition()

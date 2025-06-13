@@ -80,6 +80,7 @@
 		BB6021D22D1E613800D47C86 /* Window Image Sizing Calculations.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6021D12D1E613100D47C86 /* Window Image Sizing Calculations.swift */; };
 		BB6A4F1C2C1CFCFF00CB4C9E /* PermissionsSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6A4F1B2C1CFCFF00CB4C9E /* PermissionsSettingsView.swift */; };
 		BB6D81962DF75CA100DB64E4 /* SimpleProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6D81952DF75CA100DB64E4 /* SimpleProgressBar.swift */; };
+		BB70661D2DFBB46400D51D3D /* EmbeddedControlsToast.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB70661C2DFBB46400D51D3D /* EmbeddedControlsToast.swift */; };
 		BB7CA33D2C31F1B00012E303 /* WindowManipulationObservers.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB7CA33C2C31F1B00012E303 /* WindowManipulationObservers.swift */; };
 		BB90A5ED2DFA13E000857722 /* CalendarInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB90A5EC2DFA13E000857722 /* CalendarInfo.swift */; };
 		BB918BB52CF7613400931236 /* CGRect.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB918BB42CF7613200931236 /* CGRect.swift */; };
@@ -185,6 +186,7 @@
 		BB6021D12D1E613100D47C86 /* Window Image Sizing Calculations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Window Image Sizing Calculations.swift"; sourceTree = "<group>"; };
 		BB6A4F1B2C1CFCFF00CB4C9E /* PermissionsSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionsSettingsView.swift; sourceTree = "<group>"; };
 		BB6D81952DF75CA100DB64E4 /* SimpleProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleProgressBar.swift; sourceTree = "<group>"; };
+		BB70661C2DFBB46400D51D3D /* EmbeddedControlsToast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmbeddedControlsToast.swift; sourceTree = "<group>"; };
 		BB7CA33C2C31F1B00012E303 /* WindowManipulationObservers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowManipulationObservers.swift; sourceTree = "<group>"; };
 		BB8247782C2889B20098A440 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		BB90A5EC2DFA13E000857722 /* CalendarInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarInfo.swift; sourceTree = "<group>"; };
@@ -249,6 +251,7 @@
 		3A105FD42C1BED5B0015EC66 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				BB70661C2DFBB46400D51D3D /* EmbeddedControlsToast.swift */,
 				BB22D7142DF9E24500EBBCA6 /* GlintPlaceholderModifier.swift */,
 				BB6D81952DF75CA100DB64E4 /* SimpleProgressBar.swift */,
 				BBB6C5342DF681BF009E93C4 /* AirPlayPickerView.swift */,
@@ -694,6 +697,7 @@
 				BB2CBB092C481295004502C5 /* SpaceWindowCacheManager.swift in Sources */,
 				BB3968022C2A6CC2004F1AB6 /* Marquee.swift in Sources */,
 				BB0440602C77AD2C009F1D33 /* CodableColor.swift in Sources */,
+				BB70661D2DFBB46400D51D3D /* EmbeddedControlsToast.swift in Sources */,
 				BB52EDF02C5BEFE3006A64A4 /* HiddenModifier.swift in Sources */,
 				BBBAA15B2DE6998B00FF8F8F /* UpdaterState.swift in Sources */,
 				BBE63DFF2DEA583C0079D2B9 /* PreviewStateCoordinator.swift in Sources */,

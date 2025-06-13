@@ -6,6 +6,7 @@ private struct GlintPlaceholderModifier: ViewModifier {
             .redacted(reason: .placeholder)
             .overlay(
                 CustomizableFluidGradientView()
+                    .opacity(0.45)
                     .mask(content)
             )
     }

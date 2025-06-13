@@ -13,6 +13,7 @@ struct CalendarView: View {
     let bundleIdentifier: String
     let dockPosition: DockPosition
     let bestGuessMonitor: NSScreen
+    let isEmbeddedMode: Bool
 
     // MARK: – Defaults
 
@@ -20,12 +21,14 @@ struct CalendarView: View {
     @Default(.showAppName) private var showAppTitleData
     @Default(.showAppIconOnly) private var showAppIconOnly
     @Default(.appNameStyle) private var appNameStyle
+    @Default(.hasShownEmbeddedControlsToast) private var hasShownEmbeddedControlsToast
 
     // MARK: – State
 
     @State private var appIcon: NSImage? = nil
     @State private var hoveringAppIcon = false
     @State private var hoveringWindowTitle = false
+    @State private var showToast: Bool = false
 
     @Environment(\.openURL) private var openURL
 
@@ -36,6 +39,8 @@ struct CalendarView: View {
         static let sectionSpacing: CGFloat = 12
         static let eventRowSpacing: CGFloat = 10
         static let skeletonOpacity: Double = 0.25
+        static let embeddedEventRowSpacing: CGFloat = 6
+        static let embeddedEventHeight: CGFloat = 40
     }
 
     // MARK: – Init
@@ -43,17 +48,186 @@ struct CalendarView: View {
     init(appName: String,
          bundleIdentifier: String,
          dockPosition: DockPosition,
-         bestGuessMonitor: NSScreen)
+         bestGuessMonitor: NSScreen,
+         isEmbeddedMode: Bool = false)
     {
         self.appName = appName
         self.bundleIdentifier = bundleIdentifier
         self.dockPosition = dockPosition
         self.bestGuessMonitor = bestGuessMonitor
+        self.isEmbeddedMode = isEmbeddedMode
     }
 
     // MARK: – Body
 
     var body: some View {
+        Group {
+            if isEmbeddedMode {
+                embeddedContent()
+                    .overlay(alignment: .top) {
+                        if showToast, !hasShownEmbeddedControlsToast {
+                            EmbeddedControlsToast(
+                                appType: "calendar controls",
+                                onDismiss: {
+                                    showToast = false
+                                    hasShownEmbeddedControlsToast = true
+                                }
+                            )
+                            .padding(.top, 8)
+                            .transition(.move(edge: .top).combined(with: .opacity))
+                        }
+                    }
+            } else {
+                fullContent()
+            }
+        }
+        .onAppear {
+            loadAppIcon()
+        }
+        .onChange(of: calendarInfo.events.count) { _ in
+        }
+        .onChange(of: calendarInfo.eventAuthStatus) { _ in
+        }
+    }
+
+    @ViewBuilder
+    private func embeddedContent() -> some View {
+        let currentEventAuth = calendarInfo.eventAuthStatus
+        let isLoadingCalendar = currentEventAuth == .notDetermined
+
+        VStack(alignment: .leading, spacing: 8) {
+            if isLoadingCalendar {
+                embeddedCalendarSkeleton()
+            } else if currentEventAuth == .denied || currentEventAuth == .restricted {
+                embeddedPermissionNeededView()
+            } else if currentEventAuth == .authorized {
+                if !calendarInfo.events.isEmpty {
+                    VStack(alignment: .leading, spacing: Layout.embeddedEventRowSpacing) {
+                        Text("Today")
+                            .font(.caption)
+                            .fontWeight(.medium)
+                            .foregroundColor(.secondary)
+
+                        LazyVStack(alignment: .leading, spacing: Layout.embeddedEventRowSpacing) {
+                            ForEach(calendarInfo.events.prefix(3)) { event in
+                                EmbeddedEventRowView(event: event)
+                            }
+
+                            if calendarInfo.events.count > 3 {
+                                Text("+\(calendarInfo.events.count - 3) more")
+                                    .font(.caption2)
+                                    .foregroundColor(.secondary)
+                                    .padding(.leading, 8)
+                            }
+                        }
+                    }
+                } else {
+                    VStack(spacing: 6) {
+                        Image(systemName: "calendar.badge.checkmark")
+                            .font(.title3)
+                            .foregroundStyle(.secondary)
+                        Text("No events today")
+                            .font(.caption)
+                            .fontWeight(.medium)
+                            .foregroundStyle(.secondary)
+                    }
+                    .frame(maxWidth: .infinity, alignment: .center)
+                }
+            }
+        }
+        .padding(12)
+        .background(
+            RoundedRectangle(cornerRadius: uniformCardRadius ? 12 : 0, style: .continuous)
+                .fill(.regularMaterial)
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: uniformCardRadius ? 12 : 0, style: .continuous)
+                .strokeBorder(Color.primary.opacity(0.1), lineWidth: 1)
+        )
+    }
+
+    @ViewBuilder
+    private func EmbeddedEventRowView(event: DailyCalendarInfo.Event) -> some View {
+        HStack(alignment: .center, spacing: 8) {
+            VStack(alignment: .leading, spacing: 1) {
+                Text(event.title)
+                    .font(.caption)
+                    .fontWeight(.medium)
+                    .lineLimit(1)
+
+                Text(dateIntervalString(for: event))
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+                    .lineLimit(1)
+            }
+
+            Spacer()
+
+            if let location = event.location {
+                Text(location)
+                    .font(.caption2)
+                    .foregroundStyle(.tertiary)
+                    .lineLimit(1)
+            }
+        }
+        .padding(.horizontal, 8)
+        .padding(.vertical, 4)
+        .frame(maxWidth: .infinity, minHeight: Layout.embeddedEventHeight, alignment: .leading)
+        .background(Color.gray.opacity(0.08))
+        .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+    }
+
+    @ViewBuilder
+    private func embeddedCalendarSkeleton() -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            RoundedRectangle(cornerRadius: 4)
+                .fill(Color.primary.opacity(Layout.skeletonOpacity))
+                .frame(width: 80, height: 12)
+
+            VStack(alignment: .leading, spacing: Layout.embeddedEventRowSpacing) {
+                ForEach(0 ..< 2) { _ in
+                    RoundedRectangle(cornerRadius: 8)
+                        .fill(Color.primary.opacity(Layout.skeletonOpacity * 0.5))
+                        .frame(height: Layout.embeddedEventHeight)
+                }
+            }
+        }
+        .padding(12)
+        .background(
+            RoundedRectangle(cornerRadius: uniformCardRadius ? 12 : 0, style: .continuous)
+                .fill(.regularMaterial)
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: uniformCardRadius ? 12 : 0, style: .continuous)
+                .strokeBorder(Color.primary.opacity(0.1), lineWidth: 1)
+        )
+        .glintPlaceholder()
+    }
+
+    @ViewBuilder
+    private func embeddedPermissionNeededView() -> some View {
+        VStack(spacing: 6) {
+            Image(systemName: "calendar.badge.exclamationmark")
+                .font(.title3)
+                .foregroundStyle(.orange)
+
+            Text("Calendar Access Needed")
+                .font(.caption)
+                .fontWeight(.medium)
+                .multilineTextAlignment(.center)
+
+            Button("Grant Access") {
+                if let url = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Calendars") {
+                    openURL(url)
+                }
+            }
+            .buttonStyle(AccentButtonStyle())
+        }
+        .frame(maxWidth: .infinity, alignment: .center)
+    }
+
+    @ViewBuilder
+    private func fullContent() -> some View {
         BaseHoverContainer(
             bestGuessMonitor: bestGuessMonitor,
             mockPreviewActive: false,
@@ -80,13 +254,6 @@ struct CalendarView: View {
             },
             highlightColor: nil
         )
-        .onAppear {
-            loadAppIcon()
-        }
-        .onChange(of: calendarInfo.events.count) { _ in
-        }
-        .onChange(of: calendarInfo.eventAuthStatus) { _ in
-        }
     }
 
     // MARK: – Main Content
@@ -134,10 +301,10 @@ struct CalendarView: View {
                                 .foregroundStyle(.tertiary)
                                 .multilineTextAlignment(.center)
                         }
-                        .frame(maxWidth: .infinity, alignment: .center)
+                        .frame(maxWidth: .infinity)
                     }
                 }
-                .frame(minHeight: 175, alignment: .topLeading)
+                .frame(minHeight: 175, alignment: calendarInfo.events.isEmpty ? .center : .topLeading)
             }
         }
     }
@@ -339,7 +506,7 @@ struct CalendarView: View {
     private func hoverTitleLabelView(labelSize: CGSize) -> some View {
         if !showAppIconOnly {
             let trimmedAppName = appName.trimmingCharacters(in: .whitespaces)
-            let baseText = Text(trimmedAppName).font(.system(size: 14, weight: .medium))
+            let baseText = Text(trimmedAppName).font(.subheadline).fontWeight(.medium)
 
             switch appNameStyle {
             case .shadowed:

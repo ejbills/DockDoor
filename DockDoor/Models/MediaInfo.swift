@@ -15,92 +15,76 @@ class MediaInfo: ObservableObject {
     private var currentApp: String = ""
     var updateTimer: Timer?
 
+    private static let delimiter = "〈♫DOCKDOOR♫〉"
+
+    // MARK: - Public Methods
+
     func fetchMediaInfo(for bundleIdentifier: String) async {
         currentApp = bundleIdentifier
+
         switch bundleIdentifier {
         case spotifyAppIdentifier:
-            await fetchSpotifyInfo()
             appName = "Spotify"
         case appleMusicAppIdentifier:
-            await fetchAppleMusicInfo()
             appName = "Music"
         default:
             clearMediaInfo()
+            return
         }
+
+        await fetchMediaData()
         startPeriodicUpdates()
     }
+
+    func playPause() {
+        executeMediaCommand("playpause")
+    }
+
+    func nextTrack() {
+        executeMediaCommand("next track")
+    }
+
+    func previousTrack() {
+        executeMediaCommand("previous track")
+    }
+
+    func seek(to position: TimeInterval) {
+        let script = buildSeekScript(position: position)
+
+        Task {
+            let appleScript = NSAppleScript(source: script)
+            appleScript?.executeAndReturnError(nil)
+            currentTime = position
+        }
+    }
+
+    // MARK: - Private Methods
 
     private func startPeriodicUpdates() {
         updateTimer?.invalidate()
         updateTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
             Task { @MainActor in
-                await self?.refreshMediaInfo()
+                await self?.fetchMediaData()
             }
         }
     }
 
-    private func refreshMediaInfo() async {
-        switch currentApp {
-        case spotifyAppIdentifier:
-            await fetchSpotifyInfo()
-        case appleMusicAppIdentifier:
-            await fetchAppleMusicInfo()
-        default:
-            break
+    private func fetchMediaData() async {
+        guard !currentApp.isEmpty else { return }
+
+        let script = buildMediaInfoScript()
+        await executeAppleScript(script)
+    }
+
+    private func executeMediaCommand(_ command: String, delay: UInt64 = 250_000_000) {
+        let script = buildMediaCommandScript(command: command)
+
+        Task {
+            let appleScript = NSAppleScript(source: script)
+            appleScript?.executeAndReturnError(nil)
+            try? await Task.sleep(nanoseconds: delay)
+            await fetchMediaData()
         }
-    }
-
-    deinit {
-        updateTimer?.invalidate()
-    }
-
-    private func fetchSpotifyInfo() async {
-        let script = """
-        tell application "Spotify"
-            if it is running then
-                try
-                    set trackName to name of current track
-                    set artistName to artist of current track
-                    set albumName to album of current track
-                    set playerState to player state as string
-                    set currentPos to player position
-                    set trackDuration to duration of current track
-                    set artworkURL to artwork url of current track
-                    return trackName & "|||" & artistName & "|||" & albumName & "|||" & playerState & "|||" & currentPos & "|||" & trackDuration & "|||" & artworkURL
-                on error
-                    return "error"
-                end try
-            else
-                return "not_running"
-            end if
-        end tell
-        """
-
-        await executeAppleScript(script)
-    }
-
-    private func fetchAppleMusicInfo() async {
-        let script = """
-        tell application "Music"
-            if it is running then
-                try
-                    set trackName to name of current track
-                    set artistName to artist of current track
-                    set albumName to album of current track
-                    set playerState to player state as string
-                    set currentPos to player position
-                    set trackDuration to duration of current track
-                    return trackName & "|||" & artistName & "|||" & albumName & "|||" & playerState & "|||" & currentPos & "|||" & trackDuration & "|||"
-                on error
-                    return "error"
-                end try
-            else
-                return "not_running"
-            end if
-        end tell
-        """
-
-        await executeAppleScript(script)
     }
 
     private func executeAppleScript(_ script: String) async {
@@ -116,49 +100,57 @@ class MediaInfo: ObservableObject {
             return executionResult?.stringValue
         }.value
 
-        guard let resultString = scriptResult else {
+        guard let resultString = scriptResult else { return }
+
+        if resultString == "not_running" {
+            clearMediaInfo()
             return
         }
 
-        if resultString == "not_running" || resultString == "error" {
-            if resultString == "not_running" {
-                clearMediaInfo()
-            }
+        if resultString == "error" {
             return
         }
 
-        let components = resultString.components(separatedBy: "|||")
-        if components.count >= 6 {
-            title = components[0]
-            artist = components[1]
-            album = components[2]
-            isPlaying = components[3] == "playing"
-            let newCurrentTime = Double(components[4]) ?? 0
-            let rawDuration = Double(components[5]) ?? 0
+        parseMediaInfo(from: resultString)
+    }
 
-            if rawDuration > 1000.0 {
-                duration = rawDuration / 1000.0
-            } else {
-                duration = rawDuration
-            }
+    private func parseMediaInfo(from resultString: String) {
+        let components = resultString.components(separatedBy: Self.delimiter)
+        guard components.count >= 6 else { return }
 
-            if newCurrentTime > 1000.0 {
-                currentTime = newCurrentTime / 1000.0
-            } else {
-                currentTime = newCurrentTime
-            }
+        title = components[0]
+        artist = components[1]
+        album = components[2]
+        isPlaying = components[3] == "playing"
 
-            if components.count > 6, !components[6].isEmpty {
+        // Parse time values with locale-aware parsing
+        currentTime = parseTimeValue(components[4])
+        duration = parseTimeValue(components[5])
+
+        // Handle artwork URL if present
+        if components.count > 6, !components[6].isEmpty {
+            Task {
                 await fetchArtworkFromURL(components[6])
-            } else {
-                await fetchArtwork()
+            }
+        } else {
+            Task {
+                await setDefaultArtwork()
             }
         }
     }
 
+    private func parseTimeValue(_ timeString: String) -> TimeInterval {
+        // Handle different decimal separators (comma vs period)
+        let normalizedString = timeString.replacingOccurrences(of: ",", with: ".")
+        let timeValue = Double(normalizedString) ?? 0
+
+        // Convert from milliseconds to seconds if needed
+        return timeValue > 1000.0 ? timeValue / 1000.0 : timeValue
+    }
+
     private func fetchArtworkFromURL(_ urlString: String) async {
         guard let url = URL(string: urlString) else {
-            await fetchArtwork()
+            await setDefaultArtwork()
             return
         }
 
@@ -167,14 +159,14 @@ class MediaInfo: ObservableObject {
             if let image = NSImage(data: data) {
                 artwork = image
             } else {
-                await fetchArtwork()
+                await setDefaultArtwork()
             }
         } catch {
-            await fetchArtwork()
+            await setDefaultArtwork()
         }
     }
 
-    private func fetchArtwork() async {
+    private func setDefaultArtwork() async {
         artwork = NSImage(systemSymbolName: "music.note", accessibilityDescription: nil)
     }
 
@@ -191,78 +183,40 @@ class MediaInfo: ObservableObject {
         updateTimer = nil
     }
 
-    func playPause() {
-        let script: String
-        switch currentApp {
-        case spotifyAppIdentifier:
-            script = "tell application \"Spotify\" to playpause"
-        case appleMusicAppIdentifier:
-            script = "tell application \"Music\" to playpause"
-        default:
-            return
-        }
+    // MARK: - Script Builders
 
-        Task {
-            let appleScript = NSAppleScript(source: script)
-            appleScript?.executeAndReturnError(nil)
-            try? await Task.sleep(nanoseconds: 250_000_000)
-            await refreshMediaInfo()
-        }
+    private func buildMediaInfoScript() -> String {
+        """
+        tell application "\(appName)"
+            if it is running then
+                try
+                    set trackName to name of current track
+                    set artistName to artist of current track
+                    set albumName to album of current track
+                    set playerState to player state as string
+                    set currentPos to player position
+                    set trackDuration to duration of current track
+                    set artworkURL to artwork url of current track
+                    return trackName & "\(Self.delimiter)" & artistName & "\(Self.delimiter)" & albumName & "\(Self.delimiter)" & playerState & "\(Self.delimiter)" & currentPos & "\(Self.delimiter)" & trackDuration & "\(Self.delimiter)" & artworkURL
+                on error
+                    return "error"
+                end try
+            else
+                return "not_running"
+            end if
+        end tell
+        """
     }
 
-    func nextTrack() {
-        let script: String
-        switch currentApp {
-        case spotifyAppIdentifier:
-            script = "tell application \"Spotify\" to next track"
-        case appleMusicAppIdentifier:
-            script = "tell application \"Music\" to next track"
-        default:
-            return
-        }
-
-        Task {
-            let appleScript = NSAppleScript(source: script)
-            appleScript?.executeAndReturnError(nil)
-            try? await Task.sleep(nanoseconds: 500_000_000)
-            await refreshMediaInfo()
-        }
+    private func buildMediaCommandScript(command: String) -> String {
+        "tell application \"\(appName)\" to \(command)"
     }
 
-    func previousTrack() {
-        let script: String
-        switch currentApp {
-        case spotifyAppIdentifier:
-            script = "tell application \"Spotify\" to previous track"
-        case appleMusicAppIdentifier:
-            script = "tell application \"Music\" to previous track"
-        default:
-            return
-        }
-
-        Task {
-            let appleScript = NSAppleScript(source: script)
-            appleScript?.executeAndReturnError(nil)
-            try? await Task.sleep(nanoseconds: 500_000_000)
-            await refreshMediaInfo()
-        }
+    private func buildSeekScript(position: TimeInterval) -> String {
+        "tell application \"\(appName)\" to set player position to \(position)"
     }
 
-    func seek(to position: TimeInterval) {
-        let script: String
-        switch currentApp {
-        case spotifyAppIdentifier:
-            script = "tell application \"Spotify\" to set player position to \(position)"
-        case appleMusicAppIdentifier:
-            script = "tell application \"Music\" to set player position to \(position)"
-        default:
-            return
-        }
-
-        Task {
-            let appleScript = NSAppleScript(source: script)
-            appleScript?.executeAndReturnError(nil)
-            currentTime = position
-        }
+    deinit {
+        updateTimer?.invalidate()
     }
 }

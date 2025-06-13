@@ -35,6 +35,8 @@ extension Defaults.Keys {
 
     static let showSpecialAppControls = Key<Bool>("showSpecialAppControls", default: true)
 
+    static let hasShownEmbeddedControlsToast = Key<Bool>("hasShownEmbeddedControlsToast", default: false)
+
     static let showAnimations = Key<Bool>("showAnimations", default: true)
     static let gradientColorPalette = Key<GradientColorPaletteSettings>("gradientColorPalette", default: .init())
     static let enableWindowSwitcher = Key<Bool>("enableWindowSwitcher", default: true)
