@@ -38,6 +38,50 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://buymeacoffee.com/keplercafe</div>
 
+<a id="v1.14.3"></a>
+# [v1.14.3](https://github.com/ejbills/DockDoor/releases/tag/v1.14.3) - 2025-06-13
+
+## 🐛 Bug Fixes
+
+### Music Controls Fixes
+- **Fixed album artwork display issue** in Music app previews where artwork was not being shown properly
+- **Resolved progress bar display** for music timestamps for international users
+- **Improved localization support** for time formatting in music controls across different regions and languages
+
+### Special App Control Display
+- **Corrected standalone control display** issue where "big" standalone special app controls might not appear when media/calendar controls were enabled but embedding was disabled
+- **Fixed edge case handling** for apps with no visible windows ensuring proper standalone view prioritization
+
+## 📝 Notes
+
+This release significantly enhances the flexibility and reliability of the media and calendar controls introduced in v1.14, providing users with more granular control over how these special integrations are displayed while fixing critical display and localization issues.
+
+---
+
+*For full v1.14 features and changes, see the v1.14 changelog.*
+
+[Changes][v1.14.3]
+
+
+<a id="v1.14.3"></a>
+# [v1.14.3](https://github.com/ejbills/DockDoor/releases/tag/v1.14.3) - 2025-06-13
+
+## 🐛 Bug Fixes
+-   Refined the display logic for special app controls (e.g., Music, Spotify, Calendar):
+    -   When "Show media/calendar controls on Dock hover" (`showSpecialAppControls`) is enabled:
+        -   If "Embed controls with window previews" (`useEmbeddedMediaControls`) is also enabled:
+            -   Special controls will be embedded within the preview area alongside actual window previews if any are visible.
+            -   If no window previews are visible (e.g., app has no open windows or all are minimized), the special controls will be shown in a larger, standalone embedded format.
+        -   If "Embed controls with window previews" is disabled:
+            -   The special controls will be shown in a larger, standalone format, replacing any window previews for that app.
+    -   When "Show media/calendar controls on Dock hover" is disabled:
+        -   Standard window previews will be shown for all apps, including those that have special controls available.
+-   Updated the "Interaction & Behavior (Dock Previews)" section in Main Settings to include a new toggle for "Embed controls with window previews", which is active when "Show media/calendar controls on Dock hover" is enabled. This provides users with finer control over how these special app integrations are displayed.
+
+
+[Changes][v1.14.3]
+
+
 <a id="v1.14.2"></a>
 # [v1.14.2](https://github.com/ejbills/DockDoor/releases/tag/v1.14.2) - 2025-06-13
 
@@ -1054,6 +1098,8 @@ v1.0
 [Changes][releases]
 
 
+[v1.14.3]: https://github.com/ejbills/DockDoor/compare/v1.14.3...v1.14.3
+[v1.14.3]: https://github.com/ejbills/DockDoor/compare/v1.14.2...v1.14.3
 [v1.14.2]: https://github.com/ejbills/DockDoor/compare/v1.14.1...v1.14.2
 [v1.14.1]: https://github.com/ejbills/DockDoor/compare/v1.14...v1.14.1
 [v1.14]: https://github.com/ejbills/DockDoor/compare/v1.13.1...v1.14
