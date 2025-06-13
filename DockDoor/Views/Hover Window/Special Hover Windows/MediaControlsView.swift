@@ -16,14 +16,13 @@ struct MediaControlsView: View {
     @Default(.appNameStyle) var appNameStyle
     @Default(.showAnimations) var showAnimations
     @Default(.gradientColorPalette) private var defaultGradientColorPalette
-    @Default(.hasShownEmbeddedControlsToast) var hasShownEmbeddedControlsToast
 
     @State private var appIcon: NSImage? = nil
     @State private var hoveringAppIcon: Bool = false
     @State private var hoveringWindowTitle: Bool = false
     @State private var isLoadingMediaInfo: Bool = true
     @State private var dominantArtworkColor: Color? = nil
-    @State private var showToast: Bool = false
+    @State private var capturedEmbeddedWidth: CGFloat? = nil
 
     private enum Layout {
         static let containerSpacing: CGFloat = 8
@@ -55,19 +54,6 @@ struct MediaControlsView: View {
         Group {
             if isEmbeddedMode {
                 embeddedContent()
-                    .overlay(alignment: .top) {
-                        if showToast, !hasShownEmbeddedControlsToast {
-                            EmbeddedControlsToast(
-                                appType: "media controls",
-                                onDismiss: {
-                                    showToast = false
-                                    hasShownEmbeddedControlsToast = true
-                                }
-                            )
-                            .padding(.top, 8)
-                            .transition(.move(edge: .top).combined(with: .opacity))
-                        }
-                    }
             } else {
                 fullContent()
             }
@@ -83,13 +69,6 @@ struct MediaControlsView: View {
             }
             if let artwork = mediaInfo.artwork {
                 dominantArtworkColor = artwork.averageColor()
-            }
-            if isEmbeddedMode {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                    withAnimation(.spring(response: 0.5, dampingFraction: 0.8)) {
-                        showToast = true
-                    }
-                }
             }
         }
         .onChange(of: mediaInfo.artwork) { newArtwork in
@@ -148,6 +127,7 @@ struct MediaControlsView: View {
                     }
                 }
                 .padding(12)
+                .frame(width: 250)
             }
         }
         .background(

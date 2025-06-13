@@ -18856,6 +18856,9 @@
         }
       }
     },
+    "Embed controls with window previews (if previews shown)" : {
+
+    },
     "Embedded" : {
       "comment" : "Preview title style option",
       "extractionState" : "stale",
@@ -26675,9 +26678,6 @@
         }
       }
     },
-    "Hide or minimize all application windows to access full %@" : {
-
-    },
     "Highlight Gradient Colors" : {
       "localizations" : {
         "af" : {
@@ -27439,6 +27439,9 @@
           }
         }
       }
+    },
+    "If disabled, special controls only appear if no window previews are available (e.g., all windows minimized). If enabled, controls integrate with previews when possible." : {
+
     },
     "If you find DockDoor useful, consider donating. Your support helps keep the project going!" : {
       "localizations" : {

@@ -34,8 +34,7 @@ extension Defaults.Keys {
     static let aeroShakeAction = Key<AeroShakeAction>("aeroShakeAction", default: .none)
 
     static let showSpecialAppControls = Key<Bool>("showSpecialAppControls", default: true)
-
-    static let hasShownEmbeddedControlsToast = Key<Bool>("hasShownEmbeddedControlsToast", default: false)
+    static let useEmbeddedMediaControls = Key<Bool>("useEmbeddedMediaControls", default: false)
 
     static let showAnimations = Key<Bool>("showAnimations", default: true)
     static let gradientColorPalette = Key<GradientColorPaletteSettings>("gradientColorPalette", default: .init())

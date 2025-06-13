@@ -112,6 +112,7 @@ struct MainSettingsView: View {
     @Default(.previewHoverAction) var previewHoverAction
     @Default(.aeroShakeAction) var aeroShakeAction
     @Default(.showSpecialAppControls) var showSpecialAppControls
+    @Default(.useEmbeddedMediaControls) var useEmbeddedMediaControls
     @Default(.showAnimations) var showAnimations
     @Default(.raisedWindowLevel) var raisedWindowLevel
 
@@ -505,6 +506,15 @@ struct MainSettingsView: View {
                         .font(.caption)
                         .foregroundColor(.secondary)
                         .padding(.leading, 20)
+                    if showSpecialAppControls {
+                        Toggle(isOn: $useEmbeddedMediaControls) { Text("Embed controls with window previews (if previews shown)") }
+                            .padding(.leading, 20)
+                        Text("If disabled, special controls only appear if no window previews are available (e.g., all windows minimized). If enabled, controls integrate with previews when possible.")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                            .padding(.leading, 40) // Further indent to align with the toggle's text
+                    }
+
                     sliderSetting(title: "Window Buffer from Dock (pixels)", value: $bufferFromDock, range: -100 ... 100, step: 5, unit: "px", formatter: { let f = NumberFormatter(); f.allowsFloats = false; f.minimumIntegerDigits = 1; f.maximumFractionDigits = 0; return f }())
                 }
             }

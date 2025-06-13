@@ -353,63 +353,61 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         bundleIdentifier: String?
     ) {
         let screen = mouseScreen ?? NSScreen.main!
+        var finalEmbeddedContentType: EmbeddedContentType = .none
+        var useBigStandaloneViewInstead = false
+        var viewForBigStandalone: AnyView?
 
         if let bundleId = bundleIdentifier {
-            let embeddedContentType = getEmbeddedContentType(for: bundleId)
+            let actualAppContentType = getEmbeddedContentType(for: bundleId)
 
-            if Defaults[.showSpecialAppControls], windows.isEmpty || windows.allSatisfy(\.isMinimized) || windows.allSatisfy(\.isHidden) {
-                if case let .media(bundleId) = embeddedContentType {
-                    let mediaView = MediaControlsView(
-                        appName: appName,
-                        bundleIdentifier: bundleId,
-                        dockPosition: DockUtils.getDockPosition(),
-                        bestGuessMonitor: screen,
-                        isEmbeddedMode: false
-                    )
-                    performShowView(
-                        mediaView,
-                        mouseLocation: mouseLocation,
-                        mouseScreen: screen,
-                        dockItemElement: dockItemElement
-                    )
-                    return
-                } else if case let .calendar(bundleId) = embeddedContentType {
-                    let calendarView = CalendarView(
-                        appName: appName,
-                        bundleIdentifier: bundleId,
-                        dockPosition: DockUtils.getDockPosition(),
-                        bestGuessMonitor: screen,
-                        isEmbeddedMode: false
-                    )
-                    performShowView(
-                        calendarView,
-                        mouseLocation: mouseLocation,
-                        mouseScreen: screen,
-                        dockItemElement: dockItemElement
-                    )
-                    return
+            switch actualAppContentType {
+            case let .media(mediaBundleId):
+                if Defaults[.showSpecialAppControls] {
+                    if Defaults[.useEmbeddedMediaControls] {
+                        finalEmbeddedContentType = .media(bundleIdentifier: mediaBundleId)
+                    } else {
+                        useBigStandaloneViewInstead = true
+                        viewForBigStandalone = AnyView(MediaControlsView(
+                            appName: appName,
+                            bundleIdentifier: mediaBundleId,
+                            dockPosition: DockUtils.getDockPosition(),
+                            bestGuessMonitor: screen,
+                            isEmbeddedMode: false
+                        ))
+                    }
                 }
+            case let .calendar(calendarBundleId):
+                if Defaults[.showSpecialAppControls] {
+                    if Defaults[.useEmbeddedMediaControls] {
+                        finalEmbeddedContentType = .calendar(bundleIdentifier: calendarBundleId)
+                    } else {
+                        useBigStandaloneViewInstead = true
+                        viewForBigStandalone = AnyView(CalendarView(
+                            appName: appName,
+                            bundleIdentifier: calendarBundleId,
+                            dockPosition: DockUtils.getDockPosition(),
+                            bestGuessMonitor: screen,
+                            isEmbeddedMode: false
+                        ))
+                    }
+                }
+            case .none:
+                break
             }
+        }
 
-            performShowWindow(
-                appName: appName,
-                windows: windows,
-                mouseLocation: mouseLocation,
-                mouseScreen: mouseScreen,
-                dockItemElement: dockItemElement,
-                centeredHoverWindowState: centeredHoverWindowState,
-                onWindowTap: onWindowTap,
-                embeddedContentType: embeddedContentType
-            )
+        if useBigStandaloneViewInstead, let viewToShow = viewForBigStandalone {
+            performShowView(viewToShow, mouseLocation: mouseLocation, mouseScreen: screen, dockItemElement: dockItemElement)
         } else {
             performShowWindow(
                 appName: appName,
                 windows: windows,
                 mouseLocation: mouseLocation,
-                mouseScreen: mouseScreen,
+                mouseScreen: screen,
                 dockItemElement: dockItemElement,
                 centeredHoverWindowState: centeredHoverWindowState,
-                onWindowTap: onWindowTap
+                onWindowTap: onWindowTap,
+                embeddedContentType: finalEmbeddedContentType
             )
         }
     }

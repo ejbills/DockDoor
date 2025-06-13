@@ -21,7 +21,6 @@ struct CalendarView: View {
     @Default(.showAppName) private var showAppTitleData
     @Default(.showAppIconOnly) private var showAppIconOnly
     @Default(.appNameStyle) private var appNameStyle
-    @Default(.hasShownEmbeddedControlsToast) private var hasShownEmbeddedControlsToast
 
     // MARK: – State
 
@@ -64,19 +63,6 @@ struct CalendarView: View {
         Group {
             if isEmbeddedMode {
                 embeddedContent()
-                    .overlay(alignment: .top) {
-                        if showToast, !hasShownEmbeddedControlsToast {
-                            EmbeddedControlsToast(
-                                appType: "calendar controls",
-                                onDismiss: {
-                                    showToast = false
-                                    hasShownEmbeddedControlsToast = true
-                                }
-                            )
-                            .padding(.top, 8)
-                            .transition(.move(edge: .top).combined(with: .opacity))
-                        }
-                    }
             } else {
                 fullContent()
             }

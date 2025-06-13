@@ -43,7 +43,6 @@ struct WindowPreviewHoverContainer: View {
     @Default(.previewWrap) var previewWrap
     @Default(.switcherWrap) var switcherWrap
     @Default(.gradientColorPalette) var gradientColorPalette
-    @Default(.showSpecialAppControls) var showSpecialAppControls
     @Default(.showAnimations) var showAnimations
 
     @State private var draggedWindowIndex: Int? = nil
@@ -360,27 +359,25 @@ struct WindowPreviewHoverContainer: View {
 
     @ViewBuilder
     private func embeddedContentView() -> some View {
-        if showSpecialAppControls {
-            switch embeddedContentType {
-            case let .media(bundleIdentifier):
-                MediaControlsView(
-                    appName: appName,
-                    bundleIdentifier: bundleIdentifier,
-                    dockPosition: dockPosition,
-                    bestGuessMonitor: bestGuessMonitor,
-                    isEmbeddedMode: true
-                )
-            case let .calendar(bundleIdentifier):
-                CalendarView(
-                    appName: appName,
-                    bundleIdentifier: bundleIdentifier,
-                    dockPosition: dockPosition,
-                    bestGuessMonitor: bestGuessMonitor,
-                    isEmbeddedMode: true
-                )
-            case .none:
-                EmptyView()
-            }
+        switch embeddedContentType {
+        case let .media(bundleIdentifier):
+            MediaControlsView(
+                appName: appName,
+                bundleIdentifier: bundleIdentifier,
+                dockPosition: dockPosition,
+                bestGuessMonitor: bestGuessMonitor,
+                isEmbeddedMode: true
+            )
+        case let .calendar(bundleIdentifier):
+            CalendarView(
+                appName: appName,
+                bundleIdentifier: bundleIdentifier,
+                dockPosition: dockPosition,
+                bestGuessMonitor: bestGuessMonitor,
+                isEmbeddedMode: true
+            )
+        case .none:
+            EmptyView()
         }
     }
 
