@@ -186,7 +186,25 @@ class MediaInfo: ObservableObject {
     // MARK: - Script Builders
 
     private func buildMediaInfoScript() -> String {
-        """
+        let artworkScript = appName == "Music" ? """
+        try
+            set artData to data of artwork 1 of current track
+            set tempPath to "/tmp/aw.jpg"
+            set fileRef to open for access tempPath with write permission
+            set eof fileRef to 0
+            write artData to fileRef
+            close access fileRef
+            set base64String to do shell script "base64 -i /tmp/aw.jpg | tr -d '\\n'"
+            set artworkURLString to "data:image/jpeg;base64," & base64String
+        on error
+            set artworkURLString to ""
+        end try
+        try
+            do shell script "rm /tmp/aw.jpg 2>/dev/null"
+        end try
+        """ : "set artworkURLString to artwork url of current track"
+
+        return """
         tell application "\(appName)"
             if it is running then
                 try
@@ -196,9 +214,18 @@ class MediaInfo: ObservableObject {
                     set playerState to player state as string
                     set currentPos to player position
                     set trackDuration to duration of current track
-                    set artworkURL to artwork url of current track
-                    return trackName & "\(Self.delimiter)" & artistName & "\(Self.delimiter)" & albumName & "\(Self.delimiter)" & playerState & "\(Self.delimiter)" & currentPos & "\(Self.delimiter)" & trackDuration & "\(Self.delimiter)" & artworkURL
-                on error
+
+                    set artworkURLString to ""
+                    try
+                        \(artworkScript)
+                    on error
+                    end try
+
+                    return trackName & "\(Self.delimiter)" & artistName & "\(Self.delimiter)" & albumName & "\(Self.delimiter)" & playerState & "\(Self.delimiter)" & currentPos & "\(Self.delimiter)" & trackDuration & "\(Self.delimiter)" & artworkURLString
+                on error errMsg
+                    if errMsg contains "Can't get current track" or errMsg contains "-1728" or errMsg contains "Can't get artwork url" then
+                        return "no_library_track_info"
+                    end if
                     return "error"
                 end try
             else
