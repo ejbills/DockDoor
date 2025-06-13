@@ -38,6 +38,26 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://buymeacoffee.com/keplercafe</div>
 
+<a id="v1.14.4"></a>
+# [v1.14.4](https://github.com/ejbills/DockDoor/releases/tag/v1.14.4) - 2025-06-13
+
+## Fixed Apple Music Support
+- **Fixed**: Apple Music artwork now properly converts binary data to base64 data URLs
+- **Improved**: Error handling for artwork retrieval failures
+
+[Changes][v1.14.4]
+
+
+<a id="v1.14.4"></a>
+# [v1.14.4](https://github.com/ejbills/DockDoor/releases/tag/v1.14.4) - 2025-06-13
+
+## Fixed Apple Music Support
+- **Fixed**: Apple Music artwork now properly converts binary data to base64 data URLs
+- **Improved**: Error handling for artwork retrieval failures
+
+[Changes][v1.14.4]
+
+
 <a id="v1.14.3"></a>
 # [v1.14.3](https://github.com/ejbills/DockDoor/releases/tag/v1.14.3) - 2025-06-13
 
@@ -1073,6 +1093,8 @@ v1.0
 [Changes][releases]
 
 
+[v1.14.4]: https://github.com/ejbills/DockDoor/compare/v1.14.4...v1.14.4
+[v1.14.4]: https://github.com/ejbills/DockDoor/compare/v1.14.3...v1.14.4
 [v1.14.3]: https://github.com/ejbills/DockDoor/compare/v1.14.2...v1.14.3
 [v1.14.2]: https://github.com/ejbills/DockDoor/compare/v1.14.1...v1.14.2
 [v1.14.1]: https://github.com/ejbills/DockDoor/compare/v1.14...v1.14.1
