@@ -192,18 +192,10 @@ final class DockObserver {
         } else if case .notFound = appUnderMouseElement.status {
             let mouseScreen = NSScreen.screenContainingMouse(currentMouseLocation)
             let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
+            let isWithinBuffer = previewCoordinator.frame.extended(by: abs(Defaults[.bufferFromDock])).contains(convertedMouseLocation)
 
-            if !previewCoordinator.frame.extended(by: abs(Defaults[.bufferFromDock])).contains(convertedMouseLocation)
-                || !Defaults[.lateralMovement]
-            {
+            if !isWithinBuffer || !Defaults[.lateralMovement] {
                 hideWindowAndResetLastApp()
-            } else if !Defaults[.lateralMovement] {
-                hideWindowAndResetLastApp()
-            } else {
-                emptyAppStreakCount += 1
-                if emptyAppStreakCount >= maxEmptyAppStreak {
-                    hideWindowAndResetLastApp()
-                }
             }
             previousStatus = appUnderMouseElement.status
             resetLastAppUnderMouse()

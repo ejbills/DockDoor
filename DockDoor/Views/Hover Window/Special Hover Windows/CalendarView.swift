@@ -29,7 +29,6 @@ struct CalendarView: View {
     @State private var hoveringAppIcon = false
     @State private var hoveringWindowTitle = false
     @State private var showToast: Bool = false
-    @State private var forceEmbeddedMode: Bool = false
 
     @Environment(\.openURL) private var openURL
 
@@ -61,25 +60,16 @@ struct CalendarView: View {
         self.isPinnedMode = isPinnedMode
     }
 
-    private var effectiveEmbeddedMode: Bool {
-        isEmbeddedMode || forceEmbeddedMode
-    }
-
     // MARK: – Body
 
     var body: some View {
         Group {
-            if effectiveEmbeddedMode {
+            if isEmbeddedMode {
                 embeddedContent()
             } else {
                 fullContent()
             }
         }
-        .conditionalEmbeddedModeToggle(
-            isPinnedMode: isPinnedMode,
-            forceEmbeddedMode: $forceEmbeddedMode,
-            effectiveEmbeddedMode: effectiveEmbeddedMode
-        )
         .onAppear {
             loadAppIcon()
         }

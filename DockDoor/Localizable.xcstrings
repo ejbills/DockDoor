@@ -13332,6 +13332,7 @@
       }
     },
     "Collapse to embedded mode" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -22660,6 +22661,7 @@
       }
     },
     "Expand to full mode" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -41713,6 +41715,12 @@
           }
         }
       }
+    },
+    "Pin to Screen (Compact)" : {
+
+    },
+    "Pin to Screen (Full)" : {
+
     },
     "Pinned to screen" : {
       "comment" : "Window switcher placement option",

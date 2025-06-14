@@ -68,7 +68,6 @@
 		BB33E68C2C24C72F00A21D69 /* LaunchAtLogin in Frameworks */ = {isa = PBXBuildFile; productRef = BB33E68B2C24C72F00A21D69 /* LaunchAtLogin */; };
 		BB377C342DFD0D3700FA93DA /* PinnableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB377C332DFD0D3700FA93DA /* PinnableView.swift */; };
 		BB377C3F2DFD19ED00FA93DA /* PinnedWindowDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB377C3E2DFD19ED00FA93DA /* PinnedWindowDelegate.swift */; };
-		BB377C472DFD233200FA93DA /* EmbeddedModeToggleModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB377C462DFD233200FA93DA /* EmbeddedModeToggleModifier.swift */; };
 		BB377C492DFD434300FA93DA /* GlobalPadding.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB377C482DFD434300FA93DA /* GlobalPadding.swift */; };
 		BB3967FD2C291D5A004F1AB6 /* StackedShadow.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3967FC2C291D5A004F1AB6 /* StackedShadow.swift */; };
 		BB3968002C2A6C44004F1AB6 /* SmoothGradient in Frameworks */ = {isa = PBXBuildFile; productRef = BB3967FF2C2A6C44004F1AB6 /* SmoothGradient */; };
@@ -177,7 +176,6 @@
 		BB2CBB082C48128D004502C5 /* SpaceWindowCacheManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceWindowCacheManager.swift; sourceTree = "<group>"; };
 		BB377C332DFD0D3700FA93DA /* PinnableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinnableView.swift; sourceTree = "<group>"; };
 		BB377C3E2DFD19ED00FA93DA /* PinnedWindowDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinnedWindowDelegate.swift; sourceTree = "<group>"; };
-		BB377C462DFD233200FA93DA /* EmbeddedModeToggleModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmbeddedModeToggleModifier.swift; sourceTree = "<group>"; };
 		BB377C482DFD434300FA93DA /* GlobalPadding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalPadding.swift; sourceTree = "<group>"; };
 		BB3967FC2C291D5A004F1AB6 /* StackedShadow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackedShadow.swift; sourceTree = "<group>"; };
 		BB3968012C2A6CC2004F1AB6 /* Marquee.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Marquee.swift; sourceTree = "<group>"; };
@@ -448,7 +446,6 @@
 		BB377C3B2DFD194400FA93DA /* Pinnable */ = {
 			isa = PBXGroup;
 			children = (
-				BB377C462DFD233200FA93DA /* EmbeddedModeToggleModifier.swift */,
 				BB377C3E2DFD19ED00FA93DA /* PinnedWindowDelegate.swift */,
 				BB377C332DFD0D3700FA93DA /* PinnableView.swift */,
 			);
@@ -746,7 +743,6 @@
 				3A1622CC2C8D5F5B00D318EE /* FirstTimePermissionsTabView.swift in Sources */,
 				BB1F60E52D238A9800808E05 /* CGSize.swift in Sources */,
 				3A105FDD2C1C0EE20015EC66 /* DynStack.swift in Sources */,
-				BB377C472DFD233200FA93DA /* EmbeddedModeToggleModifier.swift in Sources */,
 				BB4ED9092C3CD97400BBDD16 /* Traffic Light Buttons.swift in Sources */,
 				C119BDF22C2AFA7600E06E18 /* WindowSwitcherSettingsView.swift in Sources */,
 				BB2567C62C10C5F000C0C93E /* DockUtils.swift in Sources */,

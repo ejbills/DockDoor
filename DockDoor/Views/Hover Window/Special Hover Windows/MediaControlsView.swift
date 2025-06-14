@@ -24,7 +24,6 @@ struct MediaControlsView: View {
     @State private var isLoadingMediaInfo: Bool = true
     @State private var dominantArtworkColor: Color? = nil
     @State private var capturedEmbeddedWidth: CGFloat? = nil
-    @State private var forceEmbeddedMode: Bool = false
 
     private enum Layout {
         static let containerSpacing: CGFloat = 8
@@ -54,23 +53,14 @@ struct MediaControlsView: View {
         self.isPinnedMode = isPinnedMode
     }
 
-    private var effectiveEmbeddedMode: Bool {
-        isEmbeddedMode || forceEmbeddedMode
-    }
-
     var body: some View {
         Group {
-            if effectiveEmbeddedMode {
+            if isEmbeddedMode {
                 embeddedContent()
             } else {
                 fullContent()
             }
         }
-        .conditionalEmbeddedModeToggle(
-            isPinnedMode: isPinnedMode,
-            forceEmbeddedMode: $forceEmbeddedMode,
-            effectiveEmbeddedMode: effectiveEmbeddedMode
-        )
         .onAppear {
             isLoadingMediaInfo = true
             loadAppIcon()

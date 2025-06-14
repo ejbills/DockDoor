@@ -36,24 +36,6 @@ struct PinnableViewModifier: ViewModifier {
             .onAppear {
                 updatePinnedState()
             }
-            .onChange(of: isPinned) { newValue in
-                let alreadyPinned = SharedPreviewWindowCoordinator.activeInstance?.isPinned(bundleIdentifier: bundleIdentifier, type: pinnableType) ?? false
-
-                if newValue, !alreadyPinned {
-                    // Create pinned window via coordinator only if it doesn't exist
-                    SharedPreviewWindowCoordinator.activeInstance?.createPinnedWindow(
-                        appName: appName,
-                        bundleIdentifier: bundleIdentifier,
-                        type: pinnableType
-                    )
-                    // Hide original window
-                    SharedPreviewWindowCoordinator.activeInstance?.hideWindow()
-                } else if !newValue, alreadyPinned {
-                    // Close pinned window via coordinator only if it exists
-                    let key = "\(bundleIdentifier)-\(pinnableType.rawValue)"
-                    SharedPreviewWindowCoordinator.activeInstance?.closePinnedWindow(key: key)
-                }
-            }
     }
 
     private func updatePinnedState() {
@@ -69,18 +51,29 @@ struct PinnableViewModifier: ViewModifier {
 
         if currentlyPinned {
             Button("Unpin") {
-                withAnimation(.easeInOut(duration: 0.2)) {
-                    isPinned = false
-                    let key = "\(bundleIdentifier)-\(pinnableType.rawValue)"
-                    SharedPreviewWindowCoordinator.activeInstance?.closePinnedWindow(key: key)
-                    SharedPreviewWindowCoordinator.activeInstance?.hideWindow()
-                }
+                let key = "\(bundleIdentifier)-\(pinnableType.rawValue)"
+                SharedPreviewWindowCoordinator.activeInstance?.closePinnedWindow(key: key)
+                SharedPreviewWindowCoordinator.activeInstance?.hideWindow()
             }
         } else {
-            Button("Pin to Screen") {
-                withAnimation(.easeInOut(duration: 0.2)) {
-                    isPinned = true
-                }
+            Button("Pin to Screen (Full)") {
+                SharedPreviewWindowCoordinator.activeInstance?.createPinnedWindow(
+                    appName: appName,
+                    bundleIdentifier: bundleIdentifier,
+                    type: pinnableType,
+                    isEmbedded: false
+                )
+                SharedPreviewWindowCoordinator.activeInstance?.hideWindow()
+            }
+
+            Button("Pin to Screen (Compact)") {
+                SharedPreviewWindowCoordinator.activeInstance?.createPinnedWindow(
+                    appName: appName,
+                    bundleIdentifier: bundleIdentifier,
+                    type: pinnableType,
+                    isEmbedded: true
+                )
+                SharedPreviewWindowCoordinator.activeInstance?.hideWindow()
             }
         }
     }

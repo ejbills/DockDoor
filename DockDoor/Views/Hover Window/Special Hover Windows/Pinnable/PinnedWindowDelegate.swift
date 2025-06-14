@@ -16,36 +16,32 @@ extension SharedPreviewWindowCoordinator {
 
     /// Create a pinned window for a specific view type
     @MainActor
-    func createPinnedWindow(appName: String, bundleIdentifier: String, type: PinnableViewType) {
+    func createPinnedWindow(appName: String, bundleIdentifier: String, type: PinnableViewType, isEmbedded: Bool = false) {
         let key = "\(bundleIdentifier)-\(type.rawValue)"
 
-        // Check if already exists
         if pinnedWindows[key] != nil {
             print("⚠️ Pinned window already exists for: \(key)")
             return
         }
 
-        // Create borderless, movable window
-        let window = NSWindow(
-            contentRect: NSRect(x: 0, y: 0, width: 300, height: 200),
-            styleMask: [.borderless, .resizable],
+        let styleMask: NSWindow.StyleMask = [.nonactivatingPanel, .fullSizeContentView, .borderless]
+
+        let window = NSPanel(
+            contentRect: .zero,
+            styleMask: styleMask,
             backing: .buffered,
             defer: false
         )
 
-        // Configure independent floating window
         window.level = .floating
         window.isOpaque = false
         window.backgroundColor = .clear
         window.hasShadow = true
-        window.collectionBehavior = [.canJoinAllSpaces, .stationary, .ignoresCycle]
-        window.isReleasedWhenClosed = false
-        window.isMovableByWindowBackground = true
+        window.collectionBehavior = [.canJoinAllSpaces, .transient, .fullScreenAuxiliary]
         window.hidesOnDeactivate = false
-        window.canBecomeVisibleWithoutLogin = true
-        window.title = "\(appName) - \(type.displayName)"
+        window.becomesKeyOnlyIfNeeded = true
+        window.isMovableByWindowBackground = true
 
-        // Create content view for pinned windows
         let contentView = switch type {
         case .media:
             AnyView(
@@ -54,7 +50,7 @@ extension SharedPreviewWindowCoordinator {
                     bundleIdentifier: bundleIdentifier,
                     dockPosition: DockUtils.getDockPosition(),
                     bestGuessMonitor: NSScreen.main ?? NSScreen.screens.first!,
-                    isEmbeddedMode: false,
+                    isEmbeddedMode: isEmbedded,
                     isPinnedMode: true
                 )
                 .pinnableDisabled(key: key)
@@ -66,7 +62,7 @@ extension SharedPreviewWindowCoordinator {
                     bundleIdentifier: bundleIdentifier,
                     dockPosition: DockUtils.getDockPosition(),
                     bestGuessMonitor: NSScreen.main ?? NSScreen.screens.first!,
-                    isEmbeddedMode: false,
+                    isEmbeddedMode: isEmbedded,
                     isPinnedMode: true
                 )
                 .pinnableDisabled(key: key)
@@ -101,7 +97,7 @@ extension SharedPreviewWindowCoordinator {
         pinnedWindows[key] = window
         window.makeKeyAndOrderFront(nil)
 
-        print("✅ Created pinned window: \(key)")
+        print("✅ Created pinned window: \(key) - Embedded: \(isEmbedded)")
     }
 
     /// Close a specific pinned window
