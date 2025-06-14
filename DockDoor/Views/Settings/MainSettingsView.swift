@@ -116,6 +116,8 @@ struct MainSettingsView: View {
     @Default(.showAnimations) var showAnimations
     @Default(.raisedWindowLevel) var raisedWindowLevel
 
+    @Default(.enablePinning) private var enablePinning
+
     private let advancedSettingsSectionID = "advancedSettingsSection"
     private let windowSwitcherAdvancedSettingsID = "windowSwitcherAdvancedSettings"
 
@@ -144,6 +146,11 @@ struct MainSettingsView: View {
                     .allowsHitTesting(false)
                     .frame(width: 0, height: 0)
                 )
+            }
+        }
+        .onChange(of: enablePinning) { isEnabled in
+            if !isEnabled {
+                SharedPreviewWindowCoordinator.activeInstance?.unpinAll()
             }
         }
         .onAppear {
@@ -509,10 +516,17 @@ struct MainSettingsView: View {
                     if showSpecialAppControls {
                         Toggle(isOn: $useEmbeddedMediaControls) { Text("Embed controls with window previews (if previews shown)") }
                             .padding(.leading, 20)
-                        Text("If disabled, special controls only appear if no window previews are available (e.g., all windows minimized). If enabled, controls integrate with previews when possible.")
+                        Text("If enabled, controls integrate with previews when possible.")
                             .font(.caption)
                             .foregroundColor(.secondary)
-                            .padding(.leading, 40) // Further indent to align with the toggle's text
+                            .padding(.leading, 40)
+
+                        Toggle(isOn: $enablePinning) { Text("Enable Pinning") }
+                            .padding(.leading, 20)
+                        Text("Allow special app controls to be pinned to the screen via right-click menu.")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                            .padding(.leading, 40)
                     }
 
                     sliderSetting(title: "Window Buffer from Dock (pixels)", value: $bufferFromDock, range: -100 ... 100, step: 5, unit: "px", formatter: { let f = NumberFormatter(); f.allowsFloats = false; f.minimumIntegerDigits = 1; f.maximumFractionDigits = 0; return f }())

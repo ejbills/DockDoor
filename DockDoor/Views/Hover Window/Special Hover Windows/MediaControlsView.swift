@@ -9,6 +9,7 @@ struct MediaControlsView: View {
     let dockPosition: DockPosition
     let bestGuessMonitor: NSScreen
     let isEmbeddedMode: Bool
+    let isPinnedMode: Bool
 
     @Default(.uniformCardRadius) var uniformCardRadius
     @Default(.showAppName) var showAppTitleData
@@ -23,6 +24,7 @@ struct MediaControlsView: View {
     @State private var isLoadingMediaInfo: Bool = true
     @State private var dominantArtworkColor: Color? = nil
     @State private var capturedEmbeddedWidth: CGFloat? = nil
+    @State private var forceEmbeddedMode: Bool = false
 
     private enum Layout {
         static let containerSpacing: CGFloat = 8
@@ -41,23 +43,34 @@ struct MediaControlsView: View {
          bundleIdentifier: String,
          dockPosition: DockPosition,
          bestGuessMonitor: NSScreen,
-         isEmbeddedMode: Bool = false)
+         isEmbeddedMode: Bool = false,
+         isPinnedMode: Bool = false)
     {
         self.appName = appName
         self.bundleIdentifier = bundleIdentifier
         self.dockPosition = dockPosition
         self.bestGuessMonitor = bestGuessMonitor
         self.isEmbeddedMode = isEmbeddedMode
+        self.isPinnedMode = isPinnedMode
+    }
+
+    private var effectiveEmbeddedMode: Bool {
+        isEmbeddedMode || forceEmbeddedMode
     }
 
     var body: some View {
         Group {
-            if isEmbeddedMode {
+            if effectiveEmbeddedMode {
                 embeddedContent()
             } else {
                 fullContent()
             }
         }
+        .conditionalEmbeddedModeToggle(
+            isPinnedMode: isPinnedMode,
+            forceEmbeddedMode: $forceEmbeddedMode,
+            effectiveEmbeddedMode: effectiveEmbeddedMode
+        )
         .onAppear {
             isLoadingMediaInfo = true
             loadAppIcon()
@@ -96,16 +109,26 @@ struct MediaControlsView: View {
                             .clipShape(RoundedRectangle(cornerRadius: Layout.artworkCornerRadius, style: .continuous))
 
                         VStack(alignment: .leading, spacing: 1) {
-                            Text(mediaInfo.title)
-                                .font(.callout)
-                                .fontWeight(.medium)
-                                .lineLimit(1)
+                            MarqueeText(
+                                text: mediaInfo.title,
+                                fontSize: 16,
+                                startDelay: 1,
+                                maxWidth: 165
+                            )
+                            .font(.callout)
+                            .fontWeight(.medium)
+                            .id(mediaInfo.title)
 
                             if !mediaInfo.artist.isEmpty {
-                                Text(mediaInfo.artist)
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
-                                    .lineLimit(1)
+                                MarqueeText(
+                                    text: mediaInfo.artist,
+                                    fontSize: 12,
+                                    startDelay: 1,
+                                    maxWidth: 150
+                                )
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                                .id(mediaInfo.artist)
                             }
                         }
                         Spacer(minLength: 0)
@@ -181,13 +204,22 @@ struct MediaControlsView: View {
 
     @ViewBuilder
     private func fullContent() -> some View {
+        if isPinnedMode {
+            pinnedContent()
+        } else {
+            regularContent()
+        }
+    }
+
+    @ViewBuilder
+    private func regularContent() -> some View {
         BaseHoverContainer(
             bestGuessMonitor: bestGuessMonitor,
             mockPreviewActive: false,
             content: {
                 VStack(spacing: 0) {
                     mediaControlsContent()
-                        .padding(20)
+                        .globalPadding(20)
                 }
                 .padding(.top, (appNameStyle == .default && showAppTitleData) ? 25 : 0)
                 .overlay(alignment: .topLeading) {
@@ -207,6 +239,24 @@ struct MediaControlsView: View {
             },
             highlightColor: dominantArtworkColor
         )
+        .pinnable(appName: appName, bundleIdentifier: bundleIdentifier, type: .media)
+    }
+
+    @ViewBuilder
+    private func pinnedContent() -> some View {
+        VStack(spacing: 0) {
+            mediaControlsContent()
+                .globalPadding(20)
+        }
+        .padding(.top, (appNameStyle == .default && showAppTitleData) ? 25 : 0)
+        .overlay(alignment: .topLeading) {
+            hoverTitleBaseView(labelSize: measureString(appName, fontSize: 14))
+                .onHover { isHovered in
+                    withAnimation(.snappy) { hoveringWindowTitle = isHovered }
+                }
+        }
+        .padding(.top, (appNameStyle == .popover && showAppTitleData) ? 30 : 0)
+        .dockStyle(cornerRadius: 16, highlightColor: dominantArtworkColor)
     }
 
     @ViewBuilder
@@ -222,15 +272,25 @@ struct MediaControlsView: View {
                             .clipShape(RoundedRectangle(cornerRadius: Layout.artworkCornerRadius, style: .continuous))
 
                         VStack(alignment: .leading, spacing: 2) {
-                            Text(mediaInfo.title)
-                                .fontWeight(.semibold)
-                                .lineLimit(1)
-                                .animation(.easeInOut(duration: 0.2), value: mediaInfo.title)
+                            MarqueeText(
+                                text: mediaInfo.title,
+                                fontSize: 16,
+                                startDelay: 1,
+                                maxWidth: 180
+                            )
+                            .fontWeight(.semibold)
+                            .animation(.easeInOut(duration: 0.2), value: mediaInfo.title)
+                            .id(mediaInfo.title)
 
                             if !mediaInfo.artist.isEmpty {
-                                Text(mediaInfo.artist)
-                                    .lineLimit(1)
-                                    .animation(.easeInOut(duration: 0.2), value: mediaInfo.artist)
+                                MarqueeText(
+                                    text: mediaInfo.artist,
+                                    fontSize: 14,
+                                    startDelay: 1,
+                                    maxWidth: 180
+                                )
+                                .animation(.easeInOut(duration: 0.2), value: mediaInfo.artist)
+                                .id(mediaInfo.artist)
                             }
                         }
                         Spacer(minLength: 0)
@@ -499,7 +559,7 @@ struct MediaControlButton: View {
         Button(action: action) {
             Image(systemName: systemName)
                 .symbolRenderingMode(.hierarchical)
-                .font(isTitle ? .body : .caption)
+                .font(isTitle ? .title : .body)
                 .fontWeight(.semibold)
                 .frame(width: buttonDimension, height: buttonDimension)
                 .contentShape(Circle())
@@ -509,6 +569,7 @@ struct MediaControlButton: View {
         .background(
             Circle()
                 .fill(Color.primary.opacity(isHovering ? 0.12 : 0))
+                .frame(width: buttonDimension + 8, height: buttonDimension + 8)
         )
         .onHover { hovering in
             withAnimation(.easeInOut(duration: 0.10)) { isHovering = hovering }

@@ -66,6 +66,10 @@
 		BB2567C62C10C5F000C0C93E /* DockUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2567C52C10C5F000C0C93E /* DockUtils.swift */; };
 		BB2CBB092C481295004502C5 /* SpaceWindowCacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2CBB082C48128D004502C5 /* SpaceWindowCacheManager.swift */; };
 		BB33E68C2C24C72F00A21D69 /* LaunchAtLogin in Frameworks */ = {isa = PBXBuildFile; productRef = BB33E68B2C24C72F00A21D69 /* LaunchAtLogin */; };
+		BB377C342DFD0D3700FA93DA /* PinnableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB377C332DFD0D3700FA93DA /* PinnableView.swift */; };
+		BB377C3F2DFD19ED00FA93DA /* PinnedWindowDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB377C3E2DFD19ED00FA93DA /* PinnedWindowDelegate.swift */; };
+		BB377C472DFD233200FA93DA /* EmbeddedModeToggleModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB377C462DFD233200FA93DA /* EmbeddedModeToggleModifier.swift */; };
+		BB377C492DFD434300FA93DA /* GlobalPadding.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB377C482DFD434300FA93DA /* GlobalPadding.swift */; };
 		BB3967FD2C291D5A004F1AB6 /* StackedShadow.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3967FC2C291D5A004F1AB6 /* StackedShadow.swift */; };
 		BB3968002C2A6C44004F1AB6 /* SmoothGradient in Frameworks */ = {isa = PBXBuildFile; productRef = BB3967FF2C2A6C44004F1AB6 /* SmoothGradient */; };
 		BB3968022C2A6CC2004F1AB6 /* Marquee.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3968012C2A6CC2004F1AB6 /* Marquee.swift */; };
@@ -171,6 +175,10 @@
 		BB2461F02DFA17B000005C30 /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
 		BB2567C52C10C5F000C0C93E /* DockUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DockUtils.swift; sourceTree = "<group>"; };
 		BB2CBB082C48128D004502C5 /* SpaceWindowCacheManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceWindowCacheManager.swift; sourceTree = "<group>"; };
+		BB377C332DFD0D3700FA93DA /* PinnableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinnableView.swift; sourceTree = "<group>"; };
+		BB377C3E2DFD19ED00FA93DA /* PinnedWindowDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinnedWindowDelegate.swift; sourceTree = "<group>"; };
+		BB377C462DFD233200FA93DA /* EmbeddedModeToggleModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmbeddedModeToggleModifier.swift; sourceTree = "<group>"; };
+		BB377C482DFD434300FA93DA /* GlobalPadding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalPadding.swift; sourceTree = "<group>"; };
 		BB3967FC2C291D5A004F1AB6 /* StackedShadow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackedShadow.swift; sourceTree = "<group>"; };
 		BB3968012C2A6CC2004F1AB6 /* Marquee.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Marquee.swift; sourceTree = "<group>"; };
 		BB3D6EAD2C82E4AE00FFE584 /* WindowDismissalContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowDismissalContainer.swift; sourceTree = "<group>"; };
@@ -272,6 +280,7 @@
 		3A105FD72C1BF11D0015EC66 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				BB377C482DFD434300FA93DA /* GlobalPadding.swift */,
 				BBB6C5362DF738E3009E93C4 /* Color.swift */,
 				BBE033CB2DD92061006417B0 /* CGimage.swift */,
 				BB0036D12D24AAE60072C61E /* CoreGraphics */,
@@ -429,10 +438,21 @@
 		BB2461F22DFA17F900005C30 /* Special Hover Windows */ = {
 			isa = PBXGroup;
 			children = (
+				BB377C3B2DFD194400FA93DA /* Pinnable */,
 				BBB6C5312DF3C8A4009E93C4 /* MediaControlsView.swift */,
 				BB2461F02DFA17B000005C30 /* CalendarView.swift */,
 			);
 			path = "Special Hover Windows";
+			sourceTree = "<group>";
+		};
+		BB377C3B2DFD194400FA93DA /* Pinnable */ = {
+			isa = PBXGroup;
+			children = (
+				BB377C462DFD233200FA93DA /* EmbeddedModeToggleModifier.swift */,
+				BB377C3E2DFD19ED00FA93DA /* PinnedWindowDelegate.swift */,
+				BB377C332DFD0D3700FA93DA /* PinnableView.swift */,
+			);
+			path = Pinnable;
 			sourceTree = "<group>";
 		};
 		BB4B44492C372A42006680DC /* Hover Window */ = {
@@ -673,6 +693,7 @@
 				BBE692192D17AD9E0093B4A5 /* DangerButton.swift in Sources */,
 				3A1622BE2C8C218500D318EE /* FirstTimeViewInstructionsView.swift in Sources */,
 				BB1A85F52D05263C00326297 /* FiltersSettingsView.swift in Sources */,
+				BB377C342DFD0D3700FA93DA /* PinnableView.swift in Sources */,
 				3A1622BC2C8C1B8600D318EE /* FirstTimeViewAppIcon.swift in Sources */,
 				3A1622B52C8C09A700D318EE /* AccentButton.swift in Sources */,
 				BB7CA33D2C31F1B00012E303 /* WindowManipulationObservers.swift in Sources */,
@@ -704,6 +725,7 @@
 				3A1622D02C8D691700D318EE /* SquiggleDivider.swift in Sources */,
 				BB157B822C0EB29E00997315 /* DockObserver.swift in Sources */,
 				BBA153FA2C11FFD500119C02 /* consts.swift in Sources */,
+				BB377C3F2DFD19ED00FA93DA /* PinnedWindowDelegate.swift in Sources */,
 				BBE033CC2DD92061006417B0 /* CGimage.swift in Sources */,
 				BBA153F62C115DDA00119C02 /* AppDelegate.swift in Sources */,
 				BB918BB52CF7613400931236 /* CGRect.swift in Sources */,
@@ -711,6 +733,7 @@
 				3A1622CA2C8D5E4600D318EE /* FirstTimeIntroTabView.swift in Sources */,
 				BB1865562DD57F1E000F34AD /* SupportSettingsView.swift in Sources */,
 				BB15E1F72C8FC05A002ECFB9 /* UniformCardView.swift in Sources */,
+				BB377C492DFD434300FA93DA /* GlobalPadding.swift in Sources */,
 				BBA153F82C11604400119C02 /* SharedPreviewWindowCoordinator.swift in Sources */,
 				BB1865542DD57E18000F34AD /* BaseSettingsView.swift in Sources */,
 				BBA153FC2C12356100119C02 /* main.swift in Sources */,
@@ -723,6 +746,7 @@
 				3A1622CC2C8D5F5B00D318EE /* FirstTimePermissionsTabView.swift in Sources */,
 				BB1F60E52D238A9800808E05 /* CGSize.swift in Sources */,
 				3A105FDD2C1C0EE20015EC66 /* DynStack.swift in Sources */,
+				BB377C472DFD233200FA93DA /* EmbeddedModeToggleModifier.swift in Sources */,
 				BB4ED9092C3CD97400BBDD16 /* Traffic Light Buttons.swift in Sources */,
 				C119BDF22C2AFA7600E06E18 /* WindowSwitcherSettingsView.swift in Sources */,
 				BB2567C62C10C5F000C0C93E /* DockUtils.swift in Sources */,

@@ -2291,6 +2291,9 @@
     "+%lld more" : {
 
     },
+    "×" : {
+
+    },
     "1." : {
       "localizations" : {
         "af" : {
@@ -6290,6 +6293,9 @@
           }
         }
       }
+    },
+    "Allow special app controls to be pinned to the screen via right-click menu." : {
+
     },
     "Always" : {
       "comment" : "Preview window title condition option",
@@ -12763,6 +12769,9 @@
           }
         }
       }
+    },
+    "Collapse to embedded mode" : {
+
     },
     "Color Customization" : {
       "localizations" : {
@@ -19432,6 +19441,9 @@
         }
       }
     },
+    "Enable Pinning" : {
+
+    },
     "Enable Preview Window Sliding Animation" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -21524,6 +21536,9 @@
           }
         }
       }
+    },
+    "Expand to full mode" : {
+
     },
     "EXPERIMENTAL: Show preview above app labels" : {
       "extractionState" : "stale",
@@ -24578,6 +24593,9 @@
           }
         }
       }
+    },
+    "Global Padding Scale" : {
+
     },
     "Grant Access" : {
 
@@ -63246,6 +63264,9 @@
           }
         }
       }
+    },
+    "Unpin" : {
+
     },
     "Up to date" : {
       "localizations" : {

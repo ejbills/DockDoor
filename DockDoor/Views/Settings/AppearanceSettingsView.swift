@@ -92,6 +92,7 @@ struct AppearanceSettingsView: View {
     @Default(.previewWrap) var previewWrap
     @Default(.showAppIconOnly) var showAppIconOnly
     @Default(.useAccentColorForSelection) var useAccentColorForSelection
+    @Default(.globalPaddingMultiplier) var globalPaddingMultiplier
 
     @State private var showAdvancedAppearanceSettings: Bool = false
     @State private var selectedPreviewContext: PreviewContext = .dock
@@ -129,6 +130,18 @@ struct AppearanceSettingsView: View {
                     StyledGroupBox(label: "General Appearance") {
                         VStack(alignment: .leading, spacing: 10) {
                             WindowSizeSliderView()
+
+                            sliderSetting(title: "Global Padding Scale",
+                                          value: $globalPaddingMultiplier,
+                                          range: 0.5 ... 2.0,
+                                          step: 0.1,
+                                          unit: "×",
+                                          formatter: {
+                                              let f = NumberFormatter()
+                                              f.minimumFractionDigits = 1
+                                              f.maximumFractionDigits = 1
+                                              return f
+                                          }())
 
                             VStack(alignment: .leading) {
                                 Toggle(isOn: $uniformCardRadius) {

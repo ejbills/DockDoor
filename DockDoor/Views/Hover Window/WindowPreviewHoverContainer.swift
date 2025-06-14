@@ -472,7 +472,7 @@ struct WindowPreviewHoverContainer: View {
                     }
                 }
             }
-            .padding(20)
+            .globalPadding(20)
         }
         .animation(.smooth(duration: 0.1), value: previewStateCoordinator.windows)
         .onChange(of: previewStateCoordinator.currIndex) { newIndex in

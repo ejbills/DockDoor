@@ -30,6 +30,8 @@ final class SharedPreviewWindowCoordinator: NSPanel {
     private var debounceWorkItem: DispatchWorkItem?
     private var lastShowTime: Date?
 
+    var pinnedWindows: [String: NSWindow] = [:]
+
     init() {
         let styleMask: NSWindow.StyleMask = [.nonactivatingPanel, .fullSizeContentView, .borderless]
         super.init(contentRect: .zero, styleMask: styleMask, backing: .buffered, defer: false)
@@ -412,44 +414,6 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         }
     }
 
-    func showWindow(appName: String, windows: [WindowInfo], mouseLocation: CGPoint? = nil, mouseScreen: NSScreen? = nil,
-                    dockItemElement: AXUIElement?,
-                    overrideDelay: Bool = false, centeredHoverWindowState: PreviewStateCoordinator.WindowState? = nil,
-                    onWindowTap: (() -> Void)? = nil, bundleIdentifier: String? = nil)
-    {
-        let now = Date()
-        let naturalDelay = Defaults[.lateralMovement] ? (Defaults[.hoverWindowOpenDelay] == 0 ? 0.2 : Defaults[.hoverWindowOpenDelay]) : Defaults[.hoverWindowOpenDelay]
-        let delay = overrideDelay ? 0.0 : naturalDelay
-
-        debounceWorkItem?.cancel()
-
-        let workItem = DispatchWorkItem { [weak self] in
-            if let mouseLocation, mouseLocation.distance(to: NSEvent.mouseLocation) > 100 {
-                return
-            }
-
-            Task { @MainActor [weak self] in
-                self?.performDisplay(appName: appName, windows: windows, mouseLocation: mouseLocation, mouseScreen: mouseScreen, dockItemElement: dockItemElement, centeredHoverWindowState: centeredHoverWindowState, onWindowTap: onWindowTap, bundleIdentifier: bundleIdentifier)
-            }
-        }
-
-        if let lastShowTime, now.timeIntervalSince(lastShowTime) < debounceDelay {
-            debounceWorkItem = workItem
-            DispatchQueue.main.asyncAfter(deadline: .now() + debounceDelay, execute: workItem)
-        } else {
-            if delay == 0.0 {
-                Task { @MainActor [weak self] in
-                    self?.performDisplay(appName: appName, windows: windows, mouseLocation: mouseLocation, mouseScreen: mouseScreen, dockItemElement: dockItemElement, centeredHoverWindowState: centeredHoverWindowState, onWindowTap: onWindowTap, bundleIdentifier: bundleIdentifier)
-                }
-            } else {
-                debounceWorkItem = workItem
-                DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: workItem)
-            }
-        }
-
-        lastShowTime = now
-    }
-
     @MainActor
     private func performShowWindow(appName: String, windows: [WindowInfo], mouseLocation: CGPoint?,
                                    mouseScreen: NSScreen?, dockItemElement: AXUIElement?,
@@ -584,5 +548,43 @@ final class SharedPreviewWindowCoordinator: NSPanel {
             WindowUtil.openNewWindow(app: window.app)
             hideWindow()
         }
+    }
+
+    func showWindow(appName: String, windows: [WindowInfo], mouseLocation: CGPoint? = nil, mouseScreen: NSScreen? = nil,
+                    dockItemElement: AXUIElement?,
+                    overrideDelay: Bool = false, centeredHoverWindowState: PreviewStateCoordinator.WindowState? = nil,
+                    onWindowTap: (() -> Void)? = nil, bundleIdentifier: String? = nil)
+    {
+        let now = Date()
+        let naturalDelay = Defaults[.lateralMovement] ? (Defaults[.hoverWindowOpenDelay] == 0 ? 0.2 : Defaults[.hoverWindowOpenDelay]) : Defaults[.hoverWindowOpenDelay]
+        let delay = overrideDelay ? 0.0 : naturalDelay
+
+        debounceWorkItem?.cancel()
+
+        let workItem = DispatchWorkItem { [weak self] in
+            if let mouseLocation, mouseLocation.distance(to: NSEvent.mouseLocation) > 100 {
+                return
+            }
+
+            Task { @MainActor [weak self] in
+                self?.performDisplay(appName: appName, windows: windows, mouseLocation: mouseLocation, mouseScreen: mouseScreen, dockItemElement: dockItemElement, centeredHoverWindowState: centeredHoverWindowState, onWindowTap: onWindowTap, bundleIdentifier: bundleIdentifier)
+            }
+        }
+
+        if let lastShowTime, now.timeIntervalSince(lastShowTime) < debounceDelay {
+            debounceWorkItem = workItem
+            DispatchQueue.main.asyncAfter(deadline: .now() + debounceDelay, execute: workItem)
+        } else {
+            if delay == 0.0 {
+                Task { @MainActor [weak self] in
+                    self?.performDisplay(appName: appName, windows: windows, mouseLocation: mouseLocation, mouseScreen: mouseScreen, dockItemElement: dockItemElement, centeredHoverWindowState: centeredHoverWindowState, onWindowTap: onWindowTap, bundleIdentifier: bundleIdentifier)
+                }
+            } else {
+                debounceWorkItem = workItem
+                DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: workItem)
+            }
+        }
+
+        lastShowTime = now
     }
 }

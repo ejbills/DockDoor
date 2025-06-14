@@ -14,6 +14,7 @@ struct CalendarView: View {
     let dockPosition: DockPosition
     let bestGuessMonitor: NSScreen
     let isEmbeddedMode: Bool
+    let isPinnedMode: Bool
 
     // MARK: – Defaults
 
@@ -28,6 +29,7 @@ struct CalendarView: View {
     @State private var hoveringAppIcon = false
     @State private var hoveringWindowTitle = false
     @State private var showToast: Bool = false
+    @State private var forceEmbeddedMode: Bool = false
 
     @Environment(\.openURL) private var openURL
 
@@ -48,25 +50,36 @@ struct CalendarView: View {
          bundleIdentifier: String,
          dockPosition: DockPosition,
          bestGuessMonitor: NSScreen,
-         isEmbeddedMode: Bool = false)
+         isEmbeddedMode: Bool = false,
+         isPinnedMode: Bool = false)
     {
         self.appName = appName
         self.bundleIdentifier = bundleIdentifier
         self.dockPosition = dockPosition
         self.bestGuessMonitor = bestGuessMonitor
         self.isEmbeddedMode = isEmbeddedMode
+        self.isPinnedMode = isPinnedMode
+    }
+
+    private var effectiveEmbeddedMode: Bool {
+        isEmbeddedMode || forceEmbeddedMode
     }
 
     // MARK: – Body
 
     var body: some View {
         Group {
-            if isEmbeddedMode {
+            if effectiveEmbeddedMode {
                 embeddedContent()
             } else {
                 fullContent()
             }
         }
+        .conditionalEmbeddedModeToggle(
+            isPinnedMode: isPinnedMode,
+            forceEmbeddedMode: $forceEmbeddedMode,
+            effectiveEmbeddedMode: effectiveEmbeddedMode
+        )
         .onAppear {
             loadAppIcon()
         }
@@ -214,13 +227,22 @@ struct CalendarView: View {
 
     @ViewBuilder
     private func fullContent() -> some View {
+        if isPinnedMode {
+            pinnedContent()
+        } else {
+            regularContent()
+        }
+    }
+
+    @ViewBuilder
+    private func regularContent() -> some View {
         BaseHoverContainer(
             bestGuessMonitor: bestGuessMonitor,
             mockPreviewActive: false,
             content: {
                 VStack(spacing: 0) {
                     calendarContent()
-                        .padding(20)
+                        .globalPadding(20)
                 }
                 .padding(.top, (appNameStyle == .default && showAppTitleData) ? 25 : 0)
                 .overlay(alignment: .topLeading) {
@@ -240,6 +262,24 @@ struct CalendarView: View {
             },
             highlightColor: nil
         )
+        .pinnable(appName: appName, bundleIdentifier: bundleIdentifier, type: .calendar)
+    }
+
+    @ViewBuilder
+    private func pinnedContent() -> some View {
+        VStack(spacing: 0) {
+            calendarContent()
+                .globalPadding(20)
+        }
+        .padding(.top, (appNameStyle == .default && showAppTitleData) ? 25 : 0)
+        .overlay(alignment: .topLeading) {
+            hoverTitleBaseView(labelSize: measureString(appName, fontSize: 14))
+                .onHover { isHovered in
+                    withAnimation(.snappy) { hoveringWindowTitle = isHovered }
+                }
+        }
+        .padding(.top, (appNameStyle == .popover && showAppTitleData) ? 30 : 0)
+        .dockStyle(cornerRadius: 16)
     }
 
     // MARK: – Main Content
