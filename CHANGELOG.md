@@ -38,14 +38,29 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://buymeacoffee.com/keplercafe</div>
 
-<a id="v1.14.4"></a>
-# [v1.14.4](https://github.com/ejbills/DockDoor/releases/tag/v1.14.4) - 2025-06-13
+<a id="v1.15"></a>
+# [v1.15](https://github.com/ejbills/DockDoor/releases/tag/v1.15) - 2025-06-14
 
-## Fixed Apple Music Support
-- **Fixed**: Apple Music artwork now properly converts binary data to base64 data URLs
-- **Improved**: Error handling for artwork retrieval failures
+## 🎨 New Features
 
-[Changes][v1.14.4]
+### Floating Widget Controls
+- **Pin special controls as desktop widgets** - Right-click on music and calendar controls to pin them as floating widgets
+- **Persistent desktop presence** - Pinned controls remain visible on desktop for quick access without dock interaction
+- **Widget-style behavior** - Pinned controls float above other windows and maintain their functionality
+- **Easy unpinning** - Right-click pinned widgets to unpin and return to dock-only behavior
+![CleanShot 2025-06-13 at 23 13 03@2x](https://github.com/user-attachments/assets/e3fc4a05-eda9-4555-93bb-548f62629a4c)
+![CleanShot 2025-06-13 at 23 14 10@2x](https://github.com/user-attachments/assets/4ee3eb8c-16a0-4341-9880-6c490223687b)
+
+### Global Padding Control
+- **Added global padding control** for appearance customization
+- **Fine-tune spacing** across all preview elements for personalized visual experience
+- **Consistent padding application** throughout the interface for improved visual coherence
+
+## 📝 Notes
+
+This release introduces significant workflow enhancements, allowing users to transform dock previews into persistent desktop widgets. The floating widget feature is particularly useful for users who frequently interact with music controls or need quick calendar access throughout their workflow, eliminating the need to repeatedly hover over dock items.
+
+[Changes][v1.15]
 
 
 <a id="v1.14.4"></a>
@@ -1093,7 +1108,7 @@ v1.0
 [Changes][releases]
 
 
-[v1.14.4]: https://github.com/ejbills/DockDoor/compare/v1.14.4...v1.14.4
+[v1.15]: https://github.com/ejbills/DockDoor/compare/v1.14.4...v1.15
 [v1.14.4]: https://github.com/ejbills/DockDoor/compare/v1.14.3...v1.14.4
 [v1.14.3]: https://github.com/ejbills/DockDoor/compare/v1.14.2...v1.14.3
 [v1.14.2]: https://github.com/ejbills/DockDoor/compare/v1.14.1...v1.14.2
