@@ -115,8 +115,8 @@ struct MainSettingsView: View {
     @Default(.useEmbeddedMediaControls) var useEmbeddedMediaControls
     @Default(.showAnimations) var showAnimations
     @Default(.raisedWindowLevel) var raisedWindowLevel
-
-    @Default(.enablePinning) private var enablePinning
+    @Default(.enablePinning) var enablePinning
+    @Default(.showBigControlsWhenNoValidWindows) var showBigControlsWhenNoValidWindows
 
     private let advancedSettingsSectionID = "advancedSettingsSection"
     private let windowSwitcherAdvancedSettingsID = "windowSwitcherAdvancedSettings"
@@ -521,6 +521,17 @@ struct MainSettingsView: View {
                             .foregroundColor(.secondary)
                             .padding(.leading, 40)
 
+                        Toggle(isOn: $showBigControlsWhenNoValidWindows) { Text("Show big controls when no valid windows") }
+                            .padding(.leading, 20)
+                            .disabled(!useEmbeddedMediaControls)
+                        Text(useEmbeddedMediaControls ?
+                            "When embedded mode is enabled, show big controls instead of embedded ones if all windows are minimized/hidden or there are no windows." :
+                            "This setting only applies when \"Embed controls with window previews\" is enabled above.")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                            .padding(.leading, 40)
+                            .opacity(useEmbeddedMediaControls ? 1.0 : 0.6)
+
                         Toggle(isOn: $enablePinning) { Text("Enable Pinning") }
                             .padding(.leading, 20)
                         Text("Allow special app controls to be pinned to the screen via right-click menu.")
@@ -677,6 +688,7 @@ struct MainSettingsView: View {
                 keybindModel.modifierKey = Defaults[.UserKeybind].modifierFlags
 
                 showSpecialAppControls = Defaults.Keys.showSpecialAppControls.defaultValue
+                showBigControlsWhenNoValidWindows = Defaults.Keys.showBigControlsWhenNoValidWindows.defaultValue
                 placementStrategy = Defaults.Keys.windowSwitcherPlacementStrategy.defaultValue
                 pinnedScreenIdentifier = Defaults.Keys.pinnedScreenIdentifier.defaultValue
                 askUserToRestartApplication()

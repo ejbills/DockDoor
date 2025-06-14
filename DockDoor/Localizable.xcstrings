@@ -56000,6 +56000,9 @@
         }
       }
     },
+    "Show big controls when no valid windows" : {
+
+    },
     "Show media/calendar controls on Dock hover" : {
       "localizations" : {
         "af" : {
@@ -62477,6 +62480,9 @@
           }
         }
       }
+    },
+    "This setting only applies when \"Embed controls with window previews\" is enabled above." : {
+
     },
     "Tiny (1/%lld)" : {
       "localizations" : {
@@ -69715,6 +69721,9 @@
           }
         }
       }
+    },
+    "When embedded mode is enabled, show big controls instead of embedded ones if all windows are minimized/hidden or there are no windows." : {
+
     },
     "When enabled, all preview images will be cropped to a rounded rectangle." : {
       "localizations" : {

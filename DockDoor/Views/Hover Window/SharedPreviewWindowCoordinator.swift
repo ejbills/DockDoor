@@ -365,7 +365,11 @@ final class SharedPreviewWindowCoordinator: NSPanel {
             switch actualAppContentType {
             case let .media(mediaBundleId):
                 if Defaults[.showSpecialAppControls] {
-                    if Defaults[.useEmbeddedMediaControls] {
+                    let hasValidWindows = windows.contains { !$0.isMinimized && !$0.isHidden }
+                    let shouldUseBigControlsForNoValidWindows = Defaults[.showBigControlsWhenNoValidWindows] &&
+                        (windows.isEmpty || !hasValidWindows)
+
+                    if Defaults[.useEmbeddedMediaControls], !shouldUseBigControlsForNoValidWindows {
                         finalEmbeddedContentType = .media(bundleIdentifier: mediaBundleId)
                     } else {
                         useBigStandaloneViewInstead = true
@@ -380,7 +384,11 @@ final class SharedPreviewWindowCoordinator: NSPanel {
                 }
             case let .calendar(calendarBundleId):
                 if Defaults[.showSpecialAppControls] {
-                    if Defaults[.useEmbeddedMediaControls] {
+                    let hasValidWindows = windows.contains { !$0.isMinimized && !$0.isHidden }
+                    let shouldUseBigControlsForNoValidWindows = Defaults[.showBigControlsWhenNoValidWindows] &&
+                        (windows.isEmpty || !hasValidWindows)
+
+                    if Defaults[.useEmbeddedMediaControls], !shouldUseBigControlsForNoValidWindows {
                         finalEmbeddedContentType = .calendar(bundleIdentifier: calendarBundleId)
                     } else {
                         useBigStandaloneViewInstead = true
