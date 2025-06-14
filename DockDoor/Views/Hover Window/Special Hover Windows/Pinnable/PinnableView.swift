@@ -37,8 +37,10 @@ struct PinnableViewModifier: ViewModifier {
                 updatePinnedState()
             }
             .onChange(of: isPinned) { newValue in
-                if newValue {
-                    // Create pinned window via coordinator
+                let alreadyPinned = SharedPreviewWindowCoordinator.activeInstance?.isPinned(bundleIdentifier: bundleIdentifier, type: pinnableType) ?? false
+
+                if newValue, !alreadyPinned {
+                    // Create pinned window via coordinator only if it doesn't exist
                     SharedPreviewWindowCoordinator.activeInstance?.createPinnedWindow(
                         appName: appName,
                         bundleIdentifier: bundleIdentifier,
@@ -46,8 +48,8 @@ struct PinnableViewModifier: ViewModifier {
                     )
                     // Hide original window
                     SharedPreviewWindowCoordinator.activeInstance?.hideWindow()
-                } else {
-                    // Close pinned window via coordinator
+                } else if !newValue, alreadyPinned {
+                    // Close pinned window via coordinator only if it exists
                     let key = "\(bundleIdentifier)-\(pinnableType.rawValue)"
                     SharedPreviewWindowCoordinator.activeInstance?.closePinnedWindow(key: key)
                 }
@@ -63,10 +65,15 @@ struct PinnableViewModifier: ViewModifier {
 
     @ViewBuilder
     private var contextMenuContent: some View {
-        if isPinned {
+        let currentlyPinned = SharedPreviewWindowCoordinator.activeInstance?.isPinned(bundleIdentifier: bundleIdentifier, type: pinnableType) ?? false
+
+        if currentlyPinned {
             Button("Unpin") {
                 withAnimation(.easeInOut(duration: 0.2)) {
                     isPinned = false
+                    let key = "\(bundleIdentifier)-\(pinnableType.rawValue)"
+                    SharedPreviewWindowCoordinator.activeInstance?.closePinnedWindow(key: key)
+                    SharedPreviewWindowCoordinator.activeInstance?.hideWindow()
                 }
             }
         } else {
@@ -74,16 +81,6 @@ struct PinnableViewModifier: ViewModifier {
                 withAnimation(.easeInOut(duration: 0.2)) {
                     isPinned = true
                 }
-            }
-        }
-
-        Divider()
-
-        if isPinned {
-            Button("Close") {
-                let key = "\(bundleIdentifier)-\(pinnableType.rawValue)"
-                SharedPreviewWindowCoordinator.activeInstance?.closePinnedWindow(key: key)
-                SharedPreviewWindowCoordinator.activeInstance?.hideWindow()
             }
         }
     }
