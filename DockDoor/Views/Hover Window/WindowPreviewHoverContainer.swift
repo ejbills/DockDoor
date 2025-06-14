@@ -368,6 +368,7 @@ struct WindowPreviewHoverContainer: View {
                 bestGuessMonitor: bestGuessMonitor,
                 isEmbeddedMode: true
             )
+            .pinnable(appName: appName, bundleIdentifier: bundleIdentifier, type: .media)
         case let .calendar(bundleIdentifier):
             CalendarView(
                 appName: appName,
@@ -376,6 +377,7 @@ struct WindowPreviewHoverContainer: View {
                 bestGuessMonitor: bestGuessMonitor,
                 isEmbeddedMode: true
             )
+            .pinnable(appName: appName, bundleIdentifier: bundleIdentifier, type: .calendar)
         case .none:
             EmptyView()
         }
