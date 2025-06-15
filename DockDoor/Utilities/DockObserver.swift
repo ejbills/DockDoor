@@ -161,7 +161,8 @@ final class DockObserver {
             case let .success(dupApp) = appUnderMouseElement.status,
             let existingTask = hoverProcessingTask,
             !existingTask.isCancelled,
-            lastAppUnderMouse?.processIdentifier == dupApp.processIdentifier
+            lastAppUnderMouse?.processIdentifier == dupApp.processIdentifier,
+            isProcessing
         {
             // Duplicate notification for the same PID while we're still
             // working on it – swallow it.
@@ -217,7 +218,10 @@ final class DockObserver {
         }
 
         hoverProcessingTask = Task { @MainActor [weak self] in
-            guard let self else { return }
+            guard let self else {
+                self?.isProcessing = false
+                return
+            }
 
             do {
                 try Task.checkCancellation()
@@ -225,6 +229,7 @@ final class DockObserver {
                 guard case let .success(currentApp) = appUnderMouseElement.status,
                       let dockItemElement = appUnderMouseElement.dockItemElement
                 else {
+                    isProcessing = false
                     return
                 }
 
@@ -234,6 +239,7 @@ final class DockObserver {
                     let timeSinceLastNotification = currentTime - lastNotificationTime
                     if timeSinceLastNotification < artifactTimeThreshold {
                         pendingShows.remove(pid)
+                        isProcessing = false
                         return
                     }
                 }
@@ -354,6 +360,8 @@ final class DockObserver {
                     pendingShows.remove(currentAppInfo.processIdentifier)
                 }
                 previousStatus = .success(currentApp)
+            } catch {
+                isProcessing = false
             }
         }
     }
