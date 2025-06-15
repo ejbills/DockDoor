@@ -38,6 +38,23 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://buymeacoffee.com/keplercafe</div>
 
+<a id="v1.15.1"></a>
+# [v1.15.1](https://github.com/ejbills/DockDoor/releases/tag/v1.15.1) - 2025-06-15
+
+## 🔧 Improvements
+- **Cleaned up DockObserver processing logic** for more reliable window placement detection
+- **Refined window pinning logic** for more consistent floating widget behavior
+
+## 🐛 Bug Fixes
+- **Fixed various pinning bugs** that could cause inconsistent widget behavior
+- **Improved reliability** of pin/unpin operations for floating widgets
+
+## 📝 Notes
+This patch release focuses on improving the core reliability of window detection and pinning systems introduced in v1.15.
+
+[Changes][v1.15.1]
+
+
 <a id="v1.15"></a>
 # [v1.15](https://github.com/ejbills/DockDoor/releases/tag/v1.15) - 2025-06-14
 
@@ -1108,6 +1125,7 @@ v1.0
 [Changes][releases]
 
 
+[v1.15.1]: https://github.com/ejbills/DockDoor/compare/v1.15...v1.15.1
 [v1.15]: https://github.com/ejbills/DockDoor/compare/v1.14.4...v1.15
 [v1.14.4]: https://github.com/ejbills/DockDoor/compare/v1.14.3...v1.14.4
 [v1.14.3]: https://github.com/ejbills/DockDoor/compare/v1.14.2...v1.14.3
