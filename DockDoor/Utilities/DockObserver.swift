@@ -275,15 +275,23 @@ final class DockObserver {
                     }
 
                     guard !appsToFetchWindowsFrom.isEmpty else {
+                        let isSpecialApp = currentApp.bundleIdentifier == spotifyAppIdentifier ||
+                            currentApp.bundleIdentifier == appleMusicAppIdentifier ||
+                            currentApp.bundleIdentifier == calendarAppIdentifier
+
                         // This case should ideally not be hit if currentApp is valid.
                         // If it is, treat as "empty" for streak purposes if lateral movement is on.
                         if Defaults[.lateralMovement] {
-                            emptyAppStreakCount += 1
-                            if emptyAppStreakCount >= maxEmptyAppStreak {
-                                hideWindowAndResetLastApp()
+                            if !(isSpecialApp && Defaults[.showSpecialAppControls]) {
+                                emptyAppStreakCount += 1
+                                if emptyAppStreakCount >= maxEmptyAppStreak {
+                                    hideWindowAndResetLastApp()
+                                }
                             }
                         } else {
-                            hideWindowAndResetLastApp()
+                            if !(isSpecialApp && Defaults[.showSpecialAppControls]) {
+                                hideWindowAndResetLastApp()
+                            }
                         }
                         pendingShows.remove(currentAppInfo.processIdentifier)
                         return
@@ -296,16 +304,24 @@ final class DockObserver {
                     }
 
                     if combinedWindows.isEmpty {
+                        let isSpecialApp = currentApp.bundleIdentifier == spotifyAppIdentifier ||
+                            currentApp.bundleIdentifier == appleMusicAppIdentifier ||
+                            currentApp.bundleIdentifier == calendarAppIdentifier
+
                         if !Defaults[.lateralMovement] {
-                            hideWindowAndResetLastApp()
-                            pendingShows.remove(currentAppInfo.processIdentifier)
-                            return
-                        } else {
-                            emptyAppStreakCount += 1
-                            if emptyAppStreakCount >= maxEmptyAppStreak {
+                            if !(isSpecialApp && Defaults[.showSpecialAppControls]) {
                                 hideWindowAndResetLastApp()
                                 pendingShows.remove(currentAppInfo.processIdentifier)
                                 return
+                            }
+                        } else {
+                            if !(isSpecialApp && Defaults[.showSpecialAppControls]) {
+                                emptyAppStreakCount += 1
+                                if emptyAppStreakCount >= maxEmptyAppStreak {
+                                    hideWindowAndResetLastApp()
+                                    pendingShows.remove(currentAppInfo.processIdentifier)
+                                    return
+                                }
                             }
                             // If streak not maxed, proceed to showWindow (might show special view)
                             // emptyAppStreakCount remains incremented.
