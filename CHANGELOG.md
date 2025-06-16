@@ -38,6 +38,14 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://buymeacoffee.com/keplercafe</div>
 
+<a id="v1.15.2"></a>
+# [v1.15.2](https://github.com/ejbills/DockDoor/releases/tag/v1.15.2) - 2025-06-16
+
+- Resolves missing entitlements that prevented Apple Music and Spotify from displaying music controls
+
+[Changes][v1.15.2]
+
+
 <a id="v1.15.1"></a>
 # [v1.15.1](https://github.com/ejbills/DockDoor/releases/tag/v1.15.1) - 2025-06-15
 
@@ -1125,6 +1133,7 @@ v1.0
 [Changes][releases]
 
 
+[v1.15.2]: https://github.com/ejbills/DockDoor/compare/v1.15.1...v1.15.2
 [v1.15.1]: https://github.com/ejbills/DockDoor/compare/v1.15...v1.15.1
 [v1.15]: https://github.com/ejbills/DockDoor/compare/v1.14.4...v1.15
 [v1.14.4]: https://github.com/ejbills/DockDoor/compare/v1.14.3...v1.14.4
