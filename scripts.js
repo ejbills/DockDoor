@@ -218,7 +218,53 @@ document.addEventListener('DOMContentLoaded', function() {
     if ('IntersectionObserver' in window) {
         animateOnScroll();
     }
-    
+
+    // Donation Modal Logic
+    const donationModal = document.getElementById('donation-modal');
+    const donationLinks = document.querySelectorAll('.donation-prompt');
+    const closeModalBtn = donationModal.querySelector('.modal-close');
+    const proceedToDownloadBtn = document.getElementById('proceed-to-download');
+    let downloadUrl = '';
+
+    const openModal = () => {
+        donationModal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    };
+
+    const closeModal = () => {
+        donationModal.classList.remove('active');
+        document.body.style.overflow = '';
+    };
+
+    donationLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            downloadUrl = this.href;
+            openModal();
+        });
+    });
+
+    closeModalBtn.addEventListener('click', closeModal);
+
+    proceedToDownloadBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        closeModal();
+        window.location.href = downloadUrl;
+    });
+
+    donationModal.addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeModal();
+        }
+    });
+
+    // Close modal with Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && donationModal.classList.contains('active')) {
+            closeModal();
+        }
+    });
+
     // Toast notification for donations when clicking download buttons
     function createToast() {
         const toastContainer = document.querySelector('.toast-container');

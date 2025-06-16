@@ -36,7 +36,7 @@ extension SharedPreviewWindowCoordinator {
         window.level = .floating
         window.isOpaque = false
         window.backgroundColor = .clear
-        window.hasShadow = true
+        window.hasShadow = false
         window.collectionBehavior = [.canJoinAllSpaces, .transient, .fullScreenAuxiliary]
         window.hidesOnDeactivate = false
         window.becomesKeyOnlyIfNeeded = true

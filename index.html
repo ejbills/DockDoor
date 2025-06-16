@@ -375,9 +375,9 @@
 
                 <div class="download-options">
                     <a href="https://github.com/ejbills/DockDoor/releases/latest/download/DockDoor.dmg"
-                        class="btn btn-primary btn-large download-btn">Download DockDoor</a>
+                        class="btn btn-primary btn-large download-btn donation-prompt">Download DockDoor</a>
                     <a href="https://formulae.brew.sh/cask/dockdoor"
-                        class="btn btn-secondary btn-large download-btn">Install with Homebrew</a>
+                        class="btn btn-secondary btn-large download-btn donation-prompt">Install with Homebrew</a>
                 </div>
 
                 <div class="download-badges">
@@ -459,6 +459,23 @@
         </div>
     </section>
 
+    <!-- Donation Modal -->
+    <div id="donation-modal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="modal-close" aria-label="Close modal">&times;</button>
+            <div class="modal-header">
+                <span class="modal-icon">❤️</span>
+                <h2 class="modal-title">Support DockDoor</h2>
+            </div>
+            <p class="modal-text">DockDoor is a passion project I develop in my free time. If you find it useful, please consider making a small donation to support its future.</p>
+            <p class="modal-subtext">Every contribution helps and is greatly appreciated!</p>
+            <div class="modal-actions">
+                <a href="https://www.buymeacoffee.com/keplercafe" class="btn btn-primary" target="_blank">Buy Me a Coffee ☕</a>
+                <a href="#" id="proceed-to-download" class="btn btn-outline">Continue to Download</a>
+            </div>
+        </div>
+    </div>
+    
     <!-- Toast Container for Donation Request -->
     <div class="toast-container">
         <!-- Toast will be dynamically added here by JavaScript -->
