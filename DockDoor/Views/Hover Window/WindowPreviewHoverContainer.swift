@@ -77,6 +77,26 @@ struct WindowPreviewHoverContainer: View {
         self.embeddedContentType = embeddedContentType
     }
 
+    private var minimumEmbeddedWidth: CGFloat {
+        let calculatedDimensionsMap = previewStateCoordinator.windowDimensionsMap
+
+        guard !calculatedDimensionsMap.isEmpty else {
+            // Fallback to skeleton width if no windows
+            return MediaControlsLayout.embeddedArtworkSize + MediaControlsLayout.artworkTextSpacing + 165
+        }
+
+        var minWidth = 0.0
+
+        for dimension in calculatedDimensionsMap {
+            let width = dimension.value.size.width
+            if minWidth == 0 || width < minWidth {
+                minWidth = width
+            }
+        }
+
+        return min(300, minWidth)
+    }
+
     var body: some View {
         let calculatedMaxDimension = previewStateCoordinator.overallMaxPreviewDimension
         let calculatedDimensionsMap = previewStateCoordinator.windowDimensionsMap
@@ -98,7 +118,6 @@ struct WindowPreviewHoverContainer: View {
                             withAnimation(.snappy) { hoveringWindowTitle = isHovered }
                         }
                 }
-                .padding(.top, (!previewStateCoordinator.windowSwitcherActive && appNameStyle == .popover && showAppTitleData) ? 30 : 0)
                 .overlay {
                     if !mockPreviewActive, !isDragging {
                         WindowDismissalContainer(appName: appName,
@@ -110,6 +129,7 @@ struct WindowPreviewHoverContainer: View {
                 }
             }
         }
+        .padding(.top, (!previewStateCoordinator.windowSwitcherActive && appNameStyle == .popover && showAppTitleData) ? 30 : 0)
         .onAppear {
             loadAppIcon()
         }
@@ -226,7 +246,7 @@ struct WindowPreviewHoverContainer: View {
                 }
             } label: {
                 Label("Update available", systemImage: "arrow.down.circle.fill")
-                    .font(.system(size: 11, weight: .medium))
+                    .font(.caption2.weight(.medium))
                     .padding(.horizontal, 8)
                     .padding(.vertical, 4)
                     .background(
@@ -366,7 +386,8 @@ struct WindowPreviewHoverContainer: View {
                 bundleIdentifier: bundleIdentifier,
                 dockPosition: dockPosition,
                 bestGuessMonitor: bestGuessMonitor,
-                isEmbeddedMode: true
+                isEmbeddedMode: true,
+                idealWidth: minimumEmbeddedWidth
             )
             .pinnable(appName: appName, bundleIdentifier: bundleIdentifier, type: .media)
         case let .calendar(bundleIdentifier):
@@ -375,7 +396,8 @@ struct WindowPreviewHoverContainer: View {
                 bundleIdentifier: bundleIdentifier,
                 dockPosition: dockPosition,
                 bestGuessMonitor: bestGuessMonitor,
-                isEmbeddedMode: true
+                isEmbeddedMode: true,
+                idealWidth: minimumEmbeddedWidth
             )
             .pinnable(appName: appName, bundleIdentifier: bundleIdentifier, type: .calendar)
         case .none:
@@ -489,16 +511,13 @@ struct WindowPreviewHoverContainer: View {
     }
 
     private func loadAppIcon() {
-        if let app = previewStateCoordinator.windows.first?.app, let icon = app.icon {
+        guard let app = previewStateCoordinator.windows.first?.app, let bundleID = app.bundleIdentifier else { return }
+        if let icon = SharedHoverUtils.loadAppIcon(for: bundleID) {
             DispatchQueue.main.async {
-                if appIcon != icon {
-                    appIcon = icon
-                }
+                if appIcon != icon { appIcon = icon }
             }
         } else if appIcon != nil {
-            DispatchQueue.main.async {
-                appIcon = nil
-            }
+            DispatchQueue.main.async { appIcon = nil }
         }
     }
 

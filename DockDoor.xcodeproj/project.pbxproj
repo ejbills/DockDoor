@@ -48,7 +48,6 @@
 		BB15E1E52C8E9435002ECFB9 /* BlobLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB15E1DE2C8E9435002ECFB9 /* BlobLayer.swift */; };
 		BB15E1E82C8F8C9C002ECFB9 /* ScreenRecordWarningView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB15E1E72C8F8C93002ECFB9 /* ScreenRecordWarningView.swift */; };
 		BB15E1EA2C8F8DB4002ECFB9 /* HelpSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB15E1E92C8F8DB1002ECFB9 /* HelpSettingsView.swift */; };
-		BB15E1EC2C8F8F13002ECFB9 /* CardModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB15E1EB2C8F8F0F002ECFB9 /* CardModifier.swift */; };
 		BB15E1EF2C8FB70C002ECFB9 /* Glur in Frameworks */ = {isa = PBXBuildFile; productRef = BB15E1EE2C8FB70C002ECFB9 /* Glur */; };
 		BB15E1F12C8FBCD4002ECFB9 /* BugAndFeatureReporting.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB15E1F02C8FBCCD002ECFB9 /* BugAndFeatureReporting.swift */; };
 		BB15E1F52C8FBEAB002ECFB9 /* DonationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB15E1F42C8FBEA4002ECFB9 /* DonationView.swift */; };
@@ -62,7 +61,6 @@
 		BB1CBD5D2C1BCA4F003969BC /* Misc Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB1CBD5C2C1BCA4F003969BC /* Misc Utils.swift */; };
 		BB1F60E52D238A9800808E05 /* CGSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB1F60E42D238A9700808E05 /* CGSize.swift */; };
 		BB22D7152DF9E24500EBBCA6 /* GlintPlaceholderModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB22D7142DF9E24500EBBCA6 /* GlintPlaceholderModifier.swift */; };
-		BB2461F12DFA17B000005C30 /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2461F02DFA17B000005C30 /* CalendarView.swift */; };
 		BB2567C62C10C5F000C0C93E /* DockUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2567C52C10C5F000C0C93E /* DockUtils.swift */; };
 		BB2CBB092C481295004502C5 /* SpaceWindowCacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2CBB082C48128D004502C5 /* SpaceWindowCacheManager.swift */; };
 		BB33E68C2C24C72F00A21D69 /* LaunchAtLogin in Frameworks */ = {isa = PBXBuildFile; productRef = BB33E68B2C24C72F00A21D69 /* LaunchAtLogin */; };
@@ -81,6 +79,26 @@
 		BB52EDF02C5BEFE3006A64A4 /* HiddenModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB52EDEF2C5BEFE3006A64A4 /* HiddenModifier.swift */; };
 		BB6021D02D1E60EA00D47C86 /* Flow Container Calculations.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6021CF2D1E60E100D47C86 /* Flow Container Calculations.swift */; };
 		BB6021D22D1E613800D47C86 /* Window Image Sizing Calculations.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6021D12D1E613100D47C86 /* Window Image Sizing Calculations.swift */; };
+		BB638EFA2E0216DA0010077D /* MediaControlsEmbeddedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB638EF92E0216DA0010077D /* MediaControlsEmbeddedView.swift */; };
+		BB638EFC2E0216DE0010077D /* MediaControlsFullView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB638EFB2E0216DE0010077D /* MediaControlsFullView.swift */; };
+		BB638F002E0216FA0010077D /* MediaArtworkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB638EFF2E0216FA0010077D /* MediaArtworkView.swift */; };
+		BB638F022E0216FE0010077D /* MediaControlButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB638F012E0216FE0010077D /* MediaControlButton.swift */; };
+		BB638F042E0217030010077D /* MediaControlButtonRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB638F032E0217030010077D /* MediaControlButtonRow.swift */; };
+		BB638F062E02170B0010077D /* MediaProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB638F052E02170B0010077D /* MediaProgressBar.swift */; };
+		BB638F082E0217250010077D /* MediaPlaybackControls.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB638F072E0217250010077D /* MediaPlaybackControls.swift */; };
+		BB638F0A2E02172B0010077D /* MediaLyricsButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB638F092E02172B0010077D /* MediaLyricsButton.swift */; };
+		BB638F0C2E0217480010077D /* MediaLyricsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB638F0B2E0217480010077D /* MediaLyricsView.swift */; };
+		BB638F0F2E02175C0010077D /* MediaControlsSkeleton.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB638F0E2E02175C0010077D /* MediaControlsSkeleton.swift */; };
+		BB638F142E0218BB0010077D /* SharedHoverAppTitle.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB638F132E0218BB0010077D /* SharedHoverAppTitle.swift */; };
+		BB638F162E0218C00010077D /* SharedHoverUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB638F152E0218C00010077D /* SharedHoverUtils.swift */; };
+		BB638F182E0218C90010077D /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB638F172E0218C90010077D /* CalendarView.swift */; };
+		BB638F1A2E0218CD0010077D /* CalendarEmbeddedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB638F192E0218CD0010077D /* CalendarEmbeddedView.swift */; };
+		BB638F1C2E0218D10010077D /* CalendarFullView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB638F1B2E0218D10010077D /* CalendarFullView.swift */; };
+		BB638F1E2E0218EC0010077D /* CalendarContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB638F1D2E0218EC0010077D /* CalendarContentView.swift */; };
+		BB638F202E0218F00010077D /* CalendarEventRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB638F1F2E0218F00010077D /* CalendarEventRow.swift */; };
+		BB638F222E0218F40010077D /* CalendarSkeleton.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB638F212E0218F40010077D /* CalendarSkeleton.swift */; };
+		BB638F242E0218F80010077D /* CalendarEmptyState.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB638F232E0218F80010077D /* CalendarEmptyState.swift */; };
+		BB638F262E0218FE0010077D /* CalendarPermissionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB638F252E0218FE0010077D /* CalendarPermissionView.swift */; };
 		BB6A4F1C2C1CFCFF00CB4C9E /* PermissionsSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6A4F1B2C1CFCFF00CB4C9E /* PermissionsSettingsView.swift */; };
 		BB6D81962DF75CA100DB64E4 /* SimpleProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6D81952DF75CA100DB64E4 /* SimpleProgressBar.swift */; };
 		BB7CA33D2C31F1B00012E303 /* WindowManipulationObservers.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB7CA33C2C31F1B00012E303 /* WindowManipulationObservers.swift */; };
@@ -159,7 +177,6 @@
 		BB15E1E12C8E9435002ECFB9 /* ResizableLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResizableLayer.swift; sourceTree = "<group>"; };
 		BB15E1E72C8F8C93002ECFB9 /* ScreenRecordWarningView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenRecordWarningView.swift; sourceTree = "<group>"; };
 		BB15E1E92C8F8DB1002ECFB9 /* HelpSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpSettingsView.swift; sourceTree = "<group>"; };
-		BB15E1EB2C8F8F0F002ECFB9 /* CardModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardModifier.swift; sourceTree = "<group>"; };
 		BB15E1F02C8FBCCD002ECFB9 /* BugAndFeatureReporting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BugAndFeatureReporting.swift; sourceTree = "<group>"; };
 		BB15E1F42C8FBEA4002ECFB9 /* DonationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DonationView.swift; sourceTree = "<group>"; };
 		BB15E1F62C8FC056002ECFB9 /* UniformCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UniformCardView.swift; sourceTree = "<group>"; };
@@ -171,7 +188,6 @@
 		BB1CBD5C2C1BCA4F003969BC /* Misc Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Misc Utils.swift"; sourceTree = "<group>"; };
 		BB1F60E42D238A9700808E05 /* CGSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGSize.swift; sourceTree = "<group>"; };
 		BB22D7142DF9E24500EBBCA6 /* GlintPlaceholderModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlintPlaceholderModifier.swift; sourceTree = "<group>"; };
-		BB2461F02DFA17B000005C30 /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
 		BB2567C52C10C5F000C0C93E /* DockUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DockUtils.swift; sourceTree = "<group>"; };
 		BB2CBB082C48128D004502C5 /* SpaceWindowCacheManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceWindowCacheManager.swift; sourceTree = "<group>"; };
 		BB377C332DFD0D3700FA93DA /* PinnableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinnableView.swift; sourceTree = "<group>"; };
@@ -188,6 +204,26 @@
 		BB52EDEF2C5BEFE3006A64A4 /* HiddenModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HiddenModifier.swift; sourceTree = "<group>"; };
 		BB6021CF2D1E60E100D47C86 /* Flow Container Calculations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Flow Container Calculations.swift"; sourceTree = "<group>"; };
 		BB6021D12D1E613100D47C86 /* Window Image Sizing Calculations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Window Image Sizing Calculations.swift"; sourceTree = "<group>"; };
+		BB638EF92E0216DA0010077D /* MediaControlsEmbeddedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaControlsEmbeddedView.swift; sourceTree = "<group>"; };
+		BB638EFB2E0216DE0010077D /* MediaControlsFullView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaControlsFullView.swift; sourceTree = "<group>"; };
+		BB638EFF2E0216FA0010077D /* MediaArtworkView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaArtworkView.swift; sourceTree = "<group>"; };
+		BB638F012E0216FE0010077D /* MediaControlButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaControlButton.swift; sourceTree = "<group>"; };
+		BB638F032E0217030010077D /* MediaControlButtonRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaControlButtonRow.swift; sourceTree = "<group>"; };
+		BB638F052E02170B0010077D /* MediaProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaProgressBar.swift; sourceTree = "<group>"; };
+		BB638F072E0217250010077D /* MediaPlaybackControls.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaPlaybackControls.swift; sourceTree = "<group>"; };
+		BB638F092E02172B0010077D /* MediaLyricsButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaLyricsButton.swift; sourceTree = "<group>"; };
+		BB638F0B2E0217480010077D /* MediaLyricsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaLyricsView.swift; sourceTree = "<group>"; };
+		BB638F0E2E02175C0010077D /* MediaControlsSkeleton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaControlsSkeleton.swift; sourceTree = "<group>"; };
+		BB638F132E0218BB0010077D /* SharedHoverAppTitle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedHoverAppTitle.swift; sourceTree = "<group>"; };
+		BB638F152E0218C00010077D /* SharedHoverUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedHoverUtils.swift; sourceTree = "<group>"; };
+		BB638F172E0218C90010077D /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
+		BB638F192E0218CD0010077D /* CalendarEmbeddedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarEmbeddedView.swift; sourceTree = "<group>"; };
+		BB638F1B2E0218D10010077D /* CalendarFullView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarFullView.swift; sourceTree = "<group>"; };
+		BB638F1D2E0218EC0010077D /* CalendarContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarContentView.swift; sourceTree = "<group>"; };
+		BB638F1F2E0218F00010077D /* CalendarEventRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarEventRow.swift; sourceTree = "<group>"; };
+		BB638F212E0218F40010077D /* CalendarSkeleton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarSkeleton.swift; sourceTree = "<group>"; };
+		BB638F232E0218F80010077D /* CalendarEmptyState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarEmptyState.swift; sourceTree = "<group>"; };
+		BB638F252E0218FE0010077D /* CalendarPermissionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarPermissionView.swift; sourceTree = "<group>"; };
 		BB6A4F1B2C1CFCFF00CB4C9E /* PermissionsSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionsSettingsView.swift; sourceTree = "<group>"; };
 		BB6D81952DF75CA100DB64E4 /* SimpleProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleProgressBar.swift; sourceTree = "<group>"; };
 		BB7CA33C2C31F1B00012E303 /* WindowManipulationObservers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowManipulationObservers.swift; sourceTree = "<group>"; };
@@ -261,7 +297,6 @@
 				BBE692182D17AD9C0093B4A5 /* DangerButton.swift */,
 				3A1622C62C8D5A5C00D318EE /* EnabledActionRowView.swift */,
 				BBF383962C94A25B00B39A23 /* sliderSetting.swift */,
-				BB15E1EB2C8F8F0F002ECFB9 /* CardModifier.swift */,
 				BB750D232C8E939A00245E3E /* FluidGradient */,
 				3A1622BF2C8D579F00D318EE /* PermissionsView */,
 				BB04405C2C77A878009F1D33 /* Defaults */,
@@ -436,9 +471,9 @@
 		BB2461F22DFA17F900005C30 /* Special Hover Windows */ = {
 			isa = PBXGroup;
 			children = (
+				BB638F0D2E0217560010077D /* Calendar */,
+				BB638EF82E0216D00010077D /* Media */,
 				BB377C3B2DFD194400FA93DA /* Pinnable */,
-				BBB6C5312DF3C8A4009E93C4 /* MediaControlsView.swift */,
-				BB2461F02DFA17B000005C30 /* CalendarView.swift */,
 			);
 			path = "Special Hover Windows";
 			sourceTree = "<group>";
@@ -455,15 +490,11 @@
 		BB4B44492C372A42006680DC /* Hover Window */ = {
 			isa = PBXGroup;
 			children = (
+				BB638F122E0218B10010077D /* Shared Components */,
 				BB2461F22DFA17F900005C30 /* Special Hover Windows */,
 				BB6021CE2D1E60C700D47C86 /* WindowPreview Supporting */,
-				BB1A85F62D08E52A00326297 /* DragPreviewCoordinator.swift */,
 				BBF413932C40977F00AA6733 /* WindowPreviewHoverContainer.swift */,
 				BB4B444A2C372A4C006680DC /* WindowPreview.swift */,
-				BBF413912C40618800AA6733 /* FullSizePreviewView.swift */,
-				BB4ED9082C3CD96D00BBDD16 /* Traffic Light Buttons.swift */,
-				BBA153F72C11604400119C02 /* SharedPreviewWindowCoordinator.swift */,
-				BBB6C5332DF3C8B4009E93C4 /* BaseHoverContainer.swift */,
 			);
 			path = "Hover Window";
 			sourceTree = "<group>";
@@ -478,6 +509,53 @@
 				BB6021CF2D1E60E100D47C86 /* Flow Container Calculations.swift */,
 			);
 			path = "WindowPreview Supporting";
+			sourceTree = "<group>";
+		};
+		BB638EF82E0216D00010077D /* Media */ = {
+			isa = PBXGroup;
+			children = (
+				BB638F0E2E02175C0010077D /* MediaControlsSkeleton.swift */,
+				BB638F0B2E0217480010077D /* MediaLyricsView.swift */,
+				BB638F092E02172B0010077D /* MediaLyricsButton.swift */,
+				BB638F072E0217250010077D /* MediaPlaybackControls.swift */,
+				BB638F052E02170B0010077D /* MediaProgressBar.swift */,
+				BB638F032E0217030010077D /* MediaControlButtonRow.swift */,
+				BB638F012E0216FE0010077D /* MediaControlButton.swift */,
+				BB638EFF2E0216FA0010077D /* MediaArtworkView.swift */,
+				BB638EFB2E0216DE0010077D /* MediaControlsFullView.swift */,
+				BB638EF92E0216DA0010077D /* MediaControlsEmbeddedView.swift */,
+				BBB6C5312DF3C8A4009E93C4 /* MediaControlsView.swift */,
+			);
+			path = Media;
+			sourceTree = "<group>";
+		};
+		BB638F0D2E0217560010077D /* Calendar */ = {
+			isa = PBXGroup;
+			children = (
+				BB638F252E0218FE0010077D /* CalendarPermissionView.swift */,
+				BB638F232E0218F80010077D /* CalendarEmptyState.swift */,
+				BB638F212E0218F40010077D /* CalendarSkeleton.swift */,
+				BB638F1F2E0218F00010077D /* CalendarEventRow.swift */,
+				BB638F1D2E0218EC0010077D /* CalendarContentView.swift */,
+				BB638F1B2E0218D10010077D /* CalendarFullView.swift */,
+				BB638F192E0218CD0010077D /* CalendarEmbeddedView.swift */,
+				BB638F172E0218C90010077D /* CalendarView.swift */,
+			);
+			path = Calendar;
+			sourceTree = "<group>";
+		};
+		BB638F122E0218B10010077D /* Shared Components */ = {
+			isa = PBXGroup;
+			children = (
+				BB638F152E0218C00010077D /* SharedHoverUtils.swift */,
+				BB638F132E0218BB0010077D /* SharedHoverAppTitle.swift */,
+				BBB6C5332DF3C8B4009E93C4 /* BaseHoverContainer.swift */,
+				BB4ED9082C3CD96D00BBDD16 /* Traffic Light Buttons.swift */,
+				BB1A85F62D08E52A00326297 /* DragPreviewCoordinator.swift */,
+				BBF413912C40618800AA6733 /* FullSizePreviewView.swift */,
+				BBA153F72C11604400119C02 /* SharedPreviewWindowCoordinator.swift */,
+			);
+			path = "Shared Components";
 			sourceTree = "<group>";
 		};
 		BB750D232C8E939A00245E3E /* FluidGradient */ = {
@@ -671,8 +749,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				0531F8D22C3CC04600327808 /* AppearanceSettingsView.swift in Sources */,
+				BB638EFA2E0216DA0010077D /* MediaControlsEmbeddedView.swift in Sources */,
 				3A1622982C8BF71000D318EE /* SwiftUIWindow.swift in Sources */,
-				BB2461F12DFA17B000005C30 /* CalendarView.swift in Sources */,
+				BB638F082E0217250010077D /* MediaPlaybackControls.swift in Sources */,
 				BB6A4F1C2C1CFCFF00CB4C9E /* PermissionsSettingsView.swift in Sources */,
 				BB3D6EB02C84E58400FFE584 /* NSScreen.swift in Sources */,
 				BB3D6EAE2C82E4B400FFE584 /* WindowDismissalContainer.swift in Sources */,
@@ -681,7 +760,11 @@
 				BB3967FD2C291D5A004F1AB6 /* StackedShadow.swift in Sources */,
 				BBB6C5322DF3C8A4009E93C4 /* MediaControlsView.swift in Sources */,
 				BBB6C5342DF3C8B4009E93C4 /* BaseHoverContainer.swift in Sources */,
+				BB638F182E0218C90010077D /* CalendarView.swift in Sources */,
 				BBE153BE2D2126D000CD3D4A /* MaterialPill.swift in Sources */,
+				BB638F0C2E0217480010077D /* MediaLyricsView.swift in Sources */,
+				BB638F222E0218F40010077D /* CalendarSkeleton.swift in Sources */,
+				BB638F0F2E02175C0010077D /* MediaControlsSkeleton.swift in Sources */,
 				BB0CBE3A2DD8179200D55437 /* MouseEventModifier.swift in Sources */,
 				BBB6C5372DF738E4009E93C4 /* Color.swift in Sources */,
 				3A1622CE2C8D5F8500D318EE /* FirstTimeCongratsTabView.swift in Sources */,
@@ -690,14 +773,18 @@
 				BBE692192D17AD9E0093B4A5 /* DangerButton.swift in Sources */,
 				3A1622BE2C8C218500D318EE /* FirstTimeViewInstructionsView.swift in Sources */,
 				BB1A85F52D05263C00326297 /* FiltersSettingsView.swift in Sources */,
+				BB638F002E0216FA0010077D /* MediaArtworkView.swift in Sources */,
 				BB377C342DFD0D3700FA93DA /* PinnableView.swift in Sources */,
 				3A1622BC2C8C1B8600D318EE /* FirstTimeViewAppIcon.swift in Sources */,
 				3A1622B52C8C09A700D318EE /* AccentButton.swift in Sources */,
+				BB638EFC2E0216DE0010077D /* MediaControlsFullView.swift in Sources */,
 				BB7CA33D2C31F1B00012E303 /* WindowManipulationObservers.swift in Sources */,
 				BB15E1E82C8F8C9C002ECFB9 /* ScreenRecordWarningView.swift in Sources */,
 				BBF383972C94A26200B39A23 /* sliderSetting.swift in Sources */,
 				BBAC6B452D15FA8900A0F370 /* AXValue.swift in Sources */,
 				BB157B802C0E8E6700997315 /* MessageUtil.swift in Sources */,
+				BB638F242E0218F80010077D /* CalendarEmptyState.swift in Sources */,
+				BB638F1A2E0218CD0010077D /* CalendarEmbeddedView.swift in Sources */,
 				05C0C7182C60629C000ADAC6 /* AXUIElement.swift in Sources */,
 				3A1622C12C8D57AF00D318EE /* PermissionsChecker.swift in Sources */,
 				3A105FD62C1BED660015EC66 /* BlurView.swift in Sources */,
@@ -711,7 +798,6 @@
 				BB52EDF02C5BEFE3006A64A4 /* HiddenModifier.swift in Sources */,
 				BBBAA15B2DE6998B00FF8F8F /* UpdaterState.swift in Sources */,
 				BBE63DFF2DEA583C0079D2B9 /* PreviewStateCoordinator.swift in Sources */,
-				BB15E1EC2C8F8F13002ECFB9 /* CardModifier.swift in Sources */,
 				BB44474F2C507F950047EB92 /* LimitedTaskGroup.swift in Sources */,
 				BB22D7152DF9E24500EBBCA6 /* GlintPlaceholderModifier.swift in Sources */,
 				BBBD4AF52C8D671C0074FFCF /* NSImage.swift in Sources */,
@@ -720,7 +806,10 @@
 				3A1622C72C8D5A5C00D318EE /* EnabledActionRowView.swift in Sources */,
 				BBE153C22D22024F00CD3D4A /* View.swift in Sources */,
 				3A1622D02C8D691700D318EE /* SquiggleDivider.swift in Sources */,
+				BB638F1E2E0218EC0010077D /* CalendarContentView.swift in Sources */,
 				BB157B822C0EB29E00997315 /* DockObserver.swift in Sources */,
+				BB638F022E0216FE0010077D /* MediaControlButton.swift in Sources */,
+				BB638F0A2E02172B0010077D /* MediaLyricsButton.swift in Sources */,
 				BBA153FA2C11FFD500119C02 /* consts.swift in Sources */,
 				BB377C3F2DFD19ED00FA93DA /* PinnedWindowDelegate.swift in Sources */,
 				BBE033CC2DD92061006417B0 /* CGimage.swift in Sources */,
@@ -729,14 +818,19 @@
 				BB6021D22D1E613800D47C86 /* Window Image Sizing Calculations.swift in Sources */,
 				3A1622CA2C8D5E4600D318EE /* FirstTimeIntroTabView.swift in Sources */,
 				BB1865562DD57F1E000F34AD /* SupportSettingsView.swift in Sources */,
+				BB638F062E02170B0010077D /* MediaProgressBar.swift in Sources */,
 				BB15E1F72C8FC05A002ECFB9 /* UniformCardView.swift in Sources */,
+				BB638F042E0217030010077D /* MediaControlButtonRow.swift in Sources */,
 				BB377C492DFD434300FA93DA /* GlobalPadding.swift in Sources */,
+				BB638F162E0218C00010077D /* SharedHoverUtils.swift in Sources */,
 				BBA153F82C11604400119C02 /* SharedPreviewWindowCoordinator.swift in Sources */,
 				BB1865542DD57E18000F34AD /* BaseSettingsView.swift in Sources */,
 				BBA153FC2C12356100119C02 /* main.swift in Sources */,
 				BBF6C6242C1B4B4400BF1D40 /* KeybindHelper.swift in Sources */,
+				BB638F1C2E0218D10010077D /* CalendarFullView.swift in Sources */,
 				0596C2C32C3E060D00DCABEF /* PrivateApis.swift in Sources */,
 				BB15E1E22C8E9435002ECFB9 /* FluidGradient.swift in Sources */,
+				BB638F142E0218BB0010077D /* SharedHoverAppTitle.swift in Sources */,
 				BB15E1E32C8E9435002ECFB9 /* ResizableLayer.swift in Sources */,
 				BB15E1E42C8E9435002ECFB9 /* FluidGradientView.swift in Sources */,
 				BB15E1E52C8E9435002ECFB9 /* BlobLayer.swift in Sources */,
@@ -760,10 +854,12 @@
 				BB1CBD582C1BA800003969BC /* MainSettingsView.swift in Sources */,
 				BB157B792C0E330100997315 /* WindowUtil.swift in Sources */,
 				BB15E1EA2C8F8DB4002ECFB9 /* HelpSettingsView.swift in Sources */,
+				BB638F202E0218F00010077D /* CalendarEventRow.swift in Sources */,
 				BB6D81962DF75CA100DB64E4 /* SimpleProgressBar.swift in Sources */,
 				BBFAD73C2C287C770092F5F1 /* UpdateSettingsView.swift in Sources */,
 				BBE153C02D21FA2700CD3D4A /* StyledGroupBox.swift in Sources */,
 				BB157B7B2C0E343000997315 /* SystemPreferencesHelper.swift in Sources */,
+				BB638F262E0218FE0010077D /* CalendarPermissionView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

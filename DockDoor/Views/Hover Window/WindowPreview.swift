@@ -380,7 +380,8 @@ struct WindowPreview: View {
                !windowTitle.isEmpty,
                windowTitle != windowInfo.app.localizedName
             {
-                MarqueeText(text: windowTitle, fontSize: 12, startDelay: 1, maxWidth: dimensions.size.width * 0.75)
+                MarqueeText(text: windowTitle, startDelay: 1)
+                    .font(.caption)
                     .lineLimit(1)
                     .materialPill()
                     .padding(4)

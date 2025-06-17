@@ -24,7 +24,7 @@ struct UniformCardView: View {
                     }
                 }) {
                     Text(buttonTitle)
-                        .font(.system(size: 12, weight: .medium))
+                        .font(.caption.weight(.medium))
                 }
                 .buttonStyle(AccentButtonStyle(color: .accentColor, small: true))
             }

@@ -17,6 +17,6 @@ struct AccentButtonStyle: ButtonStyle {
             .onHover { newHovering in
                 hovering = newHovering
             }
-            .font(.system(size: small ? 10 : 14, weight: .medium))
+            .font(small ? .caption.weight(.medium) : .subheadline.weight(.medium))
     }
 }

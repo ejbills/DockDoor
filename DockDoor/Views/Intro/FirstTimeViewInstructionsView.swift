@@ -15,7 +15,7 @@ struct FirstTimeViewInstructionsView: View {
 
             if step >= 2 {
                 Text("Enhance your dock experience!")
-                    .font(.system(size: 16))
+                    .font(.callout)
                     .foregroundColor(.secondary)
                     .transition(FirstTimeView.transition)
             }

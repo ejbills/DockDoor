@@ -15,7 +15,7 @@ struct EnabledActionRowView: View {
     var body: some View {
         HStack(alignment: .center, spacing: 12) {
             Image(systemName: iconName)
-                .font(.system(size: 20))
+                .font(.title2)
                 .foregroundColor(.accentColor)
                 .frame(width: 28, height: 28)
             VStack(alignment: .leading, spacing: 2) {
@@ -41,7 +41,7 @@ struct EnabledActionRowView: View {
                                 .foregroundStyle(.secondary)
                             Image(systemName: isGranted ? "checkmark.circle.fill" : "xmark.circle.fill")
                                 .foregroundColor(isGranted ? .green : .red)
-                                .font(.system(size: 16))
+                                .font(.callout)
                         }
                     }
                 }
@@ -49,7 +49,7 @@ struct EnabledActionRowView: View {
                 if let action {
                     Button(action: action) {
                         Text(buttonText)
-                            .font(.system(size: 12, weight: .medium))
+                            .font(.caption.weight(.medium))
                     }
                     .buttonStyle(AccentButtonStyle(color: .accentColor, small: true))
                 }
