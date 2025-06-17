@@ -25,6 +25,14 @@ struct MediaControlsView: View {
     @State private var dominantArtworkColor: Color? = nil
     @State private var capturedEmbeddedWidth: CGFloat? = nil
 
+    @State private var isArtworkExpanded: Bool = false
+    @Namespace private var artworkExpansionNamespace
+
+    @State private var isArtworkExpandedFull: Bool = false
+    @Namespace private var artworkExpansionFullNamespace
+
+    @State private var artworkRotation: Double = 0.0
+
     private enum Layout {
         static let containerSpacing: CGFloat = 8
         static let artworkSize: CGFloat = 55
@@ -36,6 +44,21 @@ struct MediaControlsView: View {
         static let embeddedArtworkSize: CGFloat = 40
         static let embeddedMediaButtonsSpacing: CGFloat = 15
         static let embeddedProgressBarHeight: CGFloat = 16
+
+        static let expandedArtworkSize: CGFloat = 200
+        static let expandedArtworkCornerRadius: CGFloat = 8
+        static let expandedMediaButtonsSpacing: CGFloat = 25
+        static let expandedPlayButtonDimension: CGFloat = 36
+        static let expandedOtherButtonDimension: CGFloat = 28
+
+        static let fullExpandedArtworkSize: CGFloat = 150
+        static let fullExpandedArtworkCornerRadius: CGFloat = 12
+        static let fullExpandedTitleFontSize: CGFloat = 18
+        static let fullExpandedArtistFontSize: CGFloat = 15
+        static let fullExpandedContainerSpacing: CGFloat = 12
+        static let fullExpandedMediaButtonsSpacing: CGFloat = 22
+        static let fullExpandedPlayButtonDimension: CGFloat = 34
+        static let fullExpandedOtherButtonDimension: CGFloat = 26
     }
 
     init(appName: String,
@@ -66,7 +89,7 @@ struct MediaControlsView: View {
             loadAppIcon()
             Task {
                 await mediaInfo.fetchMediaInfo(for: bundleIdentifier)
-                withAnimation(.smooth(duration: 0.125)) {
+                withAnimation(showAnimations ? .smooth(duration: 0.225) : nil) {
                     isLoadingMediaInfo = false
                 }
             }
@@ -81,6 +104,13 @@ struct MediaControlsView: View {
                 dominantArtworkColor = nil
             }
         }
+        .onChange(of: mediaInfo.title) { _ in
+            if !mediaInfo.title.isEmpty {
+                withAnimation(showAnimations ? .smooth(duration: 0.3) : nil) {
+                    artworkRotation += 360
+                }
+            }
+        }
         .onDisappear {
             mediaInfo.updateTimer?.invalidate()
         }
@@ -89,68 +119,157 @@ struct MediaControlsView: View {
     @ViewBuilder
     private func embeddedContent() -> some View {
         Group {
-            if isLoadingMediaInfo || mediaInfo.title.isEmpty {
-                embeddedMediaControlsSkeleton()
+            if isArtworkExpanded {
+                expandedEmbeddedDisplayCore()
+                    .globalPadding(20)
             } else {
-                VStack(alignment: .center, spacing: 6) {
-                    HStack(alignment: .center, spacing: Layout.artworkTextSpacing) {
-                        artworkView()
-                            .frame(width: Layout.embeddedArtworkSize, height: Layout.embeddedArtworkSize)
-                            .clipShape(RoundedRectangle(cornerRadius: Layout.artworkCornerRadius, style: .continuous))
-
-                        VStack(alignment: .leading, spacing: 1) {
-                            MarqueeText(
-                                text: mediaInfo.title,
-                                fontSize: 16,
-                                startDelay: 1,
-                                maxWidth: 165
-                            )
-                            .font(.callout)
-                            .fontWeight(.medium)
-                            .id(mediaInfo.title)
-
-                            if !mediaInfo.artist.isEmpty {
-                                MarqueeText(
-                                    text: mediaInfo.artist,
-                                    fontSize: 12,
-                                    startDelay: 1,
-                                    maxWidth: 150
-                                )
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                                .id(mediaInfo.artist)
-                            }
-                        }
-                        Spacer(minLength: 0)
-                    }
-
-                    HStack(spacing: Layout.embeddedMediaButtonsSpacing) {
-                        MediaControlButton(systemName: "backward.fill", isTitle: false, action: { mediaInfo.previousTrack() }, buttonDimension: 24)
-
-                        MediaControlButton(systemName: mediaInfo.isPlaying ? "pause.fill" : "play.fill", isTitle: true,
-                                           action: {
-                                               withAnimation(.easeInOut(duration: 0.2)) {
-                                                   mediaInfo.isPlaying.toggle()
-                                               }
-                                               mediaInfo.playPause()
-                                           }, buttonDimension: 28)
-                            .animation(.easeInOut(duration: 0.15), value: mediaInfo.isPlaying)
-
-                        MediaControlButton(systemName: "forward.fill", isTitle: false, action: { mediaInfo.nextTrack() }, buttonDimension: 24)
-                    }
-                }
-                .padding(12)
-                .frame(width: 250)
+                compactEmbeddedDisplayCore()
             }
         }
-        .background(
-            RoundedRectangle(cornerRadius: uniformCardRadius ? 12 : 0, style: .continuous)
-                .fill(.regularMaterial)
-        )
-        .overlay(
-            RoundedRectangle(cornerRadius: uniformCardRadius ? 12 : 0, style: .continuous)
-                .strokeBorder(Color.primary.opacity(0.1), lineWidth: 1)
-        )
+        .frame(width: isArtworkExpanded ? 280 : 250)
+        .frame(height: isArtworkExpanded ? 380 : nil)
+        .dockStyle()
+        .animation(showAnimations ? .spring(response: 0.45, dampingFraction: 0.8) : nil, value: isArtworkExpanded)
+        .animation(showAnimations ? .smooth(duration: 0.125) : nil, value: isLoadingMediaInfo)
+    }
+
+    @ViewBuilder
+    private func compactEmbeddedDisplayCore() -> some View {
+        if isLoadingMediaInfo || mediaInfo.title.isEmpty {
+            embeddedMediaControlsSkeleton()
+        } else {
+            VStack(alignment: .center, spacing: 6) {
+                HStack(alignment: .center, spacing: Layout.artworkTextSpacing) {
+                    artworkView(
+                        size: CGSize(width: Layout.embeddedArtworkSize, height: Layout.embeddedArtworkSize),
+                        cornerRadius: Layout.artworkCornerRadius
+                    )
+                    .onTapGesture {
+                        withAnimation(showAnimations ? .spring(response: 0.45, dampingFraction: 0.8) : nil) {
+                            isArtworkExpanded = true
+                        }
+                    }
+
+                    VStack(alignment: .leading, spacing: 1) {
+                        MarqueeText(
+                            text: mediaInfo.title,
+                            fontSize: 16,
+                            startDelay: 1,
+                            maxWidth: 165
+                        )
+                        .font(.callout)
+                        .fontWeight(.medium)
+                        .id("compact-title-\(mediaInfo.title)")
+                        .matchedGeometryEffect(id: "mediaTitle", in: artworkExpansionNamespace)
+
+                        if !mediaInfo.artist.isEmpty {
+                            MarqueeText(
+                                text: mediaInfo.artist,
+                                fontSize: 12,
+                                startDelay: 1,
+                                maxWidth: 150
+                            )
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                            .id("compact-artist-\(mediaInfo.artist)")
+                            .matchedGeometryEffect(id: "mediaArtist", in: artworkExpansionNamespace)
+                        }
+                    }
+                    Spacer(minLength: 0)
+                }
+
+                HStack(spacing: Layout.embeddedMediaButtonsSpacing) {
+                    MediaControlButton(systemName: "backward.fill", isTitle: false, action: { mediaInfo.previousTrack() }, buttonDimension: 24)
+
+                    MediaControlButton(systemName: mediaInfo.isPlaying ? "pause.fill" : "play.fill", isTitle: true,
+                                       action: {
+                                           withAnimation(showAnimations ? .easeInOut(duration: 0.2) : nil) {
+                                               mediaInfo.isPlaying.toggle()
+                                           }
+                                           mediaInfo.playPause()
+                                       }, buttonDimension: 28)
+                        .animation(showAnimations ? .easeInOut(duration: 0.15) : nil, value: mediaInfo.isPlaying)
+
+                    MediaControlButton(systemName: "forward.fill", isTitle: false, action: { mediaInfo.nextTrack() }, buttonDimension: 24)
+                }
+            }
+            .padding(12)
+            .animation(showAnimations ? .smooth(duration: 0.2) : nil, value: "\(mediaInfo.title)\(mediaInfo.artist)")
+        }
+    }
+
+    @ViewBuilder
+    private func expandedEmbeddedDisplayCore() -> some View {
+        VStack(alignment: .center, spacing: 15) {
+            artworkView(
+                size: CGSize(width: Layout.expandedArtworkSize, height: Layout.expandedArtworkSize),
+                cornerRadius: Layout.expandedArtworkCornerRadius
+            )
+            .shadow(color: .black.opacity(0.2), radius: 5, y: 3)
+            .onTapGesture {
+                withAnimation(showAnimations ? .spring(response: 0.45, dampingFraction: 0.8) : nil) {
+                    isArtworkExpanded = false
+                }
+            }
+
+            VStack(spacing: 2) {
+                MarqueeText(
+                    text: mediaInfo.title,
+                    fontSize: 18,
+                    startDelay: 1,
+                    maxWidth: 240
+                )
+                .fontWeight(.bold)
+                .id("expanded-title-\(mediaInfo.title)")
+                .matchedGeometryEffect(id: "mediaTitle", in: artworkExpansionNamespace)
+
+                if !mediaInfo.artist.isEmpty {
+                    MarqueeText(
+                        text: mediaInfo.artist,
+                        fontSize: 15,
+                        startDelay: 1,
+                        maxWidth: 220
+                    )
+                    .foregroundColor(.secondary)
+                    .id("expanded-artist-\(mediaInfo.artist)")
+                    .matchedGeometryEffect(id: "mediaArtist", in: artworkExpansionNamespace)
+                }
+            }
+
+            HStack(alignment: .center, spacing: 8) {
+                Text(formatTime(mediaInfo.currentTime))
+                    .font(.caption)
+                SimpleProgressBar(
+                    value: Binding(
+                        get: { mediaInfo.currentTime },
+                        set: { newValue in mediaInfo.seek(to: newValue) }
+                    ),
+                    range: 0 ... max(mediaInfo.duration, 1),
+                    barColor: dominantArtworkColor ?? .primary.opacity(0.8),
+                    backgroundColor: (dominantArtworkColor ?? .secondary).opacity(0.3)
+                )
+                .frame(height: Layout.embeddedProgressBarHeight - 2)
+                Text("-\(formatTime(max(0, mediaInfo.duration - mediaInfo.currentTime)))")
+                    .font(.caption)
+            }
+            .monospacedDigit()
+            .padding(.horizontal, 5)
+
+            HStack(spacing: Layout.expandedMediaButtonsSpacing) {
+                MediaControlButton(systemName: "backward.fill", isTitle: false, action: { mediaInfo.previousTrack() }, buttonDimension: Layout.expandedOtherButtonDimension)
+                MediaControlButton(
+                    systemName: mediaInfo.isPlaying ? "pause.fill" : "play.fill", isTitle: true,
+                    action: {
+                        withAnimation(showAnimations ? .easeInOut(duration: 0.2) : nil) { mediaInfo.isPlaying.toggle() }
+                        mediaInfo.playPause()
+                    },
+                    buttonDimension: Layout.expandedPlayButtonDimension
+                )
+                .animation(showAnimations ? .easeInOut(duration: 0.15) : nil, value: mediaInfo.isPlaying)
+                MediaControlButton(systemName: "forward.fill", isTitle: false, action: { mediaInfo.nextTrack() }, buttonDimension: Layout.expandedOtherButtonDimension)
+            }
+        }
+        .animation(showAnimations ? .smooth(duration: 0.2) : nil, value: "\(mediaInfo.title)\(mediaInfo.artist)")
     }
 
     @ViewBuilder
@@ -255,82 +374,145 @@ struct MediaControlsView: View {
             if isLoadingMediaInfo || mediaInfo.title.isEmpty {
                 mediaControlsSkeleton()
             } else {
-                VStack(alignment: .center, spacing: Layout.containerSpacing) {
-                    HStack(alignment: .center, spacing: Layout.artworkTextSpacing) {
-                        artworkView()
-                            .frame(width: Layout.artworkSize, height: Layout.artworkSize)
-                            .clipShape(RoundedRectangle(cornerRadius: Layout.artworkCornerRadius, style: .continuous))
-
-                        VStack(alignment: .leading, spacing: 2) {
-                            MarqueeText(
-                                text: mediaInfo.title,
-                                fontSize: 16,
-                                startDelay: 1,
-                                maxWidth: 180
-                            )
-                            .fontWeight(.semibold)
-                            .animation(.easeInOut(duration: 0.2), value: mediaInfo.title)
-                            .id(mediaInfo.title)
-
-                            if !mediaInfo.artist.isEmpty {
-                                MarqueeText(
-                                    text: mediaInfo.artist,
-                                    fontSize: 14,
-                                    startDelay: 1,
-                                    maxWidth: 180
-                                )
-                                .animation(.easeInOut(duration: 0.2), value: mediaInfo.artist)
-                                .id(mediaInfo.artist)
-                            }
-                        }
-                        Spacer(minLength: 0)
-                    }
-
-                    HStack(alignment: .center, spacing: 8) {
-                        Text(formatTime(mediaInfo.currentTime))
-
-                        SimpleProgressBar(
-                            value: Binding(
-                                get: { mediaInfo.currentTime },
-                                set: { newValue in
-                                    mediaInfo.seek(to: newValue)
-                                }
-                            ),
-                            range: 0 ... max(mediaInfo.duration, 1),
-                            barColor: .primary.opacity(0.8),
-                            backgroundColor: .secondary.opacity(0.8)
-                        )
-                        .frame(height: Layout.progressBarHeight)
-
-                        Text("-\(formatTime(max(0, mediaInfo.duration - mediaInfo.currentTime)))")
-                    }
-                    .font(.caption)
-                    .monospacedDigit()
-
-                    HStack(spacing: Layout.mediaButtonsSpacing) {
-                        MediaControlButton(systemName: "backward.fill", isTitle: false, action: { mediaInfo.previousTrack() })
-                        MediaControlButton(systemName: "gobackward.15", isTitle: true, action: {
-                            let newTime = max(0, mediaInfo.currentTime - 15)
-                            mediaInfo.seek(to: newTime)
-                        })
-
-                        MediaControlButton(systemName: mediaInfo.isPlaying ? "pause.fill" : "play.fill", isTitle: true,
-                                           action: {
-                                               withAnimation(.easeInOut(duration: 0.2)) {
-                                                   mediaInfo.isPlaying.toggle()
-                                               }
-                                               mediaInfo.playPause()
-                                           })
-                                           .animation(.easeInOut(duration: 0.15), value: mediaInfo.isPlaying)
-
-                        MediaControlButton(systemName: "goforward.15", isTitle: true, action: {
-                            let newTime = min(mediaInfo.duration, mediaInfo.currentTime + 15)
-                            mediaInfo.seek(to: newTime)
-                        })
-                        MediaControlButton(systemName: "forward.fill", isTitle: false, action: { mediaInfo.nextTrack() })
-                    }
+                if isArtworkExpandedFull {
+                    expandedMediaControlsCore()
+                } else {
+                    compactMediaControlsCore()
                 }
             }
+        }
+        .animation(showAnimations ? .spring(response: 0.45, dampingFraction: 0.8) : nil, value: isArtworkExpandedFull)
+    }
+
+    @ViewBuilder
+    private func compactMediaControlsCore() -> some View {
+        VStack(alignment: .center, spacing: Layout.containerSpacing) {
+            HStack(alignment: .center, spacing: Layout.artworkTextSpacing) {
+                artworkView(
+                    size: CGSize(width: Layout.artworkSize, height: Layout.artworkSize),
+                    cornerRadius: Layout.artworkCornerRadius
+                )
+                .onTapGesture {
+                    withAnimation(showAnimations ? .smooth(duration: 0.125) : nil) {
+                        isArtworkExpandedFull = true
+                    }
+                }
+
+                VStack(alignment: .leading, spacing: 2) {
+                    MarqueeText(
+                        text: mediaInfo.title,
+                        fontSize: 16,
+                        startDelay: 1,
+                        maxWidth: 180
+                    )
+                    .fontWeight(.semibold)
+                    .animation(showAnimations ? .easeInOut(duration: 0.2) : nil, value: mediaInfo.title)
+                    .id("compact-full-title-\(mediaInfo.title)")
+
+                    if !mediaInfo.artist.isEmpty {
+                        MarqueeText(
+                            text: mediaInfo.artist,
+                            fontSize: 14,
+                            startDelay: 1,
+                            maxWidth: 180
+                        )
+                        .animation(showAnimations ? .easeInOut(duration: 0.2) : nil, value: mediaInfo.artist)
+                        .id("compact-full-artist-\(mediaInfo.artist)")
+                    }
+                }
+                Spacer(minLength: 0)
+            }
+
+            standardMediaPlaybackControls()
+        }
+        .animation(showAnimations ? .smooth(duration: 0.2) : nil, value: "\(mediaInfo.title)\(mediaInfo.artist)")
+    }
+
+    @ViewBuilder
+    private func expandedMediaControlsCore() -> some View {
+        VStack(alignment: .center, spacing: Layout.fullExpandedContainerSpacing) {
+            artworkView(
+                size: CGSize(width: Layout.fullExpandedArtworkSize, height: Layout.fullExpandedArtworkSize),
+                cornerRadius: Layout.fullExpandedArtworkCornerRadius
+            )
+            .shadow(color: .black.opacity(0.2), radius: 8, y: 4)
+            .onTapGesture {
+                withAnimation(showAnimations ? .smooth(duration: 0.125) : nil) {
+                    isArtworkExpandedFull = false
+                }
+            }
+
+            VStack(spacing: 3) {
+                MarqueeText(
+                    text: mediaInfo.title,
+                    fontSize: Layout.fullExpandedTitleFontSize,
+                    startDelay: 1,
+                    maxWidth: Layout.fullExpandedArtworkSize + 20
+                )
+                .fontWeight(.bold)
+                .id("expanded-full-title-\(mediaInfo.title)")
+
+                if !mediaInfo.artist.isEmpty {
+                    MarqueeText(
+                        text: mediaInfo.artist,
+                        fontSize: Layout.fullExpandedArtistFontSize,
+                        startDelay: 1,
+                        maxWidth: Layout.fullExpandedArtworkSize
+                    )
+                    .foregroundColor(.secondary)
+                    .id("expanded-full-artist-\(mediaInfo.artist)")
+                }
+            }
+
+            standardMediaPlaybackControls()
+        }
+        .animation(showAnimations ? .smooth(duration: 0.2) : nil, value: "\(mediaInfo.title)\(mediaInfo.artist)")
+    }
+
+    @ViewBuilder
+    private func standardMediaPlaybackControls() -> some View {
+        HStack(alignment: .center, spacing: 8) {
+            Text(formatTime(mediaInfo.currentTime))
+
+            SimpleProgressBar(
+                value: Binding(
+                    get: { mediaInfo.currentTime },
+                    set: { newValue in
+                        mediaInfo.seek(to: newValue)
+                    }
+                ),
+                range: 0 ... max(mediaInfo.duration, 1),
+                barColor: .primary.opacity(0.8),
+                backgroundColor: .secondary.opacity(0.8)
+            )
+            .frame(height: Layout.progressBarHeight)
+
+            Text("-\(formatTime(max(0, mediaInfo.duration - mediaInfo.currentTime)))")
+        }
+        .font(.caption)
+        .monospacedDigit()
+
+        HStack(spacing: Layout.mediaButtonsSpacing) { // Standard spacing
+            MediaControlButton(systemName: "backward.fill", isTitle: false, action: { mediaInfo.previousTrack() })
+            MediaControlButton(systemName: "gobackward.15", isTitle: true, action: {
+                let newTime = max(0, mediaInfo.currentTime - 15)
+                mediaInfo.seek(to: newTime)
+            })
+
+            MediaControlButton(systemName: mediaInfo.isPlaying ? "pause.fill" : "play.fill", isTitle: true,
+                               action: {
+                                   withAnimation(showAnimations ? .easeInOut(duration: 0.2) : nil) {
+                                       mediaInfo.isPlaying.toggle()
+                                   }
+                                   mediaInfo.playPause()
+                               })
+                               .animation(showAnimations ? .easeInOut(duration: 0.15) : nil, value: mediaInfo.isPlaying)
+
+            MediaControlButton(systemName: "goforward.15", isTitle: true, action: {
+                let newTime = min(mediaInfo.duration, mediaInfo.currentTime + 15)
+                mediaInfo.seek(to: newTime)
+            })
+            MediaControlButton(systemName: "forward.fill", isTitle: false, action: { mediaInfo.nextTrack() })
         }
     }
 
@@ -383,21 +565,27 @@ struct MediaControlsView: View {
     }
 
     @ViewBuilder
-    private func artworkView() -> some View {
+    private func artworkView(size: CGSize, cornerRadius: CGFloat) -> some View {
         ZStack {
             if let artwork = mediaInfo.artwork {
                 Image(nsImage: artwork)
                     .resizable()
                     .aspectRatio(contentMode: .fill)
+                    .frame(width: size.width, height: size.height)
             } else {
-                RoundedRectangle(cornerRadius: Layout.artworkCornerRadius)
+                RoundedRectangle(cornerRadius: cornerRadius)
                     .fill(Color.gray.opacity(0.3))
+                    .frame(width: size.width, height: size.height)
                     .overlay(
                         Image(systemName: "music.note")
                             .font(.title2)
                     )
             }
         }
+        .frame(width: size.width, height: size.height)
+        .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
+        .rotation3DEffect(.degrees(artworkRotation), axis: (x: 0, y: 1, z: 0))
+        .animation(showAnimations ? .smooth(duration: 0.35) : nil, value: mediaInfo.artwork?.tiffRepresentation)
     }
 
     private func formatTime(_ seconds: TimeInterval) -> String {
@@ -425,7 +613,7 @@ struct MediaControlsView: View {
                     }
                     .padding(.top, 10)
                     .padding(.horizontal)
-                    .animation(.smooth(duration: 0.15), value: hoveringAppIcon)
+                    .animation(showAnimations ? .smooth(duration: 0.15) : nil, value: hoveringAppIcon)
 
                 case .shadowed:
                     HStack(spacing: 2) {
@@ -440,7 +628,7 @@ struct MediaControlsView: View {
                             .animation(nil, value: hoveringAppIcon)
                     }
                     .padding(EdgeInsets(top: -11.5, leading: 15, bottom: -1.5, trailing: 1.5))
-                    .animation(.smooth(duration: 0.15), value: hoveringAppIcon)
+                    .animation(showAnimations ? .smooth(duration: 0.15) : nil, value: hoveringAppIcon)
 
                 case .popover:
                     HStack {
@@ -462,11 +650,14 @@ struct MediaControlsView: View {
                         Spacer()
                     }
                     .offset(y: -30)
-                    .animation(.smooth(duration: 0.15), value: hoveringAppIcon)
+                    .animation(showAnimations ? .smooth(duration: 0.15) : nil, value: hoveringAppIcon)
                 }
             }
             .onHover { hover in
-                hoveringAppIcon = hover
+                withAnimation(showAnimations ? .snappy : nil) { hoveringAppIcon = hover } // Assuming .snappy is a valid Animation or should be .defaultAnimation
+                // If .snappy is custom, ensure it's handled or replaced with a standard one.
+                // For safety, let's use .default or a specific curve. .smooth is often used.
+                // Rechecking .snappy in Apple docs. It is a valid animation type.
             }
         }
     }
@@ -494,7 +685,7 @@ struct MediaControlsView: View {
                                     MaterialBlurView(material: .hudWindow).mask(Ellipse().fill(LinearGradient(gradient: Gradient(colors: [Color.white.opacity(1.0), Color.white.opacity(0.35)]), startPoint: .top, endPoint: .bottom))).blur(radius: 5)
                                 }.frame(width: labelSize.width + 30)
                             )
-                            .animation(.easeInOut(duration: 0.2), value: trimmedAppName)
+                            .animation(showAnimations ? .easeInOut(duration: 0.2) : nil, value: trimmedAppName)
                     } else {
                         baseText.foregroundStyle(Color.primary).shadow(stacked: 2, radius: 6)
                             .background(
@@ -502,17 +693,17 @@ struct MediaControlsView: View {
                                     MaterialBlurView(material: .hudWindow).mask(Ellipse().fill(LinearGradient(gradient: Gradient(colors: [Color.white.opacity(1.0), Color.white.opacity(0.35)]), startPoint: .top, endPoint: .bottom))).blur(radius: 5)
                                 }.frame(width: labelSize.width + 30)
                             )
-                            .animation(.easeInOut(duration: 0.2), value: trimmedAppName)
+                            .animation(showAnimations ? .easeInOut(duration: 0.2) : nil, value: trimmedAppName)
                     }
                 case .default, .popover:
                     if trimmedAppName == "DockDoor" {
                         FluidGradient(blobs: rainbowGradientColors, highlights: rainbowGradientHighlights, speed: 0.65, blur: 0.5)
                             .frame(width: labelSize.width, height: labelSize.height)
                             .mask(baseText)
-                            .animation(.easeInOut(duration: 0.2), value: trimmedAppName)
+                            .animation(showAnimations ? .easeInOut(duration: 0.2) : nil, value: trimmedAppName)
                     } else {
                         baseText.foregroundStyle(Color.primary)
-                            .animation(.easeInOut(duration: 0.2), value: trimmedAppName)
+                            .animation(showAnimations ? .easeInOut(duration: 0.2) : nil, value: trimmedAppName)
                     }
                 }
             }
@@ -543,6 +734,7 @@ struct MediaControlButton: View {
     let action: () -> Void
     var buttonDimension: CGFloat = 28
 
+    @Default(.showAnimations) var showAnimations
     @State private var isHovering = false
 
     var body: some View {
@@ -562,18 +754,7 @@ struct MediaControlButton: View {
                 .frame(width: buttonDimension + 8, height: buttonDimension + 8)
         )
         .onHover { hovering in
-            withAnimation(.easeInOut(duration: 0.10)) { isHovering = hovering }
-        }
-    }
-}
-
-private extension View {
-    @ViewBuilder
-    func symbolReplaceTransition() -> some View {
-        if #available(macOS 14.0, *) {
-            self.contentTransition(.symbolEffect(.replace))
-        } else {
-            self
+            withAnimation(showAnimations ? .easeInOut(duration: 0.10) : nil) { isHovering = hovering }
         }
     }
 }
