@@ -1,5 +1,5 @@
 {
-  "originHash" : "5248e828952ad393abc81a18a8a9c34a4822127cc0a9ff2cfb3a5e4715c9fbd3",
+  "originHash" : "6c00261d471427f8a867f26a58903cfb0df2b10dd2839d18219d77860d55d05f",
   "pins" : [
     {
       "identity" : "confettiswiftui",
@@ -16,7 +16,7 @@
       "location" : "https://github.com/sindresorhus/Defaults",
       "state" : {
         "branch" : "main",
-        "revision" : "00c82eff4550c87cf9c547d7e5493a6a97837061"
+        "revision" : "d88a5c8cdb498e7536ef5ff88e7120e9b5874806"
       }
     },
     {
@@ -44,6 +44,15 @@
       "state" : {
         "branch" : "main",
         "revision" : "a04ec1c363be3627734f6dad757d82f5d4fa8fcc"
+      }
+    },
+    {
+      "identity" : "mediaremote-adapter",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ejbills/mediaremote-adapter.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "a487c49929d5af84ebf8f5ee8fb6cff9184bfb1d"
       }
     },
     {
@@ -78,8 +87,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/sparkle-project/Sparkle",
       "state" : {
-        "revision" : "0ca3004e98712ea2b39dd881d28448630cce1c99",
-        "version" : "2.7.0"
+        "revision" : "df074165274afaa39539c05d57b0832620775b11",
+        "version" : "2.7.1"
       }
     },
     {

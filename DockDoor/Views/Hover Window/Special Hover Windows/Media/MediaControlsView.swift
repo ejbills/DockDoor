@@ -142,9 +142,6 @@ struct MediaControlsView: View {
                 showingLyricsInFull = false
             }
         }
-        .onDisappear {
-            mediaInfo.updateTimer?.invalidate()
-        }
     }
 
     @ViewBuilder
