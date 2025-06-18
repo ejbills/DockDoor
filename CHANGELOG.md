@@ -38,6 +38,38 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://buymeacoffee.com/keplercafe</div>
 
+<a id="v1.16"></a>
+# [v1.16](https://github.com/ejbills/DockDoor/releases/tag/v1.16) - 2025-06-18
+
+## 🎵 New Features
+
+### Lyric Mode for Pinned Media Controls
+- **Added expandable lyric mode** to pinned media control widgets
+- **Tap album artwork** on pinned widgets to expand and reveal additional controls
+- **Lyrics toggle button** appears in expanded view to enable/disable lyric display
+- **Real-time lyric synchronization** displays current lyrics alongside music playback
+- **Seamless integration** works with existing pinned Spotify and Apple Music widgets
+
+### Enhanced Pinned Widget Experience
+- **Interactive album artwork** now serves as an expansion trigger for additional features
+- **Expanded control panel** provides access to advanced media features beyond basic playback
+- **Compact and expanded modes** allow users to choose between minimal and feature-rich widget displays
+- **Persistent lyric display** remains active while widget is pinned and lyrics are enabled
+
+## 🔧 Improvements
+- **Optimized widget performance** maintains smooth operation even with lyric data processing
+- **Optimized memory** by removing SwiftUI uses of .system() fonts which caused abandoned memory
+
+## 🎬 Demo
+
+![Clipboard-20250618-014356-811(1)](https://github.com/user-attachments/assets/756f3f45-f363-4ecc-b1a8-a9f6dadf1ed7)
+
+
+
+
+[Changes][v1.16]
+
+
 <a id="v1.15.2"></a>
 # [v1.15.2](https://github.com/ejbills/DockDoor/releases/tag/v1.15.2) - 2025-06-16
 
@@ -1133,6 +1165,7 @@ v1.0
 [Changes][releases]
 
 
+[v1.16]: https://github.com/ejbills/DockDoor/compare/v1.15.2...v1.16
 [v1.15.2]: https://github.com/ejbills/DockDoor/compare/v1.15.1...v1.15.2
 [v1.15.1]: https://github.com/ejbills/DockDoor/compare/v1.15...v1.15.1
 [v1.15]: https://github.com/ejbills/DockDoor/compare/v1.14.4...v1.15
