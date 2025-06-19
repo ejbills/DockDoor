@@ -38,6 +38,22 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://buymeacoffee.com/keplercafe</div>
 
+<a id="v1.17"></a>
+# [v1.17](https://github.com/ejbills/DockDoor/releases/tag/v1.17) - 2025-06-19
+
+## 🎵 New Features
+
+### Audio Output Configuration
+- **Added audio output selection** in expanded artwork mode for pinned media widgets
+- ![CleanShot 2025-06-18 at 20 42 58](https://github.com/user-attachments/assets/8680e257-1bff-4c68-aadd-179b627fdac7)
+
+### Lyric Experience
+- **Improved lyric UX** with refined display and interaction patterns
+- **Better synchronization** for more accurate lyric timing
+
+[Changes][v1.17]
+
+
 <a id="v1.16"></a>
 # [v1.16](https://github.com/ejbills/DockDoor/releases/tag/v1.16) - 2025-06-18
 
@@ -1165,6 +1181,7 @@ v1.0
 [Changes][releases]
 
 
+[v1.17]: https://github.com/ejbills/DockDoor/compare/v1.16...v1.17
 [v1.16]: https://github.com/ejbills/DockDoor/compare/v1.15.2...v1.16
 [v1.15.2]: https://github.com/ejbills/DockDoor/compare/v1.15.1...v1.15.2
 [v1.15.1]: https://github.com/ejbills/DockDoor/compare/v1.15...v1.15.1
