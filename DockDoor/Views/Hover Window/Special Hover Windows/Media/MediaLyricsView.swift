@@ -150,7 +150,7 @@ struct MediaLyricsView: View {
                 let isCurrent = i == currentIndex
 
                 let timeSinceLyricStart = mediaInfo.currentTime - lyric.startTime
-                let isInLongBreak = isCurrent && timeSinceLyricStart > 6.0 && mediaInfo.isPlaying
+                let isInLongBreak = isCurrent && timeSinceLyricStart > 15.0 && mediaInfo.isPlaying
 
                 visibleItems.append(LyricDisplayItem(
                     lyric: lyric,

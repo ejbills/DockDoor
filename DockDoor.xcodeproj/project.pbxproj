@@ -76,6 +76,7 @@
 		BB4B444B2C372A4E006680DC /* WindowPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB4B444A2C372A4C006680DC /* WindowPreview.swift */; };
 		BB4ED9072C3C75CA00BBDD16 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = BB4ED9062C3C75CA00BBDD16 /* Localizable.xcstrings */; };
 		BB4ED9092C3CD97400BBDD16 /* Traffic Light Buttons.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB4ED9082C3CD96D00BBDD16 /* Traffic Light Buttons.swift */; };
+		BB5059322E0386B500BDD731 /* AudioOutputDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB5059312E0386B500BDD731 /* AudioOutputDevice.swift */; };
 		BB52EDF02C5BEFE3006A64A4 /* HiddenModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB52EDEF2C5BEFE3006A64A4 /* HiddenModifier.swift */; };
 		BB6021D02D1E60EA00D47C86 /* Flow Container Calculations.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6021CF2D1E60E100D47C86 /* Flow Container Calculations.swift */; };
 		BB6021D22D1E613800D47C86 /* Window Image Sizing Calculations.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6021D12D1E613100D47C86 /* Window Image Sizing Calculations.swift */; };
@@ -201,6 +202,7 @@
 		BB4B444A2C372A4C006680DC /* WindowPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowPreview.swift; sourceTree = "<group>"; };
 		BB4ED9062C3C75CA00BBDD16 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		BB4ED9082C3CD96D00BBDD16 /* Traffic Light Buttons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Traffic Light Buttons.swift"; sourceTree = "<group>"; };
+		BB5059312E0386B500BDD731 /* AudioOutputDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioOutputDevice.swift; sourceTree = "<group>"; };
 		BB52EDEF2C5BEFE3006A64A4 /* HiddenModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HiddenModifier.swift; sourceTree = "<group>"; };
 		BB6021CF2D1E60E100D47C86 /* Flow Container Calculations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Flow Container Calculations.swift"; sourceTree = "<group>"; };
 		BB6021D12D1E613100D47C86 /* Window Image Sizing Calculations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Window Image Sizing Calculations.swift"; sourceTree = "<group>"; };
@@ -514,6 +516,7 @@
 		BB638EF82E0216D00010077D /* Media */ = {
 			isa = PBXGroup;
 			children = (
+				BB5059312E0386B500BDD731 /* AudioOutputDevice.swift */,
 				BB638F0E2E02175C0010077D /* MediaControlsSkeleton.swift */,
 				BB638F0B2E0217480010077D /* MediaLyricsView.swift */,
 				BB638F092E02172B0010077D /* MediaLyricsButton.swift */,
@@ -847,6 +850,7 @@
 				BB15E1F12C8FBCD4002ECFB9 /* BugAndFeatureReporting.swift in Sources */,
 				BB0036D02D24AAD20072C61E /* CGPoint.swift in Sources */,
 				BB15E1F52C8FBEAB002ECFB9 /* DonationView.swift in Sources */,
+				BB5059322E0386B500BDD731 /* AudioOutputDevice.swift in Sources */,
 				BB90A5ED2DFA13E000857722 /* CalendarInfo.swift in Sources */,
 				BBCFAE402C266234002E1516 /* FirstTimeView.swift in Sources */,
 				BB4B444B2C372A4E006680DC /* WindowPreview.swift in Sources */,

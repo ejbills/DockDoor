@@ -55,6 +55,7 @@ struct MediaControlsEmbeddedView: View {
                             .id("compact-artist-\(mediaInfo.artist)")
                         }
                     }
+
                     Spacer(minLength: 0)
                 }
 

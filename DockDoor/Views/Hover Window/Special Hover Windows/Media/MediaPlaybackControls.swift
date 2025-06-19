@@ -68,6 +68,12 @@ struct MediaPlaybackControls: View {
                         mediaInfo.seek(to: newTime)
                     })
                     MediaControlButton(systemName: "forward.fill", isTitle: false, action: { mediaInfo.nextTrack() })
+                }
+
+                HStack {
+                    AudioDevicePickerView()
+
+                    Spacer()
 
                     MediaLyricsButton(
                         mediaInfo: mediaInfo,
