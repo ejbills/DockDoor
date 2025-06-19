@@ -24,7 +24,7 @@ final class AudioDeviceManager: ObservableObject {
     func refresh() {
         var address = AudioObjectPropertyAddress(mSelector: kAudioHardwarePropertyDevices,
                                                  mScope: kAudioObjectPropertyScopeGlobal,
-                                                 mElement: kAudioObjectPropertyElementMaster)
+                                                 mElement: kAudioObjectPropertyElementMain)
 
         var dataSize: UInt32 = 0
         AudioObjectGetPropertyDataSize(systemID, &address, 0, nil, &dataSize)
@@ -37,23 +37,31 @@ final class AudioDeviceManager: ObservableObject {
         for id in ids {
             var nameAddr = AudioObjectPropertyAddress(mSelector: kAudioObjectPropertyName,
                                                       mScope: kAudioObjectPropertyScopeGlobal,
-                                                      mElement: kAudioObjectPropertyElementMaster)
-            var cfName: CFString = "" as CFString
-            var nameSize = UInt32(MemoryLayout<CFString>.size)
-            guard AudioObjectGetPropertyData(id, &nameAddr, 0, nil, &nameSize, &cfName) == noErr else { continue }
+                                                      mElement: kAudioObjectPropertyElementMain)
+
+            var nameSize: UInt32 = 0
+            guard AudioObjectGetPropertyDataSize(id, &nameAddr, 0, nil, &nameSize) == noErr else { continue }
+
+            let namePtr = UnsafeMutableRawPointer.allocate(byteCount: Int(nameSize), alignment: MemoryLayout<CFString>.alignment)
+            defer { namePtr.deallocate() }
+
+            guard AudioObjectGetPropertyData(id, &nameAddr, 0, nil, &nameSize, namePtr) == noErr else { continue }
+            let cfName = namePtr.load(as: CFString.self)
 
             var streamAddr = AudioObjectPropertyAddress(mSelector: kAudioDevicePropertyStreamConfiguration,
                                                         mScope: kAudioDevicePropertyScopeOutput,
-                                                        mElement: kAudioObjectPropertyElementMaster)
+                                                        mElement: kAudioObjectPropertyElementMain)
             var cfgSize: UInt32 = 0
             guard AudioObjectGetPropertyDataSize(id, &streamAddr, 0, nil, &cfgSize) == noErr else { continue }
             let ptr = UnsafeMutableRawPointer.allocate(byteCount: Int(cfgSize), alignment: MemoryLayout<AudioBufferList>.alignment)
             defer { ptr.deallocate() }
             guard AudioObjectGetPropertyData(id, &streamAddr, 0, nil, &cfgSize, ptr) == noErr else { continue }
             let listPtr = ptr.bindMemory(to: AudioBufferList.self, capacity: 1)
-            let buffers = UnsafeBufferPointer(start: &listPtr.pointee.mBuffers,
-                                              count: Int(listPtr.pointee.mNumberBuffers))
-            let channels = buffers.reduce(0) { $0 + Int($1.mNumberChannels) }
+
+            let channels = withUnsafePointer(to: &listPtr.pointee.mBuffers) { buffersPtr in
+                let buffers = UnsafeBufferPointer(start: buffersPtr, count: Int(listPtr.pointee.mNumberBuffers))
+                return buffers.reduce(0) { $0 + Int($1.mNumberChannels) }
+            }
             guard channels > 0 else { continue }
 
             list.append(AudioOutputDevice(id: id, name: cfName as String))
@@ -63,7 +71,7 @@ final class AudioDeviceManager: ObservableObject {
         var defSize = UInt32(MemoryLayout<AudioObjectID>.size)
         var defAddr = AudioObjectPropertyAddress(mSelector: kAudioHardwarePropertyDefaultOutputDevice,
                                                  mScope: kAudioObjectPropertyScopeGlobal,
-                                                 mElement: kAudioObjectPropertyElementMaster)
+                                                 mElement: kAudioObjectPropertyElementMain)
         AudioObjectGetPropertyData(systemID, &defAddr, 0, nil, &defSize, &defID)
 
         DispatchQueue.main.async {
@@ -74,10 +82,10 @@ final class AudioDeviceManager: ObservableObject {
 
     func setDefault(device: AudioOutputDevice) {
         var id = device.id
-        var size = UInt32(MemoryLayout<AudioObjectID>.size)
+        let size = UInt32(MemoryLayout<AudioObjectID>.size)
         var addr = AudioObjectPropertyAddress(mSelector: kAudioHardwarePropertyDefaultOutputDevice,
                                               mScope: kAudioObjectPropertyScopeGlobal,
-                                              mElement: kAudioObjectPropertyElementMaster)
+                                              mElement: kAudioObjectPropertyElementMain)
         if AudioObjectSetPropertyData(AudioObjectID(kAudioObjectSystemObject), &addr, 0, nil, size, &id) == noErr {
             DispatchQueue.main.async {
                 self.currentDevice = device
@@ -89,19 +97,17 @@ final class AudioDeviceManager: ObservableObject {
     private func startListening() {
         var addr = AudioObjectPropertyAddress(mSelector: kAudioHardwarePropertyDefaultOutputDevice,
                                               mScope: kAudioObjectPropertyScopeGlobal,
-                                              mElement: kAudioObjectPropertyElementMaster)
+                                              mElement: kAudioObjectPropertyElementMain)
         AudioObjectAddPropertyListenerBlock(systemID, &addr, DispatchQueue.main) { _, _ in
             self.refresh()
-            noErr
         }
     }
 
     private func stopListening() {
         var addr = AudioObjectPropertyAddress(mSelector: kAudioHardwarePropertyDefaultOutputDevice,
                                               mScope: kAudioObjectPropertyScopeGlobal,
-                                              mElement: kAudioObjectPropertyElementMaster)
+                                              mElement: kAudioObjectPropertyElementMain)
         AudioObjectRemovePropertyListenerBlock(systemID, &addr, DispatchQueue.main) { _, _ in
-            noErr
         }
     }
 }

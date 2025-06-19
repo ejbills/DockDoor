@@ -142,7 +142,6 @@ struct MediaLyricsView: View {
         guard !mediaInfo.lyrics.isEmpty else { return [] }
 
         var visibleItems: [LyricDisplayItem] = []
-        // let maxVisibleLines = MediaControlsLayout.lyricsMaxVisibleLines // Not strictly needed if we show all and scroll
 
         if let currentIndex = mediaInfo.currentLyricIndex {
             for i in 0 ..< mediaInfo.lyrics.count {
