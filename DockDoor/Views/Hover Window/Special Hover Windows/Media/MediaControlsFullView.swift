@@ -45,7 +45,6 @@ struct MediaControlsFullView: View {
             content: {
                 VStack(spacing: 0) {
                     mediaControlsContent()
-                        .globalPadding(20)
                 }
                 .padding(.top, (appNameStyle == .default && showAppTitleData) ? 25 : 0)
                 .overlay(alignment: .topLeading) {
@@ -54,7 +53,9 @@ struct MediaControlsFullView: View {
                         appIcon: appIcon,
                         hoveringAppIcon: hoveringAppIcon
                     )
+                    .padding([.top, .leading], 4)
                 }
+                .dockStyle()
                 .padding(.top, (appNameStyle == .popover && showAppTitleData) ? 30 : 0)
                 .overlay {
                     WindowDismissalContainer(appName: appName,
@@ -64,7 +65,8 @@ struct MediaControlsFullView: View {
                         .allowsHitTesting(false)
                 }
             },
-            highlightColor: dominantArtworkColor
+            highlightColor: dominantArtworkColor,
+            preventDockStyling: true
         )
         .pinnable(appName: appName, bundleIdentifier: bundleIdentifier, type: .media)
     }
@@ -73,10 +75,8 @@ struct MediaControlsFullView: View {
     private func pinnedContent() -> some View {
         VStack(spacing: 0) {
             mediaControlsContent()
-                .globalPadding(20)
         }
         .padding(.top, (appNameStyle == .default && showAppTitleData) ? 25 : 0)
-        .dockStyle(highlightColor: dominantArtworkColor)
         .overlay(alignment: .topLeading) {
             SharedHoverAppTitle(
                 appName: appName,
@@ -85,6 +85,7 @@ struct MediaControlsFullView: View {
             )
             .padding([.top, .leading], 4)
         }
+        .dockStyle()
         .padding(.top, (appNameStyle == .popover && showAppTitleData) ? 30 : 0)
     }
 
@@ -103,6 +104,7 @@ struct MediaControlsFullView: View {
         }
         .animation(showAnimations ? .spring(response: 0.45, dampingFraction: 0.8) : nil, value: isArtworkExpandedFull)
         .animation(showAnimations ? .spring(response: 0.45, dampingFraction: 0.8) : nil, value: showingLyricsInFull)
+        .globalPadding(20)
     }
 
     @ViewBuilder

@@ -38,5 +38,6 @@ struct CalendarContentView: View {
                 .frame(minHeight: 175, alignment: calendarInfo.events.isEmpty ? .center : .topLeading)
             }
         }
+        .globalPadding(20)
     }
 }

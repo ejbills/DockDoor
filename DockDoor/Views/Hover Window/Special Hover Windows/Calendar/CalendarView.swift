@@ -24,9 +24,6 @@ struct CalendarView: View {
     let idealWidth: CGFloat?
 
     @Default(.uniformCardRadius) private var uniformCardRadius
-    @Default(.showAppName) private var showAppTitleData
-    @Default(.showAppIconOnly) private var showAppIconOnly
-    @Default(.appNameStyle) private var appNameStyle
 
     @State private var appIcon: NSImage? = nil
     @State private var hoveringAppIcon = false
