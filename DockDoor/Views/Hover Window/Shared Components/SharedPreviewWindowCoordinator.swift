@@ -420,6 +420,8 @@ final class SharedPreviewWindowCoordinator: NSPanel {
                 embeddedContentType: finalEmbeddedContentType
             )
         }
+
+        dockManager.preventDockHiding(centeredHoverWindowState != nil)
     }
 
     @MainActor
@@ -431,7 +433,6 @@ final class SharedPreviewWindowCoordinator: NSPanel {
     {
         guard !windows.isEmpty else { return }
 
-        dockManager.preventDockHiding(centeredHoverWindowState != nil)
         let shouldCenterOnScreen = centeredHoverWindowState != .none
 
         let screen = mouseScreen ?? NSScreen.main!
