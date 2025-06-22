@@ -38,6 +38,15 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://buymeacoffee.com/keplercafe</div>
 
+<a id="v1.17.1"></a>
+# [v1.17.1](https://github.com/ejbills/DockDoor/releases/tag/v1.17.1) - 2025-06-22
+
+- Fixes crash when pinning calendar
+- Fixes dock hide manager positioning issue
+
+[Changes][v1.17.1]
+
+
 <a id="v1.17"></a>
 # [v1.17](https://github.com/ejbills/DockDoor/releases/tag/v1.17) - 2025-06-19
 
@@ -1181,6 +1190,7 @@ v1.0
 [Changes][releases]
 
 
+[v1.17.1]: https://github.com/ejbills/DockDoor/compare/v1.17...v1.17.1
 [v1.17]: https://github.com/ejbills/DockDoor/compare/v1.16...v1.17
 [v1.16]: https://github.com/ejbills/DockDoor/compare/v1.15.2...v1.16
 [v1.15.2]: https://github.com/ejbills/DockDoor/compare/v1.15.1...v1.15.2
