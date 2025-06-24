@@ -5313,7 +5313,7 @@
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Додати додаткові папки для сканування застосунків"
+            "value" : "Додати додаткові теки для сканування застосунків"
           }
         },
         "vi" : {
@@ -5503,7 +5503,7 @@
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Додати додаткові папки для сканування застосунків. Це корисно, якщо ви зберігаєте застосунки в нестандартних місцях."
+            "value" : "Додати додаткові теки для сканування застосунків. Це корисно, якщо ви зберігаєте застосунки в нестандартних місцях."
           }
         },
         "vi" : {
@@ -6264,7 +6264,7 @@
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Налаштовує швидкість реагування та поведінку програми під час взаємодії."
+            "value" : "Налаштовує швидкість реагування та поведінку застосунку під час взаємодії."
           }
         },
         "vi" : {
@@ -15402,7 +15402,7 @@
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Поточний ярлик"
+            "value" : "Поточне скорочення"
           }
         },
         "vi" : {
@@ -16164,7 +16164,7 @@
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Типово"
+            "value" : "Типовий"
           }
         },
         "vi" : {
@@ -16546,7 +16546,7 @@
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Детально"
+            "value" : "Деталізований"
           }
         },
         "vi" : {
@@ -18067,8 +18067,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Preview Window Hover Action"
+            "state" : "translated",
+            "value" : "Дія наведення курсора на вікно попереднього перегляду"
           }
         },
         "vi" : {
@@ -18257,8 +18257,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Previews"
+            "state" : "translated",
+            "value" : "Попередній перегляд Dock"
           }
         },
         "vi" : {
@@ -18448,8 +18448,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Previews & Window Switcher"
+            "state" : "translated",
+            "value" : "Попередній перегляд Dock та перемикач вікон"
           }
         },
         "vi" : {
@@ -18639,8 +18639,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Previews only"
+            "state" : "translated",
+            "value" : "Тільки попередній перегляд Dock"
           }
         },
         "vi" : {
@@ -18829,8 +18829,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "DockDoor does not record your screen or audio. It only captures static window previews. No information is stored or shared; all processing occurs privately on your device."
+            "state" : "translated",
+            "value" : "DockDoor не записує ваш екран чи аудіо. Він лише записує статичні попередні перегляди вікон. Жодна інформація не зберігається та не передається; вся обробка відбувається конфіденційно на вашому пристрої."
           }
         },
         "vi" : {
@@ -19019,8 +19019,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "DockDoor needs permission to access your calendar."
+            "state" : "translated",
+            "value" : "DockDoor потрібен дозвіл на доступ до вашого календаря."
           }
         },
         "vi" : {
@@ -19209,8 +19209,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "DockDoor needs screen recording access. In macOS Sequoia, you'll see this prompt every week or month and after reboots. This is a new system-wide security policy for all screen capture apps."
+            "state" : "translated",
+            "value" : "DockDoor потрібен доступ до записування екрана. У macOS Sequoia ви бачитимете це повідомлення щотижня або щомісяця та після перезавантажень. Це нова політика безпеки системи для всіх застосунків із записуванням екрана."
           }
         },
         "vi" : {
@@ -19399,8 +19399,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Edit Color"
+            "state" : "translated",
+            "value" : "Редагувати колір"
           }
         },
         "vi" : {
@@ -19590,8 +19590,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Elements Overlap"
+            "state" : "translated",
+            "value" : "Перекриття елементів"
           }
         },
         "vi" : {
@@ -19780,8 +19780,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Embed controls with window previews (if previews shown)"
+            "state" : "translated",
+            "value" : "Вбудовувати елементи керування з попереднім переглядом вікон (якщо попередній перегляд показується)"
           }
         },
         "vi" : {
@@ -19972,8 +19972,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Embedded"
+            "state" : "translated",
+            "value" : "Вбудовано"
           }
         },
         "vi" : {
@@ -20162,8 +20162,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable automatic checking for updates"
+            "state" : "translated",
+            "value" : "Увімкнути автоматичну перевірку оновлень"
           }
         },
         "vi" : {
@@ -24360,7 +24360,7 @@
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Для підтримуваних програм (Music, Spotify, Календар) показувати інтерактивні елементи керування замість попереднього перегляду вікон під час наведення курсора на їхні значки в Dock."
+            "value" : "Для підтримуваних застосунків (Music, Spotify, Календар) показувати інтерактивні елементи керування замість попереднього перегляду вікон під час наведення курсора на їхні значки в Dock."
           }
         },
         "vi" : {
@@ -28166,8 +28166,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hide all app windows on dock icon click"
+            "state" : "translated",
+            "value" : "Приховувати всі вікна застосунків після натискання на значок Dock"
           }
         },
         "vi" : {
@@ -28357,8 +28357,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hide all application windows when clicking on the dock icon"
+            "state" : "translated",
+            "value" : "Приховувати всі вікна застосунків після натискання на значок Dock"
           }
         },
         "vi" : {
@@ -28547,8 +28547,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Highlight Gradient Colors"
+            "state" : "translated",
+            "value" : "Підсвічувати градієнти кольорів"
           }
         },
         "vi" : {
@@ -28738,8 +28738,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hover Window Open Delay"
+            "state" : "translated",
+            "value" : "Затримка відкриття вікна при наведенні"
           }
         },
         "vi" : {
@@ -28929,8 +28929,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hover Window Title Style"
+            "state" : "translated",
+            "value" : "Стиль заголовка вікна при наведенні курсора"
           }
         },
         "vi" : {
@@ -29119,8 +29119,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "How to Set Up"
+            "state" : "translated",
+            "value" : "Як налаштувати"
           }
         },
         "vi" : {
@@ -29310,8 +29310,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "If disabled, special controls only appear if no window previews are available (e.g., all windows minimized). If enabled, controls integrate with previews when possible."
+            "state" : "translated",
+            "value" : "Якщо вимкнено, спеціальні елементи керування показуються лише за відсутності попереднього перегляду вікон (наприклад, усі вікна згорнуті). Якщо ввімкнено, елементи керування інтегруються з попереднім переглядом, коли це можливо."
           }
         },
         "vi" : {
@@ -29500,8 +29500,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "If enabled, controls integrate with previews when possible."
+            "state" : "translated",
+            "value" : "Якщо ввімкнено, елементи керування інтегруються з попередніми переглядами, коли це можливо."
           }
         },
         "vi" : {
@@ -29690,8 +29690,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "If you find DockDoor useful, consider donating. Your support helps keep the project going!"
+            "state" : "translated",
+            "value" : "Якщо ви вважаєте DockDoor корисним, подумайте про пожертву. Ваша підтримка допомагає продовжувати проєкт!"
           }
         },
         "vi" : {
@@ -29881,8 +29881,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "If you need to access the menu bar icon, launch the app to reveal it for 10 seconds."
+            "state" : "translated",
+            "value" : "Якщо вам потрібно отримати доступ до значка в Центрі керування, запустіть застосунок, щоб показати його на 10 секунд."
           }
         },
         "vi" : {
@@ -30071,8 +30071,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Ignore apps with one window"
+            "state" : "translated",
+            "value" : "Ігнорувати додатки одним вікном"
           }
         },
         "vi" : {
@@ -30262,8 +30262,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Ignore Apps with One Window"
+            "state" : "translated",
+            "value" : "Ігнорувати застосунки з одним вікном"
           }
         },
         "vi" : {
@@ -30453,8 +30453,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Important: When recording, press ONLY the trigger key (e.g. just press Tab if you want command + Tab). Do not press the initialization key during recording."
+            "state" : "translated",
+            "value" : "Важливо: Під час запису натискайте ТІЛЬКИ клавішу-тригер (наприклад, просто натисніть Tab, якщо хочете Command + Tab). Не натискайте клавішу ініціалізації під час запису."
           }
         },
         "vi" : {
@@ -30644,8 +30644,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Include Hidden and Minimized Windows in the Window Switcher"
+            "state" : "translated",
+            "value" : "Включити приховані та згорнуті вікна в перемикач вікон"
           }
         },
         "vi" : {
@@ -30834,8 +30834,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Include hidden/minimized windows in Switcher"
+            "state" : "translated",
+            "value" : "Включити приховані/згорнуті вікна у Перемикач"
           }
         },
         "vi" : {
@@ -31025,8 +31025,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Include Hidden/Minimized Windows in Switcher"
+            "state" : "translated",
+            "value" : "Включити приховані/згорнуті вікна у Перемикач"
           }
         },
         "vi" : {
@@ -31215,8 +31215,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Initialization Key"
+            "state" : "translated",
+            "value" : "Клавіша ініціалізації"
           }
         },
         "vi" : {
@@ -31405,8 +31405,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Instructions"
+            "state" : "translated",
+            "value" : "Інструкції"
           }
         },
         "vi" : {
@@ -31595,8 +31595,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Interaction & Behavior (Dock Previews)"
+            "state" : "translated",
+            "value" : "Взаємодія та поведінка (попередній перегляд Dock)"
           }
         },
         "vi" : {
@@ -31785,8 +31785,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Join our Discord"
+            "state" : "translated",
+            "value" : "Доєднуйся до нас у Discord"
           }
         },
         "vi" : {
@@ -31975,8 +31975,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Keep previews visible during lateral movement"
+            "state" : "translated",
+            "value" : "Зберігати попередній перегляд видимим під час бокового руху"
           }
         },
         "vi" : {
@@ -32165,8 +32165,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Keyboard Shortcut"
+            "state" : "translated",
+            "value" : "Клавіатурне скорочення"
           }
         },
         "vi" : {
@@ -32357,8 +32357,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Large"
+            "state" : "translated",
+            "value" : "Великий"
           }
         },
         "vi" : {
@@ -32547,8 +32547,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Large (1/2)"
+            "state" : "translated",
+            "value" : "Великий (1/2)"
           }
         },
         "vi" : {
@@ -32737,8 +32737,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Last checked: %@"
+            "state" : "translated",
+            "value" : "Востаннє перевірено: %@"
           }
         },
         "vi" : {
@@ -32927,8 +32927,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Launch DockDoor at login"
+            "state" : "translated",
+            "value" : "Запускати DockDoor при вході в систему"
           }
         },
         "vi" : {
@@ -33118,8 +33118,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Layout Limits"
+            "state" : "translated",
+            "value" : "Обмеження макета"
           }
         },
         "vi" : {
@@ -33308,8 +33308,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Let's set things up"
+            "state" : "translated",
+            "value" : "Давайте все налаштуємо"
           }
         },
         "vi" : {
@@ -33498,8 +33498,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Lightweight"
+            "state" : "translated",
+            "value" : "Полегшений"
           }
         },
         "vi" : {
@@ -33556,8 +33556,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Loading lyrics..."
+            "state" : "translated",
+            "value" : "Songtexte laden..."
           }
         },
         "el" : {
@@ -33688,8 +33688,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Loading lyrics..."
+            "state" : "translated",
+            "value" : "Завантаження тексту..."
           }
         },
         "vi" : {
@@ -33878,8 +33878,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Loading preview..."
+            "state" : "translated",
+            "value" : "Завантаження попереднього перегляду..."
           }
         },
         "vi" : {
@@ -34068,8 +34068,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Max Rows for Switcher Previews"
+            "state" : "translated",
+            "value" : "Макс. кількість рядків для попереднього перегляду Перемикача"
           }
         },
         "vi" : {
@@ -34258,8 +34258,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Max Stacks for Dock Previews"
+            "state" : "translated",
+            "value" : "Мак. кількість стеків для попереднього перегляду в Dock"
           }
         },
         "vi" : {
@@ -34449,8 +34449,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Maximum Horizontal Rows"
+            "state" : "translated",
+            "value" : "Макс. кількість горизонтальних рядків"
           }
         },
         "vi" : {
@@ -34639,8 +34639,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Maximum number of colors (%lld) reached."
+            "state" : "translated",
+            "value" : "Досягнуто максимальної кількості кольорів (%lld)."
           }
         },
         "vi" : {
@@ -34830,8 +34830,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Maximum Vertical Columns"
+            "state" : "translated",
+            "value" : "Макс. кількість вертикальних стовпчиків"
           }
         },
         "vi" : {
@@ -35022,8 +35022,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Medium"
+            "state" : "translated",
+            "value" : "Середній"
           }
         },
         "vi" : {
@@ -35212,8 +35212,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Medium (1/%lld)"
+            "state" : "translated",
+            "value" : "Середній (1/%lld)"
           }
         },
         "vi" : {
@@ -35403,8 +35403,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Menu Bar Icon Hidden"
+            "state" : "translated",
+            "value" : "Іконка в Центрі керування прихована"
           }
         },
         "vi" : {
@@ -35593,8 +35593,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Minimize"
+            "state" : "translated",
+            "value" : "Згорнути"
           }
         },
         "vi" : {
@@ -35783,8 +35783,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Minimize All"
+            "state" : "translated",
+            "value" : "Згорнути все"
           }
         },
         "vi" : {
@@ -35974,8 +35974,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Minimize all windows"
+            "state" : "translated",
+            "value" : "Згорнути всі вікна"
           }
         },
         "vi" : {
@@ -36099,8 +36099,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Minimize all windows except the current one"
+            "state" : "translated",
+            "value" : "현재 창을 제외한 모든 창을 최소화합니다"
           }
         },
         "nl" : {
@@ -36165,8 +36165,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Minimize all windows except the current one"
+            "state" : "translated",
+            "value" : "Згорнути всі вікна, окрім поточного"
           }
         },
         "vi" : {
@@ -36289,8 +36289,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Minimum number of colors reached."
+            "state" : "translated",
+            "value" : "도달한 최소 색상 수입니다."
           }
         },
         "nl" : {
@@ -36355,8 +36355,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Minimum number of colors reached."
+            "state" : "translated",
+            "value" : "Досягнуто мінімальної кількості кольорів."
           }
         },
         "vi" : {
@@ -36479,8 +36479,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Navigate to Settings → Privacy & Security"
+            "state" : "translated",
+            "value" : "설정 → 개인정보 및 보안으로 이동합니다."
           }
         },
         "nl" : {
@@ -36545,8 +36545,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Navigate to Settings → Privacy & Security"
+            "state" : "translated",
+            "value" : "Перейдіть до Системних параметрів → Приватність і Безпека"
           }
         },
         "vi" : {
@@ -36736,8 +36736,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Never visible"
+            "state" : "translated",
+            "value" : "Ніколи не видно"
           }
         },
         "vi" : {
@@ -36860,8 +36860,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "New Window"
+            "state" : "translated",
+            "value" : "새 윈도우"
           }
         },
         "nl" : {
@@ -36926,8 +36926,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "New Window"
+            "state" : "translated",
+            "value" : "Нове вікно"
           }
         },
         "vi" : {
@@ -37116,8 +37116,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Next page"
+            "state" : "translated",
+            "value" : "Наступна сторінка"
           }
         },
         "vi" : {
@@ -37307,8 +37307,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No action"
+            "state" : "translated",
+            "value" : "Дія відсутня"
           }
         },
         "vi" : {
@@ -37431,8 +37431,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No applications found or scanned yet."
+            "state" : "translated",
+            "value" : "아직 검색되거나 스캔된 애플리케이션이 없습니다."
           }
         },
         "nl" : {
@@ -37497,8 +37497,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No applications found or scanned yet."
+            "state" : "translated",
+            "value" : "Поки що не знайдено та не проскановано жодних застосунків."
           }
         },
         "vi" : {
@@ -37555,8 +37555,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No audio devices found"
+            "state" : "translated",
+            "value" : "Keine Audiogeräte gefunden"
           }
         },
         "el" : {
@@ -37621,8 +37621,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No audio devices found"
+            "state" : "translated",
+            "value" : "오디오 장치를 찾을 수 없습니다."
           }
         },
         "nl" : {
@@ -37687,8 +37687,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No audio devices found"
+            "state" : "translated",
+            "value" : "Аудіопристрої не знайдено"
           }
         },
         "vi" : {
@@ -37811,8 +37811,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No custom directories added"
+            "state" : "translated",
+            "value" : "사용자 지정 디렉터리가 추가되지 않았습니다."
           }
         },
         "nl" : {
@@ -37877,8 +37877,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No custom directories added"
+            "state" : "translated",
+            "value" : "Користувацькі теки ще не додані"
           }
         },
         "vi" : {
@@ -37935,8 +37935,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No events scheduled for today!"
+            "state" : "translated",
+            "value" : "Keine Termine für heute geplant!"
           }
         },
         "el" : {
@@ -38001,8 +38001,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No events scheduled for today!"
+            "state" : "translated",
+            "value" : "오늘은 예정된 이벤트가 없습니다!"
           }
         },
         "nl" : {
@@ -38067,8 +38067,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No events scheduled for today!"
+            "state" : "translated",
+            "value" : "На сьогодні немає запланованих подій!"
           }
         },
         "vi" : {
@@ -38125,8 +38125,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No events today"
+            "state" : "translated",
+            "value" : "Keine Termine heute"
           }
         },
         "el" : {
@@ -38191,8 +38191,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No events today"
+            "state" : "translated",
+            "value" : "오늘은 이벤트 없음"
           }
         },
         "nl" : {
@@ -38257,8 +38257,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No events today"
+            "state" : "translated",
+            "value" : "Сьогодні жодних подій"
           }
         },
         "vi" : {
@@ -38382,8 +38382,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No filters added"
+            "state" : "translated",
+            "value" : "추가한 필터 없음"
           }
         },
         "nl" : {
@@ -38448,8 +38448,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No filters added"
+            "state" : "translated",
+            "value" : "Не додано жодного фільтра"
           }
         },
         "vi" : {
@@ -38640,8 +38640,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No hover action"
+            "state" : "translated",
+            "value" : "Без дії наведення курсора"
           }
         },
         "vi" : {
@@ -38698,8 +38698,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No lyrics available"
+            "state" : "translated",
+            "value" : "Keine Songtexte verfügbar"
           }
         },
         "el" : {
@@ -38764,8 +38764,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No lyrics available"
+            "state" : "translated",
+            "value" : "사용 가능한 가사 없음"
           }
         },
         "nl" : {
@@ -38830,8 +38830,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No lyrics available"
+            "state" : "translated",
+            "value" : "Немає доступних текстів"
           }
         },
         "vi" : {
@@ -38954,8 +38954,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No recent checks"
+            "state" : "translated",
+            "value" : "최근 확인사항 없음"
           }
         },
         "nl" : {
@@ -39020,8 +39020,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No recent checks"
+            "state" : "translated",
+            "value" : "Немає нещодавніх перевірок"
           }
         },
         "vi" : {
@@ -39144,8 +39144,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No window title filters added"
+            "state" : "translated",
+            "value" : "창 제목 필터가 추가되지 않았습니다."
           }
         },
         "nl" : {
@@ -39210,8 +39210,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No window title filters added"
+            "state" : "translated",
+            "value" : "Фільтри заголовків вікон не додано"
           }
         },
         "vi" : {
@@ -39334,8 +39334,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Not %@"
+            "state" : "translated",
+            "value" : "%@ 아니다."
           }
         },
         "nl" : {
@@ -39400,8 +39400,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Not %@"
+            "state" : "translated",
+            "value" : "Не %@"
           }
         },
         "vi" : {
@@ -39591,8 +39591,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Not granted"
+            "state" : "translated",
+            "value" : "Не надано"
           }
         },
         "vi" : {
@@ -39972,8 +39972,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "On window hover; Dimmed until button hover"
+            "state" : "translated",
+            "value" : "При наведенні на вікно; Затемнене до наведення на кнопку"
           }
         },
         "vi" : {
@@ -40163,8 +40163,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "On window hover; Full opacity"
+            "state" : "translated",
+            "value" : "При наведенні на вікно; Повна непрозорість"
           }
         },
         "vi" : {
@@ -40288,8 +40288,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Only takes effect when dock auto-hide is enabled"
+            "state" : "translated",
+            "value" : "독 자동 숨기기가 활성화된 경우에만 적용됩니다."
           }
         },
         "nl" : {
@@ -40354,8 +40354,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Only takes effect when dock auto-hide is enabled"
+            "state" : "translated",
+            "value" : "Діє лише тоді, коли ввімкнено автоматичне приховування Dock"
           }
         },
         "vi" : {
@@ -40545,8 +40545,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open Accessibility Settings"
+            "state" : "translated",
+            "value" : "Відкрити налаштування доступності"
           }
         },
         "vi" : {
@@ -40736,8 +40736,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open Screen Recording Settings"
+            "state" : "translated",
+            "value" : "Відкрити налаштування записування екрана"
           }
         },
         "vi" : {
@@ -41050,8 +41050,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open System Privacy Settings"
+            "state" : "translated",
+            "value" : "시스템 개인 정보 설정 열기"
           }
         },
         "nl" : {
@@ -41116,8 +41116,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open System Privacy Settings"
+            "state" : "translated",
+            "value" : "Відкрити налаштування приватності системи"
           }
         },
         "vi" : {
@@ -41306,7 +41306,7 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Option (⌥)"
           }
         },
@@ -41430,8 +41430,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Performance Profiles"
+            "state" : "translated",
+            "value" : "성능 프로필"
           }
         },
         "nl" : {
@@ -41496,8 +41496,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Performance Profiles"
+            "state" : "translated",
+            "value" : "Профілі продуктивності"
           }
         },
         "vi" : {
@@ -41620,8 +41620,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Performance Tuning (Dock Previews)"
+            "state" : "translated",
+            "value" : "성능 튜닝(dock 미리보기)"
           }
         },
         "nl" : {
@@ -41686,8 +41686,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Performance Tuning (Dock Previews)"
+            "state" : "translated",
+            "value" : "Налаштування продуктивності (попередній перегляд Dock)"
           }
         },
         "vi" : {
@@ -41877,8 +41877,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Permission error"
+            "state" : "translated",
+            "value" : "Помилка дозволу"
           }
         },
         "vi" : {
@@ -42068,8 +42068,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Permissions"
+            "state" : "translated",
+            "value" : "Дозволи"
           }
         },
         "vi" : {
@@ -42259,8 +42259,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Permissions settings"
+            "state" : "translated",
+            "value" : "Налаштування дозволів"
           }
         },
         "vi" : {
@@ -42383,8 +42383,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Pin to Screen"
+            "state" : "translated",
+            "value" : "화면에 고정"
           }
         },
         "nl" : {
@@ -42507,8 +42507,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Pin to Screen (Compact)"
+            "state" : "translated",
+            "value" : "An Bildschirm anheften (Kompakt)"
           }
         },
         "el" : {
@@ -42573,8 +42573,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Pin to Screen (Compact)"
+            "state" : "translated",
+            "value" : "화면에 고정(컴팩트)"
           }
         },
         "nl" : {
@@ -42639,8 +42639,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Pin to Screen (Compact)"
+            "state" : "translated",
+            "value" : "Закріпити на екрані (компактно)"
           }
         },
         "vi" : {
@@ -42697,8 +42697,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Pin to Screen (Full)"
+            "state" : "translated",
+            "value" : "An Bildschirm anheften (Voll)"
           }
         },
         "el" : {
@@ -42763,8 +42763,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Pin to Screen (Full)"
+            "state" : "translated",
+            "value" : "화면에 고정(전체)"
           }
         },
         "nl" : {
@@ -42829,8 +42829,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Pin to Screen (Full)"
+            "state" : "translated",
+            "value" : "Закріпити на екрані (повністю)"
           }
         },
         "vi" : {
@@ -42954,8 +42954,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Pinned to screen"
+            "state" : "translated",
+            "value" : "화면에 고정됨"
           }
         },
         "nl" : {
@@ -43210,8 +43210,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Placement Strategy"
+            "state" : "translated",
+            "value" : "Стратегія розміщення"
           }
         },
         "vi" : {
@@ -43401,8 +43401,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Please Quit the App to Apply Changes! :)"
+            "state" : "translated",
+            "value" : "Будь ласка, вийдіть із застосунку для застосування змін! :)"
           }
         },
         "vi" : {
@@ -43592,8 +43592,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Please Restart the App to Apply Changes! :)"
+            "state" : "translated",
+            "value" : "Будь ласка, перезапустіть застосунок для застосування змін! :)"
           }
         },
         "vi" : {
@@ -43782,8 +43782,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Please restart the application to apply your changes. Click OK to quit the app."
+            "state" : "translated",
+            "value" : "Будь ласка, перезапустіть застосунок для застосування ваших змін. Натисніть ОК, щоб вийти із застосунку."
           }
         },
         "vi" : {
@@ -43973,8 +43973,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Popover"
+            "state" : "translated",
+            "value" : "Спливаюче вікно"
           }
         },
         "vi" : {
@@ -44097,8 +44097,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Position Window Controls"
+            "state" : "translated",
+            "value" : "위치 창 컨트롤"
           }
         },
         "nl" : {
@@ -44163,8 +44163,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Position Window Controls"
+            "state" : "translated",
+            "value" : "Розташування елементів керування вікном"
           }
         },
         "vi" : {
@@ -44288,8 +44288,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Present a full size preview of the window"
+            "state" : "translated",
+            "value" : "창의 전체 크기 미리 보기 표시"
           }
         },
         "nl" : {
@@ -44354,8 +44354,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Present a full size preview of the window"
+            "state" : "translated",
+            "value" : "Показати попередній перегляд вікна в повному розмірі"
           }
         },
         "vi" : {
@@ -44545,8 +44545,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Press any key combination after holding the initialization key to set the keybind."
+            "state" : "translated",
+            "value" : "Натисніть будь-яку комбінацію клавіш після утримання клавіші ініціалізації, щоб встановити прив'язку клавіш."
           }
         },
         "vi" : {
@@ -44736,8 +44736,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Press any key to set the keybind."
+            "state" : "translated",
+            "value" : "Натисніть будь-яку клавішу, щоб встановити прив'язку клавіш."
           }
         },
         "vi" : {
@@ -44926,8 +44926,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Press any key..."
+            "state" : "translated",
+            "value" : "Натисніть будь-яку клавішу..."
           }
         },
         "vi" : {
@@ -45050,8 +45050,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Press ONLY the trigger key (e.g. just Tab)"
+            "state" : "translated",
+            "value" : "트리거 키만 누릅니다(예: Tab 키만 누름)."
           }
         },
         "nl" : {
@@ -45116,8 +45116,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Press ONLY the trigger key (e.g. just Tab)"
+            "state" : "translated",
+            "value" : "Натисніть ТІЛЬКИ тригерну клавішу (наприклад, лише Tab)"
           }
         },
         "vi" : {
@@ -45307,8 +45307,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Press the key combination..."
+            "state" : "translated",
+            "value" : "Натисніть комбінацію клавіш..."
           }
         },
         "vi" : {
@@ -45431,8 +45431,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Prevent dock from hiding during previews"
+            "state" : "translated",
+            "value" : "미리보기 중에 도크가 숨겨지지 않도록 하기"
           }
         },
         "nl" : {
@@ -45497,8 +45497,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Prevent dock from hiding during previews"
+            "state" : "translated",
+            "value" : "Запобігання приховуванню Dock під час попереднього перегляду"
           }
         },
         "vi" : {
@@ -45621,8 +45621,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Prevents apps that only ever have a single window from appearing in previews."
+            "state" : "translated",
+            "value" : "창이 하나만 있는 앱이 미리 보기에 표시되지 않도록 합니다."
           }
         },
         "nl" : {
@@ -45687,8 +45687,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Prevents apps that only ever have a single window from appearing in previews."
+            "state" : "translated",
+            "value" : "Запобігає показу застосунків, які мають лише одне вікно, у попередніх переглядах."
           }
         },
         "vi" : {
@@ -45812,8 +45812,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Prevents previews from disappearing when moving sideways to adjacent windows"
+            "state" : "translated",
+            "value" : "인접한 창으로 옆으로 이동할 때 미리보기가 사라지는 것을 방지합니다."
           }
         },
         "nl" : {
@@ -45878,8 +45878,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Prevents previews from disappearing when moving sideways to adjacent windows"
+            "state" : "translated",
+            "value" : "Запобігає зникненню попередніх переглядів під час переміщення вбік до сусідніх вікон"
           }
         },
         "vi" : {
@@ -46002,8 +46002,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Appearance & Quality"
+            "state" : "translated",
+            "value" : "모양 및 품질 미리보기"
           }
         },
         "nl" : {
@@ -46068,8 +46068,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Appearance & Quality"
+            "state" : "translated",
+            "value" : "Попередній перегляд зовнішнього вигляду та якості"
           }
         },
         "vi" : {
@@ -46193,8 +46193,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Appearance & Quality (Dock Previews)"
+            "state" : "translated",
+            "value" : "모양 및 품질 미리보기(독 미리보기)"
           }
         },
         "nl" : {
@@ -46259,8 +46259,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Appearance & Quality (Dock Previews)"
+            "state" : "translated",
+            "value" : "Попередній перегляд зовнішнього вигляду та якості (Попередній перегляд Dock)"
           }
         },
         "vi" : {
@@ -46450,8 +46450,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Hover Action"
+            "state" : "translated",
+            "value" : "Дія попереднього перегляду при наведенні"
           }
         },
         "vi" : {
@@ -46574,8 +46574,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Hover Action Delay"
+            "state" : "translated",
+            "value" : "미리보기 호버 동작 지연"
           }
         },
         "nl" : {
@@ -46640,8 +46640,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Hover Action Delay"
+            "state" : "translated",
+            "value" : "Затримка дії попереднього перегляду при наведенні"
           }
         },
         "vi" : {
@@ -46831,8 +46831,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Hover Delay"
+            "state" : "translated",
+            "value" : "Затримка попереднього перегляду при наведенні"
           }
         },
         "vi" : {
@@ -46955,8 +46955,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Layout (Dock)"
+            "state" : "translated",
+            "value" : "레이아웃 미리보기(독)"
           }
         },
         "nl" : {
@@ -47021,8 +47021,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Layout (Dock)"
+            "state" : "translated",
+            "value" : "Попередній перегляд макета (Dock)"
           }
         },
         "vi" : {
@@ -47145,8 +47145,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Layout (Switcher)"
+            "state" : "translated",
+            "value" : "레이아웃 미리보기(스위쳐)"
           }
         },
         "nl" : {
@@ -47211,8 +47211,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Layout (Switcher)"
+            "state" : "translated",
+            "value" : "Попередній перегляд макета (Перемикач)"
           }
         },
         "vi" : {
@@ -47335,8 +47335,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Quality Profiles"
+            "state" : "translated",
+            "value" : "품질 프로필 미리보기"
           }
         },
         "nl" : {
@@ -47401,8 +47401,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Quality Profiles"
+            "state" : "translated",
+            "value" : "Попередній перегляд профілів якості"
           }
         },
         "vi" : {
@@ -47525,8 +47525,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Size"
+            "state" : "translated",
+            "value" : "미리보기 크기"
           }
         },
         "nl" : {
@@ -47591,8 +47591,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Size"
+            "state" : "translated",
+            "value" : "Розмір попереднього перегляду"
           }
         },
         "vi" : {
@@ -47715,8 +47715,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Window Fade Out Duration"
+            "state" : "translated",
+            "value" : "미리보기 창 페이드 아웃 기간"
           }
         },
         "nl" : {
@@ -47781,8 +47781,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Window Fade Out Duration"
+            "state" : "translated",
+            "value" : "Тривалість поступового зникнення вікна попереднього перегляду"
           }
         },
         "vi" : {
@@ -47905,8 +47905,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Window Inactivity Timer"
+            "state" : "translated",
+            "value" : "미리보기 창 비활성 타이머"
           }
         },
         "nl" : {
@@ -47971,8 +47971,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Window Inactivity Timer"
+            "state" : "translated",
+            "value" : "Таймер неактивності вікна попереднього перегляду"
           }
         },
         "vi" : {
@@ -48095,8 +48095,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Window Open Delay"
+            "state" : "translated",
+            "value" : "미리보기 창 열기 지연"
           }
         },
         "nl" : {
@@ -48161,8 +48161,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Window Open Delay"
+            "state" : "translated",
+            "value" : "Затримка відкриття вікна попереднього перегляду"
           }
         },
         "vi" : {
@@ -48286,8 +48286,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview windows are sized to 1/%lld of your screen dimensions"
+            "state" : "translated",
+            "value" : "미리보기 창 크기는 화면 크기의 1/%lld로 조정됩니다."
           }
         },
         "nl" : {
@@ -48352,8 +48352,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview windows are sized to 1/%lld of your screen dimensions"
+            "state" : "translated",
+            "value" : "Вікна попереднього перегляду розраховані на 1/%lld від розміру вашого екрана"
           }
         },
         "vi" : {
@@ -48476,8 +48476,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "px"
+            "state" : "translated",
+            "value" : "픽셀"
           }
         },
         "nl" : {
@@ -48542,7 +48542,7 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "px"
           }
         },
@@ -48732,8 +48732,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Quit"
+            "state" : "translated",
+            "value" : "Вийти"
           }
         },
         "vi" : {
@@ -48923,8 +48923,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Quit App"
+            "state" : "translated",
+            "value" : "Вийти із застосунку"
           }
         },
         "vi" : {
@@ -49113,8 +49113,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Quit DockDoor"
+            "state" : "translated",
+            "value" : "Вийти з DockDoor"
           }
         },
         "vi" : {
@@ -49237,8 +49237,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reduce motion"
+            "state" : "translated",
+            "value" : "모션 감소"
           }
         },
         "nl" : {
@@ -49303,8 +49303,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reduce motion"
+            "state" : "translated",
+            "value" : "Зменшити рух"
           }
         },
         "vi" : {
@@ -49427,8 +49427,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Relaxed"
+            "state" : "translated",
+            "value" : "편안한"
           }
         },
         "nl" : {
@@ -49493,8 +49493,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Relaxed"
+            "state" : "translated",
+            "value" : "Сповільнений"
           }
         },
         "vi" : {
@@ -49617,8 +49617,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Release initializer key to select window in Switcher"
+            "state" : "translated",
+            "value" : "스위처에서 창을 선택하려면 초기화 키에서 손을 떼세요."
           }
         },
         "nl" : {
@@ -49683,8 +49683,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Release initializer key to select window in Switcher"
+            "state" : "translated",
+            "value" : "Відпустіть клавішу ініціалізатора, щоб вибрати вікно в Перемикачі"
           }
         },
         "vi" : {
@@ -49873,8 +49873,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Remove"
+            "state" : "translated",
+            "value" : "Вилучити"
           }
         },
         "vi" : {
@@ -49997,8 +49997,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Remove All"
+            "state" : "translated",
+            "value" : "모두 제거"
           }
         },
         "nl" : {
@@ -50063,8 +50063,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Remove All"
+            "state" : "translated",
+            "value" : "Вилучити все"
           }
         },
         "vi" : {
@@ -50253,8 +50253,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Report a Bug"
+            "state" : "translated",
+            "value" : "Повідомити про помилку"
           }
         },
         "vi" : {
@@ -50443,8 +50443,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Request a Feature"
+            "state" : "translated",
+            "value" : "Запропонувати ідею"
           }
         },
         "vi" : {
@@ -50567,8 +50567,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Required for capturing window previews of other apps"
+            "state" : "translated",
+            "value" : "다른 앱의 창 미리 보기를 캡처하는 데 필요합니다."
           }
         },
         "nl" : {
@@ -50633,8 +50633,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Required for capturing window previews of other apps"
+            "state" : "translated",
+            "value" : "Потрібно для записування попередніх переглядів вікон інших застосунків"
           }
         },
         "vi" : {
@@ -50757,8 +50757,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Required for dock hover detection and window switcher hotkeys"
+            "state" : "translated",
+            "value" : "도크 호버 감지 및 창 전환기 핫키에 필요합니다."
           }
         },
         "nl" : {
@@ -50823,8 +50823,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Required for dock hover detection and window switcher hotkeys"
+            "state" : "translated",
+            "value" : "Потрібно для виявлення наведення курсора на Dock та гарячих клавіш перемикача вікон"
           }
         },
         "vi" : {
@@ -51013,8 +51013,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reset"
+            "state" : "translated",
+            "value" : "Скинути"
           }
         },
         "vi" : {
@@ -51204,8 +51204,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reset All Settings"
+            "state" : "translated",
+            "value" : "Скинути всі налаштування"
           }
         },
         "vi" : {
@@ -51394,8 +51394,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reset All Settings to Defaults"
+            "state" : "translated",
+            "value" : "Скинути всі налаштування до значень за замовчуванням"
           }
         },
         "vi" : {
@@ -51584,8 +51584,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reset to Defaults"
+            "state" : "translated",
+            "value" : "Скинути до налаштувань за замовчуванням"
           }
         },
         "vi" : {
@@ -51774,8 +51774,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Restart app"
+            "state" : "translated",
+            "value" : "Перезапустити застосунок"
           }
         },
         "vi" : {
@@ -51965,8 +51965,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Restart App"
+            "state" : "translated",
+            "value" : "Перезапустити застосунок"
           }
         },
         "vi" : {
@@ -52155,8 +52155,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Restart required"
+            "state" : "translated",
+            "value" : "Необхідне перезавантаження"
           }
         },
         "vi" : {
@@ -52345,8 +52345,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Right click a color to remove it."
+            "state" : "translated",
+            "value" : "Клацніть правою кнопкою миші на кольорі, щоб видалити його."
           }
         },
         "vi" : {
@@ -52469,8 +52469,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Rounded image corners"
+            "state" : "translated",
+            "value" : "둥근 이미지 모서리"
           }
         },
         "nl" : {
@@ -52535,8 +52535,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Rounded image corners"
+            "state" : "translated",
+            "value" : "Закруглені кути зображення"
           }
         },
         "vi" : {
@@ -52659,8 +52659,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Screen"
+            "state" : "translated",
+            "value" : "화면"
           }
         },
         "nl" : {
@@ -52725,8 +52725,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Screen"
+            "state" : "translated",
+            "value" : "Екран"
           }
         },
         "vi" : {
@@ -52916,8 +52916,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Screen Capturing:"
+            "state" : "translated",
+            "value" : "Захоплення екрана:"
           }
         },
         "vi" : {
@@ -53106,8 +53106,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Screen recording"
+            "state" : "translated",
+            "value" : "Записування екрана"
           }
         },
         "vi" : {
@@ -53297,8 +53297,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Screen Recording Permissions"
+            "state" : "translated",
+            "value" : "Дозволи для записування екрана"
           }
         },
         "vi" : {
@@ -53422,8 +53422,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Screen with last active window"
+            "state" : "translated",
+            "value" : "마지막으로 활성화된 창이 있는 화면"
           }
         },
         "nl" : {
@@ -53488,8 +53488,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Screen with last active window"
+            "state" : "translated",
+            "value" : "Екран з останнім активним вікном"
           }
         },
         "vi" : {
@@ -53613,8 +53613,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Screen with mouse"
+            "state" : "translated",
+            "value" : "마우스가 있는 화면"
           }
         },
         "nl" : {
@@ -53679,8 +53679,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Screen with mouse"
+            "state" : "translated",
+            "value" : "Екран з мишею"
           }
         },
         "vi" : {
@@ -53869,8 +53869,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "seconds"
+            "state" : "translated",
+            "value" : "секунд"
           }
         },
         "vi" : {
@@ -53995,8 +53995,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "See a large preview of the window"
+            "state" : "translated",
+            "value" : "창 크게 보기"
           }
         },
         "nl" : {
@@ -54061,8 +54061,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "See a large preview of the window"
+            "state" : "translated",
+            "value" : "Перегляньте великий попередній перегляд вікна"
           }
         },
         "vi" : {
@@ -54253,8 +54253,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "See a preview of the window"
+            "state" : "translated",
+            "value" : "Перегляньте попередній перегляд вікна"
           }
         },
         "vi" : {
@@ -54443,8 +54443,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "See more..."
+            "state" : "translated",
+            "value" : "Дивитися більше..."
           }
         },
         "vi" : {
@@ -54633,8 +54633,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Select a profile to quickly adjust common performance settings. Choose \"Advanced\" for manual control."
+            "state" : "translated",
+            "value" : "Виберіть профіль, щоб швидко налаштувати поширені параметри продуктивності. Виберіть «Розширені налаштування» для ручного налаштування."
           }
         },
         "vi" : {
@@ -54823,8 +54823,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Select an initialization key (e.g. Command ⌘)"
+            "state" : "translated",
+            "value" : "Виберіть ключ ініціалізації (наприклад, Command ⌘)"
           }
         },
         "vi" : {
@@ -55014,8 +55014,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Select which applications can be captured and previewed"
+            "state" : "translated",
+            "value" : "Виберіть, які застосунки можуть бути захопленими та переглянутими"
           }
         },
         "vi" : {
@@ -55204,8 +55204,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Select which applications DockDoor should show previews for. Unchecked apps will be ignored."
+            "state" : "translated",
+            "value" : "Виберіть, для яких застосунків DockDoor має показувати попередній перегляд. Невибрані застосунки будуть ігноруватися."
           }
         },
         "vi" : {
@@ -55394,8 +55394,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Selection Highlight"
+            "state" : "translated",
+            "value" : "Виділення підсвітки"
           }
         },
         "vi" : {
@@ -55585,8 +55585,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Set Initialization Key and Keybind"
+            "state" : "translated",
+            "value" : "Встановити ключ ініціалізації та прив'язку клавіш"
           }
         },
         "vi" : {
@@ -55776,8 +55776,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Set to 0 for unlimited"
+            "state" : "translated",
+            "value" : "Встановіть 0 для необмеженості"
           }
         },
         "vi" : {
@@ -55966,8 +55966,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Set Trigger Key"
+            "state" : "translated",
+            "value" : "Встановити тригерну клавішу"
           }
         },
         "vi" : {
@@ -56156,8 +56156,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Sets the max rows (for bottom/top Dock) or columns (for side Dock) previews will use. '0' dynamically determines fit."
+            "state" : "translated",
+            "value" : "Встановлює максимальну кількість рядків (для низу/верху Dock) або стовпців (для бічного Dock), які використовуватимуться в попередньому перегляді. '0' динамічно визначає розмір."
           }
         },
         "vi" : {
@@ -56346,8 +56346,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Sets the maximum number of rows the Window Switcher will use. '0' dynamically determines rows based on screen height."
+            "state" : "translated",
+            "value" : "Встановлює максимальну кількість рядків, яку використовуватиме перемикач вікон. «0» динамічно визначає рядки на основі висоти екрана."
           }
         },
         "vi" : {
@@ -56537,8 +56537,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Shadowed"
+            "state" : "translated",
+            "value" : "Затінення"
           }
         },
         "vi" : {
@@ -56727,8 +56727,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Advanced Settings"
+            "state" : "translated",
+            "value" : "Показати розширені налаштування"
           }
         },
         "vi" : {
@@ -56917,8 +56917,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show App Name"
+            "state" : "translated",
+            "value" : "Показати назву застосунку"
           }
         },
         "vi" : {
@@ -57107,8 +57107,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show App Name in Dock Previews"
+            "state" : "translated",
+            "value" : "Показувати назву застосунку в попередньому перегляді Dock"
           }
         },
         "vi" : {
@@ -57297,8 +57297,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show big controls when no valid windows"
+            "state" : "translated",
+            "value" : "Показувати великі елементи керування, коли немає дійсних вікон"
           }
         },
         "vi" : {
@@ -57487,8 +57487,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show media/calendar controls on Dock hover"
+            "state" : "translated",
+            "value" : "Показувати елементи керування медіа/календарем при наведенні на Dock"
           }
         },
         "vi" : {
@@ -57677,8 +57677,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show menu bar icon"
+            "state" : "translated",
+            "value" : "Показати іконку в Центрі керування"
           }
         },
         "vi" : {
@@ -57868,8 +57868,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Menu Bar Icon"
+            "state" : "translated",
+            "value" : "Показати іконку в Центрі керування"
           }
         },
         "vi" : {
@@ -58058,8 +58058,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show preview above app labels"
+            "state" : "translated",
+            "value" : "Показати попередній перегляд над мітками застосунків"
           }
         },
         "vi" : {
@@ -58248,8 +58248,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Window Title"
+            "state" : "translated",
+            "value" : "Показати заголовок вікна"
           }
         },
         "vi" : {
@@ -58438,8 +58438,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Window Title in"
+            "state" : "translated",
+            "value" : "Показати заголовок вікна у"
           }
         },
         "vi" : {
@@ -58629,8 +58629,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Window Title in Previews"
+            "state" : "translated",
+            "value" : "Показувати заголовок вікна в попередньому перегляді"
           }
         },
         "vi" : {
@@ -58820,8 +58820,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Window Titles"
+            "state" : "translated",
+            "value" : "Показати заголовки вікон"
           }
         },
         "vi" : {
@@ -59011,8 +59011,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Window Titles on Previews"
+            "state" : "translated",
+            "value" : "Показувати заголовки вікон у попередньому перегляді"
           }
         },
         "vi" : {
@@ -59201,8 +59201,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Shows last active window first, instead of current window."
+            "state" : "translated",
+            "value" : "Спочатку показується останнє активне вікно, а не поточне."
           }
         },
         "vi" : {
@@ -59393,8 +59393,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Simulate a click"
+            "state" : "translated",
+            "value" : "Імітація кліку"
           }
         },
         "vi" : {
@@ -59584,8 +59584,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Simulate a click (open the window)"
+            "state" : "translated",
+            "value" : "Імітація кліку (відкрити вікно)"
           }
         },
         "vi" : {
@@ -59776,8 +59776,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Small"
+            "state" : "translated",
+            "value" : "Маленький"
           }
         },
         "vi" : {
@@ -59966,8 +59966,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Small (1/%lld)"
+            "state" : "translated",
+            "value" : "Малий (1/%lld)"
           }
         },
         "vi" : {
@@ -60156,8 +60156,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Snappy"
+            "state" : "translated",
+            "value" : "Пришвидшений"
           }
         },
         "vi" : {
@@ -60347,8 +60347,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Sort Window Previews by Date"
+            "state" : "translated",
+            "value" : "Сортувати попередній перегляд вікон за датою"
           }
         },
         "vi" : {
@@ -60537,8 +60537,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Sort Window Previews by Date (if multiple)"
+            "state" : "translated",
+            "value" : "Сортувати попередній перегляд вікон за датою (якщо декілька)"
           }
         },
         "vi" : {
@@ -60727,8 +60727,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Standard"
+            "state" : "translated",
+            "value" : "Стандартний"
           }
         },
         "vi" : {
@@ -60918,8 +60918,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Start recording keybind"
+            "state" : "translated",
+            "value" : "Почати запис комбінації клавіш"
           }
         },
         "vi" : {
@@ -61109,8 +61109,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Start Recording Keybind"
+            "state" : "translated",
+            "value" : "Почати запис комбінації клавіш"
           }
         },
         "vi" : {
@@ -61300,8 +61300,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Start recording trigger key"
+            "state" : "translated",
+            "value" : "Почати запис тригерної клавіші"
           }
         },
         "vi" : {
@@ -61492,8 +61492,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Subatomic"
+            "state" : "translated",
+            "value" : "Субатомний"
           }
         },
         "vi" : {
@@ -61682,8 +61682,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Suggest new features to make DockDoor even better."
+            "state" : "translated",
+            "value" : "Запропонуйте нові функції, щоб зробити DockDoor ще кращим."
           }
         },
         "vi" : {
@@ -61873,8 +61873,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Support"
+            "state" : "translated",
+            "value" : "Служба підтримки"
           }
         },
         "vi" : {
@@ -62063,8 +62063,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Support & Contributions"
+            "state" : "translated",
+            "value" : "Підтримка та внески"
           }
         },
         "vi" : {
@@ -62253,8 +62253,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Support development with a small donation"
+            "state" : "translated",
+            "value" : "Підтримайте розробку невеликим пожертвуванням"
           }
         },
         "vi" : {
@@ -62443,8 +62443,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Support DockDoor"
+            "state" : "translated",
+            "value" : "Підтримка DockDoor"
           }
         },
         "vi" : {
@@ -62633,8 +62633,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Support settings"
+            "state" : "translated",
+            "value" : "Налаштування підтримки"
           }
         },
         "vi" : {
@@ -62823,8 +62823,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Thank you to all contributors ❤️"
+            "state" : "translated",
+            "value" : "Дякуємо всім учасникам ❤️"
           }
         },
         "vi" : {
@@ -63013,8 +63013,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Thanks for supporting DockDoor! 💖"
+            "state" : "translated",
+            "value" : "Дякуємо за підтримку DockDoor! 💖"
           }
         },
         "vi" : {
@@ -63137,8 +63137,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "The changes to permissions will take effect after restarting."
+            "state" : "translated",
+            "value" : "권한 변경 사항은 재시작 후 적용됩니다."
           }
         },
         "nl" : {
@@ -63203,8 +63203,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "The changes to permissions will take effect after restarting."
+            "state" : "translated",
+            "value" : "Зміни дозволів набудуть чинності після перезавантаження."
           }
         },
         "vi" : {
@@ -63328,8 +63328,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "The selected positions for Traffic Light Buttons and Window Title will overlap."
+            "state" : "translated",
+            "value" : "신호등 버튼과 창 제목에 대해 선택한 위치가 겹치게 됩니다."
           }
         },
         "nl" : {
@@ -63394,8 +63394,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "The selected positions for Traffic Light Buttons and Window Title will overlap."
+            "state" : "translated",
+            "value" : "Вибрані позиції для кнопок світлофора та заголовка вікна будуть перекриватися."
           }
         },
         "vi" : {
@@ -63518,8 +63518,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "The Window Switcher (often Alt/Cmd-Tab) lets you quickly cycle between open app windows with a keyboard shortcut."
+            "state" : "translated",
+            "value" : "창 전환기(보통 Alt/Cmd-Tab)를 사용하면 키보드 단축키로 열려 있는 앱 창 사이를 빠르게 전환할 수 있습니다."
           }
         },
         "nl" : {
@@ -63584,8 +63584,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "The Window Switcher (often Alt/Cmd-Tab) lets you quickly cycle between open app windows with a keyboard shortcut."
+            "state" : "translated",
+            "value" : "Перемикач вікон (часто Alt/Cmd-Tab) дозволяє швидко перемикатися між відкритими вікнами програм за допомогою комбінації клавіш."
           }
         },
         "vi" : {
@@ -63709,8 +63709,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "This display is currently disconnected. The window switcher will appear on the main display until the selected display is reconnected."
+            "state" : "translated",
+            "value" : "이 디스플레이는 현재 연결이 끊어졌습니다. 선택한 디스플레이가 다시 연결될 때까지 창 전환기가 기본 디스플레이에 나타납니다."
           }
         },
         "nl" : {
@@ -63775,8 +63775,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "This display is currently disconnected. The window switcher will appear on the main display until the selected display is reconnected."
+            "state" : "translated",
+            "value" : "Цей дисплей наразі відключено. Перемикач вікон буде показано на головному дисплеї, доки вибраний дисплей не буде підʼєднано знову."
           }
         },
         "vi" : {
@@ -63899,8 +63899,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "This setting only applies when \"Embed controls with window previews\" is enabled above."
+            "state" : "translated",
+            "value" : "이 설정은 위에서 '창 미리보기가 있는 컨트롤 포함'이 활성화된 경우에만 적용됩니다."
           }
         },
         "nl" : {
@@ -63965,8 +63965,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "This setting only applies when \"Embed controls with window previews\" is enabled above."
+            "state" : "translated",
+            "value" : "Цей параметр застосовується лише тоді, коли вище ввімкнено опцію «Вбудовувати елементи керування з попереднім переглядом вікон»."
           }
         },
         "vi" : {
@@ -64089,8 +64089,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Tiny (1/%lld)"
+            "state" : "translated",
+            "value" : "작은(1/%lld)"
           }
         },
         "nl" : {
@@ -64155,8 +64155,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Tiny (1/%lld)"
+            "state" : "translated",
+            "value" : "Крихітний (1/%lld)"
           }
         },
         "vi" : {
@@ -64279,8 +64279,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Today"
+            "state" : "translated",
+            "value" : "오늘"
           }
         },
         "nl" : {
@@ -64345,8 +64345,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Today"
+            "state" : "translated",
+            "value" : "Сьогодні"
           }
         },
         "vi" : {
@@ -64469,8 +64469,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Toggle"
+            "state" : "translated",
+            "value" : "토글"
           }
         },
         "nl" : {
@@ -64535,8 +64535,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Toggle"
+            "state" : "translated",
+            "value" : "Перемкнути"
           }
         },
         "vi" : {
@@ -64659,8 +64659,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Toggle Full Screen"
+            "state" : "translated",
+            "value" : "전체화면 켜기/끄기"
           }
         },
         "nl" : {
@@ -64725,8 +64725,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Toggle Full Screen"
+            "state" : "translated",
+            "value" : "Перемикання повноекранного режиму"
           }
         },
         "vi" : {
@@ -64916,8 +64916,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Top Left"
+            "state" : "translated",
+            "value" : "Зверху ліворуч"
           }
         },
         "vi" : {
@@ -65107,8 +65107,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Top Right"
+            "state" : "translated",
+            "value" : "Зверху праворуч"
           }
         },
         "vi" : {
@@ -65232,8 +65232,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Traffic Light Buttons"
+            "state" : "translated",
+            "value" : "신호등 버튼"
           }
         },
         "nl" : {
@@ -65298,8 +65298,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Traffic Light Buttons"
+            "state" : "translated",
+            "value" : "Кнопки світлофора"
           }
         },
         "vi" : {
@@ -65422,8 +65422,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Traffic Light Buttons in Previews"
+            "state" : "translated",
+            "value" : "미리보기의 신호등 버튼"
           }
         },
         "nl" : {
@@ -65488,8 +65488,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Traffic Light Buttons in Previews"
+            "state" : "translated",
+            "value" : "Кнопки світлофора у попередньому перегляді"
           }
         },
         "vi" : {
@@ -65613,8 +65613,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Traffic Light Buttons Position"
+            "state" : "translated",
+            "value" : "신호등 버튼 위치"
           }
         },
         "nl" : {
@@ -65679,8 +65679,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Traffic Light Buttons Position"
+            "state" : "translated",
+            "value" : "Розташування кнопок світлофора"
           }
         },
         "vi" : {
@@ -65869,8 +65869,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Traffic Light Buttons Visibility"
+            "state" : "translated",
+            "value" : "Видимість кнопок світлофора"
           }
         },
         "vi" : {
@@ -65993,8 +65993,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Trigger Key"
+            "state" : "translated",
+            "value" : "트리거 키"
           }
         },
         "nl" : {
@@ -66059,8 +66059,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Trigger Key"
+            "state" : "translated",
+            "value" : "Тригерна клавіша"
           }
         },
         "vi" : {
@@ -66184,8 +66184,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Triggers an action when hovering over a window in a dock preview"
+            "state" : "translated",
+            "value" : "독 미리보기에서 창 위로 마우스를 가져가면 동작을 트리거합니다."
           }
         },
         "nl" : {
@@ -66250,8 +66250,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Triggers an action when hovering over a window in a dock preview"
+            "state" : "translated",
+            "value" : "Активує дію під час наведення на вікно в попередньому перегляді Dock"
           }
         },
         "vi" : {
@@ -66375,8 +66375,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Triggers an action when shaking a window while it is being dragged from a dock preview"
+            "state" : "translated",
+            "value" : "도크 미리보기에서 창을 드래그하는 동안 창을 흔들면 동작을 트리거합니다."
           }
         },
         "nl" : {
@@ -66441,8 +66441,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Triggers an action when shaking a window while it is being dragged from a dock preview"
+            "state" : "translated",
+            "value" : "Активує дію під час струшування вікна під час його перетягування з попереднього перегляду в Dock"
           }
         },
         "vi" : {
@@ -66565,8 +66565,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Un-minimize"
+            "state" : "translated",
+            "value" : "최소화 해제"
           }
         },
         "nl" : {
@@ -66631,8 +66631,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Un-minimize"
+            "state" : "translated",
+            "value" : "Розгорнути"
           }
         },
         "vi" : {
@@ -66755,8 +66755,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Unknown Display"
+            "state" : "translated",
+            "value" : "알 수 없는 디스플레이"
           }
         },
         "nl" : {
@@ -66821,8 +66821,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Unknown Display"
+            "state" : "translated",
+            "value" : "Невідомий екран"
           }
         },
         "vi" : {
@@ -66879,8 +66879,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Unpin"
+            "state" : "translated",
+            "value" : "Loslösen"
           }
         },
         "el" : {
@@ -66945,8 +66945,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Unpin"
+            "state" : "translated",
+            "value" : "고정해제"
           }
         },
         "nl" : {
@@ -67011,8 +67011,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Unpin"
+            "state" : "translated",
+            "value" : "Відкріпити"
           }
         },
         "vi" : {
@@ -67201,8 +67201,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Up to date"
+            "state" : "translated",
+            "value" : "Актуальний"
           }
         },
         "vi" : {
@@ -67391,8 +67391,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Up to Date"
+            "state" : "translated",
+            "value" : "Актуальний"
           }
         },
         "vi" : {
@@ -67515,8 +67515,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update aborted: %@"
+            "state" : "translated",
+            "value" : "업데이트가 중단되었습니다: %@"
           }
         },
         "nl" : {
@@ -67581,8 +67581,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update aborted: %@"
+            "state" : "translated",
+            "value" : "Оновлення перервано: %@"
           }
         },
         "vi" : {
@@ -67771,8 +67771,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update available"
+            "state" : "translated",
+            "value" : "Доступне оновлення"
           }
         },
         "vi" : {
@@ -67962,8 +67962,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update settings"
+            "state" : "translated",
+            "value" : "Оновити налаштування"
           }
         },
         "vi" : {
@@ -68086,8 +68086,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update v%@ available"
+            "state" : "translated",
+            "value" : "v%@ 업데이트 가능"
           }
         },
         "nl" : {
@@ -68152,8 +68152,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update v%@ available"
+            "state" : "translated",
+            "value" : "Доступне оновлення%@"
           }
         },
         "vi" : {
@@ -68276,8 +68276,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Updater not configured."
+            "state" : "translated",
+            "value" : "업데이터가 구성되지 않았습니다."
           }
         },
         "nl" : {
@@ -68342,8 +68342,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Updater not configured."
+            "state" : "translated",
+            "value" : "Оновлення не налаштовано."
           }
         },
         "vi" : {
@@ -68658,8 +68658,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use classic window ordering"
+            "state" : "translated",
+            "value" : "클래식 창 명령 사용"
           }
         },
         "nl" : {
@@ -68724,8 +68724,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use classic window ordering"
+            "state" : "translated",
+            "value" : "Використовувати класичне упорядкування вікон"
           }
         },
         "vi" : {
@@ -68915,8 +68915,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use default MacOS keybind ⌘ + ⇥"
+            "state" : "translated",
+            "value" : "Використовувати стандартну комбінацію клавіш MacOS ⌘ + ⇥"
           }
         },
         "vi" : {
@@ -69039,8 +69039,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use Monochrome Colors"
+            "state" : "translated",
+            "value" : "단색 색상 사용"
           }
         },
         "nl" : {
@@ -69105,8 +69105,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use Monochrome Colors"
+            "state" : "translated",
+            "value" : "Використовувати монохромні кольори"
           }
         },
         "vi" : {
@@ -69229,8 +69229,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use System Accent Color for Highlight"
+            "state" : "translated",
+            "value" : "강조 표시를 위해 시스템 강조 색상 사용"
           }
         },
         "nl" : {
@@ -69295,8 +69295,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use System Accent Color for Highlight"
+            "state" : "translated",
+            "value" : "Використовувати системний колірний акцент для виділення"
           }
         },
         "vi" : {
@@ -69486,8 +69486,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use Uniform Image Preview Radius"
+            "state" : "translated",
+            "value" : "Використовувати рівномірний радіус попереднього перегляду зображення"
           }
         },
         "vi" : {
@@ -69611,8 +69611,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use Windows-style window ordering"
+            "state" : "translated",
+            "value" : "Windows 스타일 창 순서 사용"
           }
         },
         "nl" : {
@@ -69677,8 +69677,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use Windows-style window ordering"
+            "state" : "translated",
+            "value" : "Використання порядку вікон у стилі Windows"
           }
         },
         "vi" : {
@@ -69801,8 +69801,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use Windows-style window ordering in Switcher"
+            "state" : "translated",
+            "value" : "스위처에서 Windows 스타일 창 순서 사용"
           }
         },
         "nl" : {
@@ -69867,8 +69867,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use Windows-style window ordering in Switcher"
+            "state" : "translated",
+            "value" : "Використання порядку вікон у стилі Windows у Перемикачі"
           }
         },
         "vi" : {
@@ -69992,8 +69992,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use Windows-style window ordering in the window switcher"
+            "state" : "translated",
+            "value" : "창 전환기에서 Windows 스타일 창 순서 사용"
           }
         },
         "nl" : {
@@ -70058,8 +70058,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use Windows-style window ordering in the window switcher"
+            "state" : "translated",
+            "value" : "Використання порядку вікон у стилі Windows у Перемикачі вікон"
           }
         },
         "vi" : {
@@ -70373,8 +70373,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Want to see for yourself? Review our source code"
+            "state" : "translated",
+            "value" : "직접 보고 싶으신가요? 소스 코드 살펴보기"
           }
         },
         "nl" : {
@@ -70439,8 +70439,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Want to see for yourself? Review our source code"
+            "state" : "translated",
+            "value" : "Бажаєте переконатися самі? Перегляньте наш вихідний код"
           }
         },
         "vi" : {
@@ -70564,8 +70564,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Want to see the app in your language?"
+            "state" : "translated",
+            "value" : "해당 언어로 앱을 보고 싶으신가요?"
           }
         },
         "nl" : {
@@ -70630,8 +70630,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Want to see the app in your language?"
+            "state" : "translated",
+            "value" : "Бажаєте бачити застосунок вашою мовою?"
           }
         },
         "vi" : {
@@ -70821,8 +70821,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Want to support development?"
+            "state" : "translated",
+            "value" : "Бажаєте підтримати розробку?"
           }
         },
         "vi" : {
@@ -71203,8 +71203,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "What is this? A window for ANTS?"
+            "state" : "translated",
+            "value" : "Що це таке? Вікно для МУРАХ?"
           }
         },
         "vi" : {
@@ -71327,8 +71327,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When embedded mode is enabled, show big controls instead of embedded ones if all windows are minimized/hidden or there are no windows."
+            "state" : "translated",
+            "value" : "임베디드 모드가 활성화된 경우, 모든 창이 최소화/숨겨져 있거나 창이 없는 경우 임베디드 컨트롤 대신 큰 컨트롤을 표시합니다."
           }
         },
         "nl" : {
@@ -71393,8 +71393,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When embedded mode is enabled, show big controls instead of embedded ones if all windows are minimized/hidden or there are no windows."
+            "state" : "translated",
+            "value" : "Коли ввімкнено вбудований режим, показати великі елементи керування замість вбудованих, якщо всі вікна згорнуті/приховані або вікон немає."
           }
         },
         "vi" : {
@@ -71517,8 +71517,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When enabled, all preview images will be cropped to a rounded rectangle."
+            "state" : "translated",
+            "value" : "활성화하면 모든 미리보기 이미지가 둥근 직사각형으로 잘립니다."
           }
         },
         "nl" : {
@@ -71583,8 +71583,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When enabled, all preview images will be cropped to a rounded rectangle."
+            "state" : "translated",
+            "value" : "Якщо цю опцію ввімкнено, усі зображення попереднього перегляду будуть обрізані до заокругленого прямокутника."
           }
         },
         "vi" : {
@@ -71708,8 +71708,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When enabled, clicking an app's Dock icon will minimize all windows of that application, similar to Windows taskbar behavior"
+            "state" : "translated",
+            "value" : "이 기능을 활성화하면 앱의 Dock 아이콘을 클릭하면 Windows 작업 표시줄 동작과 유사하게 해당 애플리케이션의 모든 창이 최소화됩니다."
           }
         },
         "nl" : {
@@ -71774,8 +71774,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When enabled, clicking an app's Dock icon will minimize all windows of that application, similar to Windows taskbar behavior"
+            "state" : "translated",
+            "value" : "Якщо цю функцію ввімкнено, клік на іконку застосунку в Dock згортатиме всі вікна цієї програми, подібно до поведінки панелі завдань Windows"
           }
         },
         "vi" : {
@@ -71898,8 +71898,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When enabled, dims all windows except those currently under selected."
+            "state" : "translated",
+            "value" : "활성화하면 현재 선택되어 있는 창을 제외한 모든 창을 어둡게 합니다."
           }
         },
         "nl" : {
@@ -71964,8 +71964,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When enabled, dims all windows except those currently under selected."
+            "state" : "translated",
+            "value" : "Якщо ввімкнено, затемнює всі вікна, окрім тих, що наразі вибрані."
           }
         },
         "vi" : {
@@ -72089,8 +72089,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When enabled, shows the last active window first instead of the current window"
+            "state" : "translated",
+            "value" : "활성화하면 현재 창 대신 마지막으로 활성화된 창을 먼저 표시합니다."
           }
         },
         "nl" : {
@@ -72155,8 +72155,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When enabled, shows the last active window first instead of the current window"
+            "state" : "translated",
+            "value" : "Якщо ввімкнено, спочатку показується останнє активне вікно замість поточного"
           }
         },
         "vi" : {
@@ -72280,8 +72280,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When hovering over the preview"
+            "state" : "translated",
+            "value" : "미리보기 위로 마우스를 가져가면"
           }
         },
         "nl" : {
@@ -72346,8 +72346,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When hovering over the preview"
+            "state" : "translated",
+            "value" : "При наведенні на попередній перегляд"
           }
         },
         "vi" : {
@@ -72538,8 +72538,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When Showing Dock Tile Previews"
+            "state" : "translated",
+            "value" : "Під час показу попередніх переглядів плиток Dock"
           }
         },
         "vi" : {
@@ -72730,8 +72730,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When Using Window Switcher"
+            "state" : "translated",
+            "value" : "Під час використання перемикача вікон"
           }
         },
         "vi" : {
@@ -72854,8 +72854,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When you click the button below, DockDoor will restart and move to the menu bar to run in the background."
+            "state" : "translated",
+            "value" : "아래 버튼을 클릭하면 DockDoor가 다시 시작되고 메뉴 표시줄로 이동하여 백그라운드에서 실행됩니다."
           }
         },
         "nl" : {
@@ -72920,8 +72920,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When you click the button below, DockDoor will restart and move to the menu bar to run in the background."
+            "state" : "translated",
+            "value" : "Коли ви натиснете кнопку нижче, DockDoor перезавантажиться та перейде до Центру керування, щоб працювати у фоновому режимі."
           }
         },
         "vi" : {
@@ -73111,8 +73111,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Why we need permissions"
+            "state" : "translated",
+            "value" : "Чому нам потрібні дозволи"
           }
         },
         "vi" : {
@@ -73302,8 +73302,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Buffer"
+            "state" : "translated",
+            "value" : "Буфер вікна"
           }
         },
         "vi" : {
@@ -73426,8 +73426,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Buffer from Dock (pixels)"
+            "state" : "translated",
+            "value" : "독의 창 버퍼(픽셀)"
           }
         },
         "nl" : {
@@ -73492,8 +73492,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Buffer from Dock (pixels)"
+            "state" : "translated",
+            "value" : "Буфер вікна з Dock (пікселі)"
           }
         },
         "vi" : {
@@ -73683,8 +73683,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Cache Lifespan"
+            "state" : "translated",
+            "value" : "Тривалість життя кешу вікна"
           }
         },
         "vi" : {
@@ -73807,8 +73807,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Image Cache Lifespan"
+            "state" : "translated",
+            "value" : "창 이미지 캐시 수명"
           }
         },
         "nl" : {
@@ -73873,8 +73873,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Image Cache Lifespan"
+            "state" : "translated",
+            "value" : "Тривалість кешу зображень вікна"
           }
         },
         "vi" : {
@@ -73997,8 +73997,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Image Resolution Scale (1=Best)"
+            "state" : "translated",
+            "value" : "창 이미지 해상도 스케일(1=최고)"
           }
         },
         "nl" : {
@@ -74063,8 +74063,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Image Resolution Scale (1=Best)"
+            "state" : "translated",
+            "value" : "Шкала роздільної здатності зображення вікна (1=Найкраща)"
           }
         },
         "vi" : {
@@ -74188,8 +74188,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Image Resolution Scale (higher means lower resolution)"
+            "state" : "translated",
+            "value" : "창 이미지 해상도 스케일(높을수록 해상도가 낮음)"
           }
         },
         "nl" : {
@@ -74254,8 +74254,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Image Resolution Scale (higher means lower resolution)"
+            "state" : "translated",
+            "value" : "Шкала роздільної здатності зображення вікна (вища означає нижчу роздільну здатність)"
           }
         },
         "vi" : {
@@ -74379,8 +74379,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Preview Layout"
+            "state" : "translated",
+            "value" : "창 미리보기 레이아웃"
           }
         },
         "nl" : {
@@ -74445,8 +74445,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Preview Layout"
+            "state" : "translated",
+            "value" : "Макет попереднього перегляду вікна"
           }
         },
         "vi" : {
@@ -74570,8 +74570,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Preview Layout Limits"
+            "state" : "translated",
+            "value" : "창 미리보기 레이아웃 제한"
           }
         },
         "nl" : {
@@ -74636,8 +74636,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Preview Layout Limits"
+            "state" : "translated",
+            "value" : "Обмеження макета попереднього перегляду вікна"
           }
         },
         "vi" : {
@@ -74761,8 +74761,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Preview Size"
+            "state" : "translated",
+            "value" : "창 미리보기 크기"
           }
         },
         "nl" : {
@@ -74827,8 +74827,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Preview Size"
+            "state" : "translated",
+            "value" : "Розмір попереднього перегляду вікна"
           }
         },
         "vi" : {
@@ -74951,8 +74951,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Selection Background Color"
+            "state" : "translated",
+            "value" : "창 선택 배경색"
           }
         },
         "nl" : {
@@ -75017,8 +75017,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Selection Background Color"
+            "state" : "translated",
+            "value" : "Колір фону вибору вікна"
           }
         },
         "vi" : {
@@ -75141,8 +75141,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Selection Background Opacity"
+            "state" : "translated",
+            "value" : "창 선택 배경 불투명도"
           }
         },
         "nl" : {
@@ -75207,8 +75207,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Selection Background Opacity"
+            "state" : "translated",
+            "value" : "Непрозорість фону вибору вікна"
           }
         },
         "vi" : {
@@ -75398,8 +75398,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Size"
+            "state" : "translated",
+            "value" : "Розмір вікна"
           }
         },
         "vi" : {
@@ -75589,8 +75589,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Switcher"
+            "state" : "translated",
+            "value" : "Перемикач вікон"
           }
         },
         "vi" : {
@@ -75713,8 +75713,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Switcher Customization"
+            "state" : "translated",
+            "value" : "창 전환기 사용자 지정"
           }
         },
         "nl" : {
@@ -75779,8 +75779,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Switcher Customization"
+            "state" : "translated",
+            "value" : "Налаштування Перемикача вікон"
           }
         },
         "vi" : {
@@ -75904,8 +75904,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Switcher only"
+            "state" : "translated",
+            "value" : "창 전환기 전용"
           }
         },
         "nl" : {
@@ -75970,8 +75970,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Switcher only"
+            "state" : "translated",
+            "value" : "Тільки Перемикач вікон"
           }
         },
         "vi" : {
@@ -76094,8 +76094,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Switcher Placement"
+            "state" : "translated",
+            "value" : "창 전환기 배치"
           }
         },
         "nl" : {
@@ -76160,8 +76160,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Switcher Placement"
+            "state" : "translated",
+            "value" : "Розміщення перемикача вікон"
           }
         },
         "vi" : {
@@ -76284,8 +76284,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Switcher Settings"
+            "state" : "translated",
+            "value" : "창 전환기 설정"
           }
         },
         "nl" : {
@@ -76350,8 +76350,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Switcher Settings"
+            "state" : "translated",
+            "value" : "Налаштування перемикача вікон"
           }
         },
         "vi" : {
@@ -76475,8 +76475,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window title filters"
+            "state" : "translated",
+            "value" : "창 제목 필터"
           }
         },
         "nl" : {
@@ -76541,8 +76541,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window title filters"
+            "state" : "translated",
+            "value" : "Фільтри заголовків вікон"
           }
         },
         "vi" : {
@@ -76665,8 +76665,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Title Filters"
+            "state" : "translated",
+            "value" : "창 제목 필터"
           }
         },
         "nl" : {
@@ -76731,8 +76731,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Title Filters"
+            "state" : "translated",
+            "value" : "Фільтри заголовків вікон"
           }
         },
         "vi" : {
@@ -76921,8 +76921,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Title Position"
+            "state" : "translated",
+            "value" : "Позиція заголовка вікна"
           }
         },
         "vi" : {
@@ -77045,8 +77045,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Title Visibility"
+            "state" : "translated",
+            "value" : "창 제목 가시성"
           }
         },
         "nl" : {
@@ -77111,8 +77111,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Title Visibility"
+            "state" : "translated",
+            "value" : "Видимість заголовка вікна"
           }
         },
         "vi" : {
@@ -77235,8 +77235,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Titles in Previews"
+            "state" : "translated",
+            "value" : "미리보기의 창 제목"
           }
         },
         "nl" : {
@@ -77301,8 +77301,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Titles in Previews"
+            "state" : "translated",
+            "value" : "Заголовки вікон у попередньому перегляді"
           }
         },
         "vi" : {
@@ -77492,8 +77492,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Windows switching settings"
+            "state" : "translated",
+            "value" : "Налаштування перемикання вікон"
           }
         },
         "vi" : {
@@ -77683,8 +77683,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "You need to give DockDoor access to the accessibility API in order for it to function."
+            "state" : "translated",
+            "value" : "Щоб DockDoor працював, вам потрібно надати йому дозвіл до API Доступності."
           }
         },
         "vi" : {
@@ -77873,8 +77873,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Your app is on version %@"
+            "state" : "translated",
+            "value" : "Версія вашого застосунку %@"
           }
         },
         "vi" : {
@@ -77997,8 +77997,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Your shortcut will be set (e.g. ⌘ + Tab)"
+            "state" : "translated",
+            "value" : "단축키가 설정됩니다(예: ⌘ + Tab)."
           }
         },
         "nl" : {
@@ -78063,8 +78063,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Your shortcut will be set (e.g. ⌘ + Tab)"
+            "state" : "translated",
+            "value" : "Ваше скорочення буде встановлено (наприклад, ⌘ + Tab)"
           }
         },
         "vi" : {
@@ -78187,8 +78187,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Your traffic lights will be set to disabled automatically."
+            "state" : "translated",
+            "value" : "신호등이 자동으로 비활성화되도록 설정됩니다."
           }
         },
         "nl" : {
@@ -78253,8 +78253,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Your traffic lights will be set to disabled automatically."
+            "state" : "translated",
+            "value" : "Ваші світлофори будуть автоматично налаштовані на вимкнення."
           }
         },
         "vi" : {
@@ -78443,7 +78443,7 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Z"
           }
         },
