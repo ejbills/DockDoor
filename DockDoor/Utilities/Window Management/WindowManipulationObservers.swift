@@ -71,11 +71,9 @@ class WindowManipulationObservers {
 
     @MainActor
     @objc private func appDidTerminate(_ notification: Notification) {
-        guard let app = notification.userInfo?[NSWorkspace.applicationUserInfoKey] as? NSRunningApplication else {
-            return
-        }
-        WindowUtil.clearWindowCache(for: app)
-        removeObserverForApp(app)
+        guard let app = notification.userInfo?[NSWorkspace.applicationUserInfoKey] as? NSRunningApplication else { return }
+        WindowUtil.purgeAppCache(with: app.processIdentifier)
+        removeObserver(for: app.processIdentifier)
         previewCoordinator.hideWindow()
     }
 
@@ -119,7 +117,10 @@ class WindowManipulationObservers {
     }
 
     private func removeObserverForApp(_ app: NSRunningApplication) {
-        let pid = app.processIdentifier
+        removeObserver(for: app.processIdentifier)
+    }
+
+    func removeObserver(for pid: pid_t) {
         guard let observer = observers[pid] else { return }
 
         let appElement = AXUIElementCreateApplication(pid)
@@ -155,17 +156,25 @@ class WindowManipulationObservers {
 
     func processAXNotification(element: AXUIElement, notificationName: String, app: NSRunningApplication, pid: pid_t) {
         switch notificationName {
-        case kAXFocusedUIElementChangedNotification as String, kAXFocusedWindowChangedNotification as String:
+        case kAXFocusedUIElementChangedNotification, kAXFocusedWindowChangedNotification:
             handleFocusedUIElementChanged(element: element, app: app, pid: pid)
-        case kAXUIElementDestroyedNotification as String, kAXWindowResizedNotification as String, kAXWindowMovedNotification as String:
+        case kAXUIElementDestroyedNotification, kAXWindowResizedNotification, kAXWindowMovedNotification:
             handleWindowStateChange(element: element, app: app)
-        case kAXWindowMiniaturizedNotification as String:
+        case kAXWindowMiniaturizedNotification:
             WindowUtil.updateStatusOfWindowCache(pid: pid, isParentAppHidden: false)
-        case kAXApplicationHiddenNotification as String:
-            WindowUtil.updateStatusOfWindowCache(pid: pid, isParentAppHidden: true)
-        case kAXApplicationShownNotification as String:
+        case kAXApplicationHiddenNotification:
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+                guard let self else { return }
+                if NSRunningApplication(processIdentifier: pid) == nil {
+                    WindowUtil.purgeAppCache(with: pid)
+                    removeObserver(for: pid)
+                } else {
+                    WindowUtil.updateStatusOfWindowCache(pid: pid, isParentAppHidden: true)
+                }
+            }
+        case kAXApplicationShownNotification:
             WindowUtil.updateStatusOfWindowCache(pid: pid, isParentAppHidden: false)
-        case kAXWindowCreatedNotification as String:
+        case kAXWindowCreatedNotification:
             handleNewWindow(for: pid)
         default:
             break
@@ -205,6 +214,11 @@ func axObserverCallback(observer: AXObserver, element: AXUIElement, notification
            let observerInstance = activeWindowManipulationObserversInstance
         {
             observerInstance.processAXNotification(element: element, notificationName: notificationName as String, app: app, pid: pid)
+        } else {
+            WindowUtil.purgeAppCache(with: pid)
+            if let observerInstance = activeWindowManipulationObserversInstance {
+                observerInstance.removeObserver(for: pid)
+            }
         }
     }
 }

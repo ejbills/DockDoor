@@ -681,6 +681,12 @@ enum WindowUtil {
         desktopSpaceWindowCacheManager.removeFromCache(pid: pid, windowId: windowId)
     }
 
+    static func removeWindowFromCache(with element: AXUIElement, in pid: pid_t) {
+        if let windowId = try? element.cgWindowId() {
+            removeWindowFromDesktopSpaceCache(with: windowId, in: pid)
+        }
+    }
+
     static func purifyAppCache(with pid: pid_t, removeAll: Bool) async -> Set<WindowInfo>? {
         if removeAll {
             desktopSpaceWindowCacheManager.writeCache(pid: pid, windowSet: [])
