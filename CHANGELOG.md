@@ -38,6 +38,16 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://buymeacoffee.com/keplercafe</div>
 
+<a id="v1.17.2"></a>
+# [v1.17.2](https://github.com/ejbills/DockDoor/releases/tag/v1.17.2) - 2025-06-24
+
+### Fixed
+
+- **Resolved orphaned windows remaining in the app switcher:** A persistent bug has been fixed where windows from applications that were already closed would incorrectly continue to appear in the window switcher.
+
+[Changes][v1.17.2]
+
+
 <a id="v1.17.1"></a>
 # [v1.17.1](https://github.com/ejbills/DockDoor/releases/tag/v1.17.1) - 2025-06-22
 
@@ -1190,6 +1200,7 @@ v1.0
 [Changes][releases]
 
 
+[v1.17.2]: https://github.com/ejbills/DockDoor/compare/v1.17.1...v1.17.2
 [v1.17.1]: https://github.com/ejbills/DockDoor/compare/v1.17...v1.17.1
 [v1.17]: https://github.com/ejbills/DockDoor/compare/v1.16...v1.17
 [v1.16]: https://github.com/ejbills/DockDoor/compare/v1.15.2...v1.16
