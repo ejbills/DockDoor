@@ -444,9 +444,26 @@ enum WindowUtil {
 
     static func getAllWindowsOfAllApps() -> [WindowInfo] {
         let windows = desktopSpaceWindowCacheManager.getAllWindows()
-        return !Defaults[.includeHiddenWindowsInSwitcher]
+        let filteredWindows = !Defaults[.includeHiddenWindowsInSwitcher]
             ? windows.filter { !$0.isHidden && !$0.isMinimized }
             : windows
+
+        // Filter by frontmost app if enabled
+        if Defaults[.limitSwitcherToFrontmostApp] {
+            return getWindowsForFrontmostApp(from: filteredWindows)
+        }
+
+        return filteredWindows
+    }
+
+    static func getWindowsForFrontmostApp(from windows: [WindowInfo]) -> [WindowInfo] {
+        guard let frontmostApp = NSWorkspace.shared.frontmostApplication else {
+            return windows
+        }
+
+        return windows.filter { windowInfo in
+            windowInfo.app.processIdentifier == frontmostApp.processIdentifier
+        }
     }
 
     static func getActiveWindows(of app: NSRunningApplication) async throws -> [WindowInfo] {
@@ -710,5 +727,46 @@ enum WindowUtil {
 
     static func purgeAppCache(with pid: pid_t) {
         desktopSpaceWindowCacheManager.writeCache(pid: pid, windowSet: [])
+    }
+
+    /// Checks if the frontmost application is fullscreen and in the blacklist
+    static func shouldIgnoreKeybindForFrontmostApp() -> Bool {
+        guard let frontmostApp = NSWorkspace.shared.frontmostApplication else {
+            return false
+        }
+
+        // Check if the app is in fullscreen mode
+        let isFullscreen = isAppInFullscreen(frontmostApp)
+
+        // Check if the app is in the blacklist
+        let appName = frontmostApp.localizedName ?? ""
+        let bundleIdentifier = frontmostApp.bundleIdentifier ?? ""
+        let blacklist = Defaults[.fullscreenAppBlacklist]
+
+        let isInBlacklist = blacklist.contains { blacklistEntry in
+            appName.lowercased().contains(blacklistEntry.lowercased()) ||
+                bundleIdentifier.lowercased().contains(blacklistEntry.lowercased())
+        }
+
+        return isFullscreen && isInBlacklist
+    }
+
+    /// Checks if the given application is currently in fullscreen mode
+    static func isAppInFullscreen(_ app: NSRunningApplication) -> Bool {
+        let appElement = AXUIElementCreateApplication(app.processIdentifier)
+
+        // Try to get the app's windows
+        guard let windows = try? appElement.windows() else {
+            return false
+        }
+
+        // Check if any window is in fullscreen mode
+        for window in windows {
+            if let isFullscreen = try? window.isFullscreen(), isFullscreen {
+                return true
+            }
+        }
+
+        return false
     }
 }

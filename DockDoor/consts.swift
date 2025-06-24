@@ -78,6 +78,11 @@ extension Defaults.Keys {
     static let dimInSwitcherUntilSelected = Key<Bool>("dimInSwitcherUntilSelected", default: false)
     static let pinnedScreenIdentifier = Key<String>("pinnedScreenIdentifier", default: NSScreen.main?.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? String ?? "")
 
+    // MARK: - Window Switcher Filters
+
+    static let limitSwitcherToFrontmostApp = Key<Bool>("limitSwitcherToFrontmostApp", default: false)
+    static let fullscreenAppBlacklist = Key<[String]>("fullscreenAppBlacklist", default: [])
+
     // MARK: - Filters
 
     static let appNameFilters = Key<[String]>("appNameFilters", default: [])

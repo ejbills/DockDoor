@@ -2,6 +2,7 @@ import AppKit
 import Defaults
 import LaunchAtLogin
 import SwiftUI
+import UniformTypeIdentifiers
 
 enum SettingsProfile: String, CaseIterable, Identifiable {
     case `default`, snappy, relaxed
@@ -88,11 +89,15 @@ struct MainSettingsView: View {
     @Default(.enableWindowSwitcher) var enableWindowSwitcher
     @Default(.includeHiddenWindowsInSwitcher) var includeHiddenWindowsInSwitcher
     @Default(.useClassicWindowOrdering) var useClassicWindowOrdering
+    @Default(.limitSwitcherToFrontmostApp) var limitSwitcherToFrontmostApp
+    @Default(.fullscreenAppBlacklist) var fullscreenAppBlacklist
 
     @State private var selectedPerformanceProfile: SettingsProfile = .default
     @State private var selectedPreviewQualityProfile: PreviewQualityProfile = .standard
     @State private var showAdvancedSettings: Bool = false
     @StateObject private var keybindModel = KeybindModel()
+    @State private var showingAddBlacklistAppSheet = false
+    @State private var newBlacklistApp = ""
     @Default(.windowSwitcherPlacementStrategy) var placementStrategy
     @Default(.pinnedScreenIdentifier) var pinnedScreenIdentifier
 
@@ -395,6 +400,12 @@ struct MainSettingsView: View {
                             .font(.caption)
                             .foregroundColor(.secondary)
                             .padding(.leading, 20)
+
+                        Toggle(isOn: $limitSwitcherToFrontmostApp) { Text("Limit Window Switcher to active app only") }
+                        Text("Only show windows from the currently active/frontmost application.")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                            .padding(.leading, 20)
                     }
                     .padding(.leading, 20)
                     .padding(.top, 4)
@@ -565,10 +576,92 @@ struct MainSettingsView: View {
                             if !pinnedScreenIdentifier.isEmpty, !NSScreen.screens.contains(where: { $0.uniqueIdentifier() == pinnedScreenIdentifier }) { Text("This display is currently disconnected. The window switcher will appear on the main display until the selected display is reconnected.", comment: "Message shown when a pinned display is disconnected").font(.subheadline).foregroundColor(.secondary).fixedSize(horizontal: false, vertical: true) }
                         }
                     }
+
+                    Divider()
+
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Fullscreen App Blacklist").font(.headline)
+                        Text("Apps in this list will not respond to window switcher shortcuts when in fullscreen mode.")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+
+                        fullscreenAppBlacklistView
+                    }
                 }
             }
         }.padding(.top, 5)
             .onAppear { keybindModel.modifierKey = Defaults[.UserKeybind].modifierFlags; keybindModel.currentKeybind = Defaults[.UserKeybind] }
+    }
+
+    private var fullscreenAppBlacklistView: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 8) {
+                    if !fullscreenAppBlacklist.isEmpty {
+                        ForEach(fullscreenAppBlacklist, id: \.self) { appName in
+                            HStack {
+                                Text(appName)
+                                    .foregroundColor(.primary)
+
+                                Spacer()
+
+                                Button(action: {
+                                    fullscreenAppBlacklist.removeAll { $0 == appName }
+                                }) {
+                                    Image(systemName: "trash")
+                                        .foregroundColor(.secondary)
+                                }
+                                .buttonStyle(.plain)
+                            }
+                            .padding(.vertical, 4)
+
+                            if appName != fullscreenAppBlacklist.last {
+                                Divider()
+                            }
+                        }
+                    } else {
+                        Text("No apps in blacklist")
+                            .foregroundColor(.secondary)
+                            .padding(.vertical, 8)
+                    }
+                }
+                .frame(maxWidth: .infinity)
+                .padding(8)
+            }
+            .frame(maxHeight: 120)
+            .overlay(
+                RoundedRectangle(cornerRadius: 8)
+                    .stroke(Color.gray.opacity(0.25), lineWidth: 1)
+            )
+
+            HStack {
+                Button(action: { showingAddBlacklistAppSheet.toggle() }) {
+                    Text("Add App")
+                }
+                .buttonStyle(AccentButtonStyle())
+
+                Spacer()
+
+                if !fullscreenAppBlacklist.isEmpty {
+                    DangerButton(action: {
+                        fullscreenAppBlacklist.removeAll()
+                    }) {
+                        Text("Remove All")
+                    }
+                }
+            }
+        }
+        .sheet(isPresented: $showingAddBlacklistAppSheet) {
+            AddBlacklistAppSheet(
+                isPresented: $showingAddBlacklistAppSheet,
+                appNameToAdd: $newBlacklistApp,
+                onAdd: { appName in
+                    if !appName.isEmpty, !fullscreenAppBlacklist.contains(where: { $0.caseInsensitiveCompare(appName) == .orderedSame }) {
+                        fullscreenAppBlacklist.append(appName)
+                    }
+                }
+            )
+        }
     }
 
     private func modifierSymbol(_ modifier: Int) -> String {
@@ -682,6 +775,8 @@ struct MainSettingsView: View {
                 enableWindowSwitcher = Defaults.Keys.enableWindowSwitcher.defaultValue
                 includeHiddenWindowsInSwitcher = Defaults.Keys.includeHiddenWindowsInSwitcher.defaultValue
                 useClassicWindowOrdering = Defaults.Keys.useClassicWindowOrdering.defaultValue
+                limitSwitcherToFrontmostApp = Defaults.Keys.limitSwitcherToFrontmostApp.defaultValue
+                fullscreenAppBlacklist = Defaults.Keys.fullscreenAppBlacklist.defaultValue
 
                 Defaults[.UserKeybind] = Defaults.Keys.UserKeybind.defaultValue
                 keybindModel.currentKeybind = Defaults[.UserKeybind]
@@ -694,5 +789,126 @@ struct MainSettingsView: View {
                 askUserToRestartApplication()
             }
         }
+    }
+}
+
+struct AddBlacklistAppSheet: View {
+    @Binding var isPresented: Bool
+    @Binding var appNameToAdd: String
+    var onAdd: (String) -> Void
+
+    @State private var selectedAppInfo: String = ""
+    @State private var isLoadingAppInfo: Bool = false
+
+    var body: some View {
+        VStack(spacing: 20) {
+            Text("Add App to Blacklist")
+                .font(.headline)
+
+            VStack(alignment: .leading, spacing: 12) {
+                Text("Select an application:")
+                    .font(.subheadline)
+
+                Button(action: selectAppFile) {
+                    HStack {
+                        Image(systemName: "folder")
+                        Text("Browse for .app file...")
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 8)
+                }
+                .buttonStyle(.bordered)
+                .disabled(isLoadingAppInfo)
+
+                if isLoadingAppInfo {
+                    HStack {
+                        ProgressView()
+                            .scaleEffect(0.8)
+                        Text("Reading app information...")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                }
+
+                if !selectedAppInfo.isEmpty {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Selected app:")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                        Text(selectedAppInfo)
+                            .font(.subheadline)
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 4)
+                            .background(Color(NSColor.controlBackgroundColor))
+                            .cornerRadius(4)
+                    }
+                }
+
+                Text("This will add the app to the blacklist using its bundle identifier for reliable matching.")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+
+            HStack {
+                Spacer()
+
+                Button("Cancel") {
+                    resetState()
+                    isPresented = false
+                }
+                .keyboardShortcut(.escape)
+
+                Spacer()
+            }
+        }
+        .padding()
+        .frame(width: 450, height: 200)
+    }
+
+    private func selectAppFile() {
+        let panel = NSOpenPanel()
+        panel.allowsMultipleSelection = false
+        panel.canChooseDirectories = false
+        panel.canChooseFiles = true
+        panel.allowedContentTypes = [.applicationBundle]
+        panel.prompt = "Select Application"
+        panel.message = "Choose an application to add to the blacklist"
+
+        if panel.runModal() == .OK, let url = panel.url {
+            isLoadingAppInfo = true
+
+            // Extract app information in background
+            DispatchQueue.global(qos: .userInitiated).async {
+                let bundle = Bundle(url: url)
+                let appName = bundle?.object(forInfoDictionaryKey: "CFBundleDisplayName") as? String
+                    ?? bundle?.object(forInfoDictionaryKey: "CFBundleName") as? String
+                    ?? url.deletingPathExtension().lastPathComponent
+
+                let bundleIdentifier = bundle?.bundleIdentifier ?? ""
+
+                DispatchQueue.main.async {
+                    let appToAdd: String
+                    if !bundleIdentifier.isEmpty {
+                        appToAdd = bundleIdentifier
+                        selectedAppInfo = "\(appName) (\(bundleIdentifier))"
+                    } else {
+                        appToAdd = appName
+                        selectedAppInfo = appName
+                    }
+
+                    // Automatically add the app and close the sheet
+                    onAdd(appToAdd)
+                    resetState()
+                    isPresented = false
+                    isLoadingAppInfo = false
+                }
+            }
+        }
+    }
+
+    private func resetState() {
+        appNameToAdd = ""
+        selectedAppInfo = ""
+        isLoadingAppInfo = false
     }
 }
