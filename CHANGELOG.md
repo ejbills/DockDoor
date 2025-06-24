@@ -38,6 +38,15 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://buymeacoffee.com/keplercafe</div>
 
+<a id="v1.17.3"></a>
+# [v1.17.3](https://github.com/ejbills/DockDoor/releases/tag/v1.17.3) - 2025-06-24
+
+- **Fixed preview window re-opening issue** - Resolved bug where preview windows would reappear after clicking an app icon and moving cursor away from dock
+- Updates translations
+
+[Changes][v1.17.3]
+
+
 <a id="v1.17.2"></a>
 # [v1.17.2](https://github.com/ejbills/DockDoor/releases/tag/v1.17.2) - 2025-06-24
 
@@ -1200,6 +1209,7 @@ v1.0
 [Changes][releases]
 
 
+[v1.17.3]: https://github.com/ejbills/DockDoor/compare/v1.17.2...v1.17.3
 [v1.17.2]: https://github.com/ejbills/DockDoor/compare/v1.17.1...v1.17.2
 [v1.17.1]: https://github.com/ejbills/DockDoor/compare/v1.17...v1.17.1
 [v1.17]: https://github.com/ejbills/DockDoor/compare/v1.16...v1.17
