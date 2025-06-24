@@ -269,6 +269,11 @@ class KeybindHelper {
     }
 
     private func determineActionForKeyDown(event: CGEvent) -> (shouldConsume: Bool, actionTask: (() async -> Void)?) {
+        // Check if we should ignore keybinds for fullscreen blacklisted apps
+        if WindowUtil.shouldIgnoreKeybindForFrontmostApp() {
+            return (false, nil)
+        }
+
         let keyCode = event.getIntegerValueField(.keyboardEventKeycode)
         let flags = event.flags
         let keyBoardShortcutSaved: UserKeyBind = Defaults[.UserKeybind]
