@@ -145,11 +145,11 @@ class MouseTrackingNSView: NSView {
         }
     }
 
-    private func performHideWindow() {
+    private func performHideWindow(preventLastAppClear: Bool = false) {
         DispatchQueue.main.async { [weak self] in
             guard self != nil else { return }
             SharedPreviewWindowCoordinator.activeInstance?.hideWindow()
-            DockObserver.activeInstance?.lastAppUnderMouse = nil
+            if !preventLastAppClear { DockObserver.activeInstance?.lastAppUnderMouse = nil }
         }
     }
 
@@ -171,7 +171,7 @@ class MouseTrackingNSView: NSView {
                             self?.minimizeAllWindowsCallback()
                         }
                     } else {
-                        performHideWindow()
+                        performHideWindow(preventLastAppClear: true)
                     }
                 } else {
                     handleExternalClick(event: event)
