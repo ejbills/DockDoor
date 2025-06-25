@@ -254,8 +254,21 @@ class KeybindHelper {
     @MainActor
     private func handleModifierEvent(currentSwitcherModifierIsPressed: Bool, currentShiftState: Bool) {
         let oldSwitcherModifierState = isSwitcherModifierKeyPressed
+        let oldShiftState = isShiftKeyPressedGeneral
+
         isSwitcherModifierKeyPressed = currentSwitcherModifierIsPressed
         isShiftKeyPressedGeneral = currentShiftState
+
+        // Detect when Shift is newly pressed during active window switching or dock previews
+        if !oldShiftState, currentShiftState,
+           previewCoordinator.isVisible,
+           (previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive && (currentSwitcherModifierIsPressed || Defaults[.preventSwitcherHide])) ||
+           (!previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive)
+        {
+            Task { @MainActor in
+                await self.previewCoordinator.cycleWindows(goBackwards: true)
+            }
+        }
 
         if !Defaults[.preventSwitcherHide] {
             if oldSwitcherModifierState, !isSwitcherModifierKeyPressed {
@@ -307,8 +320,10 @@ class KeybindHelper {
 
         if previewIsCurrentlyVisible {
             if keyCode == kVK_Tab {
-                return (true, { await self.previewCoordinator.cycleWindows(goBackwards: flags.contains(.maskShift)) })
+                // Tab always goes forward, backwards navigation is handled by Shift modifier changes
+                return (true, { await self.previewCoordinator.cycleWindows(goBackwards: false) })
             }
+
             switch keyCode {
             case Int64(kVK_LeftArrow), Int64(kVK_RightArrow), Int64(kVK_UpArrow), Int64(kVK_DownArrow):
                 let dir: ArrowDirection = switch keyCode {
