@@ -3,13 +3,13 @@
     <channel>
         <title>DockDoor</title>
         <item>
-            <title>1.17.3</title>
-            <pubDate>Tue, 24 Jun 2025 15:34:55 -0700</pubDate>
+            <title>1.18</title>
+            <pubDate>Tue, 01 Jul 2025 19:01:26 -0700</pubDate>
             <sparkle:releaseNotesLink>https://dockdoor.net/CHANGELOG.html</sparkle:releaseNotesLink>
-            <sparkle:version>1.17.3</sparkle:version>
-            <sparkle:shortVersionString>1.17.3</sparkle:shortVersionString>
+            <sparkle:version>1.18</sparkle:version>
+            <sparkle:shortVersionString>1.18</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/ejbills/DockDoor/releases/latest/download/DockDoor.dmg" length="4610092" type="application/octet-stream" sparkle:edSignature="NsWGTqHTH6vxofKfF2mfjbgYWkhOIO8fUVGDm68zro9pyq/ZQEUVhI6BKwYJnZAA7eNyg95ypenU0GIdAOC5Bg=="/>
+            <enclosure url="https://github.com/ejbills/DockDoor/releases/latest/download/DockDoor.dmg" length="4660727" type="application/octet-stream" sparkle:edSignature="03UV6i6g4f+c+21zZhZ0JrDaGIs83RkDysaFyIlAdJEgPaAUI8X4rh53sdCPMHT9NACTxvbRrLqdwev6VuV9Dg=="/>
         </item>
     </channel>
 </rss>

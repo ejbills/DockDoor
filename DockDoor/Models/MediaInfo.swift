@@ -76,6 +76,12 @@ class MediaInfo: ObservableObject {
     private var currentFetchTask: Task<[LyricLine], Error>?
     private var lastFetchedTrack: String = "" // Track to prevent duplicate fetches
 
+    // MARK: - Timing Synchronization
+
+    private var lastPolledTime: TimeInterval = 0
+    private var lastPollDate: Date = .init()
+    private var interpolatedTime: TimeInterval = 0
+
     private static let delimiter = "〈♫DOCKDOOR♫〉"
 
     // MARK: - Public Methods
@@ -116,6 +122,12 @@ class MediaInfo: ObservableObject {
             let appleScript = NSAppleScript(source: script)
             appleScript?.executeAndReturnError(nil)
             currentTime = position
+
+            // Reset interpolation timing after seeking
+            lastPolledTime = position
+            lastPollDate = Date()
+            interpolatedTime = position
+
             updateCurrentLyricIndex()
         }
     }
@@ -158,6 +170,7 @@ class MediaInfo: ObservableObject {
 
             if hasLyrics {
                 startLyricsTimer()
+                startPeriodicUpdates() // Restart with higher frequency
             }
         } catch {
             if !Task.isCancelled {
@@ -342,10 +355,28 @@ class MediaInfo: ObservableObject {
     private func startLyricsTimer() {
         lyricsTimer?.invalidate()
 
-        lyricsTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak self] _ in
+        lyricsTimer = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { [weak self] _ in
             Task { @MainActor in
+                self?.updateInterpolatedTime()
                 self?.updateCurrentLyricIndex()
             }
+        }
+    }
+
+    private func updateInterpolatedTime() {
+        guard isPlaying else {
+            interpolatedTime = currentTime
+            return
+        }
+
+        let now = Date()
+        let timeSinceLastPoll = now.timeIntervalSince(lastPollDate)
+
+        // Only interpolate if the last poll was recent (within 2 seconds)
+        if timeSinceLastPoll < 2.0 {
+            interpolatedTime = lastPolledTime + timeSinceLastPoll
+        } else {
+            interpolatedTime = currentTime
         }
     }
 
@@ -355,9 +386,9 @@ class MediaInfo: ObservableObject {
             return
         }
 
-        let currentTimeSeconds = currentTime
+        let currentTimeSeconds = interpolatedTime
 
-        // Find the current lyric line - fix timing calculation
+        // Find the current lyric line with improved timing calculation
         var newIndex: Int?
 
         for (index, lyric) in lyrics.enumerated() {
@@ -381,13 +412,27 @@ class MediaInfo: ObservableObject {
         lyricsTimer?.invalidate()
         lyricsTimer = nil
         lastFetchedTrack = ""
+
+        // Reset timing interpolation
+        lastPolledTime = currentTime
+        lastPollDate = Date()
+        interpolatedTime = currentTime
+
+        // Restart with slower polling frequency
+        if !currentApp.isEmpty {
+            startPeriodicUpdates()
+        }
     }
 
     // MARK: - Private Methods
 
     private func startPeriodicUpdates() {
         updateTimer?.invalidate()
-        updateTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
+
+        // Use more frequent updates when lyrics are active for better sync
+        let updateInterval: TimeInterval = hasLyrics ? 0.5 : 1.0
+
+        updateTimer = Timer.scheduledTimer(withTimeInterval: updateInterval, repeats: true) { [weak self] _ in
             Task { @MainActor in
                 await self?.fetchMediaData()
             }
@@ -462,7 +507,21 @@ class MediaInfo: ObservableObject {
         isPlaying = components[3] == "playing"
 
         // Parse time values with locale-aware parsing
-        currentTime = parseTimeValue(components[4])
+        let newCurrentTime = parseTimeValue(components[4])
+
+        // Update timing tracking for interpolation
+        if abs(newCurrentTime - currentTime) > 0.5 || !isPlaying {
+            // Significant time change or not playing - reset interpolation
+            lastPolledTime = newCurrentTime
+            lastPollDate = Date()
+            interpolatedTime = newCurrentTime
+        } else {
+            // Small change - just update the baseline
+            lastPolledTime = newCurrentTime
+            lastPollDate = Date()
+        }
+
+        currentTime = newCurrentTime
         duration = parseTimeValue(components[5])
 
         // Handle artwork URL if present
