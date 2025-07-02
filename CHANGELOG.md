@@ -38,6 +38,43 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://buymeacoffee.com/keplercafe</div>
 
+<a id="v1.18"></a>
+# [v1.18](https://github.com/ejbills/DockDoor/releases/tag/v1.18) - 2025-07-02
+
+🎯 New Features
+
+  Windows-Style Navigation Enhancement
+  - Improved keyboard navigation: Replace Shift+Tab with standalone Shift key for
+  backwards navigation
+  - Simplified controls: Tab always goes forward, Shift always goes backwards in
+  Window Switcher
+
+  Frontmost App Filtering
+  - Active app only mode: New option to limit Window Switcher to show only windows
+  from the currently active application
+  - Fullscreen app blacklist: Prevent DockDoor key combinations when specific apps
+  are in fullscreen mode
+
+  🔧 Technical Improvements
+
+  Enhanced App Detection
+  - Better keybind handling: Improved KeybindHelper with support for new navigation
+   patterns
+  - Window utility enhancements: Enhanced WindowUtil with frontmost app filtering
+  capabilities
+
+  📚 Documentation
+
+  Website Updates
+  - Updated keyboard shortcuts documentation: Reflect new Windows-style navigation
+  behavior
+  - Improved user guidance: Better documentation of new filtering and navigation
+  features
+
+
+[Changes][v1.18]
+
+
 <a id="v1.17.3"></a>
 # [v1.17.3](https://github.com/ejbills/DockDoor/releases/tag/v1.17.3) - 2025-06-24
 
@@ -1209,6 +1246,7 @@ v1.0
 [Changes][releases]
 
 
+[v1.18]: https://github.com/ejbills/DockDoor/compare/v1.17.3...v1.18
 [v1.17.3]: https://github.com/ejbills/DockDoor/compare/v1.17.2...v1.17.3
 [v1.17.2]: https://github.com/ejbills/DockDoor/compare/v1.17.1...v1.17.2
 [v1.17.1]: https://github.com/ejbills/DockDoor/compare/v1.17...v1.17.1
