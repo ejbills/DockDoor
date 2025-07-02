@@ -56,12 +56,11 @@
   are in fullscreen mode
 
   🔧 Technical Improvements
-
-  Enhanced App Detection
   - Better keybind handling: Improved KeybindHelper with support for new navigation
    patterns
   - Window utility enhancements: Enhanced WindowUtil with frontmost app filtering
   capabilities
+  - Better lyric timing
 
   📚 Documentation
 
