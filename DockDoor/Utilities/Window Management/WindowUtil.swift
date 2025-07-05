@@ -303,23 +303,25 @@ enum WindowUtil {
 
         func attemptActivation() -> Bool {
             do {
-                // First try to activate the application
+                // First, quickly activate the app to make it frontmost
                 let activationOptions: NSApplication.ActivationOptions = [.activateIgnoringOtherApps]
                 let activated = windowInfo.app.activate(options: activationOptions)
 
-                if !activated {
-                    // Try alternative activation method
-                    try windowInfo.appAxElement.setAttribute(kAXFocusedAttribute, true)
-                    try windowInfo.appAxElement.setAttribute(kAXFrontmostAttribute, true)
-                }
-
-                usleep(10000)
-
+                // Immediately use AX actions to focus the specific window before system decides
                 try windowInfo.axElement.performAction(kAXRaiseAction)
                 try windowInfo.axElement.performAction(kAXPressAction)
                 try windowInfo.axElement.setAttribute(kAXMainAttribute, true)
                 try windowInfo.axElement.setAttribute(kAXFocusedAttribute, true)
                 try windowInfo.axElement.setAttribute(kAXFrontmostAttribute, true)
+
+                if !activated {
+                    // Try alternative activation method if needed
+                    try windowInfo.appAxElement.setAttribute(kAXFocusedAttribute, true)
+                    try windowInfo.appAxElement.setAttribute(kAXFrontmostAttribute, true)
+                }
+
+                // Small delay to ensure AX actions take effect before observer cache updates
+                usleep(15000)
 
                 updateWindowDateTime(windowInfo)
                 return true
