@@ -5614,8 +5614,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add App"
+            "state" : "translated",
+            "value" : "Aggiungi app"
           }
         },
         "ja" : {
@@ -5692,8 +5692,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add App"
+            "state" : "translated",
+            "value" : "Додати застосунок"
           }
         },
         "vi" : {
@@ -5804,8 +5804,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add App to Blacklist"
+            "state" : "translated",
+            "value" : "Aggiungi app alla blacklist"
           }
         },
         "ja" : {
@@ -5882,8 +5882,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add App to Blacklist"
+            "state" : "translated",
+            "value" : "Додати застосунок до чорного списку"
           }
         },
         "vi" : {
@@ -9422,8 +9422,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Apps in this list will not respond to window switcher shortcuts when in fullscreen mode."
+            "state" : "translated",
+            "value" : "Le applicazioni in questo elenco non reagiranno alle scorciatoie del selettore finestre in modalità schermo intero."
           }
         },
         "ja" : {
@@ -9500,8 +9500,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Apps in this list will not respond to window switcher shortcuts when in fullscreen mode."
+            "state" : "translated",
+            "value" : "Застосунки з цього списку не реагуватимуть на комбінації клавіш Перемикача вікон у повноекранному режимі."
           }
         },
         "vi" : {
@@ -11896,8 +11896,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Browse for .app file..."
+            "state" : "translated",
+            "value" : "Seleziona il file .app..."
           }
         },
         "ja" : {
@@ -11974,8 +11974,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Browse for .app file..."
+            "state" : "translated",
+            "value" : "Обрати .app файл..."
           }
         },
         "vi" : {
@@ -13688,7 +13688,7 @@
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Натисніть \"Встановити тригерну клавішу\""
+            "value" : "Натисніть \"Встановити\""
           }
         },
         "vi" : {
@@ -25801,8 +25801,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Fullscreen App Blacklist"
+            "state" : "translated",
+            "value" : "Blacklist app a schermo intero"
           }
         },
         "ja" : {
@@ -25879,8 +25879,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Fullscreen App Blacklist"
+            "state" : "translated",
+            "value" : "Чорний список повноекранних застосунків"
           }
         },
         "vi" : {
@@ -34560,8 +34560,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Limit Window Switcher to active app only"
+            "state" : "translated",
+            "value" : "Limita il selettore finestre all'app attiva"
           }
         },
         "ja" : {
@@ -34638,8 +34638,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Limit Window Switcher to active app only"
+            "state" : "translated",
+            "value" : "Обмежити Перемикач вікон лише активною програмою"
           }
         },
         "vi" : {
@@ -38749,8 +38749,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No apps in blacklist"
+            "state" : "translated",
+            "value" : "Nessuna app in blacklist"
           }
         },
         "ja" : {
@@ -38827,8 +38827,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No apps in blacklist"
+            "state" : "translated",
+            "value" : "Немає застосунків у чорному списку"
           }
         },
         "vi" : {
@@ -41605,8 +41605,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Only show windows from the currently active/frontmost application."
+            "state" : "translated",
+            "value" : "Mostra solo le finestre dall'applicazione attiva / in primo piano."
           }
         },
         "ja" : {
@@ -41683,8 +41683,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Only show windows from the currently active/frontmost application."
+            "state" : "translated",
+            "value" : "Показувати лише вікна з поточного активного/найпопереднішого застосунку."
           }
         },
         "vi" : {
@@ -50745,8 +50745,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reading app information..."
+            "state" : "translated",
+            "value" : "Lettura delle info dell'app..."
           }
         },
         "ja" : {
@@ -50823,8 +50823,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reading app information..."
+            "state" : "translated",
+            "value" : "Читання інформації про застосунок..."
           }
         },
         "vi" : {
@@ -56455,8 +56455,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Select an application:"
+            "state" : "translated",
+            "value" : "Scegli un'app:"
           }
         },
         "ja" : {
@@ -56533,8 +56533,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Select an application:"
+            "state" : "translated",
+            "value" : "Оберіть застосунок:"
           }
         },
         "vi" : {
@@ -57216,8 +57216,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Selected app:"
+            "state" : "translated",
+            "value" : "App selezionate:"
           }
         },
         "ja" : {
@@ -57294,8 +57294,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Selected app:"
+            "state" : "translated",
+            "value" : "Оберіть застосунок:"
           }
         },
         "vi" : {
@@ -58057,7 +58057,7 @@
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Встановити тригерну клавішу"
+            "value" : "Встановити"
           }
         },
         "vi" : {
@@ -66167,8 +66167,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "This will add the app to the blacklist using its bundle identifier for reliable matching."
+            "state" : "translated",
+            "value" : "L'app sarà aggiunta alla blacklist tramite il suo bundle identifier per una corrispondenza totalmente affidabile."
           }
         },
         "ja" : {
@@ -66245,8 +66245,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "This will add the app to the blacklist using its bundle identifier for reliable matching."
+            "state" : "translated",
+            "value" : "Це додасть застосунок до чорного списку, використовуючи його ідентифікатор пакета для надійного зіставлення."
           }
         },
         "vi" : {
