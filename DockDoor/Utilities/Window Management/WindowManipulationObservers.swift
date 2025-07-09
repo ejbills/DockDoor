@@ -76,7 +76,6 @@ class WindowManipulationObservers {
         previewCoordinator.hideWindow()
     }
 
-
     @objc private func activeSpaceDidChange(_ notification: Notification) {
         Task(priority: .high) { [weak self] in
             guard self != nil else { return }
