@@ -393,6 +393,18 @@ enum WindowUtil {
         }
     }
 
+    static func updateWindowDateTime(element: AXUIElement, app: NSRunningApplication) {
+        guard Defaults[.sortWindowsByDate] else { return }
+        desktopSpaceWindowCacheManager.updateCache(pid: app.processIdentifier) { windowSet in
+            if let index = windowSet.firstIndex(where: { $0.axElement == element }) {
+                var updatedWindow = windowSet[index]
+                updatedWindow.date = Date()
+                windowSet.remove(at: index)
+                windowSet.insert(updatedWindow)
+            }
+        }
+    }
+
     static func updateStatusOfWindowCache(pid: pid_t, isParentAppHidden: Bool) {
         let appElement = AXUIElementCreateApplication(pid)
         desktopSpaceWindowCacheManager.updateCache(pid: pid) { cachedWindows in
