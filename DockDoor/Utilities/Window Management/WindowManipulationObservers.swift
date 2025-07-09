@@ -48,7 +48,6 @@ class WindowManipulationObservers {
         let notificationCenter = NSWorkspace.shared.notificationCenter
         notificationCenter.addObserver(self, selector: #selector(appDidLaunch(_:)), name: NSWorkspace.didLaunchApplicationNotification, object: nil)
         notificationCenter.addObserver(self, selector: #selector(appDidTerminate(_:)), name: NSWorkspace.didTerminateApplicationNotification, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(appDidActivate(_:)), name: NSWorkspace.didActivateApplicationNotification, object: nil)
 
         notificationCenter.addObserver(self, selector: #selector(activeSpaceDidChange(_:)), name: NSWorkspace.activeSpaceDidChangeNotification, object: nil)
 
@@ -75,14 +74,6 @@ class WindowManipulationObservers {
         WindowUtil.purgeAppCache(with: app.processIdentifier)
         removeObserver(for: app.processIdentifier)
         previewCoordinator.hideWindow()
-    }
-
-    @objc private func appDidActivate(_ notification: Notification) {
-        guard let app = notification.userInfo?[NSWorkspace.applicationUserInfoKey] as? NSRunningApplication else {
-            return
-        }
-
-        WindowUtil.updateWindowDateTime(for: app)
     }
 
     @objc private func activeSpaceDidChange(_ notification: Notification) {
@@ -186,7 +177,7 @@ class WindowManipulationObservers {
 
         let workItem = DispatchWorkItem {
             if updateDateTime {
-                WindowUtil.updateWindowDateTime(for: app)
+                WindowUtil.updateWindowDateTime(element: element, app: app)
             }
             WindowUtil.updateWindowCache(for: app) { windowSet in
                 windowSet = windowSet.filter { WindowUtil.isValidElement($0.axElement) }
