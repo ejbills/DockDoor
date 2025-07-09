@@ -333,4 +333,50 @@ document.addEventListener('DOMContentLoaded', function() {
             createToast();
         });
     });
+    
+    // LookieLoo section animations
+    function animateLookielooSection() {
+        const lookielooFeatures = document.querySelectorAll('.lookieloo-feature');
+        const lookielooShowcase = document.querySelector('.lookieloo-showcase');
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        // Animate features with staggered delay
+        lookielooFeatures.forEach((feature, index) => {
+            feature.style.opacity = '0';
+            feature.style.transform = 'translateY(30px)';
+            feature.style.transition = `opacity 0.6s ease ${index * 0.2}s, transform 0.6s ease ${index * 0.2}s`;
+            observer.observe(feature);
+        });
+        
+        // Animate showcase
+        if (lookielooShowcase) {
+            lookielooShowcase.style.opacity = '0';
+            lookielooShowcase.style.transform = 'translateY(30px)';
+            lookielooShowcase.style.transition = 'opacity 0.6s ease 0.4s, transform 0.6s ease 0.4s';
+            observer.observe(lookielooShowcase);
+        }
+    }
+    
+    // Initialize LookieLoo animations
+    if ('IntersectionObserver' in window) {
+        animateLookielooSection();
+    }
+    
+    // Track LookieLoo clicks (optional analytics)
+    const lookielooLinks = document.querySelectorAll('.lookieloo-cta a');
+    lookielooLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            // Optional: Send analytics event
+            console.log('LookieLoo link clicked:', link.href);
+        });
+    });
 });
