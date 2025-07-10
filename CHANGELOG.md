@@ -38,6 +38,14 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://buymeacoffee.com/keplercafe</div>
 
+<a id="v1.18.1"></a>
+# [v1.18.1](https://github.com/ejbills/DockDoor/releases/tag/v1.18.1) - 2025-07-10
+
+- Fixes window ordering 
+
+[Changes][v1.18.1]
+
+
 <a id="v1.18"></a>
 # [v1.18](https://github.com/ejbills/DockDoor/releases/tag/v1.18) - 2025-07-02
 
@@ -1245,6 +1253,7 @@ v1.0
 [Changes][releases]
 
 
+[v1.18.1]: https://github.com/ejbills/DockDoor/compare/v1.18...v1.18.1
 [v1.18]: https://github.com/ejbills/DockDoor/compare/v1.17.3...v1.18
 [v1.17.3]: https://github.com/ejbills/DockDoor/compare/v1.17.2...v1.17.3
 [v1.17.2]: https://github.com/ejbills/DockDoor/compare/v1.17.1...v1.17.2
