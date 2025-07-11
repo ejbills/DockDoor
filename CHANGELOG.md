@@ -38,6 +38,17 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://buymeacoffee.com/keplercafe</div>
 
+<a id="v1.18.2"></a>
+# [v1.18.2](https://github.com/ejbills/DockDoor/releases/tag/v1.18.2) - 2025-07-11
+
+- Fixed issue where window timestamps weren't updating when clicking on dock icons or directly clicking on windows. The app now properly detects these interactions and updates only the specific window that was clicked, ensuring accurate MRU (Most Recently Used) ordering in the window switcher.
+
+---
+  Note: This addresses a remaining issue from the previous window ordering fix that was missed in the earlier release.
+
+[Changes][v1.18.2]
+
+
 <a id="v1.18.1"></a>
 # [v1.18.1](https://github.com/ejbills/DockDoor/releases/tag/v1.18.1) - 2025-07-10
 
@@ -1253,6 +1264,7 @@ v1.0
 [Changes][releases]
 
 
+[v1.18.2]: https://github.com/ejbills/DockDoor/compare/v1.18.1...v1.18.2
 [v1.18.1]: https://github.com/ejbills/DockDoor/compare/v1.18...v1.18.1
 [v1.18]: https://github.com/ejbills/DockDoor/compare/v1.17.3...v1.18
 [v1.17.3]: https://github.com/ejbills/DockDoor/compare/v1.17.2...v1.17.3
