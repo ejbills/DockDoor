@@ -50,6 +50,7 @@ class WindowManipulationObservers {
         notificationCenter.addObserver(self, selector: #selector(appDidTerminate(_:)), name: NSWorkspace.didTerminateApplicationNotification, object: nil)
 
         notificationCenter.addObserver(self, selector: #selector(activeSpaceDidChange(_:)), name: NSWorkspace.activeSpaceDidChangeNotification, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(appDidActivate(_:)), name: NSWorkspace.didActivateApplicationNotification, object: nil)
 
         for app in NSWorkspace.shared.runningApplications {
             if app.activationPolicy == .regular, app.processIdentifier != ProcessInfo.processInfo.processIdentifier {
@@ -83,6 +84,26 @@ class WindowManipulationObservers {
         }
     }
 
+    @objc private func appDidActivate(_ notification: Notification) {
+        guard let app = notification.userInfo?[NSWorkspace.applicationUserInfoKey] as? NSRunningApplication,
+              app.activationPolicy == .regular,
+              app.processIdentifier != ProcessInfo.processInfo.processIdentifier
+        else {
+            return
+        }
+
+        // Get the focused window when app becomes active (this is the window user clicked on)
+        let appElement = AXUIElementCreateApplication(app.processIdentifier)
+
+        // Try to get the focused window first (the one user clicked on)
+        if let focusedWindow = try? appElement.focusedWindow() {
+            WindowUtil.updateWindowDateTime(element: focusedWindow, app: app)
+        } else if let windows = try? appElement.windows(), let firstWindow = windows.first {
+            // Last resort: use first window
+            WindowUtil.updateWindowDateTime(element: firstWindow, app: app)
+        }
+    }
+
     private func createObserverForApp(_ app: NSRunningApplication) {
         let pid = app.processIdentifier
 
@@ -99,6 +120,7 @@ class WindowManipulationObservers {
         AXObserverAddNotification(observer, appElement, kAXApplicationShownNotification as CFString, UnsafeMutableRawPointer(bitPattern: Int(pid)))
         AXObserverAddNotification(observer, appElement, kAXWindowResizedNotification as CFString, UnsafeMutableRawPointer(bitPattern: Int(pid)))
         AXObserverAddNotification(observer, appElement, kAXWindowMovedNotification as CFString, UnsafeMutableRawPointer(bitPattern: Int(pid)))
+        AXObserverAddNotification(observer, appElement, kAXMainWindowChangedNotification as CFString, UnsafeMutableRawPointer(bitPattern: Int(pid)))
         AXObserverAddNotification(observer, appElement, kAXFocusedUIElementChangedNotification as CFString, UnsafeMutableRawPointer(bitPattern: Int(pid)))
         AXObserverAddNotification(observer, appElement, kAXFocusedWindowChangedNotification as CFString, UnsafeMutableRawPointer(bitPattern: Int(pid)))
 
@@ -121,6 +143,7 @@ class WindowManipulationObservers {
         AXObserverRemoveNotification(observer, appElement, kAXWindowMiniaturizedNotification as CFString)
         AXObserverRemoveNotification(observer, appElement, kAXApplicationHiddenNotification as CFString)
         AXObserverRemoveNotification(observer, appElement, kAXApplicationShownNotification as CFString)
+        AXObserverRemoveNotification(observer, appElement, kAXMainWindowChangedNotification as CFString)
         AXObserverRemoveNotification(observer, appElement, kAXFocusedUIElementChangedNotification as CFString)
         AXObserverRemoveNotification(observer, appElement, kAXFocusedWindowChangedNotification as CFString)
         AXObserverRemoveNotification(observer, appElement, kAXWindowResizedNotification as CFString)
@@ -147,7 +170,7 @@ class WindowManipulationObservers {
 
     func processAXNotification(element: AXUIElement, notificationName: String, app: NSRunningApplication, pid: pid_t) {
         switch notificationName {
-        case kAXFocusedUIElementChangedNotification, kAXFocusedWindowChangedNotification:
+        case kAXFocusedUIElementChangedNotification, kAXFocusedWindowChangedNotification, kAXMainWindowChangedNotification:
             handleFocusedUIElementChanged(element: element, app: app, pid: pid)
         case kAXUIElementDestroyedNotification, kAXWindowResizedNotification, kAXWindowMovedNotification:
             handleWindowStateChange(element: element, app: app)
