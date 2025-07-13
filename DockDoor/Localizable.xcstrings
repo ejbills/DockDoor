@@ -2472,8 +2472,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "+%lld more"
+            "state" : "translated",
+            "value" : "還有+%lld"
           }
         }
       }
@@ -4181,7 +4181,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "4."
+            "value" : "4,"
           }
         },
         "zh-Hant" : {
@@ -5710,8 +5710,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add App"
+            "state" : "translated",
+            "value" : "加入App"
           }
         }
       }
@@ -5900,8 +5900,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add App to Blacklist"
+            "state" : "translated",
+            "value" : "將App加入黑名單"
           }
         }
       }
@@ -9518,8 +9518,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Apps in this list will not respond to window switcher shortcuts when in fullscreen mode."
+            "state" : "translated",
+            "value" : "列表內的App在全螢幕模式中不會回應視窗切換器的快速鍵。"
           }
         }
       }
@@ -11992,8 +11992,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Browse for .app file..."
+            "state" : "translated",
+            "value" : "瀏覽.app檔案..."
           }
         }
       }
@@ -25897,8 +25897,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Fullscreen App Blacklist"
+            "state" : "translated",
+            "value" : "全螢幕App黑名單"
           }
         }
       }
@@ -34656,8 +34656,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Limit Window Switcher to active app only"
+            "state" : "translated",
+            "value" : "限制視窗切換器只顯示使用中的App"
           }
         }
       }
@@ -38845,8 +38845,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No apps in blacklist"
+            "state" : "translated",
+            "value" : "黑名單中沒有App"
           }
         }
       }
@@ -41701,8 +41701,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Only show windows from the currently active/frontmost application."
+            "state" : "translated",
+            "value" : "只顯示使用中或最前方的App。"
           }
         }
       }
@@ -45321,7 +45321,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "請重新打開App來套用變更。按一下「好」來退出應用程式。"
+            "value" : "請重新打開App來套用變更。按一下「好」來結束App。"
           }
         }
       }
@@ -50841,8 +50841,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reading app information..."
+            "state" : "translated",
+            "value" : "正在讀取App資訊…"
           }
         }
       }
@@ -56551,8 +56551,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Select an application:"
+            "state" : "translated",
+            "value" : "選擇App："
           }
         }
       }
@@ -57312,8 +57312,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Selected app:"
+            "state" : "translated",
+            "value" : "選擇的App："
           }
         }
       }
@@ -66263,8 +66263,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "This will add the app to the blacklist using its bundle identifier for reliable matching."
+            "state" : "translated",
+            "value" : "App將根據其套件識別碼加入黑名單來提升可靠度。"
           }
         }
       }
