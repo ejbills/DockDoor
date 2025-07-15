@@ -58,7 +58,7 @@ extension AppearanceSettingsView {
                     closeButton: dummyAXElement,
                     isMinimized: false,
                     isHidden: false,
-                    date: Date()
+                    lastAccessedTime: Date()
                 )
             )
         }

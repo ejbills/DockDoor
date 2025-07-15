@@ -31,11 +31,11 @@ struct WindowInfo: Identifiable, Hashable {
     var closeButton: AXUIElement?
     var isMinimized: Bool
     var isHidden: Bool
-    var date: Date
+    var lastAccessedTime: Date
 
     private var _scWindow: SCWindow?
 
-    init(windowProvider: WindowPropertiesProviding, app: NSRunningApplication, image: CGImage?, axElement: AXUIElement, appAxElement: AXUIElement, closeButton: AXUIElement?, isMinimized: Bool, isHidden: Bool, date: Date) {
+    init(windowProvider: WindowPropertiesProviding, app: NSRunningApplication, image: CGImage?, axElement: AXUIElement, appAxElement: AXUIElement, closeButton: AXUIElement?, isMinimized: Bool, isHidden: Bool, lastAccessedTime: Date) {
         id = windowProvider.windowID
         self.windowProvider = windowProvider
         self.app = app
@@ -46,7 +46,7 @@ struct WindowInfo: Identifiable, Hashable {
         self.closeButton = closeButton
         self.isMinimized = isMinimized
         self.isHidden = isHidden
-        self.date = date
+        self.lastAccessedTime = lastAccessedTime
         _scWindow = windowProvider as? SCWindow
     }
 
@@ -87,6 +87,18 @@ enum WindowUtil {
         desktopSpaceWindowCacheManager.updateCache(pid: app.processIdentifier, update: update)
     }
 
+    static func updateWindowDateTime(element: AXUIElement, app: NSRunningApplication) {
+        guard Defaults[.sortWindowsByDate] else { return }
+        desktopSpaceWindowCacheManager.updateCache(pid: app.processIdentifier) { windowSet in
+            if let index = windowSet.firstIndex(where: { $0.axElement == element }) {
+                var updatedWindow = windowSet[index]
+                updatedWindow.lastAccessedTime = Date()
+                windowSet.remove(at: index)
+                windowSet.insert(updatedWindow)
+            }
+        }
+    }
+
     // MARK: - Helper Functions
 
     /// Main function to capture a window image using ScreenCaptureKit, with fallback to legacy methods for older macOS versions.
@@ -100,7 +112,7 @@ enum WindowUtil {
             {
                 // Check if we need to refresh the image based on cache lifespan
                 let cacheLifespan = Defaults[.screenCaptureCacheLifespan]
-                if Date().timeIntervalSince(cachedWindow.date) <= cacheLifespan {
+                if Date().timeIntervalSince(cachedWindow.lastAccessedTime) <= cacheLifespan {
                     return cachedImage
                 }
 
@@ -246,7 +258,6 @@ enum WindowUtil {
                 try windowInfo.axElement.setAttribute(kAXMinimizedAttribute, false)
                 windowInfo.app.activate()
                 bringWindowToFront(windowInfo: windowInfo)
-                updateWindowDateTime(windowInfo)
                 return false
             } catch {
                 print("Error un-minimizing window")
@@ -255,7 +266,6 @@ enum WindowUtil {
         } else {
             do {
                 try windowInfo.axElement.setAttribute(kAXMinimizedAttribute, true)
-                updateWindowDateTime(windowInfo)
                 return true
             } catch {
                 print("Error minimizing window")
@@ -273,7 +283,6 @@ enum WindowUtil {
                 windowInfo.app.activate()
                 bringWindowToFront(windowInfo: windowInfo)
             }
-            updateWindowDateTime(windowInfo)
             return newHiddenState
         } catch {
             print("Error toggling hidden state of application")
@@ -303,29 +312,12 @@ enum WindowUtil {
 
         func attemptActivation() -> Bool {
             do {
-                // First, quickly activate the app to make it frontmost
-                let activationOptions: NSApplication.ActivationOptions = [.activateIgnoringOtherApps]
-                let activated = windowInfo.app.activate(options: activationOptions)
+                windowInfo.app.activate()
 
-                // Immediately use AX actions to focus the specific window before system decides
                 try windowInfo.axElement.performAction(kAXRaiseAction)
-                try windowInfo.axElement.performAction(kAXPressAction)
-                try windowInfo.axElement.setAttribute(kAXMainAttribute, true)
-                try windowInfo.axElement.setAttribute(kAXFocusedAttribute, true)
-                try windowInfo.axElement.setAttribute(kAXFrontmostAttribute, true)
+                try windowInfo.axElement.setAttribute(kAXMainWindowAttribute, true)
 
-                if !activated {
-                    // Try alternative activation method if needed
-                    try windowInfo.appAxElement.setAttribute(kAXFocusedAttribute, true)
-                    try windowInfo.appAxElement.setAttribute(kAXFrontmostAttribute, true)
-                }
-
-                // Small delay to ensure AX actions take effect before observer cache updates
-                usleep(15000)
-
-                updateWindowDateTime(windowInfo)
                 return true
-
             } catch {
                 print("Attempt \(retryCount + 1) failed to bring window to front: \(error)")
                 if error is AxError {
@@ -358,51 +350,6 @@ enum WindowUtil {
         let keyUp = CGEvent(keyboardEventSource: source, virtualKey: 0x2D, keyDown: false)
         keyUp?.flags = .maskCommand
         keyUp?.postToPid(app.processIdentifier)
-    }
-
-    static func updateWindowDateTime(_ windowInfo: WindowInfo) {
-        guard Defaults[.sortWindowsByDate] else { return }
-        desktopSpaceWindowCacheManager.updateCache(pid: windowInfo.app.processIdentifier) { windowSet in
-            if let index = windowSet.firstIndex(where: { $0.axElement == windowInfo.axElement }) {
-                var updatedWindow = windowSet[index]
-                updatedWindow.date = Date()
-                windowSet.remove(at: index)
-                windowSet.insert(updatedWindow)
-            }
-        }
-    }
-
-    static func updateWindowDateTime(for app: NSRunningApplication) {
-        guard Defaults[.sortWindowsByDate] else { return }
-        desktopSpaceWindowCacheManager.updateCache(pid: app.processIdentifier) { windowSet in
-            if windowSet.isEmpty {
-                return
-            }
-            let appElement = AXUIElementCreateApplication(app.processIdentifier)
-            if let windows = try? appElement.windows() {
-                for window in windows {
-                    if let cgWindowId = try? window.cgWindowId(), let index = windowSet.firstIndex(where: { $0.id == cgWindowId }) {
-                        var updatedWindow = windowSet[index]
-                        updatedWindow.date = Date()
-                        windowSet.remove(at: index)
-                        windowSet.insert(updatedWindow)
-                        return
-                    }
-                }
-            }
-        }
-    }
-
-    static func updateWindowDateTime(element: AXUIElement, app: NSRunningApplication) {
-        guard Defaults[.sortWindowsByDate] else { return }
-        desktopSpaceWindowCacheManager.updateCache(pid: app.processIdentifier) { windowSet in
-            if let index = windowSet.firstIndex(where: { $0.axElement == element }) {
-                var updatedWindow = windowSet[index]
-                updatedWindow.date = Date()
-                windowSet.remove(at: index)
-                windowSet.insert(updatedWindow)
-            }
-        }
     }
 
     static func updateStatusOfWindowCache(pid: pid_t, isParentAppHidden: Bool) {
@@ -508,7 +455,7 @@ enum WindowUtil {
             }
 
             let finalWindows = await WindowUtil.purifyAppCache(with: app.processIdentifier, removeAll: false) ?? []
-            return finalWindows.sorted(by: { $0.date > $1.date })
+            return finalWindows.sorted(by: { $0.lastAccessedTime > $1.lastAccessedTime })
         }
 
         return []
@@ -526,7 +473,7 @@ enum WindowUtil {
 
             for window in appWindows {
                 await group.addTask {
-                    try? await captureAndCacheWindowInfo(window: window, app: app, preventDateUpdate: false)
+                    try? await captureAndCacheWindowInfo(window: window, app: app)
                 }
             }
 
@@ -577,7 +524,7 @@ enum WindowUtil {
         }
     }
 
-    static func captureAndCacheWindowInfo(window: SCWindow, app: NSRunningApplication, isMinimizedOrHidden: Bool = false, preventDateUpdate: Bool = true) async throws {
+    static func captureAndCacheWindowInfo(window: SCWindow, app: NSRunningApplication, isMinimizedOrHidden: Bool = false) async throws {
         let windowID = window.windowID
 
         if isMinimizedOrHidden {
@@ -674,20 +621,20 @@ enum WindowUtil {
                 closeButton: closeButton,
                 isMinimized: false,
                 isHidden: false,
-                date: Date.now
+                lastAccessedTime: Date.now
             )
 
             await Task.detached(priority: .userInitiated) {
                 if let image = try? await captureWindowImage(window: window) {
                     var mutableCopy = windowInfo
                     mutableCopy.image = image
-                    updateDesktopSpaceWindowCache(with: mutableCopy, preventDateUpdate)
+                    updateDesktopSpaceWindowCache(with: mutableCopy)
                 }
             }.value
         }
     }
 
-    static func updateDesktopSpaceWindowCache(with windowInfo: WindowInfo, _ preventDateUpdate: Bool = false) {
+    static func updateDesktopSpaceWindowCache(with windowInfo: WindowInfo) {
         desktopSpaceWindowCacheManager.updateCache(pid: windowInfo.app.processIdentifier) { windowSet in
             if let matchingWindow = windowSet.first(where: { $0.axElement == windowInfo.axElement }) {
                 var matchingWindowCopy = matchingWindow
@@ -695,10 +642,6 @@ enum WindowUtil {
                 matchingWindowCopy.image = windowInfo.image
                 matchingWindowCopy.isHidden = windowInfo.isHidden
                 matchingWindowCopy.isMinimized = windowInfo.isMinimized
-
-                if !preventDateUpdate, Defaults[.sortWindowsByDate] {
-                    matchingWindowCopy.date = windowInfo.date
-                }
 
                 windowSet.remove(matchingWindow)
                 windowSet.insert(matchingWindowCopy)

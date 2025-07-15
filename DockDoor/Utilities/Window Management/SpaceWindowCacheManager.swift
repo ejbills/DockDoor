@@ -84,6 +84,6 @@ class SpaceWindowCacheManager {
     func getAllWindows() -> [WindowInfo] {
         cacheLock.lock()
         defer { cacheLock.unlock() }
-        return Array(windowCache.values.flatMap { $0 }).sorted(by: { $0.date > $1.date })
+        return Array(windowCache.values.flatMap { $0 }).sorted(by: { $0.lastAccessedTime > $1.lastAccessedTime })
     }
 }

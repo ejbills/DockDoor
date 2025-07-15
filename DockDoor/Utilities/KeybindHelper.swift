@@ -266,7 +266,7 @@ class KeybindHelper {
            (!previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive)
         {
             Task { @MainActor in
-                await self.previewCoordinator.cycleWindows(goBackwards: true)
+                self.previewCoordinator.cycleWindows(goBackwards: true)
             }
         }
 

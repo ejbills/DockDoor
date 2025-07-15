@@ -94,14 +94,11 @@ class WindowManipulationObservers {
 
         // Get the focused window when app becomes active (this is the window user clicked on)
         let appElement = AXUIElementCreateApplication(app.processIdentifier)
-
-        // Try to get the focused window first (the one user clicked on)
-        if let focusedWindow = try? appElement.focusedWindow() {
-            WindowUtil.updateWindowDateTime(element: focusedWindow, app: app)
-        } else if let windows = try? appElement.windows(), let firstWindow = windows.first {
-            // Last resort: use first window
-            WindowUtil.updateWindowDateTime(element: firstWindow, app: app)
-        }
+        doAfter(0.45, action: { // allow space switch animation
+            if let focusedWindow = try? appElement.focusedWindow() {
+                WindowUtil.updateWindowDateTime(element: focusedWindow, app: app)
+            }
+        })
     }
 
     private func createObserverForApp(_ app: NSRunningApplication) {
@@ -171,10 +168,16 @@ class WindowManipulationObservers {
     func processAXNotification(element: AXUIElement, notificationName: String, app: NSRunningApplication, pid: pid_t) {
         switch notificationName {
         case kAXFocusedUIElementChangedNotification, kAXFocusedWindowChangedNotification, kAXMainWindowChangedNotification:
-            handleFocusedUIElementChanged(element: element, app: app, pid: pid)
+            // Only update timestamp if app is already frontmost (same space window switching)
+            // Otherwise let app activation observer handle it after space switch completes
+            if app.isActive {
+                WindowUtil.updateWindowDateTime(element: element, app: app)
+            }
+            handleWindowEvent(element: element, app: app)
         case kAXUIElementDestroyedNotification, kAXWindowResizedNotification, kAXWindowMovedNotification:
-            handleWindowStateChange(element: element, app: app)
+            handleWindowEvent(element: element, app: app)
         case kAXWindowMiniaturizedNotification:
+            handleWindowEvent(element: element, app: app)
             WindowUtil.updateStatusOfWindowCache(pid: pid, isParentAppHidden: false)
         case kAXApplicationHiddenNotification:
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
@@ -195,27 +198,16 @@ class WindowManipulationObservers {
         }
     }
 
-    private func handleWindowEvent(element: AXUIElement, app: NSRunningApplication, updateDateTime: Bool = false) {
+    private func handleWindowEvent(element: AXUIElement, app: NSRunningApplication) {
         debounceWorkItem?.cancel()
 
         let workItem = DispatchWorkItem {
-            if updateDateTime {
-                WindowUtil.updateWindowDateTime(element: element, app: app)
-            }
             WindowUtil.updateWindowCache(for: app) { windowSet in
                 windowSet = windowSet.filter { WindowUtil.isValidElement($0.axElement) }
             }
         }
         debounceWorkItem = workItem
         DispatchQueue.main.asyncAfter(deadline: .now() + windowProcessingDebounceInterval, execute: workItem)
-    }
-
-    private func handleFocusedUIElementChanged(element: AXUIElement, app: NSRunningApplication, pid: pid_t) {
-        handleWindowEvent(element: element, app: app, updateDateTime: true)
-    }
-
-    private func handleWindowStateChange(element: AXUIElement, app: NSRunningApplication) {
-        handleWindowEvent(element: element, app: app)
     }
 }
 
