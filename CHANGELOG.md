@@ -38,6 +38,19 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://buymeacoffee.com/keplercafe</div>
 
+<a id="v1.18.3"></a>
+# [v1.18.3](https://github.com/ejbills/DockDoor/releases/tag/v1.18.3) - 2025-07-18
+
+## 🐛 Bug Fixes
+
+### Window Switcher MRU Ordering
+* **Fixed critical window switcher bug**: Resolved issue where Window Switcher would incorrectly switch to unused windows of the same app instead of maintaining proper Most Recently Used (MRU) ordering
+* **Improved window timestamp management**: Implemented a single point of entry for updating window timestamps, ensuring reliable and consistent MRU tracking
+* **Enhanced cross-application switching**: Window Switcher now properly alternates between different applications without unexpectedly jumping to inactive windows of the same app
+
+[Changes][v1.18.3]
+
+
 <a id="v1.18.2"></a>
 # [v1.18.2](https://github.com/ejbills/DockDoor/releases/tag/v1.18.2) - 2025-07-11
 
@@ -1264,6 +1277,7 @@ v1.0
 [Changes][releases]
 
 
+[v1.18.3]: https://github.com/ejbills/DockDoor/compare/v1.18.2...v1.18.3
 [v1.18.2]: https://github.com/ejbills/DockDoor/compare/v1.18.1...v1.18.2
 [v1.18.1]: https://github.com/ejbills/DockDoor/compare/v1.18...v1.18.1
 [v1.18]: https://github.com/ejbills/DockDoor/compare/v1.17.3...v1.18
