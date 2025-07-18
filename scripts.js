@@ -2,33 +2,6 @@
 
 // Wait for DOM to be fully loaded
 document.addEventListener('DOMContentLoaded', function() {
-    // Theme toggle functionality
-    const themeToggle = document.getElementById('theme-toggle');
-    const body = document.body;
-    
-    // Check for saved theme preference or use preferred color scheme
-    const savedTheme = localStorage.getItem('theme');
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    
-    if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
-        body.classList.add('dark');
-        themeToggle.innerText = '☀️';
-    } else {
-        themeToggle.innerText = '🌙';
-    }
-    
-    themeToggle.addEventListener('click', () => {
-        body.classList.toggle('dark');
-        
-        if (body.classList.contains('dark')) {
-            localStorage.setItem('theme', 'dark');
-            themeToggle.innerText = '☀️';
-        } else {
-            localStorage.setItem('theme', 'light');
-            themeToggle.innerText = '🌙';
-        }
-    });
-    
     // Mobile menu toggle
     const mobileMenuBtn = document.getElementById('mobile-menu-btn');
     const navLinks = document.querySelector('.nav-links');

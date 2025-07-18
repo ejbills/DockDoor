@@ -35,11 +35,11 @@
                     <li><a href="#features" class="nav-link">Features</a></li>
                     <li><a href="#alt-tab" class="nav-link">Alt+Tab</a></li>
                     <li><a href="#dock-previews" class="nav-link">Dock Previews</a></li>
+                    <li><a href="#lyric-mode" class="nav-link">Lyric Mode</a></li>
                     <li><a href="#faq" class="nav-link">FAQ</a></li>
                 </ul>
             </nav>
             <div class="header-actions">
-                <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">🌓</button>
                 <a href="#download" class="btn btn-primary">Download</a>
                 <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Toggle mobile menu">☰</button>
             </div>
@@ -127,6 +127,39 @@
         </div>
     </section>
 
+    <!-- Lyric Mode Section -->
+    <section class="feature-showcase compact-section" id="lyric-mode">
+        <div class="container">
+            <h2 class="section-title">Lyric Mode for Pinned Media Controls</h2>
+            <p class="section-subtitle">Transform your media experience with synchronized lyrics</p>
+
+            <div class="two-column-grid">
+                <div class="feature-description-container">
+                    <div class="feature-description">
+                        <h3>Real-time Lyric Synchronization</h3>
+                        <p>Pin your Spotify or Apple Music widgets to the screen and enable synchronized lyrics that display alongside your music playback.</p>
+                        
+                        <div class="lyric-mode-guide">
+                            <h4 style="margin-bottom: 1rem; font-size: 1.1rem; color: var(--primary);">How to Use:</h4>
+                            <ol style="text-align: left; opacity: 0.9; line-height: 1.8; margin-left: 1.5rem;">
+                                <li>Hover over media app in dock → Right-click → Pin to Screen (full)</li>
+                                <li>Click album artwork to expand</li>
+                                <li>Toggle lyrics on</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="feature-media-container">
+                    <video autoplay muted loop playsinline class="feature-media">
+                        <source src="/resources/lyrics.mp4" type="video/mp4">
+                        Your browser does not support video playback.
+                    </video>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Special Features Grid -->
     <section class="special-features section" id="features">
         <div class="container">
@@ -179,6 +212,7 @@
                         </video>
                     </div>
                 </div>
+
             </div>
         </div>
     </section>
@@ -592,6 +626,7 @@
                     <h3>DockDoor</h3>
                     <div class="footer-links">
                         <a href="#features" class="footer-link">Features</a>
+                        <a href="#lyric-mode" class="footer-link">Lyric Mode</a>
                         <a href="#download" class="footer-link">Download</a>
                         <a href="#faq" class="footer-link">FAQ</a>
                         <a href="https://github.com/ejbills/DockDoor" class="footer-link">GitHub</a>
