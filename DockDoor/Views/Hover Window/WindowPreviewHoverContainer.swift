@@ -2,6 +2,20 @@ import Defaults
 import ScreenCaptureKit
 import SwiftUI
 
+enum FlowItem: Hashable, Identifiable {
+    case embedded
+    case window(Int)
+
+    var id: String {
+        switch self {
+        case .embedded:
+            "embedded"
+        case let .window(index):
+            "window-\(index)"
+        }
+    }
+}
+
 class MockPreviewWindow: WindowPropertiesProviding {
     var windowID: CGWindowID
     var frame: CGRect
@@ -40,8 +54,9 @@ struct WindowPreviewHoverContainer: View {
     @Default(.appNameStyle) var appNameStyle
     @Default(.windowTitlePosition) var windowTitlePosition
     @Default(.aeroShakeAction) var aeroShakeAction
-    @Default(.previewWrap) var previewWrap
-    @Default(.switcherWrap) var switcherWrap
+    @Default(.previewMaxColumns) var previewMaxColumns
+    @Default(.previewMaxRows) var previewMaxRows
+    @Default(.switcherMaxRows) var switcherMaxRows
     @Default(.gradientColorPalette) var gradientColorPalette
     @Default(.showAnimations) var showAnimations
 
@@ -412,90 +427,41 @@ struct WindowPreviewHoverContainer: View {
         currentMaxDimensionForPreviews: CGPoint,
         currentDimensionsMapForPreviews: [Int: WindowDimensions]
     ) -> some View {
-        let wrap = previewStateCoordinator.windowSwitcherActive ? switcherWrap : previewWrap
-        let layout = calculateOptimalLayout(
-            windowDimensions: currentDimensionsMapForPreviews,
-            isHorizontal: isHorizontal,
-            wrap: wrap,
-            maxDimensionForLayout: currentMaxDimensionForPreviews
-        )
-
         ScrollView(isHorizontal ? .horizontal : .vertical, showsIndicators: false) {
-            DynStack(direction: isHorizontal ? .vertical : .horizontal, spacing: 16) {
-                ForEach(Array(layout.windowsPerStack.enumerated()), id: \.offset) { stackIndex, range in
-                    DynStack(direction: isHorizontal ? .horizontal : .vertical, spacing: 16) {
-                        if stackIndex == 0, embeddedContentType != .none {
-                            embeddedContentView()
-                                .id("\(appName)-embedded")
+            Group {
+                if isHorizontal {
+                    let chunkedItems = createChunkedItems()
+                    VStack(alignment: .leading, spacing: 16) {
+                        ForEach(Array(chunkedItems.enumerated()), id: \.offset) { index, rowItems in
+                            HStack(spacing: 16) {
+                                ForEach(rowItems, id: \.id) { item in
+                                    buildFlowItem(
+                                        item: item,
+                                        currentMaxDimensionForPreviews: currentMaxDimensionForPreviews,
+                                        currentDimensionsMapForPreviews: currentDimensionsMapForPreviews
+                                    )
+                                }
+                            }
                         }
-
-                        ForEach(previewStateCoordinator.windows.indices, id: \.self) { index in
-                            if range.contains(index) {
-                                WindowPreview(
-                                    windowInfo: previewStateCoordinator.windows[index],
-                                    onTap: onWindowTap,
-                                    index: index,
-                                    dockPosition: dockPosition,
-                                    maxWindowDimension: currentMaxDimensionForPreviews,
-                                    bestGuessMonitor: bestGuessMonitor,
-                                    uniformCardRadius: uniformCardRadius,
-                                    handleWindowAction: { action in
-                                        handleWindowAction(action, at: index)
-                                    },
-                                    currIndex: previewStateCoordinator.currIndex,
-                                    windowSwitcherActive: previewStateCoordinator.windowSwitcherActive,
-                                    dimensions: getDimensions(for: index, dimensionsMap: currentDimensionsMapForPreviews),
-                                    showAppIconOnly: showAppIconOnly,
-                                    mockPreviewActive: mockPreviewActive
-                                )
-                                .id("\(appName)-\(index)")
-                                .gesture(
-                                    DragGesture(minimumDistance: 3, coordinateSpace: .global)
-                                        .onChanged { value in
-                                            if draggedWindowIndex == nil {
-                                                draggedWindowIndex = index
-                                                isDragging = true
-                                                DragPreviewCoordinator.shared.startDragging(
-                                                    windowInfo: previewStateCoordinator.windows[index],
-                                                    at: NSEvent.mouseLocation
-                                                )
-                                            }
-                                            if draggedWindowIndex == index {
-                                                let currentPoint = value.location
-                                                if !previewStateCoordinator.windowSwitcherActive, aeroShakeAction != .none,
-                                                   checkForShakeGesture(currentPoint: currentPoint)
-                                                {
-                                                    DragPreviewCoordinator.shared.endDragging()
-                                                    draggedWindowIndex = nil
-                                                    isDragging = false
-
-                                                    switch aeroShakeAction {
-                                                    case .all:
-                                                        minimizeAllWindows()
-                                                    case .except:
-                                                        minimizeAllWindows(previewStateCoordinator.windows[index])
-                                                    default: break
-                                                    }
-                                                } else {
-                                                    DragPreviewCoordinator.shared.updatePreviewPosition(to: NSEvent.mouseLocation)
-                                                }
-                                            }
-                                        }
-                                        .onEnded { value in
-                                            if draggedWindowIndex == index {
-                                                handleWindowDrop(at: NSEvent.mouseLocation, for: index)
-                                                DragPreviewCoordinator.shared.endDragging()
-                                                draggedWindowIndex = nil
-                                                isDragging = false
-                                                dragPoints.removeAll()
-                                            }
-                                        }
-                                )
+                    }
+                } else {
+                    let chunkedItems = createChunkedItems()
+                    HStack(alignment: .top, spacing: 16) {
+                        ForEach(Array(chunkedItems.enumerated()), id: \.offset) { index, colItems in
+                            VStack(spacing: 16) {
+                                ForEach(colItems, id: \.id) { item in
+                                    buildFlowItem(
+                                        item: item,
+                                        currentMaxDimensionForPreviews: currentMaxDimensionForPreviews,
+                                        currentDimensionsMapForPreviews: currentDimensionsMapForPreviews
+                                    )
+                                }
                             }
                         }
                     }
                 }
             }
+            .frame(alignment: .topLeading)
             .globalPadding(20)
         }
         .animation(.smooth(duration: 0.1), value: previewStateCoordinator.windows)
@@ -659,5 +625,204 @@ struct WindowPreviewHoverContainer: View {
         }
 
         return isShake
+    }
+
+    private func getDimensions(for index: Int, dimensionsMap: [Int: WindowDimensions]) -> WindowDimensions? {
+        dimensionsMap[index]
+    }
+
+    private func createFlowItems() -> [FlowItem] {
+        var allItems: [FlowItem] = []
+
+        // Add embedded content first if present
+        if embeddedContentType != .none {
+            allItems.append(.embedded)
+        }
+
+        // Add all windows
+        for index in previewStateCoordinator.windows.indices {
+            allItems.append(.window(index))
+        }
+
+        return allItems
+    }
+
+    private func createChunkedItems() -> [[FlowItem]] {
+        // Determine max items per chunk based on orientation and settings
+        let isHorizontal = dockPosition.isHorizontalFlow || previewStateCoordinator.windowSwitcherActive
+
+        let (maxColumns, maxRows): (Int, Int)
+        if previewStateCoordinator.windowSwitcherActive {
+            // Window switcher mode - only use maxRows (always horizontal)
+            maxColumns = 999 // Not used for switcher
+            maxRows = switcherMaxRows
+        } else {
+            // Dock preview mode - use maxRows for bottom dock only, maxColumns for left/right dock
+            if dockPosition == .bottom {
+                maxColumns = 999 // Not used for bottom dock
+                maxRows = previewMaxRows
+            } else {
+                // Left/right dock (and top dock if it exists)
+                maxColumns = previewMaxColumns
+                maxRows = 999 // Not used for side docks
+            }
+        }
+
+        guard maxColumns > 0, maxRows > 0 else {
+            // If max is 0, create items for all windows
+            let allItems = createFlowItems()
+            return allItems.isEmpty ? [[]] : [allItems]
+        }
+
+        // Create flow items for ALL windows - don't limit them
+        var itemsToProcess: [FlowItem] = []
+
+        // Add embedded content first if present
+        if embeddedContentType != .none {
+            itemsToProcess.append(.embedded)
+        }
+
+        // Add ALL windows
+        for index in previewStateCoordinator.windows.indices {
+            itemsToProcess.append(.window(index))
+        }
+
+        let totalItems = itemsToProcess.count
+
+        if isHorizontal {
+            // Horizontal layout: distribute items across rows, respecting maxRows
+            if maxRows == 1 {
+                return itemsToProcess.isEmpty ? [[]] : [itemsToProcess]
+            }
+
+            let itemsPerRow = Int(ceil(Double(totalItems) / Double(maxRows)))
+            var chunks: [[FlowItem]] = []
+            var startIndex = 0
+
+            for _ in 0 ..< maxRows {
+                let endIndex = min(startIndex + itemsPerRow, totalItems)
+
+                if startIndex < totalItems {
+                    let rowItems = Array(itemsToProcess[startIndex ..< endIndex])
+                    if !rowItems.isEmpty {
+                        chunks.append(rowItems)
+                    }
+                    startIndex = endIndex
+                }
+
+                if startIndex >= totalItems {
+                    break
+                }
+            }
+
+            return chunks.isEmpty ? [[]] : chunks
+
+        } else {
+            // Vertical layout: distribute items across columns, respecting maxColumns
+            if maxColumns == 1 {
+                return itemsToProcess.isEmpty ? [itemsToProcess] : [itemsToProcess]
+            }
+
+            let itemsPerColumn = Int(ceil(Double(totalItems) / Double(maxColumns)))
+            var chunks: [[FlowItem]] = []
+            var startIndex = 0
+
+            for _ in 0 ..< maxColumns {
+                let endIndex = min(startIndex + itemsPerColumn, totalItems)
+
+                if startIndex < totalItems {
+                    let columnItems = Array(itemsToProcess[startIndex ..< endIndex])
+                    if !columnItems.isEmpty {
+                        chunks.append(columnItems)
+                    }
+                    startIndex = endIndex
+                }
+
+                if startIndex >= totalItems {
+                    break
+                }
+            }
+
+            return chunks.isEmpty ? [[]] : chunks
+        }
+    }
+
+    @ViewBuilder
+    private func buildFlowItem(
+        item: FlowItem,
+        currentMaxDimensionForPreviews: CGPoint,
+        currentDimensionsMapForPreviews: [Int: WindowDimensions]
+    ) -> some View {
+        switch item {
+        case .embedded:
+            embeddedContentView()
+                .id("\(appName)-embedded")
+        case let .window(index):
+            if index < previewStateCoordinator.windows.count {
+                WindowPreview(
+                    windowInfo: previewStateCoordinator.windows[index],
+                    onTap: onWindowTap,
+                    index: index,
+                    dockPosition: dockPosition,
+                    maxWindowDimension: currentMaxDimensionForPreviews,
+                    bestGuessMonitor: bestGuessMonitor,
+                    uniformCardRadius: uniformCardRadius,
+                    handleWindowAction: { action in
+                        handleWindowAction(action, at: index)
+                    },
+                    currIndex: previewStateCoordinator.currIndex,
+                    windowSwitcherActive: previewStateCoordinator.windowSwitcherActive,
+                    dimensions: getDimensions(for: index, dimensionsMap: currentDimensionsMapForPreviews),
+                    showAppIconOnly: showAppIconOnly,
+                    mockPreviewActive: mockPreviewActive
+                )
+                .id("\(appName)-\(index)")
+                .gesture(
+                    DragGesture(minimumDistance: 3, coordinateSpace: .global)
+                        .onChanged { value in
+                            if draggedWindowIndex == nil {
+                                draggedWindowIndex = index
+                                isDragging = true
+                                DragPreviewCoordinator.shared.startDragging(
+                                    windowInfo: previewStateCoordinator.windows[index],
+                                    at: NSEvent.mouseLocation
+                                )
+                            }
+                            if draggedWindowIndex == index {
+                                let currentPoint = value.location
+                                if !previewStateCoordinator.windowSwitcherActive, aeroShakeAction != .none,
+                                   checkForShakeGesture(currentPoint: currentPoint)
+                                {
+                                    DragPreviewCoordinator.shared.endDragging()
+                                    draggedWindowIndex = nil
+                                    isDragging = false
+
+                                    switch aeroShakeAction {
+                                    case .all:
+                                        minimizeAllWindows()
+                                    case .except:
+                                        minimizeAllWindows(previewStateCoordinator.windows[index])
+                                    default: break
+                                    }
+                                } else {
+                                    DragPreviewCoordinator.shared.updatePreviewPosition(to: NSEvent.mouseLocation)
+                                }
+                            }
+                        }
+                        .onEnded { value in
+                            if draggedWindowIndex == index {
+                                handleWindowDrop(at: NSEvent.mouseLocation, for: index)
+                                DragPreviewCoordinator.shared.endDragging()
+                                draggedWindowIndex = nil
+                                isDragging = false
+                                dragPoints.removeAll()
+                            }
+                        }
+                )
+            } else {
+                // Index is out of bounds - don't render anything
+                EmptyView()
+            }
+        }
     }
 }

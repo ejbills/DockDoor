@@ -88,8 +88,9 @@ struct AppearanceSettingsView: View {
     @Default(.dimInSwitcherUntilSelected) var dimInSwitcherUntilSelected
     @Default(.selectionOpacity) var selectionOpacity
     @Default(.selectionColor) var selectionColor
-    @Default(.switcherWrap) var switcherWrap
-    @Default(.previewWrap) var previewWrap
+    @Default(.previewMaxColumns) var previewMaxColumns
+    @Default(.previewMaxRows) var previewMaxRows
+    @Default(.switcherMaxRows) var switcherMaxRows
     @Default(.showAppIconOnly) var showAppIconOnly
     @Default(.useAccentColorForSelection) var useAccentColorForSelection
     @Default(.globalPaddingMultiplier) var globalPaddingMultiplier
@@ -167,15 +168,10 @@ struct AppearanceSettingsView: View {
                     VStack {
                         let currentCoordinator = selectedPreviewContext == .dock ? mockDockPreviewCoordinator : mockWindowSwitcherCoordinator
                         if !currentCoordinator.windows.isEmpty {
-                            WindowPreviewHoverContainer(
+                            MockWindowPreviewContainer(
                                 appName: mockAppNameForPreview,
-                                onWindowTap: nil,
-                                dockPosition: .bottom,
-                                mouseLocation: .zero,
-                                bestGuessMonitor: NSScreen.main!,
-                                windowSwitcherCoordinator: currentCoordinator,
-                                mockPreviewActive: true,
-                                updateAvailable: false
+                                coordinator: currentCoordinator,
+                                isWindowSwitcher: selectedPreviewContext == .windowSwitcher
                             )
                             .allowsHitTesting(false)
                         } else {
@@ -264,24 +260,39 @@ struct AppearanceSettingsView: View {
             Text("Preview Layout (Dock)").font(.headline).padding(.bottom, -2)
 
             VStack(alignment: .leading, spacing: 4) {
-                HStack(alignment: .top, spacing: 10) {
-                    let previewWrapBinding = Binding<Double>(
-                        get: { Double(previewWrap) },
-                        set: { previewWrap = Int($0) }
-                    )
-                    sliderSetting(title: "Max Stacks for Dock Previews",
-                                  value: previewWrapBinding,
-                                  range: 0.0 ... 10.0,
-                                  step: 1.0,
-                                  unit: "",
-                                  formatter: {
-                                      let f = NumberFormatter()
-                                      f.minimumFractionDigits = 0
-                                      f.maximumFractionDigits = 0
-                                      return f
-                                  }())
-                }
-                Text(String(localized: "Sets the max rows (for bottom/top Dock) or columns (for side Dock) previews will use. '0' dynamically determines fit."))
+                let previewMaxRowsBinding = Binding<Double>(
+                    get: { Double(previewMaxRows) },
+                    set: { previewMaxRows = Int($0) }
+                )
+                sliderSetting(title: "Max Rows (Bottom Dock)",
+                              value: previewMaxRowsBinding,
+                              range: 1.0 ... 8.0,
+                              step: 1.0,
+                              unit: "",
+                              formatter: {
+                                  let f = NumberFormatter()
+                                  f.minimumFractionDigits = 0
+                                  f.maximumFractionDigits = 0
+                                  return f
+                              }())
+
+                let previewMaxColumnsBinding = Binding<Double>(
+                    get: { Double(previewMaxColumns) },
+                    set: { previewMaxColumns = Int($0) }
+                )
+                sliderSetting(title: "Max Columns (Left/Right Dock)",
+                              value: previewMaxColumnsBinding,
+                              range: 1.0 ... 8.0,
+                              step: 1.0,
+                              unit: "",
+                              formatter: {
+                                  let f = NumberFormatter()
+                                  f.minimumFractionDigits = 0
+                                  f.maximumFractionDigits = 0
+                                  return f
+                              }())
+
+                Text(String(localized: "Controls how many rows/columns of windows are shown in dock previews. Only the relevant setting applies based on dock position."))
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
@@ -311,24 +322,23 @@ struct AppearanceSettingsView: View {
             Divider().padding(.vertical, 2)
             Text("Preview Layout (Switcher)").font(.headline).padding(.bottom, -2)
             VStack(alignment: .leading, spacing: 4) {
-                HStack(alignment: .top, spacing: 10) {
-                    let switcherWrapBinding = Binding<Double>(
-                        get: { Double(switcherWrap) },
-                        set: { switcherWrap = Int($0) }
-                    )
-                    sliderSetting(title: "Max Rows for Switcher Previews",
-                                  value: switcherWrapBinding,
-                                  range: 0.0 ... 10.0,
-                                  step: 1.0,
-                                  unit: "",
-                                  formatter: {
-                                      let f = NumberFormatter()
-                                      f.minimumFractionDigits = 0
-                                      f.maximumFractionDigits = 0
-                                      return f
-                                  }())
-                }
-                Text(String(localized: "Sets the maximum number of rows the Window Switcher will use. '0' dynamically determines rows based on screen height."))
+                let switcherMaxRowsBinding = Binding<Double>(
+                    get: { Double(switcherMaxRows) },
+                    set: { switcherMaxRows = Int($0) }
+                )
+                sliderSetting(title: "Max Rows",
+                              value: switcherMaxRowsBinding,
+                              range: 1.0 ... 8.0,
+                              step: 1.0,
+                              unit: "",
+                              formatter: {
+                                  let f = NumberFormatter()
+                                  f.minimumFractionDigits = 0
+                                  f.maximumFractionDigits = 0
+                                  return f
+                              }())
+
+                Text(String(localized: "Controls how many rows of windows are shown in the window switcher. Windows are distributed across rows automatically."))
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
@@ -503,6 +513,77 @@ struct AppearanceSettingsView: View {
             }
             .onChange(of: sizingMultiplier) { _ in
                 SharedPreviewWindowCoordinator.activeInstance?.windowSize = getWindowSize()
+            }
+        }
+    }
+}
+
+// MARK: - Mock Window Preview Container
+
+struct MockWindowPreviewContainer: View {
+    let appName: String
+    let coordinator: PreviewStateCoordinator
+    let isWindowSwitcher: Bool
+
+    @Default(.uniformCardRadius) var uniformCardRadius
+    @Default(.showAppName) var showAppName
+    @Default(.appNameStyle) var appNameStyle
+    @Default(.showWindowTitle) var showWindowTitle
+    @Default(.windowTitleDisplayCondition) var windowTitleDisplayCondition
+    @Default(.windowTitleVisibility) var windowTitleVisibility
+    @Default(.windowTitlePosition) var windowTitlePosition
+    @Default(.showAppIconOnly) var showAppIconOnly
+
+    var body: some View {
+        BaseHoverContainer(bestGuessMonitor: NSScreen.main!, mockPreviewActive: true) {
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 16) {
+                    ForEach(Array(coordinator.windows.enumerated()), id: \.offset) { index, window in
+                        WindowPreview(
+                            windowInfo: window,
+                            onTap: nil,
+                            index: index,
+                            dockPosition: .bottom,
+                            maxWindowDimension: coordinator.overallMaxPreviewDimension,
+                            bestGuessMonitor: NSScreen.main!,
+                            uniformCardRadius: uniformCardRadius,
+                            handleWindowAction: { _ in },
+                            currIndex: coordinator.currIndex,
+                            windowSwitcherActive: isWindowSwitcher,
+                            dimensions: coordinator.windowDimensionsMap[index] ?? WindowPreviewHoverContainer.WindowDimensions(size: CGSize(width: 200, height: 150), maxDimensions: CGSize(width: 200, height: 150)),
+                            showAppIconOnly: showAppIconOnly,
+                            mockPreviewActive: true
+                        )
+                        .id("\(appName)-\(index)")
+                    }
+                }
+                .frame(alignment: .topLeading)
+                .globalPadding(20)
+            }
+            .overlay(alignment: .topLeading) {
+                if !isWindowSwitcher, showAppName {
+                    mockHoverTitle
+                        .padding(.top, appNameStyle == .default ? 35 : 10)
+                        .padding(.horizontal)
+                }
+            }
+        }
+        .padding(.top, (!isWindowSwitcher && appNameStyle == .popover && showAppName) ? 30 : 0)
+    }
+
+    @ViewBuilder
+    private var mockHoverTitle: some View {
+        HStack(alignment: .center) {
+            if let appIcon = NSApp.applicationIconImage {
+                Image(nsImage: appIcon)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 24, height: 24)
+            }
+
+            if !showAppIconOnly {
+                Text(appName)
+                    .foregroundStyle(Color.primary)
             }
         }
     }

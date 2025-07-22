@@ -14,7 +14,7 @@ let appleMusicAppIdentifier = "com.apple.Music"
 let calendarAppIdentifier = "com.apple.iCal"
 
 extension Defaults.Keys {
-    static let sizingMultiplier = Key<CGFloat>("sizingMultiplier", default: DockUtils.getDockPosition() == .bottom ? 5 : 3)
+    static let sizingMultiplier = Key<CGFloat>("sizingMultiplier", default: DockUtils.getDockPosition() == .bottom ? 5 : 4)
     static let bufferFromDock = Key<CGFloat>("bufferFromDock", default: CoreDockIsMagnificationEnabled() ? -25 : DockUtils.getDockPosition() == .right ? -18 : -20)
     static let globalPaddingMultiplier = Key<CGFloat>("globalPaddingMultiplier", default: 1.0)
     static let useAccentColorForSelection = Key<Bool>("useAccentColorForSelection", default: false)
@@ -70,8 +70,9 @@ extension Defaults.Keys {
     static let enabledTrafficLightButtons = Key<Set<WindowAction>>("enabledTrafficLightButtons", default: [.quit, .close, .minimize, .toggleFullScreen])
     static let useMonochromeTrafficLights = Key<Bool>("useMonochromeTrafficLights", default: false)
 
-    static let previewWrap = Key<Int>("previewWrap", default: 2)
-    static let switcherWrap = Key<Int>("switcherWrap", default: 2)
+    static let previewMaxColumns = Key<Int>("previewMaxColumns", default: 2) // For left/right dock
+    static let previewMaxRows = Key<Int>("previewMaxRows", default: 1) // For bottom dock only
+    static let switcherMaxRows = Key<Int>("switcherMaxRows", default: 2) // For window switcher
 
     static let windowSwitcherPlacementStrategy = Key<WindowSwitcherPlacementStrategy>("windowSwitcherPlacementStrategy", default: .screenWithMouse)
     static let windowSwitcherControlPosition = Key<WindowSwitcherControlPosition>("windowSwitcherControlPosition", default: .topTrailing)
