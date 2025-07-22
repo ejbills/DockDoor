@@ -9512,8 +9512,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Apps in this list will not respond to window switcher shortcuts when in fullscreen mode."
+            "state" : "translated",
+            "value" : "全屏模式下，此列表中的应用将不会响应窗口切换器快捷键。"
           }
         },
         "zh-Hant" : {
@@ -34650,8 +34650,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Limit Window Switcher to active app only"
+            "state" : "translated",
+            "value" : "将窗口切换器限制为仅对活动应用有效"
           }
         },
         "zh-Hant" : {
@@ -41695,8 +41695,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Only show windows from the currently active/frontmost application."
+            "state" : "translated",
+            "value" : "仅显示当前活动/最前端应用程序中的窗口。"
           }
         },
         "zh-Hant" : {
@@ -66257,8 +66257,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "This will add the app to the blacklist using its bundle identifier for reliable matching."
+            "state" : "translated",
+            "value" : "这将使用捆绑标识符将应用程序添加到阻止名单中以进行可靠匹配。"
           }
         },
         "zh-Hant" : {
