@@ -123,8 +123,10 @@ struct WindowPreviewHoverContainer: View {
                         WindowDismissalContainer(appName: appName,
                                                  bestGuessMonitor: bestGuessMonitor,
                                                  dockPosition: dockPosition,
-                                                 minimizeAllWindowsCallback: { minimizeAllWindows() })
-                            .allowsHitTesting(false)
+                                                 minimizeAllWindowsCallback: { wasAppActiveBeforeClick in
+                                                     minimizeAllWindows(wasAppActiveBeforeClick: wasAppActiveBeforeClick)
+                                                 })
+                                                 .allowsHitTesting(false)
                     }
                 }
             }
@@ -532,41 +534,57 @@ struct WindowPreviewHoverContainer: View {
         }
     }
 
-    private func minimizeAllWindows(_ except: WindowInfo? = nil) {
+    private func minimizeAllWindows(_ except: WindowInfo? = nil, wasAppActiveBeforeClick: Bool? = nil) {
         onWindowTap?()
         let originalWindows = previewStateCoordinator.windows
-        var modifiedWindows = originalWindows
-        var didMinimizeAny = false
 
-        if let except { WindowUtil.bringWindowToFront(windowInfo: except) }
+        guard !originalWindows.isEmpty else { return }
 
-        for i in 0 ..< modifiedWindows.count {
-            if modifiedWindows[i] == except { continue }
-            if !modifiedWindows[i].isMinimized {
-                if WindowUtil.toggleMinimize(windowInfo: modifiedWindows[i]) == true {
-                    modifiedWindows[i].isMinimized = true
-                    didMinimizeAny = true
-                }
-            }
+        if let except {
+            WindowUtil.bringWindowToFront(windowInfo: except)
+            return
         }
-        if didMinimizeAny || except == nil { // If we are minimizing all, or some were minimized
-            if except == nil {
-                previewStateCoordinator.setWindows([], dockPosition: dockPosition, bestGuessMonitor: bestGuessMonitor, isMockPreviewActive: mockPreviewActive)
-            } else {
-                var windowsToKeep: [WindowInfo] = []
-                for var window in originalWindows {
-                    if window == except {
-                        windowsToKeep.append(window)
-                        continue
+
+        if let wasAppActiveBeforeClick {
+            if wasAppActiveBeforeClick {
+                switch Defaults[.dockClickAction] {
+                case .hide:
+                    if let app = originalWindows.first?.app {
+                        app.hide()
+                        previewStateCoordinator.setWindows([], dockPosition: dockPosition, bestGuessMonitor: bestGuessMonitor, isMockPreviewActive: mockPreviewActive)
                     }
-                    if WindowUtil.toggleMinimize(windowInfo: window) == true {
-                        window.isMinimized = true
-                    } else {
-                        windowsToKeep.append(window)
+                case .minimize:
+                    for window in originalWindows {
+                        if !window.isMinimized {
+                            WindowUtil.toggleMinimize(windowInfo: window)
+                        }
                     }
+                    previewStateCoordinator.setWindows([], dockPosition: dockPosition, bestGuessMonitor: bestGuessMonitor, isMockPreviewActive: mockPreviewActive)
                 }
-                previewStateCoordinator.setWindows(windowsToKeep, dockPosition: dockPosition, bestGuessMonitor: bestGuessMonitor, isMockPreviewActive: mockPreviewActive)
+            } else {
+                if let app = originalWindows.first?.app {
+                    app.activate()
+                    app.unhide()
+
+                    var restoredWindows: [WindowInfo] = []
+                    for var window in originalWindows {
+                        if window.isMinimized {
+                            if let newMinimizedState = WindowUtil.toggleMinimize(windowInfo: window) {
+                                window.isMinimized = newMinimizedState
+                            }
+                        }
+                        restoredWindows.append(window)
+                    }
+                    previewStateCoordinator.setWindows(restoredWindows, dockPosition: dockPosition, bestGuessMonitor: bestGuessMonitor, isMockPreviewActive: mockPreviewActive)
+                }
             }
+        } else {
+            for window in originalWindows {
+                if !window.isMinimized {
+                    WindowUtil.toggleMinimize(windowInfo: window)
+                }
+            }
+            previewStateCoordinator.setWindows([], dockPosition: dockPosition, bestGuessMonitor: bestGuessMonitor, isMockPreviewActive: mockPreviewActive)
         }
     }
 

@@ -61,7 +61,7 @@ struct MediaControlsFullView: View {
                     WindowDismissalContainer(appName: appName,
                                              bestGuessMonitor: bestGuessMonitor,
                                              dockPosition: dockPosition,
-                                             minimizeAllWindowsCallback: {})
+                                             minimizeAllWindowsCallback: { _ in })
                         .allowsHitTesting(false)
                 }
             },
