@@ -15614,6 +15614,12 @@
         }
       }
     },
+    "Controls how many rows of windows are shown in the window switcher. Windows are distributed across rows automatically." : {
+
+    },
+    "Controls how many rows/columns of windows are shown in dock previews. Only the relevant setting applies based on dock position." : {
+
+    },
     "Controls the visual detail and update frequency of window previews." : {
       "localizations" : {
         "af" : {
@@ -35048,7 +35054,17 @@
         }
       }
     },
+    "Max Columns (Left/Right Dock)" : {
+
+    },
+    "Max Rows" : {
+
+    },
+    "Max Rows (Bottom Dock)" : {
+
+    },
     "Max Rows for Switcher Previews" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -35239,6 +35255,7 @@
       }
     },
     "Max Stacks for Dock Previews" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -58090,6 +58107,7 @@
       }
     },
     "Sets the max rows (for bottom/top Dock) or columns (for side Dock) previews will use. '0' dynamically determines fit." : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -58280,6 +58298,7 @@
       }
     },
     "Sets the maximum number of rows the Window Switcher will use. '0' dynamically determines rows based on screen height." : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {

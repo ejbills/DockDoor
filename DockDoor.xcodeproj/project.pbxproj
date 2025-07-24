@@ -78,7 +78,6 @@
 		BB4ED9092C3CD97400BBDD16 /* Traffic Light Buttons.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB4ED9082C3CD96D00BBDD16 /* Traffic Light Buttons.swift */; };
 		BB5059322E0386B500BDD731 /* AudioOutputDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB5059312E0386B500BDD731 /* AudioOutputDevice.swift */; };
 		BB52EDF02C5BEFE3006A64A4 /* HiddenModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB52EDEF2C5BEFE3006A64A4 /* HiddenModifier.swift */; };
-		BB6021D02D1E60EA00D47C86 /* Flow Container Calculations.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6021CF2D1E60E100D47C86 /* Flow Container Calculations.swift */; };
 		BB6021D22D1E613800D47C86 /* Window Image Sizing Calculations.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6021D12D1E613100D47C86 /* Window Image Sizing Calculations.swift */; };
 		BB638EFA2E0216DA0010077D /* MediaControlsEmbeddedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB638EF92E0216DA0010077D /* MediaControlsEmbeddedView.swift */; };
 		BB638EFC2E0216DE0010077D /* MediaControlsFullView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB638EFB2E0216DE0010077D /* MediaControlsFullView.swift */; };
@@ -204,7 +203,6 @@
 		BB4ED9082C3CD96D00BBDD16 /* Traffic Light Buttons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Traffic Light Buttons.swift"; sourceTree = "<group>"; };
 		BB5059312E0386B500BDD731 /* AudioOutputDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioOutputDevice.swift; sourceTree = "<group>"; };
 		BB52EDEF2C5BEFE3006A64A4 /* HiddenModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HiddenModifier.swift; sourceTree = "<group>"; };
-		BB6021CF2D1E60E100D47C86 /* Flow Container Calculations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Flow Container Calculations.swift"; sourceTree = "<group>"; };
 		BB6021D12D1E613100D47C86 /* Window Image Sizing Calculations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Window Image Sizing Calculations.swift"; sourceTree = "<group>"; };
 		BB638EF92E0216DA0010077D /* MediaControlsEmbeddedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaControlsEmbeddedView.swift; sourceTree = "<group>"; };
 		BB638EFB2E0216DE0010077D /* MediaControlsFullView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaControlsFullView.swift; sourceTree = "<group>"; };
@@ -267,6 +265,7 @@
 			files = (
 				BBBD4AF82C8D71560074FFCF /* ConfettiSwiftUI in Frameworks */,
 				BB33E68C2C24C72F00A21D69 /* LaunchAtLogin in Frameworks */,
+				BB96B5072E2FF87600B2D221 /* SwiftUIFlowLayout in Frameworks */,
 				BB15E1EF2C8FB70C002ECFB9 /* Glur in Frameworks */,
 				3A1622A32C8BFF3800D318EE /* Pow in Frameworks */,
 				BBFAD73A2C287A9C0092F5F1 /* Sparkle in Frameworks */,
@@ -508,7 +507,6 @@
 				BB0CBE392DD8179200D55437 /* MouseEventModifier.swift */,
 				BB3D6EAD2C82E4AE00FFE584 /* WindowDismissalContainer.swift */,
 				BB6021D12D1E613100D47C86 /* Window Image Sizing Calculations.swift */,
-				BB6021CF2D1E60E100D47C86 /* Flow Container Calculations.swift */,
 			);
 			path = "WindowPreview Supporting";
 			sourceTree = "<group>";
@@ -758,7 +756,6 @@
 				BB6A4F1C2C1CFCFF00CB4C9E /* PermissionsSettingsView.swift in Sources */,
 				BB3D6EB02C84E58400FFE584 /* NSScreen.swift in Sources */,
 				BB3D6EAE2C82E4B400FFE584 /* WindowDismissalContainer.swift in Sources */,
-				BB6021D02D1E60EA00D47C86 /* Flow Container Calculations.swift in Sources */,
 				3A1622BA2C8C0FF100D318EE /* NoBtnStyle.swift in Sources */,
 				BB3967FD2C291D5A004F1AB6 /* StackedShadow.swift in Sources */,
 				BBB6C5322DF3C8A4009E93C4 /* MediaControlsView.swift in Sources */,
