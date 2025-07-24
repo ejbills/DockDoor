@@ -538,7 +538,7 @@ struct WindowPreviewHoverContainer: View {
                 case .minimize:
                     for window in originalWindows {
                         if !window.isMinimized {
-                            WindowUtil.toggleMinimize(windowInfo: window)
+                            _ = WindowUtil.toggleMinimize(windowInfo: window)
                         }
                     }
                     previewStateCoordinator.setWindows([], dockPosition: dockPosition, bestGuessMonitor: bestGuessMonitor, isMockPreviewActive: mockPreviewActive)
@@ -563,7 +563,7 @@ struct WindowPreviewHoverContainer: View {
         } else {
             for window in originalWindows {
                 if !window.isMinimized {
-                    WindowUtil.toggleMinimize(windowInfo: window)
+                    _ = WindowUtil.toggleMinimize(windowInfo: window)
                 }
             }
             previewStateCoordinator.setWindows([], dockPosition: dockPosition, bestGuessMonitor: bestGuessMonitor, isMockPreviewActive: mockPreviewActive)

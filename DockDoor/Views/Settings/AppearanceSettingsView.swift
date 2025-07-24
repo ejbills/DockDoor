@@ -89,6 +89,7 @@ struct AppearanceSettingsView: View {
     @Default(.dimInSwitcherUntilSelected) var dimInSwitcherUntilSelected
     @Default(.selectionOpacity) var selectionOpacity
     @Default(.hoverHighlightColor) var hoverHighlightColor
+    @Default(.dockPreviewBackgroundOpacity) var dockPreviewBackgroundOpacity
     @Default(.previewMaxColumns) var previewMaxColumns
     @Default(.previewMaxRows) var previewMaxRows
     @Default(.switcherMaxRows) var switcherMaxRows
@@ -418,6 +419,21 @@ struct AppearanceSettingsView: View {
                 }
             }
 
+            StyledGroupBox(label: "Dock Preview Transparency") {
+                VStack(alignment: .leading, spacing: 10) {
+                    Text("Control the transparency of the dock preview background. Lower values make the preview more transparent, which can help prevent it from blocking window content.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+
+                    sliderSetting(title: "Background Opacity",
+                                  value: $dockPreviewBackgroundOpacity,
+                                  range: 0.1 ... 1.0,
+                                  step: 0.05,
+                                  unit: "",
+                                  formatter: NumberFormatter.percentFormatter)
+                }
+            }
+
             StyledGroupBox(label: "Color Customization") {
                 GradientColorPaletteSettingsView()
             }
@@ -450,42 +466,12 @@ struct AppearanceSettingsView: View {
 
         private func getSizeDescription(_ value: CGFloat) -> String {
             let intValue = Int(value)
-            switch intValue {
-            case 100 ... 150: return "\(intValue)px (Small)"
-            case 151 ... 220: return "\(intValue)px (Medium)"
-            case 221 ... 300: return "\(intValue)px (Large)"
-            default: return "\(intValue)px (Extra Large)"
-            }
+            return "\(intValue)px"
         }
 
         var body: some View {
             HStack(alignment: .top, spacing: 24) {
-                ZStack {
-                    RoundedRectangle(cornerRadius: 16, style: .continuous)
-                        .stroke(Color.gray.opacity(0.5), lineWidth: 1)
-                        .frame(width: visualScreenSize.width, height: visualScreenSize.height)
-                        .overlay(
-                            Text("Dock Preview Area")
-                                .font(.caption2)
-                                .padding(.top, 2),
-                            alignment: .top
-                        )
-
-                    RoundedRectangle(cornerRadius: 4, style: .continuous)
-                        .fill(Color.accentColor.opacity(0.6))
-                        .frame(width: visualPreviewSize.width, height: visualPreviewSize.height)
-                        .overlay(
-                            Text("16:9")
-                                .font(.caption2.weight(.medium))
-                                .foregroundColor(.white)
-                        )
-                }
-
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Window Preview Size")
-                        .font(.subheadline.weight(.medium))
-                        .padding(.bottom, 2)
-
                     Menu {
                         ForEach(pixelSizeOptions, id: \.self) { value in
                             Button(action: { previewPixelSize = value }) {

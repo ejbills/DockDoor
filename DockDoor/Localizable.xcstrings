@@ -4383,9 +4383,6 @@
         }
       }
     },
-    "16:9" : {
-
-    },
     "Accessibility" : {
       "localizations" : {
         "af" : {
@@ -15627,6 +15624,9 @@
         }
       }
     },
+    "Control the transparency of the dock preview background. Lower values make the preview more transparent, which can help prevent it from blocking window content." : {
+
+    },
     "Controls how many rows of windows are shown in the window switcher. Windows are distributed across rows automatically." : {
 
     },
@@ -18305,9 +18305,6 @@
         }
       }
     },
-    "Dock Preview Area" : {
-
-    },
     "Dock Preview Hover Action" : {
       "localizations" : {
         "af" : {
@@ -18689,6 +18686,9 @@
       }
     },
     "Dock Preview Toolbar" : {
+
+    },
+    "Dock Preview Transparency" : {
 
     },
     "Dock Preview Window Hover Action" : {
