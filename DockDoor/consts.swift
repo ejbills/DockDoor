@@ -22,6 +22,7 @@ extension Defaults.Keys {
     static let preventDockHide = Key<Bool>("preventDockHide", default: false)
     static let preventSwitcherHide = Key<Bool>("preventSwitcherHide", default: false)
     static let shouldHideOnDockItemClick = Key<Bool>("shouldHideOnDockItemClick", default: false)
+    static let dockClickAction = Key<DockClickAction>("dockClickAction", default: .hide)
 
     static let screenCaptureCacheLifespan = Key<CGFloat>("screenCaptureCacheLifespan", default: 60)
     static let windowPreviewImageScale = Key<CGFloat>("windowPreviewImageScale", default: 1)
@@ -270,6 +271,20 @@ enum AeroShakeAction: String, CaseIterable, Defaults.Serializable {
             String(localized: "Minimize all windows", comment: "Aero shake action option")
         case .except:
             String(localized: "Minimize all windows except the current one", comment: "Aero shake action option")
+        }
+    }
+}
+
+enum DockClickAction: String, CaseIterable, Defaults.Serializable {
+    case minimize
+    case hide
+
+    var localizedName: String {
+        switch self {
+        case .minimize:
+            String(localized: "Minimize windows", comment: "Dock click action option")
+        case .hide:
+            String(localized: "Hide application", comment: "Dock click action option")
         }
     }
 }

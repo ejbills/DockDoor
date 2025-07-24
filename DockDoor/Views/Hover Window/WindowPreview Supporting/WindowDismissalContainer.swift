@@ -5,7 +5,7 @@ struct WindowDismissalContainer: NSViewRepresentable {
     let appName: String
     let bestGuessMonitor: NSScreen
     let dockPosition: DockPosition
-    let minimizeAllWindowsCallback: () -> Void
+    let minimizeAllWindowsCallback: (_ wasAppActiveBeforeClick: Bool) -> Void
 
     func makeNSView(context: Context) -> MouseTrackingNSView {
         let view = MouseTrackingNSView(appName: appName,
@@ -23,7 +23,7 @@ class MouseTrackingNSView: NSView {
     private let appName: String
     private let bestGuessMonitor: NSScreen
     private let dockPosition: DockPosition
-    private let minimizeAllWindowsCallback: () -> Void
+    private let minimizeAllWindowsCallback: (_ wasAppActiveBeforeClick: Bool) -> Void
     private var fadeOutTimer: Timer?
     private let fadeOutDuration: TimeInterval
     private var inactivityCheckTimer: Timer?
@@ -31,7 +31,7 @@ class MouseTrackingNSView: NSView {
 
     private var eventMonitor: Any?
 
-    init(appName: String, bestGuessMonitor: NSScreen, dockPosition: DockPosition, minimizeAllWindowsCallback: @escaping () -> Void, frame frameRect: NSRect = .zero) {
+    init(appName: String, bestGuessMonitor: NSScreen, dockPosition: DockPosition, minimizeAllWindowsCallback: @escaping (_ wasAppActiveBeforeClick: Bool) -> Void, frame frameRect: NSRect = .zero) {
         self.appName = appName
         self.bestGuessMonitor = bestGuessMonitor
         self.dockPosition = dockPosition
@@ -167,8 +167,9 @@ class MouseTrackingNSView: NSView {
             case let .success(currApp):
                 if currApp.localizedName == appName {
                     if Defaults[.shouldHideOnDockItemClick] {
+                        let wasAppActiveBeforeClick = NSWorkspace.shared.frontmostApplication == currApp
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) { [weak self] in
-                            self?.minimizeAllWindowsCallback()
+                            self?.minimizeAllWindowsCallback(wasAppActiveBeforeClick)
                         }
                     } else {
                         performHideWindow(preventLastAppClear: true)
