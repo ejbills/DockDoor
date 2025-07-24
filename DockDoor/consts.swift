@@ -14,10 +14,9 @@ let appleMusicAppIdentifier = "com.apple.Music"
 let calendarAppIdentifier = "com.apple.iCal"
 
 extension Defaults.Keys {
-    static let sizingMultiplier = Key<CGFloat>("sizingMultiplier", default: DockUtils.getDockPosition() == .bottom ? 5 : 4)
+    static let previewPixelSize = Key<CGFloat>("previewPixelSize", default: 200)
     static let bufferFromDock = Key<CGFloat>("bufferFromDock", default: CoreDockIsMagnificationEnabled() ? -25 : DockUtils.getDockPosition() == .right ? -18 : -20)
     static let globalPaddingMultiplier = Key<CGFloat>("globalPaddingMultiplier", default: 1.0)
-    static let useAccentColorForSelection = Key<Bool>("useAccentColorForSelection", default: false)
     static let hoverWindowOpenDelay = Key<CGFloat>("openDelay", default: 0.2)
     static let lateralMovement = Key<Bool>("lateralMovement", default: true)
     static let preventDockHide = Key<Bool>("preventDockHide", default: false)
@@ -57,12 +56,12 @@ extension Defaults.Keys {
     static let showAppName = Key<Bool>("showAppName", default: true)
     static let appNameStyle = Key<AppNameStyle>("appNameStyle", default: .default)
     static let selectionOpacity = Key<CGFloat>("selectionOpacity", default: 0.4)
-    static let selectionColor = Key<Color?>("selectionColor", default: nil)
+    static let hoverHighlightColor = Key<Color?>("hoverHighlightColor", default: nil)
 
     static let showWindowTitle = Key<Bool>("showWindowTitle", default: true)
     static let showAppIconOnly = Key<Bool>("showAppIconOnly", default: false)
     static let windowTitleDisplayCondition = Key<WindowTitleDisplayCondition>("windowTitleDisplayCondition", default: .all)
-    static let windowTitleVisibility = Key<WindowTitleVisibility>("windowTitleVisibility", default: .whenHoveringPreview)
+    static let windowTitleVisibility = Key<WindowTitleVisibility>("windowTitleVisibility", default: .alwaysVisible)
     static let windowTitlePosition = Key<WindowTitlePosition>("windowTitlePosition", default: .bottomLeft)
 
     static let trafficLightButtonsVisibility = Key<TrafficLightButtonsVisibility>("trafficLightButtonsVisibility", default: .dimmedOnPreviewHover)
@@ -76,6 +75,7 @@ extension Defaults.Keys {
 
     static let windowSwitcherPlacementStrategy = Key<WindowSwitcherPlacementStrategy>("windowSwitcherPlacementStrategy", default: .screenWithMouse)
     static let windowSwitcherControlPosition = Key<WindowSwitcherControlPosition>("windowSwitcherControlPosition", default: .topTrailing)
+    static let dockPreviewControlPosition = Key<WindowSwitcherControlPosition>("dockPreviewControlPosition", default: .topTrailing)
     static let dimInSwitcherUntilSelected = Key<Bool>("dimInSwitcherUntilSelected", default: false)
     static let pinnedScreenIdentifier = Key<String>("pinnedScreenIdentifier", default: NSScreen.main?.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? String ?? "")
 

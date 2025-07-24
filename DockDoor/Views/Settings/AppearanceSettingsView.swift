@@ -85,14 +85,14 @@ struct AppearanceSettingsView: View {
     @Default(.windowTitleVisibility) var windowTitleVisibility
     @Default(.windowTitlePosition) var windowTitlePosition
     @Default(.windowSwitcherControlPosition) var windowSwitcherControlPosition
+    @Default(.dockPreviewControlPosition) var dockPreviewControlPosition
     @Default(.dimInSwitcherUntilSelected) var dimInSwitcherUntilSelected
     @Default(.selectionOpacity) var selectionOpacity
-    @Default(.selectionColor) var selectionColor
+    @Default(.hoverHighlightColor) var hoverHighlightColor
     @Default(.previewMaxColumns) var previewMaxColumns
     @Default(.previewMaxRows) var previewMaxRows
     @Default(.switcherMaxRows) var switcherMaxRows
     @Default(.showAppIconOnly) var showAppIconOnly
-    @Default(.useAccentColorForSelection) var useAccentColorForSelection
     @Default(.globalPaddingMultiplier) var globalPaddingMultiplier
 
     @State private var showAdvancedAppearanceSettings: Bool = false
@@ -128,11 +128,19 @@ struct AppearanceSettingsView: View {
         ScrollViewReader { proxy in
             BaseSettingsView {
                 VStack(alignment: .leading, spacing: 16) {
+                    StyledGroupBox(label: "Window Preview Size") {
+                        VStack(alignment: .leading, spacing: 10) {
+                            WindowSizeDropdownView()
+
+                            Text("Choose how large window previews appear when hovering over dock icons. All window images are automatically scaled to fit within this size while maintaining their original proportions.")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                    }
+
                     StyledGroupBox(label: "General Appearance") {
                         VStack(alignment: .leading, spacing: 10) {
-                            WindowSizeSliderView()
-
-                            sliderSetting(title: "Global Padding Scale",
+                            sliderSetting(title: "Spacing Scale",
                                           value: $globalPaddingMultiplier,
                                           range: 0.5 ... 2.0,
                                           step: 0.1,
@@ -146,9 +154,9 @@ struct AppearanceSettingsView: View {
 
                             VStack(alignment: .leading) {
                                 Toggle(isOn: $uniformCardRadius) {
-                                    Text("Rounded image corners")
+                                    Text("Rounded corners")
                                 }
-                                Text("When enabled, all preview images will be cropped to a rounded rectangle.")
+                                Text("Round the corners of window preview images for a modern look.")
                                     .font(.footnote)
                                     .foregroundColor(.gray)
                                     .padding(.leading, 20)
@@ -217,7 +225,16 @@ struct AppearanceSettingsView: View {
             .disabled(!showAppName)
 
             Divider().padding(.vertical, 2)
-            Text("Window Titles in Previews").font(.headline).padding(.bottom, -2)
+            Text("Dock Preview Toolbar").font(.headline).padding(.bottom, -2)
+
+            Picker("Position Dock Preview Controls", selection: $dockPreviewControlPosition) {
+                ForEach(WindowSwitcherControlPosition.allCases, id: \.self) { position in
+                    Text(position.localizedName)
+                        .tag(position)
+                }
+            }
+            .pickerStyle(MenuPickerStyle())
+
             Toggle(isOn: $showWindowTitle) {
                 Text("Show Window Title")
             }
@@ -241,13 +258,6 @@ struct AppearanceSettingsView: View {
                     ForEach(WindowTitleVisibility.allCases, id: \.self) { visibility in
                         Text(visibility.localizedName)
                             .tag(visibility)
-                    }
-                }
-
-                Picker("Window Title Position", selection: $windowTitlePosition) {
-                    ForEach(WindowTitlePosition.allCases, id: \.self) { position in
-                        Text(position.localizedName)
-                            .tag(position)
                     }
                 }
             }
@@ -375,33 +385,31 @@ struct AppearanceSettingsView: View {
     @ViewBuilder
     private var advancedAppearanceSettingsSection: some View {
         VStack(alignment: .leading, spacing: 16) {
-            StyledGroupBox(label: "Selection Highlight") {
+            StyledGroupBox(label: "Window Background") {
                 VStack(alignment: .leading, spacing: 10) {
-                    Toggle(isOn: $useAccentColorForSelection) {
-                        Text("Use System Accent Color for Highlight")
-                    }
+                    Text("All window previews show a gray background. When hovered, the background changes to the accent color or custom color below.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+
                     HStack {
-                        ColorPicker("Window Selection Background Color", selection: Binding(
-                            get: { selectionColor ?? .secondary },
-                            set: { selectionColor = $0 }
+                        ColorPicker("Custom Hover Highlight Color", selection: Binding(
+                            get: { hoverHighlightColor ?? Color(nsColor: .controlAccentColor) },
+                            set: { hoverHighlightColor = $0 }
                         ))
-                        .disabled(useAccentColorForSelection)
                         Button(action: {
-                            Defaults.reset(.selectionColor)
+                            Defaults.reset(.hoverHighlightColor)
                         }) {
                             Text("Reset")
                         }
                         .buttonStyle(AccentButtonStyle(small: true))
                     }
-                    .disabled(useAccentColorForSelection)
 
-                    sliderSetting(title: "Window Selection Background Opacity",
+                    sliderSetting(title: "Background Opacity",
                                   value: $selectionOpacity,
                                   range: 0 ... 1,
                                   step: 0.05,
                                   unit: "",
                                   formatter: NumberFormatter.percentFormatter)
-                        .disabled(useAccentColorForSelection)
                 }
             }
 
@@ -412,44 +420,36 @@ struct AppearanceSettingsView: View {
         .padding(.top, 10)
     }
 
-    struct WindowSizeSliderView: View {
-        @Default(.sizingMultiplier) var sizingMultiplier
+    struct WindowSizeDropdownView: View {
+        @Default(.previewPixelSize) var previewPixelSize
+
+        private let pixelSizeOptions: [CGFloat] = [100, 120, 150, 180, 200, 220, 250, 280, 300, 350, 400]
 
         private var visualScaleFactor: CGFloat {
             let maxWidth: CGFloat = 450
             let maxHeight: CGFloat = 120
-            let widthScale = maxWidth / optimisticScreenSizeWidth
-            let heightScale = maxHeight / optimisticScreenSizeHeight
-            return min(widthScale, heightScale) * 0.9
-        }
-
-        private var scaledPreviewSize: CGSize {
-            CGSize(
-                width: optimisticScreenSizeWidth / sizingMultiplier,
-                height: optimisticScreenSizeHeight / sizingMultiplier
-            )
+            return min(maxWidth / 450, maxHeight / 300) * 0.9
         }
 
         private var visualScreenSize: CGSize {
-            CGSize(
-                width: optimisticScreenSizeWidth * visualScaleFactor,
-                height: optimisticScreenSizeHeight * visualScaleFactor
-            )
+            CGSize(width: 180 * visualScaleFactor, height: 120 * visualScaleFactor)
         }
 
         private var visualPreviewSize: CGSize {
-            CGSize(
-                width: scaledPreviewSize.width * visualScaleFactor,
-                height: scaledPreviewSize.height * visualScaleFactor
-            )
+            let baseWidth: CGFloat = 80
+            let scaleFactor = previewPixelSize / 200.0 // Normalize around 200px
+            let width = baseWidth * scaleFactor
+            let height = width / (16.0 / 9.0) // 16:9 aspect ratio
+            return CGSize(width: width, height: height)
         }
 
-        private func getSizeDescription(_ value: Int) -> String {
-            switch value {
-            case 2: String(localized: "Large (1/2)")
-            case 3, 4: String(localized: "Medium (1/\(value))")
-            case 5, 6: String(localized: "Small (1/\(value))")
-            default: String(localized: "Tiny (1/\(value))")
+        private func getSizeDescription(_ value: CGFloat) -> String {
+            let intValue = Int(value)
+            switch intValue {
+            case 100 ... 150: return "\(intValue)px (Small)"
+            case 151 ... 220: return "\(intValue)px (Medium)"
+            case 221 ... 300: return "\(intValue)px (Large)"
+            default: return "\(intValue)px (Extra Large)"
             }
         }
 
@@ -460,58 +460,69 @@ struct AppearanceSettingsView: View {
                         .stroke(Color.gray.opacity(0.5), lineWidth: 1)
                         .frame(width: visualScreenSize.width, height: visualScreenSize.height)
                         .overlay(
-                            Text(String(localized: "Screen"))
-                                .font(.caption)
-                                .foregroundColor(.gray)
-                                .padding(.top, 4),
+                            Text("Dock Preview Area")
+                                .font(.caption2)
+                                .padding(.top, 2),
                             alignment: .top
                         )
 
-                    Rectangle()
-                        .fill(Color.blue.opacity(0.35))
+                    RoundedRectangle(cornerRadius: 4, style: .continuous)
+                        .fill(Color.accentColor.opacity(0.6))
                         .frame(width: visualPreviewSize.width, height: visualPreviewSize.height)
-                        .clipShape(RoundedRectangle(cornerRadius: 5))
+                        .overlay(
+                            Text("16:9")
+                                .font(.caption2.weight(.medium))
+                                .foregroundColor(.white)
+                        )
                 }
 
                 VStack(alignment: .leading, spacing: 8) {
-                    Text(String(localized: "Preview Size"))
-                        .foregroundColor(.secondary)
-                        .padding(.bottom, 4)
+                    Text("Window Preview Size")
+                        .font(.subheadline.weight(.medium))
+                        .padding(.bottom, 2)
 
                     Menu {
-                        ForEach(2 ... 10, id: \.self) { value in
-                            Button(action: { sizingMultiplier = Double(value) }) {
+                        ForEach(pixelSizeOptions, id: \.self) { value in
+                            Button(action: { previewPixelSize = value }) {
                                 HStack {
-                                    Rectangle()
-                                        .fill(Color.accentColor.opacity(0.2))
-                                        .frame(width: 60 / Double(value), height: 16)
-                                        .cornerRadius(2)
+                                    RoundedRectangle(cornerRadius: 2)
+                                        .fill(Color.accentColor.opacity(0.3))
+                                        .frame(width: max(8, value / 10), height: 12)
 
                                     Text(getSizeDescription(value))
-                                        .frame(width: 100, alignment: .leading)
+                                        .frame(maxWidth: .infinity, alignment: .leading)
 
-                                    if sizingMultiplier == Double(value) {
+                                    if previewPixelSize == value {
                                         Image(systemName: "checkmark")
+                                            .foregroundColor(.accentColor)
+                                            .font(.caption.weight(.semibold))
                                     }
                                 }
-                                .padding(.horizontal, 4)
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 4)
                             }
                         }
                     } label: {
                         HStack(spacing: 8) {
-                            Text(getSizeDescription(Int(sizingMultiplier)))
-                                .frame(width: 100, alignment: .leading)
-                            Image(systemName: "chevron.down")
-                                .font(.caption)
+                            Text(getSizeDescription(previewPixelSize))
+                                .foregroundColor(.primary)
+                            Spacer()
+                            Image(systemName: "chevron.up.chevron.down")
+                                .font(.caption2)
+                                .foregroundColor(.secondary)
                         }
-                        .padding(.vertical, 4)
-                        .padding(.horizontal, 8)
-                        .background(Color.secondary.opacity(0.1))
-                        .cornerRadius(6)
+                        .padding(.vertical, 6)
+                        .padding(.horizontal, 12)
+                        .background(Color(NSColor.controlBackgroundColor))
+                        .cornerRadius(8)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(Color.secondary.opacity(0.2), lineWidth: 1)
+                        )
                     }
                 }
             }
-            .onChange(of: sizingMultiplier) { _ in
+            .onChange(of: previewPixelSize) { _ in
                 SharedPreviewWindowCoordinator.activeInstance?.windowSize = getWindowSize()
             }
         }

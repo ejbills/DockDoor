@@ -4383,6 +4383,9 @@
         }
       }
     },
+    "16:9" : {
+
+    },
     "Accessibility" : {
       "localizations" : {
         "af" : {
@@ -7047,6 +7050,9 @@
           }
         }
       }
+    },
+    "All window previews show a gray background. When hovered, the background changes to the accent color or custom color below." : {
+
     },
     "Allow special app controls to be pinned to the screen via right-click menu." : {
       "localizations" : {
@@ -11236,6 +11242,9 @@
         }
       }
     },
+    "Background Opacity" : {
+
+    },
     "Blur amount" : {
       "localizations" : {
         "af" : {
@@ -13521,6 +13530,9 @@
         }
       }
     },
+    "Choose how large window previews appear when hovering over dock icons. All window images are automatically scaled to fit within this size while maintaining their original proportions." : {
+
+    },
     "Click \"Set Trigger Key\"" : {
       "localizations" : {
         "af" : {
@@ -13902,6 +13914,7 @@
       }
     },
     "Close All" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -16762,6 +16775,9 @@
         }
       }
     },
+    "Custom Hover Highlight Color" : {
+
+    },
     "Default" : {
       "comment" : "Preview title style option",
       "localizations" : {
@@ -18286,6 +18302,9 @@
         }
       }
     },
+    "Dock Preview Area" : {
+
+    },
     "Dock Preview Hover Action" : {
       "localizations" : {
         "af" : {
@@ -18665,6 +18684,9 @@
           }
         }
       }
+    },
+    "Dock Preview Toolbar" : {
+
     },
     "Dock Preview Window Hover Action" : {
       "extractionState" : "stale",
@@ -26862,6 +26884,7 @@
       }
     },
     "Global Padding Scale" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -33338,6 +33361,7 @@
       }
     },
     "Large (1/2)" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -36204,6 +36228,7 @@
       }
     },
     "Medium (1/%lld)" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -36775,6 +36800,7 @@
       }
     },
     "Minimize All" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -45534,6 +45560,9 @@
         }
       }
     },
+    "Position Dock Preview Controls" : {
+
+    },
     "Position Window Controls" : {
       "localizations" : {
         "af" : {
@@ -48963,6 +48992,7 @@
       }
     },
     "Preview Size" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -54096,7 +54126,14 @@
         }
       }
     },
+    "Round the corners of window preview images for a modern look." : {
+
+    },
+    "Rounded corners" : {
+
+    },
     "Rounded image corners" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -54287,6 +54324,7 @@
       }
     },
     "Screen" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -57336,6 +57374,7 @@
       }
     },
     "Selection Highlight" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -61910,6 +61949,7 @@
       }
     },
     "Small (1/%lld)" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -62669,6 +62709,9 @@
           }
         }
       }
+    },
+    "Spacing Scale" : {
+
     },
     "Standard" : {
       "localizations" : {
@@ -66289,6 +66332,7 @@
       }
     },
     "Tiny (1/%lld)" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -71429,6 +71473,7 @@
       }
     },
     "Use System Accent Color for Highlight" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -73717,6 +73762,7 @@
       }
     },
     "When enabled, all preview images will be cropped to a rounded rectangle." : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -75434,6 +75480,9 @@
         }
       }
     },
+    "Window Background" : {
+
+    },
     "Window Buffer" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -76960,7 +77009,6 @@
       }
     },
     "Window Preview Size" : {
-      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -77151,6 +77199,7 @@
       }
     },
     "Window Selection Background Color" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -77341,6 +77390,7 @@
       }
     },
     "Window Selection Background Opacity" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -79055,6 +79105,7 @@
       }
     },
     "Window Title Position" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -79435,6 +79486,7 @@
       }
     },
     "Window Titles in Previews" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {

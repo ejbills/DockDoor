@@ -24,9 +24,9 @@ struct WindowPreview: View {
     @Default(.trafficLightButtonsVisibility) var trafficLightButtonsVisibility
     @Default(.trafficLightButtonsPosition) var trafficLightButtonsPosition
     @Default(.windowSwitcherControlPosition) var windowSwitcherControlPosition
+    @Default(.dockPreviewControlPosition) var dockPreviewControlPosition
     @Default(.selectionOpacity) var selectionOpacity
-    @Default(.selectionColor) var selectionColor
-    @Default(.useAccentColorForSelection) var useAccentColorForSelection
+    @Default(.hoverHighlightColor) var hoverHighlightColor
     @Default(.dimInSwitcherUntilSelected) var dimInSwitcherUntilSelected
 
     @Default(.tapEquivalentInterval) var tapEquivalentInterval
@@ -45,7 +45,7 @@ struct WindowPreview: View {
                 let inactive = isMinimized || isHidden
                 Image(decorative: cgImage, scale: 1.0)
                     .resizable()
-                    .aspectRatio(contentMode: .fit)
+                    .scaledToFit()
                     .markHidden(isHidden: inactive || (windowSwitcherActive && !isSelected && dimInSwitcherUntilSelected))
                     .overlay(isSelected && !inactive ? CustomizableFluidGradientView().opacity(0.125) : nil)
                     .clipShape(uniformCardRadius ? AnyShape(RoundedRectangle(cornerRadius: 12, style: .continuous)) : AnyShape(Rectangle()))
@@ -54,37 +54,6 @@ struct WindowPreview: View {
         .frame(width: max(dimensions.size.width, 50), height: dimensions.size.height, alignment: .center)
         .frame(maxWidth: dimensions.maxDimensions.width, maxHeight: dimensions.maxDimensions.height)
         .shadow(radius: isSelected ? 0 : 3)
-        .overlay(alignment: {
-            switch windowTitlePosition {
-            case .bottomLeft: .bottomLeading
-            case .bottomRight: .bottomTrailing
-            case .topRight: .topTrailing
-            case .topLeft: .topLeading
-            }
-        }()) {
-            if !windowSwitcherActive {
-                windowTitleOverlay(selected: isSelected)
-            }
-        }
-        .overlay(alignment: {
-            switch trafficLightButtonsPosition {
-            case .bottomLeft: .bottomLeading
-            case .bottomRight: .bottomTrailing
-            case .topRight: .topTrailing
-            case .topLeft: .topLeading
-            }
-        }()) {
-            if !windowSwitcherActive, !isMinimized, !isHidden, let _ = windowInfo.closeButton {
-                TrafficLightButtons(
-                    displayMode: trafficLightButtonsVisibility,
-                    hoveringOverParentWindow: isSelected || isHoveringOverWindowSwitcherPreview,
-                    onWindowAction: handleWindowAction,
-                    pillStyling: false,
-                    mockPreviewActive: mockPreviewActive
-                )
-                .padding(4)
-            }
-        }
     }
 
     private func windowSwitcherContent(_ selected: Bool) -> some View {
@@ -174,6 +143,88 @@ struct WindowPreview: View {
             .bottom : .top, 4)
     }
 
+    private func dockPreviewContent(_ selected: Bool) -> some View {
+        let shouldShowTitle = showWindowTitle && (
+            windowTitleDisplayCondition == .all ||
+                windowTitleDisplayCondition == .dockPreviewsOnly
+        )
+
+        // Determine what title to show: window name first, then app name as fallback
+        let titleToShow: String? = if let windowTitle = windowInfo.windowName, !windowTitle.isEmpty {
+            windowTitle
+        } else {
+            windowInfo.app.localizedName
+        }
+
+        let hasTitle = shouldShowTitle &&
+            titleToShow != nil &&
+            (windowTitleVisibility == .alwaysVisible || selected)
+
+        let hasTrafficLights = !windowInfo.isMinimized &&
+            !windowInfo.isHidden &&
+            windowInfo.closeButton != nil &&
+            trafficLightButtonsVisibility != .never
+
+        let titleContent = Group {
+            if hasTitle, let title = titleToShow {
+                MarqueeText(text: title, startDelay: 1)
+                    .font(.subheadline)
+                    .padding(.vertical, 4)
+                    .materialPill()
+            }
+        }
+
+        let controlsContent = Group {
+            if hasTrafficLights {
+                TrafficLightButtons(
+                    displayMode: trafficLightButtonsVisibility,
+                    hoveringOverParentWindow: selected || isHoveringOverDockPeekPreview,
+                    onWindowAction: handleWindowAction,
+                    pillStyling: true,
+                    mockPreviewActive: mockPreviewActive
+                )
+            }
+        }
+
+        @ViewBuilder
+        func contentRow(isLeadingControls: Bool) -> some View {
+            HStack(spacing: 4) {
+                if isLeadingControls {
+                    controlsContent
+                    Spacer()
+                    titleContent
+                } else {
+                    titleContent
+                    Spacer()
+                    controlsContent
+                }
+            }
+        }
+
+        // Only show the toolbar if there's either a title or traffic lights to display
+        if hasTitle || hasTrafficLights {
+            return AnyView(
+                VStack(spacing: 0) {
+                    switch dockPreviewControlPosition {
+                    case .topLeading:
+                        contentRow(isLeadingControls: false)
+                    case .topTrailing:
+                        contentRow(isLeadingControls: true)
+                    case .bottomLeading:
+                        contentRow(isLeadingControls: false)
+                    case .bottomTrailing:
+                        contentRow(isLeadingControls: true)
+                    }
+                }
+                .padding(dockPreviewControlPosition == .topLeading ||
+                    dockPreviewControlPosition == .topTrailing ?
+                    .bottom : .top, 4)
+            )
+        } else {
+            return AnyView(EmptyView())
+        }
+    }
+
     @ViewBuilder
     private var previewCoreContent: some View {
         let isSelectedByKeyboardInDock = !windowSwitcherActive && (index == currIndex)
@@ -192,6 +243,12 @@ struct WindowPreview: View {
                     windowSwitcherContent(finalIsSelected)
                 }
 
+                if !windowSwitcherActive, dockPreviewControlPosition == .topLeading ||
+                    dockPreviewControlPosition == .topTrailing
+                {
+                    dockPreviewContent(finalIsSelected)
+                }
+
                 windowContent(
                     isMinimized: windowInfo.isMinimized,
                     isHidden: windowInfo.isHidden,
@@ -203,25 +260,30 @@ struct WindowPreview: View {
                 {
                     windowSwitcherContent(finalIsSelected)
                 }
+
+                if !windowSwitcherActive, dockPreviewControlPosition == .bottomLeading ||
+                    dockPreviewControlPosition == .bottomTrailing
+                {
+                    dockPreviewContent(finalIsSelected)
+                }
             }
             .background {
-                if finalIsSelected {
-                    let highlightColor: Color = if useAccentColorForSelection {
-                        Color(nsColor: .controlAccentColor)
-                    } else {
-                        selectionColor ?? .secondary
-                    }
-                    RoundedRectangle(cornerRadius: uniformCardRadius ? 14 : 0)
-                        .fill(highlightColor.opacity(selectionOpacity))
-                        .padding(-6)
+                // Always show background - gray by default, accent color (or custom) on hover
+                let (backgroundColor, opacity): (Color, CGFloat) = if finalIsSelected {
+                    (hoverHighlightColor ?? Color(nsColor: .controlAccentColor), selectionOpacity)
+                } else {
+                    (Color.secondary, selectionOpacity * 0.3)
                 }
+                RoundedRectangle(cornerRadius: uniformCardRadius ? 20 : 0)
+                    .fill(backgroundColor.opacity(opacity))
+                    .padding(-6)
             }
         }
         .overlay {
             if isDraggingOver {
-                RoundedRectangle(cornerRadius: uniformCardRadius ? 14 : 0)
-                    .strokeBorder(Color(nsColor: .controlAccentColor), lineWidth: 2)
-                    .padding(-2)
+                RoundedRectangle(cornerRadius: uniformCardRadius ? 20 : 0)
+                    .fill(Color(nsColor: .controlAccentColor).opacity(0.3))
+                    .padding(-6)
                     .opacity(highlightOpacity)
             }
         }
