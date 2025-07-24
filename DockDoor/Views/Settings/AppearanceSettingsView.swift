@@ -108,7 +108,7 @@ struct AppearanceSettingsView: View {
     init() {
         _previousWindowTitlePosition = State(initialValue: Defaults[.windowTitlePosition])
 
-        let initialMockWindows = AppearanceSettingsView.generateMockWindowsForPreview(count: 2)
+        let initialMockWindows = AppearanceSettingsView.generateMockWindowsForPreview(count: 1)
 
         _mockDockPreviewCoordinator = StateObject(wrappedValue: AppearanceSettingsView.getMockCoordinator(
             windows: initialMockWindows,
@@ -168,10 +168,15 @@ struct AppearanceSettingsView: View {
                     VStack {
                         let currentCoordinator = selectedPreviewContext == .dock ? mockDockPreviewCoordinator : mockWindowSwitcherCoordinator
                         if !currentCoordinator.windows.isEmpty {
-                            MockWindowPreviewContainer(
+                            WindowPreviewHoverContainer(
                                 appName: mockAppNameForPreview,
-                                coordinator: currentCoordinator,
-                                isWindowSwitcher: selectedPreviewContext == .windowSwitcher
+                                onWindowTap: nil,
+                                dockPosition: .bottom,
+                                mouseLocation: .zero,
+                                bestGuessMonitor: NSScreen.main!,
+                                windowSwitcherCoordinator: currentCoordinator,
+                                mockPreviewActive: true,
+                                updateAvailable: false
                             )
                             .allowsHitTesting(false)
                         } else {
@@ -513,77 +518,6 @@ struct AppearanceSettingsView: View {
             }
             .onChange(of: sizingMultiplier) { _ in
                 SharedPreviewWindowCoordinator.activeInstance?.windowSize = getWindowSize()
-            }
-        }
-    }
-}
-
-// MARK: - Mock Window Preview Container
-
-struct MockWindowPreviewContainer: View {
-    let appName: String
-    let coordinator: PreviewStateCoordinator
-    let isWindowSwitcher: Bool
-
-    @Default(.uniformCardRadius) var uniformCardRadius
-    @Default(.showAppName) var showAppName
-    @Default(.appNameStyle) var appNameStyle
-    @Default(.showWindowTitle) var showWindowTitle
-    @Default(.windowTitleDisplayCondition) var windowTitleDisplayCondition
-    @Default(.windowTitleVisibility) var windowTitleVisibility
-    @Default(.windowTitlePosition) var windowTitlePosition
-    @Default(.showAppIconOnly) var showAppIconOnly
-
-    var body: some View {
-        BaseHoverContainer(bestGuessMonitor: NSScreen.main!, mockPreviewActive: true) {
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 16) {
-                    ForEach(Array(coordinator.windows.enumerated()), id: \.offset) { index, window in
-                        WindowPreview(
-                            windowInfo: window,
-                            onTap: nil,
-                            index: index,
-                            dockPosition: .bottom,
-                            maxWindowDimension: coordinator.overallMaxPreviewDimension,
-                            bestGuessMonitor: NSScreen.main!,
-                            uniformCardRadius: uniformCardRadius,
-                            handleWindowAction: { _ in },
-                            currIndex: coordinator.currIndex,
-                            windowSwitcherActive: isWindowSwitcher,
-                            dimensions: coordinator.windowDimensionsMap[index] ?? WindowPreviewHoverContainer.WindowDimensions(size: CGSize(width: 200, height: 150), maxDimensions: CGSize(width: 200, height: 150)),
-                            showAppIconOnly: showAppIconOnly,
-                            mockPreviewActive: true
-                        )
-                        .id("\(appName)-\(index)")
-                    }
-                }
-                .frame(alignment: .topLeading)
-                .globalPadding(20)
-            }
-            .overlay(alignment: .topLeading) {
-                if !isWindowSwitcher, showAppName {
-                    mockHoverTitle
-                        .padding(.top, appNameStyle == .default ? 35 : 10)
-                        .padding(.horizontal)
-                }
-            }
-        }
-        .padding(.top, (!isWindowSwitcher && appNameStyle == .popover && showAppName) ? 30 : 0)
-    }
-
-    @ViewBuilder
-    private var mockHoverTitle: some View {
-        HStack(alignment: .center) {
-            if let appIcon = NSApp.applicationIconImage {
-                Image(nsImage: appIcon)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 24, height: 24)
-            }
-
-            if !showAppIconOnly {
-                Text(appName)
-                    .foregroundStyle(Color.primary)
             }
         }
     }
