@@ -189,14 +189,17 @@ struct WindowPreviewHoverContainer: View {
                                 .frame(width: 24, height: 24)
                         }
                         hoverTitleLabelView(labelSize: labelSize)
-                        Spacer()
+
                         let shouldShowUpdateElements = updateAvailable && !mockPreviewActive
-                        update(shouldShowUpdateElements)
-                        massOperations(hoveringAppIcon && !updateAvailable)
+
+                        Group {
+                            update(shouldShowUpdateElements)
+                            massOperations(hoveringAppIcon && !updateAvailable)
+                        }
+                        .padding(.leading, 4)
                     }
                     .padding(.top, 10)
                     .padding(.horizontal)
-                    .animation(.smooth(duration: 0.15), value: hoveringAppIcon)
 
                 case .shadowed:
                     HStack(spacing: 2) {
@@ -211,13 +214,16 @@ struct WindowPreviewHoverContainer: View {
                                 .frame(width: 24, height: 24)
                         }
                         hoverTitleLabelView(labelSize: labelSize)
-                        Spacer()
+
                         let shouldShowUpdateElements = updateAvailable && !mockPreviewActive
-                        update(shouldShowUpdateElements)
-                        massOperations(hoveringAppIcon && !updateAvailable)
+
+                        Group {
+                            update(shouldShowUpdateElements)
+                            massOperations(hoveringAppIcon && !updateAvailable)
+                        }
+                        .padding(.leading, 4)
                     }
                     .padding(EdgeInsets(top: -11.5, leading: 15, bottom: -1.5, trailing: 1.5))
-                    .animation(.smooth(duration: 0.15), value: hoveringAppIcon)
 
                 case .popover:
                     HStack {
@@ -234,10 +240,14 @@ struct WindowPreviewHoverContainer: View {
                                     .frame(width: 24, height: 24)
                             }
                             hoverTitleLabelView(labelSize: labelSize)
-                            Spacer()
+
                             let shouldShowUpdateElements = updateAvailable && !mockPreviewActive
-                            update(shouldShowUpdateElements)
-                            massOperations(hoveringAppIcon && !updateAvailable)
+
+                            Group {
+                                update(shouldShowUpdateElements)
+                                massOperations(hoveringAppIcon && !updateAvailable)
+                            }
+                            .padding(.leading, 4)
                         }
                         .padding(.vertical, 5)
                         .padding(.horizontal, 10)
@@ -245,7 +255,6 @@ struct WindowPreviewHoverContainer: View {
                         Spacer()
                     }
                     .offset(y: -30)
-                    .animation(.smooth(duration: 0.15), value: hoveringAppIcon)
                 }
             }
             .onHover { hover in
@@ -303,7 +312,6 @@ struct WindowPreviewHoverContainer: View {
                 }
                 .buttonStyle(AccentButtonStyle(small: true))
             }
-            .transition(.opacity)
         }
     }
 
