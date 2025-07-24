@@ -108,7 +108,7 @@ struct AppearanceSettingsView: View {
     init() {
         _previousWindowTitlePosition = State(initialValue: Defaults[.windowTitlePosition])
 
-        let initialMockWindows = AppearanceSettingsView.generateMockWindowsForPreview(count: 2)
+        let initialMockWindows = AppearanceSettingsView.generateMockWindowsForPreview(count: 1)
 
         _mockDockPreviewCoordinator = StateObject(wrappedValue: AppearanceSettingsView.getMockCoordinator(
             windows: initialMockWindows,
@@ -176,10 +176,15 @@ struct AppearanceSettingsView: View {
                     VStack {
                         let currentCoordinator = selectedPreviewContext == .dock ? mockDockPreviewCoordinator : mockWindowSwitcherCoordinator
                         if !currentCoordinator.windows.isEmpty {
-                            MockWindowPreviewContainer(
+                            WindowPreviewHoverContainer(
                                 appName: mockAppNameForPreview,
-                                coordinator: currentCoordinator,
-                                isWindowSwitcher: selectedPreviewContext == .windowSwitcher
+                                onWindowTap: nil,
+                                dockPosition: .bottom,
+                                mouseLocation: .zero,
+                                bestGuessMonitor: NSScreen.main!,
+                                windowSwitcherCoordinator: currentCoordinator,
+                                mockPreviewActive: true,
+                                updateAvailable: false
                             )
                             .allowsHitTesting(false)
                         } else {
@@ -525,239 +530,6 @@ struct AppearanceSettingsView: View {
             .onChange(of: previewPixelSize) { _ in
                 SharedPreviewWindowCoordinator.activeInstance?.windowSize = getWindowSize()
             }
-        }
-    }
-}
-
-// MARK: - Mock Window Preview Container
-
-struct MockWindowPreviewContainer: View {
-    let appName: String
-    let coordinator: PreviewStateCoordinator
-    let isWindowSwitcher: Bool
-
-    @Default(.uniformCardRadius) var uniformCardRadius
-    @Default(.showAppName) var showAppName
-    @Default(.appNameStyle) var appNameStyle
-    @Default(.showWindowTitle) var showWindowTitle
-    @Default(.windowTitleDisplayCondition) var windowTitleDisplayCondition
-    @Default(.windowTitleVisibility) var windowTitleVisibility
-    @Default(.windowTitlePosition) var windowTitlePosition
-    @Default(.showAppIconOnly) var showAppIconOnly
-
-    @State private var appIcon: NSImage? = nil
-    @State private var hoveringAppIcon: Bool = false
-
-    var body: some View {
-        BaseHoverContainer(bestGuessMonitor: NSScreen.main!, mockPreviewActive: true) {
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 24) {
-                    ForEach(Array(coordinator.windows.enumerated()), id: \.offset) { index, window in
-                        WindowPreview(
-                            windowInfo: window,
-                            onTap: nil,
-                            index: index,
-                            dockPosition: .bottom,
-                            maxWindowDimension: coordinator.overallMaxPreviewDimension,
-                            bestGuessMonitor: NSScreen.main!,
-                            uniformCardRadius: uniformCardRadius,
-                            handleWindowAction: { _ in },
-                            currIndex: coordinator.currIndex,
-                            windowSwitcherActive: isWindowSwitcher,
-                            dimensions: coordinator.windowDimensionsMap[index] ?? WindowPreviewHoverContainer.WindowDimensions(size: CGSize(width: 200, height: 150), maxDimensions: CGSize(width: 200, height: 150)),
-                            showAppIconOnly: showAppIconOnly,
-                            mockPreviewActive: true
-                        )
-                        .id("\(appName)-\(index)")
-                    }
-                }
-                .frame(alignment: .topLeading)
-                .globalPadding(20)
-            }
-            .overlay(alignment: .topLeading) {
-                if !isWindowSwitcher, showAppName {
-                    hoverTitleBaseView(labelSize: measureString(appName, fontSize: 14))
-                        .onHover { hover in
-                            hoveringAppIcon = hover
-                        }
-                }
-            }
-        }
-        .onAppear {
-            loadAppIcon()
-        }
-    }
-
-    @ViewBuilder
-    private func hoverTitleBaseView(labelSize: CGSize) -> some View {
-        if !isWindowSwitcher, showAppName {
-            Group {
-                switch appNameStyle {
-                case .default:
-                    HStack(alignment: .center) {
-                        if let appIcon {
-                            Image(nsImage: appIcon)
-                                .resizable()
-                                .scaledToFit()
-                                .zIndex(1)
-                                .frame(width: 24, height: 24)
-                        } else {
-                            ProgressView()
-                                .frame(width: 24, height: 24)
-                        }
-                        hoverTitleLabelView(labelSize: labelSize)
-                        Spacer()
-                    }
-                    .padding(.top, 10)
-                    .padding(.horizontal)
-                    .animation(.smooth(duration: 0.15), value: hoveringAppIcon)
-
-                case .shadowed:
-                    HStack(spacing: 2) {
-                        if let appIcon {
-                            Image(nsImage: appIcon)
-                                .resizable()
-                                .scaledToFit()
-                                .zIndex(1)
-                                .frame(width: 24, height: 24)
-                        } else {
-                            ProgressView()
-                                .frame(width: 24, height: 24)
-                        }
-                        hoverTitleLabelView(labelSize: labelSize)
-                        Spacer()
-                    }
-                    .padding(EdgeInsets(top: -11.5, leading: 15, bottom: -1.5, trailing: 1.5))
-                    .animation(.smooth(duration: 0.15), value: hoveringAppIcon)
-
-                case .popover:
-                    HStack(alignment: .center, spacing: 2) {
-                        if let appIcon {
-                            Image(nsImage: appIcon)
-                                .resizable()
-                                .scaledToFit()
-                                .zIndex(1)
-                                .frame(width: 24, height: 24)
-                        } else {
-                            ProgressView()
-                                .frame(width: 24, height: 24)
-                        }
-                        hoverTitleLabelView(labelSize: labelSize)
-                        Spacer()
-                    }
-                    .padding(.vertical, 5)
-                    .padding(.horizontal, 10)
-                    .dockStyle(cornerRadius: 10)
-                    .padding(.top, 10)
-                    .padding(.horizontal)
-                    .animation(.smooth(duration: 0.15), value: hoveringAppIcon)
-                }
-            }
-        }
-    }
-
-    @ViewBuilder
-    private func hoverTitleLabelView(labelSize: CGSize) -> some View {
-        if !showAppIconOnly {
-            let trimmedAppName = appName.trimmingCharacters(in: .whitespaces)
-            let baseText = Text(trimmedAppName)
-
-            let rainbowGradientColors: [Color] = [.red, .orange, .yellow, .green, .blue, .purple, .pink]
-            let rainbowGradientHighlights: [Color] = [.white.opacity(0.45), .yellow.opacity(0.35), .pink.opacity(0.4)]
-            let rainbowGradientSpeed: CGFloat = 0.65
-            let defaultBlur: CGFloat = 0.5
-
-            Group {
-                switch appNameStyle {
-                case .shadowed:
-                    if trimmedAppName == "DockDoor" {
-                        FluidGradient(
-                            blobs: rainbowGradientColors,
-                            highlights: rainbowGradientHighlights,
-                            speed: rainbowGradientSpeed,
-                            blur: defaultBlur
-                        )
-                        .frame(width: labelSize.width, height: labelSize.height)
-                        .mask(baseText)
-                        .fontWeight(.medium)
-                        .padding(.leading, 4)
-                        .shadow(stacked: 2, radius: 6)
-                        .background(
-                            ZStack {
-                                MaterialBlurView(material: .hudWindow)
-                                    .mask(
-                                        Ellipse()
-                                            .fill(
-                                                LinearGradient(
-                                                    gradient: Gradient(
-                                                        colors: [
-                                                            Color.white.opacity(1.0),
-                                                            Color.white.opacity(0.35),
-                                                        ]
-                                                    ),
-                                                    startPoint: .top,
-                                                    endPoint: .bottom
-                                                )
-                                            )
-                                    )
-                                    .blur(radius: 5)
-                            }
-                            .frame(width: labelSize.width + 30)
-                        )
-                    } else {
-                        baseText
-                            .foregroundStyle(Color.primary)
-                            .shadow(stacked: 2, radius: 6)
-                            .background(
-                                ZStack {
-                                    MaterialBlurView(material: .hudWindow)
-                                        .mask(
-                                            Ellipse()
-                                                .fill(
-                                                    LinearGradient(
-                                                        gradient: Gradient(
-                                                            colors: [
-                                                                Color.white.opacity(1.0),
-                                                                Color.white.opacity(0.35),
-                                                            ]
-                                                        ),
-                                                        startPoint: .top,
-                                                        endPoint: .bottom
-                                                    )
-                                                )
-                                        )
-                                        .blur(radius: 5)
-                                }
-                                .frame(width: labelSize.width + 30)
-                            )
-                    }
-                case .default, .popover:
-                    if trimmedAppName == "DockDoor" {
-                        FluidGradient(
-                            blobs: rainbowGradientColors,
-                            highlights: rainbowGradientHighlights,
-                            speed: rainbowGradientSpeed,
-                            blur: defaultBlur
-                        )
-                        .frame(width: labelSize.width, height: labelSize.height)
-                        .mask(baseText)
-                    } else {
-                        baseText
-                            .foregroundStyle(Color.primary)
-                    }
-                }
-            }
-        }
-    }
-
-    private func loadAppIcon() {
-        guard let app = coordinator.windows.first?.app, let bundleID = app.bundleIdentifier else { return }
-        if let icon = SharedHoverUtils.loadAppIcon(for: bundleID) {
-            DispatchQueue.main.async {
-                if appIcon != icon { appIcon = icon }
-            }
-        } else if appIcon != nil {
-            DispatchQueue.main.async { appIcon = nil }
         }
     }
 }
