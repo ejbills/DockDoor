@@ -114,7 +114,7 @@ jobs:
         rm -rf build/
         
         # Create ExportOptions.plist with actual team ID
-        cat > ExportOptions.plist << EOF
+        cat > ExportOptions.plist << 'EOF'
         <?xml version="1.0" encoding="UTF-8"?>
         <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
         <plist version="1.0">
@@ -238,23 +238,23 @@ jobs:
           
           echo "✅ UNSIGNED Appcast would be:"
           echo "=========================="
-          cat << EOF
-<?xml version="1.0" standalone="yes"?>
-<rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
-    <channel>
-        <title>DockDoor</title>
-        <item>
-            <title>$NEW_VERSION</title>
-            <pubDate>$CURRENT_DATE</pubDate>
-            <sparkle:releaseNotesLink>https://dockdoor.net/CHANGELOG.html</sparkle:releaseNotesLink>
-            <sparkle:version>$NEW_VERSION</sparkle:version>
-            <sparkle:shortVersionString>$NEW_VERSION</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-            <enclosure url="$DOWNLOAD_URL" length="$DMG_SIZE" type="application/octet-stream"/>
-        </item>
-    </channel>
-</rss>
-EOF
+          cat << 'EOF'
+        <?xml version="1.0" standalone="yes"?>
+        <rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
+            <channel>
+                <title>DockDoor</title>
+                <item>
+                    <title>$NEW_VERSION</title>
+                    <pubDate>$CURRENT_DATE</pubDate>
+                    <sparkle:releaseNotesLink>https://dockdoor.net/CHANGELOG.html</sparkle:releaseNotesLink>
+                    <sparkle:version>$NEW_VERSION</sparkle:version>
+                    <sparkle:shortVersionString>$NEW_VERSION</sparkle:shortVersionString>
+                    <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+                    <enclosure url="$DOWNLOAD_URL" length="$DMG_SIZE" type="application/octet-stream"/>
+                </item>
+            </channel>
+        </rss>
+        EOF
           echo "=========================="
         fi
     
@@ -308,4 +308,3 @@ EOF
         echo ""
         echo "🚀 Ready for real release? Run 'Sparkle Release Automation' workflow"
         echo "⚠️  Remember to merge this branch to main first if testing on a feature branch"
-        
