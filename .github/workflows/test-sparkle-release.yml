@@ -104,51 +104,159 @@ jobs:
         mv DockDoor.xcodeproj/project.pbxproj.backup DockDoor.xcodeproj/project.pbxproj
         echo "✅ Original project file restored"
     
-    - name: Test build (validation only)
+    - name: Build and Create DMG
+      env:
+        APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
       run: |
-        echo "🔨 Testing build configuration..."
+        echo "🔨 Building app and creating DMG..."
         
-        # Test that the project can be read
-        xcodebuild -list -project DockDoor.xcodeproj
+        # Clean build folder
+        rm -rf build/
         
-        # Test build settings without actually building
+        # Create ExportOptions.plist with actual team ID
+        cat > ExportOptions.plist << EOF
+        <?xml version="1.0" encoding="UTF-8"?>
+        <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+        <plist version="1.0">
+        <dict>
+            <key>method</key>
+            <string>developer-id</string>
+            <key>teamID</key>
+            <string>$APPLE_TEAM_ID</string>
+            <key>uploadBitcode</key>
+            <false/>
+            <key>uploadSymbols</key>
+            <true/>
+            <key>compileBitcode</key>
+            <false/>
+            <key>signingStyle</key>
+            <string>automatic</string>
+            <key>stripSwiftSymbols</key>
+            <true/>
+        </dict>
+        </plist>
+        EOF
+        
+        # Build for release
         xcodebuild -project DockDoor.xcodeproj \
           -scheme DockDoor \
           -configuration Release \
-          -showBuildSettings | head -20
+          -derivedDataPath build/ \
+          -archivePath build/DockDoor.xcarchive \
+          archive
         
-        echo "✅ Build configuration valid"
+        # Export the app
+        xcodebuild -exportArchive \
+          -archivePath build/DockDoor.xcarchive \
+          -exportPath build/export \
+          -exportOptionsPlist ExportOptions.plist
+        
+        # Create proper DMG with Applications shortcut
+        APP_PATH="build/export/DockDoor.app"
+        DMG_PATH="build/DockDoor.dmg"
+        TEMP_DMG_DIR="build/dmg_temp"
+        
+        if [ -d "$APP_PATH" ]; then
+          # Create temporary directory for DMG contents
+          mkdir -p "$TEMP_DMG_DIR"
+          
+          # Copy app to temp directory
+          cp -R "$APP_PATH" "$TEMP_DMG_DIR/"
+          
+          # Create symbolic link to Applications
+          ln -s /Applications "$TEMP_DMG_DIR/Applications"
+          
+          # Create DMG with proper drag-and-drop layout
+          hdiutil create -volname "DockDoor" -srcfolder "$TEMP_DMG_DIR" -ov -format UDZO "$DMG_PATH"
+          
+          # Clean up temp directory
+          rm -rf "$TEMP_DMG_DIR"
+          
+          echo "✅ DMG created at $DMG_PATH with Applications shortcut"
+          
+          # Show DMG info
+          DMG_SIZE=$(stat -f%z "$DMG_PATH")
+          echo "📦 DMG Size: $DMG_SIZE bytes"
+          ls -lah "$DMG_PATH"
+        else
+          echo "❌ Error: App not found at $APP_PATH"
+          exit 1
+        fi
     
-    - name: Test appcast generation
+    - name: Upload DMG as Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: DockDoor-Test-v${{ steps.new_version.outputs.new }}
+        path: build/DockDoor.dmg
+        retention-days: 7
+    
+    - name: Generate and Display Appcast
+      env:
+        SPARKLE_PRIVATE_KEY: ${{ secrets.SPARKLE_PRIVATE_KEY }}
       run: |
-        echo "📡 Testing appcast generation..."
+        echo "📡 Generating actual appcast with real DMG..."
         
         NEW_VERSION="${{ steps.new_version.outputs.new }}"
-        CURRENT_DATE=$(date -u +"%a, %d %b %Y %H:%M:%S %z")
-        DMG_SIZE="12345678"  # Fake size for testing
-        DOWNLOAD_URL="https://github.com/ejbills/DockDoor/releases/download/v$NEW_VERSION/DockDoor.dmg"
+        DMG_SIZE=$(stat -f%z build/DockDoor.dmg)
+        DOWNLOAD_URL="https://github.com/ejbills/DockDoor/releases/latest/download/DockDoor.dmg"
         
-        # Test appcast XML generation
-        cat > test_appcast.xml << EOF
-        <?xml version="1.0" standalone="yes"?>
-        <rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
-            <channel>
-                <title>DockDoor</title>
-                <item>
-                    <title>$NEW_VERSION</title>
-                    <pubDate>$CURRENT_DATE</pubDate>
-                    <sparkle:releaseNotesLink>https://dockdoor.kepler.cafe/CHANGELOG.html</sparkle:releaseNotesLink>
-                    <sparkle:version>$NEW_VERSION</sparkle:version>
-                    <sparkle:shortVersionString>$NEW_VERSION</sparkle:shortVersionString>
-                    <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-                    <enclosure url="$DOWNLOAD_URL" length="$DMG_SIZE" type="application/octet-stream"/>
-                </item>
-            </channel>
-        </rss>
-        EOF
+        echo "📊 DMG Info:"
+        echo "  Version: $NEW_VERSION"
+        echo "  Size: $DMG_SIZE bytes"
+        echo "  Download URL: $DOWNLOAD_URL"
+        echo ""
         
-        echo "✅ Test appcast generated:"
-        cat test_appcast.xml
+        # Generate appcast with proper signatures using Sparkle's tool
+        if [ -n "$SPARKLE_PRIVATE_KEY" ]; then
+          echo "🔐 Generating SIGNED appcast with Sparkle tool..."
+          
+          # Create a temporary directory for appcast generation
+          mkdir -p temp_appcast
+          cp build/DockDoor.dmg "temp_appcast/DockDoor-$NEW_VERSION.dmg"
+          
+          # Save private key to temporary file
+          echo "$SPARKLE_PRIVATE_KEY" > temp_private_key.pem
+          
+          # Generate appcast with signatures
+          ./Sparkle/generate_appcast \
+            --ed-key-file temp_private_key.pem \
+            --download-url-prefix "https://github.com/ejbills/DockDoor/releases/latest/download/" \
+            --release-notes-url-prefix "https://dockdoor.net/CHANGELOG.html" \
+            temp_appcast/
+          
+          echo "✅ SIGNED Appcast generated:"
+          echo "=========================="
+          cat temp_appcast/appcast.xml
+          echo "=========================="
+          
+          # Clean up
+          rm -f temp_private_key.pem
+          rm -rf temp_appcast
+        else
+          echo "⚠️ Generating UNSIGNED appcast (SPARKLE_PRIVATE_KEY not set)..."
+          CURRENT_DATE=$(date -u +"%a, %d %b %Y %H:%M:%S %z")
+          
+          echo "✅ UNSIGNED Appcast would be:"
+          echo "=========================="
+          cat << EOF
+<?xml version="1.0" standalone="yes"?>
+<rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
+    <channel>
+        <title>DockDoor</title>
+        <item>
+            <title>$NEW_VERSION</title>
+            <pubDate>$CURRENT_DATE</pubDate>
+            <sparkle:releaseNotesLink>https://dockdoor.net/CHANGELOG.html</sparkle:releaseNotesLink>
+            <sparkle:version>$NEW_VERSION</sparkle:version>
+            <sparkle:shortVersionString>$NEW_VERSION</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+            <enclosure url="$DOWNLOAD_URL" length="$DMG_SIZE" type="application/octet-stream"/>
+        </item>
+    </channel>
+</rss>
+EOF
+          echo "=========================="
+        fi
     
     - name: Test Sparkle signing (if configured)
       run: |
