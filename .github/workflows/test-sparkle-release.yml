@@ -308,3 +308,4 @@ EOF
         echo ""
         echo "🚀 Ready for real release? Run 'Sparkle Release Automation' workflow"
         echo "⚠️  Remember to merge this branch to main first if testing on a feature branch"
+        
