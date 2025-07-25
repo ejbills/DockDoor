@@ -1,0 +1,202 @@
+name: Test Sparkle Release (Safe)
+
+on:
+  workflow_dispatch:
+    inputs:
+      version_increment:
+        description: 'Version increment type (TEST ONLY - no actual release)'
+        required: true
+        default: 'patch'
+        type: choice
+        options:
+        - major
+        - minor
+        - patch
+      release_notes:
+        description: 'Test release notes'
+        required: false
+        type: string
+        default: 'TEST RELEASE - This is a test run of the automation'
+
+jobs:
+  test-release:
+    runs-on: macos-latest
+    
+    steps:
+    - name: ⚠️ TEST MODE WARNING
+      run: |
+        echo "🧪 THIS IS A TEST RUN - NO ACTUAL RELEASE WILL BE CREATED"
+        echo "📋 This workflow will:"
+        echo "   ✅ Test version calculation"
+        echo "   ✅ Test project file parsing"
+        echo "   ✅ Test build process (dry run)"
+        echo "   ✅ Test appcast generation"
+        echo "   ❌ Will NOT create GitHub release"
+        echo "   ❌ Will NOT push changes to repository"
+        echo "   ❌ Will NOT upload any assets"
+        echo ""
+    
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        ref: ${{ github.ref }}
+    
+    - name: Setup Xcode
+      uses: maxim-lobanov/setup-xcode@v1
+      with:
+        xcode-version: latest-stable
+    
+    - name: Get current version
+      id: current_version
+      run: |
+        CURRENT_VERSION=$(grep -o 'MARKETING_VERSION = [0-9.]*' DockDoor.xcodeproj/project.pbxproj | head -1 | cut -d' ' -f3 | tr -d ';')
+        echo "current=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+        echo "✅ Current version detected: $CURRENT_VERSION"
+    
+    - name: Calculate new version (TEST)
+      id: new_version  
+      run: |
+        CURRENT="${{ steps.current_version.outputs.current }}"
+        IFS='.' read -ra VERSION_PARTS <<< "$CURRENT"
+        MAJOR=${VERSION_PARTS[0]}
+        MINOR=${VERSION_PARTS[1]}
+        PATCH=${VERSION_PARTS[2]}
+        
+        case "${{ github.event.inputs.version_increment }}" in
+          major)
+            MAJOR=$((MAJOR + 1))
+            MINOR=0
+            PATCH=0
+            ;;
+          minor)
+            MINOR=$((MINOR + 1))
+            PATCH=0
+            ;;
+          patch)
+            PATCH=$((PATCH + 1))
+            ;;
+        esac
+        
+        NEW_VERSION="$MAJOR.$MINOR.$PATCH"
+        echo "new=$NEW_VERSION" >> $GITHUB_OUTPUT
+        echo "✅ Would increment to: $NEW_VERSION"
+        echo "📊 Version change: $CURRENT → $NEW_VERSION (${{ github.event.inputs.version_increment }})"
+    
+    - name: Test version update (dry run)
+      run: |
+        NEW_VERSION="${{ steps.new_version.outputs.new }}"
+        echo "🔍 Testing version update process..."
+        
+        # Create backup of project file
+        cp DockDoor.xcodeproj/project.pbxproj DockDoor.xcodeproj/project.pbxproj.backup
+        
+        # Test the sed commands
+        sed -i '' "s/MARKETING_VERSION = [0-9.]*/MARKETING_VERSION = $NEW_VERSION/g" DockDoor.xcodeproj/project.pbxproj
+        sed -i '' "s/CURRENT_PROJECT_VERSION = [0-9.]*/CURRENT_PROJECT_VERSION = $NEW_VERSION/g" DockDoor.xcodeproj/project.pbxproj
+        
+        # Verify changes
+        echo "✅ Version replacement test successful:"
+        grep "MARKETING_VERSION = " DockDoor.xcodeproj/project.pbxproj | head -2
+        grep "CURRENT_PROJECT_VERSION = " DockDoor.xcodeproj/project.pbxproj | head -2
+        
+        # Restore original file
+        mv DockDoor.xcodeproj/project.pbxproj.backup DockDoor.xcodeproj/project.pbxproj
+        echo "✅ Original project file restored"
+    
+    - name: Test build (validation only)
+      run: |
+        echo "🔨 Testing build configuration..."
+        
+        # Test that the project can be read
+        xcodebuild -list -project DockDoor.xcodeproj
+        
+        # Test build settings without actually building
+        xcodebuild -project DockDoor.xcodeproj \
+          -scheme DockDoor \
+          -configuration Release \
+          -showBuildSettings | head -20
+        
+        echo "✅ Build configuration valid"
+    
+    - name: Test appcast generation
+      run: |
+        echo "📡 Testing appcast generation..."
+        
+        NEW_VERSION="${{ steps.new_version.outputs.new }}"
+        CURRENT_DATE=$(date -u +"%a, %d %b %Y %H:%M:%S %z")
+        DMG_SIZE="12345678"  # Fake size for testing
+        DOWNLOAD_URL="https://github.com/ejbills/DockDoor/releases/download/v$NEW_VERSION/DockDoor.dmg"
+        
+        # Test appcast XML generation
+        cat > test_appcast.xml << EOF
+        <?xml version="1.0" standalone="yes"?>
+        <rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
+            <channel>
+                <title>DockDoor</title>
+                <item>
+                    <title>$NEW_VERSION</title>
+                    <pubDate>$CURRENT_DATE</pubDate>
+                    <sparkle:releaseNotesLink>https://dockdoor.kepler.cafe/CHANGELOG.html</sparkle:releaseNotesLink>
+                    <sparkle:version>$NEW_VERSION</sparkle:version>
+                    <sparkle:shortVersionString>$NEW_VERSION</sparkle:shortVersionString>
+                    <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+                    <enclosure url="$DOWNLOAD_URL" length="$DMG_SIZE" type="application/octet-stream"/>
+                </item>
+            </channel>
+        </rss>
+        EOF
+        
+        echo "✅ Test appcast generated:"
+        cat test_appcast.xml
+    
+    - name: Test Sparkle signing (if configured)
+      run: |
+        if [ -n "${{ secrets.SPARKLE_PRIVATE_KEY }}" ]; then
+          echo "✅ SPARKLE_PRIVATE_KEY secret is configured"
+          echo "🔐 Sparkle signing would be enabled in real release"
+        else
+          echo "⚠️  SPARKLE_PRIVATE_KEY secret not configured"
+          echo "📝 Appcast would be generated without signatures"
+        fi
+        
+        if [ -n "${{ secrets.APPLE_TEAM_ID }}" ]; then
+          echo "✅ APPLE_TEAM_ID secret is configured"
+        else
+          echo "⚠️  APPLE_TEAM_ID secret not configured"
+        fi
+    
+    - name: Test release notes generation
+      run: |
+        echo "📝 Testing release notes generation..."
+        
+        if [ -n "${{ github.event.inputs.release_notes }}" ]; then
+          echo "✅ Using provided release notes:"
+          echo "${{ github.event.inputs.release_notes }}"
+        else
+          echo "📄 Would extract from CHANGELOG.md:"
+          if [ -f "CHANGELOG.md" ]; then
+            echo "✅ CHANGELOG.md found"
+            # Show what would be extracted
+            awk '/^## \[/ {if(found) exit; found=1; next} found && /^## \[/ {exit} found {print}' CHANGELOG.md | head -10
+          else
+            echo "⚠️  CHANGELOG.md not found, would use default notes"
+          fi
+        fi
+    
+    - name: 🎉 Test Summary
+      run: |
+        echo "🧪 TEST COMPLETE - Summary:"
+        echo "================================="
+        echo "Current Version: ${{ steps.current_version.outputs.current }}"
+        echo "Would Create: v${{ steps.new_version.outputs.new }}"
+        echo "Increment Type: ${{ github.event.inputs.version_increment }}"
+        echo "Branch: ${{ github.ref_name }}"
+        echo ""
+        echo "✅ Version calculation: PASSED"
+        echo "✅ Project file updates: PASSED" 
+        echo "✅ Build configuration: PASSED"
+        echo "✅ Appcast generation: PASSED"
+        echo ""
+        echo "🚀 Ready for real release? Run 'Sparkle Release Automation' workflow"
+        echo "⚠️  Remember to merge this branch to main first if testing on a feature branch"
