@@ -4,13 +4,13 @@
         <title>DockDoor</title>
         <item>
             <title>1.18.4.6-pre1_19</title>
-            <pubDate>Sat, 26 Jul 2025 10:32:51 -0700</pubDate>
+            <pubDate>Sat, 26 Jul 2025 11:05:47 -0700</pubDate>
             <sparkle:releaseNotesLink>https://dockdoor.net/CHANGELOG.html</sparkle:releaseNotesLink>
             <sparkle:channel>beta</sparkle:channel>
             <sparkle:version>1.18.4.6-pre1_19</sparkle:version>
             <sparkle:shortVersionString>1.18.4.6-pre1_19 beta</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/ejbills/DockDoor/releases/download/1.18.4.6-pre1_19/DockDoor.dmg" length="2654764" type="application/octet-stream" sparkle:edSignature="L1C9t8Ks5RSggTC5hB9rphT1JnXZdCMvBNwGxbFdPAJE5A9LUQ9cugNWIoUASGkensWWYiwM4CE37riPkMwnDg==" />
+            <enclosure url="https://github.com/ejbills/DockDoor/releases/download/1.18.4.6-pre1_19/DockDoor.dmg" length="2654764" type="application/octet-stream" sparkle:edSignature="oRAmECQ6GGSMcMW+xqw2ks4vSZ6zUZ9qev1w2+PbAI68aUsHszEXaRKBzUM7HIKXCmAwRuot/sR+qFrEs/FdBw==" />
         </item>
     <item>
             <title>1.18.4</title>
