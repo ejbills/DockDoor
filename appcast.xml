@@ -3,6 +3,15 @@
     <channel>
         <title>DockDoor</title>
         <item>
+            <title>1.18.4</title>
+            <pubDate>Sat, 26 Jul 2025 10:16:28 -0700</pubDate>
+            <sparkle:releaseNotesLink>https://dockdoor.net/CHANGELOG.html</sparkle:releaseNotesLink>
+            <sparkle:version>1.18.4</sparkle:version>
+            <sparkle:shortVersionString>1.18.4</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/ejbills/DockDoor/releases/download/1.18.4/DockDoor.dmg" length="2659548" type="application/octet-stream" sparkle:edSignature="nsr+eqdwJgMakiJoSs08d5R+1KN7IoGWtwKKyHcWJDNr+1Bc27qikin2wS2K38w481MnGQLTjTrZLAXn0XztAA==" />
+        </item>
+    <item>
             <title>1.18.4.5-pre1_18_4</title>
             <pubDate>Fri, 25 Jul 2025 21:45:42 -0700</pubDate>
             <sparkle:releaseNotesLink>https://dockdoor.net/CHANGELOG.html</sparkle:releaseNotesLink>
@@ -11,15 +20,6 @@
             <sparkle:shortVersionString>1.18.4.5-pre1_18_4 beta</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
             <enclosure url="https://github.com/ejbills/DockDoor/releases/download/1.18.4.5-pre1_18_4/DockDoor.dmg" length="2661952" type="application/octet-stream" sparkle:edSignature="hhU+cUScY8OjJ261mX+vKThfSMWEW6y0jcuBtxXoZBW6O7A+mwUy8I5IyK907Vn1hkNYzJ60HcSHT8Ls9z3QAg==" />
-        </item>
-    <item>
-            <title>1.18.3</title>
-            <pubDate>Thu, 24 Jul 2025 20:41:29 -0700</pubDate>
-            <sparkle:releaseNotesLink>https://dockdoor.net/CHANGELOG.html</sparkle:releaseNotesLink>
-            <sparkle:version>1.18.3</sparkle:version>
-            <sparkle:shortVersionString>1.18.3</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/ejbills/DockDoor/releases/latest/download/DockDoor.dmg" length="4663620" type="application/octet-stream" sparkle:edSignature="082wvLnGkFadQO2kt+ios3sMzPuMRHu5um+TcCCZaS0s8HLnwN7e/9WogJoJu/4hXijlsKe7znGy5hrYgq2pBg==" />
         </item>
     </channel>
 </rss>
