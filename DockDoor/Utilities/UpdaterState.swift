@@ -2,11 +2,33 @@ import Combine
 import Sparkle
 import SwiftUI
 
+enum UpdateChannel: String, CaseIterable {
+    case stable
+    case beta
+
+    var displayName: String {
+        switch self {
+        case .stable:
+            String(localized: "Stable")
+        case .beta:
+            String(localized: "Beta")
+        }
+    }
+}
+
 final class UpdaterState: NSObject, SPUUpdaterDelegate, ObservableObject {
     @Published var canCheckForUpdates: Bool = false
     @Published var lastUpdateCheckDate: Date?
     @Published var currentVersion: String
     @Published var isAutomaticChecksEnabled: Bool = false
+    @Published var updateChannel: UpdateChannel = .stable {
+        didSet {
+            if updateChannel != oldValue {
+                switchUpdateChannel(to: updateChannel)
+            }
+        }
+    }
+
     @Published var updateStatus: UpdateStatus = .noUpdates {
         didSet {
             print("UpdaterState: updateStatus changed to: \(updateStatus)")
@@ -18,6 +40,7 @@ final class UpdaterState: NSObject, SPUUpdaterDelegate, ObservableObject {
             bindUpdaterProperties()
             if let updater {
                 isAutomaticChecksEnabled = updater.automaticallyChecksForUpdates
+                print("UpdaterState: Initialized with \(updateChannel.displayName)")
             }
         }
     }
@@ -49,7 +72,15 @@ final class UpdaterState: NSObject, SPUUpdaterDelegate, ObservableObject {
     }
 
     override init() {
-        currentVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "Unknown"
+        currentVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "Unknown"
+
+        // Load saved update channel preference
+        if let savedChannelRaw = UserDefaults.standard.string(forKey: "updateChannel"),
+           let savedChannel = UpdateChannel(rawValue: savedChannelRaw)
+        {
+            updateChannel = savedChannel
+        }
+
         super.init()
     }
 
@@ -84,6 +115,16 @@ final class UpdaterState: NSObject, SPUUpdaterDelegate, ObservableObject {
         isAutomaticChecksEnabled = updater.automaticallyChecksForUpdates
     }
 
+    private func switchUpdateChannel(to channel: UpdateChannel) {
+        // Save the channel preference
+        UserDefaults.standard.set(channel.rawValue, forKey: "updateChannel")
+
+        // Reset update status when switching channels
+        updateStatus = .noUpdates
+
+        print("UpdaterState: Switched to \(channel.displayName) channel")
+    }
+
     func updater(_ updater: SPUUpdater, didFindValidUpdate item: SUAppcastItem) {
         DispatchQueue.main.async {
             self.updateStatus = .available(version: item.versionString, publishedDate: item.date, releaseNotes: item.itemDescription)
@@ -115,7 +156,12 @@ final class UpdaterState: NSObject, SPUUpdaterDelegate, ObservableObject {
     func updaterDidFinishSetup(_ updater: SPUUpdater) {}
 
     func allowedChannels(for updater: SPUUpdater) -> Set<String> {
-        []
+        switch updateChannel {
+        case .stable:
+            Set() // Empty set means default channel only
+        case .beta:
+            Set(["beta"])
+        }
     }
 
     func updater(_ updater: SPUUpdater, willShowModalAlert alert: NSAlert) {

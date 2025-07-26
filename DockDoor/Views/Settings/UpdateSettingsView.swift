@@ -8,39 +8,48 @@ struct UpdateSettingsView: View {
     }
 
     var body: some View {
-        VStack(alignment: .center, spacing: 16) {
-            EnabledActionRowView(
-                title: String(localized: "Current Version"),
-                description: String(localized: "Your app is on version \(updaterState.currentVersion)"),
-                isGranted: true,
-                iconName: "checkmark.seal",
-                action: nil,
-                disableShine: false,
-                statusText: String(localized: "Up to Date"),
-                customStatusView: AnyView(updateStatusView)
-            )
+        VStack(alignment: .leading, spacing: 16) {
+            Picker("Update Channel", selection: $updaterState.updateChannel) {
+                ForEach(UpdateChannel.allCases, id: \.self) { channel in
+                    Text(channel.displayName).tag(channel)
+                }
+            }
+            .pickerStyle(MenuPickerStyle())
 
-            EnabledActionRowView(
-                title: String(localized: "Check for Updates"),
-                description: lastCheckDescription,
-                isGranted: updaterState.canCheckForUpdates,
-                iconName: "arrow.triangle.2.circlepath",
-                action: updaterState.checkForUpdates,
-                disableShine: true,
-                buttonText: String(localized: "Check for Updates"),
-                hideStatus: true
-            )
+            VStack(alignment: .center, spacing: 16) {
+                EnabledActionRowView(
+                    title: String(localized: "Current Version"),
+                    description: String(localized: "Your app is on version \(updaterState.currentVersion)"),
+                    isGranted: true,
+                    iconName: "checkmark.seal",
+                    action: nil,
+                    disableShine: false,
+                    statusText: String(localized: "Up to Date"),
+                    customStatusView: AnyView(updateStatusView)
+                )
 
-            EnabledActionRowView(
-                title: String(localized: "Automatic Updates"),
-                description: String(localized: "Enable automatic checking for updates"),
-                isGranted: updaterState.isAutomaticChecksEnabled,
-                iconName: "clock.arrow.2.circlepath",
-                action: updaterState.toggleAutomaticChecks,
-                disableShine: true,
-                buttonText: String(localized: "Toggle"),
-                statusText: String(localized: "Enabled")
-            )
+                EnabledActionRowView(
+                    title: String(localized: "Check for Updates"),
+                    description: lastCheckDescription,
+                    isGranted: updaterState.canCheckForUpdates,
+                    iconName: "arrow.triangle.2.circlepath",
+                    action: updaterState.checkForUpdates,
+                    disableShine: true,
+                    buttonText: String(localized: "Check for Updates"),
+                    hideStatus: true
+                )
+
+                EnabledActionRowView(
+                    title: String(localized: "Automatic Updates"),
+                    description: String(localized: "Enable automatic checking for updates"),
+                    isGranted: updaterState.isAutomaticChecksEnabled,
+                    iconName: "clock.arrow.2.circlepath",
+                    action: updaterState.toggleAutomaticChecks,
+                    disableShine: true,
+                    buttonText: String(localized: "Toggle"),
+                    statusText: String(localized: "Enabled")
+                )
+            }
         }
     }
 

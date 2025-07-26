@@ -11236,6 +11236,9 @@
         }
       }
     },
+    "Beta" : {
+
+    },
     "Blur amount" : {
       "localizations" : {
         "af" : {
@@ -62679,6 +62682,9 @@
         }
       }
     },
+    "Stable" : {
+
+    },
     "Standard" : {
       "localizations" : {
         "af" : {
@@ -70102,6 +70108,9 @@
           }
         }
       }
+    },
+    "Update Channel" : {
+
     },
     "Update settings" : {
       "extractionState" : "stale",
