@@ -72,7 +72,7 @@ final class UpdaterState: NSObject, SPUUpdaterDelegate, ObservableObject {
     }
 
     override init() {
-        currentVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "Unknown"
+        currentVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "Unknown"
 
         // Load saved update channel preference
         if let savedChannelRaw = UserDefaults.standard.string(forKey: "updateChannel"),
