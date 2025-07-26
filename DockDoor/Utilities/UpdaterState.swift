@@ -52,8 +52,6 @@ final class UpdaterState: NSObject, SPUUpdaterDelegate, ObservableObject {
 
                 // Clear any previously stored feed URL from UserDefaults
                 updater.clearFeedURLFromUserDefaults()
-
-                print("UpdaterState: Initialized with \(updateChannel.displayName) channel: \(updateChannel.feedURL)")
             }
         }
     }
