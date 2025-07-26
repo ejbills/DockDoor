@@ -40,7 +40,7 @@ final class UpdaterState: NSObject, SPUUpdaterDelegate, ObservableObject {
             bindUpdaterProperties()
             if let updater {
                 isAutomaticChecksEnabled = updater.automaticallyChecksForUpdates
-                print("UpdaterState: Initialized with \(updateChannel.displayName) channel")
+                print("UpdaterState: Initialized with \(updateChannel.displayName)")
             }
         }
     }
