@@ -14,15 +14,6 @@ enum UpdateChannel: String, CaseIterable {
             String(localized: "Beta")
         }
     }
-
-    var feedURL: String {
-        switch self {
-        case .stable:
-            "https://dockdoor.kepler.cafe/appcast.xml"
-        case .beta:
-            "https://dockdoor.kepler.cafe/appcast-beta.xml"
-        }
-    }
 }
 
 final class UpdaterState: NSObject, SPUUpdaterDelegate, ObservableObject {
@@ -49,9 +40,7 @@ final class UpdaterState: NSObject, SPUUpdaterDelegate, ObservableObject {
             bindUpdaterProperties()
             if let updater {
                 isAutomaticChecksEnabled = updater.automaticallyChecksForUpdates
-
-                // Clear any previously stored feed URL from UserDefaults
-                updater.clearFeedURLFromUserDefaults()
+                print("UpdaterState: Initialized with \(updateChannel.displayName) channel")
             }
         }
     }
@@ -133,7 +122,7 @@ final class UpdaterState: NSObject, SPUUpdaterDelegate, ObservableObject {
         // Reset update status when switching channels
         updateStatus = .noUpdates
 
-        print("UpdaterState: Switched to \(channel.displayName) channel: \(channel.feedURL)")
+        print("UpdaterState: Switched to \(channel.displayName) channel")
     }
 
     func updater(_ updater: SPUUpdater, didFindValidUpdate item: SUAppcastItem) {
@@ -167,14 +156,15 @@ final class UpdaterState: NSObject, SPUUpdaterDelegate, ObservableObject {
     func updaterDidFinishSetup(_ updater: SPUUpdater) {}
 
     func allowedChannels(for updater: SPUUpdater) -> Set<String> {
-        []
+        switch updateChannel {
+        case .stable:
+            return Set() // Empty set means default channel only
+        case .beta:
+            return Set(["beta"])
+        }
     }
 
     func updater(_ updater: SPUUpdater, willShowModalAlert alert: NSAlert) {
         print("UpdaterState (SPUUpdaterDelegate): updater:willShowModalAlert. Alert: \(alert.messageText)")
-    }
-
-    func feedURLString(for updater: SPUUpdater) -> String? {
-        updateChannel.feedURL
     }
 }
