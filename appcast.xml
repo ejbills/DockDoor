@@ -1,15 +1,25 @@
-<?xml version="1.0" standalone="yes"?>
+<?xml version='1.0' encoding='utf-8'?>
 <rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
     <channel>
         <title>DockDoor</title>
         <item>
+            <title>1.18.4-1-beta</title>
+            <pubDate>Fri, 25 Jul 2025 20:39:58 -0700</pubDate>
+            <sparkle:releaseNotesLink>https://dockdoor.net/CHANGELOG.html</sparkle:releaseNotesLink>
+            <sparkle:channel>beta</sparkle:channel>
+            <sparkle:version>1.18.4-1-beta</sparkle:version>
+            <sparkle:shortVersionString>1.18.4-1-beta</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/ejbills/DockDoor/releases/download/1.18.4-1-beta/DockDoor.dmg" length="2662616" type="application/octet-stream" sparkle:edSignature="fCac4zY+jzfumde9FJHidxU8GWyuT118IICYt8QOxWmaPYelmSXXOcblxNR1OoqASkN8c03Zjjbbphnv9W0SCw==" />
+        </item>
+    <item>
             <title>1.18.3</title>
             <pubDate>Thu, 24 Jul 2025 20:41:29 -0700</pubDate>
             <sparkle:releaseNotesLink>https://dockdoor.net/CHANGELOG.html</sparkle:releaseNotesLink>
             <sparkle:version>1.18.3</sparkle:version>
             <sparkle:shortVersionString>1.18.3</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/ejbills/DockDoor/releases/latest/download/DockDoor.dmg" length="4663620" type="application/octet-stream" sparkle:edSignature="082wvLnGkFadQO2kt+ios3sMzPuMRHu5um+TcCCZaS0s8HLnwN7e/9WogJoJu/4hXijlsKe7znGy5hrYgq2pBg=="/>
+            <enclosure url="https://github.com/ejbills/DockDoor/releases/latest/download/DockDoor.dmg" length="4663620" type="application/octet-stream" sparkle:edSignature="082wvLnGkFadQO2kt+ios3sMzPuMRHu5um+TcCCZaS0s8HLnwN7e/9WogJoJu/4hXijlsKe7znGy5hrYgq2pBg==" />
         </item>
     </channel>
 </rss>
