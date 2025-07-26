@@ -3,6 +3,16 @@
     <channel>
         <title>DockDoor</title>
         <item>
+            <title>1.18.4-2-beta</title>
+            <pubDate>Fri, 25 Jul 2025 20:50:34 -0700</pubDate>
+            <sparkle:releaseNotesLink>https://dockdoor.net/CHANGELOG.html</sparkle:releaseNotesLink>
+            <sparkle:channel>beta</sparkle:channel>
+            <sparkle:version>1.18.4-2-beta</sparkle:version>
+            <sparkle:shortVersionString>1.18.4-2-beta</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/ejbills/DockDoor/releases/download/1.18.4-2-beta/DockDoor.dmg" length="2662580" type="application/octet-stream" sparkle:edSignature="ps/1aJ94zqkn8Ggz1eBuDYC7eV6PV3mmff5VxpSjeyuja+JeZREA/MCKqRzLQFv4TUFa0UOFzsS2X8+zaMc5Ag==" />
+        </item>
+    <item>
             <title>1.18.4-1-beta</title>
             <pubDate>Fri, 25 Jul 2025 20:39:58 -0700</pubDate>
             <sparkle:releaseNotesLink>https://dockdoor.net/CHANGELOG.html</sparkle:releaseNotesLink>
