@@ -1,0 +1,16 @@
+<?xml version="1.0" standalone="yes"?>
+<rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
+    <channel>
+        <title>DockDoor</title>
+        <item>
+            <title>1.18.3</title>
+            <pubDate>Fri, 25 Jul 2025 19:17:24 -0700</pubDate>
+            <sparkle:releaseNotesLink>https://dockdoor.net/CHANGELOG.html</sparkle:releaseNotesLink>
+            <sparkle:channel>beta</sparkle:channel>
+            <sparkle:version>1.18.3</sparkle:version>
+            <sparkle:shortVersionString>1.18.3</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/ejbills/DockDoor/releases/download/1.18.3-1-beta/DockDoor.dmg" length="2661364" type="application/octet-stream" sparkle:edSignature="8LG4wRV6JsSslo6wKaPFnsL2Rjwnc//0Iw9WE2ew04ugqQ3hJlu9ZwpDtfZSKSPjAC7Ht9lWrO9hyuisezh/DQ=="/>
+        </item>
+    </channel>
+</rss>
