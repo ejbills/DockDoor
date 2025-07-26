@@ -158,9 +158,9 @@ final class UpdaterState: NSObject, SPUUpdaterDelegate, ObservableObject {
     func allowedChannels(for updater: SPUUpdater) -> Set<String> {
         switch updateChannel {
         case .stable:
-            return Set() // Empty set means default channel only
+            Set() // Empty set means default channel only
         case .beta:
-            return Set(["beta"])
+            Set(["beta"])
         }
     }
 
