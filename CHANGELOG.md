@@ -41,7 +41,19 @@
 <a id="1.18.4"></a>
 # [Release 1.18.4](https://github.com/ejbills/DockDoor/releases/tag/1.18.4) - 2025-07-26
 
-Automated release for version 1.18.4.
+## ✨ New Features
+- Added update channel options
+  - Beta channel support
+  - Stable channel selection
+
+## 🔧 Improvements & Stability
+- Improved dock click behavior
+  - Hide option available
+  - Minimize option available
+- Enhanced flow layout controls
+  - Separate row settings
+  - Separate column settings
+- Improved window restoration system
 
 
 [Changes][1.18.4]
