@@ -38,6 +38,15 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://buymeacoffee.com/keplercafe</div>
 
+<a id="1.18.4"></a>
+# [Release 1.18.4](https://github.com/ejbills/DockDoor/releases/tag/1.18.4) - 2025-07-26
+
+Automated release for version 1.18.4.
+
+
+[Changes][1.18.4]
+
+
 <a id="v1.18.3"></a>
 # [v1.18.3](https://github.com/ejbills/DockDoor/releases/tag/v1.18.3) - 2025-07-18
 
@@ -1277,6 +1286,7 @@ v1.0
 [Changes][releases]
 
 
+[1.18.4]: https://github.com/ejbills/DockDoor/compare/v1.18.3...1.18.4
 [v1.18.3]: https://github.com/ejbills/DockDoor/compare/v1.18.2...v1.18.3
 [v1.18.2]: https://github.com/ejbills/DockDoor/compare/v1.18.1...v1.18.2
 [v1.18.1]: https://github.com/ejbills/DockDoor/compare/v1.18...v1.18.1
