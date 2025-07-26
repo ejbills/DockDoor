@@ -131,7 +131,7 @@ struct AppearanceSettingsView: View {
                 VStack(alignment: .leading, spacing: 16) {
                     StyledGroupBox(label: "Window Preview Size") {
                         VStack(alignment: .leading, spacing: 10) {
-                            WindowSizeDropdownView()
+                            WindowSizeSliderView()
 
                             Text("Choose how large window previews appear when hovering over dock icons. All window images are automatically scaled to fit within this size while maintaining their original proportions.")
                                 .font(.caption)
@@ -441,78 +441,23 @@ struct AppearanceSettingsView: View {
         .padding(.top, 10)
     }
 
-    struct WindowSizeDropdownView: View {
+    struct WindowSizeSliderView: View {
         @Default(.previewPixelSize) var previewPixelSize
 
-        private let pixelSizeOptions: [CGFloat] = [100, 120, 150, 180, 200, 220, 250, 280, 300, 350, 400]
-
-        private var visualScaleFactor: CGFloat {
-            let maxWidth: CGFloat = 450
-            let maxHeight: CGFloat = 120
-            return min(maxWidth / 450, maxHeight / 300) * 0.9
-        }
-
-        private var visualScreenSize: CGSize {
-            CGSize(width: 180 * visualScaleFactor, height: 120 * visualScaleFactor)
-        }
-
-        private var visualPreviewSize: CGSize {
-            let baseWidth: CGFloat = 80
-            let scaleFactor = previewPixelSize / 200.0 // Normalize around 200px
-            let width = baseWidth * scaleFactor
-            let height = width / (16.0 / 9.0) // 16:9 aspect ratio
-            return CGSize(width: width, height: height)
-        }
-
-        private func getSizeDescription(_ value: CGFloat) -> String {
-            let intValue = Int(value)
-            return "\(intValue)px"
-        }
-
         var body: some View {
-            HStack(alignment: .top, spacing: 24) {
-                VStack(alignment: .leading, spacing: 8) {
-                    Menu {
-                        ForEach(pixelSizeOptions, id: \.self) { value in
-                            Button(action: { previewPixelSize = value }) {
-                                HStack {
-                                    RoundedRectangle(cornerRadius: 2)
-                                        .fill(Color.accentColor.opacity(0.3))
-                                        .frame(width: max(8, value / 10), height: 12)
-
-                                    Text(getSizeDescription(value))
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-
-                                    if previewPixelSize == value {
-                                        Image(systemName: "checkmark")
-                                            .foregroundColor(.accentColor)
-                                            .font(.caption.weight(.semibold))
-                                    }
-                                }
-                                .padding(.horizontal, 8)
-                                .padding(.vertical, 4)
-                            }
-                        }
-                    } label: {
-                        HStack(spacing: 8) {
-                            Text(getSizeDescription(previewPixelSize))
-                                .foregroundColor(.primary)
-                            Spacer()
-                            Image(systemName: "chevron.up.chevron.down")
-                                .font(.caption2)
-                                .foregroundColor(.secondary)
-                        }
-                        .padding(.vertical, 6)
-                        .padding(.horizontal, 12)
-                        .background(Color(NSColor.controlBackgroundColor))
-                        .cornerRadius(8)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 8)
-                                .stroke(Color.secondary.opacity(0.2), lineWidth: 1)
-                        )
-                    }
-                }
-            }
+            sliderSetting(
+                title: "Preview Size",
+                value: $previewPixelSize,
+                range: 100.0...400.0,
+                step: 10.0,
+                unit: "px",
+                formatter: {
+                    let f = NumberFormatter()
+                    f.minimumFractionDigits = 0
+                    f.maximumFractionDigits = 0
+                    return f
+                }()
+            )
             .onChange(of: previewPixelSize) { _ in
                 SharedPreviewWindowCoordinator.activeInstance?.windowSize = getWindowSize()
             }
