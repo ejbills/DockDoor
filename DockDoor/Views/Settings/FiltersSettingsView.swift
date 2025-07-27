@@ -18,7 +18,7 @@ struct FiltersSettingsView: View {
 
     private var installedApps: [(name: String, icon: NSImage)] {
         var apps: [(String, NSImage)] = []
-        var appLocations = [
+        let appLocations = [
             "/Applications",
             "/System/Applications",
             "/System/Applications/Utilities",

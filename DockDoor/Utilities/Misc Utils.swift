@@ -24,7 +24,10 @@ func resetDefaultsToDefaultValues() {
 }
 
 func getWindowSize() -> CGSize {
-    CGSize(width: optimisticScreenSizeWidth / Defaults[.sizingMultiplier], height: optimisticScreenSizeHeight / Defaults[.sizingMultiplier])
+    let pixelSize = Defaults[.previewPixelSize]
+    let width = pixelSize
+    let height = pixelSize / (16.0 / 9.0) // 16:9 aspect ratio
+    return CGSize(width: width, height: height)
 }
 
 // Measure string length in px

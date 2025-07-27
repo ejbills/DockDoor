@@ -65,7 +65,7 @@ struct TrafficLightButtons: View {
         case .dimmedOnPreviewHover:
             (hoveringOverParentWindow && isHovering) || mockPreviewActive ? 1.0 : 0.25
         case .fullOpacityOnPreviewHover:
-            hoveringOverParentWindow || mockPreviewActive ? 1 : 0
+            hoveringOverParentWindow || mockPreviewActive ? 1 : 0.25
         case .alwaysVisible:
             1
         case .never:
