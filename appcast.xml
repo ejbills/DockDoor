@@ -3,23 +3,23 @@
     <channel>
         <title>DockDoor</title>
         <item>
-            <title>1.18.5</title>
-            <pubDate>Sat, 26 Jul 2025 17:24:48 -0700</pubDate>
-            <sparkle:releaseNotesLink>https://dockdoor.net/CHANGELOG.html</sparkle:releaseNotesLink>
-            <sparkle:version>1.18.5</sparkle:version>
-            <sparkle:shortVersionString>1.18.5</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/ejbills/DockDoor/releases/download/1.18.5/DockDoor.dmg" length="2661552" type="application/octet-stream" sparkle:edSignature="Fu3ODKKg4UWr0rlMtsae+WhgOG2x3bwerQ3d6k5k9pDutyGNrq0IpfLd/bofZUWAn8oOI6MsfGlE+BfUs1DZCg==" />
-        </item>
-    <item>
-            <title>1.18.4.6-pre1_19</title>
-            <pubDate>Sat, 26 Jul 2025 11:26:30 -0700</pubDate>
+            <title>1.18.5.7-pre1_19</title>
+            <pubDate>Sat, 26 Jul 2025 17:26:54 -0700</pubDate>
             <sparkle:releaseNotesLink>https://dockdoor.net/CHANGELOG.html</sparkle:releaseNotesLink>
             <sparkle:channel>beta</sparkle:channel>
-            <sparkle:version>1.18.4.6-pre1_19</sparkle:version>
-            <sparkle:shortVersionString>1.18.4.6-pre1_19 beta</sparkle:shortVersionString>
+            <sparkle:version>1.18.5.7-pre1_19</sparkle:version>
+            <sparkle:shortVersionString>1.18.5.7-pre1_19 beta</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/ejbills/DockDoor/releases/download/1.18.4.6-pre1_19/DockDoor.dmg" length="2654740" type="application/octet-stream" sparkle:edSignature="JoHie+ai3c/7H7pMY6BWGBafxNN5QTFhadkRQA+6+k28IiBQWFR8R4rgNEeTE0hzCZqaOeqfnLdjsZQrr/8SBg==" />
+            <enclosure url="https://github.com/ejbills/DockDoor/releases/download/1.18.5.7-pre1_19/DockDoor.dmg" length="2658800" type="application/octet-stream" sparkle:edSignature="0vpTXUskAuXm7K53GPK8m+2lJgzPxcDa9CqYOcT6ksCxAMtyxWyrFpp/Lo4tgMoDhH2nwXUApZYmvgx6puKlDg==" />
+        </item>
+    <item>
+            <title>1.18.4</title>
+            <pubDate>Sat, 26 Jul 2025 10:16:28 -0700</pubDate>
+            <sparkle:releaseNotesLink>https://dockdoor.net/CHANGELOG.html</sparkle:releaseNotesLink>
+            <sparkle:version>1.18.4</sparkle:version>
+            <sparkle:shortVersionString>1.18.4</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/ejbills/DockDoor/releases/download/1.18.4/DockDoor.dmg" length="2659548" type="application/octet-stream" sparkle:edSignature="nsr+eqdwJgMakiJoSs08d5R+1KN7IoGWtwKKyHcWJDNr+1Bc27qikin2wS2K38w481MnGQLTjTrZLAXn0XztAA==" />
         </item>
     </channel>
 </rss>
