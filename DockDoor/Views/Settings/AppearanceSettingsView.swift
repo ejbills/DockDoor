@@ -86,8 +86,9 @@ struct AppearanceSettingsView: View {
     @Default(.windowTitlePosition) var windowTitlePosition
     @Default(.windowSwitcherControlPosition) var windowSwitcherControlPosition
     @Default(.dockPreviewControlPosition) var dockPreviewControlPosition
-    @Default(.dimInSwitcherUntilSelected) var dimInSwitcherUntilSelected
+
     @Default(.selectionOpacity) var selectionOpacity
+    @Default(.unselectedContentOpacity) var unselectedContentOpacity
     @Default(.hoverHighlightColor) var hoverHighlightColor
     @Default(.dockPreviewBackgroundOpacity) var dockPreviewBackgroundOpacity
     @Default(.previewMaxColumns) var previewMaxColumns
@@ -162,6 +163,12 @@ struct AppearanceSettingsView: View {
                                     .foregroundColor(.gray)
                                     .padding(.leading, 20)
                             }
+                            sliderSetting(title: "Unselected Content Opacity",
+                                          value: $unselectedContentOpacity,
+                                          range: 0 ... 1,
+                                          step: 0.05,
+                                          unit: "",
+                                          formatter: NumberFormatter.percentFormatter)
                         }
                     }
 
@@ -325,15 +332,6 @@ struct AppearanceSettingsView: View {
                 }
             }
             .pickerStyle(MenuPickerStyle())
-
-            VStack(alignment: .leading) {
-                Toggle(isOn: $dimInSwitcherUntilSelected) {
-                    Text("Dim Unselected Windows")
-                }
-                Text("When enabled, dims all windows except those currently under selected.")
-                    .font(.footnote)
-                    .foregroundColor(.gray)
-            }
 
             Divider().padding(.vertical, 2)
             Text("Preview Layout (Switcher)").font(.headline).padding(.bottom, -2)

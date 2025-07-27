@@ -26,8 +26,8 @@ struct WindowPreview: View {
     @Default(.windowSwitcherControlPosition) var windowSwitcherControlPosition
     @Default(.dockPreviewControlPosition) var dockPreviewControlPosition
     @Default(.selectionOpacity) var selectionOpacity
+    @Default(.unselectedContentOpacity) var unselectedContentOpacity
     @Default(.hoverHighlightColor) var hoverHighlightColor
-    @Default(.dimInSwitcherUntilSelected) var dimInSwitcherUntilSelected
 
     @Default(.tapEquivalentInterval) var tapEquivalentInterval
     @Default(.previewHoverAction) var previewHoverAction
@@ -46,14 +46,21 @@ struct WindowPreview: View {
                 Image(decorative: cgImage, scale: 1.0)
                     .resizable()
                     .scaledToFit()
-                    .markHidden(isHidden: inactive || (windowSwitcherActive && !isSelected && dimInSwitcherUntilSelected))
-                    .overlay(isSelected && !inactive ? CustomizableFluidGradientView().opacity(0.125) : nil)
+                    .markHidden(isHidden: inactive || (windowSwitcherActive && !isSelected))
+                    .overlay {
+                        if inactive {
+                            Image(systemName: "eye.slash")
+                                .font(.largeTitle)
+                                .foregroundColor(.primary)
+                                .shadow(radius: 2)
+                        }
+                    }
                     .clipShape(uniformCardRadius ? AnyShape(RoundedRectangle(cornerRadius: 12, style: .continuous)) : AnyShape(Rectangle()))
             }
         }
         .frame(width: max(dimensions.size.width, 50), height: dimensions.size.height, alignment: .center)
         .frame(maxWidth: dimensions.maxDimensions.width, maxHeight: dimensions.maxDimensions.height)
-        .shadow(radius: isSelected ? 0 : 3)
+        .opacity(isSelected ? 1.0 : unselectedContentOpacity)
     }
 
     private func windowSwitcherContent(_ selected: Bool) -> some View {
@@ -74,20 +81,12 @@ struct WindowPreview: View {
                windowTitle != windowInfo.app.localizedName,
                shouldShowTitle
             {
-                HStack(spacing: 0) {
-                    Text(windowTitle)
-
-                    if windowInfo.isMinimized || windowInfo.isHidden {
-                        Text(" - Inactive").italic()
-                    }
-                }
-                .foregroundStyle(.secondary)
-                .lineLimit(1)
+                MarqueeText(text: windowTitle, startDelay: 1)
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                    .lineLimit(1)
             }
         }
-        .frame(
-            maxWidth: max(dimensions.size.width * 0.6, 70),
-        ).fixedSize(horizontal: true, vertical: false)
 
         let appIconContent = Group {
             if let appIcon = windowInfo.app.icon {
@@ -106,6 +105,14 @@ struct WindowPreview: View {
                     onWindowAction: handleWindowAction,
                     pillStyling: true, mockPreviewActive: mockPreviewActive
                 )
+            } else if windowInfo.isMinimized || windowInfo.isHidden {
+                Text(windowInfo.isMinimized ? "Minimized" : "Hidden")
+                    .font(.subheadline)
+                    .italic()
+                    .foregroundStyle(.secondary)
+                    .padding(4)
+                    .materialPill()
+                    .frame(height: 34)
             }
         }
 
@@ -124,6 +131,7 @@ struct WindowPreview: View {
                     controlsContent
                 }
             }
+            .fixedSize(horizontal: false, vertical: true)
         }
 
         return VStack(spacing: 0) {
@@ -169,7 +177,7 @@ struct WindowPreview: View {
             if hasTitle, let title = titleToShow {
                 MarqueeText(text: title, startDelay: 1)
                     .font(.subheadline)
-                    .padding(.vertical, 4)
+                    .padding(4)
                     .materialPill()
             }
         }
@@ -183,6 +191,14 @@ struct WindowPreview: View {
                     pillStyling: true,
                     mockPreviewActive: mockPreviewActive
                 )
+            } else if windowInfo.isMinimized || windowInfo.isHidden {
+                Text(windowInfo.isMinimized ? "Minimized" : "Hidden")
+                    .font(.subheadline)
+                    .italic()
+                    .foregroundStyle(.secondary)
+                    .padding(4)
+                    .materialPill()
+                    .frame(height: 34)
             }
         }
 

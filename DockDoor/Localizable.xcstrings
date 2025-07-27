@@ -382,6 +382,7 @@
       }
     },
     " - Inactive" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -17916,6 +17917,7 @@
       }
     },
     "Dim Unselected Windows" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -29353,7 +29355,6 @@
     },
     "Hidden" : {
       "comment" : "Preview title style option",
-      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -39068,6 +39069,9 @@
           }
         }
       }
+    },
+    "Minimized" : {
+
     },
     "Minimum number of colors reached." : {
       "localizations" : {
@@ -71264,6 +71268,9 @@
         }
       }
     },
+    "Unselected Content Opacity" : {
+
+    },
     "Up to date" : {
       "localizations" : {
         "af" : {
@@ -76220,6 +76227,7 @@
       }
     },
     "When enabled, dims all windows except those currently under selected." : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {

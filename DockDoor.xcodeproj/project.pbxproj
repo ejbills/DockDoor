@@ -265,7 +265,6 @@
 			files = (
 				BBBD4AF82C8D71560074FFCF /* ConfettiSwiftUI in Frameworks */,
 				BB33E68C2C24C72F00A21D69 /* LaunchAtLogin in Frameworks */,
-				BB96B5072E2FF87600B2D221 /* SwiftUIFlowLayout in Frameworks */,
 				BB15E1EF2C8FB70C002ECFB9 /* Glur in Frameworks */,
 				3A1622A32C8BFF3800D318EE /* Pow in Frameworks */,
 				BBFAD73A2C287A9C0092F5F1 /* Sparkle in Frameworks */,

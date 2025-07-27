@@ -57,6 +57,7 @@ extension Defaults.Keys {
     static let showAppName = Key<Bool>("showAppName", default: true)
     static let appNameStyle = Key<AppNameStyle>("appNameStyle", default: .default)
     static let selectionOpacity = Key<CGFloat>("selectionOpacity", default: 0.4)
+    static let unselectedContentOpacity = Key<CGFloat>("unselectedContentOpacity", default: 0.85)
     static let hoverHighlightColor = Key<Color?>("hoverHighlightColor", default: nil)
     static let dockPreviewBackgroundOpacity = Key<CGFloat>("dockPreviewBackgroundOpacity", default: 1.0)
 
@@ -78,7 +79,6 @@ extension Defaults.Keys {
     static let windowSwitcherPlacementStrategy = Key<WindowSwitcherPlacementStrategy>("windowSwitcherPlacementStrategy", default: .screenWithMouse)
     static let windowSwitcherControlPosition = Key<WindowSwitcherControlPosition>("windowSwitcherControlPosition", default: .topTrailing)
     static let dockPreviewControlPosition = Key<WindowSwitcherControlPosition>("dockPreviewControlPosition", default: .topTrailing)
-    static let dimInSwitcherUntilSelected = Key<Bool>("dimInSwitcherUntilSelected", default: false)
     static let pinnedScreenIdentifier = Key<String>("pinnedScreenIdentifier", default: NSScreen.main?.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? String ?? "")
 
     // MARK: - Window Switcher Filters
