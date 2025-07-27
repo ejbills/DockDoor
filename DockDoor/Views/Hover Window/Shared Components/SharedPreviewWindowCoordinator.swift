@@ -525,7 +525,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
             return
         }
 
-        var window = coordinator.windows[coordinator.currIndex]
+        let window = coordinator.windows[coordinator.currIndex]
         let originalIndex = coordinator.currIndex
 
         switch action {
@@ -538,20 +538,14 @@ final class SharedPreviewWindowCoordinator: NSPanel {
             coordinator.removeWindow(at: originalIndex)
 
         case .minimize:
-            if let newMinimizedState = WindowUtil.toggleMinimize(windowInfo: window) {
-                window.isMinimized = newMinimizedState
-                coordinator.updateWindow(at: originalIndex, with: window)
-            }
+            _ = WindowUtil.toggleMinimize(windowInfo: window)
 
         case .toggleFullScreen:
             WindowUtil.toggleFullScreen(windowInfo: window)
             hideWindow()
 
         case .hide:
-            if let newHiddenState = WindowUtil.toggleHidden(windowInfo: window) {
-                window.isHidden = newHiddenState
-                coordinator.updateWindow(at: originalIndex, with: window)
-            }
+            _ = WindowUtil.toggleHidden(windowInfo: window)
 
         case .openNewWindow:
             WindowUtil.openNewWindow(app: window.app)

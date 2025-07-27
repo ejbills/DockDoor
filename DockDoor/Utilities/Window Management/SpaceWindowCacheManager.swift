@@ -31,6 +31,21 @@ class SpaceWindowCacheManager {
         }
     }
 
+    private func notifyCoordinatorOfUpdatedWindows(_ updatedWindows: [WindowInfo]) {
+        if !updatedWindows.isEmpty {
+            DispatchQueue.main.async { [weak self] in
+                guard self != nil else { return }
+                if let coordinator = SharedPreviewWindowCoordinator.activeInstance?.windowSwitcherCoordinator {
+                    for updatedWindow in updatedWindows {
+                        if let index = coordinator.windows.firstIndex(where: { $0.id == updatedWindow.id }) {
+                            coordinator.updateWindow(at: index, with: updatedWindow)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     func readCache(pid: pid_t) -> Set<WindowInfo> {
         cacheLock.lock()
         defer { cacheLock.unlock() }
@@ -43,11 +58,30 @@ class SpaceWindowCacheManager {
         let oldWindowSet = windowCache[pid] ?? []
         windowCache[pid] = windowSet
 
-        let removedWindows = oldWindowSet.subtracting(windowSet)
-        notifyCoordinatorOfRemovedWindows(removedWindows)
+        let oldWindowIDs = Set(oldWindowSet.map(\.id))
+        let newWindowIDs = Set(windowSet.map(\.id))
 
-        let addedWindows = windowSet.subtracting(oldWindowSet)
-        notifyCoordinatorOfAddedWindows(addedWindows)
+        let removedWindowIDs = oldWindowIDs.subtracting(newWindowIDs)
+        let removedWindows = oldWindowSet.filter { removedWindowIDs.contains($0.id) }
+        notifyCoordinatorOfRemovedWindows(Set(removedWindows))
+
+        let addedWindowIDs = newWindowIDs.subtracting(oldWindowIDs)
+        let addedWindows = windowSet.filter { addedWindowIDs.contains($0.id) }
+        notifyCoordinatorOfAddedWindows(Set(addedWindows))
+
+        let persistingWindowIDs = oldWindowIDs.intersection(newWindowIDs)
+        var updatedWindows: [WindowInfo] = []
+
+        for windowID in persistingWindowIDs {
+            if let oldWindow = oldWindowSet.first(where: { $0.id == windowID }),
+               let newWindow = windowSet.first(where: { $0.id == windowID }),
+               oldWindow != newWindow
+            {
+                updatedWindows.append(newWindow)
+            }
+        }
+
+        notifyCoordinatorOfUpdatedWindows(updatedWindows)
     }
 
     func updateCache(pid: pid_t, update: (inout Set<WindowInfo>) -> Void) {
@@ -58,11 +92,30 @@ class SpaceWindowCacheManager {
         update(&currentWindowSet)
         windowCache[pid] = currentWindowSet
 
-        let removedWindows = oldWindowSet.subtracting(currentWindowSet)
-        notifyCoordinatorOfRemovedWindows(removedWindows)
+        let oldWindowIDs = Set(oldWindowSet.map(\.id))
+        let newWindowIDs = Set(currentWindowSet.map(\.id))
 
-        let addedWindows = currentWindowSet.subtracting(oldWindowSet)
-        notifyCoordinatorOfAddedWindows(addedWindows)
+        let removedWindowIDs = oldWindowIDs.subtracting(newWindowIDs)
+        let removedWindows = oldWindowSet.filter { removedWindowIDs.contains($0.id) }
+        notifyCoordinatorOfRemovedWindows(Set(removedWindows))
+
+        let addedWindowIDs = newWindowIDs.subtracting(oldWindowIDs)
+        let addedWindows = currentWindowSet.filter { addedWindowIDs.contains($0.id) }
+        notifyCoordinatorOfAddedWindows(Set(addedWindows))
+
+        let persistingWindowIDs = oldWindowIDs.intersection(newWindowIDs)
+        var updatedWindows: [WindowInfo] = []
+
+        for windowID in persistingWindowIDs {
+            if let oldWindow = oldWindowSet.first(where: { $0.id == windowID }),
+               let newWindow = currentWindowSet.first(where: { $0.id == windowID }),
+               oldWindow != newWindow
+            {
+                updatedWindows.append(newWindow)
+            }
+        }
+
+        notifyCoordinatorOfUpdatedWindows(updatedWindows)
     }
 
     func removeFromCache(pid: pid_t, windowId: CGWindowID) {
