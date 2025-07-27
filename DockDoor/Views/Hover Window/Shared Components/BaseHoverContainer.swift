@@ -21,7 +21,7 @@ struct BaseHoverContainer<Content: View>: View {
     var body: some View {
         content
             .if(!preventDockStyling) { view in
-                view.dockStyle(cornerRadius: 16, highlightColor: highlightColor, backgroundOpacity: dockPreviewBackgroundOpacity)
+                view.dockStyle(highlightColor: highlightColor, backgroundOpacity: dockPreviewBackgroundOpacity)
             }
             .padding(.all, mockPreviewActive ? 0 : 24)
             .frame(maxWidth: bestGuessMonitor.visibleFrame.width, maxHeight: bestGuessMonitor.visibleFrame.height)

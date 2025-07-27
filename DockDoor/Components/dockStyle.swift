@@ -1,3 +1,4 @@
+import Defaults
 import SwiftUI
 
 struct DockStyleModifier: ViewModifier {
@@ -32,7 +33,7 @@ struct DockStyleModifier: ViewModifier {
 }
 
 extension View {
-    func dockStyle(cornerRadius: Double = 19, highlightColor: Color? = nil, backgroundOpacity: CGFloat = 1.0) -> some View {
+    func dockStyle(cornerRadius: Double = Defaults[.uniformCardRadius] ? 26 : 8, highlightColor: Color? = nil, backgroundOpacity: CGFloat = 1.0) -> some View {
         modifier(DockStyleModifier(cornerRadius: cornerRadius, highlightColor: highlightColor, backgroundOpacity: backgroundOpacity))
     }
 }

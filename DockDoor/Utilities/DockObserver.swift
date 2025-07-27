@@ -23,7 +23,7 @@ struct ApplicationReturnType {
     let dockItemElement: AXUIElement?
 }
 
-func handleSelectedDockItemChangedNotification(observer _: AXObserver, element _: AXUIElement, notificationName: CFString, context: UnsafeMutableRawPointer?) {
+func handleSelectedDockItemChangedNotification(observer _: AXObserver, element _: AXUIElement, notificationName _: CFString, context: UnsafeMutableRawPointer?) {
     DockObserver.activeInstance?.processSelectedDockItemChanged()
 }
 
