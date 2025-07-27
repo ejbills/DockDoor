@@ -523,11 +523,9 @@ final class DockObserver {
     }
 
     private func eventTapCallback(proxy: CGEventTapProxy, type: CGEventType, event: CGEvent) -> Unmanaged<CGEvent>? {
-        // Use our existing AX element detection to see if click is on dock item
         let appUnderMouse = getDockItemAppStatusUnderMouse()
 
         if case let .success(app) = appUnderMouse.status {
-            print("🎯 CGEvent Dock Click: \(app.localizedName ?? "Unknown") (PID: \(app.processIdentifier))")
             handleDockClick(app: app)
         }
 
