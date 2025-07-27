@@ -3,6 +3,15 @@
     <channel>
         <title>DockDoor</title>
         <item>
+            <title>1.18.5</title>
+            <pubDate>Sun, 27 Jul 2025 00:41:32 -0700</pubDate>
+            <sparkle:releaseNotesLink>https://dockdoor.net/CHANGELOG.html</sparkle:releaseNotesLink>
+            <sparkle:version>1.18.5</sparkle:version>
+            <sparkle:shortVersionString>1.18.5</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/ejbills/DockDoor/releases/download/1.18.5/DockDoor.dmg" length="2660684" type="application/octet-stream" sparkle:edSignature="7/l40TgQSA1dsIvRi6b6n1SSUQtOnbIR1/Kxq72uXe633tHWwcNvNZIK3498XC+olC0kkLkrXV5cBg0lTk6qAA==" />
+        </item>
+    <item>
             <title>1.18.5.8-pre1_19</title>
             <pubDate>Sun, 27 Jul 2025 00:38:10 -0700</pubDate>
             <sparkle:releaseNotesLink>https://dockdoor.net/CHANGELOG.html</sparkle:releaseNotesLink>
@@ -11,15 +20,6 @@
             <sparkle:shortVersionString>1.18.5.8-pre1_19 beta</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
             <enclosure url="https://github.com/ejbills/DockDoor/releases/download/1.18.5.8-pre1_19/DockDoor.dmg" length="2663736" type="application/octet-stream" sparkle:edSignature="mFcslrVXePfg1io4SGY8cRd0eZxLdWTMLTULuOXgyX/CKC5yJbfso8R9N0CYWfhZc74rY7xqEhk0XeOaFjZFBA==" />
-        </item>
-    <item>
-            <title>1.18.4</title>
-            <pubDate>Sat, 26 Jul 2025 10:16:28 -0700</pubDate>
-            <sparkle:releaseNotesLink>https://dockdoor.net/CHANGELOG.html</sparkle:releaseNotesLink>
-            <sparkle:version>1.18.4</sparkle:version>
-            <sparkle:shortVersionString>1.18.4</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/ejbills/DockDoor/releases/download/1.18.4/DockDoor.dmg" length="2659548" type="application/octet-stream" sparkle:edSignature="nsr+eqdwJgMakiJoSs08d5R+1KN7IoGWtwKKyHcWJDNr+1Bc27qikin2wS2K38w481MnGQLTjTrZLAXn0XztAA==" />
         </item>
     </channel>
 </rss>
