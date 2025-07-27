@@ -38,6 +38,17 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://buymeacoffee.com/keplercafe</div>
 
+<a id="1.18.5"></a>
+# [Release 1.18.5](https://github.com/ejbills/DockDoor/releases/tag/1.18.5) - 2025-07-27
+
+## 🔧 Improvements & Stability
+- Improved dock click detection
+- Fixed Chinese text layout
+
+
+[Changes][1.18.5]
+
+
 <a id="1.18.4"></a>
 # [Release 1.18.4](https://github.com/ejbills/DockDoor/releases/tag/1.18.4) - 2025-07-26
 
@@ -1298,6 +1309,7 @@ v1.0
 [Changes][releases]
 
 
+[1.18.5]: https://github.com/ejbills/DockDoor/compare/1.18.4...1.18.5
 [1.18.4]: https://github.com/ejbills/DockDoor/compare/v1.18.3...1.18.4
 [v1.18.3]: https://github.com/ejbills/DockDoor/compare/v1.18.2...v1.18.3
 [v1.18.2]: https://github.com/ejbills/DockDoor/compare/v1.18.1...v1.18.2
