@@ -92,6 +92,14 @@ class WindowManipulationObservers {
             return
         }
 
+        if let dockObserver = DockObserver.activeInstance,
+           let currentClickedPID = dockObserver.currentClickedAppPID,
+           currentClickedPID != app.processIdentifier
+        {
+            dockObserver.clickCount = 0
+            dockObserver.currentClickedAppPID = nil
+        }
+
         // Get the focused window when app becomes active (this is the window user clicked on)
         let appElement = AXUIElementCreateApplication(app.processIdentifier)
         doAfter(0.45, action: { // allow space switch animation

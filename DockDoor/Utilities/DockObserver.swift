@@ -23,7 +23,7 @@ struct ApplicationReturnType {
     let dockItemElement: AXUIElement?
 }
 
-func handleSelectedDockItemChangedNotification(observer _: AXObserver, element _: AXUIElement, notificationName _: CFString, context: UnsafeMutableRawPointer?) {
+func handleSelectedDockItemChangedNotification(observer _: AXObserver, element _: AXUIElement, notificationName: CFString, context: UnsafeMutableRawPointer?) {
     DockObserver.activeInstance?.processSelectedDockItemChanged()
 }
 
@@ -48,11 +48,18 @@ final class DockObserver {
     private var emptyAppStreakCount: Int = 0
     private let maxEmptyAppStreak: Int = 3
 
+    private var eventTap: CFMachPort?
+
+    // App click tracking for dock click detection
+    var currentClickedAppPID: pid_t?
+    var clickCount: Int = 0
+
     init(previewCoordinator: SharedPreviewWindowCoordinator) {
         self.previewCoordinator = previewCoordinator
         DockObserver.activeInstance = self
         setupSelectedDockItemObserver()
         startHealthCheckTimer()
+        enableDockClickDetection()
     }
 
     deinit {
@@ -61,6 +68,11 @@ final class DockObserver {
         }
         healthCheckTimer?.invalidate()
         teardownObserver()
+
+        if let eventTap {
+            CGEvent.tapEnable(tap: eventTap, enable: false)
+            CFMachPortInvalidate(eventTap)
+        }
     }
 
     private func startHealthCheckTimer() {
@@ -478,5 +490,133 @@ final class DockObserver {
         let menuScreenHeight = screen.frame.maxY
 
         return CGPoint(x: point.x, y: menuScreenHeight - point.y + offsetTop)
+    }
+
+    // Enable dock click detection
+    func enableDockClickDetection() {
+        setupEventTap()
+    }
+
+    private func setupEventTap() {
+        let eventMask: CGEventMask = (1 << CGEventType.leftMouseDown.rawValue)
+
+        guard let eventTap = CGEvent.tapCreate(
+            tap: .cghidEventTap,
+            place: .tailAppendEventTap,
+            options: .defaultTap,
+            eventsOfInterest: eventMask,
+            callback: { proxy, type, event, refcon -> Unmanaged<CGEvent>? in
+                guard let refcon else { return Unmanaged.passUnretained(event) }
+                let observer = Unmanaged<DockObserver>.fromOpaque(refcon).takeUnretainedValue()
+                return observer.eventTapCallback(proxy: proxy, type: type, event: event)
+            },
+            userInfo: Unmanaged.passUnretained(self).toOpaque()
+        ) else {
+            print("Failed to create event tap")
+            return
+        }
+
+        let runLoopSource = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, eventTap, 0)
+        CFRunLoopAddSource(CFRunLoopGetCurrent(), runLoopSource, .commonModes)
+
+        self.eventTap = eventTap
+    }
+
+    private func eventTapCallback(proxy: CGEventTapProxy, type: CGEventType, event: CGEvent) -> Unmanaged<CGEvent>? {
+        // Use our existing AX element detection to see if click is on dock item
+        let appUnderMouse = getDockItemAppStatusUnderMouse()
+
+        if case let .success(app) = appUnderMouse.status {
+            print("🎯 CGEvent Dock Click: \(app.localizedName ?? "Unknown") (PID: \(app.processIdentifier))")
+            handleDockClick(app: app)
+        }
+
+        return Unmanaged.passUnretained(event)
+    }
+
+    private func handleDockClick(app: NSRunningApplication) {
+        // Only proceed if dock click actions are enabled
+        guard Defaults[.shouldHideOnDockItemClick] else { return }
+
+        let pid = app.processIdentifier
+        let appName = app.localizedName ?? "Unknown"
+
+        if let currentPID = currentClickedAppPID, currentPID != pid {
+            clickCount = 0
+        }
+
+        currentClickedAppPID = pid
+        clickCount += 1
+
+        let isFrontmost = NSWorkspace.shared.frontmostApplication?.processIdentifier == pid
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) { [weak self] in
+            guard let self else { return }
+
+            previewCoordinator.hideWindow()
+
+            if clickCount == 1 {
+                if !isFrontmost {
+                    app.activate()
+                } else {
+                    clickCount = 2
+                    hideAppWindows(app: app, appName: appName)
+                }
+            } else if clickCount % 2 == 0 {
+                hideAppWindows(app: app, appName: appName)
+            } else {
+                restoreAppWindows(app: app, appName: appName)
+            }
+        }
+
+        if clickCount >= 100 {
+            clickCount = 0
+        }
+    }
+
+    private func hideAppWindows(app: NSRunningApplication, appName: String) {
+        if Defaults[.dockClickAction] == .hide {
+            DispatchQueue.main.async {
+                app.hide()
+            }
+        } else {
+            Task { @MainActor in
+                do {
+                    let windows = try await WindowUtil.getActiveWindows(of: app)
+                    for window in windows {
+                        if !window.isMinimized {
+                            _ = WindowUtil.toggleMinimize(windowInfo: window)
+                        }
+                    }
+                } catch {
+                    app.hide()
+                }
+            }
+        }
+    }
+
+    private func restoreAppWindows(app: NSRunningApplication, appName: String) {
+        if Defaults[.dockClickAction] == .hide {
+            DispatchQueue.main.async {
+                app.activate()
+            }
+        } else {
+            Task { @MainActor in
+                do {
+                    let windows = try await WindowUtil.getActiveWindows(of: app)
+                    let minimizedWindows = windows.filter(\.isMinimized)
+
+                    if !minimizedWindows.isEmpty {
+                        for window in minimizedWindows {
+                            _ = WindowUtil.toggleMinimize(windowInfo: window)
+                        }
+                        app.activate()
+                    } else {
+                        app.activate()
+                    }
+                } catch {
+                    app.activate()
+                }
+            }
+        }
     }
 }

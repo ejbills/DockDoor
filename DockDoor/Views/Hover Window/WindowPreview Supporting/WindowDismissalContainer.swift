@@ -29,8 +29,6 @@ class MouseTrackingNSView: NSView {
     private var inactivityCheckTimer: Timer?
     private let inactivityCheckInterval: TimeInterval
 
-    private var eventMonitor: Any?
-
     init(appName: String, bestGuessMonitor: NSScreen, dockPosition: DockPosition, minimizeAllWindowsCallback: @escaping (_ wasAppActiveBeforeClick: Bool) -> Void, frame frameRect: NSRect = .zero) {
         self.appName = appName
         self.bestGuessMonitor = bestGuessMonitor
@@ -40,7 +38,6 @@ class MouseTrackingNSView: NSView {
         inactivityCheckInterval = TimeInterval(Defaults[.inactivityTimeout])
         super.init(frame: frameRect)
         setupTrackingArea()
-        setupGlobalClickMonitor()
         startInactivityMonitoring()
         resetOpacityVisually()
     }
@@ -58,9 +55,6 @@ class MouseTrackingNSView: NSView {
 
     deinit {
         clearTimers()
-        if let eventMonitor {
-            NSEvent.removeMonitor(eventMonitor)
-        }
     }
 
     private func clearTimers() {
@@ -150,48 +144,6 @@ class MouseTrackingNSView: NSView {
             guard self != nil else { return }
             SharedPreviewWindowCoordinator.activeInstance?.hideWindow()
             if !preventLastAppClear { DockObserver.activeInstance?.lastAppUnderMouse = nil }
-        }
-    }
-
-    private func setupGlobalClickMonitor() {
-        eventMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.leftMouseDown]) { [weak self] event in
-            guard let self else { return }
-
-            guard let activeDockObserver = DockObserver.activeInstance else {
-                handleExternalClick(event: event)
-                return
-            }
-            let currentAppReturnType = activeDockObserver.getDockItemAppStatusUnderMouse()
-
-            switch currentAppReturnType.status {
-            case let .success(currApp):
-                if currApp.localizedName == appName {
-                    if Defaults[.shouldHideOnDockItemClick] {
-                        let wasAppActiveBeforeClick = NSWorkspace.shared.frontmostApplication == currApp
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) { [weak self] in
-                            self?.minimizeAllWindowsCallback(wasAppActiveBeforeClick)
-                        }
-                    } else {
-                        performHideWindow(preventLastAppClear: true)
-                    }
-                } else {
-                    handleExternalClick(event: event)
-                }
-            default:
-                handleExternalClick(event: event)
-            }
-        }
-    }
-
-    private func handleExternalClick(event: NSEvent) {
-        guard let window else { return }
-        let clickScreenLocation = NSEvent.mouseLocation
-        let windowFrame = window.frame
-
-        if !windowFrame.contains(clickScreenLocation) {
-            DispatchQueue.main.async {
-                self.startFadeOut()
-            }
         }
     }
 }
