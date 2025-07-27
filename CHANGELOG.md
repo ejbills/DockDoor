@@ -47,8 +47,8 @@
   - Minimize windows option
 
 ## 🔧 Improvements & Stability
-- Improved dock click detection
-- Enhanced settings layout spacing
+- Improved click detection system
+- Enhanced settings layout responsiveness
 
 
 [Changes][1.18.5]
