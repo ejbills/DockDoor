@@ -448,7 +448,7 @@ struct AppearanceSettingsView: View {
             sliderSetting(
                 title: "Preview Size",
                 value: $previewPixelSize,
-                range: 100.0...400.0,
+                range: 100.0 ... 400.0,
                 step: 10.0,
                 unit: "px",
                 formatter: {
