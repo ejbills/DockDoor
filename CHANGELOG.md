@@ -41,14 +41,15 @@
 <a id="1.18.5"></a>
 # [Release 1.18.5](https://github.com/ejbills/DockDoor/releases/tag/1.18.5) - 2025-07-27
 
+
 ## ✨ New Features
 - Added dock click options
   - Hide windows option
   - Minimize windows option
 
 ## 🔧 Improvements & Stability
-- Improved click detection system
-- Enhanced settings layout responsiveness
+- Improved dock click detection
+- Enhanced settings layout scaling
 
 
 [Changes][1.18.5]
