@@ -691,13 +691,21 @@ struct MainSettingsView: View {
                     Text("Initialization Key").font(.subheadline).foregroundColor(.secondary)
                     Picker("", selection: $keybindModel.modifierKey) {
                         Text("Control (⌃)").tag(Defaults[.Int64maskControl]); Text("Option (⌥)").tag(Defaults[.Int64maskAlternate]); Text("Command (⌘)").tag(Defaults[.Int64maskCommand])
-                    }.pickerStyle(SegmentedPickerStyle()).frame(maxWidth: 250)
+                    }.pickerStyle(SegmentedPickerStyle())
                         .onChange(of: keybindModel.modifierKey) { newValue in if let currentKeybind = keybindModel.currentKeybind, currentKeybind.keyCode != 0 { let updatedKeybind = UserKeyBind(keyCode: currentKeybind.keyCode, modifierFlags: newValue); Defaults[.UserKeybind] = updatedKeybind; keybindModel.currentKeybind = updatedKeybind } }
                 }
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Trigger Key").font(.subheadline).foregroundColor(.secondary)
-                    Button(action: { keybindModel.isRecording.toggle() }) { HStack { Image(systemName: keybindModel.isRecording ? "keyboard.fill" : "record.circle"); Text(keybindModel.isRecording ? "Press any key..." : "Set Trigger Key") }.frame(maxWidth: 150) }
-                        .buttonStyle(.borderedProminent).disabled(keybindModel.isRecording)
+                    Button(action: { keybindModel.isRecording.toggle() }) {
+                        HStack {
+                            Image(systemName: keybindModel.isRecording ? "keyboard.fill" : "record.circle")
+                            Text(keybindModel.isRecording ? "Press any key..." : "Set Trigger Key")
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.8)
+                        }
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .disabled(keybindModel.isRecording)
                 }
             }
             if let keybind = keybindModel.currentKeybind, keybind.keyCode != 0 {
