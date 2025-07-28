@@ -178,25 +178,29 @@ struct WindowPreviewHoverContainer: View {
                 switch appNameStyle {
                 case .default:
                     HStack(alignment: .center) {
-                        if let appIcon {
-                            Image(nsImage: appIcon)
-                                .resizable()
-                                .scaledToFit()
-                                .zIndex(1)
-                                .frame(width: 24, height: 24)
-                        } else {
-                            ProgressView()
-                                .frame(width: 24, height: 24)
-                        }
-                        hoverTitleLabelView(labelSize: labelSize)
-
-                        let shouldShowUpdateElements = updateAvailable && !mockPreviewActive
-
                         Group {
-                            update(shouldShowUpdateElements)
-                            massOperations(hoveringAppIcon && !updateAvailable)
+                            if let appIcon {
+                                Image(nsImage: appIcon)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .zIndex(1)
+                                    .frame(width: 24, height: 24)
+                            } else {
+                                ProgressView()
+                                    .frame(width: 24, height: 24)
+                            }
+                            hoverTitleLabelView(labelSize: labelSize)
+
+                            let shouldShowUpdateElements = updateAvailable && !mockPreviewActive
+
+                            Group {
+                                update(shouldShowUpdateElements)
+                                massOperations(hoveringAppIcon && !updateAvailable)
+                            }
+                            .padding(.leading, 4)
                         }
-                        .padding(.leading, 4)
+                        .shadow(radius: 3)
+                        .bold()
                     }
                     .padding(.top, 10)
                     .padding(.horizontal)

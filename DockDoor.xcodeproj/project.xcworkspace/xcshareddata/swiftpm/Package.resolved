@@ -20,15 +20,6 @@
       }
     },
     {
-      "identity" : "glur",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/joogps/Glur",
-      "state" : {
-        "revision" : "9e00ff79da318f2c78b749b1027e54a9d4de2e33",
-        "version" : "1.0.4"
-      }
-    },
-    {
       "identity" : "kroma",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/kaishin/Kroma.git",

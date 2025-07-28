@@ -284,15 +284,19 @@ struct WindowPreview: View {
                 }
             }
             .background {
-                // Always show background - gray by default, accent color (or custom) on hover
-                let (backgroundColor, opacity): (Color, CGFloat) = if finalIsSelected {
-                    (hoverHighlightColor ?? Color(nsColor: .controlAccentColor), selectionOpacity)
-                } else {
-                    (Color.secondary, selectionOpacity * 0.3)
-                }
-                RoundedRectangle(cornerRadius: uniformCardRadius ? 20 : 0)
-                    .fill(backgroundColor.opacity(opacity))
+                let cornerRadius = uniformCardRadius ? 20.0 : 0.0
+
+                BlurView(variant: 18)
+                    .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
                     .padding(-6)
+                    .overlay {
+                        if finalIsSelected {
+                            let highlightColor = hoverHighlightColor ?? Color(nsColor: .controlAccentColor)
+                            RoundedRectangle(cornerRadius: cornerRadius)
+                                .fill(highlightColor.opacity(selectionOpacity))
+                                .padding(-6)
+                        }
+                    }
             }
         }
         .overlay {
@@ -444,26 +448,5 @@ struct WindowPreview: View {
         dragTimer = nil
         isDraggingOver = false
         highlightOpacity = 0.0
-    }
-
-    @ViewBuilder
-    private func windowTitleOverlay(selected: Bool) -> some View {
-        let shouldShowTitle = showWindowTitle && (
-            windowTitleDisplayCondition == .all ||
-                (windowTitleDisplayCondition == .dockPreviewsOnly && !windowSwitcherActive) ||
-                (windowTitleDisplayCondition == .windowSwitcherOnly && windowSwitcherActive)
-        )
-        if shouldShowTitle, windowTitleVisibility == .alwaysVisible || selected {
-            if let windowTitle = windowInfo.windowName,
-               !windowTitle.isEmpty,
-               windowTitle != windowInfo.app.localizedName
-            {
-                MarqueeText(text: windowTitle, startDelay: 1)
-                    .font(.caption)
-                    .lineLimit(1)
-                    .materialPill()
-                    .padding(4)
-            }
-        }
     }
 }
