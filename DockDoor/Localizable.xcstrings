@@ -4956,6 +4956,9 @@
         }
       }
     },
+    "Acknowledgments" : {
+
+    },
     "Add" : {
       "localizations" : {
         "af" : {
@@ -15060,6 +15063,9 @@
         }
       }
     },
+    "Community Contributors" : {
+
+    },
     "Confirm" : {
       "localizations" : {
         "af" : {
@@ -15630,6 +15636,9 @@
           }
         }
       }
+    },
+    "Contributions" : {
+
     },
     "Control (⌃)" : {
       "localizations" : {
@@ -34120,6 +34129,9 @@
         }
       }
     },
+    "Language" : {
+
+    },
     "Large" : {
       "comment" : "Window size option",
       "extractionState" : "stale",
@@ -39268,6 +39280,9 @@
           }
         }
       }
+    },
+    "Name" : {
+
     },
     "Navigate to Settings → Privacy & Security" : {
       "localizations" : {
@@ -51648,6 +51663,9 @@
           }
         }
       }
+    },
+    "Profile" : {
+
     },
     "px" : {
       "localizations" : {
@@ -70132,6 +70150,9 @@
         }
       }
     },
+    "Translation Contributors" : {
+
+    },
     "Trigger Key" : {
       "localizations" : {
         "af" : {
@@ -74705,6 +74726,9 @@
           }
         }
       }
+    },
+    "View" : {
+
     },
     "Want to see for yourself? Review our source code" : {
       "localizations" : {
