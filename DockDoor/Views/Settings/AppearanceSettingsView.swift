@@ -78,6 +78,7 @@ extension AppearanceSettingsView {
 
 struct AppearanceSettingsView: View {
     @Default(.uniformCardRadius) var uniformCardRadius
+    @Default(.allowDynamicImageSizing) var allowDynamicImageSizing
     @Default(.showAppName) var showAppName
     @Default(.appNameStyle) var appNameStyle
     @Default(.showWindowTitle) var showWindowTitle
@@ -159,6 +160,16 @@ struct AppearanceSettingsView: View {
                                     Text("Rounded corners")
                                 }
                                 Text("Round the corners of window preview images for a modern look.")
+                                    .font(.footnote)
+                                    .foregroundColor(.gray)
+                                    .padding(.leading, 20)
+                            }
+
+                            VStack(alignment: .leading) {
+                                Toggle(isOn: $allowDynamicImageSizing) {
+                                    Text("Allow dynamic image sizing")
+                                }
+                                Text("Allows window preview images to scale dynamically to reasonable dimensions, overriding fixed frame constraints.")
                                     .font(.footnote)
                                     .foregroundColor(.gray)
                                     .padding(.leading, 20)

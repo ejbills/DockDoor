@@ -7052,6 +7052,9 @@
     "All window previews show a gray background. When hovered, the background changes to the accent color or custom color below." : {
 
     },
+    "Allow dynamic image sizing" : {
+
+    },
     "Allow special app controls to be pinned to the screen via right-click menu." : {
       "localizations" : {
         "af" : {
@@ -7241,6 +7244,9 @@
           }
         }
       }
+    },
+    "Allows window preview images to scale dynamically to reasonable dimensions, overriding fixed frame constraints." : {
+
     },
     "Always" : {
       "comment" : "Preview window title condition option",

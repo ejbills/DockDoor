@@ -28,6 +28,7 @@ struct WindowPreview: View {
     @Default(.selectionOpacity) var selectionOpacity
     @Default(.unselectedContentOpacity) var unselectedContentOpacity
     @Default(.hoverHighlightColor) var hoverHighlightColor
+    @Default(.allowDynamicImageSizing) var allowDynamicImageSizing
 
     @Default(.tapEquivalentInterval) var tapEquivalentInterval
     @Default(.previewHoverAction) var previewHoverAction
@@ -58,8 +59,11 @@ struct WindowPreview: View {
                     .clipShape(uniformCardRadius ? AnyShape(RoundedRectangle(cornerRadius: 12, style: .continuous)) : AnyShape(Rectangle()))
             }
         }
-        .frame(width: max(dimensions.size.width, 50), height: dimensions.size.height, alignment: .center)
-        .frame(maxWidth: dimensions.maxDimensions.width, maxHeight: dimensions.maxDimensions.height)
+        .frame(width: max(dimensions.size.width, 50),
+               height: allowDynamicImageSizing ? nil : dimensions.size.height,
+               alignment: .center)
+        .frame(maxWidth: allowDynamicImageSizing ? .infinity : dimensions.maxDimensions.width,
+               maxHeight: allowDynamicImageSizing ? .infinity : dimensions.maxDimensions.height)
         .opacity(isSelected ? 1.0 : unselectedContentOpacity)
     }
 

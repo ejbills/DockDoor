@@ -28,6 +28,7 @@ extension Defaults.Keys {
     static let windowPreviewImageScale = Key<CGFloat>("windowPreviewImageScale", default: 1)
 
     static let uniformCardRadius = Key<Bool>("uniformCardRadius", default: true)
+    static let allowDynamicImageSizing = Key<Bool>("allowDynamicImageSizing", default: false)
     static let tapEquivalentInterval = Key<CGFloat>("tapEquivalentInterval", default: 1.5)
     static let fadeOutDuration = Key<CGFloat>("fadeOutDuration", default: 0.4)
     static let inactivityTimeout = Key<CGFloat>("inactivityTimeout", default: 1.5)
