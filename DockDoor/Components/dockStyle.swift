@@ -20,7 +20,7 @@ struct DockStyleModifier: ViewModifier {
                 .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
                 .overlay {
                     RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                        .stroke(Color.gray.opacity(0.19 * backgroundOpacity), lineWidth: 1)
+                        .stroke(Color.gray.opacity(0.19 * backgroundOpacity), lineWidth: 1.5)
                         .blendMode(.plusLighter)
                 }
                 .overlay {

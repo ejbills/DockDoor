@@ -288,6 +288,10 @@ struct WindowPreview: View {
 
                 BlurView(variant: 18)
                     .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: cornerRadius)
+                            .strokeBorder(Color.primary.opacity(0.1), lineWidth: 1.5)
+                    )
                     .padding(-6)
                     .overlay {
                         if finalIsSelected {
