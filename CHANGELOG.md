@@ -38,29 +38,6 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://buymeacoffee.com/keplercafe</div>
 
-<a id="1.18.5.9-pre1_19"></a>
-# [Release 1.18.5.9-pre1_19](https://github.com/ejbills/DockDoor/releases/tag/1.18.5.9-pre1_19) - 2025-07-28
-
-
-> ⚠️ **BETA RELEASE WARNING**  
-> This is an unstable pre-release version intended for testing purposes only. It may contain bugs, incomplete features, or cause system instability. Use at your own risk and do not install on production systems.
-
-## ✨ New Features
-- Added liquid glass effects
-
-## 🔧 Improvements & Stability
-- Enhanced window preview sizing
-- Improved background opacity controls
-- Better window state tracking
-
-## 🐛 Bug Fixes
-- Fixed marquee text display
-- Resolved window reordering issues
-
-
-[Changes][1.18.5.9-pre1_19]
-
-
 <a id="1.18.5"></a>
 # [Release 1.18.5](https://github.com/ejbills/DockDoor/releases/tag/1.18.5) - 2025-07-27
 
@@ -1338,7 +1315,6 @@ v1.0
 [Changes][releases]
 
 
-[1.18.5.9-pre1_19]: https://github.com/ejbills/DockDoor/compare/1.18.5...1.18.5.9-pre1_19
 [1.18.5]: https://github.com/ejbills/DockDoor/compare/1.18.4...1.18.5
 [1.18.4]: https://github.com/ejbills/DockDoor/compare/v1.18.3...1.18.4
 [v1.18.3]: https://github.com/ejbills/DockDoor/compare/v1.18.2...v1.18.3
