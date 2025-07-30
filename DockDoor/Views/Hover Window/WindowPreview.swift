@@ -59,11 +59,12 @@ struct WindowPreview: View {
                     .clipShape(uniformCardRadius ? AnyShape(RoundedRectangle(cornerRadius: 12, style: .continuous)) : AnyShape(Rectangle()))
             }
         }
-        .frame(width: max(dimensions.size.width, 50),
-               height: allowDynamicImageSizing ? nil : dimensions.size.height,
-               alignment: .center)
-        .frame(maxWidth: allowDynamicImageSizing ? .infinity : dimensions.maxDimensions.width,
-               maxHeight: allowDynamicImageSizing ? .infinity : dimensions.maxDimensions.height)
+        .dynamicWindowFrame(
+            allowDynamicSizing: allowDynamicImageSizing,
+            dimensions: dimensions,
+            dockPosition: dockPosition,
+            windowSwitcherActive: windowSwitcherActive
+        )
         .opacity(isSelected ? 1.0 : unselectedContentOpacity)
     }
 

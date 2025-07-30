@@ -10,7 +10,7 @@ struct BaseSettingsView<Content: View>: View {
     var body: some View {
         ScrollView {
             content
-                .globalPadding(20)
+                .padding(20)
         }
         .frame(minWidth: 650, idealWidth: 700, maxWidth: .infinity,
                minHeight: 675, idealHeight: 700, maxHeight: 700)

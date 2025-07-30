@@ -33,6 +33,14 @@ class PreviewStateCoordinator: ObservableObject {
             return
         }
 
+        // If window switcher state changed and we have windows, recalculate dimensions
+        if oldSwitcherState != windowSwitcherActive, !windows.isEmpty {
+            if let monitor = lastKnownBestGuessMonitor {
+                let dockPosition = DockUtils.getDockPosition()
+                recomputeAndPublishDimensions(dockPosition: dockPosition, bestGuessMonitor: monitor)
+            }
+        }
+
         if windowSwitcherActive {
             if !oldSwitcherState || currIndex < 0 { // If just activated or was unselected
                 if Defaults[.useClassicWindowOrdering], windows.count >= 2 {
@@ -87,6 +95,7 @@ class PreviewStateCoordinator: ObservableObject {
             // For dock previews, always reset to no initial selection when windows are set/reset
             currIndex = -1
         }
+
         recomputeAndPublishDimensions(dockPosition: dockPosition, bestGuessMonitor: bestGuessMonitor, isMockPreviewActive: isMockPreviewActive)
     }
 
@@ -103,16 +112,6 @@ class PreviewStateCoordinator: ObservableObject {
         let oldCurrIndex = currIndex
 
         windows.remove(at: indexToRemove)
-        windowDimensionsMap.removeValue(forKey: indexToRemove)
-        var newDimensionsMap: [Int: WindowPreviewHoverContainer.WindowDimensions] = [:]
-        for (key, value) in windowDimensionsMap {
-            if key < indexToRemove {
-                newDimensionsMap[key] = value
-            } else {
-                newDimensionsMap[key - 1] = value
-            }
-        }
-        windowDimensionsMap = newDimensionsMap
 
         let newWindowsCount = windows.count
 
@@ -139,6 +138,12 @@ class PreviewStateCoordinator: ObservableObject {
                 currIndex = newWindowsCount - 1
             }
         }
+
+        // Recompute dimensions after removing window
+        if let monitor = lastKnownBestGuessMonitor {
+            let dockPosition = DockUtils.getDockPosition()
+            recomputeAndPublishDimensions(dockPosition: dockPosition, bestGuessMonitor: monitor)
+        }
     }
 
     @MainActor
@@ -153,29 +158,18 @@ class PreviewStateCoordinator: ObservableObject {
     func addWindows(_ newWindowsToAdd: [WindowInfo]) {
         guard !newWindowsToAdd.isEmpty else { return }
 
-        guard let monitor = lastKnownBestGuessMonitor, overallMaxPreviewDimension != .zero else {
-            // Add windows to the list but skip dimension calculation for now.
-            // They will be processed in the next full setWindows call.
-            for newWin in newWindowsToAdd {
-                if !windows.contains(where: { $0.id == newWin.id }) {
-                    windows.append(newWin)
-                }
-            }
-            return
-        }
-
+        var windowsWereAdded = false
         for newWin in newWindowsToAdd {
             if !windows.contains(where: { $0.id == newWin.id }) {
                 windows.append(newWin)
-
-                let newWindowIndex = windows.count - 1
-                let singleWindowDimensions = WindowPreviewHoverContainer.calculateSingleWindowDimensions(
-                    windowInfo: newWin,
-                    overallMaxDimensions: overallMaxPreviewDimension,
-                    bestGuessMonitor: monitor
-                )
-                windowDimensionsMap[newWindowIndex] = singleWindowDimensions
+                windowsWereAdded = true
             }
+        }
+
+        // Recompute dimensions if any windows were added
+        if windowsWereAdded, let monitor = lastKnownBestGuessMonitor {
+            let dockPosition = DockUtils.getDockPosition()
+            recomputeAndPublishDimensions(dockPosition: dockPosition, bestGuessMonitor: monitor)
         }
     }
 
@@ -187,7 +181,7 @@ class PreviewStateCoordinator: ObservableObject {
     }
 
     @MainActor
-    private func recomputeAndPublishDimensions(dockPosition: DockPosition, bestGuessMonitor: NSScreen, isMockPreviewActive: Bool = false) {
+    func recomputeAndPublishDimensions(dockPosition: DockPosition, bestGuessMonitor: NSScreen, isMockPreviewActive: Bool = false) {
         let panelSize = getWindowSize()
 
         let newOverallMaxDimension = WindowPreviewHoverContainer.calculateOverallMaxDimensions(
@@ -201,7 +195,12 @@ class PreviewStateCoordinator: ObservableObject {
         let newDimensionsMap = WindowPreviewHoverContainer.precomputeWindowDimensions(
             windows: windows,
             overallMaxDimensions: newOverallMaxDimension,
-            bestGuessMonitor: bestGuessMonitor
+            bestGuessMonitor: bestGuessMonitor,
+            dockPosition: dockPosition,
+            isWindowSwitcherActive: windowSwitcherActive,
+            previewMaxColumns: Defaults[.previewMaxColumns],
+            previewMaxRows: Defaults[.previewMaxRows],
+            switcherMaxRows: Defaults[.switcherMaxRows]
         )
 
         overallMaxPreviewDimension = newOverallMaxDimension

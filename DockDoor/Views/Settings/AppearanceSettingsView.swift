@@ -15,7 +15,7 @@ enum PreviewContext: String, CaseIterable, Identifiable {
 // MARK: - Mock Data Generation
 
 extension AppearanceSettingsView {
-    private static func generateMockWindowsForPreview(count: Int = 3) -> [WindowInfo] {
+    private static func generateMockWindowsForPreview(count: Int = 2) -> [WindowInfo] {
         guard let baseNSImage = NSImage(named: "WindowsXP") else {
             return []
         }
@@ -39,9 +39,17 @@ extension AppearanceSettingsView {
                     .cgImage(forProposedRect: nil, context: nil, hints: nil)
             }
 
+            let aspectRatios: [(width: CGFloat, height: CGFloat)] = [
+                (300, 200), // 3:2 landscape
+                (200, 300), // 2:3 portrait
+                (400, 200), // 2:1 wide landscape
+                (180, 320), // 9:16 tall portrait
+            ]
+            let aspectRatio = aspectRatios[i % aspectRatios.count]
+
             let mockWindowProvider = MockPreviewWindow(
                 windowID: CGWindowID(i + 1),
-                frame: CGRect(x: 100 * (i + 1), y: 100, width: 250, height: 180),
+                frame: CGRect(x: CGFloat(100 * (i + 1)), y: 100, width: aspectRatio.width, height: aspectRatio.height),
                 title: "Window \(i + 1)",
                 owningApplicationBundleIdentifier: "com.example.preview",
                 owningApplicationProcessID: pid + pid_t(i + 1),
@@ -111,7 +119,7 @@ struct AppearanceSettingsView: View {
     init() {
         _previousWindowTitlePosition = State(initialValue: Defaults[.windowTitlePosition])
 
-        let initialMockWindows = AppearanceSettingsView.generateMockWindowsForPreview(count: 1)
+        let initialMockWindows = AppearanceSettingsView.generateMockWindowsForPreview()
 
         _mockDockPreviewCoordinator = StateObject(wrappedValue: AppearanceSettingsView.getMockCoordinator(
             windows: initialMockWindows,
@@ -139,6 +147,23 @@ struct AppearanceSettingsView: View {
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                         }
+                        
+                        VStack(alignment: .leading) {
+                            Toggle(isOn: $allowDynamicImageSizing) {
+                                Text("Allow dynamic image sizing")
+                            }
+                            .onChange(of: allowDynamicImageSizing) { _ in
+                                // Recalculate dimensions for both mock coordinators when dynamic sizing changes
+                                let dockPosition = DockPosition.bottom
+                                let monitor = NSScreen.main!
+                                mockDockPreviewCoordinator.recomputeAndPublishDimensions(dockPosition: dockPosition, bestGuessMonitor: monitor, isMockPreviewActive: true)
+                                mockWindowSwitcherCoordinator.recomputeAndPublishDimensions(dockPosition: dockPosition, bestGuessMonitor: monitor, isMockPreviewActive: true)
+                            }
+                            Text("Allows window preview images to scale dynamically to reasonable dimensions, overriding fixed frame constraints.")
+                                .font(.footnote)
+                                .foregroundColor(.gray)
+                                .padding(.leading, 20)
+                        }
                     }
 
                     StyledGroupBox(label: "General Appearance") {
@@ -165,15 +190,6 @@ struct AppearanceSettingsView: View {
                                     .padding(.leading, 20)
                             }
 
-                            VStack(alignment: .leading) {
-                                Toggle(isOn: $allowDynamicImageSizing) {
-                                    Text("Allow dynamic image sizing")
-                                }
-                                Text("Allows window preview images to scale dynamically to reasonable dimensions, overriding fixed frame constraints.")
-                                    .font(.footnote)
-                                    .foregroundColor(.gray)
-                                    .padding(.leading, 20)
-                            }
                             sliderSetting(title: "Unselected Content Opacity",
                                           value: $unselectedContentOpacity,
                                           range: 0 ... 1,

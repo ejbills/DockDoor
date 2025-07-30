@@ -14,7 +14,7 @@ let appleMusicAppIdentifier = "com.apple.Music"
 let calendarAppIdentifier = "com.apple.iCal"
 
 extension Defaults.Keys {
-    static let previewPixelSize = Key<CGFloat>("previewPixelSize", default: 200)
+    static let previewPixelSize = Key<CGFloat>("previewPixelSize", default: 300)
     static let bufferFromDock = Key<CGFloat>("bufferFromDock", default: CoreDockIsMagnificationEnabled() ? -25 : DockUtils.getDockPosition() == .right ? -18 : -20)
     static let globalPaddingMultiplier = Key<CGFloat>("globalPaddingMultiplier", default: 1.0)
     static let hoverWindowOpenDelay = Key<CGFloat>("openDelay", default: 0.2)
