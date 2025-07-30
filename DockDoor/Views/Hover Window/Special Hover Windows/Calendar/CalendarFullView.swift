@@ -14,6 +14,7 @@ struct CalendarFullView: View {
 
     @Default(.showAppName) private var showAppTitleData
     @Default(.appNameStyle) private var appNameStyle
+    @Default(.uniformCardRadius) private var uniformCardRadius
 
     var body: some View {
         Group {
@@ -43,7 +44,6 @@ struct CalendarFullView: View {
                     )
                     .padding([.top, .leading], 4)
                 }
-                .dockStyle()
                 .padding(.top, (appNameStyle == .popover && showAppTitleData) ? 30 : 0)
                 .overlay {
                     WindowDismissalContainer(appName: appName,
@@ -53,8 +53,7 @@ struct CalendarFullView: View {
                         .allowsHitTesting(false)
                 }
             },
-            highlightColor: nil,
-            preventDockStyling: true
+            highlightColor: nil
         )
         .pinnable(appName: appName, bundleIdentifier: bundleIdentifier, type: .calendar)
     }
@@ -73,7 +72,7 @@ struct CalendarFullView: View {
             )
             .padding([.top, .leading], 4)
         }
-        .dockStyle()
+        .simpleBlurBackground()
         .padding(.top, (appNameStyle == .popover && showAppTitleData) ? 30 : 0)
     }
 }

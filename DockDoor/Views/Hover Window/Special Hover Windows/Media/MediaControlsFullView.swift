@@ -55,7 +55,6 @@ struct MediaControlsFullView: View {
                     )
                     .padding([.top, .leading], 4)
                 }
-                .dockStyle()
                 .padding(.top, (appNameStyle == .popover && showAppTitleData) ? 30 : 0)
                 .overlay {
                     WindowDismissalContainer(appName: appName,
@@ -65,8 +64,7 @@ struct MediaControlsFullView: View {
                         .allowsHitTesting(false)
                 }
             },
-            highlightColor: dominantArtworkColor,
-            preventDockStyling: true
+            highlightColor: dominantArtworkColor
         )
         .pinnable(appName: appName, bundleIdentifier: bundleIdentifier, type: .media)
     }
@@ -85,7 +83,7 @@ struct MediaControlsFullView: View {
             )
             .padding([.top, .leading], 4)
         }
-        .dockStyle()
+        .simpleBlurBackground()
         .padding(.top, (appNameStyle == .popover && showAppTitleData) ? 30 : 0)
     }
 
