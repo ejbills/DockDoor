@@ -3,14 +3,14 @@
     <channel>
         <title>DockDoor</title>
         <item>
-            <title>1.18.5.10-pre1_19</title>
-            <pubDate>Mon, 28 Jul 2025 13:10:56 -0700</pubDate>
+            <title>1.18.5.11-pre1_19</title>
+            <pubDate>Wed, 30 Jul 2025 09:05:43 -0700</pubDate>
             <sparkle:releaseNotesLink>https://dockdoor.net/CHANGELOG.html</sparkle:releaseNotesLink>
             <sparkle:channel>beta</sparkle:channel>
-            <sparkle:version>1.18.5.10-pre1_19</sparkle:version>
-            <sparkle:shortVersionString>1.18.5.10-pre1_19 beta</sparkle:shortVersionString>
+            <sparkle:version>1.18.5.11-pre1_19</sparkle:version>
+            <sparkle:shortVersionString>1.18.5.11-pre1_19 beta</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/ejbills/DockDoor/releases/download/1.18.5.10-pre1_19/DockDoor.dmg" length="3543924" type="application/octet-stream" sparkle:edSignature="2b638P/LeaYf0gZ3hLA9a8CS99WLmPfk//jlXE7ZyqXdSnbNbhv0wPFxkY6mVQsTYDY1J1NahnH3XTFkoTSGDQ==" />
+            <enclosure url="https://github.com/ejbills/DockDoor/releases/download/1.18.5.11-pre1_19/DockDoor.dmg" length="3572304" type="application/octet-stream" sparkle:edSignature="gNun0AS+KABJLtmbppQ/RflsvJQwWag6JoDS1JZNdZE8oLxcQ3d8ytD51/uiRp/IBz+Zn4idiMGguSuO1mZpDA==" />
         </item>
     <item>
             <title>1.18.5</title>
