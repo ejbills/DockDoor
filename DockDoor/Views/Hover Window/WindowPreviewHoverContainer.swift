@@ -199,8 +199,7 @@ struct WindowPreviewHoverContainer: View {
                             }
                             .padding(.leading, 4)
                         }
-                        .shadow(radius: 3)
-                        .bold()
+                        .shadow(radius: 2)
                     }
                     .padding(.top, 10)
                     .padding(.horizontal)
