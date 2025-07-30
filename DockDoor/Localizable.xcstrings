@@ -16403,6 +16403,9 @@
         }
       }
     },
+    "Current aspect ratio: %@" : {
+
+    },
     "Current Keybind: %@" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -36036,6 +36039,9 @@
         }
       }
     },
+    "Lock aspect ratio (16:10)" : {
+
+    },
     "Max Columns (Left/Right Dock)" : {
       "localizations" : {
         "af" : {
@@ -49571,6 +49577,9 @@
         }
       }
     },
+    "Preview Height" : {
+
+    },
     "Preview Hover Action" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -50714,6 +50723,7 @@
       }
     },
     "Preview Size" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -50902,6 +50912,9 @@
           }
         }
       }
+    },
+    "Preview Width" : {
+
     },
     "Preview Window Fade Out Duration" : {
       "localizations" : {

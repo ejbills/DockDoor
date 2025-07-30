@@ -24,9 +24,8 @@ func resetDefaultsToDefaultValues() {
 }
 
 func getWindowSize() -> CGSize {
-    let pixelSize = Defaults[.previewPixelSize]
-    let width = pixelSize
-    let height = pixelSize / (16.0 / 9.0) // 16:9 aspect ratio
+    let width = Defaults[.previewWidth]
+    let height = Defaults[.previewHeight]
     return CGSize(width: width, height: height)
 }
 

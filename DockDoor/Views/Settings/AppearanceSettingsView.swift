@@ -147,7 +147,7 @@ struct AppearanceSettingsView: View {
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                         }
-                        
+
                         VStack(alignment: .leading) {
                             Toggle(isOn: $allowDynamicImageSizing) {
                                 Text("Allow dynamic image sizing")
@@ -467,25 +467,96 @@ struct AppearanceSettingsView: View {
     }
 
     struct WindowSizeSliderView: View {
-        @Default(.previewPixelSize) var previewPixelSize
+        @Default(.previewWidth) var previewWidth
+        @Default(.previewHeight) var previewHeight
+        @Default(.lockAspectRatio) var lockAspectRatio
+
+        private let aspectRatio: CGFloat = 16.0 / 10.0
 
         var body: some View {
-            sliderSetting(
-                title: "Preview Size",
-                value: $previewPixelSize,
-                range: 100.0 ... 400.0,
-                step: 10.0,
-                unit: "px",
-                formatter: {
-                    let f = NumberFormatter()
-                    f.minimumFractionDigits = 0
-                    f.maximumFractionDigits = 0
-                    return f
-                }()
-            )
-            .onChange(of: previewPixelSize) { _ in
-                SharedPreviewWindowCoordinator.activeInstance?.windowSize = getWindowSize()
+            VStack(alignment: .leading, spacing: 10) {
+                Toggle(isOn: $lockAspectRatio) {
+                    Text("Lock aspect ratio (16:10)")
+                }
+                .onChange(of: lockAspectRatio) { newValue in
+                    if newValue {
+                        // When locking, adjust height to match 16:10 ratio
+                        previewHeight = previewWidth / aspectRatio
+                    }
+                    updateWindowSize()
+                }
+
+                sliderSetting(
+                    title: "Preview Width",
+                    value: $previewWidth,
+                    range: 100.0 ... 600.0,
+                    step: 10.0,
+                    unit: "px",
+                    formatter: {
+                        let f = NumberFormatter()
+                        f.minimumFractionDigits = 0
+                        f.maximumFractionDigits = 0
+                        return f
+                    }()
+                )
+                .onChange(of: previewWidth) { _ in
+                    if lockAspectRatio {
+                        previewHeight = previewWidth / aspectRatio
+                    }
+                    updateWindowSize()
+                }
+
+                sliderSetting(
+                    title: "Preview Height",
+                    value: $previewHeight,
+                    range: 60.0 ... 400.0,
+                    step: 10.0,
+                    unit: "px",
+                    formatter: {
+                        let f = NumberFormatter()
+                        f.minimumFractionDigits = 0
+                        f.maximumFractionDigits = 0
+                        return f
+                    }()
+                )
+                .disabled(lockAspectRatio)
+                .onChange(of: previewHeight) { _ in
+                    if lockAspectRatio {
+                        previewWidth = previewHeight * aspectRatio
+                    }
+                    updateWindowSize()
+                }
+
+                Text("Current aspect ratio: \(formatAspectRatio(previewWidth / previewHeight))")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
             }
+        }
+
+        private func updateWindowSize() {
+            SharedPreviewWindowCoordinator.activeInstance?.windowSize = getWindowSize()
+        }
+
+        private func formatAspectRatio(_ ratio: CGFloat) -> String {
+            // Common aspect ratios
+            let commonRatios: [(ratio: CGFloat, display: String)] = [
+                (16.0 / 9.0, "16:9"),
+                (16.0 / 10.0, "16:10"),
+                (4.0 / 3.0, "4:3"),
+                (3.0 / 2.0, "3:2"),
+                (21.0 / 9.0, "21:9"),
+                (1.0, "1:1"),
+            ]
+
+            // Check if it matches a common ratio (within 0.01 tolerance)
+            for commonRatio in commonRatios {
+                if abs(ratio - commonRatio.ratio) < 0.01 {
+                    return commonRatio.display
+                }
+            }
+
+            // For custom ratios, show as X.XX:1
+            return String(format: "%.2f:1", ratio)
         }
     }
 }

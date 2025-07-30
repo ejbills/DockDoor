@@ -42,10 +42,9 @@ extension WindowPreviewHoverContainer {
             }
             return CGPoint(x: max(1, maxWidth), y: max(1, maxHeight)) // Ensure positive dimensions
         } else {
-            // Use fixed 16:9 aspect ratio sizing
-            let pixelSize = Defaults[.previewPixelSize]
-            let width = pixelSize
-            let height = pixelSize / (16.0 / 9.0) // 16:9 aspect ratio
+            // Use fixed sizing from user settings
+            let width = Defaults[.previewWidth]
+            let height = Defaults[.previewHeight]
             return CGPoint(x: width, y: height)
         }
     }
@@ -151,10 +150,9 @@ extension WindowPreviewHoverContainer {
                 }
             }
         } else {
-            // Use fixed 16:9 aspect ratio sizing
-            let pixelSize = Defaults[.previewPixelSize]
-            let width = pixelSize
-            let height = pixelSize / (16.0 / 9.0) // 16:9 aspect ratio
+            // Use fixed sizing from user settings
+            let width = Defaults[.previewWidth]
+            let height = Defaults[.previewHeight]
             let fixedBoxSize = CGSize(width: width, height: height)
 
             for (index, _) in windows.enumerated() {
@@ -172,9 +170,8 @@ extension WindowPreviewHoverContainer {
         overallMaxDimensions: CGPoint,
         bestGuessMonitor: NSScreen
     ) -> WindowDimensions {
-        let pixelSize = Defaults[.previewPixelSize]
-        let width = pixelSize
-        let height = pixelSize / (16.0 / 9.0) // 16:9 aspect ratio
+        let width = Defaults[.previewWidth]
+        let height = Defaults[.previewHeight]
         let fixedBoxSize = CGSize(width: width, height: height)
 
         let cardMaxFrameDimensions = CGSize(
