@@ -557,7 +557,7 @@ final class DockObserver {
         // Only proceed with existing dock click actions if they are enabled
         guard Defaults[.shouldHideOnDockItemClick] else { return }
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) { [weak self] in
             guard let self else { return }
 
             previewCoordinator.hideWindow()
