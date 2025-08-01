@@ -6,8 +6,10 @@ struct FiltersSettingsView: View {
     @Default(.appNameFilters) var appNameFilters
     @Default(.windowTitleFilters) var windowTitleFilters
     @Default(.customAppDirectories) var customAppDirectories
+    @Default(.orphanedWindowAssociations) var orphanedWindowAssociations
 
     @State private var showingAddFilterSheet = false
+    @State private var showingOrphanedWindowSheet = false
     @State private var newFilter = FilterEntry(text: "")
     @State private var showingDirectoryPicker = false
 
@@ -184,6 +186,100 @@ struct FiltersSettingsView: View {
                     }
                 }
 
+                // Orphaned Window Associations Section
+                StyledGroupBox(label: "Orphaned Window Associations") {
+                    VStack(alignment: .leading, spacing: 8) {
+                        HStack(spacing: 8) {
+                            Image(systemName: "questionmark.app.dashed")
+                                .foregroundColor(.orange)
+                                .font(.system(size: 14))
+
+                            Text("Some apps don't properly associate their windows with their dock icons. Create manual associations to fix this.")
+                                .font(.footnote)
+                                .foregroundColor(.secondary)
+                        }
+                        .padding(.bottom, 4)
+
+                        ScrollView {
+                            VStack(alignment: .leading, spacing: 4) {
+                                if orphanedWindowAssociations.isEmpty {
+                                    VStack(spacing: 8) {
+                                        Image(systemName: "app.connected.to.app.below.fill")
+                                            .font(.system(size: 24))
+                                            .foregroundColor(.secondary)
+                                        Text("No window associations configured")
+                                            .foregroundColor(.secondary)
+                                    }
+                                    .frame(maxWidth: .infinity)
+                                    .padding(.vertical, 16)
+                                } else {
+                                    ForEach(orphanedWindowAssociations, id: \.windowID) { association in
+                                        HStack(spacing: 12) {
+                                            Image(systemName: "link")
+                                                .foregroundColor(.accentColor)
+                                                .font(.system(size: 12))
+
+                                            VStack(alignment: .leading, spacing: 2) {
+                                                Text(association.windowTitle)
+                                                    .font(.system(size: 12, weight: .medium))
+                                                    .lineLimit(1)
+                                                HStack(spacing: 4) {
+                                                    Image(systemName: "arrow.right")
+                                                        .font(.system(size: 8))
+                                                        .foregroundColor(.secondary)
+                                                    Text(association.bundleIdentifier)
+                                                        .font(.system(size: 10))
+                                                        .foregroundColor(.secondary)
+                                                        .lineLimit(1)
+                                                }
+                                            }
+
+                                            Spacer()
+
+                                            Button(action: {
+                                                orphanedWindowAssociations.removeAll { $0.windowID == association.windowID }
+                                            }) {
+                                                Image(systemName: "trash")
+                                                    .foregroundColor(.secondary)
+                                                    .font(.system(size: 11))
+                                            }
+                                            .buttonStyle(.plain)
+                                        }
+                                        .padding(.horizontal, 12)
+                                        .padding(.vertical, 8)
+                                        .background(Color(NSColor.controlColor).opacity(0.5))
+                                        .cornerRadius(6)
+                                    }
+                                }
+                            }
+                            .frame(maxWidth: .infinity)
+                            .padding(8)
+                        }
+                        .frame(maxHeight: 120)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(Color.gray.opacity(0.25), lineWidth: 1)
+                        )
+
+                        HStack {
+                            Button("Manage Associations") {
+                                showingOrphanedWindowSheet = true
+                            }
+                            .buttonStyle(AccentButtonStyle(color: .accentColor))
+
+                            Spacer()
+
+                            if !orphanedWindowAssociations.isEmpty {
+                                DangerButton(action: {
+                                    orphanedWindowAssociations.removeAll()
+                                }) {
+                                    Text("Clear All")
+                                }
+                            }
+                        }
+                    }
+                }
+
                 // Window Title Filters Section
                 StyledGroupBox(label: "Window Title Filters") {
                     VStack(alignment: .leading, spacing: 8) {
@@ -217,7 +313,7 @@ struct FiltersSettingsView: View {
                                         }
                                     }
                                 } else {
-                                    Text("No window title filters added")
+                                    Text("No filters added")
                                         .foregroundColor(.secondary)
                                         .padding(.vertical, 8)
                                 }
@@ -231,8 +327,8 @@ struct FiltersSettingsView: View {
                                 .stroke(Color.gray.opacity(0.25), lineWidth: 1)
                         )
                         HStack {
-                            Button(action: { showingAddFilterSheet.toggle() }) {
-                                Text("Add Filter")
+                            Button("Add Filter") {
+                                showingAddFilterSheet = true
                             }
                             .buttonStyle(AccentButtonStyle(color: .accentColor))
 
@@ -258,6 +354,12 @@ struct FiltersSettingsView: View {
                             windowTitleFilters.append(filter.text)
                         }
                     }
+                )
+            }
+            .sheet(isPresented: $showingOrphanedWindowSheet) {
+                OrphanedWindowAssociationSheet(
+                    isPresented: $showingOrphanedWindowSheet,
+                    orphanedWindowAssociations: $orphanedWindowAssociations
                 )
             }
         }

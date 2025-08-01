@@ -762,6 +762,12 @@
         }
       }
     },
+    "%lld" : {
+
+    },
+    "%lld windows selected" : {
+
+    },
     "• Allows for enhanced visual information in the dock" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -7055,6 +7061,9 @@
     "All window previews show a gray background. When hovered, the background changes to the accent color or custom color below." : {
 
     },
+    "All windows appear to be properly associated with their applications." : {
+
+    },
     "Allow dynamic image sizing" : {
 
     },
@@ -10108,6 +10117,9 @@
         }
       }
     },
+    "Associate Orphaned Windows" : {
+
+    },
     "At bottom - Controls on left, title on right" : {
       "localizations" : {
         "af" : {
@@ -12204,6 +12216,9 @@
         }
       }
     },
+    "Bundle: %@" : {
+
+    },
     "Buy me a coffee" : {
       "localizations" : {
         "af" : {
@@ -13728,6 +13743,9 @@
       }
     },
     "Choose how large window previews appear when hovering over dock icons. All window images are automatically scaled to fit within this size while maintaining their original proportions." : {
+
+    },
+    "Clear All" : {
 
     },
     "Click \"Set Trigger Key\"" : {
@@ -15256,6 +15274,9 @@
         }
       }
     },
+    "Connect orphaned windows with their corresponding dock applications" : {
+
+    },
     "Contribute translation" : {
       "localizations" : {
         "af" : {
@@ -16402,6 +16423,9 @@
           }
         }
       }
+    },
+    "Create Association" : {
+
     },
     "Current aspect ratio: %@" : {
 
@@ -20794,6 +20818,9 @@
           }
         }
       }
+    },
+    "Done" : {
+
     },
     "Edit Color" : {
       "localizations" : {
@@ -34898,6 +34925,9 @@
         }
       }
     },
+    "Layer: %lld" : {
+
+    },
     "Layout Limits" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -36040,6 +36070,9 @@
       }
     },
     "Lock aspect ratio (16:10)" : {
+
+    },
+    "Manage Associations" : {
 
     },
     "Max Columns (Left/Right Dock)" : {
@@ -41383,7 +41416,6 @@
       }
     },
     "No filters added" : {
-      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -41955,6 +41987,12 @@
         }
       }
     },
+    "No Orphaned Windows Found" : {
+
+    },
+    "No orphaned windows match your search criteria." : {
+
+    },
     "No recent checks" : {
       "localizations" : {
         "af" : {
@@ -42145,7 +42183,14 @@
         }
       }
     },
+    "No target application selected" : {
+
+    },
+    "No window associations configured" : {
+
+    },
     "No window title filters added" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -44620,6 +44665,12 @@
           }
         }
       }
+    },
+    "Orphaned Window Associations" : {
+
+    },
+    "Orphaned Windows" : {
+
     },
     "Performance Profiles" : {
       "localizations" : {
@@ -52821,6 +52872,9 @@
         }
       }
     },
+    "Refresh" : {
+
+    },
     "Relaxed" : {
       "localizations" : {
         "af" : {
@@ -56060,6 +56114,9 @@
         }
       }
     },
+    "Scanning for orphaned windows..." : {
+
+    },
     "Screen" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -57204,6 +57261,9 @@
           }
         }
       }
+    },
+    "Search windows or apps..." : {
+
     },
     "seconds" : {
       "localizations" : {
@@ -63493,6 +63553,16 @@
         }
       }
     },
+    "Size: %lld×%lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Size: %1$lld×%2$lld"
+          }
+        }
+      }
+    },
     "Small" : {
       "comment" : "Window size option",
       "extractionState" : "stale",
@@ -64065,6 +64135,9 @@
           }
         }
       }
+    },
+    "Some apps don't properly associate their windows with their dock icons. Create manual associations to fix this." : {
+
     },
     "Sort Window Previews by Date" : {
       "extractionState" : "stale",
@@ -66736,6 +66809,12 @@
         }
       }
     },
+    "Target Applications" : {
+
+    },
+    "Target: %@" : {
+
+    },
     "Thank you to all contributors ❤️" : {
       "localizations" : {
         "af" : {
@@ -67877,6 +67956,9 @@
           }
         }
       }
+    },
+    "This may take a moment while we analyze window associations" : {
+
     },
     "This setting only applies when \"Embed controls with window previews\" is enabled above." : {
       "localizations" : {

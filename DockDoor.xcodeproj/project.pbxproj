@@ -100,9 +100,13 @@
 		BB638F262E0218FE0010077D /* CalendarPermissionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB638F252E0218FE0010077D /* CalendarPermissionView.swift */; };
 		BB6A4F1C2C1CFCFF00CB4C9E /* PermissionsSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6A4F1B2C1CFCFF00CB4C9E /* PermissionsSettingsView.swift */; };
 		BB6D81962DF75CA100DB64E4 /* SimpleProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6D81952DF75CA100DB64E4 /* SimpleProgressBar.swift */; };
+		BB783D182E3D0D3100BD4763 /* ConfigurationTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB783D172E3D0D3100BD4763 /* ConfigurationTypes.swift */; };
+		BB783D1A2E3D0D4C00BD4763 /* OrphanedWindowAssociationSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB783D192E3D0D4C00BD4763 /* OrphanedWindowAssociationSheet.swift */; };
+		BB783D1C2E3D0D6600BD4763 /* OrphanedWindowUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB783D1B2E3D0D6600BD4763 /* OrphanedWindowUtil.swift */; };
 		BB7CA33D2C31F1B00012E303 /* WindowManipulationObservers.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB7CA33C2C31F1B00012E303 /* WindowManipulationObservers.swift */; };
 		BB90A5ED2DFA13E000857722 /* CalendarInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB90A5EC2DFA13E000857722 /* CalendarInfo.swift */; };
 		BB918BB52CF7613400931236 /* CGRect.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB918BB42CF7613200931236 /* CGRect.swift */; };
+		BB9B41B52E3AD77E00657490 /* OrphanedWindowUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB9B41B42E3AD77E00657490 /* OrphanedWindowUtil.swift */; };
 		BBA153F62C115DDA00119C02 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA153F52C115DDA00119C02 /* AppDelegate.swift */; };
 		BBA153F82C11604400119C02 /* SharedPreviewWindowCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA153F72C11604400119C02 /* SharedPreviewWindowCoordinator.swift */; };
 		BBA153FA2C11FFD500119C02 /* consts.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA153F92C11FFD500119C02 /* consts.swift */; };
@@ -226,10 +230,14 @@
 		BB638F252E0218FE0010077D /* CalendarPermissionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarPermissionView.swift; sourceTree = "<group>"; };
 		BB6A4F1B2C1CFCFF00CB4C9E /* PermissionsSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionsSettingsView.swift; sourceTree = "<group>"; };
 		BB6D81952DF75CA100DB64E4 /* SimpleProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleProgressBar.swift; sourceTree = "<group>"; };
+		BB783D172E3D0D3100BD4763 /* ConfigurationTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationTypes.swift; sourceTree = "<group>"; };
+		BB783D192E3D0D4C00BD4763 /* OrphanedWindowAssociationSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrphanedWindowAssociationSheet.swift; sourceTree = "<group>"; };
+		BB783D1B2E3D0D6600BD4763 /* OrphanedWindowUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrphanedWindowUtil.swift; sourceTree = "<group>"; };
 		BB7CA33C2C31F1B00012E303 /* WindowManipulationObservers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowManipulationObservers.swift; sourceTree = "<group>"; };
 		BB8247782C2889B20098A440 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		BB90A5EC2DFA13E000857722 /* CalendarInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarInfo.swift; sourceTree = "<group>"; };
 		BB918BB42CF7613200931236 /* CGRect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGRect.swift; sourceTree = "<group>"; };
+		BB9B41B42E3AD77E00657490 /* OrphanedWindowUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrphanedWindowUtil.swift; sourceTree = "<group>"; };
 		BBA153F52C115DDA00119C02 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BBA153F72C11604400119C02 /* SharedPreviewWindowCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedPreviewWindowCoordinator.swift; sourceTree = "<group>"; };
 		BBA153F92C11FFD500119C02 /* consts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = consts.swift; sourceTree = "<group>"; };
@@ -448,6 +456,8 @@
 				BB2567C52C10C5F000C0C93E /* DockUtils.swift */,
 				BB157B7A2C0E343000997315 /* SystemPreferencesHelper.swift */,
 				BB157B7F2C0E8E6700997315 /* MessageUtil.swift */,
+				BB783D1B2E3D0D6600BD4763 /* OrphanedWindowUtil.swift */,
+				BB9B41B42E3AD77E00657490 /* OrphanedWindowUtil.swift */,
 				BB157B812C0EB29E00997315 /* DockObserver.swift */,
 				BBF6C6232C1B4B4400BF1D40 /* KeybindHelper.swift */,
 				BB1CBD5C2C1BCA4F003969BC /* Misc Utils.swift */,
@@ -597,6 +607,7 @@
 			children = (
 				BBB6C52F2DF3C884009E93C4 /* MediaInfo.swift */,
 				BB90A5EC2DFA13E000857722 /* CalendarInfo.swift */,
+				BB783D172E3D0D3100BD4763 /* ConfigurationTypes.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -618,6 +629,7 @@
 				BB15E1E62C8F8C8D002ECFB9 /* Help */,
 				BBE7CC902C22429A00AB8F4D /* settings.swift */,
 				BB1CBD572C1BA800003969BC /* MainSettingsView.swift */,
+				BB783D192E3D0D4C00BD4763 /* OrphanedWindowAssociationSheet.swift */,
 				BB1A85F42D05263C00326297 /* FiltersSettingsView.swift */,
 				BB1865552DD57F1E000F34AD /* SupportSettingsView.swift */,
 				BB6A4F1B2C1CFCFF00CB4C9E /* PermissionsSettingsView.swift */,
@@ -775,8 +787,11 @@
 				BB377C342DFD0D3700FA93DA /* PinnableView.swift in Sources */,
 				3A1622BC2C8C1B8600D318EE /* FirstTimeViewAppIcon.swift in Sources */,
 				3A1622B52C8C09A700D318EE /* AccentButton.swift in Sources */,
+				BB783D182E3D0D3100BD4763 /* ConfigurationTypes.swift in Sources */,
 				BB638EFC2E0216DE0010077D /* MediaControlsFullView.swift in Sources */,
+				BB783D1C2E3D0D6600BD4763 /* OrphanedWindowUtil.swift in Sources */,
 				BB7CA33D2C31F1B00012E303 /* WindowManipulationObservers.swift in Sources */,
+				BB9B41B52E3AD77E00657490 /* OrphanedWindowUtil.swift in Sources */,
 				BB15E1E82C8F8C9C002ECFB9 /* ScreenRecordWarningView.swift in Sources */,
 				BBF383972C94A26200B39A23 /* sliderSetting.swift in Sources */,
 				BBAC6B452D15FA8900A0F370 /* AXValue.swift in Sources */,
@@ -807,6 +822,7 @@
 				BB638F1E2E0218EC0010077D /* CalendarContentView.swift in Sources */,
 				BB157B822C0EB29E00997315 /* DockObserver.swift in Sources */,
 				BB638F022E0216FE0010077D /* MediaControlButton.swift in Sources */,
+				BB783D1A2E3D0D4C00BD4763 /* OrphanedWindowAssociationSheet.swift in Sources */,
 				BB638F0A2E02172B0010077D /* MediaLyricsButton.swift in Sources */,
 				BBA153FA2C11FFD500119C02 /* consts.swift in Sources */,
 				BB377C3F2DFD19ED00FA93DA /* PinnedWindowDelegate.swift in Sources */,
