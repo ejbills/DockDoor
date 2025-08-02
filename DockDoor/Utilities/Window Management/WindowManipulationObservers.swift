@@ -92,6 +92,8 @@ class WindowManipulationObservers {
             return
         }
 
+        previewCoordinator.hideWindow()
+
         if let dockObserver = DockObserver.activeInstance,
            let currentClickedPID = dockObserver.currentClickedAppPID,
            currentClickedPID != app.processIdentifier
@@ -159,7 +161,6 @@ class WindowManipulationObservers {
 
     func handleNewWindow(for pid: pid_t) {
         windowCreationWorkItem?.cancel()
-
         let workItem = DispatchWorkItem { [weak self] in
             guard self != nil else { return }
             Task {

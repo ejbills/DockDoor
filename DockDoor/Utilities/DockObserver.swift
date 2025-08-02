@@ -23,7 +23,7 @@ struct ApplicationReturnType {
     let dockItemElement: AXUIElement?
 }
 
-func handleSelectedDockItemChangedNotification(observer _: AXObserver, element _: AXUIElement, notificationName: CFString, context: UnsafeMutableRawPointer?) {
+func handleSelectedDockItemChangedNotification(observer _: AXObserver, element _: AXUIElement, notificationName _: CFString, context: UnsafeMutableRawPointer?) {
     DockObserver.activeInstance?.processSelectedDockItemChanged()
 }
 
@@ -533,9 +533,6 @@ final class DockObserver {
     }
 
     private func handleDockClick(app: NSRunningApplication) {
-        // Only proceed if dock click actions are enabled
-        guard Defaults[.shouldHideOnDockItemClick] else { return }
-
         let pid = app.processIdentifier
         let appName = app.localizedName ?? "Unknown"
 
@@ -547,7 +544,20 @@ final class DockObserver {
         clickCount += 1
 
         let isFrontmost = NSWorkspace.shared.frontmostApplication?.processIdentifier == pid
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) { [weak self] in
+
+        // If dock click actions are disabled and app is frontmost, show DockDoor preview on 2nd+ click
+        if !Defaults[.shouldHideOnDockItemClick], isFrontmost, clickCount >= 2, !previewCoordinator.isVisible {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+                guard let self else { return }
+                showPreviewForFocusedApp(app: app)
+            }
+            return
+        }
+
+        // Only proceed with existing dock click actions if they are enabled
+        guard Defaults[.shouldHideOnDockItemClick] else { return }
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) { [weak self] in
             guard let self else { return }
 
             previewCoordinator.hideWindow()
@@ -613,6 +623,64 @@ final class DockObserver {
                     }
                 } catch {
                     app.activate()
+                }
+            }
+        }
+    }
+
+    private func showPreviewForFocusedApp(app: NSRunningApplication) {
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+
+            let currentMouseLocation = DockObserver.getMousePosition()
+            let appUnderMouseElement = getDockItemAppStatusUnderMouse()
+
+            guard case let .success(currentApp) = appUnderMouseElement.status,
+                  currentApp.processIdentifier == app.processIdentifier,
+                  let dockItemElement = appUnderMouseElement.dockItemElement
+            else {
+                return
+            }
+
+            do {
+                let windows = try await WindowUtil.getActiveWindows(of: app)
+                let mouseScreen = NSScreen.screenContainingMouse(currentMouseLocation)
+                let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
+
+                previewCoordinator.showWindow(
+                    appName: app.localizedName ?? "Unknown",
+                    windows: windows,
+                    mouseLocation: convertedMouseLocation,
+                    mouseScreen: mouseScreen,
+                    dockItemElement: dockItemElement,
+                    overrideDelay: true,
+                    onWindowTap: { [weak self] in
+                        self?.hideWindowAndResetLastApp()
+                    },
+                    bundleIdentifier: app.bundleIdentifier
+                )
+            } catch {
+                // If we can't get windows, still show the preview for special apps if enabled
+                let isSpecialApp = app.bundleIdentifier == spotifyAppIdentifier ||
+                    app.bundleIdentifier == appleMusicAppIdentifier ||
+                    app.bundleIdentifier == calendarAppIdentifier
+
+                if isSpecialApp, Defaults[.showSpecialAppControls] {
+                    let mouseScreen = NSScreen.screenContainingMouse(currentMouseLocation)
+                    let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
+
+                    previewCoordinator.showWindow(
+                        appName: app.localizedName ?? "Unknown",
+                        windows: [],
+                        mouseLocation: convertedMouseLocation,
+                        mouseScreen: mouseScreen,
+                        dockItemElement: dockItemElement,
+                        overrideDelay: true,
+                        onWindowTap: { [weak self] in
+                            self?.hideWindowAndResetLastApp()
+                        },
+                        bundleIdentifier: app.bundleIdentifier
+                    )
                 }
             }
         }

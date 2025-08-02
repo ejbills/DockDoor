@@ -15,7 +15,7 @@ enum PreviewContext: String, CaseIterable, Identifiable {
 // MARK: - Mock Data Generation
 
 extension AppearanceSettingsView {
-    private static func generateMockWindowsForPreview(count: Int = 3) -> [WindowInfo] {
+    private static func generateMockWindowsForPreview(count: Int = 2) -> [WindowInfo] {
         guard let baseNSImage = NSImage(named: "WindowsXP") else {
             return []
         }
@@ -39,9 +39,17 @@ extension AppearanceSettingsView {
                     .cgImage(forProposedRect: nil, context: nil, hints: nil)
             }
 
+            let aspectRatios: [(width: CGFloat, height: CGFloat)] = [
+                (300, 200), // 3:2 landscape
+                (200, 300), // 2:3 portrait
+                (400, 200), // 2:1 wide landscape
+                (180, 320), // 9:16 tall portrait
+            ]
+            let aspectRatio = aspectRatios[i % aspectRatios.count]
+
             let mockWindowProvider = MockPreviewWindow(
                 windowID: CGWindowID(i + 1),
-                frame: CGRect(x: 100 * (i + 1), y: 100, width: 250, height: 180),
+                frame: CGRect(x: CGFloat(100 * (i + 1)), y: 100, width: aspectRatio.width, height: aspectRatio.height),
                 title: "Window \(i + 1)",
                 owningApplicationBundleIdentifier: "com.example.preview",
                 owningApplicationProcessID: pid + pid_t(i + 1),
@@ -78,6 +86,7 @@ extension AppearanceSettingsView {
 
 struct AppearanceSettingsView: View {
     @Default(.uniformCardRadius) var uniformCardRadius
+    @Default(.allowDynamicImageSizing) var allowDynamicImageSizing
     @Default(.showAppName) var showAppName
     @Default(.appNameStyle) var appNameStyle
     @Default(.showWindowTitle) var showWindowTitle
@@ -85,14 +94,16 @@ struct AppearanceSettingsView: View {
     @Default(.windowTitleVisibility) var windowTitleVisibility
     @Default(.windowTitlePosition) var windowTitlePosition
     @Default(.windowSwitcherControlPosition) var windowSwitcherControlPosition
-    @Default(.dimInSwitcherUntilSelected) var dimInSwitcherUntilSelected
+    @Default(.dockPreviewControlPosition) var dockPreviewControlPosition
+
     @Default(.selectionOpacity) var selectionOpacity
-    @Default(.selectionColor) var selectionColor
+    @Default(.unselectedContentOpacity) var unselectedContentOpacity
+    @Default(.hoverHighlightColor) var hoverHighlightColor
+    @Default(.dockPreviewBackgroundOpacity) var dockPreviewBackgroundOpacity
     @Default(.previewMaxColumns) var previewMaxColumns
     @Default(.previewMaxRows) var previewMaxRows
     @Default(.switcherMaxRows) var switcherMaxRows
     @Default(.showAppIconOnly) var showAppIconOnly
-    @Default(.useAccentColorForSelection) var useAccentColorForSelection
     @Default(.globalPaddingMultiplier) var globalPaddingMultiplier
 
     @State private var showAdvancedAppearanceSettings: Bool = false
@@ -108,7 +119,7 @@ struct AppearanceSettingsView: View {
     init() {
         _previousWindowTitlePosition = State(initialValue: Defaults[.windowTitlePosition])
 
-        let initialMockWindows = AppearanceSettingsView.generateMockWindowsForPreview(count: 1)
+        let initialMockWindows = AppearanceSettingsView.generateMockWindowsForPreview()
 
         _mockDockPreviewCoordinator = StateObject(wrappedValue: AppearanceSettingsView.getMockCoordinator(
             windows: initialMockWindows,
@@ -128,11 +139,36 @@ struct AppearanceSettingsView: View {
         ScrollViewReader { proxy in
             BaseSettingsView {
                 VStack(alignment: .leading, spacing: 16) {
-                    StyledGroupBox(label: "General Appearance") {
+                    StyledGroupBox(label: "Window Preview Size") {
                         VStack(alignment: .leading, spacing: 10) {
                             WindowSizeSliderView()
 
-                            sliderSetting(title: "Global Padding Scale",
+                            Text("Choose how large window previews appear when hovering over dock icons. All window images are automatically scaled to fit within this size while maintaining their original proportions.")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+
+                        VStack(alignment: .leading) {
+                            Toggle(isOn: $allowDynamicImageSizing) {
+                                Text("Allow dynamic image sizing")
+                            }
+                            .onChange(of: allowDynamicImageSizing) { _ in
+                                // Recalculate dimensions for both mock coordinators when dynamic sizing changes
+                                let dockPosition = DockPosition.bottom
+                                let monitor = NSScreen.main!
+                                mockDockPreviewCoordinator.recomputeAndPublishDimensions(dockPosition: dockPosition, bestGuessMonitor: monitor, isMockPreviewActive: true)
+                                mockWindowSwitcherCoordinator.recomputeAndPublishDimensions(dockPosition: dockPosition, bestGuessMonitor: monitor, isMockPreviewActive: true)
+                            }
+                            Text("Allows window preview images to scale dynamically to reasonable dimensions, overriding fixed frame constraints.")
+                                .font(.footnote)
+                                .foregroundColor(.gray)
+                                .padding(.leading, 20)
+                        }
+                    }
+
+                    StyledGroupBox(label: "General Appearance") {
+                        VStack(alignment: .leading, spacing: 10) {
+                            sliderSetting(title: "Spacing Scale",
                                           value: $globalPaddingMultiplier,
                                           range: 0.5 ... 2.0,
                                           step: 0.1,
@@ -146,13 +182,20 @@ struct AppearanceSettingsView: View {
 
                             VStack(alignment: .leading) {
                                 Toggle(isOn: $uniformCardRadius) {
-                                    Text("Rounded image corners")
+                                    Text("Rounded corners")
                                 }
-                                Text("When enabled, all preview images will be cropped to a rounded rectangle.")
+                                Text("Round the corners of window preview images for a modern look.")
                                     .font(.footnote)
                                     .foregroundColor(.gray)
                                     .padding(.leading, 20)
                             }
+
+                            sliderSetting(title: "Unselected Content Opacity",
+                                          value: $unselectedContentOpacity,
+                                          range: 0 ... 1,
+                                          step: 0.05,
+                                          unit: "",
+                                          formatter: NumberFormatter.percentFormatter)
                         }
                     }
 
@@ -222,7 +265,16 @@ struct AppearanceSettingsView: View {
             .disabled(!showAppName)
 
             Divider().padding(.vertical, 2)
-            Text("Window Titles in Previews").font(.headline).padding(.bottom, -2)
+            Text("Dock Preview Toolbar").font(.headline).padding(.bottom, -2)
+
+            Picker("Position Dock Preview Controls", selection: $dockPreviewControlPosition) {
+                ForEach(WindowSwitcherControlPosition.allCases, id: \.self) { position in
+                    Text(position.localizedName)
+                        .tag(position)
+                }
+            }
+            .pickerStyle(MenuPickerStyle())
+
             Toggle(isOn: $showWindowTitle) {
                 Text("Show Window Title")
             }
@@ -246,13 +298,6 @@ struct AppearanceSettingsView: View {
                     ForEach(WindowTitleVisibility.allCases, id: \.self) { visibility in
                         Text(visibility.localizedName)
                             .tag(visibility)
-                    }
-                }
-
-                Picker("Window Title Position", selection: $windowTitlePosition) {
-                    ForEach(WindowTitlePosition.allCases, id: \.self) { position in
-                        Text(position.localizedName)
-                            .tag(position)
                     }
                 }
             }
@@ -315,15 +360,6 @@ struct AppearanceSettingsView: View {
             }
             .pickerStyle(MenuPickerStyle())
 
-            VStack(alignment: .leading) {
-                Toggle(isOn: $dimInSwitcherUntilSelected) {
-                    Text("Dim Unselected Windows")
-                }
-                Text("When enabled, dims all windows except those currently under selected.")
-                    .font(.footnote)
-                    .foregroundColor(.gray)
-            }
-
             Divider().padding(.vertical, 2)
             Text("Preview Layout (Switcher)").font(.headline).padding(.bottom, -2)
             VStack(alignment: .leading, spacing: 4) {
@@ -380,33 +416,46 @@ struct AppearanceSettingsView: View {
     @ViewBuilder
     private var advancedAppearanceSettingsSection: some View {
         VStack(alignment: .leading, spacing: 16) {
-            StyledGroupBox(label: "Selection Highlight") {
+            StyledGroupBox(label: "Window Background") {
                 VStack(alignment: .leading, spacing: 10) {
-                    Toggle(isOn: $useAccentColorForSelection) {
-                        Text("Use System Accent Color for Highlight")
-                    }
+                    Text("All window previews show a gray background. When hovered, the background changes to the accent color or custom color below.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+
                     HStack {
-                        ColorPicker("Window Selection Background Color", selection: Binding(
-                            get: { selectionColor ?? .secondary },
-                            set: { selectionColor = $0 }
+                        ColorPicker("Custom Hover Highlight Color", selection: Binding(
+                            get: { hoverHighlightColor ?? Color(nsColor: .controlAccentColor) },
+                            set: { hoverHighlightColor = $0 }
                         ))
-                        .disabled(useAccentColorForSelection)
                         Button(action: {
-                            Defaults.reset(.selectionColor)
+                            Defaults.reset(.hoverHighlightColor)
                         }) {
                             Text("Reset")
                         }
                         .buttonStyle(AccentButtonStyle(small: true))
                     }
-                    .disabled(useAccentColorForSelection)
 
-                    sliderSetting(title: "Window Selection Background Opacity",
+                    sliderSetting(title: "Background Opacity",
                                   value: $selectionOpacity,
                                   range: 0 ... 1,
                                   step: 0.05,
                                   unit: "",
                                   formatter: NumberFormatter.percentFormatter)
-                        .disabled(useAccentColorForSelection)
+                }
+            }
+
+            StyledGroupBox(label: "Dock Preview Transparency") {
+                VStack(alignment: .leading, spacing: 10) {
+                    Text("Control the transparency of the dock preview background. Lower values make the preview more transparent, which can help prevent it from blocking window content.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+
+                    sliderSetting(title: "Background Opacity",
+                                  value: $dockPreviewBackgroundOpacity,
+                                  range: 0.1 ... 1.0,
+                                  step: 0.05,
+                                  unit: "",
+                                  formatter: NumberFormatter.percentFormatter)
                 }
             }
 
@@ -418,107 +467,96 @@ struct AppearanceSettingsView: View {
     }
 
     struct WindowSizeSliderView: View {
-        @Default(.sizingMultiplier) var sizingMultiplier
+        @Default(.previewWidth) var previewWidth
+        @Default(.previewHeight) var previewHeight
+        @Default(.lockAspectRatio) var lockAspectRatio
 
-        private var visualScaleFactor: CGFloat {
-            let maxWidth: CGFloat = 450
-            let maxHeight: CGFloat = 120
-            let widthScale = maxWidth / optimisticScreenSizeWidth
-            let heightScale = maxHeight / optimisticScreenSizeHeight
-            return min(widthScale, heightScale) * 0.9
-        }
-
-        private var scaledPreviewSize: CGSize {
-            CGSize(
-                width: optimisticScreenSizeWidth / sizingMultiplier,
-                height: optimisticScreenSizeHeight / sizingMultiplier
-            )
-        }
-
-        private var visualScreenSize: CGSize {
-            CGSize(
-                width: optimisticScreenSizeWidth * visualScaleFactor,
-                height: optimisticScreenSizeHeight * visualScaleFactor
-            )
-        }
-
-        private var visualPreviewSize: CGSize {
-            CGSize(
-                width: scaledPreviewSize.width * visualScaleFactor,
-                height: scaledPreviewSize.height * visualScaleFactor
-            )
-        }
-
-        private func getSizeDescription(_ value: Int) -> String {
-            switch value {
-            case 2: String(localized: "Large (1/2)")
-            case 3, 4: String(localized: "Medium (1/\(value))")
-            case 5, 6: String(localized: "Small (1/\(value))")
-            default: String(localized: "Tiny (1/\(value))")
-            }
-        }
+        private let aspectRatio: CGFloat = 16.0 / 10.0
 
         var body: some View {
-            HStack(alignment: .top, spacing: 24) {
-                ZStack {
-                    RoundedRectangle(cornerRadius: 16, style: .continuous)
-                        .stroke(Color.gray.opacity(0.5), lineWidth: 1)
-                        .frame(width: visualScreenSize.width, height: visualScreenSize.height)
-                        .overlay(
-                            Text(String(localized: "Screen"))
-                                .font(.caption)
-                                .foregroundColor(.gray)
-                                .padding(.top, 4),
-                            alignment: .top
-                        )
-
-                    Rectangle()
-                        .fill(Color.blue.opacity(0.35))
-                        .frame(width: visualPreviewSize.width, height: visualPreviewSize.height)
-                        .clipShape(RoundedRectangle(cornerRadius: 5))
+            VStack(alignment: .leading, spacing: 10) {
+                Toggle(isOn: $lockAspectRatio) {
+                    Text("Lock aspect ratio (16:10)")
                 }
-
-                VStack(alignment: .leading, spacing: 8) {
-                    Text(String(localized: "Preview Size"))
-                        .foregroundColor(.secondary)
-                        .padding(.bottom, 4)
-
-                    Menu {
-                        ForEach(2 ... 10, id: \.self) { value in
-                            Button(action: { sizingMultiplier = Double(value) }) {
-                                HStack {
-                                    Rectangle()
-                                        .fill(Color.accentColor.opacity(0.2))
-                                        .frame(width: 60 / Double(value), height: 16)
-                                        .cornerRadius(2)
-
-                                    Text(getSizeDescription(value))
-                                        .frame(width: 100, alignment: .leading)
-
-                                    if sizingMultiplier == Double(value) {
-                                        Image(systemName: "checkmark")
-                                    }
-                                }
-                                .padding(.horizontal, 4)
-                            }
-                        }
-                    } label: {
-                        HStack(spacing: 8) {
-                            Text(getSizeDescription(Int(sizingMultiplier)))
-                                .frame(width: 100, alignment: .leading)
-                            Image(systemName: "chevron.down")
-                                .font(.caption)
-                        }
-                        .padding(.vertical, 4)
-                        .padding(.horizontal, 8)
-                        .background(Color.secondary.opacity(0.1))
-                        .cornerRadius(6)
+                .onChange(of: lockAspectRatio) { newValue in
+                    if newValue {
+                        // When locking, adjust height to match 16:10 ratio
+                        previewHeight = previewWidth / aspectRatio
                     }
+                    updateWindowSize()
+                }
+
+                sliderSetting(
+                    title: "Preview Width",
+                    value: $previewWidth,
+                    range: 100.0 ... 600.0,
+                    step: 10.0,
+                    unit: "px",
+                    formatter: {
+                        let f = NumberFormatter()
+                        f.minimumFractionDigits = 0
+                        f.maximumFractionDigits = 0
+                        return f
+                    }()
+                )
+                .onChange(of: previewWidth) { _ in
+                    if lockAspectRatio {
+                        previewHeight = previewWidth / aspectRatio
+                    }
+                    updateWindowSize()
+                }
+
+                sliderSetting(
+                    title: "Preview Height",
+                    value: $previewHeight,
+                    range: 60.0 ... 400.0,
+                    step: 10.0,
+                    unit: "px",
+                    formatter: {
+                        let f = NumberFormatter()
+                        f.minimumFractionDigits = 0
+                        f.maximumFractionDigits = 0
+                        return f
+                    }()
+                )
+                .disabled(lockAspectRatio)
+                .onChange(of: previewHeight) { _ in
+                    if lockAspectRatio {
+                        previewWidth = previewHeight * aspectRatio
+                    }
+                    updateWindowSize()
+                }
+
+                Text("Current aspect ratio: \(formatAspectRatio(previewWidth / previewHeight))")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+        }
+
+        private func updateWindowSize() {
+            SharedPreviewWindowCoordinator.activeInstance?.windowSize = getWindowSize()
+        }
+
+        private func formatAspectRatio(_ ratio: CGFloat) -> String {
+            // Common aspect ratios
+            let commonRatios: [(ratio: CGFloat, display: String)] = [
+                (16.0 / 9.0, "16:9"),
+                (16.0 / 10.0, "16:10"),
+                (4.0 / 3.0, "4:3"),
+                (3.0 / 2.0, "3:2"),
+                (21.0 / 9.0, "21:9"),
+                (1.0, "1:1"),
+            ]
+
+            // Check if it matches a common ratio (within 0.01 tolerance)
+            for commonRatio in commonRatios {
+                if abs(ratio - commonRatio.ratio) < 0.01 {
+                    return commonRatio.display
                 }
             }
-            .onChange(of: sizingMultiplier) { _ in
-                SharedPreviewWindowCoordinator.activeInstance?.windowSize = getWindowSize()
-            }
+
+            // For custom ratios, show as X.XX:1
+            return String(format: "%.2f:1", ratio)
         }
     }
 }

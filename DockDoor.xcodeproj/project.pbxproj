@@ -48,7 +48,6 @@
 		BB15E1E52C8E9435002ECFB9 /* BlobLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB15E1DE2C8E9435002ECFB9 /* BlobLayer.swift */; };
 		BB15E1E82C8F8C9C002ECFB9 /* ScreenRecordWarningView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB15E1E72C8F8C93002ECFB9 /* ScreenRecordWarningView.swift */; };
 		BB15E1EA2C8F8DB4002ECFB9 /* HelpSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB15E1E92C8F8DB1002ECFB9 /* HelpSettingsView.swift */; };
-		BB15E1EF2C8FB70C002ECFB9 /* Glur in Frameworks */ = {isa = PBXBuildFile; productRef = BB15E1EE2C8FB70C002ECFB9 /* Glur */; };
 		BB15E1F12C8FBCD4002ECFB9 /* BugAndFeatureReporting.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB15E1F02C8FBCCD002ECFB9 /* BugAndFeatureReporting.swift */; };
 		BB15E1F52C8FBEAB002ECFB9 /* DonationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB15E1F42C8FBEA4002ECFB9 /* DonationView.swift */; };
 		BB15E1F72C8FC05A002ECFB9 /* UniformCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB15E1F62C8FC056002ECFB9 /* UniformCardView.swift */; };
@@ -116,6 +115,7 @@
 		BBBAA15B2DE6998B00FF8F8F /* UpdaterState.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBBAA15A2DE6998B00FF8F8F /* UpdaterState.swift */; };
 		BBBD4AF52C8D671C0074FFCF /* NSImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBBD4AF42C8D671A0074FFCF /* NSImage.swift */; };
 		BBBD4AF82C8D71560074FFCF /* ConfettiSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = BBBD4AF72C8D71560074FFCF /* ConfettiSwiftUI */; };
+		BBC57AA82E3A6BED0078B262 /* DynamicWindowFrameModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBC57AA72E3A6BED0078B262 /* DynamicWindowFrameModifier.swift */; };
 		BBCFAE402C266234002E1516 /* FirstTimeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBCFAE3F2C266234002E1516 /* FirstTimeView.swift */; };
 		BBE033CC2DD92061006417B0 /* CGimage.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE033CB2DD92061006417B0 /* CGimage.swift */; };
 		BBE153BE2D2126D000CD3D4A /* MaterialPill.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE153BD2D2126C000CD3D4A /* MaterialPill.swift */; };
@@ -241,6 +241,7 @@
 		BBB6C5362DF738E3009E93C4 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 		BBBAA15A2DE6998B00FF8F8F /* UpdaterState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdaterState.swift; sourceTree = "<group>"; };
 		BBBD4AF42C8D671A0074FFCF /* NSImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSImage.swift; sourceTree = "<group>"; };
+		BBC57AA72E3A6BED0078B262 /* DynamicWindowFrameModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicWindowFrameModifier.swift; sourceTree = "<group>"; };
 		BBCFAE3F2C266234002E1516 /* FirstTimeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstTimeView.swift; sourceTree = "<group>"; };
 		BBE033CB2DD92061006417B0 /* CGimage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGimage.swift; sourceTree = "<group>"; };
 		BBE153BD2D2126C000CD3D4A /* MaterialPill.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaterialPill.swift; sourceTree = "<group>"; };
@@ -265,8 +266,6 @@
 			files = (
 				BBBD4AF82C8D71560074FFCF /* ConfettiSwiftUI in Frameworks */,
 				BB33E68C2C24C72F00A21D69 /* LaunchAtLogin in Frameworks */,
-				BB96B5072E2FF87600B2D221 /* SwiftUIFlowLayout in Frameworks */,
-				BB15E1EF2C8FB70C002ECFB9 /* Glur in Frameworks */,
 				3A1622A32C8BFF3800D318EE /* Pow in Frameworks */,
 				BBFAD73A2C287A9C0092F5F1 /* Sparkle in Frameworks */,
 				BB3968002C2A6C44004F1AB6 /* SmoothGradient in Frameworks */,
@@ -504,6 +503,7 @@
 			isa = PBXGroup;
 			children = (
 				BBE63DFE2DEA58040079D2B9 /* PreviewStateCoordinator.swift */,
+				BBC57AA72E3A6BED0078B262 /* DynamicWindowFrameModifier.swift */,
 				BB0CBE392DD8179200D55437 /* MouseEventModifier.swift */,
 				BB3D6EAD2C82E4AE00FFE584 /* WindowDismissalContainer.swift */,
 				BB6021D12D1E613100D47C86 /* Window Image Sizing Calculations.swift */,
@@ -655,7 +655,6 @@
 				3A1622A22C8BFF3800D318EE /* Pow */,
 				3A1622B72C8C0EE200D318EE /* Kroma */,
 				BBBD4AF72C8D71560074FFCF /* ConfettiSwiftUI */,
-				BB15E1EE2C8FB70C002ECFB9 /* Glur */,
 			);
 			productName = DockDoor;
 			productReference = BB157B652C0E31CE00997315 /* DockDoor.app */;
@@ -696,7 +695,6 @@
 				3A1622A12C8BFF3800D318EE /* XCRemoteSwiftPackageReference "Pow" */,
 				3A1622B62C8C0EE200D318EE /* XCRemoteSwiftPackageReference "Kroma" */,
 				BBBD4AF62C8D71560074FFCF /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */,
-				BB15E1ED2C8FB70C002ECFB9 /* XCRemoteSwiftPackageReference "Glur" */,
 			);
 			productRefGroup = BB157B662C0E31CE00997315 /* Products */;
 			projectDirPath = "";
@@ -826,6 +824,7 @@
 				BBA153F82C11604400119C02 /* SharedPreviewWindowCoordinator.swift in Sources */,
 				BB1865542DD57E18000F34AD /* BaseSettingsView.swift in Sources */,
 				BBA153FC2C12356100119C02 /* main.swift in Sources */,
+				BBC57AA82E3A6BED0078B262 /* DynamicWindowFrameModifier.swift in Sources */,
 				BBF6C6242C1B4B4400BF1D40 /* KeybindHelper.swift in Sources */,
 				BB638F1C2E0218D10010077D /* CalendarFullView.swift in Sources */,
 				0596C2C32C3E060D00DCABEF /* PrivateApis.swift in Sources */,
@@ -1121,14 +1120,6 @@
 				kind = branch;
 			};
 		};
-		BB15E1ED2C8FB70C002ECFB9 /* XCRemoteSwiftPackageReference "Glur" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/joogps/Glur";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.4;
-			};
-		};
 		BB1CBD592C1BA8DC003969BC /* XCRemoteSwiftPackageReference "Defaults" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/sindresorhus/Defaults";
@@ -1189,11 +1180,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 3A1622B62C8C0EE200D318EE /* XCRemoteSwiftPackageReference "Kroma" */;
 			productName = Kroma;
-		};
-		BB15E1EE2C8FB70C002ECFB9 /* Glur */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = BB15E1ED2C8FB70C002ECFB9 /* XCRemoteSwiftPackageReference "Glur" */;
-			productName = Glur;
 		};
 		BB1CBD5A2C1BA8DC003969BC /* Defaults */ = {
 			isa = XCSwiftPackageProductDependency;

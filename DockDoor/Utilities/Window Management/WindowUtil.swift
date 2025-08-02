@@ -79,6 +79,11 @@ enum WindowAction: String, Hashable, CaseIterable, Defaults.Serializable {
 enum WindowUtil {
     private static let desktopSpaceWindowCacheManager = SpaceWindowCacheManager()
 
+    // Track windows explicitly updated by bringWindowToFront to prevent observer duplication
+    private static var explicitTimestampUpdates: [AXUIElement: Date] = [:]
+    private static let explicitUpdateLock = NSLock()
+    private static let explicitUpdateTimeWindow: TimeInterval = 1.5
+
     static func clearWindowCache(for app: NSRunningApplication) {
         desktopSpaceWindowCacheManager.writeCache(pid: app.processIdentifier, windowSet: [])
     }
@@ -89,10 +94,24 @@ enum WindowUtil {
 
     static func updateWindowDateTime(element: AXUIElement, app: NSRunningApplication) {
         guard Defaults[.sortWindowsByDate] else { return }
+
+        explicitUpdateLock.lock()
+        defer { explicitUpdateLock.unlock() }
+
+        // Check if this window was recently updated by bringWindowToFront
+        let now = Date()
+        if let lastExplicitUpdate = explicitTimestampUpdates[element],
+           now.timeIntervalSince(lastExplicitUpdate) < explicitUpdateTimeWindow
+        {
+            // Clean up expired entries while we're here
+            cleanupExpiredExplicitUpdates(currentTime: now)
+            return // Skip update to avoid duplication
+        }
+
         desktopSpaceWindowCacheManager.updateCache(pid: app.processIdentifier) { windowSet in
             if let index = windowSet.firstIndex(where: { $0.axElement == element }) {
                 var updatedWindow = windowSet[index]
-                updatedWindow.lastAccessedTime = Date()
+                updatedWindow.lastAccessedTime = now
                 windowSet.remove(at: index)
                 windowSet.insert(updatedWindow)
             }
@@ -330,6 +349,8 @@ enum WindowUtil {
         // Try activation with retries
         while retryCount < maxRetries {
             if attemptActivation() {
+                // Optimistically update timestamp and leave breadcrumb
+                updateTimestampOptimistically(for: windowInfo)
                 return
             }
             retryCount += 1
@@ -725,5 +746,36 @@ enum WindowUtil {
         }
 
         return false
+    }
+
+    // MARK: - Private Helper Methods
+
+    /// Updates window timestamp optimistically and records breadcrumb for observer deduplication
+    private static func updateTimestampOptimistically(for windowInfo: WindowInfo) {
+        guard Defaults[.sortWindowsByDate] else { return }
+
+        let now = Date()
+
+        // Record breadcrumb for observer deduplication
+        explicitUpdateLock.lock()
+        explicitTimestampUpdates[windowInfo.axElement] = now
+        explicitUpdateLock.unlock()
+
+        // Update timestamp in cache
+        desktopSpaceWindowCacheManager.updateCache(pid: windowInfo.app.processIdentifier) { windowSet in
+            if let index = windowSet.firstIndex(where: { $0.axElement == windowInfo.axElement }) {
+                var updatedWindow = windowSet[index]
+                updatedWindow.lastAccessedTime = now
+                windowSet.remove(at: index)
+                windowSet.insert(updatedWindow)
+            }
+        }
+    }
+
+    /// Removes expired entries from explicit timestamp tracking (must be called with lock held)
+    private static func cleanupExpiredExplicitUpdates(currentTime: Date) {
+        explicitTimestampUpdates = explicitTimestampUpdates.filter { _, date in
+            currentTime.timeIntervalSince(date) < explicitUpdateTimeWindow
+        }
     }
 }

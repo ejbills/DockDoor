@@ -178,25 +178,31 @@ struct WindowPreviewHoverContainer: View {
                 switch appNameStyle {
                 case .default:
                     HStack(alignment: .center) {
-                        if let appIcon {
-                            Image(nsImage: appIcon)
-                                .resizable()
-                                .scaledToFit()
-                                .zIndex(1)
-                                .frame(width: 24, height: 24)
-                        } else {
-                            ProgressView()
-                                .frame(width: 24, height: 24)
+                        Group {
+                            if let appIcon {
+                                Image(nsImage: appIcon)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .zIndex(1)
+                                    .frame(width: 24, height: 24)
+                            } else {
+                                ProgressView()
+                                    .frame(width: 24, height: 24)
+                            }
+                            hoverTitleLabelView(labelSize: labelSize)
+
+                            let shouldShowUpdateElements = updateAvailable && !mockPreviewActive
+
+                            Group {
+                                update(shouldShowUpdateElements)
+                                massOperations(hoveringAppIcon && !updateAvailable)
+                            }
+                            .padding(.leading, 4)
                         }
-                        hoverTitleLabelView(labelSize: labelSize)
-                        let shouldShowUpdateElements = updateAvailable && !mockPreviewActive
-                        if shouldShowUpdateElements { Spacer() }
-                        update(shouldShowUpdateElements)
-                        massOperations(hoveringAppIcon && !updateAvailable)
+                        .shadow(radius: 2)
                     }
                     .padding(.top, 10)
                     .padding(.horizontal)
-                    .animation(.smooth(duration: 0.15), value: hoveringAppIcon)
 
                 case .shadowed:
                     HStack(spacing: 2) {
@@ -211,13 +217,16 @@ struct WindowPreviewHoverContainer: View {
                                 .frame(width: 24, height: 24)
                         }
                         hoverTitleLabelView(labelSize: labelSize)
+
                         let shouldShowUpdateElements = updateAvailable && !mockPreviewActive
-                        if shouldShowUpdateElements { Spacer() }
-                        update(shouldShowUpdateElements)
-                        massOperations(hoveringAppIcon && !updateAvailable)
+
+                        Group {
+                            update(shouldShowUpdateElements)
+                            massOperations(hoveringAppIcon && !updateAvailable)
+                        }
+                        .padding(.leading, 4)
                     }
                     .padding(EdgeInsets(top: -11.5, leading: 15, bottom: -1.5, trailing: 1.5))
-                    .animation(.smooth(duration: 0.15), value: hoveringAppIcon)
 
                 case .popover:
                     HStack {
@@ -234,10 +243,14 @@ struct WindowPreviewHoverContainer: View {
                                     .frame(width: 24, height: 24)
                             }
                             hoverTitleLabelView(labelSize: labelSize)
+
                             let shouldShowUpdateElements = updateAvailable && !mockPreviewActive
-                            if shouldShowUpdateElements { Spacer() }
-                            update(shouldShowUpdateElements)
-                            massOperations(hoveringAppIcon && !updateAvailable)
+
+                            Group {
+                                update(shouldShowUpdateElements)
+                                massOperations(hoveringAppIcon && !updateAvailable)
+                            }
+                            .padding(.leading, 4)
                         }
                         .padding(.vertical, 5)
                         .padding(.horizontal, 10)
@@ -245,7 +258,6 @@ struct WindowPreviewHoverContainer: View {
                         Spacer()
                     }
                     .offset(y: -30)
-                    .animation(.smooth(duration: 0.15), value: hoveringAppIcon)
                 }
             }
             .onHover { hover in
@@ -285,17 +297,24 @@ struct WindowPreviewHoverContainer: View {
     func massOperations(_ shouldDisplay: Bool) -> some View {
         if shouldDisplay {
             Group {
-                Button("Close All") {
+                Button {
                     closeAllWindows()
+                } label: {
+                    MarqueeText(text: "Close All", startDelay: 1)
+                        .font(.caption)
+                        .lineLimit(1)
                 }
                 .buttonStyle(AccentButtonStyle(small: true))
 
-                Button("Minimize All") {
+                Button {
                     minimizeAllWindows()
+                } label: {
+                    MarqueeText(text: "Minimize All", startDelay: 1)
+                        .font(.caption)
+                        .lineLimit(1)
                 }
                 .buttonStyle(AccentButtonStyle(small: true))
             }
-            .transition(.opacity)
         }
     }
 
@@ -433,9 +452,9 @@ struct WindowPreviewHoverContainer: View {
             Group {
                 if isHorizontal {
                     let chunkedItems = createChunkedItems()
-                    VStack(alignment: .leading, spacing: 16) {
+                    VStack(alignment: .leading, spacing: 24) {
                         ForEach(Array(chunkedItems.enumerated()), id: \.offset) { index, rowItems in
-                            HStack(spacing: 16) {
+                            HStack(spacing: 24) {
                                 ForEach(rowItems, id: \.id) { item in
                                     buildFlowItem(
                                         item: item,
@@ -448,9 +467,9 @@ struct WindowPreviewHoverContainer: View {
                     }
                 } else {
                     let chunkedItems = createChunkedItems()
-                    HStack(alignment: .top, spacing: 16) {
+                    HStack(alignment: .top, spacing: 24) {
                         ForEach(Array(chunkedItems.enumerated()), id: \.offset) { index, colItems in
-                            VStack(spacing: 16) {
+                            VStack(spacing: 24) {
                                 ForEach(colItems, id: \.id) { item in
                                     buildFlowItem(
                                         item: item,
@@ -522,7 +541,7 @@ struct WindowPreviewHoverContainer: View {
                 case .minimize:
                     for window in originalWindows {
                         if !window.isMinimized {
-                            WindowUtil.toggleMinimize(windowInfo: window)
+                            _ = WindowUtil.toggleMinimize(windowInfo: window)
                         }
                     }
                     previewStateCoordinator.setWindows([], dockPosition: dockPosition, bestGuessMonitor: bestGuessMonitor, isMockPreviewActive: mockPreviewActive)
@@ -547,7 +566,7 @@ struct WindowPreviewHoverContainer: View {
         } else {
             for window in originalWindows {
                 if !window.isMinimized {
-                    WindowUtil.toggleMinimize(windowInfo: window)
+                    _ = WindowUtil.toggleMinimize(windowInfo: window)
                 }
             }
             previewStateCoordinator.setWindows([], dockPosition: dockPosition, bestGuessMonitor: bestGuessMonitor, isMockPreviewActive: mockPreviewActive)
@@ -666,41 +685,33 @@ struct WindowPreviewHoverContainer: View {
     }
 
     private func createChunkedItems() -> [[FlowItem]] {
-        // Determine max items per chunk based on orientation and settings
         let isHorizontal = dockPosition.isHorizontalFlow || previewStateCoordinator.windowSwitcherActive
 
         let (maxColumns, maxRows): (Int, Int)
         if previewStateCoordinator.windowSwitcherActive {
-            // Window switcher mode - only use maxRows (always horizontal)
-            maxColumns = 999 // Not used for switcher
+            maxColumns = 999
             maxRows = switcherMaxRows
         } else {
-            // Dock preview mode - use maxRows for bottom dock only, maxColumns for left/right dock
             if dockPosition == .bottom {
-                maxColumns = 999 // Not used for bottom dock
+                maxColumns = 999
                 maxRows = previewMaxRows
             } else {
-                // Left/right dock (and top dock if it exists)
                 maxColumns = previewMaxColumns
-                maxRows = 999 // Not used for side docks
+                maxRows = 999
             }
         }
 
         guard maxColumns > 0, maxRows > 0 else {
-            // If max is 0, create items for all windows
             let allItems = createFlowItems()
             return allItems.isEmpty ? [[]] : [allItems]
         }
 
-        // Create flow items for ALL windows - don't limit them
         var itemsToProcess: [FlowItem] = []
 
-        // Add embedded content first if present
         if embeddedContentType != .none {
             itemsToProcess.append(.embedded)
         }
 
-        // Add ALL windows
         for index in previewStateCoordinator.windows.indices {
             itemsToProcess.append(.window(index))
         }
@@ -708,7 +719,6 @@ struct WindowPreviewHoverContainer: View {
         let totalItems = itemsToProcess.count
 
         if isHorizontal {
-            // Horizontal layout: distribute items across rows, respecting maxRows
             if maxRows == 1 {
                 return itemsToProcess.isEmpty ? [[]] : [itemsToProcess]
             }
@@ -736,7 +746,6 @@ struct WindowPreviewHoverContainer: View {
             return chunks.isEmpty ? [[]] : chunks
 
         } else {
-            // Vertical layout: distribute items across columns, respecting maxColumns
             if maxColumns == 1 {
                 return itemsToProcess.isEmpty ? [itemsToProcess] : [itemsToProcess]
             }

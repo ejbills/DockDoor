@@ -33,15 +33,16 @@ struct CalendarEmptyState: View {
                 .font(.largeTitle)
                 .fontWeight(.light)
                 .imageScale(.medium)
-                .foregroundStyle(.secondary)
+
             Text("No events scheduled for today!")
                 .font(.headline)
-                .foregroundStyle(.secondary)
+
             Text("Enjoy your free day or add some events to your calendar.")
                 .font(.subheadline)
-                .foregroundStyle(.tertiary)
                 .multilineTextAlignment(.center)
+                .foregroundStyle(.secondary)
         }
         .frame(maxWidth: .infinity)
+        .shadow(radius: 2)
     }
 }

@@ -5,7 +5,7 @@ struct MaterialPillStyle: ViewModifier {
         content
             .padding(.horizontal, 8)
             .padding(.vertical, 5)
-            .background(.ultraThinMaterial)
+            .background(BlurView(variant: 18))
             .clipShape(Capsule(style: .continuous))
             .overlay(
                 Capsule(style: .continuous)

@@ -24,10 +24,11 @@ struct WindowPreview: View {
     @Default(.trafficLightButtonsVisibility) var trafficLightButtonsVisibility
     @Default(.trafficLightButtonsPosition) var trafficLightButtonsPosition
     @Default(.windowSwitcherControlPosition) var windowSwitcherControlPosition
+    @Default(.dockPreviewControlPosition) var dockPreviewControlPosition
     @Default(.selectionOpacity) var selectionOpacity
-    @Default(.selectionColor) var selectionColor
-    @Default(.useAccentColorForSelection) var useAccentColorForSelection
-    @Default(.dimInSwitcherUntilSelected) var dimInSwitcherUntilSelected
+    @Default(.unselectedContentOpacity) var unselectedContentOpacity
+    @Default(.hoverHighlightColor) var hoverHighlightColor
+    @Default(.allowDynamicImageSizing) var allowDynamicImageSizing
 
     @Default(.tapEquivalentInterval) var tapEquivalentInterval
     @Default(.previewHoverAction) var previewHoverAction
@@ -45,46 +46,26 @@ struct WindowPreview: View {
                 let inactive = isMinimized || isHidden
                 Image(decorative: cgImage, scale: 1.0)
                     .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .markHidden(isHidden: inactive || (windowSwitcherActive && !isSelected && dimInSwitcherUntilSelected))
-                    .overlay(isSelected && !inactive ? CustomizableFluidGradientView().opacity(0.125) : nil)
+                    .scaledToFit()
+                    .markHidden(isHidden: inactive || (windowSwitcherActive && !isSelected))
+                    .overlay {
+                        if inactive {
+                            Image(systemName: "eye.slash")
+                                .font(.largeTitle)
+                                .foregroundColor(.primary)
+                                .shadow(radius: 2)
+                        }
+                    }
                     .clipShape(uniformCardRadius ? AnyShape(RoundedRectangle(cornerRadius: 12, style: .continuous)) : AnyShape(Rectangle()))
             }
         }
-        .frame(width: max(dimensions.size.width, 50), height: dimensions.size.height, alignment: .center)
-        .frame(maxWidth: dimensions.maxDimensions.width, maxHeight: dimensions.maxDimensions.height)
-        .shadow(radius: isSelected ? 0 : 3)
-        .overlay(alignment: {
-            switch windowTitlePosition {
-            case .bottomLeft: .bottomLeading
-            case .bottomRight: .bottomTrailing
-            case .topRight: .topTrailing
-            case .topLeft: .topLeading
-            }
-        }()) {
-            if !windowSwitcherActive {
-                windowTitleOverlay(selected: isSelected)
-            }
-        }
-        .overlay(alignment: {
-            switch trafficLightButtonsPosition {
-            case .bottomLeft: .bottomLeading
-            case .bottomRight: .bottomTrailing
-            case .topRight: .topTrailing
-            case .topLeft: .topLeading
-            }
-        }()) {
-            if !windowSwitcherActive, !isMinimized, !isHidden, let _ = windowInfo.closeButton {
-                TrafficLightButtons(
-                    displayMode: trafficLightButtonsVisibility,
-                    hoveringOverParentWindow: isSelected || isHoveringOverWindowSwitcherPreview,
-                    onWindowAction: handleWindowAction,
-                    pillStyling: false,
-                    mockPreviewActive: mockPreviewActive
-                )
-                .padding(4)
-            }
-        }
+        .dynamicWindowFrame(
+            allowDynamicSizing: allowDynamicImageSizing,
+            dimensions: dimensions,
+            dockPosition: dockPosition,
+            windowSwitcherActive: windowSwitcherActive
+        )
+        .opacity(isSelected ? 1.0 : unselectedContentOpacity)
     }
 
     private func windowSwitcherContent(_ selected: Bool) -> some View {
@@ -105,20 +86,12 @@ struct WindowPreview: View {
                windowTitle != windowInfo.app.localizedName,
                shouldShowTitle
             {
-                HStack(spacing: 0) {
-                    Text(windowTitle)
-
-                    if windowInfo.isMinimized || windowInfo.isHidden {
-                        Text(" - Inactive").italic()
-                    }
-                }
-                .foregroundStyle(.secondary)
-                .lineLimit(1)
+                MarqueeText(text: windowTitle, startDelay: 1)
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                    .lineLimit(1)
             }
         }
-        .frame(
-            maxWidth: max(dimensions.size.width * 0.6, 70),
-        ).fixedSize(horizontal: true, vertical: false)
 
         let appIconContent = Group {
             if let appIcon = windowInfo.app.icon {
@@ -137,6 +110,14 @@ struct WindowPreview: View {
                     onWindowAction: handleWindowAction,
                     pillStyling: true, mockPreviewActive: mockPreviewActive
                 )
+            } else if windowInfo.isMinimized || windowInfo.isHidden {
+                Text(windowInfo.isMinimized ? "Minimized" : "Hidden")
+                    .font(.subheadline)
+                    .italic()
+                    .foregroundStyle(.secondary)
+                    .padding(4)
+                    .materialPill()
+                    .frame(height: 34)
             }
         }
 
@@ -155,6 +136,7 @@ struct WindowPreview: View {
                     controlsContent
                 }
             }
+            .fixedSize(horizontal: false, vertical: true)
         }
 
         return VStack(spacing: 0) {
@@ -172,6 +154,96 @@ struct WindowPreview: View {
         .padding(windowSwitcherControlPosition == .topLeading ||
             windowSwitcherControlPosition == .topTrailing ?
             .bottom : .top, 4)
+    }
+
+    private func dockPreviewContent(_ selected: Bool) -> some View {
+        let shouldShowTitle = showWindowTitle && (
+            windowTitleDisplayCondition == .all ||
+                windowTitleDisplayCondition == .dockPreviewsOnly
+        )
+
+        // Determine what title to show: window name first, then app name as fallback
+        let titleToShow: String? = if let windowTitle = windowInfo.windowName, !windowTitle.isEmpty {
+            windowTitle
+        } else {
+            windowInfo.app.localizedName
+        }
+
+        let hasTitle = shouldShowTitle &&
+            titleToShow != nil &&
+            (windowTitleVisibility == .alwaysVisible || selected)
+
+        let hasTrafficLights = !windowInfo.isMinimized &&
+            !windowInfo.isHidden &&
+            windowInfo.closeButton != nil &&
+            trafficLightButtonsVisibility != .never
+
+        let titleContent = Group {
+            if hasTitle, let title = titleToShow {
+                MarqueeText(text: title, startDelay: 1)
+                    .font(.subheadline)
+                    .padding(4)
+                    .materialPill()
+            }
+        }
+
+        let controlsContent = Group {
+            if hasTrafficLights {
+                TrafficLightButtons(
+                    displayMode: trafficLightButtonsVisibility,
+                    hoveringOverParentWindow: selected || isHoveringOverDockPeekPreview,
+                    onWindowAction: handleWindowAction,
+                    pillStyling: true,
+                    mockPreviewActive: mockPreviewActive
+                )
+            } else if windowInfo.isMinimized || windowInfo.isHidden {
+                Text(windowInfo.isMinimized ? "Minimized" : "Hidden")
+                    .font(.subheadline)
+                    .italic()
+                    .foregroundStyle(.secondary)
+                    .padding(4)
+                    .materialPill()
+                    .frame(height: 34)
+            }
+        }
+
+        @ViewBuilder
+        func contentRow(isLeadingControls: Bool) -> some View {
+            HStack(spacing: 4) {
+                if isLeadingControls {
+                    controlsContent
+                    Spacer()
+                    titleContent
+                } else {
+                    titleContent
+                    Spacer()
+                    controlsContent
+                }
+            }
+        }
+
+        // Only show the toolbar if there's either a title or traffic lights to display
+        if hasTitle || hasTrafficLights {
+            return AnyView(
+                VStack(spacing: 0) {
+                    switch dockPreviewControlPosition {
+                    case .topLeading:
+                        contentRow(isLeadingControls: false)
+                    case .topTrailing:
+                        contentRow(isLeadingControls: true)
+                    case .bottomLeading:
+                        contentRow(isLeadingControls: false)
+                    case .bottomTrailing:
+                        contentRow(isLeadingControls: true)
+                    }
+                }
+                .padding(dockPreviewControlPosition == .topLeading ||
+                    dockPreviewControlPosition == .topTrailing ?
+                    .bottom : .top, 4)
+            )
+        } else {
+            return AnyView(EmptyView())
+        }
     }
 
     @ViewBuilder
@@ -192,6 +264,12 @@ struct WindowPreview: View {
                     windowSwitcherContent(finalIsSelected)
                 }
 
+                if !windowSwitcherActive, dockPreviewControlPosition == .topLeading ||
+                    dockPreviewControlPosition == .topTrailing
+                {
+                    dockPreviewContent(finalIsSelected)
+                }
+
                 windowContent(
                     isMinimized: windowInfo.isMinimized,
                     isHidden: windowInfo.isHidden,
@@ -203,25 +281,38 @@ struct WindowPreview: View {
                 {
                     windowSwitcherContent(finalIsSelected)
                 }
+
+                if !windowSwitcherActive, dockPreviewControlPosition == .bottomLeading ||
+                    dockPreviewControlPosition == .bottomTrailing
+                {
+                    dockPreviewContent(finalIsSelected)
+                }
             }
             .background {
-                if finalIsSelected {
-                    let highlightColor: Color = if useAccentColorForSelection {
-                        Color(nsColor: .controlAccentColor)
-                    } else {
-                        selectionColor ?? .secondary
+                let cornerRadius = uniformCardRadius ? 20.0 : 0.0
+
+                BlurView(variant: 18)
+                    .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: cornerRadius)
+                            .strokeBorder(Color.primary.opacity(0.1), lineWidth: 1.5)
+                    )
+                    .padding(-6)
+                    .overlay {
+                        if finalIsSelected {
+                            let highlightColor = hoverHighlightColor ?? Color(nsColor: .controlAccentColor)
+                            RoundedRectangle(cornerRadius: cornerRadius)
+                                .fill(highlightColor.opacity(selectionOpacity))
+                                .padding(-6)
+                        }
                     }
-                    RoundedRectangle(cornerRadius: uniformCardRadius ? 14 : 0)
-                        .fill(highlightColor.opacity(selectionOpacity))
-                        .padding(-6)
-                }
             }
         }
         .overlay {
             if isDraggingOver {
-                RoundedRectangle(cornerRadius: uniformCardRadius ? 14 : 0)
-                    .strokeBorder(Color(nsColor: .controlAccentColor), lineWidth: 2)
-                    .padding(-2)
+                RoundedRectangle(cornerRadius: uniformCardRadius ? 20 : 0)
+                    .fill(Color(nsColor: .controlAccentColor).opacity(0.3))
+                    .padding(-6)
                     .opacity(highlightOpacity)
             }
         }
@@ -366,26 +457,5 @@ struct WindowPreview: View {
         dragTimer = nil
         isDraggingOver = false
         highlightOpacity = 0.0
-    }
-
-    @ViewBuilder
-    private func windowTitleOverlay(selected: Bool) -> some View {
-        let shouldShowTitle = showWindowTitle && (
-            windowTitleDisplayCondition == .all ||
-                (windowTitleDisplayCondition == .dockPreviewsOnly && !windowSwitcherActive) ||
-                (windowTitleDisplayCondition == .windowSwitcherOnly && windowSwitcherActive)
-        )
-        if shouldShowTitle, windowTitleVisibility == .alwaysVisible || selected {
-            if let windowTitle = windowInfo.windowName,
-               !windowTitle.isEmpty,
-               windowTitle != windowInfo.app.localizedName
-            {
-                MarqueeText(text: windowTitle, startDelay: 1)
-                    .font(.caption)
-                    .lineLimit(1)
-                    .materialPill()
-                    .padding(4)
-            }
-        }
     }
 }

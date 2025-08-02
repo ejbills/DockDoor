@@ -1,4 +1,3 @@
-import Glur
 import SwiftUI
 
 struct ScreenRecordingWarningView: View {
@@ -10,8 +9,7 @@ struct ScreenRecordingWarningView: View {
                 Image("ScreenRecordWarning")
                     .resizable()
                     .scaledToFit()
-                    .glur(radius: displayExplanation ? 10.0 : 2.0,
-                          direction: .down)
+                    .blur(radius: displayExplanation ? 5.0 : 0.0)
                     .clipShape(RoundedRectangle(cornerRadius: 16))
 
                 VStack(alignment: .leading, spacing: 8) {
