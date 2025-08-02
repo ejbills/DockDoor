@@ -78,7 +78,7 @@ extension WindowPreviewHoverContainer {
             )
 
             // Process each chunk (row/column) to find unified dimensions
-            for (chunkIndex, chunk) in windowChunks.enumerated() {
+            for (_, chunk) in windowChunks.enumerated() {
                 var unifiedHeight: CGFloat = 0
                 var unifiedWidth: CGFloat = 0
 
@@ -123,9 +123,6 @@ extension WindowPreviewHoverContainer {
                     guard windowIndex < windows.count else { continue }
 
                     if let cgImage = windows[windowIndex].image {
-                        let originalSize = CGSize(width: cgImage.width, height: cgImage.height)
-                        let aspectRatio = originalSize.width / originalSize.height
-
                         let windowSize = if orientationIsHorizontal {
                             // For horizontal flow: unified height, let width scale naturally
                             CGSize(width: 0, height: max(unifiedHeight, 50)) // width = 0 means no constraint
