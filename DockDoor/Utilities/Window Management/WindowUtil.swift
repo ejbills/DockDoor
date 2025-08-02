@@ -204,18 +204,6 @@ enum WindowUtil {
     }
 
     static func isValidElement(_ element: AXUIElement) -> Bool {
-        // Check if this is an orphaned window association by checking if it's an app element
-        // being used as a placeholder for an orphaned window
-        do {
-            let role = try element.role()
-            if role == kAXApplicationRole {
-                // This is likely an orphaned window placeholder - consider it valid
-                return true
-            }
-        } catch {
-            // If we can't get the role, continue with normal validation
-        }
-
         do {
             // Try to get the window's position
             let position = try element.position()
@@ -464,34 +452,18 @@ enum WindowUtil {
         let content = try await SCShareableContent.excludingDesktopWindows(true, onScreenWindowsOnly: true)
         let group = LimitedTaskGroup<Void>(maxConcurrentTasks: 4)
 
-        // Get windows that belong to this app normally
-        let allAppWindows = content.windows.filter {
+        let activeWindowIDs = content.windows.filter {
             $0.owningApplication?.processID == app.processIdentifier
-        }
+        }.map(\.windowID)
 
-        // Also get orphaned windows that have been manually associated with this app
-        let orphanedAssociations = Defaults[.orphanedWindowAssociations]
-        let associatedOrphanedWindows = content.windows.filter { window in
-            orphanedAssociations.contains { association in
-                // Use enhanced matching that works even if window ID changed
-                association.bundleIdentifier == app.bundleIdentifier && association.matches(window: window)
-            }
-        }
-
-        let combinedWindows = Set(allAppWindows + associatedOrphanedWindows)
-
-        let activeWindowIDs = Array(combinedWindows).map(\.windowID)
-
-        for window in combinedWindows {
+        for window in content.windows where window.owningApplication?.processID == app.processIdentifier {
             await group.addTask { try await captureAndCacheWindowInfo(window: window, app: app) }
         }
 
         _ = try await group.waitForAll()
 
         if let purifiedWindows = await WindowUtil.purifyAppCache(with: app.processIdentifier, removeAll: false) {
-            if Defaults[.ignoreAppsWithSingleWindow], purifiedWindows.count <= 1 {
-                return []
-            }
+            guard !Defaults[.ignoreAppsWithSingleWindow] || purifiedWindows.count > 1 else { return [] }
 
             let inactiveWindows = purifiedWindows.filter {
                 !activeWindowIDs.contains($0.id) && ($0.isMinimized || $0.isHidden)
@@ -576,12 +548,6 @@ enum WindowUtil {
     static func captureAndCacheWindowInfo(window: SCWindow, app: NSRunningApplication, isMinimizedOrHidden: Bool = false) async throws {
         let windowID = window.windowID
 
-        // Check if this is an orphaned window that has been manually associated
-        let orphanedAssociations = Defaults[.orphanedWindowAssociations]
-        let isOrphanedAssociation = orphanedAssociations.contains { association in
-            association.bundleIdentifier == app.bundleIdentifier && association.matches(window: window)
-        }
-
         if isMinimizedOrHidden {
             if let existingWindow = desktopSpaceWindowCacheManager.readCache(pid: app.processIdentifier).first(where: { $0.id == windowID }),
                let actualSCWindow = existingWindow.scWindow
@@ -598,21 +564,12 @@ enum WindowUtil {
             return
         }
 
-        guard window.owningApplication != nil else {
-            return
-        }
-        guard window.isOnScreen else {
-            return
-        }
-        guard window.windowLayer == 0 else {
-            return
-        }
-        guard window.frame.size.width >= 100 else {
-            return
-        }
-        guard window.frame.size.height >= 100 else {
-            return
-        }
+        guard window.owningApplication != nil,
+              window.isOnScreen,
+              window.windowLayer == 0,
+              window.frame.size.width >= 100,
+              window.frame.size.height >= 100
+        else { return }
 
         guard let bundleId = app.bundleIdentifier else {
             purgeAppCache(with: app.processIdentifier)
@@ -668,34 +625,6 @@ enum WindowUtil {
         }
 
         guard let windowRef = findWindow(matchingWindow: window, in: axWindows) else {
-            // For orphaned associations, we might not be able to match with AX windows
-            // In that case, try to create a basic WindowInfo with a special marker
-            if isOrphanedAssociation {
-                // Create a special orphaned window marker AX element
-                let orphanedMarkerElement = AXUIElementCreateApplication(app.processIdentifier)
-
-                let windowInfo = WindowInfo(
-                    windowProvider: window,
-                    app: app,
-                    image: nil,
-                    axElement: orphanedMarkerElement,
-                    appAxElement: AXUIElementCreateApplication(app.processIdentifier),
-                    closeButton: nil,
-                    isMinimized: false,
-                    isHidden: false,
-                    lastAccessedTime: Date.now
-                )
-
-                await Task.detached(priority: .userInitiated) {
-                    if let image = try? await captureWindowImage(window: window) {
-                        var mutableCopy = windowInfo
-                        mutableCopy.image = image
-                        updateDesktopSpaceWindowCache(with: mutableCopy)
-                    }
-                }.value
-                return
-            }
-
             return
         }
 
