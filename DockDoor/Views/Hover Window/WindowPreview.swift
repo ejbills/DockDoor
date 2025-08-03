@@ -417,6 +417,7 @@ struct WindowPreview: View {
         } else {
             fullPreviewTimer?.invalidate()
             fullPreviewTimer = nil
+            SharedPreviewWindowCoordinator.activeInstance?.hideFullPreviewWindow()
         }
     }
 
