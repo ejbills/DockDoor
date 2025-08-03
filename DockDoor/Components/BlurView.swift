@@ -13,13 +13,13 @@ struct BlurView: View {
         if #available(macOS 26.0, *) {
             GlassEffectView(variant: variant, frostedTranslucentLayer: frostedTranslucentLayer)
         } else {
-        Rectangle().fill(.ultraThinMaterial)
+            Rectangle().fill(.ultraThinMaterial)
         }
     }
 }
 
- @available(macOS 26.0, *)
- struct GlassEffectView: NSViewRepresentable {
+@available(macOS 26.0, *)
+struct GlassEffectView: NSViewRepresentable {
     let variant: Int
     let frostedTranslucentLayer: Bool
     let backgroundOpacity: CGFloat = 0.725
@@ -78,7 +78,7 @@ struct BlurView: View {
     private func setGlassVariant(_ glassView: NSGlassEffectView, variant: Int) {
         glassView.setValue(NSNumber(value: variant), forKey: "_variant")
     }
- }
+}
 
 struct MaterialBlurView: NSViewRepresentable {
     var material: NSVisualEffectView.Material

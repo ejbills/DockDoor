@@ -117,6 +117,7 @@
 		BBBD4AF82C8D71560074FFCF /* ConfettiSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = BBBD4AF72C8D71560074FFCF /* ConfettiSwiftUI */; };
 		BBC57AA82E3A6BED0078B262 /* DynamicWindowFrameModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBC57AA72E3A6BED0078B262 /* DynamicWindowFrameModifier.swift */; };
 		BBCFAE402C266234002E1516 /* FirstTimeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBCFAE3F2C266234002E1516 /* FirstTimeView.swift */; };
+		BBD182AE2E3EE37500A81D69 /* WindowSwitcherStateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBD182AD2E3EE37500A81D69 /* WindowSwitcherStateManager.swift */; };
 		BBE033CC2DD92061006417B0 /* CGimage.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE033CB2DD92061006417B0 /* CGimage.swift */; };
 		BBE153BE2D2126D000CD3D4A /* MaterialPill.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE153BD2D2126C000CD3D4A /* MaterialPill.swift */; };
 		BBE153C02D21FA2700CD3D4A /* StyledGroupBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE153BF2D21FA2300CD3D4A /* StyledGroupBox.swift */; };
@@ -243,6 +244,7 @@
 		BBBD4AF42C8D671A0074FFCF /* NSImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSImage.swift; sourceTree = "<group>"; };
 		BBC57AA72E3A6BED0078B262 /* DynamicWindowFrameModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicWindowFrameModifier.swift; sourceTree = "<group>"; };
 		BBCFAE3F2C266234002E1516 /* FirstTimeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstTimeView.swift; sourceTree = "<group>"; };
+		BBD182AD2E3EE37500A81D69 /* WindowSwitcherStateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowSwitcherStateManager.swift; sourceTree = "<group>"; };
 		BBE033CB2DD92061006417B0 /* CGimage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGimage.swift; sourceTree = "<group>"; };
 		BBE153BD2D2126C000CD3D4A /* MaterialPill.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaterialPill.swift; sourceTree = "<group>"; };
 		BBE153BF2D21FA2300CD3D4A /* StyledGroupBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyledGroupBox.swift; sourceTree = "<group>"; };
@@ -447,6 +449,7 @@
 				0596C2C22C3E060D00DCABEF /* PrivateApis.swift */,
 				BB2567C52C10C5F000C0C93E /* DockUtils.swift */,
 				BB157B7A2C0E343000997315 /* SystemPreferencesHelper.swift */,
+				BBD182AD2E3EE37500A81D69 /* WindowSwitcherStateManager.swift */,
 				BB157B7F2C0E8E6700997315 /* MessageUtil.swift */,
 				BB157B812C0EB29E00997315 /* DockObserver.swift */,
 				BBF6C6232C1B4B4400BF1D40 /* KeybindHelper.swift */,
@@ -781,6 +784,7 @@
 				BBF383972C94A26200B39A23 /* sliderSetting.swift in Sources */,
 				BBAC6B452D15FA8900A0F370 /* AXValue.swift in Sources */,
 				BB157B802C0E8E6700997315 /* MessageUtil.swift in Sources */,
+				BBD182AE2E3EE37500A81D69 /* WindowSwitcherStateManager.swift in Sources */,
 				BB638F242E0218F80010077D /* CalendarEmptyState.swift in Sources */,
 				BB638F1A2E0218CD0010077D /* CalendarEmbeddedView.swift in Sources */,
 				05C0C7182C60629C000ADAC6 /* AXUIElement.swift in Sources */,

@@ -17,6 +17,9 @@ struct UserKeyBind: Codable, Defaults.Serializable {
 
 private class WindowSwitchingCoordinator {
     private var isProcessingSwitcher = false
+    private let stateManager = WindowSwitcherStateManager()
+    private var uiRenderingTask: Task<Void, Never>?
+    private var currentSessionId = UUID()
 
     @MainActor
     func handleWindowSwitching(
@@ -28,38 +31,46 @@ private class WindowSwitchingCoordinator {
         isProcessingSwitcher = true
         defer { isProcessingSwitcher = false }
 
-        if previewCoordinator.isVisible {
-            previewCoordinator.cycleWindows(goBackwards: isShiftPressed)
+        if stateManager.isActive {
+            if isShiftPressed {
+                stateManager.cycleBackward()
+            } else {
+                stateManager.cycleForward()
+            }
+            previewCoordinator.windowSwitcherCoordinator.setIndex(to: stateManager.currentIndex)
         } else if isModifierPressed {
-            await showHoverWindow(
-                previewCoordinator: previewCoordinator,
-                isModifierPressed: isModifierPressed
+            await initializeWindowSwitching(
+                previewCoordinator: previewCoordinator
             )
         }
     }
 
     @MainActor
-    private func showHoverWindow(
-        previewCoordinator: SharedPreviewWindowCoordinator,
-        isModifierPressed: Bool
+    private func initializeWindowSwitching(
+        previewCoordinator: SharedPreviewWindowCoordinator
     ) async {
-        guard isModifierPressed else { return }
-
         let windows = WindowUtil.getAllWindowsOfAllApps()
-        guard !windows.isEmpty else {
-            print("No windows found for switcher.")
-            return
-        }
+        guard !windows.isEmpty else { return }
+
+        currentSessionId = UUID()
+        let sessionId = currentSessionId
+
+        stateManager.initializeWithWindows(windows)
 
         let currentMouseLocation = DockObserver.getMousePosition()
         let targetScreen = getTargetScreenForSwitcher()
 
-        displayHoverWindow(
-            previewCoordinator: previewCoordinator,
-            windows: windows,
-            currentMouseLocation: currentMouseLocation,
-            targetScreen: targetScreen
-        )
+        uiRenderingTask?.cancel()
+        uiRenderingTask = Task { @MainActor in
+            await renderWindowSwitcherUI(
+                previewCoordinator: previewCoordinator,
+                windows: windows,
+                currentMouseLocation: currentMouseLocation,
+                targetScreen: targetScreen,
+                initialIndex: stateManager.currentIndex,
+                sessionId: sessionId
+            )
+        }
 
         Task.detached(priority: .low) {
             await WindowUtil.updateAllWindowsInCurrentSpace()
@@ -67,16 +78,21 @@ private class WindowSwitchingCoordinator {
     }
 
     @MainActor
-    private func displayHoverWindow(
+    private func renderWindowSwitcherUI(
         previewCoordinator: SharedPreviewWindowCoordinator,
         windows: [WindowInfo],
         currentMouseLocation: CGPoint,
-        targetScreen: NSScreen
-    ) {
-        if Defaults[.useClassicWindowOrdering], windows.count >= 2 {
-            previewCoordinator.windowSwitcherCoordinator.setIndex(to: 1)
-        }
+        targetScreen: NSScreen,
+        initialIndex: Int,
+        sessionId: UUID
+    ) async {
+        guard sessionId == currentSessionId else { return }
+        guard stateManager.isActive else { return }
 
+        if previewCoordinator.isVisible, previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive {
+            previewCoordinator.windowSwitcherCoordinator.setIndex(to: stateManager.currentIndex)
+            return
+        }
         let showWindowLambda = { (mouseLocation: NSPoint?, mouseScreen: NSScreen?) in
             previewCoordinator.showWindow(
                 appName: "Window Switcher",
@@ -92,6 +108,11 @@ private class WindowSwitchingCoordinator {
                     }
                 }
             )
+
+            // Set the correct index after the window is shown, with a small delay to ensure setWindows completes
+            DispatchQueue.main.async {
+                previewCoordinator.windowSwitcherCoordinator.setIndex(to: self.stateManager.currentIndex)
+            }
         }
 
         switch Defaults[.windowSwitcherPlacementStrategy] {
@@ -116,6 +137,26 @@ private class WindowSwitchingCoordinator {
         let mouseLocation = DockObserver.getMousePosition()
         return NSScreen.screenContainingMouse(mouseLocation)
     }
+
+    func selectCurrentWindow() -> WindowInfo? {
+        guard stateManager.isActive else { return nil }
+
+        let selectedWindow = stateManager.getCurrentWindow()
+        currentSessionId = UUID()
+        stateManager.reset()
+        uiRenderingTask?.cancel()
+        return selectedWindow
+    }
+
+    func isStateManagerActive() -> Bool {
+        stateManager.isActive
+    }
+
+    func cancelSwitching() {
+        currentSessionId = UUID()
+        stateManager.reset()
+        uiRenderingTask?.cancel()
+    }
 }
 
 class KeybindHelper {
@@ -125,6 +166,7 @@ class KeybindHelper {
 
     private var isSwitcherModifierKeyPressed: Bool = false
     private var isShiftKeyPressedGeneral: Bool = false
+    private var hasProcessedModifierRelease: Bool = false
 
     private var eventTap: CFMachPort?
     private var runLoopSource: CFRunLoopSource?
@@ -259,6 +301,10 @@ class KeybindHelper {
         isSwitcherModifierKeyPressed = currentSwitcherModifierIsPressed
         isShiftKeyPressedGeneral = currentShiftState
 
+        if !oldSwitcherModifierState && currentSwitcherModifierIsPressed {
+            hasProcessedModifierRelease = false
+        }
+
         // Detect when Shift is newly pressed during active window switching or dock previews
         if !oldShiftState, currentShiftState,
            previewCoordinator.isVisible,
@@ -266,14 +312,22 @@ class KeybindHelper {
            (!previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive)
         {
             Task { @MainActor in
-                self.previewCoordinator.cycleWindows(goBackwards: true)
+                await self.windowSwitchingCoordinator.handleWindowSwitching(
+                    previewCoordinator: self.previewCoordinator,
+                    isModifierPressed: currentSwitcherModifierIsPressed,
+                    isShiftPressed: true
+                )
             }
         }
 
         if !Defaults[.preventSwitcherHide] {
-            if oldSwitcherModifierState, !isSwitcherModifierKeyPressed {
+            if oldSwitcherModifierState, !isSwitcherModifierKeyPressed, !hasProcessedModifierRelease {
+                hasProcessedModifierRelease = true
                 Task { @MainActor in
-                    if self.previewCoordinator.isVisible, self.previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive {
+                    if let selectedWindow = self.windowSwitchingCoordinator.selectCurrentWindow() {
+                        WindowUtil.bringWindowToFront(windowInfo: selectedWindow)
+                        self.previewCoordinator.hideWindow()
+                    } else if self.previewCoordinator.isVisible, self.previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive {
                         self.previewCoordinator.selectAndBringToFrontCurrentWindow()
                     }
                 }
@@ -294,7 +348,10 @@ class KeybindHelper {
 
         if previewIsCurrentlyVisible {
             if keyCode == kVK_Escape {
-                return (true, { await self.previewCoordinator.hideWindow() })
+                return (true, {
+                    self.windowSwitchingCoordinator.cancelSwitching()
+                    await self.previewCoordinator.hideWindow()
+                })
             }
 
             if flags.contains(.maskCommand), previewCoordinator.windowSwitcherCoordinator.currIndex >= 0 {
@@ -321,7 +378,13 @@ class KeybindHelper {
         if previewIsCurrentlyVisible {
             if keyCode == kVK_Tab {
                 // Tab always goes forward, backwards navigation is handled by Shift modifier changes
-                return (true, { await self.previewCoordinator.cycleWindows(goBackwards: false) })
+                return (true, {
+                    await self.windowSwitchingCoordinator.handleWindowSwitching(
+                        previewCoordinator: self.previewCoordinator,
+                        isModifierPressed: self.isSwitcherModifierKeyPressed,
+                        isShiftPressed: false
+                    )
+                })
             }
 
             switch keyCode {
@@ -339,7 +402,14 @@ class KeybindHelper {
                 return (true, { await self.previewCoordinator.navigateWithArrowKey(direction: dir) })
             case Int64(kVK_Return):
                 if previewCoordinator.windowSwitcherCoordinator.currIndex >= 0 {
-                    return (true, { await self.previewCoordinator.selectAndBringToFrontCurrentWindow() })
+                    return (true, {
+                        if let selectedWindow = self.windowSwitchingCoordinator.selectCurrentWindow() {
+                            WindowUtil.bringWindowToFront(windowInfo: selectedWindow)
+                            await self.previewCoordinator.hideWindow()
+                        } else {
+                            await self.previewCoordinator.selectAndBringToFrontCurrentWindow()
+                        }
+                    })
                 }
             default:
                 break
@@ -361,6 +431,7 @@ class KeybindHelper {
 
     @MainActor
     private func handleKeybindActivation() {
+        hasProcessedModifierRelease = false
         Task { @MainActor in
             await windowSwitchingCoordinator.handleWindowSwitching(
                 previewCoordinator: previewCoordinator,
