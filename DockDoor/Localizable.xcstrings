@@ -630,7 +630,7 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "-%@"
           }
         },
@@ -2347,8 +2347,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "+%lld more"
+            "state" : "translated",
+            "value" : "+%lld en plus"
           }
         },
         "he" : {
@@ -2537,7 +2537,7 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "×"
           }
         },
@@ -5014,8 +5014,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Acknowledgments"
+            "state" : "translated",
+            "value" : "Crédits"
           }
         },
         "he" : {
@@ -5775,8 +5775,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add App"
+            "state" : "translated",
+            "value" : "Ajouter l’application"
           }
         },
         "he" : {
@@ -5965,8 +5965,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Add App to Blacklist"
+            "state" : "translated",
+            "value" : "Ajouter l’application à la liste noire"
           }
         },
         "he" : {
@@ -7297,8 +7297,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "All window previews show a gray background. When hovered, the background changes to the accent color or custom color below."
+            "state" : "translated",
+            "value" : "Tous les aperçus de fenêtres affichent un fond gris. Quand ils sont survolés, le fond change pour la couleur d'accentuation ou la couleur personnalisée ci-dessous."
           }
         },
         "he" : {
@@ -7487,8 +7487,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Allow dynamic image sizing"
+            "state" : "translated",
+            "value" : "Autoriser le dimensionnement d’image dynamique"
           }
         },
         "he" : {
@@ -7677,8 +7677,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Allow special app controls to be pinned to the screen via right-click menu."
+            "state" : "translated",
+            "value" : "Autoriser les contrôles d’application spéciaux à être épinglés à l’écran via le menu du clic droit."
           }
         },
         "he" : {
