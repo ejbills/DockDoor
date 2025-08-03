@@ -38,6 +38,36 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://buymeacoffee.com/keplercafe</div>
 
+<a id="1.19"></a>
+# [Release 1.19](https://github.com/ejbills/DockDoor/releases/tag/1.19) - 2025-08-02
+
+# DockDoor v1.19
+
+## ✨ New Features
+- You can now specify exact pixel values for DockDoor windows
+- Added contributor section to support tab
+- Added code to prepare for liquid glass in macOS 26
+- Clicking dock icon with the app already focused will bring forward the dock preview
+
+## 🎨 UI/UX Redesigns
+- Completely redesigned the dock preview UI to be consistent with window switcher
+- Completely redesigned window sizing options
+- UX improvements across the board for more consistent visuals
+
+## 🔧 Improvements & Stability
+- Improved visual elements consistency
+- Enhanced glass effects support
+- Better window preview updates
+- Enhanced window sizing control
+- Improved dock preview styling
+
+⚠️ This  update changes a lot of code. Report issues if you find them.
+
+
+
+[Changes][1.19]
+
+
 <a id="1.18.5"></a>
 # [Release 1.18.5](https://github.com/ejbills/DockDoor/releases/tag/1.18.5) - 2025-07-27
 
@@ -1315,6 +1345,7 @@ v1.0
 [Changes][releases]
 
 
+[1.19]: https://github.com/ejbills/DockDoor/compare/1.18.5...1.19
 [1.18.5]: https://github.com/ejbills/DockDoor/compare/1.18.4...1.18.5
 [1.18.4]: https://github.com/ejbills/DockDoor/compare/v1.18.3...1.18.4
 [v1.18.3]: https://github.com/ejbills/DockDoor/compare/v1.18.2...v1.18.3
