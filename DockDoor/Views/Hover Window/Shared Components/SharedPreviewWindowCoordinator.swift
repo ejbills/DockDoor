@@ -296,7 +296,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         let shouldAnimate = animated && frame != self.frame && Defaults[.showAnimations]
 
         if shouldAnimate {
-            let distanceThreshold: CGFloat = 100			
+            let distanceThreshold: CGFloat = 100
             let distance = previousHoverWindowOrigin.map { frame.origin.distance(to: $0) } ?? distanceThreshold + 1
             if distance > distanceThreshold {
                 let dockPosition = DockUtils.getDockPosition()
