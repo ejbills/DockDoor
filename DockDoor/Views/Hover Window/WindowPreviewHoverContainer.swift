@@ -485,6 +485,7 @@ struct WindowPreviewHoverContainer: View {
             .frame(alignment: .topLeading)
             .globalPadding(20)
         }
+        .padding(2)
         .animation(.smooth(duration: 0.1), value: previewStateCoordinator.windows)
         .onChange(of: previewStateCoordinator.currIndex) { newIndex in
             if showAnimations {
