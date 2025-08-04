@@ -1,7 +1,7 @@
 import Defaults
 import SwiftUI
 
-// Manages window element states and presentation of window switcher (and associated cycling
+// Pure UI state container for window preview presentation
 class PreviewStateCoordinator: ObservableObject {
     @Published var currIndex: Int = -1
     @Published var windowSwitcherActive: Bool = false
@@ -40,37 +40,14 @@ class PreviewStateCoordinator: ObservableObject {
                 recomputeAndPublishDimensions(dockPosition: dockPosition, bestGuessMonitor: monitor)
             }
         }
-
-        if windowSwitcherActive {
-            if !oldSwitcherState || currIndex < 0 { // If just activated or was unselected
-                if Defaults[.useClassicWindowOrdering], windows.count >= 2 {
-                    currIndex = 1
-                } else if !windows.isEmpty {
-                    currIndex = 0
-                } else {
-                    currIndex = -1 // No windows to select
-                }
-            }
-        } else {
-            currIndex = -1 // Dock previews have no initial selection
-        }
     }
 
     @MainActor
     func setIndex(to: Int) {
-        // If window switcher is active, currIndex must be valid if windows exist
-        if windowSwitcherActive {
-            if !windows.isEmpty {
-                currIndex = max(0, min(to, windows.count - 1))
-            } else {
-                currIndex = -1
-            }
+        if to >= 0, to < windows.count {
+            currIndex = to
         } else {
-            if to >= 0, to < windows.count {
-                currIndex = to
-            } else {
-                currIndex = -1 // Allow unselecting or invalid index becomes -1
-            }
+            currIndex = -1
         }
     }
 
@@ -79,21 +56,8 @@ class PreviewStateCoordinator: ObservableObject {
         windows = newWindows
         lastKnownBestGuessMonitor = bestGuessMonitor
 
-        if windowSwitcherActive {
-            if currIndex >= windows.count || (currIndex < 0 && !windows.isEmpty) {
-                if Defaults[.useClassicWindowOrdering], windows.count >= 2 {
-                    currIndex = 1
-                } else if !windows.isEmpty {
-                    currIndex = 0
-                } else {
-                    currIndex = -1
-                }
-            } else if windows.isEmpty { // If list became empty
-                currIndex = -1
-            }
-        } else {
-            // For dock previews, always reset to no initial selection when windows are set/reset
-            currIndex = -1
+        if currIndex >= windows.count {
+            currIndex = windows.isEmpty ? -1 : windows.count - 1
         }
 
         recomputeAndPublishDimensions(dockPosition: dockPosition, bestGuessMonitor: bestGuessMonitor, isMockPreviewActive: isMockPreviewActive)
@@ -110,33 +74,22 @@ class PreviewStateCoordinator: ObservableObject {
         guard indexToRemove >= 0, indexToRemove < windows.count else { return }
 
         let oldCurrIndex = currIndex
-
         windows.remove(at: indexToRemove)
 
-        let newWindowsCount = windows.count
-
-        if newWindowsCount == 0 {
+        if windows.isEmpty {
             currIndex = -1
             SharedPreviewWindowCoordinator.activeInstance?.hideWindow()
             return
         }
 
         if oldCurrIndex == indexToRemove {
-            currIndex = min(indexToRemove, newWindowsCount - 1)
+            currIndex = min(indexToRemove, windows.count - 1)
         } else if oldCurrIndex > indexToRemove {
             currIndex = oldCurrIndex - 1
         }
 
-        if windowSwitcherActive {
-            if currIndex < 0, newWindowsCount > 0 {
-                currIndex = 0
-            } else if currIndex >= newWindowsCount {
-                currIndex = newWindowsCount - 1
-            }
-        } else {
-            if currIndex >= newWindowsCount {
-                currIndex = newWindowsCount - 1
-            }
+        if currIndex >= windows.count {
+            currIndex = windows.count - 1
         }
 
         // Recompute dimensions after removing window

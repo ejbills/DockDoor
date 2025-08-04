@@ -104,11 +104,12 @@ class WindowManipulationObservers {
 
         // Get the focused window when app becomes active (this is the window user clicked on)
         let appElement = AXUIElementCreateApplication(app.processIdentifier)
-        doAfter(0.45, action: { // allow space switch animation
-            if let focusedWindow = try? appElement.focusedWindow() {
-                WindowUtil.updateWindowDateTime(element: focusedWindow, app: app)
-            }
-        })
+        if let focusedWindow = try? appElement.focusedWindow(),
+           let windowParentPid = try? focusedWindow.pid(),
+           windowParentPid == app.processIdentifier
+        {
+            WindowUtil.updateWindowDateTime(element: focusedWindow, app: app)
+        }
     }
 
     private func createObserverForApp(_ app: NSRunningApplication) {
