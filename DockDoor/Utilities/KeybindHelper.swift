@@ -380,11 +380,15 @@ class KeybindHelper {
             if keyCode == kVK_Tab {
                 // Tab always goes forward, backwards navigation is handled by Shift modifier changes
                 return (true, {
-                    await self.windowSwitchingCoordinator.handleWindowSwitching(
-                        previewCoordinator: self.previewCoordinator,
-                        isModifierPressed: self.isSwitcherModifierKeyPressed,
-                        isShiftPressed: false
-                    )
+                    if self.previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive {
+                        await self.windowSwitchingCoordinator.handleWindowSwitching(
+                            previewCoordinator: self.previewCoordinator,
+                            isModifierPressed: self.isSwitcherModifierKeyPressed,
+                            isShiftPressed: false
+                        )
+                    } else {
+                        await self.previewCoordinator.navigateWithArrowKey(direction: .right)
+                    }
                 })
             }
 
