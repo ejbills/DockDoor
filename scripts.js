@@ -344,12 +344,28 @@ document.addEventListener('DOMContentLoaded', function() {
         animateLookielooSection();
     }
     
-    // Track LookieLoo clicks (optional analytics)
-    const lookielooLinks = document.querySelectorAll('.lookieloo-cta a');
-    lookielooLinks.forEach(link => {
-        link.addEventListener('click', () => {
-            // Optional: Send analytics event
-            console.log('LookieLoo link clicked:', link.href);
+    // Privacy Policy Modal Logic
+    const privacyModal = document.getElementById('privacy-modal');
+    const privacyPolicyLink = document.querySelector('.privacy-policy-link');
+    const privacyCloseButtons = document.querySelectorAll('.privacy-modal-close');
+
+    if (privacyPolicyLink && privacyModal) {
+        privacyPolicyLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            privacyModal.classList.add('active');
         });
-    });
+
+        privacyCloseButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                privacyModal.classList.remove('active');
+            });
+        });
+
+        // Close modal when clicking outside
+        privacyModal.addEventListener('click', (e) => {
+            if (e.target === privacyModal) {
+                privacyModal.classList.remove('active');
+            }
+        });
+    }
 });
