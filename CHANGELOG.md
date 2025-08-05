@@ -43,20 +43,18 @@
 
 
 ## ✨ New Features
-- Glass effect support
-  - Liquid glass transitions
-  - Enhanced transparency layers
+- Quick window switcher
+  - Tab navigation mode
+  - Classic window ordering
 
 ## 🔧 Improvements & Stability
-- Improved window switching
-  - Faster UI rendering
-  - Better keyboard navigation
-- Enhanced preview animations
-  - Reduced distance threshold
-  - Smoother transitions
-- Better window tracking
-  - Improved focus detection
-  - Fixed timing issues
+- Glass visual effects
+- Window switching animation
+- Preview window timing
+
+## 🐛 Bug Fixes
+- Window tap cancellation
+- Preview window hiding
 
 
 [Changes][1.20]
