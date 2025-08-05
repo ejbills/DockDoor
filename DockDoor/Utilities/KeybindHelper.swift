@@ -104,6 +104,7 @@ private class WindowSwitchingCoordinator {
                 overrideDelay: true,
                 centeredHoverWindowState: .windowSwitcher,
                 onWindowTap: {
+                    self.cancelSwitching()
                     Task { @MainActor in
                         previewCoordinator.hideWindow()
                     }
@@ -379,7 +380,7 @@ class KeybindHelper {
         if previewIsCurrentlyVisible {
             if keyCode == kVK_Tab {
                 // Tab always goes forward, backwards navigation is handled by Shift modifier changes
-                return (true, {
+                return (true, { @MainActor in
                     if self.previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive {
                         await self.windowSwitchingCoordinator.handleWindowSwitching(
                             previewCoordinator: self.previewCoordinator,
@@ -387,7 +388,7 @@ class KeybindHelper {
                             isShiftPressed: false
                         )
                     } else {
-                        await self.previewCoordinator.navigateWithArrowKey(direction: .right)
+                        self.previewCoordinator.navigateWithArrowKey(direction: .right)
                     }
                 })
             }
