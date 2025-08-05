@@ -1,6 +1,7 @@
 import AppKit
 import ApplicationServices
 import Cocoa
+import Defaults
 
 private var windowCreationWorkItem: DispatchWorkItem?
 private let windowCreationDebounceInterval: TimeInterval = 1
@@ -74,7 +75,10 @@ class WindowManipulationObservers {
         guard let app = notification.userInfo?[NSWorkspace.applicationUserInfoKey] as? NSRunningApplication else { return }
         WindowUtil.purgeAppCache(with: app.processIdentifier)
         removeObserver(for: app.processIdentifier)
-        previewCoordinator.hideWindow()
+
+        if !Defaults[.keepPreviewOnAppTerminate] {
+            previewCoordinator.hideWindow()
+        }
     }
 
     @objc private func activeSpaceDidChange(_ notification: Notification) {

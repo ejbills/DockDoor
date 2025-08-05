@@ -36186,6 +36186,9 @@
         }
       }
     },
+    "Keep preview when app terminates" : {
+
+    },
     "Keep previews visible during lateral movement" : {
       "localizations" : {
         "af" : {
@@ -80751,6 +80754,9 @@
           }
         }
       }
+    },
+    "When an app terminates, remove only its windows from the preview instead of hiding the entire preview." : {
+
     },
     "When embedded mode is enabled, show big controls instead of embedded ones if all windows are minimized/hidden or there are no windows." : {
       "localizations" : {

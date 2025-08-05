@@ -21,7 +21,7 @@ final class WindowSwitcherStateManager: ObservableObject {
             }
         } else {
             currentIndex = -1
-        }		
+        }
 
         isActive = true
     }

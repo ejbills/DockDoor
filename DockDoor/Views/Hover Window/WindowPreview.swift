@@ -367,7 +367,7 @@ struct WindowPreview: View {
 
                 Button(role: .destructive, action: { handleWindowAction(.quit) }) {
                     if NSEvent.modifierFlags.contains(.option) {
-                        Label("Force Quit", systemImage: "power.square.fill")
+                        Label("Force Quit", systemImage: "power")
                     } else {
                         Label("Quit", systemImage: "minus.square.fill")
                     }

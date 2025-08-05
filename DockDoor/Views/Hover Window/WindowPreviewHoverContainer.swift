@@ -593,7 +593,17 @@ struct WindowPreviewHoverContainer: View {
         switch action {
         case .quit:
             WindowUtil.quitApp(windowInfo: window, force: NSEvent.modifierFlags.contains(.option))
-            onWindowTap?()
+
+            if Defaults[.keepPreviewOnAppTerminate] {
+                let appPID = window.app.processIdentifier
+                for i in stride(from: previewStateCoordinator.windows.count - 1, through: 0, by: -1) {
+                    if previewStateCoordinator.windows[i].app.processIdentifier == appPID {
+                        previewStateCoordinator.removeWindow(at: i)
+                    }
+                }
+            } else {
+                onWindowTap?()
+            }
 
         case .close:
             WindowUtil.closeWindow(windowInfo: window)

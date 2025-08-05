@@ -88,6 +88,7 @@ struct MainSettingsView: View {
     @Default(.showMenuBarIcon) var showMenuBarIcon
     @Default(.enableWindowSwitcher) var enableWindowSwitcher
     @Default(.enableDockPreviews) var enableDockPreviews
+    @Default(.keepPreviewOnAppTerminate) var keepPreviewOnAppTerminate
     @Default(.includeHiddenWindowsInSwitcher) var includeHiddenWindowsInSwitcher
     @Default(.useClassicWindowOrdering) var useClassicWindowOrdering
     @Default(.limitSwitcherToFrontmostApp) var limitSwitcherToFrontmostApp
@@ -389,6 +390,15 @@ struct MainSettingsView: View {
                     .font(.caption)
                     .foregroundColor(.secondary)
                     .padding(.leading, 20)
+
+                if enableDockPreviews {
+                    Toggle(isOn: $keepPreviewOnAppTerminate) { Text("Keep preview when app terminates") }
+                        .padding(.leading, 20)
+                    Text("When an app terminates, remove only its windows from the preview instead of hiding the entire preview.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                        .padding(.leading, 40)
+                }
 
                 Toggle(isOn: $enableWindowSwitcher) { Text("Enable Window Switcher") }
                     .onChange(of: enableWindowSwitcher) { _ in askUserToRestartApplication() }
