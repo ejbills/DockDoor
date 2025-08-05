@@ -38,6 +38,30 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://buymeacoffee.com/keplercafe</div>
 
+<a id="1.20"></a>
+# [Release 1.20](https://github.com/ejbills/DockDoor/releases/tag/1.20) - 2025-08-05
+
+
+## ✨ New Features
+- Glass effect support
+  - Liquid glass transitions
+  - Enhanced transparency layers
+
+## 🔧 Improvements & Stability
+- Improved window switching
+  - Faster UI rendering
+  - Better keyboard navigation
+- Enhanced preview animations
+  - Reduced distance threshold
+  - Smoother transitions
+- Better window tracking
+  - Improved focus detection
+  - Fixed timing issues
+
+
+[Changes][1.20]
+
+
 <a id="1.19"></a>
 # [Release 1.19](https://github.com/ejbills/DockDoor/releases/tag/1.19) - 2025-08-02
 
@@ -1345,6 +1369,7 @@ v1.0
 [Changes][releases]
 
 
+[1.20]: https://github.com/ejbills/DockDoor/compare/1.19...1.20
 [1.19]: https://github.com/ejbills/DockDoor/compare/1.18.5...1.19
 [1.18.5]: https://github.com/ejbills/DockDoor/compare/1.18.4...1.18.5
 [1.18.4]: https://github.com/ejbills/DockDoor/compare/v1.18.3...1.18.4
