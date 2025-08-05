@@ -4,12 +4,12 @@
         <title>DockDoor</title>
         <item>
             <title>1.20</title>
-            <pubDate>Mon, 04 Aug 2025 17:01:19 -0700</pubDate>
+            <pubDate>Mon, 04 Aug 2025 17:15:12 -0700</pubDate>
             <sparkle:releaseNotesLink>https://dockdoor.net/CHANGELOG.html</sparkle:releaseNotesLink>
             <sparkle:version>1.20</sparkle:version>
             <sparkle:shortVersionString>1.20</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/ejbills/DockDoor/releases/download/1.20/DockDoor.dmg" length="3621240" type="application/octet-stream" sparkle:edSignature="kxWpGJvxbVKzeUxRA96SpEa9o+xUxun9q8ZXLvzi/BWRaMGFg1uBnq1GqsacusHdYOMic7ibvp3Q6fJ19BQlCQ==" />
+            <enclosure url="https://github.com/ejbills/DockDoor/releases/download/1.20/DockDoor.dmg" length="3620864" type="application/octet-stream" sparkle:edSignature="tuLAU+SZyhN/oq3E2K1Hb07SE49gA6ner5a4G4etWLvCGqQahV0hYKjri/hOkZk9xfm+QrO5EO6pQndlbuRuBw==" />
         </item>
     <item>
             <title>1.19.0.3-pre1_19_1</title>
