@@ -126,6 +126,18 @@ struct WindowPreviewHoverContainer: View {
                     currentMaxDimensionForPreviews: calculatedMaxDimension,
                     currentDimensionsMapForPreviews: calculatedDimensionsMap
                 )
+                .mask(
+                    LinearGradient(
+                        gradient: Gradient(stops: [
+                            .init(color: .clear, location: 0),
+                            .init(color: .black, location: 0.02),
+                            .init(color: .black, location: 0.98),
+                            .init(color: .clear, location: 1),
+                        ]),
+                        startPoint: orientationIsHorizontal ? .leading : .top,
+                        endPoint: orientationIsHorizontal ? .trailing : .bottom
+                    )
+                )
                 .padding(.top, (!previewStateCoordinator.windowSwitcherActive && appNameStyle == .default && showAppTitleData) ? 25 : 0)
                 .overlay(alignment: .topLeading) {
                     hoverTitleBaseView(labelSize: measureString(appName, fontSize: 14))
