@@ -122,7 +122,7 @@ extension WindowPreviewHoverContainer {
                 for windowIndex in chunk {
                     guard windowIndex < windows.count else { continue }
 
-                    if let cgImage = windows[windowIndex].image {
+                    if windows[windowIndex].image != nil {
                         let windowSize = if orientationIsHorizontal {
                             // For horizontal flow: unified height, let width scale naturally
                             CGSize(width: 0, height: max(unifiedHeight, 50)) // width = 0 means no constraint
