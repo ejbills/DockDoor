@@ -3,6 +3,15 @@
     <channel>
         <title>DockDoor</title>
         <item>
+            <title>1.20</title>
+            <pubDate>Mon, 04 Aug 2025 17:01:19 -0700</pubDate>
+            <sparkle:releaseNotesLink>https://dockdoor.net/CHANGELOG.html</sparkle:releaseNotesLink>
+            <sparkle:version>1.20</sparkle:version>
+            <sparkle:shortVersionString>1.20</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/ejbills/DockDoor/releases/download/1.20/DockDoor.dmg" length="3621240" type="application/octet-stream" sparkle:edSignature="kxWpGJvxbVKzeUxRA96SpEa9o+xUxun9q8ZXLvzi/BWRaMGFg1uBnq1GqsacusHdYOMic7ibvp3Q6fJ19BQlCQ==" />
+        </item>
+    <item>
             <title>1.19.0.3-pre1_19_1</title>
             <pubDate>Sat, 02 Aug 2025 21:51:06 -0700</pubDate>
             <sparkle:releaseNotesLink>https://dockdoor.net/CHANGELOG.html</sparkle:releaseNotesLink>
@@ -11,15 +20,6 @@
             <sparkle:shortVersionString>1.19.0.3-pre1_19_1 beta</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
             <enclosure url="https://github.com/ejbills/DockDoor/releases/download/1.19.0.3-pre1_19_1/DockDoor.dmg" length="3620372" type="application/octet-stream" sparkle:edSignature="yPoXUL/rWx0hkDGOpd9QW3jVxh6dRIC0Hov7DH5tZJFw8BgpCZuJXF1J0ctLCK1MZvUPPDHdJthqREr2g3qaBA==" />
-        </item>
-    <item>
-            <title>1.18.5</title>
-            <pubDate>Sun, 27 Jul 2025 03:11:49 -0700</pubDate>
-            <sparkle:releaseNotesLink>https://dockdoor.net/CHANGELOG.html</sparkle:releaseNotesLink>
-            <sparkle:version>1.18.5</sparkle:version>
-            <sparkle:shortVersionString>1.18.5</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/ejbills/DockDoor/releases/download/1.18.5/DockDoor.dmg" length="3592380" type="application/octet-stream" sparkle:edSignature="sWh4VYN6jBCHBE0j73rSFrqpHP6f/sxd4rGcX/CyuE1DvJP0fOiR/YbW0/JJfkXPNSCZZy9S41mLn7ywSkf2AQ==" />
         </item>
     </channel>
 </rss>
