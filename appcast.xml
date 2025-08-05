@@ -3,6 +3,16 @@
     <channel>
         <title>DockDoor</title>
         <item>
+            <title>1.20.0.1-pre1_21</title>
+            <pubDate>Mon, 04 Aug 2025 17:21:03 -0700</pubDate>
+            <sparkle:releaseNotesLink>https://dockdoor.net/CHANGELOG.html</sparkle:releaseNotesLink>
+            <sparkle:channel>beta</sparkle:channel>
+            <sparkle:version>1.20.0.1-pre1_21</sparkle:version>
+            <sparkle:shortVersionString>1.20.0.1-pre1_21 beta</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/ejbills/DockDoor/releases/download/1.20.0.1-pre1_21/DockDoor.dmg" length="3621712" type="application/octet-stream" sparkle:edSignature="ChofP/CZbUvODGFF5netQ+srvSKpwYPzzQQ4xQebqrVxuqmDkrF+GMYDSA9Q7FtQnrFuH22ElqUmOGBPRLBaDA==" />
+        </item>
+    <item>
             <title>1.20</title>
             <pubDate>Mon, 04 Aug 2025 17:15:12 -0700</pubDate>
             <sparkle:releaseNotesLink>https://dockdoor.net/CHANGELOG.html</sparkle:releaseNotesLink>
@@ -10,16 +20,6 @@
             <sparkle:shortVersionString>1.20</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
             <enclosure url="https://github.com/ejbills/DockDoor/releases/download/1.20/DockDoor.dmg" length="3620864" type="application/octet-stream" sparkle:edSignature="tuLAU+SZyhN/oq3E2K1Hb07SE49gA6ner5a4G4etWLvCGqQahV0hYKjri/hOkZk9xfm+QrO5EO6pQndlbuRuBw==" />
-        </item>
-    <item>
-            <title>1.19.0.3-pre1_19_1</title>
-            <pubDate>Sat, 02 Aug 2025 21:51:06 -0700</pubDate>
-            <sparkle:releaseNotesLink>https://dockdoor.net/CHANGELOG.html</sparkle:releaseNotesLink>
-            <sparkle:channel>beta</sparkle:channel>
-            <sparkle:version>1.19.0.3-pre1_19_1</sparkle:version>
-            <sparkle:shortVersionString>1.19.0.3-pre1_19_1 beta</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/ejbills/DockDoor/releases/download/1.19.0.3-pre1_19_1/DockDoor.dmg" length="3620372" type="application/octet-stream" sparkle:edSignature="yPoXUL/rWx0hkDGOpd9QW3jVxh6dRIC0Hov7DH5tZJFw8BgpCZuJXF1J0ctLCK1MZvUPPDHdJthqREr2g3qaBA==" />
         </item>
     </channel>
 </rss>
