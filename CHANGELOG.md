@@ -41,14 +41,11 @@
 <a id="1.20"></a>
 # [Release 1.20](https://github.com/ejbills/DockDoor/releases/tag/1.20) - 2025-08-05
 
-
 ## ✨ New Features
-- Quick window switcher
-  - Tab navigation mode
-  - Classic window ordering
+- Quick window switcher, no more lag
+- Liquid glass (if on macOS 26)
 
 ## 🔧 Improvements & Stability
-- Glass visual effects
 - Window switching animation
 - Preview window timing
 
