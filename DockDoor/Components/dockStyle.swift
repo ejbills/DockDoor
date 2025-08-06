@@ -22,12 +22,8 @@ struct DockStyleModifier: ViewModifier {
                 .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
                 .overlay {
                     RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                        .stroke(Color.gray.opacity(0.19 * backgroundOpacity), lineWidth: 1.5)
+                        .strokeBorder(Color.gray.opacity(0.19 * backgroundOpacity), lineWidth: 1.5)
                         .blendMode(.plusLighter)
-                }
-                .overlay {
-                    RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                        .strokeBorder(Color.primary.opacity(0.1 * backgroundOpacity), lineWidth: 0.5)
                 }
             }
             .padding(2)

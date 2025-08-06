@@ -126,6 +126,18 @@ struct WindowPreviewHoverContainer: View {
                     currentMaxDimensionForPreviews: calculatedMaxDimension,
                     currentDimensionsMapForPreviews: calculatedDimensionsMap
                 )
+                .mask(
+                    LinearGradient(
+                        gradient: Gradient(stops: [
+                            .init(color: .clear, location: 0),
+                            .init(color: .black, location: 0.02),
+                            .init(color: .black, location: 0.98),
+                            .init(color: .clear, location: 1),
+                        ]),
+                        startPoint: orientationIsHorizontal ? .leading : .top,
+                        endPoint: orientationIsHorizontal ? .trailing : .bottom
+                    )
+                )
                 .padding(.top, (!previewStateCoordinator.windowSwitcherActive && appNameStyle == .default && showAppTitleData) ? 25 : 0)
                 .overlay(alignment: .topLeading) {
                     hoverTitleBaseView(labelSize: measureString(appName, fontSize: 14))
@@ -581,7 +593,17 @@ struct WindowPreviewHoverContainer: View {
         switch action {
         case .quit:
             WindowUtil.quitApp(windowInfo: window, force: NSEvent.modifierFlags.contains(.option))
-            onWindowTap?()
+
+            if Defaults[.keepPreviewOnAppTerminate] {
+                let appPID = window.app.processIdentifier
+                for i in stride(from: previewStateCoordinator.windows.count - 1, through: 0, by: -1) {
+                    if previewStateCoordinator.windows[i].app.processIdentifier == appPID {
+                        previewStateCoordinator.removeWindow(at: i)
+                    }
+                }
+            } else {
+                onWindowTap?()
+            }
 
         case .close:
             WindowUtil.closeWindow(windowInfo: window)
@@ -688,7 +710,7 @@ struct WindowPreviewHoverContainer: View {
     private func createChunkedItems() -> [[FlowItem]] {
         let isHorizontal = dockPosition.isHorizontalFlow || previewStateCoordinator.windowSwitcherActive
 
-        let (maxColumns, maxRows): (Int, Int)
+        var (maxColumns, maxRows): (Int, Int)
         if previewStateCoordinator.windowSwitcherActive {
             maxColumns = 999
             maxRows = switcherMaxRows
@@ -705,6 +727,11 @@ struct WindowPreviewHoverContainer: View {
         guard maxColumns > 0, maxRows > 0 else {
             let allItems = createFlowItems()
             return allItems.isEmpty ? [[]] : [allItems]
+        }
+
+        if mockPreviewActive {
+            maxRows = 1
+            maxColumns = 1
         }
 
         var itemsToProcess: [FlowItem] = []

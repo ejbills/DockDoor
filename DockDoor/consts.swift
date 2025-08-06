@@ -39,12 +39,16 @@ extension Defaults.Keys {
 
     static let showSpecialAppControls = Key<Bool>("showSpecialAppControls", default: true)
     static let useEmbeddedMediaControls = Key<Bool>("useEmbeddedMediaControls", default: false)
+    static let useEmbeddedDockPreviewElements = Key<Bool>("useEmbeddedDockPreviewElements", default: false)
+    static let disableDockStyleTrafficLights = Key<Bool>("disableDockStyleTrafficLights", default: false)
     static let showBigControlsWhenNoValidWindows = Key<Bool>("showBigControlsWhenNoValidWindows", default: true)
     static let enablePinning = Key<Bool>("enablePinning", default: true)
 
     static let showAnimations = Key<Bool>("showAnimations", default: true)
     static let gradientColorPalette = Key<GradientColorPaletteSettings>("gradientColorPalette", default: .init())
     static let enableWindowSwitcher = Key<Bool>("enableWindowSwitcher", default: true)
+    static let enableDockPreviews = Key<Bool>("enableDockPreviews", default: true)
+    static let keepPreviewOnAppTerminate = Key<Bool>("keepPreviewOnAppTerminate", default: false)
     static let sortWindowsByDate = Key<Bool>("sortWindowsByDate", default: true)
     static let useClassicWindowOrdering = Key<Bool>("useClassicWindowOrdering", default: true)
     static let includeHiddenWindowsInSwitcher = Key<Bool>("includeHiddenWindowsInSwitcher", default: true)
@@ -228,6 +232,10 @@ enum WindowSwitcherControlPosition: String, CaseIterable, Defaults.Serializable 
     case topTrailing
     case bottomLeading
     case bottomTrailing
+    case diagonalTopLeftBottomRight
+    case diagonalTopRightBottomLeft
+    case diagonalBottomLeftTopRight
+    case diagonalBottomRightTopLeft
 
     var localizedName: String {
         switch self {
@@ -239,6 +247,14 @@ enum WindowSwitcherControlPosition: String, CaseIterable, Defaults.Serializable 
             String(localized: "At bottom - Title on left, controls on right")
         case .bottomTrailing:
             String(localized: "At bottom - Controls on left, title on right")
+        case .diagonalTopLeftBottomRight:
+            String(localized: "Diagonal - Title top left, controls bottom right")
+        case .diagonalTopRightBottomLeft:
+            String(localized: "Diagonal - Title top right, controls bottom left")
+        case .diagonalBottomLeftTopRight:
+            String(localized: "Diagonal - Title bottom left, controls top right")
+        case .diagonalBottomRightTopLeft:
+            String(localized: "Diagonal - Title bottom right, controls top left")
         }
     }
 }
