@@ -39,7 +39,8 @@ extension Defaults.Keys {
 
     static let showSpecialAppControls = Key<Bool>("showSpecialAppControls", default: true)
     static let useEmbeddedMediaControls = Key<Bool>("useEmbeddedMediaControls", default: false)
-    static let useEmbeddedPreviewElements = Key<Bool>("useEmbeddedPreviewElements", default: false)
+    static let useEmbeddedDockPreviewElements = Key<Bool>("useEmbeddedDockPreviewElements", default: false)
+    static let disableDockStyleTrafficLights = Key<Bool>("disableDockStyleTrafficLights", default: false)
     static let showBigControlsWhenNoValidWindows = Key<Bool>("showBigControlsWhenNoValidWindows", default: true)
     static let enablePinning = Key<Bool>("enablePinning", default: true)
 
@@ -231,6 +232,10 @@ enum WindowSwitcherControlPosition: String, CaseIterable, Defaults.Serializable 
     case topTrailing
     case bottomLeading
     case bottomTrailing
+    case diagonalTopLeftBottomRight
+    case diagonalTopRightBottomLeft
+    case diagonalBottomLeftTopRight
+    case diagonalBottomRightTopLeft
 
     var localizedName: String {
         switch self {
@@ -242,6 +247,14 @@ enum WindowSwitcherControlPosition: String, CaseIterable, Defaults.Serializable 
             String(localized: "At bottom - Title on left, controls on right")
         case .bottomTrailing:
             String(localized: "At bottom - Controls on left, title on right")
+        case .diagonalTopLeftBottomRight:
+            String(localized: "Diagonal - Title top left, controls bottom right")
+        case .diagonalTopRightBottomLeft:
+            String(localized: "Diagonal - Title top right, controls bottom left")
+        case .diagonalBottomLeftTopRight:
+            String(localized: "Diagonal - Title bottom left, controls top right")
+        case .diagonalBottomRightTopLeft:
+            String(localized: "Diagonal - Title bottom right, controls top left")
         }
     }
 }

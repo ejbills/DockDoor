@@ -19991,6 +19991,18 @@
         }
       }
     },
+    "Diagonal - Title bottom left, controls top right" : {
+
+    },
+    "Diagonal - Title bottom right, controls top left" : {
+
+    },
+    "Diagonal - Title top left, controls bottom right" : {
+
+    },
+    "Diagonal - Title top right, controls bottom left" : {
+
+    },
     "Dim Unselected Windows" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -20181,6 +20193,9 @@
           }
         }
       }
+    },
+    "Disable dock styling on traffic light buttons" : {
+
     },
     "Disconnected Display" : {
       "localizations" : {
@@ -21322,6 +21337,9 @@
           }
         }
       }
+    },
+    "Dock Preview Layout" : {
+
     },
     "Dock Preview Settings" : {
       "localizations" : {
@@ -23607,6 +23625,9 @@
         }
       }
     },
+    "Embed controls in preview frames" : {
+
+    },
     "Embed controls with window previews (if previews shown)" : {
       "localizations" : {
         "af" : {
@@ -23796,9 +23817,6 @@
           }
         }
       }
-    },
-    "Embed traffic lights and window titles in preview frames" : {
-
     },
     "Embedded" : {
       "comment" : "Preview title style option",
@@ -49713,7 +49731,7 @@
         }
       }
     },
-    "Places traffic light buttons and window titles directly inside the preview frames for a more compact and minimal appearance." : {
+    "Places traffic light buttons and window titles directly inside the dock preview frames for a more compact and minimal appearance." : {
 
     },
     "Please Quit the App to Apply Changes! :)" : {
@@ -53718,6 +53736,7 @@
       }
     },
     "Preview Layout (Dock)" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -57519,6 +57538,9 @@
           }
         }
       }
+    },
+    "Removes the pill-shaped background styling from traffic light buttons in dock previews for a cleaner look." : {
+
     },
     "Report a Bug" : {
       "localizations" : {

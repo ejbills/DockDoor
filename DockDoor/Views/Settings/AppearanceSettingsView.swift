@@ -105,7 +105,8 @@ struct AppearanceSettingsView: View {
     @Default(.switcherMaxRows) var switcherMaxRows
     @Default(.showAppIconOnly) var showAppIconOnly
     @Default(.globalPaddingMultiplier) var globalPaddingMultiplier
-    @Default(.useEmbeddedPreviewElements) var useEmbeddedPreviewElements
+    @Default(.useEmbeddedDockPreviewElements) var useEmbeddedDockPreviewElements
+    @Default(.disableDockStyleTrafficLights) var disableDockStyleTrafficLights
 
     @State private var showAdvancedAppearanceSettings: Bool = false
     @State private var selectedPreviewContext: PreviewContext = .dock
@@ -197,16 +198,6 @@ struct AppearanceSettingsView: View {
                                           step: 0.05,
                                           unit: "",
                                           formatter: NumberFormatter.percentFormatter)
-
-                            VStack(alignment: .leading) {
-                                Toggle(isOn: $useEmbeddedPreviewElements) {
-                                    Text("Embed traffic lights and window titles in preview frames")
-                                }
-                                Text("Places traffic light buttons and window titles directly inside the preview frames for a more compact and minimal appearance.")
-                                    .font(.footnote)
-                                    .foregroundColor(.gray)
-                                    .padding(.leading, 20)
-                            }
                         }
                     }
 
@@ -317,8 +308,28 @@ struct AppearanceSettingsView: View {
             Text("Traffic Light Buttons in Previews").font(.headline).padding(.bottom, -2)
             TrafficLightButtonsSettingsView()
 
+            VStack(alignment: .leading) {
+                Toggle(isOn: $disableDockStyleTrafficLights) {
+                    Text("Disable dock styling on traffic light buttons")
+                }
+                Text("Removes the pill-shaped background styling from traffic light buttons in dock previews for a cleaner look.")
+                    .font(.footnote)
+                    .foregroundColor(.gray)
+                    .padding(.leading, 20)
+            }
+
             Divider().padding(.vertical, 2)
-            Text("Preview Layout (Dock)").font(.headline).padding(.bottom, -2)
+            Text("Dock Preview Layout").font(.headline).padding(.bottom, -2)
+
+            VStack(alignment: .leading) {
+                Toggle(isOn: $useEmbeddedDockPreviewElements) {
+                    Text("Embed controls in preview frames")
+                }
+                Text("Places traffic light buttons and window titles directly inside the dock preview frames for a more compact and minimal appearance.")
+                    .font(.footnote)
+                    .foregroundColor(.gray)
+                    .padding(.leading, 20)
+            }
 
             VStack(alignment: .leading, spacing: 4) {
                 let previewMaxRowsBinding = Binding<Double>(
