@@ -710,7 +710,7 @@ struct WindowPreviewHoverContainer: View {
     private func createChunkedItems() -> [[FlowItem]] {
         let isHorizontal = dockPosition.isHorizontalFlow || previewStateCoordinator.windowSwitcherActive
 
-        let (maxColumns, maxRows): (Int, Int)
+        var (maxColumns, maxRows): (Int, Int)
         if previewStateCoordinator.windowSwitcherActive {
             maxColumns = 999
             maxRows = switcherMaxRows
@@ -727,6 +727,11 @@ struct WindowPreviewHoverContainer: View {
         guard maxColumns > 0, maxRows > 0 else {
             let allItems = createFlowItems()
             return allItems.isEmpty ? [[]] : [allItems]
+        }
+
+        if mockPreviewActive {
+            maxRows = 1
+            maxColumns = 1
         }
 
         var itemsToProcess: [FlowItem] = []
