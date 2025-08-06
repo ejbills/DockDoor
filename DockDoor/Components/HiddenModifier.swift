@@ -1,10 +1,10 @@
-import SwiftUI
 import Defaults
+import SwiftUI
 
 struct HiddenModifier: ViewModifier {
     let isHidden: Bool
     @Default(.unselectedContentOpacity) var unselectedContentOpacity
-    
+
     func body(content: Content) -> some View {
         content
             .opacity(isHidden ? unselectedContentOpacity : 1)

@@ -521,12 +521,6 @@ struct WindowPreview: View {
                 contentRow(isLeadingControls: true)
             }
         }
-        .padding(
-            isWindowSwitcherDiagonalPosition ? .vertical :
-                (windowSwitcherControlPosition == .topLeading ||
-                    windowSwitcherControlPosition == .topTrailing ? .bottom : .top),
-            4
-        )
     }
 
     private func dockPreviewContent(_ selected: Bool, showTitleContent: Bool = true, showControlsContent: Bool = true) -> some View {
@@ -622,12 +616,6 @@ struct WindowPreview: View {
                         contentRow(isLeadingControls: true)
                     }
                 }
-                .padding(
-                    isDiagonalPosition ? .vertical :
-                        (dockPreviewControlPosition == .topLeading ||
-                            dockPreviewControlPosition == .topTrailing ? .bottom : .top),
-                    4
-                )
             )
         } else {
             return AnyView(EmptyView())
@@ -649,33 +637,36 @@ struct WindowPreview: View {
                 if !useEmbeddedDockPreviewElements ||
                     windowSwitcherActive
                 {
-                    if windowSwitcherActive, windowSwitcherControlPosition == .topLeading ||
-                        windowSwitcherControlPosition == .topTrailing
-                    {
-                        windowSwitcherContent(finalIsSelected)
-                    } else if windowSwitcherActive, windowSwitcherControlPosition == .diagonalTopLeftBottomRight {
-                        windowSwitcherContent(finalIsSelected, showTitleContent: true, showControlsContent: false)
-                    } else if windowSwitcherActive, windowSwitcherControlPosition == .diagonalTopRightBottomLeft {
-                        windowSwitcherContent(finalIsSelected, showTitleContent: true, showControlsContent: false)
-                    } else if windowSwitcherActive, windowSwitcherControlPosition == .diagonalBottomLeftTopRight {
-                        windowSwitcherContent(finalIsSelected, showTitleContent: false, showControlsContent: true)
-                    } else if windowSwitcherActive, windowSwitcherControlPosition == .diagonalBottomRightTopLeft {
-                        windowSwitcherContent(finalIsSelected, showTitleContent: false, showControlsContent: true)
-                    }
+                    Group {
+                        if windowSwitcherActive, windowSwitcherControlPosition == .topLeading ||
+                            windowSwitcherControlPosition == .topTrailing
+                        {
+                            windowSwitcherContent(finalIsSelected)
+                        } else if windowSwitcherActive, windowSwitcherControlPosition == .diagonalTopLeftBottomRight {
+                            windowSwitcherContent(finalIsSelected, showTitleContent: true, showControlsContent: false)
+                        } else if windowSwitcherActive, windowSwitcherControlPosition == .diagonalTopRightBottomLeft {
+                            windowSwitcherContent(finalIsSelected, showTitleContent: true, showControlsContent: false)
+                        } else if windowSwitcherActive, windowSwitcherControlPosition == .diagonalBottomLeftTopRight {
+                            windowSwitcherContent(finalIsSelected, showTitleContent: false, showControlsContent: true)
+                        } else if windowSwitcherActive, windowSwitcherControlPosition == .diagonalBottomRightTopLeft {
+                            windowSwitcherContent(finalIsSelected, showTitleContent: false, showControlsContent: true)
+                        }
 
-                    if !windowSwitcherActive, dockPreviewControlPosition == .topLeading ||
-                        dockPreviewControlPosition == .topTrailing
-                    {
-                        dockPreviewContent(finalIsSelected)
-                    } else if !windowSwitcherActive, dockPreviewControlPosition == .diagonalTopLeftBottomRight {
-                        dockPreviewContent(finalIsSelected, showTitleContent: true, showControlsContent: false)
-                    } else if !windowSwitcherActive, dockPreviewControlPosition == .diagonalTopRightBottomLeft {
-                        dockPreviewContent(finalIsSelected, showTitleContent: true, showControlsContent: false)
-                    } else if !windowSwitcherActive, dockPreviewControlPosition == .diagonalBottomLeftTopRight {
-                        dockPreviewContent(finalIsSelected, showTitleContent: false, showControlsContent: true)
-                    } else if !windowSwitcherActive, dockPreviewControlPosition == .diagonalBottomRightTopLeft {
-                        dockPreviewContent(finalIsSelected, showTitleContent: false, showControlsContent: true)
+                        if !windowSwitcherActive, dockPreviewControlPosition == .topLeading ||
+                            dockPreviewControlPosition == .topTrailing
+                        {
+                            dockPreviewContent(finalIsSelected)
+                        } else if !windowSwitcherActive, dockPreviewControlPosition == .diagonalTopLeftBottomRight {
+                            dockPreviewContent(finalIsSelected, showTitleContent: true, showControlsContent: false)
+                        } else if !windowSwitcherActive, dockPreviewControlPosition == .diagonalTopRightBottomLeft {
+                            dockPreviewContent(finalIsSelected, showTitleContent: true, showControlsContent: false)
+                        } else if !windowSwitcherActive, dockPreviewControlPosition == .diagonalBottomLeftTopRight {
+                            dockPreviewContent(finalIsSelected, showTitleContent: false, showControlsContent: true)
+                        } else if !windowSwitcherActive, dockPreviewControlPosition == .diagonalBottomRightTopLeft {
+                            dockPreviewContent(finalIsSelected, showTitleContent: false, showControlsContent: true)
+                        }
                     }
+                    .padding(.bottom, 4)
                 }
 
                 windowContent(
@@ -687,33 +678,36 @@ struct WindowPreview: View {
                 if !useEmbeddedDockPreviewElements ||
                     windowSwitcherActive
                 {
-                    if windowSwitcherActive, windowSwitcherControlPosition == .bottomLeading ||
-                        windowSwitcherControlPosition == .bottomTrailing
-                    {
-                        windowSwitcherContent(finalIsSelected)
-                    } else if windowSwitcherActive, windowSwitcherControlPosition == .diagonalTopLeftBottomRight {
-                        windowSwitcherContent(finalIsSelected, showTitleContent: false, showControlsContent: true)
-                    } else if windowSwitcherActive, windowSwitcherControlPosition == .diagonalTopRightBottomLeft {
-                        windowSwitcherContent(finalIsSelected, showTitleContent: false, showControlsContent: true)
-                    } else if windowSwitcherActive, windowSwitcherControlPosition == .diagonalBottomLeftTopRight {
-                        windowSwitcherContent(finalIsSelected, showTitleContent: true, showControlsContent: false)
-                    } else if windowSwitcherActive, windowSwitcherControlPosition == .diagonalBottomRightTopLeft {
-                        windowSwitcherContent(finalIsSelected, showTitleContent: true, showControlsContent: false)
-                    }
+                    Group {
+                        if windowSwitcherActive, windowSwitcherControlPosition == .bottomLeading ||
+                            windowSwitcherControlPosition == .bottomTrailing
+                        {
+                            windowSwitcherContent(finalIsSelected)
+                        } else if windowSwitcherActive, windowSwitcherControlPosition == .diagonalTopLeftBottomRight {
+                            windowSwitcherContent(finalIsSelected, showTitleContent: false, showControlsContent: true)
+                        } else if windowSwitcherActive, windowSwitcherControlPosition == .diagonalTopRightBottomLeft {
+                            windowSwitcherContent(finalIsSelected, showTitleContent: false, showControlsContent: true)
+                        } else if windowSwitcherActive, windowSwitcherControlPosition == .diagonalBottomLeftTopRight {
+                            windowSwitcherContent(finalIsSelected, showTitleContent: true, showControlsContent: false)
+                        } else if windowSwitcherActive, windowSwitcherControlPosition == .diagonalBottomRightTopLeft {
+                            windowSwitcherContent(finalIsSelected, showTitleContent: true, showControlsContent: false)
+                        }
 
-                    if !windowSwitcherActive, dockPreviewControlPosition == .bottomLeading ||
-                        dockPreviewControlPosition == .bottomTrailing
-                    {
-                        dockPreviewContent(finalIsSelected)
-                    } else if !windowSwitcherActive, dockPreviewControlPosition == .diagonalTopLeftBottomRight {
-                        dockPreviewContent(finalIsSelected, showTitleContent: false, showControlsContent: true)
-                    } else if !windowSwitcherActive, dockPreviewControlPosition == .diagonalTopRightBottomLeft {
-                        dockPreviewContent(finalIsSelected, showTitleContent: false, showControlsContent: true)
-                    } else if !windowSwitcherActive, dockPreviewControlPosition == .diagonalBottomLeftTopRight {
-                        dockPreviewContent(finalIsSelected, showTitleContent: true, showControlsContent: false)
-                    } else if !windowSwitcherActive, dockPreviewControlPosition == .diagonalBottomRightTopLeft {
-                        dockPreviewContent(finalIsSelected, showTitleContent: true, showControlsContent: false)
+                        if !windowSwitcherActive, dockPreviewControlPosition == .bottomLeading ||
+                            dockPreviewControlPosition == .bottomTrailing
+                        {
+                            dockPreviewContent(finalIsSelected)
+                        } else if !windowSwitcherActive, dockPreviewControlPosition == .diagonalTopLeftBottomRight {
+                            dockPreviewContent(finalIsSelected, showTitleContent: false, showControlsContent: true)
+                        } else if !windowSwitcherActive, dockPreviewControlPosition == .diagonalTopRightBottomLeft {
+                            dockPreviewContent(finalIsSelected, showTitleContent: false, showControlsContent: true)
+                        } else if !windowSwitcherActive, dockPreviewControlPosition == .diagonalBottomLeftTopRight {
+                            dockPreviewContent(finalIsSelected, showTitleContent: true, showControlsContent: false)
+                        } else if !windowSwitcherActive, dockPreviewControlPosition == .diagonalBottomRightTopLeft {
+                            dockPreviewContent(finalIsSelected, showTitleContent: true, showControlsContent: false)
+                        }
                     }
+                    .padding(.top, 4)
                 }
             }
             .background {
