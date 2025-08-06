@@ -41,8 +41,8 @@
 <a id="1.21"></a>
 # [Release 1.21](https://github.com/ejbills/DockDoor/releases/tag/1.21) - 2025-08-06
 
-
 ## ✨ New Features
+- New options for diagonal window title and controls positioning
 - Embed controls in previews
   - New compact layout option
   - Supports diagonal control positions
