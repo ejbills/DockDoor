@@ -105,6 +105,7 @@ struct AppearanceSettingsView: View {
     @Default(.switcherMaxRows) var switcherMaxRows
     @Default(.showAppIconOnly) var showAppIconOnly
     @Default(.globalPaddingMultiplier) var globalPaddingMultiplier
+    @Default(.useEmbeddedPreviewElements) var useEmbeddedPreviewElements
 
     @State private var showAdvancedAppearanceSettings: Bool = false
     @State private var selectedPreviewContext: PreviewContext = .dock
@@ -196,6 +197,16 @@ struct AppearanceSettingsView: View {
                                           step: 0.05,
                                           unit: "",
                                           formatter: NumberFormatter.percentFormatter)
+
+                            VStack(alignment: .leading) {
+                                Toggle(isOn: $useEmbeddedPreviewElements) {
+                                    Text("Embed traffic lights and window titles in preview frames")
+                                }
+                                Text("Places traffic light buttons and window titles directly inside the preview frames for a more compact and minimal appearance.")
+                                    .font(.footnote)
+                                    .foregroundColor(.gray)
+                                    .padding(.leading, 20)
+                            }
                         }
                     }
 

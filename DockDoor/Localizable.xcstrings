@@ -23797,6 +23797,9 @@
         }
       }
     },
+    "Embed traffic lights and window titles in preview frames" : {
+
+    },
     "Embedded" : {
       "comment" : "Preview title style option",
       "extractionState" : "stale",
@@ -49709,6 +49712,9 @@
           }
         }
       }
+    },
+    "Places traffic light buttons and window titles directly inside the preview frames for a more compact and minimal appearance." : {
+
     },
     "Please Quit the App to Apply Changes! :)" : {
       "extractionState" : "stale",

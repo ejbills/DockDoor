@@ -39,6 +39,7 @@ extension Defaults.Keys {
 
     static let showSpecialAppControls = Key<Bool>("showSpecialAppControls", default: true)
     static let useEmbeddedMediaControls = Key<Bool>("useEmbeddedMediaControls", default: false)
+    static let useEmbeddedPreviewElements = Key<Bool>("useEmbeddedPreviewElements", default: false)
     static let showBigControlsWhenNoValidWindows = Key<Bool>("showBigControlsWhenNoValidWindows", default: true)
     static let enablePinning = Key<Bool>("enablePinning", default: true)
 
