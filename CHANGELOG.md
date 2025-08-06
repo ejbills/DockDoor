@@ -38,6 +38,31 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://buymeacoffee.com/keplercafe</div>
 
+<a id="1.21"></a>
+# [Release 1.21](https://github.com/ejbills/DockDoor/releases/tag/1.21) - 2025-08-06
+
+
+## ✨ New Features
+- Embed controls in previews
+  - New compact layout option
+  - Supports diagonal control positions
+- Keep previews after app quit
+- Customize unselected window opacity
+- Customize traffic light buttons
+  - Disable pill background style
+
+## 🔧 Improvements & Stability
+- Improved window switcher stability
+- Refined preview list appearance
+  - Fades out list edges
+  - Improved preview border rendering
+- Improved application resource handling
+- Updated force quit icon
+
+
+[Changes][1.21]
+
+
 <a id="1.20"></a>
 # [Release 1.20](https://github.com/ejbills/DockDoor/releases/tag/1.20) - 2025-08-05
 
@@ -1364,6 +1389,7 @@ v1.0
 [Changes][releases]
 
 
+[1.21]: https://github.com/ejbills/DockDoor/compare/1.20...1.21
 [1.20]: https://github.com/ejbills/DockDoor/compare/1.19...1.20
 [1.19]: https://github.com/ejbills/DockDoor/compare/1.18.5...1.19
 [1.18.5]: https://github.com/ejbills/DockDoor/compare/1.18.4...1.18.5
