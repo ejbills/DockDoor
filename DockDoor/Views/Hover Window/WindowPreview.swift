@@ -92,181 +92,8 @@ struct WindowPreview: View {
 
     @ViewBuilder
     private func embeddedControlsOverlay(_ selected: Bool) -> some View {
-        if windowSwitcherActive {
-            embeddedWindowSwitcherControls(selected)
-        } else {
+        if !windowSwitcherActive {
             embeddedDockPreviewControls(selected)
-        }
-    }
-
-    @ViewBuilder
-    private func embeddedWindowSwitcherControls(_ selected: Bool) -> some View {
-        let shouldShowTitle = showWindowTitle && (
-            windowTitleDisplayCondition == .all ||
-                windowTitleDisplayCondition == .windowSwitcherOnly
-        )
-
-        let titleAndSubtitleContent = VStack(alignment: .leading, spacing: 0) {
-            if !showAppIconOnly {
-                Text(windowInfo.app.localizedName ?? "Unknown")
-                    .foregroundStyle(.primary)
-                    .lineLimit(1)
-                    .shadow(radius: 2)
-            }
-
-            if let windowTitle = windowInfo.windowName,
-               !windowTitle.isEmpty,
-               windowTitle != windowInfo.app.localizedName,
-               shouldShowTitle
-            {
-                MarqueeText(text: windowTitle, startDelay: 1)
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-                    .lineLimit(1)
-                    .shadow(radius: 2)
-            }
-        }
-
-        let appIconContent = Group {
-            if let appIcon = windowInfo.app.icon {
-                Image(nsImage: appIcon)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 35, height: 35)
-                    .shadow(radius: 2)
-            }
-        }
-
-        let controlsContent = Group {
-            if !windowInfo.isMinimized, !windowInfo.isHidden, windowInfo.closeButton != nil {
-                TrafficLightButtons(
-                    displayMode: trafficLightButtonsVisibility,
-                    hoveringOverParentWindow: selected || isHoveringOverWindowSwitcherPreview,
-                    onWindowAction: handleWindowAction,
-                    pillStyling: true,
-                    mockPreviewActive: mockPreviewActive
-                )
-                .shadow(radius: 2)
-            } else if windowInfo.isMinimized || windowInfo.isHidden {
-                Text(windowInfo.isMinimized ? "Minimized" : "Hidden")
-                    .font(.subheadline)
-                    .italic()
-                    .foregroundStyle(.secondary)
-                    .padding(4)
-                    .materialPill()
-                    .frame(height: 34)
-                    .shadow(radius: 2)
-            }
-        }
-
-        switch windowSwitcherControlPosition {
-        case .topLeading, .topTrailing, .bottomLeading, .bottomTrailing:
-            VStack {
-                HStack {
-                    switch windowSwitcherControlPosition {
-                    case .topLeading:
-                        appIconContent
-                        titleAndSubtitleContent
-                        Spacer()
-                        controlsContent
-                    case .topTrailing:
-                        controlsContent
-                        Spacer()
-                        appIconContent
-                        titleAndSubtitleContent
-                    case .bottomLeading:
-                        appIconContent
-                        titleAndSubtitleContent
-                        Spacer()
-                        controlsContent
-                    case .bottomTrailing:
-                        controlsContent
-                        Spacer()
-                        appIconContent
-                        titleAndSubtitleContent
-                    default:
-                        EmptyView()
-                    }
-                }
-                .padding(8)
-                Spacer()
-            }
-        case .diagonalTopLeftBottomRight:
-            VStack {
-                HStack {
-                    VStack(alignment: .leading, spacing: 2) {
-                        appIconContent
-                        titleAndSubtitleContent
-                    }
-                    Spacer()
-                }
-                .padding(.leading, 8)
-                .padding(.top, 8)
-                Spacer()
-                HStack {
-                    Spacer()
-                    controlsContent
-                }
-                .padding(.trailing, 8)
-                .padding(.bottom, 8)
-            }
-        case .diagonalTopRightBottomLeft:
-            VStack {
-                HStack {
-                    Spacer()
-                    VStack(alignment: .trailing, spacing: 2) {
-                        appIconContent
-                        titleAndSubtitleContent
-                    }
-                }
-                .padding(.trailing, 8)
-                .padding(.top, 8)
-                Spacer()
-                HStack {
-                    controlsContent
-                    Spacer()
-                }
-                .padding(.leading, 8)
-                .padding(.bottom, 8)
-            }
-        case .diagonalBottomLeftTopRight:
-            VStack {
-                HStack {
-                    Spacer()
-                    controlsContent
-                }
-                .padding(.trailing, 8)
-                .padding(.top, 8)
-                Spacer()
-                HStack {
-                    VStack(alignment: .leading, spacing: 2) {
-                        appIconContent
-                        titleAndSubtitleContent
-                    }
-                    Spacer()
-                }
-                .padding(.leading, 8)
-                .padding(.bottom, 8)
-            }
-        case .diagonalBottomRightTopLeft:
-            VStack {
-                HStack {
-                    controlsContent
-                    Spacer()
-                }
-                .padding(.leading, 8)
-                .padding(.top, 8)
-                Spacer()
-                HStack {
-                    Spacer()
-                    VStack(alignment: .trailing, spacing: 2) {
-                        appIconContent
-                        titleAndSubtitleContent
-                    }
-                }
-                .padding(.trailing, 8)
-                .padding(.bottom, 8)
-            }
         }
     }
 
@@ -298,7 +125,6 @@ struct WindowPreview: View {
                     .font(.subheadline)
                     .padding(4)
                     .materialPill()
-                    .shadow(radius: 2)
             }
         }
 
@@ -311,7 +137,6 @@ struct WindowPreview: View {
                     pillStyling: !disableDockStyleTrafficLights,
                     mockPreviewActive: mockPreviewActive
                 )
-                .shadow(radius: 2)
             } else if windowInfo.isMinimized || windowInfo.isHidden {
                 Text(windowInfo.isMinimized ? "Minimized" : "Hidden")
                     .font(.subheadline)
@@ -320,7 +145,6 @@ struct WindowPreview: View {
                     .padding(4)
                     .materialPill()
                     .frame(height: 34)
-                    .shadow(radius: 2)
             }
         }
 
