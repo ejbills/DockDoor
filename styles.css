@@ -1432,6 +1432,9 @@ header {
 }
 
 .product-hunt-embed img {
+    max-width: 100%;
+    width: 250px;
+    height: auto;
     transition: var(--transition);
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
@@ -1444,8 +1447,19 @@ header {
 
 @media (max-width: 768px) {
     .product-hunt-embed img {
-        width: 200px;
-        height: 43px;
+        max-width: 200px;
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .product-hunt-embed img {
+        max-width: 180px;
+    }
+    
+    .btn, .privacy-highlight {
+        white-space: normal;
+        word-wrap: break-word;
     }
 }
 
