@@ -38,6 +38,18 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://buymeacoffee.com/keplercafe</div>
 
+<a id="1.21.1"></a>
+# [Release 1.21.1](https://github.com/ejbills/DockDoor/releases/tag/1.21.1) - 2025-08-08
+
+## 🔧 Improvements & Stability
+- Fixed border cutoff issues
+  - Improved component borders
+  - Enhanced UI consistency
+
+
+[Changes][1.21.1]
+
+
 <a id="1.21"></a>
 # [Release 1.21](https://github.com/ejbills/DockDoor/releases/tag/1.21) - 2025-08-06
 
@@ -1389,6 +1401,7 @@ v1.0
 [Changes][releases]
 
 
+[1.21.1]: https://github.com/ejbills/DockDoor/compare/1.21...1.21.1
 [1.21]: https://github.com/ejbills/DockDoor/compare/1.20...1.21
 [1.20]: https://github.com/ejbills/DockDoor/compare/1.19...1.20
 [1.19]: https://github.com/ejbills/DockDoor/compare/1.18.5...1.19
