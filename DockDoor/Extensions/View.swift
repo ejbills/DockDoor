@@ -1,3 +1,4 @@
+import SmoothGradient
 import SwiftUI
 
 extension View {
@@ -21,6 +22,38 @@ extension View {
 
     func borderedBackground(_ content: some ShapeStyle, lineWidth: CGFloat = 1.0, cornerRadius: CGFloat = 0) -> some View {
         borderedBackground(content, lineWidth: lineWidth, shape: RoundedRectangle(cornerRadius: cornerRadius))
+    }
+
+    func fadeOnEdges(axis: Axis, fadeLength: Double, disable: Bool = false) -> some View {
+        mask {
+            if !disable {
+                GeometryReader { geo in
+                    DynStack(direction: axis, spacing: 0) {
+                        if #available(macOS 14.0, *) {
+                            SmoothLinearGradient(
+                                from: .black.opacity(0),
+                                to: .black.opacity(1),
+                                startPoint: axis == .horizontal ? .leading : .top,
+                                endPoint: axis == .horizontal ? .trailing : .bottom,
+                                curve: .easeInOut
+                            )
+                            .frame(width: axis == .horizontal ? fadeLength : nil, height: axis == .vertical ? fadeLength : nil)
+                            Color.black.frame(maxWidth: .infinity)
+                            SmoothLinearGradient(
+                                from: .black.opacity(0),
+                                to: .black.opacity(1),
+                                startPoint: axis == .horizontal ? .trailing : .bottom,
+                                endPoint: axis == .horizontal ? .leading : .top,
+                                curve: .easeInOut
+                            )
+                            .frame(width: axis == .horizontal ? fadeLength : nil, height: axis == .vertical ? fadeLength : nil)
+                        }
+                    }
+                }
+            } else {
+                Color.black
+            }
+        }
     }
 }
 

@@ -116,6 +116,7 @@
 		BBBD4AF52C8D671C0074FFCF /* NSImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBBD4AF42C8D671A0074FFCF /* NSImage.swift */; };
 		BBBD4AF82C8D71560074FFCF /* ConfettiSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = BBBD4AF72C8D71560074FFCF /* ConfettiSwiftUI */; };
 		BBC57AA82E3A6BED0078B262 /* DynamicWindowFrameModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBC57AA72E3A6BED0078B262 /* DynamicWindowFrameModifier.swift */; };
+		BBC5BDF42E45A708003A0D64 /* SwiftUIUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBC5BDF32E45A708003A0D64 /* SwiftUIUtils.swift */; };
 		BBCFAE402C266234002E1516 /* FirstTimeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBCFAE3F2C266234002E1516 /* FirstTimeView.swift */; };
 		BBD182AE2E3EE37500A81D69 /* WindowSwitcherStateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBD182AD2E3EE37500A81D69 /* WindowSwitcherStateManager.swift */; };
 		BBE033CC2DD92061006417B0 /* CGimage.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE033CB2DD92061006417B0 /* CGimage.swift */; };
@@ -243,6 +244,7 @@
 		BBBAA15A2DE6998B00FF8F8F /* UpdaterState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdaterState.swift; sourceTree = "<group>"; };
 		BBBD4AF42C8D671A0074FFCF /* NSImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSImage.swift; sourceTree = "<group>"; };
 		BBC57AA72E3A6BED0078B262 /* DynamicWindowFrameModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicWindowFrameModifier.swift; sourceTree = "<group>"; };
+		BBC5BDF32E45A708003A0D64 /* SwiftUIUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIUtils.swift; sourceTree = "<group>"; };
 		BBCFAE3F2C266234002E1516 /* FirstTimeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstTimeView.swift; sourceTree = "<group>"; };
 		BBD182AD2E3EE37500A81D69 /* WindowSwitcherStateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowSwitcherStateManager.swift; sourceTree = "<group>"; };
 		BBE033CB2DD92061006417B0 /* CGimage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGimage.swift; sourceTree = "<group>"; };
@@ -315,6 +317,7 @@
 		3A105FD72C1BF11D0015EC66 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				BBC5BDF32E45A708003A0D64 /* SwiftUIUtils.swift */,
 				BB377C482DFD434300FA93DA /* GlobalPadding.swift */,
 				BBB6C5362DF738E3009E93C4 /* Color.swift */,
 				BBE033CB2DD92061006417B0 /* CGimage.swift */,
@@ -770,6 +773,7 @@
 				BBB6C5372DF738E4009E93C4 /* Color.swift in Sources */,
 				3A1622CE2C8D5F8500D318EE /* FirstTimeCongratsTabView.swift in Sources */,
 				3A1622C32C8D586900D318EE /* PermissionsView.swift in Sources */,
+				BBC5BDF42E45A708003A0D64 /* SwiftUIUtils.swift in Sources */,
 				BBF4139A2C40A64A00AA6733 /* CustomizableFluidGradient.swift in Sources */,
 				BBE692192D17AD9E0093B4A5 /* DangerButton.swift in Sources */,
 				3A1622BE2C8C218500D318EE /* FirstTimeViewInstructionsView.swift in Sources */,
