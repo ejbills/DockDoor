@@ -9,6 +9,19 @@ extension View {
             self
         }
     }
+
+    func borderedBackground(_ content: some ShapeStyle, lineWidth: CGFloat = 1.0, shape: some InsettableShape) -> some View {
+        padding(lineWidth * 0.75)
+            .background {
+                shape
+                    .strokeBorder(content, lineWidth: lineWidth)
+            }
+            .clipShape(shape)
+    }
+
+    func borderedBackground(_ content: some ShapeStyle, lineWidth: CGFloat = 1.0, cornerRadius: CGFloat = 0) -> some View {
+        borderedBackground(content, lineWidth: lineWidth, shape: RoundedRectangle(cornerRadius: cornerRadius))
+    }
 }
 
 extension View {

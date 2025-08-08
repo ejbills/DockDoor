@@ -20,11 +20,7 @@ struct DockStyleModifier: ViewModifier {
                     }
                 }
                 .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
-                .overlay {
-                    RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                        .strokeBorder(Color.gray.opacity(0.19 * backgroundOpacity), lineWidth: 1.5)
-                        .blendMode(.plusLighter)
-                }
+                .borderedBackground(.primary.opacity(0.19 * backgroundOpacity), lineWidth: 1.5, shape: RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
             }
             .padding(2)
     }
@@ -39,10 +35,7 @@ extension View {
         background {
             BlurView(variant: variant)
                 .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
-                .overlay(
-                    RoundedRectangle(cornerRadius: cornerRadius)
-                        .strokeBorder(Color.primary.opacity(strokeOpacity), lineWidth: strokeWidth)
-                )
+                .borderedBackground(.secondary.opacity(0.19), lineWidth: strokeWidth, shape: RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
         }
     }
 }

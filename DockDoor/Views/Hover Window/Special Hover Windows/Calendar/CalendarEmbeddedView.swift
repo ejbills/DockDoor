@@ -45,6 +45,6 @@ struct CalendarEmbeddedView: View {
         }
         .padding(12)
         .frame(minWidth: idealWidth ?? 200, alignment: .center)
-        .simpleBlurBackground()
+        .simpleBlurBackground(strokeWidth: 1.75)
     }
 }
