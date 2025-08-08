@@ -18,7 +18,7 @@ struct MediaControlsEmbeddedView: View {
             .animation(showAnimations ? .smooth(duration: 0.125) : nil, value: isLoadingMediaInfo)
             .padding(12)
             .frame(minWidth: idealWidth ?? (MediaControlsLayout.embeddedArtworkSize + MediaControlsLayout.artworkTextSpacing + 165), alignment: .center)
-            .simpleBlurBackground()
+            .simpleBlurBackground(strokeWidth: 1.75)
     }
 
     @ViewBuilder

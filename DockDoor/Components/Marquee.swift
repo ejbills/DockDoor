@@ -1,4 +1,3 @@
-import SmoothGradient
 import SwiftUI
 
 struct MarqueeText: View {
@@ -161,53 +160,4 @@ struct TheMarquee<C: View>: View {
         }
         return nil
     }
-}
-
-extension View {
-    func fadeOnEdges(axis: Axis, fadeLength: Double, disable: Bool = false) -> some View {
-        mask {
-            if !disable {
-                GeometryReader { geo in
-                    DynStack(direction: axis, spacing: 0) {
-                        if #available(macOS 14.0, *) {
-                            SmoothLinearGradient(
-                                from: .black.opacity(0),
-                                to: .black.opacity(1),
-                                startPoint: axis == .horizontal ? .leading : .top,
-                                endPoint: axis == .horizontal ? .trailing : .bottom,
-                                curve: .easeInOut
-                            )
-                            .frame(width: axis == .horizontal ? fadeLength : nil, height: axis == .vertical ? fadeLength : nil)
-                            Color.black.frame(maxWidth: .infinity)
-                            SmoothLinearGradient(
-                                from: .black.opacity(0),
-                                to: .black.opacity(1),
-                                startPoint: axis == .horizontal ? .trailing : .bottom,
-                                endPoint: axis == .horizontal ? .leading : .top,
-                                curve: .easeInOut
-                            )
-                            .frame(width: axis == .horizontal ? fadeLength : nil, height: axis == .vertical ? fadeLength : nil)
-                        }
-                    }
-                }
-            } else {
-                Color.black
-            }
-        }
-    }
-}
-
-struct ViewSizeKey: PreferenceKey {
-    static var defaultValue: CGSize = .zero
-    static func reduce(value: inout CGSize, nextValue: () -> CGSize) {
-        value = value + nextValue()
-    }
-}
-
-func doAfter(_ seconds: Double = 0, action: @escaping () -> Void) {
-    DispatchQueue.main.asyncAfter(deadline: .now() + seconds, execute: action)
-}
-
-func timer(_ seconds: Double = 0, action: @escaping (Timer) -> Void) -> Timer {
-    Timer.scheduledTimer(withTimeInterval: seconds, repeats: false, block: action)
 }

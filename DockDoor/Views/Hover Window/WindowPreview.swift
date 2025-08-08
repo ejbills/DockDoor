@@ -539,10 +539,7 @@ struct WindowPreview: View {
 
                 BlurView(variant: 18)
                     .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: cornerRadius)
-                            .strokeBorder(Color.primary.opacity(0.1), lineWidth: 1.5)
-                    )
+                    .borderedBackground(.primary.opacity(0.1), lineWidth: 1.75, shape: RoundedRectangle(cornerRadius: cornerRadius))
                     .padding(-6)
                     .overlay {
                         if finalIsSelected {
