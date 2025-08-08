@@ -8740,7 +8740,7 @@
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "кількість"
+            "value" : "одиниць"
           }
         },
         "vi" : {
@@ -20157,8 +20157,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Diagonal - Title bottom left, controls top right"
+            "state" : "translated",
+            "value" : "По діагоналі – заголовок внизу ліворуч, елементи керування зверху праворуч"
           }
         },
         "vi" : {
@@ -20347,8 +20347,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Diagonal - Title bottom right, controls top left"
+            "state" : "translated",
+            "value" : "По діагоналі – заголовок внизу праворуч, елементи керування зверху ліворуч"
           }
         },
         "vi" : {
@@ -20537,8 +20537,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Diagonal - Title top left, controls bottom right"
+            "state" : "translated",
+            "value" : "По діагоналі – заголовок зверху ліворуч, елементи керування внизу праворуч"
           }
         },
         "vi" : {
@@ -20727,8 +20727,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Diagonal - Title top right, controls bottom left"
+            "state" : "translated",
+            "value" : "По діагоналі – заголовок зверху праворуч, елементи керування внизу ліворуч"
           }
         },
         "vi" : {
@@ -21108,8 +21108,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Disable dock styling on traffic light buttons"
+            "state" : "translated",
+            "value" : "Вимкнути стилізацію Dock для кнопок світлофора"
           }
         },
         "vi" : {
@@ -22439,8 +22439,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Preview Layout"
+            "state" : "translated",
+            "value" : "Макет попереднього перегляду Dock"
           }
         },
         "vi" : {
@@ -24913,8 +24913,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Embed controls in preview frames"
+            "state" : "translated",
+            "value" : "Вбудовані елементи керування у кадри попереднього перегляду"
           }
         },
         "vi" : {
@@ -25675,8 +25675,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable Dock Previews"
+            "state" : "translated",
+            "value" : "Увімкнути попередній перегляд у Dock"
           }
         },
         "vi" : {
@@ -37869,8 +37869,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Keep preview when app terminates"
+            "state" : "translated",
+            "value" : "Зберігати попередній перегляд після завершення роботи програми"
           }
         },
         "vi" : {
@@ -51580,8 +51580,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Places traffic light buttons and window titles directly inside the dock preview frames for a more compact and minimal appearance."
+            "state" : "translated",
+            "value" : "Розміщує кнопки світлофора та заголовки вікон безпосередньо всередині рамок попереднього перегляду Dock для більш компактного та мінімалістичного вигляду."
           }
         },
         "vi" : {
@@ -59575,8 +59575,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Removes the pill-shaped background styling from traffic light buttons in dock previews for a cleaner look."
+            "state" : "translated",
+            "value" : "Видаляє фонове оформлення у формі таблетки з кнопок світлофора в попередньому перегляді Dock для покращення вигляду."
           }
         },
         "vi" : {
@@ -68525,8 +68525,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show window previews when hovering over Dock icons."
+            "state" : "translated",
+            "value" : "Показувати попередній перегляд вікон під час наведення курсора на значки Dock."
           }
         },
         "vi" : {
@@ -82050,7 +82050,7 @@
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Вигляд"
+            "value" : "Переглянути"
           }
         },
         "vi" : {
@@ -83193,8 +83193,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When an app terminates, remove only its windows from the preview instead of hiding the entire preview."
+            "state" : "translated",
+            "value" : "Коли програма завершує роботу, видаляти з попереднього перегляду лише її вікна, а не приховувати весь попередній перегляд."
           }
         },
         "vi" : {
