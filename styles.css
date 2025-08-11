@@ -1642,6 +1642,7 @@ header {
     font-weight: 400;
 }
 
+
 @media (max-width: 1024px) {
     .hero .container {
         grid-template-columns: 1fr;
