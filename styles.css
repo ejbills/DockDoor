@@ -40,6 +40,12 @@
     box-sizing: border-box;
 }
 
+html {
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden;
+}
+
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', Arial, sans-serif;
     background: var(--light);
@@ -53,6 +59,8 @@ body {
     scroll-padding-top: 5rem;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    width: 100%;
+    max-width: 100vw;
 }
 
 /* Container and general styling */
@@ -1453,6 +1461,20 @@ header {
 }
 
 @media (max-width: 480px) {
+    *, *::before, *::after {
+        max-width: 100vw;
+    }
+    
+    .container, 
+    section, 
+    div, 
+    header, 
+    main, 
+    footer {
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+    
     .product-hunt-embed img {
         max-width: 180px;
     }
@@ -2175,7 +2197,7 @@ header {
     box-shadow: var(--shadow-lg);
     padding: 1rem;
     margin-bottom: 1rem;
-    min-width: 300px;
+    min-width: min(300px, 90vw);
     max-width: 400px;
     transform: translateX(400px);
     opacity: 0;
