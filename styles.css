@@ -1461,20 +1461,6 @@ header {
 }
 
 @media (max-width: 480px) {
-    *, *::before, *::after {
-        max-width: 100vw;
-    }
-    
-    .container, 
-    section, 
-    div, 
-    header, 
-    main, 
-    footer {
-        max-width: 100%;
-        overflow-x: hidden;
-    }
-    
     .product-hunt-embed img {
         max-width: 180px;
     }
@@ -2186,6 +2172,8 @@ header {
     bottom: 30px;
     right: 30px;
     z-index: 1000;
+    overflow: hidden;
+    max-width: calc(100vw - 60px);
 }
 
 .toast {
@@ -2200,7 +2188,7 @@ header {
     margin-bottom: 1rem;
     min-width: min(300px, 90vw);
     max-width: 400px;
-    transform: translateX(400px);
+    transform: translateX(100%);
     opacity: 0;
     transition: all 0.5s ease;
 }
