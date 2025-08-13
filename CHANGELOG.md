@@ -38,6 +38,19 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://buymeacoffee.com/keplercafe</div>
 
+<a id="1.21.2"></a>
+# [Release 1.21.2](https://github.com/ejbills/DockDoor/releases/tag/1.21.2) - 2025-08-13
+
+
+## ✨ New Features
+- Added window state options
+  - Distinguish minimized windows setting
+  - Visual hidden window indicators
+
+
+[Changes][1.21.2]
+
+
 <a id="1.21.1"></a>
 # [Release 1.21.1](https://github.com/ejbills/DockDoor/releases/tag/1.21.1) - 2025-08-08
 
@@ -1401,6 +1414,7 @@ v1.0
 [Changes][releases]
 
 
+[1.21.2]: https://github.com/ejbills/DockDoor/compare/1.21.1...1.21.2
 [1.21.1]: https://github.com/ejbills/DockDoor/compare/1.21...1.21.1
 [1.21]: https://github.com/ejbills/DockDoor/compare/1.20...1.21
 [1.20]: https://github.com/ejbills/DockDoor/compare/1.19...1.20
