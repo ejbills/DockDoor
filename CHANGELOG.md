@@ -41,11 +41,8 @@
 <a id="1.21.2"></a>
 # [Release 1.21.2](https://github.com/ejbills/DockDoor/releases/tag/1.21.2) - 2025-08-13
 
-
 ## ✨ New Features
-- Added window state options
-  - Distinguish minimized windows setting
-  - Visual hidden window indicators
+- Added window state options (disable minimize/hidden label text)
 
 
 [Changes][1.21.2]
