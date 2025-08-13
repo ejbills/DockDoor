@@ -5044,8 +5044,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Acknowledgments"
+            "state" : "translated",
+            "value" : "Ringraziamenti"
           }
         },
         "ja" : {
@@ -7327,8 +7327,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "All window previews show a gray background. When hovered, the background changes to the accent color or custom color below."
+            "state" : "translated",
+            "value" : "Le anteprime hanno uno sfondo grigio. Al passaggio del mouse, lo sfondo cambia in base alle impostazioni."
           }
         },
         "ja" : {
@@ -7517,8 +7517,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Allow dynamic image sizing"
+            "state" : "translated",
+            "value" : "Dimensione dinamica"
           }
         },
         "ja" : {
@@ -7897,8 +7897,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Allows window preview images to scale dynamically to reasonable dimensions, overriding fixed frame constraints."
+            "state" : "translated",
+            "value" : "Ridimensiona dinamicamente le immagini di anteprima a dimensioni ragionevoli, sovrascrivendo i vincoli."
           }
         },
         "ja" : {
@@ -12085,8 +12085,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Background Opacity"
+            "state" : "translated",
+            "value" : "Opacità sfondo"
           }
         },
         "ja" : {
@@ -14750,8 +14750,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Choose how large window previews appear when hovering over dock icons. All window images are automatically scaled to fit within this size while maintaining their original proportions."
+            "state" : "translated",
+            "value" : "Dimensioni delle anteprime del Dock. Le immagini delle finestre sono scalate automaticamente per adattarsi a questa dimensione mantenendo le proporzioni originali."
           }
         },
         "ja" : {
@@ -16273,8 +16273,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Community Contributors"
+            "state" : "translated",
+            "value" : "Collaboratori della community"
           }
         },
         "ja" : {
@@ -17034,8 +17034,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Contributions"
+            "state" : "translated",
+            "value" : "Contributi"
           }
         },
         "ja" : {
@@ -17414,8 +17414,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Control the transparency of the dock preview background. Lower values make the preview more transparent, which can help prevent it from blocking window content."
+            "state" : "translated",
+            "value" : "Trasparenza dello sfondo dell'anteprima. Valori piccoli determinano un'anteprima più trasparente (può aiutare a impedire che il contenuto della finestra sia coperto)."
           }
         },
         "ja" : {
@@ -18174,8 +18174,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Current aspect ratio: %@"
+            "state" : "translated",
+            "value" : "Proporzione attuale: %@"
           }
         },
         "ja" : {
@@ -19316,8 +19316,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Custom Hover Highlight Color"
+            "state" : "translated",
+            "value" : "Colore sovrapposizione personalizzato"
           }
         },
         "ja" : {
@@ -20079,8 +20079,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Diagonal - Title bottom left, controls top right"
+            "state" : "translated",
+            "value" : "Diagonale - Titolo in basso a sinistra, controlli in alto a destra"
           }
         },
         "ja" : {
@@ -20269,8 +20269,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Diagonal - Title bottom right, controls top left"
+            "state" : "translated",
+            "value" : "Diagonale - Titolo in basso a destra, controlli in alto a sinistra"
           }
         },
         "ja" : {
@@ -20459,8 +20459,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Diagonal - Title top left, controls bottom right"
+            "state" : "translated",
+            "value" : "Diagonale - Titolo in alto a sinistra, controlli in basso a destra"
           }
         },
         "ja" : {
@@ -20649,8 +20649,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Diagonal - Title top right, controls bottom left"
+            "state" : "translated",
+            "value" : "Diagonale - Titolo in alto a destra, controlli in basso a sinistra"
           }
         },
         "ja" : {
@@ -21030,8 +21030,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Disable dock styling on traffic light buttons"
+            "state" : "translated",
+            "value" : "Disabilita lo stile del Dock sui tasti azione"
           }
         },
         "ja" : {
@@ -22361,8 +22361,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Preview Layout"
+            "state" : "translated",
+            "value" : "Layout anteprime"
           }
         },
         "ja" : {
@@ -22741,8 +22741,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Preview Toolbar"
+            "state" : "translated",
+            "value" : "Barra degli strumenti delle anteprime"
           }
         },
         "ja" : {
@@ -22931,8 +22931,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Preview Transparency"
+            "state" : "translated",
+            "value" : "Trasparenza delle anteprime"
           }
         },
         "ja" : {
@@ -24835,8 +24835,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Embed controls in preview frames"
+            "state" : "translated",
+            "value" : "Incorpora i controlli nelle anteprime"
           }
         },
         "ja" : {
@@ -25597,8 +25597,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable Dock Previews"
+            "state" : "translated",
+            "value" : "Abilita le anteprime del Dock"
           }
         },
         "ja" : {
@@ -37791,8 +37791,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Keep preview when app terminates"
+            "state" : "translated",
+            "value" : "Mantieni l'anteprima alla chiusura di DockDoor"
           }
         },
         "ja" : {
@@ -38361,8 +38361,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Language"
+            "state" : "translated",
+            "value" : "Lingua"
           }
         },
         "ja" : {
@@ -40455,8 +40455,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Lock aspect ratio (16:10)"
+            "state" : "translated",
+            "value" : "Blocca proporzioni (16:10)"
           }
         },
         "ja" : {
@@ -43697,8 +43697,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Minimized"
+            "state" : "translated",
+            "value" : "Minimizzata"
           }
         },
         "ja" : {
@@ -44077,8 +44077,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Name"
+            "state" : "translated",
+            "value" : "Titolo"
           }
         },
         "ja" : {
@@ -51502,8 +51502,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Places traffic light buttons and window titles directly inside the dock preview frames for a more compact and minimal appearance."
+            "state" : "translated",
+            "value" : "Posiziona i tasti azione e i titoli delle finestre all'interno dei quadri di anteprima per un aspetto più compatto e minimale."
           }
         },
         "ja" : {
@@ -52455,8 +52455,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Position Dock Preview Controls"
+            "state" : "translated",
+            "value" : "Posizionamento dei controlli delle anteprime del Dock"
           }
         },
         "ja" : {
@@ -54931,8 +54931,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Height"
+            "state" : "translated",
+            "value" : "Altezza anteprima"
           }
         },
         "ja" : {
@@ -56455,8 +56455,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Width"
+            "state" : "translated",
+            "value" : "Larghezza anteprima"
           }
         },
         "ja" : {
@@ -57406,8 +57406,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Profile"
+            "state" : "translated",
+            "value" : "Profilo"
           }
         },
         "ja" : {
@@ -59497,8 +59497,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Removes the pill-shaped background styling from traffic light buttons in dock previews for a cleaner look."
+            "state" : "translated",
+            "value" : "Rimuove lo sfondo a forma di pillola dai tasti azione per un look più pulito."
           }
         },
         "ja" : {
@@ -61969,8 +61969,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Round the corners of window preview images for a modern look."
+            "state" : "translated",
+            "value" : "Arrotonda gli angoli delle immagini di anteprima per un look moderno."
           }
         },
         "ja" : {
@@ -62159,8 +62159,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Rounded corners"
+            "state" : "translated",
+            "value" : "Angoli arrotondati"
           }
         },
         "ja" : {
@@ -68447,8 +68447,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show window previews when hovering over Dock icons."
+            "state" : "translated",
+            "value" : "Mostra le anteprime delle finestre quando il cursore del mouse passa sopra le icone del Dock."
           }
         },
         "ja" : {
@@ -71117,8 +71117,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Spacing Scale"
+            "state" : "translated",
+            "value" : "Spaziatura"
           }
         },
         "ja" : {
@@ -77020,8 +77020,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Translation Contributors"
+            "state" : "translated",
+            "value" : "Traduzioni"
           }
         },
         "ja" : {
@@ -78352,8 +78352,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Unselected Content Opacity"
+            "state" : "translated",
+            "value" : "Opacità degli elementi non selezionati"
           }
         },
         "ja" : {
@@ -81971,8 +81971,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "View"
+            "state" : "translated",
+            "value" : "Vista"
           }
         },
         "ja" : {
@@ -83115,8 +83115,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When an app terminates, remove only its windows from the preview instead of hiding the entire preview."
+            "state" : "translated",
+            "value" : "Alla chiusura di un'app, rimuovi solo le sue finestre dall'anteprima invece di nascondere l'intera anteprima."
           }
         },
         "ja" : {
@@ -85215,8 +85215,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Background"
+            "state" : "translated",
+            "value" : "Sfondo della finestra"
           }
         },
         "ja" : {
