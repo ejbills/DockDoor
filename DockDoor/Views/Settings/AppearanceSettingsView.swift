@@ -107,6 +107,7 @@ struct AppearanceSettingsView: View {
     @Default(.globalPaddingMultiplier) var globalPaddingMultiplier
     @Default(.useEmbeddedDockPreviewElements) var useEmbeddedDockPreviewElements
     @Default(.disableDockStyleTrafficLights) var disableDockStyleTrafficLights
+    @Default(.showMinimizedHiddenLabels) var showMinimizedHiddenLabels
 
     @State private var showAdvancedAppearanceSettings: Bool = false
     @State private var selectedPreviewContext: PreviewContext = .dock
@@ -182,6 +183,13 @@ struct AppearanceSettingsView: View {
                                               return f
                                           }())
 
+                            sliderSetting(title: "Unselected Content Opacity",
+                                          value: $unselectedContentOpacity,
+                                          range: 0 ... 1,
+                                          step: 0.05,
+                                          unit: "",
+                                          formatter: NumberFormatter.percentFormatter)
+
                             VStack(alignment: .leading) {
                                 Toggle(isOn: $uniformCardRadius) {
                                     Text("Rounded corners")
@@ -192,12 +200,15 @@ struct AppearanceSettingsView: View {
                                     .padding(.leading, 20)
                             }
 
-                            sliderSetting(title: "Unselected Content Opacity",
-                                          value: $unselectedContentOpacity,
-                                          range: 0 ... 1,
-                                          step: 0.05,
-                                          unit: "",
-                                          formatter: NumberFormatter.percentFormatter)
+                            VStack(alignment: .leading) {
+                                Toggle(isOn: $showMinimizedHiddenLabels) {
+                                    Text("Distinguish minimized/hidden windows")
+                                }
+                                Text("When enabled, shows visual indicators and dims minimized/hidden windows. When disabled, treats them as normal windows with full functionality.")
+                                    .font(.footnote)
+                                    .foregroundColor(.gray)
+                                    .padding(.leading, 20)
+                            }
                         }
                     }
 

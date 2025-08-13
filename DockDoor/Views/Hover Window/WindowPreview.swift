@@ -31,6 +31,7 @@ struct WindowPreview: View {
     @Default(.allowDynamicImageSizing) var allowDynamicImageSizing
     @Default(.useEmbeddedDockPreviewElements) var useEmbeddedDockPreviewElements
     @Default(.disableDockStyleTrafficLights) var disableDockStyleTrafficLights
+    @Default(.showMinimizedHiddenLabels) var showMinimizedHiddenLabels
 
     @Default(.tapEquivalentInterval) var tapEquivalentInterval
     @Default(.previewHoverAction) var previewHoverAction
@@ -65,13 +66,13 @@ struct WindowPreview: View {
     private func windowContent(isMinimized: Bool, isHidden: Bool, isSelected: Bool) -> some View {
         Group {
             if let cgImage = windowInfo.image {
-                let inactive = isMinimized || isHidden
+                let inactive = (isMinimized || isHidden) && showMinimizedHiddenLabels
                 Image(decorative: cgImage, scale: 1.0)
                     .resizable()
                     .scaledToFit()
                     .markHidden(isHidden: inactive || (windowSwitcherActive && !isSelected))
                     .overlay {
-                        if inactive {
+                        if inactive, showMinimizedHiddenLabels {
                             Image(systemName: "eye.slash")
                                 .font(.largeTitle)
                                 .foregroundColor(.primary)
@@ -114,10 +115,9 @@ struct WindowPreview: View {
             titleToShow != nil &&
             (windowTitleVisibility == .alwaysVisible || selected)
 
-        let hasTrafficLights = !windowInfo.isMinimized &&
-            !windowInfo.isHidden &&
-            windowInfo.closeButton != nil &&
-            trafficLightButtonsVisibility != .never
+        let hasTrafficLights = windowInfo.closeButton != nil &&
+            trafficLightButtonsVisibility != .never &&
+            (showMinimizedHiddenLabels ? (!windowInfo.isMinimized && !windowInfo.isHidden) : true)
 
         let titleContent = Group {
             if hasTitle, let title = titleToShow {
@@ -137,7 +137,7 @@ struct WindowPreview: View {
                     pillStyling: !disableDockStyleTrafficLights,
                     mockPreviewActive: mockPreviewActive
                 )
-            } else if windowInfo.isMinimized || windowInfo.isHidden {
+            } else if windowInfo.isMinimized || windowInfo.isHidden, showMinimizedHiddenLabels {
                 Text(windowInfo.isMinimized ? "Minimized" : "Hidden")
                     .font(.subheadline)
                     .italic()
@@ -285,14 +285,14 @@ struct WindowPreview: View {
         }
 
         let controlsContent = Group {
-            if !windowInfo.isMinimized, !windowInfo.isHidden, windowInfo.closeButton != nil {
+            if windowInfo.closeButton != nil && (showMinimizedHiddenLabels ? (!windowInfo.isMinimized && !windowInfo.isHidden) : true) {
                 TrafficLightButtons(
                     displayMode: trafficLightButtonsVisibility,
                     hoveringOverParentWindow: selected || isHoveringOverWindowSwitcherPreview,
                     onWindowAction: handleWindowAction,
                     pillStyling: true, mockPreviewActive: mockPreviewActive
                 )
-            } else if windowInfo.isMinimized || windowInfo.isHidden {
+            } else if windowInfo.isMinimized || windowInfo.isHidden, showMinimizedHiddenLabels {
                 Text(windowInfo.isMinimized ? "Minimized" : "Hidden")
                     .font(.subheadline)
                     .italic()
@@ -364,10 +364,9 @@ struct WindowPreview: View {
             titleToShow != nil &&
             (windowTitleVisibility == .alwaysVisible || selected)
 
-        let hasTrafficLights = !windowInfo.isMinimized &&
-            !windowInfo.isHidden &&
-            windowInfo.closeButton != nil &&
-            trafficLightButtonsVisibility != .never
+        let hasTrafficLights = windowInfo.closeButton != nil &&
+            trafficLightButtonsVisibility != .never &&
+            (showMinimizedHiddenLabels ? (!windowInfo.isMinimized && !windowInfo.isHidden) : true)
 
         let titleContent = Group {
             if hasTitle, let title = titleToShow {
@@ -387,7 +386,7 @@ struct WindowPreview: View {
                     pillStyling: !disableDockStyleTrafficLights,
                     mockPreviewActive: mockPreviewActive
                 )
-            } else if windowInfo.isMinimized || windowInfo.isHidden {
+            } else if windowInfo.isMinimized || windowInfo.isHidden, showMinimizedHiddenLabels {
                 Text(windowInfo.isMinimized ? "Minimized" : "Hidden")
                     .font(.subheadline)
                     .italic()
