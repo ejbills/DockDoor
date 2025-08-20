@@ -20175,8 +20175,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Diagonal - Title bottom left, controls top right"
+            "state" : "translated",
+            "value" : "對角 — 標題在左下，控制按鈕在右上"
           }
         }
       }
@@ -20365,8 +20365,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Diagonal - Title bottom right, controls top left"
+            "state" : "translated",
+            "value" : "對角 — 標題在右下，控制按鈕在左上"
           }
         }
       }
@@ -20555,8 +20555,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Diagonal - Title top left, controls bottom right"
+            "state" : "translated",
+            "value" : "對角 — 標題在左上，控制按鈕在右下"
           }
         }
       }
@@ -20745,8 +20745,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Diagonal - Title top right, controls bottom left"
+            "state" : "translated",
+            "value" : "對角 — 標題在右上，控制按鈕在左下"
           }
         }
       }
@@ -21126,8 +21126,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Disable dock styling on traffic light buttons"
+            "state" : "translated",
+            "value" : "停用視窗控制按鈕的底座造型"
           }
         }
       }
@@ -22457,8 +22457,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Preview Layout"
+            "state" : "translated",
+            "value" : "Dock預覽佈局"
           }
         }
       }
@@ -24931,8 +24931,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Embed controls in preview frames"
+            "state" : "translated",
+            "value" : "將控制按鈕嵌入預覽畫面"
           }
         }
       }
@@ -25693,8 +25693,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable Dock Previews"
+            "state" : "translated",
+            "value" : "啟用Dock預覽"
           }
         }
       }
@@ -51503,7 +51503,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Posiziona i tasti azione e i titoli delle finestre all'interno dei quadri di anteprima per un aspetto più compatto e minimale."
+            "value" : "Posiziona i tasti azione e i titoli delle finestre all'interno dei riquadri di anteprima per un aspetto più compatto e minimale."
           }
         },
         "ja" : {
@@ -51598,8 +51598,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Places traffic light buttons and window titles directly inside the dock preview frames for a more compact and minimal appearance."
+            "state" : "translated",
+            "value" : "將視窗控制按鈕和標題顯示在Dock預覽畫面內，使外觀更加緊湊簡潔。"
           }
         }
       }
@@ -59593,8 +59593,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Removes the pill-shaped background styling from traffic light buttons in dock previews for a cleaner look."
+            "state" : "translated",
+            "value" : "移除Dock預覽中視窗控制按鈕的膠囊形背景，使外觀更簡潔。"
           }
         }
       }
@@ -68543,8 +68543,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show window previews when hovering over Dock icons."
+            "state" : "translated",
+            "value" : "指標停留在Dock圖像上方時顯示視窗預覽。"
           }
         }
       }
