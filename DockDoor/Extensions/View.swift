@@ -47,6 +47,20 @@ extension View {
                                 curve: .easeInOut
                             )
                             .frame(width: axis == .horizontal ? fadeLength : nil, height: axis == .vertical ? fadeLength : nil)
+                        } else {
+                            LinearGradient(
+                                gradient: Gradient(colors: [.black.opacity(0), .black]),
+                                startPoint: axis == .horizontal ? .leading : .top,
+                                endPoint: axis == .horizontal ? .trailing : .bottom
+                            )
+                            .frame(width: axis == .horizontal ? fadeLength : nil, height: axis == .vertical ? fadeLength : nil)
+                            Color.black.frame(maxWidth: .infinity)
+                            LinearGradient(
+                                gradient: Gradient(colors: [.black.opacity(0), .black]),
+                                startPoint: axis == .horizontal ? .trailing : .bottom,
+                                endPoint: axis == .horizontal ? .leading : .top
+                            )
+                            .frame(width: axis == .horizontal ? fadeLength : nil, height: axis == .vertical ? fadeLength : nil)
                         }
                     }
                 }
