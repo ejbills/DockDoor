@@ -38,6 +38,17 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://buymeacoffee.com/keplercafe</div>
 
+<a id="1.21.3"></a>
+# [Release 1.21.3](https://github.com/ejbills/DockDoor/releases/tag/1.21.3) - 2025-08-20
+
+
+## 🐛 Bug Fixes
+- Fixed blank previews
+
+
+[Changes][1.21.3]
+
+
 <a id="1.21.2"></a>
 # [Release 1.21.2](https://github.com/ejbills/DockDoor/releases/tag/1.21.2) - 2025-08-13
 
@@ -1411,6 +1422,7 @@ v1.0
 [Changes][releases]
 
 
+[1.21.3]: https://github.com/ejbills/DockDoor/compare/1.21.2...1.21.3
 [1.21.2]: https://github.com/ejbills/DockDoor/compare/1.21.1...1.21.2
 [1.21.1]: https://github.com/ejbills/DockDoor/compare/1.21...1.21.1
 [1.21]: https://github.com/ejbills/DockDoor/compare/1.20...1.21
