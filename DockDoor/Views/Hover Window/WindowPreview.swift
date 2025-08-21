@@ -70,6 +70,7 @@ struct WindowPreview: View {
                 Image(decorative: cgImage, scale: 1.0)
                     .resizable()
                     .scaledToFit()
+                    .clipped(antialiased: true)
                     .markHidden(isHidden: inactive || (windowSwitcherActive && !isSelected))
                     .overlay {
                         if inactive, showMinimizedHiddenLabels {
