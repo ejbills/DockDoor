@@ -18,7 +18,6 @@ struct DynamicWindowFrameModifier: ViewModifier {
                     .scaledToFit()
                     .frame(maxWidth: dimensions.maxDimensions.width,
                            maxHeight: dimensions.maxDimensions.height)
-                    .clipped(antialiased: true)
             } else {
                 // Vertical flow: fixed width, let height scale naturally
                 content
@@ -26,7 +25,6 @@ struct DynamicWindowFrameModifier: ViewModifier {
                     .scaledToFit()
                     .frame(maxWidth: dimensions.maxDimensions.width,
                            maxHeight: dimensions.maxDimensions.height)
-                    .clipped(antialiased: true)
             }
         } else {
             // Fixed sizing: use the computed dimensions exactly
@@ -37,7 +35,6 @@ struct DynamicWindowFrameModifier: ViewModifier {
                 .frame(maxWidth: dimensions.maxDimensions.width,
                        maxHeight: dimensions.maxDimensions.height)
                 .aspectRatio(dimensions.size.width / dimensions.size.height, contentMode: .fit)
-                .clipped(antialiased: true)
         }
     }
 }
