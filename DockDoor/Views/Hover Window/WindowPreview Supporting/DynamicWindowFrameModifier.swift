@@ -34,7 +34,6 @@ struct DynamicWindowFrameModifier: ViewModifier {
                        alignment: .center)
                 .frame(maxWidth: dimensions.maxDimensions.width,
                        maxHeight: dimensions.maxDimensions.height)
-                .aspectRatio(dimensions.size.width / dimensions.size.height, contentMode: .fit)
         }
     }
 }
