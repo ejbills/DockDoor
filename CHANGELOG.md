@@ -43,11 +43,7 @@
 
 ## 🔧 Improvements & Stability
 - Enhanced background opacity control
-  - Zero opacity support
-  - Better transparency settings
-
-## 🐛 Bug Fixes
-- Fixed window aspect ratios
+- Fixed window preview scaling
 
 
 [Changes][1.21.4]
