@@ -41,9 +41,13 @@
 <a id="1.21.4"></a>
 # [Release 1.21.4](https://github.com/ejbills/DockDoor/releases/tag/1.21.4) - 2025-08-24
 
+
 ## 🔧 Improvements & Stability
-- Enhanced background opacity control
-- Fixed window preview scaling
+- Allow transparent preview background
+- Tweaked default opacity settings
+
+## 🐛 Bug Fixes
+- Fixed window preview stretching
 
 
 [Changes][1.21.4]
