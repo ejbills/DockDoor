@@ -38,6 +38,21 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://buymeacoffee.com/keplercafe</div>
 
+<a id="1.21.4"></a>
+# [Release 1.21.4](https://github.com/ejbills/DockDoor/releases/tag/1.21.4) - 2025-08-24
+
+## 🔧 Improvements & Stability
+- Enhanced background opacity control
+  - Zero opacity support
+  - Better transparency settings
+
+## 🐛 Bug Fixes
+- Fixed window aspect ratios
+
+
+[Changes][1.21.4]
+
+
 <a id="1.21.3"></a>
 # [Release 1.21.3](https://github.com/ejbills/DockDoor/releases/tag/1.21.3) - 2025-08-20
 
@@ -1422,6 +1437,7 @@ v1.0
 [Changes][releases]
 
 
+[1.21.4]: https://github.com/ejbills/DockDoor/compare/1.21.3...1.21.4
 [1.21.3]: https://github.com/ejbills/DockDoor/compare/1.21.2...1.21.3
 [1.21.2]: https://github.com/ejbills/DockDoor/compare/1.21.1...1.21.2
 [1.21.1]: https://github.com/ejbills/DockDoor/compare/1.21...1.21.1
