@@ -64,7 +64,7 @@ extension Defaults.Keys {
     static let showAppName = Key<Bool>("showAppName", default: true)
     static let appNameStyle = Key<AppNameStyle>("appNameStyle", default: .default)
     static let selectionOpacity = Key<CGFloat>("selectionOpacity", default: 0.4)
-    static let unselectedContentOpacity = Key<CGFloat>("unselectedContentOpacity", default: 0.85)
+    static let unselectedContentOpacity = Key<CGFloat>("unselectedContentOpacity", default: 0.75)
     static let hoverHighlightColor = Key<Color?>("hoverHighlightColor", default: nil)
     static let dockPreviewBackgroundOpacity = Key<CGFloat>("dockPreviewBackgroundOpacity", default: 1.0)
 

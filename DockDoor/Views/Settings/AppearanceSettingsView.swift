@@ -485,7 +485,7 @@ struct AppearanceSettingsView: View {
 
                     sliderSetting(title: "Background Opacity",
                                   value: $dockPreviewBackgroundOpacity,
-                                  range: 0.1 ... 1.0,
+                                  range: 0 ... 1.0,
                                   step: 0.05,
                                   unit: "",
                                   formatter: NumberFormatter.percentFormatter)

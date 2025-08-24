@@ -3,7 +3,7 @@ import SwiftUI
 // Inspired by https://cocoacasts.com/from-hex-to-uicolor-and-back-in-swift
 // Make Color codable. This includes support for transparency.
 // See https://www.digitalocean.com/community/tutorials/css-hex-code-colors-alpha-values
-extension Color: Codable {
+extension Color: @retroactive Codable {
     init(hex: String) {
         let rgba = hex.toRGBA()
 
