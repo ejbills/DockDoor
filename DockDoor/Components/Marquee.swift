@@ -1,3 +1,4 @@
+import Defaults
 import SwiftUI
 
 struct MarqueeText: View {
@@ -45,12 +46,13 @@ struct TheMarquee<C: View>: View {
     @State private var offset: Double = 0
     @State private var animating = false
     @State private var actualWidth: CGFloat = 0
+    @Default(.enableTitleMarquee) private var enableTitleMarquee
 
     var measured: Bool { contentSize != .zero }
 
     var internalShouldMove: Bool {
         let displayRegionWidth = forcedWidth ?? actualWidth
-        return measured && displayRegionWidth > 0 && contentSize.width > displayRegionWidth
+        return enableTitleMarquee && (measured && displayRegionWidth > 0 && contentSize.width > displayRegionWidth)
     }
 
     private func updateAnimationState() {
@@ -113,6 +115,7 @@ struct TheMarquee<C: View>: View {
                 }
                 .padding(.horizontal, internalShouldMove ? horizontalPadding : 0)
                 .frame(minWidth: internalShouldMove ? displayRegionWidth : nil, alignment: internalShouldMove ? marqueeAlignment : nonMovingAlignment)
+                .frame(maxWidth: !enableTitleMarquee ? displayRegionWidth : nil)
                 .offset(x: internalShouldMove ? offset : 0)
             }
             .scrollDisabled(true)

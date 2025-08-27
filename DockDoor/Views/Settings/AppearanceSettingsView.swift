@@ -108,6 +108,7 @@ struct AppearanceSettingsView: View {
     @Default(.useEmbeddedDockPreviewElements) var useEmbeddedDockPreviewElements
     @Default(.disableDockStyleTrafficLights) var disableDockStyleTrafficLights
     @Default(.showMinimizedHiddenLabels) var showMinimizedHiddenLabels
+    @Default(.enableTitleMarquee) var enableTitleMarquee
 
     @State private var showAdvancedAppearanceSettings: Bool = false
     @State private var selectedPreviewContext: PreviewContext = .dock
@@ -195,6 +196,16 @@ struct AppearanceSettingsView: View {
                                     Text("Rounded corners")
                                 }
                                 Text("Round the corners of window preview images for a modern look.")
+                                    .font(.footnote)
+                                    .foregroundColor(.gray)
+                                    .padding(.leading, 20)
+                            }
+
+                            VStack(alignment: .leading) {
+                                Toggle(isOn: $enableTitleMarquee) {
+                                    Text("Scroll long titles (marquee)")
+                                }
+                                Text("When disabled, long titles remain static instead of scrolling.")
                                     .font(.footnote)
                                     .foregroundColor(.gray)
                                     .padding(.leading, 20)
