@@ -69,6 +69,8 @@
 		BB3967FD2C291D5A004F1AB6 /* StackedShadow.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3967FC2C291D5A004F1AB6 /* StackedShadow.swift */; };
 		BB3968002C2A6C44004F1AB6 /* SmoothGradient in Frameworks */ = {isa = PBXBuildFile; productRef = BB3967FF2C2A6C44004F1AB6 /* SmoothGradient */; };
 		BB3968022C2A6CC2004F1AB6 /* Marquee.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3968012C2A6CC2004F1AB6 /* Marquee.swift */; };
+		BB3A552D2E611D6D00854F20 /* applescript-adapter in Frameworks */ = {isa = PBXBuildFile; productRef = BB3A552C2E611D6D00854F20 /* applescript-adapter */; };
+		BB3A552E2E611F4100854F20 /* applescript-adapter in Embed Frameworks */ = {isa = PBXBuildFile; productRef = BB3A552C2E611D6D00854F20 /* applescript-adapter */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		BB3D6EAE2C82E4B400FFE584 /* WindowDismissalContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3D6EAD2C82E4AE00FFE584 /* WindowDismissalContainer.swift */; };
 		BB3D6EB02C84E58400FFE584 /* NSScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3D6EAF2C84E58000FFE584 /* NSScreen.swift */; };
 		BB44474F2C507F950047EB92 /* LimitedTaskGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB44474E2C507F920047EB92 /* LimitedTaskGroup.swift */; };
@@ -108,6 +110,15 @@
 		BBA153FA2C11FFD500119C02 /* consts.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA153F92C11FFD500119C02 /* consts.swift */; };
 		BBA153FC2C12356100119C02 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA153FB2C12356100119C02 /* main.swift */; };
 		BBAC6B452D15FA8900A0F370 /* AXValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBAC6B442D15FA8800A0F370 /* AXValue.swift */; };
+		BBB290832E60C234001DC458 /* WidgetHostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBB2907F2E60C234001DC458 /* WidgetHostView.swift */; };
+		BBB290842E60C234001DC458 /* Wireframe.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBB290802E60C234001DC458 /* Wireframe.swift */; };
+		BBB290852E60C234001DC458 /* WidgetOrchestrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBB2907C2E60C234001DC458 /* WidgetOrchestrator.swift */; };
+		BBB290862E60C234001DC458 /* WidgetRegistry.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBB2907D2E60C234001DC458 /* WidgetRegistry.swift */; };
+		BBB290872E60C234001DC458 /* WidgetModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBB2907B2E60C234001DC458 /* WidgetModels.swift */; };
+		BBB290892E60C31E001DC458 /* WidgetsSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBB290882E60C31E001DC458 /* WidgetsSettingsView.swift */; };
+		BBB2908C2E60CA2C001DC458 /* ActionRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBB2908A2E60CA2C001DC458 /* ActionRouter.swift */; };
+		BBB2908D2E60CA2C001DC458 /* AppleScriptExecutor.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBB2908B2E60CA2C001DC458 /* AppleScriptExecutor.swift */; };
+		BBB2908F2E60D437001DC458 /* ScriptAgentManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBB2908E2E60D437001DC458 /* ScriptAgentManager.swift */; };
 		BBB6C5302DF3C884009E93C4 /* MediaInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBB6C52F2DF3C884009E93C4 /* MediaInfo.swift */; };
 		BBB6C5322DF3C8A4009E93C4 /* MediaControlsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBB6C5312DF3C8A4009E93C4 /* MediaControlsView.swift */; };
 		BBB6C5342DF3C8B4009E93C4 /* BaseHoverContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBB6C5332DF3C8B4009E93C4 /* BaseHoverContainer.swift */; };
@@ -136,6 +147,20 @@
 		BBFAD73C2C287C770092F5F1 /* UpdateSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBFAD73B2C287C770092F5F1 /* UpdateSettingsView.swift */; };
 		C119BDF22C2AFA7600E06E18 /* WindowSwitcherSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C119BDF12C2AFA7600E06E18 /* WindowSwitcherSettingsView.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		BB3A552F2E611F4100854F20 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				BB3A552E2E611F4100854F20 /* applescript-adapter in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		0531F8D12C3CC04600327808 /* AppearanceSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceSettingsView.swift; sourceTree = "<group>"; };
@@ -237,6 +262,15 @@
 		BBA153F92C11FFD500119C02 /* consts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = consts.swift; sourceTree = "<group>"; };
 		BBA153FB2C12356100119C02 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		BBAC6B442D15FA8800A0F370 /* AXValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AXValue.swift; sourceTree = "<group>"; };
+		BBB2907B2E60C234001DC458 /* WidgetModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetModels.swift; sourceTree = "<group>"; };
+		BBB2907C2E60C234001DC458 /* WidgetOrchestrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetOrchestrator.swift; sourceTree = "<group>"; };
+		BBB2907D2E60C234001DC458 /* WidgetRegistry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetRegistry.swift; sourceTree = "<group>"; };
+		BBB2907F2E60C234001DC458 /* WidgetHostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetHostView.swift; sourceTree = "<group>"; };
+		BBB290802E60C234001DC458 /* Wireframe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wireframe.swift; sourceTree = "<group>"; };
+		BBB290882E60C31E001DC458 /* WidgetsSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetsSettingsView.swift; sourceTree = "<group>"; };
+		BBB2908A2E60CA2C001DC458 /* ActionRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionRouter.swift; sourceTree = "<group>"; };
+		BBB2908B2E60CA2C001DC458 /* AppleScriptExecutor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleScriptExecutor.swift; sourceTree = "<group>"; };
+		BBB2908E2E60D437001DC458 /* ScriptAgentManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptAgentManager.swift; sourceTree = "<group>"; };
 		BBB6C52F2DF3C884009E93C4 /* MediaInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaInfo.swift; sourceTree = "<group>"; };
 		BBB6C5312DF3C8A4009E93C4 /* MediaControlsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaControlsView.swift; sourceTree = "<group>"; };
 		BBB6C5332DF3C8B4009E93C4 /* BaseHoverContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseHoverContainer.swift; sourceTree = "<group>"; };
@@ -268,6 +302,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BB3A552D2E611D6D00854F20 /* applescript-adapter in Frameworks */,
 				BBBD4AF82C8D71560074FFCF /* ConfettiSwiftUI in Frameworks */,
 				BB33E68C2C24C72F00A21D69 /* LaunchAtLogin in Frameworks */,
 				3A1622A32C8BFF3800D318EE /* Pow in Frameworks */,
@@ -402,6 +437,7 @@
 			isa = PBXGroup;
 			children = (
 				BB157B672C0E31CE00997315 /* DockDoor */,
+				BB3A552B2E611D6D00854F20 /* Frameworks */,
 				BB157B662C0E31CE00997315 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -417,6 +453,7 @@
 		BB157B672C0E31CE00997315 /* DockDoor */ = {
 			isa = PBXGroup;
 			children = (
+				BBB290822E60C234001DC458 /* Widgets */,
 				BB8247782C2889B20098A440 /* Info.plist */,
 				BB4ED9062C3C75CA00BBDD16 /* Localizable.xcstrings */,
 				BBA153F92C11FFD500119C02 /* consts.swift */,
@@ -491,6 +528,13 @@
 				BB377C332DFD0D3700FA93DA /* PinnableView.swift */,
 			);
 			path = Pinnable;
+			sourceTree = "<group>";
+		};
+		BB3A552B2E611D6D00854F20 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		BB4B44492C372A42006680DC /* Hover Window */ = {
@@ -598,6 +642,37 @@
 			path = "Window Management";
 			sourceTree = "<group>";
 		};
+		BBB2907E2E60C234001DC458 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				BBB2908E2E60D437001DC458 /* ScriptAgentManager.swift */,
+				BBB2908A2E60CA2C001DC458 /* ActionRouter.swift */,
+				BBB2908B2E60CA2C001DC458 /* AppleScriptExecutor.swift */,
+				BBB2907B2E60C234001DC458 /* WidgetModels.swift */,
+				BBB2907C2E60C234001DC458 /* WidgetOrchestrator.swift */,
+				BBB2907D2E60C234001DC458 /* WidgetRegistry.swift */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		BBB290812E60C234001DC458 /* Declarative */ = {
+			isa = PBXGroup;
+			children = (
+				BBB2907F2E60C234001DC458 /* WidgetHostView.swift */,
+				BBB290802E60C234001DC458 /* Wireframe.swift */,
+			);
+			path = Declarative;
+			sourceTree = "<group>";
+		};
+		BBB290822E60C234001DC458 /* Widgets */ = {
+			isa = PBXGroup;
+			children = (
+				BBB2907E2E60C234001DC458 /* Core */,
+				BBB290812E60C234001DC458 /* Declarative */,
+			);
+			path = Widgets;
+			sourceTree = "<group>";
+		};
 		BBB6C52E2DF3C883009E93C4 /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -629,6 +704,7 @@
 				BB6A4F1B2C1CFCFF00CB4C9E /* PermissionsSettingsView.swift */,
 				BBFAD73B2C287C770092F5F1 /* UpdateSettingsView.swift */,
 				C119BDF12C2AFA7600E06E18 /* WindowSwitcherSettingsView.swift */,
+				BBB290882E60C31E001DC458 /* WidgetsSettingsView.swift */,
 				0531F8D12C3CC04600327808 /* AppearanceSettingsView.swift */,
 				BB0440612C77AE85009F1D33 /* GradientColorPaletteSettingsView.swift */,
 			);
@@ -646,6 +722,7 @@
 				BB157B612C0E31CE00997315 /* Sources */,
 				BB157B622C0E31CE00997315 /* Frameworks */,
 				BB157B632C0E31CE00997315 /* Resources */,
+				BB3A552F2E611F4100854F20 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -661,6 +738,7 @@
 				3A1622A22C8BFF3800D318EE /* Pow */,
 				3A1622B72C8C0EE200D318EE /* Kroma */,
 				BBBD4AF72C8D71560074FFCF /* ConfettiSwiftUI */,
+				BB3A552C2E611D6D00854F20 /* applescript-adapter */,
 			);
 			productName = DockDoor;
 			productReference = BB157B652C0E31CE00997315 /* DockDoor.app */;
@@ -701,6 +779,7 @@
 				3A1622A12C8BFF3800D318EE /* XCRemoteSwiftPackageReference "Pow" */,
 				3A1622B62C8C0EE200D318EE /* XCRemoteSwiftPackageReference "Kroma" */,
 				BBBD4AF62C8D71560074FFCF /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */,
+				BB3A552A2E611D0D00854F20 /* XCRemoteSwiftPackageReference "applescript-adapter" */,
 			);
 			productRefGroup = BB157B662C0E31CE00997315 /* Products */;
 			projectDirPath = "";
@@ -777,6 +856,9 @@
 				BBF4139A2C40A64A00AA6733 /* CustomizableFluidGradient.swift in Sources */,
 				BBE692192D17AD9E0093B4A5 /* DangerButton.swift in Sources */,
 				3A1622BE2C8C218500D318EE /* FirstTimeViewInstructionsView.swift in Sources */,
+				BBB2908C2E60CA2C001DC458 /* ActionRouter.swift in Sources */,
+				BBB2908D2E60CA2C001DC458 /* AppleScriptExecutor.swift in Sources */,
+				BBB290892E60C31E001DC458 /* WidgetsSettingsView.swift in Sources */,
 				BB1A85F52D05263C00326297 /* FiltersSettingsView.swift in Sources */,
 				BB638F002E0216FA0010077D /* MediaArtworkView.swift in Sources */,
 				BB377C342DFD0D3700FA93DA /* PinnableView.swift in Sources */,
@@ -816,6 +898,7 @@
 				BB157B822C0EB29E00997315 /* DockObserver.swift in Sources */,
 				BB638F022E0216FE0010077D /* MediaControlButton.swift in Sources */,
 				BB638F0A2E02172B0010077D /* MediaLyricsButton.swift in Sources */,
+				BBB2908F2E60D437001DC458 /* ScriptAgentManager.swift in Sources */,
 				BBA153FA2C11FFD500119C02 /* consts.swift in Sources */,
 				BB377C3F2DFD19ED00FA93DA /* PinnedWindowDelegate.swift in Sources */,
 				BBE033CC2DD92061006417B0 /* CGimage.swift in Sources */,
@@ -849,6 +932,11 @@
 				BB2567C62C10C5F000C0C93E /* DockUtils.swift in Sources */,
 				BBE7CC912C22429A00AB8F4D /* settings.swift in Sources */,
 				BB1A85F72D08E53000326297 /* DragPreviewCoordinator.swift in Sources */,
+				BBB290832E60C234001DC458 /* WidgetHostView.swift in Sources */,
+				BBB290842E60C234001DC458 /* Wireframe.swift in Sources */,
+				BBB290852E60C234001DC458 /* WidgetOrchestrator.swift in Sources */,
+				BBB290862E60C234001DC458 /* WidgetRegistry.swift in Sources */,
+				BBB290872E60C234001DC458 /* WidgetModels.swift in Sources */,
 				BBF413942C40978400AA6733 /* WindowPreviewHoverContainer.swift in Sources */,
 				BBF413922C40618D00AA6733 /* FullSizePreviewView.swift in Sources */,
 				BB15E1F12C8FBCD4002ECFB9 /* BugAndFeatureReporting.swift in Sources */,
@@ -1005,7 +1093,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				AUTOMATION_APPLE_EVENTS = YES;
+				AUTOMATION_APPLE_EVENTS = NO;
 				CODE_SIGN_ENTITLEMENTS = DockDoor/DockDoorDebug.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
@@ -1014,10 +1102,10 @@
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"DockDoor/Preview Content\"";
 				DEVELOPMENT_TEAM = 2Q775S63Q3;
-				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_HARDENED_RUNTIME = NO;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_RESOURCE_ACCESS_AUDIO_INPUT = NO;
-				ENABLE_RESOURCE_ACCESS_CALENDARS = YES;
+				ENABLE_RESOURCE_ACCESS_CALENDARS = NO;
 				ENABLE_RESOURCE_ACCESS_CAMERA = NO;
 				ENABLE_RESOURCE_ACCESS_CONTACTS = NO;
 				ENABLE_RESOURCE_ACCESS_LOCATION = NO;
@@ -1027,6 +1115,8 @@
 				INFOPLIST_FILE = DockDoor/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = DockDoor;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_LSUIElement = YES;
+				INFOPLIST_KEY_NSCalendarsUsageDescription = "DockDoor uses EventKit to fetch task info from Calendar.";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1052,7 +1142,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				AUTOMATION_APPLE_EVENTS = YES;
+				AUTOMATION_APPLE_EVENTS = NO;
 				CODE_SIGN_ENTITLEMENTS = DockDoor/DockDoor.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
@@ -1061,10 +1151,10 @@
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"DockDoor/Preview Content\"";
 				DEVELOPMENT_TEAM = 2Q775S63Q3;
-				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_HARDENED_RUNTIME = NO;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_RESOURCE_ACCESS_AUDIO_INPUT = NO;
-				ENABLE_RESOURCE_ACCESS_CALENDARS = YES;
+				ENABLE_RESOURCE_ACCESS_CALENDARS = NO;
 				ENABLE_RESOURCE_ACCESS_CAMERA = NO;
 				ENABLE_RESOURCE_ACCESS_CONTACTS = NO;
 				ENABLE_RESOURCE_ACCESS_LOCATION = NO;
@@ -1074,6 +1164,8 @@
 				INFOPLIST_FILE = DockDoor/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = DockDoor;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_LSUIElement = YES;
+				INFOPLIST_KEY_NSCalendarsUsageDescription = "DockDoor uses EventKit to fetch task info from Calendar.";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1158,6 +1250,14 @@
 				minimumVersion = 1.0.0;
 			};
 		};
+		BB3A552A2E611D0D00854F20 /* XCRemoteSwiftPackageReference "applescript-adapter" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ejbills/applescript-adapter.git";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 		BBBD4AF62C8D71560074FFCF /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/simibac/ConfettiSwiftUI";
@@ -1209,6 +1309,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = BB3967FE2C2A6C44004F1AB6 /* XCRemoteSwiftPackageReference "SmoothGradient" */;
 			productName = SmoothGradient;
+		};
+		BB3A552C2E611D6D00854F20 /* applescript-adapter */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BB3A552A2E611D0D00854F20 /* XCRemoteSwiftPackageReference "applescript-adapter" */;
+			productName = "applescript-adapter";
 		};
 		BBBD4AF72C8D71560074FFCF /* ConfettiSwiftUI */ = {
 			isa = XCSwiftPackageProductDependency;

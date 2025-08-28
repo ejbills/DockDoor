@@ -125,6 +125,12 @@ struct MainSettingsView: View {
     @Default(.raisedWindowLevel) var raisedWindowLevel
     @Default(.enablePinning) var enablePinning
     @Default(.showBigControlsWhenNoValidWindows) var showBigControlsWhenNoValidWindows
+    @Default(.useWidgetSystem) var useWidgetSystem
+
+    // Widgets (experimental)
+    @State private var widgetsManifests: [WidgetManifest] = []
+    @State private var widgetsInstalling: Bool = false
+    @State private var widgetsMessage: String? = nil
 
     private let advancedSettingsSectionID = "advancedSettingsSection"
     private let windowSwitcherAdvancedSettingsID = "windowSwitcherAdvancedSettings"
@@ -548,15 +554,15 @@ struct MainSettingsView: View {
                         .pickerStyle(MenuPickerStyle())
                         .padding(.leading, 20)
                     }
-                    Toggle(isOn: $showSpecialAppControls) { Text("Show media/calendar controls on Dock hover") }
-                    Text("For supported apps (Music, Spotify, Calendar), show interactive controls instead of window previews when hovering their Dock icons.")
+                    Toggle(isOn: $showSpecialAppControls) { Text("Show widgets/special app controls on Dock hover") }
+                    Text("For supported apps and installed widgets, show interactive controls instead of window previews when hovering their Dock icons.")
                         .font(.caption)
                         .foregroundColor(.secondary)
                         .padding(.leading, 20)
                     if showSpecialAppControls {
-                        Toggle(isOn: $useEmbeddedMediaControls) { Text("Embed controls with window previews (if previews shown)") }
+                        Toggle(isOn: $useEmbeddedMediaControls) { Text("Embed controls/widgets with window previews (if previews shown)") }
                             .padding(.leading, 20)
-                        Text("If enabled, controls integrate with previews when possible.")
+                        Text("If enabled, controls or widgets integrate with previews when possible.")
                             .font(.caption)
                             .foregroundColor(.secondary)
                             .padding(.leading, 40)
@@ -581,6 +587,51 @@ struct MainSettingsView: View {
                     }
 
                     sliderSetting(title: "Window Buffer from Dock (pixels)", value: $bufferFromDock, range: -100 ... 100, step: 5, unit: "px", formatter: { let f = NumberFormatter(); f.allowsFloats = false; f.minimumIntegerDigits = 1; f.maximumFractionDigits = 0; return f }())
+                }
+            }
+
+            // MARK: - Widgets (Experimental)
+
+            StyledGroupBox(label: "Widgets (Experimental)") {
+                VStack(alignment: .leading, spacing: 10) {
+                    Toggle(isOn: $useWidgetSystem) { Text("Enable Widget System (Experimental)") }
+                    Text("Install and render widgets without updating the app.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+
+                    HStack(spacing: 8) {
+                        Button(action: installSampleWidget) {
+                            if widgetsInstalling { ProgressView().scaleEffect(0.8) } else { Text("Install Sample Widget") }
+                        }
+                        .disabled(widgetsInstalling)
+                        Button(action: reinstallSampleWidget) { Text("Reinstall Sample Widget") }
+                            .disabled(widgetsInstalling)
+                        Button(action: openWidgetsFolder) { Text("Open Widgets Folder") }
+                    }
+
+                    if let msg = widgetsMessage { Text(msg).font(.caption).foregroundColor(.secondary) }
+
+                    Divider().padding(.vertical, 6)
+
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Installed Widgets").font(.headline)
+                        if widgetsManifests.isEmpty {
+                            Text("No widgets installed").foregroundColor(.secondary)
+                        } else {
+                            ForEach(widgetsManifests, id: \.self) { m in
+                                HStack(alignment: .center, spacing: 10) {
+                                    VStack(alignment: .leading, spacing: 2) {
+                                        Text(m.name).font(.subheadline)
+                                        Text("\(m.id) • v\(m.version)").font(.caption).foregroundColor(.secondary)
+                                    }
+                                    Spacer()
+                                    Button(role: .destructive) { removeWidget(m) } label: { Image(systemName: "trash") }
+                                        .buttonStyle(.plain)
+                                }
+                                if m != widgetsManifests.last { Divider() }
+                            }
+                        }
+                    }
                 }
             }
         }.padding(.top, 5)
@@ -826,6 +877,104 @@ struct MainSettingsView: View {
                 askUserToRestartApplication()
             }
         }
+    }
+}
+
+// MARK: - Widgets Helpers
+
+extension MainSettingsView {
+    private func reloadWidgets() {
+        print("[WidgetsSettings] Reloading widgets from settings view…")
+        WidgetRegistry.shared.reload()
+        widgetsManifests = WidgetRegistry.shared.manifests
+        print("[WidgetsSettings] Loaded manifests: \(widgetsManifests.map(\.id).joined(separator: ", "))")
+    }
+
+    private func openWidgetsFolder() {
+        let url = WidgetRegistry.installRoot
+        _ = try? FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
+        NSWorkspace.shared.open(url)
+    }
+
+    private func removeWidget(_ m: WidgetManifest) {
+        guard let dir = m.installDirectory else { return }
+        do {
+            try FileManager.default.removeItem(at: dir)
+            widgetsMessage = "Removed \(m.name)"
+            reloadWidgets()
+        } catch {
+            widgetsMessage = "Failed to remove \(m.name)"
+        }
+    }
+
+    private var sampleWidgetId: String { "com.dockdoor.sample.systemsettings" }
+
+    private func installSampleWidget() {
+        widgetsInstalling = true
+        widgetsMessage = nil
+        DispatchQueue.global(qos: .userInitiated).async {
+            let root = WidgetRegistry.installRoot.appendingPathComponent(sampleWidgetId, isDirectory: true)
+            let fm = FileManager.default
+            do {
+                print("[WidgetsSettings] Installing sample to: \(root.path)")
+                try fm.createDirectory(at: root, withIntermediateDirectories: true)
+                let manifest = Self.sampleManifest
+                let layout = Self.sampleLayout
+                let manifestURL = root.appendingPathComponent("manifest.json")
+                let layoutURL = root.appendingPathComponent("layout.json")
+                try manifest.write(to: manifestURL, atomically: true, encoding: .utf8)
+                try layout.write(to: layoutURL, atomically: true, encoding: .utf8)
+                print("[WidgetsSettings] Wrote manifest: \(manifestURL.path)")
+                print("[WidgetsSettings] Wrote layout: \(layoutURL.path)")
+                DispatchQueue.main.async {
+                    widgetsInstalling = false
+                    widgetsMessage = "Installed sample widget targeting System Settings"
+                    reloadWidgets()
+                }
+            } catch {
+                print("[WidgetsSettings] Failed installing sample: \(error)")
+                DispatchQueue.main.async {
+                    widgetsInstalling = false
+                    widgetsMessage = "Failed to install sample widget"
+                }
+            }
+        }
+    }
+
+    private func reinstallSampleWidget() {
+        widgetsInstalling = true
+        widgetsMessage = nil
+        DispatchQueue.global(qos: .userInitiated).async {
+            let root = WidgetRegistry.installRoot.appendingPathComponent(sampleWidgetId, isDirectory: true)
+            let fm = FileManager.default
+            if fm.fileExists(atPath: root.path) {
+                do {
+                    print("[WidgetsSettings] Removing existing sample at: \(root.path)")
+                    try fm.removeItem(at: root)
+                    print("[WidgetsSettings] Removed existing sample")
+                } catch {
+                    print("[WidgetsSettings] Failed removing existing sample: \(error)")
+                }
+            } else {
+                print("[WidgetsSettings] No existing sample found to remove at: \(root.path)")
+            }
+            DispatchQueue.main.async {
+                widgetsInstalling = false
+                installSampleWidget()
+            }
+        }
+    }
+
+    private static var sampleManifest: String {
+        """
+        {\n  \"id\": \"com.dockdoor.sample.systemsettings\",\n  \"name\": \"System Settings Info\",\n  \"version\": \"1.0.0\",\n  \"author\": \"DockDoor\",\n  \"runtime\": \"declarative\",\n  \"entry\": \"layout.json\",\n  \"modes\": [\"embedded\", \"full\"],\n  \"matches\": [\n    { \"bundleId\": \"com.apple.SystemSettings\" },\n    { \"bundleId\": \"com.apple.systempreferences\" }\n  ],\n  \"actions\": {\n    \"openGeneral\": \"try\\nopen location \\\"x-apple.systempreferences:com.apple.preference.general\\\"\\nend try\\ntell application \\\"System Settings\\\" to activate\"\n  }\n }\n
+        """
+    }
+
+    private static var sampleLayout: String {
+        """
+        {\n  \"embedded\": {\n    \"type\": \"hstack\",\n    \"spacing\": 8,\n    \"children\": [\n      {\"type\": \"imageSymbol\", \"symbol\": \"gearshape.fill\", \"size\": 16},\n      {\"type\": \"text\", \"text\": \"{{app.name}} ({{windows.count}} windows)\", \"font\": \"callout\"},\n      {\"type\": \"spacer\"},\n      {\"type\": \"buttonRow\", \"buttons\": [{\"symbol\": \"gearshape\", \"action\": \"openGeneral\"}]}\n    ]\n  },\n  \"full\": {\n    \"type\": \"vstack\",\n    \"spacing\": 12,\n    \"children\": [\n      {\"type\": \"text\", \"text\": \"System Settings\", \"font\": \"title3\"},\n      {\"type\": \"text\", \"text\": \"Open → General to customize your Mac\", \"font\": \"subheadline\"},\n      {\"type\": \"buttonRow\", \"buttons\": [{\"symbol\": \"gearshape\", \"action\": \"openGeneral\"}]}\n    ]\n  }\n}\n
+        """
     }
 }
 

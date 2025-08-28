@@ -1,6 +1,15 @@
 {
-  "originHash" : "5248e828952ad393abc81a18a8a9c34a4822127cc0a9ff2cfb3a5e4715c9fbd3",
+  "originHash" : "57f9cc4702555938591d4f8e8f42e92a25207d068d143aaa9efef2b3fe98baed",
   "pins" : [
+    {
+      "identity" : "applescript-adapter",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ejbills/applescript-adapter.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "9260467e7a60e07fb1c2c946b306b72aca96256a"
+      }
+    },
     {
       "identity" : "confettiswiftui",
       "kind" : "remoteSourceControl",
@@ -16,7 +25,7 @@
       "location" : "https://github.com/sindresorhus/Defaults",
       "state" : {
         "branch" : "main",
-        "revision" : "00c82eff4550c87cf9c547d7e5493a6a97837061"
+        "revision" : "564b72578c0d25d2850aa5dd595cedb7a274c4da"
       }
     },
     {
@@ -60,8 +69,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/raymondjavaxx/SmoothGradient",
       "state" : {
-        "revision" : "61bf248fad31c7921c9985b418e6e9297cd7b861",
-        "version" : "1.0.0"
+        "revision" : "77ac160533ce312f92b566754731e07b20315a41",
+        "version" : "1.0.1"
       }
     },
     {
@@ -69,8 +78,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/sparkle-project/Sparkle",
       "state" : {
-        "revision" : "0ca3004e98712ea2b39dd881d28448630cce1c99",
-        "version" : "2.7.0"
+        "revision" : "df074165274afaa39539c05d57b0832620775b11",
+        "version" : "2.7.1"
       }
     },
     {

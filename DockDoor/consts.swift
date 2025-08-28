@@ -99,6 +99,10 @@ extension Defaults.Keys {
     static let appNameFilters = Key<[String]>("appNameFilters", default: [])
     static let windowTitleFilters = Key<[String]>("windowTitleFilters", default: [])
     static let customAppDirectories = Key<[String]>("customAppDirectories", default: [])
+
+    // MARK: - Experimental Widget System
+
+    static let useWidgetSystem = Key<Bool>("useWidgetSystem", default: false)
 }
 
 // MARK: Display Configurations

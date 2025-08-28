@@ -45,6 +45,8 @@ struct WindowPreviewHoverContainer: View {
     var mockPreviewActive: Bool
     let updateAvailable: Bool
     let embeddedContentType: EmbeddedContentType
+    // New: optional declarative widgets to render in embedded mode (behind feature flag)
+    let embeddedWidgets: [WidgetManifest]?
 
     @ObservedObject var previewStateCoordinator: PreviewStateCoordinator
 
@@ -79,7 +81,8 @@ struct WindowPreviewHoverContainer: View {
          windowSwitcherCoordinator: PreviewStateCoordinator,
          mockPreviewActive: Bool,
          updateAvailable: Bool,
-         embeddedContentType: EmbeddedContentType = .none)
+         embeddedContentType: EmbeddedContentType = .none,
+         embeddedWidgets: [WidgetManifest]? = nil)
     {
         self.appName = appName
         self.onWindowTap = onWindowTap
@@ -90,6 +93,7 @@ struct WindowPreviewHoverContainer: View {
         self.mockPreviewActive = mockPreviewActive
         self.updateAvailable = updateAvailable
         self.embeddedContentType = embeddedContentType
+        self.embeddedWidgets = embeddedWidgets
     }
 
     private var minimumEmbeddedWidth: CGFloat {
@@ -416,29 +420,40 @@ struct WindowPreviewHoverContainer: View {
 
     @ViewBuilder
     private func embeddedContentView() -> some View {
-        switch embeddedContentType {
-        case let .media(bundleIdentifier):
-            MediaControlsView(
-                appName: appName,
-                bundleIdentifier: bundleIdentifier,
-                dockPosition: dockPosition,
-                bestGuessMonitor: bestGuessMonitor,
-                isEmbeddedMode: true,
-                idealWidth: minimumEmbeddedWidth
-            )
-            .pinnable(appName: appName, bundleIdentifier: bundleIdentifier, type: .media)
-        case let .calendar(bundleIdentifier):
-            CalendarView(
-                appName: appName,
-                bundleIdentifier: bundleIdentifier,
-                dockPosition: dockPosition,
-                bestGuessMonitor: bestGuessMonitor,
-                isEmbeddedMode: true,
-                idealWidth: minimumEmbeddedWidth
-            )
-            .pinnable(appName: appName, bundleIdentifier: bundleIdentifier, type: .calendar)
-        case .none:
-            EmptyView()
+        if Defaults[.useWidgetSystem], let widgets = embeddedWidgets, let first = widgets.first {
+            let ctx: [String: String] = [
+                "app.name": appName,
+                "windows.count": String(previewStateCoordinator.windows.count),
+            ]
+            WidgetHostView(manifest: first, mode: .embedded, context: ctx)
+                .padding(12)
+                .frame(minWidth: minimumEmbeddedWidth, alignment: .center)
+                .simpleBlurBackground(strokeWidth: 1.75)
+        } else {
+            switch embeddedContentType {
+            case let .media(bundleIdentifier):
+                MediaControlsView(
+                    appName: appName,
+                    bundleIdentifier: bundleIdentifier,
+                    dockPosition: dockPosition,
+                    bestGuessMonitor: bestGuessMonitor,
+                    isEmbeddedMode: true,
+                    idealWidth: minimumEmbeddedWidth
+                )
+                .pinnable(appName: appName, bundleIdentifier: bundleIdentifier, type: .media)
+            case let .calendar(bundleIdentifier):
+                CalendarView(
+                    appName: appName,
+                    bundleIdentifier: bundleIdentifier,
+                    dockPosition: dockPosition,
+                    bestGuessMonitor: bestGuessMonitor,
+                    isEmbeddedMode: true,
+                    idealWidth: minimumEmbeddedWidth
+                )
+                .pinnable(appName: appName, bundleIdentifier: bundleIdentifier, type: .calendar)
+            case .none:
+                EmptyView()
+            }
         }
     }
 
@@ -683,8 +698,9 @@ struct WindowPreviewHoverContainer: View {
     private func createFlowItems() -> [FlowItem] {
         var allItems: [FlowItem] = []
 
-        // Add embedded content first if present
-        if embeddedContentType != .none {
+        // Add embedded content first if present (legacy or widget)
+        let hasWidgetEmbedded = Defaults[.useWidgetSystem] && (embeddedWidgets?.isEmpty == false)
+        if embeddedContentType != .none || hasWidgetEmbedded {
             allItems.append(.embedded)
         }
 
@@ -725,7 +741,8 @@ struct WindowPreviewHoverContainer: View {
 
         var itemsToProcess: [FlowItem] = []
 
-        if embeddedContentType != .none {
+        let hasWidgetEmbedded = Defaults[.useWidgetSystem] && (embeddedWidgets?.isEmpty == false)
+        if embeddedContentType != .none || hasWidgetEmbedded {
             itemsToProcess.append(.embedded)
         }
 
