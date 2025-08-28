@@ -5,6 +5,7 @@ extension Settings.PaneIdentifier {
     static let general = Self("general")
     static let appearance = Self("appearance")
     static let filters = Self("filters")
+    static let widgets = Self("widgets")
     static let support = Self("support")
 }
 
@@ -39,6 +40,18 @@ let FiltersSettingsViewController: () -> SettingsPane = {
         toolbarIcon: NSImage(systemSymbolName: "air.purifier", accessibilityDescription: String(localized: "Filters settings"))!
     ) {
         FiltersSettingsView()
+    }
+
+    return Settings.PaneHostingController(pane: paneView)
+}
+
+let WidgetsSettingsViewController: () -> SettingsPane = {
+    let paneView = Settings.Pane(
+        identifier: .widgets,
+        title: String(localized: "Widgets", comment: "Widgets tab title"),
+        toolbarIcon: NSImage(systemSymbolName: "rectangle.3.group.fill", accessibilityDescription: String(localized: "Widgets settings"))!
+    ) {
+        WidgetsSettingsView()
     }
 
     return Settings.PaneHostingController(pane: paneView)

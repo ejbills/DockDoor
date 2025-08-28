@@ -3,7 +3,7 @@ import Defaults
 import SwiftUI
 
 struct MediaControlButtonRow: View {
-    @ObservedObject var mediaInfo: MediaInfo
+    @ObservedObject var mediaInfo: MediaStore
     let spacing: CGFloat
     var isEmbedded: Bool = false
     var isExpanded: Bool = false

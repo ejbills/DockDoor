@@ -2,7 +2,7 @@ import Defaults
 import SwiftUI
 
 struct MediaControlsEmbeddedView: View {
-    @ObservedObject var mediaInfo: MediaInfo
+    @ObservedObject var mediaInfo: MediaStore
     let appName: String
     let bundleIdentifier: String
     let dominantArtworkColor: Color?

@@ -3,7 +3,7 @@ import Defaults
 import SwiftUI
 
 struct MediaLyricsButton: View {
-    @ObservedObject var mediaInfo: MediaInfo
+    @ObservedObject var lyricProvider: LyricProvider
     @Binding var lyricsMode: Bool
     @Binding var showingLyrics: Bool
     var isFullMode: Bool = false
@@ -18,7 +18,7 @@ struct MediaLyricsButton: View {
                 if !lyricsMode {
                     lyricsMode = true
                     Task {
-                        await mediaInfo.fetchLyrics()
+                        await lyricProvider.fetchLyrics()
                     }
                     withAnimation(showAnimations ? .spring(response: 0.6, dampingFraction: 0.8) : nil) {
                         showingLyrics = true
@@ -30,7 +30,7 @@ struct MediaLyricsButton: View {
                 }
             }
         )
-        .opacity(mediaInfo.isLoadingLyrics ? 0.5 : 1.0)
-        .disabled(mediaInfo.isLoadingLyrics)
+        .opacity(lyricProvider.isLoadingLyrics ? 0.5 : 1.0)
+        .disabled(lyricProvider.isLoadingLyrics)
     }
 }

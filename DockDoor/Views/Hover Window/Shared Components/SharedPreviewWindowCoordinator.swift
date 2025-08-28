@@ -6,12 +6,6 @@ enum ArrowDirection {
     case left, right, up, down
 }
 
-enum EmbeddedContentType: Equatable {
-    case media(bundleIdentifier: String)
-    case calendar(bundleIdentifier: String)
-    case none
-}
-
 final class SharedPreviewWindowCoordinator: NSPanel {
     weak static var activeInstance: SharedPreviewWindowCoordinator?
 
@@ -56,28 +50,6 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         collectionBehavior = [.canJoinAllSpaces, .transient, .fullScreenAuxiliary]
         hidesOnDeactivate = false
         becomesKeyOnlyIfNeeded = true
-    }
-
-    private func isMediaApp(bundleIdentifier: String?) -> Bool {
-        guard let bundleId = bundleIdentifier else { return false }
-        return bundleId == spotifyAppIdentifier || bundleId == appleMusicAppIdentifier
-    }
-
-    private func isCalendarApp(bundleIdentifier: String?) -> Bool {
-        guard let bundleId = bundleIdentifier else { return false }
-        return bundleId == calendarAppIdentifier
-    }
-
-    private func getEmbeddedContentType(for bundleIdentifier: String?) -> EmbeddedContentType {
-        guard let bundleId = bundleIdentifier else { return .none }
-
-        if isMediaApp(bundleIdentifier: bundleId) {
-            return .media(bundleIdentifier: bundleId)
-        } else if isCalendarApp(bundleIdentifier: bundleId) {
-            return .calendar(bundleIdentifier: bundleId)
-        }
-
-        return .none
     }
 
     func hideWindow() {
@@ -144,7 +116,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
     private func updateContentViewSizeAndPosition(mouseLocation: CGPoint? = nil, mouseScreen: NSScreen, dockItemElement: AXUIElement?,
                                                   animated: Bool, centerOnScreen: Bool = false,
                                                   centeredHoverWindowState: PreviewStateCoordinator.WindowState? = nil,
-                                                  embeddedContentType: EmbeddedContentType = .none)
+                                                  embeddedWidgets: [WidgetManifest]? = nil)
     {
         windowSwitcherCoordinator.setShowing(centeredHoverWindowState, toState: centerOnScreen)
 
@@ -155,7 +127,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
                                                     bestGuessMonitor: mouseScreen, windowSwitcherCoordinator: windowSwitcherCoordinator,
                                                     mockPreviewActive: false,
                                                     updateAvailable: updateAvailable,
-                                                    embeddedContentType: embeddedContentType)
+                                                    embeddedWidgets: embeddedWidgets)
         let newHostingView = NSHostingView(rootView: hoverView)
 
         if let oldContentView = contentView {
@@ -358,54 +330,47 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         bundleIdentifier: String?
     ) {
         let screen = mouseScreen ?? NSScreen.main!
-        var finalEmbeddedContentType: EmbeddedContentType = .none
         var useBigStandaloneViewInstead = false
         var viewForBigStandalone: AnyView?
+        var embeddedWidgets: [WidgetManifest]? = nil
+        var fullWidgets: [WidgetManifest]? = nil
 
-        if let bundleId = bundleIdentifier {
-            let actualAppContentType = getEmbeddedContentType(for: bundleId)
+        if let bundleId = bundleIdentifier, Defaults[.widgetsEnabled] {
+            let selection = WidgetOrchestrator().selectWidgets(for: bundleId)
+            print("[Coordinator] Widget selection for \(bundleId): embedded=\(selection.embedded.count) full=\(selection.full.count)")
+            if !selection.embedded.isEmpty { embeddedWidgets = selection.embedded }
+            if !selection.full.isEmpty { fullWidgets = selection.full }
+        }
 
-            switch actualAppContentType {
-            case let .media(mediaBundleId):
-                if Defaults[.showSpecialAppControls] {
-                    let hasValidWindows = windows.contains { !$0.isMinimized && !$0.isHidden }
-                    let shouldUseBigControlsForNoValidWindows = Defaults[.showBigControlsWhenNoValidWindows] &&
-                        (windows.isEmpty || !hasValidWindows)
+        // Generic widget handling (when no legacy content type decided the view)
+        if embeddedWidgets != nil || fullWidgets != nil {
+            let hasValidWindows = windows.contains { !$0.isMinimized && !$0.isHidden }
+            let shouldUseBigControlsForNoValidWindows = Defaults[.showBigControlsWhenNoValidWindows] &&
+                (windows.isEmpty || !hasValidWindows)
 
-                    if Defaults[.useEmbeddedMediaControls], !shouldUseBigControlsForNoValidWindows {
-                        finalEmbeddedContentType = .media(bundleIdentifier: mediaBundleId)
+            if Defaults[.showSpecialAppControls] {
+                if Defaults[.useEmbeddedMediaControls], !shouldUseBigControlsForNoValidWindows, let ews = embeddedWidgets, !ews.isEmpty {
+                    // Use embedded (by passing through)
+                } else if let fw = fullWidgets, let first = fw.first {
+                    useBigStandaloneViewInstead = true
+                    let ctx: [String: String] = [
+                        "appName": appName,
+                        "bundleIdentifier": bundleIdentifier ?? windows.first?.app.bundleIdentifier ?? "",
+                        "windows.count": String(windows.count),
+                        "dockPosition": String(describing: DockUtils.getDockPosition()),
+                    ]
+                    if first.isNative() {
+                        viewForBigStandalone = AnyView(
+                            WidgetHostView(manifest: first, mode: .full, context: ctx, screen: screen)
+                        )
                     } else {
-                        useBigStandaloneViewInstead = true
-                        viewForBigStandalone = AnyView(MediaControlsView(
-                            appName: appName,
-                            bundleIdentifier: mediaBundleId,
-                            dockPosition: DockUtils.getDockPosition(),
-                            bestGuessMonitor: screen,
-                            isEmbeddedMode: false
-                        ))
+                        viewForBigStandalone = AnyView(
+                            BaseHoverContainer(bestGuessMonitor: screen, mockPreviewActive: false) {
+                                WidgetHostView(manifest: first, mode: .full, context: ctx, screen: screen)
+                            }
+                        )
                     }
                 }
-            case let .calendar(calendarBundleId):
-                if Defaults[.showSpecialAppControls] {
-                    let hasValidWindows = windows.contains { !$0.isMinimized && !$0.isHidden }
-                    let shouldUseBigControlsForNoValidWindows = Defaults[.showBigControlsWhenNoValidWindows] &&
-                        (windows.isEmpty || !hasValidWindows)
-
-                    if Defaults[.useEmbeddedMediaControls], !shouldUseBigControlsForNoValidWindows {
-                        finalEmbeddedContentType = .calendar(bundleIdentifier: calendarBundleId)
-                    } else {
-                        useBigStandaloneViewInstead = true
-                        viewForBigStandalone = AnyView(CalendarView(
-                            appName: appName,
-                            bundleIdentifier: calendarBundleId,
-                            dockPosition: DockUtils.getDockPosition(),
-                            bestGuessMonitor: screen,
-                            isEmbeddedMode: false
-                        ))
-                    }
-                }
-            case .none:
-                break
             }
         }
 
@@ -420,7 +385,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
                 dockItemElement: dockItemElement,
                 centeredHoverWindowState: centeredHoverWindowState,
                 onWindowTap: onWindowTap,
-                embeddedContentType: finalEmbeddedContentType
+                embeddedWidgets: (Defaults[.showSpecialAppControls] && Defaults[.useEmbeddedMediaControls]) ? embeddedWidgets : nil
             )
         }
 
@@ -432,7 +397,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
                                    mouseScreen: NSScreen?, dockItemElement: AXUIElement?,
                                    centeredHoverWindowState: PreviewStateCoordinator.WindowState? = nil,
                                    onWindowTap: (() -> Void)?,
-                                   embeddedContentType: EmbeddedContentType = .none)
+                                   embeddedWidgets: [WidgetManifest]? = nil)
     {
         guard !windows.isEmpty else { return }
 
@@ -456,7 +421,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
 
             updateContentViewSizeAndPosition(mouseLocation: mouseLocation, mouseScreen: screen, dockItemElement: dockItemElement, animated: !shouldCenterOnScreen,
                                              centerOnScreen: shouldCenterOnScreen, centeredHoverWindowState: centeredHoverWindowState,
-                                             embeddedContentType: embeddedContentType)
+                                             embeddedWidgets: embeddedWidgets)
         }
     }
 

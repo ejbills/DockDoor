@@ -2,7 +2,8 @@ import Defaults
 import SwiftUI
 
 struct MediaControlsFullView: View {
-    @ObservedObject var mediaInfo: MediaInfo
+    @ObservedObject var mediaInfo: MediaStore
+    @ObservedObject var lyricProvider: LyricProvider
     let appName: String
     let bundleIdentifier: String
     let dockPosition: DockPosition
@@ -147,6 +148,7 @@ struct MediaControlsFullView: View {
 
             MediaPlaybackControls(
                 mediaInfo: mediaInfo,
+                lyricProvider: lyricProvider,
                 isExpanded: false,
                 showingLyrics: false
             )
@@ -196,6 +198,7 @@ struct MediaControlsFullView: View {
 
                 MediaPlaybackControls(
                     mediaInfo: mediaInfo,
+                    lyricProvider: lyricProvider,
                     isExpanded: true,
                     showingLyrics: showingLyricsInFull,
                     lyricsMode: $lyricsMode,
@@ -218,7 +221,7 @@ struct MediaControlsFullView: View {
             // Right side - Lyrics view
             if showingLyricsInFull {
                 MediaLyricsView(
-                    mediaInfo: mediaInfo,
+                    lyricProvider: lyricProvider,
                     width: MediaControlsLayout.fullLyricsViewWidth + 80,
                     maxHeight: 300,
                     isFullMode: true

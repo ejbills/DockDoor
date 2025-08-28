@@ -11,7 +11,6 @@ class DailyCalendarInfo: ObservableObject {
         let startDate: Date
         let endDate: Date
         let location: String?
-        let calendarColor: CGColor?
     }
 
     private let eventStore = EKEventStore()
@@ -34,10 +33,7 @@ class DailyCalendarInfo: ObservableObject {
                 }
             }
         } else {
-            // If status is already determined, fetch data immediately.
-            DispatchQueue.main.async {
-                self.fetchDataBasedOnCurrentPermissions()
-            }
+            DispatchQueue.main.async { self.fetchDataBasedOnCurrentPermissions() }
         }
     }
 
@@ -81,8 +77,7 @@ class DailyCalendarInfo: ObservableObject {
                     title: $0.title,
                     startDate: $0.startDate,
                     endDate: $0.endDate,
-                    location: $0.location,
-                    calendarColor: $0.calendar.cgColor
+                    location: $0.location
                 )
             }.sorted(by: { $0.startDate < $1.startDate })
 

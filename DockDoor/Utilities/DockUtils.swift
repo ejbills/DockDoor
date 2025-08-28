@@ -1,12 +1,22 @@
 import Cocoa
 import Defaults
 
-enum DockPosition {
+enum DockPosition: String {
     case top
     case bottom
     case left
     case right
     case unknown
+
+    init(from string: String) {
+        switch string.lowercased() {
+        case "top": self = .top
+        case "bottom": self = .bottom
+        case "left": self = .left
+        case "right": self = .right
+        default: self = .unknown
+        }
+    }
 
     var isHorizontalFlow: Bool {
         switch self {

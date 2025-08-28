@@ -44,7 +44,8 @@ enum MediaControlsLayout {
 }
 
 struct MediaControlsView: View {
-    @StateObject private var mediaInfo = MediaInfo()
+    @ObservedObject var mediaInfo: MediaStore
+    @StateObject private var lyricProvider: LyricProvider = .init()
     let appName: String
     let bundleIdentifier: String
     let dockPosition: DockPosition
@@ -52,6 +53,7 @@ struct MediaControlsView: View {
     let isEmbeddedMode: Bool
     let isPinnedMode: Bool
     let idealWidth: CGFloat?
+    let autoFetch: Bool
 
     @Default(.uniformCardRadius) var uniformCardRadius
     @Default(.showAppName) var showAppTitleData
@@ -62,7 +64,6 @@ struct MediaControlsView: View {
     @State private var appIcon: NSImage? = nil
     @State private var hoveringAppIcon: Bool = false
     @State private var hoveringWindowTitle: Bool = false
-    @State private var isLoadingMediaInfo: Bool = true
     @State private var dominantArtworkColor: Color? = nil
     @State private var hasAppeared: Bool = false
 
@@ -81,14 +82,18 @@ struct MediaControlsView: View {
 
     @State private var artworkRotation: Double = 0.0
 
-    init(appName: String,
+    @MainActor
+    init(mediaInfo: MediaStore,
+         appName: String,
          bundleIdentifier: String,
          dockPosition: DockPosition,
          bestGuessMonitor: NSScreen,
          isEmbeddedMode: Bool = false,
          isPinnedMode: Bool = false,
-         idealWidth: CGFloat? = nil)
+         idealWidth: CGFloat? = nil,
+         autoFetch: Bool = true)
     {
+        self.mediaInfo = mediaInfo
         self.appName = appName
         self.bundleIdentifier = bundleIdentifier
         self.dockPosition = dockPosition
@@ -96,6 +101,43 @@ struct MediaControlsView: View {
         self.isEmbeddedMode = isEmbeddedMode
         self.isPinnedMode = isPinnedMode
         self.idealWidth = idealWidth
+        self.autoFetch = autoFetch
+    }
+
+    @MainActor
+    init(mediaInfo: MediaStore?,
+         appName: String,
+         bundleIdentifier: String,
+         dockPosition: DockPosition,
+         bestGuessMonitor: NSScreen,
+         isEmbeddedMode: Bool = false,
+         isPinnedMode: Bool = false,
+         idealWidth: CGFloat? = nil,
+         autoFetch: Bool = true)
+    {
+        if let mediaInfo {
+            self.init(mediaInfo: mediaInfo,
+                      appName: appName,
+                      bundleIdentifier: bundleIdentifier,
+                      dockPosition: dockPosition,
+                      bestGuessMonitor: bestGuessMonitor,
+                      isEmbeddedMode: isEmbeddedMode,
+                      isPinnedMode: isPinnedMode,
+                      idealWidth: idealWidth,
+                      autoFetch: autoFetch)
+        } else {
+            // Create a default MediaStore if none provided
+            let defaultStore = MediaStore(actions: nil)
+            self.init(mediaInfo: defaultStore,
+                      appName: appName,
+                      bundleIdentifier: bundleIdentifier,
+                      dockPosition: dockPosition,
+                      bestGuessMonitor: bestGuessMonitor,
+                      isEmbeddedMode: isEmbeddedMode,
+                      isPinnedMode: isPinnedMode,
+                      idealWidth: idealWidth,
+                      autoFetch: autoFetch)
+        }
     }
 
     var body: some View {
@@ -103,14 +145,18 @@ struct MediaControlsView: View {
             coreContent()
         }
         .onAppear {
-            isLoadingMediaInfo = true
             loadAppIcon()
-            Task {
-                await mediaInfo.fetchMediaInfo(for: bundleIdentifier)
-                withAnimation(showAnimations ? .smooth(duration: 0.225) : nil) {
-                    isLoadingMediaInfo = false
-                }
-            }
+
+            // Initialize lyric provider with current media info
+            lyricProvider.updateMediaInfo(
+                title: mediaInfo.title,
+                artist: mediaInfo.artist,
+                album: mediaInfo.album,
+                duration: mediaInfo.duration,
+                isPlaying: mediaInfo.isPlaying,
+                currentTime: mediaInfo.currentTime
+            )
+
             if let artwork = mediaInfo.artwork {
                 dominantArtworkColor = artwork.averageColor()
             }
@@ -124,6 +170,16 @@ struct MediaControlsView: View {
             }
         }
         .onChange(of: mediaInfo.title) { newTitle in
+            // Update lyric provider with current media info
+            lyricProvider.updateMediaInfo(
+                title: mediaInfo.title,
+                artist: mediaInfo.artist,
+                album: mediaInfo.album,
+                duration: mediaInfo.duration,
+                isPlaying: mediaInfo.isPlaying,
+                currentTime: mediaInfo.currentTime
+            )
+
             if !mediaInfo.title.isEmpty, hasAppeared {
                 withAnimation(showAnimations ? .smooth(duration: 0.3) : nil) {
                     artworkRotation += 360
@@ -131,11 +187,31 @@ struct MediaControlsView: View {
 
                 if lyricsMode {
                     Task {
-                        await mediaInfo.fetchLyricsIfNeeded(lyricsMode: lyricsMode)
+                        await lyricProvider.fetchLyricsIfNeeded(lyricsMode: lyricsMode)
                     }
                 }
             }
             if !hasAppeared { hasAppeared = true }
+        }
+        .onChange(of: mediaInfo.currentTime) { _ in
+            lyricProvider.updateMediaInfo(
+                title: mediaInfo.title,
+                artist: mediaInfo.artist,
+                album: mediaInfo.album,
+                duration: mediaInfo.duration,
+                isPlaying: mediaInfo.isPlaying,
+                currentTime: mediaInfo.currentTime
+            )
+        }
+        .onChange(of: mediaInfo.isPlaying) { _ in
+            lyricProvider.updateMediaInfo(
+                title: mediaInfo.title,
+                artist: mediaInfo.artist,
+                album: mediaInfo.album,
+                duration: mediaInfo.duration,
+                isPlaying: mediaInfo.isPlaying,
+                currentTime: mediaInfo.currentTime
+            )
         }
         .onChange(of: isArtworkExpandedFull) { expanded in
             if !expanded {
@@ -143,7 +219,7 @@ struct MediaControlsView: View {
             }
         }
         .onDisappear {
-            mediaInfo.updateTimer?.invalidate()
+            // No cleanup needed for MediaStore as it's managed by the widget polling system
         }
     }
 
@@ -156,12 +232,13 @@ struct MediaControlsView: View {
                 bundleIdentifier: bundleIdentifier,
                 dominantArtworkColor: dominantArtworkColor,
                 artworkRotation: artworkRotation,
-                isLoadingMediaInfo: isLoadingMediaInfo,
+                isLoadingMediaInfo: false,
                 idealWidth: idealWidth
             )
         } else {
             MediaControlsFullView(
                 mediaInfo: mediaInfo,
+                lyricProvider: lyricProvider,
                 appName: appName,
                 bundleIdentifier: bundleIdentifier,
                 dockPosition: dockPosition,
@@ -173,7 +250,7 @@ struct MediaControlsView: View {
                 artworkExpansionFullNamespace: artworkExpansionFullNamespace,
                 dominantArtworkColor: dominantArtworkColor,
                 artworkRotation: artworkRotation,
-                isLoadingMediaInfo: isLoadingMediaInfo,
+                isLoadingMediaInfo: false,
                 appIcon: appIcon,
                 hoveringAppIcon: hoveringAppIcon,
                 hoveringWindowTitle: hoveringWindowTitle

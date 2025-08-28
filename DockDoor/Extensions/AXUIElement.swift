@@ -35,7 +35,9 @@ extension AXUIElement {
     private func value<T>(_ key: String, _ target: T, _ type: AXValueType) throws -> T? {
         if let a = try attribute(key, AXValue.self) {
             var value = target
-            AXValueGetValue(a, type, &value)
+            _ = withUnsafeMutablePointer(to: &value) { pointer in
+                AXValueGetValue(a, type, UnsafeMutableRawPointer(pointer))
+            }
             return value
         }
         return nil

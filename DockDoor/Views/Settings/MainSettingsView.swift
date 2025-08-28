@@ -116,15 +116,14 @@ struct MainSettingsView: View {
     @Default(.bufferFromDock) var bufferFromDock
     @Default(.sortWindowsByDate) var sortWindowsByDate
     @Default(.shouldHideOnDockItemClick) var shouldHideOnDockItemClick
+    @Default(.showBigControlsWhenNoValidWindows) var showBigControlsWhenNoValidWindows
+    @Default(.showSpecialAppControls) var showSpecialAppControls
     @Default(.dockClickAction) var dockClickAction
     @Default(.previewHoverAction) var previewHoverAction
     @Default(.aeroShakeAction) var aeroShakeAction
-    @Default(.showSpecialAppControls) var showSpecialAppControls
-    @Default(.useEmbeddedMediaControls) var useEmbeddedMediaControls
     @Default(.showAnimations) var showAnimations
     @Default(.raisedWindowLevel) var raisedWindowLevel
     @Default(.enablePinning) var enablePinning
-    @Default(.showBigControlsWhenNoValidWindows) var showBigControlsWhenNoValidWindows
 
     private let advancedSettingsSectionID = "advancedSettingsSection"
     private let windowSwitcherAdvancedSettingsID = "windowSwitcherAdvancedSettings"
@@ -548,37 +547,11 @@ struct MainSettingsView: View {
                         .pickerStyle(MenuPickerStyle())
                         .padding(.leading, 20)
                     }
-                    Toggle(isOn: $showSpecialAppControls) { Text("Show media/calendar controls on Dock hover") }
-                    Text("For supported apps (Music, Spotify, Calendar), show interactive controls instead of window previews when hovering their Dock icons.")
+                    Toggle(isOn: $showSpecialAppControls) { Text("Show widgets/special app controls on Dock hover") }
+                    Text("For supported apps and installed widgets, show interactive controls instead of window previews when hovering their Dock icons.")
                         .font(.caption)
                         .foregroundColor(.secondary)
                         .padding(.leading, 20)
-                    if showSpecialAppControls {
-                        Toggle(isOn: $useEmbeddedMediaControls) { Text("Embed controls with window previews (if previews shown)") }
-                            .padding(.leading, 20)
-                        Text("If enabled, controls integrate with previews when possible.")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                            .padding(.leading, 40)
-
-                        Toggle(isOn: $showBigControlsWhenNoValidWindows) { Text("Show big controls when no valid windows") }
-                            .padding(.leading, 20)
-                            .disabled(!useEmbeddedMediaControls)
-                        Text(useEmbeddedMediaControls ?
-                            "When embedded mode is enabled, show big controls instead of embedded ones if all windows are minimized/hidden or there are no windows." :
-                            "This setting only applies when \"Embed controls with window previews\" is enabled above.")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                            .padding(.leading, 40)
-                            .opacity(useEmbeddedMediaControls ? 1.0 : 0.6)
-
-                        Toggle(isOn: $enablePinning) { Text("Enable Pinning") }
-                            .padding(.leading, 20)
-                        Text("Allow special app controls to be pinned to the screen via right-click menu.")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                            .padding(.leading, 40)
-                    }
 
                     sliderSetting(title: "Window Buffer from Dock (pixels)", value: $bufferFromDock, range: -100 ... 100, step: 5, unit: "px", formatter: { let f = NumberFormatter(); f.allowsFloats = false; f.minimumIntegerDigits = 1; f.maximumFractionDigits = 0; return f }())
                 }

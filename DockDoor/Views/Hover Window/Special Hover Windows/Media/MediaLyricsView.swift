@@ -2,7 +2,7 @@ import Defaults
 import SwiftUI
 
 struct MediaLyricsView: View {
-    @ObservedObject var mediaInfo: MediaInfo
+    @ObservedObject var lyricProvider: LyricProvider
     let width: CGFloat
     let maxHeight: CGFloat
     let isFullMode: Bool
@@ -11,9 +11,9 @@ struct MediaLyricsView: View {
 
     var body: some View {
         VStack(alignment: .center, spacing: 0) {
-            if mediaInfo.isLoadingLyrics {
+            if lyricProvider.isLoadingLyrics {
                 lyricsLoadingView()
-            } else if mediaInfo.hasLyrics {
+            } else if lyricProvider.hasLyrics {
                 lyricsScrollView()
             } else {
                 lyricsNotFoundView()
@@ -84,9 +84,9 @@ struct MediaLyricsView: View {
             }
             .fadeOnEdges(axis: .vertical, fadeLength: 45, disable: visibleLyrics.isEmpty)
             .scrollDisabled(visibleLyrics.isEmpty)
-            .onChange(of: mediaInfo.currentLyricIndex) { newIndex in
+            .onChange(of: lyricProvider.currentLyricIndex) { newIndex in
                 guard let currentIndex = newIndex,
-                      currentIndex < mediaInfo.lyrics.count
+                      currentIndex < lyricProvider.lyrics.count
                 else {
                     if newIndex == nil, !visibleLyrics.isEmpty {
                         proxy.scrollTo(visibleLyrics.first?.lyric.id, anchor: .top)
@@ -95,7 +95,7 @@ struct MediaLyricsView: View {
                 }
 
                 // Get the ID of the lyric line to scroll to
-                let targetLyricID = mediaInfo.lyrics[currentIndex].id
+                let targetLyricID = lyricProvider.lyrics[currentIndex].id
 
                 DispatchQueue.main.async {
                     withAnimation(lyricAnimation) {
@@ -103,7 +103,7 @@ struct MediaLyricsView: View {
                     }
                 }
             }
-            .animation(lyricAnimation, value: mediaInfo.currentLyricIndex)
+            .animation(lyricAnimation, value: lyricProvider.currentLyricIndex)
             .animation(lyricAnimation, value: visibleLyrics.map(\.lyric.words))
         }
         .padding(.horizontal, 4)
@@ -115,7 +115,7 @@ struct MediaLyricsView: View {
         // Fallback for empty lyrics
         if visibleLyrics.isEmpty {
             VStack(spacing: 8) {
-                if mediaInfo.isLoadingLyrics {
+                if lyricProvider.isLoadingLyrics {
                     ProgressView()
                         .scaleEffect(0.8)
                         .tint(.secondary)
@@ -139,17 +139,17 @@ struct MediaLyricsView: View {
     }
 
     private func getVisibleLyrics() -> [LyricDisplayItem] {
-        guard !mediaInfo.lyrics.isEmpty else { return [] }
+        guard !lyricProvider.lyrics.isEmpty else { return [] }
 
         var visibleItems: [LyricDisplayItem] = []
 
-        if let currentIndex = mediaInfo.currentLyricIndex {
-            for i in 0 ..< mediaInfo.lyrics.count {
-                let lyric = mediaInfo.lyrics[i]
+        if let currentIndex = lyricProvider.currentLyricIndex {
+            for i in 0 ..< lyricProvider.lyrics.count {
+                let lyric = lyricProvider.lyrics[i]
                 let isCurrent = i == currentIndex
 
-                let timeSinceLyricStart = mediaInfo.currentTime - lyric.startTime
-                let isInLongBreak = isCurrent && timeSinceLyricStart > 15.0 && mediaInfo.isPlaying
+                let timeSinceLyricStart = lyricProvider.currentTime - lyric.startTime
+                let isInLongBreak = isCurrent && timeSinceLyricStart > 15.0 && lyricProvider.isPlaying
 
                 visibleItems.append(LyricDisplayItem(
                     lyric: lyric,
@@ -158,10 +158,10 @@ struct MediaLyricsView: View {
                     isNext: i > currentIndex
                 ))
             }
-        } else if !mediaInfo.lyrics.isEmpty {
+        } else if !lyricProvider.lyrics.isEmpty {
             // No current index, show all lyrics as 'next' or 'upcoming'
-            for i in 0 ..< mediaInfo.lyrics.count {
-                let lyric = mediaInfo.lyrics[i]
+            for i in 0 ..< lyricProvider.lyrics.count {
+                let lyric = lyricProvider.lyrics[i]
                 visibleItems.append(LyricDisplayItem(
                     lyric: lyric,
                     isCurrent: false,

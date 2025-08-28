@@ -16,8 +16,8 @@ struct FiltersSettingsView: View {
         var text: String
     }
 
-    private var installedApps: [(name: String, icon: NSImage)] {
-        var apps: [(String, NSImage)] = []
+    private var installedApps: [(id: String, name: String, icon: NSImage)] {
+        var apps: [(id: String, name: String, icon: NSImage)] = []
         let appLocations = [
             "/Applications",
             "/System/Applications",
@@ -34,19 +34,22 @@ struct FiltersSettingsView: View {
                 options: [.skipsHiddenFiles]
             ) else { continue }
 
-            let locationApps = urls
+            var locationApps: [(id: String, name: String, icon: NSImage)] = urls
                 .filter { $0.pathExtension == "app" }
-                .compactMap { url -> (String, NSImage)? in
+                .compactMap { url -> (id: String, name: String, icon: NSImage)? in
                     guard let bundle = Bundle(url: url),
                           let name = bundle.infoDictionary?["CFBundleName"] as? String ?? bundle.infoDictionary?["CFBundleDisplayName"] as? String
                     else { return nil }
-                    return (name, NSWorkspace.shared.icon(forFile: url.path))
+                    let id = (bundle.infoDictionary?["CFBundleIdentifier"] as? String) ?? url.path
+                    return (id: id, name: name, icon: NSWorkspace.shared.icon(forFile: url.path))
                 }
-
+            // Deduplicate by id across multiple locations
+            let existingIDs = Set(apps.map(\.id))
+            locationApps.removeAll { existingIDs.contains($0.id) }
             apps.append(contentsOf: locationApps)
         }
 
-        return apps.sorted { $0.0 < $1.0 }
+        return apps.sorted { $0.name < $1.name }
     }
 
     var body: some View {
@@ -146,7 +149,7 @@ struct FiltersSettingsView: View {
                                         .foregroundColor(.secondary)
                                         .padding()
                                 } else {
-                                    ForEach(installedApps, id: \.name) { app in
+                                    ForEach(installedApps, id: \.id) { app in
                                         HStack(spacing: 8) {
                                             Toggle(isOn: Binding(
                                                 get: { !appNameFilters.contains(app.name) },
