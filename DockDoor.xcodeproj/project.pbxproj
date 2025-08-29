@@ -69,8 +69,6 @@
 		BB3967FD2C291D5A004F1AB6 /* StackedShadow.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3967FC2C291D5A004F1AB6 /* StackedShadow.swift */; };
 		BB3968002C2A6C44004F1AB6 /* SmoothGradient in Frameworks */ = {isa = PBXBuildFile; productRef = BB3967FF2C2A6C44004F1AB6 /* SmoothGradient */; };
 		BB3968022C2A6CC2004F1AB6 /* Marquee.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3968012C2A6CC2004F1AB6 /* Marquee.swift */; };
-		BB3A552D2E611D6D00854F20 /* applescript-adapter in Frameworks */ = {isa = PBXBuildFile; productRef = BB3A552C2E611D6D00854F20 /* applescript-adapter */; };
-		BB3A552E2E611F4100854F20 /* applescript-adapter in Embed Frameworks */ = {isa = PBXBuildFile; productRef = BB3A552C2E611D6D00854F20 /* applescript-adapter */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		BB3D6EAE2C82E4B400FFE584 /* WindowDismissalContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3D6EAD2C82E4AE00FFE584 /* WindowDismissalContainer.swift */; };
 		BB3D6EB02C84E58400FFE584 /* NSScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3D6EAF2C84E58000FFE584 /* NSScreen.swift */; };
 		BB44474F2C507F950047EB92 /* LimitedTaskGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB44474E2C507F920047EB92 /* LimitedTaskGroup.swift */; };
@@ -116,9 +114,7 @@
 		BBB290862E60C234001DC458 /* WidgetRegistry.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBB2907D2E60C234001DC458 /* WidgetRegistry.swift */; };
 		BBB290872E60C234001DC458 /* WidgetModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBB2907B2E60C234001DC458 /* WidgetModels.swift */; };
 		BBB290892E60C31E001DC458 /* WidgetsSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBB290882E60C31E001DC458 /* WidgetsSettingsView.swift */; };
-		BBB2908C2E60CA2C001DC458 /* ActionRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBB2908A2E60CA2C001DC458 /* ActionRouter.swift */; };
 		BBB2908D2E60CA2C001DC458 /* AppleScriptExecutor.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBB2908B2E60CA2C001DC458 /* AppleScriptExecutor.swift */; };
-		BBB2908F2E60D437001DC458 /* ScriptAgentManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBB2908E2E60D437001DC458 /* ScriptAgentManager.swift */; };
 		BBB6C5302DF3C884009E93C4 /* MediaInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBB6C52F2DF3C884009E93C4 /* MediaInfo.swift */; };
 		BBB6C5322DF3C8A4009E93C4 /* MediaControlsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBB6C5312DF3C8A4009E93C4 /* MediaControlsView.swift */; };
 		BBB6C5342DF3C8B4009E93C4 /* BaseHoverContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBB6C5332DF3C8B4009E93C4 /* BaseHoverContainer.swift */; };
@@ -155,7 +151,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				BB3A552E2E611F4100854F20 /* applescript-adapter in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -268,9 +263,7 @@
 		BBB2907F2E60C234001DC458 /* WidgetHostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetHostView.swift; sourceTree = "<group>"; };
 		BBB290802E60C234001DC458 /* Wireframe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wireframe.swift; sourceTree = "<group>"; };
 		BBB290882E60C31E001DC458 /* WidgetsSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetsSettingsView.swift; sourceTree = "<group>"; };
-		BBB2908A2E60CA2C001DC458 /* ActionRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionRouter.swift; sourceTree = "<group>"; };
 		BBB2908B2E60CA2C001DC458 /* AppleScriptExecutor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleScriptExecutor.swift; sourceTree = "<group>"; };
-		BBB2908E2E60D437001DC458 /* ScriptAgentManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptAgentManager.swift; sourceTree = "<group>"; };
 		BBB6C52F2DF3C884009E93C4 /* MediaInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaInfo.swift; sourceTree = "<group>"; };
 		BBB6C5312DF3C8A4009E93C4 /* MediaControlsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaControlsView.swift; sourceTree = "<group>"; };
 		BBB6C5332DF3C8B4009E93C4 /* BaseHoverContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseHoverContainer.swift; sourceTree = "<group>"; };
@@ -302,7 +295,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BB3A552D2E611D6D00854F20 /* applescript-adapter in Frameworks */,
 				BBBD4AF82C8D71560074FFCF /* ConfettiSwiftUI in Frameworks */,
 				BB33E68C2C24C72F00A21D69 /* LaunchAtLogin in Frameworks */,
 				3A1622A32C8BFF3800D318EE /* Pow in Frameworks */,
@@ -645,8 +637,6 @@
 		BBB2907E2E60C234001DC458 /* Core */ = {
 			isa = PBXGroup;
 			children = (
-				BBB2908E2E60D437001DC458 /* ScriptAgentManager.swift */,
-				BBB2908A2E60CA2C001DC458 /* ActionRouter.swift */,
 				BBB2908B2E60CA2C001DC458 /* AppleScriptExecutor.swift */,
 				BBB2907B2E60C234001DC458 /* WidgetModels.swift */,
 				BBB2907C2E60C234001DC458 /* WidgetOrchestrator.swift */,
@@ -738,7 +728,6 @@
 				3A1622A22C8BFF3800D318EE /* Pow */,
 				3A1622B72C8C0EE200D318EE /* Kroma */,
 				BBBD4AF72C8D71560074FFCF /* ConfettiSwiftUI */,
-				BB3A552C2E611D6D00854F20 /* applescript-adapter */,
 			);
 			productName = DockDoor;
 			productReference = BB157B652C0E31CE00997315 /* DockDoor.app */;
@@ -779,7 +768,6 @@
 				3A1622A12C8BFF3800D318EE /* XCRemoteSwiftPackageReference "Pow" */,
 				3A1622B62C8C0EE200D318EE /* XCRemoteSwiftPackageReference "Kroma" */,
 				BBBD4AF62C8D71560074FFCF /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */,
-				BB3A552A2E611D0D00854F20 /* XCRemoteSwiftPackageReference "applescript-adapter" */,
 			);
 			productRefGroup = BB157B662C0E31CE00997315 /* Products */;
 			projectDirPath = "";
@@ -856,7 +844,6 @@
 				BBF4139A2C40A64A00AA6733 /* CustomizableFluidGradient.swift in Sources */,
 				BBE692192D17AD9E0093B4A5 /* DangerButton.swift in Sources */,
 				3A1622BE2C8C218500D318EE /* FirstTimeViewInstructionsView.swift in Sources */,
-				BBB2908C2E60CA2C001DC458 /* ActionRouter.swift in Sources */,
 				BBB2908D2E60CA2C001DC458 /* AppleScriptExecutor.swift in Sources */,
 				BBB290892E60C31E001DC458 /* WidgetsSettingsView.swift in Sources */,
 				BB1A85F52D05263C00326297 /* FiltersSettingsView.swift in Sources */,
@@ -898,7 +885,6 @@
 				BB157B822C0EB29E00997315 /* DockObserver.swift in Sources */,
 				BB638F022E0216FE0010077D /* MediaControlButton.swift in Sources */,
 				BB638F0A2E02172B0010077D /* MediaLyricsButton.swift in Sources */,
-				BBB2908F2E60D437001DC458 /* ScriptAgentManager.swift in Sources */,
 				BBA153FA2C11FFD500119C02 /* consts.swift in Sources */,
 				BB377C3F2DFD19ED00FA93DA /* PinnedWindowDelegate.swift in Sources */,
 				BBE033CC2DD92061006417B0 /* CGimage.swift in Sources */,
@@ -1116,6 +1102,7 @@
 				INFOPLIST_KEY_CFBundleDisplayName = DockDoor;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_LSUIElement = YES;
+				INFOPLIST_KEY_NSAppleEventsUsageDescription = "DockDoor uses Apple Script to display widgets.";
 				INFOPLIST_KEY_NSCalendarsUsageDescription = "DockDoor uses EventKit to fetch task info from Calendar.";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1165,6 +1152,7 @@
 				INFOPLIST_KEY_CFBundleDisplayName = DockDoor;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_LSUIElement = YES;
+				INFOPLIST_KEY_NSAppleEventsUsageDescription = "DockDoor uses Apple Script to display widgets.";
 				INFOPLIST_KEY_NSCalendarsUsageDescription = "DockDoor uses EventKit to fetch task info from Calendar.";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1250,14 +1238,6 @@
 				minimumVersion = 1.0.0;
 			};
 		};
-		BB3A552A2E611D0D00854F20 /* XCRemoteSwiftPackageReference "applescript-adapter" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/ejbills/applescript-adapter.git";
-			requirement = {
-				branch = main;
-				kind = branch;
-			};
-		};
 		BBBD4AF62C8D71560074FFCF /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/simibac/ConfettiSwiftUI";
@@ -1309,11 +1289,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = BB3967FE2C2A6C44004F1AB6 /* XCRemoteSwiftPackageReference "SmoothGradient" */;
 			productName = SmoothGradient;
-		};
-		BB3A552C2E611D6D00854F20 /* applescript-adapter */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = BB3A552A2E611D0D00854F20 /* XCRemoteSwiftPackageReference "applescript-adapter" */;
-			productName = "applescript-adapter";
 		};
 		BBBD4AF72C8D71560074FFCF /* ConfettiSwiftUI */ = {
 			isa = XCSwiftPackageProductDependency;

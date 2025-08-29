@@ -1,15 +1,6 @@
 {
-  "originHash" : "57f9cc4702555938591d4f8e8f42e92a25207d068d143aaa9efef2b3fe98baed",
+  "originHash" : "16c460e453b9e3c076d7bd4fb8b97fe398f32c8d60d31adeccd83d0077a7ab37",
   "pins" : [
-    {
-      "identity" : "applescript-adapter",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/ejbills/applescript-adapter.git",
-      "state" : {
-        "branch" : "main",
-        "revision" : "9260467e7a60e07fb1c2c946b306b72aca96256a"
-      }
-    },
     {
       "identity" : "confettiswiftui",
       "kind" : "remoteSourceControl",

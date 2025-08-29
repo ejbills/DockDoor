@@ -37354,6 +37354,9 @@
     "Install and render widgets without updating the app." : {
 
     },
+    "Install Music Widgets" : {
+
+    },
     "Install Sample Widget" : {
 
     },
@@ -85557,7 +85560,13 @@
         }
       }
     },
+    "Widgets" : {
+      "comment" : "Widgets tab title"
+    },
     "Widgets (Experimental)" : {
+
+    },
+    "Widgets settings" : {
 
     },
     "Window Background" : {

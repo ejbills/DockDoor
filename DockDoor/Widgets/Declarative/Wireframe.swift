@@ -23,6 +23,8 @@ struct WireNode: Codable {
     let text: String?
     let font: String?
     let foreground: String?
+    let truncation: String? // "head", "tail", "middle"
+    let lineLimit: Int?
 
     // Image Symbol
     let symbol: String?
@@ -65,10 +67,8 @@ struct WireframeRenderer {
                 }
             })
         case .text:
-            let t = substitute(node.text ?? "", with: context)
-            var view = Text(t)
-            if let style = node.font { view = applyFont(style, to: view) }
-            return AnyView(view)
+            let textContent = substitute(node.text ?? "", with: context)
+            return AnyView(renderText(content: textContent, node: node))
         case .imageSymbol:
             let symbolName = node.symbol ?? "questionmark"
             let img = Image(systemName: symbolName)
@@ -91,16 +91,16 @@ struct WireframeRenderer {
         }
     }
 
-    func applyFont(_ style: String, to text: Text) -> Text {
+    func getFont(_ style: String) -> Font {
         switch style {
-        case "caption": text.font(.caption)
-        case "callout": text.font(.callout)
-        case "subheadline": text.font(.subheadline)
-        case "headline": text.font(.headline)
-        case "title3": text.font(.title3)
-        case "title2": text.font(.title2)
-        case "title": text.font(.title)
-        default: text
+        case "caption": .caption
+        case "callout": .callout
+        case "subheadline": .subheadline
+        case "headline": .headline
+        case "title3": .title3
+        case "title2": .title2
+        case "title": .title
+        default: .body
         }
     }
 
@@ -109,6 +109,46 @@ struct WireframeRenderer {
         case "leading": .leading
         case "trailing": .trailing
         default: .center
+        }
+    }
+
+    private func getForegroundColor(_ colorName: String) -> Color {
+        switch colorName {
+        case "primary": .primary
+        case "secondary": .secondary
+        case "white": .white
+        case "gray": .gray
+        default: .primary
+        }
+    }
+
+    private func getTruncationMode(_ truncation: String) -> Text.TruncationMode {
+        switch truncation {
+        case "head": .head
+        case "tail": .tail
+        case "middle": .middle
+        default: .tail
+        }
+    }
+
+    @ViewBuilder
+    private func renderText(content: String, node: WireNode) -> some View {
+        let baseText = Text(content)
+        let font = node.font.map(getFont) ?? .body
+        let color = node.foreground.map(getForegroundColor) ?? .primary
+        let truncation = node.truncation.map(getTruncationMode) ?? .tail
+
+        if let lineLimit = node.lineLimit {
+            baseText
+                .font(font)
+                .foregroundColor(color)
+                .truncationMode(truncation)
+                .lineLimit(lineLimit)
+        } else {
+            baseText
+                .font(font)
+                .foregroundColor(color)
+                .truncationMode(truncation)
         }
     }
 }

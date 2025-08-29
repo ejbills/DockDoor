@@ -33,6 +33,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             GeneralSettingsViewController(),
             AppearanceSettingsViewController(),
             FiltersSettingsViewController(),
+            WidgetsSettingsViewController(),
             SupportSettingsViewController(updaterState: updaterState),
         ]
 
