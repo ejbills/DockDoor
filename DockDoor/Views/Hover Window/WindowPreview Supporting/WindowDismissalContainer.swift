@@ -86,6 +86,9 @@ class MouseTrackingNSView: NSView {
 
     private func checkIfMouseIsOverDockIcon() -> Bool {
         guard let activeDockObserver = DockObserver.activeInstance else { return false }
+        // If DockObserver requests inactivity-based dismissal (e.g., hovered an empty app with lateral movement off),
+        // treat the dock icon as not hovered so the inactivity timer can dismiss the window.
+        if activeDockObserver.requireInactivityDismissal { return false }
         let currentAppReturnType = activeDockObserver.getDockItemAppStatusUnderMouse()
         return currentAppReturnType.status != .notFound
     }
@@ -144,6 +147,7 @@ class MouseTrackingNSView: NSView {
             guard self != nil else { return }
             SharedPreviewWindowCoordinator.activeInstance?.hideWindow()
             if !preventLastAppClear { DockObserver.activeInstance?.lastAppUnderMouse = nil }
+            DockObserver.activeInstance?.resetTrackingAfterContainerDismissal()
         }
     }
 }
