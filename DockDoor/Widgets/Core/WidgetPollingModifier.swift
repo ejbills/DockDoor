@@ -1,69 +1,60 @@
 import SwiftUI
 
-/// Simple callback-based polling modifier for declarative widgets
+/// Callback-based polling modifier implemented with a cancellable async Task loop.
 struct CallbackPollingModifier: ViewModifier {
     let provider: WidgetStatusProvider
     let onUpdate: ([String: String]) -> Void
 
-    @State private var pollTimer: Timer?
+    @State private var pollTask: Task<Void, Never>?
 
     func body(content: Content) -> some View {
         content
-            .onAppear {
-                startPolling()
-            }
-            .onDisappear {
-                stopPolling()
-            }
+            .onAppear { startPolling() }
+            .onDisappear { stopPolling() }
     }
 
     private func startPolling() {
-        guard pollTimer == nil else { return }
-
-        let interval = TimeInterval(provider.pollIntervalMs) / 1000.0
-        pollTimer = Timer.scheduledTimer(withTimeInterval: interval, repeats: true) { _ in
-            Task { @MainActor in
-                await pollStatus()
+        guard pollTask == nil else { return }
+        let intervalNs = UInt64(max(50, provider.pollIntervalMs)) * 1_000_000 // ms -> ns
+        pollTask = Task { @MainActor in
+            // Initial poll immediately
+            await pollOnce()
+            while !Task.isCancelled {
+                try? await Task.sleep(nanoseconds: intervalNs)
+                await pollOnce()
             }
         }
-
-        // Initial poll
-        Task { await pollStatus() }
     }
 
     private func stopPolling() {
-        pollTimer?.invalidate()
-        pollTimer = nil
+        pollTask?.cancel()
+        pollTask = nil
     }
 
     @MainActor
-    private func pollStatus() async {
-        let result = await Task.detached {
-            AppleScriptExecutor.run(provider.statusScript)
-        }.value
-
-        guard let output = result.output else { return }
+    private func pollOnce() async {
+        let output = await Task.detached { AppleScriptExecutor.run(provider.statusScript) }.value
+        guard let output else { return }
 
         let components = output.components(separatedBy: provider.delimiter)
         var context: [String: String] = [:]
-
         for (fieldName, index) in provider.fields {
             if index < components.count {
                 context[fieldName] = components[index].trimmingCharacters(in: .whitespacesAndNewlines)
             }
         }
-
         onUpdate(context)
     }
 }
 
 extension View {
-    /// Adds callback-based polling for declarative widgets
+    /// Adds callback-based polling for declarative widgets.
+    @ViewBuilder
     func widgetPolling(provider: WidgetStatusProvider?, onUpdate: @escaping ([String: String]) -> Void) -> some View {
         if let provider {
-            AnyView(modifier(CallbackPollingModifier(provider: provider, onUpdate: onUpdate)))
+            modifier(CallbackPollingModifier(provider: provider, onUpdate: onUpdate))
         } else {
-            AnyView(self)
+            self
         }
     }
 }

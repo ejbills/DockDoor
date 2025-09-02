@@ -14,13 +14,11 @@ struct WidgetHostView: View {
     @State private var dynamicContext: [String: String] = [:]
 
     init(manifest: WidgetManifest, mode: WidgetMode, context: [String: String], screen: NSScreen?, onContextUpdate: (([String: String]) -> Void)? = nil) {
-        print("🎵 WidgetHostView init - START")
         self.manifest = manifest
         self.mode = mode
         self.context = context
         self.screen = screen
         self.onContextUpdate = onContextUpdate
-        print("🎵 WidgetHostView init - DONE")
     }
 
     var body: some View {
@@ -76,22 +74,7 @@ struct WidgetHostView: View {
     }
 
     @MainActor
-    private func handleAction(_ action: String) {
-        guard let script = manifest.actions?[action], !script.isEmpty else { return }
-        let expandedScript = expandScriptTemplates(script)
-        Task.detached {
-            _ = AppleScriptExecutor.run(expandedScript)
-        }
-    }
-
-    private func expandScriptTemplates(_ script: String) -> String {
-        var expanded = script
-        let mergedContext = context.merging(dynamicContext) { _, new in new }
-        for (key, value) in mergedContext {
-            expanded = expanded.replacingOccurrences(of: "{{\(key)}}", with: value)
-        }
-        return expanded
-    }
+    private func handleAction(_ action: String) { handleAction(action, extras: nil) }
 
     @ViewBuilder
     private func renderNativeWidget() -> some View {

@@ -24,16 +24,7 @@ enum NativeWidgetFactory {
         }
     }
 
-    /// Resolve a typed SimpleMediaStore for the first matching native media manifest for a bundle id.
-    /// Returns nil if no suitable manifest/provider is installed.
-    @MainActor
-    static func mediaStore(for bundleId: String) -> MediaStore? {
-        let manifests = WidgetRegistry.matchingWidgets(for: bundleId)
-        guard let m = manifests.first(where: { $0.isNative() && $0.entry == "MediaControlsWidget" && $0.provider != nil }) else {
-            return nil
-        }
-        return MediaStore(actions: m.actions)
-    }
+    // Removed mediaStore(for:) helper (unused).
 
     @MainActor
     private static func createMediaControlsWidget(
@@ -43,15 +34,11 @@ enum NativeWidgetFactory {
         screen: NSScreen,
         isPinnedMode: Bool = false
     ) -> AnyView {
-        print("🎵 NativeWidgetRegistry createMediaControlsWidget - START")
-
         // Ensure provider exists
         guard manifest.provider != nil else {
-            print("🎵 NativeWidgetRegistry createMediaControlsWidget - Missing provider!")
             return AnyView(Text("Missing provider").font(.caption).foregroundColor(.secondary))
         }
 
-        print("🎵 NativeWidgetRegistry createMediaControlsWidget - About to create MediaControlsWidgetView")
         let widgetView = MediaControlsWidgetView(
             manifest: manifest,
             context: context,
@@ -59,8 +46,6 @@ enum NativeWidgetFactory {
             screen: screen,
             isPinnedMode: isPinnedMode
         )
-        print("🎵 NativeWidgetRegistry createMediaControlsWidget - Created MediaControlsWidgetView, wrapping in AnyView")
-
         return AnyView(widgetView)
     }
 

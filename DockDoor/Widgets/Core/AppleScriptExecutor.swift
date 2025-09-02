@@ -2,27 +2,20 @@ import Foundation
 
 enum AppleScriptExecutor {
     @discardableResult
-    static func run(_ script: String, timeout: TimeInterval = 5.0) -> (output: String?, error: String?) {
+    static func run(_ script: String, timeoutSeconds: Int? = 5) -> String? {
+        // Wrap the script with AppleScript's built-in timeout block when requested.
+        let wrapped: String = if let t = timeoutSeconds {
+            "with timeout of \(t) seconds\n\(script)\nend timeout"
+        } else {
+            script
+        }
+
         var error: NSDictionary?
-        guard let scriptObject = NSAppleScript(source: script) else {
-            return (nil, "Failed to create NSAppleScript object")
+        guard let scriptObject = NSAppleScript(source: wrapped) else {
+            return nil
         }
-
-        // Execute with timeout handling using DispatchSemaphore
-        let semaphore = DispatchSemaphore(value: 0)
-        var result: (output: String?, error: String?) = (nil, nil)
-
-        DispatchQueue.global().async {
-            let output = scriptObject.executeAndReturnError(&error)
-            result = (output.stringValue, nil)
-            semaphore.signal()
-        }
-
-        let timeoutResult = semaphore.wait(timeout: .now() + timeout)
-        if timeoutResult == .timedOut {
-            return (nil, "AppleScript execution timed out")
-        }
-
-        return result
+        let output = scriptObject.executeAndReturnError(&error)
+        guard error == nil else { return nil }
+        return output.stringValue
     }
 }
