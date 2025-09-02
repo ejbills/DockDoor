@@ -19,6 +19,7 @@ struct MediaControlsEmbeddedView: View {
             .padding(12)
             .frame(minWidth: idealWidth ?? (MediaControlsLayout.embeddedArtworkSize + MediaControlsLayout.artworkTextSpacing + 165), alignment: .center)
             .simpleBlurBackground(strokeWidth: 1.75)
+            .pinnable(appName: appName, bundleIdentifier: bundleIdentifier, type: .media)
     }
 
     @ViewBuilder
