@@ -5015,7 +5015,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Crédits"
+            "value" : "Remerciements"
           }
         },
         "he" : {
@@ -5396,7 +5396,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ajouter des répertoires supplémentaires dans lesquels rechercher des applications"
+            "value" : "Ajoutez des dossiers supplémentaires dans lesquels rechercher des applications"
           }
         },
         "he" : {
@@ -5586,7 +5586,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ajoutez des répertoires additionnels dans lesquels chercher des applications. Ceci est utile si vous placez vos applications en dehors des emplacements habituels."
+            "value" : "Ajoutez des dossiers additionnels dans lesquels chercher des applications. Ceci est utile si vous placez vos applications en dehors des emplacements habituels."
           }
         },
         "he" : {
@@ -5776,7 +5776,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ajouter l’application"
+            "value" : "Ajouter une application"
           }
         },
         "he" : {
@@ -5966,7 +5966,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ajouter l’application à la liste noire"
+            "value" : "Ajouter une application à la liste noire"
           }
         },
         "he" : {
@@ -6156,7 +6156,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ajouter un répertoire"
+            "value" : "Ajouter un dossier"
           }
         },
         "he" : {
@@ -6727,7 +6727,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ajuste la sensibilité et le comportement de l’application lors d’une interaction."
+            "value" : "Ajuste la sensibilité et le comportement des interactions avec l’application."
           }
         },
         "he" : {
@@ -7298,7 +7298,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tous les aperçus de fenêtres affichent un fond gris. Quand ils sont survolés, le fond change pour la couleur d'accentuation ou la couleur personnalisée ci-dessous."
+            "value" : "Tous les aperçus de fenêtres affichent un arrière-plan gris. Quand ils sont survolés, l’arrière-plan prend la couleur d'accentuation ou une couleur personnalisée ci-dessous."
           }
         },
         "he" : {
@@ -7678,7 +7678,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Autoriser les contrôles d’application spéciaux à être épinglés à l’écran via le menu du clic droit."
+            "value" : "Autorise l’épinglage des contrôles spéciaux des applications à l’écran via le menu contextuel."
           }
         },
         "he" : {
@@ -7867,8 +7867,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Allows window preview images to scale dynamically to reasonable dimensions, overriding fixed frame constraints."
+            "state" : "translated",
+            "value" : "Permet aux aperçus des fenêtres de se redimensionner dynamiquement à des dimensions raisonnables, en contournant les contraintes de cadre fixe."
           }
         },
         "he" : {
@@ -8442,7 +8442,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Toujours visible ; opacité complète"
+            "value" : "Toujours visibles ; opacité complète"
           }
         },
         "he" : {
@@ -8632,7 +8632,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "quantité"
+            "value" : "taux"
           }
         },
         "he" : {
@@ -9964,7 +9964,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Filtres de l’application"
+            "value" : "Filtres d’application"
           }
         },
         "he" : {
@@ -10153,8 +10153,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Apps in this list will not respond to window switcher shortcuts when in fullscreen mode."
+            "state" : "translated",
+            "value" : "Les applications dans cette liste ne répondront pas aux raccourcis du sélecteur de fenêtres en mode plein écran."
           }
         },
         "he" : {
@@ -10535,7 +10535,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Êtes-vous sûr de vouloir réinitialiser tous les paramètres à leurs valeurs par défaut ?"
+            "value" : "Êtes-vous sûr de vouloir réinitialiser tous les réglages à leurs valeurs par défaut ?"
           }
         },
         "he" : {
@@ -12055,8 +12055,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Background Opacity"
+            "state" : "translated",
+            "value" : "Opacité de l’arrière-plan"
           }
         },
         "he" : {
@@ -12245,8 +12245,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Beta"
+            "state" : "translated",
+            "value" : "Bêta"
           }
         },
         "he" : {
@@ -13007,8 +13007,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Browse for .app file..."
+            "state" : "translated",
+            "value" : "Parcourir pour un fichier .app..."
           }
         },
         "he" : {
@@ -13198,7 +13198,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Achetez-moi un café"
+            "value" : "Offrez-moi un café"
           }
         },
         "he" : {
@@ -13389,7 +13389,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Achetez-moi un café ici, merci !"
+            "value" : "Offrez-moi un café ici, merci !"
           }
         },
         "he" : {
@@ -13578,8 +13578,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Calendar Access Needed"
+            "state" : "translated",
+            "value" : "Accès au calendrier requis"
           }
         },
         "he" : {
@@ -14720,8 +14720,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Choose how large window previews appear when hovering over dock icons. All window images are automatically scaled to fit within this size while maintaining their original proportions."
+            "state" : "translated",
+            "value" : "Choisissez la taille d’affichage des aperçus des fenêtres au survol des icônes du Dock. Toutes les images des fenêtres sont automatiquement redimensionnées pour s’adapter à cette taille tout en conservant leurs proportions d’origine."
           }
         },
         "he" : {
@@ -14911,7 +14911,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Cliquer sur « Définir la touche de déclenchement »"
+            "value" : "Cliquez sur « Définir la touche de déclenchement »"
           }
         },
         "he" : {
@@ -15482,8 +15482,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Collapse to embedded mode"
+            "state" : "translated",
+            "value" : "Réduire en mode intégré"
           }
         },
         "he" : {
@@ -16243,8 +16243,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Community Contributors"
+            "state" : "translated",
+            "value" : "Contributeurs à la communauté"
           }
         },
         "he" : {
@@ -16624,7 +16624,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Contribuer à la traduction"
+            "value" : "Contribuez à la traduction"
           }
         },
         "he" : {
@@ -17004,7 +17004,7 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Contributions"
           }
         },
@@ -17384,8 +17384,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Control the transparency of the dock preview background. Lower values make the preview more transparent, which can help prevent it from blocking window content."
+            "state" : "translated",
+            "value" : "Contrôlez la transparence de l’arrière-plan des aperçus du Dock. Des valeurs plus basses rendent l’aperçu plus transparent, ce qui peut aider à l’empêcher de bloquer le contenu de fenêtres."
           }
         },
         "he" : {
@@ -17574,8 +17574,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Controls how many rows of windows are shown in the window switcher. Windows are distributed across rows automatically."
+            "state" : "translated",
+            "value" : "Contrôle le nombre de lignes de fenêtres affichées dans le sélecteur de fenêtres. Les fenêtres sont distribuées automatiquement sur les lignes."
           }
         },
         "he" : {
@@ -17764,8 +17764,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Controls how many rows/columns of windows are shown in dock previews. Only the relevant setting applies based on dock position."
+            "state" : "translated",
+            "value" : "Contrôle le nombre de lignes/colonnes de fenêtres affichées dans les aperçus du Dock. Seul le paremètre approprié s’applique, en fonction de la position du Dock."
           }
         },
         "he" : {
@@ -17955,7 +17955,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Contrôle les détails visuels et la fréquence de mise à jour des aperçus de fenêtre."
+            "value" : "Contrôle le détail visuel et la fréquence de mise à jour des aperçus de fenêtre."
           }
         },
         "he" : {
@@ -18144,8 +18144,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Current aspect ratio: %@"
+            "state" : "translated",
+            "value" : "Ratio actuel : %@"
           }
         },
         "he" : {
@@ -19097,7 +19097,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Répertoires d’application personnalisés"
+            "value" : "Dossiers d’applications personnalisés"
           }
         },
         "he" : {
@@ -19286,8 +19286,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Custom Hover Highlight Color"
+            "state" : "translated",
+            "value" : "Couleur personnalisée de surbrillance au survol"
           }
         },
         "he" : {
@@ -20049,8 +20049,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Diagonal - Title bottom left, controls top right"
+            "state" : "translated",
+            "value" : "En diagonale - Titre en bas à gauche, contrôles en haut à droite"
           }
         },
         "he" : {
@@ -20239,8 +20239,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Diagonal - Title bottom right, controls top left"
+            "state" : "translated",
+            "value" : "En diagonale - Titre en bas à droite, contrôles en haut à gauche"
           }
         },
         "he" : {
@@ -20429,8 +20429,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Diagonal - Title top left, controls bottom right"
+            "state" : "translated",
+            "value" : "En diagonale - Titre en haut à gauche, contrôles en bas à droite"
           }
         },
         "he" : {
@@ -20619,8 +20619,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Diagonal - Title top right, controls bottom left"
+            "state" : "translated",
+            "value" : "En diagonale - Titre en haut à droite, contrôles en bas à gauche"
           }
         },
         "he" : {
@@ -21000,8 +21000,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Disable dock styling on traffic light buttons"
+            "state" : "translated",
+            "value" : "Supprimer le style du Dock sur les boutons feu tricolore"
           }
         },
         "he" : {
@@ -21381,7 +21381,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Discutez des fonctionnalités et obtenez de l’aide de la communauté"
+            "value" : "Discutez des fonctionnalités et obtenez de l’aide auprès de la communauté"
           }
         },
         "he" : {
@@ -21761,8 +21761,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Distinguish minimized/hidden windows"
+            "state" : "translated",
+            "value" : "Distinguer les fenêtres minimisées/masquées"
           }
         },
         "he" : {
@@ -21791,8 +21791,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Distinguish minimized/hidden windows"
+            "state" : "translated",
+            "value" : "Distingui le finestre minimizzate/nascoste"
           }
         },
         "ja" : {
@@ -21869,8 +21869,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Distinguish minimized/hidden windows"
+            "state" : "translated",
+            "value" : "Розрізняти згорнуті/приховані вікна"
           }
         },
         "vi" : {
@@ -21887,8 +21887,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Distinguish minimized/hidden windows"
+            "state" : "translated",
+            "value" : "區隔最小化／隱藏的視窗"
           }
         }
       }
@@ -21951,8 +21951,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Click Action"
+            "state" : "translated",
+            "value" : "Action de clic sur le Dock"
           }
         },
         "he" : {
@@ -22142,7 +22142,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Action d’aperçu du Dock avec secousse Aero"
+            "value" : "Action Aero Shake de l’aperçu du Dock"
           }
         },
         "he" : {
@@ -22521,8 +22521,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Preview Layout"
+            "state" : "translated",
+            "value" : "Disposition des aperçus du Dock"
           }
         },
         "he" : {
@@ -22901,8 +22901,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Preview Toolbar"
+            "state" : "translated",
+            "value" : "Barre d’outils des aperçus du Dock"
           }
         },
         "he" : {
@@ -23091,8 +23091,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Preview Transparency"
+            "state" : "translated",
+            "value" : "Transparence des aperçus du Dock"
           }
         },
         "he" : {
@@ -23664,7 +23664,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Aperçus du Dock et sélecteur d’applications"
+            "value" : "Aperçus du Dock et sélecteur de fenêtres"
           }
         },
         "he" : {
@@ -24045,7 +24045,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "DockDoor n’enregistre pas votre écran ni votre audio. L’application ne fait que capturer des aperçus statiques de fenêtres. Aucune donnée n’est stockée ni partagée ; tout traitement s’effectue en privé, sur votre ordinateur."
+            "value" : "DockDoor n’enregistre ni votre écran, ni votre audio. L’application ne fait que capturer des aperçus statiques de fenêtres. Aucune donnée n’est stockée ni partagée ; tout traitement s’effectue en privé, sur votre ordinateur."
           }
         },
         "he" : {
@@ -24234,8 +24234,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "DockDoor needs permission to access your calendar."
+            "state" : "translated",
+            "value" : "DockDoor a besoin de votre permission pour accéder à votre calendrier."
           }
         },
         "he" : {
@@ -24995,8 +24995,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Embed controls in preview frames"
+            "state" : "translated",
+            "value" : "Intégrer les contrôles dans les aperçus"
           }
         },
         "he" : {
@@ -25185,8 +25185,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Embed controls with window previews (if previews shown)"
+            "state" : "translated",
+            "value" : "Intégrer les commandes avec les aperçus de fenêtre (si les aperçus sont affichés)"
           }
         },
         "he" : {
@@ -25757,8 +25757,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable Dock Previews"
+            "state" : "translated",
+            "value" : "Activer les aperçus du Dock"
           }
         },
         "he" : {
@@ -26138,8 +26138,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable Pinning"
+            "state" : "translated",
+            "value" : "Activer l’épinglage"
           }
         },
         "he" : {
@@ -26520,7 +26520,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Activer le sélecteur d’applications"
+            "value" : "Activer le sélecteur de fenêtres"
           }
         },
         "he" : {
@@ -27279,8 +27279,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enjoy your free day or add some events to your calendar."
+            "state" : "translated",
+            "value" : "Profitez de votre journée libre ou ajoutez des événements à votre calendrier."
           }
         },
         "he" : {
@@ -28422,8 +28422,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Expand to full mode"
+            "state" : "translated",
+            "value" : "Développer en mode complet"
           }
         },
         "he" : {
@@ -29193,8 +29193,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Failed to download v%1$@: %2$@"
+            "state" : "translated",
+            "value" : "Échec du téléchargement de la v%1$@: %2$@"
           }
         },
         "he" : {
@@ -29765,7 +29765,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Affiner les détails visuels et les options de disposition."
+            "value" : "Affinez les détails visuels et les options de disposition."
           }
         },
         "he" : {
@@ -29954,8 +29954,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "For supported apps (Music, Spotify, Calendar), show interactive controls instead of window previews when hovering their Dock icons."
+            "state" : "translated",
+            "value" : "Pour les applications prises en charge (Musique, Spotify, Calendrier), affiche des commandes interactives au lieu des aperçus de fenêtre lors du survol de leur icône dans le Dock."
           }
         },
         "he" : {
@@ -30714,8 +30714,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Fullscreen App Blacklist"
+            "state" : "translated",
+            "value" : "Liste noire des applications en plein écran"
           }
         },
         "he" : {
@@ -31857,8 +31857,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Global Padding Scale"
+            "state" : "translated",
+            "value" : "Échelle de marge globale"
           }
         },
         "he" : {
@@ -32047,8 +32047,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Grant Access"
+            "state" : "translated",
+            "value" : "Accorder l’accès"
           }
         },
         "he" : {
@@ -33381,7 +33381,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Aidez-nous à améliorer DockDoor en signalant les bogues que vous rencontrez."
+            "value" : "Aidez-nous à améliorer DockDoor en signalant tout bogue que vous rencontreriez."
           }
         },
         "he" : {
@@ -33952,7 +33952,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Masquer toutes les fenêtres de l’application en cliquant sur son icône dans le Dock"
+            "value" : "Masquer toutes les fenêtres d’une application en cliquant sur son icône dans le Dock"
           }
         },
         "he" : {
@@ -34333,8 +34333,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hide application"
+            "state" : "translated",
+            "value" : "Masquer l’application"
           }
         },
         "he" : {
@@ -35286,8 +35286,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "If disabled, special controls only appear if no window previews are available (e.g., all windows minimized). If enabled, controls integrate with previews when possible."
+            "state" : "translated",
+            "value" : "Si désactivé, les contrôles spéciaux n’apparaissent que si aucun aperçu de fenêtre n’est disponible (par ex. toutes les fenêtres sont minimisées). Si activé, les contrôles sont intégrés avec les aperçus lorsque possible."
           }
         },
         "he" : {
@@ -35476,8 +35476,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "If enabled, controls integrate with previews when possible."
+            "state" : "translated",
+            "value" : "Si activé, les contrôles s’intègrent aux aperçus lorsque c’est possible."
           }
         },
         "he" : {
@@ -36047,8 +36047,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Ignore apps with one window"
+            "state" : "translated",
+            "value" : "Ignorer les applications avec une seule fenêtre"
           }
         },
         "he" : {
@@ -36239,7 +36239,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ignorer les applications avec une fenêtre"
+            "value" : "Ignorer les applications avec une seule fenêtre"
           }
         },
         "he" : {
@@ -36621,7 +36621,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Inclure les fenêtres masquées et minimisées dans le sélecteur d’applications"
+            "value" : "Inclure les fenêtres masquées et minimisées dans le sélecteur de fenêtres"
           }
         },
         "he" : {
@@ -36810,8 +36810,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Include hidden/minimized windows in Switcher"
+            "state" : "translated",
+            "value" : "Inclure les fenêtres masquées et minimisées dans le sélecteur de fenêtres"
           }
         },
         "he" : {
@@ -37002,7 +37002,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Inclure les fenêtres minimisées et masquées dans le commutateur"
+            "value" : "Inclure les fenêtres masquées et minimisées dans le sélecteur de fenêtres"
           }
         },
         "he" : {
@@ -37951,8 +37951,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Keep preview when app terminates"
+            "state" : "translated",
+            "value" : "Conserver les aperçus à la fermeture de l’application"
           }
         },
         "he" : {
@@ -38521,8 +38521,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Language"
+            "state" : "translated",
+            "value" : "Langue"
           }
         },
         "he" : {
@@ -39285,7 +39285,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Lancer DockDoor au démarrage"
+            "value" : "Lancer DockDoor à la connexion"
           }
         },
         "he" : {
@@ -40045,8 +40045,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Limit Window Switcher to active app only"
+            "state" : "translated",
+            "value" : "Limiter le sélecteur d’applications à l’application active uniquement"
           }
         },
         "he" : {
@@ -40235,8 +40235,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Loading lyrics..."
+            "state" : "translated",
+            "value" : "Chargement des paroles..."
           }
         },
         "he" : {
@@ -40615,8 +40615,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Lock aspect ratio (16:10)"
+            "state" : "translated",
+            "value" : "Verrouiller les proportions (16:10)"
           }
         },
         "he" : {
@@ -40805,8 +40805,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Max Columns (Left/Right Dock)"
+            "state" : "translated",
+            "value" : "Nombre maximum de colonnes (Dock à gauche ou à droite)"
           }
         },
         "he" : {
@@ -40995,8 +40995,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Max Rows"
+            "state" : "translated",
+            "value" : "Nombre maximum de lignes"
           }
         },
         "he" : {
@@ -41185,8 +41185,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Max Rows (Bottom Dock)"
+            "state" : "translated",
+            "value" : "Nombre maximum de lignes (Dock en bas)"
           }
         },
         "he" : {
@@ -43667,8 +43667,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Minimize windows"
+            "state" : "translated",
+            "value" : "Minimiser les fenêtres"
           }
         },
         "he" : {
@@ -43857,8 +43857,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Minimized"
+            "state" : "translated",
+            "value" : "Minimisé"
           }
         },
         "he" : {
@@ -44237,8 +44237,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Name"
+            "state" : "translated",
+            "value" : "Nom"
           }
         },
         "he" : {
@@ -44619,7 +44619,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Jamais visible"
+            "value" : "Jamais visibles"
           }
         },
         "he" : {
@@ -44808,8 +44808,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "New Window"
+            "state" : "translated",
+            "value" : "Nouvelle fenêtre"
           }
         },
         "he" : {
@@ -45190,7 +45190,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pas d’action"
+            "value" : "Ne rien faire"
           }
         },
         "he" : {
@@ -45569,8 +45569,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No apps in blacklist"
+            "state" : "translated",
+            "value" : "Aucune application dans la liste noire"
           }
         },
         "he" : {
@@ -45759,8 +45759,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No audio devices found"
+            "state" : "translated",
+            "value" : "Aucun périphérique audio trouvé"
           }
         },
         "he" : {
@@ -45950,7 +45950,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Aucun répertoire personnalisé ajouté"
+            "value" : "Aucun dossier personnalisé ajouté"
           }
         },
         "he" : {
@@ -46139,8 +46139,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No events scheduled for today!"
+            "state" : "translated",
+            "value" : "Aucun événement programmé pour aujourd’hui !"
           }
         },
         "he" : {
@@ -46329,8 +46329,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No events today"
+            "state" : "translated",
+            "value" : "Aucun événement aujourd’hui"
           }
         },
         "he" : {
@@ -46902,8 +46902,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No lyrics available"
+            "state" : "translated",
+            "value" : "Paroles indisponibles"
           }
         },
         "he" : {
@@ -48425,8 +48425,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Only show windows from the currently active/frontmost application."
+            "state" : "translated",
+            "value" : "Affiche uniquement les fenêtres de l’application active/au premier plan."
           }
         },
         "he" : {
@@ -49189,7 +49189,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ouvrir les réglages"
+            "value" : "Ouvrir Réglages Système"
           }
         },
         "he" : {
@@ -49378,8 +49378,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open System Privacy Settings"
+            "state" : "translated",
+            "value" : "Ouvrir les réglages de confidentialité"
           }
         },
         "he" : {
@@ -50901,8 +50901,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Pin to Screen (Compact)"
+            "state" : "translated",
+            "value" : "Épingler à l’écran (compact)"
           }
         },
         "he" : {
@@ -51091,8 +51091,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Pin to Screen (Full)"
+            "state" : "translated",
+            "value" : "Épingler à l’écran (complet)"
           }
         },
         "he" : {
@@ -51662,8 +51662,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Places traffic light buttons and window titles directly inside the dock preview frames for a more compact and minimal appearance."
+            "state" : "translated",
+            "value" : "Place les boutons feu tricolore et les titres des fenêtres directement sur les aperçus du Dock pour une apparence plus compacte et minimale."
           }
         },
         "he" : {
@@ -52426,7 +52426,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "En infobulle"
+            "value" : "En popover"
           }
         },
         "he" : {
@@ -52615,8 +52615,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Position Dock Preview Controls"
+            "state" : "translated",
+            "value" : "Position des commandes des aperçus du Dock"
           }
         },
         "he" : {
@@ -52997,7 +52997,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Présenter un aperçu de taille maximale de la fenêtre"
+            "value" : "Présenter un aperçu en taille réelle de la fenêtre"
           }
         },
         "he" : {
@@ -53759,7 +53759,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Appuyez UNIQUEMENT sur la touche de déclenchement (par exemple juste Tab)"
+            "value" : "Appuyez UNIQUEMENT sur la touche de déclenchement (par ex. Tab)"
           }
         },
         "he" : {
@@ -54140,7 +54140,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Empêcher le Dock de se cacher pendant les aperçus"
+            "value" : "Empêcher le Dock de se masquer pendant les aperçus"
           }
         },
         "he" : {
@@ -54710,8 +54710,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Appearance & Quality"
+            "state" : "translated",
+            "value" : "Apparence et qualité des aperçus"
           }
         },
         "he" : {
@@ -55091,8 +55091,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Height"
+            "state" : "translated",
+            "value" : "Hauteur de l’aperçu"
           }
         },
         "he" : {
@@ -55472,8 +55472,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Hover Action Delay"
+            "state" : "translated",
+            "value" : "Délai de l’action au survol des aperçus"
           }
         },
         "he" : {
@@ -56615,8 +56615,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview Width"
+            "state" : "translated",
+            "value" : "Largeur de l’aperçu"
           }
         },
         "he" : {
@@ -56806,7 +56806,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Durée du fondu de l’aperçu"
+            "value" : "Durée de disparition de l’aperçu des fenêtres"
           }
         },
         "he" : {
@@ -57566,8 +57566,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Profile"
+            "state" : "translated",
+            "value" : "Profil"
           }
         },
         "he" : {
@@ -57756,7 +57756,7 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "px"
           }
         },
@@ -58517,8 +58517,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reading app information..."
+            "state" : "translated",
+            "value" : "Lecture des informations de l’application..."
           }
         },
         "he" : {
@@ -58708,7 +58708,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Diminuer les mouvements"
+            "value" : "Réduire les animations"
           }
         },
         "he" : {
@@ -59087,8 +59087,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Release initializer key to select window in Switcher"
+            "state" : "translated",
+            "value" : "Relâcher la touche d’initialisation pour choisir une fenêtre dans le sélecteur d’applications"
           }
         },
         "he" : {
@@ -59657,8 +59657,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Removes the pill-shaped background styling from traffic light buttons in dock previews for a cleaner look."
+            "state" : "translated",
+            "value" : "Supprime le style d’arrière-plan en forme de pilule des boutons feu tricolore dans les aperçus du Dock pour un look plus propre."
           }
         },
         "he" : {
@@ -60418,7 +60418,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Requis pour la détection du survol du Dock et les raccourcis clavier du Sélecteur d’applications"
+            "value" : "Requis pour la détection du survol du Dock et les raccourcis clavier du Sélecteur de fenêtres"
           }
         },
         "he" : {
@@ -60989,7 +60989,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Réinitialiser tous les paramètres aux valeurs par défaut"
+            "value" : "Réinitialiser tous les réglages aux valeurs par défaut"
           }
         },
         "he" : {
@@ -61179,7 +61179,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Revenir aux paramètres par défaut"
+            "value" : "Réinitialiser tous les réglages aux valeurs par défaut"
           }
         },
         "he" : {
@@ -62129,8 +62129,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Round the corners of window preview images for a modern look."
+            "state" : "translated",
+            "value" : "Arrondit les coins des aperçus de fenêtre pour un look moderne."
           }
         },
         "he" : {
@@ -62319,8 +62319,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Rounded corners"
+            "state" : "translated",
+            "value" : "Coins arrondis"
           }
         },
         "he" : {
@@ -63656,7 +63656,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Écran avec souris"
+            "value" : "Écran avec la souris"
           }
         },
         "he" : {
@@ -64610,7 +64610,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sélectionnez un profil pour ajuster rapidement les réglages de performance courants. Choisissez « Avancé » pour un contrôle manuel."
+            "value" : "Choisissez un profil pour ajuster rapidement les réglages de performance. Sélectionnez « Avancé » pour les modifier manuellement."
           }
         },
         "he" : {
@@ -64799,8 +64799,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Select an application:"
+            "state" : "translated",
+            "value" : "Sélectionnez une application :"
           }
         },
         "he" : {
@@ -64990,7 +64990,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sélectionnez une clé d’initialisation (exemple : Commande ⌘)"
+            "value" : "Sélectionnez une touche d’initialisation (par ex. : Commande ⌘)"
           }
         },
         "he" : {
@@ -65371,7 +65371,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Choisissez pour quelles applications DockDoor devrait afficher les aperçus. Les applications non cochées seront ignorées."
+            "value" : "Choisissez pour quelles applications DockDoor devrait afficher les aperçus. Les applications décochées seront ignorées."
           }
         },
         "he" : {
@@ -65560,8 +65560,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Selected app:"
+            "state" : "translated",
+            "value" : "Application sélectionnée :"
           }
         },
         "he" : {
@@ -66324,7 +66324,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Définir la clé d’initialisation"
+            "value" : "Définir la touche de déclenchement"
           }
         },
         "he" : {
@@ -66897,7 +66897,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ombré"
+            "value" : "Avec une ombre"
           }
         },
         "he" : {
@@ -67467,7 +67467,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Afficher le nom de l’application dans les aperçus du Dock"
+            "value" : "Afficher le nom des applications dans les aperçus du Dock"
           }
         },
         "he" : {
@@ -67656,8 +67656,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show big controls when no valid windows"
+            "state" : "translated",
+            "value" : "Afficher des contrôles plus grands en l’absence de fenêtre valide"
           }
         },
         "he" : {
@@ -67846,8 +67846,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show media/calendar controls on Dock hover"
+            "state" : "translated",
+            "value" : "Afficher les contrôles média/calendrier au survol du Dock"
           }
         },
         "he" : {
@@ -68036,8 +68036,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show menu bar icon"
+            "state" : "translated",
+            "value" : "Afficher l’icône dans la barre des menus"
           }
         },
         "he" : {
@@ -68417,8 +68417,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show preview above app labels"
+            "state" : "translated",
+            "value" : "Afficher les aperçus au-dessus des étiquettes des applications"
           }
         },
         "he" : {
@@ -68607,8 +68607,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show window previews when hovering over Dock icons."
+            "state" : "translated",
+            "value" : "Affiche l’aperçu des fenêtres au survol des icônes du Dock."
           }
         },
         "he" : {
@@ -70898,7 +70898,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Trier les aperçus chronologiquement"
+            "value" : "Trier les aperçus de fenêtre chronologiquement"
           }
         },
         "he" : {
@@ -71088,7 +71088,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Organiser les fenêtres par date (s’il y en a plusieurs)"
+            "value" : "Trier les aperçus de fenêtre chronologiquement (s’il y en a plusieurs)"
           }
         },
         "he" : {
@@ -71277,8 +71277,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Spacing Scale"
+            "state" : "translated",
+            "value" : "Échelle d’espacement"
           }
         },
         "he" : {
@@ -71467,7 +71467,7 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Stable"
           }
         },
@@ -72613,7 +72613,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Suggérez de nouvelles fonctionnalités pour rendre DockDoor encore mieux."
+            "value" : "Suggérez de nouvelles fonctionnalités pour améliorer DockDoor."
           }
         },
         "he" : {
@@ -73374,7 +73374,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Supportez DockDoor"
+            "value" : "Soutenez DockDoor"
           }
         },
         "he" : {
@@ -73944,7 +73944,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Merci de soutenir DockDoor! 💖"
+            "value" : "Merci de soutenir DockDoor ! 💖"
           }
         },
         "he" : {
@@ -74515,7 +74515,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Le commutateur d’applications (souvent Alt/Cmd-Tab) vous permet de permuter rapidement entre des fenêtres ouvertes grâce à un raccourci clavier."
+            "value" : "Le sélecteur de fenêtres (souvent Alt/Cmd-Tab) vous permet de permuter rapidement entre des fenêtres ouvertes grâce à un raccourci clavier."
           }
         },
         "he" : {
@@ -74895,8 +74895,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "This setting only applies when \"Embed controls with window previews\" is enabled above."
+            "state" : "translated",
+            "value" : "Ce réglage ne s’applique que lorsque l’option « Intégrer les commandes avec les aperçus de fenêtre » est activée ci-dessus."
           }
         },
         "he" : {
@@ -75085,8 +75085,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "This will add the app to the blacklist using its bundle identifier for reliable matching."
+            "state" : "translated",
+            "value" : "Ceci ajoutera l’application à la liste noire en utilisant son identifiant de bundle pour un appariement fiable."
           }
         },
         "he" : {
@@ -75466,8 +75466,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Today"
+            "state" : "translated",
+            "value" : "Aujourd’hui"
           }
         },
         "he" : {
@@ -75657,7 +75657,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Activer"
+            "value" : "Activer/désactiver"
           }
         },
         "he" : {
@@ -76991,7 +76991,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Visibilité des boutons « feu tricolore »"
+            "value" : "Visibilité des boutons feu tricolore"
           }
         },
         "he" : {
@@ -77180,8 +77180,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Translation Contributors"
+            "state" : "translated",
+            "value" : "Contributeurs à la traduction"
           }
         },
         "he" : {
@@ -78322,8 +78322,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Unpin"
+            "state" : "translated",
+            "value" : "Désépingler"
           }
         },
         "he" : {
@@ -78512,8 +78512,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Unselected Content Opacity"
+            "state" : "translated",
+            "value" : "Opacité du contenu non sélectionné"
           }
         },
         "he" : {
@@ -79082,8 +79082,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update aborted: %@"
+            "state" : "translated",
+            "value" : "Mise à jour annulée : %@"
           }
         },
         "he" : {
@@ -79462,8 +79462,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update Channel"
+            "state" : "translated",
+            "value" : "Canal de mises à jour"
           }
         },
         "he" : {
@@ -79843,8 +79843,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Update v%@ available"
+            "state" : "translated",
+            "value" : "Mise à jour v%@ disponible"
           }
         },
         "he" : {
@@ -80033,8 +80033,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Updater not configured."
+            "state" : "translated",
+            "value" : "Mise à jour non configurée."
           }
         },
         "he" : {
@@ -80225,7 +80225,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Mise à jour"
+            "value" : "Mises à jour"
           }
         },
         "he" : {
@@ -80987,8 +80987,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use System Accent Color for Highlight"
+            "state" : "translated",
+            "value" : "Utiliser la couleur d’accentuation du système pour la surbrillance"
           }
         },
         "he" : {
@@ -81560,7 +81560,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Utiliser l’ordre des fenêtres de style Windows dans le commutateur"
+            "value" : "Organiser les fenêtres à la façon de Windows dans le sélecteur de fenêtres"
           }
         },
         "he" : {
@@ -82131,8 +82131,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "View"
+            "state" : "translated",
+            "value" : "Voir"
           }
         },
         "he" : {
@@ -82322,7 +82322,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Vous voulez voir par vous-même ? Consultez notre code source"
+            "value" : "Vous souhaitez voir par vous-même ? Consultez notre code source"
           }
         },
         "he" : {
@@ -83275,8 +83275,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When an app terminates, remove only its windows from the preview instead of hiding the entire preview."
+            "state" : "translated",
+            "value" : "À la fermeture d’une application, supprimer seulement ses fenêtres de l’aperçu plutôt que de masquer l’aperçu entier."
           }
         },
         "he" : {
@@ -83465,8 +83465,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When embedded mode is enabled, show big controls instead of embedded ones if all windows are minimized/hidden or there are no windows."
+            "state" : "translated",
+            "value" : "Lorsque le mode Intégré est activé, affiche des contrôles plus grands au lieu de contrôles intégrés si toutes les fenêtres sont minimisées/masquées ou s’il n’y a pas de fenêtre."
           }
         },
         "he" : {
@@ -84419,8 +84419,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When enabled, shows visual indicators and dims minimized/hidden windows. When disabled, treats them as normal windows with full functionality."
+            "state" : "translated",
+            "value" : "Si activé, affiche des indicateurs visuels et grise les fenêtres minimisées/masquées. Si désactivé, les traite comme des fenêtres normales avec toutes les fonctionnalités."
           }
         },
         "he" : {
@@ -84449,8 +84449,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When enabled, shows visual indicators and dims minimized/hidden windows. When disabled, treats them as normal windows with full functionality."
+            "state" : "translated",
+            "value" : "Se disabilitata, considera le finestre minimizzate nel Dock o nascoste come finestre normali con piena funzionalità."
           }
         },
         "ja" : {
@@ -84527,8 +84527,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When enabled, shows visual indicators and dims minimized/hidden windows. When disabled, treats them as normal windows with full functionality."
+            "state" : "translated",
+            "value" : "Коли ввімкнено, показує візуальні індикатори та затемнює згорнуті/приховані вікна. Коли вимкнено, вони розглядаються як звичайні вікна з повним функціоналом."
           }
         },
         "vi" : {
@@ -84545,8 +84545,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When enabled, shows visual indicators and dims minimized/hidden windows. When disabled, treats them as normal windows with full functionality."
+            "state" : "translated",
+            "value" : "啟用時顯示圖形指示器並調暗已最小化／隱藏的視窗；停用時則與運作中的普通視窗一視同仁。"
           }
         }
       }
@@ -84611,7 +84611,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "En survolant l’aperçu"
+            "value" : "Au survol de l’aperçu"
           }
         },
         "he" : {
@@ -85565,8 +85565,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Background"
+            "state" : "translated",
+            "value" : "Arrière-plan des fenêtres"
           }
         },
         "he" : {
@@ -85946,8 +85946,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Buffer from Dock (pixels)"
+            "state" : "translated",
+            "value" : "Tampon de fenêtre depuis le Dock (en pixels)"
           }
         },
         "he" : {
@@ -86517,8 +86517,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Image Resolution Scale (1=Best)"
+            "state" : "translated",
+            "value" : "Échelle de résolution des images de fenêtre (1 = meilleure qualité)"
           }
         },
         "he" : {
@@ -87281,7 +87281,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Taille des aperçus"
+            "value" : "Taille des aperçus de fenêtre"
           }
         },
         "he" : {
@@ -88045,7 +88045,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sélecteur d’applications"
+            "value" : "Sélecteur de fenêtres"
           }
         },
         "he" : {
@@ -88235,7 +88235,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Personnalisation du commutateur d’applications"
+            "value" : "Personnalisation du sélecteur de fenêtres"
           }
         },
         "he" : {
@@ -88426,7 +88426,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sélecteur d’applications uniquement"
+            "value" : "Sélecteur de fenêtres uniquement"
           }
         },
         "he" : {
@@ -88616,7 +88616,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Placement du sélecteur d’applications"
+            "value" : "Emplacement du sélecteur de fenêtres"
           }
         },
         "he" : {
@@ -90331,7 +90331,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Vous avez la version %@"
+            "value" : "Vous utilisez la version %@"
           }
         },
         "he" : {
@@ -90521,7 +90521,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Votre raccourci clavier sera défini (par exemple : ⌘ + Tab)"
+            "value" : "Votre raccourci clavier sera défini (par ex. : ⌘ + Tab)"
           }
         },
         "he" : {
