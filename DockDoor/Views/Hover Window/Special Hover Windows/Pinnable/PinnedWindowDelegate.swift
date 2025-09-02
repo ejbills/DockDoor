@@ -95,25 +95,21 @@ extension SharedPreviewWindowCoordinator {
         // Let the view size itself, then fit window to content
         let fittingSize = hostingView.fittingSize
 
-        // Position with cascade for multiple windows
         let screenFrame = NSScreen.main?.visibleFrame ?? NSRect(x: 0, y: 0, width: 1000, height: 800)
         let existingCount = pinnedWindows.count
-        let offset = CGFloat(existingCount) * 30
 
         let windowFrame = NSRect(
-            x: screenFrame.midX - fittingSize.width / 2 + offset,
-            y: screenFrame.midY - fittingSize.height / 2 - offset,
+            x: screenFrame.midX - fittingSize.width / 2,
+            y: screenFrame.midY - fittingSize.height / 2,
             width: fittingSize.width,
             height: fittingSize.height
         )
 
         window.setFrame(windowFrame, display: true)
 
-        // Set up delegate for cleanup
         let delegate = PinnedWindowDelegate(coordinator: self, key: key)
         window.delegate = delegate
 
-        // Store and show
         pinnedWindows[key] = window
         window.makeKeyAndOrderFront(nil)
     }

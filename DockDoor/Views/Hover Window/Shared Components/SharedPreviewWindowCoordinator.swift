@@ -357,7 +357,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
                         "appName": appName,
                         "bundleIdentifier": bundleIdentifier ?? windows.first?.app.bundleIdentifier ?? "",
                         "windows.count": String(windows.count),
-                        "dockPosition": String(describing: DockUtils.getDockPosition()),
+                        "dockPosition": DockUtils.getDockPosition().rawValue,
                     ]
                     if first.isNative() {
                         viewForBigStandalone = AnyView(

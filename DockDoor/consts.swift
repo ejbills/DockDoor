@@ -100,7 +100,7 @@ extension Defaults.Keys {
     static let windowTitleFilters = Key<[String]>("windowTitleFilters", default: [])
     static let customAppDirectories = Key<[String]>("customAppDirectories", default: [])
 
-    // MARK: - Widget System (always on)
+    // MARK: Widget System
 
     static let widgetsEnabled = Key<Bool>("widgetsEnabled", default: true)
 }

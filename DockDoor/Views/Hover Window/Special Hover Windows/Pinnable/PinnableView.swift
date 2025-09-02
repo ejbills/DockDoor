@@ -3,6 +3,7 @@ import Foundation
 import SwiftUI
 
 /// Types of views that can be pinned
+/// // TODO: fix this
 enum PinnableViewType: String, CaseIterable, Codable {
     case media
     case calendar
