@@ -3,13 +3,13 @@ import ScreenCaptureKit
 import SwiftUI
 
 enum FlowItem: Hashable, Identifiable {
-    case embedded
+    case widget(Int)
     case window(Int)
 
     var id: String {
         switch self {
-        case .embedded:
-            "embedded"
+        case let .widget(index):
+            "widget-\(index)"
         case let .window(index):
             "window-\(index)"
         }
@@ -415,29 +415,7 @@ struct WindowPreviewHoverContainer: View {
         }
     }
 
-    @ViewBuilder
-    private func embeddedContentView() -> some View {
-        if let widgets = embeddedWidgets, let first = widgets.first {
-            let ctx: [String: String] = [
-                "appName": appName,
-                "bundleIdentifier": previewStateCoordinator.windows.first?.app.bundleIdentifier ?? "",
-                "windows.count": String(previewStateCoordinator.windows.count),
-            ]
-            if first.isNative() {
-                // Native embedded widgets render directly (no container/background)
-                WidgetHostView(manifest: first, mode: .embedded, context: ctx, screen: bestGuessMonitor)
-                    .frame(minWidth: minimumEmbeddedWidth, alignment: .center)
-            } else {
-                // Declarative widgets retain embedded container styling
-                WidgetHostView(manifest: first, mode: .embedded, context: ctx, screen: bestGuessMonitor)
-                    .padding(12)
-                    .frame(minWidth: minimumEmbeddedWidth, alignment: .center)
-                    .simpleBlurBackground(strokeWidth: 1.75)
-            }
-        } else {
-            EmptyView()
-        }
-    }
+    // Removed embeddedContentView; widgets are rendered as individual flow items.
 
     @ViewBuilder
     private func buildFlowStack(
@@ -680,10 +658,11 @@ struct WindowPreviewHoverContainer: View {
     private func createFlowItems() -> [FlowItem] {
         var allItems: [FlowItem] = []
 
-        // Add embedded content first if present
-        let hasWidgetEmbedded = (embeddedWidgets?.isEmpty == false)
-        if hasWidgetEmbedded {
-            allItems.append(.embedded)
+        // Add each embedded widget as its own flow item
+        if let widgets = embeddedWidgets, !widgets.isEmpty {
+            for i in widgets.indices {
+                allItems.append(.widget(i))
+            }
         }
 
         // Add all windows
@@ -723,9 +702,10 @@ struct WindowPreviewHoverContainer: View {
 
         var itemsToProcess: [FlowItem] = []
 
-        let hasWidgetEmbedded = (embeddedWidgets?.isEmpty == false)
-        if hasWidgetEmbedded {
-            itemsToProcess.append(.embedded)
+        if let widgets = embeddedWidgets, !widgets.isEmpty {
+            for i in widgets.indices {
+                itemsToProcess.append(.widget(i))
+            }
         }
 
         for index in previewStateCoordinator.windows.indices {
@@ -797,9 +777,30 @@ struct WindowPreviewHoverContainer: View {
         currentDimensionsMapForPreviews: [Int: WindowDimensions]
     ) -> some View {
         switch item {
-        case .embedded:
-            embeddedContentView()
-                .id("\(appName)-embedded")
+        case let .widget(index):
+            if let widgets = embeddedWidgets, index < widgets.count {
+                let manifest = widgets[index]
+                let ctx: [String: String] = [
+                    "appName": appName,
+                    "bundleIdentifier": previewStateCoordinator.windows.first?.app.bundleIdentifier ?? "",
+                    "windows.count": String(previewStateCoordinator.windows.count),
+                    "dockPosition": dockPosition.rawValue,
+                ]
+
+                if manifest.isNative() {
+                    WidgetHostView(manifest: manifest, mode: .embedded, context: ctx, screen: bestGuessMonitor)
+                        .id("\(appName)-widget-native-\(index)")
+                        .frame(minWidth: minimumEmbeddedWidth, alignment: .center)
+                } else {
+                    WidgetHostView(manifest: manifest, mode: .embedded, context: ctx, screen: bestGuessMonitor)
+                        .padding(12)
+                        .simpleBlurBackground(strokeWidth: 1.75)
+                        .id("\(appName)-widget-decl-\(index)")
+                        .frame(minWidth: minimumEmbeddedWidth, alignment: .center)
+                }
+            } else {
+                EmptyView()
+            }
         case let .window(index):
             if index < previewStateCoordinator.windows.count {
                 WindowPreview(
