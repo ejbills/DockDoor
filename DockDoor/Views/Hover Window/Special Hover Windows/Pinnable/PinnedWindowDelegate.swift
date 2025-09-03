@@ -77,8 +77,6 @@ extension SharedPreviewWindowCoordinator {
 
         // Position with cascade for multiple windows
         let screenFrame = NSScreen.main?.visibleFrame ?? NSRect(x: 0, y: 0, width: 1000, height: 800)
-        let existingCount = pinnedWindows.count
-        let offset = CGFloat(existingCount) * 30
 
         let windowFrame = NSRect(
             x: screenFrame.midX - fittingSize.width / 2 + offset,

@@ -123,9 +123,15 @@ class PreviewStateCoordinator: ObservableObject {
     @MainActor
     func addWindows(_ newWindowsToAdd: [WindowInfo]) {
         guard !newWindowsToAdd.isEmpty else { return }
+        // Gate additions by PID of the currently displayed windows (if any)
+        guard let currentPid = windows.first?.app.processIdentifier else {
+            // No active windows context; ignore additions to avoid cross-app injection
+            return
+        }
+        let gated: [WindowInfo] = newWindowsToAdd.filter { $0.app.processIdentifier == currentPid }
 
         var windowsWereAdded = false
-        for newWin in newWindowsToAdd {
+        for newWin in gated {
             if !windows.contains(where: { $0.id == newWin.id }) {
                 windows.append(newWin)
                 windowsWereAdded = true
