@@ -96,7 +96,6 @@ extension SharedPreviewWindowCoordinator {
         let fittingSize = hostingView.fittingSize
 
         let screenFrame = NSScreen.main?.visibleFrame ?? NSRect(x: 0, y: 0, width: 1000, height: 800)
-        let existingCount = pinnedWindows.count
 
         let windowFrame = NSRect(
             x: screenFrame.midX - fittingSize.width / 2,
