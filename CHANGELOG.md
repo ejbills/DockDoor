@@ -38,6 +38,27 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://buymeacoffee.com/keplercafe</div>
 
+<a id="1.22"></a>
+# [Release 1.22](https://github.com/ejbills/DockDoor/releases/tag/1.22) - 2025-09-07
+
+
+## ✨ New Features
+- Marquee scrolling toggle
+  - Static titles option
+  - Settings control added
+
+## 🔧 Improvements & Stability
+- Enhanced settings window
+  - Better window raising
+  - Improved focus handling
+- Refined preview display
+  - Better dock validation
+  - Improved hover accuracy
+
+
+[Changes][1.22]
+
+
 <a id="1.21.4"></a>
 # [Release 1.21.4](https://github.com/ejbills/DockDoor/releases/tag/1.21.4) - 2025-08-24
 
@@ -1437,6 +1458,7 @@ v1.0
 [Changes][releases]
 
 
+[1.22]: https://github.com/ejbills/DockDoor/compare/1.21.4...1.22
 [1.21.4]: https://github.com/ejbills/DockDoor/compare/1.21.3...1.21.4
 [1.21.3]: https://github.com/ejbills/DockDoor/compare/1.21.2...1.21.3
 [1.21.2]: https://github.com/ejbills/DockDoor/compare/1.21.1...1.21.2
