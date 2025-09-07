@@ -572,6 +572,17 @@ final class SharedPreviewWindowCoordinator: NSPanel {
                 return
             }
 
+            // Final validation: ensure mouse is still over the expected dock item
+            if let expectedBundleId = bundleIdentifier {
+                guard let currentDockItemStatus = DockObserver.activeInstance?.getDockItemAppStatusUnderMouse() else { return }
+                let matches = switch currentDockItemStatus.status {
+                case .success(let app): app.bundleIdentifier == expectedBundleId
+                case .notRunning(let bundleId): bundleId == expectedBundleId
+                case .notFound: false
+                }
+                guard matches else { return }
+            }
+
             Task { @MainActor [weak self] in
                 self?.performDisplay(appName: appName, windows: windows, mouseLocation: mouseLocation, mouseScreen: mouseScreen, dockItemElement: dockItemElement, centeredHoverWindowState: centeredHoverWindowState, onWindowTap: onWindowTap, bundleIdentifier: bundleIdentifier)
             }
