@@ -666,7 +666,7 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "-%@"
           }
         },
@@ -2193,7 +2193,7 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "+"
           }
         },
@@ -2573,7 +2573,7 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "×"
           }
         },
@@ -2763,7 +2763,7 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "1."
           }
         },
@@ -3335,7 +3335,7 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "2."
           }
         },
@@ -3716,7 +3716,7 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "3."
           }
         },
@@ -4013,7 +4013,7 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "4."
           }
         },
@@ -4097,7 +4097,7 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "4."
           }
         },
@@ -13149,8 +13149,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Buy me a coffee"
+            "state" : "translated",
+            "value" : "اشتري لي قهوة"
           }
         },
         "ca" : {
@@ -13530,8 +13530,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Calendar Access Needed"
+            "state" : "translated",
+            "value" : "مطلوب الوصول إلى التقويم"
           }
         },
         "ca" : {
@@ -14102,8 +14102,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Cannot Add Color"
+            "state" : "translated",
+            "value" : "لا يمكن إضافة اللون"
           }
         },
         "ca" : {
@@ -14292,8 +14292,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Cannot Remove Color"
+            "state" : "translated",
+            "value" : "لا يمكن إزالة اللون"
           }
         },
         "ca" : {
@@ -14862,8 +14862,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Click \"Set Trigger Key\""
+            "state" : "translated",
+            "value" : "انقر على \"ضبط مفتاح التشغيل\""
           }
         },
         "ca" : {
@@ -16956,8 +16956,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Contributions"
+            "state" : "translated",
+            "value" : "المساهمين"
           }
         },
         "ca" : {
@@ -21881,8 +21881,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Distinguish minimized/hidden windows"
+            "state" : "translated",
+            "value" : "区分最小化/隐藏的窗口"
           }
         },
         "zh-Hant" : {
@@ -36107,8 +36107,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Ignore apps with one window"
+            "state" : "translated",
+            "value" : "apps"
           }
         },
         "pt-BR" : {
@@ -37821,8 +37821,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Join our Discord"
+            "state" : "translated",
+            "value" : "Dołącz do naszego serwera Discord"
           }
         },
         "pt-BR" : {
@@ -38077,8 +38077,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Keep preview when app terminates"
+            "state" : "translated",
+            "value" : "應用程式結束後仍保留預覽"
           }
         }
       }
@@ -66275,8 +66275,8 @@
         },
         "ar" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Set Trigger Key"
+            "state" : "translated",
+            "value" : "ضبط مفتاح المشغل"
           }
         },
         "ca" : {
@@ -75016,7 +75016,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : ""
+            "value" : "这项设置只针对启用了”窗口预览嵌入控制“时有效。"
           }
         },
         "zh-Hant" : {
@@ -78063,7 +78063,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Un-minimize"
+            "value" : "取消最小化"
           }
         },
         "zh-Hant" : {
@@ -83401,8 +83401,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When an app terminates, remove only its windows from the preview instead of hiding the entire preview."
+            "state" : "translated",
+            "value" : "當應用程式結束時，僅從預覧中移除其視窗，而非隠藏整個預覧。"
           }
         }
       }
@@ -86067,7 +86067,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "窗口与停靠区的缓冲距离（像素）"
+            "value" : "窗口与Dock之间的缓冲距离（像素）"
           }
         },
         "zh-Hant" : {
