@@ -130,7 +130,6 @@ struct MediaControlsFullView: View {
                     )
                     .fontWeight(.semibold)
                     .animation(showAnimations ? .easeInOut(duration: 0.2) : nil, value: mediaInfo.title)
-                    .id("compact-full-title-\(mediaInfo.title)")
 
                     if !mediaInfo.artist.isEmpty {
                         MarqueeText(
@@ -140,7 +139,6 @@ struct MediaControlsFullView: View {
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                         .animation(showAnimations ? .easeInOut(duration: 0.2) : nil, value: mediaInfo.artist)
-                        .id("compact-full-artist-\(mediaInfo.artist)")
                     }
                 }
                 Spacer(minLength: 0)
@@ -183,7 +181,6 @@ struct MediaControlsFullView: View {
                     )
                     .font(.title3)
                     .fontWeight(.bold)
-                    .id("expanded-full-title-\(mediaInfo.title)")
 
                     if !mediaInfo.artist.isEmpty {
                         MarqueeText(
@@ -192,7 +189,6 @@ struct MediaControlsFullView: View {
                         )
                         .font(.callout)
                         .foregroundColor(.secondary)
-                        .id("expanded-full-artist-\(mediaInfo.artist)")
                     }
                 }
 

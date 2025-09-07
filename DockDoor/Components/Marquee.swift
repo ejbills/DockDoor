@@ -155,7 +155,7 @@ struct TheMarquee<C: View>: View {
             if !internalShouldMove {
                 return contentSize.width
             } else {
-                return actualWidth > 0 ? actualWidth : nil
+                return nil
             }
         }
         return nil

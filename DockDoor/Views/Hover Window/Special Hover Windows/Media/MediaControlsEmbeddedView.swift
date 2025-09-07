@@ -40,20 +40,18 @@ struct MediaControlsEmbeddedView: View {
                     VStack(alignment: .leading, spacing: 1) {
                         MarqueeText(
                             text: mediaInfo.title,
-                            startDelay: 1
+                            startDelay: 1,
                         )
                         .font(.callout)
                         .fontWeight(.medium)
-                        .id("compact-title-\(mediaInfo.title)")
 
                         if !mediaInfo.artist.isEmpty {
                             MarqueeText(
                                 text: mediaInfo.artist,
-                                startDelay: 1
+                                startDelay: 1,
                             )
                             .font(.caption)
                             .foregroundColor(.secondary)
-                            .id("compact-artist-\(mediaInfo.artist)")
                         }
                     }
 

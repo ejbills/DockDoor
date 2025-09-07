@@ -21,23 +21,25 @@ final class MediaStore: ObservableObject {
     }
 
     func updateFromContext(_ context: [String: String]) {
-        if let v = context["media.title"] { title = v }
-        if let v = context["media.artist"] { artist = v }
-        if let v = context["media.album"] { album = v }
+        if let v = context["media.title"], v != title { title = v }
+        if let v = context["media.artist"], v != artist { artist = v }
+        if let v = context["media.album"], v != album { album = v }
 
         if let s = context["media.state"] {
             let playing = s.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() == "playing"
-            isPlaying = playing
+            if playing != isPlaying { isPlaying = playing }
         }
 
         if let tStr = context["media.currentTime"],
-           let t = TimeInterval(tStr.replacingOccurrences(of: ",", with: "."))
+           let t = TimeInterval(tStr.replacingOccurrences(of: ",", with: ".")),
+           t != currentTime
         {
             currentTime = t
         }
 
         if let dStr = context["media.duration"],
-           let d = TimeInterval(dStr.replacingOccurrences(of: ",", with: "."))
+           let d = TimeInterval(dStr.replacingOccurrences(of: ",", with: ".")),
+           d != duration
         {
             duration = d
         }

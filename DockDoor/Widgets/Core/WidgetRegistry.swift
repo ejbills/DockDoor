@@ -65,6 +65,13 @@ enum WidgetRegistry {
         try data.write(to: url, options: .atomic)
     }
 
+    /// Install manifest and a layout.json payload in one step (for declarative widgets).
+    static func install(manifest: WidgetManifest, layout: Data, entryFileName: String = "layout.json", overwrite: Bool = true) throws {
+        try install(manifest: manifest, overwrite: overwrite)
+        let fileURL = manifest.installDirectory.appendingPathComponent(entryFileName, isDirectory: false)
+        try layout.write(to: fileURL, options: .atomic)
+    }
+
     /// Uninstall a widget by id (removes its directory).
     static func uninstall(id: UUID) throws {
         let fm = FileManager.default

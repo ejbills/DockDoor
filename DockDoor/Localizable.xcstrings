@@ -6477,6 +6477,9 @@
         }
       }
     },
+    "Add media keys" : {
+
+    },
     "Adjust this if the preview is misaligned with dock" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -13140,6 +13143,9 @@
         }
       }
     },
+    "Build, install, and discover widgets." : {
+
+    },
     "Buy me a coffee" : {
       "localizations" : {
         "af" : {
@@ -14665,6 +14671,9 @@
           }
         }
       }
+    },
+    "Choose Folder…" : {
+
     },
     "Choose how large window previews appear when hovering over dock icons. All window images are automatically scaled to fit within this size while maintaining their original proportions." : {
       "localizations" : {
@@ -21326,6 +21335,9 @@
         }
       }
     },
+    "Discover" : {
+
+    },
     "Discuss features and get help from the community" : {
       "localizations" : {
         "af" : {
@@ -25324,7 +25336,6 @@
     },
     "Embedded" : {
       "comment" : "Preview title style option",
-      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -30478,6 +30489,9 @@
           }
         }
       }
+    },
+    "Full" : {
+
     },
     "Fullscreen" : {
       "localizations" : {
@@ -36384,6 +36398,9 @@
         }
       }
     },
+    "Import .zip" : {
+
+    },
     "Important: When recording, press ONLY the trigger key (e.g. just press Tab if you want command + Tab). Do not press the initialization key during recording." : {
       "extractionState" : "stale",
       "localizations" : {
@@ -37337,16 +37354,10 @@
         }
       }
     },
-    "Install and manage native/declarative widgets." : {
+    "Install for Preview" : {
 
     },
-    "Install Calendar (Native)" : {
-
-    },
-    "Install Spotify and Apple Music Controls (Native)" : {
-
-    },
-    "Installed Widgets" : {
+    "Installed" : {
 
     },
     "Instructions" : {
@@ -40582,6 +40593,9 @@
           }
         }
       }
+    },
+    "Loading…" : {
+
     },
     "Lock aspect ratio (16:10)" : {
       "localizations" : {
@@ -44208,6 +44222,15 @@
     "Missing provider" : {
 
     },
+    "Mock Data" : {
+
+    },
+    "Mode" : {
+
+    },
+    "My Widgets" : {
+
+    },
     "Name" : {
       "localizations" : {
         "af" : {
@@ -45920,6 +45943,9 @@
         }
       }
     },
+    "No catalog loaded yet." : {
+
+    },
     "No custom directories added" : {
       "localizations" : {
         "af" : {
@@ -47062,6 +47088,9 @@
           }
         }
       }
+    },
+    "No mock keys yet" : {
+
     },
     "No recent checks" : {
       "localizations" : {
@@ -48970,6 +48999,9 @@
           }
         }
       }
+    },
+    "Open Docs" : {
+
     },
     "Open Screen Recording Settings" : {
       "extractionState" : "stale",
@@ -54687,6 +54719,9 @@
         }
       }
     },
+    "Preview" : {
+
+    },
     "Preview Appearance & Quality" : {
       "localizations" : {
         "af" : {
@@ -55067,6 +55102,9 @@
           }
         }
       }
+    },
+    "Preview from Folder…" : {
+
     },
     "Preview Height" : {
       "localizations" : {
@@ -58873,6 +58911,9 @@
           }
         }
       }
+    },
+    "Refresh" : {
+
     },
     "Relaxed" : {
       "localizations" : {
@@ -64775,6 +64816,9 @@
           }
         }
       }
+    },
+    "Select a widget folder containing manifest.json and layout.json, then Install for Preview." : {
+
     },
     "Select an application:" : {
       "localizations" : {
@@ -78115,6 +78159,9 @@
         }
       }
     },
+    "Uninstall Preview" : {
+
+    },
     "Unknown Display" : {
       "localizations" : {
         "af" : {
@@ -81923,6 +81970,9 @@
         }
       }
     },
+    "Value" : {
+
+    },
     "Version %@" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -85548,6 +85598,9 @@
           }
         }
       }
+    },
+    "Widget Preview Playground" : {
+
     },
     "Widgets" : {
       "comment" : "Widgets tab title"

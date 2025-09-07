@@ -132,6 +132,12 @@
 		BBCFAE402C266234002E1516 /* FirstTimeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBCFAE3F2C266234002E1516 /* FirstTimeView.swift */; };
 		BBD182AE2E3EE37500A81D69 /* WindowSwitcherStateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBD182AD2E3EE37500A81D69 /* WindowSwitcherStateManager.swift */; };
 		BBE033CC2DD92061006417B0 /* CGimage.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE033CB2DD92061006417B0 /* CGimage.swift */; };
+		BBE0CE822E6890A9009C1CC8 /* MyWidgetsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE0CE802E6890A9009C1CC8 /* MyWidgetsView.swift */; };
+		BBE0CE832E6890A9009C1CC8 /* DiscoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE0CE7F2E6890A9009C1CC8 /* DiscoverView.swift */; };
+		BBE0CE8C2E689E39009C1CC8 /* WidgetCatalogModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE0CE8A2E689E39009C1CC8 /* WidgetCatalogModels.swift */; };
+		BBE0CE8D2E689E39009C1CC8 /* WidgetCatalogClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE0CE892E689E39009C1CC8 /* WidgetCatalogClient.swift */; };
+		BBE0CE902E689E3F009C1CC8 /* WidgetBuilderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE0CE8E2E689E3F009C1CC8 /* WidgetBuilderView.swift */; };
+		BBE0CE922E6B1F19009C1CC8 /* WidgetPreviewPlaygroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE0CE912E6B1F19009C1CC8 /* WidgetPreviewPlaygroundView.swift */; };
 		BBE153BE2D2126D000CD3D4A /* MaterialPill.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE153BD2D2126C000CD3D4A /* MaterialPill.swift */; };
 		BBE153C02D21FA2700CD3D4A /* StyledGroupBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE153BF2D21FA2300CD3D4A /* StyledGroupBox.swift */; };
 		BBE153C22D22024F00CD3D4A /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE153C12D22024E00CD3D4A /* View.swift */; };
@@ -285,6 +291,12 @@
 		BBCFAE3F2C266234002E1516 /* FirstTimeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstTimeView.swift; sourceTree = "<group>"; };
 		BBD182AD2E3EE37500A81D69 /* WindowSwitcherStateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowSwitcherStateManager.swift; sourceTree = "<group>"; };
 		BBE033CB2DD92061006417B0 /* CGimage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGimage.swift; sourceTree = "<group>"; };
+		BBE0CE7F2E6890A9009C1CC8 /* DiscoverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverView.swift; sourceTree = "<group>"; };
+		BBE0CE802E6890A9009C1CC8 /* MyWidgetsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyWidgetsView.swift; sourceTree = "<group>"; };
+		BBE0CE892E689E39009C1CC8 /* WidgetCatalogClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetCatalogClient.swift; sourceTree = "<group>"; };
+		BBE0CE8A2E689E39009C1CC8 /* WidgetCatalogModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetCatalogModels.swift; sourceTree = "<group>"; };
+		BBE0CE8E2E689E3F009C1CC8 /* WidgetBuilderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetBuilderView.swift; sourceTree = "<group>"; };
+		BBE0CE912E6B1F19009C1CC8 /* WidgetPreviewPlaygroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetPreviewPlaygroundView.swift; sourceTree = "<group>"; };
 		BBE153BD2D2126C000CD3D4A /* MaterialPill.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaterialPill.swift; sourceTree = "<group>"; };
 		BBE153BF2D21FA2300CD3D4A /* StyledGroupBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyledGroupBox.swift; sourceTree = "<group>"; };
 		BBE153C12D22024E00CD3D4A /* View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
@@ -682,6 +694,8 @@
 				BB3A55352E613B8100854F20 /* Native */,
 				BBB2907E2E60C234001DC458 /* Core */,
 				BBB290812E60C234001DC458 /* Declarative */,
+				BBE0CE8B2E689E39009C1CC8 /* Catalog */,
+				BBE0CE8F2E689E3F009C1CC8 /* Builder */,
 			);
 			path = Widgets;
 			sourceTree = "<group>";
@@ -714,9 +728,37 @@
 			path = Media;
 			sourceTree = "<group>";
 		};
+		BBE0CE812E6890A9009C1CC8 /* Widgets */ = {
+			isa = PBXGroup;
+			children = (
+				BBE0CE912E6B1F19009C1CC8 /* WidgetPreviewPlaygroundView.swift */,
+				BBE0CE7F2E6890A9009C1CC8 /* DiscoverView.swift */,
+				BBE0CE802E6890A9009C1CC8 /* MyWidgetsView.swift */,
+			);
+			path = Widgets;
+			sourceTree = "<group>";
+		};
+		BBE0CE8B2E689E39009C1CC8 /* Catalog */ = {
+			isa = PBXGroup;
+			children = (
+				BBE0CE892E689E39009C1CC8 /* WidgetCatalogClient.swift */,
+				BBE0CE8A2E689E39009C1CC8 /* WidgetCatalogModels.swift */,
+			);
+			path = Catalog;
+			sourceTree = "<group>";
+		};
+		BBE0CE8F2E689E3F009C1CC8 /* Builder */ = {
+			isa = PBXGroup;
+			children = (
+				BBE0CE8E2E689E3F009C1CC8 /* WidgetBuilderView.swift */,
+			);
+			path = Builder;
+			sourceTree = "<group>";
+		};
 		BBE7CC922C2244A600AB8F4D /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				BBE0CE812E6890A9009C1CC8 /* Widgets */,
 				BB15E1E62C8F8C8D002ECFB9 /* Help */,
 				BBE7CC902C22429A00AB8F4D /* settings.swift */,
 				BB1CBD572C1BA800003969BC /* MainSettingsView.swift */,
@@ -879,6 +921,7 @@
 				BBB2908D2E60CA2C001DC458 /* AppleScriptExecutor.swift in Sources */,
 				BBB290892E60C31E001DC458 /* WidgetsSettingsView.swift in Sources */,
 				BB1A85F52D05263C00326297 /* FiltersSettingsView.swift in Sources */,
+				BBE0CE902E689E3F009C1CC8 /* WidgetBuilderView.swift in Sources */,
 				BB3A55372E613B8100854F20 /* MediaControlsWidgetView.swift in Sources */,
 				BB638F002E0216FA0010077D /* MediaArtworkView.swift in Sources */,
 				BB377C342DFD0D3700FA93DA /* PinnableView.swift in Sources */,
@@ -896,6 +939,8 @@
 				05C0C7182C60629C000ADAC6 /* AXUIElement.swift in Sources */,
 				3A1622C12C8D57AF00D318EE /* PermissionsChecker.swift in Sources */,
 				3A105FD62C1BED660015EC66 /* BlurView.swift in Sources */,
+				BBE0CE822E6890A9009C1CC8 /* MyWidgetsView.swift in Sources */,
+				BBE0CE832E6890A9009C1CC8 /* DiscoverView.swift in Sources */,
 				BB0440622C77AE8D009F1D33 /* GradientColorPaletteSettingsView.swift in Sources */,
 				BB1CBD5D2C1BCA4F003969BC /* Misc Utils.swift in Sources */,
 				3A105FD92C1C049E0015EC66 /* dockStyle.swift in Sources */,
@@ -918,6 +963,8 @@
 				BB157B822C0EB29E00997315 /* DockObserver.swift in Sources */,
 				BB638F022E0216FE0010077D /* MediaControlButton.swift in Sources */,
 				BB638F0A2E02172B0010077D /* MediaLyricsButton.swift in Sources */,
+				BBE0CE8C2E689E39009C1CC8 /* WidgetCatalogModels.swift in Sources */,
+				BBE0CE8D2E689E39009C1CC8 /* WidgetCatalogClient.swift in Sources */,
 				BBA153FA2C11FFD500119C02 /* consts.swift in Sources */,
 				BB377C3F2DFD19ED00FA93DA /* PinnedWindowDelegate.swift in Sources */,
 				BBE033CC2DD92061006417B0 /* CGimage.swift in Sources */,
@@ -932,6 +979,7 @@
 				BB377C492DFD434300FA93DA /* GlobalPadding.swift in Sources */,
 				BB638F162E0218C00010077D /* SharedHoverUtils.swift in Sources */,
 				BBCDD5A02E63ADF50016FE98 /* CalendarWidgetView.swift in Sources */,
+				BBE0CE922E6B1F19009C1CC8 /* WidgetPreviewPlaygroundView.swift in Sources */,
 				BBA153F82C11604400119C02 /* SharedPreviewWindowCoordinator.swift in Sources */,
 				BB1865542DD57E18000F34AD /* BaseSettingsView.swift in Sources */,
 				BBA153FC2C12356100119C02 /* main.swift in Sources */,

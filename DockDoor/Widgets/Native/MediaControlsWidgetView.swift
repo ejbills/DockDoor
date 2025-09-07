@@ -35,7 +35,6 @@ struct MediaControlsWidgetView: View {
             bestGuessMonitor: screen,
             isEmbeddedMode: mode == .embedded,
             isPinnedMode: isPinnedMode,
-            idealWidth: mode == .embedded ? 200 : nil,
             autoFetch: false
         )
         // Native media widgets handle their own polling (needed for both embedded and pinned usage)
