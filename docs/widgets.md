@@ -1,56 +1,43 @@
-# DockDoor Widget System
+# DockDoor Widgets
 
-This documents DockDoor’s pluggable widget system, covering both declarative (JSON-rendered) widgets and native (SwiftUI) widgets. Widgets are installed per-user in Application Support and selected by the target app’s bundle identifier.
+Build small, app‑specific controls that appear alongside DockDoor’s previews. There are two ways to build:
 
-Key components
-- `WidgetManifest` (DockDoor/Widgets/Core/WidgetModels.swift): JSON manifest describing a widget (runtime, entry, modes, matches, optional actions/provider).
-- `WidgetRegistry` (DockDoor/Widgets/Core/WidgetRegistry.swift): discovers manifests in `~/Library/Application Support/DockDoor/Widgets`.
-- `WidgetOrchestrator` (DockDoor/Widgets/Core/WidgetOrchestrator.swift): selects embedded/full widgets for the current app.
-- Declarative runtime: `Wireframe` + `WidgetHostView` render JSON layouts and poll status providers for dynamic context.
-- Native runtime: `NativeWidgetFactory` builds first‑party SwiftUI views. Native widgets handle their own polling (e.g., `MediaControlsWidgetView` with `MediaStore`).
+- Native: a built‑in SwiftUI view identified by name in the manifest.
+- Declarative: a tiny JSON layout (Wireframe) rendered by DockDoor, with optional AppleScript polling and actions.
 
 Install location
 ```
 ~/Library/Application Support/DockDoor/Widgets/<UUID>/
   manifest.json
-  layout.json        # for declarative widgets
-  assets/*           # optional assets
+  layout.json        # only for declarative widgets
 ```
 
-Manifest schema (simplified)
-- `id`: auto-generated UUID by DockDoor when installing via the settings UI
-- `name`, `author`: display metadata
-- `runtime`: `"declarative"` or `"native"`
-- `entry`: declarative: `layout.json`; native: a built-in identifier (e.g. `"MediaControlsWidget"`, `"CalendarWidget"`)
-- `modes`: list of `"embedded"` and/or `"full"`
-- `matches`: array of `{ "bundleId": "…" }` rules
-- `actions` (optional): map of action key → AppleScript string (supports template expansion)
-- `provider` (optional): polling spec for dynamic data
+Keep it simple: no assets folder is needed. Declarative widgets use SF Symbols; native widgets render SwiftUI directly.
 
-Provider (polling) spec
+Manifest (essentials)
+- `name`, `author`: Display info.
+- `runtime`: `"native"` or `"declarative"`.
+- `entry`: Native → a built‑in identifier (e.g. `"MediaControlsWidget"`, `"CalendarWidget"`). Declarative → `"layout.json"`.
+- `modes`: Any of `"embedded"`, `"full"`.
+- `matches`: Array of `{ "bundleId": "…" }` rules selecting which app(s) show the widget.
+- Optional: `actions` (AppleScript snippets) and `provider` (polling) for dynamic data.
+
+Provider (polling) — optional
 ```
 {
   "statusScript": "…AppleScript…",
   "pollIntervalMs": 500,
   "delimiter": "\t",
-  "fields": { "media.title": 0, "media.artist": 1, … }
+  "fields": { "media.title": 0, "media.artist": 1 }
 }
 ```
-- DockDoor executes `statusScript` on a schedule and splits stdout by `delimiter`.
-- Each field name maps to an index in the parts array; those key/value pairs form the widget context.
-- For native media widgets, these fields populate a typed store (`MediaStore`), so avoid renaming the standard keys below.
+DockDoor executes `statusScript`, splits stdout by `delimiter`, and maps indexes to keys into the widget’s context. Use stable names when possible.
 
-Standard media context keys
-- `media.title`, `media.artist`, `media.album`
-- `media.state` ("playing" | "paused" | "stopped")
-- `media.currentTime`, `media.duration` (seconds; decimals allowed)
-- `media.artworkURL` (http(s) or data: URL)
+Action scripts (templating)
+- Define keys like `playPause`, `nextTrack`, `seekSeconds`.
+- Scripts expand `{{key}}` from the current context (and extras passed by native views).
 
-Action scripts (template expansion)
-- Manifests may define actions like `playPause`, `nextTrack`, `previousTrack`, `seekSeconds`.
-- Templates expand `{{key}}` from the merged context. Native views may pass extra keys (e.g., `{"seconds":"42"}` for `seekSeconds`).
-
-Example: Apple Music (native)
+Quick start — Native (example)
 ```
 {
   "name": "Apple Music Controls",
@@ -60,75 +47,74 @@ Example: Apple Music (native)
   "modes": ["embedded", "full"],
   "matches": [{ "bundleId": "com.apple.Music" }],
   "actions": {
-    "playPause": "tell application \"Music\" to playpause",
-    "nextTrack": "tell application \"Music\" to next track",
-    "previousTrack": "tell application \"Music\" to previous track",
-    "seekSeconds": "tell application \"Music\" to set player position to {{seconds}}"
+    "playPause": "tell application \"Music\" to playpause"
   },
   "provider": {
-    "statusScript": "tell application \"Music\"\n  try\n    set currentState to player state\n    if currentState is playing then\n      set trackName to name of current track\n      set artistName to artist of current track\n      set albumName to album of current track\n      set playerState to \"playing\"\n      set currentPos to player position\n      set trackDuration to duration of current track\n      return trackName & tab & artistName & tab & albumName & tab & playerState & tab & currentPos & tab & trackDuration\n    else if currentState is paused then\n      set trackName to name of current track\n      set artistName to artist of current track\n      set albumName to album of current track\n      set playerState to \"paused\"\n      set currentPos to player position\n      set trackDuration to duration of current track\n      return trackName & tab & artistName & tab & albumName & tab & playerState & tab & currentPos & tab & trackDuration\n    else\n      return \"\" & tab & \"\" & tab & \"\" & tab & \"stopped\" & tab & \"0\" & tab & \"0\"\n    end if\n  on error\n    return \"\" & tab & \"\" & tab & \"\" & tab & \"stopped\" & tab & \"0\" & tab & \"0\"\n  end try\nend tell",
+    "statusScript": "tell application \"Music\" to return (name of current track) & tab & (artist of current track)",
     "pollIntervalMs": 500,
     "delimiter": "\t",
-    "fields": {
-      "media.title": 0,
-      "media.artist": 1,
-      "media.album": 2,
-      "media.state": 3,
-      "media.currentTime": 4,
-      "media.duration": 5
-    }
+    "fields": { "media.title": 0, "media.artist": 1 }
   }
 }
 ```
+Steps:
+- Create `manifest.json` like above.
+- Install: Settings → Widgets → My Widgets → Install from Folder…
+- Open the target app and hover its Dock icon.
 
-Example: Spotify (native)
+Quick start — Declarative (example)
+`layout.json` (uses SF Symbols; no external assets):
 ```
 {
-  "name": "Spotify Controls",
+  "embedded": {
+    "type": "hstack",
+    "spacing": 8,
+    "children": [
+      { "type": "imageSymbol", "symbol": "playpause.fill", "size": 16 },
+      { "type": "text", "text": "{{media.title}} — {{media.artist}}", "font": "caption", "lineLimit": 1 }
+    ]
+  }
+}
+```
+`manifest.json`:
+```
+{
+  "name": "Safari Essentials",
   "author": "DockDoor",
-  "runtime": "native",
-  "entry": "MediaControlsWidget",
-  "modes": ["embedded", "full"],
-  "matches": [{ "bundleId": "com.spotify.client" }],
-  "actions": {
-    "playPause": "tell application \"Spotify\" to playpause",
-    "nextTrack": "tell application \"Spotify\" to next track",
-    "previousTrack": "tell application \"Spotify\" to previous track",
-    "seekSeconds": "tell application \"Spotify\"\n  set player position to {{seconds}}\nend tell"
-  },
+  "runtime": "declarative",
+  "entry": "layout.json",
+  "modes": ["embedded"],
+  "matches": [{ "bundleId": "com.apple.Safari" }],
+  "actions": { "playPause": "tell app \"Music\" to playpause" },
   "provider": {
-    "statusScript": "tell application \"Spotify\"\n  try\n    if player state is playing then\n      set trackName to name of current track\n      set artistName to artist of current track\n      set albumName to album of current track\n      set playerState to \"playing\"\n      set currentPos to player position\n      set trackDuration to (duration of current track) / 1000.0\n      set artworkUrl to artwork url of current track\n      return trackName & tab & artistName & tab & albumName & tab & playerState & tab & currentPos & tab & trackDuration & tab & artworkUrl\n    else if player state is paused then\n      set trackName to name of current track\n      set artistName to artist of current track\n      set albumName to album of current track\n      set playerState to \"paused\"\n      set currentPos to player position\n      set trackDuration to (duration of current track) / 1000.0\n      set artworkUrl to artwork url of current track\n      return trackName & tab & artistName & tab & albumName & tab & playerState & tab & currentPos & tab & trackDuration & tab & artworkUrl\n    else\n      return \"\" & tab & \"\" & tab & \"\" & tab & \"stopped\" & tab & \"0\" & tab & \"0\" & tab & \"\"\n    end if\n  on error\n    return \"\" & tab & \"\" & tab & \"\" & tab & \"stopped\" & tab & \"0\" & tab & \"0\" & tab & \"\"\n  end try\nend tell",
+    "statusScript": "tell application \"Music\" to return (name of current track) & tab & (artist of current track)",
     "pollIntervalMs": 500,
     "delimiter": "\t",
-    "fields": {
-      "media.title": 0,
-      "media.artist": 1,
-      "media.album": 2,
-      "media.state": 3,
-      "media.currentTime": 4,
-      "media.duration": 5,
-      "media.artworkURL": 6
-    }
+    "fields": { "media.title": 0, "media.artist": 1 }
   }
 }
 ```
 
-Declarative widgets
-- Provide `runtime: "declarative"`, `entry: "layout.json"`, optional `actions`, and optional `provider`.
-- `WidgetHostView` polls the provider at `pollIntervalMs` while visible and injects the resulting context map into the layout renderer.
-- Bind UI nodes to context keys and use the `buttonRow` actions to trigger manifest `actions`.
+Layout nodes (supported)
+- `vstack`, `hstack`, `zstack`: Containers with optional `spacing`.
+- `text`: Text content; supports `font` (e.g. caption, body, headline), `foreground` (`primary`, `secondary`), `truncation`, `lineLimit`.
+- `imageSymbol`: SF Symbol by name; set `size`.
+- `buttonRow`: Row of buttons with SF Symbols that trigger manifest `actions` by key.
+- `spacer`: Flexible space.
 
-Native widgets
-- Provide `runtime: "native"` and an `entry` of a built-in view. Native widgets handle their own polling directly.
-- For media, `MediaControlsWidgetView` uses a `MediaStore` (ObservableObject) that polls the manifest's `provider` and updates the UI reactively. Actions are executed from the manifest with optimistic UI updates.
-- Native widgets that don't require polling (e.g., Calendar) can omit `provider` and rely on their own data sources.
+Context keys
+- Provided automatically: `appName`, `bundleIdentifier`, `windows.count`, `dockPosition`.
+- Media convenience: `media.title`, `media.artist`, `media.album`, `media.state`, `media.currentTime`, `media.duration`, `media.artworkURL` (if your provider returns it).
 
 Lifecycle & performance
-- Polling is lifecycle-aware: providers run only while their widgets are visible and stop when they go off-screen.
-- Native widgets handle their own polling (needed for both embedded and pinned usage scenarios).
-- Prefer stable field names and avoid excessive intervals; 500ms is typical for media.
+- Polling runs only while the widget is visible.
+- Use reasonable intervals (e.g. 500ms for media).
 
-Tips
-- You can template any `{{key}}` present in context into your AppleScript `actions`.
-- Consider returning a data URL string for artwork if fetching files is cumbersome.
-- If your domain suits JSON, we plan to support JSON output (no `delimiter`/`fields`) in a future iteration.
+Install & manage
+- Use Settings → Widgets → My Widgets to install from a folder, reveal, and remove widgets.
+- Widgets are per‑user under Application Support; no separate assets folder is required.
+
+Notes
+- Native widgets ignore external files; everything is rendered in SwiftUI.
+- Declarative widgets use only SF Symbols for images.
+- Future: a JSON provider output may be supported to avoid delimiter/index parsing.
