@@ -115,8 +115,9 @@ struct FiltersSettingsView: View {
                                             customAppDirectories.append(path)
                                         }
                                     }
-                                case let .failure(error):
-                                    print("Error selecting directory: \(error.localizedDescription)")
+                                case .failure:
+                                    // Ignore selection failures silently in settings
+                                    break
                                 }
                             }
                             .buttonStyle(AccentButtonStyle(color: .accentColor))

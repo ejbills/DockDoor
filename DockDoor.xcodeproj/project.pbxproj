@@ -137,7 +137,6 @@
 		BBE0CE8C2E689E39009C1CC8 /* WidgetCatalogModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE0CE8A2E689E39009C1CC8 /* WidgetCatalogModels.swift */; };
 		BBE0CE8D2E689E39009C1CC8 /* WidgetCatalogClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE0CE892E689E39009C1CC8 /* WidgetCatalogClient.swift */; };
 		BBE0CE902E689E3F009C1CC8 /* WidgetBuilderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE0CE8E2E689E3F009C1CC8 /* WidgetBuilderView.swift */; };
-		BBE0CE922E6B1F19009C1CC8 /* WidgetPreviewPlaygroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE0CE912E6B1F19009C1CC8 /* WidgetPreviewPlaygroundView.swift */; };
 		BBE153BE2D2126D000CD3D4A /* MaterialPill.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE153BD2D2126C000CD3D4A /* MaterialPill.swift */; };
 		BBE153C02D21FA2700CD3D4A /* StyledGroupBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE153BF2D21FA2300CD3D4A /* StyledGroupBox.swift */; };
 		BBE153C22D22024F00CD3D4A /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE153C12D22024E00CD3D4A /* View.swift */; };
@@ -296,7 +295,6 @@
 		BBE0CE892E689E39009C1CC8 /* WidgetCatalogClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetCatalogClient.swift; sourceTree = "<group>"; };
 		BBE0CE8A2E689E39009C1CC8 /* WidgetCatalogModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetCatalogModels.swift; sourceTree = "<group>"; };
 		BBE0CE8E2E689E3F009C1CC8 /* WidgetBuilderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetBuilderView.swift; sourceTree = "<group>"; };
-		BBE0CE912E6B1F19009C1CC8 /* WidgetPreviewPlaygroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetPreviewPlaygroundView.swift; sourceTree = "<group>"; };
 		BBE153BD2D2126C000CD3D4A /* MaterialPill.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaterialPill.swift; sourceTree = "<group>"; };
 		BBE153BF2D21FA2300CD3D4A /* StyledGroupBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyledGroupBox.swift; sourceTree = "<group>"; };
 		BBE153C12D22024E00CD3D4A /* View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
@@ -731,7 +729,6 @@
 		BBE0CE812E6890A9009C1CC8 /* Widgets */ = {
 			isa = PBXGroup;
 			children = (
-				BBE0CE912E6B1F19009C1CC8 /* WidgetPreviewPlaygroundView.swift */,
 				BBE0CE7F2E6890A9009C1CC8 /* DiscoverView.swift */,
 				BBE0CE802E6890A9009C1CC8 /* MyWidgetsView.swift */,
 			);
@@ -979,7 +976,6 @@
 				BB377C492DFD434300FA93DA /* GlobalPadding.swift in Sources */,
 				BB638F162E0218C00010077D /* SharedHoverUtils.swift in Sources */,
 				BBCDD5A02E63ADF50016FE98 /* CalendarWidgetView.swift in Sources */,
-				BBE0CE922E6B1F19009C1CC8 /* WidgetPreviewPlaygroundView.swift in Sources */,
 				BBA153F82C11604400119C02 /* SharedPreviewWindowCoordinator.swift in Sources */,
 				BB1865542DD57E18000F34AD /* BaseSettingsView.swift in Sources */,
 				BBA153FC2C12356100119C02 /* main.swift in Sources */,

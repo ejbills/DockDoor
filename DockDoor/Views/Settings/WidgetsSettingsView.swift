@@ -16,13 +16,9 @@ struct WidgetsSettingsView: View {
                     }
                 }
 
-                TabView {
-                    MyWidgetsView()
-                        .tabItem { Text("My Widgets") }
-                    DiscoverView()
-                        .tabItem { Text("Discover") }
-                }
-                .tabViewStyle(.automatic)
+                // Lay out both sections without a tab/segmented control
+                MyWidgetsView()
+                DiscoverView()
             }
         }
     }

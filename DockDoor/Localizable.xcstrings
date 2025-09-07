@@ -5336,6 +5336,9 @@
         }
       }
     },
+    "Add a cached catalog or configure a remote source in a future update." : {
+
+    },
     "Add additional directories to scan for applications" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -6476,9 +6479,6 @@
           }
         }
       }
-    },
-    "Add media keys" : {
-
     },
     "Adjust this if the preview is misaligned with dock" : {
       "extractionState" : "stale",
@@ -14672,9 +14672,6 @@
         }
       }
     },
-    "Choose Folder…" : {
-
-    },
     "Choose how large window previews appear when hovering over dock icons. All window images are automatically scaled to fit within this size while maintaining their original proportions." : {
       "localizations" : {
         "af" : {
@@ -21335,9 +21332,6 @@
         }
       }
     },
-    "Discover" : {
-
-    },
     "Discuss features and get help from the community" : {
       "localizations" : {
         "af" : {
@@ -24572,6 +24566,9 @@
         }
       }
     },
+    "Docs" : {
+
+    },
     "Edit Color" : {
       "localizations" : {
         "af" : {
@@ -25336,6 +25333,7 @@
     },
     "Embedded" : {
       "comment" : "Preview title style option",
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -30489,9 +30487,6 @@
           }
         }
       }
-    },
-    "Full" : {
-
     },
     "Fullscreen" : {
       "localizations" : {
@@ -36398,9 +36393,6 @@
         }
       }
     },
-    "Import .zip" : {
-
-    },
     "Important: When recording, press ONLY the trigger key (e.g. just press Tab if you want command + Tab). Do not press the initialization key during recording." : {
       "extractionState" : "stale",
       "localizations" : {
@@ -37354,10 +37346,16 @@
         }
       }
     },
-    "Install for Preview" : {
+    "Install" : {
 
     },
-    "Installed" : {
+    "Install from a folder with manifest.json (and optional layout.json), or use Marketplace below." : {
+
+    },
+    "Install from Folder…" : {
+
+    },
+    "Installation from Marketplace will be available in a future update or with network enabled." : {
 
     },
     "Instructions" : {
@@ -40214,6 +40212,9 @@
         }
       }
     },
+    "Loading catalog…" : {
+
+    },
     "Loading lyrics..." : {
       "localizations" : {
         "af" : {
@@ -40786,6 +40787,9 @@
           }
         }
       }
+    },
+    "Marketplace" : {
+
     },
     "Max Columns (Left/Right Dock)" : {
       "localizations" : {
@@ -44222,12 +44226,6 @@
     "Missing provider" : {
 
     },
-    "Mock Data" : {
-
-    },
-    "Mode" : {
-
-    },
     "My Widgets" : {
 
     },
@@ -45943,7 +45941,7 @@
         }
       }
     },
-    "No catalog loaded yet." : {
+    "No catalog available" : {
 
     },
     "No custom directories added" : {
@@ -47088,9 +47086,6 @@
           }
         }
       }
-    },
-    "No mock keys yet" : {
-
     },
     "No recent checks" : {
       "localizations" : {
@@ -49000,9 +48995,6 @@
         }
       }
     },
-    "Open Docs" : {
-
-    },
     "Open Screen Recording Settings" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -49573,9 +49565,6 @@
           }
         }
       }
-    },
-    "Open Widgets Folder" : {
-
     },
     "Option (⌥)" : {
       "localizations" : {
@@ -54719,9 +54708,6 @@
         }
       }
     },
-    "Preview" : {
-
-    },
     "Preview Appearance & Quality" : {
       "localizations" : {
         "af" : {
@@ -55102,9 +55088,6 @@
           }
         }
       }
-    },
-    "Preview from Folder…" : {
-
     },
     "Preview Height" : {
       "localizations" : {
@@ -61957,6 +61940,9 @@
         }
       }
     },
+    "Reveal" : {
+
+    },
     "Right click a color to remove it." : {
       "localizations" : {
         "af" : {
@@ -63863,6 +63849,12 @@
         }
       }
     },
+    "Search installed widgets" : {
+
+    },
+    "Search widgets" : {
+
+    },
     "seconds" : {
       "localizations" : {
         "af" : {
@@ -64816,9 +64808,6 @@
           }
         }
       }
-    },
-    "Select a widget folder containing manifest.json and layout.json, then Install for Preview." : {
-
     },
     "Select an application:" : {
       "localizations" : {
@@ -78159,9 +78148,6 @@
         }
       }
     },
-    "Uninstall Preview" : {
-
-    },
     "Unknown Display" : {
       "localizations" : {
         "af" : {
@@ -81970,9 +81956,6 @@
         }
       }
     },
-    "Value" : {
-
-    },
     "Version %@" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -85598,9 +85581,6 @@
           }
         }
       }
-    },
-    "Widget Preview Playground" : {
-
     },
     "Widgets" : {
       "comment" : "Widgets tab title"
