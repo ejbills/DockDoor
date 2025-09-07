@@ -13,6 +13,15 @@ struct WidgetsSettingsView: View {
                         Text("Build, install, and discover widgets.")
                             .font(.caption)
                             .foregroundColor(.secondary)
+                        HStack(spacing: 8) {
+                            Menu("Install Defaults…") {
+                                Button("All (Calendar, Apple Music, Spotify)") { DefaultWidgets.installAll() }
+                                Divider()
+                                Button("Calendar") { DefaultWidgets.installCalendar() }
+                                Button("Apple Music") { DefaultWidgets.installAppleMusic() }
+                                Button("Spotify") { DefaultWidgets.installSpotify() }
+                            }
+                        }
                     }
                 }
 

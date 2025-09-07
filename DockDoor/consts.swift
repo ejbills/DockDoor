@@ -103,6 +103,7 @@ extension Defaults.Keys {
     // MARK: Widget System
 
     static let widgetsEnabled = Key<Bool>("widgetsEnabled", default: true)
+    static let installedDefaultWidgets = Key<Bool>("installedDefaultWidgets", default: false)
 }
 
 // MARK: Display Configurations

@@ -7052,6 +7052,9 @@
         }
       }
     },
+    "All (Calendar, Apple Music, Spotify)" : {
+
+    },
     "All buttons removed" : {
       "localizations" : {
         "af" : {
@@ -9527,6 +9530,9 @@
           }
         }
       }
+    },
+    "Apple Music" : {
+
     },
     "Application Basics" : {
       "localizations" : {
@@ -13528,6 +13534,9 @@
       }
     },
     "by %@" : {
+
+    },
+    "Calendar" : {
 
     },
     "Calendar Access Needed" : {
@@ -37347,6 +37356,9 @@
       }
     },
     "Install" : {
+
+    },
+    "Install Defaults…" : {
 
     },
     "Install from a folder with manifest.json (and optional layout.json), or use Marketplace below." : {
@@ -71481,6 +71493,9 @@
           }
         }
       }
+    },
+    "Spotify" : {
+
     },
     "Stable" : {
       "localizations" : {

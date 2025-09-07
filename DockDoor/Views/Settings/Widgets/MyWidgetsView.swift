@@ -46,8 +46,7 @@ struct MyWidgetsView: View {
                         List {
                             ForEach(filteredManifests, id: \.self) { m in
                                 HStack(spacing: 10) {
-                                    Image(systemName: "square.grid.2x2")
-                                        .foregroundStyle(.secondary)
+                                    iconView(for: m)
                                     VStack(alignment: .leading, spacing: 2) {
                                         HStack(spacing: 6) {
                                             Text(m.name).font(.headline)
@@ -125,6 +124,18 @@ struct MyWidgetsView: View {
             message = "Removed \(m.name)"
         } catch {
             message = "Failed to remove \(m.name)"
+        }
+    }
+
+    @ViewBuilder
+    private func iconView(for manifest: WidgetManifest) -> some View {
+        let symbol = manifest.icon?.trimmingCharacters(in: .whitespacesAndNewlines)
+        if let symbol, !symbol.isEmpty, NSImage(systemSymbolName: symbol, accessibilityDescription: nil) != nil {
+            Image(systemName: symbol)
+                .foregroundStyle(.secondary)
+        } else {
+            Image(systemName: "square.grid.2x2")
+                .foregroundStyle(.secondary)
         }
     }
 }
