@@ -154,7 +154,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     @objc func openSettingsWindow(_ sender: Any?) {
+        NSApp.setActivationPolicy(.regular)
+        NSApp.activate(ignoringOtherApps: true)
+
         settingsWindowController.show()
+
+        if let window = settingsWindowController.window {
+            window.makeKeyAndOrderFront(nil)
+            window.orderFrontRegardless()
+        }
     }
 
     func quitApp() {
