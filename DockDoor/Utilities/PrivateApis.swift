@@ -1,5 +1,15 @@
 import Cocoa
 
+struct CGSWindowCaptureOptions: OptionSet {
+    let rawValue: UInt32
+    static let ignoreGlobalClipShape = CGSWindowCaptureOptions(rawValue: 1 << 11)
+    // on a retina display, 1px is spread on 4px, so nominalResolution is 1/4 of bestResolution
+    static let nominalResolution = CGSWindowCaptureOptions(rawValue: 1 << 9)
+    static let bestResolution = CGSWindowCaptureOptions(rawValue: 1 << 8)
+    // when Stage Manager is enabled, screenshots can become skewed. This param gets us full-size screenshots regardless
+    static let fullSize = CGSWindowCaptureOptions(rawValue: 1 << 19)
+}
+
 // returns the CGWindowID of the provided AXUIElement
 // * macOS 10.10+
 @_silgen_name("_AXUIElementGetWindow") @discardableResult
@@ -27,7 +37,6 @@ func CoreDockIsMagnificationEnabled() -> Bool
 // Define the private API types
 typealias CGSConnectionID = UInt32
 typealias CGSWindowCount = UInt32
-typealias CGSWindowCaptureOptions = UInt32
 
 // Define the private API functions with @_silgen_name
 @_silgen_name("CGSMainConnectionID")

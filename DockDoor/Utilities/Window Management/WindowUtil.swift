@@ -147,33 +147,22 @@ enum WindowUtil {
         )
 
         var cgImage: CGImage
-
-        if forceRefresh {
-            let connectionID = CGSMainConnectionID()
-            var windowID = UInt32(window.windowID)
-
-            guard let capturedWindows = CGSHWCaptureWindowList(
-                connectionID,
-                &windowID,
-                1,
-                0x0200 // kCGSWindowCaptureNominalResolution
-            ) as? [CGImage],
-                let capturedImage = capturedWindows.first
-            else {
-                throw captureError
-            }
-            cgImage = capturedImage
-        } else {
-            guard let windowImage = CGWindowListCreateImage(
-                .null,
-                .optionIncludingWindow,
-                CGWindowID(window.windowID),
-                [.bestResolution, .boundsIgnoreFraming]
-            ) else {
-                throw captureError
-            }
-            cgImage = windowImage
+        let connectionID = CGSMainConnectionID()
+        var windowID = UInt32(window.windowID)
+        guard let capturedWindows = CGSHWCaptureWindowList(
+            connectionID,
+            &windowID,
+            1,
+            [
+                CGSWindowCaptureOptions.nominalResolution,
+                CGSWindowCaptureOptions.fullSize,
+            ]
+        ) as? [CGImage],
+            let capturedImage = capturedWindows.first
+        else {
+            throw captureError
         }
+        cgImage = capturedImage
 
         // Only scale down if previewScale is greater than 1
         let previewScale = Int(Defaults[.windowPreviewImageScale])
