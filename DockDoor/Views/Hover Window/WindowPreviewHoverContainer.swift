@@ -1,3 +1,4 @@
+import AppKit
 import Defaults
 import ScreenCaptureKit
 import SwiftUI
@@ -150,6 +151,12 @@ struct WindowPreviewHoverContainer: View {
         .padding(.top, (!previewStateCoordinator.windowSwitcherActive && appNameStyle == .popover && showAppTitleData) ? 30 : 0)
         .onAppear {
             loadAppIcon()
+        }
+        .onChange(of: previewStateCoordinator.windowSwitcherActive) { isActive in
+            if !isActive {
+                // Clear search when switcher is dismissed
+                previewStateCoordinator.searchQuery = ""
+            }
         }
     }
 
@@ -451,7 +458,10 @@ struct WindowPreviewHoverContainer: View {
     ) -> some View {
         ScrollView(isHorizontal ? .horizontal : .vertical, showsIndicators: false) {
             Group {
-                if isHorizontal {
+                // Show no results view when search is active and no results found
+                if shouldShowNoResultsView() {
+                    noResultsView()
+                } else if isHorizontal {
                     let chunkedItems = createChunkedItems()
                     VStack(alignment: .leading, spacing: 24) {
                         ForEach(Array(chunkedItems.enumerated()), id: \.offset) { index, rowItems in
@@ -680,6 +690,20 @@ struct WindowPreviewHoverContainer: View {
         dimensionsMap[index]
     }
 
+    private func filteredWindowIndices() -> [Int] {
+        // Only filter when switcher is active; view-only filtering
+        let query = previewStateCoordinator.searchQuery.lowercased()
+        guard previewStateCoordinator.windowSwitcherActive, !query.isEmpty else {
+            return Array(previewStateCoordinator.windows.indices)
+        }
+
+        return previewStateCoordinator.windows.enumerated().compactMap { idx, win in
+            let appName = win.app.localizedName?.lowercased() ?? ""
+            let windowTitle = (win.windowName ?? "").lowercased()
+            return (appName.contains(query) || windowTitle.contains(query)) ? idx : nil
+        }
+    }
+
     private func createFlowItems() -> [FlowItem] {
         var allItems: [FlowItem] = []
 
@@ -688,8 +712,8 @@ struct WindowPreviewHoverContainer: View {
             allItems.append(.embedded)
         }
 
-        // Add all windows
-        for index in previewStateCoordinator.windows.indices {
+        // Add windows from filtered indices (dimensions stay mapped by original indices)
+        for index in filteredWindowIndices() {
             allItems.append(.window(index))
         }
 
@@ -729,7 +753,7 @@ struct WindowPreviewHoverContainer: View {
             itemsToProcess.append(.embedded)
         }
 
-        for index in previewStateCoordinator.windows.indices {
+        for index in filteredWindowIndices() {
             itemsToProcess.append(.window(index))
         }
 
@@ -868,5 +892,34 @@ struct WindowPreviewHoverContainer: View {
                 EmptyView()
             }
         }
+    }
+
+    private func shouldShowNoResultsView() -> Bool {
+        let query = previewStateCoordinator.searchQuery
+        return previewStateCoordinator.windowSwitcherActive &&
+            !query.isEmpty &&
+            filteredWindowIndices().isEmpty &&
+            embeddedContentType == .none
+    }
+
+    @ViewBuilder
+    private func noResultsView() -> some View {
+        VStack(spacing: 16) {
+            Image(systemName: "magnifyingglass")
+                .font(.system(size: 48, weight: .light))
+                .foregroundColor(.secondary)
+
+            VStack(spacing: 4) {
+                Text("No Results")
+                    .font(.headline)
+                    .foregroundColor(.primary)
+
+                Text("No windows match your search")
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+            }
+        }
+        .frame(minWidth: 200, minHeight: 120)
+        .padding()
     }
 }

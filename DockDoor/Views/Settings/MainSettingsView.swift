@@ -87,6 +87,7 @@ struct PreviewQualitySettingsValues {
 struct MainSettingsView: View {
     @Default(.showMenuBarIcon) var showMenuBarIcon
     @Default(.enableWindowSwitcher) var enableWindowSwitcher
+    @Default(.enableWindowSwitcherSearch) var enableWindowSwitcherSearch
     @Default(.enableDockPreviews) var enableDockPreviews
     @Default(.keepPreviewOnAppTerminate) var keepPreviewOnAppTerminate
     @Default(.includeHiddenWindowsInSwitcher) var includeHiddenWindowsInSwitcher
@@ -411,6 +412,7 @@ struct MainSettingsView: View {
                 if enableWindowSwitcher {
                     VStack(alignment: .leading, spacing: 8) {
                         Toggle(isOn: $includeHiddenWindowsInSwitcher) { Text("Include hidden/minimized windows in Switcher") }
+                        Toggle(isOn: $enableWindowSwitcherSearch) { Text("Enable search while using Window Switcher") }
                         Toggle(isOn: Binding(
                             get: { !preventSwitcherHide },
                             set: { preventSwitcherHide = !$0 }

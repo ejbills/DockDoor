@@ -49,6 +49,7 @@ extension Defaults.Keys {
     static let enableWindowSwitcher = Key<Bool>("enableWindowSwitcher", default: true)
     static let enableDockPreviews = Key<Bool>("enableDockPreviews", default: true)
     static let keepPreviewOnAppTerminate = Key<Bool>("keepPreviewOnAppTerminate", default: false)
+    static let enableWindowSwitcherSearch = Key<Bool>("enableWindowSwitcherSearch", default: false)
     static let sortWindowsByDate = Key<Bool>("sortWindowsByDate", default: true)
     static let useClassicWindowOrdering = Key<Bool>("useClassicWindowOrdering", default: true)
     static let includeHiddenWindowsInSwitcher = Key<Bool>("includeHiddenWindowsInSwitcher", default: true)
