@@ -50,6 +50,11 @@ final class DockObserver {
 
     private var eventTap: CFMachPort?
 
+    // When true, the WindowDismissalContainer should treat the dock icon as "not hovered"
+    // to allow the inactivity timer fade-out to dismiss the preview window.
+    // This is used when hovering an app with no active windows while lateral movement is disabled.
+    var requireInactivityDismissal: Bool = false
+
     // App click tracking for dock click detection
     var currentClickedAppPID: pid_t?
     var clickCount: Int = 0
@@ -159,7 +164,32 @@ final class DockObserver {
             lastNotificationId = ""
             emptyAppStreakCount = 0
             pendingShows.removeAll()
+            requireInactivityDismissal = false
         }
+    }
+
+    // Similar to hideWindowAndResetLastApp but does not immediately hide the window.
+    // Instead, it prepares state for WindowDismissalContainer to fade out using inactivity timer.
+    private func prepareForInactivityDismissal() {
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            resetLastAppUnderMouse()
+            lastNotificationTime = 0
+            lastNotificationId = ""
+            emptyAppStreakCount = 0
+            pendingShows.removeAll()
+            requireInactivityDismissal = true
+        }
+    }
+
+    // Called by WindowDismissalContainer after fade-out completes to reset tracking variables.
+    func resetTrackingAfterContainerDismissal() {
+        resetLastAppUnderMouse()
+        lastNotificationTime = 0
+        lastNotificationId = ""
+        emptyAppStreakCount = 0
+        pendingShows.removeAll()
+        requireInactivityDismissal = false
     }
 
     func processSelectedDockItemChanged() {
@@ -192,7 +222,8 @@ final class DockObserver {
             lastNotificationId = bundleIdentifier
 
             if !Defaults[.lateralMovement] {
-                hideWindowAndResetLastApp()
+                // Hovering empty app while lateral movement is off -> dismiss via inactivity timer fade
+                prepareForInactivityDismissal()
             } else {
                 emptyAppStreakCount += 1
                 if emptyAppStreakCount >= maxEmptyAppStreak {
@@ -308,7 +339,8 @@ final class DockObserver {
                             }
                         } else {
                             if !(isSpecialApp && Defaults[.showSpecialAppControls]) {
-                                hideWindowAndResetLastApp()
+                                // Hovering empty app while lateral movement is off -> dismiss via inactivity timer fade
+                                prepareForInactivityDismissal()
                             }
                         }
                         pendingShows.remove(currentAppInfo.processIdentifier)
@@ -328,7 +360,8 @@ final class DockObserver {
 
                         if !Defaults[.lateralMovement] {
                             if !(isSpecialApp && Defaults[.showSpecialAppControls]) {
-                                hideWindowAndResetLastApp()
+                                // Hovering empty app while lateral movement is off -> dismiss via inactivity timer fade
+                                prepareForInactivityDismissal()
                                 pendingShows.remove(currentAppInfo.processIdentifier)
                                 return
                             }
@@ -347,6 +380,7 @@ final class DockObserver {
                     } else {
                         // Successfully found windows for the app, reset the streak.
                         emptyAppStreakCount = 0
+                        requireInactivityDismissal = false
                     }
 
                     if !pendingShows.contains(currentAppInfo.processIdentifier) {
@@ -372,6 +406,7 @@ final class DockObserver {
                     pendingShows.remove(currentAppInfo.processIdentifier)
                 }
                 previousStatus = .success(currentApp)
+                requireInactivityDismissal = false
             } catch {
                 isProcessing = false
             }
