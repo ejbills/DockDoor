@@ -38497,8 +38497,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Language"
+            "state" : "translated",
+            "value" : "Sprache"
           }
         },
         "el" : {
@@ -46260,7 +46260,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "未发现音频设备！"
+            "value" : "今天暂无日程安排！"
           }
         },
         "zh-Hant" : {
@@ -63875,8 +63875,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Scroll long titles (marquee)"
+            "state" : "translated",
+            "value" : "Fai scorrere i titoli lunghi"
           }
         },
         "ja" : {
@@ -63953,8 +63953,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Scroll long titles (marquee)"
+            "state" : "translated",
+            "value" : "Прокручування довгих заголовків (вибірковий рядок)"
           }
         },
         "vi" : {
@@ -63965,14 +63965,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Scroll long titles (marquee)"
+            "state" : "translated",
+            "value" : "滚动长标题 (选框)"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Scroll long titles (marquee)"
+            "state" : "translated",
+            "value" : "捲動長標題（跑馬燈）"
           }
         }
       }
@@ -73024,7 +73024,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Assistenza"
+            "value" : "Info"
           }
         },
         "ja" : {
@@ -82441,8 +82441,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "View"
+            "state" : "translated",
+            "value" : "查看"
           }
         },
         "zh-Hant" : {
@@ -83655,8 +83655,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When disabled, long titles remain static instead of scrolling."
+            "state" : "translated",
+            "value" : "Si désactivé, les longs titres restent fixes au lieu de défiler."
           }
         },
         "he" : {
@@ -83685,8 +83685,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When disabled, long titles remain static instead of scrolling."
+            "state" : "translated",
+            "value" : "Se disattivato, i titoli lunghi potrebbero non essere leggibili per intero."
           }
         },
         "ja" : {
@@ -83763,8 +83763,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When disabled, long titles remain static instead of scrolling."
+            "state" : "translated",
+            "value" : "Якщо вимкнено, довгі заголовки залишаються статичними, а не прокручуються."
           }
         },
         "vi" : {
@@ -83775,14 +83775,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When disabled, long titles remain static instead of scrolling."
+            "state" : "translated",
+            "value" : "禁用时，长标题保持静态而非滚动。"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When disabled, long titles remain static instead of scrolling."
+            "state" : "translated",
+            "value" : "停用時，長標題會保持靜止而不捲動。"
           }
         }
       }
@@ -84919,8 +84919,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When enabled, shows visual indicators and dims minimized/hidden windows. When disabled, treats them as normal windows with full functionality."
+            "state" : "translated",
+            "value" : "启用时，将显示视觉指示器和最小化/隐藏窗口。禁用时，将其视为具有全部功能的正常窗口。"
           }
         },
         "zh-Hant" : {
