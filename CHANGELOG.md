@@ -41,11 +41,11 @@
 <a id="1.23"></a>
 # [Release 1.23](https://github.com/ejbills/DockDoor/releases/tag/1.23) - 2025-09-16
 
-
 ## ✨ New Features
-- Search for open windows
+- Search for open windows (default off)
   - Press / to start
   - Type to filter list
+  - <img width="1326" height="614" alt="CleanShot 2025-09-16 at 11 34 35@2x" src="https://github.com/user-attachments/assets/ce0c8c1a-a32f-4dae-b94f-359a7747feb9" />
 
 ## 🔧 Improvements & Stability
 - Improved window preview quality
