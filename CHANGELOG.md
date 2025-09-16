@@ -38,6 +38,52 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://buymeacoffee.com/keplercafe</div>
 
+<a id="1.23"></a>
+# [Release 1.23](https://github.com/ejbills/DockDoor/releases/tag/1.23) - 2025-09-16
+
+## ✨ New Features
+- Search for open windows (default off)
+  - Press / to start
+  - Type to filter list
+  - <img width="1326" height="614" alt="CleanShot 2025-09-16 at 11 34 35@2x" src="https://github.com/user-attachments/assets/ce0c8c1a-a32f-4dae-b94f-359a7747feb9" />
+
+## 🔧 Improvements & Stability
+- Improved window preview quality
+  - Better Stage Manager support
+- Better update status messages
+- Improved keybind display text
+- Improved button text contrast
+
+## 🐛 Bug Fixes
+- Fixed keybind detection issues
+- Fixed window selection stability
+- Fixed preview interaction issues
+
+
+[Changes][1.23]
+
+
+<a id="1.22"></a>
+# [Release 1.22](https://github.com/ejbills/DockDoor/releases/tag/1.22) - 2025-09-07
+
+
+## ✨ New Features
+- Marquee scrolling toggle
+  - Static titles option
+  - Settings control added
+
+## 🔧 Improvements & Stability
+- Enhanced settings window
+  - Better window raising
+  - Improved focus handling
+- Refined preview display
+  - Better dock validation
+  - Improved hover accuracy
+
+
+[Changes][1.22]
+
+
 <a id="1.21.4"></a>
 # [Release 1.21.4](https://github.com/ejbills/DockDoor/releases/tag/1.21.4) - 2025-08-24
 
@@ -1437,6 +1483,8 @@ v1.0
 [Changes][releases]
 
 
+[1.23]: https://github.com/ejbills/DockDoor/compare/1.22...1.23
+[1.22]: https://github.com/ejbills/DockDoor/compare/1.21.4...1.22
 [1.21.4]: https://github.com/ejbills/DockDoor/compare/1.21.3...1.21.4
 [1.21.3]: https://github.com/ejbills/DockDoor/compare/1.21.2...1.21.3
 [1.21.2]: https://github.com/ejbills/DockDoor/compare/1.21.1...1.21.2

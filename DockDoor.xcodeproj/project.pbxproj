@@ -66,6 +66,7 @@
 		BB377C342DFD0D3700FA93DA /* PinnableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB377C332DFD0D3700FA93DA /* PinnableView.swift */; };
 		BB377C3F2DFD19ED00FA93DA /* PinnedWindowDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB377C3E2DFD19ED00FA93DA /* PinnedWindowDelegate.swift */; };
 		BB377C492DFD434300FA93DA /* GlobalPadding.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB377C482DFD434300FA93DA /* GlobalPadding.swift */; };
+		BB387FB32E70BA1300640D79 /* SearchWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB387FB22E70BA1300640D79 /* SearchWindow.swift */; };
 		BB3967FD2C291D5A004F1AB6 /* StackedShadow.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3967FC2C291D5A004F1AB6 /* StackedShadow.swift */; };
 		BB3968002C2A6C44004F1AB6 /* SmoothGradient in Frameworks */ = {isa = PBXBuildFile; productRef = BB3967FF2C2A6C44004F1AB6 /* SmoothGradient */; };
 		BB3968022C2A6CC2004F1AB6 /* Marquee.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3968012C2A6CC2004F1AB6 /* Marquee.swift */; };
@@ -225,6 +226,7 @@
 		BB377C332DFD0D3700FA93DA /* PinnableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinnableView.swift; sourceTree = "<group>"; };
 		BB377C3E2DFD19ED00FA93DA /* PinnedWindowDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinnedWindowDelegate.swift; sourceTree = "<group>"; };
 		BB377C482DFD434300FA93DA /* GlobalPadding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalPadding.swift; sourceTree = "<group>"; };
+		BB387FB22E70BA1300640D79 /* SearchWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchWindow.swift; sourceTree = "<group>"; };
 		BB3967FC2C291D5A004F1AB6 /* StackedShadow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackedShadow.swift; sourceTree = "<group>"; };
 		BB3968012C2A6CC2004F1AB6 /* Marquee.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Marquee.swift; sourceTree = "<group>"; };
 		BB3A55302E6131B600854F20 /* NativeWidgetRegistry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeWidgetRegistry.swift; sourceTree = "<group>"; };
@@ -620,6 +622,7 @@
 		BB638F122E0218B10010077D /* Shared Components */ = {
 			isa = PBXGroup;
 			children = (
+				BB387FB22E70BA1300640D79 /* SearchWindow.swift */,
 				BB638F152E0218C00010077D /* SharedHoverUtils.swift */,
 				BB638F132E0218BB0010077D /* SharedHoverAppTitle.swift */,
 				BBB6C5332DF3C8B4009E93C4 /* BaseHoverContainer.swift */,
@@ -1011,6 +1014,7 @@
 				BB3A55312E6131B600854F20 /* NativeWidgetRegistry.swift in Sources */,
 				BBCDD5A92E64D8730016FE98 /* WidgetPollingModifier.swift in Sources */,
 				BBCFAE402C266234002E1516 /* FirstTimeView.swift in Sources */,
+				BB387FB32E70BA1300640D79 /* SearchWindow.swift in Sources */,
 				BB4B444B2C372A4E006680DC /* WindowPreview.swift in Sources */,
 				BB04405B2C77A013009F1D33 /* GradientColorPaletteSettings.swift in Sources */,
 				BB1CBD582C1BA800003969BC /* MainSettingsView.swift in Sources */,

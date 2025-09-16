@@ -118,8 +118,10 @@ struct MediaControlsFullView: View {
                 )
                 .matchedGeometryEffect(id: "artworkForFullView", in: artworkExpansionFullNamespace)
                 .onTapGesture {
-                    withAnimation(showAnimations ? .smooth(duration: 0.125) : nil) {
-                        isArtworkExpandedFull = true
+                    if isPinnedMode {
+                        withAnimation(showAnimations ? .smooth(duration: 0.125) : nil) {
+                            isArtworkExpandedFull = true
+                        }
                     }
                 }
 

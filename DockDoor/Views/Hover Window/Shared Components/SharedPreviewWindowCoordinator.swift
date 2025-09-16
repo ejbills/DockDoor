@@ -11,6 +11,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
 
     let windowSwitcherCoordinator = PreviewStateCoordinator()
     private let dockManager = DockAutoHideManager()
+    private var searchWindow: SearchWindow?
 
     private var appName: String = ""
     private var onWindowTap: (() -> Void)?
@@ -31,6 +32,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         super.init(contentRect: .zero, styleMask: styleMask, backing: .buffered, defer: false)
         SharedPreviewWindowCoordinator.activeInstance = self
         setupWindow()
+        setupSearchWindow()
     }
 
     deinit {
@@ -52,6 +54,37 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         becomesKeyOnlyIfNeeded = true
     }
 
+    private func setupSearchWindow() {
+        if Defaults[.enableWindowSwitcherSearch] {
+            if searchWindow == nil {
+                searchWindow = SearchWindow(previewCoordinator: windowSwitcherCoordinator)
+            }
+        } else {
+            searchWindow?.hideSearch()
+            searchWindow = nil
+        }
+    }
+
+    func updateSearchWindow(with text: String) {
+        guard Defaults[.enableWindowSwitcherSearch] else { return }
+        if searchWindow == nil { setupSearchWindow() }
+        if searchWindow?.isFocused != true {
+            searchWindow?.updateSearchText(text)
+        }
+    }
+
+    func focusSearchWindow() {
+        guard Defaults[.enableWindowSwitcherSearch] else { return }
+        if searchWindow == nil { setupSearchWindow() }
+        guard let searchWindow else { return }
+        searchWindow.showSearch(relativeTo: self)
+        searchWindow.focusSearchField()
+    }
+
+    var isSearchWindowFocused: Bool {
+        searchWindow?.isFocused ?? false
+    }
+
     func hideWindow() {
         guard isVisible else { return }
 
@@ -60,6 +93,9 @@ final class SharedPreviewWindowCoordinator: NSPanel {
 
         DragPreviewCoordinator.shared.endDragging()
         hideFullPreviewWindow()
+
+        // Hide search window
+        searchWindow?.hideSearch()
 
         if let currentContent = contentView {
             currentContent.removeFromSuperview()
@@ -120,6 +156,8 @@ final class SharedPreviewWindowCoordinator: NSPanel {
     {
         windowSwitcherCoordinator.setShowing(centeredHoverWindowState, toState: centerOnScreen)
 
+        // Defer showing the search window until after the hover window frame is applied
+
         let updateAvailable = (NSApp.delegate as? AppDelegate)?.updaterState.anUpdateIsAvailable ?? false
 
         let hoverView = WindowPreviewHoverContainer(appName: appName, onWindowTap: onWindowTap,
@@ -150,6 +188,15 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         let finalFrame = CGRect(origin: position, size: newHoverWindowSize)
         applyWindowFrame(finalFrame, animated: animated)
         previousHoverWindowOrigin = position
+
+        // Now that the main panel has a valid frame, position the search window (if active)
+        if windowSwitcherCoordinator.windowSwitcherActive, Defaults[.enableWindowSwitcherSearch] {
+            DispatchQueue.main.async { [weak self] in
+                guard let self else { return }
+                if searchWindow == nil { setupSearchWindow() }
+                searchWindow?.showSearch(relativeTo: self)
+            }
+        }
     }
 
     @MainActor
@@ -430,6 +477,10 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         let coordinator = windowSwitcherCoordinator
         guard !coordinator.windows.isEmpty else { return }
 
+        if coordinator.windowSwitcherActive, coordinator.hasActiveSearch {
+            return
+        }
+
         var newIndex = coordinator.currIndex
         let windowsCount = coordinator.windows.count
 
@@ -446,13 +497,15 @@ final class SharedPreviewWindowCoordinator: NSPanel {
 
     @MainActor
     func selectAndBringToFrontCurrentWindow() {
-        let currentIndex = windowSwitcherCoordinator.currIndex
-        guard currentIndex >= 0, currentIndex < windowSwitcherCoordinator.windows.count else {
+        let coordinator = windowSwitcherCoordinator
+        let currentIndex = coordinator.currIndex
+
+        guard currentIndex >= 0, currentIndex < coordinator.windows.count else {
             hideWindow()
             return
         }
 
-        let selectedWindow = windowSwitcherCoordinator.windows[currentIndex]
+        let selectedWindow = coordinator.windows[currentIndex]
         WindowUtil.bringWindowToFront(windowInfo: selectedWindow)
         hideWindow()
     }
@@ -461,6 +514,10 @@ final class SharedPreviewWindowCoordinator: NSPanel {
     func navigateWithArrowKey(direction: ArrowDirection) {
         let coordinator = windowSwitcherCoordinator
         guard !coordinator.windows.isEmpty else { return }
+
+        if coordinator.windowSwitcherActive, coordinator.hasActiveSearch {
+            return
+        }
 
         var newIndex = coordinator.currIndex
         let windowsCount = coordinator.windows.count
@@ -535,6 +592,17 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         let workItem = DispatchWorkItem { [weak self] in
             if let mouseLocation, mouseLocation.distance(to: NSEvent.mouseLocation) > 100 {
                 return
+            }
+
+            // Final validation: ensure mouse is still over the expected dock item
+            if let expectedBundleId = bundleIdentifier {
+                guard let currentDockItemStatus = DockObserver.activeInstance?.getDockItemAppStatusUnderMouse() else { return }
+                let matches = switch currentDockItemStatus.status {
+                case let .success(app): app.bundleIdentifier == expectedBundleId
+                case let .notRunning(bundleId): bundleId == expectedBundleId
+                case .notFound: false
+                }
+                guard matches else { return }
             }
 
             Task { @MainActor [weak self] in

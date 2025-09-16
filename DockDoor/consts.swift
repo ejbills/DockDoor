@@ -49,6 +49,7 @@ extension Defaults.Keys {
     static let enableWindowSwitcher = Key<Bool>("enableWindowSwitcher", default: true)
     static let enableDockPreviews = Key<Bool>("enableDockPreviews", default: true)
     static let keepPreviewOnAppTerminate = Key<Bool>("keepPreviewOnAppTerminate", default: false)
+    static let enableWindowSwitcherSearch = Key<Bool>("enableWindowSwitcherSearch", default: false)
     static let sortWindowsByDate = Key<Bool>("sortWindowsByDate", default: true)
     static let useClassicWindowOrdering = Key<Bool>("useClassicWindowOrdering", default: true)
     static let includeHiddenWindowsInSwitcher = Key<Bool>("includeHiddenWindowsInSwitcher", default: true)
@@ -73,6 +74,7 @@ extension Defaults.Keys {
     static let windowTitleDisplayCondition = Key<WindowTitleDisplayCondition>("windowTitleDisplayCondition", default: .all)
     static let windowTitleVisibility = Key<WindowTitleVisibility>("windowTitleVisibility", default: .alwaysVisible)
     static let windowTitlePosition = Key<WindowTitlePosition>("windowTitlePosition", default: .bottomLeft)
+    static let enableTitleMarquee = Key<Bool>("enableTitleMarquee", default: true)
 
     static let trafficLightButtonsVisibility = Key<TrafficLightButtonsVisibility>("trafficLightButtonsVisibility", default: .dimmedOnPreviewHover)
     static let trafficLightButtonsPosition = Key<TrafficLightButtonsPosition>("trafficLightButtonsPosition", default: .topLeft)

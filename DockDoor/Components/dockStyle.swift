@@ -21,6 +21,7 @@ struct DockStyleModifier: ViewModifier {
                 }
                 .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
                 .borderedBackground(.primary.opacity(0.19 * backgroundOpacity), lineWidth: 1.5, shape: RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
+                .allowsHitTesting(false)
             }
             .padding(2)
     }

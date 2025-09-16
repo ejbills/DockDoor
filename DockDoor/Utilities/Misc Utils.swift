@@ -41,13 +41,13 @@ func measureString(_ string: String, fontSize: CGFloat, fontWeight: NSFont.Weigh
 enum modifierConverter {
     static func toString(_ modifierIntValue: Int) -> String {
         if modifierIntValue == Defaults[.Int64maskCommand] {
-            "⌘"
+            String(localized: "Command")
         } else if modifierIntValue == Defaults[.Int64maskAlternate] {
-            "⌥"
+            String(localized: "Option")
         } else if modifierIntValue == Defaults[.Int64maskControl] {
-            "⌃"
+            String(localized: "Control")
         } else {
-            " "
+            ""
         }
     }
 }
@@ -56,13 +56,13 @@ enum KeyCodeConverter {
     static func toString(_ keyCode: UInt16) -> String {
         switch keyCode {
         case 48:
-            return "⇥" // Tab symbol
+            return String(localized: "Tab")
         case 51:
-            return "⌫" // Delete symbol
+            return String(localized: "Delete")
         case 53:
-            return "⎋" // Escape symbol
+            return String(localized: "Escape")
         case 36:
-            return "↩︎" // Return symbol
+            return String(localized: "Return")
         default:
             let source = TISCopyCurrentKeyboardInputSource().takeUnretainedValue()
             let layoutData = TISGetInputSourceProperty(source, kTISPropertyUnicodeKeyLayoutData)
@@ -90,7 +90,8 @@ enum KeyCodeConverter {
                                         &chars)
 
             if result == noErr {
-                return String(utf16CodeUnits: chars, count: realLength)
+                let s = String(utf16CodeUnits: chars, count: realLength)
+                return s.uppercased()
             } else {
                 return "?"
             }

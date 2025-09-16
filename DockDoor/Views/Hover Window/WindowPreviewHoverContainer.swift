@@ -1,3 +1,4 @@
+import AppKit
 import Defaults
 import ScreenCaptureKit
 import SwiftUI
@@ -129,10 +130,10 @@ struct WindowPreviewHoverContainer: View {
                 )
                 .fadeOnEdges(axis: orientationIsHorizontal ? .horizontal : .vertical, fadeLength: 20)
                 .padding(.top, (!previewStateCoordinator.windowSwitcherActive && appNameStyle == .default && showAppTitleData) ? 25 : 0)
-                .overlay(alignment: .topLeading) {
+                .overlay(alignment: appNameStyle == .popover ? .top : .topLeading) {
                     hoverTitleBaseView(labelSize: measureString(appName, fontSize: 14))
                         .onHover { isHovered in
-                            withAnimation(.snappy) { hoveringWindowTitle = isHovered }
+                            hoveringWindowTitle = isHovered
                         }
                 }
                 .overlay {
@@ -151,6 +152,12 @@ struct WindowPreviewHoverContainer: View {
         .padding(.top, (!previewStateCoordinator.windowSwitcherActive && appNameStyle == .popover && showAppTitleData) ? 30 : 0)
         .onAppear {
             loadAppIcon()
+        }
+        .onChange(of: previewStateCoordinator.windowSwitcherActive) { isActive in
+            if !isActive {
+                // Clear search when switcher is dismissed
+                previewStateCoordinator.searchQuery = ""
+            }
         }
     }
 
@@ -180,7 +187,7 @@ struct WindowPreviewHoverContainer: View {
                 switch appNameStyle {
                 case .default:
                     HStack(alignment: .center) {
-                        Group {
+                        HStack(spacing: 6) {
                             if let appIcon {
                                 Image(nsImage: appIcon)
                                     .resizable()
@@ -192,33 +199,8 @@ struct WindowPreviewHoverContainer: View {
                                     .frame(width: 24, height: 24)
                             }
                             hoverTitleLabelView(labelSize: labelSize)
-
-                            let shouldShowUpdateElements = updateAvailable && !mockPreviewActive
-
-                            Group {
-                                update(shouldShowUpdateElements)
-                                massOperations(hoveringAppIcon && !updateAvailable)
-                            }
-                            .padding(.leading, 4)
                         }
-                        .shadow(radius: 2)
-                    }
-                    .padding(.top, 10)
-                    .padding(.horizontal)
-
-                case .shadowed:
-                    HStack(spacing: 2) {
-                        if let appIcon {
-                            Image(nsImage: appIcon)
-                                .resizable()
-                                .scaledToFit()
-                                .zIndex(1)
-                                .frame(width: 24, height: 24)
-                        } else {
-                            ProgressView()
-                                .frame(width: 24, height: 24)
-                        }
-                        hoverTitleLabelView(labelSize: labelSize)
+                        .contentShape(Rectangle())
 
                         let shouldShowUpdateElements = updateAvailable && !mockPreviewActive
 
@@ -228,12 +210,17 @@ struct WindowPreviewHoverContainer: View {
                         }
                         .padding(.leading, 4)
                     }
-                    .padding(EdgeInsets(top: -11.5, leading: 15, bottom: -1.5, trailing: 1.5))
+                    .contentShape(Rectangle())
+                    .onHover { hover in
+                        hoveringAppIcon = hover
+                    }
+                    .shadow(radius: 2)
+                    .padding(.top, 10)
+                    .padding(.horizontal)
 
-                case .popover:
-                    HStack {
-                        Spacer()
-                        HStack(alignment: .center, spacing: 2) {
+                case .shadowed:
+                    HStack(spacing: 2) {
+                        HStack(spacing: 6) {
                             if let appIcon {
                                 Image(nsImage: appIcon)
                                     .resizable()
@@ -245,25 +232,56 @@ struct WindowPreviewHoverContainer: View {
                                     .frame(width: 24, height: 24)
                             }
                             hoverTitleLabelView(labelSize: labelSize)
-
-                            let shouldShowUpdateElements = updateAvailable && !mockPreviewActive
-
-                            Group {
-                                update(shouldShowUpdateElements)
-                                massOperations(hoveringAppIcon && !updateAvailable)
-                            }
-                            .padding(.leading, 4)
                         }
-                        .padding(.vertical, 5)
-                        .padding(.horizontal, 10)
-                        .dockStyle(cornerRadius: 10)
-                        Spacer()
+                        .contentShape(Rectangle())
+
+                        let shouldShowUpdateElements = updateAvailable && !mockPreviewActive
+
+                        Group {
+                            update(shouldShowUpdateElements)
+                            massOperations(hoveringAppIcon && !updateAvailable)
+                        }
+                        .padding(.leading, 4)
+                    }
+                    .contentShape(Rectangle())
+                    .onHover { hover in
+                        hoveringAppIcon = hover
+                    }
+                    .padding(EdgeInsets(top: -11.5, leading: 15, bottom: -1.5, trailing: 1.5))
+
+                case .popover:
+                    HStack(alignment: .center, spacing: 2) {
+                        HStack(spacing: 6) {
+                            if let appIcon {
+                                Image(nsImage: appIcon)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .zIndex(1)
+                                    .frame(width: 24, height: 24)
+                            } else {
+                                ProgressView()
+                                    .frame(width: 24, height: 24)
+                            }
+                            hoverTitleLabelView(labelSize: labelSize)
+                        }
+
+                        let shouldShowUpdateElements = updateAvailable && !mockPreviewActive
+
+                        Group {
+                            update(shouldShowUpdateElements)
+                            massOperations(hoveringAppIcon && !updateAvailable)
+                        }
+                        .padding(.leading, 4)
+                    }
+                    .padding(.vertical, 5)
+                    .padding(.horizontal, 10)
+                    .dockStyle(cornerRadius: 10, frostedTranslucentLayer: true)
+                    .contentShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+                    .onHover { hover in
+                        hoveringAppIcon = hover
                     }
                     .offset(y: -30)
                 }
-            }
-            .onHover { hover in
-                hoveringAppIcon = hover
             }
         }
     }
@@ -412,6 +430,7 @@ struct WindowPreviewHoverContainer: View {
                     }
                 }
             }
+            .lineLimit(1)
         }
     }
 
@@ -426,7 +445,10 @@ struct WindowPreviewHoverContainer: View {
     ) -> some View {
         ScrollView(isHorizontal ? .horizontal : .vertical, showsIndicators: false) {
             Group {
-                if isHorizontal {
+                // Show no results view when search is active and no results found
+                if shouldShowNoResultsView() {
+                    noResultsView()
+                } else if isHorizontal {
                     let chunkedItems = createChunkedItems()
                     VStack(alignment: .leading, spacing: 24) {
                         ForEach(Array(chunkedItems.enumerated()), id: \.offset) { index, rowItems in
@@ -655,6 +677,20 @@ struct WindowPreviewHoverContainer: View {
         dimensionsMap[index]
     }
 
+    private func filteredWindowIndices() -> [Int] {
+        // Only filter when switcher is active; view-only filtering
+        let query = previewStateCoordinator.searchQuery.lowercased()
+        guard previewStateCoordinator.windowSwitcherActive, !query.isEmpty else {
+            return Array(previewStateCoordinator.windows.indices)
+        }
+
+        return previewStateCoordinator.windows.enumerated().compactMap { idx, win in
+            let appName = win.app.localizedName?.lowercased() ?? ""
+            let windowTitle = (win.windowName ?? "").lowercased()
+            return (appName.contains(query) || windowTitle.contains(query)) ? idx : nil
+        }
+    }
+
     private func createFlowItems() -> [FlowItem] {
         var allItems: [FlowItem] = []
 
@@ -665,8 +701,8 @@ struct WindowPreviewHoverContainer: View {
             }
         }
 
-        // Add all windows
-        for index in previewStateCoordinator.windows.indices {
+        // Add windows from filtered indices (dimensions stay mapped by original indices)
+        for index in filteredWindowIndices() {
             allItems.append(.window(index))
         }
 
@@ -708,7 +744,7 @@ struct WindowPreviewHoverContainer: View {
             }
         }
 
-        for index in previewStateCoordinator.windows.indices {
+        for index in filteredWindowIndices() {
             itemsToProcess.append(.window(index))
         }
 
@@ -868,5 +904,34 @@ struct WindowPreviewHoverContainer: View {
                 EmptyView()
             }
         }
+    }
+
+    private func shouldShowNoResultsView() -> Bool {
+        let query = previewStateCoordinator.searchQuery
+        return previewStateCoordinator.windowSwitcherActive &&
+            !query.isEmpty &&
+            filteredWindowIndices().isEmpty &&
+            (embeddedWidgets?.isEmpty ?? true)
+    }
+
+    @ViewBuilder
+    private func noResultsView() -> some View {
+        VStack(spacing: 16) {
+            Image(systemName: "magnifyingglass")
+                .font(.system(size: 48, weight: .light))
+                .foregroundColor(.secondary)
+
+            VStack(spacing: 4) {
+                Text("No Results")
+                    .font(.headline)
+                    .foregroundColor(.primary)
+
+                Text("No windows match your search")
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+            }
+        }
+        .frame(minWidth: 200, minHeight: 120)
+        .padding()
     }
 }

@@ -311,8 +311,13 @@ enum WindowUtil {
     }
 
     static func bringWindowToFront(windowInfo: WindowInfo) {
-        if let appDelegate = NSApplication.shared.delegate as? AppDelegate, windowInfo.app.localizedName != "DockDoor" { // clean up lingering settings pane windows which interfere with AX actions
-            appDelegate.settingsWindowController.close()
+        // Clean up lingering settings pane windows which interfere with AX actions (must be on main thread)
+        DispatchQueue.main.async {
+            if let appDelegate = NSApplication.shared.delegate as? AppDelegate,
+               windowInfo.app.localizedName != "DockDoor"
+            {
+                appDelegate.settingsWindowController.close()
+            }
         }
 
         let maxRetries = 3
