@@ -129,10 +129,10 @@ struct WindowPreviewHoverContainer: View {
                 )
                 .fadeOnEdges(axis: orientationIsHorizontal ? .horizontal : .vertical, fadeLength: 20)
                 .padding(.top, (!previewStateCoordinator.windowSwitcherActive && appNameStyle == .default && showAppTitleData) ? 25 : 0)
-                .overlay(alignment: .topLeading) {
+                .overlay(alignment: appNameStyle == .popover ? .top : .topLeading) {
                     hoverTitleBaseView(labelSize: measureString(appName, fontSize: 14))
                         .onHover { isHovered in
-                            withAnimation(.snappy) { hoveringWindowTitle = isHovered }
+                            hoveringWindowTitle = isHovered
                         }
                 }
                 .overlay {
@@ -186,7 +186,7 @@ struct WindowPreviewHoverContainer: View {
                 switch appNameStyle {
                 case .default:
                     HStack(alignment: .center) {
-                        Group {
+                        HStack(spacing: 6) {
                             if let appIcon {
                                 Image(nsImage: appIcon)
                                     .resizable()
@@ -198,33 +198,8 @@ struct WindowPreviewHoverContainer: View {
                                     .frame(width: 24, height: 24)
                             }
                             hoverTitleLabelView(labelSize: labelSize)
-
-                            let shouldShowUpdateElements = updateAvailable && !mockPreviewActive
-
-                            Group {
-                                update(shouldShowUpdateElements)
-                                massOperations(hoveringAppIcon && !updateAvailable)
-                            }
-                            .padding(.leading, 4)
                         }
-                        .shadow(radius: 2)
-                    }
-                    .padding(.top, 10)
-                    .padding(.horizontal)
-
-                case .shadowed:
-                    HStack(spacing: 2) {
-                        if let appIcon {
-                            Image(nsImage: appIcon)
-                                .resizable()
-                                .scaledToFit()
-                                .zIndex(1)
-                                .frame(width: 24, height: 24)
-                        } else {
-                            ProgressView()
-                                .frame(width: 24, height: 24)
-                        }
-                        hoverTitleLabelView(labelSize: labelSize)
+                        .contentShape(Rectangle())
 
                         let shouldShowUpdateElements = updateAvailable && !mockPreviewActive
 
@@ -234,12 +209,17 @@ struct WindowPreviewHoverContainer: View {
                         }
                         .padding(.leading, 4)
                     }
-                    .padding(EdgeInsets(top: -11.5, leading: 15, bottom: -1.5, trailing: 1.5))
+                    .contentShape(Rectangle())
+                    .onHover { hover in
+                        hoveringAppIcon = hover
+                    }
+                    .shadow(radius: 2)
+                    .padding(.top, 10)
+                    .padding(.horizontal)
 
-                case .popover:
-                    HStack {
-                        Spacer()
-                        HStack(alignment: .center, spacing: 2) {
+                case .shadowed:
+                    HStack(spacing: 2) {
+                        HStack(spacing: 6) {
                             if let appIcon {
                                 Image(nsImage: appIcon)
                                     .resizable()
@@ -251,25 +231,56 @@ struct WindowPreviewHoverContainer: View {
                                     .frame(width: 24, height: 24)
                             }
                             hoverTitleLabelView(labelSize: labelSize)
-
-                            let shouldShowUpdateElements = updateAvailable && !mockPreviewActive
-
-                            Group {
-                                update(shouldShowUpdateElements)
-                                massOperations(hoveringAppIcon && !updateAvailable)
-                            }
-                            .padding(.leading, 4)
                         }
-                        .padding(.vertical, 5)
-                        .padding(.horizontal, 10)
-                        .dockStyle(cornerRadius: 10)
-                        Spacer()
+                        .contentShape(Rectangle())
+
+                        let shouldShowUpdateElements = updateAvailable && !mockPreviewActive
+
+                        Group {
+                            update(shouldShowUpdateElements)
+                            massOperations(hoveringAppIcon && !updateAvailable)
+                        }
+                        .padding(.leading, 4)
+                    }
+                    .contentShape(Rectangle())
+                    .onHover { hover in
+                        hoveringAppIcon = hover
+                    }
+                    .padding(EdgeInsets(top: -11.5, leading: 15, bottom: -1.5, trailing: 1.5))
+
+                case .popover:
+                    HStack(alignment: .center, spacing: 2) {
+                        HStack(spacing: 6) {
+                            if let appIcon {
+                                Image(nsImage: appIcon)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .zIndex(1)
+                                    .frame(width: 24, height: 24)
+                            } else {
+                                ProgressView()
+                                    .frame(width: 24, height: 24)
+                            }
+                            hoverTitleLabelView(labelSize: labelSize)
+                        }
+
+                        let shouldShowUpdateElements = updateAvailable && !mockPreviewActive
+
+                        Group {
+                            update(shouldShowUpdateElements)
+                            massOperations(hoveringAppIcon && !updateAvailable)
+                        }
+                        .padding(.leading, 4)
+                    }
+                    .padding(.vertical, 5)
+                    .padding(.horizontal, 10)
+                    .dockStyle(cornerRadius: 10, frostedTranslucentLayer: true)
+                    .contentShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+                    .onHover { hover in
+                        hoveringAppIcon = hover
                     }
                     .offset(y: -30)
                 }
-            }
-            .onHover { hover in
-                hoveringAppIcon = hover
             }
         }
     }
@@ -418,6 +429,7 @@ struct WindowPreviewHoverContainer: View {
                     }
                 }
             }
+            .lineLimit(1)
         }
     }
 
