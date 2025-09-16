@@ -79,8 +79,8 @@ extension SharedPreviewWindowCoordinator {
         let screenFrame = NSScreen.main?.visibleFrame ?? NSRect(x: 0, y: 0, width: 1000, height: 800)
 
         let windowFrame = NSRect(
-            x: screenFrame.midX - fittingSize.width / 2 + offset,
-            y: screenFrame.midY - fittingSize.height / 2 - offset,
+            x: screenFrame.midX - fittingSize.width / 2,
+            y: screenFrame.midY - fittingSize.height / 2,
             width: fittingSize.width,
             height: fittingSize.height
         )
