@@ -38,6 +38,31 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://buymeacoffee.com/keplercafe</div>
 
+<a id="1.23"></a>
+# [Release 1.23](https://github.com/ejbills/DockDoor/releases/tag/1.23) - 2025-09-16
+
+
+## ✨ New Features
+- Search for open windows
+  - Press / to start
+  - Type to filter list
+
+## 🔧 Improvements & Stability
+- Improved window preview quality
+  - Better Stage Manager support
+- Better update status messages
+- Improved keybind display text
+- Improved button text contrast
+
+## 🐛 Bug Fixes
+- Fixed keybind detection issues
+- Fixed window selection stability
+- Fixed preview interaction issues
+
+
+[Changes][1.23]
+
+
 <a id="1.22"></a>
 # [Release 1.22](https://github.com/ejbills/DockDoor/releases/tag/1.22) - 2025-09-07
 
@@ -1458,6 +1483,7 @@ v1.0
 [Changes][releases]
 
 
+[1.23]: https://github.com/ejbills/DockDoor/compare/1.22...1.23
 [1.22]: https://github.com/ejbills/DockDoor/compare/1.21.4...1.22
 [1.21.4]: https://github.com/ejbills/DockDoor/compare/1.21.3...1.21.4
 [1.21.3]: https://github.com/ejbills/DockDoor/compare/1.21.2...1.21.3
