@@ -705,51 +705,58 @@ struct MainSettingsView: View {
     }
 
     private func keyboardShortcutSection() -> some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text("Keyboard Shortcut").font(.headline)
-            HStack(spacing: 20) {
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Initialization Key").font(.subheadline).foregroundColor(.secondary)
-                    Picker("", selection: $keybindModel.modifierKey) {
-                        Text("Control (⌃)").tag(Defaults[.Int64maskControl]); Text("Option (⌥)").tag(Defaults[.Int64maskAlternate]); Text("Command (⌘)").tag(Defaults[.Int64maskCommand])
-                    }.pickerStyle(SegmentedPickerStyle())
-                        .onChange(of: keybindModel.modifierKey) { newValue in if let currentKeybind = keybindModel.currentKeybind, currentKeybind.keyCode != 0 { let updatedKeybind = UserKeyBind(keyCode: currentKeybind.keyCode, modifierFlags: newValue); Defaults[.UserKeybind] = updatedKeybind; keybindModel.currentKeybind = updatedKeybind } }
-                }
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Trigger Key").font(.subheadline).foregroundColor(.secondary)
-                    Button(action: { keybindModel.isRecording.toggle() }) {
-                        HStack {
-                            Image(systemName: keybindModel.isRecording ? "keyboard.fill" : "record.circle")
-                            Text(keybindModel.isRecording ? "Press any key..." : "Set Trigger Key")
-                                .lineLimit(1)
-                                .minimumScaleFactor(0.8)
-                        }
-                    }
-                    .buttonStyle(.borderedProminent)
-                    .disabled(keybindModel.isRecording)
-                }
-            }
+        VStack(alignment: .leading, spacing: 14) {
+            Text("Window Switcher Shortcut").font(.headline)
+
+            // Current shortcut summary
             if let keybind = keybindModel.currentKeybind, keybind.keyCode != 0 {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("Current Shortcut").font(.subheadline).foregroundColor(.secondary)
-                    HStack(spacing: 8) {
-                        KeyCapView(text: modifierConverter.toString(keybind.modifierFlags), symbol: modifierSymbol(keybind.modifierFlags))
-                        Text("+").foregroundColor(.secondary)
-                        KeyCapView(text: KeyCodeConverter.toString(keybind.keyCode), symbol: nil)
-                    }
-                }.padding(.top, 4)
+                HStack(spacing: 8) {
+                    KeyCapView(text: modifierConverter.toString(keybind.modifierFlags), symbol: nil)
+                    Text("+").foregroundColor(.secondary)
+                    KeyCapView(text: KeyCodeConverter.toString(keybind.keyCode), symbol: nil)
+                }
+            } else {
+                Text("No shortcut set").foregroundColor(.secondary)
             }
-            StyledGroupBox(label: "Instructions") {
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("How to Set Up").font(.subheadline).bold()
-                    VStack(alignment: .leading, spacing: 4) {
-                        HStack(alignment: .top, spacing: 8) { Text("1."); Text("Select an initialization key (e.g. Command ⌘)") }
-                        HStack(alignment: .top, spacing: 8) { Text("2."); Text("Click \"Set Trigger Key\"") }
-                        HStack(alignment: .top, spacing: 8) { Text("3."); Text("Press ONLY the trigger key (e.g. just Tab)") }
-                        HStack(alignment: .top, spacing: 8) { Text("4."); Text("Your shortcut will be set (e.g. ⌘ + Tab)") }
+
+            // Controls: initializer modifier + capture button
+            HStack(spacing: 12) {
+                Picker("Initializer", selection: $keybindModel.modifierKey) {
+                    Text("Control ⌃").tag(Defaults[.Int64maskControl])
+                    Text("Option ⌥").tag(Defaults[.Int64maskAlternate])
+                    Text("Command ⌘").tag(Defaults[.Int64maskCommand])
+                }
+                .labelsHidden()
+                .pickerStyle(.segmented)
+                .onChange(of: keybindModel.modifierKey) { newValue in
+                    if let currentKeybind = keybindModel.currentKeybind, currentKeybind.keyCode != 0 {
+                        let updatedKeybind = UserKeyBind(keyCode: currentKeybind.keyCode, modifierFlags: newValue)
+                        Defaults[.UserKeybind] = updatedKeybind
+                        keybindModel.currentKeybind = updatedKeybind
                     }
                 }
-            }.padding(.top, 8)
+
+                Button(action: { keybindModel.isRecording.toggle() }) {
+                    HStack {
+                        Image(systemName: keybindModel.isRecording ? "keyboard.fill" : "record.circle")
+                        Text(keybindModel.isRecording ? "Press shortcut…" : "Change…")
+                    }
+                }
+                .buttonStyle(.borderedProminent)
+                .disabled(keybindModel.isRecording)
+
+                Button("Reset") {
+                    let def = UserKeyBind(keyCode: 48, modifierFlags: Defaults[.Int64maskAlternate])
+                    Defaults[.UserKeybind] = def
+                    keybindModel.currentKeybind = def
+                    keybindModel.modifierKey = def.modifierFlags
+                }
+                .buttonStyle(.bordered)
+            }
+
+            Text("Either left or right Command, Option, or Control keys work. You can also hold the modifier while pressing the trigger to capture both.")
+                .font(.caption)
+                .foregroundColor(.secondary)
         }
     }
 

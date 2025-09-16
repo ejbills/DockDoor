@@ -291,8 +291,19 @@ class KeybindHelper {
     }
 
     private func updateModifierStatesFromFlags(event: CGEvent, keyBoardShortcutSaved: UserKeyBind) -> (currentSwitcherModifierIsPressed: Bool, currentShiftState: Bool) {
-        let currentSwitcherModifierIsPressed = event.flags.rawValue & UInt64(keyBoardShortcutSaved.modifierFlags) == UInt64(keyBoardShortcutSaved.modifierFlags) && keyBoardShortcutSaved.modifierFlags != 0
-        let currentShiftState = event.flags.contains(.maskShift)
+        // Interpret saved mask by checking presence of standard CGEventFlag bits
+        let saved = keyBoardShortcutSaved.modifierFlags
+        let wantsAlt = (saved & Int(CGEventFlags.maskAlternate.rawValue)) != 0
+        let wantsCtrl = (saved & Int(CGEventFlags.maskControl.rawValue)) != 0
+        let wantsCmd = (saved & Int(CGEventFlags.maskCommand.rawValue)) != 0
+
+        let flags = event.flags
+        let hasAlt = flags.contains(.maskAlternate)
+        let hasCtrl = flags.contains(.maskControl)
+        let hasCmd = flags.contains(.maskCommand)
+
+        let currentSwitcherModifierIsPressed = (wantsAlt && hasAlt) || (wantsCtrl && hasCtrl) || (wantsCmd && hasCmd)
+        let currentShiftState = flags.contains(.maskShift)
 
         return (currentSwitcherModifierIsPressed, currentShiftState)
     }
@@ -375,8 +386,16 @@ class KeybindHelper {
             }
         }
 
-        let isExactSwitcherShortcutPressed = (isSwitcherModifierKeyPressed && keyCode == keyBoardShortcutSaved.keyCode) ||
-            (!isSwitcherModifierKeyPressed && keyBoardShortcutSaved.modifierFlags == 0 && keyCode == keyBoardShortcutSaved.keyCode)
+        // Compute desired modifier press based on current event flags to avoid relying solely on flagsChanged ordering
+        let wantsAlt = (keyBoardShortcutSaved.modifierFlags & Int(CGEventFlags.maskAlternate.rawValue)) != 0
+        let wantsCtrl = (keyBoardShortcutSaved.modifierFlags & Int(CGEventFlags.maskControl.rawValue)) != 0
+        let wantsCmd = (keyBoardShortcutSaved.modifierFlags & Int(CGEventFlags.maskCommand.rawValue)) != 0
+        let isDesiredModifierPressedNow = (wantsAlt && flags.contains(.maskAlternate)) ||
+            (wantsCtrl && flags.contains(.maskControl)) ||
+            (wantsCmd && flags.contains(.maskCommand))
+
+        let isExactSwitcherShortcutPressed = (isDesiredModifierPressedNow && keyCode == keyBoardShortcutSaved.keyCode) ||
+            (!isDesiredModifierPressedNow && keyBoardShortcutSaved.modifierFlags == 0 && keyCode == keyBoardShortcutSaved.keyCode)
 
         if isExactSwitcherShortcutPressed {
             return (true, { await self.handleKeybindActivation() })

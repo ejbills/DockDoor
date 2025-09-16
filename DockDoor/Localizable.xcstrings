@@ -2670,6 +2670,7 @@
       }
     },
     "1." : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -3242,6 +3243,7 @@
       }
     },
     "2." : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -3623,6 +3625,7 @@
       }
     },
     "3." : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -4004,6 +4007,7 @@
       }
     },
     "4." : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -14472,6 +14476,9 @@
         }
       }
     },
+    "Change…" : {
+
+    },
     "Check for Updates" : {
       "localizations" : {
         "af" : {
@@ -14853,6 +14860,7 @@
       }
     },
     "Click \"Set Trigger Key\"" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -15995,7 +16003,11 @@
         }
       }
     },
+    "Command" : {
+
+    },
     "Command (⌘)" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -16184,6 +16196,9 @@
           }
         }
       }
+    },
+    "Command ⌘" : {
+
     },
     "Community Contributors" : {
       "localizations" : {
@@ -17136,7 +17151,11 @@
         }
       }
     },
+    "Control" : {
+
+    },
     "Control (⌃)" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -17325,6 +17344,9 @@
           }
         }
       }
+    },
+    "Control ⌃" : {
+
     },
     "Control the transparency of the dock preview background. Lower values make the preview more transparent, which can help prevent it from blocking window content." : {
       "localizations" : {
@@ -18468,6 +18490,7 @@
       }
     },
     "Current Shortcut" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -19800,6 +19823,9 @@
           }
         }
       }
+    },
+    "Delete" : {
+
     },
     "Detailed" : {
       "localizations" : {
@@ -24746,6 +24772,9 @@
         }
       }
     },
+    "Either left or right Command, Option, or Control keys work. You can also hold the modifier while pressing the trigger to capture both." : {
+
+    },
     "Elements Overlap" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -27603,6 +27632,9 @@
           }
         }
       }
+    },
+    "Escape" : {
+
     },
     "Everything is now set up!" : {
       "localizations" : {
@@ -35041,6 +35073,7 @@
       }
     },
     "How to Set Up" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -37137,6 +37170,7 @@
       }
     },
     "Initialization Key" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -37326,7 +37360,11 @@
         }
       }
     },
+    "Initializer" : {
+
+    },
     "Instructions" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -38277,6 +38315,7 @@
       }
     },
     "Keyboard Shortcut" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -47230,6 +47269,9 @@
     "No Results" : {
 
     },
+    "No shortcut set" : {
+
+    },
     "No window title filters added" : {
       "localizations" : {
         "af" : {
@@ -49519,7 +49561,11 @@
         }
       }
     },
+    "Option" : {
+
+    },
     "Option (⌥)" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -49708,6 +49754,9 @@
           }
         }
       }
+    },
+    "Option ⌥" : {
+
     },
     "Performance Profiles" : {
       "localizations" : {
@@ -53520,6 +53569,7 @@
       }
     },
     "Press any key..." : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -53710,6 +53760,7 @@
       }
     },
     "Press ONLY the trigger key (e.g. just Tab)" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -53898,6 +53949,9 @@
           }
         }
       }
+    },
+    "Press shortcut…" : {
+
     },
     "Press the key combination..." : {
       "extractionState" : "stale",
@@ -61890,6 +61944,9 @@
         }
       }
     },
+    "Return" : {
+
+    },
     "Right click a color to remove it." : {
       "localizations" : {
         "af" : {
@@ -65131,6 +65188,7 @@
       }
     },
     "Select an initialization key (e.g. Command ⌘)" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -66465,6 +66523,7 @@
       }
     },
     "Set Trigger Key" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -73894,6 +73953,9 @@
         }
       }
     },
+    "Tab" : {
+
+    },
     "Thank you to all contributors ❤️" : {
       "localizations" : {
         "af" : {
@@ -77512,6 +77574,7 @@
       }
     },
     "Trigger Key" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -89326,6 +89389,9 @@
         }
       }
     },
+    "Window Switcher Shortcut" : {
+
+    },
     "Window title filters" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -90852,6 +90918,7 @@
       }
     },
     "Your shortcut will be set (e.g. ⌘ + Tab)" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {

@@ -26,7 +26,7 @@ struct KeyCapView: View {
                 Text(text)
             }
         }
-        .padding(8)
+        .padding(6)
         .dockStyle()
     }
 }
@@ -86,9 +86,23 @@ struct ShortcutCaptureView: NSViewControllerRepresentable {
                 }
 
                 parent.isRecording = false
-                let newKeybind = UserKeyBind(keyCode: UInt16(event.keyCode), modifierFlags: parent.modifierKey)
+                // If user is holding exactly one of Command/Option/Control while recording,
+                // capture that as the initializer modifier automatically.
+                let flags = event.modifierFlags
+                let wantsCmd = flags.contains(.command)
+                let wantsOpt = flags.contains(.option)
+                let wantsCtrl = flags.contains(.control)
+                let count = [wantsCmd, wantsOpt, wantsCtrl].filter { $0 }.count
+                var capturedModifier = parent.modifierKey
+                if count == 1 {
+                    if wantsCmd { capturedModifier = Defaults[.Int64maskCommand] }
+                    else if wantsOpt { capturedModifier = Defaults[.Int64maskAlternate] }
+                    else if wantsCtrl { capturedModifier = Defaults[.Int64maskControl] }
+                }
+                let newKeybind = UserKeyBind(keyCode: UInt16(event.keyCode), modifierFlags: capturedModifier)
                 Defaults[.UserKeybind] = newKeybind
                 parent.currentKeybind = newKeybind
+                parent.modifierKey = capturedModifier
                 DispatchQueue.main.async {
                     event.window?.makeFirstResponder(nil)
                 }
