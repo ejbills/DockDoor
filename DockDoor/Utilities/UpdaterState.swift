@@ -143,6 +143,23 @@ final class UpdaterState: NSObject, SPUUpdaterDelegate, ObservableObject {
 
     func updater(_ updater: SPUUpdater, didAbortWithError error: Error) {
         DispatchQueue.main.async {
+            let nsError = error as NSError
+
+            if let reasonValue = nsError.userInfo[SPUNoUpdateFoundReasonKey] as? NSNumber,
+               let reason = SPUNoUpdateFoundReason(rawValue: OSStatus(reasonValue.int32Value))
+            {
+                switch reason {
+                case .onLatestVersion, .onNewerThanLatestVersion:
+                    self.updateStatus = .noUpdates
+                    return
+                case .systemIsTooOld, .systemIsTooNew, .unknown:
+                    break // fall through to error handling below
+                @unknown default:
+                    break
+                }
+            }
+
+            // Fallback: treat as error and surface message
             self.updateStatus = .error(String(localized: "Update aborted: \(error.localizedDescription)"))
         }
     }

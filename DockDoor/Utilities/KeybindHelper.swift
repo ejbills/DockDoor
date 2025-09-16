@@ -17,7 +17,7 @@ struct UserKeyBind: Codable, Defaults.Serializable {
 
 private class WindowSwitchingCoordinator {
     private var isProcessingSwitcher = false
-    private let stateManager = WindowSwitcherStateManager()
+    let stateManager = WindowSwitcherStateManager()
     private var uiRenderingTask: Task<Void, Never>?
     private var currentSessionId = UUID()
 
@@ -169,6 +169,7 @@ class KeybindHelper {
     private var isSwitcherModifierKeyPressed: Bool = false
     private var isShiftKeyPressedGeneral: Bool = false
     private var hasProcessedModifierRelease: Bool = false
+    private var preventSwitcherHideOnRelease: Bool = false
 
     private var eventTap: CFMachPort?
     private var runLoopSource: CFRunLoopSource?
@@ -198,6 +199,7 @@ class KeybindHelper {
     private func resetState() {
         isSwitcherModifierKeyPressed = false
         isShiftKeyPressedGeneral = false
+        preventSwitcherHideOnRelease = false
     }
 
     private func startMonitoring() {
@@ -289,8 +291,19 @@ class KeybindHelper {
     }
 
     private func updateModifierStatesFromFlags(event: CGEvent, keyBoardShortcutSaved: UserKeyBind) -> (currentSwitcherModifierIsPressed: Bool, currentShiftState: Bool) {
-        let currentSwitcherModifierIsPressed = event.flags.rawValue & UInt64(keyBoardShortcutSaved.modifierFlags) == UInt64(keyBoardShortcutSaved.modifierFlags) && keyBoardShortcutSaved.modifierFlags != 0
-        let currentShiftState = event.flags.contains(.maskShift)
+        // Interpret saved mask by checking presence of standard CGEventFlag bits
+        let saved = keyBoardShortcutSaved.modifierFlags
+        let wantsAlt = (saved & Int(CGEventFlags.maskAlternate.rawValue)) != 0
+        let wantsCtrl = (saved & Int(CGEventFlags.maskControl.rawValue)) != 0
+        let wantsCmd = (saved & Int(CGEventFlags.maskCommand.rawValue)) != 0
+
+        let flags = event.flags
+        let hasAlt = flags.contains(.maskAlternate)
+        let hasCtrl = flags.contains(.maskControl)
+        let hasCmd = flags.contains(.maskCommand)
+
+        let currentSwitcherModifierIsPressed = (wantsAlt && hasAlt) || (wantsCtrl && hasCtrl) || (wantsCmd && hasCmd)
+        let currentShiftState = flags.contains(.maskShift)
 
         return (currentSwitcherModifierIsPressed, currentShiftState)
     }
@@ -307,7 +320,6 @@ class KeybindHelper {
             hasProcessedModifierRelease = false
         }
 
-        // Detect when Shift is newly pressed during active window switching or dock previews
         if !oldShiftState, currentShiftState,
            previewCoordinator.isVisible,
            (previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive && (currentSwitcherModifierIsPressed || Defaults[.preventSwitcherHide])) ||
@@ -322,15 +334,17 @@ class KeybindHelper {
             }
         }
 
-        if !Defaults[.preventSwitcherHide] {
+        if !Defaults[.preventSwitcherHide], !preventSwitcherHideOnRelease, !(previewCoordinator.isSearchWindowFocused) {
             if oldSwitcherModifierState, !isSwitcherModifierKeyPressed, !hasProcessedModifierRelease {
                 hasProcessedModifierRelease = true
+                preventSwitcherHideOnRelease = false
                 Task { @MainActor in
-                    if let selectedWindow = self.windowSwitchingCoordinator.selectCurrentWindow() {
+                    if self.previewCoordinator.isVisible, self.previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive {
+                        self.previewCoordinator.selectAndBringToFrontCurrentWindow()
+                        self.windowSwitchingCoordinator.cancelSwitching()
+                    } else if let selectedWindow = self.windowSwitchingCoordinator.selectCurrentWindow() {
                         WindowUtil.bringWindowToFront(windowInfo: selectedWindow)
                         self.previewCoordinator.hideWindow()
-                    } else if self.previewCoordinator.isVisible, self.previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive {
-                        self.previewCoordinator.selectAndBringToFrontCurrentWindow()
                     }
                 }
             }
@@ -353,6 +367,8 @@ class KeybindHelper {
                 return (true, {
                     self.windowSwitchingCoordinator.cancelSwitching()
                     await self.previewCoordinator.hideWindow()
+                    self.preventSwitcherHideOnRelease = false
+                    self.hasProcessedModifierRelease = true
                 })
             }
 
@@ -370,8 +386,16 @@ class KeybindHelper {
             }
         }
 
-        let isExactSwitcherShortcutPressed = (isSwitcherModifierKeyPressed && keyCode == keyBoardShortcutSaved.keyCode) ||
-            (!isSwitcherModifierKeyPressed && keyBoardShortcutSaved.modifierFlags == 0 && keyCode == keyBoardShortcutSaved.keyCode)
+        // Compute desired modifier press based on current event flags to avoid relying solely on flagsChanged ordering
+        let wantsAlt = (keyBoardShortcutSaved.modifierFlags & Int(CGEventFlags.maskAlternate.rawValue)) != 0
+        let wantsCtrl = (keyBoardShortcutSaved.modifierFlags & Int(CGEventFlags.maskControl.rawValue)) != 0
+        let wantsCmd = (keyBoardShortcutSaved.modifierFlags & Int(CGEventFlags.maskCommand.rawValue)) != 0
+        let isDesiredModifierPressedNow = (wantsAlt && flags.contains(.maskAlternate)) ||
+            (wantsCtrl && flags.contains(.maskControl)) ||
+            (wantsCmd && flags.contains(.maskCommand))
+
+        let isExactSwitcherShortcutPressed = (isDesiredModifierPressedNow && keyCode == keyBoardShortcutSaved.keyCode) ||
+            (!isDesiredModifierPressedNow && keyBoardShortcutSaved.modifierFlags == 0 && keyCode == keyBoardShortcutSaved.keyCode)
 
         if isExactSwitcherShortcutPressed {
             return (true, { await self.handleKeybindActivation() })
@@ -379,14 +403,16 @@ class KeybindHelper {
 
         if previewIsCurrentlyVisible {
             if keyCode == kVK_Tab {
-                // Tab always goes forward, backwards navigation is handled by Shift modifier changes
                 return (true, { @MainActor in
                     if self.previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive {
-                        await self.windowSwitchingCoordinator.handleWindowSwitching(
-                            previewCoordinator: self.previewCoordinator,
-                            isModifierPressed: self.isSwitcherModifierKeyPressed,
-                            isShiftPressed: false
-                        )
+                        let hasActiveSearch = self.previewCoordinator.windowSwitcherCoordinator.hasActiveSearch
+                        if !hasActiveSearch {
+                            await self.windowSwitchingCoordinator.handleWindowSwitching(
+                                previewCoordinator: self.previewCoordinator,
+                                isModifierPressed: self.isSwitcherModifierKeyPressed,
+                                isShiftPressed: false
+                            )
+                        }
                     } else {
                         self.previewCoordinator.navigateWithArrowKey(direction: .right)
                     }
@@ -405,20 +431,71 @@ class KeybindHelper {
                 default:
                     .down
                 }
-                return (true, { await self.previewCoordinator.navigateWithArrowKey(direction: dir) })
-            case Int64(kVK_Return):
+                return (true, { @MainActor in
+                    let hasActiveSearch = self.previewCoordinator.windowSwitcherCoordinator.hasActiveSearch
+                    if !hasActiveSearch {
+                        self.previewCoordinator.navigateWithArrowKey(direction: dir)
+                    }
+                })
+            case Int64(kVK_Return), Int64(kVK_ANSI_KeypadEnter):
                 if previewCoordinator.windowSwitcherCoordinator.currIndex >= 0 {
-                    return (true, {
-                        if let selectedWindow = self.windowSwitchingCoordinator.selectCurrentWindow() {
-                            WindowUtil.bringWindowToFront(windowInfo: selectedWindow)
-                            await self.previewCoordinator.hideWindow()
-                        } else {
-                            await self.previewCoordinator.selectAndBringToFrontCurrentWindow()
-                        }
-                    })
+                    return (true, makeEnterSelectionTask())
                 }
             default:
                 break
+            }
+        }
+
+        if previewIsCurrentlyVisible,
+           previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive,
+           Defaults[.enableWindowSwitcherSearch],
+           keyCode == Int64(kVK_ANSI_Slash) // Forward slash key
+        {
+            return (true, { @MainActor in
+                self.previewCoordinator.focusSearchWindow()
+                self.preventSwitcherHideOnRelease = true
+            })
+        }
+        if previewIsCurrentlyVisible,
+           previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive,
+           Defaults[.enableWindowSwitcherSearch],
+           !(previewCoordinator.isSearchWindowFocused)
+        {
+            if keyCode == Int64(kVK_Delete) {
+                return (true, { @MainActor in
+                    var query = self.previewCoordinator.windowSwitcherCoordinator.searchQuery
+                    if !query.isEmpty {
+                        query.removeLast()
+                        self.previewCoordinator.windowSwitcherCoordinator.searchQuery = query
+                        SharedPreviewWindowCoordinator.activeInstance?.updateSearchWindow(with: query)
+
+                        if query.isEmpty {
+                            self.preventSwitcherHideOnRelease = false
+                        }
+                    }
+                })
+            }
+
+            if !flags.contains(.maskCommand),
+               let nsEvent = NSEvent(cgEvent: event),
+               let characters = nsEvent.characters,
+               !characters.isEmpty
+            {
+                let filteredChars = characters.filter { char in
+                    char.isLetter || char.isNumber || char.isWhitespace ||
+                        ".,!?-_()[]{}@#$%^&*+=|\\:;\"'<>/~`".contains(char)
+                }
+                if !filteredChars.isEmpty {
+                    return (true, { @MainActor in
+                        self.previewCoordinator.windowSwitcherCoordinator.searchQuery.append(contentsOf: filteredChars)
+                        let newQuery = self.previewCoordinator.windowSwitcherCoordinator.searchQuery
+                        SharedPreviewWindowCoordinator.activeInstance?.updateSearchWindow(with: newQuery)
+
+                        if !newQuery.isEmpty {
+                            self.preventSwitcherHideOnRelease = true
+                        }
+                    })
+                }
             }
         }
 
@@ -433,6 +510,25 @@ class KeybindHelper {
         }
 
         return (false, nil)
+    }
+
+    private func makeEnterSelectionTask() -> (() async -> Void) {
+        { @MainActor in
+            self.preventSwitcherHideOnRelease = false
+
+            if self.previewCoordinator.isVisible, self.previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive {
+                self.previewCoordinator.selectAndBringToFrontCurrentWindow()
+                self.windowSwitchingCoordinator.cancelSwitching()
+                return
+            }
+
+            if let selectedWindow = self.windowSwitchingCoordinator.selectCurrentWindow() {
+                WindowUtil.bringWindowToFront(windowInfo: selectedWindow)
+                self.previewCoordinator.hideWindow()
+            } else {
+                self.previewCoordinator.selectAndBringToFrontCurrentWindow()
+            }
+        }
     }
 
     @MainActor

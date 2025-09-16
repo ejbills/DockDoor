@@ -7,6 +7,19 @@ class PreviewStateCoordinator: ObservableObject {
     @Published var windowSwitcherActive: Bool = false
     @Published var fullWindowPreviewActive: Bool = false
     @Published var windows: [WindowInfo] = []
+    @Published var searchQuery: String = "" {
+        didSet {
+            if windowSwitcherActive {
+                Task { @MainActor in
+                    updateIndexForSearch()
+                }
+            }
+        }
+    }
+
+    var hasActiveSearch: Bool {
+        !searchQuery.isEmpty
+    }
 
     @Published var overallMaxPreviewDimension: CGPoint = .zero
     @Published var windowDimensionsMap: [Int: WindowPreviewHoverContainer.WindowDimensions] = [:]
@@ -110,9 +123,15 @@ class PreviewStateCoordinator: ObservableObject {
     @MainActor
     func addWindows(_ newWindowsToAdd: [WindowInfo]) {
         guard !newWindowsToAdd.isEmpty else { return }
+        // Gate additions by PID of the currently displayed windows (if any)
+        guard let currentPid = windows.first?.app.processIdentifier else {
+            // No active windows context; ignore additions to avoid cross-app injection
+            return
+        }
+        let gated: [WindowInfo] = newWindowsToAdd.filter { $0.app.processIdentifier == currentPid }
 
         var windowsWereAdded = false
-        for newWin in newWindowsToAdd {
+        for newWin in gated {
             if !windows.contains(where: { $0.id == newWin.id }) {
                 windows.append(newWin)
                 windowsWereAdded = true
@@ -158,5 +177,22 @@ class PreviewStateCoordinator: ObservableObject {
 
         overallMaxPreviewDimension = newOverallMaxDimension
         windowDimensionsMap = newDimensionsMap
+    }
+
+    @MainActor
+    private func updateIndexForSearch() {
+        if !hasActiveSearch {
+            if currIndex >= windows.count {
+                currIndex = windows.isEmpty ? -1 : 0
+            }
+        } else {
+            let query = searchQuery.lowercased()
+            let filteredIndices = windows.enumerated().compactMap { idx, win in
+                let appName = win.app.localizedName?.lowercased() ?? ""
+                let windowTitle = (win.windowName ?? "").lowercased()
+                return (appName.contains(query) || windowTitle.contains(query)) ? idx : nil
+            }
+            currIndex = filteredIndices.first ?? -1
+        }
     }
 }
