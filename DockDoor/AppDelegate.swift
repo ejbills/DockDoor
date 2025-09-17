@@ -79,17 +79,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             let currentPreviewCoordinator = SharedPreviewWindowCoordinator()
             previewCoordinator = currentPreviewCoordinator
 
-            var currentDockObserver: DockObserver?
             if Defaults[.enableDockPreviews] {
                 let dockObs = DockObserver(previewCoordinator: currentPreviewCoordinator)
                 dockObserver = dockObs
-                currentDockObserver = dockObs
             }
 
             appClosureObserver = WindowManipulationObservers(previewCoordinator: currentPreviewCoordinator)
 
-            if Defaults[.enableWindowSwitcher], let currentDockObserver {
-                keybindHelper = KeybindHelper(previewCoordinator: currentPreviewCoordinator, dockObserver: currentDockObserver)
+            if Defaults[.enableWindowSwitcher] {
+                keybindHelper = KeybindHelper(previewCoordinator: currentPreviewCoordinator)
             }
             if updater.automaticallyChecksForUpdates {
                 print("AppDelegate: Automatic updates enabled, checking in background.")

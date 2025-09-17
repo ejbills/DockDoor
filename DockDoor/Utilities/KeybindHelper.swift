@@ -163,7 +163,6 @@ private class WindowSwitchingCoordinator {
 
 class KeybindHelper {
     private let previewCoordinator: SharedPreviewWindowCoordinator
-    private let dockObserver: DockObserver
     private let windowSwitchingCoordinator = WindowSwitchingCoordinator()
 
     private var isSwitcherModifierKeyPressed: Bool = false
@@ -176,9 +175,8 @@ class KeybindHelper {
     private var monitorTimer: Timer?
     private var unmanagedEventTapUserInfo: Unmanaged<KeybindHelperUserInfo>?
 
-    init(previewCoordinator: SharedPreviewWindowCoordinator, dockObserver: DockObserver) {
+    init(previewCoordinator: SharedPreviewWindowCoordinator) {
         self.previewCoordinator = previewCoordinator
-        self.dockObserver = dockObserver
         setupEventTap()
         startMonitoring()
     }
