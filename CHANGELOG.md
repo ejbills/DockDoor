@@ -38,6 +38,19 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://buymeacoffee.com/keplercafe</div>
 
+<a id="1.23.1"></a>
+# [Release 1.23.1](https://github.com/ejbills/DockDoor/releases/tag/1.23.1) - 2025-09-17
+
+
+## 🐛 Bug Fixes
+- Fixed window switcher functionality
+  - Works without dock previews
+  - Improved initialization reliability
+
+
+[Changes][1.23.1]
+
+
 <a id="1.23"></a>
 # [Release 1.23](https://github.com/ejbills/DockDoor/releases/tag/1.23) - 2025-09-16
 
@@ -1483,6 +1496,7 @@ v1.0
 [Changes][releases]
 
 
+[1.23.1]: https://github.com/ejbills/DockDoor/compare/1.23...1.23.1
 [1.23]: https://github.com/ejbills/DockDoor/compare/1.22...1.23
 [1.22]: https://github.com/ejbills/DockDoor/compare/1.21.4...1.22
 [1.21.4]: https://github.com/ejbills/DockDoor/compare/1.21.3...1.21.4
