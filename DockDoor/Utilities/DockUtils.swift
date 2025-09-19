@@ -6,11 +6,12 @@ enum DockPosition {
     case bottom
     case left
     case right
+    case cmdTab
     case unknown
 
     var isHorizontalFlow: Bool {
         switch self {
-        case .top, .bottom:
+        case .top, .bottom, .cmdTab:
             true
         case .left, .right:
             false

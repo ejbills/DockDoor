@@ -21,7 +21,7 @@ extension WindowPreviewHoverContainer {
             var maxWidth: CGFloat = 300 // Default/min
             var maxHeight: CGFloat = 300 // Default/min
 
-            let orientationIsHorizontal = dockPosition == .bottom || isWindowSwitcherActive
+            let orientationIsHorizontal = dockPosition == .bottom || dockPosition == .cmdTab || isWindowSwitcherActive
             let maxAspectRatio: CGFloat = 1.5
 
             for window in windows {
@@ -68,13 +68,16 @@ extension WindowPreviewHoverContainer {
 
         if Defaults[.allowDynamicImageSizing] {
             // Use row/column-aware dynamic sizing for unified UX experience
-            let orientationIsHorizontal = dockPosition == .bottom || isWindowSwitcherActive
+            let orientationIsHorizontal = dockPosition == .bottom || dockPosition == .cmdTab || isWindowSwitcherActive
+
+            // Force a single row while in Cmd+Tab context, regardless of user row settings
+            let effectiveMaxRows = (dockPosition == .cmdTab) ? 1 : (isWindowSwitcherActive ? switcherMaxRows : previewMaxRows)
 
             let windowChunks = createWindowChunks(
                 totalWindows: windows.count,
                 isHorizontal: orientationIsHorizontal,
                 maxColumns: previewMaxColumns,
-                maxRows: isWindowSwitcherActive ? switcherMaxRows : previewMaxRows
+                maxRows: effectiveMaxRows
             )
 
             // Process each chunk (row/column) to find unified dimensions

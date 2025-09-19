@@ -57,11 +57,13 @@ struct MediaControlsFullView: View {
                 }
                 .padding(.top, (appNameStyle == .popover && showAppTitleData) ? 30 : 0)
                 .overlay {
-                    WindowDismissalContainer(appName: appName,
-                                             bestGuessMonitor: bestGuessMonitor,
-                                             dockPosition: dockPosition,
-                                             minimizeAllWindowsCallback: { _ in })
-                        .allowsHitTesting(false)
+                    if dockPosition != .cmdTab {
+                        WindowDismissalContainer(appName: appName,
+                                                 bestGuessMonitor: bestGuessMonitor,
+                                                 dockPosition: dockPosition,
+                                                 minimizeAllWindowsCallback: { _ in })
+                            .allowsHitTesting(false)
+                    }
                 }
             },
             highlightColor: dominantArtworkColor
