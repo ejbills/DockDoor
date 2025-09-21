@@ -8666,7 +8666,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Quantità"
+            "value" : "punti"
           }
         },
         "ja" : {
@@ -14564,8 +14564,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Change…"
+            "state" : "translated",
+            "value" : "Cambia…"
           }
         },
         "ja" : {
@@ -14642,8 +14642,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Change…"
+            "state" : "translated",
+            "value" : "Змінити…"
           }
         },
         "vi" : {
@@ -16278,7 +16278,7 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Command"
           }
         },
@@ -16356,7 +16356,7 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Command"
           }
         },
@@ -16659,7 +16659,7 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Command ⌘"
           }
         },
@@ -16737,7 +16737,7 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Command ⌘"
           }
         },
@@ -17800,7 +17800,7 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Control"
           }
         },
@@ -17878,7 +17878,7 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Control"
           }
         },
@@ -18181,7 +18181,7 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Control ⌃"
           }
         },
@@ -18259,7 +18259,7 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Control ⌃"
           }
         },
@@ -19592,7 +19592,7 @@
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Поточне скорочення"
+            "value" : "Поточна комбінація клавіш"
           }
         },
         "vi" : {
@@ -20847,8 +20847,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Delete"
+            "state" : "translated",
+            "value" : "Canc ⌦"
           }
         },
         "ja" : {
@@ -20925,7 +20925,7 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Delete"
           }
         },
@@ -25982,8 +25982,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Either left or right Command, Option, or Control keys work. You can also hold the modifier while pressing the trigger to capture both."
+            "state" : "translated",
+            "value" : "Sono validi entrambi i tasti Command (a destra o a sinistra della barra spaziatrice). Puoi anche aggiungere un ulteriore tasto tenendolo premuto insieme al tasto modificatore."
           }
         },
         "ja" : {
@@ -26060,8 +26060,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Either left or right Command, Option, or Control keys work. You can also hold the modifier while pressing the trigger to capture both."
+            "state" : "translated",
+            "value" : "Працюють як ліва, так і права клавіші Command, Option або Control. Ви також можете утримувати модифікатор під час натискання на тригер, щоб захопити обидві."
           }
         },
         "vi" : {
@@ -27887,8 +27887,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable search while using Window Switcher"
+            "state" : "translated",
+            "value" : "Abilita la ricerca nel selettore finestre"
           }
         },
         "ja" : {
@@ -27965,8 +27965,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable search while using Window Switcher"
+            "state" : "translated",
+            "value" : "Увімкнути пошук при використанні Перемикача вікон"
           }
         },
         "vi" : {
@@ -29217,8 +29217,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Escape"
+            "state" : "translated",
+            "value" : "Esc ⎋"
           }
         },
         "ja" : {
@@ -29295,7 +29295,7 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Escape"
           }
         },
@@ -39131,8 +39131,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Initializer"
+            "state" : "translated",
+            "value" : "Tasto scorciatoia"
           }
         },
         "ja" : {
@@ -39209,8 +39209,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Initializer"
+            "state" : "translated",
+            "value" : "Ініціалізатор"
           }
         },
         "vi" : {
@@ -49224,8 +49224,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No Results"
+            "state" : "translated",
+            "value" : "Nessun risultato"
           }
         },
         "ja" : {
@@ -49302,8 +49302,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No Results"
+            "state" : "translated",
+            "value" : "Результати відсутні"
           }
         },
         "vi" : {
@@ -49414,8 +49414,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No shortcut set"
+            "state" : "translated",
+            "value" : "Nessuna combinazione di tasti impostata"
           }
         },
         "ja" : {
@@ -49492,8 +49492,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No shortcut set"
+            "state" : "translated",
+            "value" : "Комбінацію клавіш не встановлено"
           }
         },
         "vi" : {
@@ -49794,8 +49794,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No windows match your search"
+            "state" : "translated",
+            "value" : "Nessuna finestra corrisponde alla tua ricerca"
           }
         },
         "ja" : {
@@ -49872,8 +49872,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No windows match your search"
+            "state" : "translated",
+            "value" : "Відсутні вікна, що відповідають вашому пошуку"
           }
         },
         "vi" : {
@@ -52080,7 +52080,7 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Option"
           }
         },
@@ -52158,7 +52158,7 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Option"
           }
         },
@@ -52461,7 +52461,7 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Option ⌥"
           }
         },
@@ -52539,7 +52539,7 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Option ⌥"
           }
         },
@@ -56843,8 +56843,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Press shortcut…"
+            "state" : "translated",
+            "value" : "Premi la combinazione di tasti…"
           }
         },
         "ja" : {
@@ -56921,8 +56921,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Press shortcut…"
+            "state" : "translated",
+            "value" : "Натисніть комбінацію клавіш…"
           }
         },
         "vi" : {
@@ -65024,8 +65024,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Return"
+            "state" : "translated",
+            "value" : "Invio"
           }
         },
         "ja" : {
@@ -65102,7 +65102,7 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Return"
           }
         },
@@ -77220,7 +77220,7 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Tab"
           }
         },
@@ -77298,7 +77298,7 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Tab"
           }
         },
@@ -92843,8 +92843,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Switcher Shortcut"
+            "state" : "translated",
+            "value" : "Scelta rapida per il selettore finestre"
           }
         },
         "ja" : {
@@ -92921,8 +92921,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Switcher Shortcut"
+            "state" : "translated",
+            "value" : "Комбінація клавіш для Перемикача вікон"
           }
         },
         "vi" : {
@@ -94638,7 +94638,7 @@
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ваше скорочення буде встановлено (наприклад, ⌘ + Tab)"
+            "value" : "Ваша комбінація клавіш буде встановлена (наприклад, ⌘ + Tab)"
           }
         },
         "vi" : {
