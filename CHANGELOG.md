@@ -38,6 +38,24 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://buymeacoffee.com/keplercafe</div>
 
+<a id="1.24"></a>
+# [Release 1.24](https://github.com/ejbills/DockDoor/releases/tag/1.24) - 2025-09-22
+
+## ✨ New Features
+- Shows minimized windows and windows from other desktops on launch
+- Added preview quality setting
+  - Sharper window previews option
+- Added title style option
+  - Disable rounded label
+
+## 🔧 Improvements & Stability
+- More reliable window detection
+- Cleaner full-size previews
+
+
+[Changes][1.24]
+
+
 <a id="1.23.1"></a>
 # [Release 1.23.1](https://github.com/ejbills/DockDoor/releases/tag/1.23.1) - 2025-09-17
 
@@ -1496,6 +1514,7 @@ v1.0
 [Changes][releases]
 
 
+[1.24]: https://github.com/ejbills/DockDoor/compare/1.23.1...1.24
 [1.23.1]: https://github.com/ejbills/DockDoor/compare/1.23...1.23.1
 [1.23]: https://github.com/ejbills/DockDoor/compare/1.22...1.23
 [1.22]: https://github.com/ejbills/DockDoor/compare/1.21.4...1.22
