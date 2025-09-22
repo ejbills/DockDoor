@@ -706,11 +706,6 @@ enum WindowUtil {
         desktopSpaceWindowCacheManager.writeCache(pid: pid, windowSet: [])
     }
 
-    // Expose all cached windows (unfiltered) for reconciliation tasks
-    static func getAllCachedWindows() -> [WindowInfo] {
-        desktopSpaceWindowCacheManager.getAllWindows()
-    }
-
     // Map a CGWindowID to its Space via private CGS
     static func spaceIDForWindowID(_ id: CGWindowID) -> Int? {
         let arr: CFArray = [NSNumber(value: UInt32(id))] as CFArray
