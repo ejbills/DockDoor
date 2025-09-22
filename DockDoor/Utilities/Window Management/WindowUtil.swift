@@ -152,14 +152,12 @@ enum WindowUtil {
         var cgImage: CGImage
         let connectionID = CGSMainConnectionID()
         var windowID = UInt32(window.windowID)
+        let qualityOption: CGSWindowCaptureOptions = (Defaults[.windowImageCaptureQuality] == .best) ? .bestResolution : .nominalResolution
         guard let capturedWindows = CGSHWCaptureWindowList(
             connectionID,
             &windowID,
             1,
-            [
-                CGSWindowCaptureOptions.nominalResolution,
-                CGSWindowCaptureOptions.fullSize,
-            ]
+            [qualityOption, CGSWindowCaptureOptions.fullSize]
         ) as? [CGImage],
             let capturedImage = capturedWindows.first
         else {

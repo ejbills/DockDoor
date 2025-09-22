@@ -12191,6 +12191,9 @@
         }
       }
     },
+    "Best quality (full resolution)" : {
+      "comment" : "Window image capture quality option"
+    },
     "Beta" : {
       "localizations" : {
         "af" : {
@@ -38282,6 +38285,9 @@
           }
         }
       }
+    },
+    "Improved performance (nominal)" : {
+      "comment" : "Window image capture quality option"
     },
     "Include Hidden and Minimized Windows in the Window Switcher" : {
       "extractionState" : "stale",
@@ -90282,6 +90288,9 @@
           }
         }
       }
+    },
+    "Window Image Capture Quality" : {
+
     },
     "Window Image Resolution Scale (1=Best)" : {
       "localizations" : {
