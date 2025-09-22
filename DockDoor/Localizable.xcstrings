@@ -26850,9 +26850,6 @@
         }
       }
     },
-    "Embeds traffic lights and window titles inside preview frames and uses the dock preview toolbar layout for consistency." : {
-
-    },
     "Enable automatic checking for updates" : {
       "localizations" : {
         "af" : {
@@ -84374,9 +84371,6 @@
           }
         }
       }
-    },
-    "Use dock preview styling in switcher" : {
-
     },
     "Use Monochrome Colors" : {
       "localizations" : {

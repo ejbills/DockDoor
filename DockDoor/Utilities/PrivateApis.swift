@@ -37,6 +37,11 @@ func CoreDockIsMagnificationEnabled() -> Bool
 // Define the private API types
 typealias CGSConnectionID = UInt32
 typealias CGSWindowCount = UInt32
+typealias CGSSpaceID = UInt64
+typealias CGSSpaceMask = UInt64
+
+// All spaces mask (private constant)
+let kCGSAllSpacesMask: CGSSpaceMask = 0xFFFF_FFFF_FFFF_FFFF
 
 // Define the private API functions with @_silgen_name
 @_silgen_name("CGSMainConnectionID")
@@ -49,3 +54,32 @@ func CGSHWCaptureWindowList(
     _ count: CGSWindowCount,
     _ options: CGSWindowCaptureOptions
 ) -> CFArray?
+
+// Private spaces API: returns array of space IDs corresponding to the provided windows
+@_silgen_name("CGSCopySpacesForWindows")
+func CGSCopySpacesForWindows(
+    _ cid: CGSConnectionID,
+    _ mask: CGSSpaceMask,
+    _ windowIDs: CFArray
+) -> CFArray?
+
+// Private: get window level
+@_silgen_name("CGSGetWindowLevel")
+func CGSGetWindowLevel(
+    _ cid: CGSConnectionID,
+    _ wid: UInt32,
+    _ outLevel: UnsafeMutablePointer<Int32>
+) -> Int32
+
+// Private: copy window property (e.g., kCGSWindowTitle)
+@_silgen_name("CGSCopyWindowProperty")
+func CGSCopyWindowProperty(
+    _ cid: CGSConnectionID,
+    _ wid: UInt32,
+    _ key: CFString,
+    _ outValue: UnsafeMutablePointer<CFTypeRef?>
+) -> Int32
+
+// Private: create AXUIElement from remote token (used for brute-force window enumeration)
+@_silgen_name("_AXUIElementCreateWithRemoteToken")
+func _AXUIElementCreateWithRemoteToken(_ token: CFData) -> Unmanaged<AXUIElement>?

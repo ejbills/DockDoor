@@ -31,11 +31,12 @@ struct WindowInfo: Identifiable, Hashable {
     var closeButton: AXUIElement?
     var isMinimized: Bool
     var isHidden: Bool
+    var spaceID: Int?
     var lastAccessedTime: Date
 
     private var _scWindow: SCWindow?
 
-    init(windowProvider: WindowPropertiesProviding, app: NSRunningApplication, image: CGImage?, axElement: AXUIElement, appAxElement: AXUIElement, closeButton: AXUIElement?, isMinimized: Bool, isHidden: Bool, lastAccessedTime: Date) {
+    init(windowProvider: WindowPropertiesProviding, app: NSRunningApplication, image: CGImage?, axElement: AXUIElement, appAxElement: AXUIElement, closeButton: AXUIElement?, isMinimized: Bool, isHidden: Bool, lastAccessedTime: Date, spaceID: Int? = nil) {
         id = windowProvider.windowID
         self.windowProvider = windowProvider
         self.app = app
@@ -46,6 +47,7 @@ struct WindowInfo: Identifiable, Hashable {
         self.closeButton = closeButton
         self.isMinimized = isMinimized
         self.isHidden = isHidden
+        self.spaceID = spaceID
         self.lastAccessedTime = lastAccessedTime
         _scWindow = windowProvider as? SCWindow
     }
@@ -63,6 +65,7 @@ struct WindowInfo: Identifiable, Hashable {
             lhs.app.processIdentifier == rhs.app.processIdentifier &&
             lhs.isMinimized == rhs.isMinimized &&
             lhs.isHidden == rhs.isHidden &&
+            lhs.spaceID == rhs.spaceID &&
             lhs.axElement == rhs.axElement
     }
 }
@@ -636,7 +639,8 @@ enum WindowUtil {
                 closeButton: closeButton,
                 isMinimized: false,
                 isHidden: false,
-                lastAccessedTime: Date.now
+                lastAccessedTime: Date.now,
+                spaceID: WindowUtil.spaceIDForWindowID(window.windowID)
             )
 
             await Task.detached(priority: .userInitiated) {
@@ -657,6 +661,7 @@ enum WindowUtil {
                 matchingWindowCopy.image = windowInfo.image
                 matchingWindowCopy.isHidden = windowInfo.isHidden
                 matchingWindowCopy.isMinimized = windowInfo.isMinimized
+                matchingWindowCopy.spaceID = windowInfo.spaceID
 
                 windowSet.remove(matchingWindow)
                 windowSet.insert(matchingWindowCopy)
@@ -699,6 +704,19 @@ enum WindowUtil {
 
     static func purgeAppCache(with pid: pid_t) {
         desktopSpaceWindowCacheManager.writeCache(pid: pid, windowSet: [])
+    }
+
+    // Expose all cached windows (unfiltered) for reconciliation tasks
+    static func getAllCachedWindows() -> [WindowInfo] {
+        desktopSpaceWindowCacheManager.getAllWindows()
+    }
+
+    // Map a CGWindowID to its Space via private CGS
+    static func spaceIDForWindowID(_ id: CGWindowID) -> Int? {
+        let arr: CFArray = [NSNumber(value: UInt32(id))] as CFArray
+        guard let spaces = CGSCopySpacesForWindows(CGSMainConnectionID(), kCGSAllSpacesMask, arr) as NSArray? else { return nil }
+        if let first = spaces.firstObject as? NSNumber { return first.intValue }
+        return nil
     }
 
     /// Checks if the frontmost application is fullscreen and in the blacklist
