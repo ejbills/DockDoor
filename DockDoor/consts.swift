@@ -41,6 +41,7 @@ extension Defaults.Keys {
     static let useEmbeddedMediaControls = Key<Bool>("useEmbeddedMediaControls", default: false)
     static let useEmbeddedDockPreviewElements = Key<Bool>("useEmbeddedDockPreviewElements", default: false)
     static let disableDockStyleTrafficLights = Key<Bool>("disableDockStyleTrafficLights", default: false)
+    static let disableDockStyleTitles = Key<Bool>("disableDockStyleTitles", default: false)
     static let showBigControlsWhenNoValidWindows = Key<Bool>("showBigControlsWhenNoValidWindows", default: true)
     static let enablePinning = Key<Bool>("enablePinning", default: true)
 

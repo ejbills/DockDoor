@@ -108,6 +108,7 @@ struct AppearanceSettingsView: View {
     @Default(.globalPaddingMultiplier) var globalPaddingMultiplier
     @Default(.useEmbeddedDockPreviewElements) var useEmbeddedDockPreviewElements
     @Default(.disableDockStyleTrafficLights) var disableDockStyleTrafficLights
+    @Default(.disableDockStyleTitles) var disableDockStyleTitles
     @Default(.showMinimizedHiddenLabels) var showMinimizedHiddenLabels
     @Default(.enableTitleMarquee) var enableTitleMarquee
 
@@ -329,6 +330,16 @@ struct AppearanceSettingsView: View {
                         Text(visibility.localizedName)
                             .tag(visibility)
                     }
+                }
+
+                VStack(alignment: .leading) {
+                    Toggle(isOn: $disableDockStyleTitles) {
+                        Text("Disable dock styling on window titles")
+                    }
+                    Text("Removes the pill-shaped background styling from window titles in dock previews for a cleaner look.")
+                        .font(.footnote)
+                        .foregroundColor(.gray)
+                        .padding(.leading, 20)
                 }
             }
 
