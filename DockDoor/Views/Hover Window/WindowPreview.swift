@@ -31,6 +31,7 @@ struct WindowPreview: View {
     @Default(.allowDynamicImageSizing) var allowDynamicImageSizing
     @Default(.useEmbeddedDockPreviewElements) var useEmbeddedDockPreviewElements
     @Default(.disableDockStyleTrafficLights) var disableDockStyleTrafficLights
+    @Default(.disableDockStyleTitles) var disableDockStyleTitles
     @Default(.showMinimizedHiddenLabels) var showMinimizedHiddenLabels
 
     @Default(.tapEquivalentInterval) var tapEquivalentInterval
@@ -124,7 +125,9 @@ struct WindowPreview: View {
                 MarqueeText(text: title, startDelay: 1)
                     .font(.subheadline)
                     .padding(4)
-                    .materialPill()
+                    .if(!disableDockStyleTitles) { view in
+                        view.materialPill()
+                    }
             }
         }
 
@@ -373,7 +376,9 @@ struct WindowPreview: View {
                 MarqueeText(text: title, startDelay: 1)
                     .font(.subheadline)
                     .padding(4)
-                    .materialPill()
+                    .if(!disableDockStyleTitles) { view in
+                        view.materialPill()
+                    }
             }
         }
 
