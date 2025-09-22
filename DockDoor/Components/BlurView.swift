@@ -1,6 +1,8 @@
+import Defaults
 import SwiftUI
 
 struct BlurView: View {
+    @Default(.useLiquidGlass) private var useLiquidGlass
     let variant: Int?
     let frostedTranslucentLayer: Bool
 
@@ -10,7 +12,7 @@ struct BlurView: View {
     }
 
     var body: some View {
-        if #available(macOS 26.0, *) {
+        if #available(macOS 26.0, *), useLiquidGlass {
             GlassEffectView(variant: variant, frostedTranslucentLayer: frostedTranslucentLayer)
         } else {
             Rectangle().fill(.ultraThinMaterial)

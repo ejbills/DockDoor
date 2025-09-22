@@ -87,6 +87,7 @@ extension AppearanceSettingsView {
 struct AppearanceSettingsView: View {
     @Default(.uniformCardRadius) var uniformCardRadius
     @Default(.allowDynamicImageSizing) var allowDynamicImageSizing
+    @Default(.useLiquidGlass) var useLiquidGlass
     @Default(.showAppName) var showAppName
     @Default(.appNameStyle) var appNameStyle
     @Default(.showWindowTitle) var showWindowTitle
@@ -172,6 +173,11 @@ struct AppearanceSettingsView: View {
 
                     StyledGroupBox(label: "General Appearance") {
                         VStack(alignment: .leading, spacing: 10) {
+                            if #available(macOS 26.0, *) {
+                                Toggle(isOn: $useLiquidGlass) {
+                                    Text("Use Liquid Glass (macOS 26+)")
+                                }
+                            }
                             sliderSetting(title: "Spacing Scale",
                                           value: $globalPaddingMultiplier,
                                           range: 0.5 ... 2.0,
