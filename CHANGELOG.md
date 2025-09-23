@@ -38,6 +38,23 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://buymeacoffee.com/keplercafe</div>
 
+<a id="1.25"></a>
+# [Release 1.25](https://github.com/ejbills/DockDoor/releases/tag/1.25) - 2025-09-23
+
+## ✨ New Features
+- Added native cmd+tab app switcher previews (defaults to off)
+  - Keyboard driven navigation
+  - Window actions shortcuts work (cmd+m - minimize, cmd+w - close, cmd+q - quit)
+
+## 🔧 Improvements & Stability
+- Helpful on-screen tips for cmd-tab enhancement feature
+- Adjustable blur background (option to disable liquid glass)
+- Avoids app switcher conflicts, you can still use app expose shortcuts
+
+
+[Changes][1.25]
+
+
 <a id="1.24.1"></a>
 # [Release 1.24.1](https://github.com/ejbills/DockDoor/releases/tag/1.24.1) - 2025-09-23
 
@@ -1536,6 +1553,7 @@ v1.0
 [Changes][releases]
 
 
+[1.25]: https://github.com/ejbills/DockDoor/compare/1.24.1...1.25
 [1.24.1]: https://github.com/ejbills/DockDoor/compare/1.24...1.24.1
 [1.24]: https://github.com/ejbills/DockDoor/compare/1.23.1...1.24
 [1.23.1]: https://github.com/ejbills/DockDoor/compare/1.23...1.23.1
