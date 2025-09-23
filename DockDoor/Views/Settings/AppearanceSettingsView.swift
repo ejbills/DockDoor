@@ -100,6 +100,7 @@ struct AppearanceSettingsView: View {
     @Default(.unselectedContentOpacity) var unselectedContentOpacity
     @Default(.hoverHighlightColor) var hoverHighlightColor
     @Default(.dockPreviewBackgroundOpacity) var dockPreviewBackgroundOpacity
+    @Default(.hidePreviewCardBackground) var hidePreviewCardBackground
     @Default(.previewMaxColumns) var previewMaxColumns
     @Default(.previewMaxRows) var previewMaxRows
     @Default(.switcherMaxRows) var switcherMaxRows
@@ -217,6 +218,16 @@ struct AppearanceSettingsView: View {
                                     Text("Distinguish minimized/hidden windows")
                                 }
                                 Text("When enabled, shows visual indicators and dims minimized/hidden windows. When disabled, treats them as normal windows with full functionality.")
+                                    .font(.footnote)
+                                    .foregroundColor(.gray)
+                                    .padding(.leading, 20)
+                            }
+
+                            VStack(alignment: .leading) {
+                                Toggle(isOn: $hidePreviewCardBackground) {
+                                    Text("Hide preview card background")
+                                }
+                                Text("Removes the background panel from individual window previews.")
                                     .font(.footnote)
                                     .foregroundColor(.gray)
                                     .padding(.leading, 20)

@@ -14,6 +14,5 @@ struct FullSizePreviewView: View {
                     .aspectRatio(windowSize, contentMode: .fit)
             }
         }
-        .clipShape(uniformCardRadius ? AnyShape(RoundedRectangle(cornerRadius: 12, style: .continuous)) : AnyShape(Rectangle()))
     }
 }
