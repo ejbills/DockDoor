@@ -136,7 +136,7 @@ struct WindowPreviewHoverContainer: View {
                         }
                 }
                 .overlay {
-                    if !mockPreviewActive, !isDragging {
+                    if !mockPreviewActive, !isDragging, dockPosition != .cmdTab {
                         WindowDismissalContainer(appName: appName,
                                                  bestGuessMonitor: bestGuessMonitor,
                                                  dockPosition: dockPosition,
@@ -144,6 +144,19 @@ struct WindowPreviewHoverContainer: View {
                                                      minimizeAllWindows(wasAppActiveBeforeClick: wasAppActiveBeforeClick)
                                                  })
                                                  .allowsHitTesting(false)
+                    }
+                }
+                .overlay {
+                    if dockPosition == .cmdTab,
+                       Defaults[.enableCmdTabEnhancements],
+                       !Defaults[.hasSeenCmdTabFocusHint],
+                       !previewStateCoordinator.windowSwitcherActive,
+                       previewStateCoordinator.currIndex < 0
+                    {
+                        CmdTabFocusFullOverlayView()
+                            .transition(.opacity)
+                            .allowsHitTesting(false)
+                            .clipShape(RoundedRectangle(cornerRadius: Defaults[.uniformCardRadius] ? 26 : 8, style: .continuous))
                     }
                 }
             }
@@ -740,9 +753,10 @@ struct WindowPreviewHoverContainer: View {
             maxColumns = 999
             maxRows = switcherMaxRows
         } else {
-            if dockPosition == .bottom {
+            if dockPosition == .bottom || dockPosition == .cmdTab {
                 maxColumns = 999
-                maxRows = previewMaxRows
+                // Force a single row while Cmd+Tab is active to avoid multi-row flow
+                maxRows = (dockPosition == .cmdTab) ? 1 : previewMaxRows
             } else {
                 maxColumns = previewMaxColumns
                 maxRows = 999

@@ -50,12 +50,14 @@ extension Defaults.Keys {
     static let gradientColorPalette = Key<GradientColorPaletteSettings>("gradientColorPalette", default: .init())
     static let enableWindowSwitcher = Key<Bool>("enableWindowSwitcher", default: true)
     static let enableDockPreviews = Key<Bool>("enableDockPreviews", default: true)
+    static let enableCmdTabEnhancements = Key<Bool>("enableCmdTabEnhancements", default: false)
     static let keepPreviewOnAppTerminate = Key<Bool>("keepPreviewOnAppTerminate", default: false)
     static let enableWindowSwitcherSearch = Key<Bool>("enableWindowSwitcherSearch", default: false)
     static let sortWindowsByDate = Key<Bool>("sortWindowsByDate", default: true)
     static let useClassicWindowOrdering = Key<Bool>("useClassicWindowOrdering", default: true)
     static let includeHiddenWindowsInSwitcher = Key<Bool>("includeHiddenWindowsInSwitcher", default: true)
     static let ignoreAppsWithSingleWindow = Key<Bool>("ignoreAppsWithSingleWindow", default: false)
+    static let useLiquidGlass = Key<Bool>("useLiquidGlass", default: true)
     static let showMenuBarIcon = Key<Bool>("showMenuBarIcon", default: true)
     static let raisedWindowLevel = Key<Bool>("raisedWindowLevel", default: true)
     static let launched = Key<Bool>("launched", default: false)
@@ -104,6 +106,9 @@ extension Defaults.Keys {
     static let appNameFilters = Key<[String]>("appNameFilters", default: [])
     static let windowTitleFilters = Key<[String]>("windowTitleFilters", default: [])
     static let customAppDirectories = Key<[String]>("customAppDirectories", default: [])
+
+    // Onboarding / Hints
+    static let hasSeenCmdTabFocusHint = Key<Bool>("hasSeenCmdTabFocusHint", default: false)
 }
 
 // MARK: Display Configurations

@@ -90,6 +90,7 @@ struct MainSettingsView: View {
     @Default(.enableWindowSwitcherSearch) var enableWindowSwitcherSearch
     @Default(.enableDockPreviews) var enableDockPreviews
     @Default(.keepPreviewOnAppTerminate) var keepPreviewOnAppTerminate
+    @Default(.enableCmdTabEnhancements) var enableCmdTabEnhancements
     @Default(.includeHiddenWindowsInSwitcher) var includeHiddenWindowsInSwitcher
     @Default(.useClassicWindowOrdering) var useClassicWindowOrdering
     @Default(.limitSwitcherToFrontmostApp) var limitSwitcherToFrontmostApp
@@ -348,11 +349,6 @@ struct MainSettingsView: View {
                 }
                 .buttonStyle(PlainButtonStyle())
                 .padding(.top, 4)
-
-                Text("Thanks for supporting DockDoor! 💖")
-                    .font(.footnote)
-                    .foregroundColor(.secondary)
-                    .frame(maxWidth: .infinity, alignment: .center)
             }
         }
     }
@@ -383,58 +379,72 @@ struct MainSettingsView: View {
                     .foregroundColor(.secondary)
                     .padding(.leading, 20)
 
-                Divider().padding(.vertical, 2)
+                Divider()
 
-                Toggle(isOn: $enableDockPreviews) { Text("Enable Dock Previews") }
-                    .onChange(of: enableDockPreviews) { _ in askUserToRestartApplication() }
-
-                Text("Show window previews when hovering over Dock icons.")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-                    .padding(.leading, 20)
-
-                if enableDockPreviews {
-                    Toggle(isOn: $keepPreviewOnAppTerminate) { Text("Keep preview when app terminates") }
-                        .padding(.leading, 20)
-                    Text("When an app terminates, remove only its windows from the preview instead of hiding the entire preview.")
+                SettingsIllustratedRow(imageName: "DockPreviews") {
+                    Toggle(isOn: $enableDockPreviews) { Text("Enable Dock Previews") }
+                        .onChange(of: enableDockPreviews) { _ in askUserToRestartApplication() }
+                    Text("Show window previews when hovering over Dock icons.")
                         .font(.caption)
                         .foregroundColor(.secondary)
-                        .padding(.leading, 40)
+                        .padding(.leading, 20)
+                    if enableDockPreviews {
+                        Toggle(isOn: $keepPreviewOnAppTerminate) { Text("Keep preview when app terminates") }
+                            .padding(.leading, 20)
+                        Text("When an app terminates, remove only its windows from the preview instead of hiding the entire preview.")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                            .padding(.leading, 40)
+                    }
                 }
 
-                Toggle(isOn: $enableWindowSwitcher) { Text("Enable Window Switcher") }
-                    .onChange(of: enableWindowSwitcher) { _ in askUserToRestartApplication() }
+                Divider()
 
-                Text("The Window Switcher (often Alt/Cmd-Tab) lets you quickly cycle between open app windows with a keyboard shortcut.")
+                SettingsIllustratedRow(imageName: "WindowSwitcher") {
+                    Toggle(isOn: $enableWindowSwitcher) { Text("Enable Window Switcher") }
+                        .onChange(of: enableWindowSwitcher) { _ in askUserToRestartApplication() }
+                    Text("The Window Switcher (often Alt/Cmd-Tab) lets you quickly cycle between open app windows with a keyboard shortcut.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                        .padding(.leading, 20)
+                    if enableWindowSwitcher {
+                        VStack(alignment: .leading, spacing: 8) {
+                            Toggle(isOn: $includeHiddenWindowsInSwitcher) { Text("Include hidden/minimized windows in Switcher") }
+                            Toggle(isOn: $enableWindowSwitcherSearch) { Text("Enable search while using Window Switcher") }
+                            Toggle(isOn: Binding(
+                                get: { !preventSwitcherHide },
+                                set: { preventSwitcherHide = !$0 }
+                            )) { Text("Release initializer key to select window in Switcher") }
+                            Toggle(isOn: $useClassicWindowOrdering) { Text("Use Windows-style window ordering in Switcher") }
+                            Text("Shows last active window first, instead of current window.")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                                .padding(.leading, 20)
+
+                            Toggle(isOn: $limitSwitcherToFrontmostApp) { Text("Limit Window Switcher to active app only") }
+                            Text("Only show windows from the currently active/frontmost application.")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                                .padding(.leading, 20)
+                        }
+                        .padding(.leading, 20)
+                        .padding(.top, 4)
+                    }
+                }
+
+                Divider()
+
+                SettingsIllustratedRow(imageName: "CmdTab") {
+                    Toggle(isOn: $enableCmdTabEnhancements) { Text("Enable Cmd+Tab Enhancements") }
+                        .onChange(of: enableCmdTabEnhancements) { _ in askUserToRestartApplication() }
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Show previews while holding Cmd+Tab.")
+                        Text("Cmd+A focuses previews, Left/Right navigate, Down clears selection.")
+                    }
                     .font(.caption)
                     .foregroundColor(.secondary)
                     .padding(.leading, 20)
-
-                if enableWindowSwitcher {
-                    VStack(alignment: .leading, spacing: 8) {
-                        Toggle(isOn: $includeHiddenWindowsInSwitcher) { Text("Include hidden/minimized windows in Switcher") }
-                        Toggle(isOn: $enableWindowSwitcherSearch) { Text("Enable search while using Window Switcher") }
-                        Toggle(isOn: Binding(
-                            get: { !preventSwitcherHide },
-                            set: { preventSwitcherHide = !$0 }
-                        )) { Text("Release initializer key to select window in Switcher") }
-                        Toggle(isOn: $useClassicWindowOrdering) { Text("Use Windows-style window ordering in Switcher") }
-                        Text("Shows last active window first, instead of current window.")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                            .padding(.leading, 20)
-
-                        Toggle(isOn: $limitSwitcherToFrontmostApp) { Text("Limit Window Switcher to active app only") }
-                        Text("Only show windows from the currently active/frontmost application.")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                            .padding(.leading, 20)
-                    }
-                    .padding(.leading, 20)
-                    .padding(.top, 4)
                 }
-
-                Divider().padding(.vertical, 2)
 
                 HStack {
                     Spacer()

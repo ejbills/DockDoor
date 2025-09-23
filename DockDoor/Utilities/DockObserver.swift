@@ -29,7 +29,7 @@ func handleSelectedDockItemChangedNotification(observer _: AXObserver, element _
 
 final class DockObserver {
     weak static var activeInstance: DockObserver?
-    private let previewCoordinator: SharedPreviewWindowCoordinator
+    let previewCoordinator: SharedPreviewWindowCoordinator
 
     var axObserver: AXObserver?
     var lastAppUnderMouse: ApplicationInfo?
@@ -39,6 +39,10 @@ final class DockObserver {
 
     private var currentDockPID: pid_t?
     private var healthCheckTimer: Timer?
+
+    // Cmd+Tab switcher monitoring (accessed from extension file)
+    var cmdTabObserver: AXObserver?
+    var cmdTabRetryTimer: Timer?
 
     private var lastNotificationTime: TimeInterval = 0
     private var lastNotificationId: String = ""
@@ -58,6 +62,7 @@ final class DockObserver {
         self.previewCoordinator = previewCoordinator
         DockObserver.activeInstance = self
         setupSelectedDockItemObserver()
+        setupCmdTabSwitcherObserver()
         startHealthCheckTimer()
         enableDockClickDetection()
     }
@@ -67,7 +72,9 @@ final class DockObserver {
             DockObserver.activeInstance = nil
         }
         healthCheckTimer?.invalidate()
+        cmdTabRetryTimer?.invalidate()
         teardownObserver()
+        teardownCmdTabObserver()
 
         if let eventTap {
             CGEvent.tapEnable(tap: eventTap, enable: false)
@@ -92,7 +99,9 @@ final class DockObserver {
 
         if currentDockApp?.processIdentifier != currentDockPID {
             teardownObserver()
+            teardownCmdTabObserver()
             setupSelectedDockItemObserver()
+            setupCmdTabSwitcherObserver()
         }
     }
 
@@ -150,7 +159,7 @@ final class DockObserver {
 
     private func resetLastAppUnderMouse() { lastAppUnderMouse = nil }
 
-    private func hideWindowAndResetLastApp() {
+    func hideWindowAndResetLastApp() {
         Task { @MainActor [weak self] in
             guard let self else { return }
             previewCoordinator.hideWindow()

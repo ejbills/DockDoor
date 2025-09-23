@@ -149,7 +149,8 @@ final class SharedPreviewWindowCoordinator: NSPanel {
     private func performShowView(_ view: some View,
                                  mouseLocation: CGPoint?,
                                  mouseScreen: NSScreen,
-                                 dockItemElement: AXUIElement?)
+                                 dockItemElement: AXUIElement?,
+                                 dockPositionOverride: DockPosition? = nil)
     {
         let hostingView = NSHostingView(rootView: view)
 
@@ -165,7 +166,8 @@ final class SharedPreviewWindowCoordinator: NSPanel {
             position = calculateWindowPosition(mouseLocation: mouseLocation,
                                                windowSize: newHoverWindowSize,
                                                screen: mouseScreen,
-                                               dockItemElement: validDockItemElement)
+                                               dockItemElement: validDockItemElement,
+                                               dockPositionOverride: dockPositionOverride)
         } else {
             print("Warning: dockItemElement is nil when showing custom view. Defaulting position to center of screen.")
             position = centerWindowOnScreen(size: newHoverWindowSize, screen: mouseScreen)
@@ -180,7 +182,8 @@ final class SharedPreviewWindowCoordinator: NSPanel {
     private func updateContentViewSizeAndPosition(mouseLocation: CGPoint? = nil, mouseScreen: NSScreen, dockItemElement: AXUIElement?,
                                                   animated: Bool, centerOnScreen: Bool = false,
                                                   centeredHoverWindowState: PreviewStateCoordinator.WindowState? = nil,
-                                                  embeddedContentType: EmbeddedContentType = .none)
+                                                  embeddedContentType: EmbeddedContentType = .none,
+                                                  dockPositionOverride: DockPosition? = nil)
     {
         windowSwitcherCoordinator.setShowing(centeredHoverWindowState, toState: centerOnScreen)
 
@@ -189,7 +192,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         let updateAvailable = (NSApp.delegate as? AppDelegate)?.updaterState.anUpdateIsAvailable ?? false
 
         let hoverView = WindowPreviewHoverContainer(appName: appName, onWindowTap: onWindowTap,
-                                                    dockPosition: DockUtils.getDockPosition(), mouseLocation: mouseLocation,
+                                                    dockPosition: dockPositionOverride ?? DockUtils.getDockPosition(), mouseLocation: mouseLocation,
                                                     bestGuessMonitor: mouseScreen, windowSwitcherCoordinator: windowSwitcherCoordinator,
                                                     mockPreviewActive: false,
                                                     updateAvailable: updateAvailable,
@@ -207,7 +210,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
             position = centerWindowOnScreen(size: newHoverWindowSize, screen: mouseScreen)
         } else {
             if let validDockItemElement = dockItemElement {
-                position = calculateWindowPosition(mouseLocation: mouseLocation, windowSize: newHoverWindowSize, screen: mouseScreen, dockItemElement: validDockItemElement)
+                position = calculateWindowPosition(mouseLocation: mouseLocation, windowSize: newHoverWindowSize, screen: mouseScreen, dockItemElement: validDockItemElement, dockPositionOverride: dockPositionOverride)
             } else {
                 print("Warning: dockItemElement is nil when not centering on screen. Defaulting position to center of screen.")
                 position = centerWindowOnScreen(size: newHoverWindowSize, screen: mouseScreen)
@@ -278,10 +281,10 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         )
     }
 
-    private func calculateWindowPosition(mouseLocation: CGPoint?, windowSize: CGSize, screen: NSScreen, dockItemElement: AXUIElement) -> CGPoint {
+    private func calculateWindowPosition(mouseLocation: CGPoint?, windowSize: CGSize, screen: NSScreen, dockItemElement: AXUIElement, dockPositionOverride: DockPosition? = nil) -> CGPoint {
         guard let mouseLocation else { return .zero }
         let screenFrame = screen.frame
-        let dockPosition = DockUtils.getDockPosition()
+        let dockPosition = dockPositionOverride ?? DockUtils.getDockPosition()
 
         do {
             guard let currentPosition = try dockItemElement.position(),
@@ -300,7 +303,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
             var yPosition: CGFloat
 
             switch dockPosition {
-            case .bottom:
+            case .bottom, .cmdTab:
                 xPosition = flippedIconRect.midX - (windowSize.width / 2)
                 yPosition = flippedIconRect.minY
             case .left:
@@ -322,6 +325,8 @@ final class SharedPreviewWindowCoordinator: NSPanel {
                 xPosition -= bufferFromDock
             case .bottom:
                 yPosition += bufferFromDock
+            case .cmdTab:
+                yPosition += 5
             default:
                 break
             }
@@ -402,7 +407,8 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         dockItemElement: AXUIElement?,
         centeredHoverWindowState: PreviewStateCoordinator.WindowState?,
         onWindowTap: (() -> Void)?,
-        bundleIdentifier: String?
+        bundleIdentifier: String?,
+        dockPositionOverride: DockPosition? = nil
     ) {
         let screen = mouseScreen ?? NSScreen.main!
         var finalEmbeddedContentType: EmbeddedContentType = .none
@@ -426,7 +432,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
                         viewForBigStandalone = AnyView(MediaControlsView(
                             appName: appName,
                             bundleIdentifier: mediaBundleId,
-                            dockPosition: DockUtils.getDockPosition(),
+                            dockPosition: dockPositionOverride ?? DockUtils.getDockPosition(),
                             bestGuessMonitor: screen,
                             isEmbeddedMode: false
                         ))
@@ -445,7 +451,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
                         viewForBigStandalone = AnyView(CalendarView(
                             appName: appName,
                             bundleIdentifier: calendarBundleId,
-                            dockPosition: DockUtils.getDockPosition(),
+                            dockPosition: dockPositionOverride ?? DockUtils.getDockPosition(),
                             bestGuessMonitor: screen,
                             isEmbeddedMode: false
                         ))
@@ -457,7 +463,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         }
 
         if useBigStandaloneViewInstead, let viewToShow = viewForBigStandalone {
-            performShowView(viewToShow, mouseLocation: mouseLocation, mouseScreen: screen, dockItemElement: dockItemElement)
+            performShowView(viewToShow, mouseLocation: mouseLocation, mouseScreen: screen, dockItemElement: dockItemElement, dockPositionOverride: dockPositionOverride)
         } else {
             performShowWindow(
                 appName: appName,
@@ -467,7 +473,8 @@ final class SharedPreviewWindowCoordinator: NSPanel {
                 dockItemElement: dockItemElement,
                 centeredHoverWindowState: centeredHoverWindowState,
                 onWindowTap: onWindowTap,
-                embeddedContentType: finalEmbeddedContentType
+                embeddedContentType: finalEmbeddedContentType,
+                dockPositionOverride: dockPositionOverride
             )
         }
 
@@ -479,7 +486,8 @@ final class SharedPreviewWindowCoordinator: NSPanel {
                                    mouseScreen: NSScreen?, dockItemElement: AXUIElement?,
                                    centeredHoverWindowState: PreviewStateCoordinator.WindowState? = nil,
                                    onWindowTap: (() -> Void)?,
-                                   embeddedContentType: EmbeddedContentType = .none)
+                                   embeddedContentType: EmbeddedContentType = .none,
+                                   dockPositionOverride: DockPosition? = nil)
     {
         guard !windows.isEmpty else { return }
 
@@ -503,7 +511,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
 
             updateContentViewSizeAndPosition(mouseLocation: mouseLocation, mouseScreen: screen, dockItemElement: dockItemElement, animated: !shouldCenterOnScreen,
                                              centerOnScreen: shouldCenterOnScreen, centeredHoverWindowState: centeredHoverWindowState,
-                                             embeddedContentType: embeddedContentType)
+                                             embeddedContentType: embeddedContentType, dockPositionOverride: dockPositionOverride)
         }
     }
 
@@ -616,7 +624,9 @@ final class SharedPreviewWindowCoordinator: NSPanel {
     func showWindow(appName: String, windows: [WindowInfo], mouseLocation: CGPoint? = nil, mouseScreen: NSScreen? = nil,
                     dockItemElement: AXUIElement?,
                     overrideDelay: Bool = false, centeredHoverWindowState: PreviewStateCoordinator.WindowState? = nil,
-                    onWindowTap: (() -> Void)? = nil, bundleIdentifier: String? = nil)
+                    onWindowTap: (() -> Void)? = nil, bundleIdentifier: String? = nil,
+                    bypassDockMouseValidation: Bool = false,
+                    dockPositionOverride: DockPosition? = nil)
     {
         let now = Date()
         let naturalDelay = Defaults[.lateralMovement] ? (Defaults[.hoverWindowOpenDelay] == 0 ? 0.2 : Defaults[.hoverWindowOpenDelay]) : Defaults[.hoverWindowOpenDelay]
@@ -630,18 +640,20 @@ final class SharedPreviewWindowCoordinator: NSPanel {
             }
 
             // Final validation: ensure mouse is still over the expected dock item
-            if let expectedBundleId = bundleIdentifier {
-                guard let currentDockItemStatus = DockObserver.activeInstance?.getDockItemAppStatusUnderMouse() else { return }
-                let matches = switch currentDockItemStatus.status {
-                case let .success(app): app.bundleIdentifier == expectedBundleId
-                case let .notRunning(bundleId): bundleId == expectedBundleId
-                case .notFound: false
+            if !bypassDockMouseValidation {
+                if let expectedBundleId = bundleIdentifier {
+                    guard let currentDockItemStatus = DockObserver.activeInstance?.getDockItemAppStatusUnderMouse() else { return }
+                    let matches = switch currentDockItemStatus.status {
+                    case let .success(app): app.bundleIdentifier == expectedBundleId
+                    case let .notRunning(bundleId): bundleId == expectedBundleId
+                    case .notFound: false
+                    }
+                    guard matches else { return }
                 }
-                guard matches else { return }
             }
 
             Task { @MainActor [weak self] in
-                self?.performDisplay(appName: appName, windows: windows, mouseLocation: mouseLocation, mouseScreen: mouseScreen, dockItemElement: dockItemElement, centeredHoverWindowState: centeredHoverWindowState, onWindowTap: onWindowTap, bundleIdentifier: bundleIdentifier)
+                self?.performDisplay(appName: appName, windows: windows, mouseLocation: mouseLocation, mouseScreen: mouseScreen, dockItemElement: dockItemElement, centeredHoverWindowState: centeredHoverWindowState, onWindowTap: onWindowTap, bundleIdentifier: bundleIdentifier, dockPositionOverride: dockPositionOverride)
             }
         }
 
@@ -651,7 +663,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         } else {
             if delay == 0.0 {
                 Task { @MainActor [weak self] in
-                    self?.performDisplay(appName: appName, windows: windows, mouseLocation: mouseLocation, mouseScreen: mouseScreen, dockItemElement: dockItemElement, centeredHoverWindowState: centeredHoverWindowState, onWindowTap: onWindowTap, bundleIdentifier: bundleIdentifier)
+                    self?.performDisplay(appName: appName, windows: windows, mouseLocation: mouseLocation, mouseScreen: mouseScreen, dockItemElement: dockItemElement, centeredHoverWindowState: centeredHoverWindowState, onWindowTap: onWindowTap, bundleIdentifier: bundleIdentifier, dockPositionOverride: dockPositionOverride)
                 }
             } else {
                 debounceWorkItem = workItem
