@@ -6,6 +6,8 @@ import ApplicationServices.HIServices.AXUIElement
 import ApplicationServices.HIServices.AXValue
 import Cocoa
 
+// NOTE: Borrows code from https://github.com/lwouis/alt-tab-macos/blob/master/src/api-wrappers/AXUIElement.swift
+
 extension AXUIElement {
     func axCallWhichCanThrow<T>(_ result: AXError, _ successValue: inout T) throws -> T? {
         switch result {
@@ -63,6 +65,35 @@ extension AXUIElement {
 
     func windows() throws -> [AXUIElement]? {
         try attribute(kAXWindowsAttribute, [AXUIElement].self)
+    }
+
+    static func windowsByBruteForce(_ pid: pid_t) -> [AXUIElement] {
+        var token = Data(count: 20)
+        token.replaceSubrange(0 ..< 4, with: withUnsafeBytes(of: pid) { Data($0) })
+        token.replaceSubrange(4 ..< 8, with: withUnsafeBytes(of: Int32(0)) { Data($0) })
+        token.replaceSubrange(8 ..< 12, with: withUnsafeBytes(of: Int32(0x636F_636F)) { Data($0) })
+
+        var results: [AXUIElement] = []
+        for axId: AXUIElementID in 0 ..< 1000 {
+            token.replaceSubrange(12 ..< 20, with: withUnsafeBytes(of: axId) { Data($0) })
+            if let el = _AXUIElementCreateWithRemoteToken(token as CFData)?.takeRetainedValue(),
+               let subrole = try? el.subrole(),
+               [kAXStandardWindowSubrole, kAXDialogSubrole].contains(subrole)
+            {
+                results.append(el)
+            }
+        }
+        return results
+    }
+
+    static func allWindows(_ pid: pid_t, appElement: AXUIElement) -> [AXUIElement] {
+        var set = Set<AXUIElement>()
+        if let maybe = try? appElement.windows() {
+            set.formUnion(maybe)
+        }
+        let brute = windowsByBruteForce(pid)
+        set.formUnion(brute)
+        return Array(set)
     }
 
     func isMinimized() throws -> Bool {
@@ -124,3 +155,5 @@ extension AXUIElement {
 enum AxError: Error {
     case runtimeError
 }
+
+typealias AXUIElementID = UInt64

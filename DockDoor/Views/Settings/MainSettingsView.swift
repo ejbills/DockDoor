@@ -115,6 +115,7 @@ struct MainSettingsView: View {
     @Default(.ignoreAppsWithSingleWindow) var ignoreAppsWithSingleWindow
     @Default(.screenCaptureCacheLifespan) var screenCaptureCacheLifespan
     @Default(.windowPreviewImageScale) var windowPreviewImageScale
+    @Default(.windowImageCaptureQuality) var windowImageCaptureQuality
     @Default(.bufferFromDock) var bufferFromDock
     @Default(.sortWindowsByDate) var sortWindowsByDate
     @Default(.shouldHideOnDockItemClick) var shouldHideOnDockItemClick
@@ -543,6 +544,13 @@ struct MainSettingsView: View {
             }
             StyledGroupBox(label: "Preview Appearance & Quality") {
                 VStack(alignment: .leading, spacing: 10) {
+                    Picker("Window Image Capture Quality", selection: $windowImageCaptureQuality) {
+                        ForEach(WindowImageCaptureQuality.allCases, id: \.self) { quality in
+                            Text(quality.localizedName).tag(quality)
+                        }
+                    }
+                    .pickerStyle(MenuPickerStyle())
+
                     sliderSetting(title: "Window Image Cache Lifespan", value: $screenCaptureCacheLifespan, range: 0 ... 60, step: 10, unit: "seconds")
                     sliderSetting(title: "Window Image Resolution Scale (1=Best)", value: $windowPreviewImageScale, range: 1 ... 4, step: 1, unit: "")
                     Toggle(isOn: $sortWindowsByDate) { Text("Sort Window Previews by Date (if multiple)") }

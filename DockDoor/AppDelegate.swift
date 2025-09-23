@@ -17,6 +17,7 @@ class SettingsWindowControllerDelegate: NSObject, NSWindowDelegate {
 class AppDelegate: NSObject, NSApplicationDelegate {
     private var dockObserver: DockObserver?
     private var appClosureObserver: WindowManipulationObservers?
+    private var windowSeeder: WindowSeeder?
     private var previewCoordinator: SharedPreviewWindowCoordinator?
     private var keybindHelper: KeybindHelper?
     private var statusBarItem: NSStatusItem?
@@ -100,6 +101,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
             await WindowUtil.updateAllWindowsInCurrentSpace()
         }
+
+        // Cold-start: seed all windows (including minimized and other Spaces) and start live AX tracker
+        let seeder = WindowSeeder()
+        seeder.run()
+        windowSeeder = seeder
     }
 
     func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {

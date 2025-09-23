@@ -28,6 +28,7 @@ extension Defaults.Keys {
 
     static let screenCaptureCacheLifespan = Key<CGFloat>("screenCaptureCacheLifespan", default: 60)
     static let windowPreviewImageScale = Key<CGFloat>("windowPreviewImageScale", default: 1)
+    static let windowImageCaptureQuality = Key<WindowImageCaptureQuality>("windowImageCaptureQuality", default: .best)
 
     static let uniformCardRadius = Key<Bool>("uniformCardRadius", default: true)
     static let allowDynamicImageSizing = Key<Bool>("allowDynamicImageSizing", default: false)
@@ -107,6 +108,20 @@ extension Defaults.Keys {
 }
 
 // MARK: Display Configurations
+
+enum WindowImageCaptureQuality: String, CaseIterable, Defaults.Serializable {
+    case nominal
+    case best
+
+    var localizedName: String {
+        switch self {
+        case .nominal:
+            String(localized: "Improved performance (nominal)", comment: "Window image capture quality option")
+        case .best:
+            String(localized: "Best quality (full resolution)", comment: "Window image capture quality option")
+        }
+    }
+}
 
 enum WindowTitleDisplayCondition: String, CaseIterable, Defaults.Serializable {
     case all
