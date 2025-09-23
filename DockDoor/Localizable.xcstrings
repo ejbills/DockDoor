@@ -12280,8 +12280,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Best quality (full resolution)"
+            "state" : "translated",
+            "value" : "Risoluzione piena (migliore qualità)"
           }
         },
         "ja" : {
@@ -12358,8 +12358,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Best quality (full resolution)"
+            "state" : "translated",
+            "value" : "Найкраща якість (повна роздільна здатність)"
           }
         },
         "vi" : {
@@ -22559,8 +22559,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Disable dock styling on window titles"
+            "state" : "translated",
+            "value" : "Non applicare lo stile del Dock ai titoli delle finestre"
           }
         },
         "ja" : {
@@ -22637,8 +22637,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Disable dock styling on window titles"
+            "state" : "translated",
+            "value" : "Вимкнути стилізацію Dock у заголовках вікна"
           }
         },
         "vi" : {
@@ -36564,6 +36564,196 @@
         }
       }
     },
+    "Hide preview card background" : {
+      "localizations" : {
+        "af" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Hide preview card background"
+          }
+        },
+        "ar" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Hide preview card background"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Hide preview card background"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Hide preview card background"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Hide preview card background"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Hide preview card background"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Hide preview card background"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Hide preview card background"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Hide preview card background"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Hide preview card background"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Hide preview card background"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Hide preview card background"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Hide preview card background"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Hide preview card background"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Hide preview card background"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Hide preview card background"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Hide preview card background"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Hide preview card background"
+          }
+        },
+        "no" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Hide preview card background"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Hide preview card background"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Hide preview card background"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Hide preview card background"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Hide preview card background"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Hide preview card background"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Hide preview card background"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Hide preview card background"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Hide preview card background"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Hide preview card background"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Hide preview card background"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Hide preview card background"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Hide preview card background"
+          }
+        }
+      }
+    },
     "Highlight Gradient Colors" : {
       "localizations" : {
         "af" : {
@@ -38750,8 +38940,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Improved performance (nominal)"
+            "state" : "translated",
+            "value" : "Risoluzione standard (più responsivo)"
           }
         },
         "ja" : {
@@ -38828,8 +39018,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Improved performance (nominal)"
+            "state" : "translated",
+            "value" : "Покращена продуктивність (номінальна)"
           }
         },
         "vi" : {
@@ -58446,7 +58636,7 @@
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Попередній перегляд зовнішнього вигляду та якості"
+            "value" : "Зовнішній вигляд та якість попереднього перегляду"
           }
         },
         "vi" : {
@@ -63226,6 +63416,196 @@
         }
       }
     },
+    "Removes the background panel from individual window previews." : {
+      "localizations" : {
+        "af" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Removes the background panel from individual window previews."
+          }
+        },
+        "ar" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Removes the background panel from individual window previews."
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Removes the background panel from individual window previews."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Removes the background panel from individual window previews."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Removes the background panel from individual window previews."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Removes the background panel from individual window previews."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Removes the background panel from individual window previews."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Removes the background panel from individual window previews."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Removes the background panel from individual window previews."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Removes the background panel from individual window previews."
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Removes the background panel from individual window previews."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Removes the background panel from individual window previews."
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Removes the background panel from individual window previews."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Removes the background panel from individual window previews."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Removes the background panel from individual window previews."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Removes the background panel from individual window previews."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Removes the background panel from individual window previews."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Removes the background panel from individual window previews."
+          }
+        },
+        "no" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Removes the background panel from individual window previews."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Removes the background panel from individual window previews."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Removes the background panel from individual window previews."
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Removes the background panel from individual window previews."
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Removes the background panel from individual window previews."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Removes the background panel from individual window previews."
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Removes the background panel from individual window previews."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Removes the background panel from individual window previews."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Removes the background panel from individual window previews."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Removes the background panel from individual window previews."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Removes the background panel from individual window previews."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Removes the background panel from individual window previews."
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Removes the background panel from individual window previews."
+          }
+        }
+      }
+    },
     "Removes the pill-shaped background styling from traffic light buttons in dock previews for a cleaner look." : {
       "localizations" : {
         "af" : {
@@ -63504,8 +63884,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Removes the pill-shaped background styling from window titles in dock previews for a cleaner look."
+            "state" : "translated",
+            "value" : "Disattiva il riquadro stondato intorno al nome, per uno stile più pulito."
           }
         },
         "ja" : {
@@ -63582,8 +63962,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Removes the pill-shaped background styling from window titles in dock previews for a cleaner look."
+            "state" : "translated",
+            "value" : "Видаляє фонове оформлення у формі таблетки з заголовків вікон у попередньому перегляді Dock для покращення вигляду."
           }
         },
         "vi" : {
@@ -91127,8 +91507,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Image Capture Quality"
+            "state" : "translated",
+            "value" : "Qualità anteprima"
           }
         },
         "ja" : {
@@ -91205,8 +91585,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Image Capture Quality"
+            "state" : "translated",
+            "value" : "Якість захоплення зображення вікна"
           }
         },
         "vi" : {
@@ -93885,8 +94265,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Switcher Shortcut"
+            "state" : "translated",
+            "value" : "窗口切换器快捷键"
           }
         },
         "zh-Hant" : {

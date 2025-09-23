@@ -17,6 +17,7 @@
 
 [![GitHub release](https://img.shields.io/github/v/release/ejbills/DockDoor)](https://github.com/ejbills/DockDoor/releases/latest/download/DockDoor.dmg)
 [![Downloads](https://img.shields.io/github/downloads/ejbills/DockDoor/total?label=Downloads)](https://github.com/ejbills/DockDoor/releases)
+[![Number of downloads of the latest version](https://img.shields.io/github/downloads/ejbills/DockDoor/latest/total?style=flat&label=Downloads%20%40latest&labelColor=444&logo=hack-the-box&logoColor=white&cacheSeconds=600)](https://github.com/ungive/discord-music-presence/releases/latest)
 [![Website](https://img.shields.io/badge/Website-dockdoor.net-blue)](https://dockdoor.net)
 
 ## Star History

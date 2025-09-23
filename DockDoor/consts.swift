@@ -28,7 +28,7 @@ extension Defaults.Keys {
 
     static let screenCaptureCacheLifespan = Key<CGFloat>("screenCaptureCacheLifespan", default: 60)
     static let windowPreviewImageScale = Key<CGFloat>("windowPreviewImageScale", default: 1)
-    static let windowImageCaptureQuality = Key<WindowImageCaptureQuality>("windowImageCaptureQuality", default: .best)
+    static let windowImageCaptureQuality = Key<WindowImageCaptureQuality>("windowImageCaptureQuality", default: .nominal)
 
     static let uniformCardRadius = Key<Bool>("uniformCardRadius", default: true)
     static let allowDynamicImageSizing = Key<Bool>("allowDynamicImageSizing", default: false)
@@ -72,6 +72,7 @@ extension Defaults.Keys {
     static let unselectedContentOpacity = Key<CGFloat>("unselectedContentOpacity", default: 0.75)
     static let hoverHighlightColor = Key<Color?>("hoverHighlightColor", default: nil)
     static let dockPreviewBackgroundOpacity = Key<CGFloat>("dockPreviewBackgroundOpacity", default: 1.0)
+    static let hidePreviewCardBackground = Key<Bool>("hidePreviewCardBackground", default: false)
 
     static let showWindowTitle = Key<Bool>("showWindowTitle", default: true)
     static let showAppIconOnly = Key<Bool>("showAppIconOnly", default: false)

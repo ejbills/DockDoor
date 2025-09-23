@@ -59,6 +59,7 @@
 		BB1CBD5B2C1BA8DC003969BC /* Defaults in Frameworks */ = {isa = PBXBuildFile; productRef = BB1CBD5A2C1BA8DC003969BC /* Defaults */; };
 		BB1CBD5D2C1BCA4F003969BC /* Misc Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB1CBD5C2C1BCA4F003969BC /* Misc Utils.swift */; };
 		BB1F60E52D238A9800808E05 /* CGSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB1F60E42D238A9700808E05 /* CGSize.swift */; };
+		BB2106742E830EC5002F87D6 /* WindowDiscoveryShared.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2106732E830EC5002F87D6 /* WindowDiscoveryShared.swift */; };
 		BB22D7152DF9E24500EBBCA6 /* GlintPlaceholderModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB22D7142DF9E24500EBBCA6 /* GlintPlaceholderModifier.swift */; };
 		BB2567C62C10C5F000C0C93E /* DockUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2567C52C10C5F000C0C93E /* DockUtils.swift */; };
 		BB2884FF2E81AFCB0048A09B /* SettingsIllustratedToggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2884FD2E81AFCB0048A09B /* SettingsIllustratedToggle.swift */; };
@@ -195,6 +196,7 @@
 		BB1CBD572C1BA800003969BC /* MainSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainSettingsView.swift; sourceTree = "<group>"; };
 		BB1CBD5C2C1BCA4F003969BC /* Misc Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Misc Utils.swift"; sourceTree = "<group>"; };
 		BB1F60E42D238A9700808E05 /* CGSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGSize.swift; sourceTree = "<group>"; };
+		BB2106732E830EC5002F87D6 /* WindowDiscoveryShared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowDiscoveryShared.swift; sourceTree = "<group>"; };
 		BB22D7142DF9E24500EBBCA6 /* GlintPlaceholderModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlintPlaceholderModifier.swift; sourceTree = "<group>"; };
 		BB2567C52C10C5F000C0C93E /* DockUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DockUtils.swift; sourceTree = "<group>"; };
 		BB2884FD2E81AFCB0048A09B /* SettingsIllustratedToggle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsIllustratedToggle.swift; sourceTree = "<group>"; };
@@ -614,6 +616,7 @@
 		BBAC6B412D15F71E00A0F370 /* Window Management */ = {
 			isa = PBXGroup;
 			children = (
+				BB2106732E830EC5002F87D6 /* WindowDiscoveryShared.swift */,
 				BB49747C2E81CE5100308326 /* WindowSeeder.swift */,
 				3A1622972C8BF71000D318EE /* SwiftUIWindow.swift */,
 				BB2CBB082C48128D004502C5 /* SpaceWindowCacheManager.swift */,
@@ -854,6 +857,7 @@
 				BB1865562DD57F1E000F34AD /* SupportSettingsView.swift in Sources */,
 				BB638F062E02170B0010077D /* MediaProgressBar.swift in Sources */,
 				BB15E1F72C8FC05A002ECFB9 /* UniformCardView.swift in Sources */,
+				BB2106742E830EC5002F87D6 /* WindowDiscoveryShared.swift in Sources */,
 				BB638F042E0217030010077D /* MediaControlButtonRow.swift in Sources */,
 				BB377C492DFD434300FA93DA /* GlobalPadding.swift in Sources */,
 				BB638F162E0218C00010077D /* SharedHoverUtils.swift in Sources */,
