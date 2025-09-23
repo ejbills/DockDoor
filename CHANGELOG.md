@@ -38,6 +38,28 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://buymeacoffee.com/keplercafe</div>
 
+<a id="1.24.1"></a>
+# [Release 1.24.1](https://github.com/ejbills/DockDoor/releases/tag/1.24.1) - 2025-09-23
+
+## ✨ New Features
+- Better coverage of missing app windows
+  - Works with more apps (Adobe Illustrator)
+  - Captures previews reliably
+- Added preview background option
+  - Hide panel behind previews
+
+## 🔧 Improvements & Stability
+- Cleaner full-size previews
+- Improved performance defaults
+
+## 🐛 Bug Fixes
+- Fixed wrong minimized status
+  - Hidden state syncs correctly
+
+
+[Changes][1.24.1]
+
+
 <a id="1.24"></a>
 # [Release 1.24](https://github.com/ejbills/DockDoor/releases/tag/1.24) - 2025-09-22
 
@@ -1514,6 +1536,7 @@ v1.0
 [Changes][releases]
 
 
+[1.24.1]: https://github.com/ejbills/DockDoor/compare/1.24...1.24.1
 [1.24]: https://github.com/ejbills/DockDoor/compare/1.23.1...1.24
 [1.23.1]: https://github.com/ejbills/DockDoor/compare/1.23...1.23.1
 [1.23]: https://github.com/ejbills/DockDoor/compare/1.22...1.23
