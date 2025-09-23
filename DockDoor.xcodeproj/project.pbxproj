@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BB21067B2E8351A5002F87D6 /* KeyboardLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB21067A2E8351A5002F87D6 /* KeyboardLabel.swift */; };
 		0531F8D22C3CC04600327808 /* AppearanceSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0531F8D12C3CC04600327808 /* AppearanceSettingsView.swift */; };
 		0596C2C32C3E060D00DCABEF /* PrivateApis.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0596C2C22C3E060D00DCABEF /* PrivateApis.swift */; };
 		05C0C7182C60629C000ADAC6 /* AXUIElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C0C7172C60629C000ADAC6 /* AXUIElement.swift */; };
@@ -60,6 +61,9 @@
 		BB1CBD5D2C1BCA4F003969BC /* Misc Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB1CBD5C2C1BCA4F003969BC /* Misc Utils.swift */; };
 		BB1F60E52D238A9800808E05 /* CGSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB1F60E42D238A9700808E05 /* CGSize.swift */; };
 		BB2106742E830EC5002F87D6 /* WindowDiscoveryShared.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2106732E830EC5002F87D6 /* WindowDiscoveryShared.swift */; };
+		BB2106762E834F25002F87D6 /* CmdTabFocusFullOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2106752E834F25002F87D6 /* CmdTabFocusFullOverlayView.swift */; };
+		BB2106782E834F46002F87D6 /* KeyHintRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2106772E834F46002F87D6 /* KeyHintRow.swift */; };
+		BB21067D2E83565A002F87D6 /* KeyboardLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB21067C2E83565A002F87D6 /* KeyboardLabel.swift */; };
 		BB22D7152DF9E24500EBBCA6 /* GlintPlaceholderModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB22D7142DF9E24500EBBCA6 /* GlintPlaceholderModifier.swift */; };
 		BB2567C62C10C5F000C0C93E /* DockUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2567C52C10C5F000C0C93E /* DockUtils.swift */; };
 		BB2884FF2E81AFCB0048A09B /* SettingsIllustratedToggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2884FD2E81AFCB0048A09B /* SettingsIllustratedToggle.swift */; };
@@ -145,6 +149,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		BB21067A2E8351A5002F87D6 /* KeyboardLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardLabel.swift; sourceTree = "<group>"; };
 		0531F8D12C3CC04600327808 /* AppearanceSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceSettingsView.swift; sourceTree = "<group>"; };
 		0596C2C22C3E060D00DCABEF /* PrivateApis.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateApis.swift; sourceTree = "<group>"; };
 		05C0C7172C60629C000ADAC6 /* AXUIElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AXUIElement.swift; sourceTree = "<group>"; };
@@ -197,6 +202,9 @@
 		BB1CBD5C2C1BCA4F003969BC /* Misc Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Misc Utils.swift"; sourceTree = "<group>"; };
 		BB1F60E42D238A9700808E05 /* CGSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGSize.swift; sourceTree = "<group>"; };
 		BB2106732E830EC5002F87D6 /* WindowDiscoveryShared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowDiscoveryShared.swift; sourceTree = "<group>"; };
+		BB2106752E834F25002F87D6 /* CmdTabFocusFullOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CmdTabFocusFullOverlayView.swift; sourceTree = "<group>"; };
+		BB2106772E834F46002F87D6 /* KeyHintRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyHintRow.swift; sourceTree = "<group>"; };
+		BB21067C2E83565A002F87D6 /* KeyboardLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardLabel.swift; sourceTree = "<group>"; };
 		BB22D7142DF9E24500EBBCA6 /* GlintPlaceholderModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlintPlaceholderModifier.swift; sourceTree = "<group>"; };
 		BB2567C52C10C5F000C0C93E /* DockUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DockUtils.swift; sourceTree = "<group>"; };
 		BB2884FD2E81AFCB0048A09B /* SettingsIllustratedToggle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsIllustratedToggle.swift; sourceTree = "<group>"; };
@@ -461,6 +469,7 @@
 		BB157B772C0E32EF00997315 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				BB21067C2E83565A002F87D6 /* KeyboardLabel.swift */,
 				BBDF65722E7E212400DD6D6D /* DockObserver+CmdTab.swift */,
 				BBBAA15A2DE6998B00FF8F8F /* UpdaterState.swift */,
 				BBAC6B412D15F71E00A0F370 /* Window Management */,
@@ -488,6 +497,15 @@
 				BB15E1E72C8F8C93002ECFB9 /* ScreenRecordWarningView.swift */,
 			);
 			path = Help;
+			sourceTree = "<group>";
+		};
+		BB2106792E834F64002F87D6 /* CmdTabFocus Overlay */ = {
+			isa = PBXGroup;
+			children = (
+				BB2106772E834F46002F87D6 /* KeyHintRow.swift */,
+				BB2106752E834F25002F87D6 /* CmdTabFocusFullOverlayView.swift */,
+			);
+			path = "CmdTabFocus Overlay";
 			sourceTree = "<group>";
 		};
 		BB2461F22DFA17F900005C30 /* Special Hover Windows */ = {
@@ -521,6 +539,7 @@
 		BB4B44492C372A42006680DC /* Hover Window */ = {
 			isa = PBXGroup;
 			children = (
+				BB2106792E834F64002F87D6 /* CmdTabFocus Overlay */,
 				BB638F122E0218B10010077D /* Shared Components */,
 				BB2461F22DFA17F900005C30 /* Special Hover Windows */,
 				BB6021CE2D1E60C700D47C86 /* WindowPreview Supporting */,
@@ -817,6 +836,7 @@
 				BBF383972C94A26200B39A23 /* sliderSetting.swift in Sources */,
 				BBAC6B452D15FA8900A0F370 /* AXValue.swift in Sources */,
 				BB2884FF2E81AFCB0048A09B /* SettingsIllustratedToggle.swift in Sources */,
+				BB2106782E834F46002F87D6 /* KeyHintRow.swift in Sources */,
 				BB157B802C0E8E6700997315 /* MessageUtil.swift in Sources */,
 				BBD182AE2E3EE37500A81D69 /* WindowSwitcherStateManager.swift in Sources */,
 				BB638F242E0218F80010077D /* CalendarEmptyState.swift in Sources */,
@@ -873,6 +893,7 @@
 				BB15E1E32C8E9435002ECFB9 /* ResizableLayer.swift in Sources */,
 				BB15E1E42C8E9435002ECFB9 /* FluidGradientView.swift in Sources */,
 				BB15E1E52C8E9435002ECFB9 /* BlobLayer.swift in Sources */,
+				BB21067D2E83565A002F87D6 /* KeyboardLabel.swift in Sources */,
 				3A1622CC2C8D5F5B00D318EE /* FirstTimePermissionsTabView.swift in Sources */,
 				BB1F60E52D238A9800808E05 /* CGSize.swift in Sources */,
 				3A105FDD2C1C0EE20015EC66 /* DynStack.swift in Sources */,
@@ -904,6 +925,7 @@
 				BB157B7B2C0E343000997315 /* SystemPreferencesHelper.swift in Sources */,
 				BB49747F2E81D30F00308326 /* CGWindowID.swift in Sources */,
 				BB638F262E0218FE0010077D /* CalendarPermissionView.swift in Sources */,
+				BB2106762E834F25002F87D6 /* CmdTabFocusFullOverlayView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

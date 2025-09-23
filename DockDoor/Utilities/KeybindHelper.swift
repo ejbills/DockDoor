@@ -170,6 +170,10 @@ class KeybindHelper {
     private var hasProcessedModifierRelease: Bool = false
     private var preventSwitcherHideOnRelease: Bool = false
 
+    // Track Command key state to detect key-up fallback for lingering previews
+    private var isCommandKeyCurrentlyDown: Bool = false
+    private var lastCmdTabObservedActive: Bool = false
+
     private var eventTap: CFMachPort?
     private var runLoopSource: CFRunLoopSource?
     private var monitorTimer: Timer?
@@ -269,6 +273,21 @@ class KeybindHelper {
             let keyBoardShortcutSaved: UserKeyBind = Defaults[.UserKeybind]
             let (currentSwitcherModifierIsPressed, currentShiftState) = updateModifierStatesFromFlags(event: event, keyBoardShortcutSaved: keyBoardShortcutSaved)
 
+            // Track Command up/down explicitly for Cmd+Tab fallback behavior
+            let cmdNowDown = event.flags.contains(.maskCommand)
+            if isCommandKeyCurrentlyDown, !cmdNowDown {
+                if Defaults[.enableCmdTabEnhancements], lastCmdTabObservedActive,
+                   previewCoordinator.isVisible,
+                   !previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive
+                {
+                    Task { @MainActor in
+                        self.previewCoordinator.hideWindow()
+                    }
+                }
+                lastCmdTabObservedActive = false
+            }
+            isCommandKeyCurrentlyDown = cmdNowDown
+
             Task { @MainActor [weak self] in
                 self?.handleModifierEvent(currentSwitcherModifierIsPressed: currentSwitcherModifierIsPressed, currentShiftState: currentShiftState)
             }
@@ -276,6 +295,7 @@ class KeybindHelper {
         case .keyDown:
             // If system Cmd+Tab switcher is active, optionally handle arrows when enhancements are enabled
             if DockObserver.isCmdTabSwitcherActive() {
+                lastCmdTabObservedActive = true
                 if Defaults[.enableCmdTabEnhancements],
                    previewCoordinator.isVisible
                 {
@@ -304,11 +324,7 @@ class KeybindHelper {
                             return Unmanaged.passUnretained(event)
                         }
                     case Int64(kVK_UpArrow):
-                        // Up selects the first window explicitly
-                        Task { @MainActor in
-                            self.previewCoordinator.windowSwitcherCoordinator.setIndex(to: 0)
-                        }
-                        return nil
+                        return Unmanaged.passUnretained(event)
                     case Int64(kVK_DownArrow):
                         // If a preview is selected, first Down just deselects and is consumed.
                         // Subsequent Down (with no selection) is passed through to system Exposé.
@@ -321,22 +337,33 @@ class KeybindHelper {
                             return Unmanaged.passUnretained(event)
                         }
                     default:
-                        // Allow Command-based shortcuts when a preview is focused
+                        // Allow activation via Cmd+A (when not yet focused) and
+                        // Command-based actions when a preview is focused
+                        if flags.contains(.maskCommand) {
+                            if !hasSelection, keyCode == Int64(kVK_ANSI_A) {
+                                Task { @MainActor in
+                                    self.previewCoordinator.windowSwitcherCoordinator.setIndex(to: 0)
+                                    Defaults[.hasSeenCmdTabFocusHint] = true
+                                }
+                                return nil
+                            }
+                        }
+
                         if hasSelection, flags.contains(.maskCommand) {
                             switch keyCode {
                             case Int64(kVK_ANSI_W):
                                 Task { @MainActor in
-                                    await self.previewCoordinator.performActionOnCurrentWindow(action: .close)
+                                    self.previewCoordinator.performActionOnCurrentWindow(action: .close)
                                 }
                                 return nil
                             case Int64(kVK_ANSI_Q):
                                 Task { @MainActor in
-                                    await self.previewCoordinator.performActionOnCurrentWindow(action: .quit)
+                                    self.previewCoordinator.performActionOnCurrentWindow(action: .quit)
                                 }
                                 return nil
                             case Int64(kVK_ANSI_M):
                                 Task { @MainActor in
-                                    await self.previewCoordinator.performActionOnCurrentWindow(action: .minimize)
+                                    self.previewCoordinator.performActionOnCurrentWindow(action: .minimize)
                                 }
                                 return nil
                             default:

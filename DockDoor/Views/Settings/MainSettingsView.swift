@@ -349,11 +349,6 @@ struct MainSettingsView: View {
                 }
                 .buttonStyle(PlainButtonStyle())
                 .padding(.top, 4)
-
-                Text("Thanks for supporting DockDoor! 💖")
-                    .font(.footnote)
-                    .foregroundColor(.secondary)
-                    .frame(maxWidth: .infinity, alignment: .center)
             }
         }
     }
@@ -384,7 +379,7 @@ struct MainSettingsView: View {
                     .foregroundColor(.secondary)
                     .padding(.leading, 20)
 
-                Divider().padding(.vertical, 2)
+                Divider()
 
                 SettingsIllustratedRow(imageName: "DockPreviews") {
                     Toggle(isOn: $enableDockPreviews) { Text("Enable Dock Previews") }
@@ -402,6 +397,8 @@ struct MainSettingsView: View {
                             .padding(.leading, 40)
                     }
                 }
+
+                Divider()
 
                 SettingsIllustratedRow(imageName: "WindowSwitcher") {
                     Toggle(isOn: $enableWindowSwitcher) { Text("Enable Window Switcher") }
@@ -435,19 +432,19 @@ struct MainSettingsView: View {
                     }
                 }
 
+                Divider()
+
                 SettingsIllustratedRow(imageName: "CmdTab") {
                     Toggle(isOn: $enableCmdTabEnhancements) { Text("Enable Cmd+Tab Enhancements") }
                         .onChange(of: enableCmdTabEnhancements) { _ in askUserToRestartApplication() }
                     VStack(alignment: .leading, spacing: 2) {
                         Text("Show previews while holding Cmd+Tab.")
-                        Text("Up focuses previews, Left/Right navigate, Down clears selection.")
+                        Text("Cmd+A focuses previews, Left/Right navigate, Down clears selection.")
                     }
                     .font(.caption)
                     .foregroundColor(.secondary)
                     .padding(.leading, 20)
                 }
-
-                Divider().padding(.vertical, 2)
 
                 HStack {
                     Spacer()

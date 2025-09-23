@@ -146,6 +146,19 @@ struct WindowPreviewHoverContainer: View {
                                                  .allowsHitTesting(false)
                     }
                 }
+                .overlay {
+                    if dockPosition == .cmdTab,
+                       Defaults[.enableCmdTabEnhancements],
+                       !Defaults[.hasSeenCmdTabFocusHint],
+                       !previewStateCoordinator.windowSwitcherActive,
+                       previewStateCoordinator.currIndex < 0
+                    {
+                        CmdTabFocusFullOverlayView()
+                            .transition(.opacity)
+                            .allowsHitTesting(false)
+                            .clipShape(RoundedRectangle(cornerRadius: Defaults[.uniformCardRadius] ? 26 : 8, style: .continuous))
+                    }
+                }
             }
         }
         .padding(.top, (!previewStateCoordinator.windowSwitcherActive && appNameStyle == .popover && showAppTitleData) ? 30 : 0)
