@@ -45,7 +45,7 @@
 - Added native cmd+tab app switcher previews (defaults to off)
   - Keyboard driven navigation
   - Window actions shortcuts work (cmd+m - minimize, cmd+w - close, cmd+q - quit)
-  - <img width="4029" height="2893" alt="output-compressed" src="https://github.com/user-attachments/assets/74798f00-e351-45f9-964e-5a2b7e6c93ed" />
+  - <img width="200" alt="output-compressed" src="https://github.com/user-attachments/assets/74798f00-e351-45f9-964e-5a2b7e6c93ed" />
 
 ## 🔧 Improvements & Stability
 - Helpful on-screen tips for cmd-tab enhancement feature
