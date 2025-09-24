@@ -582,6 +582,7 @@ enum WindowUtil {
         var usedIDs = Set<CGWindowID>(desktopSpaceWindowCacheManager.readCache(pid: pid).map(\.id))
 
         for axWin in axWindows {
+            if !isValidAXWindowCandidate(axWin) { continue }
             var cgID: CGWindowID = 0
             if _AXUIElementGetWindow(axWin, &cgID) == .success, cgID != 0 {
             } else if let mapped = mapAXToCG(axWindow: axWin, candidates: cgCandidates, excluding: usedIDs) {
@@ -593,9 +594,7 @@ enum WindowUtil {
             if usedIDs.contains(cgID) { continue }
 
             // Basic sanity: only normal and above
-            let level = cgID.cgsLevel()
-            let normalLevel = CGWindowLevelForKey(.normalWindow)
-            if level < Int32(normalLevel) { continue }
+            if !isAtLeastNormalLevel(cgID) { continue }
 
             // Optional title filtering
             let titleFilters = Defaults[.windowTitleFilters]
@@ -605,6 +604,8 @@ enum WindowUtil {
                     continue
                 }
             }
+
+            if !isValidCGWindowCandidate(cgID, in: cgCandidates) { continue }
 
             // Capture image via CGS (works even if SCK missed it)
             guard let image = cgID.cgsScreenshot() else { continue }
@@ -623,7 +624,6 @@ enum WindowUtil {
                 spaceID: spaceIDForWindowID(cgID)
             )
             info.windowName = cgID.cgsTitle()
-
             updateDesktopSpaceWindowCache(with: info)
             usedIDs.insert(cgID)
         }

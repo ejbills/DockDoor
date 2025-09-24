@@ -63,3 +63,40 @@ func mapAXToCG(axWindow: AXUIElement, candidates: [[String: AnyObject]], excludi
 
     return nil
 }
+
+// MARK: - Shared Validation
+
+let AXMinWindowSize: CGSize = .init(width: 100, height: 100)
+
+func isValidAXWindowCandidate(_ axWindow: AXUIElement) -> Bool {
+    if let role = try? axWindow.role(), role != kAXWindowRole { return false }
+    if let subrole = try? axWindow.subrole(),
+       ![kAXStandardWindowSubrole, kAXDialogSubrole].contains(subrole)
+    { return false }
+    if let s = try? axWindow.size(), let p = try? axWindow.position() {
+        if s == .zero || s.width < AXMinWindowSize.width || s.height < AXMinWindowSize.height { return false }
+        if !p.x.isFinite || !p.y.isFinite { return false }
+    }
+    return true
+}
+
+func isAtLeastNormalLevel(_ id: CGWindowID) -> Bool {
+    let level = id.cgsLevel()
+    let normalLevel = CGWindowLevelForKey(.normalWindow)
+    return level >= Int32(normalLevel)
+}
+
+func isValidCGWindowCandidate(_ id: CGWindowID, in candidates: [[String: AnyObject]]) -> Bool {
+    guard let match = candidates.first(where: { desc -> Bool in
+        let wid = CGWindowID((desc[kCGWindowNumber as String] as? NSNumber)?.uint32Value ?? 0)
+        return wid == id
+    }) else { return false }
+
+    let bounds = match[kCGWindowBounds as String] as? [String: AnyObject]
+    let rw = CGFloat((bounds?["Width"] as? NSNumber)?.doubleValue ?? 0)
+    let rh = CGFloat((bounds?["Height"] as? NSNumber)?.doubleValue ?? 0)
+    let alpha = CGFloat((match[kCGWindowAlpha as String] as? NSNumber)?.doubleValue ?? 1.0)
+    if rw < AXMinWindowSize.width || rh < AXMinWindowSize.height { return false }
+    if alpha <= 0.01 { return false }
+    return true
+}

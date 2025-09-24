@@ -32,17 +32,18 @@ final class WindowSeeder {
         var usedIDs = Set<CGWindowID>()
 
         for axWin in axWindows {
+            if !isValidAXWindowCandidate(axWin) { continue }
             var id32: CGWindowID = 0
             if _AXUIElementGetWindow(axWin, &id32) == .success, id32 != 0 {
                 usedIDs.insert(id32)
             } else if let fid = mapAXToCG(axWindow: axWin, candidates: cgCandidates, excluding: usedIDs) {
                 id32 = fid
-                usedIDs.insert(fid)
+                usedIDs.insert(id32)
             } else { continue }
 
-            let level = id32.cgsLevel()
-            let normalLevel = CGWindowLevelForKey(.normalWindow)
-            if level < Int32(normalLevel) { continue }
+            if !isAtLeastNormalLevel(id32) { continue }
+
+            if !isValidCGWindowCandidate(id32, in: cgCandidates) { continue }
 
             guard let image = id32.cgsScreenshot() else { continue }
 
@@ -60,6 +61,7 @@ final class WindowSeeder {
                 spaceID: id32.cgsSpaces().first.map { Int($0) }
             )
             info.windowName = id32.cgsTitle()
+
             WindowUtil.updateDesktopSpaceWindowCache(with: info)
         }
     }
