@@ -100,3 +100,54 @@ func isValidCGWindowCandidate(_ id: CGWindowID, in candidates: [[String: AnyObje
     if alpha <= 0.01 { return false }
     return true
 }
+
+// Returns the set of currently active Space IDs across all displays by
+// inspecting on-screen, layer-0 windows and unioning their space IDs.
+func currentActiveSpaceIDs() -> Set<Int> {
+    var result = Set<Int>()
+    guard let list = CGWindowListCopyWindowInfo([.excludeDesktopElements], kCGNullWindowID) as? [[String: AnyObject]] else { return result }
+    for desc in list {
+        let layer = (desc[kCGWindowLayer as String] as? NSNumber)?.intValue ?? -1
+        let isOnscreen = (desc[kCGWindowIsOnscreen as String] as? NSNumber)?.boolValue ?? false
+        guard layer == 0, isOnscreen else { continue }
+        let wid = CGWindowID((desc[kCGWindowNumber as String] as? NSNumber)?.uint32Value ?? 0)
+        for space in wid.cgsSpaces() {
+            result.insert(Int(space))
+        }
+    }
+    return result
+}
+
+// Decide if a window should be accepted considering on-screen state,
+// ScreenCaptureKit presence, multi-Space, and window/app state.
+func shouldAcceptWindow(axWindow: AXUIElement,
+                        windowID: CGWindowID,
+                        cgEntry: [String: AnyObject],
+                        app: NSRunningApplication,
+                        activeSpaceIDs: Set<Int>,
+                        scBacked: Bool) -> Bool
+{
+    // Base: role/subrole, level, size/alpha checks already enforced by caller
+    let isOnscreen = (cgEntry[kCGWindowIsOnscreen as String] as? NSNumber)?.boolValue ?? false
+
+    if isOnscreen || scBacked { return true }
+
+    // If minimized/fullscreen or app hidden, include even if not currently on-screen
+    let axIsFullscreen = (try? axWindow.isFullscreen()) ?? false
+    let axIsMinimized = (try? axWindow.isMinimized()) ?? false
+    if app.isHidden || axIsFullscreen || axIsMinimized { return true }
+
+    // If assigned to other Space(s) than any active Space, include
+    let windowSpaces = Set(windowID.cgsSpaces().map { Int($0) })
+    if !windowSpaces.isEmpty, windowSpaces.isDisjoint(with: activeSpaceIDs) {
+        return true
+    }
+
+    // Fallback: if AX marks it as main, consider it significant and include.
+    // This helps when CGS space mapping is unreliable or empty for other-Spaces windows.
+    if (try? axWindow.attribute(kAXMainAttribute, Bool.self)) == true {
+        return true
+    }
+
+    return false
+}

@@ -580,6 +580,7 @@ enum WindowUtil {
 
         // Avoid re-adding existing windows
         var usedIDs = Set<CGWindowID>(desktopSpaceWindowCacheManager.readCache(pid: pid).map(\.id))
+        let activeSpaceIDs = currentActiveSpaceIDs()
 
         for axWin in axWindows {
             if !isValidAXWindowCandidate(axWin) { continue }
@@ -606,6 +607,18 @@ enum WindowUtil {
             }
 
             if !isValidCGWindowCandidate(cgID, in: cgCandidates) { continue }
+
+            // Find matching CG entry for visibility flags
+            guard let cgEntry = cgCandidates.first(where: { desc in
+                let wid = CGWindowID((desc[kCGWindowNumber as String] as? NSNumber)?.uint32Value ?? 0)
+                return wid == cgID
+            }) else { continue }
+
+            // Accept window if on-screen, SCK-backed (false here), in other Space, or minimized/fullscreen/hidden
+            let scBacked = false
+            if !shouldAcceptWindow(axWindow: axWin, windowID: cgID, cgEntry: cgEntry, app: app, activeSpaceIDs: activeSpaceIDs, scBacked: scBacked) {
+                continue
+            }
 
             // Capture image via CGS (works even if SCK missed it)
             guard let image = cgID.cgsScreenshot() else { continue }
