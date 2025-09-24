@@ -38,6 +38,18 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://buymeacoffee.com/keplercafe</div>
 
+<a id="1.25.1"></a>
+# [Release 1.25.1](https://github.com/ejbills/DockDoor/releases/tag/1.25.1) - 2025-09-24
+
+## 🔧 Improvements & Stability
+- Fixes transient windows rendering inside DockDoor
+    - Fixes Chrome search window registering as window
+    - Fixes microsoft teams transient windows
+
+
+[Changes][1.25.1]
+
+
 <a id="1.25"></a>
 # [Release 1.25](https://github.com/ejbills/DockDoor/releases/tag/1.25) - 2025-09-23
 
@@ -1554,6 +1566,7 @@ v1.0
 [Changes][releases]
 
 
+[1.25.1]: https://github.com/ejbills/DockDoor/compare/1.25...1.25.1
 [1.25]: https://github.com/ejbills/DockDoor/compare/1.24.1...1.25
 [1.24.1]: https://github.com/ejbills/DockDoor/compare/1.24...1.24.1
 [1.24]: https://github.com/ejbills/DockDoor/compare/1.23.1...1.24
