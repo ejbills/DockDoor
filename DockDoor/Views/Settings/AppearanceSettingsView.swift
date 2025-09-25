@@ -87,6 +87,7 @@ extension AppearanceSettingsView {
 struct AppearanceSettingsView: View {
     @Default(.uniformCardRadius) var uniformCardRadius
     @Default(.allowDynamicImageSizing) var allowDynamicImageSizing
+    @Default(.useLiquidGlass) var useLiquidGlass
     @Default(.showAppName) var showAppName
     @Default(.appNameStyle) var appNameStyle
     @Default(.showWindowTitle) var showWindowTitle
@@ -100,6 +101,7 @@ struct AppearanceSettingsView: View {
     @Default(.unselectedContentOpacity) var unselectedContentOpacity
     @Default(.hoverHighlightColor) var hoverHighlightColor
     @Default(.dockPreviewBackgroundOpacity) var dockPreviewBackgroundOpacity
+    @Default(.hidePreviewCardBackground) var hidePreviewCardBackground
     @Default(.previewMaxColumns) var previewMaxColumns
     @Default(.previewMaxRows) var previewMaxRows
     @Default(.switcherMaxRows) var switcherMaxRows
@@ -107,6 +109,7 @@ struct AppearanceSettingsView: View {
     @Default(.globalPaddingMultiplier) var globalPaddingMultiplier
     @Default(.useEmbeddedDockPreviewElements) var useEmbeddedDockPreviewElements
     @Default(.disableDockStyleTrafficLights) var disableDockStyleTrafficLights
+    @Default(.disableDockStyleTitles) var disableDockStyleTitles
     @Default(.showMinimizedHiddenLabels) var showMinimizedHiddenLabels
     @Default(.enableTitleMarquee) var enableTitleMarquee
 
@@ -172,6 +175,11 @@ struct AppearanceSettingsView: View {
 
                     StyledGroupBox(label: "General Appearance") {
                         VStack(alignment: .leading, spacing: 10) {
+                            if #available(macOS 26.0, *) {
+                                Toggle(isOn: $useLiquidGlass) {
+                                    Text("Use Liquid Glass (macOS 26+)")
+                                }
+                            }
                             sliderSetting(title: "Spacing Scale",
                                           value: $globalPaddingMultiplier,
                                           range: 0.5 ... 2.0,
@@ -216,6 +224,16 @@ struct AppearanceSettingsView: View {
                                     Text("Distinguish minimized/hidden windows")
                                 }
                                 Text("When enabled, shows visual indicators and dims minimized/hidden windows. When disabled, treats them as normal windows with full functionality.")
+                                    .font(.footnote)
+                                    .foregroundColor(.gray)
+                                    .padding(.leading, 20)
+                            }
+
+                            VStack(alignment: .leading) {
+                                Toggle(isOn: $hidePreviewCardBackground) {
+                                    Text("Hide preview card background")
+                                }
+                                Text("Removes the background panel from individual window previews.")
                                     .font(.footnote)
                                     .foregroundColor(.gray)
                                     .padding(.leading, 20)
@@ -323,6 +341,16 @@ struct AppearanceSettingsView: View {
                         Text(visibility.localizedName)
                             .tag(visibility)
                     }
+                }
+
+                VStack(alignment: .leading) {
+                    Toggle(isOn: $disableDockStyleTitles) {
+                        Text("Disable dock styling on window titles")
+                    }
+                    Text("Removes the pill-shaped background styling from window titles in dock previews for a cleaner look.")
+                        .font(.footnote)
+                        .foregroundColor(.gray)
+                        .padding(.leading, 20)
                 }
             }
 

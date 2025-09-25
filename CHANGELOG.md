@@ -38,6 +38,100 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://buymeacoffee.com/keplercafe</div>
 
+<a id="1.25.2"></a>
+# [Release 1.25.2](https://github.com/ejbills/DockDoor/releases/tag/1.25.2) - 2025-09-24
+
+## 🔧 Improvements & Stability
+- Better window recognition
+    - Fixes issue where Termius and Microsoft Teams showed additional windows incorrectly
+
+
+[Changes][1.25.2]
+
+
+<a id="1.25.1"></a>
+# [Release 1.25.1](https://github.com/ejbills/DockDoor/releases/tag/1.25.1) - 2025-09-24
+
+## 🔧 Improvements & Stability
+- Fixes transient windows rendering inside DockDoor
+    - Fixes Chrome search window registering as window
+    - Fixes microsoft teams transient windows
+
+
+[Changes][1.25.1]
+
+
+<a id="1.25"></a>
+# [Release 1.25](https://github.com/ejbills/DockDoor/releases/tag/1.25) - 2025-09-23
+
+## ✨ New Features
+- Added native cmd+tab app switcher previews (defaults to off)
+  - Keyboard driven navigation
+  - Window actions shortcuts work (cmd+m - minimize, cmd+w - close, cmd+q - quit)
+  - <img width="200" alt="output-compressed" src="https://github.com/user-attachments/assets/74798f00-e351-45f9-964e-5a2b7e6c93ed" />
+
+## 🔧 Improvements & Stability
+- Helpful on-screen tips for cmd-tab enhancement feature
+- Adjustable blur background (option to disable liquid glass)
+- Avoids app switcher conflicts, you can still use app expose shortcuts
+
+
+[Changes][1.25]
+
+
+<a id="1.24.1"></a>
+# [Release 1.24.1](https://github.com/ejbills/DockDoor/releases/tag/1.24.1) - 2025-09-23
+
+## ✨ New Features
+- Better coverage of missing app windows
+  - Works with more apps (Adobe Illustrator)
+  - Captures previews reliably
+- Added preview background option
+  - Hide panel behind previews
+
+## 🔧 Improvements & Stability
+- Cleaner full-size previews
+- Improved performance defaults
+
+## 🐛 Bug Fixes
+- Fixed wrong minimized status
+  - Hidden state syncs correctly
+
+
+[Changes][1.24.1]
+
+
+<a id="1.24"></a>
+# [Release 1.24](https://github.com/ejbills/DockDoor/releases/tag/1.24) - 2025-09-22
+
+## ✨ New Features
+- Shows minimized windows and windows from other desktops on launch
+- Added preview quality setting
+  - Sharper window previews option
+- Added title style option
+  - Disable rounded label
+
+## 🔧 Improvements & Stability
+- More reliable window detection
+- Cleaner full-size previews
+
+
+[Changes][1.24]
+
+
+<a id="1.23.1"></a>
+# [Release 1.23.1](https://github.com/ejbills/DockDoor/releases/tag/1.23.1) - 2025-09-17
+
+
+## 🐛 Bug Fixes
+- Fixed window switcher functionality
+  - Works without dock previews
+  - Improved initialization reliability
+
+
+[Changes][1.23.1]
+
+
 <a id="1.23"></a>
 # [Release 1.23](https://github.com/ejbills/DockDoor/releases/tag/1.23) - 2025-09-16
 
@@ -1483,6 +1577,12 @@ v1.0
 [Changes][releases]
 
 
+[1.25.2]: https://github.com/ejbills/DockDoor/compare/1.25.1...1.25.2
+[1.25.1]: https://github.com/ejbills/DockDoor/compare/1.25...1.25.1
+[1.25]: https://github.com/ejbills/DockDoor/compare/1.24.1...1.25
+[1.24.1]: https://github.com/ejbills/DockDoor/compare/1.24...1.24.1
+[1.24]: https://github.com/ejbills/DockDoor/compare/1.23.1...1.24
+[1.23.1]: https://github.com/ejbills/DockDoor/compare/1.23...1.23.1
 [1.23]: https://github.com/ejbills/DockDoor/compare/1.22...1.23
 [1.22]: https://github.com/ejbills/DockDoor/compare/1.21.4...1.22
 [1.21.4]: https://github.com/ejbills/DockDoor/compare/1.21.3...1.21.4

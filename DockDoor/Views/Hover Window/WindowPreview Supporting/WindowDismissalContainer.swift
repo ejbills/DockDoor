@@ -107,6 +107,7 @@ class MouseTrackingNSView: NSView {
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }
             guard SharedPreviewWindowCoordinator.activeInstance?.windowSwitcherCoordinator.windowSwitcherActive == false else { return }
+            guard dockPosition != .cmdTab else { return }
 
             guard let window, window.alphaValue > 0 else { return }
 

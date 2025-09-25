@@ -163,7 +163,6 @@ private class WindowSwitchingCoordinator {
 
 class KeybindHelper {
     private let previewCoordinator: SharedPreviewWindowCoordinator
-    private let dockObserver: DockObserver
     private let windowSwitchingCoordinator = WindowSwitchingCoordinator()
 
     private var isSwitcherModifierKeyPressed: Bool = false
@@ -171,14 +170,17 @@ class KeybindHelper {
     private var hasProcessedModifierRelease: Bool = false
     private var preventSwitcherHideOnRelease: Bool = false
 
+    // Track Command key state to detect key-up fallback for lingering previews
+    private var isCommandKeyCurrentlyDown: Bool = false
+    private var lastCmdTabObservedActive: Bool = false
+
     private var eventTap: CFMachPort?
     private var runLoopSource: CFRunLoopSource?
     private var monitorTimer: Timer?
     private var unmanagedEventTapUserInfo: Unmanaged<KeybindHelperUserInfo>?
 
-    init(previewCoordinator: SharedPreviewWindowCoordinator, dockObserver: DockObserver) {
+    init(previewCoordinator: SharedPreviewWindowCoordinator) {
         self.previewCoordinator = previewCoordinator
-        self.dockObserver = dockObserver
         setupEventTap()
         startMonitoring()
     }
@@ -271,11 +273,108 @@ class KeybindHelper {
             let keyBoardShortcutSaved: UserKeyBind = Defaults[.UserKeybind]
             let (currentSwitcherModifierIsPressed, currentShiftState) = updateModifierStatesFromFlags(event: event, keyBoardShortcutSaved: keyBoardShortcutSaved)
 
+            // Track Command up/down explicitly for Cmd+Tab fallback behavior
+            let cmdNowDown = event.flags.contains(.maskCommand)
+            if isCommandKeyCurrentlyDown, !cmdNowDown {
+                if Defaults[.enableCmdTabEnhancements], lastCmdTabObservedActive,
+                   previewCoordinator.isVisible,
+                   !previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive
+                {
+                    Task { @MainActor in
+                        self.previewCoordinator.hideWindow()
+                    }
+                }
+                lastCmdTabObservedActive = false
+            }
+            isCommandKeyCurrentlyDown = cmdNowDown
+
             Task { @MainActor [weak self] in
                 self?.handleModifierEvent(currentSwitcherModifierIsPressed: currentSwitcherModifierIsPressed, currentShiftState: currentShiftState)
             }
 
         case .keyDown:
+            // If system Cmd+Tab switcher is active, optionally handle arrows when enhancements are enabled
+            if DockObserver.isCmdTabSwitcherActive() {
+                lastCmdTabObservedActive = true
+                if Defaults[.enableCmdTabEnhancements],
+                   previewCoordinator.isVisible
+                {
+                    let keyCode = event.getIntegerValueField(.keyboardEventKeycode)
+                    let hasSelection = previewCoordinator.windowSwitcherCoordinator.currIndex >= 0
+                    let flags = event.flags
+                    switch keyCode {
+                    case Int64(kVK_LeftArrow):
+                        if hasSelection {
+                            Task { @MainActor in
+                                self.previewCoordinator.navigateWithArrowKey(direction: .left)
+                            }
+                            // Consume only when a selection is active (focused mode)
+                            return nil
+                        } else {
+                            // Let system Cmd+Tab handle left/right until user focuses with Up
+                            return Unmanaged.passUnretained(event)
+                        }
+                    case Int64(kVK_RightArrow):
+                        if hasSelection {
+                            Task { @MainActor in
+                                self.previewCoordinator.navigateWithArrowKey(direction: .right)
+                            }
+                            return nil
+                        } else {
+                            return Unmanaged.passUnretained(event)
+                        }
+                    case Int64(kVK_UpArrow):
+                        return Unmanaged.passUnretained(event)
+                    case Int64(kVK_DownArrow):
+                        // If a preview is selected, first Down just deselects and is consumed.
+                        // Subsequent Down (with no selection) is passed through to system Exposé.
+                        if hasSelection {
+                            Task { @MainActor in
+                                self.previewCoordinator.windowSwitcherCoordinator.setIndex(to: -1)
+                            }
+                            return nil
+                        } else {
+                            return Unmanaged.passUnretained(event)
+                        }
+                    default:
+                        // Allow activation via Cmd+A (when not yet focused) and
+                        // Command-based actions when a preview is focused
+                        if flags.contains(.maskCommand) {
+                            if !hasSelection, keyCode == Int64(kVK_ANSI_A) {
+                                Task { @MainActor in
+                                    self.previewCoordinator.windowSwitcherCoordinator.setIndex(to: 0)
+                                    Defaults[.hasSeenCmdTabFocusHint] = true
+                                }
+                                return nil
+                            }
+                        }
+
+                        if hasSelection, flags.contains(.maskCommand) {
+                            switch keyCode {
+                            case Int64(kVK_ANSI_W):
+                                Task { @MainActor in
+                                    self.previewCoordinator.performActionOnCurrentWindow(action: .close)
+                                }
+                                return nil
+                            case Int64(kVK_ANSI_Q):
+                                Task { @MainActor in
+                                    self.previewCoordinator.performActionOnCurrentWindow(action: .quit)
+                                }
+                                return nil
+                            case Int64(kVK_ANSI_M):
+                                Task { @MainActor in
+                                    self.previewCoordinator.performActionOnCurrentWindow(action: .minimize)
+                                }
+                                return nil
+                            default:
+                                break
+                            }
+                        }
+                    }
+                }
+                // Not enhancing or not in our cmdTab context — let the system handle it.
+                return Unmanaged.passUnretained(event)
+            }
             let (shouldConsume, actionTask) = determineActionForKeyDown(event: event)
             if let task = actionTask {
                 Task { @MainActor in
@@ -310,6 +409,8 @@ class KeybindHelper {
 
     @MainActor
     private func handleModifierEvent(currentSwitcherModifierIsPressed: Bool, currentShiftState: Bool) {
+        // If system Cmd+Tab switcher is active, do not engage DockDoor's own switcher logic
+        if DockObserver.isCmdTabSwitcherActive() { return }
         let oldSwitcherModifierState = isSwitcherModifierKeyPressed
         let oldShiftState = isShiftKeyPressedGeneral
 

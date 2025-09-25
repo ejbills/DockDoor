@@ -28,6 +28,7 @@ extension Defaults.Keys {
 
     static let screenCaptureCacheLifespan = Key<CGFloat>("screenCaptureCacheLifespan", default: 60)
     static let windowPreviewImageScale = Key<CGFloat>("windowPreviewImageScale", default: 1)
+    static let windowImageCaptureQuality = Key<WindowImageCaptureQuality>("windowImageCaptureQuality", default: .nominal)
 
     static let uniformCardRadius = Key<Bool>("uniformCardRadius", default: true)
     static let allowDynamicImageSizing = Key<Bool>("allowDynamicImageSizing", default: false)
@@ -41,6 +42,7 @@ extension Defaults.Keys {
     static let useEmbeddedMediaControls = Key<Bool>("useEmbeddedMediaControls", default: false)
     static let useEmbeddedDockPreviewElements = Key<Bool>("useEmbeddedDockPreviewElements", default: false)
     static let disableDockStyleTrafficLights = Key<Bool>("disableDockStyleTrafficLights", default: false)
+    static let disableDockStyleTitles = Key<Bool>("disableDockStyleTitles", default: false)
     static let showBigControlsWhenNoValidWindows = Key<Bool>("showBigControlsWhenNoValidWindows", default: true)
     static let enablePinning = Key<Bool>("enablePinning", default: true)
 
@@ -48,12 +50,14 @@ extension Defaults.Keys {
     static let gradientColorPalette = Key<GradientColorPaletteSettings>("gradientColorPalette", default: .init())
     static let enableWindowSwitcher = Key<Bool>("enableWindowSwitcher", default: true)
     static let enableDockPreviews = Key<Bool>("enableDockPreviews", default: true)
+    static let enableCmdTabEnhancements = Key<Bool>("enableCmdTabEnhancements", default: false)
     static let keepPreviewOnAppTerminate = Key<Bool>("keepPreviewOnAppTerminate", default: false)
     static let enableWindowSwitcherSearch = Key<Bool>("enableWindowSwitcherSearch", default: false)
     static let sortWindowsByDate = Key<Bool>("sortWindowsByDate", default: true)
     static let useClassicWindowOrdering = Key<Bool>("useClassicWindowOrdering", default: true)
     static let includeHiddenWindowsInSwitcher = Key<Bool>("includeHiddenWindowsInSwitcher", default: true)
     static let ignoreAppsWithSingleWindow = Key<Bool>("ignoreAppsWithSingleWindow", default: false)
+    static let useLiquidGlass = Key<Bool>("useLiquidGlass", default: true)
     static let showMenuBarIcon = Key<Bool>("showMenuBarIcon", default: true)
     static let raisedWindowLevel = Key<Bool>("raisedWindowLevel", default: true)
     static let launched = Key<Bool>("launched", default: false)
@@ -68,6 +72,7 @@ extension Defaults.Keys {
     static let unselectedContentOpacity = Key<CGFloat>("unselectedContentOpacity", default: 0.75)
     static let hoverHighlightColor = Key<Color?>("hoverHighlightColor", default: nil)
     static let dockPreviewBackgroundOpacity = Key<CGFloat>("dockPreviewBackgroundOpacity", default: 1.0)
+    static let hidePreviewCardBackground = Key<Bool>("hidePreviewCardBackground", default: false)
 
     static let showWindowTitle = Key<Bool>("showWindowTitle", default: true)
     static let showAppIconOnly = Key<Bool>("showAppIconOnly", default: false)
@@ -102,6 +107,9 @@ extension Defaults.Keys {
     static let windowTitleFilters = Key<[String]>("windowTitleFilters", default: [])
     static let customAppDirectories = Key<[String]>("customAppDirectories", default: [])
 
+    // Onboarding / Hints
+    static let hasSeenCmdTabFocusHint = Key<Bool>("hasSeenCmdTabFocusHint", default: false)
+
     // MARK: Widget System
 
     static let widgetsEnabled = Key<Bool>("widgetsEnabled", default: true)
@@ -109,6 +117,20 @@ extension Defaults.Keys {
 }
 
 // MARK: Display Configurations
+
+enum WindowImageCaptureQuality: String, CaseIterable, Defaults.Serializable {
+    case nominal
+    case best
+
+    var localizedName: String {
+        switch self {
+        case .nominal:
+            String(localized: "Improved performance (nominal)", comment: "Window image capture quality option")
+        case .best:
+            String(localized: "Best quality (full resolution)", comment: "Window image capture quality option")
+        }
+    }
+}
 
 enum WindowTitleDisplayCondition: String, CaseIterable, Defaults.Serializable {
     case all

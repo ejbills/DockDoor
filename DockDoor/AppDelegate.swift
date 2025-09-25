@@ -17,6 +17,7 @@ class SettingsWindowControllerDelegate: NSObject, NSWindowDelegate {
 class AppDelegate: NSObject, NSApplicationDelegate {
     private var dockObserver: DockObserver?
     private var appClosureObserver: WindowManipulationObservers?
+    private var windowSeeder: WindowSeeder?
     private var previewCoordinator: SharedPreviewWindowCoordinator?
     private var keybindHelper: KeybindHelper?
     private var statusBarItem: NSStatusItem?
@@ -83,17 +84,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             let currentPreviewCoordinator = SharedPreviewWindowCoordinator()
             previewCoordinator = currentPreviewCoordinator
 
-            var currentDockObserver: DockObserver?
             if Defaults[.enableDockPreviews] {
                 let dockObs = DockObserver(previewCoordinator: currentPreviewCoordinator)
                 dockObserver = dockObs
-                currentDockObserver = dockObs
             }
 
             appClosureObserver = WindowManipulationObservers(previewCoordinator: currentPreviewCoordinator)
 
-            if Defaults[.enableWindowSwitcher], let currentDockObserver {
-                keybindHelper = KeybindHelper(previewCoordinator: currentPreviewCoordinator, dockObserver: currentDockObserver)
+            if Defaults[.enableWindowSwitcher] {
+                keybindHelper = KeybindHelper(previewCoordinator: currentPreviewCoordinator)
             }
             if updater.automaticallyChecksForUpdates {
                 print("AppDelegate: Automatic updates enabled, checking in background.")
@@ -106,6 +105,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
             await WindowUtil.updateAllWindowsInCurrentSpace()
         }
+
+        // Cold-start: seed all windows (including minimized and other Spaces) and start live AX tracker
+        let seeder = WindowSeeder()
+        seeder.run()
+        windowSeeder = seeder
     }
 
     func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {

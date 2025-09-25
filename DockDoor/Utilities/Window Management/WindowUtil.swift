@@ -31,11 +31,12 @@ struct WindowInfo: Identifiable, Hashable {
     var closeButton: AXUIElement?
     var isMinimized: Bool
     var isHidden: Bool
+    var spaceID: Int?
     var lastAccessedTime: Date
 
     private var _scWindow: SCWindow?
 
-    init(windowProvider: WindowPropertiesProviding, app: NSRunningApplication, image: CGImage?, axElement: AXUIElement, appAxElement: AXUIElement, closeButton: AXUIElement?, isMinimized: Bool, isHidden: Bool, lastAccessedTime: Date) {
+    init(windowProvider: WindowPropertiesProviding, app: NSRunningApplication, image: CGImage?, axElement: AXUIElement, appAxElement: AXUIElement, closeButton: AXUIElement?, isMinimized: Bool, isHidden: Bool, lastAccessedTime: Date, spaceID: Int? = nil) {
         id = windowProvider.windowID
         self.windowProvider = windowProvider
         self.app = app
@@ -46,6 +47,7 @@ struct WindowInfo: Identifiable, Hashable {
         self.closeButton = closeButton
         self.isMinimized = isMinimized
         self.isHidden = isHidden
+        self.spaceID = spaceID
         self.lastAccessedTime = lastAccessedTime
         _scWindow = windowProvider as? SCWindow
     }
@@ -63,6 +65,7 @@ struct WindowInfo: Identifiable, Hashable {
             lhs.app.processIdentifier == rhs.app.processIdentifier &&
             lhs.isMinimized == rhs.isMinimized &&
             lhs.isHidden == rhs.isHidden &&
+            lhs.spaceID == rhs.spaceID &&
             lhs.axElement == rhs.axElement
     }
 }
@@ -149,14 +152,12 @@ enum WindowUtil {
         var cgImage: CGImage
         let connectionID = CGSMainConnectionID()
         var windowID = UInt32(window.windowID)
+        let qualityOption: CGSWindowCaptureOptions = (Defaults[.windowImageCaptureQuality] == .best) ? .bestResolution : .nominalResolution
         guard let capturedWindows = CGSHWCaptureWindowList(
             connectionID,
             &windowID,
             1,
-            [
-                CGSWindowCaptureOptions.nominalResolution,
-                CGSWindowCaptureOptions.fullSize,
-            ]
+            [qualityOption, CGSWindowCaptureOptions.fullSize]
         ) as? [CGImage],
             let capturedImage = capturedWindows.first
         else {
@@ -369,28 +370,27 @@ enum WindowUtil {
 
     static func updateStatusOfWindowCache(pid: pid_t, isParentAppHidden: Bool) {
         let appElement = AXUIElementCreateApplication(pid)
-        desktopSpaceWindowCacheManager.updateCache(pid: pid) { cachedWindows in
-            if let windows = try? appElement.windows() {
-                for window in windows {
-                    if let cgWindowId = try? window.cgWindowId() {
-                        let isMinimized: Bool = (try? window.isMinimized()) ?? false
-                        cachedWindows = Set(cachedWindows.map { windowInfo in
-                            var updatedWindow = windowInfo
-                            if windowInfo.id == cgWindowId {
-                                updatedWindow.isMinimized = isMinimized
-                                updatedWindow.isHidden = isParentAppHidden
-                            }
-                            return updatedWindow
-                        })
-                    }
+        desktopSpaceWindowCacheManager.updateCache(pid: pid) { windowSet in
+            guard let axWindows = try? appElement.windows() else {
+                // Still apply parent hidden flag
+                windowSet = Set(windowSet.map { var w = $0; w.isHidden = isParentAppHidden; return w })
+                return
+            }
+
+            for ax in axWindows {
+                let isMin = (try? ax.isMinimized()) ?? false
+                guard let cgId = ((try? ax.cgWindowId()) ?? nil) else { continue }
+                if let existing = windowSet.first(where: { $0.id == cgId }) {
+                    var updated = existing
+                    updated.isMinimized = isMin
+                    updated.isHidden = isParentAppHidden
+                    windowSet.remove(existing)
+                    windowSet.insert(updated)
                 }
             }
 
-            cachedWindows = Set(cachedWindows.map { windowInfo in
-                var updatedWindow = windowInfo
-                updatedWindow.isHidden = isParentAppHidden
-                return updatedWindow
-            })
+            // Ensure hidden state is applied universally (legacy behavior)
+            windowSet = Set(windowSet.map { var w = $0; w.isHidden = isParentAppHidden; return w })
         }
     }
 
@@ -469,7 +469,50 @@ enum WindowUtil {
                 }
             }
 
-            let finalWindows = await WindowUtil.purifyAppCache(with: app.processIdentifier, removeAll: false) ?? []
+            var finalWindows = await WindowUtil.purifyAppCache(with: app.processIdentifier, removeAll: false) ?? []
+
+            // Ensure AX-fallback windows (no SCWindow) get refreshed images on hover
+            let lifespan = Defaults[.screenCaptureCacheLifespan]
+            let now = Date()
+            let toRefresh = finalWindows.filter { $0.scWindow == nil && ($0.image == nil || now.timeIntervalSince($0.lastAccessedTime) > lifespan) }
+            if !toRefresh.isEmpty {
+                for window in toRefresh {
+                    if let image = window.id.cgsScreenshot() {
+                        var updated = window
+                        updated.image = image
+                        updated.spaceID = spaceIDForWindowID(window.id)
+                        updated.lastAccessedTime = now
+                        updateDesktopSpaceWindowCache(with: updated)
+                    }
+                }
+                finalWindows = desktopSpaceWindowCacheManager.readCache(pid: app.processIdentifier)
+            }
+
+            // Also sync minimized/hidden state for AX-fallback windows from AX attributes
+            let axApp = AXUIElementCreateApplication(app.processIdentifier)
+            if let axWindows = try? axApp.windows() {
+                var updatedAny = false
+                for ax in axWindows {
+                    guard let cgId = ((try? ax.cgWindowId()) ?? nil) else { continue }
+                    let isMin = (try? ax.isMinimized()) ?? false
+                    desktopSpaceWindowCacheManager.updateCache(pid: app.processIdentifier) { set in
+                        if let existing = set.first(where: { $0.id == cgId && $0.scWindow == nil }) {
+                            if existing.isMinimized != isMin || existing.isHidden != app.isHidden {
+                                var u = existing
+                                u.isMinimized = isMin
+                                u.isHidden = app.isHidden
+                                set.remove(existing)
+                                set.insert(u)
+                                updatedAny = true
+                            }
+                        }
+                    }
+                }
+                if updatedAny {
+                    finalWindows = desktopSpaceWindowCacheManager.readCache(pid: app.processIdentifier)
+                }
+            }
+
             return finalWindows.sorted(by: { $0.lastAccessedTime > $1.lastAccessedTime })
         }
 
@@ -496,6 +539,106 @@ enum WindowUtil {
 
         } catch {
             print("Error updating windows for \(app.localizedName ?? "unknown app"): \(error)")
+        }
+
+        // AX fallback: discover windows that SCK didn't report (e.g., some Adobe apps)
+        discoverNewWindowsViaAXFallback(app: app)
+        // Ensure AX-fallback windows get fresh images too
+        refreshAXFallbackWindowImages(for: app.processIdentifier)
+    }
+
+    // MARK: - AX Fallback Discovery
+
+    /// Discovers and caches windows via AX + CGS when SCK misses them (e.g., certain Adobe apps)
+    private static func discoverNewWindowsViaAXFallback(app: NSRunningApplication) {
+        let pid = app.processIdentifier
+
+        // Respect basic filters to avoid polluting cache
+        guard let bundleId = app.bundleIdentifier, !filteredBundleIdentifiers.contains(bundleId) else {
+            purgeAppCache(with: pid)
+            return
+        }
+
+        let appName = app.localizedName ?? ""
+        let appNameFilters = Defaults[.appNameFilters]
+        if !appNameFilters.isEmpty, appNameFilters.contains(where: { appName.lowercased().contains($0.lowercased()) }) {
+            purgeAppCache(with: pid)
+            return
+        }
+
+        let appAX = AXUIElementCreateApplication(pid)
+        let axWindows = AXUIElement.allWindows(pid, appElement: appAX)
+        if axWindows.isEmpty { return }
+
+        // Build CG candidates for this PID on layer 0
+        let cgAll = (CGWindowListCopyWindowInfo([.excludeDesktopElements], kCGNullWindowID) as? [[String: AnyObject]]) ?? []
+        let cgCandidates = cgAll.filter { desc in
+            let owner = (desc[kCGWindowOwnerPID as String] as? NSNumber)?.int32Value ?? 0
+            let layer = (desc[kCGWindowLayer as String] as? NSNumber)?.intValue ?? 0
+            return owner == pid && layer == 0
+        }
+
+        // Avoid re-adding existing windows
+        var usedIDs = Set<CGWindowID>(desktopSpaceWindowCacheManager.readCache(pid: pid).map(\.id))
+        let activeSpaceIDs = currentActiveSpaceIDs()
+
+        for axWin in axWindows {
+            if !isValidAXWindowCandidate(axWin) { continue }
+            var cgID: CGWindowID = 0
+            if _AXUIElementGetWindow(axWin, &cgID) == .success, cgID != 0 {
+            } else if let mapped = mapAXToCG(axWindow: axWin, candidates: cgCandidates, excluding: usedIDs) {
+                cgID = mapped
+            } else {
+                continue
+            }
+
+            if usedIDs.contains(cgID) { continue }
+
+            // Basic sanity: only normal and above
+            if !isAtLeastNormalLevel(cgID) { continue }
+
+            // Optional title filtering
+            let titleFilters = Defaults[.windowTitleFilters]
+            if !titleFilters.isEmpty {
+                let cgTitle = cgID.cgsTitle() ?? ""
+                if titleFilters.contains(where: { cgTitle.lowercased().contains($0.lowercased()) }) {
+                    continue
+                }
+            }
+
+            if !isValidCGWindowCandidate(cgID, in: cgCandidates) { continue }
+
+            // Find matching CG entry for visibility flags
+            guard let cgEntry = cgCandidates.first(where: { desc in
+                let wid = CGWindowID((desc[kCGWindowNumber as String] as? NSNumber)?.uint32Value ?? 0)
+                return wid == cgID
+            }) else { continue }
+
+            // Accept window if on-screen, SCK-backed (false here), in other Space, or minimized/fullscreen/hidden
+            let scBacked = false
+            if !shouldAcceptWindow(axWindow: axWin, windowID: cgID, cgEntry: cgEntry, app: app, activeSpaceIDs: activeSpaceIDs, scBacked: scBacked) {
+                continue
+            }
+
+            // Capture image via CGS (works even if SCK missed it)
+            guard let image = cgID.cgsScreenshot() else { continue }
+
+            let provider = AXFallbackProvider(cgID: cgID)
+            var info = WindowInfo(
+                windowProvider: provider,
+                app: app,
+                image: image,
+                axElement: axWin,
+                appAxElement: appAX,
+                closeButton: try? axWin.closeButton(),
+                isMinimized: (try? axWin.isMinimized()) ?? false,
+                isHidden: app.isHidden,
+                lastAccessedTime: Date(),
+                spaceID: spaceIDForWindowID(cgID)
+            )
+            info.windowName = cgID.cgsTitle()
+            updateDesktopSpaceWindowCache(with: info)
+            usedIDs.insert(cgID)
         }
     }
 
@@ -532,10 +675,33 @@ enum WindowUtil {
             // After processing windows, purify the cache for each app that had windows in the current space
             for pid in processedPIDs {
                 _ = await purifyAppCache(with: pid, removeAll: false)
+                // Refresh images for AX-fallback windows (not covered by SCK)
+                refreshAXFallbackWindowImages(for: pid)
             }
 
         } catch {
             print("Error updating windows: \(error)")
+        }
+    }
+
+    /// Refresh images for windows discovered via AX fallback (no SCWindow available)
+    private static func refreshAXFallbackWindowImages(for pid: pid_t) {
+        let windows = desktopSpaceWindowCacheManager.readCache(pid: pid)
+        guard !windows.isEmpty else { return }
+
+        for window in windows where window.scWindow == nil {
+            // Skip invalid AX elements
+            if !isValidElement(window.axElement) {
+                desktopSpaceWindowCacheManager.removeFromCache(pid: pid, windowId: window.id)
+                continue
+            }
+
+            if let image = window.id.cgsScreenshot() {
+                var updated = window
+                updated.image = image
+                updated.spaceID = spaceIDForWindowID(window.id)
+                updateDesktopSpaceWindowCache(with: updated)
+            }
         }
     }
 
@@ -636,7 +802,8 @@ enum WindowUtil {
                 closeButton: closeButton,
                 isMinimized: false,
                 isHidden: false,
-                lastAccessedTime: Date.now
+                lastAccessedTime: Date.now,
+                spaceID: WindowUtil.spaceIDForWindowID(window.windowID)
             )
 
             await Task.detached(priority: .userInitiated) {
@@ -657,6 +824,7 @@ enum WindowUtil {
                 matchingWindowCopy.image = windowInfo.image
                 matchingWindowCopy.isHidden = windowInfo.isHidden
                 matchingWindowCopy.isMinimized = windowInfo.isMinimized
+                matchingWindowCopy.spaceID = windowInfo.spaceID
 
                 windowSet.remove(matchingWindow)
                 windowSet.insert(matchingWindowCopy)
@@ -699,6 +867,14 @@ enum WindowUtil {
 
     static func purgeAppCache(with pid: pid_t) {
         desktopSpaceWindowCacheManager.writeCache(pid: pid, windowSet: [])
+    }
+
+    // Map a CGWindowID to its Space via private CGS
+    static func spaceIDForWindowID(_ id: CGWindowID) -> Int? {
+        let arr: CFArray = [NSNumber(value: UInt32(id))] as CFArray
+        guard let spaces = CGSCopySpacesForWindows(CGSMainConnectionID(), kCGSAllSpacesMask, arr) as NSArray? else { return nil }
+        if let first = spaces.firstObject as? NSNumber { return first.intValue }
+        return nil
     }
 
     /// Checks if the frontmost application is fullscreen and in the blacklist

@@ -31,6 +31,8 @@ struct WindowPreview: View {
     @Default(.allowDynamicImageSizing) var allowDynamicImageSizing
     @Default(.useEmbeddedDockPreviewElements) var useEmbeddedDockPreviewElements
     @Default(.disableDockStyleTrafficLights) var disableDockStyleTrafficLights
+    @Default(.disableDockStyleTitles) var disableDockStyleTitles
+    @Default(.hidePreviewCardBackground) var hidePreviewCardBackground
     @Default(.showMinimizedHiddenLabels) var showMinimizedHiddenLabels
 
     @Default(.tapEquivalentInterval) var tapEquivalentInterval
@@ -124,7 +126,9 @@ struct WindowPreview: View {
                 MarqueeText(text: title, startDelay: 1)
                     .font(.subheadline)
                     .padding(4)
-                    .materialPill()
+                    .if(!disableDockStyleTitles) { view in
+                        view.materialPill()
+                    }
             }
         }
 
@@ -373,7 +377,9 @@ struct WindowPreview: View {
                 MarqueeText(text: title, startDelay: 1)
                     .font(.subheadline)
                     .padding(4)
-                    .materialPill()
+                    .if(!disableDockStyleTitles) { view in
+                        view.materialPill()
+                    }
             }
         }
 
@@ -536,18 +542,20 @@ struct WindowPreview: View {
             .background {
                 let cornerRadius = uniformCardRadius ? 20.0 : 0.0
 
-                BlurView(variant: 18)
-                    .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
-                    .borderedBackground(.primary.opacity(0.1), lineWidth: 1.75, shape: RoundedRectangle(cornerRadius: cornerRadius))
-                    .padding(-6)
-                    .overlay {
-                        if finalIsSelected {
-                            let highlightColor = hoverHighlightColor ?? Color(nsColor: .controlAccentColor)
-                            RoundedRectangle(cornerRadius: cornerRadius)
-                                .fill(highlightColor.opacity(selectionOpacity))
-                                .padding(-6)
+                if !hidePreviewCardBackground {
+                    BlurView(variant: 18)
+                        .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
+                        .borderedBackground(.primary.opacity(0.1), lineWidth: 1.75, shape: RoundedRectangle(cornerRadius: cornerRadius))
+                        .padding(-6)
+                        .overlay {
+                            if finalIsSelected {
+                                let highlightColor = hoverHighlightColor ?? Color(nsColor: .controlAccentColor)
+                                RoundedRectangle(cornerRadius: cornerRadius)
+                                    .fill(highlightColor.opacity(selectionOpacity))
+                                    .padding(-6)
+                            }
                         }
-                    }
+                }
             }
         }
         .overlay {
