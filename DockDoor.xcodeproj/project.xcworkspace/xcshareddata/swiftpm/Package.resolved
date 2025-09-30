@@ -1,5 +1,5 @@
 {
-  "originHash" : "5248e828952ad393abc81a18a8a9c34a4822127cc0a9ff2cfb3a5e4715c9fbd3",
+  "originHash" : "1aa9fb48d4e0797930115961711b1ca1ddd436584bad9f72d944d4e056bc886f",
   "pins" : [
     {
       "identity" : "confettiswiftui",
@@ -44,15 +44,6 @@
       "state" : {
         "revision" : "a504eb6d144bcf49f4f33029a2795345cb39e6b4",
         "version" : "1.0.5"
-      }
-    },
-    {
-      "identity" : "settings",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/sindresorhus/Settings",
-      "state" : {
-        "revision" : "879ea83a7bbc6dbebf62bed8c547f090146372a6",
-        "version" : "3.1.1"
       }
     },
     {
