@@ -33,10 +33,11 @@ struct WindowInfo: Identifiable, Hashable {
     var isHidden: Bool
     var spaceID: Int?
     var lastAccessedTime: Date
+    var lastImageCaptureTime: Date
 
     private var _scWindow: SCWindow?
 
-    init(windowProvider: WindowPropertiesProviding, app: NSRunningApplication, image: CGImage?, axElement: AXUIElement, appAxElement: AXUIElement, closeButton: AXUIElement?, isMinimized: Bool, isHidden: Bool, lastAccessedTime: Date, spaceID: Int? = nil) {
+    init(windowProvider: WindowPropertiesProviding, app: NSRunningApplication, image: CGImage?, axElement: AXUIElement, appAxElement: AXUIElement, closeButton: AXUIElement?, isMinimized: Bool, isHidden: Bool, lastAccessedTime: Date, lastImageCaptureTime: Date, spaceID: Int? = nil) {
         id = windowProvider.windowID
         self.windowProvider = windowProvider
         self.app = app
@@ -49,6 +50,7 @@ struct WindowInfo: Identifiable, Hashable {
         self.isHidden = isHidden
         self.spaceID = spaceID
         self.lastAccessedTime = lastAccessedTime
+        self.lastImageCaptureTime = lastImageCaptureTime
         _scWindow = windowProvider as? SCWindow
     }
 
@@ -124,7 +126,7 @@ enum WindowUtil {
     // MARK: - Helper Functions
 
     /// Main function to capture a window image using ScreenCaptureKit, with fallback to legacy methods for older macOS versions.
-    static func captureWindowImage(window: SCWindow, forceRefresh: Bool = false) async throws -> CGImage {
+    static func captureWindowImage(window: SCWindow, forceRefresh: Bool = false) async throws -> (CGImage, Date) {
         // Check cache first if not forcing refresh
         if !forceRefresh {
             if let pid = window.owningApplication?.processID,
@@ -134,8 +136,8 @@ enum WindowUtil {
             {
                 // Check if we need to refresh the image based on cache lifespan
                 let cacheLifespan = Defaults[.screenCaptureCacheLifespan]
-                if Date().timeIntervalSince(cachedWindow.lastAccessedTime) <= cacheLifespan {
-                    return cachedImage
+                if Date().timeIntervalSince(cachedWindow.lastImageCaptureTime) <= cacheLifespan {
+                    return (cachedImage, cachedWindow.lastImageCaptureTime)
                 }
 
                 // If we reach here, the image is stale and needs refreshing
@@ -190,7 +192,7 @@ enum WindowUtil {
             }
         }
 
-        return cgImage
+        return (cgImage, Date.now)
     }
 
     static func isValidElement(_ element: AXUIElement) -> Bool {
@@ -474,14 +476,14 @@ enum WindowUtil {
             // Ensure AX-fallback windows (no SCWindow) get refreshed images on hover
             let lifespan = Defaults[.screenCaptureCacheLifespan]
             let now = Date()
-            let toRefresh = finalWindows.filter { $0.scWindow == nil && ($0.image == nil || now.timeIntervalSince($0.lastAccessedTime) > lifespan) }
+            let toRefresh = finalWindows.filter { $0.scWindow == nil && ($0.image == nil || now.timeIntervalSince($0.lastImageCaptureTime) > lifespan) }
             if !toRefresh.isEmpty {
                 for window in toRefresh {
                     if let image = window.id.cgsScreenshot() {
                         var updated = window
                         updated.image = image
                         updated.spaceID = spaceIDForWindowID(window.id)
-                        updated.lastAccessedTime = now
+                        updated.lastImageCaptureTime = Date.now
                         updateDesktopSpaceWindowCache(with: updated)
                     }
                 }
@@ -633,7 +635,8 @@ enum WindowUtil {
                 closeButton: try? axWin.closeButton(),
                 isMinimized: (try? axWin.isMinimized()) ?? false,
                 isHidden: app.isHidden,
-                lastAccessedTime: Date(),
+                lastAccessedTime: Date.now,
+                lastImageCaptureTime: Date.now,
                 spaceID: spaceIDForWindowID(cgID)
             )
             info.windowName = cgID.cgsTitle()
@@ -699,6 +702,7 @@ enum WindowUtil {
             if let image = window.id.cgsScreenshot() {
                 var updated = window
                 updated.image = image
+                updated.lastImageCaptureTime = Date.now
                 updated.spaceID = spaceIDForWindowID(window.id)
                 updateDesktopSpaceWindowCache(with: updated)
             }
@@ -714,9 +718,10 @@ enum WindowUtil {
             {
                 let updatedWindow = existingWindow
                 await Task.detached(priority: .userInitiated) {
-                    if let image = try? await captureWindowImage(window: actualSCWindow, forceRefresh: true) {
+                    if let (image, imageDate) = try? await captureWindowImage(window: actualSCWindow, forceRefresh: true) {
                         var mutableCopy = updatedWindow
                         mutableCopy.image = image
+                        mutableCopy.lastImageCaptureTime = imageDate
                         updateDesktopSpaceWindowCache(with: mutableCopy)
                     }
                 }.value
@@ -803,13 +808,15 @@ enum WindowUtil {
                 isMinimized: false,
                 isHidden: false,
                 lastAccessedTime: Date.now,
+                lastImageCaptureTime: Date.distantPast,
                 spaceID: WindowUtil.spaceIDForWindowID(window.windowID)
             )
 
             await Task.detached(priority: .userInitiated) {
-                if let image = try? await captureWindowImage(window: window) {
+                if let (image, imageDate) = try? await captureWindowImage(window: window) {
                     var mutableCopy = windowInfo
                     mutableCopy.image = image
+                    mutableCopy.lastImageCaptureTime = imageDate
                     updateDesktopSpaceWindowCache(with: mutableCopy)
                 }
             }.value
@@ -822,6 +829,7 @@ enum WindowUtil {
                 var matchingWindowCopy = matchingWindow
                 matchingWindowCopy.windowName = windowInfo.windowName
                 matchingWindowCopy.image = windowInfo.image
+                matchingWindowCopy.lastImageCaptureTime = windowInfo.lastImageCaptureTime
                 matchingWindowCopy.isHidden = windowInfo.isHidden
                 matchingWindowCopy.isMinimized = windowInfo.isMinimized
                 matchingWindowCopy.spaceID = windowInfo.spaceID
