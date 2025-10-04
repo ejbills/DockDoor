@@ -118,6 +118,7 @@ struct MainSettingsView: View {
     @Default(.windowImageCaptureQuality) var windowImageCaptureQuality
     @Default(.bufferFromDock) var bufferFromDock
     @Default(.sortWindowsByDate) var sortWindowsByDate
+    @Default(.showOldestWindowsFirst) var showOldestWindowsFirst
     @Default(.shouldHideOnDockItemClick) var shouldHideOnDockItemClick
     @Default(.dockClickAction) var dockClickAction
     @Default(.previewHoverAction) var previewHoverAction
@@ -551,6 +552,7 @@ struct MainSettingsView: View {
                     sliderSetting(title: "Window Image Cache Lifespan", value: $screenCaptureCacheLifespan, range: 0 ... 60, step: 10, unit: "seconds")
                     sliderSetting(title: "Window Image Resolution Scale (1=Best)", value: $windowPreviewImageScale, range: 1 ... 4, step: 1, unit: "")
                     Toggle(isOn: $sortWindowsByDate) { Text("Sort Window Previews by Date (if multiple)") }
+                    Toggle(isOn: $showOldestWindowsFirst) { Text("Show Oldest Window Previews First (if multiple)") }
                 }
             }
             StyledGroupBox(label: "Interaction & Behavior (Dock Previews)") {

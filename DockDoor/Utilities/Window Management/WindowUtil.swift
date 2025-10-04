@@ -419,7 +419,7 @@ enum WindowUtil {
     }
 
     static func getAllWindowsOfAllApps() -> [WindowInfo] {
-        let windows = desktopSpaceWindowCacheManager.getAllWindows()
+        let windows = desktopSpaceWindowCacheManager.getAllWindows(showOldestWindowsFirst: Defaults[.showOldestWindowsFirst])
         let filteredWindows = !Defaults[.includeHiddenWindowsInSwitcher]
             ? windows.filter { !$0.isHidden && !$0.isMinimized }
             : windows
