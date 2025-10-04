@@ -326,7 +326,7 @@ final class DockObserver {
 
                     var combinedWindows: [WindowInfo] = []
                     for appInstance in appsToFetchWindowsFrom {
-                        let windowsForInstance = try await WindowUtil.getActiveWindows(of: appInstance)
+                        let windowsForInstance = try await WindowUtil.getActiveWindows(of: appInstance, showOldestWindowsFirst: Defaults[.showOldestWindowsFirst])
                         combinedWindows.append(contentsOf: windowsForInstance)
                     }
 
@@ -598,7 +598,7 @@ final class DockObserver {
         } else {
             Task { @MainActor in
                 do {
-                    let windows = try await WindowUtil.getActiveWindows(of: app)
+                    let windows = try await WindowUtil.getActiveWindows(of: app, showOldestWindowsFirst: Defaults[.showOldestWindowsFirst])
                     for window in windows {
                         if !window.isMinimized {
                             _ = WindowUtil.toggleMinimize(windowInfo: window)
@@ -619,7 +619,7 @@ final class DockObserver {
         } else {
             Task { @MainActor in
                 do {
-                    let windows = try await WindowUtil.getActiveWindows(of: app)
+                    let windows = try await WindowUtil.getActiveWindows(of: app, showOldestWindowsFirst: Defaults[.showOldestWindowsFirst])
                     let minimizedWindows = windows.filter(\.isMinimized)
 
                     if !minimizedWindows.isEmpty {
@@ -652,7 +652,7 @@ final class DockObserver {
             }
 
             do {
-                let windows = try await WindowUtil.getActiveWindows(of: app)
+                let windows = try await WindowUtil.getActiveWindows(of: app, showOldestWindowsFirst: Defaults[.showOldestWindowsFirst])
                 let mouseScreen = NSScreen.screenContainingMouse(currentMouseLocation)
                 let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
 

@@ -133,7 +133,7 @@ extension DockObserver {
             do {
                 var windows: [WindowInfo] = []
                 if let app = resolvedApp {
-                    windows = try await WindowUtil.getActiveWindows(of: app)
+                    windows = try await WindowUtil.getActiveWindows(of: app, showOldestWindowsFirst: Defaults[.showOldestWindowsFirst])
                 }
 
                 let elementPos = try? selectedItem.element.position()

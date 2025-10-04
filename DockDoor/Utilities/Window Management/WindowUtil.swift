@@ -444,7 +444,7 @@ enum WindowUtil {
         }
     }
 
-    static func getActiveWindows(of app: NSRunningApplication) async throws -> [WindowInfo] {
+    static func getActiveWindows(of app: NSRunningApplication, showOldestWindowsFirst: Bool) async throws -> [WindowInfo] {
         let content = try await SCShareableContent.excludingDesktopWindows(true, onScreenWindowsOnly: true)
         let group = LimitedTaskGroup<Void>(maxConcurrentTasks: 4)
 
@@ -515,7 +515,11 @@ enum WindowUtil {
                 }
             }
 
-            return finalWindows.sorted(by: { $0.lastAccessedTime > $1.lastAccessedTime })
+            let sortOrder: (WindowInfo, WindowInfo) -> Bool = showOldestWindowsFirst
+                ? { $0.lastAccessedTime < $1.lastAccessedTime }
+                : { $0.lastAccessedTime > $1.lastAccessedTime }
+
+            return finalWindows.sorted(by: sortOrder)
         }
 
         return []

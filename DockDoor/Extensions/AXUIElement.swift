@@ -87,13 +87,28 @@ extension AXUIElement {
     }
 
     static func allWindows(_ pid: pid_t, appElement: AXUIElement) -> [AXUIElement] {
-        var set = Set<AXUIElement>()
+        // Use split Set/Array to preserve order of window discovery
+        var seen = Set<AXUIElement>()
+        var orderedWindows = [AXUIElement]()
+
         if let maybe = try? appElement.windows() {
-            set.formUnion(maybe)
+            for window in maybe {
+                if !seen.contains(window) {
+                    seen.insert(window)
+                    orderedWindows.append(window)
+                }
+            }
         }
+
         let brute = windowsByBruteForce(pid)
-        set.formUnion(brute)
-        return Array(set)
+        for window in brute {
+            if !seen.contains(window) {
+                seen.insert(window)
+                orderedWindows.append(window)
+            }
+        }
+
+        return orderedWindows
     }
 
     func isMinimized() throws -> Bool {
