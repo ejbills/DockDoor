@@ -134,13 +134,19 @@ class SpaceWindowCacheManager {
         }
     }
 
-    func getAllWindows(showOldestWindowsFirst: Bool) -> [WindowInfo] {
+    func getAllWindows() -> [WindowInfo] {
         cacheLock.lock()
         defer { cacheLock.unlock() }
 
-        let sortOrder: (WindowInfo, WindowInfo) -> Bool = showOldestWindowsFirst
-            ? { $0.lastAccessedTime < $1.lastAccessedTime }
-            : { $0.lastAccessedTime > $1.lastAccessedTime }
+        let sortOrder: (WindowInfo, WindowInfo) -> Bool = if Defaults[.sortWindowsByDate] {
+            Defaults[.showOldestWindowsFirst]
+                ? { $0.lastAccessedTime < $1.lastAccessedTime }
+                : { $0.lastAccessedTime > $1.lastAccessedTime }
+        } else {
+            Defaults[.showOldestWindowsFirst]
+                ? { $0.id < $1.id }
+                : { $0.id > $1.id }
+        }
 
         return Array(windowCache.values.flatMap { $0 }).sorted(by: sortOrder)
     }

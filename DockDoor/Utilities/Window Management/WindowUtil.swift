@@ -421,7 +421,7 @@ enum WindowUtil {
     }
 
     static func getAllWindowsOfAllApps() -> [WindowInfo] {
-        let windows = desktopSpaceWindowCacheManager.getAllWindows(showOldestWindowsFirst: Defaults[.showOldestWindowsFirst])
+        let windows = desktopSpaceWindowCacheManager.getAllWindows()
         let filteredWindows = !Defaults[.includeHiddenWindowsInSwitcher]
             ? windows.filter { !$0.isHidden && !$0.isMinimized }
             : windows
@@ -444,7 +444,7 @@ enum WindowUtil {
         }
     }
 
-    static func getActiveWindows(of app: NSRunningApplication, showOldestWindowsFirst: Bool) async throws -> [WindowInfo] {
+    static func getActiveWindows(of app: NSRunningApplication) async throws -> [WindowInfo] {
         let content = try await SCShareableContent.excludingDesktopWindows(true, onScreenWindowsOnly: true)
         let group = LimitedTaskGroup<Void>(maxConcurrentTasks: 4)
 
@@ -515,9 +515,15 @@ enum WindowUtil {
                 }
             }
 
-            let sortOrder: (WindowInfo, WindowInfo) -> Bool = showOldestWindowsFirst
-                ? { $0.lastAccessedTime < $1.lastAccessedTime }
-                : { $0.lastAccessedTime > $1.lastAccessedTime }
+            let sortOrder: (WindowInfo, WindowInfo) -> Bool = if Defaults[.sortWindowsByDate] {
+                Defaults[.showOldestWindowsFirst]
+                    ? { $0.lastAccessedTime < $1.lastAccessedTime }
+                    : { $0.lastAccessedTime > $1.lastAccessedTime }
+            } else {
+                Defaults[.showOldestWindowsFirst]
+                    ? { $0.id < $1.id }
+                    : { $0.id > $1.id }
+            }
 
             return finalWindows.sorted(by: sortOrder)
         }

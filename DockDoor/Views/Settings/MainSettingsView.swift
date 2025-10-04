@@ -551,7 +551,7 @@ struct MainSettingsView: View {
 
                     sliderSetting(title: "Window Image Cache Lifespan", value: $screenCaptureCacheLifespan, range: 0 ... 60, step: 10, unit: "seconds")
                     sliderSetting(title: "Window Image Resolution Scale (1=Best)", value: $windowPreviewImageScale, range: 1 ... 4, step: 1, unit: "")
-                    Toggle(isOn: $sortWindowsByDate) { Text("Sort Window Previews by Date (if multiple)") }
+                    Toggle(isOn: $sortWindowsByDate) { Text("Sort Window Previews by Last Interaction (if multiple)") }
                     Toggle(isOn: $showOldestWindowsFirst) { Text("Show Oldest Window Previews First (if multiple)") }
                 }
             }
