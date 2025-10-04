@@ -104,6 +104,7 @@ struct AppearanceSettingsView: View {
     @Default(.hidePreviewCardBackground) var hidePreviewCardBackground
     @Default(.previewMaxColumns) var previewMaxColumns
     @Default(.previewMaxRows) var previewMaxRows
+    @Default(.previewFixedDimensions) var previewFixedDimensions
     @Default(.switcherMaxRows) var switcherMaxRows
     @Default(.showAppIconOnly) var showAppIconOnly
     @Default(.globalPaddingMultiplier) var globalPaddingMultiplier
@@ -376,6 +377,16 @@ struct AppearanceSettingsView: View {
                     Text("Embed controls in preview frames")
                 }
                 Text("Places traffic light buttons and window titles directly inside the dock preview frames for a more compact and minimal appearance.")
+                    .font(.footnote)
+                    .foregroundColor(.gray)
+                    .padding(.leading, 20)
+            }
+
+            VStack(alignment: .leading) {
+                Toggle(isOn: $previewFixedDimensions) {
+                    Text("Use fixed-rows/columns in dock preview")
+                }
+                Text("Bottom dock will fill up each row to Max Columns before wrapping to the next row. (Visa versa for left/right docks)")
                     .font(.footnote)
                     .foregroundColor(.gray)
                     .padding(.leading, 20)

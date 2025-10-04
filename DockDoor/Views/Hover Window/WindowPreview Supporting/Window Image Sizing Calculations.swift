@@ -57,6 +57,7 @@ extension WindowPreviewHoverContainer {
         isWindowSwitcherActive: Bool,
         previewMaxColumns: Int,
         previewMaxRows: Int,
+        previewFixedDimensions: Bool,
         switcherMaxRows: Int
     ) -> [Int: WindowDimensions] {
         var dimensionsMap: [Int: WindowDimensions] = [:]
@@ -73,11 +74,15 @@ extension WindowPreviewHoverContainer {
             // Force a single row while in Cmd+Tab context, regardless of user row settings
             let effectiveMaxRows = (dockPosition == .cmdTab) ? 1 : (isWindowSwitcherActive ? switcherMaxRows : previewMaxRows)
 
+            // Cmd+Tab doesn't do fixed dimensions
+            let useFixedDimensions = (dockPosition == .cmdTab) ? false : previewFixedDimensions
+
             let windowChunks = createWindowChunks(
                 totalWindows: windows.count,
                 isHorizontal: orientationIsHorizontal,
                 maxColumns: previewMaxColumns,
-                maxRows: effectiveMaxRows
+                maxRows: effectiveMaxRows,
+                fixedDimensions: useFixedDimensions
             )
 
             // Process each chunk (row/column) to find unified dimensions
@@ -212,7 +217,8 @@ extension WindowPreviewHoverContainer {
         totalWindows: Int,
         isHorizontal: Bool,
         maxColumns: Int,
-        maxRows: Int
+        maxRows: Int,
+        fixedDimensions: Bool
     ) -> [[Int]] {
         guard totalWindows > 0, maxColumns > 0, maxRows > 0 else { return [] }
 
@@ -224,7 +230,7 @@ extension WindowPreviewHoverContainer {
                 return [windowIndices]
             }
 
-            let itemsPerRow = Int(ceil(Double(totalWindows) / Double(maxRows)))
+            let itemsPerRow = fixedDimensions ? maxColumns : Int(ceil(Double(totalWindows) / Double(maxRows)))
             var chunks: [[Int]] = []
             var startIndex = 0
 
@@ -247,7 +253,7 @@ extension WindowPreviewHoverContainer {
                 return [windowIndices]
             }
 
-            let itemsPerColumn = Int(ceil(Double(totalWindows) / Double(maxColumns)))
+            let itemsPerColumn = fixedDimensions ? maxRows : Int(ceil(Double(totalWindows) / Double(maxColumns)))
             var chunks: [[Int]] = []
             var startIndex = 0
 
