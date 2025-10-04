@@ -111,6 +111,7 @@ struct AppearanceSettingsView: View {
     @Default(.disableDockStyleTrafficLights) var disableDockStyleTrafficLights
     @Default(.disableDockStyleTitles) var disableDockStyleTitles
     @Default(.showMinimizedHiddenLabels) var showMinimizedHiddenLabels
+    @Default(.trafficLightOrHidden) var trafficLightOrHidden
     @Default(.enableTitleMarquee) var enableTitleMarquee
 
     @State private var showAdvancedAppearanceSettings: Bool = false
@@ -224,6 +225,15 @@ struct AppearanceSettingsView: View {
                                     Text("Distinguish minimized/hidden windows")
                                 }
                                 Text("When enabled, shows visual indicators and dims minimized/hidden windows. When disabled, treats them as normal windows with full functionality.")
+                                    .font(.footnote)
+                                    .foregroundColor(.gray)
+                                    .padding(.leading, 20)
+                            }
+                            VStack(alignment: .leading) {
+                                Toggle(isOn: $trafficLightOrHidden) {
+                                    Text("Keep traffic Lights")
+                                }
+                                Text("When Toggled disable minimized text and keep traffic lights.")
                                     .font(.footnote)
                                     .foregroundColor(.gray)
                                     .padding(.leading, 20)
