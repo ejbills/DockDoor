@@ -34,6 +34,7 @@ struct WindowPreview: View {
     @Default(.disableDockStyleTitles) var disableDockStyleTitles
     @Default(.hidePreviewCardBackground) var hidePreviewCardBackground
     @Default(.showMinimizedHiddenLabels) var showMinimizedHiddenLabels
+    @Default(.trafficLightOrHidden) var trafficLightOrHidden
 
     @Default(.tapEquivalentInterval) var tapEquivalentInterval
     @Default(.previewHoverAction) var previewHoverAction
@@ -119,7 +120,7 @@ struct WindowPreview: View {
 
         let hasTrafficLights = windowInfo.closeButton != nil &&
             trafficLightButtonsVisibility != .never &&
-            (showMinimizedHiddenLabels ? (!windowInfo.isMinimized && !windowInfo.isHidden) : true)
+            (!trafficLightOrHidden ? (!windowInfo.isMinimized && !windowInfo.isHidden) : true)
 
         let titleContent = Group {
             if hasTitle, let title = titleToShow {
@@ -296,7 +297,7 @@ struct WindowPreview: View {
                     onWindowAction: handleWindowAction,
                     pillStyling: true, mockPreviewActive: mockPreviewActive
                 )
-            } else if windowInfo.isMinimized || windowInfo.isHidden, showMinimizedHiddenLabels {
+            } else if windowInfo.isMinimized || windowInfo.isHidden, false {
                 Text(windowInfo.isMinimized ? "Minimized" : "Hidden")
                     .font(.subheadline)
                     .italic()
@@ -370,7 +371,7 @@ struct WindowPreview: View {
 
         let hasTrafficLights = windowInfo.closeButton != nil &&
             trafficLightButtonsVisibility != .never &&
-            (showMinimizedHiddenLabels ? (!windowInfo.isMinimized && !windowInfo.isHidden) : true)
+            (!trafficLightOrHidden ? (!windowInfo.isMinimized && !windowInfo.isHidden) : true)
 
         let titleContent = Group {
             if hasTitle, let title = titleToShow {
