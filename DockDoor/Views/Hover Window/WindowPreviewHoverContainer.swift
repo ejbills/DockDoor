@@ -57,6 +57,7 @@ struct WindowPreviewHoverContainer: View {
     @Default(.aeroShakeAction) var aeroShakeAction
     @Default(.previewMaxColumns) var previewMaxColumns
     @Default(.previewMaxRows) var previewMaxRows
+    @Default(.previewFixedDimensions) var previewFixedDimensions
     @Default(.switcherMaxRows) var switcherMaxRows
     @Default(.gradientColorPalette) var gradientColorPalette
     @Default(.showAnimations) var showAnimations
@@ -750,6 +751,7 @@ struct WindowPreviewHoverContainer: View {
 
         var (maxColumns, maxRows): (Int, Int)
         if previewStateCoordinator.windowSwitcherActive {
+            // These 999 values are never used
             maxColumns = 999
             maxRows = switcherMaxRows
         } else {
@@ -785,12 +787,14 @@ struct WindowPreviewHoverContainer: View {
 
         let totalItems = itemsToProcess.count
 
+        let fixedDimensions = (dockPosition == .cmdTab) ? false : previewFixedDimensions
+
         if isHorizontal {
             if maxRows == 1 {
                 return itemsToProcess.isEmpty ? [[]] : [itemsToProcess]
             }
 
-            let itemsPerRow = Int(ceil(Double(totalItems) / Double(maxRows)))
+            let itemsPerRow = fixedDimensions ? previewMaxColumns : Int(ceil(Double(totalItems) / Double(maxRows)))
             var chunks: [[FlowItem]] = []
             var startIndex = 0
 
@@ -817,7 +821,7 @@ struct WindowPreviewHoverContainer: View {
                 return itemsToProcess.isEmpty ? [itemsToProcess] : [itemsToProcess]
             }
 
-            let itemsPerColumn = Int(ceil(Double(totalItems) / Double(maxColumns)))
+            let itemsPerColumn = fixedDimensions ? previewMaxRows : Int(ceil(Double(totalItems) / Double(maxColumns)))
             var chunks: [[FlowItem]] = []
             var startIndex = 0
 

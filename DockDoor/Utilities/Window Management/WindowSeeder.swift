@@ -71,6 +71,7 @@ final class WindowSeeder {
                 isMinimized: (try? axWin.isMinimized()) ?? false,
                 isHidden: app.isHidden,
                 lastAccessedTime: Date(),
+                lastImageCaptureTime: Date(),
                 spaceID: id32.cgsSpaces().first.map { Int($0) }
             )
             info.windowName = id32.cgsTitle()
