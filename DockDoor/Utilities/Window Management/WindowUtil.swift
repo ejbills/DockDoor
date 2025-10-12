@@ -321,8 +321,7 @@ enum WindowUtil {
             if let appDelegate = NSApplication.shared.delegate as? AppDelegate,
                windowInfo.app.localizedName != "DockDoor"
             {
-                // Close the settings window to avoid AX interference
-                appDelegate.settingsWindow.close()
+                appDelegate.settingsWindowController.close()
             }
         }
 

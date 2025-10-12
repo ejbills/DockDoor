@@ -1,9 +1,18 @@
 import Cocoa
 import Defaults
+import Settings
 import Sparkle
 import SwiftUI
 
-class SettingsWindowControllerDelegate: NSObject, NSWindowDelegate {}
+class SettingsWindowControllerDelegate: NSObject, NSWindowDelegate {
+    func windowDidBecomeKey(_ notification: Notification) {
+        NSApp.setActivationPolicy(.regular)
+    }
+
+    func windowWillClose(_ notification: Notification) {
+        NSApp.setActivationPolicy(.accessory)
+    }
+}
 
 class AppDelegate: NSObject, NSApplicationDelegate {
     private var dockObserver: DockObserver?
@@ -20,18 +29,26 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     private var firstTimeWindow: NSWindow?
-    lazy var settingsWindow: SwiftUIWindow = {
-        let window = SwiftUIWindow(
-            styleMask: [.titled, .closable, .resizable, .fullSizeContentView],
-            content: { SettingsWindowView(updaterState: self.updaterState) },
-            onClose: { NSApp.setActivationPolicy(.accessory) }
-        )
-        window.title = String(localized: "Settings")
-        window.isReleasedWhenClosed = false
-        if let zoomButton = window.standardWindowButton(.zoomButton) {
-            zoomButton.isEnabled = true
+    lazy var settingsWindowController: SettingsWindowController = {
+        var panes: [SettingsPane] = [
+            GeneralSettingsViewController(),
+            AppearanceSettingsViewController(),
+            FiltersSettingsViewController(),
+            SupportSettingsViewController(updaterState: updaterState),
+        ]
+
+        let controller = SettingsWindowController(panes: panes)
+        controller.window?.delegate = self.settingsWindowControllerDelegate
+
+        if let window = controller.window {
+            window.styleMask.insert(.resizable)
+
+            if let zoomButton = window.standardWindowButton(.zoomButton) {
+                zoomButton.isEnabled = true
+            }
         }
-        return window
+
+        return controller
     }()
 
     private let settingsWindowControllerDelegate = SettingsWindowControllerDelegate()
@@ -47,8 +64,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         super.init()
 
-        // Ensure delegate exists for potential future use
-        _ = settingsWindowControllerDelegate
+        settingsWindowController.window?.delegate = settingsWindowControllerDelegate
     }
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
@@ -145,9 +161,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         NSApp.setActivationPolicy(.regular)
         NSApp.activate(ignoringOtherApps: true)
 
-        settingsWindow.show()
-        settingsWindow.makeKeyAndOrderFront(nil)
-        settingsWindow.orderFrontRegardless()
+        settingsWindowController.show()
+
+        if let window = settingsWindowController.window {
+            window.makeKeyAndOrderFront(nil)
+            window.orderFrontRegardless()
+        }
     }
 
     func quitApp() {
