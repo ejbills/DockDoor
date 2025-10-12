@@ -82,9 +82,11 @@ class WindowManipulationObservers {
     }
 
     @objc private func activeSpaceDidChange(_ notification: Notification) {
+        print("[MIN-DEBUG] activeSpaceDidChange notification received - refreshing all windows")
         Task(priority: .high) { [weak self] in
             guard self != nil else { return }
             await WindowUtil.updateAllWindowsInCurrentSpace()
+            print("[MIN-DEBUG] Finished updating all windows in current space")
         }
     }
 
@@ -191,9 +193,14 @@ class WindowManipulationObservers {
         case kAXUIElementDestroyedNotification, kAXWindowResizedNotification, kAXWindowMovedNotification:
             handleWindowEvent(element: element, app: app)
         case kAXWindowMiniaturizedNotification:
+            if let cgId = try? element.cgWindowId() {
+                let isMin = (try? element.isMinimized()) ?? false
+                print("[MIN-DEBUG] kAXWindowMiniaturizedNotification received for window \(cgId) in pid \(pid), isMinimized: \(isMin)")
+            }
             handleWindowEvent(element: element, app: app)
             WindowUtil.updateStatusOfWindowCache(pid: pid, isParentAppHidden: false)
         case kAXApplicationHiddenNotification:
+            print("[MIN-DEBUG] kAXApplicationHiddenNotification received for pid \(pid)")
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
                 guard let self else { return }
                 if NSRunningApplication(processIdentifier: pid) == nil {
@@ -204,6 +211,7 @@ class WindowManipulationObservers {
                 }
             }
         case kAXApplicationShownNotification:
+            print("[MIN-DEBUG] kAXApplicationShownNotification received for pid \(pid)")
             WindowUtil.updateStatusOfWindowCache(pid: pid, isParentAppHidden: false)
         case kAXWindowCreatedNotification:
             handleNewWindow(for: pid)

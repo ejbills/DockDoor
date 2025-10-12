@@ -61,6 +61,8 @@ final class WindowSeeder {
             guard let image = id32.cgsScreenshot() else { continue }
 
             let provider = AXFallbackProvider(cgID: id32)
+            let isMinimized = (try? axWin.isMinimized()) ?? false
+            print("[MIN-DEBUG] WindowSeeder: Seeding window \(id32) for pid \(pid) - isMinimized: \(isMinimized)")
             var info = WindowInfo(
                 windowProvider: provider,
                 app: app,
@@ -68,7 +70,7 @@ final class WindowSeeder {
                 axElement: axWin,
                 appAxElement: appAX,
                 closeButton: try? axWin.closeButton(),
-                isMinimized: (try? axWin.isMinimized()) ?? false,
+                isMinimized: isMinimized,
                 isHidden: app.isHidden,
                 lastAccessedTime: Date(),
                 spaceID: id32.cgsSpaces().first.map { Int($0) }

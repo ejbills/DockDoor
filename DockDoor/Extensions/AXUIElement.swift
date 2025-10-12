@@ -97,7 +97,11 @@ extension AXUIElement {
     }
 
     func isMinimized() throws -> Bool {
-        try attribute(kAXMinimizedAttribute, Bool.self) == true
+        let result = try attribute(kAXMinimizedAttribute, Bool.self) == true
+        if let cgId = try? cgWindowId() {
+            print("[MIN-DEBUG] AXUIElement.isMinimized() called for window \(cgId) - result: \(result)")
+        }
+        return result
     }
 
     func isFullscreen() throws -> Bool {
