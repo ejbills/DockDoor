@@ -38,6 +38,17 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://buymeacoffee.com/keplercafe</div>
 
+<a id="1.25.3"></a>
+# [Release 1.25.3](https://github.com/ejbills/DockDoor/releases/tag/1.25.3) - 2025-09-26
+
+## 🐛 Bug Fixes 
+- Fixed invisible OK button
+- Fixed unreadable support section
+
+
+[Changes][1.25.3]
+
+
 <a id="1.25.2"></a>
 # [Release 1.25.2](https://github.com/ejbills/DockDoor/releases/tag/1.25.2) - 2025-09-24
 
@@ -1577,6 +1588,7 @@ v1.0
 [Changes][releases]
 
 
+[1.25.3]: https://github.com/ejbills/DockDoor/compare/1.25.2...1.25.3
 [1.25.2]: https://github.com/ejbills/DockDoor/compare/1.25.1...1.25.2
 [1.25.1]: https://github.com/ejbills/DockDoor/compare/1.25...1.25.1
 [1.25]: https://github.com/ejbills/DockDoor/compare/1.24.1...1.25

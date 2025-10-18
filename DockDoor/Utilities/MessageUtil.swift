@@ -16,8 +16,17 @@ enum MessageUtil {
             switch action {
             case .ok:
                 alert.addButton(withTitle: String(localized: "OK"))
+                if let button = alert.buttons.last {
+                    button.keyEquivalent = "\r"
+                    if #available(macOS 10.12, *) {
+                        button.bezelColor = .controlAccentColor
+                    }
+                }
             case .cancel:
                 alert.addButton(withTitle: String(localized: "Cancel"))
+                if let button = alert.buttons.last {
+                    button.keyEquivalent = "\u{1b}"
+                }
             }
         }
 

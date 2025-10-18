@@ -22,7 +22,7 @@ struct ScreenRecordingWarningView: View {
                             .font(.caption)
                             .foregroundColor(.blue)
                             .onTapGesture {
-                                if let url = URL(string: "https://github.com/ejbills/DockDoor/blob/main/DockDoor/Utilities/WindowUtil.swift#L71-L147") {
+                                if let url = URL(string: "https://github.com/ejbills/DockDoor/blob/main/DockDoor/Utilities/Window%20Management/WindowUtil.swift#L127-L194") {
                                     NSWorkspace.shared.open(url)
                                 }
                             }
@@ -34,7 +34,7 @@ struct ScreenRecordingWarningView: View {
                     }
                 }
                 .padding(16)
-                .dockStyle(cornerRadius: 16)
+                .background(RoundedRectangle(cornerRadius: 16, style: .continuous).fill(.ultraThickMaterial))
                 .padding(.bottom, 2)
                 .frame(maxWidth: .infinity)
                 .onTapGesture {
