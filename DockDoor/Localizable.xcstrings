@@ -850,7 +850,7 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%@"
           }
         },
@@ -928,7 +928,7 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%@"
           }
         },
@@ -946,7 +946,7 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%@"
           }
         }
@@ -1046,7 +1046,7 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%1$@ — %2$@"
           }
         },
@@ -1124,7 +1124,7 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%1$@ — %2$@"
           }
         },
@@ -1142,7 +1142,7 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%1$@ — %2$@"
           }
         }
@@ -12606,8 +12606,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Best quality (full resolution)"
+            "state" : "translated",
+            "value" : "Bedste kvalitet (fuld opløsning)"
           }
         },
         "de" : {
@@ -12756,14 +12756,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Best quality (full resolution)"
+            "state" : "translated",
+            "value" : "最佳质量(完全分辨率)"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Best quality (full resolution)"
+            "state" : "translated",
+            "value" : "最佳畫質（完整）"
           }
         }
       }
@@ -15081,8 +15081,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Change…"
+            "state" : "translated",
+            "value" : "Skift…"
           }
         },
         "de" : {
@@ -15231,14 +15231,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Change…"
+            "state" : "translated",
+            "value" : "更改…"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Change…"
+            "state" : "translated",
+            "value" : "更改⋯"
           }
         }
       }
@@ -16223,8 +16223,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Cmd+A focuses previews, Left/Right navigate, Down clears selection."
+            "state" : "translated",
+            "value" : "Cmd+A fokuserer previews, Venstre/Højre navigation, Ned rydder markering."
           }
         },
         "de" : {
@@ -16283,8 +16283,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Cmd+A focuses previews, Left/Right navigate, Down clears selection."
+            "state" : "translated",
+            "value" : "⌘A mostra anteprima | ← → selezione a sinistra/destra | ↓ cancella la selezione"
           }
         },
         "ja" : {
@@ -16361,8 +16361,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Cmd+A focuses previews, Left/Right navigate, Down clears selection."
+            "state" : "translated",
+            "value" : "Cmd+A фокусує попередній перегляд, навігація ліворуч/праворуч, вниз очищує виділення."
           }
         },
         "vi" : {
@@ -16373,14 +16373,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Cmd+A focuses previews, Left/Right navigate, Down clears selection."
+            "state" : "translated",
+            "value" : "Cmd+A聚焦到预览窗口，左/右键导航，向下键清除选择。"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Cmd+A focuses previews, Left/Right navigate, Down clears selection."
+            "state" : "translated",
+            "value" : "按「Command+A」來聚焦於預覽，按「左／右」移動，按「下」清除已選項目。"
           }
         }
       }
@@ -16985,7 +16985,7 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Command"
           }
         },
@@ -17141,7 +17141,7 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Command"
           }
         }
@@ -17366,7 +17366,7 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Command ⌘"
           }
         },
@@ -17516,13 +17516,13 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Command ⌘"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Command ⌘"
           }
         }
@@ -18657,13 +18657,13 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Control"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Control"
           }
         }
@@ -19038,13 +19038,13 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Control ⌃"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Control ⌃"
           }
         }
@@ -21554,8 +21554,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Delete"
+            "state" : "translated",
+            "value" : "Slet"
           }
         },
         "de" : {
@@ -21704,13 +21704,13 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Delete"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Delete"
           }
         }
@@ -21934,8 +21934,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Diagonal - Title bottom left, controls top right"
+            "state" : "translated",
+            "value" : "Diagonal - Titel nederst til venstre, kontrol øverst til højre"
           }
         },
         "de" : {
@@ -22124,8 +22124,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Diagonal - Title bottom right, controls top left"
+            "state" : "translated",
+            "value" : "Diagonal - Titel nederst til højre, kontrol øverst til venstre"
           }
         },
         "de" : {
@@ -22314,8 +22314,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Diagonal - Title top left, controls bottom right"
+            "state" : "translated",
+            "value" : "Diagonal - Titel øverst til venstre, kontrol nederst til højre"
           }
         },
         "de" : {
@@ -22504,8 +22504,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Diagonal - Title top right, controls bottom left"
+            "state" : "translated",
+            "value" : "Diagonal - Titel øverst til højre, kontrol nederst til venstre"
           }
         },
         "de" : {
@@ -22885,8 +22885,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Disable dock styling on traffic light buttons"
+            "state" : "translated",
+            "value" : "Deaktivér dock styling på trafiklys knapper"
           }
         },
         "de" : {
@@ -23075,8 +23075,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Disable dock styling on window titles"
+            "state" : "translated",
+            "value" : "Deaktivér dock styling på vinduets titler"
           }
         },
         "de" : {
@@ -23225,14 +23225,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Disable dock styling on window titles"
+            "state" : "translated",
+            "value" : "禁用窗口标题上的 Dock 样式"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Disable dock styling on window titles"
+            "state" : "translated",
+            "value" : "停用視窗標題的樣式"
           }
         }
       }
@@ -24596,8 +24596,8 @@
         },
         "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Preview Layout"
+            "state" : "translated",
+            "value" : "Dock Forhåndsvisning Layout"
           }
         },
         "de" : {
@@ -27029,14 +27029,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Either left or right Command, Option, or Control keys work. You can also hold the modifier while pressing the trigger to capture both."
+            "state" : "translated",
+            "value" : "两侧的 Command,Option或者Control键均可，您也可以在按下触发器的同时按住修改器，以便同时捕捉这两个动作。"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Either left or right Command, Option, or Control keys work. You can also hold the modifier while pressing the trigger to capture both."
+            "state" : "translated",
+            "value" : "左或右邊的 Command、Option或Control鍵皆可。你也可以在按下最終鍵的同時按住變更鍵來一次記錄。"
           }
         }
       }
@@ -28082,8 +28082,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable Cmd+Tab Enhancements"
+            "state" : "translated",
+            "value" : "Abilita i miglioramenti al selettore finestre di sistema (⌘⇥ / Cmd+Tab)"
           }
         },
         "ja" : {
@@ -28160,8 +28160,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable Cmd+Tab Enhancements"
+            "state" : "translated",
+            "value" : "Увімкнути покращений Cmd+Tab"
           }
         },
         "vi" : {
@@ -28172,14 +28172,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable Cmd+Tab Enhancements"
+            "state" : "translated",
+            "value" : "启用 Cmd+Tab 增强"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable Cmd+Tab Enhancements"
+            "state" : "translated",
+            "value" : "啟用Cmd+Tab強化功能"
           }
         }
       }
@@ -29124,14 +29124,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable search while using Window Switcher"
+            "state" : "translated",
+            "value" : "在使用窗口切换器时启用搜索"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable search while using Window Switcher"
+            "state" : "translated",
+            "value" : "在視窗切換器啟用搜尋"
           }
         }
       }
@@ -30454,14 +30454,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Escape"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Escape"
+            "state" : "translated",
+            "value" : "Esc"
           }
         }
       }
@@ -32849,8 +32849,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Focus and use previews"
+            "state" : "translated",
+            "value" : "Evidenzia e mostra anteprime"
           }
         },
         "ja" : {
@@ -32927,8 +32927,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Focus and use previews"
+            "state" : "translated",
+            "value" : "Фокусування та використання попереднього перегляду"
           }
         },
         "vi" : {
@@ -32939,14 +32939,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Focus and use previews"
+            "state" : "translated",
+            "value" : "聚焦后预览"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Focus and use previews"
+            "state" : "translated",
+            "value" : "聚焦和使用預覽"
           }
         }
       }
@@ -35150,8 +35150,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Grant Access"
+            "state" : "translated",
+            "value" : "Toegang geven"
           }
         },
         "no" : {
@@ -37608,8 +37608,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hide preview card background"
+            "state" : "translated",
+            "value" : "Nascondi lo sfondo della scheda di anteprima"
           }
         },
         "ja" : {
@@ -37686,8 +37686,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hide preview card background"
+            "state" : "translated",
+            "value" : "Приховати фон картки попереднього перегляду"
           }
         },
         "vi" : {
@@ -37698,14 +37698,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hide preview card background"
+            "state" : "translated",
+            "value" : "隐藏预览卡片背景"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hide preview card background"
+            "state" : "translated",
+            "value" : "隱藏預覽卡片背景"
           }
         }
       }
@@ -39842,8 +39842,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Improved performance (nominal)"
+            "state" : "translated",
+            "value" : "Verbesserte Leistung (nominal)"
           }
         },
         "el" : {
@@ -39986,14 +39986,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Improved performance (nominal)"
+            "state" : "translated",
+            "value" : "改进性能(正常模式)"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Improved performance (nominal)"
+            "state" : "translated",
+            "value" : "效能優先（抽象）"
           }
         }
       }
@@ -40939,14 +40939,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Initializer"
+            "state" : "translated",
+            "value" : "初始化"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Initializer"
+            "state" : "translated",
+            "value" : "變更鍵"
           }
         }
       }
@@ -51032,14 +51032,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No Results"
+            "state" : "translated",
+            "value" : "无结果"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No Results"
+            "state" : "translated",
+            "value" : "沒有結果"
           }
         }
       }
@@ -51150,8 +51150,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No shortcut set"
+            "state" : "translated",
+            "value" : "Geen snelkoppeling ingesteld"
           }
         },
         "no" : {
@@ -51222,14 +51222,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No shortcut set"
+            "state" : "translated",
+            "value" : "未设置快捷键"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No shortcut set"
+            "state" : "translated",
+            "value" : "沒有快速鍵組合"
           }
         }
       }
@@ -51602,14 +51602,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No windows match your search"
+            "state" : "translated",
+            "value" : "没有符合您搜索条件的窗口"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No windows match your search"
+            "state" : "translated",
+            "value" : "沒有符合搜尋條件的視窗"
           }
         }
       }
@@ -52656,7 +52656,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Mostra solo le finestre dall'applicazione attiva / in primo piano."
+            "value" : "Mostra solo le finestre dall'applicazione attiva (in primo piano)."
           }
         },
         "ja" : {
@@ -53888,13 +53888,13 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Option"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Option"
           }
         }
@@ -54269,13 +54269,13 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Option ⌥"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Option ⌥"
           }
         }
@@ -58651,14 +58651,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Press shortcut…"
+            "state" : "translated",
+            "value" : "按下快捷键…"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Press shortcut…"
+            "state" : "translated",
+            "value" : "按下按鍵組合…"
           }
         }
       }
@@ -64460,8 +64460,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Removes the background panel from individual window previews."
+            "state" : "translated",
+            "value" : "Rimuove il pannello di sfondo dalle singole anteprime delle finestre."
           }
         },
         "ja" : {
@@ -64538,8 +64538,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Removes the background panel from individual window previews."
+            "state" : "translated",
+            "value" : "Видаляє фонову панель з попереднього перегляду окремих вікон."
           }
         },
         "vi" : {
@@ -64550,14 +64550,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Removes the background panel from individual window previews."
+            "state" : "translated",
+            "value" : "移除预览窗口面板的背景"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Removes the background panel from individual window previews."
+            "state" : "translated",
+            "value" : "移除個別視窗預覽的背景板。"
           }
         }
       }
@@ -64651,7 +64651,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Rimuove lo sfondo a forma di pillola dai tasti azione per un look più pulito."
+            "value" : "Disattiva il riquadro stondato intorno ai comandi, per uno stile più pulito."
           }
         },
         "ja" : {
@@ -64930,14 +64930,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Removes the pill-shaped background styling from window titles in dock previews for a cleaner look."
+            "state" : "translated",
+            "value" : "从Dock预览中的窗口标题中移除药丸形状的背景样式，以获得更干净的外观。"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Removes the pill-shaped background styling from window titles in dock previews for a cleaner look."
+            "state" : "translated",
+            "value" : "移除Dock預覽中視窗控制按鈕的膠囊形背景，使外觀更簡潔。"
           }
         }
       }
@@ -67218,7 +67218,7 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Return"
           }
         }
@@ -71142,8 +71142,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Selected app:"
+            "state" : "translated",
+            "value" : "Gekozen app:"
           }
         },
         "no" : {
@@ -74079,7 +74079,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "在App名稱上方顯示預覽"
+            "value" : "在App名稱上層顯示預覽"
           }
         }
       }
@@ -74172,8 +74172,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show previews while holding Cmd+Tab."
+            "state" : "translated",
+            "value" : "Mostra le anteprime tenendo premuto ⌘⇥."
           }
         },
         "ja" : {
@@ -74250,8 +74250,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show previews while holding Cmd+Tab."
+            "state" : "translated",
+            "value" : "Показувати попередній перегляд, утримуючи Cmd+Tab."
           }
         },
         "vi" : {
@@ -74262,14 +74262,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show previews while holding Cmd+Tab."
+            "state" : "translated",
+            "value" : "按住Cmd+Tab时显示预览"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show previews while holding Cmd+Tab."
+            "state" : "translated",
+            "value" : "按住Command+Tab時顯示預覽。"
           }
         }
       }
@@ -79598,13 +79598,13 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Tab"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Tab"
           }
         }
@@ -86743,8 +86743,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use Liquid Glass (macOS 26+)"
+            "state" : "translated",
+            "value" : "Estetica Liquid Glass (macOS 26+)"
           }
         },
         "ja" : {
@@ -86761,8 +86761,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use Liquid Glass (macOS 26+)"
+            "state" : "translated",
+            "value" : "Gebruik Liquid Glass (macOS 26+)"
           }
         },
         "no" : {
@@ -86821,8 +86821,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use Liquid Glass (macOS 26+)"
+            "state" : "translated",
+            "value" : "Використання Рідкого Скла (macOS 26+)"
           }
         },
         "vi" : {
@@ -86833,14 +86833,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use Liquid Glass (macOS 26+)"
+            "state" : "translated",
+            "value" : "使用Liquid Glass效果(macOS 26+)"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use Liquid Glass (macOS 26+)"
+            "state" : "translated",
+            "value" : "使用Liquid Glass (macOS 26+)"
           }
         }
       }
@@ -88214,8 +88214,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "View"
+            "state" : "translated",
+            "value" : "Anzeigen"
           }
         },
         "el" : {
@@ -89413,7 +89413,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Alla chiusura di un'app, rimuovi solo le sue finestre dall'anteprima invece di nascondere l'intera anteprima."
+            "value" : "Alla chiusura di un'app, rimuovi solo le sue miniature invece di chiudere l'intera anteprima."
           }
         },
         "ja" : {
@@ -89430,8 +89430,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When an app terminates, remove only its windows from the preview instead of hiding the entire preview."
+            "state" : "translated",
+            "value" : ""
           }
         },
         "no" : {
@@ -92934,14 +92934,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Image Capture Quality"
+            "state" : "translated",
+            "value" : "窗口图像捕获质量"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Image Capture Quality"
+            "state" : "translated",
+            "value" : "視窗影像擷取畫質"
           }
         }
       }
@@ -95608,8 +95608,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Switcher Shortcut"
+            "state" : "translated",
+            "value" : "視窗切換器快速鍵"
           }
         }
       }
