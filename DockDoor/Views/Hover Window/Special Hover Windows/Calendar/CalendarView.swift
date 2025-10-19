@@ -19,6 +19,7 @@ struct CalendarView: View {
     let bundleIdentifier: String
     let dockPosition: DockPosition
     let bestGuessMonitor: NSScreen
+    let dockItemElement: AXUIElement?
     let isEmbeddedMode: Bool
     let isPinnedMode: Bool
     let idealWidth: CGFloat?
@@ -33,6 +34,7 @@ struct CalendarView: View {
          bundleIdentifier: String,
          dockPosition: DockPosition,
          bestGuessMonitor: NSScreen,
+         dockItemElement: AXUIElement?,
          isEmbeddedMode: Bool = false,
          isPinnedMode: Bool = false,
          idealWidth: CGFloat? = nil)
@@ -41,6 +43,7 @@ struct CalendarView: View {
         self.bundleIdentifier = bundleIdentifier
         self.dockPosition = dockPosition
         self.bestGuessMonitor = bestGuessMonitor
+        self.dockItemElement = dockItemElement
         self.isEmbeddedMode = isEmbeddedMode
         self.isPinnedMode = isPinnedMode
         self.idealWidth = idealWidth
@@ -61,6 +64,7 @@ struct CalendarView: View {
                     bundleIdentifier: bundleIdentifier,
                     dockPosition: dockPosition,
                     bestGuessMonitor: bestGuessMonitor,
+                    dockItemElement: dockItemElement,
                     isPinnedMode: isPinnedMode,
                     appIcon: appIcon,
                     hoveringAppIcon: hoveringAppIcon,

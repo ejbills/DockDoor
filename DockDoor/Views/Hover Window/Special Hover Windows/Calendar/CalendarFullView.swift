@@ -7,6 +7,7 @@ struct CalendarFullView: View {
     let bundleIdentifier: String
     let dockPosition: DockPosition
     let bestGuessMonitor: NSScreen
+    let dockItemElement: AXUIElement?
     let isPinnedMode: Bool
     let appIcon: NSImage?
     let hoveringAppIcon: Bool
@@ -49,6 +50,7 @@ struct CalendarFullView: View {
                     WindowDismissalContainer(appName: appName,
                                              bestGuessMonitor: bestGuessMonitor,
                                              dockPosition: dockPosition,
+                                             dockItemElement: dockItemElement,
                                              minimizeAllWindowsCallback: { _ in })
                         .allowsHitTesting(false)
                 }

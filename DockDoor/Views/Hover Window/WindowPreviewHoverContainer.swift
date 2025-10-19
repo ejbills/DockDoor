@@ -43,6 +43,7 @@ struct WindowPreviewHoverContainer: View {
     let dockPosition: DockPosition
     let mouseLocation: CGPoint?
     let bestGuessMonitor: NSScreen
+    let dockItemElement: AXUIElement?
     var mockPreviewActive: Bool
     let updateAvailable: Bool
     let embeddedContentType: EmbeddedContentType
@@ -77,6 +78,7 @@ struct WindowPreviewHoverContainer: View {
          dockPosition: DockPosition,
          mouseLocation: CGPoint?,
          bestGuessMonitor: NSScreen,
+         dockItemElement: AXUIElement?,
          windowSwitcherCoordinator: PreviewStateCoordinator,
          mockPreviewActive: Bool,
          updateAvailable: Bool,
@@ -87,6 +89,7 @@ struct WindowPreviewHoverContainer: View {
         self.dockPosition = dockPosition
         self.mouseLocation = mouseLocation
         self.bestGuessMonitor = bestGuessMonitor
+        self.dockItemElement = dockItemElement
         previewStateCoordinator = windowSwitcherCoordinator
         self.mockPreviewActive = mockPreviewActive
         self.updateAvailable = updateAvailable
@@ -140,6 +143,7 @@ struct WindowPreviewHoverContainer: View {
                         WindowDismissalContainer(appName: appName,
                                                  bestGuessMonitor: bestGuessMonitor,
                                                  dockPosition: dockPosition,
+                                                 dockItemElement: dockItemElement,
                                                  minimizeAllWindowsCallback: { wasAppActiveBeforeClick in
                                                      minimizeAllWindows(wasAppActiveBeforeClick: wasAppActiveBeforeClick)
                                                  })
@@ -455,6 +459,7 @@ struct WindowPreviewHoverContainer: View {
                 bundleIdentifier: bundleIdentifier,
                 dockPosition: dockPosition,
                 bestGuessMonitor: bestGuessMonitor,
+                dockItemElement: dockItemElement,
                 isEmbeddedMode: true,
                 idealWidth: minimumEmbeddedWidth
             )
@@ -465,6 +470,7 @@ struct WindowPreviewHoverContainer: View {
                 bundleIdentifier: bundleIdentifier,
                 dockPosition: dockPosition,
                 bestGuessMonitor: bestGuessMonitor,
+                dockItemElement: dockItemElement,
                 isEmbeddedMode: true,
                 idealWidth: minimumEmbeddedWidth
             )

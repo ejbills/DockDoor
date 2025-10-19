@@ -27,10 +27,6 @@ final class SharedPreviewWindowCoordinator: NSPanel {
 
     private var previousHoverWindowOrigin: CGPoint?
 
-    private let debounceDelay: TimeInterval = 0.1
-    private var debounceWorkItem: DispatchWorkItem?
-    private var lastShowTime: Date?
-
     var pinnedWindows: [String: NSWindow] = [:]
 
     init() {
@@ -116,9 +112,6 @@ final class SharedPreviewWindowCoordinator: NSPanel {
     func hideWindow() {
         guard isVisible else { return }
 
-        debounceWorkItem?.cancel()
-        debounceWorkItem = nil
-
         DragPreviewCoordinator.shared.endDragging()
         hideFullPreviewWindow()
 
@@ -137,12 +130,6 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         windowSwitcherCoordinator.setShowing(.both, toState: false)
         dockManager.restoreDockState()
         orderOut(nil)
-    }
-
-    func cancelDebounceWorkItem() {
-        DispatchQueue.main.async { [weak self] in
-            self?.debounceWorkItem?.cancel()
-        }
     }
 
     @MainActor
@@ -193,7 +180,8 @@ final class SharedPreviewWindowCoordinator: NSPanel {
 
         let hoverView = WindowPreviewHoverContainer(appName: appName, onWindowTap: onWindowTap,
                                                     dockPosition: dockPositionOverride ?? DockUtils.getDockPosition(), mouseLocation: mouseLocation,
-                                                    bestGuessMonitor: mouseScreen, windowSwitcherCoordinator: windowSwitcherCoordinator,
+                                                    bestGuessMonitor: mouseScreen, dockItemElement: dockItemElement,
+                                                    windowSwitcherCoordinator: windowSwitcherCoordinator,
                                                     mockPreviewActive: false,
                                                     updateAvailable: updateAvailable,
                                                     embeddedContentType: embeddedContentType)
@@ -434,6 +422,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
                             bundleIdentifier: mediaBundleId,
                             dockPosition: dockPositionOverride ?? DockUtils.getDockPosition(),
                             bestGuessMonitor: screen,
+                            dockItemElement: dockItemElement,
                             isEmbeddedMode: false
                         ))
                     }
@@ -453,6 +442,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
                             bundleIdentifier: calendarBundleId,
                             dockPosition: dockPositionOverride ?? DockUtils.getDockPosition(),
                             bestGuessMonitor: screen,
+                            dockItemElement: dockItemElement,
                             isEmbeddedMode: false
                         ))
                     }
@@ -628,27 +618,26 @@ final class SharedPreviewWindowCoordinator: NSPanel {
                     bypassDockMouseValidation: Bool = false,
                     dockPositionOverride: DockPosition? = nil)
     {
-        let now = Date()
-        let naturalDelay = Defaults[.lateralMovement] ? (Defaults[.hoverWindowOpenDelay] == 0 ? 0.2 : Defaults[.hoverWindowOpenDelay]) : Defaults[.hoverWindowOpenDelay]
-        let delay = overrideDelay ? 0.0 : naturalDelay
+        let delay = overrideDelay ? 0 : Defaults[.hoverWindowOpenDelay]
 
-        debounceWorkItem?.cancel()
-
-        let workItem = DispatchWorkItem { [weak self] in
-            if let mouseLocation, mouseLocation.distance(to: NSEvent.mouseLocation) > 100 {
-                return
-            }
-
+        let workItem = {
             // Final validation: ensure mouse is still over the expected dock item
             if !bypassDockMouseValidation {
                 if let expectedBundleId = bundleIdentifier {
-                    guard let currentDockItemStatus = DockObserver.activeInstance?.getDockItemAppStatusUnderMouse() else { return }
-                    let matches = switch currentDockItemStatus.status {
-                    case let .success(app): app.bundleIdentifier == expectedBundleId
-                    case let .notRunning(bundleId): bundleId == expectedBundleId
-                    case .notFound: false
+                    guard let currentDockItemStatus = DockObserver.activeInstance?.getDockItemAppStatusUnderMouse() else {
+                        return
                     }
-                    guard matches else { return }
+                    let matches: Bool = switch currentDockItemStatus.status {
+                    case let .success(app):
+                        app.bundleIdentifier == expectedBundleId
+                    case let .notRunning(bundleId):
+                        bundleId == expectedBundleId
+                    case .notFound:
+                        false
+                    }
+                    guard matches else {
+                        return
+                    }
                 }
             }
 
@@ -657,20 +646,12 @@ final class SharedPreviewWindowCoordinator: NSPanel {
             }
         }
 
-        if let lastShowTime, now.timeIntervalSince(lastShowTime) < debounceDelay {
-            debounceWorkItem = workItem
-            DispatchQueue.main.asyncAfter(deadline: .now() + debounceDelay, execute: workItem)
-        } else {
-            if delay == 0.0 {
-                Task { @MainActor [weak self] in
-                    self?.performDisplay(appName: appName, windows: windows, mouseLocation: mouseLocation, mouseScreen: mouseScreen, dockItemElement: dockItemElement, centeredHoverWindowState: centeredHoverWindowState, onWindowTap: onWindowTap, bundleIdentifier: bundleIdentifier, dockPositionOverride: dockPositionOverride)
-                }
-            } else {
-                debounceWorkItem = workItem
-                DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: workItem)
+        if delay == 0.0 {
+            Task { @MainActor [weak self] in
+                self?.performDisplay(appName: appName, windows: windows, mouseLocation: mouseLocation, mouseScreen: mouseScreen, dockItemElement: dockItemElement, centeredHoverWindowState: centeredHoverWindowState, onWindowTap: onWindowTap, bundleIdentifier: bundleIdentifier, dockPositionOverride: dockPositionOverride)
             }
+        } else {
+            DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: workItem)
         }
-
-        lastShowTime = now
     }
 }

@@ -29,15 +29,13 @@ enum SettingsProfile: String, CaseIterable, Identifiable {
             PerformanceProfileSettingsValues(
                 hoverWindowOpenDelay: Defaults.Keys.hoverWindowOpenDelay.defaultValue,
                 fadeOutDuration: Defaults.Keys.fadeOutDuration.defaultValue,
-                inactivityTimeout: Defaults.Keys.inactivityTimeout.defaultValue,
                 tapEquivalentInterval: Defaults.Keys.tapEquivalentInterval.defaultValue,
-                lateralMovement: Defaults.Keys.lateralMovement.defaultValue,
                 preventDockHide: Defaults.Keys.preventDockHide.defaultValue
             )
         case .snappy:
-            PerformanceProfileSettingsValues(hoverWindowOpenDelay: CoreDockGetAutoHideEnabled() ? 0.1 : 0, fadeOutDuration: 0.15, inactivityTimeout: 0.5, tapEquivalentInterval: 0.5, lateralMovement: false, preventDockHide: false)
+            PerformanceProfileSettingsValues(hoverWindowOpenDelay: CoreDockGetAutoHideEnabled() ? 0.1 : 0, fadeOutDuration: 0.15, tapEquivalentInterval: 0.5, preventDockHide: false)
         case .relaxed:
-            PerformanceProfileSettingsValues(hoverWindowOpenDelay: 0.25, fadeOutDuration: 0.5, inactivityTimeout: 2.5, tapEquivalentInterval: 1.5, lateralMovement: true, preventDockHide: true)
+            PerformanceProfileSettingsValues(hoverWindowOpenDelay: 0.25, fadeOutDuration: 0.5, tapEquivalentInterval: 1.5, preventDockHide: true)
         }
     }
 }
@@ -45,9 +43,7 @@ enum SettingsProfile: String, CaseIterable, Identifiable {
 struct PerformanceProfileSettingsValues {
     let hoverWindowOpenDelay: CGFloat
     let fadeOutDuration: CGFloat
-    let inactivityTimeout: CGFloat
     let tapEquivalentInterval: CGFloat
-    let lateralMovement: Bool
     let preventDockHide: Bool
 }
 
@@ -110,7 +106,6 @@ struct MainSettingsView: View {
     @Default(.fadeOutDuration) var fadeOutDuration
     @Default(.inactivityTimeout) var inactivityTimeout
     @Default(.tapEquivalentInterval) var tapEquivalentInterval
-    @Default(.lateralMovement) var lateralMovement
     @Default(.preventDockHide) var preventDockHide
     @Default(.preventSwitcherHide) var preventSwitcherHide
     @Default(.ignoreAppsWithSingleWindow) var ignoreAppsWithSingleWindow
@@ -535,7 +530,6 @@ struct MainSettingsView: View {
                     sliderSetting(title: "Preview Window Open Delay", value: $hoverWindowOpenDelay, range: 0 ... 2, step: 0.1, unit: "seconds", formatter: NumberFormatter.oneDecimalFormatter)
                     sliderSetting(title: "Preview Window Fade Out Duration", value: $fadeOutDuration, range: 0 ... 2, step: 0.1, unit: "seconds", formatter: NumberFormatter.oneDecimalFormatter)
                     sliderSetting(title: "Preview Window Inactivity Timer", value: $inactivityTimeout, range: 0 ... 3, step: 0.1, unit: "seconds", formatter: NumberFormatter.oneDecimalFormatter)
-                    Toggle(isOn: $lateralMovement) { Text("Keep previews visible during lateral movement") }
                     Toggle(isOn: $preventDockHide) { Text("Prevent dock from hiding during previews") }
                     Toggle(isOn: $raisedWindowLevel) { Text("Show preview above app labels").onChange(of: raisedWindowLevel) { _ in askUserToRestartApplication() }}
                 }
@@ -801,9 +795,7 @@ struct MainSettingsView: View {
         let settings = profile.settings
         hoverWindowOpenDelay = settings.hoverWindowOpenDelay
         fadeOutDuration = settings.fadeOutDuration
-        inactivityTimeout = settings.inactivityTimeout
         tapEquivalentInterval = settings.tapEquivalentInterval
-        lateralMovement = settings.lateralMovement
         preventDockHide = settings.preventDockHide
     }
 
@@ -811,9 +803,7 @@ struct MainSettingsView: View {
         let settings = profile.settings
         return hoverWindowOpenDelay == settings.hoverWindowOpenDelay &&
             fadeOutDuration == settings.fadeOutDuration &&
-            inactivityTimeout == settings.inactivityTimeout &&
             tapEquivalentInterval == settings.tapEquivalentInterval &&
-            lateralMovement == settings.lateralMovement &&
             preventDockHide == settings.preventDockHide
     }
 
@@ -839,7 +829,7 @@ struct MainSettingsView: View {
                 selectedPreviewQualityProfile = .standard; applyPreviewQualityProfileSettings(.standard)
 
                 let perfDefault = SettingsProfile.default.settings
-                hoverWindowOpenDelay = perfDefault.hoverWindowOpenDelay; fadeOutDuration = perfDefault.fadeOutDuration; inactivityTimeout = perfDefault.inactivityTimeout; tapEquivalentInterval = perfDefault.tapEquivalentInterval; lateralMovement = perfDefault.lateralMovement; preventDockHide = perfDefault.preventDockHide
+                hoverWindowOpenDelay = perfDefault.hoverWindowOpenDelay; fadeOutDuration = perfDefault.fadeOutDuration; tapEquivalentInterval = perfDefault.tapEquivalentInterval; preventDockHide = perfDefault.preventDockHide
                 let qualityDefault = PreviewQualityProfile.standard.settings
                 screenCaptureCacheLifespan = qualityDefault.screenCaptureCacheLifespan; windowPreviewImageScale = qualityDefault.windowPreviewImageScale
                 bufferFromDock = Defaults.Keys.bufferFromDock.defaultValue; sortWindowsByDate = Defaults.Keys.sortWindowsByDate.defaultValue; shouldHideOnDockItemClick = Defaults.Keys.shouldHideOnDockItemClick.defaultValue; dockClickAction = Defaults.Keys.dockClickAction.defaultValue; previewHoverAction = Defaults.Keys.previewHoverAction.defaultValue; aeroShakeAction = Defaults.Keys.aeroShakeAction.defaultValue
