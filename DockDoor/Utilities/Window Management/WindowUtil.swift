@@ -195,6 +195,18 @@ enum WindowUtil {
 
     static func isValidElement(_ element: AXUIElement) -> Bool {
         do {
+            let position = try element.position()
+            let size = try element.size()
+            if position != nil, size != nil {
+                return true
+            }
+        } catch AxError.runtimeError {
+            return false
+        } catch {
+            // Geometry check failed, fall through to AX windows list validation
+        }
+
+        do {
             if let pid = try element.pid() {
                 let appElement = AXUIElementCreateApplication(pid)
 
@@ -215,18 +227,10 @@ enum WindowUtil {
                 }
             }
         } catch {
-            // Primary check failed, fall through to geometry validation
+            // Both checks failed
         }
 
-        do {
-            let position = try element.position()
-            let size = try element.size()
-            return position != nil && size != nil
-        } catch AxError.runtimeError {
-            return false
-        } catch {
-            return false
-        }
+        return false
     }
 
     static func findWindow(matchingWindow window: SCWindow, in axWindows: [AXUIElement]) -> AXUIElement? {
