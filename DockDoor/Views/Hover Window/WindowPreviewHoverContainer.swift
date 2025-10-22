@@ -868,7 +868,12 @@ struct WindowPreviewHoverContainer: View {
                     windowSwitcherActive: previewStateCoordinator.windowSwitcherActive,
                     dimensions: getDimensions(for: index, dimensionsMap: currentDimensionsMapForPreviews),
                     showAppIconOnly: showAppIconOnly,
-                    mockPreviewActive: mockPreviewActive
+                    mockPreviewActive: mockPreviewActive,
+                    onHoverIndexChange: { hoveredIndex in
+                        if let hoveredIndex {
+                            previewStateCoordinator.setIndex(to: hoveredIndex)
+                        }
+                    }
                 )
                 .id("\(appName)-\(index)")
                 .gesture(
