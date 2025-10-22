@@ -195,41 +195,36 @@ enum WindowUtil {
 
     static func isValidElement(_ element: AXUIElement) -> Bool {
         do {
-            // PRIMARY VALIDATION: Try to get the window's position and size
+            if let pid = try element.pid() {
+                let appElement = AXUIElementCreateApplication(pid)
+
+                if let windows = try? appElement.windows() {
+                    if let elementWindowId = try? element.cgWindowId() {
+                        for window in windows {
+                            if let windowId = try? window.cgWindowId(), windowId == elementWindowId {
+                                return true
+                            }
+                        }
+                    }
+
+                    for window in windows {
+                        if CFEqual(element, window) {
+                            return true
+                        }
+                    }
+                }
+            }
+        } catch {
+            // Primary check failed, fall through to geometry validation
+        }
+
+        do {
             let position = try element.position()
             let size = try element.size()
-
-            // If we can get both position and size, the window is fully valid
-            if position != nil, size != nil {
-                return true
-            }
-
-            // SECONDARY VALIDATION: Position/size failed, but check if we can read window state
-            // During display reconfiguration, geometry queries fail but state queries may still work
-            // This indicates a stale AX reference where the window still exists
-
-            // Test if we can read state attributes that use different code paths
-            let canReadPid = (try? element.pid()) != nil
-            let canReadMinimized = (try? element.isMinimized()) != nil
-            let canReadFullscreen = (try? element.isFullscreen()) != nil
-
-            // Count how many state checks succeeded
-            let stateChecksSucceeded = [canReadPid, canReadMinimized, canReadFullscreen].filter { $0 }.count
-
-            // If we can read at least 2 state attributes, the window likely exists
-            // but has a stale/detached AX reference (common during display reconfiguration)
-            if stateChecksSucceeded >= 2 {
-                return true
-            }
-
-            // If we can't read geometry OR state, the element is truly invalid
-            return false
-
+            return position != nil && size != nil
         } catch AxError.runtimeError {
-            // If we get a runtime error, the app might be unresponsive, so we consider the element invalid
             return false
         } catch {
-            // For any other errors, we also consider the element invalid
             return false
         }
     }
