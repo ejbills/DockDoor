@@ -62,7 +62,6 @@ final class WindowSeeder {
 
             let provider = AXFallbackProvider(cgID: id32)
             let isMinimized = (try? axWin.isMinimized()) ?? false
-            print("[MIN-DEBUG] WindowSeeder: Seeding window \(id32) for pid \(pid) - isMinimized: \(isMinimized)")
             var info = WindowInfo(
                 windowProvider: provider,
                 app: app,

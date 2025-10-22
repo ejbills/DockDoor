@@ -195,14 +195,36 @@ enum WindowUtil {
 
     static func isValidElement(_ element: AXUIElement) -> Bool {
         do {
-            // Try to get the window's position
+            // PRIMARY VALIDATION: Try to get the window's position and size
             let position = try element.position()
-
-            // Try to get the window's size
             let size = try element.size()
 
-            // If we can get both position and size, the window likely still exists
-            return position != nil && size != nil
+            // If we can get both position and size, the window is fully valid
+            if position != nil, size != nil {
+                return true
+            }
+
+            // SECONDARY VALIDATION: Position/size failed, but check if we can read window state
+            // During display reconfiguration, geometry queries fail but state queries may still work
+            // This indicates a stale AX reference where the window still exists
+
+            // Test if we can read state attributes that use different code paths
+            let canReadPid = (try? element.pid()) != nil
+            let canReadMinimized = (try? element.isMinimized()) != nil
+            let canReadFullscreen = (try? element.isFullscreen()) != nil
+
+            // Count how many state checks succeeded
+            let stateChecksSucceeded = [canReadPid, canReadMinimized, canReadFullscreen].filter { $0 }.count
+
+            // If we can read at least 2 state attributes, the window likely exists
+            // but has a stale/detached AX reference (common during display reconfiguration)
+            if stateChecksSucceeded >= 2 {
+                return true
+            }
+
+            // If we can't read geometry OR state, the element is truly invalid
+            return false
+
         } catch AxError.runtimeError {
             // If we get a runtime error, the app might be unresponsive, so we consider the element invalid
             return false
@@ -259,29 +281,23 @@ enum WindowUtil {
     }
 
     static func toggleMinimize(windowInfo: WindowInfo) -> Bool? {
-        print("[MIN-DEBUG] toggleMinimize called for window \(windowInfo.id), current isMinimized: \(windowInfo.isMinimized)")
         if windowInfo.isMinimized {
             if windowInfo.app.isHidden {
-                print("[MIN-DEBUG] App is hidden, unhiding before un-minimizing")
                 windowInfo.app.unhide()
             }
             do {
                 try windowInfo.axElement.setAttribute(kAXMinimizedAttribute, false)
                 windowInfo.app.activate()
                 bringWindowToFront(windowInfo: windowInfo)
-                print("[MIN-DEBUG] Successfully un-minimized window \(windowInfo.id)")
                 return false
             } catch {
-                print("[MIN-DEBUG] Error un-minimizing window \(windowInfo.id): \(error)")
                 return nil
             }
         } else {
             do {
                 try windowInfo.axElement.setAttribute(kAXMinimizedAttribute, true)
-                print("[MIN-DEBUG] Successfully minimized window \(windowInfo.id)")
                 return true
             } catch {
-                print("[MIN-DEBUG] Error minimizing window \(windowInfo.id): \(error)")
                 return nil
             }
         }
@@ -373,31 +389,26 @@ enum WindowUtil {
     }
 
     static func updateStatusOfWindowCache(pid: pid_t, isParentAppHidden: Bool) {
-        print("[MIN-DEBUG] updateStatusOfWindowCache called for pid: \(pid), isParentAppHidden: \(isParentAppHidden)")
         let appElement = AXUIElementCreateApplication(pid)
 
         var missingWindowCount = 0
         desktopSpaceWindowCacheManager.updateCache(pid: pid) { windowSet in
             guard let axWindows = try? appElement.windows() else {
-                print("[MIN-DEBUG] Failed to get AX windows for pid: \(pid), applying hidden flag only")
                 // Still apply parent hidden flag
                 windowSet = Set(windowSet.map { var w = $0; w.isHidden = isParentAppHidden; return w })
                 return
             }
 
-            print("[MIN-DEBUG] Found \(axWindows.count) AX windows for pid: \(pid), cache has \(windowSet.count) windows")
             for ax in axWindows {
                 let isMin = (try? ax.isMinimized()) ?? false
                 guard let cgId = ((try? ax.cgWindowId()) ?? nil) else { continue }
                 if let existing = windowSet.first(where: { $0.id == cgId }) {
-                    print("[MIN-DEBUG] Updating window \(cgId) for pid: \(pid) - isMinimized: \(existing.isMinimized) -> \(isMin)")
                     var updated = existing
                     updated.isMinimized = isMin
                     updated.isHidden = isParentAppHidden
                     windowSet.remove(existing)
                     windowSet.insert(updated)
                 } else {
-                    print("[MIN-DEBUG] Window \(cgId) not found in cache for pid: \(pid)")
                     missingWindowCount += 1
                 }
             }
@@ -408,7 +419,6 @@ enum WindowUtil {
 
         // If AX reported windows that weren't in cache, trigger discovery to recover them
         if missingWindowCount > 0, let app = NSRunningApplication(processIdentifier: pid) {
-            print("[MIN-DEBUG] Detected \(missingWindowCount) missing windows in cache for pid \(pid) - triggering discovery")
             discoverNewWindowsViaAXFallback(app: app)
         }
     }
@@ -462,7 +472,6 @@ enum WindowUtil {
     }
 
     static func getActiveWindows(of app: NSRunningApplication) async throws -> [WindowInfo] {
-        print("[MIN-DEBUG] getActiveWindows called for app: \(app.localizedName ?? "Unknown") (pid: \(app.processIdentifier))")
         let content = try await SCShareableContent.excludingDesktopWindows(true, onScreenWindowsOnly: true)
         let group = LimitedTaskGroup<Void>(maxConcurrentTasks: 4)
 
@@ -482,7 +491,6 @@ enum WindowUtil {
             let inactiveWindows = purifiedWindows.filter {
                 !activeWindowIDs.contains($0.id) && ($0.isMinimized || $0.isHidden)
             }
-            print("[MIN-DEBUG] Found \(inactiveWindows.count) inactive windows (minimized or hidden) for app: \(app.localizedName ?? "Unknown")")
 
             for windowInfo in inactiveWindows {
                 if let scWin = windowInfo.scWindow {
@@ -512,7 +520,6 @@ enum WindowUtil {
             // Also sync minimized/hidden state for AX-fallback windows from AX attributes
             let axApp = AXUIElementCreateApplication(app.processIdentifier)
             if let axWindows = try? axApp.windows() {
-                print("[MIN-DEBUG] Syncing AX-fallback windows for app: \(app.localizedName ?? "Unknown"), found \(axWindows.count) AX windows")
                 var updatedAny = false
                 for ax in axWindows {
                     guard let cgId = ((try? ax.cgWindowId()) ?? nil) else { continue }
@@ -520,7 +527,6 @@ enum WindowUtil {
                     desktopSpaceWindowCacheManager.updateCache(pid: app.processIdentifier) { set in
                         if let existing = set.first(where: { $0.id == cgId && $0.scWindow == nil }) {
                             if existing.isMinimized != isMin || existing.isHidden != app.isHidden {
-                                print("[MIN-DEBUG] AX-fallback window \(cgId) state change - isMinimized: \(existing.isMinimized) -> \(isMin), isHidden: \(existing.isHidden) -> \(app.isHidden)")
                                 var u = existing
                                 u.isMinimized = isMin
                                 u.isHidden = app.isHidden
@@ -532,7 +538,6 @@ enum WindowUtil {
                     }
                 }
                 if updatedAny {
-                    print("[MIN-DEBUG] Updated AX-fallback windows, refreshing finalWindows")
                     finalWindows = desktopSpaceWindowCacheManager.readCache(pid: app.processIdentifier)
                 }
             }
@@ -649,7 +654,6 @@ enum WindowUtil {
 
             let provider = AXFallbackProvider(cgID: cgID)
             let isMinimized = (try? axWin.isMinimized()) ?? false
-            print("[MIN-DEBUG] AX Fallback Discovery: window \(cgID) for pid \(app.processIdentifier) - isMinimized: \(isMinimized)")
             var info = WindowInfo(
                 windowProvider: provider,
                 app: app,
@@ -820,7 +824,6 @@ enum WindowUtil {
 
         if shouldWindowBeCaptured {
             let actualIsMinimized = (try? windowRef.isMinimized()) ?? false
-            print("[MIN-DEBUG] captureAndCacheWindowInfo: window \(window.windowID) - isMinimized from AX: \(actualIsMinimized)")
             let windowInfo = WindowInfo(
                 windowProvider: window,
                 app: app,
@@ -847,7 +850,6 @@ enum WindowUtil {
     static func updateDesktopSpaceWindowCache(with windowInfo: WindowInfo) {
         desktopSpaceWindowCacheManager.updateCache(pid: windowInfo.app.processIdentifier) { windowSet in
             if let matchingWindow = windowSet.first(where: { $0.axElement == windowInfo.axElement }) {
-                print("[MIN-DEBUG] updateDesktopSpaceWindowCache: Updating existing window \(windowInfo.id) - isMinimized: \(matchingWindow.isMinimized) -> \(windowInfo.isMinimized)")
                 var matchingWindowCopy = matchingWindow
                 matchingWindowCopy.windowName = windowInfo.windowName
                 matchingWindowCopy.image = windowInfo.image
@@ -858,7 +860,6 @@ enum WindowUtil {
                 windowSet.remove(matchingWindow)
                 windowSet.insert(matchingWindowCopy)
             } else {
-                print("[MIN-DEBUG] updateDesktopSpaceWindowCache: Adding new window \(windowInfo.id) - isMinimized: \(windowInfo.isMinimized)")
                 windowSet.insert(windowInfo)
             }
         }
@@ -876,7 +877,6 @@ enum WindowUtil {
 
     static func purifyAppCache(with pid: pid_t, removeAll: Bool) async -> Set<WindowInfo>? {
         if removeAll {
-            print("[MIN-DEBUG] purifyAppCache: Removing all windows for pid \(pid)")
             desktopSpaceWindowCacheManager.writeCache(pid: pid, windowSet: [])
             return nil
         } else {
@@ -885,19 +885,12 @@ enum WindowUtil {
                 return nil
             }
 
-            print("[MIN-DEBUG] purifyAppCache: Checking \(existingWindowsSet.count) windows for pid \(pid)")
             var purifiedSet = existingWindowsSet
-            var removedCount = 0
             for window in existingWindowsSet {
                 if !isValidElement(window.axElement) {
-                    print("[MIN-DEBUG] purifyAppCache: Removing invalid window \(window.id) from cache")
                     purifiedSet.remove(window)
                     desktopSpaceWindowCacheManager.removeFromCache(pid: pid, windowId: window.id)
-                    removedCount += 1
                 }
-            }
-            if removedCount > 0 {
-                print("[MIN-DEBUG] purifyAppCache: Removed \(removedCount) invalid windows for pid \(pid)")
             }
             return purifiedSet
         }

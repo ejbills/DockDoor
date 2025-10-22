@@ -130,30 +130,24 @@ func shouldAcceptWindow(axWindow: AXUIElement,
     // Base: role/subrole, level, size/alpha checks already enforced by caller
     let isOnscreen = (cgEntry[kCGWindowIsOnscreen as String] as? NSNumber)?.boolValue ?? false
 
-    print("[MIN-DEBUG] shouldAcceptWindow for window \(windowID) - isOnscreen: \(isOnscreen), scBacked: \(scBacked)")
-
     if isOnscreen || scBacked { return true }
 
     // If minimized/fullscreen or app hidden, include even if not currently on-screen
     let axIsFullscreen = (try? axWindow.isFullscreen()) ?? false
     let axIsMinimized = (try? axWindow.isMinimized()) ?? false
-    print("[MIN-DEBUG] Window \(windowID) - axIsMinimized: \(axIsMinimized), axIsFullscreen: \(axIsFullscreen), app.isHidden: \(app.isHidden)")
     if app.isHidden || axIsFullscreen || axIsMinimized { return true }
 
     // If assigned to other Space(s) than any active Space, include
     let windowSpaces = Set(windowID.cgsSpaces().map { Int($0) })
     if !windowSpaces.isEmpty, windowSpaces.isDisjoint(with: activeSpaceIDs) {
-        print("[MIN-DEBUG] Window \(windowID) in different space - accepting")
         return true
     }
 
     // Fallback: if AX marks it as main, consider it significant and include.
     // This helps when CGS space mapping is unreliable or empty for other-Spaces windows.
     if (try? axWindow.attribute(kAXMainAttribute, Bool.self)) == true {
-        print("[MIN-DEBUG] Window \(windowID) is main window - accepting")
         return true
     }
 
-    print("[MIN-DEBUG] Window \(windowID) rejected - not meeting any criteria")
     return false
 }
