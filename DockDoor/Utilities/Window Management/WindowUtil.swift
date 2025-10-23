@@ -508,7 +508,7 @@ enum WindowUtil {
                     if let image = window.id.cgsScreenshot() {
                         var updated = window
                         updated.image = image
-                        updated.spaceID = spaceIDForWindowID(window.id)
+                        updated.spaceID = window.id.cgsSpaces().first.map { Int($0) }
                         updated.lastAccessedTime = now
                         updateDesktopSpaceWindowCache(with: updated)
                     }
@@ -599,12 +599,7 @@ enum WindowUtil {
         if axWindows.isEmpty { return }
 
         // Build CG candidates for this PID on layer 0
-        let cgAll = (CGWindowListCopyWindowInfo([.excludeDesktopElements], kCGNullWindowID) as? [[String: AnyObject]]) ?? []
-        let cgCandidates = cgAll.filter { desc in
-            let owner = (desc[kCGWindowOwnerPID as String] as? NSNumber)?.int32Value ?? 0
-            let layer = (desc[kCGWindowLayer as String] as? NSNumber)?.intValue ?? 0
-            return owner == pid && layer == 0
-        }
+        let cgCandidates = getCGWindowCandidates(for: pid)
 
         // Avoid re-adding existing windows
         var usedIDs = Set<CGWindowID>(desktopSpaceWindowCacheManager.readCache(pid: pid).map(\.id))
@@ -637,10 +632,7 @@ enum WindowUtil {
             if !isValidCGWindowCandidate(cgID, in: cgCandidates) { continue }
 
             // Find matching CG entry for visibility flags
-            guard let cgEntry = cgCandidates.first(where: { desc in
-                let wid = CGWindowID((desc[kCGWindowNumber as String] as? NSNumber)?.uint32Value ?? 0)
-                return wid == cgID
-            }) else { continue }
+            guard let cgEntry = findCGEntry(for: cgID, in: cgCandidates) else { continue }
 
             // Accept window if on-screen, SCK-backed (false here), in other Space, or minimized/fullscreen/hidden
             let scBacked = false
@@ -663,7 +655,7 @@ enum WindowUtil {
                 isMinimized: isMinimized,
                 isHidden: app.isHidden,
                 lastAccessedTime: Date(),
-                spaceID: spaceIDForWindowID(cgID)
+                spaceID: cgID.cgsSpaces().first.map { Int($0) }
             )
             info.windowName = cgID.cgsTitle()
             updateDesktopSpaceWindowCache(with: info)
@@ -728,7 +720,7 @@ enum WindowUtil {
             if let image = window.id.cgsScreenshot() {
                 var updated = window
                 updated.image = image
-                updated.spaceID = spaceIDForWindowID(window.id)
+                updated.spaceID = window.id.cgsSpaces().first.map { Int($0) }
                 updateDesktopSpaceWindowCache(with: updated)
             }
         }
@@ -833,7 +825,7 @@ enum WindowUtil {
                 isMinimized: actualIsMinimized,
                 isHidden: false,
                 lastAccessedTime: Date.now,
-                spaceID: WindowUtil.spaceIDForWindowID(window.windowID)
+                spaceID: window.windowID.cgsSpaces().first.map { Int($0) }
             )
 
             await Task.detached(priority: .userInitiated) {
@@ -897,14 +889,6 @@ enum WindowUtil {
 
     static func purgeAppCache(with pid: pid_t) {
         desktopSpaceWindowCacheManager.writeCache(pid: pid, windowSet: [])
-    }
-
-    // Map a CGWindowID to its Space via private CGS
-    static func spaceIDForWindowID(_ id: CGWindowID) -> Int? {
-        let arr: CFArray = [NSNumber(value: UInt32(id))] as CFArray
-        guard let spaces = CGSCopySpacesForWindows(CGSMainConnectionID(), kCGSAllSpacesMask, arr) as NSArray? else { return nil }
-        if let first = spaces.firstObject as? NSNumber { return first.intValue }
-        return nil
     }
 
     /// Checks if the frontmost application is fullscreen and in the blacklist

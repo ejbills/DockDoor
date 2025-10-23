@@ -23,12 +23,7 @@ final class WindowSeeder {
         let axWindows = AXUIElement.allWindows(pid, appElement: appAX)
         if axWindows.isEmpty { return }
 
-        let cgAll = (CGWindowListCopyWindowInfo([.excludeDesktopElements], kCGNullWindowID) as? [[String: AnyObject]]) ?? []
-        let cgCandidates = cgAll.filter { desc in
-            let owner = (desc[kCGWindowOwnerPID as String] as? NSNumber)?.int32Value ?? 0
-            let layer = (desc[kCGWindowLayer as String] as? NSNumber)?.intValue ?? 0
-            return owner == pid && layer == 0
-        }
+        let cgCandidates = getCGWindowCandidates(for: pid)
         var usedIDs = Set<CGWindowID>()
         let activeSpaceIDs = currentActiveSpaceIDs()
 
@@ -47,10 +42,7 @@ final class WindowSeeder {
             if !isValidCGWindowCandidate(id32, in: cgCandidates) { continue }
 
             // Find matching CG entry for visibility flags
-            guard let cgEntry = cgCandidates.first(where: { desc in
-                let wid = CGWindowID((desc[kCGWindowNumber as String] as? NSNumber)?.uint32Value ?? 0)
-                return wid == id32
-            }) else { continue }
+            guard let cgEntry = findCGEntry(for: id32, in: cgCandidates) else { continue }
 
             // Accept window if on-screen, SCK-backed (not in seeding), in other Space, or minimized/fullscreen/hidden
             let scBacked = false
