@@ -95,6 +95,7 @@ struct MainSettingsView: View {
     @Default(.useClassicWindowOrdering) var useClassicWindowOrdering
     @Default(.limitSwitcherToFrontmostApp) var limitSwitcherToFrontmostApp
     @Default(.fullscreenAppBlacklist) var fullscreenAppBlacklist
+    @Default(.groupAppInstancesInDock) var groupAppInstancesInDock
 
     @State private var selectedPerformanceProfile: SettingsProfile = .default
     @State private var selectedPreviewQualityProfile: PreviewQualityProfile = .standard
@@ -555,6 +556,14 @@ struct MainSettingsView: View {
             }
             StyledGroupBox(label: "Interaction & Behavior (Dock Previews)") {
                 VStack(alignment: .leading, spacing: 10) {
+                    Toggle(isOn: $groupAppInstancesInDock) { Text("Group multiple app instances together") }
+                    Text("When enabled, hovering over an app in the Dock shows windows from all instances of that app. When disabled, shows only windows from the specific instance under the mouse.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                        .padding(.leading, 20)
+
+                    Divider()
+
                     Picker("Dock Preview Hover Action", selection: $previewHoverAction) { ForEach(PreviewHoverAction.allCases, id: \.self) { Text($0.localizedName).tag($0) } }.pickerStyle(MenuPickerStyle())
                     sliderSetting(title: "Preview Hover Action Delay", value: $tapEquivalentInterval, range: 0 ... 2, step: 0.1, unit: "seconds", formatter: NumberFormatter.oneDecimalFormatter).disabled(previewHoverAction == .none)
                     Picker("Dock Preview Aero Shake Action", selection: $aeroShakeAction) { ForEach(AeroShakeAction.allCases, id: \.self) { Text($0.localizedName).tag($0) } }.pickerStyle(MenuPickerStyle())
@@ -850,6 +859,7 @@ struct MainSettingsView: View {
                 showBigControlsWhenNoValidWindows = Defaults.Keys.showBigControlsWhenNoValidWindows.defaultValue
                 placementStrategy = Defaults.Keys.windowSwitcherPlacementStrategy.defaultValue
                 pinnedScreenIdentifier = Defaults.Keys.pinnedScreenIdentifier.defaultValue
+                groupAppInstancesInDock = Defaults.Keys.groupAppInstancesInDock.defaultValue
                 askUserToRestartApplication()
             }
         }

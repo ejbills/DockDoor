@@ -290,7 +290,8 @@ final class DockObserver {
                     lastAppUnderMouse = currentAppInfo
 
                     var appsToFetchWindowsFrom: [NSRunningApplication] = []
-                    if let bundleId = currentApp.bundleIdentifier, !bundleId.isEmpty {
+                    if Defaults[.groupAppInstancesInDock],
+                       let bundleId = currentApp.bundleIdentifier, !bundleId.isEmpty {
                         let potentialApps = NSRunningApplication.runningApplications(withBundleIdentifier: bundleId)
                         if !potentialApps.isEmpty {
                             appsToFetchWindowsFrom = potentialApps

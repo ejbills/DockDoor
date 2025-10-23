@@ -57,6 +57,7 @@ extension Defaults.Keys {
     static let useClassicWindowOrdering = Key<Bool>("useClassicWindowOrdering", default: true)
     static let includeHiddenWindowsInSwitcher = Key<Bool>("includeHiddenWindowsInSwitcher", default: true)
     static let ignoreAppsWithSingleWindow = Key<Bool>("ignoreAppsWithSingleWindow", default: false)
+    static let groupAppInstancesInDock = Key<Bool>("groupAppInstancesInDock", default: true)
     static let useLiquidGlass = Key<Bool>("useLiquidGlass", default: true)
     static let showMenuBarIcon = Key<Bool>("showMenuBarIcon", default: true)
     static let raisedWindowLevel = Key<Bool>("raisedWindowLevel", default: true)
