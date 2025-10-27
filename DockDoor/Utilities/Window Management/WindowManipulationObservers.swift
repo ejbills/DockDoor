@@ -82,10 +82,6 @@ class WindowManipulationObservers {
     }
 
     @objc private func activeSpaceDidChange(_ notification: Notification) {
-        if isMainSleep() {
-            return
-        }
-
         Task(priority: .high) { [weak self] in
             guard self != nil else { return }
             await WindowUtil.updateAllWindowsInCurrentSpace()
@@ -230,7 +226,7 @@ class WindowManipulationObservers {
 }
 
 func axObserverCallback(observer: AXObserver, element: AXUIElement, notificationName: CFString, userData: UnsafeMutableRawPointer?) {
-    guard let userData, !isMainSleep() else { return }
+    guard let userData else { return }
     let pid = pid_t(Int(bitPattern: userData))
 
     DispatchQueue.main.async {
@@ -245,8 +241,4 @@ func axObserverCallback(observer: AXObserver, element: AXUIElement, notification
             }
         }
     }
-}
-
-private func isMainSleep() -> Bool {
-    CGDisplayIsAsleep(CGMainDisplayID()) == 1
 }

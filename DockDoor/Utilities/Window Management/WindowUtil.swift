@@ -194,32 +194,6 @@ enum WindowUtil {
     }
 
     static func isValidElement(_ element: AXUIElement) -> Bool {
-        var roleCheckResult: AXError?
-
-        // Check if app is marked unresponsive - skip validation to avoid repeated expensive calls
-        if let pid = try? element.pid() {
-            if desktopSpaceWindowCacheManager.isAppUnresponsive(pid: pid) {
-                return true
-            }
-
-            var value: AnyObject?
-            let result = AXUIElementCopyAttributeValue(element, kAXRoleAttribute as CFString, &value)
-            roleCheckResult = result
-
-            if result == .success {
-                if value != nil {
-                    return true
-                }
-            }
-
-            if result == .cannotComplete {
-                // App is busy - mark as unresponsive and assume valid to avoid removing windows
-                desktopSpaceWindowCacheManager.markAppUnresponsive(pid: pid)
-                return true
-            }
-        }
-
-        // Fallback: Try geometry check
         do {
             let position = try element.position()
             let size = try element.size()
@@ -227,9 +201,11 @@ enum WindowUtil {
                 return true
             }
         } catch AxError.runtimeError {
-        } catch {}
+            return false
+        } catch {
+            // Geometry check failed, fall through to AX windows list validation
+        }
 
-        // Fallback: Check AX windows list
         do {
             if let pid = try element.pid() {
                 let appElement = AXUIElementCreateApplication(pid)
@@ -250,7 +226,9 @@ enum WindowUtil {
                     }
                 }
             }
-        } catch {}
+        } catch {
+            // Both checks failed
+        }
 
         return false
     }
