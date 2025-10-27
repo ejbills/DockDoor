@@ -5,6 +5,7 @@ import SwiftUI
 
 class SpaceWindowCacheManager {
     private var windowCache: [pid_t: Set<WindowInfo>] = [:]
+    private var unresponsiveApps: [pid_t: Date] = [:]
     private let cacheLock = NSLock()
 
     private func notifyCoordinatorOfRemovedWindows(_ removedWindows: Set<WindowInfo>) {
@@ -86,11 +87,15 @@ class SpaceWindowCacheManager {
 
     func updateCache(pid: pid_t, update: (inout Set<WindowInfo>) -> Void) {
         cacheLock.lock()
-        defer { cacheLock.unlock() }
         var currentWindowSet = windowCache[pid] ?? []
         let oldWindowSet = currentWindowSet
+        cacheLock.unlock()
+
         update(&currentWindowSet)
+
+        cacheLock.lock()
         windowCache[pid] = currentWindowSet
+        cacheLock.unlock()
 
         let oldWindowIDs = Set(oldWindowSet.map(\.id))
         let newWindowIDs = Set(currentWindowSet.map(\.id))
@@ -138,5 +143,28 @@ class SpaceWindowCacheManager {
         cacheLock.lock()
         defer { cacheLock.unlock() }
         return Array(windowCache.values.flatMap { $0 }).sorted(by: { $0.lastAccessedTime > $1.lastAccessedTime })
+    }
+
+    func markAppUnresponsive(pid: pid_t) {
+        cacheLock.lock()
+        unresponsiveApps[pid] = Date()
+        cacheLock.unlock()
+    }
+
+    func isAppUnresponsive(pid: pid_t, cooldownSeconds: TimeInterval = 30) -> Bool {
+        cacheLock.lock()
+        let lastFailure = unresponsiveApps[pid]
+        cacheLock.unlock()
+
+        if let lastFailure {
+            let elapsed = Date().timeIntervalSince(lastFailure)
+            if elapsed < cooldownSeconds {
+                return true
+            }
+            cacheLock.lock()
+            unresponsiveApps.removeValue(forKey: pid)
+            cacheLock.unlock()
+        }
+        return false
     }
 }
