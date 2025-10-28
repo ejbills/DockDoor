@@ -530,6 +530,7 @@ struct WindowPreviewHoverContainer: View {
         .padding(2)
         .animation(.smooth(duration: 0.1), value: previewStateCoordinator.windows)
         .onChange(of: previewStateCoordinator.currIndex) { newIndex in
+            guard previewStateCoordinator.shouldScrollToIndex else { return }
             if showAnimations {
                 withAnimation(.snappy) {
                     scrollProxy.scrollTo("\(appName)-\(newIndex)", anchor: .center)
@@ -877,7 +878,7 @@ struct WindowPreviewHoverContainer: View {
                     mockPreviewActive: mockPreviewActive,
                     onHoverIndexChange: { hoveredIndex in
                         if let hoveredIndex {
-                            previewStateCoordinator.setIndex(to: hoveredIndex)
+                            previewStateCoordinator.setIndex(to: hoveredIndex, shouldScroll: Defaults[.scrollToMouseHoverInSwitcher])
                         }
                     }
                 )

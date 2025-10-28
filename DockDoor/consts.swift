@@ -50,6 +50,7 @@ extension Defaults.Keys {
     static let enableWindowSwitcher = Key<Bool>("enableWindowSwitcher", default: true)
     static let enableDockPreviews = Key<Bool>("enableDockPreviews", default: true)
     static let enableCmdTabEnhancements = Key<Bool>("enableCmdTabEnhancements", default: false)
+    static let scrollToMouseHoverInSwitcher = Key<Bool>("scrollToMouseHoverInSwitcher", default: false)
     static let keepPreviewOnAppTerminate = Key<Bool>("keepPreviewOnAppTerminate", default: false)
     static let enableWindowSwitcherSearch = Key<Bool>("enableWindowSwitcherSearch", default: false)
     static let sortWindowsByDate = Key<Bool>("sortWindowsByDate", default: true)
