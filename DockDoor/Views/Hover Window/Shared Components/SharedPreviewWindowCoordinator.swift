@@ -155,6 +155,15 @@ final class SharedPreviewWindowCoordinator: NSPanel {
                                                screen: mouseScreen,
                                                dockItemElement: validDockItemElement,
                                                dockPositionOverride: dockPositionOverride)
+
+            // Prevent rendering if position calculation failed for cmd-tab
+            if dockPositionOverride == .cmdTab, position == .zero {
+                if let oldContentView = contentView {
+                    oldContentView.removeFromSuperview()
+                }
+                contentView = nil
+                return
+            }
         } else {
             print("Warning: dockItemElement is nil when showing custom view. Defaulting position to center of screen.")
             position = centerWindowOnScreen(size: newHoverWindowSize, screen: mouseScreen)
@@ -199,6 +208,15 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         } else {
             if let validDockItemElement = dockItemElement {
                 position = calculateWindowPosition(mouseLocation: mouseLocation, windowSize: newHoverWindowSize, screen: mouseScreen, dockItemElement: validDockItemElement, dockPositionOverride: dockPositionOverride)
+
+                // Prevent rendering if position calculation failed for cmd-tab
+                if dockPositionOverride == .cmdTab, position == .zero {
+                    if let oldContentView = contentView {
+                        oldContentView.removeFromSuperview()
+                    }
+                    contentView = nil
+                    return
+                }
             } else {
                 print("Warning: dockItemElement is nil when not centering on screen. Defaulting position to center of screen.")
                 position = centerWindowOnScreen(size: newHoverWindowSize, screen: mouseScreen)
