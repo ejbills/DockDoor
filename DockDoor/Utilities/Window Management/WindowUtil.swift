@@ -200,9 +200,6 @@ enum WindowUtil {
             let id = try element.cgWindowId()
             if position != nil, size != nil {
                 return true
-            } else if id == nil {
-                print("Window cannot be validated in this state, try again later.")
-                return true
             }
         } catch AxError.runtimeError {
             return false

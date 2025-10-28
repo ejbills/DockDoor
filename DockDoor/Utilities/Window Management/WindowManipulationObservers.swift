@@ -187,11 +187,13 @@ class WindowManipulationObservers {
             if app.isActive {
                 WindowUtil.updateWindowDateTime(element: element, app: app)
             }
-            handleWindowEvent(element: element, app: app)
-        case kAXUIElementDestroyedNotification, kAXWindowResizedNotification, kAXWindowMovedNotification:
-            handleWindowEvent(element: element, app: app)
+            handleWindowEvent(element: element, app: app, notification: notificationName, validate: false)
+        case kAXUIElementDestroyedNotification:
+            handleWindowEvent(element: element, app: app, notification: notificationName, validate: true)
+        case kAXWindowResizedNotification, kAXWindowMovedNotification:
+            handleWindowEvent(element: element, app: app, notification: notificationName, validate: false)
         case kAXWindowMiniaturizedNotification:
-            handleWindowEvent(element: element, app: app)
+            handleWindowEvent(element: element, app: app, notification: notificationName, validate: true)
             WindowUtil.updateStatusOfWindowCache(pid: pid, isParentAppHidden: false)
         case kAXApplicationHiddenNotification:
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
@@ -212,12 +214,14 @@ class WindowManipulationObservers {
         }
     }
 
-    private func handleWindowEvent(element: AXUIElement, app: NSRunningApplication) {
+    private func handleWindowEvent(element: AXUIElement, app: NSRunningApplication, notification: String, validate: Bool = false) {
         debounceWorkItem?.cancel()
 
         let workItem = DispatchWorkItem {
             WindowUtil.updateWindowCache(for: app) { windowSet in
-                windowSet = windowSet.filter { WindowUtil.isValidElement($0.axElement) }
+                if validate {
+                    windowSet = windowSet.filter { WindowUtil.isValidElement($0.axElement) }
+                }
             }
         }
         debounceWorkItem = workItem
