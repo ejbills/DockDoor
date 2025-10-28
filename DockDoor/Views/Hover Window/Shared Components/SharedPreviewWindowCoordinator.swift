@@ -351,50 +351,32 @@ final class SharedPreviewWindowCoordinator: NSPanel {
 
     @MainActor
     private func applyWindowFrame(_ frame: CGRect, animated: Bool) {
-        let shouldAnimate = animated && frame != self.frame && Defaults[.showAnimations]
+        let shouldAnimate = animated && Defaults[.showAnimations]
 
         if shouldAnimate {
-            let distanceThreshold: CGFloat = 100
-            let distance = previousHoverWindowOrigin.map { frame.origin.distance(to: $0) } ?? distanceThreshold + 1
-            if distance > distanceThreshold {
-                let dockPosition = DockUtils.getDockPosition()
-                let animationOffset: CGFloat = 7.0
-                var startFrame = frame
+            // Window is appearing for the first time, apply slide animation
+            let dockPosition = DockUtils.getDockPosition()
+            let animationOffset: CGFloat = 7.0
+            var startFrame = frame
 
-                switch dockPosition {
-                case .bottom:
-                    startFrame.origin.y -= animationOffset
-                case .left:
-                    startFrame.origin.x -= animationOffset
-                case .right:
-                    startFrame.origin.x += animationOffset
-                default:
-                    startFrame.origin.y -= animationOffset
-                }
+            switch dockPosition {
+            case .bottom:
+                startFrame.origin.y -= animationOffset
+            case .left:
+                startFrame.origin.x -= animationOffset
+            case .right:
+                startFrame.origin.x += animationOffset
+            default:
+                startFrame.origin.y -= animationOffset
+            }
 
-                setFrame(startFrame, display: true)
-                orderFront(nil)
+            setFrame(startFrame, display: true)
+            orderFront(nil)
 
-                let fadeAnimation = CABasicAnimation(keyPath: "opacity")
-                fadeAnimation.fromValue = 0.65
-                fadeAnimation.toValue = 1.0
-                fadeAnimation.duration = 0.175
-                fadeAnimation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
-
-                contentView?.layer?.add(fadeAnimation, forKey: "opacity")
-                contentView?.layer?.opacity = 1.0
-
-                NSAnimationContext.runAnimationGroup { context in
-                    context.duration = 0.175
-                    context.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
-                    self.animator().setFrame(frame, display: true)
-                }
-            } else {
-                NSAnimationContext.runAnimationGroup({ context in
-                    context.duration = 0.15
-                    context.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
-                    self.animator().setFrame(frame, display: true)
-                }, completionHandler: nil)
+            NSAnimationContext.runAnimationGroup { context in
+                context.duration = 0.175
+                context.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+                self.animator().setFrame(frame, display: true)
             }
         } else {
             setFrame(frame, display: true)
