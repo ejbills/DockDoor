@@ -197,7 +197,11 @@ enum WindowUtil {
         do {
             let position = try element.position()
             let size = try element.size()
+            let id = try element.cgWindowId()
             if position != nil, size != nil {
+                return true
+            } else if id == nil {
+                print("Window cannot be validated in this state, try again later.")
                 return true
             }
         } catch AxError.runtimeError {

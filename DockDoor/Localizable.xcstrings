@@ -35424,6 +35424,9 @@
         }
       }
     },
+    "Group multiple app instances together" : {
+
+    },
     "Have an Idea?" : {
       "localizations" : {
         "af" : {
@@ -90467,6 +90470,9 @@
           }
         }
       }
+    },
+    "When enabled, hovering over an app in the Dock shows windows from all instances of that app. When disabled, shows only windows from the specific instance under the mouse." : {
+
     },
     "When enabled, shows the last active window first instead of the current window" : {
       "extractionState" : "stale",

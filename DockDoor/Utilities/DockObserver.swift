@@ -176,8 +176,8 @@ final class DockObserver {
             do {
                 var appsToFetchWindowsFrom: [NSRunningApplication] = []
                 if Defaults[.groupAppInstancesInDock],
-                       let bundleId = currentApp.bundleIdentifier, !bundleId.isEmpty
-                    {
+                   let bundleId = currentApp.bundleIdentifier, !bundleId.isEmpty
+                {
                     let potentialApps = NSRunningApplication.runningApplications(withBundleIdentifier: bundleId)
                     if !potentialApps.isEmpty {
                         appsToFetchWindowsFrom = potentialApps
