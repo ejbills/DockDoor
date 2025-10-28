@@ -146,7 +146,7 @@ extension DockObserver {
                     mouseScreen: bestScreen,
                     dockItemElement: selectedItem.element,
                     overrideDelay: true,
-                    centeredHoverWindowState: .none,
+                    centeredHoverWindowState: .windowSwitcher,
                     onWindowTap: { [weak self] in
                         self?.hideWindowAndResetLastApp()
                     },
@@ -164,7 +164,7 @@ extension DockObserver {
                     mouseScreen: bestScreen,
                     dockItemElement: selectedItem.element,
                     overrideDelay: true,
-                    centeredHoverWindowState: .none,
+                    centeredHoverWindowState: .windowSwitcher,
                     onWindowTap: { [weak self] in
                         self?.hideWindowAndResetLastApp()
                     },
