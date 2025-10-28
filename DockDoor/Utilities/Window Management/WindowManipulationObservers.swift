@@ -217,25 +217,7 @@ class WindowManipulationObservers {
 
         let workItem = DispatchWorkItem {
             WindowUtil.updateWindowCache(for: app) { windowSet in
-                var updatedSet = Set<WindowInfo>()
-                for window in windowSet {
-                    let result = WindowUtil.validateElement(window.id, window.axElement, isCurrentlyStale: window.isStale)
-                    switch result {
-                    case .valid:
-                        var updated = window
-                        if window.isStale {
-                            updated.isStale = false
-                        }
-                        updatedSet.insert(updated)
-                    case .keepAndMarkStale:
-                        var updated = window
-                        updated.isStale = true
-                        updatedSet.insert(updated)
-                    case .remove:
-                        break  // Don't add to updated set
-                    }
-                }
-                windowSet = updatedSet
+                windowSet = windowSet.filter { WindowUtil.isValidElement($0.axElement) }
             }
         }
         debounceWorkItem = workItem

@@ -33,7 +33,6 @@ struct WindowInfo: Identifiable, Hashable {
     var isHidden: Bool
     var spaceID: Int?
     var lastAccessedTime: Date
-    var isStale: Bool = false
 
     private var _scWindow: SCWindow?
 
@@ -78,12 +77,6 @@ enum WindowAction: String, Hashable, CaseIterable, Defaults.Serializable {
     case toggleFullScreen
     case hide
     case openNewWindow
-}
-
-enum WindowValidationResult {
-    case valid
-    case keepAndMarkStale
-    case remove
 }
 
 enum WindowUtil {
@@ -200,78 +193,44 @@ enum WindowUtil {
         return cgImage
     }
 
-    static func validateElement(_ wId: CGWindowID, _ element: AXUIElement, isCurrentlyStale: Bool = false) -> WindowValidationResult {
-        // First pass: Geometry check
+    static func isValidElement(_ element: AXUIElement) -> Bool {
         do {
             let position = try element.position()
             let size = try element.size()
             if position != nil, size != nil {
-                return .valid
+                return true
             }
         } catch AxError.runtimeError {
-            return .remove
+            return false
         } catch {
             // Geometry check failed, fall through to AX windows list validation
         }
 
-        // Second pass: AX windows list validation
-        guard let pid = try? element.pid() else {
-            return .remove
-        }
+        do {
+            if let pid = try element.pid() {
+                let appElement = AXUIElementCreateApplication(pid)
 
-        let appElement = AXUIElementCreateApplication(pid)
-        guard let windows = try? appElement.windows() else {
-            return .remove
-        }
+                if let windows = try? appElement.windows() {
+                    if let elementWindowId = try? element.cgWindowId() {
+                        for window in windows {
+                            if let windowId = try? window.cgWindowId(), windowId == elementWindowId {
+                                return true
+                            }
+                        }
+                    }
 
-        // Check by window ID
-        for window in windows {
-            if let windowId = try? window.cgWindowId(), windowId == wId {
-                return .valid
-            }
-        }
-
-        // Check by title match
-        if let elementWindowTitle = try? element.title(), !elementWindowTitle.isEmpty {
-            for window in windows {
-                if let axWindowTitle = try? window.title(),
-                   !axWindowTitle.isEmpty,
-                   elementWindowTitle.lowercased() == axWindowTitle.lowercased()
-                {
-                    return .valid
+                    for window in windows {
+                        if CFEqual(element, window) {
+                            return true
+                        }
+                    }
                 }
             }
+        } catch {
+            // Both checks failed
         }
 
-        // Backup: CFEqual check
-        for window in windows {
-            if CFEqual(element, window) {
-                return .valid
-            }
-        }
-
-        // All validation checks failed - check for stale marking
-        // Check if app is returning itself (buggy AX behavior)
-        let hasAppElement = windows.contains { (try? $0.role()) == "AXApplication" }
-
-        if hasAppElement {
-            if isCurrentlyStale {
-                // Second failure - remove the window
-                return .remove
-            } else {
-                // First failure - keep it and mark as stale
-                return .keepAndMarkStale
-            }
-        }
-
-        // Normal failure case - remove immediately
-        return .remove
-    }
-
-    // Backward compatibility wrapper
-    static func isValidElement(_ wId: CGWindowID, _ element: AXUIElement, isCurrentlyStale: Bool = false) -> Bool {
-        let result = validateElement(wId, element, isCurrentlyStale: isCurrentlyStale)
-        return result == .valid || result == .keepAndMarkStale
+        return false
     }
 
     static func findWindow(matchingWindow window: SCWindow, in axWindows: [AXUIElement]) -> AXUIElement? {
@@ -752,25 +711,17 @@ enum WindowUtil {
         guard !windows.isEmpty else { return }
 
         for window in windows where window.scWindow == nil {
-            let result = validateElement(window.id, window.axElement, isCurrentlyStale: window.isStale)
-
-            switch result {
-            case .valid:
-                var updated = window
-                if window.isStale {
-                    updated.isStale = false
-                }
-                if let image = window.id.cgsScreenshot() {
-                    updated.image = image
-                    updated.spaceID = window.id.cgsSpaces().first.map { Int($0) }
-                }
-                updateDesktopSpaceWindowCache(with: updated)
-            case .keepAndMarkStale:
-                var updated = window
-                updated.isStale = true
-                updateDesktopSpaceWindowCache(with: updated)
-            case .remove:
+            // Skip invalid AX elements
+            if !isValidElement(window.axElement) {
                 desktopSpaceWindowCacheManager.removeFromCache(pid: pid, windowId: window.id)
+                continue
+            }
+
+            if let image = window.id.cgsScreenshot() {
+                var updated = window
+                updated.image = image
+                updated.spaceID = window.id.cgsSpaces().first.map { Int($0) }
+                updateDesktopSpaceWindowCache(with: updated)
             }
         }
     }
@@ -925,25 +876,13 @@ enum WindowUtil {
                 return nil
             }
 
-            var purifiedSet = Set<WindowInfo>()
+            var purifiedSet = existingWindowsSet
             for window in existingWindowsSet {
-                let result = validateElement(window.id, window.axElement, isCurrentlyStale: window.isStale)
-                switch result {
-                case .valid:
-                    var updated = window
-                    if window.isStale {
-                        updated.isStale = false
-                    }
-                    purifiedSet.insert(updated)
-                case .keepAndMarkStale:
-                    var updated = window
-                    updated.isStale = true
-                    purifiedSet.insert(updated)
-                case .remove:
+                if !isValidElement(window.axElement) {
+                    purifiedSet.remove(window)
                     desktopSpaceWindowCacheManager.removeFromCache(pid: pid, windowId: window.id)
                 }
             }
-            desktopSpaceWindowCacheManager.writeCache(pid: pid, windowSet: purifiedSet)
             return purifiedSet
         }
     }
