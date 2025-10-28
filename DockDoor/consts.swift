@@ -54,6 +54,7 @@ extension Defaults.Keys {
     static let keepPreviewOnAppTerminate = Key<Bool>("keepPreviewOnAppTerminate", default: false)
     static let enableWindowSwitcherSearch = Key<Bool>("enableWindowSwitcherSearch", default: false)
     static let sortWindowsByDate = Key<Bool>("sortWindowsByDate", default: true)
+    static let showOldestWindowsFirst = Key<Bool>("showOldestWindowsFirst", default: false)
     static let useClassicWindowOrdering = Key<Bool>("useClassicWindowOrdering", default: true)
     static let includeHiddenWindowsInSwitcher = Key<Bool>("includeHiddenWindowsInSwitcher", default: true)
     static let ignoreAppsWithSingleWindow = Key<Bool>("ignoreAppsWithSingleWindow", default: false)
@@ -65,6 +66,8 @@ extension Defaults.Keys {
     static let Int64maskControl = Key<Int>("Int64maskControl", default: 262_401)
     static let Int64maskAlternate = Key<Int>("Int64maskAlternate", default: 524_576)
     static let UserKeybind = Key<UserKeyBind>("UserKeybind", default: UserKeyBind(keyCode: 48, modifierFlags: Defaults[.Int64maskAlternate]))
+
+    static let enableSwipeListener = Key<Bool>("enableSwipeListener", default: true)
 
     static let showAppName = Key<Bool>("showAppName", default: true)
     static let appNameStyle = Key<AppNameStyle>("appNameStyle", default: .default)
@@ -89,6 +92,7 @@ extension Defaults.Keys {
 
     static let previewMaxColumns = Key<Int>("previewMaxColumns", default: 2) // For left/right dock
     static let previewMaxRows = Key<Int>("previewMaxRows", default: 1) // For bottom dock only
+    static let previewFixedDimensions = Key<Bool>("previewFixedDimensions", default: false)
     static let switcherMaxRows = Key<Int>("switcherMaxRows", default: 2) // For window switcher
 
     static let windowSwitcherPlacementStrategy = Key<WindowSwitcherPlacementStrategy>("windowSwitcherPlacementStrategy", default: .screenWithMouse)
