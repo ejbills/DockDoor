@@ -12387,6 +12387,9 @@
         }
       }
     },
+    "Automatically scrolls the window switcher when hovering over windows with the mouse." : {
+
+    },
     "Background Opacity" : {
       "localizations" : {
         "af" : {
@@ -69323,6 +69326,9 @@
           }
         }
       }
+    },
+    "Scroll to window on mouse hover" : {
+
     },
     "seconds" : {
       "localizations" : {

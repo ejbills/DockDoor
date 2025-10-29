@@ -517,7 +517,7 @@ enum WindowUtil {
                 finalWindows = desktopSpaceWindowCacheManager.readCache(pid: app.processIdentifier)
             }
 
-            // Also sync minimized/hidden state for AX-fallback windows from AX attributes
+            // Sync minimized/hidden state for all windows from AX attributes
             let axApp = AXUIElementCreateApplication(app.processIdentifier)
             if let axWindows = try? axApp.windows() {
                 var updatedAny = false
@@ -525,7 +525,7 @@ enum WindowUtil {
                     guard let cgId = ((try? ax.cgWindowId()) ?? nil) else { continue }
                     let isMin = (try? ax.isMinimized()) ?? false
                     desktopSpaceWindowCacheManager.updateCache(pid: app.processIdentifier) { set in
-                        if let existing = set.first(where: { $0.id == cgId && $0.scWindow == nil }) {
+                        if let existing = set.first(where: { $0.id == cgId }) {
                             if existing.isMinimized != isMin || existing.isHidden != app.isHidden {
                                 var u = existing
                                 u.isMinimized = isMin
