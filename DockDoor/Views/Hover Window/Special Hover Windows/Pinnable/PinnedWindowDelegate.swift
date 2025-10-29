@@ -19,10 +19,7 @@ extension SharedPreviewWindowCoordinator {
     func createPinnedWindow(appName: String, bundleIdentifier: String, type: PinnableViewType, isEmbedded: Bool = false) {
         let key = "\(bundleIdentifier)-\(type.rawValue)"
 
-        if pinnedWindows[key] != nil {
-            print("⚠️ Pinned window already exists for: \(key)")
-            return
-        }
+        if pinnedWindows[key] != nil { return }
 
         let styleMask: NSWindow.StyleMask = [.nonactivatingPanel, .fullSizeContentView, .borderless]
 
@@ -44,17 +41,39 @@ extension SharedPreviewWindowCoordinator {
 
         let contentView = switch type {
         case .media:
-            AnyView(
-                MediaControlsView(
-                    appName: appName,
-                    bundleIdentifier: bundleIdentifier,
-                    dockPosition: DockUtils.getDockPosition(),
-                    bestGuessMonitor: NSScreen.main ?? NSScreen.screens.first!,
-                    isEmbeddedMode: isEmbedded,
+            // Try to use the widget system first
+            if let manifest = WidgetRegistry.matchingWidgets(for: bundleIdentifier)
+                .first(where: { $0.isNative() && $0.entry == "MediaControlsWidget" }),
+                let widgetView = NativeWidgetFactory.createWidget(
+                    manifest: manifest,
+                    context: [
+                        "appName": appName,
+                        "bundleIdentifier": bundleIdentifier,
+                        "dockPosition": DockUtils.getDockPosition().rawValue,
+                    ],
+                    mode: isEmbedded ? .embedded : .full,
+                    screen: NSScreen.main ?? NSScreen.screens.first!,
                     isPinnedMode: true
                 )
-                .pinnableDisabled(key: key)
-            )
+            {
+                AnyView(widgetView.pinnableDisabled(key: key))
+            } else {
+                // Fallback to legacy view with no data (will be empty)
+                AnyView(
+                    MediaControlsView(
+                        mediaInfo: nil,
+                        appName: appName,
+                        bundleIdentifier: bundleIdentifier,
+                        dockPosition: DockUtils.getDockPosition(),
+                        bestGuessMonitor: NSScreen.main ?? NSScreen.screens.first!,
+                        isEmbeddedMode: isEmbedded,
+                        isPinnedMode: true,
+                        idealWidth: nil,
+                        autoFetch: false
+                    )
+                    .pinnableDisabled(key: key)
+                )
+            }
         case .calendar:
             AnyView(
                 CalendarView(
@@ -63,7 +82,8 @@ extension SharedPreviewWindowCoordinator {
                     dockPosition: DockUtils.getDockPosition(),
                     bestGuessMonitor: NSScreen.main ?? NSScreen.screens.first!,
                     isEmbeddedMode: isEmbedded,
-                    isPinnedMode: true
+                    isPinnedMode: true,
+                    calendarInfo: DailyCalendarInfo()
                 )
                 .pinnableDisabled(key: key)
             )
@@ -75,7 +95,6 @@ extension SharedPreviewWindowCoordinator {
         // Let the view size itself, then fit window to content
         let fittingSize = hostingView.fittingSize
 
-        // Position with cascade for multiple windows
         let screenFrame = NSScreen.main?.visibleFrame ?? NSRect(x: 0, y: 0, width: 1000, height: 800)
 
         let windowFrame = NSRect(
@@ -87,15 +106,11 @@ extension SharedPreviewWindowCoordinator {
 
         window.setFrame(windowFrame, display: true)
 
-        // Set up delegate for cleanup
         let delegate = PinnedWindowDelegate(coordinator: self, key: key)
         window.delegate = delegate
 
-        // Store and show
         pinnedWindows[key] = window
         window.makeKeyAndOrderFront(nil)
-
-        print("✅ Created pinned window: \(key) - Embedded: \(isEmbedded)")
     }
 
     /// Close a specific pinned window

@@ -2,7 +2,7 @@
 import SwiftUI
 
 struct MediaProgressBar: View {
-    @ObservedObject var mediaInfo: MediaInfo
+    @ObservedObject var mediaInfo: MediaStore
     let dominantColor: Color?
     let showingLyrics: Bool
 

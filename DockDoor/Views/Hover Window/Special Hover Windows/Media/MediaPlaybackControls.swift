@@ -2,7 +2,8 @@ import Defaults
 import SwiftUI
 
 struct MediaPlaybackControls: View {
-    @ObservedObject var mediaInfo: MediaInfo
+    @ObservedObject var mediaInfo: MediaStore
+    @ObservedObject var lyricProvider: LyricProvider
     let isExpanded: Bool
     let showingLyrics: Bool
     @Binding var lyricsMode: Bool
@@ -10,13 +11,15 @@ struct MediaPlaybackControls: View {
 
     @Default(.showAnimations) var showAnimations
 
-    init(mediaInfo: MediaInfo,
+    init(mediaInfo: MediaStore,
+         lyricProvider: LyricProvider,
          isExpanded: Bool,
          showingLyrics: Bool,
          lyricsMode: Binding<Bool> = .constant(false),
          showingLyricsInFull: Binding<Bool> = .constant(false))
     {
         self.mediaInfo = mediaInfo
+        self.lyricProvider = lyricProvider
         self.isExpanded = isExpanded
         self.showingLyrics = showingLyrics
         _lyricsMode = lyricsMode
@@ -76,7 +79,7 @@ struct MediaPlaybackControls: View {
                     Spacer()
 
                     MediaLyricsButton(
-                        mediaInfo: mediaInfo,
+                        lyricProvider: lyricProvider,
                         lyricsMode: $lyricsMode,
                         showingLyrics: $showingLyricsInFull,
                         isFullMode: true

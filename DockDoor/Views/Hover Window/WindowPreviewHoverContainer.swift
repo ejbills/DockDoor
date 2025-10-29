@@ -4,13 +4,13 @@ import ScreenCaptureKit
 import SwiftUI
 
 enum FlowItem: Hashable, Identifiable {
-    case embedded
+    case widget(Int)
     case window(Int)
 
     var id: String {
         switch self {
-        case .embedded:
-            "embedded"
+        case let .widget(index):
+            "widget-\(index)"
         case let .window(index):
             "window-\(index)"
         }
@@ -45,7 +45,8 @@ struct WindowPreviewHoverContainer: View {
     let bestGuessMonitor: NSScreen
     var mockPreviewActive: Bool
     let updateAvailable: Bool
-    let embeddedContentType: EmbeddedContentType
+    // Optional declarative/native widgets to render in embedded mode
+    let embeddedWidgets: [WidgetManifest]?
 
     @ObservedObject var previewStateCoordinator: PreviewStateCoordinator
 
@@ -80,7 +81,7 @@ struct WindowPreviewHoverContainer: View {
          windowSwitcherCoordinator: PreviewStateCoordinator,
          mockPreviewActive: Bool,
          updateAvailable: Bool,
-         embeddedContentType: EmbeddedContentType = .none)
+         embeddedWidgets: [WidgetManifest]? = nil)
     {
         self.appName = appName
         self.onWindowTap = onWindowTap
@@ -90,7 +91,7 @@ struct WindowPreviewHoverContainer: View {
         previewStateCoordinator = windowSwitcherCoordinator
         self.mockPreviewActive = mockPreviewActive
         self.updateAvailable = updateAvailable
-        self.embeddedContentType = embeddedContentType
+        self.embeddedWidgets = embeddedWidgets
     }
 
     private var minimumEmbeddedWidth: CGFloat {
@@ -446,33 +447,7 @@ struct WindowPreviewHoverContainer: View {
         }
     }
 
-    @ViewBuilder
-    private func embeddedContentView() -> some View {
-        switch embeddedContentType {
-        case let .media(bundleIdentifier):
-            MediaControlsView(
-                appName: appName,
-                bundleIdentifier: bundleIdentifier,
-                dockPosition: dockPosition,
-                bestGuessMonitor: bestGuessMonitor,
-                isEmbeddedMode: true,
-                idealWidth: minimumEmbeddedWidth
-            )
-            .pinnable(appName: appName, bundleIdentifier: bundleIdentifier, type: .media)
-        case let .calendar(bundleIdentifier):
-            CalendarView(
-                appName: appName,
-                bundleIdentifier: bundleIdentifier,
-                dockPosition: dockPosition,
-                bestGuessMonitor: bestGuessMonitor,
-                isEmbeddedMode: true,
-                idealWidth: minimumEmbeddedWidth
-            )
-            .pinnable(appName: appName, bundleIdentifier: bundleIdentifier, type: .calendar)
-        case .none:
-            EmptyView()
-        }
-    }
+    // Removed embeddedContentView; widgets are rendered as individual flow items.
 
     @ViewBuilder
     private func buildFlowStack(
@@ -732,9 +707,11 @@ struct WindowPreviewHoverContainer: View {
     private func createFlowItems() -> [FlowItem] {
         var allItems: [FlowItem] = []
 
-        // Add embedded content first if present
-        if embeddedContentType != .none {
-            allItems.append(.embedded)
+        // Add each embedded widget as its own flow item
+        if let widgets = embeddedWidgets, !widgets.isEmpty {
+            for i in widgets.indices {
+                allItems.append(.widget(i))
+            }
         }
 
         // Add windows from filtered indices (dimensions stay mapped by original indices)
@@ -775,8 +752,10 @@ struct WindowPreviewHoverContainer: View {
 
         var itemsToProcess: [FlowItem] = []
 
-        if embeddedContentType != .none {
-            itemsToProcess.append(.embedded)
+        if let widgets = embeddedWidgets, !widgets.isEmpty {
+            for i in widgets.indices {
+                itemsToProcess.append(.widget(i))
+            }
         }
 
         for index in filteredWindowIndices() {
@@ -848,9 +827,30 @@ struct WindowPreviewHoverContainer: View {
         currentDimensionsMapForPreviews: [Int: WindowDimensions]
     ) -> some View {
         switch item {
-        case .embedded:
-            embeddedContentView()
-                .id("\(appName)-embedded")
+        case let .widget(index):
+            if let widgets = embeddedWidgets, index < widgets.count {
+                let manifest = widgets[index]
+                let ctx: [String: String] = [
+                    "appName": appName,
+                    "bundleIdentifier": previewStateCoordinator.windows.first?.app.bundleIdentifier ?? "",
+                    "windows.count": String(previewStateCoordinator.windows.count),
+                    "dockPosition": dockPosition.rawValue,
+                ]
+
+                if manifest.isNative() {
+                    WidgetHostView(manifest: manifest, mode: .embedded, context: ctx, screen: bestGuessMonitor)
+                        .id("\(appName)-widget-native-\(index)")
+                        .frame(minWidth: minimumEmbeddedWidth, alignment: .center)
+                } else {
+                    WidgetHostView(manifest: manifest, mode: .embedded, context: ctx, screen: bestGuessMonitor)
+                        .padding(12)
+                        .simpleBlurBackground(strokeWidth: 1.75)
+                        .id("\(appName)-widget-decl-\(index)")
+                        .frame(minWidth: minimumEmbeddedWidth, alignment: .center)
+                }
+            } else {
+                EmptyView()
+            }
         case let .window(index):
             if index < previewStateCoordinator.windows.count {
                 WindowPreview(
@@ -925,7 +925,7 @@ struct WindowPreviewHoverContainer: View {
         return previewStateCoordinator.windowSwitcherActive &&
             !query.isEmpty &&
             filteredWindowIndices().isEmpty &&
-            embeddedContentType == .none
+            (embeddedWidgets?.isEmpty ?? true)
     }
 
     @ViewBuilder

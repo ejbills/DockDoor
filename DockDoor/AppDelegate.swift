@@ -34,6 +34,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             GeneralSettingsViewController(),
             AppearanceSettingsViewController(),
             FiltersSettingsViewController(),
+            WidgetsSettingsViewController(),
             SupportSettingsViewController(updaterState: updaterState),
         ]
 
@@ -68,6 +69,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
+        // Ensure built-in widgets are available out of the box (Calendar, Apple Music, Spotify)
+        DefaultWidgets.ensureInstalledIfNeeded()
+
         if Defaults[.showMenuBarIcon] {
             setupMenuBar()
         } else {

@@ -50,25 +50,13 @@ struct LyricsOVHResponse: Codable {
 }
 
 @MainActor
-class MediaInfo: ObservableObject {
-    @Published var title: String = ""
-    @Published var artist: String = ""
-    @Published var album: String = ""
-    @Published var artwork: NSImage?
-    @Published var isPlaying: Bool = false
-    @Published var currentTime: TimeInterval = 0
-    @Published var duration: TimeInterval = 0
-    @Published var appName: String = ""
-
+class LyricProvider: ObservableObject {
     // MARK: - Lyrics Properties
 
     @Published var lyrics: [LyricLine] = []
     @Published var currentLyricIndex: Int?
     @Published var isLoadingLyrics: Bool = false
     @Published var hasLyrics: Bool = false
-
-    private var currentApp: String = ""
-    var updateTimer: Timer?
 
     // MARK: - Lyrics Timer
 
@@ -82,54 +70,28 @@ class MediaInfo: ObservableObject {
     private var lastPollDate: Date = .init()
     private var interpolatedTime: TimeInterval = 0
 
-    private static let delimiter = "〈♫DOCKDOOR♫〉"
+    // MARK: - Media Info (for lyric fetching)
+
+    private var title: String = ""
+    private var artist: String = ""
+    private var album: String = ""
+    private var duration: TimeInterval = 0
+    var isPlaying: Bool = false
+    var currentTime: TimeInterval = 0
 
     // MARK: - Public Methods
 
-    func fetchMediaInfo(for bundleIdentifier: String) async {
-        currentApp = bundleIdentifier
-
-        switch bundleIdentifier {
-        case spotifyAppIdentifier:
-            appName = "Spotify"
-        case appleMusicAppIdentifier:
-            appName = "Music"
-        default:
-            clearMediaInfo()
-            return
-        }
-
-        await fetchMediaData()
-        startPeriodicUpdates()
-    }
-
-    func playPause() {
-        executeMediaCommand("playpause")
-    }
-
-    func nextTrack() {
-        executeMediaCommand("next track")
-    }
-
-    func previousTrack() {
-        executeMediaCommand("previous track")
-    }
-
-    func seek(to position: TimeInterval) {
-        let script = buildSeekScript(position: position)
-
-        Task {
-            let appleScript = NSAppleScript(source: script)
-            appleScript?.executeAndReturnError(nil)
-            currentTime = position
-
-            // Reset interpolation timing after seeking
-            lastPolledTime = position
-            lastPollDate = Date()
-            interpolatedTime = position
-
-            updateCurrentLyricIndex()
-        }
+    func updateMediaInfo(title: String, artist: String, album: String, duration: TimeInterval, isPlaying: Bool, currentTime: TimeInterval) {
+        self.title = title
+        self.artist = artist
+        self.album = album
+        self.duration = duration
+        self.isPlaying = isPlaying
+        self.currentTime = currentTime
+        lastPolledTime = currentTime
+        lastPollDate = Date()
+        interpolatedTime = currentTime
+        updateCurrentLyricIndex()
     }
 
     // MARK: - Lyrics Methods
@@ -170,7 +132,6 @@ class MediaInfo: ObservableObject {
 
             if hasLyrics {
                 startLyricsTimer()
-                startPeriodicUpdates() // Restart with higher frequency
             }
         } catch {
             if !Task.isCancelled {
@@ -418,227 +379,19 @@ class MediaInfo: ObservableObject {
         lastPollDate = Date()
         interpolatedTime = currentTime
 
-        // Restart with slower polling frequency
-        if !currentApp.isEmpty {
-            startPeriodicUpdates()
-        }
+        // No-op: legacy polling removed
     }
 
     // MARK: - Private Methods
-
-    private func startPeriodicUpdates() {
-        updateTimer?.invalidate()
-
-        // Use more frequent updates when lyrics are active for better sync
-        let updateInterval: TimeInterval = hasLyrics ? 0.5 : 1.0
-
-        updateTimer = Timer.scheduledTimer(withTimeInterval: updateInterval, repeats: true) { [weak self] _ in
-            Task { @MainActor in
-                await self?.fetchMediaData()
-            }
-        }
-    }
-
-    private func fetchMediaData() async {
-        guard !currentApp.isEmpty else { return }
-
-        let script = buildMediaInfoScript()
-        await executeAppleScript(script)
-    }
-
-    private func executeMediaCommand(_ command: String, delay: UInt64 = 250_000_000) {
-        let script = buildMediaCommandScript(command: command)
-
-        Task {
-            let appleScript = NSAppleScript(source: script)
-            appleScript?.executeAndReturnError(nil)
-            try? await Task.sleep(nanoseconds: delay)
-            await fetchMediaData()
-        }
-    }
-
-    private func executeAppleScript(_ script: String) async {
-        let scriptResult: String? = await Task.detached(priority: .utility) {
-            let appleScript = NSAppleScript(source: script)
-            var errorDict: NSDictionary?
-            let executionResult = appleScript?.executeAndReturnError(&errorDict)
-
-            if let error = errorDict {
-                print("AppleScript error: \(error)")
-                return nil
-            }
-            return executionResult?.stringValue
-        }.value
-
-        guard let resultString = scriptResult else { return }
-
-        if resultString == "not_running" {
-            clearMediaInfo()
-            return
-        }
-
-        if resultString == "error" {
-            return
-        }
-
-        parseMediaInfo(from: resultString)
-    }
-
-    private func parseMediaInfo(from resultString: String) {
-        let components = resultString.components(separatedBy: Self.delimiter)
-        guard components.count >= 6 else {
-            return
-        }
-
-        let newTitle = components[0]
-        let newArtist = components[1]
-        let newAlbum = components[2]
-
-        // Check if track changed
-        let trackChanged = newTitle != title || newArtist != artist || newAlbum != album
-
-        if trackChanged {
-            clearLyrics()
-        }
-
-        title = newTitle
-        artist = newArtist
-        album = newAlbum
-        isPlaying = components[3] == "playing"
-
-        // Parse time values with locale-aware parsing
-        let newCurrentTime = parseTimeValue(components[4])
-
-        // Update timing tracking for interpolation
-        if abs(newCurrentTime - currentTime) > 0.5 || !isPlaying {
-            // Significant time change or not playing - reset interpolation
-            lastPolledTime = newCurrentTime
-            lastPollDate = Date()
-            interpolatedTime = newCurrentTime
-        } else {
-            // Small change - just update the baseline
-            lastPolledTime = newCurrentTime
-            lastPollDate = Date()
-        }
-
-        currentTime = newCurrentTime
-        duration = parseTimeValue(components[5])
-
-        // Handle artwork URL if present
-        if components.count > 6, !components[6].isEmpty {
-            Task {
-                await fetchArtworkFromURL(components[6])
-            }
-        } else {
-            Task {
-                await setDefaultArtwork()
-            }
-        }
-    }
-
-    private func parseTimeValue(_ timeString: String) -> TimeInterval {
-        // Handle different decimal separators (comma vs period)
-        let normalizedString = timeString.replacingOccurrences(of: ",", with: ".")
-        let timeValue = Double(normalizedString) ?? 0
-
-        // Convert from milliseconds to seconds if needed
-        return timeValue > 1000.0 ? timeValue / 1000.0 : timeValue
-    }
-
-    private func fetchArtworkFromURL(_ urlString: String) async {
-        guard let url = URL(string: urlString) else {
-            await setDefaultArtwork()
-            return
-        }
-
-        do {
-            let (data, _) = try await URLSession.shared.data(from: url)
-            if let image = NSImage(data: data) {
-                artwork = image
-            } else {
-                await setDefaultArtwork()
-            }
-        } catch {
-            await setDefaultArtwork()
-        }
-    }
-
-    private func setDefaultArtwork() async {
-        artwork = NSImage(systemSymbolName: "music.note", accessibilityDescription: nil)
-    }
 
     private func clearMediaInfo() {
         title = ""
         artist = ""
         album = ""
-        artwork = nil
         isPlaying = false
         currentTime = 0
         duration = 0
-        appName = ""
-        updateTimer?.invalidate()
-        updateTimer = nil
         clearLyrics()
-    }
-
-    // MARK: - Script Builders
-
-    private func buildMediaInfoScript() -> String {
-        let artworkScript = appName == "Music" ? """
-        try
-            set artData to data of artwork 1 of current track
-            set tempPath to "/tmp/aw.jpg"
-            set fileRef to open for access tempPath with write permission
-            set eof fileRef to 0
-            write artData to fileRef
-            close access fileRef
-            set base64String to do shell script "base64 -i /tmp/aw.jpg | tr -d '\\n'"
-            set artworkURLString to "data:image/jpeg;base64," & base64String
-        on error
-            set artworkURLString to ""
-        end try
-        try
-            do shell script "rm /tmp/aw.jpg 2>/dev/null"
-        end try
-        """ : "set artworkURLString to artwork url of current track"
-
-        return """
-        tell application "\(appName)"
-            if it is running then
-                try
-                    set trackName to name of current track
-                    set artistName to artist of current track
-                    set albumName to album of current track
-                    set playerState to player state as string
-                    set currentPos to player position
-                    set trackDuration to duration of current track
-
-                    set artworkURLString to ""
-                    try
-                        \(artworkScript)
-                    on error
-                    end try
-
-                    return trackName & "\(Self.delimiter)" & artistName & "\(Self.delimiter)" & albumName & "\(Self.delimiter)" & playerState & "\(Self.delimiter)" & currentPos & "\(Self.delimiter)" & trackDuration & "\(Self.delimiter)" & artworkURLString
-                on error errMsg
-                    if errMsg contains "Can't get current track" or errMsg contains "-1728" or errMsg contains "Can't get artwork url" then
-                        return "no_library_track_info"
-                    end if
-                    return "error"
-                end try
-            else
-                return "not_running"
-            end if
-        end tell
-        """
-    }
-
-    private func buildMediaCommandScript(command: String) -> String {
-        "tell application \"\(appName)\" to \(command)"
-    }
-
-    private func buildSeekScript(position: TimeInterval) -> String {
-        "tell application \"\(appName)\" to set player position to \(position)"
     }
 
     private func convertPlainLyricsToTimedLines(_ plainLyrics: String) -> [LyricLine] {
@@ -663,7 +416,6 @@ class MediaInfo: ObservableObject {
     }
 
     deinit {
-        updateTimer?.invalidate()
         lyricsTimer?.invalidate()
         currentFetchTask?.cancel()
     }
