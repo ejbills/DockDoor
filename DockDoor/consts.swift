@@ -86,6 +86,7 @@ extension Defaults.Keys {
     static let enabledTrafficLightButtons = Key<Set<WindowAction>>("enabledTrafficLightButtons", default: [.quit, .close, .minimize, .toggleFullScreen])
     static let useMonochromeTrafficLights = Key<Bool>("useMonochromeTrafficLights", default: false)
     static let showMinimizedHiddenLabels = Key<Bool>("showMinimizedHiddenLabels", default: true)
+    static let trafficLightOrHidden = Key<Bool>("trafficLightOrHidden", default: false)
 
     static let previewMaxColumns = Key<Int>("previewMaxColumns", default: 2) // For left/right dock
     static let previewMaxRows = Key<Int>("previewMaxRows", default: 1) // For bottom dock only
