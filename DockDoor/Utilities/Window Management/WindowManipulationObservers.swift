@@ -181,13 +181,9 @@ class WindowManipulationObservers {
 
     func processAXNotification(element: AXUIElement, notificationName: String, app: NSRunningApplication, pid: pid_t) {
         switch notificationName {
-        case kAXFocusedUIElementChangedNotification:
+        case kAXFocusedUIElementChangedNotification, kAXFocusedWindowChangedNotification, kAXMainWindowChangedNotification:
             updateTimestampIfAppActive(element: element, app: app)
             handleWindowEvent(element: element, app: app, notification: notificationName, validate: false)
-        case kAXFocusedWindowChangedNotification, kAXMainWindowChangedNotification:
-            updateTimestampIfAppActive(element: element, app: app)
-            handleWindowEvent(element: element, app: app, notification: notificationName, validate: false)
-            WindowUtil.checkForMissingWindows(pid: pid)
         case kAXUIElementDestroyedNotification:
             handleWindowEvent(element: element, app: app, notification: notificationName, validate: true)
         case kAXWindowResizedNotification, kAXWindowMovedNotification:
