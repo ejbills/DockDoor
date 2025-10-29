@@ -181,13 +181,13 @@ class WindowManipulationObservers {
 
     func processAXNotification(element: AXUIElement, notificationName: String, app: NSRunningApplication, pid: pid_t) {
         switch notificationName {
-        case kAXFocusedUIElementChangedNotification, kAXFocusedWindowChangedNotification, kAXMainWindowChangedNotification:
-            // Only update timestamp if app is already frontmost (same space window switching)
-            // Otherwise let app activation observer handle it after space switch completes
-            if app.isActive {
-                WindowUtil.updateWindowDateTime(element: element, app: app)
-            }
+        case kAXFocusedUIElementChangedNotification:
+            updateTimestampIfAppActive(element: element, app: app)
             handleWindowEvent(element: element, app: app, notification: notificationName, validate: false)
+        case kAXFocusedWindowChangedNotification, kAXMainWindowChangedNotification:
+            updateTimestampIfAppActive(element: element, app: app)
+            handleWindowEvent(element: element, app: app, notification: notificationName, validate: false)
+            WindowUtil.checkForMissingWindows(pid: pid)
         case kAXUIElementDestroyedNotification:
             handleWindowEvent(element: element, app: app, notification: notificationName, validate: true)
         case kAXWindowResizedNotification, kAXWindowMovedNotification:
@@ -211,6 +211,14 @@ class WindowManipulationObservers {
             handleNewWindow(for: pid)
         default:
             break
+        }
+    }
+
+    private func updateTimestampIfAppActive(element: AXUIElement, app: NSRunningApplication) {
+        // Only update timestamp if app is already frontmost (same space window switching)
+        // Otherwise let app activation observer handle it after space switch completes
+        if app.isActive {
+            WindowUtil.updateWindowDateTime(element: element, app: app)
         }
     }
 

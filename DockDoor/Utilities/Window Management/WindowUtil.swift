@@ -388,10 +388,28 @@ enum WindowUtil {
         keyUp?.postToPid(app.processIdentifier)
     }
 
+    static func checkForMissingWindows(pid: pid_t) {
+        let appElement = AXUIElementCreateApplication(pid)
+        guard let axWindows = try? appElement.windows() else { return }
+
+        let cachedWindowIDs = Set(desktopSpaceWindowCacheManager.readCache(pid: pid).map(\.id))
+
+        var missingWindowCount = 0
+        for ax in axWindows {
+            if let cgId = try? ax.cgWindowId(), !cachedWindowIDs.contains(cgId) {
+                missingWindowCount += 1
+            }
+        }
+
+        // If AX reported windows that weren't in cache, trigger discovery to recover them
+        if missingWindowCount > 0, let app = NSRunningApplication(processIdentifier: pid) {
+            discoverNewWindowsViaAXFallback(app: app)
+        }
+    }
+
     static func updateStatusOfWindowCache(pid: pid_t, isParentAppHidden: Bool) {
         let appElement = AXUIElementCreateApplication(pid)
 
-        var missingWindowCount = 0
         desktopSpaceWindowCacheManager.updateCache(pid: pid) { windowSet in
             guard let axWindows = try? appElement.windows() else {
                 // Still apply parent hidden flag
@@ -408,8 +426,6 @@ enum WindowUtil {
                     updated.isHidden = isParentAppHidden
                     windowSet.remove(existing)
                     windowSet.insert(updated)
-                } else {
-                    missingWindowCount += 1
                 }
             }
 
@@ -417,10 +433,7 @@ enum WindowUtil {
             windowSet = Set(windowSet.map { var w = $0; w.isHidden = isParentAppHidden; return w })
         }
 
-        // If AX reported windows that weren't in cache, trigger discovery to recover them
-        if missingWindowCount > 0, let app = NSRunningApplication(processIdentifier: pid) {
-            discoverNewWindowsViaAXFallback(app: app)
-        }
+        checkForMissingWindows(pid: pid)
     }
 
     static func closeWindow(windowInfo: WindowInfo) {
