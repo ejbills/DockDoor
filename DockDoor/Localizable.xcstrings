@@ -9725,6 +9725,7 @@
       }
     },
     "Appearance settings" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -32572,6 +32573,7 @@
       }
     },
     "Filters settings" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -34664,6 +34666,7 @@
       }
     },
     "General settings" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -79805,6 +79808,7 @@
       }
     },
     "Support settings" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {

@@ -1,18 +1,7 @@
 import Cocoa
 import Defaults
-import Settings
 import Sparkle
 import SwiftUI
-
-class SettingsWindowControllerDelegate: NSObject, NSWindowDelegate {
-    func windowDidBecomeKey(_ notification: Notification) {
-        NSApp.setActivationPolicy(.regular)
-    }
-
-    func windowWillClose(_ notification: Notification) {
-        NSApp.setActivationPolicy(.accessory)
-    }
-}
 
 class AppDelegate: NSObject, NSApplicationDelegate {
     private var dockObserver: DockObserver?
@@ -29,29 +18,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     private var firstTimeWindow: NSWindow?
-    lazy var settingsWindowController: SettingsWindowController = {
-        var panes: [SettingsPane] = [
-            GeneralSettingsViewController(),
-            AppearanceSettingsViewController(),
-            FiltersSettingsViewController(),
-            SupportSettingsViewController(updaterState: updaterState),
-        ]
-
-        let controller = SettingsWindowController(panes: panes)
-        controller.window?.delegate = self.settingsWindowControllerDelegate
-
-        if let window = controller.window {
-            window.styleMask.insert(.resizable)
-
-            if let zoomButton = window.standardWindowButton(.zoomButton) {
-                zoomButton.isEnabled = true
-            }
-        }
-
-        return controller
-    }()
-
-    private let settingsWindowControllerDelegate = SettingsWindowControllerDelegate()
+    private var settingsManager: SettingsManager?
 
     override init() {
         let state = UpdaterState()
@@ -64,7 +31,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         super.init()
 
-        settingsWindowController.window?.delegate = settingsWindowControllerDelegate
+        settingsManager = SettingsManager(updaterState: state)
     }
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
@@ -161,12 +128,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         NSApp.setActivationPolicy(.regular)
         NSApp.activate(ignoringOtherApps: true)
 
-        settingsWindowController.show()
+        settingsManager?.showSettings()
+    }
 
-        if let window = settingsWindowController.window {
-            window.makeKeyAndOrderFront(nil)
-            window.orderFrontRegardless()
-        }
+    func closeSettingsWindow() {
+        settingsManager?.close()
     }
 
     func quitApp() {
