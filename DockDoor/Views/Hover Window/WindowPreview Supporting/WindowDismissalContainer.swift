@@ -103,6 +103,7 @@ class MouseTrackingNSView: NSView {
     }
 
     private func resetOpacityVisually() {
+        guard !Defaults[.preventPreviewReentryDuringFadeOut] else { return }
         cancelFadeOut()
         setWindowOpacity(to: 1.0, duration: 0.2)
     }

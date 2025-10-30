@@ -105,6 +105,7 @@ struct MainSettingsView: View {
 
     @Default(.hoverWindowOpenDelay) var hoverWindowOpenDelay
     @Default(.fadeOutDuration) var fadeOutDuration
+    @Default(.preventPreviewReentryDuringFadeOut) var preventPreviewReentryDuringFadeOut
     @Default(.inactivityTimeout) var inactivityTimeout
     @Default(.tapEquivalentInterval) var tapEquivalentInterval
     @Default(.preventDockHide) var preventDockHide
@@ -538,6 +539,15 @@ struct MainSettingsView: View {
                     sliderSetting(title: "Preview Window Inactivity Timer", value: $inactivityTimeout, range: 0 ... 3, step: 0.1, unit: "seconds", formatter: NumberFormatter.oneDecimalFormatter)
                     Toggle(isOn: $preventDockHide) { Text("Prevent dock from hiding during previews") }
                     Toggle(isOn: $raisedWindowLevel) { Text("Show preview above app labels").onChange(of: raisedWindowLevel) { _ in askUserToRestartApplication() }}
+                    VStack(alignment: .leading) {
+                        Toggle(isOn: $preventPreviewReentryDuringFadeOut) {
+                            Text("Prevent preview reappearance during fade-out")
+                        }
+                        Text("When enabled, moving the mouse back over the preview during fade-out will not reactivate it. You must hover over the dock icon again to show the preview.")
+                            .font(.footnote)
+                            .foregroundColor(.gray)
+                            .padding(.leading, 20)
+                    }
                 }
             }
             StyledGroupBox(label: "Preview Appearance & Quality") {

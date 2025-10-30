@@ -33,6 +33,7 @@ extension Defaults.Keys {
     static let allowDynamicImageSizing = Key<Bool>("allowDynamicImageSizing", default: false)
     static let tapEquivalentInterval = Key<CGFloat>("tapEquivalentInterval", default: 1.5)
     static let fadeOutDuration = Key<CGFloat>("fadeOutDuration", default: 0.4)
+    static let preventPreviewReentryDuringFadeOut = Key<Bool>("preventPreviewReentryDuringFadeOut", default: false)
     static let inactivityTimeout = Key<CGFloat>("inactivityTimeout", default: 0.2)
     static let previewHoverAction = Key<PreviewHoverAction>("previewHoverAction", default: .none)
     static let aeroShakeAction = Key<AeroShakeAction>("aeroShakeAction", default: .none)
