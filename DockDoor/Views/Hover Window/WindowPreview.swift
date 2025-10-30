@@ -16,6 +16,7 @@ struct WindowPreview: View {
     let dimensions: WindowPreviewHoverContainer.WindowDimensions
     let showAppIconOnly: Bool
     let mockPreviewActive: Bool
+    let onHoverIndexChange: ((Int?) -> Void)?
 
     @Default(.windowTitlePosition) var windowTitlePosition
     @Default(.showWindowTitle) var showWindowTitle
@@ -592,6 +593,7 @@ struct WindowPreview: View {
                         handleFullPreviewHover(isHovering: isHovering, action: previewHoverAction)
                     } else {
                         isHoveringOverWindowSwitcherPreview = isHovering
+                        onHoverIndexChange?(isHovering ? index : nil)
                     }
                 }
             }

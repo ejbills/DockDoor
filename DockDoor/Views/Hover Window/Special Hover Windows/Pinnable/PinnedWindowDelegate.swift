@@ -50,6 +50,7 @@ extension SharedPreviewWindowCoordinator {
                     bundleIdentifier: bundleIdentifier,
                     dockPosition: DockUtils.getDockPosition(),
                     bestGuessMonitor: NSScreen.main ?? NSScreen.screens.first!,
+                    dockItemElement: nil,
                     isEmbeddedMode: isEmbedded,
                     isPinnedMode: true
                 )
@@ -62,6 +63,7 @@ extension SharedPreviewWindowCoordinator {
                     bundleIdentifier: bundleIdentifier,
                     dockPosition: DockUtils.getDockPosition(),
                     bestGuessMonitor: NSScreen.main ?? NSScreen.screens.first!,
+                    dockItemElement: nil,
                     isEmbeddedMode: isEmbedded,
                     isPinnedMode: true
                 )

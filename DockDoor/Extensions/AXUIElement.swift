@@ -97,7 +97,8 @@ extension AXUIElement {
     }
 
     func isMinimized() throws -> Bool {
-        try attribute(kAXMinimizedAttribute, Bool.self) == true
+        let result = try attribute(kAXMinimizedAttribute, Bool.self) == true
+        return result
     }
 
     func isFullscreen() throws -> Bool {

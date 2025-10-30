@@ -281,7 +281,11 @@ class KeybindHelper {
                    !previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive
                 {
                     Task { @MainActor in
-                        self.previewCoordinator.hideWindow()
+                        if self.previewCoordinator.windowSwitcherCoordinator.currIndex >= 0 {
+                            self.previewCoordinator.selectAndBringToFrontCurrentWindow()
+                        } else {
+                            self.previewCoordinator.hideWindow()
+                        }
                     }
                 }
                 lastCmdTabObservedActive = false

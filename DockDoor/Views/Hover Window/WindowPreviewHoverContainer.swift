@@ -43,6 +43,7 @@ struct WindowPreviewHoverContainer: View {
     let dockPosition: DockPosition
     let mouseLocation: CGPoint?
     let bestGuessMonitor: NSScreen
+    let dockItemElement: AXUIElement?
     var mockPreviewActive: Bool
     let updateAvailable: Bool
     let embeddedContentType: EmbeddedContentType
@@ -77,6 +78,7 @@ struct WindowPreviewHoverContainer: View {
          dockPosition: DockPosition,
          mouseLocation: CGPoint?,
          bestGuessMonitor: NSScreen,
+         dockItemElement: AXUIElement?,
          windowSwitcherCoordinator: PreviewStateCoordinator,
          mockPreviewActive: Bool,
          updateAvailable: Bool,
@@ -87,6 +89,7 @@ struct WindowPreviewHoverContainer: View {
         self.dockPosition = dockPosition
         self.mouseLocation = mouseLocation
         self.bestGuessMonitor = bestGuessMonitor
+        self.dockItemElement = dockItemElement
         previewStateCoordinator = windowSwitcherCoordinator
         self.mockPreviewActive = mockPreviewActive
         self.updateAvailable = updateAvailable
@@ -140,6 +143,7 @@ struct WindowPreviewHoverContainer: View {
                         WindowDismissalContainer(appName: appName,
                                                  bestGuessMonitor: bestGuessMonitor,
                                                  dockPosition: dockPosition,
+                                                 dockItemElement: dockItemElement,
                                                  minimizeAllWindowsCallback: { wasAppActiveBeforeClick in
                                                      minimizeAllWindows(wasAppActiveBeforeClick: wasAppActiveBeforeClick)
                                                  })
@@ -455,6 +459,7 @@ struct WindowPreviewHoverContainer: View {
                 bundleIdentifier: bundleIdentifier,
                 dockPosition: dockPosition,
                 bestGuessMonitor: bestGuessMonitor,
+                dockItemElement: dockItemElement,
                 isEmbeddedMode: true,
                 idealWidth: minimumEmbeddedWidth
             )
@@ -465,6 +470,7 @@ struct WindowPreviewHoverContainer: View {
                 bundleIdentifier: bundleIdentifier,
                 dockPosition: dockPosition,
                 bestGuessMonitor: bestGuessMonitor,
+                dockItemElement: dockItemElement,
                 isEmbeddedMode: true,
                 idealWidth: minimumEmbeddedWidth
             )
@@ -524,6 +530,7 @@ struct WindowPreviewHoverContainer: View {
         .padding(2)
         .animation(.smooth(duration: 0.1), value: previewStateCoordinator.windows)
         .onChange(of: previewStateCoordinator.currIndex) { newIndex in
+            guard previewStateCoordinator.shouldScrollToIndex else { return }
             if showAnimations {
                 withAnimation(.snappy) {
                     scrollProxy.scrollTo("\(appName)-\(newIndex)", anchor: .center)
@@ -868,7 +875,12 @@ struct WindowPreviewHoverContainer: View {
                     windowSwitcherActive: previewStateCoordinator.windowSwitcherActive,
                     dimensions: getDimensions(for: index, dimensionsMap: currentDimensionsMapForPreviews),
                     showAppIconOnly: showAppIconOnly,
-                    mockPreviewActive: mockPreviewActive
+                    mockPreviewActive: mockPreviewActive,
+                    onHoverIndexChange: { hoveredIndex in
+                        if let hoveredIndex {
+                            previewStateCoordinator.setIndex(to: hoveredIndex, shouldScroll: Defaults[.scrollToMouseHoverInSwitcher])
+                        }
+                    }
                 )
                 .id("\(appName)-\(index)")
                 .gesture(

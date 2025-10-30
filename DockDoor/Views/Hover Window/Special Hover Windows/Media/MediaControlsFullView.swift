@@ -7,6 +7,7 @@ struct MediaControlsFullView: View {
     let bundleIdentifier: String
     let dockPosition: DockPosition
     let bestGuessMonitor: NSScreen
+    let dockItemElement: AXUIElement?
     let isPinnedMode: Bool
     @Binding var isArtworkExpandedFull: Bool
     @Binding var showingLyricsInFull: Bool
@@ -61,6 +62,7 @@ struct MediaControlsFullView: View {
                         WindowDismissalContainer(appName: appName,
                                                  bestGuessMonitor: bestGuessMonitor,
                                                  dockPosition: dockPosition,
+                                                 dockItemElement: dockItemElement,
                                                  minimizeAllWindowsCallback: { _ in })
                             .allowsHitTesting(false)
                     }

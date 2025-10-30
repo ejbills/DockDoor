@@ -64,6 +64,26 @@ func mapAXToCG(axWindow: AXUIElement, candidates: [[String: AnyObject]], excludi
     return nil
 }
 
+// MARK: - Shared Helper Functions
+
+/// Returns CG window candidates for a given PID on layer 0
+func getCGWindowCandidates(for pid: pid_t) -> [[String: AnyObject]] {
+    let cgAll = (CGWindowListCopyWindowInfo([.excludeDesktopElements], kCGNullWindowID) as? [[String: AnyObject]]) ?? []
+    return cgAll.filter { desc in
+        let owner = (desc[kCGWindowOwnerPID as String] as? NSNumber)?.int32Value ?? 0
+        let layer = (desc[kCGWindowLayer as String] as? NSNumber)?.intValue ?? 0
+        return owner == pid && layer == 0
+    }
+}
+
+/// Finds the CG window entry matching a given window ID in the candidates list
+func findCGEntry(for windowID: CGWindowID, in candidates: [[String: AnyObject]]) -> [String: AnyObject]? {
+    candidates.first { desc in
+        let wid = CGWindowID((desc[kCGWindowNumber as String] as? NSNumber)?.uint32Value ?? 0)
+        return wid == windowID
+    }
+}
+
 // MARK: - Shared Validation
 
 let AXMinWindowSize: CGSize = .init(width: 100, height: 100)

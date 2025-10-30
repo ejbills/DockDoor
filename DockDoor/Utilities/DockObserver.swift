@@ -32,10 +32,7 @@ final class DockObserver {
     let previewCoordinator: SharedPreviewWindowCoordinator
 
     var axObserver: AXObserver?
-    var lastAppUnderMouse: ApplicationInfo?
     private var previousStatus: ApplicationReturnType.Status?
-    private var hoverProcessingTask: Task<Void, Error>?
-    private var isProcessing: Bool = false
 
     private var currentDockPID: pid_t?
     private var healthCheckTimer: Timer?
@@ -43,14 +40,6 @@ final class DockObserver {
     // Cmd+Tab switcher monitoring (accessed from extension file)
     var cmdTabObserver: AXObserver?
     var cmdTabRetryTimer: Timer?
-
-    private var lastNotificationTime: TimeInterval = 0
-    private var lastNotificationId: String = ""
-    private let artifactTimeThreshold: TimeInterval = 0.05
-    private var pendingShows: Set<pid_t> = []
-
-    private var emptyAppStreakCount: Int = 0
-    private let maxEmptyAppStreak: Int = 3
 
     private var eventTap: CFMachPort?
 
@@ -157,232 +146,88 @@ final class DockObserver {
         }
     }
 
-    private func resetLastAppUnderMouse() { lastAppUnderMouse = nil }
-
     func hideWindowAndResetLastApp() {
         Task { @MainActor [weak self] in
             guard let self else { return }
             previewCoordinator.hideWindow()
-            resetLastAppUnderMouse()
-            lastNotificationTime = 0
-            lastNotificationId = ""
-            emptyAppStreakCount = 0
-            pendingShows.removeAll()
         }
     }
 
     func processSelectedDockItemChanged() {
-        let currentTime = ProcessInfo.processInfo.systemUptime
         let currentMouseLocation = DockObserver.getMousePosition()
         let appUnderMouseElement = getDockItemAppStatusUnderMouse()
 
-        // If so, ignore this duplicate notification so we don't keep
-        // cancelling the in-flight task that will eventually show the preview.
-        if
-            case let .success(dupApp) = appUnderMouseElement.status,
-            let existingTask = hoverProcessingTask,
-            !existingTask.isCancelled,
-            lastAppUnderMouse?.processIdentifier == dupApp.processIdentifier,
-            isProcessing
-        {
-            // Duplicate notification for the same PID while we're still
-            // working on it – swallow it.
+        guard case let .success(currentApp) = appUnderMouseElement.status,
+              let dockItemElement = appUnderMouseElement.dockItemElement,
+              !previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive
+        else {
             return
         }
 
-        if case let .notRunning(bundleIdentifier) = appUnderMouseElement.status {
-            if lastNotificationId == bundleIdentifier {
-                let timeSinceLastNotification = currentTime - lastNotificationTime
-                if timeSinceLastNotification < artifactTimeThreshold {
-                    return
-                }
-            }
-            lastNotificationTime = currentTime
-            lastNotificationId = bundleIdentifier
+        let currentAppInfo = ApplicationInfo(
+            processIdentifier: currentApp.processIdentifier,
+            bundleIdentifier: currentApp.bundleIdentifier,
+            localizedName: currentApp.localizedName
+        )
 
-            if !Defaults[.lateralMovement] {
-                hideWindowAndResetLastApp()
-            } else {
-                emptyAppStreakCount += 1
-                if emptyAppStreakCount >= maxEmptyAppStreak {
-                    hideWindowAndResetLastApp()
-                }
-            }
-            previousStatus = appUnderMouseElement.status
-            resetLastAppUnderMouse()
-            return
-        } else if case .notFound = appUnderMouseElement.status {
-            let mouseScreen = NSScreen.screenContainingMouse(currentMouseLocation)
-            let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
-            let isWithinBuffer = previewCoordinator.frame.extended(by: abs(Defaults[.bufferFromDock])).contains(convertedMouseLocation)
-
-            if !isWithinBuffer || !Defaults[.lateralMovement] {
-                hideWindowAndResetLastApp()
-            }
-            previousStatus = appUnderMouseElement.status
-            resetLastAppUnderMouse()
-            return
-        }
-
-        if let existingTask = hoverProcessingTask,
-           !existingTask.isCancelled,
-           case let .success(newApp) = appUnderMouseElement.status,
-           lastAppUnderMouse?.processIdentifier != newApp.processIdentifier
-        {
-            isProcessing = false
-            existingTask.cancel()
-            pendingShows.removeAll()
-        }
-
-        Task { @MainActor in
-            self.previewCoordinator.cancelDebounceWorkItem()
-        }
-
-        hoverProcessingTask = Task { @MainActor [weak self] in
-            guard let self else {
-                self?.isProcessing = false
-                return
-            }
+        Task { @MainActor [weak self] in
+            guard let self else { return }
 
             do {
-                try Task.checkCancellation()
-
-                guard case let .success(currentApp) = appUnderMouseElement.status,
-                      let dockItemElement = appUnderMouseElement.dockItemElement
-                else {
-                    isProcessing = false
-                    return
-                }
-
-                let pid = currentApp.processIdentifier
-
-                if lastNotificationId == String(pid) {
-                    let timeSinceLastNotification = currentTime - lastNotificationTime
-                    if timeSinceLastNotification < artifactTimeThreshold {
-                        pendingShows.remove(pid)
-                        isProcessing = false
-                        return
-                    }
-                }
-
-                lastNotificationTime = currentTime
-                lastNotificationId = String(pid)
-
-                guard !isProcessing, !previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive else {
-                    return
-                }
-
-                isProcessing = true
-                defer {
-                    isProcessing = false
-                }
-
-                let currentAppInfo = ApplicationInfo(
-                    processIdentifier: currentApp.processIdentifier,
-                    bundleIdentifier: currentApp.bundleIdentifier,
-                    localizedName: currentApp.localizedName
-                )
-
-                let isWindowVisible = previewCoordinator.isVisible && previewCoordinator.alphaValue == 1.0
-
-                if currentAppInfo.processIdentifier != lastAppUnderMouse?.processIdentifier || !isWindowVisible {
-                    pendingShows.insert(currentAppInfo.processIdentifier)
-                    lastAppUnderMouse = currentAppInfo
-
-                    var appsToFetchWindowsFrom: [NSRunningApplication] = []
-                    if let bundleId = currentApp.bundleIdentifier, !bundleId.isEmpty {
-                        let potentialApps = NSRunningApplication.runningApplications(withBundleIdentifier: bundleId)
-                        if !potentialApps.isEmpty {
-                            appsToFetchWindowsFrom = potentialApps
-                        } else {
-                            appsToFetchWindowsFrom = [currentApp]
-                        }
+                var appsToFetchWindowsFrom: [NSRunningApplication] = []
+                if Defaults[.groupAppInstancesInDock],
+                   let bundleId = currentApp.bundleIdentifier, !bundleId.isEmpty
+                {
+                    let potentialApps = NSRunningApplication.runningApplications(withBundleIdentifier: bundleId)
+                    if !potentialApps.isEmpty {
+                        appsToFetchWindowsFrom = potentialApps
                     } else {
                         appsToFetchWindowsFrom = [currentApp]
                     }
-
-                    guard !appsToFetchWindowsFrom.isEmpty else {
-                        let isSpecialApp = currentApp.bundleIdentifier == spotifyAppIdentifier ||
-                            currentApp.bundleIdentifier == appleMusicAppIdentifier ||
-                            currentApp.bundleIdentifier == calendarAppIdentifier
-
-                        // This case should ideally not be hit if currentApp is valid.
-                        // If it is, treat as "empty" for streak purposes if lateral movement is on.
-                        if Defaults[.lateralMovement] {
-                            if !(isSpecialApp && Defaults[.showSpecialAppControls]) {
-                                emptyAppStreakCount += 1
-                                if emptyAppStreakCount >= maxEmptyAppStreak {
-                                    hideWindowAndResetLastApp()
-                                }
-                            }
-                        } else {
-                            if !(isSpecialApp && Defaults[.showSpecialAppControls]) {
-                                hideWindowAndResetLastApp()
-                            }
-                        }
-                        pendingShows.remove(currentAppInfo.processIdentifier)
-                        return
-                    }
-
-                    var combinedWindows: [WindowInfo] = []
-                    for appInstance in appsToFetchWindowsFrom {
-                        let windowsForInstance = try await WindowUtil.getActiveWindows(of: appInstance)
-                        combinedWindows.append(contentsOf: windowsForInstance)
-                    }
-
-                    if combinedWindows.isEmpty {
-                        let isSpecialApp = currentApp.bundleIdentifier == spotifyAppIdentifier ||
-                            currentApp.bundleIdentifier == appleMusicAppIdentifier ||
-                            currentApp.bundleIdentifier == calendarAppIdentifier
-
-                        if !Defaults[.lateralMovement] {
-                            if !(isSpecialApp && Defaults[.showSpecialAppControls]) {
-                                hideWindowAndResetLastApp()
-                                pendingShows.remove(currentAppInfo.processIdentifier)
-                                return
-                            }
-                        } else {
-                            if !(isSpecialApp && Defaults[.showSpecialAppControls]) {
-                                emptyAppStreakCount += 1
-                                if emptyAppStreakCount >= maxEmptyAppStreak {
-                                    hideWindowAndResetLastApp()
-                                    pendingShows.remove(currentAppInfo.processIdentifier)
-                                    return
-                                }
-                            }
-                            // If streak not maxed, proceed to showWindow (might show special view)
-                            // emptyAppStreakCount remains incremented.
-                        }
-                    } else {
-                        // Successfully found windows for the app, reset the streak.
-                        emptyAppStreakCount = 0
-                    }
-
-                    if !pendingShows.contains(currentAppInfo.processIdentifier) {
-                        return
-                    }
-
-                    let mouseScreen = NSScreen.screenContainingMouse(currentMouseLocation)
-                    let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
-
-                    previewCoordinator.showWindow(
-                        appName: currentAppInfo.localizedName ?? "Unknown",
-                        windows: combinedWindows,
-                        mouseLocation: convertedMouseLocation,
-                        mouseScreen: mouseScreen,
-                        dockItemElement: dockItemElement,
-                        overrideDelay: lastAppUnderMouse == nil && Defaults[.hoverWindowOpenDelay] == 0,
-                        onWindowTap: { [weak self] in
-                            self?.hideWindowAndResetLastApp()
-                        },
-                        bundleIdentifier: currentAppInfo.bundleIdentifier
-                    )
-
-                    pendingShows.remove(currentAppInfo.processIdentifier)
+                } else {
+                    appsToFetchWindowsFrom = [currentApp]
                 }
+
+                guard !appsToFetchWindowsFrom.isEmpty else {
+                    return
+                }
+
+                var combinedWindows: [WindowInfo] = []
+                for appInstance in appsToFetchWindowsFrom {
+                    let windowsForInstance = try await WindowUtil.getActiveWindows(of: appInstance)
+                    combinedWindows.append(contentsOf: windowsForInstance)
+                }
+
+                if combinedWindows.isEmpty {
+                    let isSpecialApp = currentApp.bundleIdentifier == spotifyAppIdentifier ||
+                        currentApp.bundleIdentifier == appleMusicAppIdentifier ||
+                        currentApp.bundleIdentifier == calendarAppIdentifier
+
+                    // Only continue if this is a special app with controls enabled
+                    guard isSpecialApp, Defaults[.showSpecialAppControls] else {
+                        return
+                    }
+                }
+
+                let mouseScreen = NSScreen.screenContainingMouse(currentMouseLocation)
+                let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
+
+                previewCoordinator.showWindow(
+                    appName: currentAppInfo.localizedName ?? "Unknown",
+                    windows: combinedWindows,
+                    mouseLocation: convertedMouseLocation,
+                    mouseScreen: mouseScreen,
+                    dockItemElement: dockItemElement,
+                    overrideDelay: false,
+                    onWindowTap: { [weak self] in
+                        self?.hideWindowAndResetLastApp()
+                    },
+                    bundleIdentifier: currentAppInfo.bundleIdentifier
+                )
+
                 previousStatus = .success(currentApp)
             } catch {
-                isProcessing = false
+                // Silently handle errors
             }
         }
     }

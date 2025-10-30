@@ -7,6 +7,7 @@ class PreviewStateCoordinator: ObservableObject {
     @Published var windowSwitcherActive: Bool = false
     @Published var fullWindowPreviewActive: Bool = false
     @Published var windows: [WindowInfo] = []
+    @Published var shouldScrollToIndex: Bool = true
     @Published var searchQuery: String = "" {
         didSet {
             if windowSwitcherActive {
@@ -56,7 +57,8 @@ class PreviewStateCoordinator: ObservableObject {
     }
 
     @MainActor
-    func setIndex(to: Int) {
+    func setIndex(to: Int, shouldScroll: Bool = true) {
+        shouldScrollToIndex = shouldScroll
         if to >= 0, to < windows.count {
             currIndex = to
         } else {
