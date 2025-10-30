@@ -41,10 +41,18 @@
 <a id="1.25.4"></a>
 # [Release 1.25.4](https://github.com/ejbills/DockDoor/releases/tag/1.25.4) - 2025-10-30
 
-## 🐛 Bug Fixes
-- Fixed preview window access
-  - Dock auto-hide compatibility
+## 🔧 Improvements & Stability
+- Fixed window preview losing track of minimized windows, windows in other spaces
+- Enhanced window state tracking
+- Optimized window discovery performance
+- Much more reliable dock preview hover detection and presentation
+  - Removed the 'lateral movement' checkbox
+- Hovered window switcher window now selected on release of initalizer key
+- Cmd tab enhancement now selects selected window on release of CMD 
+- Cleaned up code
 
+## 🐛 Bug Fixes
+- Fixed cmd-tab window positioning on bottom left side of screen
 
 [Changes][1.25.4]
 
