@@ -26,7 +26,6 @@ class SettingsManager: NSObject, ObservableObject {
             )
 
             window.contentViewController = hostingController
-            window.center()
             window.isReleasedWhenClosed = false
 
             window.delegate = self
@@ -45,6 +44,7 @@ class SettingsManager: NSObject, ObservableObject {
         }
 
         settingsWindowController?.showWindow(nil)
+        settingsWindowController?.window?.center()
         NSApp.activate(ignoringOtherApps: true)
     }
 }
