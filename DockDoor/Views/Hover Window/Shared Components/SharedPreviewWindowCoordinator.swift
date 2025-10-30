@@ -20,6 +20,8 @@ final class SharedPreviewWindowCoordinator: NSPanel {
     private var searchWindow: SearchWindow?
 
     private var appName: String = ""
+    var currentlyDisplayedPID: pid_t?
+    var mouseIsWithinPreviewWindow: Bool = false
     private var onWindowTap: (() -> Void)?
     private var fullPreviewWindow: NSPanel?
 
@@ -123,6 +125,8 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         }
         contentView = nil
         appName = ""
+        currentlyDisplayedPID = nil
+        mouseIsWithinPreviewWindow = false
 
         let currentDockPos = DockUtils.getDockPosition()
         let currentScreen = NSScreen.main ?? NSScreen.screens.first!
@@ -452,6 +456,10 @@ final class SharedPreviewWindowCoordinator: NSPanel {
             }
         }
 
+        if let dockItemElement {
+            currentlyDisplayedPID = try? dockItemElement.pid()
+        }
+
         if useBigStandaloneViewInstead, let viewToShow = viewForBigStandalone {
             performShowView(viewToShow, mouseLocation: mouseLocation, mouseScreen: screen, dockItemElement: dockItemElement, dockPositionOverride: dockPositionOverride)
         } else {
@@ -620,7 +628,19 @@ final class SharedPreviewWindowCoordinator: NSPanel {
     {
         let delay = overrideDelay ? 0 : Defaults[.hoverWindowOpenDelay]
 
-        let workItem = {
+        let workItem = { [weak self] in
+            guard let self else { return }
+
+            // Check if mouse entered the preview window and we're trying to show a different app
+            if mouseIsWithinPreviewWindow,
+               let currentPID = currentlyDisplayedPID,
+               let expectedBundleId = bundleIdentifier,
+               let expectedApp = NSRunningApplication.runningApplications(withBundleIdentifier: expectedBundleId).first,
+               currentPID != expectedApp.processIdentifier
+            {
+                return
+            }
+
             // Final validation: ensure mouse is still over the expected dock item
             if !bypassDockMouseValidation {
                 if let expectedBundleId = bundleIdentifier {
@@ -646,12 +666,6 @@ final class SharedPreviewWindowCoordinator: NSPanel {
             }
         }
 
-        if delay == 0.0 {
-            Task { @MainActor [weak self] in
-                self?.performDisplay(appName: appName, windows: windows, mouseLocation: mouseLocation, mouseScreen: mouseScreen, dockItemElement: dockItemElement, centeredHoverWindowState: centeredHoverWindowState, onWindowTap: onWindowTap, bundleIdentifier: bundleIdentifier, dockPositionOverride: dockPositionOverride)
-            }
-        } else {
-            DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: workItem)
-        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: workItem)
     }
 }

@@ -109,6 +109,11 @@ class MouseTrackingNSView: NSView {
 
     override func mouseEntered(with event: NSEvent) {
         resetOpacityVisually()
+        SharedPreviewWindowCoordinator.activeInstance?.mouseIsWithinPreviewWindow = true
+    }
+
+    override func mouseExited(with event: NSEvent) {
+        SharedPreviewWindowCoordinator.activeInstance?.mouseIsWithinPreviewWindow = false
     }
 
     private func startFadeOut() {
