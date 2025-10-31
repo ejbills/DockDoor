@@ -108,13 +108,9 @@ private class WindowSwitchingCoordinator {
                     Task { @MainActor in
                         previewCoordinator.hideWindow()
                     }
-                }
+                },
+                initialIndex: self.stateManager.currentIndex
             )
-
-            // Set the correct index after the window is shown, with a small delay to ensure setWindows completes
-            DispatchQueue.main.async {
-                previewCoordinator.windowSwitcherCoordinator.setIndex(to: self.stateManager.currentIndex)
-            }
         }
 
         switch Defaults[.windowSwitcherPlacementStrategy] {

@@ -61,6 +61,7 @@ struct WindowPreviewHoverContainer: View {
     @Default(.switcherMaxRows) var switcherMaxRows
     @Default(.gradientColorPalette) var gradientColorPalette
     @Default(.showAnimations) var showAnimations
+    @Default(.scrollToMouseHoverInSwitcher) var scrollToMouseHoverInSwitcher
 
     @State private var draggedWindowIndex: Int? = nil
     @State private var isDragging = false
@@ -877,7 +878,7 @@ struct WindowPreviewHoverContainer: View {
                     showAppIconOnly: showAppIconOnly,
                     mockPreviewActive: mockPreviewActive,
                     onHoverIndexChange: { hoveredIndex in
-                        if let hoveredIndex {
+                        if let hoveredIndex, scrollToMouseHoverInSwitcher {
                             previewStateCoordinator.setIndex(to: hoveredIndex, shouldScroll: Defaults[.scrollToMouseHoverInSwitcher])
                         }
                     }
