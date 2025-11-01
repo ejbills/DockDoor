@@ -38,6 +38,24 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://buymeacoffee.com/keplercafe</div>
 
+<a id="1.25.5"></a>
+# [Release 1.25.5](https://github.com/ejbills/DockDoor/releases/tag/1.25.5) - 2025-11-01
+
+## Features
+- Added option to prevent preview reappearance during fade-out
+
+## 🔧 Improvements & Stability
+- Improved settings window layout
+- Fixed window switcher index not being set
+- Fixed window switcher index being set by mouse hover
+
+## 🐛 Bug Fixes
+- Prevented fade-out reset issue
+
+
+[Changes][1.25.5]
+
+
 <a id="1.25.4"></a>
 # [Release 1.25.4](https://github.com/ejbills/DockDoor/releases/tag/1.25.4) - 2025-10-30
 
@@ -1607,6 +1625,7 @@ v1.0
 [Changes][releases]
 
 
+[1.25.5]: https://github.com/ejbills/DockDoor/compare/1.25.4...1.25.5
 [1.25.4]: https://github.com/ejbills/DockDoor/compare/1.25.3...1.25.4
 [1.25.3]: https://github.com/ejbills/DockDoor/compare/1.25.2...1.25.3
 [1.25.2]: https://github.com/ejbills/DockDoor/compare/1.25.1...1.25.2
