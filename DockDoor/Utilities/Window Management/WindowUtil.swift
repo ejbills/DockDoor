@@ -340,6 +340,14 @@ enum WindowUtil {
                 appDelegate.closeSettingsWindow()
             }
         }
+        
+        if windowInfo.app.bundleIdentifier == Bundle.main.bundleIdentifier {
+            NSApplication.shared.activate(ignoringOtherApps: true)
+            if let window = NSApp.window(withWindowNumber: Int(windowInfo.id)) {
+                window.makeKeyAndOrderFront(nil)
+            }
+            return
+        }
 
         let maxRetries = 3
         var retryCount = 0
