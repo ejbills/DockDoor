@@ -303,6 +303,11 @@ class KeybindHelper {
                     let hasSelection = previewCoordinator.windowSwitcherCoordinator.currIndex >= 0
                     let flags = event.flags
                     switch keyCode {
+                    case Int64(kVK_Escape):
+                        Task { @MainActor in
+                            self.previewCoordinator.hideWindow()
+                        }
+                        return nil
                     case Int64(kVK_LeftArrow):
                         if hasSelection {
                             Task { @MainActor in
@@ -634,6 +639,7 @@ class KeybindHelper {
 
     @MainActor
     private func handleKeybindActivation() {
+        guard Defaults[.enableWindowSwitcher] else { return }
         hasProcessedModifierRelease = false
         Task { @MainActor in
             await windowSwitchingCoordinator.handleWindowSwitching(
