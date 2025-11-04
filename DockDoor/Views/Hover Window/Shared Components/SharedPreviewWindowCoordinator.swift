@@ -577,13 +577,68 @@ final class SharedPreviewWindowCoordinator: NSPanel {
             case .right, .down: newIndex = windowsCount > 0 ? 0 : -1
             }
         } else {
-            let goBackwards = switch direction {
-            case .left, .up: true
-            case .right, .down: false
-            }
+            let dockPosition = DockUtils.getDockPosition()
+            let isHorizontalFlow = dockPosition.isHorizontalFlow || coordinator.windowSwitcherActive
+
+            let maxRows = coordinator.windowSwitcherActive ? Defaults[.switcherMaxRows] : Defaults[.previewMaxRows]
+            let maxColumns = Defaults[.previewMaxColumns]
+
             var tempCurrentIndex = coordinator.currIndex
+
             if windowsCount > 0 {
-                tempCurrentIndex = (tempCurrentIndex + (goBackwards ? -1 : 1) + windowsCount) % windowsCount
+                if isHorizontalFlow {
+                    switch direction {
+                    case .left, .right:
+                        let goBackwards = (direction == .left)
+                        tempCurrentIndex = (tempCurrentIndex + (goBackwards ? -1 : 1) + windowsCount) % windowsCount
+                    case .up, .down:
+                        if maxRows > 1 {
+                            let itemsPerRow = Int(ceil(Double(windowsCount) / Double(maxRows)))
+                            let currentRow = tempCurrentIndex / itemsPerRow
+                            let currentCol = tempCurrentIndex % itemsPerRow
+
+                            let totalRows = Int(ceil(Double(windowsCount) / Double(itemsPerRow)))
+                            let targetRow = direction == .up
+                                ? (currentRow - 1 + totalRows) % totalRows
+                                : (currentRow + 1) % totalRows
+
+                            let targetIndex = targetRow * itemsPerRow + currentCol
+
+                            let rowStartIndex = targetRow * itemsPerRow
+                            let rowEndIndex = min(rowStartIndex + itemsPerRow, windowsCount) - 1
+                            tempCurrentIndex = min(targetIndex, rowEndIndex)
+                        } else {
+                            let goBackwards = (direction == .up)
+                            tempCurrentIndex = (tempCurrentIndex + (goBackwards ? -1 : 1) + windowsCount) % windowsCount
+                        }
+                    }
+                } else {
+                    switch direction {
+                    case .up, .down:
+                        let goBackwards = (direction == .up)
+                        tempCurrentIndex = (tempCurrentIndex + (goBackwards ? -1 : 1) + windowsCount) % windowsCount
+                    case .left, .right:
+                        if maxColumns > 1 {
+                            let itemsPerColumn = Int(ceil(Double(windowsCount) / Double(maxColumns)))
+                            let currentCol = tempCurrentIndex / itemsPerColumn
+                            let currentRow = tempCurrentIndex % itemsPerColumn
+
+                            let totalCols = Int(ceil(Double(windowsCount) / Double(itemsPerColumn)))
+                            let targetCol = direction == .left
+                                ? (currentCol - 1 + totalCols) % totalCols
+                                : (currentCol + 1) % totalCols
+
+                            let targetIndex = targetCol * itemsPerColumn + currentRow
+
+                            let colStartIndex = targetCol * itemsPerColumn
+                            let colEndIndex = min(colStartIndex + itemsPerColumn, windowsCount) - 1
+                            tempCurrentIndex = min(targetIndex, colEndIndex)
+                        } else {
+                            let goBackwards = (direction == .left)
+                            tempCurrentIndex = (tempCurrentIndex + (goBackwards ? -1 : 1) + windowsCount) % windowsCount
+                        }
+                    }
+                }
             } else {
                 tempCurrentIndex = -1
             }
