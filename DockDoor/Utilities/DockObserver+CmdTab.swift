@@ -1,6 +1,31 @@
 import ApplicationServices
 import Cocoa
 import Defaults
+import os.log
+
+// MARK: - Threading Model & Memory Management
+//
+// This file implements AXObserver lifecycle management for monitoring the Cmd+Tab switcher.
+// Critical implementation notes to prevent zombie observers and memory leaks:
+//
+// 1. CFRunLoop Thread Consistency:
+//    - All AXObserver operations (create, add source, remove source) MUST use CFRunLoopGetMain()
+//    - Using CFRunLoopGetCurrent() can cause thread mismatches if teardown happens on a different thread
+//    - Example: Observer created on thread A, teardown called from thread B → source removal fails → MEMORY LEAK
+//
+// 2. Observer Retention:
+//    - cmdTabObserver MUST be stored as an instance variable (DockObserver.cmdTabObserver)
+//    - Using local variables causes immediate deallocation after scope exit → callbacks never fire → ZOMBIE STATE
+//    - The observer is properly retained throughout the subscription lifecycle
+//
+// 3. Retry Logic Threading:
+//    - Uses DispatchQueue.main.asyncAfter instead of Task/async to avoid CFRunLoop conflicts
+//    - Exponential backoff with random jitter (0-100ms) prevents thundering herd on retry storms
+//    - All retry operations stay on main thread for CFRunLoop consistency
+//
+// 4. Thread-Safe Property Access:
+//    - lastCmdTabNotificationTime and cmdTabObserverCreationTime use DispatchQueue for synchronized access
+//    - Properties accessed from multiple contexts: AX callbacks, timers, async tasks, deinit
 
 // AXObserver callback for Cmd+Tab switcher changes
 func handleCmdTabSwitcherNotification(observer _: AXObserver, element _: AXUIElement, notificationName: CFString, context: UnsafeMutableRawPointer?) {
@@ -9,6 +34,21 @@ func handleCmdTabSwitcherNotification(observer _: AXObserver, element _: AXUIEle
 
 extension DockObserver {
     // MARK: - Cmd+Tab Switcher Monitoring
+    
+    private static let logger = Logger(subsystem: "com.dockdoor.app", category: "CmdTabObserver")
+    
+    enum CmdTabObserverError: Error {
+        case dockAppNotFound
+        case accessibilityNotGranted
+        case observerCreationFailed
+        case subscriptionFailed(String)
+    }
+    
+    private enum CmdTabConstants {
+        static let maxObserverRetries = 3
+        static let retryBaseDelay: TimeInterval = 0.1
+        static let resubscribeInterval: TimeInterval = 0.5
+    }
 
     func setupCmdTabSwitcherObserver() {
         guard Defaults[.enableCmdTabEnhancements] else { return }
@@ -16,6 +56,7 @@ extension DockObserver {
         teardownCmdTabObserver()
 
         guard let dockApp = NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.dock").first else {
+            Self.logger.warning("Cannot find Dock app for Cmd+Tab observer setup")
             return
         }
 
@@ -23,6 +64,7 @@ extension DockObserver {
         let dockAppElement = AXUIElementCreateApplication(dockAppPID)
 
         guard AXIsProcessTrusted() else {
+            Self.logger.warning("Accessibility permissions not granted for Cmd+Tab observer")
             return
         }
 
@@ -39,19 +81,23 @@ extension DockObserver {
         subscribeToProcessSwitcher(processSwitcherList: processSwitcherList, dockAppPID: dockAppPID)
         processCmdTabSwitcherChanged()
     }
-
+    
     func teardownCmdTabObserver() {
         if let observer = cmdTabObserver {
-            CFRunLoopRemoveSource(CFRunLoopGetCurrent(), AXObserverGetRunLoopSource(observer), .commonModes)
+            // Always use main RunLoop for consistency - AXObserver callbacks and setup happen on main thread
+            CFRunLoopRemoveSource(CFRunLoopGetMain(), AXObserverGetRunLoopSource(observer), .commonModes)
+            Self.logger.debug("Tore down Cmd+Tab observer")
         }
         cmdTabObserver = nil
+        cmdTabObserverCreationTime = nil
+        lastCmdTabNotificationTime = nil
         cmdTabRetryTimer?.invalidate()
         cmdTabRetryTimer = nil
     }
 
     private func scheduleCmdTabResubscribe(dockAppPID: pid_t) {
         cmdTabRetryTimer?.invalidate()
-        cmdTabRetryTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { [weak self] timer in
+        cmdTabRetryTimer = Timer.scheduledTimer(withTimeInterval: CmdTabConstants.resubscribeInterval, repeats: true) { [weak self] timer in
             guard let self else {
                 timer.invalidate()
                 return
@@ -75,24 +121,68 @@ extension DockObserver {
     }
 
     private func subscribeToProcessSwitcher(processSwitcherList: AXUIElement, dockAppPID: pid_t) {
-        if AXObserverCreate(dockAppPID, handleCmdTabSwitcherNotification, &cmdTabObserver) != .success {
+        subscribeWithRetry(processSwitcherList: processSwitcherList, dockAppPID: dockAppPID, attempt: 0)
+    }
+    
+    private func subscribeWithRetry(processSwitcherList: AXUIElement, dockAppPID: pid_t, attempt: Int) {
+        let result = AXObserverCreate(dockAppPID, handleCmdTabSwitcherNotification, &cmdTabObserver)
+        
+        if result == .success {
+            completeSubscription(processSwitcherList: processSwitcherList)
             return
         }
-
-        guard let cmdTabObserver else { return }
-
+        
+        // Log failure with AXError code
+        Self.logger.error("AXObserverCreate failed: code \(result.rawValue, privacy: .public), attempt \(attempt + 1, privacy: .public)/\(CmdTabConstants.maxObserverRetries, privacy: .public)")
+        
+        guard attempt < CmdTabConstants.maxObserverRetries - 1 else {
+            Self.logger.error("AXObserverCreate failed after \(CmdTabConstants.maxObserverRetries, privacy: .public) attempts, giving up")
+            return
+        }
+        
+        let delay = calculateBackoffDelay(attempt: attempt)
+        Self.logger.warning("Retrying AXObserverCreate in \(String(format: "%.3f", delay), privacy: .public)s")
+        
+        // Use DispatchQueue for retry scheduling instead of async/await to avoid CFRunLoop conflicts
+        // Retries happen on main queue to ensure all CFRunLoop operations are on the same thread
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self] in
+            self?.subscribeWithRetry(processSwitcherList: processSwitcherList, dockAppPID: dockAppPID, attempt: attempt + 1)
+        }
+    }
+    
+    private func calculateBackoffDelay(attempt: Int) -> TimeInterval {
+        let baseDelay = CmdTabConstants.retryBaseDelay * pow(2.0, Double(attempt))
+        let jitter = Double.random(in: 0...0.1) // 0-100ms randomization to prevent thundering herd
+        return min(baseDelay + jitter, 10.0) // Cap at 10s
+    }
+    
+    private func completeSubscription(processSwitcherList: AXUIElement) {
+        guard let cmdTabObserver else {
+            Self.logger.error("cmdTabObserver is nil after successful creation")
+            return
+        }
+        
         do {
+            // Always use main RunLoop for consistency - all AXObserver operations use main thread
             try processSwitcherList.subscribeToNotification(cmdTabObserver, kAXSelectedChildrenChangedNotification as String) {
-                CFRunLoopAddSource(CFRunLoopGetCurrent(), AXObserverGetRunLoopSource(cmdTabObserver), .commonModes)
+                CFRunLoopAddSource(CFRunLoopGetMain(), AXObserverGetRunLoopSource(cmdTabObserver), .commonModes)
             }
             try processSwitcherList.subscribeToNotification(cmdTabObserver, kAXUIElementDestroyedNotification as String)
+            
+            cmdTabObserverCreationTime = Date()
+            lastCmdTabNotificationTime = Date() // Initialize with creation time
+            Self.logger.info("Successfully created Cmd+Tab observer")
         } catch {
-            // ignore subscription error
+            Self.logger.error("Failed to subscribe to Cmd+Tab notifications: \(error.localizedDescription, privacy: .public)")
         }
     }
 
     func processCmdTabSwitcherEvent(_ notification: CFString) {
         guard Defaults[.enableCmdTabEnhancements] else { return }
+        
+        // Update last notification time for health check
+        lastCmdTabNotificationTime = Date()
+        
         let notif = notification as String
         if notif == (kAXSelectedChildrenChangedNotification as String) {
             processCmdTabSwitcherChanged()
