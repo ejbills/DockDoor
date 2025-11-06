@@ -10,11 +10,45 @@ func handleCmdTabSwitcherNotification(observer _: AXObserver, element _: AXUIEle
 extension DockObserver {
     // MARK: - Cmd+Tab Switcher Monitoring
 
-    func setupCmdTabSwitcherObserver() {
-        guard Defaults[.enableCmdTabEnhancements] else { return }
-        // Ensure a clean state before subscribing (switcher element is ephemeral)
-        teardownCmdTabObserver()
+    func teardownCmdTabObserver() {
+        if let observer = cmdTabObserver {
+            CFRunLoopRemoveSource(CFRunLoopGetCurrent(), AXObserverGetRunLoopSource(observer), .commonModes)
+        }
+        cmdTabObserver = nil
+        stopCmdTabPolling()
+    }
 
+    // MARK: - On-Demand Polling (Event-Driven)
+
+    func startCmdTabPolling() {
+        guard Defaults[.enableCmdTabEnhancements] else { return }
+        guard cmdTabObserver == nil else { return }
+
+        attemptCmdTabSubscription()
+
+        if cmdTabObserver == nil {
+            cmdTabPollingTimer?.invalidate()
+            cmdTabPollingTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak self] timer in
+                guard let self else {
+                    timer.invalidate()
+                    return
+                }
+                attemptCmdTabSubscription()
+
+                if cmdTabObserver != nil {
+                    timer.invalidate()
+                    cmdTabPollingTimer = nil
+                }
+            }
+        }
+    }
+
+    func stopCmdTabPolling() {
+        cmdTabPollingTimer?.invalidate()
+        cmdTabPollingTimer = nil
+    }
+
+    private func attemptCmdTabSubscription() {
         guard let dockApp = NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.dock").first else {
             return
         }
@@ -22,64 +56,29 @@ extension DockObserver {
         let dockAppPID = dockApp.processIdentifier
         let dockAppElement = AXUIElementCreateApplication(dockAppPID)
 
-        guard AXIsProcessTrusted() else {
-            return
-        }
-
-        // Find the process switcher list
         guard let children = try? dockAppElement.children(),
               let processSwitcherList = children.first(where: { element in
                   (try? element.subrole()) == "AXProcessSwitcherList"
               })
         else {
-            scheduleCmdTabResubscribe(dockAppPID: dockAppPID)
             return
         }
 
+        stopCmdTabPolling()
         subscribeToProcessSwitcher(processSwitcherList: processSwitcherList, dockAppPID: dockAppPID)
         processCmdTabSwitcherChanged()
     }
 
-    func teardownCmdTabObserver() {
-        if let observer = cmdTabObserver {
-            CFRunLoopRemoveSource(CFRunLoopGetCurrent(), AXObserverGetRunLoopSource(observer), .commonModes)
-        }
-        cmdTabObserver = nil
-        cmdTabRetryTimer?.invalidate()
-        cmdTabRetryTimer = nil
-    }
-
-    private func scheduleCmdTabResubscribe(dockAppPID: pid_t) {
-        cmdTabRetryTimer?.invalidate()
-        cmdTabRetryTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { [weak self] timer in
-            guard let self else {
-                timer.invalidate()
-                return
-            }
-
-            let dockAppElement = AXUIElementCreateApplication(dockAppPID)
-            guard let children = try? dockAppElement.children(),
-                  let processSwitcherList = children.first(where: { element in
-                      (try? element.subrole()) == "AXProcessSwitcherList"
-                  })
-            else {
-                return
-            }
-
-            timer.invalidate()
-            cmdTabRetryTimer = nil
-            subscribeToProcessSwitcher(processSwitcherList: processSwitcherList, dockAppPID: dockAppPID)
-            // Emit initial selection after resubscribe
-            processCmdTabSwitcherChanged()
-        }
-    }
-
     private func subscribeToProcessSwitcher(processSwitcherList: AXUIElement, dockAppPID: pid_t) {
-        if AXObserverCreate(dockAppPID, handleCmdTabSwitcherNotification, &cmdTabObserver) != .success {
+        if cmdTabObserver != nil {
+            teardownCmdTabObserver()
+        }
+
+        guard AXObserverCreate(dockAppPID, handleCmdTabSwitcherNotification, &cmdTabObserver) == .success,
+              let cmdTabObserver
+        else {
             return
         }
-
-        guard let cmdTabObserver else { return }
 
         do {
             try processSwitcherList.subscribeToNotification(cmdTabObserver, kAXSelectedChildrenChangedNotification as String) {
@@ -87,26 +86,22 @@ extension DockObserver {
             }
             try processSwitcherList.subscribeToNotification(cmdTabObserver, kAXUIElementDestroyedNotification as String)
         } catch {
-            // ignore subscription error
+            // Ignore subscription errors
         }
     }
 
     func processCmdTabSwitcherEvent(_ notification: CFString) {
         guard Defaults[.enableCmdTabEnhancements] else { return }
+
         let notif = notification as String
+
         if notif == (kAXSelectedChildrenChangedNotification as String) {
             processCmdTabSwitcherChanged()
             return
         }
 
         if notif == (kAXUIElementDestroyedNotification as String) {
-            // Switcher closed; set up to re-subscribe for the next session
-            guard let dockApp = NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.dock").first else {
-                teardownCmdTabObserver()
-                return
-            }
             teardownCmdTabObserver()
-            scheduleCmdTabResubscribe(dockAppPID: dockApp.processIdentifier)
             return
         }
     }
@@ -186,7 +181,9 @@ extension DockObserver {
         let root = AXUIElementCreateApplication(dockApp.processIdentifier)
 
         func scan(_ element: AXUIElement) -> Bool {
-            if (try? element.subrole()) == "AXProcessSwitcherList" { return true }
+            if (try? element.subrole()) == "AXProcessSwitcherList" {
+                return true
+            }
             if let children = try? element.children() {
                 for child in children {
                     if scan(child) { return true }

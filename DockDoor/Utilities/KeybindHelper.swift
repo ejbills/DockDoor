@@ -272,6 +272,8 @@ class KeybindHelper {
             // Track Command up/down explicitly for Cmd+Tab fallback behavior
             let cmdNowDown = event.flags.contains(.maskCommand)
             if isCommandKeyCurrentlyDown, !cmdNowDown {
+                DockObserver.activeInstance?.stopCmdTabPolling()
+
                 if Defaults[.enableCmdTabEnhancements], lastCmdTabObservedActive,
                    previewCoordinator.isVisible,
                    !previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive
@@ -293,6 +295,23 @@ class KeybindHelper {
             }
 
         case .keyDown:
+            let keyCode = event.getIntegerValueField(.keyboardEventKeycode)
+            let flags = event.flags
+
+            // Detect Cmd+Tab press to start on-demand polling for the switcher
+            if Defaults[.enableCmdTabEnhancements],
+               keyCode == Int64(kVK_Tab),
+               flags.contains(.maskCommand)
+            {
+                let keyBoardShortcutSaved: UserKeyBind = Defaults[.UserKeybind]
+                let isCustomKeybind = (keyCode == keyBoardShortcutSaved.keyCode) &&
+                    (keyBoardShortcutSaved.modifierFlags & Int(CGEventFlags.maskCommand.rawValue)) != 0
+
+                if !isCustomKeybind {
+                    DockObserver.activeInstance?.startCmdTabPolling()
+                }
+            }
+
             // If system Cmd+Tab switcher is active, optionally handle arrows when enhancements are enabled
             if DockObserver.isCmdTabSwitcherActive() {
                 lastCmdTabObservedActive = true
