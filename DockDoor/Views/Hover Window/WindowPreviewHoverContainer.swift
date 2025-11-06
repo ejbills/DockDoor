@@ -618,7 +618,7 @@ struct WindowPreviewHoverContainer: View {
 
     private func handleWindowAction(_ action: WindowAction, at index: Int) {
         guard index < previewStateCoordinator.windows.count else { return }
-        var window = previewStateCoordinator.windows[index]
+        let window = previewStateCoordinator.windows[index]
 
         switch action {
         case .quit:

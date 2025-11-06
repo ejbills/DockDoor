@@ -89,6 +89,12 @@ enum WindowUtil {
     private static let explicitUpdateLock = NSLock()
     private static let explicitUpdateTimeWindow: TimeInterval = 1.5
 
+    private static let captureError = NSError(
+        domain: "WindowCaptureError",
+        code: 1,
+        userInfo: [NSLocalizedDescriptionKey: "Error encountered during image capture"]
+    )
+
     static func clearWindowCache(for app: NSRunningApplication) {
         desktopSpaceWindowCacheManager.writeCache(pid: app.processIdentifier, windowSet: [])
     }
@@ -125,14 +131,25 @@ enum WindowUtil {
 
     // MARK: - Helper Functions
 
-    /// Main function to capture a window image using ScreenCaptureKit, with fallback to legacy methods for older macOS versions.
     static func captureWindowImage(window: SCWindow, forceRefresh: Bool = false) async throws -> CGImage {
+        guard let pid = window.owningApplication?.processID else {
+            throw captureError
+        }
+
+        return try await captureWindowImage(
+            windowID: window.windowID,
+            pid: pid,
+            windowTitle: window.title,
+            forceRefresh: forceRefresh
+        )
+    }
+
+    static func captureWindowImage(windowID: CGWindowID, pid: pid_t, windowTitle: String? = nil, forceRefresh: Bool = false) async throws -> CGImage {
         // Check cache first if not forcing refresh
         if !forceRefresh {
-            if let pid = window.owningApplication?.processID,
-               let cachedWindow = desktopSpaceWindowCacheManager.readCache(pid: pid)
-               .first(where: { $0.id == window.windowID && $0.windowName == window.title }),
-               let cachedImage = cachedWindow.image
+            if let cachedWindow = desktopSpaceWindowCacheManager.readCache(pid: pid)
+                .first(where: { $0.id == windowID && (windowTitle == nil || $0.windowName == windowTitle) }),
+                let cachedImage = cachedWindow.image
             {
                 // Check if we need to refresh the image based on cache lifespan
                 let cacheLifespan = Defaults[.screenCaptureCacheLifespan]
@@ -145,19 +162,13 @@ enum WindowUtil {
             }
         }
 
-        let captureError = NSError(
-            domain: "WindowCaptureError",
-            code: 1,
-            userInfo: [NSLocalizedDescriptionKey: "Failed to create image for window"]
-        )
-
         var cgImage: CGImage
         let connectionID = CGSMainConnectionID()
-        var windowID = UInt32(window.windowID)
+        var windowIDUInt32 = UInt32(windowID)
         let qualityOption: CGSWindowCaptureOptions = (Defaults[.windowImageCaptureQuality] == .best) ? .bestResolution : .nominalResolution
         guard let capturedWindows = CGSHWCaptureWindowList(
             connectionID,
-            &windowID,
+            &windowIDUInt32,
             1,
             [qualityOption, CGSWindowCaptureOptions.fullSize]
         ) as? [CGImage],
@@ -199,7 +210,6 @@ enum WindowUtil {
         do {
             let position = try element.position()
             let size = try element.size()
-            let id = try element.cgWindowId()
             if position != nil, size != nil {
                 return true
             }
@@ -537,20 +547,27 @@ enum WindowUtil {
                 continue
             }
 
-            guard let image = cgID.cgsScreenshot() else { continue }
-
+            let windowTitle = cgID.cgsTitle()
             var info = WindowInfo(
                 windowProvider: AXFallbackProvider(cgID: cgID),
                 app: app,
-                image: image,
+                image: nil,
                 axElement: axWin,
                 appAxElement: appAX,
                 closeButton: try? axWin.closeButton(),
                 lastAccessedTime: Date(),
                 spaceID: cgID.cgsSpaces().first.map { Int($0) }
             )
-            info.windowName = cgID.cgsTitle()
-            updateDesktopSpaceWindowCache(with: info)
+            info.windowName = windowTitle
+
+            Task.detached(priority: .userInitiated) {
+                if let image = try? await captureWindowImage(windowID: cgID, pid: app.processIdentifier, windowTitle: windowTitle) {
+                    var mutableCopy = info
+                    mutableCopy.image = image
+                    updateDesktopSpaceWindowCache(with: mutableCopy)
+                }
+            }
+
             usedIDs.insert(cgID)
             processedCount += 1
         }
@@ -583,7 +600,7 @@ enum WindowUtil {
         // AX fallback: discover windows that SCK didn't report (e.g., some Adobe apps)
         discoverNewWindowsViaAXFallback(app: app)
         // Ensure AX-fallback windows get fresh images too
-        refreshAXFallbackWindowImages(for: app.processIdentifier)
+        await refreshAXFallbackWindowImages(for: app.processIdentifier)
     }
 
     // MARK: - AX Fallback Discovery
@@ -627,7 +644,7 @@ enum WindowUtil {
             for pid in processedPIDs {
                 _ = await purifyAppCache(with: pid, removeAll: false)
                 // Refresh images for AX-fallback windows (not covered by SCK)
-                refreshAXFallbackWindowImages(for: pid)
+                await refreshAXFallbackWindowImages(for: pid)
             }
 
         } catch {
@@ -636,7 +653,7 @@ enum WindowUtil {
     }
 
     /// Refresh images for windows discovered via AX fallback (no SCWindow available)
-    private static func refreshAXFallbackWindowImages(for pid: pid_t) {
+    private static func refreshAXFallbackWindowImages(for pid: pid_t) async {
         let windows = desktopSpaceWindowCacheManager.readCache(pid: pid)
         guard !windows.isEmpty else { return }
 
@@ -647,7 +664,7 @@ enum WindowUtil {
                 continue
             }
 
-            if let image = window.id.cgsScreenshot() {
+            if let image = try? await captureWindowImage(windowID: window.id, pid: pid, windowTitle: window.windowName) {
                 var updated = window
                 updated.image = image
                 updated.spaceID = window.id.cgsSpaces().first.map { Int($0) }
