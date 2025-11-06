@@ -597,11 +597,9 @@ struct WindowPreviewHoverContainer: View {
                     app.unhide()
 
                     var restoredWindows: [WindowInfo] = []
-                    for var window in originalWindows {
+                    for window in originalWindows {
                         if window.isMinimized {
-                            if let newMinimizedState = WindowUtil.toggleMinimize(windowInfo: window) {
-                                window.isMinimized = newMinimizedState
-                            }
+                            _ = WindowUtil.toggleMinimize(windowInfo: window)
                         }
                         restoredWindows.append(window)
                     }
@@ -642,20 +640,14 @@ struct WindowPreviewHoverContainer: View {
             previewStateCoordinator.removeWindow(at: index)
 
         case .minimize:
-            if let newMinimizedState = WindowUtil.toggleMinimize(windowInfo: window) {
-                window.isMinimized = newMinimizedState
-                previewStateCoordinator.updateWindow(at: index, with: window)
-            }
+            _ = WindowUtil.toggleMinimize(windowInfo: window)
 
         case .toggleFullScreen:
             WindowUtil.toggleFullScreen(windowInfo: window)
             onWindowTap?()
 
         case .hide:
-            if let newHiddenState = WindowUtil.toggleHidden(windowInfo: window) {
-                window.isHidden = newHiddenState
-                previewStateCoordinator.updateWindow(at: index, with: window)
-            }
+            _ = WindowUtil.toggleHidden(windowInfo: window)
 
         case .openNewWindow:
             WindowUtil.openNewWindow(app: window.app)

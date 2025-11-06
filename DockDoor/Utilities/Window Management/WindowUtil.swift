@@ -29,14 +29,20 @@ struct WindowInfo: Identifiable, Hashable {
     var axElement: AXUIElement
     var appAxElement: AXUIElement
     var closeButton: AXUIElement?
-    var isMinimized: Bool
-    var isHidden: Bool
     var spaceID: Int?
     var lastAccessedTime: Date
 
     private var _scWindow: SCWindow?
 
-    init(windowProvider: WindowPropertiesProviding, app: NSRunningApplication, image: CGImage?, axElement: AXUIElement, appAxElement: AXUIElement, closeButton: AXUIElement?, isMinimized: Bool, isHidden: Bool, lastAccessedTime: Date, spaceID: Int? = nil) {
+    var isMinimized: Bool {
+        (try? axElement.isMinimized()) ?? false
+    }
+
+    var isHidden: Bool {
+        app.isHidden
+    }
+
+    init(windowProvider: WindowPropertiesProviding, app: NSRunningApplication, image: CGImage?, axElement: AXUIElement, appAxElement: AXUIElement, closeButton: AXUIElement?, lastAccessedTime: Date, spaceID: Int? = nil) {
         id = windowProvider.windowID
         self.windowProvider = windowProvider
         self.app = app
@@ -45,8 +51,6 @@ struct WindowInfo: Identifiable, Hashable {
         self.axElement = axElement
         self.appAxElement = appAxElement
         self.closeButton = closeButton
-        self.isMinimized = isMinimized
-        self.isHidden = isHidden
         self.spaceID = spaceID
         self.lastAccessedTime = lastAccessedTime
         _scWindow = windowProvider as? SCWindow
@@ -63,8 +67,6 @@ struct WindowInfo: Identifiable, Hashable {
     static func == (lhs: WindowInfo, rhs: WindowInfo) -> Bool {
         lhs.id == rhs.id &&
             lhs.app.processIdentifier == rhs.app.processIdentifier &&
-            lhs.isMinimized == rhs.isMinimized &&
-            lhs.isHidden == rhs.isHidden &&
             lhs.spaceID == rhs.spaceID &&
             lhs.axElement == rhs.axElement
     }
@@ -396,33 +398,6 @@ enum WindowUtil {
         keyUp?.postToPid(app.processIdentifier)
     }
 
-    static func updateStatusOfWindowCache(pid: pid_t, isParentAppHidden: Bool) {
-        let appElement = AXUIElementCreateApplication(pid)
-
-        desktopSpaceWindowCacheManager.updateCache(pid: pid) { windowSet in
-            guard let axWindows = try? appElement.windows() else {
-                // Still apply parent hidden flag
-                windowSet = Set(windowSet.map { var w = $0; w.isHidden = isParentAppHidden; return w })
-                return
-            }
-
-            for ax in axWindows {
-                let isMin = (try? ax.isMinimized()) ?? false
-                guard let cgId = ((try? ax.cgWindowId()) ?? nil) else { continue }
-                if let existing = windowSet.first(where: { $0.id == cgId }) {
-                    var updated = existing
-                    updated.isMinimized = isMin
-                    updated.isHidden = isParentAppHidden
-                    windowSet.remove(existing)
-                    windowSet.insert(updated)
-                }
-            }
-
-            // Ensure hidden state is applied universally (legacy behavior)
-            windowSet = Set(windowSet.map { var w = $0; w.isHidden = isParentAppHidden; return w })
-        }
-    }
-
     static func closeWindow(windowInfo: WindowInfo) {
         guard windowInfo.closeButton != nil else {
             print("Error: closeButton is nil.")
@@ -564,7 +539,6 @@ enum WindowUtil {
 
             guard let image = cgID.cgsScreenshot() else { continue }
 
-            let isMinimized = (try? axWin.isMinimized()) ?? false
             var info = WindowInfo(
                 windowProvider: AXFallbackProvider(cgID: cgID),
                 app: app,
@@ -572,8 +546,6 @@ enum WindowUtil {
                 axElement: axWin,
                 appAxElement: appAX,
                 closeButton: try? axWin.closeButton(),
-                isMinimized: isMinimized,
-                isHidden: app.isHidden,
                 lastAccessedTime: Date(),
                 spaceID: cgID.cgsSpaces().first.map { Int($0) }
             )
@@ -756,7 +728,6 @@ enum WindowUtil {
         let shouldWindowBeCaptured = (closeButton != nil) || (minimizeButton != nil)
 
         if shouldWindowBeCaptured {
-            let actualIsMinimized = (try? windowRef.isMinimized()) ?? false
             let windowInfo = WindowInfo(
                 windowProvider: window,
                 app: app,
@@ -764,8 +735,6 @@ enum WindowUtil {
                 axElement: windowRef,
                 appAxElement: appElement,
                 closeButton: closeButton,
-                isMinimized: actualIsMinimized,
-                isHidden: false,
                 lastAccessedTime: Date.now,
                 spaceID: window.windowID.cgsSpaces().first.map { Int($0) }
             )
@@ -786,8 +755,6 @@ enum WindowUtil {
                 var matchingWindowCopy = matchingWindow
                 matchingWindowCopy.windowName = windowInfo.windowName
                 matchingWindowCopy.image = windowInfo.image
-                matchingWindowCopy.isHidden = windowInfo.isHidden
-                matchingWindowCopy.isMinimized = windowInfo.isMinimized
                 matchingWindowCopy.spaceID = windowInfo.spaceID
 
                 windowSet.remove(matchingWindow)

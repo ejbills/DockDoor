@@ -32,6 +32,7 @@ class WindowManipulationObservers {
             AXObserverRemoveNotification(observer, appElement, kAXUIElementDestroyedNotification as CFString)
             AXObserverRemoveNotification(observer, appElement, kAXMainWindowChangedNotification as CFString)
             AXObserverRemoveNotification(observer, appElement, kAXWindowMiniaturizedNotification as CFString)
+            AXObserverRemoveNotification(observer, appElement, kAXWindowDeminiaturizedNotification as CFString)
             AXObserverRemoveNotification(observer, appElement, kAXApplicationHiddenNotification as CFString)
             AXObserverRemoveNotification(observer, appElement, kAXApplicationShownNotification as CFString)
             AXObserverRemoveNotification(observer, appElement, kAXFocusedUIElementChangedNotification as CFString)
@@ -128,6 +129,7 @@ class WindowManipulationObservers {
         AXObserverAddNotification(observer, appElement, kAXWindowCreatedNotification as CFString, UnsafeMutableRawPointer(bitPattern: Int(pid)))
         AXObserverAddNotification(observer, appElement, kAXUIElementDestroyedNotification as CFString, UnsafeMutableRawPointer(bitPattern: Int(pid)))
         AXObserverAddNotification(observer, appElement, kAXWindowMiniaturizedNotification as CFString, UnsafeMutableRawPointer(bitPattern: Int(pid)))
+        AXObserverAddNotification(observer, appElement, kAXWindowDeminiaturizedNotification as CFString, UnsafeMutableRawPointer(bitPattern: Int(pid)))
         AXObserverAddNotification(observer, appElement, kAXApplicationHiddenNotification as CFString, UnsafeMutableRawPointer(bitPattern: Int(pid)))
         AXObserverAddNotification(observer, appElement, kAXApplicationShownNotification as CFString, UnsafeMutableRawPointer(bitPattern: Int(pid)))
         AXObserverAddNotification(observer, appElement, kAXWindowResizedNotification as CFString, UnsafeMutableRawPointer(bitPattern: Int(pid)))
@@ -153,6 +155,7 @@ class WindowManipulationObservers {
         AXObserverRemoveNotification(observer, appElement, kAXWindowCreatedNotification as CFString)
         AXObserverRemoveNotification(observer, appElement, kAXUIElementDestroyedNotification as CFString)
         AXObserverRemoveNotification(observer, appElement, kAXWindowMiniaturizedNotification as CFString)
+        AXObserverRemoveNotification(observer, appElement, kAXWindowDeminiaturizedNotification as CFString)
         AXObserverRemoveNotification(observer, appElement, kAXApplicationHiddenNotification as CFString)
         AXObserverRemoveNotification(observer, appElement, kAXApplicationShownNotification as CFString)
         AXObserverRemoveNotification(observer, appElement, kAXMainWindowChangedNotification as CFString)
@@ -188,9 +191,9 @@ class WindowManipulationObservers {
             handleWindowEvent(element: element, app: app, notification: notificationName, validate: true)
         case kAXWindowResizedNotification, kAXWindowMovedNotification:
             handleWindowEvent(element: element, app: app, notification: notificationName, validate: false)
-        case kAXWindowMiniaturizedNotification:
+        case kAXWindowMiniaturizedNotification, kAXWindowDeminiaturizedNotification:
             handleWindowEvent(element: element, app: app, notification: notificationName, validate: true)
-            WindowUtil.updateStatusOfWindowCache(pid: pid, isParentAppHidden: false)
+            forceCoordinatorRefresh(for: pid)
         case kAXApplicationHiddenNotification:
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
                 guard let self else { return }
@@ -198,11 +201,11 @@ class WindowManipulationObservers {
                     WindowUtil.purgeAppCache(with: pid)
                     removeObserver(for: pid)
                 } else {
-                    WindowUtil.updateStatusOfWindowCache(pid: pid, isParentAppHidden: true)
+                    forceCoordinatorRefresh(for: pid)
                 }
             }
         case kAXApplicationShownNotification:
-            WindowUtil.updateStatusOfWindowCache(pid: pid, isParentAppHidden: false)
+            forceCoordinatorRefresh(for: pid)
         case kAXWindowCreatedNotification:
             handleNewWindow(for: pid)
         default:
@@ -230,6 +233,14 @@ class WindowManipulationObservers {
         }
         debounceWorkItem = workItem
         DispatchQueue.main.asyncAfter(deadline: .now() + windowProcessingDebounceInterval, execute: workItem)
+    }
+
+    private func forceCoordinatorRefresh(for pid: pid_t) {
+        DispatchQueue.main.async {
+            if let coordinator = SharedPreviewWindowCoordinator.activeInstance?.windowSwitcherCoordinator {
+                coordinator.windows = coordinator.windows.map { $0 }
+            }
+        }
     }
 }
 
