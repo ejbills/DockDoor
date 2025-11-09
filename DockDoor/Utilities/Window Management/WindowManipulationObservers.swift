@@ -14,7 +14,8 @@ class WindowManipulationObservers {
     private let previewCoordinator: SharedPreviewWindowCoordinator
 
     private var observers: [pid_t: AXObserver] = [:]
-    var debounceWorkItem: DispatchWorkItem?
+    var cacheUpdateWorkItem: DispatchWorkItem?
+    var updateDateTimeWorkItem: DispatchWorkItem?
 
     init(previewCoordinator: SharedPreviewWindowCoordinator) {
         self.previewCoordinator = previewCoordinator
@@ -214,15 +215,21 @@ class WindowManipulationObservers {
     }
 
     private func updateTimestampIfAppActive(element: AXUIElement, app: NSRunningApplication) {
-        // Only update timestamp if app is already frontmost (same space window switching)
-        // Otherwise let app activation observer handle it after space switch completes
-        if app.isActive {
-            WindowUtil.updateWindowDateTime(element: element, app: app)
+        updateDateTimeWorkItem?.cancel()
+
+        let workItem = DispatchWorkItem {
+            // Only update timestamp if app is already frontmost (same space window switching)
+            // Otherwise let app activation observer handle it after space switch completes
+            if app.isActive {
+                WindowUtil.updateWindowDateTime(element: element, app: app)
+            }
         }
+        updateDateTimeWorkItem = workItem
+        DispatchQueue.main.asyncAfter(deadline: .now() + windowProcessingDebounceInterval, execute: workItem)
     }
 
     private func handleWindowEvent(element: AXUIElement, app: NSRunningApplication, notification: String, validate: Bool = false) {
-        debounceWorkItem?.cancel()
+        cacheUpdateWorkItem?.cancel()
 
         let workItem = DispatchWorkItem {
             WindowUtil.updateWindowCache(for: app) { windowSet in
@@ -231,7 +238,7 @@ class WindowManipulationObservers {
                 }
             }
         }
-        debounceWorkItem = workItem
+        cacheUpdateWorkItem = workItem
         DispatchQueue.main.asyncAfter(deadline: .now() + windowProcessingDebounceInterval, execute: workItem)
     }
 
