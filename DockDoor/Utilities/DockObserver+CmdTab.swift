@@ -125,6 +125,9 @@ extension DockObserver {
 
         Task { @MainActor [weak self] in
             guard let self else { return }
+
+            previewCoordinator.windowSwitcherCoordinator.setIndex(to: -1, shouldScroll: false)
+
             do {
                 var windows: [WindowInfo] = []
                 if let app = resolvedApp {
