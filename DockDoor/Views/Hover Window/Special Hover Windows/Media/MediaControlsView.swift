@@ -50,6 +50,7 @@ struct MediaControlsView: View {
     let bundleIdentifier: String
     let dockPosition: DockPosition
     let bestGuessMonitor: NSScreen
+    let dockItemElement: AXUIElement?
     let isEmbeddedMode: Bool
     let isPinnedMode: Bool
     let idealWidth: CGFloat?
@@ -88,6 +89,7 @@ struct MediaControlsView: View {
          bundleIdentifier: String,
          dockPosition: DockPosition,
          bestGuessMonitor: NSScreen,
+         dockItemElement: AXUIElement?,
          isEmbeddedMode: Bool = false,
          isPinnedMode: Bool = false,
          idealWidth: CGFloat? = nil,
@@ -98,6 +100,7 @@ struct MediaControlsView: View {
         self.bundleIdentifier = bundleIdentifier
         self.dockPosition = dockPosition
         self.bestGuessMonitor = bestGuessMonitor
+        self.dockItemElement = dockItemElement
         self.isEmbeddedMode = isEmbeddedMode
         self.isPinnedMode = isPinnedMode
         self.idealWidth = idealWidth
@@ -121,6 +124,7 @@ struct MediaControlsView: View {
                       bundleIdentifier: bundleIdentifier,
                       dockPosition: dockPosition,
                       bestGuessMonitor: bestGuessMonitor,
+                      dockItemElement: nil,
                       isEmbeddedMode: isEmbeddedMode,
                       isPinnedMode: isPinnedMode,
                       idealWidth: idealWidth,
@@ -133,6 +137,7 @@ struct MediaControlsView: View {
                       bundleIdentifier: bundleIdentifier,
                       dockPosition: dockPosition,
                       bestGuessMonitor: bestGuessMonitor,
+                      dockItemElement: nil,
                       isEmbeddedMode: isEmbeddedMode,
                       isPinnedMode: isPinnedMode,
                       idealWidth: idealWidth,
@@ -243,6 +248,7 @@ struct MediaControlsView: View {
                 bundleIdentifier: bundleIdentifier,
                 dockPosition: dockPosition,
                 bestGuessMonitor: bestGuessMonitor,
+                dockItemElement: dockItemElement,
                 isPinnedMode: isPinnedMode,
                 isArtworkExpandedFull: $isArtworkExpandedFull,
                 showingLyricsInFull: $showingLyricsInFull,

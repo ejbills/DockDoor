@@ -61,11 +61,12 @@ extension SharedPreviewWindowCoordinator {
                 // Fallback to legacy view with no data (will be empty)
                 AnyView(
                     MediaControlsView(
-                        mediaInfo: nil,
+                        mediaInfo: MediaStore(actions: nil),
                         appName: appName,
                         bundleIdentifier: bundleIdentifier,
                         dockPosition: DockUtils.getDockPosition(),
                         bestGuessMonitor: NSScreen.main ?? NSScreen.screens.first!,
+                        dockItemElement: nil,
                         isEmbeddedMode: isEmbedded,
                         isPinnedMode: true,
                         idealWidth: nil,
@@ -81,6 +82,7 @@ extension SharedPreviewWindowCoordinator {
                     bundleIdentifier: bundleIdentifier,
                     dockPosition: DockUtils.getDockPosition(),
                     bestGuessMonitor: NSScreen.main ?? NSScreen.screens.first!,
+                    dockItemElement: nil,
                     isEmbeddedMode: isEmbedded,
                     isPinnedMode: true,
                     calendarInfo: DailyCalendarInfo()

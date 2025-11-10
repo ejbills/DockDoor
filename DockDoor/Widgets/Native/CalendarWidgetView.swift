@@ -35,6 +35,7 @@ struct CalendarWidgetView: View {
             bundleIdentifier: bundleIdentifier,
             dockPosition: dockPosition,
             bestGuessMonitor: screen,
+            dockItemElement: nil,
             isEmbeddedMode: isEmbedded,
             isPinnedMode: false,
             idealWidth: isEmbedded ? 200 : nil,

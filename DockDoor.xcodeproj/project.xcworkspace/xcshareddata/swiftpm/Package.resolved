@@ -1,5 +1,5 @@
 {
-  "originHash" : "16c460e453b9e3c076d7bd4fb8b97fe398f32c8d60d31adeccd83d0077a7ab37",
+  "originHash" : "1aa9fb48d4e0797930115961711b1ca1ddd436584bad9f72d944d4e056bc886f",
   "pins" : [
     {
       "identity" : "confettiswiftui",
@@ -16,7 +16,7 @@
       "location" : "https://github.com/sindresorhus/Defaults",
       "state" : {
         "branch" : "main",
-        "revision" : "564b72578c0d25d2850aa5dd595cedb7a274c4da"
+        "revision" : "00c82eff4550c87cf9c547d7e5493a6a97837061"
       }
     },
     {
@@ -47,21 +47,12 @@
       }
     },
     {
-      "identity" : "settings",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/sindresorhus/Settings",
-      "state" : {
-        "revision" : "879ea83a7bbc6dbebf62bed8c547f090146372a6",
-        "version" : "3.1.1"
-      }
-    },
-    {
       "identity" : "smoothgradient",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/raymondjavaxx/SmoothGradient",
       "state" : {
-        "revision" : "77ac160533ce312f92b566754731e07b20315a41",
-        "version" : "1.0.1"
+        "revision" : "61bf248fad31c7921c9985b418e6e9297cd7b861",
+        "version" : "1.0.0"
       }
     },
     {
@@ -69,8 +60,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/sparkle-project/Sparkle",
       "state" : {
-        "revision" : "df074165274afaa39539c05d57b0832620775b11",
-        "version" : "2.7.1"
+        "revision" : "0ca3004e98712ea2b39dd881d28448630cce1c99",
+        "version" : "2.7.0"
       }
     },
     {

@@ -29,15 +29,13 @@ enum SettingsProfile: String, CaseIterable, Identifiable {
             PerformanceProfileSettingsValues(
                 hoverWindowOpenDelay: Defaults.Keys.hoverWindowOpenDelay.defaultValue,
                 fadeOutDuration: Defaults.Keys.fadeOutDuration.defaultValue,
-                inactivityTimeout: Defaults.Keys.inactivityTimeout.defaultValue,
                 tapEquivalentInterval: Defaults.Keys.tapEquivalentInterval.defaultValue,
-                lateralMovement: Defaults.Keys.lateralMovement.defaultValue,
                 preventDockHide: Defaults.Keys.preventDockHide.defaultValue
             )
         case .snappy:
-            PerformanceProfileSettingsValues(hoverWindowOpenDelay: CoreDockGetAutoHideEnabled() ? 0.1 : 0, fadeOutDuration: 0.15, inactivityTimeout: 0.5, tapEquivalentInterval: 0.5, lateralMovement: false, preventDockHide: false)
+            PerformanceProfileSettingsValues(hoverWindowOpenDelay: CoreDockGetAutoHideEnabled() ? 0.1 : 0, fadeOutDuration: 0.15, tapEquivalentInterval: 0.5, preventDockHide: false)
         case .relaxed:
-            PerformanceProfileSettingsValues(hoverWindowOpenDelay: 0.25, fadeOutDuration: 0.5, inactivityTimeout: 2.5, tapEquivalentInterval: 1.5, lateralMovement: true, preventDockHide: true)
+            PerformanceProfileSettingsValues(hoverWindowOpenDelay: 0.25, fadeOutDuration: 0.5, tapEquivalentInterval: 1.5, preventDockHide: true)
         }
     }
 }
@@ -45,9 +43,7 @@ enum SettingsProfile: String, CaseIterable, Identifiable {
 struct PerformanceProfileSettingsValues {
     let hoverWindowOpenDelay: CGFloat
     let fadeOutDuration: CGFloat
-    let inactivityTimeout: CGFloat
     let tapEquivalentInterval: CGFloat
-    let lateralMovement: Bool
     let preventDockHide: Bool
 }
 
@@ -91,10 +87,12 @@ struct MainSettingsView: View {
     @Default(.enableDockPreviews) var enableDockPreviews
     @Default(.keepPreviewOnAppTerminate) var keepPreviewOnAppTerminate
     @Default(.enableCmdTabEnhancements) var enableCmdTabEnhancements
+    @Default(.scrollToMouseHoverInSwitcher) var scrollToMouseHoverInSwitcher
     @Default(.includeHiddenWindowsInSwitcher) var includeHiddenWindowsInSwitcher
     @Default(.useClassicWindowOrdering) var useClassicWindowOrdering
     @Default(.limitSwitcherToFrontmostApp) var limitSwitcherToFrontmostApp
     @Default(.fullscreenAppBlacklist) var fullscreenAppBlacklist
+    @Default(.groupAppInstancesInDock) var groupAppInstancesInDock
 
     @State private var selectedPerformanceProfile: SettingsProfile = .default
     @State private var selectedPreviewQualityProfile: PreviewQualityProfile = .standard
@@ -107,9 +105,9 @@ struct MainSettingsView: View {
 
     @Default(.hoverWindowOpenDelay) var hoverWindowOpenDelay
     @Default(.fadeOutDuration) var fadeOutDuration
+    @Default(.preventPreviewReentryDuringFadeOut) var preventPreviewReentryDuringFadeOut
     @Default(.inactivityTimeout) var inactivityTimeout
     @Default(.tapEquivalentInterval) var tapEquivalentInterval
-    @Default(.lateralMovement) var lateralMovement
     @Default(.preventDockHide) var preventDockHide
     @Default(.preventSwitcherHide) var preventSwitcherHide
     @Default(.ignoreAppsWithSingleWindow) var ignoreAppsWithSingleWindow
@@ -414,6 +412,11 @@ struct MainSettingsView: View {
                                 get: { !preventSwitcherHide },
                                 set: { preventSwitcherHide = !$0 }
                             )) { Text("Release initializer key to select window in Switcher") }
+                            Toggle(isOn: $scrollToMouseHoverInSwitcher) { Text("Scroll to window on mouse hover") }
+                            Text("Automatically scrolls the window switcher when hovering over windows with the mouse.")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                                .padding(.leading, 20)
                             Toggle(isOn: $useClassicWindowOrdering) { Text("Use Windows-style window ordering in Switcher") }
                             Text("Shows last active window first, instead of current window.")
                                 .font(.caption)
@@ -533,9 +536,17 @@ struct MainSettingsView: View {
                     sliderSetting(title: "Preview Window Open Delay", value: $hoverWindowOpenDelay, range: 0 ... 2, step: 0.1, unit: "seconds", formatter: NumberFormatter.oneDecimalFormatter)
                     sliderSetting(title: "Preview Window Fade Out Duration", value: $fadeOutDuration, range: 0 ... 2, step: 0.1, unit: "seconds", formatter: NumberFormatter.oneDecimalFormatter)
                     sliderSetting(title: "Preview Window Inactivity Timer", value: $inactivityTimeout, range: 0 ... 3, step: 0.1, unit: "seconds", formatter: NumberFormatter.oneDecimalFormatter)
-                    Toggle(isOn: $lateralMovement) { Text("Keep previews visible during lateral movement") }
                     Toggle(isOn: $preventDockHide) { Text("Prevent dock from hiding during previews") }
                     Toggle(isOn: $raisedWindowLevel) { Text("Show preview above app labels").onChange(of: raisedWindowLevel) { _ in askUserToRestartApplication() }}
+                    VStack(alignment: .leading) {
+                        Toggle(isOn: $preventPreviewReentryDuringFadeOut) {
+                            Text("Prevent preview reappearance during fade-out")
+                        }
+                        Text("When enabled, moving the mouse back over the preview during fade-out will not reactivate it. You must hover over the dock icon again to show the preview.")
+                            .font(.footnote)
+                            .foregroundColor(.gray)
+                            .padding(.leading, 20)
+                    }
                 }
             }
             StyledGroupBox(label: "Preview Appearance & Quality") {
@@ -554,6 +565,14 @@ struct MainSettingsView: View {
             }
             StyledGroupBox(label: "Interaction & Behavior (Dock Previews)") {
                 VStack(alignment: .leading, spacing: 10) {
+                    Toggle(isOn: $groupAppInstancesInDock) { Text("Group multiple app instances together") }
+                    Text("When enabled, hovering over an app in the Dock shows windows from all instances of that app. When disabled, shows only windows from the specific instance under the mouse.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                        .padding(.leading, 20)
+
+                    Divider()
+
                     Picker("Dock Preview Hover Action", selection: $previewHoverAction) { ForEach(PreviewHoverAction.allCases, id: \.self) { Text($0.localizedName).tag($0) } }.pickerStyle(MenuPickerStyle())
                     sliderSetting(title: "Preview Hover Action Delay", value: $tapEquivalentInterval, range: 0 ... 2, step: 0.1, unit: "seconds", formatter: NumberFormatter.oneDecimalFormatter).disabled(previewHoverAction == .none)
                     Picker("Dock Preview Aero Shake Action", selection: $aeroShakeAction) { ForEach(AeroShakeAction.allCases, id: \.self) { Text($0.localizedName).tag($0) } }.pickerStyle(MenuPickerStyle())
@@ -765,9 +784,7 @@ struct MainSettingsView: View {
         let settings = profile.settings
         hoverWindowOpenDelay = settings.hoverWindowOpenDelay
         fadeOutDuration = settings.fadeOutDuration
-        inactivityTimeout = settings.inactivityTimeout
         tapEquivalentInterval = settings.tapEquivalentInterval
-        lateralMovement = settings.lateralMovement
         preventDockHide = settings.preventDockHide
     }
 
@@ -775,9 +792,7 @@ struct MainSettingsView: View {
         let settings = profile.settings
         return hoverWindowOpenDelay == settings.hoverWindowOpenDelay &&
             fadeOutDuration == settings.fadeOutDuration &&
-            inactivityTimeout == settings.inactivityTimeout &&
             tapEquivalentInterval == settings.tapEquivalentInterval &&
-            lateralMovement == settings.lateralMovement &&
             preventDockHide == settings.preventDockHide
     }
 
@@ -803,7 +818,7 @@ struct MainSettingsView: View {
                 selectedPreviewQualityProfile = .standard; applyPreviewQualityProfileSettings(.standard)
 
                 let perfDefault = SettingsProfile.default.settings
-                hoverWindowOpenDelay = perfDefault.hoverWindowOpenDelay; fadeOutDuration = perfDefault.fadeOutDuration; inactivityTimeout = perfDefault.inactivityTimeout; tapEquivalentInterval = perfDefault.tapEquivalentInterval; lateralMovement = perfDefault.lateralMovement; preventDockHide = perfDefault.preventDockHide
+                hoverWindowOpenDelay = perfDefault.hoverWindowOpenDelay; fadeOutDuration = perfDefault.fadeOutDuration; tapEquivalentInterval = perfDefault.tapEquivalentInterval; preventDockHide = perfDefault.preventDockHide
                 let qualityDefault = PreviewQualityProfile.standard.settings
                 screenCaptureCacheLifespan = qualityDefault.screenCaptureCacheLifespan; windowPreviewImageScale = qualityDefault.windowPreviewImageScale
                 bufferFromDock = Defaults.Keys.bufferFromDock.defaultValue; sortWindowsByDate = Defaults.Keys.sortWindowsByDate.defaultValue; shouldHideOnDockItemClick = Defaults.Keys.shouldHideOnDockItemClick.defaultValue; dockClickAction = Defaults.Keys.dockClickAction.defaultValue; previewHoverAction = Defaults.Keys.previewHoverAction.defaultValue; aeroShakeAction = Defaults.Keys.aeroShakeAction.defaultValue
@@ -823,6 +838,7 @@ struct MainSettingsView: View {
                 showBigControlsWhenNoValidWindows = Defaults.Keys.showBigControlsWhenNoValidWindows.defaultValue
                 placementStrategy = Defaults.Keys.windowSwitcherPlacementStrategy.defaultValue
                 pinnedScreenIdentifier = Defaults.Keys.pinnedScreenIdentifier.defaultValue
+                groupAppInstancesInDock = Defaults.Keys.groupAppInstancesInDock.defaultValue
                 askUserToRestartApplication()
             }
         }

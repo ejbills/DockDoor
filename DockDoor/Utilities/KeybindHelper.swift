@@ -108,13 +108,9 @@ private class WindowSwitchingCoordinator {
                     Task { @MainActor in
                         previewCoordinator.hideWindow()
                     }
-                }
+                },
+                initialIndex: self.stateManager.currentIndex
             )
-
-            // Set the correct index after the window is shown, with a small delay to ensure setWindows completes
-            DispatchQueue.main.async {
-                previewCoordinator.windowSwitcherCoordinator.setIndex(to: self.stateManager.currentIndex)
-            }
         }
 
         switch Defaults[.windowSwitcherPlacementStrategy] {
@@ -281,7 +277,11 @@ class KeybindHelper {
                    !previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive
                 {
                     Task { @MainActor in
-                        self.previewCoordinator.hideWindow()
+                        if self.previewCoordinator.windowSwitcherCoordinator.currIndex >= 0 {
+                            self.previewCoordinator.selectAndBringToFrontCurrentWindow()
+                        } else {
+                            self.previewCoordinator.hideWindow()
+                        }
                     }
                 }
                 lastCmdTabObservedActive = false

@@ -259,6 +259,7 @@ struct AppearanceSettingsView: View {
                                 dockPosition: .bottom,
                                 mouseLocation: .zero,
                                 bestGuessMonitor: NSScreen.main!,
+                                dockItemElement: nil,
                                 windowSwitcherCoordinator: currentCoordinator,
                                 mockPreviewActive: true,
                                 updateAvailable: false

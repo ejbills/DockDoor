@@ -38,6 +38,43 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://buymeacoffee.com/keplercafe</div>
 
+<a id="1.25.5"></a>
+# [Release 1.25.5](https://github.com/ejbills/DockDoor/releases/tag/1.25.5) - 2025-11-01
+
+## Features
+- Added option to prevent preview reappearance during fade-out
+
+## 🔧 Improvements & Stability
+- Improved settings window layout
+- Fixed window switcher index not being set
+- Fixed window switcher index being set by mouse hover
+
+## 🐛 Bug Fixes
+- Prevented fade-out reset issue
+
+
+[Changes][1.25.5]
+
+
+<a id="1.25.4"></a>
+# [Release 1.25.4](https://github.com/ejbills/DockDoor/releases/tag/1.25.4) - 2025-10-30
+
+## 🔧 Improvements & Stability
+- Fixed window preview losing track of minimized windows, windows in other spaces
+- Enhanced window state tracking
+- Optimized window discovery performance
+- Much more reliable dock preview hover detection and presentation
+  - Removed the 'lateral movement' checkbox
+- Hovered window switcher window now selected on release of initalizer key
+- Cmd tab enhancement now selects selected window on release of CMD 
+- Cleaned up code
+
+## 🐛 Bug Fixes
+- Fixed cmd-tab window positioning on bottom left side of screen
+
+[Changes][1.25.4]
+
+
 <a id="1.25.3"></a>
 # [Release 1.25.3](https://github.com/ejbills/DockDoor/releases/tag/1.25.3) - 2025-09-26
 
@@ -1588,6 +1625,8 @@ v1.0
 [Changes][releases]
 
 
+[1.25.5]: https://github.com/ejbills/DockDoor/compare/1.25.4...1.25.5
+[1.25.4]: https://github.com/ejbills/DockDoor/compare/1.25.3...1.25.4
 [1.25.3]: https://github.com/ejbills/DockDoor/compare/1.25.2...1.25.3
 [1.25.2]: https://github.com/ejbills/DockDoor/compare/1.25.1...1.25.2
 [1.25.1]: https://github.com/ejbills/DockDoor/compare/1.25...1.25.1
