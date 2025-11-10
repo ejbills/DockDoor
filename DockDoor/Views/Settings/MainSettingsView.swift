@@ -442,7 +442,7 @@ struct MainSettingsView: View {
                         .onChange(of: enableCmdTabEnhancements) { _ in askUserToRestartApplication() }
                     VStack(alignment: .leading, spacing: 2) {
                         Text("Show previews while holding Cmd+Tab.")
-                        Text("Cmd+A focuses previews, Left/Right navigate, Down clears selection.")
+                        Text("Cmd+A cycles through previews (Shift+A cycles backward), Left/Right navigate, Down clears selection.")
                     }
                     .font(.caption)
                     .foregroundColor(.secondary)
