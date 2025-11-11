@@ -170,7 +170,7 @@ enum WindowUtil {
             connectionID,
             &windowIDUInt32,
             1,
-            [qualityOption, CGSWindowCaptureOptions.fullSize]
+            [.ignoreGlobalClipShape, qualityOption]
         ) as? [CGImage],
             let capturedImage = capturedWindows.first
         else {
