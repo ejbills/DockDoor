@@ -1,6 +1,5 @@
 import AppKit
 import Defaults
-import EventKit
 import os.log
 import SwiftUI
 
@@ -14,7 +13,7 @@ enum CalendarLayout {
 }
 
 struct CalendarView: View {
-    @StateObject private var calendarInfo = DailyCalendarInfo()
+    let calendarInfo: DailyCalendarInfo
     let appName: String
     let bundleIdentifier: String
     let dockPosition: DockPosition
@@ -37,7 +36,8 @@ struct CalendarView: View {
          dockItemElement: AXUIElement?,
          isEmbeddedMode: Bool = false,
          isPinnedMode: Bool = false,
-         idealWidth: CGFloat? = nil)
+         idealWidth: CGFloat? = nil,
+         calendarInfo: DailyCalendarInfo)
     {
         self.appName = appName
         self.bundleIdentifier = bundleIdentifier
@@ -47,6 +47,7 @@ struct CalendarView: View {
         self.isEmbeddedMode = isEmbeddedMode
         self.isPinnedMode = isPinnedMode
         self.idealWidth = idealWidth
+        self.calendarInfo = calendarInfo
     }
 
     var body: some View {

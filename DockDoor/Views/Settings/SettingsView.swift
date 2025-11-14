@@ -109,13 +109,15 @@ struct SettingsView: View {
     var body: some View {
         NavigationSplitView(columnVisibility: .constant(.all), sidebar: {
             List(selection: $selectedTab) {
-                Label(String(localized: "General", comment: "Settings tab title"), systemImage: "gearshape.fill")
+                Label(String(localized: "General", comment: ""), systemImage: "gearshape.fill")
                     .tag("General")
-                Label(String(localized: "Appearance", comment: "Settings Tab"), systemImage: "wand.and.stars.inverse")
+                Label(String(localized: "Appearance", comment: ""), systemImage: "wand.and.stars.inverse")
                     .tag("Appearance")
-                Label(String(localized: "Filters", comment: "Filters tab title"), systemImage: "air.purifier")
+                Label(String(localized: "Widgets", comment: ""), systemImage: "minus.plus.batteryblock.stack.fill")
+                    .tag("Widgets")
+                Label(String(localized: "Filters", comment: ""), systemImage: "air.purifier")
                     .tag("Filters")
-                Label(String(localized: "Support", comment: "Settings tab title"), systemImage: "lifepreserver.fill")
+                Label(String(localized: "Support", comment: ""), systemImage: "lifepreserver.fill")
                     .tag("Support")
             }
             .listStyle(.sidebar)
@@ -127,6 +129,8 @@ struct SettingsView: View {
                     MainSettingsView()
                 case "Appearance":
                     AppearanceSettingsView()
+                case "Widgets":
+                    WidgetsSettingsView()
                 case "Filters":
                     FiltersSettingsView()
                 case "Support":
