@@ -31,6 +31,7 @@ struct WindowInfo: Identifiable, Hashable {
     var closeButton: AXUIElement?
     var spaceID: Int?
     var lastAccessedTime: Date
+    var imageCapturedTime: Date
 
     private var _scWindow: SCWindow?
 
@@ -42,7 +43,7 @@ struct WindowInfo: Identifiable, Hashable {
         app.isHidden
     }
 
-    init(windowProvider: WindowPropertiesProviding, app: NSRunningApplication, image: CGImage?, axElement: AXUIElement, appAxElement: AXUIElement, closeButton: AXUIElement?, lastAccessedTime: Date, spaceID: Int? = nil) {
+    init(windowProvider: WindowPropertiesProviding, app: NSRunningApplication, image: CGImage?, axElement: AXUIElement, appAxElement: AXUIElement, closeButton: AXUIElement?, lastAccessedTime: Date, imageCapturedTime: Date? = nil, spaceID: Int? = nil) {
         id = windowProvider.windowID
         self.windowProvider = windowProvider
         self.app = app
@@ -53,6 +54,7 @@ struct WindowInfo: Identifiable, Hashable {
         self.closeButton = closeButton
         self.spaceID = spaceID
         self.lastAccessedTime = lastAccessedTime
+        self.imageCapturedTime = imageCapturedTime ?? lastAccessedTime
         _scWindow = windowProvider as? SCWindow
     }
 
@@ -151,14 +153,10 @@ enum WindowUtil {
                 .first(where: { $0.id == windowID && (windowTitle == nil || $0.windowName == windowTitle) }),
                 let cachedImage = cachedWindow.image
             {
-                // Check if we need to refresh the image based on cache lifespan
                 let cacheLifespan = Defaults[.screenCaptureCacheLifespan]
-                if Date().timeIntervalSince(cachedWindow.lastAccessedTime) <= cacheLifespan {
+                if Date().timeIntervalSince(cachedWindow.imageCapturedTime) <= cacheLifespan {
                     return cachedImage
                 }
-
-                // If we reach here, the image is stale and needs refreshing
-                // but we keep the WindowInfo in cache
             }
         }
 
@@ -564,6 +562,7 @@ enum WindowUtil {
                 if let image = try? await captureWindowImage(windowID: cgID, pid: app.processIdentifier, windowTitle: windowTitle) {
                     var mutableCopy = info
                     mutableCopy.image = image
+                    mutableCopy.imageCapturedTime = Date()
                     updateDesktopSpaceWindowCache(with: mutableCopy)
                 }
             }
@@ -760,6 +759,7 @@ enum WindowUtil {
                 if let image = try? await captureWindowImage(window: window) {
                     var mutableCopy = windowInfo
                     mutableCopy.image = image
+                    mutableCopy.imageCapturedTime = Date()
                     updateDesktopSpaceWindowCache(with: mutableCopy)
                 }
             }.value
@@ -772,6 +772,7 @@ enum WindowUtil {
                 var matchingWindowCopy = matchingWindow
                 matchingWindowCopy.windowName = windowInfo.windowName
                 matchingWindowCopy.image = windowInfo.image
+                matchingWindowCopy.imageCapturedTime = windowInfo.imageCapturedTime
                 matchingWindowCopy.spaceID = windowInfo.spaceID
 
                 windowSet.remove(matchingWindow)
