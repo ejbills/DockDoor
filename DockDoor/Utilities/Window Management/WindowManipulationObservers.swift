@@ -109,12 +109,11 @@ class WindowManipulationObservers {
         }
 
         // Get the focused window when app becomes active (this is the window user clicked on)
-        let appElement = AXUIElementCreateApplication(app.processIdentifier)
-        if let focusedWindow = try? appElement.focusedWindow(),
-           let windowParentPid = try? focusedWindow.pid(),
-           windowParentPid == app.processIdentifier
-        {
-            WindowUtil.updateWindowDateTime(element: focusedWindow, app: app)
+        let appAX = AXUIElementCreateApplication(app.processIdentifier)
+        doAfter(0.3) { // wait for space switching animation to complete
+            if let focusedWindow = try? appAX.focusedWindow() {
+                WindowUtil.updateWindowDateTime(element: focusedWindow, app: app)
+            }
         }
     }
 
@@ -218,10 +217,11 @@ class WindowManipulationObservers {
         updateDateTimeWorkItem?.cancel()
 
         let workItem = DispatchWorkItem {
-            // Only update timestamp if app is already frontmost (same space window switching)
-            // Otherwise let app activation observer handle it after space switch completes
             if app.isActive {
-                WindowUtil.updateWindowDateTime(element: element, app: app)
+                let appAX = AXUIElementCreateApplication(app.processIdentifier)
+                if let focusedWindow = try? appAX.focusedWindow() {
+                    WindowUtil.updateWindowDateTime(element: focusedWindow, app: app)
+                }
             }
         }
         updateDateTimeWorkItem = workItem

@@ -87,9 +87,9 @@ enum WindowUtil {
     private static let desktopSpaceWindowCacheManager = SpaceWindowCacheManager()
 
     // Track windows explicitly updated by bringWindowToFront to prevent observer duplication
-    private static var explicitTimestampUpdates: [AXUIElement: Date] = [:]
-    private static let explicitUpdateLock = NSLock()
-    private static let explicitUpdateTimeWindow: TimeInterval = 1.5
+    private static var timestampUpdates: [AXUIElement: Date] = [:]
+    private static let updateTimestampLock = NSLock()
+    private static let windowUpdateTimeWindow: TimeInterval = 1.5
 
     private static let captureError = NSError(
         domain: "WindowCaptureError",
@@ -108,17 +108,17 @@ enum WindowUtil {
     static func updateWindowDateTime(element: AXUIElement, app: NSRunningApplication) {
         guard Defaults[.sortWindowsByDate] else { return }
 
-        explicitUpdateLock.lock()
-        defer { explicitUpdateLock.unlock() }
+        updateTimestampLock.lock()
+        defer { updateTimestampLock.unlock() }
 
-        // Check if this window was recently updated by bringWindowToFront
+        // Check if this window was recently updated
         let now = Date()
-        if let lastExplicitUpdate = explicitTimestampUpdates[element],
-           now.timeIntervalSince(lastExplicitUpdate) < explicitUpdateTimeWindow
+        if let lastUpdate = timestampUpdates[element],
+           now.timeIntervalSince(lastUpdate) < windowUpdateTimeWindow
         {
-            // Clean up expired entries while we're here
-            cleanupExpiredExplicitUpdates(currentTime: now)
-            return // Skip update to avoid duplication
+            // Clean up expired timestamp entries
+            cleanupExpiredUpdates(currentTime: now)
+            return // Skip update
         }
 
         desktopSpaceWindowCacheManager.updateCache(pid: app.processIdentifier) { windowSet in
@@ -129,6 +129,8 @@ enum WindowUtil {
                 windowSet.insert(updatedWindow)
             }
         }
+
+        timestampUpdates[element] = now
     }
 
     // MARK: - Helper Functions
@@ -342,32 +344,14 @@ enum WindowUtil {
     }
 
     static func bringWindowToFront(windowInfo: WindowInfo) {
-        // Clean up lingering settings pane windows which interfere with AX actions (must be on main thread)
-        DispatchQueue.main.async {
-            if let appDelegate = NSApplication.shared.delegate as? AppDelegate,
-               windowInfo.app.localizedName != "DockDoor"
-            {
-                appDelegate.closeSettingsWindow()
-            }
-        }
-
-        if windowInfo.app.bundleIdentifier == Bundle.main.bundleIdentifier {
-            NSApplication.shared.activate(ignoringOtherApps: true)
-            if let window = NSApp.window(withWindowNumber: Int(windowInfo.id)) {
-                window.makeKeyAndOrderFront(nil)
-            }
-            return
-        }
-
         let maxRetries = 3
         var retryCount = 0
 
         func attemptActivation() -> Bool {
             do {
-                windowInfo.app.activate()
-
                 try windowInfo.axElement.performAction(kAXRaiseAction)
                 try windowInfo.axElement.setAttribute(kAXMainWindowAttribute, true)
+                try windowInfo.appAxElement.setAttribute(kAXFrontmostAttribute, true) // set app frontmost without activating application
 
                 return true
             } catch {
@@ -866,13 +850,6 @@ enum WindowUtil {
         guard Defaults[.sortWindowsByDate] else { return }
 
         let now = Date()
-
-        // Record breadcrumb for observer deduplication
-        explicitUpdateLock.lock()
-        explicitTimestampUpdates[windowInfo.axElement] = now
-        explicitUpdateLock.unlock()
-
-        // Update timestamp in cache
         desktopSpaceWindowCacheManager.updateCache(pid: windowInfo.app.processIdentifier) { windowSet in
             if let index = windowSet.firstIndex(where: { $0.axElement == windowInfo.axElement }) {
                 var updatedWindow = windowSet[index]
@@ -883,10 +860,10 @@ enum WindowUtil {
         }
     }
 
-    /// Removes expired entries from explicit timestamp tracking (must be called with lock held)
-    private static func cleanupExpiredExplicitUpdates(currentTime: Date) {
-        explicitTimestampUpdates = explicitTimestampUpdates.filter { _, date in
-            currentTime.timeIntervalSince(date) < explicitUpdateTimeWindow
+    /// Removes expired entries from timestamp tracking (must be called with lock held)
+    private static func cleanupExpiredUpdates(currentTime: Date) {
+        timestampUpdates = timestampUpdates.filter { _, date in
+            currentTime.timeIntervalSince(date) < windowUpdateTimeWindow
         }
     }
 }
