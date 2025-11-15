@@ -3,14 +3,14 @@
     <channel>
         <title>DockDoor</title>
         <item>
-            <title>1.25.5.6_pre_1_26</title>
-            <pubDate>Mon, 10 Nov 2025 16:49:05 -0800</pubDate>
+            <title>1.25.5.7_pre_1_26</title>
+            <pubDate>Fri, 14 Nov 2025 16:47:11 -0800</pubDate>
             <sparkle:releaseNotesLink>https://dockdoor.net/CHANGELOG.html</sparkle:releaseNotesLink>
             <sparkle:channel>beta</sparkle:channel>
-            <sparkle:version>1.25.5.6_pre_1_26</sparkle:version>
-            <sparkle:shortVersionString>1.25.5.6_pre_1_26 beta</sparkle:shortVersionString>
+            <sparkle:version>1.25.5.7_pre_1_26</sparkle:version>
+            <sparkle:shortVersionString>1.25.5.7_pre_1_26 beta</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/ejbills/DockDoor/releases/download/1.25.5.6_pre_1_26/DockDoor.dmg" length="16028376" type="application/octet-stream" sparkle:edSignature="OsRg7umIUdzw6Yc6hAwRjObTeS/Hng5yUkjlqBXoS06m9ZMRevDll+J7TZZOK4+yNgGVmH/SgkJ7jaLj/HGRDQ==" />
+            <enclosure url="https://github.com/ejbills/DockDoor/releases/download/1.25.5.7_pre_1_26/DockDoor.dmg" length="16030988" type="application/octet-stream" sparkle:edSignature="mx8z5owFNyAo2FrTRHBQxIWG87jFrZ+59tOJfVALxxsH4vjYWRPU0hGx4xVEdYhve5dGFnRI8MyYbNBMu5l3Aw==" />
         </item>
     <item>
             <title>1.25.5</title>
