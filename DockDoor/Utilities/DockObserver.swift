@@ -352,7 +352,7 @@ final class DockObserver {
     }
 
     private func setupEventTap() {
-        let eventMask: CGEventMask = (1 << CGEventType.leftMouseDown.rawValue)
+        let eventMask: CGEventMask = (1 << CGEventType.leftMouseDown.rawValue) | (1 << CGEventType.rightMouseDown.rawValue)
 
         guard let eventTap = CGEvent.tapCreate(
             tap: .cghidEventTap,
@@ -380,7 +380,17 @@ final class DockObserver {
         let appUnderMouse = getDockItemAppStatusUnderMouse()
 
         if case let .success(app) = appUnderMouse.status {
-            handleDockClick(app: app)
+            // Check for CMD + Right Click for quit action
+            if type == .rightMouseDown && event.flags.contains(.maskCommand) {
+                handleCmdRightClickQuit(app: app, event: event)
+                // Don't pass the event through to prevent context menu
+                return nil
+            }
+
+            // Handle normal left click
+            if type == .leftMouseDown {
+                handleDockClick(app: app)
+            }
         }
 
         return Unmanaged.passUnretained(event)
@@ -537,6 +547,22 @@ final class DockObserver {
                     )
                 }
             }
+        }
+    }
+
+    private func handleCmdRightClickQuit(app: NSRunningApplication, event: CGEvent) {
+        Task { @MainActor in
+            // Check if Option key is also pressed for force quit
+            let shouldForceQuit = event.flags.contains(.maskAlternate)
+
+            if shouldForceQuit {
+                app.forceTerminate()
+            } else {
+                app.terminate()
+            }
+
+            // Purge the app cache
+            WindowUtil.purgeAppCache(with: app.processIdentifier)
         }
     }
 }
