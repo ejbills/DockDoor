@@ -1,6 +1,7 @@
 import ApplicationServices
 import Cocoa
 import Defaults
+import os.log
 
 struct ApplicationInfo: Sendable {
     let processIdentifier: pid_t
@@ -30,6 +31,14 @@ func handleSelectedDockItemChangedNotification(observer _: AXObserver, element _
 final class DockObserver {
     weak static var activeInstance: DockObserver?
     let previewCoordinator: SharedPreviewWindowCoordinator
+    
+    private static let logger = Logger(subsystem: "com.dockdoor.app", category: "DockObserver")
+    
+    private enum HealthCheckConstants {
+        static let healthCheckInterval: TimeInterval = 5.0
+        static let observerWarmupPeriod: TimeInterval = 60.0
+        static let zombieDetectionThreshold: TimeInterval = 10.0
+    }
 
     var axObserver: AXObserver?
     private var previousStatus: ApplicationReturnType.Status?
@@ -40,6 +49,21 @@ final class DockObserver {
     // Cmd+Tab switcher monitoring (accessed from extension file)
     var cmdTabObserver: AXObserver?
     var cmdTabRetryTimer: Timer?
+    
+    // Thread-safe date properties accessed from multiple threads (AX callbacks, timers, async tasks)
+    private let observerStateQueue = DispatchQueue(label: "com.dockdoor.observer.state")
+    private var _lastCmdTabNotificationTime: Date?
+    private var _cmdTabObserverCreationTime: Date?
+    
+    var lastCmdTabNotificationTime: Date? {
+        get { observerStateQueue.sync { _lastCmdTabNotificationTime } }
+        set { observerStateQueue.sync { _lastCmdTabNotificationTime = newValue } }
+    }
+    
+    var cmdTabObserverCreationTime: Date? {
+        get { observerStateQueue.sync { _cmdTabObserverCreationTime } }
+        set { observerStateQueue.sync { _cmdTabObserverCreationTime = newValue } }
+    }
 
     private var eventTap: CFMachPort?
 
@@ -73,7 +97,7 @@ final class DockObserver {
 
     private func startHealthCheckTimer() {
         healthCheckTimer?.invalidate()
-        healthCheckTimer = Timer.scheduledTimer(withTimeInterval: 5.0, repeats: true) { [weak self] _ in
+        healthCheckTimer = Timer.scheduledTimer(withTimeInterval: HealthCheckConstants.healthCheckInterval, repeats: true) { [weak self] _ in
             self?.performHealthCheck()
         }
     }
@@ -91,7 +115,45 @@ final class DockObserver {
             teardownCmdTabObserver()
             setupSelectedDockItemObserver()
             setupCmdTabSwitcherObserver()
+            return
         }
+
+        // Check if Cmd+Tab observer is in zombie state
+        checkCmdTabObserverHealth()
+    }
+
+    private func checkCmdTabObserverHealth() {
+        guard Defaults[.enableCmdTabEnhancements],
+              cmdTabObserver != nil,
+              let creationTime = cmdTabObserverCreationTime else {
+            return
+        }
+
+        // Only check if observer has been alive for at least 60 seconds
+        let observerAge = Date().timeIntervalSince(creationTime)
+        guard observerAge > HealthCheckConstants.observerWarmupPeriod else {
+            return
+        }
+
+        // Check if Cmd+Tab switcher is currently active
+        let isSwitcherActive = DockObserver.isCmdTabSwitcherActive()
+        
+        if isSwitcherActive {
+            // If switcher is active but we haven't received a notification in 10+ seconds, observer is likely zombie
+            if let lastNotif = lastCmdTabNotificationTime {
+                let timeSinceLastNotification = Date().timeIntervalSince(lastNotif)
+                if timeSinceLastNotification > HealthCheckConstants.zombieDetectionThreshold {
+                    Self.logger.warning("Cmd+Tab observer appears to be zombie (no notifications for \(Int(timeSinceLastNotification))s while switcher active). Recreating...")
+                    recreateCmdTabObserver()
+                }
+            }
+        }
+    }
+
+    private func recreateCmdTabObserver() {
+        Self.logger.info("Recreating Cmd+Tab observer")
+        teardownCmdTabObserver()
+        setupCmdTabSwitcherObserver()
     }
 
     private func teardownObserver() {
