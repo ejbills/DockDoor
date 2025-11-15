@@ -260,11 +260,6 @@ func axObserverCallback(observer: AXObserver, element: AXUIElement, notification
            let observerInstance = activeWindowManipulationObserversInstance
         {
             observerInstance.processAXNotification(element: element, notificationName: notificationName as String, app: app, pid: pid)
-        } else {
-            WindowUtil.purgeAppCache(with: pid)
-            if let observerInstance = activeWindowManipulationObserversInstance {
-                observerInstance.removeObserver(for: pid)
-            }
         }
     }
 }
