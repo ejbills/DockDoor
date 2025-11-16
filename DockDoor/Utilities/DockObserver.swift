@@ -560,9 +560,6 @@ final class DockObserver {
             } else {
                 app.terminate()
             }
-
-            // Purge the app cache
-            WindowUtil.purgeAppCache(with: app.processIdentifier)
         }
     }
 }
