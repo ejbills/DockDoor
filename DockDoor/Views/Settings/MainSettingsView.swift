@@ -118,6 +118,7 @@ struct MainSettingsView: View {
     @Default(.sortWindowsByDate) var sortWindowsByDate
     @Default(.shouldHideOnDockItemClick) var shouldHideOnDockItemClick
     @Default(.dockClickAction) var dockClickAction
+    @Default(.enableCmdRightClickQuit) var enableCmdRightClickQuit
     @Default(.previewHoverAction) var previewHoverAction
     @Default(.aeroShakeAction) var aeroShakeAction
     @Default(.showSpecialAppControls) var showSpecialAppControls
@@ -587,6 +588,7 @@ struct MainSettingsView: View {
                         .pickerStyle(MenuPickerStyle())
                         .padding(.leading, 20)
                     }
+                    Toggle(isOn: $enableCmdRightClickQuit) { Text("CMD + Right Click on dock icon to quit app") }
                     Toggle(isOn: $showSpecialAppControls) { Text("Show media/calendar controls on Dock hover") }
                     Text("For supported apps (Music, Spotify, Calendar), show interactive controls instead of window previews when hovering their Dock icons.")
                         .font(.caption)
@@ -848,7 +850,7 @@ struct MainSettingsView: View {
                 hoverWindowOpenDelay = perfDefault.hoverWindowOpenDelay; fadeOutDuration = perfDefault.fadeOutDuration; tapEquivalentInterval = perfDefault.tapEquivalentInterval; preventDockHide = perfDefault.preventDockHide
                 let qualityDefault = PreviewQualityProfile.standard.settings
                 screenCaptureCacheLifespan = qualityDefault.screenCaptureCacheLifespan; windowPreviewImageScale = qualityDefault.windowPreviewImageScale
-                bufferFromDock = Defaults.Keys.bufferFromDock.defaultValue; sortWindowsByDate = Defaults.Keys.sortWindowsByDate.defaultValue; shouldHideOnDockItemClick = Defaults.Keys.shouldHideOnDockItemClick.defaultValue; dockClickAction = Defaults.Keys.dockClickAction.defaultValue; previewHoverAction = Defaults.Keys.previewHoverAction.defaultValue; aeroShakeAction = Defaults.Keys.aeroShakeAction.defaultValue
+                bufferFromDock = Defaults.Keys.bufferFromDock.defaultValue; sortWindowsByDate = Defaults.Keys.sortWindowsByDate.defaultValue; shouldHideOnDockItemClick = Defaults.Keys.shouldHideOnDockItemClick.defaultValue; dockClickAction = Defaults.Keys.dockClickAction.defaultValue; enableCmdRightClickQuit = Defaults.Keys.enableCmdRightClickQuit.defaultValue; previewHoverAction = Defaults.Keys.previewHoverAction.defaultValue; aeroShakeAction = Defaults.Keys.aeroShakeAction.defaultValue
 
                 showMenuBarIcon = Defaults.Keys.showMenuBarIcon.defaultValue
                 enableWindowSwitcher = Defaults.Keys.enableWindowSwitcher.defaultValue
