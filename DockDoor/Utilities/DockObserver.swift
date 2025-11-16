@@ -549,9 +549,7 @@ final class DockObserver {
 
     private func handleCmdRightClickQuit(app: NSRunningApplication, event: CGEvent) {
         Task { @MainActor in
-            let shouldForceQuit = event.flags.contains(.maskAlternate)
-
-            if shouldForceQuit {
+            if event.flags.contains(.maskAlternate) {
                 app.forceTerminate()
             } else {
                 app.terminate()
