@@ -380,14 +380,11 @@ final class DockObserver {
         let appUnderMouse = getDockItemAppStatusUnderMouse()
 
         if case let .success(app) = appUnderMouse.status {
-            // Check for CMD + Right Click for quit action
             if type == .rightMouseDown && event.flags.contains(.maskCommand) {
                 handleCmdRightClickQuit(app: app, event: event)
-                // Don't pass the event through to prevent context menu
                 return nil
             }
 
-            // Handle normal left click
             if type == .leftMouseDown {
                 handleDockClick(app: app)
             }
@@ -552,7 +549,6 @@ final class DockObserver {
 
     private func handleCmdRightClickQuit(app: NSRunningApplication, event: CGEvent) {
         Task { @MainActor in
-            // Check if Option key is also pressed for force quit
             let shouldForceQuit = event.flags.contains(.maskAlternate)
 
             if shouldForceQuit {
