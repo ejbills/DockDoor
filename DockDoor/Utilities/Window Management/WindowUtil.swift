@@ -349,9 +349,17 @@ enum WindowUtil {
 
         func attemptActivation() -> Bool {
             do {
+                // Use AltTab's approach: _SLPSSetFrontProcessWithOptions with userGenerated mode which
+                //                        brings only the specific window forward, not all windows of the app
+                var psn = ProcessSerialNumber()
+                _ = GetProcessForPID(windowInfo.app.processIdentifier, &psn)
+                _ = _SLPSSetFrontProcessWithOptions(&psn, UInt32(windowInfo.id), SLPSMode.userGenerated.rawValue)
+
+                // Make the window key using raw event bytes (ported from Hammerspoon/AltTab)
+                makeKeyWindow(&psn, windowID: windowInfo.id)
+
                 try windowInfo.axElement.performAction(kAXRaiseAction)
                 try windowInfo.axElement.setAttribute(kAXMainWindowAttribute, true)
-                try windowInfo.appAxElement.setAttribute(kAXFrontmostAttribute, true) // set app frontmost without activating application
 
                 return true
             } catch {
@@ -844,6 +852,21 @@ enum WindowUtil {
     }
 
     // MARK: - Private Helper Methods
+
+    /// Makes a window key by posting raw event bytes to the Window Server
+    /// Ported from https://github.com/Hammerspoon/hammerspoon/issues/370#issuecomment-545545468
+    private static func makeKeyWindow(_ psn: inout ProcessSerialNumber, windowID: CGWindowID) {
+        var bytes = [UInt8](repeating: 0, count: 0xF8)
+        bytes[0x04] = 0xF8
+        bytes[0x3A] = 0x10
+        var wid = UInt32(windowID)
+        memcpy(&bytes[0x3C], &wid, MemoryLayout<UInt32>.size)
+        memset(&bytes[0x20], 0xFF, 0x10)
+        bytes[0x08] = 0x01
+        _ = SLPSPostEventRecordTo(&psn, &bytes)
+        bytes[0x08] = 0x02
+        _ = SLPSPostEventRecordTo(&psn, &bytes)
+    }
 
     /// Updates window timestamp optimistically and records breadcrumb for observer deduplication
     private static func updateTimestampOptimistically(for windowInfo: WindowInfo) {
