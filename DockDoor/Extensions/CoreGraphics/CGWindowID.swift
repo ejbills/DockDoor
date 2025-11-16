@@ -19,20 +19,4 @@ extension CGWindowID {
         guard let spaces = CGSCopySpacesForWindows(CGSMainConnectionID(), kCGSAllSpacesMask, arr) as? [NSNumber] else { return [] }
         return spaces.map(\.uint64Value)
     }
-
-    func cgsScreenshot() -> CGImage? {
-        var w = UInt32(self)
-        guard let images = CGSHWCaptureWindowList(
-            CGSMainConnectionID(),
-            &w,
-            1,
-            [
-                CGSWindowCaptureOptions.nominalResolution,
-                CGSWindowCaptureOptions.bestResolution,
-                CGSWindowCaptureOptions.fullSize,
-                CGSWindowCaptureOptions.ignoreGlobalClipShape,
-            ]
-        ) as? [CGImage] else { return nil }
-        return images.first
-    }
 }

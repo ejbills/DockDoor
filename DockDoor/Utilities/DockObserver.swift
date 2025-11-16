@@ -39,7 +39,7 @@ final class DockObserver {
 
     // Cmd+Tab switcher monitoring (accessed from extension file)
     var cmdTabObserver: AXObserver?
-    var cmdTabRetryTimer: Timer?
+    var cmdTabPollingTimer: Timer?
 
     private var eventTap: CFMachPort?
 
@@ -51,7 +51,6 @@ final class DockObserver {
         self.previewCoordinator = previewCoordinator
         DockObserver.activeInstance = self
         setupSelectedDockItemObserver()
-        setupCmdTabSwitcherObserver()
         startHealthCheckTimer()
         enableDockClickDetection()
     }
@@ -61,7 +60,6 @@ final class DockObserver {
             DockObserver.activeInstance = nil
         }
         healthCheckTimer?.invalidate()
-        cmdTabRetryTimer?.invalidate()
         teardownObserver()
         teardownCmdTabObserver()
 
@@ -78,6 +76,12 @@ final class DockObserver {
         }
     }
 
+    private func reset() {
+        teardownObserver()
+        teardownCmdTabObserver()
+        setupSelectedDockItemObserver()
+    }
+
     private func performHealthCheck() {
         guard let currentDockPID else {
             setupSelectedDockItemObserver()
@@ -87,10 +91,7 @@ final class DockObserver {
         let currentDockApp = NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.dock").first
 
         if currentDockApp?.processIdentifier != currentDockPID {
-            teardownObserver()
-            teardownCmdTabObserver()
-            setupSelectedDockItemObserver()
-            setupCmdTabSwitcherObserver()
+            reset()
         }
     }
 

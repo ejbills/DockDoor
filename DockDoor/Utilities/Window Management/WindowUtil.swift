@@ -29,14 +29,21 @@ struct WindowInfo: Identifiable, Hashable {
     var axElement: AXUIElement
     var appAxElement: AXUIElement
     var closeButton: AXUIElement?
-    var isMinimized: Bool
-    var isHidden: Bool
     var spaceID: Int?
     var lastAccessedTime: Date
+    var imageCapturedTime: Date
 
     private var _scWindow: SCWindow?
 
-    init(windowProvider: WindowPropertiesProviding, app: NSRunningApplication, image: CGImage?, axElement: AXUIElement, appAxElement: AXUIElement, closeButton: AXUIElement?, isMinimized: Bool, isHidden: Bool, lastAccessedTime: Date, spaceID: Int? = nil) {
+    var isMinimized: Bool {
+        (try? axElement.isMinimized()) ?? false
+    }
+
+    var isHidden: Bool {
+        app.isHidden
+    }
+
+    init(windowProvider: WindowPropertiesProviding, app: NSRunningApplication, image: CGImage?, axElement: AXUIElement, appAxElement: AXUIElement, closeButton: AXUIElement?, lastAccessedTime: Date, imageCapturedTime: Date? = nil, spaceID: Int? = nil) {
         id = windowProvider.windowID
         self.windowProvider = windowProvider
         self.app = app
@@ -45,10 +52,9 @@ struct WindowInfo: Identifiable, Hashable {
         self.axElement = axElement
         self.appAxElement = appAxElement
         self.closeButton = closeButton
-        self.isMinimized = isMinimized
-        self.isHidden = isHidden
         self.spaceID = spaceID
         self.lastAccessedTime = lastAccessedTime
+        self.imageCapturedTime = imageCapturedTime ?? lastAccessedTime
         _scWindow = windowProvider as? SCWindow
     }
 
@@ -63,8 +69,6 @@ struct WindowInfo: Identifiable, Hashable {
     static func == (lhs: WindowInfo, rhs: WindowInfo) -> Bool {
         lhs.id == rhs.id &&
             lhs.app.processIdentifier == rhs.app.processIdentifier &&
-            lhs.isMinimized == rhs.isMinimized &&
-            lhs.isHidden == rhs.isHidden &&
             lhs.spaceID == rhs.spaceID &&
             lhs.axElement == rhs.axElement
     }
@@ -83,9 +87,15 @@ enum WindowUtil {
     private static let desktopSpaceWindowCacheManager = SpaceWindowCacheManager()
 
     // Track windows explicitly updated by bringWindowToFront to prevent observer duplication
-    private static var explicitTimestampUpdates: [AXUIElement: Date] = [:]
-    private static let explicitUpdateLock = NSLock()
-    private static let explicitUpdateTimeWindow: TimeInterval = 1.5
+    private static var timestampUpdates: [AXUIElement: Date] = [:]
+    private static let updateTimestampLock = NSLock()
+    private static let windowUpdateTimeWindow: TimeInterval = 1.5
+
+    private static let captureError = NSError(
+        domain: "WindowCaptureError",
+        code: 1,
+        userInfo: [NSLocalizedDescriptionKey: "Error encountered during image capture"]
+    )
 
     static func clearWindowCache(for app: NSRunningApplication) {
         desktopSpaceWindowCacheManager.writeCache(pid: app.processIdentifier, windowSet: [])
@@ -98,17 +108,17 @@ enum WindowUtil {
     static func updateWindowDateTime(element: AXUIElement, app: NSRunningApplication) {
         guard Defaults[.sortWindowsByDate] else { return }
 
-        explicitUpdateLock.lock()
-        defer { explicitUpdateLock.unlock() }
+        updateTimestampLock.lock()
+        defer { updateTimestampLock.unlock() }
 
-        // Check if this window was recently updated by bringWindowToFront
+        // Check if this window was recently updated
         let now = Date()
-        if let lastExplicitUpdate = explicitTimestampUpdates[element],
-           now.timeIntervalSince(lastExplicitUpdate) < explicitUpdateTimeWindow
+        if let lastUpdate = timestampUpdates[element],
+           now.timeIntervalSince(lastUpdate) < windowUpdateTimeWindow
         {
-            // Clean up expired entries while we're here
-            cleanupExpiredExplicitUpdates(currentTime: now)
-            return // Skip update to avoid duplication
+            // Clean up expired timestamp entries
+            cleanupExpiredUpdates(currentTime: now)
+            return // Skip update
         }
 
         desktopSpaceWindowCacheManager.updateCache(pid: app.processIdentifier) { windowSet in
@@ -119,45 +129,48 @@ enum WindowUtil {
                 windowSet.insert(updatedWindow)
             }
         }
+
+        timestampUpdates[element] = now
     }
 
     // MARK: - Helper Functions
 
-    /// Main function to capture a window image using ScreenCaptureKit, with fallback to legacy methods for older macOS versions.
     static func captureWindowImage(window: SCWindow, forceRefresh: Bool = false) async throws -> CGImage {
+        guard let pid = window.owningApplication?.processID else {
+            throw captureError
+        }
+
+        return try await captureWindowImage(
+            windowID: window.windowID,
+            pid: pid,
+            windowTitle: window.title,
+            forceRefresh: forceRefresh
+        )
+    }
+
+    static func captureWindowImage(windowID: CGWindowID, pid: pid_t, windowTitle: String? = nil, forceRefresh: Bool = false) async throws -> CGImage {
         // Check cache first if not forcing refresh
         if !forceRefresh {
-            if let pid = window.owningApplication?.processID,
-               let cachedWindow = desktopSpaceWindowCacheManager.readCache(pid: pid)
-               .first(where: { $0.id == window.windowID && $0.windowName == window.title }),
-               let cachedImage = cachedWindow.image
+            if let cachedWindow = desktopSpaceWindowCacheManager.readCache(pid: pid)
+                .first(where: { $0.id == windowID && (windowTitle == nil || $0.windowName == windowTitle) }),
+                let cachedImage = cachedWindow.image
             {
-                // Check if we need to refresh the image based on cache lifespan
                 let cacheLifespan = Defaults[.screenCaptureCacheLifespan]
-                if Date().timeIntervalSince(cachedWindow.lastAccessedTime) <= cacheLifespan {
+                if Date().timeIntervalSince(cachedWindow.imageCapturedTime) <= cacheLifespan {
                     return cachedImage
                 }
-
-                // If we reach here, the image is stale and needs refreshing
-                // but we keep the WindowInfo in cache
             }
         }
 
-        let captureError = NSError(
-            domain: "WindowCaptureError",
-            code: 1,
-            userInfo: [NSLocalizedDescriptionKey: "Failed to create image for window"]
-        )
-
         var cgImage: CGImage
         let connectionID = CGSMainConnectionID()
-        var windowID = UInt32(window.windowID)
+        var windowIDUInt32 = UInt32(windowID)
         let qualityOption: CGSWindowCaptureOptions = (Defaults[.windowImageCaptureQuality] == .best) ? .bestResolution : .nominalResolution
         guard let capturedWindows = CGSHWCaptureWindowList(
             connectionID,
-            &windowID,
+            &windowIDUInt32,
             1,
-            [qualityOption, CGSWindowCaptureOptions.fullSize]
+            [.ignoreGlobalClipShape, qualityOption]
         ) as? [CGImage],
             let capturedImage = capturedWindows.first
         else {
@@ -197,7 +210,6 @@ enum WindowUtil {
         do {
             let position = try element.position()
             let size = try element.size()
-            let id = try element.cgWindowId()
             if position != nil, size != nil {
                 return true
             }
@@ -332,21 +344,19 @@ enum WindowUtil {
     }
 
     static func bringWindowToFront(windowInfo: WindowInfo) {
-        // Clean up lingering settings pane windows which interfere with AX actions (must be on main thread)
-        DispatchQueue.main.async {
-            if let appDelegate = NSApplication.shared.delegate as? AppDelegate,
-               windowInfo.app.localizedName != "DockDoor"
-            {
-                appDelegate.closeSettingsWindow()
-            }
-        }
-
         let maxRetries = 3
         var retryCount = 0
 
         func attemptActivation() -> Bool {
             do {
-                windowInfo.app.activate()
+                // Use AltTab's approach: _SLPSSetFrontProcessWithOptions with userGenerated mode which
+                //                        brings only the specific window forward, not all windows of the app
+                var psn = ProcessSerialNumber()
+                _ = GetProcessForPID(windowInfo.app.processIdentifier, &psn)
+                _ = _SLPSSetFrontProcessWithOptions(&psn, UInt32(windowInfo.id), SLPSMode.userGenerated.rawValue)
+
+                // Make the window key using raw event bytes (ported from Hammerspoon/AltTab)
+                makeKeyWindow(&psn, windowID: windowInfo.id)
 
                 try windowInfo.axElement.performAction(kAXRaiseAction)
                 try windowInfo.axElement.setAttribute(kAXMainWindowAttribute, true)
@@ -386,33 +396,6 @@ enum WindowUtil {
         let keyUp = CGEvent(keyboardEventSource: source, virtualKey: 0x2D, keyDown: false)
         keyUp?.flags = .maskCommand
         keyUp?.postToPid(app.processIdentifier)
-    }
-
-    static func updateStatusOfWindowCache(pid: pid_t, isParentAppHidden: Bool) {
-        let appElement = AXUIElementCreateApplication(pid)
-
-        desktopSpaceWindowCacheManager.updateCache(pid: pid) { windowSet in
-            guard let axWindows = try? appElement.windows() else {
-                // Still apply parent hidden flag
-                windowSet = Set(windowSet.map { var w = $0; w.isHidden = isParentAppHidden; return w })
-                return
-            }
-
-            for ax in axWindows {
-                let isMin = (try? ax.isMinimized()) ?? false
-                guard let cgId = ((try? ax.cgWindowId()) ?? nil) else { continue }
-                if let existing = windowSet.first(where: { $0.id == cgId }) {
-                    var updated = existing
-                    updated.isMinimized = isMin
-                    updated.isHidden = isParentAppHidden
-                    windowSet.remove(existing)
-                    windowSet.insert(updated)
-                }
-            }
-
-            // Ensure hidden state is applied universally (legacy behavior)
-            windowSet = Set(windowSet.map { var w = $0; w.isHidden = isParentAppHidden; return w })
-        }
     }
 
     static func closeWindow(windowInfo: WindowInfo) {
@@ -554,23 +537,28 @@ enum WindowUtil {
                 continue
             }
 
-            guard let image = cgID.cgsScreenshot() else { continue }
-
-            let isMinimized = (try? axWin.isMinimized()) ?? false
+            let windowTitle = cgID.cgsTitle()
             var info = WindowInfo(
                 windowProvider: AXFallbackProvider(cgID: cgID),
                 app: app,
-                image: image,
+                image: nil,
                 axElement: axWin,
                 appAxElement: appAX,
                 closeButton: try? axWin.closeButton(),
-                isMinimized: isMinimized,
-                isHidden: app.isHidden,
                 lastAccessedTime: Date(),
                 spaceID: cgID.cgsSpaces().first.map { Int($0) }
             )
-            info.windowName = cgID.cgsTitle()
-            updateDesktopSpaceWindowCache(with: info)
+            info.windowName = windowTitle
+
+            Task.detached(priority: .userInitiated) {
+                if let image = try? await captureWindowImage(windowID: cgID, pid: app.processIdentifier, windowTitle: windowTitle) {
+                    var mutableCopy = info
+                    mutableCopy.image = image
+                    mutableCopy.imageCapturedTime = Date()
+                    updateDesktopSpaceWindowCache(with: mutableCopy)
+                }
+            }
+
             usedIDs.insert(cgID)
             processedCount += 1
         }
@@ -603,7 +591,7 @@ enum WindowUtil {
         // AX fallback: discover windows that SCK didn't report (e.g., some Adobe apps)
         discoverNewWindowsViaAXFallback(app: app)
         // Ensure AX-fallback windows get fresh images too
-        refreshAXFallbackWindowImages(for: app.processIdentifier)
+        await refreshAXFallbackWindowImages(for: app.processIdentifier)
     }
 
     // MARK: - AX Fallback Discovery
@@ -647,7 +635,7 @@ enum WindowUtil {
             for pid in processedPIDs {
                 _ = await purifyAppCache(with: pid, removeAll: false)
                 // Refresh images for AX-fallback windows (not covered by SCK)
-                refreshAXFallbackWindowImages(for: pid)
+                await refreshAXFallbackWindowImages(for: pid)
             }
 
         } catch {
@@ -656,7 +644,7 @@ enum WindowUtil {
     }
 
     /// Refresh images for windows discovered via AX fallback (no SCWindow available)
-    private static func refreshAXFallbackWindowImages(for pid: pid_t) {
+    private static func refreshAXFallbackWindowImages(for pid: pid_t) async {
         let windows = desktopSpaceWindowCacheManager.readCache(pid: pid)
         guard !windows.isEmpty else { return }
 
@@ -667,7 +655,7 @@ enum WindowUtil {
                 continue
             }
 
-            if let image = window.id.cgsScreenshot() {
+            if let image = try? await captureWindowImage(windowID: window.id, pid: pid, windowTitle: window.windowName) {
                 var updated = window
                 updated.image = image
                 updated.spaceID = window.id.cgsSpaces().first.map { Int($0) }
@@ -748,7 +736,6 @@ enum WindowUtil {
         let shouldWindowBeCaptured = (closeButton != nil) || (minimizeButton != nil)
 
         if shouldWindowBeCaptured {
-            let actualIsMinimized = (try? windowRef.isMinimized()) ?? false
             let windowInfo = WindowInfo(
                 windowProvider: window,
                 app: app,
@@ -756,8 +743,6 @@ enum WindowUtil {
                 axElement: windowRef,
                 appAxElement: appElement,
                 closeButton: closeButton,
-                isMinimized: actualIsMinimized,
-                isHidden: false,
                 lastAccessedTime: Date.now,
                 spaceID: window.windowID.cgsSpaces().first.map { Int($0) }
             )
@@ -766,6 +751,7 @@ enum WindowUtil {
                 if let image = try? await captureWindowImage(window: window) {
                     var mutableCopy = windowInfo
                     mutableCopy.image = image
+                    mutableCopy.imageCapturedTime = Date()
                     updateDesktopSpaceWindowCache(with: mutableCopy)
                 }
             }.value
@@ -778,8 +764,7 @@ enum WindowUtil {
                 var matchingWindowCopy = matchingWindow
                 matchingWindowCopy.windowName = windowInfo.windowName
                 matchingWindowCopy.image = windowInfo.image
-                matchingWindowCopy.isHidden = windowInfo.isHidden
-                matchingWindowCopy.isMinimized = windowInfo.isMinimized
+                matchingWindowCopy.imageCapturedTime = windowInfo.imageCapturedTime
                 matchingWindowCopy.spaceID = windowInfo.spaceID
 
                 windowSet.remove(matchingWindow)
@@ -868,18 +853,26 @@ enum WindowUtil {
 
     // MARK: - Private Helper Methods
 
+    /// Makes a window key by posting raw event bytes to the Window Server
+    /// Ported from https://github.com/Hammerspoon/hammerspoon/issues/370#issuecomment-545545468
+    private static func makeKeyWindow(_ psn: inout ProcessSerialNumber, windowID: CGWindowID) {
+        var bytes = [UInt8](repeating: 0, count: 0xF8)
+        bytes[0x04] = 0xF8
+        bytes[0x3A] = 0x10
+        var wid = UInt32(windowID)
+        memcpy(&bytes[0x3C], &wid, MemoryLayout<UInt32>.size)
+        memset(&bytes[0x20], 0xFF, 0x10)
+        bytes[0x08] = 0x01
+        _ = SLPSPostEventRecordTo(&psn, &bytes)
+        bytes[0x08] = 0x02
+        _ = SLPSPostEventRecordTo(&psn, &bytes)
+    }
+
     /// Updates window timestamp optimistically and records breadcrumb for observer deduplication
     private static func updateTimestampOptimistically(for windowInfo: WindowInfo) {
         guard Defaults[.sortWindowsByDate] else { return }
 
         let now = Date()
-
-        // Record breadcrumb for observer deduplication
-        explicitUpdateLock.lock()
-        explicitTimestampUpdates[windowInfo.axElement] = now
-        explicitUpdateLock.unlock()
-
-        // Update timestamp in cache
         desktopSpaceWindowCacheManager.updateCache(pid: windowInfo.app.processIdentifier) { windowSet in
             if let index = windowSet.firstIndex(where: { $0.axElement == windowInfo.axElement }) {
                 var updatedWindow = windowSet[index]
@@ -890,10 +883,10 @@ enum WindowUtil {
         }
     }
 
-    /// Removes expired entries from explicit timestamp tracking (must be called with lock held)
-    private static func cleanupExpiredExplicitUpdates(currentTime: Date) {
-        explicitTimestampUpdates = explicitTimestampUpdates.filter { _, date in
-            currentTime.timeIntervalSince(date) < explicitUpdateTimeWindow
+    /// Removes expired entries from timestamp tracking (must be called with lock held)
+    private static func cleanupExpiredUpdates(currentTime: Date) {
+        timestampUpdates = timestampUpdates.filter { _, date in
+            currentTime.timeIntervalSince(date) < windowUpdateTimeWindow
         }
     }
 }

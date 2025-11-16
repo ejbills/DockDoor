@@ -152,6 +152,11 @@ func shouldAcceptWindow(axWindow: AXUIElement,
 
     if isOnscreen || scBacked { return true }
 
+    // If it has window controls, include even if not currently on-screen
+    let axHasClose = (try? axWindow.closeButton())
+    let axHasMinimize = (try? axWindow.minimizeButton())
+    if axHasClose != nil || axHasMinimize != nil { return true }
+
     // If minimized/fullscreen or app hidden, include even if not currently on-screen
     let axIsFullscreen = (try? axWindow.isFullscreen()) ?? false
     let axIsMinimized = (try? axWindow.isMinimized()) ?? false

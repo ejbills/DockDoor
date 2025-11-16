@@ -81,11 +81,10 @@ struct TrafficLightButtons: View {
         }
         .foregroundStyle(color, fillColor)
         .font(.headline)
-        .onLongPressGesture(minimumDuration: .infinity, maximumDistance: 10, perform: {}, onPressingChanged: { pressing in
-            if pressing {
-                onWindowAction(action)
-            }
-        })
+        .contentShape(Rectangle())
+        .onTapGesture {
+            onWindowAction(action)
+        }
     }
 }
 

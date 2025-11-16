@@ -80,8 +80,10 @@ struct WindowPreview: View {
                                 .font(.largeTitle)
                                 .foregroundColor(.primary)
                                 .shadow(radius: 2)
+                                .transition(.opacity)
                         }
                     }
+                    .animation(.easeInOut(duration: 0.15), value: inactive)
                     .clipShape(uniformCardRadius ? AnyShape(RoundedRectangle(cornerRadius: 12, style: .continuous)) : AnyShape(Rectangle()))
             }
         }
