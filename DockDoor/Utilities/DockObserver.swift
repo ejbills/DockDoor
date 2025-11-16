@@ -353,7 +353,7 @@ final class DockObserver {
     }
 
     private func setupEventTap() {
-        let eventMask: CGEventMask = (1 << CGEventType.leftMouseDown.rawValue)
+        let eventMask: CGEventMask = (1 << CGEventType.leftMouseDown.rawValue) | (1 << CGEventType.rightMouseDown.rawValue)
 
         guard let eventTap = CGEvent.tapCreate(
             tap: .cghidEventTap,
@@ -381,7 +381,14 @@ final class DockObserver {
         let appUnderMouse = getDockItemAppStatusUnderMouse()
 
         if case let .success(app) = appUnderMouse.status {
-            handleDockClick(app: app)
+            if type == .rightMouseDown && event.flags.contains(.maskCommand) {
+                handleCmdRightClickQuit(app: app, event: event)
+                return nil
+            }
+
+            if type == .leftMouseDown {
+                handleDockClick(app: app)
+            }
         }
 
         return Unmanaged.passUnretained(event)
@@ -537,6 +544,16 @@ final class DockObserver {
                         bundleIdentifier: app.bundleIdentifier
                     )
                 }
+            }
+        }
+    }
+
+    private func handleCmdRightClickQuit(app: NSRunningApplication, event: CGEvent) {
+        Task { @MainActor in
+            if event.flags.contains(.maskAlternate) {
+                app.forceTerminate()
+            } else {
+                app.terminate()
             }
         }
     }
