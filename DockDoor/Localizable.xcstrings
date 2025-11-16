@@ -12476,8 +12476,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Automatically scrolls the window switcher when hovering over windows with the mouse."
+            "state" : "translated",
+            "value" : "Scorre automaticamente il selettore finestre al passaggio del puntatore sulle anteprime."
           }
         },
         "ja" : {
@@ -12572,8 +12572,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Automatically scrolls the window switcher when hovering over windows with the mouse."
+            "state" : "translated",
+            "value" : "指標停留在視窗上時自動捲動視窗切換器。"
           }
         }
       }
@@ -21821,8 +21821,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Delete"
+            "state" : "translated",
+            "value" : "삭제"
           }
         },
         "nb" : {
@@ -35709,8 +35709,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Group multiple app instances together"
+            "state" : "translated",
+            "value" : "Considera più istanze della stessa app come una unica"
           }
         },
         "ja" : {
@@ -35805,8 +35805,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Group multiple app instances together"
+            "state" : "translated",
+            "value" : "群組多個App實體"
           }
         }
       }
@@ -59520,8 +59520,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Prevent preview reappearance during fade-out"
+            "state" : "translated",
+            "value" : "Impedisci alle anteprime di tornare visibili durante la dissolvenza"
           }
         },
         "ja" : {
@@ -59598,8 +59598,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Prevent preview reappearance during fade-out"
+            "state" : "translated",
+            "value" : "Запобігання повторній появі попереднього перегляду під час поступового затухання"
           }
         },
         "vi" : {
@@ -59616,8 +59616,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Prevent preview reappearance during fade-out"
+            "state" : "translated",
+            "value" : "防止淡出期間重新顯示預覽"
           }
         }
       }
@@ -69986,8 +69986,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Scroll to window on mouse hover"
+            "state" : "translated",
+            "value" : "Scorri al passaggio del mouse"
           }
         },
         "ja" : {
@@ -70082,8 +70082,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Scroll to window on mouse hover"
+            "state" : "translated",
+            "value" : "指標停留時捲動至視窗"
           }
         }
       }
@@ -91324,8 +91324,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When enabled, hovering over an app in the Dock shows windows from all instances of that app. When disabled, shows only windows from the specific instance under the mouse."
+            "state" : "translated",
+            "value" : "Al passaggio del puntatore su un'icona del Dock, mostra le finestre da tutte le istanze dell'app. Quando disabilitato, mostra solo le finestre dell'istanza specifica (il comportamento può dipendere dall'app)."
           }
         },
         "ja" : {
@@ -91420,8 +91420,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When enabled, hovering over an app in the Dock shows windows from all instances of that app. When disabled, shows only windows from the specific instance under the mouse."
+            "state" : "translated",
+            "value" : "啟用時，指標停留在Dock中的App上方會顯示該App來自所有實體的全部視窗。停用時，只顯示指標所在實體所屬視窗。"
           }
         }
       }
@@ -91514,8 +91514,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When enabled, moving the mouse back over the preview during fade-out will not reactivate it. You must hover over the dock icon again to show the preview."
+            "state" : "translated",
+            "value" : "Se si torna con il puntatore su un'anteprima durante la dissolvenza, l'anteprima non sarà riattivata. Per mostrarla di nuovo, riporta il puntatore sull'icona del Dock."
           }
         },
         "ja" : {
@@ -91592,8 +91592,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When enabled, moving the mouse back over the preview during fade-out will not reactivate it. You must hover over the dock icon again to show the preview."
+            "state" : "translated",
+            "value" : "Якщо цю функцію ввімкнено, переміщення курсора миші назад на попередній перегляд під час поступового загасання не призведе до його повторної активації. Щоб переглянути попередній перегляд, потрібно знову навести курсор на іконку у Dock."
           }
         },
         "vi" : {
@@ -91610,8 +91610,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When enabled, moving the mouse back over the preview during fade-out will not reactivate it. You must hover over the dock icon again to show the preview."
+            "state" : "translated",
+            "value" : "啟用時，在淡出期間將指標移回預覽上將不會重新顯示該預覽。你會需要將指標再次停留在Dock圖像上來顯示預覽。"
           }
         }
       }

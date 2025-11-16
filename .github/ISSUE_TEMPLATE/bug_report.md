@@ -7,27 +7,22 @@ assignees: ''
 
 ---
 
-## Describe the bug
-A clear and concise description of what the bug is.
+## Bug Description
 
-## Steps to reproduce
-- 
 
-## Expected behavior
-A clear and concise description of what you expected to happen.
+## Steps to Reproduce
+1.
+2.
+3.
 
-## Actual behavior
-A clear and concise description of what actually happened.
+## Expected vs Actual Behavior
 
-## Screenshots
-If applicable, add screenshots to help explain your problem.
 
 ## Environment
- - macOS version: [e.g. macOS 15.0 Sequoia]
- - App version: [e.g. 1.1.4]
+- macOS version:
+- App version:
 
-## Additional context
-Add any other context about the problem here.
+## Screenshots (optional)
 
-<!-- You must make sure you've reviewed existing issues before submitting a new one. -->
-- [ ] I have reviewed the open issues to ensure this is not a duplicate
+
+- [ ] I have reviewed existing issues to ensure this is not a duplicate
