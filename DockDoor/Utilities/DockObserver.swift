@@ -381,20 +381,23 @@ final class DockObserver {
         let appUnderMouse = getDockItemAppStatusUnderMouse()
 
         if case let .success(app) = appUnderMouse.status {
-            if type == .rightMouseDown && event.flags.contains(.maskCommand) {
+            if type == .rightMouseDown, event.flags.contains(.maskCommand) {
                 handleCmdRightClickQuit(app: app, event: event)
                 return nil
             }
 
             if type == .leftMouseDown {
-                handleDockClick(app: app)
+                let shouldIntercept = handleDockClick(app: app)
+                if shouldIntercept {
+                    return nil
+                }
             }
         }
 
         return Unmanaged.passUnretained(event)
     }
 
-    private func handleDockClick(app: NSRunningApplication) {
+    private func handleDockClick(app: NSRunningApplication) -> Bool {
         let pid = app.processIdentifier
         let appName = app.localizedName ?? "Unknown"
 
@@ -413,79 +416,90 @@ final class DockObserver {
                 guard let self else { return }
                 showPreviewForFocusedApp(app: app)
             }
-            return
+            return false
         }
 
         // Only proceed with existing dock click actions if they are enabled
-        guard Defaults[.shouldHideOnDockItemClick] else { return }
+        guard Defaults[.shouldHideOnDockItemClick] else { return false }
 
+        // Determine if we should intercept based on what action will be taken
+        let shouldIntercept: Bool = if clickCount == 1 {
+            // Intercept only if frontmost (will hide), not if activating
+            isFrontmost
+        } else {
+            // Will either hide or restore windows, so intercept
+            true
+        }
+
+        let currentClickCount = clickCount
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) { [weak self] in
             guard let self else { return }
 
             previewCoordinator.hideWindow()
 
-            if clickCount == 1 {
-                if !isFrontmost {
-                    app.activate()
+            Task { @MainActor [weak self] in
+                guard let self else { return }
+
+                let windows = try await WindowUtil.getActiveWindows(of: app)
+
+                if currentClickCount == 1 {
+                    if !isFrontmost {
+                        app.activate()
+                    } else if !windows.isEmpty {
+                        clickCount = 2
+                        hideAppWindows(windows: windows, app: app, appName: appName)
+                    } else if Defaults[.dockClickAction] == .hide {
+                        clickCount = 2
+                        app.hide()
+                    }
+                } else if currentClickCount % 2 == 0 {
+                    if !windows.isEmpty {
+                        hideAppWindows(windows: windows, app: app, appName: appName)
+                    } else if Defaults[.dockClickAction] == .hide {
+                        app.hide()
+                    }
                 } else {
-                    clickCount = 2
-                    hideAppWindows(app: app, appName: appName)
+                    restoreAppWindows(windows: windows, app: app, appName: appName)
                 }
-            } else if clickCount % 2 == 0 {
-                hideAppWindows(app: app, appName: appName)
-            } else {
-                restoreAppWindows(app: app, appName: appName)
             }
         }
 
         if clickCount >= 100 {
             clickCount = 0
         }
+
+        return shouldIntercept
     }
 
-    private func hideAppWindows(app: NSRunningApplication, appName: String) {
+    private func hideAppWindows(windows: [WindowInfo], app: NSRunningApplication, appName: String) {
         if Defaults[.dockClickAction] == .hide {
             DispatchQueue.main.async {
                 app.hide()
             }
         } else {
-            Task { @MainActor in
-                do {
-                    let windows = try await WindowUtil.getActiveWindows(of: app)
-                    for window in windows {
-                        if !window.isMinimized {
-                            _ = WindowUtil.toggleMinimize(windowInfo: window)
-                        }
-                    }
-                } catch {
-                    app.hide()
+            for window in windows {
+                if !window.isMinimized {
+                    _ = WindowUtil.toggleMinimize(windowInfo: window)
                 }
             }
         }
     }
 
-    private func restoreAppWindows(app: NSRunningApplication, appName: String) {
+    private func restoreAppWindows(windows: [WindowInfo], app: NSRunningApplication, appName: String) {
         if Defaults[.dockClickAction] == .hide {
             DispatchQueue.main.async {
                 app.activate()
             }
         } else {
-            Task { @MainActor in
-                do {
-                    let windows = try await WindowUtil.getActiveWindows(of: app)
-                    let minimizedWindows = windows.filter(\.isMinimized)
+            let minimizedWindows = windows.filter(\.isMinimized)
 
-                    if !minimizedWindows.isEmpty {
-                        for window in minimizedWindows {
-                            _ = WindowUtil.toggleMinimize(windowInfo: window)
-                        }
-                        app.activate()
-                    } else {
-                        app.activate()
-                    }
-                } catch {
-                    app.activate()
+            if !minimizedWindows.isEmpty {
+                for window in minimizedWindows {
+                    _ = WindowUtil.toggleMinimize(windowInfo: window)
                 }
+                app.activate()
+            } else {
+                app.activate()
             }
         }
     }
