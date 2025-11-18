@@ -43,9 +43,11 @@ final class DockObserver {
 
     private var eventTap: CFMachPort?
 
-    // App click tracking for dock click detection
+    // Dock click behavior state
     var currentClickedAppPID: pid_t?
-    var clickCount: Int = 0
+    var lastHoveredPID: pid_t?
+    var lastHoveredAppWasFrontmost: Bool = false
+    var lastHoveredAppNeedsRestore: Bool = false
 
     init(previewCoordinator: SharedPreviewWindowCoordinator) {
         self.previewCoordinator = previewCoordinator
@@ -198,6 +200,10 @@ final class DockObserver {
                     let windowsForInstance = try await WindowUtil.getActiveWindows(of: appInstance)
                     combinedWindows.append(contentsOf: windowsForInstance)
                 }
+
+                lastHoveredPID = currentApp.processIdentifier
+                lastHoveredAppWasFrontmost = NSWorkspace.shared.frontmostApplication?.processIdentifier == currentApp.processIdentifier
+                lastHoveredAppNeedsRestore = currentApp.isHidden || combinedWindows.contains(where: \.isMinimized)
 
                 if combinedWindows.isEmpty {
                     let isSpecialApp = currentApp.bundleIdentifier == spotifyAppIdentifier ||
@@ -401,37 +407,23 @@ final class DockObserver {
         let pid = app.processIdentifier
         let appName = app.localizedName ?? "Unknown"
 
-        if let currentPID = currentClickedAppPID, currentPID != pid {
-            clickCount = 0
-        }
-
         currentClickedAppPID = pid
-        clickCount += 1
 
         let isFrontmost = NSWorkspace.shared.frontmostApplication?.processIdentifier == pid
+        let hasValidHoverState = lastHoveredPID == pid
+        let wasFrontmostOnHover = hasValidHoverState ? lastHoveredAppWasFrontmost : isFrontmost
 
-        // If dock click actions are disabled and app is frontmost, show DockDoor preview on 2nd+ click
-        if !Defaults[.shouldHideOnDockItemClick], isFrontmost, clickCount >= 2, !previewCoordinator.isVisible {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
-                guard let self else { return }
-                showPreviewForFocusedApp(app: app)
-            }
+        guard Defaults[.shouldHideOnDockItemClick] else { return false }
+
+        // Defer to native behavior for simple activation
+        if hasValidHoverState, !lastHoveredAppWasFrontmost, !lastHoveredAppNeedsRestore {
+            lastHoveredPID = nil
             return false
         }
 
-        // Only proceed with existing dock click actions if they are enabled
-        guard Defaults[.shouldHideOnDockItemClick] else { return false }
+        let wasRestorationNeeded = hasValidHoverState && lastHoveredAppNeedsRestore
+        lastHoveredPID = nil
 
-        // Determine if we should intercept based on what action will be taken
-        let shouldIntercept: Bool = if clickCount == 1 {
-            // Intercept only if frontmost (will hide), not if activating
-            isFrontmost
-        } else {
-            // Will either hide or restore windows, so intercept
-            true
-        }
-
-        let currentClickCount = clickCount
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) { [weak self] in
             guard let self else { return }
 
@@ -441,34 +433,17 @@ final class DockObserver {
                 guard let self else { return }
 
                 let windows = try await WindowUtil.getActiveWindows(of: app)
+                let needsRestore = app.isHidden || windows.contains(where: \.isMinimized) || wasRestorationNeeded
 
-                if currentClickCount == 1 {
-                    if !isFrontmost {
-                        app.activate()
-                    } else if !windows.isEmpty {
-                        clickCount = 2
-                        hideAppWindows(windows: windows, app: app, appName: appName)
-                    } else if Defaults[.dockClickAction] == .hide {
-                        clickCount = 2
-                        app.hide()
-                    }
-                } else if currentClickCount % 2 == 0 {
-                    if !windows.isEmpty {
-                        hideAppWindows(windows: windows, app: app, appName: appName)
-                    } else if Defaults[.dockClickAction] == .hide {
-                        app.hide()
-                    }
-                } else {
+                if needsRestore {
                     restoreAppWindows(windows: windows, app: app, appName: appName)
+                } else if wasFrontmostOnHover, !windows.isEmpty {
+                    hideAppWindows(windows: windows, app: app, appName: appName)
                 }
             }
         }
 
-        if clickCount >= 100 {
-            clickCount = 0
-        }
-
-        return shouldIntercept
+        return false
     }
 
     private func hideAppWindows(windows: [WindowInfo], app: NSRunningApplication, appName: String) {
@@ -477,30 +452,20 @@ final class DockObserver {
                 app.hide()
             }
         } else {
-            for window in windows {
-                if !window.isMinimized {
-                    _ = WindowUtil.toggleMinimize(windowInfo: window)
-                }
+            for window in windows where !window.isMinimized {
+                _ = WindowUtil.toggleMinimize(windowInfo: window)
             }
         }
     }
 
     private func restoreAppWindows(windows: [WindowInfo], app: NSRunningApplication, appName: String) {
         if Defaults[.dockClickAction] == .hide {
-            DispatchQueue.main.async {
-                app.activate()
-            }
+            app.activate()
         } else {
-            let minimizedWindows = windows.filter(\.isMinimized)
-
-            if !minimizedWindows.isEmpty {
-                for window in minimizedWindows {
-                    _ = WindowUtil.toggleMinimize(windowInfo: window)
-                }
-                app.activate()
-            } else {
-                app.activate()
+            for window in windows where window.isMinimized {
+                _ = WindowUtil.toggleMinimize(windowInfo: window)
             }
+            app.activate()
         }
     }
 

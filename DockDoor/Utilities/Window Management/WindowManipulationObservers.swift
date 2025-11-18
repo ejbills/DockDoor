@@ -102,7 +102,6 @@ class WindowManipulationObservers {
            let currentClickedPID = dockObserver.currentClickedAppPID,
            currentClickedPID != app.processIdentifier
         {
-            dockObserver.clickCount = 0
             dockObserver.currentClickedAppPID = nil
         }
 
