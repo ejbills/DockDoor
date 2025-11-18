@@ -56,7 +56,7 @@ class WindowManipulationObservers {
         notificationCenter.addObserver(self, selector: #selector(appDidActivate(_:)), name: NSWorkspace.didActivateApplicationNotification, object: nil)
 
         for app in NSWorkspace.shared.runningApplications {
-            if app.activationPolicy == .regular, app.processIdentifier != ProcessInfo.processInfo.processIdentifier {
+            if app.activationPolicy == .regular {
                 createObserverForApp(app)
             }
         }
@@ -91,9 +91,7 @@ class WindowManipulationObservers {
     }
 
     @objc private func appDidActivate(_ notification: Notification) {
-        guard let app = notification.userInfo?[NSWorkspace.applicationUserInfoKey] as? NSRunningApplication,
-              app.activationPolicy == .regular,
-              app.processIdentifier != ProcessInfo.processInfo.processIdentifier
+        guard let app = notification.userInfo?[NSWorkspace.applicationUserInfoKey] as? NSRunningApplication
         else {
             return
         }
