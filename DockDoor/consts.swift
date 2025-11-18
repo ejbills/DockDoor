@@ -111,6 +111,11 @@ extension Defaults.Keys {
 
     // Onboarding / Hints
     static let hasSeenCmdTabFocusHint = Key<Bool>("hasSeenCmdTabFocusHint", default: false)
+
+    // MARK: Widget System
+
+    static let widgetsEnabled = Key<Bool>("widgetsEnabled", default: true)
+    static let installedDefaultWidgets = Key<Bool>("installedDefaultWidgets", default: false)
 }
 
 // MARK: Display Configurations

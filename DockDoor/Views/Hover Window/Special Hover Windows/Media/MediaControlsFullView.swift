@@ -2,7 +2,8 @@ import Defaults
 import SwiftUI
 
 struct MediaControlsFullView: View {
-    @ObservedObject var mediaInfo: MediaInfo
+    @ObservedObject var mediaInfo: MediaStore
+    @ObservedObject var lyricProvider: LyricProvider
     let appName: String
     let bundleIdentifier: String
     let dockPosition: DockPosition
@@ -135,7 +136,6 @@ struct MediaControlsFullView: View {
                     )
                     .fontWeight(.semibold)
                     .animation(showAnimations ? .easeInOut(duration: 0.2) : nil, value: mediaInfo.title)
-                    .id("compact-full-title-\(mediaInfo.title)")
 
                     if !mediaInfo.artist.isEmpty {
                         MarqueeText(
@@ -145,7 +145,6 @@ struct MediaControlsFullView: View {
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                         .animation(showAnimations ? .easeInOut(duration: 0.2) : nil, value: mediaInfo.artist)
-                        .id("compact-full-artist-\(mediaInfo.artist)")
                     }
                 }
                 Spacer(minLength: 0)
@@ -153,6 +152,7 @@ struct MediaControlsFullView: View {
 
             MediaPlaybackControls(
                 mediaInfo: mediaInfo,
+                lyricProvider: lyricProvider,
                 isExpanded: false,
                 showingLyrics: false
             )
@@ -187,7 +187,6 @@ struct MediaControlsFullView: View {
                     )
                     .font(.title3)
                     .fontWeight(.bold)
-                    .id("expanded-full-title-\(mediaInfo.title)")
 
                     if !mediaInfo.artist.isEmpty {
                         MarqueeText(
@@ -196,12 +195,12 @@ struct MediaControlsFullView: View {
                         )
                         .font(.callout)
                         .foregroundColor(.secondary)
-                        .id("expanded-full-artist-\(mediaInfo.artist)")
                     }
                 }
 
                 MediaPlaybackControls(
                     mediaInfo: mediaInfo,
+                    lyricProvider: lyricProvider,
                     isExpanded: true,
                     showingLyrics: showingLyricsInFull,
                     lyricsMode: $lyricsMode,
@@ -224,7 +223,7 @@ struct MediaControlsFullView: View {
             // Right side - Lyrics view
             if showingLyricsInFull {
                 MediaLyricsView(
-                    mediaInfo: mediaInfo,
+                    lyricProvider: lyricProvider,
                     width: MediaControlsLayout.fullLyricsViewWidth + 80,
                     maxHeight: 300,
                     isFullMode: true

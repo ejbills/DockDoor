@@ -124,12 +124,7 @@ struct GradientColorPaletteSettingsView: View {
             message: String(localized: "Minimum number of colors reached."),
             actions: [.ok, .cancel]
         ) { action in
-            switch action {
-            case .ok:
-                print("User acknowledged the minimum colors alert")
-            case .cancel:
-                print("User cancelled the minimum colors alert")
-            }
+            _ = action // No side-effects needed
         }
     }
 
@@ -139,12 +134,7 @@ struct GradientColorPaletteSettingsView: View {
             message: String(localized: "Maximum number of colors (\(maxColors)) reached."),
             actions: [.ok, .cancel]
         ) { action in
-            switch action {
-            case .ok:
-                print("User acknowledged the maximum colors alert")
-            case .cancel:
-                print("User cancelled the maximum colors alert")
-            }
+            _ = action // No side-effects needed
         }
     }
 

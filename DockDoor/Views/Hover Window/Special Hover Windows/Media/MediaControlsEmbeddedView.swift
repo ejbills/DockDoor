@@ -2,7 +2,7 @@ import Defaults
 import SwiftUI
 
 struct MediaControlsEmbeddedView: View {
-    @ObservedObject var mediaInfo: MediaInfo
+    @ObservedObject var mediaInfo: MediaStore
     let appName: String
     let bundleIdentifier: String
     let dominantArtworkColor: Color?
@@ -19,6 +19,7 @@ struct MediaControlsEmbeddedView: View {
             .padding(12)
             .frame(minWidth: idealWidth ?? (MediaControlsLayout.embeddedArtworkSize + MediaControlsLayout.artworkTextSpacing + 165), alignment: .center)
             .simpleBlurBackground(strokeWidth: 1.75)
+            .pinnable(appName: appName, bundleIdentifier: bundleIdentifier, type: .media)
     }
 
     @ViewBuilder
@@ -39,20 +40,18 @@ struct MediaControlsEmbeddedView: View {
                     VStack(alignment: .leading, spacing: 1) {
                         MarqueeText(
                             text: mediaInfo.title,
-                            startDelay: 1
+                            startDelay: 1,
                         )
                         .font(.callout)
                         .fontWeight(.medium)
-                        .id("compact-title-\(mediaInfo.title)")
 
                         if !mediaInfo.artist.isEmpty {
                             MarqueeText(
                                 text: mediaInfo.artist,
-                                startDelay: 1
+                                startDelay: 1,
                             )
                             .font(.caption)
                             .foregroundColor(.secondary)
-                            .id("compact-artist-\(mediaInfo.artist)")
                         }
                     }
 
