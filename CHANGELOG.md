@@ -38,6 +38,31 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://buymeacoffee.com/keplercafe</div>
 
+<a id="1.26"></a>
+# [Release 1.26](https://github.com/ejbills/DockDoor/releases/tag/1.26) - 2025-11-20
+
+## ✨ New Features
+- CMD + Right Click quits apps (thanks [@danieletieghi](https://github.com/danieletieghi))
+  - Hold Option to force quit
+- Enhanced CMD + Tab switching
+  - CMD + A can now be pressed repeatedly for window cycling
+- Arrow keys now jump over rows and columns (up/down works in window switcher)
+
+## 🔧 Improvements & Stability
+- Better window state tracking (should track window order better)
+- Improved window discovery accuracy
+- Only intended window will be raised to front (rather than activating all windows)
+
+## 🐛 Bug Fixes
+- Dock click to hide window behavior fixed
+- Fixed CMD-TAB enhancement ceasing to function
+- No more cmd-tab overlay after acknowledgement
+- Restores stage manager previews
+
+
+[Changes][1.26]
+
+
 <a id="1.25.5"></a>
 # [Release 1.25.5](https://github.com/ejbills/DockDoor/releases/tag/1.25.5) - 2025-11-01
 
@@ -1625,6 +1650,7 @@ v1.0
 [Changes][releases]
 
 
+[1.26]: https://github.com/ejbills/DockDoor/compare/1.25.5...1.26
 [1.25.5]: https://github.com/ejbills/DockDoor/compare/1.25.4...1.25.5
 [1.25.4]: https://github.com/ejbills/DockDoor/compare/1.25.3...1.25.4
 [1.25.3]: https://github.com/ejbills/DockDoor/compare/1.25.2...1.25.3
