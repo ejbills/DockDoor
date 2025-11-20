@@ -68,6 +68,49 @@ def validate_feature_request(sections):
 
     return missing
 
+def validate_title(title, issue_type):
+    """Validate that the title is not just the default prefix."""
+    title_stripped = title.strip()
+
+    # Check if title is just the prefix or has minimal/placeholder content
+    invalid_patterns = [
+        r'^\[BUG\]$',
+        r'^\[FR\]$',
+        r'^\[BUG\]\s*$',
+        r'^\[FR\]\s*$',
+        r'^\[BUG\]\s+xyz\s*$',
+        r'^\[FR\]\s+xyz\s*$',
+    ]
+
+    for pattern in invalid_patterns:
+        if re.match(pattern, title_stripped, re.IGNORECASE):
+            return False
+
+    # Check if there's actual content after the prefix
+    if issue_type == 'bug':
+        content_after_prefix = re.sub(r'^\[BUG\]\s*', '', title_stripped, flags=re.IGNORECASE)
+    elif issue_type == 'feature':
+        content_after_prefix = re.sub(r'^\[FR\]\s*', '', title_stripped, flags=re.IGNORECASE)
+    else:
+        return True
+
+    # Title should have at least 5 characters of actual content
+    return len(content_after_prefix.strip()) >= 5
+
+def check_duplicate_checkbox(body):
+    """Check if the duplicate review checkbox is checked."""
+    # Look for checked checkbox patterns
+    checked_patterns = [
+        r'-\s*\[x\]\s*I have reviewed existing issues',
+        r'-\s*\[X\]\s*I have reviewed existing issues',
+    ]
+
+    for pattern in checked_patterns:
+        if re.search(pattern, body, re.IGNORECASE):
+            return True
+
+    return False
+
 def determine_issue_type(title, labels):
     title_lower = title.lower()
 
@@ -117,6 +160,25 @@ def main():
     issue_body = issue_data['body']
     issue_labels = [label['name'] for label in issue_data.get('labels', [])]
 
+    # First, check if the duplicate review checkbox is checked
+    if not check_duplicate_checkbox(issue_body):
+        comment = """Thank you for your submission. However, we require all issue reporters to confirm they have reviewed existing issues to avoid duplicates.
+
+Please review the existing issues at https://github.com/ejbills/DockDoor/issues and confirm you are not creating a duplicate before resubmitting.
+
+If this is not a duplicate, please reopen or create a new issue and check the box confirming you have reviewed existing issues."""
+
+        subprocess.run(
+            ['gh', 'issue', 'comment', str(issue_number), '--body', comment],
+            check=True
+        )
+        subprocess.run(
+            ['gh', 'issue', 'close', str(issue_number)],
+            check=True
+        )
+        print('Issue closed - duplicate review checkbox not checked')
+        sys.exit(0)
+
     sections = parse_issue_body(issue_body)
     issue_type = determine_issue_type(issue_title, issue_labels)
 
@@ -124,6 +186,13 @@ def main():
         print('Could not determine issue type (bug or feature request)')
         sys.exit(0)
 
+    # Validate title
+    if not validate_title(issue_title, issue_type):
+        manage_labels(issue_number, False)
+        print('Issue is incomplete - title is invalid (appears to be default or placeholder)')
+        sys.exit(0)
+
+    # Validate required fields
     if issue_type == 'bug':
         missing_fields = validate_bug_report(sections)
     else:
