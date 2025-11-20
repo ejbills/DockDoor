@@ -25,4 +25,5 @@ assignees: ''
 ## Screenshots (optional)
 
 
+<!-- Please check the box below by replacing [ ] with [x] -->
 - [ ] I have reviewed existing issues to ensure this is not a duplicate
