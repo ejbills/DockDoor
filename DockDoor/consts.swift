@@ -24,6 +24,7 @@ extension Defaults.Keys {
     static let preventSwitcherHide = Key<Bool>("preventSwitcherHide", default: false)
     static let shouldHideOnDockItemClick = Key<Bool>("shouldHideOnDockItemClick", default: false)
     static let dockClickAction = Key<DockClickAction>("dockClickAction", default: .hide)
+    static let enableCmdRightClickQuit = Key<Bool>("enableCmdRightClickQuit", default: true)
 
     static let screenCaptureCacheLifespan = Key<CGFloat>("screenCaptureCacheLifespan", default: 60)
     static let windowPreviewImageScale = Key<CGFloat>("windowPreviewImageScale", default: 1)

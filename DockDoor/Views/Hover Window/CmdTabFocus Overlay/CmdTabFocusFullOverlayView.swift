@@ -21,7 +21,7 @@ struct CmdTabFocusFullOverlayView: View {
                         "⌘",
                         KeyboardLabel.localizedKey(for: UInt16(kVK_ANSI_A)),
                     ],
-                    description: "Focus previews",
+                    description: "Cycle through previews (Shift to reverse)",
                     titleColor: titleColor,
                     textColor: textColor
                 )

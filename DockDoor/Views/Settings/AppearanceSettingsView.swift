@@ -64,8 +64,6 @@ extension AppearanceSettingsView {
                     axElement: dummyAXElement,
                     appAxElement: dummyAXElement,
                     closeButton: dummyAXElement,
-                    isMinimized: false,
-                    isHidden: false,
                     lastAccessedTime: Date()
                 )
             )

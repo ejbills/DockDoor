@@ -39,19 +39,20 @@ final class DockObserver {
 
     // Cmd+Tab switcher monitoring (accessed from extension file)
     var cmdTabObserver: AXObserver?
-    var cmdTabRetryTimer: Timer?
+    var cmdTabPollingTimer: Timer?
 
     private var eventTap: CFMachPort?
 
-    // App click tracking for dock click detection
+    // Dock click behavior state
     var currentClickedAppPID: pid_t?
-    var clickCount: Int = 0
+    var lastHoveredPID: pid_t?
+    var lastHoveredAppWasFrontmost: Bool = false
+    var lastHoveredAppNeedsRestore: Bool = false
 
     init(previewCoordinator: SharedPreviewWindowCoordinator) {
         self.previewCoordinator = previewCoordinator
         DockObserver.activeInstance = self
         setupSelectedDockItemObserver()
-        setupCmdTabSwitcherObserver()
         startHealthCheckTimer()
         enableDockClickDetection()
     }
@@ -61,7 +62,6 @@ final class DockObserver {
             DockObserver.activeInstance = nil
         }
         healthCheckTimer?.invalidate()
-        cmdTabRetryTimer?.invalidate()
         teardownObserver()
         teardownCmdTabObserver()
 
@@ -78,6 +78,12 @@ final class DockObserver {
         }
     }
 
+    private func reset() {
+        teardownObserver()
+        teardownCmdTabObserver()
+        setupSelectedDockItemObserver()
+    }
+
     private func performHealthCheck() {
         guard let currentDockPID else {
             setupSelectedDockItemObserver()
@@ -87,10 +93,7 @@ final class DockObserver {
         let currentDockApp = NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.dock").first
 
         if currentDockApp?.processIdentifier != currentDockPID {
-            teardownObserver()
-            teardownCmdTabObserver()
-            setupSelectedDockItemObserver()
-            setupCmdTabSwitcherObserver()
+            reset()
         }
     }
 
@@ -197,6 +200,10 @@ final class DockObserver {
                     let windowsForInstance = try await WindowUtil.getActiveWindows(of: appInstance)
                     combinedWindows.append(contentsOf: windowsForInstance)
                 }
+
+                lastHoveredPID = currentApp.processIdentifier
+                lastHoveredAppWasFrontmost = NSWorkspace.shared.frontmostApplication?.processIdentifier == currentApp.processIdentifier
+                lastHoveredAppNeedsRestore = currentApp.isHidden || combinedWindows.contains(where: \.isMinimized)
 
                 if combinedWindows.isEmpty {
                     let isSpecialApp = currentApp.bundleIdentifier == spotifyAppIdentifier ||
@@ -380,112 +387,85 @@ final class DockObserver {
         let appUnderMouse = getDockItemAppStatusUnderMouse()
 
         if case let .success(app) = appUnderMouse.status {
-            if type == .rightMouseDown && event.flags.contains(.maskCommand) {
+            if type == .rightMouseDown, event.flags.contains(.maskCommand), Defaults[.enableCmdRightClickQuit] {
                 handleCmdRightClickQuit(app: app, event: event)
                 return nil
             }
 
             if type == .leftMouseDown {
-                handleDockClick(app: app)
+                let shouldIntercept = handleDockClick(app: app)
+                if shouldIntercept {
+                    return nil
+                }
             }
         }
 
         return Unmanaged.passUnretained(event)
     }
 
-    private func handleDockClick(app: NSRunningApplication) {
+    private func handleDockClick(app: NSRunningApplication) -> Bool {
         let pid = app.processIdentifier
         let appName = app.localizedName ?? "Unknown"
 
-        if let currentPID = currentClickedAppPID, currentPID != pid {
-            clickCount = 0
-        }
-
         currentClickedAppPID = pid
-        clickCount += 1
 
         let isFrontmost = NSWorkspace.shared.frontmostApplication?.processIdentifier == pid
+        let hasValidHoverState = lastHoveredPID == pid
+        let wasFrontmostOnHover = hasValidHoverState ? lastHoveredAppWasFrontmost : isFrontmost
 
-        // If dock click actions are disabled and app is frontmost, show DockDoor preview on 2nd+ click
-        if !Defaults[.shouldHideOnDockItemClick], isFrontmost, clickCount >= 2, !previewCoordinator.isVisible {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
-                guard let self else { return }
-                showPreviewForFocusedApp(app: app)
-            }
-            return
+        guard Defaults[.shouldHideOnDockItemClick] else { return false }
+
+        // Defer to native behavior for simple activation
+        if hasValidHoverState, !lastHoveredAppWasFrontmost, !lastHoveredAppNeedsRestore {
+            lastHoveredPID = nil
+            return false
         }
 
-        // Only proceed with existing dock click actions if they are enabled
-        guard Defaults[.shouldHideOnDockItemClick] else { return }
+        let wasRestorationNeeded = hasValidHoverState && lastHoveredAppNeedsRestore
+        lastHoveredPID = nil
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) { [weak self] in
             guard let self else { return }
 
             previewCoordinator.hideWindow()
 
-            if clickCount == 1 {
-                if !isFrontmost {
-                    app.activate()
-                } else {
-                    clickCount = 2
-                    hideAppWindows(app: app, appName: appName)
+            Task { @MainActor [weak self] in
+                guard let self else { return }
+
+                let windows = try await WindowUtil.getActiveWindows(of: app)
+                let needsRestore = app.isHidden || windows.contains(where: \.isMinimized) || wasRestorationNeeded
+
+                if needsRestore {
+                    restoreAppWindows(windows: windows, app: app, appName: appName)
+                } else if wasFrontmostOnHover, !windows.isEmpty {
+                    hideAppWindows(windows: windows, app: app, appName: appName)
                 }
-            } else if clickCount % 2 == 0 {
-                hideAppWindows(app: app, appName: appName)
-            } else {
-                restoreAppWindows(app: app, appName: appName)
             }
         }
 
-        if clickCount >= 100 {
-            clickCount = 0
-        }
+        return false
     }
 
-    private func hideAppWindows(app: NSRunningApplication, appName: String) {
+    private func hideAppWindows(windows: [WindowInfo], app: NSRunningApplication, appName: String) {
         if Defaults[.dockClickAction] == .hide {
             DispatchQueue.main.async {
                 app.hide()
             }
         } else {
-            Task { @MainActor in
-                do {
-                    let windows = try await WindowUtil.getActiveWindows(of: app)
-                    for window in windows {
-                        if !window.isMinimized {
-                            _ = WindowUtil.toggleMinimize(windowInfo: window)
-                        }
-                    }
-                } catch {
-                    app.hide()
-                }
+            for window in windows where !window.isMinimized {
+                _ = WindowUtil.toggleMinimize(windowInfo: window)
             }
         }
     }
 
-    private func restoreAppWindows(app: NSRunningApplication, appName: String) {
+    private func restoreAppWindows(windows: [WindowInfo], app: NSRunningApplication, appName: String) {
         if Defaults[.dockClickAction] == .hide {
-            DispatchQueue.main.async {
-                app.activate()
-            }
+            app.activate()
         } else {
-            Task { @MainActor in
-                do {
-                    let windows = try await WindowUtil.getActiveWindows(of: app)
-                    let minimizedWindows = windows.filter(\.isMinimized)
-
-                    if !minimizedWindows.isEmpty {
-                        for window in minimizedWindows {
-                            _ = WindowUtil.toggleMinimize(windowInfo: window)
-                        }
-                        app.activate()
-                    } else {
-                        app.activate()
-                    }
-                } catch {
-                    app.activate()
-                }
+            for window in windows where window.isMinimized {
+                _ = WindowUtil.toggleMinimize(windowInfo: window)
             }
+            app.activate()
         }
     }
 

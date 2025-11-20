@@ -1,5 +1,7 @@
 import Cocoa
 
+// Borrows from: https://github.com/lwouis/alt-tab-macos/blob/master/src/api-wrappers/private-apis/SkyLight.framework.swift
+
 struct CGSWindowCaptureOptions: OptionSet {
     let rawValue: UInt32
     static let ignoreGlobalClipShape = CGSWindowCaptureOptions(rawValue: 1 << 11)
@@ -83,3 +85,70 @@ func CGSCopyWindowProperty(
 // Private: create AXUIElement from remote token (used for brute-force window enumeration)
 @_silgen_name("_AXUIElementCreateWithRemoteToken")
 func _AXUIElementCreateWithRemoteToken(_ token: CFData) -> Unmanaged<AXUIElement>?
+
+// MARK: - SkyLight Private APIs for Window Focusing
+
+// Process Serial Number (legacy Carbon API type)
+struct ProcessSerialNumber {
+    var highLongOfPSN: UInt32 = 0
+    var lowLongOfPSN: UInt32 = 0
+}
+
+// Get ProcessSerialNumber for a given PID (from ApplicationServices)
+@_silgen_name("GetProcessForPID")
+func GetProcessForPID(_ pid: pid_t, _ psn: UnsafeMutablePointer<ProcessSerialNumber>) -> OSStatus
+
+enum SLPSMode: UInt32 {
+    case allWindows = 0x100
+    case userGenerated = 0x200
+    case noWindows = 0x400
+}
+
+// MARK: SkyLight Function Loading
+
+typealias SLPSSetFrontProcessWithOptionsType = @convention(c) (
+    UnsafeMutableRawPointer,
+    CGWindowID,
+    UInt32
+) -> CGError
+
+typealias SLPSPostEventRecordToType = @convention(c) (
+    UnsafeMutableRawPointer,
+    UnsafeMutablePointer<UInt8>
+) -> CGError
+
+private var skyLightHandle: UnsafeMutableRawPointer?
+private var setFrontProcessPtr: SLPSSetFrontProcessWithOptionsType?
+private var postEventRecordPtr: SLPSPostEventRecordToType?
+
+private func loadSkyLightFunctions() {
+    guard skyLightHandle == nil else { return }
+
+    let skyLightPath = "/System/Library/PrivateFrameworks/SkyLight.framework/SkyLight"
+    guard let handle = dlopen(skyLightPath, RTLD_LAZY) else {
+        print("Failed to load SkyLight framework")
+        return
+    }
+
+    skyLightHandle = handle
+
+    if let symbol = dlsym(handle, "_SLPSSetFrontProcessWithOptions") {
+        setFrontProcessPtr = unsafeBitCast(symbol, to: SLPSSetFrontProcessWithOptionsType.self)
+    }
+
+    if let symbol = dlsym(handle, "SLPSPostEventRecordTo") {
+        postEventRecordPtr = unsafeBitCast(symbol, to: SLPSPostEventRecordToType.self)
+    }
+}
+
+func _SLPSSetFrontProcessWithOptions(_ psn: UnsafeMutablePointer<ProcessSerialNumber>, _ wid: CGWindowID, _ mode: SLPSMode.RawValue) -> CGError {
+    loadSkyLightFunctions()
+    guard let fn = setFrontProcessPtr else { return CGError(rawValue: -1)! }
+    return fn(psn, wid, mode)
+}
+
+func SLPSPostEventRecordTo(_ psn: UnsafeMutablePointer<ProcessSerialNumber>, _ bytes: UnsafeMutablePointer<UInt8>) -> CGError {
+    loadSkyLightFunctions()
+    guard let fn = postEventRecordPtr else { return CGError(rawValue: -1)! }
+    return fn(psn, bytes)
+}

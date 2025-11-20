@@ -54,7 +54,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
             appClosureObserver = WindowManipulationObservers(previewCoordinator: currentPreviewCoordinator)
 
-            if Defaults[.enableWindowSwitcher] {
+            if Defaults[.enableWindowSwitcher] || Defaults[.enableCmdTabEnhancements] {
                 keybindHelper = KeybindHelper(previewCoordinator: currentPreviewCoordinator)
             }
             if updater.automaticallyChecksForUpdates {

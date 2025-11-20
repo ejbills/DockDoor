@@ -272,6 +272,8 @@ class KeybindHelper {
             // Track Command up/down explicitly for Cmd+Tab fallback behavior
             let cmdNowDown = event.flags.contains(.maskCommand)
             if isCommandKeyCurrentlyDown, !cmdNowDown {
+                DockObserver.activeInstance?.stopCmdTabPolling()
+
                 if Defaults[.enableCmdTabEnhancements], lastCmdTabObservedActive,
                    previewCoordinator.isVisible,
                    !previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive
@@ -293,6 +295,23 @@ class KeybindHelper {
             }
 
         case .keyDown:
+            let keyCode = event.getIntegerValueField(.keyboardEventKeycode)
+            let flags = event.flags
+
+            // Detect Cmd+Tab press to start on-demand polling for the switcher
+            if Defaults[.enableCmdTabEnhancements],
+               keyCode == Int64(kVK_Tab),
+               flags.contains(.maskCommand)
+            {
+                let keyBoardShortcutSaved: UserKeyBind = Defaults[.UserKeybind]
+                let isCustomKeybind = (keyCode == keyBoardShortcutSaved.keyCode) &&
+                    (keyBoardShortcutSaved.modifierFlags & Int(CGEventFlags.maskCommand.rawValue)) != 0
+
+                if !isCustomKeybind {
+                    DockObserver.activeInstance?.startCmdTabPolling()
+                }
+            }
+
             // If system Cmd+Tab switcher is active, optionally handle arrows when enhancements are enabled
             if DockObserver.isCmdTabSwitcherActive() {
                 lastCmdTabObservedActive = true
@@ -303,6 +322,11 @@ class KeybindHelper {
                     let hasSelection = previewCoordinator.windowSwitcherCoordinator.currIndex >= 0
                     let flags = event.flags
                     switch keyCode {
+                    case Int64(kVK_Escape):
+                        Task { @MainActor in
+                            self.previewCoordinator.hideWindow()
+                        }
+                        return nil
                     case Int64(kVK_LeftArrow):
                         if hasSelection {
                             Task { @MainActor in
@@ -340,10 +364,25 @@ class KeybindHelper {
                         // Allow activation via Cmd+A (when not yet focused) and
                         // Command-based actions when a preview is focused
                         if flags.contains(.maskCommand) {
-                            if !hasSelection, keyCode == Int64(kVK_ANSI_A) {
+                            if keyCode == Int64(kVK_ANSI_A) {
                                 Task { @MainActor in
-                                    self.previewCoordinator.windowSwitcherCoordinator.setIndex(to: 0)
-                                    Defaults[.hasSeenCmdTabFocusHint] = true
+                                    let currentIndex = self.previewCoordinator.windowSwitcherCoordinator.currIndex
+                                    let windowCount = self.previewCoordinator.windowSwitcherCoordinator.windows.count
+                                    let isShift = flags.contains(.maskShift)
+
+                                    if !hasSelection {
+                                        // First activation: select first preview
+                                        self.previewCoordinator.windowSwitcherCoordinator.setIndex(to: 0)
+                                        Defaults[.hasSeenCmdTabFocusHint] = true
+                                    } else if isShift {
+                                        // Cmd+Shift+A: cycle backward
+                                        let newIndex = currentIndex > 0 ? currentIndex - 1 : windowCount - 1
+                                        self.previewCoordinator.windowSwitcherCoordinator.setIndex(to: newIndex)
+                                    } else {
+                                        // Cmd+A: cycle forward
+                                        let newIndex = (currentIndex + 1) % windowCount
+                                        self.previewCoordinator.windowSwitcherCoordinator.setIndex(to: newIndex)
+                                    }
                                 }
                                 return nil
                             }
@@ -634,6 +673,7 @@ class KeybindHelper {
 
     @MainActor
     private func handleKeybindActivation() {
+        guard Defaults[.enableWindowSwitcher] else { return }
         hasProcessedModifierRelease = false
         Task { @MainActor in
             await windowSwitchingCoordinator.handleWindowSwitching(
