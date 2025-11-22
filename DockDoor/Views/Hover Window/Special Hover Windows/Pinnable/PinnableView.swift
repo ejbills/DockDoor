@@ -28,6 +28,7 @@ struct PinnableViewModifier: ViewModifier {
 
     func body(content: Content) -> some View {
         content
+            .contentShape(Rectangle())
             .contextMenu {
                 if enablePinning {
                     contextMenuContent
