@@ -67,27 +67,32 @@ extension WindowPreviewHoverContainer {
         )
 
         if Defaults[.allowDynamicImageSizing] {
-            // Use row/column-aware dynamic sizing for unified UX experience
             let orientationIsHorizontal = dockPosition == .bottom || dockPosition == .cmdTab || isWindowSwitcherActive
 
-            // Force a single row while in Cmd+Tab context, regardless of user row settings
-            let effectiveMaxRows = (dockPosition == .cmdTab) ? 1 : (isWindowSwitcherActive ? switcherMaxRows : previewMaxRows)
+            let (effectiveMaxColumns, effectiveMaxRows) = calculateEffectiveMaxColumnsAndRows(
+                bestGuessMonitor: bestGuessMonitor,
+                overallMaxDimensions: overallMaxDimensions,
+                dockPosition: dockPosition,
+                isWindowSwitcherActive: isWindowSwitcherActive,
+                previewMaxColumns: previewMaxColumns,
+                previewMaxRows: previewMaxRows,
+                switcherMaxRows: switcherMaxRows,
+                totalItems: windows.count
+            )
 
             let windowChunks = createWindowChunks(
                 totalWindows: windows.count,
                 isHorizontal: orientationIsHorizontal,
-                maxColumns: previewMaxColumns,
+                maxColumns: effectiveMaxColumns,
                 maxRows: effectiveMaxRows
             )
 
-            // Process each chunk (row/column) to find unified dimensions
             for (_, chunk) in windowChunks.enumerated() {
                 var unifiedHeight: CGFloat = 0
                 var unifiedWidth: CGFloat = 0
 
                 if orientationIsHorizontal {
-                    // For horizontal flow: find the tallest window in this specific row
-                    let thickness = overallMaxDimensions.y // This is the available height
+                    let thickness = overallMaxDimensions.y
                     for windowIndex in chunk {
                         guard windowIndex < windows.count,
                               let cgImage = windows[windowIndex].image else { continue }
@@ -95,16 +100,14 @@ extension WindowPreviewHoverContainer {
                         let originalSize = CGSize(width: cgImage.width, height: cgImage.height)
                         let aspectRatio = originalSize.width / originalSize.height
 
-                        // Calculate what width this window would need at the thickness height
                         let rawWidthAtThickness = thickness * aspectRatio
-                        let widthAtThickness = min(rawWidthAtThickness, thickness * 1.5) // Max aspect ratio 1.5
+                        let widthAtThickness = min(rawWidthAtThickness, thickness * 1.5)
 
                         unifiedWidth = max(unifiedWidth, widthAtThickness)
                     }
-                    unifiedHeight = thickness // All windows in this row use the full thickness height
+                    unifiedHeight = thickness
                 } else {
-                    // For vertical flow: find the widest window in this specific column
-                    let thickness = overallMaxDimensions.x // This is the available width
+                    let thickness = overallMaxDimensions.x
                     for windowIndex in chunk {
                         guard windowIndex < windows.count,
                               let cgImage = windows[windowIndex].image else { continue }
@@ -112,26 +115,22 @@ extension WindowPreviewHoverContainer {
                         let originalSize = CGSize(width: cgImage.width, height: cgImage.height)
                         let aspectRatio = originalSize.width / originalSize.height
 
-                        // Calculate what width this window would need at the thickness width
                         let rawWidthAtThickness = thickness * aspectRatio
-                        let widthAtThickness = min(rawWidthAtThickness, thickness * 1.5) // Max aspect ratio 1.5
+                        let widthAtThickness = min(rawWidthAtThickness, thickness * 1.5)
 
                         unifiedWidth = max(unifiedWidth, widthAtThickness)
                     }
-                    unifiedWidth = thickness // All windows in this column use the full thickness width
+                    unifiedWidth = thickness
                 }
 
-                // Apply unified dimension constraint but let each window scale naturally
                 for windowIndex in chunk {
                     guard windowIndex < windows.count else { continue }
 
                     if windows[windowIndex].image != nil {
                         let windowSize = if orientationIsHorizontal {
-                            // For horizontal flow: unified height, let width scale naturally
-                            CGSize(width: 0, height: max(unifiedHeight, 50)) // width = 0 means no constraint
+                            CGSize(width: 0, height: max(unifiedHeight, 50))
                         } else {
-                            // For vertical flow: unified width, let height scale naturally
-                            CGSize(width: max(unifiedWidth, 50), height: 0) // height = 0 means no constraint
+                            CGSize(width: max(unifiedWidth, 50), height: 0)
                         }
 
                         dimensionsMap[windowIndex] = WindowDimensions(
@@ -139,7 +138,6 @@ extension WindowPreviewHoverContainer {
                             maxDimensions: cardMaxFrameDimensions
                         )
                     } else {
-                        // Fallback for windows without images
                         let fallbackSize = CGSize(width: min(300, overallMaxDimensions.x),
                                                   height: min(300, overallMaxDimensions.y))
                         dimensionsMap[windowIndex] = WindowDimensions(
@@ -150,7 +148,6 @@ extension WindowPreviewHoverContainer {
                 }
             }
         } else {
-            // Use fixed sizing from user settings
             let width = Defaults[.previewWidth]
             let height = Defaults[.previewHeight]
             let fixedBoxSize = CGSize(width: width, height: height)
@@ -207,6 +204,125 @@ extension WindowPreviewHoverContainer {
 
     // MARK: - Helper Functions
 
+    /// Calculates the effective maximum columns and rows based on screen size and user settings
+    /// - Parameters:
+    ///   - bestGuessMonitor: The screen to calculate for
+    ///   - overallMaxDimensions: The maximum preview dimensions (width and height)
+    ///   - dockPosition: Current dock position
+    ///   - isWindowSwitcherActive: Whether window switcher is active
+    ///   - previewMaxColumns: User setting for max columns
+    ///   - previewMaxRows: User setting for max rows
+    ///   - switcherMaxRows: Max rows for window switcher
+    ///   - totalItems: Total number of items to display
+    /// - Returns: Tuple of (maxColumns, maxRows)
+    static func calculateEffectiveMaxColumnsAndRows(
+        bestGuessMonitor: NSScreen,
+        overallMaxDimensions: CGPoint,
+        dockPosition: DockPosition,
+        isWindowSwitcherActive: Bool,
+        previewMaxColumns: Int,
+        previewMaxRows: Int,
+        switcherMaxRows: Int,
+        totalItems: Int? = nil
+    ) -> (maxColumns: Int, maxRows: Int) {
+        let screenWidth = bestGuessMonitor.frame.width * 0.75
+        let screenHeight = bestGuessMonitor.frame.height * 0.75
+        let itemSpacing: CGFloat = 24
+        let globalPadding: CGFloat = 40
+
+        let previewWidth = overallMaxDimensions.x
+        let previewHeight = overallMaxDimensions.y
+
+        let calculatedMaxColumns = max(1, Int((screenWidth - globalPadding + itemSpacing) / (previewWidth + itemSpacing)))
+        let calculatedMaxRows = max(1, Int((screenHeight - globalPadding + itemSpacing) / (previewHeight + itemSpacing)))
+
+        var effectiveMaxColumns: Int
+        var effectiveMaxRows: Int
+
+        if isWindowSwitcherActive {
+            effectiveMaxColumns = calculatedMaxColumns
+            effectiveMaxRows = switcherMaxRows
+        } else if dockPosition == .bottom || dockPosition == .cmdTab {
+            effectiveMaxColumns = calculatedMaxColumns
+            effectiveMaxRows = (dockPosition == .cmdTab) ? 1 : previewMaxRows
+        } else {
+            effectiveMaxColumns = previewMaxColumns
+            effectiveMaxRows = calculatedMaxRows
+        }
+
+        return (effectiveMaxColumns, effectiveMaxRows)
+    }
+
+    /// Organizes items into rows/columns based on flow direction
+    /// - Parameters:
+    ///   - items: Array of items to chunk
+    ///   - isHorizontal: If true, fills rows left-to-right; if false, fills columns top-to-bottom
+    ///   - maxColumns: Maximum items per row or maximum columns
+    ///   - maxRows: Maximum rows or maximum items per column
+    ///   - reverse: If true, reverses layout based on direction of window preview
+    /// - Returns: Array of chunks (rows or columns)
+    static func chunkArray<T>(
+        items: [T],
+        isHorizontal: Bool,
+        maxColumns: Int,
+        maxRows: Int,
+        reverse: Bool = false
+    ) -> [[T]] {
+        let totalItems = items.count
+
+        guard totalItems > 0, maxColumns > 0, maxRows > 0 else {
+            return []
+        }
+
+        var chunks: [[T]]
+
+        if isHorizontal {
+            let actualRowsNeeded = min(maxRows, Int(ceil(Double(totalItems) / Double(maxColumns))))
+            let itemsPerRow = Int(ceil(Double(totalItems) / Double(actualRowsNeeded)))
+
+            chunks = []
+            var startIndex = 0
+
+            for _ in 0 ..< actualRowsNeeded {
+                guard startIndex < totalItems else { break }
+
+                let endIndex = min(startIndex + itemsPerRow, totalItems)
+                let rowItems = Array(items[startIndex ..< endIndex])
+
+                if !rowItems.isEmpty {
+                    chunks.append(rowItems)
+                }
+
+                startIndex = endIndex
+            }
+        } else {
+            let actualColumnsNeeded = min(maxColumns, Int(ceil(Double(totalItems) / Double(maxRows))))
+            let itemsPerColumn = Int(ceil(Double(totalItems) / Double(actualColumnsNeeded)))
+
+            chunks = []
+            var startIndex = 0
+
+            for _ in 0 ..< actualColumnsNeeded {
+                guard startIndex < totalItems else { break }
+
+                let endIndex = min(startIndex + itemsPerColumn, totalItems)
+                let columnItems = Array(items[startIndex ..< endIndex])
+
+                if !columnItems.isEmpty {
+                    chunks.append(columnItems)
+                }
+
+                startIndex = endIndex
+            }
+        }
+
+        if reverse {
+            chunks = chunks.reversed()
+        }
+
+        return chunks
+    }
+
     /// Creates chunks of window indices organized by rows/columns based on flow direction
     private static func createWindowChunks(
         totalWindows: Int,
@@ -214,56 +330,132 @@ extension WindowPreviewHoverContainer {
         maxColumns: Int,
         maxRows: Int
     ) -> [[Int]] {
-        guard totalWindows > 0, maxColumns > 0, maxRows > 0 else { return [] }
-
         let windowIndices = Array(0 ..< totalWindows)
+        return chunkArray(
+            items: windowIndices,
+            isHorizontal: isHorizontal,
+            maxColumns: maxColumns,
+            maxRows: maxRows
+        )
+    }
+
+    /// Navigates window switcher grid
+    /// - Returns: New index after navigation
+    static func navigateWindowSwitcher(
+        from currentIndex: Int,
+        direction: ArrowDirection,
+        totalItems: Int,
+        dockPosition: DockPosition,
+        isWindowSwitcherActive: Bool
+    ) -> Int {
+        guard let coordinator = SharedPreviewWindowCoordinator.activeInstance?.windowSwitcherCoordinator else {
+            let delta = (direction == .right || direction == .down) ? 1 : -1
+            return (currentIndex + delta + totalItems) % totalItems
+        }
+
+        let bestGuessMonitor = NSScreen.main ?? NSScreen.screens.first!
+        let isHorizontalFlow = dockPosition.isHorizontalFlow || isWindowSwitcherActive
+
+        let (maxColumns, maxRows) = calculateEffectiveMaxColumnsAndRows(
+            bestGuessMonitor: bestGuessMonitor,
+            overallMaxDimensions: coordinator.overallMaxPreviewDimension,
+            dockPosition: dockPosition,
+            isWindowSwitcherActive: isWindowSwitcherActive,
+            previewMaxColumns: Defaults[.previewMaxColumns],
+            previewMaxRows: Defaults[.previewMaxRows],
+            switcherMaxRows: Defaults[.switcherMaxRows],
+            totalItems: totalItems
+        )
+
+        let shouldReverse = (dockPosition == .bottom || dockPosition == .right) && !isWindowSwitcherActive
+
+        return navigateInGrid(
+            from: currentIndex,
+            direction: direction,
+            totalItems: totalItems,
+            isHorizontal: isHorizontalFlow,
+            maxColumns: maxColumns,
+            maxRows: maxRows,
+            reverse: shouldReverse
+        )
+    }
+
+    /// Navigates in a 2D grid
+    /// - Returns: New flat index after navigation
+    static func navigateInGrid(
+        from currentIndex: Int,
+        direction: ArrowDirection,
+        totalItems: Int,
+        isHorizontal: Bool,
+        maxColumns: Int,
+        maxRows: Int,
+        reverse: Bool = false
+    ) -> Int {
+        guard totalItems > 0, currentIndex >= 0, currentIndex < totalItems else {
+            return currentIndex
+        }
+
+        let items = Array(0 ..< totalItems)
+        let chunks = chunkArray(items: items, isHorizontal: isHorizontal, maxColumns: maxColumns, maxRows: maxRows, reverse: reverse)
+
+        var currentChunkIndex = 0
+        var currentPositionInChunk = 0
+
+        for (chunkIdx, chunk) in chunks.enumerated() {
+            if let posInChunk = chunk.firstIndex(of: currentIndex) {
+                currentChunkIndex = chunkIdx
+                currentPositionInChunk = posInChunk
+                break
+            }
+        }
+
+        var targetChunkIndex = currentChunkIndex
+        var targetPositionInChunk = currentPositionInChunk
 
         if isHorizontal {
-            // Horizontal flow: create rows
-            if maxRows == 1 {
-                return [windowIndices]
-            }
-
-            let itemsPerRow = Int(ceil(Double(totalWindows) / Double(maxRows)))
-            var chunks: [[Int]] = []
-            var startIndex = 0
-
-            for _ in 0 ..< maxRows {
-                let endIndex = min(startIndex + itemsPerRow, totalWindows)
-                if startIndex < totalWindows {
-                    let rowItems = Array(windowIndices[startIndex ..< endIndex])
-                    if !rowItems.isEmpty {
-                        chunks.append(rowItems)
-                    }
-                    startIndex = endIndex
+            switch direction {
+            case .left:
+                targetPositionInChunk -= 1
+                if targetPositionInChunk < 0 {
+                    targetChunkIndex = (currentChunkIndex - 1 + chunks.count) % chunks.count
+                    targetPositionInChunk = chunks[targetChunkIndex].count - 1
                 }
-                if startIndex >= totalWindows { break }
+            case .right:
+                targetPositionInChunk += 1
+                if targetPositionInChunk >= chunks[currentChunkIndex].count {
+                    targetChunkIndex = (currentChunkIndex + 1) % chunks.count
+                    targetPositionInChunk = 0
+                }
+            case .up:
+                targetChunkIndex = (currentChunkIndex - 1 + chunks.count) % chunks.count
+                targetPositionInChunk = min(currentPositionInChunk, chunks[targetChunkIndex].count - 1)
+            case .down:
+                targetChunkIndex = (currentChunkIndex + 1) % chunks.count
+                targetPositionInChunk = min(currentPositionInChunk, chunks[targetChunkIndex].count - 1)
             }
-
-            return chunks
         } else {
-            // Vertical flow: create columns
-            if maxColumns == 1 {
-                return [windowIndices]
-            }
-
-            let itemsPerColumn = Int(ceil(Double(totalWindows) / Double(maxColumns)))
-            var chunks: [[Int]] = []
-            var startIndex = 0
-
-            for _ in 0 ..< maxColumns {
-                let endIndex = min(startIndex + itemsPerColumn, totalWindows)
-                if startIndex < totalWindows {
-                    let columnItems = Array(windowIndices[startIndex ..< endIndex])
-                    if !columnItems.isEmpty {
-                        chunks.append(columnItems)
-                    }
-                    startIndex = endIndex
+            switch direction {
+            case .up:
+                targetPositionInChunk -= 1
+                if targetPositionInChunk < 0 {
+                    targetChunkIndex = (currentChunkIndex - 1 + chunks.count) % chunks.count
+                    targetPositionInChunk = chunks[targetChunkIndex].count - 1
                 }
-                if startIndex >= totalWindows { break }
+            case .down:
+                targetPositionInChunk += 1
+                if targetPositionInChunk >= chunks[currentChunkIndex].count {
+                    targetChunkIndex = (currentChunkIndex + 1) % chunks.count
+                    targetPositionInChunk = 0
+                }
+            case .left:
+                targetChunkIndex = (currentChunkIndex - 1 + chunks.count) % chunks.count
+                targetPositionInChunk = min(currentPositionInChunk, chunks[targetChunkIndex].count - 1)
+            case .right:
+                targetChunkIndex = (currentChunkIndex + 1) % chunks.count
+                targetPositionInChunk = min(currentPositionInChunk, chunks[targetChunkIndex].count - 1)
             }
-
-            return chunks
         }
+
+        return chunks[targetChunkIndex][targetPositionInChunk]
     }
 }

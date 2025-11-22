@@ -716,7 +716,6 @@ struct WindowPreviewHoverContainer: View {
     }
 
     private func filteredWindowIndices() -> [Int] {
-        // Only filter when switcher is active; view-only filtering
         let query = previewStateCoordinator.searchQuery.lowercased()
         guard previewStateCoordinator.windowSwitcherActive, !query.isEmpty else {
             return Array(previewStateCoordinator.windows.indices)
@@ -732,12 +731,10 @@ struct WindowPreviewHoverContainer: View {
     private func createFlowItems() -> [FlowItem] {
         var allItems: [FlowItem] = []
 
-        // Add embedded content first if present
         if embeddedContentType != .none {
             allItems.append(.embedded)
         }
 
-        // Add windows from filtered indices (dimensions stay mapped by original indices)
         for index in filteredWindowIndices() {
             allItems.append(.window(index))
         }
@@ -747,31 +744,6 @@ struct WindowPreviewHoverContainer: View {
 
     private func createChunkedItems() -> [[FlowItem]] {
         let isHorizontal = dockPosition.isHorizontalFlow || previewStateCoordinator.windowSwitcherActive
-
-        var (maxColumns, maxRows): (Int, Int)
-        if previewStateCoordinator.windowSwitcherActive {
-            maxColumns = 999
-            maxRows = switcherMaxRows
-        } else {
-            if dockPosition == .bottom || dockPosition == .cmdTab {
-                maxColumns = 999
-                // Force a single row while Cmd+Tab is active to avoid multi-row flow
-                maxRows = (dockPosition == .cmdTab) ? 1 : previewMaxRows
-            } else {
-                maxColumns = previewMaxColumns
-                maxRows = 999
-            }
-        }
-
-        guard maxColumns > 0, maxRows > 0 else {
-            let allItems = createFlowItems()
-            return allItems.isEmpty ? [[]] : [allItems]
-        }
-
-        if mockPreviewActive {
-            maxRows = 1
-            maxColumns = 1
-        }
 
         var itemsToProcess: [FlowItem] = []
 
@@ -783,62 +755,37 @@ struct WindowPreviewHoverContainer: View {
             itemsToProcess.append(.window(index))
         }
 
-        let totalItems = itemsToProcess.count
+        var (maxColumns, maxRows) = WindowPreviewHoverContainer.calculateEffectiveMaxColumnsAndRows(
+            bestGuessMonitor: bestGuessMonitor,
+            overallMaxDimensions: previewStateCoordinator.overallMaxPreviewDimension,
+            dockPosition: dockPosition,
+            isWindowSwitcherActive: previewStateCoordinator.windowSwitcherActive,
+            previewMaxColumns: previewMaxColumns,
+            previewMaxRows: previewMaxRows,
+            switcherMaxRows: switcherMaxRows,
+            totalItems: itemsToProcess.count
+        )
 
-        if isHorizontal {
-            if maxRows == 1 {
-                return itemsToProcess.isEmpty ? [[]] : [itemsToProcess]
-            }
-
-            let itemsPerRow = Int(ceil(Double(totalItems) / Double(maxRows)))
-            var chunks: [[FlowItem]] = []
-            var startIndex = 0
-
-            for _ in 0 ..< maxRows {
-                let endIndex = min(startIndex + itemsPerRow, totalItems)
-
-                if startIndex < totalItems {
-                    let rowItems = Array(itemsToProcess[startIndex ..< endIndex])
-                    if !rowItems.isEmpty {
-                        chunks.append(rowItems)
-                    }
-                    startIndex = endIndex
-                }
-
-                if startIndex >= totalItems {
-                    break
-                }
-            }
-
-            return chunks.isEmpty ? [[]] : chunks
-
-        } else {
-            if maxColumns == 1 {
-                return itemsToProcess.isEmpty ? [itemsToProcess] : [itemsToProcess]
-            }
-
-            let itemsPerColumn = Int(ceil(Double(totalItems) / Double(maxColumns)))
-            var chunks: [[FlowItem]] = []
-            var startIndex = 0
-
-            for _ in 0 ..< maxColumns {
-                let endIndex = min(startIndex + itemsPerColumn, totalItems)
-
-                if startIndex < totalItems {
-                    let columnItems = Array(itemsToProcess[startIndex ..< endIndex])
-                    if !columnItems.isEmpty {
-                        chunks.append(columnItems)
-                    }
-                    startIndex = endIndex
-                }
-
-                if startIndex >= totalItems {
-                    break
-                }
-            }
-
-            return chunks.isEmpty ? [[]] : chunks
+        guard maxColumns > 0, maxRows > 0 else {
+            return itemsToProcess.isEmpty ? [[]] : [itemsToProcess]
         }
+
+        if mockPreviewActive {
+            maxRows = 1
+            maxColumns = 1
+        }
+
+        let shouldReverse = (dockPosition == .bottom || dockPosition == .right) && !previewStateCoordinator.windowSwitcherActive
+
+        let chunks = WindowPreviewHoverContainer.chunkArray(
+            items: itemsToProcess,
+            isHorizontal: isHorizontal,
+            maxColumns: maxColumns,
+            maxRows: maxRows,
+            reverse: shouldReverse
+        )
+
+        return chunks.isEmpty ? [[]] : chunks
     }
 
     @ViewBuilder
@@ -919,7 +866,6 @@ struct WindowPreviewHoverContainer: View {
                         }
                 )
             } else {
-                // Index is out of bounds - don't render anything
                 EmptyView()
             }
         }

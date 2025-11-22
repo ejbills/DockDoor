@@ -1,3 +1,4 @@
+import AppKit
 import Defaults
 import Foundation
 import ScreenCaptureKit
@@ -38,9 +39,16 @@ final class WindowSwitcherStateManager: ObservableObject {
 
         if currentIndex < 0 {
             currentIndex = 0
-        } else {
-            currentIndex = (currentIndex + 1) % windowIDs.count
+            return
         }
+
+        currentIndex = WindowPreviewHoverContainer.navigateWindowSwitcher(
+            from: currentIndex,
+            direction: .right,
+            totalItems: windowIDs.count,
+            dockPosition: .bottom,
+            isWindowSwitcherActive: true
+        )
     }
 
     func cycleBackward() {
@@ -48,9 +56,16 @@ final class WindowSwitcherStateManager: ObservableObject {
 
         if currentIndex < 0 {
             currentIndex = windowIDs.count - 1
-        } else {
-            currentIndex = (currentIndex - 1 + windowIDs.count) % windowIDs.count
+            return
         }
+
+        currentIndex = WindowPreviewHoverContainer.navigateWindowSwitcher(
+            from: currentIndex,
+            direction: .left,
+            totalItems: windowIDs.count,
+            dockPosition: .bottom,
+            isWindowSwitcherActive: true
+        )
     }
 
     func setIndex(_ index: Int) {

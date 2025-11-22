@@ -51,7 +51,6 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         isOpaque = false
         backgroundColor = .clear
         hasShadow = false
-        isReleasedWhenClosed = false
         isMovableByWindowBackground = false
         collectionBehavior = [.canJoinAllSpaces, .transient, .fullScreenAuxiliary]
         hidesOnDeactivate = false
@@ -169,7 +168,6 @@ final class SharedPreviewWindowCoordinator: NSPanel {
                 return
             }
         } else {
-            print("Warning: dockItemElement is nil when showing custom view. Defaulting position to center of screen.")
             position = centerWindowOnScreen(size: newHoverWindowSize, screen: mouseScreen)
         }
 
@@ -222,7 +220,6 @@ final class SharedPreviewWindowCoordinator: NSPanel {
                     return
                 }
             } else {
-                print("Warning: dockItemElement is nil when not centering on screen. Defaulting position to center of screen.")
                 position = centerWindowOnScreen(size: newHoverWindowSize, screen: mouseScreen)
             }
         }
@@ -300,7 +297,6 @@ final class SharedPreviewWindowCoordinator: NSPanel {
             guard let currentPosition = try dockItemElement.position(),
                   let currentSize = try dockItemElement.size()
             else {
-                print("Failed to get current position/size")
                 return .zero
             }
             let currentIconRect = CGRect(origin: currentPosition, size: currentSize)
@@ -347,10 +343,8 @@ final class SharedPreviewWindowCoordinator: NSPanel {
             return CGPoint(x: xPosition, y: yPosition)
 
         } catch {
-            print("Error fetching current dock item position/size: \(error)")
+            return .zero
         }
-
-        return CGPoint.zero
     }
 
     @MainActor
@@ -530,14 +524,29 @@ final class SharedPreviewWindowCoordinator: NSPanel {
             return
         }
 
-        var newIndex = coordinator.currIndex
         let windowsCount = coordinator.windows.count
+        var newIndex = coordinator.currIndex
 
         if !coordinator.windowSwitcherActive, coordinator.currIndex < 0 {
             newIndex = goBackwards ? (windowsCount - 1) : 0
             if windowsCount == 0 { newIndex = -1 }
         } else if windowsCount > 0 {
-            newIndex = (coordinator.currIndex + (goBackwards ? -1 : 1) + windowsCount) % windowsCount
+            let dockPosition = DockUtils.getDockPosition()
+            let isHorizontalFlow = dockPosition.isHorizontalFlow || coordinator.windowSwitcherActive
+
+            let direction: ArrowDirection = if isHorizontalFlow {
+                goBackwards ? .left : .right
+            } else {
+                goBackwards ? .up : .down
+            }
+
+            newIndex = WindowPreviewHoverContainer.navigateWindowSwitcher(
+                from: coordinator.currIndex,
+                direction: direction,
+                totalItems: windowsCount,
+                dockPosition: dockPosition,
+                isWindowSwitcherActive: coordinator.windowSwitcherActive
+            )
         } else {
             newIndex = -1
         }
@@ -568,81 +577,21 @@ final class SharedPreviewWindowCoordinator: NSPanel {
             return
         }
 
-        var newIndex = coordinator.currIndex
         let windowsCount = coordinator.windows.count
+        var newIndex = coordinator.currIndex
 
         if !coordinator.windowSwitcherActive, coordinator.currIndex < 0 {
-            switch direction {
-            case .left, .up: newIndex = windowsCount > 0 ? windowsCount - 1 : -1
-            case .right, .down: newIndex = windowsCount > 0 ? 0 : -1
-            }
+            newIndex = windowsCount > 0 ? 0 : -1
         } else {
             let dockPosition = DockUtils.getDockPosition()
-            let isHorizontalFlow = dockPosition.isHorizontalFlow || coordinator.windowSwitcherActive
 
-            let maxRows = coordinator.windowSwitcherActive ? Defaults[.switcherMaxRows] : Defaults[.previewMaxRows]
-            let maxColumns = Defaults[.previewMaxColumns]
-
-            var tempCurrentIndex = coordinator.currIndex
-
-            if windowsCount > 0 {
-                if isHorizontalFlow {
-                    switch direction {
-                    case .left, .right:
-                        let goBackwards = (direction == .left)
-                        tempCurrentIndex = (tempCurrentIndex + (goBackwards ? -1 : 1) + windowsCount) % windowsCount
-                    case .up, .down:
-                        if maxRows > 1 {
-                            let itemsPerRow = Int(ceil(Double(windowsCount) / Double(maxRows)))
-                            let currentRow = tempCurrentIndex / itemsPerRow
-                            let currentCol = tempCurrentIndex % itemsPerRow
-
-                            let totalRows = Int(ceil(Double(windowsCount) / Double(itemsPerRow)))
-                            let targetRow = direction == .up
-                                ? (currentRow - 1 + totalRows) % totalRows
-                                : (currentRow + 1) % totalRows
-
-                            let targetIndex = targetRow * itemsPerRow + currentCol
-
-                            let rowStartIndex = targetRow * itemsPerRow
-                            let rowEndIndex = min(rowStartIndex + itemsPerRow, windowsCount) - 1
-                            tempCurrentIndex = min(targetIndex, rowEndIndex)
-                        } else {
-                            let goBackwards = (direction == .up)
-                            tempCurrentIndex = (tempCurrentIndex + (goBackwards ? -1 : 1) + windowsCount) % windowsCount
-                        }
-                    }
-                } else {
-                    switch direction {
-                    case .up, .down:
-                        let goBackwards = (direction == .up)
-                        tempCurrentIndex = (tempCurrentIndex + (goBackwards ? -1 : 1) + windowsCount) % windowsCount
-                    case .left, .right:
-                        if maxColumns > 1 {
-                            let itemsPerColumn = Int(ceil(Double(windowsCount) / Double(maxColumns)))
-                            let currentCol = tempCurrentIndex / itemsPerColumn
-                            let currentRow = tempCurrentIndex % itemsPerColumn
-
-                            let totalCols = Int(ceil(Double(windowsCount) / Double(itemsPerColumn)))
-                            let targetCol = direction == .left
-                                ? (currentCol - 1 + totalCols) % totalCols
-                                : (currentCol + 1) % totalCols
-
-                            let targetIndex = targetCol * itemsPerColumn + currentRow
-
-                            let colStartIndex = targetCol * itemsPerColumn
-                            let colEndIndex = min(colStartIndex + itemsPerColumn, windowsCount) - 1
-                            tempCurrentIndex = min(targetIndex, colEndIndex)
-                        } else {
-                            let goBackwards = (direction == .left)
-                            tempCurrentIndex = (tempCurrentIndex + (goBackwards ? -1 : 1) + windowsCount) % windowsCount
-                        }
-                    }
-                }
-            } else {
-                tempCurrentIndex = -1
-            }
-            newIndex = tempCurrentIndex
+            newIndex = WindowPreviewHoverContainer.navigateWindowSwitcher(
+                from: coordinator.currIndex,
+                direction: direction,
+                totalItems: windowsCount,
+                dockPosition: dockPosition,
+                isWindowSwitcherActive: coordinator.windowSwitcherActive
+            )
         }
         coordinator.setIndex(to: newIndex)
     }
