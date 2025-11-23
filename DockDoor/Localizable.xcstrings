@@ -16474,8 +16474,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "CMD + Right Click on dock icon to quit app"
+            "state" : "translated",
+            "value" : "⌘ (Cmd) + clic destro sull'icona del Dock per chiudere le app"
           }
         },
         "ja" : {
@@ -16552,8 +16552,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "CMD + Right Click on dock icon to quit app"
+            "state" : "translated",
+            "value" : "CMD + натискання правою кнопкою миші на іконці в Dock для виходу із застосунку"
           }
         },
         "vi" : {
@@ -16664,8 +16664,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Cmd+A cycles through previews (Shift+A cycles backward), Left/Right navigate, Down clears selection."
+            "state" : "translated",
+            "value" : "Navigazione: ⌘A per scorrere le anteprime in avanti, ⇧A per scorrerle all'indietro, ← → per spostare la selezione, ↓ per deselezionare."
           }
         },
         "ja" : {
@@ -16742,8 +16742,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Cmd+A cycles through previews (Shift+A cycles backward), Left/Right navigate, Down clears selection."
+            "state" : "translated",
+            "value" : "Cmd+A перемикає між попередніми переглядами (Shift+A перемикається назад), навігація стрілками ліворуч/праворуч, натискання стрілки вниз знімає виділення."
           }
         },
         "vi" : {
