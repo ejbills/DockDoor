@@ -21,6 +21,9 @@ private class WindowSwitchingCoordinator {
     private var uiRenderingTask: Task<Void, Never>?
     private var currentSessionId = UUID()
 
+    private static var lastUpdateAllWindowsTime: Date?
+    private static let updateAllWindowsThrottleInterval: TimeInterval = 60.0
+
     @MainActor
     func handleWindowSwitching(
         previewCoordinator: SharedPreviewWindowCoordinator,
@@ -74,6 +77,15 @@ private class WindowSwitchingCoordinator {
         }
 
         Task.detached(priority: .low) {
+            let now = Date()
+            let shouldUpdate: Bool = if let lastUpdate = WindowSwitchingCoordinator.lastUpdateAllWindowsTime {
+                now.timeIntervalSince(lastUpdate) >= WindowSwitchingCoordinator.updateAllWindowsThrottleInterval
+            } else {
+                true
+            }
+
+            guard shouldUpdate else { return }
+            WindowSwitchingCoordinator.lastUpdateAllWindowsTime = now
             await WindowUtil.updateAllWindowsInCurrentSpace()
         }
     }

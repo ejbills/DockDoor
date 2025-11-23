@@ -6,18 +6,18 @@ final class WindowSeeder {
         let opts = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String: true] as CFDictionary
         guard AXIsProcessTrustedWithOptions(opts) else { return }
 
-        DispatchQueue.global(qos: .userInitiated).async {
+        Task {
             let myPID = ProcessInfo.processInfo.processIdentifier
             let apps = NSWorkspace.shared.runningApplications
                 .filter { $0.activationPolicy == .regular && $0.processIdentifier != 0 && $0.processIdentifier != myPID }
 
             for app in apps {
-                self.seedApp(app: app)
+                await self.seedApp(app: app)
             }
         }
     }
 
-    private func seedApp(app: NSRunningApplication) {
-        _ = WindowUtil.discoverWindowsViaAX(app: app)
+    private func seedApp(app: NSRunningApplication) async {
+        _ = await WindowUtil.discoverWindowsViaAX(app: app)
     }
 }

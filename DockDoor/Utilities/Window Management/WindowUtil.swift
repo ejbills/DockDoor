@@ -464,7 +464,7 @@ enum WindowUtil {
         _ = try await group.waitForAll()
 
         // Discover non-SCK windows via AX (minimized, hidden, other spaces, or SCK-missed)
-        discoverNonSCKWindowsViaAX(app: app, sckWindowIDs: sckWindowIDs)
+        await discoverNonSCKWindowsViaAX(app: app, sckWindowIDs: sckWindowIDs)
 
         // Purify cache and return
         if let finalWindows = await WindowUtil.purifyAppCache(with: app.processIdentifier, removeAll: false) {
@@ -475,14 +475,14 @@ enum WindowUtil {
         return []
     }
 
-    private static func discoverNonSCKWindowsViaAX(app: NSRunningApplication, sckWindowIDs: Set<CGWindowID>) {
-        _ = discoverWindowsViaAX(app: app, excludeWindowIDs: sckWindowIDs)
+    private static func discoverNonSCKWindowsViaAX(app: NSRunningApplication, sckWindowIDs: Set<CGWindowID>) async {
+        _ = await discoverWindowsViaAX(app: app, excludeWindowIDs: sckWindowIDs)
     }
 
     static func discoverWindowsViaAX(
         app: NSRunningApplication,
         excludeWindowIDs: Set<CGWindowID> = []
-    ) -> Int {
+    ) async -> Int {
         let pid = app.processIdentifier
 
         guard let bundleId = app.bundleIdentifier, !filteredBundleIdentifiers.contains(bundleId) else {
@@ -501,69 +501,22 @@ enum WindowUtil {
         let axWindows = AXUIElement.allWindows(pid, appElement: appAX)
         guard !axWindows.isEmpty else { return 0 }
 
-        let cgCandidates = getCGWindowCandidates(for: pid)
-        var usedIDs = Set<CGWindowID>(desktopSpaceWindowCacheManager.readCache(pid: pid).map(\.id))
-        let activeSpaceIDs = currentActiveSpaceIDs()
+        let group = LimitedTaskGroup<Void>(maxConcurrentTasks: 4)
 
-        var processedCount = 0
         for axWin in axWindows {
-            if !isValidAXWindowCandidate(axWin) { continue }
-
-            var cgID: CGWindowID = 0
-            if _AXUIElementGetWindow(axWin, &cgID) == .success, cgID != 0 {
-            } else if let mapped = mapAXToCG(axWindow: axWin, candidates: cgCandidates, excluding: usedIDs) {
-                cgID = mapped
-            } else {
-                continue
+            await group.addTask {
+                try? await captureAndCacheAXWindowInfo(
+                    axWindow: axWin,
+                    appAxElement: appAX,
+                    app: app,
+                    excludeWindowIDs: excludeWindowIDs
+                )
             }
-
-            if excludeWindowIDs.contains(cgID) || usedIDs.contains(cgID) { continue }
-
-            if !isAtLeastNormalLevel(cgID) { continue }
-
-            let titleFilters = Defaults[.windowTitleFilters]
-            if !titleFilters.isEmpty {
-                let cgTitle = cgID.cgsTitle() ?? ""
-                if titleFilters.contains(where: { cgTitle.lowercased().contains($0.lowercased()) }) {
-                    continue
-                }
-            }
-
-            if !isValidCGWindowCandidate(cgID, in: cgCandidates) { continue }
-
-            guard let cgEntry = findCGEntry(for: cgID, in: cgCandidates) else { continue }
-
-            if !shouldAcceptWindow(axWindow: axWin, windowID: cgID, cgEntry: cgEntry, app: app, activeSpaceIDs: activeSpaceIDs, scBacked: false) {
-                continue
-            }
-
-            let windowTitle = cgID.cgsTitle()
-            var info = WindowInfo(
-                windowProvider: AXFallbackProvider(cgID: cgID),
-                app: app,
-                image: nil,
-                axElement: axWin,
-                appAxElement: appAX,
-                closeButton: try? axWin.closeButton(),
-                lastAccessedTime: Date(),
-                spaceID: cgID.cgsSpaces().first.map { Int($0) }
-            )
-            info.windowName = windowTitle
-
-            Task.detached(priority: .userInitiated) {
-                if let image = try? await captureWindowImage(windowID: cgID, pid: app.processIdentifier, windowTitle: windowTitle) {
-                    var mutableCopy = info
-                    mutableCopy.image = image
-                    mutableCopy.imageCapturedTime = Date()
-                    updateDesktopSpaceWindowCache(with: mutableCopy)
-                }
-            }
-
-            usedIDs.insert(cgID)
-            processedCount += 1
         }
 
-        return processedCount
+        _ = try? await group.waitForAll()
+
+        return axWindows.count
     }
 
     static func updateNewWindowsForApp(_ app: NSRunningApplication) async {
@@ -589,7 +542,7 @@ enum WindowUtil {
         }
 
         // AX fallback: discover windows that SCK didn't report (e.g., some Adobe apps)
-        discoverNewWindowsViaAXFallback(app: app)
+        await discoverNewWindowsViaAXFallback(app: app)
         // Ensure AX-fallback windows get fresh images too
         await refreshAXFallbackWindowImages(for: app.processIdentifier)
     }
@@ -597,39 +550,29 @@ enum WindowUtil {
     // MARK: - AX Fallback Discovery
 
     /// Discovers and caches windows via AX + CGS when SCK misses them (e.g., certain Adobe apps)
-    private static func discoverNewWindowsViaAXFallback(app: NSRunningApplication) {
-        _ = discoverWindowsViaAX(app: app)
+    private static func discoverNewWindowsViaAXFallback(app: NSRunningApplication) async {
+        _ = await discoverWindowsViaAX(app: app)
     }
 
     static func updateAllWindowsInCurrentSpace() async {
         do {
             let content = try await SCShareableContent.excludingDesktopWindows(true, onScreenWindowsOnly: false)
             var processedPIDs = Set<pid_t>()
+            let group = LimitedTaskGroup<Void>(maxConcurrentTasks: 4)
 
-            await withTaskGroup(of: Void.self) { group in
-                var processedCount = 0
-                let maxConcurrentTasks = 4
+            for window in content.windows {
+                guard let scApp = window.owningApplication,
+                      !filteredBundleIdentifiers.contains(scApp.bundleIdentifier)
+                else { continue }
 
-                for window in content.windows {
-                    guard let scApp = window.owningApplication,
-                          !filteredBundleIdentifiers.contains(scApp.bundleIdentifier)
-                    else { continue }
-
-                    if processedCount >= maxConcurrentTasks {
-                        await group.next()
-                        processedCount -= 1
-                    }
-
-                    if let nsApp = NSRunningApplication(processIdentifier: scApp.processID) {
-                        processedPIDs.insert(nsApp.processIdentifier)
-                        group.addTask {
-                            try? await captureAndCacheWindowInfo(window: window, app: nsApp)
-                        }
-                        processedCount += 1
+                if let nsApp = NSRunningApplication(processIdentifier: scApp.processID) {
+                    processedPIDs.insert(nsApp.processIdentifier)
+                    await group.addTask {
+                        try? await captureAndCacheWindowInfo(window: window, app: nsApp)
                     }
                 }
-                await group.waitForAll()
             }
+            _ = try await group.waitForAll()
 
             // After processing windows, purify the cache for each app that had windows in the current space
             for pid in processedPIDs {
@@ -648,6 +591,8 @@ enum WindowUtil {
         let windows = desktopSpaceWindowCacheManager.readCache(pid: pid)
         guard !windows.isEmpty else { return }
 
+        let group = LimitedTaskGroup<Void>(maxConcurrentTasks: 4)
+
         for window in windows where window.scWindow == nil {
             // Skip invalid AX elements
             if !isValidElement(window.axElement) {
@@ -655,13 +600,17 @@ enum WindowUtil {
                 continue
             }
 
-            if let image = try? await captureWindowImage(windowID: window.id, pid: pid, windowTitle: window.windowName) {
-                var updated = window
-                updated.image = image
-                updated.spaceID = window.id.cgsSpaces().first.map { Int($0) }
-                updateDesktopSpaceWindowCache(with: updated)
+            await group.addTask {
+                if let image = try? await captureWindowImage(windowID: window.id, pid: pid, windowTitle: window.windowName) {
+                    var updated = window
+                    updated.image = image
+                    updated.spaceID = window.id.cgsSpaces().first.map { Int($0) }
+                    updateDesktopSpaceWindowCache(with: updated)
+                }
             }
         }
+
+        _ = try? await group.waitForAll()
     }
 
     static func captureAndCacheWindowInfo(window: SCWindow, app: NSRunningApplication) async throws {
@@ -736,7 +685,7 @@ enum WindowUtil {
         let shouldWindowBeCaptured = (closeButton != nil) || (minimizeButton != nil)
 
         if shouldWindowBeCaptured {
-            let windowInfo = WindowInfo(
+            var windowInfo = WindowInfo(
                 windowProvider: window,
                 app: app,
                 image: nil,
@@ -747,15 +696,80 @@ enum WindowUtil {
                 spaceID: window.windowID.cgsSpaces().first.map { Int($0) }
             )
 
-            await Task.detached(priority: .userInitiated) {
-                if let image = try? await captureWindowImage(window: window) {
-                    var mutableCopy = windowInfo
-                    mutableCopy.image = image
-                    mutableCopy.imageCapturedTime = Date()
-                    updateDesktopSpaceWindowCache(with: mutableCopy)
-                }
-            }.value
+            if let image = try? await captureWindowImage(window: window) {
+                windowInfo.image = image
+                windowInfo.imageCapturedTime = Date()
+            }
+            updateDesktopSpaceWindowCache(with: windowInfo)
         }
+    }
+
+    static func captureAndCacheAXWindowInfo(
+        axWindow: AXUIElement,
+        appAxElement: AXUIElement,
+        app: NSRunningApplication,
+        excludeWindowIDs: Set<CGWindowID>
+    ) async throws {
+        let pid = app.processIdentifier
+
+        guard isValidAXWindowCandidate(axWindow) else { return }
+
+        let cgCandidates = getCGWindowCandidates(for: pid)
+        let usedIDs = Set<CGWindowID>(desktopSpaceWindowCacheManager.readCache(pid: pid).map(\.id))
+
+        var cgID: CGWindowID = 0
+        if _AXUIElementGetWindow(axWindow, &cgID) == .success, cgID != 0 {
+        } else if let mapped = mapAXToCG(axWindow: axWindow, candidates: cgCandidates, excluding: usedIDs) {
+            cgID = mapped
+        } else {
+            return
+        }
+
+        guard !excludeWindowIDs.contains(cgID), !usedIDs.contains(cgID) else { return }
+
+        guard isAtLeastNormalLevel(cgID) else { return }
+
+        let titleFilters = Defaults[.windowTitleFilters]
+        if !titleFilters.isEmpty {
+            let cgTitle = cgID.cgsTitle() ?? ""
+            if titleFilters.contains(where: { cgTitle.lowercased().contains($0.lowercased()) }) {
+                return
+            }
+        }
+
+        guard isValidCGWindowCandidate(cgID, in: cgCandidates) else { return }
+
+        guard let cgEntry = findCGEntry(for: cgID, in: cgCandidates) else { return }
+
+        let activeSpaceIDs = currentActiveSpaceIDs()
+        guard shouldAcceptWindow(
+            axWindow: axWindow,
+            windowID: cgID,
+            cgEntry: cgEntry,
+            app: app,
+            activeSpaceIDs: activeSpaceIDs,
+            scBacked: false
+        ) else { return }
+
+        let windowTitle = cgID.cgsTitle()
+        var info = WindowInfo(
+            windowProvider: AXFallbackProvider(cgID: cgID),
+            app: app,
+            image: nil,
+            axElement: axWindow,
+            appAxElement: appAxElement,
+            closeButton: try? axWindow.closeButton(),
+            lastAccessedTime: Date(),
+            spaceID: cgID.cgsSpaces().first.map { Int($0) }
+        )
+        info.windowName = windowTitle
+
+        if let image = try? await captureWindowImage(windowID: cgID, pid: pid, windowTitle: windowTitle) {
+            info.image = image
+            info.imageCapturedTime = Date()
+        }
+
+        updateDesktopSpaceWindowCache(with: info)
     }
 
     static func updateDesktopSpaceWindowCache(with windowInfo: WindowInfo) {
