@@ -1,3 +1,4 @@
+import Defaults
 import SwiftUI
 
 struct SupportSettingsView: View {
@@ -16,8 +17,14 @@ struct SupportSettingsView: View {
                 }
 
                 StyledGroupBox(label: "Updates") {
-                    UpdateSettingsView(updaterState: updaterState)
-                        .padding(.top, 5)
+                    VStack(alignment: .center, spacing: 16) {
+                        UpdateSettingsView(updaterState: updaterState)
+
+                        SquiggleDivider()
+
+                        DebugSettingsView()
+                    }
+                    .padding(.top, 5)
                 }
 
                 StyledGroupBox(label: "Help & Support") {
@@ -28,6 +35,41 @@ struct SupportSettingsView: View {
                 StyledGroupBox(label: "Acknowledgments") {
                     AcknowledgmentsView()
                         .padding(.top, 5)
+                }
+            }
+        }
+    }
+}
+
+struct DebugSettingsView: View {
+    @Default(.debugMode) var debugMode
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            EnabledActionRowView(
+                title: "Debug Logging",
+                description: "Captures performance metrics and system events for troubleshooting",
+                isGranted: debugMode,
+                iconName: "ant.fill",
+                action: { debugMode.toggle() },
+                disableShine: true,
+                buttonText: "Toggle",
+                statusText: "Enabled"
+            )
+
+            if debugMode {
+                HStack(spacing: 12) {
+                    Button("Export Logs") {
+                        if let url = DebugLogger.exportLogs() {
+                            NSWorkspace.shared.activateFileViewerSelecting([url])
+                        }
+                    }
+                    .buttonStyle(AccentButtonStyle(small: true))
+
+                    Button("Clear Logs") {
+                        DebugLogger.clearLogs()
+                    }
+                    .buttonStyle(AccentButtonStyle(small: true))
                 }
             }
         }

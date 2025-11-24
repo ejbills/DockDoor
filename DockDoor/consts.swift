@@ -112,6 +112,9 @@ extension Defaults.Keys {
 
     // Onboarding / Hints
     static let hasSeenCmdTabFocusHint = Key<Bool>("hasSeenCmdTabFocusHint", default: false)
+
+    // Debug
+    static let debugMode = Key<Bool>("debugMode", default: false)
 }
 
 // MARK: Display Configurations
