@@ -27,6 +27,7 @@ extension Defaults.Keys {
     static let enableCmdRightClickQuit = Key<Bool>("enableCmdRightClickQuit", default: true)
 
     static let screenCaptureCacheLifespan = Key<CGFloat>("screenCaptureCacheLifespan", default: 60)
+    static let windowProcessingDebounceInterval = Key<CGFloat>("windowProcessingDebounceInterval", default: 0.3)
     static let windowPreviewImageScale = Key<CGFloat>("windowPreviewImageScale", default: 1)
     static let windowImageCaptureQuality = Key<WindowImageCaptureQuality>("windowImageCaptureQuality", default: .nominal)
 

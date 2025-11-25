@@ -95431,6 +95431,9 @@
         }
       }
     },
+    "Window Processing Debounce Interval" : {
+
+    },
     "Window Selection Background Color" : {
       "extractionState" : "stale",
       "localizations" : {

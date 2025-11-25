@@ -7,7 +7,7 @@ import Foundation
 private var windowCreationWorkItem: DispatchWorkItem?
 private let windowCreationDebounceInterval: TimeInterval = 1
 
-private let windowProcessingDebounceInterval: TimeInterval = 0.3
+private let windowProcessingDebounceInterval: TimeInterval = Defaults[.windowProcessingDebounceInterval]
 
 private weak var activeWindowManipulationObserversInstance: WindowManipulationObservers?
 

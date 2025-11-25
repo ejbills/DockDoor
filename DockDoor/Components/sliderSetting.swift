@@ -6,7 +6,8 @@ func sliderSetting<T: BinaryFloatingPoint>(
     range: ClosedRange<T>,
     step: T.Stride,
     unit: LocalizedStringKey,
-    formatter: NumberFormatter = NumberFormatter.defaultFormatter
+    formatter: NumberFormatter = NumberFormatter.defaultFormatter,
+    onEditingChanged: ((Bool) -> Void)? = nil
 ) -> some View where T.Stride: BinaryFloatingPoint {
     VStack(alignment: .leading, spacing: 5) {
         Text(title)
@@ -15,7 +16,10 @@ func sliderSetting<T: BinaryFloatingPoint>(
             Slider(
                 value: value,
                 in: range,
-                step: step
+                step: step,
+                onEditingChanged: { isEditing in
+                    onEditingChanged?(isEditing)
+                }
             )
             TextField("", value: value, formatter: formatter)
                 .textFieldStyle(RoundedBorderTextFieldStyle())

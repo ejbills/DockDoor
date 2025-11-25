@@ -112,6 +112,7 @@ struct MainSettingsView: View {
     @Default(.preventSwitcherHide) var preventSwitcherHide
     @Default(.ignoreAppsWithSingleWindow) var ignoreAppsWithSingleWindow
     @Default(.screenCaptureCacheLifespan) var screenCaptureCacheLifespan
+    @Default(.windowProcessingDebounceInterval) var windowProcessingDebounceInterval
     @Default(.windowPreviewImageScale) var windowPreviewImageScale
     @Default(.windowImageCaptureQuality) var windowImageCaptureQuality
     @Default(.bufferFromDock) var bufferFromDock
@@ -538,6 +539,11 @@ struct MainSettingsView: View {
                     sliderSetting(title: "Preview Window Open Delay", value: $hoverWindowOpenDelay, range: 0 ... 2, step: 0.1, unit: "seconds", formatter: NumberFormatter.oneDecimalFormatter)
                     sliderSetting(title: "Preview Window Fade Out Duration", value: $fadeOutDuration, range: 0 ... 2, step: 0.1, unit: "seconds", formatter: NumberFormatter.oneDecimalFormatter)
                     sliderSetting(title: "Preview Window Inactivity Timer", value: $inactivityTimeout, range: 0 ... 3, step: 0.1, unit: "seconds", formatter: NumberFormatter.oneDecimalFormatter)
+                    sliderSetting(title: "Window Processing Debounce Interval", value: $windowProcessingDebounceInterval, range: 0 ... 3, step: 0.1, unit: "seconds", formatter: NumberFormatter.oneDecimalFormatter, onEditingChanged: { isEditing in
+                        if !isEditing {
+                            askUserToRestartApplication()
+                        }
+                    })
                     Toggle(isOn: $preventDockHide) { Text("Prevent dock from hiding during previews") }
                     Toggle(isOn: $raisedWindowLevel) { Text("Show preview above app labels").onChange(of: raisedWindowLevel) { _ in askUserToRestartApplication() }}
                     VStack(alignment: .leading) {
