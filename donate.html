@@ -60,52 +60,6 @@
             margin-bottom: 3rem;
         }
 
-        .donate-button {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 1rem;
-            padding: 1.5rem 2.5rem;
-            border-radius: var(--radius);
-            font-size: 1.25rem;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.2s ease;
-            border: 2px solid transparent;
-        }
-
-        .donate-button-github {
-            background: var(--text-primary);
-            color: var(--light);
-        }
-
-        .donate-button-github:hover {
-            background: var(--dark);
-            color: var(--light);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-        }
-
-        .donate-button-coffee {
-            background: var(--light);
-            color: var(--text-primary);
-            border: 2px solid var(--medium-gray);
-        }
-
-        .donate-button-coffee:hover {
-            background: var(--light-gray);
-            color: var(--text-primary);
-            border-color: var(--text-primary);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-        }
-
-        .donate-icon {
-            font-size: 1.5rem;
-            display: flex;
-            align-items: center;
-        }
-
         .donate-note {
             font-size: 0.95rem;
             line-height: 1.6;
@@ -122,11 +76,6 @@
             .donate-subheadline {
                 font-size: 1.1rem;
                 margin-bottom: 3rem;
-            }
-
-            .donate-button {
-                padding: 1.25rem 2rem;
-                font-size: 1.1rem;
             }
 
             .donate-hero {
@@ -169,18 +118,15 @@
                 </p>
 
                 <div class="donate-options">
-                    <a href="https://github.com/sponsors/ejbills" class="donate-button donate-button-github" target="_blank" rel="noopener noreferrer">
-                        <span class="donate-icon">
-                            <svg width="24" height="24" viewBox="0 0 16 16" fill="currentColor">
-                                <path d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
-                            </svg>
-                        </span>
-                        <span>GitHub Sponsors</span>
+                    <a href="https://github.com/sponsors/ejbills" class="btn btn-primary btn-large" target="_blank" rel="noopener noreferrer" style="gap: 0.75rem;">
+                        <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor">
+                            <path d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
+                        </svg>
+                        GitHub Sponsors
                     </a>
 
-                    <a href="https://www.buymeacoffee.com/keplercafe" class="donate-button donate-button-coffee" target="_blank" rel="noopener noreferrer">
-                        <span class="donate-icon">☕</span>
-                        <span>Buy Me a Coffee</span>
+                    <a href="https://www.buymeacoffee.com/keplercafe" class="btn btn-secondary btn-large" target="_blank" rel="noopener noreferrer" style="gap: 0.75rem;">
+                        ☕ Buy Me a Coffee
                     </a>
                 </div>
 

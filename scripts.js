@@ -368,4 +368,99 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+
+    // Press carousel infinite scroll
+    const pressCarousel = document.querySelector('.press-carousel');
+    const pressTrack = document.querySelector('.press-track');
+
+    if (pressCarousel && pressTrack) {
+        let scrollTimeout;
+        let isUserScrolling = false;
+        let animationFrame;
+        let scrollPosition = 0;
+        const scrollSpeed = 0.4; // pixels per frame
+        let halfWidth = 0;
+
+        // Calculate the width of half the track (original content)
+        const calculateHalfWidth = () => {
+            const items = pressTrack.querySelectorAll('.press-item');
+            const itemCount = items.length / 2; // Divided by 2 because we have duplicates
+            let width = 0;
+
+            for (let i = 0; i < itemCount; i++) {
+                width += items[i].offsetWidth;
+            }
+
+            // Add gaps between items
+            const gap = parseFloat(getComputedStyle(pressTrack).gap) || 64; // 4rem = 64px fallback
+            width += gap * itemCount; // Total gaps including after last item
+
+            return width;
+        };
+
+        // Wait for images/content to load, then calculate
+        setTimeout(() => {
+            halfWidth = calculateHalfWidth();
+        }, 100);
+
+        const animate = () => {
+            if (!isUserScrolling && halfWidth > 0) {
+                scrollPosition += scrollSpeed;
+
+                // Reset when we've scrolled past the first set of items
+                if (scrollPosition >= halfWidth) {
+                    scrollPosition = scrollPosition - halfWidth;
+                }
+
+                pressCarousel.scrollLeft = scrollPosition;
+            }
+            animationFrame = requestAnimationFrame(animate);
+        };
+
+        // Start animation
+        animationFrame = requestAnimationFrame(animate);
+
+        // Handle user scrolling
+        let userScrollTimeout;
+        pressCarousel.addEventListener('scroll', () => {
+            // Only update if this is a user-initiated scroll
+            if (!isUserScrolling && Math.abs(pressCarousel.scrollLeft - scrollPosition) > 2) {
+                isUserScrolling = true;
+                scrollPosition = pressCarousel.scrollLeft;
+            }
+
+            clearTimeout(userScrollTimeout);
+            userScrollTimeout = setTimeout(() => {
+                if (isUserScrolling) {
+                    scrollPosition = pressCarousel.scrollLeft;
+                }
+            }, 50);
+        });
+
+        // Pause on hover
+        pressCarousel.addEventListener('mouseenter', () => {
+            isUserScrolling = true;
+        });
+
+        pressCarousel.addEventListener('mouseleave', () => {
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(() => {
+                isUserScrolling = false;
+                scrollPosition = pressCarousel.scrollLeft;
+            }, 500);
+        });
+
+        // Recalculate on window resize
+        window.addEventListener('resize', () => {
+            halfWidth = calculateHalfWidth();
+        });
+
+        // Clean up on page unload
+        window.addEventListener('beforeunload', () => {
+            if (animationFrame) {
+                cancelAnimationFrame(animationFrame);
+            }
+        });
+    }
+
 });

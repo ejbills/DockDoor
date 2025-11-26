@@ -2596,3 +2596,109 @@ footer {
         padding: 1.5rem;
     }
 }
+
+/* Press Reviews Section */
+.press-section {
+    padding: 3rem 0;
+    width: 100%;
+    overflow: hidden;
+}
+
+.press-carousel {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    position: relative;
+    margin-top: 3rem;
+    -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 10%, black 90%, transparent 100%);
+    mask-image: linear-gradient(90deg, transparent 0%, black 10%, black 90%, transparent 100%);
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    -webkit-overflow-scrolling: touch;
+    cursor: grab;
+}
+
+.press-carousel::-webkit-scrollbar {
+    display: none;
+}
+
+.press-carousel:active {
+    cursor: grabbing;
+}
+
+.press-track {
+    display: inline-flex;
+    gap: 4rem;
+    will-change: transform;
+    backface-visibility: hidden;
+    transform: translateZ(0);
+    padding-right: 4rem;
+}
+
+.press-item {
+    flex: 0 0 auto;
+    width: 520px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    backface-visibility: hidden;
+    transform: translateZ(0);
+}
+
+.press-quote {
+    font-size: 1.5rem;
+    line-height: 1.4;
+    color: var(--text-primary);
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    margin: 0;
+}
+
+.press-attribution {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    font-weight: 400;
+    margin: 0;
+}
+
+@media (max-width: 1068px) {
+    .press-item {
+        width: 440px;
+    }
+
+    .press-quote {
+        font-size: 1.375rem;
+    }
+
+    .press-attribution {
+        font-size: 0.9375rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .press-section {
+        padding: 2rem 0;
+    }
+
+    .press-carousel {
+        margin-top: 2rem;
+    }
+
+    .press-track {
+        gap: 3rem;
+        animation-duration: 35s;
+    }
+
+    .press-item {
+        width: 320px;
+    }
+
+    .press-quote {
+        font-size: 1.125rem;
+        line-height: 1.4;
+    }
+
+    .press-attribution {
+        font-size: 0.875rem;
+    }
+}
