@@ -31,6 +31,7 @@ struct WindowInfo: Identifiable, Hashable {
     var closeButton: AXUIElement?
     var spaceID: Int?
     var lastAccessedTime: Date
+    var creationTime: Date
     var imageCapturedTime: Date
 
     private var _scWindow: SCWindow?
@@ -43,7 +44,7 @@ struct WindowInfo: Identifiable, Hashable {
         app.isHidden
     }
 
-    init(windowProvider: WindowPropertiesProviding, app: NSRunningApplication, image: CGImage?, axElement: AXUIElement, appAxElement: AXUIElement, closeButton: AXUIElement?, lastAccessedTime: Date, imageCapturedTime: Date? = nil, spaceID: Int? = nil) {
+    init(windowProvider: WindowPropertiesProviding, app: NSRunningApplication, image: CGImage?, axElement: AXUIElement, appAxElement: AXUIElement, closeButton: AXUIElement?, lastAccessedTime: Date, creationTime: Date? = nil, imageCapturedTime: Date? = nil, spaceID: Int? = nil) {
         id = windowProvider.windowID
         self.windowProvider = windowProvider
         self.app = app
@@ -54,6 +55,7 @@ struct WindowInfo: Identifiable, Hashable {
         self.closeButton = closeButton
         self.spaceID = spaceID
         self.lastAccessedTime = lastAccessedTime
+        self.creationTime = creationTime ?? lastAccessedTime
         self.imageCapturedTime = imageCapturedTime ?? lastAccessedTime
         _scWindow = windowProvider as? SCWindow
     }
@@ -469,7 +471,14 @@ enum WindowUtil {
         // Purify cache and return
         if let finalWindows = await WindowUtil.purifyAppCache(with: app.processIdentifier, removeAll: false) {
             guard !Defaults[.ignoreAppsWithSingleWindow] || finalWindows.count > 1 else { return [] }
-            return finalWindows.sorted(by: { $0.lastAccessedTime > $1.lastAccessedTime })
+
+            // Sort windows based on user preference
+            switch Defaults[.windowPreviewSortOrder] {
+            case .recentlyUsed:
+                return finalWindows.sorted(by: { $0.lastAccessedTime > $1.lastAccessedTime })
+            case .creationOrder:
+                return finalWindows.sorted(by: { $0.creationTime < $1.creationTime })
+            }
         }
 
         return []

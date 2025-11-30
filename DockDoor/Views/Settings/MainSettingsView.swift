@@ -86,6 +86,7 @@ struct MainSettingsView: View {
     @Default(.enableWindowSwitcherSearch) var enableWindowSwitcherSearch
     @Default(.enableDockPreviews) var enableDockPreviews
     @Default(.showWindowsFromCurrentSpaceOnly) var showWindowsFromCurrentSpaceOnly
+    @Default(.windowPreviewSortOrder) var windowPreviewSortOrder
     @Default(.keepPreviewOnAppTerminate) var keepPreviewOnAppTerminate
     @Default(.enableCmdTabEnhancements) var enableCmdTabEnhancements
     @Default(.scrollToMouseHoverInSwitcher) var scrollToMouseHoverInSwitcher
@@ -396,6 +397,24 @@ struct MainSettingsView: View {
                             .font(.caption)
                             .foregroundColor(.secondary)
                             .padding(.leading, 40)
+
+                        HStack {
+                            Text("Window sort order")
+                            Spacer()
+                            Picker("", selection: $windowPreviewSortOrder) {
+                                ForEach(WindowPreviewSortOrder.allCases) { order in
+                                    Text(order.localizedName).tag(order)
+                                }
+                            }
+                            .pickerStyle(.menu)
+                            .frame(width: 180)
+                        }
+                        .padding(.leading, 20)
+                        Text("Choose how windows are sorted in the preview.")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                            .padding(.leading, 40)
+
                         Toggle(isOn: $keepPreviewOnAppTerminate) { Text("Keep preview when app terminates") }
                             .padding(.leading, 20)
                         Text("When an app terminates, remove only its windows from the preview instead of hiding the entire preview.")

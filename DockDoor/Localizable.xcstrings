@@ -76600,6 +76600,72 @@
         }
       }
     },
+    "Window sort order" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "窗口排序方式"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "視窗排序方式"
+          }
+        }
+      }
+    },
+    "Choose how windows are sorted in the preview." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "选择预览中窗口的排序方式。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "選擇預覽中視窗的排序方式。"
+          }
+        }
+      }
+    },
+    "Recently used" : {
+      "comment" : "Window preview sort order option",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "最近使用"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "最近使用"
+          }
+        }
+      }
+    },
+    "Creation order (fixed)" : {
+      "comment" : "Window preview sort order option",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "创建顺序（固定）"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "創建順序（固定）"
+          }
+        }
+      }
+    },
     "Shows last active window first, instead of current window." : {
       "localizations" : {
         "af" : {

@@ -53,6 +53,7 @@ extension Defaults.Keys {
     static let enableWindowSwitcher = Key<Bool>("enableWindowSwitcher", default: true)
     static let enableDockPreviews = Key<Bool>("enableDockPreviews", default: true)
     static let showWindowsFromCurrentSpaceOnly = Key<Bool>("showWindowsFromCurrentSpaceOnly", default: false)
+    static let windowPreviewSortOrder = Key<WindowPreviewSortOrder>("windowPreviewSortOrder", default: .recentlyUsed)
     static let enableCmdTabEnhancements = Key<Bool>("enableCmdTabEnhancements", default: false)
     static let scrollToMouseHoverInSwitcher = Key<Bool>("scrollToMouseHoverInSwitcher", default: false)
     static let keepPreviewOnAppTerminate = Key<Bool>("keepPreviewOnAppTerminate", default: false)
@@ -338,6 +339,22 @@ enum DockClickAction: String, CaseIterable, Defaults.Serializable {
             String(localized: "Minimize windows", comment: "Dock click action option")
         case .hide:
             String(localized: "Hide application", comment: "Dock click action option")
+        }
+    }
+}
+
+enum WindowPreviewSortOrder: String, CaseIterable, Defaults.Serializable, Identifiable {
+    case recentlyUsed
+    case creationOrder
+
+    var id: String { rawValue }
+
+    var localizedName: String {
+        switch self {
+        case .recentlyUsed:
+            String(localized: "Recently used", comment: "Window preview sort order option")
+        case .creationOrder:
+            String(localized: "Creation order (fixed)", comment: "Window preview sort order option")
         }
     }
 }
