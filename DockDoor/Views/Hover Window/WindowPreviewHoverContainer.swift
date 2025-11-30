@@ -559,8 +559,7 @@ struct WindowPreviewHoverContainer: View {
         previewStateCoordinator.removeAllWindows()
 
         DispatchQueue.concurrentPerform(iterations: windowsToClose.count) { index in
-            var window = windowsToClose[index]
-            window.close()
+            windowsToClose[index].close()
         }
     }
 
@@ -571,7 +570,21 @@ struct WindowPreviewHoverContainer: View {
         guard !originalWindows.isEmpty else { return }
 
         if let except {
-            except.bringToFront()
+            var updatedWindows = originalWindows
+            guard let exceptIndex = updatedWindows.firstIndex(where: { $0.id == except.id }) else {
+                except.bringToFront()
+                return
+            }
+
+            for idx in updatedWindows.indices where idx != exceptIndex {
+                if !updatedWindows[idx].isMinimized {
+                    _ = updatedWindows[idx].toggleMinimize()
+                }
+            }
+
+            let keptWindow = updatedWindows[exceptIndex]
+            previewStateCoordinator.setWindows([keptWindow], dockPosition: dockPosition, bestGuessMonitor: bestGuessMonitor, isMockPreviewActive: mockPreviewActive)
+            keptWindow.bringToFront()
             return
         }
 
@@ -808,9 +821,11 @@ struct WindowPreviewHoverContainer: View {
             embeddedContentView()
                 .id("\(appName)-embedded")
         case let .window(index):
-            if index < previewStateCoordinator.windows.count {
+            let windows = previewStateCoordinator.windows
+            if index < windows.count {
+                let windowInfo = windows[index]
                 WindowPreview(
-                    windowInfo: previewStateCoordinator.windows[index],
+                    windowInfo: windowInfo,
                     onTap: onWindowTap,
                     index: index,
                     dockPosition: dockPosition,
@@ -839,7 +854,7 @@ struct WindowPreviewHoverContainer: View {
                                 draggedWindowIndex = index
                                 isDragging = true
                                 DragPreviewCoordinator.shared.startDragging(
-                                    windowInfo: previewStateCoordinator.windows[index],
+                                    windowInfo: windowInfo,
                                     at: NSEvent.mouseLocation
                                 )
                             }
@@ -856,7 +871,7 @@ struct WindowPreviewHoverContainer: View {
                                     case .all:
                                         minimizeAllWindows()
                                     case .except:
-                                        minimizeAllWindows(previewStateCoordinator.windows[index])
+                                        minimizeAllWindows(windowInfo)
                                     default: break
                                     }
                                 } else {
