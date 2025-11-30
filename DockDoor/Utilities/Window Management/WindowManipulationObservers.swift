@@ -205,8 +205,14 @@ class WindowManipulationObservers {
         case kAXWindowResizedNotification, kAXWindowMovedNotification:
             handleWindowEvent(element: element, app: app, notification: notificationName, validate: false)
         case kAXWindowMiniaturizedNotification, kAXWindowDeminiaturizedNotification:
-            handleWindowEvent(element: element, app: app, notification: notificationName, validate: true)
-            forceCoordinatorRefresh(for: pid)
+            let windowID = try? element.cgWindowId()
+            let minimizedState = try? element.isMinimized()
+            handleWindowEvent(element: element, app: app, notification: notificationName, validate: true) { [weak self] windowSet in
+                guard let self else { return }
+                update(windowSet: &windowSet, matching: windowID, element: element) { window in
+                    window.isMinimized = minimizedState ?? false
+                }
+            }
         case kAXApplicationHiddenNotification:
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
                 guard let self else { return }
@@ -214,11 +220,23 @@ class WindowManipulationObservers {
                     WindowUtil.purgeAppCache(with: pid)
                     removeObserver(for: pid)
                 } else {
-                    forceCoordinatorRefresh(for: pid)
+                    handleWindowEvent(element: element, app: app, notification: notificationName, validate: true) { windowSet in
+                        windowSet = Set(windowSet.map { window in
+                            var updated = window
+                            updated.isHidden = true
+                            return updated
+                        })
+                    }
                 }
             }
         case kAXApplicationShownNotification:
-            forceCoordinatorRefresh(for: pid)
+            handleWindowEvent(element: element, app: app, notification: notificationName, validate: true) { windowSet in
+                windowSet = Set(windowSet.map { window in
+                    var updated = window
+                    updated.isHidden = false
+                    return updated
+                })
+            }
         case kAXWindowCreatedNotification:
             handleNewWindow(for: pid)
         default:
@@ -241,7 +259,12 @@ class WindowManipulationObservers {
         DispatchQueue.main.asyncAfter(deadline: .now() + windowProcessingDebounceInterval, execute: workItem)
     }
 
-    private func handleWindowEvent(element: AXUIElement, app: NSRunningApplication, notification: String, validate: Bool = false) {
+    private func handleWindowEvent(element: AXUIElement,
+                                   app: NSRunningApplication,
+                                   notification: String,
+                                   validate: Bool = false,
+                                   stateAdjustment: ((inout Set<WindowInfo>) -> Void)? = nil)
+    {
         cacheUpdateWorkItem?.cancel()
 
         let workItem = DispatchWorkItem {
@@ -250,6 +273,7 @@ class WindowManipulationObservers {
                     if validate {
                         windowSet = windowSet.filter { WindowUtil.isValidElement($0.axElement) }
                     }
+                    stateAdjustment?(&windowSet)
                 }
             }
         }
@@ -257,11 +281,26 @@ class WindowManipulationObservers {
         DispatchQueue.main.asyncAfter(deadline: .now() + windowProcessingDebounceInterval, execute: workItem)
     }
 
-    private func forceCoordinatorRefresh(for pid: pid_t) {
-        DispatchQueue.main.async {
-            if let coordinator = SharedPreviewWindowCoordinator.activeInstance?.windowSwitcherCoordinator {
-                coordinator.windows = coordinator.windows.map { $0 }
-            }
+    private func update(windowSet: inout Set<WindowInfo>,
+                        matching windowID: CGWindowID?,
+                        element: AXUIElement,
+                        updateBlock: (inout WindowInfo) -> Void)
+    {
+        if let windowID,
+           let existing = windowSet.first(where: { $0.id == windowID })
+        {
+            var updated = existing
+            updateBlock(&updated)
+            windowSet.remove(existing)
+            windowSet.insert(updated)
+            return
+        }
+
+        if let existing = windowSet.first(where: { $0.axElement == element }) {
+            var updated = existing
+            updateBlock(&updated)
+            windowSet.remove(existing)
+            windowSet.insert(updated)
         }
     }
 }

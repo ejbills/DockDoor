@@ -495,7 +495,7 @@ class KeybindHelper {
                         self.previewCoordinator.selectAndBringToFrontCurrentWindow()
                         self.windowSwitchingCoordinator.cancelSwitching()
                     } else if let selectedWindow = self.windowSwitchingCoordinator.selectCurrentWindow() {
-                        WindowUtil.bringWindowToFront(windowInfo: selectedWindow)
+                        selectedWindow.bringToFront()
                         self.previewCoordinator.hideWindow()
                     }
                 }
@@ -675,7 +675,7 @@ class KeybindHelper {
             }
 
             if let selectedWindow = self.windowSwitchingCoordinator.selectCurrentWindow() {
-                WindowUtil.bringWindowToFront(windowInfo: selectedWindow)
+                selectedWindow.bringToFront()
                 self.previewCoordinator.hideWindow()
             } else {
                 self.previewCoordinator.selectAndBringToFrontCurrentWindow()

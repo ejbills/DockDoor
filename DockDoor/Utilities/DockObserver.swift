@@ -453,7 +453,8 @@ final class DockObserver {
             }
         } else {
             for window in windows where !window.isMinimized {
-                _ = WindowUtil.toggleMinimize(windowInfo: window)
+                var mutableWindow = window
+                _ = mutableWindow.toggleMinimize()
             }
         }
     }
@@ -463,7 +464,8 @@ final class DockObserver {
             app.activate()
         } else {
             for window in windows where window.isMinimized {
-                _ = WindowUtil.toggleMinimize(windowInfo: window)
+                var mutableWindow = window
+                _ = mutableWindow.toggleMinimize()
             }
             app.activate()
         }

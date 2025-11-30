@@ -192,7 +192,7 @@ struct WindowPreviewHoverContainer: View {
 
         if let positionValue = AXValue.from(point: finalPosition) {
             try? window.axElement.setAttribute(kAXPositionAttribute, positionValue)
-            WindowUtil.bringWindowToFront(windowInfo: window)
+            window.bringToFront()
             onWindowTap?()
         }
     }
@@ -559,8 +559,8 @@ struct WindowPreviewHoverContainer: View {
         previewStateCoordinator.removeAllWindows()
 
         DispatchQueue.concurrentPerform(iterations: windowsToClose.count) { index in
-            let window = windowsToClose[index]
-            WindowUtil.closeWindow(windowInfo: window)
+            var window = windowsToClose[index]
+            window.close()
         }
     }
 
@@ -571,7 +571,7 @@ struct WindowPreviewHoverContainer: View {
         guard !originalWindows.isEmpty else { return }
 
         if let except {
-            WindowUtil.bringWindowToFront(windowInfo: except)
+            except.bringToFront()
             return
         }
 
@@ -584,10 +584,9 @@ struct WindowPreviewHoverContainer: View {
                         previewStateCoordinator.setWindows([], dockPosition: dockPosition, bestGuessMonitor: bestGuessMonitor, isMockPreviewActive: mockPreviewActive)
                     }
                 case .minimize:
-                    for window in originalWindows {
-                        if !window.isMinimized {
-                            _ = WindowUtil.toggleMinimize(windowInfo: window)
-                        }
+                    for window in originalWindows where !window.isMinimized {
+                        var mutableWindow = window
+                        _ = mutableWindow.toggleMinimize()
                     }
                     previewStateCoordinator.setWindows([], dockPosition: dockPosition, bestGuessMonitor: bestGuessMonitor, isMockPreviewActive: mockPreviewActive)
                 }
@@ -599,7 +598,11 @@ struct WindowPreviewHoverContainer: View {
                     var restoredWindows: [WindowInfo] = []
                     for window in originalWindows {
                         if window.isMinimized {
-                            _ = WindowUtil.toggleMinimize(windowInfo: window)
+                            var updatedWindow = window
+                            if updatedWindow.toggleMinimize() != nil {
+                                restoredWindows.append(updatedWindow)
+                                continue
+                            }
                         }
                         restoredWindows.append(window)
                     }
@@ -607,10 +610,9 @@ struct WindowPreviewHoverContainer: View {
                 }
             }
         } else {
-            for window in originalWindows {
-                if !window.isMinimized {
-                    _ = WindowUtil.toggleMinimize(windowInfo: window)
-                }
+            for window in originalWindows where !window.isMinimized {
+                var mutableWindow = window
+                _ = mutableWindow.toggleMinimize()
             }
             previewStateCoordinator.setWindows([], dockPosition: dockPosition, bestGuessMonitor: bestGuessMonitor, isMockPreviewActive: mockPreviewActive)
         }
@@ -622,7 +624,7 @@ struct WindowPreviewHoverContainer: View {
 
         switch action {
         case .quit:
-            WindowUtil.quitApp(windowInfo: window, force: NSEvent.modifierFlags.contains(.option))
+            window.quit(force: NSEvent.modifierFlags.contains(.option))
 
             if Defaults[.keepPreviewOnAppTerminate] {
                 let appPID = window.app.processIdentifier
@@ -636,18 +638,25 @@ struct WindowPreviewHoverContainer: View {
             }
 
         case .close:
-            WindowUtil.closeWindow(windowInfo: window)
+            window.close()
             previewStateCoordinator.removeWindow(at: index)
 
         case .minimize:
-            _ = WindowUtil.toggleMinimize(windowInfo: window)
+            var updatedWindow = window
+            if updatedWindow.toggleMinimize() != nil {
+                previewStateCoordinator.updateWindow(at: index, with: updatedWindow)
+            }
 
         case .toggleFullScreen:
-            WindowUtil.toggleFullScreen(windowInfo: window)
+            var updatedWindow = window
+            updatedWindow.toggleFullScreen()
             onWindowTap?()
 
         case .hide:
-            _ = WindowUtil.toggleHidden(windowInfo: window)
+            var updatedWindow = window
+            if updatedWindow.toggleHidden() != nil {
+                previewStateCoordinator.updateWindow(at: index, with: updatedWindow)
+            }
 
         case .openNewWindow:
             WindowUtil.openNewWindow(app: window.app)
