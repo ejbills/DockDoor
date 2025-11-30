@@ -85,6 +85,12 @@ struct MainSettingsView: View {
     @Default(.enableWindowSwitcher) var enableWindowSwitcher
     @Default(.enableWindowSwitcherSearch) var enableWindowSwitcherSearch
     @Default(.enableDockPreviews) var enableDockPreviews
+    @Default(.showWindowsFromCurrentSpaceOnly) var showWindowsFromCurrentSpaceOnly
+    @Default(.windowPreviewSortOrder) var windowPreviewSortOrder
+    @Default(.showWindowsFromCurrentSpaceOnlyInSwitcher) var showWindowsFromCurrentSpaceOnlyInSwitcher
+    @Default(.windowSwitcherSortOrder) var windowSwitcherSortOrder
+    @Default(.showWindowsFromCurrentSpaceOnlyInCmdTab) var showWindowsFromCurrentSpaceOnlyInCmdTab
+    @Default(.cmdTabSortOrder) var cmdTabSortOrder
     @Default(.keepPreviewOnAppTerminate) var keepPreviewOnAppTerminate
     @Default(.enableCmdTabEnhancements) var enableCmdTabEnhancements
     @Default(.scrollToMouseHoverInSwitcher) var scrollToMouseHoverInSwitcher
@@ -389,6 +395,27 @@ struct MainSettingsView: View {
                         .foregroundColor(.secondary)
                         .padding(.leading, 20)
                     if enableDockPreviews {
+                        Toggle(isOn: $showWindowsFromCurrentSpaceOnly) { Text("Show windows from current Space only") }
+                            .padding(.leading, 20)
+                        Text("Only display windows that are in the current virtual desktop/Space.")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                            .padding(.leading, 40)
+
+                        Text("Window sort order")
+                            .padding(.leading, 20)
+                        Picker("", selection: $windowPreviewSortOrder) {
+                            ForEach(WindowPreviewSortOrder.allCases) { order in
+                                Text(order.localizedName).tag(order)
+                            }
+                        }
+                        .pickerStyle(.menu)
+                        .padding(.leading, 40)
+                        Text("Choose how windows are sorted in the preview.")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                            .padding(.leading, 40)
+
                         Toggle(isOn: $keepPreviewOnAppTerminate) { Text("Keep preview when app terminates") }
                             .padding(.leading, 20)
                         Text("When an app terminates, remove only its windows from the preview instead of hiding the entire preview.")
@@ -420,14 +447,33 @@ struct MainSettingsView: View {
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                                 .padding(.leading, 20)
-                            Toggle(isOn: $useClassicWindowOrdering) { Text("Use Windows-style window ordering in Switcher") }
-                            Text("Shows last active window first, instead of current window.")
+                            Toggle(isOn: $useClassicWindowOrdering) { Text("Start on second window in Switcher") }
+                            Text("When opening the window switcher, highlight the second window instead of the first.")
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                                 .padding(.leading, 20)
 
                             Toggle(isOn: $limitSwitcherToFrontmostApp) { Text("Limit Window Switcher to active app only") }
                             Text("Only show windows from the currently active/frontmost application.")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                                .padding(.leading, 20)
+
+                            Toggle(isOn: $showWindowsFromCurrentSpaceOnlyInSwitcher) { Text("Show windows from current Space only") }
+                            Text("Only display windows that are in the current virtual desktop/Space.")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                                .padding(.leading, 20)
+
+                            Text("Window sort order")
+                            Picker("", selection: $windowSwitcherSortOrder) {
+                                ForEach(WindowPreviewSortOrder.allCases) { order in
+                                    Text(order.localizedName).tag(order)
+                                }
+                            }
+                            .pickerStyle(.menu)
+                            .padding(.leading, 20)
+                            Text("Choose how windows are sorted in the window switcher.")
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                                 .padding(.leading, 20)
@@ -449,6 +495,29 @@ struct MainSettingsView: View {
                     .font(.caption)
                     .foregroundColor(.secondary)
                     .padding(.leading, 20)
+
+                    if enableCmdTabEnhancements {
+                        Toggle(isOn: $showWindowsFromCurrentSpaceOnlyInCmdTab) { Text("Show windows from current Space only") }
+                            .padding(.leading, 20)
+                        Text("Only display windows that are in the current virtual desktop/Space.")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                            .padding(.leading, 40)
+
+                        Text("Window sort order")
+                            .padding(.leading, 20)
+                        Picker("", selection: $cmdTabSortOrder) {
+                            ForEach(WindowPreviewSortOrder.allCases) { order in
+                                Text(order.localizedName).tag(order)
+                            }
+                        }
+                        .pickerStyle(.menu)
+                        .padding(.leading, 40)
+                        Text("Choose how windows are sorted in Cmd+Tab previews.")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                            .padding(.leading, 40)
+                    }
                 }
 
                 HStack {

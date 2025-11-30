@@ -52,7 +52,10 @@ private class WindowSwitchingCoordinator {
     private func initializeWindowSwitching(
         previewCoordinator: SharedPreviewWindowCoordinator
     ) async {
-        let windows = WindowUtil.getAllWindowsOfAllApps()
+        var windows = WindowUtil.getAllWindowsOfAllApps()
+        if Defaults[.showWindowsFromCurrentSpaceOnlyInSwitcher] {
+            windows = await WindowUtil.filterWindowsByCurrentSpace(windows)
+        }
         guard !windows.isEmpty else { return }
 
         currentSessionId = UUID()

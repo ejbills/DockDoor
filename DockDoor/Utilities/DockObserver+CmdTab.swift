@@ -131,7 +131,12 @@ extension DockObserver {
             do {
                 var windows: [WindowInfo] = []
                 if let app = resolvedApp {
-                    windows = try await WindowUtil.getActiveWindows(of: app)
+                    windows = try await WindowUtil.getActiveWindows(of: app, context: .cmdTab)
+
+                    // Filter by current space if enabled
+                    if Defaults[.showWindowsFromCurrentSpaceOnlyInCmdTab] {
+                        windows = await WindowUtil.filterWindowsByCurrentSpace(windows)
+                    }
                 }
 
                 let elementPos = try? selectedItem.element.position()
