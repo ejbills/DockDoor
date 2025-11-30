@@ -53338,6 +53338,22 @@
         }
       }
     },
+    "Only display windows that are in the current virtual desktop/Space." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "仅显示当前虚拟桌面/空间中的窗口。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "僅顯示當前虛擬桌面/空間中的視窗。"
+          }
+        }
+      }
+    },
     "Only show windows from the currently active/frontmost application." : {
       "localizations" : {
         "af" : {
@@ -76568,6 +76584,22 @@
         }
       }
     },
+    "Show windows from current Space only" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "仅显示当前空间的窗口"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "僅顯示當前空間的視窗"
+          }
+        }
+      }
+    },
     "Shows last active window first, instead of current window." : {
       "localizations" : {
         "af" : {
@@ -99246,5 +99278,5 @@
       }
     }
   },
-  "version" : "1.0"
+  "version" : "1.1"
 }

@@ -201,6 +201,53 @@ final class DockObserver {
                     combinedWindows.append(contentsOf: windowsForInstance)
                 }
 
+                // Filter windows to only show those in the current Space if the setting is enabled
+                if Defaults[.showWindowsFromCurrentSpaceOnly] {
+                    let activeSpaceIDs = currentActiveSpaceIDs()
+
+                    // Build a map of window ID to isOnScreen status using CGWindowList
+                    var windowOnScreenMap: [CGWindowID: Bool] = [:]
+                    if let windowList = CGWindowListCopyWindowInfo([.optionAll], kCGNullWindowID) as? [[String: AnyObject]] {
+                        for windowInfo in windowList {
+                            if let windowNumber = windowInfo[kCGWindowNumber as String] as? NSNumber {
+                                let windowID = CGWindowID(windowNumber.uint32Value)
+                                let isOnScreen = (windowInfo[kCGWindowIsOnscreen as String] as? NSNumber)?.boolValue ?? false
+                                windowOnScreenMap[windowID] = isOnScreen
+                            }
+                        }
+                    }
+
+                    combinedWindows = combinedWindows.filter { windowInfo in
+                        let windowSpaces = Set(windowInfo.id.cgsSpaces().map { Int($0) })
+                        let isOnScreen = windowOnScreenMap[windowInfo.id] ?? false
+
+                        // For minimized/hidden windows, check if they belong to current space
+                        if windowInfo.isMinimized || windowInfo.isHidden {
+                            if !windowSpaces.isEmpty {
+                                return !windowSpaces.isDisjoint(with: activeSpaceIDs)
+                            }
+                            if let spaceID = windowInfo.spaceID {
+                                return activeSpaceIDs.contains(spaceID)
+                            }
+                            // If no space info at all, include minimized/hidden windows
+                            return true
+                        }
+
+                        // For normal windows, check space info
+                        if !windowSpaces.isEmpty {
+                            return !windowSpaces.isDisjoint(with: activeSpaceIDs)
+                        }
+
+                        // If no space info, check if window is on screen (visible in current space)
+                        if isOnScreen {
+                            return true
+                        }
+
+                        // Window has no space info and is not on screen - likely in another space
+                        return false
+                    }
+                }
+
                 lastHoveredPID = currentApp.processIdentifier
                 lastHoveredAppWasFrontmost = NSWorkspace.shared.frontmostApplication?.processIdentifier == currentApp.processIdentifier
                 lastHoveredAppNeedsRestore = currentApp.isHidden || combinedWindows.contains(where: \.isMinimized)

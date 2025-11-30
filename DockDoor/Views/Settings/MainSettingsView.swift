@@ -85,6 +85,7 @@ struct MainSettingsView: View {
     @Default(.enableWindowSwitcher) var enableWindowSwitcher
     @Default(.enableWindowSwitcherSearch) var enableWindowSwitcherSearch
     @Default(.enableDockPreviews) var enableDockPreviews
+    @Default(.showWindowsFromCurrentSpaceOnly) var showWindowsFromCurrentSpaceOnly
     @Default(.keepPreviewOnAppTerminate) var keepPreviewOnAppTerminate
     @Default(.enableCmdTabEnhancements) var enableCmdTabEnhancements
     @Default(.scrollToMouseHoverInSwitcher) var scrollToMouseHoverInSwitcher
@@ -389,6 +390,12 @@ struct MainSettingsView: View {
                         .foregroundColor(.secondary)
                         .padding(.leading, 20)
                     if enableDockPreviews {
+                        Toggle(isOn: $showWindowsFromCurrentSpaceOnly) { Text("Show windows from current Space only") }
+                            .padding(.leading, 20)
+                        Text("Only display windows that are in the current virtual desktop/Space.")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                            .padding(.leading, 40)
                         Toggle(isOn: $keepPreviewOnAppTerminate) { Text("Keep preview when app terminates") }
                             .padding(.leading, 20)
                         Text("When an app terminates, remove only its windows from the preview instead of hiding the entire preview.")

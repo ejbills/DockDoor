@@ -52,6 +52,7 @@ extension Defaults.Keys {
     static let gradientColorPalette = Key<GradientColorPaletteSettings>("gradientColorPalette", default: .init())
     static let enableWindowSwitcher = Key<Bool>("enableWindowSwitcher", default: true)
     static let enableDockPreviews = Key<Bool>("enableDockPreviews", default: true)
+    static let showWindowsFromCurrentSpaceOnly = Key<Bool>("showWindowsFromCurrentSpaceOnly", default: false)
     static let enableCmdTabEnhancements = Key<Bool>("enableCmdTabEnhancements", default: false)
     static let scrollToMouseHoverInSwitcher = Key<Bool>("scrollToMouseHoverInSwitcher", default: false)
     static let keepPreviewOnAppTerminate = Key<Bool>("keepPreviewOnAppTerminate", default: false)
