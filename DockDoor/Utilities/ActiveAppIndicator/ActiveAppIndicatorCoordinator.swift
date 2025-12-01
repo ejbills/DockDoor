@@ -2,8 +2,8 @@ import Cocoa
 import Defaults
 import SwiftUI
 
-/// Manages the active app indicator that shows a line below the currently active app in the dock.
-/// This feature only supports bottom dock position.
+/// Manages the active app indicator that shows a line next to the currently active app in the dock.
+/// Supports bottom, left, and right dock positions.
 final class ActiveAppIndicatorCoordinator {
     static var shared: ActiveAppIndicatorCoordinator?
 
@@ -125,10 +125,10 @@ final class ActiveAppIndicatorCoordinator {
         guard Defaults[.showActiveAppIndicator] else { return }
 
         // Hide indicator if dock moved to unsupported position
-        if newPosition != .bottom {
+        if !ActiveAppIndicatorPositioning.isSupported(newPosition) {
             indicatorWindow?.orderOut(nil)
         } else if let app = currentActiveApp {
-            // Dock moved back to bottom - reposition indicator
+            // Dock moved to a supported position - reposition indicator
             updateIndicatorPosition(for: app)
         }
     }
@@ -206,14 +206,15 @@ final class ActiveAppIndicatorCoordinator {
             return
         }
 
-        // Only support bottom dock position
         let dockPosition = DockUtils.getDockPosition()
-        guard dockPosition == .bottom else {
+
+        // Check if dock position is supported
+        guard ActiveAppIndicatorPositioning.isSupported(dockPosition) else {
             indicatorWindow.orderOut(nil)
             return
         }
 
-        positionIndicator(below: dockItemFrame)
+        positionIndicator(relativeTo: dockItemFrame, dockPosition: dockPosition)
         indicatorWindow.orderFront(nil)
     }
 
@@ -274,39 +275,36 @@ final class ActiveAppIndicatorCoordinator {
 
     // MARK: - Positioning
 
-    private func positionIndicator(below dockItemFrame: CGRect) {
+    private func positionIndicator(relativeTo dockItemFrame: CGRect, dockPosition: DockPosition) {
         guard let indicatorWindow else { return }
 
-        let indicatorHeight = Defaults[.activeAppIndicatorHeight]
+        let indicatorThickness = Defaults[.activeAppIndicatorHeight]
         let indicatorOffset = Defaults[.activeAppIndicatorOffset]
-        let indicatorWidth = dockItemFrame.width * 0.6 // Make indicator slightly narrower than dock icon
-
-        // Position indicator centered below the dock icon
-        // Note: In screen coordinates, Y increases downward from top-left
-        let x = dockItemFrame.midX - (indicatorWidth / 2)
 
         // Get the screen containing the dock
         guard let screen = NSScreen.screens.first(where: { $0.frame.contains(dockItemFrame.origin) }) ?? NSScreen.main else {
             return
         }
 
-        // Convert from screen coordinates (Y from top) to AppKit coordinates (Y from bottom)
-        let screenHeight = screen.frame.height
-        let dockItemBottomInScreenCoords = dockItemFrame.origin.y + dockItemFrame.height
+        // Calculate the indicator frame using the positioning module
+        guard let indicatorFrame = ActiveAppIndicatorPositioning.calculateIndicatorFrame(
+            for: dockItemFrame,
+            dockPosition: dockPosition,
+            indicatorThickness: indicatorThickness,
+            indicatorOffset: indicatorOffset,
+            on: screen
+        ) else {
+            indicatorWindow.orderOut(nil)
+            return
+        }
 
-        // The indicator should be just below the dock icon
-        // In AppKit coordinates, we need to flip Y
-        // Positive offset moves indicator up (adds to Y in AppKit coords), negative moves down
-        let y = screenHeight - dockItemBottomInScreenCoords - indicatorHeight - 2 + indicatorOffset // 2px base gap
-
-        let indicatorFrame = CGRect(x: x, y: y, width: indicatorWidth, height: indicatorHeight)
         indicatorWindow.setFrame(indicatorFrame, display: true)
     }
 }
 
 // MARK: - Indicator Window
 
-/// A borderless window that displays the indicator line below the active dock app.
+/// A borderless window that displays the indicator line next to the active dock app.
 final class ActiveAppIndicatorWindow: NSPanel {
     private var indicatorView: NSHostingView<ActiveAppIndicatorView>?
 
@@ -341,13 +339,15 @@ final class ActiveAppIndicatorWindow: NSPanel {
 // MARK: - Indicator View
 
 /// The SwiftUI view that draws the indicator line.
+/// The Capsule adapts to the window frame set by the positioning module:
+/// - Horizontal (width > height) for bottom dock
+/// - Vertical (height > width) for left/right dock
 struct ActiveAppIndicatorView: View {
     @Default(.activeAppIndicatorColor) var indicatorColor
-    @Default(.activeAppIndicatorHeight) var indicatorHeight
 
     var body: some View {
         Capsule()
             .fill(indicatorColor)
-            .frame(height: indicatorHeight)
+        // Frame is controlled by the window - Capsule fills it and adapts shape automatically
     }
 }

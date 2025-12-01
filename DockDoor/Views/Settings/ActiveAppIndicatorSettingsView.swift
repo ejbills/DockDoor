@@ -52,7 +52,7 @@ struct ActiveAppIndicatorSettingsView: View {
                     .padding(.leading, 20)
 
                     sliderSetting(
-                        title: "Vertical Position Offset",
+                        title: "Position Offset",
                         value: $activeAppIndicatorOffset,
                         range: -20.0 ... 20.0,
                         step: 1.0,
@@ -125,7 +125,7 @@ struct ActiveAppIndicatorSettingsView: View {
                     HStack(spacing: 8) {
                         Image(systemName: "info.circle")
                             .foregroundColor(.secondary)
-                        Text("This feature only works when the dock is positioned at the bottom of the screen.")
+                        Text("The indicator appears next to the active app's dock icon.")
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
