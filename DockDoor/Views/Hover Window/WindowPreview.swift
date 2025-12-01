@@ -38,6 +38,7 @@ struct WindowPreview: View {
 
     @Default(.tapEquivalentInterval) var tapEquivalentInterval
     @Default(.previewHoverAction) var previewHoverAction
+    @Default(.activeAppIndicatorColor) var activeAppIndicatorColor
 
     @State private var isHoveringOverDockPeekPreview = false
     @State private var isHoveringOverWindowSwitcherPreview = false
@@ -54,6 +55,15 @@ struct WindowPreview: View {
         default:
             false
         }
+    }
+
+    /// Checks if this window is the currently active (focused) window on the system
+    private var isActiveWindow: Bool {
+        guard windowInfo.app.isActive else { return false }
+        guard let focusedWindow = try? windowInfo.appAxElement.focusedWindow(),
+              let focusedWindowID = try? focusedWindow.cgWindowId()
+        else { return false }
+        return windowInfo.id == focusedWindowID
     }
 
     private var isWindowSwitcherDiagonalPosition: Bool {
@@ -555,6 +565,13 @@ struct WindowPreview: View {
                                 let highlightColor = hoverHighlightColor ?? Color(nsColor: .controlAccentColor)
                                 RoundedRectangle(cornerRadius: cornerRadius)
                                     .fill(highlightColor.opacity(selectionOpacity))
+                                    .padding(-6)
+                            }
+                        }
+                        .overlay {
+                            if isActiveWindow {
+                                RoundedRectangle(cornerRadius: cornerRadius)
+                                    .strokeBorder(activeAppIndicatorColor, lineWidth: 2.5)
                                     .padding(-6)
                             }
                         }
