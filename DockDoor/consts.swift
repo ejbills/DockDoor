@@ -127,7 +127,6 @@ extension Defaults.Keys {
     static let activeAppIndicatorFadeOutDelay = Key<CGFloat>("activeAppIndicatorFadeOutDelay", default: 0.0)
     static let activeAppIndicatorFadeInDuration = Key<CGFloat>("activeAppIndicatorFadeInDuration", default: 0.0)
     static let activeAppIndicatorFadeInDelay = Key<CGFloat>("activeAppIndicatorFadeInDelay", default: 0.4)
-    static let activeAppIndicatorDockTriggerZone = Key<CGFloat>("activeAppIndicatorDockTriggerZone", default: 70.0)
 }
 
 // MARK: Display Configurations

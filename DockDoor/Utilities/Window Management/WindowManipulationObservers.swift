@@ -75,6 +75,9 @@ class WindowManipulationObservers {
         DebugLogger.log("appDidLaunch", details: "App: \(app.localizedName ?? "Unknown") (PID: \(app.processIdentifier))")
         createObserverForApp(app)
         handleNewWindow(for: app.processIdentifier)
+
+        // Notify active app indicator of dock shift
+        ActiveAppIndicatorCoordinator.shared?.notifyDockItemsChanged()
     }
 
     @MainActor
@@ -87,6 +90,9 @@ class WindowManipulationObservers {
         if !Defaults[.keepPreviewOnAppTerminate] {
             previewCoordinator.hideWindow()
         }
+
+        // Notify active app indicator of dock shift
+        ActiveAppIndicatorCoordinator.shared?.notifyDockItemsChanged()
     }
 
     @objc private func activeSpaceDidChange(_ notification: Notification) {
@@ -207,6 +213,8 @@ class WindowManipulationObservers {
         case kAXWindowMiniaturizedNotification, kAXWindowDeminiaturizedNotification:
             handleWindowEvent(element: element, app: app, notification: notificationName, validate: true)
             forceCoordinatorRefresh(for: pid)
+            // Notify active app indicator of potential dock shift (when minimize to dock is not using app icon)
+            ActiveAppIndicatorCoordinator.shared?.notifyDockItemsChanged()
         case kAXApplicationHiddenNotification:
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
                 guard let self else { return }

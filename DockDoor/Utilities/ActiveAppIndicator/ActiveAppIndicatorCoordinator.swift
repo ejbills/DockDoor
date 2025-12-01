@@ -16,16 +16,17 @@ final class ActiveAppIndicatorCoordinator {
 
     private var currentActiveApp: NSRunningApplication?
 
-    // Dock auto-hide visibility tracking
-    private var mouseMonitor: Any?
-    private var isDockCurrentlyVisible: Bool = true
-    private var dockHideDebounceTimer: Timer?
-    private var dockShowDebounceTimer: Timer?
+    // Dock item shift tracking (app launch/terminate/minimize)
+    private var dockShiftDebounceTimer: Timer?
+
+    // Dock state observers (orientation and auto-hide visibility)
+    private var orientationObserver: ActiveAppIndicatorOrientationObserver?
+    private var visibilityManager: ActiveAppIndicatorVisibilityManager?
 
     init() {
         ActiveAppIndicatorCoordinator.shared = self
         setupObservers()
-        setupDockVisibilityTracking()
+        setupDockStateObservers()
         updateIndicatorVisibility()
     }
 
@@ -82,110 +83,69 @@ final class ActiveAppIndicatorCoordinator {
         }
     }
 
-    private func setupDockVisibilityTracking() {
-        // Monitor mouse movements globally to detect when dock should show/hide
-        mouseMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.mouseMoved, .leftMouseDragged, .rightMouseDragged]) { [weak self] event in
-            self?.handleMouseMoved(event)
-        }
-
-        // Also monitor local events when DockDoor windows are active
-        NSEvent.addLocalMonitorForEvents(matching: [.mouseMoved, .leftMouseDragged, .rightMouseDragged]) { [weak self] event in
-            self?.handleMouseMoved(event)
-            return event
-        }
+    private func setupDockStateObservers() {
+        // Initialize observers for dock orientation changes and auto-hide visibility
+        orientationObserver = ActiveAppIndicatorOrientationObserver(coordinator: self)
+        visibilityManager = ActiveAppIndicatorVisibilityManager(coordinator: self)
     }
 
     private func cleanup() {
         if let observer = workspaceObserver {
             NSWorkspace.shared.notificationCenter.removeObserver(observer)
         }
-        if let monitor = mouseMonitor {
-            NSEvent.removeMonitor(monitor)
-        }
-        dockHideDebounceTimer?.invalidate()
-        dockShowDebounceTimer?.invalidate()
+        dockShiftDebounceTimer?.invalidate()
         settingsObserver?.invalidate()
         colorObserver?.invalidate()
         heightObserver?.invalidate()
         offsetObserver?.invalidate()
+        orientationObserver = nil
+        visibilityManager = nil
         hideIndicator()
     }
 
-    // MARK: - Dock Visibility Tracking
+    // MARK: - Dock Item Change Notifications
 
-    private func handleMouseMoved(_ event: NSEvent) {
-        // Only track if auto-hide is enabled
-        guard CoreDockGetAutoHideEnabled() else {
-            dockShowDebounceTimer?.invalidate()
-            dockShowDebounceTimer = nil
-            if !isDockCurrentlyVisible {
-                isDockCurrentlyVisible = true
-                fadeInIndicator()
-            }
-            return
-        }
+    /// Called when dock items may have shifted (app launch, terminate, minimize, etc.)
+    /// Refreshes the indicator position after a debounced delay to account for dock animation.
+    func notifyDockItemsChanged() {
+        guard Defaults[.showActiveAppIndicator] else { return }
 
-        guard let screen = NSScreen.main else { return }
-
-        // Get mouse position in screen coordinates (Y from bottom)
-        let mouseLocation = NSEvent.mouseLocation
-        let dockTriggerZone = Defaults[.activeAppIndicatorDockTriggerZone]
-
-        // Check if mouse is in the dock trigger zone (bottom of screen for bottom dock)
-        let isInDockZone = mouseLocation.y <= dockTriggerZone &&
-            mouseLocation.x >= screen.frame.minX &&
-            mouseLocation.x <= screen.frame.maxX
-
-        if isInDockZone {
-            // Mouse is near dock area - dock should be visible
-            dockHideDebounceTimer?.invalidate()
-            dockHideDebounceTimer = nil
-
-            if !isDockCurrentlyVisible, dockShowDebounceTimer == nil {
-                let fadeInDelay = Defaults[.activeAppIndicatorFadeInDelay]
-                // Start delay timer before showing indicator
-                dockShowDebounceTimer = Timer.scheduledTimer(withTimeInterval: fadeInDelay, repeats: false) { [weak self] _ in
-                    self?.isDockCurrentlyVisible = true
-                    self?.fadeInIndicator()
-                    self?.dockShowDebounceTimer = nil
-                }
-            }
-        } else {
-            // Mouse moved away from dock area - cancel show timer and start hide timer
-            dockShowDebounceTimer?.invalidate()
-            dockShowDebounceTimer = nil
-
-            if isDockCurrentlyVisible, dockHideDebounceTimer == nil {
-                let fadeOutDelay = Defaults[.activeAppIndicatorFadeOutDelay]
-                dockHideDebounceTimer = Timer.scheduledTimer(withTimeInterval: fadeOutDelay, repeats: false) { [weak self] _ in
-                    self?.isDockCurrentlyVisible = false
-                    self?.fadeOutIndicator()
-                    self?.dockHideDebounceTimer = nil
-                }
-            }
+        // Debounce to avoid multiple rapid updates and wait for dock animation
+        dockShiftDebounceTimer?.invalidate()
+        dockShiftDebounceTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { [weak self] _ in
+            guard let self, let app = currentActiveApp else { return }
+            updateIndicatorPosition(for: app)
         }
     }
 
-    private func fadeInIndicator() {
-        guard let indicatorWindow, Defaults[.showActiveAppIndicator] else { return }
+    // MARK: - Dock Orientation & Visibility Notifications
 
-        let fadeInDuration = Defaults[.activeAppIndicatorFadeInDuration]
-        NSAnimationContext.runAnimationGroup { context in
-            context.duration = fadeInDuration
-            context.timingFunction = CAMediaTimingFunction(name: .easeOut)
-            indicatorWindow.animator().alphaValue = 1.0
+    /// Called when dock orientation changes
+    func notifyDockPositionChanged(newPosition: DockPosition) {
+        guard Defaults[.showActiveAppIndicator] else { return }
+
+        // Hide indicator if dock moved to unsupported position
+        if newPosition != .bottom {
+            indicatorWindow?.orderOut(nil)
+        } else if let app = currentActiveApp {
+            // Dock moved back to bottom - reposition indicator
+            updateIndicatorPosition(for: app)
         }
     }
 
-    private func fadeOutIndicator() {
-        guard let indicatorWindow else { return }
+    /// Called by DockObserver when a dock item is being hovered
+    func notifyDockItemHovered() {
+        visibilityManager?.notifyDockItemHovered()
+    }
 
-        let fadeOutDuration = Defaults[.activeAppIndicatorFadeOutDuration]
-        NSAnimationContext.runAnimationGroup { context in
-            context.duration = fadeOutDuration
-            context.timingFunction = CAMediaTimingFunction(name: .easeIn)
-            indicatorWindow.animator().alphaValue = 0.0
-        }
+    /// Called by DockObserver when no dock item is hovered
+    func notifyDockItemUnhovered() {
+        visibilityManager?.notifyDockItemUnhovered()
+    }
+
+    /// Getter for indicator window (used by visibility manager)
+    func getIndicatorWindow() -> ActiveAppIndicatorWindow? {
+        indicatorWindow
     }
 
     // MARK: - Visibility Management
@@ -207,23 +167,18 @@ final class ActiveAppIndicatorCoordinator {
             indicatorWindow = ActiveAppIndicatorWindow()
 
             // Set initial alpha based on dock auto-hide state
+            // Visibility manager will handle the visibility logic via DockObserver
             if CoreDockGetAutoHideEnabled() {
-                // If auto-hide is enabled, check if mouse is currently in dock zone
-                let mouseLocation = NSEvent.mouseLocation
-                let dockTriggerZone = Defaults[.activeAppIndicatorDockTriggerZone]
-                let isInDockZone = mouseLocation.y <= dockTriggerZone
-                isDockCurrentlyVisible = isInDockZone
-                indicatorWindow?.alphaValue = isInDockZone ? 1.0 : 0.0
+                // If auto-hide is enabled, start with invisible (DockObserver will show when needed)
+                indicatorWindow?.alphaValue = 0.0
             } else {
-                isDockCurrentlyVisible = true
+                // If auto-hide is off, dock is always visible
                 indicatorWindow?.alphaValue = 1.0
             }
         }
     }
 
     private func hideIndicator() {
-        dockHideDebounceTimer?.invalidate()
-        dockHideDebounceTimer = nil
         indicatorWindow?.orderOut(nil)
         indicatorWindow = nil
         currentActiveApp = nil

@@ -13,7 +13,6 @@ struct ActiveAppIndicatorSettingsView: View {
     @Default(.activeAppIndicatorFadeOutDelay) var fadeOutDelay
     @Default(.activeAppIndicatorFadeInDuration) var fadeInDuration
     @Default(.activeAppIndicatorFadeInDelay) var fadeInDelay
-    @Default(.activeAppIndicatorDockTriggerZone) var dockTriggerZone
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -119,21 +118,6 @@ struct ActiveAppIndicatorSettingsView: View {
                             step: 0.1,
                             unit: "s",
                             formatter: NumberFormatter.oneDecimalFormatter
-                        )
-                        .padding(.leading, 20)
-
-                        sliderSetting(
-                            title: "Dock Trigger Zone Height",
-                            value: $dockTriggerZone,
-                            range: 0.0 ... 100.0,
-                            step: 1,
-                            unit: "px",
-                            formatter: {
-                                let f = NumberFormatter()
-                                f.minimumFractionDigits = 0
-                                f.maximumFractionDigits = 0
-                                return f
-                            }()
                         )
                         .padding(.leading, 20)
                     }
