@@ -116,6 +116,12 @@ extension Defaults.Keys {
 
     // Debug
     static let debugMode = Key<Bool>("debugMode", default: false)
+
+    // Active App Indicator
+    static let showActiveAppIndicator = Key<Bool>("showActiveAppIndicator", default: false)
+    static let activeAppIndicatorColor = Key<Color>("activeAppIndicatorColor", default: Color.accentColor)
+    static let activeAppIndicatorHeight = Key<CGFloat>("activeAppIndicatorHeight", default: 4.0)
+    static let activeAppIndicatorOffset = Key<CGFloat>("activeAppIndicatorOffset", default: 5.0)
 }
 
 // MARK: Display Configurations

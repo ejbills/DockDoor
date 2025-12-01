@@ -630,6 +630,9 @@ struct MainSettingsView: View {
                     sliderSetting(title: "Window Buffer from Dock (pixels)", value: $bufferFromDock, range: -100 ... 100, step: 5, unit: "px", formatter: { let f = NumberFormatter(); f.allowsFloats = false; f.minimumIntegerDigits = 1; f.maximumFractionDigits = 0; return f }())
                 }
             }
+            StyledGroupBox(label: "Active App Indicator") {
+                ActiveAppIndicatorSettingsView()
+            }
         }.padding(.top, 5)
     }
 
