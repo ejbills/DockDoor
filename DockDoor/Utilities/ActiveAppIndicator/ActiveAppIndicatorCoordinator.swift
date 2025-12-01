@@ -16,9 +16,16 @@ final class ActiveAppIndicatorCoordinator {
 
     private var currentActiveApp: NSRunningApplication?
 
+    // Dock auto-hide visibility tracking
+    private var mouseMonitor: Any?
+    private var isDockCurrentlyVisible: Bool = true
+    private var dockHideDebounceTimer: Timer?
+    private var dockShowDebounceTimer: Timer?
+
     init() {
         ActiveAppIndicatorCoordinator.shared = self
         setupObservers()
+        setupDockVisibilityTracking()
         updateIndicatorVisibility()
     }
 
@@ -75,15 +82,110 @@ final class ActiveAppIndicatorCoordinator {
         }
     }
 
+    private func setupDockVisibilityTracking() {
+        // Monitor mouse movements globally to detect when dock should show/hide
+        mouseMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.mouseMoved, .leftMouseDragged, .rightMouseDragged]) { [weak self] event in
+            self?.handleMouseMoved(event)
+        }
+
+        // Also monitor local events when DockDoor windows are active
+        NSEvent.addLocalMonitorForEvents(matching: [.mouseMoved, .leftMouseDragged, .rightMouseDragged]) { [weak self] event in
+            self?.handleMouseMoved(event)
+            return event
+        }
+    }
+
     private func cleanup() {
         if let observer = workspaceObserver {
             NSWorkspace.shared.notificationCenter.removeObserver(observer)
         }
+        if let monitor = mouseMonitor {
+            NSEvent.removeMonitor(monitor)
+        }
+        dockHideDebounceTimer?.invalidate()
+        dockShowDebounceTimer?.invalidate()
         settingsObserver?.invalidate()
         colorObserver?.invalidate()
         heightObserver?.invalidate()
         offsetObserver?.invalidate()
         hideIndicator()
+    }
+
+    // MARK: - Dock Visibility Tracking
+
+    private func handleMouseMoved(_ event: NSEvent) {
+        // Only track if auto-hide is enabled
+        guard CoreDockGetAutoHideEnabled() else {
+            dockShowDebounceTimer?.invalidate()
+            dockShowDebounceTimer = nil
+            if !isDockCurrentlyVisible {
+                isDockCurrentlyVisible = true
+                fadeInIndicator()
+            }
+            return
+        }
+
+        guard let screen = NSScreen.main else { return }
+
+        // Get mouse position in screen coordinates (Y from bottom)
+        let mouseLocation = NSEvent.mouseLocation
+        let dockTriggerZone = Defaults[.activeAppIndicatorDockTriggerZone]
+
+        // Check if mouse is in the dock trigger zone (bottom of screen for bottom dock)
+        let isInDockZone = mouseLocation.y <= dockTriggerZone &&
+            mouseLocation.x >= screen.frame.minX &&
+            mouseLocation.x <= screen.frame.maxX
+
+        if isInDockZone {
+            // Mouse is near dock area - dock should be visible
+            dockHideDebounceTimer?.invalidate()
+            dockHideDebounceTimer = nil
+
+            if !isDockCurrentlyVisible, dockShowDebounceTimer == nil {
+                let fadeInDelay = Defaults[.activeAppIndicatorFadeInDelay]
+                // Start delay timer before showing indicator
+                dockShowDebounceTimer = Timer.scheduledTimer(withTimeInterval: fadeInDelay, repeats: false) { [weak self] _ in
+                    self?.isDockCurrentlyVisible = true
+                    self?.fadeInIndicator()
+                    self?.dockShowDebounceTimer = nil
+                }
+            }
+        } else {
+            // Mouse moved away from dock area - cancel show timer and start hide timer
+            dockShowDebounceTimer?.invalidate()
+            dockShowDebounceTimer = nil
+
+            if isDockCurrentlyVisible, dockHideDebounceTimer == nil {
+                let fadeOutDelay = Defaults[.activeAppIndicatorFadeOutDelay]
+                dockHideDebounceTimer = Timer.scheduledTimer(withTimeInterval: fadeOutDelay, repeats: false) { [weak self] _ in
+                    self?.isDockCurrentlyVisible = false
+                    self?.fadeOutIndicator()
+                    self?.dockHideDebounceTimer = nil
+                }
+            }
+        }
+    }
+
+    private func fadeInIndicator() {
+        guard let indicatorWindow, Defaults[.showActiveAppIndicator] else { return }
+
+        let fadeInDuration = Defaults[.activeAppIndicatorFadeInDuration]
+        NSAnimationContext.runAnimationGroup { context in
+            context.duration = fadeInDuration
+            context.timingFunction = CAMediaTimingFunction(name: .easeOut)
+            indicatorWindow.animator().alphaValue = 1.0
+        }
+    }
+
+    private func fadeOutIndicator() {
+        guard let indicatorWindow else { return }
+
+        let fadeOutDuration = Defaults[.activeAppIndicatorFadeOutDuration]
+        NSAnimationContext.runAnimationGroup { context in
+            context.duration = fadeOutDuration
+            context.timingFunction = CAMediaTimingFunction(name: .easeIn)
+            indicatorWindow.animator().alphaValue = 0.0
+        }
     }
 
     // MARK: - Visibility Management
@@ -103,10 +205,25 @@ final class ActiveAppIndicatorCoordinator {
     private func showIndicator() {
         if indicatorWindow == nil {
             indicatorWindow = ActiveAppIndicatorWindow()
+
+            // Set initial alpha based on dock auto-hide state
+            if CoreDockGetAutoHideEnabled() {
+                // If auto-hide is enabled, check if mouse is currently in dock zone
+                let mouseLocation = NSEvent.mouseLocation
+                let dockTriggerZone = Defaults[.activeAppIndicatorDockTriggerZone]
+                let isInDockZone = mouseLocation.y <= dockTriggerZone
+                isDockCurrentlyVisible = isInDockZone
+                indicatorWindow?.alphaValue = isInDockZone ? 1.0 : 0.0
+            } else {
+                isDockCurrentlyVisible = true
+                indicatorWindow?.alphaValue = 1.0
+            }
         }
     }
 
     private func hideIndicator() {
+        dockHideDebounceTimer?.invalidate()
+        dockHideDebounceTimer = nil
         indicatorWindow?.orderOut(nil)
         indicatorWindow = nil
         currentActiveApp = nil

@@ -122,6 +122,12 @@ extension Defaults.Keys {
     static let activeAppIndicatorColor = Key<Color>("activeAppIndicatorColor", default: Color.accentColor)
     static let activeAppIndicatorHeight = Key<CGFloat>("activeAppIndicatorHeight", default: 4.0)
     static let activeAppIndicatorOffset = Key<CGFloat>("activeAppIndicatorOffset", default: 5.0)
+    static let adjustDockAutoHideAnimation = Key<Bool>("adjustDockAutoHideAnimation", default: false)
+    static let activeAppIndicatorFadeOutDuration = Key<CGFloat>("activeAppIndicatorFadeOutDuration", default: 0.0)
+    static let activeAppIndicatorFadeOutDelay = Key<CGFloat>("activeAppIndicatorFadeOutDelay", default: 0.0)
+    static let activeAppIndicatorFadeInDuration = Key<CGFloat>("activeAppIndicatorFadeInDuration", default: 0.0)
+    static let activeAppIndicatorFadeInDelay = Key<CGFloat>("activeAppIndicatorFadeInDelay", default: 0.4)
+    static let activeAppIndicatorDockTriggerZone = Key<CGFloat>("activeAppIndicatorDockTriggerZone", default: 70.0)
 }
 
 // MARK: Display Configurations
