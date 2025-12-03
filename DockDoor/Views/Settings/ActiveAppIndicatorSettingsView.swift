@@ -110,7 +110,7 @@ struct ActiveAppIndicatorSettingsView: View {
                         sliderSetting(
                             title: "Indicator Width",
                             value: $activeAppIndicatorWidth,
-                            range: 1.0...110.0,
+                            range: 1.0 ... 110.0,
                             step: 1.0,
                             unit: "px",
                             formatter: {
@@ -124,9 +124,9 @@ struct ActiveAppIndicatorSettingsView: View {
                     }
 
                     sliderSetting(
-                        title: "Shift",
+                        title: "Shift Indicator",
                         value: $activeAppIndicatorShift,
-                        range: -5.0...5.0,
+                        range: -2.0 ... 2.0,
                         step: 1.0,
                         unit: "px",
                         formatter: {
