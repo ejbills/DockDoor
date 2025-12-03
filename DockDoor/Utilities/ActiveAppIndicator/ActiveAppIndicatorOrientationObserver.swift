@@ -1,16 +1,18 @@
 import Cocoa
 import Defaults
 
-/// Observes dock orientation changes and notifies the coordinator when the dock position changes.
-/// Uses NSApplication.didChangeScreenParametersNotification which fires when dock position affects screen's visibleFrame.
+/// Observes dock orientation and size changes and notifies the coordinator when they change.
+/// Uses NSApplication.didChangeScreenParametersNotification which fires when dock position/size affects screen's visibleFrame.
 final class ActiveAppIndicatorOrientationObserver {
     private weak var coordinator: ActiveAppIndicatorCoordinator?
     private var screenParametersObserver: NSObjectProtocol?
     private var lastKnownDockPosition: DockPosition
+    private var lastKnownDockSize: CGFloat
 
     init(coordinator: ActiveAppIndicatorCoordinator) {
         self.coordinator = coordinator
         lastKnownDockPosition = DockUtils.getDockPosition()
+        lastKnownDockSize = DockUtils.getDockSize()
         setupObserver()
     }
 
@@ -44,12 +46,19 @@ final class ActiveAppIndicatorOrientationObserver {
 
     private func handleScreenParametersChanged() {
         let newDockPosition = DockUtils.getDockPosition()
+        let newDockSize = DockUtils.getDockSize()
 
-        // Only notify if dock position actually changed
-        guard newDockPosition != lastKnownDockPosition else { return }
+        // Check if dock position changed
+        if newDockPosition != lastKnownDockPosition {
+            lastKnownDockPosition = newDockPosition
+            coordinator?.notifyDockPositionChanged(newPosition: newDockPosition)
+        }
 
-        lastKnownDockPosition = newDockPosition
-        coordinator?.notifyDockPositionChanged(newPosition: newDockPosition)
+        // Check if dock size changed (refresh indicator position for auto-size)
+        if newDockSize != lastKnownDockSize {
+            lastKnownDockSize = newDockSize
+            coordinator?.notifyDockItemsChanged()
+        }
     }
 
     /// Returns the current dock position

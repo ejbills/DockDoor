@@ -79,7 +79,10 @@ final class ActiveAppIndicatorVisibilityManager {
         // Start a debounce timer before hiding
         // This prevents flickering when moving between dock items
         let fadeOutDelay = Defaults[.activeAppIndicatorFadeOutDelay]
-        dockHideDebounceTimer = Timer.scheduledTimer(withTimeInterval: fadeOutDelay, repeats: false) { [weak self] _ in
+        dockHideDebounceTimer = Timer.scheduledTimer(
+            withTimeInterval: fadeOutDelay,
+            repeats: false
+        ) { [weak self] _ in
             guard let self else { return }
             isDockCurrentlyVisible = false
             fadeOutIndicator()
@@ -96,13 +99,16 @@ final class ActiveAppIndicatorVisibilityManager {
         let fadeInDelay = Defaults[.activeAppIndicatorFadeInDelay]
 
         // Apply delay before starting fade-in animation
-        DispatchQueue.main.asyncAfter(deadline: .now() + fadeInDelay) { [weak self, weak window] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + fadeInDelay) {
+            [weak self, weak window] in
             guard self != nil, let window else { return }
 
             if fadeInDuration > 0 {
                 NSAnimationContext.runAnimationGroup { context in
                     context.duration = fadeInDuration
-                    context.timingFunction = CAMediaTimingFunction(name: .easeOut)
+                    context.timingFunction = CAMediaTimingFunction(
+                        name: .easeOut
+                    )
                     window.animator().alphaValue = 1.0
                 }
             } else {

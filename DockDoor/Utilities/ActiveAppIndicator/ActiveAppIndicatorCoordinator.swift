@@ -11,8 +11,11 @@ final class ActiveAppIndicatorCoordinator {
     private var workspaceObserver: NSObjectProtocol?
     private var settingsObserver: Defaults.Observation?
     private var colorObserver: Defaults.Observation?
+    private var autoSizeObserver: Defaults.Observation?
+    private var autoWidthObserver: Defaults.Observation?
     private var heightObserver: Defaults.Observation?
     private var offsetObserver: Defaults.Observation?
+    private var widthObserver: Defaults.Observation?
 
     private var currentActiveApp: NSRunningApplication?
 
@@ -47,25 +50,30 @@ final class ActiveAppIndicatorCoordinator {
             queue: .main
         ) { [weak self] notification in
             guard Defaults[.showActiveAppIndicator] else { return }
-            if let app = notification.userInfo?[NSWorkspace.applicationUserInfoKey] as? NSRunningApplication {
+            if let app = notification.userInfo?[
+                NSWorkspace.applicationUserInfoKey
+            ] as? NSRunningApplication {
                 self?.handleActiveAppChanged(app)
             }
         }
 
         // Observe settings changes
-        settingsObserver = Defaults.observe(.showActiveAppIndicator) { [weak self] change in
+        settingsObserver = Defaults.observe(.showActiveAppIndicator) {
+            [weak self] change in
             DispatchQueue.main.async {
                 self?.updateIndicatorVisibility()
             }
         }
 
-        colorObserver = Defaults.observe(.activeAppIndicatorColor) { [weak self] _ in
+        colorObserver = Defaults.observe(.activeAppIndicatorColor) {
+            [weak self] _ in
             DispatchQueue.main.async {
                 self?.indicatorWindow?.updateAppearance()
             }
         }
 
-        heightObserver = Defaults.observe(.activeAppIndicatorHeight) { [weak self] _ in
+        autoSizeObserver = Defaults.observe(.activeAppIndicatorAutoSize) {
+            [weak self] _ in
             DispatchQueue.main.async {
                 self?.indicatorWindow?.updateAppearance()
                 if let app = self?.currentActiveApp {
@@ -74,7 +82,36 @@ final class ActiveAppIndicatorCoordinator {
             }
         }
 
-        offsetObserver = Defaults.observe(.activeAppIndicatorOffset) { [weak self] _ in
+        autoWidthObserver = Defaults.observe(.activeAppIndicatorAutoWidth) {
+            [weak self] _ in
+            DispatchQueue.main.async {
+                if let app = self?.currentActiveApp {
+                    self?.updateIndicatorPosition(for: app)
+                }
+            }
+        }
+
+        heightObserver = Defaults.observe(.activeAppIndicatorHeight) {
+            [weak self] _ in
+            DispatchQueue.main.async {
+                self?.indicatorWindow?.updateAppearance()
+                if let app = self?.currentActiveApp {
+                    self?.updateIndicatorPosition(for: app)
+                }
+            }
+        }
+
+        offsetObserver = Defaults.observe(.activeAppIndicatorOffset) {
+            [weak self] _ in
+            DispatchQueue.main.async {
+                if let app = self?.currentActiveApp {
+                    self?.updateIndicatorPosition(for: app)
+                }
+            }
+        }
+
+        widthObserver = Defaults.observe(.activeAppIndicatorWidth) {
+            [weak self] _ in
             DispatchQueue.main.async {
                 if let app = self?.currentActiveApp {
                     self?.updateIndicatorPosition(for: app)
@@ -85,8 +122,12 @@ final class ActiveAppIndicatorCoordinator {
 
     private func setupDockStateObservers() {
         // Initialize observers for dock orientation changes and auto-hide visibility
-        orientationObserver = ActiveAppIndicatorOrientationObserver(coordinator: self)
-        visibilityManager = ActiveAppIndicatorVisibilityManager(coordinator: self)
+        orientationObserver = ActiveAppIndicatorOrientationObserver(
+            coordinator: self
+        )
+        visibilityManager = ActiveAppIndicatorVisibilityManager(
+            coordinator: self
+        )
     }
 
     private func cleanup() {
@@ -96,8 +137,11 @@ final class ActiveAppIndicatorCoordinator {
         dockShiftDebounceTimer?.invalidate()
         settingsObserver?.invalidate()
         colorObserver?.invalidate()
+        autoSizeObserver?.invalidate()
+        autoWidthObserver?.invalidate()
         heightObserver?.invalidate()
         offsetObserver?.invalidate()
+        widthObserver?.invalidate()
         orientationObserver = nil
         visibilityManager = nil
         hideIndicator()
@@ -112,7 +156,10 @@ final class ActiveAppIndicatorCoordinator {
 
         // Debounce to avoid multiple rapid updates and wait for dock animation
         dockShiftDebounceTimer?.invalidate()
-        dockShiftDebounceTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { [weak self] _ in
+        dockShiftDebounceTimer = Timer.scheduledTimer(
+            withTimeInterval: 0.5,
+            repeats: false
+        ) { [weak self] _ in
             guard let self, let app = currentActiveApp else { return }
             updateIndicatorPosition(for: app)
         }
@@ -224,11 +271,17 @@ final class ActiveAppIndicatorCoordinator {
         guard let bundleIdentifier = app.bundleIdentifier else { return nil }
 
         // Get the Dock application
-        guard let dockApp = NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.dock").first else {
+        guard
+            let dockApp = NSRunningApplication.runningApplications(
+                withBundleIdentifier: "com.apple.dock"
+            ).first
+        else {
             return nil
         }
 
-        let dockElement = AXUIElementCreateApplication(dockApp.processIdentifier)
+        let dockElement = AXUIElementCreateApplication(
+            dockApp.processIdentifier
+        )
 
         // Navigate to the dock's list of items
         guard let children = try? dockElement.children(),
@@ -247,9 +300,10 @@ final class ActiveAppIndicatorCoordinator {
             else { continue }
 
             // Check if this is our app by comparing bundle identifiers
-            if let itemURL = try? item.attribute(kAXURLAttribute, NSURL.self)?.absoluteURL,
-               let itemBundle = Bundle(url: itemURL),
-               itemBundle.bundleIdentifier == bundleIdentifier
+            if let itemURL = try? item.attribute(kAXURLAttribute, NSURL.self)?
+                .absoluteURL,
+                let itemBundle = Bundle(url: itemURL),
+                itemBundle.bundleIdentifier == bundleIdentifier
             {
                 return getFrameForDockItem(item)
             }
@@ -273,27 +327,124 @@ final class ActiveAppIndicatorCoordinator {
         return CGRect(origin: position, size: size)
     }
 
+    // MARK: - Auto Size Calculation
+
+    /// Calculates indicator height, offset, and width based on dock size and position.
+    /// Values derived from testing for dock sizes 36-125.
+    private func calculateAutoSize(
+        dockSize: CGFloat,
+        dockPosition: DockPosition
+    ) -> (height: CGFloat, offset: CGFloat, width: CGFloat?) {
+        let size = Int(dockSize)
+
+        // Check if dock size is in the tested range (36-125)
+        guard size >= 36, size <= 125 else {
+            // Fallback for untested dock sizes
+            let height = max(2.0, min(8.0, dockSize * 0.05))
+            let offset: CGFloat =
+                switch dockPosition {
+                case .bottom:
+                    max(2.0, min(10.0, dockSize * 0.05))
+                case .left:
+                    -max(2.0, min(10.0, dockSize * 0.05))
+                case .right:
+                    -3.0
+                default:
+                    0.0
+                }
+            // Return nil for width to use default 65% calculation
+            return (height, offset, nil)
+        }
+
+        // Height: 3 for dock sizes 36-50, 4 for dock sizes 51+
+        let height: CGFloat = size <= 50 ? 3.0 : 4.0
+
+        // Offset varies by position and dock size
+        let offset: CGFloat =
+            switch dockPosition {
+            case .bottom:
+                // Bottom: 4 for sizes 36-50, 5 for sizes 51+
+                size <= 50 ? 4.0 : 5.0
+            case .left:
+                // Left: -4 for sizes 36-50, -5 for sizes 51+
+                size <= 50 ? -4.0 : -5.0
+            case .right:
+                // Right: -3 for all sizes
+                -3.0
+            default:
+                0.0
+            }
+
+        // Width
+        let width: CGFloat =
+            if dockSize <= 50 {
+                floor(dockSize * 0.476635514) - 10
+            } else if dockSize <= 80 {
+                floor(dockSize * 0.6175548589) - 12
+            } else if dockSize <= 125 {
+                floor(dockSize * 0.6175548589) - 20
+            } else {
+                floor(dockSize * 0.6175548589) - 26
+            }
+
+        return (height, offset, width)
+    }
+
     // MARK: - Positioning
 
-    private func positionIndicator(relativeTo dockItemFrame: CGRect, dockPosition: DockPosition) {
+    private func positionIndicator(
+        relativeTo dockItemFrame: CGRect,
+        dockPosition: DockPosition
+    ) {
         guard let indicatorWindow else { return }
 
-        let indicatorThickness = Defaults[.activeAppIndicatorHeight]
-        let indicatorOffset = Defaults[.activeAppIndicatorOffset]
+        let indicatorThickness: CGFloat
+        let indicatorOffset: CGFloat
+        let indicatorLength: CGFloat?
+
+        let dockSize = DockUtils.getDockSize()
+        let autoSize = calculateAutoSize(
+            dockSize: dockSize,
+            dockPosition: dockPosition
+        )
+
+        // Auto size controls height and offset
+        if Defaults[.activeAppIndicatorAutoSize] {
+            indicatorThickness = autoSize.height
+            indicatorOffset = autoSize.offset
+        } else {
+            indicatorThickness = Defaults[.activeAppIndicatorHeight]
+            indicatorOffset = Defaults[.activeAppIndicatorOffset]
+        }
+
+        // Auto width is a separate setting
+        if Defaults[.activeAppIndicatorAutoWidth] {
+            indicatorLength = autoSize.width
+        } else {
+            indicatorLength = Defaults[.activeAppIndicatorWidth]
+        }
 
         // Get the screen containing the dock
-        guard let screen = NSScreen.screens.first(where: { $0.frame.contains(dockItemFrame.origin) }) ?? NSScreen.main else {
+        guard
+            let screen = NSScreen.screens.first(where: {
+                $0.frame.contains(dockItemFrame.origin)
+            }) ?? NSScreen.main
+        else {
             return
         }
 
         // Calculate the indicator frame using the positioning module
-        guard let indicatorFrame = ActiveAppIndicatorPositioning.calculateIndicatorFrame(
-            for: dockItemFrame,
-            dockPosition: dockPosition,
-            indicatorThickness: indicatorThickness,
-            indicatorOffset: indicatorOffset,
-            on: screen
-        ) else {
+        guard
+            let indicatorFrame =
+            ActiveAppIndicatorPositioning.calculateIndicatorFrame(
+                for: dockItemFrame,
+                dockPosition: dockPosition,
+                indicatorThickness: indicatorThickness,
+                indicatorOffset: indicatorOffset,
+                indicatorLength: indicatorLength,
+                on: screen
+            )
+        else {
             indicatorWindow.orderOut(nil)
             return
         }
@@ -309,8 +460,15 @@ final class ActiveAppIndicatorWindow: NSPanel {
     private var indicatorView: NSHostingView<ActiveAppIndicatorView>?
 
     init() {
-        let styleMask: NSWindow.StyleMask = [.nonactivatingPanel, .fullSizeContentView, .borderless]
-        super.init(contentRect: .zero, styleMask: styleMask, backing: .buffered, defer: false)
+        let styleMask: NSWindow.StyleMask = [
+            .nonactivatingPanel, .fullSizeContentView, .borderless,
+        ]
+        super.init(
+            contentRect: .zero,
+            styleMask: styleMask,
+            backing: .buffered,
+            defer: false
+        )
         setupWindow()
     }
 
@@ -320,7 +478,9 @@ final class ActiveAppIndicatorWindow: NSPanel {
         backgroundColor = .clear
         hasShadow = false
         isMovableByWindowBackground = false
-        collectionBehavior = [.canJoinAllSpaces, .transient, .fullScreenAuxiliary, .ignoresCycle]
+        collectionBehavior = [
+            .canJoinAllSpaces, .transient, .fullScreenAuxiliary, .ignoresCycle,
+        ]
         hidesOnDeactivate = false
         ignoresMouseEvents = true
         animationBehavior = .none

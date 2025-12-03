@@ -34,6 +34,24 @@ class DockUtils {
         default: return .unknown
         }
     }
+
+    /// Returns the dock size (thickness) in pixels based on the screen's visible frame.
+    static func getDockSize() -> CGFloat {
+        guard let screen = NSScreen.main else { return 0 }
+        let dockPosition = getDockPosition()
+        switch dockPosition {
+        case .right:
+            return screen.frame.width - screen.visibleFrame.width
+        case .left:
+            return screen.visibleFrame.origin.x
+        case .bottom:
+            return screen.visibleFrame.origin.y
+        case .top:
+            return screen.frame.height - screen.visibleFrame.maxY
+        case .cmdTab, .unknown:
+            return 0
+        }
+    }
 }
 
 final class DockAutoHideManager {
