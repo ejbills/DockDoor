@@ -11,6 +11,7 @@ struct ActiveAppIndicatorSettingsView: View {
     @Default(.activeAppIndicatorHeight) var activeAppIndicatorHeight
     @Default(.activeAppIndicatorOffset) var activeAppIndicatorOffset
     @Default(.activeAppIndicatorWidth) var activeAppIndicatorWidth
+    @Default(.activeAppIndicatorShift) var activeAppIndicatorShift
     @Default(.adjustDockAutoHideAnimation) var adjustDockAutoHideAnimation
     @Default(.activeAppIndicatorFadeOutDuration) var fadeOutDuration
     @Default(.activeAppIndicatorFadeOutDelay) var fadeOutDelay
@@ -109,7 +110,7 @@ struct ActiveAppIndicatorSettingsView: View {
                         sliderSetting(
                             title: "Indicator Width",
                             value: $activeAppIndicatorWidth,
-                            range: 1.0 ... 80.0,
+                            range: 1.0...110.0,
                             step: 1.0,
                             unit: "px",
                             formatter: {
@@ -121,6 +122,22 @@ struct ActiveAppIndicatorSettingsView: View {
                         )
                         .padding(.leading, 40)
                     }
+
+                    sliderSetting(
+                        title: "Shift",
+                        value: $activeAppIndicatorShift,
+                        range: -5.0...5.0,
+                        step: 1.0,
+                        unit: "px",
+                        formatter: {
+                            let f = NumberFormatter()
+                            f.minimumFractionDigits = 0
+                            f.maximumFractionDigits = 0
+                            f.positivePrefix = "+"
+                            return f
+                        }()
+                    )
+                    .padding(.leading, 20)
 
                     Divider()
                         .padding(.vertical, 4)

@@ -16,6 +16,7 @@ final class ActiveAppIndicatorCoordinator {
     private var heightObserver: Defaults.Observation?
     private var offsetObserver: Defaults.Observation?
     private var widthObserver: Defaults.Observation?
+    private var shiftObserver: Defaults.Observation?
 
     private var currentActiveApp: NSRunningApplication?
 
@@ -118,6 +119,15 @@ final class ActiveAppIndicatorCoordinator {
                 }
             }
         }
+
+        shiftObserver = Defaults.observe(.activeAppIndicatorShift) {
+            [weak self] _ in
+            DispatchQueue.main.async {
+                if let app = self?.currentActiveApp {
+                    self?.updateIndicatorPosition(for: app)
+                }
+            }
+        }
     }
 
     private func setupDockStateObservers() {
@@ -142,6 +152,7 @@ final class ActiveAppIndicatorCoordinator {
         heightObserver?.invalidate()
         offsetObserver?.invalidate()
         widthObserver?.invalidate()
+        shiftObserver?.invalidate()
         orientationObserver = nil
         visibilityManager = nil
         hideIndicator()
@@ -338,7 +349,7 @@ final class ActiveAppIndicatorCoordinator {
         let size = Int(dockSize)
 
         // Check if dock size is in the tested range (36-125)
-        guard size >= 36, size <= 125 else {
+        guard size >= 36, size <= 156 else {
             // Fallback for untested dock sizes
             let height = max(2.0, min(8.0, dockSize * 0.05))
             let offset: CGFloat =
@@ -375,16 +386,15 @@ final class ActiveAppIndicatorCoordinator {
                 0.0
             }
 
-        // Width
         let width: CGFloat =
-            if dockSize <= 50 {
-                floor(dockSize * 0.476635514) - 10
+            if dockSize <= 40 {
+                floor(dockSize * 0.30)
+            } else if dockSize <= 50 {
+                floor(dockSize * 0.35)
             } else if dockSize <= 80 {
-                floor(dockSize * 0.6175548589) - 12
-            } else if dockSize <= 125 {
-                floor(dockSize * 0.6175548589) - 20
+                floor(dockSize * 0.40)
             } else {
-                floor(dockSize * 0.6175548589) - 26
+                floor(dockSize * 0.45)
             }
 
         return (height, offset, width)
@@ -435,7 +445,7 @@ final class ActiveAppIndicatorCoordinator {
 
         // Calculate the indicator frame using the positioning module
         guard
-            let indicatorFrame =
+            var indicatorFrame =
             ActiveAppIndicatorPositioning.calculateIndicatorFrame(
                 for: dockItemFrame,
                 dockPosition: dockPosition,
@@ -448,6 +458,9 @@ final class ActiveAppIndicatorCoordinator {
             indicatorWindow.orderOut(nil)
             return
         }
+
+        // Apply shift for alignment (-2 to +2 pixels)
+        indicatorFrame.origin.x += Defaults[.activeAppIndicatorShift]
 
         indicatorWindow.setFrame(indicatorFrame, display: true)
     }
