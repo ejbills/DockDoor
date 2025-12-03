@@ -71,7 +71,7 @@ struct ActiveAppIndicatorSettingsView: View {
                         sliderSetting(
                             title: "Indicator Height",
                             value: $activeAppIndicatorHeight,
-                            range: 1.0 ... 8.0,
+                            range: 1.0 ... 15.0,
                             step: 1,
                             unit: "px",
                             formatter: {
@@ -86,7 +86,7 @@ struct ActiveAppIndicatorSettingsView: View {
                         sliderSetting(
                             title: "Position Offset",
                             value: $activeAppIndicatorOffset,
-                            range: -20.0 ... 20.0,
+                            range: -30.0 ... 30.0,
                             step: 1.0,
                             unit: "px",
                             formatter: {
@@ -109,7 +109,7 @@ struct ActiveAppIndicatorSettingsView: View {
                         sliderSetting(
                             title: "Indicator Width",
                             value: $activeAppIndicatorWidth,
-                            range: 10.0 ... 80.0,
+                            range: 1.0 ... 80.0,
                             step: 1.0,
                             unit: "px",
                             formatter: {
