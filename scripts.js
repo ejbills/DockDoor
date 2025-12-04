@@ -17,7 +17,8 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // FAQ accordion
+    /*
+    // FAQ accordion (Using <details> and <summary> instead)
     const faqQuestions = document.querySelectorAll('.faq-question');
     
     faqQuestions.forEach(question => {
@@ -33,6 +34,7 @@ document.addEventListener('DOMContentLoaded', function() {
             icon.textContent = question.classList.contains('active') ? '↑' : '↓';
         });
     });
+    */
     
     // Slideshow functionality for customization sections
     function setupSlideshow(slideshowId) {
