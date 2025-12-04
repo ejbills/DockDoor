@@ -15,7 +15,7 @@ class WindowManipulationObservers {
     private let previewCoordinator: SharedPreviewWindowCoordinator
 
     private var observers: [pid_t: AXObserver] = [:]
-    var cacheUpdateWorkItem: DispatchWorkItem?
+    var cacheUpdateWorkItem: (workItem: DispatchWorkItem, hasStateAdjustment: Bool)?
     var updateDateTimeWorkItem: DispatchWorkItem?
 
     init(previewCoordinator: SharedPreviewWindowCoordinator) {
@@ -265,9 +265,14 @@ class WindowManipulationObservers {
                                    validate: Bool = false,
                                    stateAdjustment: ((inout Set<WindowInfo>) -> Void)? = nil)
     {
-        cacheUpdateWorkItem?.cancel()
+        // Don't cancel if the pending work item has a state adjustment (prioritize state writes)
+        if cacheUpdateWorkItem?.hasStateAdjustment != true {
+            cacheUpdateWorkItem?.workItem.cancel()
+        }
 
-        let workItem = DispatchWorkItem {
+        let hasStateAdjustment = stateAdjustment != nil
+        let workItem = DispatchWorkItem { [weak self] in
+            guard let self else { return }
             DebugLogger.measure("updateWindowCache", details: "App: \(app.localizedName ?? "Unknown"), Notification: \(notification), Validate: \(validate)") {
                 WindowUtil.updateWindowCache(for: app) { windowSet in
                     if validate {
@@ -276,8 +281,10 @@ class WindowManipulationObservers {
                     stateAdjustment?(&windowSet)
                 }
             }
+            // Clear when work item completes
+            cacheUpdateWorkItem = nil
         }
-        cacheUpdateWorkItem = workItem
+        cacheUpdateWorkItem = (workItem, hasStateAdjustment)
         DispatchQueue.main.asyncAfter(deadline: .now() + windowProcessingDebounceInterval, execute: workItem)
     }
 

@@ -41,13 +41,11 @@ struct WindowInfo: Identifiable, Hashable {
 
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
-        hasher.combine(app.bundleIdentifier ?? String(app.processIdentifier))
     }
 
     static func == (lhs: WindowInfo, rhs: WindowInfo) -> Bool {
         lhs.id == rhs.id &&
             lhs.app.processIdentifier == rhs.app.processIdentifier &&
-            lhs.spaceID == rhs.spaceID &&
             lhs.axElement == rhs.axElement
     }
 }
