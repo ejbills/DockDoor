@@ -685,7 +685,7 @@ struct WindowPreview: View {
         } else if windowInfo.isHidden {
             handleWindowAction(.hide)
         } else {
-            WindowUtil.bringWindowToFront(windowInfo: windowInfo)
+            windowInfo.bringToFront()
             onTap?()
         }
     }

@@ -564,7 +564,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         }
 
         let selectedWindow = coordinator.windows[currentIndex]
-        WindowUtil.bringWindowToFront(windowInfo: selectedWindow)
+        selectedWindow.bringToFront()
         hideWindow()
     }
 
@@ -608,22 +608,29 @@ final class SharedPreviewWindowCoordinator: NSPanel {
 
         switch action {
         case .quit:
-            WindowUtil.quitApp(windowInfo: window, force: NSEvent.modifierFlags.contains(.option))
+            window.quit(force: NSEvent.modifierFlags.contains(.option))
             hideWindow()
 
         case .close:
-            WindowUtil.closeWindow(windowInfo: window)
+            window.close()
             coordinator.removeWindow(at: originalIndex)
 
         case .minimize:
-            _ = WindowUtil.toggleMinimize(windowInfo: window)
+            var updatedWindow = window
+            if updatedWindow.toggleMinimize() != nil {
+                coordinator.updateWindow(at: originalIndex, with: updatedWindow)
+            }
 
         case .toggleFullScreen:
-            WindowUtil.toggleFullScreen(windowInfo: window)
+            var updatedWindow = window
+            updatedWindow.toggleFullScreen()
             hideWindow()
 
         case .hide:
-            _ = WindowUtil.toggleHidden(windowInfo: window)
+            var updatedWindow = window
+            if updatedWindow.toggleHidden() != nil {
+                coordinator.updateWindow(at: originalIndex, with: updatedWindow)
+            }
 
         case .openNewWindow:
             WindowUtil.openNewWindow(app: window.app)

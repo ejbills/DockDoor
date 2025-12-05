@@ -26,12 +26,13 @@ struct MediaControlsSkeleton: View {
                 VStack(alignment: .leading, spacing: 4) {
                     RoundedRectangle(cornerRadius: 3)
                         .fill(Color.primary.opacity(MediaControlsLayout.skeletonOpacity))
-                        .frame(width: 100, height: 13)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .frame(height: 13)
                     RoundedRectangle(cornerRadius: 3)
                         .fill(Color.primary.opacity(MediaControlsLayout.skeletonOpacity))
-                        .frame(width: 70, height: 11)
+                        .frame(maxWidth: 70, alignment: .leading)
+                        .frame(height: 11)
                 }
-                Spacer(minLength: 0)
             }
 
             HStack(spacing: MediaControlsLayout.embeddedMediaButtonsSpacing) {

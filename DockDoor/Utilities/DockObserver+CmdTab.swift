@@ -16,6 +16,7 @@ extension DockObserver {
         }
         cmdTabObserver = nil
         stopCmdTabPolling()
+        DockObserver.isCmdTabSwitcherActive = false
     }
 
     // MARK: - On-Demand Polling (Event-Driven)
@@ -85,6 +86,7 @@ extension DockObserver {
                 CFRunLoopAddSource(CFRunLoopGetCurrent(), AXObserverGetRunLoopSource(cmdTabObserver), .commonModes)
             }
             try processSwitcherList.subscribeToNotification(cmdTabObserver, kAXUIElementDestroyedNotification as String)
+            DockObserver.isCmdTabSwitcherActive = true
         } catch {
             // Ignore subscription errors
         }
@@ -179,28 +181,11 @@ extension DockObserver {
         }
     }
 
-    // MARK: - Public helper: is Cmd+Tab switcher active now?
+    // MARK: - Cmd+Tab Session State
 
-    static func isCmdTabSwitcherActive() -> Bool {
-        guard AXIsProcessTrusted() else { return false }
-        guard let dockApp = NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.dock").first else {
-            return false
-        }
-        let root = AXUIElementCreateApplication(dockApp.processIdentifier)
-
-        func scan(_ element: AXUIElement) -> Bool {
-            if (try? element.subrole()) == "AXProcessSwitcherList" {
-                return true
-            }
-            if let children = try? element.children() {
-                for child in children {
-                    if scan(child) { return true }
-                }
-            }
-            return false
-        }
-        return scan(root)
-    }
+    /// Cached state tracking whether the Cmd+Tab switcher is currently active.
+    /// Updated by the AXObserver when the switcher appears/disappears.
+    static var isCmdTabSwitcherActive = false
 
     private func getSelectedCmdTabItem(dockElement: AXUIElement) -> (element: AXUIElement, app: NSRunningApplication?, bundleId: String?, title: String?)? {
         guard let appSwitcherElement = findCmdTabSwitcherElement(in: dockElement) else {

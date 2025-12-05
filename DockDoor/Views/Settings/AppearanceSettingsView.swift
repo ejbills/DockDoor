@@ -64,7 +64,9 @@ extension AppearanceSettingsView {
                     axElement: dummyAXElement,
                     appAxElement: dummyAXElement,
                     closeButton: dummyAXElement,
-                    lastAccessedTime: Date()
+                    lastAccessedTime: Date(),
+                    isMinimized: false,
+                    isHidden: false
                 )
             )
         }
@@ -76,7 +78,7 @@ extension AppearanceSettingsView {
         coordinator.setWindows(windows, dockPosition: dockPosition, bestGuessMonitor: bestGuessMonitor, isMockPreviewActive: true)
         coordinator.windowSwitcherActive = windowSwitcherActive
         if !windows.isEmpty {
-            coordinator.currIndex = 0
+            coordinator.setIndex(to: 0)
         }
         return coordinator
     }
