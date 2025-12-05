@@ -325,7 +325,7 @@ class KeybindHelper {
             }
 
             // If system Cmd+Tab switcher is active, optionally handle arrows when enhancements are enabled
-            if DockObserver.isCmdTabSwitcherActive() {
+            if DockObserver.isCmdTabSwitcherActive {
                 lastCmdTabObservedActive = true
                 if Defaults[.enableCmdTabEnhancements],
                    previewCoordinator.isVisible
@@ -461,7 +461,7 @@ class KeybindHelper {
     @MainActor
     private func handleModifierEvent(currentSwitcherModifierIsPressed: Bool, currentShiftState: Bool) {
         // If system Cmd+Tab switcher is active, do not engage DockDoor's own switcher logic
-        if DockObserver.isCmdTabSwitcherActive() { return }
+        if DockObserver.isCmdTabSwitcherActive { return }
         let oldSwitcherModifierState = isSwitcherModifierKeyPressed
         let oldShiftState = isShiftKeyPressedGeneral
 
