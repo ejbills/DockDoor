@@ -3,6 +3,15 @@
     <channel>
         <title>DockDoor</title>
         <item>
+            <title>1.27</title>
+            <pubDate>Fri, 05 Dec 2025 11:20:08 -0800</pubDate>
+            <sparkle:releaseNotesLink>https://dockdoor.net/CHANGELOG.html</sparkle:releaseNotesLink>
+            <sparkle:version>1.27</sparkle:version>
+            <sparkle:shortVersionString>1.27</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/ejbills/DockDoor/releases/download/1.27/DockDoor.dmg" length="16117529" type="application/octet-stream" sparkle:edSignature="UO/KBkoETkJlLbfLyIXqz7A6BUM2nUXgeT6osTQx1GN9cEUW95ZCEhE3WUHCuREdzEwzbtBlkg+ui7XCtMldDg==" />
+        </item>
+    <item>
             <title>1.26.0.5_pre_1_27</title>
             <pubDate>Fri, 05 Dec 2025 10:14:26 -0800</pubDate>
             <sparkle:releaseNotesLink>https://dockdoor.net/CHANGELOG.html</sparkle:releaseNotesLink>
@@ -11,15 +20,6 @@
             <sparkle:shortVersionString>1.26.0.5_pre_1_27 beta</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
             <enclosure url="https://github.com/ejbills/DockDoor/releases/download/1.26.0.5_pre_1_27/DockDoor.dmg" length="16067364" type="application/octet-stream" sparkle:edSignature="7qrjGcBEsjdCibsNg0lr15dFThyoVcV5G9AsQERsYd9fNLxggqOBmxs6jexYaRXUvmSEwYO7iWJYmo5EFTmCBA==" />
-        </item>
-    <item>
-            <title>1.26</title>
-            <pubDate>Wed, 19 Nov 2025 18:36:54 -0800</pubDate>
-            <sparkle:releaseNotesLink>https://dockdoor.net/CHANGELOG.html</sparkle:releaseNotesLink>
-            <sparkle:version>1.26</sparkle:version>
-            <sparkle:shortVersionString>1.26</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/ejbills/DockDoor/releases/download/1.26/DockDoor.dmg" length="16031564" type="application/octet-stream" sparkle:edSignature="SGbdWkc+4/j18HKowxGr37ekI45dJnL3voYB5zYY89jyXBiniFcVIApiu6GHrhqx8bA19L5pdnb9kWjY5/f2AA==" />
         </item>
     </channel>
 </rss>
