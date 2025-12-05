@@ -421,7 +421,24 @@ final class DockObserver {
             return false
         }
 
-        let wasRestorationNeeded = hasValidHoverState && lastHoveredAppNeedsRestore
+        // If no hover state, query AX directly to check if any windows are minimized at click time
+        var hasMinimizedWindowsAtClickTime = false
+        if !hasValidHoverState {
+            let axApp = AXUIElementCreateApplication(pid)
+            if let windowList = try? axApp.windows() {
+                for window in windowList {
+                    if (try? window.isMinimized()) == true {
+                        hasMinimizedWindowsAtClickTime = true
+                        break
+                    }
+                }
+            }
+        }
+
+        // Capture restoration need from hover state OR from AX query at click time
+        let wasRestorationNeededFromHover = hasValidHoverState && lastHoveredAppNeedsRestore
+        let restorationNeededAtClickTime = wasRestorationNeededFromHover || hasMinimizedWindowsAtClickTime || app.isHidden
+
         lastHoveredPID = nil
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) { [weak self] in
@@ -433,7 +450,11 @@ final class DockObserver {
                 guard let self else { return }
 
                 let windows = try await WindowUtil.getActiveWindows(of: app)
-                let needsRestore = app.isHidden || windows.contains(where: \.isMinimized) || wasRestorationNeeded
+                let currentlyHasMinimizedWindows = windows.contains(where: \.isMinimized)
+
+                // Use the state captured at click time to determine intent
+                // This prevents native dock's restore from confusing our logic
+                let needsRestore = restorationNeededAtClickTime || currentlyHasMinimizedWindows
 
                 if needsRestore {
                     restoreAppWindows(windows: windows, app: app, appName: appName)
@@ -447,12 +468,15 @@ final class DockObserver {
     }
 
     private func hideAppWindows(windows: [WindowInfo], app: NSRunningApplication, appName: String) {
+        let windowsToMinimize = windows.filter { !$0.isMinimized }
+        guard !windowsToMinimize.isEmpty else { return }
+
         if Defaults[.dockClickAction] == .hide {
             DispatchQueue.main.async {
                 app.hide()
             }
         } else {
-            for window in windows where !window.isMinimized {
+            for window in windowsToMinimize {
                 var mutableWindow = window
                 _ = mutableWindow.toggleMinimize()
             }
@@ -460,10 +484,13 @@ final class DockObserver {
     }
 
     private func restoreAppWindows(windows: [WindowInfo], app: NSRunningApplication, appName: String) {
+        let windowsToRestore = windows.filter(\.isMinimized)
+        guard !windowsToRestore.isEmpty || app.isHidden else { return }
+
         if Defaults[.dockClickAction] == .hide {
             app.activate()
         } else {
-            for window in windows where window.isMinimized {
+            for window in windowsToRestore {
                 var mutableWindow = window
                 _ = mutableWindow.toggleMinimize()
             }
