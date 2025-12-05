@@ -5,6 +5,12 @@ import ScreenCaptureKit
 
 let filteredBundleIdentifiers: [String] = ["com.apple.notificationcenterui"] // filters desktop widgets
 
+/// Context for fetching windows - determines which settings to use
+enum WindowFetchContext {
+    case dockPreview
+    case cmdTab
+}
+
 protocol WindowPropertiesProviding {
     var windowID: CGWindowID { get }
     var frame: CGRect { get }
@@ -288,16 +294,22 @@ extension WindowUtil {
 extension WindowUtil {
     static func getAllWindowsOfAllApps() -> [WindowInfo] {
         let windows = desktopSpaceWindowCacheManager.getAllWindows()
-        let filteredWindows = !Defaults[.includeHiddenWindowsInSwitcher]
+        var filteredWindows = !Defaults[.includeHiddenWindowsInSwitcher]
             ? windows.filter { !$0.isHidden && !$0.isMinimized }
             : windows
 
         // Filter by frontmost app if enabled
         if Defaults[.limitSwitcherToFrontmostApp] {
-            return getWindowsForFrontmostApp(from: filteredWindows)
+            filteredWindows = getWindowsForFrontmostApp(from: filteredWindows)
         }
 
-        return filteredWindows
+        // Sort windows based on user preference for window switcher
+        switch Defaults[.windowSwitcherSortOrder] {
+        case .recentlyUsed:
+            return filteredWindows.sorted(by: { $0.lastAccessedTime > $1.lastAccessedTime })
+        case .creationOrder:
+            return filteredWindows.sorted(by: { $0.creationTime < $1.creationTime })
+        }
     }
 
     static func getWindowsForFrontmostApp(from windows: [WindowInfo]) -> [WindowInfo] {
@@ -310,7 +322,45 @@ extension WindowUtil {
         }
     }
 
-    static func getActiveWindows(of app: NSRunningApplication) async throws -> [WindowInfo] {
+    /// Filters windows to only include those in the current Space.
+    /// Uses SCShareableContent to determine on-screen status (modern API).
+    /// TODO: Update window observer to track window space in cache
+    static func filterWindowsByCurrentSpace(_ windows: [WindowInfo]) async -> [WindowInfo] {
+        let activeSpaceIDs = currentActiveSpaceIDs()
+
+        // Use SCShareableContent to get on-screen window IDs
+        let onScreenWindowIDs: Set<CGWindowID> = if let content = try? await SCShareableContent.excludingDesktopWindows(true, onScreenWindowsOnly: true) {
+            Set(content.windows.map(\.windowID))
+        } else {
+            []
+        }
+
+        return windows.filter { windowInfo in
+            let windowSpaces = Set(windowInfo.id.cgsSpaces().map { Int($0) })
+            let isOnScreen = onScreenWindowIDs.contains(windowInfo.id)
+
+            // For minimized/hidden windows, check if they belong to current space
+            if windowInfo.isMinimized || windowInfo.isHidden {
+                if !windowSpaces.isEmpty {
+                    return !windowSpaces.isDisjoint(with: activeSpaceIDs)
+                }
+                if let spaceID = windowInfo.spaceID {
+                    return activeSpaceIDs.contains(spaceID)
+                }
+                return true
+            }
+
+            // For normal windows, check space info
+            if !windowSpaces.isEmpty {
+                return !windowSpaces.isDisjoint(with: activeSpaceIDs)
+            }
+
+            // If no space info, check if window is on screen
+            return isOnScreen
+        }
+    }
+
+    static func getActiveWindows(of app: NSRunningApplication, context: WindowFetchContext = .dockPreview) async throws -> [WindowInfo] {
         // Fetch SCK windows (visible windows only)
         let content = try await SCShareableContent.excludingDesktopWindows(true, onScreenWindowsOnly: true)
         let group = LimitedTaskGroup<Void>(maxConcurrentTasks: 4)
@@ -333,7 +383,20 @@ extension WindowUtil {
         // Purify cache and return
         if let finalWindows = await WindowUtil.purifyAppCache(with: app.processIdentifier, removeAll: false) {
             guard !Defaults[.ignoreAppsWithSingleWindow] || finalWindows.count > 1 else { return [] }
-            return finalWindows.sorted(by: { $0.lastAccessedTime > $1.lastAccessedTime })
+            // Sort windows based on user preference for the context
+            let sortOrder: WindowPreviewSortOrder = switch context {
+            case .dockPreview:
+                Defaults[.windowPreviewSortOrder]
+            case .cmdTab:
+                Defaults[.cmdTabSortOrder]
+            }
+
+            switch sortOrder {
+            case .recentlyUsed:
+                return finalWindows.sorted(by: { $0.lastAccessedTime > $1.lastAccessedTime })
+            case .creationOrder:
+                return finalWindows.sorted(by: { $0.creationTime < $1.creationTime })
+            }
         }
 
         return []
