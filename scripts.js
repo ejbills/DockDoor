@@ -17,25 +17,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    /*
-    // FAQ accordion (Using <details> and <summary> instead)
-    const faqQuestions = document.querySelectorAll('.faq-question');
-    
-    faqQuestions.forEach(question => {
-        question.addEventListener('click', () => {
-            const answer = question.nextElementSibling;
-            
-            // Toggle active class on question and answer
-            question.classList.toggle('active');
-            answer.classList.toggle('active');
-            
-            // Update icon
-            const icon = question.querySelector('i');
-            icon.textContent = question.classList.contains('active') ? '↑' : '↓';
-        });
-    });
-    */
-    
     // Slideshow functionality for customization sections
     function setupSlideshow(slideshowId) {
         const slideshow = document.getElementById(slideshowId);
