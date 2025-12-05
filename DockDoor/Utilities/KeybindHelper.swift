@@ -550,6 +550,7 @@ class KeybindHelper {
             (!isDesiredModifierPressedNow && keyBoardShortcutSaved.modifierFlags == 0 && keyCode == keyBoardShortcutSaved.keyCode)
 
         if isExactSwitcherShortcutPressed {
+            guard Defaults[.enableWindowSwitcher] else { return (false, nil) }
             return (true, { await self.handleKeybindActivation() })
         }
 
