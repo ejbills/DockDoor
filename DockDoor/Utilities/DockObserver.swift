@@ -201,6 +201,11 @@ final class DockObserver {
                     combinedWindows.append(contentsOf: windowsForInstance)
                 }
 
+                // Filter windows to only show those in the current Space if the setting is enabled
+                if Defaults[.showWindowsFromCurrentSpaceOnly] {
+                    combinedWindows = await WindowUtil.filterWindowsByCurrentSpace(combinedWindows)
+                }
+
                 lastHoveredPID = currentApp.processIdentifier
                 lastHoveredAppWasFrontmost = NSWorkspace.shared.frontmostApplication?.processIdentifier == currentApp.processIdentifier
                 lastHoveredAppNeedsRestore = currentApp.isHidden || combinedWindows.contains(where: \.isMinimized)
