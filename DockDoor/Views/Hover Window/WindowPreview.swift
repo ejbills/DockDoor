@@ -17,6 +17,7 @@ struct WindowPreview: View {
     let showAppIconOnly: Bool
     let mockPreviewActive: Bool
     let onHoverIndexChange: ((Int?) -> Void)?
+    @ObservedObject var liveCapture = LiveWindowCapture.shared
 
     @Default(.windowTitlePosition) var windowTitlePosition
     @Default(.showWindowTitle) var showWindowTitle
@@ -68,7 +69,8 @@ struct WindowPreview: View {
 
     private func windowContent(isMinimized: Bool, isHidden: Bool, isSelected: Bool) -> some View {
         Group {
-            if let cgImage = windowInfo.image {
+            let displayImage = liveCapture.capturedImages[windowInfo.id] ?? windowInfo.image
+            if let cgImage = displayImage {
                 let inactive = (isMinimized || isHidden) && showMinimizedHiddenLabels
                 Image(decorative: cgImage, scale: 1.0)
                     .resizable()
