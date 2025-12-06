@@ -38,6 +38,36 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://buymeacoffee.com/keplercafe</div>
 
+<a id="1.27"></a>
+# [Release 1.27](https://github.com/ejbills/DockDoor/releases/tag/1.27) - 2025-12-05
+
+# DockDoor v1.27
+
+## ✨ New Features
+- Space-based window filtering (thanks [@YiwenZhu77](https://github.com/YiwenZhu77))
+  - Dock hover filtering
+  - Window switcher filtering
+  - Command-Tab enhancement filtering
+- Debug logging system (default OFF)
+  - Log export functionality
+
+## 🔧 Improvements & Stability
+- Improved dock click behavior
+- Faster window state updates
+- Enhanced Command-Tab integration
+- Optimized app startup performance
+- Better window switcher throttling
+
+## 🐛 Bug Fixes
+- Fixed window restoration timing 
+- Corrected state tracking accuracy
+- Fixed CMD+TAB enhancement causing lag while holding key
+
+
+
+[Changes][1.27]
+
+
 <a id="1.26"></a>
 # [Release 1.26](https://github.com/ejbills/DockDoor/releases/tag/1.26) - 2025-11-20
 
@@ -1650,6 +1680,7 @@ v1.0
 [Changes][releases]
 
 
+[1.27]: https://github.com/ejbills/DockDoor/compare/1.26...1.27
 [1.26]: https://github.com/ejbills/DockDoor/compare/1.25.5...1.26
 [1.25.5]: https://github.com/ejbills/DockDoor/compare/1.25.4...1.25.5
 [1.25.4]: https://github.com/ejbills/DockDoor/compare/1.25.3...1.25.4

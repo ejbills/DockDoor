@@ -52,7 +52,10 @@ private class WindowSwitchingCoordinator {
     private func initializeWindowSwitching(
         previewCoordinator: SharedPreviewWindowCoordinator
     ) async {
-        let windows = WindowUtil.getAllWindowsOfAllApps()
+        var windows = WindowUtil.getAllWindowsOfAllApps()
+        if Defaults[.showWindowsFromCurrentSpaceOnlyInSwitcher] {
+            windows = await WindowUtil.filterWindowsByCurrentSpace(windows)
+        }
         guard !windows.isEmpty else { return }
 
         currentSessionId = UUID()
@@ -325,7 +328,7 @@ class KeybindHelper {
             }
 
             // If system Cmd+Tab switcher is active, optionally handle arrows when enhancements are enabled
-            if DockObserver.isCmdTabSwitcherActive() {
+            if DockObserver.isCmdTabSwitcherActive {
                 lastCmdTabObservedActive = true
                 if Defaults[.enableCmdTabEnhancements],
                    previewCoordinator.isVisible
@@ -461,7 +464,7 @@ class KeybindHelper {
     @MainActor
     private func handleModifierEvent(currentSwitcherModifierIsPressed: Bool, currentShiftState: Bool) {
         // If system Cmd+Tab switcher is active, do not engage DockDoor's own switcher logic
-        if DockObserver.isCmdTabSwitcherActive() { return }
+        if DockObserver.isCmdTabSwitcherActive { return }
         let oldSwitcherModifierState = isSwitcherModifierKeyPressed
         let oldShiftState = isShiftKeyPressedGeneral
 
@@ -495,7 +498,7 @@ class KeybindHelper {
                         self.previewCoordinator.selectAndBringToFrontCurrentWindow()
                         self.windowSwitchingCoordinator.cancelSwitching()
                     } else if let selectedWindow = self.windowSwitchingCoordinator.selectCurrentWindow() {
-                        WindowUtil.bringWindowToFront(windowInfo: selectedWindow)
+                        selectedWindow.bringToFront()
                         self.previewCoordinator.hideWindow()
                     }
                 }
@@ -550,6 +553,7 @@ class KeybindHelper {
             (!isDesiredModifierPressedNow && keyBoardShortcutSaved.modifierFlags == 0 && keyCode == keyBoardShortcutSaved.keyCode)
 
         if isExactSwitcherShortcutPressed {
+            guard Defaults[.enableWindowSwitcher] else { return (false, nil) }
             return (true, { await self.handleKeybindActivation() })
         }
 
@@ -675,7 +679,7 @@ class KeybindHelper {
             }
 
             if let selectedWindow = self.windowSwitchingCoordinator.selectCurrentWindow() {
-                WindowUtil.bringWindowToFront(windowInfo: selectedWindow)
+                selectedWindow.bringToFront()
                 self.previewCoordinator.hideWindow()
             } else {
                 self.previewCoordinator.selectAndBringToFrontCurrentWindow()

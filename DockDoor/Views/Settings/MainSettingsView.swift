@@ -85,6 +85,12 @@ struct MainSettingsView: View {
     @Default(.enableWindowSwitcher) var enableWindowSwitcher
     @Default(.enableWindowSwitcherSearch) var enableWindowSwitcherSearch
     @Default(.enableDockPreviews) var enableDockPreviews
+    @Default(.showWindowsFromCurrentSpaceOnly) var showWindowsFromCurrentSpaceOnly
+    @Default(.windowPreviewSortOrder) var windowPreviewSortOrder
+    @Default(.showWindowsFromCurrentSpaceOnlyInSwitcher) var showWindowsFromCurrentSpaceOnlyInSwitcher
+    @Default(.windowSwitcherSortOrder) var windowSwitcherSortOrder
+    @Default(.showWindowsFromCurrentSpaceOnlyInCmdTab) var showWindowsFromCurrentSpaceOnlyInCmdTab
+    @Default(.cmdTabSortOrder) var cmdTabSortOrder
     @Default(.keepPreviewOnAppTerminate) var keepPreviewOnAppTerminate
     @Default(.enableCmdTabEnhancements) var enableCmdTabEnhancements
     @Default(.scrollToMouseHoverInSwitcher) var scrollToMouseHoverInSwitcher
@@ -116,7 +122,6 @@ struct MainSettingsView: View {
     @Default(.windowPreviewImageScale) var windowPreviewImageScale
     @Default(.windowImageCaptureQuality) var windowImageCaptureQuality
     @Default(.bufferFromDock) var bufferFromDock
-    @Default(.sortWindowsByDate) var sortWindowsByDate
     @Default(.shouldHideOnDockItemClick) var shouldHideOnDockItemClick
     @Default(.dockClickAction) var dockClickAction
     @Default(.enableCmdRightClickQuit) var enableCmdRightClickQuit
@@ -389,6 +394,27 @@ struct MainSettingsView: View {
                         .foregroundColor(.secondary)
                         .padding(.leading, 20)
                     if enableDockPreviews {
+                        Toggle(isOn: $showWindowsFromCurrentSpaceOnly) { Text("Show windows from current Space only") }
+                            .padding(.leading, 20)
+                        Text("Only display windows that are in the current virtual desktop/Space.")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                            .padding(.leading, 40)
+
+                        Text("Window sort order")
+                            .padding(.leading, 20)
+                        Picker("", selection: $windowPreviewSortOrder) {
+                            ForEach(WindowPreviewSortOrder.allCases) { order in
+                                Text(order.localizedName).tag(order)
+                            }
+                        }
+                        .pickerStyle(.menu)
+                        .padding(.leading, 40)
+                        Text("Choose how windows are sorted in the preview.")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                            .padding(.leading, 40)
+
                         Toggle(isOn: $keepPreviewOnAppTerminate) { Text("Keep preview when app terminates") }
                             .padding(.leading, 20)
                         Text("When an app terminates, remove only its windows from the preview instead of hiding the entire preview.")
@@ -420,14 +446,33 @@ struct MainSettingsView: View {
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                                 .padding(.leading, 20)
-                            Toggle(isOn: $useClassicWindowOrdering) { Text("Use Windows-style window ordering in Switcher") }
-                            Text("Shows last active window first, instead of current window.")
+                            Toggle(isOn: $useClassicWindowOrdering) { Text("Start on second window in Switcher") }
+                            Text("When opening the window switcher, highlight the second window instead of the first.")
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                                 .padding(.leading, 20)
 
                             Toggle(isOn: $limitSwitcherToFrontmostApp) { Text("Limit Window Switcher to active app only") }
                             Text("Only show windows from the currently active/frontmost application.")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                                .padding(.leading, 20)
+
+                            Toggle(isOn: $showWindowsFromCurrentSpaceOnlyInSwitcher) { Text("Show windows from current Space only") }
+                            Text("Only display windows that are in the current virtual desktop/Space.")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                                .padding(.leading, 20)
+
+                            Text("Window sort order")
+                            Picker("", selection: $windowSwitcherSortOrder) {
+                                ForEach(WindowPreviewSortOrder.allCases) { order in
+                                    Text(order.localizedName).tag(order)
+                                }
+                            }
+                            .pickerStyle(.menu)
+                            .padding(.leading, 20)
+                            Text("Choose how windows are sorted in the window switcher.")
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                                 .padding(.leading, 20)
@@ -449,6 +494,29 @@ struct MainSettingsView: View {
                     .font(.caption)
                     .foregroundColor(.secondary)
                     .padding(.leading, 20)
+
+                    if enableCmdTabEnhancements {
+                        Toggle(isOn: $showWindowsFromCurrentSpaceOnlyInCmdTab) { Text("Show windows from current Space only") }
+                            .padding(.leading, 20)
+                        Text("Only display windows that are in the current virtual desktop/Space.")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                            .padding(.leading, 40)
+
+                        Text("Window sort order")
+                            .padding(.leading, 20)
+                        Picker("", selection: $cmdTabSortOrder) {
+                            ForEach(WindowPreviewSortOrder.allCases) { order in
+                                Text(order.localizedName).tag(order)
+                            }
+                        }
+                        .pickerStyle(.menu)
+                        .padding(.leading, 40)
+                        Text("Choose how windows are sorted in Cmd+Tab previews.")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                            .padding(.leading, 40)
+                    }
                 }
 
                 HStack {
@@ -568,7 +636,6 @@ struct MainSettingsView: View {
 
                     sliderSetting(title: "Window Image Cache Lifespan", value: $screenCaptureCacheLifespan, range: 0 ... 60, step: 10, unit: "seconds")
                     sliderSetting(title: "Window Image Resolution Scale (1=Best)", value: $windowPreviewImageScale, range: 1 ... 4, step: 1, unit: "")
-                    Toggle(isOn: $sortWindowsByDate) { Text("Sort Window Previews by Date (if multiple)") }
                 }
             }
             StyledGroupBox(label: "Interaction & Behavior (Dock Previews)") {
@@ -859,7 +926,7 @@ struct MainSettingsView: View {
                 hoverWindowOpenDelay = perfDefault.hoverWindowOpenDelay; fadeOutDuration = perfDefault.fadeOutDuration; tapEquivalentInterval = perfDefault.tapEquivalentInterval; preventDockHide = perfDefault.preventDockHide
                 let qualityDefault = PreviewQualityProfile.standard.settings
                 screenCaptureCacheLifespan = qualityDefault.screenCaptureCacheLifespan; windowPreviewImageScale = qualityDefault.windowPreviewImageScale
-                bufferFromDock = Defaults.Keys.bufferFromDock.defaultValue; sortWindowsByDate = Defaults.Keys.sortWindowsByDate.defaultValue; shouldHideOnDockItemClick = Defaults.Keys.shouldHideOnDockItemClick.defaultValue; dockClickAction = Defaults.Keys.dockClickAction.defaultValue; enableCmdRightClickQuit = Defaults.Keys.enableCmdRightClickQuit.defaultValue; previewHoverAction = Defaults.Keys.previewHoverAction.defaultValue; aeroShakeAction = Defaults.Keys.aeroShakeAction.defaultValue
+                bufferFromDock = Defaults.Keys.bufferFromDock.defaultValue; shouldHideOnDockItemClick = Defaults.Keys.shouldHideOnDockItemClick.defaultValue; dockClickAction = Defaults.Keys.dockClickAction.defaultValue; enableCmdRightClickQuit = Defaults.Keys.enableCmdRightClickQuit.defaultValue; previewHoverAction = Defaults.Keys.previewHoverAction.defaultValue; aeroShakeAction = Defaults.Keys.aeroShakeAction.defaultValue
 
                 showMenuBarIcon = Defaults.Keys.showMenuBarIcon.defaultValue
                 enableWindowSwitcher = Defaults.Keys.enableWindowSwitcher.defaultValue
