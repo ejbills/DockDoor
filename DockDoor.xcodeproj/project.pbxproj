@@ -11,6 +11,8 @@
 		DDE7D7ED954542C3BDF287E1 /* ActiveAppIndicatorOrientationObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = E975DCFA0DD94F85B976DB20 /* ActiveAppIndicatorOrientationObserver.swift */; };
 		7481FD0077674EC4855D8808 /* ActiveAppIndicatorVisibilityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26DF21ADE5544187AECDE80D /* ActiveAppIndicatorVisibilityManager.swift */; };
 		F3A2B8C1D5E6489AAB123456 /* ActiveAppIndicatorPositioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B7C6D5E4F3A2B1098765432 /* ActiveAppIndicatorPositioning.swift */; };
+		A1B2C3D4E5F6789012345678 /* ActiveAppIndicatorWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C3D4E5F67890123456789A /* ActiveAppIndicatorWindow.swift */; };
+		C3D4E5F6789012345678901B /* ActiveAppIndicatorDockDetection.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4E5F6789012345678901234 /* ActiveAppIndicatorDockDetection.swift */; };
 		83E26DB067D2426086683147 /* ActiveAppIndicatorSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D264F468F734971AE701690 /* ActiveAppIndicatorSettingsView.swift */; };
 		0531F8D22C3CC04600327808 /* AppearanceSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0531F8D12C3CC04600327808 /* AppearanceSettingsView.swift */; };
 		0596C2C32C3E060D00DCABEF /* PrivateApis.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0596C2C22C3E060D00DCABEF /* PrivateApis.swift */; };
@@ -158,6 +160,8 @@
 		E975DCFA0DD94F85B976DB20 /* ActiveAppIndicatorOrientationObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveAppIndicatorOrientationObserver.swift; sourceTree = "<group>"; };
 		26DF21ADE5544187AECDE80D /* ActiveAppIndicatorVisibilityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveAppIndicatorVisibilityManager.swift; sourceTree = "<group>"; };
 		8B7C6D5E4F3A2B1098765432 /* ActiveAppIndicatorPositioning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveAppIndicatorPositioning.swift; sourceTree = "<group>"; };
+		B2C3D4E5F67890123456789A /* ActiveAppIndicatorWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveAppIndicatorWindow.swift; sourceTree = "<group>"; };
+		D4E5F6789012345678901234 /* ActiveAppIndicatorDockDetection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveAppIndicatorDockDetection.swift; sourceTree = "<group>"; };
 		7D264F468F734971AE701690 /* ActiveAppIndicatorSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveAppIndicatorSettingsView.swift; sourceTree = "<group>"; };
 		0531F8D12C3CC04600327808 /* AppearanceSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceSettingsView.swift; sourceTree = "<group>"; };
 		0596C2C22C3E060D00DCABEF /* PrivateApis.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateApis.swift; sourceTree = "<group>"; };
@@ -480,9 +484,11 @@
 			isa = PBXGroup;
 			children = (
 				C6F87422D4714171AD2CCC4A /* ActiveAppIndicatorCoordinator.swift */,
+				D4E5F6789012345678901234 /* ActiveAppIndicatorDockDetection.swift */,
 				E975DCFA0DD94F85B976DB20 /* ActiveAppIndicatorOrientationObserver.swift */,
 				8B7C6D5E4F3A2B1098765432 /* ActiveAppIndicatorPositioning.swift */,
 				26DF21ADE5544187AECDE80D /* ActiveAppIndicatorVisibilityManager.swift */,
+				B2C3D4E5F67890123456789A /* ActiveAppIndicatorWindow.swift */,
 			);
 			path = ActiveAppIndicator;
 			sourceTree = "<group>";
@@ -825,9 +831,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				1A04FA16AC74448F83D0F964 /* ActiveAppIndicatorCoordinator.swift in Sources */,
+				C3D4E5F6789012345678901B /* ActiveAppIndicatorDockDetection.swift in Sources */,
 				DDE7D7ED954542C3BDF287E1 /* ActiveAppIndicatorOrientationObserver.swift in Sources */,
 				F3A2B8C1D5E6489AAB123456 /* ActiveAppIndicatorPositioning.swift in Sources */,
 				7481FD0077674EC4855D8808 /* ActiveAppIndicatorVisibilityManager.swift in Sources */,
+				A1B2C3D4E5F6789012345678 /* ActiveAppIndicatorWindow.swift in Sources */,
 				83E26DB067D2426086683147 /* ActiveAppIndicatorSettingsView.swift in Sources */,
 				0531F8D22C3CC04600327808 /* AppearanceSettingsView.swift in Sources */,
 				BB5D35542ED4C4CC006ECE15 /* DebugLogger.swift in Sources */,
