@@ -12,10 +12,10 @@ final class ActiveAppIndicatorCoordinator {
     private var settingsObserver: Defaults.Observation?
     private var colorObserver: Defaults.Observation?
     private var autoSizeObserver: Defaults.Observation?
-    private var autoWidthObserver: Defaults.Observation?
+    private var autoLengthObserver: Defaults.Observation?
     private var heightObserver: Defaults.Observation?
     private var offsetObserver: Defaults.Observation?
-    private var widthObserver: Defaults.Observation?
+    private var lengthObserver: Defaults.Observation?
     private var shiftObserver: Defaults.Observation?
 
     private var currentActiveApp: NSRunningApplication?
@@ -83,7 +83,7 @@ final class ActiveAppIndicatorCoordinator {
             }
         }
 
-        autoWidthObserver = Defaults.observe(.activeAppIndicatorAutoWidth) {
+        autoLengthObserver = Defaults.observe(.activeAppIndicatorAutoLength) {
             [weak self] _ in
             DispatchQueue.main.async {
                 if let app = self?.currentActiveApp {
@@ -111,7 +111,7 @@ final class ActiveAppIndicatorCoordinator {
             }
         }
 
-        widthObserver = Defaults.observe(.activeAppIndicatorWidth) {
+        lengthObserver = Defaults.observe(.activeAppIndicatorLength) {
             [weak self] _ in
             DispatchQueue.main.async {
                 if let app = self?.currentActiveApp {
@@ -148,10 +148,10 @@ final class ActiveAppIndicatorCoordinator {
         settingsObserver?.invalidate()
         colorObserver?.invalidate()
         autoSizeObserver?.invalidate()
-        autoWidthObserver?.invalidate()
+        autoLengthObserver?.invalidate()
         heightObserver?.invalidate()
         offsetObserver?.invalidate()
-        widthObserver?.invalidate()
+        lengthObserver?.invalidate()
         shiftObserver?.invalidate()
         orientationObserver = nil
         visibilityManager = nil
@@ -319,7 +319,7 @@ final class ActiveAppIndicatorCoordinator {
                 return getFrameForDockItem(item)
             }
 
-            // Also check by running app
+            // Check by running app if bundle ID check failed
             if let itemTitle = try? item.title(),
                itemTitle == app.localizedName
             {
@@ -340,53 +340,29 @@ final class ActiveAppIndicatorCoordinator {
 
     // MARK: - Auto Size Calculation
 
-    /// Calculates indicator height, offset, and width based on dock size and position.
-    /// Values derived from testing for dock sizes 36-125.
+    /// Calculates indicator height, offset, and length based on dock size and position.
+    /// Values derived from testing for dock sizes 36-156
     private func calculateAutoSize(
         dockSize: CGFloat,
         dockPosition: DockPosition
-    ) -> (height: CGFloat, offset: CGFloat, width: CGFloat?) {
+    ) -> (height: CGFloat, offset: CGFloat, length: CGFloat) {
         let size = Int(dockSize)
 
-        // Check if dock size is in the tested range (36-125)
-        guard size >= 36, size <= 156 else {
-            // Fallback for untested dock sizes
-            let height = max(2.0, min(8.0, dockSize * 0.05))
-            let offset: CGFloat =
-                switch dockPosition {
-                case .bottom:
-                    max(2.0, min(10.0, dockSize * 0.05))
-                case .left:
-                    -max(2.0, min(10.0, dockSize * 0.05))
-                case .right:
-                    -3.0
-                default:
-                    0.0
-                }
-            // Return nil for width to use default 65% calculation
-            return (height, offset, nil)
-        }
-
-        // Height: 3 for dock sizes 36-50, 4 for dock sizes 51+
         let height: CGFloat = size <= 50 ? 3.0 : 4.0
 
-        // Offset varies by position and dock size
         let offset: CGFloat =
             switch dockPosition {
             case .bottom:
-                // Bottom: 4 for sizes 36-50, 5 for sizes 51+
                 size <= 50 ? 4.0 : 5.0
             case .left:
-                // Left: -4 for sizes 36-50, -5 for sizes 51+
                 size <= 50 ? -4.0 : -5.0
             case .right:
-                // Right: -3 for all sizes
                 -3.0
             default:
                 0.0
             }
 
-        let width: CGFloat =
+        let length: CGFloat =
             if dockSize <= 40 {
                 floor(dockSize * 0.30)
             } else if dockSize <= 50 {
@@ -397,7 +373,7 @@ final class ActiveAppIndicatorCoordinator {
                 floor(dockSize * 0.45)
             }
 
-        return (height, offset, width)
+        return (height, offset, length)
     }
 
     // MARK: - Positioning
@@ -410,7 +386,7 @@ final class ActiveAppIndicatorCoordinator {
 
         let indicatorThickness: CGFloat
         let indicatorOffset: CGFloat
-        let indicatorLength: CGFloat?
+        let indicatorLength: CGFloat
 
         let dockSize = DockUtils.getDockSize()
         let autoSize = calculateAutoSize(
@@ -427,11 +403,10 @@ final class ActiveAppIndicatorCoordinator {
             indicatorOffset = Defaults[.activeAppIndicatorOffset]
         }
 
-        // Auto width is a separate setting
-        if Defaults[.activeAppIndicatorAutoWidth] {
-            indicatorLength = autoSize.width
+        if Defaults[.activeAppIndicatorAutoLength] {
+            indicatorLength = autoSize.length
         } else {
-            indicatorLength = Defaults[.activeAppIndicatorWidth]
+            indicatorLength = Defaults[.activeAppIndicatorLength]
         }
 
         // Get the screen containing the dock
@@ -459,7 +434,7 @@ final class ActiveAppIndicatorCoordinator {
             return
         }
 
-        // Apply shift for alignment (-2 to +2 pixels)
+        // Apply shift setting for alignment (-2 to +2 pixels)
         indicatorFrame.origin.x += Defaults[.activeAppIndicatorShift]
 
         indicatorWindow.setFrame(indicatorFrame, display: true)
@@ -512,9 +487,6 @@ final class ActiveAppIndicatorWindow: NSPanel {
 // MARK: - Indicator View
 
 /// The SwiftUI view that draws the indicator line.
-/// The Capsule adapts to the window frame set by the positioning module:
-/// - Horizontal (width > height) for bottom dock
-/// - Vertical (height > width) for left/right dock
 struct ActiveAppIndicatorView: View {
     @Default(.activeAppIndicatorColor) var indicatorColor
 

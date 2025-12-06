@@ -35,7 +35,7 @@ class DockUtils {
         }
     }
 
-    /// Returns the dock size (thickness) in pixels based on the screen's visible frame.
+    /// Returns the dock size in pixels based on the screen's visible frame.
     static func getDockSize() -> CGFloat {
         guard let screen = NSScreen.main else { return 0 }
         let dockPosition = getDockPosition()

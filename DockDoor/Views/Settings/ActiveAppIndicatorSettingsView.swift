@@ -7,10 +7,10 @@ struct ActiveAppIndicatorSettingsView: View {
     @Default(.showActiveAppIndicator) var showActiveAppIndicator
     @Default(.activeAppIndicatorColor) var activeAppIndicatorColor
     @Default(.activeAppIndicatorAutoSize) var activeAppIndicatorAutoSize
-    @Default(.activeAppIndicatorAutoWidth) var activeAppIndicatorAutoWidth
+    @Default(.activeAppIndicatorAutoLength) var activeAppIndicatorAutoLength
     @Default(.activeAppIndicatorHeight) var activeAppIndicatorHeight
     @Default(.activeAppIndicatorOffset) var activeAppIndicatorOffset
-    @Default(.activeAppIndicatorWidth) var activeAppIndicatorWidth
+    @Default(.activeAppIndicatorLength) var activeAppIndicatorLength
     @Default(.activeAppIndicatorShift) var activeAppIndicatorShift
     @Default(.adjustDockAutoHideAnimation) var adjustDockAutoHideAnimation
     @Default(.activeAppIndicatorFadeOutDuration) var fadeOutDuration
@@ -101,15 +101,15 @@ struct ActiveAppIndicatorSettingsView: View {
                         .padding(.leading, 40)
                     }
 
-                    Toggle(isOn: $activeAppIndicatorAutoWidth) {
-                        Text("Automatically set width")
+                    Toggle(isOn: $activeAppIndicatorAutoLength) {
+                        Text("Automatically set length")
                     }
                     .padding(.leading, 20)
 
-                    if !activeAppIndicatorAutoWidth {
+                    if !activeAppIndicatorAutoLength {
                         sliderSetting(
-                            title: "Indicator Width",
-                            value: $activeAppIndicatorWidth,
+                            title: "Indicator Length",
+                            value: $activeAppIndicatorLength,
                             range: 1.0 ... 110.0,
                             step: 1.0,
                             unit: "px",

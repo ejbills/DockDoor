@@ -13,16 +13,14 @@ enum ActiveAppIndicatorPositioning {
     }
 
     /// Calculates the indicator frame for the given dock item frame and dock position.
-    /// Returns nil if the dock position is not supported.
     /// - Parameters:
-    ///   - indicatorLength: Optional explicit length (width for bottom, height for left/right).
-    ///                      If nil, uses 60% of dock item dimension.
+    ///   - indicatorLength: Explicit length (width for bottom, height for left/right).
     static func calculateIndicatorFrame(
         for dockItemFrame: CGRect,
         dockPosition: DockPosition,
         indicatorThickness: CGFloat,
         indicatorOffset: CGFloat,
-        indicatorLength: CGFloat? = nil,
+        indicatorLength: CGFloat,
         on screen: NSScreen
     ) -> CGRect? {
         switch dockPosition {
@@ -31,7 +29,7 @@ enum ActiveAppIndicatorPositioning {
                 dockItemFrame: dockItemFrame,
                 indicatorThickness: indicatorThickness,
                 indicatorOffset: indicatorOffset,
-                indicatorWidth: indicatorLength,
+                indicatorLength: indicatorLength,
                 screenHeight: screen.frame.height
             )
         case .left:
@@ -63,14 +61,11 @@ enum ActiveAppIndicatorPositioning {
         dockItemFrame: CGRect,
         indicatorThickness: CGFloat,
         indicatorOffset: CGFloat,
-        indicatorWidth: CGFloat?,
+        indicatorLength: CGFloat,
         screenHeight: CGFloat
     ) -> CGRect {
-        // Use explicit width if provided, otherwise 60% of dock icon width
-        let width = indicatorWidth ?? (dockItemFrame.width * 0.655)
-
         // Center horizontally below the dock icon
-        let x = dockItemFrame.midX - (width / 2)
+        let x = dockItemFrame.midX - (indicatorLength / 2)
 
         // Convert from screen coordinates (Y from top) to AppKit coordinates (Y from bottom)
         // The dock item frame uses screen coordinates where Y increases downward from top-left
@@ -83,7 +78,7 @@ enum ActiveAppIndicatorPositioning {
             screenHeight - dockItemBottomInScreenCoords - indicatorThickness - 2
                 + indicatorOffset // 2px base gap
 
-        return CGRect(x: x, y: y, width: width, height: indicatorThickness)
+        return CGRect(x: x, y: y, width: indicatorLength, height: indicatorThickness)
     }
 
     // MARK: - Left Dock Positioning

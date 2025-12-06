@@ -76,7 +76,6 @@ class WindowManipulationObservers {
         createObserverForApp(app)
         handleNewWindow(for: app.processIdentifier)
 
-        // Notify active app indicator of dock shift
         ActiveAppIndicatorCoordinator.shared?.notifyDockItemsChanged()
     }
 
@@ -91,7 +90,6 @@ class WindowManipulationObservers {
             previewCoordinator.hideWindow()
         }
 
-        // Notify active app indicator of dock shift
         ActiveAppIndicatorCoordinator.shared?.notifyDockItemsChanged()
     }
 
@@ -208,7 +206,6 @@ class WindowManipulationObservers {
             handleWindowEvent(element: element, app: app, notification: notificationName, validate: false)
         case kAXUIElementDestroyedNotification:
             handleWindowEvent(element: element, app: app, notification: notificationName, validate: true)
-            // Notify active app indicator of potential dock shift (when window is closed)
             ActiveAppIndicatorCoordinator.shared?.notifyDockItemsChanged()
         case kAXWindowResizedNotification, kAXWindowMovedNotification:
             handleWindowEvent(element: element, app: app, notification: notificationName, validate: false)
