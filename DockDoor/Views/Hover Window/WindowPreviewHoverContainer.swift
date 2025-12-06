@@ -1,4 +1,5 @@
 import AppKit
+import Combine
 import Defaults
 import ScreenCaptureKit
 import SwiftUI
@@ -73,6 +74,7 @@ struct WindowPreviewHoverContainer: View {
 
     @State private var dragPoints: [CGPoint] = []
     @State private var lastShakeCheck: Date = .init()
+    @StateObject private var liveCapture = LiveWindowCapture.shared
 
     init(appName: String,
          onWindowTap: (() -> Void)?,
@@ -169,12 +171,29 @@ struct WindowPreviewHoverContainer: View {
         .padding(.top, (!previewStateCoordinator.windowSwitcherActive && appNameStyle == .popover && showAppTitleData) ? 30 : 0)
         .onAppear {
             loadAppIcon()
+            startLiveCapture()
+        }
+        .onDisappear {
+            Task {
+                await liveCapture.stopAllCaptures()
+            }
+        }
+        .onChange(of: previewStateCoordinator.windows) { _ in
+            startLiveCapture()
         }
         .onChange(of: previewStateCoordinator.windowSwitcherActive) { isActive in
             if !isActive {
                 // Clear search when switcher is dismissed
                 previewStateCoordinator.searchQuery = ""
             }
+        }
+    }
+
+    private func startLiveCapture() {
+        let windowIDs = previewStateCoordinator.windows.map(\.id)
+        guard !windowIDs.isEmpty else { return }
+        Task {
+            await liveCapture.startCapture(windowIDs: windowIDs)
         }
     }
 
