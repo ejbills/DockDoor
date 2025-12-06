@@ -184,7 +184,7 @@ final class ActiveAppIndicatorCoordinator {
 
         // Hide indicator if dock moved to unsupported position
         if !ActiveAppIndicatorPositioning.isSupported(newPosition) {
-            indicatorWindow?.orderOut(nil)
+            indicatorWindow?.orderOut(self)
         } else if let app = currentActiveApp {
             // Dock moved to a supported position - reposition indicator
             updateIndicatorPosition(for: app)
@@ -237,7 +237,7 @@ final class ActiveAppIndicatorCoordinator {
     }
 
     private func hideIndicator() {
-        indicatorWindow?.orderOut(nil)
+        indicatorWindow?.orderOut(self)
         indicatorWindow = nil
         currentActiveApp = nil
     }
@@ -249,7 +249,7 @@ final class ActiveAppIndicatorCoordinator {
 
         // Don't show indicator for the Dock itself or Finder's desktop
         guard app.bundleIdentifier != "com.apple.dock" else {
-            indicatorWindow?.orderOut(nil)
+            indicatorWindow?.orderOut(self)
             return
         }
 
@@ -260,7 +260,7 @@ final class ActiveAppIndicatorCoordinator {
         guard let indicatorWindow,
               let dockItemFrame = ActiveAppIndicatorDockDetection.getDockItemFrame(for: app)
         else {
-            indicatorWindow?.orderOut(nil)
+            indicatorWindow?.orderOut(self)
             return
         }
 
@@ -268,7 +268,7 @@ final class ActiveAppIndicatorCoordinator {
 
         // Check if dock position is supported
         guard ActiveAppIndicatorPositioning.isSupported(dockPosition) else {
-            indicatorWindow.orderOut(nil)
+            indicatorWindow.orderOut(self)
             return
         }
 
@@ -277,6 +277,6 @@ final class ActiveAppIndicatorCoordinator {
             relativeTo: dockItemFrame,
             dockPosition: dockPosition
         )
-        indicatorWindow.orderFront(nil)
+        indicatorWindow.orderFront(self)
     }
 }
