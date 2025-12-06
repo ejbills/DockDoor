@@ -125,7 +125,6 @@ struct MainSettingsView: View {
     @Default(.livePreviewQuality) var livePreviewQuality
     @Default(.livePreviewFrameRate) var livePreviewFrameRate
     @Default(.bufferFromDock) var bufferFromDock
-    @Default(.sortWindowsByDate) var sortWindowsByDate
     @Default(.shouldHideOnDockItemClick) var shouldHideOnDockItemClick
     @Default(.dockClickAction) var dockClickAction
     @Default(.enableCmdRightClickQuit) var enableCmdRightClickQuit
@@ -640,7 +639,6 @@ struct MainSettingsView: View {
 
                     sliderSetting(title: "Window Image Cache Lifespan", value: $screenCaptureCacheLifespan, range: 0 ... 60, step: 10, unit: "seconds")
                     sliderSetting(title: "Window Image Resolution Scale (1=Best)", value: $windowPreviewImageScale, range: 1 ... 4, step: 1, unit: "")
-                    Toggle(isOn: $sortWindowsByDate) { Text("Sort Window Previews by Date (if multiple)") }
 
                     Divider()
 
@@ -959,7 +957,7 @@ struct MainSettingsView: View {
                 hoverWindowOpenDelay = perfDefault.hoverWindowOpenDelay; fadeOutDuration = perfDefault.fadeOutDuration; tapEquivalentInterval = perfDefault.tapEquivalentInterval; preventDockHide = perfDefault.preventDockHide
                 let qualityDefault = PreviewQualityProfile.standard.settings
                 screenCaptureCacheLifespan = qualityDefault.screenCaptureCacheLifespan; windowPreviewImageScale = qualityDefault.windowPreviewImageScale
-                bufferFromDock = Defaults.Keys.bufferFromDock.defaultValue; sortWindowsByDate = Defaults.Keys.sortWindowsByDate.defaultValue; shouldHideOnDockItemClick = Defaults.Keys.shouldHideOnDockItemClick.defaultValue; dockClickAction = Defaults.Keys.dockClickAction.defaultValue; enableCmdRightClickQuit = Defaults.Keys.enableCmdRightClickQuit.defaultValue; previewHoverAction = Defaults.Keys.previewHoverAction.defaultValue; aeroShakeAction = Defaults.Keys.aeroShakeAction.defaultValue
+                bufferFromDock = Defaults.Keys.bufferFromDock.defaultValue; shouldHideOnDockItemClick = Defaults.Keys.shouldHideOnDockItemClick.defaultValue; dockClickAction = Defaults.Keys.dockClickAction.defaultValue; enableCmdRightClickQuit = Defaults.Keys.enableCmdRightClickQuit.defaultValue; previewHoverAction = Defaults.Keys.previewHoverAction.defaultValue; aeroShakeAction = Defaults.Keys.aeroShakeAction.defaultValue
 
                 showMenuBarIcon = Defaults.Keys.showMenuBarIcon.defaultValue
                 enableWindowSwitcher = Defaults.Keys.enableWindowSwitcher.defaultValue

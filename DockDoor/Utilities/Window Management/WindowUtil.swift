@@ -62,8 +62,6 @@ extension WindowUtil {
     }
 
     static func updateWindowDateTime(element: AXUIElement, app: NSRunningApplication) {
-        guard Defaults[.sortWindowsByDate] else { return }
-
         updateTimestampLock.lock()
         defer { updateTimestampLock.unlock() }
 
@@ -91,8 +89,6 @@ extension WindowUtil {
 
     /// Updates window timestamp optimistically and records breadcrumb for observer deduplication
     static func updateTimestampOptimistically(for windowInfo: WindowInfo) {
-        guard Defaults[.sortWindowsByDate] else { return }
-
         let now = Date()
         desktopSpaceWindowCacheManager.updateCache(pid: windowInfo.app.processIdentifier) { windowSet in
             if let index = windowSet.firstIndex(where: { $0.axElement == windowInfo.axElement }) {
