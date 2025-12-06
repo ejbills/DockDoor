@@ -75,6 +75,8 @@ class WindowManipulationObservers {
         DebugLogger.log("appDidLaunch", details: "App: \(app.localizedName ?? "Unknown") (PID: \(app.processIdentifier))")
         createObserverForApp(app)
         handleNewWindow(for: app.processIdentifier)
+
+        ActiveAppIndicatorCoordinator.shared?.notifyDockItemsChanged()
     }
 
     @MainActor
@@ -87,6 +89,8 @@ class WindowManipulationObservers {
         if !Defaults[.keepPreviewOnAppTerminate] {
             previewCoordinator.hideWindow()
         }
+
+        ActiveAppIndicatorCoordinator.shared?.notifyDockItemsChanged()
     }
 
     @objc private func activeSpaceDidChange(_ notification: Notification) {
@@ -202,6 +206,7 @@ class WindowManipulationObservers {
             handleWindowEvent(element: element, app: app, notification: notificationName, validate: false)
         case kAXUIElementDestroyedNotification:
             handleWindowEvent(element: element, app: app, notification: notificationName, validate: true)
+            ActiveAppIndicatorCoordinator.shared?.notifyDockItemsChanged()
         case kAXWindowResizedNotification, kAXWindowMovedNotification:
             handleWindowEvent(element: element, app: app, notification: notificationName, validate: false)
         case kAXWindowMiniaturizedNotification, kAXWindowDeminiaturizedNotification:
@@ -213,6 +218,7 @@ class WindowManipulationObservers {
                     window.isMinimized = minimizedState ?? false
                 }
             }
+            ActiveAppIndicatorCoordinator.shared?.notifyDockItemsChanged()
         case kAXApplicationHiddenNotification:
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
                 guard let self else { return }

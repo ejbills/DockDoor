@@ -49,6 +49,9 @@ final class DockObserver {
     var lastHoveredAppWasFrontmost: Bool = false
     var lastHoveredAppNeedsRestore: Bool = false
 
+    // Active app indicator hover state tracking
+    private var lastIndicatorHoverState: Bool = false
+
     init(previewCoordinator: SharedPreviewWindowCoordinator) {
         self.previewCoordinator = previewCoordinator
         DockObserver.activeInstance = self
@@ -156,9 +159,35 @@ final class DockObserver {
         }
     }
 
+    /// Called to check and update the active app indicator hover state.
+    /// This provides an additional check when we suspect the dock may no longer be hovered.
+    func recheckIndicatorHoverState() {
+        let currentHoverState = isAnyDockItemHovered()
+        if currentHoverState != lastIndicatorHoverState {
+            lastIndicatorHoverState = currentHoverState
+            if currentHoverState {
+                ActiveAppIndicatorCoordinator.shared?.notifyDockItemHovered()
+            } else {
+                ActiveAppIndicatorCoordinator.shared?.notifyDockItemUnhovered()
+            }
+        }
+    }
+
     func processSelectedDockItemChanged() {
         let currentMouseLocation = DockObserver.getMousePosition()
         let appUnderMouseElement = getDockItemAppStatusUnderMouse()
+
+        // Notify active app indicator about dock hover state changes
+        // Only send notifications on actual state transitions to prevent duplicate events from canceling the hide timer or causing flickering
+        let currentHoverState = isAnyDockItemHovered()
+        if currentHoverState != lastIndicatorHoverState {
+            lastIndicatorHoverState = currentHoverState
+            if currentHoverState {
+                ActiveAppIndicatorCoordinator.shared?.notifyDockItemHovered()
+            } else {
+                ActiveAppIndicatorCoordinator.shared?.notifyDockItemUnhovered()
+            }
+        }
 
         guard case let .success(currentApp) = appUnderMouseElement.status,
               let dockItemElement = appUnderMouseElement.dockItemElement,
@@ -242,6 +271,34 @@ final class DockObserver {
                 // Silently handle errors
             }
         }
+    }
+
+    /// Checks if ANY dock item (app, folder, trash, etc.) is currently being hovered.
+    /// Used for visibility decisions where we care about dock visibility, not specific app items.
+    func isAnyDockItemHovered() -> Bool {
+        guard let dockAppPID = NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.dock").first?.processIdentifier else {
+            return false
+        }
+
+        let dockAppElement = AXUIElementCreateApplication(dockAppPID)
+
+        var dockItems: CFTypeRef?
+        guard AXUIElementCopyAttributeValue(dockAppElement, kAXChildrenAttribute as CFString, &dockItems) == .success,
+              let dockItems = dockItems as? [AXUIElement],
+              !dockItems.isEmpty
+        else {
+            return false
+        }
+
+        var selectedChildren: CFTypeRef?
+        guard AXUIElementCopyAttributeValue(dockItems.first!, kAXSelectedChildrenAttribute as CFString, &selectedChildren) == .success,
+              let selected = selectedChildren as? [AXUIElement],
+              !selected.isEmpty
+        else {
+            return false
+        }
+
+        return true
     }
 
     func getHoveredApplicationDockItem() -> AXUIElement? {
