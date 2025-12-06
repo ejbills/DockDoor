@@ -58,6 +58,7 @@ extension Defaults.Keys {
     static let windowSwitcherSortOrder = Key<WindowPreviewSortOrder>("windowSwitcherSortOrder", default: .recentlyUsed)
     static let showWindowsFromCurrentSpaceOnlyInCmdTab = Key<Bool>("showWindowsFromCurrentSpaceOnlyInCmdTab", default: false)
     static let cmdTabSortOrder = Key<WindowPreviewSortOrder>("cmdTabSortOrder", default: .recentlyUsed)
+    static let sortMinimizedToEnd = Key<Bool>("sortMinimizedToEnd", default: false)
     static let enableCmdTabEnhancements = Key<Bool>("enableCmdTabEnhancements", default: false)
     static let scrollToMouseHoverInSwitcher = Key<Bool>("scrollToMouseHoverInSwitcher", default: false)
     static let keepPreviewOnAppTerminate = Key<Bool>("keepPreviewOnAppTerminate", default: false)
@@ -349,6 +350,8 @@ enum DockClickAction: String, CaseIterable, Defaults.Serializable {
 enum WindowPreviewSortOrder: String, CaseIterable, Defaults.Serializable, Identifiable {
     case recentlyUsed
     case creationOrder
+    case alphabeticalByTitle
+    case alphabeticalByAppName
 
     var id: String { rawValue }
 
@@ -358,6 +361,20 @@ enum WindowPreviewSortOrder: String, CaseIterable, Defaults.Serializable, Identi
             String(localized: "Recently used", comment: "Window preview sort order option")
         case .creationOrder:
             String(localized: "Creation order (fixed)", comment: "Window preview sort order option")
+        case .alphabeticalByTitle:
+            String(localized: "Alphabetical by title", comment: "Window preview sort order option")
+        case .alphabeticalByAppName:
+            String(localized: "Grouped by app name", comment: "Window preview sort order option")
+        }
+    }
+
+    /// Whether this sort order is applicable only for window switcher (multi-app context)
+    var isWindowSwitcherOnly: Bool {
+        switch self {
+        case .alphabeticalByAppName:
+            true
+        default:
+            false
         }
     }
 }

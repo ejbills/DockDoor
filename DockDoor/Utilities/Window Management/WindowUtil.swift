@@ -299,13 +299,7 @@ extension WindowUtil {
             filteredWindows = getWindowsForFrontmostApp(from: filteredWindows)
         }
 
-        // Sort windows based on user preference for window switcher
-        switch Defaults[.windowSwitcherSortOrder] {
-        case .recentlyUsed:
-            return filteredWindows.sorted(by: { $0.lastAccessedTime > $1.lastAccessedTime })
-        case .creationOrder:
-            return filteredWindows.sorted(by: { $0.creationTime < $1.creationTime })
-        }
+        return sortWindowsForSwitcher(filteredWindows)
     }
 
     static func getWindowsForFrontmostApp(from windows: [WindowInfo]) -> [WindowInfo] {
@@ -379,20 +373,7 @@ extension WindowUtil {
         // Purify cache and return
         if let finalWindows = await WindowUtil.purifyAppCache(with: app.processIdentifier, removeAll: false) {
             guard !Defaults[.ignoreAppsWithSingleWindow] || finalWindows.count > 1 else { return [] }
-            // Sort windows based on user preference for the context
-            let sortOrder: WindowPreviewSortOrder = switch context {
-            case .dockPreview:
-                Defaults[.windowPreviewSortOrder]
-            case .cmdTab:
-                Defaults[.cmdTabSortOrder]
-            }
-
-            switch sortOrder {
-            case .recentlyUsed:
-                return finalWindows.sorted(by: { $0.lastAccessedTime > $1.lastAccessedTime })
-            case .creationOrder:
-                return finalWindows.sorted(by: { $0.creationTime < $1.creationTime })
-            }
+            return sortWindows(finalWindows, for: context)
         }
 
         return []
@@ -797,6 +778,71 @@ extension WindowUtil {
         }
 
         return false
+    }
+}
+
+// MARK: - Window Sorting
+
+extension WindowUtil {
+    /// Centralized sorting for dock preview and cmd+tab contexts (single app windows)
+    static func sortWindows(_ windows: Set<WindowInfo>, for context: WindowFetchContext) -> [WindowInfo] {
+        let sortOrder: WindowPreviewSortOrder = switch context {
+        case .dockPreview:
+            Defaults[.windowPreviewSortOrder]
+        case .cmdTab:
+            Defaults[.cmdTabSortOrder]
+        }
+
+        return sortWindowsWithOptions(Array(windows), sortOrder: sortOrder)
+    }
+
+    /// Centralized sorting for window switcher context (all apps windows)
+    static func sortWindowsForSwitcher(_ windows: [WindowInfo]) -> [WindowInfo] {
+        sortWindowsWithOptions(windows, sortOrder: Defaults[.windowSwitcherSortOrder])
+    }
+
+    /// Core sorting logic with configurable options
+    private static func sortWindowsWithOptions(
+        _ windows: [WindowInfo],
+        sortOrder: WindowPreviewSortOrder
+    ) -> [WindowInfo] {
+        var sortedWindows: [WindowInfo]
+
+            // Apply primary sort order
+            = switch sortOrder
+        {
+        case .recentlyUsed:
+            windows.sorted { $0.lastAccessedTime > $1.lastAccessedTime }
+        case .creationOrder:
+            windows.sorted { $0.creationTime < $1.creationTime }
+        case .alphabeticalByTitle:
+            windows.sorted { ($0.windowName ?? "").localizedCaseInsensitiveCompare($1.windowName ?? "") == .orderedAscending }
+        case .alphabeticalByAppName:
+            // Group by app name, then sort within groups by recently used
+            windows.sorted { first, second in
+                let firstName = first.app.localizedName ?? ""
+                let secondName = second.app.localizedName ?? ""
+                if firstName != secondName {
+                    return firstName.localizedCaseInsensitiveCompare(secondName) == .orderedAscending
+                }
+                // Within same app, sort by recently used
+                return first.lastAccessedTime > second.lastAccessedTime
+            }
+        }
+
+        // Optionally move minimized/hidden windows to the end (global setting)
+        if Defaults[.sortMinimizedToEnd] {
+            let (visible, minimizedOrHidden) = sortedWindows.reduce(into: ([WindowInfo](), [WindowInfo]())) { result, window in
+                if window.isMinimized || window.isHidden {
+                    result.1.append(window)
+                } else {
+                    result.0.append(window)
+                }
+            }
+            sortedWindows = visible + minimizedOrHidden
+        }
+
+        return sortedWindows
     }
 }
 

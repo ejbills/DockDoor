@@ -91,6 +91,7 @@ struct MainSettingsView: View {
     @Default(.windowSwitcherSortOrder) var windowSwitcherSortOrder
     @Default(.showWindowsFromCurrentSpaceOnlyInCmdTab) var showWindowsFromCurrentSpaceOnlyInCmdTab
     @Default(.cmdTabSortOrder) var cmdTabSortOrder
+    @Default(.sortMinimizedToEnd) var sortMinimizedToEnd
     @Default(.keepPreviewOnAppTerminate) var keepPreviewOnAppTerminate
     @Default(.enableCmdTabEnhancements) var enableCmdTabEnhancements
     @Default(.scrollToMouseHoverInSwitcher) var scrollToMouseHoverInSwitcher
@@ -384,6 +385,14 @@ struct MainSettingsView: View {
                     .foregroundColor(.secondary)
                     .padding(.leading, 20)
 
+                Toggle(isOn: $sortMinimizedToEnd, label: {
+                    Text("Sort minimized/hidden windows to end")
+                })
+                Text("Minimized and hidden windows will appear after all visible windows in previews and switcher.")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .padding(.leading, 20)
+
                 Divider()
 
                 SettingsIllustratedRow(imageName: "DockPreviews") {
@@ -404,7 +413,7 @@ struct MainSettingsView: View {
                         Text("Window sort order")
                             .padding(.leading, 20)
                         Picker("", selection: $windowPreviewSortOrder) {
-                            ForEach(WindowPreviewSortOrder.allCases) { order in
+                            ForEach(WindowPreviewSortOrder.allCases.filter { !$0.isWindowSwitcherOnly }) { order in
                                 Text(order.localizedName).tag(order)
                             }
                         }
@@ -506,7 +515,7 @@ struct MainSettingsView: View {
                         Text("Window sort order")
                             .padding(.leading, 20)
                         Picker("", selection: $cmdTabSortOrder) {
-                            ForEach(WindowPreviewSortOrder.allCases) { order in
+                            ForEach(WindowPreviewSortOrder.allCases.filter { !$0.isWindowSwitcherOnly }) { order in
                                 Text(order.localizedName).tag(order)
                             }
                         }
