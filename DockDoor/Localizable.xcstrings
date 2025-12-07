@@ -8400,6 +8400,9 @@
         }
       }
     },
+    "Alphabetical by title" : {
+      "comment" : "Window preview sort order option"
+    },
     "Always" : {
       "comment" : "Preview window title condition option",
       "extractionState" : "stale",
@@ -29926,6 +29929,9 @@
         }
       }
     },
+    "Enable dock scroll gestures" : {
+
+    },
     "Enable Hover Window Sliding Animation" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -37373,6 +37379,9 @@
           }
         }
       }
+    },
+    "Grouped by app name" : {
+      "comment" : "Window preview sort order option"
     },
     "Have an Idea?" : {
       "localizations" : {
@@ -49584,6 +49593,9 @@
           }
         }
       }
+    },
+    "Minimized and hidden windows will appear after all visible windows in previews and switcher." : {
+
     },
     "Minimum number of colors reached." : {
       "localizations" : {
@@ -72059,6 +72071,9 @@
         }
       }
     },
+    "Scroll up on a dock icon to bring the app to front, scroll down to hide all its windows." : {
+
+    },
     "seconds" : {
       "localizations" : {
         "af" : {
@@ -79502,6 +79517,9 @@
           }
         }
       }
+    },
+    "Sort minimized/hidden windows to end" : {
+
     },
     "Sort Window Previews by Date" : {
       "extractionState" : "stale",

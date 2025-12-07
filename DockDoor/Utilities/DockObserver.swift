@@ -52,6 +52,10 @@ final class DockObserver {
     // Active app indicator hover state tracking
     private var lastIndicatorHoverState: Bool = false
 
+    // Scroll gesture state
+    private var lastScrollActionTime: Date = .distantPast
+    private let scrollActionDebounceInterval: TimeInterval = 0.3
+
     init(previewCoordinator: SharedPreviewWindowCoordinator) {
         self.previewCoordinator = previewCoordinator
         DockObserver.activeInstance = self
@@ -411,7 +415,9 @@ final class DockObserver {
     }
 
     private func setupEventTap() {
-        let eventMask: CGEventMask = (1 << CGEventType.leftMouseDown.rawValue) | (1 << CGEventType.rightMouseDown.rawValue)
+        let eventMask: CGEventMask = (1 << CGEventType.leftMouseDown.rawValue) |
+            (1 << CGEventType.rightMouseDown.rawValue) |
+            (1 << CGEventType.scrollWheel.rawValue)
 
         guard let eventTap = CGEvent.tapCreate(
             tap: .cghidEventTap,
@@ -436,6 +442,22 @@ final class DockObserver {
     }
 
     private func eventTapCallback(proxy: CGEventTapProxy, type: CGEventType, event: CGEvent) -> Unmanaged<CGEvent>? {
+        if type == .scrollWheel {
+            guard Defaults[.enableDockScrollGesture] else {
+                return Unmanaged.passUnretained(event)
+            }
+
+            // lookup to verify mouse is actually over a dock icon
+            let appUnderMouse = getDockItemAppStatusUnderMouse()
+            if case let .success(app) = appUnderMouse.status {
+                let handled = handleDockScroll(app: app, event: event)
+                if handled {
+                    return nil
+                }
+            }
+            return Unmanaged.passUnretained(event)
+        }
+
         let appUnderMouse = getDockItemAppStatusUnderMouse()
 
         if case let .success(app) = appUnderMouse.status {
@@ -615,6 +637,44 @@ final class DockObserver {
             } else {
                 app.terminate()
             }
+        }
+    }
+
+    private func handleDockScroll(app: NSRunningApplication, event: CGEvent) -> Bool {
+        let deltaY = event.getDoubleValueField(.scrollWheelEventDeltaAxis1)
+
+        // Ignore noise (very small scroll amounts)
+        guard abs(deltaY) > 0.1 else { return false }
+
+        let now = Date()
+        guard now.timeIntervalSince(lastScrollActionTime) >= scrollActionDebounceInterval else {
+            return true // Still consume the event during debounce
+        }
+        lastScrollActionTime = now
+
+        if deltaY > 0 {
+            activateApp(app)
+        } else {
+            hideApp(app)
+        }
+
+        return true
+    }
+
+    private func activateApp(_ app: NSRunningApplication) {
+        Task { @MainActor in
+            if app.isHidden {
+                app.unhide()
+            }
+            app.activate(options: [.activateIgnoringOtherApps])
+            previewCoordinator.hideWindow()
+        }
+    }
+
+    private func hideApp(_ app: NSRunningApplication) {
+        Task { @MainActor in
+            app.hide()
+            previewCoordinator.hideWindow()
         }
     }
 }
