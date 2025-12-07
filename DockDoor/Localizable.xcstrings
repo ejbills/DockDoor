@@ -29900,6 +29900,9 @@
         }
       }
     },
+    "Enable dock scroll gestures" : {
+
+    },
     "Enable Hover Window Sliding Animation" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -71995,6 +71998,9 @@
           }
         }
       }
+    },
+    "Scroll up on a dock icon to bring the app to front, scroll down to hide all its windows." : {
+
     },
     "seconds" : {
       "localizations" : {
