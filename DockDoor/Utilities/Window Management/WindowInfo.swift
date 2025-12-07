@@ -112,6 +112,56 @@ extension WindowInfo {
         }
     }
 
+    func zoom() {
+        // Get current window position directly from AXUIElement
+        guard let currentPosition = try? axElement.position(),
+              let currentSize = try? axElement.size()
+        else {
+            print("Failed to get current window position/size")
+            return
+        }
+
+        // Find the screen containing this window
+        guard let screen = NSScreen.screens.first(where: { screen in
+            // Convert AX coordinates to screen coordinates for comparison
+            let screenTop = screen.frame.origin.y + screen.frame.height
+            let windowBottomLeft = CGPoint(
+                x: currentPosition.x,
+                y: screenTop - currentPosition.y - currentSize.height
+            )
+            let windowFrame = CGRect(origin: windowBottomLeft, size: currentSize)
+            return screen.frame.intersects(windowFrame)
+        }) ?? NSScreen.main else {
+            print("Failed to find screen for window")
+            return
+        }
+
+        // Use visibleFrame to respect menu bar and dock
+        let visibleFrame = screen.visibleFrame
+
+        // Convert position: Cocoa uses bottom-left origin, AX uses top-left origin from primary screen
+        // Primary screen's maxY in Cocoa = 0 in AX coordinates
+        let primaryScreenMaxY = NSScreen.screens.first?.frame.maxY ?? screen.frame.maxY
+        let axY = primaryScreenMaxY - visibleFrame.maxY
+        let newPosition = CGPoint(x: visibleFrame.origin.x, y: axY)
+        let newSize = CGSize(width: visibleFrame.width, height: visibleFrame.height)
+
+        // Create AXValue wrapped values
+        guard let positionValue = AXValue.from(point: newPosition),
+              let sizeValue = AXValue.from(size: newSize)
+        else {
+            print("Failed to create AXValue")
+            return
+        }
+
+        do {
+            try axElement.setAttribute(kAXPositionAttribute, positionValue)
+            try axElement.setAttribute(kAXSizeAttribute, sizeValue)
+        } catch {
+            print("Failed to zoom window: \(error)")
+        }
+    }
+
     func bringToFront() {
         let maxRetries = 3
         var retryCount = 0

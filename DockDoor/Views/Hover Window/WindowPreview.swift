@@ -635,12 +635,64 @@ struct WindowPreview: View {
     }
 
     var body: some View {
+        let isHorizontalFlow = dockPosition.isHorizontalFlow || windowSwitcherActive
+
         previewCoreContent
             .onMiddleClick(perform: {
                 if windowInfo.closeButton != nil {
                     handleWindowAction(.close)
                 }
             })
+            .onTrackpadSwipe(
+                onSwipeUp: {
+                    let currentlyMinimized = (try? windowInfo.axElement.isMinimized()) ?? windowInfo.isMinimized
+                    if isHorizontalFlow {
+                        if currentlyMinimized {
+                            handleWindowAction(.minimize)
+                        } else {
+                            handleWindowAction(.maximize)
+                        }
+                    }
+                },
+                onSwipeDown: {
+                    let currentlyMinimized = (try? windowInfo.axElement.isMinimized()) ?? windowInfo.isMinimized
+                    if isHorizontalFlow, !currentlyMinimized {
+                        handleWindowAction(.minimize)
+                    }
+                },
+                onSwipeLeft: {
+                    let currentlyMinimized = (try? windowInfo.axElement.isMinimized()) ?? windowInfo.isMinimized
+                    if !isHorizontalFlow {
+                        if dockPosition == .left {
+                            if !currentlyMinimized {
+                                handleWindowAction(.minimize)
+                            }
+                        } else {
+                            if currentlyMinimized {
+                                handleWindowAction(.minimize)
+                            } else {
+                                handleWindowAction(.maximize)
+                            }
+                        }
+                    }
+                },
+                onSwipeRight: {
+                    let currentlyMinimized = (try? windowInfo.axElement.isMinimized()) ?? windowInfo.isMinimized
+                    if !isHorizontalFlow {
+                        if dockPosition == .right {
+                            if !currentlyMinimized {
+                                handleWindowAction(.minimize)
+                            }
+                        } else {
+                            if currentlyMinimized {
+                                handleWindowAction(.minimize)
+                            } else {
+                                handleWindowAction(.maximize)
+                            }
+                        }
+                    }
+                }
+            )
             .fixedSize()
     }
 

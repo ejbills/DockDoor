@@ -635,6 +635,10 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         case .openNewWindow:
             WindowUtil.openNewWindow(app: window.app)
             hideWindow()
+
+        case .maximize:
+            window.zoom()
+            hideWindow()
         }
     }
 

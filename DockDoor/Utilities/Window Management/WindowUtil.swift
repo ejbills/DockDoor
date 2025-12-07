@@ -33,6 +33,7 @@ enum WindowAction: String, Hashable, CaseIterable, Defaults.Serializable {
     case toggleFullScreen
     case hide
     case openNewWindow
+    case maximize
 }
 
 enum WindowUtil {

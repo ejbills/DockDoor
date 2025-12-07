@@ -674,6 +674,10 @@ struct WindowPreviewHoverContainer: View {
         case .openNewWindow:
             WindowUtil.openNewWindow(app: window.app)
             onWindowTap?()
+
+        case .maximize:
+            window.zoom()
+            onWindowTap?()
         }
     }
 

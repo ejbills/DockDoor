@@ -47244,6 +47244,9 @@
         }
       }
     },
+    "Maximize" : {
+
+    },
     "Maximum Horizontal Rows" : {
       "extractionState" : "stale",
       "localizations" : {

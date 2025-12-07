@@ -112,6 +112,7 @@
 		BB6CAB7F2EB3F0020080E537 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6CAB7E2EB3F0020080E537 /* SettingsView.swift */; };
 		BB6D81962DF75CA100DB64E4 /* SimpleProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6D81952DF75CA100DB64E4 /* SimpleProgressBar.swift */; };
 		BB7CA33D2C31F1B00012E303 /* WindowManipulationObservers.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB7CA33C2C31F1B00012E303 /* WindowManipulationObservers.swift */; };
+		BB7CD3C92EE54DDC00412546 /* TrackpadGestureModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB7CD3C82EE54DDC00412546 /* TrackpadGestureModifier.swift */; };
 		BB90A5ED2DFA13E000857722 /* CalendarInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB90A5EC2DFA13E000857722 /* CalendarInfo.swift */; };
 		BB918BB52CF7613400931236 /* CGRect.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB918BB42CF7613200931236 /* CGRect.swift */; };
 		BBA153F62C115DDA00119C02 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA153F52C115DDA00119C02 /* AppDelegate.swift */; };
@@ -251,6 +252,7 @@
 		BB6CAB7E2EB3F0020080E537 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		BB6D81952DF75CA100DB64E4 /* SimpleProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleProgressBar.swift; sourceTree = "<group>"; };
 		BB7CA33C2C31F1B00012E303 /* WindowManipulationObservers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowManipulationObservers.swift; sourceTree = "<group>"; };
+		BB7CD3C82EE54DDC00412546 /* TrackpadGestureModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackpadGestureModifier.swift; sourceTree = "<group>"; };
 		BB8247782C2889B20098A440 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		BB90A5EC2DFA13E000857722 /* CalendarInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarInfo.swift; sourceTree = "<group>"; };
 		BB918BB42CF7613200931236 /* CGRect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGRect.swift; sourceTree = "<group>"; };
@@ -553,6 +555,7 @@
 		BB6021CE2D1E60C700D47C86 /* WindowPreview Supporting */ = {
 			isa = PBXGroup;
 			children = (
+				BB7CD3C82EE54DDC00412546 /* TrackpadGestureModifier.swift */,
 				BBE63DFE2DEA58040079D2B9 /* PreviewStateCoordinator.swift */,
 				BBC57AA72E3A6BED0078B262 /* DynamicWindowFrameModifier.swift */,
 				BB0CBE392DD8179200D55437 /* MouseEventModifier.swift */,
@@ -849,6 +852,7 @@
 				BBB6C5302DF3C884009E93C4 /* MediaInfo.swift in Sources */,
 				BB0440622C77AE8D009F1D33 /* GradientColorPaletteSettingsView.swift in Sources */,
 				BB1CBD5D2C1BCA4F003969BC /* Misc Utils.swift in Sources */,
+				BB7CD3C92EE54DDC00412546 /* TrackpadGestureModifier.swift in Sources */,
 				3A105FD92C1C049E0015EC66 /* dockStyle.swift in Sources */,
 				BB2CBB092C481295004502C5 /* SpaceWindowCacheManager.swift in Sources */,
 				BBDF65732E7E212400DD6D6D /* DockObserver+CmdTab.swift in Sources */,
