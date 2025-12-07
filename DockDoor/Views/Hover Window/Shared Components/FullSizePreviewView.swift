@@ -9,7 +9,7 @@ struct FullSizePreviewView: View {
 
     var body: some View {
         Group {
-            let displayImage = liveCapture.capturedImages[windowInfo.id] ?? windowInfo.image
+            let displayImage = (windowInfo.isMinimized || windowInfo.isHidden) ? windowInfo.image : (liveCapture.capturedImages[windowInfo.id] ?? windowInfo.image)
             if let image = displayImage {
                 Image(decorative: image, scale: 1.0)
                     .resizable()

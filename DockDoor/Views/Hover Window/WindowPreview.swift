@@ -69,7 +69,7 @@ struct WindowPreview: View {
 
     private func windowContent(isMinimized: Bool, isHidden: Bool, isSelected: Bool) -> some View {
         Group {
-            let displayImage = liveCapture.capturedImages[windowInfo.id] ?? windowInfo.image
+            let displayImage = (isMinimized || isHidden) ? windowInfo.image : (liveCapture.capturedImages[windowInfo.id] ?? windowInfo.image)
             if let cgImage = displayImage {
                 let inactive = (isMinimized || isHidden) && showMinimizedHiddenLabels
                 Image(decorative: cgImage, scale: 1.0)
@@ -645,8 +645,10 @@ struct WindowPreview: View {
             })
             .fixedSize()
             .onAppear {
-                Task {
-                    await liveCapture.startCapture(windowID: windowInfo.id)
+                if !windowInfo.isMinimized, !windowInfo.isHidden {
+                    Task {
+                        await liveCapture.startCapture(windowID: windowInfo.id)
+                    }
                 }
             }
             .onDisappear {
