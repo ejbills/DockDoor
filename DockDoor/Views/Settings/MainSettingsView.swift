@@ -91,6 +91,7 @@ struct MainSettingsView: View {
     @Default(.windowSwitcherSortOrder) var windowSwitcherSortOrder
     @Default(.showWindowsFromCurrentSpaceOnlyInCmdTab) var showWindowsFromCurrentSpaceOnlyInCmdTab
     @Default(.cmdTabSortOrder) var cmdTabSortOrder
+    @Default(.sortMinimizedToEnd) var sortMinimizedToEnd
     @Default(.keepPreviewOnAppTerminate) var keepPreviewOnAppTerminate
     @Default(.enableCmdTabEnhancements) var enableCmdTabEnhancements
     @Default(.scrollToMouseHoverInSwitcher) var scrollToMouseHoverInSwitcher
@@ -128,6 +129,7 @@ struct MainSettingsView: View {
     @Default(.shouldHideOnDockItemClick) var shouldHideOnDockItemClick
     @Default(.dockClickAction) var dockClickAction
     @Default(.enableCmdRightClickQuit) var enableCmdRightClickQuit
+    @Default(.enableDockScrollGesture) var enableDockScrollGesture
     @Default(.previewHoverAction) var previewHoverAction
     @Default(.aeroShakeAction) var aeroShakeAction
     @Default(.showSpecialAppControls) var showSpecialAppControls
@@ -387,6 +389,14 @@ struct MainSettingsView: View {
                     .foregroundColor(.secondary)
                     .padding(.leading, 20)
 
+                Toggle(isOn: $sortMinimizedToEnd, label: {
+                    Text("Sort minimized/hidden windows to end")
+                })
+                Text("Minimized and hidden windows will appear after all visible windows in previews and switcher.")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .padding(.leading, 20)
+
                 Divider()
 
                 SettingsIllustratedRow(imageName: "DockPreviews") {
@@ -407,7 +417,7 @@ struct MainSettingsView: View {
                         Text("Window sort order")
                             .padding(.leading, 20)
                         Picker("", selection: $windowPreviewSortOrder) {
-                            ForEach(WindowPreviewSortOrder.allCases) { order in
+                            ForEach(WindowPreviewSortOrder.allCases.filter { !$0.isWindowSwitcherOnly }) { order in
                                 Text(order.localizedName).tag(order)
                             }
                         }
@@ -509,7 +519,7 @@ struct MainSettingsView: View {
                         Text("Window sort order")
                             .padding(.leading, 20)
                         Picker("", selection: $cmdTabSortOrder) {
-                            ForEach(WindowPreviewSortOrder.allCases) { order in
+                            ForEach(WindowPreviewSortOrder.allCases.filter { !$0.isWindowSwitcherOnly }) { order in
                                 Text(order.localizedName).tag(order)
                             }
                         }
@@ -696,6 +706,13 @@ struct MainSettingsView: View {
                         .padding(.leading, 20)
                     }
                     Toggle(isOn: $enableCmdRightClickQuit) { Text("CMD + Right Click on dock icon to quit app") }
+
+                    Toggle(isOn: $enableDockScrollGesture) { Text("Enable dock scroll gestures") }
+                    Text("Scroll up on a dock icon to bring the app to front, scroll down to hide all its windows.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                        .padding(.leading, 20)
+
                     Toggle(isOn: $showSpecialAppControls) { Text("Show media/calendar controls on Dock hover") }
                     Text("For supported apps (Music, Spotify, Calendar), show interactive controls instead of window previews when hovering their Dock icons.")
                         .font(.caption)
@@ -957,7 +974,7 @@ struct MainSettingsView: View {
                 hoverWindowOpenDelay = perfDefault.hoverWindowOpenDelay; fadeOutDuration = perfDefault.fadeOutDuration; tapEquivalentInterval = perfDefault.tapEquivalentInterval; preventDockHide = perfDefault.preventDockHide
                 let qualityDefault = PreviewQualityProfile.standard.settings
                 screenCaptureCacheLifespan = qualityDefault.screenCaptureCacheLifespan; windowPreviewImageScale = qualityDefault.windowPreviewImageScale
-                bufferFromDock = Defaults.Keys.bufferFromDock.defaultValue; shouldHideOnDockItemClick = Defaults.Keys.shouldHideOnDockItemClick.defaultValue; dockClickAction = Defaults.Keys.dockClickAction.defaultValue; enableCmdRightClickQuit = Defaults.Keys.enableCmdRightClickQuit.defaultValue; previewHoverAction = Defaults.Keys.previewHoverAction.defaultValue; aeroShakeAction = Defaults.Keys.aeroShakeAction.defaultValue
+                bufferFromDock = Defaults.Keys.bufferFromDock.defaultValue; shouldHideOnDockItemClick = Defaults.Keys.shouldHideOnDockItemClick.defaultValue; dockClickAction = Defaults.Keys.dockClickAction.defaultValue; enableCmdRightClickQuit = Defaults.Keys.enableCmdRightClickQuit.defaultValue; enableDockScrollGesture = Defaults.Keys.enableDockScrollGesture.defaultValue; previewHoverAction = Defaults.Keys.previewHoverAction.defaultValue; aeroShakeAction = Defaults.Keys.aeroShakeAction.defaultValue
 
                 showMenuBarIcon = Defaults.Keys.showMenuBarIcon.defaultValue
                 enableWindowSwitcher = Defaults.Keys.enableWindowSwitcher.defaultValue

@@ -1133,6 +1133,11 @@ header {
     border-radius: var(--radius);
 }
 
+.special-feature-media video.align-left,
+.special-feature-media img.align-left {
+    object-position: left center;
+}
+
 /* Customization Section */
 .customization-grid {
     display: flex;
