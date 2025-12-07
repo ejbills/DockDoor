@@ -93,6 +93,19 @@ class LiveWindowCapture: NSObject, ObservableObject {
         capturedImages.removeAll()
     }
 
+    func startCapture(windowID: CGWindowID) async {
+        guard Defaults[.enableLivePreview] else { return }
+        guard streams[windowID] == nil else { return } // Already capturing
+
+        do {
+            let content = try await SCShareableContent.excludingDesktopWindows(true, onScreenWindowsOnly: false)
+            guard let scWindow = content.windows.first(where: { $0.windowID == windowID }) else {
+                return
+            }
+            await startStreamForWindow(scWindow)
+        } catch {}
+    }
+
     func stopCapture(windowID: CGWindowID) async {
         if let stream = streams[windowID] {
             try? await stream.stopCapture()

@@ -644,6 +644,16 @@ struct WindowPreview: View {
                 }
             })
             .fixedSize()
+            .onAppear {
+                Task {
+                    await liveCapture.startCapture(windowID: windowInfo.id)
+                }
+            }
+            .onDisappear {
+                Task {
+                    await liveCapture.stopCapture(windowID: windowInfo.id)
+                }
+            }
     }
 
     private func handleFullPreviewHover(isHovering: Bool, action: PreviewHoverAction) {

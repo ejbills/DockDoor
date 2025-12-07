@@ -34,7 +34,7 @@ extension Defaults.Keys {
 
     static let enableLivePreview = Key<Bool>("enableLivePreview", default: true)
     static let livePreviewQuality = Key<LivePreviewQuality>("livePreviewQuality", default: .retina)
-    static let livePreviewFrameRate = Key<LivePreviewFrameRate>("livePreviewFrameRate", default: .fps120)
+    static let livePreviewFrameRate = Key<LivePreviewFrameRate>("livePreviewFrameRate", default: .fps30)
 
     static let uniformCardRadius = Key<Bool>("uniformCardRadius", default: true)
     static let allowDynamicImageSizing = Key<Bool>("allowDynamicImageSizing", default: false)
