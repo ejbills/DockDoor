@@ -206,7 +206,6 @@ class WindowManipulationObservers {
             handleWindowEvent(element: element, app: app, notification: notificationName, validate: false)
         case kAXUIElementDestroyedNotification:
             handleWindowEvent(element: element, app: app, notification: notificationName, validate: true)
-            ActiveAppIndicatorCoordinator.shared?.notifyDockItemsChanged()
         case kAXWindowResizedNotification, kAXWindowMovedNotification:
             handleWindowEvent(element: element, app: app, notification: notificationName, validate: false)
         case kAXWindowMiniaturizedNotification, kAXWindowDeminiaturizedNotification:

@@ -38,6 +38,7 @@ struct WindowPreview: View {
 
     @Default(.tapEquivalentInterval) var tapEquivalentInterval
     @Default(.previewHoverAction) var previewHoverAction
+    @Default(.showActiveWindowBorder) var showActiveWindowBorder
     @Default(.activeAppIndicatorColor) var activeAppIndicatorColor
 
     @State private var isHoveringOverDockPeekPreview = false
@@ -59,6 +60,7 @@ struct WindowPreview: View {
 
     /// Checks if this window is the currently active (focused) window on the system
     private var isActiveWindow: Bool {
+        guard showActiveWindowBorder else { return false }
         guard windowInfo.app.isActive else { return false }
         guard let focusedWindow = try? windowInfo.appAxElement.focusedWindow(),
               let focusedWindowID = try? focusedWindow.cgWindowId()

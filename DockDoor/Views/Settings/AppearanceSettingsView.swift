@@ -102,6 +102,7 @@ struct AppearanceSettingsView: View {
     @Default(.hoverHighlightColor) var hoverHighlightColor
     @Default(.dockPreviewBackgroundOpacity) var dockPreviewBackgroundOpacity
     @Default(.hidePreviewCardBackground) var hidePreviewCardBackground
+    @Default(.showActiveWindowBorder) var showActiveWindowBorder
     @Default(.previewMaxColumns) var previewMaxColumns
     @Default(.previewMaxRows) var previewMaxRows
     @Default(.switcherMaxRows) var switcherMaxRows
@@ -234,6 +235,16 @@ struct AppearanceSettingsView: View {
                                     Text("Hide preview card background")
                                 }
                                 Text("Removes the background panel from individual window previews.")
+                                    .font(.footnote)
+                                    .foregroundColor(.gray)
+                                    .padding(.leading, 20)
+                            }
+
+                            VStack(alignment: .leading) {
+                                Toggle(isOn: $showActiveWindowBorder) {
+                                    Text("Show active window border")
+                                }
+                                Text("Highlights the currently focused window with a colored border.")
                                     .font(.footnote)
                                     .foregroundColor(.gray)
                                     .padding(.leading, 20)

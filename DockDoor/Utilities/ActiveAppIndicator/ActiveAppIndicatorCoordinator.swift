@@ -10,27 +10,29 @@ final class ActiveAppIndicatorCoordinator {
     private var indicatorWindow: ActiveAppIndicatorWindow?
     private var workspaceObserver: NSObjectProtocol?
     private var settingsObserver: Defaults.Observation?
-    private var colorObserver: Defaults.Observation?
-    private var autoSizeObserver: Defaults.Observation?
-    private var autoLengthObserver: Defaults.Observation?
-    private var heightObserver: Defaults.Observation?
-    private var offsetObserver: Defaults.Observation?
-    private var lengthObserver: Defaults.Observation?
-    private var shiftObserver: Defaults.Observation?
+    private var positionSettingsObserver: Defaults.Observation?
+    private var screenParametersObserver: NSObjectProtocol?
 
     private var currentActiveApp: NSRunningApplication?
 
     // Dock item shift tracking (app launch/terminate/minimize)
     private var dockShiftDebounceTimer: Timer?
 
-    // Dock state observers (orientation and auto-hide visibility)
-    private var orientationObserver: ActiveAppIndicatorOrientationObserver?
-    private var visibilityManager: ActiveAppIndicatorVisibilityManager?
+    // Dock state tracking
+    private var lastKnownDockPosition: DockPosition
+    private var lastKnownDockSize: CGFloat
+
+    // Auto-hide visibility tracking
+    private var isDockCurrentlyVisible: Bool = true
+    private var dockHideDebounceTimer: Timer?
 
     init() {
+        lastKnownDockPosition = DockUtils.getDockPosition()
+        lastKnownDockSize = DockUtils.getDockSize()
+        isDockCurrentlyVisible = !CoreDockGetAutoHideEnabled()
+
         ActiveAppIndicatorCoordinator.shared = self
         setupObservers()
-        setupDockStateObservers()
         updateIndicatorVisibility()
     }
 
@@ -58,104 +60,68 @@ final class ActiveAppIndicatorCoordinator {
             }
         }
 
-        // Observe settings changes
-        settingsObserver = Defaults.observe(.showActiveAppIndicator) {
-            [weak self] change in
+        // Observe enable/disable setting
+        settingsObserver = Defaults.observe(.showActiveAppIndicator) { [weak self] _ in
             DispatchQueue.main.async {
                 self?.updateIndicatorVisibility()
             }
         }
 
-        colorObserver = Defaults.observe(.activeAppIndicatorColor) {
-            [weak self] _ in
+        // Observe all position-related settings with a single observer
+        // Color is handled by @Default in the SwiftUI view automatically
+        positionSettingsObserver = Defaults.observe(
+            keys: .activeAppIndicatorAutoSize,
+            .activeAppIndicatorAutoLength,
+            .activeAppIndicatorHeight,
+            .activeAppIndicatorOffset,
+            .activeAppIndicatorLength,
+            .activeAppIndicatorShift
+        ) { [weak self] in
             DispatchQueue.main.async {
-                self?.indicatorWindow?.updateAppearance()
+                guard let self, let app = self.currentActiveApp else { return }
+                self.updateIndicatorPosition(for: app)
             }
         }
 
-        autoSizeObserver = Defaults.observe(.activeAppIndicatorAutoSize) {
-            [weak self] _ in
-            DispatchQueue.main.async {
-                self?.indicatorWindow?.updateAppearance()
-                if let app = self?.currentActiveApp {
-                    self?.updateIndicatorPosition(for: app)
-                }
-            }
+        // Observe screen parameter changes (dock position/size changes)
+        screenParametersObserver = NotificationCenter.default.addObserver(
+            forName: NSApplication.didChangeScreenParametersNotification,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            self?.handleScreenParametersChanged()
         }
-
-        autoLengthObserver = Defaults.observe(.activeAppIndicatorAutoLength) {
-            [weak self] _ in
-            DispatchQueue.main.async {
-                if let app = self?.currentActiveApp {
-                    self?.updateIndicatorPosition(for: app)
-                }
-            }
-        }
-
-        heightObserver = Defaults.observe(.activeAppIndicatorHeight) {
-            [weak self] _ in
-            DispatchQueue.main.async {
-                self?.indicatorWindow?.updateAppearance()
-                if let app = self?.currentActiveApp {
-                    self?.updateIndicatorPosition(for: app)
-                }
-            }
-        }
-
-        offsetObserver = Defaults.observe(.activeAppIndicatorOffset) {
-            [weak self] _ in
-            DispatchQueue.main.async {
-                if let app = self?.currentActiveApp {
-                    self?.updateIndicatorPosition(for: app)
-                }
-            }
-        }
-
-        lengthObserver = Defaults.observe(.activeAppIndicatorLength) {
-            [weak self] _ in
-            DispatchQueue.main.async {
-                if let app = self?.currentActiveApp {
-                    self?.updateIndicatorPosition(for: app)
-                }
-            }
-        }
-
-        shiftObserver = Defaults.observe(.activeAppIndicatorShift) {
-            [weak self] _ in
-            DispatchQueue.main.async {
-                if let app = self?.currentActiveApp {
-                    self?.updateIndicatorPosition(for: app)
-                }
-            }
-        }
-    }
-
-    private func setupDockStateObservers() {
-        // Initialize observers for dock orientation changes and auto-hide visibility
-        orientationObserver = ActiveAppIndicatorOrientationObserver(
-            coordinator: self
-        )
-        visibilityManager = ActiveAppIndicatorVisibilityManager(
-            coordinator: self
-        )
     }
 
     private func cleanup() {
         if let observer = workspaceObserver {
             NSWorkspace.shared.notificationCenter.removeObserver(observer)
         }
+        if let observer = screenParametersObserver {
+            NotificationCenter.default.removeObserver(observer)
+        }
         dockShiftDebounceTimer?.invalidate()
+        dockHideDebounceTimer?.invalidate()
         settingsObserver?.invalidate()
-        colorObserver?.invalidate()
-        autoSizeObserver?.invalidate()
-        autoLengthObserver?.invalidate()
-        heightObserver?.invalidate()
-        offsetObserver?.invalidate()
-        lengthObserver?.invalidate()
-        shiftObserver?.invalidate()
-        orientationObserver = nil
-        visibilityManager = nil
+        positionSettingsObserver?.invalidate()
         hideIndicator()
+    }
+
+    private func handleScreenParametersChanged() {
+        let newDockPosition = DockUtils.getDockPosition()
+        let newDockSize = DockUtils.getDockSize()
+
+        // Check if dock position changed
+        if newDockPosition != lastKnownDockPosition {
+            lastKnownDockPosition = newDockPosition
+            notifyDockPositionChanged(newPosition: newDockPosition)
+        }
+
+        // Check if dock size changed (refresh indicator position for auto-size)
+        if newDockSize != lastKnownDockSize {
+            lastKnownDockSize = newDockSize
+            notifyDockItemsChanged()
+        }
     }
 
     // MARK: - Dock Item Change Notifications
@@ -193,17 +159,49 @@ final class ActiveAppIndicatorCoordinator {
 
     /// Called by DockObserver when a dock item is being hovered
     func notifyDockItemHovered() {
-        visibilityManager?.notifyDockItemHovered()
+        guard Defaults[.showActiveAppIndicator] else { return }
+
+        // Cancel any pending hide timer
+        dockHideDebounceTimer?.invalidate()
+        dockHideDebounceTimer = nil
+
+        // If auto-hide is disabled, dock is always visible - no animation needed
+        guard CoreDockGetAutoHideEnabled() else {
+            if !isDockCurrentlyVisible {
+                isDockCurrentlyVisible = true
+                indicatorWindow?.alphaValue = 1.0
+            }
+            return
+        }
+
+        // Show the indicator if it was hidden
+        if !isDockCurrentlyVisible {
+            isDockCurrentlyVisible = true
+            fadeInIndicator()
+        }
     }
 
     /// Called by DockObserver when no dock item is hovered
     func notifyDockItemUnhovered() {
-        visibilityManager?.notifyDockItemUnhovered()
-    }
+        guard Defaults[.showActiveAppIndicator] else { return }
 
-    /// Getter for indicator window (used by visibility manager)
-    func getIndicatorWindow() -> ActiveAppIndicatorWindow? {
-        indicatorWindow
+        // If auto-hide is disabled, dock is always visible - don't hide the indicator
+        guard CoreDockGetAutoHideEnabled() else { return }
+
+        // Cancel any previous hide timer
+        dockHideDebounceTimer?.invalidate()
+
+        // Start a debounce timer before hiding
+        let fadeOutDelay = Defaults[.activeAppIndicatorFadeOutDelay]
+        dockHideDebounceTimer = Timer.scheduledTimer(
+            withTimeInterval: fadeOutDelay,
+            repeats: false
+        ) { [weak self] _ in
+            guard let self else { return }
+            isDockCurrentlyVisible = false
+            fadeOutIndicator()
+            dockHideDebounceTimer = nil
+        }
     }
 
     // MARK: - Visibility Management
@@ -225,14 +223,48 @@ final class ActiveAppIndicatorCoordinator {
             indicatorWindow = ActiveAppIndicatorWindow()
 
             // Set initial alpha based on dock auto-hide state
-            // Visibility manager will handle the visibility logic via DockObserver
             if CoreDockGetAutoHideEnabled() {
-                // If auto-hide is enabled, start with invisible (DockObserver will show when needed)
                 indicatorWindow?.alphaValue = 0.0
             } else {
-                // If auto-hide is off, dock is always visible
                 indicatorWindow?.alphaValue = 1.0
             }
+        }
+    }
+
+    private func fadeInIndicator() {
+        guard let window = indicatorWindow else { return }
+
+        let fadeInDuration = Defaults[.activeAppIndicatorFadeInDuration]
+        let fadeInDelay = Defaults[.activeAppIndicatorFadeInDelay]
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + fadeInDelay) { [weak self, weak window] in
+            guard self != nil, let window else { return }
+
+            if fadeInDuration > 0 {
+                NSAnimationContext.runAnimationGroup { context in
+                    context.duration = fadeInDuration
+                    context.timingFunction = CAMediaTimingFunction(name: .easeOut)
+                    window.animator().alphaValue = 1.0
+                }
+            } else {
+                window.alphaValue = 1.0
+            }
+        }
+    }
+
+    private func fadeOutIndicator() {
+        guard let window = indicatorWindow else { return }
+
+        let fadeOutDuration = Defaults[.activeAppIndicatorFadeOutDuration]
+
+        if fadeOutDuration > 0 {
+            NSAnimationContext.runAnimationGroup { context in
+                context.duration = fadeOutDuration
+                context.timingFunction = CAMediaTimingFunction(name: .easeIn)
+                window.animator().alphaValue = 0.0
+            }
+        } else {
+            window.alphaValue = 0.0
         }
     }
 

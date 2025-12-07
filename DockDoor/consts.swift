@@ -82,6 +82,7 @@ extension Defaults.Keys {
     static let hoverHighlightColor = Key<Color?>("hoverHighlightColor", default: nil)
     static let dockPreviewBackgroundOpacity = Key<CGFloat>("dockPreviewBackgroundOpacity", default: 1.0)
     static let hidePreviewCardBackground = Key<Bool>("hidePreviewCardBackground", default: false)
+    static let showActiveWindowBorder = Key<Bool>("showActiveWindowBorder", default: false)
 
     static let showWindowTitle = Key<Bool>("showWindowTitle", default: true)
     static let showAppIconOnly = Key<Bool>("showAppIconOnly", default: false)

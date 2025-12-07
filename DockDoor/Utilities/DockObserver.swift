@@ -273,11 +273,11 @@ final class DockObserver {
         }
     }
 
-    /// Checks if ANY dock item (app, folder, trash, etc.) is currently being hovered.
-    /// Used for visibility decisions where we care about dock visibility, not specific app items.
-    func isAnyDockItemHovered() -> Bool {
+    /// Returns the currently selected (hovered) dock item, if any.
+    /// This is the shared helper used by both isAnyDockItemHovered() and getHoveredApplicationDockItem().
+    private func getSelectedDockItem() -> AXUIElement? {
         guard let dockAppPID = NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.dock").first?.processIdentifier else {
-            return false
+            return nil
         }
 
         let dockAppElement = AXUIElementCreateApplication(dockAppPID)
@@ -287,43 +287,33 @@ final class DockObserver {
               let dockItems = dockItems as? [AXUIElement],
               !dockItems.isEmpty
         else {
-            return false
+            return nil
         }
 
         var selectedChildren: CFTypeRef?
         guard AXUIElementCopyAttributeValue(dockItems.first!, kAXSelectedChildrenAttribute as CFString, &selectedChildren) == .success,
               let selected = selectedChildren as? [AXUIElement],
-              !selected.isEmpty
+              let hoveredItem = selected.first
         else {
-            return false
+            return nil
         }
 
-        return true
+        return hoveredItem
+    }
+
+    /// Checks if ANY dock item (app, folder, trash, etc.) is currently being hovered.
+    /// Used for visibility decisions where we care about dock visibility, not specific app items.
+    func isAnyDockItemHovered() -> Bool {
+        getSelectedDockItem() != nil
     }
 
     func getHoveredApplicationDockItem() -> AXUIElement? {
-        guard let dockAppPID = NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.dock").first?.processIdentifier else {
+        guard let item = getSelectedDockItem(),
+              (try? item.subrole()) == "AXApplicationDockItem"
+        else {
             return nil
         }
-
-        let dockAppElement = AXUIElementCreateApplication(dockAppPID)
-
-        var dockItems: CFTypeRef?
-        guard AXUIElementCopyAttributeValue(dockAppElement, kAXChildrenAttribute as CFString, &dockItems) == .success, let dockItems = dockItems as? [AXUIElement], !dockItems.isEmpty else {
-            return nil
-        }
-
-        var hoveredDockItem: CFTypeRef?
-        guard AXUIElementCopyAttributeValue(dockItems.first!, kAXSelectedChildrenAttribute as CFString, &hoveredDockItem) == .success, !dockItems.isEmpty, let hoveredDockItem = (hoveredDockItem as! [AXUIElement]).first else {
-            return nil
-        }
-
-        let subrole = try? hoveredDockItem.subrole()
-        guard subrole == "AXApplicationDockItem" else {
-            return nil
-        }
-
-        return hoveredDockItem
+        return item
     }
 
     func getDockItemAppStatusUnderMouse() -> ApplicationReturnType {

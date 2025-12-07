@@ -37,10 +37,6 @@ final class ActiveAppIndicatorWindow: NSPanel {
         contentView = hostingView
         indicatorView = hostingView
     }
-
-    func updateAppearance() {
-        indicatorView?.rootView = ActiveAppIndicatorView()
-    }
 }
 
 /// The SwiftUI view that draws the indicator line.
