@@ -4774,6 +4774,15 @@
         }
       }
     },
+    "30 FPS" : {
+
+    },
+    "60 FPS" : {
+
+    },
+    "120 FPS (ProMotion)" : {
+
+    },
     "Accessibility" : {
       "localizations" : {
         "af" : {
@@ -30094,6 +30103,9 @@
         }
       }
     },
+    "Enable Live Preview (Video)" : {
+
+    },
     "Enable Pinning" : {
       "localizations" : {
         "af" : {
@@ -39624,6 +39636,12 @@
         }
       }
     },
+    "High" : {
+
+    },
+    "Higher quality and frame rate use more CPU/GPU resources." : {
+
+    },
     "Highlight Gradient Colors" : {
       "localizations" : {
         "af" : {
@@ -45721,6 +45739,12 @@
           }
         }
       }
+    },
+    "Live Preview Frame Rate" : {
+
+    },
+    "Live Preview Quality" : {
+
     },
     "Loading lyrics..." : {
       "localizations" : {
@@ -69522,6 +69546,9 @@
           }
         }
       }
+    },
+    "Retina (Best)" : {
+
     },
     "Return" : {
       "localizations" : {
@@ -94296,6 +94323,9 @@
           }
         }
       }
+    },
+    "When enabled, window previews show live video instead of static screenshots. Uses ScreenCaptureKit for real-time capture." : {
+
     },
     "When hovering over the preview" : {
       "comment" : "Window title visibility option",

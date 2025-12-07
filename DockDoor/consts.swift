@@ -32,7 +32,7 @@ extension Defaults.Keys {
     static let windowPreviewImageScale = Key<CGFloat>("windowPreviewImageScale", default: 1)
     static let windowImageCaptureQuality = Key<WindowImageCaptureQuality>("windowImageCaptureQuality", default: .nominal)
 
-    static let enableLivePreview = Key<Bool>("enableLivePreview", default: true)
+    static let enableLivePreview = Key<Bool>("enableLivePreview", default: false)
     static let livePreviewQuality = Key<LivePreviewQuality>("livePreviewQuality", default: .retina)
     static let livePreviewFrameRate = Key<LivePreviewFrameRate>("livePreviewFrameRate", default: .fps30)
 

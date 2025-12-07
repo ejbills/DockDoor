@@ -1,5 +1,4 @@
 import AppKit
-import Combine
 import Defaults
 import ScreenCaptureKit
 import SwiftUI
@@ -74,7 +73,6 @@ struct WindowPreviewHoverContainer: View {
 
     @State private var dragPoints: [CGPoint] = []
     @State private var lastShakeCheck: Date = .init()
-    @StateObject private var liveCapture = LiveWindowCapture.shared
 
     init(appName: String,
          onWindowTap: (() -> Void)?,
