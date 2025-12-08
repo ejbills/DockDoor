@@ -600,10 +600,7 @@ class KeybindHelper {
                     .down
                 }
                 return (true, { @MainActor in
-                    let hasActiveSearch = self.previewCoordinator.windowSwitcherCoordinator.hasActiveSearch
-                    if !hasActiveSearch {
-                        self.previewCoordinator.navigateWithArrowKey(direction: dir)
-                    }
+                    self.previewCoordinator.navigateWithArrowKey(direction: dir)
                 })
             case Int64(kVK_Return), Int64(kVK_ANSI_KeypadEnter):
                 if previewCoordinator.windowSwitcherCoordinator.currIndex >= 0 {

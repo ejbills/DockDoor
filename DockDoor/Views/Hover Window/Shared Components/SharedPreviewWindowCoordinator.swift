@@ -573,7 +573,17 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         let coordinator = windowSwitcherCoordinator
         guard !coordinator.windows.isEmpty else { return }
 
+        // Handle filtered navigation for left/right arrows when search is active
         if coordinator.windowSwitcherActive, coordinator.hasActiveSearch {
+            switch direction {
+            case .left:
+                coordinator.cycleBackwardFiltered()
+            case .right:
+                coordinator.cycleForwardFiltered()
+            case .up, .down:
+                // Up/Down navigation not supported during search
+                return
+            }
             return
         }
 
