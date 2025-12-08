@@ -3,14 +3,14 @@
     <channel>
         <title>DockDoor</title>
         <item>
-            <title>1.27.0.1_pre_1_28</title>
-            <pubDate>Sat, 06 Dec 2025 23:00:25 -0800</pubDate>
+            <title>1.27.0.2_pre_1_28</title>
+            <pubDate>Sun, 07 Dec 2025 16:44:29 -0800</pubDate>
             <sparkle:releaseNotesLink>https://dockdoor.net/CHANGELOG.html</sparkle:releaseNotesLink>
             <sparkle:channel>beta</sparkle:channel>
-            <sparkle:version>1.27.0.1_pre_1_28</sparkle:version>
-            <sparkle:shortVersionString>1.27.0.1_pre_1_28 beta</sparkle:shortVersionString>
+            <sparkle:version>1.27.0.2_pre_1_28</sparkle:version>
+            <sparkle:shortVersionString>1.27.0.2_pre_1_28 beta</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/ejbills/DockDoor/releases/download/1.27.0.1_pre_1_28/DockDoor.dmg" length="16146105" type="application/octet-stream" sparkle:edSignature="Tjv+LjCT+3sQCi8OWRA6kVSRX5nWjBPcIbatvnVvF2b4t55dzZD5kffQ65DKSlKnorHEcLaWV0B2+9YqnY7lAg==" />
+            <enclosure url="https://github.com/ejbills/DockDoor/releases/download/1.27.0.2_pre_1_28/DockDoor.dmg" length="16199417" type="application/octet-stream" sparkle:edSignature="AEVGy7NBu4xwo1ktGXnMsXmbK+jZqmVWaaiMeLHJEd1aCfBqWe3Kd1Rsu8bEAG9r0HN92AzDQDH4AOphinJnDg==" />
         </item>
     <item>
             <title>1.27</title>
