@@ -574,6 +574,23 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         guard !coordinator.windows.isEmpty else { return }
 
         if coordinator.windowSwitcherActive, coordinator.hasActiveSearch {
+            let filteredIndices = coordinator.filteredWindowIndices()
+            guard !filteredIndices.isEmpty else { return }
+
+            guard let currentFilteredPos = filteredIndices.firstIndex(of: coordinator.currIndex) else {
+                coordinator.setIndex(to: filteredIndices.first ?? 0)
+                return
+            }
+
+            let newFilteredPos = WindowPreviewHoverContainer.navigateWindowSwitcher(
+                from: currentFilteredPos,
+                direction: direction,
+                totalItems: filteredIndices.count,
+                dockPosition: .bottom,
+                isWindowSwitcherActive: true
+            )
+
+            coordinator.setIndex(to: filteredIndices[newFilteredPos])
             return
         }
 

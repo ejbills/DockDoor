@@ -68,7 +68,9 @@ private class WindowSwitchingCoordinator {
 
         uiRenderingTask?.cancel()
         uiRenderingTask = Task { @MainActor in
-            try? await Task.sleep(nanoseconds: 100_000_000)
+            if !Defaults[.instantWindowSwitcher] {
+                try? await Task.sleep(nanoseconds: 100_000_000)
+            }
             await renderWindowSwitcherUI(
                 previewCoordinator: previewCoordinator,
                 windows: windows,
@@ -561,8 +563,7 @@ class KeybindHelper {
             if keyCode == kVK_Tab {
                 return (true, { @MainActor in
                     if self.previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive {
-                        let hasActiveSearch = self.previewCoordinator.windowSwitcherCoordinator.hasActiveSearch
-                        if !hasActiveSearch {
+                        if !self.previewCoordinator.windowSwitcherCoordinator.hasActiveSearch {
                             await self.windowSwitchingCoordinator.handleWindowSwitching(
                                 previewCoordinator: self.previewCoordinator,
                                 isModifierPressed: self.isSwitcherModifierKeyPressed,
@@ -588,10 +589,7 @@ class KeybindHelper {
                     .down
                 }
                 return (true, { @MainActor in
-                    let hasActiveSearch = self.previewCoordinator.windowSwitcherCoordinator.hasActiveSearch
-                    if !hasActiveSearch {
-                        self.previewCoordinator.navigateWithArrowKey(direction: dir)
-                    }
+                    self.previewCoordinator.navigateWithArrowKey(direction: dir)
                 })
             case Int64(kVK_Return), Int64(kVK_ANSI_KeypadEnter):
                 if previewCoordinator.windowSwitcherCoordinator.currIndex >= 0 {
@@ -623,6 +621,8 @@ class KeybindHelper {
                     if !query.isEmpty {
                         query.removeLast()
                         self.previewCoordinator.windowSwitcherCoordinator.searchQuery = query
+                        let windows = self.previewCoordinator.windowSwitcherCoordinator.windows
+                        self.windowSwitchingCoordinator.stateManager.setSearchQuery(query, windows: windows)
                         SharedPreviewWindowCoordinator.activeInstance?.updateSearchWindow(with: query)
 
                         if query.isEmpty {
@@ -645,6 +645,8 @@ class KeybindHelper {
                     return (true, { @MainActor in
                         self.previewCoordinator.windowSwitcherCoordinator.searchQuery.append(contentsOf: filteredChars)
                         let newQuery = self.previewCoordinator.windowSwitcherCoordinator.searchQuery
+                        let windows = self.previewCoordinator.windowSwitcherCoordinator.windows
+                        self.windowSwitchingCoordinator.stateManager.setSearchQuery(newQuery, windows: windows)
                         SharedPreviewWindowCoordinator.activeInstance?.updateSearchWindow(with: newQuery)
 
                         if !newQuery.isEmpty {
