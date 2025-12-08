@@ -1,45 +1,59 @@
 import Cocoa
 import Defaults
 import ScreenCaptureKit
+import SwiftUI
 
-@MainActor
-class LiveWindowCapture: NSObject, ObservableObject {
-    static let shared = LiveWindowCapture()
+struct LivePreviewImage: View {
+    let windowID: CGWindowID
+    let fallbackImage: CGImage?
 
-    @Published var capturedImages: [CGWindowID: CGImage] = [:]
+    @StateObject private var capture: WindowLiveCapture
 
-    private var streams: [CGWindowID: SCStream] = [:]
-    private var streamOutputs: [CGWindowID: StreamOutput] = [:]
-    private var isCapturing = false
-
-    var isEnabled: Bool {
-        Defaults[.enableLivePreview]
+    init(windowID: CGWindowID, fallbackImage: CGImage?) {
+        self.windowID = windowID
+        self.fallbackImage = fallbackImage
+        _capture = StateObject(wrappedValue: WindowLiveCapture(windowID: windowID))
     }
 
-    override private init() {
+    var body: some View {
+        Group {
+            if let image = capture.capturedImage ?? fallbackImage {
+                Image(decorative: image, scale: 1.0)
+                    .resizable()
+            }
+        }
+        .task {
+            await capture.startCapture()
+        }
+    }
+}
+
+@MainActor
+class WindowLiveCapture: NSObject, ObservableObject {
+    @Published var capturedImage: CGImage?
+
+    private let windowID: CGWindowID
+    private var stream: SCStream?
+    private var streamOutput: StreamOutput?
+
+    init(windowID: CGWindowID) {
+        self.windowID = windowID
         super.init()
     }
 
-    func startCapture(windowIDs: [CGWindowID]) async {
-        guard Defaults[.enableLivePreview] else { return }
-
-        await stopAllCaptures()
-        isCapturing = true
+    func startCapture() async {
+        guard stream == nil else { return }
 
         do {
             let content = try await SCShareableContent.excludingDesktopWindows(true, onScreenWindowsOnly: false)
-
-            for windowID in windowIDs {
-                guard let scWindow = content.windows.first(where: { $0.windowID == windowID }) else {
-                    continue
-                }
-                await startStreamForWindow(scWindow)
+            guard let scWindow = content.windows.first(where: { $0.windowID == windowID }) else {
+                return
             }
+            await startStream(for: scWindow)
         } catch {}
     }
 
-    private func startStreamForWindow(_ window: SCWindow) async {
-        let windowID = window.windowID
+    private func startStream(for window: SCWindow) async {
         let filter = SCContentFilter(desktopIndependentWindow: window)
 
         let quality = Defaults[.livePreviewQuality]
@@ -47,76 +61,55 @@ class LiveWindowCapture: NSObject, ObservableObject {
 
         let config = SCStreamConfiguration()
 
+        let backingScaleFactor = Int(NSScreen.main?.backingScaleFactor ?? 2.0)
         let windowWidth = Int(window.frame.width)
         let windowHeight = Int(window.frame.height)
 
         if quality.useFullResolution {
-            config.width = windowWidth * quality.scaleFactor
-            config.height = windowHeight * quality.scaleFactor
+            let effectiveScale = quality == .retina ? 2 : backingScaleFactor
+            config.width = windowWidth * effectiveScale
+            config.height = windowHeight * effectiveScale
         } else {
-            config.width = min(640, windowWidth)
-            config.height = min(360, windowHeight)
+            let aspectRatio = Double(windowWidth) / Double(windowHeight)
+            if aspectRatio > 1 {
+                config.width = min(640, windowWidth * backingScaleFactor)
+                config.height = Int(Double(config.width) / aspectRatio)
+            } else {
+                config.height = min(480, windowHeight * backingScaleFactor)
+                config.width = Int(Double(config.height) * aspectRatio)
+            }
         }
 
         config.minimumFrameInterval = CMTime(value: 1, timescale: frameRate.frameRate)
         config.pixelFormat = kCVPixelFormatType_32BGRA
         config.showsCursor = false
         config.queueDepth = quality == .retina ? 5 : 3
-        config.scalesToFit = false
+        config.scalesToFit = true
 
         do {
-            let stream = SCStream(filter: filter, configuration: config, delegate: nil)
+            let newStream = SCStream(filter: filter, configuration: config, delegate: nil)
 
             let output = StreamOutput(windowID: windowID) { [weak self] image in
                 Task { @MainActor in
-                    self?.capturedImages[windowID] = image
+                    self?.capturedImage = image
                 }
             }
 
-            try stream.addStreamOutput(output, type: .screen, sampleHandlerQueue: .global(qos: .userInteractive))
-            try await stream.startCapture()
+            try newStream.addStreamOutput(output, type: .screen, sampleHandlerQueue: .global(qos: .userInteractive))
+            try await newStream.startCapture()
 
-            streams[windowID] = stream
-            streamOutputs[windowID] = output
+            stream = newStream
+            streamOutput = output
         } catch {}
     }
 
-    func stopAllCaptures() async {
-        isCapturing = false
-
-        for (_, stream) in streams {
+    func stopCapture() async {
+        if let stream {
             try? await stream.stopCapture()
         }
-
-        streams.removeAll()
-        streamOutputs.removeAll()
-        capturedImages.removeAll()
-    }
-
-    func startCapture(windowID: CGWindowID) async {
-        guard Defaults[.enableLivePreview] else { return }
-        guard streams[windowID] == nil else { return } // Already capturing
-
-        do {
-            let content = try await SCShareableContent.excludingDesktopWindows(true, onScreenWindowsOnly: false)
-            guard let scWindow = content.windows.first(where: { $0.windowID == windowID }) else {
-                return
-            }
-            await startStreamForWindow(scWindow)
-        } catch {}
-    }
-
-    func stopCapture(windowID: CGWindowID) async {
-        if let stream = streams[windowID] {
-            try? await stream.stopCapture()
-            streams.removeValue(forKey: windowID)
-            streamOutputs.removeValue(forKey: windowID)
-            capturedImages.removeValue(forKey: windowID)
-        }
-    }
-
-    func getImage(for windowID: CGWindowID) -> CGImage? {
-        capturedImages[windowID]
+        stream = nil
+        streamOutput = nil
+        capturedImage = nil
     }
 }
 

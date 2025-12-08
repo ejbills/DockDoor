@@ -17,7 +17,6 @@ struct WindowPreview: View {
     let showAppIconOnly: Bool
     let mockPreviewActive: Bool
     let onHoverIndexChange: ((Int?) -> Void)?
-    @ObservedObject var liveCapture = LiveWindowCapture.shared
 
     @Default(.windowTitlePosition) var windowTitlePosition
     @Default(.showWindowTitle) var showWindowTitle
@@ -39,6 +38,7 @@ struct WindowPreview: View {
 
     @Default(.tapEquivalentInterval) var tapEquivalentInterval
     @Default(.previewHoverAction) var previewHoverAction
+    @Default(.enableLivePreview) var enableLivePreview
 
     @State private var isHoveringOverDockPeekPreview = false
     @State private var isHoveringOverWindowSwitcherPreview = false
@@ -67,28 +67,33 @@ struct WindowPreview: View {
         }
     }
 
+    @ViewBuilder
     private func windowContent(isMinimized: Bool, isHidden: Bool, isSelected: Bool) -> some View {
+        let inactive = (isMinimized || isHidden) && showMinimizedHiddenLabels
+        let useLivePreview = enableLivePreview && !isMinimized && !isHidden
+
         Group {
-            let displayImage = (isMinimized || isHidden) ? windowInfo.image : (liveCapture.capturedImages[windowInfo.id] ?? windowInfo.image)
-            if let cgImage = displayImage {
-                let inactive = (isMinimized || isHidden) && showMinimizedHiddenLabels
+            if useLivePreview {
+                LivePreviewImage(windowID: windowInfo.id, fallbackImage: windowInfo.image)
+                    .scaledToFit()
+            } else if let cgImage = windowInfo.image {
                 Image(decorative: cgImage, scale: 1.0)
                     .resizable()
                     .scaledToFit()
-                    .markHidden(isHidden: inactive || (windowSwitcherActive && !isSelected))
-                    .overlay {
-                        if inactive, showMinimizedHiddenLabels {
-                            Image(systemName: "eye.slash")
-                                .font(.largeTitle)
-                                .foregroundColor(.primary)
-                                .shadow(radius: 2)
-                                .transition(.opacity)
-                        }
-                    }
-                    .animation(.easeInOut(duration: 0.15), value: inactive)
-                    .clipShape(uniformCardRadius ? AnyShape(RoundedRectangle(cornerRadius: 12, style: .continuous)) : AnyShape(Rectangle()))
             }
         }
+        .markHidden(isHidden: inactive || (windowSwitcherActive && !isSelected))
+        .overlay {
+            if inactive, showMinimizedHiddenLabels {
+                Image(systemName: "eye.slash")
+                    .font(.largeTitle)
+                    .foregroundColor(.primary)
+                    .shadow(radius: 2)
+                    .transition(.opacity)
+            }
+        }
+        .animation(.easeInOut(duration: 0.15), value: inactive)
+        .clipShape(uniformCardRadius ? AnyShape(RoundedRectangle(cornerRadius: 12, style: .continuous)) : AnyShape(Rectangle()))
         .dynamicWindowFrame(
             allowDynamicSizing: allowDynamicImageSizing,
             dimensions: dimensions,
@@ -644,18 +649,6 @@ struct WindowPreview: View {
                 }
             })
             .fixedSize()
-            .onAppear {
-                if !windowInfo.isMinimized, !windowInfo.isHidden {
-                    Task {
-                        await liveCapture.startCapture(windowID: windowInfo.id)
-                    }
-                }
-            }
-            .onDisappear {
-                Task {
-                    await liveCapture.stopCapture(windowID: windowInfo.id)
-                }
-            }
     }
 
     private func handleFullPreviewHover(isHovering: Bool, action: PreviewHoverAction) {
