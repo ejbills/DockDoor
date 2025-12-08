@@ -9,7 +9,7 @@ struct TrackpadGestureModifier: ViewModifier {
 
     @State private var isHovering = false
 
-    public func body(content: Content) -> some View {
+    func body(content: Content) -> some View {
         content
             .onHover { hovering in
                 isHovering = hovering
