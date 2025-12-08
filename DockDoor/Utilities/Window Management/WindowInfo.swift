@@ -113,6 +113,14 @@ extension WindowInfo {
     }
 
     func bringToFront() {
+        // Must run on main thread - AX operations trigger AppKit calls that require it
+        guard Thread.isMainThread else {
+            DispatchQueue.main.async { [self] in
+                bringToFront()
+            }
+            return
+        }
+
         let maxRetries = 3
         var retryCount = 0
 
@@ -144,7 +152,7 @@ extension WindowInfo {
             }
             retryCount += 1
             if retryCount < maxRetries {
-                usleep(50000)
+                usleep(20000)
             }
         }
 

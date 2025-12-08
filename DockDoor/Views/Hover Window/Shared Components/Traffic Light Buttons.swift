@@ -74,6 +74,28 @@ struct TrafficLightButtons: View {
     }
 
     private func buttonFor(action: WindowAction, symbol: String, color: Color, fillColor: Color) -> some View {
+        TrafficLightButton(
+            action: action,
+            symbol: symbol,
+            color: color,
+            fillColor: fillColor,
+            onWindowAction: onWindowAction
+        )
+    }
+}
+
+// MARK: - Traffic Light Button with Hover Effects
+
+private struct TrafficLightButton: View {
+    let action: WindowAction
+    let symbol: String
+    let color: Color
+    let fillColor: Color
+    let onWindowAction: (WindowAction) -> Void
+
+    @State private var isHovering = false
+
+    var body: some View {
         ZStack {
             Image(systemName: "circle.fill")
                 .foregroundStyle(.secondary)
@@ -81,10 +103,36 @@ struct TrafficLightButtons: View {
         }
         .foregroundStyle(color, fillColor)
         .font(.headline)
+        .modifier(TrafficLightHoverEffect(isHovering: isHovering))
         .contentShape(Rectangle())
+        .onHover { hovering in
+            withAnimation(.easeInOut(duration: 0.1)) {
+                isHovering = hovering
+            }
+        }
         .onTapGesture {
             onWindowAction(action)
         }
+    }
+}
+
+// MARK: - Hover Effect Modifier
+
+private struct TrafficLightHoverEffect: ViewModifier {
+    private enum Constants {
+        static let dimOverlayOpacity: Double = 0.25
+    }
+
+    let isHovering: Bool
+
+    func body(content: Content) -> some View {
+        content
+            .overlay {
+                if isHovering {
+                    Circle()
+                        .fill(Color.black.opacity(Constants.dimOverlayOpacity))
+                }
+            }
     }
 }
 

@@ -94,8 +94,10 @@ struct MainSettingsView: View {
     @Default(.sortMinimizedToEnd) var sortMinimizedToEnd
     @Default(.keepPreviewOnAppTerminate) var keepPreviewOnAppTerminate
     @Default(.enableCmdTabEnhancements) var enableCmdTabEnhancements
+    @Default(.enableMouseHoverInSwitcher) var enableMouseHoverInSwitcher
     @Default(.scrollToMouseHoverInSwitcher) var scrollToMouseHoverInSwitcher
     @Default(.includeHiddenWindowsInSwitcher) var includeHiddenWindowsInSwitcher
+    @Default(.showTabsAsWindows) var showTabsAsWindows
     @Default(.useClassicWindowOrdering) var useClassicWindowOrdering
     @Default(.limitSwitcherToFrontmostApp) var limitSwitcherToFrontmostApp
     @Default(.fullscreenAppBlacklist) var fullscreenAppBlacklist
@@ -449,12 +451,20 @@ struct MainSettingsView: View {
                     if enableWindowSwitcher {
                         VStack(alignment: .leading, spacing: 8) {
                             Toggle(isOn: $includeHiddenWindowsInSwitcher) { Text("Include hidden/minimized windows in Switcher") }
+                            Toggle(isOn: $showTabsAsWindows) { Text("Show standard tabs as windows") }
                             Toggle(isOn: $enableWindowSwitcherSearch) { Text("Enable search while using Window Switcher") }
                             Toggle(isOn: Binding(
                                 get: { !preventSwitcherHide },
                                 set: { preventSwitcherHide = !$0 }
                             )) { Text("Release initializer key to select window in Switcher") }
+                            Toggle(isOn: $enableMouseHoverInSwitcher) { Text("Enable mouse hover selection") }
+                            Text("Select windows by hovering with mouse.")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                                .padding(.leading, 20)
+
                             Toggle(isOn: $scrollToMouseHoverInSwitcher) { Text("Scroll to window on mouse hover") }
+                                .disabled(!enableMouseHoverInSwitcher)
                             Text("Automatically scrolls the window switcher when hovering over windows with the mouse.")
                                 .font(.caption)
                                 .foregroundColor(.secondary)
@@ -982,6 +992,7 @@ struct MainSettingsView: View {
                 showMenuBarIcon = Defaults.Keys.showMenuBarIcon.defaultValue
                 enableWindowSwitcher = Defaults.Keys.enableWindowSwitcher.defaultValue
                 includeHiddenWindowsInSwitcher = Defaults.Keys.includeHiddenWindowsInSwitcher.defaultValue
+                showTabsAsWindows = Defaults.Keys.showTabsAsWindows.defaultValue
                 useClassicWindowOrdering = Defaults.Keys.useClassicWindowOrdering.defaultValue
                 limitSwitcherToFrontmostApp = Defaults.Keys.limitSwitcherToFrontmostApp.defaultValue
                 fullscreenAppBlacklist = Defaults.Keys.fullscreenAppBlacklist.defaultValue

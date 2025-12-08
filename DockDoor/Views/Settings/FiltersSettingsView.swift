@@ -11,12 +11,17 @@ struct FiltersSettingsView: View {
     @State private var newFilter = FilterEntry(text: "")
     @State private var showingDirectoryPicker = false
 
+    // MARK: - App Loading State
+
+    @State private var installedApps: [(name: String, icon: NSImage)] = []
+    @State private var isLoadingApps = true
+
     struct FilterEntry: Identifiable, Hashable {
         let id = UUID()
         var text: String
     }
 
-    private var installedApps: [(name: String, icon: NSImage)] {
+    private func loadInstalledApps() async -> [(name: String, icon: NSImage)] {
         var apps: [(String, NSImage)] = []
         let appLocations = [
             "/Applications",
@@ -141,7 +146,20 @@ struct FiltersSettingsView: View {
 
                         ScrollView {
                             VStack(alignment: .leading, spacing: 4) {
-                                if installedApps.isEmpty {
+                                if isLoadingApps {
+                                    HStack {
+                                        Spacer()
+                                        VStack(spacing: 12) {
+                                            ProgressView()
+                                                .scaleEffect(1.2)
+                                            Text("Scanning applications…")
+                                                .font(.caption)
+                                                .foregroundColor(.secondary)
+                                        }
+                                        .padding(.vertical, 40)
+                                        Spacer()
+                                    }
+                                } else if installedApps.isEmpty {
                                     Text("No applications found or scanned yet.")
                                         .foregroundColor(.secondary)
                                         .padding()
@@ -181,6 +199,14 @@ struct FiltersSettingsView: View {
                             RoundedRectangle(cornerRadius: 8)
                                 .stroke(Color.gray.opacity(0.25), lineWidth: 1)
                         )
+                    }
+                }
+                .task {
+                    guard isLoadingApps else { return }
+                    let apps = await loadInstalledApps()
+                    await MainActor.run {
+                        installedApps = apps
+                        isLoadingApps = false
                     }
                 }
 

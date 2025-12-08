@@ -762,6 +762,9 @@
         }
       }
     },
+    "—" : {
+
+    },
     "%@" : {
       "localizations" : {
         "af" : {
@@ -30127,6 +30130,9 @@
     "Enable Live Preview (Video)" : {
 
     },
+    "Enable mouse hover selection" : {
+
+    },
     "Enable Pinning" : {
       "localizations" : {
         "af" : {
@@ -58543,6 +58549,9 @@
         }
       }
     },
+    "Places traffic light buttons inside the preview frames. Buttons appear on mouse hover for a cleaner look." : {
+
+    },
     "Please Quit the App to Apply Changes! :)" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -70545,6 +70554,9 @@
         }
       }
     },
+    "Scanning applications…" : {
+
+    },
     "Screen" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -73788,6 +73800,9 @@
           }
         }
       }
+    },
+    "Select windows by hovering with mouse." : {
+
     },
     "Selected app:" : {
       "localizations" : {
@@ -77036,6 +77051,9 @@
           }
         }
       }
+    },
+    "Show standard tabs as windows" : {
+
     },
     "Show window previews when hovering over Dock icons." : {
       "localizations" : {

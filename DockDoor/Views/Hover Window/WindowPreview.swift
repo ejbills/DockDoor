@@ -11,7 +11,8 @@ struct WindowPreview: View {
     let bestGuessMonitor: NSScreen
     let uniformCardRadius: Bool
     let handleWindowAction: (WindowAction) -> Void
-    var currIndex: Int
+    var isSelectedByKeyboard: Bool
+    var isHoveredByMouse: Bool = false
     var windowSwitcherActive: Bool
     let dimensions: WindowPreviewHoverContainer.WindowDimensions
     let showAppIconOnly: Bool
@@ -31,6 +32,7 @@ struct WindowPreview: View {
     @Default(.hoverHighlightColor) var hoverHighlightColor
     @Default(.allowDynamicImageSizing) var allowDynamicImageSizing
     @Default(.useEmbeddedDockPreviewElements) var useEmbeddedDockPreviewElements
+    @Default(.useEmbeddedWindowSwitcherElements) var useEmbeddedWindowSwitcherElements
     @Default(.disableDockStyleTrafficLights) var disableDockStyleTrafficLights
     @Default(.disableDockStyleTitles) var disableDockStyleTitles
     @Default(.hidePreviewCardBackground) var hidePreviewCardBackground
@@ -79,6 +81,23 @@ struct WindowPreview: View {
         }
     }
 
+    // MARK: - Header Visibility
+
+    /// Shows dock preview header (external to preview frame)
+    private var showDockHeader: Bool {
+        !windowSwitcherActive && !useEmbeddedDockPreviewElements
+    }
+
+    /// Shows window switcher header with embedded controls inside preview frame
+    private var useEmbeddedSwitcherHeader: Bool {
+        windowSwitcherActive && useEmbeddedWindowSwitcherElements
+    }
+
+    /// Shows normal (external) window switcher header
+    private var showNormalSwitcherHeader: Bool {
+        windowSwitcherActive && !useEmbeddedWindowSwitcherElements
+    }
+
     @ViewBuilder
     private func windowContent(isMinimized: Bool, isHidden: Bool, isSelected: Bool) -> some View {
         let inactive = (isMinimized || isHidden) && showMinimizedHiddenLabels
@@ -119,6 +138,8 @@ struct WindowPreview: View {
     private func embeddedControlsOverlay(_ selected: Bool) -> some View {
         if !windowSwitcherActive {
             embeddedDockPreviewControls(selected)
+        } else if windowSwitcherActive, useEmbeddedWindowSwitcherElements {
+            embeddedWindowSwitcherControls()
         }
     }
 
@@ -274,6 +295,82 @@ struct WindowPreview: View {
                 }
             }
         }
+    }
+
+    // MARK: - Embedded Window Switcher Controls
+
+    @ViewBuilder
+    private func embeddedWindowSwitcherControls() -> some View {
+        let canShowTrafficLights = windowInfo.closeButton != nil &&
+            trafficLightButtonsVisibility != .never &&
+            (showMinimizedHiddenLabels ? (!windowInfo.isMinimized && !windowInfo.isHidden) : true)
+
+        let showMinimizedLabel = isHoveringOverWindowSwitcherPreview &&
+            (windowInfo.isMinimized || windowInfo.isHidden) &&
+            showMinimizedHiddenLabels
+
+        if isHoveringOverWindowSwitcherPreview, canShowTrafficLights || showMinimizedLabel {
+            VStack {
+                HStack {
+                    if canShowTrafficLights {
+                        TrafficLightButtons(
+                            displayMode: .fullOpacityOnPreviewHover,
+                            hoveringOverParentWindow: true,
+                            onWindowAction: handleWindowAction,
+                            pillStyling: false,
+                            mockPreviewActive: mockPreviewActive
+                        )
+                    } else if showMinimizedLabel {
+                        Text(windowInfo.isMinimized ? "Minimized" : "Hidden")
+                            .font(.caption)
+                            .italic()
+                            .foregroundStyle(.secondary)
+                    }
+                    Spacer()
+                }
+                .padding(8)
+                Spacer()
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func embeddedWindowSwitcherHeader() -> some View {
+        let shouldShowTitle = showWindowTitle && (
+            windowTitleDisplayCondition == .all ||
+                windowTitleDisplayCondition == .windowSwitcherOnly
+        )
+
+        let windowTitle = windowInfo.windowName ?? ""
+        let appName = windowInfo.app.localizedName ?? "Unknown"
+        let hasWindowTitle = !windowTitle.isEmpty && windowTitle != appName && shouldShowTitle
+
+        HStack(spacing: 6) {
+            if let appIcon = windowInfo.app.icon {
+                Image(nsImage: appIcon)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 28, height: 28)
+            }
+
+            if !showAppIconOnly {
+                Text(appName)
+                    .foregroundStyle(.primary)
+                    .lineLimit(1)
+
+                if hasWindowTitle {
+                    Text("—")
+                        .foregroundStyle(.secondary)
+
+                    MarqueeText(text: windowTitle, startDelay: 1)
+                        .foregroundStyle(.secondary)
+                        .lineLimit(1)
+                }
+            }
+
+            Spacer(minLength: 0)
+        }
+        .fixedSize(horizontal: false, vertical: true)
     }
 
     private func windowSwitcherContent(_ selected: Bool, showTitleContent: Bool = true, showControlsContent: Bool = true) -> some View {
@@ -475,45 +572,49 @@ struct WindowPreview: View {
 
     @ViewBuilder
     private var previewCoreContent: some View {
-        let isSelectedByKeyboardInDock = !windowSwitcherActive && (index == currIndex)
-        let isSelectedByKeyboardInSwitcher = windowSwitcherActive && (index == currIndex)
-
-        let finalIsSelected = isHoveringOverDockPeekPreview ||
-            isSelectedByKeyboardInSwitcher ||
-            isSelectedByKeyboardInDock ||
-            isHoveringOverWindowSwitcherPreview
+        let isFocused = isSelectedByKeyboard
+        let isHovered = isHoveredByMouse && windowSwitcherActive
+        let finalIsSelected = isHoveringOverDockPeekPreview || isFocused || isHovered
 
         ZStack(alignment: .topLeading) {
             VStack(alignment: .leading, spacing: 0) {
-                if !useEmbeddedDockPreviewElements ||
-                    windowSwitcherActive
-                {
+                if useEmbeddedSwitcherHeader {
+                    embeddedWindowSwitcherHeader()
+                        .padding(.bottom, 4)
+                }
+
+                if showNormalSwitcherHeader {
                     Group {
-                        if windowSwitcherActive, windowSwitcherControlPosition == .topLeading ||
+                        if windowSwitcherControlPosition == .topLeading ||
                             windowSwitcherControlPosition == .topTrailing
                         {
                             windowSwitcherContent(finalIsSelected)
-                        } else if windowSwitcherActive, windowSwitcherControlPosition == .diagonalTopLeftBottomRight {
+                        } else if windowSwitcherControlPosition == .diagonalTopLeftBottomRight {
                             windowSwitcherContent(finalIsSelected, showTitleContent: true, showControlsContent: false)
-                        } else if windowSwitcherActive, windowSwitcherControlPosition == .diagonalTopRightBottomLeft {
+                        } else if windowSwitcherControlPosition == .diagonalTopRightBottomLeft {
                             windowSwitcherContent(finalIsSelected, showTitleContent: true, showControlsContent: false)
-                        } else if windowSwitcherActive, windowSwitcherControlPosition == .diagonalBottomLeftTopRight {
+                        } else if windowSwitcherControlPosition == .diagonalBottomLeftTopRight {
                             windowSwitcherContent(finalIsSelected, showTitleContent: false, showControlsContent: true)
-                        } else if windowSwitcherActive, windowSwitcherControlPosition == .diagonalBottomRightTopLeft {
+                        } else if windowSwitcherControlPosition == .diagonalBottomRightTopLeft {
                             windowSwitcherContent(finalIsSelected, showTitleContent: false, showControlsContent: true)
                         }
+                    }
+                    .padding(.bottom, 4)
+                }
 
-                        if !windowSwitcherActive, dockPreviewControlPosition == .topLeading ||
+                if showDockHeader {
+                    Group {
+                        if dockPreviewControlPosition == .topLeading ||
                             dockPreviewControlPosition == .topTrailing
                         {
                             dockPreviewContent(finalIsSelected)
-                        } else if !windowSwitcherActive, dockPreviewControlPosition == .diagonalTopLeftBottomRight {
+                        } else if dockPreviewControlPosition == .diagonalTopLeftBottomRight {
                             dockPreviewContent(finalIsSelected, showTitleContent: true, showControlsContent: false)
-                        } else if !windowSwitcherActive, dockPreviewControlPosition == .diagonalTopRightBottomLeft {
+                        } else if dockPreviewControlPosition == .diagonalTopRightBottomLeft {
                             dockPreviewContent(finalIsSelected, showTitleContent: true, showControlsContent: false)
-                        } else if !windowSwitcherActive, dockPreviewControlPosition == .diagonalBottomLeftTopRight {
+                        } else if dockPreviewControlPosition == .diagonalBottomLeftTopRight {
                             dockPreviewContent(finalIsSelected, showTitleContent: false, showControlsContent: true)
-                        } else if !windowSwitcherActive, dockPreviewControlPosition == .diagonalBottomRightTopLeft {
+                        } else if dockPreviewControlPosition == .diagonalBottomRightTopLeft {
                             dockPreviewContent(finalIsSelected, showTitleContent: false, showControlsContent: true)
                         }
                     }
@@ -525,36 +626,44 @@ struct WindowPreview: View {
                     isHidden: windowInfo.isHidden,
                     isSelected: finalIsSelected
                 )
+                .overlay(alignment: .topLeading) {
+                    if useEmbeddedSwitcherHeader {
+                        embeddedWindowSwitcherControls()
+                    }
+                }
 
-                if !useEmbeddedDockPreviewElements ||
-                    windowSwitcherActive
-                {
+                if showNormalSwitcherHeader {
                     Group {
-                        if windowSwitcherActive, windowSwitcherControlPosition == .bottomLeading ||
+                        if windowSwitcherControlPosition == .bottomLeading ||
                             windowSwitcherControlPosition == .bottomTrailing
                         {
                             windowSwitcherContent(finalIsSelected)
-                        } else if windowSwitcherActive, windowSwitcherControlPosition == .diagonalTopLeftBottomRight {
+                        } else if windowSwitcherControlPosition == .diagonalTopLeftBottomRight {
                             windowSwitcherContent(finalIsSelected, showTitleContent: false, showControlsContent: true)
-                        } else if windowSwitcherActive, windowSwitcherControlPosition == .diagonalTopRightBottomLeft {
+                        } else if windowSwitcherControlPosition == .diagonalTopRightBottomLeft {
                             windowSwitcherContent(finalIsSelected, showTitleContent: false, showControlsContent: true)
-                        } else if windowSwitcherActive, windowSwitcherControlPosition == .diagonalBottomLeftTopRight {
+                        } else if windowSwitcherControlPosition == .diagonalBottomLeftTopRight {
                             windowSwitcherContent(finalIsSelected, showTitleContent: true, showControlsContent: false)
-                        } else if windowSwitcherActive, windowSwitcherControlPosition == .diagonalBottomRightTopLeft {
+                        } else if windowSwitcherControlPosition == .diagonalBottomRightTopLeft {
                             windowSwitcherContent(finalIsSelected, showTitleContent: true, showControlsContent: false)
                         }
+                    }
+                    .padding(.top, 4)
+                }
 
-                        if !windowSwitcherActive, dockPreviewControlPosition == .bottomLeading ||
+                if showDockHeader {
+                    Group {
+                        if dockPreviewControlPosition == .bottomLeading ||
                             dockPreviewControlPosition == .bottomTrailing
                         {
                             dockPreviewContent(finalIsSelected)
-                        } else if !windowSwitcherActive, dockPreviewControlPosition == .diagonalTopLeftBottomRight {
+                        } else if dockPreviewControlPosition == .diagonalTopLeftBottomRight {
                             dockPreviewContent(finalIsSelected, showTitleContent: false, showControlsContent: true)
-                        } else if !windowSwitcherActive, dockPreviewControlPosition == .diagonalTopRightBottomLeft {
+                        } else if dockPreviewControlPosition == .diagonalTopRightBottomLeft {
                             dockPreviewContent(finalIsSelected, showTitleContent: false, showControlsContent: true)
-                        } else if !windowSwitcherActive, dockPreviewControlPosition == .diagonalBottomLeftTopRight {
+                        } else if dockPreviewControlPosition == .diagonalBottomLeftTopRight {
                             dockPreviewContent(finalIsSelected, showTitleContent: true, showControlsContent: false)
-                        } else if !windowSwitcherActive, dockPreviewControlPosition == .diagonalBottomRightTopLeft {
+                        } else if dockPreviewControlPosition == .diagonalBottomRightTopLeft {
                             dockPreviewContent(finalIsSelected, showTitleContent: true, showControlsContent: false)
                         }
                     }
@@ -570,8 +679,16 @@ struct WindowPreview: View {
                         .borderedBackground(.primary.opacity(0.1), lineWidth: 1.75, shape: RoundedRectangle(cornerRadius: cornerRadius))
                         .padding(-6)
                         .overlay {
-                            if finalIsSelected {
-                                let highlightColor = hoverHighlightColor ?? Color(nsColor: .controlAccentColor)
+                            let highlightColor = hoverHighlightColor ?? Color(nsColor: .controlAccentColor)
+                            if isFocused {
+                                RoundedRectangle(cornerRadius: cornerRadius)
+                                    .fill(highlightColor.opacity(selectionOpacity))
+                                    .padding(-6)
+                            } else if isHovered {
+                                RoundedRectangle(cornerRadius: cornerRadius)
+                                    .fill(highlightColor.opacity(selectionOpacity * 0.5))
+                                    .padding(-6)
+                            } else if finalIsSelected {
                                 RoundedRectangle(cornerRadius: cornerRadius)
                                     .fill(highlightColor.opacity(selectionOpacity))
                                     .padding(-6)
@@ -615,14 +732,12 @@ struct WindowPreview: View {
         .contentShape(Rectangle())
         .onHover { isHovering in
             if !isDraggingOver {
-                withAnimation(.snappy(duration: 0.175)) {
-                    if !windowSwitcherActive {
-                        isHoveringOverDockPeekPreview = isHovering
-                        handleFullPreviewHover(isHovering: isHovering, action: previewHoverAction)
-                    } else {
-                        isHoveringOverWindowSwitcherPreview = isHovering
-                        onHoverIndexChange?(isHovering ? index : nil)
-                    }
+                if !windowSwitcherActive {
+                    isHoveringOverDockPeekPreview = isHovering
+                    handleFullPreviewHover(isHovering: isHovering, action: previewHoverAction)
+                } else {
+                    isHoveringOverWindowSwitcherPreview = isHovering
+                    onHoverIndexChange?(isHovering ? index : nil)
                 }
             }
         }

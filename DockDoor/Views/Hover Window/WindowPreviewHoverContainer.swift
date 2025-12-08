@@ -61,6 +61,7 @@ struct WindowPreviewHoverContainer: View {
     @Default(.switcherMaxRows) var switcherMaxRows
     @Default(.gradientColorPalette) var gradientColorPalette
     @Default(.showAnimations) var showAnimations
+    @Default(.enableMouseHoverInSwitcher) var enableMouseHoverInSwitcher
     @Default(.scrollToMouseHoverInSwitcher) var scrollToMouseHoverInSwitcher
 
     @State private var draggedWindowIndex: Int? = nil
@@ -529,7 +530,8 @@ struct WindowPreviewHoverContainer: View {
             .globalPadding(20)
         }
         .padding(2)
-        .animation(.smooth(duration: 0.1), value: previewStateCoordinator.windows)
+        .animation(nil, value: previewStateCoordinator.windows)
+        .animation(nil, value: previewStateCoordinator.currIndex)
         .onChange(of: previewStateCoordinator.currIndex) { newIndex in
             guard previewStateCoordinator.shouldScrollToIndex else { return }
             if showAnimations {
@@ -835,14 +837,17 @@ struct WindowPreviewHoverContainer: View {
                     handleWindowAction: { action in
                         handleWindowAction(action, at: index)
                     },
-                    currIndex: previewStateCoordinator.currIndex,
+                    isSelectedByKeyboard: index == previewStateCoordinator.focusedIndex,
+                    isHoveredByMouse: index == previewStateCoordinator.hoveredIndex,
                     windowSwitcherActive: previewStateCoordinator.windowSwitcherActive,
                     dimensions: getDimensions(for: index, dimensionsMap: currentDimensionsMapForPreviews),
                     showAppIconOnly: showAppIconOnly,
                     mockPreviewActive: mockPreviewActive,
                     onHoverIndexChange: { hoveredIndex in
-                        if let hoveredIndex, scrollToMouseHoverInSwitcher {
-                            previewStateCoordinator.setIndex(to: hoveredIndex, shouldScroll: Defaults[.scrollToMouseHoverInSwitcher])
+                        guard enableMouseHoverInSwitcher else { return }
+                        previewStateCoordinator.setPendingHoverIndex(hoveredIndex)
+                        if previewStateCoordinator.isMouseHoverEnabled, let hoveredIndex {
+                            previewStateCoordinator.setIndex(to: hoveredIndex, shouldScroll: scrollToMouseHoverInSwitcher, source: .mouse)
                         }
                     }
                 )

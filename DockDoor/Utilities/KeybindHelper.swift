@@ -21,6 +21,14 @@ private class WindowSwitchingCoordinator {
     private var uiRenderingTask: Task<Void, Never>?
     private var currentSessionId = UUID()
 
+    private static let uiDisplayDelayNs: UInt64 = 50_000_000
+    private var uiDelayTask: Task<Void, Never>?
+    var isUIScheduled = false
+
+    private var cachedWindows: [WindowInfo] = []
+    private var cachedMouseLocation: CGPoint = .zero
+    private var cachedTargetScreen: NSScreen?
+
     private static var lastUpdateAllWindowsTime: Date?
     private static let updateAllWindowsThrottleInterval: TimeInterval = 60.0
 
@@ -63,18 +71,24 @@ private class WindowSwitchingCoordinator {
 
         stateManager.initializeWithWindows(windows)
 
-        let currentMouseLocation = DockObserver.getMousePosition()
-        let targetScreen = getTargetScreenForSwitcher()
+        cachedWindows = windows
+        cachedMouseLocation = DockObserver.getMousePosition()
+        cachedTargetScreen = getTargetScreenForSwitcher()
+        isUIScheduled = true
 
+        uiDelayTask?.cancel()
         uiRenderingTask?.cancel()
-        uiRenderingTask = Task { @MainActor in
-            try? await Task.sleep(nanoseconds: 100_000_000)
-            await renderWindowSwitcherUI(
+
+        uiDelayTask = Task { @MainActor in
+            try? await Task.sleep(nanoseconds: WindowSwitchingCoordinator.uiDisplayDelayNs)
+            guard !Task.isCancelled, sessionId == self.currentSessionId, self.isUIScheduled else { return }
+
+            await self.renderWindowSwitcherUI(
                 previewCoordinator: previewCoordinator,
-                windows: windows,
-                currentMouseLocation: currentMouseLocation,
-                targetScreen: targetScreen,
-                initialIndex: stateManager.currentIndex,
+                windows: self.cachedWindows,
+                currentMouseLocation: self.cachedMouseLocation,
+                targetScreen: self.cachedTargetScreen ?? NSScreen.main ?? NSScreen.screens.first!,
+                initialIndex: self.stateManager.currentIndex,
                 sessionId: sessionId
             )
         }
@@ -157,7 +171,9 @@ private class WindowSwitchingCoordinator {
         let selectedWindow = stateManager.getCurrentWindow()
         currentSessionId = UUID()
         stateManager.reset()
+        uiDelayTask?.cancel()
         uiRenderingTask?.cancel()
+        isUIScheduled = false
         return selectedWindow
     }
 
@@ -168,11 +184,22 @@ private class WindowSwitchingCoordinator {
     func cancelSwitching() {
         currentSessionId = UUID()
         stateManager.reset()
+        uiDelayTask?.cancel()
         uiRenderingTask?.cancel()
+        isUIScheduled = false
     }
 }
 
 class KeybindHelper {
+    // MARK: - Constants
+
+    private enum TimerConstants {
+        static let initialDelay: TimeInterval = 0.4
+        static let repeatInterval: TimeInterval = 0.05
+    }
+
+    // MARK: - Properties
+
     private let previewCoordinator: SharedPreviewWindowCoordinator
     private let windowSwitchingCoordinator = WindowSwitchingCoordinator()
 
@@ -189,12 +216,39 @@ class KeybindHelper {
     private var runLoopSource: CFRunLoopSource?
     private var monitorTimer: Timer?
     private var unmanagedEventTapUserInfo: Unmanaged<KeybindHelperUserInfo>?
+    private var shiftRepeatTimer: Timer?
+    private var tabRepeatTimer: Timer?
+    private var isTabKeyDown: Bool = false
 
     init(previewCoordinator: SharedPreviewWindowCoordinator) {
         self.previewCoordinator = previewCoordinator
         setupEventTap()
         startMonitoring()
+        setupMouseHoverObserver()
     }
+
+    // MARK: - Mouse Hover Integration
+
+    private func setupMouseHoverObserver() {
+        NotificationCenter.default.addObserver(
+            forName: .mouseHoverSelectionChanged,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            self?.stopKeyboardRepeatTimers()
+        }
+    }
+
+    /// Stops all keyboard repeat timers when mouse takes over selection.
+    private func stopKeyboardRepeatTimers() {
+        shiftRepeatTimer?.invalidate()
+        shiftRepeatTimer = nil
+        tabRepeatTimer?.invalidate()
+        tabRepeatTimer = nil
+        isTabKeyDown = false
+    }
+
+    // MARK: - Lifecycle
 
     func reset() {
         cleanup()
@@ -206,6 +260,7 @@ class KeybindHelper {
     private func cleanup() {
         monitorTimer?.invalidate()
         monitorTimer = nil
+        stopKeyboardRepeatTimers()
         removeEventTap()
     }
 
@@ -213,6 +268,7 @@ class KeybindHelper {
         isSwitcherModifierKeyPressed = false
         isShiftKeyPressedGeneral = false
         preventSwitcherHideOnRelease = false
+        stopKeyboardRepeatTimers()
     }
 
     private func startMonitoring() {
@@ -293,7 +349,7 @@ class KeybindHelper {
                    previewCoordinator.isVisible,
                    !previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive
                 {
-                    Task { @MainActor in
+                    DispatchQueue.main.async {
                         if self.previewCoordinator.windowSwitcherCoordinator.currIndex >= 0 {
                             self.previewCoordinator.selectAndBringToFrontCurrentWindow()
                         } else {
@@ -305,7 +361,7 @@ class KeybindHelper {
             }
             isCommandKeyCurrentlyDown = cmdNowDown
 
-            Task { @MainActor [weak self] in
+            DispatchQueue.main.async { [weak self] in
                 self?.handleModifierEvent(currentSwitcherModifierIsPressed: currentSwitcherModifierIsPressed, currentShiftState: currentShiftState)
             }
 
@@ -429,6 +485,28 @@ class KeybindHelper {
                 // Not enhancing or not in our cmdTab context — let the system handle it.
                 return Unmanaged.passUnretained(event)
             }
+
+            if keyCode == Int64(kVK_Tab), previewCoordinator.isVisible {
+                if previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive {
+                    let hasActiveSearch = previewCoordinator.windowSwitcherCoordinator.hasActiveSearch
+                    if !hasActiveSearch, !isTabKeyDown {
+                        isTabKeyDown = true
+                        let isShiftHeld = flags.contains(.maskShift)
+
+                        DispatchQueue.main.async { [weak self] in
+                            self?.handleTabKeyDown(isShiftHeld: isShiftHeld)
+                        }
+                    }
+                    return nil
+                } else {
+                    let direction: ArrowDirection = flags.contains(.maskShift) ? .left : .right
+                    DispatchQueue.main.async { [weak self] in
+                        self?.previewCoordinator.navigateWithArrowKey(direction: direction)
+                    }
+                    return nil
+                }
+            }
+
             let (shouldConsume, actionTask) = determineActionForKeyDown(event: event)
             if let task = actionTask {
                 Task { @MainActor in
@@ -436,6 +514,14 @@ class KeybindHelper {
                 }
             }
             if shouldConsume { return nil }
+
+        case .keyUp:
+            let keyCode = event.getIntegerValueField(.keyboardEventKeycode)
+            if keyCode == kVK_Tab {
+                isTabKeyDown = false
+                tabRepeatTimer?.invalidate()
+                tabRepeatTimer = nil
+            }
 
         default:
             break
@@ -462,6 +548,37 @@ class KeybindHelper {
     }
 
     @MainActor
+    private func handleTabKeyDown(isShiftHeld: Bool) {
+        guard windowSwitchingCoordinator.stateManager.isActive else { return }
+
+        if isShiftHeld {
+            windowSwitchingCoordinator.stateManager.cycleBackward()
+        } else {
+            windowSwitchingCoordinator.stateManager.cycleForward()
+        }
+        let newIndex = windowSwitchingCoordinator.stateManager.currentIndex
+        previewCoordinator.windowSwitcherCoordinator.setIndex(to: newIndex)
+
+        tabRepeatTimer?.invalidate()
+        tabRepeatTimer = Timer.scheduledTimer(withTimeInterval: TimerConstants.initialDelay, repeats: false) { [weak self] _ in
+            guard let self else { return }
+            tabRepeatTimer = Timer.scheduledTimer(withTimeInterval: TimerConstants.repeatInterval, repeats: true) { [weak self] _ in
+                guard let self, isTabKeyDown else { return }
+                let currentShiftState = NSEvent.modifierFlags.contains(.shift)
+                if currentShiftState {
+                    windowSwitchingCoordinator.stateManager.cycleBackward()
+                } else {
+                    windowSwitchingCoordinator.stateManager.cycleForward()
+                }
+                let idx = windowSwitchingCoordinator.stateManager.currentIndex
+                DispatchQueue.main.async {
+                    self.previewCoordinator.windowSwitcherCoordinator.setIndex(to: idx)
+                }
+            }
+        }
+    }
+
+    @MainActor
     private func handleModifierEvent(currentSwitcherModifierIsPressed: Bool, currentShiftState: Bool) {
         // If system Cmd+Tab switcher is active, do not engage DockDoor's own switcher logic
         if DockObserver.isCmdTabSwitcherActive { return }
@@ -475,31 +592,64 @@ class KeybindHelper {
             hasProcessedModifierRelease = false
         }
 
-        if !oldShiftState, currentShiftState,
+        if currentShiftState,
            previewCoordinator.isVisible,
            (previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive && (currentSwitcherModifierIsPressed || Defaults[.preventSwitcherHide])) ||
            (!previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive)
         {
-            Task { @MainActor in
-                await self.windowSwitchingCoordinator.handleWindowSwitching(
-                    previewCoordinator: self.previewCoordinator,
-                    isModifierPressed: currentSwitcherModifierIsPressed,
-                    isShiftPressed: true
-                )
+            if shiftRepeatTimer == nil {
+                if windowSwitchingCoordinator.stateManager.isActive {
+                    windowSwitchingCoordinator.stateManager.cycleBackward()
+                    let newIndex = windowSwitchingCoordinator.stateManager.currentIndex
+                    previewCoordinator.windowSwitcherCoordinator.setIndex(to: newIndex)
+                }
+                shiftRepeatTimer = Timer.scheduledTimer(withTimeInterval: TimerConstants.initialDelay, repeats: false) { [weak self] _ in
+                    guard let self else { return }
+                    shiftRepeatTimer = Timer.scheduledTimer(withTimeInterval: TimerConstants.repeatInterval, repeats: true) { [weak self] _ in
+                        guard let self else { return }
+                        if windowSwitchingCoordinator.stateManager.isActive {
+                            windowSwitchingCoordinator.stateManager.cycleBackward()
+                            let newIndex = windowSwitchingCoordinator.stateManager.currentIndex
+                            DispatchQueue.main.async {
+                                self.previewCoordinator.windowSwitcherCoordinator.setIndex(to: newIndex)
+                            }
+                        }
+                    }
+                }
             }
+        } else {
+            shiftRepeatTimer?.invalidate()
+            shiftRepeatTimer = nil
         }
 
         if !Defaults[.preventSwitcherHide], !preventSwitcherHideOnRelease, !(previewCoordinator.isSearchWindowFocused) {
             if oldSwitcherModifierState, !isSwitcherModifierKeyPressed, !hasProcessedModifierRelease {
                 hasProcessedModifierRelease = true
                 preventSwitcherHideOnRelease = false
-                Task { @MainActor in
-                    if self.previewCoordinator.isVisible, self.previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive {
-                        self.previewCoordinator.selectAndBringToFrontCurrentWindow()
-                        self.windowSwitchingCoordinator.cancelSwitching()
-                    } else if let selectedWindow = self.windowSwitchingCoordinator.selectCurrentWindow() {
-                        selectedWindow.bringToFront()
-                        self.previewCoordinator.hideWindow()
+
+                let selectedWindow: WindowInfo?
+                if previewCoordinator.isVisible, previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive {
+                    let idx = previewCoordinator.windowSwitcherCoordinator.currIndex
+                    let windows = previewCoordinator.windowSwitcherCoordinator.windows
+                    selectedWindow = (idx >= 0 && idx < windows.count) ? windows[idx] : nil
+                } else if windowSwitchingCoordinator.isUIScheduled || windowSwitchingCoordinator.stateManager.isActive {
+                    selectedWindow = windowSwitchingCoordinator.stateManager.getCurrentWindow()
+                } else {
+                    selectedWindow = windowSwitchingCoordinator.selectCurrentWindow()
+                }
+
+                windowSwitchingCoordinator.cancelSwitching()
+                previewCoordinator.hideWindow()
+
+                tabRepeatTimer?.invalidate()
+                tabRepeatTimer = nil
+                isTabKeyDown = false
+                shiftRepeatTimer?.invalidate()
+                shiftRepeatTimer = nil
+
+                if let window = selectedWindow {
+                    DispatchQueue.main.async {
+                        window.bringToFront()
                     }
                 }
             }
@@ -558,23 +708,6 @@ class KeybindHelper {
         }
 
         if previewIsCurrentlyVisible {
-            if keyCode == kVK_Tab {
-                return (true, { @MainActor in
-                    if self.previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive {
-                        let hasActiveSearch = self.previewCoordinator.windowSwitcherCoordinator.hasActiveSearch
-                        if !hasActiveSearch {
-                            await self.windowSwitchingCoordinator.handleWindowSwitching(
-                                previewCoordinator: self.previewCoordinator,
-                                isModifierPressed: self.isSwitcherModifierKeyPressed,
-                                isShiftPressed: false
-                            )
-                        }
-                    } else {
-                        self.previewCoordinator.navigateWithArrowKey(direction: .right)
-                    }
-                })
-            }
-
             switch keyCode {
             case Int64(kVK_LeftArrow), Int64(kVK_RightArrow), Int64(kVK_UpArrow), Int64(kVK_DownArrow):
                 let dir: ArrowDirection = switch keyCode {

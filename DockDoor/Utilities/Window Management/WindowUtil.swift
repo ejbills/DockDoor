@@ -294,12 +294,32 @@ extension WindowUtil {
             ? windows.filter { !$0.isHidden && !$0.isMinimized }
             : windows
 
+        // Filter out tabbed windows if showTabsAsWindows is disabled
+        if !Defaults[.showTabsAsWindows] {
+            filteredWindows = filterOutTabbedWindows(filteredWindows)
+        }
+
         // Filter by frontmost app if enabled
         if Defaults[.limitSwitcherToFrontmostApp] {
             filteredWindows = getWindowsForFrontmostApp(from: filteredWindows)
         }
 
         return sortWindowsForSwitcher(filteredWindows)
+    }
+
+    private static func filterOutTabbedWindows(_ windows: [WindowInfo]) -> [WindowInfo] {
+        guard let windowList = CGWindowListCopyWindowInfo([.optionOnScreenOnly, .excludeDesktopElements], kCGNullWindowID) as? [[String: Any]] else {
+            return windows
+        }
+
+        let visibleWindowIDs = Set(windowList.compactMap { $0[kCGWindowNumber as String] as? CGWindowID })
+
+        return windows.filter { windowInfo in
+            if windowInfo.isMinimized || windowInfo.isHidden {
+                return true
+            }
+            return visibleWindowIDs.contains(windowInfo.id)
+        }
     }
 
     static func getWindowsForFrontmostApp(from windows: [WindowInfo]) -> [WindowInfo] {
