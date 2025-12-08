@@ -32,7 +32,6 @@
 		3A1622CC2C8D5F5B00D318EE /* FirstTimePermissionsTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A1622CB2C8D5F5B00D318EE /* FirstTimePermissionsTabView.swift */; };
 		3A1622CE2C8D5F8500D318EE /* FirstTimeCongratsTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A1622CD2C8D5F8500D318EE /* FirstTimeCongratsTabView.swift */; };
 		3A1622D02C8D691700D318EE /* SquiggleDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A1622CF2C8D691700D318EE /* SquiggleDivider.swift */; };
-		81BFDF0B2EE7401D00D56F65 /* StringMatchingUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81BFDF0A2EE7401C00D56F65 /* StringMatchingUtil.swift */; };
 		83E26DB067D2426086683147 /* ActiveAppIndicatorSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D264F468F734971AE701690 /* ActiveAppIndicatorSettingsView.swift */; };
 		A1B2C3D4E5F6789012345678 /* ActiveAppIndicatorWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C3D4E5F67890123456789A /* ActiveAppIndicatorWindow.swift */; };
 		AAAAAAAA2EEE000000000004 /* WindowListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAAAAAAA2EEE000000000001 /* WindowListView.swift */; };
@@ -181,7 +180,6 @@
 		3A1622CD2C8D5F8500D318EE /* FirstTimeCongratsTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstTimeCongratsTabView.swift; sourceTree = "<group>"; };
 		3A1622CF2C8D691700D318EE /* SquiggleDivider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SquiggleDivider.swift; sourceTree = "<group>"; };
 		7D264F468F734971AE701690 /* ActiveAppIndicatorSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveAppIndicatorSettingsView.swift; sourceTree = "<group>"; };
-		81BFDF0A2EE7401C00D56F65 /* StringMatchingUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringMatchingUtil.swift; sourceTree = "<group>"; };
 		8B7C6D5E4F3A2B1098765432 /* ActiveAppIndicatorPositioning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveAppIndicatorPositioning.swift; sourceTree = "<group>"; };
 		AAAAAAAA2EEE000000000001 /* WindowListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowListView.swift; sourceTree = "<group>"; };
 		AAAAAAAA2EEE000000000002 /* WindowListItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowListItemView.swift; sourceTree = "<group>"; };
@@ -507,7 +505,6 @@
 		BB157B772C0E32EF00997315 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
-				81BFDF0A2EE7401C00D56F65 /* StringMatchingUtil.swift */,
 				205C45E5266848C9B4F622AA /* ActiveAppIndicator */,
 				BB5D35532ED4C4CC006ECE15 /* DebugLogger.swift */,
 				BB21067C2E83565A002F87D6 /* KeyboardLabel.swift */,
@@ -919,7 +916,6 @@
 				BB638F022E0216FE0010077D /* MediaControlButton.swift in Sources */,
 				BB638F0A2E02172B0010077D /* MediaLyricsButton.swift in Sources */,
 				BBA153FA2C11FFD500119C02 /* consts.swift in Sources */,
-				81BFDF0B2EE7401D00D56F65 /* StringMatchingUtil.swift in Sources */,
 				BB377C3F2DFD19ED00FA93DA /* PinnedWindowDelegate.swift in Sources */,
 				BBE033CC2DD92061006417B0 /* CGimage.swift in Sources */,
 				BBA153F62C115DDA00119C02 /* AppDelegate.swift in Sources */,
