@@ -42,6 +42,18 @@ struct WindowPreview: View {
     @Default(.activeAppIndicatorColor) var activeAppIndicatorColor
     @Default(.enableLivePreview) var enableLivePreview
 
+    // Dock Preview Gestures
+    @Default(.enableDockPreviewGestures) var enableDockPreviewGestures
+    @Default(.dockSwipeTowardsDockAction) var dockSwipeTowardsDockAction
+    @Default(.dockSwipeAwayFromDockAction) var dockSwipeAwayFromDockAction
+
+    // Window Switcher Gestures
+    @Default(.enableWindowSwitcherGestures) var enableWindowSwitcherGestures
+    @Default(.switcherSwipeUpAction) var switcherSwipeUpAction
+    @Default(.switcherSwipeDownAction) var switcherSwipeDownAction
+
+    @Default(.middleClickAction) var middleClickAction
+
     @State private var isHoveringOverDockPeekPreview = false
     @State private var isHoveringOverWindowSwitcherPreview = false
     @State private var fullPreviewTimer: Timer?
@@ -661,65 +673,87 @@ struct WindowPreview: View {
     }
 
     var body: some View {
-        let isHorizontalFlow = dockPosition.isHorizontalFlow || windowSwitcherActive
-
         previewCoreContent
             .onMiddleClick(perform: {
-                if windowInfo.closeButton != nil {
-                    handleWindowAction(.close)
+                if middleClickAction != .none {
+                    performAction(middleClickAction)
                 }
             })
             .onTrackpadSwipe(
-                onSwipeUp: {
-                    let currentlyMinimized = (try? windowInfo.axElement.isMinimized()) ?? windowInfo.isMinimized
-                    if isHorizontalFlow {
-                        if currentlyMinimized {
-                            handleWindowAction(.minimize)
-                        } else {
-                            handleWindowAction(.maximize)
-                        }
-                    }
-                },
-                onSwipeDown: {
-                    let currentlyMinimized = (try? windowInfo.axElement.isMinimized()) ?? windowInfo.isMinimized
-                    if isHorizontalFlow, !currentlyMinimized {
-                        handleWindowAction(.minimize)
-                    }
-                },
-                onSwipeLeft: {
-                    let currentlyMinimized = (try? windowInfo.axElement.isMinimized()) ?? windowInfo.isMinimized
-                    if !isHorizontalFlow {
-                        if dockPosition == .left {
-                            if !currentlyMinimized {
-                                handleWindowAction(.minimize)
-                            }
-                        } else {
-                            if currentlyMinimized {
-                                handleWindowAction(.minimize)
-                            } else {
-                                handleWindowAction(.maximize)
-                            }
-                        }
-                    }
-                },
-                onSwipeRight: {
-                    let currentlyMinimized = (try? windowInfo.axElement.isMinimized()) ?? windowInfo.isMinimized
-                    if !isHorizontalFlow {
-                        if dockPosition == .right {
-                            if !currentlyMinimized {
-                                handleWindowAction(.minimize)
-                            }
-                        } else {
-                            if currentlyMinimized {
-                                handleWindowAction(.minimize)
-                            } else {
-                                handleWindowAction(.maximize)
-                            }
-                        }
-                    }
-                }
+                onSwipeUp: { handleSwipe(.up) },
+                onSwipeDown: { handleSwipe(.down) },
+                onSwipeLeft: { handleSwipe(.left) },
+                onSwipeRight: { handleSwipe(.right) }
             )
             .fixedSize()
+    }
+
+    private enum SwipeDirection {
+        case up, down, left, right
+    }
+
+    private func handleSwipe(_ direction: SwipeDirection) {
+        if windowSwitcherActive {
+            // Window Switcher: only responds to up/down
+            guard enableWindowSwitcherGestures else { return }
+            switch direction {
+            case .up:
+                performAction(switcherSwipeUpAction)
+            case .down:
+                performAction(switcherSwipeDownAction)
+            case .left, .right:
+                // Window switcher ignores left/right swipes
+                break
+            }
+        } else {
+            // Dock Preview: translates towards/away based on dock position
+            guard enableDockPreviewGestures else { return }
+            let isTowardsDock = isSwipeTowardsDock(direction)
+
+            if isTowardsDock {
+                performAction(dockSwipeTowardsDockAction)
+            } else if isSwipeAwayFromDock(direction) {
+                performAction(dockSwipeAwayFromDockAction)
+            }
+            // Perpendicular swipes are ignored
+        }
+    }
+
+    /// Determines if the swipe direction is towards the dock
+    private func isSwipeTowardsDock(_ direction: SwipeDirection) -> Bool {
+        switch dockPosition {
+        case .bottom:
+            direction == .down
+        case .top:
+            direction == .up
+        case .left:
+            direction == .left
+        case .right:
+            direction == .right
+        case .cmdTab, .unknown:
+            direction == .down // Default to bottom dock behavior
+        }
+    }
+
+    /// Determines if the swipe direction is away from the dock
+    private func isSwipeAwayFromDock(_ direction: SwipeDirection) -> Bool {
+        switch dockPosition {
+        case .bottom:
+            direction == .up
+        case .top:
+            direction == .down
+        case .left:
+            direction == .right
+        case .right:
+            direction == .left
+        case .cmdTab, .unknown:
+            direction == .up // Default to bottom dock behavior
+        }
+    }
+
+    private func performAction(_ action: WindowAction) {
+        guard action != .none else { return }
+        handleWindowAction(action)
     }
 
     private func handleFullPreviewHover(isHovering: Bool, action: PreviewHoverAction) {

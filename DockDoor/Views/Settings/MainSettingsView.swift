@@ -100,15 +100,12 @@ struct MainSettingsView: View {
     @Default(.limitSwitcherToFrontmostApp) var limitSwitcherToFrontmostApp
     @Default(.fullscreenAppBlacklist) var fullscreenAppBlacklist
     @Default(.groupAppInstancesInDock) var groupAppInstancesInDock
+    @Default(.windowSwitcherPlacementStrategy) var placementStrategy
+    @Default(.pinnedScreenIdentifier) var pinnedScreenIdentifier
 
     @State private var selectedPerformanceProfile: SettingsProfile = .default
     @State private var selectedPreviewQualityProfile: PreviewQualityProfile = .standard
     @State private var showAdvancedSettings: Bool = false
-    @StateObject private var keybindModel = KeybindModel()
-    @State private var showingAddBlacklistAppSheet = false
-    @State private var newBlacklistApp = ""
-    @Default(.windowSwitcherPlacementStrategy) var placementStrategy
-    @Default(.pinnedScreenIdentifier) var pinnedScreenIdentifier
 
     @Default(.hoverWindowOpenDelay) var hoverWindowOpenDelay
     @Default(.fadeOutDuration) var fadeOutDuration
@@ -140,7 +137,6 @@ struct MainSettingsView: View {
     @Default(.showBigControlsWhenNoValidWindows) var showBigControlsWhenNoValidWindows
 
     private let advancedSettingsSectionID = "advancedSettingsSection"
-    private let windowSwitcherAdvancedSettingsID = "windowSwitcherAdvancedSettings"
 
     var body: some View {
         ScrollViewReader { proxy in
@@ -153,20 +149,8 @@ struct MainSettingsView: View {
                     advancedSettingsToggle(proxy: proxy)
                     if showAdvancedSettings {
                         advancedSettingsSection.id(advancedSettingsSectionID)
-                        if enableWindowSwitcher {
-                            windowSwitcherAdvancedSection.id(windowSwitcherAdvancedSettingsID)
-                        }
                     }
                 }
-                .background(
-                    ShortcutCaptureView(
-                        currentKeybind: $keybindModel.currentKeybind,
-                        isRecording: $keybindModel.isRecording,
-                        modifierKey: $keybindModel.modifierKey
-                    )
-                    .allowsHitTesting(false)
-                    .frame(width: 0, height: 0)
-                )
             }
         }
         .onChange(of: enablePinning) { isEnabled in
@@ -182,9 +166,6 @@ struct MainSettingsView: View {
             if doesCurrentSettingsMatchPreviewQualityProfile(.detailed) { selectedPreviewQualityProfile = .detailed }
             else if doesCurrentSettingsMatchPreviewQualityProfile(.lightweight) { selectedPreviewQualityProfile = .lightweight }
             else if doesCurrentSettingsMatchPreviewQualityProfile(.standard) { selectedPreviewQualityProfile = .standard }
-
-            keybindModel.modifierKey = Defaults[.UserKeybind].modifierFlags
-            keybindModel.currentKeybind = Defaults[.UserKeybind]
         }
     }
 
@@ -489,6 +470,49 @@ struct MainSettingsView: View {
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                                 .padding(.leading, 20)
+
+                            Text("Window Switcher Placement")
+                            Picker("", selection: $placementStrategy) {
+                                ForEach(WindowSwitcherPlacementStrategy.allCases, id: \.self) {
+                                    Text($0.localizedName).tag($0)
+                                }
+                            }
+                            .pickerStyle(.menu)
+                            .padding(.leading, 20)
+                            .onChange(of: placementStrategy) { newStrategy in
+                                if newStrategy == .pinnedToScreen, pinnedScreenIdentifier.isEmpty {
+                                    pinnedScreenIdentifier = NSScreen.main?.uniqueIdentifier() ?? ""
+                                }
+                            }
+
+                            if placementStrategy == .pinnedToScreen {
+                                Picker("Pin to Screen", selection: $pinnedScreenIdentifier) {
+                                    ForEach(NSScreen.screens, id: \.self) { screen in
+                                        Text(screenDisplayName(screen)).tag(screen.uniqueIdentifier())
+                                    }
+                                    if !pinnedScreenIdentifier.isEmpty,
+                                       !NSScreen.screens.contains(where: { $0.uniqueIdentifier() == pinnedScreenIdentifier })
+                                    {
+                                        Text("Disconnected Display").tag(pinnedScreenIdentifier)
+                                    }
+                                }
+                                .pickerStyle(.menu)
+                                .padding(.leading, 20)
+
+                                if !pinnedScreenIdentifier.isEmpty,
+                                   !NSScreen.screens.contains(where: { $0.uniqueIdentifier() == pinnedScreenIdentifier })
+                                {
+                                    Text("This display is currently disconnected. The window switcher will appear on the main display until reconnected.")
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                        .padding(.leading, 20)
+                                }
+                            }
+
+                            Text("Choose where the window switcher appears on screen.")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                                .padding(.leading, 20)
                         }
                         .padding(.leading, 20)
                         .padding(.top, 4)
@@ -754,184 +778,15 @@ struct MainSettingsView: View {
         }.padding(.top, 5)
     }
 
-    private var windowSwitcherAdvancedSection: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            StyledGroupBox(label: "Window Switcher Customization") {
-                VStack(alignment: .leading, spacing: 10) {
-                    keyboardShortcutSection()
-                    Divider()
-                    Text("Window Switcher Placement").font(.headline)
-                    Picker("Placement Strategy", selection: $placementStrategy) { ForEach(WindowSwitcherPlacementStrategy.allCases, id: \.self) { Text($0.localizedName).tag($0) } }
-                        .labelsHidden()
-                        .onChange(of: placementStrategy) { newStrategy in if newStrategy == .pinnedToScreen, pinnedScreenIdentifier.isEmpty { pinnedScreenIdentifier = NSScreen.main?.uniqueIdentifier() ?? "" } }
-                    if placementStrategy == .pinnedToScreen {
-                        VStack(alignment: .leading, spacing: 4) {
-                            Picker("Pin to Screen", selection: $pinnedScreenIdentifier) {
-                                ForEach(NSScreen.screens, id: \.self) { screen in Text(screenDisplayName(screen)).tag(screen.uniqueIdentifier()) }
-                                if !pinnedScreenIdentifier.isEmpty, !NSScreen.screens.contains(where: { $0.uniqueIdentifier() == pinnedScreenIdentifier }) { Text("Disconnected Display").tag(pinnedScreenIdentifier) }
-                            }.labelsHidden()
-                            if !pinnedScreenIdentifier.isEmpty, !NSScreen.screens.contains(where: { $0.uniqueIdentifier() == pinnedScreenIdentifier }) { Text("This display is currently disconnected. The window switcher will appear on the main display until the selected display is reconnected.", comment: "Message shown when a pinned display is disconnected").font(.subheadline).foregroundColor(.secondary).fixedSize(horizontal: false, vertical: true) }
-                        }
-                    }
-
-                    Divider()
-
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("Fullscreen App Blacklist").font(.headline)
-                        Text("Apps in this list will not respond to window switcher shortcuts when in fullscreen mode.")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-
-                        fullscreenAppBlacklistView
-                    }
-                }
-            }
-        }.padding(.top, 5)
-            .onAppear { keybindModel.modifierKey = Defaults[.UserKeybind].modifierFlags; keybindModel.currentKeybind = Defaults[.UserKeybind] }
-    }
-
-    private var fullscreenAppBlacklistView: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 8) {
-                    if !fullscreenAppBlacklist.isEmpty {
-                        ForEach(fullscreenAppBlacklist, id: \.self) { appName in
-                            HStack {
-                                Text(appName)
-                                    .foregroundColor(.primary)
-
-                                Spacer()
-
-                                Button(action: {
-                                    fullscreenAppBlacklist.removeAll { $0 == appName }
-                                }) {
-                                    Image(systemName: "trash")
-                                        .foregroundColor(.secondary)
-                                }
-                                .buttonStyle(.plain)
-                            }
-                            .padding(.vertical, 4)
-
-                            if appName != fullscreenAppBlacklist.last {
-                                Divider()
-                            }
-                        }
-                    } else {
-                        Text("No apps in blacklist")
-                            .foregroundColor(.secondary)
-                            .padding(.vertical, 8)
-                    }
-                }
-                .frame(maxWidth: .infinity)
-                .padding(8)
-            }
-            .frame(maxHeight: 120)
-            .overlay(
-                RoundedRectangle(cornerRadius: 8)
-                    .stroke(Color.gray.opacity(0.25), lineWidth: 1)
-            )
-
-            HStack {
-                Button(action: { showingAddBlacklistAppSheet.toggle() }) {
-                    Text("Add App")
-                }
-                .buttonStyle(AccentButtonStyle())
-
-                Spacer()
-
-                if !fullscreenAppBlacklist.isEmpty {
-                    DangerButton(action: {
-                        fullscreenAppBlacklist.removeAll()
-                    }) {
-                        Text("Remove All")
-                    }
-                }
-            }
-        }
-        .sheet(isPresented: $showingAddBlacklistAppSheet) {
-            AddBlacklistAppSheet(
-                isPresented: $showingAddBlacklistAppSheet,
-                appNameToAdd: $newBlacklistApp,
-                onAdd: { appName in
-                    if !appName.isEmpty, !fullscreenAppBlacklist.contains(where: { $0.caseInsensitiveCompare(appName) == .orderedSame }) {
-                        fullscreenAppBlacklist.append(appName)
-                    }
-                }
-            )
-        }
-    }
-
-    private func modifierSymbol(_ modifier: Int) -> String {
-        switch modifier {
-        case Defaults[.Int64maskControl]: "control"
-        case Defaults[.Int64maskAlternate]: "option"
-        case Defaults[.Int64maskCommand]: "command"
-        default: ""
-        }
-    }
-
-    private func keyboardShortcutSection() -> some View {
-        VStack(alignment: .leading, spacing: 14) {
-            Text("Window Switcher Shortcut").font(.headline)
-
-            // Current shortcut summary
-            if let keybind = keybindModel.currentKeybind, keybind.keyCode != 0 {
-                HStack(spacing: 8) {
-                    KeyCapView(text: modifierConverter.toString(keybind.modifierFlags), symbol: nil)
-                    Text("+").foregroundColor(.secondary)
-                    KeyCapView(text: KeyCodeConverter.toString(keybind.keyCode), symbol: nil)
-                }
-            } else {
-                Text("No shortcut set").foregroundColor(.secondary)
-            }
-
-            // Controls: initializer modifier + capture button
-            HStack(spacing: 12) {
-                Picker("Initializer", selection: $keybindModel.modifierKey) {
-                    Text("Control ⌃").tag(Defaults[.Int64maskControl])
-                    Text("Option ⌥").tag(Defaults[.Int64maskAlternate])
-                    Text("Command ⌘").tag(Defaults[.Int64maskCommand])
-                }
-                .labelsHidden()
-                .pickerStyle(.segmented)
-                .onChange(of: keybindModel.modifierKey) { newValue in
-                    if let currentKeybind = keybindModel.currentKeybind, currentKeybind.keyCode != 0 {
-                        let updatedKeybind = UserKeyBind(keyCode: currentKeybind.keyCode, modifierFlags: newValue)
-                        Defaults[.UserKeybind] = updatedKeybind
-                        keybindModel.currentKeybind = updatedKeybind
-                    }
-                }
-
-                Button(action: { keybindModel.isRecording.toggle() }) {
-                    HStack {
-                        Image(systemName: keybindModel.isRecording ? "keyboard.fill" : "record.circle")
-                        Text(keybindModel.isRecording ? "Press shortcut…" : "Change…")
-                    }
-                }
-                .buttonStyle(.borderedProminent)
-                .disabled(keybindModel.isRecording)
-
-                Button("Reset") {
-                    let def = UserKeyBind(keyCode: 48, modifierFlags: Defaults[.Int64maskAlternate])
-                    Defaults[.UserKeybind] = def
-                    keybindModel.currentKeybind = def
-                    keybindModel.modifierKey = def.modifierFlags
-                }
-                .buttonStyle(.bordered)
-            }
-
-            Text("Either left or right Command, Option, or Control keys work. You can also hold the modifier while pressing the trigger to capture both.")
-                .font(.caption)
-                .foregroundColor(.secondary)
-        }
-    }
-
     private func screenDisplayName(_ screen: NSScreen) -> String {
         let isMain = screen == NSScreen.main
         var name = screen.localizedName
         if name.isEmpty {
-            if let displayID = screen.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? CGDirectDisplayID { name = String(format: NSLocalizedString("Display %u", comment: "Generic display name with CGDirectDisplayID"), displayID) }
-            else { name = String(localized: "Unknown Display") }
+            if let displayID = screen.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? CGDirectDisplayID {
+                name = String(format: NSLocalizedString("Display %u", comment: "Generic display name with CGDirectDisplayID"), displayID)
+            } else {
+                name = String(localized: "Unknown Display")
+            }
         }
         return name + (isMain ? " (Main)" : "")
     }
@@ -987,13 +842,29 @@ struct MainSettingsView: View {
                 fullscreenAppBlacklist = Defaults.Keys.fullscreenAppBlacklist.defaultValue
 
                 Defaults[.UserKeybind] = Defaults.Keys.UserKeybind.defaultValue
-                keybindModel.currentKeybind = Defaults[.UserKeybind]
-                keybindModel.modifierKey = Defaults[.UserKeybind].modifierFlags
+                Defaults[.windowSwitcherPlacementStrategy] = Defaults.Keys.windowSwitcherPlacementStrategy.defaultValue
+                Defaults[.pinnedScreenIdentifier] = Defaults.Keys.pinnedScreenIdentifier.defaultValue
+
+                // Reset gesture settings
+                Defaults[.enableDockPreviewGestures] = Defaults.Keys.enableDockPreviewGestures.defaultValue
+                Defaults[.dockSwipeTowardsDockAction] = Defaults.Keys.dockSwipeTowardsDockAction.defaultValue
+                Defaults[.dockSwipeAwayFromDockAction] = Defaults.Keys.dockSwipeAwayFromDockAction.defaultValue
+                Defaults[.enableWindowSwitcherGestures] = Defaults.Keys.enableWindowSwitcherGestures.defaultValue
+                Defaults[.switcherSwipeUpAction] = Defaults.Keys.switcherSwipeUpAction.defaultValue
+                Defaults[.switcherSwipeDownAction] = Defaults.Keys.switcherSwipeDownAction.defaultValue
+                Defaults[.gestureSwipeThreshold] = Defaults.Keys.gestureSwipeThreshold.defaultValue
+                Defaults[.middleClickAction] = Defaults.Keys.middleClickAction.defaultValue
+
+                // Reset keyboard shortcuts
+                Defaults[.cmdShortcut1Key] = Defaults.Keys.cmdShortcut1Key.defaultValue
+                Defaults[.cmdShortcut1Action] = Defaults.Keys.cmdShortcut1Action.defaultValue
+                Defaults[.cmdShortcut2Key] = Defaults.Keys.cmdShortcut2Key.defaultValue
+                Defaults[.cmdShortcut2Action] = Defaults.Keys.cmdShortcut2Action.defaultValue
+                Defaults[.cmdShortcut3Key] = Defaults.Keys.cmdShortcut3Key.defaultValue
+                Defaults[.cmdShortcut3Action] = Defaults.Keys.cmdShortcut3Action.defaultValue
 
                 showSpecialAppControls = Defaults.Keys.showSpecialAppControls.defaultValue
                 showBigControlsWhenNoValidWindows = Defaults.Keys.showBigControlsWhenNoValidWindows.defaultValue
-                placementStrategy = Defaults.Keys.windowSwitcherPlacementStrategy.defaultValue
-                pinnedScreenIdentifier = Defaults.Keys.pinnedScreenIdentifier.defaultValue
                 groupAppInstancesInDock = Defaults.Keys.groupAppInstancesInDock.defaultValue
                 askUserToRestartApplication()
             }

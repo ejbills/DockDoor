@@ -3059,6 +3059,9 @@
         }
       }
     },
+    "⌘" : {
+
+    },
     "1." : {
       "extractionState" : "stale",
       "localizations" : {
@@ -5548,6 +5551,9 @@
           }
         }
       }
+    },
+    "Action performed when middle-clicking on a window preview." : {
+
     },
     "Active App Indicator" : {
 
@@ -15269,6 +15275,9 @@
         }
       }
     },
+    "Center Window" : {
+      "comment" : "Window action"
+    },
     "Change…" : {
       "localizations" : {
         "af" : {
@@ -16409,6 +16418,9 @@
         }
       }
     },
+    "Choose where the window switcher appears on screen." : {
+
+    },
     "Clear Logs" : {
       "localizations" : {
         "af" : {
@@ -17171,6 +17183,9 @@
         }
       }
     },
+    "Close Window" : {
+      "comment" : "Window action"
+    },
     "CMD + Right Click on dock icon to quit app" : {
       "localizations" : {
         "af" : {
@@ -17741,6 +17756,9 @@
           }
         }
       }
+    },
+    "Cmd+key shortcuts for quick actions on the selected window preview. These work in both the window switcher and Cmd+Tab enhancement mode." : {
+
     },
     "Collapse to embedded mode" : {
       "extractionState" : "stale",
@@ -25934,6 +25952,9 @@
         }
       }
     },
+    "Dock Preview Gestures" : {
+
+    },
     "Dock Preview Hover Action" : {
       "localizations" : {
         "af" : {
@@ -29933,6 +29954,12 @@
     "Enable dock scroll gestures" : {
 
     },
+    "Enable gestures in window switcher" : {
+
+    },
+    "Enable gestures on dock window previews" : {
+
+    },
     "Enable Hover Window Sliding Animation" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -31647,6 +31674,9 @@
           }
         }
       }
+    },
+    "Enter" : {
+
     },
     "Enter text to filter" : {
       "localizations" : {
@@ -33941,6 +33971,30 @@
           }
         }
       }
+    },
+    "Fill Bottom Half" : {
+      "comment" : "Window action"
+    },
+    "Fill Bottom Left" : {
+      "comment" : "Window action"
+    },
+    "Fill Bottom Right" : {
+      "comment" : "Window action"
+    },
+    "Fill Left Half" : {
+      "comment" : "Window action"
+    },
+    "Fill Right Half" : {
+      "comment" : "Window action"
+    },
+    "Fill Top Half" : {
+      "comment" : "Window action"
+    },
+    "Fill Top Left" : {
+      "comment" : "Window action"
+    },
+    "Fill Top Right" : {
+      "comment" : "Window action"
     },
     "Filters" : {
       "comment" : "Filters tab title",
@@ -36416,6 +36470,15 @@
           }
         }
       }
+    },
+    "Gesture Sensitivity" : {
+
+    },
+    "Gesture Settings" : {
+
+    },
+    "Gestures & Keybinds" : {
+      "comment" : "Settings tab title"
     },
     "Get Started" : {
       "localizations" : {
@@ -39275,6 +39338,9 @@
           }
         }
       }
+    },
+    "Hide App" : {
+      "comment" : "Window action"
     },
     "Hide application" : {
       "comment" : "Dock click action option",
@@ -46352,6 +46418,9 @@
         }
       }
     },
+    "Lower values make gestures more sensitive. Higher values require longer swipes. Applies to both dock previews and window switcher." : {
+
+    },
     "Max Columns (Left/Right Dock)" : {
       "localizations" : {
         "af" : {
@@ -47305,7 +47374,7 @@
       }
     },
     "Maximize" : {
-
+      "comment" : "Window action"
     },
     "Maximum Horizontal Rows" : {
       "extractionState" : "stale",
@@ -48453,7 +48522,11 @@
         }
       }
     },
+    "Middle Click" : {
+
+    },
     "Minimize" : {
+      "comment" : "Window action",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -49790,6 +49863,9 @@
         }
       }
     },
+    "Mouse Actions" : {
+
+    },
     "Name" : {
       "localizations" : {
         "af" : {
@@ -50931,6 +51007,9 @@
           }
         }
       }
+    },
+    "No Action" : {
+      "comment" : "Window action"
     },
     "No applications found or scanned yet." : {
       "localizations" : {
@@ -55310,6 +55389,9 @@
         }
       }
     },
+    "Open New Window" : {
+      "comment" : "Window action"
+    },
     "Open Screen Recording Settings" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -58167,6 +58249,7 @@
       }
     },
     "Placement Strategy" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -59883,6 +59966,9 @@
           }
         }
       }
+    },
+    "Press a key…" : {
+
     },
     "Press any key combination after holding the initialization key to set the keybind." : {
       "extractionState" : "stale",
@@ -65217,7 +65303,7 @@
       }
     },
     "Quit App" : {
-      "extractionState" : "stale",
+      "comment" : "Window action",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -79905,6 +79991,9 @@
         }
       }
     },
+    "Space" : {
+
+    },
     "Spacing Scale" : {
       "localizations" : {
         "af" : {
@@ -82572,6 +82661,12 @@
         }
       }
     },
+    "Swipe on window previews in the dock popup. Direction is relative to dock position — swipe towards the dock (e.g., down when dock is at bottom, left when dock is on left)." : {
+
+    },
+    "Swipe up or down on window previews in the keyboard-activated window switcher. Only vertical swipes are recognized." : {
+
+    },
     "Tab" : {
       "localizations" : {
         "af" : {
@@ -83717,8 +83812,12 @@
         }
       }
     },
+    "This display is currently disconnected. The window switcher will appear on the main display until reconnected." : {
+
+    },
     "This display is currently disconnected. The window switcher will appear on the main display until the selected display is reconnected." : {
       "comment" : "Message shown when a pinned display is disconnected",
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -84860,6 +84959,7 @@
       }
     },
     "Toggle Full Screen" : {
+      "comment" : "Window action",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -97056,6 +97156,9 @@
         }
       }
     },
+    "Window Preview Keyboard Shortcuts" : {
+
+    },
     "Window Preview Layout" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -98773,6 +98876,7 @@
       }
     },
     "Window Switcher Customization" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -98961,6 +99065,12 @@
           }
         }
       }
+    },
+    "Window Switcher Gestures" : {
+
+    },
+    "Window Switcher is disabled. Enable it in General settings to use keyboard shortcuts." : {
+
     },
     "Window Switcher only" : {
       "comment" : "Preview window title condition display option",

@@ -639,6 +639,45 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         case .maximize:
             window.zoom()
             hideWindow()
+
+        case .fillLeftHalf:
+            window.fillLeftHalf()
+            hideWindow()
+
+        case .fillRightHalf:
+            window.fillRightHalf()
+            hideWindow()
+
+        case .fillTopHalf:
+            window.fillTopHalf()
+            hideWindow()
+
+        case .fillBottomHalf:
+            window.fillBottomHalf()
+            hideWindow()
+
+        case .fillTopLeftQuarter:
+            window.fillTopLeftQuarter()
+            hideWindow()
+
+        case .fillTopRightQuarter:
+            window.fillTopRightQuarter()
+            hideWindow()
+
+        case .fillBottomLeftQuarter:
+            window.fillBottomLeftQuarter()
+            hideWindow()
+
+        case .fillBottomRightQuarter:
+            window.fillBottomRightQuarter()
+            hideWindow()
+
+        case .center:
+            window.centerWindow()
+            hideWindow()
+
+        case .none:
+            break
         }
     }
 

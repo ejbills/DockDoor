@@ -27,6 +27,7 @@ extension SCWindow: WindowPropertiesProviding {
 }
 
 enum WindowAction: String, Hashable, CaseIterable, Defaults.Serializable {
+    // Existing actions
     case quit
     case close
     case minimize
@@ -34,6 +35,88 @@ enum WindowAction: String, Hashable, CaseIterable, Defaults.Serializable {
     case hide
     case openNewWindow
     case maximize
+
+    // Window positioning actions
+    case fillLeftHalf
+    case fillRightHalf
+    case fillTopHalf
+    case fillBottomHalf
+    case fillTopLeftQuarter
+    case fillTopRightQuarter
+    case fillBottomLeftQuarter
+    case fillBottomRightQuarter
+    case center
+
+    // No action
+    case none
+
+    var localizedName: String {
+        switch self {
+        case .quit:
+            String(localized: "Quit App", comment: "Window action")
+        case .close:
+            String(localized: "Close Window", comment: "Window action")
+        case .minimize:
+            String(localized: "Minimize", comment: "Window action")
+        case .toggleFullScreen:
+            String(localized: "Toggle Full Screen", comment: "Window action")
+        case .hide:
+            String(localized: "Hide App", comment: "Window action")
+        case .openNewWindow:
+            String(localized: "Open New Window", comment: "Window action")
+        case .maximize:
+            String(localized: "Maximize", comment: "Window action")
+        case .fillLeftHalf:
+            String(localized: "Fill Left Half", comment: "Window action")
+        case .fillRightHalf:
+            String(localized: "Fill Right Half", comment: "Window action")
+        case .fillTopHalf:
+            String(localized: "Fill Top Half", comment: "Window action")
+        case .fillBottomHalf:
+            String(localized: "Fill Bottom Half", comment: "Window action")
+        case .fillTopLeftQuarter:
+            String(localized: "Fill Top Left", comment: "Window action")
+        case .fillTopRightQuarter:
+            String(localized: "Fill Top Right", comment: "Window action")
+        case .fillBottomLeftQuarter:
+            String(localized: "Fill Bottom Left", comment: "Window action")
+        case .fillBottomRightQuarter:
+            String(localized: "Fill Bottom Right", comment: "Window action")
+        case .center:
+            String(localized: "Center Window", comment: "Window action")
+        case .none:
+            String(localized: "No Action", comment: "Window action")
+        }
+    }
+
+    var iconName: String {
+        switch self {
+        case .quit: "xmark.circle.fill"
+        case .close: "xmark.square"
+        case .minimize: "minus.circle"
+        case .toggleFullScreen: "arrow.up.left.and.arrow.down.right"
+        case .hide: "eye.slash"
+        case .openNewWindow: "plus.rectangle.on.rectangle"
+        case .maximize: "arrow.up.backward.and.arrow.down.forward"
+        case .fillLeftHalf: "rectangle.lefthalf.filled"
+        case .fillRightHalf: "rectangle.righthalf.filled"
+        case .fillTopHalf: "rectangle.tophalf.filled"
+        case .fillBottomHalf: "rectangle.bottomhalf.filled"
+        case .fillTopLeftQuarter: "rectangle.split.2x2.fill"
+        case .fillTopRightQuarter: "rectangle.split.2x2.fill"
+        case .fillBottomLeftQuarter: "rectangle.split.2x2.fill"
+        case .fillBottomRightQuarter: "rectangle.split.2x2.fill"
+        case .center: "rectangle.center.inset.filled"
+        case .none: "nosign"
+        }
+    }
+
+    /// Actions that can be assigned to trackpad gestures
+    static var gestureActions: [WindowAction] {
+        [.none, .close, .minimize, .maximize, .toggleFullScreen, .hide, .quit,
+         .fillLeftHalf, .fillRightHalf, .fillTopHalf, .fillBottomHalf,
+         .fillTopLeftQuarter, .fillTopRightQuarter, .fillBottomLeftQuarter, .fillBottomRightQuarter, .center]
+    }
 }
 
 enum WindowUtil {

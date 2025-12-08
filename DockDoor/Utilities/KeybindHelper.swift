@@ -404,24 +404,12 @@ class KeybindHelper {
                         }
 
                         if hasSelection, flags.contains(.maskCommand) {
-                            switch keyCode {
-                            case Int64(kVK_ANSI_W):
+                            // Check configurable Cmd+key shortcuts
+                            if let action = getActionForCmdShortcut(keyCode: keyCode) {
                                 Task { @MainActor in
-                                    self.previewCoordinator.performActionOnCurrentWindow(action: .close)
+                                    self.previewCoordinator.performActionOnCurrentWindow(action: action)
                                 }
                                 return nil
-                            case Int64(kVK_ANSI_Q):
-                                Task { @MainActor in
-                                    self.previewCoordinator.performActionOnCurrentWindow(action: .quit)
-                                }
-                                return nil
-                            case Int64(kVK_ANSI_M):
-                                Task { @MainActor in
-                                    self.previewCoordinator.performActionOnCurrentWindow(action: .minimize)
-                                }
-                                return nil
-                            default:
-                                break
                             }
                         }
                     }
@@ -528,15 +516,9 @@ class KeybindHelper {
             }
 
             if flags.contains(.maskCommand), previewCoordinator.windowSwitcherCoordinator.currIndex >= 0 {
-                switch keyCode {
-                case Int64(kVK_ANSI_W):
-                    return (true, { await self.previewCoordinator.performActionOnCurrentWindow(action: .close) })
-                case Int64(kVK_ANSI_Q):
-                    return (true, { await self.previewCoordinator.performActionOnCurrentWindow(action: .quit) })
-                case Int64(kVK_ANSI_M):
-                    return (true, { await self.previewCoordinator.performActionOnCurrentWindow(action: .minimize) })
-                default:
-                    break
+                // Check configurable Cmd+key shortcuts
+                if let action = getActionForCmdShortcut(keyCode: keyCode) {
+                    return (true, { await self.previewCoordinator.performActionOnCurrentWindow(action: action) })
                 }
             }
         }
@@ -697,6 +679,27 @@ class KeybindHelper {
                 isModifierPressed: self.isSwitcherModifierKeyPressed,
                 isShiftPressed: self.isShiftKeyPressedGeneral
             )
+        }
+    }
+
+    /// Returns the action for a Cmd+key shortcut if the keyCode matches any configured shortcut
+    private func getActionForCmdShortcut(keyCode: Int64) -> WindowAction? {
+        let shortcut1Key = Defaults[.cmdShortcut1Key]
+        let shortcut2Key = Defaults[.cmdShortcut2Key]
+        let shortcut3Key = Defaults[.cmdShortcut3Key]
+
+        switch keyCode {
+        case Int64(shortcut1Key):
+            let action = Defaults[.cmdShortcut1Action]
+            return action != .none ? action : nil
+        case Int64(shortcut2Key):
+            let action = Defaults[.cmdShortcut2Action]
+            return action != .none ? action : nil
+        case Int64(shortcut3Key):
+            let action = Defaults[.cmdShortcut3Action]
+            return action != .none ? action : nil
+        default:
+            return nil
         }
     }
 }

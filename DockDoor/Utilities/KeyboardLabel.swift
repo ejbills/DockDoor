@@ -3,7 +3,18 @@ import Carbon
 
 enum KeyboardLabel {
     static func localizedKey(for keyCode: UInt16) -> String {
-        // Try Unicode key layout first
+        // Handle special keys that don't translate well
+        switch keyCode {
+        case 48: return String(localized: "Tab")
+        case 36: return String(localized: "Return")
+        case 51: return String(localized: "Delete")
+        case 53: return String(localized: "Escape")
+        case 49: return String(localized: "Space")
+        case 76: return String(localized: "Enter")
+        default: break
+        }
+
+        // Try Unicode key layout for regular keys
         if let source = TISCopyCurrentKeyboardLayoutInputSource()?.takeRetainedValue(),
            let ptr = TISGetInputSourceProperty(source, kTISPropertyUnicodeKeyLayoutData)
         {

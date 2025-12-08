@@ -1,3 +1,4 @@
+import Carbon.HIToolbox.Events
 import Cocoa
 import Defaults
 import Foundation
@@ -138,6 +139,38 @@ extension Defaults.Keys {
     static let activeAppIndicatorOffset = Key<CGFloat>("activeAppIndicatorOffset", default: 5.0)
     static let activeAppIndicatorLength = Key<CGFloat>("activeAppIndicatorLength", default: 40.0)
     static let activeAppIndicatorShift = Key<CGFloat>("activeAppIndicatorShift", default: 0.0)
+
+    // MARK: - Trackpad Gestures
+
+    static let gestureSwipeThreshold = Key<CGFloat>("gestureSwipeThreshold", default: 50)
+
+    // Dock Preview Gestures (towards/away from dock - automatically translates based on dock position)
+    static let enableDockPreviewGestures = Key<Bool>("enableDockPreviewGestures", default: true)
+    static let dockSwipeTowardsDockAction = Key<WindowAction>("dockSwipeTowardsDockAction", default: .minimize)
+    static let dockSwipeAwayFromDockAction = Key<WindowAction>("dockSwipeAwayFromDockAction", default: .maximize)
+
+    // Window Switcher Gestures (up/down only - switcher is always horizontally centered)
+    static let enableWindowSwitcherGestures = Key<Bool>("enableWindowSwitcherGestures", default: true)
+    static let switcherSwipeUpAction = Key<WindowAction>("switcherSwipeUpAction", default: .maximize)
+    static let switcherSwipeDownAction = Key<WindowAction>("switcherSwipeDownAction", default: .minimize)
+
+    // MARK: - Middle Click Action
+
+    static let middleClickAction = Key<WindowAction>("middleClickAction", default: .close)
+
+    // MARK: - Window Switcher Keyboard Shortcuts (Cmd+key)
+
+    // Each shortcut has a key code (the letter/key) and an action
+    // The Cmd modifier is always required - only the key is customizable
+
+    static let cmdShortcut1Key = Key<UInt16>("cmdShortcut1Key", default: UInt16(kVK_ANSI_W))
+    static let cmdShortcut1Action = Key<WindowAction>("cmdShortcut1Action", default: .close)
+
+    static let cmdShortcut2Key = Key<UInt16>("cmdShortcut2Key", default: UInt16(kVK_ANSI_M))
+    static let cmdShortcut2Action = Key<WindowAction>("cmdShortcut2Action", default: .minimize)
+
+    static let cmdShortcut3Key = Key<UInt16>("cmdShortcut3Key", default: UInt16(kVK_ANSI_Q))
+    static let cmdShortcut3Action = Key<WindowAction>("cmdShortcut3Action", default: .quit)
 }
 
 // MARK: Display Configurations

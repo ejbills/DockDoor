@@ -678,6 +678,45 @@ struct WindowPreviewHoverContainer: View {
         case .maximize:
             window.zoom()
             onWindowTap?()
+
+        case .fillLeftHalf:
+            window.fillLeftHalf()
+            onWindowTap?()
+
+        case .fillRightHalf:
+            window.fillRightHalf()
+            onWindowTap?()
+
+        case .fillTopHalf:
+            window.fillTopHalf()
+            onWindowTap?()
+
+        case .fillBottomHalf:
+            window.fillBottomHalf()
+            onWindowTap?()
+
+        case .fillTopLeftQuarter:
+            window.fillTopLeftQuarter()
+            onWindowTap?()
+
+        case .fillTopRightQuarter:
+            window.fillTopRightQuarter()
+            onWindowTap?()
+
+        case .fillBottomLeftQuarter:
+            window.fillBottomLeftQuarter()
+            onWindowTap?()
+
+        case .fillBottomRightQuarter:
+            window.fillBottomRightQuarter()
+            onWindowTap?()
+
+        case .center:
+            window.centerWindow()
+            onWindowTap?()
+
+        case .none:
+            break
         }
     }
 
