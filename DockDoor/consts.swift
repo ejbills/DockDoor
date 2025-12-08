@@ -32,6 +32,10 @@ extension Defaults.Keys {
     static let windowPreviewImageScale = Key<CGFloat>("windowPreviewImageScale", default: 1)
     static let windowImageCaptureQuality = Key<WindowImageCaptureQuality>("windowImageCaptureQuality", default: .nominal)
 
+    static let enableLivePreview = Key<Bool>("enableLivePreview", default: false)
+    static let livePreviewQuality = Key<LivePreviewQuality>("livePreviewQuality", default: .retina)
+    static let livePreviewFrameRate = Key<LivePreviewFrameRate>("livePreviewFrameRate", default: .fps30)
+
     static let uniformCardRadius = Key<Bool>("uniformCardRadius", default: true)
     static let allowDynamicImageSizing = Key<Bool>("allowDynamicImageSizing", default: false)
     static let tapEquivalentInterval = Key<CGFloat>("tapEquivalentInterval", default: 1.5)
@@ -84,6 +88,7 @@ extension Defaults.Keys {
     static let hoverHighlightColor = Key<Color?>("hoverHighlightColor", default: nil)
     static let dockPreviewBackgroundOpacity = Key<CGFloat>("dockPreviewBackgroundOpacity", default: 1.0)
     static let hidePreviewCardBackground = Key<Bool>("hidePreviewCardBackground", default: false)
+    static let showActiveWindowBorder = Key<Bool>("showActiveWindowBorder", default: false)
 
     static let showWindowTitle = Key<Bool>("showWindowTitle", default: true)
     static let showAppIconOnly = Key<Bool>("showAppIconOnly", default: false)
@@ -123,6 +128,16 @@ extension Defaults.Keys {
 
     // Debug
     static let debugMode = Key<Bool>("debugMode", default: false)
+
+    // Active App Indicator
+    static let showActiveAppIndicator = Key<Bool>("showActiveAppIndicator", default: false)
+    static let activeAppIndicatorColor = Key<Color>("activeAppIndicatorColor", default: Color.accentColor)
+    static let activeAppIndicatorAutoSize = Key<Bool>("activeAppIndicatorAutoSize", default: true)
+    static let activeAppIndicatorAutoLength = Key<Bool>("activeAppIndicatorAutoLength", default: false)
+    static let activeAppIndicatorHeight = Key<CGFloat>("activeAppIndicatorHeight", default: 4.0)
+    static let activeAppIndicatorOffset = Key<CGFloat>("activeAppIndicatorOffset", default: 5.0)
+    static let activeAppIndicatorLength = Key<CGFloat>("activeAppIndicatorLength", default: 40.0)
+    static let activeAppIndicatorShift = Key<CGFloat>("activeAppIndicatorShift", default: 0.0)
 }
 
 // MARK: Display Configurations
@@ -376,6 +391,67 @@ enum WindowPreviewSortOrder: String, CaseIterable, Defaults.Serializable, Identi
             true
         default:
             false
+        }
+    }
+}
+
+enum LivePreviewQuality: String, CaseIterable, Defaults.Serializable, Identifiable {
+    case standard
+    case high
+    case retina
+
+    var id: String { rawValue }
+
+    var scaleFactor: Int {
+        switch self {
+        case .standard: 1
+        case .high: 1
+        case .retina: 2
+        }
+    }
+
+    var useFullResolution: Bool {
+        switch self {
+        case .standard: false
+        case .high, .retina: true
+        }
+    }
+
+    var localizedName: String {
+        switch self {
+        case .standard:
+            String(localized: "Standard")
+        case .high:
+            String(localized: "High")
+        case .retina:
+            String(localized: "Retina (Best)")
+        }
+    }
+}
+
+enum LivePreviewFrameRate: String, CaseIterable, Defaults.Serializable, Identifiable {
+    case fps30
+    case fps60
+    case fps120
+
+    var id: String { rawValue }
+
+    var frameRate: Int32 {
+        switch self {
+        case .fps30: 30
+        case .fps60: 60
+        case .fps120: 120
+        }
+    }
+
+    var localizedName: String {
+        switch self {
+        case .fps30:
+            String(localized: "30 FPS")
+        case .fps60:
+            String(localized: "60 FPS")
+        case .fps120:
+            String(localized: "120 FPS (ProMotion)")
         }
     }
 }

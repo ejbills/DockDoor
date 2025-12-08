@@ -7,10 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1A04FA16AC74448F83D0F964 /* ActiveAppIndicatorCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6F87422D4714171AD2CCC4A /* ActiveAppIndicatorCoordinator.swift */; };
+		F3A2B8C1D5E6489AAB123456 /* ActiveAppIndicatorPositioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B7C6D5E4F3A2B1098765432 /* ActiveAppIndicatorPositioning.swift */; };
+		A1B2C3D4E5F6789012345678 /* ActiveAppIndicatorWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C3D4E5F67890123456789A /* ActiveAppIndicatorWindow.swift */; };
+		C3D4E5F6789012345678901B /* ActiveAppIndicatorDockDetection.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4E5F6789012345678901234 /* ActiveAppIndicatorDockDetection.swift */; };
+		83E26DB067D2426086683147 /* ActiveAppIndicatorSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D264F468F734971AE701690 /* ActiveAppIndicatorSettingsView.swift */; };
 		0531F8D22C3CC04600327808 /* AppearanceSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0531F8D12C3CC04600327808 /* AppearanceSettingsView.swift */; };
 		0596C2C32C3E060D00DCABEF /* PrivateApis.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0596C2C22C3E060D00DCABEF /* PrivateApis.swift */; };
 		05C0C7182C60629C000ADAC6 /* AXUIElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C0C7172C60629C000ADAC6 /* AXUIElement.swift */; };
 		27DC8C172CFA4DA7005F8F31 /* NumberFormatter+Convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27DC8C152CFA4DA7005F8F31 /* NumberFormatter+Convenience.swift */; };
+		341691AA2EE37A6D004AFFC9 /* LiveWindowCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 341691A92EE37A6D004AFFC9 /* LiveWindowCapture.swift */; };
 		3A105FD62C1BED660015EC66 /* BlurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A105FD52C1BED660015EC66 /* BlurView.swift */; };
 		3A105FD92C1C049E0015EC66 /* dockStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A105FD82C1C049E0015EC66 /* dockStyle.swift */; };
 		3A105FDD2C1C0EE20015EC66 /* DynStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A105FDC2C1C0EE20015EC66 /* DynStack.swift */; };
@@ -150,10 +156,16 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C6F87422D4714171AD2CCC4A /* ActiveAppIndicatorCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveAppIndicatorCoordinator.swift; sourceTree = "<group>"; };
+		8B7C6D5E4F3A2B1098765432 /* ActiveAppIndicatorPositioning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveAppIndicatorPositioning.swift; sourceTree = "<group>"; };
+		B2C3D4E5F67890123456789A /* ActiveAppIndicatorWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveAppIndicatorWindow.swift; sourceTree = "<group>"; };
+		D4E5F6789012345678901234 /* ActiveAppIndicatorDockDetection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveAppIndicatorDockDetection.swift; sourceTree = "<group>"; };
+		7D264F468F734971AE701690 /* ActiveAppIndicatorSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveAppIndicatorSettingsView.swift; sourceTree = "<group>"; };
 		0531F8D12C3CC04600327808 /* AppearanceSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceSettingsView.swift; sourceTree = "<group>"; };
 		0596C2C22C3E060D00DCABEF /* PrivateApis.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateApis.swift; sourceTree = "<group>"; };
 		05C0C7172C60629C000ADAC6 /* AXUIElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AXUIElement.swift; sourceTree = "<group>"; };
 		27DC8C152CFA4DA7005F8F31 /* NumberFormatter+Convenience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NumberFormatter+Convenience.swift"; sourceTree = "<group>"; };
+		341691A92EE37A6D004AFFC9 /* LiveWindowCapture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveWindowCapture.swift; sourceTree = "<group>"; };
 		3A105FD52C1BED660015EC66 /* BlurView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurView.swift; sourceTree = "<group>"; };
 		3A105FD82C1C049E0015EC66 /* dockStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dockStyle.swift; sourceTree = "<group>"; };
 		3A105FDC2C1C0EE20015EC66 /* DynStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynStack.swift; sourceTree = "<group>"; };
@@ -468,9 +480,21 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
+		205C45E5266848C9B4F622AA /* ActiveAppIndicator */ = {
+			isa = PBXGroup;
+			children = (
+				C6F87422D4714171AD2CCC4A /* ActiveAppIndicatorCoordinator.swift */,
+				D4E5F6789012345678901234 /* ActiveAppIndicatorDockDetection.swift */,
+				8B7C6D5E4F3A2B1098765432 /* ActiveAppIndicatorPositioning.swift */,
+				B2C3D4E5F67890123456789A /* ActiveAppIndicatorWindow.swift */,
+			);
+			path = ActiveAppIndicator;
+			sourceTree = "<group>";
+		};
 		BB157B772C0E32EF00997315 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				205C45E5266848C9B4F622AA /* ActiveAppIndicator */,
 				BB5D35532ED4C4CC006ECE15 /* DebugLogger.swift */,
 				BB21067C2E83565A002F87D6 /* KeyboardLabel.swift */,
 				BBDF65722E7E212400DD6D6D /* DockObserver+CmdTab.swift */,
@@ -639,6 +663,7 @@
 		BBAC6B412D15F71E00A0F370 /* Window Management */ = {
 			isa = PBXGroup;
 			children = (
+				341691A92EE37A6D004AFFC9 /* LiveWindowCapture.swift */,
 				BB2106732E830EC5002F87D6 /* WindowDiscoveryShared.swift */,
 				BB49747C2E81CE5100308326 /* WindowSeeder.swift */,
 				BBB023AC2EDCCB9100317CF4 /* WindowInfo.swift */,
@@ -675,6 +700,7 @@
 			children = (
 				BB2884FE2E81AFCB0048A09B /* Shared Components */,
 				BB15E1E62C8F8C8D002ECFB9 /* Help */,
+				7D264F468F734971AE701690 /* ActiveAppIndicatorSettingsView.swift */,
 				BB1CBD572C1BA800003969BC /* MainSettingsView.swift */,
 				BB1A85F42D05263C00326297 /* FiltersSettingsView.swift */,
 				BB1865552DD57F1E000F34AD /* SupportSettingsView.swift */,
@@ -804,6 +830,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1A04FA16AC74448F83D0F964 /* ActiveAppIndicatorCoordinator.swift in Sources */,
+				C3D4E5F6789012345678901B /* ActiveAppIndicatorDockDetection.swift in Sources */,
+				F3A2B8C1D5E6489AAB123456 /* ActiveAppIndicatorPositioning.swift in Sources */,
+				A1B2C3D4E5F6789012345678 /* ActiveAppIndicatorWindow.swift in Sources */,
+				83E26DB067D2426086683147 /* ActiveAppIndicatorSettingsView.swift in Sources */,
 				0531F8D22C3CC04600327808 /* AppearanceSettingsView.swift in Sources */,
 				BB5D35542ED4C4CC006ECE15 /* DebugLogger.swift in Sources */,
 				BB638EFA2E0216DA0010077D /* MediaControlsEmbeddedView.swift in Sources */,
@@ -883,6 +914,7 @@
 				3A1622CA2C8D5E4600D318EE /* FirstTimeIntroTabView.swift in Sources */,
 				BB1865562DD57F1E000F34AD /* SupportSettingsView.swift in Sources */,
 				BB638F062E02170B0010077D /* MediaProgressBar.swift in Sources */,
+				341691AA2EE37A6D004AFFC9 /* LiveWindowCapture.swift in Sources */,
 				BB15E1F72C8FC05A002ECFB9 /* UniformCardView.swift in Sources */,
 				BB2106742E830EC5002F87D6 /* WindowDiscoveryShared.swift in Sources */,
 				BB638F042E0217030010077D /* MediaControlButtonRow.swift in Sources */,

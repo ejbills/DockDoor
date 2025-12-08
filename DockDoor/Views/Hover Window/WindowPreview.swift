@@ -38,6 +38,9 @@ struct WindowPreview: View {
 
     @Default(.tapEquivalentInterval) var tapEquivalentInterval
     @Default(.previewHoverAction) var previewHoverAction
+    @Default(.showActiveWindowBorder) var showActiveWindowBorder
+    @Default(.activeAppIndicatorColor) var activeAppIndicatorColor
+    @Default(.enableLivePreview) var enableLivePreview
 
     @State private var isHoveringOverDockPeekPreview = false
     @State private var isHoveringOverWindowSwitcherPreview = false
@@ -56,6 +59,16 @@ struct WindowPreview: View {
         }
     }
 
+    /// Checks if this window is the currently active (focused) window on the system
+    private var isActiveWindow: Bool {
+        guard showActiveWindowBorder else { return false }
+        guard windowInfo.app.isActive else { return false }
+        guard let focusedWindow = try? windowInfo.appAxElement.focusedWindow(),
+              let focusedWindowID = try? focusedWindow.cgWindowId()
+        else { return false }
+        return windowInfo.id == focusedWindowID
+    }
+
     private var isWindowSwitcherDiagonalPosition: Bool {
         switch windowSwitcherControlPosition {
         case .diagonalTopLeftBottomRight, .diagonalTopRightBottomLeft,
@@ -66,27 +79,33 @@ struct WindowPreview: View {
         }
     }
 
+    @ViewBuilder
     private func windowContent(isMinimized: Bool, isHidden: Bool, isSelected: Bool) -> some View {
+        let inactive = (isMinimized || isHidden) && showMinimizedHiddenLabels
+        let useLivePreview = enableLivePreview && !isMinimized && !isHidden
+
         Group {
-            if let cgImage = windowInfo.image {
-                let inactive = (isMinimized || isHidden) && showMinimizedHiddenLabels
+            if useLivePreview {
+                LivePreviewImage(windowID: windowInfo.id, fallbackImage: windowInfo.image)
+                    .scaledToFit()
+            } else if let cgImage = windowInfo.image {
                 Image(decorative: cgImage, scale: 1.0)
                     .resizable()
                     .scaledToFit()
-                    .markHidden(isHidden: inactive || (windowSwitcherActive && !isSelected))
-                    .overlay {
-                        if inactive, showMinimizedHiddenLabels {
-                            Image(systemName: "eye.slash")
-                                .font(.largeTitle)
-                                .foregroundColor(.primary)
-                                .shadow(radius: 2)
-                                .transition(.opacity)
-                        }
-                    }
-                    .animation(.easeInOut(duration: 0.15), value: inactive)
-                    .clipShape(uniformCardRadius ? AnyShape(RoundedRectangle(cornerRadius: 12, style: .continuous)) : AnyShape(Rectangle()))
             }
         }
+        .markHidden(isHidden: inactive || (windowSwitcherActive && !isSelected))
+        .overlay {
+            if inactive, showMinimizedHiddenLabels {
+                Image(systemName: "eye.slash")
+                    .font(.largeTitle)
+                    .foregroundColor(.primary)
+                    .shadow(radius: 2)
+                    .transition(.opacity)
+            }
+        }
+        .animation(.easeInOut(duration: 0.15), value: inactive)
+        .clipShape(uniformCardRadius ? AnyShape(RoundedRectangle(cornerRadius: 12, style: .continuous)) : AnyShape(Rectangle()))
         .dynamicWindowFrame(
             allowDynamicSizing: allowDynamicImageSizing,
             dimensions: dimensions,
@@ -555,6 +574,13 @@ struct WindowPreview: View {
                                 let highlightColor = hoverHighlightColor ?? Color(nsColor: .controlAccentColor)
                                 RoundedRectangle(cornerRadius: cornerRadius)
                                     .fill(highlightColor.opacity(selectionOpacity))
+                                    .padding(-6)
+                            }
+                        }
+                        .overlay {
+                            if isActiveWindow {
+                                RoundedRectangle(cornerRadius: cornerRadius)
+                                    .strokeBorder(activeAppIndicatorColor, lineWidth: 2.5)
                                     .padding(-6)
                             }
                         }

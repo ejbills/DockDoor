@@ -90,7 +90,7 @@ extension View {
     @ViewBuilder
     func symbolReplaceTransition() -> some View {
         if #available(macOS 14.0, *) {
-            self.contentTransition(.symbolEffect(.replace))
+            contentTransition(.symbolEffect(.replace))
         } else {
             self
         }
