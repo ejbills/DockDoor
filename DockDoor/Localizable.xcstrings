@@ -77248,6 +77248,9 @@
         }
       }
     },
+    "Show Window Switcher instantly" : {
+
+    },
     "Show Window Title" : {
       "localizations" : {
         "af" : {
@@ -78967,6 +78970,9 @@
           }
         }
       }
+    },
+    "Skip the small delay before the switcher appears. May feel snappier but can cause flickering if you quickly release the key." : {
+
     },
     "Small" : {
       "comment" : "Window size option",

@@ -56,6 +56,7 @@ extension Defaults.Keys {
     static let showAnimations = Key<Bool>("showAnimations", default: true)
     static let gradientColorPalette = Key<GradientColorPaletteSettings>("gradientColorPalette", default: .init())
     static let enableWindowSwitcher = Key<Bool>("enableWindowSwitcher", default: true)
+    static let instantWindowSwitcher = Key<Bool>("instantWindowSwitcher", default: false)
     static let enableDockPreviews = Key<Bool>("enableDockPreviews", default: true)
     static let showWindowsFromCurrentSpaceOnly = Key<Bool>("showWindowsFromCurrentSpaceOnly", default: false)
     static let windowPreviewSortOrder = Key<WindowPreviewSortOrder>("windowPreviewSortOrder", default: .recentlyUsed)

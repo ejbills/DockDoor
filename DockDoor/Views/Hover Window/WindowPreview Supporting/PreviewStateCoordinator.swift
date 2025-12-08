@@ -203,69 +203,12 @@ class PreviewStateCoordinator: ObservableObject {
         let query = searchQuery.lowercased()
         let fuzziness = Defaults[.searchFuzziness]
 
-        return windows.enumerated().compactMap { [fuzziness] idx, win in
+        return windows.enumerated().compactMap { idx, win in
             let appName = win.app.localizedName?.lowercased() ?? ""
             let windowTitle = (win.windowName ?? "").lowercased()
-            return (fuzzyMatch(query: query, target: appName, fuzziness: fuzziness) ||
-                fuzzyMatch(query: query, target: windowTitle, fuzziness: fuzziness)) ? idx : nil
+            return (StringMatchingUtil.fuzzyMatch(query: query, target: appName, fuzziness: fuzziness) ||
+                StringMatchingUtil.fuzzyMatch(query: query, target: windowTitle, fuzziness: fuzziness)) ? idx : nil
         }
-    }
-
-    /// Performs fuzzy matching based on fuzziness level (1-5).
-    /// Level 1: Exact substring match (strictest)
-    /// Level 2: Characters in order, max 1 char gap between matches
-    /// Level 3: Characters in order, max 3 char gap between matches
-    /// Level 4: Characters in order, max 5 char gap between matches
-    /// Level 5: Characters in order, no gap limit (most lenient)
-    private func fuzzyMatch(query: String, target: String, fuzziness: Int) -> Bool {
-        if query.isEmpty { return true }
-        if target.isEmpty { return false }
-
-        // Level 1: exact substring match
-        if fuzziness == 1 {
-            return target.contains(query)
-        }
-
-        // Levels 2-5: fuzzy matching with varying gap tolerances
-        let maxGap: Int? = switch fuzziness {
-        case 2: 1
-        case 3: 3
-        case 4: 5
-        default: nil // Level 5: no limit
-        }
-
-        // Try matching starting from each position in target
-        var searchStart = target.startIndex
-
-        outer: while searchStart < target.endIndex {
-            var queryIndex = query.startIndex
-            var targetIndex = searchStart
-            var lastMatchIndex: String.Index?
-
-            while queryIndex < query.endIndex, targetIndex < target.endIndex {
-                if query[queryIndex] == target[targetIndex] {
-                    // Check gap constraint if applicable
-                    if let maxGapValue = maxGap, let lastMatch = lastMatchIndex {
-                        let gap = target.distance(from: lastMatch, to: targetIndex) - 1
-                        if gap > maxGapValue {
-                            // Gap too large, try next starting position
-                            searchStart = target.index(after: searchStart)
-                            continue outer
-                        }
-                    }
-                    lastMatchIndex = targetIndex
-                    queryIndex = query.index(after: queryIndex)
-                }
-                targetIndex = target.index(after: targetIndex)
-            }
-
-            if queryIndex == query.endIndex {
-                return true
-            }
-            searchStart = target.index(after: searchStart)
-        }
-
-        return false
     }
 
     /// Cycles forward through filtered windows only.
