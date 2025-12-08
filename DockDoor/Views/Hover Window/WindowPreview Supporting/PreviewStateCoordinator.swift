@@ -201,11 +201,13 @@ class PreviewStateCoordinator: ObservableObject {
         }
 
         let query = searchQuery.lowercased()
+        let fuzziness = Defaults[.searchFuzziness]
 
         return windows.enumerated().compactMap { idx, win in
             let appName = win.app.localizedName?.lowercased() ?? ""
             let windowTitle = (win.windowName ?? "").lowercased()
-            return (appName.contains(query) || windowTitle.contains(query)) ? idx : nil
+            return (StringMatchingUtil.fuzzyMatch(query: query, target: appName, fuzziness: fuzziness) ||
+                StringMatchingUtil.fuzzyMatch(query: query, target: windowTitle, fuzziness: fuzziness)) ? idx : nil
         }
     }
 

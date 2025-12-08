@@ -28,7 +28,8 @@ private class WindowSwitchingCoordinator {
     func handleWindowSwitching(
         previewCoordinator: SharedPreviewWindowCoordinator,
         isModifierPressed: Bool,
-        isShiftPressed: Bool
+        isShiftPressed: Bool,
+        mode: SwitcherInvocationMode = .allWindows
     ) async {
         guard !isProcessingSwitcher else { return }
         isProcessingSwitcher = true
@@ -55,19 +56,41 @@ private class WindowSwitchingCoordinator {
             }
         } else if isModifierPressed {
             await initializeWindowSwitching(
-                previewCoordinator: previewCoordinator
+                previewCoordinator: previewCoordinator,
+                mode: mode
             )
         }
     }
 
     @MainActor
     private func initializeWindowSwitching(
-        previewCoordinator: SharedPreviewWindowCoordinator
+        previewCoordinator: SharedPreviewWindowCoordinator,
+        mode: SwitcherInvocationMode = .allWindows
     ) async {
         var windows = WindowUtil.getAllWindowsOfAllApps()
-        if Defaults[.showWindowsFromCurrentSpaceOnlyInSwitcher] {
+
+        // Apply space filter based on mode or default setting
+        let filterBySpace = (mode == .currentSpaceOnly || mode == .activeAppCurrentSpace)
+            || (mode == .allWindows && Defaults[.showWindowsFromCurrentSpaceOnlyInSwitcher])
+        if filterBySpace {
             windows = await WindowUtil.filterWindowsByCurrentSpace(windows)
         }
+
+        // Apply active app filter based on mode or default setting
+        let filterByApp = (mode == .activeAppOnly || mode == .activeAppCurrentSpace)
+            || (mode == .allWindows && Defaults[.limitSwitcherToFrontmostApp])
+        if filterByApp {
+            windows = WindowUtil.getWindowsForFrontmostApp(from: windows)
+        }
+
+        // Apply hidden windows filter (always respect the global setting)
+        if !Defaults[.includeHiddenWindowsInSwitcher] {
+            windows = windows.filter { !$0.isHidden && !$0.isMinimized }
+        }
+
+        // Sort windows
+        windows = WindowUtil.sortWindowsForSwitcher(windows)
+
         guard !windows.isEmpty else { return }
 
         currentSessionId = UUID()
@@ -80,7 +103,9 @@ private class WindowSwitchingCoordinator {
 
         uiRenderingTask?.cancel()
         uiRenderingTask = Task { @MainActor in
-            try? await Task.sleep(nanoseconds: 100_000_000)
+            if !Defaults[.instantWindowSwitcher] {
+                try? await Task.sleep(nanoseconds: 100_000_000)
+            }
             await renderWindowSwitcherUI(
                 previewCoordinator: previewCoordinator,
                 windows: windows,
@@ -193,6 +218,9 @@ class KeybindHelper {
     private var hasProcessedModifierRelease: Bool = false
     private var preventSwitcherHideOnRelease: Bool = false
 
+    // Track the invocation mode for alternate keybinds
+    private var currentInvocationMode: SwitcherInvocationMode = .allWindows
+
     // Track Command key state to detect key-up fallback for lingering previews
     private var isCommandKeyCurrentlyDown: Bool = false
     private var lastCmdTabObservedActive: Bool = false
@@ -225,6 +253,7 @@ class KeybindHelper {
         isSwitcherModifierKeyPressed = false
         isShiftKeyPressedGeneral = false
         preventSwitcherHideOnRelease = false
+        currentInvocationMode = .allWindows
     }
 
     private func startMonitoring() {
@@ -416,24 +445,12 @@ class KeybindHelper {
                         }
 
                         if hasSelection, flags.contains(.maskCommand) {
-                            switch keyCode {
-                            case Int64(kVK_ANSI_W):
+                            // Check configurable Cmd+key shortcuts
+                            if let action = getActionForCmdShortcut(keyCode: keyCode) {
                                 Task { @MainActor in
-                                    self.previewCoordinator.performActionOnCurrentWindow(action: .close)
+                                    self.previewCoordinator.performActionOnCurrentWindow(action: action)
                                 }
                                 return nil
-                            case Int64(kVK_ANSI_Q):
-                                Task { @MainActor in
-                                    self.previewCoordinator.performActionOnCurrentWindow(action: .quit)
-                                }
-                                return nil
-                            case Int64(kVK_ANSI_M):
-                                Task { @MainActor in
-                                    self.previewCoordinator.performActionOnCurrentWindow(action: .minimize)
-                                }
-                                return nil
-                            default:
-                                break
                             }
                         }
                     }
@@ -496,7 +513,8 @@ class KeybindHelper {
                 await self.windowSwitchingCoordinator.handleWindowSwitching(
                     previewCoordinator: self.previewCoordinator,
                     isModifierPressed: currentSwitcherModifierIsPressed,
-                    isShiftPressed: true
+                    isShiftPressed: true,
+                    mode: self.currentInvocationMode
                 )
             }
         }
@@ -540,15 +558,9 @@ class KeybindHelper {
             }
 
             if flags.contains(.maskCommand), previewCoordinator.windowSwitcherCoordinator.currIndex >= 0 {
-                switch keyCode {
-                case Int64(kVK_ANSI_W):
-                    return (true, { await self.previewCoordinator.performActionOnCurrentWindow(action: .close) })
-                case Int64(kVK_ANSI_Q):
-                    return (true, { await self.previewCoordinator.performActionOnCurrentWindow(action: .quit) })
-                case Int64(kVK_ANSI_M):
-                    return (true, { await self.previewCoordinator.performActionOnCurrentWindow(action: .minimize) })
-                default:
-                    break
+                // Check configurable Cmd+key shortcuts
+                if let action = getActionForCmdShortcut(keyCode: keyCode) {
+                    return (true, { await self.previewCoordinator.performActionOnCurrentWindow(action: action) })
                 }
             }
         }
@@ -566,19 +578,29 @@ class KeybindHelper {
 
         if isExactSwitcherShortcutPressed {
             guard Defaults[.enableWindowSwitcher] else { return (false, nil) }
-            return (true, { await self.handleKeybindActivation() })
+            return (true, { await self.handleKeybindActivation(mode: .allWindows) })
+        }
+
+        // Check alternate keybind (shares same modifier as primary keybind)
+        if isDesiredModifierPressedNow {
+            let alternateKey = Defaults[.alternateKeybindKey]
+            if alternateKey != 0, keyCode == alternateKey {
+                guard Defaults[.enableWindowSwitcher] else { return (false, nil) }
+                let mode = Defaults[.alternateKeybindMode]
+                return (true, { await self.handleKeybindActivation(mode: mode) })
+            }
         }
 
         if previewIsCurrentlyVisible {
             if keyCode == kVK_Tab {
                 return (true, { @MainActor in
                     if self.previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive {
-                        let hasActiveSearch = self.previewCoordinator.windowSwitcherCoordinator.hasActiveSearch
-                        if !hasActiveSearch {
+                        if !self.previewCoordinator.windowSwitcherCoordinator.hasActiveSearch {
                             await self.windowSwitchingCoordinator.handleWindowSwitching(
                                 previewCoordinator: self.previewCoordinator,
                                 isModifierPressed: self.isSwitcherModifierKeyPressed,
-                                isShiftPressed: false
+                                isShiftPressed: false,
+                                mode: self.currentInvocationMode
                             )
                         }
                     } else {
@@ -632,6 +654,8 @@ class KeybindHelper {
                     if !query.isEmpty {
                         query.removeLast()
                         self.previewCoordinator.windowSwitcherCoordinator.searchQuery = query
+                        let windows = self.previewCoordinator.windowSwitcherCoordinator.windows
+                        self.windowSwitchingCoordinator.stateManager.setSearchQuery(query, windows: windows)
                         SharedPreviewWindowCoordinator.activeInstance?.updateSearchWindow(with: query)
 
                         if query.isEmpty {
@@ -654,6 +678,8 @@ class KeybindHelper {
                     return (true, { @MainActor in
                         self.previewCoordinator.windowSwitcherCoordinator.searchQuery.append(contentsOf: filteredChars)
                         let newQuery = self.previewCoordinator.windowSwitcherCoordinator.searchQuery
+                        let windows = self.previewCoordinator.windowSwitcherCoordinator.windows
+                        self.windowSwitchingCoordinator.stateManager.setSearchQuery(newQuery, windows: windows)
                         SharedPreviewWindowCoordinator.activeInstance?.updateSearchWindow(with: newQuery)
 
                         if !newQuery.isEmpty {
@@ -697,15 +723,38 @@ class KeybindHelper {
     }
 
     @MainActor
-    private func handleKeybindActivation() {
+    private func handleKeybindActivation(mode: SwitcherInvocationMode = .allWindows) {
         guard Defaults[.enableWindowSwitcher] else { return }
         hasProcessedModifierRelease = false
+        currentInvocationMode = mode
         Task { @MainActor in
             await windowSwitchingCoordinator.handleWindowSwitching(
                 previewCoordinator: previewCoordinator,
                 isModifierPressed: self.isSwitcherModifierKeyPressed,
-                isShiftPressed: self.isShiftKeyPressedGeneral
+                isShiftPressed: self.isShiftKeyPressedGeneral,
+                mode: mode
             )
+        }
+    }
+
+    /// Returns the action for a Cmd+key shortcut if the keyCode matches any configured shortcut
+    private func getActionForCmdShortcut(keyCode: Int64) -> WindowAction? {
+        let shortcut1Key = Defaults[.cmdShortcut1Key]
+        let shortcut2Key = Defaults[.cmdShortcut2Key]
+        let shortcut3Key = Defaults[.cmdShortcut3Key]
+
+        switch keyCode {
+        case Int64(shortcut1Key):
+            let action = Defaults[.cmdShortcut1Action]
+            return action != .none ? action : nil
+        case Int64(shortcut2Key):
+            let action = Defaults[.cmdShortcut2Action]
+            return action != .none ? action : nil
+        case Int64(shortcut3Key):
+            let action = Defaults[.cmdShortcut3Action]
+            return action != .none ? action : nil
+        default:
+            return nil
         }
     }
 }

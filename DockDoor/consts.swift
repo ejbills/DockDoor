@@ -1,3 +1,4 @@
+import Carbon.HIToolbox.Events
 import Cocoa
 import Defaults
 import Foundation
@@ -56,6 +57,7 @@ extension Defaults.Keys {
     static let showAnimations = Key<Bool>("showAnimations", default: true)
     static let gradientColorPalette = Key<GradientColorPaletteSettings>("gradientColorPalette", default: .init())
     static let enableWindowSwitcher = Key<Bool>("enableWindowSwitcher", default: true)
+    static let instantWindowSwitcher = Key<Bool>("instantWindowSwitcher", default: false)
     static let enableDockPreviews = Key<Bool>("enableDockPreviews", default: true)
     static let showWindowsFromCurrentSpaceOnly = Key<Bool>("showWindowsFromCurrentSpaceOnly", default: false)
     static let windowPreviewSortOrder = Key<WindowPreviewSortOrder>("windowPreviewSortOrder", default: .recentlyUsed)
@@ -71,6 +73,7 @@ extension Defaults.Keys {
     static let windowSwitcherShowListView = Key<Bool>("windowSwitcherShowListView", default: false)
     static let listViewShowAppName = Key<Bool>("listViewShowAppName", default: true)
     static let windowSwitcherListFontSize = Key<CGFloat>("windowSwitcherListFontSize", default: 13)
+    static let searchFuzziness = Key<Int>("searchFuzziness", default: 3)
     static let useClassicWindowOrdering = Key<Bool>("useClassicWindowOrdering", default: true)
     static let includeHiddenWindowsInSwitcher = Key<Bool>("includeHiddenWindowsInSwitcher", default: true)
     static let ignoreAppsWithSingleWindow = Key<Bool>("ignoreAppsWithSingleWindow", default: false)
@@ -141,6 +144,43 @@ extension Defaults.Keys {
     static let activeAppIndicatorOffset = Key<CGFloat>("activeAppIndicatorOffset", default: 5.0)
     static let activeAppIndicatorLength = Key<CGFloat>("activeAppIndicatorLength", default: 40.0)
     static let activeAppIndicatorShift = Key<CGFloat>("activeAppIndicatorShift", default: 0.0)
+
+    // MARK: - Trackpad Gestures
+
+    static let gestureSwipeThreshold = Key<CGFloat>("gestureSwipeThreshold", default: 50)
+
+    // Dock Preview Gestures (towards/away from dock - automatically translates based on dock position)
+    static let enableDockPreviewGestures = Key<Bool>("enableDockPreviewGestures", default: true)
+    static let dockSwipeTowardsDockAction = Key<WindowAction>("dockSwipeTowardsDockAction", default: .minimize)
+    static let dockSwipeAwayFromDockAction = Key<WindowAction>("dockSwipeAwayFromDockAction", default: .maximize)
+
+    // Window Switcher Gestures (up/down only - switcher is always horizontally centered)
+    static let enableWindowSwitcherGestures = Key<Bool>("enableWindowSwitcherGestures", default: true)
+    static let switcherSwipeUpAction = Key<WindowAction>("switcherSwipeUpAction", default: .maximize)
+    static let switcherSwipeDownAction = Key<WindowAction>("switcherSwipeDownAction", default: .minimize)
+
+    // MARK: - Middle Click Action
+
+    static let middleClickAction = Key<WindowAction>("middleClickAction", default: .close)
+
+    // MARK: - Window Switcher Keyboard Shortcuts (Cmd+key)
+
+    // Each shortcut has a key code (the letter/key) and an action
+    // The Cmd modifier is always required - only the key is customizable
+
+    static let cmdShortcut1Key = Key<UInt16>("cmdShortcut1Key", default: UInt16(kVK_ANSI_W))
+    static let cmdShortcut1Action = Key<WindowAction>("cmdShortcut1Action", default: .close)
+
+    static let cmdShortcut2Key = Key<UInt16>("cmdShortcut2Key", default: UInt16(kVK_ANSI_M))
+    static let cmdShortcut2Action = Key<WindowAction>("cmdShortcut2Action", default: .minimize)
+
+    static let cmdShortcut3Key = Key<UInt16>("cmdShortcut3Key", default: UInt16(kVK_ANSI_Q))
+    static let cmdShortcut3Action = Key<WindowAction>("cmdShortcut3Action", default: .quit)
+
+    // MARK: - Alternate Window Switcher Keybind (shares modifier with primary keybind)
+
+    static let alternateKeybindKey = Key<UInt16>("alternateKeybindKey", default: 0)
+    static let alternateKeybindMode = Key<SwitcherInvocationMode>("alternateKeybindMode", default: .activeAppOnly)
 }
 
 // MARK: Display Configurations
@@ -394,6 +434,41 @@ enum WindowPreviewSortOrder: String, CaseIterable, Defaults.Serializable, Identi
             true
         default:
             false
+        }
+    }
+}
+
+enum SwitcherInvocationMode: String, CaseIterable, Defaults.Serializable, Identifiable {
+    case allWindows
+    case activeAppOnly
+    case currentSpaceOnly
+    case activeAppCurrentSpace
+
+    var id: String { rawValue }
+
+    var localizedName: String {
+        switch self {
+        case .allWindows:
+            String(localized: "All Windows", comment: "Switcher invocation mode")
+        case .activeAppOnly:
+            String(localized: "Active App Only", comment: "Switcher invocation mode")
+        case .currentSpaceOnly:
+            String(localized: "Current Space Only", comment: "Switcher invocation mode")
+        case .activeAppCurrentSpace:
+            String(localized: "Active App + Current Space", comment: "Switcher invocation mode")
+        }
+    }
+
+    var localizedDescription: String {
+        switch self {
+        case .allWindows:
+            String(localized: "Uses your default window switcher settings", comment: "Switcher invocation mode description")
+        case .activeAppOnly:
+            String(localized: "Shows only windows from the frontmost application", comment: "Switcher invocation mode description")
+        case .currentSpaceOnly:
+            String(localized: "Shows only windows from the current Space", comment: "Switcher invocation mode description")
+        case .activeAppCurrentSpace:
+            String(localized: "Shows only windows from the frontmost app in the current Space", comment: "Switcher invocation mode description")
         }
     }
 }

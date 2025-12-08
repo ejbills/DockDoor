@@ -113,6 +113,8 @@ struct SettingsView: View {
                     .tag("General")
                 Label(String(localized: "Appearance", comment: "Settings Tab"), systemImage: "wand.and.stars.inverse")
                     .tag("Appearance")
+                Label(String(localized: "Gestures & Keybinds", comment: "Settings tab title"), systemImage: "hand.draw.fill")
+                    .tag("GesturesKeybinds")
                 Label(String(localized: "Filters", comment: "Filters tab title"), systemImage: "air.purifier")
                     .tag("Filters")
                 Label(String(localized: "Support", comment: "Settings tab title"), systemImage: "lifepreserver.fill")
@@ -127,6 +129,8 @@ struct SettingsView: View {
                     MainSettingsView()
                 case "Appearance":
                     AppearanceSettingsView()
+                case "GesturesKeybinds":
+                    GesturesAndKeybindsSettingsView()
                 case "Filters":
                     FiltersSettingsView()
                 case "Support":

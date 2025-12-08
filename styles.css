@@ -1743,18 +1743,6 @@ header {
     .promo-desc {
         font-size: 0.75rem;
     }
-    
-    .modal-header {
-        padding: 1.5rem 1.5rem 1rem;
-    }
-    
-    .modal-text {
-        margin: 0 1.5rem 1.5rem;
-    }
-    
-    .modal-actions {
-        padding: 0 1.5rem 1.5rem;
-    }
 }
 
 /* FAQ Section - Apple Style */
@@ -2065,22 +2053,19 @@ details[open] .faq-question i {
 }
 
 .modal-header {
-    padding: 2rem 2rem 1rem;
+    padding-top: 2rem   ;
 }
 
 .modal-title {
     font-size: 1.5rem;
     font-weight: 600;
     color: var(--text-primary);
-    margin: 0;
-    letter-spacing: -0.015em;
 }
 
 .modal-text {
     color: var(--text-secondary);
-    margin: 0 2rem 2rem;
-    line-height: 1.47;
-    font-size: 1.0625rem;
+    padding: 2rem;
+    text-wrap: balance;
 }
 
 .modal-close {
@@ -2154,6 +2139,7 @@ details[open] .faq-question i {
     z-index: 1000;
     overflow: hidden;
     max-width: calc(100vw - 60px);
+    border-radius: var(--radius);
 }
 
 .toast {
@@ -2185,44 +2171,29 @@ details[open] .faq-question i {
 
 .toast-title {
     font-weight: 600;
-    margin-bottom: 0.5rem;
     display: flex;
     align-items: center;
     gap: 0.5rem;
 }
 
-.toast-title svg {
-    color: var(--primary);
-}
-
 .toast-message {
     font-size: 0.9rem;
-    margin-bottom: 0.75rem;
+    padding-block: 0.75rem;
+    text-wrap: pretty;
 }
 
 .toast-actions {
     display: flex;
     gap: 0.5rem;
-    margin-top: 0.75rem;
 }
 
 .toast-btn {
+    width: 60%;
     font-size: 0.8rem;
-    padding: 0.4rem 0.75rem;
 }
 
-.toast-close {
-    background: none;
-    border: none;
-    color: var(--gray);
-    cursor: pointer;
-    font-size: 1.25rem;
-    padding: 0;
-    align-self: flex-start;
-}
-
-.toast-close:hover {
-    color: var(--dark);
+.not-now {
+    width: 40%;
 }
 
 /* Footer */
@@ -2579,7 +2550,7 @@ footer {
 
 /* Press Reviews Section */
 .press-section {
-    padding: 3rem 0;
+    padding-block: 4rem;
     width: 100%;
     overflow: hidden;
 }
@@ -2589,7 +2560,7 @@ footer {
     overflow-x: auto;
     overflow-y: hidden;
     position: relative;
-    margin-top: 3rem;
+    padding-top: 2rem;
     -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 10%, black 90%, transparent 100%);
     mask-image: linear-gradient(90deg, transparent 0%, black 10%, black 90%, transparent 100%);
     scrollbar-width: none;
@@ -2604,6 +2575,7 @@ footer {
 
 .press-carousel:active {
     cursor: grabbing;
+    user-select: none;
 }
 
 .press-track {
@@ -2612,17 +2584,19 @@ footer {
     will-change: transform;
     backface-visibility: hidden;
     transform: translateZ(0);
-    padding-right: 4rem;
+    padding-inline: 4rem;
 }
 
 .press-item {
-    flex: 0 0 auto;
     width: 520px;
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
     backface-visibility: hidden;
     transform: translateZ(0);
+    border: 1px solid var(--text-secondary);
+    border-radius: var(--radius);
+    padding: 2rem;
 }
 
 .press-quote {
@@ -2630,15 +2604,20 @@ footer {
     line-height: 1.4;
     color: var(--text-primary);
     font-weight: 600;
-    letter-spacing: -0.015em;
-    margin: 0;
+    text-wrap: balance;
 }
 
 .press-attribution {
-    font-size: 1rem;
     color: var(--text-secondary);
-    font-weight: 400;
-    margin: 0;
+}
+
+.press-icon {
+    width: 32px;
+    height: 32px;
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+    opacity: 0.4;
 }
 
 @media (max-width: 1068px) {
@@ -2656,26 +2635,12 @@ footer {
 }
 
 @media (max-width: 768px) {
-    .press-section {
-        padding: 2rem 0;
-    }
-
-    .press-carousel {
-        margin-top: 2rem;
-    }
-
-    .press-track {
-        gap: 3rem;
-        animation-duration: 35s;
-    }
-
     .press-item {
         width: 320px;
     }
 
     .press-quote {
         font-size: 1.125rem;
-        line-height: 1.4;
     }
 
     .press-attribution {

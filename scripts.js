@@ -190,6 +190,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const closeModal = () => {
         donationModal.classList.remove('active');
         document.body.style.overflow = '';
+
+        // Show donation toast after closing modal if no other toast is visible
+        if (!document.querySelector('.toast.show')) {
+            createToast();
+        }
     };
 
     donationLinks.forEach(link => {
@@ -231,20 +236,17 @@ document.addEventListener('DOMContentLoaded', function() {
         toast.innerHTML = `
             <div class="toast-content">
                 <div class="toast-title">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                        <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zM8 1.918l-.797.161A4.002 4.002 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4.002 4.002 0 0 0-3.203-3.92L8 1.917zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5.002 5.002 0 0 1 13 6c0 .88.32 4.2 1.22 6z"/>
-                    </svg>
+                    <img src="./resources/svg/toastBell.svg" alt="Bell icon">
                     Support DockDoor Development
                 </div>
                 <div class="toast-message">
                     DockDoor is free, but your support helps us continue development. Consider making a small donation to keep this project going.
                 </div>
                 <div class="toast-actions">
-                    <a href="https://www.buymeacoffee.com/keplercafe" class="btn btn-primary toast-btn" target="_blank">Donate</a>
-                    <button class="btn btn-outline toast-btn not-now">Not Now</button>
+                    <a href="donate.html" class="btn btn-primary toast-btn">Donate</a>
+                    <button class="btn btn-secondary toast-btn not-now">Not Now</button>
                 </div>
             </div>
-            <button class="toast-close">&times;</button>
         `;
         
         // Add to container
@@ -253,13 +255,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Show the toast after a small delay
         setTimeout(() => {
             toast.classList.add('show');
-        }, 300);
-        
-        // Handle close button click
-        const closeBtn = toast.querySelector('.toast-close');
-        closeBtn.addEventListener('click', () => {
-            hideToast(toast);
-        });
+        }, 100);
         
         // Handle "Not Now" button click
         const notNowBtn = toast.querySelector('.not-now');
@@ -285,8 +281,6 @@ document.addEventListener('DOMContentLoaded', function() {
     downloadButtons.forEach(button => {
         button.addEventListener('click', (e) => {
             // Don't prevent default - we want the download to happen
-            // Show the donation toast
-            createToast();
         });
     });
     
@@ -385,6 +379,37 @@ document.addEventListener('DOMContentLoaded', function() {
         setTimeout(() => {
             halfWidth = calculateHalfWidth();
         }, 100);
+
+        // Mouse drag to scroll functionality
+        let isDown = false;
+        let startX, startScrollLeft;
+
+        pressCarousel.addEventListener('mousedown', (e) => {
+            isDown = true;
+            isUserScrolling = true;
+            startX = e.pageX - pressCarousel.offsetLeft;
+            startScrollLeft = pressCarousel.scrollLeft;
+            pressCarousel.style.cursor = 'grabbing';
+        });
+
+        const stopDragging = () => {
+            isDown = false;
+            pressCarousel.style.cursor = 'grab';
+        };
+
+        pressCarousel.addEventListener('mouseup', stopDragging);
+        pressCarousel.addEventListener('mouseleave', stopDragging);
+
+        pressCarousel.addEventListener('mousemove', (e) => {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - pressCarousel.offsetLeft;
+            const walk = (x - startX) * 2;
+            
+            pressCarousel.scrollLeft = startScrollLeft - walk;
+            
+            scrollPosition = pressCarousel.scrollLeft; 
+        });
 
         const animate = () => {
             if (!isUserScrolling && halfWidth > 0) {
