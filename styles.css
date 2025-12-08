@@ -1743,18 +1743,6 @@ header {
     .promo-desc {
         font-size: 0.75rem;
     }
-    
-    .modal-header {
-        padding: 1.5rem 1.5rem 1rem;
-    }
-    
-    .modal-text {
-        margin: 0 1.5rem 1.5rem;
-    }
-    
-    .modal-actions {
-        padding: 0 1.5rem 1.5rem;
-    }
 }
 
 /* FAQ Section - Apple Style */
@@ -2065,22 +2053,19 @@ details[open] .faq-question i {
 }
 
 .modal-header {
-    padding: 2rem 2rem 1rem;
+    padding-top: 2rem   ;
 }
 
 .modal-title {
     font-size: 1.5rem;
     font-weight: 600;
     color: var(--text-primary);
-    margin: 0;
-    letter-spacing: -0.015em;
 }
 
 .modal-text {
     color: var(--text-secondary);
-    margin: 0 2rem 2rem;
-    line-height: 1.47;
-    font-size: 1.0625rem;
+    padding: 2rem;
+    text-wrap: balance;
 }
 
 .modal-close {
@@ -2154,6 +2139,7 @@ details[open] .faq-question i {
     z-index: 1000;
     overflow: hidden;
     max-width: calc(100vw - 60px);
+    border-radius: var(--radius);
 }
 
 .toast {
@@ -2185,44 +2171,29 @@ details[open] .faq-question i {
 
 .toast-title {
     font-weight: 600;
-    margin-bottom: 0.5rem;
     display: flex;
     align-items: center;
     gap: 0.5rem;
 }
 
-.toast-title svg {
-    color: var(--primary);
-}
-
 .toast-message {
     font-size: 0.9rem;
-    margin-bottom: 0.75rem;
+    padding-block: 0.75rem;
+    text-wrap: pretty;
 }
 
 .toast-actions {
     display: flex;
     gap: 0.5rem;
-    margin-top: 0.75rem;
 }
 
 .toast-btn {
+    width: 60%;
     font-size: 0.8rem;
-    padding: 0.4rem 0.75rem;
 }
 
-.toast-close {
-    background: none;
-    border: none;
-    color: var(--gray);
-    cursor: pointer;
-    font-size: 1.25rem;
-    padding: 0;
-    align-self: flex-start;
-}
-
-.toast-close:hover {
-    color: var(--dark);
+.not-now {
+    width: 40%;
 }
 
 /* Footer */
