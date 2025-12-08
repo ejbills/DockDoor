@@ -68,6 +68,7 @@ extension Defaults.Keys {
     static let scrollToMouseHoverInSwitcher = Key<Bool>("scrollToMouseHoverInSwitcher", default: false)
     static let keepPreviewOnAppTerminate = Key<Bool>("keepPreviewOnAppTerminate", default: false)
     static let enableWindowSwitcherSearch = Key<Bool>("enableWindowSwitcherSearch", default: false)
+    static let searchFuzziness = Key<Int>("searchFuzziness", default: 1)
     static let useClassicWindowOrdering = Key<Bool>("useClassicWindowOrdering", default: true)
     static let includeHiddenWindowsInSwitcher = Key<Bool>("includeHiddenWindowsInSwitcher", default: true)
     static let ignoreAppsWithSingleWindow = Key<Bool>("ignoreAppsWithSingleWindow", default: false)

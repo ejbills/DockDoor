@@ -738,16 +738,7 @@ struct WindowPreviewHoverContainer: View {
     }
 
     private func filteredWindowIndices() -> [Int] {
-        let query = previewStateCoordinator.searchQuery.lowercased()
-        guard previewStateCoordinator.windowSwitcherActive, !query.isEmpty else {
-            return Array(previewStateCoordinator.windows.indices)
-        }
-
-        return previewStateCoordinator.windows.enumerated().compactMap { idx, win in
-            let appName = win.app.localizedName?.lowercased() ?? ""
-            let windowTitle = (win.windowName ?? "").lowercased()
-            return (appName.contains(query) || windowTitle.contains(query)) ? idx : nil
-        }
+        previewStateCoordinator.filteredWindowIndices()
     }
 
     private func createFlowItems() -> [FlowItem] {

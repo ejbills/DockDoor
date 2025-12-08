@@ -35,12 +35,24 @@ private class WindowSwitchingCoordinator {
         defer { isProcessingSwitcher = false }
 
         if stateManager.isActive {
-            if isShiftPressed {
-                stateManager.cycleBackward()
+            // Use filter-aware navigation when search is active
+            let coordinator = previewCoordinator.windowSwitcherCoordinator
+            if coordinator.hasActiveSearch {
+                if isShiftPressed {
+                    coordinator.cycleBackwardFiltered()
+                } else {
+                    coordinator.cycleForwardFiltered()
+                }
+                // Sync the stateManager index with the coordinator's filtered index
+                stateManager.setIndex(coordinator.currIndex)
             } else {
-                stateManager.cycleForward()
+                if isShiftPressed {
+                    stateManager.cycleBackward()
+                } else {
+                    stateManager.cycleForward()
+                }
+                coordinator.setIndex(to: stateManager.currentIndex)
             }
-            previewCoordinator.windowSwitcherCoordinator.setIndex(to: stateManager.currentIndex)
         } else if isModifierPressed {
             await initializeWindowSwitching(
                 previewCoordinator: previewCoordinator
