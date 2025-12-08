@@ -171,6 +171,11 @@ extension Defaults.Keys {
 
     static let cmdShortcut3Key = Key<UInt16>("cmdShortcut3Key", default: UInt16(kVK_ANSI_Q))
     static let cmdShortcut3Action = Key<WindowAction>("cmdShortcut3Action", default: .quit)
+
+    // MARK: - Alternate Window Switcher Keybind (shares modifier with primary keybind)
+
+    static let alternateKeybindKey = Key<UInt16>("alternateKeybindKey", default: 0)
+    static let alternateKeybindMode = Key<SwitcherInvocationMode>("alternateKeybindMode", default: .activeAppOnly)
 }
 
 // MARK: Display Configurations
@@ -424,6 +429,41 @@ enum WindowPreviewSortOrder: String, CaseIterable, Defaults.Serializable, Identi
             true
         default:
             false
+        }
+    }
+}
+
+enum SwitcherInvocationMode: String, CaseIterable, Defaults.Serializable, Identifiable {
+    case allWindows
+    case activeAppOnly
+    case currentSpaceOnly
+    case activeAppCurrentSpace
+
+    var id: String { rawValue }
+
+    var localizedName: String {
+        switch self {
+        case .allWindows:
+            String(localized: "All Windows", comment: "Switcher invocation mode")
+        case .activeAppOnly:
+            String(localized: "Active App Only", comment: "Switcher invocation mode")
+        case .currentSpaceOnly:
+            String(localized: "Current Space Only", comment: "Switcher invocation mode")
+        case .activeAppCurrentSpace:
+            String(localized: "Active App + Current Space", comment: "Switcher invocation mode")
+        }
+    }
+
+    var localizedDescription: String {
+        switch self {
+        case .allWindows:
+            String(localized: "Uses your default window switcher settings", comment: "Switcher invocation mode description")
+        case .activeAppOnly:
+            String(localized: "Shows only windows from the frontmost application", comment: "Switcher invocation mode description")
+        case .currentSpaceOnly:
+            String(localized: "Shows only windows from the current Space", comment: "Switcher invocation mode description")
+        case .activeAppCurrentSpace:
+            String(localized: "Shows only windows from the frontmost app in the current Space", comment: "Switcher invocation mode description")
         }
     }
 }

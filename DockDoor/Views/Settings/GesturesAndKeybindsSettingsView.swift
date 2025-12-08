@@ -36,10 +36,16 @@ struct GesturesAndKeybindsSettingsView: View {
     @Default(.cmdShortcut3Key) var cmdShortcut3Key
     @Default(.cmdShortcut3Action) var cmdShortcut3Action
 
+    // MARK: - Alternate Window Switcher Keybind (shares modifier with primary)
+
+    @Default(.alternateKeybindKey) var alternateKeybindKey
+    @Default(.alternateKeybindMode) var alternateKeybindMode
+
     @StateObject private var keybindModel = KeybindModel()
     @State private var showingAddBlacklistAppSheet = false
     @State private var newBlacklistApp = ""
     @State private var capturingShortcutSlot: Int? = nil
+    @State private var capturingAlternateKey = false
     @State private var keyMonitor: Any? = nil
 
     var body: some View {
@@ -370,7 +376,7 @@ struct GesturesAndKeybindsSettingsView: View {
     // MARK: - Window Switcher Keybind Section
 
     private var windowSwitcherKeybindSection: some View {
-        StyledGroupBox(label: "Window Switcher Shortcut") {
+        StyledGroupBox(label: "Window Switcher Shortcuts") {
             VStack(alignment: .leading, spacing: 12) {
                 if !enableWindowSwitcher {
                     HStack {
@@ -391,6 +397,12 @@ struct GesturesAndKeybindsSettingsView: View {
 
                 Divider()
 
+                alternateShortcutsSection
+                    .disabled(!enableWindowSwitcher)
+                    .opacity(enableWindowSwitcher ? 1.0 : 0.5)
+
+                Divider()
+
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Fullscreen App Blacklist").font(.headline)
                     Text("Apps in this list will not respond to window switcher shortcuts when in fullscreen mode.")
@@ -400,6 +412,90 @@ struct GesturesAndKeybindsSettingsView: View {
                     fullscreenAppBlacklistView
                 }
             }
+        }
+    }
+
+    private var alternateShortcutsSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Alternate Shortcut").font(.headline)
+            Text("An additional trigger key using the same modifier, invoking the switcher with a different filter mode.")
+                .font(.caption)
+                .foregroundColor(.secondary)
+
+            HStack(spacing: 12) {
+                // Modifier display (from primary keybind)
+                Text(modifierConverter.toString(keybindModel.modifierKey))
+                    .font(.system(size: 12, weight: .medium, design: .monospaced))
+                    .foregroundColor(.secondary)
+                Text("+")
+                    .font(.system(size: 12))
+                    .foregroundColor(.secondary)
+
+                // Key capture
+                if capturingAlternateKey {
+                    Text("Press a key…")
+                        .font(.system(size: 12))
+                        .foregroundColor(.accentColor)
+                        .frame(minWidth: 50)
+                } else {
+                    Button(action: {
+                        startAlternateKeyCapture()
+                    }) {
+                        Text(alternateKeybindKey == 0 ? "Not set" : KeyboardLabel.localizedKey(for: alternateKeybindKey))
+                            .font(.system(size: 14, weight: .medium, design: .monospaced))
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 4)
+                            .background(alternateKeybindKey == 0 ? Color.secondary.opacity(0.1) : Color.secondary.opacity(0.2))
+                            .cornerRadius(4)
+                    }
+                    .buttonStyle(.plain)
+                }
+
+                if alternateKeybindKey != 0 {
+                    Button("Clear") {
+                        alternateKeybindKey = 0
+                    }
+                    .buttonStyle(.bordered)
+                    .controlSize(.small)
+                }
+
+                Spacer()
+
+                Picker("Mode", selection: $alternateKeybindMode) {
+                    ForEach(SwitcherInvocationMode.allCases) { mode in
+                        Text(mode.localizedName).tag(mode)
+                    }
+                }
+                .pickerStyle(.menu)
+                .labelsHidden()
+                .frame(maxWidth: 200)
+            }
+        }
+    }
+
+    private func startAlternateKeyCapture() {
+        // Remove any existing monitor
+        if let monitor = keyMonitor {
+            NSEvent.removeMonitor(monitor)
+        }
+
+        capturingAlternateKey = true
+
+        keyMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [self] event in
+            defer {
+                capturingAlternateKey = false
+                if let monitor = keyMonitor {
+                    NSEvent.removeMonitor(monitor)
+                    keyMonitor = nil
+                }
+            }
+
+            // Escape cancels
+            if event.keyCode == 53 { return nil }
+
+            // Update the binding directly
+            alternateKeybindKey = event.keyCode
+            return nil
         }
     }
 

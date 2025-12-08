@@ -28,7 +28,8 @@ private class WindowSwitchingCoordinator {
     func handleWindowSwitching(
         previewCoordinator: SharedPreviewWindowCoordinator,
         isModifierPressed: Bool,
-        isShiftPressed: Bool
+        isShiftPressed: Bool,
+        mode: SwitcherInvocationMode = .allWindows
     ) async {
         guard !isProcessingSwitcher else { return }
         isProcessingSwitcher = true
@@ -43,19 +44,41 @@ private class WindowSwitchingCoordinator {
             previewCoordinator.windowSwitcherCoordinator.setIndex(to: stateManager.currentIndex)
         } else if isModifierPressed {
             await initializeWindowSwitching(
-                previewCoordinator: previewCoordinator
+                previewCoordinator: previewCoordinator,
+                mode: mode
             )
         }
     }
 
     @MainActor
     private func initializeWindowSwitching(
-        previewCoordinator: SharedPreviewWindowCoordinator
+        previewCoordinator: SharedPreviewWindowCoordinator,
+        mode: SwitcherInvocationMode = .allWindows
     ) async {
         var windows = WindowUtil.getAllWindowsOfAllApps()
-        if Defaults[.showWindowsFromCurrentSpaceOnlyInSwitcher] {
+
+        // Apply space filter based on mode or default setting
+        let filterBySpace = (mode == .currentSpaceOnly || mode == .activeAppCurrentSpace)
+            || (mode == .allWindows && Defaults[.showWindowsFromCurrentSpaceOnlyInSwitcher])
+        if filterBySpace {
             windows = await WindowUtil.filterWindowsByCurrentSpace(windows)
         }
+
+        // Apply active app filter based on mode or default setting
+        let filterByApp = (mode == .activeAppOnly || mode == .activeAppCurrentSpace)
+            || (mode == .allWindows && Defaults[.limitSwitcherToFrontmostApp])
+        if filterByApp {
+            windows = WindowUtil.getWindowsForFrontmostApp(from: windows)
+        }
+
+        // Apply hidden windows filter (always respect the global setting)
+        if !Defaults[.includeHiddenWindowsInSwitcher] {
+            windows = windows.filter { !$0.isHidden && !$0.isMinimized }
+        }
+
+        // Sort windows
+        windows = WindowUtil.sortWindowsForSwitcher(windows)
+
         guard !windows.isEmpty else { return }
 
         currentSessionId = UUID()
@@ -181,6 +204,9 @@ class KeybindHelper {
     private var hasProcessedModifierRelease: Bool = false
     private var preventSwitcherHideOnRelease: Bool = false
 
+    // Track the invocation mode for alternate keybinds
+    private var currentInvocationMode: SwitcherInvocationMode = .allWindows
+
     // Track Command key state to detect key-up fallback for lingering previews
     private var isCommandKeyCurrentlyDown: Bool = false
     private var lastCmdTabObservedActive: Bool = false
@@ -213,6 +239,7 @@ class KeybindHelper {
         isSwitcherModifierKeyPressed = false
         isShiftKeyPressedGeneral = false
         preventSwitcherHideOnRelease = false
+        currentInvocationMode = .allWindows
     }
 
     private func startMonitoring() {
@@ -472,7 +499,8 @@ class KeybindHelper {
                 await self.windowSwitchingCoordinator.handleWindowSwitching(
                     previewCoordinator: self.previewCoordinator,
                     isModifierPressed: currentSwitcherModifierIsPressed,
-                    isShiftPressed: true
+                    isShiftPressed: true,
+                    mode: self.currentInvocationMode
                 )
             }
         }
@@ -536,7 +564,17 @@ class KeybindHelper {
 
         if isExactSwitcherShortcutPressed {
             guard Defaults[.enableWindowSwitcher] else { return (false, nil) }
-            return (true, { await self.handleKeybindActivation() })
+            return (true, { await self.handleKeybindActivation(mode: .allWindows) })
+        }
+
+        // Check alternate keybind (shares same modifier as primary keybind)
+        if isDesiredModifierPressedNow {
+            let alternateKey = Defaults[.alternateKeybindKey]
+            if alternateKey != 0, keyCode == alternateKey {
+                guard Defaults[.enableWindowSwitcher] else { return (false, nil) }
+                let mode = Defaults[.alternateKeybindMode]
+                return (true, { await self.handleKeybindActivation(mode: mode) })
+            }
         }
 
         if previewIsCurrentlyVisible {
@@ -548,7 +586,8 @@ class KeybindHelper {
                             await self.windowSwitchingCoordinator.handleWindowSwitching(
                                 previewCoordinator: self.previewCoordinator,
                                 isModifierPressed: self.isSwitcherModifierKeyPressed,
-                                isShiftPressed: false
+                                isShiftPressed: false,
+                                mode: self.currentInvocationMode
                             )
                         }
                     } else {
@@ -670,14 +709,16 @@ class KeybindHelper {
     }
 
     @MainActor
-    private func handleKeybindActivation() {
+    private func handleKeybindActivation(mode: SwitcherInvocationMode = .allWindows) {
         guard Defaults[.enableWindowSwitcher] else { return }
         hasProcessedModifierRelease = false
+        currentInvocationMode = mode
         Task { @MainActor in
             await windowSwitchingCoordinator.handleWindowSwitching(
                 previewCoordinator: previewCoordinator,
                 isModifierPressed: self.isSwitcherModifierKeyPressed,
-                isShiftPressed: self.isShiftKeyPressedGeneral
+                isShiftPressed: self.isShiftKeyPressedGeneral,
+                mode: mode
             )
         }
     }

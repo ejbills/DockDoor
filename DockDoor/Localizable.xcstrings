@@ -5555,8 +5555,14 @@
     "Action performed when middle-clicking on a window preview." : {
 
     },
+    "Active App + Current Space" : {
+      "comment" : "Switcher invocation mode"
+    },
     "Active App Indicator" : {
 
+    },
+    "Active App Only" : {
+      "comment" : "Switcher invocation mode"
     },
     "Add" : {
       "localizations" : {
@@ -7841,6 +7847,9 @@
         }
       }
     },
+    "All Windows" : {
+      "comment" : "Switcher invocation mode"
+    },
     "Allow dynamic image sizing" : {
       "localizations" : {
         "af" : {
@@ -8413,6 +8422,9 @@
     },
     "Alphabetical by title" : {
       "comment" : "Window preview sort order option"
+    },
+    "Alternate Shortcut" : {
+
     },
     "Always" : {
       "comment" : "Preview window title condition option",
@@ -9177,6 +9189,9 @@
           }
         }
       }
+    },
+    "An additional trigger key using the same modifier, invoking the switcher with a different filter mode." : {
+
     },
     "Animation speed" : {
       "localizations" : {
@@ -16421,6 +16436,9 @@
     "Choose where the window switcher appears on screen." : {
 
     },
+    "Clear" : {
+
+    },
     "Clear Logs" : {
       "localizations" : {
         "af" : {
@@ -21951,6 +21969,9 @@
           }
         }
       }
+    },
+    "Current Space Only" : {
+      "comment" : "Switcher invocation mode"
     },
     "Current Version" : {
       "localizations" : {
@@ -49862,6 +49883,9 @@
           }
         }
       }
+    },
+    "Mode" : {
+
     },
     "Mouse Actions" : {
 
@@ -78650,6 +78674,15 @@
         }
       }
     },
+    "Shows only windows from the current Space" : {
+      "comment" : "Switcher invocation mode description"
+    },
+    "Shows only windows from the frontmost app in the current Space" : {
+      "comment" : "Switcher invocation mode description"
+    },
+    "Shows only windows from the frontmost application" : {
+      "comment" : "Switcher invocation mode description"
+    },
     "Simulate a click" : {
       "comment" : "Window popup hover action option",
       "extractionState" : "stale",
@@ -91245,6 +91278,9 @@
         }
       }
     },
+    "Uses your default window switcher settings" : {
+      "comment" : "Switcher invocation mode description"
+    },
     "Version %@" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -99644,6 +99680,7 @@
       }
     },
     "Window Switcher Shortcut" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -99832,6 +99869,9 @@
           }
         }
       }
+    },
+    "Window Switcher Shortcuts" : {
+
     },
     "Window title filters" : {
       "extractionState" : "stale",

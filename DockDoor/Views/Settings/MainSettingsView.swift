@@ -863,6 +863,10 @@ struct MainSettingsView: View {
                 Defaults[.cmdShortcut3Key] = Defaults.Keys.cmdShortcut3Key.defaultValue
                 Defaults[.cmdShortcut3Action] = Defaults.Keys.cmdShortcut3Action.defaultValue
 
+                // Reset alternate keybind
+                Defaults[.alternateKeybindKey] = Defaults.Keys.alternateKeybindKey.defaultValue
+                Defaults[.alternateKeybindMode] = Defaults.Keys.alternateKeybindMode.defaultValue
+
                 showSpecialAppControls = Defaults.Keys.showSpecialAppControls.defaultValue
                 showBigControlsWhenNoValidWindows = Defaults.Keys.showBigControlsWhenNoValidWindows.defaultValue
                 groupAppInstancesInDock = Defaults.Keys.groupAppInstancesInDock.defaultValue
