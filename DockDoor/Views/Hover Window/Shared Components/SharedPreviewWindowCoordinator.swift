@@ -573,17 +573,24 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         let coordinator = windowSwitcherCoordinator
         guard !coordinator.windows.isEmpty else { return }
 
-        // Handle filtered navigation when search is active
         if coordinator.windowSwitcherActive, coordinator.hasActiveSearch {
-            switch direction {
-            case .left:
-                coordinator.cycleBackwardFiltered()
-            case .right:
-                coordinator.cycleForwardFiltered()
-            case .up, .down:
-                // Up/Down navigation not supported during search in grid view
+            let filteredIndices = coordinator.filteredWindowIndices()
+            guard !filteredIndices.isEmpty else { return }
+
+            guard let currentFilteredPos = filteredIndices.firstIndex(of: coordinator.currIndex) else {
+                coordinator.setIndex(to: filteredIndices.first ?? 0)
                 return
             }
+
+            let newFilteredPos = WindowPreviewHoverContainer.navigateWindowSwitcher(
+                from: currentFilteredPos,
+                direction: direction,
+                totalItems: filteredIndices.count,
+                dockPosition: .bottom,
+                isWindowSwitcherActive: true
+            )
+
+            coordinator.setIndex(to: filteredIndices[newFilteredPos])
             return
         }
 

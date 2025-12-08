@@ -35,24 +35,12 @@ private class WindowSwitchingCoordinator {
         defer { isProcessingSwitcher = false }
 
         if stateManager.isActive {
-            // Use filter-aware navigation when search is active
-            let coordinator = previewCoordinator.windowSwitcherCoordinator
-            if coordinator.hasActiveSearch {
-                if isShiftPressed {
-                    coordinator.cycleBackwardFiltered()
-                } else {
-                    coordinator.cycleForwardFiltered()
-                }
-                // Sync the stateManager index with the coordinator's filtered index
-                stateManager.setIndex(coordinator.currIndex)
+            if isShiftPressed {
+                stateManager.cycleBackward()
             } else {
-                if isShiftPressed {
-                    stateManager.cycleBackward()
-                } else {
-                    stateManager.cycleForward()
-                }
-                coordinator.setIndex(to: stateManager.currentIndex)
+                stateManager.cycleForward()
             }
+            previewCoordinator.windowSwitcherCoordinator.setIndex(to: stateManager.currentIndex)
         } else if isModifierPressed {
             await initializeWindowSwitching(
                 previewCoordinator: previewCoordinator
@@ -575,8 +563,7 @@ class KeybindHelper {
             if keyCode == kVK_Tab {
                 return (true, { @MainActor in
                     if self.previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive {
-                        let hasActiveSearch = self.previewCoordinator.windowSwitcherCoordinator.hasActiveSearch
-                        if !hasActiveSearch {
+                        if !self.previewCoordinator.windowSwitcherCoordinator.hasActiveSearch {
                             await self.windowSwitchingCoordinator.handleWindowSwitching(
                                 previewCoordinator: self.previewCoordinator,
                                 isModifierPressed: self.isSwitcherModifierKeyPressed,
@@ -634,6 +621,8 @@ class KeybindHelper {
                     if !query.isEmpty {
                         query.removeLast()
                         self.previewCoordinator.windowSwitcherCoordinator.searchQuery = query
+                        let windows = self.previewCoordinator.windowSwitcherCoordinator.windows
+                        self.windowSwitchingCoordinator.stateManager.setSearchQuery(query, windows: windows)
                         SharedPreviewWindowCoordinator.activeInstance?.updateSearchWindow(with: query)
 
                         if query.isEmpty {
@@ -656,6 +645,8 @@ class KeybindHelper {
                     return (true, { @MainActor in
                         self.previewCoordinator.windowSwitcherCoordinator.searchQuery.append(contentsOf: filteredChars)
                         let newQuery = self.previewCoordinator.windowSwitcherCoordinator.searchQuery
+                        let windows = self.previewCoordinator.windowSwitcherCoordinator.windows
+                        self.windowSwitchingCoordinator.stateManager.setSearchQuery(newQuery, windows: windows)
                         SharedPreviewWindowCoordinator.activeInstance?.updateSearchWindow(with: newQuery)
 
                         if !newQuery.isEmpty {
