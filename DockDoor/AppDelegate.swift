@@ -11,9 +11,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var keybindHelper: KeybindHelper?
     private var statusBarItem: NSStatusItem?
     private var updaterController: SPUStandardUpdaterController
-    @ObservedObject public var updaterState: UpdaterState
+    @ObservedObject var updaterState: UpdaterState
 
-    public var updater: SPUUpdater {
+    var updater: SPUUpdater {
         updaterController.updater
     }
 

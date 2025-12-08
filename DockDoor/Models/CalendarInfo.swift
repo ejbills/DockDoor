@@ -2,7 +2,7 @@ import EventKit
 import Foundation
 
 extension DailyCalendarInfo.Event: Identifiable {
-    public var id: String { title + startDate.timeIntervalSince1970.description + (location ?? "") }
+    var id: String { title + startDate.timeIntervalSince1970.description + (location ?? "") }
 }
 
 class DailyCalendarInfo: ObservableObject {

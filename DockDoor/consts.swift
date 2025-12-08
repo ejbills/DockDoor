@@ -32,6 +32,10 @@ extension Defaults.Keys {
     static let windowPreviewImageScale = Key<CGFloat>("windowPreviewImageScale", default: 1)
     static let windowImageCaptureQuality = Key<WindowImageCaptureQuality>("windowImageCaptureQuality", default: .nominal)
 
+    static let enableLivePreview = Key<Bool>("enableLivePreview", default: false)
+    static let livePreviewQuality = Key<LivePreviewQuality>("livePreviewQuality", default: .retina)
+    static let livePreviewFrameRate = Key<LivePreviewFrameRate>("livePreviewFrameRate", default: .fps30)
+
     static let uniformCardRadius = Key<Bool>("uniformCardRadius", default: true)
     static let allowDynamicImageSizing = Key<Bool>("allowDynamicImageSizing", default: false)
     static let tapEquivalentInterval = Key<CGFloat>("tapEquivalentInterval", default: 1.5)
@@ -376,6 +380,67 @@ enum WindowPreviewSortOrder: String, CaseIterable, Defaults.Serializable, Identi
             true
         default:
             false
+        }
+    }
+}
+
+enum LivePreviewQuality: String, CaseIterable, Defaults.Serializable, Identifiable {
+    case standard
+    case high
+    case retina
+
+    var id: String { rawValue }
+
+    var scaleFactor: Int {
+        switch self {
+        case .standard: 1
+        case .high: 1
+        case .retina: 2
+        }
+    }
+
+    var useFullResolution: Bool {
+        switch self {
+        case .standard: false
+        case .high, .retina: true
+        }
+    }
+
+    var localizedName: String {
+        switch self {
+        case .standard:
+            String(localized: "Standard")
+        case .high:
+            String(localized: "High")
+        case .retina:
+            String(localized: "Retina (Best)")
+        }
+    }
+}
+
+enum LivePreviewFrameRate: String, CaseIterable, Defaults.Serializable, Identifiable {
+    case fps30
+    case fps60
+    case fps120
+
+    var id: String { rawValue }
+
+    var frameRate: Int32 {
+        switch self {
+        case .fps30: 30
+        case .fps60: 60
+        case .fps120: 120
+        }
+    }
+
+    var localizedName: String {
+        switch self {
+        case .fps30:
+            String(localized: "30 FPS")
+        case .fps60:
+            String(localized: "60 FPS")
+        case .fps120:
+            String(localized: "120 FPS (ProMotion)")
         }
     }
 }
