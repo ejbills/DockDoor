@@ -88,6 +88,7 @@ extension Defaults.Keys {
     static let hoverHighlightColor = Key<Color?>("hoverHighlightColor", default: nil)
     static let dockPreviewBackgroundOpacity = Key<CGFloat>("dockPreviewBackgroundOpacity", default: 1.0)
     static let hidePreviewCardBackground = Key<Bool>("hidePreviewCardBackground", default: false)
+    static let showActiveWindowBorder = Key<Bool>("showActiveWindowBorder", default: false)
 
     static let showWindowTitle = Key<Bool>("showWindowTitle", default: true)
     static let showAppIconOnly = Key<Bool>("showAppIconOnly", default: false)
@@ -127,6 +128,16 @@ extension Defaults.Keys {
 
     // Debug
     static let debugMode = Key<Bool>("debugMode", default: false)
+
+    // Active App Indicator
+    static let showActiveAppIndicator = Key<Bool>("showActiveAppIndicator", default: false)
+    static let activeAppIndicatorColor = Key<Color>("activeAppIndicatorColor", default: Color.accentColor)
+    static let activeAppIndicatorAutoSize = Key<Bool>("activeAppIndicatorAutoSize", default: true)
+    static let activeAppIndicatorAutoLength = Key<Bool>("activeAppIndicatorAutoLength", default: false)
+    static let activeAppIndicatorHeight = Key<CGFloat>("activeAppIndicatorHeight", default: 4.0)
+    static let activeAppIndicatorOffset = Key<CGFloat>("activeAppIndicatorOffset", default: 5.0)
+    static let activeAppIndicatorLength = Key<CGFloat>("activeAppIndicatorLength", default: 40.0)
+    static let activeAppIndicatorShift = Key<CGFloat>("activeAppIndicatorShift", default: 0.0)
 }
 
 // MARK: Display Configurations

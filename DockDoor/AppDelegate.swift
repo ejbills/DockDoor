@@ -9,6 +9,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var windowSeeder: WindowSeeder?
     private var previewCoordinator: SharedPreviewWindowCoordinator?
     private var keybindHelper: KeybindHelper?
+    private var activeAppIndicator: ActiveAppIndicatorCoordinator?
     private var statusBarItem: NSStatusItem?
     private var updaterController: SPUStandardUpdaterController
     @ObservedObject var updaterState: UpdaterState
@@ -57,6 +58,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             if Defaults[.enableWindowSwitcher] || Defaults[.enableCmdTabEnhancements] {
                 keybindHelper = KeybindHelper(previewCoordinator: currentPreviewCoordinator)
             }
+
+            if Defaults[.showActiveAppIndicator] {
+                activeAppIndicator = ActiveAppIndicatorCoordinator()
+            }
+
             if updater.automaticallyChecksForUpdates {
                 print("AppDelegate: Automatic updates enabled, checking in background.")
                 updater.checkForUpdatesInBackground()
