@@ -573,7 +573,33 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         let coordinator = windowSwitcherCoordinator
         guard !coordinator.windows.isEmpty else { return }
 
-        // Handle filtered navigation for left/right arrows when search is active
+        let isListViewMode = coordinator.windowSwitcherActive && Defaults[.windowSwitcherShowListView]
+
+        // Handle list view navigation (up/down only, with filtering support)
+        if isListViewMode {
+            let isFiltered = coordinator.hasActiveSearch
+            switch direction {
+            case .up, .left:
+                if isFiltered {
+                    coordinator.cycleBackwardFiltered()
+                } else {
+                    let windowsCount = coordinator.windows.count
+                    let newIndex = coordinator.currIndex <= 0 ? windowsCount - 1 : coordinator.currIndex - 1
+                    coordinator.setIndex(to: newIndex)
+                }
+            case .down, .right:
+                if isFiltered {
+                    coordinator.cycleForwardFiltered()
+                } else {
+                    let windowsCount = coordinator.windows.count
+                    let newIndex = (coordinator.currIndex + 1) % windowsCount
+                    coordinator.setIndex(to: newIndex)
+                }
+            }
+            return
+        }
+
+        // Handle filtered navigation for left/right arrows when search is active (grid view)
         if coordinator.windowSwitcherActive, coordinator.hasActiveSearch {
             switch direction {
             case .left:
@@ -581,7 +607,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
             case .right:
                 coordinator.cycleForwardFiltered()
             case .up, .down:
-                // Up/Down navigation not supported during search
+                // Up/Down navigation not supported during search in grid view
                 return
             }
             return

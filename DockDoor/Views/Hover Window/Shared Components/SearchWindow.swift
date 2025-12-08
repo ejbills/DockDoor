@@ -1,4 +1,5 @@
 import AppKit
+import Defaults
 import SwiftUI
 
 struct SearchFieldView: View {
@@ -93,9 +94,11 @@ class SearchWindow: NSPanel, NSTextFieldDelegate {
             return
         }
 
+        let verticalGap: CGFloat = Defaults[.windowSwitcherShowListView] ? -20 : 20
+
         var searchFrame = NSRect(
             x: frame.midX - 150,
-            y: frame.maxY + 20,
+            y: frame.maxY + verticalGap,
             width: 300,
             height: 40
         )

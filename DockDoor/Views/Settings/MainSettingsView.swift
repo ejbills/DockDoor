@@ -85,6 +85,9 @@ struct MainSettingsView: View {
     @Default(.enableWindowSwitcher) var enableWindowSwitcher
     @Default(.enableWindowSwitcherSearch) var enableWindowSwitcherSearch
     @Default(.searchFuzziness) var searchFuzziness
+    @Default(.windowSwitcherShowListView) var showListView
+    @Default(.listViewShowAppName) var listViewShowAppName
+    @Default(.windowSwitcherListFontSize) var listFontSize
     @Default(.enableDockPreviews) var enableDockPreviews
     @Default(.showWindowsFromCurrentSpaceOnly) var showWindowsFromCurrentSpaceOnly
     @Default(.windowPreviewSortOrder) var windowPreviewSortOrder
@@ -467,6 +470,31 @@ struct MainSettingsView: View {
                                     .foregroundColor(.secondary)
                                     .padding(.leading, 20)
                             }
+
+                            Toggle(isOn: $showListView) { Text("Show Windows List instead of previews") }
+                            Text("Display windows as a compact list with app icon and window name instead of window previews.")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                                .padding(.leading, 20)
+
+                            if showListView {
+                                Toggle(isOn: $listViewShowAppName) { Text("Show app name") }
+                                    .padding(.leading, 20)
+                                Text("When disabled, only shows the window title.")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                                    .padding(.leading, 40)
+
+                                HStack {
+                                    Text("List Font Size")
+                                    Slider(value: $listFontSize, in: 10 ... 20, step: 1)
+                                    Text("\(Int(listFontSize))pt")
+                                        .frame(width: 35, alignment: .trailing)
+                                        .monospacedDigit()
+                                }
+                                .padding(.leading, 20)
+                            }
+
                             Toggle(isOn: Binding(
                                 get: { !preventSwitcherHide },
                                 set: { preventSwitcherHide = !$0 }
