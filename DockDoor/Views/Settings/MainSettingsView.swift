@@ -122,6 +122,9 @@ struct MainSettingsView: View {
     @Default(.windowProcessingDebounceInterval) var windowProcessingDebounceInterval
     @Default(.windowPreviewImageScale) var windowPreviewImageScale
     @Default(.windowImageCaptureQuality) var windowImageCaptureQuality
+    @Default(.enableLivePreview) var enableLivePreview
+    @Default(.livePreviewQuality) var livePreviewQuality
+    @Default(.livePreviewFrameRate) var livePreviewFrameRate
     @Default(.bufferFromDock) var bufferFromDock
     @Default(.shouldHideOnDockItemClick) var shouldHideOnDockItemClick
     @Default(.dockClickAction) var dockClickAction
@@ -646,6 +649,37 @@ struct MainSettingsView: View {
 
                     sliderSetting(title: "Window Image Cache Lifespan", value: $screenCaptureCacheLifespan, range: 0 ... 60, step: 10, unit: "seconds")
                     sliderSetting(title: "Window Image Resolution Scale (1=Best)", value: $windowPreviewImageScale, range: 1 ... 4, step: 1, unit: "")
+
+                    Divider()
+
+                    Toggle(isOn: $enableLivePreview) { Text("Enable Live Preview (Video)") }
+                    Text("When enabled, window previews show live video instead of static screenshots. Uses ScreenCaptureKit for real-time capture.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                        .padding(.leading, 20)
+
+                    if enableLivePreview {
+                        Picker("Live Preview Quality", selection: $livePreviewQuality) {
+                            ForEach(LivePreviewQuality.allCases, id: \.self) { quality in
+                                Text(quality.localizedName).tag(quality)
+                            }
+                        }
+                        .pickerStyle(MenuPickerStyle())
+                        .padding(.leading, 20)
+
+                        Picker("Live Preview Frame Rate", selection: $livePreviewFrameRate) {
+                            ForEach(LivePreviewFrameRate.allCases, id: \.self) { fps in
+                                Text(fps.localizedName).tag(fps)
+                            }
+                        }
+                        .pickerStyle(MenuPickerStyle())
+                        .padding(.leading, 20)
+
+                        Text("Higher quality and frame rate use more CPU/GPU resources.")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                            .padding(.leading, 20)
+                    }
                 }
             }
             StyledGroupBox(label: "Interaction & Behavior (Dock Previews)") {

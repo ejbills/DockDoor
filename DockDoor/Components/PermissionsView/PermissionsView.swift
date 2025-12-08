@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct PermissionsView: View {
-    var nextTab: (() -> Void)? = nil
+    var nextTab: (() -> Void)?
     var disableShine: Bool = false
     @StateObject private var permissionsChecker = PermissionsChecker()
 

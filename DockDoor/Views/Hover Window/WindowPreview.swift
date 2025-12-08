@@ -40,6 +40,7 @@ struct WindowPreview: View {
     @Default(.previewHoverAction) var previewHoverAction
     @Default(.showActiveWindowBorder) var showActiveWindowBorder
     @Default(.activeAppIndicatorColor) var activeAppIndicatorColor
+    @Default(.enableLivePreview) var enableLivePreview
 
     @State private var isHoveringOverDockPeekPreview = false
     @State private var isHoveringOverWindowSwitcherPreview = false
@@ -78,27 +79,33 @@ struct WindowPreview: View {
         }
     }
 
+    @ViewBuilder
     private func windowContent(isMinimized: Bool, isHidden: Bool, isSelected: Bool) -> some View {
+        let inactive = (isMinimized || isHidden) && showMinimizedHiddenLabels
+        let useLivePreview = enableLivePreview && !isMinimized && !isHidden
+
         Group {
-            if let cgImage = windowInfo.image {
-                let inactive = (isMinimized || isHidden) && showMinimizedHiddenLabels
+            if useLivePreview {
+                LivePreviewImage(windowID: windowInfo.id, fallbackImage: windowInfo.image)
+                    .scaledToFit()
+            } else if let cgImage = windowInfo.image {
                 Image(decorative: cgImage, scale: 1.0)
                     .resizable()
                     .scaledToFit()
-                    .markHidden(isHidden: inactive || (windowSwitcherActive && !isSelected))
-                    .overlay {
-                        if inactive, showMinimizedHiddenLabels {
-                            Image(systemName: "eye.slash")
-                                .font(.largeTitle)
-                                .foregroundColor(.primary)
-                                .shadow(radius: 2)
-                                .transition(.opacity)
-                        }
-                    }
-                    .animation(.easeInOut(duration: 0.15), value: inactive)
-                    .clipShape(uniformCardRadius ? AnyShape(RoundedRectangle(cornerRadius: 12, style: .continuous)) : AnyShape(Rectangle()))
             }
         }
+        .markHidden(isHidden: inactive || (windowSwitcherActive && !isSelected))
+        .overlay {
+            if inactive, showMinimizedHiddenLabels {
+                Image(systemName: "eye.slash")
+                    .font(.largeTitle)
+                    .foregroundColor(.primary)
+                    .shadow(radius: 2)
+                    .transition(.opacity)
+            }
+        }
+        .animation(.easeInOut(duration: 0.15), value: inactive)
+        .clipShape(uniformCardRadius ? AnyShape(RoundedRectangle(cornerRadius: 12, style: .continuous)) : AnyShape(Rectangle()))
         .dynamicWindowFrame(
             allowDynamicSizing: allowDynamicImageSizing,
             dimensions: dimensions,
