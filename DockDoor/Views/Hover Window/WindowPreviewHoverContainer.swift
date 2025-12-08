@@ -635,87 +635,23 @@ struct WindowPreviewHoverContainer: View {
         guard index < previewStateCoordinator.windows.count else { return }
         let window = previewStateCoordinator.windows[index]
 
-        switch action {
-        case .quit:
-            window.quit(force: NSEvent.modifierFlags.contains(.option))
+        let keepPreviewOnQuit = Defaults[.keepPreviewOnAppTerminate]
+        let result = action.perform(on: window, keepPreviewOnQuit: keepPreviewOnQuit)
 
-            if Defaults[.keepPreviewOnAppTerminate] {
-                let appPID = window.app.processIdentifier
-                for i in stride(from: previewStateCoordinator.windows.count - 1, through: 0, by: -1) {
-                    if previewStateCoordinator.windows[i].app.processIdentifier == appPID {
-                        previewStateCoordinator.removeWindow(at: i)
-                    }
-                }
-            } else {
-                onWindowTap?()
-            }
-
-        case .close:
-            window.close()
+        switch result {
+        case .dismissed:
+            onWindowTap?()
+        case let .windowUpdated(updatedWindow):
+            previewStateCoordinator.updateWindow(at: index, with: updatedWindow)
+        case .windowRemoved:
             previewStateCoordinator.removeWindow(at: index)
-
-        case .minimize:
-            var updatedWindow = window
-            if updatedWindow.toggleMinimize() != nil {
-                previewStateCoordinator.updateWindow(at: index, with: updatedWindow)
+        case let .appWindowsRemoved(pid):
+            for i in stride(from: previewStateCoordinator.windows.count - 1, through: 0, by: -1) {
+                if previewStateCoordinator.windows[i].app.processIdentifier == pid {
+                    previewStateCoordinator.removeWindow(at: i)
+                }
             }
-
-        case .toggleFullScreen:
-            var updatedWindow = window
-            updatedWindow.toggleFullScreen()
-            onWindowTap?()
-
-        case .hide:
-            var updatedWindow = window
-            if updatedWindow.toggleHidden() != nil {
-                previewStateCoordinator.updateWindow(at: index, with: updatedWindow)
-            }
-
-        case .openNewWindow:
-            WindowUtil.openNewWindow(app: window.app)
-            onWindowTap?()
-
-        case .maximize:
-            window.zoom()
-            onWindowTap?()
-
-        case .fillLeftHalf:
-            window.fillLeftHalf()
-            onWindowTap?()
-
-        case .fillRightHalf:
-            window.fillRightHalf()
-            onWindowTap?()
-
-        case .fillTopHalf:
-            window.fillTopHalf()
-            onWindowTap?()
-
-        case .fillBottomHalf:
-            window.fillBottomHalf()
-            onWindowTap?()
-
-        case .fillTopLeftQuarter:
-            window.fillTopLeftQuarter()
-            onWindowTap?()
-
-        case .fillTopRightQuarter:
-            window.fillTopRightQuarter()
-            onWindowTap?()
-
-        case .fillBottomLeftQuarter:
-            window.fillBottomLeftQuarter()
-            onWindowTap?()
-
-        case .fillBottomRightQuarter:
-            window.fillBottomRightQuarter()
-            onWindowTap?()
-
-        case .center:
-            window.centerWindow()
-            onWindowTap?()
-
-        case .none:
+        case .noChange:
             break
         }
     }

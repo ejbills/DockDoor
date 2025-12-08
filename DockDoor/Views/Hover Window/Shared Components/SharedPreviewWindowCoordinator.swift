@@ -606,77 +606,16 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         let window = coordinator.windows[coordinator.currIndex]
         let originalIndex = coordinator.currIndex
 
-        switch action {
-        case .quit:
-            window.quit(force: NSEvent.modifierFlags.contains(.option))
-            hideWindow()
+        let result = action.perform(on: window, keepPreviewOnQuit: false)
 
-        case .close:
-            window.close()
+        switch result {
+        case .dismissed:
+            hideWindow()
+        case let .windowUpdated(updatedWindow):
+            coordinator.updateWindow(at: originalIndex, with: updatedWindow)
+        case .windowRemoved:
             coordinator.removeWindow(at: originalIndex)
-
-        case .minimize:
-            var updatedWindow = window
-            if updatedWindow.toggleMinimize() != nil {
-                coordinator.updateWindow(at: originalIndex, with: updatedWindow)
-            }
-
-        case .toggleFullScreen:
-            var updatedWindow = window
-            updatedWindow.toggleFullScreen()
-            hideWindow()
-
-        case .hide:
-            var updatedWindow = window
-            if updatedWindow.toggleHidden() != nil {
-                coordinator.updateWindow(at: originalIndex, with: updatedWindow)
-            }
-
-        case .openNewWindow:
-            WindowUtil.openNewWindow(app: window.app)
-            hideWindow()
-
-        case .maximize:
-            window.zoom()
-            hideWindow()
-
-        case .fillLeftHalf:
-            window.fillLeftHalf()
-            hideWindow()
-
-        case .fillRightHalf:
-            window.fillRightHalf()
-            hideWindow()
-
-        case .fillTopHalf:
-            window.fillTopHalf()
-            hideWindow()
-
-        case .fillBottomHalf:
-            window.fillBottomHalf()
-            hideWindow()
-
-        case .fillTopLeftQuarter:
-            window.fillTopLeftQuarter()
-            hideWindow()
-
-        case .fillTopRightQuarter:
-            window.fillTopRightQuarter()
-            hideWindow()
-
-        case .fillBottomLeftQuarter:
-            window.fillBottomLeftQuarter()
-            hideWindow()
-
-        case .fillBottomRightQuarter:
-            window.fillBottomRightQuarter()
-            hideWindow()
-
-        case .center:
-            window.centerWindow()
-            hideWindow()
-
-        case .none:
+        case .appWindowsRemoved, .noChange:
             break
         }
     }

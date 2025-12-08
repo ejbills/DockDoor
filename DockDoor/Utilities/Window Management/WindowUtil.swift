@@ -117,6 +117,102 @@ enum WindowAction: String, Hashable, CaseIterable, Defaults.Serializable {
          .fillLeftHalf, .fillRightHalf, .fillTopHalf, .fillBottomHalf,
          .fillTopLeftQuarter, .fillTopRightQuarter, .fillBottomLeftQuarter, .fillBottomRightQuarter, .center]
     }
+
+    /// Result of performing a window action
+    enum ActionResult {
+        case dismissed
+        case windowUpdated(WindowInfo)
+        case windowRemoved
+        case appWindowsRemoved(pid: pid_t)
+        case noChange
+    }
+
+    /// Performs the action on the given window
+    /// - Parameters:
+    ///   - window: The window to perform the action on
+    ///   - keepPreviewOnQuit: Whether to keep the preview open after quitting (removes app windows instead of dismissing)
+    /// - Returns: The result indicating what happened
+    func perform(on window: WindowInfo, keepPreviewOnQuit: Bool = false) -> ActionResult {
+        switch self {
+        case .quit:
+            window.quit(force: NSEvent.modifierFlags.contains(.option))
+            if keepPreviewOnQuit {
+                return .appWindowsRemoved(pid: window.app.processIdentifier)
+            } else {
+                return .dismissed
+            }
+
+        case .close:
+            window.close()
+            return .windowRemoved
+
+        case .minimize:
+            var updatedWindow = window
+            if updatedWindow.toggleMinimize() != nil {
+                return .windowUpdated(updatedWindow)
+            }
+            return .noChange
+
+        case .toggleFullScreen:
+            var updatedWindow = window
+            updatedWindow.toggleFullScreen()
+            return .dismissed
+
+        case .hide:
+            var updatedWindow = window
+            if updatedWindow.toggleHidden() != nil {
+                return .windowUpdated(updatedWindow)
+            }
+            return .noChange
+
+        case .openNewWindow:
+            WindowUtil.openNewWindow(app: window.app)
+            return .dismissed
+
+        case .maximize:
+            window.zoom()
+            return .dismissed
+
+        case .fillLeftHalf:
+            window.fillLeftHalf()
+            return .dismissed
+
+        case .fillRightHalf:
+            window.fillRightHalf()
+            return .dismissed
+
+        case .fillTopHalf:
+            window.fillTopHalf()
+            return .dismissed
+
+        case .fillBottomHalf:
+            window.fillBottomHalf()
+            return .dismissed
+
+        case .fillTopLeftQuarter:
+            window.fillTopLeftQuarter()
+            return .dismissed
+
+        case .fillTopRightQuarter:
+            window.fillTopRightQuarter()
+            return .dismissed
+
+        case .fillBottomLeftQuarter:
+            window.fillBottomLeftQuarter()
+            return .dismissed
+
+        case .fillBottomRightQuarter:
+            window.fillBottomRightQuarter()
+            return .dismissed
+
+        case .center:
+            window.centerWindow()
+            return .dismissed
+
+        case .none:
+            return .noChange
+        }
+    }
 }
 
 enum WindowUtil {
