@@ -83,7 +83,9 @@ struct PreviewQualitySettingsValues {
 struct MainSettingsView: View {
     @Default(.showMenuBarIcon) var showMenuBarIcon
     @Default(.enableWindowSwitcher) var enableWindowSwitcher
+    @Default(.instantWindowSwitcher) var instantWindowSwitcher
     @Default(.enableWindowSwitcherSearch) var enableWindowSwitcherSearch
+    @Default(.searchFuzziness) var searchFuzziness
     @Default(.enableDockPreviews) var enableDockPreviews
     @Default(.showWindowsFromCurrentSpaceOnly) var showWindowsFromCurrentSpaceOnly
     @Default(.windowPreviewSortOrder) var windowPreviewSortOrder
@@ -448,8 +450,29 @@ struct MainSettingsView: View {
                         .padding(.leading, 20)
                     if enableWindowSwitcher {
                         VStack(alignment: .leading, spacing: 8) {
+                            Toggle(isOn: $instantWindowSwitcher) { Text("Show Window Switcher instantly") }
+                            Text("Skip the small delay before the switcher appears. May feel snappier but can cause flickering if you quickly release the key.")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                                .padding(.leading, 20)
                             Toggle(isOn: $includeHiddenWindowsInSwitcher) { Text("Include hidden/minimized windows in Switcher") }
                             Toggle(isOn: $enableWindowSwitcherSearch) { Text("Enable search while using Window Switcher") }
+                            if enableWindowSwitcherSearch {
+                                HStack {
+                                    Text("Search Fuzziness")
+                                    Slider(value: Binding(
+                                        get: { Double(searchFuzziness) },
+                                        set: { searchFuzziness = Int($0) }
+                                    ), in: 1 ... 5, step: 1)
+                                    Text("\(searchFuzziness)")
+                                        .frame(width: 20)
+                                }
+                                .padding(.leading, 20)
+                                Text("Level 1 is exact match, level 5 is most lenient fuzzy matching.")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                                    .padding(.leading, 20)
+                            }
                             Toggle(isOn: Binding(
                                 get: { !preventSwitcherHide },
                                 set: { preventSwitcherHide = !$0 }
@@ -981,6 +1004,7 @@ struct MainSettingsView: View {
 
                 showMenuBarIcon = Defaults.Keys.showMenuBarIcon.defaultValue
                 enableWindowSwitcher = Defaults.Keys.enableWindowSwitcher.defaultValue
+                instantWindowSwitcher = Defaults.Keys.instantWindowSwitcher.defaultValue
                 includeHiddenWindowsInSwitcher = Defaults.Keys.includeHiddenWindowsInSwitcher.defaultValue
                 useClassicWindowOrdering = Defaults.Keys.useClassicWindowOrdering.defaultValue
                 limitSwitcherToFrontmostApp = Defaults.Keys.limitSwitcherToFrontmostApp.defaultValue

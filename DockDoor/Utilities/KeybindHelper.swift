@@ -35,12 +35,24 @@ private class WindowSwitchingCoordinator {
         defer { isProcessingSwitcher = false }
 
         if stateManager.isActive {
-            if isShiftPressed {
-                stateManager.cycleBackward()
+            // Use filter-aware navigation when search is active
+            let coordinator = previewCoordinator.windowSwitcherCoordinator
+            if coordinator.hasActiveSearch {
+                if isShiftPressed {
+                    coordinator.cycleBackwardFiltered()
+                } else {
+                    coordinator.cycleForwardFiltered()
+                }
+                // Sync the stateManager index with the coordinator's filtered index
+                stateManager.setIndex(coordinator.currIndex)
             } else {
-                stateManager.cycleForward()
+                if isShiftPressed {
+                    stateManager.cycleBackward()
+                } else {
+                    stateManager.cycleForward()
+                }
+                coordinator.setIndex(to: stateManager.currentIndex)
             }
-            previewCoordinator.windowSwitcherCoordinator.setIndex(to: stateManager.currentIndex)
         } else if isModifierPressed {
             await initializeWindowSwitching(
                 previewCoordinator: previewCoordinator
@@ -68,7 +80,9 @@ private class WindowSwitchingCoordinator {
 
         uiRenderingTask?.cancel()
         uiRenderingTask = Task { @MainActor in
-            try? await Task.sleep(nanoseconds: 100_000_000)
+            if !Defaults[.instantWindowSwitcher] {
+                try? await Task.sleep(nanoseconds: 100_000_000)
+            }
             await renderWindowSwitcherUI(
                 previewCoordinator: previewCoordinator,
                 windows: windows,
@@ -588,10 +602,7 @@ class KeybindHelper {
                     .down
                 }
                 return (true, { @MainActor in
-                    let hasActiveSearch = self.previewCoordinator.windowSwitcherCoordinator.hasActiveSearch
-                    if !hasActiveSearch {
-                        self.previewCoordinator.navigateWithArrowKey(direction: dir)
-                    }
+                    self.previewCoordinator.navigateWithArrowKey(direction: dir)
                 })
             case Int64(kVK_Return), Int64(kVK_ANSI_KeypadEnter):
                 if previewCoordinator.windowSwitcherCoordinator.currIndex >= 0 {
