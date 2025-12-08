@@ -530,8 +530,6 @@ struct WindowPreviewHoverContainer: View {
             .globalPadding(20)
         }
         .padding(2)
-        .animation(nil, value: previewStateCoordinator.windows)
-        .animation(nil, value: previewStateCoordinator.currIndex)
         .onChange(of: previewStateCoordinator.currIndex) { newIndex in
             guard previewStateCoordinator.shouldScrollToIndex else { return }
             if showAnimations {
