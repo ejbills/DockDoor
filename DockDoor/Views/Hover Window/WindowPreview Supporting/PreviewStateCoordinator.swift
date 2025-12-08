@@ -188,13 +188,26 @@ class PreviewStateCoordinator: ObservableObject {
                 currIndex = windows.isEmpty ? -1 : 0
             }
         } else {
-            let query = searchQuery.lowercased()
-            let filteredIndices = windows.enumerated().compactMap { idx, win in
-                let appName = win.app.localizedName?.lowercased() ?? ""
-                let windowTitle = (win.windowName ?? "").lowercased()
-                return (appName.contains(query) || windowTitle.contains(query)) ? idx : nil
-            }
-            currIndex = filteredIndices.first ?? -1
+            let filtered = filteredWindowIndices()
+            currIndex = filtered.first ?? -1
+        }
+    }
+
+    /// Returns the indices of windows that match the current search query.
+    /// If no search is active, returns all window indices.
+    func filteredWindowIndices() -> [Int] {
+        guard windowSwitcherActive, !searchQuery.isEmpty else {
+            return Array(windows.indices)
+        }
+
+        let query = searchQuery.lowercased()
+        let fuzziness = Defaults[.searchFuzziness]
+
+        return windows.enumerated().compactMap { idx, win in
+            let appName = win.app.localizedName?.lowercased() ?? ""
+            let windowTitle = (win.windowName ?? "").lowercased()
+            return (StringMatchingUtil.fuzzyMatch(query: query, target: appName, fuzziness: fuzziness) ||
+                StringMatchingUtil.fuzzyMatch(query: query, target: windowTitle, fuzziness: fuzziness)) ? idx : nil
         }
     }
 }

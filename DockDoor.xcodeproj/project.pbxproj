@@ -149,6 +149,7 @@
 		BBF413942C40978400AA6733 /* WindowPreviewHoverContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF413932C40977F00AA6733 /* WindowPreviewHoverContainer.swift */; };
 		BBF4139A2C40A64A00AA6733 /* CustomizableFluidGradient.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF413992C40A64000AA6733 /* CustomizableFluidGradient.swift */; };
 		BBF6C6242C1B4B4400BF1D40 /* KeybindHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF6C6232C1B4B4400BF1D40 /* KeybindHelper.swift */; };
+		BBF6C6252C1B4B4500BF1D40 /* StringMatchingUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF6C6262C1B4B4500BF1D40 /* StringMatchingUtil.swift */; };
 		BBFAD73A2C287A9C0092F5F1 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = BBFAD7392C287A9C0092F5F1 /* Sparkle */; };
 		BBFAD73C2C287C770092F5F1 /* UpdateSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBFAD73B2C287C770092F5F1 /* UpdateSettingsView.swift */; };
 		C119BDF22C2AFA7600E06E18 /* WindowSwitcherSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C119BDF12C2AFA7600E06E18 /* WindowSwitcherSettingsView.swift */; };
@@ -296,6 +297,7 @@
 		BBF413932C40977F00AA6733 /* WindowPreviewHoverContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowPreviewHoverContainer.swift; sourceTree = "<group>"; };
 		BBF413992C40A64000AA6733 /* CustomizableFluidGradient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomizableFluidGradient.swift; sourceTree = "<group>"; };
 		BBF6C6232C1B4B4400BF1D40 /* KeybindHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeybindHelper.swift; sourceTree = "<group>"; };
+		BBF6C6262C1B4B4500BF1D40 /* StringMatchingUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringMatchingUtil.swift; sourceTree = "<group>"; };
 		BBFAD73B2C287C770092F5F1 /* UpdateSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateSettingsView.swift; sourceTree = "<group>"; };
 		C119BDF12C2AFA7600E06E18 /* WindowSwitcherSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowSwitcherSettingsView.swift; sourceTree = "<group>"; };
 		C6F87422D4714171AD2CCC4A /* ActiveAppIndicatorCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveAppIndicatorCoordinator.swift; sourceTree = "<group>"; };
@@ -510,6 +512,7 @@
 				BB157B7F2C0E8E6700997315 /* MessageUtil.swift */,
 				BB157B812C0EB29E00997315 /* DockObserver.swift */,
 				BBF6C6232C1B4B4400BF1D40 /* KeybindHelper.swift */,
+				BBF6C6262C1B4B4500BF1D40 /* StringMatchingUtil.swift */,
 				BB1CBD5C2C1BCA4F003969BC /* Misc Utils.swift */,
 			);
 			path = Utilities;
@@ -929,6 +932,7 @@
 				BBA153FC2C12356100119C02 /* main.swift in Sources */,
 				BBC57AA82E3A6BED0078B262 /* DynamicWindowFrameModifier.swift in Sources */,
 				BBF6C6242C1B4B4400BF1D40 /* KeybindHelper.swift in Sources */,
+				BBF6C6252C1B4B4500BF1D40 /* StringMatchingUtil.swift in Sources */,
 				BB638F1C2E0218D10010077D /* CalendarFullView.swift in Sources */,
 				0596C2C32C3E060D00DCABEF /* PrivateApis.swift in Sources */,
 				BB15E1E22C8E9435002ECFB9 /* FluidGradient.swift in Sources */,

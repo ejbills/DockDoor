@@ -386,6 +386,37 @@ document.addEventListener('DOMContentLoaded', function() {
             halfWidth = calculateHalfWidth();
         }, 100);
 
+        // Mouse drag to scroll functionality
+        let isDown = false;
+        let startX, startScrollLeft;
+
+        pressCarousel.addEventListener('mousedown', (e) => {
+            isDown = true;
+            isUserScrolling = true;
+            startX = e.pageX - pressCarousel.offsetLeft;
+            startScrollLeft = pressCarousel.scrollLeft;
+            pressCarousel.style.cursor = 'grabbing';
+        });
+
+        const stopDragging = () => {
+            isDown = false;
+            pressCarousel.style.cursor = 'grab';
+        };
+
+        pressCarousel.addEventListener('mouseup', stopDragging);
+        pressCarousel.addEventListener('mouseleave', stopDragging);
+
+        pressCarousel.addEventListener('mousemove', (e) => {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - pressCarousel.offsetLeft;
+            const walk = (x - startX) * 2;
+            
+            pressCarousel.scrollLeft = startScrollLeft - walk;
+            
+            scrollPosition = pressCarousel.scrollLeft; 
+        });
+
         const animate = () => {
             if (!isUserScrolling && halfWidth > 0) {
                 scrollPosition += scrollSpeed;
