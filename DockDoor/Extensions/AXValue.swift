@@ -5,4 +5,9 @@ extension AXValue {
         var point = point
         return AXValueCreate(.cgPoint, &point)
     }
+
+    static func from(size: CGSize) -> AXValue? {
+        var size = size
+        return AXValueCreate(.cgSize, &size)
+    }
 }

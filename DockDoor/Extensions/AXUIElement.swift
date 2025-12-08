@@ -129,6 +129,10 @@ extension AXUIElement {
         try attribute(kAXMinimizeButtonAttribute, AXUIElement.self)
     }
 
+    func zoomButton() throws -> AXUIElement? {
+        try attribute(kAXZoomButtonAttribute, AXUIElement.self)
+    }
+
     func fullscreenButton() throws -> AXUIElement? {
         try attribute(kAXFullscreenAttribute, AXUIElement.self)
     }
