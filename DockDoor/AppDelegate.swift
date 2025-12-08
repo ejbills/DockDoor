@@ -59,8 +59,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 keybindHelper = KeybindHelper(previewCoordinator: currentPreviewCoordinator)
             }
 
-            // Initialize active app indicator (handles its own visibility based on settings)
-            activeAppIndicator = ActiveAppIndicatorCoordinator()
+            if Defaults[.showActiveAppIndicator] {
+                activeAppIndicator = ActiveAppIndicatorCoordinator()
+            }
 
             if updater.automaticallyChecksForUpdates {
                 print("AppDelegate: Automatic updates enabled, checking in background.")

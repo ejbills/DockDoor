@@ -12,11 +12,6 @@ struct ActiveAppIndicatorSettingsView: View {
     @Default(.activeAppIndicatorOffset) var activeAppIndicatorOffset
     @Default(.activeAppIndicatorLength) var activeAppIndicatorLength
     @Default(.activeAppIndicatorShift) var activeAppIndicatorShift
-    @Default(.adjustDockAutoHideAnimation) var adjustDockAutoHideAnimation
-    @Default(.activeAppIndicatorFadeOutDuration) var fadeOutDuration
-    @Default(.activeAppIndicatorFadeOutDelay) var fadeOutDelay
-    @Default(.activeAppIndicatorFadeInDuration) var fadeInDuration
-    @Default(.activeAppIndicatorFadeInDelay) var fadeInDelay
 
     @State private var currentDockSize: CGFloat = 0
 
@@ -25,6 +20,7 @@ struct ActiveAppIndicatorSettingsView: View {
             Toggle(isOn: $showActiveAppIndicator) {
                 Text("Show active app indicator below dock icon")
             }
+            .onChange(of: showActiveAppIndicator) { _ in askUserToRestartApplication() }
 
             Text(
                 "Displays a colored line below the currently active application's dock icon."
@@ -139,68 +135,11 @@ struct ActiveAppIndicatorSettingsView: View {
                     )
                     .padding(.leading, 20)
 
-                    Divider()
-                        .padding(.vertical, 4)
-
-                    Toggle(isOn: $adjustDockAutoHideAnimation) {
-                        Text("Adjust dock auto-hide animation values")
-                    }
-                    .padding(.leading, 20)
-
-                    if adjustDockAutoHideAnimation {
-                        Text(
-                            "Auto-Hide Animation (when dock auto-hide is enabled)"
-                        )
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                        .padding(.leading, 20)
-
-                        sliderSetting(
-                            title: "Fade In Delay",
-                            value: $fadeInDelay,
-                            range: 0.0 ... 2.0,
-                            step: 0.1,
-                            unit: "s",
-                            formatter: NumberFormatter.oneDecimalFormatter
-                        )
-                        .padding(.leading, 20)
-
-                        sliderSetting(
-                            title: "Fade In Duration",
-                            value: $fadeInDuration,
-                            range: 0.0 ... 2.0,
-                            step: 0.1,
-                            unit: "s",
-                            formatter: NumberFormatter.oneDecimalFormatter
-                        )
-                        .padding(.leading, 20)
-
-                        sliderSetting(
-                            title: "Fade Out Delay",
-                            value: $fadeOutDelay,
-                            range: 0.0 ... 2.0,
-                            step: 0.1,
-                            unit: "s",
-                            formatter: NumberFormatter.oneDecimalFormatter
-                        )
-                        .padding(.leading, 20)
-
-                        sliderSetting(
-                            title: "Fade Out Duration",
-                            value: $fadeOutDuration,
-                            range: 0.0 ... 2.0,
-                            step: 0.1,
-                            unit: "s",
-                            formatter: NumberFormatter.oneDecimalFormatter
-                        )
-                        .padding(.leading, 20)
-                    }
-
                     HStack(spacing: 8) {
                         Image(systemName: "info.circle")
                             .foregroundColor(.secondary)
                         Text(
-                            "The indicator appears next to the active app's dock icon."
+                            "The indicator appears next to the active app's dock icon. Note: This feature does not support auto-hiding docks."
                         )
                         .font(.caption)
                         .foregroundColor(.secondary)

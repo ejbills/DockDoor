@@ -133,9 +133,6 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         windowSwitcherCoordinator.setShowing(.both, toState: false)
         dockManager.restoreDockState()
         orderOut(nil)
-
-        // Recheck indicator hover state since the preview window is hiding
-        DockObserver.activeInstance?.recheckIndicatorHoverState()
     }
 
     @MainActor
