@@ -93,23 +93,88 @@ class SearchWindow: NSPanel, NSTextFieldDelegate {
             return
         }
 
-        var searchFrame = NSRect(
-            x: frame.midX - 150,
-            y: frame.maxY + 20,
-            width: 300,
-            height: 40
-        )
+        let searchWidth: CGFloat = 300
+        let searchHeight: CGFloat = 40
+        let gap: CGFloat = 20
 
-        if let screen = window.screen ?? NSScreen.main {
-            let screenFrame = screen.visibleFrame
-            if searchFrame.minX < screenFrame.minX {
-                searchFrame.origin.x = screenFrame.minX + 10
-            } else if searchFrame.maxX > screenFrame.maxX {
-                searchFrame.origin.x = screenFrame.maxX - 310
+        guard let screen = window.screen ?? NSScreen.main else {
+            // Fallback: position above
+            let searchFrame = NSRect(
+                x: frame.midX - searchWidth / 2,
+                y: frame.maxY + gap,
+                width: searchWidth,
+                height: searchHeight
+            )
+            setFrame(searchFrame, display: false)
+            orderFront(nil)
+            return
+        }
+
+        let screenFrame = screen.visibleFrame
+        let spaceAbove = screenFrame.maxY - frame.maxY
+        let spaceBelow = frame.minY - screenFrame.minY
+        let requiredVerticalSpace = searchHeight + gap
+
+        var searchFrame: NSRect
+
+        if spaceAbove >= requiredVerticalSpace {
+            // Fits above
+            searchFrame = NSRect(
+                x: frame.midX - searchWidth / 2,
+                y: frame.maxY + gap,
+                width: searchWidth,
+                height: searchHeight
+            )
+        } else if spaceBelow >= requiredVerticalSpace {
+            // Fits below
+            searchFrame = NSRect(
+                x: frame.midX - searchWidth / 2,
+                y: frame.minY - searchHeight - gap,
+                width: searchWidth,
+                height: searchHeight
+            )
+        } else {
+            // Neither fits - position to the side
+            let spaceRight = screenFrame.maxX - frame.maxX
+            let spaceLeft = frame.minX - screenFrame.minX
+
+            if spaceRight >= searchWidth + gap {
+                // Position to the right
+                searchFrame = NSRect(
+                    x: frame.maxX + gap,
+                    y: frame.maxY - searchHeight,
+                    width: searchWidth,
+                    height: searchHeight
+                )
+            } else if spaceLeft >= searchWidth + gap {
+                // Position to the left
+                searchFrame = NSRect(
+                    x: frame.minX - searchWidth - gap,
+                    y: frame.maxY - searchHeight,
+                    width: searchWidth,
+                    height: searchHeight
+                )
+            } else {
+                // No room anywhere - overlay at top of window
+                searchFrame = NSRect(
+                    x: frame.midX - searchWidth / 2,
+                    y: frame.maxY - searchHeight - gap,
+                    width: searchWidth,
+                    height: searchHeight
+                )
             }
-            if searchFrame.maxY > screenFrame.maxY {
-                searchFrame.origin.y = frame.minY - 60
-            }
+        }
+
+        // Clamp to screen bounds
+        if searchFrame.minX < screenFrame.minX {
+            searchFrame.origin.x = screenFrame.minX + 10
+        } else if searchFrame.maxX > screenFrame.maxX {
+            searchFrame.origin.x = screenFrame.maxX - searchWidth - 10
+        }
+        if searchFrame.minY < screenFrame.minY {
+            searchFrame.origin.y = screenFrame.minY + 10
+        } else if searchFrame.maxY > screenFrame.maxY {
+            searchFrame.origin.y = screenFrame.maxY - searchHeight - 10
         }
 
         setFrame(searchFrame, display: false)

@@ -114,6 +114,12 @@ struct AppearanceSettingsView: View {
     @Default(.showMinimizedHiddenLabels) var showMinimizedHiddenLabels
     @Default(.enableTitleMarquee) var enableTitleMarquee
 
+    // Compact mode settings
+    @Default(.compactModeTitleFormat) var compactModeTitleFormat
+    @Default(.windowSwitcherCompactThreshold) var windowSwitcherCompactThreshold
+    @Default(.dockPreviewCompactThreshold) var dockPreviewCompactThreshold
+    @Default(.cmdTabCompactThreshold) var cmdTabCompactThreshold
+
     @State private var showAdvancedAppearanceSettings: Bool = false
     @State private var selectedPreviewContext: PreviewContext = .dock
 
@@ -249,6 +255,45 @@ struct AppearanceSettingsView: View {
                                     .foregroundColor(.gray)
                                     .padding(.leading, 20)
                             }
+                        }
+                    }
+
+                    StyledGroupBox(label: "Compact Mode (Titles Only)") {
+                        VStack(alignment: .leading, spacing: 10) {
+                            Text("Compact mode displays windows as a streamlined vertical list with app icons and titles. Set a threshold to automatically switch to compact mode when an app has that many or more windows. Set to 0 to disable.")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+
+                            Divider().padding(.vertical, 2)
+                            Text("Window Threshold").font(.headline).padding(.bottom, -2)
+
+                            compactThresholdSlider(
+                                title: "Window Switcher",
+                                value: $windowSwitcherCompactThreshold,
+                                description: "Switch to compact list in window switcher when window count reaches threshold."
+                            )
+
+                            compactThresholdSlider(
+                                title: "Dock Previews",
+                                value: $dockPreviewCompactThreshold,
+                                description: "Switch to compact list in dock previews when window count reaches threshold."
+                            )
+
+                            compactThresholdSlider(
+                                title: "Cmd+Tab Enhancement",
+                                value: $cmdTabCompactThreshold,
+                                description: "Switch to compact list in Cmd+Tab overlay when window count reaches threshold."
+                            )
+
+                            Divider().padding(.vertical, 2)
+                            Text("Title Format").font(.headline).padding(.bottom, -2)
+
+                            Picker("Format", selection: $compactModeTitleFormat) {
+                                ForEach(CompactModeTitleFormat.allCases) { format in
+                                    Text(format.localizedName).tag(format)
+                                }
+                            }
+                            .pickerStyle(.menu)
                         }
                     }
 
@@ -548,6 +593,32 @@ struct AppearanceSettingsView: View {
             }
         }
         .padding(.top, 10)
+    }
+
+    @ViewBuilder
+    private func compactThresholdSlider(title: String, value: Binding<Int>, description: String) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            HStack {
+                Text(title)
+                Spacer()
+                Text(value.wrappedValue == 0 ? "Disabled" : "\(value.wrappedValue)+ windows")
+                    .foregroundColor(.secondary)
+                    .monospacedDigit()
+            }
+
+            Slider(
+                value: Binding(
+                    get: { Double(value.wrappedValue) },
+                    set: { value.wrappedValue = Int($0) }
+                ),
+                in: 0 ... 10,
+                step: 1
+            )
+
+            Text(description)
+                .font(.caption)
+                .foregroundColor(.secondary)
+        }
     }
 
     struct WindowSizeSliderView: View {

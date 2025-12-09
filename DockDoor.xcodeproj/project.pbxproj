@@ -90,6 +90,7 @@
 		BB4ED9092C3CD97400BBDD16 /* Traffic Light Buttons.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB4ED9082C3CD96D00BBDD16 /* Traffic Light Buttons.swift */; };
 		BB5059322E0386B500BDD731 /* AudioOutputDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB5059312E0386B500BDD731 /* AudioOutputDevice.swift */; };
 		BB52EDF02C5BEFE3006A64A4 /* HiddenModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB52EDEF2C5BEFE3006A64A4 /* HiddenModifier.swift */; };
+		BB5349C32EE7C3F5004B1FDD /* WindowPreviewCompact.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB5349C22EE7C3F5004B1FDD /* WindowPreviewCompact.swift */; };
 		BB5D35542ED4C4CC006ECE15 /* DebugLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB5D35532ED4C4CC006ECE15 /* DebugLogger.swift */; };
 		BB6021D22D1E613800D47C86 /* Window Image Sizing Calculations.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6021D12D1E613100D47C86 /* Window Image Sizing Calculations.swift */; };
 		BB638EFA2E0216DA0010077D /* MediaControlsEmbeddedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB638EF92E0216DA0010077D /* MediaControlsEmbeddedView.swift */; };
@@ -238,6 +239,7 @@
 		BB4ED9082C3CD96D00BBDD16 /* Traffic Light Buttons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Traffic Light Buttons.swift"; sourceTree = "<group>"; };
 		BB5059312E0386B500BDD731 /* AudioOutputDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioOutputDevice.swift; sourceTree = "<group>"; };
 		BB52EDEF2C5BEFE3006A64A4 /* HiddenModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HiddenModifier.swift; sourceTree = "<group>"; };
+		BB5349C22EE7C3F5004B1FDD /* WindowPreviewCompact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowPreviewCompact.swift; sourceTree = "<group>"; };
 		BB5D35532ED4C4CC006ECE15 /* DebugLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugLogger.swift; sourceTree = "<group>"; };
 		BB6021D12D1E613100D47C86 /* Window Image Sizing Calculations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Window Image Sizing Calculations.swift"; sourceTree = "<group>"; };
 		BB638EF92E0216DA0010077D /* MediaControlsEmbeddedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaControlsEmbeddedView.swift; sourceTree = "<group>"; };
@@ -577,6 +579,7 @@
 				BB6021CE2D1E60C700D47C86 /* WindowPreview Supporting */,
 				BBF413932C40977F00AA6733 /* WindowPreviewHoverContainer.swift */,
 				BB4B444A2C372A4C006680DC /* WindowPreview.swift */,
+				BB5349C22EE7C3F5004B1FDD /* WindowPreviewCompact.swift */,
 			);
 			path = "Hover Window";
 			sourceTree = "<group>";
@@ -972,6 +975,7 @@
 				BB49747F2E81D30F00308326 /* CGWindowID.swift in Sources */,
 				BB638F262E0218FE0010077D /* CalendarPermissionView.swift in Sources */,
 				BB2106762E834F25002F87D6 /* CmdTabFocusFullOverlayView.swift in Sources */,
+				BB5349C32EE7C3F5004B1FDD /* WindowPreviewCompact.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

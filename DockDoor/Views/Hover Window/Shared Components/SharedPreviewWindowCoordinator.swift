@@ -573,6 +573,27 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         let coordinator = windowSwitcherCoordinator
         guard !coordinator.windows.isEmpty else { return }
 
+        let threshold = Defaults[.windowSwitcherCompactThreshold]
+        let isListViewMode = coordinator.windowSwitcherActive && threshold > 0 && coordinator.windows.count >= threshold
+
+        // Handle list view navigation (up/down only, with filtering support)
+        if isListViewMode {
+            let filteredIndices = coordinator.filteredWindowIndices()
+            let indicesToUse = coordinator.hasActiveSearch ? filteredIndices : Array(coordinator.windows.indices)
+            guard !indicesToUse.isEmpty else { return }
+
+            let currentPos = indicesToUse.firstIndex(of: coordinator.currIndex) ?? 0
+            let newPos: Int = switch direction {
+            case .up, .left:
+                currentPos > 0 ? currentPos - 1 : indicesToUse.count - 1
+            case .down, .right:
+                (currentPos + 1) % indicesToUse.count
+            }
+            coordinator.setIndex(to: indicesToUse[newPos])
+            return
+        }
+
+        // Handle filtered navigation when search is active (grid view)
         if coordinator.windowSwitcherActive, coordinator.hasActiveSearch {
             let filteredIndices = coordinator.filteredWindowIndices()
             guard !filteredIndices.isEmpty else { return }

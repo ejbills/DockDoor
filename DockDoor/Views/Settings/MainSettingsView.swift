@@ -454,6 +454,7 @@ struct MainSettingsView: View {
                                     .foregroundColor(.secondary)
                                     .padding(.leading, 20)
                             }
+
                             Toggle(isOn: Binding(
                                 get: { !preventSwitcherHide },
                                 set: { preventSwitcherHide = !$0 }
