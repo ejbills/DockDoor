@@ -70,6 +70,11 @@ final class WindowSwitcherStateManager: ObservableObject {
         }
     }
 
+    func setCurrentIndex(_ index: Int) {
+        guard index >= -1, index < windowIDs.count else { return }
+        currentIndex = index
+    }
+
     func cycleForward() {
         guard !windowIDs.isEmpty else { return }
 

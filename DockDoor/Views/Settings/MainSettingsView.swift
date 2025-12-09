@@ -96,6 +96,7 @@ struct MainSettingsView: View {
     @Default(.sortMinimizedToEnd) var sortMinimizedToEnd
     @Default(.keepPreviewOnAppTerminate) var keepPreviewOnAppTerminate
     @Default(.enableCmdTabEnhancements) var enableCmdTabEnhancements
+    @Default(.enableMouseHoverInSwitcher) var enableMouseHoverInSwitcher
     @Default(.scrollToMouseHoverInSwitcher) var scrollToMouseHoverInSwitcher
     @Default(.includeHiddenWindowsInSwitcher) var includeHiddenWindowsInSwitcher
     @Default(.useClassicWindowOrdering) var useClassicWindowOrdering
@@ -122,8 +123,13 @@ struct MainSettingsView: View {
     @Default(.windowPreviewImageScale) var windowPreviewImageScale
     @Default(.windowImageCaptureQuality) var windowImageCaptureQuality
     @Default(.enableLivePreview) var enableLivePreview
-    @Default(.livePreviewQuality) var livePreviewQuality
-    @Default(.livePreviewFrameRate) var livePreviewFrameRate
+    @Default(.enableLivePreviewForDock) var enableLivePreviewForDock
+    @Default(.enableLivePreviewForWindowSwitcher) var enableLivePreviewForWindowSwitcher
+    @Default(.dockLivePreviewQuality) var dockLivePreviewQuality
+    @Default(.dockLivePreviewFrameRate) var dockLivePreviewFrameRate
+    @Default(.windowSwitcherLivePreviewQuality) var windowSwitcherLivePreviewQuality
+    @Default(.windowSwitcherLivePreviewFrameRate) var windowSwitcherLivePreviewFrameRate
+    @Default(.windowSwitcherLivePreviewScope) var windowSwitcherLivePreviewScope
     @Default(.bufferFromDock) var bufferFromDock
     @Default(.shouldHideOnDockItemClick) var shouldHideOnDockItemClick
     @Default(.dockClickAction) var dockClickAction
@@ -459,7 +465,14 @@ struct MainSettingsView: View {
                                 get: { !preventSwitcherHide },
                                 set: { preventSwitcherHide = !$0 }
                             )) { Text("Release initializer key to select window in Switcher") }
+                            Toggle(isOn: $enableMouseHoverInSwitcher) { Text("Enable mouse hover selection") }
+                            Text("Select windows by hovering with mouse.")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                                .padding(.leading, 20)
+
                             Toggle(isOn: $scrollToMouseHoverInSwitcher) { Text("Scroll to window on mouse hover") }
+                                .disabled(!enableMouseHoverInSwitcher)
                             Text("Automatically scrolls the window switcher when hovering over windows with the mouse.")
                                 .font(.caption)
                                 .foregroundColor(.secondary)
@@ -707,23 +720,72 @@ struct MainSettingsView: View {
                         .padding(.leading, 20)
 
                     if enableLivePreview {
-                        Picker("Live Preview Quality", selection: $livePreviewQuality) {
-                            ForEach(LivePreviewQuality.allCases, id: \.self) { quality in
-                                Text(quality.localizedName).tag(quality)
-                            }
-                        }
-                        .pickerStyle(MenuPickerStyle())
-                        .padding(.leading, 20)
+                        // MARK: - Dock Live Preview Settings
 
-                        Picker("Live Preview Frame Rate", selection: $livePreviewFrameRate) {
-                            ForEach(LivePreviewFrameRate.allCases, id: \.self) { fps in
-                                Text(fps.localizedName).tag(fps)
-                            }
-                        }
-                        .pickerStyle(MenuPickerStyle())
-                        .padding(.leading, 20)
+                        Toggle(isOn: $enableLivePreviewForDock) { Text("Enable for Dock Preview") }
+                            .padding(.leading, 20)
 
-                        Text("Higher quality and frame rate use more CPU/GPU resources.")
+                        if enableLivePreviewForDock {
+                            Picker("Dock Quality", selection: $dockLivePreviewQuality) {
+                                ForEach(LivePreviewQuality.allCases, id: \.self) { quality in
+                                    Text(quality.localizedName).tag(quality)
+                                }
+                            }
+                            .pickerStyle(MenuPickerStyle())
+                            .padding(.leading, 40)
+
+                            Picker("Dock Frame Rate", selection: $dockLivePreviewFrameRate) {
+                                ForEach(LivePreviewFrameRate.allCases, id: \.self) { fps in
+                                    Text(fps.localizedName).tag(fps)
+                                }
+                            }
+                            .pickerStyle(MenuPickerStyle())
+                            .padding(.leading, 40)
+                        }
+
+                        Divider()
+                            .padding(.leading, 20)
+
+                        // MARK: - Window Switcher Live Preview Settings
+
+                        Toggle(isOn: $enableLivePreviewForWindowSwitcher) { Text("Enable for Window Switcher") }
+                            .padding(.leading, 20)
+
+                        if enableLivePreviewForWindowSwitcher {
+                            Picker("Switcher Quality", selection: $windowSwitcherLivePreviewQuality) {
+                                ForEach(LivePreviewQuality.allCases, id: \.self) { quality in
+                                    Text(quality.localizedName).tag(quality)
+                                }
+                            }
+                            .pickerStyle(MenuPickerStyle())
+                            .padding(.leading, 40)
+
+                            Picker("Switcher Frame Rate", selection: $windowSwitcherLivePreviewFrameRate) {
+                                ForEach(LivePreviewFrameRate.allCases, id: \.self) { fps in
+                                    Text(fps.localizedName).tag(fps)
+                                }
+                            }
+                            .pickerStyle(MenuPickerStyle())
+                            .padding(.leading, 40)
+
+                            Picker("Switcher Live Preview Scope", selection: $windowSwitcherLivePreviewScope) {
+                                ForEach(WindowSwitcherLivePreviewScope.allCases, id: \.self) { scope in
+                                    Text(scope.localizedName).tag(scope)
+                                }
+                            }
+                            .pickerStyle(MenuPickerStyle())
+                            .padding(.leading, 40)
+
+                            Text(windowSwitcherLivePreviewScope.localizedDescription)
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                                .padding(.leading, 40)
+                        }
+
+                        Divider()
+                            .padding(.leading, 20)
+
+                        Text("Higher quality and frame rate use more CPU/GPU resources. Use lower settings for Window Switcher if you experience lag.")
                             .font(.caption)
                             .foregroundColor(.secondary)
                             .padding(.leading, 20)

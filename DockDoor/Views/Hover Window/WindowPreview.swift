@@ -11,12 +11,14 @@ struct WindowPreview: View {
     let bestGuessMonitor: NSScreen
     let uniformCardRadius: Bool
     let handleWindowAction: (WindowAction) -> Void
-    var currIndex: Int
+    var isSelectedByKeyboard: Bool
+    var isHoveredByMouse: Bool = false
     var windowSwitcherActive: Bool
     let dimensions: WindowPreviewHoverContainer.WindowDimensions
     let showAppIconOnly: Bool
     let mockPreviewActive: Bool
     let onHoverIndexChange: ((Int?) -> Void)?
+    var isEligibleForLivePreview: Bool = true // Based on scope setting
 
     @Default(.windowTitlePosition) var windowTitlePosition
     @Default(.showWindowTitle) var showWindowTitle
@@ -36,11 +38,18 @@ struct WindowPreview: View {
     @Default(.hidePreviewCardBackground) var hidePreviewCardBackground
     @Default(.showMinimizedHiddenLabels) var showMinimizedHiddenLabels
 
+    @Default(.showAnimations) var showAnimations
     @Default(.tapEquivalentInterval) var tapEquivalentInterval
     @Default(.previewHoverAction) var previewHoverAction
     @Default(.showActiveWindowBorder) var showActiveWindowBorder
     @Default(.activeAppIndicatorColor) var activeAppIndicatorColor
     @Default(.enableLivePreview) var enableLivePreview
+    @Default(.enableLivePreviewForDock) var enableLivePreviewForDock
+    @Default(.enableLivePreviewForWindowSwitcher) var enableLivePreviewForWindowSwitcher
+    @Default(.dockLivePreviewQuality) var dockLivePreviewQuality
+    @Default(.dockLivePreviewFrameRate) var dockLivePreviewFrameRate
+    @Default(.windowSwitcherLivePreviewQuality) var windowSwitcherLivePreviewQuality
+    @Default(.windowSwitcherLivePreviewFrameRate) var windowSwitcherLivePreviewFrameRate
 
     @State private var isHoveringOverDockPeekPreview = false
     @State private var isHoveringOverWindowSwitcherPreview = false
@@ -79,14 +88,31 @@ struct WindowPreview: View {
         }
     }
 
+    // MARK: - Header Visibility
+
+    /// Shows dock preview header (external to preview frame)
+    private var showDockHeader: Bool {
+        !windowSwitcherActive && !useEmbeddedDockPreviewElements
+    }
+
+    /// Shows window switcher header
+    private var showSwitcherHeader: Bool {
+        windowSwitcherActive
+    }
+
     @ViewBuilder
     private func windowContent(isMinimized: Bool, isHidden: Bool, isSelected: Bool) -> some View {
         let inactive = (isMinimized || isHidden) && showMinimizedHiddenLabels
-        let useLivePreview = enableLivePreview && !isMinimized && !isHidden
+        let livePreviewEnabledForContext = windowSwitcherActive ? enableLivePreviewForWindowSwitcher : enableLivePreviewForDock
+        let useLivePreview = enableLivePreview && livePreviewEnabledForContext && isEligibleForLivePreview && !isMinimized && !isHidden
+
+        // Select appropriate quality and frame rate based on context
+        let quality = windowSwitcherActive ? windowSwitcherLivePreviewQuality : dockLivePreviewQuality
+        let frameRate = windowSwitcherActive ? windowSwitcherLivePreviewFrameRate : dockLivePreviewFrameRate
 
         Group {
             if useLivePreview {
-                LivePreviewImage(windowID: windowInfo.id, fallbackImage: windowInfo.image)
+                LivePreviewImage(windowID: windowInfo.id, fallbackImage: windowInfo.image, quality: quality, frameRate: frameRate)
                     .scaledToFit()
             } else if let cgImage = windowInfo.image {
                 Image(decorative: cgImage, scale: 1.0)
@@ -475,45 +501,44 @@ struct WindowPreview: View {
 
     @ViewBuilder
     private var previewCoreContent: some View {
-        let isSelectedByKeyboardInDock = !windowSwitcherActive && (index == currIndex)
-        let isSelectedByKeyboardInSwitcher = windowSwitcherActive && (index == currIndex)
-
-        let finalIsSelected = isHoveringOverDockPeekPreview ||
-            isSelectedByKeyboardInSwitcher ||
-            isSelectedByKeyboardInDock ||
-            isHoveringOverWindowSwitcherPreview
+        let isFocused = isSelectedByKeyboard
+        let isHovered = isHoveredByMouse && windowSwitcherActive
+        let finalIsSelected = isHoveringOverDockPeekPreview || isFocused || isHovered
 
         ZStack(alignment: .topLeading) {
             VStack(alignment: .leading, spacing: 0) {
-                if !useEmbeddedDockPreviewElements ||
-                    windowSwitcherActive
-                {
+                if showSwitcherHeader {
                     Group {
-                        if windowSwitcherActive, windowSwitcherControlPosition == .topLeading ||
+                        if windowSwitcherControlPosition == .topLeading ||
                             windowSwitcherControlPosition == .topTrailing
                         {
                             windowSwitcherContent(finalIsSelected)
-                        } else if windowSwitcherActive, windowSwitcherControlPosition == .diagonalTopLeftBottomRight {
+                        } else if windowSwitcherControlPosition == .diagonalTopLeftBottomRight {
                             windowSwitcherContent(finalIsSelected, showTitleContent: true, showControlsContent: false)
-                        } else if windowSwitcherActive, windowSwitcherControlPosition == .diagonalTopRightBottomLeft {
+                        } else if windowSwitcherControlPosition == .diagonalTopRightBottomLeft {
                             windowSwitcherContent(finalIsSelected, showTitleContent: true, showControlsContent: false)
-                        } else if windowSwitcherActive, windowSwitcherControlPosition == .diagonalBottomLeftTopRight {
+                        } else if windowSwitcherControlPosition == .diagonalBottomLeftTopRight {
                             windowSwitcherContent(finalIsSelected, showTitleContent: false, showControlsContent: true)
-                        } else if windowSwitcherActive, windowSwitcherControlPosition == .diagonalBottomRightTopLeft {
+                        } else if windowSwitcherControlPosition == .diagonalBottomRightTopLeft {
                             windowSwitcherContent(finalIsSelected, showTitleContent: false, showControlsContent: true)
                         }
+                    }
+                    .padding(.bottom, 4)
+                }
 
-                        if !windowSwitcherActive, dockPreviewControlPosition == .topLeading ||
+                if showDockHeader {
+                    Group {
+                        if dockPreviewControlPosition == .topLeading ||
                             dockPreviewControlPosition == .topTrailing
                         {
                             dockPreviewContent(finalIsSelected)
-                        } else if !windowSwitcherActive, dockPreviewControlPosition == .diagonalTopLeftBottomRight {
+                        } else if dockPreviewControlPosition == .diagonalTopLeftBottomRight {
                             dockPreviewContent(finalIsSelected, showTitleContent: true, showControlsContent: false)
-                        } else if !windowSwitcherActive, dockPreviewControlPosition == .diagonalTopRightBottomLeft {
+                        } else if dockPreviewControlPosition == .diagonalTopRightBottomLeft {
                             dockPreviewContent(finalIsSelected, showTitleContent: true, showControlsContent: false)
-                        } else if !windowSwitcherActive, dockPreviewControlPosition == .diagonalBottomLeftTopRight {
+                        } else if dockPreviewControlPosition == .diagonalBottomLeftTopRight {
                             dockPreviewContent(finalIsSelected, showTitleContent: false, showControlsContent: true)
-                        } else if !windowSwitcherActive, dockPreviewControlPosition == .diagonalBottomRightTopLeft {
+                        } else if dockPreviewControlPosition == .diagonalBottomRightTopLeft {
                             dockPreviewContent(finalIsSelected, showTitleContent: false, showControlsContent: true)
                         }
                     }
@@ -526,35 +551,38 @@ struct WindowPreview: View {
                     isSelected: finalIsSelected
                 )
 
-                if !useEmbeddedDockPreviewElements ||
-                    windowSwitcherActive
-                {
+                if showSwitcherHeader {
                     Group {
-                        if windowSwitcherActive, windowSwitcherControlPosition == .bottomLeading ||
+                        if windowSwitcherControlPosition == .bottomLeading ||
                             windowSwitcherControlPosition == .bottomTrailing
                         {
                             windowSwitcherContent(finalIsSelected)
-                        } else if windowSwitcherActive, windowSwitcherControlPosition == .diagonalTopLeftBottomRight {
+                        } else if windowSwitcherControlPosition == .diagonalTopLeftBottomRight {
                             windowSwitcherContent(finalIsSelected, showTitleContent: false, showControlsContent: true)
-                        } else if windowSwitcherActive, windowSwitcherControlPosition == .diagonalTopRightBottomLeft {
+                        } else if windowSwitcherControlPosition == .diagonalTopRightBottomLeft {
                             windowSwitcherContent(finalIsSelected, showTitleContent: false, showControlsContent: true)
-                        } else if windowSwitcherActive, windowSwitcherControlPosition == .diagonalBottomLeftTopRight {
+                        } else if windowSwitcherControlPosition == .diagonalBottomLeftTopRight {
                             windowSwitcherContent(finalIsSelected, showTitleContent: true, showControlsContent: false)
-                        } else if windowSwitcherActive, windowSwitcherControlPosition == .diagonalBottomRightTopLeft {
+                        } else if windowSwitcherControlPosition == .diagonalBottomRightTopLeft {
                             windowSwitcherContent(finalIsSelected, showTitleContent: true, showControlsContent: false)
                         }
+                    }
+                    .padding(.top, 4)
+                }
 
-                        if !windowSwitcherActive, dockPreviewControlPosition == .bottomLeading ||
+                if showDockHeader {
+                    Group {
+                        if dockPreviewControlPosition == .bottomLeading ||
                             dockPreviewControlPosition == .bottomTrailing
                         {
                             dockPreviewContent(finalIsSelected)
-                        } else if !windowSwitcherActive, dockPreviewControlPosition == .diagonalTopLeftBottomRight {
+                        } else if dockPreviewControlPosition == .diagonalTopLeftBottomRight {
                             dockPreviewContent(finalIsSelected, showTitleContent: false, showControlsContent: true)
-                        } else if !windowSwitcherActive, dockPreviewControlPosition == .diagonalTopRightBottomLeft {
+                        } else if dockPreviewControlPosition == .diagonalTopRightBottomLeft {
                             dockPreviewContent(finalIsSelected, showTitleContent: false, showControlsContent: true)
-                        } else if !windowSwitcherActive, dockPreviewControlPosition == .diagonalBottomLeftTopRight {
+                        } else if dockPreviewControlPosition == .diagonalBottomLeftTopRight {
                             dockPreviewContent(finalIsSelected, showTitleContent: true, showControlsContent: false)
-                        } else if !windowSwitcherActive, dockPreviewControlPosition == .diagonalBottomRightTopLeft {
+                        } else if dockPreviewControlPosition == .diagonalBottomRightTopLeft {
                             dockPreviewContent(finalIsSelected, showTitleContent: true, showControlsContent: false)
                         }
                     }
@@ -570,8 +598,8 @@ struct WindowPreview: View {
                         .borderedBackground(.primary.opacity(0.1), lineWidth: 1.75, shape: RoundedRectangle(cornerRadius: cornerRadius))
                         .padding(-6)
                         .overlay {
+                            let highlightColor = hoverHighlightColor ?? Color(nsColor: .controlAccentColor)
                             if finalIsSelected {
-                                let highlightColor = hoverHighlightColor ?? Color(nsColor: .controlAccentColor)
                                 RoundedRectangle(cornerRadius: cornerRadius)
                                     .fill(highlightColor.opacity(selectionOpacity))
                                     .padding(-6)
@@ -615,7 +643,7 @@ struct WindowPreview: View {
         .contentShape(Rectangle())
         .onHover { isHovering in
             if !isDraggingOver {
-                withAnimation(.snappy(duration: 0.175)) {
+                let updateHoverState = {
                     if !windowSwitcherActive {
                         isHoveringOverDockPeekPreview = isHovering
                         handleFullPreviewHover(isHovering: isHovering, action: previewHoverAction)
@@ -623,6 +651,13 @@ struct WindowPreview: View {
                         isHoveringOverWindowSwitcherPreview = isHovering
                         onHoverIndexChange?(isHovering ? index : nil)
                     }
+                }
+                if showAnimations {
+                    withAnimation(.snappy(duration: 0.175)) {
+                        updateHoverState()
+                    }
+                } else {
+                    updateHoverState()
                 }
             }
         }

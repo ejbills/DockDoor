@@ -61,7 +61,9 @@ struct WindowPreviewHoverContainer: View {
     @Default(.switcherMaxRows) var switcherMaxRows
     @Default(.gradientColorPalette) var gradientColorPalette
     @Default(.showAnimations) var showAnimations
+    @Default(.enableMouseHoverInSwitcher) var enableMouseHoverInSwitcher
     @Default(.scrollToMouseHoverInSwitcher) var scrollToMouseHoverInSwitcher
+    @Default(.windowSwitcherLivePreviewScope) var windowSwitcherLivePreviewScope
 
     // Compact mode thresholds (0 = disabled, 1+ = enable when window count >= threshold)
     @Default(.windowSwitcherCompactThreshold) var windowSwitcherCompactThreshold
@@ -563,7 +565,6 @@ struct WindowPreviewHoverContainer: View {
             .globalPadding(20)
         }
         .padding(2)
-        .animation(.smooth(duration: 0.1), value: previewStateCoordinator.windows)
         .onChange(of: previewStateCoordinator.currIndex) { newIndex in
             guard previewStateCoordinator.shouldScrollToIndex else { return }
             if showAnimations {
@@ -829,6 +830,27 @@ struct WindowPreviewHoverContainer: View {
             if index < windows.count {
                 let windowInfo = windows[index]
 
+                // Calculate live preview eligibility based on scope
+                let isEligibleForLivePreview: Bool = {
+                    // Dock preview: always eligible (scope doesn't apply)
+                    guard previewStateCoordinator.windowSwitcherActive else { return true }
+
+                    switch windowSwitcherLivePreviewScope {
+                    case .allWindows:
+                        return true
+                    case .hoveredWindowOnly:
+                        // Only the focused/hovered window
+                        let currentIndex = previewStateCoordinator.hoveredIndex ?? previewStateCoordinator.focusedIndex
+                        return index == currentIndex
+                    case .hoveredAppWindows:
+                        // All windows from the hovered/focused app
+                        let currentIndex = previewStateCoordinator.hoveredIndex ?? previewStateCoordinator.focusedIndex
+                        guard currentIndex >= 0, currentIndex < windows.count else { return false }
+                        let focusedBundleID = windows[currentIndex].app.bundleIdentifier
+                        return windowInfo.app.bundleIdentifier == focusedBundleID
+                    }
+                }()
+
                 if shouldUseCompactMode {
                     WindowPreviewCompact(
                         windowInfo: windowInfo,
@@ -843,8 +865,10 @@ struct WindowPreviewHoverContainer: View {
                         mockPreviewActive: mockPreviewActive,
                         onTap: onWindowTap,
                         onHoverIndexChange: { hoveredIndex in
-                            if let hoveredIndex, scrollToMouseHoverInSwitcher {
-                                previewStateCoordinator.setIndex(to: hoveredIndex, shouldScroll: Defaults[.scrollToMouseHoverInSwitcher])
+                            guard enableMouseHoverInSwitcher else { return }
+                            previewStateCoordinator.setPendingHoverIndex(hoveredIndex)
+                            if previewStateCoordinator.isMouseHoverEnabled, let hoveredIndex {
+                                previewStateCoordinator.setIndex(to: hoveredIndex, shouldScroll: scrollToMouseHoverInSwitcher, source: .mouse)
                             }
                         }
                     )
@@ -861,16 +885,20 @@ struct WindowPreviewHoverContainer: View {
                         handleWindowAction: { action in
                             handleWindowAction(action, at: index)
                         },
-                        currIndex: previewStateCoordinator.currIndex,
+                        isSelectedByKeyboard: index == previewStateCoordinator.focusedIndex,
+                        isHoveredByMouse: false,
                         windowSwitcherActive: previewStateCoordinator.windowSwitcherActive,
                         dimensions: getDimensions(for: index, dimensionsMap: currentDimensionsMapForPreviews),
                         showAppIconOnly: showAppIconOnly,
                         mockPreviewActive: mockPreviewActive,
                         onHoverIndexChange: { hoveredIndex in
-                            if let hoveredIndex, scrollToMouseHoverInSwitcher {
-                                previewStateCoordinator.setIndex(to: hoveredIndex, shouldScroll: Defaults[.scrollToMouseHoverInSwitcher])
+                            guard enableMouseHoverInSwitcher else { return }
+                            previewStateCoordinator.setPendingHoverIndex(hoveredIndex)
+                            if previewStateCoordinator.isMouseHoverEnabled, let hoveredIndex {
+                                previewStateCoordinator.setIndex(to: hoveredIndex, shouldScroll: scrollToMouseHoverInSwitcher, source: .mouse)
                             }
-                        }
+                        },
+                        isEligibleForLivePreview: isEligibleForLivePreview
                     )
                     .id("\(appName)-\(index)")
                     .gesture(
