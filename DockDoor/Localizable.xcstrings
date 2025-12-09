@@ -4793,6 +4793,18 @@
         }
       }
     },
+    "5 FPS" : {
+
+    },
+    "10 FPS" : {
+
+    },
+    "15 FPS" : {
+
+    },
+    "24 FPS" : {
+
+    },
     "30 FPS" : {
 
     },
@@ -7861,6 +7873,12 @@
     },
     "All Windows" : {
       "comment" : "Switcher invocation mode"
+    },
+    "All windows from the selected app get live preview" : {
+
+    },
+    "All windows get live preview (may cause lag with many windows)" : {
+
     },
     "Allow dynamic image sizing" : {
       "localizations" : {
@@ -25816,6 +25834,9 @@
         }
       }
     },
+    "Dock Frame Rate" : {
+
+    },
     "Dock Preview Aero Shake Action" : {
       "localizations" : {
         "af" : {
@@ -27721,6 +27742,9 @@
           }
         }
       }
+    },
+    "Dock Quality" : {
+
     },
     "DockDoor does not record your screen or audio. It only captures static window previews. No information is stored or shared; all processing occurs privately on your device." : {
       "localizations" : {
@@ -30006,6 +30030,12 @@
       }
     },
     "Enable dock scroll gestures" : {
+
+    },
+    "Enable for Dock Preview" : {
+
+    },
+    "Enable for Window Switcher" : {
 
     },
     "Enable gestures in window switcher" : {
@@ -39781,10 +39811,10 @@
         }
       }
     },
-    "High" : {
+    "High (960px)" : {
 
     },
-    "Higher quality and frame rate use more CPU/GPU resources." : {
+    "Higher quality and frame rate use more CPU/GPU resources. Use lower settings for Window Switcher if you experience lag." : {
 
     },
     "Highlight Gradient Colors" : {
@@ -45905,12 +45935,6 @@
         }
       }
     },
-    "Live Preview Frame Rate" : {
-
-    },
-    "Live Preview Quality" : {
-
-    },
     "Loading lyrics..." : {
       "localizations" : {
         "af" : {
@@ -46480,6 +46504,9 @@
           }
         }
       }
+    },
+    "Low (480px)" : {
+
     },
     "Lower values make gestures more sensitive. Higher values require longer swipes. Applies to both dock previews and window switcher." : {
 
@@ -50120,6 +50147,9 @@
           }
         }
       }
+    },
+    "Native (Best)" : {
+
     },
     "Navigate to Settings → Privacy & Security" : {
       "localizations" : {
@@ -55262,6 +55292,9 @@
           }
         }
       }
+    },
+    "Only the currently selected window gets live preview" : {
+
     },
     "Open Accessibility Settings" : {
       "extractionState" : "stale",
@@ -69750,7 +69783,7 @@
         }
       }
     },
-    "Retina (Best)" : {
+    "Retina (1280px)" : {
 
     },
     "Return" : {
@@ -74146,6 +74179,12 @@
           }
         }
       }
+    },
+    "Selected App's Windows" : {
+
+    },
+    "Selected Window Only" : {
+
     },
     "Selection Highlight" : {
       "extractionState" : "stale",
@@ -80664,6 +80703,9 @@
         }
       }
     },
+    "Standard (640px)" : {
+
+    },
     "Start on second window in Switcher" : {
       "localizations" : {
         "af" : {
@@ -82767,6 +82809,15 @@
     "Swipe up or down on window previews in the keyboard-activated window switcher. Only vertical swipes are recognized." : {
 
     },
+    "Switcher Frame Rate" : {
+
+    },
+    "Switcher Live Preview Scope" : {
+
+    },
+    "Switcher Quality" : {
+
+    },
     "Tab" : {
       "localizations" : {
         "af" : {
@@ -84486,6 +84537,9 @@
           }
         }
       }
+    },
+    "Thumbnail (320px)" : {
+
     },
     "Tiny (1/%lld)" : {
       "extractionState" : "stale",

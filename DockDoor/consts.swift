@@ -34,8 +34,13 @@ extension Defaults.Keys {
     static let windowImageCaptureQuality = Key<WindowImageCaptureQuality>("windowImageCaptureQuality", default: .nominal)
 
     static let enableLivePreview = Key<Bool>("enableLivePreview", default: false)
-    static let livePreviewQuality = Key<LivePreviewQuality>("livePreviewQuality", default: .retina)
-    static let livePreviewFrameRate = Key<LivePreviewFrameRate>("livePreviewFrameRate", default: .fps30)
+    static let enableLivePreviewForDock = Key<Bool>("enableLivePreviewForDock", default: true)
+    static let enableLivePreviewForWindowSwitcher = Key<Bool>("enableLivePreviewForWindowSwitcher", default: false)
+    static let dockLivePreviewQuality = Key<LivePreviewQuality>("dockLivePreviewQuality", default: .high)
+    static let dockLivePreviewFrameRate = Key<LivePreviewFrameRate>("dockLivePreviewFrameRate", default: .fps24)
+    static let windowSwitcherLivePreviewQuality = Key<LivePreviewQuality>("windowSwitcherLivePreviewQuality", default: .low)
+    static let windowSwitcherLivePreviewFrameRate = Key<LivePreviewFrameRate>("windowSwitcherLivePreviewFrameRate", default: .fps10)
+    static let windowSwitcherLivePreviewScope = Key<WindowSwitcherLivePreviewScope>("windowSwitcherLivePreviewScope", default: .selectedAppWindows)
 
     static let uniformCardRadius = Key<Bool>("uniformCardRadius", default: true)
     static let allowDynamicImageSizing = Key<Bool>("allowDynamicImageSizing", default: false)
@@ -482,40 +487,67 @@ enum SwitcherInvocationMode: String, CaseIterable, Defaults.Serializable, Identi
 }
 
 enum LivePreviewQuality: String, CaseIterable, Defaults.Serializable, Identifiable {
+    case thumbnail
+    case low
     case standard
     case high
     case retina
+    case native
 
     var id: String { rawValue }
 
     var scaleFactor: Int {
         switch self {
+        case .thumbnail: 1
+        case .low: 1
         case .standard: 1
         case .high: 1
         case .retina: 2
+        case .native: 2
         }
     }
 
     var useFullResolution: Bool {
         switch self {
-        case .standard: false
-        case .high, .retina: true
+        case .thumbnail, .low: false
+        case .standard, .high, .retina, .native: true
+        }
+    }
+
+    var maxDimension: Int {
+        switch self {
+        case .thumbnail: 320
+        case .low: 480
+        case .standard: 640
+        case .high: 960
+        case .retina: 1280
+        case .native: 0 // No limit
         }
     }
 
     var localizedName: String {
         switch self {
+        case .thumbnail:
+            String(localized: "Thumbnail (320px)")
+        case .low:
+            String(localized: "Low (480px)")
         case .standard:
-            String(localized: "Standard")
+            String(localized: "Standard (640px)")
         case .high:
-            String(localized: "High")
+            String(localized: "High (960px)")
         case .retina:
-            String(localized: "Retina (Best)")
+            String(localized: "Retina (1280px)")
+        case .native:
+            String(localized: "Native (Best)")
         }
     }
 }
 
 enum LivePreviewFrameRate: String, CaseIterable, Defaults.Serializable, Identifiable {
+    case fps5
+    case fps10
+    case fps15
+    case fps24
     case fps30
     case fps60
     case fps120
@@ -524,6 +556,10 @@ enum LivePreviewFrameRate: String, CaseIterable, Defaults.Serializable, Identifi
 
     var frameRate: Int32 {
         switch self {
+        case .fps5: 5
+        case .fps10: 10
+        case .fps15: 15
+        case .fps24: 24
         case .fps30: 30
         case .fps60: 60
         case .fps120: 120
@@ -532,6 +568,14 @@ enum LivePreviewFrameRate: String, CaseIterable, Defaults.Serializable, Identifi
 
     var localizedName: String {
         switch self {
+        case .fps5:
+            String(localized: "5 FPS")
+        case .fps10:
+            String(localized: "10 FPS")
+        case .fps15:
+            String(localized: "15 FPS")
+        case .fps24:
+            String(localized: "24 FPS")
         case .fps30:
             String(localized: "30 FPS")
         case .fps60:
@@ -636,6 +680,37 @@ enum CompactModeItemSize: Int, CaseIterable, Defaults.Serializable, Identifiable
         case .xLarge: 56
         case .xxLarge: 64
         case .xxxLarge: 72
+        }
+    }
+}
+
+/// Window Switcher live preview scope - determines which windows get live preview
+enum WindowSwitcherLivePreviewScope: String, CaseIterable, Defaults.Serializable, Identifiable {
+    case selectedWindowOnly
+    case selectedAppWindows
+    case allWindows
+
+    var id: String { rawValue }
+
+    var localizedName: String {
+        switch self {
+        case .selectedWindowOnly:
+            String(localized: "Selected Window Only")
+        case .selectedAppWindows:
+            String(localized: "Selected App's Windows")
+        case .allWindows:
+            String(localized: "All Windows")
+        }
+    }
+
+    var localizedDescription: String {
+        switch self {
+        case .selectedWindowOnly:
+            String(localized: "Only the currently selected window gets live preview")
+        case .selectedAppWindows:
+            String(localized: "All windows from the selected app get live preview")
+        case .allWindows:
+            String(localized: "All windows get live preview (may cause lag with many windows)")
         }
     }
 }
