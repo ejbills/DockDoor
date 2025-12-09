@@ -4,6 +4,7 @@ import SwiftUI
 struct WindowPreviewCompact: View {
     let windowInfo: WindowInfo
     let index: Int
+    let dockPosition: DockPosition
     let uniformCardRadius: Bool
     let handleWindowAction: (WindowAction) -> Void
     let currIndex: Int
@@ -116,6 +117,7 @@ struct WindowPreviewCompact: View {
             if !hidePreviewCardBackground {
                 BlurView(variant: 18)
                     .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
+                    .borderedBackground(.primary.opacity(0.1), lineWidth: 1.75, shape: RoundedRectangle(cornerRadius: cornerRadius))
                     .overlay {
                         if isSelected {
                             let highlightColor = hoverHighlightColor ?? Color(nsColor: .controlAccentColor)
@@ -135,54 +137,13 @@ struct WindowPreviewCompact: View {
                 }
             }
         }
-        .onTapGesture {
-            handleWindowTap()
-        }
-        .contextMenu {
-            if windowInfo.closeButton != nil {
-                Button(action: { handleWindowAction(.minimize) }) {
-                    if windowInfo.isMinimized {
-                        Label("Un-minimize", systemImage: "arrow.up.left.and.arrow.down.right.square")
-                    } else {
-                        Label("Minimize", systemImage: "minus.square")
-                    }
-                }
-
-                Button(action: { handleWindowAction(.toggleFullScreen) }) {
-                    Label("Toggle Full Screen", systemImage: "arrow.up.left.and.arrow.down.right.square")
-                }
-
-                Divider()
-
-                Button(action: { handleWindowAction(.close) }) {
-                    Label("Close", systemImage: "xmark.square")
-                }
-
-                Button(role: .destructive, action: { handleWindowAction(.quit) }) {
-                    if NSEvent.modifierFlags.contains(.option) {
-                        Label("Force Quit", systemImage: "power")
-                    } else {
-                        Label("Quit", systemImage: "minus.square.fill")
-                    }
-                }
-            }
-        }
-        .onMiddleClick {
-            if windowInfo.closeButton != nil {
-                handleWindowAction(.close)
-            }
-        }
-    }
-
-    private func handleWindowTap() {
-        if windowInfo.isMinimized {
-            handleWindowAction(.minimize)
-        } else if windowInfo.isHidden {
-            handleWindowAction(.hide)
-        } else {
-            windowInfo.bringToFront()
-            onTap?()
-        }
+        .windowPreviewInteractions(
+            windowInfo: windowInfo,
+            windowSwitcherActive: windowSwitcherActive,
+            dockPosition: dockPosition,
+            handleWindowAction: handleWindowAction,
+            onTap: onTap
+        )
     }
 
     @ViewBuilder

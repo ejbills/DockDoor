@@ -91,6 +91,7 @@
 		BB5059322E0386B500BDD731 /* AudioOutputDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB5059312E0386B500BDD731 /* AudioOutputDevice.swift */; };
 		BB52EDF02C5BEFE3006A64A4 /* HiddenModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB52EDEF2C5BEFE3006A64A4 /* HiddenModifier.swift */; };
 		BB5349C32EE7C3F5004B1FDD /* WindowPreviewCompact.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB5349C22EE7C3F5004B1FDD /* WindowPreviewCompact.swift */; };
+		BB5349C52EE7D160004B1FDD /* WindowPreviewInteractionModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB5349C42EE7D160004B1FDD /* WindowPreviewInteractionModifier.swift */; };
 		BB5D35542ED4C4CC006ECE15 /* DebugLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB5D35532ED4C4CC006ECE15 /* DebugLogger.swift */; };
 		BB6021D22D1E613800D47C86 /* Window Image Sizing Calculations.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6021D12D1E613100D47C86 /* Window Image Sizing Calculations.swift */; };
 		BB638EFA2E0216DA0010077D /* MediaControlsEmbeddedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB638EF92E0216DA0010077D /* MediaControlsEmbeddedView.swift */; };
@@ -240,6 +241,7 @@
 		BB5059312E0386B500BDD731 /* AudioOutputDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioOutputDevice.swift; sourceTree = "<group>"; };
 		BB52EDEF2C5BEFE3006A64A4 /* HiddenModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HiddenModifier.swift; sourceTree = "<group>"; };
 		BB5349C22EE7C3F5004B1FDD /* WindowPreviewCompact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowPreviewCompact.swift; sourceTree = "<group>"; };
+		BB5349C42EE7D160004B1FDD /* WindowPreviewInteractionModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowPreviewInteractionModifier.swift; sourceTree = "<group>"; };
 		BB5D35532ED4C4CC006ECE15 /* DebugLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugLogger.swift; sourceTree = "<group>"; };
 		BB6021D12D1E613100D47C86 /* Window Image Sizing Calculations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Window Image Sizing Calculations.swift"; sourceTree = "<group>"; };
 		BB638EF92E0216DA0010077D /* MediaControlsEmbeddedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaControlsEmbeddedView.swift; sourceTree = "<group>"; };
@@ -580,6 +582,7 @@
 				BBF413932C40977F00AA6733 /* WindowPreviewHoverContainer.swift */,
 				BB4B444A2C372A4C006680DC /* WindowPreview.swift */,
 				BB5349C22EE7C3F5004B1FDD /* WindowPreviewCompact.swift */,
+				BB5349C42EE7D160004B1FDD /* WindowPreviewInteractionModifier.swift */,
 			);
 			path = "Hover Window";
 			sourceTree = "<group>";
@@ -961,6 +964,7 @@
 				BB2885012E81B5B60048A09B /* SettingsIllustratedRow.swift in Sources */,
 				BBCFAE402C266234002E1516 /* FirstTimeView.swift in Sources */,
 				BB387FB32E70BA1300640D79 /* SearchWindow.swift in Sources */,
+				BB5349C52EE7D160004B1FDD /* WindowPreviewInteractionModifier.swift in Sources */,
 				BB4B444B2C372A4E006680DC /* WindowPreview.swift in Sources */,
 				BB04405B2C77A013009F1D33 /* GradientColorPaletteSettings.swift in Sources */,
 				BB1CBD582C1BA800003969BC /* MainSettingsView.swift in Sources */,

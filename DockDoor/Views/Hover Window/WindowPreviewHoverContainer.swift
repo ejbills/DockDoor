@@ -833,6 +833,7 @@ struct WindowPreviewHoverContainer: View {
                     WindowPreviewCompact(
                         windowInfo: windowInfo,
                         index: index,
+                        dockPosition: dockPosition,
                         uniformCardRadius: uniformCardRadius,
                         handleWindowAction: { action in
                             handleWindowAction(action, at: index)
