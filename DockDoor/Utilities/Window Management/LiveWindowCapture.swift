@@ -6,13 +6,17 @@ import SwiftUI
 struct LivePreviewImage: View {
     let windowID: CGWindowID
     let fallbackImage: CGImage?
+    let quality: LivePreviewQuality
+    let frameRate: LivePreviewFrameRate
 
     @StateObject private var capture: WindowLiveCapture
 
-    init(windowID: CGWindowID, fallbackImage: CGImage?) {
+    init(windowID: CGWindowID, fallbackImage: CGImage?, quality: LivePreviewQuality = .high, frameRate: LivePreviewFrameRate = .fps24) {
         self.windowID = windowID
         self.fallbackImage = fallbackImage
-        _capture = StateObject(wrappedValue: WindowLiveCapture(windowID: windowID))
+        self.quality = quality
+        self.frameRate = frameRate
+        _capture = StateObject(wrappedValue: WindowLiveCapture(windowID: windowID, quality: quality, frameRate: frameRate))
     }
 
     var body: some View {
@@ -36,11 +40,15 @@ class WindowLiveCapture: NSObject, ObservableObject {
     @Published var capturedImage: CGImage?
 
     private let windowID: CGWindowID
+    private let quality: LivePreviewQuality
+    private let frameRate: LivePreviewFrameRate
     private var stream: SCStream?
     private var streamOutput: StreamOutput?
 
-    init(windowID: CGWindowID) {
+    init(windowID: CGWindowID, quality: LivePreviewQuality = .high, frameRate: LivePreviewFrameRate = .fps24) {
         self.windowID = windowID
+        self.quality = quality
+        self.frameRate = frameRate
         super.init()
     }
 
@@ -61,26 +69,39 @@ class WindowLiveCapture: NSObject, ObservableObject {
     private func startStream(for window: SCWindow) async {
         let filter = SCContentFilter(desktopIndependentWindow: window)
 
-        let quality = Defaults[.livePreviewQuality]
-        let frameRate = Defaults[.livePreviewFrameRate]
-
         let config = SCStreamConfiguration()
 
         let backingScaleFactor = Int(NSScreen.main?.backingScaleFactor ?? 2.0)
         let windowWidth = Int(window.frame.width)
         let windowHeight = Int(window.frame.height)
+        let maxDim = quality.maxDimension
 
         if quality.useFullResolution {
-            let effectiveScale = quality == .retina ? 2 : backingScaleFactor
-            config.width = windowWidth * effectiveScale
-            config.height = windowHeight * effectiveScale
+            let effectiveScale = quality.scaleFactor == 2 ? 2 : backingScaleFactor
+            var targetWidth = windowWidth * effectiveScale
+            var targetHeight = windowHeight * effectiveScale
+
+            if maxDim > 0 {
+                let aspectRatio = Double(targetWidth) / Double(targetHeight)
+                if targetWidth > targetHeight {
+                    targetWidth = min(targetWidth, maxDim * effectiveScale)
+                    targetHeight = Int(Double(targetWidth) / aspectRatio)
+                } else {
+                    targetHeight = min(targetHeight, maxDim * effectiveScale)
+                    targetWidth = Int(Double(targetHeight) * aspectRatio)
+                }
+            }
+
+            config.width = targetWidth
+            config.height = targetHeight
         } else {
             let aspectRatio = Double(windowWidth) / Double(windowHeight)
+            let limitDim = maxDim > 0 ? maxDim : 640
             if aspectRatio > 1 {
-                config.width = min(640, windowWidth * backingScaleFactor)
+                config.width = min(limitDim, windowWidth * backingScaleFactor)
                 config.height = Int(Double(config.width) / aspectRatio)
             } else {
-                config.height = min(480, windowHeight * backingScaleFactor)
+                config.height = min(limitDim, windowHeight * backingScaleFactor)
                 config.width = Int(Double(config.height) * aspectRatio)
             }
         }
@@ -88,7 +109,7 @@ class WindowLiveCapture: NSObject, ObservableObject {
         config.minimumFrameInterval = CMTime(value: 1, timescale: frameRate.frameRate)
         config.pixelFormat = kCVPixelFormatType_32BGRA
         config.showsCursor = false
-        config.queueDepth = quality == .retina ? 5 : 3
+        config.queueDepth = quality.scaleFactor == 2 ? 5 : 3
         config.scalesToFit = true
 
         do {

@@ -62,6 +62,7 @@ struct WindowPreviewHoverContainer: View {
     @Default(.gradientColorPalette) var gradientColorPalette
     @Default(.showAnimations) var showAnimations
     @Default(.scrollToMouseHoverInSwitcher) var scrollToMouseHoverInSwitcher
+    @Default(.windowSwitcherLivePreviewScope) var windowSwitcherLivePreviewScope
 
     // Compact mode thresholds (0 = disabled, 1+ = enable when window count >= threshold)
     @Default(.windowSwitcherCompactThreshold) var windowSwitcherCompactThreshold
@@ -839,6 +840,22 @@ struct WindowPreviewHoverContainer: View {
             if index < windows.count {
                 let windowInfo = windows[index]
 
+                let isEligibleForLivePreview: Bool = {
+                    guard previewStateCoordinator.windowSwitcherActive else { return true }
+
+                    switch windowSwitcherLivePreviewScope {
+                    case .allWindows:
+                        return true
+                    case .selectedWindowOnly:
+                        return index == previewStateCoordinator.currIndex
+                    case .selectedAppWindows:
+                        let currentIndex = previewStateCoordinator.currIndex
+                        guard currentIndex >= 0, currentIndex < windows.count else { return false }
+                        let selectedBundleID = windows[currentIndex].app.bundleIdentifier
+                        return windowInfo.app.bundleIdentifier == selectedBundleID
+                    }
+                }()
+
                 if shouldUseCompactMode {
                     WindowPreviewCompact(
                         windowInfo: windowInfo,
@@ -880,7 +897,8 @@ struct WindowPreviewHoverContainer: View {
                             if let hoveredIndex, scrollToMouseHoverInSwitcher {
                                 previewStateCoordinator.setIndex(to: hoveredIndex, shouldScroll: Defaults[.scrollToMouseHoverInSwitcher])
                             }
-                        }
+                        },
+                        isEligibleForLivePreview: isEligibleForLivePreview
                     )
                     .id("\(appName)-\(index)")
                     .gesture(

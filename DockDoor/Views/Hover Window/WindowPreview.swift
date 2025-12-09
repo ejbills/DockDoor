@@ -17,6 +17,7 @@ struct WindowPreview: View {
     let showAppIconOnly: Bool
     let mockPreviewActive: Bool
     let onHoverIndexChange: ((Int?) -> Void)?
+    var isEligibleForLivePreview: Bool = true
 
     @Default(.windowTitlePosition) var windowTitlePosition
     @Default(.showWindowTitle) var showWindowTitle
@@ -41,6 +42,12 @@ struct WindowPreview: View {
     @Default(.showActiveWindowBorder) var showActiveWindowBorder
     @Default(.activeAppIndicatorColor) var activeAppIndicatorColor
     @Default(.enableLivePreview) var enableLivePreview
+    @Default(.enableLivePreviewForDock) var enableLivePreviewForDock
+    @Default(.enableLivePreviewForWindowSwitcher) var enableLivePreviewForWindowSwitcher
+    @Default(.dockLivePreviewQuality) var dockLivePreviewQuality
+    @Default(.dockLivePreviewFrameRate) var dockLivePreviewFrameRate
+    @Default(.windowSwitcherLivePreviewQuality) var windowSwitcherLivePreviewQuality
+    @Default(.windowSwitcherLivePreviewFrameRate) var windowSwitcherLivePreviewFrameRate
 
     @State private var isHoveringOverDockPeekPreview = false
     @State private var isHoveringOverWindowSwitcherPreview = false
@@ -82,11 +89,14 @@ struct WindowPreview: View {
     @ViewBuilder
     private func windowContent(isMinimized: Bool, isHidden: Bool, isSelected: Bool) -> some View {
         let inactive = (isMinimized || isHidden) && showMinimizedHiddenLabels
-        let useLivePreview = enableLivePreview && !isMinimized && !isHidden
+        let livePreviewEnabledForContext = windowSwitcherActive ? enableLivePreviewForWindowSwitcher : enableLivePreviewForDock
+        let useLivePreview = enableLivePreview && livePreviewEnabledForContext && isEligibleForLivePreview && !isMinimized && !isHidden
+        let quality = windowSwitcherActive ? windowSwitcherLivePreviewQuality : dockLivePreviewQuality
+        let frameRate = windowSwitcherActive ? windowSwitcherLivePreviewFrameRate : dockLivePreviewFrameRate
 
         Group {
             if useLivePreview {
-                LivePreviewImage(windowID: windowInfo.id, fallbackImage: windowInfo.image)
+                LivePreviewImage(windowID: windowInfo.id, fallbackImage: windowInfo.image, quality: quality, frameRate: frameRate)
                     .scaledToFit()
             } else if let cgImage = windowInfo.image {
                 Image(decorative: cgImage, scale: 1.0)
