@@ -95,7 +95,7 @@ class SearchWindow: NSPanel, NSTextFieldDelegate {
 
         let searchWidth: CGFloat = 300
         let searchHeight: CGFloat = 40
-        let gap: CGFloat = 20
+        let gap: CGFloat = -20
 
         guard let screen = window.screen ?? NSScreen.main else {
             // Fallback: position above

@@ -35,6 +35,10 @@ private class WindowSwitchingCoordinator {
         isProcessingSwitcher = true
         defer { isProcessingSwitcher = false }
 
+        if stateManager.isActive, !previewCoordinator.isVisible {
+            stateManager.reset()
+        }
+
         if stateManager.isActive {
             if isShiftPressed {
                 stateManager.cycleBackward()
@@ -487,6 +491,10 @@ class KeybindHelper {
 
         isSwitcherModifierKeyPressed = currentSwitcherModifierIsPressed
         isShiftKeyPressedGeneral = currentShiftState
+
+        if preventSwitcherHideOnRelease, !previewCoordinator.isVisible {
+            preventSwitcherHideOnRelease = false
+        }
 
         if !oldSwitcherModifierState && currentSwitcherModifierIsPressed {
             hasProcessedModifierRelease = false

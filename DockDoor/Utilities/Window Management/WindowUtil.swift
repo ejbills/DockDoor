@@ -531,23 +531,32 @@ extension WindowUtil {
     }
 
     static func getActiveWindows(of app: NSRunningApplication, context: WindowFetchContext = .dockPreview) async throws -> [WindowInfo] {
-        // Fetch SCK windows (visible windows only)
-        let content = try await SCShareableContent.excludingDesktopWindows(true, onScreenWindowsOnly: true)
-        let group = LimitedTaskGroup<Void>(maxConcurrentTasks: 4)
+        var sckWindowIDs = Set<CGWindowID>()
 
-        // Build set of SCK window IDs
-        let sckWindowIDs = Set(content.windows.filter {
-            $0.owningApplication?.processID == app.processIdentifier
-        }.map(\.windowID))
+        // Skip SCK if user has disabled image previews (compact mode only)
+        if !Defaults[.disableImagePreview] {
+            do {
+                // Fetch SCK windows (visible windows only)
+                let content = try await SCShareableContent.excludingDesktopWindows(true, onScreenWindowsOnly: true)
+                let group = LimitedTaskGroup<Void>(maxConcurrentTasks: 4)
 
-        // Process SCK windows
-        for window in content.windows where window.owningApplication?.processID == app.processIdentifier {
-            await group.addTask { try await captureAndCacheWindowInfo(window: window, app: app) }
+                // Build set of SCK window IDs
+                sckWindowIDs = Set(content.windows.filter {
+                    $0.owningApplication?.processID == app.processIdentifier
+                }.map(\.windowID))
+
+                // Process SCK windows
+                for window in content.windows where window.owningApplication?.processID == app.processIdentifier {
+                    await group.addTask { try await captureAndCacheWindowInfo(window: window, app: app) }
+                }
+
+                _ = try await group.waitForAll()
+            } catch {
+                // Screen recording permission not granted - fall back to AX-only discovery
+            }
         }
 
-        _ = try await group.waitForAll()
-
-        // Discover non-SCK windows via AX (minimized, hidden, other spaces, or SCK-missed)
+        // Discover windows via AX (minimized, hidden, other spaces, SCK-missed, or all when compact mode)
         await discoverNonSCKWindowsViaAX(app: app, sckWindowIDs: sckWindowIDs)
 
         // Purify cache and return
@@ -839,7 +848,8 @@ extension WindowUtil {
             scBacked: false
         ) else { return }
 
-        let windowTitle = cgID.cgsTitle()
+        // Try AX title first (works without screen recording permission), fall back to CGS title
+        let windowTitle = (try? axWindow.title()) ?? cgID.cgsTitle()
         let minimizedState = (try? axWindow.isMinimized()) ?? false
         let hiddenState = app.isHidden
 

@@ -25,6 +25,10 @@ class PermissionsChecker: ObservableObject {
     }
 
     private func checkScreenRecordingPermission() -> Bool {
+        Self.hasScreenRecordingPermission()
+    }
+
+    static func hasScreenRecordingPermission() -> Bool {
         let stream = CGDisplayStream(
             dispatchQueueDisplay: CGMainDisplayID(),
             outputWidth: 1,

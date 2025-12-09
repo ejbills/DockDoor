@@ -5,7 +5,7 @@ import SwiftUI
 struct PermissionsSettingsView: View {
     var body: some View {
         BaseSettingsView {
-            PermissionsView(disableShine: true)
+            PermissionsView(disableShine: true, showSkipOption: false)
         }
     }
 }

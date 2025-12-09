@@ -116,9 +116,18 @@ struct AppearanceSettingsView: View {
 
     // Compact mode settings
     @Default(.compactModeTitleFormat) var compactModeTitleFormat
+    @Default(.compactModeItemSize) var compactModeItemSize
     @Default(.windowSwitcherCompactThreshold) var windowSwitcherCompactThreshold
     @Default(.dockPreviewCompactThreshold) var dockPreviewCompactThreshold
     @Default(.cmdTabCompactThreshold) var cmdTabCompactThreshold
+
+    // Force compact mode settings
+    @Default(.disableImagePreview) var disableImagePreview
+    @StateObject private var permissionsChecker = PermissionsChecker()
+
+    private var isCompactModeForced: Bool {
+        disableImagePreview || !permissionsChecker.screenRecordingPermission
+    }
 
     @State private var showAdvancedAppearanceSettings: Bool = false
     @State private var selectedPreviewContext: PreviewContext = .dock
@@ -153,6 +162,13 @@ struct AppearanceSettingsView: View {
         ScrollViewReader { proxy in
             BaseSettingsView {
                 VStack(alignment: .leading, spacing: 16) {
+                    if !permissionsChecker.screenRecordingPermission {
+                        CompactModeWarningBanner(
+                            hasScreenRecordingPermission: permissionsChecker.screenRecordingPermission,
+                            disableImagePreview: disableImagePreview
+                        )
+                    }
+
                     StyledGroupBox(label: "Window Preview Size") {
                         VStack(alignment: .leading, spacing: 10) {
                             WindowSizeSliderView()
@@ -260,35 +276,69 @@ struct AppearanceSettingsView: View {
 
                     StyledGroupBox(label: "Compact Mode (Titles Only)") {
                         VStack(alignment: .leading, spacing: 10) {
-                            Text("Compact mode displays windows as a streamlined vertical list with app icons and titles. Set a threshold to automatically switch to compact mode when an app has that many or more windows. Set to 0 to disable.")
+                            Text("Compact mode displays windows as a streamlined vertical list with app icons and titles.")
                                 .font(.caption)
                                 .foregroundColor(.secondary)
 
+                            VStack(alignment: .leading, spacing: 4) {
+                                Toggle(isOn: Binding(
+                                    get: { !permissionsChecker.screenRecordingPermission || disableImagePreview },
+                                    set: { disableImagePreview = $0 }
+                                )) {
+                                    Text("Always use compact mode")
+                                }
+                                .disabled(!permissionsChecker.screenRecordingPermission)
+
+                                if !permissionsChecker.screenRecordingPermission {
+                                    HStack(spacing: 4) {
+                                        Image(systemName: "lock.fill")
+                                            .font(.caption)
+                                        Text("Screen Recording permission is required for window thumbnails.")
+                                            .font(.caption)
+                                    }
+                                    .foregroundColor(.orange)
+                                    .padding(.leading, 20)
+                                }
+                            }
+
+                            if !isCompactModeForced {
+                                Divider().padding(.vertical, 2)
+                                Text("Window Threshold").font(.headline).padding(.bottom, -2)
+
+                                Text("Set a threshold to automatically switch to compact mode when an app has that many or more windows. Set to 0 to disable.")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+
+                                compactThresholdSlider(
+                                    title: "Window Switcher",
+                                    value: $windowSwitcherCompactThreshold,
+                                    description: "Switch to compact list in window switcher when window count reaches threshold."
+                                )
+
+                                compactThresholdSlider(
+                                    title: "Dock Previews",
+                                    value: $dockPreviewCompactThreshold,
+                                    description: "Switch to compact list in dock previews when window count reaches threshold."
+                                )
+
+                                compactThresholdSlider(
+                                    title: "Cmd+Tab Enhancement",
+                                    value: $cmdTabCompactThreshold,
+                                    description: "Switch to compact list in Cmd+Tab overlay when window count reaches threshold."
+                                )
+                            }
+
                             Divider().padding(.vertical, 2)
-                            Text("Window Threshold").font(.headline).padding(.bottom, -2)
+                            Text("Appearance").font(.headline).padding(.bottom, -2)
 
-                            compactThresholdSlider(
-                                title: "Window Switcher",
-                                value: $windowSwitcherCompactThreshold,
-                                description: "Switch to compact list in window switcher when window count reaches threshold."
-                            )
+                            Picker("Item Size", selection: $compactModeItemSize) {
+                                ForEach(CompactModeItemSize.allCases) { size in
+                                    Text(size.localizedName).tag(size)
+                                }
+                            }
+                            .pickerStyle(.menu)
 
-                            compactThresholdSlider(
-                                title: "Dock Previews",
-                                value: $dockPreviewCompactThreshold,
-                                description: "Switch to compact list in dock previews when window count reaches threshold."
-                            )
-
-                            compactThresholdSlider(
-                                title: "Cmd+Tab Enhancement",
-                                value: $cmdTabCompactThreshold,
-                                description: "Switch to compact list in Cmd+Tab overlay when window count reaches threshold."
-                            )
-
-                            Divider().padding(.vertical, 2)
-                            Text("Title Format").font(.headline).padding(.bottom, -2)
-
-                            Picker("Format", selection: $compactModeTitleFormat) {
+                            Picker("Title Format", selection: $compactModeTitleFormat) {
                                 ForEach(CompactModeTitleFormat.allCases) { format in
                                     Text(format.localizedName).tag(format)
                                 }

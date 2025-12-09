@@ -15,6 +15,7 @@ struct WindowPreviewCompact: View {
 
     @Default(.previewWidth) private var previewWidth
     @Default(.compactModeTitleFormat) private var titleFormat
+    @Default(.compactModeItemSize) private var itemSize
     @Default(.trafficLightButtonsVisibility) private var trafficLightButtonsVisibility
     @Default(.selectionOpacity) private var selectionOpacity
     @Default(.unselectedContentOpacity) private var unselectedContentOpacity
@@ -22,11 +23,23 @@ struct WindowPreviewCompact: View {
     @Default(.showMinimizedHiddenLabels) private var showMinimizedHiddenLabels
     @Default(.hidePreviewCardBackground) private var hidePreviewCardBackground
     @Default(.enableTitleMarquee) private var enableTitleMarquee
+    @Default(.showActiveWindowBorder) private var showActiveWindowBorder
+    @Default(.activeAppIndicatorColor) private var activeAppIndicatorColor
 
     @State private var isHovering = false
 
     private var isSelected: Bool {
         isHovering || index == currIndex
+    }
+
+    /// Checks if this window is the currently active (focused) window on the system and adds a border if so.
+    private var isActiveWindow: Bool {
+        guard showActiveWindowBorder else { return false }
+        guard windowInfo.app.isActive else { return false }
+        guard let focusedWindow = try? windowInfo.appAxElement.focusedWindow(),
+              let focusedWindowID = try? focusedWindow.cgWindowId()
+        else { return false }
+        return windowInfo.id == focusedWindowID
     }
 
     private var appName: String {
@@ -57,12 +70,12 @@ struct WindowPreviewCompact: View {
                 Image(nsImage: appIcon)
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 32, height: 32)
+                    .frame(width: itemSize.iconSize, height: itemSize.iconSize)
             } else {
                 Image(systemName: "app.fill")
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 32, height: 32)
+                    .frame(width: itemSize.iconSize, height: itemSize.iconSize)
                     .foregroundStyle(.secondary)
             }
 
@@ -109,7 +122,7 @@ struct WindowPreviewCompact: View {
         }
         .padding(.horizontal, 12)
         .padding(.vertical, 8)
-        .frame(width: previewWidth, height: 48, alignment: .leading)
+        .frame(width: previewWidth, height: itemSize.rowHeight, alignment: .leading)
         .clipped()
         .background {
             let cornerRadius = uniformCardRadius ? 12.0 : 4.0
@@ -123,6 +136,12 @@ struct WindowPreviewCompact: View {
                             let highlightColor = hoverHighlightColor ?? Color(nsColor: .controlAccentColor)
                             RoundedRectangle(cornerRadius: cornerRadius)
                                 .fill(highlightColor.opacity(selectionOpacity))
+                        }
+                    }
+                    .overlay {
+                        if isActiveWindow {
+                            RoundedRectangle(cornerRadius: cornerRadius)
+                                .strokeBorder(activeAppIndicatorColor, lineWidth: 2.5)
                         }
                     }
             }
@@ -141,6 +160,7 @@ struct WindowPreviewCompact: View {
             windowInfo: windowInfo,
             windowSwitcherActive: windowSwitcherActive,
             dockPosition: dockPosition,
+            useCompactMode: true,
             handleWindowAction: handleWindowAction,
             onTap: onTap
         )
@@ -148,13 +168,14 @@ struct WindowPreviewCompact: View {
 
     @ViewBuilder
     private func titleText(_ text: String, isPrimary: Bool) -> some View {
+        let font = isPrimary ? itemSize.primaryFont : itemSize.secondaryFont
         if enableTitleMarquee {
             MarqueeText(text: text, startDelay: 1)
-                .font(.system(size: isPrimary ? 13 : 11, weight: isPrimary ? .medium : .regular))
+                .font(font)
                 .foregroundStyle(isPrimary ? .primary : .secondary)
         } else {
             Text(text)
-                .font(.system(size: isPrimary ? 13 : 11, weight: isPrimary ? .medium : .regular))
+                .font(font)
                 .foregroundStyle(isPrimary ? .primary : .secondary)
                 .lineLimit(1)
                 .truncationMode(.tail)
@@ -164,7 +185,7 @@ struct WindowPreviewCompact: View {
     @ViewBuilder
     private func stateText(_ text: String) -> some View {
         Text(text)
-            .font(.system(size: 11))
+            .font(itemSize.secondaryFont)
             .foregroundStyle(.secondary)
             .italic()
     }
