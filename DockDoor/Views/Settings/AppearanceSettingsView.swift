@@ -162,7 +162,7 @@ struct AppearanceSettingsView: View {
         ScrollViewReader { proxy in
             BaseSettingsView {
                 VStack(alignment: .leading, spacing: 16) {
-                    if isCompactModeForced {
+                    if !permissionsChecker.screenRecordingPermission {
                         CompactModeWarningBanner(
                             hasScreenRecordingPermission: permissionsChecker.screenRecordingPermission,
                             disableImagePreview: disableImagePreview

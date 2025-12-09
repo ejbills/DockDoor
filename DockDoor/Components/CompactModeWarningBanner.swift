@@ -26,7 +26,7 @@ struct CompactModeWarningBanner: View {
                 .shadow(color: .black.opacity(0.1), radius: 2, x: 0, y: 1)
 
             VStack(alignment: .leading, spacing: 4) {
-                Text("Compact List Mode Only - Window Previews are Disabled")
+                Text("Compact List Mode Only (Window Previews are Disabled)")
                     .font(.headline)
                     .foregroundColor(.primary)
                 Text("Screen Recording permission is required to show window thumbnails.")
