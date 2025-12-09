@@ -210,46 +210,4 @@ class PreviewStateCoordinator: ObservableObject {
                 StringMatchingUtil.fuzzyMatch(query: query, target: windowTitle, fuzziness: fuzziness)) ? idx : nil
         }
     }
-
-    /// Cycles forward through filtered windows only.
-    @MainActor
-    func cycleForwardFiltered() {
-        let filtered = filteredWindowIndices()
-        guard !filtered.isEmpty else { return }
-
-        if currIndex < 0 {
-            currIndex = filtered.first ?? 0
-            return
-        }
-
-        // Find current position in filtered list
-        if let currentPos = filtered.firstIndex(of: currIndex) {
-            let nextPos = (currentPos + 1) % filtered.count
-            currIndex = filtered[nextPos]
-        } else {
-            // Current index not in filtered list, go to first filtered
-            currIndex = filtered.first ?? 0
-        }
-    }
-
-    /// Cycles backward through filtered windows only.
-    @MainActor
-    func cycleBackwardFiltered() {
-        let filtered = filteredWindowIndices()
-        guard !filtered.isEmpty else { return }
-
-        if currIndex < 0 {
-            currIndex = filtered.last ?? 0
-            return
-        }
-
-        // Find current position in filtered list
-        if let currentPos = filtered.firstIndex(of: currIndex) {
-            let prevPos = (currentPos - 1 + filtered.count) % filtered.count
-            currIndex = filtered[prevPos]
-        } else {
-            // Current index not in filtered list, go to last filtered
-            currIndex = filtered.last ?? 0
-        }
-    }
 }

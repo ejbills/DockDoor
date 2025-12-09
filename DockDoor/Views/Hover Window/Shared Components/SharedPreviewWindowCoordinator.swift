@@ -578,39 +578,40 @@ final class SharedPreviewWindowCoordinator: NSPanel {
 
         // Handle list view navigation (up/down only, with filtering support)
         if isListViewMode {
-            let isFiltered = coordinator.hasActiveSearch
-            switch direction {
+            let filteredIndices = coordinator.filteredWindowIndices()
+            let indicesToUse = coordinator.hasActiveSearch ? filteredIndices : Array(coordinator.windows.indices)
+            guard !indicesToUse.isEmpty else { return }
+
+            let currentPos = indicesToUse.firstIndex(of: coordinator.currIndex) ?? 0
+            let newPos: Int = switch direction {
             case .up, .left:
-                if isFiltered {
-                    coordinator.cycleBackwardFiltered()
-                } else {
-                    let windowsCount = coordinator.windows.count
-                    let newIndex = coordinator.currIndex <= 0 ? windowsCount - 1 : coordinator.currIndex - 1
-                    coordinator.setIndex(to: newIndex)
-                }
+                currentPos > 0 ? currentPos - 1 : indicesToUse.count - 1
             case .down, .right:
-                if isFiltered {
-                    coordinator.cycleForwardFiltered()
-                } else {
-                    let windowsCount = coordinator.windows.count
-                    let newIndex = (coordinator.currIndex + 1) % windowsCount
-                    coordinator.setIndex(to: newIndex)
-                }
+                (currentPos + 1) % indicesToUse.count
             }
+            coordinator.setIndex(to: indicesToUse[newPos])
             return
         }
 
-        // Handle filtered navigation for left/right arrows when search is active (grid view)
+        // Handle filtered navigation when search is active (grid view)
         if coordinator.windowSwitcherActive, coordinator.hasActiveSearch {
-            switch direction {
-            case .left:
-                coordinator.cycleBackwardFiltered()
-            case .right:
-                coordinator.cycleForwardFiltered()
-            case .up, .down:
-                // Up/Down navigation not supported during search in grid view
+            let filteredIndices = coordinator.filteredWindowIndices()
+            guard !filteredIndices.isEmpty else { return }
+
+            guard let currentFilteredPos = filteredIndices.firstIndex(of: coordinator.currIndex) else {
+                coordinator.setIndex(to: filteredIndices.first ?? 0)
                 return
             }
+
+            let newFilteredPos = WindowPreviewHoverContainer.navigateWindowSwitcher(
+                from: currentFilteredPos,
+                direction: direction,
+                totalItems: filteredIndices.count,
+                dockPosition: .bottom,
+                isWindowSwitcherActive: true
+            )
+
+            coordinator.setIndex(to: filteredIndices[newFilteredPos])
             return
         }
 
