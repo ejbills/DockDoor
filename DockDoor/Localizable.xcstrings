@@ -82764,7 +82764,7 @@
     "Swipe on window previews in the dock popup. Direction is relative to dock position — swipe towards the dock (e.g., down when dock is at bottom, left when dock is on left)." : {
 
     },
-    "Swipe up or down on window previews in the keyboard-activated window switcher. Only vertical swipes are recognized." : {
+    "Swipe up or down on window previews in the keyboard-activated window switcher. Only vertical swipes are recognized, unless in compact mode." : {
 
     },
     "Tab" : {
