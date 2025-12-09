@@ -72,6 +72,7 @@ extension Defaults.Keys {
     static let enableWindowSwitcherSearch = Key<Bool>("enableWindowSwitcherSearch", default: false)
     // Compact mode settings
     static let compactModeTitleFormat = Key<CompactModeTitleFormat>("compactModeTitleFormat", default: .appNameAndTitle)
+    static let compactModeItemSize = Key<CompactModeItemSize>("compactModeItemSize", default: .medium)
 
     // Per-feature compact mode thresholds (0 = disabled, 1+ = enable when window count >= threshold)
     static let windowSwitcherCompactThreshold = Key<Int>("windowSwitcherCompactThreshold", default: 0)
@@ -135,6 +136,9 @@ extension Defaults.Keys {
 
     // Onboarding / Hints
     static let hasSeenCmdTabFocusHint = Key<Bool>("hasSeenCmdTabFocusHint", default: false)
+
+    // Screen Recording & Preview Mode
+    static let disableImagePreview = Key<Bool>("disableImagePreview", default: false)
 
     // Debug
     static let debugMode = Key<Bool>("debugMode", default: false)
@@ -553,6 +557,85 @@ enum CompactModeTitleFormat: String, CaseIterable, Defaults.Serializable, Identi
             String(localized: "Window Title Only")
         case .appNameOnly:
             String(localized: "App Name Only")
+        }
+    }
+}
+
+enum CompactModeItemSize: Int, CaseIterable, Defaults.Serializable, Identifiable {
+    case xSmall = 0
+    case small = 1
+    case medium = 2
+    case large = 3
+    case xLarge = 4
+    case xxLarge = 5
+    case xxxLarge = 6
+
+    var id: Int { rawValue }
+
+    var localizedName: String {
+        switch self {
+        case .xSmall:
+            String(localized: "X-Small", comment: "Compact mode item size option")
+        case .small:
+            String(localized: "Small", comment: "Compact mode item size option")
+        case .medium:
+            String(localized: "Medium", comment: "Compact mode item size option")
+        case .large:
+            String(localized: "Large", comment: "Compact mode item size option")
+        case .xLarge:
+            String(localized: "X-Large", comment: "Compact mode item size option")
+        case .xxLarge:
+            String(localized: "2X-Large", comment: "Compact mode item size option")
+        case .xxxLarge:
+            String(localized: "3X-Large", comment: "Compact mode item size option")
+        }
+    }
+
+    var primaryFont: Font {
+        switch self {
+        case .xSmall: .caption
+        case .small: .callout
+        case .medium: .system(size: 13, weight: .medium)
+        case .large: .headline
+        case .xLarge: .title3
+        case .xxLarge: .title2
+        case .xxxLarge: .title
+        }
+    }
+
+    var secondaryFont: Font {
+        switch self {
+        case .xSmall: .caption2
+        case .small: .caption
+        case .medium: .system(size: 11)
+        case .large: .callout
+        case .xLarge: .body
+        case .xxLarge: .headline
+        case .xxxLarge: .title3
+        }
+    }
+
+    var iconSize: CGFloat {
+        switch self {
+        case .xSmall: 24
+        case .small: 28
+        case .medium: 32
+        case .large: 36
+        case .xLarge: 40
+        case .xxLarge: 48
+        case .xxxLarge: 56
+        }
+    }
+
+    var rowHeight: CGFloat {
+        switch self {
+        case .xSmall: 36
+        case .small: 40
+        case .medium: 48
+        case .large: 52
+        case .xLarge: 56
+        case .xxLarge: 64
+        case .xxxLarge: 72
         }
     }
 }

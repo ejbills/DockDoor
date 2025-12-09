@@ -68,6 +68,10 @@ struct WindowPreviewHoverContainer: View {
     @Default(.dockPreviewCompactThreshold) var dockPreviewCompactThreshold
     @Default(.cmdTabCompactThreshold) var cmdTabCompactThreshold
 
+    // Force list view settings
+    @Default(.disableImagePreview) var disableImagePreview
+    @State private var hasScreenRecordingPermission: Bool = true
+
     @State private var draggedWindowIndex: Int? = nil
     @State private var isDragging = false
 
@@ -125,6 +129,11 @@ struct WindowPreviewHoverContainer: View {
     private var shouldUseCompactMode: Bool {
         if mockPreviewActive { return false }
 
+        // Force list view if image preview is disabled or screen recording permission is not granted
+        if disableImagePreview || !hasScreenRecordingPermission {
+            return true
+        }
+
         let windowCount = previewStateCoordinator.windows.count
 
         if previewStateCoordinator.windowSwitcherActive {
@@ -143,6 +152,7 @@ struct WindowPreviewHoverContainer: View {
         .padding(.top, (!previewStateCoordinator.windowSwitcherActive && appNameStyle == .popover && showAppTitleData) ? 30 : 0)
         .onAppear {
             loadAppIcon()
+            hasScreenRecordingPermission = PermissionsChecker.hasScreenRecordingPermission()
         }
         .onChange(of: previewStateCoordinator.windowSwitcherActive) { isActive in
             if !isActive {

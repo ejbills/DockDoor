@@ -137,6 +137,8 @@ struct MainSettingsView: View {
     @Default(.raisedWindowLevel) var raisedWindowLevel
     @Default(.enablePinning) var enablePinning
     @Default(.showBigControlsWhenNoValidWindows) var showBigControlsWhenNoValidWindows
+    @Default(.disableImagePreview) var disableImagePreview
+    @StateObject private var permissionsChecker = PermissionsChecker()
 
     private let advancedSettingsSectionID = "advancedSettingsSection"
 
@@ -895,6 +897,10 @@ struct MainSettingsView: View {
                 showSpecialAppControls = Defaults.Keys.showSpecialAppControls.defaultValue
                 showBigControlsWhenNoValidWindows = Defaults.Keys.showBigControlsWhenNoValidWindows.defaultValue
                 groupAppInstancesInDock = Defaults.Keys.groupAppInstancesInDock.defaultValue
+
+                // Reset image preview settings
+                disableImagePreview = Defaults.Keys.disableImagePreview.defaultValue
+
                 askUserToRestartApplication()
             }
         }
