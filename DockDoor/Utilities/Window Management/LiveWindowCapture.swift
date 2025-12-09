@@ -25,6 +25,9 @@ struct LivePreviewImage: View {
         .task {
             await capture.startCapture()
         }
+        .onDisappear {
+            Task { await capture.stopCapture() }
+        }
     }
 }
 
@@ -50,7 +53,9 @@ class WindowLiveCapture: NSObject, ObservableObject {
                 return
             }
             await startStream(for: scWindow)
-        } catch {}
+        } catch {
+            DebugLogger.log("LiveWindowCapture: Failed to get shareable content", details: error.localizedDescription)
+        }
     }
 
     private func startStream(for window: SCWindow) async {
@@ -89,7 +94,7 @@ class WindowLiveCapture: NSObject, ObservableObject {
         do {
             let newStream = SCStream(filter: filter, configuration: config, delegate: nil)
 
-            let output = StreamOutput(windowID: windowID) { [weak self] image in
+            let output = StreamOutput { [weak self] image in
                 Task { @MainActor in
                     self?.capturedImage = image
                 }
@@ -100,7 +105,9 @@ class WindowLiveCapture: NSObject, ObservableObject {
 
             stream = newStream
             streamOutput = output
-        } catch {}
+        } catch {
+            DebugLogger.log("LiveWindowCapture: Failed to start stream", details: error.localizedDescription)
+        }
     }
 
     func stopCapture() async {
@@ -114,11 +121,10 @@ class WindowLiveCapture: NSObject, ObservableObject {
 }
 
 private class StreamOutput: NSObject, SCStreamOutput {
-    let windowID: CGWindowID
-    let onFrame: (CGImage) -> Void
+    private let context = CIContext()
+    private let onFrame: (CGImage) -> Void
 
-    init(windowID: CGWindowID, onFrame: @escaping (CGImage) -> Void) {
-        self.windowID = windowID
+    init(onFrame: @escaping (CGImage) -> Void) {
         self.onFrame = onFrame
         super.init()
     }
@@ -128,7 +134,6 @@ private class StreamOutput: NSObject, SCStreamOutput {
         guard let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
 
         let ciImage = CIImage(cvPixelBuffer: imageBuffer)
-        let context = CIContext()
         let width = CVPixelBufferGetWidth(imageBuffer)
         let height = CVPixelBufferGetHeight(imageBuffer)
 
