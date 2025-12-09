@@ -35,7 +35,6 @@ private class WindowSwitchingCoordinator {
         isProcessingSwitcher = true
         defer { isProcessingSwitcher = false }
 
-        // If stateManager thinks it's active but preview is not visible, reset stale state
         if stateManager.isActive, !previewCoordinator.isVisible {
             stateManager.reset()
         }
@@ -493,7 +492,6 @@ class KeybindHelper {
         isSwitcherModifierKeyPressed = currentSwitcherModifierIsPressed
         isShiftKeyPressedGeneral = currentShiftState
 
-        // Reset preventSwitcherHideOnRelease if preview is not visible (stale state cleanup)
         if preventSwitcherHideOnRelease, !previewCoordinator.isVisible {
             preventSwitcherHideOnRelease = false
         }

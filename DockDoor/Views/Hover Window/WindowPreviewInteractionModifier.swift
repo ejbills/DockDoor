@@ -7,6 +7,7 @@ struct WindowPreviewInteractionModifier: ViewModifier {
     let windowInfo: WindowInfo
     let windowSwitcherActive: Bool
     let dockPosition: DockPosition
+    let useCompactMode: Bool
     let handleWindowAction: (WindowAction) -> Void
     let onTap: (() -> Void)?
 
@@ -84,20 +85,44 @@ struct WindowPreviewInteractionModifier: ViewModifier {
     private func handleSwipe(_ direction: SwipeDirection) {
         if windowSwitcherActive {
             guard enableWindowSwitcherGestures else { return }
-            switch direction {
-            case .up:
-                performAction(switcherSwipeUpAction)
-            case .down:
-                performAction(switcherSwipeDownAction)
-            case .left, .right:
-                break
+            // In compact mode, use horizontal gestures (left/right) since vertical is for scrolling
+            if useCompactMode {
+                switch direction {
+                case .left:
+                    performAction(switcherSwipeDownAction)
+                case .right:
+                    performAction(switcherSwipeUpAction)
+                case .up, .down:
+                    break
+                }
+            } else {
+                switch direction {
+                case .up:
+                    performAction(switcherSwipeUpAction)
+                case .down:
+                    performAction(switcherSwipeDownAction)
+                case .left, .right:
+                    break
+                }
             }
         } else {
             guard enableDockPreviewGestures else { return }
-            if isSwipeTowardsDock(direction) {
-                performAction(dockSwipeTowardsDockAction)
-            } else if isSwipeAwayFromDock(direction) {
-                performAction(dockSwipeAwayFromDockAction)
+            // In compact mode, use horizontal gestures (left/right) since vertical is for scrolling
+            if useCompactMode {
+                switch direction {
+                case .left:
+                    performAction(dockSwipeTowardsDockAction)
+                case .right:
+                    performAction(dockSwipeAwayFromDockAction)
+                case .up, .down:
+                    break
+                }
+            } else {
+                if isSwipeTowardsDock(direction) {
+                    performAction(dockSwipeTowardsDockAction)
+                } else if isSwipeAwayFromDock(direction) {
+                    performAction(dockSwipeAwayFromDockAction)
+                }
             }
         }
     }
@@ -147,6 +172,7 @@ extension View {
         windowInfo: WindowInfo,
         windowSwitcherActive: Bool,
         dockPosition: DockPosition,
+        useCompactMode: Bool = false,
         handleWindowAction: @escaping (WindowAction) -> Void,
         onTap: (() -> Void)?
     ) -> some View {
@@ -154,6 +180,7 @@ extension View {
             windowInfo: windowInfo,
             windowSwitcherActive: windowSwitcherActive,
             dockPosition: dockPosition,
+            useCompactMode: useCompactMode,
             handleWindowAction: handleWindowAction,
             onTap: onTap
         ))

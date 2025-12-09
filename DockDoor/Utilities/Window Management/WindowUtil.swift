@@ -531,30 +531,32 @@ extension WindowUtil {
     }
 
     static func getActiveWindows(of app: NSRunningApplication, context: WindowFetchContext = .dockPreview) async throws -> [WindowInfo] {
-        // Try to fetch SCK windows (visible windows only) - requires screen recording permission
         var sckWindowIDs = Set<CGWindowID>()
 
-        do {
-            let content = try await SCShareableContent.excludingDesktopWindows(true, onScreenWindowsOnly: true)
-            let group = LimitedTaskGroup<Void>(maxConcurrentTasks: 4)
+        // Skip SCK if user has disabled image previews (compact mode only)
+        if !Defaults[.disableImagePreview] {
+            do {
+                // Fetch SCK windows (visible windows only)
+                let content = try await SCShareableContent.excludingDesktopWindows(true, onScreenWindowsOnly: true)
+                let group = LimitedTaskGroup<Void>(maxConcurrentTasks: 4)
 
-            // Build set of SCK window IDs
-            sckWindowIDs = Set(content.windows.filter {
-                $0.owningApplication?.processID == app.processIdentifier
-            }.map(\.windowID))
+                // Build set of SCK window IDs
+                sckWindowIDs = Set(content.windows.filter {
+                    $0.owningApplication?.processID == app.processIdentifier
+                }.map(\.windowID))
 
-            // Process SCK windows
-            for window in content.windows where window.owningApplication?.processID == app.processIdentifier {
-                await group.addTask { try await captureAndCacheWindowInfo(window: window, app: app) }
+                // Process SCK windows
+                for window in content.windows where window.owningApplication?.processID == app.processIdentifier {
+                    await group.addTask { try await captureAndCacheWindowInfo(window: window, app: app) }
+                }
+
+                _ = try await group.waitForAll()
+            } catch {
+                // Screen recording permission not granted - fall back to AX-only discovery
             }
-
-            _ = try await group.waitForAll()
-        } catch {
-            // Screen recording permission not granted - fall back to AX-only discovery
-            // sckWindowIDs remains empty, so all windows will be discovered via AX
         }
 
-        // Discover non-SCK windows via AX (minimized, hidden, other spaces, SCK-missed, or all when no permission)
+        // Discover windows via AX (minimized, hidden, other spaces, SCK-missed, or all when compact mode)
         await discoverNonSCKWindowsViaAX(app: app, sckWindowIDs: sckWindowIDs)
 
         // Purify cache and return

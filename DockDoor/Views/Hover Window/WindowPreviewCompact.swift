@@ -160,6 +160,7 @@ struct WindowPreviewCompact: View {
             windowInfo: windowInfo,
             windowSwitcherActive: windowSwitcherActive,
             dockPosition: dockPosition,
+            useCompactMode: true,
             handleWindowAction: handleWindowAction,
             onTap: onTap
         )
