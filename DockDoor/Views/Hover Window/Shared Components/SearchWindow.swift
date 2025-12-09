@@ -94,7 +94,10 @@ class SearchWindow: NSPanel, NSTextFieldDelegate {
             return
         }
 
-        let verticalGap: CGFloat = Defaults[.windowSwitcherShowListView] ? -20 : 20
+        let threshold = Defaults[.windowSwitcherCompactThreshold]
+        let windowCount = previewCoordinator?.windows.count ?? 0
+        let isCompactMode = threshold > 0 && windowCount >= threshold
+        let verticalGap: CGFloat = isCompactMode ? -20 : 20
 
         var searchFrame = NSRect(
             x: frame.midX - 150,

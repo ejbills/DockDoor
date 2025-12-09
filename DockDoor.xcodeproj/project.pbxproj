@@ -34,8 +34,6 @@
 		3A1622D02C8D691700D318EE /* SquiggleDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A1622CF2C8D691700D318EE /* SquiggleDivider.swift */; };
 		83E26DB067D2426086683147 /* ActiveAppIndicatorSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D264F468F734971AE701690 /* ActiveAppIndicatorSettingsView.swift */; };
 		A1B2C3D4E5F6789012345678 /* ActiveAppIndicatorWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C3D4E5F67890123456789A /* ActiveAppIndicatorWindow.swift */; };
-		AAAAAAAA2EEE000000000004 /* WindowListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAAAAAAA2EEE000000000001 /* WindowListView.swift */; };
-		AAAAAAAA2EEE000000000005 /* WindowListItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAAAAAAA2EEE000000000002 /* WindowListItemView.swift */; };
 		BB0036D02D24AAD20072C61E /* CGPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0036CF2D24AAD10072C61E /* CGPoint.swift */; };
 		BB04405B2C77A013009F1D33 /* GradientColorPaletteSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB04405A2C77A011009F1D33 /* GradientColorPaletteSettings.swift */; };
 		BB04405E2C77A87F009F1D33 /* PreferencesProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB04405D2C77A87E009F1D33 /* PreferencesProtocol.swift */; };
@@ -92,6 +90,7 @@
 		BB4ED9092C3CD97400BBDD16 /* Traffic Light Buttons.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB4ED9082C3CD96D00BBDD16 /* Traffic Light Buttons.swift */; };
 		BB5059322E0386B500BDD731 /* AudioOutputDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB5059312E0386B500BDD731 /* AudioOutputDevice.swift */; };
 		BB52EDF02C5BEFE3006A64A4 /* HiddenModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB52EDEF2C5BEFE3006A64A4 /* HiddenModifier.swift */; };
+		BB5349C32EE7C3F5004B1FDD /* WindowPreviewCompact.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB5349C22EE7C3F5004B1FDD /* WindowPreviewCompact.swift */; };
 		BB5D35542ED4C4CC006ECE15 /* DebugLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB5D35532ED4C4CC006ECE15 /* DebugLogger.swift */; };
 		BB6021D22D1E613800D47C86 /* Window Image Sizing Calculations.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6021D12D1E613100D47C86 /* Window Image Sizing Calculations.swift */; };
 		BB638EFA2E0216DA0010077D /* MediaControlsEmbeddedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB638EF92E0216DA0010077D /* MediaControlsEmbeddedView.swift */; };
@@ -184,8 +183,6 @@
 		3A1622CF2C8D691700D318EE /* SquiggleDivider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SquiggleDivider.swift; sourceTree = "<group>"; };
 		7D264F468F734971AE701690 /* ActiveAppIndicatorSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveAppIndicatorSettingsView.swift; sourceTree = "<group>"; };
 		8B7C6D5E4F3A2B1098765432 /* ActiveAppIndicatorPositioning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveAppIndicatorPositioning.swift; sourceTree = "<group>"; };
-		AAAAAAAA2EEE000000000001 /* WindowListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowListView.swift; sourceTree = "<group>"; };
-		AAAAAAAA2EEE000000000002 /* WindowListItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowListItemView.swift; sourceTree = "<group>"; };
 		B2C3D4E5F67890123456789A /* ActiveAppIndicatorWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveAppIndicatorWindow.swift; sourceTree = "<group>"; };
 		BB0036CF2D24AAD10072C61E /* CGPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGPoint.swift; sourceTree = "<group>"; };
 		BB04405A2C77A011009F1D33 /* GradientColorPaletteSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientColorPaletteSettings.swift; sourceTree = "<group>"; };
@@ -242,6 +239,7 @@
 		BB4ED9082C3CD96D00BBDD16 /* Traffic Light Buttons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Traffic Light Buttons.swift"; sourceTree = "<group>"; };
 		BB5059312E0386B500BDD731 /* AudioOutputDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioOutputDevice.swift; sourceTree = "<group>"; };
 		BB52EDEF2C5BEFE3006A64A4 /* HiddenModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HiddenModifier.swift; sourceTree = "<group>"; };
+		BB5349C22EE7C3F5004B1FDD /* WindowPreviewCompact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowPreviewCompact.swift; sourceTree = "<group>"; };
 		BB5D35532ED4C4CC006ECE15 /* DebugLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugLogger.swift; sourceTree = "<group>"; };
 		BB6021D12D1E613100D47C86 /* Window Image Sizing Calculations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Window Image Sizing Calculations.swift"; sourceTree = "<group>"; };
 		BB638EF92E0216DA0010077D /* MediaControlsEmbeddedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaControlsEmbeddedView.swift; sourceTree = "<group>"; };
@@ -434,15 +432,6 @@
 			path = Tabs;
 			sourceTree = "<group>";
 		};
-		AAAAAAAA2EEE000000000003 /* Windows List */ = {
-			isa = PBXGroup;
-			children = (
-				AAAAAAAA2EEE000000000001 /* WindowListView.swift */,
-				AAAAAAAA2EEE000000000002 /* WindowListItemView.swift */,
-			);
-			path = "Windows List";
-			sourceTree = "<group>";
-		};
 		BB0036D12D24AAE60072C61E /* CoreGraphics */ = {
 			isa = PBXGroup;
 			children = (
@@ -588,9 +577,9 @@
 				BB638F122E0218B10010077D /* Shared Components */,
 				BB2461F22DFA17F900005C30 /* Special Hover Windows */,
 				BB6021CE2D1E60C700D47C86 /* WindowPreview Supporting */,
-				AAAAAAAA2EEE000000000003 /* Windows List */,
 				BBF413932C40977F00AA6733 /* WindowPreviewHoverContainer.swift */,
 				BB4B444A2C372A4C006680DC /* WindowPreview.swift */,
+				BB5349C22EE7C3F5004B1FDD /* WindowPreviewCompact.swift */,
 			);
 			path = "Hover Window";
 			sourceTree = "<group>";
@@ -963,8 +952,6 @@
 				BB2567C62C10C5F000C0C93E /* DockUtils.swift in Sources */,
 				BB1A85F72D08E53000326297 /* DragPreviewCoordinator.swift in Sources */,
 				BBF413942C40978400AA6733 /* WindowPreviewHoverContainer.swift in Sources */,
-				AAAAAAAA2EEE000000000004 /* WindowListView.swift in Sources */,
-				AAAAAAAA2EEE000000000005 /* WindowListItemView.swift in Sources */,
 				BBF413922C40618D00AA6733 /* FullSizePreviewView.swift in Sources */,
 				BB15E1F12C8FBCD4002ECFB9 /* BugAndFeatureReporting.swift in Sources */,
 				BB0036D02D24AAD20072C61E /* CGPoint.swift in Sources */,
@@ -988,6 +975,7 @@
 				BB49747F2E81D30F00308326 /* CGWindowID.swift in Sources */,
 				BB638F262E0218FE0010077D /* CalendarPermissionView.swift in Sources */,
 				BB2106762E834F25002F87D6 /* CmdTabFocusFullOverlayView.swift in Sources */,
+				BB5349C32EE7C3F5004B1FDD /* WindowPreviewCompact.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

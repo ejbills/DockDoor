@@ -70,9 +70,13 @@ extension Defaults.Keys {
     static let scrollToMouseHoverInSwitcher = Key<Bool>("scrollToMouseHoverInSwitcher", default: false)
     static let keepPreviewOnAppTerminate = Key<Bool>("keepPreviewOnAppTerminate", default: false)
     static let enableWindowSwitcherSearch = Key<Bool>("enableWindowSwitcherSearch", default: false)
-    static let windowSwitcherShowListView = Key<Bool>("windowSwitcherShowListView", default: false)
-    static let listViewShowAppName = Key<Bool>("listViewShowAppName", default: true)
-    static let windowSwitcherListFontSize = Key<CGFloat>("windowSwitcherListFontSize", default: 13)
+    // Compact mode settings
+    static let compactModeTitleFormat = Key<CompactModeTitleFormat>("compactModeTitleFormat", default: .appNameAndTitle)
+
+    // Per-feature compact mode thresholds (0 = disabled, 1+ = enable when window count >= threshold)
+    static let windowSwitcherCompactThreshold = Key<Int>("windowSwitcherCompactThreshold", default: 0)
+    static let dockPreviewCompactThreshold = Key<Int>("dockPreviewCompactThreshold", default: 0)
+    static let cmdTabCompactThreshold = Key<Int>("cmdTabCompactThreshold", default: 0)
     static let searchFuzziness = Key<Int>("searchFuzziness", default: 3)
     static let useClassicWindowOrdering = Key<Bool>("useClassicWindowOrdering", default: true)
     static let includeHiddenWindowsInSwitcher = Key<Bool>("includeHiddenWindowsInSwitcher", default: true)
@@ -530,6 +534,25 @@ enum LivePreviewFrameRate: String, CaseIterable, Defaults.Serializable, Identifi
             String(localized: "60 FPS")
         case .fps120:
             String(localized: "120 FPS (ProMotion)")
+        }
+    }
+}
+
+enum CompactModeTitleFormat: String, CaseIterable, Defaults.Serializable, Identifiable {
+    case appNameAndTitle // App name on top, window title below
+    case titleOnly // Window title only (or app name if no title)
+    case appNameOnly // App name only
+
+    var id: String { rawValue }
+
+    var localizedName: String {
+        switch self {
+        case .appNameAndTitle:
+            String(localized: "App Name + Window Title")
+        case .titleOnly:
+            String(localized: "Window Title Only")
+        case .appNameOnly:
+            String(localized: "App Name Only")
         }
     }
 }

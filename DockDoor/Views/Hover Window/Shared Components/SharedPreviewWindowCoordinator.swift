@@ -573,7 +573,8 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         let coordinator = windowSwitcherCoordinator
         guard !coordinator.windows.isEmpty else { return }
 
-        let isListViewMode = coordinator.windowSwitcherActive && Defaults[.windowSwitcherShowListView]
+        let threshold = Defaults[.windowSwitcherCompactThreshold]
+        let isListViewMode = coordinator.windowSwitcherActive && threshold > 0 && coordinator.windows.count >= threshold
 
         // Handle list view navigation (up/down only, with filtering support)
         if isListViewMode {
