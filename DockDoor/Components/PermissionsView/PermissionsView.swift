@@ -50,6 +50,13 @@ struct PermissionsView: View {
                     .buttonStyle(AccentButtonStyle())
                 }
             }
+
+            if disableShine {
+                Text("Changes to permissions require an app restart to take effect.")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .multilineTextAlignment(.center)
+            }
         }
     }
 

@@ -84,21 +84,24 @@ struct WindowPreviewCompact: View {
                 switch titleFormat {
                 case .appNameAndTitle:
                     titleText(appName, isPrimary: true)
-                    if let title = windowTitle {
-                        titleText(title, isPrimary: false)
-                    } else if showMinimizedHiddenLabels, let state = stateIndicator {
+                    // Show state instead of window title when minimized/hidden
+                    if let state = stateIndicator {
                         stateText(state)
+                    } else if let title = windowTitle {
+                        titleText(title, isPrimary: false)
                     }
 
                 case .titleOnly:
                     titleText(windowTitle ?? appName, isPrimary: true)
-                    if showMinimizedHiddenLabels, let state = stateIndicator {
+                    // Show state below the title
+                    if let state = stateIndicator {
                         stateText(state)
                     }
 
                 case .appNameOnly:
                     titleText(appName, isPrimary: true)
-                    if showMinimizedHiddenLabels, let state = stateIndicator {
+                    // Show state below app name
+                    if let state = stateIndicator {
                         stateText(state)
                     }
                 }
@@ -120,12 +123,12 @@ struct WindowPreviewCompact: View {
                 )
             }
         }
-        .padding(.horizontal, 12)
+        .padding(.horizontal, 8)
         .padding(.vertical, 8)
         .frame(width: previewWidth, height: itemSize.rowHeight, alignment: .leading)
         .clipped()
         .background {
-            let cornerRadius = uniformCardRadius ? 12.0 : 4.0
+            let cornerRadius = uniformCardRadius ? 20.0 : 4.0
 
             if !hidePreviewCardBackground {
                 BlurView(variant: 18)

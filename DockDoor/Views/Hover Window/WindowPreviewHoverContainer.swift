@@ -47,6 +47,7 @@ struct WindowPreviewHoverContainer: View {
     var mockPreviewActive: Bool
     let updateAvailable: Bool
     let embeddedContentType: EmbeddedContentType
+    let hasScreenRecordingPermission: Bool
 
     @ObservedObject var previewStateCoordinator: PreviewStateCoordinator
 
@@ -71,7 +72,6 @@ struct WindowPreviewHoverContainer: View {
 
     // Force list view settings
     @Default(.disableImagePreview) var disableImagePreview
-    @State private var hasScreenRecordingPermission: Bool = true
 
     @State private var draggedWindowIndex: Int? = nil
     @State private var isDragging = false
@@ -93,7 +93,8 @@ struct WindowPreviewHoverContainer: View {
          windowSwitcherCoordinator: PreviewStateCoordinator,
          mockPreviewActive: Bool,
          updateAvailable: Bool,
-         embeddedContentType: EmbeddedContentType = .none)
+         embeddedContentType: EmbeddedContentType = .none,
+         hasScreenRecordingPermission: Bool)
     {
         self.appName = appName
         self.onWindowTap = onWindowTap
@@ -105,6 +106,7 @@ struct WindowPreviewHoverContainer: View {
         self.mockPreviewActive = mockPreviewActive
         self.updateAvailable = updateAvailable
         self.embeddedContentType = embeddedContentType
+        self.hasScreenRecordingPermission = hasScreenRecordingPermission
     }
 
     private var minimumEmbeddedWidth: CGFloat {
@@ -153,7 +155,6 @@ struct WindowPreviewHoverContainer: View {
         .padding(.top, (!previewStateCoordinator.windowSwitcherActive && appNameStyle == .popover && showAppTitleData) ? 30 : 0)
         .onAppear {
             loadAppIcon()
-            hasScreenRecordingPermission = PermissionsChecker.hasScreenRecordingPermission()
         }
         .onChange(of: previewStateCoordinator.windowSwitcherActive) { isActive in
             if !isActive {

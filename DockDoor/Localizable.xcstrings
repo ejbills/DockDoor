@@ -15522,6 +15522,9 @@
         }
       }
     },
+    "Changes to permissions require an app restart to take effect." : {
+
+    },
     "Check for Updates" : {
       "localizations" : {
         "af" : {

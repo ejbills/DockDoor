@@ -12,7 +12,7 @@ struct SupportSettingsView: View {
         BaseSettingsView {
             VStack(alignment: .leading, spacing: 20) {
                 StyledGroupBox(label: "Permissions") {
-                    PermissionsView(disableShine: true)
+                    PermissionsView(disableShine: true, showSkipOption: false)
                         .padding(.top, 5)
                 }
 

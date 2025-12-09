@@ -29,6 +29,8 @@ final class SharedPreviewWindowCoordinator: NSPanel {
 
     private var previousHoverWindowOrigin: CGPoint?
 
+    private(set) var hasScreenRecordingPermission: Bool = PermissionsChecker.hasScreenRecordingPermission()
+
     var pinnedWindows: [String: NSWindow] = [:]
 
     init() {
@@ -195,7 +197,8 @@ final class SharedPreviewWindowCoordinator: NSPanel {
                                                     windowSwitcherCoordinator: windowSwitcherCoordinator,
                                                     mockPreviewActive: false,
                                                     updateAvailable: updateAvailable,
-                                                    embeddedContentType: embeddedContentType)
+                                                    embeddedContentType: embeddedContentType,
+                                                    hasScreenRecordingPermission: hasScreenRecordingPermission)
         let newHostingView = NSHostingView(rootView: hoverView)
 
         if let oldContentView = contentView {

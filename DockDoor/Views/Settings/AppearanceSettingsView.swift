@@ -368,7 +368,8 @@ struct AppearanceSettingsView: View {
                                 dockItemElement: nil,
                                 windowSwitcherCoordinator: currentCoordinator,
                                 mockPreviewActive: true,
-                                updateAvailable: false
+                                updateAvailable: false,
+                                hasScreenRecordingPermission: true
                             )
                             .allowsHitTesting(false)
                         } else {
