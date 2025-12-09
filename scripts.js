@@ -236,7 +236,7 @@ document.addEventListener('DOMContentLoaded', function() {
         toast.innerHTML = `
             <div class="toast-content">
                 <div class="toast-title">
-                    <img src="./resources/svg/toastBell.svg" alt="Bell icon">
+                    <img src="./resources/svg/toastBell.svg" alt="Bell icon" width="20" height="20">
                     Support DockDoor Development
                 </div>
                 <div class="toast-message">
