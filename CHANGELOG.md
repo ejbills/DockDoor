@@ -38,6 +38,47 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://buymeacoffee.com/keplercafe</div>
 
+<a id="1.28"></a>
+# [Release 1.28](https://github.com/ejbills/DockDoor/releases/tag/1.28) - 2025-12-10
+
+## ✨ New Features
+- Trackpad swipe gesture controls (default ON)
+  - Swipe toward dock to minimize
+  - Swipe away to maximize
+  - New Gestures & Keybinds settings
+- Live window video previews (default OFF) - thanks [@suatkocar](https://github.com/suatkocar)
+  - Granular live preview settings
+  - Separate Dock/Switcher settings
+  - More quality and FPS options
+- Active app dock indicator (default OFF) - thanks [@maddada](https://github.com/maddada)
+- Compact list view mode (default OFF) - thanks [@maddada](https://github.com/maddada)
+- Fuzzy search with fuzziness levels - thanks [@maddada](https://github.com/maddada)
+- Instant window switcher toggle - thanks [@maddada](https://github.com/maddada)
+- Skip screen recording permission - thanks [@maddada](https://github.com/maddada)
+- Scroll to show/hide apps (default OFF)
+- New window sort options
+- Alternate window switcher shortcut
+- Maximize traffic light button
+- Extensive gesture customization redesign
+
+## 🔧 Improvements & Stability
+- Window Switcher scope options
+- LiveWindowCapture performance improvements
+- Per-window capture management
+- Smart search window positioning
+- Centralized sorting logic
+- Improved compact mode support
+
+## 🐛 Bug Fixes
+- High window count startup
+- Filtered navigation with arrows
+- Removed deprecated sort option
+
+
+
+[Changes][1.28]
+
+
 <a id="1.27"></a>
 # [Release 1.27](https://github.com/ejbills/DockDoor/releases/tag/1.27) - 2025-12-05
 
@@ -1680,6 +1721,7 @@ v1.0
 [Changes][releases]
 
 
+[1.28]: https://github.com/ejbills/DockDoor/compare/1.27...1.28
 [1.27]: https://github.com/ejbills/DockDoor/compare/1.26...1.27
 [1.26]: https://github.com/ejbills/DockDoor/compare/1.25.5...1.26
 [1.25.5]: https://github.com/ejbills/DockDoor/compare/1.25.4...1.25.5
