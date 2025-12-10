@@ -40,6 +40,11 @@ private class WindowSwitchingCoordinator {
         }
 
         if stateManager.isActive {
+            let viewIndex = previewCoordinator.windowSwitcherCoordinator.currIndex
+            if viewIndex >= 0, viewIndex != stateManager.currentIndex {
+                stateManager.setIndex(viewIndex)
+            }
+
             if isShiftPressed {
                 stateManager.cycleBackward()
             } else {
@@ -221,6 +226,9 @@ class KeybindHelper {
     private var runLoopSource: CFRunLoopSource?
     private var monitorTimer: Timer?
     private var unmanagedEventTapUserInfo: Unmanaged<KeybindHelperUserInfo>?
+    private var shiftCycleTimer: Timer?
+    private var tabCycleTimer: Timer?
+    private var isTabKeyDown: Bool = false
 
     init(previewCoordinator: SharedPreviewWindowCoordinator) {
         self.previewCoordinator = previewCoordinator
@@ -238,6 +246,11 @@ class KeybindHelper {
     private func cleanup() {
         monitorTimer?.invalidate()
         monitorTimer = nil
+        shiftCycleTimer?.invalidate()
+        shiftCycleTimer = nil
+        tabCycleTimer?.invalidate()
+        tabCycleTimer = nil
+        isTabKeyDown = false
         removeEventTap()
     }
 
@@ -451,6 +464,27 @@ class KeybindHelper {
                 // Not enhancing or not in our cmdTab context — let the system handle it.
                 return Unmanaged.passUnretained(event)
             }
+
+            if keyCode == Int64(kVK_Tab), previewCoordinator.isVisible {
+                if previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive {
+                    let hasActiveSearch = previewCoordinator.windowSwitcherCoordinator.hasActiveSearch
+                    if !hasActiveSearch, !isTabKeyDown {
+                        isTabKeyDown = true
+                        let isShiftHeld = flags.contains(.maskShift)
+                        DispatchQueue.main.async { [weak self] in
+                            self?.handleTabKeyDown(isShiftHeld: isShiftHeld)
+                        }
+                    }
+                    return nil
+                } else {
+                    let direction: ArrowDirection = flags.contains(.maskShift) ? .left : .right
+                    DispatchQueue.main.async { [weak self] in
+                        self?.previewCoordinator.navigateWithArrowKey(direction: direction)
+                    }
+                    return nil
+                }
+            }
+
             let (shouldConsume, actionTask) = determineActionForKeyDown(event: event)
             if let task = actionTask {
                 Task { @MainActor in
@@ -483,6 +517,16 @@ class KeybindHelper {
                 }
             }
 
+        case .keyUp:
+            let keyCode = event.getIntegerValueField(.keyboardEventKeycode)
+            if keyCode == kVK_Tab {
+                isTabKeyDown = false
+                DispatchQueue.main.async { [weak self] in
+                    self?.tabCycleTimer?.invalidate()
+                    self?.tabCycleTimer = nil
+                }
+            }
+
         default:
             break
         }
@@ -512,7 +556,6 @@ class KeybindHelper {
         // If system Cmd+Tab switcher is active, do not engage DockDoor's own switcher logic
         if DockObserver.isCmdTabSwitcherActive { return }
         let oldSwitcherModifierState = isSwitcherModifierKeyPressed
-        let oldShiftState = isShiftKeyPressedGeneral
 
         isSwitcherModifierKeyPressed = currentSwitcherModifierIsPressed
         isShiftKeyPressedGeneral = currentShiftState
@@ -521,29 +564,51 @@ class KeybindHelper {
             preventSwitcherHideOnRelease = false
         }
 
-        if !oldSwitcherModifierState && currentSwitcherModifierIsPressed {
+        if !oldSwitcherModifierState, currentSwitcherModifierIsPressed {
             hasProcessedModifierRelease = false
         }
 
-        if !oldShiftState, currentShiftState,
-           previewCoordinator.isVisible,
-           (previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive && (currentSwitcherModifierIsPressed || Defaults[.preventSwitcherHide])) ||
-           (!previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive)
-        {
-            Task { @MainActor in
-                await self.windowSwitchingCoordinator.handleWindowSwitching(
-                    previewCoordinator: self.previewCoordinator,
-                    isModifierPressed: currentSwitcherModifierIsPressed,
-                    isShiftPressed: true,
-                    mode: self.currentInvocationMode
-                )
+        let shouldCycleBackward = previewCoordinator.isVisible &&
+            ((previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive && (currentSwitcherModifierIsPressed || Defaults[.preventSwitcherHide])) ||
+                (!previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive))
+
+        if currentShiftState, shouldCycleBackward {
+            if shiftCycleTimer == nil {
+                if windowSwitchingCoordinator.stateManager.isActive {
+                    syncStateManagerWithViewIndex()
+                    windowSwitchingCoordinator.stateManager.cycleBackward()
+                    let newIndex = windowSwitchingCoordinator.stateManager.currentIndex
+                    previewCoordinator.windowSwitcherCoordinator.setIndex(to: newIndex)
+                }
+                shiftCycleTimer = Timer.scheduledTimer(withTimeInterval: TimerConstants.initialDelay, repeats: false) { [weak self] _ in
+                    guard let self else { return }
+                    shiftCycleTimer = Timer.scheduledTimer(withTimeInterval: TimerConstants.repeatInterval, repeats: true) { [weak self] _ in
+                        guard let self else { return }
+                        guard previewCoordinator.windowSwitcherCoordinator.lastInputWasKeyboard else {
+                            stopShiftCycleTimer()
+                            return
+                        }
+                        if windowSwitchingCoordinator.stateManager.isActive {
+                            windowSwitchingCoordinator.stateManager.cycleBackward()
+                            let newIndex = windowSwitchingCoordinator.stateManager.currentIndex
+                            DispatchQueue.main.async {
+                                self.previewCoordinator.windowSwitcherCoordinator.setIndex(to: newIndex)
+                            }
+                        }
+                    }
+                }
             }
+        } else {
+            shiftCycleTimer?.invalidate()
+            shiftCycleTimer = nil
         }
 
         if !Defaults[.preventSwitcherHide], !preventSwitcherHideOnRelease, !(previewCoordinator.isSearchWindowFocused) {
             if oldSwitcherModifierState, !isSwitcherModifierKeyPressed, !hasProcessedModifierRelease {
                 hasProcessedModifierRelease = true
                 preventSwitcherHideOnRelease = false
+                stopShiftCycleTimer()
+                stopTabCycleTimer()
                 Task { @MainActor in
                     if self.previewCoordinator.isVisible, self.previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive {
                         self.previewCoordinator.selectAndBringToFrontCurrentWindow()
@@ -552,6 +617,66 @@ class KeybindHelper {
                         selectedWindow.bringToFront()
                         self.previewCoordinator.hideWindow()
                     }
+                }
+            }
+        }
+    }
+
+    private enum TimerConstants {
+        static let initialDelay: TimeInterval = 0.4
+        static let repeatInterval: TimeInterval = 0.05
+    }
+
+    private func syncStateManagerWithViewIndex() {
+        let viewIndex = previewCoordinator.windowSwitcherCoordinator.currIndex
+        if viewIndex >= 0, viewIndex != windowSwitchingCoordinator.stateManager.currentIndex {
+            windowSwitchingCoordinator.stateManager.setIndex(viewIndex)
+        }
+    }
+
+    private func stopShiftCycleTimer() {
+        shiftCycleTimer?.invalidate()
+        shiftCycleTimer = nil
+    }
+
+    private func stopTabCycleTimer() {
+        tabCycleTimer?.invalidate()
+        tabCycleTimer = nil
+        isTabKeyDown = false
+    }
+
+    @MainActor
+    private func handleTabKeyDown(isShiftHeld: Bool) {
+        guard windowSwitchingCoordinator.stateManager.isActive else { return }
+
+        syncStateManagerWithViewIndex()
+
+        if isShiftHeld {
+            windowSwitchingCoordinator.stateManager.cycleBackward()
+        } else {
+            windowSwitchingCoordinator.stateManager.cycleForward()
+        }
+        let newIndex = windowSwitchingCoordinator.stateManager.currentIndex
+        previewCoordinator.windowSwitcherCoordinator.setIndex(to: newIndex)
+
+        tabCycleTimer?.invalidate()
+        tabCycleTimer = Timer.scheduledTimer(withTimeInterval: TimerConstants.initialDelay, repeats: false) { [weak self] _ in
+            guard let self, isTabKeyDown else { return }
+            tabCycleTimer = Timer.scheduledTimer(withTimeInterval: TimerConstants.repeatInterval, repeats: true) { [weak self] _ in
+                guard let self, isTabKeyDown else { return }
+                guard previewCoordinator.windowSwitcherCoordinator.lastInputWasKeyboard else {
+                    stopTabCycleTimer()
+                    return
+                }
+                let currentShiftState = NSEvent.modifierFlags.contains(.shift)
+                if currentShiftState {
+                    windowSwitchingCoordinator.stateManager.cycleBackward()
+                } else {
+                    windowSwitchingCoordinator.stateManager.cycleForward()
+                }
+                let idx = windowSwitchingCoordinator.stateManager.currentIndex
+                DispatchQueue.main.async {
+                    self.previewCoordinator.windowSwitcherCoordinator.setIndex(to: idx)
                 }
             }
         }
@@ -571,6 +696,8 @@ class KeybindHelper {
         if previewIsCurrentlyVisible {
             if keyCode == kVK_Escape {
                 return (true, {
+                    self.stopShiftCycleTimer()
+                    self.stopTabCycleTimer()
                     self.windowSwitchingCoordinator.cancelSwitching()
                     await self.previewCoordinator.hideWindow()
                     self.preventSwitcherHideOnRelease = false
@@ -613,23 +740,6 @@ class KeybindHelper {
         }
 
         if previewIsCurrentlyVisible {
-            if keyCode == kVK_Tab {
-                return (true, { @MainActor in
-                    if self.previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive {
-                        if !self.previewCoordinator.windowSwitcherCoordinator.hasActiveSearch {
-                            await self.windowSwitchingCoordinator.handleWindowSwitching(
-                                previewCoordinator: self.previewCoordinator,
-                                isModifierPressed: self.isSwitcherModifierKeyPressed,
-                                isShiftPressed: false,
-                                mode: self.currentInvocationMode
-                            )
-                        }
-                    } else {
-                        self.previewCoordinator.navigateWithArrowKey(direction: .right)
-                    }
-                })
-            }
-
             switch keyCode {
             case Int64(kVK_LeftArrow), Int64(kVK_RightArrow), Int64(kVK_UpArrow), Int64(kVK_DownArrow):
                 let dir: ArrowDirection = switch keyCode {

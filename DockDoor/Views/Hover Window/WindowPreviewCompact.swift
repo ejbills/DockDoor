@@ -11,7 +11,7 @@ struct WindowPreviewCompact: View {
     let windowSwitcherActive: Bool
     let mockPreviewActive: Bool
     let onTap: (() -> Void)?
-    let onHoverIndexChange: ((Int?) -> Void)?
+    let onHoverIndexChange: ((Int?, CGPoint?) -> Bool)?
 
     @Default(.previewWidth) private var previewWidth
     @Default(.compactModeTitleFormat) private var titleFormat
@@ -23,13 +23,14 @@ struct WindowPreviewCompact: View {
     @Default(.showMinimizedHiddenLabels) private var showMinimizedHiddenLabels
     @Default(.hidePreviewCardBackground) private var hidePreviewCardBackground
     @Default(.enableTitleMarquee) private var enableTitleMarquee
+    @Default(.showAnimations) private var showAnimations
     @Default(.showActiveWindowBorder) private var showActiveWindowBorder
     @Default(.activeAppIndicatorColor) private var activeAppIndicatorColor
 
     @State private var isHovering = false
 
     private var isSelected: Bool {
-        isHovering || index == currIndex
+        index == currIndex
     }
 
     /// Checks if this window is the currently active (focused) window on the system and adds a border if so.
@@ -116,7 +117,7 @@ struct WindowPreviewCompact: View {
             {
                 TrafficLightButtons(
                     displayMode: trafficLightButtonsVisibility,
-                    hoveringOverParentWindow: isSelected,
+                    hoveringOverParentWindow: isSelected || isHovering,
                     onWindowAction: handleWindowAction,
                     pillStyling: true,
                     mockPreviewActive: mockPreviewActive
@@ -151,12 +152,22 @@ struct WindowPreviewCompact: View {
         }
         .opacity(isSelected ? 1.0 : unselectedContentOpacity)
         .contentShape(Rectangle())
-        .onHover { hovering in
-            withAnimation(.snappy(duration: 0.175)) {
-                isHovering = hovering
-                if windowSwitcherActive {
-                    onHoverIndexChange?(hovering ? index : nil)
+        .onContinuousHover { phase in
+            let setHoverState: (Bool) -> Void = { newState in
+                if showAnimations {
+                    withAnimation(.snappy(duration: 0.175)) { isHovering = newState }
+                } else {
+                    isHovering = newState
                 }
+            }
+
+            switch phase {
+            case let .active(location):
+                let shouldApply = !windowSwitcherActive || (onHoverIndexChange?(index, location) ?? true)
+                if shouldApply, !isHovering { setHoverState(true) }
+            case .ended:
+                if windowSwitcherActive { _ = onHoverIndexChange?(nil, nil) }
+                if isHovering { setHoverState(false) }
             }
         }
         .windowPreviewInteractions(

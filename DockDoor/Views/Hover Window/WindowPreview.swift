@@ -16,7 +16,7 @@ struct WindowPreview: View {
     let dimensions: WindowPreviewHoverContainer.WindowDimensions
     let showAppIconOnly: Bool
     let mockPreviewActive: Bool
-    let onHoverIndexChange: ((Int?) -> Void)?
+    let onHoverIndexChange: ((Int?, CGPoint?) -> Bool)?
     var isEligibleForLivePreview: Bool = true
 
     @Default(.windowTitlePosition) var windowTitlePosition
@@ -48,6 +48,7 @@ struct WindowPreview: View {
     @Default(.dockLivePreviewFrameRate) var dockLivePreviewFrameRate
     @Default(.windowSwitcherLivePreviewQuality) var windowSwitcherLivePreviewQuality
     @Default(.windowSwitcherLivePreviewFrameRate) var windowSwitcherLivePreviewFrameRate
+    @Default(.showAnimations) var showAnimations
 
     @State private var isHoveringOverDockPeekPreview = false
     @State private var isHoveringOverWindowSwitcherPreview = false
@@ -488,10 +489,9 @@ struct WindowPreview: View {
         let isSelectedByKeyboardInDock = !windowSwitcherActive && (index == currIndex)
         let isSelectedByKeyboardInSwitcher = windowSwitcherActive && (index == currIndex)
 
-        let finalIsSelected = isHoveringOverDockPeekPreview ||
-            isSelectedByKeyboardInSwitcher ||
+        let finalIsSelected = isSelectedByKeyboardInSwitcher ||
             isSelectedByKeyboardInDock ||
-            isHoveringOverWindowSwitcherPreview
+            isHoveringOverDockPeekPreview
 
         ZStack(alignment: .topLeading) {
             VStack(alignment: .leading, spacing: 0) {
@@ -623,16 +623,37 @@ struct WindowPreview: View {
         }
         .environment(\.layoutDirection, .leftToRight)
         .contentShape(Rectangle())
-        .onHover { isHovering in
-            if !isDraggingOver {
-                withAnimation(.snappy(duration: 0.175)) {
-                    if !windowSwitcherActive {
-                        isHoveringOverDockPeekPreview = isHovering
-                        handleFullPreviewHover(isHovering: isHovering, action: previewHoverAction)
-                    } else {
-                        isHoveringOverWindowSwitcherPreview = isHovering
-                        onHoverIndexChange?(isHovering ? index : nil)
+        .onContinuousHover { phase in
+            if isDraggingOver { return }
+
+            let setHoverState: (Bool) -> Void = { newState in
+                if showAnimations {
+                    withAnimation(.snappy(duration: 0.175)) {
+                        if windowSwitcherActive { isHoveringOverWindowSwitcherPreview = newState }
+                        else { isHoveringOverDockPeekPreview = newState }
                     }
+                } else {
+                    if windowSwitcherActive { isHoveringOverWindowSwitcherPreview = newState }
+                    else { isHoveringOverDockPeekPreview = newState }
+                }
+            }
+
+            let currentHoverState = windowSwitcherActive ? isHoveringOverWindowSwitcherPreview : isHoveringOverDockPeekPreview
+
+            switch phase {
+            case let .active(location):
+                if windowSwitcherActive {
+                    let shouldApply = onHoverIndexChange?(index, location) ?? true
+                    if shouldApply, !currentHoverState { setHoverState(true) }
+                } else if !currentHoverState {
+                    setHoverState(true)
+                    handleFullPreviewHover(isHovering: true, action: previewHoverAction)
+                }
+            case .ended:
+                if windowSwitcherActive { _ = onHoverIndexChange?(nil, nil) }
+                if currentHoverState {
+                    setHoverState(false)
+                    if !windowSwitcherActive { handleFullPreviewHover(isHovering: false, action: previewHoverAction) }
                 }
             }
         }

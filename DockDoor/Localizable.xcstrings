@@ -17336,6 +17336,7 @@
       }
     },
     "Automatically scrolls the window switcher when hovering over windows with the mouse." : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -39599,6 +39600,9 @@
           }
         }
       }
+    },
+    "Enable mouse hover selection" : {
+
     },
     "Enable Pinning" : {
       "localizations" : {
@@ -89125,6 +89129,7 @@
       }
     },
     "Scroll to window on mouse hover" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -91028,6 +91033,9 @@
           }
         }
       }
+    },
+    "Select and scroll to windows when hovering with mouse. Disable for keyboard-only navigation." : {
+
     },
     "Select which applications can be captured and previewed" : {
       "extractionState" : "stale",
