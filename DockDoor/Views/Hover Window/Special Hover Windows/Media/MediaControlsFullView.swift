@@ -21,8 +21,9 @@ struct MediaControlsFullView: View {
     let hoveringWindowTitle: Bool
 
     @Default(.showAppName) var showAppTitleData
-    @Default(.showAppIconOnly) var showAppIconOnly
     @Default(.appNameStyle) var appNameStyle
+    @Default(.dockShowHeaderAppIcon) var dockShowHeaderAppIcon
+    @Default(.dockShowHeaderAppName) var dockShowHeaderAppName
     @Default(.showAnimations) var showAnimations
 
     @State private var initialContentSize: CGSize = .zero
@@ -52,7 +53,9 @@ struct MediaControlsFullView: View {
                     SharedHoverAppTitle(
                         appName: appName,
                         appIcon: appIcon,
-                        hoveringAppIcon: hoveringAppIcon
+                        hoveringAppIcon: hoveringAppIcon,
+                        showAppIcon: dockShowHeaderAppIcon,
+                        showAppNameLabel: dockShowHeaderAppName
                     )
                     .padding([.top, .leading], 4)
                 }
@@ -83,7 +86,9 @@ struct MediaControlsFullView: View {
             SharedHoverAppTitle(
                 appName: appName,
                 appIcon: appIcon,
-                hoveringAppIcon: hoveringAppIcon
+                hoveringAppIcon: hoveringAppIcon,
+                showAppIcon: dockShowHeaderAppIcon,
+                showAppNameLabel: dockShowHeaderAppName
             )
             .padding([.top, .leading], 4)
         }

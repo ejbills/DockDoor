@@ -56,7 +56,6 @@ struct MediaControlsView: View {
 
     @Default(.uniformCardRadius) var uniformCardRadius
     @Default(.showAppName) var showAppTitleData
-    @Default(.showAppIconOnly) var showAppIconOnly
     @Default(.appNameStyle) var appNameStyle
     @Default(.showAnimations) var showAnimations
 
