@@ -2589,6 +2589,7 @@ footer {
     border: 1px solid var(--text-secondary);
     border-radius: var(--radius);
     padding: 2rem;
+    margin-bottom: 2rem;
 }
 
 .press-quote {
