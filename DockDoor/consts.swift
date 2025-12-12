@@ -21,6 +21,7 @@ extension Defaults.Keys {
     static let bufferFromDock = Key<CGFloat>("bufferFromDock", default: CoreDockIsMagnificationEnabled() ? -25 : DockUtils.getDockPosition() == .right ? -18 : -20)
     static let globalPaddingMultiplier = Key<CGFloat>("globalPaddingMultiplier", default: 1.0)
     static let hoverWindowOpenDelay = Key<CGFloat>("openDelay", default: 0.2)
+    static let useDelayOnlyForInitialOpen = Key<Bool>("useDelayOnlyForInitialOpen", default: false)
     static let preventDockHide = Key<Bool>("preventDockHide", default: false)
     static let preventSwitcherHide = Key<Bool>("preventSwitcherHide", default: false)
     static let shouldHideOnDockItemClick = Key<Bool>("shouldHideOnDockItemClick", default: false)

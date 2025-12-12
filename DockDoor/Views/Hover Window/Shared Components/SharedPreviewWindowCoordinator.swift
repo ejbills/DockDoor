@@ -668,7 +668,8 @@ final class SharedPreviewWindowCoordinator: NSPanel {
                     bypassDockMouseValidation: Bool = false,
                     dockPositionOverride: DockPosition? = nil, initialIndex: Int? = nil)
     {
-        let delay = overrideDelay ? 0 : Defaults[.hoverWindowOpenDelay]
+        let shouldSkipDelay = overrideDelay || (Defaults[.useDelayOnlyForInitialOpen] && isVisible)
+        let delay = shouldSkipDelay ? 0 : Defaults[.hoverWindowOpenDelay]
 
         let workItem = { [weak self] in
             guard let self else { return }

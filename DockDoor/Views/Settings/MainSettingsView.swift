@@ -110,6 +110,7 @@ struct MainSettingsView: View {
     @State private var showAdvancedSettings: Bool = false
 
     @Default(.hoverWindowOpenDelay) var hoverWindowOpenDelay
+    @Default(.useDelayOnlyForInitialOpen) var useDelayOnlyForInitialOpen
     @Default(.fadeOutDuration) var fadeOutDuration
     @Default(.preventPreviewReentryDuringFadeOut) var preventPreviewReentryDuringFadeOut
     @Default(.inactivityTimeout) var inactivityTimeout
@@ -673,6 +674,15 @@ struct MainSettingsView: View {
             StyledGroupBox(label: "Performance Tuning (Dock Previews)") {
                 VStack(alignment: .leading, spacing: 10) {
                     sliderSetting(title: "Preview Window Open Delay", value: $hoverWindowOpenDelay, range: 0 ... 2, step: 0.1, unit: "seconds", formatter: NumberFormatter.oneDecimalFormatter)
+                    VStack(alignment: .leading) {
+                        Toggle(isOn: $useDelayOnlyForInitialOpen) {
+                            Text("Only use delay for initial window opening")
+                        }
+                        Text("When enabled, switching between dock icons while a preview is already open will show previews instantly.")
+                            .font(.footnote)
+                            .foregroundColor(.gray)
+                            .padding(.leading, 20)
+                    }
                     sliderSetting(title: "Preview Window Fade Out Duration", value: $fadeOutDuration, range: 0 ... 2, step: 0.1, unit: "seconds", formatter: NumberFormatter.oneDecimalFormatter)
                     sliderSetting(title: "Preview Window Inactivity Timer", value: $inactivityTimeout, range: 0 ... 3, step: 0.1, unit: "seconds", formatter: NumberFormatter.oneDecimalFormatter)
                     sliderSetting(title: "Window Processing Debounce Interval", value: $windowProcessingDebounceInterval, range: 0 ... 3, step: 0.1, unit: "seconds", formatter: NumberFormatter.oneDecimalFormatter, onEditingChanged: { isEditing in
