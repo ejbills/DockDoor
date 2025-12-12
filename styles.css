@@ -44,6 +44,7 @@ html {
     width: 100%;
     max-width: 100vw;
     overflow-x: hidden;
+    scroll-behavior: smooth;
 }
 
 body {
@@ -54,9 +55,6 @@ body {
     font-size: 17px;
     font-weight: 400;
     letter-spacing: -0.022em;
-    overflow-x: hidden;
-    scroll-behavior: smooth;
-    scroll-padding-top: 5rem;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     width: 100%;
@@ -228,8 +226,8 @@ img {
 /* Header/Navigation */
 header {
     background: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
     border-bottom: 1px solid rgba(0, 0, 0, 0.05);
     position: sticky;
     top: 0;
@@ -329,8 +327,6 @@ header {
     }
 }
 
-
-
 .nav-links {
     display: flex;
     gap: 2rem;
@@ -364,7 +360,6 @@ header {
     align-items: center;
     gap: 1rem;
 }
-
 
 .mobile-menu-btn {
     display: none;
@@ -2354,6 +2349,7 @@ footer {
     
     .mobile-menu-btn {
         display: block;
+        margin-left: 1rem;
     }
     
     .section-title {
@@ -2593,6 +2589,7 @@ footer {
     border: 1px solid var(--text-secondary);
     border-radius: var(--radius);
     padding: 2rem;
+    margin-bottom: 2rem;
 }
 
 .press-quote {
