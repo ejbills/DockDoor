@@ -75,6 +75,7 @@ extension AppearanceSettingsView {
 
     static func getMockCoordinator(windows: [WindowInfo], windowSwitcherActive: Bool, dockPosition: DockPosition, bestGuessMonitor: NSScreen) -> PreviewStateCoordinator {
         let coordinator = PreviewStateCoordinator()
+        coordinator.isMockCoordinator = true // Prevent interference with real dock previews
         coordinator.setWindows(windows, dockPosition: dockPosition, bestGuessMonitor: bestGuessMonitor, isMockPreviewActive: true)
         coordinator.windowSwitcherActive = windowSwitcherActive
         if !windows.isEmpty {
@@ -90,10 +91,6 @@ struct AppearanceSettingsView: View {
     @Default(.useLiquidGlass) var useLiquidGlass
     @Default(.showAppName) var showAppName
     @Default(.appNameStyle) var appNameStyle
-    @Default(.showWindowTitle) var showWindowTitle
-    @Default(.windowTitleDisplayCondition) var windowTitleDisplayCondition
-    @Default(.windowTitleVisibility) var windowTitleVisibility
-    @Default(.windowTitlePosition) var windowTitlePosition
     @Default(.windowSwitcherControlPosition) var windowSwitcherControlPosition
     @Default(.dockPreviewControlPosition) var dockPreviewControlPosition
 
@@ -106,13 +103,43 @@ struct AppearanceSettingsView: View {
     @Default(.previewMaxColumns) var previewMaxColumns
     @Default(.previewMaxRows) var previewMaxRows
     @Default(.switcherMaxRows) var switcherMaxRows
-    @Default(.showAppIconOnly) var showAppIconOnly
     @Default(.globalPaddingMultiplier) var globalPaddingMultiplier
     @Default(.useEmbeddedDockPreviewElements) var useEmbeddedDockPreviewElements
-    @Default(.disableDockStyleTrafficLights) var disableDockStyleTrafficLights
-    @Default(.disableDockStyleTitles) var disableDockStyleTitles
+    @Default(.useEmbeddedWindowSwitcherElements) var useEmbeddedWindowSwitcherElements
     @Default(.showMinimizedHiddenLabels) var showMinimizedHiddenLabels
     @Default(.enableTitleMarquee) var enableTitleMarquee
+
+    // Dock header settings
+    @Default(.showAppIconOnly) var dockShowHeaderAppIcon
+    @Default(.showAppName) var dockShowHeaderAppName
+
+    // Dock embedded mode settings
+    @Default(.showWindowTitle) var dockShowWindowTitle
+    @Default(.windowTitleVisibility) var dockWindowTitleVisibility
+    @Default(.trafficLightButtonsVisibility) var dockTrafficLightButtonsVisibility
+    @Default(.enabledTrafficLightButtons) var dockEnabledTrafficLightButtons
+    @Default(.useMonochromeTrafficLights) var dockUseMonochromeTrafficLights
+    @Default(.disableDockStyleTrafficLights) var dockDisableDockStyleTrafficLights
+    @Default(.disableDockStyleTitles) var dockDisableDockStyleTitles
+    @Default(.disableButtonHoverEffects) var dockDisableButtonHoverEffects
+
+    // Window Switcher header settings
+    @Default(.switcherShowHeaderAppIcon) var switcherShowHeaderAppIcon
+    @Default(.switcherShowHeaderAppName) var switcherShowHeaderAppName
+    @Default(.switcherShowHeaderWindowTitle) var switcherShowHeaderWindowTitle
+    @Default(.switcherHeaderAppIconVisibility) var switcherHeaderAppIconVisibility
+    @Default(.switcherHeaderAppNameVisibility) var switcherHeaderAppNameVisibility
+    @Default(.switcherHeaderTitleVisibility) var switcherHeaderTitleVisibility
+
+    // Window Switcher embedded mode settings
+    @Default(.switcherShowWindowTitle) var switcherShowWindowTitle
+    @Default(.switcherWindowTitleVisibility) var switcherWindowTitleVisibility
+    @Default(.switcherTrafficLightButtonsVisibility) var switcherTrafficLightButtonsVisibility
+    @Default(.switcherEnabledTrafficLightButtons) var switcherEnabledTrafficLightButtons
+    @Default(.switcherUseMonochromeTrafficLights) var switcherUseMonochromeTrafficLights
+    @Default(.switcherDisableDockStyleTrafficLights) var switcherDisableDockStyleTrafficLights
+    @Default(.switcherDisableDockStyleTitles) var switcherDisableDockStyleTitles
+    @Default(.switcherDisableButtonHoverEffects) var switcherDisableButtonHoverEffects
 
     // Compact mode settings
     @Default(.compactModeTitleFormat) var compactModeTitleFormat
@@ -131,8 +158,8 @@ struct AppearanceSettingsView: View {
 
     @State private var showAdvancedAppearanceSettings: Bool = false
     @State private var selectedPreviewContext: PreviewContext = .dock
+    @State private var isHoveringOverPreview: Bool = false
 
-    @State private var previousWindowTitlePosition: WindowTitlePosition
     @State private var mockAppNameForPreview: String = "DockDoor (•‿•)"
     @StateObject private var mockWindowSwitcherCoordinator: PreviewStateCoordinator
     @StateObject private var mockDockPreviewCoordinator: PreviewStateCoordinator
@@ -140,8 +167,6 @@ struct AppearanceSettingsView: View {
     private let advancedAppearanceSettingsSectionID = "advancedAppearanceSettingsSection"
 
     init() {
-        _previousWindowTitlePosition = State(initialValue: Defaults[.windowTitlePosition])
-
         let initialMockWindows = AppearanceSettingsView.generateMockWindowsForPreview()
 
         _mockDockPreviewCoordinator = StateObject(wrappedValue: AppearanceSettingsView.getMockCoordinator(
@@ -367,11 +392,11 @@ struct AppearanceSettingsView: View {
                                 bestGuessMonitor: NSScreen.main!,
                                 dockItemElement: nil,
                                 windowSwitcherCoordinator: currentCoordinator,
-                                mockPreviewActive: true,
+                                mockPreviewActive: false,
+                                disableActions: true,
                                 updateAvailable: false,
                                 hasScreenRecordingPermission: true
                             )
-                            .allowsHitTesting(false)
                         } else {
                             Text("Loading preview...")
                                 .frame(minHeight: 150, maxHeight: 250)
@@ -402,22 +427,41 @@ struct AppearanceSettingsView: View {
     @ViewBuilder
     private var dockPreviewSettings: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Toggle(isOn: $showAppName) {
-                Text("Show App Name in Dock Previews")
-            }
+            // MARK: - Display Mode
 
-            Picker(String(localized: "App Name Style"), selection: $appNameStyle) {
-                ForEach(AppNameStyle.allCases, id: \.self) { style in
-                    Text(style.localizedName)
-                        .tag(style)
+            VStack(alignment: .leading) {
+                Toggle(isOn: $useEmbeddedDockPreviewElements) {
+                    Text(String(localized: "Embed controls in preview frames", comment: "Dock preview setting: embed mode toggle"))
                 }
+                Text(String(localized: "Places traffic light buttons and window titles directly inside the dock preview frames for a more compact and minimal appearance.", comment: "Dock preview setting: embed mode description"))
+                    .font(.footnote)
+                    .foregroundColor(.gray)
+                    .padding(.leading, 20)
             }
-            .disabled(!showAppName)
 
             Divider().padding(.vertical, 2)
+
+            // MARK: - Dock Preview Toolbar
+
             Text("Dock Preview Toolbar").font(.headline).padding(.bottom, -2)
 
-            Picker("Position Dock Preview Controls", selection: $dockPreviewControlPosition) {
+            Toggle(isOn: $dockShowHeaderAppIcon) {
+                Text("Show App Icon")
+            }
+
+            Toggle(isOn: $dockShowHeaderAppName) {
+                Text("Show App Name")
+            }
+
+            Divider().padding(.vertical, 2)
+
+            // MARK: - Controls Position
+
+            Text(String(localized: "Controls Position", comment: "Dock preview settings section title"))
+                .font(.headline)
+                .padding(.bottom, -2)
+
+            Picker("Position", selection: $dockPreviewControlPosition) {
                 ForEach(WindowSwitcherControlPosition.allCases, id: \.self) { position in
                     Text(position.localizedName)
                         .tag(position)
@@ -425,37 +469,38 @@ struct AppearanceSettingsView: View {
             }
             .pickerStyle(MenuPickerStyle())
 
-            Toggle(isOn: $showWindowTitle) {
-                Text("Show Window Title")
-            }
+            Divider().padding(.vertical, 2)
 
-            Toggle(isOn: Binding(
-                get: { !showAppIconOnly },
-                set: { showAppIconOnly = !$0 }
-            )) {
-                Text("Show App Name")
-            }
+            // MARK: - Window Title
 
-            if showWindowTitle {
-                Picker("Show Window Title in", selection: $windowTitleDisplayCondition) {
-                    ForEach(WindowTitleDisplayCondition.allCases, id: \.self) { condition in
-                        Text(condition.localizedName)
-                            .tag(condition)
-                    }
+            Text(String(localized: "Window Title", comment: "Dock preview settings section title"))
+                .font(.headline)
+                .padding(.bottom, -2)
+            Text(String(localized: "Window title shown on each preview. Position changes based on embedded mode.", comment: "Dock preview settings section description"))
+                .font(.caption)
+                .foregroundColor(.secondary)
+
+            HStack {
+                Toggle(isOn: $dockShowWindowTitle) {
+                    Text(String(localized: "Show Window Title", comment: "Dock preview setting toggle"))
                 }
-
-                Picker("Window Title Visibility", selection: $windowTitleVisibility) {
-                    ForEach(WindowTitleVisibility.allCases, id: \.self) { visibility in
-                        Text(visibility.localizedName)
-                            .tag(visibility)
+                if dockShowWindowTitle {
+                    Picker("", selection: $dockWindowTitleVisibility) {
+                        ForEach(WindowTitleVisibility.visibleCases, id: \.self) { visibility in
+                            Text(visibility.localizedName)
+                                .tag(visibility)
+                        }
                     }
+                    .labelsHidden()
+                    .frame(maxWidth: 180)
                 }
-
+            }
+            if dockShowWindowTitle {
                 VStack(alignment: .leading) {
-                    Toggle(isOn: $disableDockStyleTitles) {
-                        Text("Disable dock styling on window titles")
+                    Toggle(isOn: $dockDisableDockStyleTitles) {
+                        Text(String(localized: "Disable dock styling on window titles", comment: "Dock preview setting toggle"))
                     }
-                    Text("Removes the pill-shaped background styling from window titles in dock previews for a cleaner look.")
+                    Text(String(localized: "Removes the pill-shaped background styling from window titles for a cleaner look.", comment: "Dock preview setting description"))
                         .font(.footnote)
                         .foregroundColor(.gray)
                         .padding(.leading, 20)
@@ -463,31 +508,24 @@ struct AppearanceSettingsView: View {
             }
 
             Divider().padding(.vertical, 2)
-            Text("Traffic Light Buttons in Previews").font(.headline).padding(.bottom, -2)
-            TrafficLightButtonsSettingsView()
 
-            VStack(alignment: .leading) {
-                Toggle(isOn: $disableDockStyleTrafficLights) {
-                    Text("Disable dock styling on traffic light buttons")
-                }
-                Text("Removes the pill-shaped background styling from traffic light buttons in dock previews for a cleaner look.")
-                    .font(.footnote)
-                    .foregroundColor(.gray)
-                    .padding(.leading, 20)
-            }
+            // MARK: - Traffic Light Buttons in Previews
+
+            Text("Traffic Light Buttons in Previews").font(.headline).padding(.bottom, -2)
+
+            ContextTrafficLightButtonsSettingsView(
+                visibility: $dockTrafficLightButtonsVisibility,
+                enabledButtons: $dockEnabledTrafficLightButtons,
+                useMonochrome: $dockUseMonochromeTrafficLights,
+                disableButtonHoverEffects: $dockDisableButtonHoverEffects,
+                disableDockStyle: $dockDisableDockStyleTrafficLights
+            )
 
             Divider().padding(.vertical, 2)
-            Text("Dock Preview Layout").font(.headline).padding(.bottom, -2)
 
-            VStack(alignment: .leading) {
-                Toggle(isOn: $useEmbeddedDockPreviewElements) {
-                    Text("Embed controls in preview frames")
-                }
-                Text("Places traffic light buttons and window titles directly inside the dock preview frames for a more compact and minimal appearance.")
-                    .font(.footnote)
-                    .foregroundColor(.gray)
-                    .padding(.leading, 20)
-            }
+            // MARK: - Dock Preview Layout
+
+            Text("Dock Preview Layout").font(.headline).padding(.bottom, -2)
 
             VStack(alignment: .leading, spacing: 4) {
                 let previewMaxRowsBinding = Binding<Double>(
@@ -532,7 +570,27 @@ struct AppearanceSettingsView: View {
     @ViewBuilder
     private var windowSwitcherPreviewSettings: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Picker("Position Window Controls", selection: $windowSwitcherControlPosition) {
+            // MARK: - Display Mode
+
+            VStack(alignment: .leading) {
+                Toggle(isOn: $useEmbeddedWindowSwitcherElements) {
+                    Text(String(localized: "Embed controls in preview frames", comment: "Window switcher setting: embed mode toggle"))
+                }
+                Text(String(localized: "Places traffic light buttons and window titles directly inside the window switcher preview frames for a more compact and minimal appearance.", comment: "Window switcher setting: embed mode description"))
+                    .font(.footnote)
+                    .foregroundColor(.gray)
+                    .padding(.leading, 20)
+            }
+
+            Divider().padding(.vertical, 2)
+
+            // MARK: - Controls Position
+
+            Text(String(localized: "Controls Position", comment: "Window switcher settings section title"))
+                .font(.headline)
+                .padding(.bottom, -2)
+
+            Picker("Position", selection: $windowSwitcherControlPosition) {
                 ForEach(WindowSwitcherControlPosition.allCases, id: \.self) { position in
                     Text(position.localizedName)
                         .tag(position)
@@ -541,7 +599,122 @@ struct AppearanceSettingsView: View {
             .pickerStyle(MenuPickerStyle())
 
             Divider().padding(.vertical, 2)
+
+            // MARK: - Header (each window shows its own info)
+
+            Text(String(localized: "Header Bar", comment: "Window switcher settings section title"))
+                .font(.headline)
+                .padding(.bottom, -2)
+            Text(String(localized: "Info shown above each window preview. Visibility options apply based on hover.", comment: "Window switcher settings section description"))
+                .font(.caption)
+                .foregroundColor(.secondary)
+
+            HStack {
+                Toggle(isOn: $switcherShowHeaderAppIcon) {
+                    Text(String(localized: "App Icon", comment: "Window switcher header bar toggle"))
+                }
+                if switcherShowHeaderAppIcon {
+                    Picker("", selection: $switcherHeaderAppIconVisibility) {
+                        ForEach(WindowTitleVisibility.headerCases, id: \.self) { visibility in
+                            Text(visibility.localizedName)
+                                .tag(visibility)
+                        }
+                    }
+                    .labelsHidden()
+                    .frame(maxWidth: 180)
+                }
+            }
+
+            HStack {
+                Toggle(isOn: $switcherShowHeaderAppName) {
+                    Text(String(localized: "App Name", comment: "Window switcher header bar toggle"))
+                }
+                if switcherShowHeaderAppName {
+                    Picker("", selection: $switcherHeaderAppNameVisibility) {
+                        ForEach(WindowTitleVisibility.headerCases, id: \.self) { visibility in
+                            Text(visibility.localizedName)
+                                .tag(visibility)
+                        }
+                    }
+                    .labelsHidden()
+                    .frame(maxWidth: 180)
+                }
+            }
+
+            HStack {
+                Toggle(isOn: $switcherShowHeaderWindowTitle) {
+                    Text(String(localized: "Window Title", comment: "Window switcher header bar toggle"))
+                }
+                if switcherShowHeaderWindowTitle {
+                    Picker("", selection: $switcherHeaderTitleVisibility) {
+                        ForEach(WindowTitleVisibility.headerCases, id: \.self) { visibility in
+                            Text(visibility.localizedName)
+                                .tag(visibility)
+                        }
+                    }
+                    .labelsHidden()
+                    .frame(maxWidth: 180)
+                }
+            }
+
+            Divider().padding(.vertical, 2)
+
+            // MARK: - Embedded Title
+
+            Text(String(localized: "Embedded Title", comment: "Window switcher settings section title"))
+                .font(.headline)
+                .padding(.bottom, -2)
+            Text(String(localized: "Title displayed inside the preview frame when embedded mode is enabled.", comment: "Window switcher settings section description"))
+                .font(.caption)
+                .foregroundColor(.secondary)
+
+            HStack {
+                Toggle(isOn: $switcherShowWindowTitle) {
+                    Text(String(localized: "Show Embedded Title", comment: "Window switcher setting toggle"))
+                }
+                if switcherShowWindowTitle {
+                    Picker("", selection: $switcherWindowTitleVisibility) {
+                        ForEach(WindowTitleVisibility.visibleCases, id: \.self) { visibility in
+                            Text(visibility.localizedName)
+                                .tag(visibility)
+                        }
+                    }
+                    .labelsHidden()
+                    .frame(maxWidth: 180)
+                }
+            }
+            if switcherShowWindowTitle {
+                VStack(alignment: .leading) {
+                    Toggle(isOn: $switcherDisableDockStyleTitles) {
+                        Text(String(localized: "Disable dock styling on window titles", comment: "Window switcher setting toggle"))
+                    }
+                    Text(String(localized: "Removes the pill-shaped background styling from window titles in window switcher previews for a cleaner look.", comment: "Window switcher setting description"))
+                        .font(.footnote)
+                        .foregroundColor(.gray)
+                        .padding(.leading, 20)
+                }
+            }
+
+            Divider().padding(.vertical, 2)
+
+            // MARK: - Traffic Light Buttons in Previews
+
+            Text("Traffic Light Buttons in Previews").font(.headline).padding(.bottom, -2)
+
+            ContextTrafficLightButtonsSettingsView(
+                visibility: $switcherTrafficLightButtonsVisibility,
+                enabledButtons: $switcherEnabledTrafficLightButtons,
+                useMonochrome: $switcherUseMonochromeTrafficLights,
+                disableButtonHoverEffects: $switcherDisableButtonHoverEffects,
+                disableDockStyle: $switcherDisableDockStyleTrafficLights
+            )
+
+            Divider().padding(.vertical, 2)
+
+            // MARK: - Preview Layout (Switcher)
+
             Text("Preview Layout (Switcher)").font(.headline).padding(.bottom, -2)
+
             VStack(alignment: .leading, spacing: 4) {
                 let switcherMaxRowsBinding = Binding<Double>(
                     get: { Double(switcherMaxRows) },

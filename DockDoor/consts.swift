@@ -56,8 +56,37 @@ extension Defaults.Keys {
     static let showSpecialAppControls = Key<Bool>("showSpecialAppControls", default: true)
     static let useEmbeddedMediaControls = Key<Bool>("useEmbeddedMediaControls", default: false)
     static let useEmbeddedDockPreviewElements = Key<Bool>("useEmbeddedDockPreviewElements", default: false)
+    static let useEmbeddedWindowSwitcherElements = Key<Bool>("useEmbeddedWindowSwitcherElements", default: false)
+
+    // Dock appearance settings (primary context - uses unprefixed keys)
+    static let showWindowTitle = Key<Bool>("showWindowTitle", default: true)
+    static let showAppIconOnly = Key<Bool>("showAppIconOnly", default: false)
+    static let windowTitleVisibility = Key<WindowTitleVisibility>("windowTitleVisibility", default: .alwaysVisible)
+    static let trafficLightButtonsVisibility = Key<TrafficLightButtonsVisibility>("trafficLightButtonsVisibility", default: .dimmedOnPreviewHover)
+    static let enabledTrafficLightButtons = Key<Set<WindowAction>>("enabledTrafficLightButtons", default: [.quit, .close, .minimize, .toggleFullScreen])
+    static let useMonochromeTrafficLights = Key<Bool>("useMonochromeTrafficLights", default: false)
     static let disableDockStyleTrafficLights = Key<Bool>("disableDockStyleTrafficLights", default: false)
     static let disableDockStyleTitles = Key<Bool>("disableDockStyleTitles", default: false)
+    static let disableButtonHoverEffects = Key<Bool>("disableButtonHoverEffects", default: false)
+
+    // Window Switcher header settings
+    static let switcherShowHeaderAppIcon = Key<Bool>("switcherShowHeaderAppIcon", default: true)
+    static let switcherShowHeaderAppName = Key<Bool>("switcherShowHeaderAppName", default: true)
+    static let switcherShowHeaderWindowTitle = Key<Bool>("switcherShowHeaderWindowTitle", default: true)
+    static let switcherHeaderAppIconVisibility = Key<WindowTitleVisibility>("switcherHeaderAppIconVisibility", default: .alwaysVisible)
+    static let switcherHeaderAppNameVisibility = Key<WindowTitleVisibility>("switcherHeaderAppNameVisibility", default: .alwaysVisible)
+    static let switcherHeaderTitleVisibility = Key<WindowTitleVisibility>("switcherHeaderTitleVisibility", default: .alwaysVisible)
+
+    // Window Switcher embedded mode settings
+    static let switcherShowWindowTitle = Key<Bool>("switcherShowWindowTitle", default: true)
+    static let switcherWindowTitleVisibility = Key<WindowTitleVisibility>("switcherWindowTitleVisibility", default: .alwaysVisible)
+    static let switcherTrafficLightButtonsVisibility = Key<TrafficLightButtonsVisibility>("switcherTrafficLightButtonsVisibility", default: .dimmedOnPreviewHover)
+    static let switcherEnabledTrafficLightButtons = Key<Set<WindowAction>>("switcherEnabledTrafficLightButtons", default: [.quit, .close, .minimize, .toggleFullScreen])
+    static let switcherUseMonochromeTrafficLights = Key<Bool>("switcherUseMonochromeTrafficLights", default: false)
+    static let switcherDisableDockStyleTrafficLights = Key<Bool>("switcherDisableDockStyleTrafficLights", default: false)
+    static let switcherDisableDockStyleTitles = Key<Bool>("switcherDisableDockStyleTitles", default: false)
+    static let switcherDisableButtonHoverEffects = Key<Bool>("switcherDisableButtonHoverEffects", default: false)
+
     static let showBigControlsWhenNoValidWindows = Key<Bool>("showBigControlsWhenNoValidWindows", default: true)
     static let enablePinning = Key<Bool>("enablePinning", default: true)
 
@@ -108,17 +137,8 @@ extension Defaults.Keys {
     static let hidePreviewCardBackground = Key<Bool>("hidePreviewCardBackground", default: false)
     static let showActiveWindowBorder = Key<Bool>("showActiveWindowBorder", default: false)
 
-    static let showWindowTitle = Key<Bool>("showWindowTitle", default: true)
-    static let showAppIconOnly = Key<Bool>("showAppIconOnly", default: false)
-    static let windowTitleDisplayCondition = Key<WindowTitleDisplayCondition>("windowTitleDisplayCondition", default: .all)
-    static let windowTitleVisibility = Key<WindowTitleVisibility>("windowTitleVisibility", default: .alwaysVisible)
-    static let windowTitlePosition = Key<WindowTitlePosition>("windowTitlePosition", default: .bottomLeft)
     static let enableTitleMarquee = Key<Bool>("enableTitleMarquee", default: true)
 
-    static let trafficLightButtonsVisibility = Key<TrafficLightButtonsVisibility>("trafficLightButtonsVisibility", default: .dimmedOnPreviewHover)
-    static let trafficLightButtonsPosition = Key<TrafficLightButtonsPosition>("trafficLightButtonsPosition", default: .topLeft)
-    static let enabledTrafficLightButtons = Key<Set<WindowAction>>("enabledTrafficLightButtons", default: [.quit, .close, .minimize, .toggleFullScreen])
-    static let useMonochromeTrafficLights = Key<Bool>("useMonochromeTrafficLights", default: false)
     static let showMinimizedHiddenLabels = Key<Bool>("showMinimizedHiddenLabels", default: true)
 
     static let previewMaxColumns = Key<Int>("previewMaxColumns", default: 2) // For left/right dock
@@ -215,43 +235,6 @@ enum WindowImageCaptureQuality: String, CaseIterable, Defaults.Serializable {
     }
 }
 
-enum WindowTitleDisplayCondition: String, CaseIterable, Defaults.Serializable {
-    case all
-    case dockPreviewsOnly
-    case windowSwitcherOnly
-
-    var localizedName: String {
-        switch self {
-        case .all:
-            String(localized: "Dock Previews & Window Switcher", comment: "Preview window title display condition option")
-        case .dockPreviewsOnly:
-            String(localized: "Dock Previews only", comment: "Preview window title condition display option")
-        case .windowSwitcherOnly:
-            String(localized: "Window Switcher only", comment: "Preview window title condition display option")
-        }
-    }
-}
-
-enum WindowTitlePosition: String, CaseIterable, Defaults.Serializable {
-    case bottomLeft
-    case bottomRight
-    case topRight
-    case topLeft
-
-    var localizedName: String {
-        switch self {
-        case .bottomLeft:
-            String(localized: "Bottom Left", comment: "Preview window title position option")
-        case .bottomRight:
-            String(localized: "Bottom Right", comment: "Preview window title position option")
-        case .topRight:
-            String(localized: "Top Right", comment: "Preview window title position option")
-        case .topLeft:
-            String(localized: "Top Left", comment: "Preview window title position option")
-        }
-    }
-}
-
 enum AppNameStyle: String, CaseIterable, Defaults.Serializable {
     case `default`
     case shadowed
@@ -271,12 +254,29 @@ enum AppNameStyle: String, CaseIterable, Defaults.Serializable {
 
 enum WindowTitleVisibility: String, CaseIterable, Defaults.Serializable {
     case whenHoveringPreview
+    case never
+    case hiddenUntilHover
+    case dimmedUntilHover
     case alwaysVisible
+
+    static var visibleCases: [WindowTitleVisibility] {
+        [.hiddenUntilHover, .dimmedUntilHover, .alwaysVisible]
+    }
+
+    static var headerCases: [WindowTitleVisibility] {
+        [.hiddenUntilHover, .alwaysVisible]
+    }
 
     var localizedName: String {
         switch self {
         case .whenHoveringPreview:
             String(localized: "When hovering over the preview", comment: "Window title visibility option")
+        case .never:
+            String(localized: "Never visible", comment: "Window title visibility option")
+        case .hiddenUntilHover:
+            String(localized: "When hovering over the preview", comment: "Window title visibility option")
+        case .dimmedUntilHover:
+            String(localized: "Dimmed until hover", comment: "Window title visibility option")
         case .alwaysVisible:
             String(localized: "Always visible", comment: "Window title visibility option")
         }
@@ -285,40 +285,27 @@ enum WindowTitleVisibility: String, CaseIterable, Defaults.Serializable {
 
 enum TrafficLightButtonsVisibility: String, CaseIterable, Defaults.Serializable {
     case never
+    case hiddenUntilHover
     case dimmedOnPreviewHover
     case fullOpacityOnPreviewHover
     case alwaysVisible
+
+    static var visibleCases: [TrafficLightButtonsVisibility] {
+        [.hiddenUntilHover, .dimmedOnPreviewHover, .fullOpacityOnPreviewHover, .alwaysVisible]
+    }
 
     var localizedName: String {
         switch self {
         case .never:
             String(localized: "Never visible", comment: "Traffic light buttons visibility option")
+        case .hiddenUntilHover:
+            String(localized: "Hidden until hover", comment: "Traffic light buttons visibility option")
         case .dimmedOnPreviewHover:
             String(localized: "On window hover; Dimmed until button hover", comment: "Traffic light buttons visibility option")
         case .fullOpacityOnPreviewHover:
             String(localized: "On window hover; Full opacity", comment: "Traffic light buttons visibility option")
         case .alwaysVisible:
             String(localized: "Always visible; Full opacity", comment: "Traffic light buttons visibility option")
-        }
-    }
-}
-
-enum TrafficLightButtonsPosition: String, CaseIterable, Defaults.Serializable {
-    case topLeft
-    case topRight
-    case bottomRight
-    case bottomLeft
-
-    var localizedName: String {
-        switch self {
-        case .topLeft:
-            String(localized: "Top Left", comment: "Traffic light buttons position option")
-        case .topRight:
-            String(localized: "Top Right", comment: "Traffic light buttons position option")
-        case .bottomRight:
-            String(localized: "Bottom Right", comment: "Traffic light buttons position option")
-        case .bottomLeft:
-            String(localized: "Bottom Left", comment: "Traffic light buttons position option")
         }
     }
 }

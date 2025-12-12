@@ -10,6 +10,9 @@ class PreviewStateCoordinator: ObservableObject {
     var initialHoverLocation: CGPoint?
     @Published var fullWindowPreviewActive: Bool = false
     @Published var windows: [WindowInfo] = []
+
+    /// When true, this coordinator is used for settings preview and should NOT interact with SharedPreviewWindowCoordinator
+    var isMockCoordinator: Bool = false
     @Published var shouldScrollToIndex: Bool = true
     @Published var searchQuery: String = "" {
         didSet {
@@ -101,7 +104,9 @@ class PreviewStateCoordinator: ObservableObject {
 
         if windows.isEmpty {
             currIndex = -1
-            SharedPreviewWindowCoordinator.activeInstance?.hideWindow()
+            if !isMockCoordinator {
+                SharedPreviewWindowCoordinator.activeInstance?.hideWindow()
+            }
             return
         }
 
@@ -159,7 +164,9 @@ class PreviewStateCoordinator: ObservableObject {
     func removeAllWindows() {
         windows.removeAll()
         currIndex = -1 // Reset to no selection
-        SharedPreviewWindowCoordinator.activeInstance?.hideWindow()
+        if !isMockCoordinator {
+            SharedPreviewWindowCoordinator.activeInstance?.hideWindow()
+        }
     }
 
     @MainActor
