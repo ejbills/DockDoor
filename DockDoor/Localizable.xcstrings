@@ -13910,6 +13910,12 @@
         }
       }
     },
+    "App Icon" : {
+      "comment" : "Window switcher header bar toggle"
+    },
+    "App Name" : {
+      "comment" : "Window switcher header bar toggle"
+    },
     "App Name + Window Title" : {
       "localizations" : {
         "af" : {
@@ -14291,6 +14297,7 @@
       }
     },
     "App Name Style" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -18668,6 +18675,7 @@
     },
     "Bottom Left" : {
       "comment" : "Preview window title position option\nTraffic light buttons position option",
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -18859,6 +18867,7 @@
     },
     "Bottom Right" : {
       "comment" : "Preview window title position option\nTraffic light buttons position option",
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -27991,6 +28000,9 @@
         }
       }
     },
+    "Controls Position" : {
+      "comment" : "Dock preview settings section title\nWindow switcher settings section title"
+    },
     "Controls the visual detail and update frequency of window previews." : {
       "localizations" : {
         "af" : {
@@ -31801,7 +31813,14 @@
         }
       }
     },
+    "Dimmed until hover" : {
+      "comment" : "Window title visibility option"
+    },
+    "Disable Button Hover Effects" : {
+
+    },
     "Disable dock styling on traffic light buttons" : {
+      "comment" : "Traffic light buttons setting toggle",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -31992,6 +32011,7 @@
       }
     },
     "Disable dock styling on window titles" : {
+      "comment" : "Dock preview setting toggle\nWindow switcher setting toggle",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -35416,6 +35436,7 @@
     },
     "Dock Previews & Window Switcher" : {
       "comment" : "Preview window title display condition option",
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -35607,6 +35628,7 @@
     },
     "Dock Previews only" : {
       "comment" : "Preview window title condition display option",
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -37128,6 +37150,7 @@
       }
     },
     "Embed controls in preview frames" : {
+      "comment" : "Dock preview setting: embed mode toggle\nWindow switcher setting: embed mode toggle",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -37698,6 +37721,9 @@
           }
         }
       }
+    },
+    "Embedded Title" : {
+      "comment" : "Window switcher settings section title"
     },
     "Enable automatic checking for updates" : {
       "localizations" : {
@@ -40552,6 +40578,7 @@
       }
     },
     "Enabled Buttons" : {
+      "comment" : "Traffic light buttons setting section title",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -49702,6 +49729,9 @@
         }
       }
     },
+    "Header Bar" : {
+      "comment" : "Window switcher settings section title"
+    },
     "Help" : {
       "comment" : "Settings tab title",
       "extractionState" : "stale",
@@ -50845,6 +50875,9 @@
           }
         }
       }
+    },
+    "Hidden until hover" : {
+      "comment" : "Traffic light buttons visibility option"
     },
     "Hide Advanced Settings" : {
       "localizations" : {
@@ -55991,6 +56024,9 @@
           }
         }
       }
+    },
+    "Info shown above each window preview. Visibility options apply based on hover." : {
+      "comment" : "Window switcher settings section description"
     },
     "Initialization Key" : {
       "extractionState" : "stale",
@@ -65513,7 +65549,7 @@
       }
     },
     "Never visible" : {
-      "comment" : "Traffic light buttons visibility option",
+      "comment" : "Traffic light buttons visibility option\nWindow title visibility option",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -74275,6 +74311,7 @@
       }
     },
     "Places traffic light buttons and window titles directly inside the dock preview frames for a more compact and minimal appearance." : {
+      "comment" : "Dock preview setting: embed mode description",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -74463,6 +74500,9 @@
           }
         }
       }
+    },
+    "Places traffic light buttons and window titles directly inside the window switcher preview frames for a more compact and minimal appearance." : {
+      "comment" : "Window switcher setting: embed mode description"
     },
     "Please Quit the App to Apply Changes! :)" : {
       "extractionState" : "stale",
@@ -75227,7 +75267,11 @@
         }
       }
     },
+    "Position" : {
+
+    },
     "Position Dock Preview Controls" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -75609,6 +75653,7 @@
       }
     },
     "Position Window Controls" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -83605,6 +83650,7 @@
       }
     },
     "Removes the pill-shaped background styling from traffic light buttons in dock previews for a cleaner look." : {
+      "comment" : "Traffic light buttons setting description",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -83794,7 +83840,11 @@
         }
       }
     },
+    "Removes the pill-shaped background styling from window titles for a cleaner look." : {
+      "comment" : "Dock preview setting description"
+    },
     "Removes the pill-shaped background styling from window titles in dock previews for a cleaner look." : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -83983,6 +84033,9 @@
           }
         }
       }
+    },
+    "Removes the pill-shaped background styling from window titles in window switcher previews for a cleaner look." : {
+      "comment" : "Window switcher setting description"
     },
     "Report a Bug" : {
       "localizations" : {
@@ -94268,6 +94321,9 @@
         }
       }
     },
+    "Show App Icon" : {
+
+    },
     "Show App Name" : {
       "localizations" : {
         "af" : {
@@ -94459,6 +94515,7 @@
       }
     },
     "Show App Name in Dock Previews" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -94837,6 +94894,9 @@
           }
         }
       }
+    },
+    "Show Embedded Title" : {
+      "comment" : "Window switcher setting toggle"
     },
     "Show media/calendar controls on Dock hover" : {
       "localizations" : {
@@ -96170,6 +96230,7 @@
       }
     },
     "Show Window Title" : {
+      "comment" : "Dock preview setting toggle",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -96360,6 +96421,7 @@
       }
     },
     "Show Window Title in" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -106456,6 +106518,9 @@
         }
       }
     },
+    "Title displayed inside the preview frame when embedded mode is enabled." : {
+      "comment" : "Window switcher settings section description"
+    },
     "Title Format" : {
       "localizations" : {
         "af" : {
@@ -107219,6 +107284,7 @@
     },
     "Top Left" : {
       "comment" : "Preview window title position option\nTraffic light buttons position option",
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -107410,6 +107476,7 @@
     },
     "Top Right" : {
       "comment" : "Preview window title position option\nTraffic light buttons position option",
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -108172,6 +108239,7 @@
       }
     },
     "Traffic Light Buttons Visibility" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -113884,6 +113952,9 @@
           }
         }
       }
+    },
+    "Visibility" : {
+
     },
     "Want to see for yourself? Review our source code" : {
       "localizations" : {
@@ -122084,6 +122155,7 @@
     },
     "Window Switcher only" : {
       "comment" : "Preview window title condition display option",
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -123224,6 +123296,9 @@
         }
       }
     },
+    "Window Title" : {
+      "comment" : "Dock preview settings section title\nWindow switcher header bar toggle"
+    },
     "Window title filters" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -123986,7 +124061,11 @@
         }
       }
     },
+    "Window title shown on each preview. Position changes based on embedded mode." : {
+      "comment" : "Dock preview settings section description"
+    },
     "Window Title Visibility" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
