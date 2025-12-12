@@ -5,6 +5,11 @@ import SwiftUI
 class PreviewStateCoordinator: ObservableObject {
     @Published var currIndex: Int = -1
     @Published var windowSwitcherActive: Bool = false
+
+    @Published var hasMovedSinceOpen: Bool = false
+    @Published var lastInputWasKeyboard: Bool = true
+    var initialHoverLocation: CGPoint?
+    @Published var isKeyboardScrolling: Bool = false
     @Published var fullWindowPreviewActive: Bool = false
     @Published var windows: [WindowInfo] = []
     @Published var shouldScrollToIndex: Bool = true
@@ -47,6 +52,13 @@ class PreviewStateCoordinator: ObservableObject {
             return
         }
 
+        if !oldSwitcherState, windowSwitcherActive {
+            hasMovedSinceOpen = false
+            lastInputWasKeyboard = true
+            initialHoverLocation = nil
+            isKeyboardScrolling = false
+        }
+
         // If window switcher state changed and we have windows, recalculate dimensions
         if oldSwitcherState != windowSwitcherActive, !windows.isEmpty {
             if let monitor = lastKnownBestGuessMonitor {
@@ -57,8 +69,13 @@ class PreviewStateCoordinator: ObservableObject {
     }
 
     @MainActor
-    func setIndex(to: Int, shouldScroll: Bool = true) {
+    func setIndex(to: Int, shouldScroll: Bool = true, fromKeyboard: Bool = true) {
         shouldScrollToIndex = shouldScroll
+        lastInputWasKeyboard = fromKeyboard
+        if fromKeyboard {
+            initialHoverLocation = nil
+            hasMovedSinceOpen = false
+        }
         if to >= 0, to < windows.count {
             currIndex = to
         } else {

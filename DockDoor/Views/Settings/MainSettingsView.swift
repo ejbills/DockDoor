@@ -96,7 +96,7 @@ struct MainSettingsView: View {
     @Default(.sortMinimizedToEnd) var sortMinimizedToEnd
     @Default(.keepPreviewOnAppTerminate) var keepPreviewOnAppTerminate
     @Default(.enableCmdTabEnhancements) var enableCmdTabEnhancements
-    @Default(.scrollToMouseHoverInSwitcher) var scrollToMouseHoverInSwitcher
+    @Default(.enableMouseHoverInSwitcher) var enableMouseHoverInSwitcher
     @Default(.includeHiddenWindowsInSwitcher) var includeHiddenWindowsInSwitcher
     @Default(.useClassicWindowOrdering) var useClassicWindowOrdering
     @Default(.limitSwitcherToFrontmostApp) var limitSwitcherToFrontmostApp
@@ -467,8 +467,8 @@ struct MainSettingsView: View {
                                 get: { !preventSwitcherHide },
                                 set: { preventSwitcherHide = !$0 }
                             )) { Text("Release initializer key to select window in Switcher") }
-                            Toggle(isOn: $scrollToMouseHoverInSwitcher) { Text("Scroll to window on mouse hover") }
-                            Text("Automatically scrolls the window switcher when hovering over windows with the mouse.")
+                            Toggle(isOn: $enableMouseHoverInSwitcher) { Text("Enable mouse hover selection") }
+                            Text("Select and scroll to windows when hovering with mouse. Disable for keyboard-only navigation.")
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                                 .padding(.leading, 20)
