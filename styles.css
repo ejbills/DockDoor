@@ -379,6 +379,7 @@ header {
     position: relative;
     background: linear-gradient(135deg, var(--light) 0%, var(--light-gray) 100%);
     padding: 4rem 0;
+    overflow-x: hidden;
 }
 
 .hero .container {
@@ -499,10 +500,13 @@ header {
 
 .hero-image-container {
     position: relative;
-    z-index: 2;
+    display: inline-block;
+    z-index: 1;
 }
 
 .hero-image {
+    position: relative;
+    z-index: 10;
     width: 100%;
     height: auto;
     border-radius: var(--radius-xl);
@@ -512,25 +516,40 @@ header {
 
 .hero-image:hover {
     transform: scale(1.02);
-    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2);
 }
 
-.hero-glow {
+.hero-image-container::before {
+    content: '';
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 120%;
-    height: 120%;
-    background: radial-gradient(circle, var(--primary-light) 0%, transparent 70%);
-    opacity: 0.1;
     transform: translate(-50%, -50%);
-    z-index: 1;
-    animation: pulse 4s ease-in-out infinite;
+    width: 120%; 
+    height: 120%;
+    
+    background: radial-gradient(
+        circle, 
+        rgba(59, 130, 246, 0.9) 0%,
+        rgba(59, 130, 246, 0.5) 40%,
+        rgba(59, 130, 246, 0.1) 70%,
+        transparent 80%
+    );
+    
+    filter: blur(45px); 
+    z-index: -1;    
+    animation: glow-pulse 4s ease-in-out infinite;
 }
 
-@keyframes pulse {
-    0%, 100% { opacity: 0.1; transform: translate(-50%, -50%) scale(1); }
-    50% { opacity: 0.2; transform: translate(-50%, -50%) scale(1.05); }
+@keyframes glow-pulse {
+    0%, 100% { 
+        opacity: 0.6;
+        transform: translate(-50%, -50%) scale(0.95); 
+    }
+    50% { 
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.05); 
+    }
 }
 
 /* Remove all card hover effects and shadows */
