@@ -155,6 +155,15 @@ struct WindowPreviewHoverContainer: View {
         .padding(.top, (!previewStateCoordinator.windowSwitcherActive && appNameStyle == .popover && showAppTitleData) ? 30 : 0)
         .onAppear {
             loadAppIcon()
+            // Only use LiveCaptureManager when live preview AND keep-alive are both enabled
+            if Defaults[.enableLivePreview], Defaults[.livePreviewStreamKeepAlive] != 0 {
+                LiveCaptureManager.shared.panelOpened()
+            }
+        }
+        .onDisappear {
+            if Defaults[.enableLivePreview], Defaults[.livePreviewStreamKeepAlive] != 0 {
+                Task { await LiveCaptureManager.shared.panelClosed() }
+            }
         }
         .onChange(of: previewStateCoordinator.windowSwitcherActive) { isActive in
             if !isActive {

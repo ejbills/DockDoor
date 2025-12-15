@@ -108,6 +108,8 @@ struct MainSettingsView: View {
     @State private var selectedPerformanceProfile: SettingsProfile = .default
     @State private var selectedPreviewQualityProfile: PreviewQualityProfile = .standard
     @State private var showAdvancedSettings: Bool = false
+    @FocusState private var isKeepAliveFieldFocused: Bool
+    @State private var lastKeepAliveDuration: Int = 5
 
     @Default(.hoverWindowOpenDelay) var hoverWindowOpenDelay
     @Default(.useDelayOnlyForInitialOpen) var useDelayOnlyForInitialOpen
@@ -130,6 +132,7 @@ struct MainSettingsView: View {
     @Default(.windowSwitcherLivePreviewQuality) var windowSwitcherLivePreviewQuality
     @Default(.windowSwitcherLivePreviewFrameRate) var windowSwitcherLivePreviewFrameRate
     @Default(.windowSwitcherLivePreviewScope) var windowSwitcherLivePreviewScope
+    @Default(.livePreviewStreamKeepAlive) var livePreviewStreamKeepAlive
     @Default(.bufferFromDock) var bufferFromDock
     @Default(.shouldHideOnDockItemClick) var shouldHideOnDockItemClick
     @Default(.dockClickAction) var dockClickAction
@@ -176,6 +179,10 @@ struct MainSettingsView: View {
             if doesCurrentSettingsMatchPreviewQualityProfile(.detailed) { selectedPreviewQualityProfile = .detailed }
             else if doesCurrentSettingsMatchPreviewQualityProfile(.lightweight) { selectedPreviewQualityProfile = .lightweight }
             else if doesCurrentSettingsMatchPreviewQualityProfile(.standard) { selectedPreviewQualityProfile = .standard }
+
+            if livePreviewStreamKeepAlive > 0 {
+                lastKeepAliveDuration = livePreviewStreamKeepAlive
+            }
         }
     }
 
@@ -718,6 +725,11 @@ struct MainSettingsView: View {
                     Divider()
 
                     Toggle(isOn: $enableLivePreview) { Text("Enable Live Preview (Video)") }
+                        .onChange(of: enableLivePreview) { newValue in
+                            if !newValue {
+                                Task { await LiveCaptureManager.shared.stopAllStreams() }
+                            }
+                        }
                     Text("When enabled, window previews show live video instead of static screenshots. Uses ScreenCaptureKit for real-time capture.")
                         .font(.caption)
                         .foregroundColor(.secondary)
@@ -793,6 +805,99 @@ struct MainSettingsView: View {
                             .font(.caption)
                             .foregroundColor(.secondary)
                             .padding(.leading, 20)
+
+                        Divider()
+                            .padding(.leading, 20)
+
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Stream Keep-Alive Duration")
+                                .onTapGesture { isKeepAliveFieldFocused = false }
+
+                            HStack(spacing: 0) {
+                                Button(action: {
+                                    livePreviewStreamKeepAlive = 0
+                                    isKeepAliveFieldFocused = false
+                                }) {
+                                    Text("Immediately close")
+                                        .padding(.horizontal, 12)
+                                        .padding(.vertical, 6)
+                                        .contentShape(Rectangle())
+                                }
+                                .buttonStyle(.plain)
+                                .background(livePreviewStreamKeepAlive == 0 ? Color.accentColor : Color.secondary.opacity(0.15))
+                                .foregroundColor(livePreviewStreamKeepAlive == 0 ? .white : .primary)
+                                .contentShape(Rectangle())
+
+                                HStack(spacing: 4) {
+                                    TextField("", value: Binding(
+                                        get: { livePreviewStreamKeepAlive > 0 ? livePreviewStreamKeepAlive : lastKeepAliveDuration },
+                                        set: {
+                                            let newValue = max(1, $0)
+                                            lastKeepAliveDuration = newValue
+
+                                            if livePreviewStreamKeepAlive > 0 {
+                                                livePreviewStreamKeepAlive = newValue
+                                            }
+                                        }
+                                    ), formatter: NumberFormatter())
+                                        .textFieldStyle(.roundedBorder)
+                                        .frame(width: 40)
+                                        .multilineTextAlignment(.center)
+                                        .focused($isKeepAliveFieldFocused)
+                                        .onChange(of: isKeepAliveFieldFocused) { focused in
+                                            if focused, livePreviewStreamKeepAlive <= 0 {
+                                                livePreviewStreamKeepAlive = lastKeepAliveDuration
+                                            }
+                                        }
+                                    Text("seconds")
+                                        .foregroundColor(livePreviewStreamKeepAlive > 0 ? .white : .primary)
+                                }
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 3)
+                                .background(livePreviewStreamKeepAlive > 0 ? Color.accentColor : Color.secondary.opacity(0.15))
+                                .contentShape(Rectangle())
+                                .onTapGesture {
+                                    if livePreviewStreamKeepAlive <= 0 {
+                                        livePreviewStreamKeepAlive = lastKeepAliveDuration
+                                    }
+                                }
+
+                                Button(action: {
+                                    livePreviewStreamKeepAlive = -1
+                                    isKeepAliveFieldFocused = false
+                                }) {
+                                    Text("Keep Open")
+                                        .padding(.horizontal, 12)
+                                        .padding(.vertical, 6)
+                                        .contentShape(Rectangle())
+                                }
+                                .buttonStyle(.plain)
+                                .background(livePreviewStreamKeepAlive == -1 ? Color.accentColor : Color.secondary.opacity(0.15))
+                                .foregroundColor(livePreviewStreamKeepAlive == -1 ? .white : .primary)
+                                .contentShape(Rectangle())
+                            }
+                            .cornerRadius(6)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 6)
+                                    .stroke(Color.secondary.opacity(0.3), lineWidth: 1)
+                            )
+                            .onChange(of: livePreviewStreamKeepAlive) { newValue in
+                                if newValue == 0 {
+                                    Task { await LiveCaptureManager.shared.stopAllStreams() }
+                                }
+                            }
+
+                            Text("How long to keep video streams active after closing preview. Longer duration means faster reopening but uses more resources.")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                                .onTapGesture { isKeepAliveFieldFocused = false }
+                        }
+                        .padding(.leading, 20)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .contentShape(Rectangle())
+                        .gesture(TapGesture().onEnded {
+                            isKeepAliveFieldFocused = false
+                        }, including: .gesture)
                     }
                 }
             }
