@@ -40,11 +40,21 @@ private class WindowSwitchingCoordinator {
         }
 
         if stateManager.isActive {
+            // TODO: Consolidate WindowSwitcherStateManager and PreviewStateCoordinator into a single index system
+            let uiIndex = previewCoordinator.windowSwitcherCoordinator.currIndex
+            if uiIndex >= 0, uiIndex != stateManager.currentIndex {
+                stateManager.setIndex(uiIndex)
+            }
+
             if isShiftPressed {
                 stateManager.cycleBackward()
             } else {
                 stateManager.cycleForward()
             }
+
+            previewCoordinator.windowSwitcherCoordinator.hasMovedSinceOpen = false
+            previewCoordinator.windowSwitcherCoordinator.initialHoverLocation = nil
+
             previewCoordinator.windowSwitcherCoordinator.setIndex(to: stateManager.currentIndex)
         } else if isModifierPressed {
             await initializeWindowSwitching(

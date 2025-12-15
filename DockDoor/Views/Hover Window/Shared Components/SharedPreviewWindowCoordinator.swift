@@ -576,6 +576,9 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         let coordinator = windowSwitcherCoordinator
         guard !coordinator.windows.isEmpty else { return }
 
+        coordinator.hasMovedSinceOpen = false
+        coordinator.initialHoverLocation = nil
+
         let threshold = Defaults[.windowSwitcherCompactThreshold]
         let isListViewMode = coordinator.windowSwitcherActive && threshold > 0 && coordinator.windows.count >= threshold
 
