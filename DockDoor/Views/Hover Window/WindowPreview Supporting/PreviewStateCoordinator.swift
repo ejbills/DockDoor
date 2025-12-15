@@ -5,6 +5,9 @@ import SwiftUI
 class PreviewStateCoordinator: ObservableObject {
     @Published var currIndex: Int = -1
     @Published var windowSwitcherActive: Bool = false
+
+    @Published var hasMovedSinceOpen: Bool = false
+    var initialHoverLocation: CGPoint?
     @Published var fullWindowPreviewActive: Bool = false
     @Published var windows: [WindowInfo] = []
     @Published var shouldScrollToIndex: Bool = true
@@ -45,6 +48,11 @@ class PreviewStateCoordinator: ObservableObject {
             fullWindowPreviewActive = toState
         case .none:
             return
+        }
+
+        if !oldSwitcherState, windowSwitcherActive {
+            hasMovedSinceOpen = false
+            initialHoverLocation = nil
         }
 
         // If window switcher state changed and we have windows, recalculate dimensions
