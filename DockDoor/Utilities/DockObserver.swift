@@ -171,6 +171,10 @@ final class DockObserver {
             return
         }
 
+        if WindowUtil.isAppFiltered(currentApp) {
+            return
+        }
+
         let currentAppInfo = ApplicationInfo(
             processIdentifier: currentApp.processIdentifier,
             bundleIdentifier: currentApp.bundleIdentifier,
@@ -537,6 +541,10 @@ final class DockObserver {
     }
 
     private func showPreviewForFocusedApp(app: NSRunningApplication) {
+        if WindowUtil.isAppFiltered(app) {
+            return
+        }
+
         Task { @MainActor [weak self] in
             guard let self else { return }
 
