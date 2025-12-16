@@ -139,6 +139,7 @@ extension Defaults.Keys {
     static let appNameFilters = Key<[String]>("appNameFilters", default: [])
     static let windowTitleFilters = Key<[String]>("windowTitleFilters", default: [])
     static let customAppDirectories = Key<[String]>("customAppDirectories", default: [])
+    static let filteredCalendarIdentifiers = Key<[String]>("filteredCalendarIdentifiers", default: [])
 
     // Onboarding / Hints
     static let hasSeenCmdTabFocusHint = Key<Bool>("hasSeenCmdTabFocusHint", default: false)

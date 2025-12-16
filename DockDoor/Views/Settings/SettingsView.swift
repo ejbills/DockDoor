@@ -117,6 +117,8 @@ struct SettingsView: View {
                     .tag("GesturesKeybinds")
                 Label(String(localized: "Filters", comment: "Filters tab title"), systemImage: "air.purifier")
                     .tag("Filters")
+                Label(String(localized: "Widgets", comment: "Widget settings tab title"), systemImage: "square.grid.2x2")
+                    .tag("Widgets")
                 Label(String(localized: "Support", comment: "Settings tab title"), systemImage: "lifepreserver.fill")
                     .tag("Support")
             }
@@ -133,6 +135,8 @@ struct SettingsView: View {
                     GesturesAndKeybindsSettingsView()
                 case "Filters":
                     FiltersSettingsView()
+                case "Widgets":
+                    WidgetSettingsView()
                 case "Support":
                     SupportSettingsView(updaterState: updaterState)
                 default:
