@@ -18,6 +18,11 @@ struct GesturesAndKeybindsSettingsView: View {
 
     @Default(.gestureSwipeThreshold) var gestureSwipeThreshold
 
+    // MARK: - Dock Scroll Gesture Settings
+
+    @Default(.enableDockScrollGesture) var enableDockScrollGesture
+    @Default(.mediaScrollBehavior) var mediaScrollBehavior
+
     // MARK: - Middle Click Settings
 
     @Default(.middleClickAction) var middleClickAction
@@ -51,6 +56,7 @@ struct GesturesAndKeybindsSettingsView: View {
     var body: some View {
         BaseSettingsView {
             VStack(alignment: .leading, spacing: 16) {
+                dockScrollGestureSection
                 dockPreviewGesturesSection
                 windowSwitcherGesturesSection
                 gestureSettingsSection
@@ -71,6 +77,38 @@ struct GesturesAndKeybindsSettingsView: View {
         .onAppear {
             keybindModel.modifierKey = Defaults[.UserKeybind].modifierFlags
             keybindModel.currentKeybind = Defaults[.UserKeybind]
+        }
+    }
+
+    // MARK: - Dock Scroll Gesture Section
+
+    private var dockScrollGestureSection: some View {
+        StyledGroupBox(label: "Dock Icon Scroll Gesture") {
+            VStack(alignment: .leading, spacing: 12) {
+                Toggle(isOn: $enableDockScrollGesture) {
+                    HStack(spacing: 8) {
+                        Image(systemName: "arrow.up.arrow.down")
+                            .foregroundColor(.accentColor)
+                        Text("Enable scroll gestures on dock icons")
+                    }
+                }
+
+                if enableDockScrollGesture {
+                    Text("Scroll up on a dock icon to bring the app to front, scroll down to hide all its windows.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                        .padding(.bottom, 4)
+
+                    Divider()
+
+                    Picker("Music/Spotify behavior:", selection: $mediaScrollBehavior) {
+                        ForEach(MediaScrollBehavior.allCases, id: \.self) { behavior in
+                            Text(behavior.localizedName).tag(behavior)
+                        }
+                    }
+                    .pickerStyle(.menu)
+                }
+            }
         }
     }
 

@@ -28,6 +28,7 @@ extension Defaults.Keys {
     static let dockClickAction = Key<DockClickAction>("dockClickAction", default: .hide)
     static let enableCmdRightClickQuit = Key<Bool>("enableCmdRightClickQuit", default: true)
     static let enableDockScrollGesture = Key<Bool>("enableDockScrollGesture", default: false)
+    static let mediaScrollBehavior = Key<MediaScrollBehavior>("mediaScrollBehavior", default: .adjustVolume)
 
     static let screenCaptureCacheLifespan = Key<CGFloat>("screenCaptureCacheLifespan", default: 60)
     static let windowProcessingDebounceInterval = Key<CGFloat>("windowProcessingDebounceInterval", default: 0.3)
@@ -417,6 +418,20 @@ enum DockClickAction: String, CaseIterable, Defaults.Serializable {
             String(localized: "Minimize windows", comment: "Dock click action option")
         case .hide:
             String(localized: "Hide application", comment: "Dock click action option")
+        }
+    }
+}
+
+enum MediaScrollBehavior: String, CaseIterable, Defaults.Serializable {
+    case adjustVolume
+    case activateHide
+
+    var localizedName: String {
+        switch self {
+        case .adjustVolume:
+            String(localized: "Adjust volume", comment: "Media scroll behavior option")
+        case .activateHide:
+            String(localized: "Activate/Hide (same as other apps)", comment: "Media scroll behavior option")
         }
     }
 }
