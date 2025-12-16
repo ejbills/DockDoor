@@ -1072,7 +1072,7 @@ header {
 .support-section {
     background: var(--primary);
     color: white;
-    padding: 6rem 0;
+    margin-top: 6rem;
 }
 
 .support-content {
@@ -1083,24 +1083,19 @@ header {
 
 .support-headline {
     font-size: 3.5rem;
-    font-weight: 700;
     line-height: 1.08;
-    color: white;
     margin-bottom: 1rem;
-    letter-spacing: -0.025em;
 }
 
 .support-subheadline {
     font-size: 1.375rem;
-    font-weight: 400;
-    line-height: 1.4;
-    color: rgba(255, 255, 255, 0.9);
+    color: var(--light-gray);
     margin-bottom: 4rem;
-    letter-spacing: -0.01em;
 }
 
 .support-actions {
     margin-bottom: 4rem;
+    text-wrap: balance;
 }
 
 .support-primary {
@@ -1110,17 +1105,19 @@ header {
 
 .support-title {
     font-size: 1.75rem;
-    font-weight: 600;
-    color: white;
     margin-bottom: 1rem;
-    letter-spacing: -0.015em;
 }
 
 .support-description {
     font-size: 1.0625rem;
     line-height: 1.47;
-    color: rgba(255, 255, 255, 0.9);
+    color: var(--light-gray);
     margin-bottom: 2rem;
+}
+
+.support-line {
+    margin-top: 2rem;
+    font-size: 0.9rem;
 }
 
 .support-alternatives {
@@ -1130,10 +1127,7 @@ header {
 
 .alternatives-title {
     font-size: 1.5rem;
-    font-weight: 600;
-    color: white;
     margin-bottom: 2rem;
-    letter-spacing: -0.015em;
 }
 
 .alternatives-grid {
@@ -1151,10 +1145,11 @@ header {
     color: white;
     transition: var(--transition);
     border-radius: var(--radius);
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .alternative-link:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.2);
     color: white;
 }
 
@@ -1163,14 +1158,12 @@ header {
     font-size: 1.125rem;
     font-weight: 600;
     margin-bottom: 0.5rem;
-    letter-spacing: -0.01em;
 }
 
 .alternative-desc {
     display: block;
     font-size: 0.9375rem;
-    color: rgba(255, 255, 255, 0.8);
-    line-height: 1.4;
+    color: var(--light-gray);
 }
 
 /* Download Section - Apple Style */
