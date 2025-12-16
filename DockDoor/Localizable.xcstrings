@@ -10489,6 +10489,9 @@
         }
       }
     },
+    "Aero Shake" : {
+
+    },
     "Aero Shake Action" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -33720,6 +33723,7 @@
 
     },
     "Dock Preview Aero Shake Action" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -93751,6 +93755,9 @@
           }
         }
       }
+    },
+    "Shake a window preview rapidly" : {
+
     },
     "Shift Indicator" : {
       "localizations" : {

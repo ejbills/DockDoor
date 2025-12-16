@@ -135,7 +135,6 @@ struct MainSettingsView: View {
     @Default(.dockClickAction) var dockClickAction
     @Default(.enableCmdRightClickQuit) var enableCmdRightClickQuit
     @Default(.previewHoverAction) var previewHoverAction
-    @Default(.aeroShakeAction) var aeroShakeAction
     @Default(.showAnimations) var showAnimations
     @Default(.raisedWindowLevel) var raisedWindowLevel
     @Default(.disableImagePreview) var disableImagePreview
@@ -798,7 +797,6 @@ struct MainSettingsView: View {
 
                     Picker("Dock Preview Hover Action", selection: $previewHoverAction) { ForEach(PreviewHoverAction.allCases, id: \.self) { Text($0.localizedName).tag($0) } }.pickerStyle(MenuPickerStyle())
                     sliderSetting(title: "Preview Hover Action Delay", value: $tapEquivalentInterval, range: 0 ... 2, step: 0.1, unit: "seconds", formatter: NumberFormatter.oneDecimalFormatter).disabled(previewHoverAction == .none)
-                    Picker("Dock Preview Aero Shake Action", selection: $aeroShakeAction) { ForEach(AeroShakeAction.allCases, id: \.self) { Text($0.localizedName).tag($0) } }.pickerStyle(MenuPickerStyle())
                     Toggle(isOn: $shouldHideOnDockItemClick) { Text("Hide all app windows on dock icon click") }
                     if shouldHideOnDockItemClick {
                         Picker("Dock Click Action", selection: $dockClickAction) {
@@ -874,7 +872,7 @@ struct MainSettingsView: View {
                 hoverWindowOpenDelay = perfDefault.hoverWindowOpenDelay; fadeOutDuration = perfDefault.fadeOutDuration; tapEquivalentInterval = perfDefault.tapEquivalentInterval; preventDockHide = perfDefault.preventDockHide
                 let qualityDefault = PreviewQualityProfile.standard.settings
                 screenCaptureCacheLifespan = qualityDefault.screenCaptureCacheLifespan; windowPreviewImageScale = qualityDefault.windowPreviewImageScale
-                bufferFromDock = Defaults.Keys.bufferFromDock.defaultValue; shouldHideOnDockItemClick = Defaults.Keys.shouldHideOnDockItemClick.defaultValue; dockClickAction = Defaults.Keys.dockClickAction.defaultValue; enableCmdRightClickQuit = Defaults.Keys.enableCmdRightClickQuit.defaultValue; previewHoverAction = Defaults.Keys.previewHoverAction.defaultValue; aeroShakeAction = Defaults.Keys.aeroShakeAction.defaultValue
+                bufferFromDock = Defaults.Keys.bufferFromDock.defaultValue; shouldHideOnDockItemClick = Defaults.Keys.shouldHideOnDockItemClick.defaultValue; dockClickAction = Defaults.Keys.dockClickAction.defaultValue; enableCmdRightClickQuit = Defaults.Keys.enableCmdRightClickQuit.defaultValue; previewHoverAction = Defaults.Keys.previewHoverAction.defaultValue
 
                 showMenuBarIcon = Defaults.Keys.showMenuBarIcon.defaultValue
                 enableWindowSwitcher = Defaults.Keys.enableWindowSwitcher.defaultValue

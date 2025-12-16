@@ -2,47 +2,25 @@ import Defaults
 import SwiftUI
 
 struct GesturesAndKeybindsSettingsView: View {
-    // MARK: - Dock Preview Gesture Settings
-
     @Default(.enableDockPreviewGestures) var enableDockPreviewGestures
     @Default(.dockSwipeTowardsDockAction) var dockSwipeTowardsDockAction
     @Default(.dockSwipeAwayFromDockAction) var dockSwipeAwayFromDockAction
-
-    // MARK: - Window Switcher Gesture Settings
-
     @Default(.enableWindowSwitcherGestures) var enableWindowSwitcherGestures
     @Default(.switcherSwipeUpAction) var switcherSwipeUpAction
     @Default(.switcherSwipeDownAction) var switcherSwipeDownAction
-
-    // MARK: - Shared Settings
-
     @Default(.gestureSwipeThreshold) var gestureSwipeThreshold
-
-    // MARK: - Dock Scroll Gesture Settings
-
     @Default(.enableDockScrollGesture) var enableDockScrollGesture
     @Default(.mediaScrollBehavior) var mediaScrollBehavior
-
-    // MARK: - Middle Click Settings
-
     @Default(.middleClickAction) var middleClickAction
-
-    // MARK: - Window Switcher Keybind Settings
-
+    @Default(.aeroShakeAction) var aeroShakeAction
     @Default(.enableWindowSwitcher) var enableWindowSwitcher
     @Default(.fullscreenAppBlacklist) var fullscreenAppBlacklist
-
-    // MARK: - Cmd+Key Shortcuts
-
     @Default(.cmdShortcut1Key) var cmdShortcut1Key
     @Default(.cmdShortcut1Action) var cmdShortcut1Action
     @Default(.cmdShortcut2Key) var cmdShortcut2Key
     @Default(.cmdShortcut2Action) var cmdShortcut2Action
     @Default(.cmdShortcut3Key) var cmdShortcut3Key
     @Default(.cmdShortcut3Action) var cmdShortcut3Action
-
-    // MARK: - Alternate Window Switcher Keybind (shares modifier with primary)
-
     @Default(.alternateKeybindKey) var alternateKeybindKey
     @Default(.alternateKeybindMode) var alternateKeybindMode
 
@@ -80,8 +58,6 @@ struct GesturesAndKeybindsSettingsView: View {
         }
     }
 
-    // MARK: - Dock Scroll Gesture Section
-
     private var dockScrollGestureSection: some View {
         StyledGroupBox(label: "Dock Icon Scroll Gesture") {
             VStack(alignment: .leading, spacing: 12) {
@@ -111,8 +87,6 @@ struct GesturesAndKeybindsSettingsView: View {
             }
         }
     }
-
-    // MARK: - Dock Preview Gestures Section
 
     private var dockPreviewGesturesSection: some View {
         StyledGroupBox(label: "Dock Preview Gestures") {
@@ -147,9 +121,37 @@ struct GesturesAndKeybindsSettingsView: View {
                         action: $dockSwipeAwayFromDockAction
                     )
 
+                    Divider()
+
+                    HStack(spacing: 12) {
+                        VStack(alignment: .leading, spacing: 2) {
+                            HStack(spacing: 6) {
+                                Image(systemName: "hand.point.up.left.and.text")
+                                    .font(.system(size: 14, weight: .medium))
+                                    .foregroundColor(.secondary)
+                                    .frame(width: 20)
+                                Text("Aero Shake")
+                            }
+                            Text("Shake a window preview rapidly")
+                                .font(.caption2)
+                                .foregroundColor(.secondary)
+                                .padding(.leading, 26)
+                        }
+                        .frame(minWidth: 140, alignment: .leading)
+
+                        Picker("", selection: $aeroShakeAction) {
+                            ForEach(AeroShakeAction.allCases, id: \.self) { action in
+                                Text(action.localizedName).tag(action)
+                            }
+                        }
+                        .pickerStyle(.menu)
+                        .labelsHidden()
+                    }
+
                     Button("Reset to Defaults") {
                         dockSwipeTowardsDockAction = Defaults.Keys.dockSwipeTowardsDockAction.defaultValue
                         dockSwipeAwayFromDockAction = Defaults.Keys.dockSwipeAwayFromDockAction.defaultValue
+                        aeroShakeAction = Defaults.Keys.aeroShakeAction.defaultValue
                     }
                     .buttonStyle(AccentButtonStyle(small: true))
                     .padding(.top, 4)
@@ -157,8 +159,6 @@ struct GesturesAndKeybindsSettingsView: View {
             }
         }
     }
-
-    // MARK: - Window Switcher Gestures Section
 
     private var windowSwitcherGesturesSection: some View {
         StyledGroupBox(label: "Window Switcher Gestures") {
@@ -203,8 +203,6 @@ struct GesturesAndKeybindsSettingsView: View {
             }
         }
     }
-
-    // MARK: - Gesture Settings Section
 
     private var gestureSettingsSection: some View {
         StyledGroupBox(label: "Gesture Settings") {
@@ -266,8 +264,6 @@ struct GesturesAndKeybindsSettingsView: View {
         }
     }
 
-    // MARK: - Mouse Actions Section
-
     private var mouseActionsSection: some View {
         StyledGroupBox(label: "Mouse Actions") {
             VStack(alignment: .leading, spacing: 10) {
@@ -300,8 +296,6 @@ struct GesturesAndKeybindsSettingsView: View {
             }
         }
     }
-
-    // MARK: - Cmd+Key Shortcuts Section
 
     private var cmdKeyShortcutsSection: some View {
         StyledGroupBox(label: "Window Preview Keyboard Shortcuts") {
@@ -410,8 +404,6 @@ struct GesturesAndKeybindsSettingsView: View {
             return nil
         }
     }
-
-    // MARK: - Window Switcher Keybind Section
 
     private var windowSwitcherKeybindSection: some View {
         StyledGroupBox(label: "Window Switcher Shortcuts") {
