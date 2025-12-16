@@ -38,6 +38,22 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://buymeacoffee.com/keplercafe</div>
 
+<a id="1.28.1"></a>
+# [Release 1.28.1](https://github.com/ejbills/DockDoor/releases/tag/1.28.1) - 2025-12-16
+
+## 🔧 Improvements & Stability
+- Improved window switcher navigation
+  - Better mouse hover detection
+  - Auto-scroll near edges
+
+## 🐛 Bug Fixes
+- Fixed app filtering logic
+- Fixed preview window layering
+
+
+[Changes][1.28.1]
+
+
 <a id="1.28"></a>
 # [Release 1.28](https://github.com/ejbills/DockDoor/releases/tag/1.28) - 2025-12-10
 
@@ -1721,6 +1737,7 @@ v1.0
 [Changes][releases]
 
 
+[1.28.1]: https://github.com/ejbills/DockDoor/compare/1.28...1.28.1
 [1.28]: https://github.com/ejbills/DockDoor/compare/1.27...1.28
 [1.27]: https://github.com/ejbills/DockDoor/compare/1.26...1.27
 [1.26]: https://github.com/ejbills/DockDoor/compare/1.25.5...1.26
