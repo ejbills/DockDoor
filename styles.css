@@ -982,7 +982,7 @@ header {
     padding: 1.5rem 1rem 0.5rem;
     margin: 0;
     text-align: center;
-    color: var(--dark);
+    color: var(--primary);
     font-weight: 700;
 }
 
@@ -1815,10 +1815,6 @@ details[open] .faq-question i {
     
     .section-title {
         font-size: 1.75rem;
-    }
-    
-    .special-feature-media {
-        aspect-ratio: 4/3;
     }
     
     .slideshow-track {

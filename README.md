@@ -34,7 +34,7 @@ Effortless Alt+Tab switching and dock previews that respect your privacy.
 
   <ol>
     <li><a href="#about-the-project">About The Project</a></li>
-    <li><a href="#getting-started">Getting Started</a></li>
+    <li><a href="#features">Features</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
   </ol>
@@ -102,6 +102,6 @@ For full details, features, and documentation, please visit **[dockdoor.net](htt
 
 ## License
 
-This project is licensed under the GNU GENERAL PUBLIC LICENSE - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](LICENSE) file for details.
 
 <p align="right"><a href="#readme-top">Back to top ⬆️</a></p>
