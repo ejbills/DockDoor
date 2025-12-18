@@ -38,6 +38,7 @@ struct CalendarContentView: View {
                 .frame(minHeight: 175, alignment: calendarInfo.events.isEmpty ? .center : .topLeading)
             }
         }
+        .fadeOnEdges(axis: .vertical, fadeLength: 6)
         .globalPadding(20)
     }
 }

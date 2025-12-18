@@ -62,7 +62,7 @@ struct WindowPreviewHoverContainer: View {
     @Default(.switcherMaxRows) var switcherMaxRows
     @Default(.gradientColorPalette) var gradientColorPalette
     @Default(.showAnimations) var showAnimations
-    @Default(.scrollToMouseHoverInSwitcher) var scrollToMouseHoverInSwitcher
+    @Default(.enableMouseHoverInSwitcher) var enableMouseHoverInSwitcher
     @Default(.windowSwitcherLivePreviewScope) var windowSwitcherLivePreviewScope
 
     // Compact mode thresholds (0 = disabled, 1+ = enable when window count >= threshold)
@@ -83,6 +83,9 @@ struct WindowPreviewHoverContainer: View {
 
     @State private var dragPoints: [CGPoint] = []
     @State private var lastShakeCheck: Date = .init()
+    @State private var edgeScrollTimer: Timer?
+    @State private var edgeScrollDirection: CGFloat = 0
+    @State private var cachedScrollView: NSScrollView?
 
     init(appName: String,
          onWindowTap: (() -> Void)?,
@@ -148,6 +151,32 @@ struct WindowPreviewHoverContainer: View {
         }
     }
 
+    private func handleHoverIndexChange(_ hoveredIndex: Int?, _ location: CGPoint?) {
+        guard enableMouseHoverInSwitcher else { return }
+        guard let hoveredIndex else { return }
+        guard hoveredIndex != previewStateCoordinator.currIndex else { return }
+
+        if !previewStateCoordinator.hasMovedSinceOpen {
+            let screenLocation = NSEvent.mouseLocation
+
+            if previewStateCoordinator.initialHoverLocation == nil {
+                previewStateCoordinator.initialHoverLocation = screenLocation
+                return
+            }
+
+            if let initial = previewStateCoordinator.initialHoverLocation {
+                let distance = hypot(screenLocation.x - initial.x, screenLocation.y - initial.y)
+                if distance > 1 {
+                    previewStateCoordinator.hasMovedSinceOpen = true
+                } else {
+                    return
+                }
+            }
+        }
+
+        previewStateCoordinator.setIndex(to: hoveredIndex, shouldScroll: false)
+    }
+
     var body: some View {
         BaseHoverContainer(bestGuessMonitor: bestGuessMonitor, mockPreviewActive: mockPreviewActive) {
             windowGridContent()
@@ -155,11 +184,20 @@ struct WindowPreviewHoverContainer: View {
         .padding(.top, (!previewStateCoordinator.windowSwitcherActive && appNameStyle == .popover && showAppTitleData) ? 30 : 0)
         .onAppear {
             loadAppIcon()
+            // Only use LiveCaptureManager when live preview AND keep-alive are both enabled
+            if Defaults[.enableLivePreview], Defaults[.livePreviewStreamKeepAlive] != 0 {
+                LiveCaptureManager.shared.panelOpened()
+            }
+        }
+        .onDisappear {
+            if Defaults[.enableLivePreview], Defaults[.livePreviewStreamKeepAlive] != 0 {
+                Task { await LiveCaptureManager.shared.panelClosed() }
+            }
         }
         .onChange(of: previewStateCoordinator.windowSwitcherActive) { isActive in
             if !isActive {
-                // Clear search when switcher is dismissed
                 previewStateCoordinator.searchQuery = ""
+                stopEdgeScroll()
             }
         }
     }
@@ -208,6 +246,11 @@ struct WindowPreviewHoverContainer: View {
                         .transition(.opacity)
                         .allowsHitTesting(false)
                         .clipShape(RoundedRectangle(cornerRadius: Defaults[.uniformCardRadius] ? 26 : 8, style: .continuous))
+                }
+            }
+            .overlay {
+                if enableMouseHoverInSwitcher, previewStateCoordinator.windowSwitcherActive {
+                    edgeScrollZones(isHorizontal: orientationIsHorizontal)
                 }
             }
         }
@@ -578,12 +621,115 @@ struct WindowPreviewHoverContainer: View {
         .animation(.smooth(duration: 0.1), value: previewStateCoordinator.windows)
         .onChange(of: previewStateCoordinator.currIndex) { newIndex in
             guard previewStateCoordinator.shouldScrollToIndex else { return }
+
             if showAnimations {
                 withAnimation(.snappy) {
                     scrollProxy.scrollTo("\(appName)-\(newIndex)", anchor: .center)
                 }
             } else {
                 scrollProxy.scrollTo("\(appName)-\(newIndex)", anchor: .center)
+            }
+        }
+    }
+
+    private func startEdgeScroll(direction: CGFloat, isHorizontal: Bool) {
+        edgeScrollDirection = direction
+        guard edgeScrollTimer == nil else { return }
+
+        if cachedScrollView == nil || cachedScrollView?.window == nil {
+            if let window = NSApp.windows.first(where: { $0.isVisible && $0.title.isEmpty }) {
+                cachedScrollView = findScrollView(in: window.contentView)
+            }
+        }
+
+        edgeScrollTimer = Timer.scheduledTimer(withTimeInterval: 1.0 / 60.0, repeats: true) { _ in
+            smoothScrollBy(direction: edgeScrollDirection, isHorizontal: isHorizontal)
+        }
+    }
+
+    private func stopEdgeScroll() {
+        edgeScrollTimer?.invalidate()
+        edgeScrollTimer = nil
+        edgeScrollDirection = 0
+        cachedScrollView = nil
+    }
+
+    private func smoothScrollBy(direction: CGFloat, isHorizontal: Bool) {
+        guard let scrollView = cachedScrollView,
+              let documentView = scrollView.documentView
+        else { return }
+
+        let scrollAmount: CGFloat = 4.0 * direction
+        let clipView = scrollView.contentView
+        var newOrigin = clipView.bounds.origin
+
+        if isHorizontal {
+            newOrigin.x += scrollAmount
+            newOrigin.x = max(0, min(newOrigin.x, documentView.frame.width - clipView.bounds.width))
+        } else {
+            newOrigin.y += scrollAmount
+            newOrigin.y = max(0, min(newOrigin.y, documentView.frame.height - clipView.bounds.height))
+        }
+
+        clipView.setBoundsOrigin(newOrigin)
+    }
+
+    private func findScrollView(in view: NSView?) -> NSScrollView? {
+        guard let view else { return nil }
+        if let scrollView = view as? NSScrollView {
+            return scrollView
+        }
+        for subview in view.subviews {
+            if let found = findScrollView(in: subview) {
+                return found
+            }
+        }
+        return nil
+    }
+
+    @ViewBuilder
+    private func edgeScrollZones(isHorizontal: Bool) -> some View {
+        let edgeSize: CGFloat = 50
+
+        if isHorizontal {
+            HStack {
+                // Leading edge
+                Color.clear
+                    .frame(width: edgeSize)
+                    .contentShape(Rectangle())
+                    .onHover { hovering in
+                        if hovering { startEdgeScroll(direction: -1, isHorizontal: true) }
+                        else { stopEdgeScroll() }
+                    }
+                Spacer()
+                // Trailing edge
+                Color.clear
+                    .frame(width: edgeSize)
+                    .contentShape(Rectangle())
+                    .onHover { hovering in
+                        if hovering { startEdgeScroll(direction: 1, isHorizontal: true) }
+                        else { stopEdgeScroll() }
+                    }
+            }
+        } else {
+            VStack {
+                // Top edge
+                Color.clear
+                    .frame(height: edgeSize)
+                    .contentShape(Rectangle())
+                    .onHover { hovering in
+                        if hovering { startEdgeScroll(direction: -1, isHorizontal: false) }
+                        else { stopEdgeScroll() }
+                    }
+                Spacer()
+                // Bottom edge
+                Color.clear
+                    .frame(height: edgeSize)
+                    .contentShape(Rectangle())
+                    .onHover { hovering in
+                        if hovering { startEdgeScroll(direction: 1, isHorizontal: false) }
+                        else { stopEdgeScroll() }
+                    }
             }
         }
     }
@@ -870,11 +1016,7 @@ struct WindowPreviewHoverContainer: View {
                         windowSwitcherActive: previewStateCoordinator.windowSwitcherActive,
                         mockPreviewActive: mockPreviewActive,
                         onTap: onWindowTap,
-                        onHoverIndexChange: { hoveredIndex in
-                            if let hoveredIndex, scrollToMouseHoverInSwitcher {
-                                previewStateCoordinator.setIndex(to: hoveredIndex, shouldScroll: Defaults[.scrollToMouseHoverInSwitcher])
-                            }
-                        }
+                        onHoverIndexChange: handleHoverIndexChange
                     )
                     .id("\(appName)-\(index)")
                 } else {
@@ -894,11 +1036,7 @@ struct WindowPreviewHoverContainer: View {
                         dimensions: getDimensions(for: index, dimensionsMap: currentDimensionsMapForPreviews),
                         showAppIconOnly: showAppIconOnly,
                         mockPreviewActive: mockPreviewActive,
-                        onHoverIndexChange: { hoveredIndex in
-                            if let hoveredIndex, scrollToMouseHoverInSwitcher {
-                                previewStateCoordinator.setIndex(to: hoveredIndex, shouldScroll: Defaults[.scrollToMouseHoverInSwitcher])
-                            }
-                        },
+                        onHoverIndexChange: handleHoverIndexChange,
                         isEligibleForLivePreview: isEligibleForLivePreview
                     )
                     .id("\(appName)-\(index)")

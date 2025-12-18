@@ -21,12 +21,15 @@ extension Defaults.Keys {
     static let bufferFromDock = Key<CGFloat>("bufferFromDock", default: CoreDockIsMagnificationEnabled() ? -25 : DockUtils.getDockPosition() == .right ? -18 : -20)
     static let globalPaddingMultiplier = Key<CGFloat>("globalPaddingMultiplier", default: 1.0)
     static let hoverWindowOpenDelay = Key<CGFloat>("openDelay", default: 0.2)
+    static let useDelayOnlyForInitialOpen = Key<Bool>("useDelayOnlyForInitialOpen", default: false)
     static let preventDockHide = Key<Bool>("preventDockHide", default: false)
     static let preventSwitcherHide = Key<Bool>("preventSwitcherHide", default: false)
     static let shouldHideOnDockItemClick = Key<Bool>("shouldHideOnDockItemClick", default: false)
     static let dockClickAction = Key<DockClickAction>("dockClickAction", default: .hide)
     static let enableCmdRightClickQuit = Key<Bool>("enableCmdRightClickQuit", default: true)
     static let enableDockScrollGesture = Key<Bool>("enableDockScrollGesture", default: false)
+    static let dockIconMediaScrollBehavior = Key<DockIconMediaScrollBehavior>("dockIconMediaScrollBehavior", default: .adjustVolume)
+    static let mediaWidgetScrollBehavior = Key<MediaWidgetScrollBehavior>("mediaWidgetScrollBehavior", default: .seekPlayback)
 
     static let screenCaptureCacheLifespan = Key<CGFloat>("screenCaptureCacheLifespan", default: 60)
     static let windowProcessingDebounceInterval = Key<CGFloat>("windowProcessingDebounceInterval", default: 0.3)
@@ -41,6 +44,7 @@ extension Defaults.Keys {
     static let windowSwitcherLivePreviewQuality = Key<LivePreviewQuality>("windowSwitcherLivePreviewQuality", default: .low)
     static let windowSwitcherLivePreviewFrameRate = Key<LivePreviewFrameRate>("windowSwitcherLivePreviewFrameRate", default: .fps10)
     static let windowSwitcherLivePreviewScope = Key<WindowSwitcherLivePreviewScope>("windowSwitcherLivePreviewScope", default: .selectedAppWindows)
+    static let livePreviewStreamKeepAlive = Key<Int>("livePreviewStreamKeepAlive", default: 0)
 
     static let uniformCardRadius = Key<Bool>("uniformCardRadius", default: true)
     static let allowDynamicImageSizing = Key<Bool>("allowDynamicImageSizing", default: false)
@@ -72,7 +76,7 @@ extension Defaults.Keys {
     static let cmdTabSortOrder = Key<WindowPreviewSortOrder>("cmdTabSortOrder", default: .recentlyUsed)
     static let sortMinimizedToEnd = Key<Bool>("sortMinimizedToEnd", default: false)
     static let enableCmdTabEnhancements = Key<Bool>("enableCmdTabEnhancements", default: false)
-    static let scrollToMouseHoverInSwitcher = Key<Bool>("scrollToMouseHoverInSwitcher", default: false)
+    static let enableMouseHoverInSwitcher = Key<Bool>("enableMouseHoverInSwitcher", default: true)
     static let keepPreviewOnAppTerminate = Key<Bool>("keepPreviewOnAppTerminate", default: false)
     static let enableWindowSwitcherSearch = Key<Bool>("enableWindowSwitcherSearch", default: false)
     // Compact mode settings
@@ -138,6 +142,7 @@ extension Defaults.Keys {
     static let appNameFilters = Key<[String]>("appNameFilters", default: [])
     static let windowTitleFilters = Key<[String]>("windowTitleFilters", default: [])
     static let customAppDirectories = Key<[String]>("customAppDirectories", default: [])
+    static let filteredCalendarIdentifiers = Key<[String]>("filteredCalendarIdentifiers", default: [])
 
     // Onboarding / Hints
     static let hasSeenCmdTabFocusHint = Key<Bool>("hasSeenCmdTabFocusHint", default: false)
@@ -415,6 +420,36 @@ enum DockClickAction: String, CaseIterable, Defaults.Serializable {
             String(localized: "Minimize windows", comment: "Dock click action option")
         case .hide:
             String(localized: "Hide application", comment: "Dock click action option")
+        }
+    }
+}
+
+// Dock icon scroll behavior for Music/Spotify
+enum DockIconMediaScrollBehavior: String, CaseIterable, Defaults.Serializable {
+    case adjustVolume
+    case activateHide
+
+    var localizedName: String {
+        switch self {
+        case .adjustVolume:
+            String(localized: "Adjust volume", comment: "Dock icon media scroll option")
+        case .activateHide:
+            String(localized: "Activate/Hide (same as other apps)", comment: "Dock icon media scroll option")
+        }
+    }
+}
+
+// Media widget scroll behavior
+enum MediaWidgetScrollBehavior: String, CaseIterable, Defaults.Serializable {
+    case adjustVolume
+    case seekPlayback
+
+    var localizedName: String {
+        switch self {
+        case .adjustVolume:
+            String(localized: "Adjust volume", comment: "Media widget scroll option")
+        case .seekPlayback:
+            String(localized: "Seek playback (scrub through track)", comment: "Media widget scroll option")
         }
     }
 }

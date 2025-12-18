@@ -171,6 +171,10 @@ final class DockObserver {
             return
         }
 
+        if WindowUtil.isAppFiltered(currentApp) {
+            return
+        }
+
         let currentAppInfo = ApplicationInfo(
             processIdentifier: currentApp.processIdentifier,
             bundleIdentifier: currentApp.bundleIdentifier,
@@ -411,7 +415,6 @@ final class DockObserver {
                 return Unmanaged.passUnretained(event)
             }
 
-            // lookup to verify mouse is actually over a dock icon
             let appUnderMouse = getDockItemAppStatusUnderMouse()
             if case let .success(app) = appUnderMouse.status {
                 let handled = handleDockScroll(app: app, event: event)
@@ -459,11 +462,13 @@ final class DockObserver {
             return false
         }
 
-        // If no hover state, query AX directly to check if any windows are minimized at click time
+        // If no hover state, query AX directly to check window state at click time
         var hasMinimizedWindowsAtClickTime = false
+        var hasAnyWindowsAtClickTime = false
         if !hasValidHoverState {
             let axApp = AXUIElementCreateApplication(pid)
             if let windowList = try? axApp.windows() {
+                hasAnyWindowsAtClickTime = !windowList.isEmpty
                 for window in windowList {
                     if (try? window.isMinimized()) == true {
                         hasMinimizedWindowsAtClickTime = true
@@ -471,6 +476,13 @@ final class DockObserver {
                     }
                 }
             }
+        }
+
+        // If app has no windows at click time and wasn't tracked via hover,
+        // defer to native behavior to let macOS create a new window without interference
+        if !hasValidHoverState, !hasAnyWindowsAtClickTime, !app.isHidden {
+            lastHoveredPID = nil
+            return false
         }
 
         // Capture restoration need from hover state OR from AX query at click time
@@ -537,6 +549,10 @@ final class DockObserver {
     }
 
     private func showPreviewForFocusedApp(app: NSRunningApplication) {
+        if WindowUtil.isAppFiltered(app) {
+            return
+        }
+
         Task { @MainActor [weak self] in
             guard let self else { return }
 
@@ -610,19 +626,39 @@ final class DockObserver {
         // Ignore noise (very small scroll amounts)
         guard abs(deltaY) > 0.1 else { return false }
 
+        let nsEvent = NSEvent(cgEvent: event)
+        let isNaturalScrolling = nsEvent?.isDirectionInvertedFromDevice ?? false
+        let normalizedDeltaY = isNaturalScrolling ? -deltaY : deltaY
+
+        if let bundleId = app.bundleIdentifier,
+           bundleId == appleMusicAppIdentifier || bundleId == spotifyAppIdentifier
+        {
+            if Defaults[.dockIconMediaScrollBehavior] == .adjustVolume {
+                handleVolumeScroll(deltaY: normalizedDeltaY)
+                return true
+            }
+        }
+
         let now = Date()
         guard now.timeIntervalSince(lastScrollActionTime) >= scrollActionDebounceInterval else {
             return true // Still consume the event during debounce
         }
         lastScrollActionTime = now
 
-        if deltaY > 0 {
+        if normalizedDeltaY > 0 {
             activateApp(app)
         } else {
             hideApp(app)
         }
 
         return true
+    }
+
+    private func handleVolumeScroll(deltaY: Double) {
+        let sensitivity: Float = 0.015
+        let current = AudioDeviceManager.getSystemVolume()
+        let newVolume = max(0, min(1, current + Float(deltaY) * sensitivity))
+        AudioDeviceManager.setSystemVolume(newVolume)
     }
 
     private func activateApp(_ app: NSRunningApplication) {

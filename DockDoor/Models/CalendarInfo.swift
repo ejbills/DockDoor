@@ -1,3 +1,4 @@
+import Defaults
 import EventKit
 import Foundation
 
@@ -62,8 +63,9 @@ class DailyCalendarInfo: ObservableObject {
             return
         }
 
+        let filteredIdentifiers = Defaults[.filteredCalendarIdentifiers]
         let calendars = eventStore.calendars(for: .event).filter { cal in
-            !cal.title.lowercased().contains("holiday") && cal.type != .birthday
+            !filteredIdentifiers.contains(cal.calendarIdentifier)
         }
 
         let startOfDay = Calendar.current.startOfDay(for: Date())

@@ -63,6 +63,7 @@ struct TrackpadEventMonitor: NSViewRepresentable {
         private var cumulativeScrollX: CGFloat = 0
         private var cumulativeScrollY: CGFloat = 0
         private var isScrolling = false
+        private var isNaturalScrolling = false
         private var scrollEndTimer: Timer?
 
         init(
@@ -101,6 +102,7 @@ struct TrackpadEventMonitor: NSViewRepresentable {
                 cumulativeScrollX = 0
                 cumulativeScrollY = 0
                 isScrolling = true
+                isNaturalScrolling = event.isDirectionInvertedFromDevice
                 scrollEndTimer?.invalidate()
 
             case .changed:
@@ -132,11 +134,13 @@ struct TrackpadEventMonitor: NSViewRepresentable {
 
             let minDelta: CGFloat = 50
 
+            let normalizedY = isNaturalScrolling ? -cumulativeScrollY : cumulativeScrollY
+
             if abs(cumulativeScrollY) > abs(cumulativeScrollX), abs(cumulativeScrollY) > minDelta {
-                if cumulativeScrollY > 0 {
-                    DispatchQueue.main.async { self.onSwipeDown() }
-                } else {
+                if normalizedY > 0 {
                     DispatchQueue.main.async { self.onSwipeUp() }
+                } else {
+                    DispatchQueue.main.async { self.onSwipeDown() }
                 }
             } else if abs(cumulativeScrollX) > abs(cumulativeScrollY), abs(cumulativeScrollX) > minDelta {
                 if cumulativeScrollX < 0 {

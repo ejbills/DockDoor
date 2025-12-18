@@ -2,6 +2,14 @@ import AppKit
 import Defaults
 import SwiftUI
 
+struct InstalledApp: Identifiable {
+    let id: String
+    let name: String
+    let icon: NSImage
+
+    var bundleIdentifier: String { id }
+}
+
 struct FiltersSettingsView: View {
     @Default(.appNameFilters) var appNameFilters
     @Default(.windowTitleFilters) var windowTitleFilters
@@ -10,43 +18,65 @@ struct FiltersSettingsView: View {
     @State private var showingAddFilterSheet = false
     @State private var newFilter = FilterEntry(text: "")
     @State private var showingDirectoryPicker = false
+    @State private var installedApps: [InstalledApp] = []
+    @State private var isLoadingApps = true
 
     struct FilterEntry: Identifiable, Hashable {
         let id = UUID()
         var text: String
     }
 
-    private var installedApps: [(name: String, icon: NSImage)] {
-        var apps: [(String, NSImage)] = []
-        let appLocations = [
-            "/Applications",
-            "/System/Applications",
-            "/System/Applications/Utilities",
-            "~/Applications",
-        ]
-
-        for location in appLocations {
-            let expandedPath = NSString(string: location).expandingTildeInPath
+    private func loadInstalledApps() async -> [InstalledApp] {
+        await Task.detached(priority: .userInitiated) {
+            var apps: [InstalledApp] = []
+            let workspace = NSWorkspace.shared
             let fileManager = FileManager.default
-            guard let urls = try? fileManager.contentsOfDirectory(
-                at: URL(fileURLWithPath: expandedPath),
-                includingPropertiesForKeys: nil,
-                options: [.skipsHiddenFiles]
-            ) else { continue }
 
-            let locationApps = urls
-                .filter { $0.pathExtension == "app" }
-                .compactMap { url -> (String, NSImage)? in
-                    guard let bundle = Bundle(url: url),
+            let defaultLocations = [
+                "/Applications",
+                "/System/Applications",
+                "/System/Applications/Utilities",
+                "~/Applications",
+            ].map { NSString(string: $0).expandingTildeInPath }
+
+            let allLocations = Set(defaultLocations + Defaults[.customAppDirectories])
+
+            for directory in allLocations {
+                guard let enumerator = fileManager.enumerator(
+                    at: URL(fileURLWithPath: directory),
+                    includingPropertiesForKeys: [.isApplicationKey],
+                    options: [.skipsHiddenFiles, .skipsPackageDescendants]
+                ) else { continue }
+
+                for case let fileURL as URL in enumerator {
+                    guard fileURL.pathExtension == "app" else { continue }
+
+                    guard let bundle = Bundle(url: fileURL),
+                          let bundleId = bundle.bundleIdentifier,
                           let name = bundle.infoDictionary?["CFBundleName"] as? String ?? bundle.infoDictionary?["CFBundleDisplayName"] as? String
-                    else { return nil }
-                    return (name, NSWorkspace.shared.icon(forFile: url.path))
+                    else { continue }
+
+                    apps.append(InstalledApp(id: bundleId, name: name, icon: workspace.icon(forFile: fileURL.path)))
                 }
+            }
 
-            apps.append(contentsOf: locationApps)
-        }
+            // Add Finder explicitly
+            apps.append(InstalledApp(
+                id: "com.apple.finder",
+                name: "Finder",
+                icon: workspace.icon(forFile: "/System/Library/CoreServices/Finder.app")
+            ))
 
-        return apps.sorted { $0.0 < $1.0 }
+            // Remove duplicates and sort
+            var seenBundleIds = Set<String>()
+            return apps.filter { app in
+                if seenBundleIds.contains(app.id) {
+                    return false
+                }
+                seenBundleIds.insert(app.id)
+                return true
+            }.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }
+        }.value
     }
 
     var body: some View {
@@ -141,21 +171,37 @@ struct FiltersSettingsView: View {
 
                         ScrollView {
                             VStack(alignment: .leading, spacing: 4) {
-                                if installedApps.isEmpty {
-                                    Text("No applications found or scanned yet.")
+                                if isLoadingApps {
+                                    HStack {
+                                        Spacer()
+                                        ProgressView()
+                                            .scaleEffect(0.8)
+                                        Text("Loading applications...")
+                                            .foregroundColor(.secondary)
+                                        Spacer()
+                                    }
+                                    .padding()
+                                } else if installedApps.isEmpty {
+                                    Text("No applications found.")
                                         .foregroundColor(.secondary)
                                         .padding()
                                 } else {
-                                    ForEach(installedApps, id: \.name) { app in
+                                    ForEach(installedApps) { app in
                                         HStack(spacing: 8) {
                                             Toggle(isOn: Binding(
-                                                get: { !appNameFilters.contains(app.name) },
+                                                get: {
+                                                    // Check both bundle ID and legacy app name
+                                                    !appNameFilters.contains(app.bundleIdentifier) &&
+                                                        !appNameFilters.contains(where: { $0.caseInsensitiveCompare(app.name) == .orderedSame })
+                                                },
                                                 set: { isEnabled in
                                                     if isEnabled {
-                                                        appNameFilters.removeAll { $0 == app.name }
+                                                        // Remove both bundle ID and legacy app name
+                                                        appNameFilters.removeAll { $0 == app.bundleIdentifier }
+                                                        appNameFilters.removeAll { $0.caseInsensitiveCompare(app.name) == .orderedSame }
                                                     } else {
-                                                        if !appNameFilters.contains(app.name) {
-                                                            appNameFilters.append(app.name)
+                                                        if !appNameFilters.contains(app.bundleIdentifier) {
+                                                            appNameFilters.append(app.bundleIdentifier)
                                                         }
                                                     }
                                                 }
@@ -182,6 +228,11 @@ struct FiltersSettingsView: View {
                                 .stroke(Color.gray.opacity(0.25), lineWidth: 1)
                         )
                     }
+                }
+                .task(id: customAppDirectories) {
+                    isLoadingApps = true
+                    installedApps = await loadInstalledApps()
+                    isLoadingApps = false
                 }
 
                 // Window Title Filters Section

@@ -1,3 +1,4 @@
+import AudioToolbox
 import CoreAudio
 import SwiftUI
 
@@ -92,6 +93,49 @@ final class AudioDeviceManager: ObservableObject {
                 NSHapticFeedbackManager.defaultPerformer.perform(.generic, performanceTime: .now)
             }
         }
+    }
+
+    static func getSystemVolume() -> Float {
+        let deviceID = getDefaultOutputDeviceID()
+        guard deviceID != kAudioObjectUnknown else { return 0 }
+
+        var volume: Float32 = 0
+        var size = UInt32(MemoryLayout<Float32>.size)
+        var address = AudioObjectPropertyAddress(
+            mSelector: kAudioHardwareServiceDeviceProperty_VirtualMainVolume,
+            mScope: kAudioDevicePropertyScopeOutput,
+            mElement: kAudioObjectPropertyElementMain
+        )
+
+        let status = AudioObjectGetPropertyData(deviceID, &address, 0, nil, &size, &volume)
+        return status == noErr ? volume : 0
+    }
+
+    static func setSystemVolume(_ volume: Float) {
+        let deviceID = getDefaultOutputDeviceID()
+        guard deviceID != kAudioObjectUnknown else { return }
+
+        var vol = max(0, min(1, volume))
+        let size = UInt32(MemoryLayout<Float32>.size)
+        var address = AudioObjectPropertyAddress(
+            mSelector: kAudioHardwareServiceDeviceProperty_VirtualMainVolume,
+            mScope: kAudioDevicePropertyScopeOutput,
+            mElement: kAudioObjectPropertyElementMain
+        )
+
+        AudioObjectSetPropertyData(deviceID, &address, 0, nil, size, &vol)
+    }
+
+    private static func getDefaultOutputDeviceID() -> AudioObjectID {
+        var deviceID = AudioObjectID(kAudioObjectUnknown)
+        var size = UInt32(MemoryLayout<AudioObjectID>.size)
+        var address = AudioObjectPropertyAddress(
+            mSelector: kAudioHardwarePropertyDefaultOutputDevice,
+            mScope: kAudioObjectPropertyScopeGlobal,
+            mElement: kAudioObjectPropertyElementMain
+        )
+        AudioObjectGetPropertyData(AudioObjectID(kAudioObjectSystemObject), &address, 0, nil, &size, &deviceID)
+        return deviceID
     }
 
     private func startListening() {

@@ -36,6 +36,7 @@ struct MediaControlsFullView: View {
                 regularContent()
             }
         }
+        .mediaScrollable(bundleIdentifier: bundleIdentifier, mediaInfo: mediaInfo)
     }
 
     @ViewBuilder

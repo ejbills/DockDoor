@@ -100,14 +100,12 @@ def validate_title(title, issue_type):
 def check_duplicate_checkbox(body):
     """Check if the duplicate review checkbox is checked."""
     # Look for checked checkbox patterns
-    checked_patterns = [
-        r'-\s*\[x\]\s*I have reviewed existing issues',
-        r'-\s*\[X\]\s*I have reviewed existing issues',
-    ]
+    # Allow for malformed checkboxes like [x ], [ x], [ x ], etc.
+    # The pattern \[\s*[xX]\s*\] matches any variation of whitespace around the x
+    pattern = r'-\s*\[\s*[xX]\s*\]\s*I have reviewed existing issues'
 
-    for pattern in checked_patterns:
-        if re.search(pattern, body, re.IGNORECASE):
-            return True
+    if re.search(pattern, body, re.IGNORECASE):
+        return True
 
     return False
 
@@ -150,6 +148,8 @@ def main():
 
     issue_number = sys.argv[1]
 
+    # Fetch the latest issue data from GitHub API
+    # This ensures we always validate the current content, even on edited issues
     result = subprocess.run(
         ['gh', 'issue', 'view', issue_number, '--json', 'title,body,labels'],
         capture_output=True, text=True, check=True

@@ -96,7 +96,7 @@ struct MainSettingsView: View {
     @Default(.sortMinimizedToEnd) var sortMinimizedToEnd
     @Default(.keepPreviewOnAppTerminate) var keepPreviewOnAppTerminate
     @Default(.enableCmdTabEnhancements) var enableCmdTabEnhancements
-    @Default(.scrollToMouseHoverInSwitcher) var scrollToMouseHoverInSwitcher
+    @Default(.enableMouseHoverInSwitcher) var enableMouseHoverInSwitcher
     @Default(.includeHiddenWindowsInSwitcher) var includeHiddenWindowsInSwitcher
     @Default(.useClassicWindowOrdering) var useClassicWindowOrdering
     @Default(.limitSwitcherToFrontmostApp) var limitSwitcherToFrontmostApp
@@ -108,8 +108,11 @@ struct MainSettingsView: View {
     @State private var selectedPerformanceProfile: SettingsProfile = .default
     @State private var selectedPreviewQualityProfile: PreviewQualityProfile = .standard
     @State private var showAdvancedSettings: Bool = false
+    @FocusState private var isKeepAliveFieldFocused: Bool
+    @State private var lastKeepAliveDuration: Int = 5
 
     @Default(.hoverWindowOpenDelay) var hoverWindowOpenDelay
+    @Default(.useDelayOnlyForInitialOpen) var useDelayOnlyForInitialOpen
     @Default(.fadeOutDuration) var fadeOutDuration
     @Default(.preventPreviewReentryDuringFadeOut) var preventPreviewReentryDuringFadeOut
     @Default(.inactivityTimeout) var inactivityTimeout
@@ -129,19 +132,14 @@ struct MainSettingsView: View {
     @Default(.windowSwitcherLivePreviewQuality) var windowSwitcherLivePreviewQuality
     @Default(.windowSwitcherLivePreviewFrameRate) var windowSwitcherLivePreviewFrameRate
     @Default(.windowSwitcherLivePreviewScope) var windowSwitcherLivePreviewScope
+    @Default(.livePreviewStreamKeepAlive) var livePreviewStreamKeepAlive
     @Default(.bufferFromDock) var bufferFromDock
     @Default(.shouldHideOnDockItemClick) var shouldHideOnDockItemClick
     @Default(.dockClickAction) var dockClickAction
     @Default(.enableCmdRightClickQuit) var enableCmdRightClickQuit
-    @Default(.enableDockScrollGesture) var enableDockScrollGesture
     @Default(.previewHoverAction) var previewHoverAction
-    @Default(.aeroShakeAction) var aeroShakeAction
-    @Default(.showSpecialAppControls) var showSpecialAppControls
-    @Default(.useEmbeddedMediaControls) var useEmbeddedMediaControls
     @Default(.showAnimations) var showAnimations
     @Default(.raisedWindowLevel) var raisedWindowLevel
-    @Default(.enablePinning) var enablePinning
-    @Default(.showBigControlsWhenNoValidWindows) var showBigControlsWhenNoValidWindows
     @Default(.disableImagePreview) var disableImagePreview
     @StateObject private var permissionsChecker = PermissionsChecker()
 
@@ -162,11 +160,6 @@ struct MainSettingsView: View {
                 }
             }
         }
-        .onChange(of: enablePinning) { isEnabled in
-            if !isEnabled {
-                SharedPreviewWindowCoordinator.activeInstance?.unpinAll()
-            }
-        }
         .onAppear {
             if doesCurrentSettingsMatchPerformanceProfile(.snappy) { selectedPerformanceProfile = .snappy }
             else if doesCurrentSettingsMatchPerformanceProfile(.relaxed) { selectedPerformanceProfile = .relaxed }
@@ -175,6 +168,10 @@ struct MainSettingsView: View {
             if doesCurrentSettingsMatchPreviewQualityProfile(.detailed) { selectedPreviewQualityProfile = .detailed }
             else if doesCurrentSettingsMatchPreviewQualityProfile(.lightweight) { selectedPreviewQualityProfile = .lightweight }
             else if doesCurrentSettingsMatchPreviewQualityProfile(.standard) { selectedPreviewQualityProfile = .standard }
+
+            if livePreviewStreamKeepAlive > 0 {
+                lastKeepAliveDuration = livePreviewStreamKeepAlive
+            }
         }
     }
 
@@ -466,8 +463,8 @@ struct MainSettingsView: View {
                                 get: { !preventSwitcherHide },
                                 set: { preventSwitcherHide = !$0 }
                             )) { Text("Release initializer key to select window in Switcher") }
-                            Toggle(isOn: $scrollToMouseHoverInSwitcher) { Text("Scroll to window on mouse hover") }
-                            Text("Automatically scrolls the window switcher when hovering over windows with the mouse.")
+                            Toggle(isOn: $enableMouseHoverInSwitcher) { Text("Enable mouse hover selection") }
+                            Text("Select and scroll to windows when hovering with mouse. Disable for keyboard-only navigation.")
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                                 .padding(.leading, 20)
@@ -673,6 +670,15 @@ struct MainSettingsView: View {
             StyledGroupBox(label: "Performance Tuning (Dock Previews)") {
                 VStack(alignment: .leading, spacing: 10) {
                     sliderSetting(title: "Preview Window Open Delay", value: $hoverWindowOpenDelay, range: 0 ... 2, step: 0.1, unit: "seconds", formatter: NumberFormatter.oneDecimalFormatter)
+                    VStack(alignment: .leading) {
+                        Toggle(isOn: $useDelayOnlyForInitialOpen) {
+                            Text("Only use delay for initial window opening")
+                        }
+                        Text("When enabled, switching between dock icons while a preview is already open will show previews instantly.")
+                            .font(.footnote)
+                            .foregroundColor(.gray)
+                            .padding(.leading, 20)
+                    }
                     sliderSetting(title: "Preview Window Fade Out Duration", value: $fadeOutDuration, range: 0 ... 2, step: 0.1, unit: "seconds", formatter: NumberFormatter.oneDecimalFormatter)
                     sliderSetting(title: "Preview Window Inactivity Timer", value: $inactivityTimeout, range: 0 ... 3, step: 0.1, unit: "seconds", formatter: NumberFormatter.oneDecimalFormatter)
                     sliderSetting(title: "Window Processing Debounce Interval", value: $windowProcessingDebounceInterval, range: 0 ... 3, step: 0.1, unit: "seconds", formatter: NumberFormatter.oneDecimalFormatter, onEditingChanged: { isEditing in
@@ -708,6 +714,11 @@ struct MainSettingsView: View {
                     Divider()
 
                     Toggle(isOn: $enableLivePreview) { Text("Enable Live Preview (Video)") }
+                        .onChange(of: enableLivePreview) { newValue in
+                            if !newValue {
+                                Task { await LiveCaptureManager.shared.stopAllStreams() }
+                            }
+                        }
                     Text("When enabled, window previews show live video instead of static screenshots. Uses ScreenCaptureKit for real-time capture.")
                         .font(.caption)
                         .foregroundColor(.secondary)
@@ -783,6 +794,99 @@ struct MainSettingsView: View {
                             .font(.caption)
                             .foregroundColor(.secondary)
                             .padding(.leading, 20)
+
+                        Divider()
+                            .padding(.leading, 20)
+
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Stream Keep-Alive Duration")
+                                .onTapGesture { isKeepAliveFieldFocused = false }
+
+                            HStack(spacing: 0) {
+                                Button(action: {
+                                    livePreviewStreamKeepAlive = 0
+                                    isKeepAliveFieldFocused = false
+                                }) {
+                                    Text("Immediately close")
+                                        .padding(.horizontal, 12)
+                                        .padding(.vertical, 6)
+                                        .contentShape(Rectangle())
+                                }
+                                .buttonStyle(.plain)
+                                .background(livePreviewStreamKeepAlive == 0 ? Color.accentColor : Color.secondary.opacity(0.15))
+                                .foregroundColor(livePreviewStreamKeepAlive == 0 ? .white : .primary)
+                                .contentShape(Rectangle())
+
+                                HStack(spacing: 4) {
+                                    TextField("", value: Binding(
+                                        get: { livePreviewStreamKeepAlive > 0 ? livePreviewStreamKeepAlive : lastKeepAliveDuration },
+                                        set: {
+                                            let newValue = max(1, $0)
+                                            lastKeepAliveDuration = newValue
+
+                                            if livePreviewStreamKeepAlive > 0 {
+                                                livePreviewStreamKeepAlive = newValue
+                                            }
+                                        }
+                                    ), formatter: NumberFormatter())
+                                        .textFieldStyle(.roundedBorder)
+                                        .frame(width: 40)
+                                        .multilineTextAlignment(.center)
+                                        .focused($isKeepAliveFieldFocused)
+                                        .onChange(of: isKeepAliveFieldFocused) { focused in
+                                            if focused, livePreviewStreamKeepAlive <= 0 {
+                                                livePreviewStreamKeepAlive = lastKeepAliveDuration
+                                            }
+                                        }
+                                    Text("seconds")
+                                        .foregroundColor(livePreviewStreamKeepAlive > 0 ? .white : .primary)
+                                }
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 3)
+                                .background(livePreviewStreamKeepAlive > 0 ? Color.accentColor : Color.secondary.opacity(0.15))
+                                .contentShape(Rectangle())
+                                .onTapGesture {
+                                    if livePreviewStreamKeepAlive <= 0 {
+                                        livePreviewStreamKeepAlive = lastKeepAliveDuration
+                                    }
+                                }
+
+                                Button(action: {
+                                    livePreviewStreamKeepAlive = -1
+                                    isKeepAliveFieldFocused = false
+                                }) {
+                                    Text("Keep Open")
+                                        .padding(.horizontal, 12)
+                                        .padding(.vertical, 6)
+                                        .contentShape(Rectangle())
+                                }
+                                .buttonStyle(.plain)
+                                .background(livePreviewStreamKeepAlive == -1 ? Color.accentColor : Color.secondary.opacity(0.15))
+                                .foregroundColor(livePreviewStreamKeepAlive == -1 ? .white : .primary)
+                                .contentShape(Rectangle())
+                            }
+                            .cornerRadius(6)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 6)
+                                    .stroke(Color.secondary.opacity(0.3), lineWidth: 1)
+                            )
+                            .onChange(of: livePreviewStreamKeepAlive) { newValue in
+                                if newValue == 0 {
+                                    Task { await LiveCaptureManager.shared.stopAllStreams() }
+                                }
+                            }
+
+                            Text("How long to keep video streams active after closing preview. Longer duration means faster reopening but uses more resources.")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                                .onTapGesture { isKeepAliveFieldFocused = false }
+                        }
+                        .padding(.leading, 20)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .contentShape(Rectangle())
+                        .gesture(TapGesture().onEnded {
+                            isKeepAliveFieldFocused = false
+                        }, including: .gesture)
                     }
                 }
             }
@@ -798,7 +902,6 @@ struct MainSettingsView: View {
 
                     Picker("Dock Preview Hover Action", selection: $previewHoverAction) { ForEach(PreviewHoverAction.allCases, id: \.self) { Text($0.localizedName).tag($0) } }.pickerStyle(MenuPickerStyle())
                     sliderSetting(title: "Preview Hover Action Delay", value: $tapEquivalentInterval, range: 0 ... 2, step: 0.1, unit: "seconds", formatter: NumberFormatter.oneDecimalFormatter).disabled(previewHoverAction == .none)
-                    Picker("Dock Preview Aero Shake Action", selection: $aeroShakeAction) { ForEach(AeroShakeAction.allCases, id: \.self) { Text($0.localizedName).tag($0) } }.pickerStyle(MenuPickerStyle())
                     Toggle(isOn: $shouldHideOnDockItemClick) { Text("Hide all app windows on dock icon click") }
                     if shouldHideOnDockItemClick {
                         Picker("Dock Click Action", selection: $dockClickAction) {
@@ -810,44 +913,6 @@ struct MainSettingsView: View {
                         .padding(.leading, 20)
                     }
                     Toggle(isOn: $enableCmdRightClickQuit) { Text("CMD + Right Click on dock icon to quit app") }
-
-                    Toggle(isOn: $enableDockScrollGesture) { Text("Enable dock scroll gestures") }
-                    Text("Scroll up on a dock icon to bring the app to front, scroll down to hide all its windows.")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                        .padding(.leading, 20)
-
-                    Toggle(isOn: $showSpecialAppControls) { Text("Show media/calendar controls on Dock hover") }
-                    Text("For supported apps (Music, Spotify, Calendar), show interactive controls instead of window previews when hovering their Dock icons.")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                        .padding(.leading, 20)
-                    if showSpecialAppControls {
-                        Toggle(isOn: $useEmbeddedMediaControls) { Text("Embed controls with window previews (if previews shown)") }
-                            .padding(.leading, 20)
-                        Text("If enabled, controls integrate with previews when possible.")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                            .padding(.leading, 40)
-
-                        Toggle(isOn: $showBigControlsWhenNoValidWindows) { Text("Show big controls when no valid windows") }
-                            .padding(.leading, 20)
-                            .disabled(!useEmbeddedMediaControls)
-                        Text(useEmbeddedMediaControls ?
-                            "When embedded mode is enabled, show big controls instead of embedded ones if all windows are minimized/hidden or there are no windows." :
-                            "This setting only applies when \"Embed controls with window previews\" is enabled above.")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                            .padding(.leading, 40)
-                            .opacity(useEmbeddedMediaControls ? 1.0 : 0.6)
-
-                        Toggle(isOn: $enablePinning) { Text("Enable Pinning") }
-                            .padding(.leading, 20)
-                        Text("Allow special app controls to be pinned to the screen via right-click menu.")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                            .padding(.leading, 40)
-                    }
 
                     sliderSetting(title: "Window Buffer from Dock (pixels)", value: $bufferFromDock, range: -100 ... 100, step: 5, unit: "px", formatter: { let f = NumberFormatter(); f.allowsFloats = false; f.minimumIntegerDigits = 1; f.maximumFractionDigits = 0; return f }())
                 }
@@ -912,7 +977,7 @@ struct MainSettingsView: View {
                 hoverWindowOpenDelay = perfDefault.hoverWindowOpenDelay; fadeOutDuration = perfDefault.fadeOutDuration; tapEquivalentInterval = perfDefault.tapEquivalentInterval; preventDockHide = perfDefault.preventDockHide
                 let qualityDefault = PreviewQualityProfile.standard.settings
                 screenCaptureCacheLifespan = qualityDefault.screenCaptureCacheLifespan; windowPreviewImageScale = qualityDefault.windowPreviewImageScale
-                bufferFromDock = Defaults.Keys.bufferFromDock.defaultValue; shouldHideOnDockItemClick = Defaults.Keys.shouldHideOnDockItemClick.defaultValue; dockClickAction = Defaults.Keys.dockClickAction.defaultValue; enableCmdRightClickQuit = Defaults.Keys.enableCmdRightClickQuit.defaultValue; enableDockScrollGesture = Defaults.Keys.enableDockScrollGesture.defaultValue; previewHoverAction = Defaults.Keys.previewHoverAction.defaultValue; aeroShakeAction = Defaults.Keys.aeroShakeAction.defaultValue
+                bufferFromDock = Defaults.Keys.bufferFromDock.defaultValue; shouldHideOnDockItemClick = Defaults.Keys.shouldHideOnDockItemClick.defaultValue; dockClickAction = Defaults.Keys.dockClickAction.defaultValue; enableCmdRightClickQuit = Defaults.Keys.enableCmdRightClickQuit.defaultValue; previewHoverAction = Defaults.Keys.previewHoverAction.defaultValue
 
                 showMenuBarIcon = Defaults.Keys.showMenuBarIcon.defaultValue
                 enableWindowSwitcher = Defaults.Keys.enableWindowSwitcher.defaultValue
@@ -948,8 +1013,11 @@ struct MainSettingsView: View {
                 Defaults[.alternateKeybindKey] = Defaults.Keys.alternateKeybindKey.defaultValue
                 Defaults[.alternateKeybindMode] = Defaults.Keys.alternateKeybindMode.defaultValue
 
-                showSpecialAppControls = Defaults.Keys.showSpecialAppControls.defaultValue
-                showBigControlsWhenNoValidWindows = Defaults.Keys.showBigControlsWhenNoValidWindows.defaultValue
+                Defaults[.showSpecialAppControls] = Defaults.Keys.showSpecialAppControls.defaultValue
+                Defaults[.showBigControlsWhenNoValidWindows] = Defaults.Keys.showBigControlsWhenNoValidWindows.defaultValue
+                Defaults[.useEmbeddedMediaControls] = Defaults.Keys.useEmbeddedMediaControls.defaultValue
+                Defaults[.enablePinning] = Defaults.Keys.enablePinning.defaultValue
+                Defaults[.filteredCalendarIdentifiers] = Defaults.Keys.filteredCalendarIdentifiers.defaultValue
                 groupAppInstancesInDock = Defaults.Keys.groupAppInstancesInDock.defaultValue
 
                 // Reset image preview settings

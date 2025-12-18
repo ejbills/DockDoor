@@ -40,11 +40,21 @@ private class WindowSwitchingCoordinator {
         }
 
         if stateManager.isActive {
+            // TODO: Consolidate WindowSwitcherStateManager and PreviewStateCoordinator into a single index system
+            let uiIndex = previewCoordinator.windowSwitcherCoordinator.currIndex
+            if uiIndex >= 0, uiIndex != stateManager.currentIndex {
+                stateManager.setIndex(uiIndex)
+            }
+
             if isShiftPressed {
                 stateManager.cycleBackward()
             } else {
                 stateManager.cycleForward()
             }
+
+            previewCoordinator.windowSwitcherCoordinator.hasMovedSinceOpen = false
+            previewCoordinator.windowSwitcherCoordinator.initialHoverLocation = nil
+
             previewCoordinator.windowSwitcherCoordinator.setIndex(to: stateManager.currentIndex)
         } else if isModifierPressed {
             await initializeWindowSwitching(
@@ -269,7 +279,8 @@ class KeybindHelper {
     private func setupEventTap() {
         let eventMask = (1 << CGEventType.keyDown.rawValue) |
             (1 << CGEventType.keyUp.rawValue) |
-            (1 << CGEventType.flagsChanged.rawValue)
+            (1 << CGEventType.flagsChanged.rawValue) |
+            (1 << CGEventType.leftMouseDown.rawValue)
 
         let userInfo = KeybindHelperUserInfo(instance: self)
         unmanagedEventTapUserInfo = Unmanaged.passRetained(userInfo)
@@ -457,6 +468,30 @@ class KeybindHelper {
                 }
             }
             if shouldConsume { return nil }
+
+        case .leftMouseDown:
+            if previewCoordinator.isVisible,
+               previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive
+            {
+                let clickLocation = NSEvent.mouseLocation
+                let windowFrame = previewCoordinator.frame
+
+                if windowFrame.contains(clickLocation) {
+                    let flags = event.flags
+                    if flags.contains(.maskControl) {
+                        var newFlags = flags
+                        newFlags.remove(.maskControl)
+                        event.flags = newFlags
+                    }
+                } else {
+                    Task { @MainActor in
+                        self.windowSwitchingCoordinator.cancelSwitching()
+                        self.previewCoordinator.hideWindow()
+                        self.preventSwitcherHideOnRelease = false
+                        self.hasProcessedModifierRelease = true
+                    }
+                }
+            }
 
         default:
             break

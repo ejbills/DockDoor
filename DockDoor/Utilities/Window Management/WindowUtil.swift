@@ -218,6 +218,17 @@ enum WindowAction: String, Hashable, CaseIterable, Defaults.Serializable {
 enum WindowUtil {
     private static let desktopSpaceWindowCacheManager = SpaceWindowCacheManager()
 
+    static func isAppFiltered(_ app: NSRunningApplication) -> Bool {
+        let filters = Defaults[.appNameFilters]
+        guard !filters.isEmpty else { return false }
+
+        let bundleId = app.bundleIdentifier ?? ""
+        let appName = app.localizedName ?? ""
+
+        // Check bundle ID (new format) or app name (legacy format)
+        return filters.contains(bundleId) || filters.contains(where: { $0.caseInsensitiveCompare(appName) == .orderedSame })
+    }
+
     // Track windows explicitly updated by bringWindowToFront to prevent observer duplication
     private static var timestampUpdates: [AXUIElement: Date] = [:]
     private static let updateTimestampLock = NSLock()
@@ -531,6 +542,11 @@ extension WindowUtil {
     }
 
     static func getActiveWindows(of app: NSRunningApplication, context: WindowFetchContext = .dockPreview) async throws -> [WindowInfo] {
+        if isAppFiltered(app) {
+            purgeAppCache(with: app.processIdentifier)
+            return []
+        }
+
         var sckWindowIDs = Set<CGWindowID>()
 
         // Skip SCK if user has disabled image previews (compact mode only)
@@ -583,9 +599,7 @@ extension WindowUtil {
             return 0
         }
 
-        let appName = app.localizedName ?? ""
-        let appNameFilters = Defaults[.appNameFilters]
-        if !appNameFilters.isEmpty, appNameFilters.contains(where: { appName.lowercased().contains($0.lowercased()) }) {
+        if isAppFiltered(app) {
             purgeAppCache(with: pid)
             return 0
         }
@@ -726,16 +740,9 @@ extension WindowUtil {
             return
         }
 
-        if let appName = app.localizedName {
-            let appNameFilters = Defaults[.appNameFilters]
-            if !appNameFilters.isEmpty {
-                for filter in appNameFilters {
-                    if appName.lowercased().contains(filter.lowercased()) {
-                        purgeAppCache(with: app.processIdentifier)
-                        return
-                    }
-                }
-            }
+        if isAppFiltered(app) {
+            purgeAppCache(with: app.processIdentifier)
+            return
         }
 
         if let windowTitle = window.title {

@@ -241,7 +241,11 @@ extension WindowPreviewHoverContainer {
 
         if isWindowSwitcherActive {
             effectiveMaxColumns = calculatedMaxColumns
-            effectiveMaxRows = switcherMaxRows
+            if let totalItems, totalItems <= calculatedMaxColumns {
+                effectiveMaxRows = 1
+            } else {
+                effectiveMaxRows = switcherMaxRows
+            }
         } else if dockPosition == .bottom || dockPosition == .cmdTab {
             effectiveMaxColumns = calculatedMaxColumns
             effectiveMaxRows = (dockPosition == .cmdTab) ? 1 : previewMaxRows
