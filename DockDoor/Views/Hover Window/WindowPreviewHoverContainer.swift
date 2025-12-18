@@ -85,6 +85,7 @@ struct WindowPreviewHoverContainer: View {
     @State private var lastShakeCheck: Date = .init()
     @State private var edgeScrollTimer: Timer?
     @State private var edgeScrollDirection: CGFloat = 0
+    @State private var cachedScrollView: NSScrollView?
 
     init(appName: String,
          onWindowTap: (() -> Void)?,
@@ -153,6 +154,7 @@ struct WindowPreviewHoverContainer: View {
     private func handleHoverIndexChange(_ hoveredIndex: Int?, _ location: CGPoint?) {
         guard enableMouseHoverInSwitcher else { return }
         guard let hoveredIndex else { return }
+        guard hoveredIndex != previewStateCoordinator.currIndex else { return }
 
         if !previewStateCoordinator.hasMovedSinceOpen {
             let screenLocation = NSEvent.mouseLocation
@@ -172,9 +174,7 @@ struct WindowPreviewHoverContainer: View {
             }
         }
 
-        if hoveredIndex != previewStateCoordinator.currIndex {
-            previewStateCoordinator.setIndex(to: hoveredIndex, shouldScroll: false)
-        }
+        previewStateCoordinator.setIndex(to: hoveredIndex, shouldScroll: false)
     }
 
     var body: some View {
@@ -627,6 +627,12 @@ struct WindowPreviewHoverContainer: View {
         edgeScrollDirection = direction
         guard edgeScrollTimer == nil else { return }
 
+        if cachedScrollView == nil || cachedScrollView?.window == nil {
+            if let window = NSApp.windows.first(where: { $0.isVisible && $0.title.isEmpty }) {
+                cachedScrollView = findScrollView(in: window.contentView)
+            }
+        }
+
         edgeScrollTimer = Timer.scheduledTimer(withTimeInterval: 1.0 / 60.0, repeats: true) { _ in
             smoothScrollBy(direction: edgeScrollDirection, isHorizontal: isHorizontal)
         }
@@ -636,11 +642,12 @@ struct WindowPreviewHoverContainer: View {
         edgeScrollTimer?.invalidate()
         edgeScrollTimer = nil
         edgeScrollDirection = 0
+        cachedScrollView = nil
     }
 
     private func smoothScrollBy(direction: CGFloat, isHorizontal: Bool) {
-        guard let window = NSApp.windows.first(where: { $0.isVisible && $0.title.isEmpty }),
-              let scrollView = findScrollView(in: window.contentView)
+        guard let scrollView = cachedScrollView,
+              let documentView = scrollView.documentView
         else { return }
 
         let scrollAmount: CGFloat = 4.0 * direction
@@ -649,10 +656,10 @@ struct WindowPreviewHoverContainer: View {
 
         if isHorizontal {
             newOrigin.x += scrollAmount
-            newOrigin.x = max(0, min(newOrigin.x, scrollView.documentView!.frame.width - clipView.bounds.width))
+            newOrigin.x = max(0, min(newOrigin.x, documentView.frame.width - clipView.bounds.width))
         } else {
             newOrigin.y += scrollAmount
-            newOrigin.y = max(0, min(newOrigin.y, scrollView.documentView!.frame.height - clipView.bounds.height))
+            newOrigin.y = max(0, min(newOrigin.y, documentView.frame.height - clipView.bounds.height))
         }
 
         clipView.setBoundsOrigin(newOrigin)
