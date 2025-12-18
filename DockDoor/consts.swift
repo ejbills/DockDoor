@@ -74,7 +74,7 @@ extension Defaults.Keys {
     static let cmdTabSortOrder = Key<WindowPreviewSortOrder>("cmdTabSortOrder", default: .recentlyUsed)
     static let sortMinimizedToEnd = Key<Bool>("sortMinimizedToEnd", default: false)
     static let enableCmdTabEnhancements = Key<Bool>("enableCmdTabEnhancements", default: false)
-    static let enableMouseHoverInSwitcher = Key<Bool>("enableMouseHoverInSwitcher", default: false)
+    static let enableMouseHoverInSwitcher = Key<Bool>("enableMouseHoverInSwitcher", default: true)
     static let keepPreviewOnAppTerminate = Key<Bool>("keepPreviewOnAppTerminate", default: false)
     static let enableWindowSwitcherSearch = Key<Bool>("enableWindowSwitcherSearch", default: false)
     // Compact mode settings
