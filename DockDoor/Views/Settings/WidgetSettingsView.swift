@@ -17,6 +17,7 @@ struct WidgetSettingsView: View {
     @Default(.showBigControlsWhenNoValidWindows) var showBigControlsWhenNoValidWindows
     @Default(.enablePinning) var enablePinning
     @Default(.filteredCalendarIdentifiers) var filteredCalendarIdentifiers
+    @Default(.mediaWidgetScrollBehavior) var mediaWidgetScrollBehavior
 
     @State private var availableCalendars: [CalendarItem] = []
     @State private var isLoadingCalendars = true
@@ -102,6 +103,21 @@ struct WidgetSettingsView: View {
                                 .foregroundColor(.secondary)
                                 .padding(.leading, 40)
                         }
+                    }
+                }
+
+                StyledGroupBox(label: "Media") {
+                    VStack(alignment: .leading, spacing: 10) {
+                        Picker("Scroll behavior:", selection: $mediaWidgetScrollBehavior) {
+                            ForEach(MediaWidgetScrollBehavior.allCases, id: \.self) { behavior in
+                                Text(behavior.localizedName).tag(behavior)
+                            }
+                        }
+                        .pickerStyle(.menu)
+
+                        Text("When scrolling on the media widget preview, choose whether to adjust system volume or seek through the track.")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
                     }
                 }
 

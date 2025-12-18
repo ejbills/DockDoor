@@ -8200,7 +8200,7 @@
       }
     },
     "Activate/Hide (same as other apps)" : {
-      "comment" : "Media scroll behavior option"
+      "comment" : "Dock icon media scroll option"
     },
     "Active App + Current Space" : {
       "comment" : "Switcher invocation mode",
@@ -10297,7 +10297,7 @@
       }
     },
     "Adjust volume" : {
-      "comment" : "Media scroll behavior option"
+      "comment" : "Dock icon media scroll option\nMedia widget scroll option"
     },
     "Adjusts how responsive the app feels and behaves during interaction." : {
       "localizations" : {
@@ -62316,6 +62316,9 @@
         }
       }
     },
+    "Media" : {
+
+    },
     "Medium" : {
       "comment" : "Compact mode item size option",
       "localizations" : {
@@ -89176,6 +89179,9 @@
         }
       }
     },
+    "Scroll behavior:" : {
+
+    },
     "Scroll long titles (marquee)" : {
       "localizations" : {
         "af" : {
@@ -90700,6 +90706,9 @@
           }
         }
       }
+    },
+    "Seek playback (scrub through track)" : {
+      "comment" : "Media widget scroll option"
     },
     "Select a profile to quickly adjust common performance settings. Choose \"Advanced\" for manual control." : {
       "localizations" : {
@@ -117758,6 +117767,9 @@
           }
         }
       }
+    },
+    "When scrolling on the media widget preview, choose whether to adjust system volume or seek through the track." : {
+
     },
     "When Showing Dock Tile Previews" : {
       "comment" : "Preview window title condition option",

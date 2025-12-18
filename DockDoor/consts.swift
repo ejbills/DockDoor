@@ -28,7 +28,8 @@ extension Defaults.Keys {
     static let dockClickAction = Key<DockClickAction>("dockClickAction", default: .hide)
     static let enableCmdRightClickQuit = Key<Bool>("enableCmdRightClickQuit", default: true)
     static let enableDockScrollGesture = Key<Bool>("enableDockScrollGesture", default: false)
-    static let mediaScrollBehavior = Key<MediaScrollBehavior>("mediaScrollBehavior", default: .adjustVolume)
+    static let dockIconMediaScrollBehavior = Key<DockIconMediaScrollBehavior>("dockIconMediaScrollBehavior", default: .adjustVolume)
+    static let mediaWidgetScrollBehavior = Key<MediaWidgetScrollBehavior>("mediaWidgetScrollBehavior", default: .seekPlayback)
 
     static let screenCaptureCacheLifespan = Key<CGFloat>("screenCaptureCacheLifespan", default: 60)
     static let windowProcessingDebounceInterval = Key<CGFloat>("windowProcessingDebounceInterval", default: 0.3)
@@ -422,16 +423,32 @@ enum DockClickAction: String, CaseIterable, Defaults.Serializable {
     }
 }
 
-enum MediaScrollBehavior: String, CaseIterable, Defaults.Serializable {
+// Dock icon scroll behavior for Music/Spotify
+enum DockIconMediaScrollBehavior: String, CaseIterable, Defaults.Serializable {
     case adjustVolume
     case activateHide
 
     var localizedName: String {
         switch self {
         case .adjustVolume:
-            String(localized: "Adjust volume", comment: "Media scroll behavior option")
+            String(localized: "Adjust volume", comment: "Dock icon media scroll option")
         case .activateHide:
-            String(localized: "Activate/Hide (same as other apps)", comment: "Media scroll behavior option")
+            String(localized: "Activate/Hide (same as other apps)", comment: "Dock icon media scroll option")
+        }
+    }
+}
+
+// Media widget scroll behavior
+enum MediaWidgetScrollBehavior: String, CaseIterable, Defaults.Serializable {
+    case adjustVolume
+    case seekPlayback
+
+    var localizedName: String {
+        switch self {
+        case .adjustVolume:
+            String(localized: "Adjust volume", comment: "Media widget scroll option")
+        case .seekPlayback:
+            String(localized: "Seek playback (scrub through track)", comment: "Media widget scroll option")
         }
     }
 }

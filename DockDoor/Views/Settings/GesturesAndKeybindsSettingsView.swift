@@ -10,7 +10,7 @@ struct GesturesAndKeybindsSettingsView: View {
     @Default(.switcherSwipeDownAction) var switcherSwipeDownAction
     @Default(.gestureSwipeThreshold) var gestureSwipeThreshold
     @Default(.enableDockScrollGesture) var enableDockScrollGesture
-    @Default(.mediaScrollBehavior) var mediaScrollBehavior
+    @Default(.dockIconMediaScrollBehavior) var dockIconMediaScrollBehavior
     @Default(.middleClickAction) var middleClickAction
     @Default(.aeroShakeAction) var aeroShakeAction
     @Default(.enableWindowSwitcher) var enableWindowSwitcher
@@ -77,8 +77,8 @@ struct GesturesAndKeybindsSettingsView: View {
 
                     Divider()
 
-                    Picker("Music/Spotify behavior:", selection: $mediaScrollBehavior) {
-                        ForEach(MediaScrollBehavior.allCases, id: \.self) { behavior in
+                    Picker("Music/Spotify behavior:", selection: $dockIconMediaScrollBehavior) {
+                        ForEach(DockIconMediaScrollBehavior.allCases, id: \.self) { behavior in
                             Text(behavior.localizedName).tag(behavior)
                         }
                     }

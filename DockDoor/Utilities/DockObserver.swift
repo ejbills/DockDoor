@@ -462,11 +462,13 @@ final class DockObserver {
             return false
         }
 
-        // If no hover state, query AX directly to check if any windows are minimized at click time
+        // If no hover state, query AX directly to check window state at click time
         var hasMinimizedWindowsAtClickTime = false
+        var hasAnyWindowsAtClickTime = false
         if !hasValidHoverState {
             let axApp = AXUIElementCreateApplication(pid)
             if let windowList = try? axApp.windows() {
+                hasAnyWindowsAtClickTime = !windowList.isEmpty
                 for window in windowList {
                     if (try? window.isMinimized()) == true {
                         hasMinimizedWindowsAtClickTime = true
@@ -474,6 +476,13 @@ final class DockObserver {
                     }
                 }
             }
+        }
+
+        // If app has no windows at click time and wasn't tracked via hover,
+        // defer to native behavior to let macOS create a new window without interference
+        if !hasValidHoverState, !hasAnyWindowsAtClickTime, !app.isHidden {
+            lastHoveredPID = nil
+            return false
         }
 
         // Capture restoration need from hover state OR from AX query at click time
@@ -621,12 +630,13 @@ final class DockObserver {
         let isNaturalScrolling = nsEvent?.isDirectionInvertedFromDevice ?? false
         let normalizedDeltaY = isNaturalScrolling ? -deltaY : deltaY
 
-        if Defaults[.mediaScrollBehavior] == .adjustVolume,
-           let bundleId = app.bundleIdentifier,
+        if let bundleId = app.bundleIdentifier,
            bundleId == appleMusicAppIdentifier || bundleId == spotifyAppIdentifier
         {
-            handleVolumeScroll(deltaY: normalizedDeltaY)
-            return true
+            if Defaults[.dockIconMediaScrollBehavior] == .adjustVolume {
+                handleVolumeScroll(deltaY: normalizedDeltaY)
+                return true
+            }
         }
 
         let now = Date()

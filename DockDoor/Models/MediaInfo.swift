@@ -60,6 +60,12 @@ class MediaInfo: ObservableObject {
     @Published var duration: TimeInterval = 0
     @Published var appName: String = ""
 
+    // MARK: - Seek State
+
+    var isSeeking: Bool = false
+    var seekBaseTime: TimeInterval = 0
+    var seekAccumulatedDelta: CGFloat = 0
+
     // MARK: - Lyrics Properties
 
     @Published var lyrics: [LyricLine] = []
@@ -508,6 +514,10 @@ class MediaInfo: ObservableObject {
 
         // Parse time values with locale-aware parsing
         let newCurrentTime = parseTimeValue(components[4])
+        duration = parseTimeValue(components[5])
+
+        // Skip updating currentTime while user is seeking (faux scrub)
+        guard !isSeeking else { return }
 
         // Update timing tracking for interpolation
         if abs(newCurrentTime - currentTime) > 0.5 || !isPlaying {
@@ -522,7 +532,6 @@ class MediaInfo: ObservableObject {
         }
 
         currentTime = newCurrentTime
-        duration = parseTimeValue(components[5])
 
         // Handle artwork URL if present
         if components.count > 6, !components[6].isEmpty {
