@@ -41,11 +41,11 @@ Effortless Alt+Tab switching and dock previews that respect your privacy.
 
 ## About The Project
 
-**Dockdoor** reintroduces the missing "Window Peeking" functionality to macOS, inspired by the utility found in Windows and Linux environments.
+**DockDoor** reintroduces the missing "Window Peeking" functionality to macOS, inspired by the utility found in Windows and Linux environments.
 
-While the native macOS Dock is iconic, it often lacks context when multiple windows of the same application are open. Dockdoor solves this by allowing you to visualize, manage, and switch between your open windows simply by hovering over your Dock icons.
+While the native macOS Dock is iconic, it often lacks context when multiple windows of the same application are open. DockDoor solves this by allowing you to visualize, manage, and switch between your open windows simply by hovering over your Dock icons.
 
-Built entirely open-source, Dockdoor is designed to feel like a native extension of the operating system. Fast, lightweight, and seamlessly integrated!
+Built entirely open-source, DockDoor is designed to feel like a native extension of the operating system. Fast, lightweight, and seamlessly integrated!
 
 For full details, features, and documentation, please visit **[dockdoor.net](https://dockdoor.net)** ⭐
 
