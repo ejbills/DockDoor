@@ -53164,6 +53164,9 @@
         }
       }
     },
+    "How long to keep video streams active after closing preview. Longer duration means faster reopening but uses more resources." : {
+
+    },
     "How to Set Up" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -54497,6 +54500,9 @@
           }
         }
       }
+    },
+    "Immediately close" : {
+
     },
     "Important: When recording, press ONLY the trigger key (e.g. just press Tab if you want command + Tab). Do not press the initialization key during recording." : {
       "extractionState" : "stale",
@@ -57166,6 +57172,9 @@
           }
         }
       }
+    },
+    "Keep Open" : {
+
     },
     "Keep preview when app terminates" : {
       "localizations" : {
@@ -101960,6 +101969,9 @@
           }
         }
       }
+    },
+    "Stream Keep-Alive Duration" : {
+
     },
     "Subatomic" : {
       "comment" : "Window size option",

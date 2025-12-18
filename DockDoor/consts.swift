@@ -44,6 +44,7 @@ extension Defaults.Keys {
     static let windowSwitcherLivePreviewQuality = Key<LivePreviewQuality>("windowSwitcherLivePreviewQuality", default: .low)
     static let windowSwitcherLivePreviewFrameRate = Key<LivePreviewFrameRate>("windowSwitcherLivePreviewFrameRate", default: .fps10)
     static let windowSwitcherLivePreviewScope = Key<WindowSwitcherLivePreviewScope>("windowSwitcherLivePreviewScope", default: .selectedAppWindows)
+    static let livePreviewStreamKeepAlive = Key<Int>("livePreviewStreamKeepAlive", default: 0)
 
     static let uniformCardRadius = Key<Bool>("uniformCardRadius", default: true)
     static let allowDynamicImageSizing = Key<Bool>("allowDynamicImageSizing", default: false)
