@@ -14,6 +14,7 @@ struct FiltersSettingsView: View {
     @Default(.appNameFilters) var appNameFilters
     @Default(.windowTitleFilters) var windowTitleFilters
     @Default(.customAppDirectories) var customAppDirectories
+    @Default(.groupedAppsInSwitcher) var groupedAppsInSwitcher
 
     @State private var showingAddFilterSheet = false
     @State private var newFilter = FilterEntry(text: "")
@@ -233,6 +234,71 @@ struct FiltersSettingsView: View {
                     isLoadingApps = true
                     installedApps = await loadInstalledApps()
                     isLoadingApps = false
+                }
+
+                // Group Windows by App Section
+                StyledGroupBox(label: "Group Windows by App") {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Selected apps will show as a single entry in the window switcher (using the most recently used window). All windows are shown when using the active app only mode.")
+                            .font(.footnote)
+                            .foregroundColor(.secondary)
+                            .padding(.bottom, 4)
+
+                        ScrollView {
+                            VStack(alignment: .leading, spacing: 4) {
+                                if isLoadingApps {
+                                    HStack {
+                                        Spacer()
+                                        ProgressView()
+                                            .scaleEffect(0.8)
+                                        Text("Loading applications...")
+                                            .foregroundColor(.secondary)
+                                        Spacer()
+                                    }
+                                    .padding()
+                                } else if installedApps.isEmpty {
+                                    Text("No applications found.")
+                                        .foregroundColor(.secondary)
+                                        .padding()
+                                } else {
+                                    ForEach(installedApps) { app in
+                                        HStack(spacing: 8) {
+                                            Toggle(isOn: Binding(
+                                                get: {
+                                                    groupedAppsInSwitcher.contains(app.bundleIdentifier)
+                                                },
+                                                set: { isEnabled in
+                                                    if isEnabled {
+                                                        if !groupedAppsInSwitcher.contains(app.bundleIdentifier) {
+                                                            groupedAppsInSwitcher.append(app.bundleIdentifier)
+                                                        }
+                                                    } else {
+                                                        groupedAppsInSwitcher.removeAll { $0 == app.bundleIdentifier }
+                                                    }
+                                                }
+                                            )) { EmptyView() }
+
+                                            Image(nsImage: app.icon)
+                                                .resizable()
+                                                .frame(width: 16, height: 16)
+
+                                            Text(app.name)
+                                                .lineLimit(1)
+
+                                            Spacer()
+                                        }
+                                        .padding(.vertical, 2)
+                                    }
+                                }
+                            }
+                            .padding(8)
+                        }
+                        .frame(height: 200)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(Color.gray.opacity(0.25), lineWidth: 1)
+                        )
+                    }
                 }
 
                 // Window Title Filters Section
