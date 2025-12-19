@@ -762,6 +762,9 @@
         }
       }
     },
+    "%" : {
+
+    },
     "%@" : {
       "localizations" : {
         "af" : {
@@ -10489,6 +10492,9 @@
         }
       }
     },
+    "Adjusts the window switcher's position as a percentage of screen size. Setting both values to 0 centers the switcher (or aligns to top if anchored). Large values may cause the window to overflow off-screen." : {
+
+    },
     "Aero Shake" : {
 
     },
@@ -13728,6 +13734,9 @@
           }
         }
       }
+    },
+    "Anchor to top of screen" : {
+
     },
     "Animation speed" : {
       "localizations" : {
@@ -93777,6 +93786,9 @@
     "Shake a window preview rapidly" : {
 
     },
+    "Shift Horizontal Position" : {
+
+    },
     "Shift Indicator" : {
       "localizations" : {
         "af" : {
@@ -93966,6 +93978,9 @@
           }
         }
       }
+    },
+    "Shift Vertical Position" : {
+
     },
     "Show active app indicator below dock icon" : {
       "comment" : "A toggle switch label that enables or disables the display of a line below the currently active application's dock icon.",
@@ -117209,6 +117224,9 @@
         }
       }
     },
+    "When enabled, the switcher's top edge stays fixed regardless of its size. When disabled, the switcher is centered vertically." : {
+
+    },
     "When enabled, window previews show live video instead of static screenshots. Uses ScreenCaptureKit for real-time capture." : {
       "localizations" : {
         "af" : {
@@ -122931,6 +122949,9 @@
           }
         }
       }
+    },
+    "Window Switcher Position" : {
+
     },
     "Window Switcher Settings" : {
       "localizations" : {
