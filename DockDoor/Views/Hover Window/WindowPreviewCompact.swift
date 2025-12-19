@@ -136,7 +136,7 @@ struct WindowPreviewCompact: View {
                     .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
                     .borderedBackground(.primary.opacity(0.1), lineWidth: 1.75, shape: RoundedRectangle(cornerRadius: cornerRadius))
                     .overlay {
-                        if isSelected {
+                        if isSelected || isHovering {
                             let highlightColor = hoverHighlightColor ?? Color(nsColor: .controlAccentColor)
                             RoundedRectangle(cornerRadius: cornerRadius)
                                 .fill(highlightColor.opacity(selectionOpacity))
@@ -150,7 +150,7 @@ struct WindowPreviewCompact: View {
                     }
             }
         }
-        .opacity(isSelected ? 1.0 : unselectedContentOpacity)
+        .opacity((isSelected || isHovering) ? 1.0 : unselectedContentOpacity)
         .contentShape(Rectangle())
         .onContinuousHover { phase in
             let setHoverState: (Bool) -> Void = { newState in
