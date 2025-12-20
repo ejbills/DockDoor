@@ -48,6 +48,7 @@ final class DockObserver {
     var lastHoveredPID: pid_t?
     var lastHoveredAppWasFrontmost: Bool = false
     var lastHoveredAppNeedsRestore: Bool = false
+    var lastHoveredAppHadWindows: Bool = false
 
     // Scroll gesture state
     private var lastScrollActionTime: Date = .distantPast
@@ -217,6 +218,10 @@ final class DockObserver {
                 lastHoveredPID = currentApp.processIdentifier
                 lastHoveredAppWasFrontmost = NSWorkspace.shared.frontmostApplication?.processIdentifier == currentApp.processIdentifier
                 lastHoveredAppNeedsRestore = currentApp.isHidden || combinedWindows.contains(where: \.isMinimized)
+                lastHoveredAppHadWindows = !combinedWindows.isEmpty
+
+                // Only show preview if dock previews are enabled
+                guard Defaults[.enableDockPreviews] else { return }
 
                 if combinedWindows.isEmpty {
                     let isSpecialApp = currentApp.bundleIdentifier == spotifyAppIdentifier ||
@@ -462,13 +467,18 @@ final class DockObserver {
             return false
         }
 
-        // If no hover state, query AX directly to check window state at click time
+        // If app had no windows at hover time, defer to native behavior
+        // This prevents minimizing newly created windows when clicking an app with no windows
+        if hasValidHoverState, !lastHoveredAppHadWindows, !app.isHidden {
+            lastHoveredPID = nil
+            return false
+        }
+
+        // If no hover state, query AX directly to check if windows are minimized at click time
         var hasMinimizedWindowsAtClickTime = false
-        var hasAnyWindowsAtClickTime = false
         if !hasValidHoverState {
             let axApp = AXUIElementCreateApplication(pid)
             if let windowList = try? axApp.windows() {
-                hasAnyWindowsAtClickTime = !windowList.isEmpty
                 for window in windowList {
                     if (try? window.isMinimized()) == true {
                         hasMinimizedWindowsAtClickTime = true
@@ -478,16 +488,9 @@ final class DockObserver {
             }
         }
 
-        // If app has no windows at click time and wasn't tracked via hover,
-        // defer to native behavior to let macOS create a new window without interference
-        if !hasValidHoverState, !hasAnyWindowsAtClickTime, !app.isHidden {
-            lastHoveredPID = nil
-            return false
-        }
-
         // Capture restoration need from hover state OR from AX query at click time
-        let wasRestorationNeededFromHover = hasValidHoverState && lastHoveredAppNeedsRestore
-        let restorationNeededAtClickTime = wasRestorationNeededFromHover || hasMinimizedWindowsAtClickTime || app.isHidden
+        let restorationNeededFromHover = hasValidHoverState && lastHoveredAppNeedsRestore
+        let restorationNeededAtClickTime = restorationNeededFromHover || hasMinimizedWindowsAtClickTime || app.isHidden
 
         lastHoveredPID = nil
 

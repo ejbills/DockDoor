@@ -16,7 +16,25 @@ struct WindowPreviewCompact: View {
     @Default(.previewWidth) private var previewWidth
     @Default(.compactModeTitleFormat) private var titleFormat
     @Default(.compactModeItemSize) private var itemSize
+
+    // MARK: - Dock Preview Appearance Settings
+
     @Default(.trafficLightButtonsVisibility) private var trafficLightButtonsVisibility
+    @Default(.enabledTrafficLightButtons) private var enabledTrafficLightButtons
+    @Default(.useMonochromeTrafficLights) private var useMonochromeTrafficLights
+
+    // MARK: - Window Switcher Appearance Settings
+
+    @Default(.switcherTrafficLightButtonsVisibility) private var switcherTrafficLightButtonsVisibility
+    @Default(.switcherEnabledTrafficLightButtons) private var switcherEnabledTrafficLightButtons
+    @Default(.switcherUseMonochromeTrafficLights) private var switcherUseMonochromeTrafficLights
+
+    // MARK: - Cmd+Tab Appearance Settings
+
+    @Default(.cmdTabTrafficLightButtonsVisibility) private var cmdTabTrafficLightButtonsVisibility
+    @Default(.cmdTabEnabledTrafficLightButtons) private var cmdTabEnabledTrafficLightButtons
+    @Default(.cmdTabUseMonochromeTrafficLights) private var cmdTabUseMonochromeTrafficLights
+
     @Default(.selectionOpacity) private var selectionOpacity
     @Default(.unselectedContentOpacity) private var unselectedContentOpacity
     @Default(.hoverHighlightColor) private var hoverHighlightColor
@@ -62,6 +80,38 @@ struct WindowPreviewCompact: View {
             return "Hidden"
         }
         return nil
+    }
+
+    // MARK: - Context-based appearance settings
+
+    private var effectiveTrafficLightVisibility: TrafficLightButtonsVisibility {
+        if windowSwitcherActive {
+            switcherTrafficLightButtonsVisibility
+        } else if dockPosition == .cmdTab {
+            cmdTabTrafficLightButtonsVisibility
+        } else {
+            trafficLightButtonsVisibility
+        }
+    }
+
+    private var effectiveEnabledTrafficLightButtons: Set<WindowAction> {
+        if windowSwitcherActive {
+            switcherEnabledTrafficLightButtons
+        } else if dockPosition == .cmdTab {
+            cmdTabEnabledTrafficLightButtons
+        } else {
+            enabledTrafficLightButtons
+        }
+    }
+
+    private var effectiveUseMonochromeTrafficLights: Bool {
+        if windowSwitcherActive {
+            switcherUseMonochromeTrafficLights
+        } else if dockPosition == .cmdTab {
+            cmdTabUseMonochromeTrafficLights
+        } else {
+            useMonochromeTrafficLights
+        }
     }
 
     var body: some View {
@@ -112,15 +162,17 @@ struct WindowPreviewCompact: View {
 
             // Traffic light buttons
             if windowInfo.closeButton != nil,
-               trafficLightButtonsVisibility != .never,
+               effectiveTrafficLightVisibility != .never,
                !showMinimizedHiddenLabels || (!windowInfo.isMinimized && !windowInfo.isHidden)
             {
                 TrafficLightButtons(
-                    displayMode: trafficLightButtonsVisibility,
+                    displayMode: effectiveTrafficLightVisibility,
                     hoveringOverParentWindow: isSelected || isHovering,
                     onWindowAction: handleWindowAction,
                     pillStyling: true,
-                    mockPreviewActive: mockPreviewActive
+                    mockPreviewActive: mockPreviewActive,
+                    enabledButtons: effectiveEnabledTrafficLightButtons,
+                    useMonochrome: effectiveUseMonochromeTrafficLights
                 )
             }
         }

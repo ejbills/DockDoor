@@ -79,7 +79,6 @@ extension Defaults.Keys {
     static let enableMouseHoverInSwitcher = Key<Bool>("enableMouseHoverInSwitcher", default: true)
     static let keepPreviewOnAppTerminate = Key<Bool>("keepPreviewOnAppTerminate", default: false)
     static let enableWindowSwitcherSearch = Key<Bool>("enableWindowSwitcherSearch", default: false)
-    // Compact mode settings
     static let compactModeTitleFormat = Key<CompactModeTitleFormat>("compactModeTitleFormat", default: .appNameAndTitle)
     static let compactModeItemSize = Key<CompactModeItemSize>("compactModeItemSize", default: .medium)
 
@@ -110,18 +109,45 @@ extension Defaults.Keys {
     static let hidePreviewCardBackground = Key<Bool>("hidePreviewCardBackground", default: false)
     static let showActiveWindowBorder = Key<Bool>("showActiveWindowBorder", default: false)
 
+    // MARK: - Dock Preview Appearance Settings
+
     static let showWindowTitle = Key<Bool>("showWindowTitle", default: true)
     static let showAppIconOnly = Key<Bool>("showAppIconOnly", default: false)
     static let windowTitleDisplayCondition = Key<WindowTitleDisplayCondition>("windowTitleDisplayCondition", default: .all)
     static let windowTitleVisibility = Key<WindowTitleVisibility>("windowTitleVisibility", default: .alwaysVisible)
     static let windowTitlePosition = Key<WindowTitlePosition>("windowTitlePosition", default: .bottomLeft)
     static let enableTitleMarquee = Key<Bool>("enableTitleMarquee", default: true)
-
     static let trafficLightButtonsVisibility = Key<TrafficLightButtonsVisibility>("trafficLightButtonsVisibility", default: .dimmedOnPreviewHover)
     static let trafficLightButtonsPosition = Key<TrafficLightButtonsPosition>("trafficLightButtonsPosition", default: .topLeft)
     static let enabledTrafficLightButtons = Key<Set<WindowAction>>("enabledTrafficLightButtons", default: [.quit, .close, .minimize, .toggleFullScreen])
     static let useMonochromeTrafficLights = Key<Bool>("useMonochromeTrafficLights", default: false)
     static let showMinimizedHiddenLabels = Key<Bool>("showMinimizedHiddenLabels", default: true)
+
+    // MARK: - Window Switcher Appearance Settings
+
+    static let switcherShowWindowTitle = Key<Bool>("switcherShowWindowTitle", default: true)
+    static let switcherWindowTitleVisibility = Key<WindowTitleVisibility>("switcherWindowTitleVisibility", default: .alwaysVisible)
+    static let switcherTrafficLightButtonsVisibility = Key<TrafficLightButtonsVisibility>("switcherTrafficLightButtonsVisibility", default: .dimmedOnPreviewHover)
+    static let switcherEnabledTrafficLightButtons = Key<Set<WindowAction>>("switcherEnabledTrafficLightButtons", default: [.quit, .close, .minimize, .toggleFullScreen])
+    static let switcherUseMonochromeTrafficLights = Key<Bool>("switcherUseMonochromeTrafficLights", default: false)
+    static let switcherDisableDockStyleTrafficLights = Key<Bool>("switcherDisableDockStyleTrafficLights", default: false)
+
+    // MARK: - Cmd+Tab Appearance Settings
+
+    static let cmdTabShowAppName = Key<Bool>("cmdTabShowAppName", default: true)
+    static let cmdTabAppNameStyle = Key<AppNameStyle>("cmdTabAppNameStyle", default: .default)
+    static let cmdTabShowAppIconOnly = Key<Bool>("cmdTabShowAppIconOnly", default: false)
+    static let cmdTabShowWindowTitle = Key<Bool>("cmdTabShowWindowTitle", default: true)
+    static let cmdTabWindowTitleVisibility = Key<WindowTitleVisibility>("cmdTabWindowTitleVisibility", default: .alwaysVisible)
+    static let cmdTabWindowTitlePosition = Key<WindowTitlePosition>("cmdTabWindowTitlePosition", default: .bottomLeft)
+    static let cmdTabTrafficLightButtonsVisibility = Key<TrafficLightButtonsVisibility>("cmdTabTrafficLightButtonsVisibility", default: .dimmedOnPreviewHover)
+    static let cmdTabTrafficLightButtonsPosition = Key<TrafficLightButtonsPosition>("cmdTabTrafficLightButtonsPosition", default: .topLeft)
+    static let cmdTabEnabledTrafficLightButtons = Key<Set<WindowAction>>("cmdTabEnabledTrafficLightButtons", default: [.quit, .close, .minimize, .toggleFullScreen])
+    static let cmdTabUseMonochromeTrafficLights = Key<Bool>("cmdTabUseMonochromeTrafficLights", default: false)
+    static let cmdTabControlPosition = Key<WindowSwitcherControlPosition>("cmdTabControlPosition", default: .topTrailing)
+    static let cmdTabUseEmbeddedDockPreviewElements = Key<Bool>("cmdTabUseEmbeddedDockPreviewElements", default: false)
+    static let cmdTabDisableDockStyleTrafficLights = Key<Bool>("cmdTabDisableDockStyleTrafficLights", default: false)
+    static let cmdTabDisableDockStyleTitles = Key<Bool>("cmdTabDisableDockStyleTitles", default: false)
 
     static let previewMaxColumns = Key<Int>("previewMaxColumns", default: 2) // For left/right dock
     static let previewMaxRows = Key<Int>("previewMaxRows", default: 1) // For bottom dock only
@@ -143,17 +169,12 @@ extension Defaults.Keys {
     static let windowTitleFilters = Key<[String]>("windowTitleFilters", default: [])
     static let customAppDirectories = Key<[String]>("customAppDirectories", default: [])
     static let filteredCalendarIdentifiers = Key<[String]>("filteredCalendarIdentifiers", default: [])
-
-    // Onboarding / Hints
     static let hasSeenCmdTabFocusHint = Key<Bool>("hasSeenCmdTabFocusHint", default: false)
-
-    // Screen Recording & Preview Mode
     static let disableImagePreview = Key<Bool>("disableImagePreview", default: false)
-
-    // Debug
     static let debugMode = Key<Bool>("debugMode", default: false)
 
-    // Active App Indicator
+    // MARK: - Active App Indicator
+
     static let showActiveAppIndicator = Key<Bool>("showActiveAppIndicator", default: false)
     static let activeAppIndicatorColor = Key<Color>("activeAppIndicatorColor", default: Color.accentColor)
     static let activeAppIndicatorAutoSize = Key<Bool>("activeAppIndicatorAutoSize", default: true)

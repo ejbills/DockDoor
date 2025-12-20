@@ -17,7 +17,6 @@ struct UserKeyBind: Codable, Defaults.Serializable {
 
 private class WindowSwitchingCoordinator {
     private var isProcessingSwitcher = false
-    let stateManager = WindowSwitcherStateManager()
     private var uiRenderingTask: Task<Void, Never>?
     private var currentSessionId = UUID()
 
@@ -35,27 +34,22 @@ private class WindowSwitchingCoordinator {
         isProcessingSwitcher = true
         defer { isProcessingSwitcher = false }
 
-        if stateManager.isActive, !previewCoordinator.isVisible {
-            stateManager.reset()
+        let coordinator = previewCoordinator.windowSwitcherCoordinator
+
+        if coordinator.isKeybindSessionActive, !previewCoordinator.isVisible {
+            coordinator.deactivateKeybindSession()
+            coordinator.currIndex = -1
         }
 
-        if stateManager.isActive {
-            // TODO: Consolidate WindowSwitcherStateManager and PreviewStateCoordinator into a single index system
-            let uiIndex = previewCoordinator.windowSwitcherCoordinator.currIndex
-            if uiIndex >= 0, uiIndex != stateManager.currentIndex {
-                stateManager.setIndex(uiIndex)
-            }
+        if coordinator.isKeybindSessionActive {
+            coordinator.hasMovedSinceOpen = false
+            coordinator.initialHoverLocation = nil
 
             if isShiftPressed {
-                stateManager.cycleBackward()
+                coordinator.cycleBackward()
             } else {
-                stateManager.cycleForward()
+                coordinator.cycleForward()
             }
-
-            previewCoordinator.windowSwitcherCoordinator.hasMovedSinceOpen = false
-            previewCoordinator.windowSwitcherCoordinator.initialHoverLocation = nil
-
-            previewCoordinator.windowSwitcherCoordinator.setIndex(to: stateManager.currentIndex)
         } else if isModifierPressed {
             await initializeWindowSwitching(
                 previewCoordinator: previewCoordinator,
@@ -71,26 +65,22 @@ private class WindowSwitchingCoordinator {
     ) async {
         var windows = WindowUtil.getAllWindowsOfAllApps()
 
-        // Apply space filter based on mode or default setting
         let filterBySpace = (mode == .currentSpaceOnly || mode == .activeAppCurrentSpace)
             || (mode == .allWindows && Defaults[.showWindowsFromCurrentSpaceOnlyInSwitcher])
         if filterBySpace {
             windows = await WindowUtil.filterWindowsByCurrentSpace(windows)
         }
 
-        // Apply active app filter based on mode or default setting
         let filterByApp = (mode == .activeAppOnly || mode == .activeAppCurrentSpace)
             || (mode == .allWindows && Defaults[.limitSwitcherToFrontmostApp])
         if filterByApp {
             windows = WindowUtil.getWindowsForFrontmostApp(from: windows)
         }
 
-        // Apply hidden windows filter (always respect the global setting)
         if !Defaults[.includeHiddenWindowsInSwitcher] {
             windows = windows.filter { !$0.isHidden && !$0.isMinimized }
         }
 
-        // Sort windows
         windows = WindowUtil.sortWindowsForSwitcher(windows)
 
         guard !windows.isEmpty else { return }
@@ -98,10 +88,12 @@ private class WindowSwitchingCoordinator {
         currentSessionId = UUID()
         let sessionId = currentSessionId
 
-        stateManager.initializeWithWindows(windows)
+        let coordinator = previewCoordinator.windowSwitcherCoordinator
+        let targetScreen = getTargetScreenForSwitcher()
+        coordinator.initializeForWindowSwitcher(with: windows, dockPosition: DockUtils.getDockPosition(), bestGuessMonitor: targetScreen)
+        coordinator.activateKeybindSession()
 
         let currentMouseLocation = DockObserver.getMousePosition()
-        let targetScreen = getTargetScreenForSwitcher()
 
         uiRenderingTask?.cancel()
         uiRenderingTask = Task { @MainActor in
@@ -113,7 +105,7 @@ private class WindowSwitchingCoordinator {
                 windows: windows,
                 currentMouseLocation: currentMouseLocation,
                 targetScreen: targetScreen,
-                initialIndex: stateManager.currentIndex,
+                initialIndex: coordinator.currIndex,
                 sessionId: sessionId
             )
         }
@@ -142,10 +134,10 @@ private class WindowSwitchingCoordinator {
         sessionId: UUID
     ) async {
         guard sessionId == currentSessionId else { return }
-        guard stateManager.isActive else { return }
+        let coordinator = previewCoordinator.windowSwitcherCoordinator
+        guard coordinator.isKeybindSessionActive else { return }
 
-        if previewCoordinator.isVisible, previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive {
-            previewCoordinator.windowSwitcherCoordinator.setIndex(to: stateManager.currentIndex)
+        if previewCoordinator.isVisible, coordinator.windowSwitcherActive {
             return
         }
         let showWindowLambda = { (mouseLocation: NSPoint?, mouseScreen: NSScreen?) in
@@ -158,12 +150,12 @@ private class WindowSwitchingCoordinator {
                 overrideDelay: true,
                 centeredHoverWindowState: .windowSwitcher,
                 onWindowTap: {
-                    self.cancelSwitching()
+                    self.cancelSwitching(previewCoordinator: previewCoordinator)
                     Task { @MainActor in
                         previewCoordinator.hideWindow()
                     }
                 },
-                initialIndex: self.stateManager.currentIndex
+                initialIndex: coordinator.currIndex
             )
         }
 
@@ -190,23 +182,26 @@ private class WindowSwitchingCoordinator {
         return NSScreen.screenContainingMouse(mouseLocation)
     }
 
-    func selectCurrentWindow() -> WindowInfo? {
-        guard stateManager.isActive else { return nil }
+    @MainActor
+    func selectCurrentWindow(previewCoordinator: SharedPreviewWindowCoordinator) -> WindowInfo? {
+        let coordinator = previewCoordinator.windowSwitcherCoordinator
+        guard coordinator.isKeybindSessionActive else { return nil }
 
-        let selectedWindow = stateManager.getCurrentWindow()
+        let selectedWindow = coordinator.getCurrentWindow()
         currentSessionId = UUID()
-        stateManager.reset()
+        coordinator.deactivateKeybindSession()
         uiRenderingTask?.cancel()
         return selectedWindow
     }
 
-    func isStateManagerActive() -> Bool {
-        stateManager.isActive
+    func isActive(previewCoordinator: SharedPreviewWindowCoordinator) -> Bool {
+        previewCoordinator.windowSwitcherCoordinator.isKeybindSessionActive
     }
 
-    func cancelSwitching() {
+    @MainActor
+    func cancelSwitching(previewCoordinator: SharedPreviewWindowCoordinator) {
         currentSessionId = UUID()
-        stateManager.reset()
+        previewCoordinator.windowSwitcherCoordinator.deactivateKeybindSession()
         uiRenderingTask?.cancel()
     }
 }
@@ -485,7 +480,7 @@ class KeybindHelper {
                     }
                 } else {
                     Task { @MainActor in
-                        self.windowSwitchingCoordinator.cancelSwitching()
+                        self.windowSwitchingCoordinator.cancelSwitching(previewCoordinator: self.previewCoordinator)
                         self.previewCoordinator.hideWindow()
                         self.preventSwitcherHideOnRelease = false
                         self.hasProcessedModifierRelease = true
@@ -557,8 +552,8 @@ class KeybindHelper {
                 Task { @MainActor in
                     if self.previewCoordinator.isVisible, self.previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive {
                         self.previewCoordinator.selectAndBringToFrontCurrentWindow()
-                        self.windowSwitchingCoordinator.cancelSwitching()
-                    } else if let selectedWindow = self.windowSwitchingCoordinator.selectCurrentWindow() {
+                        self.windowSwitchingCoordinator.cancelSwitching(previewCoordinator: self.previewCoordinator)
+                    } else if let selectedWindow = self.windowSwitchingCoordinator.selectCurrentWindow(previewCoordinator: self.previewCoordinator) {
                         selectedWindow.bringToFront()
                         self.previewCoordinator.hideWindow()
                     }
@@ -580,9 +575,9 @@ class KeybindHelper {
 
         if previewIsCurrentlyVisible {
             if keyCode == kVK_Escape {
-                return (true, {
-                    self.windowSwitchingCoordinator.cancelSwitching()
-                    await self.previewCoordinator.hideWindow()
+                return (true, { @MainActor in
+                    self.windowSwitchingCoordinator.cancelSwitching(previewCoordinator: self.previewCoordinator)
+                    self.previewCoordinator.hideWindow()
                     self.preventSwitcherHideOnRelease = false
                     self.hasProcessedModifierRelease = true
                 })
@@ -685,8 +680,6 @@ class KeybindHelper {
                     if !query.isEmpty {
                         query.removeLast()
                         self.previewCoordinator.windowSwitcherCoordinator.searchQuery = query
-                        let windows = self.previewCoordinator.windowSwitcherCoordinator.windows
-                        self.windowSwitchingCoordinator.stateManager.setSearchQuery(query, windows: windows)
                         SharedPreviewWindowCoordinator.activeInstance?.updateSearchWindow(with: query)
 
                         if query.isEmpty {
@@ -709,8 +702,6 @@ class KeybindHelper {
                     return (true, { @MainActor in
                         self.previewCoordinator.windowSwitcherCoordinator.searchQuery.append(contentsOf: filteredChars)
                         let newQuery = self.previewCoordinator.windowSwitcherCoordinator.searchQuery
-                        let windows = self.previewCoordinator.windowSwitcherCoordinator.windows
-                        self.windowSwitchingCoordinator.stateManager.setSearchQuery(newQuery, windows: windows)
                         SharedPreviewWindowCoordinator.activeInstance?.updateSearchWindow(with: newQuery)
 
                         if !newQuery.isEmpty {
@@ -740,11 +731,11 @@ class KeybindHelper {
 
             if self.previewCoordinator.isVisible, self.previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive {
                 self.previewCoordinator.selectAndBringToFrontCurrentWindow()
-                self.windowSwitchingCoordinator.cancelSwitching()
+                self.windowSwitchingCoordinator.cancelSwitching(previewCoordinator: self.previewCoordinator)
                 return
             }
 
-            if let selectedWindow = self.windowSwitchingCoordinator.selectCurrentWindow() {
+            if let selectedWindow = self.windowSwitchingCoordinator.selectCurrentWindow(previewCoordinator: self.previewCoordinator) {
                 selectedWindow.bringToFront()
                 self.previewCoordinator.hideWindow()
             } else {

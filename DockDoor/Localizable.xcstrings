@@ -13919,6 +13919,9 @@
         }
       }
     },
+    "App Header Style" : {
+
+    },
     "App Name + Window Title" : {
       "localizations" : {
         "af" : {
@@ -14300,6 +14303,7 @@
       }
     },
     "App Name Style" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -24201,6 +24205,18 @@
           }
         }
       }
+    },
+    "Cmd+Tab" : {
+
+    },
+    "Cmd+Tab Layout" : {
+
+    },
+    "Cmd+Tab Settings" : {
+
+    },
+    "Cmd+Tab Toolbar" : {
+
     },
     "Collapse to embedded mode" : {
       "extractionState" : "stale",
@@ -74718,6 +74734,9 @@
         }
       }
     },
+    "Places traffic light buttons and window titles directly inside the preview frames." : {
+
+    },
     "Please Quit the App to Apply Changes! :)" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -84048,6 +84067,9 @@
         }
       }
     },
+    "Removes the pill-shaped background styling from traffic light buttons." : {
+
+    },
     "Removes the pill-shaped background styling from window titles in dock previews for a cleaner look." : {
       "localizations" : {
         "af" : {
@@ -84237,6 +84259,9 @@
           }
         }
       }
+    },
+    "Removes the pill-shaped background styling from window titles." : {
+
     },
     "Report a Bug" : {
       "localizations" : {
@@ -94541,7 +94566,14 @@
     "Show All" : {
 
     },
+    "Show App Header" : {
+
+    },
+    "Show App Icon Only" : {
+
+    },
     "Show App Name" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -94732,6 +94764,7 @@
       }
     },
     "Show App Name in Dock Previews" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -96633,6 +96666,7 @@
       }
     },
     "Show Window Title in" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -107876,7 +107910,6 @@
       }
     },
     "Traffic Light Buttons" : {
-      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -114160,6 +114193,9 @@
           }
         }
       }
+    },
+    "Visibility" : {
+
     },
     "Want to see for yourself? Review our source code" : {
       "localizations" : {
@@ -123692,6 +123728,9 @@
           }
         }
       }
+    },
+    "Window Title" : {
+
     },
     "Window title filters" : {
       "extractionState" : "stale",

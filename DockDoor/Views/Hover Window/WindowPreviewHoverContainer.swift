@@ -52,9 +52,19 @@ struct WindowPreviewHoverContainer: View {
     @ObservedObject var previewStateCoordinator: PreviewStateCoordinator
 
     @Default(.uniformCardRadius) var uniformCardRadius
+
+    // MARK: - Dock Preview Header Settings
+
     @Default(.showAppName) var showAppTitleData
     @Default(.showAppIconOnly) var showAppIconOnly
     @Default(.appNameStyle) var appNameStyle
+
+    // MARK: - Cmd+Tab Header Settings
+
+    @Default(.cmdTabShowAppName) var cmdTabShowAppName
+    @Default(.cmdTabAppNameStyle) var cmdTabAppNameStyle
+    @Default(.cmdTabShowAppIconOnly) var cmdTabShowAppIconOnly
+
     @Default(.windowTitlePosition) var windowTitlePosition
     @Default(.aeroShakeAction) var aeroShakeAction
     @Default(.previewMaxColumns) var previewMaxColumns
@@ -151,6 +161,40 @@ struct WindowPreviewHoverContainer: View {
         }
     }
 
+    // MARK: - Context-based header settings
+
+    private var effectiveShowAppName: Bool {
+        if dockPosition == .cmdTab {
+            cmdTabShowAppName
+        } else {
+            showAppTitleData
+        }
+    }
+
+    private var effectiveAppNameStyle: AppNameStyle {
+        if dockPosition == .cmdTab {
+            cmdTabAppNameStyle
+        } else {
+            appNameStyle
+        }
+    }
+
+    private var effectiveShowAppIconOnly: Bool {
+        if dockPosition == .cmdTab {
+            cmdTabShowAppIconOnly
+        } else {
+            showAppIconOnly
+        }
+    }
+
+    private var effectiveShouldShowHeader: Bool {
+        // Window switcher doesn't show the container header
+        if previewStateCoordinator.windowSwitcherActive {
+            return false
+        }
+        return effectiveShowAppName
+    }
+
     private func handleHoverIndexChange(_ hoveredIndex: Int?, _ location: CGPoint?) {
         guard enableMouseHoverInSwitcher else { return }
         guard let hoveredIndex else { return }
@@ -181,7 +225,7 @@ struct WindowPreviewHoverContainer: View {
         BaseHoverContainer(bestGuessMonitor: bestGuessMonitor, mockPreviewActive: mockPreviewActive) {
             windowGridContent()
         }
-        .padding(.top, (!previewStateCoordinator.windowSwitcherActive && appNameStyle == .popover && showAppTitleData) ? 30 : 0)
+        .padding(.top, (!previewStateCoordinator.windowSwitcherActive && effectiveAppNameStyle == .popover && effectiveShowAppName) ? 30 : 0)
         .onAppear {
             loadAppIcon()
             // Only use LiveCaptureManager when live preview AND keep-alive are both enabled
@@ -216,8 +260,8 @@ struct WindowPreviewHoverContainer: View {
                 currentDimensionsMapForPreviews: calculatedDimensionsMap
             )
             .fadeOnEdges(axis: shouldUseCompactMode ? .vertical : (orientationIsHorizontal ? .horizontal : .vertical), fadeLength: 20)
-            .padding(.top, (!previewStateCoordinator.windowSwitcherActive && appNameStyle == .default && showAppTitleData) ? 25 : 0)
-            .overlay(alignment: appNameStyle == .popover ? .top : .topLeading) {
+            .padding(.top, (!previewStateCoordinator.windowSwitcherActive && effectiveAppNameStyle == .default && effectiveShowAppName) ? 25 : 0)
+            .overlay(alignment: effectiveAppNameStyle == .popover ? .top : .topLeading) {
                 hoverTitleBaseView(labelSize: measureString(appName, fontSize: 14))
                     .onHover { isHovered in
                         hoveringWindowTitle = isHovered
@@ -277,9 +321,11 @@ struct WindowPreviewHoverContainer: View {
 
     @ViewBuilder
     private func hoverTitleBaseView(labelSize: CGSize) -> some View {
-        if !previewStateCoordinator.windowSwitcherActive, showAppTitleData {
+        let showName = !effectiveShowAppIconOnly
+
+        if !previewStateCoordinator.windowSwitcherActive, effectiveShouldShowHeader {
             Group {
-                switch appNameStyle {
+                switch effectiveAppNameStyle {
                 case .default:
                     HStack(alignment: .center) {
                         HStack(spacing: 6) {
@@ -293,7 +339,9 @@ struct WindowPreviewHoverContainer: View {
                                 ProgressView()
                                     .frame(width: 24, height: 24)
                             }
-                            hoverTitleLabelView(labelSize: labelSize)
+                            if showName {
+                                hoverTitleLabelView(labelSize: labelSize)
+                            }
                         }
                         .contentShape(Rectangle())
 
@@ -326,7 +374,9 @@ struct WindowPreviewHoverContainer: View {
                                 ProgressView()
                                     .frame(width: 24, height: 24)
                             }
-                            hoverTitleLabelView(labelSize: labelSize)
+                            if showName {
+                                hoverTitleLabelView(labelSize: labelSize)
+                            }
                         }
                         .contentShape(Rectangle())
 
@@ -357,7 +407,9 @@ struct WindowPreviewHoverContainer: View {
                                 ProgressView()
                                     .frame(width: 24, height: 24)
                             }
-                            hoverTitleLabelView(labelSize: labelSize)
+                            if showName {
+                                hoverTitleLabelView(labelSize: labelSize)
+                            }
                         }
 
                         let shouldShowUpdateElements = updateAvailable && !mockPreviewActive
@@ -395,7 +447,7 @@ struct WindowPreviewHoverContainer: View {
                     .padding(.vertical, 4)
                     .background(
                         CustomizableFluidGradientView()
-                            .opacity(appNameStyle == .shadowed ? 1 : 0.25)
+                            .opacity(effectiveAppNameStyle == .shadowed ? 1 : 0.25)
                     )
                     .clipShape(Capsule())
                     .shadow(radius: 2)
@@ -435,30 +487,54 @@ struct WindowPreviewHoverContainer: View {
 
     @ViewBuilder
     private func hoverTitleLabelView(labelSize: CGSize) -> some View {
-        if !showAppIconOnly {
-            let trimmedAppName = appName.trimmingCharacters(in: .whitespaces)
+        let trimmedAppName = appName.trimmingCharacters(in: .whitespaces)
+        let baseText = Text(trimmedAppName)
 
-            let baseText = Text(trimmedAppName)
+        let rainbowGradientColors: [Color] = [.red, .orange, .yellow, .green, .blue, .purple, .pink]
+        let rainbowGradientHighlights: [Color] = [.white.opacity(0.45), .yellow.opacity(0.35), .pink.opacity(0.4)]
+        let rainbowGradientSpeed: CGFloat = 0.65
+        let defaultBlur: CGFloat = 0.5
 
-            let rainbowGradientColors: [Color] = [.red, .orange, .yellow, .green, .blue, .purple, .pink]
-            let rainbowGradientHighlights: [Color] = [.white.opacity(0.45), .yellow.opacity(0.35), .pink.opacity(0.4)]
-            let rainbowGradientSpeed: CGFloat = 0.65
-            let defaultBlur: CGFloat = 0.5
-
-            Group {
-                switch appNameStyle {
-                case .shadowed:
-                    if trimmedAppName == "DockDoor" {
-                        FluidGradient(
-                            blobs: rainbowGradientColors,
-                            highlights: rainbowGradientHighlights,
-                            speed: rainbowGradientSpeed,
-                            blur: defaultBlur
-                        )
-                        .frame(width: labelSize.width, height: labelSize.height)
-                        .mask(baseText)
-                        .fontWeight(.medium)
-                        .padding(.leading, 4)
+        Group {
+            switch effectiveAppNameStyle {
+            case .shadowed:
+                if trimmedAppName == "DockDoor" {
+                    FluidGradient(
+                        blobs: rainbowGradientColors,
+                        highlights: rainbowGradientHighlights,
+                        speed: rainbowGradientSpeed,
+                        blur: defaultBlur
+                    )
+                    .frame(width: labelSize.width, height: labelSize.height)
+                    .mask(baseText)
+                    .fontWeight(.medium)
+                    .padding(.leading, 4)
+                    .shadow(stacked: 2, radius: 6)
+                    .background(
+                        ZStack {
+                            MaterialBlurView(material: .hudWindow)
+                                .mask(
+                                    Ellipse()
+                                        .fill(
+                                            LinearGradient(
+                                                gradient: Gradient(
+                                                    colors: [
+                                                        Color.white.opacity(1.0),
+                                                        Color.white.opacity(0.35),
+                                                    ]
+                                                ),
+                                                startPoint: .top,
+                                                endPoint: .bottom
+                                            )
+                                        )
+                                )
+                                .blur(radius: 5)
+                        }
+                        .frame(width: labelSize.width + 30)
+                    )
+                } else {
+                    baseText
+                        .foregroundStyle(Color.primary)
                         .shadow(stacked: 2, radius: 6)
                         .background(
                             ZStack {
@@ -482,51 +558,24 @@ struct WindowPreviewHoverContainer: View {
                             }
                             .frame(width: labelSize.width + 30)
                         )
-                    } else {
-                        baseText
-                            .foregroundStyle(Color.primary)
-                            .shadow(stacked: 2, radius: 6)
-                            .background(
-                                ZStack {
-                                    MaterialBlurView(material: .hudWindow)
-                                        .mask(
-                                            Ellipse()
-                                                .fill(
-                                                    LinearGradient(
-                                                        gradient: Gradient(
-                                                            colors: [
-                                                                Color.white.opacity(1.0),
-                                                                Color.white.opacity(0.35),
-                                                            ]
-                                                        ),
-                                                        startPoint: .top,
-                                                        endPoint: .bottom
-                                                    )
-                                                )
-                                        )
-                                        .blur(radius: 5)
-                                }
-                                .frame(width: labelSize.width + 30)
-                            )
-                    }
-                case .default, .popover:
-                    if trimmedAppName == "DockDoor" {
-                        FluidGradient(
-                            blobs: rainbowGradientColors,
-                            highlights: rainbowGradientHighlights,
-                            speed: rainbowGradientSpeed,
-                            blur: defaultBlur
-                        )
-                        .frame(width: labelSize.width, height: labelSize.height)
-                        .mask(baseText)
-                    } else {
-                        baseText
-                            .foregroundStyle(Color.primary)
-                    }
+                }
+            case .default, .popover:
+                if trimmedAppName == "DockDoor" {
+                    FluidGradient(
+                        blobs: rainbowGradientColors,
+                        highlights: rainbowGradientHighlights,
+                        speed: rainbowGradientSpeed,
+                        blur: defaultBlur
+                    )
+                    .frame(width: labelSize.width, height: labelSize.height)
+                    .mask(baseText)
+                } else {
+                    baseText
+                        .foregroundStyle(Color.primary)
                 }
             }
-            .lineLimit(1)
         }
+        .lineLimit(1)
     }
 
     @ViewBuilder
@@ -1034,7 +1083,7 @@ struct WindowPreviewHoverContainer: View {
                         currIndex: previewStateCoordinator.currIndex,
                         windowSwitcherActive: previewStateCoordinator.windowSwitcherActive,
                         dimensions: getDimensions(for: index, dimensionsMap: currentDimensionsMapForPreviews),
-                        showAppIconOnly: showAppIconOnly,
+                        showAppIconOnly: effectiveShowAppIconOnly,
                         mockPreviewActive: mockPreviewActive,
                         onHoverIndexChange: handleHoverIndexChange,
                         isEligibleForLivePreview: isEligibleForLivePreview
