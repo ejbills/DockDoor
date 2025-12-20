@@ -30,6 +30,7 @@ extension Defaults.Keys {
     static let enableDockScrollGesture = Key<Bool>("enableDockScrollGesture", default: false)
     static let dockIconMediaScrollBehavior = Key<DockIconMediaScrollBehavior>("dockIconMediaScrollBehavior", default: .adjustVolume)
     static let mediaWidgetScrollBehavior = Key<MediaWidgetScrollBehavior>("mediaWidgetScrollBehavior", default: .seekPlayback)
+    static let mediaWidgetScrollDirection = Key<MediaWidgetScrollDirection>("mediaWidgetScrollDirection", default: .vertical)
 
     static let screenCaptureCacheLifespan = Key<CGFloat>("screenCaptureCacheLifespan", default: 60)
     static let windowProcessingDebounceInterval = Key<CGFloat>("windowProcessingDebounceInterval", default: 0.3)
@@ -77,6 +78,7 @@ extension Defaults.Keys {
     static let sortMinimizedToEnd = Key<Bool>("sortMinimizedToEnd", default: false)
     static let enableCmdTabEnhancements = Key<Bool>("enableCmdTabEnhancements", default: false)
     static let enableMouseHoverInSwitcher = Key<Bool>("enableMouseHoverInSwitcher", default: true)
+    static let mouseHoverAutoScrollSpeed = Key<CGFloat>("mouseHoverAutoScrollSpeed", default: 4.0)
     static let keepPreviewOnAppTerminate = Key<Bool>("keepPreviewOnAppTerminate", default: false)
     static let enableWindowSwitcherSearch = Key<Bool>("enableWindowSwitcherSearch", default: false)
     static let compactModeTitleFormat = Key<CompactModeTitleFormat>("compactModeTitleFormat", default: .appNameAndTitle)
@@ -471,6 +473,21 @@ enum MediaWidgetScrollBehavior: String, CaseIterable, Defaults.Serializable {
             String(localized: "Adjust volume", comment: "Media widget scroll option")
         case .seekPlayback:
             String(localized: "Seek playback (scrub through track)", comment: "Media widget scroll option")
+        }
+    }
+}
+
+// Media widget scroll direction
+enum MediaWidgetScrollDirection: String, CaseIterable, Defaults.Serializable {
+    case vertical
+    case horizontal
+
+    var localizedName: String {
+        switch self {
+        case .vertical:
+            String(localized: "Vertical", comment: "Media widget scroll direction option")
+        case .horizontal:
+            String(localized: "Horizontal", comment: "Media widget scroll direction option")
         }
     }
 }

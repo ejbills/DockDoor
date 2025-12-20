@@ -465,9 +465,10 @@ class KeybindHelper {
             if shouldConsume { return nil }
 
         case .leftMouseDown:
-            if previewCoordinator.isVisible,
-               previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive
-            {
+            let isWindowSwitcherActive = previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive
+            let isCmdTabActive = DockObserver.isCmdTabSwitcherActive
+
+            if previewCoordinator.isVisible, isWindowSwitcherActive || isCmdTabActive {
                 let clickLocation = NSEvent.mouseLocation
                 let windowFrame = previewCoordinator.frame
 
@@ -480,10 +481,15 @@ class KeybindHelper {
                     }
                 } else {
                     Task { @MainActor in
-                        self.windowSwitchingCoordinator.cancelSwitching(previewCoordinator: self.previewCoordinator)
+                        if isWindowSwitcherActive {
+                            self.windowSwitchingCoordinator.cancelSwitching(previewCoordinator: self.previewCoordinator)
+                            self.preventSwitcherHideOnRelease = false
+                            self.hasProcessedModifierRelease = true
+                        }
+                        if isCmdTabActive {
+                            DockObserver.activeInstance?.teardownCmdTabObserver()
+                        }
                         self.previewCoordinator.hideWindow()
-                        self.preventSwitcherHideOnRelease = false
-                        self.hasProcessedModifierRelease = true
                     }
                 }
             }

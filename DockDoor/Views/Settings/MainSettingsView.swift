@@ -97,6 +97,7 @@ struct MainSettingsView: View {
     @Default(.keepPreviewOnAppTerminate) var keepPreviewOnAppTerminate
     @Default(.enableCmdTabEnhancements) var enableCmdTabEnhancements
     @Default(.enableMouseHoverInSwitcher) var enableMouseHoverInSwitcher
+    @Default(.mouseHoverAutoScrollSpeed) var mouseHoverAutoScrollSpeed
     @Default(.includeHiddenWindowsInSwitcher) var includeHiddenWindowsInSwitcher
     @Default(.useClassicWindowOrdering) var useClassicWindowOrdering
     @Default(.limitSwitcherToFrontmostApp) var limitSwitcherToFrontmostApp
@@ -468,6 +469,18 @@ struct MainSettingsView: View {
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                                 .padding(.leading, 20)
+
+                            if enableMouseHoverInSwitcher {
+                                HStack {
+                                    Text("Auto-scroll speed:")
+                                    Slider(value: $mouseHoverAutoScrollSpeed, in: 1 ... 10, step: 0.5)
+                                    Text(String(format: "%.1f", mouseHoverAutoScrollSpeed))
+                                        .frame(width: 30)
+                                        .foregroundColor(.secondary)
+                                }
+                                .padding(.leading, 20)
+                            }
+
                             Toggle(isOn: $useClassicWindowOrdering) { Text("Start on second window in Switcher") }
                             Text("When opening the window switcher, highlight the second window instead of the first.")
                                 .font(.caption)

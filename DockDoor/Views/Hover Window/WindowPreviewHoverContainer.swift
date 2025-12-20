@@ -73,6 +73,7 @@ struct WindowPreviewHoverContainer: View {
     @Default(.gradientColorPalette) var gradientColorPalette
     @Default(.showAnimations) var showAnimations
     @Default(.enableMouseHoverInSwitcher) var enableMouseHoverInSwitcher
+    @Default(.mouseHoverAutoScrollSpeed) var mouseHoverAutoScrollSpeed
     @Default(.windowSwitcherLivePreviewScope) var windowSwitcherLivePreviewScope
 
     // Compact mode thresholds (0 = disabled, 1+ = enable when window count >= threshold)
@@ -709,7 +710,7 @@ struct WindowPreviewHoverContainer: View {
               let documentView = scrollView.documentView
         else { return }
 
-        let scrollAmount: CGFloat = 4.0 * direction
+        let scrollAmount: CGFloat = mouseHoverAutoScrollSpeed * direction
         let clipView = scrollView.contentView
         var newOrigin = clipView.bounds.origin
 
