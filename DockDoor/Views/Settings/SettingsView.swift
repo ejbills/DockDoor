@@ -124,6 +124,7 @@ struct SettingsView: View {
             }
             .listStyle(.sidebar)
             .frame(width: 200)
+            .modifier(HideSidebarToggleModifier())
         }, detail: {
             Group {
                 switch selectedTab {
@@ -145,5 +146,15 @@ struct SettingsView: View {
             }
             .navigationSplitViewColumnWidth(min: 700, ideal: 700)
         })
+    }
+}
+
+private struct HideSidebarToggleModifier: ViewModifier {
+    func body(content: Content) -> some View {
+        if #available(macOS 14.0, *) {
+            content.toolbar(removing: .sidebarToggle)
+        } else {
+            content
+        }
     }
 }

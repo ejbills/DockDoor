@@ -82,6 +82,7 @@ struct WindowPreviewHoverContainer: View {
 
     // Force list view settings
     @Default(.disableImagePreview) var disableImagePreview
+    @Default(.previewWidth) var previewWidth
 
     @State private var draggedWindowIndex: Int? = nil
     @State private var isDragging = false
@@ -1163,7 +1164,6 @@ struct WindowPreviewHoverContainer: View {
                     .foregroundColor(.secondary)
             }
         }
-        .frame(minWidth: 200, minHeight: 120)
-        .padding()
+        .frame(minWidth: previewWidth, maxWidth: previewWidth, minHeight: 120)
     }
 }
