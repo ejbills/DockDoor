@@ -30,19 +30,24 @@ struct MediaScrollModifier: ViewModifier {
     private func handleScroll(_ event: NSEvent) {
         guard event.window != nil else { return }
 
-        let deltaY = event.scrollingDeltaY
-        guard abs(deltaY) > 0.5 else { return }
+        let isHorizontal = Defaults[.mediaWidgetScrollDirection] == .horizontal
+        let delta: CGFloat = isHorizontal ? event.scrollingDeltaX : event.scrollingDeltaY
+        guard abs(delta) > 0.5 else { return }
 
-        let normalizedDeltaY = event.isDirectionInvertedFromDevice ? -deltaY : deltaY
+        let normalizedDelta: CGFloat = if isHorizontal {
+            event.isDirectionInvertedFromDevice ? delta : -delta
+        } else {
+            event.isDirectionInvertedFromDevice ? -delta : delta
+        }
 
         switch Defaults[.mediaWidgetScrollBehavior] {
         case .adjustVolume:
             let sensitivity: Float = 0.008
             let current = AudioDeviceManager.getSystemVolume()
-            let newVolume = max(0, min(1, current + Float(normalizedDeltaY) * sensitivity))
+            let newVolume = max(0, min(1, current + Float(normalizedDelta) * sensitivity))
             AudioDeviceManager.setSystemVolume(newVolume)
         case .seekPlayback:
-            handleSeekScroll(deltaY: normalizedDeltaY)
+            handleSeekScroll(deltaY: normalizedDelta)
         }
     }
 

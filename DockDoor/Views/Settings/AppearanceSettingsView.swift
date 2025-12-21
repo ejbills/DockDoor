@@ -2,12 +2,13 @@ import Defaults
 import SwiftUI
 
 enum PreviewContext: String, CaseIterable, Identifiable {
-    case dock, windowSwitcher
+    case dock, windowSwitcher, cmdTab
     var id: String { rawValue }
     var displayName: LocalizedStringKey {
         switch self {
         case .dock: "Dock Previews"
         case .windowSwitcher: "Window Switcher"
+        case .cmdTab: "Cmd+Tab"
         }
     }
 }
@@ -91,7 +92,6 @@ struct AppearanceSettingsView: View {
     @Default(.showAppName) var showAppName
     @Default(.appNameStyle) var appNameStyle
     @Default(.showWindowTitle) var showWindowTitle
-    @Default(.windowTitleDisplayCondition) var windowTitleDisplayCondition
     @Default(.windowTitleVisibility) var windowTitleVisibility
     @Default(.windowTitlePosition) var windowTitlePosition
     @Default(.windowSwitcherControlPosition) var windowSwitcherControlPosition
@@ -113,6 +113,32 @@ struct AppearanceSettingsView: View {
     @Default(.disableDockStyleTitles) var disableDockStyleTitles
     @Default(.showMinimizedHiddenLabels) var showMinimizedHiddenLabels
     @Default(.enableTitleMarquee) var enableTitleMarquee
+
+    // MARK: - Window Switcher Appearance Settings
+
+    @Default(.switcherShowWindowTitle) var switcherShowWindowTitle
+    @Default(.switcherWindowTitleVisibility) var switcherWindowTitleVisibility
+    @Default(.switcherTrafficLightButtonsVisibility) var switcherTrafficLightButtonsVisibility
+    @Default(.switcherEnabledTrafficLightButtons) var switcherEnabledTrafficLightButtons
+    @Default(.switcherUseMonochromeTrafficLights) var switcherUseMonochromeTrafficLights
+    @Default(.switcherDisableDockStyleTrafficLights) var switcherDisableDockStyleTrafficLights
+
+    // MARK: - Cmd+Tab Appearance Settings
+
+    @Default(.cmdTabShowAppName) var cmdTabShowAppName
+    @Default(.cmdTabAppNameStyle) var cmdTabAppNameStyle
+    @Default(.cmdTabShowAppIconOnly) var cmdTabShowAppIconOnly
+    @Default(.cmdTabShowWindowTitle) var cmdTabShowWindowTitle
+    @Default(.cmdTabWindowTitleVisibility) var cmdTabWindowTitleVisibility
+    @Default(.cmdTabWindowTitlePosition) var cmdTabWindowTitlePosition
+    @Default(.cmdTabTrafficLightButtonsVisibility) var cmdTabTrafficLightButtonsVisibility
+    @Default(.cmdTabTrafficLightButtonsPosition) var cmdTabTrafficLightButtonsPosition
+    @Default(.cmdTabEnabledTrafficLightButtons) var cmdTabEnabledTrafficLightButtons
+    @Default(.cmdTabUseMonochromeTrafficLights) var cmdTabUseMonochromeTrafficLights
+    @Default(.cmdTabControlPosition) var cmdTabControlPosition
+    @Default(.cmdTabUseEmbeddedDockPreviewElements) var cmdTabUseEmbeddedDockPreviewElements
+    @Default(.cmdTabDisableDockStyleTrafficLights) var cmdTabDisableDockStyleTrafficLights
+    @Default(.cmdTabDisableDockStyleTitles) var cmdTabDisableDockStyleTitles
 
     // Compact mode settings
     @Default(.compactModeTitleFormat) var compactModeTitleFormat
@@ -357,12 +383,25 @@ struct AppearanceSettingsView: View {
                     }
 
                     VStack {
-                        let currentCoordinator = selectedPreviewContext == .dock ? mockDockPreviewCoordinator : mockWindowSwitcherCoordinator
+                        let currentCoordinator: PreviewStateCoordinator = switch selectedPreviewContext {
+                        case .dock, .cmdTab:
+                            mockDockPreviewCoordinator
+                        case .windowSwitcher:
+                            mockWindowSwitcherCoordinator
+                        }
+                        let currentDockPosition: DockPosition = switch selectedPreviewContext {
+                        case .dock:
+                            .bottom
+                        case .windowSwitcher:
+                            .bottom
+                        case .cmdTab:
+                            .cmdTab
+                        }
                         if !currentCoordinator.windows.isEmpty {
                             WindowPreviewHoverContainer(
                                 appName: mockAppNameForPreview,
                                 onWindowTap: nil,
-                                dockPosition: .bottom,
+                                dockPosition: currentDockPosition,
                                 mouseLocation: .zero,
                                 bestGuessMonitor: NSScreen.main!,
                                 dockItemElement: nil,
@@ -378,12 +417,15 @@ struct AppearanceSettingsView: View {
                         }
                     }
 
-                    StyledGroupBox(label: selectedPreviewContext == .dock ? "Dock Preview Settings" : "Window Switcher Settings") {
+                    StyledGroupBox(label: contextSettingsLabel) {
                         VStack(alignment: .leading, spacing: 10) {
-                            if selectedPreviewContext == .dock {
+                            switch selectedPreviewContext {
+                            case .dock:
                                 dockPreviewSettings
-                            } else {
+                            case .windowSwitcher:
                                 windowSwitcherPreviewSettings
+                            case .cmdTab:
+                                cmdTabPreviewSettings
                             }
                         }
                     }
@@ -402,17 +444,23 @@ struct AppearanceSettingsView: View {
     @ViewBuilder
     private var dockPreviewSettings: some View {
         VStack(alignment: .leading, spacing: 10) {
+            // App Header section
             Toggle(isOn: $showAppName) {
-                Text("Show App Name in Dock Previews")
+                Text("Show App Header")
             }
 
-            Picker(String(localized: "App Name Style"), selection: $appNameStyle) {
-                ForEach(AppNameStyle.allCases, id: \.self) { style in
-                    Text(style.localizedName)
-                        .tag(style)
+            if showAppName {
+                Picker(String(localized: "App Header Style"), selection: $appNameStyle) {
+                    ForEach(AppNameStyle.allCases, id: \.self) { style in
+                        Text(style.localizedName)
+                            .tag(style)
+                    }
+                }
+
+                Toggle(isOn: $showAppIconOnly) {
+                    Text("Show App Icon Only")
                 }
             }
-            .disabled(!showAppName)
 
             Divider().padding(.vertical, 2)
             Text("Dock Preview Toolbar").font(.headline).padding(.bottom, -2)
@@ -429,21 +477,7 @@ struct AppearanceSettingsView: View {
                 Text("Show Window Title")
             }
 
-            Toggle(isOn: Binding(
-                get: { !showAppIconOnly },
-                set: { showAppIconOnly = !$0 }
-            )) {
-                Text("Show App Name")
-            }
-
             if showWindowTitle {
-                Picker("Show Window Title in", selection: $windowTitleDisplayCondition) {
-                    ForEach(WindowTitleDisplayCondition.allCases, id: \.self) { condition in
-                        Text(condition.localizedName)
-                            .tag(condition)
-                    }
-                }
-
                 Picker("Window Title Visibility", selection: $windowTitleVisibility) {
                     ForEach(WindowTitleVisibility.allCases, id: \.self) { visibility in
                         Text(visibility.localizedName)
@@ -541,6 +575,62 @@ struct AppearanceSettingsView: View {
             .pickerStyle(MenuPickerStyle())
 
             Divider().padding(.vertical, 2)
+            Text("Traffic Light Buttons").font(.headline).padding(.bottom, -2)
+
+            Picker("Visibility", selection: $switcherTrafficLightButtonsVisibility) {
+                ForEach(TrafficLightButtonsVisibility.allCases, id: \.self) { visibility in
+                    Text(visibility.localizedName)
+                        .tag(visibility)
+                }
+            }
+
+            if switcherTrafficLightButtonsVisibility != .never {
+                Text("Enabled Buttons")
+                VStack(alignment: .leading) {
+                    if !switcherEnabledTrafficLightButtons.isEmpty {
+                        TrafficLightButtons(
+                            displayMode: switcherTrafficLightButtonsVisibility,
+                            hoveringOverParentWindow: true,
+                            onWindowAction: { _ in },
+                            pillStyling: !switcherDisableDockStyleTrafficLights,
+                            mockPreviewActive: false,
+                            enabledButtons: switcherEnabledTrafficLightButtons,
+                            useMonochrome: switcherUseMonochromeTrafficLights
+                        )
+                    }
+                    enabledButtonsCheckboxes(
+                        enabledButtons: $switcherEnabledTrafficLightButtons,
+                        visibilityBinding: $switcherTrafficLightButtonsVisibility,
+                        useMonochrome: switcherUseMonochromeTrafficLights
+                    )
+                }
+                Toggle("Use Monochrome Colors", isOn: $switcherUseMonochromeTrafficLights)
+
+                VStack(alignment: .leading) {
+                    Toggle(isOn: $switcherDisableDockStyleTrafficLights) {
+                        Text("Disable dock styling on traffic light buttons")
+                    }
+                    Text("Removes the pill-shaped background styling from traffic light buttons.")
+                        .font(.footnote)
+                        .foregroundColor(.gray)
+                }
+            }
+
+            Divider().padding(.vertical, 2)
+            Text("Window Title").font(.headline).padding(.bottom, -2)
+
+            Toggle("Show Window Title", isOn: $switcherShowWindowTitle)
+
+            if switcherShowWindowTitle {
+                Picker("Visibility", selection: $switcherWindowTitleVisibility) {
+                    ForEach(WindowTitleVisibility.allCases, id: \.self) { visibility in
+                        Text(visibility.localizedName)
+                            .tag(visibility)
+                    }
+                }
+            }
+
+            Divider().padding(.vertical, 2)
             Text("Preview Layout (Switcher)").font(.headline).padding(.bottom, -2)
             VStack(alignment: .leading, spacing: 4) {
                 let switcherMaxRowsBinding = Binding<Double>(
@@ -563,6 +653,185 @@ struct AppearanceSettingsView: View {
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
+        }
+    }
+
+    @ViewBuilder
+    private var cmdTabPreviewSettings: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            // App Header section
+            Toggle("Show App Header", isOn: $cmdTabShowAppName)
+
+            if cmdTabShowAppName {
+                Picker("App Header Style", selection: $cmdTabAppNameStyle) {
+                    ForEach(AppNameStyle.allCases, id: \.self) { style in
+                        Text(style.localizedName)
+                            .tag(style)
+                    }
+                }
+                Toggle("Show App Icon Only", isOn: $cmdTabShowAppIconOnly)
+            }
+
+            // Toolbar section
+            Divider().padding(.vertical, 2)
+            Text("Cmd+Tab Toolbar").font(.headline).padding(.bottom, -2)
+
+            Picker("Position Window Controls", selection: $cmdTabControlPosition) {
+                ForEach(WindowSwitcherControlPosition.allCases, id: \.self) { position in
+                    Text(position.localizedName)
+                        .tag(position)
+                }
+            }
+            .pickerStyle(MenuPickerStyle())
+
+            Toggle("Show Window Title", isOn: $cmdTabShowWindowTitle)
+
+            if cmdTabShowWindowTitle {
+                Picker("Window Title Visibility", selection: $cmdTabWindowTitleVisibility) {
+                    ForEach(WindowTitleVisibility.allCases, id: \.self) { visibility in
+                        Text(visibility.localizedName)
+                            .tag(visibility)
+                    }
+                }
+
+                VStack(alignment: .leading) {
+                    Toggle(isOn: $cmdTabDisableDockStyleTitles) {
+                        Text("Disable dock styling on window titles")
+                    }
+                    Text("Removes the pill-shaped background styling from window titles.")
+                        .font(.footnote)
+                        .foregroundColor(.gray)
+                        .padding(.leading, 20)
+                }
+            }
+
+            // Traffic Light Buttons section
+            Divider().padding(.vertical, 2)
+            Text("Traffic Light Buttons").font(.headline).padding(.bottom, -2)
+
+            Picker("Visibility", selection: $cmdTabTrafficLightButtonsVisibility) {
+                ForEach(TrafficLightButtonsVisibility.allCases, id: \.self) { visibility in
+                    Text(visibility.localizedName)
+                        .tag(visibility)
+                }
+            }
+
+            if cmdTabTrafficLightButtonsVisibility != .never {
+                Text("Enabled Buttons")
+                VStack(alignment: .leading) {
+                    if !cmdTabEnabledTrafficLightButtons.isEmpty {
+                        TrafficLightButtons(
+                            displayMode: cmdTabTrafficLightButtonsVisibility,
+                            hoveringOverParentWindow: true,
+                            onWindowAction: { _ in },
+                            pillStyling: true,
+                            mockPreviewActive: false,
+                            enabledButtons: cmdTabEnabledTrafficLightButtons,
+                            useMonochrome: cmdTabUseMonochromeTrafficLights
+                        )
+                    }
+                    enabledButtonsCheckboxes(
+                        enabledButtons: $cmdTabEnabledTrafficLightButtons,
+                        visibilityBinding: $cmdTabTrafficLightButtonsVisibility,
+                        useMonochrome: cmdTabUseMonochromeTrafficLights
+                    )
+                }
+                Toggle("Use Monochrome Colors", isOn: $cmdTabUseMonochromeTrafficLights)
+
+                VStack(alignment: .leading) {
+                    Toggle(isOn: $cmdTabDisableDockStyleTrafficLights) {
+                        Text("Disable dock styling on traffic light buttons")
+                    }
+                    Text("Removes the pill-shaped background styling from traffic light buttons.")
+                        .font(.footnote)
+                        .foregroundColor(.gray)
+                        .padding(.leading, 20)
+                }
+            }
+
+            // Layout section
+            Divider().padding(.vertical, 2)
+            Text("Cmd+Tab Layout").font(.headline).padding(.bottom, -2)
+
+            VStack(alignment: .leading) {
+                Toggle(isOn: $cmdTabUseEmbeddedDockPreviewElements) {
+                    Text("Embed controls in preview frames")
+                }
+                Text("Places traffic light buttons and window titles directly inside the preview frames.")
+                    .font(.footnote)
+                    .foregroundColor(.gray)
+                    .padding(.leading, 20)
+            }
+        }
+    }
+
+    private let buttonDescriptions: [(WindowAction, String)] = [
+        (.quit, String(localized: "Quit")),
+        (.close, String(localized: "Close")),
+        (.minimize, String(localized: "Minimize")),
+        (.toggleFullScreen, String(localized: "Fullscreen")),
+        (.maximize, String(localized: "Maximize")),
+        (.openNewWindow, String(localized: "New Window")),
+    ]
+
+    @ViewBuilder
+    private func enabledButtonsCheckboxes(
+        enabledButtons: Binding<Set<WindowAction>>,
+        visibilityBinding: Binding<TrafficLightButtonsVisibility>,
+        useMonochrome: Bool
+    ) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack(spacing: 12) {
+                ForEach(buttonDescriptions.prefix(3), id: \.0) { action, label in
+                    Toggle(isOn: Binding(
+                        get: { enabledButtons.wrappedValue.contains(action) },
+                        set: { isEnabled in
+                            if isEnabled {
+                                enabledButtons.wrappedValue.insert(action)
+                            } else {
+                                enabledButtons.wrappedValue.remove(action)
+                                if enabledButtons.wrappedValue.isEmpty {
+                                    visibilityBinding.wrappedValue = .never
+                                }
+                            }
+                        }
+                    )) {
+                        Text(label)
+                    }
+                    .toggleStyle(CheckboxToggleStyle())
+                }
+            }
+            HStack(spacing: 12) {
+                ForEach(buttonDescriptions.suffix(3), id: \.0) { action, label in
+                    Toggle(isOn: Binding(
+                        get: { enabledButtons.wrappedValue.contains(action) },
+                        set: { isEnabled in
+                            if isEnabled {
+                                enabledButtons.wrappedValue.insert(action)
+                            } else {
+                                enabledButtons.wrappedValue.remove(action)
+                                if enabledButtons.wrappedValue.isEmpty {
+                                    visibilityBinding.wrappedValue = .never
+                                }
+                            }
+                        }
+                    )) {
+                        Text(label)
+                    }
+                    .toggleStyle(CheckboxToggleStyle())
+                }
+            }
+        }
+    }
+
+    private var contextSettingsLabel: LocalizedStringKey {
+        switch selectedPreviewContext {
+        case .dock:
+            "Dock Preview Settings"
+        case .windowSwitcher:
+            "Window Switcher Settings"
+        case .cmdTab:
+            "Cmd+Tab Settings"
         }
     }
 

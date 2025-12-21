@@ -38,6 +38,34 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://buymeacoffee.com/keplercafe</div>
 
+<a id="1.29"></a>
+# [Release 1.29](https://github.com/ejbills/DockDoor/releases/tag/1.29) - 2025-12-20
+
+## ✨ New Features
+ - Calendar event filtering
+ - Separate appearance options for window switcher and cmd-tab enhancement features
+  - May cause various appearance options to revert to its default. Report issues if encountered.
+ - Media widget seek and volume control gesture (in widget settings)
+  - Scroll to adjust
+- Live preview configurable keep-alive duration (thanks [@suatkocar](https://github.com/suatkocar))
+  - Reduced CPU usage
+
+## 🔧 Improvements & Stability
+- Improved window switcher performance
+- Enhanced live preview quality (thanks [@suatkocar](https://github.com/suatkocar)) 
+  - HDR support
+  - Display P3 colors
+- Better dock click behavior
+
+## 🐛 Bug Fixes
+- Fixed preview hit detection & other fixes (thanks [@maddada](https://github.com/maddada))
+- Fixed window switcher cancellation
+- Fixed accessibility value retrieval
+
+
+[Changes][1.29]
+
+
 <a id="1.28.1"></a>
 # [Release 1.28.1](https://github.com/ejbills/DockDoor/releases/tag/1.28.1) - 2025-12-16
 
@@ -1737,6 +1765,7 @@ v1.0
 [Changes][releases]
 
 
+[1.29]: https://github.com/ejbills/DockDoor/compare/1.28.1...1.29
 [1.28.1]: https://github.com/ejbills/DockDoor/compare/1.28...1.28.1
 [1.28]: https://github.com/ejbills/DockDoor/compare/1.27...1.28
 [1.27]: https://github.com/ejbills/DockDoor/compare/1.26...1.27

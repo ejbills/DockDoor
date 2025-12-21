@@ -245,7 +245,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         if fullPreviewWindow == nil {
             let styleMask: NSWindow.StyleMask = [.nonactivatingPanel, .fullSizeContentView, .borderless]
             fullPreviewWindow = NSPanel(contentRect: .zero, styleMask: styleMask, backing: .buffered, defer: false)
-            fullPreviewWindow?.level = .normal
+            fullPreviewWindow?.level = NSWindow.Level(rawValue: NSWindow.Level.floating.rawValue - 1)
             fullPreviewWindow?.isOpaque = false
             fullPreviewWindow?.backgroundColor = .clear
             fullPreviewWindow?.hasShadow = true
@@ -505,9 +505,10 @@ final class SharedPreviewWindowCoordinator: NSPanel {
 
             windowSwitcherCoordinator.setWindows(windows, dockPosition: currentDockPosition, bestGuessMonitor: screen)
 
-            // Set initial index for window switcher
             if let initialIndex {
                 windowSwitcherCoordinator.setIndex(to: initialIndex, shouldScroll: false)
+            } else {
+                windowSwitcherCoordinator.currIndex = -1
             }
 
             self.onWindowTap = onWindowTap

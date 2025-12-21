@@ -6,6 +6,24 @@ class PreviewStateCoordinator: ObservableObject {
     @Published var currIndex: Int = -1
     @Published var windowSwitcherActive: Bool = false
 
+    // MARK: - Keybind Session Tracking
+
+    /// Tracks whether the window switcher was activated via keybind (not just visible)
+    @Published private(set) var isKeybindSessionActive: Bool = false
+
+    @MainActor
+    func activateKeybindSession() {
+        isKeybindSessionActive = true
+    }
+
+    @MainActor
+    func deactivateKeybindSession() {
+        isKeybindSessionActive = false
+        searchQuery = ""
+    }
+
+    // MARK: - UI State
+
     @Published var hasMovedSinceOpen: Bool = false
     var initialHoverLocation: CGPoint?
     @Published var fullWindowPreviewActive: Bool = false
@@ -217,5 +235,143 @@ class PreviewStateCoordinator: ObservableObject {
             return (StringMatchingUtil.fuzzyMatch(query: query, target: appName, fuzziness: fuzziness) ||
                 StringMatchingUtil.fuzzyMatch(query: query, target: windowTitle, fuzziness: fuzziness)) ? idx : nil
         }
+    }
+
+    // MARK: - Keyboard Navigation
+
+    /// Cycle to the next window in the grid
+    @MainActor
+    func cycleForward() {
+        guard !windows.isEmpty else { return }
+
+        if hasActiveSearch {
+            cycleFilteredForward()
+            return
+        }
+
+        shouldScrollToIndex = true
+        if currIndex < 0 {
+            currIndex = 0
+            return
+        }
+
+        currIndex = WindowPreviewHoverContainer.navigateWindowSwitcher(
+            from: currIndex,
+            direction: .right,
+            totalItems: windows.count,
+            dockPosition: .bottom,
+            isWindowSwitcherActive: true
+        )
+    }
+
+    /// Cycle to the previous window in the grid
+    @MainActor
+    func cycleBackward() {
+        guard !windows.isEmpty else { return }
+
+        if hasActiveSearch {
+            cycleFilteredBackward()
+            return
+        }
+
+        shouldScrollToIndex = true
+        if currIndex < 0 {
+            currIndex = windows.count - 1
+            return
+        }
+
+        currIndex = WindowPreviewHoverContainer.navigateWindowSwitcher(
+            from: currIndex,
+            direction: .left,
+            totalItems: windows.count,
+            dockPosition: .bottom,
+            isWindowSwitcherActive: true
+        )
+    }
+
+    @MainActor
+    private func cycleFilteredForward() {
+        let filtered = filteredWindowIndices()
+        guard !filtered.isEmpty else { return }
+
+        shouldScrollToIndex = true
+        if currIndex < 0 {
+            currIndex = filtered.first ?? 0
+            return
+        }
+
+        if let currentPos = filtered.firstIndex(of: currIndex) {
+            let nextPos = (currentPos + 1) % filtered.count
+            currIndex = filtered[nextPos]
+        } else {
+            currIndex = filtered.first ?? 0
+        }
+    }
+
+    @MainActor
+    private func cycleFilteredBackward() {
+        let filtered = filteredWindowIndices()
+        guard !filtered.isEmpty else { return }
+
+        shouldScrollToIndex = true
+        if currIndex < 0 {
+            currIndex = filtered.last ?? 0
+            return
+        }
+
+        if let currentPos = filtered.firstIndex(of: currIndex) {
+            let prevPos = (currentPos - 1 + filtered.count) % filtered.count
+            currIndex = filtered[prevPos]
+        } else {
+            currIndex = filtered.last ?? 0
+        }
+    }
+
+    /// Navigate within filtered results using arrow direction
+    @MainActor
+    func navigateFiltered(direction: ArrowDirection) {
+        let filtered = filteredWindowIndices()
+        guard !filtered.isEmpty else { return }
+
+        shouldScrollToIndex = true
+        guard let currentFilteredPos = filtered.firstIndex(of: currIndex) else {
+            currIndex = filtered.first ?? 0
+            return
+        }
+
+        let newFilteredPos = WindowPreviewHoverContainer.navigateWindowSwitcher(
+            from: currentFilteredPos,
+            direction: direction,
+            totalItems: filtered.count,
+            dockPosition: .bottom,
+            isWindowSwitcherActive: true
+        )
+
+        currIndex = filtered[newFilteredPos]
+    }
+
+    // MARK: - Window Switcher Initialization
+
+    /// Initialize for window switcher keybind activation
+    @MainActor
+    func initializeForWindowSwitcher(with newWindows: [WindowInfo], dockPosition: DockPosition, bestGuessMonitor: NSScreen) {
+        setWindows(newWindows, dockPosition: dockPosition, bestGuessMonitor: bestGuessMonitor)
+        searchQuery = ""
+
+        if !windows.isEmpty {
+            if Defaults[.useClassicWindowOrdering], windows.count >= 2 {
+                currIndex = 1
+            } else {
+                currIndex = 0
+            }
+        } else {
+            currIndex = -1
+        }
+    }
+
+    /// Get the currently selected window
+    func getCurrentWindow() -> WindowInfo? {
+        guard currIndex >= 0, currIndex < windows.count else { return nil }
+        return windows[currIndex]
     }
 }

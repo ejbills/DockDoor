@@ -9,9 +9,9 @@ struct TrafficLightButtons: View {
     let onWindowAction: (WindowAction) -> Void
     let pillStyling: Bool
     let mockPreviewActive: Bool
+    let enabledButtons: Set<WindowAction>
+    let useMonochrome: Bool
     @State private var isHovering = false
-    @Default(.enabledTrafficLightButtons) private var enabledButtons
-    @Default(.useMonochromeTrafficLights) private var useMonochrome
 
     var body: some View {
         let monochromeFillColor = colorScheme == .dark ? Color.gray.darker(by: 0.075) : Color.white
@@ -126,7 +126,9 @@ extension AppearanceSettingsView {
                                 hoveringOverParentWindow: true,
                                 onWindowAction: { _ in },
                                 pillStyling: true,
-                                mockPreviewActive: false
+                                mockPreviewActive: false,
+                                enabledButtons: enabledButtons,
+                                useMonochrome: useMonochrome
                             )
                         }
 
