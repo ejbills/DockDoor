@@ -48,7 +48,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             let currentPreviewCoordinator = SharedPreviewWindowCoordinator()
             previewCoordinator = currentPreviewCoordinator
 
-            if Defaults[.enableDockPreviews] {
+            let needsDockObserver = Defaults[.enableDockPreviews] ||
+                Defaults[.shouldHideOnDockItemClick] ||
+                Defaults[.enableCmdRightClickQuit] ||
+                Defaults[.enableDockScrollGesture]
+
+            if needsDockObserver {
                 let dockObs = DockObserver(previewCoordinator: currentPreviewCoordinator)
                 dockObserver = dockObs
             }

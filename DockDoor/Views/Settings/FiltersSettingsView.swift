@@ -49,7 +49,8 @@ struct FiltersSettingsView: View {
                     options: [.skipsHiddenFiles, .skipsPackageDescendants]
                 ) else { continue }
 
-                for case let fileURL as URL in enumerator {
+                let urls = enumerator.allObjects.compactMap { $0 as? URL }
+                for fileURL in urls {
                     guard fileURL.pathExtension == "app" else { continue }
 
                     guard let bundle = Bundle(url: fileURL),

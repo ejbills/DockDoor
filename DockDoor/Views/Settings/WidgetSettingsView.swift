@@ -18,6 +18,7 @@ struct WidgetSettingsView: View {
     @Default(.enablePinning) var enablePinning
     @Default(.filteredCalendarIdentifiers) var filteredCalendarIdentifiers
     @Default(.mediaWidgetScrollBehavior) var mediaWidgetScrollBehavior
+    @Default(.mediaWidgetScrollDirection) var mediaWidgetScrollDirection
 
     @State private var availableCalendars: [CalendarItem] = []
     @State private var isLoadingCalendars = true
@@ -106,18 +107,44 @@ struct WidgetSettingsView: View {
                     }
                 }
 
-                StyledGroupBox(label: "Media") {
-                    VStack(alignment: .leading, spacing: 10) {
-                        Picker("Scroll behavior:", selection: $mediaWidgetScrollBehavior) {
-                            ForEach(MediaWidgetScrollBehavior.allCases, id: \.self) { behavior in
-                                Text(behavior.localizedName).tag(behavior)
+                if showSpecialAppControls {
+                    StyledGroupBox(label: "Media") {
+                        VStack(alignment: .leading, spacing: 10) {
+                            Picker("Scroll behavior:", selection: $mediaWidgetScrollBehavior) {
+                                ForEach(MediaWidgetScrollBehavior.allCases, id: \.self) { behavior in
+                                    Text(behavior.localizedName).tag(behavior)
+                                }
+                            }
+                            .pickerStyle(.menu)
+
+                            Text("When scrolling on the media widget preview, choose whether to adjust system volume or seek through the track.")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+
+                            Picker("Scroll direction:", selection: $mediaWidgetScrollDirection) {
+                                ForEach(MediaWidgetScrollDirection.allCases, id: \.self) { direction in
+                                    Text(direction.localizedName).tag(direction)
+                                }
+                            }
+                            .pickerStyle(.menu)
+                            .padding(.leading, 20)
+
+                            Text("Choose whether vertical or horizontal scrolling controls the media widget.")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                                .padding(.leading, 20)
+
+                            if mediaWidgetScrollDirection == .horizontal {
+                                HStack(spacing: 6) {
+                                    Image(systemName: "exclamationmark.triangle.fill")
+                                        .foregroundColor(.orange)
+                                    Text("Horizontal scrolling may interfere with dock preview gestures.")
+                                        .font(.caption)
+                                }
+                                .foregroundColor(.orange)
+                                .padding(.leading, 20)
                             }
                         }
-                        .pickerStyle(.menu)
-
-                        Text("When scrolling on the media widget preview, choose whether to adjust system volume or seek through the track.")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
                     }
                 }
 

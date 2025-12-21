@@ -505,9 +505,10 @@ final class SharedPreviewWindowCoordinator: NSPanel {
 
             windowSwitcherCoordinator.setWindows(windows, dockPosition: currentDockPosition, bestGuessMonitor: screen)
 
-            // Set initial index for window switcher
             if let initialIndex {
                 windowSwitcherCoordinator.setIndex(to: initialIndex, shouldScroll: false)
+            } else {
+                windowSwitcherCoordinator.currIndex = -1
             }
 
             self.onWindowTap = onWindowTap

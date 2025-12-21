@@ -19,12 +19,39 @@ struct WindowPreview: View {
     let onHoverIndexChange: ((Int?, CGPoint?) -> Void)?
     var isEligibleForLivePreview: Bool = true
 
+    // MARK: - Dock Preview Appearance Settings
+
     @Default(.windowTitlePosition) var windowTitlePosition
     @Default(.showWindowTitle) var showWindowTitle
-    @Default(.windowTitleDisplayCondition) var windowTitleDisplayCondition
     @Default(.windowTitleVisibility) var windowTitleVisibility
     @Default(.trafficLightButtonsVisibility) var trafficLightButtonsVisibility
     @Default(.trafficLightButtonsPosition) var trafficLightButtonsPosition
+    @Default(.enabledTrafficLightButtons) var enabledTrafficLightButtons
+    @Default(.useMonochromeTrafficLights) var useMonochromeTrafficLights
+
+    // MARK: - Window Switcher Appearance Settings
+
+    @Default(.switcherShowWindowTitle) var switcherShowWindowTitle
+    @Default(.switcherWindowTitleVisibility) var switcherWindowTitleVisibility
+    @Default(.switcherTrafficLightButtonsVisibility) var switcherTrafficLightButtonsVisibility
+    @Default(.switcherEnabledTrafficLightButtons) var switcherEnabledTrafficLightButtons
+    @Default(.switcherUseMonochromeTrafficLights) var switcherUseMonochromeTrafficLights
+    @Default(.switcherDisableDockStyleTrafficLights) var switcherDisableDockStyleTrafficLights
+
+    // MARK: - Cmd+Tab Appearance Settings
+
+    @Default(.cmdTabShowWindowTitle) var cmdTabShowWindowTitle
+    @Default(.cmdTabWindowTitleVisibility) var cmdTabWindowTitleVisibility
+    @Default(.cmdTabWindowTitlePosition) var cmdTabWindowTitlePosition
+    @Default(.cmdTabTrafficLightButtonsVisibility) var cmdTabTrafficLightButtonsVisibility
+    @Default(.cmdTabTrafficLightButtonsPosition) var cmdTabTrafficLightButtonsPosition
+    @Default(.cmdTabEnabledTrafficLightButtons) var cmdTabEnabledTrafficLightButtons
+    @Default(.cmdTabUseMonochromeTrafficLights) var cmdTabUseMonochromeTrafficLights
+    @Default(.cmdTabControlPosition) var cmdTabControlPosition
+    @Default(.cmdTabUseEmbeddedDockPreviewElements) var cmdTabUseEmbeddedDockPreviewElements
+    @Default(.cmdTabDisableDockStyleTrafficLights) var cmdTabDisableDockStyleTrafficLights
+    @Default(.cmdTabDisableDockStyleTitles) var cmdTabDisableDockStyleTitles
+
     @Default(.windowSwitcherControlPosition) var windowSwitcherControlPosition
     @Default(.dockPreviewControlPosition) var dockPreviewControlPosition
     @Default(.selectionOpacity) var selectionOpacity
@@ -57,16 +84,6 @@ struct WindowPreview: View {
     @State private var dragTimer: Timer?
     @State private var highlightOpacity = 0.0
 
-    private var isDiagonalPosition: Bool {
-        switch dockPreviewControlPosition {
-        case .diagonalTopLeftBottomRight, .diagonalTopRightBottomLeft,
-             .diagonalBottomLeftTopRight, .diagonalBottomRightTopLeft:
-            true
-        default:
-            false
-        }
-    }
-
     /// Checks if this window is the currently active (focused) window on the system
     private var isActiveWindow: Bool {
         guard showActiveWindowBorder else { return false }
@@ -77,13 +94,101 @@ struct WindowPreview: View {
         return windowInfo.id == focusedWindowID
     }
 
-    private var isWindowSwitcherDiagonalPosition: Bool {
-        switch windowSwitcherControlPosition {
+    // MARK: - Context-based appearance settings
+
+    private var effectiveTrafficLightVisibility: TrafficLightButtonsVisibility {
+        if windowSwitcherActive {
+            switcherTrafficLightButtonsVisibility
+        } else if dockPosition == .cmdTab {
+            cmdTabTrafficLightButtonsVisibility
+        } else {
+            trafficLightButtonsVisibility
+        }
+    }
+
+    private var effectiveEnabledTrafficLightButtons: Set<WindowAction> {
+        if windowSwitcherActive {
+            switcherEnabledTrafficLightButtons
+        } else if dockPosition == .cmdTab {
+            cmdTabEnabledTrafficLightButtons
+        } else {
+            enabledTrafficLightButtons
+        }
+    }
+
+    private var effectiveUseMonochromeTrafficLights: Bool {
+        if windowSwitcherActive {
+            switcherUseMonochromeTrafficLights
+        } else if dockPosition == .cmdTab {
+            cmdTabUseMonochromeTrafficLights
+        } else {
+            useMonochromeTrafficLights
+        }
+    }
+
+    private var effectiveShowWindowTitle: Bool {
+        if windowSwitcherActive {
+            switcherShowWindowTitle
+        } else if dockPosition == .cmdTab {
+            cmdTabShowWindowTitle
+        } else {
+            showWindowTitle
+        }
+    }
+
+    private var effectiveWindowTitleVisibility: WindowTitleVisibility {
+        if windowSwitcherActive {
+            switcherWindowTitleVisibility
+        } else if dockPosition == .cmdTab {
+            cmdTabWindowTitleVisibility
+        } else {
+            windowTitleVisibility
+        }
+    }
+
+    private var effectiveControlPosition: WindowSwitcherControlPosition {
+        if windowSwitcherActive {
+            windowSwitcherControlPosition
+        } else if dockPosition == .cmdTab {
+            cmdTabControlPosition
+        } else {
+            dockPreviewControlPosition
+        }
+    }
+
+    private var effectiveIsDiagonalPosition: Bool {
+        switch effectiveControlPosition {
         case .diagonalTopLeftBottomRight, .diagonalTopRightBottomLeft,
              .diagonalBottomLeftTopRight, .diagonalBottomRightTopLeft:
             true
         default:
             false
+        }
+    }
+
+    private var effectiveUseEmbeddedElements: Bool {
+        if dockPosition == .cmdTab {
+            cmdTabUseEmbeddedDockPreviewElements
+        } else {
+            useEmbeddedDockPreviewElements
+        }
+    }
+
+    private var effectiveDisableDockStyleTrafficLights: Bool {
+        if windowSwitcherActive {
+            switcherDisableDockStyleTrafficLights
+        } else if dockPosition == .cmdTab {
+            cmdTabDisableDockStyleTrafficLights
+        } else {
+            disableDockStyleTrafficLights
+        }
+    }
+
+    private var effectiveDisableDockStyleTitles: Bool {
+        if dockPosition == .cmdTab {
+            cmdTabDisableDockStyleTitles
+        } else {
+            disableDockStyleTitles
         }
     }
 
@@ -135,23 +240,18 @@ struct WindowPreview: View {
 
     @ViewBuilder
     private func embeddedDockPreviewControls(_ selected: Bool) -> some View {
-        let shouldShowTitle = showWindowTitle && (
-            windowTitleDisplayCondition == .all ||
-                windowTitleDisplayCondition == .dockPreviewsOnly
-        )
-
         let titleToShow: String? = if let windowTitle = windowInfo.windowName, !windowTitle.isEmpty {
             windowTitle
         } else {
             windowInfo.app.localizedName
         }
 
-        let hasTitle = shouldShowTitle &&
+        let hasTitle = effectiveShowWindowTitle &&
             titleToShow != nil &&
-            (windowTitleVisibility == .alwaysVisible || selected)
+            (effectiveWindowTitleVisibility == .alwaysVisible || selected)
 
         let hasTrafficLights = windowInfo.closeButton != nil &&
-            trafficLightButtonsVisibility != .never &&
+            effectiveTrafficLightVisibility != .never &&
             (showMinimizedHiddenLabels ? (!windowInfo.isMinimized && !windowInfo.isHidden) : true)
 
         let titleContent = Group {
@@ -159,7 +259,7 @@ struct WindowPreview: View {
                 MarqueeText(text: title, startDelay: 1)
                     .font(.subheadline)
                     .padding(4)
-                    .if(!disableDockStyleTitles) { view in
+                    .if(!effectiveDisableDockStyleTitles) { view in
                         view.materialPill()
                     }
             }
@@ -168,11 +268,13 @@ struct WindowPreview: View {
         let controlsContent = Group {
             if hasTrafficLights {
                 TrafficLightButtons(
-                    displayMode: trafficLightButtonsVisibility,
+                    displayMode: effectiveTrafficLightVisibility,
                     hoveringOverParentWindow: selected || isHoveringOverDockPeekPreview,
                     onWindowAction: handleWindowAction,
-                    pillStyling: !disableDockStyleTrafficLights,
-                    mockPreviewActive: mockPreviewActive
+                    pillStyling: !effectiveDisableDockStyleTrafficLights,
+                    mockPreviewActive: mockPreviewActive,
+                    enabledButtons: effectiveEnabledTrafficLightButtons,
+                    useMonochrome: effectiveUseMonochromeTrafficLights
                 )
             } else if windowInfo.isMinimized || windowInfo.isHidden, showMinimizedHiddenLabels {
                 Text(windowInfo.isMinimized ? "Minimized" : "Hidden")
@@ -186,11 +288,11 @@ struct WindowPreview: View {
         }
 
         if hasTitle || hasTrafficLights {
-            switch dockPreviewControlPosition {
+            switch effectiveControlPosition {
             case .topLeading, .topTrailing:
                 VStack {
                     HStack(spacing: 4) {
-                        if dockPreviewControlPosition == .topLeading {
+                        if effectiveControlPosition == .topLeading {
                             titleContent
                             Spacer()
                             controlsContent
@@ -207,7 +309,7 @@ struct WindowPreview: View {
                 VStack {
                     Spacer()
                     HStack(spacing: 4) {
-                        if dockPreviewControlPosition == .bottomLeading {
+                        if effectiveControlPosition == .bottomLeading {
                             titleContent
                             Spacer()
                             controlsContent
@@ -288,10 +390,8 @@ struct WindowPreview: View {
     }
 
     private func windowSwitcherContent(_ selected: Bool, showTitleContent: Bool = true, showControlsContent: Bool = true) -> some View {
-        let shouldShowTitle = showWindowTitle && (
-            windowTitleDisplayCondition == .all ||
-                windowTitleDisplayCondition == .windowSwitcherOnly
-        )
+        let shouldShowWindowTitle = effectiveShowWindowTitle &&
+            (effectiveWindowTitleVisibility == .alwaysVisible || selected || isHoveringOverWindowSwitcherPreview)
 
         let titleAndSubtitleContent = VStack(alignment: .leading, spacing: 0) {
             if !showAppIconOnly {
@@ -303,7 +403,7 @@ struct WindowPreview: View {
             if let windowTitle = windowInfo.windowName,
                !windowTitle.isEmpty,
                windowTitle != windowInfo.app.localizedName,
-               shouldShowTitle
+               shouldShowWindowTitle
             {
                 MarqueeText(text: windowTitle, startDelay: 1)
                     .font(.subheadline)
@@ -324,10 +424,13 @@ struct WindowPreview: View {
         let controlsContent = Group {
             if windowInfo.closeButton != nil && (showMinimizedHiddenLabels ? (!windowInfo.isMinimized && !windowInfo.isHidden) : true) {
                 TrafficLightButtons(
-                    displayMode: trafficLightButtonsVisibility,
+                    displayMode: effectiveTrafficLightVisibility,
                     hoveringOverParentWindow: selected || isHoveringOverWindowSwitcherPreview,
                     onWindowAction: handleWindowAction,
-                    pillStyling: true, mockPreviewActive: mockPreviewActive
+                    pillStyling: !effectiveDisableDockStyleTrafficLights,
+                    mockPreviewActive: mockPreviewActive,
+                    enabledButtons: effectiveEnabledTrafficLightButtons,
+                    useMonochrome: effectiveUseMonochromeTrafficLights
                 )
             } else if windowInfo.isMinimized || windowInfo.isHidden, showMinimizedHiddenLabels {
                 Text(windowInfo.isMinimized ? "Minimized" : "Hidden")
@@ -367,7 +470,7 @@ struct WindowPreview: View {
         }
 
         return VStack(spacing: 0) {
-            switch windowSwitcherControlPosition {
+            switch effectiveControlPosition {
             case .topLeading:
                 contentRow(isLeadingControls: false)
             case .topTrailing:
@@ -376,20 +479,15 @@ struct WindowPreview: View {
                 contentRow(isLeadingControls: false)
             case .bottomTrailing:
                 contentRow(isLeadingControls: true)
-            case .diagonalTopLeftBottomRight, .diagonalBottomRightTopLeft:
+            case .diagonalTopLeftBottomRight, .diagonalBottomLeftTopRight:
                 contentRow(isLeadingControls: false)
-            case .diagonalTopRightBottomLeft, .diagonalBottomLeftTopRight:
+            case .diagonalTopRightBottomLeft, .diagonalBottomRightTopLeft:
                 contentRow(isLeadingControls: true)
             }
         }
     }
 
     private func dockPreviewContent(_ selected: Bool, showTitleContent: Bool = true, showControlsContent: Bool = true) -> some View {
-        let shouldShowTitle = showWindowTitle && (
-            windowTitleDisplayCondition == .all ||
-                windowTitleDisplayCondition == .dockPreviewsOnly
-        )
-
         // Determine what title to show: window name first, then app name as fallback
         let titleToShow: String? = if let windowTitle = windowInfo.windowName, !windowTitle.isEmpty {
             windowTitle
@@ -397,12 +495,12 @@ struct WindowPreview: View {
             windowInfo.app.localizedName
         }
 
-        let hasTitle = shouldShowTitle &&
+        let hasTitle = effectiveShowWindowTitle &&
             titleToShow != nil &&
-            (windowTitleVisibility == .alwaysVisible || selected)
+            (effectiveWindowTitleVisibility == .alwaysVisible || selected)
 
         let hasTrafficLights = windowInfo.closeButton != nil &&
-            trafficLightButtonsVisibility != .never &&
+            effectiveTrafficLightVisibility != .never &&
             (showMinimizedHiddenLabels ? (!windowInfo.isMinimized && !windowInfo.isHidden) : true)
 
         let titleContent = Group {
@@ -410,7 +508,7 @@ struct WindowPreview: View {
                 MarqueeText(text: title, startDelay: 1)
                     .font(.subheadline)
                     .padding(4)
-                    .if(!disableDockStyleTitles) { view in
+                    .if(!effectiveDisableDockStyleTitles) { view in
                         view.materialPill()
                     }
             }
@@ -419,11 +517,13 @@ struct WindowPreview: View {
         let controlsContent = Group {
             if hasTrafficLights {
                 TrafficLightButtons(
-                    displayMode: trafficLightButtonsVisibility,
+                    displayMode: effectiveTrafficLightVisibility,
                     hoveringOverParentWindow: selected || isHoveringOverDockPeekPreview,
                     onWindowAction: handleWindowAction,
-                    pillStyling: !disableDockStyleTrafficLights,
-                    mockPreviewActive: mockPreviewActive
+                    pillStyling: !effectiveDisableDockStyleTrafficLights,
+                    mockPreviewActive: mockPreviewActive,
+                    enabledButtons: effectiveEnabledTrafficLightButtons,
+                    useMonochrome: effectiveUseMonochromeTrafficLights
                 )
             } else if windowInfo.isMinimized || windowInfo.isHidden, showMinimizedHiddenLabels {
                 Text(windowInfo.isMinimized ? "Minimized" : "Hidden")
@@ -463,7 +563,7 @@ struct WindowPreview: View {
         if hasTitle || hasTrafficLights {
             return AnyView(
                 VStack(spacing: 0) {
-                    switch dockPreviewControlPosition {
+                    switch effectiveControlPosition {
                     case .topLeading:
                         contentRow(isLeadingControls: false)
                     case .topTrailing:
@@ -472,9 +572,9 @@ struct WindowPreview: View {
                         contentRow(isLeadingControls: false)
                     case .bottomTrailing:
                         contentRow(isLeadingControls: true)
-                    case .diagonalTopLeftBottomRight, .diagonalBottomRightTopLeft:
+                    case .diagonalTopLeftBottomRight, .diagonalBottomLeftTopRight:
                         contentRow(isLeadingControls: false)
-                    case .diagonalTopRightBottomLeft, .diagonalBottomLeftTopRight:
+                    case .diagonalTopRightBottomLeft, .diagonalBottomRightTopLeft:
                         contentRow(isLeadingControls: true)
                     }
                 }
@@ -495,35 +595,35 @@ struct WindowPreview: View {
 
         ZStack(alignment: .topLeading) {
             VStack(alignment: .leading, spacing: 0) {
-                if !useEmbeddedDockPreviewElements ||
+                if !effectiveUseEmbeddedElements ||
                     windowSwitcherActive
                 {
                     Group {
-                        if windowSwitcherActive, windowSwitcherControlPosition == .topLeading ||
-                            windowSwitcherControlPosition == .topTrailing
+                        if windowSwitcherActive, effectiveControlPosition == .topLeading ||
+                            effectiveControlPosition == .topTrailing
                         {
                             windowSwitcherContent(finalIsSelected)
-                        } else if windowSwitcherActive, windowSwitcherControlPosition == .diagonalTopLeftBottomRight {
+                        } else if windowSwitcherActive, effectiveControlPosition == .diagonalTopLeftBottomRight {
                             windowSwitcherContent(finalIsSelected, showTitleContent: true, showControlsContent: false)
-                        } else if windowSwitcherActive, windowSwitcherControlPosition == .diagonalTopRightBottomLeft {
+                        } else if windowSwitcherActive, effectiveControlPosition == .diagonalTopRightBottomLeft {
                             windowSwitcherContent(finalIsSelected, showTitleContent: true, showControlsContent: false)
-                        } else if windowSwitcherActive, windowSwitcherControlPosition == .diagonalBottomLeftTopRight {
+                        } else if windowSwitcherActive, effectiveControlPosition == .diagonalBottomLeftTopRight {
                             windowSwitcherContent(finalIsSelected, showTitleContent: false, showControlsContent: true)
-                        } else if windowSwitcherActive, windowSwitcherControlPosition == .diagonalBottomRightTopLeft {
+                        } else if windowSwitcherActive, effectiveControlPosition == .diagonalBottomRightTopLeft {
                             windowSwitcherContent(finalIsSelected, showTitleContent: false, showControlsContent: true)
                         }
 
-                        if !windowSwitcherActive, dockPreviewControlPosition == .topLeading ||
-                            dockPreviewControlPosition == .topTrailing
+                        if !windowSwitcherActive, effectiveControlPosition == .topLeading ||
+                            effectiveControlPosition == .topTrailing
                         {
                             dockPreviewContent(finalIsSelected)
-                        } else if !windowSwitcherActive, dockPreviewControlPosition == .diagonalTopLeftBottomRight {
+                        } else if !windowSwitcherActive, effectiveControlPosition == .diagonalTopLeftBottomRight {
                             dockPreviewContent(finalIsSelected, showTitleContent: true, showControlsContent: false)
-                        } else if !windowSwitcherActive, dockPreviewControlPosition == .diagonalTopRightBottomLeft {
+                        } else if !windowSwitcherActive, effectiveControlPosition == .diagonalTopRightBottomLeft {
                             dockPreviewContent(finalIsSelected, showTitleContent: true, showControlsContent: false)
-                        } else if !windowSwitcherActive, dockPreviewControlPosition == .diagonalBottomLeftTopRight {
+                        } else if !windowSwitcherActive, effectiveControlPosition == .diagonalBottomLeftTopRight {
                             dockPreviewContent(finalIsSelected, showTitleContent: false, showControlsContent: true)
-                        } else if !windowSwitcherActive, dockPreviewControlPosition == .diagonalBottomRightTopLeft {
+                        } else if !windowSwitcherActive, effectiveControlPosition == .diagonalBottomRightTopLeft {
                             dockPreviewContent(finalIsSelected, showTitleContent: false, showControlsContent: true)
                         }
                     }
@@ -536,35 +636,35 @@ struct WindowPreview: View {
                     isSelected: finalIsSelected
                 )
 
-                if !useEmbeddedDockPreviewElements ||
+                if !effectiveUseEmbeddedElements ||
                     windowSwitcherActive
                 {
                     Group {
-                        if windowSwitcherActive, windowSwitcherControlPosition == .bottomLeading ||
-                            windowSwitcherControlPosition == .bottomTrailing
+                        if windowSwitcherActive, effectiveControlPosition == .bottomLeading ||
+                            effectiveControlPosition == .bottomTrailing
                         {
                             windowSwitcherContent(finalIsSelected)
-                        } else if windowSwitcherActive, windowSwitcherControlPosition == .diagonalTopLeftBottomRight {
+                        } else if windowSwitcherActive, effectiveControlPosition == .diagonalTopLeftBottomRight {
                             windowSwitcherContent(finalIsSelected, showTitleContent: false, showControlsContent: true)
-                        } else if windowSwitcherActive, windowSwitcherControlPosition == .diagonalTopRightBottomLeft {
+                        } else if windowSwitcherActive, effectiveControlPosition == .diagonalTopRightBottomLeft {
                             windowSwitcherContent(finalIsSelected, showTitleContent: false, showControlsContent: true)
-                        } else if windowSwitcherActive, windowSwitcherControlPosition == .diagonalBottomLeftTopRight {
+                        } else if windowSwitcherActive, effectiveControlPosition == .diagonalBottomLeftTopRight {
                             windowSwitcherContent(finalIsSelected, showTitleContent: true, showControlsContent: false)
-                        } else if windowSwitcherActive, windowSwitcherControlPosition == .diagonalBottomRightTopLeft {
+                        } else if windowSwitcherActive, effectiveControlPosition == .diagonalBottomRightTopLeft {
                             windowSwitcherContent(finalIsSelected, showTitleContent: true, showControlsContent: false)
                         }
 
-                        if !windowSwitcherActive, dockPreviewControlPosition == .bottomLeading ||
-                            dockPreviewControlPosition == .bottomTrailing
+                        if !windowSwitcherActive, effectiveControlPosition == .bottomLeading ||
+                            effectiveControlPosition == .bottomTrailing
                         {
                             dockPreviewContent(finalIsSelected)
-                        } else if !windowSwitcherActive, dockPreviewControlPosition == .diagonalTopLeftBottomRight {
+                        } else if !windowSwitcherActive, effectiveControlPosition == .diagonalTopLeftBottomRight {
                             dockPreviewContent(finalIsSelected, showTitleContent: false, showControlsContent: true)
-                        } else if !windowSwitcherActive, dockPreviewControlPosition == .diagonalTopRightBottomLeft {
+                        } else if !windowSwitcherActive, effectiveControlPosition == .diagonalTopRightBottomLeft {
                             dockPreviewContent(finalIsSelected, showTitleContent: false, showControlsContent: true)
-                        } else if !windowSwitcherActive, dockPreviewControlPosition == .diagonalBottomLeftTopRight {
+                        } else if !windowSwitcherActive, effectiveControlPosition == .diagonalBottomLeftTopRight {
                             dockPreviewContent(finalIsSelected, showTitleContent: true, showControlsContent: false)
-                        } else if !windowSwitcherActive, dockPreviewControlPosition == .diagonalBottomRightTopLeft {
+                        } else if !windowSwitcherActive, effectiveControlPosition == .diagonalBottomRightTopLeft {
                             dockPreviewContent(finalIsSelected, showTitleContent: true, showControlsContent: false)
                         }
                     }
@@ -605,7 +705,7 @@ struct WindowPreview: View {
                     .opacity(highlightOpacity)
             }
 
-            if !windowSwitcherActive, useEmbeddedDockPreviewElements {
+            if !windowSwitcherActive, effectiveUseEmbeddedElements {
                 embeddedControlsOverlay(finalIsSelected)
             }
         }
