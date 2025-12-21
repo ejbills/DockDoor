@@ -762,9 +762,6 @@
         }
       }
     },
-    "%" : {
-
-    },
     "%@" : {
       "localizations" : {
         "af" : {
@@ -1531,6 +1528,9 @@
           }
         }
       }
+    },
+    "%lld%%" : {
+
     },
     "%lld+ windows" : {
       "localizations" : {
@@ -10492,9 +10492,6 @@
         }
       }
     },
-    "Adjusts the window switcher's position as a percentage of screen size. Setting both values to 0 centers the switcher (or aligns to top if anchored). Large values may cause the window to overflow off-screen." : {
-
-    },
     "Aero Shake" : {
 
     },
@@ -13735,7 +13732,7 @@
         }
       }
     },
-    "Anchor to top of screen" : {
+    "Anchor to top" : {
 
     },
     "Animation speed" : {
@@ -22118,6 +22115,7 @@
       }
     },
     "Choose where the window switcher appears on screen." : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -40209,9 +40207,6 @@
           }
         }
       }
-    },
-    "Enable to adjust the window switcher's position using the sliders below." : {
-
     },
     "Enable Window Switcher" : {
       "localizations" : {
@@ -69585,6 +69580,9 @@
         }
       }
     },
+    "Offset position" : {
+
+    },
     "OK" : {
       "localizations" : {
         "af" : {
@@ -73588,7 +73586,11 @@
         }
       }
     },
+    "Pin to" : {
+
+    },
     "Pin to Screen" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -74348,6 +74350,9 @@
           }
         }
       }
+    },
+    "Placement" : {
+
     },
     "Placement Strategy" : {
       "extractionState" : "stale",
@@ -87676,7 +87681,6 @@
       }
     },
     "Screen" : {
-      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -88817,9 +88821,6 @@
           }
         }
       }
-    },
-    "Screen Selection" : {
-
     },
     "Screen with last active window" : {
       "comment" : "Window switcher placement option",
@@ -93792,9 +93793,6 @@
     "Shake a window preview rapidly" : {
 
     },
-    "Shift Horizontal Position" : {
-
-    },
     "Shift Indicator" : {
       "localizations" : {
         "af" : {
@@ -93984,12 +93982,6 @@
           }
         }
       }
-    },
-    "Shift Vertical Position" : {
-
-    },
-    "Shift Window Switcher Placement" : {
-
     },
     "Show active app indicator below dock icon" : {
       "comment" : "A toggle switch label that enables or disables the display of a line below the currently active application's dock icon.",
@@ -105613,7 +105605,11 @@
         }
       }
     },
+    "This display is currently disconnected." : {
+
+    },
     "This display is currently disconnected. The window switcher will appear on the main display until reconnected." : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -107516,6 +107512,9 @@
           }
         }
       }
+    },
+    "Top edge stays fixed regardless of switcher size." : {
+
     },
     "Top Left" : {
       "comment" : "Preview window title position option\nTraffic light buttons position option",
@@ -117233,9 +117232,6 @@
         }
       }
     },
-    "When enabled, the switcher's top edge stays fixed regardless of its size. When disabled, the switcher is centered vertically." : {
-
-    },
     "When enabled, window previews show live video instead of static screenshots. Uses ScreenCaptureKit for real-time capture." : {
       "localizations" : {
         "af" : {
@@ -122770,6 +122766,7 @@
       }
     },
     "Window Switcher Placement" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {

@@ -285,14 +285,13 @@ final class SharedPreviewWindowCoordinator: NSPanel {
     }
 
     private func centerWindowOnScreen(size: CGSize, screen: NSScreen) -> CGPoint {
-        // Only apply offset and anchor settings when shift placement is enabled
-        let shiftEnabled = Defaults[.enableShiftWindowSwitcherPlacement]
+        let switcherOffsetConfigured = Defaults[.enableShiftWindowSwitcherPlacement]
 
-        let horizontalOffset = shiftEnabled ? screen.frame.width * (Defaults[.windowSwitcherHorizontalOffsetPercent] / 100.0) : 0
-        let verticalOffset = shiftEnabled ? screen.frame.height * (Defaults[.windowSwitcherVerticalOffsetPercent] / 100.0) : 0
+        let horizontalOffset = switcherOffsetConfigured ? screen.frame.width * (Defaults[.windowSwitcherHorizontalOffsetPercent] / 100.0) : 0
+        let verticalOffset = switcherOffsetConfigured ? screen.frame.height * (Defaults[.windowSwitcherVerticalOffsetPercent] / 100.0) : 0
 
         let xPosition = screen.frame.midX - (size.width / 2) + horizontalOffset
-        let yPosition: CGFloat = if shiftEnabled, Defaults[.windowSwitcherAnchorToTop] {
+        let yPosition: CGFloat = if switcherOffsetConfigured, Defaults[.windowSwitcherAnchorToTop] {
             // Anchor from top: start at top of screen and apply offset downward (negative offset moves down)
             screen.frame.maxY - size.height + verticalOffset
         } else {
