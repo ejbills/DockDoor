@@ -121,11 +121,6 @@ struct AppearanceSettingsView: View {
     @Default(.dockPreviewCompactThreshold) var dockPreviewCompactThreshold
     @Default(.cmdTabCompactThreshold) var cmdTabCompactThreshold
 
-    // Window switcher position
-    @Default(.windowSwitcherHorizontalOffsetPercent) var windowSwitcherHorizontalOffsetPercent
-    @Default(.windowSwitcherVerticalOffsetPercent) var windowSwitcherVerticalOffsetPercent
-    @Default(.windowSwitcherAnchorToTop) var windowSwitcherAnchorToTop
-
     // Force compact mode settings
     @Default(.disableImagePreview) var disableImagePreview
     @StateObject private var permissionsChecker = PermissionsChecker()
@@ -398,50 +393,6 @@ struct AppearanceSettingsView: View {
                     if showAdvancedAppearanceSettings {
                         advancedAppearanceSettingsSection
                             .id(advancedAppearanceSettingsSectionID)
-
-                        StyledGroupBox(label: "Window Switcher Position") {
-                            VStack(alignment: .leading, spacing: 10) {
-                                VStack(alignment: .leading) {
-                                    Toggle(isOn: $windowSwitcherAnchorToTop) {
-                                        Text("Anchor to top of screen")
-                                    }
-                                    Text("When enabled, the switcher's top edge stays fixed regardless of its size. When disabled, the switcher is centered vertically.")
-                                        .font(.footnote)
-                                        .foregroundColor(.gray)
-                                        .padding(.leading, 20)
-                                }
-
-                                sliderSetting(title: "Shift Vertical Position",
-                                              value: $windowSwitcherVerticalOffsetPercent,
-                                              range: -80.0 ... 80.0,
-                                              step: 1.0,
-                                              unit: "%",
-                                              formatter: {
-                                                  let f = NumberFormatter()
-                                                  f.minimumFractionDigits = 0
-                                                  f.maximumFractionDigits = 0
-                                                  f.positivePrefix = "+"
-                                                  return f
-                                              }())
-
-                                sliderSetting(title: "Shift Horizontal Position",
-                                              value: $windowSwitcherHorizontalOffsetPercent,
-                                              range: -80.0 ... 80.0,
-                                              step: 1.0,
-                                              unit: "%",
-                                              formatter: {
-                                                  let f = NumberFormatter()
-                                                  f.minimumFractionDigits = 0
-                                                  f.maximumFractionDigits = 0
-                                                  f.positivePrefix = "+"
-                                                  return f
-                                              }())
-
-                                Text("Adjusts the window switcher's position as a percentage of screen size. Setting both values to 0 centers the switcher (or aligns to top if anchored). Large values may cause the window to overflow off-screen.")
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
-                            }
-                        }
                     }
                 }
             }

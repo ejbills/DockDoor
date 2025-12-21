@@ -132,6 +132,7 @@ extension Defaults.Keys {
     static let windowSwitcherHorizontalOffsetPercent = Key<CGFloat>("windowSwitcherHorizontalOffsetPercent", default: 0)
     static let windowSwitcherVerticalOffsetPercent = Key<CGFloat>("windowSwitcherVerticalOffsetPercent", default: 0)
     static let windowSwitcherAnchorToTop = Key<Bool>("windowSwitcherAnchorToTop", default: false)
+    static let enableShiftWindowSwitcherPlacement = Key<Bool>("enableShiftWindowSwitcherPlacement", default: false)
     static let dockPreviewControlPosition = Key<WindowSwitcherControlPosition>("dockPreviewControlPosition", default: .topTrailing)
     static let pinnedScreenIdentifier = Key<String>("pinnedScreenIdentifier", default: NSScreen.main?.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? String ?? "")
 

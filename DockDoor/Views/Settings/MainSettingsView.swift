@@ -102,8 +102,6 @@ struct MainSettingsView: View {
     @Default(.limitSwitcherToFrontmostApp) var limitSwitcherToFrontmostApp
     @Default(.fullscreenAppBlacklist) var fullscreenAppBlacklist
     @Default(.groupAppInstancesInDock) var groupAppInstancesInDock
-    @Default(.windowSwitcherPlacementStrategy) var placementStrategy
-    @Default(.pinnedScreenIdentifier) var pinnedScreenIdentifier
 
     @State private var selectedPerformanceProfile: SettingsProfile = .default
     @State private var selectedPreviewQualityProfile: PreviewQualityProfile = .standard
@@ -141,6 +139,12 @@ struct MainSettingsView: View {
     @Default(.showAnimations) var showAnimations
     @Default(.raisedWindowLevel) var raisedWindowLevel
     @Default(.disableImagePreview) var disableImagePreview
+    @Default(.windowSwitcherPlacementStrategy) var placementStrategy
+    @Default(.pinnedScreenIdentifier) var pinnedScreenIdentifier
+    @Default(.windowSwitcherHorizontalOffsetPercent) var windowSwitcherHorizontalOffsetPercent
+    @Default(.windowSwitcherVerticalOffsetPercent) var windowSwitcherVerticalOffsetPercent
+    @Default(.windowSwitcherAnchorToTop) var windowSwitcherAnchorToTop
+    @Default(.enableShiftWindowSwitcherPlacement) var enableShiftWindowSwitcherPlacement
     @StateObject private var permissionsChecker = PermissionsChecker()
 
     private let advancedSettingsSectionID = "advancedSettingsSection"
@@ -498,49 +502,6 @@ struct MainSettingsView: View {
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                                 .padding(.leading, 20)
-
-                            Text("Window Switcher Placement")
-                            Picker("", selection: $placementStrategy) {
-                                ForEach(WindowSwitcherPlacementStrategy.allCases, id: \.self) {
-                                    Text($0.localizedName).tag($0)
-                                }
-                            }
-                            .pickerStyle(.menu)
-                            .padding(.leading, 20)
-                            .onChange(of: placementStrategy) { newStrategy in
-                                if newStrategy == .pinnedToScreen, pinnedScreenIdentifier.isEmpty {
-                                    pinnedScreenIdentifier = NSScreen.main?.uniqueIdentifier() ?? ""
-                                }
-                            }
-
-                            if placementStrategy == .pinnedToScreen {
-                                Picker("Pin to Screen", selection: $pinnedScreenIdentifier) {
-                                    ForEach(NSScreen.screens, id: \.self) { screen in
-                                        Text(screenDisplayName(screen)).tag(screen.uniqueIdentifier())
-                                    }
-                                    if !pinnedScreenIdentifier.isEmpty,
-                                       !NSScreen.screens.contains(where: { $0.uniqueIdentifier() == pinnedScreenIdentifier })
-                                    {
-                                        Text("Disconnected Display").tag(pinnedScreenIdentifier)
-                                    }
-                                }
-                                .pickerStyle(.menu)
-                                .padding(.leading, 20)
-
-                                if !pinnedScreenIdentifier.isEmpty,
-                                   !NSScreen.screens.contains(where: { $0.uniqueIdentifier() == pinnedScreenIdentifier })
-                                {
-                                    Text("This display is currently disconnected. The window switcher will appear on the main display until reconnected.")
-                                        .font(.caption)
-                                        .foregroundColor(.secondary)
-                                        .padding(.leading, 20)
-                                }
-                            }
-
-                            Text("Choose where the window switcher appears on screen.")
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                                .padding(.leading, 20)
                         }
                         .padding(.leading, 20)
                         .padding(.top, 4)
@@ -890,6 +851,103 @@ struct MainSettingsView: View {
                     }
                 }
             }
+            StyledGroupBox(label: "Window Switcher Placement") {
+                VStack(alignment: .leading, spacing: 10) {
+                    Picker("Screen Selection", selection: $placementStrategy) {
+                        ForEach(WindowSwitcherPlacementStrategy.allCases, id: \.self) {
+                            Text($0.localizedName).tag($0)
+                        }
+                    }
+                    .pickerStyle(.menu)
+                    .onChange(of: placementStrategy) { newStrategy in
+                        if newStrategy == .pinnedToScreen, pinnedScreenIdentifier.isEmpty {
+                            pinnedScreenIdentifier = NSScreen.main?.uniqueIdentifier() ?? ""
+                        }
+                    }
+
+                    if placementStrategy == .pinnedToScreen {
+                        Picker("Pin to Screen", selection: $pinnedScreenIdentifier) {
+                            ForEach(NSScreen.screens, id: \.self) { screen in
+                                Text(screenDisplayName(screen)).tag(screen.uniqueIdentifier())
+                            }
+                            if !pinnedScreenIdentifier.isEmpty,
+                               !NSScreen.screens.contains(where: { $0.uniqueIdentifier() == pinnedScreenIdentifier })
+                            {
+                                Text("Disconnected Display").tag(pinnedScreenIdentifier)
+                            }
+                        }
+                        .pickerStyle(.menu)
+                        .padding(.leading, 20)
+
+                        if !pinnedScreenIdentifier.isEmpty,
+                           !NSScreen.screens.contains(where: { $0.uniqueIdentifier() == pinnedScreenIdentifier })
+                        {
+                            Text("This display is currently disconnected. The window switcher will appear on the main display until reconnected.")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                                .padding(.leading, 20)
+                        }
+                    }
+
+                    Text("Choose where the window switcher appears on screen.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+
+                    Divider()
+
+                    VStack(alignment: .leading) {
+                        Toggle(isOn: $enableShiftWindowSwitcherPlacement) {
+                            Text("Shift Window Switcher Placement")
+                        }
+                        Text("Enable to adjust the window switcher's position using the sliders below.")
+                            .font(.footnote)
+                            .foregroundColor(.gray)
+                            .padding(.leading, 20)
+                    }
+
+                    if enableShiftWindowSwitcherPlacement {
+                        VStack(alignment: .leading) {
+                            Toggle(isOn: $windowSwitcherAnchorToTop) {
+                                Text("Anchor to top of screen")
+                            }
+                            Text("When enabled, the switcher's top edge stays fixed regardless of its size. When disabled, the switcher is centered vertically.")
+                                .font(.footnote)
+                                .foregroundColor(.gray)
+                                .padding(.leading, 20)
+                        }
+
+                        sliderSetting(title: "Shift Vertical Position",
+                                      value: $windowSwitcherVerticalOffsetPercent,
+                                      range: -80.0 ... 80.0,
+                                      step: 1.0,
+                                      unit: "%",
+                                      formatter: {
+                                          let f = NumberFormatter()
+                                          f.minimumFractionDigits = 0
+                                          f.maximumFractionDigits = 0
+                                          f.positivePrefix = "+"
+                                          return f
+                                      }())
+
+                        sliderSetting(title: "Shift Horizontal Position",
+                                      value: $windowSwitcherHorizontalOffsetPercent,
+                                      range: -80.0 ... 80.0,
+                                      step: 1.0,
+                                      unit: "%",
+                                      formatter: {
+                                          let f = NumberFormatter()
+                                          f.minimumFractionDigits = 0
+                                          f.maximumFractionDigits = 0
+                                          f.positivePrefix = "+"
+                                          return f
+                                      }())
+
+                        Text("Adjusts the window switcher's position as a percentage of screen size. Setting both values to 0 centers the switcher (or aligns to top if anchored). Large values may cause the window to overflow off-screen.")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                }
+            }
             StyledGroupBox(label: "Interaction & Behavior (Dock Previews)") {
                 VStack(alignment: .leading, spacing: 10) {
                     Toggle(isOn: $groupAppInstancesInDock) { Text("Group multiple app instances together") }
@@ -990,6 +1048,10 @@ struct MainSettingsView: View {
                 Defaults[.UserKeybind] = Defaults.Keys.UserKeybind.defaultValue
                 Defaults[.windowSwitcherPlacementStrategy] = Defaults.Keys.windowSwitcherPlacementStrategy.defaultValue
                 Defaults[.pinnedScreenIdentifier] = Defaults.Keys.pinnedScreenIdentifier.defaultValue
+                Defaults[.enableShiftWindowSwitcherPlacement] = Defaults.Keys.enableShiftWindowSwitcherPlacement.defaultValue
+                Defaults[.windowSwitcherHorizontalOffsetPercent] = Defaults.Keys.windowSwitcherHorizontalOffsetPercent.defaultValue
+                Defaults[.windowSwitcherVerticalOffsetPercent] = Defaults.Keys.windowSwitcherVerticalOffsetPercent.defaultValue
+                Defaults[.windowSwitcherAnchorToTop] = Defaults.Keys.windowSwitcherAnchorToTop.defaultValue
 
                 // Reset gesture settings
                 Defaults[.enableDockPreviewGestures] = Defaults.Keys.enableDockPreviewGestures.defaultValue
