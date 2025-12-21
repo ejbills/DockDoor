@@ -513,7 +513,7 @@
         "pt-PT" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : " - Inactivo"
+            "value" : " - Inativo"
           }
         },
         "ro" : {
@@ -1278,7 +1278,7 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%lld"
           }
         },
@@ -1469,7 +1469,7 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%lld px"
           }
         },
@@ -1659,8 +1659,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "%lld+ windows"
+            "state" : "translated",
+            "value" : "%lld+ janelas"
           }
         },
         "ro" : {
@@ -1851,7 +1851,7 @@
         "pt-PT" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "• Permite a melhoria de informações visuais no dock"
+            "value" : "• Permite a melhoria de informações visuais no Dock"
           }
         },
         "ro" : {
@@ -2042,7 +2042,7 @@
         "pt-PT" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "• Permite interação em tempo real com itens no dock"
+            "value" : "• Permite interação em tempo real com itens no Dock"
           }
         },
         "ro" : {
@@ -3756,7 +3756,7 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "⌘"
           }
         },
@@ -4139,7 +4139,7 @@
         "pt-PT" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "1. Selecione \"Command (⌘)\" como chave de inicialização."
+            "value" : "1. Selecione \"Command (⌘)\" como tecla de inicialização."
           }
         },
         "ro" : {
@@ -5858,7 +5858,7 @@
         "pt-PT" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "4. O Seu atalho será configurado como Comando+Aba."
+            "value" : "4. O Seu atalho será configurado como Command+Tab."
           }
         },
         "ro" : {
@@ -6047,7 +6047,7 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "5 FPS"
           }
         },
@@ -6237,7 +6237,7 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "10 FPS"
           }
         },
@@ -6427,7 +6427,7 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "15 FPS"
           }
         },
@@ -6617,7 +6617,7 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "24 FPS"
           }
         },
@@ -6807,7 +6807,7 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "30 FPS"
           }
         },
@@ -6997,7 +6997,7 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "60 FPS"
           }
         },
@@ -7187,7 +7187,7 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "120 FPS (ProMotion)"
           }
         },
@@ -7569,7 +7569,7 @@
         "pt-PT" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Permissões de Acessibilidade"
+            "value" : "Permissões de acessibilidade"
           }
         },
         "ro" : {
@@ -8330,8 +8330,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Activate/Hide (same as other apps)"
+            "state" : "translated",
+            "value" : "Ativar/Esconder (o mesmo que outras aplicações)"
           }
         },
         "ro" : {
@@ -8521,8 +8521,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Active App + Current Space"
+            "state" : "translated",
+            "value" : "Aplicação ativa + Espaço atual"
           }
         },
         "ro" : {
@@ -8711,8 +8711,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Active App Indicator"
+            "state" : "translated",
+            "value" : "Indicador de aplicação ativa"
           }
         },
         "ro" : {
@@ -8902,8 +8902,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Active App Only"
+            "state" : "translated",
+            "value" : "Apenas aplicação ativa"
           }
         },
         "ro" : {
@@ -9284,7 +9284,7 @@
         "pt-PT" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Adicione outros diretórios para procurar por aplicativos"
+            "value" : "Adicione outras diretorias para procurar por aplicações"
           }
         },
         "ro" : {
@@ -9664,7 +9664,7 @@
         "pt-PT" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Adicionar Aplicação"
+            "value" : "Adicionar aplicação"
           }
         },
         "ro" : {
@@ -10044,7 +10044,7 @@
         "pt-PT" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Adicionar Directoria"
+            "value" : "Adicionar diretoria"
           }
         },
         "ro" : {
@@ -10234,7 +10234,7 @@
         "pt-PT" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Adicionar Filtro"
+            "value" : "Adicionar filtro"
           }
         },
         "ro" : {
@@ -10425,7 +10425,7 @@
         "pt-PT" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ajuste isto se a pré-visualização estiver desalinhado com o dock"
+            "value" : "Ajuste isto se a pré-visualização estiver desalinhado com o Dock"
           }
         },
         "ro" : {
@@ -10615,8 +10615,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Adjust volume"
+            "state" : "translated",
+            "value" : "Ajustar volume"
           }
         },
         "ro" : {
@@ -10806,7 +10806,7 @@
         "pt-PT" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ajusta a responsividade que a aplicação sente e como se comporta ao longo da interação."
+            "value" : "Ajusta o quão responsiva a aplicação parece e como se comporta durante a interação."
           }
         },
         "ro" : {
@@ -10995,8 +10995,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Aero Shake"
+            "state" : "translated",
+            "value" : "Agitar para minimizar (Aero Shake)"
           }
         },
         "ro" : {
@@ -11187,7 +11187,7 @@
         "pt-PT" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Acção Aero Shake"
+            "value" : "Ação ao agitar para minimizar (Aero Shake)"
           }
         },
         "ro" : {
@@ -11757,8 +11757,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "All Windows"
+            "state" : "translated",
+            "value" : "Todas as janelas"
           }
         },
         "ro" : {
@@ -11947,8 +11947,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "All windows from the selected app get live preview"
+            "state" : "translated",
+            "value" : "Todas as janelas da aplicação selecionada com pré-visualização em tempo real"
           }
         },
         "ro" : {
@@ -12137,8 +12137,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "All windows get live preview (may cause lag with many windows)"
+            "state" : "translated",
+            "value" : "Todas as janelas com pré-visualização em tempo real (pode causar atrasos ou bloqueios com muitas janelas)"
           }
         },
         "ro" : {
@@ -12899,7 +12899,7 @@
         "pt-PT" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Alfabética pelo título"
+            "value" : "Alfabeticamente pelo título"
           }
         },
         "ro" : {
@@ -13088,8 +13088,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Alternate Shortcut"
+            "state" : "translated",
+            "value" : "Atalho alternativo"
           }
         },
         "ro" : {
@@ -13470,8 +13470,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Always use compact mode"
+            "state" : "translated",
+            "value" : "Utilizar sempre o modo compacto"
           }
         },
         "ro" : {
@@ -13853,7 +13853,7 @@
         "pt-PT" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sempre visível; Opacidade completa"
+            "value" : "Sempre visível; Opacidade total"
           }
         },
         "ro" : {
@@ -14232,8 +14232,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "An additional trigger key using the same modifier, invoking the switcher with a different filter mode."
+            "state" : "translated",
+            "value" : "Uma tecla de gatilho adicional que usa o mesmo modificador, invocando o selecionador com um modo de filtro diferente."
           }
         },
         "ro" : {
@@ -14612,8 +14612,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "App Header Style"
+            "state" : "translated",
+            "value" : "Estilo do cabeçalho das aplicações"
           }
         },
         "ro" : {
@@ -14802,8 +14802,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "App Name + Window Title"
+            "state" : "translated",
+            "value" : "Nome da aplicação + Título da janela"
           }
         },
         "ro" : {
@@ -14992,8 +14992,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "App Name Only"
+            "state" : "translated",
+            "value" : "Apenas nome da aplicação"
           }
         },
         "ro" : {
@@ -15184,7 +15184,7 @@
         "pt-PT" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Estilo do Nome do Aplicativo"
+            "value" : "Estilo do nome da aplicação"
           }
         },
         "ro" : {
@@ -17847,8 +17847,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Auto-scroll speed:"
+            "state" : "translated",
+            "value" : "Velocidade da rolagem automática:"
           }
         },
         "ro" : {
@@ -18609,8 +18609,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Automatically set height and offset"
+            "state" : "translated",
+            "value" : "Definir altura e deslocamento automaticamente"
           }
         },
         "ro" : {
@@ -18799,8 +18799,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Automatically set length"
+            "state" : "translated",
+            "value" : "Definir comprimento automaticamente"
           }
         },
         "ro" : {
@@ -20703,8 +20703,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Calendar"
+            "state" : "translated",
+            "value" : "Calendário"
           }
         },
         "ro" : {
@@ -21083,8 +21083,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Calendar Access Required"
+            "state" : "translated",
+            "value" : "Acesso ao calendário necessário"
           }
         },
         "ro" : {
@@ -22036,8 +22036,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Center Window"
+            "state" : "translated",
+            "value" : "Centrar janela"
           }
         },
         "ro" : {
@@ -22416,8 +22416,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Changes to permissions require an app restart to take effect."
+            "state" : "translated",
+            "value" : "Alterações às permissões requerem que a aplicação seja reiniciada."
           }
         },
         "ro" : {
@@ -23176,8 +23176,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Choose how windows are sorted in the preview."
+            "state" : "translated",
+            "value" : "Escolha como as janelas são ordenadas na pré-visualização."
           }
         },
         "ro" : {
@@ -23556,8 +23556,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Choose where the window switcher appears on screen."
+            "state" : "translated",
+            "value" : "Escolha onde o selecionador de janelas aparece no ecrã."
           }
         },
         "ro" : {
@@ -23746,8 +23746,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Choose whether vertical or horizontal scrolling controls the media widget."
+            "state" : "translated",
+            "value" : "Escolha se a rolagem horizontal ou vertical controla o widget de mídia."
           }
         },
         "ro" : {
@@ -23936,8 +23936,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Clear"
+            "state" : "translated",
+            "value" : "Limpar"
           }
         },
         "ro" : {
@@ -24889,8 +24889,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Close Window"
+            "state" : "translated",
+            "value" : "Fechar janela"
           }
         },
         "ro" : {
@@ -25840,7 +25840,7 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Cmd+Tab"
           }
         },
@@ -26030,8 +26030,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Cmd+Tab Layout"
+            "state" : "translated",
+            "value" : "Layout de Cmd+Tab"
           }
         },
         "ro" : {
@@ -26220,8 +26220,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Cmd+Tab Settings"
+            "state" : "translated",
+            "value" : "Definições de Cmd+Tab"
           }
         },
         "ro" : {
@@ -26410,8 +26410,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Cmd+Tab Toolbar"
+            "state" : "translated",
+            "value" : "Barra de ferramentas de Cmd+Tab"
           }
         },
         "ro" : {
@@ -45630,8 +45630,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Expand to full mode"
+            "state" : "translated",
+            "value" : "Expandir para modo inteiro"
           }
         },
         "ro" : {
@@ -45821,8 +45821,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "EXPERIMENTAL: Show preview above app labels"
+            "state" : "translated",
+            "value" : "EXPERIMENTAL: Mostrar pré-visualização acima dos títulos das aplicações"
           }
         },
         "ro" : {
@@ -46782,8 +46782,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Fill Bottom Half"
+            "state" : "translated",
+            "value" : "Preencher a metade inferior"
           }
         },
         "ro" : {
@@ -46973,8 +46973,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Fill Bottom Left"
+            "state" : "translated",
+            "value" : "Preencher o inferior esquerdo"
           }
         },
         "ro" : {
@@ -47164,8 +47164,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Fill Bottom Right"
+            "state" : "translated",
+            "value" : "Preencher o inferior direito"
           }
         },
         "ro" : {
@@ -47355,8 +47355,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Fill Left Half"
+            "state" : "translated",
+            "value" : "Preencher a metade esquerda"
           }
         },
         "ro" : {
@@ -47546,8 +47546,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Fill Right Half"
+            "state" : "translated",
+            "value" : "Preencher a metade direita"
           }
         },
         "ro" : {
@@ -47737,8 +47737,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Fill Top Half"
+            "state" : "translated",
+            "value" : "Preencher a metade superior"
           }
         },
         "ro" : {
@@ -47928,8 +47928,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Fill Top Left"
+            "state" : "translated",
+            "value" : "Preencher o superior esquerdo"
           }
         },
         "ro" : {
@@ -48119,8 +48119,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Fill Top Right"
+            "state" : "translated",
+            "value" : "Preencher o superior direito"
           }
         },
         "ro" : {
@@ -49071,8 +49071,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "For supported apps (Music, Spotify, Calendar), show interactive controls instead of window previews when hovering their Dock icons."
+            "state" : "translated",
+            "value" : "Para aplicações suportadas (Music, Spotify, Calendário), mostrar controlos interativos em vez de pré-visualizações ao pairar por cima dos seus ícones na Dock."
           }
         },
         "ro" : {
@@ -50784,8 +50784,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Gesture Sensitivity"
+            "state" : "translated",
+            "value" : "Sensibilidade dos gestos"
           }
         },
         "ro" : {
@@ -50974,8 +50974,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Gesture Settings"
+            "state" : "translated",
+            "value" : "Definições dos gestos"
           }
         },
         "ro" : {
@@ -51165,8 +51165,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Gestures & Keybinds"
+            "state" : "translated",
+            "value" : "Gestos e atalhos"
           }
         },
         "ro" : {
@@ -52307,8 +52307,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Group multiple app instances together"
+            "state" : "translated",
+            "value" : "Agrupar várias instâncias de uma aplicação"
           }
         },
         "ro" : {
@@ -54212,8 +54212,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hide All"
+            "state" : "translated",
+            "value" : "Esconder tudo"
           }
         },
         "ro" : {
@@ -54784,8 +54784,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hide App"
+            "state" : "translated",
+            "value" : "Esconder aplicação"
           }
         },
         "ro" : {
@@ -55355,8 +55355,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "High (960px)"
+            "state" : "translated",
+            "value" : "Alto (960px)"
           }
         },
         "ro" : {
@@ -56116,7 +56116,7 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Horizontal"
           }
         },
@@ -58402,8 +58402,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Immediately close"
+            "state" : "translated",
+            "value" : "Fechar imediatamente"
           }
         },
         "ro" : {
@@ -58784,8 +58784,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Improved performance (nominal)"
+            "state" : "translated",
+            "value" : "Melhor desempenho (nominal)"
           }
         },
         "ro" : {
@@ -59547,8 +59547,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Indicator Color"
+            "state" : "translated",
+            "value" : "Cor do indicativo"
           }
         },
         "ro" : {
@@ -59738,8 +59738,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Indicator Height"
+            "state" : "translated",
+            "value" : "Tamanho do indicativo"
           }
         },
         "ro" : {
@@ -59929,8 +59929,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Indicator Length"
+            "state" : "translated",
+            "value" : "Comprimento do indicativo"
           }
         },
         "ro" : {
@@ -60310,8 +60310,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Initializer"
+            "state" : "translated",
+            "value" : "Inicializador"
           }
         },
         "ro" : {
@@ -60691,8 +60691,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Interaction & Behavior (Dock Previews)"
+            "state" : "translated",
+            "value" : "Interação e comportamento (pré-visualizações do Dock)"
           }
         },
         "ro" : {
@@ -60881,8 +60881,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Item Size"
+            "state" : "translated",
+            "value" : "Tamanho dos items"
           }
         },
         "ro" : {
@@ -61261,8 +61261,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Keep Open"
+            "state" : "translated",
+            "value" : "Manter aberto"
           }
         },
         "ro" : {
@@ -63356,8 +63356,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Level 1 is exact match, level 5 is most lenient fuzzy matching."
+            "state" : "translated",
+            "value" : "Nível 1 para correspondência exata, nível 5 para a correspondência mais tolerante e difusa."
           }
         },
         "ro" : {
@@ -63926,8 +63926,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Loading applications..."
+            "state" : "translated",
+            "value" : "A carregar aplicações..."
           }
         },
         "ro" : {
@@ -64116,8 +64116,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Loading calendars..."
+            "state" : "translated",
+            "value" : "A carregar calendários..."
           }
         },
         "ro" : {
@@ -64876,8 +64876,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Low (480px)"
+            "state" : "translated",
+            "value" : "Baixo (480px)"
           }
         },
         "ro" : {
@@ -66399,8 +66399,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Maximize"
+            "state" : "translated",
+            "value" : "Maximizar"
           }
         },
         "ro" : {
@@ -67161,8 +67161,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Media"
+            "state" : "translated",
+            "value" : "Mídia"
           }
         },
         "ro" : {
@@ -67924,8 +67924,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Middle Click"
+            "state" : "translated",
+            "value" : "Clique no botão do meio"
           }
         },
         "ro" : {
@@ -69639,8 +69639,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Mode"
+            "state" : "translated",
+            "value" : "Modo"
           }
         },
         "ro" : {
@@ -92863,7 +92863,7 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Retina (1280px)"
           }
         },
@@ -99147,8 +99147,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Selected App's Windows"
+            "state" : "translated",
+            "value" : "Janelas da aplicação selecionada"
           }
         },
         "ro" : {
@@ -99337,8 +99337,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Selected Window Only"
+            "state" : "translated",
+            "value" : "Apenas janela selecionada"
           }
         },
         "ro" : {
@@ -101625,8 +101625,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show active window border"
+            "state" : "translated",
+            "value" : "Mostrar borda da janela ativa"
           }
         },
         "ro" : {
@@ -102005,8 +102005,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show All"
+            "state" : "translated",
+            "value" : "Mostrar tudo"
           }
         },
         "ro" : {
@@ -102195,8 +102195,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show App Header"
+            "state" : "translated",
+            "value" : "Mostrar cabeçalho da aplicação"
           }
         },
         "ro" : {
@@ -102385,8 +102385,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show App Icon Only"
+            "state" : "translated",
+            "value" : "Mostrar apenas ícone da aplicação"
           }
         },
         "ro" : {
@@ -102957,8 +102957,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show big controls when no valid windows"
+            "state" : "translated",
+            "value" : "Mostrar controles grandes quando não há janelas válidas"
           }
         },
         "ro" : {
@@ -103147,8 +103147,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show media/calendar controls on Dock hover"
+            "state" : "translated",
+            "value" : "Mostrar controlos de mídia/calendário ao pairar por cima do Dock"
           }
         },
         "ro" : {
@@ -104288,8 +104288,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Window Switcher instantly"
+            "state" : "translated",
+            "value" : "Mostrar selecionador de janelas imediatamente"
           }
         },
         "ro" : {
@@ -105623,8 +105623,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Shows last active window first, instead of current window."
+            "state" : "translated",
+            "value" : "Mostrar a última janela ativa primeiro em vez da janela atual."
           }
         },
         "ro" : {
@@ -105814,8 +105814,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Shows only windows from the current Space"
+            "state" : "translated",
+            "value" : "Mostrar apenas janelas do espaço atual"
           }
         },
         "ro" : {
@@ -106005,8 +106005,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Shows only windows from the frontmost app in the current Space"
+            "state" : "translated",
+            "value" : "Mostrar apenas janelas da aplicação no topo do espaço atual"
           }
         },
         "ro" : {
@@ -106196,8 +106196,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Shows only windows from the frontmost application"
+            "state" : "translated",
+            "value" : "Mostrar apenas janelas da aplicação no topo"
           }
         },
         "ro" : {
@@ -106770,8 +106770,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Skip (use list view only)"
+            "state" : "translated",
+            "value" : "Ignorar (usar apenas visualização em lista)"
           }
         },
         "ro" : {
@@ -106960,8 +106960,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Skip the small delay before the switcher appears. May feel snappier but can cause flickering if you quickly release the key."
+            "state" : "translated",
+            "value" : "Desativar o pequeno atraso até o selecionador de janelas aparecer. Pode parecer mais rápido, mas pode também fazer com que a janela pisque se largar a tecla rapidamente."
           }
         },
         "ro" : {
@@ -108294,8 +108294,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Space"
+            "state" : "translated",
+            "value" : "Espaço"
           }
         },
         "ro" : {
@@ -109054,8 +109054,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Standard (640px)"
+            "state" : "translated",
+            "value" : "Padrão (640px)"
           }
         },
         "ro" : {
@@ -110960,8 +110960,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Support development with a small donation"
+            "state" : "translated",
+            "value" : "Apoie o desenvolvimento com uma pequena doação"
           }
         },
         "ro" : {
@@ -112291,8 +112291,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Switcher Quality"
+            "state" : "translated",
+            "value" : "Qualidade do selecionador de janelas"
           }
         },
         "ro" : {
@@ -119714,8 +119714,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Updater not configured."
+            "state" : "translated",
+            "value" : "Atualizador não configurado."
           }
         },
         "ro" : {
@@ -120096,8 +120096,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use classic window ordering"
+            "state" : "translated",
+            "value" : "Utilizar ordenação de janelas clássica"
           }
         },
         "ro" : {
@@ -120477,8 +120477,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use Liquid Glass (macOS 26+)"
+            "state" : "translated",
+            "value" : "Utilizar Vidro Líquido (macOS 26+)"
           }
         },
         "ro" : {
@@ -120667,8 +120667,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use Monochrome Colors"
+            "state" : "translated",
+            "value" : "Utilizar cores monocromáticas"
           }
         },
         "ro" : {
@@ -120858,8 +120858,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use System Accent Color for Highlight"
+            "state" : "translated",
+            "value" : "Utilizar cor de destaque do sistema"
           }
         },
         "ro" : {
@@ -121240,8 +121240,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use Windows-style window ordering"
+            "state" : "translated",
+            "value" : "Utilizar ordenação de janelas no estilo do Windows"
           }
         },
         "ro" : {
@@ -121813,8 +121813,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Uses your default window switcher settings"
+            "state" : "translated",
+            "value" : "Utiliza as suas definições por defeito do selecionador de janelas"
           }
         },
         "ro" : {
@@ -122195,7 +122195,7 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Vertical"
           }
         },
@@ -122385,8 +122385,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "View"
+            "state" : "translated",
+            "value" : "Ver"
           }
         },
         "ro" : {
@@ -122575,8 +122575,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Visibility"
+            "state" : "translated",
+            "value" : "Visibilidade"
           }
         },
         "ro" : {
@@ -127340,7 +127340,7 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Widgets"
           }
         },
@@ -127530,8 +127530,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Background"
+            "state" : "translated",
+            "value" : "Fundo da janela"
           }
         },
         "ro" : {
@@ -128482,8 +128482,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Image Capture Quality"
+            "state" : "translated",
+            "value" : "Qualidade da imagem da captura da janela"
           }
         },
         "ro" : {
@@ -130006,8 +130006,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Selection Background Color"
+            "state" : "translated",
+            "value" : "Cor de fundo da seleção da janela"
           }
         },
         "ro" : {
@@ -130197,8 +130197,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Selection Background Opacity"
+            "state" : "translated",
+            "value" : "Opacidade do fundo da seleção da janela"
           }
         },
         "ro" : {
@@ -130578,8 +130578,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window sort order"
+            "state" : "translated",
+            "value" : "Ordenação das janelas"
           }
         },
         "ro" : {
@@ -131150,8 +131150,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Switcher Gestures"
+            "state" : "translated",
+            "value" : "Gestos do seleciondor de janelas"
           }
         },
         "ro" : {
@@ -131340,8 +131340,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Switcher is disabled. Enable it in General settings to use keyboard shortcuts."
+            "state" : "translated",
+            "value" : "O selecionador de janelas está desativado. Ative-o nas definições gerais para utilizar atalhos do teclado."
           }
         },
         "ro" : {
@@ -132292,8 +132292,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Switcher Shortcuts"
+            "state" : "translated",
+            "value" : "Atalhos do selecionador de janelas"
           }
         },
         "ro" : {
@@ -132482,8 +132482,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Threshold"
+            "state" : "translated",
+            "value" : "Limites das janelas"
           }
         },
         "ro" : {
@@ -132672,8 +132672,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Title"
+            "state" : "translated",
+            "value" : "Título da janela"
           }
         },
         "ro" : {
@@ -132863,8 +132863,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window title filters"
+            "state" : "translated",
+            "value" : "Filtros do título da janela"
           }
         },
         "ro" : {
@@ -133053,8 +133053,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Title Filters"
+            "state" : "translated",
+            "value" : "Filtros do título da janela"
           }
         },
         "ro" : {
@@ -133243,8 +133243,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Title Only"
+            "state" : "translated",
+            "value" : "Apenas o título da jenal"
           }
         },
         "ro" : {
@@ -133815,8 +133815,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Titles in Previews"
+            "state" : "translated",
+            "value" : "Mostrar os títulos das janelas nas pré-visualizações"
           }
         },
         "ro" : {
@@ -134197,8 +134197,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "X-Large"
+            "state" : "translated",
+            "value" : "Extra largo"
           }
         },
         "ro" : {
@@ -134388,8 +134388,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "X-Small"
+            "state" : "translated",
+            "value" : "Extra pequeno"
           }
         },
         "ro" : {
@@ -135150,8 +135150,8 @@
         },
         "pt-PT" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Your traffic lights will be set to disabled automatically."
+            "state" : "translated",
+            "value" : "Os seus semáforos serão desativados automaticamente."
           }
         },
         "ro" : {
