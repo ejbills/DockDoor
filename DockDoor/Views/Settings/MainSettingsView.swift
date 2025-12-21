@@ -103,12 +103,11 @@ struct MainSettingsView: View {
     @Default(.limitSwitcherToFrontmostApp) var limitSwitcherToFrontmostApp
     @Default(.fullscreenAppBlacklist) var fullscreenAppBlacklist
     @Default(.groupAppInstancesInDock) var groupAppInstancesInDock
-    @Default(.windowSwitcherPlacementStrategy) var placementStrategy
-    @Default(.pinnedScreenIdentifier) var pinnedScreenIdentifier
 
     @State private var selectedPerformanceProfile: SettingsProfile = .default
     @State private var selectedPreviewQualityProfile: PreviewQualityProfile = .standard
     @State private var showAdvancedSettings: Bool = false
+    @State private var showPlacementSettings: Bool = false
     @FocusState private var isKeepAliveFieldFocused: Bool
     @State private var lastKeepAliveDuration: Int = 5
 
@@ -142,6 +141,12 @@ struct MainSettingsView: View {
     @Default(.showAnimations) var showAnimations
     @Default(.raisedWindowLevel) var raisedWindowLevel
     @Default(.disableImagePreview) var disableImagePreview
+    @Default(.windowSwitcherPlacementStrategy) var placementStrategy
+    @Default(.pinnedScreenIdentifier) var pinnedScreenIdentifier
+    @Default(.windowSwitcherHorizontalOffsetPercent) var windowSwitcherHorizontalOffsetPercent
+    @Default(.windowSwitcherVerticalOffsetPercent) var windowSwitcherVerticalOffsetPercent
+    @Default(.windowSwitcherAnchorToTop) var windowSwitcherAnchorToTop
+    @Default(.enableShiftWindowSwitcherPlacement) var enableShiftWindowSwitcherPlacement
     @StateObject private var permissionsChecker = PermissionsChecker()
 
     private let advancedSettingsSectionID = "advancedSettingsSection"
@@ -512,48 +517,89 @@ struct MainSettingsView: View {
                                 .foregroundColor(.secondary)
                                 .padding(.leading, 20)
 
-                            Text("Window Switcher Placement")
-                            Picker("", selection: $placementStrategy) {
-                                ForEach(WindowSwitcherPlacementStrategy.allCases, id: \.self) {
-                                    Text($0.localizedName).tag($0)
-                                }
+                            Button {
+                                withAnimation(.snappy(duration: 0.1)) { showPlacementSettings.toggle() }
+                            } label: {
+                                Label("Placement", systemImage: showPlacementSettings ? "chevron.down" : "chevron.right")
                             }
-                            .pickerStyle(.menu)
-                            .padding(.leading, 20)
-                            .onChange(of: placementStrategy) { newStrategy in
-                                if newStrategy == .pinnedToScreen, pinnedScreenIdentifier.isEmpty {
-                                    pinnedScreenIdentifier = NSScreen.main?.uniqueIdentifier() ?? ""
-                                }
-                            }
+                            .buttonStyle(AccentButtonStyle(small: true))
 
-                            if placementStrategy == .pinnedToScreen {
-                                Picker("Pin to Screen", selection: $pinnedScreenIdentifier) {
-                                    ForEach(NSScreen.screens, id: \.self) { screen in
-                                        Text(screenDisplayName(screen)).tag(screen.uniqueIdentifier())
-                                    }
-                                    if !pinnedScreenIdentifier.isEmpty,
-                                       !NSScreen.screens.contains(where: { $0.uniqueIdentifier() == pinnedScreenIdentifier })
-                                    {
-                                        Text("Disconnected Display").tag(pinnedScreenIdentifier)
+                            if showPlacementSettings {
+                                Picker("Screen", selection: $placementStrategy) {
+                                    ForEach(WindowSwitcherPlacementStrategy.allCases, id: \.self) {
+                                        Text($0.localizedName).tag($0)
                                     }
                                 }
                                 .pickerStyle(.menu)
                                 .padding(.leading, 20)
+                                .onChange(of: placementStrategy) { newStrategy in
+                                    if newStrategy == .pinnedToScreen, pinnedScreenIdentifier.isEmpty {
+                                        pinnedScreenIdentifier = NSScreen.main?.uniqueIdentifier() ?? ""
+                                    }
+                                }
 
-                                if !pinnedScreenIdentifier.isEmpty,
-                                   !NSScreen.screens.contains(where: { $0.uniqueIdentifier() == pinnedScreenIdentifier })
-                                {
-                                    Text("This display is currently disconnected. The window switcher will appear on the main display until reconnected.")
+                                if placementStrategy == .pinnedToScreen {
+                                    Picker("Pin to", selection: $pinnedScreenIdentifier) {
+                                        ForEach(NSScreen.screens, id: \.self) { screen in
+                                            Text(screenDisplayName(screen)).tag(screen.uniqueIdentifier())
+                                        }
+                                        if !pinnedScreenIdentifier.isEmpty,
+                                           !NSScreen.screens.contains(where: { $0.uniqueIdentifier() == pinnedScreenIdentifier })
+                                        {
+                                            Text("Disconnected Display").tag(pinnedScreenIdentifier)
+                                        }
+                                    }
+                                    .pickerStyle(.menu)
+                                    .padding(.leading, 40)
+
+                                    if !pinnedScreenIdentifier.isEmpty,
+                                       !NSScreen.screens.contains(where: { $0.uniqueIdentifier() == pinnedScreenIdentifier })
+                                    {
+                                        Text("This display is currently disconnected.")
+                                            .font(.caption)
+                                            .foregroundColor(.secondary)
+                                            .padding(.leading, 40)
+                                    }
+                                }
+
+                                Toggle(isOn: $enableShiftWindowSwitcherPlacement) {
+                                    Text("Offset position")
+                                }
+                                .padding(.leading, 20)
+
+                                if enableShiftWindowSwitcherPlacement {
+                                    Toggle(isOn: $windowSwitcherAnchorToTop) {
+                                        Text("Anchor to top")
+                                    }
+                                    .padding(.leading, 40)
+                                    Text("Top edge stays fixed regardless of switcher size.")
                                         .font(.caption)
                                         .foregroundColor(.secondary)
-                                        .padding(.leading, 20)
+                                        .padding(.leading, 60)
+
+                                    HStack {
+                                        Image(systemName: "arrow.up")
+                                            .foregroundColor(.secondary)
+                                            .frame(width: 16)
+                                        Slider(value: $windowSwitcherVerticalOffsetPercent, in: -80 ... 80)
+                                        Text("\(Int(windowSwitcherVerticalOffsetPercent))%")
+                                            .monospacedDigit()
+                                            .frame(width: 45, alignment: .trailing)
+                                    }
+                                    .padding(.leading, 40)
+
+                                    HStack {
+                                        Image(systemName: "arrow.right")
+                                            .foregroundColor(.secondary)
+                                            .frame(width: 16)
+                                        Slider(value: $windowSwitcherHorizontalOffsetPercent, in: -80 ... 80)
+                                        Text("\(Int(windowSwitcherHorizontalOffsetPercent))%")
+                                            .monospacedDigit()
+                                            .frame(width: 45, alignment: .trailing)
+                                    }
+                                    .padding(.leading, 40)
                                 }
                             }
-
-                            Text("Choose where the window switcher appears on screen.")
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                                .padding(.leading, 20)
                         }
                         .padding(.leading, 20)
                         .padding(.top, 4)
@@ -1003,6 +1049,10 @@ struct MainSettingsView: View {
                 Defaults[.UserKeybind] = Defaults.Keys.UserKeybind.defaultValue
                 Defaults[.windowSwitcherPlacementStrategy] = Defaults.Keys.windowSwitcherPlacementStrategy.defaultValue
                 Defaults[.pinnedScreenIdentifier] = Defaults.Keys.pinnedScreenIdentifier.defaultValue
+                Defaults[.enableShiftWindowSwitcherPlacement] = Defaults.Keys.enableShiftWindowSwitcherPlacement.defaultValue
+                Defaults[.windowSwitcherHorizontalOffsetPercent] = Defaults.Keys.windowSwitcherHorizontalOffsetPercent.defaultValue
+                Defaults[.windowSwitcherVerticalOffsetPercent] = Defaults.Keys.windowSwitcherVerticalOffsetPercent.defaultValue
+                Defaults[.windowSwitcherAnchorToTop] = Defaults.Keys.windowSwitcherAnchorToTop.defaultValue
 
                 // Reset gesture settings
                 Defaults[.enableDockPreviewGestures] = Defaults.Keys.enableDockPreviewGestures.defaultValue

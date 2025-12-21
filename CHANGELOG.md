@@ -52,7 +52,7 @@
 
 ## 🔧 Improvements & Stability
 - Improved window switcher performance
-- Enhanced live preview quality
+- Enhanced live preview quality (thanks [@suatkocar](https://github.com/suatkocar)) 
   - HDR support
   - Display P3 colors
 - Better dock click behavior
