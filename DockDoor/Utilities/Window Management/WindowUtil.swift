@@ -336,6 +336,11 @@ extension WindowUtil {
     }
 
     static func captureWindowImage(windowID: CGWindowID, pid: pid_t, windowTitle: String? = nil, forceRefresh: Bool = false) async throws -> CGImage {
+        // CGSHWCaptureWindowList requires screen recording permission
+        guard hasScreenRecordingPermission() else {
+            throw captureError
+        }
+
         // Check cache first if not forcing refresh
         if !forceRefresh {
             if let cachedWindow = desktopSpaceWindowCacheManager.readCache(pid: pid)
@@ -668,36 +673,53 @@ extension WindowUtil {
     }
 
     static func updateAllWindowsInCurrentSpace() async {
-        guard hasScreenRecordingPermission() else { return }
+        var processedPIDs = Set<pid_t>()
 
-        do {
-            let content = try await SCShareableContent.excludingDesktopWindows(true, onScreenWindowsOnly: false)
-            var processedPIDs = Set<pid_t>()
-            let group = LimitedTaskGroup<Void>(maxConcurrentTasks: 4)
+        // SCK block - only runs if permission is granted
+        if hasScreenRecordingPermission() {
+            do {
+                let content = try await SCShareableContent.excludingDesktopWindows(true, onScreenWindowsOnly: false)
+                let group = LimitedTaskGroup<Void>(maxConcurrentTasks: 4)
 
-            for window in content.windows {
-                guard let scApp = window.owningApplication,
-                      !filteredBundleIdentifiers.contains(scApp.bundleIdentifier)
-                else { continue }
+                for window in content.windows {
+                    guard let scApp = window.owningApplication,
+                          !filteredBundleIdentifiers.contains(scApp.bundleIdentifier)
+                    else { continue }
 
-                if let nsApp = NSRunningApplication(processIdentifier: scApp.processID) {
-                    processedPIDs.insert(nsApp.processIdentifier)
-                    await group.addTask {
-                        try? await captureAndCacheWindowInfo(window: window, app: nsApp)
+                    if let nsApp = NSRunningApplication(processIdentifier: scApp.processID) {
+                        processedPIDs.insert(nsApp.processIdentifier)
+                        await group.addTask {
+                            try? await captureAndCacheWindowInfo(window: window, app: nsApp)
+                        }
                     }
                 }
-            }
-            _ = try await group.waitForAll()
+                _ = try await group.waitForAll()
 
-            // After processing windows, purify the cache for each app that had windows in the current space
-            for pid in processedPIDs {
-                _ = await purifyAppCache(with: pid, removeAll: false)
-                // Refresh images for AX-fallback windows (not covered by SCK)
-                await refreshAXFallbackWindowImages(for: pid)
+            } catch {
+                print("Error updating windows: \(error)")
             }
+        }
 
-        } catch {
-            print("Error updating windows: \(error)")
+        // AX fallback - runs unconditionally
+        // Discover windows for all running apps with regular dock presence
+        let runningApps = NSWorkspace.shared.runningApplications.filter {
+            $0.activationPolicy == .regular &&
+                !filteredBundleIdentifiers.contains($0.bundleIdentifier ?? "") &&
+                !isAppFiltered($0)
+        }
+
+        for app in runningApps {
+            let pid = app.processIdentifier
+            // Discover windows via AX (works without screen recording permission)
+            await discoverNewWindowsViaAXFallback(app: app)
+            processedPIDs.insert(pid)
+        }
+
+        // Purify cache and refresh images for all processed apps
+        for pid in processedPIDs {
+            _ = await purifyAppCache(with: pid, removeAll: false)
+            // Refresh images for AX-fallback windows
+            await refreshAXFallbackWindowImages(for: pid)
         }
     }
 
