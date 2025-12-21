@@ -285,10 +285,21 @@ final class SharedPreviewWindowCoordinator: NSPanel {
     }
 
     private func centerWindowOnScreen(size: CGSize, screen: NSScreen) -> CGPoint {
-        CGPoint(
-            x: screen.frame.midX - (size.width / 2),
-            y: screen.frame.midY - (size.height / 2)
-        )
+        let switcherOffsetConfigured = Defaults[.enableShiftWindowSwitcherPlacement]
+
+        let horizontalOffset = switcherOffsetConfigured ? screen.frame.width * (Defaults[.windowSwitcherHorizontalOffsetPercent] / 100.0) : 0
+        let verticalOffset = switcherOffsetConfigured ? screen.frame.height * (Defaults[.windowSwitcherVerticalOffsetPercent] / 100.0) : 0
+
+        let xPosition = screen.frame.midX - (size.width / 2) + horizontalOffset
+        let yPosition: CGFloat = if switcherOffsetConfigured, Defaults[.windowSwitcherAnchorToTop] {
+            // Anchor from top: start at top of screen and apply offset downward (negative offset moves down)
+            screen.frame.maxY - size.height + verticalOffset
+        } else {
+            // Center vertically with offset
+            screen.frame.midY - (size.height / 2) + verticalOffset
+        }
+
+        return CGPoint(x: xPosition, y: yPosition)
     }
 
     private func calculateWindowPosition(mouseLocation: CGPoint?, windowSize: CGSize, screen: NSScreen, dockItemElement: AXUIElement, dockPositionOverride: DockPosition? = nil) -> CGPoint {

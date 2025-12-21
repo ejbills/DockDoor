@@ -1529,6 +1529,9 @@
         }
       }
     },
+    "%lld%%" : {
+
+    },
     "%lld+ windows" : {
       "localizations" : {
         "af" : {
@@ -14292,6 +14295,9 @@
         }
       }
     },
+    "Anchor to top" : {
+
+    },
     "Animation speed" : {
       "localizations" : {
         "af" : {
@@ -23427,6 +23433,7 @@
       }
     },
     "Choose where the window switcher appears on screen." : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -75027,6 +75034,9 @@
         }
       }
     },
+    "Offset position" : {
+
+    },
     "OK" : {
       "localizations" : {
         "af" : {
@@ -79217,7 +79227,11 @@
         }
       }
     },
+    "Pin to" : {
+
+    },
     "Pin to Screen" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -79977,6 +79991,9 @@
           }
         }
       }
+    },
+    "Placement" : {
+
     },
     "Placement Strategy" : {
       "extractionState" : "stale",
@@ -93875,7 +93892,6 @@
       }
     },
     "Screen" : {
-      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -113683,7 +113699,11 @@
         }
       }
     },
+    "This display is currently disconnected." : {
+
+    },
     "This display is currently disconnected. The window switcher will appear on the main display until reconnected." : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -115586,6 +115606,9 @@
           }
         }
       }
+    },
+    "Top edge stays fixed regardless of switcher size." : {
+
     },
     "Top Left" : {
       "comment" : "Preview window title position option\nTraffic light buttons position option",
@@ -131592,6 +131615,7 @@
       }
     },
     "Window Switcher Placement" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
