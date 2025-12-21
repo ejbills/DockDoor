@@ -2,83 +2,19 @@ import AppKit
 import Defaults
 import SwiftUI
 
-struct InstalledApp: Identifiable {
-    let id: String
-    let name: String
-    let icon: NSImage
-
-    var bundleIdentifier: String { id }
-}
-
 struct FiltersSettingsView: View {
     @Default(.appNameFilters) var appNameFilters
     @Default(.windowTitleFilters) var windowTitleFilters
     @Default(.customAppDirectories) var customAppDirectories
-    @Default(.groupedAppsInSwitcher) var groupedAppsInSwitcher
 
     @State private var showingAddFilterSheet = false
-    @State private var newFilter = FilterEntry(text: "")
+    @State private var showingAppPickerSheet = false
     @State private var showingDirectoryPicker = false
-    @State private var installedApps: [InstalledApp] = []
-    @State private var isLoadingApps = true
+    @State private var newFilter = FilterEntry(text: "")
 
     struct FilterEntry: Identifiable, Hashable {
         let id = UUID()
         var text: String
-    }
-
-    private func loadInstalledApps() async -> [InstalledApp] {
-        await Task.detached(priority: .userInitiated) {
-            var apps: [InstalledApp] = []
-            let workspace = NSWorkspace.shared
-            let fileManager = FileManager.default
-
-            let defaultLocations = [
-                "/Applications",
-                "/System/Applications",
-                "/System/Applications/Utilities",
-                "~/Applications",
-            ].map { NSString(string: $0).expandingTildeInPath }
-
-            let allLocations = Set(defaultLocations + Defaults[.customAppDirectories])
-
-            for directory in allLocations {
-                guard let enumerator = fileManager.enumerator(
-                    at: URL(fileURLWithPath: directory),
-                    includingPropertiesForKeys: [.isApplicationKey],
-                    options: [.skipsHiddenFiles, .skipsPackageDescendants]
-                ) else { continue }
-
-                let urls = enumerator.allObjects.compactMap { $0 as? URL }
-                for fileURL in urls {
-                    guard fileURL.pathExtension == "app" else { continue }
-
-                    guard let bundle = Bundle(url: fileURL),
-                          let bundleId = bundle.bundleIdentifier,
-                          let name = bundle.infoDictionary?["CFBundleName"] as? String ?? bundle.infoDictionary?["CFBundleDisplayName"] as? String
-                    else { continue }
-
-                    apps.append(InstalledApp(id: bundleId, name: name, icon: workspace.icon(forFile: fileURL.path)))
-                }
-            }
-
-            // Add Finder explicitly
-            apps.append(InstalledApp(
-                id: "com.apple.finder",
-                name: "Finder",
-                icon: workspace.icon(forFile: "/System/Library/CoreServices/Finder.app")
-            ))
-
-            // Remove duplicates and sort
-            var seenBundleIds = Set<String>()
-            return apps.filter { app in
-                if seenBundleIds.contains(app.id) {
-                    return false
-                }
-                seenBundleIds.insert(app.id)
-                return true
-            }.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }
-        }.value
     }
 
     var body: some View {
@@ -166,139 +102,61 @@ struct FiltersSettingsView: View {
                 // App Filters Section
                 StyledGroupBox(label: "Application Filters") {
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("Select which applications DockDoor should show previews for. Unchecked apps will be ignored.")
+                        Text("Hide specific applications from DockDoor previews.")
                             .font(.footnote)
                             .foregroundColor(.secondary)
                             .padding(.bottom, 4)
 
-                        ScrollView {
-                            VStack(alignment: .leading, spacing: 4) {
-                                if isLoadingApps {
-                                    HStack {
-                                        Spacer()
-                                        ProgressView()
-                                            .scaleEffect(0.8)
-                                        Text("Loading applications...")
-                                            .foregroundColor(.secondary)
-                                        Spacer()
-                                    }
-                                    .padding()
-                                } else if installedApps.isEmpty {
-                                    Text("No applications found.")
-                                        .foregroundColor(.secondary)
-                                        .padding()
-                                } else {
-                                    ForEach(installedApps) { app in
-                                        HStack(spacing: 8) {
-                                            Toggle(isOn: Binding(
-                                                get: {
-                                                    // Check both bundle ID and legacy app name
-                                                    !appNameFilters.contains(app.bundleIdentifier) &&
-                                                        !appNameFilters.contains(where: { $0.caseInsensitiveCompare(app.name) == .orderedSame })
-                                                },
-                                                set: { isEnabled in
-                                                    if isEnabled {
-                                                        // Remove both bundle ID and legacy app name
-                                                        appNameFilters.removeAll { $0 == app.bundleIdentifier }
-                                                        appNameFilters.removeAll { $0.caseInsensitiveCompare(app.name) == .orderedSame }
-                                                    } else {
-                                                        if !appNameFilters.contains(app.bundleIdentifier) {
-                                                            appNameFilters.append(app.bundleIdentifier)
-                                                        }
-                                                    }
-                                                }
-                                            )) { EmptyView() }
-
-                                            Image(nsImage: app.icon)
-                                                .resizable()
-                                                .frame(width: 16, height: 16)
-
-                                            Text(app.name)
+                        if appNameFilters.isEmpty {
+                            Text("No apps hidden")
+                                .foregroundColor(.secondary)
+                                .padding(.vertical, 8)
+                        } else {
+                            ScrollView {
+                                VStack(alignment: .leading, spacing: 4) {
+                                    ForEach(appNameFilters, id: \.self) { filter in
+                                        HStack {
+                                            Text(filter)
                                                 .lineLimit(1)
 
                                             Spacer()
+
+                                            Button(action: {
+                                                appNameFilters.removeAll { $0 == filter }
+                                            }) {
+                                                Image(systemName: "xmark.circle.fill")
+                                                    .foregroundColor(.secondary)
+                                            }
+                                            .buttonStyle(.plain)
                                         }
                                         .padding(.vertical, 2)
                                     }
                                 }
+                                .padding(8)
                             }
-                            .padding(8)
+                            .frame(maxHeight: 120)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 8)
+                                    .stroke(Color.gray.opacity(0.25), lineWidth: 1)
+                            )
                         }
-                        .frame(height: 200)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 8)
-                                .stroke(Color.gray.opacity(0.25), lineWidth: 1)
-                        )
-                    }
-                }
-                .task(id: customAppDirectories) {
-                    isLoadingApps = true
-                    installedApps = await loadInstalledApps()
-                    isLoadingApps = false
-                }
 
-                // Group Windows by App Section
-                StyledGroupBox(label: "Group Windows by App") {
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("Selected apps will show as a single entry in the window switcher (using the most recently used window). All windows are shown when using the active app only mode.")
-                            .font(.footnote)
-                            .foregroundColor(.secondary)
-                            .padding(.bottom, 4)
+                        HStack {
+                            Button("Select Apps to Hide...") {
+                                showingAppPickerSheet = true
+                            }
+                            .buttonStyle(AccentButtonStyle(color: .accentColor))
 
-                        ScrollView {
-                            VStack(alignment: .leading, spacing: 4) {
-                                if isLoadingApps {
-                                    HStack {
-                                        Spacer()
-                                        ProgressView()
-                                            .scaleEffect(0.8)
-                                        Text("Loading applications...")
-                                            .foregroundColor(.secondary)
-                                        Spacer()
-                                    }
-                                    .padding()
-                                } else if installedApps.isEmpty {
-                                    Text("No applications found.")
-                                        .foregroundColor(.secondary)
-                                        .padding()
-                                } else {
-                                    ForEach(installedApps) { app in
-                                        HStack(spacing: 8) {
-                                            Toggle(isOn: Binding(
-                                                get: {
-                                                    groupedAppsInSwitcher.contains(app.bundleIdentifier)
-                                                },
-                                                set: { isEnabled in
-                                                    if isEnabled {
-                                                        if !groupedAppsInSwitcher.contains(app.bundleIdentifier) {
-                                                            groupedAppsInSwitcher.append(app.bundleIdentifier)
-                                                        }
-                                                    } else {
-                                                        groupedAppsInSwitcher.removeAll { $0 == app.bundleIdentifier }
-                                                    }
-                                                }
-                                            )) { EmptyView() }
+                            Spacer()
 
-                                            Image(nsImage: app.icon)
-                                                .resizable()
-                                                .frame(width: 16, height: 16)
-
-                                            Text(app.name)
-                                                .lineLimit(1)
-
-                                            Spacer()
-                                        }
-                                        .padding(.vertical, 2)
-                                    }
+                            if !appNameFilters.isEmpty {
+                                DangerButton(action: {
+                                    appNameFilters.removeAll()
+                                }) {
+                                    Text("Clear All")
                                 }
                             }
-                            .padding(8)
                         }
-                        .frame(height: 200)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 8)
-                                .stroke(Color.gray.opacity(0.25), lineWidth: 1)
-                        )
                     }
                 }
 
@@ -376,6 +234,14 @@ struct FiltersSettingsView: View {
                             windowTitleFilters.append(filter.text)
                         }
                     }
+                )
+            }
+            .sheet(isPresented: $showingAppPickerSheet) {
+                AppPickerSheet(
+                    selectedApps: $appNameFilters,
+                    title: "Application Filters",
+                    description: "Uncheck apps to hide them from DockDoor previews.",
+                    selectionMode: .exclude
                 )
             }
         }
