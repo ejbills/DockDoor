@@ -164,6 +164,7 @@ final class WindowLiveCapture: ObservableObject {
     func startCapture() async {
         stopGeneration += 1
         guard stream == nil else { return }
+        guard WindowUtil.hasScreenRecordingPermission() else { return }
 
         do {
             let content = try await SCShareableContent.excludingDesktopWindows(true, onScreenWindowsOnly: false)

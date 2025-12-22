@@ -41,6 +41,7 @@ class WindowManipulationObservers {
             AXObserverRemoveNotification(observer, appElement, kAXFocusedWindowChangedNotification as CFString)
             AXObserverRemoveNotification(observer, appElement, kAXWindowResizedNotification as CFString)
             AXObserverRemoveNotification(observer, appElement, kAXWindowMovedNotification as CFString)
+            AXObserverRemoveNotification(observer, appElement, kAXTitleChangedNotification as CFString)
         }
         observers.removeAll()
         if activeWindowManipulationObserversInstance === self {
@@ -148,6 +149,7 @@ class WindowManipulationObservers {
             AXObserverAddNotification(observer, appElement, kAXMainWindowChangedNotification as CFString, UnsafeMutableRawPointer(bitPattern: Int(pid)))
             AXObserverAddNotification(observer, appElement, kAXFocusedUIElementChangedNotification as CFString, UnsafeMutableRawPointer(bitPattern: Int(pid)))
             AXObserverAddNotification(observer, appElement, kAXFocusedWindowChangedNotification as CFString, UnsafeMutableRawPointer(bitPattern: Int(pid)))
+            AXObserverAddNotification(observer, appElement, kAXTitleChangedNotification as CFString, UnsafeMutableRawPointer(bitPattern: Int(pid)))
 
             CFRunLoopAddSource(CFRunLoopGetMain(), AXObserverGetRunLoopSource(observer), .defaultMode)
 
@@ -175,6 +177,7 @@ class WindowManipulationObservers {
         AXObserverRemoveNotification(observer, appElement, kAXFocusedWindowChangedNotification as CFString)
         AXObserverRemoveNotification(observer, appElement, kAXWindowResizedNotification as CFString)
         AXObserverRemoveNotification(observer, appElement, kAXWindowMovedNotification as CFString)
+        AXObserverRemoveNotification(observer, appElement, kAXTitleChangedNotification as CFString)
 
         observers.removeValue(forKey: pid)
     }
@@ -244,6 +247,18 @@ class WindowManipulationObservers {
             }
         case kAXWindowCreatedNotification:
             handleNewWindow(for: pid)
+        case kAXTitleChangedNotification:
+            // Only process if the element is actually a window
+            guard let role = try? element.role(), role == kAXWindowRole as String else { return }
+            let windowID = try? element.cgWindowId()
+            handleWindowEvent(element: element, app: app, notification: notificationName, validate: false) { [weak self] windowSet in
+                guard let self else { return }
+                update(windowSet: &windowSet, matching: windowID, element: element) { window in
+                    if let freshTitle = try? window.axElement.title(), !freshTitle.isEmpty {
+                        window.windowName = freshTitle
+                    }
+                }
+            }
         default:
             break
         }

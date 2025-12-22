@@ -115,6 +115,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let menu = NSMenu()
         menu.addItem(NSMenuItem(title: String(localized: "Open Settings"), action: #selector(openSettingsWindow(_:)), keyEquivalent: ""))
         menu.addItem(NSMenuItem.separator())
+        menu.addItem(NSMenuItem(title: String(localized: "Restart DockDoor"), action: #selector(restartAppWrapper), keyEquivalent: ""))
         menu.addItem(NSMenuItem(title: String(localized: "Quit DockDoor"), action: #selector(quitAppWrapper), keyEquivalent: "q"))
         button.menu = menu
     }
@@ -133,6 +134,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     @objc private func quitAppWrapper() {
         quitApp()
+    }
+
+    @objc private func restartAppWrapper() {
+        restartApp()
     }
 
     @objc func openSettingsWindow(_ sender: Any?) {

@@ -218,6 +218,10 @@ enum WindowAction: String, Hashable, CaseIterable, Defaults.Serializable {
 enum WindowUtil {
     private static let desktopSpaceWindowCacheManager = SpaceWindowCacheManager()
 
+    static func hasScreenRecordingPermission() -> Bool {
+        PermissionsChecker.hasScreenRecordingPermission()
+    }
+
     static func isAppFiltered(_ app: NSRunningApplication) -> Bool {
         let filters = Defaults[.appNameFilters]
         guard !filters.isEmpty else { return false }
@@ -332,6 +336,11 @@ extension WindowUtil {
     }
 
     static func captureWindowImage(windowID: CGWindowID, pid: pid_t, windowTitle: String? = nil, forceRefresh: Bool = false) async throws -> CGImage {
+        // CGSHWCaptureWindowList requires screen recording permission
+        guard hasScreenRecordingPermission() else {
+            throw captureError
+        }
+
         // Check cache first if not forcing refresh
         if !forceRefresh {
             if let cachedWindow = desktopSpaceWindowCacheManager.readCache(pid: pid)
@@ -509,8 +518,8 @@ extension WindowUtil {
     static func filterWindowsByCurrentSpace(_ windows: [WindowInfo]) async -> [WindowInfo] {
         let activeSpaceIDs = currentActiveSpaceIDs()
 
-        // Use SCShareableContent to get on-screen window IDs
-        let onScreenWindowIDs: Set<CGWindowID> = if let content = try? await SCShareableContent.excludingDesktopWindows(true, onScreenWindowsOnly: true) {
+        // Use SCShareableContent to get on-screen window IDs (only if permission is granted)
+        let onScreenWindowIDs: Set<CGWindowID> = if hasScreenRecordingPermission(), let content = try? await SCShareableContent.excludingDesktopWindows(true, onScreenWindowsOnly: true) {
             Set(content.windows.map(\.windowID))
         } else {
             []
@@ -549,8 +558,8 @@ extension WindowUtil {
 
         var sckWindowIDs = Set<CGWindowID>()
 
-        // Skip SCK if user has disabled image previews (compact mode only)
-        if !Defaults[.disableImagePreview] {
+        // Skip SCK if user has disabled image previews (compact mode only) or screen recording permission not granted
+        if !Defaults[.disableImagePreview], hasScreenRecordingPermission() {
             do {
                 // Fetch SCK windows (visible windows only)
                 let content = try await SCShareableContent.excludingDesktopWindows(true, onScreenWindowsOnly: true)
@@ -627,25 +636,27 @@ extension WindowUtil {
     }
 
     static func updateNewWindowsForApp(_ app: NSRunningApplication) async {
-        do {
-            let content = try await SCShareableContent.excludingDesktopWindows(true, onScreenWindowsOnly: false)
-            let group = LimitedTaskGroup<Void>(maxConcurrentTasks: 4)
+        if hasScreenRecordingPermission() {
+            do {
+                let content = try await SCShareableContent.excludingDesktopWindows(true, onScreenWindowsOnly: false)
+                let group = LimitedTaskGroup<Void>(maxConcurrentTasks: 4)
 
-            let appWindows = content.windows.filter { window in
-                guard let scApp = window.owningApplication else { return false }
-                return scApp.processID == app.processIdentifier
-            }
-
-            for window in appWindows {
-                await group.addTask {
-                    try? await captureAndCacheWindowInfo(window: window, app: app)
+                let appWindows = content.windows.filter { window in
+                    guard let scApp = window.owningApplication else { return false }
+                    return scApp.processID == app.processIdentifier
                 }
+
+                for window in appWindows {
+                    await group.addTask {
+                        try? await captureAndCacheWindowInfo(window: window, app: app)
+                    }
+                }
+
+                _ = try await group.waitForAll()
+
+            } catch {
+                print("Error updating windows for \(app.localizedName ?? "unknown app"): \(error)")
             }
-
-            _ = try await group.waitForAll()
-
-        } catch {
-            print("Error updating windows for \(app.localizedName ?? "unknown app"): \(error)")
         }
 
         // AX fallback: discover windows that SCK didn't report (e.g., some Adobe apps)
@@ -662,34 +673,53 @@ extension WindowUtil {
     }
 
     static func updateAllWindowsInCurrentSpace() async {
-        do {
-            let content = try await SCShareableContent.excludingDesktopWindows(true, onScreenWindowsOnly: false)
-            var processedPIDs = Set<pid_t>()
-            let group = LimitedTaskGroup<Void>(maxConcurrentTasks: 4)
+        var processedPIDs = Set<pid_t>()
 
-            for window in content.windows {
-                guard let scApp = window.owningApplication,
-                      !filteredBundleIdentifiers.contains(scApp.bundleIdentifier)
-                else { continue }
+        // SCK block - only runs if permission is granted
+        if hasScreenRecordingPermission() {
+            do {
+                let content = try await SCShareableContent.excludingDesktopWindows(true, onScreenWindowsOnly: false)
+                let group = LimitedTaskGroup<Void>(maxConcurrentTasks: 4)
 
-                if let nsApp = NSRunningApplication(processIdentifier: scApp.processID) {
-                    processedPIDs.insert(nsApp.processIdentifier)
-                    await group.addTask {
-                        try? await captureAndCacheWindowInfo(window: window, app: nsApp)
+                for window in content.windows {
+                    guard let scApp = window.owningApplication,
+                          !filteredBundleIdentifiers.contains(scApp.bundleIdentifier)
+                    else { continue }
+
+                    if let nsApp = NSRunningApplication(processIdentifier: scApp.processID) {
+                        processedPIDs.insert(nsApp.processIdentifier)
+                        await group.addTask {
+                            try? await captureAndCacheWindowInfo(window: window, app: nsApp)
+                        }
                     }
                 }
-            }
-            _ = try await group.waitForAll()
+                _ = try await group.waitForAll()
 
-            // After processing windows, purify the cache for each app that had windows in the current space
-            for pid in processedPIDs {
-                _ = await purifyAppCache(with: pid, removeAll: false)
-                // Refresh images for AX-fallback windows (not covered by SCK)
-                await refreshAXFallbackWindowImages(for: pid)
+            } catch {
+                print("Error updating windows: \(error)")
             }
+        }
 
-        } catch {
-            print("Error updating windows: \(error)")
+        // AX fallback - runs unconditionally
+        // Discover windows for all running apps with regular dock presence
+        let runningApps = NSWorkspace.shared.runningApplications.filter {
+            $0.activationPolicy == .regular &&
+                !filteredBundleIdentifiers.contains($0.bundleIdentifier ?? "") &&
+                !isAppFiltered($0)
+        }
+
+        for app in runningApps {
+            let pid = app.processIdentifier
+            // Discover windows via AX (works without screen recording permission)
+            await discoverNewWindowsViaAXFallback(app: app)
+            processedPIDs.insert(pid)
+        }
+
+        // Purify cache and refresh images for all processed apps
+        for pid in processedPIDs {
+            _ = await purifyAppCache(with: pid, removeAll: false)
+            // Refresh images for AX-fallback windows
+            await refreshAXFallbackWindowImages(for: pid)
         }
     }
 
