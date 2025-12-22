@@ -74,6 +74,7 @@ struct WindowPreviewCompact: View {
     }
 
     private var stateIndicator: String? {
+        guard showMinimizedHiddenLabels else { return nil }
         if windowInfo.isMinimized {
             return "Minimized"
         } else if windowInfo.isHidden {
