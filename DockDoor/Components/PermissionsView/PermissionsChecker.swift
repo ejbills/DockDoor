@@ -6,6 +6,8 @@ class PermissionsChecker: ObservableObject {
     @Published var screenRecordingPermission: Bool = false
     private var timer: AnyCancellable?
 
+    private static var cachedScreenRecordingPermission: Bool = checkScreenRecordingPermissionFromCG()
+
     init() {
         checkPermissions()
         startTimer()
@@ -25,10 +27,16 @@ class PermissionsChecker: ObservableObject {
     }
 
     private func checkScreenRecordingPermission() -> Bool {
-        Self.hasScreenRecordingPermission()
+        let result = Self.checkScreenRecordingPermissionFromCG()
+        Self.cachedScreenRecordingPermission = result
+        return result
     }
 
     static func hasScreenRecordingPermission() -> Bool {
+        cachedScreenRecordingPermission
+    }
+
+    private static func checkScreenRecordingPermissionFromCG() -> Bool {
         let stream = CGDisplayStream(
             dispatchQueueDisplay: CGMainDisplayID(),
             outputWidth: 1,

@@ -147,6 +147,7 @@
 		BBE153C02D21FA2700CD3D4A /* StyledGroupBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE153BF2D21FA2300CD3D4A /* StyledGroupBox.swift */; };
 		BBE153C22D22024F00CD3D4A /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE153C12D22024E00CD3D4A /* View.swift */; };
 		BBE63DFF2DEA583C0079D2B9 /* PreviewStateCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE63DFE2DEA58040079D2B9 /* PreviewStateCoordinator.swift */; };
+		337B1BB3E0E1C17462D34C74 /* AppPickerSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE87C548D56298ADFB3F389 /* AppPickerSheet.swift */; };
 		BBE692192D17AD9E0093B4A5 /* DangerButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE692182D17AD9C0093B4A5 /* DangerButton.swift */; };
 		BBF383972C94A26200B39A23 /* sliderSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF383962C94A25B00B39A23 /* sliderSetting.swift */; };
 		BBF413922C40618D00AA6733 /* FullSizePreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF413912C40618800AA6733 /* FullSizePreviewView.swift */; };
@@ -299,6 +300,7 @@
 		BBE153BF2D21FA2300CD3D4A /* StyledGroupBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyledGroupBox.swift; sourceTree = "<group>"; };
 		BBE153C12D22024E00CD3D4A /* View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
 		BBE63DFE2DEA58040079D2B9 /* PreviewStateCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewStateCoordinator.swift; sourceTree = "<group>"; };
+		1AE87C548D56298ADFB3F389 /* AppPickerSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppPickerSheet.swift; sourceTree = "<group>"; };
 		BBE692182D17AD9C0093B4A5 /* DangerButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DangerButton.swift; sourceTree = "<group>"; };
 		BBF383962C94A25B00B39A23 /* sliderSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = sliderSetting.swift; sourceTree = "<group>"; };
 		BBF413912C40618800AA6733 /* FullSizePreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullSizePreviewView.swift; sourceTree = "<group>"; };
@@ -359,6 +361,7 @@
 				BBE153BD2D2126C000CD3D4A /* MaterialPill.swift */,
 				BBE153BF2D21FA2300CD3D4A /* StyledGroupBox.swift */,
 				BBE692182D17AD9C0093B4A5 /* DangerButton.swift */,
+				1AE87C548D56298ADFB3F389 /* AppPickerSheet.swift */,
 				3A1622C62C8D5A5C00D318EE /* EnabledActionRowView.swift */,
 				BBF383962C94A25B00B39A23 /* sliderSetting.swift */,
 				BB750D232C8E939A00245E3E /* FluidGradient */,
@@ -878,6 +881,7 @@
 				BBC5BDF42E45A708003A0D64 /* SwiftUIUtils.swift in Sources */,
 				BBF4139A2C40A64A00AA6733 /* CustomizableFluidGradient.swift in Sources */,
 				BBE692192D17AD9E0093B4A5 /* DangerButton.swift in Sources */,
+				337B1BB3E0E1C17462D34C74 /* AppPickerSheet.swift in Sources */,
 				3A1622BE2C8C218500D318EE /* FirstTimeViewInstructionsView.swift in Sources */,
 				BB1A85F52D05263C00326297 /* FiltersSettingsView.swift in Sources */,
 				BB638F002E0216FA0010077D /* MediaArtworkView.swift in Sources */,

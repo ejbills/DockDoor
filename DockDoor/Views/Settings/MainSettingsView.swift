@@ -103,11 +103,13 @@ struct MainSettingsView: View {
     @Default(.limitSwitcherToFrontmostApp) var limitSwitcherToFrontmostApp
     @Default(.fullscreenAppBlacklist) var fullscreenAppBlacklist
     @Default(.groupAppInstancesInDock) var groupAppInstancesInDock
+    @Default(.groupedAppsInSwitcher) var groupedAppsInSwitcher
 
     @State private var selectedPerformanceProfile: SettingsProfile = .default
     @State private var selectedPreviewQualityProfile: PreviewQualityProfile = .standard
     @State private var showAdvancedSettings: Bool = false
     @State private var showPlacementSettings: Bool = false
+    @State private var showGroupedAppsSheet: Bool = false
     @FocusState private var isKeepAliveFieldFocused: Bool
     @State private var lastKeepAliveDuration: Int = 5
 
@@ -179,6 +181,14 @@ struct MainSettingsView: View {
             if livePreviewStreamKeepAlive > 0 {
                 lastKeepAliveDuration = livePreviewStreamKeepAlive
             }
+        }
+        .sheet(isPresented: $showGroupedAppsSheet) {
+            AppPickerSheet(
+                selectedApps: $groupedAppsInSwitcher,
+                title: "Group Windows by App",
+                description: "Selected apps will show only their most recent window in the switcher.",
+                selectionMode: .include
+            )
         }
     }
 
@@ -519,6 +529,24 @@ struct MainSettingsView: View {
                             .pickerStyle(.menu)
                             .padding(.leading, 20)
                             Text("Choose how windows are sorted in the window switcher.")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                                .padding(.leading, 20)
+
+                            HStack {
+                                Text("Group windows by app")
+                                Spacer()
+                                if !groupedAppsInSwitcher.isEmpty {
+                                    Text("\(groupedAppsInSwitcher.count) app\(groupedAppsInSwitcher.count == 1 ? "" : "s")")
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                }
+                                Button("Select...") {
+                                    showGroupedAppsSheet = true
+                                }
+                                .buttonStyle(AccentButtonStyle(small: true))
+                            }
+                            Text("Selected apps show only their most recent window. All windows shown in active-app-only mode.")
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                                 .padding(.leading, 20)
