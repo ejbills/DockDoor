@@ -121,7 +121,6 @@ struct MainSettingsView: View {
     @Default(.tapEquivalentInterval) var tapEquivalentInterval
     @Default(.preventDockHide) var preventDockHide
     @Default(.preventSwitcherHide) var preventSwitcherHide
-    @Default(.requireShiftTabToGoBack) var requireShiftTabToGoBack
     @Default(.ignoreAppsWithSingleWindow) var ignoreAppsWithSingleWindow
     @Default(.screenCaptureCacheLifespan) var screenCaptureCacheLifespan
     @Default(.windowProcessingDebounceInterval) var windowProcessingDebounceInterval
@@ -187,7 +186,7 @@ struct MainSettingsView: View {
                 selectedApps: $groupedAppsInSwitcher,
                 title: "Group Windows by App",
                 description: "Selected apps will show only their most recent window in the switcher.",
-                selectionMode: .include
+                selectionMode: AppPickerSheet.SelectionMode.include
             )
         }
     }
@@ -480,11 +479,6 @@ struct MainSettingsView: View {
                                 get: { !preventSwitcherHide },
                                 set: { preventSwitcherHide = !$0 }
                             )) { Text("Release initializer key to select window in Switcher") }
-                            Toggle(isOn: $requireShiftTabToGoBack) { Text("Require Shift+Tab to go back in Switcher") }
-                            Text("When enabled, pressing Shift alone won't go back. Use Shift+Tab (or modifier+Shift+Tab when release-to-select is on) to navigate backward.")
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                                .padding(.leading, 20)
                             Toggle(isOn: $enableMouseHoverInSwitcher) { Text("Enable mouse hover selection") }
                             Text("Select and scroll to windows when hovering with mouse. Disable for keyboard-only navigation.")
                                 .font(.caption)
@@ -1079,9 +1073,9 @@ struct MainSettingsView: View {
                 useClassicWindowOrdering = Defaults.Keys.useClassicWindowOrdering.defaultValue
                 limitSwitcherToFrontmostApp = Defaults.Keys.limitSwitcherToFrontmostApp.defaultValue
                 fullscreenAppBlacklist = Defaults.Keys.fullscreenAppBlacklist.defaultValue
-                requireShiftTabToGoBack = Defaults.Keys.requireShiftTabToGoBack.defaultValue
 
                 Defaults[.UserKeybind] = Defaults.Keys.UserKeybind.defaultValue
+                Defaults[.requireShiftTabToGoBack] = Defaults.Keys.requireShiftTabToGoBack.defaultValue
                 Defaults[.windowSwitcherPlacementStrategy] = Defaults.Keys.windowSwitcherPlacementStrategy.defaultValue
                 Defaults[.pinnedScreenIdentifier] = Defaults.Keys.pinnedScreenIdentifier.defaultValue
                 Defaults[.enableShiftWindowSwitcherPlacement] = Defaults.Keys.enableShiftWindowSwitcherPlacement.defaultValue
