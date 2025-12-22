@@ -93,7 +93,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationWillTerminate(_ notification: Notification) {
         // Save window order for restoration on next launch
-        WindowOrderPersistence.shared.saveCurrentOrder()
+        WindowOrderPersistence.saveCurrentOrder()
     }
 
     func setupMenuBar() {

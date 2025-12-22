@@ -2,11 +2,7 @@ import Defaults
 import Foundation
 
 /// Persists window access timestamps across app restarts to maintain "recently used" order
-final class WindowOrderPersistence {
-    static let shared = WindowOrderPersistence()
-
-    private init() {}
-
+enum WindowOrderPersistence {
     /// Stored data for a window including its identifier
     struct PersistedWindowEntry: Codable, Defaults.Serializable {
         let bundleIdentifier: String
@@ -21,13 +17,13 @@ final class WindowOrderPersistence {
     }
 
     /// Get the persisted timestamp for a window, if available
-    func getPersistedTimestamp(bundleIdentifier: String, windowTitle: String?) -> PersistedWindowEntry? {
+    static func getPersistedTimestamp(bundleIdentifier: String, windowTitle: String?) -> PersistedWindowEntry? {
         let targetKey = "\(bundleIdentifier)|\(windowTitle ?? "")"
         return Defaults[.persistedWindowOrder].first { $0.key == targetKey }
     }
 
     /// Save the current window order from the cache
-    func saveCurrentOrder() {
+    static func saveCurrentOrder() {
         var entries: [PersistedWindowEntry] = []
 
         // Get all windows from cache
@@ -64,7 +60,7 @@ final class WindowOrderPersistence {
     }
 
     /// Clean up old entries (call periodically or on save)
-    func cleanupOldEntries(olderThan days: Int = 30) {
+    static func cleanupOldEntries(olderThan days: Int = 30) {
         let cutoffDate = Calendar.current.date(byAdding: .day, value: -days, to: Date()) ?? Date()
         var entries = Defaults[.persistedWindowOrder]
 

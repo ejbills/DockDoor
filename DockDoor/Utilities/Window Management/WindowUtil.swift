@@ -822,7 +822,7 @@ extension WindowUtil {
 
         if shouldWindowBeCaptured {
             // Check for persisted timestamp to restore window order across restarts
-            let persistedData = WindowOrderPersistence.shared.getPersistedTimestamp(
+            let persistedData = WindowOrderPersistence.getPersistedTimestamp(
                 bundleIdentifier: bundleId,
                 windowTitle: window.title
             )
@@ -905,7 +905,7 @@ extension WindowUtil {
 
         // Check for persisted timestamp to restore window order across restarts
         let persistedData: WindowOrderPersistence.PersistedWindowEntry? = if let bundleId = app.bundleIdentifier {
-            WindowOrderPersistence.shared.getPersistedTimestamp(
+            WindowOrderPersistence.getPersistedTimestamp(
                 bundleIdentifier: bundleId,
                 windowTitle: windowTitle
             )
