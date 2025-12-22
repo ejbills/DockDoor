@@ -220,6 +220,7 @@ class KeybindHelper {
     private var isShiftKeyPressedGeneral: Bool = false
     private var hasProcessedModifierRelease: Bool = false
     private var preventSwitcherHideOnRelease: Bool = false
+    private var shiftHeldBackwardTask: Task<Void, Never>?
 
     // Track the invocation mode for alternate keybinds
     private var currentInvocationMode: SwitcherInvocationMode = .allWindows
@@ -232,9 +233,6 @@ class KeybindHelper {
     private var runLoopSource: CFRunLoopSource?
     private var monitorTimer: Timer?
     private var unmanagedEventTapUserInfo: Unmanaged<KeybindHelperUserInfo>?
-
-    // Task for continuous backward cycling while Shift is held
-    private var shiftHeldBackwardTask: Task<Void, Never>?
 
     init(previewCoordinator: SharedPreviewWindowCoordinator) {
         self.previewCoordinator = previewCoordinator
@@ -549,7 +547,6 @@ class KeybindHelper {
             hasProcessedModifierRelease = false
         }
 
-        // Handle Shift key for backward cycling in window switcher
         let isWindowSwitcherActive = previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive
         let shouldSkipShiftOnlyBackward = Defaults[.requireShiftTabToGoBack] && isWindowSwitcherActive
 
@@ -573,7 +570,7 @@ class KeybindHelper {
                 if isWindowSwitcherActive {
                     shiftHeldBackwardTask?.cancel()
                     shiftHeldBackwardTask = Task { @MainActor in
-                        // Initial delay before repeat starts (like key repeat delay)
+                        // Initial delay before repeat starts (key repeat delay)
                         try? await Task.sleep(nanoseconds: 400_000_000) // 400ms initial delay
 
                         while !Task.isCancelled,
@@ -587,7 +584,7 @@ class KeybindHelper {
                                 isShiftPressed: true,
                                 mode: self.currentInvocationMode
                             )
-                            // Repeat interval (like key repeat rate)
+                            // Repeat interval (key repeat rate)
                             try? await Task.sleep(nanoseconds: 80_000_000) // 80ms between repeats
                         }
                     }
