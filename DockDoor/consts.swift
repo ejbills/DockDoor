@@ -378,6 +378,10 @@ enum WindowSwitcherControlPosition: String, CaseIterable, Defaults.Serializable 
     case diagonalTopRightBottomLeft
     case diagonalBottomLeftTopRight
     case diagonalBottomRightTopLeft
+    case parallelTopLeftBottomLeft
+    case parallelTopRightBottomRight
+    case parallelBottomLeftTopLeft
+    case parallelBottomRightTopRight
 
     var localizedName: String {
         switch self {
@@ -397,6 +401,14 @@ enum WindowSwitcherControlPosition: String, CaseIterable, Defaults.Serializable 
             String(localized: "Diagonal - Title bottom left, controls top right")
         case .diagonalBottomRightTopLeft:
             String(localized: "Diagonal - Title bottom right, controls top left")
+        case .parallelTopLeftBottomLeft:
+            String(localized: "Parallel - Title top left, controls bottom left")
+        case .parallelTopRightBottomRight:
+            String(localized: "Parallel - Title top right, controls bottom right")
+        case .parallelBottomLeftTopLeft:
+            String(localized: "Parallel - Title bottom left, controls top left")
+        case .parallelBottomRightTopRight:
+            String(localized: "Parallel - Title bottom right, controls top right")
         }
     }
 }
