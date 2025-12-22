@@ -1097,6 +1097,40 @@ extension WindowUtil {
 
         return sortedWindows
     }
+
+    /// Groups windows by app for selected apps, keeping only the most recently used window for each grouped app.
+    /// This maintains the original order based on the first appearance of each app in the sorted list.
+    static func groupWindowsByApp(_ windows: [WindowInfo]) -> [WindowInfo] {
+        let groupedApps = Set(Defaults[.groupedAppsInSwitcher])
+        guard !groupedApps.isEmpty else { return windows }
+
+        // Group by bundle ID while tracking first appearance order
+        var windowsByApp: [String: [WindowInfo]] = [:]
+        var order: [String] = []
+
+        for window in windows {
+            let bundleId = window.app.bundleIdentifier ?? ""
+            if windowsByApp[bundleId] == nil {
+                order.append(bundleId)
+            }
+            windowsByApp[bundleId, default: []].append(window)
+        }
+
+        // Build result preserving order
+        var result: [WindowInfo] = []
+        for bundleId in order {
+            guard let appWindows = windowsByApp[bundleId] else { continue }
+            if groupedApps.contains(bundleId) {
+                // Take only the most recent window (first since sorted by recency)
+                if let mostRecent = appWindows.first {
+                    result.append(mostRecent)
+                }
+            } else {
+                result.append(contentsOf: appWindows)
+            }
+        }
+        return result
+    }
 }
 
 // MARK: - Window Actions

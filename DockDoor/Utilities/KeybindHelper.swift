@@ -83,6 +83,12 @@ private class WindowSwitchingCoordinator {
 
         windows = WindowUtil.sortWindowsForSwitcher(windows)
 
+        // Group windows for selected apps (only in multi-app modes)
+        let isActiveAppMode = (mode == .activeAppOnly || mode == .activeAppCurrentSpace)
+        if !isActiveAppMode {
+            windows = WindowUtil.groupWindowsByApp(windows)
+        }
+
         guard !windows.isEmpty else { return }
 
         currentSessionId = UUID()
