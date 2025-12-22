@@ -57,7 +57,7 @@ struct WidgetSettingsView: View {
     var body: some View {
         BaseSettingsView {
             VStack(alignment: .leading, spacing: 16) {
-                StyledGroupBox(label: "General") {
+                SettingsGroup(header: "General") {
                     VStack(alignment: .leading, spacing: 10) {
                         Toggle(isOn: $showSpecialAppControls) {
                             Text("Show media/calendar controls on Dock hover")
@@ -108,7 +108,7 @@ struct WidgetSettingsView: View {
                 }
 
                 if showSpecialAppControls {
-                    StyledGroupBox(label: "Media") {
+                    SettingsGroup(header: "Media") {
                         VStack(alignment: .leading, spacing: 10) {
                             Picker("Scroll behavior:", selection: $mediaWidgetScrollBehavior) {
                                 ForEach(MediaWidgetScrollBehavior.allCases, id: \.self) { behavior in
@@ -148,7 +148,7 @@ struct WidgetSettingsView: View {
                     }
                 }
 
-                StyledGroupBox(label: "Calendar") {
+                SettingsGroup(header: "Calendar") {
                     VStack(alignment: .leading, spacing: 8) {
                         Text("Select which calendars appear in the dock preview when hovering over the Calendar app.")
                             .font(.footnote)

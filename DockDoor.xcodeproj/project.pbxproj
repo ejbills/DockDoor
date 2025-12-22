@@ -72,6 +72,29 @@
 		BB2567C62C10C5F000C0C93E /* DockUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2567C52C10C5F000C0C93E /* DockUtils.swift */; };
 		BB2884FF2E81AFCB0048A09B /* SettingsIllustratedToggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2884FD2E81AFCB0048A09B /* SettingsIllustratedToggle.swift */; };
 		BB2885012E81B5B60048A09B /* SettingsIllustratedRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2885002E81B5B60048A09B /* SettingsIllustratedRow.swift */; };
+		B84941090B484695B105D967 /* SettingsGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4258675B29E4A22ACF92845 /* SettingsGroup.swift */; };
+		D096400ED7404496AEDA58A9 /* SettingsIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DE26FD426284948A71EBACC /* SettingsIcon.swift */; };
+		9DA27E8E83A84AECA8AD3BBD /* SettingsToggleRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FBA5BBE4DFA460FBF54D30E /* SettingsToggleRow.swift */; };
+		F0796B6D96ED42D58D75BB8A /* SettingsSliderRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0970FA03935B41E59919A618 /* SettingsSliderRow.swift */; };
+		FEBF808E6ABA4DE7983FCACD /* SettingsPickerRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C341C31333F4619A4E79449 /* SettingsPickerRow.swift */; };
+		A093F1E5F59748358F395814 /* SettingsNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD01DB1CA624D4F834C60EE /* SettingsNote.swift */; };
+		18D7DFD6690D45C8A63982D2 /* SettingsLinkRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF95019606449008856E149 /* SettingsLinkRow.swift */; };
+		5C1867B80C2F46948F5C6336 /* SupportLinksSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2844BF18EB4D089A62A368 /* SupportLinksSection.swift */; };
+		19186F88AF6644B3962A052F /* GeneralAppearanceSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1531BE8CC50A472986E31058 /* GeneralAppearanceSection.swift */; };
+		6080FA3A5F224B2F932F1652 /* WindowSizeSettingsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1639E8349CE94986A5F0B6A1 /* WindowSizeSettingsSection.swift */; };
+		8EADE9C50DA94FA4B8E1E1F5 /* CompactModeSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FCC42884D0A48E6B9FB1E34 /* CompactModeSection.swift */; };
+		C71AFDC5AA42466BA6ACF360 /* DockPreviewAppearanceSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47CABF9DD43A4C468597DEFB /* DockPreviewAppearanceSection.swift */; };
+		2D6F6684A9E141A8B88927D3 /* WindowSwitcherAppearanceSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBBBAA129E24438589330D3B /* WindowSwitcherAppearanceSection.swift */; };
+		700F49963BB641ABBB0F8605 /* CmdTabAppearanceSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB59EE0D7419468CABBAD220 /* CmdTabAppearanceSection.swift */; };
+		2F26AC46A07D4343B2723D83 /* AdvancedAppearanceSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3584B7313E241EF997A4EE5 /* AdvancedAppearanceSection.swift */; };
+		A1B2C3D4E5F6A89012345679 /* EnabledButtonsCheckboxes.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C3D4E5F6A890123456789B /* EnabledButtonsCheckboxes.swift */; };
+		0BBE0D8202DA47F4940C1E96 /* DockScrollGestureSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08FF50AD1AA8499F8C7E2A7E /* DockScrollGestureSection.swift */; };
+		8A65164BC27F4A60A6FA765B /* DockPreviewGesturesSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55363085DBBF4BEEB6AB0DA1 /* DockPreviewGesturesSection.swift */; };
+		49327679B03B44DC8FC44058 /* WindowSwitcherGesturesSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8E0D699507444D3985957B6 /* WindowSwitcherGesturesSection.swift */; };
+		646F091DD2DE460EA4D5444E /* GestureSettingsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13BC17F44A8F456A8061A07F /* GestureSettingsSection.swift */; };
+		3BB072C8A800463CB09CC383 /* MouseActionsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C1919C22F1F48369D6FCCD1 /* MouseActionsSection.swift */; };
+		D4B28EF578BC4053BF908A5A /* CmdKeyShortcutsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6AA4630D2D54CD7AB622B27 /* CmdKeyShortcutsSection.swift */; };
+		2F764043EDC3435AB84C170E /* WindowSwitcherKeybindSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AB041F2D3174C8D9DA2111E /* WindowSwitcherKeybindSection.swift */; };
 		BB2CBB092C481295004502C5 /* SpaceWindowCacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2CBB082C48128D004502C5 /* SpaceWindowCacheManager.swift */; };
 		BB33E68C2C24C72F00A21D69 /* LaunchAtLogin in Frameworks */ = {isa = PBXBuildFile; productRef = BB33E68B2C24C72F00A21D69 /* LaunchAtLogin */; };
 		BB377C342DFD0D3700FA93DA /* PinnableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB377C332DFD0D3700FA93DA /* PinnableView.swift */; };
@@ -227,6 +250,29 @@
 		BB2567C52C10C5F000C0C93E /* DockUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DockUtils.swift; sourceTree = "<group>"; };
 		BB2884FD2E81AFCB0048A09B /* SettingsIllustratedToggle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsIllustratedToggle.swift; sourceTree = "<group>"; };
 		BB2885002E81B5B60048A09B /* SettingsIllustratedRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsIllustratedRow.swift; sourceTree = "<group>"; };
+		F4258675B29E4A22ACF92845 /* SettingsGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsGroup.swift; sourceTree = "<group>"; };
+		9DE26FD426284948A71EBACC /* SettingsIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsIcon.swift; sourceTree = "<group>"; };
+		2FBA5BBE4DFA460FBF54D30E /* SettingsToggleRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsToggleRow.swift; sourceTree = "<group>"; };
+		0970FA03935B41E59919A618 /* SettingsSliderRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSliderRow.swift; sourceTree = "<group>"; };
+		3C341C31333F4619A4E79449 /* SettingsPickerRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsPickerRow.swift; sourceTree = "<group>"; };
+		0BD01DB1CA624D4F834C60EE /* SettingsNote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsNote.swift; sourceTree = "<group>"; };
+		FCF95019606449008856E149 /* SettingsLinkRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsLinkRow.swift; sourceTree = "<group>"; };
+		1F2844BF18EB4D089A62A368 /* SupportLinksSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportLinksSection.swift; sourceTree = "<group>"; };
+		1531BE8CC50A472986E31058 /* GeneralAppearanceSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralAppearanceSection.swift; sourceTree = "<group>"; };
+		1639E8349CE94986A5F0B6A1 /* WindowSizeSettingsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowSizeSettingsSection.swift; sourceTree = "<group>"; };
+		0FCC42884D0A48E6B9FB1E34 /* CompactModeSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompactModeSection.swift; sourceTree = "<group>"; };
+		47CABF9DD43A4C468597DEFB /* DockPreviewAppearanceSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockPreviewAppearanceSection.swift; sourceTree = "<group>"; };
+		CBBBAA129E24438589330D3B /* WindowSwitcherAppearanceSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowSwitcherAppearanceSection.swift; sourceTree = "<group>"; };
+		FB59EE0D7419468CABBAD220 /* CmdTabAppearanceSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CmdTabAppearanceSection.swift; sourceTree = "<group>"; };
+		E3584B7313E241EF997A4EE5 /* AdvancedAppearanceSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedAppearanceSection.swift; sourceTree = "<group>"; };
+		B2C3D4E5F6A890123456789B /* EnabledButtonsCheckboxes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnabledButtonsCheckboxes.swift; sourceTree = "<group>"; };
+		08FF50AD1AA8499F8C7E2A7E /* DockScrollGestureSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockScrollGestureSection.swift; sourceTree = "<group>"; };
+		55363085DBBF4BEEB6AB0DA1 /* DockPreviewGesturesSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockPreviewGesturesSection.swift; sourceTree = "<group>"; };
+		B8E0D699507444D3985957B6 /* WindowSwitcherGesturesSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowSwitcherGesturesSection.swift; sourceTree = "<group>"; };
+		13BC17F44A8F456A8061A07F /* GestureSettingsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GestureSettingsSection.swift; sourceTree = "<group>"; };
+		5C1919C22F1F48369D6FCCD1 /* MouseActionsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MouseActionsSection.swift; sourceTree = "<group>"; };
+		F6AA4630D2D54CD7AB622B27 /* CmdKeyShortcutsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CmdKeyShortcutsSection.swift; sourceTree = "<group>"; };
+		3AB041F2D3174C8D9DA2111E /* WindowSwitcherKeybindSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowSwitcherKeybindSection.swift; sourceTree = "<group>"; };
 		BB2CBB082C48128D004502C5 /* SpaceWindowCacheManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceWindowCacheManager.swift; sourceTree = "<group>"; };
 		BB377C332DFD0D3700FA93DA /* PinnableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinnableView.swift; sourceTree = "<group>"; };
 		BB377C3E2DFD19ED00FA93DA /* PinnedWindowDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinnedWindowDelegate.swift; sourceTree = "<group>"; };
@@ -566,6 +612,14 @@
 			children = (
 				BB2885002E81B5B60048A09B /* SettingsIllustratedRow.swift */,
 				BB2884FD2E81AFCB0048A09B /* SettingsIllustratedToggle.swift */,
+				F4258675B29E4A22ACF92845 /* SettingsGroup.swift */,
+				9DE26FD426284948A71EBACC /* SettingsIcon.swift */,
+				2FBA5BBE4DFA460FBF54D30E /* SettingsToggleRow.swift */,
+				0970FA03935B41E59919A618 /* SettingsSliderRow.swift */,
+				3C341C31333F4619A4E79449 /* SettingsPickerRow.swift */,
+				0BD01DB1CA624D4F834C60EE /* SettingsNote.swift */,
+				FCF95019606449008856E149 /* SettingsLinkRow.swift */,
+				1F2844BF18EB4D089A62A368 /* SupportLinksSection.swift */,
 			);
 			path = "Shared Components";
 			sourceTree = "<group>";
@@ -577,6 +631,35 @@
 				BB377C332DFD0D3700FA93DA /* PinnableView.swift */,
 			);
 			path = Pinnable;
+			sourceTree = "<group>";
+		};
+		AABBCC112233445566778899 /* Appearance */ = {
+			isa = PBXGroup;
+			children = (
+				1531BE8CC50A472986E31058 /* GeneralAppearanceSection.swift */,
+				1639E8349CE94986A5F0B6A1 /* WindowSizeSettingsSection.swift */,
+				0FCC42884D0A48E6B9FB1E34 /* CompactModeSection.swift */,
+				47CABF9DD43A4C468597DEFB /* DockPreviewAppearanceSection.swift */,
+				CBBBAA129E24438589330D3B /* WindowSwitcherAppearanceSection.swift */,
+				FB59EE0D7419468CABBAD220 /* CmdTabAppearanceSection.swift */,
+				E3584B7313E241EF997A4EE5 /* AdvancedAppearanceSection.swift */,
+				B2C3D4E5F6A890123456789B /* EnabledButtonsCheckboxes.swift */,
+			);
+			path = Appearance;
+			sourceTree = "<group>";
+		};
+		19AFE4DEEDA347CEB48F505B /* Gestures */ = {
+			isa = PBXGroup;
+			children = (
+				08FF50AD1AA8499F8C7E2A7E /* DockScrollGestureSection.swift */,
+				55363085DBBF4BEEB6AB0DA1 /* DockPreviewGesturesSection.swift */,
+				B8E0D699507444D3985957B6 /* WindowSwitcherGesturesSection.swift */,
+				13BC17F44A8F456A8061A07F /* GestureSettingsSection.swift */,
+				5C1919C22F1F48369D6FCCD1 /* MouseActionsSection.swift */,
+				F6AA4630D2D54CD7AB622B27 /* CmdKeyShortcutsSection.swift */,
+				3AB041F2D3174C8D9DA2111E /* WindowSwitcherKeybindSection.swift */,
+			);
+			path = Gestures;
 			sourceTree = "<group>";
 		};
 		BB4B44492C372A42006680DC /* Hover Window */ = {
@@ -717,6 +800,8 @@
 		BBE7CC922C2244A600AB8F4D /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				AABBCC112233445566778899 /* Appearance */,
+				19AFE4DEEDA347CEB48F505B /* Gestures */,
 				BB2884FE2E81AFCB0048A09B /* Shared Components */,
 				BB15E1E62C8F8C8D002ECFB9 /* Help */,
 				7D264F468F734971AE701690 /* ActiveAppIndicatorSettingsView.swift */,
@@ -974,6 +1059,29 @@
 				BB5059322E0386B500BDD731 /* AudioOutputDevice.swift in Sources */,
 				BB90A5ED2DFA13E000857722 /* CalendarInfo.swift in Sources */,
 				BB2885012E81B5B60048A09B /* SettingsIllustratedRow.swift in Sources */,
+				B84941090B484695B105D967 /* SettingsGroup.swift in Sources */,
+				D096400ED7404496AEDA58A9 /* SettingsIcon.swift in Sources */,
+				9DA27E8E83A84AECA8AD3BBD /* SettingsToggleRow.swift in Sources */,
+				F0796B6D96ED42D58D75BB8A /* SettingsSliderRow.swift in Sources */,
+				FEBF808E6ABA4DE7983FCACD /* SettingsPickerRow.swift in Sources */,
+				A093F1E5F59748358F395814 /* SettingsNote.swift in Sources */,
+				18D7DFD6690D45C8A63982D2 /* SettingsLinkRow.swift in Sources */,
+				5C1867B80C2F46948F5C6336 /* SupportLinksSection.swift in Sources */,
+				19186F88AF6644B3962A052F /* GeneralAppearanceSection.swift in Sources */,
+				6080FA3A5F224B2F932F1652 /* WindowSizeSettingsSection.swift in Sources */,
+				8EADE9C50DA94FA4B8E1E1F5 /* CompactModeSection.swift in Sources */,
+				C71AFDC5AA42466BA6ACF360 /* DockPreviewAppearanceSection.swift in Sources */,
+				2D6F6684A9E141A8B88927D3 /* WindowSwitcherAppearanceSection.swift in Sources */,
+				700F49963BB641ABBB0F8605 /* CmdTabAppearanceSection.swift in Sources */,
+				2F26AC46A07D4343B2723D83 /* AdvancedAppearanceSection.swift in Sources */,
+				A1B2C3D4E5F6A89012345679 /* EnabledButtonsCheckboxes.swift in Sources */,
+				0BBE0D8202DA47F4940C1E96 /* DockScrollGestureSection.swift in Sources */,
+				8A65164BC27F4A60A6FA765B /* DockPreviewGesturesSection.swift in Sources */,
+				49327679B03B44DC8FC44058 /* WindowSwitcherGesturesSection.swift in Sources */,
+				646F091DD2DE460EA4D5444E /* GestureSettingsSection.swift in Sources */,
+				3BB072C8A800463CB09CC383 /* MouseActionsSection.swift in Sources */,
+				D4B28EF578BC4053BF908A5A /* CmdKeyShortcutsSection.swift in Sources */,
+				2F764043EDC3435AB84C170E /* WindowSwitcherKeybindSection.swift in Sources */,
 				BBCFAE402C266234002E1516 /* FirstTimeView.swift in Sources */,
 				BB387FB32E70BA1300640D79 /* SearchWindow.swift in Sources */,
 				BB5349C52EE7D160004B1FDD /* WindowPreviewInteractionModifier.swift in Sources */,

@@ -4,82 +4,6 @@ import LaunchAtLogin
 import SwiftUI
 import UniformTypeIdentifiers
 
-enum SettingsProfile: String, CaseIterable, Identifiable {
-    case `default`, snappy, relaxed
-    var id: String { rawValue }
-    var displayName: LocalizedStringKey {
-        switch self {
-        case .default: "Default"
-        case .snappy: "Snappy"
-        case .relaxed: "Relaxed"
-        }
-    }
-
-    var iconName: String {
-        switch self {
-        case .default: "slider.horizontal.3"
-        case .snappy: "hare.fill"
-        case .relaxed: "tortoise.fill"
-        }
-    }
-
-    var settings: PerformanceProfileSettingsValues {
-        switch self {
-        case .default:
-            PerformanceProfileSettingsValues(
-                hoverWindowOpenDelay: Defaults.Keys.hoverWindowOpenDelay.defaultValue,
-                fadeOutDuration: Defaults.Keys.fadeOutDuration.defaultValue,
-                tapEquivalentInterval: Defaults.Keys.tapEquivalentInterval.defaultValue,
-                preventDockHide: Defaults.Keys.preventDockHide.defaultValue
-            )
-        case .snappy:
-            PerformanceProfileSettingsValues(hoverWindowOpenDelay: CoreDockGetAutoHideEnabled() ? 0.1 : 0, fadeOutDuration: 0.15, tapEquivalentInterval: 0.5, preventDockHide: false)
-        case .relaxed:
-            PerformanceProfileSettingsValues(hoverWindowOpenDelay: 0.25, fadeOutDuration: 0.5, tapEquivalentInterval: 1.5, preventDockHide: true)
-        }
-    }
-}
-
-struct PerformanceProfileSettingsValues {
-    let hoverWindowOpenDelay: CGFloat
-    let fadeOutDuration: CGFloat
-    let tapEquivalentInterval: CGFloat
-    let preventDockHide: Bool
-}
-
-enum PreviewQualityProfile: String, CaseIterable, Identifiable {
-    case detailed, standard, lightweight
-    var id: String { rawValue }
-    var displayName: LocalizedStringKey {
-        switch self {
-        case .detailed: "Detailed"
-        case .standard: "Standard"
-        case .lightweight: "Lightweight"
-        }
-    }
-
-    var iconName: String {
-        switch self {
-        case .detailed: "sparkles"
-        case .standard: "eye.fill"
-        case .lightweight: "leaf.fill"
-        }
-    }
-
-    var settings: PreviewQualitySettingsValues {
-        switch self {
-        case .detailed: PreviewQualitySettingsValues(screenCaptureCacheLifespan: 0, windowPreviewImageScale: 1)
-        case .standard: PreviewQualitySettingsValues(screenCaptureCacheLifespan: Defaults.Keys.screenCaptureCacheLifespan.defaultValue, windowPreviewImageScale: 2)
-        case .lightweight: PreviewQualitySettingsValues(screenCaptureCacheLifespan: 60, windowPreviewImageScale: 4)
-        }
-    }
-}
-
-struct PreviewQualitySettingsValues {
-    let screenCaptureCacheLifespan: CGFloat
-    let windowPreviewImageScale: CGFloat
-}
-
 struct MainSettingsView: View {
     @Default(.showMenuBarIcon) var showMenuBarIcon
     @Default(.enableWindowSwitcher) var enableWindowSwitcher
@@ -105,9 +29,6 @@ struct MainSettingsView: View {
     @Default(.groupAppInstancesInDock) var groupAppInstancesInDock
     @Default(.groupedAppsInSwitcher) var groupedAppsInSwitcher
 
-    @State private var selectedPerformanceProfile: SettingsProfile = .default
-    @State private var selectedPreviewQualityProfile: PreviewQualityProfile = .standard
-    @State private var showAdvancedSettings: Bool = false
     @State private var showPlacementSettings: Bool = false
     @State private var showGroupedAppsSheet: Bool = false
     @FocusState private var isKeepAliveFieldFocused: Bool
@@ -151,32 +72,18 @@ struct MainSettingsView: View {
     @Default(.enableShiftWindowSwitcherPlacement) var enableShiftWindowSwitcherPlacement
     @StateObject private var permissionsChecker = PermissionsChecker()
 
-    private let advancedSettingsSectionID = "advancedSettingsSection"
-
     var body: some View {
-        ScrollViewReader { proxy in
-            BaseSettingsView {
-                VStack(alignment: .leading, spacing: 16) {
-                    supportAndContributionsSection
-                    applicationBasicsSection
-                    performanceProfilesSection
-                    previewQualityProfilesSection
-                    advancedSettingsToggle(proxy: proxy)
-                    if showAdvancedSettings {
-                        advancedSettingsSection.id(advancedSettingsSectionID)
-                    }
-                }
+        BaseSettingsView {
+            VStack(alignment: .leading, spacing: 24) {
+                supportAndContributionsSection
+                applicationBasicsSection
+                performanceTuningSection
+                previewQualitySection
+                interactionBehaviorSection
+                activeAppIndicatorSection
             }
         }
         .onAppear {
-            if doesCurrentSettingsMatchPerformanceProfile(.snappy) { selectedPerformanceProfile = .snappy }
-            else if doesCurrentSettingsMatchPerformanceProfile(.relaxed) { selectedPerformanceProfile = .relaxed }
-            else if doesCurrentSettingsMatchPerformanceProfile(.default) { selectedPerformanceProfile = .default }
-
-            if doesCurrentSettingsMatchPreviewQualityProfile(.detailed) { selectedPreviewQualityProfile = .detailed }
-            else if doesCurrentSettingsMatchPreviewQualityProfile(.lightweight) { selectedPreviewQualityProfile = .lightweight }
-            else if doesCurrentSettingsMatchPreviewQualityProfile(.standard) { selectedPreviewQualityProfile = .standard }
-
             if livePreviewStreamKeepAlive > 0 {
                 lastKeepAliveDuration = livePreviewStreamKeepAlive
             }
@@ -191,183 +98,18 @@ struct MainSettingsView: View {
         }
     }
 
+    // MARK: - Support & Contributions
+
     private var supportAndContributionsSection: some View {
-        StyledGroupBox(label: "Support & Contributions") {
-            VStack(alignment: .leading, spacing: 12) {
-                Link(destination: URL(string: "https://www.buymeacoffee.com/keplercafe")!) {
-                    HStack(spacing: 14) {
-                        Image(systemName: "cup.and.saucer.fill")
-                            .font(.title2)
-                            .foregroundStyle(.white)
-                            .frame(width: 28, height: 28)
-                            .padding(8)
-                            .background(
-                                LinearGradient(
-                                    gradient: Gradient(colors: [Color.orange, Color.yellow.opacity(0.8)]),
-                                    startPoint: .topLeading,
-                                    endPoint: .bottomTrailing
-                                )
-                            )
-                            .clipShape(RoundedRectangle(cornerRadius: 8))
-                            .shadow(color: .black.opacity(0.1), radius: 2, x: 0, y: 1)
-
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text("Buy me a coffee")
-                                .font(.headline)
-                                .foregroundColor(.primary)
-                            Text("Support development with a small donation")
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                        }
-
-                        Spacer()
-
-                        Image(systemName: "chevron.right")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    }
-                    .padding(.vertical, 10)
-                    .padding(.horizontal, 12)
-                    .background(Color(NSColor.controlBackgroundColor).opacity(0.7))
-                    .cornerRadius(10)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 10)
-                            .stroke(
-                                LinearGradient(
-                                    gradient: Gradient(colors: [Color.orange.opacity(0.5), Color.yellow.opacity(0.3)]),
-                                    startPoint: .topLeading,
-                                    endPoint: .bottomTrailing
-                                ),
-                                lineWidth: 1.5
-                            )
-                    )
-                }
-                .buttonStyle(PlainButtonStyle())
-
-                Link(destination: URL(string: "https://discord.gg/TZeRs73hFb")!) {
-                    HStack(spacing: 14) {
-                        Image(systemName: "bubble.left.and.bubble.right.fill")
-                            .font(.title2)
-                            .foregroundStyle(.white)
-                            .frame(width: 28, height: 28)
-                            .padding(8)
-                            .background(
-                                LinearGradient(
-                                    gradient: Gradient(colors: [Color.purple, Color.indigo.opacity(0.8)]),
-                                    startPoint: .topLeading,
-                                    endPoint: .bottomTrailing
-                                )
-                            )
-                            .clipShape(RoundedRectangle(cornerRadius: 8))
-                            .shadow(color: .black.opacity(0.1), radius: 2, x: 0, y: 1)
-
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text("Join our Discord")
-                                .font(.headline)
-                                .foregroundColor(.primary)
-                            Text("Discuss features and get help from the community")
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                        }
-
-                        Spacer()
-
-                        Image(systemName: "chevron.right")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    }
-                    .padding(.vertical, 10)
-                    .padding(.horizontal, 12)
-                    .background(Color(NSColor.controlBackgroundColor).opacity(0.7))
-                    .cornerRadius(10)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 10)
-                            .stroke(
-                                LinearGradient(
-                                    gradient: Gradient(colors: [Color.purple.opacity(0.5), Color.indigo.opacity(0.3)]),
-                                    startPoint: .topLeading,
-                                    endPoint: .bottomTrailing
-                                ),
-                                lineWidth: 1.5
-                            )
-                    )
-                }
-                .buttonStyle(PlainButtonStyle())
-
-                Link(destination: URL(string: "https://crowdin.com/project/dockdoor/invite?h=895e3c085646d3c07fa36a97044668e02149115")!) {
-                    HStack(spacing: 14) {
-                        Image(systemName: "globe")
-                            .font(.title2)
-                            .foregroundStyle(.white)
-                            .frame(width: 28, height: 28)
-                            .padding(8)
-                            .background(
-                                LinearGradient(
-                                    gradient: Gradient(colors: [Color.blue, Color.teal.opacity(0.8)]),
-                                    startPoint: .topLeading,
-                                    endPoint: .bottomTrailing
-                                )
-                            )
-                            .clipShape(RoundedRectangle(cornerRadius: 8))
-                            .shadow(color: .black.opacity(0.1), radius: 2, x: 0, y: 1)
-
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text("Contribute translation")
-                                .font(.headline)
-                                .foregroundColor(.primary)
-                            Text("Help make DockDoor available in your language")
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                        }
-
-                        Spacer()
-
-                        Image(systemName: "chevron.right")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    }
-                    .padding(.vertical, 10)
-                    .padding(.horizontal, 12)
-                    .background(Color(NSColor.controlBackgroundColor).opacity(0.7))
-                    .cornerRadius(10)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 10)
-                            .stroke(
-                                LinearGradient(
-                                    gradient: Gradient(colors: [Color.blue.opacity(0.5), Color.teal.opacity(0.3)]),
-                                    startPoint: .topLeading,
-                                    endPoint: .bottomTrailing
-                                ),
-                                lineWidth: 1.5
-                            )
-                    )
-                }
-                .buttonStyle(PlainButtonStyle())
-
-                Link(destination: URL(string: "https://github.com/ejbills/DockDoor/graphs/contributors")!) {
-                    HStack {
-                        Spacer()
-                        Text("Thank you to all contributors ❤️")
-                            .font(.subheadline)
-                            .foregroundColor(Color.primary.opacity(0.8))
-                        Spacer()
-                    }
-                    .padding(.vertical, 8)
-                    .background(Color(NSColor.controlBackgroundColor).opacity(0.7))
-                    .cornerRadius(8)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 8)
-                            .stroke(Color.red.opacity(0.3), lineWidth: 1)
-                    )
-                }
-                .buttonStyle(PlainButtonStyle())
-                .padding(.top, 4)
-            }
+        SettingsGroup(header: "Support & Contributions", compact: true) {
+            SupportLinksSection()
         }
     }
 
+    // MARK: - Application Basics
+
     private var applicationBasicsSection: some View {
-        StyledGroupBox(label: "Application Basics") {
+        SettingsGroup(header: "Application Basics") {
             VStack(alignment: .leading, spacing: 10) {
                 LaunchAtLogin.Toggle(String(localized: "Launch DockDoor at login"))
 
@@ -682,333 +424,280 @@ struct MainSettingsView: View {
         }
     }
 
-    private var performanceProfilesSection: some View {
-        StyledGroupBox(label: "Performance Profiles") {
+    // MARK: - Performance Tuning
+
+    private var performanceTuningSection: some View {
+        SettingsGroup(header: "Performance Tuning") {
             VStack(alignment: .leading, spacing: 10) {
-                HStack(spacing: 10) {
-                    ForEach(SettingsProfile.allCases) { profile in
-                        Button {
-                            withAnimation(.smooth) { selectedPerformanceProfile = profile }
-                            applyPerformanceProfileSettings(profile)
-                        } label: {
-                            VStack(spacing: 8) {
-                                Image(systemName: profile.iconName).font(.title2).frame(height: 25)
-                                Text(profile.displayName).font(.caption).lineLimit(1)
-                            }
-                            .padding(.vertical, 10).padding(.horizontal, 5).frame(maxWidth: .infinity)
-                            .background(selectedPerformanceProfile == profile ? Color.accentColor.opacity(0.2) : Color(NSColor.controlBackgroundColor).opacity(0.5))
-                            .cornerRadius(8)
-                            .overlay(RoundedRectangle(cornerRadius: 8).stroke(selectedPerformanceProfile == profile ? Color.accentColor : Color.gray.opacity(0.3), lineWidth: selectedPerformanceProfile == profile ? 2 : 1))
-                            .contentShape(Rectangle())
-                        }.buttonStyle(.plain)
+                sliderSetting(title: "Preview Window Open Delay", value: $hoverWindowOpenDelay, range: 0 ... 2, step: 0.1, unit: "seconds", formatter: NumberFormatter.oneDecimalFormatter)
+
+                VStack(alignment: .leading) {
+                    Toggle(isOn: $useDelayOnlyForInitialOpen) {
+                        Text("Only use delay for initial window opening")
                     }
+                    Text("When enabled, switching between dock icons while a preview is already open will show previews instantly.")
+                        .font(.footnote)
+                        .foregroundColor(.gray)
+                        .padding(.leading, 20)
                 }
-                Text("Adjusts how responsive the app feels and behaves during interaction.").font(.footnote).foregroundColor(.gray)
+
+                sliderSetting(title: "Preview Window Fade Out Duration", value: $fadeOutDuration, range: 0 ... 2, step: 0.1, unit: "seconds", formatter: NumberFormatter.oneDecimalFormatter)
+                sliderSetting(title: "Preview Window Inactivity Timer", value: $inactivityTimeout, range: 0 ... 3, step: 0.1, unit: "seconds", formatter: NumberFormatter.oneDecimalFormatter)
+                sliderSetting(title: "Window Processing Debounce Interval", value: $windowProcessingDebounceInterval, range: 0 ... 3, step: 0.1, unit: "seconds", formatter: NumberFormatter.oneDecimalFormatter, onEditingChanged: { isEditing in
+                    if !isEditing {
+                        askUserToRestartApplication()
+                    }
+                })
+
+                Toggle(isOn: $preventDockHide) { Text("Prevent dock from hiding during previews") }
+                Toggle(isOn: $raisedWindowLevel) { Text("Show preview above app labels").onChange(of: raisedWindowLevel) { _ in askUserToRestartApplication() } }
+
+                VStack(alignment: .leading) {
+                    Toggle(isOn: $preventPreviewReentryDuringFadeOut) {
+                        Text("Prevent preview reappearance during fade-out")
+                    }
+                    Text("When enabled, moving the mouse back over the preview during fade-out will not reactivate it. You must hover over the dock icon again to show the preview.")
+                        .font(.footnote)
+                        .foregroundColor(.gray)
+                        .padding(.leading, 20)
+                }
             }
         }
     }
 
-    private var previewQualityProfilesSection: some View {
-        StyledGroupBox(label: "Preview Quality Profiles") {
+    // MARK: - Preview Quality
+
+    private var previewQualitySection: some View {
+        SettingsGroup(header: "Preview Appearance & Quality") {
             VStack(alignment: .leading, spacing: 10) {
-                HStack(spacing: 10) {
-                    ForEach(PreviewQualityProfile.allCases) { profile in
-                        Button {
-                            withAnimation(.smooth) { selectedPreviewQualityProfile = profile }
-                            applyPreviewQualityProfileSettings(profile)
-                        } label: {
-                            VStack(spacing: 8) {
-                                Image(systemName: profile.iconName).font(.title2).frame(height: 25)
-                                Text(profile.displayName).font(.caption).lineLimit(1)
-                            }
-                            .padding(.vertical, 10).padding(.horizontal, 5).frame(maxWidth: .infinity)
-                            .background(selectedPreviewQualityProfile == profile ? Color.accentColor.opacity(0.2) : Color(NSColor.controlBackgroundColor).opacity(0.5))
-                            .cornerRadius(8)
-                            .overlay(RoundedRectangle(cornerRadius: 8).stroke(selectedPreviewQualityProfile == profile ? Color.accentColor : Color.gray.opacity(0.3), lineWidth: selectedPreviewQualityProfile == profile ? 2 : 1))
-                            .contentShape(Rectangle())
-                        }.buttonStyle(.plain)
+                Picker("Window Image Capture Quality", selection: $windowImageCaptureQuality) {
+                    ForEach(WindowImageCaptureQuality.allCases, id: \.self) { quality in
+                        Text(quality.localizedName).tag(quality)
                     }
                 }
-                Text("Controls the visual detail and update frequency of window previews.").font(.footnote).foregroundColor(.gray)
-            }
-        }
-    }
+                .pickerStyle(MenuPickerStyle())
 
-    private func advancedSettingsToggle(proxy: ScrollViewProxy) -> some View {
-        VStack(alignment: .center) {
-            Text("Select a profile to quickly adjust common performance settings. Choose \"Advanced\" for manual control.")
-                .font(.footnote).foregroundColor(.gray)
-            HStack {
-                Spacer()
-                Button {
-                    withAnimation(.snappy(duration: 0.1)) {
-                        showAdvancedSettings.toggle()
-                        if showAdvancedSettings { DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { withAnimation(.smooth(duration: 0.1)) { proxy.scrollTo(advancedSettingsSectionID, anchor: .top) } } }
-                    }
-                } label: { Label(showAdvancedSettings ? "Hide Advanced Settings" : "Show Advanced Settings", systemImage: showAdvancedSettings ? "chevron.up.circle" : "chevron.down.circle") }
-                    .buttonStyle(AccentButtonStyle())
-                Spacer()
-            }
-        }
-    }
+                sliderSetting(title: "Window Image Cache Lifespan", value: $screenCaptureCacheLifespan, range: 0 ... 60, step: 10, unit: "seconds")
+                sliderSetting(title: "Window Image Resolution Scale (1=Best)", value: $windowPreviewImageScale, range: 1 ... 4, step: 1, unit: "")
 
-    private var advancedSettingsSection: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            StyledGroupBox(label: "Performance Tuning (Dock Previews)") {
-                VStack(alignment: .leading, spacing: 10) {
-                    sliderSetting(title: "Preview Window Open Delay", value: $hoverWindowOpenDelay, range: 0 ... 2, step: 0.1, unit: "seconds", formatter: NumberFormatter.oneDecimalFormatter)
-                    VStack(alignment: .leading) {
-                        Toggle(isOn: $useDelayOnlyForInitialOpen) {
-                            Text("Only use delay for initial window opening")
-                        }
-                        Text("When enabled, switching between dock icons while a preview is already open will show previews instantly.")
-                            .font(.footnote)
-                            .foregroundColor(.gray)
-                            .padding(.leading, 20)
-                    }
-                    sliderSetting(title: "Preview Window Fade Out Duration", value: $fadeOutDuration, range: 0 ... 2, step: 0.1, unit: "seconds", formatter: NumberFormatter.oneDecimalFormatter)
-                    sliderSetting(title: "Preview Window Inactivity Timer", value: $inactivityTimeout, range: 0 ... 3, step: 0.1, unit: "seconds", formatter: NumberFormatter.oneDecimalFormatter)
-                    sliderSetting(title: "Window Processing Debounce Interval", value: $windowProcessingDebounceInterval, range: 0 ... 3, step: 0.1, unit: "seconds", formatter: NumberFormatter.oneDecimalFormatter, onEditingChanged: { isEditing in
-                        if !isEditing {
-                            askUserToRestartApplication()
-                        }
-                    })
-                    Toggle(isOn: $preventDockHide) { Text("Prevent dock from hiding during previews") }
-                    Toggle(isOn: $raisedWindowLevel) { Text("Show preview above app labels").onChange(of: raisedWindowLevel) { _ in askUserToRestartApplication() }}
-                    VStack(alignment: .leading) {
-                        Toggle(isOn: $preventPreviewReentryDuringFadeOut) {
-                            Text("Prevent preview reappearance during fade-out")
-                        }
-                        Text("When enabled, moving the mouse back over the preview during fade-out will not reactivate it. You must hover over the dock icon again to show the preview.")
-                            .font(.footnote)
-                            .foregroundColor(.gray)
-                            .padding(.leading, 20)
-                    }
-                }
-            }
-            StyledGroupBox(label: "Preview Appearance & Quality") {
-                VStack(alignment: .leading, spacing: 10) {
-                    Picker("Window Image Capture Quality", selection: $windowImageCaptureQuality) {
-                        ForEach(WindowImageCaptureQuality.allCases, id: \.self) { quality in
-                            Text(quality.localizedName).tag(quality)
+                Divider()
+
+                Toggle(isOn: $enableLivePreview) { Text("Enable Live Preview (Video)") }
+                    .onChange(of: enableLivePreview) { newValue in
+                        if !newValue {
+                            Task { await LiveCaptureManager.shared.stopAllStreams() }
                         }
                     }
-                    .pickerStyle(MenuPickerStyle())
+                Text("When enabled, window previews show live video instead of static screenshots. Uses ScreenCaptureKit for real-time capture.")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .padding(.leading, 20)
 
-                    sliderSetting(title: "Window Image Cache Lifespan", value: $screenCaptureCacheLifespan, range: 0 ... 60, step: 10, unit: "seconds")
-                    sliderSetting(title: "Window Image Resolution Scale (1=Best)", value: $windowPreviewImageScale, range: 1 ... 4, step: 1, unit: "")
-
-                    Divider()
-
-                    Toggle(isOn: $enableLivePreview) { Text("Enable Live Preview (Video)") }
-                        .onChange(of: enableLivePreview) { newValue in
-                            if !newValue {
-                                Task { await LiveCaptureManager.shared.stopAllStreams() }
-                            }
-                        }
-                    Text("When enabled, window previews show live video instead of static screenshots. Uses ScreenCaptureKit for real-time capture.")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
+                if enableLivePreview {
+                    Toggle(isOn: $enableLivePreviewForDock) { Text("Enable for Dock Preview") }
                         .padding(.leading, 20)
 
-                    if enableLivePreview {
-                        // MARK: - Dock Live Preview Settings
-
-                        Toggle(isOn: $enableLivePreviewForDock) { Text("Enable for Dock Preview") }
-                            .padding(.leading, 20)
-
-                        if enableLivePreviewForDock {
-                            Picker("Dock Quality", selection: $dockLivePreviewQuality) {
-                                ForEach(LivePreviewQuality.allCases, id: \.self) { quality in
-                                    Text(quality.localizedName).tag(quality)
-                                }
-                            }
-                            .pickerStyle(MenuPickerStyle())
-                            .padding(.leading, 40)
-
-                            Picker("Dock Frame Rate", selection: $dockLivePreviewFrameRate) {
-                                ForEach(LivePreviewFrameRate.allCases, id: \.self) { fps in
-                                    Text(fps.localizedName).tag(fps)
-                                }
-                            }
-                            .pickerStyle(MenuPickerStyle())
-                            .padding(.leading, 40)
-                        }
-
-                        Divider()
-                            .padding(.leading, 20)
-
-                        // MARK: - Window Switcher Live Preview Settings
-
-                        Toggle(isOn: $enableLivePreviewForWindowSwitcher) { Text("Enable for Window Switcher") }
-                            .padding(.leading, 20)
-
-                        if enableLivePreviewForWindowSwitcher {
-                            Picker("Switcher Quality", selection: $windowSwitcherLivePreviewQuality) {
-                                ForEach(LivePreviewQuality.allCases, id: \.self) { quality in
-                                    Text(quality.localizedName).tag(quality)
-                                }
-                            }
-                            .pickerStyle(MenuPickerStyle())
-                            .padding(.leading, 40)
-
-                            Picker("Switcher Frame Rate", selection: $windowSwitcherLivePreviewFrameRate) {
-                                ForEach(LivePreviewFrameRate.allCases, id: \.self) { fps in
-                                    Text(fps.localizedName).tag(fps)
-                                }
-                            }
-                            .pickerStyle(MenuPickerStyle())
-                            .padding(.leading, 40)
-
-                            Picker("Switcher Live Preview Scope", selection: $windowSwitcherLivePreviewScope) {
-                                ForEach(WindowSwitcherLivePreviewScope.allCases, id: \.self) { scope in
-                                    Text(scope.localizedName).tag(scope)
-                                }
-                            }
-                            .pickerStyle(MenuPickerStyle())
-                            .padding(.leading, 40)
-
-                            Text(windowSwitcherLivePreviewScope.localizedDescription)
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                                .padding(.leading, 40)
-                        }
-
-                        Divider()
-                            .padding(.leading, 20)
-
-                        Text("Higher quality and frame rate use more CPU/GPU resources. Use lower settings for Window Switcher if you experience lag.")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                            .padding(.leading, 20)
-
-                        Divider()
-                            .padding(.leading, 20)
-
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text("Stream Keep-Alive Duration")
-                                .onTapGesture { isKeepAliveFieldFocused = false }
-
-                            HStack(spacing: 0) {
-                                Button(action: {
-                                    livePreviewStreamKeepAlive = 0
-                                    isKeepAliveFieldFocused = false
-                                }) {
-                                    Text("Immediately close")
-                                        .padding(.horizontal, 12)
-                                        .padding(.vertical, 6)
-                                        .contentShape(Rectangle())
-                                }
-                                .buttonStyle(.plain)
-                                .background(livePreviewStreamKeepAlive == 0 ? Color.accentColor : Color.secondary.opacity(0.15))
-                                .foregroundColor(livePreviewStreamKeepAlive == 0 ? .white : .primary)
-                                .contentShape(Rectangle())
-
-                                HStack(spacing: 4) {
-                                    TextField("", value: Binding(
-                                        get: { livePreviewStreamKeepAlive > 0 ? livePreviewStreamKeepAlive : lastKeepAliveDuration },
-                                        set: {
-                                            let newValue = max(1, $0)
-                                            lastKeepAliveDuration = newValue
-
-                                            if livePreviewStreamKeepAlive > 0 {
-                                                livePreviewStreamKeepAlive = newValue
-                                            }
-                                        }
-                                    ), formatter: NumberFormatter())
-                                        .textFieldStyle(.roundedBorder)
-                                        .frame(width: 40)
-                                        .multilineTextAlignment(.center)
-                                        .focused($isKeepAliveFieldFocused)
-                                        .onChange(of: isKeepAliveFieldFocused) { focused in
-                                            if focused, livePreviewStreamKeepAlive <= 0 {
-                                                livePreviewStreamKeepAlive = lastKeepAliveDuration
-                                            }
-                                        }
-                                    Text("seconds")
-                                        .foregroundColor(livePreviewStreamKeepAlive > 0 ? .white : .primary)
-                                }
-                                .padding(.horizontal, 8)
-                                .padding(.vertical, 3)
-                                .background(livePreviewStreamKeepAlive > 0 ? Color.accentColor : Color.secondary.opacity(0.15))
-                                .contentShape(Rectangle())
-                                .onTapGesture {
-                                    if livePreviewStreamKeepAlive <= 0 {
-                                        livePreviewStreamKeepAlive = lastKeepAliveDuration
-                                    }
-                                }
-
-                                Button(action: {
-                                    livePreviewStreamKeepAlive = -1
-                                    isKeepAliveFieldFocused = false
-                                }) {
-                                    Text("Keep Open")
-                                        .padding(.horizontal, 12)
-                                        .padding(.vertical, 6)
-                                        .contentShape(Rectangle())
-                                }
-                                .buttonStyle(.plain)
-                                .background(livePreviewStreamKeepAlive == -1 ? Color.accentColor : Color.secondary.opacity(0.15))
-                                .foregroundColor(livePreviewStreamKeepAlive == -1 ? .white : .primary)
-                                .contentShape(Rectangle())
-                            }
-                            .cornerRadius(6)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 6)
-                                    .stroke(Color.secondary.opacity(0.3), lineWidth: 1)
-                            )
-                            .onChange(of: livePreviewStreamKeepAlive) { newValue in
-                                if newValue == 0 {
-                                    Task { await LiveCaptureManager.shared.stopAllStreams() }
-                                }
-                            }
-
-                            Text("How long to keep video streams active after closing preview. Longer duration means faster reopening but uses more resources.")
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                                .onTapGesture { isKeepAliveFieldFocused = false }
-                        }
-                        .padding(.leading, 20)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .contentShape(Rectangle())
-                        .gesture(TapGesture().onEnded {
-                            isKeepAliveFieldFocused = false
-                        }, including: .gesture)
-                    }
-                }
-            }
-            StyledGroupBox(label: "Interaction & Behavior (Dock Previews)") {
-                VStack(alignment: .leading, spacing: 10) {
-                    Toggle(isOn: $groupAppInstancesInDock) { Text("Group multiple app instances together") }
-                    Text("When enabled, hovering over an app in the Dock shows windows from all instances of that app. When disabled, shows only windows from the specific instance under the mouse.")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                        .padding(.leading, 20)
-
-                    Divider()
-
-                    Picker("Dock Preview Hover Action", selection: $previewHoverAction) { ForEach(PreviewHoverAction.allCases, id: \.self) { Text($0.localizedName).tag($0) } }.pickerStyle(MenuPickerStyle())
-                    sliderSetting(title: "Preview Hover Action Delay", value: $tapEquivalentInterval, range: 0 ... 2, step: 0.1, unit: "seconds", formatter: NumberFormatter.oneDecimalFormatter).disabled(previewHoverAction == .none)
-                    Toggle(isOn: $shouldHideOnDockItemClick) { Text("Hide all app windows on dock icon click") }
-                    if shouldHideOnDockItemClick {
-                        Picker("Dock Click Action", selection: $dockClickAction) {
-                            ForEach(DockClickAction.allCases, id: \.self) {
-                                Text($0.localizedName).tag($0)
+                    if enableLivePreviewForDock {
+                        Picker("Dock Quality", selection: $dockLivePreviewQuality) {
+                            ForEach(LivePreviewQuality.allCases, id: \.self) { quality in
+                                Text(quality.localizedName).tag(quality)
                             }
                         }
                         .pickerStyle(MenuPickerStyle())
-                        .padding(.leading, 20)
-                    }
-                    Toggle(isOn: $enableCmdRightClickQuit) { Text("CMD + Right Click on dock icon to quit app") }
+                        .padding(.leading, 40)
 
-                    sliderSetting(title: "Window Buffer from Dock (pixels)", value: $bufferFromDock, range: -100 ... 100, step: 5, unit: "px", formatter: { let f = NumberFormatter(); f.allowsFloats = false; f.minimumIntegerDigits = 1; f.maximumFractionDigits = 0; return f }())
+                        Picker("Dock Frame Rate", selection: $dockLivePreviewFrameRate) {
+                            ForEach(LivePreviewFrameRate.allCases, id: \.self) { fps in
+                                Text(fps.localizedName).tag(fps)
+                            }
+                        }
+                        .pickerStyle(MenuPickerStyle())
+                        .padding(.leading, 40)
+                    }
+
+                    Divider()
+                        .padding(.leading, 20)
+
+                    Toggle(isOn: $enableLivePreviewForWindowSwitcher) { Text("Enable for Window Switcher") }
+                        .padding(.leading, 20)
+
+                    if enableLivePreviewForWindowSwitcher {
+                        Picker("Switcher Quality", selection: $windowSwitcherLivePreviewQuality) {
+                            ForEach(LivePreviewQuality.allCases, id: \.self) { quality in
+                                Text(quality.localizedName).tag(quality)
+                            }
+                        }
+                        .pickerStyle(MenuPickerStyle())
+                        .padding(.leading, 40)
+
+                        Picker("Switcher Frame Rate", selection: $windowSwitcherLivePreviewFrameRate) {
+                            ForEach(LivePreviewFrameRate.allCases, id: \.self) { fps in
+                                Text(fps.localizedName).tag(fps)
+                            }
+                        }
+                        .pickerStyle(MenuPickerStyle())
+                        .padding(.leading, 40)
+
+                        Picker("Switcher Live Preview Scope", selection: $windowSwitcherLivePreviewScope) {
+                            ForEach(WindowSwitcherLivePreviewScope.allCases, id: \.self) { scope in
+                                Text(scope.localizedName).tag(scope)
+                            }
+                        }
+                        .pickerStyle(MenuPickerStyle())
+                        .padding(.leading, 40)
+
+                        Text(windowSwitcherLivePreviewScope.localizedDescription)
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                            .padding(.leading, 40)
+                    }
+
+                    Divider()
+                        .padding(.leading, 20)
+
+                    Text("Higher quality and frame rate use more CPU/GPU resources. Use lower settings for Window Switcher if you experience lag.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                        .padding(.leading, 20)
+
+                    Divider()
+                        .padding(.leading, 20)
+
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Stream Keep-Alive Duration")
+                            .onTapGesture { isKeepAliveFieldFocused = false }
+
+                        HStack(spacing: 0) {
+                            Button(action: {
+                                livePreviewStreamKeepAlive = 0
+                                isKeepAliveFieldFocused = false
+                            }) {
+                                Text("Immediately close")
+                                    .padding(.horizontal, 12)
+                                    .padding(.vertical, 6)
+                                    .contentShape(Rectangle())
+                            }
+                            .buttonStyle(.plain)
+                            .background(livePreviewStreamKeepAlive == 0 ? Color.accentColor : Color.secondary.opacity(0.15))
+                            .foregroundColor(livePreviewStreamKeepAlive == 0 ? .white : .primary)
+                            .contentShape(Rectangle())
+
+                            HStack(spacing: 4) {
+                                TextField("", value: Binding(
+                                    get: { livePreviewStreamKeepAlive > 0 ? livePreviewStreamKeepAlive : lastKeepAliveDuration },
+                                    set: {
+                                        let newValue = max(1, $0)
+                                        lastKeepAliveDuration = newValue
+
+                                        if livePreviewStreamKeepAlive > 0 {
+                                            livePreviewStreamKeepAlive = newValue
+                                        }
+                                    }
+                                ), formatter: NumberFormatter())
+                                    .textFieldStyle(.roundedBorder)
+                                    .frame(width: 40)
+                                    .multilineTextAlignment(.center)
+                                    .focused($isKeepAliveFieldFocused)
+                                    .onChange(of: isKeepAliveFieldFocused) { focused in
+                                        if focused, livePreviewStreamKeepAlive <= 0 {
+                                            livePreviewStreamKeepAlive = lastKeepAliveDuration
+                                        }
+                                    }
+                                Text("seconds")
+                                    .foregroundColor(livePreviewStreamKeepAlive > 0 ? .white : .primary)
+                            }
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 3)
+                            .background(livePreviewStreamKeepAlive > 0 ? Color.accentColor : Color.secondary.opacity(0.15))
+                            .contentShape(Rectangle())
+                            .onTapGesture {
+                                if livePreviewStreamKeepAlive <= 0 {
+                                    livePreviewStreamKeepAlive = lastKeepAliveDuration
+                                }
+                            }
+
+                            Button(action: {
+                                livePreviewStreamKeepAlive = -1
+                                isKeepAliveFieldFocused = false
+                            }) {
+                                Text("Keep Open")
+                                    .padding(.horizontal, 12)
+                                    .padding(.vertical, 6)
+                                    .contentShape(Rectangle())
+                            }
+                            .buttonStyle(.plain)
+                            .background(livePreviewStreamKeepAlive == -1 ? Color.accentColor : Color.secondary.opacity(0.15))
+                            .foregroundColor(livePreviewStreamKeepAlive == -1 ? .white : .primary)
+                            .contentShape(Rectangle())
+                        }
+                        .cornerRadius(6)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 6)
+                                .stroke(Color.secondary.opacity(0.3), lineWidth: 1)
+                        )
+                        .onChange(of: livePreviewStreamKeepAlive) { newValue in
+                            if newValue == 0 {
+                                Task { await LiveCaptureManager.shared.stopAllStreams() }
+                            }
+                        }
+
+                        Text("How long to keep video streams active after closing preview. Longer duration means faster reopening but uses more resources.")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                            .onTapGesture { isKeepAliveFieldFocused = false }
+                    }
+                    .padding(.leading, 20)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .contentShape(Rectangle())
+                    .gesture(TapGesture().onEnded {
+                        isKeepAliveFieldFocused = false
+                    }, including: .gesture)
                 }
             }
-            StyledGroupBox(label: "Active App Indicator") {
-                ActiveAppIndicatorSettingsView()
-            }
-        }.padding(.top, 5)
+        }
     }
+
+    // MARK: - Interaction & Behavior
+
+    private var interactionBehaviorSection: some View {
+        SettingsGroup(header: "Interaction & Behavior") {
+            VStack(alignment: .leading, spacing: 10) {
+                Toggle(isOn: $groupAppInstancesInDock) { Text("Group multiple app instances together") }
+                Text("When enabled, hovering over an app in the Dock shows windows from all instances of that app. When disabled, shows only windows from the specific instance under the mouse.")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .padding(.leading, 20)
+
+                Divider()
+
+                Picker("Dock Preview Hover Action", selection: $previewHoverAction) { ForEach(PreviewHoverAction.allCases, id: \.self) { Text($0.localizedName).tag($0) } }.pickerStyle(MenuPickerStyle())
+                sliderSetting(title: "Preview Hover Action Delay", value: $tapEquivalentInterval, range: 0 ... 2, step: 0.1, unit: "seconds", formatter: NumberFormatter.oneDecimalFormatter).disabled(previewHoverAction == .none)
+                Toggle(isOn: $shouldHideOnDockItemClick) { Text("Hide all app windows on dock icon click") }
+                if shouldHideOnDockItemClick {
+                    Picker("Dock Click Action", selection: $dockClickAction) {
+                        ForEach(DockClickAction.allCases, id: \.self) {
+                            Text($0.localizedName).tag($0)
+                        }
+                    }
+                    .pickerStyle(MenuPickerStyle())
+                    .padding(.leading, 20)
+                }
+                Toggle(isOn: $enableCmdRightClickQuit) { Text("CMD + Right Click on dock icon to quit app") }
+
+                sliderSetting(title: "Window Buffer from Dock (pixels)", value: $bufferFromDock, range: -100 ... 100, step: 5, unit: "px", formatter: { let f = NumberFormatter(); f.allowsFloats = false; f.minimumIntegerDigits = 1; f.maximumFractionDigits = 0; return f }())
+            }
+        }
+    }
+
+    // MARK: - Active App Indicator
+
+    private var activeAppIndicatorSection: some View {
+        SettingsGroup(header: "Active App Indicator") {
+            ActiveAppIndicatorSettingsView()
+        }
+    }
+
+    // MARK: - Helper Functions
 
     private func screenDisplayName(_ screen: NSScreen) -> String {
         let isMain = screen == NSScreen.main
@@ -1023,48 +712,23 @@ struct MainSettingsView: View {
         return name + (isMain ? " (Main)" : "")
     }
 
-    private func applyPerformanceProfileSettings(_ profile: SettingsProfile) {
-        let settings = profile.settings
-        hoverWindowOpenDelay = settings.hoverWindowOpenDelay
-        fadeOutDuration = settings.fadeOutDuration
-        tapEquivalentInterval = settings.tapEquivalentInterval
-        preventDockHide = settings.preventDockHide
-    }
-
-    private func doesCurrentSettingsMatchPerformanceProfile(_ profile: SettingsProfile) -> Bool {
-        let settings = profile.settings
-        return hoverWindowOpenDelay == settings.hoverWindowOpenDelay &&
-            fadeOutDuration == settings.fadeOutDuration &&
-            tapEquivalentInterval == settings.tapEquivalentInterval &&
-            preventDockHide == settings.preventDockHide
-    }
-
-    private func applyPreviewQualityProfileSettings(_ profile: PreviewQualityProfile) {
-        let settings = profile.settings
-        screenCaptureCacheLifespan = settings.screenCaptureCacheLifespan
-        windowPreviewImageScale = settings.windowPreviewImageScale
-    }
-
-    private func doesCurrentSettingsMatchPreviewQualityProfile(_ profile: PreviewQualityProfile) -> Bool {
-        let settings = profile.settings
-        return screenCaptureCacheLifespan == settings.screenCaptureCacheLifespan &&
-            windowPreviewImageScale == settings.windowPreviewImageScale
-    }
-
     private func showResetConfirmation() {
-        MessageUtil.showAlert(title: String(localized: "Reset to Defaults"), message: String(localized: "Are you sure you want to reset all settings to their default values? This will reset advanced settings as well."), actions: [.ok, .cancel]) { action in
+        MessageUtil.showAlert(title: String(localized: "Reset to Defaults"), message: String(localized: "Are you sure you want to reset all settings to their default values?"), actions: [.ok, .cancel]) { action in
             if action == .ok {
                 Defaults.removeAll()
                 Defaults[.launched] = true
 
-                selectedPerformanceProfile = .default; applyPerformanceProfileSettings(.default)
-                selectedPreviewQualityProfile = .standard; applyPreviewQualityProfileSettings(.standard)
-
-                let perfDefault = SettingsProfile.default.settings
-                hoverWindowOpenDelay = perfDefault.hoverWindowOpenDelay; fadeOutDuration = perfDefault.fadeOutDuration; tapEquivalentInterval = perfDefault.tapEquivalentInterval; preventDockHide = perfDefault.preventDockHide
-                let qualityDefault = PreviewQualityProfile.standard.settings
-                screenCaptureCacheLifespan = qualityDefault.screenCaptureCacheLifespan; windowPreviewImageScale = qualityDefault.windowPreviewImageScale
-                bufferFromDock = Defaults.Keys.bufferFromDock.defaultValue; shouldHideOnDockItemClick = Defaults.Keys.shouldHideOnDockItemClick.defaultValue; dockClickAction = Defaults.Keys.dockClickAction.defaultValue; enableCmdRightClickQuit = Defaults.Keys.enableCmdRightClickQuit.defaultValue; previewHoverAction = Defaults.Keys.previewHoverAction.defaultValue
+                hoverWindowOpenDelay = Defaults.Keys.hoverWindowOpenDelay.defaultValue
+                fadeOutDuration = Defaults.Keys.fadeOutDuration.defaultValue
+                tapEquivalentInterval = Defaults.Keys.tapEquivalentInterval.defaultValue
+                preventDockHide = Defaults.Keys.preventDockHide.defaultValue
+                screenCaptureCacheLifespan = Defaults.Keys.screenCaptureCacheLifespan.defaultValue
+                windowPreviewImageScale = Defaults.Keys.windowPreviewImageScale.defaultValue
+                bufferFromDock = Defaults.Keys.bufferFromDock.defaultValue
+                shouldHideOnDockItemClick = Defaults.Keys.shouldHideOnDockItemClick.defaultValue
+                dockClickAction = Defaults.Keys.dockClickAction.defaultValue
+                enableCmdRightClickQuit = Defaults.Keys.enableCmdRightClickQuit.defaultValue
+                previewHoverAction = Defaults.Keys.previewHoverAction.defaultValue
 
                 showMenuBarIcon = Defaults.Keys.showMenuBarIcon.defaultValue
                 enableWindowSwitcher = Defaults.Keys.enableWindowSwitcher.defaultValue
@@ -1082,7 +746,6 @@ struct MainSettingsView: View {
                 Defaults[.windowSwitcherVerticalOffsetPercent] = Defaults.Keys.windowSwitcherVerticalOffsetPercent.defaultValue
                 Defaults[.windowSwitcherAnchorToTop] = Defaults.Keys.windowSwitcherAnchorToTop.defaultValue
 
-                // Reset gesture settings
                 Defaults[.enableDockPreviewGestures] = Defaults.Keys.enableDockPreviewGestures.defaultValue
                 Defaults[.dockSwipeTowardsDockAction] = Defaults.Keys.dockSwipeTowardsDockAction.defaultValue
                 Defaults[.dockSwipeAwayFromDockAction] = Defaults.Keys.dockSwipeAwayFromDockAction.defaultValue
@@ -1092,7 +755,6 @@ struct MainSettingsView: View {
                 Defaults[.gestureSwipeThreshold] = Defaults.Keys.gestureSwipeThreshold.defaultValue
                 Defaults[.middleClickAction] = Defaults.Keys.middleClickAction.defaultValue
 
-                // Reset keyboard shortcuts
                 Defaults[.cmdShortcut1Key] = Defaults.Keys.cmdShortcut1Key.defaultValue
                 Defaults[.cmdShortcut1Action] = Defaults.Keys.cmdShortcut1Action.defaultValue
                 Defaults[.cmdShortcut2Key] = Defaults.Keys.cmdShortcut2Key.defaultValue
@@ -1100,7 +762,6 @@ struct MainSettingsView: View {
                 Defaults[.cmdShortcut3Key] = Defaults.Keys.cmdShortcut3Key.defaultValue
                 Defaults[.cmdShortcut3Action] = Defaults.Keys.cmdShortcut3Action.defaultValue
 
-                // Reset alternate keybind
                 Defaults[.alternateKeybindKey] = Defaults.Keys.alternateKeybindKey.defaultValue
                 Defaults[.alternateKeybindMode] = Defaults.Keys.alternateKeybindMode.defaultValue
 
@@ -1111,7 +772,6 @@ struct MainSettingsView: View {
                 Defaults[.filteredCalendarIdentifiers] = Defaults.Keys.filteredCalendarIdentifiers.defaultValue
                 groupAppInstancesInDock = Defaults.Keys.groupAppInstancesInDock.defaultValue
 
-                // Reset image preview settings
                 disableImagePreview = Defaults.Keys.disableImagePreview.defaultValue
 
                 askUserToRestartApplication()
@@ -1205,7 +865,6 @@ struct AddBlacklistAppSheet: View {
         if panel.runModal() == .OK, let url = panel.url {
             isLoadingAppInfo = true
 
-            // Extract app information in background
             DispatchQueue.global(qos: .userInitiated).async {
                 let bundle = Bundle(url: url)
                 let appName = bundle?.object(forInfoDictionaryKey: "CFBundleDisplayName") as? String
@@ -1224,7 +883,6 @@ struct AddBlacklistAppSheet: View {
                         selectedAppInfo = appName
                     }
 
-                    // Automatically add the app and close the sheet
                     onAdd(appToAdd)
                     resetState()
                     isPresented = false
