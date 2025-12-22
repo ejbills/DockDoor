@@ -6,9 +6,7 @@ class PermissionsChecker: ObservableObject {
     @Published var screenRecordingPermission: Bool = false
     private var timer: AnyCancellable?
 
-    // Cached permission value - updated by timer, read by WindowUtil
-    private static var cachedScreenRecordingPermission: Bool = // Initialize with actual check on first access
-        checkScreenRecordingPermissionFromCG()
+    private static var cachedScreenRecordingPermission: Bool = checkScreenRecordingPermissionFromCG()
 
     init() {
         checkPermissions()
@@ -34,12 +32,10 @@ class PermissionsChecker: ObservableObject {
         return result
     }
 
-    /// Returns the cached screen recording permission value (cheap read)
     static func hasScreenRecordingPermission() -> Bool {
         cachedScreenRecordingPermission
     }
 
-    /// Performs the actual CG API check (expensive)
     private static func checkScreenRecordingPermissionFromCG() -> Bool {
         let stream = CGDisplayStream(
             dispatchQueueDisplay: CGMainDisplayID(),
