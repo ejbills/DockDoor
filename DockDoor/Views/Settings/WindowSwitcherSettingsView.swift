@@ -26,8 +26,11 @@ struct KeyCapView: View {
                 Text(text)
             }
         }
-        .padding(6)
-        .dockStyle()
+        .font(.system(size: 14, weight: .medium, design: .monospaced))
+        .padding(.horizontal, 8)
+        .padding(.vertical, 4)
+        .background(Color.secondary.opacity(0.2))
+        .cornerRadius(4)
     }
 }
 
