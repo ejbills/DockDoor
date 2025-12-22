@@ -64,6 +64,7 @@ extension Defaults.Keys {
     static let showBigControlsWhenNoValidWindows = Key<Bool>("showBigControlsWhenNoValidWindows", default: true)
     static let enablePinning = Key<Bool>("enablePinning", default: true)
 
+    static let persistedWindowOrder = Key<[WindowOrderPersistence.PersistedWindowEntry]>("persistedWindowOrder", default: [])
     static let showAnimations = Key<Bool>("showAnimations", default: true)
     static let gradientColorPalette = Key<GradientColorPaletteSettings>("gradientColorPalette", default: .init())
     static let enableWindowSwitcher = Key<Bool>("enableWindowSwitcher", default: true)
@@ -227,10 +228,6 @@ extension Defaults.Keys {
 
     static let alternateKeybindKey = Key<UInt16>("alternateKeybindKey", default: 0)
     static let alternateKeybindMode = Key<SwitcherInvocationMode>("alternateKeybindMode", default: .activeAppOnly)
-
-    // MARK: - Window Order Persistence
-
-    static let persistedWindowOrder = Key<[WindowOrderPersistence.PersistedWindowEntry]>("persistedWindowOrder", default: [])
 }
 
 // MARK: Display Configurations
