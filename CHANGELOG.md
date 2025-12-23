@@ -39,28 +39,32 @@
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://buymeacoffee.com/keplercafe</div>
 
 <a id="1.29"></a>
-# [Release 1.29](https://github.com/ejbills/DockDoor/releases/tag/1.29) - 2025-12-20
+# [Release 1.29](https://github.com/ejbills/DockDoor/releases/tag/1.29) - 2025-12-23
 
-## ✨ New Features
- - Calendar event filtering
- - Separate appearance options for window switcher and cmd-tab enhancement features
-  - May cause various appearance options to revert to its default. Report issues if encountered.
- - Media widget seek and volume control gesture (in widget settings)
-  - Scroll to adjust
-- Live preview configurable keep-alive duration (thanks [@suatkocar](https://github.com/suatkocar))
-  - Reduced CPU usage
+This is a re-release due to some issues with the original 1.29 release.
+## ✨ New Features 
+- Added window grouping option
+- Group windows per app
+- Calendar event filtering options
+- Media widget seek control
+- Restart option in menu
 
 ## 🔧 Improvements & Stability
-- Improved window switcher performance
-- Enhanced live preview quality (thanks [@suatkocar](https://github.com/suatkocar)) 
-  - HDR support
-  - Display P3 colors
-- Better dock click behavior
+- Improved dock observer efficiency
+- Enhanced volume control scrolling
+  - Natural scrolling support
+- Better permission checking performance
+- Improved window switcher positioning
+  - Alignment options added
+  - Position adjustment sliders
 
 ## 🐛 Bug Fixes
-- Fixed preview hit detection & other fixes (thanks [@maddada](https://github.com/maddada))
-- Fixed window switcher cancellation
-- Fixed accessibility value retrieval
+- Window names update correctly
+- Screen recording permission prompt
+- Dock click behavior fixed
+  - Apps without windows
+- Minimized windows label display
+- Hidden windows label display
 
 
 [Changes][1.29]
