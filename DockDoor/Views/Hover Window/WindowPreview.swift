@@ -80,6 +80,7 @@ struct WindowPreview: View {
     @State private var isHoveringOverDockPeekPreview = false
     @State private var isHoveringOverWindowSwitcherPreview = false
     @State private var fullPreviewTimer: Timer?
+    @State private var fullPreviewHoverID: UUID?
     @State private var isDraggingOver = false
     @State private var dragTimer: Timer?
     @State private var highlightOpacity = 0.0
@@ -765,10 +766,23 @@ struct WindowPreview: View {
                 windowInfo: windowInfo,
                 windowSwitcherActive: windowSwitcherActive,
                 dockPosition: dockPosition,
-                handleWindowAction: handleWindowAction,
-                onTap: onTap
+                handleWindowAction: { action in
+                    cancelFullPreviewHover()
+                    handleWindowAction(action)
+                },
+                onTap: {
+                    cancelFullPreviewHover()
+                    onTap?()
+                }
             )
             .fixedSize()
+    }
+
+    private func cancelFullPreviewHover() {
+        fullPreviewTimer?.invalidate()
+        fullPreviewTimer = nil
+        fullPreviewHoverID = nil
+        SharedPreviewWindowCoordinator.activeInstance?.hideFullPreviewWindow()
     }
 
     private func handleFullPreviewHover(isHovering: Bool, action: PreviewHoverAction) {
@@ -784,25 +798,28 @@ struct WindowPreview: View {
                 }
 
             case .previewFullSize:
+                let hoverID = UUID()
+                fullPreviewHoverID = hoverID
                 let showFullPreview = {
-                    DispatchQueue.main.async {
-                        SharedPreviewWindowCoordinator.activeInstance?.showWindow(
-                            appName: windowInfo.app.localizedName ?? "Unknown",
-                            windows: [windowInfo],
-                            mouseScreen: bestGuessMonitor,
-                            dockItemElement: nil, overrideDelay: true,
-                            centeredHoverWindowState: .fullWindowPreview
-                        )
-                    }
+                    guard fullPreviewHoverID == hoverID else { return }
+                    SharedPreviewWindowCoordinator.activeInstance?.showWindow(
+                        appName: windowInfo.app.localizedName ?? "Unknown",
+                        windows: [windowInfo],
+                        mouseScreen: bestGuessMonitor,
+                        dockItemElement: nil, overrideDelay: true,
+                        centeredHoverWindowState: .fullWindowPreview
+                    )
                 }
-                if tapEquivalentInterval == 0 { showFullPreview() } else {
-                    fullPreviewTimer = Timer.scheduledTimer(withTimeInterval: tapEquivalentInterval, repeats: false) { _ in showFullPreview() }
+                if tapEquivalentInterval == 0 {
+                    showFullPreview()
+                } else {
+                    fullPreviewTimer = Timer.scheduledTimer(withTimeInterval: tapEquivalentInterval, repeats: false) { _ in
+                        showFullPreview()
+                    }
                 }
             }
         } else {
-            fullPreviewTimer?.invalidate()
-            fullPreviewTimer = nil
-            SharedPreviewWindowCoordinator.activeInstance?.hideFullPreviewWindow()
+            cancelFullPreviewHover()
         }
     }
 
