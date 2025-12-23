@@ -205,8 +205,13 @@ struct AppearanceSettingsView: View {
                         }
 
                         VStack(alignment: .leading) {
-                            Toggle(isOn: $allowDynamicImageSizing) {
+                            HStack {
+                                Toggle(isOn: $allowDynamicImageSizing) {
+                                    EmptyView()
+                                }
+                                .toggleStyle(.switch).scaleEffect(0.8)
                                 Text("Allow dynamic image sizing")
+                                Spacer()
                             }
                             .onChange(of: allowDynamicImageSizing) { _ in
                                 // Recalculate dimensions for both mock coordinators when dynamic sizing changes
@@ -225,8 +230,13 @@ struct AppearanceSettingsView: View {
                     StyledGroupBox(label: "General Appearance") {
                         VStack(alignment: .leading, spacing: 10) {
                             if #available(macOS 26.0, *) {
-                                Toggle(isOn: $useLiquidGlass) {
+                                HStack {
+                                    Toggle(isOn: $useLiquidGlass) {
+                                        EmptyView()
+                                    }
+                                    .toggleStyle(.switch).scaleEffect(0.8)
                                     Text("Use Liquid Glass (macOS 26+)")
+                                    Spacer()
                                 }
                             }
                             sliderSetting(title: "Spacing Scale",
@@ -249,8 +259,13 @@ struct AppearanceSettingsView: View {
                                           formatter: NumberFormatter.percentFormatter)
 
                             VStack(alignment: .leading) {
-                                Toggle(isOn: $uniformCardRadius) {
+                                HStack {
+                                    Toggle(isOn: $uniformCardRadius) {
+                                        EmptyView()
+                                    }
+                                    .toggleStyle(.switch).scaleEffect(0.8)
                                     Text("Rounded corners")
+                                    Spacer()
                                 }
                                 Text("Round the corners of window preview images for a modern look.")
                                     .font(.footnote)
@@ -259,8 +274,13 @@ struct AppearanceSettingsView: View {
                             }
 
                             VStack(alignment: .leading) {
-                                Toggle(isOn: $enableTitleMarquee) {
+                                HStack {
+                                    Toggle(isOn: $enableTitleMarquee) {
+                                        EmptyView()
+                                    }
+                                    .toggleStyle(.switch).scaleEffect(0.8)
                                     Text("Scroll long titles (marquee)")
+                                    Spacer()
                                 }
                                 Text("When disabled, long titles remain static instead of scrolling.")
                                     .font(.footnote)
@@ -269,8 +289,13 @@ struct AppearanceSettingsView: View {
                             }
 
                             VStack(alignment: .leading) {
-                                Toggle(isOn: $showMinimizedHiddenLabels) {
+                                HStack {
+                                    Toggle(isOn: $showMinimizedHiddenLabels) {
+                                        EmptyView()
+                                    }
+                                    .toggleStyle(.switch).scaleEffect(0.8)
                                     Text("Distinguish minimized/hidden windows")
+                                    Spacer()
                                 }
                                 Text("When enabled, shows visual indicators and dims minimized/hidden windows. When disabled, treats them as normal windows with full functionality.")
                                     .font(.footnote)
@@ -279,8 +304,13 @@ struct AppearanceSettingsView: View {
                             }
 
                             VStack(alignment: .leading) {
-                                Toggle(isOn: $hidePreviewCardBackground) {
+                                HStack {
+                                    Toggle(isOn: $hidePreviewCardBackground) {
+                                        EmptyView()
+                                    }
+                                    .toggleStyle(.switch).scaleEffect(0.8)
                                     Text("Hide preview card background")
+                                    Spacer()
                                 }
                                 Text("Removes the background panel from individual window previews.")
                                     .font(.footnote)
@@ -289,8 +319,13 @@ struct AppearanceSettingsView: View {
                             }
 
                             VStack(alignment: .leading) {
-                                Toggle(isOn: $showActiveWindowBorder) {
+                                HStack {
+                                    Toggle(isOn: $showActiveWindowBorder) {
+                                        EmptyView()
+                                    }
+                                    .toggleStyle(.switch).scaleEffect(0.8)
                                     Text("Show active window border")
+                                    Spacer()
                                 }
                                 Text("Highlights the currently focused window with a colored border.")
                                     .font(.footnote)
@@ -307,13 +342,18 @@ struct AppearanceSettingsView: View {
                                 .foregroundColor(.secondary)
 
                             VStack(alignment: .leading, spacing: 4) {
-                                Toggle(isOn: Binding(
-                                    get: { !permissionsChecker.screenRecordingPermission || disableImagePreview },
-                                    set: { disableImagePreview = $0 }
-                                )) {
+                                HStack {
+                                    Toggle(isOn: Binding(
+                                        get: { !permissionsChecker.screenRecordingPermission || disableImagePreview },
+                                        set: { disableImagePreview = $0 }
+                                    )) {
+                                        EmptyView()
+                                    }
+                                    .toggleStyle(.switch).scaleEffect(0.8)
+                                    .disabled(!permissionsChecker.screenRecordingPermission)
                                     Text("Always use compact mode")
+                                    Spacer()
                                 }
-                                .disabled(!permissionsChecker.screenRecordingPermission)
 
                                 if !permissionsChecker.screenRecordingPermission {
                                     HStack(spacing: 4) {
@@ -445,8 +485,13 @@ struct AppearanceSettingsView: View {
     private var dockPreviewSettings: some View {
         VStack(alignment: .leading, spacing: 10) {
             // App Header section
-            Toggle(isOn: $showAppName) {
+            HStack {
+                Toggle(isOn: $showAppName) {
+                    EmptyView()
+                }
+                .toggleStyle(.switch).scaleEffect(0.8)
                 Text("Show App Header")
+                Spacer()
             }
 
             if showAppName {
@@ -457,8 +502,13 @@ struct AppearanceSettingsView: View {
                     }
                 }
 
-                Toggle(isOn: $showAppIconOnly) {
+                HStack {
+                    Toggle(isOn: $showAppIconOnly) {
+                        EmptyView()
+                    }
+                    .toggleStyle(.switch).scaleEffect(0.8)
                     Text("Show App Icon Only")
+                    Spacer()
                 }
             }
 
@@ -473,8 +523,13 @@ struct AppearanceSettingsView: View {
             }
             .pickerStyle(MenuPickerStyle())
 
-            Toggle(isOn: $showWindowTitle) {
+            HStack {
+                Toggle(isOn: $showWindowTitle) {
+                    EmptyView()
+                }
+                .toggleStyle(.switch).scaleEffect(0.8)
                 Text("Show Window Title")
+                Spacer()
             }
 
             if showWindowTitle {
@@ -486,8 +541,13 @@ struct AppearanceSettingsView: View {
                 }
 
                 VStack(alignment: .leading) {
-                    Toggle(isOn: $disableDockStyleTitles) {
+                    HStack {
+                        Toggle(isOn: $disableDockStyleTitles) {
+                            EmptyView()
+                        }
+                        .toggleStyle(.switch).scaleEffect(0.8)
                         Text("Disable dock styling on window titles")
+                        Spacer()
                     }
                     Text("Removes the pill-shaped background styling from window titles in dock previews for a cleaner look.")
                         .font(.footnote)
@@ -501,8 +561,13 @@ struct AppearanceSettingsView: View {
             TrafficLightButtonsSettingsView()
 
             VStack(alignment: .leading) {
-                Toggle(isOn: $disableDockStyleTrafficLights) {
+                HStack {
+                    Toggle(isOn: $disableDockStyleTrafficLights) {
+                        EmptyView()
+                    }
+                    .toggleStyle(.switch).scaleEffect(0.8)
                     Text("Disable dock styling on traffic light buttons")
+                    Spacer()
                 }
                 Text("Removes the pill-shaped background styling from traffic light buttons in dock previews for a cleaner look.")
                     .font(.footnote)
@@ -514,8 +579,13 @@ struct AppearanceSettingsView: View {
             Text("Dock Preview Layout").font(.headline).padding(.bottom, -2)
 
             VStack(alignment: .leading) {
-                Toggle(isOn: $useEmbeddedDockPreviewElements) {
+                HStack {
+                    Toggle(isOn: $useEmbeddedDockPreviewElements) {
+                        EmptyView()
+                    }
+                    .toggleStyle(.switch).scaleEffect(0.8)
                     Text("Embed controls in preview frames")
+                    Spacer()
                 }
                 Text("Places traffic light buttons and window titles directly inside the dock preview frames for a more compact and minimal appearance.")
                     .font(.footnote)
@@ -605,10 +675,16 @@ struct AppearanceSettingsView: View {
                     )
                 }
                 Toggle("Use Monochrome Colors", isOn: $switcherUseMonochromeTrafficLights)
+                    .toggleStyle(.switch).scaleEffect(0.8)
 
                 VStack(alignment: .leading) {
-                    Toggle(isOn: $switcherDisableDockStyleTrafficLights) {
+                    HStack {
+                        Toggle(isOn: $switcherDisableDockStyleTrafficLights) {
+                            EmptyView()
+                        }
+                        .toggleStyle(.switch).scaleEffect(0.8)
                         Text("Disable dock styling on traffic light buttons")
+                        Spacer()
                     }
                     Text("Removes the pill-shaped background styling from traffic light buttons.")
                         .font(.footnote)
@@ -619,7 +695,11 @@ struct AppearanceSettingsView: View {
             Divider().padding(.vertical, 2)
             Text("Window Title").font(.headline).padding(.bottom, -2)
 
-            Toggle("Show Window Title", isOn: $switcherShowWindowTitle)
+            HStack {
+                Toggle("Show Window Title", isOn: $switcherShowWindowTitle)
+                    .toggleStyle(.switch).scaleEffect(0.8)
+                Spacer()
+            }
 
             if switcherShowWindowTitle {
                 Picker("Visibility", selection: $switcherWindowTitleVisibility) {
@@ -661,6 +741,7 @@ struct AppearanceSettingsView: View {
         VStack(alignment: .leading, spacing: 10) {
             // App Header section
             Toggle("Show App Header", isOn: $cmdTabShowAppName)
+                .toggleStyle(.switch).scaleEffect(0.8)
 
             if cmdTabShowAppName {
                 Picker("App Header Style", selection: $cmdTabAppNameStyle) {
@@ -670,6 +751,7 @@ struct AppearanceSettingsView: View {
                     }
                 }
                 Toggle("Show App Icon Only", isOn: $cmdTabShowAppIconOnly)
+                    .toggleStyle(.switch).scaleEffect(0.8)
             }
 
             // Toolbar section
@@ -685,6 +767,7 @@ struct AppearanceSettingsView: View {
             .pickerStyle(MenuPickerStyle())
 
             Toggle("Show Window Title", isOn: $cmdTabShowWindowTitle)
+                .toggleStyle(.switch).scaleEffect(0.8)
 
             if cmdTabShowWindowTitle {
                 Picker("Window Title Visibility", selection: $cmdTabWindowTitleVisibility) {
@@ -695,8 +778,13 @@ struct AppearanceSettingsView: View {
                 }
 
                 VStack(alignment: .leading) {
-                    Toggle(isOn: $cmdTabDisableDockStyleTitles) {
+                    HStack {
+                        Toggle(isOn: $cmdTabDisableDockStyleTitles) {
+                            EmptyView()
+                        }
+                        .toggleStyle(.switch).scaleEffect(0.8)
                         Text("Disable dock styling on window titles")
+                        Spacer()
                     }
                     Text("Removes the pill-shaped background styling from window titles.")
                         .font(.footnote)
@@ -737,10 +825,16 @@ struct AppearanceSettingsView: View {
                     )
                 }
                 Toggle("Use Monochrome Colors", isOn: $cmdTabUseMonochromeTrafficLights)
+                    .toggleStyle(.switch).scaleEffect(0.8)
 
                 VStack(alignment: .leading) {
-                    Toggle(isOn: $cmdTabDisableDockStyleTrafficLights) {
+                    HStack {
+                        Toggle(isOn: $cmdTabDisableDockStyleTrafficLights) {
+                            EmptyView()
+                        }
+                        .toggleStyle(.switch).scaleEffect(0.8)
                         Text("Disable dock styling on traffic light buttons")
+                        Spacer()
                     }
                     Text("Removes the pill-shaped background styling from traffic light buttons.")
                         .font(.footnote)
@@ -754,8 +848,13 @@ struct AppearanceSettingsView: View {
             Text("Cmd+Tab Layout").font(.headline).padding(.bottom, -2)
 
             VStack(alignment: .leading) {
-                Toggle(isOn: $cmdTabUseEmbeddedDockPreviewElements) {
+                HStack {
+                    Toggle(isOn: $cmdTabUseEmbeddedDockPreviewElements) {
+                        EmptyView()
+                    }
+                    .toggleStyle(.switch).scaleEffect(0.8)
                     Text("Embed controls in preview frames")
+                    Spacer()
                 }
                 Text("Places traffic light buttons and window titles directly inside the preview frames.")
                     .font(.footnote)
@@ -950,8 +1049,13 @@ struct AppearanceSettingsView: View {
 
         var body: some View {
             VStack(alignment: .leading, spacing: 10) {
-                Toggle(isOn: $lockAspectRatio) {
+                HStack {
+                    Toggle(isOn: $lockAspectRatio) {
+                        EmptyView()
+                    }
+                    .toggleStyle(.switch).scaleEffect(0.8)
                     Text("Lock aspect ratio (16:10)")
+                    Spacer()
                 }
                 .onChange(of: lockAspectRatio) { newValue in
                     if newValue {

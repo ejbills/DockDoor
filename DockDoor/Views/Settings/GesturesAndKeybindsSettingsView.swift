@@ -61,12 +61,17 @@ struct GesturesAndKeybindsSettingsView: View {
     private var dockScrollGestureSection: some View {
         StyledGroupBox(label: "Dock Icon Scroll Gesture") {
             VStack(alignment: .leading, spacing: 12) {
-                Toggle(isOn: $enableDockScrollGesture) {
+                HStack {
+                    Toggle(isOn: $enableDockScrollGesture) {
+                        EmptyView()
+                    }
+                    .toggleStyle(.switch).scaleEffect(0.8)
                     HStack(spacing: 8) {
                         Image(systemName: "arrow.up.arrow.down")
                             .foregroundColor(.accentColor)
                         Text("Enable scroll gestures on dock icons")
                     }
+                    Spacer()
                 }
 
                 if enableDockScrollGesture {
@@ -91,12 +96,17 @@ struct GesturesAndKeybindsSettingsView: View {
     private var dockPreviewGesturesSection: some View {
         StyledGroupBox(label: "Dock Preview Gestures") {
             VStack(alignment: .leading, spacing: 12) {
-                Toggle(isOn: $enableDockPreviewGestures) {
+                HStack {
+                    Toggle(isOn: $enableDockPreviewGestures) {
+                        EmptyView()
+                    }
+                    .toggleStyle(.switch).scaleEffect(0.8)
                     HStack(spacing: 8) {
                         Image(systemName: "dock.rectangle")
                             .foregroundColor(.accentColor)
                         Text("Enable gestures on dock window previews")
                     }
+                    Spacer()
                 }
 
                 if enableDockPreviewGestures {
@@ -163,12 +173,17 @@ struct GesturesAndKeybindsSettingsView: View {
     private var windowSwitcherGesturesSection: some View {
         StyledGroupBox(label: "Window Switcher Gestures") {
             VStack(alignment: .leading, spacing: 12) {
-                Toggle(isOn: $enableWindowSwitcherGestures) {
+                HStack {
+                    Toggle(isOn: $enableWindowSwitcherGestures) {
+                        EmptyView()
+                    }
+                    .toggleStyle(.switch).scaleEffect(0.8)
                     HStack(spacing: 8) {
                         Image(systemName: "rectangle.3.group")
                             .foregroundColor(.accentColor)
                         Text("Enable gestures in window switcher")
                     }
+                    Spacer()
                 }
 
                 if enableWindowSwitcherGestures {

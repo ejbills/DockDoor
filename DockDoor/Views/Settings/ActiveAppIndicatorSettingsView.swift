@@ -17,8 +17,14 @@ struct ActiveAppIndicatorSettingsView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Toggle(isOn: $showActiveAppIndicator) {
+            HStack {
+                Toggle(isOn: $showActiveAppIndicator) {
+                    EmptyView()
+                }
+                .toggleStyle(.switch)
+                .scaleEffect(0.8)
                 Text("Show active app indicator below dock icon")
+                Spacer()
             }
             .onChange(of: showActiveAppIndicator) { _ in askUserToRestartApplication() }
 
@@ -59,8 +65,14 @@ struct ActiveAppIndicatorSettingsView: View {
                     .font(.caption)
                     .padding(.leading, 20)
 
-                    Toggle(isOn: $activeAppIndicatorAutoSize) {
+                    HStack {
+                        Toggle(isOn: $activeAppIndicatorAutoSize) {
+                            EmptyView()
+                        }
+                        .toggleStyle(.switch)
+                        .scaleEffect(0.8)
                         Text("Automatically set height and offset")
+                        Spacer()
                     }
                     .padding(.leading, 20)
 
@@ -97,8 +109,14 @@ struct ActiveAppIndicatorSettingsView: View {
                         .padding(.leading, 40)
                     }
 
-                    Toggle(isOn: $activeAppIndicatorAutoLength) {
+                    HStack {
+                        Toggle(isOn: $activeAppIndicatorAutoLength) {
+                            EmptyView()
+                        }
+                        .toggleStyle(.switch)
+                        .scaleEffect(0.8)
                         Text("Automatically set length")
+                        Spacer()
                     }
                     .padding(.leading, 20)
 

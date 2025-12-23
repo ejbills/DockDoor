@@ -356,30 +356,47 @@ struct MainSettingsView: View {
             VStack(alignment: .leading, spacing: 10) {
                 LaunchAtLogin.Toggle(String(localized: "Launch DockDoor at login"))
 
-                Toggle(isOn: $showMenuBarIcon, label: { Text("Show menu bar icon") })
-                    .onChange(of: showMenuBarIcon) { isOn in
-                        let appDelegate = NSApplication.shared.delegate as! AppDelegate
-                        if isOn { appDelegate.setupMenuBar() } else { appDelegate.removeMenuBar() }
-                    }
+                HStack {
+                    Toggle(isOn: $showMenuBarIcon, label: { EmptyView() })
+                        .toggleStyle(.switch)
+                        .scaleEffect(0.8)
+                    Text("Show menu bar icon")
+                    Spacer()
+                }
+                .onChange(of: showMenuBarIcon) { isOn in
+                    let appDelegate = NSApplication.shared.delegate as! AppDelegate
+                    if isOn { appDelegate.setupMenuBar() } else { appDelegate.removeMenuBar() }
+                }
 
-                Toggle(isOn: Binding(
-                    get: { !showAnimations },
-                    set: { showAnimations = !$0 }
-                )) {
+                HStack(spacing: 8) {
+                    Toggle("", isOn: Binding(
+                        get: { !showAnimations },
+                        set: { showAnimations = !$0 }
+                    ))
+                    .toggleStyle(.switch)
+                    .scaleEffect(0.8)
                     Text("Reduce motion")
                 }
 
-                Toggle(isOn: $ignoreAppsWithSingleWindow, label: {
+                HStack {
+                    Toggle(isOn: $ignoreAppsWithSingleWindow, label: { EmptyView() })
+                        .toggleStyle(.switch)
+                        .scaleEffect(0.8)
                     Text("Ignore apps with one window")
-                })
+                    Spacer()
+                }
                 Text("Prevents apps that only ever have a single window from appearing in previews.")
                     .font(.caption)
                     .foregroundColor(.secondary)
                     .padding(.leading, 20)
 
-                Toggle(isOn: $sortMinimizedToEnd, label: {
+                HStack {
+                    Toggle(isOn: $sortMinimizedToEnd, label: { EmptyView() })
+                        .toggleStyle(.switch)
+                        .scaleEffect(0.8)
                     Text("Sort minimized/hidden windows to end")
-                })
+                    Spacer()
+                }
                 Text("Minimized and hidden windows will appear after all visible windows in previews and switcher.")
                     .font(.caption)
                     .foregroundColor(.secondary)
@@ -388,15 +405,27 @@ struct MainSettingsView: View {
                 Divider()
 
                 SettingsIllustratedRow(imageName: "DockPreviews") {
-                    Toggle(isOn: $enableDockPreviews) { Text("Enable Dock Previews") }
-                        .onChange(of: enableDockPreviews) { _ in askUserToRestartApplication() }
+                    HStack {
+                        Toggle(isOn: $enableDockPreviews) { EmptyView() }
+                            .toggleStyle(.switch)
+                            .scaleEffect(0.8)
+                        Text("Enable Dock Previews")
+                        Spacer()
+                    }
+                    .onChange(of: enableDockPreviews) { _ in askUserToRestartApplication() }
                     Text("Show window previews when hovering over Dock icons.")
                         .font(.caption)
                         .foregroundColor(.secondary)
                         .padding(.leading, 20)
                     if enableDockPreviews {
-                        Toggle(isOn: $showWindowsFromCurrentSpaceOnly) { Text("Show windows from current Space only") }
-                            .padding(.leading, 20)
+                        HStack {
+                            Toggle(isOn: $showWindowsFromCurrentSpaceOnly) { EmptyView() }
+                                .toggleStyle(.switch)
+                                .scaleEffect(0.8)
+                            Text("Show windows from current Space only")
+                            Spacer()
+                        }
+                        .padding(.leading, 20)
                         Text("Only display windows that are in the current virtual desktop/Space.")
                             .font(.caption)
                             .foregroundColor(.secondary)
@@ -416,8 +445,13 @@ struct MainSettingsView: View {
                             .foregroundColor(.secondary)
                             .padding(.leading, 40)
 
-                        Toggle(isOn: $keepPreviewOnAppTerminate) { Text("Keep preview when app terminates") }
-                            .padding(.leading, 20)
+                        HStack {
+                            Toggle(isOn: $keepPreviewOnAppTerminate) { EmptyView() }
+                                .toggleStyle(.switch).scaleEffect(0.8)
+                            Text("Keep preview when app terminates")
+                            Spacer()
+                        }
+                        .padding(.leading, 20)
                         Text("When an app terminates, remove only its windows from the preview instead of hiding the entire preview.")
                             .font(.caption)
                             .foregroundColor(.secondary)
@@ -428,28 +462,48 @@ struct MainSettingsView: View {
                 Divider()
 
                 SettingsIllustratedRow(imageName: "WindowSwitcher") {
-                    Toggle(isOn: $enableWindowSwitcher) { Text("Enable Window Switcher") }
-                        .onChange(of: enableWindowSwitcher) { _ in askUserToRestartApplication() }
+                    HStack {
+                        Toggle(isOn: $enableWindowSwitcher) { EmptyView() }
+                            .toggleStyle(.switch).scaleEffect(0.8)
+                        Text("Enable Window Switcher")
+                        Spacer()
+                    }
+                    .onChange(of: enableWindowSwitcher) { _ in askUserToRestartApplication() }
                     Text("The Window Switcher (often Alt/Cmd-Tab) lets you quickly cycle between open app windows with a keyboard shortcut.")
                         .font(.caption)
                         .foregroundColor(.secondary)
                         .padding(.leading, 20)
                     if enableWindowSwitcher {
                         VStack(alignment: .leading, spacing: 8) {
-                            Toggle(isOn: $instantWindowSwitcher) { Text("Show Window Switcher instantly") }
+                            HStack {
+                                Toggle(isOn: $instantWindowSwitcher) { EmptyView() }
+                                    .toggleStyle(.switch).scaleEffect(0.8)
+                                Text("Show Window Switcher instantly")
+                                Spacer()
+                            }
                             Text("Skip the small delay before the switcher appears. May feel snappier but can cause flickering if you quickly release the key.")
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                                 .padding(.leading, 20)
-                            Toggle(isOn: $includeHiddenWindowsInSwitcher) { Text("Include hidden/minimized windows in Switcher") }
-                            Toggle(isOn: $enableWindowSwitcherSearch) { Text("Enable search while using Window Switcher") }
+                            HStack {
+                                Toggle(isOn: $includeHiddenWindowsInSwitcher) { EmptyView() }
+                                    .toggleStyle(.switch).scaleEffect(0.8)
+                                Text("Include hidden/minimized windows in Switcher")
+                                Spacer()
+                            }
+                            HStack {
+                                Toggle(isOn: $enableWindowSwitcherSearch) { EmptyView() }
+                                    .toggleStyle(.switch).scaleEffect(0.8)
+                                Text("Enable search while using Window Switcher")
+                                Spacer()
+                            }
                             if enableWindowSwitcherSearch {
                                 HStack {
-                                    Text("Search Fuzziness")
                                     Slider(value: Binding(
                                         get: { Double(searchFuzziness) },
                                         set: { searchFuzziness = Int($0) }
                                     ), in: 1 ... 5, step: 1)
+                                    Text("Search Fuzziness")
                                     Text("\(searchFuzziness)")
                                         .frame(width: 20)
                                 }
@@ -460,11 +514,21 @@ struct MainSettingsView: View {
                                     .padding(.leading, 20)
                             }
 
-                            Toggle(isOn: Binding(
-                                get: { !preventSwitcherHide },
-                                set: { preventSwitcherHide = !$0 }
-                            )) { Text("Release initializer key to select window in Switcher") }
-                            Toggle(isOn: $enableMouseHoverInSwitcher) { Text("Enable mouse hover selection") }
+                            HStack {
+                                Toggle(isOn: Binding(
+                                    get: { !preventSwitcherHide },
+                                    set: { preventSwitcherHide = !$0 }
+                                )) { EmptyView() }
+                                    .toggleStyle(.switch).scaleEffect(0.8)
+                                Text("Release initializer key to select window in Switcher")
+                                Spacer()
+                            }
+                            HStack {
+                                Toggle(isOn: $enableMouseHoverInSwitcher) { EmptyView() }
+                                    .toggleStyle(.switch).scaleEffect(0.8)
+                                Text("Enable mouse hover selection")
+                                Spacer()
+                            }
                             Text("Select and scroll to windows when hovering with mouse. Disable for keyboard-only navigation.")
                                 .font(.caption)
                                 .foregroundColor(.secondary)
@@ -472,8 +536,8 @@ struct MainSettingsView: View {
 
                             if enableMouseHoverInSwitcher {
                                 HStack {
-                                    Text("Auto-scroll speed:")
                                     Slider(value: $mouseHoverAutoScrollSpeed, in: 1 ... 10, step: 0.5)
+                                    Text("Auto-scroll speed:")
                                     Text(String(format: "%.1f", mouseHoverAutoScrollSpeed))
                                         .frame(width: 30)
                                         .foregroundColor(.secondary)
@@ -481,19 +545,34 @@ struct MainSettingsView: View {
                                 .padding(.leading, 20)
                             }
 
-                            Toggle(isOn: $useClassicWindowOrdering) { Text("Start on second window in Switcher") }
+                            HStack {
+                                Toggle(isOn: $useClassicWindowOrdering) { EmptyView() }
+                                    .toggleStyle(.switch).scaleEffect(0.8)
+                                Text("Start on second window in Switcher")
+                                Spacer()
+                            }
                             Text("When opening the window switcher, highlight the second window instead of the first.")
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                                 .padding(.leading, 20)
 
-                            Toggle(isOn: $limitSwitcherToFrontmostApp) { Text("Limit Window Switcher to active app only") }
+                            HStack {
+                                Toggle(isOn: $limitSwitcherToFrontmostApp) { EmptyView() }
+                                    .toggleStyle(.switch).scaleEffect(0.8)
+                                Text("Limit Window Switcher to active app only")
+                                Spacer()
+                            }
                             Text("Only show windows from the currently active/frontmost application.")
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                                 .padding(.leading, 20)
 
-                            Toggle(isOn: $showWindowsFromCurrentSpaceOnlyInSwitcher) { Text("Show windows from current Space only") }
+                            HStack {
+                                Toggle(isOn: $showWindowsFromCurrentSpaceOnlyInSwitcher) { EmptyView() }
+                                    .toggleStyle(.switch).scaleEffect(0.8)
+                                Text("Show windows from current Space only")
+                                Spacer()
+                            }
                             Text("Only display windows that are in the current virtual desktop/Space.")
                                 .font(.caption)
                                 .foregroundColor(.secondary)
@@ -563,8 +642,13 @@ struct MainSettingsView: View {
                 Divider()
 
                 SettingsIllustratedRow(imageName: "CmdTab") {
-                    Toggle(isOn: $enableCmdTabEnhancements) { Text("Enable Cmd+Tab Enhancements") }
-                        .onChange(of: enableCmdTabEnhancements) { _ in askUserToRestartApplication() }
+                    HStack {
+                        Toggle(isOn: $enableCmdTabEnhancements) { EmptyView() }
+                            .toggleStyle(.switch).scaleEffect(0.8)
+                        Text("Enable Cmd+Tab Enhancements")
+                        Spacer()
+                    }
+                    .onChange(of: enableCmdTabEnhancements) { _ in askUserToRestartApplication() }
                     VStack(alignment: .leading, spacing: 2) {
                         Text("Show previews while holding Cmd+Tab.")
                         Text("Cmd+A cycles through previews (Shift+A cycles backward), Left/Right navigate, Down clears selection.")
@@ -574,8 +658,13 @@ struct MainSettingsView: View {
                     .padding(.leading, 20)
 
                     if enableCmdTabEnhancements {
-                        Toggle(isOn: $showWindowsFromCurrentSpaceOnlyInCmdTab) { Text("Show windows from current Space only") }
-                            .padding(.leading, 20)
+                        HStack {
+                            Toggle(isOn: $showWindowsFromCurrentSpaceOnlyInCmdTab) { EmptyView() }
+                                .toggleStyle(.switch).scaleEffect(0.8)
+                            Text("Show windows from current Space only")
+                            Spacer()
+                        }
+                        .padding(.leading, 20)
                         Text("Only display windows that are in the current virtual desktop/Space.")
                             .font(.caption)
                             .foregroundColor(.secondary)
@@ -682,29 +771,90 @@ struct MainSettingsView: View {
         VStack(alignment: .leading, spacing: 16) {
             StyledGroupBox(label: "Performance Tuning (Dock Previews)") {
                 VStack(alignment: .leading, spacing: 10) {
-                    sliderSetting(title: "Preview Window Open Delay", value: $hoverWindowOpenDelay, range: 0 ... 2, step: 0.1, unit: "seconds", formatter: NumberFormatter.oneDecimalFormatter)
+                    VStack(alignment: .leading, spacing: 5) {
+                        HStack {
+                            Slider(
+                                value: $hoverWindowOpenDelay,
+                                in: 0 ... 2,
+                                step: 0.1
+                            )
+                            Text("Preview Window Open Delay")
+                            TextField("", value: $hoverWindowOpenDelay, formatter: NumberFormatter.oneDecimalFormatter)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                                .frame(width: 50)
+                            Text("seconds")
+                                .font(.footnote)
+                        }
+                    }
                     VStack(alignment: .leading) {
                         Toggle(isOn: $useDelayOnlyForInitialOpen) {
                             Text("Only use delay for initial window opening")
                         }
+                        .toggleStyle(.switch).scaleEffect(0.8)
                         Text("When enabled, switching between dock icons while a preview is already open will show previews instantly.")
                             .font(.footnote)
                             .foregroundColor(.gray)
                             .padding(.leading, 20)
                     }
-                    sliderSetting(title: "Preview Window Fade Out Duration", value: $fadeOutDuration, range: 0 ... 2, step: 0.1, unit: "seconds", formatter: NumberFormatter.oneDecimalFormatter)
-                    sliderSetting(title: "Preview Window Inactivity Timer", value: $inactivityTimeout, range: 0 ... 3, step: 0.1, unit: "seconds", formatter: NumberFormatter.oneDecimalFormatter)
-                    sliderSetting(title: "Window Processing Debounce Interval", value: $windowProcessingDebounceInterval, range: 0 ... 3, step: 0.1, unit: "seconds", formatter: NumberFormatter.oneDecimalFormatter, onEditingChanged: { isEditing in
-                        if !isEditing {
-                            askUserToRestartApplication()
+                    VStack(alignment: .leading, spacing: 5) {
+                        HStack {
+                            Slider(
+                                value: $fadeOutDuration,
+                                in: 0 ... 2,
+                                step: 0.1
+                            )
+                            Text("Preview Window Fade Out Duration")
+                            TextField("", value: $fadeOutDuration, formatter: NumberFormatter.oneDecimalFormatter)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                                .frame(width: 50)
+                            Text("seconds")
+                                .font(.footnote)
                         }
-                    })
+                    }
+                    VStack(alignment: .leading, spacing: 5) {
+                        HStack {
+                            Slider(
+                                value: $inactivityTimeout,
+                                in: 0 ... 3,
+                                step: 0.1
+                            )
+                            Text("Preview Window Inactivity Timer")
+                            TextField("", value: $inactivityTimeout, formatter: NumberFormatter.oneDecimalFormatter)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                                .frame(width: 50)
+                            Text("seconds")
+                                .font(.footnote)
+                        }
+                    }
+                    VStack(alignment: .leading, spacing: 5) {
+                        HStack {
+                            Slider(
+                                value: $windowProcessingDebounceInterval,
+                                in: 0 ... 3,
+                                step: 0.1,
+                                onEditingChanged: { isEditing in
+                                    if !isEditing {
+                                        askUserToRestartApplication()
+                                    }
+                                }
+                            )
+                            Text("Window Processing Debounce Interval")
+                            TextField("", value: $windowProcessingDebounceInterval, formatter: NumberFormatter.oneDecimalFormatter)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                                .frame(width: 50)
+                            Text("seconds")
+                                .font(.footnote)
+                        }
+                    }
                     Toggle(isOn: $preventDockHide) { Text("Prevent dock from hiding during previews") }
+                        .toggleStyle(.switch).scaleEffect(0.8)
                     Toggle(isOn: $raisedWindowLevel) { Text("Show preview above app labels").onChange(of: raisedWindowLevel) { _ in askUserToRestartApplication() }}
+                        .toggleStyle(.switch).scaleEffect(0.8)
                     VStack(alignment: .leading) {
                         Toggle(isOn: $preventPreviewReentryDuringFadeOut) {
                             Text("Prevent preview reappearance during fade-out")
                         }
+                        .toggleStyle(.switch).scaleEffect(0.8)
                         Text("When enabled, moving the mouse back over the preview during fade-out will not reactivate it. You must hover over the dock icon again to show the preview.")
                             .font(.footnote)
                             .foregroundColor(.gray)
@@ -721,12 +871,41 @@ struct MainSettingsView: View {
                     }
                     .pickerStyle(MenuPickerStyle())
 
-                    sliderSetting(title: "Window Image Cache Lifespan", value: $screenCaptureCacheLifespan, range: 0 ... 60, step: 10, unit: "seconds")
-                    sliderSetting(title: "Window Image Resolution Scale (1=Best)", value: $windowPreviewImageScale, range: 1 ... 4, step: 1, unit: "")
+                    VStack(alignment: .leading, spacing: 5) {
+                        HStack {
+                            Slider(
+                                value: $screenCaptureCacheLifespan,
+                                in: 0 ... 60,
+                                step: 10
+                            )
+                            Text("Window Image Cache Lifespan")
+                            TextField("", value: $screenCaptureCacheLifespan, formatter: NumberFormatter())
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                                .frame(width: 50)
+                            Text("seconds")
+                                .font(.footnote)
+                        }
+                    }
+                    VStack(alignment: .leading, spacing: 5) {
+                        HStack {
+                            Slider(
+                                value: $windowPreviewImageScale,
+                                in: 1 ... 4,
+                                step: 1
+                            )
+                            Text("Window Image Resolution Scale (1=Best)")
+                            TextField("", value: $windowPreviewImageScale, formatter: NumberFormatter())
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                                .frame(width: 50)
+                            Text("")
+                                .font(.footnote)
+                        }
+                    }
 
                     Divider()
 
                     Toggle(isOn: $enableLivePreview) { Text("Enable Live Preview (Video)") }
+                        .toggleStyle(.switch).scaleEffect(0.8)
                         .onChange(of: enableLivePreview) { newValue in
                             if !newValue {
                                 Task { await LiveCaptureManager.shared.stopAllStreams() }
@@ -741,6 +920,7 @@ struct MainSettingsView: View {
                         // MARK: - Dock Live Preview Settings
 
                         Toggle(isOn: $enableLivePreviewForDock) { Text("Enable for Dock Preview") }
+                            .toggleStyle(.switch).scaleEffect(0.8)
                             .padding(.leading, 20)
 
                         if enableLivePreviewForDock {
@@ -767,6 +947,7 @@ struct MainSettingsView: View {
                         // MARK: - Window Switcher Live Preview Settings
 
                         Toggle(isOn: $enableLivePreviewForWindowSwitcher) { Text("Enable for Window Switcher") }
+                            .toggleStyle(.switch).scaleEffect(0.8)
                             .padding(.leading, 20)
 
                         if enableLivePreviewForWindowSwitcher {
@@ -905,7 +1086,12 @@ struct MainSettingsView: View {
             }
             StyledGroupBox(label: "Interaction & Behavior (Dock Previews)") {
                 VStack(alignment: .leading, spacing: 10) {
-                    Toggle(isOn: $groupAppInstancesInDock) { Text("Group multiple app instances together") }
+                    HStack {
+                        Toggle(isOn: $groupAppInstancesInDock) { EmptyView() }
+                            .toggleStyle(.switch).scaleEffect(0.8)
+                        Text("Group multiple app instances together")
+                        Spacer()
+                    }
                     Text("When enabled, hovering over an app in the Dock shows windows from all instances of that app. When disabled, shows only windows from the specific instance under the mouse.")
                         .font(.caption)
                         .foregroundColor(.secondary)
@@ -914,8 +1100,27 @@ struct MainSettingsView: View {
                     Divider()
 
                     Picker("Dock Preview Hover Action", selection: $previewHoverAction) { ForEach(PreviewHoverAction.allCases, id: \.self) { Text($0.localizedName).tag($0) } }.pickerStyle(MenuPickerStyle())
-                    sliderSetting(title: "Preview Hover Action Delay", value: $tapEquivalentInterval, range: 0 ... 2, step: 0.1, unit: "seconds", formatter: NumberFormatter.oneDecimalFormatter).disabled(previewHoverAction == .none)
-                    Toggle(isOn: $shouldHideOnDockItemClick) { Text("Hide all app windows on dock icon click") }
+                    VStack(alignment: .leading, spacing: 5) {
+                        HStack {
+                            Slider(
+                                value: $tapEquivalentInterval,
+                                in: 0 ... 2,
+                                step: 0.1
+                            )
+                            Text("Preview Hover Action Delay")
+                            TextField("", value: $tapEquivalentInterval, formatter: NumberFormatter.oneDecimalFormatter)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                                .frame(width: 50)
+                            Text("seconds")
+                                .font(.footnote)
+                        }
+                    }.disabled(previewHoverAction == .none)
+                    HStack {
+                        Toggle(isOn: $shouldHideOnDockItemClick) { EmptyView() }
+                            .toggleStyle(.switch).scaleEffect(0.8)
+                        Text("Hide all app windows on dock icon click")
+                        Spacer()
+                    }
                     if shouldHideOnDockItemClick {
                         Picker("Dock Click Action", selection: $dockClickAction) {
                             ForEach(DockClickAction.allCases, id: \.self) {
@@ -925,9 +1130,28 @@ struct MainSettingsView: View {
                         .pickerStyle(MenuPickerStyle())
                         .padding(.leading, 20)
                     }
-                    Toggle(isOn: $enableCmdRightClickQuit) { Text("CMD + Right Click on dock icon to quit app") }
+                    HStack {
+                        Toggle(isOn: $enableCmdRightClickQuit) { EmptyView() }
+                            .toggleStyle(.switch).scaleEffect(0.8)
+                        Text("CMD + Right Click on dock icon to quit app")
+                        Spacer()
+                    }
 
-                    sliderSetting(title: "Window Buffer from Dock (pixels)", value: $bufferFromDock, range: -100 ... 100, step: 5, unit: "px", formatter: { let f = NumberFormatter(); f.allowsFloats = false; f.minimumIntegerDigits = 1; f.maximumFractionDigits = 0; return f }())
+                    VStack(alignment: .leading, spacing: 5) {
+                        HStack {
+                            Slider(
+                                value: $bufferFromDock,
+                                in: -100 ... 100,
+                                step: 5
+                            )
+                            Text("Window Buffer from Dock (pixels)")
+                            TextField("", value: $bufferFromDock, formatter: { let f = NumberFormatter(); f.allowsFloats = false; f.minimumIntegerDigits = 1; f.maximumFractionDigits = 0; return f }())
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                                .frame(width: 50)
+                            Text("px")
+                                .font(.footnote)
+                        }
+                    }
                 }
             }
             StyledGroupBox(label: "Active App Indicator") {

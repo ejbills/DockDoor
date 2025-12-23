@@ -207,6 +207,8 @@ struct FiltersSettingsView: View {
                                                     }
                                                 }
                                             )) { EmptyView() }
+                                                .toggleStyle(.switch)
+                                                .scaleEffect(0.8)
 
                                             Image(nsImage: app.icon)
                                                 .resizable()

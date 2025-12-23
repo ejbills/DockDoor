@@ -59,8 +59,13 @@ struct WidgetSettingsView: View {
             VStack(alignment: .leading, spacing: 16) {
                 StyledGroupBox(label: "General") {
                     VStack(alignment: .leading, spacing: 10) {
-                        Toggle(isOn: $showSpecialAppControls) {
+                        HStack {
+                            Toggle(isOn: $showSpecialAppControls) {
+                                EmptyView()
+                            }
+                            .toggleStyle(.switch).scaleEffect(0.8)
                             Text("Show media/calendar controls on Dock hover")
+                            Spacer()
                         }
                         Text("For supported apps (Music, Spotify, Calendar), show interactive controls instead of window previews when hovering their Dock icons.")
                             .font(.caption)
@@ -68,8 +73,13 @@ struct WidgetSettingsView: View {
                             .padding(.leading, 20)
 
                         if showSpecialAppControls {
-                            Toggle(isOn: $useEmbeddedMediaControls) {
+                            HStack {
+                                Toggle(isOn: $useEmbeddedMediaControls) {
+                                    EmptyView()
+                                }
+                                .toggleStyle(.switch).scaleEffect(0.8)
                                 Text("Embed controls with window previews (if previews shown)")
+                                Spacer()
                             }
                             .padding(.leading, 20)
                             Text("If enabled, controls integrate with previews when possible.")
@@ -77,8 +87,13 @@ struct WidgetSettingsView: View {
                                 .foregroundColor(.secondary)
                                 .padding(.leading, 40)
 
-                            Toggle(isOn: $showBigControlsWhenNoValidWindows) {
+                            HStack {
+                                Toggle(isOn: $showBigControlsWhenNoValidWindows) {
+                                    EmptyView()
+                                }
+                                .toggleStyle(.switch).scaleEffect(0.8)
                                 Text("Show big controls when no valid windows")
+                                Spacer()
                             }
                             .padding(.leading, 20)
                             .disabled(!useEmbeddedMediaControls)
@@ -90,8 +105,13 @@ struct WidgetSettingsView: View {
                                 .padding(.leading, 40)
                                 .opacity(useEmbeddedMediaControls ? 1.0 : 0.6)
 
-                            Toggle(isOn: $enablePinning) {
+                            HStack {
+                                Toggle(isOn: $enablePinning) {
+                                    EmptyView()
+                                }
+                                .toggleStyle(.switch).scaleEffect(0.8)
                                 Text("Enable Pinning")
+                                Spacer()
                             }
                             .padding(.leading, 20)
                             .onChange(of: enablePinning) { isEnabled in

@@ -23,6 +23,8 @@ struct SettingsIllustratedToggle<Caption: View>: View {
         HStack(alignment: .top, spacing: 16) {
             VStack(alignment: .leading, spacing: 6) {
                 Toggle(isOn: $isOn) { Text(title) }
+                    .toggleStyle(.switch)
+                    .scaleEffect(0.8)
 
                 caption
                     .font(.caption)
