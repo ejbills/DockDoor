@@ -152,21 +152,17 @@ func shouldAcceptWindow(axWindow: AXUIElement,
 
     if isOnscreen || scBacked { return true }
 
-    // If it has window controls, include even if not currently on-screen
-    let axHasClose = (try? axWindow.closeButton())
-    let axHasMinimize = (try? axWindow.minimizeButton())
-    if axHasClose != nil || axHasMinimize != nil { return true }
-
-    // If minimized/fullscreen or app hidden, include even if not currently on-screen
     let axIsFullscreen = (try? axWindow.isFullscreen()) ?? false
     let axIsMinimized = (try? axWindow.isMinimized()) ?? false
+    let windowSpaces = Set(windowID.cgsSpaces().map { Int($0) })
+
     if app.isHidden || axIsFullscreen || axIsMinimized { return true }
 
-    // If assigned to other Space(s) than any active Space, include
-    let windowSpaces = Set(windowID.cgsSpaces().map { Int($0) })
-    if !windowSpaces.isEmpty, windowSpaces.isDisjoint(with: activeSpaceIDs) {
-        return true
-    }
+    // Window on different Space
+    if !windowSpaces.isEmpty, windowSpaces.isDisjoint(with: activeSpaceIDs) { return true }
+
+    // Ghost window: on active space but not on screen and not minimized/hidden
+    if !windowSpaces.isEmpty, !windowSpaces.isDisjoint(with: activeSpaceIDs) { return false }
 
     // Fallback: if AX marks it as main, consider it significant and include.
     // This helps when CGS space mapping is unreliable or empty for other-Spaces windows.
