@@ -78312,6 +78312,18 @@
         }
       }
     },
+    "Parallel - Title bottom left, controls top left" : {
+
+    },
+    "Parallel - Title bottom right, controls top right" : {
+
+    },
+    "Parallel - Title top left, controls bottom left" : {
+
+    },
+    "Parallel - Title top right, controls bottom right" : {
+
+    },
     "Performance Profiles" : {
       "localizations" : {
         "af" : {
