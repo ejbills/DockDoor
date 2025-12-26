@@ -623,52 +623,15 @@ struct WindowPreview: View {
 
         ZStack(alignment: .topLeading) {
             VStack(alignment: .leading, spacing: 0) {
-                if !effectiveUseEmbeddedElements ||
-                    windowSwitcherActive
+                if !effectiveUseEmbeddedElements || windowSwitcherActive,
+                   effectiveControlPosition.showsOnTop
                 {
+                    let config = effectiveControlPosition.topConfiguration
                     Group {
-                        if windowSwitcherActive, effectiveControlPosition == .topLeading {
-                            windowSwitcherContent(finalIsSelected, isLeadingControls: false)
-                        } else if windowSwitcherActive, effectiveControlPosition == .topTrailing {
-                            windowSwitcherContent(finalIsSelected, isLeadingControls: true)
-                        } else if windowSwitcherActive, effectiveControlPosition == .diagonalTopLeftBottomRight {
-                            windowSwitcherContent(finalIsSelected, isLeadingControls: false, showTitleContent: true, showControlsContent: false)
-                        } else if windowSwitcherActive, effectiveControlPosition == .diagonalTopRightBottomLeft {
-                            windowSwitcherContent(finalIsSelected, isLeadingControls: true, showTitleContent: true, showControlsContent: false)
-                        } else if windowSwitcherActive, effectiveControlPosition == .diagonalBottomLeftTopRight {
-                            windowSwitcherContent(finalIsSelected, isLeadingControls: false, showTitleContent: false, showControlsContent: true)
-                        } else if windowSwitcherActive, effectiveControlPosition == .diagonalBottomRightTopLeft {
-                            windowSwitcherContent(finalIsSelected, isLeadingControls: true, showTitleContent: false, showControlsContent: true)
-                        } else if windowSwitcherActive, effectiveControlPosition == .parallelTopLeftBottomLeft {
-                            windowSwitcherContent(finalIsSelected, isLeadingControls: false, showTitleContent: true, showControlsContent: false)
-                        } else if windowSwitcherActive, effectiveControlPosition == .parallelTopRightBottomRight {
-                            windowSwitcherContent(finalIsSelected, isLeadingControls: true, showTitleContent: true, showControlsContent: false)
-                        } else if windowSwitcherActive, effectiveControlPosition == .parallelBottomLeftTopLeft {
-                            windowSwitcherContent(finalIsSelected, isLeadingControls: true, showTitleContent: false, showControlsContent: true)
-                        } else if windowSwitcherActive, effectiveControlPosition == .parallelBottomRightTopRight {
-                            windowSwitcherContent(finalIsSelected, isLeadingControls: false, showTitleContent: false, showControlsContent: true)
-                        }
-
-                        if !windowSwitcherActive, effectiveControlPosition == .topLeading {
-                            dockPreviewContent(finalIsSelected, isLeadingControls: false)
-                        } else if !windowSwitcherActive, effectiveControlPosition == .topTrailing {
-                            dockPreviewContent(finalIsSelected, isLeadingControls: true)
-                        } else if !windowSwitcherActive, effectiveControlPosition == .diagonalTopLeftBottomRight {
-                            dockPreviewContent(finalIsSelected, isLeadingControls: false, showTitleContent: true, showControlsContent: false)
-                        } else if !windowSwitcherActive, effectiveControlPosition == .diagonalTopRightBottomLeft {
-                            dockPreviewContent(finalIsSelected, isLeadingControls: true, showTitleContent: true, showControlsContent: false)
-                        } else if !windowSwitcherActive, effectiveControlPosition == .diagonalBottomLeftTopRight {
-                            dockPreviewContent(finalIsSelected, isLeadingControls: false, showTitleContent: false, showControlsContent: true)
-                        } else if !windowSwitcherActive, effectiveControlPosition == .diagonalBottomRightTopLeft {
-                            dockPreviewContent(finalIsSelected, isLeadingControls: true, showTitleContent: false, showControlsContent: true)
-                        } else if !windowSwitcherActive, effectiveControlPosition == .parallelTopLeftBottomLeft {
-                            dockPreviewContent(finalIsSelected, isLeadingControls: false, showTitleContent: true, showControlsContent: false)
-                        } else if !windowSwitcherActive, effectiveControlPosition == .parallelTopRightBottomRight {
-                            dockPreviewContent(finalIsSelected, isLeadingControls: true, showTitleContent: true, showControlsContent: false)
-                        } else if !windowSwitcherActive, effectiveControlPosition == .parallelBottomLeftTopLeft {
-                            dockPreviewContent(finalIsSelected, isLeadingControls: true, showTitleContent: false, showControlsContent: true)
-                        } else if !windowSwitcherActive, effectiveControlPosition == .parallelBottomRightTopRight {
-                            dockPreviewContent(finalIsSelected, isLeadingControls: false, showTitleContent: false, showControlsContent: true)
+                        if windowSwitcherActive {
+                            windowSwitcherContent(finalIsSelected, isLeadingControls: config.isLeadingControls, showTitleContent: config.showTitle, showControlsContent: config.showControls)
+                        } else {
+                            dockPreviewContent(finalIsSelected, isLeadingControls: config.isLeadingControls, showTitleContent: config.showTitle, showControlsContent: config.showControls)
                         }
                     }
                     .padding(.bottom, 4)
@@ -680,52 +643,15 @@ struct WindowPreview: View {
                     isSelected: finalIsSelected
                 )
 
-                if !effectiveUseEmbeddedElements ||
-                    windowSwitcherActive
+                if !effectiveUseEmbeddedElements || windowSwitcherActive,
+                   effectiveControlPosition.showsOnBottom
                 {
+                    let config = effectiveControlPosition.bottomConfiguration
                     Group {
-                        if windowSwitcherActive, effectiveControlPosition == .bottomLeading {
-                            windowSwitcherContent(finalIsSelected, isLeadingControls: false)
-                        } else if windowSwitcherActive, effectiveControlPosition == .bottomTrailing {
-                            windowSwitcherContent(finalIsSelected, isLeadingControls: true)
-                        } else if windowSwitcherActive, effectiveControlPosition == .diagonalTopLeftBottomRight {
-                            windowSwitcherContent(finalIsSelected, isLeadingControls: false, showTitleContent: false, showControlsContent: true)
-                        } else if windowSwitcherActive, effectiveControlPosition == .diagonalTopRightBottomLeft {
-                            windowSwitcherContent(finalIsSelected, isLeadingControls: true, showTitleContent: false, showControlsContent: true)
-                        } else if windowSwitcherActive, effectiveControlPosition == .diagonalBottomLeftTopRight {
-                            windowSwitcherContent(finalIsSelected, isLeadingControls: false, showTitleContent: true, showControlsContent: false)
-                        } else if windowSwitcherActive, effectiveControlPosition == .diagonalBottomRightTopLeft {
-                            windowSwitcherContent(finalIsSelected, isLeadingControls: true, showTitleContent: true, showControlsContent: false)
-                        } else if windowSwitcherActive, effectiveControlPosition == .parallelTopLeftBottomLeft {
-                            windowSwitcherContent(finalIsSelected, isLeadingControls: true, showTitleContent: false, showControlsContent: true)
-                        } else if windowSwitcherActive, effectiveControlPosition == .parallelTopRightBottomRight {
-                            windowSwitcherContent(finalIsSelected, isLeadingControls: false, showTitleContent: false, showControlsContent: true)
-                        } else if windowSwitcherActive, effectiveControlPosition == .parallelBottomLeftTopLeft {
-                            windowSwitcherContent(finalIsSelected, isLeadingControls: false, showTitleContent: true, showControlsContent: false)
-                        } else if windowSwitcherActive, effectiveControlPosition == .parallelBottomRightTopRight {
-                            windowSwitcherContent(finalIsSelected, isLeadingControls: true, showTitleContent: true, showControlsContent: false)
-                        }
-
-                        if !windowSwitcherActive, effectiveControlPosition == .bottomLeading {
-                            dockPreviewContent(finalIsSelected, isLeadingControls: false)
-                        } else if !windowSwitcherActive, effectiveControlPosition == .bottomTrailing {
-                            dockPreviewContent(finalIsSelected, isLeadingControls: true)
-                        } else if !windowSwitcherActive, effectiveControlPosition == .diagonalTopLeftBottomRight {
-                            dockPreviewContent(finalIsSelected, isLeadingControls: false, showTitleContent: false, showControlsContent: true)
-                        } else if !windowSwitcherActive, effectiveControlPosition == .diagonalTopRightBottomLeft {
-                            dockPreviewContent(finalIsSelected, isLeadingControls: true, showTitleContent: false, showControlsContent: true)
-                        } else if !windowSwitcherActive, effectiveControlPosition == .diagonalBottomLeftTopRight {
-                            dockPreviewContent(finalIsSelected, isLeadingControls: false, showTitleContent: true, showControlsContent: false)
-                        } else if !windowSwitcherActive, effectiveControlPosition == .diagonalBottomRightTopLeft {
-                            dockPreviewContent(finalIsSelected, isLeadingControls: true, showTitleContent: true, showControlsContent: false)
-                        } else if !windowSwitcherActive, effectiveControlPosition == .parallelTopLeftBottomLeft {
-                            dockPreviewContent(finalIsSelected, isLeadingControls: true, showTitleContent: false, showControlsContent: true)
-                        } else if !windowSwitcherActive, effectiveControlPosition == .parallelTopRightBottomRight {
-                            dockPreviewContent(finalIsSelected, isLeadingControls: false, showTitleContent: false, showControlsContent: true)
-                        } else if !windowSwitcherActive, effectiveControlPosition == .parallelBottomLeftTopLeft {
-                            dockPreviewContent(finalIsSelected, isLeadingControls: false, showTitleContent: true, showControlsContent: false)
-                        } else if !windowSwitcherActive, effectiveControlPosition == .parallelBottomRightTopRight {
-                            dockPreviewContent(finalIsSelected, isLeadingControls: true, showTitleContent: true, showControlsContent: false)
+                        if windowSwitcherActive {
+                            windowSwitcherContent(finalIsSelected, isLeadingControls: config.isLeadingControls, showTitleContent: config.showTitle, showControlsContent: config.showControls)
+                        } else {
+                            dockPreviewContent(finalIsSelected, isLeadingControls: config.isLeadingControls, showTitleContent: config.showTitle, showControlsContent: config.showControls)
                         }
                     }
                     .padding(.top, 4)
