@@ -556,7 +556,6 @@ class KeybindHelper {
            !isWindowSwitcherActive
         {
             if !shouldSkipShiftOnlyBackward {
-                // Initial backward cycle
                 Task { @MainActor in
                     await self.windowSwitchingCoordinator.handleWindowSwitching(
                         previewCoordinator: self.previewCoordinator,
@@ -566,12 +565,10 @@ class KeybindHelper {
                     )
                 }
 
-                // Start continuous backward cycling while Shift is held (only for window switcher)
                 if isWindowSwitcherActive {
                     shiftHeldBackwardTask?.cancel()
                     shiftHeldBackwardTask = Task { @MainActor in
-                        // Initial delay before repeat starts (key repeat delay)
-                        try? await Task.sleep(nanoseconds: 400_000_000) // 400ms initial delay
+                        try? await Task.sleep(nanoseconds: 400_000_000)
 
                         while !Task.isCancelled,
                               self.isShiftKeyPressedGeneral,
@@ -584,15 +581,13 @@ class KeybindHelper {
                                 isShiftPressed: true,
                                 mode: self.currentInvocationMode
                             )
-                            // Repeat interval (key repeat rate)
-                            try? await Task.sleep(nanoseconds: 80_000_000) // 80ms between repeats
+                            try? await Task.sleep(nanoseconds: 80_000_000)
                         }
                     }
                 }
             }
         }
 
-        // Cancel backward cycling task when Shift is released
         if oldShiftState, !currentShiftState {
             shiftHeldBackwardTask?.cancel()
             shiftHeldBackwardTask = nil
@@ -677,9 +672,6 @@ class KeybindHelper {
                 return (true, { @MainActor in
                     if self.previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive {
                         if !self.previewCoordinator.windowSwitcherCoordinator.hasActiveSearch {
-                            // Go backward if Shift is pressed along with Tab
-                            // When requireShiftTabToGoBack is OFF: Shift+Tab goes back (Shift = backward modifier)
-                            // When requireShiftTabToGoBack is ON: Shift+Tab goes back only if modifier is held or preventSwitcherHide is true
                             let shouldGoBackward = isShiftPressed &&
                                 (!Defaults[.requireShiftTabToGoBack] ||
                                     self.isSwitcherModifierKeyPressed ||
