@@ -38,6 +38,30 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://buymeacoffee.com/keplercafe</div>
 
+<a id="1.30"></a>
+# [Release 1.30](https://github.com/ejbills/DockDoor/releases/tag/1.30) - 2025-12-26
+
+🎄 Merry X-Mas!
+
+## ✨ New Features
+- Parallel title/controls layout options (thanks [@X1nto](https://github.com/X1nto))
+  - Title and controls stacked
+  - Four new position choices
+- Shift+Tab navigation option (thanks [@maddada](https://github.com/maddada))
+  - Requires key combo backward
+  - Support to hold tab to iterate automatically
+
+## 🔧 Improvements & Stability
+- Improved keyboard shortcut matching
+
+## 🐛 Bug Fixes
+- Fixed ghost window detection
+- Fixed full preview activation
+
+
+[Changes][1.30]
+
+
 <a id="1.29"></a>
 # [Release 1.29](https://github.com/ejbills/DockDoor/releases/tag/1.29) - 2025-12-23
 
@@ -1769,6 +1793,7 @@ v1.0
 [Changes][releases]
 
 
+[1.30]: https://github.com/ejbills/DockDoor/compare/1.29...1.30
 [1.29]: https://github.com/ejbills/DockDoor/compare/1.28.1...1.29
 [1.28.1]: https://github.com/ejbills/DockDoor/compare/1.28...1.28.1
 [1.28]: https://github.com/ejbills/DockDoor/compare/1.27...1.28
