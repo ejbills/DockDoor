@@ -90884,6 +90884,9 @@
         }
       }
     },
+    "Require Shift+Tab to go back in Switcher" : {
+
+    },
     "Required for capturing window previews of other apps" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -125189,6 +125192,9 @@
           }
         }
       }
+    },
+    "When enabled, pressing Shift alone won't go back. Use Shift+Tab (or modifier+Shift+Tab when release-to-select is on) to navigate backward." : {
+
     },
     "When enabled, shows the last active window first instead of the current window" : {
       "extractionState" : "stale",
