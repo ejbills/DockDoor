@@ -523,7 +523,7 @@ class KeybindHelper {
         let hasCtrl = flags.contains(.maskControl)
         let hasCmd = flags.contains(.maskCommand)
 
-        let currentSwitcherModifierIsPressed = (wantsAlt && hasAlt) || (wantsCtrl && hasCtrl) || (wantsCmd && hasCmd)
+        let currentSwitcherModifierIsPressed = (wantsAlt == hasAlt) && (wantsCtrl == hasCtrl) && (wantsCmd == hasCmd)
         let currentShiftState = flags.contains(.maskShift)
 
         return (currentSwitcherModifierIsPressed, currentShiftState)
@@ -643,9 +643,10 @@ class KeybindHelper {
         let wantsAlt = (keyBoardShortcutSaved.modifierFlags & Int(CGEventFlags.maskAlternate.rawValue)) != 0
         let wantsCtrl = (keyBoardShortcutSaved.modifierFlags & Int(CGEventFlags.maskControl.rawValue)) != 0
         let wantsCmd = (keyBoardShortcutSaved.modifierFlags & Int(CGEventFlags.maskCommand.rawValue)) != 0
-        let isDesiredModifierPressedNow = (wantsAlt && flags.contains(.maskAlternate)) ||
-            (wantsCtrl && flags.contains(.maskControl)) ||
-            (wantsCmd && flags.contains(.maskCommand))
+        let hasAlt = flags.contains(.maskAlternate)
+        let hasCtrl = flags.contains(.maskControl)
+        let hasCmd = flags.contains(.maskCommand)
+        let isDesiredModifierPressedNow = (wantsAlt == hasAlt) && (wantsCtrl == hasCtrl) && (wantsCmd == hasCmd)
 
         let isExactSwitcherShortcutPressed = (isDesiredModifierPressedNow && keyCode == keyBoardShortcutSaved.keyCode) ||
             (!isDesiredModifierPressedNow && keyBoardShortcutSaved.modifierFlags == 0 && keyCode == keyBoardShortcutSaved.keyCode)
