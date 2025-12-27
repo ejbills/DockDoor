@@ -11258,6 +11258,7 @@
       }
     },
     "Adjusts how responsive the app feels and behaves during interaction." : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -17349,7 +17350,6 @@
       }
     },
     "Are you sure you want to reset all settings to their default values?" : {
-      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -17540,6 +17540,7 @@
       }
     },
     "Are you sure you want to reset all settings to their default values? This will reset advanced settings as well." : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -19059,6 +19060,9 @@
           }
         }
       }
+    },
+    "Automatically check for updates in the background" : {
+
     },
     "Automatically scrolls the window switcher when hovering over windows with the mouse." : {
       "extractionState" : "stale",
@@ -20965,6 +20969,7 @@
       }
     },
     "Buy me a coffee" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -22677,6 +22682,9 @@
         }
       }
     },
+    "Capture performance metrics for troubleshooting" : {
+
+    },
     "Center Window" : {
       "comment" : "Window action",
       "localizations" : {
@@ -23437,6 +23445,12 @@
           }
         }
       }
+    },
+    "Check Now" : {
+
+    },
+    "Choose between stable releases and beta versions" : {
+
     },
     "Choose how large window previews appear when hovering over dock icons. All window images are automatically scaled to fit within this size while maintaining their original proportions." : {
       "localizations" : {
@@ -29527,6 +29541,7 @@
       }
     },
     "Contribute translation" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -29715,6 +29730,9 @@
           }
         }
       }
+    },
+    "Contribute Translation" : {
+
     },
     "Contribute translation here!" : {
       "extractionState" : "stale",
@@ -29908,6 +29926,7 @@
       }
     },
     "Contributions" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -31239,6 +31258,7 @@
       }
     },
     "Controls the visual detail and update frequency of window previews." : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -33334,6 +33354,9 @@
         }
       }
     },
+    "Debug Logging" : {
+
+    },
     "Default" : {
       "comment" : "Preview title style option",
       "localizations" : {
@@ -33908,6 +33931,7 @@
       }
     },
     "Detailed" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -39613,6 +39637,9 @@
           }
         }
       }
+    },
+    "DockDoor is open source on GitHub" : {
+
     },
     "DockDoor needs access to your calendars to show events. Please enable Calendar access in System Settings > Privacy & Security > Calendars." : {
       "localizations" : {
@@ -52759,6 +52786,9 @@
         }
       }
     },
+    "Grant" : {
+
+    },
     "Grant Access" : {
       "localizations" : {
         "af" : {
@@ -54284,6 +54314,7 @@
       }
     },
     "Help & Support" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -54664,6 +54695,9 @@
         }
       }
     },
+    "Help keep the project going with a small donation" : {
+
+    },
     "Help make DockDoor available in your language" : {
       "localizations" : {
         "af" : {
@@ -54853,6 +54887,9 @@
           }
         }
       }
+    },
+    "Help us improve by reporting issues" : {
+
     },
     "Help us improve DockDoor by reporting any issues you encounter." : {
       "localizations" : {
@@ -62094,7 +62131,11 @@
         }
       }
     },
+    "Interaction & Behavior" : {
+
+    },
     "Interaction & Behavior (Dock Previews)" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -63427,6 +63468,7 @@
       }
     },
     "Language" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -64950,6 +64992,7 @@
       }
     },
     "Lightweight" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -71613,6 +71656,7 @@
       }
     },
     "Name" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -81128,6 +81172,7 @@
       }
     },
     "Performance Profiles" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -81317,7 +81362,11 @@
         }
       }
     },
+    "Performance Tuning" : {
+
+    },
     "Performance Tuning (Dock Previews)" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -88939,6 +88988,7 @@
       }
     },
     "Preview Quality Profiles" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -90271,6 +90321,7 @@
       }
     },
     "Profile" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -91984,6 +92035,7 @@
       }
     },
     "Relaxed" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -94644,6 +94696,9 @@
           }
         }
       }
+    },
+    "Required for capturing window previews. Without this, only compact list view is available." : {
+
     },
     "Required for dock hover detection and window switcher hotkeys" : {
       "localizations" : {
@@ -98070,6 +98125,9 @@
         }
       }
     },
+    "Screen Recording" : {
+
+    },
     "Screen Recording permission is required for window thumbnails." : {
       "localizations" : {
         "af" : {
@@ -101310,6 +101368,7 @@
       }
     },
     "Select a profile to quickly adjust common performance settings. Choose \"Advanced\" for manual control." : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -111788,6 +111847,7 @@
       }
     },
     "Snappy" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -113120,6 +113180,7 @@
       }
     },
     "Standard" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -114644,6 +114705,9 @@
         }
       }
     },
+    "Suggest new features to make DockDoor better" : {
+
+    },
     "Suggest new features to make DockDoor even better." : {
       "localizations" : {
         "af" : {
@@ -115216,6 +115280,7 @@
       }
     },
     "Support development with a small donation" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -116927,6 +116992,7 @@
       }
     },
     "Thank you to all contributors ❤️" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -126639,8 +126705,10 @@
         }
       }
     },
+    "v%@ available" : {
+
+    },
     "Version %@" : {
-      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -127022,6 +127090,7 @@
       }
     },
     "View" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -127210,6 +127279,9 @@
           }
         }
       }
+    },
+    "View Source Code" : {
+
     },
     "Visibility" : {
       "localizations" : {
