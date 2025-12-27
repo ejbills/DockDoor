@@ -96,3 +96,5 @@ iOSInjectionProject/
 node_modules/
 
 .parcel-cache/
+kilo.md
+CLAUDE.local.md

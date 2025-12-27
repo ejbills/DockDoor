@@ -80,6 +80,7 @@ struct WindowPreview: View {
     @State private var isHoveringOverDockPeekPreview = false
     @State private var isHoveringOverWindowSwitcherPreview = false
     @State private var fullPreviewTimer: Timer?
+    @State private var fullPreviewHoverID: UUID?
     @State private var isDraggingOver = false
     @State private var dragTimer: Timer?
     @State private var highlightOpacity = 0.0
@@ -385,11 +386,75 @@ struct WindowPreview: View {
                     .padding(.trailing, 8)
                     .padding(.bottom, 8)
                 }
+            case .parallelTopLeftBottomLeft:
+                VStack {
+                    HStack {
+                        titleContent
+                        Spacer()
+                    }
+                    .padding(.leading, 8)
+                    .padding(.top, 8)
+                    Spacer()
+                    HStack {
+                        Spacer()
+                        controlsContent
+                    }
+                    .padding(.leading, 8)
+                    .padding(.bottom, 8)
+                }
+            case .parallelTopRightBottomRight:
+                VStack {
+                    HStack {
+                        titleContent
+                        Spacer()
+                    }
+                    .padding(.trailing, 8)
+                    .padding(.top, 8)
+                    Spacer()
+                    HStack {
+                        Spacer()
+                        controlsContent
+                    }
+                    .padding(.trailing, 8)
+                    .padding(.bottom, 8)
+                }
+            case .parallelBottomLeftTopLeft:
+                VStack {
+                    HStack {
+                        controlsContent
+                        Spacer()
+                    }
+                    .padding(.leading, 8)
+                    .padding(.top, 8)
+                    Spacer()
+                    HStack {
+                        Spacer()
+                        titleContent
+                    }
+                    .padding(.leading, 8)
+                    .padding(.bottom, 8)
+                }
+            case .parallelBottomRightTopRight:
+                VStack {
+                    HStack {
+                        controlsContent
+                        Spacer()
+                    }
+                    .padding(.trailing, 8)
+                    .padding(.top, 8)
+                    Spacer()
+                    HStack {
+                        Spacer()
+                        titleContent
+                    }
+                    .padding(.trailing, 8)
+                    .padding(.bottom, 8)
+                }
             }
         }
     }
 
-    private func windowSwitcherContent(_ selected: Bool, showTitleContent: Bool = true, showControlsContent: Bool = true) -> some View {
+    private func windowSwitcherContent(_ selected: Bool, isLeadingControls: Bool, showTitleContent: Bool = true, showControlsContent: Bool = true) -> some View {
         let shouldShowWindowTitle = effectiveShowWindowTitle &&
             (effectiveWindowTitleVisibility == .alwaysVisible || selected || isHoveringOverWindowSwitcherPreview)
 
@@ -443,8 +508,7 @@ struct WindowPreview: View {
             }
         }
 
-        @ViewBuilder
-        func contentRow(isLeadingControls: Bool) -> some View {
+        return VStack(spacing: 0) {
             HStack(spacing: 4) {
                 if isLeadingControls {
                     if showControlsContent {
@@ -468,26 +532,9 @@ struct WindowPreview: View {
             }
             .fixedSize(horizontal: false, vertical: true)
         }
-
-        return VStack(spacing: 0) {
-            switch effectiveControlPosition {
-            case .topLeading:
-                contentRow(isLeadingControls: false)
-            case .topTrailing:
-                contentRow(isLeadingControls: true)
-            case .bottomLeading:
-                contentRow(isLeadingControls: false)
-            case .bottomTrailing:
-                contentRow(isLeadingControls: true)
-            case .diagonalTopLeftBottomRight, .diagonalBottomLeftTopRight:
-                contentRow(isLeadingControls: false)
-            case .diagonalTopRightBottomLeft, .diagonalBottomRightTopLeft:
-                contentRow(isLeadingControls: true)
-            }
-        }
     }
 
-    private func dockPreviewContent(_ selected: Bool, showTitleContent: Bool = true, showControlsContent: Bool = true) -> some View {
+    private func dockPreviewContent(_ selected: Bool, isLeadingControls: Bool, showTitleContent: Bool = true, showControlsContent: Bool = true) -> some View {
         // Determine what title to show: window name first, then app name as fallback
         let titleToShow: String? = if let windowTitle = windowInfo.windowName, !windowTitle.isEmpty {
             windowTitle
@@ -536,46 +583,28 @@ struct WindowPreview: View {
             }
         }
 
-        @ViewBuilder
-        func contentRow(isLeadingControls: Bool) -> some View {
-            HStack(spacing: 4) {
-                if isLeadingControls {
-                    if showControlsContent {
-                        controlsContent
-                    }
-                    Spacer()
-                    if showTitleContent {
-                        titleContent
-                    }
-                } else {
-                    if showTitleContent {
-                        titleContent
-                    }
-                    Spacer()
-                    if showControlsContent {
-                        controlsContent
-                    }
-                }
-            }
-        }
-
         // Only show the toolbar if there's either a title or traffic lights to display
         if hasTitle || hasTrafficLights {
             return AnyView(
                 VStack(spacing: 0) {
-                    switch effectiveControlPosition {
-                    case .topLeading:
-                        contentRow(isLeadingControls: false)
-                    case .topTrailing:
-                        contentRow(isLeadingControls: true)
-                    case .bottomLeading:
-                        contentRow(isLeadingControls: false)
-                    case .bottomTrailing:
-                        contentRow(isLeadingControls: true)
-                    case .diagonalTopLeftBottomRight, .diagonalBottomLeftTopRight:
-                        contentRow(isLeadingControls: false)
-                    case .diagonalTopRightBottomLeft, .diagonalBottomRightTopLeft:
-                        contentRow(isLeadingControls: true)
+                    HStack(spacing: 4) {
+                        if isLeadingControls {
+                            if showControlsContent {
+                                controlsContent
+                            }
+                            Spacer()
+                            if showTitleContent {
+                                titleContent
+                            }
+                        } else {
+                            if showTitleContent {
+                                titleContent
+                            }
+                            Spacer()
+                            if showControlsContent {
+                                controlsContent
+                            }
+                        }
                     }
                 }
             )
@@ -595,36 +624,15 @@ struct WindowPreview: View {
 
         ZStack(alignment: .topLeading) {
             VStack(alignment: .leading, spacing: 0) {
-                if !effectiveUseEmbeddedElements ||
-                    windowSwitcherActive
+                if !effectiveUseEmbeddedElements || windowSwitcherActive,
+                   effectiveControlPosition.showsOnTop
                 {
+                    let config = effectiveControlPosition.topConfiguration
                     Group {
-                        if windowSwitcherActive, effectiveControlPosition == .topLeading ||
-                            effectiveControlPosition == .topTrailing
-                        {
-                            windowSwitcherContent(finalIsSelected)
-                        } else if windowSwitcherActive, effectiveControlPosition == .diagonalTopLeftBottomRight {
-                            windowSwitcherContent(finalIsSelected, showTitleContent: true, showControlsContent: false)
-                        } else if windowSwitcherActive, effectiveControlPosition == .diagonalTopRightBottomLeft {
-                            windowSwitcherContent(finalIsSelected, showTitleContent: true, showControlsContent: false)
-                        } else if windowSwitcherActive, effectiveControlPosition == .diagonalBottomLeftTopRight {
-                            windowSwitcherContent(finalIsSelected, showTitleContent: false, showControlsContent: true)
-                        } else if windowSwitcherActive, effectiveControlPosition == .diagonalBottomRightTopLeft {
-                            windowSwitcherContent(finalIsSelected, showTitleContent: false, showControlsContent: true)
-                        }
-
-                        if !windowSwitcherActive, effectiveControlPosition == .topLeading ||
-                            effectiveControlPosition == .topTrailing
-                        {
-                            dockPreviewContent(finalIsSelected)
-                        } else if !windowSwitcherActive, effectiveControlPosition == .diagonalTopLeftBottomRight {
-                            dockPreviewContent(finalIsSelected, showTitleContent: true, showControlsContent: false)
-                        } else if !windowSwitcherActive, effectiveControlPosition == .diagonalTopRightBottomLeft {
-                            dockPreviewContent(finalIsSelected, showTitleContent: true, showControlsContent: false)
-                        } else if !windowSwitcherActive, effectiveControlPosition == .diagonalBottomLeftTopRight {
-                            dockPreviewContent(finalIsSelected, showTitleContent: false, showControlsContent: true)
-                        } else if !windowSwitcherActive, effectiveControlPosition == .diagonalBottomRightTopLeft {
-                            dockPreviewContent(finalIsSelected, showTitleContent: false, showControlsContent: true)
+                        if windowSwitcherActive {
+                            windowSwitcherContent(finalIsSelected, isLeadingControls: config.isLeadingControls, showTitleContent: config.showTitle, showControlsContent: config.showControls)
+                        } else {
+                            dockPreviewContent(finalIsSelected, isLeadingControls: config.isLeadingControls, showTitleContent: config.showTitle, showControlsContent: config.showControls)
                         }
                     }
                     .padding(.bottom, 4)
@@ -636,36 +644,15 @@ struct WindowPreview: View {
                     isSelected: finalIsSelected
                 )
 
-                if !effectiveUseEmbeddedElements ||
-                    windowSwitcherActive
+                if !effectiveUseEmbeddedElements || windowSwitcherActive,
+                   effectiveControlPosition.showsOnBottom
                 {
+                    let config = effectiveControlPosition.bottomConfiguration
                     Group {
-                        if windowSwitcherActive, effectiveControlPosition == .bottomLeading ||
-                            effectiveControlPosition == .bottomTrailing
-                        {
-                            windowSwitcherContent(finalIsSelected)
-                        } else if windowSwitcherActive, effectiveControlPosition == .diagonalTopLeftBottomRight {
-                            windowSwitcherContent(finalIsSelected, showTitleContent: false, showControlsContent: true)
-                        } else if windowSwitcherActive, effectiveControlPosition == .diagonalTopRightBottomLeft {
-                            windowSwitcherContent(finalIsSelected, showTitleContent: false, showControlsContent: true)
-                        } else if windowSwitcherActive, effectiveControlPosition == .diagonalBottomLeftTopRight {
-                            windowSwitcherContent(finalIsSelected, showTitleContent: true, showControlsContent: false)
-                        } else if windowSwitcherActive, effectiveControlPosition == .diagonalBottomRightTopLeft {
-                            windowSwitcherContent(finalIsSelected, showTitleContent: true, showControlsContent: false)
-                        }
-
-                        if !windowSwitcherActive, effectiveControlPosition == .bottomLeading ||
-                            effectiveControlPosition == .bottomTrailing
-                        {
-                            dockPreviewContent(finalIsSelected)
-                        } else if !windowSwitcherActive, effectiveControlPosition == .diagonalTopLeftBottomRight {
-                            dockPreviewContent(finalIsSelected, showTitleContent: false, showControlsContent: true)
-                        } else if !windowSwitcherActive, effectiveControlPosition == .diagonalTopRightBottomLeft {
-                            dockPreviewContent(finalIsSelected, showTitleContent: false, showControlsContent: true)
-                        } else if !windowSwitcherActive, effectiveControlPosition == .diagonalBottomLeftTopRight {
-                            dockPreviewContent(finalIsSelected, showTitleContent: true, showControlsContent: false)
-                        } else if !windowSwitcherActive, effectiveControlPosition == .diagonalBottomRightTopLeft {
-                            dockPreviewContent(finalIsSelected, showTitleContent: true, showControlsContent: false)
+                        if windowSwitcherActive {
+                            windowSwitcherContent(finalIsSelected, isLeadingControls: config.isLeadingControls, showTitleContent: config.showTitle, showControlsContent: config.showControls)
+                        } else {
+                            dockPreviewContent(finalIsSelected, isLeadingControls: config.isLeadingControls, showTitleContent: config.showTitle, showControlsContent: config.showControls)
                         }
                     }
                     .padding(.top, 4)
@@ -765,10 +752,23 @@ struct WindowPreview: View {
                 windowInfo: windowInfo,
                 windowSwitcherActive: windowSwitcherActive,
                 dockPosition: dockPosition,
-                handleWindowAction: handleWindowAction,
-                onTap: onTap
+                handleWindowAction: { action in
+                    cancelFullPreviewHover()
+                    handleWindowAction(action)
+                },
+                onTap: {
+                    cancelFullPreviewHover()
+                    onTap?()
+                }
             )
             .fixedSize()
+    }
+
+    private func cancelFullPreviewHover() {
+        fullPreviewTimer?.invalidate()
+        fullPreviewTimer = nil
+        fullPreviewHoverID = nil
+        SharedPreviewWindowCoordinator.activeInstance?.hideFullPreviewWindow()
     }
 
     private func handleFullPreviewHover(isHovering: Bool, action: PreviewHoverAction) {
@@ -784,25 +784,28 @@ struct WindowPreview: View {
                 }
 
             case .previewFullSize:
+                let hoverID = UUID()
+                fullPreviewHoverID = hoverID
                 let showFullPreview = {
-                    DispatchQueue.main.async {
-                        SharedPreviewWindowCoordinator.activeInstance?.showWindow(
-                            appName: windowInfo.app.localizedName ?? "Unknown",
-                            windows: [windowInfo],
-                            mouseScreen: bestGuessMonitor,
-                            dockItemElement: nil, overrideDelay: true,
-                            centeredHoverWindowState: .fullWindowPreview
-                        )
-                    }
+                    guard fullPreviewHoverID == hoverID else { return }
+                    SharedPreviewWindowCoordinator.activeInstance?.showWindow(
+                        appName: windowInfo.app.localizedName ?? "Unknown",
+                        windows: [windowInfo],
+                        mouseScreen: bestGuessMonitor,
+                        dockItemElement: nil, overrideDelay: true,
+                        centeredHoverWindowState: .fullWindowPreview
+                    )
                 }
-                if tapEquivalentInterval == 0 { showFullPreview() } else {
-                    fullPreviewTimer = Timer.scheduledTimer(withTimeInterval: tapEquivalentInterval, repeats: false) { _ in showFullPreview() }
+                if tapEquivalentInterval == 0 {
+                    showFullPreview()
+                } else {
+                    fullPreviewTimer = Timer.scheduledTimer(withTimeInterval: tapEquivalentInterval, repeats: false) { _ in
+                        showFullPreview()
+                    }
                 }
             }
         } else {
-            fullPreviewTimer?.invalidate()
-            fullPreviewTimer = nil
-            SharedPreviewWindowCoordinator.activeInstance?.hideFullPreviewWindow()
+            cancelFullPreviewHover()
         }
     }
 

@@ -93,7 +93,7 @@ struct MainSettingsView: View {
                 selectedApps: $groupedAppsInSwitcher,
                 title: "Group Windows by App",
                 description: "Selected apps will show only their most recent window in the switcher.",
-                selectionMode: .include
+                selectionMode: AppPickerSheet.SelectionMode.include
             )
         }
     }
@@ -739,6 +739,7 @@ struct MainSettingsView: View {
                 fullscreenAppBlacklist = Defaults.Keys.fullscreenAppBlacklist.defaultValue
 
                 Defaults[.UserKeybind] = Defaults.Keys.UserKeybind.defaultValue
+                Defaults[.requireShiftTabToGoBack] = Defaults.Keys.requireShiftTabToGoBack.defaultValue
                 Defaults[.windowSwitcherPlacementStrategy] = Defaults.Keys.windowSwitcherPlacementStrategy.defaultValue
                 Defaults[.pinnedScreenIdentifier] = Defaults.Keys.pinnedScreenIdentifier.defaultValue
                 Defaults[.enableShiftWindowSwitcherPlacement] = Defaults.Keys.enableShiftWindowSwitcherPlacement.defaultValue

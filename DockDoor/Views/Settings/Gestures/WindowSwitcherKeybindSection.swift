@@ -6,6 +6,7 @@ struct WindowSwitcherKeybindSection: View {
     @Default(.fullscreenAppBlacklist) var fullscreenAppBlacklist
     @Default(.alternateKeybindKey) var alternateKeybindKey
     @Default(.alternateKeybindMode) var alternateKeybindMode
+    @Default(.requireShiftTabToGoBack) var requireShiftTabToGoBack
 
     @StateObject private var keybindModel = KeybindModel()
     @State private var showingAddBlacklistAppSheet = false
@@ -32,6 +33,20 @@ struct WindowSwitcherKeybindSection: View {
                 keyboardShortcutSection
                     .disabled(!enableWindowSwitcher)
                     .opacity(enableWindowSwitcher ? 1.0 : 0.5)
+
+                Divider()
+
+                VStack(alignment: .leading, spacing: 8) {
+                    Toggle(isOn: $requireShiftTabToGoBack) {
+                        Text("Require Shift+Tab to go back in Switcher")
+                    }
+                    Text("When enabled, pressing Shift alone won't go back. Use Shift+Tab (or modifier+Shift+Tab when release-to-select is on) to navigate backward.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                        .padding(.leading, 20)
+                }
+                .disabled(!enableWindowSwitcher)
+                .opacity(enableWindowSwitcher ? 1.0 : 0.5)
 
                 Divider()
 
