@@ -156,7 +156,71 @@ struct AcknowledgmentsView: View {
                 .background(Color.primary.opacity(0.05))
                 .cornerRadius(8)
             }
+
+            VStack(alignment: .leading, spacing: 8) {
+                Text("Audio Assets")
+                    .font(.headline)
+                    .foregroundColor(.primary)
+
+                VStack(spacing: 0) {
+                    HStack {
+                        Text("Asset")
+                            .font(.subheadline)
+                            .fontWeight(.semibold)
+                            .foregroundColor(.primary)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+
+                        Text("Author")
+                            .font(.subheadline)
+                            .fontWeight(.semibold)
+                            .foregroundColor(.primary)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+
+                        Text("License")
+                            .font(.subheadline)
+                            .fontWeight(.semibold)
+                            .foregroundColor(.primary)
+                            .frame(width: 100, alignment: .center)
+                    }
+                    .padding(.vertical, 12)
+                    .padding(.horizontal, 12)
+                    .background(Color.primary.opacity(0.1))
+
+                    Divider()
+
+                    audioAssetRow(
+                        name: "Magic Glow",
+                        author: "IENBA",
+                        sourceURL: "https://freesound.org/s/752274/",
+                        license: "CC0"
+                    )
+                }
+                .background(Color.primary.opacity(0.05))
+                .cornerRadius(8)
+            }
         }
+    }
+
+    private func audioAssetRow(name: String, author: String, sourceURL: String, license: String) -> some View {
+        HStack {
+            Text(name)
+                .font(.body)
+                .foregroundColor(.primary)
+                .frame(maxWidth: .infinity, alignment: .leading)
+
+            Link(author, destination: URL(string: sourceURL)!)
+                .font(.body)
+                .foregroundColor(.accentColor)
+                .frame(maxWidth: .infinity, alignment: .leading)
+
+            Text(license)
+                .font(.body)
+                .foregroundColor(.secondary)
+                .frame(width: 100, alignment: .center)
+        }
+        .padding(.vertical, 10)
+        .padding(.horizontal, 12)
+        .background(Color.clear)
     }
 
     private func contributorTableRow(name: String, language: String, profile: String) -> some View {

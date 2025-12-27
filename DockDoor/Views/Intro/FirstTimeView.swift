@@ -1,16 +1,14 @@
-
 import SwiftUI
 
 struct FirstTimeView: View {
     static let transition: AnyTransition = .offset(y: 24).combined(with: .opacity)
-    @State private var lightsOn = false
     @State private var tabIndex = 0
 
     var body: some View {
         ZStack {
             Group {
                 switch tabIndex {
-                case 0: FirstTimeIntroTabView(nextTab: nextTab, lightsOn: $lightsOn)
+                case 0: FirstTimeIntroTabView(nextTab: nextTab)
                 case 1: FirstTimePermissionsTabView(nextTab: nextTab)
                 case 2: FirstTimeCongratsTabView(nextTab: nextTab)
                 default: EmptyView()
@@ -21,7 +19,10 @@ struct FirstTimeView: View {
         .padding(.bottom, 51) // To compensate navbar
         .frame(width: 600, height: 320)
         .background {
-            CustomizableFluidGradientView().opacity(lightsOn ? 0.125 : 0)
+            // Fluid gradient visible on first tab, fades out on others
+            CustomizableFluidGradientView()
+                .opacity(tabIndex == 0 ? 0.15 : 0)
+                .animation(.easeInOut(duration: 0.4), value: tabIndex)
                 .ignoresSafeArea(.all)
         }
         .background {
@@ -37,8 +38,6 @@ struct FirstTimeView: View {
                 tabIndex += 1
             }
         }
-
-        if lightsOn { withAnimation(.snappy) { lightsOn = false } }
     }
 }
 
