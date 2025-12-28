@@ -6,13 +6,24 @@ struct WindowDismissalContainer: NSViewRepresentable {
     let bestGuessMonitor: NSScreen
     let dockPosition: DockPosition
     let dockItemElement: AXUIElement?
+    let originalMouseLocation: CGPoint?
     let minimizeAllWindowsCallback: (_ wasAppActiveBeforeClick: Bool) -> Void
+
+    init(appName: String, bestGuessMonitor: NSScreen, dockPosition: DockPosition, dockItemElement: AXUIElement?, originalMouseLocation: CGPoint? = nil, minimizeAllWindowsCallback: @escaping (_ wasAppActiveBeforeClick: Bool) -> Void) {
+        self.appName = appName
+        self.bestGuessMonitor = bestGuessMonitor
+        self.dockPosition = dockPosition
+        self.dockItemElement = dockItemElement
+        self.originalMouseLocation = originalMouseLocation
+        self.minimizeAllWindowsCallback = minimizeAllWindowsCallback
+    }
 
     func makeNSView(context: Context) -> MouseTrackingNSView {
         let view = MouseTrackingNSView(appName: appName,
                                        bestGuessMonitor: bestGuessMonitor,
                                        dockPosition: dockPosition,
                                        dockItemElement: dockItemElement,
+                                       originalMouseLocation: originalMouseLocation,
                                        minimizeAllWindowsCallback: minimizeAllWindowsCallback)
         view.resetOpacity()
         return view
@@ -26,17 +37,19 @@ class MouseTrackingNSView: NSView {
     private let bestGuessMonitor: NSScreen
     private let dockPosition: DockPosition
     private let dockItemElement: AXUIElement?
+    private let originalMouseLocation: CGPoint?
     private let minimizeAllWindowsCallback: (_ wasAppActiveBeforeClick: Bool) -> Void
     private var fadeOutTimer: Timer?
     private let fadeOutDuration: TimeInterval
     private var inactivityCheckTimer: Timer?
     private let inactivityCheckInterval: TimeInterval
 
-    init(appName: String, bestGuessMonitor: NSScreen, dockPosition: DockPosition, dockItemElement: AXUIElement?, minimizeAllWindowsCallback: @escaping (_ wasAppActiveBeforeClick: Bool) -> Void, frame frameRect: NSRect = .zero) {
+    init(appName: String, bestGuessMonitor: NSScreen, dockPosition: DockPosition, dockItemElement: AXUIElement?, originalMouseLocation: CGPoint? = nil, minimizeAllWindowsCallback: @escaping (_ wasAppActiveBeforeClick: Bool) -> Void, frame frameRect: NSRect = .zero) {
         self.appName = appName
         self.bestGuessMonitor = bestGuessMonitor
         self.dockPosition = dockPosition
         self.dockItemElement = dockItemElement
+        self.originalMouseLocation = originalMouseLocation
         self.minimizeAllWindowsCallback = minimizeAllWindowsCallback
         fadeOutDuration = Defaults[.fadeOutDuration]
         inactivityCheckInterval = TimeInterval(Defaults[.inactivityTimeout])
@@ -89,6 +102,14 @@ class MouseTrackingNSView: NSView {
     }
 
     private func checkIfMouseIsOverDockIcon() -> Bool {
+        // For CLI mode, check if mouse is near original trigger position
+        if dockPosition == .cli, let originalPos = originalMouseLocation {
+            let currentMouseLocation = NSEvent.mouseLocation
+            let proximityThreshold: CGFloat = 50
+            let distance = hypot(currentMouseLocation.x - originalPos.x, currentMouseLocation.y - originalPos.y)
+            return distance < proximityThreshold
+        }
+
         guard let activeDockObserver = DockObserver.activeInstance else { return false }
         guard let originalDockItem = dockItemElement else { return false }
 

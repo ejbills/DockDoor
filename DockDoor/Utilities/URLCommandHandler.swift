@@ -135,7 +135,8 @@ enum URLCommandHandler {
                 overrideDelay: true,
                 onWindowTap: nil,
                 bundleIdentifier: app.bundleIdentifier,
-                bypassDockMouseValidation: true
+                bypassDockMouseValidation: true,
+                dockPositionOverride: .cli
             )
         }
     }
