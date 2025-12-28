@@ -248,8 +248,9 @@ enum WindowUtil {
 // MARK: - Cache Management
 
 extension WindowUtil {
-    static func getAllWindowsFromCache() -> [WindowInfo] {
-        desktopSpaceWindowCacheManager.getAllWindows()
+    static func saveWindowOrderFromCache() {
+        let allWindows = desktopSpaceWindowCacheManager.getAllWindows()
+        WindowOrderPersistence.saveOrder(from: allWindows)
     }
 
     static func clearWindowCache(for app: NSRunningApplication) {

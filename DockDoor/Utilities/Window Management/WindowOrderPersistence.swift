@@ -22,12 +22,8 @@ enum WindowOrderPersistence {
         return Defaults[.persistedWindowOrder].first { $0.key == targetKey }
     }
 
-    /// Save the current window order from the cache
-    static func saveCurrentOrder() {
+    static func saveOrder(from allWindows: [WindowInfo]) {
         var entries: [PersistedWindowEntry] = []
-
-        // Get all windows from cache
-        let allWindows = WindowUtil.getAllWindowsFromCache()
 
         for window in allWindows {
             guard let bundleId = window.app.bundleIdentifier else { continue }
