@@ -1432,7 +1432,7 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%1$lld app%2$@"
           }
         },
@@ -1510,8 +1510,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$lld app%2$@"
+            "state" : "translated",
+            "value" : "%1$lld застосунок%2$@"
           }
         },
         "vi" : {
@@ -1628,8 +1628,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$lld app%2$@ selected"
+            "state" : "translated",
+            "value" : "%1$lld app%2$@ selezionate"
           }
         },
         "ja" : {
@@ -1706,8 +1706,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$lld app%2$@ selected"
+            "state" : "translated",
+            "value" : "%1$lld застосунок%2$@ обрано"
           }
         },
         "vi" : {
@@ -2009,7 +2009,7 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%lld%%"
           }
         },
@@ -2087,7 +2087,7 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%lld%%"
           }
         },
@@ -2105,7 +2105,7 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%lld%%"
           }
         }
@@ -8966,8 +8966,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Activate/Hide (same as other apps)"
+            "state" : "translated",
+            "value" : "啟用／隱藏（同其他App）"
           }
         }
       }
@@ -14962,8 +14962,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Anchor to top"
+            "state" : "translated",
+            "value" : "In alto"
           }
         },
         "ja" : {
@@ -15040,8 +15040,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Anchor to top"
+            "state" : "translated",
+            "value" : "Прив’язка до верху"
           }
         },
         "vi" : {
@@ -15058,8 +15058,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Anchor to top"
+            "state" : "translated",
+            "value" : "定位至最上方"
           }
         }
       }
@@ -15432,8 +15432,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "App Header Style"
+            "state" : "translated",
+            "value" : "应用标题样式"
           }
         },
         "zh-Hant" : {
@@ -15622,8 +15622,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "App Name + Window Title"
+            "state" : "translated",
+            "value" : "应用名称 + 窗口标题"
           }
         },
         "zh-Hant" : {
@@ -15812,8 +15812,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "App Name Only"
+            "state" : "translated",
+            "value" : "仅应用名称"
           }
         },
         "zh-Hant" : {
@@ -21523,8 +21523,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Calendar"
+            "state" : "translated",
+            "value" : "日历"
           }
         },
         "zh-Hant" : {
@@ -21903,8 +21903,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Calendar Access Required"
+            "state" : "translated",
+            "value" : "需要日历访问权限"
           }
         },
         "zh-Hant" : {
@@ -24567,14 +24567,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Choose whether vertical or horizontal scrolling controls the media widget."
+            "state" : "translated",
+            "value" : "选择是垂直滚动还是水平滚动控制媒体小部件。"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Choose whether vertical or horizontal scrolling controls the media widget."
+            "state" : "translated",
+            "value" : "選擇用垂直或水平捲動來控制媒體小工具。"
           }
         }
       }
@@ -24757,8 +24757,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Clear"
+            "state" : "translated",
+            "value" : "清空"
           }
         },
         "zh-Hant" : {
@@ -24857,8 +24857,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Clear All"
+            "state" : "translated",
+            "value" : "Pulisci"
           }
         },
         "ja" : {
@@ -24935,8 +24935,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Clear All"
+            "state" : "translated",
+            "value" : "Очистити все"
           }
         },
         "vi" : {
@@ -24947,14 +24947,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Clear All"
+            "state" : "translated",
+            "value" : "清除所有"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Clear All"
+            "state" : "translated",
+            "value" : "清除全部"
           }
         }
       }
@@ -25900,8 +25900,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Close Window"
+            "state" : "translated",
+            "value" : "关闭窗口"
           }
         },
         "zh-Hant" : {
@@ -26661,8 +26661,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Cmd+key shortcuts for quick actions on the selected window preview. These work in both the window switcher and Cmd+Tab enhancement mode."
+            "state" : "translated",
+            "value" : "用于对所选窗口预览进行快速操作的 Cmd 快捷键。它们在窗口切换器和 Cmd Tab 增强模式下均有效。"
           }
         },
         "zh-Hant" : {
@@ -28944,8 +28944,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Compact List Mode Only (Window Previews are Disabled)"
+            "state" : "translated",
+            "value" : "仅紧凑列表模式（禁用窗口预览）"
           }
         },
         "zh-Hant" : {
@@ -29134,8 +29134,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Compact Mode (Titles Only)"
+            "state" : "translated",
+            "value" : "紧凑模式（仅标题）"
           }
         },
         "zh-Hant" : {
@@ -29324,8 +29324,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Compact mode displays windows as a streamlined vertical list with app icons and titles."
+            "state" : "translated",
+            "value" : "紧凑模式将预览窗口显示为只带有应用程序图标和标题的精简垂直列表。"
           }
         },
         "zh-Hant" : {
@@ -31988,8 +31988,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Current Dock Size:"
+            "state" : "translated",
+            "value" : "当前 Dock 尺寸："
           }
         },
         "zh-Hant" : {
@@ -34074,7 +34074,7 @@
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Деталізована"
+            "value" : "Деталізований"
           }
         },
         "vi" : {
@@ -35606,8 +35606,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Disabled"
+            "state" : "translated",
+            "value" : "禁用"
           }
         },
         "zh-Hant" : {
@@ -36368,8 +36368,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Displays a colored line below the currently active application's dock icon."
+            "state" : "translated",
+            "value" : "在当前活动的应用程序的 dock 图标下方显示一条彩色线。"
           }
         },
         "zh-Hant" : {
@@ -37128,14 +37128,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Icon Scroll Gesture"
+            "state" : "translated",
+            "value" : "Dock 图标滚动手势"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Icon Scroll Gesture"
+            "state" : "translated",
+            "value" : "Dock圖像捲動手勢"
           }
         }
       }
@@ -37509,8 +37509,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Preview Gestures"
+            "state" : "translated",
+            "value" : "Dock 预览手势"
           }
         },
         "zh-Hant" : {
@@ -39792,14 +39792,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "DockDoor needs access to your calendars to show events. Please enable Calendar access in System Settings > Privacy & Security > Calendars."
+            "state" : "translated",
+            "value" : "DockDoor 需要访问您的日历以显示事件。请在“系统设置”>“隐私与安全”>“日历”中启用日历访问。"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "DockDoor needs access to your calendars to show events. Please enable Calendar access in System Settings > Privacy & Security > Calendars."
+            "state" : "translated",
+            "value" : "DockDoor需要行事曆存取權限來顯示行程。請在系統設定 > 隱私權與安全性 > 行事曆中允許。"
           }
         }
       }
@@ -40272,8 +40272,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Done"
+            "state" : "translated",
+            "value" : "Fatto"
           }
         },
         "ja" : {
@@ -40350,8 +40350,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Done"
+            "state" : "translated",
+            "value" : "Готово"
           }
         },
         "vi" : {
@@ -40362,14 +40362,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Done"
+            "state" : "translated",
+            "value" : "完成"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Done"
+            "state" : "translated",
+            "value" : "完成"
           }
         }
       }
@@ -42266,8 +42266,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable dock scroll gestures"
+            "state" : "translated",
+            "value" : "启用 dock 滚动手势"
           }
         },
         "zh-Hant" : {
@@ -42456,8 +42456,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable for Dock Preview"
+            "state" : "translated",
+            "value" : "启用 Dock 预览"
           }
         },
         "zh-Hant" : {
@@ -42646,8 +42646,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable for Window Switcher"
+            "state" : "translated",
+            "value" : "启用窗口切换器"
           }
         },
         "zh-Hant" : {
@@ -42836,8 +42836,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable gestures in window switcher"
+            "state" : "translated",
+            "value" : "在窗口切换器中启用手势"
           }
         },
         "zh-Hant" : {
@@ -43026,8 +43026,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable gestures on dock window previews"
+            "state" : "translated",
+            "value" : "在 dock 窗口预览中启用手势"
           }
         },
         "zh-Hant" : {
@@ -43407,8 +43407,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable Live Preview (Video)"
+            "state" : "translated",
+            "value" : "启用实时预览（视频）"
           }
         },
         "zh-Hant" : {
@@ -44168,14 +44168,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable scroll gestures on dock icons"
+            "state" : "translated",
+            "value" : "在 dock 图标上启用滚动手势"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Enable scroll gestures on dock icons"
+            "state" : "translated",
+            "value" : "啟用Dock圖像捲動手勢"
           }
         }
       }
@@ -51985,8 +51985,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Gesture Sensitivity"
+            "state" : "translated",
+            "value" : "手势灵敏度"
           }
         },
         "zh-Hant" : {
@@ -52175,8 +52175,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Gesture Settings"
+            "state" : "translated",
+            "value" : "手势设置"
           }
         },
         "zh-Hant" : {
@@ -52366,8 +52366,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Gestures & Keybinds"
+            "state" : "translated",
+            "value" : "手势 & 快捷键"
           }
         },
         "zh-Hant" : {
@@ -53128,8 +53128,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Grant permission in System Settings to enable window previews."
+            "state" : "translated",
+            "value" : "在“系统设置”中授予权限以启用窗口预览。"
           }
         },
         "zh-Hant" : {
@@ -53508,8 +53508,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Group multiple app instances together"
+            "state" : "translated",
+            "value" : "将多个应用程序实例组合在一起"
           }
         },
         "zh-Hant" : {
@@ -53608,8 +53608,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Group windows by app"
+            "state" : "translated",
+            "value" : "Raggruppa per applicazione"
           }
         },
         "ja" : {
@@ -53686,8 +53686,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Group windows by app"
+            "state" : "translated",
+            "value" : "Групувати вікна за застосунком"
           }
         },
         "vi" : {
@@ -53698,14 +53698,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Group windows by app"
+            "state" : "translated",
+            "value" : "按应用程序对窗口进行分组"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Group windows by app"
+            "state" : "translated",
+            "value" : "依據App將視窗分組"
           }
         }
       }
@@ -55603,8 +55603,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hide All"
+            "state" : "translated",
+            "value" : "隐藏全部"
           }
         },
         "zh-Hant" : {
@@ -56175,8 +56175,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hide App"
+            "state" : "translated",
+            "value" : "隐藏应用程序"
           }
         },
         "zh-Hant" : {
@@ -56656,8 +56656,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hide specific applications from DockDoor previews."
+            "state" : "translated",
+            "value" : "Specifica quali applicazioni devono essere escluse dalla generazione di anteprime."
           }
         },
         "ja" : {
@@ -56734,8 +56734,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hide specific applications from DockDoor previews."
+            "state" : "translated",
+            "value" : "Приховати певні застосунки з попереднього перегляду DockDoor."
           }
         },
         "vi" : {
@@ -56746,14 +56746,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hide specific applications from DockDoor previews."
+            "state" : "translated",
+            "value" : "从 DockDoor 预览中隐藏特定应用程序。"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hide specific applications from DockDoor previews."
+            "state" : "translated",
+            "value" : "隱藏特定App的DockDoor預覽。"
           }
         }
       }
@@ -56936,8 +56936,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "High (960px)"
+            "state" : "translated",
+            "value" : "高 (960px)"
           }
         },
         "zh-Hant" : {
@@ -57126,8 +57126,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Higher quality and frame rate use more CPU/GPU resources. Use lower settings for Window Switcher if you experience lag."
+            "state" : "translated",
+            "value" : "更高的画质和帧率会占用更多的 CPU/GPU 资源。如果在使用窗口切换器时出现卡顿，请使用较低的设置。"
           }
         },
         "zh-Hant" : {
@@ -57506,8 +57506,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Highlights the currently focused window with a colored border."
+            "state" : "translated",
+            "value" : "用彩色边框突出显示当前聚焦的窗口。"
           }
         },
         "zh-Hant" : {
@@ -57697,8 +57697,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Horizontal"
+            "state" : "translated",
+            "value" : "水平"
           }
         },
         "zh-Hant" : {
@@ -57887,8 +57887,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Horizontal scrolling may interfere with dock preview gestures."
+            "state" : "translated",
+            "value" : "水平滚动可能会与 dock 预览手势冲突。"
           }
         },
         "zh-Hant" : {
@@ -58465,8 +58465,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "How long to keep video streams active after closing preview. Longer duration means faster reopening but uses more resources."
+            "state" : "translated",
+            "value" : "關閉預覽後，視頻串流保持啟用的時間長短。時間越長，重新開啟速度越快，但會佔用更多資源。"
           }
         }
       }
@@ -59983,8 +59983,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Immediately close"
+            "state" : "translated",
+            "value" : "立即关闭"
           }
         },
         "zh-Hant" : {
@@ -61128,8 +61128,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Indicator Color"
+            "state" : "translated",
+            "value" : "指示器颜色"
           }
         },
         "zh-Hant" : {
@@ -61319,8 +61319,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Indicator Height"
+            "state" : "translated",
+            "value" : "指示器高度"
           }
         },
         "zh-Hant" : {
@@ -61510,8 +61510,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Indicator Length"
+            "state" : "translated",
+            "value" : "指示器长度"
           }
         },
         "zh-Hant" : {
@@ -62462,8 +62462,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Item Size"
+            "state" : "translated",
+            "value" : "大小"
           }
         },
         "zh-Hant" : {
@@ -62842,8 +62842,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Keep Open"
+            "state" : "translated",
+            "value" : "保持开启"
           }
         },
         "zh-Hant" : {
@@ -65116,7 +65116,7 @@
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Полегшена"
+            "value" : "Полегшений"
           }
         },
         "vi" : {
@@ -65697,8 +65697,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Loading calendars..."
+            "state" : "translated",
+            "value" : "正在加载自定义日历……"
           }
         },
         "zh-Hant" : {
@@ -66457,8 +66457,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Low (480px)"
+            "state" : "translated",
+            "value" : "低 (480 px)"
           }
         },
         "zh-Hant" : {
@@ -66647,8 +66647,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Lower values make gestures more sensitive. Higher values require longer swipes. Applies to both dock previews and window switcher."
+            "state" : "translated",
+            "value" : "数值越低，手势就越敏感。更高的值需要更长的滑动时间。同时适用于dock预览和窗口预览切换器。"
           }
         },
         "zh-Hant" : {
@@ -66837,14 +66837,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Make sure you have calendars set up in the Calendar app."
+            "state" : "translated",
+            "value" : "确保您在日历应用程序中添加了自定义日历。"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Make sure you have calendars set up in the Calendar app."
+            "state" : "translated",
+            "value" : "請確認行事曆App中有已建立的行事曆。"
           }
         }
       }
@@ -67980,8 +67980,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Maximize"
+            "state" : "translated",
+            "value" : "最大化"
           }
         },
         "zh-Hant" : {
@@ -68742,8 +68742,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Media"
+            "state" : "translated",
+            "value" : "媒体"
           }
         },
         "zh-Hant" : {
@@ -69505,8 +69505,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Middle Click"
+            "state" : "translated",
+            "value" : "中键单击"
           }
         },
         "zh-Hant" : {
@@ -71220,8 +71220,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Mode"
+            "state" : "translated",
+            "value" : "模式"
           }
         },
         "zh-Hant" : {
@@ -71410,8 +71410,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Mouse Actions"
+            "state" : "translated",
+            "value" : "鼠标操作"
           }
         },
         "zh-Hant" : {
@@ -71600,14 +71600,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Music/Spotify behavior:"
+            "state" : "translated",
+            "value" : "音乐/Spotify 行为："
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Music/Spotify behavior:"
+            "state" : "translated",
+            "value" : "音樂／Spotify動作："
           }
         }
       }
@@ -71980,8 +71980,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Native (Best)"
+            "state" : "translated",
+            "value" : "本地(最佳)"
           }
         },
         "zh-Hant" : {
@@ -73123,8 +73123,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No Action"
+            "state" : "translated",
+            "value" : "忽略"
           }
         },
         "zh-Hant" : {
@@ -73504,8 +73504,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No applications found."
+            "state" : "translated",
+            "value" : "未找到应用程序。"
           }
         },
         "zh-Hant" : {
@@ -73604,8 +73604,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No apps hidden"
+            "state" : "translated",
+            "value" : "Nessuna applicazione nascosta"
           }
         },
         "ja" : {
@@ -73682,8 +73682,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No apps hidden"
+            "state" : "translated",
+            "value" : "Немає прихованих застосунків"
           }
         },
         "vi" : {
@@ -73694,14 +73694,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No apps hidden"
+            "state" : "translated",
+            "value" : "没有隐藏应用程序"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No apps hidden"
+            "state" : "translated",
+            "value" : "沒有隱藏的App"
           }
         }
       }
@@ -74264,8 +74264,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No calendars found"
+            "state" : "translated",
+            "value" : "未查询到自定义日历"
           }
         },
         "zh-Hant" : {
@@ -75507,8 +75507,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No matching apps."
+            "state" : "translated",
+            "value" : "Nessuna corrispondenza."
           }
         },
         "ja" : {
@@ -75585,8 +75585,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No matching apps."
+            "state" : "translated",
+            "value" : "Немає відповідних застосунків."
           }
         },
         "vi" : {
@@ -75597,14 +75597,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No matching apps."
+            "state" : "translated",
+            "value" : "没有匹配的应用程序。"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No matching apps."
+            "state" : "translated",
+            "value" : "沒有相符的App。"
           }
         }
       }
@@ -77028,8 +77028,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Offset position"
+            "state" : "translated",
+            "value" : "Spostamento"
           }
         },
         "ja" : {
@@ -77106,8 +77106,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Offset position"
+            "state" : "translated",
+            "value" : "Зміщена позиція"
           }
         },
         "vi" : {
@@ -77118,14 +77118,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Offset position"
+            "state" : "translated",
+            "value" : "位置偏移"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Offset position"
+            "state" : "translated",
+            "value" : "位置偏移"
           }
         }
       }
@@ -78451,8 +78451,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Only the currently selected window gets live preview"
+            "state" : "translated",
+            "value" : "只有当前选中的窗口会显示实时预览"
           }
         },
         "zh-Hant" : {
@@ -78641,8 +78641,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Only use delay for initial window opening"
+            "state" : "translated",
+            "value" : "仅在首次打开预览窗口时使用延迟"
           }
         },
         "zh-Hant" : {
@@ -79023,8 +79023,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open New Window"
+            "state" : "translated",
+            "value" : "打开新窗口"
           }
         },
         "zh-Hant" : {
@@ -79784,8 +79784,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open System Settings"
+            "state" : "translated",
+            "value" : "打开系统设置"
           }
         },
         "zh-Hant" : {
@@ -80455,8 +80455,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Parallel - Title bottom left, controls top left"
+            "state" : "translated",
+            "value" : "Titolo in basso a sinistra ↙ controlli in alto a sinistra ↖"
           }
         },
         "ja" : {
@@ -80533,8 +80533,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Parallel - Title bottom left, controls top left"
+            "state" : "translated",
+            "value" : "Паралельно – заголовок внизу ліворуч, елементи керування зверху ліворуч"
           }
         },
         "vi" : {
@@ -80545,14 +80545,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Parallel - Title bottom left, controls top left"
+            "state" : "translated",
+            "value" : "并行 - 标题左下角，控件左上角"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Parallel - Title bottom left, controls top left"
+            "state" : "translated",
+            "value" : "平行：標題在左下，控制項目在左上"
           }
         }
       }
@@ -80645,8 +80645,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Parallel - Title bottom right, controls top right"
+            "state" : "translated",
+            "value" : "Titolo in basso a destra ↘ controlli in alto a destra ↗"
           }
         },
         "ja" : {
@@ -80723,8 +80723,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Parallel - Title bottom right, controls top right"
+            "state" : "translated",
+            "value" : "Паралельно – заголовок внизу праворуч, елементи керування зверху праворуч"
           }
         },
         "vi" : {
@@ -80735,14 +80735,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Parallel - Title bottom right, controls top right"
+            "state" : "translated",
+            "value" : "并行 - 标题右下角，控件右上角"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Parallel - Title bottom right, controls top right"
+            "state" : "translated",
+            "value" : "平行：標題在右下，控制項目在右上"
           }
         }
       }
@@ -80835,8 +80835,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Parallel - Title top left, controls bottom left"
+            "state" : "translated",
+            "value" : "Titolo in alto a sinistra ↖ controlli in basso a sinistra ↙"
           }
         },
         "ja" : {
@@ -80913,8 +80913,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Parallel - Title top left, controls bottom left"
+            "state" : "translated",
+            "value" : "Паралельно – заголовок угорі ліворуч, елементи керування внизу ліворуч"
           }
         },
         "vi" : {
@@ -80925,14 +80925,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Parallel - Title top left, controls bottom left"
+            "state" : "translated",
+            "value" : "并行 - 标题左上角，控件左下角"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Parallel - Title top left, controls bottom left"
+            "state" : "translated",
+            "value" : "平行：標題在左上，控制項目在左下"
           }
         }
       }
@@ -81025,8 +81025,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Parallel - Title top right, controls bottom right"
+            "state" : "translated",
+            "value" : "Titolo in alto a destra ↗ controlli in basso a destra ↘"
           }
         },
         "ja" : {
@@ -81103,8 +81103,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Parallel - Title top right, controls bottom right"
+            "state" : "translated",
+            "value" : "Паралельно – заголовок угорі праворуч, елементи керування внизу праворуч"
           }
         },
         "vi" : {
@@ -81115,14 +81115,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Parallel - Title top right, controls bottom right"
+            "state" : "translated",
+            "value" : "并行 - 标题右上，控件右下"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Parallel - Title top right, controls bottom right"
+            "state" : "translated",
+            "value" : "平行：標題在右上，控制項目在右下"
           }
         }
       }
@@ -82168,8 +82168,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Pin to"
+            "state" : "translated",
+            "value" : "Fissa su"
           }
         },
         "ja" : {
@@ -82246,8 +82246,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Pin to"
+            "state" : "translated",
+            "value" : "Закріпити до"
           }
         },
         "vi" : {
@@ -82264,8 +82264,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Pin to"
+            "state" : "translated",
+            "value" : "釘選到"
           }
         }
       }
@@ -83120,8 +83120,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Placement"
+            "state" : "translated",
+            "value" : "Posizionamento"
           }
         },
         "ja" : {
@@ -83198,8 +83198,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Placement"
+            "state" : "translated",
+            "value" : "Розміщення"
           }
         },
         "vi" : {
@@ -83216,8 +83216,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Placement"
+            "state" : "translated",
+            "value" : "位置"
           }
         }
       }
@@ -83787,8 +83787,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Places traffic light buttons and window titles directly inside the preview frames."
+            "state" : "translated",
+            "value" : "將視窗控制項目和標題直接放在預覽畫面中。"
           }
         }
       }
@@ -84925,8 +84925,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Position Offset"
+            "state" : "translated",
+            "value" : "位置偏移"
           }
         },
         "zh-Hant" : {
@@ -85496,8 +85496,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Press a key…"
+            "state" : "translated",
+            "value" : "按下按键…"
           }
         },
         "zh-Hant" : {
@@ -87021,8 +87021,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Prevent preview reappearance during fade-out"
+            "state" : "translated",
+            "value" : "防止在淡出期间预览再现"
           }
         },
         "zh-Hant" : {
@@ -91971,8 +91971,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Refresh dock size"
+            "state" : "translated",
+            "value" : "刷新 dock 大小"
           }
         },
         "zh-Hant" : {
@@ -93307,8 +93307,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Removes the pill-shaped background styling from traffic light buttons."
+            "state" : "translated",
+            "value" : "移除視窗控制項目的膠囊形狀背景裝飾。"
           }
         }
       }
@@ -93687,8 +93687,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Removes the pill-shaped background styling from window titles."
+            "state" : "translated",
+            "value" : "移除視窗標題的膠囊形狀背景裝飾。"
           }
         }
       }
@@ -94161,8 +94161,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Require Shift+Tab to go back in Switcher"
+            "state" : "translated",
+            "value" : "Scorri all'indietro con ⇧⇥ (Maiuscolo+Tab)"
           }
         },
         "ja" : {
@@ -94239,8 +94239,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Require Shift+Tab to go back in Switcher"
+            "state" : "translated",
+            "value" : "Потребується Shift+Tab для повернення в Перемикач"
           }
         },
         "vi" : {
@@ -94257,8 +94257,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Require Shift+Tab to go back in Switcher"
+            "state" : "translated",
+            "value" : "按下Shift+Tab回到切換器"
           }
         }
       }
@@ -94633,8 +94633,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Required for capturing window previews of other apps. Without this, only the compact list view will be available."
+            "state" : "translated",
+            "value" : "用于捕获所有应用程序的窗口预览。否则，将只能使用紧凑列表视图。"
           }
         },
         "zh-Hant" : {
@@ -96066,8 +96066,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Restart DockDoor"
+            "state" : "translated",
+            "value" : "Riavvia DockDoor"
           }
         },
         "ja" : {
@@ -96144,8 +96144,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Restart DockDoor"
+            "state" : "translated",
+            "value" : "Перезапустити DockDoor"
           }
         },
         "vi" : {
@@ -96156,14 +96156,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Restart DockDoor"
+            "state" : "translated",
+            "value" : "重启 DockDoor"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Restart DockDoor"
+            "state" : "translated",
+            "value" : "重新打開DockDoor"
           }
         }
       }
@@ -96536,8 +96536,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Retina (1280px)"
+            "state" : "translated",
+            "value" : "视网膜 (1280 px)"
           }
         },
         "zh-Hant" : {
@@ -96726,8 +96726,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Return"
+            "state" : "translated",
+            "value" : "返回"
           }
         },
         "zh-Hant" : {
@@ -99201,14 +99201,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Scroll behavior:"
+            "state" : "translated",
+            "value" : "滚动行为："
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Scroll behavior:"
+            "state" : "translated",
+            "value" : "捲動動作："
           }
         }
       }
@@ -99391,14 +99391,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Scroll direction:"
+            "state" : "translated",
+            "value" : "滚动方向："
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Scroll direction:"
+            "state" : "translated",
+            "value" : "捲動方向："
           }
         }
       }
@@ -99962,8 +99962,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Scroll up on a dock icon to bring the app to front, scroll down to hide all its windows."
+            "state" : "translated",
+            "value" : "在 dock 图标上，向上滚动可以将应用窗口移至最前方，向下滚动可以隐藏此应用所有窗口。"
           }
         },
         "zh-Hant" : {
@@ -100062,8 +100062,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Search apps..."
+            "state" : "translated",
+            "value" : "Cerca applicazioni..."
           }
         },
         "ja" : {
@@ -100140,8 +100140,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Search apps..."
+            "state" : "translated",
+            "value" : "Пошук застосунків..."
           }
         },
         "vi" : {
@@ -100158,8 +100158,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Search apps..."
+            "state" : "translated",
+            "value" : "搜尋App…"
           }
         }
       }
@@ -101297,14 +101297,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Seek playback (scrub through track)"
+            "state" : "translated",
+            "value" : "回放（拖动音轨进度）"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Seek playback (scrub through track)"
+            "state" : "translated",
+            "value" : "調整播放進度"
           }
         }
       }
@@ -102064,8 +102064,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Select and scroll to windows when hovering with mouse. Disable for keyboard-only navigation."
+            "state" : "translated",
+            "value" : "指標停留時選擇並捲動到視窗。停用保留純鍵盤操作。"
           }
         }
       }
@@ -102158,8 +102158,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Select Apps to Hide..."
+            "state" : "translated",
+            "value" : "Scegli le applicazioni da nascondere..."
           }
         },
         "ja" : {
@@ -102236,8 +102236,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Select Apps to Hide..."
+            "state" : "translated",
+            "value" : "Оберіть застосунки, які потрібно приховати..."
           }
         },
         "vi" : {
@@ -102248,14 +102248,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Select Apps to Hide..."
+            "state" : "translated",
+            "value" : "选择要隐藏的应用……"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Select Apps to Hide..."
+            "state" : "translated",
+            "value" : "選擇要隱藏的App..."
           }
         }
       }
@@ -102820,14 +102820,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Select which calendars appear in the dock preview when hovering over the Calendar app."
+            "state" : "translated",
+            "value" : "选择将鼠标悬停在 Dock 日历应用程序图标上时，预览中显示的自定义日历。"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Select which calendars appear in the dock preview when hovering over the Calendar app."
+            "state" : "translated",
+            "value" : "選擇指標停留在Dock的行事曆上時要顯示的行事曆。"
           }
         }
       }
@@ -102920,8 +102920,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Select..."
+            "state" : "translated",
+            "value" : "Seleziona..."
           }
         },
         "ja" : {
@@ -102998,8 +102998,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Select..."
+            "state" : "translated",
+            "value" : "Обрати..."
           }
         },
         "vi" : {
@@ -103016,8 +103016,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Select..."
+            "state" : "translated",
+            "value" : "選擇..."
           }
         }
       }
@@ -103490,8 +103490,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Selected apps show only their most recent window. All windows shown in active-app-only mode."
+            "state" : "translated",
+            "value" : "Le applicazioni selezionate mostrano solo la finestra più recente (come 'solo applicazione attiva')."
           }
         },
         "ja" : {
@@ -103568,8 +103568,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Selected apps show only their most recent window. All windows shown in active-app-only mode."
+            "state" : "translated",
+            "value" : "Вибрані застосунки показують лише своє останнє вікно. Усі вікна відображаються лише в режимі активного застосунку."
           }
         },
         "vi" : {
@@ -103580,14 +103580,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Selected apps show only their most recent window. All windows shown in active-app-only mode."
+            "state" : "translated",
+            "value" : "选定的应用程序只显示其最近的窗口。所有窗口均以活动应用专用模式显示。"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Selected apps show only their most recent window. All windows shown in active-app-only mode."
+            "state" : "translated",
+            "value" : "選擇只要顯示最近使用的視窗的App。在「僅限最近使用的App」模式中，所有視窗都會顯示。"
           }
         }
       }
@@ -104151,8 +104151,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Set a threshold to automatically switch to compact mode when an app has that many or more windows. Set to 0 to disable."
+            "state" : "translated",
+            "value" : "设置一个阈值，当应用程序的窗口数量达到该值或更多时自动切换到紧凑模式。设置为 0 可禁用此功能。"
           }
         },
         "zh-Hant" : {
@@ -105493,8 +105493,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Shake a window preview rapidly"
+            "state" : "translated",
+            "value" : "快速搖晃視窗"
           }
         }
       }
@@ -105677,8 +105677,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Shift Indicator"
+            "state" : "translated",
+            "value" : "指示器偏移"
           }
         },
         "zh-Hant" : {
@@ -105868,8 +105868,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show active app indicator below dock icon"
+            "state" : "translated",
+            "value" : "在 dock 图标下方显示活动应用程序指示器"
           }
         },
         "zh-Hant" : {
@@ -106438,8 +106438,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show All"
+            "state" : "translated",
+            "value" : "显示全部"
           }
         },
         "zh-Hant" : {
@@ -106628,8 +106628,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show App Header"
+            "state" : "translated",
+            "value" : "显示应用程序标题"
           }
         },
         "zh-Hant" : {
@@ -106818,8 +106818,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show App Icon Only"
+            "state" : "translated",
+            "value" : "仅显示应用程序图标"
           }
         },
         "zh-Hant" : {
@@ -110247,8 +110247,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Shows only windows from the current Space"
+            "state" : "translated",
+            "value" : "仅显示当前空间的窗口"
           }
         },
         "zh-Hant" : {
@@ -110438,8 +110438,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Shows only windows from the frontmost app in the current Space"
+            "state" : "translated",
+            "value" : "仅显示当前空间中最前面的应用窗口"
           }
         },
         "zh-Hant" : {
@@ -110629,8 +110629,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Shows only windows from the frontmost application"
+            "state" : "translated",
+            "value" : "仅显示最前面的应用程序的窗口"
           }
         },
         "zh-Hant" : {
@@ -113286,7 +113286,7 @@
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Стандартна"
+            "value" : "Стандартний"
           }
         },
         "vi" : {
@@ -113487,8 +113487,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Standard (640px)"
+            "state" : "translated",
+            "value" : "标准 (640 px)"
           }
         },
         "zh-Hant" : {
@@ -114446,8 +114446,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Stream Keep-Alive Duration"
+            "state" : "translated",
+            "value" : "串流保持活躍時間"
           }
         }
       }
@@ -115964,8 +115964,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Swipe on window previews in the dock popup. Direction is relative to dock position — swipe towards the dock (e.g., down when dock is at bottom, left when dock is on left)."
+            "state" : "translated",
+            "value" : "在 dock 弹出窗口中滑动窗口预览。方向与 dock 位置有关 —— 朝 dock 方向滑动（例如，当 dock 在底部时向下滑动，当 dock 在左侧时向左滑动）。"
           }
         },
         "zh-Hant" : {
@@ -116154,8 +116154,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Swipe up or down on window previews in the keyboard-activated window switcher. Only vertical swipes are recognized, unless in compact mode."
+            "state" : "translated",
+            "value" : "在键盘激活的窗口切换器中，对窗口预览向上或向下滑动。除非处于紧凑模式，否则只识别垂直滑动。"
           }
         },
         "zh-Hant" : {
@@ -117675,8 +117675,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "The indicator appears next to the active app's dock icon. Note: This feature does not support auto-hiding docks."
+            "state" : "translated",
+            "value" : "该指示器会出现在活动应用程序的 Dock 图标旁。注意：此功能不支持自动隐藏 Dock。"
           }
         },
         "zh-Hant" : {
@@ -118156,8 +118156,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "This display is currently disconnected."
+            "state" : "translated",
+            "value" : "Questo schermo non è attivo."
           }
         },
         "ja" : {
@@ -118234,8 +118234,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "This display is currently disconnected."
+            "state" : "translated",
+            "value" : "Цей дисплей наразі відключено."
           }
         },
         "vi" : {
@@ -118252,8 +118252,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "This display is currently disconnected."
+            "state" : "translated",
+            "value" : "此顯示器目前未連接。"
           }
         }
       }
@@ -118437,8 +118437,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "This display is currently disconnected. The window switcher will appear on the main display until reconnected."
+            "state" : "translated",
+            "value" : "该显示器当前已断开连接。窗口切换器将出现在主显示屏上，直到重新连接。"
           }
         },
         "zh-Hant" : {
@@ -119199,8 +119199,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Thumbnail (320px)"
+            "state" : "translated",
+            "value" : "缩略图 (320 px)"
           }
         },
         "zh-Hant" : {
@@ -119580,8 +119580,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Title Format"
+            "state" : "translated",
+            "value" : "标题格式"
           }
         },
         "zh-Hant" : {
@@ -120251,8 +120251,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Top edge stays fixed regardless of switcher size."
+            "state" : "translated",
+            "value" : "Il bordo superiore rimane fisso a prescindere dalle dimensioni del selettore finestre."
           }
         },
         "ja" : {
@@ -120329,8 +120329,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Top edge stays fixed regardless of switcher size."
+            "state" : "translated",
+            "value" : "Верхній край залишається фіксованим незалежно від розміру Перемикача."
           }
         },
         "vi" : {
@@ -120347,8 +120347,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Top edge stays fixed regardless of switcher size."
+            "state" : "translated",
+            "value" : "切換器大小變化時固定頂部邊緣。"
           }
         }
       }
@@ -126627,8 +126627,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Uses your default window switcher settings"
+            "state" : "translated",
+            "value" : "使用默认的窗口切换器设置"
           }
         },
         "zh-Hant" : {
@@ -127009,8 +127009,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Vertical"
+            "state" : "translated",
+            "value" : "垂直"
           }
         },
         "zh-Hant" : {
@@ -129676,8 +129676,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When enabled, hovering over an app in the Dock shows windows from all instances of that app. When disabled, shows only windows from the specific instance under the mouse."
+            "state" : "translated",
+            "value" : "当启用时，将鼠标悬停在 Dock 中的应用程序上，会显示该应用程序所有实例的窗口。当禁用时，只显示鼠标下特定实例的窗口。"
           }
         },
         "zh-Hant" : {
@@ -129866,8 +129866,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When enabled, moving the mouse back over the preview during fade-out will not reactivate it. You must hover over the dock icon again to show the preview."
+            "state" : "translated",
+            "value" : "启用后，在淡出期间将鼠标移回预览将不会重新激活它。必须再次将鼠标悬停在 dock 图标上才能显示预览。"
           }
         },
         "zh-Hant" : {
@@ -129966,8 +129966,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When enabled, pressing Shift alone won't go back. Use Shift+Tab (or modifier+Shift+Tab when release-to-select is on) to navigate backward."
+            "state" : "translated",
+            "value" : "Se abilitata, premi ⇧⇥ (Maiuscolo+Tab) per scorrere all'indietro; in alternativa, usa [modificatore]+Maiuscolo+Tab quando è attivo 'Rilascia per selezionare'. Il solo tasto maiuscolo non è sufficiente."
           }
         },
         "ja" : {
@@ -130044,8 +130044,8 @@
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When enabled, pressing Shift alone won't go back. Use Shift+Tab (or modifier+Shift+Tab when release-to-select is on) to navigate backward."
+            "state" : "translated",
+            "value" : "Якщо ввімкнено, натискання лише клавіші Shift не призведе до повернення. Використовуйте Shift+Tab (або модифікатор+Shift+Tab, коли ввімкнено функцію «відпустити для вибору») для навігації назад."
           }
         },
         "vi" : {
@@ -130056,14 +130056,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When enabled, pressing Shift alone won't go back. Use Shift+Tab (or modifier+Shift+Tab when release-to-select is on) to navigate backward."
+            "state" : "translated",
+            "value" : "启用后，单击 Shift 无法后退。使用 Shift + Tab（或在释放选择时使用 Shift + Tab）向后导航。"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When enabled, pressing Shift alone won't go back. Use Shift+Tab (or modifier+Shift+Tab when release-to-select is on) to navigate backward."
+            "state" : "translated",
+            "value" : "啟用時按住Shift不會向後。使用Shift+Tab（或開啟「放開來選擇」時，使用變更鍵+Shift+Tab）來向後導覽。"
           }
         }
       }
@@ -130627,8 +130627,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When enabled, switching between dock icons while a preview is already open will show previews instantly."
+            "state" : "translated",
+            "value" : "启用后，当预览窗口已经打开时，在dock图标之间切换将立即显示对应预览。"
           }
         },
         "zh-Hant" : {
@@ -130817,8 +130817,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When enabled, window previews show live video instead of static screenshots. Uses ScreenCaptureKit for real-time capture."
+            "state" : "translated",
+            "value" : "启用后，预览窗口将显示实时视频而不是静态截图。使用 ScreenCaptureKit 进行实时捕获。"
           }
         },
         "zh-Hant" : {
@@ -131388,14 +131388,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When scrolling on the media widget preview, choose whether to adjust system volume or seek through the track."
+            "state" : "translated",
+            "value" : "在媒体小部件预览上滚动时，选择是调整系统音量还是音轨进度。"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "When scrolling on the media widget preview, choose whether to adjust system volume or seek through the track."
+            "state" : "translated",
+            "value" : "選擇在媒體小工具預覽上捲動時要調整系統音量或播放進度。"
           }
         }
       }
@@ -132344,8 +132344,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Widgets"
+            "state" : "translated",
+            "value" : "小工具"
           }
         },
         "zh-Hant" : {
@@ -134057,8 +134057,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Preview Keyboard Shortcuts"
+            "state" : "translated",
+            "value" : "窗口预览键盘快捷键"
           }
         },
         "zh-Hant" : {
@@ -134819,8 +134819,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Processing Debounce Interval"
+            "state" : "translated",
+            "value" : "防止窗口误动作（去抖动）间隙"
           }
         },
         "zh-Hant" : {
@@ -136154,8 +136154,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Switcher Gestures"
+            "state" : "translated",
+            "value" : "窗口切换手势"
           }
         },
         "zh-Hant" : {
@@ -136344,8 +136344,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Switcher is disabled. Enable it in General settings to use keyboard shortcuts."
+            "state" : "translated",
+            "value" : "窗口切换器已被禁用。请在常规设置中启用它以使用键盘快捷键。"
           }
         },
         "zh-Hant" : {
@@ -137297,8 +137297,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Switcher Shortcuts"
+            "state" : "translated",
+            "value" : "窗口切换快捷键"
           }
         },
         "zh-Hant" : {
@@ -137487,8 +137487,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Threshold"
+            "state" : "translated",
+            "value" : "窗口阈值"
           }
         },
         "zh-Hant" : {
@@ -137677,14 +137677,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Title"
+            "state" : "translated",
+            "value" : "窗口标题"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Title"
+            "state" : "translated",
+            "value" : "視窗標題"
           }
         }
       }
@@ -138248,8 +138248,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Window Title Only"
+            "state" : "translated",
+            "value" : "仅窗口标题"
           }
         },
         "zh-Hant" : {
