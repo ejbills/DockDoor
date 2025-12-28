@@ -115,6 +115,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let menu = NSMenu()
         menu.addItem(NSMenuItem(title: String(localized: "Open Settings"), action: #selector(openSettingsWindow(_:)), keyEquivalent: ""))
         menu.addItem(NSMenuItem.separator())
+        menu.addItem(NSMenuItem(title: String(localized: "Support DockDoor"), action: #selector(openDonationPage), keyEquivalent: ""))
+        menu.addItem(NSMenuItem.separator())
         menu.addItem(NSMenuItem(title: String(localized: "Restart DockDoor"), action: #selector(restartAppWrapper), keyEquivalent: ""))
         menu.addItem(NSMenuItem(title: String(localized: "Quit DockDoor"), action: #selector(quitAppWrapper), keyEquivalent: "q"))
         button.menu = menu
@@ -138,6 +140,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     @objc private func restartAppWrapper() {
         restartApp()
+    }
+
+    @objc private func openDonationPage() {
+        if let url = URL(string: "https://dockdoor.net/donate") {
+            NSWorkspace.shared.open(url)
+        }
     }
 
     @objc func openSettingsWindow(_ sender: Any?) {

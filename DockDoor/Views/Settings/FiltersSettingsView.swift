@@ -21,7 +21,7 @@ struct FiltersSettingsView: View {
         BaseSettingsView {
             VStack(alignment: .leading, spacing: 16) {
                 // Custom App Directories Section
-                StyledGroupBox(label: "Custom Application Directories") {
+                SettingsGroup(header: "Custom Application Directories") {
                     VStack(alignment: .leading, spacing: 8) {
                         Text("Add additional directories to scan for applications. This is useful if you keep apps outside standard locations.")
                             .font(.footnote)
@@ -100,7 +100,7 @@ struct FiltersSettingsView: View {
                 }
 
                 // App Filters Section
-                StyledGroupBox(label: "Application Filters") {
+                SettingsGroup(header: "Application Filters") {
                     VStack(alignment: .leading, spacing: 8) {
                         Text("Hide specific applications from DockDoor previews.")
                             .font(.footnote)
@@ -161,7 +161,7 @@ struct FiltersSettingsView: View {
                 }
 
                 // Window Title Filters Section
-                StyledGroupBox(label: "Window Title Filters") {
+                SettingsGroup(header: "Window Title Filters") {
                     VStack(alignment: .leading, spacing: 8) {
                         Text("Exclude windows from capture by filtering specific text in their titles (case-insensitive).")
                             .font(.footnote)
