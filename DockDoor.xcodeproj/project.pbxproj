@@ -1160,6 +1160,9 @@
 				INFOPLIST_FILE = DockDoor/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = DockDoor;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_LSUIElement = YES;
+				INFOPLIST_KEY_NSAppleEventsUsageDescription = "DockDoor uses AppleEvents to fetch music info from Music and Spotify.";
+				INFOPLIST_KEY_NSCalendarsUsageDescription = "DockDoor uses EventKit to fetch task info from Calendar.";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1208,6 +1211,9 @@
 				INFOPLIST_FILE = DockDoor/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = DockDoor;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_LSUIElement = YES;
+				INFOPLIST_KEY_NSAppleEventsUsageDescription = "DockDoor uses AppleEvents to fetch music info from Music and Spotify.";
+				INFOPLIST_KEY_NSCalendarsUsageDescription = "DockDoor uses EventKit to fetch task info from Calendar.";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

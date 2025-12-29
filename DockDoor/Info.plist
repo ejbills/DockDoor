@@ -13,12 +13,6 @@
 			</array>
 		</dict>
 	</array>
-	<key>NSCalendarsUsageDescription</key>
-	<string>DockDoor uses EventKit to fetch task info from Calendar.</string>
-	<key>NSAppleEventsUsageDescription</key>
-	<string>DockDoor uses AppleEvents to fetch music info from Music and Spotify.</string>
-	<key>LSUIElement</key>
-	<true/>
 	<key>SUEnableDownloaderService</key>
 	<true/>
 	<key>SUEnableInstallerLauncherService</key>
