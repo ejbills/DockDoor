@@ -133,7 +133,7 @@ struct WindowPreviewInteractionModifier: ViewModifier {
         case .top: direction == .up
         case .left: direction == .left
         case .right: direction == .right
-        case .cmdTab, .unknown: direction == .down
+        case .cmdTab, .cli, .unknown: direction == .down
         }
     }
 
@@ -143,7 +143,7 @@ struct WindowPreviewInteractionModifier: ViewModifier {
         case .top: direction == .down
         case .left: direction == .right
         case .right: direction == .left
-        case .cmdTab, .unknown: direction == .up
+        case .cmdTab, .cli, .unknown: direction == .up
         }
     }
 

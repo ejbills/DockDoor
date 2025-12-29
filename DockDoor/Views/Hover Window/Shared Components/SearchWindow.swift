@@ -165,7 +165,6 @@ class SearchWindow: NSPanel, NSTextFieldDelegate {
             }
         }
 
-        // Clamp to screen bounds
         if searchFrame.minX < screenFrame.minX {
             searchFrame.origin.x = screenFrame.minX + 10
         } else if searchFrame.maxX > screenFrame.maxX {

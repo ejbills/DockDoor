@@ -222,6 +222,8 @@ final class SharedPreviewWindowCoordinator: NSPanel {
                     contentView = nil
                     return
                 }
+            } else if let mouseLocation, dockPositionOverride == .cli {
+                position = calculateWindowPositionFromMouse(mouseLocation: mouseLocation, windowSize: newHoverWindowSize, screen: mouseScreen)
             } else {
                 position = centerWindowOnScreen(size: newHoverWindowSize, screen: mouseScreen)
             }
@@ -298,6 +300,19 @@ final class SharedPreviewWindowCoordinator: NSPanel {
             // Center vertically with offset
             screen.frame.midY - (size.height / 2) + verticalOffset
         }
+
+        return CGPoint(x: xPosition, y: yPosition)
+    }
+
+    private func calculateWindowPositionFromMouse(mouseLocation: CGPoint, windowSize: CGSize, screen: NSScreen) -> CGPoint {
+        let screenFrame = screen.frame
+        let buffer: CGFloat = 10
+
+        var xPosition = mouseLocation.x - (windowSize.width / 2)
+        var yPosition = mouseLocation.y + buffer
+
+        xPosition = max(screenFrame.minX, min(xPosition, screenFrame.maxX - windowSize.width))
+        yPosition = max(screenFrame.minY, min(yPosition, screenFrame.maxY - windowSize.height))
 
         return CGPoint(x: xPosition, y: yPosition)
     }

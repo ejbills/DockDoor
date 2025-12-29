@@ -18,7 +18,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         updaterController.updater
     }
 
-    private var firstTimeWindow: NSWindow?
+    private var cinematicOverlay: CinematicOverlay?
+    private var onboardingWindow: NSWindow?
     private var settingsManager: SettingsManager?
 
     override init() {
@@ -91,6 +92,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         return false
     }
 
+    // MARK: - URL Scheme Handler (dockdoor-cli://)
+
+    func application(_ application: NSApplication, open urls: [URL]) {
+        urls.forEach { URLCommandHandler.handle($0) }
+    }
+
     func setupMenuBar() {
         guard statusBarItem == nil else { return }
 
@@ -161,9 +168,26 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     private func handleFirstTimeLaunch() {
-        guard let screen = NSScreen.main else { return }
+        let currentMouseLocation = CGEvent(source: nil)?.location ?? .zero
+        let screen = NSScreen.screenContainingMouse(currentMouseLocation)
+
         Defaults[.launched] = true
 
+        if !Defaults[.showAnimations] || NSWorkspace.shared.accessibilityDisplayShouldReduceMotion {
+            showOnboardingWindow(on: screen)
+            return
+        }
+
+        let overlay = CinematicOverlay(screen: screen) { [weak self] in
+            self?.cinematicOverlay = nil
+            self?.showOnboardingWindow(on: screen)
+        }
+        cinematicOverlay = overlay
+        overlay.orderFront(nil)
+        overlay.fadeIn()
+    }
+
+    private func showOnboardingWindow(on screen: NSScreen) {
         let newWindow = SwiftUIWindow(
             styleMask: [.titled, .closable, .fullSizeContentView],
             content: {
@@ -185,24 +209,34 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         newWindow.standardWindowButton(.miniaturizeButton)?.isHidden = true
         newWindow.standardWindowButton(.zoomButton)?.isHidden = true
 
+        newWindow.level = .floating
+
         let screenFrame = screen.visibleFrame
         let windowOrigin = NSPoint(
             x: screenFrame.midX - newWindow.frame.width / 2,
             y: screenFrame.midY - newWindow.frame.height / 2
         )
-        newWindow.setFrameOrigin(windowOrigin)
 
+        newWindow.setFrameOrigin(windowOrigin)
         newWindow.isMovableByWindowBackground = true
-        firstTimeWindow = newWindow
+        onboardingWindow = newWindow
+
+        newWindow.alphaValue = 0
         newWindow.show()
         newWindow.makeKeyAndOrderFront(nil)
+
+        NSAnimationContext.runAnimationGroup { context in
+            context.duration = 0.35
+            context.timingFunction = CAMediaTimingFunction(name: .easeOut)
+            newWindow.animator().alphaValue = 1
+        }
     }
 }
 
 extension AppDelegate: NSWindowDelegate {
     func windowWillClose(_ notification: Notification) {
-        if let window = notification.object as? NSWindow, window == firstTimeWindow {
-            firstTimeWindow = nil
+        if let window = notification.object as? NSWindow, window == onboardingWindow {
+            onboardingWindow = nil
         }
     }
 }

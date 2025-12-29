@@ -1,7 +1,9 @@
 import AppKit
 
-let appDelegate = AppDelegate()
+if CLIHandler.handleIfNeeded() {
+    exit(0)
+}
 
-let application = NSApplication.shared
-application.delegate = appDelegate
+let appDelegate = AppDelegate()
+NSApplication.shared.delegate = appDelegate
 _ = NSApplicationMain(CommandLine.argc, CommandLine.unsafeArgv)
