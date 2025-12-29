@@ -19,7 +19,6 @@ struct FirstTimeView: View {
         .padding(.bottom, 51) // To compensate navbar
         .frame(width: 600, height: 320)
         .background {
-            // Fluid gradient visible on first tab, fades out on others
             CustomizableFluidGradientView()
                 .opacity(tabIndex == 0 ? 0.15 : 0)
                 .animation(.easeInOut(duration: 0.4), value: tabIndex)

@@ -168,19 +168,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     private func handleFirstTimeLaunch() {
-        // Use the screen containing the mouse cursor
         let currentMouseLocation = CGEvent(source: nil)?.location ?? .zero
         let screen = NSScreen.screenContainingMouse(currentMouseLocation)
 
         Defaults[.launched] = true
 
-        // Respect accessibility / user preference for reduced motion
         if !Defaults[.showAnimations] || NSWorkspace.shared.accessibilityDisplayShouldReduceMotion {
             showOnboardingWindow(on: screen)
             return
         }
 
-        // Show cinematic overlay first, then onboarding window
         let overlay = CinematicOverlay(screen: screen) { [weak self] in
             self?.cinematicOverlay = nil
             self?.showOnboardingWindow(on: screen)
@@ -224,7 +221,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         newWindow.isMovableByWindowBackground = true
         onboardingWindow = newWindow
 
-        // Fade in the window
         newWindow.alphaValue = 0
         newWindow.show()
         newWindow.makeKeyAndOrderFront(nil)

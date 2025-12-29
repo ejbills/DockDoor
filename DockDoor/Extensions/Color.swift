@@ -26,7 +26,6 @@ extension Color {
         var shades: [Color] = []
         for i in 0 ..< count {
             let factor = CGFloat(i) / CGFloat(count - 1)
-            // Go from 60% darker to 60% lighter
             let adjustment = (factor - 0.5) * 1.2
             if adjustment < 0 {
                 shades.append(darker(by: -adjustment))

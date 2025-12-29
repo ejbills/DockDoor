@@ -14,7 +14,6 @@ struct FirstTimePermissionsTabView: View {
                 .font(.title)
                 .fontWeight(.bold)
 
-            // Instructions
             VStack(spacing: 4) {
                 Text("Click each button below to open System Settings")
                     .font(.subheadline)
@@ -30,7 +29,6 @@ struct FirstTimePermissionsTabView: View {
                 }
             }
 
-            // Permission rows
             VStack(spacing: 10) {
                 EnabledActionRowView(
                     title: String(localized: "Accessibility"),
@@ -53,7 +51,6 @@ struct FirstTimePermissionsTabView: View {
 
             Spacer().frame(height: 4)
 
-            // Next button - only enabled when both granted
             VStack(spacing: 8) {
                 Button(action: nextTab) {
                     HStack {

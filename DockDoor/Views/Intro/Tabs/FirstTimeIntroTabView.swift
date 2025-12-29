@@ -5,10 +5,8 @@ struct FirstTimeIntroTabView: View {
 
     var body: some View {
         HStack(spacing: 32) {
-            // Icon on left
             FirstTimeViewAppIcon()
 
-            // Text content on right
             VStack(alignment: .leading, spacing: 20) {
                 Text("Welcome to DockDoor!")
                     .font(.system(size: 28, weight: .bold, design: .default))

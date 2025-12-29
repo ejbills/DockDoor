@@ -75,7 +75,6 @@ private struct CinematicView: View {
 
     var body: some View {
         ZStack {
-            // Background overlay
             ZStack {
                 Color.black.opacity(0.75)
                 CustomizableFluidGradientView()
@@ -83,7 +82,6 @@ private struct CinematicView: View {
             }
             .opacity(backgroundOpacity)
 
-            // Content
             ZStack {
                 ambientGlow
                     .opacity(ambientOpacity)
@@ -169,7 +167,6 @@ private struct CinematicView: View {
     }
 
     private func startRevealSequence() {
-        // Play intro sound with fade in
         if let url = Bundle.main.url(forResource: "Glow", withExtension: "wav") {
             do {
                 audioPlayer = try AVAudioPlayer(contentsOf: url)
@@ -181,19 +178,16 @@ private struct CinematicView: View {
             }
         }
 
-        // Background fade in
         withAnimation(.easeOut(duration: 0.5)) {
             backgroundOpacity = 1.0
         }
 
-        // Ambient glow
         doAfter(0.3) {
             withAnimation(.easeOut(duration: 0.8)) {
                 ambientOpacity = 1.0
             }
         }
 
-        // Logo reveal
         doAfter(0.5) {
             withAnimation(.spring(response: 0.6, dampingFraction: 0.8)) {
                 logoScale = 1.0
@@ -201,23 +195,19 @@ private struct CinematicView: View {
             }
         }
 
-        // Title reveal
         doAfter(1.0) {
             withAnimation(.easeOut(duration: 0.4)) {
                 titleOpacity = 1.0
             }
         }
 
-        // Tagline reveal
         doAfter(1.4) {
             withAnimation(.easeOut(duration: 0.4)) {
                 taglineOpacity = 1.0
             }
         }
 
-        // Complete and transition
         doAfter(3.5) {
-            // Fade out audio
             fadeAudioOut()
 
             withAnimation(.easeOut(duration: 0.3)) {

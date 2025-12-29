@@ -7,7 +7,6 @@ enum CLIHandler {
         let args = Array(CommandLine.arguments.dropFirst())
         guard !args.isEmpty else { return false }
 
-        // Parse all --key=value arguments
         var parsedArgs: [String: String] = [:]
         var command: String?
 
@@ -35,7 +34,6 @@ enum CLIHandler {
             return true
         }
 
-        // Build URL with all parameters
         var urlString = "dockdoor-cli://\(command)"
         if !parsedArgs.isEmpty {
             let queryItems = parsedArgs.compactMap { key, value -> String? in

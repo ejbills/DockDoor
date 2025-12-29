@@ -11,7 +11,6 @@ enum URLCommandHandler {
             item.value.map { (item.name, $0) }
         })
 
-        // Parse optional position
         let position: NSPoint? = {
             guard let xStr = paramDict["x"], let yStr = paramDict["y"],
                   let x = Double(xStr), let y = Double(yStr) else { return nil }
@@ -19,7 +18,6 @@ enum URLCommandHandler {
         }()
 
         switch command {
-        // Preview commands
         case "show-preview":
             if let app = paramDict["app"] {
                 showPreview(appName: app, at: position)
@@ -32,7 +30,6 @@ enum URLCommandHandler {
             hidePreview()
         case "trigger-switcher":
             triggerWindowSwitcher()
-        // Window actions
         case "focus":
             if let id = paramDict["window"].flatMap(UInt32.init) {
                 performWindowAction(.focus, windowId: id)
@@ -61,7 +58,6 @@ enum URLCommandHandler {
             if let id = paramDict["window"].flatMap(UInt32.init) {
                 performWindowAction(.center, windowId: id)
             }
-        // Window positioning
         case "fill-left":
             if let id = paramDict["window"].flatMap(UInt32.init) {
                 performWindowAction(.fillLeftHalf, windowId: id)

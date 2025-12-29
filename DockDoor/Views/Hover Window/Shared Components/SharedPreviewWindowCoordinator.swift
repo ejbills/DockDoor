@@ -223,7 +223,6 @@ final class SharedPreviewWindowCoordinator: NSPanel {
                     return
                 }
             } else if let mouseLocation, dockPositionOverride == .cli {
-                // CLI mode: position window above the mouse location
                 position = calculateWindowPositionFromMouse(mouseLocation: mouseLocation, windowSize: newHoverWindowSize, screen: mouseScreen)
             } else {
                 position = centerWindowOnScreen(size: newHoverWindowSize, screen: mouseScreen)
@@ -309,11 +308,9 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         let screenFrame = screen.frame
         let buffer: CGFloat = 10
 
-        // Position window centered horizontally on mouse, above the mouse cursor
         var xPosition = mouseLocation.x - (windowSize.width / 2)
         var yPosition = mouseLocation.y + buffer
 
-        // Clamp to screen bounds
         xPosition = max(screenFrame.minX, min(xPosition, screenFrame.maxX - windowSize.width))
         yPosition = max(screenFrame.minY, min(yPosition, screenFrame.maxY - windowSize.height))
 

@@ -102,7 +102,6 @@ class MouseTrackingNSView: NSView {
     }
 
     private func checkIfMouseIsOverDockIcon() -> Bool {
-        // For CLI mode, check if mouse is near original trigger position
         if dockPosition == .cli, let originalPos = originalMouseLocation {
             let currentMouseLocation = NSEvent.mouseLocation
             let proximityThreshold: CGFloat = 50
