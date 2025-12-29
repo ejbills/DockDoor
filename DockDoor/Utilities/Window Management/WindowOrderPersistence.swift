@@ -19,9 +19,14 @@ enum WindowOrderPersistence {
         if cache == nil {
             let entries = Defaults[.persistedWindowOrder]
             cache = Dictionary(entries.map { ($0.key, $0) }, uniquingKeysWith: { first, _ in first })
+            DebugLogger.log("WindowOrderPersistence", details: "Loaded \(entries.count) persisted entries")
         }
         let targetKey = "\(bundleIdentifier)|\(windowTitle ?? "")"
-        return cache?[targetKey]
+        let result = cache?[targetKey]
+        if result != nil {
+            DebugLogger.log("WindowOrderPersistence", details: "Restored: \(targetKey)")
+        }
+        return result
     }
 
     static func saveOrder(from allWindows: [WindowInfo]) {
@@ -50,6 +55,8 @@ enum WindowOrderPersistence {
             }
         }
 
-        Defaults[.persistedWindowOrder] = Array(dedupedEntries.prefix(500))
+        let finalEntries = Array(dedupedEntries.prefix(500))
+        Defaults[.persistedWindowOrder] = finalEntries
+        DebugLogger.log("WindowOrderPersistence", details: "Saved \(finalEntries.count) entries on quit")
     }
 }
