@@ -88,6 +88,7 @@
 		BB3D6EB02C84E58400FFE584 /* NSScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3D6EAF2C84E58000FFE584 /* NSScreen.swift */; };
 		BB44474F2C507F950047EB92 /* LimitedTaskGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB44474E2C507F920047EB92 /* LimitedTaskGroup.swift */; };
 		BB49747D2E81CE5100308326 /* WindowSeeder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB49747C2E81CE5100308326 /* WindowSeeder.swift */; };
+		BB49747E2F01AB0100308326 /* WindowOrderPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB49747D2F01AB0100308326 /* WindowOrderPersistence.swift */; };
 		BB49747F2E81D30F00308326 /* CGWindowID.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB49747E2E81D30F00308326 /* CGWindowID.swift */; };
 		BB4B444B2C372A4E006680DC /* WindowPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB4B444A2C372A4C006680DC /* WindowPreview.swift */; };
 		BB4ED9072C3C75CA00BBDD16 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = BB4ED9062C3C75CA00BBDD16 /* Localizable.xcstrings */; };
@@ -240,6 +241,7 @@
 		BB3D6EAF2C84E58000FFE584 /* NSScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSScreen.swift; sourceTree = "<group>"; };
 		BB44474E2C507F920047EB92 /* LimitedTaskGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LimitedTaskGroup.swift; sourceTree = "<group>"; };
 		BB49747C2E81CE5100308326 /* WindowSeeder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowSeeder.swift; sourceTree = "<group>"; };
+		BB49747D2F01AB0100308326 /* WindowOrderPersistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowOrderPersistence.swift; sourceTree = "<group>"; };
 		BB49747E2E81D30F00308326 /* CGWindowID.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGWindowID.swift; sourceTree = "<group>"; };
 		BB4B444A2C372A4C006680DC /* WindowPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowPreview.swift; sourceTree = "<group>"; };
 		BB4ED9062C3C75CA00BBDD16 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
@@ -691,6 +693,7 @@
 				341691A92EE37A6D004AFFC9 /* LiveWindowCapture.swift */,
 				BB2106732E830EC5002F87D6 /* WindowDiscoveryShared.swift */,
 				BB49747C2E81CE5100308326 /* WindowSeeder.swift */,
+				BB49747D2F01AB0100308326 /* WindowOrderPersistence.swift */,
 				BBB023AC2EDCCB9100317CF4 /* WindowInfo.swift */,
 				3A1622972C8BF71000D318EE /* SwiftUIWindow.swift */,
 				BB2CBB082C48128D004502C5 /* SpaceWindowCacheManager.swift */,
@@ -991,6 +994,7 @@
 				BB157B792C0E330100997315 /* WindowUtil.swift in Sources */,
 				BB15E1EA2C8F8DB4002ECFB9 /* HelpSettingsView.swift in Sources */,
 				BB49747D2E81CE5100308326 /* WindowSeeder.swift in Sources */,
+				BB49747E2F01AB0100308326 /* WindowOrderPersistence.swift in Sources */,
 				BB638F202E0218F00010077D /* CalendarEventRow.swift in Sources */,
 				BB6D81962DF75CA100DB64E4 /* SimpleProgressBar.swift in Sources */,
 				BBFAD73C2C287C770092F5F1 /* UpdateSettingsView.swift in Sources */,

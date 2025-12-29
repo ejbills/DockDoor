@@ -92,6 +92,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         return false
     }
 
+    func applicationWillTerminate(_ notification: Notification) {
+        WindowUtil.saveWindowOrderFromCache()
+    }
+
     // MARK: - URL Scheme Handler (dockdoor-cli://)
 
     func application(_ application: NSApplication, open urls: [URL]) {

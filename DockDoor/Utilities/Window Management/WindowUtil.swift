@@ -248,6 +248,11 @@ enum WindowUtil {
 // MARK: - Cache Management
 
 extension WindowUtil {
+    static func saveWindowOrderFromCache() {
+        let allWindows = desktopSpaceWindowCacheManager.getAllWindows()
+        WindowOrderPersistence.saveOrder(from: allWindows)
+    }
+
     static func clearWindowCache(for app: NSRunningApplication) {
         desktopSpaceWindowCacheManager.writeCache(pid: app.processIdentifier, windowSet: [])
     }
@@ -817,6 +822,13 @@ extension WindowUtil {
         let shouldWindowBeCaptured = (closeButton != nil) || (minimizeButton != nil)
 
         if shouldWindowBeCaptured {
+            let persistedData = WindowOrderPersistence.getPersistedTimestamp(
+                bundleIdentifier: bundleId,
+                windowTitle: window.title
+            )
+            let lastAccessedTime = persistedData?.lastAccessedTime ?? Date.now
+            let creationTime = persistedData?.creationTime
+
             var windowInfo = WindowInfo(
                 windowProvider: window,
                 app: app,
@@ -824,7 +836,8 @@ extension WindowUtil {
                 axElement: windowRef,
                 appAxElement: appElement,
                 closeButton: closeButton,
-                lastAccessedTime: Date.now,
+                lastAccessedTime: lastAccessedTime,
+                creationTime: creationTime,
                 spaceID: window.windowID.cgsSpaces().first.map { Int($0) },
                 isMinimized: minimizedState,
                 isHidden: hiddenState
@@ -890,6 +903,17 @@ extension WindowUtil {
         let minimizedState = (try? axWindow.isMinimized()) ?? false
         let hiddenState = app.isHidden
 
+        let persistedData: WindowOrderPersistence.PersistedWindowEntry? = if let bundleId = app.bundleIdentifier {
+            WindowOrderPersistence.getPersistedTimestamp(
+                bundleIdentifier: bundleId,
+                windowTitle: windowTitle
+            )
+        } else {
+            nil
+        }
+        let lastAccessedTime = persistedData?.lastAccessedTime ?? Date()
+        let creationTime = persistedData?.creationTime
+
         var info = WindowInfo(
             windowProvider: AXFallbackProvider(cgID: cgID),
             app: app,
@@ -897,7 +921,8 @@ extension WindowUtil {
             axElement: axWindow,
             appAxElement: appAxElement,
             closeButton: try? axWindow.closeButton(),
-            lastAccessedTime: Date(),
+            lastAccessedTime: lastAccessedTime,
+            creationTime: creationTime,
             spaceID: cgID.cgsSpaces().first.map { Int($0) },
             isMinimized: minimizedState,
             isHidden: hiddenState
