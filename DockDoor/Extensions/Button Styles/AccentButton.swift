@@ -1,4 +1,3 @@
-import Kroma
 import SwiftUI
 
 struct AccentButtonStyle: ButtonStyle {
@@ -11,7 +10,7 @@ struct AccentButtonStyle: ButtonStyle {
             .padding(.horizontal, small ? 8 : 16)
             .padding(.vertical, small ? 4 : 8)
             .background(
-                color.lighter(by: hovering && !configuration.isPressed ? 0.05 : 0),
+                color.lighter(by: hovering && !configuration.isPressed ? 0.15 : 0),
                 in: RoundedRectangle(cornerRadius: 12, style: .continuous)
             )
             .foregroundStyle(colorScheme == .light ? .white : .primary)

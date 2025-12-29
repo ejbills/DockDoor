@@ -24,6 +24,7 @@ extension Defaults.Keys {
     static let useDelayOnlyForInitialOpen = Key<Bool>("useDelayOnlyForInitialOpen", default: false)
     static let preventDockHide = Key<Bool>("preventDockHide", default: false)
     static let preventSwitcherHide = Key<Bool>("preventSwitcherHide", default: false)
+    static let requireShiftTabToGoBack = Key<Bool>("requireShiftTabToGoBack", default: false)
     static let shouldHideOnDockItemClick = Key<Bool>("shouldHideOnDockItemClick", default: false)
     static let dockClickAction = Key<DockClickAction>("dockClickAction", default: .hide)
     static let enableCmdRightClickQuit = Key<Bool>("enableCmdRightClickQuit", default: true)
@@ -380,6 +381,10 @@ enum WindowSwitcherControlPosition: String, CaseIterable, Defaults.Serializable 
     case diagonalTopRightBottomLeft
     case diagonalBottomLeftTopRight
     case diagonalBottomRightTopLeft
+    case parallelTopLeftBottomLeft
+    case parallelTopRightBottomRight
+    case parallelBottomLeftTopLeft
+    case parallelBottomRightTopRight
 
     var localizedName: String {
         switch self {
@@ -399,6 +404,82 @@ enum WindowSwitcherControlPosition: String, CaseIterable, Defaults.Serializable 
             String(localized: "Diagonal - Title bottom left, controls top right")
         case .diagonalBottomRightTopLeft:
             String(localized: "Diagonal - Title bottom right, controls top left")
+        case .parallelTopLeftBottomLeft:
+            String(localized: "Parallel - Title top left, controls bottom left")
+        case .parallelTopRightBottomRight:
+            String(localized: "Parallel - Title top right, controls bottom right")
+        case .parallelBottomLeftTopLeft:
+            String(localized: "Parallel - Title bottom left, controls top left")
+        case .parallelBottomRightTopRight:
+            String(localized: "Parallel - Title bottom right, controls top right")
+        }
+    }
+
+    var showsOnTop: Bool {
+        switch self {
+        case .topLeading, .topTrailing,
+             .diagonalTopLeftBottomRight, .diagonalTopRightBottomLeft,
+             .diagonalBottomLeftTopRight, .diagonalBottomRightTopLeft,
+             .parallelTopLeftBottomLeft, .parallelTopRightBottomRight,
+             .parallelBottomLeftTopLeft, .parallelBottomRightTopRight:
+            true
+        case .bottomLeading, .bottomTrailing:
+            false
+        }
+    }
+
+    var showsOnBottom: Bool {
+        switch self {
+        case .bottomLeading, .bottomTrailing,
+             .diagonalTopLeftBottomRight, .diagonalTopRightBottomLeft,
+             .diagonalBottomLeftTopRight, .diagonalBottomRightTopLeft,
+             .parallelTopLeftBottomLeft, .parallelTopRightBottomRight,
+             .parallelBottomLeftTopLeft, .parallelBottomRightTopRight:
+            true
+        case .topLeading, .topTrailing:
+            false
+        }
+    }
+
+    var topConfiguration: (isLeadingControls: Bool, showTitle: Bool, showControls: Bool) {
+        switch self {
+        case .topLeading, .bottomLeading:
+            (false, true, true)
+        case .topTrailing, .bottomTrailing:
+            (true, true, true)
+        case .diagonalTopLeftBottomRight, .parallelTopLeftBottomLeft:
+            (false, true, false)
+        case .diagonalTopRightBottomLeft, .parallelTopRightBottomRight:
+            (true, true, false)
+        case .diagonalBottomLeftTopRight, .parallelBottomRightTopRight:
+            (false, false, true)
+        case .diagonalBottomRightTopLeft, .parallelBottomLeftTopLeft:
+            (true, false, true)
+        }
+    }
+
+    var bottomConfiguration: (isLeadingControls: Bool, showTitle: Bool, showControls: Bool) {
+        switch self {
+        case .topLeading, .bottomLeading:
+            (false, true, true)
+        case .topTrailing, .bottomTrailing:
+            (true, true, true)
+        case .diagonalTopLeftBottomRight:
+            (false, false, true)
+        case .diagonalTopRightBottomLeft:
+            (true, false, true)
+        case .diagonalBottomLeftTopRight:
+            (false, true, false)
+        case .diagonalBottomRightTopLeft:
+            (true, true, false)
+        case .parallelTopLeftBottomLeft:
+            (true, false, true) // controls on left
+        case .parallelTopRightBottomRight:
+            (false, false, true) // controls on right
+        case .parallelBottomLeftTopLeft:
+            (false, true, false) // title on left
+        case .parallelBottomRightTopRight:
+            (true, true, false) // title on right
         }
     }
 }

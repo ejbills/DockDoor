@@ -7,11 +7,12 @@ enum DockPosition {
     case left
     case right
     case cmdTab
+    case cli
     case unknown
 
     var isHorizontalFlow: Bool {
         switch self {
-        case .top, .bottom, .cmdTab:
+        case .top, .bottom, .cmdTab, .cli:
             true
         case .left, .right:
             false
@@ -48,7 +49,7 @@ class DockUtils {
             return screen.visibleFrame.origin.y
         case .top:
             return screen.frame.height - screen.visibleFrame.maxY
-        case .cmdTab, .unknown:
+        case .cmdTab, .cli, .unknown:
             return 0
         }
     }

@@ -38,29 +38,57 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://buymeacoffee.com/keplercafe</div>
 
-<a id="1.29"></a>
-# [Release 1.29](https://github.com/ejbills/DockDoor/releases/tag/1.29) - 2025-12-20
+<a id="1.30"></a>
+# [Release 1.30](https://github.com/ejbills/DockDoor/releases/tag/1.30) - 2025-12-26
+
+🎄 Merry X-Mas!
 
 ## ✨ New Features
- - Calendar event filtering
- - Separate appearance options for window switcher and cmd-tab enhancement features
-  - May cause various appearance options to revert to its default. Report issues if encountered.
- - Media widget seek and volume control gesture (in widget settings)
-  - Scroll to adjust
-- Live preview configurable keep-alive duration (thanks [@suatkocar](https://github.com/suatkocar))
-  - Reduced CPU usage
+- Parallel title/controls layout options (thanks [@X1nto](https://github.com/X1nto))
+  - Title and controls stacked
+  - Four new position choices
+- Shift+Tab navigation option (thanks [@maddada](https://github.com/maddada))
+  - Requires key combo backward
+  - Support to hold tab to iterate automatically
 
 ## 🔧 Improvements & Stability
-- Improved window switcher performance
-- Enhanced live preview quality (thanks [@suatkocar](https://github.com/suatkocar)) 
-  - HDR support
-  - Display P3 colors
-- Better dock click behavior
+- Improved keyboard shortcut matching
 
 ## 🐛 Bug Fixes
-- Fixed preview hit detection & other fixes (thanks [@maddada](https://github.com/maddada))
-- Fixed window switcher cancellation
-- Fixed accessibility value retrieval
+- Fixed ghost window detection
+- Fixed full preview activation
+
+
+[Changes][1.30]
+
+
+<a id="1.29"></a>
+# [Release 1.29](https://github.com/ejbills/DockDoor/releases/tag/1.29) - 2025-12-23
+
+This is a re-release due to some issues with the original 1.29 release.
+## ✨ New Features 
+- Added window grouping option
+- Group windows per app
+- Calendar event filtering options
+- Media widget seek control
+- Restart option in menu
+
+## 🔧 Improvements & Stability
+- Improved dock observer efficiency
+- Enhanced volume control scrolling
+  - Natural scrolling support
+- Better permission checking performance
+- Improved window switcher positioning
+  - Alignment options added
+  - Position adjustment sliders
+
+## 🐛 Bug Fixes
+- Window names update correctly
+- Screen recording permission prompt
+- Dock click behavior fixed
+  - Apps without windows
+- Minimized windows label display
+- Hidden windows label display
 
 
 [Changes][1.29]
@@ -1765,6 +1793,7 @@ v1.0
 [Changes][releases]
 
 
+[1.30]: https://github.com/ejbills/DockDoor/compare/1.29...1.30
 [1.29]: https://github.com/ejbills/DockDoor/compare/1.28.1...1.29
 [1.28.1]: https://github.com/ejbills/DockDoor/compare/1.28...1.28.1
 [1.28]: https://github.com/ejbills/DockDoor/compare/1.27...1.28

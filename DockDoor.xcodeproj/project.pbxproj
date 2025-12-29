@@ -11,20 +11,19 @@
 		0596C2C32C3E060D00DCABEF /* PrivateApis.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0596C2C22C3E060D00DCABEF /* PrivateApis.swift */; };
 		05C0C7182C60629C000ADAC6 /* AXUIElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C0C7172C60629C000ADAC6 /* AXUIElement.swift */; };
 		1A04FA16AC74448F83D0F964 /* ActiveAppIndicatorCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6F87422D4714171AD2CCC4A /* ActiveAppIndicatorCoordinator.swift */; };
+		1AE964D28D8344CFB24C774A879160FD /* URLCommandHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A51A0628B847A195949BA41395BB84 /* URLCommandHandler.swift */; };
 		27DC8C172CFA4DA7005F8F31 /* NumberFormatter+Convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27DC8C152CFA4DA7005F8F31 /* NumberFormatter+Convenience.swift */; };
+		337B1BB3E0E1C17462D34C74 /* AppPickerSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE87C548D56298ADFB3F389 /* AppPickerSheet.swift */; };
 		341691AA2EE37A6D004AFFC9 /* LiveWindowCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 341691A92EE37A6D004AFFC9 /* LiveWindowCapture.swift */; };
 		3A105FD62C1BED660015EC66 /* BlurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A105FD52C1BED660015EC66 /* BlurView.swift */; };
 		3A105FD92C1C049E0015EC66 /* dockStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A105FD82C1C049E0015EC66 /* dockStyle.swift */; };
 		3A105FDD2C1C0EE20015EC66 /* DynStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A105FDC2C1C0EE20015EC66 /* DynStack.swift */; };
 		3A1622982C8BF71000D318EE /* SwiftUIWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A1622972C8BF71000D318EE /* SwiftUIWindow.swift */; };
 		3A1622A32C8BFF3800D318EE /* Pow in Frameworks */ = {isa = PBXBuildFile; productRef = 3A1622A22C8BFF3800D318EE /* Pow */; };
-		3A1622AE2C8C06F600D318EE /* mouse-up.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 3A1622AC2C8C06F600D318EE /* mouse-up.mp3 */; };
-		3A1622B12C8C090C00D318EE /* mouse-down.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 3A1622B02C8C090C00D318EE /* mouse-down.mp3 */; };
 		3A1622B52C8C09A700D318EE /* AccentButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A1622B42C8C09A700D318EE /* AccentButton.swift */; };
 		3A1622B82C8C0EE200D318EE /* Kroma in Frameworks */ = {isa = PBXBuildFile; productRef = 3A1622B72C8C0EE200D318EE /* Kroma */; };
 		3A1622BA2C8C0FF100D318EE /* NoBtnStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A1622B92C8C0FF100D318EE /* NoBtnStyle.swift */; };
 		3A1622BC2C8C1B8600D318EE /* FirstTimeViewAppIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A1622BB2C8C1B8600D318EE /* FirstTimeViewAppIcon.swift */; };
-		3A1622BE2C8C218500D318EE /* FirstTimeViewInstructionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A1622BD2C8C218400D318EE /* FirstTimeViewInstructionsView.swift */; };
 		3A1622C12C8D57AF00D318EE /* PermissionsChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A1622C02C8D57AF00D318EE /* PermissionsChecker.swift */; };
 		3A1622C32C8D586900D318EE /* PermissionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A1622C22C8D586900D318EE /* PermissionsView.swift */; };
 		3A1622C72C8D5A5C00D318EE /* EnabledActionRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A1622C62C8D5A5C00D318EE /* EnabledActionRowView.swift */; };
@@ -32,6 +31,10 @@
 		3A1622CC2C8D5F5B00D318EE /* FirstTimePermissionsTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A1622CB2C8D5F5B00D318EE /* FirstTimePermissionsTabView.swift */; };
 		3A1622CE2C8D5F8500D318EE /* FirstTimeCongratsTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A1622CD2C8D5F8500D318EE /* FirstTimeCongratsTabView.swift */; };
 		3A1622D02C8D691700D318EE /* SquiggleDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A1622CF2C8D691700D318EE /* SquiggleDivider.swift */; };
+		43F841B996214329B3C72838EF174A80 /* CLIHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCF90276D39A4A25AE5C7E1E0A56DD34 /* CLIHandler.swift */; };
+		5BCC969779654E67A6386C12FC709616 /* Glow.wav in Resources */ = {isa = PBXBuildFile; fileRef = D924F5BAEF564CC1AF84527876E14356 /* Glow.wav */; };
+		735F5666B8174CBEBB1ACC3CB75DB860 /* OnboardingWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A3B36A5DB70441F97C0FB7AB9CADE92 /* OnboardingWindow.swift */; };
+		800055342EFC0DDF005CAB72 /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 800055332EFC0DDF005CAB72 /* AppIcon.icon */; };
 		81BFDF0D2EE815FD00D56F65 /* CompactModeWarningBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81BFDF0C2EE815FD00D56F65 /* CompactModeWarningBanner.swift */; };
 		83E26DB067D2426086683147 /* ActiveAppIndicatorSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D264F468F734971AE701690 /* ActiveAppIndicatorSettingsView.swift */; };
 		A1B2C3D4E5F6789012345678 /* ActiveAppIndicatorWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C3D4E5F67890123456789A /* ActiveAppIndicatorWindow.swift */; };
@@ -148,7 +151,6 @@
 		BBE153C02D21FA2700CD3D4A /* StyledGroupBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE153BF2D21FA2300CD3D4A /* StyledGroupBox.swift */; };
 		BBE153C22D22024F00CD3D4A /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE153C12D22024E00CD3D4A /* View.swift */; };
 		BBE63DFF2DEA583C0079D2B9 /* PreviewStateCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE63DFE2DEA58040079D2B9 /* PreviewStateCoordinator.swift */; };
-		337B1BB3E0E1C17462D34C74 /* AppPickerSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE87C548D56298ADFB3F389 /* AppPickerSheet.swift */; };
 		BBE692192D17AD9E0093B4A5 /* DangerButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE692182D17AD9C0093B4A5 /* DangerButton.swift */; };
 		BBF383972C94A26200B39A23 /* sliderSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF383962C94A25B00B39A23 /* sliderSetting.swift */; };
 		BBF413922C40618D00AA6733 /* FullSizePreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF413912C40618800AA6733 /* FullSizePreviewView.swift */; };
@@ -167,18 +169,16 @@
 		0531F8D12C3CC04600327808 /* AppearanceSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceSettingsView.swift; sourceTree = "<group>"; };
 		0596C2C22C3E060D00DCABEF /* PrivateApis.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateApis.swift; sourceTree = "<group>"; };
 		05C0C7172C60629C000ADAC6 /* AXUIElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AXUIElement.swift; sourceTree = "<group>"; };
+		1AE87C548D56298ADFB3F389 /* AppPickerSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppPickerSheet.swift; sourceTree = "<group>"; };
 		27DC8C152CFA4DA7005F8F31 /* NumberFormatter+Convenience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NumberFormatter+Convenience.swift"; sourceTree = "<group>"; };
 		341691A92EE37A6D004AFFC9 /* LiveWindowCapture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveWindowCapture.swift; sourceTree = "<group>"; };
 		3A105FD52C1BED660015EC66 /* BlurView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurView.swift; sourceTree = "<group>"; };
 		3A105FD82C1C049E0015EC66 /* dockStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dockStyle.swift; sourceTree = "<group>"; };
 		3A105FDC2C1C0EE20015EC66 /* DynStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynStack.swift; sourceTree = "<group>"; };
 		3A1622972C8BF71000D318EE /* SwiftUIWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIWindow.swift; sourceTree = "<group>"; };
-		3A1622AC2C8C06F600D318EE /* mouse-up.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "mouse-up.mp3"; sourceTree = "<group>"; };
-		3A1622B02C8C090C00D318EE /* mouse-down.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "mouse-down.mp3"; sourceTree = "<group>"; };
 		3A1622B42C8C09A700D318EE /* AccentButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccentButton.swift; sourceTree = "<group>"; };
 		3A1622B92C8C0FF100D318EE /* NoBtnStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoBtnStyle.swift; sourceTree = "<group>"; };
 		3A1622BB2C8C1B8600D318EE /* FirstTimeViewAppIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstTimeViewAppIcon.swift; sourceTree = "<group>"; };
-		3A1622BD2C8C218400D318EE /* FirstTimeViewInstructionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstTimeViewInstructionsView.swift; sourceTree = "<group>"; };
 		3A1622C02C8D57AF00D318EE /* PermissionsChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionsChecker.swift; sourceTree = "<group>"; };
 		3A1622C22C8D586900D318EE /* PermissionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionsView.swift; sourceTree = "<group>"; };
 		3A1622C62C8D5A5C00D318EE /* EnabledActionRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnabledActionRowView.swift; sourceTree = "<group>"; };
@@ -186,7 +186,9 @@
 		3A1622CB2C8D5F5B00D318EE /* FirstTimePermissionsTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstTimePermissionsTabView.swift; sourceTree = "<group>"; };
 		3A1622CD2C8D5F8500D318EE /* FirstTimeCongratsTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstTimeCongratsTabView.swift; sourceTree = "<group>"; };
 		3A1622CF2C8D691700D318EE /* SquiggleDivider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SquiggleDivider.swift; sourceTree = "<group>"; };
+		5A3B36A5DB70441F97C0FB7AB9CADE92 /* OnboardingWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingWindow.swift; sourceTree = "<group>"; };
 		7D264F468F734971AE701690 /* ActiveAppIndicatorSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveAppIndicatorSettingsView.swift; sourceTree = "<group>"; };
+		800055332EFC0DDF005CAB72 /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
 		81BFDF0C2EE815FD00D56F65 /* CompactModeWarningBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompactModeWarningBanner.swift; sourceTree = "<group>"; };
 		8B7C6D5E4F3A2B1098765432 /* ActiveAppIndicatorPositioning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveAppIndicatorPositioning.swift; sourceTree = "<group>"; };
 		B2C3D4E5F67890123456789A /* ActiveAppIndicatorWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveAppIndicatorWindow.swift; sourceTree = "<group>"; };
@@ -302,7 +304,6 @@
 		BBE153BF2D21FA2300CD3D4A /* StyledGroupBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyledGroupBox.swift; sourceTree = "<group>"; };
 		BBE153C12D22024E00CD3D4A /* View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
 		BBE63DFE2DEA58040079D2B9 /* PreviewStateCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewStateCoordinator.swift; sourceTree = "<group>"; };
-		1AE87C548D56298ADFB3F389 /* AppPickerSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppPickerSheet.swift; sourceTree = "<group>"; };
 		BBE692182D17AD9C0093B4A5 /* DangerButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DangerButton.swift; sourceTree = "<group>"; };
 		BBF383962C94A25B00B39A23 /* sliderSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = sliderSetting.swift; sourceTree = "<group>"; };
 		BBF413912C40618800AA6733 /* FullSizePreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullSizePreviewView.swift; sourceTree = "<group>"; };
@@ -313,7 +314,10 @@
 		BBFAD73B2C287C770092F5F1 /* UpdateSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateSettingsView.swift; sourceTree = "<group>"; };
 		C119BDF12C2AFA7600E06E18 /* WindowSwitcherSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowSwitcherSettingsView.swift; sourceTree = "<group>"; };
 		C6F87422D4714171AD2CCC4A /* ActiveAppIndicatorCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveAppIndicatorCoordinator.swift; sourceTree = "<group>"; };
+		D1A51A0628B847A195949BA41395BB84 /* URLCommandHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLCommandHandler.swift; sourceTree = "<group>"; };
 		D4E5F6789012345678901234 /* ActiveAppIndicatorDockDetection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveAppIndicatorDockDetection.swift; sourceTree = "<group>"; };
+		D924F5BAEF564CC1AF84527876E14356 /* Glow.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Glow.wav; sourceTree = "<group>"; };
+		DCF90276D39A4A25AE5C7E1E0A56DD34 /* CLIHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CLIHandler.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -402,6 +406,7 @@
 		3A1622992C8BFCE800D318EE /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				BB157B6C2C0E31CF00997315 /* Assets.xcassets */,
 				3A16229A2C8BFCF100D318EE /* audios */,
 			);
 			path = Assets;
@@ -410,8 +415,7 @@
 		3A16229A2C8BFCF100D318EE /* audios */ = {
 			isa = PBXGroup;
 			children = (
-				3A1622B02C8C090C00D318EE /* mouse-down.mp3 */,
-				3A1622AC2C8C06F600D318EE /* mouse-up.mp3 */,
+				D924F5BAEF564CC1AF84527876E14356 /* Glow.wav */,
 			);
 			path = audios;
 			sourceTree = "<group>";
@@ -467,6 +471,7 @@
 		BB157B5C2C0E31CE00997315 = {
 			isa = PBXGroup;
 			children = (
+				3A1622992C8BFCE800D318EE /* Assets */,
 				BB157B672C0E31CE00997315 /* DockDoor */,
 				BB157B662C0E31CE00997315 /* Products */,
 			);
@@ -483,18 +488,17 @@
 		BB157B672C0E31CE00997315 /* DockDoor */ = {
 			isa = PBXGroup;
 			children = (
+				800055332EFC0DDF005CAB72 /* AppIcon.icon */,
 				BB8247782C2889B20098A440 /* Info.plist */,
 				BB4ED9062C3C75CA00BBDD16 /* Localizable.xcstrings */,
 				BBA153F92C11FFD500119C02 /* consts.swift */,
 				BBA153FB2C12356100119C02 /* main.swift */,
 				BBA153F52C115DDA00119C02 /* AppDelegate.swift */,
-				3A1622992C8BFCE800D318EE /* Assets */,
 				3A105FD42C1BED5B0015EC66 /* Components */,
 				3A105FD72C1BF11D0015EC66 /* Extensions */,
 				BBA153FD2C12358600119C02 /* Views */,
 				BBB6C52E2DF3C883009E93C4 /* Models */,
 				BB157B772C0E32EF00997315 /* Utilities */,
-				BB157B6C2C0E31CF00997315 /* Assets.xcassets */,
 				BB157B712C0E31CF00997315 /* DockDoor.entitlements */,
 				BB157B6E2C0E31CF00997315 /* Preview Content */,
 			);
@@ -527,6 +531,8 @@
 				BBF6C6232C1B4B4400BF1D40 /* KeybindHelper.swift */,
 				BBF6C6262C1B4B4500BF1D40 /* StringMatchingUtil.swift */,
 				BB1CBD5C2C1BCA4F003969BC /* Misc Utils.swift */,
+				DCF90276D39A4A25AE5C7E1E0A56DD34 /* CLIHandler.swift */,
+				D1A51A0628B847A195949BA41395BB84 /* URLCommandHandler.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -712,7 +718,7 @@
 				3A1622C82C8D5E3800D318EE /* Tabs */,
 				BBCFAE3F2C266234002E1516 /* FirstTimeView.swift */,
 				3A1622BB2C8C1B8600D318EE /* FirstTimeViewAppIcon.swift */,
-				3A1622BD2C8C218400D318EE /* FirstTimeViewInstructionsView.swift */,
+				5A3B36A5DB70441F97C0FB7AB9CADE92 /* OnboardingWindow.swift */,
 			);
 			path = Intro;
 			sourceTree = "<group>";
@@ -818,10 +824,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				BB157B702C0E31CF00997315 /* Preview Assets.xcassets in Resources */,
-				3A1622B12C8C090C00D318EE /* mouse-down.mp3 in Resources */,
-				3A1622AE2C8C06F600D318EE /* mouse-up.mp3 in Resources */,
 				BB157B6D2C0E31CF00997315 /* Assets.xcassets in Resources */,
+				5BCC969779654E67A6386C12FC709616 /* Glow.wav in Resources */,
 				BB4ED9072C3C75CA00BBDD16 /* Localizable.xcstrings in Resources */,
+				800055342EFC0DDF005CAB72 /* AppIcon.icon in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -854,6 +860,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				43F841B996214329B3C72838EF174A80 /* CLIHandler.swift in Sources */,
+				1AE964D28D8344CFB24C774A879160FD /* URLCommandHandler.swift in Sources */,
 				1A04FA16AC74448F83D0F964 /* ActiveAppIndicatorCoordinator.swift in Sources */,
 				C3D4E5F6789012345678901B /* ActiveAppIndicatorDockDetection.swift in Sources */,
 				F3A2B8C1D5E6489AAB123456 /* ActiveAppIndicatorPositioning.swift in Sources */,
@@ -885,7 +893,6 @@
 				BBF4139A2C40A64A00AA6733 /* CustomizableFluidGradient.swift in Sources */,
 				BBE692192D17AD9E0093B4A5 /* DangerButton.swift in Sources */,
 				337B1BB3E0E1C17462D34C74 /* AppPickerSheet.swift in Sources */,
-				3A1622BE2C8C218500D318EE /* FirstTimeViewInstructionsView.swift in Sources */,
 				BB1A85F52D05263C00326297 /* FiltersSettingsView.swift in Sources */,
 				BB638F002E0216FA0010077D /* MediaArtworkView.swift in Sources */,
 				BB377C342DFD0D3700FA93DA /* PinnableView.swift in Sources */,
@@ -978,6 +985,7 @@
 				BB90A5ED2DFA13E000857722 /* CalendarInfo.swift in Sources */,
 				BB2885012E81B5B60048A09B /* SettingsIllustratedRow.swift in Sources */,
 				BBCFAE402C266234002E1516 /* FirstTimeView.swift in Sources */,
+				735F5666B8174CBEBB1ACC3CB75DB860 /* OnboardingWindow.swift in Sources */,
 				BB387FB32E70BA1300640D79 /* SearchWindow.swift in Sources */,
 				BB5349C52EE7D160004B1FDD /* WindowPreviewInteractionModifier.swift in Sources */,
 				BB4B444B2C372A4E006680DC /* WindowPreview.swift in Sources */,
@@ -1133,6 +1141,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				AUTOMATION_APPLE_EVENTS = YES;
 				CODE_SIGN_ENTITLEMENTS = DockDoor/DockDoorDebug.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
@@ -1155,6 +1164,9 @@
 				INFOPLIST_FILE = DockDoor/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = DockDoor;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_LSUIElement = YES;
+				INFOPLIST_KEY_NSAppleEventsUsageDescription = "DockDoor uses AppleEvents to fetch music info from Music and Spotify.";
+				INFOPLIST_KEY_NSCalendarsUsageDescription = "DockDoor uses EventKit to fetch task info from Calendar.";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1162,7 +1174,7 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MARKETING_VERSION = 1.18.3;
-				PRODUCT_BUNDLE_IDENTIFIER = com.ethanbills.DockDoor;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ethanbills.DockDoor.debug;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RUNTIME_EXCEPTION_ALLOW_DYLD_ENVIRONMENT_VARIABLES = NO;
 				RUNTIME_EXCEPTION_ALLOW_JIT = NO;
@@ -1180,6 +1192,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				AUTOMATION_APPLE_EVENTS = YES;
 				CODE_SIGN_ENTITLEMENTS = DockDoor/DockDoor.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
@@ -1202,6 +1215,9 @@
 				INFOPLIST_FILE = DockDoor/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = DockDoor;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_LSUIElement = YES;
+				INFOPLIST_KEY_NSAppleEventsUsageDescription = "DockDoor uses AppleEvents to fetch music info from Music and Spotify.";
+				INFOPLIST_KEY_NSCalendarsUsageDescription = "DockDoor uses EventKit to fetch task info from Calendar.";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

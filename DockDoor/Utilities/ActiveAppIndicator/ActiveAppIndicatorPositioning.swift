@@ -48,7 +48,7 @@ enum ActiveAppIndicatorPositioning {
                 indicatorHeight: indicatorLength,
                 screenHeight: screen.frame.height
             )
-        case .top, .cmdTab, .unknown:
+        case .top, .cmdTab, .cli, .unknown:
             nil
         }
     }

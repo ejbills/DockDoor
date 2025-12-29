@@ -275,6 +275,7 @@ struct WindowPreviewHoverContainer: View {
                                              bestGuessMonitor: bestGuessMonitor,
                                              dockPosition: dockPosition,
                                              dockItemElement: dockItemElement,
+                                             originalMouseLocation: mouseLocation,
                                              minimizeAllWindowsCallback: { wasAppActiveBeforeClick in
                                                  minimizeAllWindows(wasAppActiveBeforeClick: wasAppActiveBeforeClick)
                                              })
