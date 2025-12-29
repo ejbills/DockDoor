@@ -1103,29 +1103,23 @@ extension WindowUtil {
         let groupedApps = Set(Defaults[.groupedAppsInSwitcher])
         guard !groupedApps.isEmpty else { return windows }
 
-        // Group by bundle ID while tracking first appearance order
-        var windowsByApp: [String: [WindowInfo]] = [:]
-        var order: [String] = []
+        // Track which grouped apps we've already seen (to keep only first window)
+        var seenGroupedApps = Set<String>()
+        var result: [WindowInfo] = []
 
         for window in windows {
             let bundleId = window.app.bundleIdentifier ?? ""
-            if windowsByApp[bundleId] == nil {
-                order.append(bundleId)
-            }
-            windowsByApp[bundleId, default: []].append(window)
-        }
 
-        // Build result preserving order
-        var result: [WindowInfo] = []
-        for bundleId in order {
-            guard let appWindows = windowsByApp[bundleId] else { continue }
             if groupedApps.contains(bundleId) {
-                // Take only the most recent window (first since sorted by recency)
-                if let mostRecent = appWindows.first {
-                    result.append(mostRecent)
+                // This is a grouped app - only keep the first window we see
+                if !seenGroupedApps.contains(bundleId) {
+                    seenGroupedApps.insert(bundleId)
+                    result.append(window)
                 }
+                // Skip subsequent windows of this grouped app
             } else {
-                result.append(contentsOf: appWindows)
+                // Not a grouped app - keep all windows in their original position
+                result.append(window)
             }
         }
         return result
