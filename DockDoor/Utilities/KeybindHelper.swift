@@ -220,7 +220,7 @@ class KeybindHelper {
     private var isShiftKeyPressedGeneral: Bool = false
     private var hasProcessedModifierRelease: Bool = false
     private var preventSwitcherHideOnRelease: Bool = false
-    private var shiftHeldBackwardTask: Task<Void, Never>?
+    private var heldKeyRepeatTask: Task<Void, Never>?
 
     // Track the invocation mode for alternate keybinds
     private var currentInvocationMode: SwitcherInvocationMode = .allWindows
@@ -250,9 +250,15 @@ class KeybindHelper {
     private func cleanup() {
         monitorTimer?.invalidate()
         monitorTimer = nil
-        shiftHeldBackwardTask?.cancel()
-        shiftHeldBackwardTask = nil
+        heldKeyRepeatTask?.cancel()
+        heldKeyRepeatTask = nil
         removeEventTap()
+    }
+
+    /// Cancels any running held-key repeat task to prevent main thread blocking
+    func cancelHeldKeyRepeatTask() {
+        heldKeyRepeatTask?.cancel()
+        heldKeyRepeatTask = nil
     }
 
     private func resetState() {
@@ -260,8 +266,7 @@ class KeybindHelper {
         isShiftKeyPressedGeneral = false
         preventSwitcherHideOnRelease = false
         currentInvocationMode = .allWindows
-        shiftHeldBackwardTask?.cancel()
-        shiftHeldBackwardTask = nil
+        cancelHeldKeyRepeatTask()
     }
 
     private func startMonitoring() {
@@ -469,7 +474,8 @@ class KeybindHelper {
             }
             let (shouldConsume, actionTask) = determineActionForKeyDown(event: event)
             if let task = actionTask {
-                Task { @MainActor in
+                heldKeyRepeatTask?.cancel()
+                heldKeyRepeatTask = Task { @MainActor in
                     await task()
                 }
             }
@@ -566,8 +572,8 @@ class KeybindHelper {
                 }
 
                 if isWindowSwitcherActive {
-                    shiftHeldBackwardTask?.cancel()
-                    shiftHeldBackwardTask = Task { @MainActor in
+                    heldKeyRepeatTask?.cancel()
+                    heldKeyRepeatTask = Task { @MainActor in
                         try? await Task.sleep(nanoseconds: 400_000_000)
 
                         while !Task.isCancelled,
@@ -589,8 +595,7 @@ class KeybindHelper {
         }
 
         if oldShiftState, !currentShiftState {
-            shiftHeldBackwardTask?.cancel()
-            shiftHeldBackwardTask = nil
+            cancelHeldKeyRepeatTask()
         }
 
         if !Defaults[.preventSwitcherHide], !preventSwitcherHideOnRelease, !(previewCoordinator.isSearchWindowFocused) {

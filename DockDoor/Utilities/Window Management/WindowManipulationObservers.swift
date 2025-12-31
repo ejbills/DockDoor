@@ -248,11 +248,11 @@ class WindowManipulationObservers {
         case kAXWindowCreatedNotification:
             handleNewWindow(for: pid)
         case kAXTitleChangedNotification:
-            // Only process if the element is actually a window
-            guard let role = try? element.role(), role == kAXWindowRole as String else { return }
-            let windowID = try? element.cgWindowId()
             handleWindowEvent(element: element, app: app, notification: notificationName, validate: false) { [weak self] windowSet in
                 guard let self else { return }
+                // Only process if the element is actually a window
+                guard let role = try? element.role(), role == kAXWindowRole as String else { return }
+                let windowID = try? element.cgWindowId()
                 update(windowSet: &windowSet, matching: windowID, element: element) { window in
                     if let freshTitle = try? window.axElement.title(), !freshTitle.isEmpty {
                         window.windowName = freshTitle
