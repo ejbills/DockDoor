@@ -38,6 +38,28 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://buymeacoffee.com/keplercafe</div>
 
+<a id="1.30.1"></a>
+# [Release 1.30.1](https://github.com/ejbills/DockDoor/releases/tag/1.30.1) - 2026-01-02
+
+## ✨ New Features
+- Added command line control
+  - Control windows via terminal
+  - Show previews with commands
+- Redesigned welcome experience
+
+## 🔧 Improvements & Stability
+- Remembers windows after restart
+- Improved window order preservation
+- Better button hover effects
+
+## 🐛 Bug Fixes
+- Fixed dock click behavior
+- Fixed window title updates
+
+
+[Changes][1.30.1]
+
+
 <a id="1.30"></a>
 # [Release 1.30](https://github.com/ejbills/DockDoor/releases/tag/1.30) - 2025-12-26
 
@@ -1793,6 +1815,7 @@ v1.0
 [Changes][releases]
 
 
+[1.30.1]: https://github.com/ejbills/DockDoor/compare/1.30...1.30.1
 [1.30]: https://github.com/ejbills/DockDoor/compare/1.29...1.30
 [1.29]: https://github.com/ejbills/DockDoor/compare/1.28.1...1.29
 [1.28.1]: https://github.com/ejbills/DockDoor/compare/1.28...1.28.1
