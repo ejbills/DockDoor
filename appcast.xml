@@ -3,6 +3,15 @@
     <channel>
         <title>DockDoor</title>
         <item>
+            <title>1.30.1</title>
+            <pubDate>Fri, 02 Jan 2026 12:07:49 -0800</pubDate>
+            <sparkle:releaseNotesLink>https://dockdoor.net/CHANGELOG.html</sparkle:releaseNotesLink>
+            <sparkle:version>1.30.1</sparkle:version>
+            <sparkle:shortVersionString>1.30.1</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/ejbills/DockDoor/releases/download/1.30.1/DockDoor.dmg" length="21567942" type="application/octet-stream" sparkle:edSignature="cf91ek2aF5WvqsdzRTOCBL6GGuoQ9eRQa6g5ZtX8jeY7XwKNxSJVjlvt8vaeZ/HRmqyRERl4SRWoTyRus4yCAQ==" />
+        </item>
+    <item>
             <title>1.30.0.3</title>
             <pubDate>Tue, 30 Dec 2025 16:45:52 -0800</pubDate>
             <sparkle:releaseNotesLink>https://dockdoor.net/CHANGELOG.html</sparkle:releaseNotesLink>
@@ -11,15 +20,6 @@
             <sparkle:shortVersionString>1.30.0.3 beta</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
             <enclosure url="https://github.com/ejbills/DockDoor/releases/download/1.30.0.3/DockDoor.dmg" length="21568866" type="application/octet-stream" sparkle:edSignature="ORn3HQteBhirn4JTLRiJQit2LWavsI6FbHl5whcxYgTV7X0mLselmvecIN6GJJ4pDgpSyRG70ypZe1cWeZYMAQ==" />
-        </item>
-    <item>
-            <title>1.30</title>
-            <pubDate>Thu, 25 Dec 2025 17:50:22 -0800</pubDate>
-            <sparkle:releaseNotesLink>https://dockdoor.net/CHANGELOG.html</sparkle:releaseNotesLink>
-            <sparkle:version>1.30</sparkle:version>
-            <sparkle:shortVersionString>1.30</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/ejbills/DockDoor/releases/download/1.30/DockDoor.dmg" length="20568908" type="application/octet-stream" sparkle:edSignature="bLYDJV030Pko8RPYvxC6XxxHxO0IuH8IVYRbMQJmHniF8fuzL3Ub2ovUs3lxuolkJL+icG+YsV7QAuL0WSWQAA==" />
         </item>
     </channel>
 </rss>
