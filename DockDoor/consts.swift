@@ -111,6 +111,7 @@ extension Defaults.Keys {
     static let hoverHighlightColor = Key<Color?>("hoverHighlightColor", default: nil)
     static let dockPreviewBackgroundOpacity = Key<CGFloat>("dockPreviewBackgroundOpacity", default: 1.0)
     static let hidePreviewCardBackground = Key<Bool>("hidePreviewCardBackground", default: false)
+    static let hideHoverContainerBackground = Key<Bool>("hideHoverContainerBackground", default: false)
     static let showActiveWindowBorder = Key<Bool>("showActiveWindowBorder", default: false)
 
     // MARK: - Dock Preview Appearance Settings

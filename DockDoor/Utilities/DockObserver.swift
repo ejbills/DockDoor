@@ -502,7 +502,7 @@ final class DockObserver {
             Task { @MainActor [weak self] in
                 guard let self else { return }
 
-                let windows = try await WindowUtil.getActiveWindows(of: app)
+                let windows = try await WindowUtil.getActiveWindows(of: app, ignoreSingleWindowFilter: true)
                 let currentlyHasMinimizedWindows = windows.contains(where: \.isMinimized)
 
                 // Use the state captured at click time to determine intent

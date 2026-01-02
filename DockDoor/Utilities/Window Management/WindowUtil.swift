@@ -555,7 +555,7 @@ extension WindowUtil {
         }
     }
 
-    static func getActiveWindows(of app: NSRunningApplication, context: WindowFetchContext = .dockPreview) async throws -> [WindowInfo] {
+    static func getActiveWindows(of app: NSRunningApplication, context: WindowFetchContext = .dockPreview, ignoreSingleWindowFilter: Bool = false) async throws -> [WindowInfo] {
         if isAppFiltered(app) {
             purgeAppCache(with: app.processIdentifier)
             return []
@@ -591,7 +591,7 @@ extension WindowUtil {
 
         // Purify cache and return
         if let finalWindows = await WindowUtil.purifyAppCache(with: app.processIdentifier, removeAll: false) {
-            guard !Defaults[.ignoreAppsWithSingleWindow] || finalWindows.count > 1 else { return [] }
+            guard ignoreSingleWindowFilter || !Defaults[.ignoreAppsWithSingleWindow] || finalWindows.count > 1 else { return [] }
             return sortWindows(finalWindows, for: context)
         }
 

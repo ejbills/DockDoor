@@ -102,6 +102,7 @@ struct AppearanceSettingsView: View {
     @Default(.hoverHighlightColor) var hoverHighlightColor
     @Default(.dockPreviewBackgroundOpacity) var dockPreviewBackgroundOpacity
     @Default(.hidePreviewCardBackground) var hidePreviewCardBackground
+    @Default(.hideHoverContainerBackground) var hideHoverContainerBackground
     @Default(.showActiveWindowBorder) var showActiveWindowBorder
     @Default(.previewMaxColumns) var previewMaxColumns
     @Default(.previewMaxRows) var previewMaxRows
@@ -283,6 +284,16 @@ struct AppearanceSettingsView: View {
                                     Text("Hide preview card background")
                                 }
                                 Text("Removes the background panel from individual window previews.")
+                                    .font(.footnote)
+                                    .foregroundColor(.gray)
+                                    .padding(.leading, 20)
+                            }
+
+                            VStack(alignment: .leading) {
+                                Toggle(isOn: $hideHoverContainerBackground) {
+                                    Text("Hide hover container background")
+                                }
+                                Text("Removes the root background blur from the hover container.")
                                     .font(.footnote)
                                     .foregroundColor(.gray)
                                     .padding(.leading, 20)

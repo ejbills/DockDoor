@@ -56406,6 +56406,9 @@
         }
       }
     },
+    "Hide hover container background" : {
+
+    },
     "Hide preview card background" : {
       "localizations" : {
         "af" : {
@@ -93724,6 +93727,9 @@
           }
         }
       }
+    },
+    "Removes the root background blur from the hover container." : {
+
     },
     "Report a Bug" : {
       "localizations" : {
