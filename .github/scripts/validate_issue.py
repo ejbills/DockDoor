@@ -124,17 +124,21 @@ def manage_labels(issue_number, is_complete):
     incomplete_label = 'needs more info'
 
     result = subprocess.run(
-        ['gh', 'issue', 'view', str(issue_number), '--json', 'labels'],
+        ['gh', 'issue', 'view', str(issue_number), '--json', 'labels,state'],
         capture_output=True, text=True, check=True
     )
-    labels_data = json.loads(result.stdout)
-    current_labels = [label['name'] for label in labels_data.get('labels', [])]
+    issue_data = json.loads(result.stdout)
+    current_labels = [label['name'] for label in issue_data.get('labels', [])]
+    current_state = issue_data.get('state', 'OPEN')
 
     if is_complete:
         if incomplete_label in current_labels:
             subprocess.run(['gh', 'issue', 'edit', str(issue_number), '--remove-label', incomplete_label], check=True)
         if complete_label not in current_labels:
             subprocess.run(['gh', 'issue', 'edit', str(issue_number), '--add-label', complete_label], check=True)
+        # Reopen the issue if it was closed and is now complete
+        if current_state == 'CLOSED':
+            subprocess.run(['gh', 'issue', 'reopen', str(issue_number)], check=True)
     else:
         if complete_label in current_labels:
             subprocess.run(['gh', 'issue', 'edit', str(issue_number), '--remove-label', complete_label], check=True)
