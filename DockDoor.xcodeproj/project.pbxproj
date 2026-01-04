@@ -11,7 +11,6 @@
 		0596C2C32C3E060D00DCABEF /* PrivateApis.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0596C2C22C3E060D00DCABEF /* PrivateApis.swift */; };
 		05C0C7182C60629C000ADAC6 /* AXUIElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C0C7172C60629C000ADAC6 /* AXUIElement.swift */; };
 		1A04FA16AC74448F83D0F964 /* ActiveAppIndicatorCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6F87422D4714171AD2CCC4A /* ActiveAppIndicatorCoordinator.swift */; };
-		1AE964D28D8344CFB24C774A879160FD /* URLCommandHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A51A0628B847A195949BA41395BB84 /* URLCommandHandler.swift */; };
 		27DC8C172CFA4DA7005F8F31 /* NumberFormatter+Convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27DC8C152CFA4DA7005F8F31 /* NumberFormatter+Convenience.swift */; };
 		337B1BB3E0E1C17462D34C74 /* AppPickerSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE87C548D56298ADFB3F389 /* AppPickerSheet.swift */; };
 		341691AA2EE37A6D004AFFC9 /* LiveWindowCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 341691A92EE37A6D004AFFC9 /* LiveWindowCapture.swift */; };
@@ -31,7 +30,8 @@
 		3A1622CC2C8D5F5B00D318EE /* FirstTimePermissionsTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A1622CB2C8D5F5B00D318EE /* FirstTimePermissionsTabView.swift */; };
 		3A1622CE2C8D5F8500D318EE /* FirstTimeCongratsTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A1622CD2C8D5F8500D318EE /* FirstTimeCongratsTabView.swift */; };
 		3A1622D02C8D691700D318EE /* SquiggleDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A1622CF2C8D691700D318EE /* SquiggleDivider.swift */; };
-		43F841B996214329B3C72838EF174A80 /* CLIHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCF90276D39A4A25AE5C7E1E0A56DD34 /* CLIHandler.swift */; };
+		B376D66B467C4587915220BC80D3B9CB /* ScriptCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = F098F8107F464776B5C18294427CAECD /* ScriptCommands.swift */; };
+		232B30CAA2B0451CA505C05986A22EA6 /* DockDoor.sdef in Resources */ = {isa = PBXBuildFile; fileRef = A4E8BB47686D4EF6B89131D2EB26FEE8 /* DockDoor.sdef */; };
 		5BCC969779654E67A6386C12FC709616 /* Glow.wav in Resources */ = {isa = PBXBuildFile; fileRef = D924F5BAEF564CC1AF84527876E14356 /* Glow.wav */; };
 		735F5666B8174CBEBB1ACC3CB75DB860 /* OnboardingWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A3B36A5DB70441F97C0FB7AB9CADE92 /* OnboardingWindow.swift */; };
 		800055342EFC0DDF005CAB72 /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 800055332EFC0DDF005CAB72 /* AppIcon.icon */; };
@@ -314,10 +314,10 @@
 		BBFAD73B2C287C770092F5F1 /* UpdateSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateSettingsView.swift; sourceTree = "<group>"; };
 		C119BDF12C2AFA7600E06E18 /* WindowSwitcherSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowSwitcherSettingsView.swift; sourceTree = "<group>"; };
 		C6F87422D4714171AD2CCC4A /* ActiveAppIndicatorCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveAppIndicatorCoordinator.swift; sourceTree = "<group>"; };
-		D1A51A0628B847A195949BA41395BB84 /* URLCommandHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLCommandHandler.swift; sourceTree = "<group>"; };
 		D4E5F6789012345678901234 /* ActiveAppIndicatorDockDetection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveAppIndicatorDockDetection.swift; sourceTree = "<group>"; };
 		D924F5BAEF564CC1AF84527876E14356 /* Glow.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Glow.wav; sourceTree = "<group>"; };
-		DCF90276D39A4A25AE5C7E1E0A56DD34 /* CLIHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CLIHandler.swift; sourceTree = "<group>"; };
+		F098F8107F464776B5C18294427CAECD /* ScriptCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptCommands.swift; sourceTree = "<group>"; };
+		A4E8BB47686D4EF6B89131D2EB26FEE8 /* DockDoor.sdef */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.sdef; path = DockDoor.sdef; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -490,6 +490,7 @@
 			children = (
 				800055332EFC0DDF005CAB72 /* AppIcon.icon */,
 				BB8247782C2889B20098A440 /* Info.plist */,
+				A4E8BB47686D4EF6B89131D2EB26FEE8 /* DockDoor.sdef */,
 				BB4ED9062C3C75CA00BBDD16 /* Localizable.xcstrings */,
 				BBA153F92C11FFD500119C02 /* consts.swift */,
 				BBA153FB2C12356100119C02 /* main.swift */,
@@ -531,8 +532,7 @@
 				BBF6C6232C1B4B4400BF1D40 /* KeybindHelper.swift */,
 				BBF6C6262C1B4B4500BF1D40 /* StringMatchingUtil.swift */,
 				BB1CBD5C2C1BCA4F003969BC /* Misc Utils.swift */,
-				DCF90276D39A4A25AE5C7E1E0A56DD34 /* CLIHandler.swift */,
-				D1A51A0628B847A195949BA41395BB84 /* URLCommandHandler.swift */,
+				F098F8107F464776B5C18294427CAECD /* ScriptCommands.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -828,6 +828,7 @@
 				5BCC969779654E67A6386C12FC709616 /* Glow.wav in Resources */,
 				BB4ED9072C3C75CA00BBDD16 /* Localizable.xcstrings in Resources */,
 				800055342EFC0DDF005CAB72 /* AppIcon.icon in Resources */,
+				232B30CAA2B0451CA505C05986A22EA6 /* DockDoor.sdef in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -860,8 +861,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				43F841B996214329B3C72838EF174A80 /* CLIHandler.swift in Sources */,
-				1AE964D28D8344CFB24C774A879160FD /* URLCommandHandler.swift in Sources */,
+				B376D66B467C4587915220BC80D3B9CB /* ScriptCommands.swift in Sources */,
 				1A04FA16AC74448F83D0F964 /* ActiveAppIndicatorCoordinator.swift in Sources */,
 				C3D4E5F6789012345678901B /* ActiveAppIndicatorDockDetection.swift in Sources */,
 				F3A2B8C1D5E6489AAB123456 /* ActiveAppIndicatorPositioning.swift in Sources */,
