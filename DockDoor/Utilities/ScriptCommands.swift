@@ -3,7 +3,7 @@ import Foundation
 
 // MARK: - Shared Command Logic
 
-/// Shared logic for DockDoor commands, used by both AppleScript and URL scheme handlers
+/// Shared logic for DockDoor commands, used by AppleScript handlers
 enum DockDoorCommands {
     enum AppIdentifierType: String {
         case name
@@ -117,72 +117,66 @@ enum DockDoorCommands {
 
     // MARK: - Preview Commands
 
-    @MainActor
-    static func showPreview(identifier: String, type: AppIdentifierType, position: NSPoint?) async throws {
-        guard let app = findApp(identifier: identifier, type: type) else {
-            throw CommandError.appNotFound(identifier)
+    static func showPreviewAsync(identifier: String, type: AppIdentifierType, position: NSPoint?) {
+        guard let app = findApp(identifier: identifier, type: type) else { return }
+
+        Task { @MainActor in
+            guard let coordinator = SharedPreviewWindowCoordinator.activeInstance else { return }
+            guard let windows = try? await WindowUtil.getActiveWindows(of: app, context: .dockPreview) else { return }
+
+            let mouseLocation = position ?? NSEvent.mouseLocation
+            let screen = NSScreen.screenContainingMouse(mouseLocation)
+
+            coordinator.showWindow(
+                appName: app.localizedName ?? "Unknown",
+                windows: windows,
+                mouseLocation: mouseLocation,
+                mouseScreen: screen,
+                dockItemElement: nil,
+                overrideDelay: true,
+                onWindowTap: nil,
+                bundleIdentifier: app.bundleIdentifier,
+                bypassDockMouseValidation: true,
+                dockPositionOverride: .cli
+            )
         }
-
-        guard let coordinator = SharedPreviewWindowCoordinator.activeInstance else {
-            throw CommandError.coordinatorNotAvailable
-        }
-
-        guard let windows = try? await WindowUtil.getActiveWindows(of: app, context: .dockPreview) else {
-            return
-        }
-
-        let mouseLocation = position ?? NSEvent.mouseLocation
-        let screen = NSScreen.screenContainingMouse(mouseLocation)
-
-        coordinator.showWindow(
-            appName: app.localizedName ?? "Unknown",
-            windows: windows,
-            mouseLocation: mouseLocation,
-            mouseScreen: screen,
-            dockItemElement: nil,
-            overrideDelay: true,
-            onWindowTap: nil,
-            bundleIdentifier: app.bundleIdentifier,
-            bypassDockMouseValidation: true,
-            dockPositionOverride: .cli
-        )
     }
 
-    @MainActor
-    static func hidePreview() {
-        SharedPreviewWindowCoordinator.activeInstance?.hideWindow()
+    static func hidePreviewAsync() {
+        DispatchQueue.main.async {
+            SharedPreviewWindowCoordinator.activeInstance?.hideWindow()
+        }
     }
 
-    @MainActor
-    static func showSwitcher() async throws {
-        guard let coordinator = SharedPreviewWindowCoordinator.activeInstance else {
-            throw CommandError.coordinatorNotAvailable
+    static func showSwitcherAsync() {
+        Task { @MainActor in
+            guard let coordinator = SharedPreviewWindowCoordinator.activeInstance else { return }
+
+            let windows = WindowUtil.getAllWindowsOfAllApps()
+            guard !windows.isEmpty else { return }
+
+            let screen = NSScreen.main ?? NSScreen.screens.first!
+
+            let wsCoordinator = coordinator.windowSwitcherCoordinator
+
+            wsCoordinator.initializeForWindowSwitcher(
+                with: windows,
+                dockPosition: DockUtils.getDockPosition(),
+                bestGuessMonitor: screen
+            )
+            wsCoordinator.activateKeybindSession()
+
+            coordinator.showWindow(
+                appName: "Window Switcher",
+                windows: windows,
+                mouseLocation: nil,
+                mouseScreen: screen,
+                dockItemElement: nil,
+                overrideDelay: true,
+                centeredHoverWindowState: .windowSwitcher,
+                onWindowTap: nil
+            )
         }
-
-        let windows = WindowUtil.getAllWindowsOfAllApps()
-        guard !windows.isEmpty else { return }
-
-        let screen = NSScreen.main ?? NSScreen.screens.first!
-
-        let wsCoordinator = coordinator.windowSwitcherCoordinator
-
-        wsCoordinator.initializeForWindowSwitcher(
-            with: windows,
-            dockPosition: DockUtils.getDockPosition(),
-            bestGuessMonitor: screen
-        )
-        wsCoordinator.activateKeybindSession()
-
-        coordinator.showWindow(
-            appName: "Window Switcher",
-            windows: windows,
-            mouseLocation: nil,
-            mouseScreen: screen,
-            dockItemElement: nil,
-            overrideDelay: true,
-            centeredHoverWindowState: .windowSwitcher,
-            onWindowTap: nil
-        )
     }
 
     // MARK: - Query Commands
@@ -401,6 +395,7 @@ enum DockDoorCommands {
 
 // MARK: - AppleScript Command Handlers
 
+@objc(ShowPreviewCommand)
 class ShowPreviewCommand: NSScriptCommand {
     override func performDefaultImplementation() -> Any? {
         let identifier = directParameter as? String ?? ""
@@ -408,7 +403,7 @@ class ShowPreviewCommand: NSScriptCommand {
             rawValue: (evaluatedArguments?["identifierType"] as? String ?? "name").lowercased()
         ) ?? .name
 
-        var position: NSPoint? = nil
+        var position: NSPoint?
         if let posString = evaluatedArguments?["position"] as? String {
             let parts = posString.split(separator: ",").compactMap { Double($0.trimmingCharacters(in: .whitespaces)) }
             if parts.count == 2 {
@@ -416,51 +411,28 @@ class ShowPreviewCommand: NSScriptCommand {
             }
         }
 
-        let semaphore = DispatchSemaphore(value: 0)
-        var result = "ok"
-
-        Task { @MainActor in
-            do {
-                try await DockDoorCommands.showPreview(identifier: identifier, type: identifierType, position: position)
-            } catch {
-                result = "error: \(error.localizedDescription)"
-            }
-            semaphore.signal()
-        }
-
-        semaphore.wait()
-        return result
-    }
-}
-
-class HidePreviewCommand: NSScriptCommand {
-    override func performDefaultImplementation() -> Any? {
-        Task { @MainActor in
-            DockDoorCommands.hidePreview()
-        }
+        DockDoorCommands.showPreviewAsync(identifier: identifier, type: identifierType, position: position)
         return "ok"
     }
 }
 
-class ShowSwitcherCommand: NSScriptCommand {
+@objc(HidePreviewCommand)
+class HidePreviewCommand: NSScriptCommand {
     override func performDefaultImplementation() -> Any? {
-        let semaphore = DispatchSemaphore(value: 0)
-        var result = "ok"
-
-        Task { @MainActor in
-            do {
-                try await DockDoorCommands.showSwitcher()
-            } catch {
-                result = "error: \(error.localizedDescription)"
-            }
-            semaphore.signal()
-        }
-
-        semaphore.wait()
-        return result
+        DockDoorCommands.hidePreviewAsync()
+        return "ok"
     }
 }
 
+@objc(ShowSwitcherCommand)
+class ShowSwitcherCommand: NSScriptCommand {
+    override func performDefaultImplementation() -> Any? {
+        DockDoorCommands.showSwitcherAsync()
+        return "ok"
+    }
+}
+
+@objc(ListWindowsCommand)
 class ListWindowsCommand: NSScriptCommand {
     override func performDefaultImplementation() -> Any? {
         let appIdentifier = directParameter as? String
@@ -476,6 +448,7 @@ class ListWindowsCommand: NSScriptCommand {
     }
 }
 
+@objc(ListAppsCommand)
 class ListAppsCommand: NSScriptCommand {
     override func performDefaultImplementation() -> Any? {
         do {
@@ -486,6 +459,7 @@ class ListAppsCommand: NSScriptCommand {
     }
 }
 
+@objc(GetActiveWindowCommand)
 class GetActiveWindowCommand: NSScriptCommand {
     override func performDefaultImplementation() -> Any? {
         do {
@@ -496,6 +470,7 @@ class GetActiveWindowCommand: NSScriptCommand {
     }
 }
 
+@objc(WindowActionCommand)
 class WindowActionCommand: NSScriptCommand {
     override func performDefaultImplementation() -> Any? {
         guard let windowId = directParameter as? String else {
@@ -519,7 +494,7 @@ class WindowActionCommand: NSScriptCommand {
         case "center window":
             action = .center
         default:
-            return "error: Unknown action: \(commandDescription.commandName)"
+            return "error: Unknown action: \(String(describing: commandDescription.commandName))"
         }
 
         do {
@@ -531,6 +506,7 @@ class WindowActionCommand: NSScriptCommand {
     }
 }
 
+@objc(PositionWindowCommand)
 class PositionWindowCommand: NSScriptCommand {
     override func performDefaultImplementation() -> Any? {
         guard let windowId = directParameter as? String else {
