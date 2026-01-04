@@ -96,12 +96,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         WindowUtil.saveWindowOrderFromCache()
     }
 
-    // MARK: - URL Scheme Handler (dockdoor-cli://)
-
-    func application(_ application: NSApplication, open urls: [URL]) {
-        urls.forEach { URLCommandHandler.handle($0) }
-    }
-
     func setupMenuBar() {
         guard statusBarItem == nil else { return }
 
