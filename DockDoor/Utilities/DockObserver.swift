@@ -36,6 +36,7 @@ final class DockObserver {
 
     private var currentDockPID: pid_t?
     private var healthCheckTimer: Timer?
+    private var subscribedDockList: AXUIElement?
 
     // Cmd+Tab switcher monitoring (accessed from extension file)
     var cmdTabObserver: AXObserver?
@@ -99,6 +100,20 @@ final class DockObserver {
 
         if currentDockApp?.processIdentifier != currentDockPID {
             reset()
+            return
+        }
+
+        // Verify the subscribed dock list element is still valid
+        // If the dock rebuilds its UI, the element becomes invalid and notifications stop
+        if let subscribedElement = subscribedDockList {
+            var role: CFTypeRef?
+            let result = AXUIElementCopyAttributeValue(subscribedElement, kAXRoleAttribute as CFString, &role)
+            if result == .invalidUIElement || result == .cannotComplete {
+                reset()
+            }
+        } else if axObserver != nil {
+            // We have an observer but no subscribed element reference - reset to fix state
+            reset()
         }
     }
 
@@ -108,6 +123,7 @@ final class DockObserver {
         }
         axObserver = nil
         currentDockPID = nil
+        subscribedDockList = nil
     }
 
     private func setupSelectedDockItemObserver() {
@@ -149,6 +165,7 @@ final class DockObserver {
             try axList.subscribeToNotification(axObserver, kAXSelectedChildrenChangedNotification) {
                 CFRunLoopAddSource(CFRunLoopGetCurrent(), AXObserverGetRunLoopSource(axObserver), .commonModes)
             }
+            subscribedDockList = axList
         } catch {
             return
         }
