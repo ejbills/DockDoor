@@ -21,6 +21,15 @@
             <parameter name="at" code="atps" type="text" optional="yes" description="Position as 'x,y' coordinates.">
                 <cocoa key="position"/>
             </parameter>
+            <parameter name="dock frame" code="dkfr" type="text" optional="yes" description="Dock item frame as 'x,y,width,height' for positioning relative to a dock icon.">
+                <cocoa key="dockFrame"/>
+            </parameter>
+            <parameter name="dock position" code="dkpo" type="text" optional="yes" description="Dock position: 'bottom', 'left', or 'right'. Defaults to actual dock position.">
+                <cocoa key="dockPosition"/>
+            </parameter>
+            <parameter name="with delay" code="wdly" type="boolean" optional="yes" description="Use the hover delay before showing. Defaults to false.">
+                <cocoa key="withDelay"/>
+            </parameter>
             <result type="text" description="Success or error message."/>
         </command>
 

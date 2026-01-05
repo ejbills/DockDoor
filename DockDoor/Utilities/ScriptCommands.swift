@@ -117,7 +117,13 @@ enum DockDoorCommands {
 
     // MARK: - Preview Commands
 
-    static func showPreviewAsync(identifier: String, type: AppIdentifierType, position: NSPoint?) {
+    static func showPreviewAsync(
+        identifier: String,
+        type: AppIdentifierType,
+        position: NSPoint?,
+        dockItemFrame: CGRect? = nil,
+        useDelay: Bool = false
+    ) {
         guard let app = findApp(identifier: identifier, type: type) else { return }
 
         Task { @MainActor in
@@ -133,18 +139,26 @@ enum DockDoorCommands {
                 mouseLocation: mouseLocation,
                 mouseScreen: screen,
                 dockItemElement: nil,
-                overrideDelay: true,
+                overrideDelay: dockItemFrame != nil ? !useDelay : true,
                 onWindowTap: nil,
                 bundleIdentifier: app.bundleIdentifier,
                 bypassDockMouseValidation: true,
-                dockPositionOverride: .cli
+                dockPositionOverride: .cli,
+                dockItemFrameOverride: dockItemFrame
             )
         }
     }
 
     static func hidePreviewAsync() {
         DispatchQueue.main.async {
-            SharedPreviewWindowCoordinator.activeInstance?.hideWindow()
+            guard let coordinator = SharedPreviewWindowCoordinator.activeInstance else { return }
+
+            // Don't hide if mouse is within the preview window - user is interacting with it
+            if coordinator.mouseIsWithinPreviewWindow {
+                return
+            }
+
+            coordinator.hideWindow()
         }
     }
 
@@ -411,7 +425,23 @@ class ShowPreviewCommand: NSScriptCommand {
             }
         }
 
-        DockDoorCommands.showPreviewAsync(identifier: identifier, type: identifierType, position: position)
+        var dockItemFrame: CGRect?
+        if let frameString = evaluatedArguments?["dockFrame"] as? String {
+            let parts = frameString.split(separator: ",").compactMap { Double($0.trimmingCharacters(in: .whitespaces)) }
+            if parts.count == 4 {
+                dockItemFrame = CGRect(x: parts[0], y: parts[1], width: parts[2], height: parts[3])
+            }
+        }
+
+        let useDelay = evaluatedArguments?["withDelay"] as? Bool ?? false
+
+        DockDoorCommands.showPreviewAsync(
+            identifier: identifier,
+            type: identifierType,
+            position: position,
+            dockItemFrame: dockItemFrame,
+            useDelay: useDelay
+        )
         return "ok"
     }
 }

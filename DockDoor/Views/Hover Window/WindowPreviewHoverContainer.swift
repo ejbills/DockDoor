@@ -44,6 +44,7 @@ struct WindowPreviewHoverContainer: View {
     let mouseLocation: CGPoint?
     let bestGuessMonitor: NSScreen
     let dockItemElement: AXUIElement?
+    let dockItemFrameOverride: CGRect?
     var mockPreviewActive: Bool
     let updateAvailable: Bool
     let embeddedContentType: EmbeddedContentType
@@ -105,6 +106,7 @@ struct WindowPreviewHoverContainer: View {
          mouseLocation: CGPoint?,
          bestGuessMonitor: NSScreen,
          dockItemElement: AXUIElement?,
+         dockItemFrameOverride: CGRect? = nil,
          windowSwitcherCoordinator: PreviewStateCoordinator,
          mockPreviewActive: Bool,
          updateAvailable: Bool,
@@ -117,6 +119,7 @@ struct WindowPreviewHoverContainer: View {
         self.mouseLocation = mouseLocation
         self.bestGuessMonitor = bestGuessMonitor
         self.dockItemElement = dockItemElement
+        self.dockItemFrameOverride = dockItemFrameOverride
         previewStateCoordinator = windowSwitcherCoordinator
         self.mockPreviewActive = mockPreviewActive
         self.updateAvailable = updateAvailable
@@ -275,6 +278,7 @@ struct WindowPreviewHoverContainer: View {
                                              bestGuessMonitor: bestGuessMonitor,
                                              dockPosition: dockPosition,
                                              dockItemElement: dockItemElement,
+                                             dockItemFrameOverride: dockItemFrameOverride,
                                              originalMouseLocation: mouseLocation,
                                              minimizeAllWindowsCallback: { wasAppActiveBeforeClick in
                                                  minimizeAllWindows(wasAppActiveBeforeClick: wasAppActiveBeforeClick)
