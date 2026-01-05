@@ -1,0 +1,14 @@
+{
+  "app_name": "DockDoor",
+  "xcode_project": "DockDoor.xcodeproj",
+  "xcode_scheme": "DockDoor",
+  "github_repo": "ejbills/DockDoor",
+  "appcast": {
+    "repo": "ejbills/DockDoor",
+    "branch": "main",
+    "path": "appcast.xml"
+  },
+  "release_notes_url": "https://dockdoor.net/CHANGELOG.html",
+  "notary_profile": "notarytool",
+  "test_repo": "ejbills/dockdoor-release-scripts"
+}
