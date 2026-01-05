@@ -11,30 +11,19 @@ enum DockDoorCommands {
         case pid
     }
 
-    enum WindowPosition: String, CaseIterable {
-        case left
-        case right
-        case top
-        case bottom
-        case topLeft = "top-left"
-        case topRight = "top-right"
-        case bottomLeft = "bottom-left"
-        case bottomRight = "bottom-right"
-
-        // Also accept fill- prefix for backwards compatibility
-        init?(rawValue: String) {
-            let normalized = rawValue.lowercased().replacingOccurrences(of: "fill-", with: "")
-            switch normalized {
-            case "left": self = .left
-            case "right": self = .right
-            case "top": self = .top
-            case "bottom": self = .bottom
-            case "top-left", "topleft": self = .topLeft
-            case "top-right", "topright": self = .topRight
-            case "bottom-left", "bottomleft": self = .bottomLeft
-            case "bottom-right", "bottomright": self = .bottomRight
-            default: return nil
-            }
+    /// Parses position strings from AppleScript commands into WindowAction
+    static func parsePositionAction(_ positionString: String) -> WindowAction? {
+        let normalized = positionString.lowercased().replacingOccurrences(of: "fill-", with: "")
+        switch normalized {
+        case "left": return .fillLeftHalf
+        case "right": return .fillRightHalf
+        case "top": return .fillTopHalf
+        case "bottom": return .fillBottomHalf
+        case "top-left", "topleft": return .fillTopLeftQuarter
+        case "top-right", "topright": return .fillTopRightQuarter
+        case "bottom-left", "bottomleft": return .fillBottomLeftQuarter
+        case "bottom-right", "bottomright": return .fillBottomRightQuarter
+        default: return nil
         }
     }
 
@@ -195,215 +184,202 @@ enum DockDoorCommands {
 
     // MARK: - Query Commands
 
-    struct WindowData: Codable {
-        let windowId: UInt32
-        let windowName: String?
-        let appName: String
-        let bundleId: String?
-        let pid: Int32
-        let index: Int
-        let appIndex: Int
-        let frame: FrameData
-        let spaceId: Int?
-        let isMinimized: Bool
-        let isHidden: Bool
-        let createdAt: String
-        let lastUsedAt: String
-    }
-
-    struct FrameData: Codable {
-        let x: Double
-        let y: Double
-        let width: Double
-        let height: Double
-    }
-
-    struct AppData: Codable {
-        let name: String
-        let bundleId: String?
-        let pid: Int32
-        let windowCount: Int
-    }
-
-    struct ActiveWindowData: Codable {
-        let windowId: UInt32
-        let windowName: String?
-        let appName: String
-        let bundleId: String?
-        let pid: Int32
-    }
-
-    private static let dateFormatter: ISO8601DateFormatter = {
-        let formatter = ISO8601DateFormatter()
-        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
-        return formatter
+    private static let jsonEncoder: JSONEncoder = {
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+        return encoder
     }()
 
-    static func listWindows(appIdentifier: String? = nil, type: AppIdentifierType = .name) throws -> String {
-        var allWindows = WindowUtil.getAllWindowsOfAllApps()
+    private static func encodeJSON(_ value: some Encodable) throws -> String {
+        let data = try jsonEncoder.encode(value)
+        return String(data: data, encoding: .utf8) ?? "{}"
+    }
 
-        // Filter by app if specified
+    static func listWindows(appIdentifier: String? = nil, type: AppIdentifierType = .name) throws -> String {
+        var windows = WindowUtil.getAllWindowsOfAllApps()
+
         if let identifier = appIdentifier, !identifier.isEmpty {
             guard let app = findApp(identifier: identifier, type: type) else {
                 throw CommandError.appNotFound(identifier)
             }
-            allWindows = allWindows.filter { $0.app.processIdentifier == app.processIdentifier }
+            windows = windows.filter { $0.app.processIdentifier == app.processIdentifier }
         }
 
-        // Sort by last accessed time
-        allWindows.sort { $0.lastAccessedTime > $1.lastAccessedTime }
+        let sorted = WindowUtil.sortWindowsForSwitcher(windows)
 
-        // Track app-specific indices
         var appWindowCounts: [pid_t: Int] = [:]
-
-        let windowDataList: [WindowData] = allWindows.enumerated().map { index, window in
+        let result = sorted.enumerated().map { index, window -> [String: Any] in
             let appIndex = appWindowCounts[window.app.processIdentifier] ?? 0
             appWindowCounts[window.app.processIdentifier] = appIndex + 1
-
-            return WindowData(
-                windowId: UInt32(window.id),
-                windowName: window.windowName,
-                appName: window.app.localizedName ?? "Unknown",
-                bundleId: window.app.bundleIdentifier,
-                pid: window.app.processIdentifier,
-                index: index,
-                appIndex: appIndex,
-                frame: FrameData(
-                    x: window.frame.origin.x,
-                    y: window.frame.origin.y,
-                    width: window.frame.size.width,
-                    height: window.frame.size.height
-                ),
-                spaceId: window.spaceID,
-                isMinimized: window.isMinimized,
-                isHidden: window.isHidden,
-                createdAt: dateFormatter.string(from: window.creationTime),
-                lastUsedAt: dateFormatter.string(from: window.lastAccessedTime)
-            )
+            return window.toJSON(index: index, appIndex: appIndex)
         }
 
-        let encoder = JSONEncoder()
-        encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
-        let data = try encoder.encode(windowDataList)
-        return String(data: data, encoding: .utf8) ?? "[]"
+        return try encodeJSON(result.map { JSONDictionary($0) })
     }
 
     static func listApps() throws -> String {
-        let allWindows = WindowUtil.getAllWindowsOfAllApps()
+        let windows = WindowUtil.getAllWindowsOfAllApps()
 
-        // Group windows by app
-        var appWindows: [pid_t: (app: NSRunningApplication, count: Int)] = [:]
-        for window in allWindows {
-            let pid = window.app.processIdentifier
-            if let existing = appWindows[pid] {
-                appWindows[pid] = (existing.app, existing.count + 1)
-            } else {
-                appWindows[pid] = (window.app, 1)
-            }
-        }
+        let grouped = Dictionary(grouping: windows) { $0.app.processIdentifier }
+        let apps = grouped.values.compactMap { windows -> [String: Any]? in
+            guard let first = windows.first else { return nil }
+            return [
+                "name": first.app.localizedName ?? "Unknown",
+                "bundleId": first.app.bundleIdentifier as Any,
+                "pid": first.app.processIdentifier,
+                "windowCount": windows.count,
+            ]
+        }.sorted { ($0["name"] as? String ?? "").lowercased() < ($1["name"] as? String ?? "").lowercased() }
 
-        let appDataList: [AppData] = appWindows.values
-            .map { app, count in
-                AppData(
-                    name: app.localizedName ?? "Unknown",
-                    bundleId: app.bundleIdentifier,
-                    pid: app.processIdentifier,
-                    windowCount: count
-                )
-            }
-            .sorted { $0.name.lowercased() < $1.name.lowercased() }
-
-        let encoder = JSONEncoder()
-        encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
-        let data = try encoder.encode(appDataList)
-        return String(data: data, encoding: .utf8) ?? "[]"
+        return try encodeJSON(apps.map { JSONDictionary($0) })
     }
 
     static func getActiveWindow() throws -> String {
         guard let window = getActiveWindowInfo() else {
             throw CommandError.noActiveWindow
         }
+        return try encodeJSON(JSONDictionary(window.toJSON()))
+    }
 
-        let activeData = ActiveWindowData(
-            windowId: UInt32(window.id),
-            windowName: window.windowName,
-            appName: window.app.localizedName ?? "Unknown",
-            bundleId: window.app.bundleIdentifier,
-            pid: window.app.processIdentifier
-        )
+    /// Wrapper to make [String: Any] Encodable
+    private struct JSONDictionary: Encodable {
+        let dict: [String: Any]
+        init(_ dict: [String: Any]) { self.dict = dict }
 
-        let encoder = JSONEncoder()
-        encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
-        let data = try encoder.encode(activeData)
-        return String(data: data, encoding: .utf8) ?? "{}"
+        func encode(to encoder: Encoder) throws {
+            var container = encoder.container(keyedBy: CodingKeys.self)
+            for (key, value) in dict.sorted(by: { $0.key < $1.key }) {
+                let codingKey = CodingKeys(stringValue: key)!
+                switch value {
+                case let v as String: try container.encode(v, forKey: codingKey)
+                case let v as Int: try container.encode(v, forKey: codingKey)
+                case let v as Int32: try container.encode(v, forKey: codingKey)
+                case let v as UInt32: try container.encode(v, forKey: codingKey)
+                case let v as Double: try container.encode(v, forKey: codingKey)
+                case let v as Bool: try container.encode(v, forKey: codingKey)
+                case let v as [String: Any]: try container.encode(JSONDictionary(v), forKey: codingKey)
+                case Optional<Any>.none: try container.encodeNil(forKey: codingKey)
+                default: break
+                }
+            }
+        }
+
+        struct CodingKeys: CodingKey {
+            var stringValue: String
+            init?(stringValue: String) { self.stringValue = stringValue }
+            var intValue: Int? { nil }
+            init?(intValue: Int) { nil }
+        }
+    }
+
+    // MARK: - Help
+
+    static func getHelp() -> String {
+        // Auto-generate help from the .sdef file
+        guard let sdefURL = Bundle.main.url(forResource: "DockDoor", withExtension: "sdef"),
+              let sdefData = try? Data(contentsOf: sdefURL),
+              let xml = try? XMLDocument(data: sdefData)
+        else {
+            return "Error: Could not load command definitions"
+        }
+
+        var lines: [String] = ["DockDoor AppleScript Commands", ""]
+
+        // Find all commands in the DockDoor Suite
+        guard let commands = try? xml.nodes(forXPath: "//suite[@name='DockDoor Suite']/command") else {
+            return "Error: Could not parse command definitions"
+        }
+
+        for case let command as XMLElement in commands {
+            guard let name = command.attribute(forName: "name")?.stringValue,
+                  let description = command.attribute(forName: "description")?.stringValue
+            else { continue }
+
+            // Build command signature
+            var signature = name
+
+            // Add direct parameter if present
+            if let directParam = try? command.nodes(forXPath: "direct-parameter").first as? XMLElement {
+                let optional = directParam.attribute(forName: "optional")?.stringValue == "yes"
+                let paramDesc = directParam.attribute(forName: "description")?.stringValue ?? "value"
+                let placeholder = paramDesc.contains("Window ID") ? "<id>" : "<value>"
+                signature += optional ? " [\(placeholder)]" : " \(placeholder)"
+            }
+
+            // Add named parameters
+            if let params = try? command.nodes(forXPath: "parameter") {
+                for case let param as XMLElement in params {
+                    guard let paramName = param.attribute(forName: "name")?.stringValue else { continue }
+                    let optional = param.attribute(forName: "optional")?.stringValue == "yes"
+                    let paramPart = "\(paramName) <value>"
+                    signature += optional ? " [\(paramPart)]" : " \(paramPart)"
+                }
+            }
+
+            lines.append("  \(signature)")
+            lines.append("      \(description)")
+            lines.append("")
+        }
+
+        lines.append("EXAMPLES")
+        lines.append("")
+        lines.append("  -- Window actions (use window ID or \"active\")")
+        lines.append("  focus window \"active\"")
+        lines.append("  focus window \"12345\"")
+        lines.append("  minimize window \"active\"")
+        lines.append("  position window \"active\" to \"left\"")
+        lines.append("  position window \"12345\" to \"top-right\"")
+        lines.append("")
+        lines.append("  -- App lookup by name (default)")
+        lines.append("  show preview \"Safari\"")
+        lines.append("  list windows \"Finder\"")
+        lines.append("")
+        lines.append("  -- App lookup by bundle ID")
+        lines.append("  show preview \"com.apple.Safari\" by \"bundle\"")
+        lines.append("  list windows \"com.apple.finder\" by \"bundle\"")
+        lines.append("")
+        lines.append("  -- App lookup by process ID")
+        lines.append("  show preview \"1234\" by \"pid\"")
+        lines.append("")
+        lines.append("  -- Positions: left, right, top, bottom,")
+        lines.append("  --            top-left, top-right, bottom-left, bottom-right")
+        lines.append("")
+        lines.append("USAGE: tell application \"DockDoor\" to <command>")
+
+        return lines.joined(separator: "\n")
     }
 
     // MARK: - Window Actions
 
-    enum WindowActionType: String {
-        case focus
-        case minimize
-        case close
-        case maximize
-        case hide
-        case fullscreen
-        case center
-    }
-
-    static func performWindowAction(_ action: WindowActionType, windowIdString: String) throws {
-        let result = resolveWindowId(windowIdString)
-
-        switch result {
-        case let .failure(error):
-            throw error
-        case let .success((windowInfo, _)):
-            var window = windowInfo
-
-            switch action {
-            case .focus:
-                window.bringToFront()
-            case .minimize:
-                window.toggleMinimize()
-            case .close:
-                window.close()
-            case .maximize:
-                window.zoom()
-            case .hide:
-                window.toggleHidden()
-            case .fullscreen:
-                window.toggleFullScreen()
-            case .center:
-                window.centerWindow()
-            }
+    /// Maps AppleScript command names to WindowAction
+    static func actionFromCommandName(_ commandName: String) -> WindowAction? {
+        switch commandName {
+        case "minimize window": .minimize
+        case "close window": .close
+        case "maximize window": .maximize
+        case "hide window": .hide
+        case "toggle fullscreen": .toggleFullScreen
+        case "center window": .center
+        default: nil
         }
     }
 
-    static func positionWindow(_ windowIdString: String, position: WindowPosition) throws {
-        let result = resolveWindowId(windowIdString)
+    static func performWindowAction(_ action: WindowAction, windowIdString: String) throws {
+        let windowInfo = try resolveWindowId(windowIdString).get().0
+        _ = action.perform(on: windowInfo)
+    }
 
-        switch result {
-        case let .failure(error):
-            throw error
-        case let .success((windowInfo, _)):
-            switch position {
-            case .left:
-                windowInfo.fillLeftHalf()
-            case .right:
-                windowInfo.fillRightHalf()
-            case .top:
-                windowInfo.fillTopHalf()
-            case .bottom:
-                windowInfo.fillBottomHalf()
-            case .topLeft:
-                windowInfo.fillTopLeftQuarter()
-            case .topRight:
-                windowInfo.fillTopRightQuarter()
-            case .bottomLeft:
-                windowInfo.fillBottomLeftQuarter()
-            case .bottomRight:
-                windowInfo.fillBottomRightQuarter()
-            }
+    static func focusWindow(_ windowIdString: String) throws {
+        var windowInfo = try resolveWindowId(windowIdString).get().0
+        windowInfo.bringToFront()
+    }
+
+    static func positionWindow(_ windowIdString: String, positionString: String) throws {
+        guard let action = parsePositionAction(positionString) else {
+            throw CommandError.invalidPosition(positionString)
         }
+        let windowInfo = try resolveWindowId(windowIdString).get().0
+        _ = action.perform(on: windowInfo)
     }
 }
 
@@ -507,28 +483,15 @@ class WindowActionCommand: NSScriptCommand {
             return "error: Window ID required"
         }
 
-        let action: DockDoorCommands.WindowActionType
-        switch commandDescription.commandName {
-        case "focus window":
-            action = .focus
-        case "minimize window":
-            action = .minimize
-        case "close window":
-            action = .close
-        case "maximize window":
-            action = .maximize
-        case "hide window":
-            action = .hide
-        case "toggle fullscreen":
-            action = .fullscreen
-        case "center window":
-            action = .center
-        default:
-            return "error: Unknown action: \(String(describing: commandDescription.commandName))"
-        }
-
         do {
-            try DockDoorCommands.performWindowAction(action, windowIdString: windowId)
+            // Focus is handled separately since it's not in WindowAction
+            if commandDescription.commandName == "focus window" {
+                try DockDoorCommands.focusWindow(windowId)
+            } else if let action = DockDoorCommands.actionFromCommandName(commandDescription.commandName) {
+                try DockDoorCommands.performWindowAction(action, windowIdString: windowId)
+            } else {
+                return "error: Unknown action: \(String(describing: commandDescription.commandName))"
+            }
             return "ok"
         } catch {
             return "error: \(error.localizedDescription)"
@@ -543,17 +506,62 @@ class PositionWindowCommand: NSScriptCommand {
             return "error: Window ID required"
         }
 
-        guard let positionString = evaluatedArguments?["position"] as? String,
-              let position = DockDoorCommands.WindowPosition(rawValue: positionString)
-        else {
+        guard let positionString = evaluatedArguments?["position"] as? String else {
             return "error: Position required. Use: left, right, top, bottom, top-left, top-right, bottom-left, bottom-right"
         }
 
         do {
-            try DockDoorCommands.positionWindow(windowId, position: position)
+            try DockDoorCommands.positionWindow(windowId, positionString: positionString)
             return "ok"
         } catch {
             return "error: \(error.localizedDescription)"
         }
+    }
+}
+
+@objc(GetHelpCommand)
+class GetHelpCommand: NSScriptCommand {
+    override func performDefaultImplementation() -> Any? {
+        DockDoorCommands.getHelp()
+    }
+}
+
+// MARK: - WindowInfo JSON Extension
+
+private let iso8601Formatter: ISO8601DateFormatter = {
+    let formatter = ISO8601DateFormatter()
+    formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+    return formatter
+}()
+
+extension WindowInfo {
+    /// Convert to JSON dictionary for script commands
+    func toJSON(index: Int? = nil, appIndex: Int? = nil) -> [String: Any] {
+        var dict: [String: Any] = [
+            "windowId": UInt32(id),
+            "windowName": windowName as Any,
+            "appName": app.localizedName ?? "Unknown",
+            "bundleId": app.bundleIdentifier as Any,
+            "pid": app.processIdentifier,
+        ]
+
+        // Full details only when index is provided (list windows)
+        if let index {
+            dict["index"] = index
+            dict["appIndex"] = appIndex ?? 0
+            dict["frame"] = [
+                "x": frame.origin.x,
+                "y": frame.origin.y,
+                "width": frame.size.width,
+                "height": frame.size.height,
+            ]
+            dict["spaceId"] = spaceID as Any
+            dict["isMinimized"] = isMinimized
+            dict["isHidden"] = isHidden
+            dict["createdAt"] = iso8601Formatter.string(from: creationTime)
+            dict["lastUsedAt"] = iso8601Formatter.string(from: lastAccessedTime)
+        }
+
+        return dict
     }
 }

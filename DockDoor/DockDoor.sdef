@@ -119,6 +119,13 @@
             <result type="text" description="Success or error message."/>
         </command>
 
+        <!-- Help Command -->
+
+        <command name="get help" code="DKDRhlpc" description="Get help and list all available commands.">
+            <cocoa class="GetHelpCommand"/>
+            <result type="text" description="Help text listing all available commands and their usage."/>
+        </command>
+
     </suite>
 
 </dictionary>
