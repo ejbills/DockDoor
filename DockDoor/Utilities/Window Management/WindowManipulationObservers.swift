@@ -1,15 +1,15 @@
-import AppKit
 import ApplicationServices
 import Cocoa
 import Defaults
-import Foundation
 
-private var windowCreationWorkItem: DispatchWorkItem?
-private let windowCreationDebounceInterval: TimeInterval = 1
-
-private let windowProcessingDebounceInterval: TimeInterval = Defaults[.windowProcessingDebounceInterval]
+// MARK: - Global State
 
 private weak var activeWindowManipulationObserversInstance: WindowManipulationObservers?
+private var pendingNotifications: [String: DispatchWorkItem] = [:]
+private var windowCreationWorkItem: DispatchWorkItem?
+
+private let windowCreationDebounceInterval: TimeInterval = 1
+private let windowProcessingDebounceInterval: TimeInterval = Defaults[.windowProcessingDebounceInterval]
 
 class WindowManipulationObservers {
     private let previewCoordinator: SharedPreviewWindowCoordinator
@@ -119,9 +119,8 @@ class WindowManipulationObservers {
             dockObserver.currentClickedAppPID = nil
         }
 
-        // Get the focused window when app becomes active (this is the window user clicked on)
         let appAX = AXUIElementCreateApplication(app.processIdentifier)
-        doAfter(0.3) { // wait for space switching animation to complete
+        doAfter(0.3) { // wait for space switching animation
             if let focusedWindow = try? appAX.focusedWindow() {
                 WindowUtil.updateWindowDateTime(element: focusedWindow, app: app)
             }
@@ -250,7 +249,6 @@ class WindowManipulationObservers {
         case kAXTitleChangedNotification:
             handleWindowEvent(element: element, app: app, notification: notificationName, validate: false) { [weak self] windowSet in
                 guard let self else { return }
-                // Only process if the element is actually a window
                 guard let role = try? element.role(), role == kAXWindowRole as String else { return }
                 let windowID = try? element.cgWindowId()
                 update(windowSet: &windowSet, matching: windowID, element: element) { window in
@@ -285,7 +283,6 @@ class WindowManipulationObservers {
                                    validate: Bool = false,
                                    stateAdjustment: ((inout Set<WindowInfo>) -> Void)? = nil)
     {
-        // Don't cancel if the pending work item has a state adjustment (prioritize state writes)
         if cacheUpdateWorkItem?.hasStateAdjustment != true {
             cacheUpdateWorkItem?.workItem.cancel()
         }
@@ -301,7 +298,6 @@ class WindowManipulationObservers {
                     stateAdjustment?(&windowSet)
                 }
             }
-            // Clear when work item completes
             cacheUpdateWorkItem = nil
         }
         cacheUpdateWorkItem = (workItem, hasStateAdjustment)
@@ -335,12 +331,20 @@ class WindowManipulationObservers {
 func axObserverCallback(observer: AXObserver, element: AXUIElement, notificationName: CFString, userData: UnsafeMutableRawPointer?) {
     guard let userData else { return }
     let pid = pid_t(Int(bitPattern: userData))
+    let notification = notificationName as String
+    let key = "\(pid)-\(notification)"
 
-    DispatchQueue.main.async {
+    pendingNotifications[key]?.cancel()
+
+    let workItem = DispatchWorkItem {
+        pendingNotifications.removeValue(forKey: key)
         if let app = NSRunningApplication(processIdentifier: pid),
            let observerInstance = activeWindowManipulationObserversInstance
         {
-            observerInstance.processAXNotification(element: element, notificationName: notificationName as String, app: app, pid: pid)
+            observerInstance.processAXNotification(element: element, notificationName: notification, app: app, pid: pid)
         }
     }
+
+    pendingNotifications[key] = workItem
+    DispatchQueue.main.asyncAfter(deadline: .now() + windowProcessingDebounceInterval, execute: workItem)
 }
