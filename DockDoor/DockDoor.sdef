@@ -119,6 +119,23 @@
             <result type="text" description="Success or error message."/>
         </command>
 
+        <!-- Window Data Commands (with images) -->
+
+        <command name="get window" code="DKDRgtwn" description="Get window info including cached preview image.">
+            <cocoa class="GetWindowCommand"/>
+            <direct-parameter type="text" description="Window ID or 'active' for the frontmost window."/>
+            <result type="text" description="JSON object with windowId, windowName, appName, bundleId, pid, frame, image (base64 PNG), imageWidth, imageHeight, imageCapturedAt."/>
+        </command>
+
+        <command name="get windows" code="DKDRgtws" description="Get all windows including cached preview images.">
+            <cocoa class="GetWindowsCommand"/>
+            <direct-parameter type="text" optional="yes" description="Application name, bundle ID, or PID. If omitted, returns all windows."/>
+            <parameter name="by" code="bytp" type="text" optional="yes" description="How to identify the app: 'name', 'bundle', or 'pid'. Defaults to 'name'.">
+                <cocoa key="identifierType"/>
+            </parameter>
+            <result type="text" description="JSON array of window objects with windowId, windowName, appName, bundleId, pid, frame, image (base64 PNG), imageWidth, imageHeight, imageCapturedAt."/>
+        </command>
+
         <!-- Help Command -->
 
         <command name="get help" code="DKDRhlpc" description="Get help and list all available commands.">

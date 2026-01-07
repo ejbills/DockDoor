@@ -241,6 +241,37 @@ enum DockDoorCommands {
         return try encodeJSON(JSONDictionary(window.toJSON()))
     }
 
+    // MARK: - Window Data Commands (with images)
+
+    /// Returns window info with cached image as base64 PNG
+    static func getWindow(windowIdString: String) throws -> String {
+        let (windowInfo, _) = try resolveWindowId(windowIdString).get()
+        return try encodeJSON(JSONDictionary(windowInfo.toJSON(includeImage: true)))
+    }
+
+    /// Returns all windows with cached images as base64 PNG
+    static func getWindows(appIdentifier: String? = nil, type: AppIdentifierType = .name) throws -> String {
+        var windows = WindowUtil.getAllWindowsOfAllApps()
+
+        if let identifier = appIdentifier, !identifier.isEmpty {
+            guard let app = findApp(identifier: identifier, type: type) else {
+                throw CommandError.appNotFound(identifier)
+            }
+            windows = windows.filter { $0.app.processIdentifier == app.processIdentifier }
+        }
+
+        let sorted = WindowUtil.sortWindowsForSwitcher(windows)
+
+        var appWindowCounts: [pid_t: Int] = [:]
+        let results = sorted.enumerated().map { index, window -> [String: Any] in
+            let appIndex = appWindowCounts[window.app.processIdentifier] ?? 0
+            appWindowCounts[window.app.processIdentifier] = appIndex + 1
+            return window.toJSON(index: index, appIndex: appIndex, includeImage: true)
+        }
+
+        return try encodeJSON(results.map { JSONDictionary($0) })
+    }
+
     /// Wrapper to make [String: Any] Encodable
     private struct JSONDictionary: Encodable {
         let dict: [String: Any]
@@ -526,6 +557,37 @@ class GetHelpCommand: NSScriptCommand {
     }
 }
 
+@objc(GetWindowCommand)
+class GetWindowCommand: NSScriptCommand {
+    override func performDefaultImplementation() -> Any? {
+        guard let windowId = directParameter as? String else {
+            return "error: Window ID required"
+        }
+
+        do {
+            return try DockDoorCommands.getWindow(windowIdString: windowId)
+        } catch {
+            return "error: \(error.localizedDescription)"
+        }
+    }
+}
+
+@objc(GetWindowsCommand)
+class GetWindowsCommand: NSScriptCommand {
+    override func performDefaultImplementation() -> Any? {
+        let appIdentifier = directParameter as? String
+        let identifierType = DockDoorCommands.AppIdentifierType(
+            rawValue: (evaluatedArguments?["identifierType"] as? String ?? "name").lowercased()
+        ) ?? .name
+
+        do {
+            return try DockDoorCommands.getWindows(appIdentifier: appIdentifier, type: identifierType)
+        } catch {
+            return "error: \(error.localizedDescription)"
+        }
+    }
+}
+
 // MARK: - WindowInfo JSON Extension
 
 private let iso8601Formatter: ISO8601DateFormatter = {
@@ -536,30 +598,41 @@ private let iso8601Formatter: ISO8601DateFormatter = {
 
 extension WindowInfo {
     /// Convert to JSON dictionary for script commands
-    func toJSON(index: Int? = nil, appIndex: Int? = nil) -> [String: Any] {
+    func toJSON(index: Int? = nil, appIndex: Int? = nil, includeImage: Bool = false) -> [String: Any] {
         var dict: [String: Any] = [
             "windowId": UInt32(id),
             "windowName": windowName as Any,
             "appName": app.localizedName ?? "Unknown",
             "bundleId": app.bundleIdentifier as Any,
             "pid": app.processIdentifier,
-        ]
-
-        // Full details only when index is provided (list windows)
-        if let index {
-            dict["index"] = index
-            dict["appIndex"] = appIndex ?? 0
-            dict["frame"] = [
+            "frame": [
                 "x": frame.origin.x,
                 "y": frame.origin.y,
                 "width": frame.size.width,
                 "height": frame.size.height,
-            ]
-            dict["spaceId"] = spaceID as Any
-            dict["isMinimized"] = isMinimized
-            dict["isHidden"] = isHidden
-            dict["createdAt"] = iso8601Formatter.string(from: creationTime)
-            dict["lastUsedAt"] = iso8601Formatter.string(from: lastAccessedTime)
+            ],
+            "spaceId": spaceID as Any,
+            "isMinimized": isMinimized,
+            "isHidden": isHidden,
+            "createdAt": iso8601Formatter.string(from: creationTime),
+            "lastUsedAt": iso8601Formatter.string(from: lastAccessedTime),
+        ]
+
+        if let index {
+            dict["index"] = index
+            dict["appIndex"] = appIndex ?? 0
+        }
+
+        if includeImage {
+            dict["imageCapturedAt"] = iso8601Formatter.string(from: imageCapturedTime)
+            if let cgImage = image {
+                let bitmapRep = NSBitmapImageRep(cgImage: cgImage)
+                if let pngData = bitmapRep.representation(using: .png, properties: [:]) {
+                    dict["image"] = pngData.base64EncodedString()
+                    dict["imageWidth"] = cgImage.width
+                    dict["imageHeight"] = cgImage.height
+                }
+            }
         }
 
         return dict
