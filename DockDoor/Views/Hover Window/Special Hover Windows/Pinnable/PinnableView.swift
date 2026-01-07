@@ -51,30 +51,36 @@ struct PinnableViewModifier: ViewModifier {
         let currentlyPinned = SharedPreviewWindowCoordinator.activeInstance?.isPinned(bundleIdentifier: bundleIdentifier, type: pinnableType) ?? false
 
         if currentlyPinned {
-            Button("Unpin") {
+            Button("Unpin from Screen") {
                 let key = "\(bundleIdentifier)-\(pinnableType.rawValue)"
                 SharedPreviewWindowCoordinator.activeInstance?.closePinnedWindow(key: key)
                 SharedPreviewWindowCoordinator.activeInstance?.hideWindow()
             }
         } else {
-            Button("Pin to Screen (Full)") {
-                SharedPreviewWindowCoordinator.activeInstance?.createPinnedWindow(
-                    appName: appName,
-                    bundleIdentifier: bundleIdentifier,
-                    type: pinnableType,
-                    isEmbedded: false
-                )
-                SharedPreviewWindowCoordinator.activeInstance?.hideWindow()
-            }
+            Section("Pin to Screen") {
+                Button {
+                    SharedPreviewWindowCoordinator.activeInstance?.createPinnedWindow(
+                        appName: appName,
+                        bundleIdentifier: bundleIdentifier,
+                        type: pinnableType,
+                        isEmbedded: false
+                    )
+                    SharedPreviewWindowCoordinator.activeInstance?.hideWindow()
+                } label: {
+                    Label("Full Mode", systemImage: "rectangle.expand.vertical")
+                }
 
-            Button("Pin to Screen (Compact)") {
-                SharedPreviewWindowCoordinator.activeInstance?.createPinnedWindow(
-                    appName: appName,
-                    bundleIdentifier: bundleIdentifier,
-                    type: pinnableType,
-                    isEmbedded: true
-                )
-                SharedPreviewWindowCoordinator.activeInstance?.hideWindow()
+                Button {
+                    SharedPreviewWindowCoordinator.activeInstance?.createPinnedWindow(
+                        appName: appName,
+                        bundleIdentifier: bundleIdentifier,
+                        type: pinnableType,
+                        isEmbedded: true
+                    )
+                    SharedPreviewWindowCoordinator.activeInstance?.hideWindow()
+                } label: {
+                    Label("Compact Mode", systemImage: "rectangle.compress.vertical")
+                }
             }
         }
     }
@@ -87,22 +93,39 @@ extension View {
     }
 }
 
-/// View modifier for pinned windows (disables pinning, adds close option)
+/// View modifier for pinned windows with options to switch mode and close
 private struct PinnableDisabledModifier: ViewModifier {
     let key: String
+    let currentType: PinnableViewType
+    let isEmbedded: Bool
 
     func body(content: Content) -> some View {
         content
+            .contentShape(Rectangle())
             .contextMenu {
-                Button("Close") {
+                Button {
+                    SharedPreviewWindowCoordinator.activeInstance?.togglePinnedWindowMode(key: key)
+                } label: {
+                    if isEmbedded {
+                        Label("Switch to Full", systemImage: "rectangle.expand.vertical")
+                    } else {
+                        Label("Switch to Compact", systemImage: "rectangle.compress.vertical")
+                    }
+                }
+
+                Divider()
+
+                Button(role: .destructive) {
                     SharedPreviewWindowCoordinator.activeInstance?.closePinnedWindow(key: key)
+                } label: {
+                    Label("Close", systemImage: "xmark.circle")
                 }
             }
     }
 }
 
 extension View {
-    func pinnableDisabled(key: String) -> some View {
-        modifier(PinnableDisabledModifier(key: key))
+    func pinnableDisabled(key: String, type: PinnableViewType, isEmbedded: Bool) -> some View {
+        modifier(PinnableDisabledModifier(key: key, currentType: type, isEmbedded: isEmbedded))
     }
 }
