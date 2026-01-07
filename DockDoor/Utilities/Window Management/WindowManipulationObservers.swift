@@ -6,7 +6,7 @@ import Defaults
 
 private weak var activeWindowManipulationObserversInstance: WindowManipulationObservers?
 private var pendingNotifications: [String: DispatchWorkItem] = [:]
-private var windowCreationWorkItem: DispatchWorkItem?
+private var pendingTasks: [String: Task<Void, Never>] = [:]
 
 private let windowCreationDebounceInterval: TimeInterval = 1
 private let windowProcessingDebounceInterval: TimeInterval = Defaults[.windowProcessingDebounceInterval]
@@ -182,21 +182,20 @@ class WindowManipulationObservers {
     }
 
     func handleNewWindow(for pid: pid_t) {
-        windowCreationWorkItem?.cancel()
-        let workItem = DispatchWorkItem { [weak self] in
-            guard self != nil else { return }
-            Task {
-                if let app = NSRunningApplication(processIdentifier: pid) {
-                    DebugLogger.log("handleNewWindow", details: "App: \(app.localizedName ?? "Unknown") (PID: \(pid))")
-                    await DebugLogger.measureAsync("updateNewWindowsForApp", details: "PID: \(pid)") {
-                        await WindowUtil.updateNewWindowsForApp(app)
-                    }
+        let taskKey = "windowCreation"
+        pendingTasks[taskKey]?.cancel()
+        pendingTasks[taskKey] = Task {
+            try? await Task.sleep(nanoseconds: UInt64(windowCreationDebounceInterval * 1_000_000_000))
+            guard !Task.isCancelled else { return }
+            defer { pendingTasks.removeValue(forKey: "windowCreation") }
+
+            if let app = NSRunningApplication(processIdentifier: pid) {
+                DebugLogger.log("handleNewWindow", details: "App: \(app.localizedName ?? "Unknown") (PID: \(pid))")
+                await DebugLogger.measureAsync("updateNewWindowsForApp", details: "PID: \(pid)") {
+                    await WindowUtil.updateNewWindowsForApp(app)
                 }
             }
         }
-
-        windowCreationWorkItem = workItem
-        DispatchQueue.main.asyncAfter(deadline: .now() + windowCreationDebounceInterval, execute: workItem)
     }
 
     func processAXNotification(element: AXUIElement, notificationName: String, app: NSRunningApplication, pid: pid_t) {
