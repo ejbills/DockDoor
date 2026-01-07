@@ -31,7 +31,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
 
     private(set) var hasScreenRecordingPermission: Bool = PermissionsChecker.hasScreenRecordingPermission()
 
-    var pinnedWindows: [String: NSWindow] = [:]
+    var pinnedWindows: [String: (window: NSWindow, info: PinnedWindowInfo)] = [:]
 
     init() {
         let styleMask: NSWindow.StyleMask = [.nonactivatingPanel, .fullSizeContentView, .borderless]

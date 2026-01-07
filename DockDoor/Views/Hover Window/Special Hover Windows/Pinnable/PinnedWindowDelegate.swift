@@ -1,5 +1,15 @@
 import SwiftUI
 
+// MARK: - Pinned Window Info
+
+/// Stores metadata about a pinned window for later modification
+struct PinnedWindowInfo {
+    let appName: String
+    let bundleIdentifier: String
+    var type: PinnableViewType
+    var isEmbedded: Bool
+}
+
 // MARK: - Pinning Extension for SharedPreviewWindowCoordinator
 
 extension SharedPreviewWindowCoordinator {
@@ -16,11 +26,10 @@ extension SharedPreviewWindowCoordinator {
 
     /// Create a pinned window for a specific view type
     @MainActor
-    func createPinnedWindow(appName: String, bundleIdentifier: String, type: PinnableViewType, isEmbedded: Bool = false) {
+    func createPinnedWindow(appName: String, bundleIdentifier: String, type: PinnableViewType, isEmbedded: Bool = false, preservePosition: CGPoint? = nil) {
         let key = "\(bundleIdentifier)-\(type.rawValue)"
 
         if pinnedWindows[key] != nil {
-            print("⚠️ Pinned window already exists for: \(key)")
             return
         }
 
@@ -54,7 +63,7 @@ extension SharedPreviewWindowCoordinator {
                     isEmbeddedMode: isEmbedded,
                     isPinnedMode: true
                 )
-                .pinnableDisabled(key: key)
+                .pinnableDisabled(key: key, type: type, isEmbedded: isEmbedded)
             )
         case .calendar:
             AnyView(
@@ -67,52 +76,80 @@ extension SharedPreviewWindowCoordinator {
                     isEmbeddedMode: isEmbedded,
                     isPinnedMode: true
                 )
-                .pinnableDisabled(key: key)
+                .pinnableDisabled(key: key, type: type, isEmbedded: isEmbedded)
             )
         }
 
         let hostingView = NSHostingView(rootView: contentView)
         window.contentView = hostingView
 
-        // Let the view size itself, then fit window to content
         let fittingSize = hostingView.fittingSize
 
-        // Position with cascade for multiple windows
-        let screenFrame = NSScreen.main?.visibleFrame ?? NSRect(x: 0, y: 0, width: 1000, height: 800)
-
-        let windowFrame = NSRect(
-            x: screenFrame.midX - fittingSize.width / 2,
-            y: screenFrame.midY - fittingSize.height / 2,
-            width: fittingSize.width,
-            height: fittingSize.height
-        )
+        let windowFrame: NSRect
+        if let position = preservePosition {
+            windowFrame = NSRect(
+                x: position.x,
+                y: position.y,
+                width: fittingSize.width,
+                height: fittingSize.height
+            )
+        } else {
+            let screenFrame = NSScreen.main?.visibleFrame ?? NSRect(x: 0, y: 0, width: 1000, height: 800)
+            windowFrame = NSRect(
+                x: screenFrame.midX - fittingSize.width / 2,
+                y: screenFrame.midY - fittingSize.height / 2,
+                width: fittingSize.width,
+                height: fittingSize.height
+            )
+        }
 
         window.setFrame(windowFrame, display: true)
 
-        // Set up delegate for cleanup
         let delegate = PinnedWindowDelegate(coordinator: self, key: key)
         window.delegate = delegate
 
-        // Store and show
-        pinnedWindows[key] = window
+        let info = PinnedWindowInfo(
+            appName: appName,
+            bundleIdentifier: bundleIdentifier,
+            type: type,
+            isEmbedded: isEmbedded
+        )
+        pinnedWindows[key] = (window: window, info: info)
         window.makeKeyAndOrderFront(nil)
+    }
 
-        print("✅ Created pinned window: \(key) - Embedded: \(isEmbedded)")
+    /// Toggle between full and compact mode for a pinned window
+    @MainActor
+    func togglePinnedWindowMode(key: String) {
+        guard let entry = pinnedWindows[key] else { return }
+
+        let currentPosition = entry.window.frame.origin
+        let info = entry.info
+
+        pinnedWindows.removeValue(forKey: key)
+        entry.window.close()
+
+        createPinnedWindow(
+            appName: info.appName,
+            bundleIdentifier: info.bundleIdentifier,
+            type: info.type,
+            isEmbedded: !info.isEmbedded,
+            preservePosition: currentPosition
+        )
     }
 
     /// Close a specific pinned window
     @MainActor
     func closePinnedWindow(key: String) {
-        if let window = pinnedWindows[key] {
-            window.close()
-            pinnedWindows.removeValue(forKey: key)
+        if let entry = pinnedWindows.removeValue(forKey: key) {
+            entry.window.close()
         }
     }
 
     /// Close all pinned windows
     func closeAllPinnedWindows() {
-        for window in pinnedWindows.values {
-            window.close()
+        for entry in pinnedWindows.values {
+            entry.window.close()
         }
         pinnedWindows.removeAll()
     }
