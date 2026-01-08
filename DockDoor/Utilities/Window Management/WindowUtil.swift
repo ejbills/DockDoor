@@ -568,19 +568,15 @@ extension WindowUtil {
             do {
                 // Fetch SCK windows (visible windows only)
                 let content = try await SCShareableContent.excludingDesktopWindows(true, onScreenWindowsOnly: true)
-                let group = LimitedTaskGroup<Void>(maxConcurrentTasks: 4)
 
                 // Build set of SCK window IDs
-                sckWindowIDs = Set(content.windows.filter {
-                    $0.owningApplication?.processID == app.processIdentifier
-                }.map(\.windowID))
+                let appWindows = content.windows.filter { $0.owningApplication?.processID == app.processIdentifier }
+                sckWindowIDs = Set(appWindows.map(\.windowID))
 
-                // Process SCK windows
-                for window in content.windows where window.owningApplication?.processID == app.processIdentifier {
-                    await group.addTask { try await captureAndCacheWindowInfo(window: window, app: app) }
+                // Process SCK windows with limited concurrency
+                await LimitedConcurrency.forEachNonThrowing(appWindows, maxConcurrent: 4) { window in
+                    try await captureAndCacheWindowInfo(window: window, app: app)
                 }
-
-                _ = try await group.waitForAll()
             } catch {
                 // Screen recording permission not granted - fall back to AX-only discovery
             }
@@ -622,20 +618,15 @@ extension WindowUtil {
         let axWindows = AXUIElement.allWindows(pid, appElement: appAX)
         guard !axWindows.isEmpty else { return 0 }
 
-        let group = LimitedTaskGroup<Void>(maxConcurrentTasks: 4)
-
-        for axWin in axWindows {
-            await group.addTask {
-                try? await captureAndCacheAXWindowInfo(
-                    axWindow: axWin,
-                    appAxElement: appAX,
-                    app: app,
-                    excludeWindowIDs: excludeWindowIDs
-                )
-            }
+        // Process AX windows with limited concurrency
+        await LimitedConcurrency.forEachNonThrowing(axWindows, maxConcurrent: 4) { axWin in
+            try await captureAndCacheAXWindowInfo(
+                axWindow: axWin,
+                appAxElement: appAX,
+                app: app,
+                excludeWindowIDs: excludeWindowIDs
+            )
         }
-
-        _ = try? await group.waitForAll()
 
         return axWindows.count
     }
@@ -644,21 +635,16 @@ extension WindowUtil {
         if hasScreenRecordingPermission() {
             do {
                 let content = try await SCShareableContent.excludingDesktopWindows(true, onScreenWindowsOnly: false)
-                let group = LimitedTaskGroup<Void>(maxConcurrentTasks: 4)
 
                 let appWindows = content.windows.filter { window in
                     guard let scApp = window.owningApplication else { return false }
                     return scApp.processID == app.processIdentifier
                 }
 
-                for window in appWindows {
-                    await group.addTask {
-                        try? await captureAndCacheWindowInfo(window: window, app: app)
-                    }
+                // Process windows with limited concurrency
+                await LimitedConcurrency.forEachNonThrowing(appWindows, maxConcurrent: 4) { window in
+                    try await captureAndCacheWindowInfo(window: window, app: app)
                 }
-
-                _ = try await group.waitForAll()
-
             } catch {
                 print("Error updating windows for \(app.localizedName ?? "unknown app"): \(error)")
             }
@@ -684,22 +670,25 @@ extension WindowUtil {
         if hasScreenRecordingPermission() {
             do {
                 let content = try await SCShareableContent.excludingDesktopWindows(true, onScreenWindowsOnly: false)
-                let group = LimitedTaskGroup<Void>(maxConcurrentTasks: 4)
 
-                for window in content.windows {
+                // Filter and pair windows with their apps
+                let windowAppPairs: [(window: SCWindow, app: NSRunningApplication)] = content.windows.compactMap { window in
                     guard let scApp = window.owningApplication,
-                          !filteredBundleIdentifiers.contains(scApp.bundleIdentifier)
-                    else { continue }
-
-                    if let nsApp = NSRunningApplication(processIdentifier: scApp.processID) {
-                        processedPIDs.insert(nsApp.processIdentifier)
-                        await group.addTask {
-                            try? await captureAndCacheWindowInfo(window: window, app: nsApp)
-                        }
-                    }
+                          !filteredBundleIdentifiers.contains(scApp.bundleIdentifier),
+                          let nsApp = NSRunningApplication(processIdentifier: scApp.processID)
+                    else { return nil }
+                    return (window, nsApp)
                 }
-                _ = try await group.waitForAll()
 
+                // Track processed PIDs
+                for pair in windowAppPairs {
+                    processedPIDs.insert(pair.app.processIdentifier)
+                }
+
+                // Process windows with limited concurrency
+                await LimitedConcurrency.forEachNonThrowing(windowAppPairs, maxConcurrent: 4) { pair in
+                    try await captureAndCacheWindowInfo(window: pair.window, app: pair.app)
+                }
             } catch {
                 print("Error updating windows: \(error)")
             }
@@ -733,26 +722,24 @@ extension WindowUtil {
         let windows = desktopSpaceWindowCacheManager.readCache(pid: pid)
         guard !windows.isEmpty else { return }
 
-        let group = LimitedTaskGroup<Void>(maxConcurrentTasks: 4)
-
-        for window in windows where window.scWindow == nil {
-            // Skip invalid AX elements
+        // Filter to AX-only windows with valid elements, removing invalid ones from cache
+        let validWindows = windows.filter { window in
+            guard window.scWindow == nil else { return false }
             if !isValidElement(window.axElement) {
                 desktopSpaceWindowCacheManager.removeFromCache(pid: pid, windowId: window.id)
-                continue
+                return false
             }
-
-            await group.addTask {
-                if let image = try? await captureWindowImage(windowID: window.id, pid: pid, windowTitle: window.windowName) {
-                    var updated = window
-                    updated.image = image
-                    updated.spaceID = window.id.cgsSpaces().first.map { Int($0) }
-                    updateDesktopSpaceWindowCache(with: updated)
-                }
-            }
+            return true
         }
 
-        _ = try? await group.waitForAll()
+        // Process valid windows with limited concurrency
+        await LimitedConcurrency.forEachNonThrowing(Array(validWindows), maxConcurrent: 4) { window in
+            let image = try await captureWindowImage(windowID: window.id, pid: pid, windowTitle: window.windowName)
+            var updated = window
+            updated.image = image
+            updated.spaceID = window.id.cgsSpaces().first.map { Int($0) }
+            updateDesktopSpaceWindowCache(with: updated)
+        }
     }
 
     static func captureAndCacheWindowInfo(window: SCWindow, app: NSRunningApplication) async throws {
