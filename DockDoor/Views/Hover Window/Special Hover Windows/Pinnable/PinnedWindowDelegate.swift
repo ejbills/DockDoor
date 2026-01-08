@@ -50,6 +50,7 @@ extension SharedPreviewWindowCoordinator {
         window.hidesOnDeactivate = false
         window.becomesKeyOnlyIfNeeded = true
         window.isMovableByWindowBackground = true
+        window.animationBehavior = .none
 
         let contentView = switch type {
         case .media:

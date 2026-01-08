@@ -59,6 +59,7 @@ class SearchWindow: NSPanel, NSTextFieldDelegate {
         backgroundColor = .clear
         hasShadow = true
         collectionBehavior = [.canJoinAllSpaces, .transient, .fullScreenAuxiliary]
+        animationBehavior = .none
     }
 
     private func setupSearchField() {

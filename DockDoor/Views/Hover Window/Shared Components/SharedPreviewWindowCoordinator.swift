@@ -57,6 +57,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         collectionBehavior = [.canJoinAllSpaces, .transient, .fullScreenAuxiliary]
         hidesOnDeactivate = false
         becomesKeyOnlyIfNeeded = true
+        animationBehavior = .none
     }
 
     private func setupSearchWindow() {
@@ -268,6 +269,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
             fullPreviewWindow?.collectionBehavior = [.canJoinAllSpaces, .transient, .fullScreenAuxiliary]
             fullPreviewWindow?.hidesOnDeactivate = false
             fullPreviewWindow?.becomesKeyOnlyIfNeeded = true
+            fullPreviewWindow?.animationBehavior = .none
         }
 
         let windowSize = (try? windowInfo.axElement.size()) ?? CGSize(width: screen.frame.width, height: screen.frame.height)

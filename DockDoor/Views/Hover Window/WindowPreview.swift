@@ -221,7 +221,7 @@ struct WindowPreview: View {
                     .transition(.opacity)
             }
         }
-        .animation(.easeInOut(duration: 0.15), value: inactive)
+        .animation(showAnimations ? .easeInOut(duration: 0.15) : nil, value: inactive)
         .clipShape(uniformCardRadius ? AnyShape(RoundedRectangle(cornerRadius: 12, style: .continuous)) : AnyShape(Rectangle()))
         .dynamicWindowFrame(
             allowDynamicSizing: allowDynamicImageSizing,

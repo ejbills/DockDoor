@@ -39,6 +39,7 @@ final class DragPreviewCoordinator {
         previewWindow.isOpaque = false
         previewWindow.hasShadow = true
         previewWindow.level = .popUpMenu
+        previewWindow.animationBehavior = .none
 
         let imageView = NSImageView(frame: NSRect(origin: .zero, size: scaledFrame.size))
         imageView.image = NSImage(cgImage: image, size: scaledFrame.size)
