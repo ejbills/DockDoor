@@ -89,15 +89,17 @@ func findCGEntry(for windowID: CGWindowID, in candidates: [[String: AnyObject]])
 let AXMinWindowSize: CGSize = .init(width: 100, height: 100)
 
 func isValidAXWindowCandidate(_ axWindow: AXUIElement) -> Bool {
-    if let role = try? axWindow.role(), role != kAXWindowRole { return false }
-    if let subrole = try? axWindow.subrole(),
-       ![kAXStandardWindowSubrole, kAXDialogSubrole].contains(subrole)
-    { return false }
-    if let s = try? axWindow.size(), let p = try? axWindow.position() {
-        if s == .zero || s.width < AXMinWindowSize.width || s.height < AXMinWindowSize.height { return false }
-        if !p.x.isFinite || !p.y.isFinite { return false }
+    DebugLogger.measureSlow("isValidAXWindowCandidate", thresholdMs: 50) {
+        if let role = try? axWindow.role(), role != kAXWindowRole { return false }
+        if let subrole = try? axWindow.subrole(),
+           ![kAXStandardWindowSubrole, kAXDialogSubrole].contains(subrole)
+        { return false }
+        if let s = try? axWindow.size(), let p = try? axWindow.position() {
+            if s == .zero || s.width < AXMinWindowSize.width || s.height < AXMinWindowSize.height { return false }
+            if !p.x.isFinite || !p.y.isFinite { return false }
+        }
+        return true
     }
-    return true
 }
 
 func isAtLeastNormalLevel(_ id: CGWindowID) -> Bool {

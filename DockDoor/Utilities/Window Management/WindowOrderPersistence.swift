@@ -22,11 +22,7 @@ enum WindowOrderPersistence {
             DebugLogger.log("WindowOrderPersistence", details: "Loaded \(entries.count) persisted entries")
         }
         let targetKey = "\(bundleIdentifier)|\(windowTitle ?? "")"
-        let result = cache?[targetKey]
-        if result != nil {
-            DebugLogger.log("WindowOrderPersistence", details: "Restored: \(targetKey)")
-        }
-        return result
+        return cache?[targetKey]
     }
 
     static func saveOrder(from allWindows: [WindowInfo]) {
