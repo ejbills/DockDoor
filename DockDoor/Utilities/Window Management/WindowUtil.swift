@@ -217,6 +217,27 @@ enum WindowAction: String, Hashable, CaseIterable, Defaults.Serializable {
 
 enum WindowUtil {
     private static let desktopSpaceWindowCacheManager = SpaceWindowCacheManager()
+    private static let scContentTimeout: UInt64 = 5_000_000_000
+
+    /// Fetches SCShareableContent with a timeout to prevent indefinite hangs
+    private static func fetchSCContentWithTimeout() async -> SCShareableContent? {
+        let result = await withTaskGroup(of: SCShareableContent?.self) { group in
+            group.addTask {
+                try? await SCShareableContent.excludingDesktopWindows(true, onScreenWindowsOnly: false)
+            }
+            group.addTask {
+                try? await Task.sleep(nanoseconds: scContentTimeout)
+                return nil
+            }
+            let result = await group.next() ?? nil
+            group.cancelAll()
+            return result
+        }
+        if result == nil {
+            DebugLogger.log("fetchSCContentWithTimeout", details: "SCShareableContent timed out, falling back to AX")
+        }
+        return result
+    }
 
     static func hasScreenRecordingPermission() -> Bool {
         PermissionsChecker.hasScreenRecordingPermission()
@@ -641,27 +662,21 @@ extension WindowUtil {
     }
 
     static func updateNewWindowsForApp(_ app: NSRunningApplication) async {
-        if hasScreenRecordingPermission() {
-            do {
-                let content = try await SCShareableContent.excludingDesktopWindows(true, onScreenWindowsOnly: false)
-                let group = LimitedTaskGroup<Void>(maxConcurrentTasks: 4)
+        if hasScreenRecordingPermission(), let content = await fetchSCContentWithTimeout() {
+            let group = LimitedTaskGroup<Void>(maxConcurrentTasks: 4)
 
-                let appWindows = content.windows.filter { window in
-                    guard let scApp = window.owningApplication else { return false }
-                    return scApp.processID == app.processIdentifier
-                }
-
-                for window in appWindows {
-                    await group.addTask {
-                        try? await captureAndCacheWindowInfo(window: window, app: app)
-                    }
-                }
-
-                _ = try await group.waitForAll()
-
-            } catch {
-                print("Error updating windows for \(app.localizedName ?? "unknown app"): \(error)")
+            let appWindows = content.windows.filter { window in
+                guard let scApp = window.owningApplication else { return false }
+                return scApp.processID == app.processIdentifier
             }
+
+            for window in appWindows {
+                await group.addTask {
+                    try? await captureAndCacheWindowInfo(window: window, app: app)
+                }
+            }
+
+            _ = try? await group.waitForAll()
         }
 
         // AX fallback: discover windows that SCK didn't report (e.g., some Adobe apps)
@@ -680,29 +695,23 @@ extension WindowUtil {
     static func updateAllWindowsInCurrentSpace() async {
         var processedPIDs = Set<pid_t>()
 
-        // SCK block - only runs if permission is granted
-        if hasScreenRecordingPermission() {
-            do {
-                let content = try await SCShareableContent.excludingDesktopWindows(true, onScreenWindowsOnly: false)
-                let group = LimitedTaskGroup<Void>(maxConcurrentTasks: 4)
+        // SCK block - only runs if permission is granted and fetch succeeds within timeout
+        if hasScreenRecordingPermission(), let content = await fetchSCContentWithTimeout() {
+            let group = LimitedTaskGroup<Void>(maxConcurrentTasks: 4)
 
-                for window in content.windows {
-                    guard let scApp = window.owningApplication,
-                          !filteredBundleIdentifiers.contains(scApp.bundleIdentifier)
-                    else { continue }
+            for window in content.windows {
+                guard let scApp = window.owningApplication,
+                      !filteredBundleIdentifiers.contains(scApp.bundleIdentifier)
+                else { continue }
 
-                    if let nsApp = NSRunningApplication(processIdentifier: scApp.processID) {
-                        processedPIDs.insert(nsApp.processIdentifier)
-                        await group.addTask {
-                            try? await captureAndCacheWindowInfo(window: window, app: nsApp)
-                        }
+                if let nsApp = NSRunningApplication(processIdentifier: scApp.processID) {
+                    processedPIDs.insert(nsApp.processIdentifier)
+                    await group.addTask {
+                        try? await captureAndCacheWindowInfo(window: window, app: nsApp)
                     }
                 }
-                _ = try await group.waitForAll()
-
-            } catch {
-                print("Error updating windows: \(error)")
             }
+            _ = try? await group.waitForAll()
         }
 
         // AX fallback - runs unconditionally
