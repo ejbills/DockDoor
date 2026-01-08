@@ -292,7 +292,7 @@ struct WindowPreviewHoverContainer: View {
                     CmdTabFocusFullOverlayView()
                         .transition(.opacity)
                         .allowsHitTesting(false)
-                        .clipShape(RoundedRectangle(cornerRadius: Defaults[.uniformCardRadius] ? 26 : 8, style: .continuous))
+                        .clipShape(RoundedRectangle(cornerRadius : Defaults[.uniformCardRadius] ? 20 + (20 * Defaults[.globalPaddingMultiplier]): 8, style: .continuous))
                 }
             }
             .overlay {
@@ -361,8 +361,8 @@ struct WindowPreviewHoverContainer: View {
                         hoveringAppIcon = hover
                     }
                     .shadow(radius: 2)
-                    .padding(.top, 10)
-                    .padding(.horizontal)
+                    .globalPadding(.top, 10)
+                    .globalPadding(.horizontal, 16)
 
                 case .shadowed:
                     HStack(spacing: 2) {

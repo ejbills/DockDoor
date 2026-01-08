@@ -27,7 +27,7 @@ struct DockStyleModifier: ViewModifier {
 }
 
 extension View {
-    func dockStyle(cornerRadius: Double = Defaults[.uniformCardRadius] ? 26 : 8, highlightColor: Color? = nil, backgroundOpacity: CGFloat = 1.0, frostedTranslucentLayer: Bool = false, variant: Int? = 19) -> some View {
+    func dockStyle(cornerRadius: Double = Defaults[.uniformCardRadius] ? 20 + (20 * Defaults[.globalPaddingMultiplier]) : 8, highlightColor: Color? = nil, backgroundOpacity: CGFloat = 1.0, frostedTranslucentLayer: Bool = false, variant: Int? = 19) -> some View {
         modifier(DockStyleModifier(cornerRadius: cornerRadius, highlightColor: highlightColor, backgroundOpacity: backgroundOpacity, frostedTranslucentLayer: frostedTranslucentLayer, variant: variant))
     }
 
