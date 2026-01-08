@@ -654,19 +654,13 @@ extension WindowUtil {
 
     static func updateNewWindowsForApp(_ app: NSRunningApplication) async {
         if hasScreenRecordingPermission(), let content = await fetchSCContentWithTimeout() {
-            let group = LimitedTaskGroup<Void>(maxConcurrentTasks: 4)
-
             let appWindows = content.windows.filter { window in
                 guard let scApp = window.owningApplication else { return false }
                 return scApp.processID == app.processIdentifier
             }
 
-                // Process windows with limited concurrency
-                await LimitedConcurrency.forEachNonThrowing(appWindows, maxConcurrent: 4) { window in
-                    try await captureAndCacheWindowInfo(window: window, app: app)
-                }
-            } catch {
-                print("Error updating windows for \(app.localizedName ?? "unknown app"): \(error)")
+            await LimitedConcurrency.forEachNonThrowing(appWindows, maxConcurrent: 4) { window in
+                try await captureAndCacheWindowInfo(window: window, app: app)
             }
         }
 
@@ -688,27 +682,23 @@ extension WindowUtil {
 
         // SCK block - only runs if permission is granted and fetch succeeds within timeout
         if hasScreenRecordingPermission(), let content = await fetchSCContentWithTimeout() {
+            // Filter and pair windows with their apps
+            let windowAppPairs: [(window: SCWindow, app: NSRunningApplication)] = content.windows.compactMap { window in
+                guard let scApp = window.owningApplication,
+                      !filteredBundleIdentifiers.contains(scApp.bundleIdentifier),
+                      let nsApp = NSRunningApplication(processIdentifier: scApp.processID)
+                else { return nil }
+                return (window, nsApp)
+            }
 
-                // Filter and pair windows with their apps
-                let windowAppPairs: [(window: SCWindow, app: NSRunningApplication)] = content.windows.compactMap { window in
-                    guard let scApp = window.owningApplication,
-                          !filteredBundleIdentifiers.contains(scApp.bundleIdentifier),
-                          let nsApp = NSRunningApplication(processIdentifier: scApp.processID)
-                    else { return nil }
-                    return (window, nsApp)
-                }
+            // Track processed PIDs
+            for pair in windowAppPairs {
+                processedPIDs.insert(pair.app.processIdentifier)
+            }
 
-                // Track processed PIDs
-                for pair in windowAppPairs {
-                    processedPIDs.insert(pair.app.processIdentifier)
-                }
-
-                // Process windows with limited concurrency
-                await LimitedConcurrency.forEachNonThrowing(windowAppPairs, maxConcurrent: 4) { pair in
-                    try await captureAndCacheWindowInfo(window: pair.window, app: pair.app)
-                }
-            } catch {
-                print("Error updating windows: \(error)")
+            // Process windows with limited concurrency
+            await LimitedConcurrency.forEachNonThrowing(windowAppPairs, maxConcurrent: 4) { pair in
+                try await captureAndCacheWindowInfo(window: pair.window, app: pair.app)
             }
         }
 
