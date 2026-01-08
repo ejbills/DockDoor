@@ -347,21 +347,21 @@ struct AppearanceSettingsView: View {
                                     .foregroundColor(.secondary)
 
                                 compactThresholdSlider(
-                                    title: "Window Switcher",
+                                    title: String(localized: "Window Switcher", comment: "Compact mode threshold section title"),
                                     value: $windowSwitcherCompactThreshold,
-                                    description: "Switch to compact list in window switcher when window count reaches threshold."
+                                    description: String(localized: "Switch to compact list in window switcher when window count reaches threshold.", comment: "Compact mode threshold description")
                                 )
 
                                 compactThresholdSlider(
-                                    title: "Dock Previews",
+                                    title: String(localized: "Dock Previews", comment: "Compact mode threshold section title"),
                                     value: $dockPreviewCompactThreshold,
-                                    description: "Switch to compact list in dock previews when window count reaches threshold."
+                                    description: String(localized: "Switch to compact list in dock previews when window count reaches threshold.", comment: "Compact mode threshold description")
                                 )
 
                                 compactThresholdSlider(
-                                    title: "Cmd+Tab Enhancement",
+                                    title: String(localized: "Cmd+Tab Enhancement", comment: "Compact mode threshold section title"),
                                     value: $cmdTabCompactThreshold,
-                                    description: "Switch to compact list in Cmd+Tab overlay when window count reaches threshold."
+                                    description: String(localized: "Switch to compact list in Cmd+Tab overlay when window count reaches threshold.", comment: "Compact mode threshold description")
                                 )
                             }
 
@@ -932,7 +932,7 @@ struct AppearanceSettingsView: View {
             HStack {
                 Text(title)
                 Spacer()
-                Text(value.wrappedValue == 0 ? "Disabled" : "\(value.wrappedValue)+ windows")
+                Text(value.wrappedValue == 0 ? String(localized: "Disabled", comment: "Compact mode threshold disabled state") : "\(value.wrappedValue)+ windows")
                     .foregroundColor(.secondary)
                     .monospacedDigit()
             }

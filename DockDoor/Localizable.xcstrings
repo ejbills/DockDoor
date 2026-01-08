@@ -2112,6 +2112,7 @@
       }
     },
     "%lld+ windows" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -20201,6 +20202,9 @@
         }
       }
     },
+    "Away from Dock" : {
+      "comment" : "Gesture direction label"
+    },
     "Background Opacity" : {
       "localizations" : {
         "af" : {
@@ -21916,6 +21920,7 @@
       }
     },
     "Calendar" : {
+      "comment" : "Pinnable view type name for calendar widget",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -27622,6 +27627,9 @@
           }
         }
       }
+    },
+    "Cmd+Tab Enhancement" : {
+      "comment" : "Compact mode threshold section title"
     },
     "Cmd+Tab Layout" : {
       "localizations" : {
@@ -36382,6 +36390,7 @@
       }
     },
     "Disabled" : {
+      "comment" : "Compact mode threshold disabled state",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -39616,6 +39625,7 @@
       }
     },
     "Dock Previews" : {
+      "comment" : "Compact mode threshold section title",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -70851,6 +70861,9 @@
         }
       }
     },
+    "Media Controls" : {
+      "comment" : "Pinnable view type name for media controls widget"
+    },
     "Medium" : {
       "comment" : "Compact mode item size option",
       "localizations" : {
@@ -79037,6 +79050,9 @@
           }
         }
       }
+    },
+    "Not set" : {
+      "comment" : "Keybind not configured placeholder"
     },
     "Offset position" : {
       "localizations" : {
@@ -118265,6 +118281,12 @@
         }
       }
     },
+    "Swipe away from the dock edge" : {
+      "comment" : "Gesture direction description"
+    },
+    "Swipe Down" : {
+      "comment" : "Gesture direction label"
+    },
     "Swipe on window previews in the dock popup. Direction is relative to dock position — swipe towards the dock (e.g., down when dock is at bottom, left when dock is on left)." : {
       "localizations" : {
         "af" : {
@@ -118454,6 +118476,12 @@
           }
         }
       }
+    },
+    "Swipe toward the dock edge" : {
+      "comment" : "Gesture direction description"
+    },
+    "Swipe Up" : {
+      "comment" : "Gesture direction label"
     },
     "Swipe up or down on window previews in the keyboard-activated window switcher. Only vertical swipes are recognized, unless in compact mode." : {
       "localizations" : {
@@ -118647,6 +118675,15 @@
     },
     "Switch to Compact" : {
 
+    },
+    "Switch to compact list in Cmd+Tab overlay when window count reaches threshold." : {
+      "comment" : "Compact mode threshold description"
+    },
+    "Switch to compact list in dock previews when window count reaches threshold." : {
+      "comment" : "Compact mode threshold description"
+    },
+    "Switch to compact list in window switcher when window count reaches threshold." : {
+      "comment" : "Compact mode threshold description"
     },
     "Switch to Full" : {
 
@@ -123409,6 +123446,9 @@
           }
         }
       }
+    },
+    "Towards Dock" : {
+      "comment" : "Gesture direction label"
     },
     "Traffic Light Buttons" : {
       "localizations" : {
@@ -138654,7 +138694,7 @@
       }
     },
     "Window Switcher" : {
-      "comment" : "Settings tab title",
+      "comment" : "Compact mode threshold section title",
       "localizations" : {
         "af" : {
           "stringUnit" : {

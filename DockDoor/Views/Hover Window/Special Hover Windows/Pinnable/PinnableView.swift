@@ -10,9 +10,9 @@ enum PinnableViewType: String, CaseIterable, Codable {
     var displayName: String {
         switch self {
         case .media:
-            "Media Controls"
+            String(localized: "Media Controls", comment: "Pinnable view type name for media controls widget")
         case .calendar:
-            "Calendar"
+            String(localized: "Calendar", comment: "Pinnable view type name for calendar widget")
         }
     }
 }
