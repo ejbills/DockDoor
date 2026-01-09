@@ -69,9 +69,8 @@ extension AXUIElement {
         try attribute(kAXWindowsAttribute, [AXUIElement].self)
     }
 
-    static func windowsByBruteForce(_ pid: pid_t, maxDuration: TimeInterval = 2.0) -> [AXUIElement] {
+    static func windowsByBruteForce(_ pid: pid_t) -> [AXUIElement] {
         DebugLogger.measureSlow("windowsByBruteForce", thresholdMs: 100, details: "PID: \(pid)") {
-            let startTime = CFAbsoluteTimeGetCurrent()
             var token = Data(count: 20)
             token.replaceSubrange(0 ..< 4, with: withUnsafeBytes(of: pid) { Data($0) })
             token.replaceSubrange(4 ..< 8, with: withUnsafeBytes(of: Int32(0)) { Data($0) })
@@ -79,10 +78,6 @@ extension AXUIElement {
 
             var results: [AXUIElement] = []
             for axId: AXUIElementID in 0 ..< 1000 {
-                if CFAbsoluteTimeGetCurrent() - startTime > maxDuration {
-                    DebugLogger.log("windowsByBruteForce", details: "Stopped early after \(Int(maxDuration))s for PID \(pid), checked \(axId) IDs, found \(results.count) windows")
-                    break
-                }
                 token.replaceSubrange(12 ..< 20, with: withUnsafeBytes(of: axId) { Data($0) })
                 if let el = _AXUIElementCreateWithRemoteToken(token as CFData)?.takeRetainedValue(),
                    let subrole = try? el.subrole(),

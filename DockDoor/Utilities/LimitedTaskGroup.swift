@@ -102,8 +102,10 @@ enum LimitedConcurrency {
             var iterator = items.makeIterator()
 
             for _ in 0 ..< concurrency {
+                guard !Task.isCancelled else { return }
                 if let item = iterator.next() {
                     group.addTask {
+                        guard !Task.isCancelled else { return }
                         do {
                             try await operation(item)
                         } catch {
@@ -114,8 +116,13 @@ enum LimitedConcurrency {
             }
 
             while await group.next() != nil {
+                guard !Task.isCancelled else {
+                    group.cancelAll()
+                    return
+                }
                 if let item = iterator.next() {
                     group.addTask {
+                        guard !Task.isCancelled else { return }
                         do {
                             try await operation(item)
                         } catch {
