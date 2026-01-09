@@ -166,15 +166,10 @@ final class WindowLiveCapture: ObservableObject {
         guard stream == nil else { return }
         guard WindowUtil.hasScreenRecordingPermission() else { return }
 
-        do {
-            let content = try await SCShareableContent.excludingDesktopWindows(true, onScreenWindowsOnly: false)
-            guard let scWindow = content.windows.first(where: { $0.windowID == windowID }) else {
-                return
-            }
-            await startStream(for: scWindow)
-        } catch {
-            DebugLogger.log("LiveWindowCapture: Failed to get shareable content", details: error.localizedDescription)
-        }
+        guard let content = await WindowUtil.getShareableContent(onScreenWindowsOnly: false),
+              let scWindow = content.windows.first(where: { $0.windowID == windowID })
+        else { return }
+        await startStream(for: scWindow)
     }
 
     private func startStream(for window: SCWindow) async {

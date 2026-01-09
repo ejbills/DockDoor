@@ -232,9 +232,14 @@ enum WindowUtil {
             return result
         }
         if result == nil {
-            DebugLogger.log("WindowUtil", details: "Operation timed out after 5 seconds")
+            DebugLogger.log("WindowUtil", details: "Operation timed out after 10 seconds")
         }
         return result
+    }
+
+    /// Fetches SCShareableContent with built-in timeout protection
+    static func getShareableContent(onScreenWindowsOnly: Bool) async -> SCShareableContent? {
+        await withTimeout { try? await SCShareableContent.excludingDesktopWindows(true, onScreenWindowsOnly: onScreenWindowsOnly) }.flatMap { $0 }
     }
 
     static func hasScreenRecordingPermission() -> Bool {
@@ -557,7 +562,7 @@ extension WindowUtil {
         let activeSpaceIDs = currentActiveSpaceIDs()
 
         // Use SCShareableContent to get on-screen window IDs (only if permission is granted)
-        let onScreenWindowIDs: Set<CGWindowID> = if hasScreenRecordingPermission(), let content = try? await SCShareableContent.excludingDesktopWindows(true, onScreenWindowsOnly: true) {
+        let onScreenWindowIDs: Set<CGWindowID> = if hasScreenRecordingPermission(), let content = await getShareableContent(onScreenWindowsOnly: true) {
             Set(content.windows.map(\.windowID))
         } else {
             []
@@ -598,10 +603,7 @@ extension WindowUtil {
 
         // Skip SCK if user has disabled image previews (compact mode only) or screen recording permission not granted
         if !Defaults[.disableImagePreview], hasScreenRecordingPermission() {
-            do {
-                // Fetch SCK windows (visible windows only)
-                let content = try await SCShareableContent.excludingDesktopWindows(true, onScreenWindowsOnly: true)
-
+            if let content = await getShareableContent(onScreenWindowsOnly: true) {
                 // Build set of SCK window IDs
                 let appWindows = content.windows.filter { $0.owningApplication?.processID == app.processIdentifier }
                 sckWindowIDs = Set(appWindows.map(\.windowID))
@@ -610,11 +612,9 @@ extension WindowUtil {
                 let freshCachedIDs = freshCachedWindowIDs(for: app.processIdentifier)
 
                 // Process SCK windows with limited concurrency
-                await LimitedConcurrency.forEachNonThrowing(appWindows, maxConcurrent: 4) { window in
+                await LimitedConcurrency.forEachNonThrowing(appWindows, maxConcurrent: 4, timeout: 10) { window in
                     try await captureAndCacheWindowInfo(window: window, app: app, skipWindowIDs: freshCachedIDs)
                 }
-            } catch {
-                // Screen recording permission not granted - fall back to AX-only discovery
             }
         }
 
@@ -660,7 +660,7 @@ extension WindowUtil {
         let freshCachedIDs = freshCachedWindowIDs(for: pid, from: cachedWindows)
 
         // Process AX windows with limited concurrency
-        await LimitedConcurrency.forEachNonThrowing(axWindows, maxConcurrent: 4) { axWin in
+        await LimitedConcurrency.forEachNonThrowing(axWindows, maxConcurrent: 4, timeout: 10) { axWin in
             try await captureAndCacheAXWindowInfo(
                 axWindow: axWin,
                 appAxElement: appAX,
@@ -676,7 +676,7 @@ extension WindowUtil {
 
     static func updateNewWindowsForApp(_ app: NSRunningApplication) async {
         if hasScreenRecordingPermission() {
-            if let content = await withTimeout({ try? await SCShareableContent.excludingDesktopWindows(true, onScreenWindowsOnly: false) }).flatMap({ $0 }) {
+            if let content = await getShareableContent(onScreenWindowsOnly: false) {
                 let appWindows = content.windows.filter { window in
                     guard let scApp = window.owningApplication else { return false }
                     return scApp.processID == app.processIdentifier
@@ -685,15 +685,15 @@ extension WindowUtil {
                 // Pre-compute fresh cached IDs to avoid repeated cache reads
                 let freshCachedIDs = freshCachedWindowIDs(for: app.processIdentifier)
 
-                await LimitedConcurrency.forEachNonThrowing(appWindows, maxConcurrent: 4) { window in
+                await LimitedConcurrency.forEachNonThrowing(appWindows, maxConcurrent: 4, timeout: 10) { window in
                     try await captureAndCacheWindowInfo(window: window, app: app, skipWindowIDs: freshCachedIDs)
                 }
             }
         }
 
-        // AX fallback with timeout
-        await withTimeout { await discoverNewWindowsViaAXFallback(app: app) }
-        await withTimeout { await refreshAXFallbackWindowImages(for: app.processIdentifier) }
+        // AX fallback
+        await discoverNewWindowsViaAXFallback(app: app)
+        await refreshAXFallbackWindowImages(for: app.processIdentifier)
     }
 
     // MARK: - AX Fallback Discovery
@@ -707,7 +707,7 @@ extension WindowUtil {
         var processedPIDs = Set<pid_t>()
 
         if hasScreenRecordingPermission() {
-            if let content = await withTimeout({ try? await SCShareableContent.excludingDesktopWindows(true, onScreenWindowsOnly: false) }).flatMap({ $0 }) {
+            if let content = await getShareableContent(onScreenWindowsOnly: false) {
                 let windowAppPairs: [(window: SCWindow, app: NSRunningApplication)] = content.windows.compactMap { window in
                     guard let scApp = window.owningApplication,
                           !filteredBundleIdentifiers.contains(scApp.bundleIdentifier),
@@ -729,14 +729,14 @@ extension WindowUtil {
                     return result
                 }()
 
-                await LimitedConcurrency.forEachNonThrowing(windowAppPairs, maxConcurrent: 4) { pair in
+                await LimitedConcurrency.forEachNonThrowing(windowAppPairs, maxConcurrent: 4, timeout: 10) { pair in
                     let skipIDs = freshCachedIDsByPID[pair.app.processIdentifier] ?? []
                     try await captureAndCacheWindowInfo(window: pair.window, app: pair.app, skipWindowIDs: skipIDs)
                 }
             }
         }
 
-        // AX fallback with per-app timeout
+        // AX fallback
         let runningApps = NSWorkspace.shared.runningApplications.filter {
             $0.activationPolicy == .regular &&
                 !filteredBundleIdentifiers.contains($0.bundleIdentifier ?? "") &&
@@ -745,14 +745,14 @@ extension WindowUtil {
 
         for app in runningApps {
             let pid = app.processIdentifier
-            await withTimeout { await discoverNewWindowsViaAXFallback(app: app) }
+            await discoverNewWindowsViaAXFallback(app: app)
             processedPIDs.insert(pid)
         }
 
-        // Purify cache and refresh images with timeout
+        // Purify cache and refresh images
         for pid in processedPIDs {
             _ = await purifyAppCache(with: pid, removeAll: false)
-            await withTimeout { await refreshAXFallbackWindowImages(for: pid) }
+            await refreshAXFallbackWindowImages(for: pid)
         }
     }
 
@@ -778,7 +778,7 @@ extension WindowUtil {
         }
 
         // Process valid windows with limited concurrency
-        await LimitedConcurrency.forEachNonThrowing(validWindows, maxConcurrent: 4) { window in
+        await LimitedConcurrency.forEachNonThrowing(validWindows, maxConcurrent: 4, timeout: 10) { window in
             let image = try await captureWindowImage(windowID: window.id, pid: pid, windowTitle: window.windowName, forceRefresh: true)
             var updated = window
             updated.image = image
