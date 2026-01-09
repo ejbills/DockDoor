@@ -15,16 +15,23 @@ struct MarqueeText: View {
     }
 
     var body: some View {
-        TheMarquee(
-            forcedWidth: maxWidth,
-            secsBeforeLooping: startDelay,
-            speedPtsPerSec: 30,
-            marqueeAlignment: .leading,
-            nonMovingAlignment: .center,
-            spacingBetweenElements: 8,
-            horizontalPadding: 8,
-            fadeLength: 8
-        ) {
+        let showMarquee = textSize.width > maxWidth ?? 0.0
+        if showMarquee {
+            TheMarquee(
+                forcedWidth: maxWidth,
+                secsBeforeLooping: startDelay,
+                speedPtsPerSec: 30,
+                marqueeAlignment: .leading,
+                nonMovingAlignment: .center,
+                spacingBetweenElements: 8,
+                horizontalPadding: 8,
+                fadeLength: 8
+            ) {
+                Text(text)
+                    .lineLimit(1)
+                    .measure($textSize)
+            }
+        } else {
             Text(text)
                 .lineLimit(1)
                 .measure($textSize)
