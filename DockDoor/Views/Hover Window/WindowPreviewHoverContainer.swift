@@ -365,8 +365,8 @@ struct WindowPreviewHoverContainer: View {
                         hoveringAppIcon = hover
                     }
                     .shadow(radius: 2)
-                    .globalPadding(.top, 10)
-                    .globalPadding(.horizontal, 16)
+                    .globalPadding(.top, 12)
+                    .globalPadding(.leading, 20)
 
                 case .shadowed:
                     HStack(spacing: 2) {
