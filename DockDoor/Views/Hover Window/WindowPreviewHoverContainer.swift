@@ -684,7 +684,7 @@ struct WindowPreviewHoverContainer: View {
             guard previewStateCoordinator.shouldScrollToIndex else { return }
 
             if showAnimations {
-                withAnimation(.snappy) {
+                withAnimation(.interpolatingSpring(duration: 0.2)) {
                     scrollProxy.scrollTo("\(appName)-\(newIndex)", anchor: .center)
                 }
             } else {
