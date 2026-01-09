@@ -546,10 +546,7 @@ final class DockObserver {
                 app.hide()
             }
         } else {
-            for window in windowsToMinimize {
-                var mutableWindow = window
-                _ = mutableWindow.toggleMinimize()
-            }
+            WindowUtil.minimizeWindowsAsync(windowsToMinimize)
         }
     }
 

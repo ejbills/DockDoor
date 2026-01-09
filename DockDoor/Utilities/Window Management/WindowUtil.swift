@@ -721,10 +721,13 @@ extension WindowUtil {
                 }
 
                 // Pre-compute fresh cached IDs per app to avoid repeated cache reads
-                var freshCachedIDsByPID: [pid_t: Set<CGWindowID>] = [:]
-                for pid in processedPIDs {
-                    freshCachedIDsByPID[pid] = freshCachedWindowIDs(for: pid)
-                }
+                let freshCachedIDsByPID: [pid_t: Set<CGWindowID>] = {
+                    var result: [pid_t: Set<CGWindowID>] = [:]
+                    for pid in processedPIDs {
+                        result[pid] = freshCachedWindowIDs(for: pid)
+                    }
+                    return result
+                }()
 
                 await LimitedConcurrency.forEachNonThrowing(windowAppPairs, maxConcurrent: 4) { pair in
                     let skipIDs = freshCachedIDsByPID[pair.app.processIdentifier] ?? []
@@ -1167,6 +1170,29 @@ extension WindowUtil {
 // MARK: - Window Actions
 
 extension WindowUtil {
+    /// Minimizes multiple windows concurrently off the main thread to avoid UI blocking.
+    static func minimizeWindowsAsync(_ windows: [WindowInfo]) {
+        guard !windows.isEmpty else { return }
+
+        let windowsToMinimize = windows.filter { !$0.isMinimized }
+        guard !windowsToMinimize.isEmpty else { return }
+
+        for window in windowsToMinimize {
+            updateCachedWindowState(window, isMinimized: true)
+        }
+
+        // Perform AX operations concurrently in background
+        Task.detached(priority: .userInitiated) {
+            await withTaskGroup(of: Void.self) { group in
+                for window in windowsToMinimize {
+                    group.addTask {
+                        try? window.axElement.setAttribute(kAXMinimizedAttribute, true)
+                    }
+                }
+            }
+        }
+    }
+
     static func openNewWindow(app: NSRunningApplication) {
         let source = CGEventSource(stateID: .combinedSessionState)
         let keyDown = CGEvent(keyboardEventSource: source, virtualKey: 0x2D, keyDown: true)

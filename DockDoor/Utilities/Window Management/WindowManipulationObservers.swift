@@ -6,17 +6,32 @@ import Defaults
 
 private weak var activeWindowManipulationObserversInstance: WindowManipulationObservers?
 private var pendingNotifications: [String: DispatchWorkItem] = [:]
-private var pendingTasks: [String: Task<Void, Never>] = [:]
-
-private let windowCreationDebounceInterval: TimeInterval = 1
 private let windowProcessingDebounceInterval: TimeInterval = Defaults[.windowProcessingDebounceInterval]
 
 class WindowManipulationObservers {
     private let previewCoordinator: SharedPreviewWindowCoordinator
 
     private var observers: [pid_t: AXObserver] = [:]
+    private var debouncedTasks: [String: Task<Void, Never>] = [:]
     var cacheUpdateWorkItem: (workItem: DispatchWorkItem, hasStateAdjustment: Bool)?
     var updateDateTimeWorkItem: DispatchWorkItem?
+
+    private func debounce(key: String, delay: TimeInterval = windowProcessingDebounceInterval, operation: @escaping () async -> Void) {
+        debouncedTasks[key]?.cancel()
+        debouncedTasks[key] = Task {
+            do {
+                try await Task.sleep(nanoseconds: UInt64(delay * 1_000_000_000))
+            } catch {
+                DebugLogger.log("debounce", details: "Cancelled during sleep: \(key)")
+                return
+            }
+            guard !Task.isCancelled else {
+                DebugLogger.log("debounce", details: "Cancelled after sleep: \(key)")
+                return
+            }
+            await operation()
+        }
+    }
 
     init(previewCoordinator: SharedPreviewWindowCoordinator) {
         self.previewCoordinator = previewCoordinator
@@ -96,8 +111,7 @@ class WindowManipulationObservers {
 
     @objc private func activeSpaceDidChange(_ notification: Notification) {
         DebugLogger.log("activeSpaceDidChange")
-        Task(priority: .high) { [weak self] in
-            guard self != nil else { return }
+        debounce(key: "spaceChange") {
             await DebugLogger.measureAsync("updateAllWindowsInCurrentSpace") {
                 await WindowUtil.updateAllWindowsInCurrentSpace()
             }
@@ -182,13 +196,7 @@ class WindowManipulationObservers {
     }
 
     func handleNewWindow(for pid: pid_t) {
-        let taskKey = "windowCreation"
-        pendingTasks[taskKey]?.cancel()
-        pendingTasks[taskKey] = Task {
-            try? await Task.sleep(nanoseconds: UInt64(windowCreationDebounceInterval * 1_000_000_000))
-            guard !Task.isCancelled else { return }
-            defer { pendingTasks.removeValue(forKey: "windowCreation") }
-
+        debounce(key: "windowCreation") {
             if let app = NSRunningApplication(processIdentifier: pid) {
                 DebugLogger.log("handleNewWindow", details: "App: \(app.localizedName ?? "Unknown") (PID: \(pid))")
                 await DebugLogger.measureAsync("updateNewWindowsForApp", details: "PID: \(pid)") {

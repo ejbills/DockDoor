@@ -818,19 +818,14 @@ struct WindowPreviewHoverContainer: View {
         guard !originalWindows.isEmpty else { return }
 
         if let except {
-            var updatedWindows = originalWindows
-            guard let exceptIndex = updatedWindows.firstIndex(where: { $0.id == except.id }) else {
+            guard let keptWindow = originalWindows.first(where: { $0.id == except.id }) else {
                 except.bringToFront()
                 return
             }
 
-            for idx in updatedWindows.indices where idx != exceptIndex {
-                if !updatedWindows[idx].isMinimized {
-                    _ = updatedWindows[idx].toggleMinimize()
-                }
-            }
+            let windowsToMinimize = originalWindows.filter { $0.id != except.id }
+            WindowUtil.minimizeWindowsAsync(windowsToMinimize)
 
-            let keptWindow = updatedWindows[exceptIndex]
             previewStateCoordinator.setWindows([keptWindow], dockPosition: dockPosition, bestGuessMonitor: bestGuessMonitor, isMockPreviewActive: mockPreviewActive)
             keptWindow.bringToFront()
             return
@@ -845,10 +840,7 @@ struct WindowPreviewHoverContainer: View {
                         previewStateCoordinator.setWindows([], dockPosition: dockPosition, bestGuessMonitor: bestGuessMonitor, isMockPreviewActive: mockPreviewActive)
                     }
                 case .minimize:
-                    for window in originalWindows where !window.isMinimized {
-                        var mutableWindow = window
-                        _ = mutableWindow.toggleMinimize()
-                    }
+                    WindowUtil.minimizeWindowsAsync(originalWindows)
                     previewStateCoordinator.setWindows([], dockPosition: dockPosition, bestGuessMonitor: bestGuessMonitor, isMockPreviewActive: mockPreviewActive)
                 }
             } else {
@@ -871,10 +863,7 @@ struct WindowPreviewHoverContainer: View {
                 }
             }
         } else {
-            for window in originalWindows where !window.isMinimized {
-                var mutableWindow = window
-                _ = mutableWindow.toggleMinimize()
-            }
+            WindowUtil.minimizeWindowsAsync(originalWindows)
             previewStateCoordinator.setWindows([], dockPosition: dockPosition, bestGuessMonitor: bestGuessMonitor, isMockPreviewActive: mockPreviewActive)
         }
     }
