@@ -310,6 +310,62 @@ final class DockObserver {
         return item
     }
 
+    /// Returns all dock item children from the dock list.
+    private func getAllDockItemChildren() -> [AXUIElement]? {
+        guard let dockAppPID = NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.dock").first?.processIdentifier else {
+            return nil
+        }
+
+        let dockAppElement = AXUIElementCreateApplication(dockAppPID)
+
+        var dockItems: CFTypeRef?
+        guard AXUIElementCopyAttributeValue(dockAppElement, kAXChildrenAttribute as CFString, &dockItems) == .success,
+              let dockItemsList = dockItems as? [AXUIElement],
+              let dockList = dockItemsList.first
+        else {
+            return nil
+        }
+
+        var children: CFTypeRef?
+        guard AXUIElementCopyAttributeValue(dockList, kAXChildrenAttribute as CFString, &children) == .success,
+              let dockChildren = children as? [AXUIElement]
+        else {
+            return nil
+        }
+
+        return dockChildren
+    }
+
+    /// Finds the instance index of a hovered dock item among all dock items with the same bundle identifier.
+    /// This is used to correctly identify which instance of a multi-instance app is being hovered.
+    private func findDockItemInstanceIndex(_ hoveredItem: AXUIElement, bundleIdentifier: String) -> Int {
+        guard let allDockItems = getAllDockItemChildren() else {
+            return 0
+        }
+
+        // Filter to only AXApplicationDockItems with the same bundle ID
+        var matchingItems: [AXUIElement] = []
+        for item in allDockItems {
+            guard (try? item.subrole()) == "AXApplicationDockItem",
+                  let itemURL = try? item.attribute(kAXURLAttribute, NSURL.self)?.absoluteURL,
+                  let itemBundle = Bundle(url: itemURL),
+                  itemBundle.bundleIdentifier == bundleIdentifier
+            else {
+                continue
+            }
+            matchingItems.append(item)
+        }
+
+        // Find the index of the hovered item among matching items
+        for (index, item) in matchingItems.enumerated() {
+            if CFEqual(item, hoveredItem) {
+                return index
+            }
+        }
+
+        return 0
+    }
+
     func getDockItemAppStatusUnderMouse() -> ApplicationReturnType {
         guard let hoveredDockItem = getHoveredApplicationDockItem() else {
             return ApplicationReturnType(status: .notFound, dockItemElement: nil)
@@ -333,7 +389,17 @@ final class DockObserver {
                 }
             }
 
-            if let runningApp = NSRunningApplication.runningApplications(withBundleIdentifier: bundleIdentifier).first {
+            let runningApps = NSRunningApplication.runningApplications(withBundleIdentifier: bundleIdentifier)
+
+            // For multiple instances, find the correct one based on dock position
+            if runningApps.count > 1 {
+                let instanceIndex = findDockItemInstanceIndex(hoveredDockItem, bundleIdentifier: bundleIdentifier)
+                if instanceIndex < runningApps.count {
+                    return ApplicationReturnType(status: .success(runningApps[instanceIndex]), dockItemElement: hoveredDockItem)
+                }
+            }
+
+            if let runningApp = runningApps.first {
                 return ApplicationReturnType(status: .success(runningApp), dockItemElement: hoveredDockItem)
             } else {
                 return ApplicationReturnType(status: .notRunning(bundleIdentifier: bundleIdentifier), dockItemElement: hoveredDockItem)
