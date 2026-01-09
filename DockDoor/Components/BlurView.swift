@@ -36,7 +36,7 @@ class LiquidGlassContainerView: NSView {
         hasConfigured = true
 
         // Configure backdrop layers once after a short delay for layer setup
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) { [weak self] in
             self?.configureBackdropLayers()
         }
     }
