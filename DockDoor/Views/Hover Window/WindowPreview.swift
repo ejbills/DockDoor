@@ -17,7 +17,8 @@ struct WindowPreview: View {
     let showAppIconOnly: Bool
     let mockPreviewActive: Bool
     let onHoverIndexChange: ((Int?, CGPoint?) -> Void)?
-    var isEligibleForLivePreview: Bool = true
+    let useLivePreview: Bool
+    let shouldUseCompactFallback: Bool
 
     // MARK: - Dock Preview Appearance Settings
 
@@ -68,9 +69,6 @@ struct WindowPreview: View {
     @Default(.previewHoverAction) var previewHoverAction
     @Default(.showActiveWindowBorder) var showActiveWindowBorder
     @Default(.activeAppIndicatorColor) var activeAppIndicatorColor
-    @Default(.enableLivePreview) var enableLivePreview
-    @Default(.enableLivePreviewForDock) var enableLivePreviewForDock
-    @Default(.enableLivePreviewForWindowSwitcher) var enableLivePreviewForWindowSwitcher
     @Default(.dockLivePreviewQuality) var dockLivePreviewQuality
     @Default(.dockLivePreviewFrameRate) var dockLivePreviewFrameRate
     @Default(.windowSwitcherLivePreviewQuality) var windowSwitcherLivePreviewQuality
@@ -196,8 +194,6 @@ struct WindowPreview: View {
     @ViewBuilder
     private func windowContent(isMinimized: Bool, isHidden: Bool, isSelected: Bool) -> some View {
         let inactive = (isMinimized || isHidden) && showMinimizedHiddenLabels
-        let livePreviewEnabledForContext = windowSwitcherActive ? enableLivePreviewForWindowSwitcher : enableLivePreviewForDock
-        let useLivePreview = enableLivePreview && livePreviewEnabledForContext && isEligibleForLivePreview && !isMinimized && !isHidden
         let quality = windowSwitcherActive ? windowSwitcherLivePreviewQuality : dockLivePreviewQuality
         let frameRate = windowSwitcherActive ? windowSwitcherLivePreviewFrameRate : dockLivePreviewFrameRate
 
@@ -747,21 +743,36 @@ struct WindowPreview: View {
     }
 
     var body: some View {
-        previewCoreContent
-            .windowPreviewInteractions(
+        if shouldUseCompactFallback {
+            WindowPreviewCompact(
                 windowInfo: windowInfo,
-                windowSwitcherActive: windowSwitcherActive,
+                index: index,
                 dockPosition: dockPosition,
-                handleWindowAction: { action in
-                    cancelFullPreviewHover()
-                    handleWindowAction(action)
-                },
-                onTap: {
-                    cancelFullPreviewHover()
-                    onTap?()
-                }
+                uniformCardRadius: uniformCardRadius,
+                handleWindowAction: handleWindowAction,
+                currIndex: currIndex,
+                windowSwitcherActive: windowSwitcherActive,
+                mockPreviewActive: mockPreviewActive,
+                onTap: onTap,
+                onHoverIndexChange: onHoverIndexChange
             )
-            .fixedSize()
+        } else {
+            previewCoreContent
+                .windowPreviewInteractions(
+                    windowInfo: windowInfo,
+                    windowSwitcherActive: windowSwitcherActive,
+                    dockPosition: dockPosition,
+                    handleWindowAction: { action in
+                        cancelFullPreviewHover()
+                        handleWindowAction(action)
+                    },
+                    onTap: {
+                        cancelFullPreviewHover()
+                        onTap?()
+                    }
+                )
+                .fixedSize()
+        }
     }
 
     private func cancelFullPreviewHover() {

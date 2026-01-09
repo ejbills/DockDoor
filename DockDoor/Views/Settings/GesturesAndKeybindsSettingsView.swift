@@ -109,16 +109,16 @@ struct GesturesAndKeybindsSettingsView: View {
                     Divider()
 
                     gestureDirectionRow(
-                        direction: "Towards Dock",
+                        direction: String(localized: "Towards Dock", comment: "Gesture direction label"),
                         icon: "arrow.down.to.line",
-                        description: "Swipe toward the dock edge",
+                        description: String(localized: "Swipe toward the dock edge", comment: "Gesture direction description"),
                         action: $dockSwipeTowardsDockAction
                     )
 
                     gestureDirectionRow(
-                        direction: "Away from Dock",
+                        direction: String(localized: "Away from Dock", comment: "Gesture direction label"),
                         icon: "arrow.up.to.line",
-                        description: "Swipe away from the dock edge",
+                        description: String(localized: "Swipe away from the dock edge", comment: "Gesture direction description"),
                         action: $dockSwipeAwayFromDockAction
                     )
 
@@ -181,14 +181,14 @@ struct GesturesAndKeybindsSettingsView: View {
                     Divider()
 
                     gestureDirectionRow(
-                        direction: "Swipe Up",
+                        direction: String(localized: "Swipe Up", comment: "Gesture direction label"),
                         icon: "arrow.up",
                         description: nil,
                         action: $switcherSwipeUpAction
                     )
 
                     gestureDirectionRow(
-                        direction: "Swipe Down",
+                        direction: String(localized: "Swipe Down", comment: "Gesture direction label"),
                         icon: "arrow.down",
                         description: nil,
                         action: $switcherSwipeDownAction
@@ -486,7 +486,7 @@ struct GesturesAndKeybindsSettingsView: View {
                     Button(action: {
                         startAlternateKeyCapture()
                     }) {
-                        Text(alternateKeybindKey == 0 ? "Not set" : KeyboardLabel.localizedKey(for: alternateKeybindKey))
+                        Text(alternateKeybindKey == 0 ? String(localized: "Not set", comment: "Keybind not configured placeholder") : KeyboardLabel.localizedKey(for: alternateKeybindKey))
                             .font(.system(size: 14, weight: .medium, design: .monospaced))
                             .padding(.horizontal, 8)
                             .padding(.vertical, 4)

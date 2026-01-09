@@ -77,6 +77,11 @@ struct WindowPreviewHoverContainer: View {
     @Default(.mouseHoverAutoScrollSpeed) var mouseHoverAutoScrollSpeed
     @Default(.windowSwitcherLivePreviewScope) var windowSwitcherLivePreviewScope
 
+    // Live preview settings for compact fallback computation
+    @Default(.enableLivePreview) var enableLivePreview
+    @Default(.enableLivePreviewForDock) var enableLivePreviewForDock
+    @Default(.enableLivePreviewForWindowSwitcher) var enableLivePreviewForWindowSwitcher
+
     // Compact mode thresholds (0 = disabled, 1+ = enable when window count >= threshold)
     @Default(.windowSwitcherCompactThreshold) var windowSwitcherCompactThreshold
     @Default(.dockPreviewCompactThreshold) var dockPreviewCompactThreshold
@@ -1032,21 +1037,36 @@ struct WindowPreviewHoverContainer: View {
             if index < windows.count {
                 let windowInfo = windows[index]
 
-                let isEligibleForLivePreview: Bool = {
-                    guard previewStateCoordinator.windowSwitcherActive else { return true }
+                // Compute live preview eligibility once
+                let useLivePreview: Bool = {
+                    // Check global and context-specific settings
+                    let windowSwitcherActive = previewStateCoordinator.windowSwitcherActive
+                    let livePreviewEnabledForContext = windowSwitcherActive ? enableLivePreviewForWindowSwitcher : enableLivePreviewForDock
+                    guard enableLivePreview && livePreviewEnabledForContext else { return false }
 
-                    switch windowSwitcherLivePreviewScope {
-                    case .allWindows:
-                        return true
-                    case .selectedWindowOnly:
-                        return index == previewStateCoordinator.currIndex
-                    case .selectedAppWindows:
-                        let currentIndex = previewStateCoordinator.currIndex
-                        guard currentIndex >= 0, currentIndex < windows.count else { return false }
-                        let selectedBundleID = windows[currentIndex].app.bundleIdentifier
-                        return windowInfo.app.bundleIdentifier == selectedBundleID
+                    // Can't use live preview for minimized/hidden windows
+                    guard !windowInfo.isMinimized && !windowInfo.isHidden else { return false }
+
+                    // Check scope-based eligibility for window switcher
+                    if windowSwitcherActive {
+                        switch windowSwitcherLivePreviewScope {
+                        case .allWindows:
+                            return true
+                        case .selectedWindowOnly:
+                            return index == previewStateCoordinator.currIndex
+                        case .selectedAppWindows:
+                            let currentIndex = previewStateCoordinator.currIndex
+                            guard currentIndex >= 0, currentIndex < windows.count else { return false }
+                            let selectedBundleID = windows[currentIndex].app.bundleIdentifier
+                            return windowInfo.app.bundleIdentifier == selectedBundleID
+                        }
                     }
+
+                    return true
                 }()
+
+                // Fall back to compact if no image and no live preview
+                let shouldUseCompactFallback = windowInfo.image == nil && !useLivePreview
 
                 if shouldUseCompactMode {
                     WindowPreviewCompact(
@@ -1082,7 +1102,8 @@ struct WindowPreviewHoverContainer: View {
                         showAppIconOnly: effectiveShowAppIconOnly,
                         mockPreviewActive: mockPreviewActive,
                         onHoverIndexChange: handleHoverIndexChange,
-                        isEligibleForLivePreview: isEligibleForLivePreview
+                        useLivePreview: useLivePreview,
+                        shouldUseCompactFallback: shouldUseCompactFallback
                     )
                     .id("\(appName)-\(index)")
                     .gesture(

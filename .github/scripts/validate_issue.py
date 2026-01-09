@@ -164,7 +164,13 @@ def main():
     issue_body = issue_data['body']
     issue_labels = [label['name'] for label in issue_data.get('labels', [])]
 
-    # First, check if the duplicate review checkbox is checked
+    # First, determine if this is a bug or feature request - if not, do nothing
+    issue_type = determine_issue_type(issue_title, issue_labels)
+    if not issue_type:
+        print('Not a bug or feature request template - skipping validation')
+        sys.exit(0)
+
+    # Check if the duplicate review checkbox is checked
     if not check_duplicate_checkbox(issue_body):
         comment = """Thank you for your submission. However, we require all issue reporters to confirm they have reviewed existing issues to avoid duplicates.
 
@@ -184,11 +190,6 @@ If this is not a duplicate, please reopen or create a new issue and check the bo
         sys.exit(0)
 
     sections = parse_issue_body(issue_body)
-    issue_type = determine_issue_type(issue_title, issue_labels)
-
-    if not issue_type:
-        print('Could not determine issue type (bug or feature request)')
-        sys.exit(0)
 
     # Validate title
     if not validate_title(issue_title, issue_type):
