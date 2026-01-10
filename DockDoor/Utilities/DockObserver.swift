@@ -180,7 +180,9 @@ final class DockObserver {
 
     func processSelectedDockItemChanged() {
         let currentMouseLocation = DockObserver.getMousePosition()
-        let appUnderMouseElement = getDockItemAppStatusUnderMouse()
+        let appUnderMouseElement = DebugLogger.measureSlow("getDockItemAppStatusUnderMouse", thresholdMs: 100) {
+            getDockItemAppStatusUnderMouse()
+        }
 
         guard case let .success(currentApp) = appUnderMouseElement.status,
               let dockItemElement = appUnderMouseElement.dockItemElement,
@@ -256,7 +258,9 @@ final class DockObserver {
             do {
                 var windows: [WindowInfo] = []
                 for appInstance in appsToFetchWindowsFrom {
-                    try await windows.append(contentsOf: WindowUtil.getActiveWindows(of: appInstance))
+                    try await windows.append(contentsOf: await DebugLogger.measureAsync("getActiveWindows (dock hover)", details: "PID: \(appInstance.processIdentifier)") {
+                        try await WindowUtil.getActiveWindows(of: appInstance)
+                    })
                 }
 
                 if Defaults[.showWindowsFromCurrentSpaceOnly] {
