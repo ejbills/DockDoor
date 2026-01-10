@@ -1,3 +1,4 @@
+import ApplicationServices
 import Cocoa
 import Defaults
 import Sparkle
@@ -37,6 +38,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
+        // Set global AX timeout to prevent hangs from unresponsive apps
+        AXUIElementSetMessagingTimeout(AXUIElementCreateSystemWide(), 1.0)
+
         if Defaults[.showMenuBarIcon] {
             setupMenuBar()
         } else {
