@@ -199,77 +199,95 @@ final class DockObserver {
             localizedName: currentApp.localizedName
         )
 
-        Task { @MainActor [weak self] in
+        // Build list of apps to fetch windows from
+        var appsToFetchWindowsFrom: [NSRunningApplication] = []
+        if Defaults[.groupAppInstancesInDock],
+           let bundleId = currentApp.bundleIdentifier, !bundleId.isEmpty
+        {
+            let potentialApps = NSRunningApplication.runningApplications(withBundleIdentifier: bundleId)
+            if !potentialApps.isEmpty {
+                appsToFetchWindowsFrom = potentialApps
+            } else {
+                appsToFetchWindowsFrom = [currentApp]
+            }
+        } else {
+            appsToFetchWindowsFrom = [currentApp]
+        }
+
+        guard !appsToFetchWindowsFrom.isEmpty else { return }
+
+        var cachedWindows: [WindowInfo] = []
+        for appInstance in appsToFetchWindowsFrom {
+            cachedWindows.append(contentsOf: WindowUtil.readCachedWindows(for: appInstance.processIdentifier))
+        }
+
+        lastHoveredPID = currentApp.processIdentifier
+        lastHoveredAppWasFrontmost = NSWorkspace.shared.frontmostApplication?.processIdentifier == currentApp.processIdentifier
+        lastHoveredAppNeedsRestore = currentApp.isHidden || cachedWindows.contains(where: \.isMinimized)
+        lastHoveredAppHadWindows = !cachedWindows.isEmpty
+
+        guard Defaults[.enableDockPreviews] else { return }
+
+        let mouseScreen = NSScreen.screenContainingMouse(currentMouseLocation)
+        let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
+
+        previewCoordinator.showWindow(
+            appName: currentAppInfo.localizedName ?? "Unknown",
+            windows: cachedWindows,
+            mouseLocation: convertedMouseLocation,
+            mouseScreen: mouseScreen,
+            dockItemElement: dockItemElement,
+            overrideDelay: false,
+            onWindowTap: { [weak self] in
+                self?.hideWindowAndResetLastApp()
+            },
+            bundleIdentifier: currentAppInfo.bundleIdentifier
+        )
+
+        previousStatus = .success(currentApp)
+
+        let screenOrigin = mouseScreen.frame.origin
+        let currentAppPID = currentApp.processIdentifier
+        let currentAppIsHidden = currentApp.isHidden
+
+        Task.detached { [weak self] in
             guard let self else { return }
 
             do {
-                var appsToFetchWindowsFrom: [NSRunningApplication] = []
-                if Defaults[.groupAppInstancesInDock],
-                   let bundleId = currentApp.bundleIdentifier, !bundleId.isEmpty
-                {
-                    let potentialApps = NSRunningApplication.runningApplications(withBundleIdentifier: bundleId)
-                    if !potentialApps.isEmpty {
-                        appsToFetchWindowsFrom = potentialApps
-                    } else {
-                        appsToFetchWindowsFrom = [currentApp]
-                    }
-                } else {
-                    appsToFetchWindowsFrom = [currentApp]
-                }
-
-                guard !appsToFetchWindowsFrom.isEmpty else {
-                    return
-                }
-
-                var combinedWindows: [WindowInfo] = []
+                var windows: [WindowInfo] = []
                 for appInstance in appsToFetchWindowsFrom {
-                    let windowsForInstance = try await WindowUtil.getActiveWindows(of: appInstance)
-                    combinedWindows.append(contentsOf: windowsForInstance)
+                    try await windows.append(contentsOf: WindowUtil.getActiveWindows(of: appInstance))
                 }
 
-                // Filter windows to only show those in the current Space if the setting is enabled
                 if Defaults[.showWindowsFromCurrentSpaceOnly] {
-                    combinedWindows = await WindowUtil.filterWindowsByCurrentSpace(combinedWindows)
+                    windows = await WindowUtil.filterWindowsByCurrentSpace(windows)
                 }
 
-                lastHoveredPID = currentApp.processIdentifier
-                lastHoveredAppWasFrontmost = NSWorkspace.shared.frontmostApplication?.processIdentifier == currentApp.processIdentifier
-                lastHoveredAppNeedsRestore = currentApp.isHidden || combinedWindows.contains(where: \.isMinimized)
-                lastHoveredAppHadWindows = !combinedWindows.isEmpty
+                let freshWindows = windows
 
-                // Only show preview if dock previews are enabled
-                guard Defaults[.enableDockPreviews] else { return }
+                await MainActor.run { [weak self] in
+                    guard let self else { return }
 
-                if combinedWindows.isEmpty {
-                    let isSpecialApp = currentApp.bundleIdentifier == spotifyAppIdentifier ||
-                        currentApp.bundleIdentifier == appleMusicAppIdentifier ||
-                        currentApp.bundleIdentifier == calendarAppIdentifier
+                    let currentAppStatus = getDockItemAppStatusUnderMouse()
+                    guard case let .success(stillHoveredApp) = currentAppStatus.status,
+                          stillHoveredApp.processIdentifier == currentAppPID
+                    else { return }
 
-                    // Only continue if this is a special app with controls enabled
-                    guard isSpecialApp, Defaults[.showSpecialAppControls] else {
-                        return
-                    }
+                    let dockPosition = DockUtils.getDockPosition()
+                    guard let monitor = screenOrigin.screen() else { return }
+
+                    previewCoordinator.mergeWindowsIfShowing(
+                        for: currentAppPID,
+                        windows: freshWindows,
+                        dockPosition: dockPosition,
+                        bestGuessMonitor: monitor
+                    )
+
+                    lastHoveredAppHadWindows = !freshWindows.isEmpty
+                    lastHoveredAppNeedsRestore = currentAppIsHidden || freshWindows.contains(where: \.isMinimized)
                 }
-
-                let mouseScreen = NSScreen.screenContainingMouse(currentMouseLocation)
-                let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
-
-                previewCoordinator.showWindow(
-                    appName: currentAppInfo.localizedName ?? "Unknown",
-                    windows: combinedWindows,
-                    mouseLocation: convertedMouseLocation,
-                    mouseScreen: mouseScreen,
-                    dockItemElement: dockItemElement,
-                    overrideDelay: false,
-                    onWindowTap: { [weak self] in
-                        self?.hideWindowAndResetLastApp()
-                    },
-                    bundleIdentifier: currentAppInfo.bundleIdentifier
-                )
-
-                previousStatus = .success(currentApp)
             } catch {
-                // Silently handle errors
+                DebugLogger.log("DockObserver", details: "Failed to fetch windows for dock hover: \(error)")
             }
         }
     }

@@ -119,7 +119,6 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         DragPreviewCoordinator.shared.endDragging()
         hideFullPreviewWindow()
 
-        // Hide search window
         searchWindow?.hideSearch()
 
         if let currentContent = contentView {
@@ -136,6 +135,16 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         windowSwitcherCoordinator.setShowing(.both, toState: false)
         dockManager.restoreDockState()
         orderOut(nil)
+    }
+
+    /// Merges fresh windows only if the preview is visible and showing the expected app.
+    /// Returns true if merge was performed, false if guards failed.
+    @MainActor
+    @discardableResult
+    func mergeWindowsIfShowing(for pid: pid_t, windows: [WindowInfo], dockPosition: DockPosition, bestGuessMonitor: NSScreen) -> Bool {
+        guard isVisible, currentlyDisplayedPID == pid else { return false }
+        windowSwitcherCoordinator.mergeWindows(windows, dockPosition: dockPosition, bestGuessMonitor: bestGuessMonitor)
+        return true
     }
 
     @MainActor
@@ -192,13 +201,19 @@ final class SharedPreviewWindowCoordinator: NSPanel {
                                                   centeredHoverWindowState: PreviewStateCoordinator.WindowState? = nil,
                                                   embeddedContentType: EmbeddedContentType = .none,
                                                   dockPositionOverride: DockPosition? = nil,
-                                                  dockItemFrameOverride: CGRect? = nil)
+                                                  dockItemFrameOverride: CGRect? = nil,
+                                                  renderStartTime: CFAbsoluteTime? = nil)
     {
+        var elapsed = renderStartTime.map { (CFAbsoluteTimeGetCurrent() - $0) * 1000 } ?? 0
+        DebugLogger.log("PreviewRender", details: "updateContentView start (+\(String(format: "%.1f", elapsed))ms)")
+
         windowSwitcherCoordinator.setShowing(centeredHoverWindowState, toState: centerOnScreen)
 
         // Defer showing the search window until after the hover window frame is applied
 
         let updateAvailable = (NSApp.delegate as? AppDelegate)?.updaterState.anUpdateIsAvailable ?? false
+
+        elapsed = renderStartTime.map { (CFAbsoluteTimeGetCurrent() - $0) * 1000 } ?? 0
 
         let hoverView = WindowPreviewHoverContainer(appName: appName,
                                                     onWindowTap: onWindowTap,
@@ -219,7 +234,14 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         }
         contentView = newHostingView
 
+        elapsed = renderStartTime.map { (CFAbsoluteTimeGetCurrent() - $0) * 1000 } ?? 0
+        DebugLogger.log("PreviewRender", details: "calculating fittingSize (+\(String(format: "%.1f", elapsed))ms)")
+
         let newHoverWindowSize = newHostingView.fittingSize
+
+        elapsed = renderStartTime.map { (CFAbsoluteTimeGetCurrent() - $0) * 1000 } ?? 0
+        DebugLogger.log("PreviewRender", details: "fittingSize done: \(newHoverWindowSize) (+\(String(format: "%.1f", elapsed))ms)")
+
         let position: CGPoint
         if centerOnScreen {
             position = centerWindowOnScreen(size: newHoverWindowSize, screen: mouseScreen)
@@ -246,6 +268,9 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         let finalFrame = CGRect(origin: position, size: newHoverWindowSize)
         applyWindowFrame(finalFrame, animated: animated, dockPositionOverride: dockPositionOverride)
         previousHoverWindowOrigin = position
+
+        elapsed = renderStartTime.map { (CFAbsoluteTimeGetCurrent() - $0) * 1000 } ?? 0
+        DebugLogger.log("PreviewRender", details: "window frame applied, render complete (+\(String(format: "%.1f", elapsed))ms)")
 
         // Now that the main panel has a valid frame, position the search window (if active)
         if windowSwitcherCoordinator.windowSwitcherActive, Defaults[.enableWindowSwitcherSearch] {
@@ -489,8 +514,12 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         bundleIdentifier: String?,
         dockPositionOverride: DockPosition? = nil,
         initialIndex: Int? = nil,
-        dockItemFrameOverride: CGRect? = nil
+        dockItemFrameOverride: CGRect? = nil,
+        renderStartTime: CFAbsoluteTime? = nil
     ) {
+        let elapsed = renderStartTime.map { (CFAbsoluteTimeGetCurrent() - $0) * 1000 } ?? 0
+        DebugLogger.log("PreviewRender", details: "performDisplay start (+\(String(format: "%.1f", elapsed))ms)")
+
         let screen = mouseScreen ?? NSScreen.main!
         var finalEmbeddedContentType: EmbeddedContentType = .none
         var useBigStandaloneViewInstead = false
@@ -563,7 +592,8 @@ final class SharedPreviewWindowCoordinator: NSPanel {
                 embeddedContentType: finalEmbeddedContentType,
                 dockPositionOverride: dockPositionOverride,
                 initialIndex: initialIndex,
-                dockItemFrameOverride: dockItemFrameOverride
+                dockItemFrameOverride: dockItemFrameOverride,
+                renderStartTime: renderStartTime
             )
         }
 
@@ -577,7 +607,8 @@ final class SharedPreviewWindowCoordinator: NSPanel {
                                    onWindowTap: (() -> Void)?,
                                    embeddedContentType: EmbeddedContentType = .none,
                                    dockPositionOverride: DockPosition? = nil, initialIndex: Int? = nil,
-                                   dockItemFrameOverride: CGRect? = nil)
+                                   dockItemFrameOverride: CGRect? = nil,
+                                   renderStartTime: CFAbsoluteTime? = nil)
     {
         guard !windows.isEmpty else { return }
 
@@ -609,7 +640,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
             updateContentViewSizeAndPosition(mouseLocation: mouseLocation, mouseScreen: screen, dockItemElement: dockItemElement, animated: !shouldCenterOnScreen,
                                              centerOnScreen: shouldCenterOnScreen, centeredHoverWindowState: centeredHoverWindowState,
                                              embeddedContentType: embeddedContentType, dockPositionOverride: dockPositionOverride,
-                                             dockItemFrameOverride: dockItemFrameOverride)
+                                             dockItemFrameOverride: dockItemFrameOverride, renderStartTime: renderStartTime)
         }
     }
 
@@ -767,10 +798,13 @@ final class SharedPreviewWindowCoordinator: NSPanel {
                     dockPositionOverride: DockPosition? = nil, initialIndex: Int? = nil,
                     dockItemFrameOverride: CGRect? = nil)
     {
+        let renderStartTime = CFAbsoluteTimeGetCurrent()
+        DebugLogger.log("PreviewRender", details: "showWindow called: \(windows.count) windows for \(appName)")
+
         let shouldSkipDelay = overrideDelay || (Defaults[.useDelayOnlyForInitialOpen] && isVisible)
         let delay = shouldSkipDelay ? 0 : Defaults[.hoverWindowOpenDelay]
 
-        let workItem = { [weak self] in
+        let workItem = { [weak self, renderStartTime] in
             guard let self else { return }
 
             // Check if mouse entered the preview window and we're trying to show a different app
@@ -804,7 +838,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
             }
 
             Task { @MainActor [weak self] in
-                self?.performDisplay(appName: appName, windows: windows, mouseLocation: mouseLocation, mouseScreen: mouseScreen, dockItemElement: dockItemElement, centeredHoverWindowState: centeredHoverWindowState, onWindowTap: onWindowTap, bundleIdentifier: bundleIdentifier, dockPositionOverride: dockPositionOverride, initialIndex: initialIndex, dockItemFrameOverride: dockItemFrameOverride)
+                self?.performDisplay(appName: appName, windows: windows, mouseLocation: mouseLocation, mouseScreen: mouseScreen, dockItemElement: dockItemElement, centeredHoverWindowState: centeredHoverWindowState, onWindowTap: onWindowTap, bundleIdentifier: bundleIdentifier, dockPositionOverride: dockPositionOverride, initialIndex: initialIndex, dockItemFrameOverride: dockItemFrameOverride, renderStartTime: renderStartTime)
             }
         }
 

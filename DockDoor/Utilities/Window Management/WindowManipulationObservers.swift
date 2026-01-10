@@ -197,7 +197,7 @@ class WindowManipulationObservers {
 
     func handleNewWindow(for pid: pid_t) {
         debounce(key: "windowCreation") {
-            if let app = NSRunningApplication(processIdentifier: pid) {
+            if let app = NSRunningApplication(processIdentifier: pid), pid == NSWorkspace.shared.frontmostApplication?.processIdentifier {
                 DebugLogger.log("handleNewWindow", details: "App: \(app.localizedName ?? "Unknown") (PID: \(pid))")
                 await DebugLogger.measureAsync("updateNewWindowsForApp", details: "PID: \(pid)") {
                     await WindowUtil.updateNewWindowsForApp(app)

@@ -284,6 +284,13 @@ enum WindowUtil {
 // MARK: - Cache Management
 
 extension WindowUtil {
+    /// Reads cached windows for an app without triggering any SCK/AX fetches.
+    /// Returns immediately with whatever is in cache, sorted by the given context.
+    static func readCachedWindows(for pid: pid_t, sortedBy context: WindowFetchContext = .dockPreview) -> [WindowInfo] {
+        let cached = desktopSpaceWindowCacheManager.readCache(pid: pid)
+        return sortWindows(cached, for: context)
+    }
+
     static func saveWindowOrderFromCache() {
         let allWindows = desktopSpaceWindowCacheManager.getAllWindows()
         WindowOrderPersistence.saveOrder(from: allWindows)

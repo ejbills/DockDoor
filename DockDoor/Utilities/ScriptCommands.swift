@@ -401,7 +401,7 @@ enum DockDoorCommands {
     }
 
     static func focusWindow(_ windowIdString: String) throws {
-        var windowInfo = try resolveWindowId(windowIdString).get().0
+        let windowInfo = try resolveWindowId(windowIdString).get().0
         windowInfo.bringToFront()
     }
 
