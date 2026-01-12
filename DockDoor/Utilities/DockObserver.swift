@@ -55,6 +55,12 @@ final class DockObserver {
     private var lastScrollActionTime: Date = .distantPast
     private let scrollActionDebounceInterval: TimeInterval = 0.3
 
+    private static func isSpecialControlsApp(_ bundleId: String?) -> Bool {
+        bundleId == spotifyAppIdentifier ||
+            bundleId == appleMusicAppIdentifier ||
+            bundleId == calendarAppIdentifier
+    }
+
     init(previewCoordinator: SharedPreviewWindowCoordinator) {
         self.previewCoordinator = previewCoordinator
         DockObserver.activeInstance = self
@@ -223,12 +229,22 @@ final class DockObserver {
             cachedWindows.append(contentsOf: WindowUtil.readCachedWindows(for: appInstance.processIdentifier))
         }
 
+        if Defaults[.ignoreAppsWithSingleWindow], cachedWindows.count <= 1 {
+            cachedWindows = []
+        }
+
         lastHoveredPID = currentApp.processIdentifier
         lastHoveredAppWasFrontmost = NSWorkspace.shared.frontmostApplication?.processIdentifier == currentApp.processIdentifier
         lastHoveredAppNeedsRestore = currentApp.isHidden || cachedWindows.contains(where: \.isMinimized)
         lastHoveredAppHadWindows = !cachedWindows.isEmpty
 
         guard Defaults[.enableDockPreviews] else { return }
+
+        if cachedWindows.isEmpty {
+            guard Self.isSpecialControlsApp(currentApp.bundleIdentifier), Defaults[.showSpecialAppControls] else {
+                return
+            }
+        }
 
         let mouseScreen = NSScreen.screenContainingMouse(currentMouseLocation)
         let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
@@ -251,6 +267,7 @@ final class DockObserver {
         let screenOrigin = mouseScreen.frame.origin
         let currentAppPID = currentApp.processIdentifier
         let currentAppIsHidden = currentApp.isHidden
+        let currentAppBundleId = currentApp.bundleIdentifier
 
         Task.detached { [weak self] in
             guard let self else { return }
@@ -279,6 +296,15 @@ final class DockObserver {
 
                     let dockPosition = DockUtils.getDockPosition()
                     guard let monitor = screenOrigin.screen() else { return }
+
+                    if freshWindows.isEmpty {
+                        if !Self.isSpecialControlsApp(currentAppBundleId) || !Defaults[.showSpecialAppControls] {
+                            previewCoordinator.hideWindow()
+                            lastHoveredAppHadWindows = false
+                            lastHoveredAppNeedsRestore = currentAppIsHidden
+                            return
+                        }
+                    }
 
                     previewCoordinator.mergeWindowsIfShowing(
                         for: currentAppPID,
@@ -690,11 +716,7 @@ final class DockObserver {
                 )
             } catch {
                 // If we can't get windows, still show the preview for special apps if enabled
-                let isSpecialApp = app.bundleIdentifier == spotifyAppIdentifier ||
-                    app.bundleIdentifier == appleMusicAppIdentifier ||
-                    app.bundleIdentifier == calendarAppIdentifier
-
-                if isSpecialApp, Defaults[.showSpecialAppControls] {
+                if Self.isSpecialControlsApp(app.bundleIdentifier), Defaults[.showSpecialAppControls] {
                     let mouseScreen = NSScreen.screenContainingMouse(currentMouseLocation)
                     let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
 
