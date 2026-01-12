@@ -1,6 +1,47 @@
 import AppKit
 import Foundation
 
+// MARK: - OSAScript Helper
+
+/// Runs AppleScript via osascript process - avoids NSAppleScript thread safety issues
+enum OSAScriptRunner {
+    static func run(_ script: String) async -> String? {
+        await withCheckedContinuation { continuation in
+            DispatchQueue.global(qos: .userInitiated).async {
+                let process = Process()
+                process.executableURL = URL(fileURLWithPath: "/usr/bin/osascript")
+                process.arguments = ["-e", script]
+
+                let pipe = Pipe()
+                process.standardOutput = pipe
+                process.standardError = FileHandle.nullDevice
+
+                do {
+                    try process.run()
+                    process.waitUntilExit()
+
+                    let data = pipe.fileHandleForReading.readDataToEndOfFile()
+                    let output = String(data: data, encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines)
+                    continuation.resume(returning: output)
+                } catch {
+                    continuation.resume(returning: nil)
+                }
+            }
+        }
+    }
+
+    static func runFireAndForget(_ script: String) {
+        DispatchQueue.global(qos: .userInitiated).async {
+            let process = Process()
+            process.executableURL = URL(fileURLWithPath: "/usr/bin/osascript")
+            process.arguments = ["-e", script]
+            process.standardOutput = FileHandle.nullDevice
+            process.standardError = FileHandle.nullDevice
+            try? process.run()
+        }
+    }
+}
+
 // NOTE: Borrows code from: https://github.com/aviwad/LyricFever
 
 // MARK: - Lyric Data Structures
@@ -123,19 +164,15 @@ class MediaInfo: ObservableObject {
 
     func seek(to position: TimeInterval) {
         let script = buildSeekScript(position: position)
+        OSAScriptRunner.runFireAndForget(script)
+        currentTime = position
 
-        Task {
-            let appleScript = NSAppleScript(source: script)
-            appleScript?.executeAndReturnError(nil)
-            currentTime = position
+        // Reset interpolation timing after seeking
+        lastPolledTime = position
+        lastPollDate = Date()
+        interpolatedTime = position
 
-            // Reset interpolation timing after seeking
-            lastPolledTime = position
-            lastPollDate = Date()
-            interpolatedTime = position
-
-            updateCurrentLyricIndex()
-        }
+        updateCurrentLyricIndex()
     }
 
     // MARK: - Lyrics Methods
@@ -456,27 +493,14 @@ class MediaInfo: ObservableObject {
         let script = buildMediaCommandScript(command: command)
 
         Task {
-            let appleScript = NSAppleScript(source: script)
-            appleScript?.executeAndReturnError(nil)
+            _ = await OSAScriptRunner.run(script)
             try? await Task.sleep(nanoseconds: delay)
             await fetchMediaData()
         }
     }
 
     private func executeAppleScript(_ script: String) async {
-        let scriptResult: String? = await Task.detached(priority: .utility) {
-            let appleScript = NSAppleScript(source: script)
-            var errorDict: NSDictionary?
-            let executionResult = appleScript?.executeAndReturnError(&errorDict)
-
-            if let error = errorDict {
-                print("AppleScript error: \(error)")
-                return nil
-            }
-            return executionResult?.stringValue
-        }.value
-
-        guard let resultString = scriptResult else { return }
+        guard let resultString = await OSAScriptRunner.run(script) else { return }
 
         if resultString == "not_running" {
             clearMediaInfo()
