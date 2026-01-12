@@ -19,7 +19,8 @@ private class WindowSwitchingCoordinator {
     private var isProcessingSwitcher = false
     private var uiRenderingTask: Task<Void, Never>?
     private var currentSessionId = UUID()
-    private var initializationCancelled = false
+    /// When true, initialization should complete but immediately select the window instead of showing UI
+    private var shouldSelectImmediately = false
 
     private static var lastUpdateAllWindowsTime: Date?
     private static let updateAllWindowsThrottleInterval: TimeInterval = 60.0
@@ -64,8 +65,8 @@ private class WindowSwitchingCoordinator {
         previewCoordinator: SharedPreviewWindowCoordinator,
         mode: SwitcherInvocationMode = .allWindows
     ) async {
-        // Reset cancellation flag at start of initialization
-        initializationCancelled = false
+        // Reset the immediate-select flag at start of initialization
+        shouldSelectImmediately = false
 
         var windows = WindowUtil.getAllWindowsOfAllApps()
 
@@ -103,7 +104,15 @@ private class WindowSwitchingCoordinator {
         coordinator.initializeForWindowSwitcher(with: windows, dockPosition: DockUtils.getDockPosition(), bestGuessMonitor: targetScreen)
         coordinator.activateKeybindSession()
 
-        guard !initializationCancelled else { return }
+        // If modifier was released during initialization, immediately select and exit
+        if shouldSelectImmediately {
+            if let selectedWindow = coordinator.getCurrentWindow() {
+                selectedWindow.bringToFront()
+            }
+            coordinator.deactivateKeybindSession()
+            shouldSelectImmediately = false
+            return
+        }
 
         let currentMouseLocation = DockObserver.getMousePosition()
 
@@ -213,15 +222,18 @@ private class WindowSwitchingCoordinator {
     @MainActor
     func cancelSwitching(previewCoordinator: SharedPreviewWindowCoordinator) {
         currentSessionId = UUID()
+        shouldSelectImmediately = false
         previewCoordinator.windowSwitcherCoordinator.deactivateKeybindSession()
         uiRenderingTask?.cancel()
     }
 
-    /// Cancels any pending UI rendering task and invalidates the session ID.
+    /// Signals that the modifier was released during initialization.
+    /// If initialization is still in progress, it will complete but immediately select the window.
+    /// If initialization already completed, this just cancels the UI rendering task.
     @MainActor
     func cancelPendingRender() {
         currentSessionId = UUID()
-        initializationCancelled = true
+        shouldSelectImmediately = true
         uiRenderingTask?.cancel()
     }
 }

@@ -106,14 +106,15 @@ class PreviewStateCoordinator: ObservableObject {
     }
 
     /// Merges fresh windows into the current display without jarring replacement.
-    /// Updates existing windows in-place, adds new ones, and removes stale ones.
+    /// Preserves window order and selected index where possible.
     @MainActor
     func mergeWindows(_ freshWindows: [WindowInfo], dockPosition: DockPosition, bestGuessMonitor: NSScreen) {
-        // If currently empty, just set the windows
         guard !windows.isEmpty else {
             setWindows(freshWindows, dockPosition: dockPosition, bestGuessMonitor: bestGuessMonitor)
             return
         }
+
+        let selectedWindowID: CGWindowID? = (currIndex >= 0 && currIndex < windows.count) ? windows[currIndex].id : nil
 
         let freshWindowsByID: [CGWindowID: WindowInfo] = Dictionary(
             freshWindows.map { ($0.id, $0) },
@@ -122,30 +123,31 @@ class PreviewStateCoordinator: ObservableObject {
         let freshIDs = Set(freshWindowsByID.keys)
         let existingIDs = Set(windows.map(\.id))
 
-        // Update existing windows in place (fresher images, updated state, etc.)
+        // Update existing windows in place
         for index in windows.indices {
             if let fresh = freshWindowsByID[windows[index].id] {
                 windows[index] = fresh
             }
         }
 
-        // Add new windows that weren't in the existing set
+        // Add new windows at the end
         for freshWindow in freshWindows where !existingIDs.contains(freshWindow.id) {
             windows.append(freshWindow)
         }
 
-        // Remove stale windows that no longer exist
+        // Remove stale windows
         let staleIDs = existingIDs.subtracting(freshIDs)
         if !staleIDs.isEmpty {
             windows.removeAll { staleIDs.contains($0.id) }
         }
 
-        // Adjust currIndex if needed
-        if currIndex >= windows.count {
+        // Restore selection to the same window, or clamp if it was removed
+        if let selectedID = selectedWindowID, let newIndex = windows.firstIndex(where: { $0.id == selectedID }) {
+            currIndex = newIndex
+        } else if currIndex >= windows.count {
             currIndex = windows.isEmpty ? -1 : windows.count - 1
         }
 
-        // Store monitor and recompute dimensions
         lastKnownBestGuessMonitor = bestGuessMonitor
         recomputeAndPublishDimensions(dockPosition: dockPosition, bestGuessMonitor: bestGuessMonitor)
     }

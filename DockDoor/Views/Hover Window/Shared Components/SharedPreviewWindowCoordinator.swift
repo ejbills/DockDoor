@@ -28,6 +28,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
     var windowSize: CGSize = getWindowSize()
 
     private var previousHoverWindowOrigin: CGPoint?
+    private var currentDockPosition: DockPosition = .bottom
 
     private(set) var hasScreenRecordingPermission: Bool = PermissionsChecker.hasScreenRecordingPermission()
 
@@ -138,13 +139,64 @@ final class SharedPreviewWindowCoordinator: NSPanel {
     }
 
     /// Merges fresh windows only if the preview is visible and showing the expected app.
-    /// Returns true if merge was performed, false if guards failed.
     @MainActor
     @discardableResult
     func mergeWindowsIfShowing(for pid: pid_t, windows: [WindowInfo], dockPosition: DockPosition, bestGuessMonitor: NSScreen) -> Bool {
         guard isVisible, currentlyDisplayedPID == pid else { return false }
+        let previousWindowCount = windowSwitcherCoordinator.windows.count
         windowSwitcherCoordinator.mergeWindows(windows, dockPosition: dockPosition, bestGuessMonitor: bestGuessMonitor)
+
+        if windowSwitcherCoordinator.windows.count != previousWindowCount {
+            refreshPanelFrameToFitContent()
+        }
         return true
+    }
+
+    /// Refreshes the panel frame to match SwiftUI content's intrinsic size after window count changes.
+    @MainActor
+    private func refreshPanelFrameToFitContent() {
+        guard let hostingView = contentView else { return }
+
+        hostingView.layoutSubtreeIfNeeded()
+        let newSize = hostingView.fittingSize
+        guard newSize != frame.size else { return }
+
+        let screen = NSScreen.screenContainingMouse(NSEvent.mouseLocation)
+        let screenFrame = screen.frame
+
+        let wasClampedToTop = frame.maxY >= screenFrame.maxY - 1
+        let wasClampedToBottom = frame.minY <= screenFrame.minY + 1
+
+        // Anchor based on dock position; if clamped to screen edge, keep that edge fixed
+        var newOrigin = switch currentDockPosition {
+        case .left:
+            if wasClampedToTop {
+                CGPoint(x: frame.minX, y: frame.maxY - newSize.height)
+            } else if wasClampedToBottom {
+                CGPoint(x: frame.minX, y: frame.minY)
+            } else {
+                CGPoint(x: frame.minX, y: frame.midY - newSize.height / 2)
+            }
+        case .right:
+            if wasClampedToTop {
+                CGPoint(x: frame.maxX - newSize.width, y: frame.maxY - newSize.height)
+            } else if wasClampedToBottom {
+                CGPoint(x: frame.maxX - newSize.width, y: frame.minY)
+            } else {
+                CGPoint(x: frame.maxX - newSize.width, y: frame.midY - newSize.height / 2)
+            }
+        case .bottom, .cmdTab:
+            CGPoint(x: frame.midX - newSize.width / 2, y: frame.minY)
+        default:
+            CGPoint(x: frame.midX - newSize.width / 2, y: frame.midY - newSize.height / 2)
+        }
+
+        newOrigin.x = max(screenFrame.minX, min(newOrigin.x, screenFrame.maxX - newSize.width))
+        newOrigin.y = max(screenFrame.minY, min(newOrigin.y, screenFrame.maxY - newSize.height))
+
+        animateWithUserPreference {
+            self.animator().setFrame(CGRect(origin: newOrigin, size: newSize), display: true)
+        }
     }
 
     @MainActor
@@ -625,9 +677,10 @@ final class SharedPreviewWindowCoordinator: NSPanel {
             showFullPreviewWindow(for: windowInfo, on: windowScreen)
         } else {
             self.appName = appName
-            let currentDockPosition = DockUtils.getDockPosition()
+            let activeDockPosition = dockPositionOverride ?? DockUtils.getDockPosition()
+            currentDockPosition = activeDockPosition
 
-            windowSwitcherCoordinator.setWindows(windows, dockPosition: currentDockPosition, bestGuessMonitor: screen)
+            windowSwitcherCoordinator.setWindows(windows, dockPosition: activeDockPosition, bestGuessMonitor: screen)
 
             if let initialIndex {
                 windowSwitcherCoordinator.setIndex(to: initialIndex, shouldScroll: false)
