@@ -7,6 +7,7 @@ import Defaults
 private weak var activeWindowManipulationObserversInstance: WindowManipulationObservers?
 private var pendingNotifications: [String: DispatchWorkItem] = [:]
 private let windowProcessingDebounceInterval: TimeInterval = Defaults[.windowProcessingDebounceInterval]
+private let axObserverWorkQueue = DispatchQueue(label: "ddObsWorkQueue", qos: .userInitiated)
 
 class WindowManipulationObservers {
     private let previewCoordinator: SharedPreviewWindowCoordinator
@@ -134,7 +135,7 @@ class WindowManipulationObservers {
         }
 
         let appAX = AXUIElementCreateApplication(app.processIdentifier)
-        doAfter(0.3) { // wait for space switching animation
+        axObserverWorkQueue.asyncAfter(deadline: .now() + 0.3) {
             if let focusedWindow = try? appAX.focusedWindow() {
                 WindowUtil.updateWindowDateTime(element: focusedWindow, app: app)
             }
@@ -281,7 +282,7 @@ class WindowManipulationObservers {
             }
         }
         updateDateTimeWorkItem = workItem
-        DispatchQueue.main.asyncAfter(deadline: .now() + windowProcessingDebounceInterval, execute: workItem)
+        axObserverWorkQueue.asyncAfter(deadline: .now() + windowProcessingDebounceInterval, execute: workItem)
     }
 
     private func handleWindowEvent(element: AXUIElement,
@@ -302,13 +303,12 @@ class WindowManipulationObservers {
                     if validate {
                         windowSet = windowSet.filter { WindowUtil.isValidElement($0.axElement) }
                     }
-                    stateAdjustment?(&windowSet)
                 }
             }
             cacheUpdateWorkItem = nil
         }
         cacheUpdateWorkItem = (workItem, hasStateAdjustment)
-        DispatchQueue.main.asyncAfter(deadline: .now() + windowProcessingDebounceInterval, execute: workItem)
+        axObserverWorkQueue.asyncAfter(deadline: .now() + windowProcessingDebounceInterval, execute: workItem)
     }
 
     private func update(windowSet: inout Set<WindowInfo>,
@@ -341,17 +341,19 @@ func axObserverCallback(observer: AXObserver, element: AXUIElement, notification
     let notification = notificationName as String
     let key = "\(pid)-\(notification)"
 
-    pendingNotifications[key]?.cancel()
+    axObserverWorkQueue.async {
+        pendingNotifications[key]?.cancel()
 
-    let workItem = DispatchWorkItem {
-        pendingNotifications.removeValue(forKey: key)
-        if let app = NSRunningApplication(processIdentifier: pid),
-           let observerInstance = activeWindowManipulationObserversInstance
-        {
-            observerInstance.processAXNotification(element: element, notificationName: notification, app: app, pid: pid)
+        let workItem = DispatchWorkItem {
+            pendingNotifications.removeValue(forKey: key)
+            if let app = NSRunningApplication(processIdentifier: pid),
+               let observerInstance = activeWindowManipulationObserversInstance
+            {
+                observerInstance.processAXNotification(element: element, notificationName: notification, app: app, pid: pid)
+            }
         }
-    }
 
-    pendingNotifications[key] = workItem
-    DispatchQueue.main.asyncAfter(deadline: .now() + windowProcessingDebounceInterval, execute: workItem)
+        pendingNotifications[key] = workItem
+        axObserverWorkQueue.asyncAfter(deadline: .now() + windowProcessingDebounceInterval, execute: workItem)
+    }
 }
