@@ -526,7 +526,6 @@ struct WindowPreview: View {
                     }
                 }
             }
-            .fixedSize(horizontal: false, vertical: true)
         }
     }
 
@@ -579,7 +578,6 @@ struct WindowPreview: View {
             }
         }
 
-        // Only show the toolbar if there's either a title or traffic lights to display
         if hasTitle || hasTrafficLights {
             return AnyView(
                 VStack(spacing: 0) {
@@ -654,6 +652,7 @@ struct WindowPreview: View {
                     .padding(.top, 4)
                 }
             }
+            .frame(maxWidth: maxWindowDimension.x > 0 ? maxWindowDimension.x : nil)
             .background {
                 let cornerRadius = uniformCardRadius ? 20.0 : 0.0
 
