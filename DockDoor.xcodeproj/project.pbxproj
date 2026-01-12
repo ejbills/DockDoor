@@ -318,8 +318,6 @@
 		D4E5F6789012345678901234 /* ActiveAppIndicatorDockDetection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveAppIndicatorDockDetection.swift; sourceTree = "<group>"; };
 		D924F5BAEF564CC1AF84527876E14356 /* Glow.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Glow.wav; sourceTree = "<group>"; };
 		F098F8107F464776B5C18294427CAECD /* ScriptCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptCommands.swift; sourceTree = "<group>"; };
-		A4E8BB47686D4EF6B89131D2EB26FEE8 /* DockDoor.sdef */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.sdef; path = DockDoor.sdef; sourceTree = "<group>"; };
-		F098F8107F464776B5C18294427CAECD /* ScriptCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptCommands.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */

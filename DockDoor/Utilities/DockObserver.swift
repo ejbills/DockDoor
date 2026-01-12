@@ -229,14 +229,14 @@ final class DockObserver {
             cachedWindows.append(contentsOf: WindowUtil.readCachedWindows(for: appInstance.processIdentifier))
         }
 
-        if Defaults[.ignoreAppsWithSingleWindow], cachedWindows.count <= 1 {
-            cachedWindows = []
-        }
-
         lastHoveredPID = currentApp.processIdentifier
         lastHoveredAppWasFrontmost = NSWorkspace.shared.frontmostApplication?.processIdentifier == currentApp.processIdentifier
         lastHoveredAppNeedsRestore = currentApp.isHidden || cachedWindows.contains(where: \.isMinimized)
         lastHoveredAppHadWindows = !cachedWindows.isEmpty
+
+        if Defaults[.ignoreAppsWithSingleWindow], cachedWindows.count <= 1 {
+            cachedWindows = []
+        }
 
         guard Defaults[.enableDockPreviews] else { return }
 
@@ -300,8 +300,6 @@ final class DockObserver {
                     if freshWindows.isEmpty {
                         if !Self.isSpecialControlsApp(currentAppBundleId) || !Defaults[.showSpecialAppControls] {
                             previewCoordinator.hideWindow()
-                            lastHoveredAppHadWindows = false
-                            lastHoveredAppNeedsRestore = currentAppIsHidden
                             return
                         }
                     }
@@ -312,9 +310,6 @@ final class DockObserver {
                         dockPosition: dockPosition,
                         bestGuessMonitor: monitor
                     )
-
-                    lastHoveredAppHadWindows = !freshWindows.isEmpty
-                    lastHoveredAppNeedsRestore = currentAppIsHidden || freshWindows.contains(where: \.isMinimized)
                 }
             } catch {
                 DebugLogger.log("DockObserver", details: "Failed to fetch windows for dock hover: \(error)")
@@ -641,8 +636,10 @@ final class DockObserver {
                 let needsRestore = restorationNeededAtClickTime || currentlyHasMinimizedWindows
 
                 if needsRestore {
+                    DebugLogger.log("DockClick", details: "\(appName): restoring (needsRestore=true, minimized=\(currentlyHasMinimizedWindows))")
                     restoreAppWindows(windows: windows, app: app, appName: appName)
                 } else if wasFrontmostOnHover, !windows.isEmpty {
+                    DebugLogger.log("DockClick", details: "\(appName): hiding (wasFrontmost=true, windows=\(windows.count))")
                     hideAppWindows(windows: windows, app: app, appName: appName)
                 }
             }
