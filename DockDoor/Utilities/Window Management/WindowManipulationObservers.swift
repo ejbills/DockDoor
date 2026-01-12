@@ -303,6 +303,7 @@ class WindowManipulationObservers {
                     if validate {
                         windowSet = windowSet.filter { WindowUtil.isValidElement($0.axElement) }
                     }
+                    stateAdjustment?(&windowSet)
                 }
             }
             cacheUpdateWorkItem = nil

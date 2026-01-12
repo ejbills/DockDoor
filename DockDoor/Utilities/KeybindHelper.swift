@@ -19,6 +19,7 @@ private class WindowSwitchingCoordinator {
     private var isProcessingSwitcher = false
     private var uiRenderingTask: Task<Void, Never>?
     private var currentSessionId = UUID()
+    private var initializationCancelled = false
 
     private static var lastUpdateAllWindowsTime: Date?
     private static let updateAllWindowsThrottleInterval: TimeInterval = 60.0
@@ -63,6 +64,9 @@ private class WindowSwitchingCoordinator {
         previewCoordinator: SharedPreviewWindowCoordinator,
         mode: SwitcherInvocationMode = .allWindows
     ) async {
+        // Reset cancellation flag at start of initialization
+        initializationCancelled = false
+
         var windows = WindowUtil.getAllWindowsOfAllApps()
 
         let filterBySpace = (mode == .currentSpaceOnly || mode == .activeAppCurrentSpace)
@@ -98,6 +102,8 @@ private class WindowSwitchingCoordinator {
         let targetScreen = getTargetScreenForSwitcher()
         coordinator.initializeForWindowSwitcher(with: windows, dockPosition: DockUtils.getDockPosition(), bestGuessMonitor: targetScreen)
         coordinator.activateKeybindSession()
+
+        guard !initializationCancelled else { return }
 
         let currentMouseLocation = DockObserver.getMousePosition()
 
@@ -208,6 +214,14 @@ private class WindowSwitchingCoordinator {
     func cancelSwitching(previewCoordinator: SharedPreviewWindowCoordinator) {
         currentSessionId = UUID()
         previewCoordinator.windowSwitcherCoordinator.deactivateKeybindSession()
+        uiRenderingTask?.cancel()
+    }
+
+    /// Cancels any pending UI rendering task and invalidates the session ID.
+    @MainActor
+    func cancelPendingRender() {
+        currentSessionId = UUID()
+        initializationCancelled = true
         uiRenderingTask?.cancel()
     }
 }
@@ -556,10 +570,11 @@ class KeybindHelper {
         let isWindowSwitcherActive = previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive
         let shouldSkipShiftOnlyBackward = Defaults[.requireShiftTabToGoBack] && isWindowSwitcherActive
 
+        // Only allow Shift-only backward cycling when the window switcher is already active.
         if !oldShiftState, currentShiftState,
            previewCoordinator.isVisible,
-           (isWindowSwitcherActive && (currentSwitcherModifierIsPressed || Defaults[.preventSwitcherHide])) ||
-           !isWindowSwitcherActive
+           isWindowSwitcherActive,
+           currentSwitcherModifierIsPressed || Defaults[.preventSwitcherHide]
         {
             if !shouldSkipShiftOnlyBackward {
                 Task { @MainActor in
@@ -602,6 +617,9 @@ class KeybindHelper {
             if oldSwitcherModifierState, !isSwitcherModifierKeyPressed, !hasProcessedModifierRelease {
                 hasProcessedModifierRelease = true
                 preventSwitcherHideOnRelease = false
+
+                windowSwitchingCoordinator.cancelPendingRender()
+
                 Task { @MainActor in
                     if self.previewCoordinator.isVisible, self.previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive {
                         self.previewCoordinator.selectAndBringToFrontCurrentWindow()

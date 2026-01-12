@@ -10,17 +10,24 @@ enum OSAScriptRunner {
             DispatchQueue.global(qos: .userInitiated).async {
                 let process = Process()
                 process.executableURL = URL(fileURLWithPath: "/usr/bin/osascript")
-                process.arguments = ["-e", script]
 
-                let pipe = Pipe()
-                process.standardOutput = pipe
+                let inputPipe = Pipe()
+                let outputPipe = Pipe()
+                process.standardInput = inputPipe
+                process.standardOutput = outputPipe
                 process.standardError = FileHandle.nullDevice
 
                 do {
                     try process.run()
+
+                    if let scriptData = script.data(using: .utf8) {
+                        inputPipe.fileHandleForWriting.write(scriptData)
+                    }
+                    inputPipe.fileHandleForWriting.closeFile()
+
                     process.waitUntilExit()
 
-                    let data = pipe.fileHandleForReading.readDataToEndOfFile()
+                    let data = outputPipe.fileHandleForReading.readDataToEndOfFile()
                     let output = String(data: data, encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines)
                     continuation.resume(returning: output)
                 } catch {
@@ -34,10 +41,21 @@ enum OSAScriptRunner {
         DispatchQueue.global(qos: .userInitiated).async {
             let process = Process()
             process.executableURL = URL(fileURLWithPath: "/usr/bin/osascript")
-            process.arguments = ["-e", script]
+
+            let inputPipe = Pipe()
+            process.standardInput = inputPipe
             process.standardOutput = FileHandle.nullDevice
             process.standardError = FileHandle.nullDevice
-            try? process.run()
+
+            do {
+                try process.run()
+                if let scriptData = script.data(using: .utf8) {
+                    inputPipe.fileHandleForWriting.write(scriptData)
+                }
+                inputPipe.fileHandleForWriting.closeFile()
+            } catch {
+                DebugLogger.log("Applescript ran into a failure during execution, can be ignored.")
+            }
         }
     }
 }

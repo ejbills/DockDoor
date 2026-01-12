@@ -31,7 +31,7 @@ extension View {
         modifier(DockStyleModifier(cornerRadius: cornerRadius, highlightColor: highlightColor, backgroundOpacity: backgroundOpacity, frostedTranslucentLayer: frostedTranslucentLayer, variant: variant))
     }
 
-    func simpleBlurBackground(variant: Int = 18, cornerRadius: Double = Defaults[.uniformCardRadius] ? 20 : 0, strokeOpacity: Double = 0.1, strokeWidth: Double = 1.5) -> some View {
+    func simpleBlurBackground(variant: Int = 18, cornerRadius: Double = Defaults[.uniformCardRadius] ? 20 + (20 * Defaults[.globalPaddingMultiplier]) : 0, strokeOpacity: Double = 0.1, strokeWidth: Double = 1.5) -> some View {
         background {
             BlurView(variant: variant)
                 .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
