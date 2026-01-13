@@ -147,6 +147,8 @@ class MediaInfo: ObservableObject {
     private var lastPollDate: Date = .init()
     private var interpolatedTime: TimeInterval = 0
 
+    private var artworkFetchTask: Task<Void, Never>?
+
     private static let delimiter = "〈♫DOCKDOOR♫〉"
 
     // MARK: - Public Methods
@@ -575,14 +577,15 @@ class MediaInfo: ObservableObject {
 
         currentTime = newCurrentTime
 
-        // Handle artwork URL if present
         if components.count > 6, !components[6].isEmpty {
-            Task {
+            artworkFetchTask?.cancel()
+            artworkFetchTask = Task {
                 await fetchArtworkFromURL(components[6])
             }
-        } else {
-            Task {
-                await setDefaultArtwork()
+        } else if trackChanged, !newTitle.isEmpty {
+            artworkFetchTask?.cancel()
+            artworkFetchTask = Task {
+                await fetchArtworkFromiTunes(title: newTitle, artist: newArtist, album: newAlbum)
             }
         }
     }
@@ -597,25 +600,52 @@ class MediaInfo: ObservableObject {
     }
 
     private func fetchArtworkFromURL(_ urlString: String) async {
-        guard let url = URL(string: urlString) else {
-            await setDefaultArtwork()
-            return
-        }
+        guard !Task.isCancelled, let url = URL(string: urlString) else { return }
 
         do {
             let (data, _) = try await URLSession.shared.data(from: url)
+            guard !Task.isCancelled else { return }
             if let image = NSImage(data: data) {
                 artwork = image
-            } else {
-                await setDefaultArtwork()
             }
         } catch {
-            await setDefaultArtwork()
+            // Cancelled or failed
         }
     }
 
-    private func setDefaultArtwork() async {
-        artwork = NSImage(systemSymbolName: "music.note", accessibilityDescription: nil)
+    private func fetchArtworkFromiTunes(title: String, artist: String, album: String) async {
+        guard !Task.isCancelled else { return }
+
+        let searchTerm: String = if !album.isEmpty, !artist.isEmpty {
+            "\(album) \(artist)"
+        } else if !artist.isEmpty {
+            "\(title) \(artist)"
+        } else {
+            title
+        }
+
+        guard let encodedTerm = searchTerm.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+              let url = URL(string: "https://itunes.apple.com/search?term=\(encodedTerm)&media=music&entity=song&limit=1")
+        else { return }
+
+        do {
+            let (data, _) = try await URLSession.shared.data(from: url)
+            guard !Task.isCancelled else { return }
+
+            let response = try JSONDecoder().decode(iTunesSearchResponse.self, from: data)
+
+            if let firstResult = response.results.first,
+               let artworkURL = URL(string: firstResult.artworkUrl100.replacingOccurrences(of: "100x100", with: "600x600"))
+            {
+                let (imageData, _) = try await URLSession.shared.data(from: artworkURL)
+                guard !Task.isCancelled else { return }
+                if let image = NSImage(data: imageData) {
+                    artwork = image
+                }
+            }
+        } catch {
+            // Cancelled or failed
+        }
     }
 
     private func clearMediaInfo() {
@@ -635,26 +665,16 @@ class MediaInfo: ObservableObject {
     // MARK: - Script Builders
 
     private func buildMediaInfoScript() -> String {
-        let artworkScript = appName == "Music" ? """
-        try
-            set artData to data of artwork 1 of current track
-            set tempPath to "/tmp/aw.jpg"
-            set fileRef to open for access tempPath with write permission
-            set eof fileRef to 0
-            write artData to fileRef
-            close access fileRef
-            set base64String to do shell script "base64 -i /tmp/aw.jpg | tr -d '\\n'"
-            set artworkURLString to "data:image/jpeg;base64," & base64String
-        on error
-            set artworkURLString to ""
-        end try
-        try
-            do shell script "rm /tmp/aw.jpg 2>/dev/null"
-        end try
-        """ : "set artworkURLString to artwork url of current track"
+        if currentApp == appleMusicAppIdentifier {
+            buildAppleMusicInfoScript()
+        } else {
+            buildSpotifyInfoScript()
+        }
+    }
 
-        return """
-        tell application "\(appName)"
+    private func buildAppleMusicInfoScript() -> String {
+        """
+        tell application "Music"
             if it is running then
                 try
                     set trackName to name of current track
@@ -664,15 +684,9 @@ class MediaInfo: ObservableObject {
                     set currentPos to player position
                     set trackDuration to duration of current track
 
-                    set artworkURLString to ""
-                    try
-                        \(artworkScript)
-                    on error
-                    end try
-
-                    return trackName & "\(Self.delimiter)" & artistName & "\(Self.delimiter)" & albumName & "\(Self.delimiter)" & playerState & "\(Self.delimiter)" & currentPos & "\(Self.delimiter)" & trackDuration & "\(Self.delimiter)" & artworkURLString
+                    return trackName & "\(Self.delimiter)" & artistName & "\(Self.delimiter)" & albumName & "\(Self.delimiter)" & playerState & "\(Self.delimiter)" & currentPos & "\(Self.delimiter)" & trackDuration & "\(Self.delimiter)"
                 on error errMsg
-                    if errMsg contains "Can't get current track" or errMsg contains "-1728" or errMsg contains "Can't get artwork url" then
+                    if errMsg contains "Can't get current track" or errMsg contains "-1728" then
                         return "no_library_track_info"
                     end if
                     return "error"
@@ -684,12 +698,44 @@ class MediaInfo: ObservableObject {
         """
     }
 
+    private func buildSpotifyInfoScript() -> String {
+        """
+        tell application "Spotify"
+            if it is running then
+                try
+                    set trackName to name of current track
+                    set artistName to artist of current track
+                    set albumName to album of current track
+                    set playerState to player state as string
+                    set currentPos to player position
+                    set trackDuration to duration of current track
+                    set artworkURLString to artwork url of current track
+
+                    return trackName & "\(Self.delimiter)" & artistName & "\(Self.delimiter)" & albumName & "\(Self.delimiter)" & playerState & "\(Self.delimiter)" & currentPos & "\(Self.delimiter)" & trackDuration & "\(Self.delimiter)" & artworkURLString
+                on error errMsg
+                    return "error"
+                end try
+            else
+                return "not_running"
+            end if
+        end tell
+        """
+    }
+
     private func buildMediaCommandScript(command: String) -> String {
-        "tell application \"\(appName)\" to \(command)"
+        if currentApp == appleMusicAppIdentifier {
+            "tell application \"Music\" to \(command)"
+        } else {
+            "tell application \"Spotify\" to \(command)"
+        }
     }
 
     private func buildSeekScript(position: TimeInterval) -> String {
-        "tell application \"\(appName)\" to set player position to \(position)"
+        if currentApp == appleMusicAppIdentifier {
+            "tell application \"Music\" to set player position to \(position)"
+        } else {
+            "tell application \"Spotify\" to set player position to \(position)"
+        }
     }
 
     private func convertPlainLyricsToTimedLines(_ plainLyrics: String) -> [LyricLine] {
@@ -717,6 +763,7 @@ class MediaInfo: ObservableObject {
         updateTimer?.invalidate()
         lyricsTimer?.invalidate()
         currentFetchTask?.cancel()
+        artworkFetchTask?.cancel()
     }
 }
 
@@ -760,4 +807,15 @@ struct NetEaseLyrics: Codable {
 
 struct NetEaseLyric: Codable {
     let lyric: String?
+}
+
+// MARK: - iTunes Search API
+
+struct iTunesSearchResponse: Codable {
+    let resultCount: Int
+    let results: [iTunesTrack]
+}
+
+struct iTunesTrack: Codable {
+    let artworkUrl100: String
 }
