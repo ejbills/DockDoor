@@ -21,7 +21,7 @@ extension View {
     }
 
     func borderedBackground(_ content: some ShapeStyle, lineWidth: CGFloat = 1.0, cornerRadius: CGFloat = 0) -> some View {
-        borderedBackground(content, lineWidth: lineWidth, shape: RoundedRectangle(cornerRadius: cornerRadius))
+        borderedBackground(content, lineWidth: lineWidth, shape: RoundedRectangle(cornerRadius: cornerRadius + 1, style: .continuous))
     }
 
     func fadeOnEdges(axis: Axis, fadeLength: Double, disable: Bool = false) -> some View {

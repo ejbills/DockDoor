@@ -1,13 +1,15 @@
 import AppKit
+import Defaults
 import SwiftUI
 
 struct SearchFieldView: View {
     let searchField: NSTextField
+    @Default(.globalPaddingMultiplier) private var globalPaddingMultiplier
 
     var body: some View {
         ZStack {
             BlurView(variant: 18, frostedTranslucentLayer: false)
-                .clipShape(RoundedRectangle(cornerRadius: 20))
+                .clipShape(RoundedRectangle(cornerRadius: CardRadius.base + (CardRadius.innerPadding * globalPaddingMultiplier)))
 
             HStack(spacing: 8) {
                 Image(systemName: "magnifyingglass")

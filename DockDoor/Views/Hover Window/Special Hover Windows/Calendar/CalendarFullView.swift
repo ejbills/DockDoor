@@ -74,7 +74,7 @@ struct CalendarFullView: View {
             )
             .padding([.top, .leading], 4)
         }
-        .simpleBlurBackground()
+        .dockStyle(cornerRadius: CardRadius.inner, variant: 18, outerPadding: 0)
         .padding(.top, (appNameStyle == .popover && showAppTitleData) ? 30 : 0)
     }
 }

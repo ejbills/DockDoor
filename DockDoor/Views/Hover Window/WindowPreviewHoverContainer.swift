@@ -301,7 +301,7 @@ struct WindowPreviewHoverContainer: View {
                     CmdTabFocusFullOverlayView()
                         .transition(.opacity)
                         .allowsHitTesting(false)
-                        .clipShape(RoundedRectangle(cornerRadius : Defaults[.uniformCardRadius] ? 20 + (20 * Defaults[.globalPaddingMultiplier]): 8, style: .continuous))
+                        .clipShape(RoundedRectangle(cornerRadius: CardRadius.container, style: .continuous))
                 }
             }
             .overlay {
@@ -1065,10 +1065,10 @@ struct WindowPreviewHoverContainer: View {
                     return true
                 }()
 
-                // Fall back to compact if no image and no live preview
-                let shouldUseCompactFallback = windowInfo.image == nil && !useLivePreview
+                // Use compact mode if: container threshold triggered OR per-window fallback (no image and no live preview)
+                let useCompactForThisWindow = shouldUseCompactMode || (windowInfo.image == nil && !useLivePreview)
 
-                if shouldUseCompactMode {
+                if useCompactForThisWindow {
                     WindowPreviewCompact(
                         windowInfo: windowInfo,
                         index: index,
@@ -1101,8 +1101,7 @@ struct WindowPreviewHoverContainer: View {
                         showAppIconOnly: effectiveShowAppIconOnly,
                         mockPreviewActive: mockPreviewActive,
                         onHoverIndexChange: handleHoverIndexChange,
-                        useLivePreview: useLivePreview,
-                        shouldUseCompactFallback: shouldUseCompactFallback
+                        useLivePreview: useLivePreview
                     )
                     .id("\(appName)-\(index)")
                     .gesture(

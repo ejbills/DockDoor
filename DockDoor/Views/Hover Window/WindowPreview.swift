@@ -17,7 +17,6 @@ struct WindowPreview: View {
     let mockPreviewActive: Bool
     let onHoverIndexChange: ((Int?, CGPoint?) -> Void)?
     let useLivePreview: Bool
-    let shouldUseCompactFallback: Bool
 
     // MARK: - Dock Preview Appearance Settings
 
@@ -73,6 +72,7 @@ struct WindowPreview: View {
     @Default(.windowSwitcherLivePreviewQuality) var windowSwitcherLivePreviewQuality
     @Default(.windowSwitcherLivePreviewFrameRate) var windowSwitcherLivePreviewFrameRate
     @Default(.showAnimations) var showAnimations
+    @Default(.globalPaddingMultiplier) var globalPaddingMultiplier
 
     @State private var isHoveringOverDockPeekPreview = false
     @State private var isHoveringOverWindowSwitcherPreview = false
@@ -217,7 +217,7 @@ struct WindowPreview: View {
             }
         }
         .animation(showAnimations ? .easeInOut(duration: 0.15) : nil, value: inactive)
-        .clipShape(uniformCardRadius ? AnyShape(RoundedRectangle(cornerRadius: 12, style: .continuous)) : AnyShape(Rectangle()))
+        .clipShape(RoundedRectangle(cornerRadius: CardRadius.image, style: .continuous))
         .dynamicWindowFrame(
             allowDynamicSizing: allowDynamicImageSizing,
             dimensions: dimensions,
@@ -636,26 +636,26 @@ struct WindowPreview: View {
                 }
             }
             .background {
-                let cornerRadius = uniformCardRadius ? 20.0 : 0.0
+                let cornerRadius = uniformCardRadius ? CardRadius.base + (CardRadius.innerPadding * globalPaddingMultiplier) : 8.0
 
                 if !hidePreviewCardBackground {
                     BlurView(variant: 18)
                         .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
-                        .borderedBackground(.primary.opacity(0.1), lineWidth: 1.75, shape: RoundedRectangle(cornerRadius: cornerRadius))
-                        .padding(-6)
+                        .borderedBackground(.primary.opacity(0.1), lineWidth: 1.75, cornerRadius: cornerRadius)
+                        .padding(-CardRadius.innerPadding)
                         .overlay {
                             if finalIsSelected {
                                 let highlightColor = hoverHighlightColor ?? Color(nsColor: .controlAccentColor)
                                 RoundedRectangle(cornerRadius: cornerRadius)
                                     .fill(highlightColor.opacity(selectionOpacity))
-                                    .padding(-6)
+                                    .padding(-CardRadius.innerPadding)
                             }
                         }
                         .overlay {
                             if isActiveWindow {
                                 RoundedRectangle(cornerRadius: cornerRadius)
                                     .strokeBorder(activeAppIndicatorColor, lineWidth: 2.5)
-                                    .padding(-6)
+                                    .padding(-CardRadius.innerPadding)
                             }
                         }
                 }
@@ -663,9 +663,10 @@ struct WindowPreview: View {
         }
         .overlay {
             if isDraggingOver {
-                RoundedRectangle(cornerRadius: uniformCardRadius ? 20 : 0)
+                let dragRadius = uniformCardRadius ? CardRadius.base + (CardRadius.innerPadding * globalPaddingMultiplier) : CardRadius.fallback
+                RoundedRectangle(cornerRadius: dragRadius)
                     .fill(Color(nsColor: .controlAccentColor).opacity(0.3))
-                    .padding(-6)
+                    .padding(-CardRadius.innerPadding)
                     .opacity(highlightOpacity)
             }
 
@@ -724,36 +725,21 @@ struct WindowPreview: View {
     }
 
     var body: some View {
-        if shouldUseCompactFallback {
-            WindowPreviewCompact(
+        previewCoreContent
+            .windowPreviewInteractions(
                 windowInfo: windowInfo,
-                index: index,
-                dockPosition: dockPosition,
-                uniformCardRadius: uniformCardRadius,
-                handleWindowAction: handleWindowAction,
-                currIndex: currIndex,
                 windowSwitcherActive: windowSwitcherActive,
-                mockPreviewActive: mockPreviewActive,
-                onTap: onTap,
-                onHoverIndexChange: onHoverIndexChange
+                dockPosition: dockPosition,
+                handleWindowAction: { action in
+                    cancelFullPreviewHover()
+                    handleWindowAction(action)
+                },
+                onTap: {
+                    cancelFullPreviewHover()
+                    onTap?()
+                }
             )
-        } else {
-            previewCoreContent
-                .windowPreviewInteractions(
-                    windowInfo: windowInfo,
-                    windowSwitcherActive: windowSwitcherActive,
-                    dockPosition: dockPosition,
-                    handleWindowAction: { action in
-                        cancelFullPreviewHover()
-                        handleWindowAction(action)
-                    },
-                    onTap: {
-                        cancelFullPreviewHover()
-                        onTap?()
-                    }
-                )
-                .fixedSize()
-        }
+            .fixedSize()
     }
 
     private func cancelFullPreviewHover() {

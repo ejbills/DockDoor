@@ -13,9 +13,13 @@ enum WindowOrderPersistence {
         }
     }
 
+    private static let lock = NSLock()
     private static var cache: [String: PersistedWindowEntry]?
 
     static func getPersistedTimestamp(bundleIdentifier: String, windowTitle: String?) -> PersistedWindowEntry? {
+        lock.lock()
+        defer { lock.unlock() }
+
         if cache == nil {
             let entries = Defaults[.persistedWindowOrder]
             cache = Dictionary(entries.map { ($0.key, $0) }, uniquingKeysWith: { first, _ in first })

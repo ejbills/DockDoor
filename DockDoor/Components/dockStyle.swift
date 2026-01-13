@@ -1,12 +1,28 @@
 import Defaults
 import SwiftUI
 
+enum CardRadius {
+    static let base: Double = 20
+    static let innerPadding: Double = 6
+    static let outerPadding: Double = 20
+    static let fallback: Double = 8
+
+    static func outer(for padding: Double) -> Double {
+        Defaults[.uniformCardRadius] ? base + (padding * Defaults[.globalPaddingMultiplier]) : fallback
+    }
+
+    static var inner: Double { outer(for: innerPadding) }
+    static var container: Double { outer(for: outerPadding) }
+    static var image: Double { max(fallback, inner - innerPadding) }
+}
+
 struct DockStyleModifier: ViewModifier {
     let cornerRadius: Double
     let highlightColor: Color?
     let backgroundOpacity: CGFloat
     let frostedTranslucentLayer: Bool
     let variant: Int?
+    let outerPadding: CGFloat
 
     func body(content: Content) -> some View {
         content
@@ -20,22 +36,14 @@ struct DockStyleModifier: ViewModifier {
                     }
                 }
                 .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
-                .borderedBackground(.primary.opacity(0.19 * backgroundOpacity), lineWidth: 1.5, shape: RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
+                .borderedBackground(.primary.opacity(0.19 * backgroundOpacity), lineWidth: 1.75, cornerRadius: cornerRadius)
             }
-            .padding(2)
+            .padding(outerPadding)
     }
 }
 
 extension View {
-    func dockStyle(cornerRadius: Double = Defaults[.uniformCardRadius] ? 20 + (20 * Defaults[.globalPaddingMultiplier]) : 8, highlightColor: Color? = nil, backgroundOpacity: CGFloat = 1.0, frostedTranslucentLayer: Bool = false, variant: Int? = 19) -> some View {
-        modifier(DockStyleModifier(cornerRadius: cornerRadius, highlightColor: highlightColor, backgroundOpacity: backgroundOpacity, frostedTranslucentLayer: frostedTranslucentLayer, variant: variant))
-    }
-
-    func simpleBlurBackground(variant: Int = 18, cornerRadius: Double = Defaults[.uniformCardRadius] ? 20 + (20 * Defaults[.globalPaddingMultiplier]) : 0, strokeOpacity: Double = 0.1, strokeWidth: Double = 1.5) -> some View {
-        background {
-            BlurView(variant: variant)
-                .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
-                .borderedBackground(.secondary.opacity(0.19), lineWidth: strokeWidth, shape: RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
-        }
+    func dockStyle(cornerRadius: Double = CardRadius.container, highlightColor: Color? = nil, backgroundOpacity: CGFloat = 1.0, frostedTranslucentLayer: Bool = false, variant: Int? = 19, outerPadding: CGFloat = 2) -> some View {
+        modifier(DockStyleModifier(cornerRadius: cornerRadius, highlightColor: highlightColor, backgroundOpacity: backgroundOpacity, frostedTranslucentLayer: frostedTranslucentLayer, variant: variant, outerPadding: outerPadding))
     }
 }
