@@ -754,9 +754,7 @@ final class DockObserver {
         let isNaturalScrolling = nsEvent?.isDirectionInvertedFromDevice ?? false
         let normalizedDeltaY = isNaturalScrolling ? -deltaY : deltaY
 
-        if let bundleId = app.bundleIdentifier,
-           bundleId == appleMusicAppIdentifier || bundleId == spotifyAppIdentifier
-        {
+        if isMediaApp(app.bundleIdentifier) {
             if Defaults[.dockIconMediaScrollBehavior] == .adjustVolume {
                 handleVolumeScroll(deltaY: normalizedDeltaY)
                 return true

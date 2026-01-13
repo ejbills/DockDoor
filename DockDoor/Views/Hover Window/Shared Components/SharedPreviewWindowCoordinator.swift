@@ -92,11 +92,6 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         searchWindow?.isFocused ?? false
     }
 
-    private func isMediaApp(bundleIdentifier: String?) -> Bool {
-        guard let bundleId = bundleIdentifier else { return false }
-        return bundleId == spotifyAppIdentifier || bundleId == appleMusicAppIdentifier
-    }
-
     private func isCalendarApp(bundleIdentifier: String?) -> Bool {
         guard let bundleId = bundleIdentifier else { return false }
         return bundleId == calendarAppIdentifier
@@ -105,7 +100,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
     private func getEmbeddedContentType(for bundleIdentifier: String?) -> EmbeddedContentType {
         guard let bundleId = bundleIdentifier else { return .none }
 
-        if isMediaApp(bundleIdentifier: bundleId) {
+        if isMediaApp(bundleId) {
             return .media(bundleIdentifier: bundleId)
         } else if isCalendarApp(bundleIdentifier: bundleId) {
             return .calendar(bundleIdentifier: bundleId)

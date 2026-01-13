@@ -19,7 +19,9 @@ struct MediaControlsEmbeddedView: View {
             .padding(12)
             .frame(minWidth: idealWidth ?? (MediaControlsLayout.embeddedArtworkSize + MediaControlsLayout.artworkTextSpacing + 165), alignment: .center)
             .dockStyle(cornerRadius: CardRadius.inner, variant: 18, outerPadding: 0)
-            .mediaScrollable(bundleIdentifier: bundleIdentifier, mediaInfo: mediaInfo)
+            .if(isMediaApp(bundleIdentifier)) { view in
+                view.mediaScrollable(bundleIdentifier: bundleIdentifier, mediaInfo: mediaInfo)
+            }
     }
 
     @ViewBuilder

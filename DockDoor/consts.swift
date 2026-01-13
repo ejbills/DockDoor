@@ -14,6 +14,11 @@ let spotifyAppIdentifier = "com.spotify.client"
 let appleMusicAppIdentifier = "com.apple.Music"
 let calendarAppIdentifier = "com.apple.iCal"
 
+func isMediaApp(_ bundleIdentifier: String?) -> Bool {
+    guard let bundleId = bundleIdentifier else { return false }
+    return bundleId == spotifyAppIdentifier || bundleId == appleMusicAppIdentifier
+}
+
 extension Defaults.Keys {
     static let previewWidth = Key<CGFloat>("previewWidth", default: 300)
     static let previewHeight = Key<CGFloat>("previewHeight", default: 187.5)
