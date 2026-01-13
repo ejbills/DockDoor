@@ -7,7 +7,6 @@ struct WindowPreview: View {
     let onTap: (() -> Void)?
     let index: Int
     let dockPosition: DockPosition
-    let maxWindowDimension: CGPoint
     let bestGuessMonitor: NSScreen
     let uniformCardRadius: Bool
     let handleWindowAction: (WindowAction) -> Void
@@ -504,27 +503,21 @@ struct WindowPreview: View {
             }
         }
 
-        return VStack(spacing: 0) {
-            HStack(spacing: 4) {
-                if isLeadingControls {
-                    if showControlsContent {
-                        controlsContent
-                    }
-                    Spacer()
-                    if showTitleContent {
-                        appIconContent
-                        titleAndSubtitleContent
-                    }
-                } else {
-                    if showTitleContent {
-                        appIconContent
-                        titleAndSubtitleContent
-                    }
-                    Spacer()
-                    if showControlsContent {
-                        controlsContent
-                    }
+        return HStack(spacing: 4) {
+            if isLeadingControls {
+                if showControlsContent { controlsContent }
+                Spacer(minLength: 8)
+                if showTitleContent {
+                    appIconContent
+                    titleAndSubtitleContent
                 }
+            } else {
+                if showTitleContent {
+                    appIconContent
+                    titleAndSubtitleContent
+                }
+                Spacer(minLength: 8)
+                if showControlsContent { controlsContent }
             }
         }
     }
@@ -580,25 +573,15 @@ struct WindowPreview: View {
 
         if hasTitle || hasTrafficLights {
             return AnyView(
-                VStack(spacing: 0) {
-                    HStack(spacing: 4) {
-                        if isLeadingControls {
-                            if showControlsContent {
-                                controlsContent
-                            }
-                            Spacer()
-                            if showTitleContent {
-                                titleContent
-                            }
-                        } else {
-                            if showTitleContent {
-                                titleContent
-                            }
-                            Spacer()
-                            if showControlsContent {
-                                controlsContent
-                            }
-                        }
+                HStack(spacing: 4) {
+                    if isLeadingControls {
+                        if showControlsContent { controlsContent }
+                        Spacer(minLength: 8)
+                        if showTitleContent { titleContent }
+                    } else {
+                        if showTitleContent { titleContent }
+                        Spacer(minLength: 8)
+                        if showControlsContent { controlsContent }
                     }
                 }
             )
@@ -652,7 +635,6 @@ struct WindowPreview: View {
                     .padding(.top, 4)
                 }
             }
-            .frame(maxWidth: maxWindowDimension.x > 0 ? maxWindowDimension.x : nil)
             .background {
                 let cornerRadius = uniformCardRadius ? 20.0 : 0.0
 

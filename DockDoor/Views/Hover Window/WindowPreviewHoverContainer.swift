@@ -1090,7 +1090,6 @@ struct WindowPreviewHoverContainer: View {
                         onTap: onWindowTap,
                         index: index,
                         dockPosition: dockPosition,
-                        maxWindowDimension: currentMaxDimensionForPreviews,
                         bestGuessMonitor: bestGuessMonitor,
                         uniformCardRadius: uniformCardRadius,
                         handleWindowAction: { action in
