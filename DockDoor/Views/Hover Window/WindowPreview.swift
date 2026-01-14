@@ -635,6 +635,7 @@ struct WindowPreview: View {
                     .padding(.top, 4)
                 }
             }
+            .frame(maxWidth: dimensions.maxDimensions.width > 0 ? dimensions.maxDimensions.width : nil)
             .background {
                 let cornerRadius = uniformCardRadius ? CardRadius.base + (CardRadius.innerPadding * globalPaddingMultiplier) : 8.0
 

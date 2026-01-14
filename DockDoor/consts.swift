@@ -447,6 +447,15 @@ enum WindowSwitcherControlPosition: String, CaseIterable, Defaults.Serializable 
         }
     }
 
+    /// Total height added by toolbar row(s) for this position (~38px per row)
+    var toolbarHeightOffset: CGFloat {
+        let rowHeight: CGFloat = 38
+        var offset: CGFloat = 0
+        if showsOnTop { offset += rowHeight }
+        if showsOnBottom { offset += rowHeight }
+        return offset
+    }
+
     var topConfiguration: (isLeadingControls: Bool, showTitle: Bool, showControls: Bool) {
         switch self {
         case .topLeading, .bottomLeading:

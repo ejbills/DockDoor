@@ -91,6 +91,13 @@ struct WindowPreviewHoverContainer: View {
     @Default(.disableImagePreview) var disableImagePreview
     @Default(.previewWidth) var previewWidth
 
+    // Control position settings for toolbar height calculation
+    @Default(.windowSwitcherControlPosition) var windowSwitcherControlPosition
+    @Default(.cmdTabControlPosition) var cmdTabControlPosition
+    @Default(.dockPreviewControlPosition) var dockPreviewControlPosition
+    @Default(.useEmbeddedDockPreviewElements) var useEmbeddedDockPreviewElements
+    @Default(.cmdTabUseEmbeddedDockPreviewElements) var cmdTabUseEmbeddedDockPreviewElements
+
     @State private var draggedWindowIndex: Int? = nil
     @State private var isDragging = false
 
@@ -150,6 +157,30 @@ struct WindowPreviewHoverContainer: View {
         }
 
         return min(300, minWidth)
+    }
+
+    /// Height offset for embedded content to match WindowPreview's toolbar space.
+    /// WindowPreview adds toolbar(s) above/below the image; embedded content needs the same total height.
+    private var embeddedToolbarHeightOffset: CGFloat {
+        guard embeddedContentType != .none else { return 0 }
+
+        let windowSwitcherActive = previewStateCoordinator.windowSwitcherActive
+
+        let effectiveUseEmbeddedElements = dockPosition == .cmdTab
+            ? cmdTabUseEmbeddedDockPreviewElements
+            : useEmbeddedDockPreviewElements
+
+        guard !effectiveUseEmbeddedElements || windowSwitcherActive else { return 0 }
+
+        let controlPosition: WindowSwitcherControlPosition = if windowSwitcherActive {
+            windowSwitcherControlPosition
+        } else if dockPosition == .cmdTab {
+            cmdTabControlPosition
+        } else {
+            dockPreviewControlPosition
+        }
+
+        return controlPosition.toolbarHeightOffset
     }
 
     private var shouldUseCompactMode: Bool {
@@ -638,6 +669,7 @@ struct WindowPreviewHoverContainer: View {
                         ForEach(createFlowItems(), id: \.id) { item in
                             buildFlowItem(
                                 item: item,
+                                isHorizontal: isHorizontal,
                                 currentMaxDimensionForPreviews: currentMaxDimensionForPreviews,
                                 currentDimensionsMapForPreviews: currentDimensionsMapForPreviews
                             )
@@ -651,6 +683,7 @@ struct WindowPreviewHoverContainer: View {
                                 ForEach(rowItems, id: \.id) { item in
                                     buildFlowItem(
                                         item: item,
+                                        isHorizontal: isHorizontal,
                                         currentMaxDimensionForPreviews: currentMaxDimensionForPreviews,
                                         currentDimensionsMapForPreviews: currentDimensionsMapForPreviews
                                     )
@@ -666,6 +699,7 @@ struct WindowPreviewHoverContainer: View {
                                 ForEach(colItems, id: \.id) { item in
                                     buildFlowItem(
                                         item: item,
+                                        isHorizontal: isHorizontal,
                                         currentMaxDimensionForPreviews: currentMaxDimensionForPreviews,
                                         currentDimensionsMapForPreviews: currentDimensionsMapForPreviews
                                     )
@@ -1019,12 +1053,20 @@ struct WindowPreviewHoverContainer: View {
     @ViewBuilder
     private func buildFlowItem(
         item: FlowItem,
+        isHorizontal: Bool,
         currentMaxDimensionForPreviews: CGPoint,
         currentDimensionsMapForPreviews: [Int: WindowDimensions]
     ) -> some View {
         switch item {
         case .embedded:
+            let adjustedHeight = isHorizontal
+                ? currentMaxDimensionForPreviews.y + embeddedToolbarHeightOffset
+                : nil
             embeddedContentView()
+                .frame(
+                    width: currentMaxDimensionForPreviews.x > 0 ? currentMaxDimensionForPreviews.x : nil,
+                    height: adjustedHeight
+                )
                 .id("\(appName)-embedded")
         case let .window(index):
             let windows = previewStateCoordinator.windows
