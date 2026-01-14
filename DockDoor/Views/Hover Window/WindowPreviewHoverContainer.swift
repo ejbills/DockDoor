@@ -634,7 +634,7 @@ struct WindowPreviewHoverContainer: View {
                     noResultsView()
                 } else if shouldUseCompactMode {
                     // Compact mode: simple vertical list
-                    VStack(spacing: 4) {
+                    LazyVStack(spacing: 4) {
                         ForEach(createFlowItems(), id: \.id) { item in
                             buildFlowItem(
                                 item: item,
@@ -645,9 +645,9 @@ struct WindowPreviewHoverContainer: View {
                     }
                 } else if isHorizontal {
                     let chunkedItems = createChunkedItems()
-                    VStack(alignment: .leading, spacing: 24) {
+                    LazyVStack(alignment: .leading, spacing: 24) {
                         ForEach(Array(chunkedItems.enumerated()), id: \.offset) { index, rowItems in
-                            HStack(spacing: 24) {
+                            LazyHStack(spacing: 24) {
                                 ForEach(rowItems, id: \.id) { item in
                                     buildFlowItem(
                                         item: item,
@@ -660,9 +660,9 @@ struct WindowPreviewHoverContainer: View {
                     }
                 } else {
                     let chunkedItems = createChunkedItems()
-                    HStack(alignment: .top, spacing: 24) {
+                    LazyHStack(alignment: .top, spacing: 24) {
                         ForEach(Array(chunkedItems.enumerated()), id: \.offset) { index, colItems in
-                            VStack(spacing: 24) {
+                            LazyVStack(spacing: 24) {
                                 ForEach(colItems, id: \.id) { item in
                                     buildFlowItem(
                                         item: item,
