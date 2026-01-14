@@ -683,13 +683,7 @@ struct WindowPreviewHoverContainer: View {
         .onChange(of: previewStateCoordinator.currIndex) { newIndex in
             guard previewStateCoordinator.shouldScrollToIndex else { return }
 
-            if showAnimations {
-                withAnimation(.interpolatingSpring(duration: 0.2)) {
-                    scrollProxy.scrollTo("\(appName)-\(newIndex)", anchor: .center)
-                }
-            } else {
-                scrollProxy.scrollTo("\(appName)-\(newIndex)", anchor: .center)
-            }
+            scrollProxy.scrollTo("\(appName)-\(newIndex)", anchor: .center)
         }
     }
 
