@@ -1025,7 +1025,6 @@ struct WindowPreviewHoverContainer: View {
         switch item {
         case .embedded:
             embeddedContentView()
-                .padding(-6)
                 .id("\(appName)-embedded")
         case let .window(index):
             let windows = previewStateCoordinator.windows
