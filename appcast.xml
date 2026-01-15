@@ -3,14 +3,14 @@
     <channel>
         <title>DockDoor</title>
         <item>
-            <title>1.30.1.0.25</title>
-            <pubDate>Wed, 14 Jan 2026 11:00:23 -0800</pubDate>
+            <title>1.30.1.0.26</title>
+            <pubDate>Thu, 15 Jan 2026 14:42:02 -0800</pubDate>
             <sparkle:releaseNotesLink>https://dockdoor.net/CHANGELOG.html</sparkle:releaseNotesLink>
             <sparkle:channel>beta</sparkle:channel>
-            <sparkle:version>1.30.1.0.25</sparkle:version>
-            <sparkle:shortVersionString>1.30.1.0.25 beta</sparkle:shortVersionString>
+            <sparkle:version>1.30.1.0.26</sparkle:version>
+            <sparkle:shortVersionString>1.30.1.0.26 beta</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/ejbills/DockDoor/releases/download/1.30.1.0.25/DockDoor.dmg" length="21638262" type="application/octet-stream" sparkle:edSignature="y8vM980RS39Kmx+1OjjCC0u/WGWAv/mPZ+9+c/uV4OR4G4icbi7UVGP57n0zOLsDqJ++sORFjC6xVGA9I+sbAw==" />
+            <enclosure url="https://github.com/ejbills/DockDoor/releases/download/1.30.1.0.26/DockDoor.dmg" length="21662930" type="application/octet-stream" sparkle:edSignature="eOpzeHaxewfbBArVi+/q1tA2ddhGKd2L6J3QYFNx8NNGXLwHqShZJNb/Qyw8fMdsULccGF+DwunaTKVHYVxFAg==" />
         </item>
     <item>
             <title>1.30.1</title>
