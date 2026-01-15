@@ -124,8 +124,7 @@ class MouseTrackingNSView: NSView {
         guard let activeDockObserver = DockObserver.activeInstance else { return false }
         guard let originalDockItem = dockItemElement else { return false }
 
-        let currentAppReturnType = activeDockObserver.getDockItemAppStatusUnderMouse()
-        guard let currentDockItem = currentAppReturnType.dockItemElement else { return false }
+        guard let currentDockItem = activeDockObserver.getHoveredApplicationDockItem() else { return false }
 
         return originalDockItem == currentDockItem
     }

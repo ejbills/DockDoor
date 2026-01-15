@@ -319,7 +319,7 @@ final class DockObserver {
 
     /// Returns the currently selected (hovered) dock item, if any.
     private func getSelectedDockItem() -> AXUIElement? {
-        guard let dockAppPID = NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.dock").first?.processIdentifier else {
+        guard let dockAppPID = currentDockPID else {
             return nil
         }
 
@@ -355,7 +355,7 @@ final class DockObserver {
 
     /// Returns all dock item children from the dock list.
     private func getAllDockItemChildren() -> [AXUIElement]? {
-        guard let dockAppPID = NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.dock").first?.processIdentifier else {
+        guard let dockAppPID = currentDockPID else {
             return nil
         }
 

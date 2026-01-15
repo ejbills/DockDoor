@@ -81,7 +81,7 @@ struct MediaScrollModifier: ViewModifier {
             end tell
             """
 
-            OSAScriptRunner.runFireAndForget(script)
+            OSAScriptRunner.shared.runFireAndForget(script)
         }
         seekDebounceWork = work
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2, execute: work)

@@ -3,10 +3,24 @@ import Foundation
 
 // MARK: - OSAScript Helper
 
-/// Runs AppleScript via osascript process - avoids NSAppleScript thread safety issues
-enum OSAScriptRunner {
-    static func run(_ script: String) async -> String? {
-        await withCheckedContinuation { continuation in
+/// Singleton that manages osascript processes for media queries.
+final class OSAScriptRunner: @unchecked Sendable {
+    static let shared = OSAScriptRunner()
+
+    private let lock = NSLock()
+    private var currentProcess: Process?
+    private var currentContinuation: CheckedContinuation<String?, Never>?
+
+    private init() {}
+
+    func run(_ script: String) async -> String? {
+        cancelCurrentProcess()
+
+        return await withCheckedContinuation { continuation in
+            lock.lock()
+            currentContinuation = continuation
+            lock.unlock()
+
             DispatchQueue.global(qos: .userInitiated).async {
                 let process = Process()
                 process.executableURL = URL(fileURLWithPath: "/usr/bin/osascript")
@@ -16,6 +30,14 @@ enum OSAScriptRunner {
                 process.standardInput = inputPipe
                 process.standardOutput = outputPipe
                 process.standardError = FileHandle.nullDevice
+
+                self.lock.lock()
+                if self.currentContinuation == nil {
+                    self.lock.unlock()
+                    return
+                }
+                self.currentProcess = process
+                self.lock.unlock()
 
                 do {
                     try process.run()
@@ -27,17 +49,51 @@ enum OSAScriptRunner {
 
                     process.waitUntilExit()
 
-                    let data = outputPipe.fileHandleForReading.readDataToEndOfFile()
-                    let output = String(data: data, encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines)
-                    continuation.resume(returning: output)
+                    self.lock.lock()
+                    let cont = self.currentContinuation
+                    if self.currentProcess === process {
+                        self.currentProcess = nil
+                        self.currentContinuation = nil
+                    }
+                    self.lock.unlock()
+
+                    if let cont {
+                        let data = outputPipe.fileHandleForReading.readDataToEndOfFile()
+                        let output = String(data: data, encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines)
+                        cont.resume(returning: output)
+                    }
                 } catch {
-                    continuation.resume(returning: nil)
+                    DebugLogger.log("OSAScriptRunner", details: "Process failed: \(error.localizedDescription)")
+                    self.lock.lock()
+                    let cont = self.currentContinuation
+                    if self.currentProcess === process {
+                        self.currentProcess = nil
+                        self.currentContinuation = nil
+                    }
+                    self.lock.unlock()
+                    cont?.resume(returning: nil)
                 }
             }
         }
     }
 
-    static func runFireAndForget(_ script: String) {
+    func cancelCurrentProcess() {
+        lock.lock()
+        let process = currentProcess
+        let continuation = currentContinuation
+        currentProcess = nil
+        currentContinuation = nil
+        lock.unlock()
+
+        if let process, process.isRunning {
+            process.terminate()
+        }
+        continuation?.resume(returning: nil)
+    }
+
+    func runFireAndForget(_ script: String) {
+        cancelCurrentProcess()
+
         DispatchQueue.global(qos: .userInitiated).async {
             let process = Process()
             process.executableURL = URL(fileURLWithPath: "/usr/bin/osascript")
@@ -54,7 +110,7 @@ enum OSAScriptRunner {
                 }
                 inputPipe.fileHandleForWriting.closeFile()
             } catch {
-                DebugLogger.log("Applescript ran into a failure during execution, can be ignored.")
+                DebugLogger.log("OSAScriptRunner", details: "Fire-and-forget failed: \(error.localizedDescription)")
             }
         }
     }
@@ -184,7 +240,7 @@ class MediaInfo: ObservableObject {
 
     func seek(to position: TimeInterval) {
         let script = buildSeekScript(position: position)
-        OSAScriptRunner.runFireAndForget(script)
+        OSAScriptRunner.shared.runFireAndForget(script)
         currentTime = position
 
         // Reset interpolation timing after seeking
@@ -513,14 +569,14 @@ class MediaInfo: ObservableObject {
         let script = buildMediaCommandScript(command: command)
 
         Task {
-            _ = await OSAScriptRunner.run(script)
+            _ = await OSAScriptRunner.shared.run(script)
             try? await Task.sleep(nanoseconds: delay)
             await fetchMediaData()
         }
     }
 
     private func executeAppleScript(_ script: String) async {
-        guard let resultString = await OSAScriptRunner.run(script) else { return }
+        guard let resultString = await OSAScriptRunner.shared.run(script) else { return }
 
         if resultString == "not_running" {
             clearMediaInfo()
@@ -660,6 +716,7 @@ class MediaInfo: ObservableObject {
         updateTimer?.invalidate()
         updateTimer = nil
         clearLyrics()
+        OSAScriptRunner.shared.cancelCurrentProcess()
     }
 
     // MARK: - Script Builders
@@ -764,6 +821,7 @@ class MediaInfo: ObservableObject {
         lyricsTimer?.invalidate()
         currentFetchTask?.cancel()
         artworkFetchTask?.cancel()
+        OSAScriptRunner.shared.cancelCurrentProcess()
     }
 }
 
