@@ -98,6 +98,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationWillTerminate(_ notification: Notification) {
         WindowUtil.saveWindowOrderFromCache()
+        URLCache.shared.removeAllCachedResponses()
     }
 
     func setupMenuBar() {
