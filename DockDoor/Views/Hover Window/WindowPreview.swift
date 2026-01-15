@@ -17,6 +17,7 @@ struct WindowPreview: View {
     let mockPreviewActive: Bool
     let onHoverIndexChange: ((Int?, CGPoint?) -> Void)?
     let useLivePreview: Bool
+    var skeletonMode: Bool = false
 
     // MARK: - Dock Preview Appearance Settings
 
@@ -197,7 +198,9 @@ struct WindowPreview: View {
         let frameRate = windowSwitcherActive ? windowSwitcherLivePreviewFrameRate : dockLivePreviewFrameRate
 
         Group {
-            if useLivePreview {
+            if skeletonMode {
+                Color.clear
+            } else if useLivePreview {
                 LivePreviewImage(windowID: windowInfo.id, fallbackImage: windowInfo.image, quality: quality, frameRate: frameRate)
                     .scaledToFit()
             } else if let cgImage = windowInfo.image {
@@ -741,6 +744,8 @@ struct WindowPreview: View {
                 }
             )
             .fixedSize()
+            .opacity(skeletonMode ? 0 : 1)
+            .allowsHitTesting(!skeletonMode)
     }
 
     private func cancelFullPreviewHover() {

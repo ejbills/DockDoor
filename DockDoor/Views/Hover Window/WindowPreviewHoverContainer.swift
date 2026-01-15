@@ -91,13 +91,6 @@ struct WindowPreviewHoverContainer: View {
     @Default(.disableImagePreview) var disableImagePreview
     @Default(.previewWidth) var previewWidth
 
-    // Control position settings for toolbar height calculation
-    @Default(.windowSwitcherControlPosition) var windowSwitcherControlPosition
-    @Default(.cmdTabControlPosition) var cmdTabControlPosition
-    @Default(.dockPreviewControlPosition) var dockPreviewControlPosition
-    @Default(.useEmbeddedDockPreviewElements) var useEmbeddedDockPreviewElements
-    @Default(.cmdTabUseEmbeddedDockPreviewElements) var cmdTabUseEmbeddedDockPreviewElements
-
     @State private var draggedWindowIndex: Int? = nil
     @State private var isDragging = false
 
@@ -157,30 +150,6 @@ struct WindowPreviewHoverContainer: View {
         }
 
         return min(300, minWidth)
-    }
-
-    /// Height offset for embedded content to match WindowPreview's toolbar space.
-    /// WindowPreview adds toolbar(s) above/below the image; embedded content needs the same total height.
-    private var embeddedToolbarHeightOffset: CGFloat {
-        guard embeddedContentType != .none else { return 0 }
-
-        let windowSwitcherActive = previewStateCoordinator.windowSwitcherActive
-
-        let effectiveUseEmbeddedElements = dockPosition == .cmdTab
-            ? cmdTabUseEmbeddedDockPreviewElements
-            : useEmbeddedDockPreviewElements
-
-        guard !effectiveUseEmbeddedElements || windowSwitcherActive else { return 0 }
-
-        let controlPosition: WindowSwitcherControlPosition = if windowSwitcherActive {
-            windowSwitcherControlPosition
-        } else if dockPosition == .cmdTab {
-            cmdTabControlPosition
-        } else {
-            dockPreviewControlPosition
-        }
-
-        return controlPosition.toolbarHeightOffset
     }
 
     private var shouldUseCompactMode: Bool {
@@ -1059,15 +1028,34 @@ struct WindowPreviewHoverContainer: View {
     ) -> some View {
         switch item {
         case .embedded:
-            let adjustedHeight = isHorizontal
-                ? currentMaxDimensionForPreviews.y + embeddedToolbarHeightOffset
-                : nil
-            embeddedContentView()
-                .frame(
-                    width: currentMaxDimensionForPreviews.x > 0 ? currentMaxDimensionForPreviews.x : nil,
-                    height: adjustedHeight
+            let firstWindowIndex = filteredWindowIndices().first ?? 0
+            let firstWindow = previewStateCoordinator.windows.first
+            let firstWindowDimensions = currentDimensionsMapForPreviews[firstWindowIndex]
+
+            if isHorizontal, let window = firstWindow, let dimensions = firstWindowDimensions {
+                WindowPreview(
+                    windowInfo: window,
+                    onTap: nil,
+                    index: firstWindowIndex,
+                    dockPosition: dockPosition,
+                    bestGuessMonitor: bestGuessMonitor,
+                    uniformCardRadius: uniformCardRadius,
+                    handleWindowAction: { _ in },
+                    currIndex: -1,
+                    windowSwitcherActive: previewStateCoordinator.windowSwitcherActive,
+                    dimensions: dimensions,
+                    showAppIconOnly: false,
+                    mockPreviewActive: mockPreviewActive,
+                    onHoverIndexChange: nil,
+                    useLivePreview: false,
+                    skeletonMode: true
                 )
+                .overlay { embeddedContentView() }
                 .id("\(appName)-embedded")
+            } else {
+                embeddedContentView()
+                    .id("\(appName)-embedded")
+            }
         case let .window(index):
             let windows = previewStateCoordinator.windows
             if index < windows.count {
