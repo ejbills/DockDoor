@@ -5,13 +5,15 @@ struct MarqueeText: View {
     var text: String
     var startDelay: Double
     var maxWidth: Double?
+    var greedy: Bool
 
     @State private var textSize: CGSize = .zero
 
-    init(text: String, startDelay: Double = 1.0, maxWidth: Double? = nil) {
+    init(text: String, startDelay: Double = 1.0, maxWidth: Double? = nil, greedy: Bool = false) {
         self.text = text
         self.startDelay = startDelay
         self.maxWidth = maxWidth
+        self.greedy = greedy
     }
 
     var body: some View {
@@ -25,7 +27,8 @@ struct MarqueeText: View {
                 nonMovingAlignment: .center,
                 spacingBetweenElements: 8,
                 horizontalPadding: 8,
-                fadeLength: 8
+                fadeLength: 8,
+                greedy: greedy
             ) {
                 Text(text)
                     .lineLimit(1)
@@ -35,6 +38,7 @@ struct MarqueeText: View {
             Text(text)
                 .lineLimit(1)
                 .measure($textSize)
+                .frame(maxWidth: greedy ? .infinity : nil, alignment: .leading)
         }
     }
 }
@@ -48,6 +52,7 @@ struct TheMarquee<C: View>: View {
     var spacingBetweenElements: Double = 8
     var horizontalPadding: Double = 8
     var fadeLength: Double = 8
+    var greedy: Bool = false
     @ViewBuilder var content: () -> C
     @State private var contentSize: CGSize = .zero
     @State private var offset: Double = 0
@@ -160,6 +165,9 @@ struct TheMarquee<C: View>: View {
     private var marqueeOuterFrameWidth: CGFloat? {
         if let fw = forcedWidth {
             return CGFloat(fw)
+        }
+        if greedy {
+            return nil // Let it expand to fill available space
         }
         if measured {
             if !internalShouldMove {

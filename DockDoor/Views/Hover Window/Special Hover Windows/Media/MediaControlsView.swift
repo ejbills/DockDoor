@@ -44,7 +44,7 @@ enum MediaControlsLayout {
 }
 
 struct MediaControlsView: View {
-    @StateObject private var mediaInfo = MediaInfo()
+    @ObservedObject private var mediaInfo: MediaInfo
     let appName: String
     let bundleIdentifier: String
     let dockPosition: DockPosition
@@ -99,6 +99,7 @@ struct MediaControlsView: View {
         self.isEmbeddedMode = isEmbeddedMode
         self.isPinnedMode = isPinnedMode
         self.idealWidth = idealWidth
+        mediaInfo = MediaInfo.shared(for: bundleIdentifier)
     }
 
     var body: some View {
@@ -108,16 +109,18 @@ struct MediaControlsView: View {
         .onAppear {
             isLoadingMediaInfo = true
             loadAppIcon()
-            Task {
-                await mediaInfo.fetchMediaInfo(for: bundleIdentifier)
-                withAnimation(showAnimations ? .smooth(duration: 0.225) : nil) {
-                    isLoadingMediaInfo = false
-                }
-            }
+            mediaInfo.viewAppeared()
             if let artwork = mediaInfo.artwork {
                 dominantArtworkColor = artwork.averageColor()
             }
             hasAppeared = false
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {  // allows the swiftui content to fix its frame size before cached media is returned
+                if !mediaInfo.title.isEmpty {
+                    withAnimation(showAnimations ? .smooth(duration: 0.225) : nil) {
+                        isLoadingMediaInfo = false
+                    }
+                }
+            }
         }
         .onChange(of: mediaInfo.artwork) { newArtwork in
             if let artwork = newArtwork {
@@ -127,11 +130,15 @@ struct MediaControlsView: View {
             }
         }
         .onChange(of: mediaInfo.title) { newTitle in
+            if !newTitle.isEmpty, isLoadingMediaInfo {
+                withAnimation(showAnimations ? .smooth(duration: 0.225) : nil) {
+                    isLoadingMediaInfo = false
+                }
+            }
             if !mediaInfo.title.isEmpty, hasAppeared {
                 withAnimation(showAnimations ? .smooth(duration: 0.3) : nil) {
                     artworkRotation += 360
                 }
-
                 if lyricsMode {
                     Task {
                         await mediaInfo.fetchLyricsIfNeeded(lyricsMode: lyricsMode)
@@ -146,7 +153,7 @@ struct MediaControlsView: View {
             }
         }
         .onDisappear {
-            mediaInfo.updateTimer?.invalidate()
+            mediaInfo.viewDisappeared()
         }
     }
 

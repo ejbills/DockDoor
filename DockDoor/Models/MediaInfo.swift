@@ -3,8 +3,6 @@ import Foundation
 
 // MARK: - OSAScript Helper
 
-/// Runs AppleScript via osascript process - avoids NSAppleScript thread safety issues.
-/// Each call is independent with its own process and continuation - no shared state, no race conditions.
 enum OSAScriptRunner {
     static func run(_ script: String) async -> String? {
         await withCheckedContinuation { continuation in
@@ -32,7 +30,6 @@ enum OSAScriptRunner {
                     let output = String(data: data, encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines)
                     continuation.resume(returning: output)
                 } catch {
-                    DebugLogger.log("OSAScriptRunner", details: "Process failed: \(error.localizedDescription)")
                     continuation.resume(returning: nil)
                 }
             }
@@ -111,7 +108,18 @@ struct LyricsOVHResponse: Codable {
 }
 
 @MainActor
-class MediaInfo: ObservableObject {
+final class MediaInfo: ObservableObject {
+    private static var cache: [String: MediaInfo] = [:]
+
+    static func shared(for bundleIdentifier: String) -> MediaInfo {
+        if let existing = cache[bundleIdentifier] {
+            return existing
+        }
+        let newInfo = MediaInfo(bundleIdentifier: bundleIdentifier)
+        cache[bundleIdentifier] = newInfo
+        return newInfo
+    }
+
     @Published var title: String = ""
     @Published var artist: String = ""
     @Published var album: String = ""
@@ -136,6 +144,7 @@ class MediaInfo: ObservableObject {
 
     private var currentApp: String = ""
     var updateTimer: Timer?
+    private var activeViewCount: Int = 0
 
     // MARK: - Lyrics Timer
 
@@ -153,23 +162,41 @@ class MediaInfo: ObservableObject {
 
     private static let delimiter = "〈♫DOCKDOOR♫〉"
 
-    // MARK: - Public Methods
-
-    func fetchMediaInfo(for bundleIdentifier: String) async {
+    private init(bundleIdentifier: String) {
         currentApp = bundleIdentifier
-
         switch bundleIdentifier {
         case spotifyAppIdentifier:
             appName = "Spotify"
         case appleMusicAppIdentifier:
             appName = "Music"
         default:
-            clearMediaInfo()
-            return
+            break
         }
+    }
 
-        await fetchMediaData()
-        startPeriodicUpdates()
+    func viewAppeared() {
+        activeViewCount += 1
+        if activeViewCount == 1 {
+            Task { [weak self] in
+                await self?.fetchMediaData()
+                guard let self, activeViewCount > 0 else { return }
+                startPeriodicUpdates()
+            }
+        }
+    }
+
+    func viewDisappeared() {
+        activeViewCount = max(0, activeViewCount - 1)
+        if activeViewCount == 0 {
+            stopPeriodicUpdates()
+        }
+    }
+
+    func stopPeriodicUpdates() {
+        updateTimer?.invalidate()
+        updateTimer = nil
+        lyricsTimer?.invalidate()
+        lyricsTimer = nil
     }
 
     func playPause() {
@@ -477,26 +504,17 @@ class MediaInfo: ObservableObject {
         lyricsTimer?.invalidate()
         lyricsTimer = nil
         lastFetchedTrack = ""
-
-        // Reset timing interpolation
         lastPolledTime = currentTime
         lastPollDate = Date()
         interpolatedTime = currentTime
-
-        // Restart with slower polling frequency
-        if !currentApp.isEmpty {
-            startPeriodicUpdates()
-        }
     }
 
     // MARK: - Private Methods
 
     private func startPeriodicUpdates() {
+        guard activeViewCount > 0 else { return }
         updateTimer?.invalidate()
-
-        // Use more frequent updates when lyrics are active for better sync
         let updateInterval: TimeInterval = hasLyrics ? 0.5 : 1.0
-
         updateTimer = Timer.scheduledTimer(withTimeInterval: updateInterval, repeats: true) { [weak self] _ in
             Task { @MainActor in
                 await self?.fetchMediaData()
@@ -505,7 +523,7 @@ class MediaInfo: ObservableObject {
     }
 
     private func fetchMediaData() async {
-        guard !currentApp.isEmpty else { return }
+        guard !currentApp.isEmpty, activeViewCount > 0 else { return }
 
         let script = buildMediaInfoScript()
         await executeAppleScript(script)
@@ -759,13 +777,6 @@ class MediaInfo: ObservableObject {
         }
 
         return lyricLines
-    }
-
-    deinit {
-        updateTimer?.invalidate()
-        lyricsTimer?.invalidate()
-        currentFetchTask?.cancel()
-        artworkFetchTask?.cancel()
     }
 }
 
