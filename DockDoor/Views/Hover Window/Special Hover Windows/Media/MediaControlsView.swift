@@ -114,7 +114,7 @@ struct MediaControlsView: View {
                 dominantArtworkColor = artwork.averageColor()
             }
             hasAppeared = false
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {  // allows the swiftui content to fix its frame size before cached media is returned
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) { // allows the swiftui content to fix its frame size before cached media is returned
                 if !mediaInfo.title.isEmpty {
                     withAnimation(showAnimations ? .smooth(duration: 0.225) : nil) {
                         isLoadingMediaInfo = false
