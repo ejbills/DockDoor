@@ -3,24 +3,11 @@ import Foundation
 
 // MARK: - OSAScript Helper
 
-/// Singleton that manages osascript processes for media queries.
-final class OSAScriptRunner: @unchecked Sendable {
-    static let shared = OSAScriptRunner()
-
-    private let lock = NSLock()
-    private var currentProcess: Process?
-    private var currentContinuation: CheckedContinuation<String?, Never>?
-
-    private init() {}
-
-    func run(_ script: String) async -> String? {
-        cancelCurrentProcess()
-
-        return await withCheckedContinuation { continuation in
-            lock.lock()
-            currentContinuation = continuation
-            lock.unlock()
-
+/// Runs AppleScript via osascript process - avoids NSAppleScript thread safety issues.
+/// Each call is independent with its own process and continuation - no shared state, no race conditions.
+enum OSAScriptRunner {
+    static func run(_ script: String) async -> String? {
+        await withCheckedContinuation { continuation in
             DispatchQueue.global(qos: .userInitiated).async {
                 let process = Process()
                 process.executableURL = URL(fileURLWithPath: "/usr/bin/osascript")
@@ -30,14 +17,6 @@ final class OSAScriptRunner: @unchecked Sendable {
                 process.standardInput = inputPipe
                 process.standardOutput = outputPipe
                 process.standardError = FileHandle.nullDevice
-
-                self.lock.lock()
-                if self.currentContinuation == nil {
-                    self.lock.unlock()
-                    return
-                }
-                self.currentProcess = process
-                self.lock.unlock()
 
                 do {
                     try process.run()
@@ -49,51 +28,18 @@ final class OSAScriptRunner: @unchecked Sendable {
 
                     process.waitUntilExit()
 
-                    self.lock.lock()
-                    let cont = self.currentContinuation
-                    if self.currentProcess === process {
-                        self.currentProcess = nil
-                        self.currentContinuation = nil
-                    }
-                    self.lock.unlock()
-
-                    if let cont {
-                        let data = outputPipe.fileHandleForReading.readDataToEndOfFile()
-                        let output = String(data: data, encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines)
-                        cont.resume(returning: output)
-                    }
+                    let data = outputPipe.fileHandleForReading.readDataToEndOfFile()
+                    let output = String(data: data, encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines)
+                    continuation.resume(returning: output)
                 } catch {
                     DebugLogger.log("OSAScriptRunner", details: "Process failed: \(error.localizedDescription)")
-                    self.lock.lock()
-                    let cont = self.currentContinuation
-                    if self.currentProcess === process {
-                        self.currentProcess = nil
-                        self.currentContinuation = nil
-                    }
-                    self.lock.unlock()
-                    cont?.resume(returning: nil)
+                    continuation.resume(returning: nil)
                 }
             }
         }
     }
 
-    func cancelCurrentProcess() {
-        lock.lock()
-        let process = currentProcess
-        let continuation = currentContinuation
-        currentProcess = nil
-        currentContinuation = nil
-        lock.unlock()
-
-        if let process, process.isRunning {
-            process.terminate()
-        }
-        continuation?.resume(returning: nil)
-    }
-
-    func runFireAndForget(_ script: String) {
-        cancelCurrentProcess()
-
+    static func runFireAndForget(_ script: String) {
         DispatchQueue.global(qos: .userInitiated).async {
             let process = Process()
             process.executableURL = URL(fileURLWithPath: "/usr/bin/osascript")
@@ -240,7 +186,7 @@ class MediaInfo: ObservableObject {
 
     func seek(to position: TimeInterval) {
         let script = buildSeekScript(position: position)
-        OSAScriptRunner.shared.runFireAndForget(script)
+        OSAScriptRunner.runFireAndForget(script)
         currentTime = position
 
         // Reset interpolation timing after seeking
@@ -569,14 +515,14 @@ class MediaInfo: ObservableObject {
         let script = buildMediaCommandScript(command: command)
 
         Task {
-            _ = await OSAScriptRunner.shared.run(script)
+            _ = await OSAScriptRunner.run(script)
             try? await Task.sleep(nanoseconds: delay)
             await fetchMediaData()
         }
     }
 
     private func executeAppleScript(_ script: String) async {
-        guard let resultString = await OSAScriptRunner.shared.run(script) else { return }
+        guard let resultString = await OSAScriptRunner.run(script) else { return }
 
         if resultString == "not_running" {
             clearMediaInfo()
@@ -716,7 +662,6 @@ class MediaInfo: ObservableObject {
         updateTimer?.invalidate()
         updateTimer = nil
         clearLyrics()
-        OSAScriptRunner.shared.cancelCurrentProcess()
     }
 
     // MARK: - Script Builders
@@ -821,7 +766,6 @@ class MediaInfo: ObservableObject {
         lyricsTimer?.invalidate()
         currentFetchTask?.cancel()
         artworkFetchTask?.cancel()
-        OSAScriptRunner.shared.cancelCurrentProcess()
     }
 }
 
