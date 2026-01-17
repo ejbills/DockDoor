@@ -38,6 +38,19 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://dockdoor.net/donate</div>
 
+<a id="1.31.1"></a>
+# [Release 1.31.1](https://github.com/ejbills/DockDoor/releases/tag/1.31.1) - 2026-01-17
+
+Apologies for the double update in one night, missed this bug.
+
+## 🐛 Bug Fixes
+- Fixed dock hover window updates
+  - Shows newly opened windows by updating cache in background 
+
+
+[Changes][1.31.1]
+
+
 <a id="1.31"></a>
 # [Release 1.31](https://github.com/ejbills/DockDoor/releases/tag/1.31) - 2026-01-17
 
@@ -78,9 +91,7 @@ Special thanks to **great2bnaustin**, **Larsen2k4**, **clementcampagna**, **gwme
 # [Release 1.30.1](https://github.com/ejbills/DockDoor/releases/tag/1.30.1) - 2026-01-02
 
 ## ✨ New Features
-- Added command line control
-  - Control windows via terminal
-  - Show previews with commands
+- --Added command line control-- DEPRECATED
 - Redesigned welcome experience
 
 ## 🔧 Improvements & Stability
@@ -1851,6 +1862,7 @@ v1.0
 [Changes][releases]
 
 
+[1.31.1]: https://github.com/ejbills/DockDoor/compare/1.31...1.31.1
 [1.31]: https://github.com/ejbills/DockDoor/compare/1.30.1...1.31
 [1.30.1]: https://github.com/ejbills/DockDoor/compare/1.30...1.30.1
 [1.30]: https://github.com/ejbills/DockDoor/compare/1.29...1.30
