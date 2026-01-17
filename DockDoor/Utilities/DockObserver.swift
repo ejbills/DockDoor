@@ -240,34 +240,30 @@ final class DockObserver {
 
         guard Defaults[.enableDockPreviews] else { return }
 
-        if cachedWindows.isEmpty {
-            guard Self.isSpecialControlsApp(currentApp.bundleIdentifier), Defaults[.showSpecialAppControls] else {
-                return
-            }
-        }
-
         let mouseScreen = NSScreen.screenContainingMouse(currentMouseLocation)
         let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
-
-        previewCoordinator.showWindow(
-            appName: currentAppInfo.localizedName ?? "Unknown",
-            windows: cachedWindows,
-            mouseLocation: convertedMouseLocation,
-            mouseScreen: mouseScreen,
-            dockItemElement: dockItemElement,
-            overrideDelay: false,
-            onWindowTap: { [weak self] in
-                self?.hideWindowAndResetLastApp()
-            },
-            bundleIdentifier: currentAppInfo.bundleIdentifier
-        )
-
-        previousStatus = .success(currentApp)
-
         let screenOrigin = mouseScreen.frame.origin
         let currentAppPID = currentApp.processIdentifier
-        let currentAppIsHidden = currentApp.isHidden
         let currentAppBundleId = currentApp.bundleIdentifier
+
+        let shouldShowCachedPreview = !cachedWindows.isEmpty ||
+            (Self.isSpecialControlsApp(currentApp.bundleIdentifier) && Defaults[.showSpecialAppControls])
+
+        if shouldShowCachedPreview {
+            previewCoordinator.showWindow(
+                appName: currentAppInfo.localizedName ?? "Unknown",
+                windows: cachedWindows,
+                mouseLocation: convertedMouseLocation,
+                mouseScreen: mouseScreen,
+                dockItemElement: dockItemElement,
+                overrideDelay: false,
+                onWindowTap: { [weak self] in
+                    self?.hideWindowAndResetLastApp()
+                },
+                bundleIdentifier: currentAppInfo.bundleIdentifier
+            )
+            previousStatus = .success(currentApp)
+        }
 
         Task.detached { [weak self] in
             guard let self else { return }
