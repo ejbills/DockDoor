@@ -9,6 +9,8 @@ struct GeneralAppearanceSection: View {
     @Default(.enableTitleMarquee) var enableTitleMarquee
     @Default(.showMinimizedHiddenLabels) var showMinimizedHiddenLabels
     @Default(.hidePreviewCardBackground) var hidePreviewCardBackground
+    @Default(.hideHoverContainerBackground) var hideHoverContainerBackground
+    @Default(.hideWidgetContainerBackground) var hideWidgetContainerBackground
     @Default(.showActiveWindowBorder) var showActiveWindowBorder
 
     var body: some View {
@@ -78,6 +80,26 @@ struct GeneralAppearanceSection: View {
                         Text("Hide preview card background")
                     }
                     Text("Removes the background panel from individual window previews.")
+                        .font(.footnote)
+                        .foregroundColor(.gray)
+                        .padding(.leading, 20)
+                }
+
+                VStack(alignment: .leading) {
+                    Toggle(isOn: $hideHoverContainerBackground) {
+                        Text("Hide hover container background")
+                    }
+                    Text("Removes the container background from window preview panels.")
+                        .font(.footnote)
+                        .foregroundColor(.gray)
+                        .padding(.leading, 20)
+                }
+
+                VStack(alignment: .leading) {
+                    Toggle(isOn: $hideWidgetContainerBackground) {
+                        Text("Hide widget container background")
+                    }
+                    Text("Removes the container background from widget panels (media controls, calendar).")
                         .font(.footnote)
                         .foregroundColor(.gray)
                         .padding(.leading, 20)

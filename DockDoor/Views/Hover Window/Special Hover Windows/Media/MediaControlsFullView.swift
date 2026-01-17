@@ -71,7 +71,8 @@ struct MediaControlsFullView: View {
                     }
                 }
             },
-            highlightColor: dominantArtworkColor
+            highlightColor: dominantArtworkColor,
+            isWidget: true
         )
         .pinnable(appName: appName, bundleIdentifier: bundleIdentifier, type: .media)
     }

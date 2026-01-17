@@ -55,7 +55,8 @@ struct CalendarFullView: View {
                         .allowsHitTesting(false)
                 }
             },
-            highlightColor: nil
+            highlightColor: nil,
+            isWidget: true
         )
         .pinnable(appName: appName, bundleIdentifier: bundleIdentifier, type: .calendar)
     }
