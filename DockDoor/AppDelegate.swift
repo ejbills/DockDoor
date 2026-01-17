@@ -41,6 +41,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // Set global AX timeout to prevent hangs from unresponsive apps
         AXUIElementSetMessagingTimeout(AXUIElementCreateSystemWide(), 1.0)
 
+        NSWorkspace.shared.notificationCenter.addObserver(
+            self,
+            selector: #selector(handleSystemWake),
+            name: NSWorkspace.didWakeNotification,
+            object: nil
+        )
+
         if Defaults[.showMenuBarIcon] {
             setupMenuBar()
         } else {
@@ -148,6 +155,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     @objc private func restartAppWrapper() {
         restartApp()
+    }
+
+    @objc private func handleSystemWake() {
+        // activate application to re-assert window level on wake from sleep (fixes window rendering issues, dock preview not rendering after sleep)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            NSApp.activate(ignoringOtherApps: true)
+        }
     }
 
     @objc func openSettingsWindow(_ sender: Any?) {
