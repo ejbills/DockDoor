@@ -12,7 +12,6 @@ final class ActiveAppIndicatorCoordinator {
     private var positionSettingsObserver: Defaults.Observation?
     private var screenParametersObserver: NSObjectProtocol?
     private var spaceChangeObserver: NSObjectProtocol?
-    private var dockPrefsObserver: NSObjectProtocol?
 
     // Dock layout observer (detects when dock icons are added/removed)
     private var dockLayoutObserver: AXObserver?
@@ -96,15 +95,6 @@ final class ActiveAppIndicatorCoordinator {
             self?.handleSpaceChanged()
         }
 
-        // Observe dock preference changes (detects auto-hide toggle)
-        dockPrefsObserver = DistributedNotificationCenter.default().addObserver(
-            forName: NSNotification.Name("com.apple.dock.prefchanged"),
-            object: nil,
-            queue: .main
-        ) { [weak self] _ in
-            self?.handleDockPrefsChanged()
-        }
-
         // Observe dock layout changes (detects when icons are added/removed)
         setupDockLayoutObserver()
     }
@@ -163,15 +153,6 @@ final class ActiveAppIndicatorCoordinator {
         }
     }
 
-    private func handleDockPrefsChanged() {
-        print("[Indicator:dockPrefsObserver] Dock prefs changed")
-        // Dock preferences changed (auto-hide toggled, etc.)
-        // Small delay to allow dock state to settle
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
-            self?.updateDockVisibilityState()
-        }
-    }
-
     private func updateDockVisibilityState() {
         let isVisible = isDockVisible()
 
@@ -218,9 +199,6 @@ final class ActiveAppIndicatorCoordinator {
         }
         if let observer = spaceChangeObserver {
             NSWorkspace.shared.notificationCenter.removeObserver(observer)
-        }
-        if let observer = dockPrefsObserver {
-            DistributedNotificationCenter.default().removeObserver(observer)
         }
         // Remove dock layout observer
         if let observer = dockLayoutObserver, let dockList = observedDockList {
