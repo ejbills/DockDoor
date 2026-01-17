@@ -1,6 +1,64 @@
 import AppKit
 import Foundation
 
+// MARK: - OSAScript Helper
+
+enum OSAScriptRunner {
+    static func run(_ script: String) async -> String? {
+        await withCheckedContinuation { continuation in
+            DispatchQueue.global(qos: .userInitiated).async {
+                let process = Process()
+                process.executableURL = URL(fileURLWithPath: "/usr/bin/osascript")
+
+                let inputPipe = Pipe()
+                let outputPipe = Pipe()
+                process.standardInput = inputPipe
+                process.standardOutput = outputPipe
+                process.standardError = FileHandle.nullDevice
+
+                do {
+                    try process.run()
+
+                    if let scriptData = script.data(using: .utf8) {
+                        inputPipe.fileHandleForWriting.write(scriptData)
+                    }
+                    inputPipe.fileHandleForWriting.closeFile()
+
+                    process.waitUntilExit()
+
+                    let data = outputPipe.fileHandleForReading.readDataToEndOfFile()
+                    let output = String(data: data, encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines)
+                    continuation.resume(returning: output)
+                } catch {
+                    continuation.resume(returning: nil)
+                }
+            }
+        }
+    }
+
+    static func runFireAndForget(_ script: String) {
+        DispatchQueue.global(qos: .userInitiated).async {
+            let process = Process()
+            process.executableURL = URL(fileURLWithPath: "/usr/bin/osascript")
+
+            let inputPipe = Pipe()
+            process.standardInput = inputPipe
+            process.standardOutput = FileHandle.nullDevice
+            process.standardError = FileHandle.nullDevice
+
+            do {
+                try process.run()
+                if let scriptData = script.data(using: .utf8) {
+                    inputPipe.fileHandleForWriting.write(scriptData)
+                }
+                inputPipe.fileHandleForWriting.closeFile()
+            } catch {
+                DebugLogger.log("OSAScriptRunner", details: "Fire-and-forget failed: \(error.localizedDescription)")
+            }
+        }
+    }
+}
+
 // NOTE: Borrows code from: https://github.com/aviwad/LyricFever
 
 // MARK: - Lyric Data Structures
@@ -50,7 +108,18 @@ struct LyricsOVHResponse: Codable {
 }
 
 @MainActor
-class MediaInfo: ObservableObject {
+final class MediaInfo: ObservableObject {
+    private static var cache: [String: MediaInfo] = [:]
+
+    static func shared(for bundleIdentifier: String) -> MediaInfo {
+        if let existing = cache[bundleIdentifier] {
+            return existing
+        }
+        let newInfo = MediaInfo(bundleIdentifier: bundleIdentifier)
+        cache[bundleIdentifier] = newInfo
+        return newInfo
+    }
+
     @Published var title: String = ""
     @Published var artist: String = ""
     @Published var album: String = ""
@@ -75,6 +144,7 @@ class MediaInfo: ObservableObject {
 
     private var currentApp: String = ""
     var updateTimer: Timer?
+    private var activeViewCount: Int = 0
 
     // MARK: - Lyrics Timer
 
@@ -88,25 +158,45 @@ class MediaInfo: ObservableObject {
     private var lastPollDate: Date = .init()
     private var interpolatedTime: TimeInterval = 0
 
+    private var artworkFetchTask: Task<Void, Never>?
+
     private static let delimiter = "〈♫DOCKDOOR♫〉"
 
-    // MARK: - Public Methods
-
-    func fetchMediaInfo(for bundleIdentifier: String) async {
+    private init(bundleIdentifier: String) {
         currentApp = bundleIdentifier
-
         switch bundleIdentifier {
         case spotifyAppIdentifier:
             appName = "Spotify"
         case appleMusicAppIdentifier:
             appName = "Music"
         default:
-            clearMediaInfo()
-            return
+            break
         }
+    }
 
-        await fetchMediaData()
-        startPeriodicUpdates()
+    func viewAppeared() {
+        activeViewCount += 1
+        if activeViewCount == 1 {
+            Task { [weak self] in
+                await self?.fetchMediaData()
+                guard let self, activeViewCount > 0 else { return }
+                startPeriodicUpdates()
+            }
+        }
+    }
+
+    func viewDisappeared() {
+        activeViewCount = max(0, activeViewCount - 1)
+        if activeViewCount == 0 {
+            stopPeriodicUpdates()
+        }
+    }
+
+    func stopPeriodicUpdates() {
+        updateTimer?.invalidate()
+        updateTimer = nil
+        lyricsTimer?.invalidate()
+        lyricsTimer = nil
     }
 
     func playPause() {
@@ -123,19 +213,15 @@ class MediaInfo: ObservableObject {
 
     func seek(to position: TimeInterval) {
         let script = buildSeekScript(position: position)
+        OSAScriptRunner.runFireAndForget(script)
+        currentTime = position
 
-        Task {
-            let appleScript = NSAppleScript(source: script)
-            appleScript?.executeAndReturnError(nil)
-            currentTime = position
+        // Reset interpolation timing after seeking
+        lastPolledTime = position
+        lastPollDate = Date()
+        interpolatedTime = position
 
-            // Reset interpolation timing after seeking
-            lastPolledTime = position
-            lastPollDate = Date()
-            interpolatedTime = position
-
-            updateCurrentLyricIndex()
-        }
+        updateCurrentLyricIndex()
     }
 
     // MARK: - Lyrics Methods
@@ -418,26 +504,17 @@ class MediaInfo: ObservableObject {
         lyricsTimer?.invalidate()
         lyricsTimer = nil
         lastFetchedTrack = ""
-
-        // Reset timing interpolation
         lastPolledTime = currentTime
         lastPollDate = Date()
         interpolatedTime = currentTime
-
-        // Restart with slower polling frequency
-        if !currentApp.isEmpty {
-            startPeriodicUpdates()
-        }
     }
 
     // MARK: - Private Methods
 
     private func startPeriodicUpdates() {
+        guard activeViewCount > 0 else { return }
         updateTimer?.invalidate()
-
-        // Use more frequent updates when lyrics are active for better sync
         let updateInterval: TimeInterval = hasLyrics ? 0.5 : 1.0
-
         updateTimer = Timer.scheduledTimer(withTimeInterval: updateInterval, repeats: true) { [weak self] _ in
             Task { @MainActor in
                 await self?.fetchMediaData()
@@ -446,7 +523,7 @@ class MediaInfo: ObservableObject {
     }
 
     private func fetchMediaData() async {
-        guard !currentApp.isEmpty else { return }
+        guard !currentApp.isEmpty, activeViewCount > 0 else { return }
 
         let script = buildMediaInfoScript()
         await executeAppleScript(script)
@@ -456,27 +533,14 @@ class MediaInfo: ObservableObject {
         let script = buildMediaCommandScript(command: command)
 
         Task {
-            let appleScript = NSAppleScript(source: script)
-            appleScript?.executeAndReturnError(nil)
+            _ = await OSAScriptRunner.run(script)
             try? await Task.sleep(nanoseconds: delay)
             await fetchMediaData()
         }
     }
 
     private func executeAppleScript(_ script: String) async {
-        let scriptResult: String? = await Task.detached(priority: .utility) {
-            let appleScript = NSAppleScript(source: script)
-            var errorDict: NSDictionary?
-            let executionResult = appleScript?.executeAndReturnError(&errorDict)
-
-            if let error = errorDict {
-                print("AppleScript error: \(error)")
-                return nil
-            }
-            return executionResult?.stringValue
-        }.value
-
-        guard let resultString = scriptResult else { return }
+        guard let resultString = await OSAScriptRunner.run(script) else { return }
 
         if resultString == "not_running" {
             clearMediaInfo()
@@ -533,14 +597,15 @@ class MediaInfo: ObservableObject {
 
         currentTime = newCurrentTime
 
-        // Handle artwork URL if present
         if components.count > 6, !components[6].isEmpty {
-            Task {
+            artworkFetchTask?.cancel()
+            artworkFetchTask = Task {
                 await fetchArtworkFromURL(components[6])
             }
-        } else {
-            Task {
-                await setDefaultArtwork()
+        } else if trackChanged, !newTitle.isEmpty {
+            artworkFetchTask?.cancel()
+            artworkFetchTask = Task {
+                await fetchArtworkFromiTunes(title: newTitle, artist: newArtist, album: newAlbum)
             }
         }
     }
@@ -555,25 +620,52 @@ class MediaInfo: ObservableObject {
     }
 
     private func fetchArtworkFromURL(_ urlString: String) async {
-        guard let url = URL(string: urlString) else {
-            await setDefaultArtwork()
-            return
-        }
+        guard !Task.isCancelled, let url = URL(string: urlString) else { return }
 
         do {
             let (data, _) = try await URLSession.shared.data(from: url)
+            guard !Task.isCancelled else { return }
             if let image = NSImage(data: data) {
                 artwork = image
-            } else {
-                await setDefaultArtwork()
             }
         } catch {
-            await setDefaultArtwork()
+            // Cancelled or failed
         }
     }
 
-    private func setDefaultArtwork() async {
-        artwork = NSImage(systemSymbolName: "music.note", accessibilityDescription: nil)
+    private func fetchArtworkFromiTunes(title: String, artist: String, album: String) async {
+        guard !Task.isCancelled else { return }
+
+        let searchTerm: String = if !album.isEmpty, !artist.isEmpty {
+            "\(album) \(artist)"
+        } else if !artist.isEmpty {
+            "\(title) \(artist)"
+        } else {
+            title
+        }
+
+        guard let encodedTerm = searchTerm.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+              let url = URL(string: "https://itunes.apple.com/search?term=\(encodedTerm)&media=music&entity=song&limit=1")
+        else { return }
+
+        do {
+            let (data, _) = try await URLSession.shared.data(from: url)
+            guard !Task.isCancelled else { return }
+
+            let response = try JSONDecoder().decode(iTunesSearchResponse.self, from: data)
+
+            if let firstResult = response.results.first,
+               let artworkURL = URL(string: firstResult.artworkUrl100.replacingOccurrences(of: "100x100", with: "600x600"))
+            {
+                let (imageData, _) = try await URLSession.shared.data(from: artworkURL)
+                guard !Task.isCancelled else { return }
+                if let image = NSImage(data: imageData) {
+                    artwork = image
+                }
+            }
+        } catch {
+            // Cancelled or failed
+        }
     }
 
     private func clearMediaInfo() {
@@ -593,26 +685,16 @@ class MediaInfo: ObservableObject {
     // MARK: - Script Builders
 
     private func buildMediaInfoScript() -> String {
-        let artworkScript = appName == "Music" ? """
-        try
-            set artData to data of artwork 1 of current track
-            set tempPath to "/tmp/aw.jpg"
-            set fileRef to open for access tempPath with write permission
-            set eof fileRef to 0
-            write artData to fileRef
-            close access fileRef
-            set base64String to do shell script "base64 -i /tmp/aw.jpg | tr -d '\\n'"
-            set artworkURLString to "data:image/jpeg;base64," & base64String
-        on error
-            set artworkURLString to ""
-        end try
-        try
-            do shell script "rm /tmp/aw.jpg 2>/dev/null"
-        end try
-        """ : "set artworkURLString to artwork url of current track"
+        if currentApp == appleMusicAppIdentifier {
+            buildAppleMusicInfoScript()
+        } else {
+            buildSpotifyInfoScript()
+        }
+    }
 
-        return """
-        tell application "\(appName)"
+    private func buildAppleMusicInfoScript() -> String {
+        """
+        tell application "Music"
             if it is running then
                 try
                     set trackName to name of current track
@@ -622,15 +704,9 @@ class MediaInfo: ObservableObject {
                     set currentPos to player position
                     set trackDuration to duration of current track
 
-                    set artworkURLString to ""
-                    try
-                        \(artworkScript)
-                    on error
-                    end try
-
-                    return trackName & "\(Self.delimiter)" & artistName & "\(Self.delimiter)" & albumName & "\(Self.delimiter)" & playerState & "\(Self.delimiter)" & currentPos & "\(Self.delimiter)" & trackDuration & "\(Self.delimiter)" & artworkURLString
+                    return trackName & "\(Self.delimiter)" & artistName & "\(Self.delimiter)" & albumName & "\(Self.delimiter)" & playerState & "\(Self.delimiter)" & currentPos & "\(Self.delimiter)" & trackDuration & "\(Self.delimiter)"
                 on error errMsg
-                    if errMsg contains "Can't get current track" or errMsg contains "-1728" or errMsg contains "Can't get artwork url" then
+                    if errMsg contains "Can't get current track" or errMsg contains "-1728" then
                         return "no_library_track_info"
                     end if
                     return "error"
@@ -642,12 +718,44 @@ class MediaInfo: ObservableObject {
         """
     }
 
+    private func buildSpotifyInfoScript() -> String {
+        """
+        tell application "Spotify"
+            if it is running then
+                try
+                    set trackName to name of current track
+                    set artistName to artist of current track
+                    set albumName to album of current track
+                    set playerState to player state as string
+                    set currentPos to player position
+                    set trackDuration to duration of current track
+                    set artworkURLString to artwork url of current track
+
+                    return trackName & "\(Self.delimiter)" & artistName & "\(Self.delimiter)" & albumName & "\(Self.delimiter)" & playerState & "\(Self.delimiter)" & currentPos & "\(Self.delimiter)" & trackDuration & "\(Self.delimiter)" & artworkURLString
+                on error errMsg
+                    return "error"
+                end try
+            else
+                return "not_running"
+            end if
+        end tell
+        """
+    }
+
     private func buildMediaCommandScript(command: String) -> String {
-        "tell application \"\(appName)\" to \(command)"
+        if currentApp == appleMusicAppIdentifier {
+            "tell application \"Music\" to \(command)"
+        } else {
+            "tell application \"Spotify\" to \(command)"
+        }
     }
 
     private func buildSeekScript(position: TimeInterval) -> String {
-        "tell application \"\(appName)\" to set player position to \(position)"
+        if currentApp == appleMusicAppIdentifier {
+            "tell application \"Music\" to set player position to \(position)"
+        } else {
+            "tell application \"Spotify\" to set player position to \(position)"
+        }
     }
 
     private func convertPlainLyricsToTimedLines(_ plainLyrics: String) -> [LyricLine] {
@@ -669,12 +777,6 @@ class MediaInfo: ObservableObject {
         }
 
         return lyricLines
-    }
-
-    deinit {
-        updateTimer?.invalidate()
-        lyricsTimer?.invalidate()
-        currentFetchTask?.cancel()
     }
 }
 
@@ -718,4 +820,15 @@ struct NetEaseLyrics: Codable {
 
 struct NetEaseLyric: Codable {
     let lyric: String?
+}
+
+// MARK: - iTunes Search API
+
+struct iTunesSearchResponse: Codable {
+    let resultCount: Int
+    let results: [iTunesTrack]
+}
+
+struct iTunesTrack: Codable {
+    let artworkUrl100: String
 }

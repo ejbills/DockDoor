@@ -49,14 +49,14 @@ final class CinematicOverlay: NSPanel {
     }
 
     private func fadeOutAndComplete() {
-        NSAnimationContext.runAnimationGroup({ context in
+        NSAnimationContext.runAnimationGroup { context in
             context.duration = 0.4
             context.timingFunction = CAMediaTimingFunction(name: .easeOut)
             animator().alphaValue = 0
-        }, completionHandler: { [weak self] in
+        } completionHandler: { [weak self] in
             self?.onComplete?()
             self?.close()
-        })
+        }
     }
 }
 

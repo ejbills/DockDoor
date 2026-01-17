@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dictionary SYSTEM "file://localhost/System/Library/DTDs/sdef.dtd">
+<dictionary title="DockDoor Terminology">
+
+    <suite name="Standard Suite" code="????" description="Common commands for all applications.">
+        <command name="quit" code="aaboroot" description="Quit the application.">
+            <cocoa class="NSQuitCommand"/>
+        </command>
+    </suite>
+
+    <suite name="DockDoor Suite" code="DKDR" description="Commands for controlling DockDoor.">
+
+        <!-- Preview Commands -->
+
+        <command name="show preview" code="DKDRshpr" description="Show the preview window for an application.">
+            <cocoa class="ShowPreviewCommand"/>
+            <direct-parameter type="text" optional="yes" description="The application name, bundle ID, or process ID."/>
+            <parameter name="by" code="bytp" type="text" optional="yes" description="How to identify the app: 'name', 'bundle', or 'pid'. Defaults to 'name'.">
+                <cocoa key="identifierType"/>
+            </parameter>
+            <parameter name="at" code="atps" type="text" optional="yes" description="Position as 'x,y' coordinates.">
+                <cocoa key="position"/>
+            </parameter>
+            <parameter name="dock frame" code="dkfr" type="text" optional="yes" description="Dock item frame as 'x,y,width,height' for positioning relative to a dock icon.">
+                <cocoa key="dockFrame"/>
+            </parameter>
+            <parameter name="dock position" code="dkpo" type="text" optional="yes" description="Dock position: 'bottom', 'left', or 'right'. Defaults to actual dock position.">
+                <cocoa key="dockPosition"/>
+            </parameter>
+            <parameter name="with delay" code="wdly" type="boolean" optional="yes" description="Use the hover delay before showing. Defaults to false.">
+                <cocoa key="withDelay"/>
+            </parameter>
+            <result type="text" description="Success or error message."/>
+        </command>
+
+        <command name="hide preview" code="DKDRhdpr" description="Hide the current preview window.">
+            <cocoa class="HidePreviewCommand"/>
+            <result type="text" description="Success or error message."/>
+        </command>
+
+        <command name="show switcher" code="DKDRshsw" description="Show the window switcher.">
+            <cocoa class="ShowSwitcherCommand"/>
+            <result type="text" description="Success or error message."/>
+        </command>
+
+        <!-- Query Commands -->
+
+        <command name="list windows" code="DKDRlswn" description="List all windows or windows for a specific application.">
+            <cocoa class="ListWindowsCommand"/>
+            <direct-parameter type="text" optional="yes" description="Optional application name, bundle ID, or PID to filter by."/>
+            <parameter name="by" code="bytp" type="text" optional="yes" description="How to identify the app: 'name', 'bundle', or 'pid'. Defaults to 'name'.">
+                <cocoa key="identifierType"/>
+            </parameter>
+            <result type="text" description="JSON array of window objects with id, name, app, bundleId, pid, index, appIndex, frame, spaceId, isMinimized, isHidden, createdAt, lastUsedAt."/>
+        </command>
+
+        <command name="list apps" code="DKDRlsap" description="List all running applications with windows.">
+            <cocoa class="ListAppsCommand"/>
+            <result type="text" description="JSON array of app objects with name, bundleId, pid, windowCount."/>
+        </command>
+
+        <command name="get active window" code="DKDRgtaw" description="Get the frontmost window ID.">
+            <cocoa class="GetActiveWindowCommand"/>
+            <result type="text" description="JSON object with windowId, windowName, appName, bundleId, pid, or error if no active window."/>
+        </command>
+
+        <!-- Window Action Commands -->
+
+        <command name="focus window" code="DKDRfcwn" description="Focus and bring a window to front.">
+            <cocoa class="WindowActionCommand"/>
+            <direct-parameter type="text" description="Window ID or 'active' for the frontmost window."/>
+            <result type="text" description="Success or error message."/>
+        </command>
+
+        <command name="minimize window" code="DKDRmnwn" description="Minimize or unminimize a window.">
+            <cocoa class="WindowActionCommand"/>
+            <direct-parameter type="text" description="Window ID or 'active' for the frontmost window."/>
+            <result type="text" description="Success or error message."/>
+        </command>
+
+        <command name="close window" code="DKDRclwn" description="Close a window.">
+            <cocoa class="WindowActionCommand"/>
+            <direct-parameter type="text" description="Window ID or 'active' for the frontmost window."/>
+            <result type="text" description="Success or error message."/>
+        </command>
+
+        <command name="maximize window" code="DKDRmxwn" description="Maximize a window to fill the screen.">
+            <cocoa class="WindowActionCommand"/>
+            <direct-parameter type="text" description="Window ID or 'active' for the frontmost window."/>
+            <result type="text" description="Success or error message."/>
+        </command>
+
+        <command name="hide window" code="DKDRhdwn" description="Hide or unhide the application of a window.">
+            <cocoa class="WindowActionCommand"/>
+            <direct-parameter type="text" description="Window ID or 'active' for the frontmost window."/>
+            <result type="text" description="Success or error message."/>
+        </command>
+
+        <command name="toggle fullscreen" code="DKDRtgfs" description="Toggle fullscreen mode for a window.">
+            <cocoa class="WindowActionCommand"/>
+            <direct-parameter type="text" description="Window ID or 'active' for the frontmost window."/>
+            <result type="text" description="Success or error message."/>
+        </command>
+
+        <command name="center window" code="DKDRctwn" description="Center a window on its screen.">
+            <cocoa class="WindowActionCommand"/>
+            <direct-parameter type="text" description="Window ID or 'active' for the frontmost window."/>
+            <result type="text" description="Success or error message."/>
+        </command>
+
+        <!-- Window Positioning Commands -->
+
+        <command name="position window" code="DKDRpswn" description="Position a window to a specific screen region.">
+            <cocoa class="PositionWindowCommand"/>
+            <direct-parameter type="text" description="Window ID or 'active' for the frontmost window."/>
+            <parameter name="to" code="topr" type="text" description="Position: 'left', 'right', 'top', 'bottom', 'top-left', 'top-right', 'bottom-left', 'bottom-right'.">
+                <cocoa key="position"/>
+            </parameter>
+            <result type="text" description="Success or error message."/>
+        </command>
+
+        <!-- Window Data Commands (with images) -->
+
+        <command name="get window" code="DKDRgtwn" description="Get window info including cached preview image.">
+            <cocoa class="GetWindowCommand"/>
+            <direct-parameter type="text" description="Window ID or 'active' for the frontmost window."/>
+            <result type="text" description="JSON object with windowId, windowName, appName, bundleId, pid, frame, image (base64 PNG), imageWidth, imageHeight, imageCapturedAt."/>
+        </command>
+
+        <command name="get windows" code="DKDRgtws" description="Get all windows including cached preview images.">
+            <cocoa class="GetWindowsCommand"/>
+            <direct-parameter type="text" optional="yes" description="Application name, bundle ID, or PID. If omitted, returns all windows."/>
+            <parameter name="by" code="bytp" type="text" optional="yes" description="How to identify the app: 'name', 'bundle', or 'pid'. Defaults to 'name'.">
+                <cocoa key="identifierType"/>
+            </parameter>
+            <result type="text" description="JSON array of window objects with windowId, windowName, appName, bundleId, pid, frame, image (base64 PNG), imageWidth, imageHeight, imageCapturedAt."/>
+        </command>
+
+        <!-- Help Command -->
+
+        <command name="get help" code="DKDRhlpc" description="Get help and list all available commands.">
+            <cocoa class="GetHelpCommand"/>
+            <result type="text" description="Help text listing all available commands and their usage."/>
+        </command>
+
+    </suite>
+
+</dictionary>

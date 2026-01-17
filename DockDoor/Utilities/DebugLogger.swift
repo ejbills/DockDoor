@@ -82,6 +82,40 @@ enum DebugLogger {
         return result
     }
 
+    /// Measure and log only if execution time exceeds threshold (in milliseconds)
+    @discardableResult
+    static func measureSlow<T>(_ operation: String, thresholdMs: Double = 50, details: @autoclosure () -> String? = nil, block: () throws -> T) rethrows -> T {
+        guard Defaults[.debugMode] else {
+            return try block()
+        }
+
+        let startTime = CFAbsoluteTimeGetCurrent()
+        let result = try block()
+        let durationMs = (CFAbsoluteTimeGetCurrent() - startTime) * 1000
+
+        if durationMs > thresholdMs {
+            logWithDuration(operation, details: details(), duration: durationMs / 1000)
+        }
+        return result
+    }
+
+    /// Measure and log only if async execution time exceeds threshold (in milliseconds)
+    @discardableResult
+    static func measureSlowAsync<T>(_ operation: String, thresholdMs: Double = 50, details: @autoclosure () -> String? = nil, block: () async throws -> T) async rethrows -> T {
+        guard Defaults[.debugMode] else {
+            return try await block()
+        }
+
+        let startTime = CFAbsoluteTimeGetCurrent()
+        let result = try await block()
+        let durationMs = (CFAbsoluteTimeGetCurrent() - startTime) * 1000
+
+        if durationMs > thresholdMs {
+            logWithDuration(operation, details: details(), duration: durationMs / 1000)
+        }
+        return result
+    }
+
     /// Export logs to a file and return the URL
     static func exportLogs() -> URL? {
         guard FileManager.default.fileExists(atPath: logFileURL.path) else { return nil }

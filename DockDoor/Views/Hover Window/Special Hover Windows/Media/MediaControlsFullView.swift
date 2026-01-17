@@ -36,7 +36,9 @@ struct MediaControlsFullView: View {
                 regularContent()
             }
         }
-        .mediaScrollable(bundleIdentifier: bundleIdentifier, mediaInfo: mediaInfo)
+        .if(isMediaApp(bundleIdentifier)) { view in
+            view.mediaScrollable(bundleIdentifier: bundleIdentifier, mediaInfo: mediaInfo)
+        }
     }
 
     @ViewBuilder
@@ -88,7 +90,7 @@ struct MediaControlsFullView: View {
             )
             .padding([.top, .leading], 4)
         }
-        .simpleBlurBackground()
+        .dockStyle()
         .padding(.top, (appNameStyle == .popover && showAppTitleData) ? 30 : 0)
     }
 

@@ -756,7 +756,14 @@ struct MainSettingsView: View {
         VStack(alignment: .leading, spacing: 16) {
             StyledGroupBox(label: "Performance Tuning (Dock Previews)") {
                 VStack(alignment: .leading, spacing: 10) {
-                    sliderSetting(title: "Preview Window Open Delay", value: $hoverWindowOpenDelay, range: 0 ... 2, step: 0.1, unit: "seconds", formatter: NumberFormatter.oneDecimalFormatter)
+                    VStack(alignment: .leading) {
+                        sliderSetting(title: "Preview Window Open Delay", value: $hoverWindowOpenDelay, range: 0 ... 2, step: 0.1, unit: "seconds", formatter: NumberFormatter.oneDecimalFormatter)
+                        if hoverWindowOpenDelay < 0.3 {
+                            Text("Values below 0.3 seconds may cause jittery behavior. Behavioral changes related to performance settings are not considered bugs.")
+                                .font(.footnote)
+                                .foregroundColor(.red)
+                        }
+                    }
                     VStack(alignment: .leading) {
                         Toggle(isOn: $useDelayOnlyForInitialOpen) {
                             Text("Only use delay for initial window opening")

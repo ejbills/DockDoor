@@ -129358,6 +129358,9 @@
         }
       }
     },
+    "Values below 0.3 seconds may cause jittery behavior. Behavioral changes related to performance settings are not considered bugs." : {
+
+    },
     "Version %@" : {
       "extractionState" : "stale",
       "localizations" : {

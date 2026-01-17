@@ -125,58 +125,65 @@ extension DockObserver {
         let appName = resolvedApp?.localizedName ?? selectedItem.title ?? "Unknown"
         let bundleId = resolvedApp?.bundleIdentifier ?? selectedItem.bundleId
 
+        var cachedWindows: [WindowInfo] = []
+        if let app = resolvedApp {
+            cachedWindows = WindowUtil.readCachedWindows(for: app.processIdentifier, sortedBy: .cmdTab)
+        }
+
+        let elementPos = try? selectedItem.element.position()
+        let bestScreen = elementPos?.screen() ?? NSScreen.main!
+
         Task { @MainActor [weak self] in
             guard let self else { return }
 
             previewCoordinator.windowSwitcherCoordinator.setIndex(to: -1, shouldScroll: false)
+            previewCoordinator.showWindow(
+                appName: appName,
+                windows: cachedWindows,
+                mouseLocation: DockObserver.getMousePosition(),
+                mouseScreen: bestScreen,
+                dockItemElement: selectedItem.element,
+                overrideDelay: true,
+                centeredHoverWindowState: .none,
+                onWindowTap: { [weak self] in
+                    self?.hideWindowAndResetLastApp()
+                },
+                bundleIdentifier: bundleId,
+                bypassDockMouseValidation: true,
+                dockPositionOverride: .cmdTab
+            )
+        }
 
-            do {
-                var windows: [WindowInfo] = []
-                if let app = resolvedApp {
-                    windows = try await WindowUtil.getActiveWindows(of: app, context: .cmdTab)
+        if let app = resolvedApp {
+            let appPID = app.processIdentifier
+            let screenOrigin = bestScreen.frame.origin
 
-                    // Filter by current space if enabled
+            Task.detached { [weak self] in
+                guard let self else { return }
+
+                do {
+                    var windows = try await WindowUtil.getActiveWindows(of: app, context: .cmdTab)
+
                     if Defaults[.showWindowsFromCurrentSpaceOnlyInCmdTab] {
                         windows = await WindowUtil.filterWindowsByCurrentSpace(windows)
                     }
+
+                    let freshWindows = windows
+
+                    await MainActor.run { [weak self] in
+                        guard let self else { return }
+                        guard let screen = screenOrigin.screen() else { return }
+
+                        previewCoordinator.mergeWindowsIfShowing(
+                            for: appPID,
+                            windows: freshWindows,
+                            dockPosition: .cmdTab,
+                            bestGuessMonitor: screen
+                        )
+                    }
+                } catch {
+                    DebugLogger.log("DockObserver+CmdTab", details: "Failed to fetch windows for Cmd+Tab: \(error)")
                 }
-
-                let elementPos = try? selectedItem.element.position()
-                let bestScreen = elementPos?.screen() ?? NSScreen.main!
-
-                previewCoordinator.showWindow(
-                    appName: appName,
-                    windows: windows,
-                    mouseLocation: DockObserver.getMousePosition(),
-                    mouseScreen: bestScreen,
-                    dockItemElement: selectedItem.element,
-                    overrideDelay: true,
-                    centeredHoverWindowState: .none,
-                    onWindowTap: { [weak self] in
-                        self?.hideWindowAndResetLastApp()
-                    },
-                    bundleIdentifier: bundleId,
-                    bypassDockMouseValidation: true,
-                    dockPositionOverride: .cmdTab
-                )
-            } catch {
-                let elementPos = try? selectedItem.element.position()
-                let bestScreen = elementPos?.screen() ?? NSScreen.main!
-                previewCoordinator.showWindow(
-                    appName: appName,
-                    windows: [],
-                    mouseLocation: DockObserver.getMousePosition(),
-                    mouseScreen: bestScreen,
-                    dockItemElement: selectedItem.element,
-                    overrideDelay: true,
-                    centeredHoverWindowState: .none,
-                    onWindowTap: { [weak self] in
-                        self?.hideWindowAndResetLastApp()
-                    },
-                    bundleIdentifier: bundleId,
-                    bypassDockMouseValidation: true,
-                    dockPositionOverride: .cmdTab
-                )
             }
         }
     }

@@ -1,3 +1,4 @@
+import ApplicationServices
 import Cocoa
 import Defaults
 import Sparkle
@@ -37,6 +38,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
+        // Set global AX timeout to prevent hangs from unresponsive apps
+        AXUIElementSetMessagingTimeout(AXUIElementCreateSystemWide(), 1.0)
+
         if Defaults[.showMenuBarIcon] {
             setupMenuBar()
         } else {
@@ -94,12 +98,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationWillTerminate(_ notification: Notification) {
         WindowUtil.saveWindowOrderFromCache()
-    }
-
-    // MARK: - URL Scheme Handler (dockdoor-cli://)
-
-    func application(_ application: NSApplication, open urls: [URL]) {
-        urls.forEach { URLCommandHandler.handle($0) }
+        URLCache.shared.removeAllCachedResponses()
     }
 
     func setupMenuBar() {

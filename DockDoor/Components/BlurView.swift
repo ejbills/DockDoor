@@ -20,6 +20,42 @@ struct BlurView: View {
     }
 }
 
+// MARK: - Liquid Glass Container View
+
+@available(macOS 26.0, *)
+class LiquidGlassContainerView: NSView {
+    var variant: Int = 18
+    var frostedTranslucentLayer: Bool = false
+    var backgroundOpacity: CGFloat = 0.725
+    private var hasConfigured = false
+
+    override func viewDidMoveToWindow() {
+        super.viewDidMoveToWindow()
+        guard !hasConfigured else { return }
+
+        hasConfigured = true
+
+        // Configure backdrop layers once after a short delay for layer setup
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) { [weak self] in
+            self?.configureBackdropLayers()
+        }
+    }
+
+    private func configureBackdropLayers() {
+        for subview in subviews {
+            guard let glassView = subview as? NSGlassEffectView, let layer = glassView.layer else { continue }
+            setBackdropProperties(in: layer)
+        }
+    }
+
+    private func setBackdropProperties(in layer: CALayer) {
+        if NSStringFromClass(type(of: layer)).contains("CABackdropLayer") {
+            layer.setValue(true, forKey: "windowServerAware")
+        }
+        layer.sublayers?.forEach { setBackdropProperties(in: $0) }
+    }
+}
+
 @available(macOS 26.0, *)
 struct GlassEffectView: NSViewRepresentable {
     let variant: Int
@@ -27,26 +63,28 @@ struct GlassEffectView: NSViewRepresentable {
     let backgroundOpacity: CGFloat = 0.725
 
     init(variant: Int? = 19, frostedTranslucentLayer: Bool = false) {
-        // Clamp variant to valid range 0-19
         self.variant = max(0, min(19, variant ?? 18))
         self.frostedTranslucentLayer = frostedTranslucentLayer
     }
 
-    func makeNSView(context: Context) -> NSView {
-        if variant == 19, frostedTranslucentLayer {
-            let containerView = NSView()
+    func makeNSView(context: Context) -> LiquidGlassContainerView {
+        let containerView = LiquidGlassContainerView()
+        containerView.variant = variant
+        containerView.frostedTranslucentLayer = frostedTranslucentLayer
+        containerView.backgroundOpacity = backgroundOpacity
 
+        if variant == 19, frostedTranslucentLayer {
             let tintLayer = NSView()
             tintLayer.wantsLayer = true
             tintLayer.layer?.backgroundColor = NSColor.black.cgColor
             tintLayer.alphaValue = 0.1
 
             let backgroundGlass = NSGlassEffectView()
-            setGlassVariant(backgroundGlass, variant: 17)
+            backgroundGlass.setValue(NSNumber(value: 17), forKey: "_variant")
             backgroundGlass.alphaValue = backgroundOpacity
 
             let foregroundGlass = NSGlassEffectView()
-            setGlassVariant(foregroundGlass, variant: variant)
+            foregroundGlass.setValue(NSNumber(value: variant), forKey: "_variant")
 
             for item in [tintLayer, backgroundGlass, foregroundGlass] {
                 item.translatesAutoresizingMaskIntoConstraints = false
@@ -58,28 +96,23 @@ struct GlassEffectView: NSViewRepresentable {
                     item.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
                 ])
             }
-
-            return containerView
         } else {
             let glassView = NSGlassEffectView()
-            setGlassVariant(glassView, variant: variant)
-            return glassView
+            glassView.setValue(NSNumber(value: variant), forKey: "_variant")
+            glassView.translatesAutoresizingMaskIntoConstraints = false
+            containerView.addSubview(glassView)
+            NSLayoutConstraint.activate([
+                glassView.topAnchor.constraint(equalTo: containerView.topAnchor),
+                glassView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+                glassView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+                glassView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+            ])
         }
+
+        return containerView
     }
 
-    func updateNSView(_ nsView: NSView, context: Context) {
-        if variant == 19, frostedTranslucentLayer, let glassViews = nsView.subviews as? [NSGlassEffectView], glassViews.count >= 2 {
-            setGlassVariant(glassViews[0], variant: 17)
-            glassViews[0].alphaValue = backgroundOpacity
-            setGlassVariant(glassViews[1], variant: variant)
-        } else if let glassView = nsView as? NSGlassEffectView {
-            setGlassVariant(glassView, variant: variant)
-        }
-    }
-
-    private func setGlassVariant(_ glassView: NSGlassEffectView, variant: Int) {
-        glassView.setValue(NSNumber(value: variant), forKey: "_variant")
-    }
+    func updateNSView(_ nsView: LiquidGlassContainerView, context: Context) {}
 }
 
 struct MaterialBlurView: NSViewRepresentable {

@@ -14,6 +14,11 @@ let spotifyAppIdentifier = "com.spotify.client"
 let appleMusicAppIdentifier = "com.apple.Music"
 let calendarAppIdentifier = "com.apple.iCal"
 
+func isMediaApp(_ bundleIdentifier: String?) -> Bool {
+    guard let bundleId = bundleIdentifier else { return false }
+    return bundleId == spotifyAppIdentifier || bundleId == appleMusicAppIdentifier
+}
+
 extension Defaults.Keys {
     static let previewWidth = Key<CGFloat>("previewWidth", default: 300)
     static let previewHeight = Key<CGFloat>("previewHeight", default: 187.5)
@@ -440,6 +445,15 @@ enum WindowSwitcherControlPosition: String, CaseIterable, Defaults.Serializable 
         case .topLeading, .topTrailing:
             false
         }
+    }
+
+    /// Total height added by toolbar row(s) for this position (~38px per row)
+    var toolbarHeightOffset: CGFloat {
+        let rowHeight: CGFloat = 38
+        var offset: CGFloat = 0
+        if showsOnTop { offset += rowHeight }
+        if showsOnBottom { offset += rowHeight }
+        return offset
     }
 
     var topConfiguration: (isLeadingControls: Bool, showTitle: Bool, showControls: Bool) {

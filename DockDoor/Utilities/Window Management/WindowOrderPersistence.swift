@@ -13,20 +13,20 @@ enum WindowOrderPersistence {
         }
     }
 
+    private static let lock = NSLock()
     private static var cache: [String: PersistedWindowEntry]?
 
     static func getPersistedTimestamp(bundleIdentifier: String, windowTitle: String?) -> PersistedWindowEntry? {
+        lock.lock()
+        defer { lock.unlock() }
+
         if cache == nil {
             let entries = Defaults[.persistedWindowOrder]
             cache = Dictionary(entries.map { ($0.key, $0) }, uniquingKeysWith: { first, _ in first })
             DebugLogger.log("WindowOrderPersistence", details: "Loaded \(entries.count) persisted entries")
         }
         let targetKey = "\(bundleIdentifier)|\(windowTitle ?? "")"
-        let result = cache?[targetKey]
-        if result != nil {
-            DebugLogger.log("WindowOrderPersistence", details: "Restored: \(targetKey)")
-        }
-        return result
+        return cache?[targetKey]
     }
 
     static func saveOrder(from allWindows: [WindowInfo]) {
