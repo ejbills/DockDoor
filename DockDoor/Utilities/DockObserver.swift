@@ -560,7 +560,7 @@ final class DockObserver {
                 return nil
             }
 
-            if type == .leftMouseDown {
+            if type == .leftMouseDown, !previewCoordinator.mouseIsWithinPreviewWindow {
                 let shouldIntercept = handleDockClick(app: app)
                 if shouldIntercept {
                     return nil
