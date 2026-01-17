@@ -3,13 +3,13 @@
     <channel>
         <title>DockDoor</title>
         <item>
-            <title>1.31</title>
-            <pubDate>Fri, 16 Jan 2026 16:17:06 -0800</pubDate>
+            <title>1.31.1</title>
+            <pubDate>Fri, 16 Jan 2026 17:53:43 -0800</pubDate>
             <sparkle:releaseNotesLink>https://dockdoor.net/CHANGELOG.html</sparkle:releaseNotesLink>
-            <sparkle:version>1.31</sparkle:version>
-            <sparkle:shortVersionString>1.31</sparkle:shortVersionString>
+            <sparkle:version>1.31.1</sparkle:version>
+            <sparkle:shortVersionString>1.31.1</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/ejbills/DockDoor/releases/download/1.31/DockDoor.dmg" length="21677438" type="application/octet-stream" sparkle:edSignature="DdU2i8t/ntPW4fSC6UnXNVXHQlE91yESXYeRI0nkEFXsuAD5FOU4oEVgAE7r5EC4K8OW8AQ+f0qAw6FB3X4mDQ==" />
+            <enclosure url="https://github.com/ejbills/DockDoor/releases/download/1.31.1/DockDoor.dmg" length="21678918" type="application/octet-stream" sparkle:edSignature="iprR6wN0lB1jjJmR8wnZO6EgE6oA8Crspc6Fkp6bqFZy6J5aGWMkzxxA04HibufzA8A8lw6j3rTa0kfAfOR+DQ==" />
         </item>
     <item>
             <title>1.30.1.0.28</title>
