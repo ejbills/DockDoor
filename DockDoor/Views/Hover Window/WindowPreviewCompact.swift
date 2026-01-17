@@ -44,6 +44,7 @@ struct WindowPreviewCompact: View {
     @Default(.showAnimations) private var showAnimations
     @Default(.showActiveWindowBorder) private var showActiveWindowBorder
     @Default(.activeAppIndicatorColor) private var activeAppIndicatorColor
+    @Default(.globalPaddingMultiplier) private var globalPaddingMultiplier
 
     @State private var isHovering = false
 
@@ -177,28 +178,30 @@ struct WindowPreviewCompact: View {
                 )
             }
         }
-        .padding(.horizontal, 8)
         .padding(.vertical, 8)
         .frame(width: previewWidth, height: itemSize.rowHeight, alignment: .leading)
         .clipped()
         .background {
-            let cornerRadius = uniformCardRadius ? 20.0 : 4.0
+            let cornerRadius = uniformCardRadius ? CardRadius.base + (CardRadius.innerPadding * globalPaddingMultiplier) : CardRadius.fallback
 
             if !hidePreviewCardBackground {
                 BlurView(variant: 18)
                     .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
-                    .borderedBackground(.primary.opacity(0.1), lineWidth: 1.75, shape: RoundedRectangle(cornerRadius: cornerRadius))
+                    .borderedBackground(.primary.opacity(0.1), lineWidth: 1.75, cornerRadius: cornerRadius)
+                    .padding(.horizontal, -CardRadius.innerPadding)
                     .overlay {
                         if isSelected || isHovering {
                             let highlightColor = hoverHighlightColor ?? Color(nsColor: .controlAccentColor)
                             RoundedRectangle(cornerRadius: cornerRadius)
                                 .fill(highlightColor.opacity(selectionOpacity))
+                                .padding(.horizontal, -CardRadius.innerPadding)
                         }
                     }
                     .overlay {
                         if isActiveWindow {
                             RoundedRectangle(cornerRadius: cornerRadius)
                                 .strokeBorder(activeAppIndicatorColor, lineWidth: 2.5)
+                                .padding(.horizontal, -CardRadius.innerPadding)
                         }
                     }
             }

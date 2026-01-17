@@ -36,6 +36,7 @@ final class DockObserver {
 
     private var currentDockPID: pid_t?
     private var healthCheckTimer: Timer?
+    private var subscribedDockList: AXUIElement?
 
     // Cmd+Tab switcher monitoring (accessed from extension file)
     var cmdTabObserver: AXObserver?
@@ -53,6 +54,12 @@ final class DockObserver {
     // Scroll gesture state
     private var lastScrollActionTime: Date = .distantPast
     private let scrollActionDebounceInterval: TimeInterval = 0.3
+
+    private static func isSpecialControlsApp(_ bundleId: String?) -> Bool {
+        bundleId == spotifyAppIdentifier ||
+            bundleId == appleMusicAppIdentifier ||
+            bundleId == calendarAppIdentifier
+    }
 
     init(previewCoordinator: SharedPreviewWindowCoordinator) {
         self.previewCoordinator = previewCoordinator
@@ -99,6 +106,20 @@ final class DockObserver {
 
         if currentDockApp?.processIdentifier != currentDockPID {
             reset()
+            return
+        }
+
+        // Verify the subscribed dock list element is still valid
+        // If the dock rebuilds its UI, the element becomes invalid and notifications stop
+        if let subscribedElement = subscribedDockList {
+            var role: CFTypeRef?
+            let result = AXUIElementCopyAttributeValue(subscribedElement, kAXRoleAttribute as CFString, &role)
+            if result == .invalidUIElement || result == .cannotComplete {
+                reset()
+            }
+        } else if axObserver != nil {
+            // We have an observer but no subscribed element reference - reset to fix state
+            reset()
         }
     }
 
@@ -108,6 +129,7 @@ final class DockObserver {
         }
         axObserver = nil
         currentDockPID = nil
+        subscribedDockList = nil
     }
 
     private func setupSelectedDockItemObserver() {
@@ -149,6 +171,7 @@ final class DockObserver {
             try axList.subscribeToNotification(axObserver, kAXSelectedChildrenChangedNotification) {
                 CFRunLoopAddSource(CFRunLoopGetCurrent(), AXObserverGetRunLoopSource(axObserver), .commonModes)
             }
+            subscribedDockList = axList
         } catch {
             return
         }
@@ -163,7 +186,9 @@ final class DockObserver {
 
     func processSelectedDockItemChanged() {
         let currentMouseLocation = DockObserver.getMousePosition()
-        let appUnderMouseElement = getDockItemAppStatusUnderMouse()
+        let appUnderMouseElement = DebugLogger.measureSlow("getDockItemAppStatusUnderMouse", thresholdMs: 100) {
+            getDockItemAppStatusUnderMouse()
+        }
 
         guard case let .success(currentApp) = appUnderMouseElement.status,
               let dockItemElement = appUnderMouseElement.dockItemElement,
@@ -182,84 +207,115 @@ final class DockObserver {
             localizedName: currentApp.localizedName
         )
 
-        Task { @MainActor [weak self] in
+        // Build list of apps to fetch windows from
+        var appsToFetchWindowsFrom: [NSRunningApplication] = []
+        if Defaults[.groupAppInstancesInDock],
+           let bundleId = currentApp.bundleIdentifier, !bundleId.isEmpty
+        {
+            let potentialApps = NSRunningApplication.runningApplications(withBundleIdentifier: bundleId)
+            if !potentialApps.isEmpty {
+                appsToFetchWindowsFrom = potentialApps
+            } else {
+                appsToFetchWindowsFrom = [currentApp]
+            }
+        } else {
+            appsToFetchWindowsFrom = [currentApp]
+        }
+
+        guard !appsToFetchWindowsFrom.isEmpty else { return }
+
+        var cachedWindows: [WindowInfo] = []
+        for appInstance in appsToFetchWindowsFrom {
+            cachedWindows.append(contentsOf: WindowUtil.readCachedWindows(for: appInstance.processIdentifier))
+        }
+
+        lastHoveredPID = currentApp.processIdentifier
+        lastHoveredAppWasFrontmost = NSWorkspace.shared.frontmostApplication?.processIdentifier == currentApp.processIdentifier
+        lastHoveredAppNeedsRestore = currentApp.isHidden || cachedWindows.contains(where: \.isMinimized)
+        lastHoveredAppHadWindows = !cachedWindows.isEmpty
+
+        if Defaults[.ignoreAppsWithSingleWindow], cachedWindows.count <= 1 {
+            cachedWindows = []
+        }
+
+        guard Defaults[.enableDockPreviews] else { return }
+
+        let mouseScreen = NSScreen.screenContainingMouse(currentMouseLocation)
+        let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
+        let screenOrigin = mouseScreen.frame.origin
+        let currentAppPID = currentApp.processIdentifier
+        let currentAppBundleId = currentApp.bundleIdentifier
+
+        let shouldShowCachedPreview = !cachedWindows.isEmpty ||
+            (Self.isSpecialControlsApp(currentApp.bundleIdentifier) && Defaults[.showSpecialAppControls])
+
+        if shouldShowCachedPreview {
+            previewCoordinator.showWindow(
+                appName: currentAppInfo.localizedName ?? "Unknown",
+                windows: cachedWindows,
+                mouseLocation: convertedMouseLocation,
+                mouseScreen: mouseScreen,
+                dockItemElement: dockItemElement,
+                overrideDelay: false,
+                onWindowTap: { [weak self] in
+                    self?.hideWindowAndResetLastApp()
+                },
+                bundleIdentifier: currentAppInfo.bundleIdentifier
+            )
+            previousStatus = .success(currentApp)
+        }
+
+        Task.detached { [weak self] in
             guard let self else { return }
 
             do {
-                var appsToFetchWindowsFrom: [NSRunningApplication] = []
-                if Defaults[.groupAppInstancesInDock],
-                   let bundleId = currentApp.bundleIdentifier, !bundleId.isEmpty
-                {
-                    let potentialApps = NSRunningApplication.runningApplications(withBundleIdentifier: bundleId)
-                    if !potentialApps.isEmpty {
-                        appsToFetchWindowsFrom = potentialApps
-                    } else {
-                        appsToFetchWindowsFrom = [currentApp]
-                    }
-                } else {
-                    appsToFetchWindowsFrom = [currentApp]
-                }
-
-                guard !appsToFetchWindowsFrom.isEmpty else {
-                    return
-                }
-
-                var combinedWindows: [WindowInfo] = []
+                var windows: [WindowInfo] = []
                 for appInstance in appsToFetchWindowsFrom {
-                    let windowsForInstance = try await WindowUtil.getActiveWindows(of: appInstance)
-                    combinedWindows.append(contentsOf: windowsForInstance)
+                    try await windows.append(contentsOf: DebugLogger.measureAsync("getActiveWindows (dock hover)", details: "PID: \(appInstance.processIdentifier)") {
+                        try await WindowUtil.getActiveWindows(of: appInstance)
+                    })
                 }
 
-                // Filter windows to only show those in the current Space if the setting is enabled
                 if Defaults[.showWindowsFromCurrentSpaceOnly] {
-                    combinedWindows = await WindowUtil.filterWindowsByCurrentSpace(combinedWindows)
+                    windows = await WindowUtil.filterWindowsByCurrentSpace(windows)
                 }
 
-                lastHoveredPID = currentApp.processIdentifier
-                lastHoveredAppWasFrontmost = NSWorkspace.shared.frontmostApplication?.processIdentifier == currentApp.processIdentifier
-                lastHoveredAppNeedsRestore = currentApp.isHidden || combinedWindows.contains(where: \.isMinimized)
-                lastHoveredAppHadWindows = !combinedWindows.isEmpty
+                let freshWindows = windows
 
-                // Only show preview if dock previews are enabled
-                guard Defaults[.enableDockPreviews] else { return }
+                await MainActor.run { [weak self] in
+                    guard let self else { return }
 
-                if combinedWindows.isEmpty {
-                    let isSpecialApp = currentApp.bundleIdentifier == spotifyAppIdentifier ||
-                        currentApp.bundleIdentifier == appleMusicAppIdentifier ||
-                        currentApp.bundleIdentifier == calendarAppIdentifier
+                    let currentAppStatus = getDockItemAppStatusUnderMouse()
+                    guard case let .success(stillHoveredApp) = currentAppStatus.status,
+                          stillHoveredApp.processIdentifier == currentAppPID
+                    else { return }
 
-                    // Only continue if this is a special app with controls enabled
-                    guard isSpecialApp, Defaults[.showSpecialAppControls] else {
-                        return
+                    let dockPosition = DockUtils.getDockPosition()
+                    guard let monitor = screenOrigin.screen() else { return }
+
+                    if freshWindows.isEmpty {
+                        if !Self.isSpecialControlsApp(currentAppBundleId) || !Defaults[.showSpecialAppControls] {
+                            previewCoordinator.hideWindow()
+                            return
+                        }
                     }
+
+                    previewCoordinator.mergeWindowsIfShowing(
+                        for: currentAppPID,
+                        windows: freshWindows,
+                        dockPosition: dockPosition,
+                        bestGuessMonitor: monitor
+                    )
                 }
-
-                let mouseScreen = NSScreen.screenContainingMouse(currentMouseLocation)
-                let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
-
-                previewCoordinator.showWindow(
-                    appName: currentAppInfo.localizedName ?? "Unknown",
-                    windows: combinedWindows,
-                    mouseLocation: convertedMouseLocation,
-                    mouseScreen: mouseScreen,
-                    dockItemElement: dockItemElement,
-                    overrideDelay: false,
-                    onWindowTap: { [weak self] in
-                        self?.hideWindowAndResetLastApp()
-                    },
-                    bundleIdentifier: currentAppInfo.bundleIdentifier
-                )
-
-                previousStatus = .success(currentApp)
             } catch {
-                // Silently handle errors
+                DebugLogger.log("DockObserver", details: "Failed to fetch windows for dock hover: \(error)")
             }
         }
     }
 
     /// Returns the currently selected (hovered) dock item, if any.
     private func getSelectedDockItem() -> AXUIElement? {
-        guard let dockAppPID = NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.dock").first?.processIdentifier else {
+        guard let dockAppPID = currentDockPID else {
             return nil
         }
 
@@ -293,6 +349,62 @@ final class DockObserver {
         return item
     }
 
+    /// Returns all dock item children from the dock list.
+    private func getAllDockItemChildren() -> [AXUIElement]? {
+        guard let dockAppPID = currentDockPID else {
+            return nil
+        }
+
+        let dockAppElement = AXUIElementCreateApplication(dockAppPID)
+
+        var dockItems: CFTypeRef?
+        guard AXUIElementCopyAttributeValue(dockAppElement, kAXChildrenAttribute as CFString, &dockItems) == .success,
+              let dockItemsList = dockItems as? [AXUIElement],
+              let dockList = dockItemsList.first
+        else {
+            return nil
+        }
+
+        var children: CFTypeRef?
+        guard AXUIElementCopyAttributeValue(dockList, kAXChildrenAttribute as CFString, &children) == .success,
+              let dockChildren = children as? [AXUIElement]
+        else {
+            return nil
+        }
+
+        return dockChildren
+    }
+
+    /// Finds the instance index of a hovered dock item among all dock items with the same bundle identifier.
+    /// This is used to correctly identify which instance of a multi-instance app is being hovered.
+    private func findDockItemInstanceIndex(_ hoveredItem: AXUIElement, bundleIdentifier: String) -> Int {
+        guard let allDockItems = getAllDockItemChildren() else {
+            return 0
+        }
+
+        // Filter to only AXApplicationDockItems with the same bundle ID
+        var matchingItems: [AXUIElement] = []
+        for item in allDockItems {
+            guard (try? item.subrole()) == "AXApplicationDockItem",
+                  let itemURL = try? item.attribute(kAXURLAttribute, NSURL.self)?.absoluteURL,
+                  let itemBundle = Bundle(url: itemURL),
+                  itemBundle.bundleIdentifier == bundleIdentifier
+            else {
+                continue
+            }
+            matchingItems.append(item)
+        }
+
+        // Find the index of the hovered item among matching items
+        for (index, item) in matchingItems.enumerated() {
+            if CFEqual(item, hoveredItem) {
+                return index
+            }
+        }
+
+        return 0
+    }
+
     func getDockItemAppStatusUnderMouse() -> ApplicationReturnType {
         guard let hoveredDockItem = getHoveredApplicationDockItem() else {
             return ApplicationReturnType(status: .notFound, dockItemElement: nil)
@@ -316,7 +428,17 @@ final class DockObserver {
                 }
             }
 
-            if let runningApp = NSRunningApplication.runningApplications(withBundleIdentifier: bundleIdentifier).first {
+            let runningApps = NSRunningApplication.runningApplications(withBundleIdentifier: bundleIdentifier)
+
+            // For multiple instances, find the correct one based on dock position
+            if runningApps.count > 1 {
+                let instanceIndex = findDockItemInstanceIndex(hoveredDockItem, bundleIdentifier: bundleIdentifier)
+                if instanceIndex < runningApps.count {
+                    return ApplicationReturnType(status: .success(runningApps[instanceIndex]), dockItemElement: hoveredDockItem)
+                }
+            }
+
+            if let runningApp = runningApps.first {
                 return ApplicationReturnType(status: .success(runningApp), dockItemElement: hoveredDockItem)
             } else {
                 return ApplicationReturnType(status: .notRunning(bundleIdentifier: bundleIdentifier), dockItemElement: hoveredDockItem)
@@ -438,7 +560,7 @@ final class DockObserver {
                 return nil
             }
 
-            if type == .leftMouseDown {
+            if type == .leftMouseDown, !previewCoordinator.mouseIsWithinPreviewWindow {
                 let shouldIntercept = handleDockClick(app: app)
                 if shouldIntercept {
                     return nil
@@ -502,7 +624,7 @@ final class DockObserver {
             Task { @MainActor [weak self] in
                 guard let self else { return }
 
-                let windows = try await WindowUtil.getActiveWindows(of: app)
+                let windows = try await WindowUtil.getActiveWindows(of: app, ignoreSingleWindowFilter: true)
                 let currentlyHasMinimizedWindows = windows.contains(where: \.isMinimized)
 
                 // Use the state captured at click time to determine intent
@@ -510,8 +632,10 @@ final class DockObserver {
                 let needsRestore = restorationNeededAtClickTime || currentlyHasMinimizedWindows
 
                 if needsRestore {
+                    DebugLogger.log("DockClick", details: "\(appName): restoring (needsRestore=true, minimized=\(currentlyHasMinimizedWindows))")
                     restoreAppWindows(windows: windows, app: app, appName: appName)
                 } else if wasFrontmostOnHover, !windows.isEmpty {
+                    DebugLogger.log("DockClick", details: "\(appName): hiding (wasFrontmost=true, windows=\(windows.count))")
                     hideAppWindows(windows: windows, app: app, appName: appName)
                 }
             }
@@ -529,10 +653,7 @@ final class DockObserver {
                 app.hide()
             }
         } else {
-            for window in windowsToMinimize {
-                var mutableWindow = window
-                _ = mutableWindow.toggleMinimize()
-            }
+            WindowUtil.minimizeWindowsAsync(windowsToMinimize)
         }
     }
 
@@ -588,11 +709,7 @@ final class DockObserver {
                 )
             } catch {
                 // If we can't get windows, still show the preview for special apps if enabled
-                let isSpecialApp = app.bundleIdentifier == spotifyAppIdentifier ||
-                    app.bundleIdentifier == appleMusicAppIdentifier ||
-                    app.bundleIdentifier == calendarAppIdentifier
-
-                if isSpecialApp, Defaults[.showSpecialAppControls] {
+                if Self.isSpecialControlsApp(app.bundleIdentifier), Defaults[.showSpecialAppControls] {
                     let mouseScreen = NSScreen.screenContainingMouse(currentMouseLocation)
                     let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
 
@@ -633,9 +750,7 @@ final class DockObserver {
         let isNaturalScrolling = nsEvent?.isDirectionInvertedFromDevice ?? false
         let normalizedDeltaY = isNaturalScrolling ? -deltaY : deltaY
 
-        if let bundleId = app.bundleIdentifier,
-           bundleId == appleMusicAppIdentifier || bundleId == spotifyAppIdentifier
-        {
+        if isMediaApp(app.bundleIdentifier) {
             if Defaults[.dockIconMediaScrollBehavior] == .adjustVolume {
                 handleVolumeScroll(deltaY: normalizedDeltaY)
                 return true

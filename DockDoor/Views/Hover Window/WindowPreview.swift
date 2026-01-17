@@ -7,7 +7,6 @@ struct WindowPreview: View {
     let onTap: (() -> Void)?
     let index: Int
     let dockPosition: DockPosition
-    let maxWindowDimension: CGPoint
     let bestGuessMonitor: NSScreen
     let uniformCardRadius: Bool
     let handleWindowAction: (WindowAction) -> Void
@@ -17,7 +16,8 @@ struct WindowPreview: View {
     let showAppIconOnly: Bool
     let mockPreviewActive: Bool
     let onHoverIndexChange: ((Int?, CGPoint?) -> Void)?
-    var isEligibleForLivePreview: Bool = true
+    let useLivePreview: Bool
+    var skeletonMode: Bool = false
 
     // MARK: - Dock Preview Appearance Settings
 
@@ -68,14 +68,12 @@ struct WindowPreview: View {
     @Default(.previewHoverAction) var previewHoverAction
     @Default(.showActiveWindowBorder) var showActiveWindowBorder
     @Default(.activeAppIndicatorColor) var activeAppIndicatorColor
-    @Default(.enableLivePreview) var enableLivePreview
-    @Default(.enableLivePreviewForDock) var enableLivePreviewForDock
-    @Default(.enableLivePreviewForWindowSwitcher) var enableLivePreviewForWindowSwitcher
     @Default(.dockLivePreviewQuality) var dockLivePreviewQuality
     @Default(.dockLivePreviewFrameRate) var dockLivePreviewFrameRate
     @Default(.windowSwitcherLivePreviewQuality) var windowSwitcherLivePreviewQuality
     @Default(.windowSwitcherLivePreviewFrameRate) var windowSwitcherLivePreviewFrameRate
     @Default(.showAnimations) var showAnimations
+    @Default(.globalPaddingMultiplier) var globalPaddingMultiplier
 
     @State private var isHoveringOverDockPeekPreview = false
     @State private var isHoveringOverWindowSwitcherPreview = false
@@ -196,13 +194,13 @@ struct WindowPreview: View {
     @ViewBuilder
     private func windowContent(isMinimized: Bool, isHidden: Bool, isSelected: Bool) -> some View {
         let inactive = (isMinimized || isHidden) && showMinimizedHiddenLabels
-        let livePreviewEnabledForContext = windowSwitcherActive ? enableLivePreviewForWindowSwitcher : enableLivePreviewForDock
-        let useLivePreview = enableLivePreview && livePreviewEnabledForContext && isEligibleForLivePreview && !isMinimized && !isHidden
         let quality = windowSwitcherActive ? windowSwitcherLivePreviewQuality : dockLivePreviewQuality
         let frameRate = windowSwitcherActive ? windowSwitcherLivePreviewFrameRate : dockLivePreviewFrameRate
 
         Group {
-            if useLivePreview {
+            if skeletonMode {
+                Color.clear
+            } else if useLivePreview {
                 LivePreviewImage(windowID: windowInfo.id, fallbackImage: windowInfo.image, quality: quality, frameRate: frameRate)
                     .scaledToFit()
             } else if let cgImage = windowInfo.image {
@@ -221,8 +219,8 @@ struct WindowPreview: View {
                     .transition(.opacity)
             }
         }
-        .animation(.easeInOut(duration: 0.15), value: inactive)
-        .clipShape(uniformCardRadius ? AnyShape(RoundedRectangle(cornerRadius: 12, style: .continuous)) : AnyShape(Rectangle()))
+        .animation(showAnimations ? .easeInOut(duration: 0.15) : nil, value: inactive)
+        .clipShape(RoundedRectangle(cornerRadius: CardRadius.image, style: .continuous))
         .dynamicWindowFrame(
             allowDynamicSizing: allowDynamicImageSizing,
             dimensions: dimensions,
@@ -508,29 +506,22 @@ struct WindowPreview: View {
             }
         }
 
-        return VStack(spacing: 0) {
-            HStack(spacing: 4) {
-                if isLeadingControls {
-                    if showControlsContent {
-                        controlsContent
-                    }
-                    Spacer()
-                    if showTitleContent {
-                        appIconContent
-                        titleAndSubtitleContent
-                    }
-                } else {
-                    if showTitleContent {
-                        appIconContent
-                        titleAndSubtitleContent
-                    }
-                    Spacer()
-                    if showControlsContent {
-                        controlsContent
-                    }
+        return HStack(spacing: 4) {
+            if isLeadingControls {
+                if showControlsContent { controlsContent }
+                Spacer(minLength: 8)
+                if showTitleContent {
+                    appIconContent
+                    titleAndSubtitleContent
                 }
+            } else {
+                if showTitleContent {
+                    appIconContent
+                    titleAndSubtitleContent
+                }
+                Spacer(minLength: 8)
+                if showControlsContent { controlsContent }
             }
-            .fixedSize(horizontal: false, vertical: true)
         }
     }
 
@@ -583,28 +574,17 @@ struct WindowPreview: View {
             }
         }
 
-        // Only show the toolbar if there's either a title or traffic lights to display
         if hasTitle || hasTrafficLights {
             return AnyView(
-                VStack(spacing: 0) {
-                    HStack(spacing: 4) {
-                        if isLeadingControls {
-                            if showControlsContent {
-                                controlsContent
-                            }
-                            Spacer()
-                            if showTitleContent {
-                                titleContent
-                            }
-                        } else {
-                            if showTitleContent {
-                                titleContent
-                            }
-                            Spacer()
-                            if showControlsContent {
-                                controlsContent
-                            }
-                        }
+                HStack(spacing: 4) {
+                    if isLeadingControls {
+                        if showControlsContent { controlsContent }
+                        Spacer(minLength: 8)
+                        if showTitleContent { titleContent }
+                    } else {
+                        if showTitleContent { titleContent }
+                        Spacer(minLength: 8)
+                        if showControlsContent { controlsContent }
                     }
                 }
             )
@@ -658,27 +638,28 @@ struct WindowPreview: View {
                     .padding(.top, 4)
                 }
             }
+            .frame(maxWidth: dimensions.maxDimensions.width > 0 ? dimensions.maxDimensions.width : nil)
             .background {
-                let cornerRadius = uniformCardRadius ? 20.0 : 0.0
+                let cornerRadius = uniformCardRadius ? CardRadius.base + (CardRadius.innerPadding * globalPaddingMultiplier) : 8.0
 
                 if !hidePreviewCardBackground {
                     BlurView(variant: 18)
                         .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
-                        .borderedBackground(.primary.opacity(0.1), lineWidth: 1.75, shape: RoundedRectangle(cornerRadius: cornerRadius))
-                        .padding(-6)
+                        .borderedBackground(.primary.opacity(0.1), lineWidth: 1.75, cornerRadius: cornerRadius)
+                        .padding(-CardRadius.innerPadding)
                         .overlay {
                             if finalIsSelected {
                                 let highlightColor = hoverHighlightColor ?? Color(nsColor: .controlAccentColor)
                                 RoundedRectangle(cornerRadius: cornerRadius)
                                     .fill(highlightColor.opacity(selectionOpacity))
-                                    .padding(-6)
+                                    .padding(-CardRadius.innerPadding)
                             }
                         }
                         .overlay {
                             if isActiveWindow {
                                 RoundedRectangle(cornerRadius: cornerRadius)
                                     .strokeBorder(activeAppIndicatorColor, lineWidth: 2.5)
-                                    .padding(-6)
+                                    .padding(-CardRadius.innerPadding)
                             }
                         }
                 }
@@ -686,9 +667,10 @@ struct WindowPreview: View {
         }
         .overlay {
             if isDraggingOver {
-                RoundedRectangle(cornerRadius: uniformCardRadius ? 20 : 0)
+                let dragRadius = uniformCardRadius ? CardRadius.base + (CardRadius.innerPadding * globalPaddingMultiplier) : CardRadius.fallback
+                RoundedRectangle(cornerRadius: dragRadius)
                     .fill(Color(nsColor: .controlAccentColor).opacity(0.3))
-                    .padding(-6)
+                    .padding(-CardRadius.innerPadding)
                     .opacity(highlightOpacity)
             }
 
@@ -762,6 +744,8 @@ struct WindowPreview: View {
                 }
             )
             .fixedSize()
+            .opacity(skeletonMode ? 0 : 1)
+            .allowsHitTesting(!skeletonMode)
     }
 
     private func cancelFullPreviewHover() {

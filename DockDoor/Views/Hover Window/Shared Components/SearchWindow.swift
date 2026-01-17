@@ -1,13 +1,15 @@
 import AppKit
+import Defaults
 import SwiftUI
 
 struct SearchFieldView: View {
     let searchField: NSTextField
+    @Default(.globalPaddingMultiplier) private var globalPaddingMultiplier
 
     var body: some View {
         ZStack {
             BlurView(variant: 18, frostedTranslucentLayer: false)
-                .clipShape(RoundedRectangle(cornerRadius: 20))
+                .clipShape(RoundedRectangle(cornerRadius: CardRadius.base + (CardRadius.innerPadding * globalPaddingMultiplier)))
 
             HStack(spacing: 8) {
                 Image(systemName: "magnifyingglass")
@@ -59,6 +61,7 @@ class SearchWindow: NSPanel, NSTextFieldDelegate {
         backgroundColor = .clear
         hasShadow = true
         collectionBehavior = [.canJoinAllSpaces, .transient, .fullScreenAuxiliary]
+        animationBehavior = .none
     }
 
     private func setupSearchField() {
@@ -165,7 +168,6 @@ class SearchWindow: NSPanel, NSTextFieldDelegate {
             }
         }
 
-        // Clamp to screen bounds
         if searchFrame.minX < screenFrame.minX {
             searchFrame.origin.x = screenFrame.minX + 10
         } else if searchFrame.maxX > screenFrame.maxX {

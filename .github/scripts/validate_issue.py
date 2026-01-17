@@ -124,17 +124,21 @@ def manage_labels(issue_number, is_complete):
     incomplete_label = 'needs more info'
 
     result = subprocess.run(
-        ['gh', 'issue', 'view', str(issue_number), '--json', 'labels'],
+        ['gh', 'issue', 'view', str(issue_number), '--json', 'labels,state'],
         capture_output=True, text=True, check=True
     )
-    labels_data = json.loads(result.stdout)
-    current_labels = [label['name'] for label in labels_data.get('labels', [])]
+    issue_data = json.loads(result.stdout)
+    current_labels = [label['name'] for label in issue_data.get('labels', [])]
+    current_state = issue_data.get('state', 'OPEN')
 
     if is_complete:
         if incomplete_label in current_labels:
             subprocess.run(['gh', 'issue', 'edit', str(issue_number), '--remove-label', incomplete_label], check=True)
         if complete_label not in current_labels:
             subprocess.run(['gh', 'issue', 'edit', str(issue_number), '--add-label', complete_label], check=True)
+        # Reopen the issue if it was closed and is now complete
+        if current_state == 'CLOSED':
+            subprocess.run(['gh', 'issue', 'reopen', str(issue_number)], check=True)
     else:
         if complete_label in current_labels:
             subprocess.run(['gh', 'issue', 'edit', str(issue_number), '--remove-label', complete_label], check=True)
@@ -160,7 +164,13 @@ def main():
     issue_body = issue_data['body']
     issue_labels = [label['name'] for label in issue_data.get('labels', [])]
 
-    # First, check if the duplicate review checkbox is checked
+    # First, determine if this is a bug or feature request - if not, do nothing
+    issue_type = determine_issue_type(issue_title, issue_labels)
+    if not issue_type:
+        print('Not a bug or feature request template - skipping validation')
+        sys.exit(0)
+
+    # Check if the duplicate review checkbox is checked
     if not check_duplicate_checkbox(issue_body):
         comment = """Thank you for your submission. However, we require all issue reporters to confirm they have reviewed existing issues to avoid duplicates.
 
@@ -180,11 +190,6 @@ If this is not a duplicate, please reopen or create a new issue and check the bo
         sys.exit(0)
 
     sections = parse_issue_body(issue_body)
-    issue_type = determine_issue_type(issue_title, issue_labels)
-
-    if not issue_type:
-        print('Could not determine issue type (bug or feature request)')
-        sys.exit(0)
 
     # Validate title
     if not validate_title(issue_title, issue_type):

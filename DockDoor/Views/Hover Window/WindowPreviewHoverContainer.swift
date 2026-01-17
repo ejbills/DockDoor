@@ -44,6 +44,7 @@ struct WindowPreviewHoverContainer: View {
     let mouseLocation: CGPoint?
     let bestGuessMonitor: NSScreen
     let dockItemElement: AXUIElement?
+    let dockItemFrameOverride: CGRect?
     var mockPreviewActive: Bool
     let updateAvailable: Bool
     let embeddedContentType: EmbeddedContentType
@@ -76,6 +77,11 @@ struct WindowPreviewHoverContainer: View {
     @Default(.mouseHoverAutoScrollSpeed) var mouseHoverAutoScrollSpeed
     @Default(.windowSwitcherLivePreviewScope) var windowSwitcherLivePreviewScope
 
+    // Live preview settings for compact fallback computation
+    @Default(.enableLivePreview) var enableLivePreview
+    @Default(.enableLivePreviewForDock) var enableLivePreviewForDock
+    @Default(.enableLivePreviewForWindowSwitcher) var enableLivePreviewForWindowSwitcher
+
     // Compact mode thresholds (0 = disabled, 1+ = enable when window count >= threshold)
     @Default(.windowSwitcherCompactThreshold) var windowSwitcherCompactThreshold
     @Default(.dockPreviewCompactThreshold) var dockPreviewCompactThreshold
@@ -105,6 +111,7 @@ struct WindowPreviewHoverContainer: View {
          mouseLocation: CGPoint?,
          bestGuessMonitor: NSScreen,
          dockItemElement: AXUIElement?,
+         dockItemFrameOverride: CGRect? = nil,
          windowSwitcherCoordinator: PreviewStateCoordinator,
          mockPreviewActive: Bool,
          updateAvailable: Bool,
@@ -117,6 +124,7 @@ struct WindowPreviewHoverContainer: View {
         self.mouseLocation = mouseLocation
         self.bestGuessMonitor = bestGuessMonitor
         self.dockItemElement = dockItemElement
+        self.dockItemFrameOverride = dockItemFrameOverride
         previewStateCoordinator = windowSwitcherCoordinator
         self.mockPreviewActive = mockPreviewActive
         self.updateAvailable = updateAvailable
@@ -275,6 +283,8 @@ struct WindowPreviewHoverContainer: View {
                                              bestGuessMonitor: bestGuessMonitor,
                                              dockPosition: dockPosition,
                                              dockItemElement: dockItemElement,
+                                             dockItemFrameOverride: dockItemFrameOverride,
+                                             originalMouseLocation: mouseLocation,
                                              minimizeAllWindowsCallback: { wasAppActiveBeforeClick in
                                                  minimizeAllWindows(wasAppActiveBeforeClick: wasAppActiveBeforeClick)
                                              })
@@ -291,7 +301,7 @@ struct WindowPreviewHoverContainer: View {
                     CmdTabFocusFullOverlayView()
                         .transition(.opacity)
                         .allowsHitTesting(false)
-                        .clipShape(RoundedRectangle(cornerRadius: Defaults[.uniformCardRadius] ? 26 : 8, style: .continuous))
+                        .clipShape(RoundedRectangle(cornerRadius: CardRadius.container, style: .continuous))
                 }
             }
             .overlay {
@@ -360,8 +370,8 @@ struct WindowPreviewHoverContainer: View {
                         hoveringAppIcon = hover
                     }
                     .shadow(radius: 2)
-                    .padding(.top, 10)
-                    .padding(.horizontal)
+                    .globalPadding(.top, 12)
+                    .globalPadding(.leading, 20)
 
                 case .shadowed:
                     HStack(spacing: 2) {
@@ -624,10 +634,11 @@ struct WindowPreviewHoverContainer: View {
                     noResultsView()
                 } else if shouldUseCompactMode {
                     // Compact mode: simple vertical list
-                    VStack(spacing: 4) {
+                    LazyVStack(spacing: 4) {
                         ForEach(createFlowItems(), id: \.id) { item in
                             buildFlowItem(
                                 item: item,
+                                isHorizontal: isHorizontal,
                                 currentMaxDimensionForPreviews: currentMaxDimensionForPreviews,
                                 currentDimensionsMapForPreviews: currentDimensionsMapForPreviews
                             )
@@ -635,12 +646,13 @@ struct WindowPreviewHoverContainer: View {
                     }
                 } else if isHorizontal {
                     let chunkedItems = createChunkedItems()
-                    VStack(alignment: .leading, spacing: 24) {
+                    LazyVStack(alignment: .leading, spacing: 24) {
                         ForEach(Array(chunkedItems.enumerated()), id: \.offset) { index, rowItems in
-                            HStack(spacing: 24) {
+                            LazyHStack(spacing: 24) {
                                 ForEach(rowItems, id: \.id) { item in
                                     buildFlowItem(
                                         item: item,
+                                        isHorizontal: isHorizontal,
                                         currentMaxDimensionForPreviews: currentMaxDimensionForPreviews,
                                         currentDimensionsMapForPreviews: currentDimensionsMapForPreviews
                                     )
@@ -650,12 +662,13 @@ struct WindowPreviewHoverContainer: View {
                     }
                 } else {
                     let chunkedItems = createChunkedItems()
-                    HStack(alignment: .top, spacing: 24) {
+                    LazyHStack(alignment: .top, spacing: 24) {
                         ForEach(Array(chunkedItems.enumerated()), id: \.offset) { index, colItems in
-                            VStack(spacing: 24) {
+                            LazyVStack(spacing: 24) {
                                 ForEach(colItems, id: \.id) { item in
                                     buildFlowItem(
                                         item: item,
+                                        isHorizontal: isHorizontal,
                                         currentMaxDimensionForPreviews: currentMaxDimensionForPreviews,
                                         currentDimensionsMapForPreviews: currentDimensionsMapForPreviews
                                     )
@@ -669,17 +682,11 @@ struct WindowPreviewHoverContainer: View {
             .globalPadding(20)
         }
         .padding(2)
-        .animation(.smooth(duration: 0.1), value: previewStateCoordinator.windows)
+        .animation(showAnimations ? .smooth(duration: 0.1) : nil, value: previewStateCoordinator.windows)
         .onChange(of: previewStateCoordinator.currIndex) { newIndex in
             guard previewStateCoordinator.shouldScrollToIndex else { return }
 
-            if showAnimations {
-                withAnimation(.snappy) {
-                    scrollProxy.scrollTo("\(appName)-\(newIndex)", anchor: .center)
-                }
-            } else {
-                scrollProxy.scrollTo("\(appName)-\(newIndex)", anchor: .center)
-            }
+            scrollProxy.scrollTo("\(appName)-\(newIndex)", anchor: .center)
         }
     }
 
@@ -813,19 +820,14 @@ struct WindowPreviewHoverContainer: View {
         guard !originalWindows.isEmpty else { return }
 
         if let except {
-            var updatedWindows = originalWindows
-            guard let exceptIndex = updatedWindows.firstIndex(where: { $0.id == except.id }) else {
+            guard let keptWindow = originalWindows.first(where: { $0.id == except.id }) else {
                 except.bringToFront()
                 return
             }
 
-            for idx in updatedWindows.indices where idx != exceptIndex {
-                if !updatedWindows[idx].isMinimized {
-                    _ = updatedWindows[idx].toggleMinimize()
-                }
-            }
+            let windowsToMinimize = originalWindows.filter { $0.id != except.id }
+            WindowUtil.minimizeWindowsAsync(windowsToMinimize)
 
-            let keptWindow = updatedWindows[exceptIndex]
             previewStateCoordinator.setWindows([keptWindow], dockPosition: dockPosition, bestGuessMonitor: bestGuessMonitor, isMockPreviewActive: mockPreviewActive)
             keptWindow.bringToFront()
             return
@@ -840,10 +842,7 @@ struct WindowPreviewHoverContainer: View {
                         previewStateCoordinator.setWindows([], dockPosition: dockPosition, bestGuessMonitor: bestGuessMonitor, isMockPreviewActive: mockPreviewActive)
                     }
                 case .minimize:
-                    for window in originalWindows where !window.isMinimized {
-                        var mutableWindow = window
-                        _ = mutableWindow.toggleMinimize()
-                    }
+                    WindowUtil.minimizeWindowsAsync(originalWindows)
                     previewStateCoordinator.setWindows([], dockPosition: dockPosition, bestGuessMonitor: bestGuessMonitor, isMockPreviewActive: mockPreviewActive)
                 }
             } else {
@@ -866,10 +865,7 @@ struct WindowPreviewHoverContainer: View {
                 }
             }
         } else {
-            for window in originalWindows where !window.isMinimized {
-                var mutableWindow = window
-                _ = mutableWindow.toggleMinimize()
-            }
+            WindowUtil.minimizeWindowsAsync(originalWindows)
             previewStateCoordinator.setWindows([], dockPosition: dockPosition, bestGuessMonitor: bestGuessMonitor, isMockPreviewActive: mockPreviewActive)
         }
     }
@@ -1026,35 +1022,77 @@ struct WindowPreviewHoverContainer: View {
     @ViewBuilder
     private func buildFlowItem(
         item: FlowItem,
+        isHorizontal: Bool,
         currentMaxDimensionForPreviews: CGPoint,
         currentDimensionsMapForPreviews: [Int: WindowDimensions]
     ) -> some View {
         switch item {
         case .embedded:
-            embeddedContentView()
+            let firstWindowIndex = filteredWindowIndices().first ?? 0
+            let firstWindow = previewStateCoordinator.windows.first
+            let firstWindowDimensions = currentDimensionsMapForPreviews[firstWindowIndex]
+
+            if isHorizontal, let window = firstWindow, let dimensions = firstWindowDimensions {
+                WindowPreview(
+                    windowInfo: window,
+                    onTap: nil,
+                    index: firstWindowIndex,
+                    dockPosition: dockPosition,
+                    bestGuessMonitor: bestGuessMonitor,
+                    uniformCardRadius: uniformCardRadius,
+                    handleWindowAction: { _ in },
+                    currIndex: -1,
+                    windowSwitcherActive: previewStateCoordinator.windowSwitcherActive,
+                    dimensions: dimensions,
+                    showAppIconOnly: false,
+                    mockPreviewActive: mockPreviewActive,
+                    onHoverIndexChange: nil,
+                    useLivePreview: false,
+                    skeletonMode: true
+                )
+                .overlay { embeddedContentView() }
                 .id("\(appName)-embedded")
+            } else {
+                embeddedContentView()
+                    .id("\(appName)-embedded")
+            }
         case let .window(index):
             let windows = previewStateCoordinator.windows
             if index < windows.count {
                 let windowInfo = windows[index]
 
-                let isEligibleForLivePreview: Bool = {
-                    guard previewStateCoordinator.windowSwitcherActive else { return true }
+                // Compute live preview eligibility once
+                let useLivePreview: Bool = {
+                    // Check global and context-specific settings
+                    let windowSwitcherActive = previewStateCoordinator.windowSwitcherActive
+                    let livePreviewEnabledForContext = windowSwitcherActive ? enableLivePreviewForWindowSwitcher : enableLivePreviewForDock
+                    guard enableLivePreview, livePreviewEnabledForContext else { return false }
 
-                    switch windowSwitcherLivePreviewScope {
-                    case .allWindows:
-                        return true
-                    case .selectedWindowOnly:
-                        return index == previewStateCoordinator.currIndex
-                    case .selectedAppWindows:
-                        let currentIndex = previewStateCoordinator.currIndex
-                        guard currentIndex >= 0, currentIndex < windows.count else { return false }
-                        let selectedBundleID = windows[currentIndex].app.bundleIdentifier
-                        return windowInfo.app.bundleIdentifier == selectedBundleID
+                    // Can't use live preview for minimized/hidden windows
+                    guard !windowInfo.isMinimized, !windowInfo.isHidden else { return false }
+
+                    // Check scope-based eligibility for window switcher
+                    if windowSwitcherActive {
+                        switch windowSwitcherLivePreviewScope {
+                        case .allWindows:
+                            return true
+                        case .selectedWindowOnly:
+                            return index == previewStateCoordinator.currIndex
+                        case .selectedAppWindows:
+                            let currentIndex = previewStateCoordinator.currIndex
+                            guard currentIndex >= 0, currentIndex < windows.count else { return false }
+                            let selectedBundleID = windows[currentIndex].app.bundleIdentifier
+                            return windowInfo.app.bundleIdentifier == selectedBundleID
+                        }
                     }
+
+                    return true
                 }()
 
-                if shouldUseCompactMode {
+                // Use compact mode if: container threshold triggered OR per-window fallback (no image and no live preview)
+                let useCompactForThisWindow = shouldUseCompactMode || (windowInfo.image == nil && !useLivePreview)
+
+                if useCompactForThisWindow {
                     WindowPreviewCompact(
                         windowInfo: windowInfo,
                         index: index,
@@ -1076,7 +1114,6 @@ struct WindowPreviewHoverContainer: View {
                         onTap: onWindowTap,
                         index: index,
                         dockPosition: dockPosition,
-                        maxWindowDimension: currentMaxDimensionForPreviews,
                         bestGuessMonitor: bestGuessMonitor,
                         uniformCardRadius: uniformCardRadius,
                         handleWindowAction: { action in
@@ -1088,7 +1125,7 @@ struct WindowPreviewHoverContainer: View {
                         showAppIconOnly: effectiveShowAppIconOnly,
                         mockPreviewActive: mockPreviewActive,
                         onHoverIndexChange: handleHoverIndexChange,
-                        isEligibleForLivePreview: isEligibleForLivePreview
+                        useLivePreview: useLivePreview
                     )
                     .id("\(appName)-\(index)")
                     .gesture(

@@ -2,7 +2,7 @@
 
 <div align="center">
 
-<img src="DockDoor/Assets.xcassets/AppIcon.appiconset/AppIcon-iOS-Default-512x512@1x.png" alt="DockDoor Logo" width="128"/>
+<img src="Assets/Assets.xcassets/AppIcon.appiconset/AppIcon-iOS-Default-512x512@1x.png" alt="DockDoor Logo" width="128"/>
 
 </div>
 

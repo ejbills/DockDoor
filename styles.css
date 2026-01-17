@@ -2055,3 +2055,74 @@ details[open] .faq-question i {
         display: none;
     }
 }
+
+/* From Same Dev */
+.from-dev-section {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.625rem;
+    margin-top: 1rem;
+}
+
+.from-dev-heading {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--medium-gray);
+}
+
+.from-dev-card {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 1rem 0.5rem 0.5rem;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    border-radius: 12px;
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.from-dev-card:hover {
+    background: rgba(255, 255, 255, 0.9);
+    border-color: rgba(0, 0, 0, 0.1);
+    transform: translateY(-1px);
+}
+
+.from-dev-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    flex-shrink: 0;
+}
+
+.from-dev-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.from-dev-title {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+}
+
+.from-dev-description {
+    font-size: 0.6875rem;
+    color: var(--text-secondary);
+    line-height: 1.3;
+}
+
+.from-dev-price {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    flex-shrink: 0;
+}
+

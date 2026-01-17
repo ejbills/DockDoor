@@ -61,11 +61,6 @@ extension WindowPreviewHoverContainer {
     ) -> [Int: WindowDimensions] {
         var dimensionsMap: [Int: WindowDimensions] = [:]
 
-        let cardMaxFrameDimensions = CGSize(
-            width: bestGuessMonitor.frame.width * 0.75,
-            height: bestGuessMonitor.frame.height * 0.75
-        )
-
         if Defaults[.allowDynamicImageSizing] {
             let orientationIsHorizontal = dockPosition == .bottom || dockPosition == .cmdTab || isWindowSwitcherActive
 
@@ -123,6 +118,8 @@ extension WindowPreviewHoverContainer {
                     unifiedWidth = thickness
                 }
 
+                let maxDims = CGSize(width: overallMaxDimensions.x, height: overallMaxDimensions.y)
+
                 for windowIndex in chunk {
                     guard windowIndex < windows.count else { continue }
 
@@ -133,17 +130,11 @@ extension WindowPreviewHoverContainer {
                             CGSize(width: max(unifiedWidth, 50), height: 0)
                         }
 
-                        dimensionsMap[windowIndex] = WindowDimensions(
-                            size: windowSize,
-                            maxDimensions: cardMaxFrameDimensions
-                        )
+                        dimensionsMap[windowIndex] = WindowDimensions(size: windowSize, maxDimensions: maxDims)
                     } else {
                         let fallbackSize = CGSize(width: min(300, overallMaxDimensions.x),
                                                   height: min(300, overallMaxDimensions.y))
-                        dimensionsMap[windowIndex] = WindowDimensions(
-                            size: fallbackSize,
-                            maxDimensions: cardMaxFrameDimensions
-                        )
+                        dimensionsMap[windowIndex] = WindowDimensions(size: fallbackSize, maxDimensions: maxDims)
                     }
                 }
             }
@@ -151,12 +142,10 @@ extension WindowPreviewHoverContainer {
             let width = Defaults[.previewWidth]
             let height = Defaults[.previewHeight]
             let fixedBoxSize = CGSize(width: width, height: height)
+            let maxDims = CGSize(width: width, height: height)
 
             for (index, _) in windows.enumerated() {
-                dimensionsMap[index] = WindowDimensions(
-                    size: fixedBoxSize,
-                    maxDimensions: cardMaxFrameDimensions
-                )
+                dimensionsMap[index] = WindowDimensions(size: fixedBoxSize, maxDimensions: maxDims)
             }
         }
         return dimensionsMap
@@ -169,37 +158,19 @@ extension WindowPreviewHoverContainer {
     ) -> WindowDimensions {
         let width = Defaults[.previewWidth]
         let height = Defaults[.previewHeight]
-        let fixedBoxSize = CGSize(width: width, height: height)
-
-        let cardMaxFrameDimensions = CGSize(
-            width: bestGuessMonitor.frame.width * 0.75,
-            height: bestGuessMonitor.frame.height * 0.75
-        )
-
-        return WindowDimensions(
-            size: fixedBoxSize,
-            maxDimensions: cardMaxFrameDimensions
-        )
+        let maxDims = CGSize(width: overallMaxDimensions.x, height: overallMaxDimensions.y)
+        return WindowDimensions(size: CGSize(width: width, height: height), maxDimensions: maxDims)
     }
 
     func getDimensions(for index: Int, dimensionsMap: [Int: WindowDimensions]) -> WindowDimensions {
-        guard index >= 0, index < previewStateCoordinator.windows.count else {
-            return WindowDimensions(
-                size: CGSize(width: 100, height: 100),
-                maxDimensions: CGSize(
-                    width: bestGuessMonitor.frame.width * 0.75,
-                    height: bestGuessMonitor.frame.height * 0.75
-                )
-            )
-        }
-
-        return dimensionsMap[index] ?? WindowDimensions(
+        let fallback = WindowDimensions(
             size: CGSize(width: 100, height: 100),
-            maxDimensions: CGSize(
-                width: bestGuessMonitor.frame.width * 0.75,
-                height: bestGuessMonitor.frame.height * 0.75
-            )
+            maxDimensions: CGSize(width: 100, height: 100)
         )
+        guard index >= 0, index < previewStateCoordinator.windows.count else {
+            return fallback
+        }
+        return dimensionsMap[index] ?? fallback
     }
 
     // MARK: - Helper Functions

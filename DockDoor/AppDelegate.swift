@@ -1,3 +1,4 @@
+import ApplicationServices
 import Cocoa
 import Defaults
 import Sparkle
@@ -18,7 +19,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         updaterController.updater
     }
 
-    private var firstTimeWindow: NSWindow?
+    private var cinematicOverlay: CinematicOverlay?
+    private var onboardingWindow: NSWindow?
     private var settingsManager: SettingsManager?
 
     override init() {
@@ -36,6 +38,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
+        // Set global AX timeout to prevent hangs from unresponsive apps
+        AXUIElementSetMessagingTimeout(AXUIElementCreateSystemWide(), 1.0)
+
+        NSWorkspace.shared.notificationCenter.addObserver(
+            self,
+            selector: #selector(handleSystemWake),
+            name: NSWorkspace.didWakeNotification,
+            object: nil
+        )
+
         if Defaults[.showMenuBarIcon] {
             setupMenuBar()
         } else {
@@ -89,6 +101,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
         openSettingsWindow(nil)
         return false
+    }
+
+    func applicationWillTerminate(_ notification: Notification) {
+        WindowUtil.saveWindowOrderFromCache()
+        URLCache.shared.removeAllCachedResponses()
     }
 
     func setupMenuBar() {
@@ -148,6 +165,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
+    @objc private func handleSystemWake() {
+        // activate application to re-assert window level on wake from sleep (fixes window rendering issues, dock preview not rendering after sleep)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            NSApp.activate(ignoringOtherApps: true)
+        }
+    }
+
     @objc func openSettingsWindow(_ sender: Any?) {
         NSApp.setActivationPolicy(.regular)
         NSApp.activate(ignoringOtherApps: true)
@@ -169,9 +193,26 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     private func handleFirstTimeLaunch() {
-        guard let screen = NSScreen.main else { return }
+        let currentMouseLocation = CGEvent(source: nil)?.location ?? .zero
+        let screen = NSScreen.screenContainingMouse(currentMouseLocation)
+
         Defaults[.launched] = true
 
+        if !Defaults[.showAnimations] || NSWorkspace.shared.accessibilityDisplayShouldReduceMotion {
+            showOnboardingWindow(on: screen)
+            return
+        }
+
+        let overlay = CinematicOverlay(screen: screen) { [weak self] in
+            self?.cinematicOverlay = nil
+            self?.showOnboardingWindow(on: screen)
+        }
+        cinematicOverlay = overlay
+        overlay.orderFront(nil)
+        overlay.fadeIn()
+    }
+
+    private func showOnboardingWindow(on screen: NSScreen) {
         let newWindow = SwiftUIWindow(
             styleMask: [.titled, .closable, .fullSizeContentView],
             content: {
@@ -193,24 +234,34 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         newWindow.standardWindowButton(.miniaturizeButton)?.isHidden = true
         newWindow.standardWindowButton(.zoomButton)?.isHidden = true
 
+        newWindow.level = .floating
+
         let screenFrame = screen.visibleFrame
         let windowOrigin = NSPoint(
             x: screenFrame.midX - newWindow.frame.width / 2,
             y: screenFrame.midY - newWindow.frame.height / 2
         )
-        newWindow.setFrameOrigin(windowOrigin)
 
+        newWindow.setFrameOrigin(windowOrigin)
         newWindow.isMovableByWindowBackground = true
-        firstTimeWindow = newWindow
+        onboardingWindow = newWindow
+
+        newWindow.alphaValue = 0
         newWindow.show()
         newWindow.makeKeyAndOrderFront(nil)
+
+        NSAnimationContext.runAnimationGroup { context in
+            context.duration = 0.35
+            context.timingFunction = CAMediaTimingFunction(name: .easeOut)
+            newWindow.animator().alphaValue = 1
+        }
     }
 }
 
 extension AppDelegate: NSWindowDelegate {
     func windowWillClose(_ notification: Notification) {
-        if let window = notification.object as? NSWindow, window == firstTimeWindow {
-            firstTimeWindow = nil
+        if let window = notification.object as? NSWindow, window == onboardingWindow {
+            onboardingWindow = nil
         }
     }
 }

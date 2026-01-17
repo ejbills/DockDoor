@@ -26,7 +26,7 @@ class SettingsManager: NSObject, ObservableObject {
             )
 
             window.contentViewController = hostingController
-            window.isReleasedWhenClosed = false
+            window.isReleasedWhenClosed = true
 
             window.delegate = self
             window.titlebarAppearsTransparent = true
@@ -94,6 +94,8 @@ extension SettingsManager: NSWindowDelegate {
     }
 
     func windowWillClose(_ notification: Notification) {
+        settingsWindowController?.window?.contentViewController = nil
+        settingsWindowController = nil
         NSApp.setActivationPolicy(.accessory)
     }
 }

@@ -19,6 +19,8 @@ private class WindowSwitchingCoordinator {
     private var isProcessingSwitcher = false
     private var uiRenderingTask: Task<Void, Never>?
     private var currentSessionId = UUID()
+    /// When true, initialization should complete but immediately select the window instead of showing UI
+    private var shouldSelectImmediately = false
 
     private static var lastUpdateAllWindowsTime: Date?
     private static let updateAllWindowsThrottleInterval: TimeInterval = 60.0
@@ -63,6 +65,9 @@ private class WindowSwitchingCoordinator {
         previewCoordinator: SharedPreviewWindowCoordinator,
         mode: SwitcherInvocationMode = .allWindows
     ) async {
+        // Reset the immediate-select flag at start of initialization
+        shouldSelectImmediately = false
+
         var windows = WindowUtil.getAllWindowsOfAllApps()
 
         let filterBySpace = (mode == .currentSpaceOnly || mode == .activeAppCurrentSpace)
@@ -98,6 +103,16 @@ private class WindowSwitchingCoordinator {
         let targetScreen = getTargetScreenForSwitcher()
         coordinator.initializeForWindowSwitcher(with: windows, dockPosition: DockUtils.getDockPosition(), bestGuessMonitor: targetScreen)
         coordinator.activateKeybindSession()
+
+        // If modifier was released during initialization, immediately select and exit
+        if shouldSelectImmediately {
+            if let selectedWindow = coordinator.getCurrentWindow() {
+                selectedWindow.bringToFront()
+            }
+            coordinator.deactivateKeybindSession()
+            shouldSelectImmediately = false
+            return
+        }
 
         let currentMouseLocation = DockObserver.getMousePosition()
 
@@ -207,7 +222,18 @@ private class WindowSwitchingCoordinator {
     @MainActor
     func cancelSwitching(previewCoordinator: SharedPreviewWindowCoordinator) {
         currentSessionId = UUID()
+        shouldSelectImmediately = false
         previewCoordinator.windowSwitcherCoordinator.deactivateKeybindSession()
+        uiRenderingTask?.cancel()
+    }
+
+    /// Signals that the modifier was released during initialization.
+    /// If initialization is still in progress, it will complete but immediately select the window.
+    /// If initialization already completed, this just cancels the UI rendering task.
+    @MainActor
+    func cancelPendingRender() {
+        currentSessionId = UUID()
+        shouldSelectImmediately = true
         uiRenderingTask?.cancel()
     }
 }
@@ -220,7 +246,7 @@ class KeybindHelper {
     private var isShiftKeyPressedGeneral: Bool = false
     private var hasProcessedModifierRelease: Bool = false
     private var preventSwitcherHideOnRelease: Bool = false
-    private var shiftHeldBackwardTask: Task<Void, Never>?
+    private var heldKeyRepeatTask: Task<Void, Never>?
 
     // Track the invocation mode for alternate keybinds
     private var currentInvocationMode: SwitcherInvocationMode = .allWindows
@@ -250,9 +276,15 @@ class KeybindHelper {
     private func cleanup() {
         monitorTimer?.invalidate()
         monitorTimer = nil
-        shiftHeldBackwardTask?.cancel()
-        shiftHeldBackwardTask = nil
+        heldKeyRepeatTask?.cancel()
+        heldKeyRepeatTask = nil
         removeEventTap()
+    }
+
+    /// Cancels any running held-key repeat task to prevent main thread blocking
+    func cancelHeldKeyRepeatTask() {
+        heldKeyRepeatTask?.cancel()
+        heldKeyRepeatTask = nil
     }
 
     private func resetState() {
@@ -260,8 +292,7 @@ class KeybindHelper {
         isShiftKeyPressedGeneral = false
         preventSwitcherHideOnRelease = false
         currentInvocationMode = .allWindows
-        shiftHeldBackwardTask?.cancel()
-        shiftHeldBackwardTask = nil
+        cancelHeldKeyRepeatTask()
     }
 
     private func startMonitoring() {
@@ -469,7 +500,8 @@ class KeybindHelper {
             }
             let (shouldConsume, actionTask) = determineActionForKeyDown(event: event)
             if let task = actionTask {
-                Task { @MainActor in
+                heldKeyRepeatTask?.cancel()
+                heldKeyRepeatTask = Task { @MainActor in
                     await task()
                 }
             }
@@ -550,10 +582,11 @@ class KeybindHelper {
         let isWindowSwitcherActive = previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive
         let shouldSkipShiftOnlyBackward = Defaults[.requireShiftTabToGoBack] && isWindowSwitcherActive
 
+        // Only allow Shift-only backward cycling when the window switcher is already active.
         if !oldShiftState, currentShiftState,
            previewCoordinator.isVisible,
-           (isWindowSwitcherActive && (currentSwitcherModifierIsPressed || Defaults[.preventSwitcherHide])) ||
-           !isWindowSwitcherActive
+           isWindowSwitcherActive,
+           currentSwitcherModifierIsPressed || Defaults[.preventSwitcherHide]
         {
             if !shouldSkipShiftOnlyBackward {
                 Task { @MainActor in
@@ -566,8 +599,8 @@ class KeybindHelper {
                 }
 
                 if isWindowSwitcherActive {
-                    shiftHeldBackwardTask?.cancel()
-                    shiftHeldBackwardTask = Task { @MainActor in
+                    heldKeyRepeatTask?.cancel()
+                    heldKeyRepeatTask = Task { @MainActor in
                         try? await Task.sleep(nanoseconds: 400_000_000)
 
                         while !Task.isCancelled,
@@ -589,14 +622,16 @@ class KeybindHelper {
         }
 
         if oldShiftState, !currentShiftState {
-            shiftHeldBackwardTask?.cancel()
-            shiftHeldBackwardTask = nil
+            cancelHeldKeyRepeatTask()
         }
 
         if !Defaults[.preventSwitcherHide], !preventSwitcherHideOnRelease, !(previewCoordinator.isSearchWindowFocused) {
             if oldSwitcherModifierState, !isSwitcherModifierKeyPressed, !hasProcessedModifierRelease {
                 hasProcessedModifierRelease = true
                 preventSwitcherHideOnRelease = false
+
+                windowSwitchingCoordinator.cancelPendingRender()
+
                 Task { @MainActor in
                     if self.previewCoordinator.isVisible, self.previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive {
                         self.previewCoordinator.selectAndBringToFrontCurrentWindow()
