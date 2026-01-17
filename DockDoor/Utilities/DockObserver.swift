@@ -295,7 +295,6 @@ final class DockObserver {
 
                     if freshWindows.isEmpty {
                         if !Self.isSpecialControlsApp(currentAppBundleId) || !Defaults[.showSpecialAppControls] {
-                            previewCoordinator.hideWindow()
                             return
                         }
                     }
