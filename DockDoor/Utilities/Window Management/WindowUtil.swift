@@ -1181,7 +1181,8 @@ extension WindowUtil {
     static func minimizeWindowsAsync(_ windows: [WindowInfo]) {
         guard !windows.isEmpty else { return }
 
-        let windowsToMinimize = windows.filter { !$0.isMinimized }
+        let ownBundleId = Bundle.main.bundleIdentifier
+        let windowsToMinimize = windows.filter { !$0.isMinimized && $0.app.bundleIdentifier != ownBundleId }
         guard !windowsToMinimize.isEmpty else { return }
 
         for window in windowsToMinimize {
