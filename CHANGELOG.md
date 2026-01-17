@@ -36,7 +36,43 @@
       background-color: #E5C700;
     }
 </style>
-<div class="donation-link" target="_blank">☕ Support kepler.cafe at https://buymeacoffee.com/keplercafe</div>
+<div class="donation-link" target="_blank">☕ Support kepler.cafe at https://dockdoor.net/donate</div>
+
+<a id="1.31"></a>
+# [Release 1.31](https://github.com/ejbills/DockDoor/releases/tag/1.31) - 2026-01-17
+
+Thank you for the recent support and publications about DockDoor, you are all awesome!
+
+Special thanks to **great2bnaustin**, **Larsen2k4**, **clementcampagna**, **gwmerritt-lgtm**, and **balazsnasz** for their extensive beta testing across 28 releases. Their feedback was invaluable in identifying and solving many issues.
+
+## ✨ New Features 
+- AppleScript scripting support for external automation
+  - Run `tell application "DockDoor" to get help` to see all commands
+- Reworked window presentation entirely to resolve hangs and stutters while using DockDoor
+  - DockDoor is now faster than ever!
+
+## 🔧 Improvements & Stability
+- Moved AX observer work off main thread to prevent UI hangs
+- Added timeout limits to AX operations
+- Debounced AX observer callbacks to reduce processing overhead
+- Switched to lazy stacks for better scroll performance
+
+## 🐛 Bug Fixes 
+- Fixed AppleScript causing silent crashes and music preview failures 
+- Fixed window previews from different instances of same app not showing correctly 
+- Fixed liquid glass not updating background dynamically 
+- Fixed window switching failing when front app has heavy workload 
+- Fixed dockobserver becoming unresponsive after extended use 
+- Fixed window switcher animation lag 
+- Fixed media widget memory leak and process pileup 
+- Fixed preview frame getting cut off and using too much space 
+- Fixed marquee text rendering when content fits 
+- Fixed pinned widget corner radius not matching dock preview
+
+
+
+[Changes][1.31]
+
 
 <a id="1.30.1"></a>
 # [Release 1.30.1](https://github.com/ejbills/DockDoor/releases/tag/1.30.1) - 2026-01-02
@@ -1815,6 +1851,7 @@ v1.0
 [Changes][releases]
 
 
+[1.31]: https://github.com/ejbills/DockDoor/compare/1.30.1...1.31
 [1.30.1]: https://github.com/ejbills/DockDoor/compare/1.30...1.30.1
 [1.30]: https://github.com/ejbills/DockDoor/compare/1.29...1.30
 [1.29]: https://github.com/ejbills/DockDoor/compare/1.28.1...1.29
