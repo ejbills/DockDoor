@@ -61,6 +61,10 @@ final class DockObserver {
             bundleId == calendarAppIdentifier
     }
 
+    static func isDockVisible() -> Bool {
+        DockUtils.getDockSize() > 0
+    }
+
     init(previewCoordinator: SharedPreviewWindowCoordinator) {
         self.previewCoordinator = previewCoordinator
         DockObserver.activeInstance = self

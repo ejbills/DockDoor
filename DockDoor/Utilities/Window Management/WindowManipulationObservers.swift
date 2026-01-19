@@ -112,6 +112,7 @@ class WindowManipulationObservers {
 
     @objc private func activeSpaceDidChange(_ notification: Notification) {
         DebugLogger.log("activeSpaceDidChange")
+        ActiveAppIndicatorCoordinator.shared?.handleSpaceChanged()
         debounce(key: "spaceChange") {
             await DebugLogger.measureAsync("updateAllWindowsInCurrentSpace") {
                 await WindowUtil.updateAllWindowsInCurrentSpace()

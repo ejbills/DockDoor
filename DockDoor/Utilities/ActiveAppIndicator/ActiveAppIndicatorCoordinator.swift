@@ -11,7 +11,6 @@ final class ActiveAppIndicatorCoordinator {
     private var workspaceObserver: NSObjectProtocol?
     private var positionSettingsObserver: Defaults.Observation?
     private var screenParametersObserver: NSObjectProtocol?
-    private var spaceChangeObserver: NSObjectProtocol?
 
     // Dock layout observer (detects when dock icons are added/removed)
     private var dockLayoutObserver: AXObserver?
@@ -86,15 +85,6 @@ final class ActiveAppIndicatorCoordinator {
             self?.handleScreenParametersChanged()
         }
 
-        // Observe space changes (detects fullscreen transitions)
-        spaceChangeObserver = NSWorkspace.shared.notificationCenter.addObserver(
-            forName: NSWorkspace.activeSpaceDidChangeNotification,
-            object: nil,
-            queue: .main
-        ) { [weak self] _ in
-            self?.handleSpaceChanged()
-        }
-
         // Observe dock layout changes (detects when icons are added/removed)
         setupDockLayoutObserver()
     }
@@ -144,7 +134,7 @@ final class ActiveAppIndicatorCoordinator {
         scheduleDelayedUpdate()
     }
 
-    private func handleSpaceChanged() {
+    func handleSpaceChanged() {
         print("[Indicator:spaceChangeObserver] Space changed")
         // Space changed (possibly entering/exiting fullscreen)
         // Longer delay to allow fullscreen animation to complete
@@ -154,7 +144,7 @@ final class ActiveAppIndicatorCoordinator {
     }
 
     private func updateDockVisibilityState() {
-        let isVisible = isDockVisible()
+        let isVisible = DockObserver.isDockVisible()
 
         guard isVisible != isDockCurrentlyVisible else { return }
         isDockCurrentlyVisible = isVisible
@@ -170,35 +160,12 @@ final class ActiveAppIndicatorCoordinator {
         }
     }
 
-    /// Determines if the dock is currently visible by checking:
-    /// 1. If the frontmost window is fullscreen (dock hidden in fullscreen spaces)
-    /// 2. If the dock size is effectively 0 (auto-hide triggered)
-    private func isDockVisible() -> Bool {
-        // Check if frontmost app's focused window is fullscreen
-        if let app = NSWorkspace.shared.frontmostApplication {
-            let appElement = AXUIElementCreateApplication(app.processIdentifier)
-            if let focusedWindow = try? appElement.focusedWindow(),
-               let isFullscreen = try? focusedWindow.isFullscreen(),
-               isFullscreen
-            {
-                return false
-            }
-        }
-
-        // Check dock size (handles auto-hide)
-        let dockSize = DockUtils.getDockSize()
-        return dockSize > 4
-    }
-
     private func cleanup() {
         if let observer = workspaceObserver {
             NSWorkspace.shared.notificationCenter.removeObserver(observer)
         }
         if let observer = screenParametersObserver {
             NotificationCenter.default.removeObserver(observer)
-        }
-        if let observer = spaceChangeObserver {
-            NSWorkspace.shared.notificationCenter.removeObserver(observer)
         }
         // Remove dock layout observer
         if let observer = dockLayoutObserver, let dockList = observedDockList {
@@ -213,7 +180,6 @@ final class ActiveAppIndicatorCoordinator {
     }
 
     private func handleScreenParametersChanged() {
-        print("[Indicator:screenParametersObserver] Screen parameters changed")
         let newDockPosition = DockUtils.getDockPosition()
         let newDockSize = DockUtils.getDockSize()
 
@@ -303,7 +269,7 @@ final class ActiveAppIndicatorCoordinator {
         }
 
         // Refresh dock visibility state on app change
-        isDockCurrentlyVisible = isDockVisible()
+        isDockCurrentlyVisible = DockObserver.isDockVisible()
 
         // Update immediately (for instant response when clicking dock icons)
         updateIndicatorPosition(for: app)
