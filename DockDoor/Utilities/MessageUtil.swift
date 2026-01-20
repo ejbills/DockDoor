@@ -7,6 +7,7 @@ enum MessageUtil {
     }
 
     static func showAlert(title: String, message: String, actions: [ButtonAction], completion: ((ButtonAction) -> Void)? = nil) {
+        print("DEBUG: showAlert called with title: \(title)")
         let alert = NSAlert()
         alert.messageText = title
         alert.informativeText = message

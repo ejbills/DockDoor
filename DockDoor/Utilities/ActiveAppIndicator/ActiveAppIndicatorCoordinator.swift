@@ -69,7 +69,6 @@ final class ActiveAppIndicatorCoordinator {
             .activeAppIndicatorLength,
             .activeAppIndicatorShift
         ) { [weak self] in
-            print("[Indicator:positionSettingsObserver] Settings changed")
             DispatchQueue.main.async {
                 guard let self, let app = self.currentActiveApp else { return }
                 self.updateIndicatorPosition(for: app)
@@ -129,13 +128,11 @@ final class ActiveAppIndicatorCoordinator {
     }
 
     private func handleDockLayoutChanged() {
-        print("[Indicator:dockLayoutObserver] Dock layout changed (icon added/removed)")
         // Dock layout changed (icon added/removed) - schedule delayed update
         scheduleDelayedUpdate()
     }
 
     func handleSpaceChanged() {
-        print("[Indicator:spaceChangeObserver] Space changed")
         // Space changed (possibly entering/exiting fullscreen)
         // Longer delay to allow fullscreen animation to complete
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
@@ -259,7 +256,6 @@ final class ActiveAppIndicatorCoordinator {
     // MARK: - Active App Handling
 
     private func handleActiveAppChanged(_ app: NSRunningApplication) {
-        print("[Indicator:workspaceObserver] Active app changed: \(app.localizedName ?? "unknown")")
         currentActiveApp = app
 
         // Don't show indicator for the Dock itself

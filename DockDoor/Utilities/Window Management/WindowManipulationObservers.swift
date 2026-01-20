@@ -93,7 +93,9 @@ class WindowManipulationObservers {
         createObserverForApp(app)
         handleNewWindow(for: app.processIdentifier)
 
-        ActiveAppIndicatorCoordinator.shared?.notifyDockItemsChanged()
+        if Defaults[.showActiveAppIndicator] {
+            ActiveAppIndicatorCoordinator.shared?.notifyDockItemsChanged()
+        }
     }
 
     @MainActor
@@ -107,12 +109,16 @@ class WindowManipulationObservers {
             previewCoordinator.hideWindow()
         }
 
-        ActiveAppIndicatorCoordinator.shared?.notifyDockItemsChanged()
+        if Defaults[.showActiveAppIndicator] {
+            ActiveAppIndicatorCoordinator.shared?.notifyDockItemsChanged()
+        }
     }
 
     @objc private func activeSpaceDidChange(_ notification: Notification) {
         DebugLogger.log("activeSpaceDidChange")
-        ActiveAppIndicatorCoordinator.shared?.handleSpaceChanged()
+        if Defaults[.showActiveAppIndicator] {
+            ActiveAppIndicatorCoordinator.shared?.handleSpaceChanged()
+        }
         debounce(key: "spaceChange") {
             await DebugLogger.measureAsync("updateAllWindowsInCurrentSpace") {
                 await WindowUtil.updateAllWindowsInCurrentSpace()
@@ -228,7 +234,9 @@ class WindowManipulationObservers {
                     window.isMinimized = minimizedState ?? false
                 }
             }
-            ActiveAppIndicatorCoordinator.shared?.notifyDockItemsChanged()
+            if Defaults[.showActiveAppIndicator] {
+                ActiveAppIndicatorCoordinator.shared?.notifyDockItemsChanged()
+            }
         case kAXApplicationHiddenNotification:
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
                 guard let self else { return }
