@@ -1,3 +1,4 @@
+import Combine
 import Defaults
 import Sparkle
 import SwiftUI
@@ -33,6 +34,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
     private(set) var hasScreenRecordingPermission: Bool = PermissionsChecker.hasScreenRecordingPermission()
 
     var pinnedWindows: [String: (window: NSWindow, info: PinnedWindowInfo)] = [:]
+    private var frameRefreshCancellable: AnyCancellable?
 
     init() {
         let styleMask: NSWindow.StyleMask = [.nonactivatingPanel, .fullSizeContentView, .borderless]
@@ -40,6 +42,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         SharedPreviewWindowCoordinator.activeInstance = self
         setupWindow()
         setupSearchWindow()
+        setupFrameRefreshObserver()
     }
 
     deinit {
@@ -70,6 +73,15 @@ final class SharedPreviewWindowCoordinator: NSPanel {
             searchWindow?.hideSearch()
             searchWindow = nil
         }
+    }
+
+    private func setupFrameRefreshObserver() {
+        frameRefreshCancellable = windowSwitcherCoordinator.$frameRefreshRequestId
+            .compactMap { $0 }
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.refreshPanelFrameToFitContent()
+            }
     }
 
     func updateSearchWindow(with text: String) {
@@ -133,17 +145,13 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         orderOut(nil)
     }
 
-    /// Merges fresh windows only if the preview is visible and showing the expected app.
+    /// Merges fresh windows only if the preview is visible and showing the expected app (or window switcher is active).
     @MainActor
     @discardableResult
-    func mergeWindowsIfShowing(for pid: pid_t, windows: [WindowInfo], dockPosition: DockPosition, bestGuessMonitor: NSScreen) -> Bool {
-        guard isVisible, currentlyDisplayedPID == pid else { return false }
-        let previousWindowCount = windowSwitcherCoordinator.windows.count
+    func mergeWindowsIfShowing(for pid: pid_t? = nil, windows: [WindowInfo], dockPosition: DockPosition, bestGuessMonitor: NSScreen) -> Bool {
+        guard isVisible else { return false }
+        guard windowSwitcherCoordinator.windowSwitcherActive || currentlyDisplayedPID == pid else { return false }
         windowSwitcherCoordinator.mergeWindows(windows, dockPosition: dockPosition, bestGuessMonitor: bestGuessMonitor)
-
-        if windowSwitcherCoordinator.windows.count != previousWindowCount {
-            refreshPanelFrameToFitContent()
-        }
         return true
     }
 

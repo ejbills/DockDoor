@@ -46,6 +46,7 @@ class PreviewStateCoordinator: ObservableObject {
 
     @Published var overallMaxPreviewDimension: CGPoint = .zero
     @Published var windowDimensionsMap: [Int: WindowPreviewHoverContainer.WindowDimensions] = [:]
+    @Published var frameRefreshRequestId: UUID?
     private var lastKnownBestGuessMonitor: NSScreen?
 
     enum WindowState {
@@ -114,6 +115,7 @@ class PreviewStateCoordinator: ObservableObject {
             return
         }
 
+        let previousWindowCount = windows.count
         let selectedWindowID: CGWindowID? = (currIndex >= 0 && currIndex < windows.count) ? windows[currIndex].id : nil
 
         let freshWindowsByID: [CGWindowID: WindowInfo] = Dictionary(
@@ -150,6 +152,10 @@ class PreviewStateCoordinator: ObservableObject {
 
         lastKnownBestGuessMonitor = bestGuessMonitor
         recomputeAndPublishDimensions(dockPosition: dockPosition, bestGuessMonitor: bestGuessMonitor)
+
+        if windows.count != previousWindowCount {
+            frameRefreshRequestId = UUID()
+        }
     }
 
     @MainActor
@@ -181,10 +187,11 @@ class PreviewStateCoordinator: ObservableObject {
             currIndex = windows.count - 1
         }
 
-        // Recompute dimensions after removing window
+        // Recompute dimensions and request frame refresh
         if let monitor = lastKnownBestGuessMonitor {
             let dockPosition = DockUtils.getDockPosition()
             recomputeAndPublishDimensions(dockPosition: dockPosition, bestGuessMonitor: monitor)
+            frameRefreshRequestId = UUID()
         }
     }
 
