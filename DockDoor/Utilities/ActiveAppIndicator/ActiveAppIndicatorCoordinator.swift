@@ -12,14 +12,18 @@ final class ActiveAppIndicatorCoordinator {
     private var positionSettingsObserver: Defaults.Observation?
     private var screenParametersObserver: NSObjectProtocol?
 
+    private var dockLayoutObserver: AXObserver?
+    private var observedDockList: AXUIElement?
+
     private var currentActiveApp: NSRunningApplication?
 
-    // Dock item shift tracking (app launch/terminate/minimize)
-    private var dockShiftDebounceTimer: Timer?
+    private var delayedUpdateTimer: Timer?
+    private let delayedUpdateInterval: TimeInterval = 0.6
 
     // Dock state tracking
     private var lastKnownDockPosition: DockPosition
     private var lastKnownDockSize: CGFloat
+    private var isDockCurrentlyVisible: Bool = true
 
     init() {
         lastKnownDockPosition = DockUtils.getDockPosition()
@@ -77,6 +81,68 @@ final class ActiveAppIndicatorCoordinator {
         ) { [weak self] _ in
             self?.handleScreenParametersChanged()
         }
+
+        setupDockLayoutObserver()
+    }
+
+    private func setupDockLayoutObserver() {
+        guard let dockApp = NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.dock").first else {
+            return
+        }
+
+        let dockPID = dockApp.processIdentifier
+        let dockElement = AXUIElementCreateApplication(dockPID)
+
+        guard let children = try? dockElement.children(),
+              let dockList = children.first(where: { (try? $0.role()) == kAXListRole })
+        else {
+            return
+        }
+
+        var observer: AXObserver?
+        guard AXObserverCreate(dockPID, { _, _, _, refcon in
+            guard let refcon else { return }
+            let coordinator = Unmanaged<ActiveAppIndicatorCoordinator>.fromOpaque(refcon).takeUnretainedValue()
+            DispatchQueue.main.async {
+                coordinator.handleDockLayoutChanged()
+            }
+        }, &observer) == .success, let observer else {
+            return
+        }
+
+        let refcon = Unmanaged.passUnretained(self).toOpaque()
+        AXObserverAddNotification(observer, dockList, kAXUIElementDestroyedNotification as CFString, refcon)
+        AXObserverAddNotification(observer, dockList, kAXCreatedNotification as CFString, refcon)
+
+        CFRunLoopAddSource(CFRunLoopGetMain(), AXObserverGetRunLoopSource(observer), .defaultMode)
+
+        dockLayoutObserver = observer
+        observedDockList = dockList
+    }
+
+    private func handleDockLayoutChanged() {
+        scheduleDelayedUpdate()
+    }
+
+    func handleSpaceChanged() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+            self?.updateDockVisibilityState()
+        }
+    }
+
+    private func updateDockVisibilityState() {
+        let isVisible = DockObserver.isDockVisible()
+
+        guard isVisible != isDockCurrentlyVisible else { return }
+        isDockCurrentlyVisible = isVisible
+
+        if isVisible {
+            if let app = currentActiveApp {
+                updateIndicatorPosition(for: app)
+            }
+        } else {
+            indicatorWindow?.orderOut(self)
+        }
     }
 
     private func cleanup() {
@@ -86,7 +152,13 @@ final class ActiveAppIndicatorCoordinator {
         if let observer = screenParametersObserver {
             NotificationCenter.default.removeObserver(observer)
         }
-        dockShiftDebounceTimer?.invalidate()
+        if let observer = dockLayoutObserver, let dockList = observedDockList {
+            AXObserverRemoveNotification(observer, dockList, kAXUIElementDestroyedNotification as CFString)
+            AXObserverRemoveNotification(observer, dockList, kAXCreatedNotification as CFString)
+        }
+        dockLayoutObserver = nil
+        observedDockList = nil
+        delayedUpdateTimer?.invalidate()
         positionSettingsObserver?.invalidate()
         hideIndicator()
     }
@@ -101,26 +173,32 @@ final class ActiveAppIndicatorCoordinator {
             notifyDockPositionChanged(newPosition: newDockPosition)
         }
 
-        // Check if dock size changed (refresh indicator position for auto-size)
         if newDockSize != lastKnownDockSize {
             lastKnownDockSize = newDockSize
-            notifyDockItemsChanged()
+            updateDockVisibilityState()
+            scheduleDelayedUpdate()
         }
     }
 
     // MARK: - Dock Item Change Notifications
 
-    /// Called when dock items may have shifted (app launch, terminate, minimize, etc.)
-    /// Refreshes the indicator position after a debounced delay to account for dock animation.
     func notifyDockItemsChanged() {
-        // Debounce to avoid multiple rapid updates and wait for dock animation
-        dockShiftDebounceTimer?.invalidate()
-        dockShiftDebounceTimer = Timer.scheduledTimer(
-            withTimeInterval: 0.5,
-            repeats: false
-        ) { [weak self] _ in
-            guard let self, let app = currentActiveApp else { return }
-            updateIndicatorPosition(for: app)
+        scheduleDelayedUpdate()
+    }
+
+    private func scheduleDelayedUpdate() {
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            delayedUpdateTimer?.invalidate()
+            delayedUpdateTimer = Timer.scheduledTimer(
+                withTimeInterval: delayedUpdateInterval,
+                repeats: false
+            ) { [weak self] _ in
+                guard let self else { return }
+                delayedUpdateTimer = nil
+                guard let app = currentActiveApp else { return }
+                updateIndicatorPosition(for: app)
+            }
         }
     }
 
@@ -160,26 +238,35 @@ final class ActiveAppIndicatorCoordinator {
     private func handleActiveAppChanged(_ app: NSRunningApplication) {
         currentActiveApp = app
 
-        // Don't show indicator for the Dock itself or Finder's desktop
         guard app.bundleIdentifier != "com.apple.dock" else {
             indicatorWindow?.orderOut(self)
             return
         }
 
+        isDockCurrentlyVisible = DockObserver.isDockVisible()
+
+        // Update immediately (for instant response when clicking dock icons) and schedule a delayed update to handle dock width changing
         updateIndicatorPosition(for: app)
+        scheduleDelayedUpdate()
     }
 
     private func updateIndicatorPosition(for app: NSRunningApplication) {
-        guard let indicatorWindow,
-              let dockItemFrame = ActiveAppIndicatorDockDetection.getDockItemFrame(for: app)
-        else {
+        guard isDockCurrentlyVisible else {
             indicatorWindow?.orderOut(self)
+            return
+        }
+
+        guard let indicatorWindow else {
+            return
+        }
+
+        guard let dockItemFrame = ActiveAppIndicatorDockDetection.getDockItemFrame(for: app) else {
+            indicatorWindow.orderOut(self)
             return
         }
 
         let dockPosition = DockUtils.getDockPosition()
 
-        // Check if dock position is supported
         guard ActiveAppIndicatorPositioning.isSupported(dockPosition) else {
             indicatorWindow.orderOut(self)
             return

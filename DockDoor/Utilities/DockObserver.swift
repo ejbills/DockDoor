@@ -61,6 +61,15 @@ final class DockObserver {
             bundleId == calendarAppIdentifier
     }
 
+    static func isDockVisible() -> Bool {
+        if let frontmostApp = NSWorkspace.shared.frontmostApplication,
+           WindowUtil.isAppInFullscreen(frontmostApp)
+        {
+            return false
+        }
+        return DockUtils.getDockSize() > 0
+    }
+
     init(previewCoordinator: SharedPreviewWindowCoordinator) {
         self.previewCoordinator = previewCoordinator
         DockObserver.activeInstance = self
