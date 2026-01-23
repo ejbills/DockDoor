@@ -216,6 +216,21 @@ struct SupportSettingsView: View {
                     TranslatorRow(name: "awaustin", language: "Chinese Simplified", profile: "awaustin")
                     TranslatorRow(name: "illavoluntas", language: "French", profile: "illavoluntas")
                 }
+
+                Divider()
+
+                // Audio Assets
+                Text("Audio Assets")
+                    .font(.subheadline)
+                    .fontWeight(.medium)
+                    .foregroundColor(.secondary)
+
+                AudioAssetRow(
+                    name: "Magic Glow",
+                    author: "IENBA",
+                    sourceURL: "https://freesound.org/s/752274/",
+                    license: "CC0"
+                )
             }
         }
     }
@@ -352,6 +367,39 @@ private struct TranslatorRow: View {
                 .frame(width: 120, alignment: .leading)
 
             Link(destination: URL(string: "https://crowdin.com/profile/\(profile)")!) {
+                Image(systemName: "arrow.up.right.square")
+                    .font(.system(size: 12))
+                    .foregroundColor(.accentColor)
+            }
+        }
+        .padding(.vertical, 2)
+    }
+}
+
+private struct AudioAssetRow: View {
+    let name: String
+    let author: String
+    let sourceURL: String
+    let license: String
+
+    var body: some View {
+        HStack(spacing: 12) {
+            Image(systemName: "speaker.wave.2.fill")
+                .font(.system(size: 12))
+                .foregroundColor(.secondary)
+                .frame(width: 16)
+
+            Text(name)
+                .font(.body)
+                .lineLimit(1)
+                .frame(maxWidth: .infinity, alignment: .leading)
+
+            Text(license)
+                .font(.caption)
+                .foregroundColor(.secondary)
+                .frame(width: 40, alignment: .leading)
+
+            Link(destination: URL(string: sourceURL)!) {
                 Image(systemName: "arrow.up.right.square")
                     .font(.system(size: 12))
                     .foregroundColor(.accentColor)
