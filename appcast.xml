@@ -3,6 +3,15 @@
     <channel>
         <title>DockDoor</title>
         <item>
+            <title>1.31.2</title>
+            <pubDate>Fri, 23 Jan 2026 13:04:48 -0800</pubDate>
+            <sparkle:releaseNotesLink>https://dockdoor.net/CHANGELOG.html</sparkle:releaseNotesLink>
+            <sparkle:version>1.31.2</sparkle:version>
+            <sparkle:shortVersionString>1.31.2</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/ejbills/DockDoor/releases/download/1.31.2/DockDoor.dmg" length="21629206" type="application/octet-stream" sparkle:edSignature="zKSnZT6Ot7b6YO4+GDG3Ya8B8KrfU+EOCUrXU3wANK17xvNVQgP0APvNi1vWnlCeIpS+lEgir0DG5Liu0TMzAQ==" />
+        </item>
+    <item>
             <title>1.31.1.2</title>
             <pubDate>Tue, 20 Jan 2026 12:18:02 -0800</pubDate>
             <sparkle:releaseNotesLink>https://dockdoor.net/CHANGELOG.html</sparkle:releaseNotesLink>
@@ -11,15 +20,6 @@
             <sparkle:shortVersionString>1.31.1.2 beta</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
             <enclosure url="https://github.com/ejbills/DockDoor/releases/download/1.31.1.2/DockDoor.dmg" length="21618998" type="application/octet-stream" sparkle:edSignature="q73s/OvRVWrctRtTEf2KSiAZ43rGgxAljfZ4nd8Bowf3+HaSCqzhRFeKkuLH7TzX+lgobG62i9aybkkDeqXUBA==" />
-        </item>
-    <item>
-            <title>1.31.1</title>
-            <pubDate>Fri, 16 Jan 2026 17:53:43 -0800</pubDate>
-            <sparkle:releaseNotesLink>https://dockdoor.net/CHANGELOG.html</sparkle:releaseNotesLink>
-            <sparkle:version>1.31.1</sparkle:version>
-            <sparkle:shortVersionString>1.31.1</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/ejbills/DockDoor/releases/download/1.31.1/DockDoor.dmg" length="21678918" type="application/octet-stream" sparkle:edSignature="iprR6wN0lB1jjJmR8wnZO6EgE6oA8Crspc6Fkp6bqFZy6J5aGWMkzxxA04HibufzA8A8lw6j3rTa0kfAfOR+DQ==" />
         </item>
     </channel>
 </rss>
