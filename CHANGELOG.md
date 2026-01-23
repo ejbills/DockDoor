@@ -38,6 +38,30 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://dockdoor.net/donate</div>
 
+<a id="1.31.2"></a>
+# [Release 1.31.2](https://github.com/ejbills/DockDoor/releases/tag/1.31.2) - 2026-01-23
+
+## ✨ New Features
+- Separate widget background toggle
+  - Hide widget backgrounds independently
+  - Applies to media and calendar
+
+## 🔧 Improvements & Stability
+- Reorganized settings interface
+- Better preview panel resizing
+
+## 🐛 Bug Fixes
+- Fixed active app indicator position
+  - Correct alignment in fullscreen
+  - Updates with dock changes
+- Fixed hover window behavior
+- Fixed window failing to present after sleep wake
+- Fixed dock click detection
+
+
+[Changes][1.31.2]
+
+
 <a id="1.31.1"></a>
 # [Release 1.31.1](https://github.com/ejbills/DockDoor/releases/tag/1.31.1) - 2026-01-17
 
@@ -1862,6 +1886,7 @@ v1.0
 [Changes][releases]
 
 
+[1.31.2]: https://github.com/ejbills/DockDoor/compare/1.31.1...1.31.2
 [1.31.1]: https://github.com/ejbills/DockDoor/compare/1.31...1.31.1
 [1.31]: https://github.com/ejbills/DockDoor/compare/1.30.1...1.31
 [1.30.1]: https://github.com/ejbills/DockDoor/compare/1.30...1.30.1
