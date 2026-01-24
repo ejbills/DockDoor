@@ -16,6 +16,7 @@ struct WindowPreviewCompact: View {
     @Default(.previewWidth) private var previewWidth
     @Default(.compactModeTitleFormat) private var titleFormat
     @Default(.compactModeItemSize) private var itemSize
+    @Default(.compactModeHideTrafficLights) private var hideTrafficLights
 
     // MARK: - Dock Preview Appearance Settings
 
@@ -163,7 +164,8 @@ struct WindowPreviewCompact: View {
             Spacer(minLength: 0)
 
             // Traffic light buttons
-            if windowInfo.closeButton != nil,
+            if !hideTrafficLights,
+               windowInfo.closeButton != nil,
                effectiveTrafficLightVisibility != .never,
                !showMinimizedHiddenLabels || (!windowInfo.isMinimized && !windowInfo.isHidden)
             {

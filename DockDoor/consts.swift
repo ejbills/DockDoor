@@ -90,6 +90,7 @@ extension Defaults.Keys {
     static let enableWindowSwitcherSearch = Key<Bool>("enableWindowSwitcherSearch", default: false)
     static let compactModeTitleFormat = Key<CompactModeTitleFormat>("compactModeTitleFormat", default: .appNameAndTitle)
     static let compactModeItemSize = Key<CompactModeItemSize>("compactModeItemSize", default: .medium)
+    static let compactModeHideTrafficLights = Key<Bool>("compactModeHideTrafficLights", default: false)
 
     // Per-feature compact mode thresholds (0 = disabled, 1+ = enable when window count >= threshold)
     static let windowSwitcherCompactThreshold = Key<Int>("windowSwitcherCompactThreshold", default: 0)
