@@ -5,6 +5,7 @@ struct CompactModeSection: View {
     @Default(.disableImagePreview) var disableImagePreview
     @Default(.compactModeTitleFormat) var compactModeTitleFormat
     @Default(.compactModeItemSize) var compactModeItemSize
+    @Default(.compactModeHideTrafficLights) var compactModeHideTrafficLights
     @Default(.windowSwitcherCompactThreshold) var windowSwitcherCompactThreshold
     @Default(.dockPreviewCompactThreshold) var dockPreviewCompactThreshold
     @Default(.cmdTabCompactThreshold) var cmdTabCompactThreshold
@@ -86,6 +87,13 @@ struct CompactModeSection: View {
                     }
                 }
                 .pickerStyle(.menu)
+
+                VStack(alignment: .leading, spacing: 4) {
+                    Toggle("Hide Traffic Lights", isOn: $compactModeHideTrafficLights)
+                    Text("Hides the close, minimize, and other window control buttons in compact mode to provide more room for window titles.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
             }
         }
     }
