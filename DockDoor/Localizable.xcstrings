@@ -61335,6 +61335,9 @@
         }
       }
     },
+    "Hide Traffic Lights" : {
+
+    },
     "Hide widget container background" : {
       "localizations" : {
         "af" : {
@@ -61524,6 +61527,9 @@
           }
         }
       }
+    },
+    "Hides the close, minimize, and other window control buttons in compact mode to provide more room for window titles." : {
+
     },
     "High (960px)" : {
       "localizations" : {

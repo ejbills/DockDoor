@@ -163,8 +163,13 @@ func shouldAcceptWindow(axWindow: AXUIElement,
 
     if app.isHidden || axIsFullscreen || axIsMinimized { return true }
 
-    // Window on different Space
-    if !windowSpaces.isEmpty, windowSpaces.isDisjoint(with: activeSpaceIDs) { return true }
+    // Window on different Space — but reject if not onscreen and not minimized/fullscreen/hidden (ghost with stale space ID)
+    if !windowSpaces.isEmpty, windowSpaces.isDisjoint(with: activeSpaceIDs) {
+        if !isOnscreen, !axIsMinimized, !axIsFullscreen, !app.isHidden {
+            return false
+        }
+        return true
+    }
 
     // Fallback: if AX marks it as main, consider it significant and include.
     // This helps when CGS space mapping is unreliable or empty for other-Spaces windows.
