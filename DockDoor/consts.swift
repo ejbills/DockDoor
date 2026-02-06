@@ -166,6 +166,7 @@ extension Defaults.Keys {
     static let previewMaxColumns = Key<Int>("previewMaxColumns", default: 2) // For left/right dock
     static let previewMaxRows = Key<Int>("previewMaxRows", default: 1) // For bottom dock only
     static let switcherMaxRows = Key<Int>("switcherMaxRows", default: 2) // For window switcher
+    static let windowSwitcherScrollDirection = Key<WindowSwitcherScrollDirection>("windowSwitcherScrollDirection", default: .horizontal)
 
     static let windowSwitcherPlacementStrategy = Key<WindowSwitcherPlacementStrategy>("windowSwitcherPlacementStrategy", default: .screenWithMouse)
     static let windowSwitcherControlPosition = Key<WindowSwitcherControlPosition>("windowSwitcherControlPosition", default: .topTrailing)
@@ -579,6 +580,21 @@ enum MediaWidgetScrollBehavior: String, CaseIterable, Defaults.Serializable {
             String(localized: "Adjust volume", comment: "Media widget scroll option")
         case .seekPlayback:
             String(localized: "Seek playback (scrub through track)", comment: "Media widget scroll option")
+        }
+    }
+}
+
+// Window switcher scroll direction
+enum WindowSwitcherScrollDirection: String, CaseIterable, Defaults.Serializable {
+    case horizontal
+    case vertical
+
+    var localizedName: String {
+        switch self {
+        case .horizontal:
+            String(localized: "Horizontal", comment: "Window switcher scroll direction option")
+        case .vertical:
+            String(localized: "Vertical", comment: "Window switcher scroll direction option")
         }
     }
 }

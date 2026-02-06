@@ -260,7 +260,11 @@ struct WindowPreviewHoverContainer: View {
     private func windowGridContent() -> some View {
         let calculatedMaxDimension = previewStateCoordinator.overallMaxPreviewDimension
         let calculatedDimensionsMap = previewStateCoordinator.windowDimensionsMap
-        let orientationIsHorizontal = dockPosition.isHorizontalFlow || previewStateCoordinator.windowSwitcherActive
+        let orientationIsHorizontal: Bool = if previewStateCoordinator.windowSwitcherActive {
+            Defaults[.windowSwitcherScrollDirection] == .horizontal
+        } else {
+            dockPosition.isHorizontalFlow
+        }
 
         ScrollViewReader { scrollProxy in
             buildFlowStack(
@@ -974,7 +978,11 @@ struct WindowPreviewHoverContainer: View {
     }
 
     private func createChunkedItems() -> [[FlowItem]] {
-        let isHorizontal = dockPosition.isHorizontalFlow || previewStateCoordinator.windowSwitcherActive
+        let isHorizontal: Bool = if previewStateCoordinator.windowSwitcherActive {
+            Defaults[.windowSwitcherScrollDirection] == .horizontal
+        } else {
+            dockPosition.isHorizontalFlow
+        }
 
         var itemsToProcess: [FlowItem] = []
 

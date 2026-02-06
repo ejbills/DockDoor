@@ -10,6 +10,7 @@ struct WindowSwitcherAppearanceSection: View {
     @Default(.switcherUseMonochromeTrafficLights) var switcherUseMonochromeTrafficLights
     @Default(.switcherDisableDockStyleTrafficLights) var switcherDisableDockStyleTrafficLights
     @Default(.switcherMaxRows) var switcherMaxRows
+    @Default(.windowSwitcherScrollDirection) var windowSwitcherScrollDirection
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -79,13 +80,22 @@ struct WindowSwitcherAppearanceSection: View {
 
             Divider().padding(.vertical, 2)
             Text("Preview Layout (Switcher)").font(.headline).padding(.bottom, -2)
+
+            Picker("Scroll Direction", selection: $windowSwitcherScrollDirection) {
+                ForEach(WindowSwitcherScrollDirection.allCases, id: \.self) { direction in
+                    Text(direction.localizedName).tag(direction)
+                }
+            }
+
             VStack(alignment: .leading, spacing: 4) {
                 let switcherMaxRowsBinding = Binding<Double>(
                     get: { Double(switcherMaxRows) },
                     set: { switcherMaxRows = Int($0) }
                 )
                 sliderSetting(
-                    title: "Max Rows",
+                    title: windowSwitcherScrollDirection == .horizontal
+                        ? "Max Rows"
+                        : "Max Columns",
                     value: switcherMaxRowsBinding,
                     range: 1.0 ... 8.0,
                     step: 1.0,
@@ -98,7 +108,9 @@ struct WindowSwitcherAppearanceSection: View {
                     }()
                 )
 
-                Text(String(localized: "Controls how many rows of windows are shown in the window switcher. Windows are distributed across rows automatically."))
+                Text(windowSwitcherScrollDirection == .horizontal
+                    ? String(localized: "Controls how many rows of windows are shown in the window switcher. Windows are distributed across rows automatically.")
+                    : String(localized: "Controls how many columns of windows are shown in the window switcher. Windows are distributed across columns automatically."))
                     .font(.caption)
                     .foregroundColor(.secondary)
             }

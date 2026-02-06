@@ -21,7 +21,11 @@ extension WindowPreviewHoverContainer {
             var maxWidth: CGFloat = 300 // Default/min
             var maxHeight: CGFloat = 300 // Default/min
 
-            let orientationIsHorizontal = dockPosition == .bottom || dockPosition == .cmdTab || isWindowSwitcherActive
+            let orientationIsHorizontal: Bool = if isWindowSwitcherActive {
+                Defaults[.windowSwitcherScrollDirection] == .horizontal
+            } else {
+                dockPosition == .bottom || dockPosition == .cmdTab
+            }
             let maxAspectRatio: CGFloat = 1.5
 
             for window in windows {
@@ -62,7 +66,11 @@ extension WindowPreviewHoverContainer {
         var dimensionsMap: [Int: WindowDimensions] = [:]
 
         if Defaults[.allowDynamicImageSizing] {
-            let orientationIsHorizontal = dockPosition == .bottom || dockPosition == .cmdTab || isWindowSwitcherActive
+            let orientationIsHorizontal: Bool = if isWindowSwitcherActive {
+                Defaults[.windowSwitcherScrollDirection] == .horizontal
+            } else {
+                dockPosition == .bottom || dockPosition == .cmdTab
+            }
 
             let (effectiveMaxColumns, effectiveMaxRows) = calculateEffectiveMaxColumnsAndRows(
                 bestGuessMonitor: bestGuessMonitor,
@@ -211,11 +219,22 @@ extension WindowPreviewHoverContainer {
         var effectiveMaxRows: Int
 
         if isWindowSwitcherActive {
-            effectiveMaxColumns = calculatedMaxColumns
-            if let totalItems, totalItems <= calculatedMaxColumns {
-                effectiveMaxRows = 1
+            let isVertical = Defaults[.windowSwitcherScrollDirection] == .vertical
+            if isVertical {
+                // Vertical: switcherMaxRows controls max columns, rows are calculated from screen space
+                effectiveMaxRows = calculatedMaxRows
+                if let totalItems, totalItems <= calculatedMaxRows {
+                    effectiveMaxColumns = 1
+                } else {
+                    effectiveMaxColumns = switcherMaxRows
+                }
             } else {
-                effectiveMaxRows = switcherMaxRows
+                effectiveMaxColumns = calculatedMaxColumns
+                if let totalItems, totalItems <= calculatedMaxColumns {
+                    effectiveMaxRows = 1
+                } else {
+                    effectiveMaxRows = switcherMaxRows
+                }
             }
         } else if dockPosition == .bottom || dockPosition == .cmdTab {
             effectiveMaxColumns = calculatedMaxColumns
@@ -329,7 +348,11 @@ extension WindowPreviewHoverContainer {
         }
 
         let bestGuessMonitor = NSScreen.main ?? NSScreen.screens.first!
-        let isHorizontalFlow = dockPosition.isHorizontalFlow || isWindowSwitcherActive
+        let isHorizontalFlow: Bool = if isWindowSwitcherActive {
+            Defaults[.windowSwitcherScrollDirection] == .horizontal
+        } else {
+            dockPosition.isHorizontalFlow
+        }
 
         let (maxColumns, maxRows) = calculateEffectiveMaxColumnsAndRows(
             bestGuessMonitor: bestGuessMonitor,

@@ -33343,6 +33343,9 @@
         }
       }
     },
+    "Controls how many columns of windows are shown in the window switcher. Windows are distributed across columns automatically." : {
+
+    },
     "Controls how many rows of windows are shown in the window switcher. Windows are distributed across rows automatically." : {
       "localizations" : {
         "af" : {
@@ -62296,7 +62299,7 @@
       }
     },
     "Horizontal" : {
-      "comment" : "Media widget scroll direction option",
+      "comment" : "Media widget scroll direction option\nWindow switcher scroll direction option",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -72009,6 +72012,9 @@
           }
         }
       }
+    },
+    "Max Columns" : {
+
     },
     "Max Columns (Left/Right Dock)" : {
       "localizations" : {
@@ -105909,6 +105915,9 @@
         }
       }
     },
+    "Scroll Direction" : {
+
+    },
     "Scroll direction:" : {
       "localizations" : {
         "af" : {
@@ -136405,7 +136414,7 @@
       }
     },
     "Vertical" : {
-      "comment" : "Media widget scroll direction option",
+      "comment" : "Media widget scroll direction option\nWindow switcher scroll direction option",
       "localizations" : {
         "af" : {
           "stringUnit" : {
