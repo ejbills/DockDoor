@@ -457,10 +457,10 @@ class KeybindHelper {
                             return Unmanaged.passUnretained(event)
                         }
                     default:
-                        // Allow activation via Cmd+A (when not yet focused) and
+                        // Allow activation via customizable Cmd+key (when not yet focused) and
                         // Command-based actions when a preview is focused
                         if flags.contains(.maskCommand) {
-                            if keyCode == Int64(kVK_ANSI_A) {
+                            if keyCode == Int64(Defaults[.cmdTabCycleKey]) {
                                 Task { @MainActor in
                                     let currentIndex = self.previewCoordinator.windowSwitcherCoordinator.currIndex
                                     let windowCount = self.previewCoordinator.windowSwitcherCoordinator.windows.count
@@ -753,7 +753,7 @@ class KeybindHelper {
         if previewIsCurrentlyVisible,
            previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive,
            Defaults[.enableWindowSwitcherSearch],
-           keyCode == Int64(kVK_ANSI_Slash) // Forward slash key
+           keyCode == Int64(Defaults[.searchTriggerKey]) // Customizable search trigger key
         {
             return (true, { @MainActor in
                 self.previewCoordinator.focusSearchWindow()

@@ -3,6 +3,8 @@ import SwiftUI
 
 struct WindowSwitcherKeybindSection: View {
     @Default(.enableWindowSwitcher) var enableWindowSwitcher
+    @Default(.enableWindowSwitcherSearch) var enableWindowSwitcherSearch
+    @Default(.searchTriggerKey) var searchTriggerKey
     @Default(.fullscreenAppBlacklist) var fullscreenAppBlacklist
     @Default(.alternateKeybindKey) var alternateKeybindKey
     @Default(.alternateKeybindMode) var alternateKeybindMode
@@ -11,8 +13,6 @@ struct WindowSwitcherKeybindSection: View {
     @StateObject private var keybindModel = KeybindModel()
     @State private var showingAddBlacklistAppSheet = false
     @State private var newBlacklistApp = ""
-    @State private var capturingAlternateKey = false
-    @State private var keyMonitor: Any? = nil
 
     var body: some View {
         SettingsGroup(header: "Window Switcher Shortcuts") {
@@ -53,6 +53,30 @@ struct WindowSwitcherKeybindSection: View {
                 alternateShortcutsSection
                     .disabled(!enableWindowSwitcher)
                     .opacity(enableWindowSwitcher ? 1.0 : 0.5)
+
+                if enableWindowSwitcherSearch {
+                    Divider()
+
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Search Trigger Key").font(.headline)
+                        Text("The key that activates search while the window switcher is open.")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+
+                        HStack(spacing: 12) {
+                            Text(modifierConverter.toString(keybindModel.modifierKey))
+                                .font(.system(size: 12, weight: .medium, design: .monospaced))
+                                .foregroundColor(.secondary)
+                            Text("+")
+                                .font(.system(size: 12))
+                                .foregroundColor(.secondary)
+
+                            KeyCaptureButton(keyCode: $searchTriggerKey)
+                        }
+                    }
+                    .disabled(!enableWindowSwitcher)
+                    .opacity(enableWindowSwitcher ? 1.0 : 0.5)
+                }
 
                 Divider()
 
@@ -155,25 +179,7 @@ struct WindowSwitcherKeybindSection: View {
                     .font(.system(size: 12))
                     .foregroundColor(.secondary)
 
-                // Key capture
-                if capturingAlternateKey {
-                    Text("Press a key…")
-                        .font(.system(size: 12))
-                        .foregroundColor(.accentColor)
-                        .frame(minWidth: 50)
-                } else {
-                    Button(action: {
-                        startAlternateKeyCapture()
-                    }) {
-                        Text(alternateKeybindKey == 0 ? "Not set" : KeyboardLabel.localizedKey(for: alternateKeybindKey))
-                            .font(.system(size: 14, weight: .medium, design: .monospaced))
-                            .padding(.horizontal, 8)
-                            .padding(.vertical, 4)
-                            .background(alternateKeybindKey == 0 ? Color.secondary.opacity(0.1) : Color.secondary.opacity(0.2))
-                            .cornerRadius(4)
-                    }
-                    .buttonStyle(.plain)
-                }
+                KeyCaptureButton(keyCode: $alternateKeybindKey, emptyLabel: "Not set")
 
                 if alternateKeybindKey != 0 {
                     Button("Clear") {
@@ -194,32 +200,6 @@ struct WindowSwitcherKeybindSection: View {
                 .labelsHidden()
                 .frame(maxWidth: 200)
             }
-        }
-    }
-
-    private func startAlternateKeyCapture() {
-        // Remove any existing monitor
-        if let monitor = keyMonitor {
-            NSEvent.removeMonitor(monitor)
-        }
-
-        capturingAlternateKey = true
-
-        keyMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [self] event in
-            defer {
-                capturingAlternateKey = false
-                if let monitor = keyMonitor {
-                    NSEvent.removeMonitor(monitor)
-                    keyMonitor = nil
-                }
-            }
-
-            // Escape cancels
-            if event.keyCode == 53 { return nil }
-
-            // Update the binding directly
-            alternateKeybindKey = event.keyCode
-            return nil
         }
     }
 

@@ -27819,7 +27819,11 @@
         }
       }
     },
+    "Cmd+%@ cycles through previews (Shift to reverse), Left/Right navigate, Down clears selection." : {
+
+    },
     "Cmd+A cycles through previews (Shift+A cycles backward), Left/Right navigate, Down clears selection." : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -93530,6 +93534,9 @@
         }
       }
     },
+    "Preview cycle key:" : {
+
+    },
     "Preview Height" : {
       "localizations" : {
         "af" : {
@@ -107042,6 +107049,9 @@
           }
         }
       }
+    },
+    "Search Trigger Key" : {
+
     },
     "seconds" : {
       "localizations" : {
@@ -126294,6 +126304,9 @@
           }
         }
       }
+    },
+    "The key that activates search while the window switcher is open." : {
+
     },
     "The selected positions for Traffic Light Buttons and Window Title will overlap." : {
       "extractionState" : "stale",

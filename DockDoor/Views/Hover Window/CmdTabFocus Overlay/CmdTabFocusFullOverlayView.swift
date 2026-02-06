@@ -1,4 +1,5 @@
 import Carbon
+import Defaults
 import SwiftUI
 
 struct CmdTabFocusFullOverlayView: View {
@@ -19,7 +20,7 @@ struct CmdTabFocusFullOverlayView: View {
                 KeyHintRow(
                     keys: [
                         "⌘",
-                        KeyboardLabel.localizedKey(for: UInt16(kVK_ANSI_A)),
+                        KeyboardLabel.localizedKey(for: Defaults[.cmdTabCycleKey]),
                     ],
                     description: "Cycle through previews (Shift to reverse)",
                     titleColor: titleColor,

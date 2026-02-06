@@ -9,9 +9,6 @@ struct CmdKeyShortcutsSection: View {
     @Default(.cmdShortcut3Key) var cmdShortcut3Key
     @Default(.cmdShortcut3Action) var cmdShortcut3Action
 
-    @State private var capturingShortcutSlot: Int? = nil
-    @State private var keyMonitor: Any? = nil
-
     var body: some View {
         SettingsGroup(header: "Window Preview Keyboard Shortcuts") {
             VStack(alignment: .leading, spacing: 12) {
@@ -59,26 +56,7 @@ struct CmdKeyShortcutsSection: View {
                 Text("⌘")
                     .font(.system(size: 14, weight: .medium))
                     .foregroundColor(.secondary)
-
-                if capturingShortcutSlot == slot {
-                    Text("Press a key…")
-                        .font(.system(size: 12))
-                        .foregroundColor(.accentColor)
-                        .frame(minWidth: 50)
-                } else {
-                    Button(action: {
-                        capturingShortcutSlot = slot
-                        startKeyCapture(keyBinding: keyBinding)
-                    }) {
-                        Text(KeyboardLabel.localizedKey(for: keyBinding.wrappedValue))
-                            .font(.system(size: 14, weight: .medium, design: .monospaced))
-                            .padding(.horizontal, 8)
-                            .padding(.vertical, 4)
-                            .background(Color.secondary.opacity(0.2))
-                            .cornerRadius(4)
-                    }
-                    .buttonStyle(.plain)
-                }
+                KeyCaptureButton(keyCode: keyBinding)
             }
             .frame(minWidth: 80, alignment: .leading)
 
@@ -93,30 +71,6 @@ struct CmdKeyShortcutsSection: View {
             }
             .pickerStyle(.menu)
             .labelsHidden()
-        }
-    }
-
-    private func startKeyCapture(keyBinding: Binding<UInt16>) {
-        // Remove any existing monitor
-        if let monitor = keyMonitor {
-            NSEvent.removeMonitor(monitor)
-        }
-
-        keyMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [self] event in
-            defer {
-                capturingShortcutSlot = nil
-                if let monitor = keyMonitor {
-                    NSEvent.removeMonitor(monitor)
-                    keyMonitor = nil
-                }
-            }
-
-            // Escape cancels
-            if event.keyCode == 53 { return nil }
-
-            // Update the binding directly
-            keyBinding.wrappedValue = event.keyCode
-            return nil
         }
     }
 }

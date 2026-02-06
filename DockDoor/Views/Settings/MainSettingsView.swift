@@ -9,6 +9,7 @@ struct MainSettingsView: View {
     @Default(.enableWindowSwitcher) var enableWindowSwitcher
     @Default(.instantWindowSwitcher) var instantWindowSwitcher
     @Default(.enableWindowSwitcherSearch) var enableWindowSwitcherSearch
+    @Default(.searchTriggerKey) var searchTriggerKey
     @Default(.searchFuzziness) var searchFuzziness
     @Default(.enableDockPreviews) var enableDockPreviews
     @Default(.showWindowsFromCurrentSpaceOnly) var showWindowsFromCurrentSpaceOnly
@@ -20,6 +21,7 @@ struct MainSettingsView: View {
     @Default(.sortMinimizedToEnd) var sortMinimizedToEnd
     @Default(.keepPreviewOnAppTerminate) var keepPreviewOnAppTerminate
     @Default(.enableCmdTabEnhancements) var enableCmdTabEnhancements
+    @Default(.cmdTabCycleKey) var cmdTabCycleKey
     @Default(.enableMouseHoverInSwitcher) var enableMouseHoverInSwitcher
     @Default(.mouseHoverAutoScrollSpeed) var mouseHoverAutoScrollSpeed
     @Default(.includeHiddenWindowsInSwitcher) var includeHiddenWindowsInSwitcher
@@ -383,13 +385,24 @@ struct MainSettingsView: View {
                         .onChange(of: enableCmdTabEnhancements) { _ in askUserToRestartApplication() }
                     VStack(alignment: .leading, spacing: 2) {
                         Text("Show previews while holding Cmd+Tab.")
-                        Text("Cmd+A cycles through previews (Shift+A cycles backward), Left/Right navigate, Down clears selection.")
+                        Text("Cmd+\(KeyboardLabel.localizedKey(for: cmdTabCycleKey)) cycles through previews (Shift to reverse), Left/Right navigate, Down clears selection.")
                     }
                     .font(.caption)
                     .foregroundColor(.secondary)
                     .padding(.leading, 20)
 
                     if enableCmdTabEnhancements {
+                        HStack(spacing: 8) {
+                            Text("Preview cycle key:")
+                            HStack(spacing: 4) {
+                                Text("⌘")
+                                    .font(.system(size: 14, weight: .medium))
+                                    .foregroundColor(.secondary)
+                                KeyCaptureButton(keyCode: $cmdTabCycleKey)
+                            }
+                        }
+                        .padding(.leading, 20)
+
                         Toggle(isOn: $showWindowsFromCurrentSpaceOnlyInCmdTab) { Text("Show windows from current Space only") }
                             .padding(.leading, 20)
                         Text("Only display windows that are in the current virtual desktop/Space.")
@@ -765,6 +778,9 @@ struct MainSettingsView: View {
 
                 Defaults[.alternateKeybindKey] = Defaults.Keys.alternateKeybindKey.defaultValue
                 Defaults[.alternateKeybindMode] = Defaults.Keys.alternateKeybindMode.defaultValue
+
+                cmdTabCycleKey = Defaults.Keys.cmdTabCycleKey.defaultValue
+                searchTriggerKey = Defaults.Keys.searchTriggerKey.defaultValue
 
                 Defaults[.showSpecialAppControls] = Defaults.Keys.showSpecialAppControls.defaultValue
                 Defaults[.showBigControlsWhenNoValidWindows] = Defaults.Keys.showBigControlsWhenNoValidWindows.defaultValue

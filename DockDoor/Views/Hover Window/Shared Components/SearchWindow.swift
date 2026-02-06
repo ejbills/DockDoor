@@ -66,7 +66,7 @@ class SearchWindow: NSPanel, NSTextFieldDelegate {
 
     private func setupSearchField() {
         searchField = NSTextField()
-        searchField.placeholderString = "Press / to search windows…"
+        searchField.placeholderString = "Press \(KeyboardLabel.localizedKey(for: Defaults[.searchTriggerKey])) to search windows…"
         searchField.isBordered = false
         searchField.drawsBackground = false
         searchField.backgroundColor = .clear
