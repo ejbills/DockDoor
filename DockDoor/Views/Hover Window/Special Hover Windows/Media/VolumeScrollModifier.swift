@@ -6,9 +6,13 @@ struct MediaScrollModifier: ViewModifier {
     @ObservedObject var mediaInfo: MediaInfo
     @State private var scrollMonitor: Any?
     @State private var seekDebounceWork: DispatchWorkItem?
+    @State private var isHovered: Bool = false
 
     func body(content: Content) -> some View {
         content
+            .onHover { hovering in
+                isHovered = hovering
+            }
             .onAppear { setupMonitor() }
             .onDisappear { removeMonitor() }
     }
@@ -28,6 +32,7 @@ struct MediaScrollModifier: ViewModifier {
     }
 
     private func handleScroll(_ event: NSEvent) {
+        guard isHovered else { return }
         guard event.window != nil else { return }
 
         let isHorizontal = Defaults[.mediaWidgetScrollDirection] == .horizontal

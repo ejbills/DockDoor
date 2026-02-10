@@ -515,7 +515,9 @@ class KeybindHelper {
                 let clickLocation = NSEvent.mouseLocation
                 let windowFrame = previewCoordinator.frame
 
-                if windowFrame.contains(clickLocation) {
+                let searchFrame = SharedPreviewWindowCoordinator.activeInstance?.searchWindowFrame
+                let isInSearchWindow = searchFrame?.contains(clickLocation) ?? false
+                if windowFrame.contains(clickLocation) || isInSearchWindow {
                     let flags = event.flags
                     if flags.contains(.maskControl) {
                         var newFlags = flags
@@ -753,7 +755,8 @@ class KeybindHelper {
         if previewIsCurrentlyVisible,
            previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive,
            Defaults[.enableWindowSwitcherSearch],
-           keyCode == Int64(Defaults[.searchTriggerKey]) // Customizable search trigger key
+           keyCode == Int64(Defaults[.searchTriggerKey]),
+           !(previewCoordinator.isSearchWindowFocused)
         {
             return (true, { @MainActor in
                 self.previewCoordinator.focusSearchWindow()

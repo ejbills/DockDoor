@@ -763,9 +763,6 @@ struct MainSettingsView: View {
                 Defaults[.enableDockPreviewGestures] = Defaults.Keys.enableDockPreviewGestures.defaultValue
                 Defaults[.dockSwipeTowardsDockAction] = Defaults.Keys.dockSwipeTowardsDockAction.defaultValue
                 Defaults[.dockSwipeAwayFromDockAction] = Defaults.Keys.dockSwipeAwayFromDockAction.defaultValue
-                Defaults[.enableWindowSwitcherGestures] = Defaults.Keys.enableWindowSwitcherGestures.defaultValue
-                Defaults[.switcherSwipeUpAction] = Defaults.Keys.switcherSwipeUpAction.defaultValue
-                Defaults[.switcherSwipeDownAction] = Defaults.Keys.switcherSwipeDownAction.defaultValue
                 Defaults[.gestureSwipeThreshold] = Defaults.Keys.gestureSwipeThreshold.defaultValue
                 Defaults[.middleClickAction] = Defaults.Keys.middleClickAction.defaultValue
 

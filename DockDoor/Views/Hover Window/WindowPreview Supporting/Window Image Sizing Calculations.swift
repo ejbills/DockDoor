@@ -83,9 +83,11 @@ extension WindowPreviewHoverContainer {
                 totalItems: windows.count
             )
 
+            // Chunking is always row-based for window switcher (left-to-right fill)
+            let chunkIsHorizontal = isWindowSwitcherActive || orientationIsHorizontal
             let windowChunks = createWindowChunks(
                 totalWindows: windows.count,
-                isHorizontal: orientationIsHorizontal,
+                isHorizontal: chunkIsHorizontal,
                 maxColumns: effectiveMaxColumns,
                 maxRows: effectiveMaxRows
             )
@@ -221,12 +223,15 @@ extension WindowPreviewHoverContainer {
         if isWindowSwitcherActive {
             let isVertical = Defaults[.windowSwitcherScrollDirection] == .vertical
             if isVertical {
-                // Vertical: switcherMaxRows controls max columns, rows are calculated from screen space
-                effectiveMaxRows = calculatedMaxRows
-                if let totalItems, totalItems <= calculatedMaxRows {
-                    effectiveMaxColumns = 1
+                // Vertical scroll with row-based layout: columns capped to screen, rows scroll freely
+                effectiveMaxColumns = min(switcherMaxRows, calculatedMaxColumns)
+                if let totalItems, totalItems <= effectiveMaxColumns {
+                    effectiveMaxRows = 1
+                } else if let totalItems {
+                    // Enough rows so chunkArray won't exceed maxColumns per row
+                    effectiveMaxRows = max(calculatedMaxRows, Int(ceil(Double(totalItems) / Double(effectiveMaxColumns))))
                 } else {
-                    effectiveMaxColumns = switcherMaxRows
+                    effectiveMaxRows = calculatedMaxRows
                 }
             } else {
                 effectiveMaxColumns = calculatedMaxColumns
@@ -348,11 +353,7 @@ extension WindowPreviewHoverContainer {
         }
 
         let bestGuessMonitor = NSScreen.main ?? NSScreen.screens.first!
-        let isHorizontalFlow: Bool = if isWindowSwitcherActive {
-            Defaults[.windowSwitcherScrollDirection] == .horizontal
-        } else {
-            dockPosition.isHorizontalFlow
-        }
+        let isHorizontalFlow = isWindowSwitcherActive || dockPosition.isHorizontalFlow
 
         let (maxColumns, maxRows) = calculateEffectiveMaxColumnsAndRows(
             bestGuessMonitor: bestGuessMonitor,

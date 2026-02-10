@@ -7,7 +7,6 @@ struct GesturesAndKeybindsSettingsView: View {
             VStack(alignment: .leading, spacing: 16) {
                 DockScrollGestureSection()
                 DockPreviewGesturesSection()
-                WindowSwitcherGesturesSection()
                 GestureSettingsSection()
                 MouseActionsSection()
                 CmdKeyShortcutsSection()
