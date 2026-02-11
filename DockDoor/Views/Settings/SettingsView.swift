@@ -113,16 +113,33 @@ struct SettingsView: View {
             List(selection: $selectedTab) {
                 Label(String(localized: "General", comment: "Settings tab title"), systemImage: "gearshape.fill")
                     .tag("General")
-                Label(String(localized: "Appearance", comment: "Settings Tab"), systemImage: "wand.and.stars.inverse")
-                    .tag("Appearance")
-                Label(String(localized: "Gestures & Keybinds", comment: "Settings tab title"), systemImage: "hand.draw.fill")
-                    .tag("GesturesKeybinds")
-                Label(String(localized: "Filters", comment: "Filters tab title"), systemImage: "air.purifier")
-                    .tag("Filters")
-                Label(String(localized: "Widgets", comment: "Widget settings tab title"), systemImage: "square.grid.2x2")
-                    .tag("Widgets")
-                Label(String(localized: "Support", comment: "Settings tab title"), systemImage: "lifepreserver.fill")
-                    .tag("Support")
+
+                Section(String(localized: "Features", comment: "Settings section header")) {
+                    Label(String(localized: "Dock Previews", comment: "Settings tab title"), systemImage: "dock.rectangle")
+                        .tag("DockPreviews")
+                    Label(String(localized: "Window Switcher", comment: "Settings tab title"), systemImage: "uiwindow.split.2x1")
+                        .tag("WindowSwitcher")
+                    Label(String(localized: "Cmd+Tab", comment: "Settings tab title"), systemImage: "command")
+                        .tag("CmdTab")
+                }
+
+                Section(String(localized: "Customization", comment: "Settings section header")) {
+                    Label(String(localized: "Appearance", comment: "Settings Tab"), systemImage: "wand.and.stars.inverse")
+                        .tag("Appearance")
+                    Label(String(localized: "Gestures & Keybinds", comment: "Settings tab title"), systemImage: "hand.draw.fill")
+                        .tag("GesturesKeybinds")
+                    Label(String(localized: "Filters", comment: "Filters tab title"), systemImage: "air.purifier")
+                        .tag("Filters")
+                    Label(String(localized: "Widgets", comment: "Widget settings tab title"), systemImage: "square.grid.2x2")
+                        .tag("Widgets")
+                }
+
+                Section(String(localized: "System", comment: "Settings section header")) {
+                    Label(String(localized: "Advanced", comment: "Settings tab title"), systemImage: "slider.horizontal.3")
+                        .tag("Advanced")
+                    Label(String(localized: "Support", comment: "Settings tab title"), systemImage: "lifepreserver.fill")
+                        .tag("Support")
+                }
             }
             .listStyle(.sidebar)
             .frame(width: 200)
@@ -132,6 +149,12 @@ struct SettingsView: View {
                 switch selectedTab {
                 case "General":
                     MainSettingsView()
+                case "DockPreviews":
+                    DockPreviewsSettingsView()
+                case "WindowSwitcher":
+                    WindowSwitcherBehaviorSettingsView()
+                case "CmdTab":
+                    CmdTabSettingsView()
                 case "Appearance":
                     AppearanceSettingsView()
                 case "GesturesKeybinds":
@@ -140,6 +163,8 @@ struct SettingsView: View {
                     FiltersSettingsView()
                 case "Widgets":
                     WidgetSettingsView()
+                case "Advanced":
+                    AdvancedSettingsView()
                 case "Support":
                     SupportSettingsView(updaterState: updaterState)
                 default:
