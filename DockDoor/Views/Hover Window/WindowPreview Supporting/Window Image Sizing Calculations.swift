@@ -83,7 +83,6 @@ extension WindowPreviewHoverContainer {
                 totalItems: windows.count
             )
 
-            // Chunking is always row-based for window switcher (left-to-right fill)
             let chunkIsHorizontal = isWindowSwitcherActive || orientationIsHorizontal
             let windowChunks = createWindowChunks(
                 totalWindows: windows.count,
