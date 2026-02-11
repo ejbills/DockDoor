@@ -104,6 +104,11 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         searchWindow?.isFocused ?? false
     }
 
+    var searchWindowFrame: NSRect? {
+        guard let searchWindow, searchWindow.isVisible else { return nil }
+        return searchWindow.frame
+    }
+
     private func isCalendarApp(bundleIdentifier: String?) -> Bool {
         guard let bundleId = bundleIdentifier else { return false }
         return bundleId == calendarAppIdentifier

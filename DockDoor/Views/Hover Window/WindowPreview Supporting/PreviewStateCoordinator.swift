@@ -310,7 +310,7 @@ class PreviewStateCoordinator: ObservableObject {
             return
         }
 
-        let forwardDirection: ArrowDirection = Defaults[.windowSwitcherScrollDirection] == .vertical ? .down : .right
+        let forwardDirection: ArrowDirection = .right
         currIndex = WindowPreviewHoverContainer.navigateWindowSwitcher(
             from: currIndex,
             direction: forwardDirection,
@@ -336,7 +336,7 @@ class PreviewStateCoordinator: ObservableObject {
             return
         }
 
-        let backwardDirection: ArrowDirection = Defaults[.windowSwitcherScrollDirection] == .vertical ? .up : .left
+        let backwardDirection: ArrowDirection = .left
         currIndex = WindowPreviewHoverContainer.navigateWindowSwitcher(
             from: currIndex,
             direction: backwardDirection,

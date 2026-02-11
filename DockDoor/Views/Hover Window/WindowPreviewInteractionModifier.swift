@@ -19,11 +19,6 @@ struct WindowPreviewInteractionModifier: ViewModifier {
     @Default(.dockSwipeTowardsDockAction) private var dockSwipeTowardsDockAction
     @Default(.dockSwipeAwayFromDockAction) private var dockSwipeAwayFromDockAction
 
-    // Window Switcher Gestures
-    @Default(.enableWindowSwitcherGestures) private var enableWindowSwitcherGestures
-    @Default(.switcherSwipeUpAction) private var switcherSwipeUpAction
-    @Default(.switcherSwipeDownAction) private var switcherSwipeDownAction
-
     func body(content: Content) -> some View {
         content
             .onMiddleClick {
@@ -83,46 +78,23 @@ struct WindowPreviewInteractionModifier: ViewModifier {
     }
 
     private func handleSwipe(_ direction: SwipeDirection) {
-        if windowSwitcherActive {
-            guard enableWindowSwitcherGestures else { return }
-            // In compact mode, use horizontal gestures (left/right) since vertical is for scrolling
-            if useCompactMode {
-                switch direction {
-                case .left:
-                    performAction(switcherSwipeDownAction)
-                case .right:
-                    performAction(switcherSwipeUpAction)
-                case .up, .down:
-                    break
-                }
-            } else {
-                switch direction {
-                case .up:
-                    performAction(switcherSwipeUpAction)
-                case .down:
-                    performAction(switcherSwipeDownAction)
-                case .left, .right:
-                    break
-                }
+        guard !windowSwitcherActive else { return }
+        guard enableDockPreviewGestures else { return }
+        // In compact mode, use horizontal gestures (left/right) since vertical is for scrolling
+        if useCompactMode {
+            switch direction {
+            case .left:
+                performAction(dockSwipeTowardsDockAction)
+            case .right:
+                performAction(dockSwipeAwayFromDockAction)
+            case .up, .down:
+                break
             }
         } else {
-            guard enableDockPreviewGestures else { return }
-            // In compact mode, use horizontal gestures (left/right) since vertical is for scrolling
-            if useCompactMode {
-                switch direction {
-                case .left:
-                    performAction(dockSwipeTowardsDockAction)
-                case .right:
-                    performAction(dockSwipeAwayFromDockAction)
-                case .up, .down:
-                    break
-                }
-            } else {
-                if isSwipeTowardsDock(direction) {
-                    performAction(dockSwipeTowardsDockAction)
-                } else if isSwipeAwayFromDock(direction) {
-                    performAction(dockSwipeAwayFromDockAction)
-                }
+            if isSwipeTowardsDock(direction) {
+                performAction(dockSwipeTowardsDockAction)
+            } else if isSwipeAwayFromDock(direction) {
+                performAction(dockSwipeAwayFromDockAction)
             }
         }
     }
