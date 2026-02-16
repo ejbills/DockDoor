@@ -247,6 +247,32 @@ final class DockObserver {
             cachedWindows = []
         }
 
+        // Filter cached windows by current space before showing preview
+        if Defaults[.showWindowsFromCurrentSpaceOnly], !cachedWindows.isEmpty {
+            let activeSpaceIDs = currentActiveSpaceIDs()
+            if !activeSpaceIDs.isEmpty {
+                cachedWindows = cachedWindows.filter { windowInfo in
+                    let windowSpaces = Set(windowInfo.id.cgsSpaces().map { Int($0) })
+
+                    if windowInfo.isMinimized || windowInfo.isHidden {
+                        if !windowSpaces.isEmpty {
+                            return !windowSpaces.isDisjoint(with: activeSpaceIDs)
+                        }
+                        if let spaceID = windowInfo.spaceID {
+                            return activeSpaceIDs.contains(spaceID)
+                        }
+                        return true
+                    }
+
+                    if !windowSpaces.isEmpty {
+                        return !windowSpaces.isDisjoint(with: activeSpaceIDs)
+                    }
+
+                    return true
+                }
+            }
+        }
+
         guard Defaults[.enableDockPreviews] else { return }
 
         let mouseScreen = NSScreen.screenContainingMouse(currentMouseLocation)
@@ -611,15 +637,19 @@ final class DockObserver {
 
         // If no hover state, query AX directly to check if windows are minimized at click time
         var hasMinimizedWindowsAtClickTime = false
+        var hadAnyWindowsAtClickTime = true
         if !hasValidHoverState {
             let axApp = AXUIElementCreateApplication(pid)
             if let windowList = try? axApp.windows() {
+                hadAnyWindowsAtClickTime = !windowList.isEmpty
                 for window in windowList {
                     if (try? window.isMinimized()) == true {
                         hasMinimizedWindowsAtClickTime = true
                         break
                     }
                 }
+            } else {
+                hadAnyWindowsAtClickTime = false
             }
         }
 
@@ -636,6 +666,10 @@ final class DockObserver {
 
             Task { @MainActor [weak self] in
                 guard let self else { return }
+
+                if !hadAnyWindowsAtClickTime {
+                    return
+                }
 
                 let windows = try await WindowUtil.getActiveWindows(of: app, ignoreSingleWindowFilter: true)
                 let currentlyHasMinimizedWindows = windows.contains(where: \.isMinimized)
