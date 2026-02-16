@@ -21919,6 +21919,9 @@
         }
       }
     },
+    "Browser" : {
+
+    },
     "Buy me a coffee" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -39060,6 +39063,9 @@
           }
         }
       }
+    },
+    "Displays the browser profile icon on window previews when multiple profiles are active." : {
+
     },
     "Distinguish minimized/hidden windows" : {
       "localizations" : {
@@ -114110,6 +114116,9 @@
           }
         }
       }
+    },
+    "Show browser profile badge" : {
+
     },
     "Show media/calendar controls on Dock hover" : {
       "localizations" : {

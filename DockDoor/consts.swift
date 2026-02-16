@@ -193,6 +193,11 @@ extension Defaults.Keys {
     static let disableImagePreview = Key<Bool>("disableImagePreview", default: false)
     static let debugMode = Key<Bool>("debugMode", default: false)
 
+    // MARK: - Browser Profile Badge
+
+    static let showBrowserProfileBadge = Key<Bool>("showBrowserProfileBadge", default: false)
+    static let selectedChromiumBrowser = Key<ChromiumBrowser>("selectedChromiumBrowser", default: .chrome)
+
     // MARK: - Active App Indicator
 
     static let showActiveAppIndicator = Key<Bool>("showActiveAppIndicator", default: false)

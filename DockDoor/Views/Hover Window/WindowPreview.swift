@@ -255,12 +255,21 @@ struct WindowPreview: View {
 
         let titleContent = Group {
             if hasTitle, let title = titleToShow {
-                MarqueeText(text: title, startDelay: 1)
-                    .font(.subheadline)
-                    .padding(4)
-                    .if(!effectiveDisableDockStyleTitles) { view in
-                        view.materialPill()
+                HStack(spacing: 4) {
+                    if let icon = windowInfo.browserProfileIcon {
+                        Image(nsImage: icon)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 16, height: 16)
+                            .clipShape(Circle())
                     }
+                    MarqueeText(text: title, startDelay: 1)
+                        .font(.subheadline)
+                }
+                .padding(4)
+                .if(!effectiveDisableDockStyleTitles) { view in
+                    view.materialPill()
+                }
             }
         }
 
@@ -458,9 +467,18 @@ struct WindowPreview: View {
 
         let titleAndSubtitleContent = VStack(alignment: .leading, spacing: 0) {
             if !showAppIconOnly {
-                Text(windowInfo.app.localizedName ?? "Unknown")
-                    .foregroundStyle(.primary)
-                    .lineLimit(1)
+                HStack(spacing: 4) {
+                    if let icon = windowInfo.browserProfileIcon {
+                        Image(nsImage: icon)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 16, height: 16)
+                            .clipShape(Circle())
+                    }
+                    Text(windowInfo.app.localizedName ?? "Unknown")
+                        .foregroundStyle(.primary)
+                        .lineLimit(1)
+                }
             }
 
             if let windowTitle = windowInfo.windowName,
@@ -543,12 +561,21 @@ struct WindowPreview: View {
 
         let titleContent = Group {
             if hasTitle, let title = titleToShow {
-                MarqueeText(text: title, startDelay: 1)
-                    .font(.subheadline)
-                    .padding(4)
-                    .if(!effectiveDisableDockStyleTitles) { view in
-                        view.materialPill()
+                HStack(spacing: 4) {
+                    if let icon = windowInfo.browserProfileIcon {
+                        Image(nsImage: icon)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 16, height: 16)
+                            .clipShape(Circle())
                     }
+                    MarqueeText(text: title, startDelay: 1)
+                        .font(.subheadline)
+                }
+                .padding(4)
+                .if(!effectiveDisableDockStyleTitles) { view in
+                    view.materialPill()
+                }
             }
         }
 

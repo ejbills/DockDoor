@@ -17,6 +17,7 @@ struct WindowInfo: Identifiable, Hashable {
     var imageCapturedTime: Date
     var isMinimized: Bool
     var isHidden: Bool
+    let browserProfileIcon: NSImage?
 
     private var _scWindow: SCWindow?
 
@@ -24,7 +25,7 @@ struct WindowInfo: Identifiable, Hashable {
         id = windowProvider.windowID
         self.windowProvider = windowProvider
         self.app = app
-        windowName = windowProvider.title
+        windowName = (try? axElement.title()) ?? windowProvider.title
         self.image = image
         self.axElement = axElement
         self.appAxElement = appAxElement
@@ -36,6 +37,12 @@ struct WindowInfo: Identifiable, Hashable {
         self.isMinimized = isMinimized
         self.isHidden = isHidden
         _scWindow = windowProvider as? SCWindow
+
+        if let title = windowName, let bundleId = app.bundleIdentifier {
+            browserProfileIcon = ChromiumProfileResolver.profileIcon(forWindowTitle: title, bundleIdentifier: bundleId)
+        } else {
+            browserProfileIcon = nil
+        }
     }
 
     var frame: CGRect { windowProvider.frame }

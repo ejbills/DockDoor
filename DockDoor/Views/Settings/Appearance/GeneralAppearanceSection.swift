@@ -12,6 +12,8 @@ struct GeneralAppearanceSection: View {
     @Default(.hideHoverContainerBackground) var hideHoverContainerBackground
     @Default(.hideWidgetContainerBackground) var hideWidgetContainerBackground
     @Default(.showActiveWindowBorder) var showActiveWindowBorder
+    @Default(.showBrowserProfileBadge) var showBrowserProfileBadge
+    @Default(.selectedChromiumBrowser) var selectedChromiumBrowser
 
     var body: some View {
         SettingsGroup(header: "General Appearance") {
@@ -113,6 +115,26 @@ struct GeneralAppearanceSection: View {
                         .font(.footnote)
                         .foregroundColor(.gray)
                         .padding(.leading, 20)
+                }
+
+                VStack(alignment: .leading) {
+                    Toggle(isOn: $showBrowserProfileBadge) {
+                        Text("Show browser profile badge")
+                    }
+                    Text("Displays the browser profile icon on window previews when multiple profiles are active.")
+                        .font(.footnote)
+                        .foregroundColor(.gray)
+                        .padding(.leading, 20)
+
+                    if showBrowserProfileBadge {
+                        Picker("Browser", selection: $selectedChromiumBrowser) {
+                            ForEach(ChromiumBrowser.allCases, id: \.self) { browser in
+                                Text(browser.displayName).tag(browser)
+                            }
+                        }
+                        .pickerStyle(.menu)
+                        .padding(.leading, 20)
+                    }
                 }
             }
         }
