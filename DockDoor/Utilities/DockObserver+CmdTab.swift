@@ -130,13 +130,18 @@ extension DockObserver {
             cachedWindows = WindowUtil.readCachedWindows(for: app.processIdentifier, sortedBy: .cmdTab)
         }
 
+        if !Defaults[.includeHiddenWindowsInCmdTab] {
+            cachedWindows = cachedWindows.filter { !$0.isHidden && !$0.isMinimized }
+        }
+
         let elementPos = try? selectedItem.element.position()
         let bestScreen = elementPos?.screen() ?? NSScreen.main!
 
         Task { @MainActor [weak self] in
             guard let self else { return }
 
-            previewCoordinator.windowSwitcherCoordinator.setIndex(to: -1, shouldScroll: false)
+            let initialIndex = Defaults[.cmdTabAutoSelectFirstWindow] && !cachedWindows.isEmpty ? 0 : -1
+            previewCoordinator.windowSwitcherCoordinator.setIndex(to: initialIndex, shouldScroll: false)
             previewCoordinator.showWindow(
                 appName: appName,
                 windows: cachedWindows,
@@ -166,6 +171,10 @@ extension DockObserver {
 
                     if Defaults[.showWindowsFromCurrentSpaceOnlyInCmdTab] {
                         windows = await WindowUtil.filterWindowsByCurrentSpace(windows)
+                    }
+
+                    if !Defaults[.includeHiddenWindowsInCmdTab] {
+                        windows = windows.filter { !$0.isHidden && !$0.isMinimized }
                     }
 
                     let freshWindows = windows

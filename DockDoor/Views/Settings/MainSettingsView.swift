@@ -21,10 +21,13 @@ struct MainSettingsView: View {
     @Default(.sortMinimizedToEnd) var sortMinimizedToEnd
     @Default(.keepPreviewOnAppTerminate) var keepPreviewOnAppTerminate
     @Default(.enableCmdTabEnhancements) var enableCmdTabEnhancements
+    @Default(.cmdTabAutoSelectFirstWindow) var cmdTabAutoSelectFirstWindow
     @Default(.cmdTabCycleKey) var cmdTabCycleKey
     @Default(.enableMouseHoverInSwitcher) var enableMouseHoverInSwitcher
     @Default(.mouseHoverAutoScrollSpeed) var mouseHoverAutoScrollSpeed
     @Default(.includeHiddenWindowsInSwitcher) var includeHiddenWindowsInSwitcher
+    @Default(.includeHiddenWindowsInDockPreview) var includeHiddenWindowsInDockPreview
+    @Default(.includeHiddenWindowsInCmdTab) var includeHiddenWindowsInCmdTab
     @Default(.useClassicWindowOrdering) var useClassicWindowOrdering
     @Default(.limitSwitcherToFrontmostApp) var limitSwitcherToFrontmostApp
     @Default(.fullscreenAppBlacklist) var fullscreenAppBlacklist
@@ -174,6 +177,9 @@ struct MainSettingsView: View {
                             .font(.caption)
                             .foregroundColor(.secondary)
                             .padding(.leading, 40)
+
+                        Toggle(isOn: $includeHiddenWindowsInDockPreview) { Text("Include hidden/minimized windows") }
+                            .padding(.leading, 20)
 
                         Toggle(isOn: $keepPreviewOnAppTerminate) { Text("Keep preview when app terminates") }
                             .padding(.leading, 20)
@@ -403,12 +409,22 @@ struct MainSettingsView: View {
                         }
                         .padding(.leading, 20)
 
+                        Toggle(isOn: $cmdTabAutoSelectFirstWindow) { Text("Automatically select first window") }
+                            .padding(.leading, 20)
+                        Text("When Cmd+Tab opens, highlight the first window preview automatically.")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                            .padding(.leading, 40)
+
                         Toggle(isOn: $showWindowsFromCurrentSpaceOnlyInCmdTab) { Text("Show windows from current Space only") }
                             .padding(.leading, 20)
                         Text("Only display windows that are in the current virtual desktop/Space.")
                             .font(.caption)
                             .foregroundColor(.secondary)
                             .padding(.leading, 40)
+
+                        Toggle(isOn: $includeHiddenWindowsInCmdTab) { Text("Include hidden/minimized windows") }
+                            .padding(.leading, 20)
 
                         Text("Window sort order")
                             .padding(.leading, 20)
@@ -747,6 +763,8 @@ struct MainSettingsView: View {
                 enableWindowSwitcher = Defaults.Keys.enableWindowSwitcher.defaultValue
                 instantWindowSwitcher = Defaults.Keys.instantWindowSwitcher.defaultValue
                 includeHiddenWindowsInSwitcher = Defaults.Keys.includeHiddenWindowsInSwitcher.defaultValue
+                includeHiddenWindowsInDockPreview = Defaults.Keys.includeHiddenWindowsInDockPreview.defaultValue
+                includeHiddenWindowsInCmdTab = Defaults.Keys.includeHiddenWindowsInCmdTab.defaultValue
                 useClassicWindowOrdering = Defaults.Keys.useClassicWindowOrdering.defaultValue
                 limitSwitcherToFrontmostApp = Defaults.Keys.limitSwitcherToFrontmostApp.defaultValue
                 fullscreenAppBlacklist = Defaults.Keys.fullscreenAppBlacklist.defaultValue
@@ -776,6 +794,7 @@ struct MainSettingsView: View {
                 Defaults[.alternateKeybindKey] = Defaults.Keys.alternateKeybindKey.defaultValue
                 Defaults[.alternateKeybindMode] = Defaults.Keys.alternateKeybindMode.defaultValue
 
+                cmdTabAutoSelectFirstWindow = Defaults.Keys.cmdTabAutoSelectFirstWindow.defaultValue
                 cmdTabCycleKey = Defaults.Keys.cmdTabCycleKey.defaultValue
                 searchTriggerKey = Defaults.Keys.searchTriggerKey.defaultValue
 
