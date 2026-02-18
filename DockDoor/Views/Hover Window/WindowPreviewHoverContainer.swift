@@ -260,8 +260,7 @@ struct WindowPreviewHoverContainer: View {
     private func windowGridContent() -> some View {
         let calculatedMaxDimension = previewStateCoordinator.overallMaxPreviewDimension
         let calculatedDimensionsMap = previewStateCoordinator.windowDimensionsMap
-        let layoutIsHorizontal = previewStateCoordinator.windowSwitcherActive || dockPosition.isHorizontalFlow
-        let scrollAxisIsHorizontal: Bool = if previewStateCoordinator.windowSwitcherActive {
+        let orientationIsHorizontal: Bool = if previewStateCoordinator.windowSwitcherActive {
             Defaults[.windowSwitcherScrollDirection] == .horizontal
         } else {
             dockPosition.isHorizontalFlow
@@ -270,12 +269,11 @@ struct WindowPreviewHoverContainer: View {
         ScrollViewReader { scrollProxy in
             buildFlowStack(
                 scrollProxy: scrollProxy,
-                layoutIsHorizontal: layoutIsHorizontal,
-                scrollAxisIsHorizontal: scrollAxisIsHorizontal,
+                orientationIsHorizontal,
                 currentMaxDimensionForPreviews: calculatedMaxDimension,
                 currentDimensionsMapForPreviews: calculatedDimensionsMap
             )
-            .fadeOnEdges(axis: shouldUseCompactMode ? .vertical : (scrollAxisIsHorizontal ? .horizontal : .vertical), fadeLength: 20)
+            .fadeOnEdges(axis: shouldUseCompactMode ? .vertical : (orientationIsHorizontal ? .horizontal : .vertical), fadeLength: 20)
             .padding(.top, (!previewStateCoordinator.windowSwitcherActive && effectiveAppNameStyle == .default && effectiveShowAppName) ? 25 : 0)
             .overlay(alignment: effectiveAppNameStyle == .popover ? .top : .topLeading) {
                 hoverTitleBaseView(labelSize: measureString(appName, fontSize: 14))
@@ -312,7 +310,7 @@ struct WindowPreviewHoverContainer: View {
             }
             .overlay {
                 if enableMouseHoverInSwitcher, previewStateCoordinator.windowSwitcherActive {
-                    edgeScrollZones(isHorizontal: scrollAxisIsHorizontal)
+                    edgeScrollZones(isHorizontal: orientationIsHorizontal)
                 }
             }
         }
@@ -629,12 +627,11 @@ struct WindowPreviewHoverContainer: View {
     @ViewBuilder
     private func buildFlowStack(
         scrollProxy: ScrollViewProxy,
-        layoutIsHorizontal: Bool,
-        scrollAxisIsHorizontal: Bool,
+        _ isHorizontal: Bool,
         currentMaxDimensionForPreviews: CGPoint,
         currentDimensionsMapForPreviews: [Int: WindowDimensions]
     ) -> some View {
-        ScrollView(shouldUseCompactMode ? .vertical : (scrollAxisIsHorizontal ? .horizontal : .vertical), showsIndicators: false) {
+        ScrollView(shouldUseCompactMode ? .vertical : (isHorizontal ? .horizontal : .vertical), showsIndicators: false) {
             Group {
                 // Show no results view when search is active and no results found
                 if shouldShowNoResultsView() {
@@ -645,13 +642,13 @@ struct WindowPreviewHoverContainer: View {
                         ForEach(createFlowItems(), id: \.id) { item in
                             buildFlowItem(
                                 item: item,
-                                isHorizontal: layoutIsHorizontal,
+                                isHorizontal: isHorizontal,
                                 currentMaxDimensionForPreviews: currentMaxDimensionForPreviews,
                                 currentDimensionsMapForPreviews: currentDimensionsMapForPreviews
                             )
                         }
                     }
-                } else if layoutIsHorizontal {
+                } else if isHorizontal {
                     let chunkedItems = createChunkedItems()
                     LazyVStack(alignment: .leading, spacing: 24) {
                         ForEach(Array(chunkedItems.enumerated()), id: \.offset) { index, rowItems in
@@ -659,7 +656,7 @@ struct WindowPreviewHoverContainer: View {
                                 ForEach(rowItems, id: \.id) { item in
                                     buildFlowItem(
                                         item: item,
-                                        isHorizontal: layoutIsHorizontal,
+                                        isHorizontal: isHorizontal,
                                         currentMaxDimensionForPreviews: currentMaxDimensionForPreviews,
                                         currentDimensionsMapForPreviews: currentDimensionsMapForPreviews
                                     )
@@ -675,7 +672,7 @@ struct WindowPreviewHoverContainer: View {
                                 ForEach(colItems, id: \.id) { item in
                                     buildFlowItem(
                                         item: item,
-                                        isHorizontal: layoutIsHorizontal,
+                                        isHorizontal: isHorizontal,
                                         currentMaxDimensionForPreviews: currentMaxDimensionForPreviews,
                                         currentDimensionsMapForPreviews: currentDimensionsMapForPreviews
                                     )
@@ -981,7 +978,11 @@ struct WindowPreviewHoverContainer: View {
     }
 
     private func createChunkedItems() -> [[FlowItem]] {
-        let isHorizontal = previewStateCoordinator.windowSwitcherActive || dockPosition.isHorizontalFlow
+        let isHorizontal: Bool = if previewStateCoordinator.windowSwitcherActive {
+            Defaults[.windowSwitcherScrollDirection] == .horizontal
+        } else {
+            dockPosition.isHorizontalFlow
+        }
 
         var itemsToProcess: [FlowItem] = []
 
