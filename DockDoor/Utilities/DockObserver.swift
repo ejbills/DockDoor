@@ -273,6 +273,10 @@ final class DockObserver {
             }
         }
 
+        if !Defaults[.includeHiddenWindowsInDockPreview] {
+            cachedWindows = cachedWindows.filter { !$0.isHidden && !$0.isMinimized }
+        }
+
         guard Defaults[.enableDockPreviews] else { return }
 
         let mouseScreen = NSScreen.screenContainingMouse(currentMouseLocation)
@@ -313,6 +317,10 @@ final class DockObserver {
 
                 if Defaults[.showWindowsFromCurrentSpaceOnly] {
                     windows = await WindowUtil.filterWindowsByCurrentSpace(windows)
+                }
+
+                if !Defaults[.includeHiddenWindowsInDockPreview] {
+                    windows = windows.filter { !$0.isHidden && !$0.isMinimized }
                 }
 
                 let freshWindows = windows

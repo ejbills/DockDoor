@@ -107,6 +107,8 @@ struct MainSettingsView: View {
                 Defaults[.enableWindowSwitcher] = Defaults.Keys.enableWindowSwitcher.defaultValue
                 Defaults[.instantWindowSwitcher] = Defaults.Keys.instantWindowSwitcher.defaultValue
                 Defaults[.includeHiddenWindowsInSwitcher] = Defaults.Keys.includeHiddenWindowsInSwitcher.defaultValue
+                Defaults[.includeHiddenWindowsInDockPreview] = Defaults.Keys.includeHiddenWindowsInDockPreview.defaultValue
+                Defaults[.includeHiddenWindowsInCmdTab] = Defaults.Keys.includeHiddenWindowsInCmdTab.defaultValue
                 Defaults[.useClassicWindowOrdering] = Defaults.Keys.useClassicWindowOrdering.defaultValue
                 Defaults[.limitSwitcherToFrontmostApp] = Defaults.Keys.limitSwitcherToFrontmostApp.defaultValue
                 Defaults[.fullscreenAppBlacklist] = Defaults.Keys.fullscreenAppBlacklist.defaultValue
@@ -136,6 +138,7 @@ struct MainSettingsView: View {
                 Defaults[.alternateKeybindKey] = Defaults.Keys.alternateKeybindKey.defaultValue
                 Defaults[.alternateKeybindMode] = Defaults.Keys.alternateKeybindMode.defaultValue
 
+                Defaults[.cmdTabAutoSelectFirstWindow] = Defaults.Keys.cmdTabAutoSelectFirstWindow.defaultValue
                 Defaults[.cmdTabCycleKey] = Defaults.Keys.cmdTabCycleKey.defaultValue
                 Defaults[.searchTriggerKey] = Defaults.Keys.searchTriggerKey.defaultValue
 
