@@ -7,6 +7,7 @@ struct DockPreviewsSettingsView: View {
     @Default(.windowPreviewSortOrder) var windowPreviewSortOrder
     @Default(.keepPreviewOnAppTerminate) var keepPreviewOnAppTerminate
     @Default(.groupAppInstancesInDock) var groupAppInstancesInDock
+    @Default(.includeHiddenWindowsInDockPreview) var includeHiddenWindowsInDockPreview
     @Default(.previewHoverAction) var previewHoverAction
     @Default(.tapEquivalentInterval) var tapEquivalentInterval
     @Default(.shouldHideOnDockItemClick) var shouldHideOnDockItemClick
@@ -60,6 +61,8 @@ struct DockPreviewsSettingsView: View {
                     }
                 }
                 .pickerStyle(.menu)
+
+                Toggle(isOn: $includeHiddenWindowsInDockPreview) { Text("Include hidden/minimized windows") }
 
                 Toggle(isOn: $keepPreviewOnAppTerminate) { Text("Keep preview when app terminates") }
                 Text("Remove only terminated app's windows instead of hiding the entire preview.")

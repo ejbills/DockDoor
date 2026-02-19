@@ -6,6 +6,8 @@ struct CmdTabSettingsView: View {
     @Default(.cmdTabCycleKey) var cmdTabCycleKey
     @Default(.showWindowsFromCurrentSpaceOnlyInCmdTab) var showWindowsFromCurrentSpaceOnlyInCmdTab
     @Default(.cmdTabSortOrder) var cmdTabSortOrder
+    @Default(.cmdTabAutoSelectFirstWindow) var cmdTabAutoSelectFirstWindow
+    @Default(.includeHiddenWindowsInCmdTab) var includeHiddenWindowsInCmdTab
 
     var body: some View {
         BaseSettingsView {
@@ -66,6 +68,14 @@ struct CmdTabSettingsView: View {
                     .font(.caption)
                     .foregroundColor(.secondary)
                     .padding(.leading, 20)
+
+                Toggle(isOn: $cmdTabAutoSelectFirstWindow) { Text("Automatically select first window") }
+                Text("When Cmd+Tab opens, highlight the first window preview automatically.")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .padding(.leading, 20)
+
+                Toggle(isOn: $includeHiddenWindowsInCmdTab) { Text("Include hidden/minimized windows") }
 
                 Picker("Window sort order", selection: $cmdTabSortOrder) {
                     ForEach(WindowPreviewSortOrder.allCases.filter { !$0.isWindowSwitcherOnly }) { order in
