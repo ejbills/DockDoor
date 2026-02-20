@@ -65,6 +65,7 @@
 		BB1A85F72D08E53000326297 /* DragPreviewCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB1A85F62D08E52A00326297 /* DragPreviewCoordinator.swift */; };
 		BB1CBD582C1BA800003969BC /* MainSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB1CBD572C1BA800003969BC /* MainSettingsView.swift */; };
 		BB1CBD5B2C1BA8DC003969BC /* Defaults in Frameworks */ = {isa = PBXBuildFile; productRef = BB1CBD5A2C1BA8DC003969BC /* Defaults */; };
+		4491C4EDC9C37FB3C794819B /* SettingsBackupManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF19A88ACFAAD121C6561058 /* SettingsBackupManager.swift */; };
 		BB1CBD5D2C1BCA4F003969BC /* Misc Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB1CBD5C2C1BCA4F003969BC /* Misc Utils.swift */; };
 		BB1F60E52D238A9800808E05 /* CGSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB1F60E42D238A9700808E05 /* CGSize.swift */; };
 		BB2106742E830EC5002F87D6 /* WindowDiscoveryShared.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2106732E830EC5002F87D6 /* WindowDiscoveryShared.swift */; };
@@ -245,6 +246,7 @@
 		BB1A85F42D05263C00326297 /* FiltersSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiltersSettingsView.swift; sourceTree = "<group>"; };
 		BB1A85F62D08E52A00326297 /* DragPreviewCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DragPreviewCoordinator.swift; sourceTree = "<group>"; };
 		BB1CBD572C1BA800003969BC /* MainSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainSettingsView.swift; sourceTree = "<group>"; };
+		AF19A88ACFAAD121C6561058 /* SettingsBackupManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsBackupManager.swift; sourceTree = "<group>"; };
 		BB1CBD5C2C1BCA4F003969BC /* Misc Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Misc Utils.swift"; sourceTree = "<group>"; };
 		BB1F60E42D238A9700808E05 /* CGSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGSize.swift; sourceTree = "<group>"; };
 		BB2106732E830EC5002F87D6 /* WindowDiscoveryShared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowDiscoveryShared.swift; sourceTree = "<group>"; };
@@ -581,6 +583,7 @@
 				BBF6C6232C1B4B4400BF1D40 /* KeybindHelper.swift */,
 				BBF6C6262C1B4B4500BF1D40 /* StringMatchingUtil.swift */,
 				BB1CBD5C2C1BCA4F003969BC /* Misc Utils.swift */,
+				AF19A88ACFAAD121C6561058 /* SettingsBackupManager.swift */,
 				F098F8107F464776B5C18294427CAECD /* ScriptCommands.swift */,
 			);
 			path = Utilities;
@@ -1005,6 +1008,7 @@
 				BBB6C5302DF3C884009E93C4 /* MediaInfo.swift in Sources */,
 				BB0440622C77AE8D009F1D33 /* GradientColorPaletteSettingsView.swift in Sources */,
 				BB1CBD5D2C1BCA4F003969BC /* Misc Utils.swift in Sources */,
+				4491C4EDC9C37FB3C794819B /* SettingsBackupManager.swift in Sources */,
 				BB7CD3C92EE54DDC00412546 /* TrackpadGestureModifier.swift in Sources */,
 				3A105FD92C1C049E0015EC66 /* dockStyle.swift in Sources */,
 				BB2CBB092C481295004502C5 /* SpaceWindowCacheManager.swift in Sources */,

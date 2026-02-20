@@ -444,6 +444,8 @@ struct MainSettingsView: View {
 
                 HStack {
                     Spacer()
+                    Button("Export Settings") { SettingsBackupManager.exportSettings() }
+                    Button("Import Settings") { SettingsBackupManager.importSettings() }
                     Button("Reset All Settings to Defaults") { showResetConfirmation() }
                     Button("Quit DockDoor") { (NSApplication.shared.delegate as! AppDelegate).quitApp() }
                     Spacer()
