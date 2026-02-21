@@ -11448,6 +11448,9 @@
         }
       }
     },
+    "Advanced" : {
+      "comment" : "Settings tab title"
+    },
     "Aero Shake" : {
       "localizations" : {
         "af" : {
@@ -20776,6 +20779,9 @@
         }
       }
     },
+    "Behavior" : {
+
+    },
     "Best quality (full resolution)" : {
       "comment" : "Window image capture quality option",
       "localizations" : {
@@ -25159,6 +25165,7 @@
       }
     },
     "Choose how windows are sorted in Cmd+Tab previews." : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -25349,6 +25356,7 @@
       }
     },
     "Choose how windows are sorted in the preview." : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -25539,6 +25547,7 @@
       }
     },
     "Choose how windows are sorted in the window switcher." : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -28398,6 +28407,7 @@
       }
     },
     "Cmd+Tab" : {
+      "comment" : "Settings tab title",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -28970,6 +28980,7 @@
       }
     },
     "Cmd+Tab Settings" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -31441,6 +31452,9 @@
           }
         }
       }
+    },
+    "Configuration" : {
+
     },
     "Confirm" : {
       "localizations" : {
@@ -35826,6 +35840,9 @@
         }
       }
     },
+    "Customization" : {
+      "comment" : "Settings section header"
+    },
     "Debug Logging" : {
       "localizations" : {
         "af" : {
@@ -39448,6 +39465,7 @@
       }
     },
     "Dock Frame Rate" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -39826,6 +39844,12 @@
           }
         }
       }
+    },
+    "Dock Interaction" : {
+
+    },
+    "Dock Live Preview" : {
+
     },
     "Dock Preview Aero Shake Action" : {
       "extractionState" : "stale",
@@ -40589,6 +40613,7 @@
       }
     },
     "Dock Preview Settings" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -41350,7 +41375,7 @@
       }
     },
     "Dock Previews" : {
-      "comment" : "Compact mode threshold section title",
+      "comment" : "Settings tab title",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -41923,6 +41948,7 @@
       }
     },
     "Dock Quality" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -47248,7 +47274,11 @@
         }
       }
     },
+    "Enable search" : {
+
+    },
     "Enable search while using Window Switcher" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -50873,6 +50903,9 @@
         }
       }
     },
+    "Features" : {
+      "comment" : "Settings section header"
+    },
     "Fill Bottom Half" : {
       "comment" : "Window action",
       "localizations" : {
@@ -52784,6 +52817,7 @@
       }
     },
     "Fine-tune visual details and layout options." : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -54112,6 +54146,9 @@
           }
         }
       }
+    },
+    "Frame Rate" : {
+
     },
     "Full Mode" : {
       "localizations" : {
@@ -59636,6 +59673,7 @@
       }
     },
     "Hide Advanced Settings" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -62113,6 +62151,9 @@
           }
         }
       }
+    },
+    "Highlight the second window instead of the first when opening." : {
+
     },
     "Highlights the currently focused window with a colored border." : {
       "localizations" : {
@@ -65354,7 +65395,11 @@
         }
       }
     },
+    "Include hidden/minimized windows" : {
+
+    },
     "Include hidden/minimized windows in Switcher" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -66881,6 +66926,7 @@
       }
     },
     "Interaction & Behavior" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -70309,7 +70355,11 @@
         }
       }
     },
+    "Limit to active app only" : {
+
+    },
     "Limit Window Switcher to active app only" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -70498,6 +70548,9 @@
           }
         }
       }
+    },
+    "Live Preview" : {
+
     },
     "Loading applications..." : {
       "localizations" : {
@@ -71070,6 +71123,7 @@
       }
     },
     "Loading preview..." : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -73736,6 +73790,9 @@
           }
         }
       }
+    },
+    "May feel snappier but can cause flickering if you quickly release the key." : {
+
     },
     "Media" : {
       "localizations" : {
@@ -76785,6 +76842,9 @@
           }
         }
       }
+    },
+    "Moving the mouse back over the preview during fade-out will not reactivate it." : {
+
     },
     "Music/Spotify behavior:" : {
       "localizations" : {
@@ -93166,6 +93226,7 @@
       }
     },
     "Preview Appearance & Quality" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -94691,6 +94752,9 @@
           }
         }
       }
+    },
+    "Preview Quality" : {
+
     },
     "Preview Quality Profiles" : {
       "extractionState" : "stale",
@@ -96406,6 +96470,9 @@
         }
       }
     },
+    "Quality" : {
+
+    },
     "Quit" : {
       "localizations" : {
         "af" : {
@@ -97930,7 +97997,11 @@
         }
       }
     },
+    "Release initializer key to select window" : {
+
+    },
     "Release initializer key to select window in Switcher" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -98499,6 +98570,9 @@
           }
         }
       }
+    },
+    "Remove only terminated app's windows instead of hiding the entire preview." : {
+
     },
     "Removes the background panel from individual window previews." : {
       "localizations" : {
@@ -104017,6 +104091,9 @@
         }
       }
     },
+    "Scope" : {
+
+    },
     "Screen" : {
       "localizations" : {
         "af" : {
@@ -106685,6 +106762,9 @@
         }
       }
     },
+    "Search & Input" : {
+
+    },
     "Search apps..." : {
       "localizations" : {
         "af" : {
@@ -108595,7 +108675,11 @@
         }
       }
     },
+    "Select and scroll to windows when hovering with mouse." : {
+
+    },
     "Select and scroll to windows when hovering with mouse. Disable for keyboard-only navigation." : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -112786,6 +112870,7 @@
       }
     },
     "Show Advanced Settings" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -116405,6 +116490,9 @@
         }
       }
     },
+    "Show windows from all instances of an app when hovering its dock icon." : {
+
+    },
     "Show windows from current Space only" : {
       "localizations" : {
         "af" : {
@@ -117934,6 +118022,7 @@
       }
     },
     "Skip the small delay before the switcher appears. May feel snappier but can cause flickering if you quickly release the key." : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -119268,6 +119357,9 @@
         }
       }
     },
+    "Sorting & Grouping" : {
+
+    },
     "Space" : {
       "localizations" : {
         "af" : {
@@ -120219,7 +120311,11 @@
         }
       }
     },
+    "Start on second window" : {
+
+    },
     "Start on second window in Switcher" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -121171,6 +121267,9 @@
           }
         }
       }
+    },
+    "Stream Management" : {
+
     },
     "Subatomic" : {
       "comment" : "Window size option",
@@ -124802,6 +124901,7 @@
       }
     },
     "Switcher Frame Rate" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -124991,7 +125091,11 @@
         }
       }
     },
+    "Switcher Live Preview" : {
+
+    },
     "Switcher Live Preview Scope" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -125182,6 +125286,7 @@
       }
     },
     "Switcher Quality" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -125370,6 +125475,12 @@
           }
         }
       }
+    },
+    "Switching between dock icons while a preview is already open will show previews instantly." : {
+
+    },
+    "System" : {
+      "comment" : "Settings section header"
     },
     "Tab" : {
       "localizations" : {
@@ -138139,6 +138250,7 @@
       }
     },
     "When an app terminates, remove only its windows from the preview instead of hiding the entire preview." : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -139282,6 +139394,7 @@
       }
     },
     "When enabled, hovering over an app in the Dock shows windows from all instances of that app. When disabled, shows only windows from the specific instance under the mouse." : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -139472,6 +139585,7 @@
       }
     },
     "When enabled, moving the mouse back over the preview during fade-out will not reactivate it. You must hover over the dock icon again to show the preview." : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -140233,6 +140347,7 @@
       }
     },
     "When enabled, switching between dock icons while a preview is already open will show previews instantly." : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -140423,6 +140538,7 @@
       }
     },
     "When enabled, window previews show live video instead of static screenshots. Uses ScreenCaptureKit for real-time capture." : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -140994,6 +141110,7 @@
       }
     },
     "When opening the window switcher, highlight the second window instead of the first." : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -143091,6 +143208,9 @@
         }
       }
     },
+    "Window Display" : {
+
+    },
     "Window Image Cache Lifespan" : {
       "localizations" : {
         "af" : {
@@ -144614,6 +144734,9 @@
         }
       }
     },
+    "Window previews show live video instead of static screenshots. Uses ScreenCaptureKit for real-time capture." : {
+
+    },
     "Window previews, supercharged." : {
       "localizations" : {
         "af" : {
@@ -145758,7 +145881,7 @@
       }
     },
     "Window Switcher" : {
-      "comment" : "Compact mode threshold section title",
+      "comment" : "Settings tab title",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -146902,6 +147025,7 @@
       }
     },
     "Window Switcher Settings" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {

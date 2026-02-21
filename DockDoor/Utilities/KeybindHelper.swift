@@ -648,11 +648,6 @@ class KeybindHelper {
     }
 
     private func determineActionForKeyDown(event: CGEvent) -> (shouldConsume: Bool, actionTask: (() async -> Void)?) {
-        // Check if we should ignore keybinds for fullscreen blacklisted apps
-        if WindowUtil.shouldIgnoreKeybindForFrontmostApp() {
-            return (false, nil)
-        }
-
         let keyCode = event.getIntegerValueField(.keyboardEventKeycode)
         let flags = event.flags
         let keyBoardShortcutSaved: UserKeyBind = Defaults[.UserKeybind]
@@ -690,6 +685,7 @@ class KeybindHelper {
 
         if isExactSwitcherShortcutPressed {
             guard Defaults[.enableWindowSwitcher] else { return (false, nil) }
+            if WindowUtil.shouldIgnoreKeybindForFrontmostApp() { return (false, nil) }
             return (true, { await self.handleKeybindActivation(mode: .allWindows) })
         }
 
@@ -698,6 +694,7 @@ class KeybindHelper {
             let alternateKey = Defaults[.alternateKeybindKey]
             if alternateKey != 0, keyCode == alternateKey {
                 guard Defaults[.enableWindowSwitcher] else { return (false, nil) }
+                if WindowUtil.shouldIgnoreKeybindForFrontmostApp() { return (false, nil) }
                 let mode = Defaults[.alternateKeybindMode]
                 return (true, { await self.handleKeybindActivation(mode: mode) })
             }
@@ -813,6 +810,7 @@ class KeybindHelper {
            keyBoardShortcutSaved.modifierFlags != 0,
            !flags.hasSuperfluousModifiers(ignoring: [.maskShift, .maskAlphaShift, .maskNumericPad])
         {
+            if WindowUtil.shouldIgnoreKeybindForFrontmostApp() { return (false, nil) }
             return (true, { await self.handleKeybindActivation() })
         }
 

@@ -84,6 +84,7 @@ extension Defaults.Keys {
     static let cmdTabSortOrder = Key<WindowPreviewSortOrder>("cmdTabSortOrder", default: .recentlyUsed)
     static let sortMinimizedToEnd = Key<Bool>("sortMinimizedToEnd", default: false)
     static let enableCmdTabEnhancements = Key<Bool>("enableCmdTabEnhancements", default: false)
+    static let cmdTabAutoSelectFirstWindow = Key<Bool>("cmdTabAutoSelectFirstWindow", default: false)
     static let cmdTabCycleKey = Key<UInt16>("cmdTabCycleKey", default: UInt16(kVK_ANSI_A))
     static let enableMouseHoverInSwitcher = Key<Bool>("enableMouseHoverInSwitcher", default: true)
     static let mouseHoverAutoScrollSpeed = Key<CGFloat>("mouseHoverAutoScrollSpeed", default: 4.0)
@@ -101,6 +102,8 @@ extension Defaults.Keys {
     static let searchFuzziness = Key<Int>("searchFuzziness", default: 3)
     static let useClassicWindowOrdering = Key<Bool>("useClassicWindowOrdering", default: true)
     static let includeHiddenWindowsInSwitcher = Key<Bool>("includeHiddenWindowsInSwitcher", default: true)
+    static let includeHiddenWindowsInDockPreview = Key<Bool>("includeHiddenWindowsInDockPreview", default: true)
+    static let includeHiddenWindowsInCmdTab = Key<Bool>("includeHiddenWindowsInCmdTab", default: true)
     static let ignoreAppsWithSingleWindow = Key<Bool>("ignoreAppsWithSingleWindow", default: false)
     static let groupAppInstancesInDock = Key<Bool>("groupAppInstancesInDock", default: true)
     static let useLiquidGlass = Key<Bool>("useLiquidGlass", default: true)
@@ -166,7 +169,7 @@ extension Defaults.Keys {
     static let previewMaxColumns = Key<Int>("previewMaxColumns", default: 2) // For left/right dock
     static let previewMaxRows = Key<Int>("previewMaxRows", default: 1) // For bottom dock only
     static let switcherMaxRows = Key<Int>("switcherMaxRows", default: 2) // For window switcher
-    static let windowSwitcherScrollDirection = Key<WindowSwitcherScrollDirection>("windowSwitcherScrollDirection", default: .vertical)
+    static let windowSwitcherScrollDirection = Key<WindowSwitcherScrollDirection>("windowSwitcherScrollDirection", default: .horizontal)
 
     static let windowSwitcherPlacementStrategy = Key<WindowSwitcherPlacementStrategy>("windowSwitcherPlacementStrategy", default: .screenWithMouse)
     static let windowSwitcherControlPosition = Key<WindowSwitcherControlPosition>("windowSwitcherControlPosition", default: .topTrailing)
