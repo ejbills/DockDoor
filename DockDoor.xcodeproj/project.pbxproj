@@ -22,6 +22,7 @@
 		3A105FD62C1BED660015EC66 /* BlurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A105FD52C1BED660015EC66 /* BlurView.swift */; };
 		3A105FD92C1C049E0015EC66 /* dockStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A105FD82C1C049E0015EC66 /* dockStyle.swift */; };
 		3A105FDD2C1C0EE20015EC66 /* DynStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A105FDC2C1C0EE20015EC66 /* DynStack.swift */; };
+		B20DCB3DCFA04604AD8FCEF93536EFC8 /* FlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E9D9884A8984BCAA97AB2FA8A0529DF /* FlowLayout.swift */; };
 		3A1622982C8BF71000D318EE /* SwiftUIWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A1622972C8BF71000D318EE /* SwiftUIWindow.swift */; };
 		3A1622A32C8BFF3800D318EE /* Pow in Frameworks */ = {isa = PBXBuildFile; productRef = 3A1622A22C8BFF3800D318EE /* Pow */; };
 		3A1622B52C8C09A700D318EE /* AccentButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A1622B42C8C09A700D318EE /* AccentButton.swift */; };
@@ -208,6 +209,7 @@
 		3A105FD52C1BED660015EC66 /* BlurView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurView.swift; sourceTree = "<group>"; };
 		3A105FD82C1C049E0015EC66 /* dockStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dockStyle.swift; sourceTree = "<group>"; };
 		3A105FDC2C1C0EE20015EC66 /* DynStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynStack.swift; sourceTree = "<group>"; };
+		1E9D9884A8984BCAA97AB2FA8A0529DF /* FlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowLayout.swift; sourceTree = "<group>"; };
 		3A1622972C8BF71000D318EE /* SwiftUIWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIWindow.swift; sourceTree = "<group>"; };
 		3A1622B42C8C09A700D318EE /* AccentButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccentButton.swift; sourceTree = "<group>"; };
 		3A1622B92C8C0FF100D318EE /* NoBtnStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoBtnStyle.swift; sourceTree = "<group>"; };
@@ -434,6 +436,7 @@
 				BB04405C2C77A878009F1D33 /* Defaults */,
 				3A105FD52C1BED660015EC66 /* BlurView.swift */,
 				3A105FDC2C1C0EE20015EC66 /* DynStack.swift */,
+				1E9D9884A8984BCAA97AB2FA8A0529DF /* FlowLayout.swift */,
 				BB3967FC2C291D5A004F1AB6 /* StackedShadow.swift */,
 				BB3968012C2A6CC2004F1AB6 /* Marquee.swift */,
 				BB52EDEF2C5BEFE3006A64A4 /* HiddenModifier.swift */,
@@ -1077,6 +1080,7 @@
 				3A1622CC2C8D5F5B00D318EE /* FirstTimePermissionsTabView.swift in Sources */,
 				BB1F60E52D238A9800808E05 /* CGSize.swift in Sources */,
 				3A105FDD2C1C0EE20015EC66 /* DynStack.swift in Sources */,
+				B20DCB3DCFA04604AD8FCEF93536EFC8 /* FlowLayout.swift in Sources */,
 				BB4ED9092C3CD97400BBDD16 /* Traffic Light Buttons.swift in Sources */,
 				C119BDF22C2AFA7600E06E18 /* WindowSwitcherSettingsView.swift in Sources */,
 				BB2567C62C10C5F000C0C93E /* DockUtils.swift in Sources */,

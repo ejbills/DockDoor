@@ -38,7 +38,7 @@ extension Defaults.Keys {
     static let mediaWidgetScrollBehavior = Key<MediaWidgetScrollBehavior>("mediaWidgetScrollBehavior", default: .seekPlayback)
     static let mediaWidgetScrollDirection = Key<MediaWidgetScrollDirection>("mediaWidgetScrollDirection", default: .vertical)
 
-    static let screenCaptureCacheLifespan = Key<CGFloat>("screenCaptureCacheLifespan", default: 60)
+    static let screenCaptureCacheLifespan = Key<CGFloat>("screenCaptureCacheLifespan", default: 30)
     static let windowProcessingDebounceInterval = Key<CGFloat>("windowProcessingDebounceInterval", default: 0.3)
     static let windowPreviewImageScale = Key<CGFloat>("windowPreviewImageScale", default: 1)
     static let windowImageCaptureQuality = Key<WindowImageCaptureQuality>("windowImageCaptureQuality", default: .nominal)
@@ -169,7 +169,9 @@ extension Defaults.Keys {
     static let previewMaxColumns = Key<Int>("previewMaxColumns", default: 2) // For left/right dock
     static let previewMaxRows = Key<Int>("previewMaxRows", default: 1) // For bottom dock only
     static let switcherMaxRows = Key<Int>("switcherMaxRows", default: 2) // For window switcher
-    static let windowSwitcherScrollDirection = Key<WindowSwitcherScrollDirection>("windowSwitcherScrollDirection", default: .horizontal)
+
+    static let dockPreviewMaxItemsPerLine = Key<Int>("dockPreviewMaxItemsPerLine", default: 0)
+    static let switcherMaxItemsPerLine = Key<Int>("switcherMaxItemsPerLine", default: 0)
 
     static let windowSwitcherPlacementStrategy = Key<WindowSwitcherPlacementStrategy>("windowSwitcherPlacementStrategy", default: .screenWithMouse)
     static let windowSwitcherControlPosition = Key<WindowSwitcherControlPosition>("windowSwitcherControlPosition", default: .topTrailing)
@@ -588,21 +590,6 @@ enum MediaWidgetScrollBehavior: String, CaseIterable, Defaults.Serializable {
             String(localized: "Adjust volume", comment: "Media widget scroll option")
         case .seekPlayback:
             String(localized: "Seek playback (scrub through track)", comment: "Media widget scroll option")
-        }
-    }
-}
-
-// Window switcher scroll direction
-enum WindowSwitcherScrollDirection: String, CaseIterable, Defaults.Serializable {
-    case horizontal
-    case vertical
-
-    var localizedName: String {
-        switch self {
-        case .horizontal:
-            String(localized: "Horizontal", comment: "Window switcher scroll direction option")
-        case .vertical:
-            String(localized: "Vertical", comment: "Window switcher scroll direction option")
         }
     }
 }

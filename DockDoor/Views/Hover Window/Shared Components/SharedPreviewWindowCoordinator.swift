@@ -719,33 +719,11 @@ final class SharedPreviewWindowCoordinator: NSPanel {
             return
         }
 
-        let windowsCount = coordinator.windows.count
-        var newIndex = coordinator.currIndex
-
-        if !coordinator.windowSwitcherActive, coordinator.currIndex < 0 {
-            newIndex = goBackwards ? (windowsCount - 1) : 0
-            if windowsCount == 0 { newIndex = -1 }
-        } else if windowsCount > 0 {
-            let dockPosition = DockUtils.getDockPosition()
-            let isHorizontalFlow = dockPosition.isHorizontalFlow || coordinator.windowSwitcherActive
-
-            let direction: ArrowDirection = if isHorizontalFlow {
-                goBackwards ? .left : .right
-            } else {
-                goBackwards ? .up : .down
-            }
-
-            newIndex = WindowPreviewHoverContainer.navigateWindowSwitcher(
-                from: coordinator.currIndex,
-                direction: direction,
-                totalItems: windowsCount,
-                dockPosition: dockPosition,
-                isWindowSwitcherActive: coordinator.windowSwitcherActive
-            )
+        if goBackwards {
+            coordinator.cycleBackward()
         } else {
-            newIndex = -1
+            coordinator.cycleForward()
         }
-        coordinator.setIndex(to: newIndex)
     }
 
     @MainActor
@@ -791,45 +769,18 @@ final class SharedPreviewWindowCoordinator: NSPanel {
             return
         }
 
-        // Handle filtered navigation when search is active (grid view)
+        // Handle filtered navigation when search is active
         if coordinator.windowSwitcherActive, coordinator.hasActiveSearch {
-            let filteredIndices = coordinator.filteredWindowIndices()
-            guard !filteredIndices.isEmpty else { return }
-
-            guard let currentFilteredPos = filteredIndices.firstIndex(of: coordinator.currIndex) else {
-                coordinator.setIndex(to: filteredIndices.first ?? 0)
-                return
-            }
-
-            let newFilteredPos = WindowPreviewHoverContainer.navigateWindowSwitcher(
-                from: currentFilteredPos,
-                direction: direction,
-                totalItems: filteredIndices.count,
-                dockPosition: .bottom,
-                isWindowSwitcherActive: true
-            )
-
-            coordinator.setIndex(to: filteredIndices[newFilteredPos])
+            coordinator.navigateFiltered(direction: direction)
             return
         }
 
-        let windowsCount = coordinator.windows.count
-        var newIndex = coordinator.currIndex
-
-        if !coordinator.windowSwitcherActive, coordinator.currIndex < 0 {
-            newIndex = windowsCount > 0 ? 0 : -1
-        } else {
-            let dockPosition = DockUtils.getDockPosition()
-
-            newIndex = WindowPreviewHoverContainer.navigateWindowSwitcher(
-                from: coordinator.currIndex,
-                direction: direction,
-                totalItems: windowsCount,
-                dockPosition: dockPosition,
-                isWindowSwitcherActive: coordinator.windowSwitcherActive
-            )
+        if coordinator.currIndex < 0 {
+            coordinator.setIndex(to: 0)
+            return
         }
-        coordinator.setIndex(to: newIndex)
+
+        coordinator.navigateGrid(direction: direction)
     }
 
     @MainActor

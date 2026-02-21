@@ -19255,6 +19255,12 @@
         }
       }
     },
+    "Auto: items per line determined by available screen space." : {
+
+    },
+    "Auto: items per row determined by available screen space." : {
+
+    },
     "Automatic Updates" : {
       "localizations" : {
         "af" : {
@@ -20016,6 +20022,9 @@
           }
         }
       }
+    },
+    "Automatically select first window" : {
+
     },
     "Automatically set height and offset" : {
       "localizations" : {
@@ -33360,10 +33369,8 @@
         }
       }
     },
-    "Controls how many columns of windows are shown in the window switcher. Windows are distributed across columns automatically." : {
-
-    },
     "Controls how many rows of windows are shown in the window switcher. Windows are distributed across rows automatically." : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -33554,6 +33561,7 @@
       }
     },
     "Controls how many rows/columns of windows are shown in dock previews. Only the relevant setting applies based on dock position." : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -62346,7 +62354,7 @@
       }
     },
     "Horizontal" : {
-      "comment" : "Media widget scroll direction option\nWindow switcher scroll direction option",
+      "comment" : "Media widget scroll direction option",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -70549,6 +70557,12 @@
         }
       }
     },
+    "Limits the number of window previews per line in dock previews." : {
+
+    },
+    "Limits the number of window previews per row in the window switcher." : {
+
+    },
     "Live Preview" : {
 
     },
@@ -72073,10 +72087,8 @@
         }
       }
     },
-    "Max Columns" : {
-
-    },
     "Max Columns (Left/Right Dock)" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -72266,7 +72278,14 @@
         }
       }
     },
+    "Max Items Per Line" : {
+
+    },
+    "Max Items Per Row" : {
+
+    },
     "Max Rows" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -72457,6 +72476,7 @@
       }
     },
     "Max Rows (Bottom Dock)" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -105998,9 +106018,6 @@
         }
       }
     },
-    "Scroll Direction" : {
-
-    },
     "Scroll direction:" : {
       "localizations" : {
         "af" : {
@@ -136534,7 +136551,7 @@
       }
     },
     "Vertical" : {
-      "comment" : "Media widget scroll direction option\nWindow switcher scroll direction option",
+      "comment" : "Media widget scroll direction option",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -138439,6 +138456,9 @@
           }
         }
       }
+    },
+    "When Cmd+Tab opens, highlight the first window preview automatically." : {
+
     },
     "When disabled, long titles remain static instead of scrolling." : {
       "localizations" : {

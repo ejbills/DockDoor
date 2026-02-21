@@ -1,6 +1,17 @@
 import Defaults
 import SwiftUI
 
+enum HoverContainerPadding {
+    static let container: CGFloat = 24
+    static let dockStyleOuter: CGFloat = 2
+    static let scrollOuter: CGFloat = 2
+    static let contentInner: CGFloat = 20
+
+    static func totalPerSide(paddingMultiplier: CGFloat = Defaults[.globalPaddingMultiplier]) -> CGFloat {
+        container + dockStyleOuter + scrollOuter + (contentInner * paddingMultiplier)
+    }
+}
+
 struct BaseHoverContainer<Content: View>: View {
     @Default(.dockPreviewBackgroundOpacity) var dockPreviewBackgroundOpacity
     @Default(.hideHoverContainerBackground) var hideHoverContainerBackground
@@ -31,7 +42,7 @@ struct BaseHoverContainer<Content: View>: View {
             .if(!preventDockStyling) { view in
                 view.dockStyle(highlightColor: highlightColor, backgroundOpacity: shouldHideBackground ? 0 : dockPreviewBackgroundOpacity, frostedTranslucentLayer: true)
             }
-            .padding(.all, mockPreviewActive ? 0 : 24)
+            .padding(.all, mockPreviewActive ? 0 : HoverContainerPadding.container)
             .frame(maxWidth: bestGuessMonitor.visibleFrame.width, maxHeight: bestGuessMonitor.visibleFrame.height, alignment: .topLeading)
     }
 }
