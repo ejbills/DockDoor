@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4E665A7B0E9F4D458307E40493674B2B /* DockPreviewsSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 970D8CBC36D84F14B8E6E83487035CFB /* DockPreviewsSettingsView.swift */; };
+		D9F56880CB0E4365980B4DDD87BB20AC /* WindowSwitcherBehaviorSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2361530A12344D0090E22EC428DC77D0 /* WindowSwitcherBehaviorSettingsView.swift */; };
+		EBE2166867324098AFE30B239FF83CE8 /* CmdTabSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C808769D1048FF95FCDA50FA52116A /* CmdTabSettingsView.swift */; };
+		5E55EE57430C4695BD7681A73BF3BF9D /* AdvancedSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B056906A7ACD4903BD5E1627B359AE2C /* AdvancedSettingsView.swift */; };
 		0531F8D22C3CC04600327808 /* AppearanceSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0531F8D12C3CC04600327808 /* AppearanceSettingsView.swift */; };
 		0596C2C32C3E060D00DCABEF /* PrivateApis.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0596C2C22C3E060D00DCABEF /* PrivateApis.swift */; };
 		05C0C7182C60629C000ADAC6 /* AXUIElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C0C7172C60629C000ADAC6 /* AXUIElement.swift */; };
@@ -190,6 +194,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		970D8CBC36D84F14B8E6E83487035CFB /* DockPreviewsSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockPreviewsSettingsView.swift; sourceTree = "<group>"; };
+		2361530A12344D0090E22EC428DC77D0 /* WindowSwitcherBehaviorSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowSwitcherBehaviorSettingsView.swift; sourceTree = "<group>"; };
+		99C808769D1048FF95FCDA50FA52116A /* CmdTabSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CmdTabSettingsView.swift; sourceTree = "<group>"; };
+		B056906A7ACD4903BD5E1627B359AE2C /* AdvancedSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedSettingsView.swift; sourceTree = "<group>"; };
 		0531F8D12C3CC04600327808 /* AppearanceSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceSettingsView.swift; sourceTree = "<group>"; };
 		0596C2C22C3E060D00DCABEF /* PrivateApis.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateApis.swift; sourceTree = "<group>"; };
 		05C0C7172C60629C000ADAC6 /* AXUIElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AXUIElement.swift; sourceTree = "<group>"; };
@@ -818,6 +826,10 @@
 				BB15E1E62C8F8C8D002ECFB9 /* Help */,
 				7D264F468F734971AE701690 /* ActiveAppIndicatorSettingsView.swift */,
 				BB1CBD572C1BA800003969BC /* MainSettingsView.swift */,
+				970D8CBC36D84F14B8E6E83487035CFB /* DockPreviewsSettingsView.swift */,
+				2361530A12344D0090E22EC428DC77D0 /* WindowSwitcherBehaviorSettingsView.swift */,
+				99C808769D1048FF95FCDA50FA52116A /* CmdTabSettingsView.swift */,
+				B056906A7ACD4903BD5E1627B359AE2C /* AdvancedSettingsView.swift */,
 				BB1A85F42D05263C00326297 /* FiltersSettingsView.swift */,
 				BB1865552DD57F1E000F34AD /* SupportSettingsView.swift */,
 				BB6A4F1B2C1CFCFF00CB4C9E /* PermissionsSettingsView.swift */,
@@ -1103,6 +1115,10 @@
 				BB4B444B2C372A4E006680DC /* WindowPreview.swift in Sources */,
 				BB04405B2C77A013009F1D33 /* GradientColorPaletteSettings.swift in Sources */,
 				BB1CBD582C1BA800003969BC /* MainSettingsView.swift in Sources */,
+				4E665A7B0E9F4D458307E40493674B2B /* DockPreviewsSettingsView.swift in Sources */,
+				D9F56880CB0E4365980B4DDD87BB20AC /* WindowSwitcherBehaviorSettingsView.swift in Sources */,
+				EBE2166867324098AFE30B239FF83CE8 /* CmdTabSettingsView.swift in Sources */,
+				5E55EE57430C4695BD7681A73BF3BF9D /* AdvancedSettingsView.swift in Sources */,
 				BB157B792C0E330100997315 /* WindowUtil.swift in Sources */,
 				BB15E1EA2C8F8DB4002ECFB9 /* HelpSettingsView.swift in Sources */,
 				BB49747D2E81CE5100308326 /* WindowSeeder.swift in Sources */,

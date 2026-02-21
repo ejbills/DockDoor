@@ -215,6 +215,7 @@ struct SupportSettingsView: View {
                     TranslatorRow(name: "don.julien.7", language: "German", profile: "JuGro1332")
                     TranslatorRow(name: "awaustin", language: "Chinese Simplified", profile: "awaustin")
                     TranslatorRow(name: "illavoluntas", language: "French", profile: "illavoluntas")
+                    TranslatorRow(name: "Diamant", language: "French", profile: "Diamant")
                 }
 
                 Divider()
