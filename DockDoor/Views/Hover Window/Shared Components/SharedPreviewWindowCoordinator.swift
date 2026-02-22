@@ -31,6 +31,8 @@ final class SharedPreviewWindowCoordinator: NSPanel {
     private var previousHoverWindowOrigin: CGPoint?
     private var currentDockPosition: DockPosition = .bottom
 
+    private var anchoredDockIconFrame: CGRect?
+
     private(set) var hasScreenRecordingPermission: Bool = PermissionsChecker.hasScreenRecordingPermission()
 
     var pinnedWindows: [String: (window: NSWindow, info: PinnedWindowInfo)] = [:]
@@ -141,6 +143,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         appName = ""
         currentlyDisplayedPID = nil
         mouseIsWithinPreviewWindow = false
+        anchoredDockIconFrame = nil
 
         let currentDockPos = DockUtils.getDockPosition()
         let currentScreen = NSScreen.main ?? NSScreen.screens.first!
@@ -428,58 +431,65 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         let screenFrame = screen.frame
         let dockPosition = dockPositionOverride ?? DockUtils.getDockPosition()
 
-        do {
-            guard let currentPosition = try dockItemElement.position(),
-                  let currentSize = try dockItemElement.size()
-            else {
+        let flippedIconRect: CGRect
+        if Defaults[.anchorDockPreviewPosition], let anchored = anchoredDockIconFrame {
+            flippedIconRect = anchored
+        } else {
+            do {
+                guard let currentPosition = try dockItemElement.position(),
+                      let currentSize = try dockItemElement.size()
+                else {
+                    return .zero
+                }
+                let currentIconRect = CGRect(origin: currentPosition, size: currentSize)
+                flippedIconRect = CGRect(
+                    origin: DockObserver.cgPointFromNSPoint(currentIconRect.origin, forScreen: screen),
+                    size: currentIconRect.size
+                )
+                if Defaults[.anchorDockPreviewPosition] {
+                    anchoredDockIconFrame = flippedIconRect
+                }
+            } catch {
                 return .zero
             }
-            let currentIconRect = CGRect(origin: currentPosition, size: currentSize)
-            let flippedIconRect = CGRect(
-                origin: DockObserver.cgPointFromNSPoint(currentIconRect.origin, forScreen: screen),
-                size: currentIconRect.size
-            )
-
-            var xPosition: CGFloat
-            var yPosition: CGFloat
-
-            switch dockPosition {
-            case .bottom, .cmdTab:
-                xPosition = flippedIconRect.midX - (windowSize.width / 2)
-                yPosition = flippedIconRect.minY
-            case .left:
-                xPosition = flippedIconRect.maxX
-                yPosition = flippedIconRect.midY - (windowSize.height / 2) - flippedIconRect.height
-            case .right:
-                xPosition = screenFrame.maxX - flippedIconRect.width - windowSize.width
-                yPosition = flippedIconRect.minY - (windowSize.height / 2)
-            default:
-                xPosition = mouseLocation.x - (windowSize.width / 2)
-                yPosition = mouseLocation.y - (windowSize.height / 2)
-            }
-
-            let bufferFromDock = Defaults[.bufferFromDock]
-            switch dockPosition {
-            case .left:
-                xPosition += bufferFromDock
-            case .right:
-                xPosition -= bufferFromDock
-            case .bottom:
-                yPosition += bufferFromDock
-            case .cmdTab:
-                yPosition += 5
-            default:
-                break
-            }
-
-            xPosition = max(screenFrame.minX, min(xPosition, screenFrame.maxX - windowSize.width))
-            yPosition = max(screenFrame.minY, min(yPosition, screenFrame.maxY - windowSize.height))
-
-            return CGPoint(x: xPosition, y: yPosition)
-
-        } catch {
-            return .zero
         }
+
+        var xPosition: CGFloat
+        var yPosition: CGFloat
+
+        switch dockPosition {
+        case .bottom, .cmdTab:
+            xPosition = flippedIconRect.midX - (windowSize.width / 2)
+            yPosition = flippedIconRect.minY
+        case .left:
+            xPosition = flippedIconRect.maxX
+            yPosition = flippedIconRect.midY - (windowSize.height / 2) - flippedIconRect.height
+        case .right:
+            xPosition = screenFrame.maxX - flippedIconRect.width - windowSize.width
+            yPosition = flippedIconRect.minY - (windowSize.height / 2)
+        default:
+            xPosition = mouseLocation.x - (windowSize.width / 2)
+            yPosition = mouseLocation.y - (windowSize.height / 2)
+        }
+
+        let bufferFromDock = Defaults[.bufferFromDock]
+        switch dockPosition {
+        case .left:
+            xPosition += bufferFromDock
+        case .right:
+            xPosition -= bufferFromDock
+        case .bottom:
+            yPosition += bufferFromDock
+        case .cmdTab:
+            yPosition += 5
+        default:
+            break
+        }
+
+        xPosition = max(screenFrame.minX, min(xPosition, screenFrame.maxX - windowSize.width))
+        yPosition = max(screenFrame.minY, min(yPosition, screenFrame.maxY - windowSize.height))
+
+        return CGPoint(x: xPosition, y: yPosition)
     }
 
     private func calculateWindowPositionFromFrame(mouseLocation: CGPoint?, windowSize: CGSize, screen: NSScreen, dockItemFrame: CGRect, dockPositionOverride: DockPosition? = nil) -> CGPoint {
@@ -640,7 +650,11 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         }
 
         if let dockItemElement {
-            currentlyDisplayedPID = try? dockItemElement.pid()
+            let newPID = try? dockItemElement.pid()
+            if newPID != currentlyDisplayedPID {
+                anchoredDockIconFrame = nil
+            }
+            currentlyDisplayedPID = newPID
         }
 
         if useBigStandaloneViewInstead, let viewToShow = viewForBigStandalone {
@@ -676,6 +690,8 @@ final class SharedPreviewWindowCoordinator: NSPanel {
                                    renderStartTime: CFAbsoluteTime? = nil)
     {
         guard !windows.isEmpty else { return }
+
+        anchoredDockIconFrame = nil
 
         let shouldCenterOnScreen = centeredHoverWindowState != .none
 

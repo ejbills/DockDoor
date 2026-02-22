@@ -27,6 +27,7 @@ extension Defaults.Keys {
     static let globalPaddingMultiplier = Key<CGFloat>("globalPaddingMultiplier", default: 1.0)
     static let hoverWindowOpenDelay = Key<CGFloat>("openDelay", default: 0.2)
     static let useDelayOnlyForInitialOpen = Key<Bool>("useDelayOnlyForInitialOpen", default: false)
+    static let anchorDockPreviewPosition = Key<Bool>("anchorDockPreviewPosition", default: true)
     static let preventDockHide = Key<Bool>("preventDockHide", default: false)
     static let preventSwitcherHide = Key<Bool>("preventSwitcherHide", default: false)
     static let requireShiftTabToGoBack = Key<Bool>("requireShiftTabToGoBack", default: false)
