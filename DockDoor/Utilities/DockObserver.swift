@@ -249,28 +249,7 @@ final class DockObserver {
 
         // Filter cached windows by current space before showing preview
         if Defaults[.showWindowsFromCurrentSpaceOnly], !cachedWindows.isEmpty {
-            let activeSpaceIDs = currentActiveSpaceIDs()
-            if !activeSpaceIDs.isEmpty {
-                cachedWindows = cachedWindows.filter { windowInfo in
-                    let windowSpaces = Set(windowInfo.id.cgsSpaces().map { Int($0) })
-
-                    if windowInfo.isMinimized || windowInfo.isHidden {
-                        if !windowSpaces.isEmpty {
-                            return !windowSpaces.isDisjoint(with: activeSpaceIDs)
-                        }
-                        if let spaceID = windowInfo.spaceID {
-                            return activeSpaceIDs.contains(spaceID)
-                        }
-                        return true
-                    }
-
-                    if !windowSpaces.isEmpty {
-                        return !windowSpaces.isDisjoint(with: activeSpaceIDs)
-                    }
-
-                    return true
-                }
-            }
+            cachedWindows = WindowUtil.filterWindowsByCurrentSpace(cachedWindows)
         }
 
         if !Defaults[.includeHiddenWindowsInDockPreview] {
@@ -316,7 +295,7 @@ final class DockObserver {
                 }
 
                 if Defaults[.showWindowsFromCurrentSpaceOnly] {
-                    windows = await WindowUtil.filterWindowsByCurrentSpace(windows)
+                    windows = WindowUtil.filterWindowsByCurrentSpace(windows)
                 }
 
                 if !Defaults[.includeHiddenWindowsInDockPreview] {

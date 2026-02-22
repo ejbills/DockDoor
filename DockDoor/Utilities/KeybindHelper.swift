@@ -73,7 +73,7 @@ private class WindowSwitchingCoordinator {
         let filterBySpace = (mode == .currentSpaceOnly || mode == .activeAppCurrentSpace)
             || (mode == .allWindows && Defaults[.showWindowsFromCurrentSpaceOnlyInSwitcher])
         if filterBySpace {
-            windows = await WindowUtil.filterWindowsByCurrentSpace(windows)
+            windows = WindowUtil.filterWindowsByCurrentSpace(windows)
         }
 
         let filterByApp = (mode == .activeAppOnly || mode == .activeAppCurrentSpace)
