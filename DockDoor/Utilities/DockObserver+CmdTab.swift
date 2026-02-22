@@ -130,6 +130,10 @@ extension DockObserver {
             cachedWindows = WindowUtil.readCachedWindows(for: app.processIdentifier, sortedBy: .cmdTab)
         }
 
+        if Defaults[.showWindowsFromCurrentSpaceOnlyInCmdTab] {
+            cachedWindows = WindowUtil.filterWindowsByCurrentSpace(cachedWindows)
+        }
+
         if !Defaults[.includeHiddenWindowsInCmdTab] {
             cachedWindows = cachedWindows.filter { !$0.isHidden && !$0.isMinimized }
         }
@@ -170,7 +174,7 @@ extension DockObserver {
                     var windows = try await WindowUtil.getActiveWindows(of: app, context: .cmdTab)
 
                     if Defaults[.showWindowsFromCurrentSpaceOnlyInCmdTab] {
-                        windows = await WindowUtil.filterWindowsByCurrentSpace(windows)
+                        windows = WindowUtil.filterWindowsByCurrentSpace(windows)
                     }
 
                     if !Defaults[.includeHiddenWindowsInCmdTab] {

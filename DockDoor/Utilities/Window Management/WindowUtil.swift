@@ -350,7 +350,7 @@ extension WindowUtil {
         }
     }
 
-    static func updateCachedWindowState(_ windowInfo: WindowInfo, isMinimized: Bool? = nil, isHidden: Bool? = nil) {
+    static func updateCachedWindowState(_ windowInfo: WindowInfo, isMinimized: Bool? = nil, isHidden: Bool? = nil, spaceID: Int?? = nil) {
         desktopSpaceWindowCacheManager.updateCache(pid: windowInfo.app.processIdentifier) { windowSet in
             if let existingIndex = windowSet.firstIndex(of: windowInfo) {
                 var updatedWindow = windowSet[existingIndex]
@@ -359,6 +359,9 @@ extension WindowUtil {
                 }
                 if let isHidden {
                     updatedWindow.isHidden = isHidden
+                }
+                if let spaceID {
+                    updatedWindow.spaceID = spaceID
                 }
                 windowSet.remove(at: existingIndex)
                 windowSet.insert(updatedWindow)
@@ -562,42 +565,30 @@ extension WindowUtil {
         }
     }
 
+    /// Returns whether a single window belongs to one of the given active Spaces.
+    static func windowBelongsToActiveSpace(_ windowInfo: WindowInfo, activeSpaceIDs: Set<Int>) -> Bool {
+        let windowSpaces = Set(windowInfo.id.cgsSpaces().map { Int($0) })
+
+        if !windowSpaces.isEmpty {
+            return !windowSpaces.isDisjoint(with: activeSpaceIDs)
+        }
+
+        if let spaceID = windowInfo.spaceID {
+            return activeSpaceIDs.contains(spaceID)
+        }
+
+        // Minimized/hidden windows with no space info are kept (space tracking lost on minimize)
+        if windowInfo.isMinimized || windowInfo.isHidden {
+            return true
+        }
+
+        return false
+    }
+
     /// Filters windows to only include those in the current Space.
-    /// Uses SCShareableContent to determine on-screen status (modern API).
-    /// TODO: Update window observer to track window space in cache
-    static func filterWindowsByCurrentSpace(_ windows: [WindowInfo]) async -> [WindowInfo] {
+    static func filterWindowsByCurrentSpace(_ windows: [WindowInfo]) -> [WindowInfo] {
         let activeSpaceIDs = currentActiveSpaceIDs()
-
-        // Use SCShareableContent to get on-screen window IDs (only if permission is granted)
-        let onScreenWindowIDs: Set<CGWindowID> = if hasScreenRecordingPermission(), let content = await getShareableContent(onScreenWindowsOnly: true) {
-            Set(content.windows.map(\.windowID))
-        } else {
-            []
-        }
-
-        return windows.filter { windowInfo in
-            let windowSpaces = Set(windowInfo.id.cgsSpaces().map { Int($0) })
-            let isOnScreen = onScreenWindowIDs.contains(windowInfo.id)
-
-            // For minimized/hidden windows, check if they belong to current space
-            if windowInfo.isMinimized || windowInfo.isHidden {
-                if !windowSpaces.isEmpty {
-                    return !windowSpaces.isDisjoint(with: activeSpaceIDs)
-                }
-                if let spaceID = windowInfo.spaceID {
-                    return activeSpaceIDs.contains(spaceID)
-                }
-                return true
-            }
-
-            // For normal windows, check space info
-            if !windowSpaces.isEmpty {
-                return !windowSpaces.isDisjoint(with: activeSpaceIDs)
-            }
-
-            // If no space info, check if window is on screen
-            return isOnScreen
-        }
+        return windows.filter { windowBelongsToActiveSpace($0, activeSpaceIDs: activeSpaceIDs) }
     }
 
     static func getActiveWindows(of app: NSRunningApplication, context: WindowFetchContext = .dockPreview, ignoreSingleWindowFilter: Bool = false) async throws -> [WindowInfo] {

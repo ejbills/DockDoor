@@ -14,10 +14,21 @@ struct GeneralAppearanceSection: View {
     @Default(.showActiveWindowBorder) var showActiveWindowBorder
     @Default(.showBrowserProfileBadge) var showBrowserProfileBadge
     @Default(.selectedChromiumBrowser) var selectedChromiumBrowser
+    @Default(.appAppearanceMode) var appAppearanceMode
 
     var body: some View {
         SettingsGroup(header: "General Appearance") {
             VStack(alignment: .leading, spacing: 10) {
+                Picker("Appearance", selection: $appAppearanceMode) {
+                    ForEach(AppAppearanceMode.allCases) { mode in
+                        Text(mode.localizedName).tag(mode)
+                    }
+                }
+                .pickerStyle(.segmented)
+                .onChange(of: appAppearanceMode) { newMode in
+                    applyAppearanceMode(newMode)
+                }
+
                 if #available(macOS 26.0, *) {
                     Toggle(isOn: $useLiquidGlass) {
                         Text("Use Liquid Glass (macOS 26+)")

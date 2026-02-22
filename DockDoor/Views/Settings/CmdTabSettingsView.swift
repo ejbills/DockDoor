@@ -4,6 +4,7 @@ import SwiftUI
 struct CmdTabSettingsView: View {
     @Default(.enableCmdTabEnhancements) var enableCmdTabEnhancements
     @Default(.cmdTabCycleKey) var cmdTabCycleKey
+    @Default(.cmdTabBackwardCycleKey) var cmdTabBackwardCycleKey
     @Default(.showWindowsFromCurrentSpaceOnlyInCmdTab) var showWindowsFromCurrentSpaceOnlyInCmdTab
     @Default(.cmdTabSortOrder) var cmdTabSortOrder
     @Default(.cmdTabAutoSelectFirstWindow) var cmdTabAutoSelectFirstWindow
@@ -33,7 +34,7 @@ struct CmdTabSettingsView: View {
             ) {
                 VStack(alignment: .leading, spacing: 2) {
                     Text("Show previews while holding Cmd+Tab.")
-                    Text("Cmd+\(KeyboardLabel.localizedKey(for: cmdTabCycleKey)) cycles through previews (Shift to reverse), Left/Right navigate, Down clears selection.")
+                    Text("Cmd+\(KeyboardLabel.localizedKey(for: cmdTabCycleKey)) cycles forward, Cmd+\(KeyboardLabel.localizedKey(for: cmdTabBackwardCycleKey)) or Shift+Tab cycles backward, Left/Right navigate, Down clears selection.")
                 }
             }
             .onChange(of: enableCmdTabEnhancements) { _ in askUserToRestartApplication() }
@@ -60,6 +61,16 @@ struct CmdTabSettingsView: View {
                             .font(.system(size: 14, weight: .medium))
                             .foregroundColor(.secondary)
                         KeyCaptureButton(keyCode: $cmdTabCycleKey)
+                    }
+                }
+
+                HStack(spacing: 8) {
+                    Text("Backward cycle key:")
+                    HStack(spacing: 4) {
+                        Text("⌘")
+                            .font(.system(size: 14, weight: .medium))
+                            .foregroundColor(.secondary)
+                        KeyCaptureButton(keyCode: $cmdTabBackwardCycleKey)
                     }
                 }
 

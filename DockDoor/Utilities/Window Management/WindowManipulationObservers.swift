@@ -237,11 +237,23 @@ class WindowManipulationObservers {
         switch notificationName {
         case kAXFocusedUIElementChangedNotification, kAXFocusedWindowChangedNotification, kAXMainWindowChangedNotification:
             updateTimestampIfAppActive(element: element, app: app)
-            handleWindowEvent(element: element, app: app, notification: notificationName, validate: false)
+            handleWindowEvent(element: element, app: app, notification: notificationName, validate: false) { [weak self] windowSet in
+                guard let self else { return }
+                let windowID = try? element.cgWindowId()
+                update(windowSet: &windowSet, matching: windowID, element: element) { window in
+                    window.spaceID = window.id.cgsSpaces().first.map { Int($0) }
+                }
+            }
         case kAXUIElementDestroyedNotification:
             handleWindowEvent(element: element, app: app, notification: notificationName, validate: true)
         case kAXWindowResizedNotification, kAXWindowMovedNotification:
-            handleWindowEvent(element: element, app: app, notification: notificationName, validate: false)
+            handleWindowEvent(element: element, app: app, notification: notificationName, validate: false) { [weak self] windowSet in
+                guard let self else { return }
+                let windowID = try? element.cgWindowId()
+                update(windowSet: &windowSet, matching: windowID, element: element) { window in
+                    window.spaceID = window.id.cgsSpaces().first.map { Int($0) }
+                }
+            }
         case kAXWindowMiniaturizedNotification, kAXWindowDeminiaturizedNotification:
             let windowID = try? element.cgWindowId()
             let minimizedState = try? element.isMinimized()
@@ -249,6 +261,7 @@ class WindowManipulationObservers {
                 guard let self else { return }
                 update(windowSet: &windowSet, matching: windowID, element: element) { window in
                     window.isMinimized = minimizedState ?? false
+                    window.spaceID = window.id.cgsSpaces().first.map { Int($0) }
                 }
             }
             if Defaults[.showActiveAppIndicator] {
@@ -265,6 +278,7 @@ class WindowManipulationObservers {
                         windowSet = Set(windowSet.map { window in
                             var updated = window
                             updated.isHidden = true
+                            updated.spaceID = updated.id.cgsSpaces().first.map { Int($0) }
                             return updated
                         })
                     }
@@ -275,6 +289,7 @@ class WindowManipulationObservers {
                 windowSet = Set(windowSet.map { window in
                     var updated = window
                     updated.isHidden = false
+                    updated.spaceID = updated.id.cgsSpaces().first.map { Int($0) }
                     return updated
                 })
             }

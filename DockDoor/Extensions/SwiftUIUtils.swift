@@ -38,3 +38,14 @@ func animateWithUserPreference(
         completion?()
     }
 }
+
+func applyAppearanceMode(_ mode: AppAppearanceMode) {
+    switch mode {
+    case .system:
+        NSApp.appearance = nil
+    case .light:
+        NSApp.appearance = NSAppearance(named: .aqua)
+    case .dark:
+        NSApp.appearance = NSAppearance(named: .darkAqua)
+    }
+}
