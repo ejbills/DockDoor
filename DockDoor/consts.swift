@@ -86,6 +86,7 @@ extension Defaults.Keys {
     static let enableCmdTabEnhancements = Key<Bool>("enableCmdTabEnhancements", default: false)
     static let cmdTabAutoSelectFirstWindow = Key<Bool>("cmdTabAutoSelectFirstWindow", default: false)
     static let cmdTabCycleKey = Key<UInt16>("cmdTabCycleKey", default: UInt16(kVK_ANSI_A))
+    static let cmdTabBackwardCycleKey = Key<UInt16>("cmdTabBackwardCycleKey", default: UInt16(kVK_ANSI_Grave))
     static let enableMouseHoverInSwitcher = Key<Bool>("enableMouseHoverInSwitcher", default: true)
     static let mouseHoverAutoScrollSpeed = Key<CGFloat>("mouseHoverAutoScrollSpeed", default: 4.0)
     static let keepPreviewOnAppTerminate = Key<Bool>("keepPreviewOnAppTerminate", default: false)
@@ -124,6 +125,8 @@ extension Defaults.Keys {
     static let hidePreviewCardBackground = Key<Bool>("hidePreviewCardBackground", default: false)
     static let hideHoverContainerBackground = Key<Bool>("hideHoverContainerBackground", default: false)
     static let hideWidgetContainerBackground = Key<Bool>("hideWidgetContainerBackground", default: false)
+    static let useOpaquePreviewBackground = Key<Bool>("useOpaquePreviewBackground", default: false)
+    static let appAppearanceMode = Key<AppAppearanceMode>("appAppearanceMode", default: .system)
     static let showActiveWindowBorder = Key<Bool>("showActiveWindowBorder", default: false)
 
     // MARK: - Dock Preview Appearance Settings
@@ -878,6 +881,25 @@ enum CompactModeItemSize: Int, CaseIterable, Defaults.Serializable, Identifiable
         case .xLarge: 56
         case .xxLarge: 64
         case .xxxLarge: 72
+        }
+    }
+}
+
+enum AppAppearanceMode: String, CaseIterable, Defaults.Serializable, Identifiable {
+    case system
+    case light
+    case dark
+
+    var id: String { rawValue }
+
+    var localizedName: String {
+        switch self {
+        case .system:
+            String(localized: "System", comment: "App appearance mode option")
+        case .light:
+            String(localized: "Light", comment: "App appearance mode option")
+        case .dark:
+            String(localized: "Dark", comment: "App appearance mode option")
         }
     }
 }

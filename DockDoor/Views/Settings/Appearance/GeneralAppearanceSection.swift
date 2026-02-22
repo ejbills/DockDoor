@@ -12,10 +12,21 @@ struct GeneralAppearanceSection: View {
     @Default(.hideHoverContainerBackground) var hideHoverContainerBackground
     @Default(.hideWidgetContainerBackground) var hideWidgetContainerBackground
     @Default(.showActiveWindowBorder) var showActiveWindowBorder
+    @Default(.appAppearanceMode) var appAppearanceMode
 
     var body: some View {
         SettingsGroup(header: "General Appearance") {
             VStack(alignment: .leading, spacing: 10) {
+                Picker("Appearance", selection: $appAppearanceMode) {
+                    ForEach(AppAppearanceMode.allCases) { mode in
+                        Text(mode.localizedName).tag(mode)
+                    }
+                }
+                .pickerStyle(.segmented)
+                .onChange(of: appAppearanceMode) { newMode in
+                    applyAppearanceMode(newMode)
+                }
+
                 if #available(macOS 26.0, *) {
                     Toggle(isOn: $useLiquidGlass) {
                         Text("Use Liquid Glass (macOS 26+)")

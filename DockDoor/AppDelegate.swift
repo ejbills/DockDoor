@@ -38,6 +38,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
+        applyAppearanceMode(Defaults[.appAppearanceMode])
+
         // Set global AX timeout to prevent hangs from unresponsive apps
         AXUIElementSetMessagingTimeout(AXUIElementCreateSystemWide(), 1.0)
 

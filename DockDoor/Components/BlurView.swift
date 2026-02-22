@@ -3,6 +3,7 @@ import SwiftUI
 
 struct BlurView: View {
     @Default(.useLiquidGlass) private var useLiquidGlass
+    @Default(.useOpaquePreviewBackground) private var useOpaquePreviewBackground
     let variant: Int?
     let frostedTranslucentLayer: Bool
 
@@ -12,7 +13,9 @@ struct BlurView: View {
     }
 
     var body: some View {
-        if #available(macOS 26.0, *), useLiquidGlass {
+        if useOpaquePreviewBackground {
+            Rectangle().fill(Color(nsColor: .windowBackgroundColor))
+        } else if #available(macOS 26.0, *), useLiquidGlass {
             GlassEffectView(variant: variant, frostedTranslucentLayer: frostedTranslucentLayer)
         } else {
             Rectangle().fill(.ultraThinMaterial)

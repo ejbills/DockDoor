@@ -350,7 +350,7 @@ extension WindowUtil {
         }
     }
 
-    static func updateCachedWindowState(_ windowInfo: WindowInfo, isMinimized: Bool? = nil, isHidden: Bool? = nil) {
+    static func updateCachedWindowState(_ windowInfo: WindowInfo, isMinimized: Bool? = nil, isHidden: Bool? = nil, spaceID: Int?? = nil) {
         desktopSpaceWindowCacheManager.updateCache(pid: windowInfo.app.processIdentifier) { windowSet in
             if let existingIndex = windowSet.firstIndex(of: windowInfo) {
                 var updatedWindow = windowSet[existingIndex]
@@ -359,6 +359,9 @@ extension WindowUtil {
                 }
                 if let isHidden {
                     updatedWindow.isHidden = isHidden
+                }
+                if let spaceID {
+                    updatedWindow.spaceID = spaceID
                 }
                 windowSet.remove(at: existingIndex)
                 windowSet.insert(updatedWindow)

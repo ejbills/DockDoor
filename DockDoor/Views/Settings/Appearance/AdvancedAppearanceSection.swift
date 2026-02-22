@@ -5,6 +5,7 @@ struct AdvancedAppearanceSection: View {
     @Default(.selectionOpacity) var selectionOpacity
     @Default(.hoverHighlightColor) var hoverHighlightColor
     @Default(.dockPreviewBackgroundOpacity) var dockPreviewBackgroundOpacity
+    @Default(.useOpaquePreviewBackground) var useOpaquePreviewBackground
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -40,18 +41,30 @@ struct AdvancedAppearanceSection: View {
 
             SettingsGroup(header: "Dock Preview Transparency") {
                 VStack(alignment: .leading, spacing: 10) {
-                    Text("Control the transparency of the dock preview background. Lower values make the preview more transparent, which can help prevent it from blocking window content.")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
+                    VStack(alignment: .leading) {
+                        Toggle(isOn: $useOpaquePreviewBackground) {
+                            Text("Use opaque background")
+                        }
+                        Text("Replaces the blurred/transparent background with a solid color. Useful for accessibility or readability.")
+                            .font(.footnote)
+                            .foregroundColor(.gray)
+                            .padding(.leading, 20)
+                    }
 
-                    sliderSetting(
-                        title: "Background Opacity",
-                        value: $dockPreviewBackgroundOpacity,
-                        range: 0 ... 1.0,
-                        step: 0.05,
-                        unit: "",
-                        formatter: NumberFormatter.percentFormatter
-                    )
+                    if !useOpaquePreviewBackground {
+                        Text("Control the transparency of the dock preview background. Lower values make the preview more transparent, which can help prevent it from blocking window content.")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+
+                        sliderSetting(
+                            title: "Background Opacity",
+                            value: $dockPreviewBackgroundOpacity,
+                            range: 0 ... 1.0,
+                            step: 0.05,
+                            unit: "",
+                            formatter: NumberFormatter.percentFormatter
+                        )
+                    }
                 }
             }
 
