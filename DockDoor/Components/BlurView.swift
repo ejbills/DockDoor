@@ -28,6 +28,15 @@ class LiquidGlassContainerView: NSView {
     var frostedTranslucentLayer: Bool = false
     var backgroundOpacity: CGFloat = 0.725
     private var hasConfigured = false
+    private var backdropLayers: [CALayer] = []
+
+    override func removeFromSuperview() {
+        for backdrop in backdropLayers {
+            backdrop.removeObserver(self, forKeyPath: "windowServerAware")
+        }
+        backdropLayers.removeAll()
+        super.removeFromSuperview()
+    }
 
     override func viewDidMoveToWindow() {
         super.viewDidMoveToWindow()
@@ -45,6 +54,7 @@ class LiquidGlassContainerView: NSView {
         for subview in subviews {
             guard let glassView = subview as? NSGlassEffectView, let layer = glassView.layer else { continue }
             setBackdropProperties(in: layer)
+            observeBackdropLayers(in: layer)
         }
     }
 
@@ -53,6 +63,38 @@ class LiquidGlassContainerView: NSView {
             layer.setValue(true, forKey: "windowServerAware")
         }
         layer.sublayers?.forEach { setBackdropProperties(in: $0) }
+    }
+
+    private func observeBackdropLayers(in layer: CALayer) {
+        guard backdropLayers.isEmpty else { return }
+        backdropLayers = collectBackdropLayers(in: layer)
+        for backdrop in backdropLayers {
+            backdrop.addObserver(self, forKeyPath: "windowServerAware", options: [.old, .new], context: nil)
+        }
+    }
+
+    override func observeValue(
+        forKeyPath keyPath: String?,
+        of object: Any?,
+        change: [NSKeyValueChangeKey: Any]?,
+        context: UnsafeMutableRawPointer?
+    ) {
+        if keyPath == "windowServerAware" {
+            if change?[.newKey] as? Bool == false {
+                configureBackdropLayers()
+            }
+        } else {
+            super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
+        }
+    }
+
+    private func collectBackdropLayers(in layer: CALayer) -> [CALayer] {
+        var results: [CALayer] = []
+        if NSStringFromClass(type(of: layer)).contains("CABackdropLayer") {
+            results.append(layer)
+        }
+        layer.sublayers?.forEach { results.append(contentsOf: collectBackdropLayers(in: $0)) }
+        return results
     }
 }
 
