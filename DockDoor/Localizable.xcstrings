@@ -14878,6 +14878,9 @@
         }
       }
     },
+    "Anchor preview to initial dock icon position" : {
+
+    },
     "Anchor to top" : {
       "localizations" : {
         "af" : {
@@ -68265,6 +68268,9 @@
           }
         }
       }
+    },
+    "Keeps the preview pinned where the dock icon was when first hovered, preventing it from jumping when the dock auto-hides." : {
+
     },
     "Keyboard Shortcut" : {
       "extractionState" : "stale",

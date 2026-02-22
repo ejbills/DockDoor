@@ -22,9 +22,6 @@ private class WindowSwitchingCoordinator {
     /// When true, initialization should complete but immediately select the window instead of showing UI
     private var shouldSelectImmediately = false
 
-    private static var lastUpdateAllWindowsTime: Date?
-    private static let updateAllWindowsThrottleInterval: TimeInterval = 60.0
-
     @MainActor
     func handleWindowSwitching(
         previewCoordinator: SharedPreviewWindowCoordinator,
@@ -129,19 +126,6 @@ private class WindowSwitchingCoordinator {
                 initialIndex: coordinator.currIndex,
                 sessionId: sessionId
             )
-        }
-
-        Task.detached(priority: .low) {
-            let now = Date()
-            let shouldUpdate: Bool = if let lastUpdate = WindowSwitchingCoordinator.lastUpdateAllWindowsTime {
-                now.timeIntervalSince(lastUpdate) >= WindowSwitchingCoordinator.updateAllWindowsThrottleInterval
-            } else {
-                true
-            }
-
-            guard shouldUpdate else { return }
-            WindowSwitchingCoordinator.lastUpdateAllWindowsTime = now
-            await WindowUtil.updateAllWindowsInCurrentSpace()
         }
     }
 
