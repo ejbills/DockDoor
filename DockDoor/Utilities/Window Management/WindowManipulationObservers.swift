@@ -14,7 +14,7 @@ class WindowManipulationObservers {
 
     private var observers: [pid_t: AXObserver] = [:]
     private var debouncedTasks: [String: Task<Void, Never>] = [:]
-    var cacheUpdateWorkItem: (workItem: DispatchWorkItem, hasStateAdjustment: Bool)?
+    var cacheUpdateWorkItem: (workItem: DispatchWorkItem, hasStateAdjustment: Bool, needsValidation: Bool)?
     var updateDateTimeWorkItem: DispatchWorkItem?
     private var cacheValidationTimer: Timer?
 
@@ -89,7 +89,8 @@ class WindowManipulationObservers {
 
     private func startCacheValidationTimer() {
         cacheValidationTimer?.invalidate()
-        cacheValidationTimer = Timer.scheduledTimer(withTimeInterval: 30.0, repeats: true) { [weak self] timer in
+        let interval = Defaults[.cacheValidationInterval]
+        cacheValidationTimer = Timer.scheduledTimer(withTimeInterval: TimeInterval(interval), repeats: true) { [weak self] timer in
             guard self != nil else {
                 timer.invalidate()
                 return
@@ -332,16 +333,19 @@ class WindowManipulationObservers {
                                    validate: Bool = false,
                                    stateAdjustment: ((inout Set<WindowInfo>) -> Void)? = nil)
     {
+        let inheritedValidation = cacheUpdateWorkItem?.needsValidation ?? false
+
         if cacheUpdateWorkItem?.hasStateAdjustment != true {
             cacheUpdateWorkItem?.workItem.cancel()
         }
 
+        let effectiveValidate = validate || inheritedValidation
         let hasStateAdjustment = stateAdjustment != nil
         let workItem = DispatchWorkItem { [weak self] in
             guard let self else { return }
-            DebugLogger.measure("updateWindowCache", details: "App: \(app.localizedName ?? "Unknown"), Notification: \(notification), Validate: \(validate)") {
+            DebugLogger.measure("updateWindowCache", details: "App: \(app.localizedName ?? "Unknown"), Notification: \(notification), Validate: \(effectiveValidate)") {
                 WindowUtil.updateWindowCache(for: app) { windowSet in
-                    if validate {
+                    if effectiveValidate {
                         windowSet = windowSet.filter { WindowUtil.isValidElement($0.axElement) }
                     }
                     stateAdjustment?(&windowSet)
@@ -349,7 +353,7 @@ class WindowManipulationObservers {
             }
             cacheUpdateWorkItem = nil
         }
-        cacheUpdateWorkItem = (workItem, hasStateAdjustment)
+        cacheUpdateWorkItem = (workItem, hasStateAdjustment, effectiveValidate)
         axObserverWorkQueue.asyncAfter(deadline: .now() + windowProcessingDebounceInterval, execute: workItem)
     }
 

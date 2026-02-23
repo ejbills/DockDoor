@@ -10,6 +10,7 @@ struct AdvancedSettingsView: View {
     @Default(.windowProcessingDebounceInterval) var windowProcessingDebounceInterval
     @Default(.anchorDockPreviewPosition) var anchorDockPreviewPosition
     @Default(.preventDockHide) var preventDockHide
+    @Default(.cacheValidationInterval) var cacheValidationInterval
     @Default(.raisedWindowLevel) var raisedWindowLevel
 
     @Default(.windowImageCaptureQuality) var windowImageCaptureQuality
@@ -72,6 +73,16 @@ struct AdvancedSettingsView: View {
                         askUserToRestartApplication()
                     }
                 })
+
+                sliderSetting(title: "Window Cache Validation Interval", value: $cacheValidationInterval, range: 10 ... 300, step: 10, unit: "seconds", onEditingChanged: { isEditing in
+                    if !isEditing {
+                        askUserToRestartApplication()
+                    }
+                })
+                Text("How often to validate cached windows in the background. Lower values detect closed windows faster but use more resources.")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .padding(.leading, 20)
 
                 Toggle(isOn: $anchorDockPreviewPosition) {
                     Text("Anchor preview to initial dock icon position")
