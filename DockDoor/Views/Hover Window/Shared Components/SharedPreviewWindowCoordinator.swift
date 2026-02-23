@@ -129,6 +129,9 @@ final class SharedPreviewWindowCoordinator: NSPanel {
     }
 
     func hideWindow() {
+        // Always restore dock auto-hide state, even if the preview isn't visible.
+        dockManager.restoreDockState()
+
         guard isVisible else { return }
 
         DragPreviewCoordinator.shared.endDragging()
@@ -149,7 +152,6 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         let currentScreen = NSScreen.main ?? NSScreen.screens.first!
         windowSwitcherCoordinator.setWindows([], dockPosition: currentDockPos, bestGuessMonitor: currentScreen)
         windowSwitcherCoordinator.setShowing(.both, toState: false)
-        dockManager.restoreDockState()
         orderOut(nil)
     }
 
