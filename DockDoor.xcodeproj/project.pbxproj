@@ -139,6 +139,7 @@
 		BB638F0C2E0217480010077D /* MediaLyricsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB638F0B2E0217480010077D /* MediaLyricsView.swift */; };
 		BB638F0F2E02175C0010077D /* MediaControlsSkeleton.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB638F0E2E02175C0010077D /* MediaControlsSkeleton.swift */; };
 		BB638F142E0218BB0010077D /* SharedHoverAppTitle.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB638F132E0218BB0010077D /* SharedHoverAppTitle.swift */; };
+		8895D7565ED747F8A435CF5E207647C7 /* WidgetHoverContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC5D1784E68A4052A122B9019AA9C150 /* WidgetHoverContainer.swift */; };
 		BB638F162E0218C00010077D /* SharedHoverUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB638F152E0218C00010077D /* SharedHoverUtils.swift */; };
 		BB638F182E0218C90010077D /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB638F172E0218C90010077D /* CalendarView.swift */; };
 		BB638F1A2E0218CD0010077D /* CalendarEmbeddedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB638F192E0218CD0010077D /* CalendarEmbeddedView.swift */; };
@@ -322,6 +323,7 @@
 		BB638F0B2E0217480010077D /* MediaLyricsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaLyricsView.swift; sourceTree = "<group>"; };
 		BB638F0E2E02175C0010077D /* MediaControlsSkeleton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaControlsSkeleton.swift; sourceTree = "<group>"; };
 		BB638F132E0218BB0010077D /* SharedHoverAppTitle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedHoverAppTitle.swift; sourceTree = "<group>"; };
+		CC5D1784E68A4052A122B9019AA9C150 /* WidgetHoverContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetHoverContainer.swift; sourceTree = "<group>"; };
 		BB638F152E0218C00010077D /* SharedHoverUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedHoverUtils.swift; sourceTree = "<group>"; };
 		BB638F172E0218C90010077D /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
 		BB638F192E0218CD0010077D /* CalendarEmbeddedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarEmbeddedView.swift; sourceTree = "<group>"; };
@@ -756,6 +758,7 @@
 				BB387FB22E70BA1300640D79 /* SearchWindow.swift */,
 				BB638F152E0218C00010077D /* SharedHoverUtils.swift */,
 				BB638F132E0218BB0010077D /* SharedHoverAppTitle.swift */,
+				CC5D1784E68A4052A122B9019AA9C150 /* WidgetHoverContainer.swift */,
 				BBB6C5332DF3C8B4009E93C4 /* BaseHoverContainer.swift */,
 				BB4ED9082C3CD96D00BBDD16 /* Traffic Light Buttons.swift */,
 				BB1A85F62D08E52A00326297 /* DragPreviewCoordinator.swift */,
@@ -1073,6 +1076,7 @@
 				0596C2C32C3E060D00DCABEF /* PrivateApis.swift in Sources */,
 				BB15E1E22C8E9435002ECFB9 /* FluidGradient.swift in Sources */,
 				BB638F142E0218BB0010077D /* SharedHoverAppTitle.swift in Sources */,
+				8895D7565ED747F8A435CF5E207647C7 /* WidgetHoverContainer.swift in Sources */,
 				BB15E1E32C8E9435002ECFB9 /* ResizableLayer.swift in Sources */,
 				BB15E1E42C8E9435002ECFB9 /* FluidGradientView.swift in Sources */,
 				BB15E1E52C8E9435002ECFB9 /* BlobLayer.swift in Sources */,

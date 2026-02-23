@@ -20,79 +20,28 @@ struct MediaControlsFullView: View {
     let hoveringAppIcon: Bool
     let hoveringWindowTitle: Bool
 
-    @Default(.showAppName) var showAppTitleData
-    @Default(.showAppIconOnly) var showAppIconOnly
-    @Default(.appNameStyle) var appNameStyle
     @Default(.showAnimations) var showAnimations
 
     @State private var initialContentSize: CGSize = .zero
     @State private var hasSetInitialSize: Bool = false
 
     var body: some View {
-        Group {
-            if isPinnedMode {
-                pinnedContent()
-            } else {
-                regularContent()
-            }
+        WidgetHoverContainer(
+            appName: appName,
+            bestGuessMonitor: bestGuessMonitor,
+            dockPosition: dockPosition,
+            dockItemElement: dockItemElement,
+            isPinnedMode: isPinnedMode,
+            appIcon: appIcon,
+            hoveringAppIcon: hoveringAppIcon,
+            highlightColor: dominantArtworkColor
+        ) {
+            mediaControlsContent()
         }
+        .pinnable(appName: appName, bundleIdentifier: bundleIdentifier, type: .media)
         .if(isMediaApp(bundleIdentifier)) { view in
             view.mediaScrollable(bundleIdentifier: bundleIdentifier, mediaInfo: mediaInfo)
         }
-    }
-
-    @ViewBuilder
-    private func regularContent() -> some View {
-        BaseHoverContainer(
-            bestGuessMonitor: bestGuessMonitor,
-            mockPreviewActive: false,
-            content: {
-                VStack(spacing: 0) {
-                    mediaControlsContent()
-                }
-                .padding(.top, (appNameStyle == .default && showAppTitleData) ? 25 : 0)
-                .overlay(alignment: .topLeading) {
-                    SharedHoverAppTitle(
-                        appName: appName,
-                        appIcon: appIcon,
-                        hoveringAppIcon: hoveringAppIcon
-                    )
-                    .padding([.top, .leading], 4)
-                }
-                .padding(.top, (appNameStyle == .popover && showAppTitleData) ? 30 : 0)
-                .overlay {
-                    if dockPosition != .cmdTab {
-                        WindowDismissalContainer(appName: appName,
-                                                 bestGuessMonitor: bestGuessMonitor,
-                                                 dockPosition: dockPosition,
-                                                 dockItemElement: dockItemElement,
-                                                 minimizeAllWindowsCallback: { _ in })
-                            .allowsHitTesting(false)
-                    }
-                }
-            },
-            highlightColor: dominantArtworkColor,
-            isWidget: true
-        )
-        .pinnable(appName: appName, bundleIdentifier: bundleIdentifier, type: .media)
-    }
-
-    @ViewBuilder
-    private func pinnedContent() -> some View {
-        VStack(spacing: 0) {
-            mediaControlsContent()
-        }
-        .padding(.top, (appNameStyle == .default && showAppTitleData) ? 25 : 0)
-        .overlay(alignment: .topLeading) {
-            SharedHoverAppTitle(
-                appName: appName,
-                appIcon: appIcon,
-                hoveringAppIcon: hoveringAppIcon
-            )
-            .padding([.top, .leading], 4)
-        }
-        .dockStyle()
-        .padding(.top, (appNameStyle == .popover && showAppTitleData) ? 30 : 0)
     }
 
     @ViewBuilder
