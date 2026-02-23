@@ -19,6 +19,8 @@ struct WindowPreviewInteractionModifier: ViewModifier {
     @Default(.dockSwipeTowardsDockAction) private var dockSwipeTowardsDockAction
     @Default(.dockSwipeAwayFromDockAction) private var dockSwipeAwayFromDockAction
 
+    @State private var suppressTap = false
+
     func body(content: Content) -> some View {
         content
             .onMiddleClick {
@@ -27,12 +29,14 @@ struct WindowPreviewInteractionModifier: ViewModifier {
                 }
             }
             .onTrackpadSwipe(
+                onScrollingChanged: { scrolling in suppressTap = scrolling },
                 onSwipeUp: { handleSwipe(.up) },
                 onSwipeDown: { handleSwipe(.down) },
                 onSwipeLeft: { handleSwipe(.left) },
                 onSwipeRight: { handleSwipe(.right) }
             )
             .onTapGesture {
+                guard !suppressTap else { return }
                 handleWindowTap()
             }
             .contextMenu {
