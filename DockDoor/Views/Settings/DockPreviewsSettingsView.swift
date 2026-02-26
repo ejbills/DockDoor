@@ -13,6 +13,7 @@ struct DockPreviewsSettingsView: View {
     @Default(.shouldHideOnDockItemClick) var shouldHideOnDockItemClick
     @Default(.dockClickAction) var dockClickAction
     @Default(.enableCmdRightClickQuit) var enableCmdRightClickQuit
+    @Default(.quitAppOnWindowClose) var quitAppOnWindowClose
     @Default(.bufferFromDock) var bufferFromDock
 
     var body: some View {
@@ -112,6 +113,12 @@ struct DockPreviewsSettingsView: View {
                 }
 
                 Toggle(isOn: $enableCmdRightClickQuit) { Text("CMD + Right Click on dock icon to quit app") }
+
+                Toggle(isOn: $quitAppOnWindowClose) { Text("Quit app when closing its last window") }
+                Text("Clicking the close button on a window preview will quit the app instead of just closing the window. Useful as a replacement for Swift Quit.")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .padding(.leading, 20)
 
                 sliderSetting(title: "Window Buffer from Dock (pixels)", value: $bufferFromDock, range: -100 ... 100, step: 5, unit: "px", formatter: { let f = NumberFormatter(); f.allowsFloats = false; f.minimumIntegerDigits = 1; f.maximumFractionDigits = 0; return f }())
             }
