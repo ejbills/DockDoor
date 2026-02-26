@@ -143,10 +143,13 @@ enum WindowAction: String, Hashable, CaseIterable, Defaults.Serializable {
             }
 
         case .close:
-            if Defaults[.quitAppOnWindowClose] {
+            let pid = window.app.processIdentifier
+            if Defaults[.quitAppOnWindowClose],
+               WindowUtil.readCachedWindows(for: pid).count <= 1
+            {
                 window.quit(force: NSEvent.modifierFlags.contains(.option))
                 if keepPreviewOnQuit {
-                    return .appWindowsRemoved(pid: window.app.processIdentifier)
+                    return .appWindowsRemoved(pid: pid)
                 } else {
                     return .dismissed
                 }
