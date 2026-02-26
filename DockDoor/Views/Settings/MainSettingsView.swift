@@ -17,9 +17,10 @@ struct MainSettingsView: View {
                 applicationBasicsSection
                 activeAppIndicatorSection
 
+                settingsManagementSection
+
                 HStack {
                     Spacer()
-                    Button("Reset All Settings to Defaults") { showResetConfirmation() }
                     Button("Quit DockDoor") { (NSApplication.shared.delegate as! AppDelegate).quitApp() }
                     Spacer()
                 }
@@ -80,6 +81,35 @@ struct MainSettingsView: View {
     private var activeAppIndicatorSection: some View {
         SettingsGroup(header: "Active App Indicator") {
             ActiveAppIndicatorSettingsView()
+        }
+    }
+
+    // MARK: - Settings Management
+
+    private var settingsManagementSection: some View {
+        SettingsGroup(header: "Settings Management") {
+            VStack(alignment: .leading, spacing: 10) {
+                HStack(spacing: 12) {
+                    Button {
+                        SettingsBackupManager.exportSettings()
+                    } label: {
+                        Label("Export Settings", systemImage: "square.and.arrow.up")
+                    }
+
+                    Button {
+                        SettingsBackupManager.importSettings()
+                    } label: {
+                        Label("Import Settings", systemImage: "square.and.arrow.down")
+                    }
+                }
+
+                Text("Export your settings to a file for backup or transfer to another machine. Import to restore a previous configuration.")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+
+                Button("Reset All Settings to Defaults") { showResetConfirmation() }
+                    .padding(.top, 4)
+            }
         }
     }
 
