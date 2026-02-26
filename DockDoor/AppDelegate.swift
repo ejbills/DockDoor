@@ -169,13 +169,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     @objc private func handleSystemWake() {
         // Re-assert window level on wake (fixes window rendering issues)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            NSApp.activate(ignoringOtherApps: true)
-        }
-
-        // Give macOS time to reinitialize AX framework, then recover all services
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {  [weak self] in
             guard let self else { return }
+            NSApp.activate(ignoringOtherApps: true)
             self.dockObserver?.reset()
             self.keybindHelper?.reset()
             self.appClosureObserver?.reset()
