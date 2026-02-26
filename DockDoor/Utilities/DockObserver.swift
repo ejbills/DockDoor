@@ -43,6 +43,7 @@ final class DockObserver {
     var cmdTabPollingTimer: Timer?
 
     private var eventTap: CFMachPort?
+    private var eventTapRunLoopSource: CFRunLoopSource?
 
     // Dock click behavior state
     var currentClickedAppPID: pid_t?
@@ -86,10 +87,7 @@ final class DockObserver {
         teardownObserver()
         teardownCmdTabObserver()
 
-        if let eventTap {
-            CGEvent.tapEnable(tap: eventTap, enable: false)
-            CFMachPortInvalidate(eventTap)
-        }
+        removeEventTap()
     }
 
     private func startHealthCheckTimer() {
@@ -99,10 +97,12 @@ final class DockObserver {
         }
     }
 
-    private func reset() {
+    func reset() {
         teardownObserver()
         teardownCmdTabObserver()
         setupSelectedDockItemObserver()
+        removeEventTap()
+        setupEventTap()
     }
 
     private func performHealthCheck() {
@@ -129,6 +129,16 @@ final class DockObserver {
         } else if axObserver != nil {
             // We have an observer but no subscribed element reference - reset to fix state
             reset()
+        }
+
+        // Check event tap health
+        if let eventTap {
+            if !CGEvent.tapIsEnabled(tap: eventTap) {
+                removeEventTap()
+                setupEventTap()
+            }
+        } else {
+            setupEventTap()
         }
     }
 
@@ -530,6 +540,18 @@ final class DockObserver {
         setupEventTap()
     }
 
+    private func removeEventTap() {
+        if let eventTap {
+            CGEvent.tapEnable(tap: eventTap, enable: false)
+            if let eventTapRunLoopSource {
+                CFRunLoopRemoveSource(CFRunLoopGetCurrent(), eventTapRunLoopSource, .commonModes)
+            }
+            CFMachPortInvalidate(eventTap)
+        }
+        eventTap = nil
+        eventTapRunLoopSource = nil
+    }
+
     private func setupEventTap() {
         let eventMask: CGEventMask = (1 << CGEventType.leftMouseDown.rawValue) |
             (1 << CGEventType.rightMouseDown.rawValue) |
@@ -555,9 +577,14 @@ final class DockObserver {
         CFRunLoopAddSource(CFRunLoopGetCurrent(), runLoopSource, .commonModes)
 
         self.eventTap = eventTap
+        self.eventTapRunLoopSource = runLoopSource
     }
 
     private func eventTapCallback(proxy: CGEventTapProxy, type: CGEventType, event: CGEvent) -> Unmanaged<CGEvent>? {
+        if let passthrough = reEnableIfNeeded(tap: eventTap, type: type, event: event) {
+            return passthrough
+        }
+
         if type == .scrollWheel {
             guard Defaults[.enableDockScrollGesture] else {
                 return Unmanaged.passUnretained(event)

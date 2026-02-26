@@ -339,6 +339,10 @@ class KeybindHelper {
     }
 
     private func handleEvent(proxy: CGEventTapProxy, type: CGEventType, event: CGEvent) -> Unmanaged<CGEvent>? {
+        if let passthrough = reEnableIfNeeded(tap: eventTap, type: type, event: event) {
+            return passthrough
+        }
+
         switch type {
         case .flagsChanged:
             let keyBoardShortcutSaved: UserKeyBind = Defaults[.UserKeybind]
@@ -862,6 +866,15 @@ class KeybindHelper {
             return nil
         }
     }
+}
+
+/// Re-enables a disabled event tap and returns a passthrough result, or nil if the event type is not tap-disabled.
+func reEnableIfNeeded(tap: CFMachPort?, type: CGEventType, event: CGEvent) -> Unmanaged<CGEvent>? {
+    guard type == .tapDisabledByTimeout || type == .tapDisabledByUserInput else { return nil }
+    if let tap {
+        CGEvent.tapEnable(tap: tap, enable: true)
+    }
+    return Unmanaged.passUnretained(event)
 }
 
 extension CGEventFlags {

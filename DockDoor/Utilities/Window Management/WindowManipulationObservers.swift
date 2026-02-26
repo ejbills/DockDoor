@@ -43,27 +43,25 @@ class WindowManipulationObservers {
 
     deinit {
         cacheValidationTimer?.invalidate()
-        let notificationCenter = NSWorkspace.shared.notificationCenter
-        notificationCenter.removeObserver(self)
-
-        for (pid, observer) in observers {
-            let appElement = AXUIElementCreateApplication(pid)
-            AXObserverRemoveNotification(observer, appElement, kAXWindowCreatedNotification as CFString)
-            AXObserverRemoveNotification(observer, appElement, kAXUIElementDestroyedNotification as CFString)
-            AXObserverRemoveNotification(observer, appElement, kAXMainWindowChangedNotification as CFString)
-            AXObserverRemoveNotification(observer, appElement, kAXWindowMiniaturizedNotification as CFString)
-            AXObserverRemoveNotification(observer, appElement, kAXWindowDeminiaturizedNotification as CFString)
-            AXObserverRemoveNotification(observer, appElement, kAXApplicationHiddenNotification as CFString)
-            AXObserverRemoveNotification(observer, appElement, kAXApplicationShownNotification as CFString)
-            AXObserverRemoveNotification(observer, appElement, kAXFocusedUIElementChangedNotification as CFString)
-            AXObserverRemoveNotification(observer, appElement, kAXFocusedWindowChangedNotification as CFString)
-            AXObserverRemoveNotification(observer, appElement, kAXWindowResizedNotification as CFString)
-            AXObserverRemoveNotification(observer, appElement, kAXWindowMovedNotification as CFString)
-            AXObserverRemoveNotification(observer, appElement, kAXTitleChangedNotification as CFString)
-        }
-        observers.removeAll()
+        NSWorkspace.shared.notificationCenter.removeObserver(self)
+        removeAllObservers()
         if activeWindowManipulationObserversInstance === self {
             activeWindowManipulationObserversInstance = nil
+        }
+    }
+
+    private func removeAllObservers() {
+        let pids = Array(observers.keys)
+        for pid in pids {
+            removeObserver(for: pid)
+        }
+    }
+
+    func reset() {
+        removeAllObservers()
+        let apps = NSWorkspace.shared.runningApplications.filter { $0.activationPolicy == .regular }
+        for app in apps {
+            createObserverForApp(app)
         }
     }
 

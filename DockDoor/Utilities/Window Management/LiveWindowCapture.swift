@@ -141,6 +141,7 @@ final class LiveCaptureManager {
         }
         captures.removeAll()
     }
+
 }
 
 @MainActor
