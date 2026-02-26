@@ -577,7 +577,7 @@ final class DockObserver {
         CFRunLoopAddSource(CFRunLoopGetCurrent(), runLoopSource, .commonModes)
 
         self.eventTap = eventTap
-        self.eventTapRunLoopSource = runLoopSource
+        eventTapRunLoopSource = runLoopSource
     }
 
     private func eventTapCallback(proxy: CGEventTapProxy, type: CGEventType, event: CGEvent) -> Unmanaged<CGEvent>? {

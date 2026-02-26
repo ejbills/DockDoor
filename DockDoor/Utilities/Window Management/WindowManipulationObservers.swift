@@ -16,8 +16,6 @@ class WindowManipulationObservers {
     private var debouncedTasks: [String: Task<Void, Never>] = [:]
     var cacheUpdateWorkItem: (workItem: DispatchWorkItem, hasStateAdjustment: Bool, needsValidation: Bool)?
     var updateDateTimeWorkItem: DispatchWorkItem?
-    private var cacheValidationTimer: Timer?
-
     private func debounce(key: String, delay: TimeInterval = windowProcessingDebounceInterval, operation: @escaping () async -> Void) {
         debouncedTasks[key]?.cancel()
         debouncedTasks[key] = Task {
@@ -42,7 +40,6 @@ class WindowManipulationObservers {
     }
 
     deinit {
-        cacheValidationTimer?.invalidate()
         NSWorkspace.shared.notificationCenter.removeObserver(self)
         removeAllObservers()
         if activeWindowManipulationObserversInstance === self {
@@ -79,22 +76,6 @@ class WindowManipulationObservers {
 
             for app in apps {
                 createObserverForApp(app)
-            }
-
-            startCacheValidationTimer()
-        }
-    }
-
-    private func startCacheValidationTimer() {
-        cacheValidationTimer?.invalidate()
-        let interval = Defaults[.cacheValidationInterval]
-        cacheValidationTimer = Timer.scheduledTimer(withTimeInterval: TimeInterval(interval), repeats: true) { [weak self] timer in
-            guard self != nil else {
-                timer.invalidate()
-                return
-            }
-            Task.detached(priority: .low) {
-                await WindowUtil.updateAllWindowsInCurrentSpace()
             }
         }
     }
