@@ -19,12 +19,11 @@ struct FlowLayout: Layout {
     var maxPrimaryDimension: CGFloat = .infinity
 
     struct CacheData {
-        var lines: [[Int]]
         var sizes: [CGSize]
     }
 
     func makeCache(subviews: Subviews) -> CacheData {
-        CacheData(lines: [], sizes: [])
+        CacheData(sizes: [])
     }
 
     func updateCache(_ cache: inout CacheData, subviews: Subviews) {
@@ -42,10 +41,6 @@ struct FlowLayout: Layout {
         let available = min(proposed, maxPrimaryDimension)
 
         let lines = computeLines(sizes: sizes, available: available)
-        cache.lines = lines
-
-        let visualLines = reverseLines ? lines.reversed().map { $0 } : lines
-        gridInfoRef?.update(lines: visualLines, isHorizontal: isHorizontal)
 
         return totalSize(lines: lines, sizes: sizes)
     }
@@ -55,7 +50,10 @@ struct FlowLayout: Layout {
 
         let sizes = cache.sizes.isEmpty ? subviews.map { $0.sizeThatFits(.unspecified) } : cache.sizes
         let boundsAvailable = isHorizontal ? bounds.width : bounds.height
-        let lines = cache.lines.isEmpty ? computeLines(sizes: sizes, available: min(boundsAvailable, maxPrimaryDimension)) : cache.lines
+        let lines = computeLines(sizes: sizes, available: min(boundsAvailable, maxPrimaryDimension))
+
+        let visualLines = reverseLines ? lines.reversed().map { $0 } : lines
+        gridInfoRef?.update(lines: visualLines, isHorizontal: isHorizontal)
 
         var lineCrossExtents: [CGFloat] = []
         for line in lines {

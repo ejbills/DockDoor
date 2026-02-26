@@ -114,8 +114,8 @@ struct DockPreviewsSettingsView: View {
 
                 Toggle(isOn: $enableCmdRightClickQuit) { Text("CMD + Right Click on dock icon to quit app") }
 
-                Toggle(isOn: $quitAppOnWindowClose) { Text("Quit app when closing its last window") }
-                Text("Clicking the close button on a window preview will quit the app instead of just closing the window. Useful as a replacement for Swift Quit.")
+                Toggle(isOn: $quitAppOnWindowClose) { Text("Quit app when closing window from preview") }
+                Text("Clicking the close button on a window preview will quit the app instead of just closing the window. Hold Option to force quit. Useful as a replacement for Swift Quit.")
                     .font(.caption)
                     .foregroundColor(.secondary)
                     .padding(.leading, 20)
