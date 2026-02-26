@@ -572,7 +572,6 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         mouseLocation: CGPoint?,
         mouseScreen: NSScreen?,
         dockItemElement: AXUIElement?,
-        dockIconRect: CGRect?,
         centeredHoverWindowState: PreviewStateCoordinator.WindowState?,
         onWindowTap: (() -> Void)?,
         bundleIdentifier: String?,
@@ -583,6 +582,14 @@ final class SharedPreviewWindowCoordinator: NSPanel {
     ) {
         let elapsed = renderStartTime.map { (CFAbsoluteTimeGetCurrent() - $0) * 1000 } ?? 0
         DebugLogger.log("PreviewRender", details: "performDisplay start (+\(String(format: "%.1f", elapsed))ms)")
+
+        var dockIconRect: CGRect?
+        if let dockItemElement,
+           let pos = try? dockItemElement.position(),
+           let size = try? dockItemElement.size()
+        {
+            dockIconRect = CGRect(origin: pos, size: size)
+        }
 
         let screen = mouseScreen ?? NSScreen.main!
         var finalEmbeddedContentType: EmbeddedContentType = .none
@@ -831,15 +838,6 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         let renderStartTime = CFAbsoluteTimeGetCurrent()
         DebugLogger.log("PreviewRender", details: "showWindow called: \(windows.count) windows for \(appName)")
 
-        // Capture dock icon rect off main thread before dispatching
-        var dockIconRect: CGRect?
-        if let dockItemElement,
-           let pos = try? dockItemElement.position(),
-           let size = try? dockItemElement.size()
-        {
-            dockIconRect = CGRect(origin: pos, size: size)
-        }
-
         let shouldSkipDelay = overrideDelay || (Defaults[.useDelayOnlyForInitialOpen] && isVisible)
         let delay = shouldSkipDelay ? 0 : Defaults[.hoverWindowOpenDelay]
 
@@ -877,7 +875,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
             }
 
             Task { @MainActor [weak self] in
-                self?.performDisplay(appName: appName, windows: windows, mouseLocation: mouseLocation, mouseScreen: mouseScreen, dockItemElement: dockItemElement, dockIconRect: dockIconRect, centeredHoverWindowState: centeredHoverWindowState, onWindowTap: onWindowTap, bundleIdentifier: bundleIdentifier, dockPositionOverride: dockPositionOverride, initialIndex: initialIndex, dockItemFrameOverride: dockItemFrameOverride, renderStartTime: renderStartTime)
+                self?.performDisplay(appName: appName, windows: windows, mouseLocation: mouseLocation, mouseScreen: mouseScreen, dockItemElement: dockItemElement, centeredHoverWindowState: centeredHoverWindowState, onWindowTap: onWindowTap, bundleIdentifier: bundleIdentifier, dockPositionOverride: dockPositionOverride, initialIndex: initialIndex, dockItemFrameOverride: dockItemFrameOverride, renderStartTime: renderStartTime)
             }
         }
 
