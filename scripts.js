@@ -1,5 +1,20 @@
 // DockDoor Website JavaScript
 
+// Fraud warning banner
+(function() {
+    var banner = document.createElement('div');
+    banner.id = 'fraud-banner';
+    banner.style.cssText = 'position:sticky;top:0;z-index:10000;background:#1a0608;border-bottom:1.5px solid #ff453a;padding:14px 24px;text-align:center;font-size:14px;color:rgba(255,255,255,0.9);letter-spacing:-0.01em;line-height:1.5;';
+    banner.innerHTML = '<strong style="color:#ff453a">Warning:</strong> A fraudulent copy of DockDoor is being sold on the Mac App Store by "\u9a73\u519b \u674e." DockDoor is free and always will be\u200a—\u200aget it on <a href="https://github.com/ejbills/DockDoor" style="color:#2997ff;text-decoration:underline" target="_blank" rel="noopener">GitHub</a>. Already paid? <a href="https://support.apple.com/en-us/118223" style="color:#2997ff;text-decoration:underline" target="_blank" rel="noopener">Request a refund from Apple</a>.';
+    document.body.prepend(banner);
+    var header = document.querySelector('header');
+    if (header) {
+        var sync = function() { header.style.top = banner.offsetHeight + 'px'; };
+        sync();
+        window.addEventListener('resize', sync);
+    }
+})();
+
 // Wait for DOM to be fully loaded
 document.addEventListener('DOMContentLoaded', function() {
     // Mobile menu toggle
