@@ -68,6 +68,9 @@ struct WindowPreviewHoverContainer: View {
 
     @Default(.windowTitlePosition) var windowTitlePosition
     @Default(.aeroShakeAction) var aeroShakeAction
+    @Default(.previewMaxColumns) var previewMaxColumns
+    @Default(.previewMaxRows) var previewMaxRows
+    @Default(.switcherMaxRows) var switcherMaxRows
     @Default(.gradientColorPalette) var gradientColorPalette
     @Default(.showAnimations) var showAnimations
     @Default(.enableMouseHoverInSwitcher) var enableMouseHoverInSwitcher
@@ -257,18 +260,26 @@ struct WindowPreviewHoverContainer: View {
     private func windowGridContent() -> some View {
         let calculatedMaxDimension = previewStateCoordinator.overallMaxPreviewDimension
         let calculatedDimensionsMap = previewStateCoordinator.windowDimensionsMap
-        let layoutIsHorizontal = previewStateCoordinator.windowSwitcherActive || dockPosition.isHorizontalFlow
-        let scrollAxisIsVertical = layoutIsHorizontal
+        let isCmdTab = dockPosition == .cmdTab
+        let orientationIsHorizontal: Bool = previewStateCoordinator.windowSwitcherActive || dockPosition.isHorizontalFlow
+
+        let scrollVertically: Bool = if isCmdTab {
+            false // Cmd+Tab is always one horizontal row with horizontal scroll
+        } else if previewStateCoordinator.windowSwitcherActive {
+            Defaults[.windowSwitcherScrollDirection] == .vertical
+        } else {
+            Defaults[.dockPreviewScrollDirection] == .vertical
+        }
 
         ScrollViewReader { scrollProxy in
             buildFlowStack(
                 scrollProxy: scrollProxy,
-                layoutIsHorizontal: layoutIsHorizontal,
-                scrollAxisIsVertical: scrollAxisIsVertical,
+                orientationIsHorizontal,
+                scrollVertically: scrollVertically,
                 currentMaxDimensionForPreviews: calculatedMaxDimension,
                 currentDimensionsMapForPreviews: calculatedDimensionsMap
             )
-            .fadeOnEdges(axis: shouldUseCompactMode ? .vertical : (scrollAxisIsVertical ? .vertical : .horizontal), fadeLength: 20)
+            .fadeOnEdges(axis: shouldUseCompactMode ? .vertical : (scrollVertically ? .vertical : .horizontal), fadeLength: 20)
             .padding(.top, (!previewStateCoordinator.windowSwitcherActive && effectiveAppNameStyle == .default && effectiveShowAppName) ? 25 : 0)
             .overlay(alignment: effectiveAppNameStyle == .popover ? .top : .topLeading) {
                 hoverTitleBaseView(labelSize: measureString(appName, fontSize: 14))
@@ -305,7 +316,7 @@ struct WindowPreviewHoverContainer: View {
             }
             .overlay {
                 if enableMouseHoverInSwitcher, previewStateCoordinator.windowSwitcherActive {
-                    edgeScrollZones(isHorizontal: !scrollAxisIsVertical)
+                    edgeScrollZones(isHorizontal: !scrollVertically)
                 }
             }
         }
@@ -622,89 +633,71 @@ struct WindowPreviewHoverContainer: View {
     @ViewBuilder
     private func buildFlowStack(
         scrollProxy: ScrollViewProxy,
-        layoutIsHorizontal: Bool,
-        scrollAxisIsVertical: Bool,
+        _ isHorizontal: Bool,
+        scrollVertically: Bool,
         currentMaxDimensionForPreviews: CGPoint,
         currentDimensionsMapForPreviews: [Int: WindowDimensions]
     ) -> some View {
-        ScrollView(shouldUseCompactMode ? .vertical : (scrollAxisIsVertical ? .vertical : .horizontal), showsIndicators: false) {
+        ScrollView(shouldUseCompactMode ? .vertical : (scrollVertically ? .vertical : .horizontal), showsIndicators: false) {
             Group {
+                // Show no results view when search is active and no results found
                 if shouldShowNoResultsView() {
                     noResultsView()
                 } else if shouldUseCompactMode {
+                    // Compact mode: simple vertical list
                     LazyVStack(spacing: 4) {
                         ForEach(createFlowItems(), id: \.id) { item in
                             buildFlowItem(
                                 item: item,
-                                isHorizontal: layoutIsHorizontal,
+                                isHorizontal: isHorizontal,
                                 currentMaxDimensionForPreviews: currentMaxDimensionForPreviews,
                                 currentDimensionsMapForPreviews: currentDimensionsMapForPreviews
                             )
                         }
                     }
+                } else if isHorizontal {
+                    let chunkedItems = createChunkedItems()
+                    LazyVStack(alignment: .leading, spacing: 24) {
+                        ForEach(Array(chunkedItems.enumerated()), id: \.offset) { index, rowItems in
+                            LazyHStack(spacing: 24) {
+                                ForEach(rowItems, id: \.id) { item in
+                                    buildFlowItem(
+                                        item: item,
+                                        isHorizontal: isHorizontal,
+                                        currentMaxDimensionForPreviews: currentMaxDimensionForPreviews,
+                                        currentDimensionsMapForPreviews: currentDimensionsMapForPreviews
+                                    )
+                                }
+                            }
+                        }
+                    }
                 } else {
-                    flowLayoutContent(
-                        layoutIsHorizontal: layoutIsHorizontal,
-                        currentMaxDimensionForPreviews: currentMaxDimensionForPreviews,
-                        currentDimensionsMapForPreviews: currentDimensionsMapForPreviews
-                    )
+                    let chunkedItems = createChunkedItems()
+                    LazyHStack(alignment: .top, spacing: 24) {
+                        ForEach(Array(chunkedItems.enumerated()), id: \.offset) { index, colItems in
+                            LazyVStack(spacing: 24) {
+                                ForEach(colItems, id: \.id) { item in
+                                    buildFlowItem(
+                                        item: item,
+                                        isHorizontal: isHorizontal,
+                                        currentMaxDimensionForPreviews: currentMaxDimensionForPreviews,
+                                        currentDimensionsMapForPreviews: currentDimensionsMapForPreviews
+                                    )
+                                }
+                            }
+                        }
+                    }
                 }
             }
             .frame(alignment: .topLeading)
-            .globalPadding(HoverContainerPadding.contentInner)
+            .globalPadding(20)
         }
-        .padding(HoverContainerPadding.scrollOuter)
+        .padding(2)
         .animation(showAnimations ? .smooth(duration: 0.1) : nil, value: previewStateCoordinator.windows)
         .onChange(of: previewStateCoordinator.currIndex) { newIndex in
             guard previewStateCoordinator.shouldScrollToIndex else { return }
 
             scrollProxy.scrollTo("\(appName)-\(newIndex)", anchor: .center)
-        }
-    }
-
-    @ViewBuilder
-    private func flowLayoutContent(
-        layoutIsHorizontal: Bool,
-        currentMaxDimensionForPreviews: CGPoint,
-        currentDimensionsMapForPreviews: [Int: WindowDimensions]
-    ) -> some View {
-        let flowItems = createFlowItems()
-        let rawMaxItems: Int = if previewStateCoordinator.windowSwitcherActive {
-            Defaults[.switcherMaxItemsPerLine]
-        } else {
-            Defaults[.dockPreviewMaxItemsPerLine]
-        }
-
-        let maxItemsPerLine: Int = if mockPreviewActive {
-            1
-        } else if rawMaxItems > 0 {
-            rawMaxItems
-        } else {
-            Int.max
-        }
-
-        let shouldReverse = (dockPosition == .bottom || dockPosition == .right)
-            && !previewStateCoordinator.windowSwitcherActive
-
-        let screenSize = bestGuessMonitor.visibleFrame.size
-        let maxPrimaryDimension = (layoutIsHorizontal ? screenSize.width : screenSize.height) - HoverContainerPadding.totalPerSide() * 2
-
-        FlowLayout(
-            isHorizontal: layoutIsHorizontal,
-            spacing: 24,
-            maxItemsPerLine: maxItemsPerLine,
-            reverseLines: shouldReverse,
-            gridInfoRef: previewStateCoordinator.gridInfo,
-            maxPrimaryDimension: maxPrimaryDimension
-        ) {
-            ForEach(flowItems, id: \.id) { item in
-                buildFlowItem(
-                    item: item,
-                    isHorizontal: layoutIsHorizontal,
-                    currentMaxDimensionForPreviews: currentMaxDimensionForPreviews,
-                    currentDimensionsMapForPreviews: currentDimensionsMapForPreviews
-                )
-            }
         }
     }
 
@@ -989,6 +982,52 @@ struct WindowPreviewHoverContainer: View {
         }
 
         return allItems
+    }
+
+    private func createChunkedItems() -> [[FlowItem]] {
+        let isHorizontal: Bool = previewStateCoordinator.windowSwitcherActive || dockPosition.isHorizontalFlow
+
+        var itemsToProcess: [FlowItem] = []
+
+        if embeddedContentType != .none {
+            itemsToProcess.append(.embedded)
+        }
+
+        for index in filteredWindowIndices() {
+            itemsToProcess.append(.window(index))
+        }
+
+        var (maxColumns, maxRows) = WindowPreviewHoverContainer.calculateEffectiveMaxColumnsAndRows(
+            bestGuessMonitor: bestGuessMonitor,
+            overallMaxDimensions: previewStateCoordinator.overallMaxPreviewDimension,
+            dockPosition: dockPosition,
+            isWindowSwitcherActive: previewStateCoordinator.windowSwitcherActive,
+            previewMaxColumns: previewMaxColumns,
+            previewMaxRows: previewMaxRows,
+            switcherMaxRows: switcherMaxRows,
+            totalItems: itemsToProcess.count
+        )
+
+        guard maxColumns > 0, maxRows > 0 else {
+            return itemsToProcess.isEmpty ? [[]] : [itemsToProcess]
+        }
+
+        if mockPreviewActive {
+            maxRows = 1
+            maxColumns = 1
+        }
+
+        let shouldReverse = (dockPosition == .bottom || dockPosition == .right) && !previewStateCoordinator.windowSwitcherActive
+
+        let chunks = WindowPreviewHoverContainer.chunkArray(
+            items: itemsToProcess,
+            isHorizontal: isHorizontal,
+            maxColumns: maxColumns,
+            maxRows: maxRows,
+            reverse: shouldReverse
+        )
+
+        return chunks.isEmpty ? [[]] : chunks
     }
 
     @ViewBuilder

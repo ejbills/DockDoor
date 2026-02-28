@@ -9,7 +9,8 @@ struct WindowSwitcherAppearanceSection: View {
     @Default(.switcherEnabledTrafficLightButtons) var switcherEnabledTrafficLightButtons
     @Default(.switcherUseMonochromeTrafficLights) var switcherUseMonochromeTrafficLights
     @Default(.switcherDisableDockStyleTrafficLights) var switcherDisableDockStyleTrafficLights
-    @Default(.switcherMaxItemsPerLine) var switcherMaxItemsPerLine
+    @Default(.switcherMaxRows) var switcherMaxRows
+    @Default(.windowSwitcherScrollDirection) var windowSwitcherScrollDirection
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -80,15 +81,23 @@ struct WindowSwitcherAppearanceSection: View {
             Divider().padding(.vertical, 2)
             Text("Preview Layout (Switcher)").font(.headline).padding(.bottom, -2)
 
+            Picker("Scroll Direction", selection: $windowSwitcherScrollDirection) {
+                ForEach(WindowSwitcherScrollDirection.allCases, id: \.self) { direction in
+                    Text(direction.localizedName).tag(direction)
+                }
+            }
+
             VStack(alignment: .leading, spacing: 4) {
-                let maxItemsBinding = Binding<Double>(
-                    get: { Double(switcherMaxItemsPerLine) },
-                    set: { switcherMaxItemsPerLine = Int($0) }
+                let switcherMaxRowsBinding = Binding<Double>(
+                    get: { Double(switcherMaxRows) },
+                    set: { switcherMaxRows = Int($0) }
                 )
                 sliderSetting(
-                    title: "Max Items Per Row",
-                    value: maxItemsBinding,
-                    range: 0.0 ... 8.0,
+                    title: windowSwitcherScrollDirection == .horizontal
+                        ? "Max Rows"
+                        : "Max Columns",
+                    value: switcherMaxRowsBinding,
+                    range: 1.0 ... 8.0,
                     step: 1.0,
                     unit: "",
                     formatter: {
@@ -99,9 +108,9 @@ struct WindowSwitcherAppearanceSection: View {
                     }()
                 )
 
-                Text(switcherMaxItemsPerLine == 0
-                    ? String(localized: "Auto: items per row determined by available screen space.")
-                    : String(localized: "Limits the number of window previews per row in the window switcher."))
+                Text(windowSwitcherScrollDirection == .horizontal
+                    ? String(localized: "Controls how many rows of windows are shown in the window switcher. Windows are distributed across rows automatically.")
+                    : String(localized: "Controls how many columns of windows are shown in the window switcher. Windows are distributed across columns automatically."))
                     .font(.caption)
                     .foregroundColor(.secondary)
             }

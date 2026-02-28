@@ -11,7 +11,8 @@ struct DockPreviewAppearanceSection: View {
     @Default(.disableDockStyleTitles) var disableDockStyleTitles
     @Default(.disableDockStyleTrafficLights) var disableDockStyleTrafficLights
     @Default(.useEmbeddedDockPreviewElements) var useEmbeddedDockPreviewElements
-    @Default(.dockPreviewMaxItemsPerLine) var dockPreviewMaxItemsPerLine
+    @Default(.previewMaxColumns) var previewMaxColumns
+    @Default(.previewMaxRows) var previewMaxRows
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -95,14 +96,14 @@ struct DockPreviewAppearanceSection: View {
             }
 
             VStack(alignment: .leading, spacing: 4) {
-                let maxItemsBinding = Binding<Double>(
-                    get: { Double(dockPreviewMaxItemsPerLine) },
-                    set: { dockPreviewMaxItemsPerLine = Int($0) }
+                let previewMaxRowsBinding = Binding<Double>(
+                    get: { Double(previewMaxRows) },
+                    set: { previewMaxRows = Int($0) }
                 )
                 sliderSetting(
-                    title: "Max Items Per Line",
-                    value: maxItemsBinding,
-                    range: 0.0 ... 8.0,
+                    title: "Max Rows (Bottom Dock)",
+                    value: previewMaxRowsBinding,
+                    range: 1.0 ... 8.0,
                     step: 1.0,
                     unit: "",
                     formatter: {
@@ -113,9 +114,25 @@ struct DockPreviewAppearanceSection: View {
                     }()
                 )
 
-                Text(dockPreviewMaxItemsPerLine == 0
-                    ? String(localized: "Auto: items per line determined by available screen space.")
-                    : String(localized: "Limits the number of window previews per line in dock previews."))
+                let previewMaxColumnsBinding = Binding<Double>(
+                    get: { Double(previewMaxColumns) },
+                    set: { previewMaxColumns = Int($0) }
+                )
+                sliderSetting(
+                    title: "Max Columns (Left/Right Dock)",
+                    value: previewMaxColumnsBinding,
+                    range: 1.0 ... 8.0,
+                    step: 1.0,
+                    unit: "",
+                    formatter: {
+                        let f = NumberFormatter()
+                        f.minimumFractionDigits = 0
+                        f.maximumFractionDigits = 0
+                        return f
+                    }()
+                )
+
+                Text(String(localized: "Controls how many rows/columns of windows are shown in dock previews. Only the relevant setting applies based on dock position."))
                     .font(.caption)
                     .foregroundColor(.secondary)
             }

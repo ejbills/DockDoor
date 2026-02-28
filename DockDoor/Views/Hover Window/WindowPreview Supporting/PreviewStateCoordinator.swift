@@ -6,8 +6,6 @@ class PreviewStateCoordinator: ObservableObject {
     @Published var currIndex: Int = -1
     @Published var windowSwitcherActive: Bool = false
 
-    let gridInfo = GridInfoRef()
-
     // MARK: - Keybind Session Tracking
 
     /// Tracks whether the window switcher was activated via keybind (not just visible)
@@ -254,7 +252,10 @@ class PreviewStateCoordinator: ObservableObject {
             overallMaxDimensions: newOverallMaxDimension,
             bestGuessMonitor: bestGuessMonitor,
             dockPosition: dockPosition,
-            isWindowSwitcherActive: windowSwitcherActive
+            isWindowSwitcherActive: windowSwitcherActive,
+            previewMaxColumns: Defaults[.previewMaxColumns],
+            previewMaxRows: Defaults[.previewMaxRows],
+            switcherMaxRows: Defaults[.switcherMaxRows]
         )
 
         overallMaxPreviewDimension = newOverallMaxDimension
@@ -293,6 +294,7 @@ class PreviewStateCoordinator: ObservableObject {
 
     // MARK: - Keyboard Navigation
 
+    /// Cycle to the next window in the grid
     @MainActor
     func cycleForward() {
         guard !windows.isEmpty else { return }
@@ -308,18 +310,17 @@ class PreviewStateCoordinator: ObservableObject {
             return
         }
 
-        let flatIndices = gridInfo.lines.flatMap { $0 }
-        guard !flatIndices.isEmpty else {
-            currIndex = (currIndex + 1) % windows.count
-            return
-        }
-        if let pos = flatIndices.firstIndex(of: currIndex) {
-            currIndex = flatIndices[(pos + 1) % flatIndices.count]
-        } else {
-            currIndex = flatIndices.first ?? 0
-        }
+        let forwardDirection: ArrowDirection = Defaults[.windowSwitcherScrollDirection] == .vertical ? .down : .right
+        currIndex = WindowPreviewHoverContainer.navigateWindowSwitcher(
+            from: currIndex,
+            direction: forwardDirection,
+            totalItems: windows.count,
+            dockPosition: .bottom,
+            isWindowSwitcherActive: true
+        )
     }
 
+    /// Cycle to the previous window in the grid
     @MainActor
     func cycleBackward() {
         guard !windows.isEmpty else { return }
@@ -335,16 +336,14 @@ class PreviewStateCoordinator: ObservableObject {
             return
         }
 
-        let flatIndices = gridInfo.lines.flatMap { $0 }
-        guard !flatIndices.isEmpty else {
-            currIndex = (currIndex - 1 + windows.count) % windows.count
-            return
-        }
-        if let pos = flatIndices.firstIndex(of: currIndex) {
-            currIndex = flatIndices[(pos - 1 + flatIndices.count) % flatIndices.count]
-        } else {
-            currIndex = flatIndices.last ?? (windows.count - 1)
-        }
+        let backwardDirection: ArrowDirection = Defaults[.windowSwitcherScrollDirection] == .vertical ? .up : .left
+        currIndex = WindowPreviewHoverContainer.navigateWindowSwitcher(
+            from: currIndex,
+            direction: backwardDirection,
+            totalItems: windows.count,
+            dockPosition: .bottom,
+            isWindowSwitcherActive: true
+        )
     }
 
     @MainActor
@@ -385,6 +384,7 @@ class PreviewStateCoordinator: ObservableObject {
         }
     }
 
+    /// Navigate within filtered results using arrow direction
     @MainActor
     func navigateFiltered(direction: ArrowDirection) {
         let filtered = filteredWindowIndices()
@@ -396,100 +396,20 @@ class PreviewStateCoordinator: ObservableObject {
             return
         }
 
-        let delta: Int = (direction == .right || direction == .down) ? 1 : -1
-        let newFilteredPos = (currentFilteredPos + delta + filtered.count) % filtered.count
+        let newFilteredPos = WindowPreviewHoverContainer.navigateWindowSwitcher(
+            from: currentFilteredPos,
+            direction: direction,
+            totalItems: filtered.count,
+            dockPosition: .bottom,
+            isWindowSwitcherActive: true
+        )
+
         currIndex = filtered[newFilteredPos]
-    }
-
-    @MainActor
-    func navigateGrid(direction: ArrowDirection) {
-        guard !windows.isEmpty else { return }
-
-        shouldScrollToIndex = true
-
-        let lines = gridInfo.lines
-        let isHoriz = gridInfo.isHorizontal
-        guard !lines.isEmpty else {
-            let delta = (direction == .right || direction == .down) ? 1 : -1
-            if currIndex < 0 {
-                currIndex = delta > 0 ? 0 : windows.count - 1
-            } else {
-                currIndex = (currIndex + delta + windows.count) % windows.count
-            }
-            return
-        }
-
-        var lineIdx = 0
-        var posInLine = 0
-        var found = false
-        for (li, line) in lines.enumerated() {
-            if let pi = line.firstIndex(of: currIndex) {
-                lineIdx = li
-                posInLine = pi
-                found = true
-                break
-            }
-        }
-        if !found {
-            currIndex = lines.first?.first ?? 0
-            return
-        }
-
-        let isWithinLine: Bool
-        let isForward: Bool
-
-        if isHoriz {
-            switch direction {
-            case .left:
-                isWithinLine = true; isForward = false
-            case .right:
-                isWithinLine = true; isForward = true
-            case .up:
-                isWithinLine = false; isForward = false
-            case .down:
-                isWithinLine = false; isForward = true
-            }
-        } else {
-            switch direction {
-            case .up:
-                isWithinLine = true; isForward = false
-            case .down:
-                isWithinLine = true; isForward = true
-            case .left:
-                isWithinLine = false; isForward = false
-            case .right:
-                isWithinLine = false; isForward = true
-            }
-        }
-
-        if isWithinLine {
-            if isForward {
-                posInLine += 1
-                if posInLine >= lines[lineIdx].count {
-                    lineIdx = (lineIdx + 1) % lines.count
-                    posInLine = 0
-                }
-            } else {
-                posInLine -= 1
-                if posInLine < 0 {
-                    lineIdx = (lineIdx - 1 + lines.count) % lines.count
-                    posInLine = lines[lineIdx].count - 1
-                }
-            }
-        } else {
-            if isForward {
-                lineIdx = (lineIdx + 1) % lines.count
-            } else {
-                lineIdx = (lineIdx - 1 + lines.count) % lines.count
-            }
-            posInLine = min(posInLine, lines[lineIdx].count - 1)
-        }
-
-        currIndex = lines[lineIdx][posInLine]
     }
 
     // MARK: - Window Switcher Initialization
 
+    /// Initialize for window switcher keybind activation
     @MainActor
     func initializeForWindowSwitcher(with newWindows: [WindowInfo], dockPosition: DockPosition, bestGuessMonitor: NSScreen) {
         setWindows(newWindows, dockPosition: dockPosition, bestGuessMonitor: bestGuessMonitor)

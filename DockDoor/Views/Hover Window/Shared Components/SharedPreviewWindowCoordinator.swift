@@ -800,7 +800,15 @@ final class SharedPreviewWindowCoordinator: NSPanel {
             return
         }
 
-        coordinator.navigateGrid(direction: direction)
+        let dockPosition = DockUtils.getDockPosition()
+        let newIndex = WindowPreviewHoverContainer.navigateWindowSwitcher(
+            from: coordinator.currIndex,
+            direction: direction,
+            totalItems: coordinator.windows.count,
+            dockPosition: dockPosition,
+            isWindowSwitcherActive: coordinator.windowSwitcherActive
+        )
+        coordinator.setIndex(to: newIndex)
     }
 
     @MainActor
