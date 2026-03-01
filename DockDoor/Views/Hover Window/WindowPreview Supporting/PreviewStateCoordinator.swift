@@ -258,8 +258,7 @@ class PreviewStateCoordinator: ObservableObject {
             previewMaxColumns: Defaults[.previewMaxColumns],
             previewMaxRows: Defaults[.previewMaxRows],
             switcherMaxRows: Defaults[.switcherMaxRows],
-            totalItems: windows.count,
-            windows: windows
+            totalItems: windows.count
         )
 
         let newDimensionsMap = WindowPreviewHoverContainer.precomputeWindowDimensions(
@@ -277,37 +276,66 @@ class PreviewStateCoordinator: ObservableObject {
         effectiveGridColumns = cols
         effectiveGridRows = rows
 
-        let isHorizontalFlow = windowSwitcherActive || dockPosition.isHorizontalFlow
-        let totalItems = windows.count
-        let itemSpacing: CGFloat = 24
-        let globalPadding = HoverContainerPadding.totalPerSide() * 2
-
-        if totalItems > 0 {
-            let visibleColumns: Int
-            let visibleRows: Int
-
-            if isHorizontalFlow {
-                let actualRows = min(rows, Int(ceil(Double(totalItems) / Double(max(1, cols)))))
-                let itemsPerRow = Int(ceil(Double(totalItems) / Double(max(1, actualRows))))
-                visibleColumns = min(itemsPerRow, totalItems)
-                visibleRows = actualRows
-            } else {
-                let actualColumns = min(cols, Int(ceil(Double(totalItems) / Double(max(1, rows)))))
-                let itemsPerColumn = Int(ceil(Double(totalItems) / Double(max(1, actualColumns))))
-                visibleColumns = actualColumns
-                visibleRows = min(itemsPerColumn, totalItems)
-            }
-
-            var width = CGFloat(visibleColumns) * newOverallMaxDimension.x + CGFloat(max(0, visibleColumns - 1)) * itemSpacing + globalPadding
-            var height = CGFloat(visibleRows) * newOverallMaxDimension.y + CGFloat(max(0, visibleRows - 1)) * itemSpacing + globalPadding
-
-            let screenFrame = bestGuessMonitor.visibleFrame
-            width = min(width, screenFrame.width)
-            height = min(height, screenFrame.height)
-
-            expectedContentSize = CGSize(width: width, height: height)
+        if Defaults[.allowDynamicImageSizing], !windowSwitcherActive {
+            expectedContentSize = Self.computeExpectedContentSize(
+                windowCount: windows.count,
+                dimensionsMap: newDimensionsMap,
+                isHorizontal: dockPosition.isHorizontalFlow,
+                maxColumns: cols,
+                maxRows: rows
+            )
         } else {
             expectedContentSize = .zero
+        }
+    }
+
+    private static func computeExpectedContentSize(
+        windowCount: Int,
+        dimensionsMap: [Int: WindowPreviewHoverContainer.WindowDimensions],
+        isHorizontal: Bool,
+        maxColumns: Int,
+        maxRows: Int
+    ) -> CGSize {
+        guard windowCount > 0 else { return .zero }
+
+        let itemSpacing = HoverContainerPadding.itemSpacing
+        let padding = HoverContainerPadding.totalPerSide()
+
+        let chunks = WindowPreviewHoverContainer.chunkArray(
+            items: Array(0 ..< windowCount),
+            isHorizontal: isHorizontal,
+            maxColumns: maxColumns,
+            maxRows: maxRows
+        )
+
+        if isHorizontal {
+            var maxRowWidth: CGFloat = 0
+
+            for row in chunks {
+                var rowWidth: CGFloat = 0
+                for windowIndex in row {
+                    let dims = dimensionsMap[windowIndex]
+                    rowWidth += dims?.size.width ?? dims?.maxDimensions.width ?? 0
+                }
+                rowWidth += CGFloat(max(0, row.count - 1)) * itemSpacing
+                maxRowWidth = max(maxRowWidth, rowWidth)
+            }
+
+            return CGSize(width: maxRowWidth + padding * 2, height: 0)
+        } else {
+            var maxColHeight: CGFloat = 0
+
+            for col in chunks {
+                var colHeight: CGFloat = 0
+                for windowIndex in col {
+                    let dims = dimensionsMap[windowIndex]
+                    colHeight += dims?.size.height ?? dims?.maxDimensions.height ?? 0
+                }
+                colHeight += CGFloat(max(0, col.count - 1)) * itemSpacing
+                maxColHeight = max(maxColHeight, colHeight)
+            }
+
+            return CGSize(width: 0, height: maxColHeight + padding * 2)
         }
     }
 

@@ -6,6 +6,7 @@ enum HoverContainerPadding {
     static let dockStyleOuter: CGFloat = 2
     static let scrollOuter: CGFloat = 2
     static let contentInner: CGFloat = 20
+    static let itemSpacing: CGFloat = 24
 
     static func totalPerSide(paddingMultiplier: CGFloat = Defaults[.globalPaddingMultiplier]) -> CGFloat {
         container + dockStyleOuter + scrollOuter + (contentInner * paddingMultiplier)

@@ -176,16 +176,11 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         let screen = NSScreen.screenContainingMouse(NSEvent.mouseLocation)
         let screenFrame = screen.frame
 
-        let newSize: CGSize
-        if !currentDockPosition.isHorizontalFlow {
-            let expectedSize = windowSwitcherCoordinator.expectedContentSize
-            newSize = CGSize(
-                width: max(fittingSize.width, expectedSize.width),
-                height: max(fittingSize.height, expectedSize.height)
-            )
-        } else {
-            newSize = fittingSize
-        }
+        let expectedSize = windowSwitcherCoordinator.expectedContentSize
+        let newSize = CGSize(
+            width: expectedSize.width > 0 ? expectedSize.width : fittingSize.width,
+            height: expectedSize.height > 0 ? expectedSize.height : fittingSize.height
+        )
         guard newSize != frame.size else { return }
 
         let wasClampedToTop = frame.maxY >= screenFrame.maxY - 1
@@ -326,15 +321,11 @@ final class SharedPreviewWindowCoordinator: NSPanel {
             DebugLogger.log("PreviewRender", details: "fittingSize done: \(fittingSize) (+\(String(format: "%.1f", elapsed))ms)")
 
             let dockPos = dockPositionOverride ?? DockUtils.getDockPosition()
-            if !dockPos.isHorizontalFlow {
-                let expectedSize = windowSwitcherCoordinator.expectedContentSize
-                newHoverWindowSize = CGSize(
-                    width: max(fittingSize.width, expectedSize.width),
-                    height: max(fittingSize.height, expectedSize.height)
-                )
-            } else {
-                newHoverWindowSize = fittingSize
-            }
+            let expectedSize = windowSwitcherCoordinator.expectedContentSize
+            newHoverWindowSize = CGSize(
+                width: expectedSize.width > 0 ? expectedSize.width : fittingSize.width,
+                height: expectedSize.height > 0 ? expectedSize.height : fittingSize.height
+            )
         }
 
         let position: CGPoint

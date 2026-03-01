@@ -659,9 +659,9 @@ struct WindowPreviewHoverContainer: View {
                     }
                 } else if isHorizontal {
                     let chunkedItems = createChunkedItems()
-                    LazyVStack(alignment: .leading, spacing: 24) {
+                    LazyVStack(alignment: .leading, spacing: HoverContainerPadding.itemSpacing) {
                         ForEach(Array(chunkedItems.enumerated()), id: \.offset) { index, rowItems in
-                            LazyHStack(spacing: 24) {
+                            LazyHStack(spacing: HoverContainerPadding.itemSpacing) {
                                 ForEach(rowItems, id: \.id) { item in
                                     buildFlowItem(
                                         item: item,
@@ -675,9 +675,9 @@ struct WindowPreviewHoverContainer: View {
                     }
                 } else {
                     let chunkedItems = createChunkedItems()
-                    LazyHStack(alignment: .top, spacing: 24) {
+                    LazyHStack(alignment: .top, spacing: HoverContainerPadding.itemSpacing) {
                         ForEach(Array(chunkedItems.enumerated()), id: \.offset) { index, colItems in
-                            LazyVStack(spacing: 24) {
+                            LazyVStack(spacing: HoverContainerPadding.itemSpacing) {
                                 ForEach(colItems, id: \.id) { item in
                                     buildFlowItem(
                                         item: item,
@@ -1003,8 +1003,16 @@ struct WindowPreviewHoverContainer: View {
             itemsToProcess.append(.window(index))
         }
 
-        var maxColumns = previewStateCoordinator.effectiveGridColumns
-        var maxRows = previewStateCoordinator.effectiveGridRows
+        var (maxColumns, maxRows) = WindowPreviewHoverContainer.calculateEffectiveMaxColumnsAndRows(
+            bestGuessMonitor: bestGuessMonitor,
+            overallMaxDimensions: previewStateCoordinator.overallMaxPreviewDimension,
+            dockPosition: dockPosition,
+            isWindowSwitcherActive: previewStateCoordinator.windowSwitcherActive,
+            previewMaxColumns: previewMaxColumns,
+            previewMaxRows: previewMaxRows,
+            switcherMaxRows: switcherMaxRows,
+            totalItems: itemsToProcess.count
+        )
 
         guard maxColumns > 0, maxRows > 0 else {
             return itemsToProcess.isEmpty ? [[]] : [itemsToProcess]

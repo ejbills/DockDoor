@@ -222,7 +222,7 @@ struct WindowPreview: View {
         .animation(showAnimations ? .easeInOut(duration: 0.15) : nil, value: inactive)
         .clipShape(RoundedRectangle(cornerRadius: CardRadius.image, style: .continuous))
         .dynamicWindowFrame(
-            allowDynamicSizing: allowDynamicImageSizing,
+            allowDynamicSizing: allowDynamicImageSizing && !windowSwitcherActive,
             dimensions: dimensions,
             dockPosition: dockPosition,
             windowSwitcherActive: windowSwitcherActive
