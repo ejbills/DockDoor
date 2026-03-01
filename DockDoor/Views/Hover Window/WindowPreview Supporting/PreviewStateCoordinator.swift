@@ -46,6 +46,9 @@ class PreviewStateCoordinator: ObservableObject {
 
     @Published var overallMaxPreviewDimension: CGPoint = .zero
     @Published var windowDimensionsMap: [Int: WindowPreviewHoverContainer.WindowDimensions] = [:]
+    @Published var effectiveGridColumns: Int = 1
+    @Published var effectiveGridRows: Int = 1
+    @Published var expectedContentSize: CGSize = .zero
     @Published var frameRefreshRequestId: UUID?
     private var lastKnownBestGuessMonitor: NSScreen?
 
@@ -247,19 +250,65 @@ class PreviewStateCoordinator: ObservableObject {
             sharedPanelWindowSize: panelSize
         )
 
+        let (cols, rows) = WindowPreviewHoverContainer.calculateEffectiveMaxColumnsAndRows(
+            bestGuessMonitor: bestGuessMonitor,
+            overallMaxDimensions: newOverallMaxDimension,
+            dockPosition: dockPosition,
+            isWindowSwitcherActive: windowSwitcherActive,
+            previewMaxColumns: Defaults[.previewMaxColumns],
+            previewMaxRows: Defaults[.previewMaxRows],
+            switcherMaxRows: Defaults[.switcherMaxRows],
+            totalItems: windows.count,
+            windows: windows
+        )
+
         let newDimensionsMap = WindowPreviewHoverContainer.precomputeWindowDimensions(
             windows: windows,
             overallMaxDimensions: newOverallMaxDimension,
             bestGuessMonitor: bestGuessMonitor,
             dockPosition: dockPosition,
             isWindowSwitcherActive: windowSwitcherActive,
-            previewMaxColumns: Defaults[.previewMaxColumns],
-            previewMaxRows: Defaults[.previewMaxRows],
-            switcherMaxRows: Defaults[.switcherMaxRows]
+            effectiveMaxColumns: cols,
+            effectiveMaxRows: rows
         )
 
         overallMaxPreviewDimension = newOverallMaxDimension
         windowDimensionsMap = newDimensionsMap
+        effectiveGridColumns = cols
+        effectiveGridRows = rows
+
+        let isHorizontalFlow = windowSwitcherActive || dockPosition.isHorizontalFlow
+        let totalItems = windows.count
+        let itemSpacing: CGFloat = 24
+        let globalPadding = HoverContainerPadding.totalPerSide() * 2
+
+        if totalItems > 0 {
+            let visibleColumns: Int
+            let visibleRows: Int
+
+            if isHorizontalFlow {
+                let actualRows = min(rows, Int(ceil(Double(totalItems) / Double(max(1, cols)))))
+                let itemsPerRow = Int(ceil(Double(totalItems) / Double(max(1, actualRows))))
+                visibleColumns = min(itemsPerRow, totalItems)
+                visibleRows = actualRows
+            } else {
+                let actualColumns = min(cols, Int(ceil(Double(totalItems) / Double(max(1, rows)))))
+                let itemsPerColumn = Int(ceil(Double(totalItems) / Double(max(1, actualColumns))))
+                visibleColumns = actualColumns
+                visibleRows = min(itemsPerColumn, totalItems)
+            }
+
+            var width = CGFloat(visibleColumns) * newOverallMaxDimension.x + CGFloat(max(0, visibleColumns - 1)) * itemSpacing + globalPadding
+            var height = CGFloat(visibleRows) * newOverallMaxDimension.y + CGFloat(max(0, visibleRows - 1)) * itemSpacing + globalPadding
+
+            let screenFrame = bestGuessMonitor.visibleFrame
+            width = min(width, screenFrame.width)
+            height = min(height, screenFrame.height)
+
+            expectedContentSize = CGSize(width: width, height: height)
+        } else {
+            expectedContentSize = .zero
+        }
     }
 
     @MainActor
@@ -310,7 +359,7 @@ class PreviewStateCoordinator: ObservableObject {
             return
         }
 
-        let forwardDirection: ArrowDirection = Defaults[.windowSwitcherScrollDirection] == .vertical ? .down : .right
+        let forwardDirection: ArrowDirection = .right
         currIndex = WindowPreviewHoverContainer.navigateWindowSwitcher(
             from: currIndex,
             direction: forwardDirection,
@@ -336,7 +385,7 @@ class PreviewStateCoordinator: ObservableObject {
             return
         }
 
-        let backwardDirection: ArrowDirection = Defaults[.windowSwitcherScrollDirection] == .vertical ? .up : .left
+        let backwardDirection: ArrowDirection = .left
         currIndex = WindowPreviewHoverContainer.navigateWindowSwitcher(
             from: currIndex,
             direction: backwardDirection,

@@ -47,6 +47,10 @@ class SettingsManager: NSObject, ObservableObject {
         settingsWindowController?.showWindow(nil)
         settingsWindowController?.window?.center()
         NSApp.activate(ignoringOtherApps: true)
+
+        DispatchQueue.main.async {
+            Task { await WindowUtil.updateNewWindowsForApp(.current) }
+        }
     }
 }
 
@@ -95,6 +99,10 @@ extension SettingsManager: NSWindowDelegate {
     }
 
     func windowWillClose(_ notification: Notification) {
+        if let window = notification.object as? NSWindow {
+            let windowID = CGWindowID(window.windowNumber)
+            WindowUtil.removeWindowFromDesktopSpaceCache(with: windowID, in: ProcessInfo.processInfo.processIdentifier)
+        }
         settingsWindowController?.window?.contentViewController = nil
         settingsWindowController = nil
         NSApp.setActivationPolicy(.accessory)

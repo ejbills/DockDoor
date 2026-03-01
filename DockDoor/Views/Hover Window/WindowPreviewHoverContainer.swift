@@ -260,26 +260,28 @@ struct WindowPreviewHoverContainer: View {
     private func windowGridContent() -> some View {
         let calculatedMaxDimension = previewStateCoordinator.overallMaxPreviewDimension
         let calculatedDimensionsMap = previewStateCoordinator.windowDimensionsMap
-        let isCmdTab = dockPosition == .cmdTab
-        let orientationIsHorizontal: Bool = previewStateCoordinator.windowSwitcherActive || dockPosition.isHorizontalFlow
-
-        let scrollVertically: Bool = if isCmdTab {
-            false // Cmd+Tab is always one horizontal row with horizontal scroll
-        } else if previewStateCoordinator.windowSwitcherActive {
-            Defaults[.windowSwitcherScrollDirection] == .vertical
+        let orientationIsHorizontal: Bool = if previewStateCoordinator.windowSwitcherActive {
+            true
         } else {
-            Defaults[.dockPreviewScrollDirection] == .vertical
+            dockPosition.isHorizontalFlow
+        }
+        let scrollAxis: Axis.Set = if shouldUseCompactMode {
+            .vertical
+        } else if previewStateCoordinator.windowSwitcherActive {
+            Defaults[.windowSwitcherScrollDirection] == .horizontal ? .horizontal : .vertical
+        } else {
+            orientationIsHorizontal ? .horizontal : .vertical
         }
 
         ScrollViewReader { scrollProxy in
             buildFlowStack(
                 scrollProxy: scrollProxy,
                 orientationIsHorizontal,
-                scrollVertically: scrollVertically,
+                scrollAxis: scrollAxis,
                 currentMaxDimensionForPreviews: calculatedMaxDimension,
                 currentDimensionsMapForPreviews: calculatedDimensionsMap
             )
-            .fadeOnEdges(axis: shouldUseCompactMode ? .vertical : (scrollVertically ? .vertical : .horizontal), fadeLength: 20)
+            .fadeOnEdges(axis: scrollAxis == .horizontal ? .horizontal : .vertical, fadeLength: 20)
             .padding(.top, (!previewStateCoordinator.windowSwitcherActive && effectiveAppNameStyle == .default && effectiveShowAppName) ? 25 : 0)
             .overlay(alignment: effectiveAppNameStyle == .popover ? .top : .topLeading) {
                 hoverTitleBaseView(labelSize: measureString(appName, fontSize: 14))
@@ -316,7 +318,7 @@ struct WindowPreviewHoverContainer: View {
             }
             .overlay {
                 if enableMouseHoverInSwitcher, previewStateCoordinator.windowSwitcherActive {
-                    edgeScrollZones(isHorizontal: !scrollVertically)
+                    edgeScrollZones(isHorizontal: orientationIsHorizontal)
                 }
             }
         }
@@ -634,11 +636,11 @@ struct WindowPreviewHoverContainer: View {
     private func buildFlowStack(
         scrollProxy: ScrollViewProxy,
         _ isHorizontal: Bool,
-        scrollVertically: Bool,
+        scrollAxis: Axis.Set,
         currentMaxDimensionForPreviews: CGPoint,
         currentDimensionsMapForPreviews: [Int: WindowDimensions]
     ) -> some View {
-        ScrollView(shouldUseCompactMode ? .vertical : (scrollVertically ? .vertical : .horizontal), showsIndicators: false) {
+        ScrollView(scrollAxis, showsIndicators: false) {
             Group {
                 // Show no results view when search is active and no results found
                 if shouldShowNoResultsView() {
@@ -985,7 +987,11 @@ struct WindowPreviewHoverContainer: View {
     }
 
     private func createChunkedItems() -> [[FlowItem]] {
-        let isHorizontal: Bool = previewStateCoordinator.windowSwitcherActive || dockPosition.isHorizontalFlow
+        let isHorizontal: Bool = if previewStateCoordinator.windowSwitcherActive {
+            true
+        } else {
+            dockPosition.isHorizontalFlow
+        }
 
         var itemsToProcess: [FlowItem] = []
 
@@ -997,16 +1003,8 @@ struct WindowPreviewHoverContainer: View {
             itemsToProcess.append(.window(index))
         }
 
-        var (maxColumns, maxRows) = WindowPreviewHoverContainer.calculateEffectiveMaxColumnsAndRows(
-            bestGuessMonitor: bestGuessMonitor,
-            overallMaxDimensions: previewStateCoordinator.overallMaxPreviewDimension,
-            dockPosition: dockPosition,
-            isWindowSwitcherActive: previewStateCoordinator.windowSwitcherActive,
-            previewMaxColumns: previewMaxColumns,
-            previewMaxRows: previewMaxRows,
-            switcherMaxRows: switcherMaxRows,
-            totalItems: itemsToProcess.count
-        )
+        var maxColumns = previewStateCoordinator.effectiveGridColumns
+        var maxRows = previewStateCoordinator.effectiveGridRows
 
         guard maxColumns > 0, maxRows > 0 else {
             return itemsToProcess.isEmpty ? [[]] : [itemsToProcess]

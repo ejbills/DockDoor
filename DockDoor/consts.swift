@@ -175,7 +175,6 @@ extension Defaults.Keys {
     static let previewMaxRows = Key<Int>("previewMaxRows", default: 1) // For bottom dock only
     static let switcherMaxRows = Key<Int>("switcherMaxRows", default: 2) // For window switcher
     static let windowSwitcherScrollDirection = Key<WindowSwitcherScrollDirection>("windowSwitcherScrollDirection", default: .vertical)
-    static let dockPreviewScrollDirection = Key<WindowSwitcherScrollDirection>("dockPreviewScrollDirection", default: .vertical)
 
     static let windowSwitcherPlacementStrategy = Key<WindowSwitcherPlacementStrategy>("windowSwitcherPlacementStrategy", default: .screenWithMouse)
     static let windowSwitcherControlPosition = Key<WindowSwitcherControlPosition>("windowSwitcherControlPosition", default: .topTrailing)
