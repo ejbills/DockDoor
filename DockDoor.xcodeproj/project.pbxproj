@@ -192,7 +192,6 @@
 		F0796B6D96ED42D58D75BB8A /* SettingsSliderRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0970FA03935B41E59919A618 /* SettingsSliderRow.swift */; };
 		F3A2B8C1D5E6489AAB123456 /* ActiveAppIndicatorPositioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B7C6D5E4F3A2B1098765432 /* ActiveAppIndicatorPositioning.swift */; };
 		FEBF808E6ABA4DE7983FCACD /* SettingsPickerRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C341C31333F4619A4E79449 /* SettingsPickerRow.swift */; };
-		FFD3E12134ED464AA3D20CC1EF7B2BE4 /* ChromiumProfileResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8CB46034B18460EBE430489545CC300 /* ChromiumProfileResolver.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -367,7 +366,6 @@
 		BBFAD73B2C287C770092F5F1 /* UpdateSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateSettingsView.swift; sourceTree = "<group>"; };
 		C119BDF12C2AFA7600E06E18 /* WindowSwitcherSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowSwitcherSettingsView.swift; sourceTree = "<group>"; };
 		C6F87422D4714171AD2CCC4A /* ActiveAppIndicatorCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveAppIndicatorCoordinator.swift; sourceTree = "<group>"; };
-		C8CB46034B18460EBE430489545CC300 /* ChromiumProfileResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChromiumProfileResolver.swift; sourceTree = "<group>"; };
 		CBBBAA129E24438589330D3B /* WindowSwitcherAppearanceSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowSwitcherAppearanceSection.swift; sourceTree = "<group>"; };
 		CC5D1784E68A4052A122B9019AA9C150 /* WidgetHoverContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetHoverContainer.swift; sourceTree = "<group>"; };
 		D4E5F6789012345678901234 /* ActiveAppIndicatorDockDetection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveAppIndicatorDockDetection.swift; sourceTree = "<group>"; };
@@ -623,7 +621,6 @@
 				BBF6C6262C1B4B4500BF1D40 /* StringMatchingUtil.swift */,
 				BB1CBD5C2C1BCA4F003969BC /* Misc Utils.swift */,
 				F098F8107F464776B5C18294427CAECD /* ScriptCommands.swift */,
-				C8CB46034B18460EBE430489545CC300 /* ChromiumProfileResolver.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -967,7 +964,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FFD3E12134ED464AA3D20CC1EF7B2BE4 /* ChromiumProfileResolver.swift in Sources */,
 				B376D66B467C4587915220BC80D3B9CB /* ScriptCommands.swift in Sources */,
 				1A04FA16AC74448F83D0F964 /* ActiveAppIndicatorCoordinator.swift in Sources */,
 				C3D4E5F6789012345678901B /* ActiveAppIndicatorDockDetection.swift in Sources */,

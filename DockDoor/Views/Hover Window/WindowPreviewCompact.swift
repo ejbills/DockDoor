@@ -137,16 +137,7 @@ struct WindowPreviewCompact: View {
             VStack(alignment: .leading, spacing: 2) {
                 switch titleFormat {
                 case .appNameAndTitle:
-                    HStack(spacing: 4) {
-                        if let icon = windowInfo.browserProfileIcon {
-                            Image(nsImage: icon)
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: 14, height: 14)
-                                .clipShape(Circle())
-                        }
-                        titleText(appName, isPrimary: true)
-                    }
+                    titleText(appName, isPrimary: true)
                     // Show state instead of window title when minimized/hidden
                     if let state = stateIndicator {
                         stateText(state)
@@ -155,32 +146,14 @@ struct WindowPreviewCompact: View {
                     }
 
                 case .titleOnly:
-                    HStack(spacing: 4) {
-                        if let icon = windowInfo.browserProfileIcon {
-                            Image(nsImage: icon)
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: 14, height: 14)
-                                .clipShape(Circle())
-                        }
-                        titleText(windowTitle ?? appName, isPrimary: true)
-                    }
+                    titleText(windowTitle ?? appName, isPrimary: true)
                     // Show state below the title
                     if let state = stateIndicator {
                         stateText(state)
                     }
 
                 case .appNameOnly:
-                    HStack(spacing: 4) {
-                        if let icon = windowInfo.browserProfileIcon {
-                            Image(nsImage: icon)
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: 14, height: 14)
-                                .clipShape(Circle())
-                        }
-                        titleText(appName, isPrimary: true)
-                    }
+                    titleText(appName, isPrimary: true)
                     // Show state below app name
                     if let state = stateIndicator {
                         stateText(state)
