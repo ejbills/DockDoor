@@ -231,7 +231,6 @@ extension WindowPreviewHoverContainer {
                 itemsPerRow = Int(ceil(Double(totalItems) / Double(actualRowsNeeded)))
             }
 
-
             chunks = []
             var startIndex = 0
             while startIndex < totalItems {
@@ -247,7 +246,6 @@ extension WindowPreviewHoverContainer {
                 let actualColumnsNeeded = min(maxColumns, Int(ceil(Double(totalItems) / Double(maxRows))))
                 itemsPerColumn = Int(ceil(Double(totalItems) / Double(actualColumnsNeeded)))
             }
-
 
             chunks = []
             var startIndex = 0

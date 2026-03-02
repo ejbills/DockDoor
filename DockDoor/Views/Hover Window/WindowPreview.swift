@@ -393,8 +393,8 @@ struct WindowPreview: View {
                     .padding(.top, 8)
                     Spacer()
                     HStack {
-                        Spacer()
                         controlsContent
+                        Spacer()
                     }
                     .padding(.leading, 8)
                     .padding(.bottom, 8)
@@ -402,8 +402,8 @@ struct WindowPreview: View {
             case .parallelTopRightBottomRight:
                 VStack {
                     HStack {
-                        titleContent
                         Spacer()
+                        titleContent
                     }
                     .padding(.trailing, 8)
                     .padding(.top, 8)
@@ -425,8 +425,8 @@ struct WindowPreview: View {
                     .padding(.top, 8)
                     Spacer()
                     HStack {
-                        Spacer()
                         titleContent
+                        Spacer()
                     }
                     .padding(.leading, 8)
                     .padding(.bottom, 8)
@@ -434,8 +434,8 @@ struct WindowPreview: View {
             case .parallelBottomRightTopRight:
                 VStack {
                     HStack {
-                        controlsContent
                         Spacer()
+                        controlsContent
                     }
                     .padding(.trailing, 8)
                     .padding(.top, 8)
