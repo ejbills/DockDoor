@@ -954,8 +954,8 @@ header {
 /* Settings Section */
 .settings-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
     padding-block: 3rem;
 }
 
@@ -967,9 +967,9 @@ header {
     overflow: hidden;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
     transition: var(--transition);
-    min-height: 350px;
     display: flex;
     flex-direction: column;
+    justify-content: center;
 }
 
 .settings-card:hover {
@@ -1803,9 +1803,6 @@ details[open] .faq-question i {
         gap: 2rem;
     }
     
-    .settings-card {
-        min-height: 380px;
-    }
 }
 
 @media (max-width: 480px) {
@@ -1853,10 +1850,6 @@ details[open] .faq-question i {
     .settings-grid {
         grid-template-columns: 1fr;
         gap: 1.5rem;
-    }
-    
-    .settings-card {
-        min-height: 350px;
     }
     
     .large-preview-container,
