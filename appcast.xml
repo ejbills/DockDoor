@@ -3,6 +3,15 @@
     <channel>
         <title>DockDoor</title>
         <item>
+            <title>1.32</title>
+            <pubDate>Sun, 01 Mar 2026 17:48:39 -0800</pubDate>
+            <sparkle:releaseNotesLink>https://dockdoor.net/CHANGELOG.html</sparkle:releaseNotesLink>
+            <sparkle:version>1.32</sparkle:version>
+            <sparkle:shortVersionString>1.32</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/ejbills/DockDoor/releases/download/1.32/DockDoor.dmg" length="21638248" type="application/octet-stream" sparkle:edSignature="jqjo5WYgIeAN11xLfdb5pDK80ZtLBdoly6kvKe2vktpGMP3D/GkGmnyob0JkTNolzNLAJEgl2ZUcX5YjYNK3Ag==" />
+        </item>
+    <item>
             <title>1.31.2.12</title>
             <pubDate>Sun, 01 Mar 2026 00:37:34 -0800</pubDate>
             <sparkle:releaseNotesLink>https://dockdoor.net/CHANGELOG.html</sparkle:releaseNotesLink>
@@ -11,15 +20,6 @@
             <sparkle:shortVersionString>1.31.2.12 beta</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
             <enclosure url="https://github.com/ejbills/DockDoor/releases/download/1.31.2.12/DockDoor.dmg" length="21644683" type="application/octet-stream" sparkle:edSignature="KBzYDyUjeEMY+Sl7BaOuLKrAg1o9aeFH+fh2x19rLGAQv1VN2D4Yy1w2IHPWOV1y1lGy1yqZ7tmnBmE1XCkKBg==" />
-        </item>
-    <item>
-            <title>1.31.2</title>
-            <pubDate>Fri, 23 Jan 2026 13:04:48 -0800</pubDate>
-            <sparkle:releaseNotesLink>https://dockdoor.net/CHANGELOG.html</sparkle:releaseNotesLink>
-            <sparkle:version>1.31.2</sparkle:version>
-            <sparkle:shortVersionString>1.31.2</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/ejbills/DockDoor/releases/download/1.31.2/DockDoor.dmg" length="21629206" type="application/octet-stream" sparkle:edSignature="zKSnZT6Ot7b6YO4+GDG3Ya8B8KrfU+EOCUrXU3wANK17xvNVQgP0APvNi1vWnlCeIpS+lEgir0DG5Liu0TMzAQ==" />
         </item>
     </channel>
 </rss>
