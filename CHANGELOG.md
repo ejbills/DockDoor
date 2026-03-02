@@ -38,6 +38,47 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://dockdoor.net/donate</div>
 
+<a id="1.32"></a>
+# [Release 1.32](https://github.com/ejbills/DockDoor/releases/tag/1.32) - 2026-03-02
+
+WARNING: There is a fradulent DockDoor clone currently on the Mac App Store charging a monthly subscription. This is not affiliated with DockDoor whatsoever, the only official source is dockdoor.net. DockDoor is, and always will be, completely free.
+
+## ✨ New Features
+- Customizable Cmd+Tab cycle keys
+  - Forward and backward keys
+  - Auto-select first window option
+- Manual dark mode setting
+- Opaque preview background option
+- Customizable search trigger key
+- Quit app on window close option (swift quit replacement option)
+- Window switcher scroll direction
+  - Horizontal or vertical option
+
+## 🔧 Improvements & Stability
+- Reorganized settings into tabs
+  - Dock, Cmd+Tab, Switcher tabs
+- Improved window space filtering
+  - Per-feature hidden window toggle
+- Anchored dock preview position
+- Compact mode hide close buttons
+- Customizable swipe gesture threshold
+- Improved live preview sizing
+
+## 🐛 Bug Fixes
+- Fixed liquid glass freezing
+- Fixed stale space ID windows
+- Fixed media scroll hijacking
+- Fixed dock preview gap when using live video preview
+- Fixed sleep wake reliability
+  - Event tap auto-recovery
+- Better health check detection when observer stops responding on dock previews
+- Fixed window switcher orientation
+- Fixed accidental swipe taps
+
+
+[Changes][1.32]
+
+
 <a id="1.31.2"></a>
 # [Release 1.31.2](https://github.com/ejbills/DockDoor/releases/tag/1.31.2) - 2026-01-23
 
@@ -1886,6 +1927,7 @@ v1.0
 [Changes][releases]
 
 
+[1.32]: https://github.com/ejbills/DockDoor/compare/1.31.2...1.32
 [1.31.2]: https://github.com/ejbills/DockDoor/compare/1.31.1...1.31.2
 [1.31.1]: https://github.com/ejbills/DockDoor/compare/1.31...1.31.1
 [1.31]: https://github.com/ejbills/DockDoor/compare/1.30.1...1.31
