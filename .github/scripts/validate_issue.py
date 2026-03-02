@@ -174,28 +174,22 @@ def main():
     if not check_duplicate_checkbox(issue_body):
         comment = """Thank you for your submission. However, we require all issue reporters to confirm they have reviewed existing issues to avoid duplicates.
 
-Please review the existing issues at https://github.com/ejbills/DockDoor/issues and confirm you are not creating a duplicate before resubmitting.
-
-If this is not a duplicate, please reopen or create a new issue and check the box confirming you have reviewed existing issues."""
+Please review the existing issues at https://github.com/ejbills/DockDoor/issues, then edit this issue and check the checkbox confirming you have reviewed existing issues. This issue will be automatically re-validated once updated."""
 
         subprocess.run(
             ['gh', 'issue', 'comment', str(issue_number), '--body', comment],
             check=True
         )
-        subprocess.run(
-            ['gh', 'issue', 'close', str(issue_number)],
-            check=True
-        )
-        print('Issue closed - duplicate review checkbox not checked')
+        manage_labels(issue_number, False)
+        print('Issue incomplete - duplicate review checkbox not checked')
         sys.exit(0)
 
     sections = parse_issue_body(issue_body)
 
     # Validate title
+    problems = []
     if not validate_title(issue_title, issue_type):
-        manage_labels(issue_number, False)
-        print('Issue is incomplete - title is invalid (appears to be default or placeholder)')
-        sys.exit(0)
+        problems.append('- Please provide a descriptive title (at least 5 characters after the prefix)')
 
     # Validate required fields
     if issue_type == 'bug':
@@ -204,8 +198,16 @@ If this is not a duplicate, please reopen or create a new issue and check the bo
         missing_fields = validate_feature_request(sections)
 
     if missing_fields:
+        problems.append('- The following sections need to be filled out:\n' + '\n'.join(f'  {f}' for f in missing_fields))
+
+    if problems:
+        comment = 'Your issue is missing some required information. Please edit it and fill in the following:\n\n' + '\n'.join(problems) + '\n\nThis issue will be automatically re-validated once updated.'
+        subprocess.run(
+            ['gh', 'issue', 'comment', str(issue_number), '--body', comment],
+            check=True
+        )
         manage_labels(issue_number, False)
-        print(f'Issue is incomplete - missing: {", ".join(missing_fields)}')
+        print(f'Issue is incomplete - commented with missing info')
     else:
         manage_labels(issue_number, True)
         print('Issue is complete')
