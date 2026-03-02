@@ -276,7 +276,11 @@ class PreviewStateCoordinator: ObservableObject {
         effectiveGridColumns = cols
         effectiveGridRows = rows
 
-        if Defaults[.allowDynamicImageSizing], !windowSwitcherActive {
+        let compactThreshold = Defaults[.dockPreviewCompactThreshold]
+        let wouldUseCompactMode = Defaults[.disableImagePreview]
+            || (compactThreshold > 0 && windows.count >= compactThreshold)
+
+        if Defaults[.allowDynamicImageSizing], !windowSwitcherActive, !wouldUseCompactMode {
             expectedContentSize = Self.computeExpectedContentSize(
                 windowCount: windows.count,
                 dimensionsMap: newDimensionsMap,
