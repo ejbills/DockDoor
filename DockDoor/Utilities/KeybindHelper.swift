@@ -38,11 +38,6 @@ private class WindowSwitchingCoordinator {
 
         let coordinator = previewCoordinator.windowSwitcherCoordinator
 
-        if coordinator.isKeybindSessionActive, !previewCoordinator.isVisible {
-            coordinator.deactivateKeybindSession()
-            coordinator.currIndex = -1
-        }
-
         if coordinator.isKeybindSessionActive {
             coordinator.hasMovedSinceOpen = false
             coordinator.initialHoverLocation = nil
@@ -116,6 +111,19 @@ private class WindowSwitchingCoordinator {
 
         let currentMouseLocation = DockObserver.getMousePosition()
 
+        Task.detached(priority: .low) {
+            let now = Date()
+            let shouldUpdate: Bool = if let lastUpdate = WindowSwitchingCoordinator.lastUpdateAllWindowsTime {
+                now.timeIntervalSince(lastUpdate) >= WindowSwitchingCoordinator.updateAllWindowsThrottleInterval
+            } else {
+                true
+            }
+
+            guard shouldUpdate else { return }
+            WindowSwitchingCoordinator.lastUpdateAllWindowsTime = now
+            await WindowUtil.updateAllWindowsInCurrentSpace()
+        }
+
         uiRenderingTask?.cancel()
         uiRenderingTask = Task { @MainActor in
             if !Defaults[.instantWindowSwitcher] {
@@ -129,19 +137,6 @@ private class WindowSwitchingCoordinator {
                 initialIndex: coordinator.currIndex,
                 sessionId: sessionId
             )
-        }
-
-        Task.detached(priority: .low) {
-            let now = Date()
-            let shouldUpdate: Bool = if let lastUpdate = WindowSwitchingCoordinator.lastUpdateAllWindowsTime {
-                now.timeIntervalSince(lastUpdate) >= WindowSwitchingCoordinator.updateAllWindowsThrottleInterval
-            } else {
-                true
-            }
-
-            guard shouldUpdate else { return }
-            WindowSwitchingCoordinator.lastUpdateAllWindowsTime = now
-            await WindowUtil.updateAllWindowsInCurrentSpace()
         }
     }
 
@@ -360,6 +355,10 @@ class KeybindHelper {
     }
 
     private func handleEvent(proxy: CGEventTapProxy, type: CGEventType, event: CGEvent) -> Unmanaged<CGEvent>? {
+        if let passthrough = reEnableIfNeeded(tap: eventTap, type: type, event: event) {
+            return passthrough
+        }
+
         switch type {
         case .flagsChanged:
             let keyBoardShortcutSaved: UserKeyBind = Defaults[.UserKeybind]
@@ -456,23 +455,6 @@ class KeybindHelper {
                         } else {
                             return Unmanaged.passUnretained(event)
                         }
-                    case Int64(kVK_Tab):
-                        if hasSelection {
-                            let isShift = flags.contains(.maskShift)
-                            Task { @MainActor in
-                                let currentIndex = self.previewCoordinator.windowSwitcherCoordinator.currIndex
-                                let windowCount = self.previewCoordinator.windowSwitcherCoordinator.windows.count
-                                if isShift {
-                                    let newIndex = currentIndex > 0 ? currentIndex - 1 : windowCount - 1
-                                    self.previewCoordinator.windowSwitcherCoordinator.setIndex(to: newIndex)
-                                } else {
-                                    let newIndex = (currentIndex + 1) % windowCount
-                                    self.previewCoordinator.windowSwitcherCoordinator.setIndex(to: newIndex)
-                                }
-                            }
-                            return nil
-                        }
-                        return Unmanaged.passUnretained(event)
                     default:
                         // Allow activation via customizable Cmd+key (when not yet focused) and
                         // Command-based actions when a preview is focused
@@ -900,6 +882,15 @@ class KeybindHelper {
             return nil
         }
     }
+}
+
+/// Re-enables a disabled event tap and returns a passthrough result, or nil if the event type is not tap-disabled.
+func reEnableIfNeeded(tap: CFMachPort?, type: CGEventType, event: CGEvent) -> Unmanaged<CGEvent>? {
+    guard type == .tapDisabledByTimeout || type == .tapDisabledByUserInput else { return nil }
+    if let tap {
+        CGEvent.tapEnable(tap: tap, enable: true)
+    }
+    return Unmanaged.passUnretained(event)
 }
 
 extension CGEventFlags {

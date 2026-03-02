@@ -31,6 +31,8 @@ final class SharedPreviewWindowCoordinator: NSPanel {
     private var previousHoverWindowOrigin: CGPoint?
     private var currentDockPosition: DockPosition = .bottom
 
+    private var anchoredDockItem: (element: AXUIElement, iconRect: CGRect)?
+
     private(set) var hasScreenRecordingPermission: Bool = PermissionsChecker.hasScreenRecordingPermission()
 
     var pinnedWindows: [String: (window: NSWindow, info: PinnedWindowInfo)] = [:]
@@ -127,6 +129,9 @@ final class SharedPreviewWindowCoordinator: NSPanel {
     }
 
     func hideWindow() {
+        // Always restore dock auto-hide state, even if the preview isn't visible.
+        dockManager.restoreDockState()
+
         guard isVisible else { return }
 
         DragPreviewCoordinator.shared.endDragging()
@@ -141,12 +146,12 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         appName = ""
         currentlyDisplayedPID = nil
         mouseIsWithinPreviewWindow = false
+        anchoredDockItem = nil
 
         let currentDockPos = DockUtils.getDockPosition()
         let currentScreen = NSScreen.main ?? NSScreen.screens.first!
         windowSwitcherCoordinator.setWindows([], dockPosition: currentDockPos, bestGuessMonitor: currentScreen)
         windowSwitcherCoordinator.setShowing(.both, toState: false)
-        dockManager.restoreDockState()
         orderOut(nil)
     }
 
@@ -166,11 +171,17 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         guard let hostingView = contentView else { return }
 
         hostingView.layoutSubtreeIfNeeded()
-        let newSize = hostingView.fittingSize
-        guard newSize != frame.size else { return }
+        let fittingSize = hostingView.fittingSize
 
         let screen = NSScreen.screenContainingMouse(NSEvent.mouseLocation)
         let screenFrame = screen.frame
+
+        let expectedSize = windowSwitcherCoordinator.expectedContentSize
+        let newSize = CGSize(
+            width: expectedSize.width > 0 ? expectedSize.width : fittingSize.width,
+            height: expectedSize.height > 0 ? expectedSize.height : fittingSize.height
+        )
+        guard newSize != frame.size else { return }
 
         let wasClampedToTop = frame.maxY >= screenFrame.maxY - 1
         let wasClampedToBottom = frame.minY <= screenFrame.minY + 1
@@ -212,6 +223,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
                                  mouseLocation: CGPoint?,
                                  mouseScreen: NSScreen,
                                  dockItemElement: AXUIElement?,
+                                 dockIconRect: CGRect?,
                                  dockPositionOverride: DockPosition? = nil,
                                  dockItemFrameOverride: CGRect? = nil)
     {
@@ -225,11 +237,11 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         let newHoverWindowSize = hostingView.fittingSize
         let position: CGPoint
 
-        if let validDockItemElement = dockItemElement {
+        if dockItemElement != nil, let dockIconRect {
             position = calculateWindowPosition(mouseLocation: mouseLocation,
                                                windowSize: newHoverWindowSize,
                                                screen: mouseScreen,
-                                               dockItemElement: validDockItemElement,
+                                               dockIconRect: dockIconRect,
                                                dockPositionOverride: dockPositionOverride)
 
             // Prevent rendering if position calculation failed for cmd-tab
@@ -257,6 +269,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
 
     @MainActor
     private func updateContentViewSizeAndPosition(mouseLocation: CGPoint? = nil, mouseScreen: NSScreen, dockItemElement: AXUIElement?,
+                                                  dockIconRect: CGRect? = nil,
                                                   animated: Bool, centerOnScreen: Bool = false,
                                                   centeredHoverWindowState: PreviewStateCoordinator.WindowState? = nil,
                                                   embeddedContentType: EmbeddedContentType = .none,
@@ -300,17 +313,27 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         elapsed = renderStartTime.map { (CFAbsoluteTimeGetCurrent() - $0) * 1000 } ?? 0
         DebugLogger.log("PreviewRender", details: "calculating fittingSize (+\(String(format: "%.1f", elapsed))ms)")
 
-        let newHoverWindowSize = newHostingView.fittingSize
+        let newHoverWindowSize: CGSize
+        do {
+            let fittingSize = newHostingView.fittingSize
 
-        elapsed = renderStartTime.map { (CFAbsoluteTimeGetCurrent() - $0) * 1000 } ?? 0
-        DebugLogger.log("PreviewRender", details: "fittingSize done: \(newHoverWindowSize) (+\(String(format: "%.1f", elapsed))ms)")
+            elapsed = renderStartTime.map { (CFAbsoluteTimeGetCurrent() - $0) * 1000 } ?? 0
+            DebugLogger.log("PreviewRender", details: "fittingSize done: \(fittingSize) (+\(String(format: "%.1f", elapsed))ms)")
+
+            let dockPos = dockPositionOverride ?? DockUtils.getDockPosition()
+            let expectedSize = windowSwitcherCoordinator.expectedContentSize
+            newHoverWindowSize = CGSize(
+                width: expectedSize.width > 0 ? expectedSize.width : fittingSize.width,
+                height: expectedSize.height > 0 ? expectedSize.height : fittingSize.height
+            )
+        }
 
         let position: CGPoint
         if centerOnScreen {
             position = centerWindowOnScreen(size: newHoverWindowSize, screen: mouseScreen)
         } else {
-            if let validDockItemElement = dockItemElement {
-                position = calculateWindowPosition(mouseLocation: mouseLocation, windowSize: newHoverWindowSize, screen: mouseScreen, dockItemElement: validDockItemElement, dockPositionOverride: dockPositionOverride)
+            if dockItemElement != nil, let dockIconRect {
+                position = calculateWindowPosition(mouseLocation: mouseLocation, windowSize: newHoverWindowSize, screen: mouseScreen, dockIconRect: dockIconRect, dockPositionOverride: dockPositionOverride)
 
                 // Prevent rendering if position calculation failed for cmd-tab
                 if dockPositionOverride == .cmdTab, position == .zero {
@@ -423,63 +446,54 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         return CGPoint(x: xPosition, y: yPosition)
     }
 
-    private func calculateWindowPosition(mouseLocation: CGPoint?, windowSize: CGSize, screen: NSScreen, dockItemElement: AXUIElement, dockPositionOverride: DockPosition? = nil) -> CGPoint {
+    private func calculateWindowPosition(mouseLocation: CGPoint?, windowSize: CGSize, screen: NSScreen, dockIconRect: CGRect, dockPositionOverride: DockPosition? = nil) -> CGPoint {
         guard let mouseLocation else { return .zero }
         let screenFrame = screen.frame
         let dockPosition = dockPositionOverride ?? DockUtils.getDockPosition()
 
-        do {
-            guard let currentPosition = try dockItemElement.position(),
-                  let currentSize = try dockItemElement.size()
-            else {
-                return .zero
-            }
-            let currentIconRect = CGRect(origin: currentPosition, size: currentSize)
-            let flippedIconRect = CGRect(
-                origin: DockObserver.cgPointFromNSPoint(currentIconRect.origin, forScreen: screen),
-                size: currentIconRect.size
-            )
+        // Use the anchored icon rect when anchoring is enabled, otherwise use the freshly captured rect
+        let iconRect = (Defaults[.anchorDockPreviewPosition] ? anchoredDockItem?.iconRect : nil) ?? dockIconRect
+        let flippedIconRect = CGRect(
+            origin: DockObserver.cgPointFromNSPoint(iconRect.origin, forScreen: screen),
+            size: iconRect.size
+        )
 
-            var xPosition: CGFloat
-            var yPosition: CGFloat
+        var xPosition: CGFloat
+        var yPosition: CGFloat
 
-            switch dockPosition {
-            case .bottom, .cmdTab:
-                xPosition = flippedIconRect.midX - (windowSize.width / 2)
-                yPosition = flippedIconRect.minY
-            case .left:
-                xPosition = flippedIconRect.maxX
-                yPosition = flippedIconRect.midY - (windowSize.height / 2) - flippedIconRect.height
-            case .right:
-                xPosition = screenFrame.maxX - flippedIconRect.width - windowSize.width
-                yPosition = flippedIconRect.minY - (windowSize.height / 2)
-            default:
-                xPosition = mouseLocation.x - (windowSize.width / 2)
-                yPosition = mouseLocation.y - (windowSize.height / 2)
-            }
-
-            let bufferFromDock = Defaults[.bufferFromDock]
-            switch dockPosition {
-            case .left:
-                xPosition += bufferFromDock
-            case .right:
-                xPosition -= bufferFromDock
-            case .bottom:
-                yPosition += bufferFromDock
-            case .cmdTab:
-                yPosition += 5
-            default:
-                break
-            }
-
-            xPosition = max(screenFrame.minX, min(xPosition, screenFrame.maxX - windowSize.width))
-            yPosition = max(screenFrame.minY, min(yPosition, screenFrame.maxY - windowSize.height))
-
-            return CGPoint(x: xPosition, y: yPosition)
-
-        } catch {
-            return .zero
+        switch dockPosition {
+        case .bottom, .cmdTab:
+            xPosition = flippedIconRect.midX - (windowSize.width / 2)
+            yPosition = flippedIconRect.minY
+        case .left:
+            xPosition = flippedIconRect.maxX
+            yPosition = flippedIconRect.midY - (windowSize.height / 2) - flippedIconRect.height
+        case .right:
+            xPosition = screenFrame.maxX - flippedIconRect.width - windowSize.width
+            yPosition = flippedIconRect.minY - (windowSize.height / 2)
+        default:
+            xPosition = mouseLocation.x - (windowSize.width / 2)
+            yPosition = mouseLocation.y - (windowSize.height / 2)
         }
+
+        let bufferFromDock = Defaults[.bufferFromDock]
+        switch dockPosition {
+        case .left:
+            xPosition += bufferFromDock
+        case .right:
+            xPosition -= bufferFromDock
+        case .bottom:
+            yPosition += bufferFromDock
+        case .cmdTab:
+            yPosition += 5
+        default:
+            break
+        }
+
+        xPosition = max(screenFrame.minX, min(xPosition, screenFrame.maxX - windowSize.width))
+        yPosition = max(screenFrame.minY, min(yPosition, screenFrame.maxY - windowSize.height))
+
+        return CGPoint(x: xPosition, y: yPosition)
     }
 
     private func calculateWindowPositionFromFrame(mouseLocation: CGPoint?, windowSize: CGSize, screen: NSScreen, dockItemFrame: CGRect, dockPositionOverride: DockPosition? = nil) -> CGPoint {
@@ -585,6 +599,14 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         let elapsed = renderStartTime.map { (CFAbsoluteTimeGetCurrent() - $0) * 1000 } ?? 0
         DebugLogger.log("PreviewRender", details: "performDisplay start (+\(String(format: "%.1f", elapsed))ms)")
 
+        var dockIconRect: CGRect?
+        if let dockItemElement,
+           let pos = try? dockItemElement.position(),
+           let size = try? dockItemElement.size()
+        {
+            dockIconRect = CGRect(origin: pos, size: size)
+        }
+
         let screen = mouseScreen ?? NSScreen.main!
         var finalEmbeddedContentType: EmbeddedContentType = .none
         var useBigStandaloneViewInstead = false
@@ -640,11 +662,23 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         }
 
         if let dockItemElement {
-            currentlyDisplayedPID = try? dockItemElement.pid()
+            let newPID = try? dockItemElement.pid()
+            if newPID != currentlyDisplayedPID {
+                anchoredDockItem = nil
+            } else if anchoredDockItem?.element == dockItemElement, isVisible {
+                // Same dock item element is already displayed and anchored.
+                // Skip re-display to prevent position bouncing from duplicate AX notifications
+                // (e.g. dock auto-hide at 0s). Window list updates arrive via mergeWindowsIfShowing.
+                return
+            }
+            currentlyDisplayedPID = newPID
+            if let dockIconRect {
+                anchoredDockItem = (element: dockItemElement, iconRect: dockIconRect)
+            }
         }
 
         if useBigStandaloneViewInstead, let viewToShow = viewForBigStandalone {
-            performShowView(viewToShow, mouseLocation: mouseLocation, mouseScreen: screen, dockItemElement: dockItemElement, dockPositionOverride: dockPositionOverride, dockItemFrameOverride: dockItemFrameOverride)
+            performShowView(viewToShow, mouseLocation: mouseLocation, mouseScreen: screen, dockItemElement: dockItemElement, dockIconRect: dockIconRect, dockPositionOverride: dockPositionOverride, dockItemFrameOverride: dockItemFrameOverride)
         } else {
             performShowWindow(
                 appName: appName,
@@ -652,6 +686,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
                 mouseLocation: mouseLocation,
                 mouseScreen: screen,
                 dockItemElement: dockItemElement,
+                dockIconRect: dockIconRect,
                 centeredHoverWindowState: centeredHoverWindowState,
                 onWindowTap: onWindowTap,
                 embeddedContentType: finalEmbeddedContentType,
@@ -668,6 +703,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
     @MainActor
     private func performShowWindow(appName: String, windows: [WindowInfo], mouseLocation: CGPoint?,
                                    mouseScreen: NSScreen?, dockItemElement: AXUIElement?,
+                                   dockIconRect: CGRect?,
                                    centeredHoverWindowState: PreviewStateCoordinator.WindowState? = nil,
                                    onWindowTap: (() -> Void)?,
                                    embeddedContentType: EmbeddedContentType = .none,
@@ -703,7 +739,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
 
             self.onWindowTap = onWindowTap
 
-            updateContentViewSizeAndPosition(mouseLocation: mouseLocation, mouseScreen: screen, dockItemElement: dockItemElement, animated: !shouldCenterOnScreen,
+            updateContentViewSizeAndPosition(mouseLocation: mouseLocation, mouseScreen: screen, dockItemElement: dockItemElement, dockIconRect: dockIconRect, animated: !shouldCenterOnScreen,
                                              centerOnScreen: shouldCenterOnScreen, centeredHoverWindowState: centeredHoverWindowState,
                                              embeddedContentType: embeddedContentType, dockPositionOverride: dockPositionOverride,
                                              dockItemFrameOverride: dockItemFrameOverride, renderStartTime: renderStartTime)
@@ -719,33 +755,11 @@ final class SharedPreviewWindowCoordinator: NSPanel {
             return
         }
 
-        let windowsCount = coordinator.windows.count
-        var newIndex = coordinator.currIndex
-
-        if !coordinator.windowSwitcherActive, coordinator.currIndex < 0 {
-            newIndex = goBackwards ? (windowsCount - 1) : 0
-            if windowsCount == 0 { newIndex = -1 }
-        } else if windowsCount > 0 {
-            let dockPosition = DockUtils.getDockPosition()
-            let isHorizontalFlow = dockPosition.isHorizontalFlow || coordinator.windowSwitcherActive
-
-            let direction: ArrowDirection = if isHorizontalFlow {
-                goBackwards ? .left : .right
-            } else {
-                goBackwards ? .up : .down
-            }
-
-            newIndex = WindowPreviewHoverContainer.navigateWindowSwitcher(
-                from: coordinator.currIndex,
-                direction: direction,
-                totalItems: windowsCount,
-                dockPosition: dockPosition,
-                isWindowSwitcherActive: coordinator.windowSwitcherActive
-            )
+        if goBackwards {
+            coordinator.cycleBackward()
         } else {
-            newIndex = -1
+            coordinator.cycleForward()
         }
-        coordinator.setIndex(to: newIndex)
     }
 
     @MainActor
@@ -791,44 +805,25 @@ final class SharedPreviewWindowCoordinator: NSPanel {
             return
         }
 
-        // Handle filtered navigation when search is active (grid view)
+        // Handle filtered navigation when search is active
         if coordinator.windowSwitcherActive, coordinator.hasActiveSearch {
-            let filteredIndices = coordinator.filteredWindowIndices()
-            guard !filteredIndices.isEmpty else { return }
-
-            guard let currentFilteredPos = filteredIndices.firstIndex(of: coordinator.currIndex) else {
-                coordinator.setIndex(to: filteredIndices.first ?? 0)
-                return
-            }
-
-            let newFilteredPos = WindowPreviewHoverContainer.navigateWindowSwitcher(
-                from: currentFilteredPos,
-                direction: direction,
-                totalItems: filteredIndices.count,
-                dockPosition: .bottom,
-                isWindowSwitcherActive: true
-            )
-
-            coordinator.setIndex(to: filteredIndices[newFilteredPos])
+            coordinator.navigateFiltered(direction: direction)
             return
         }
 
-        let windowsCount = coordinator.windows.count
-        var newIndex = coordinator.currIndex
-
-        if !coordinator.windowSwitcherActive, coordinator.currIndex < 0 {
-            newIndex = windowsCount > 0 ? 0 : -1
-        } else {
-            let dockPosition = DockUtils.getDockPosition()
-
-            newIndex = WindowPreviewHoverContainer.navigateWindowSwitcher(
-                from: coordinator.currIndex,
-                direction: direction,
-                totalItems: windowsCount,
-                dockPosition: dockPosition,
-                isWindowSwitcherActive: coordinator.windowSwitcherActive
-            )
+        if coordinator.currIndex < 0 {
+            coordinator.setIndex(to: 0)
+            return
         }
+
+        let dockPosition = DockUtils.getDockPosition()
+        let newIndex = WindowPreviewHoverContainer.navigateWindowSwitcher(
+            from: coordinator.currIndex,
+            direction: direction,
+            totalItems: coordinator.windows.count,
+            dockPosition: dockPosition,
+            isWindowSwitcherActive: coordinator.windowSwitcherActive
+        )
         coordinator.setIndex(to: newIndex)
     }
 

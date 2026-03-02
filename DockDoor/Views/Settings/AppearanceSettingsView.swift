@@ -16,7 +16,7 @@ struct AppearanceSettingsView: View {
                     )
                 }
 
-                WindowSizeSettingsSection(onDynamicSizingChanged: {})
+                WindowSizeSettingsSection()
 
                 GeneralAppearanceSection()
 

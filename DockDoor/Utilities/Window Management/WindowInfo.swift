@@ -24,7 +24,7 @@ struct WindowInfo: Identifiable, Hashable {
         id = windowProvider.windowID
         self.windowProvider = windowProvider
         self.app = app
-        windowName = windowProvider.title
+        windowName = (try? axElement.title()) ?? windowProvider.title
         self.image = image
         self.axElement = axElement
         self.appAxElement = appAxElement

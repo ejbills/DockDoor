@@ -14,9 +14,8 @@ class WindowManipulationObservers {
 
     private var observers: [pid_t: AXObserver] = [:]
     private var debouncedTasks: [String: Task<Void, Never>] = [:]
-    var cacheUpdateWorkItem: (workItem: DispatchWorkItem, hasStateAdjustment: Bool)?
+    var cacheUpdateWorkItem: (workItem: DispatchWorkItem, hasStateAdjustment: Bool, needsValidation: Bool)?
     var updateDateTimeWorkItem: DispatchWorkItem?
-
     private func debounce(key: String, delay: TimeInterval = windowProcessingDebounceInterval, operation: @escaping () async -> Void) {
         debouncedTasks[key]?.cancel()
         debouncedTasks[key] = Task {
@@ -41,27 +40,25 @@ class WindowManipulationObservers {
     }
 
     deinit {
-        let notificationCenter = NSWorkspace.shared.notificationCenter
-        notificationCenter.removeObserver(self)
-
-        for (pid, observer) in observers {
-            let appElement = AXUIElementCreateApplication(pid)
-            AXObserverRemoveNotification(observer, appElement, kAXWindowCreatedNotification as CFString)
-            AXObserverRemoveNotification(observer, appElement, kAXUIElementDestroyedNotification as CFString)
-            AXObserverRemoveNotification(observer, appElement, kAXMainWindowChangedNotification as CFString)
-            AXObserverRemoveNotification(observer, appElement, kAXWindowMiniaturizedNotification as CFString)
-            AXObserverRemoveNotification(observer, appElement, kAXWindowDeminiaturizedNotification as CFString)
-            AXObserverRemoveNotification(observer, appElement, kAXApplicationHiddenNotification as CFString)
-            AXObserverRemoveNotification(observer, appElement, kAXApplicationShownNotification as CFString)
-            AXObserverRemoveNotification(observer, appElement, kAXFocusedUIElementChangedNotification as CFString)
-            AXObserverRemoveNotification(observer, appElement, kAXFocusedWindowChangedNotification as CFString)
-            AXObserverRemoveNotification(observer, appElement, kAXWindowResizedNotification as CFString)
-            AXObserverRemoveNotification(observer, appElement, kAXWindowMovedNotification as CFString)
-            AXObserverRemoveNotification(observer, appElement, kAXTitleChangedNotification as CFString)
-        }
-        observers.removeAll()
+        NSWorkspace.shared.notificationCenter.removeObserver(self)
+        removeAllObservers()
         if activeWindowManipulationObserversInstance === self {
             activeWindowManipulationObserversInstance = nil
+        }
+    }
+
+    private func removeAllObservers() {
+        let pids = Array(observers.keys)
+        for pid in pids {
+            removeObserver(for: pid)
+        }
+    }
+
+    func reset() {
+        removeAllObservers()
+        let apps = NSWorkspace.shared.runningApplications.filter { $0.activationPolicy == .regular }
+        for app in apps {
+            createObserverForApp(app)
         }
     }
 
@@ -315,16 +312,19 @@ class WindowManipulationObservers {
                                    validate: Bool = false,
                                    stateAdjustment: ((inout Set<WindowInfo>) -> Void)? = nil)
     {
+        let inheritedValidation = cacheUpdateWorkItem?.needsValidation ?? false
+
         if cacheUpdateWorkItem?.hasStateAdjustment != true {
             cacheUpdateWorkItem?.workItem.cancel()
         }
 
+        let effectiveValidate = validate || inheritedValidation
         let hasStateAdjustment = stateAdjustment != nil
         let workItem = DispatchWorkItem { [weak self] in
             guard let self else { return }
-            DebugLogger.measure("updateWindowCache", details: "App: \(app.localizedName ?? "Unknown"), Notification: \(notification), Validate: \(validate)") {
+            DebugLogger.measure("updateWindowCache", details: "App: \(app.localizedName ?? "Unknown"), Notification: \(notification), Validate: \(effectiveValidate)") {
                 WindowUtil.updateWindowCache(for: app) { windowSet in
-                    if validate {
+                    if effectiveValidate {
                         windowSet = windowSet.filter { WindowUtil.isValidElement($0.axElement) }
                     }
                     stateAdjustment?(&windowSet)
@@ -332,7 +332,7 @@ class WindowManipulationObservers {
             }
             cacheUpdateWorkItem = nil
         }
-        cacheUpdateWorkItem = (workItem, hasStateAdjustment)
+        cacheUpdateWorkItem = (workItem, hasStateAdjustment, effectiveValidate)
         axObserverWorkQueue.asyncAfter(deadline: .now() + windowProcessingDebounceInterval, execute: workItem)
     }
 

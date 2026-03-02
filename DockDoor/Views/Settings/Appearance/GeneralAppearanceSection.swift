@@ -125,6 +125,7 @@ struct GeneralAppearanceSection: View {
                         .foregroundColor(.gray)
                         .padding(.leading, 20)
                 }
+
             }
         }
     }

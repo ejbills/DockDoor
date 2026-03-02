@@ -20,10 +20,11 @@ class SettingsManager: NSObject, ObservableObject {
             let hostingController = NSHostingController(rootView: settingsView)
             let window = NSWindow(
                 contentRect: NSRect(x: 0, y: 0, width: 900, height: 600),
-                styleMask: [.titled, .closable, .miniaturizable, .fullSizeContentView],
+                styleMask: [.titled, .closable, .miniaturizable, .resizable, .fullSizeContentView],
                 backing: .buffered,
                 defer: false
             )
+            window.minSize = NSSize(width: 750, height: 400)
 
             window.contentViewController = hostingController
             window.isReleasedWhenClosed = true
@@ -46,6 +47,10 @@ class SettingsManager: NSObject, ObservableObject {
         settingsWindowController?.showWindow(nil)
         settingsWindowController?.window?.center()
         NSApp.activate(ignoringOtherApps: true)
+
+        DispatchQueue.main.async {
+            Task { await WindowUtil.updateNewWindowsForApp(.current) }
+        }
     }
 }
 
@@ -94,6 +99,10 @@ extension SettingsManager: NSWindowDelegate {
     }
 
     func windowWillClose(_ notification: Notification) {
+        if let window = notification.object as? NSWindow {
+            let windowID = CGWindowID(window.windowNumber)
+            WindowUtil.removeWindowFromDesktopSpaceCache(with: windowID, in: ProcessInfo.processInfo.processIdentifier)
+        }
         settingsWindowController?.window?.contentViewController = nil
         settingsWindowController = nil
         NSApp.setActivationPolicy(.accessory)

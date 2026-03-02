@@ -2,9 +2,6 @@ import Defaults
 import SwiftUI
 
 struct WindowSizeSettingsSection: View {
-    @Default(.allowDynamicImageSizing) var allowDynamicImageSizing
-    var onDynamicSizingChanged: () -> Void
-
     var body: some View {
         SettingsGroup(header: "Window Preview Size") {
             VStack(alignment: .leading, spacing: 10) {
@@ -13,19 +10,6 @@ struct WindowSizeSettingsSection: View {
                 Text("Choose how large window previews appear when hovering over dock icons. All window images are automatically scaled to fit within this size while maintaining their original proportions.")
                     .font(.caption)
                     .foregroundColor(.secondary)
-            }
-
-            VStack(alignment: .leading) {
-                Toggle(isOn: $allowDynamicImageSizing) {
-                    Text("Allow dynamic image sizing")
-                }
-                .onChange(of: allowDynamicImageSizing) { _ in
-                    onDynamicSizingChanged()
-                }
-                Text("Allows window preview images to scale dynamically to reasonable dimensions, overriding fixed frame constraints.")
-                    .font(.footnote)
-                    .foregroundColor(.gray)
-                    .padding(.leading, 20)
             }
         }
     }

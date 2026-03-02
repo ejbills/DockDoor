@@ -29,8 +29,8 @@ struct SharedHoverAppTitle: View {
                         hoverTitleLabelView()
                             .animation(nil, value: hoveringAppIcon)
                     }
-                    .padding(.top, 10)
-                    .padding(.horizontal)
+                    .globalPadding(.top, 12)
+                    .globalPadding(.leading, 20)
                     .animation(showAnimations ? .smooth(duration: 0.15) : nil, value: hoveringAppIcon)
 
                 case .shadowed:

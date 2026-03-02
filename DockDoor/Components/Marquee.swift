@@ -167,15 +167,15 @@ struct TheMarquee<C: View>: View {
             return CGFloat(fw)
         }
         if greedy {
-            return nil // Let it expand to fill available space
+            return nil
         }
-        if measured {
-            if !internalShouldMove {
-                return contentSize.width
-            } else {
-                return actualWidth > 0 ? actualWidth : nil
-            }
+        guard measured else { return nil }
+
+        if internalShouldMove {
+            return actualWidth > 0 ? actualWidth : nil
         }
-        return nil
+
+        guard actualWidth > 0 else { return nil }
+        return min(contentSize.width, actualWidth)
     }
 }

@@ -43,7 +43,7 @@ struct DockStyleModifier: ViewModifier {
 }
 
 extension View {
-    func dockStyle(cornerRadius: Double = CardRadius.container, highlightColor: Color? = nil, backgroundOpacity: CGFloat = 1.0, frostedTranslucentLayer: Bool = false, variant: Int? = 19, outerPadding: CGFloat = 2) -> some View {
+    func dockStyle(cornerRadius: Double = CardRadius.container, highlightColor: Color? = nil, backgroundOpacity: CGFloat = 1.0, frostedTranslucentLayer: Bool = false, variant: Int? = 19, outerPadding: CGFloat = HoverContainerPadding.dockStyleOuter) -> some View {
         modifier(DockStyleModifier(cornerRadius: cornerRadius, highlightColor: highlightColor, backgroundOpacity: backgroundOpacity, frostedTranslucentLayer: frostedTranslucentLayer, variant: variant, outerPadding: outerPadding))
     }
 }

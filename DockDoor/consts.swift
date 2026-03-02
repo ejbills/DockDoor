@@ -27,18 +27,20 @@ extension Defaults.Keys {
     static let globalPaddingMultiplier = Key<CGFloat>("globalPaddingMultiplier", default: 1.0)
     static let hoverWindowOpenDelay = Key<CGFloat>("openDelay", default: 0.2)
     static let useDelayOnlyForInitialOpen = Key<Bool>("useDelayOnlyForInitialOpen", default: false)
+    static let anchorDockPreviewPosition = Key<Bool>("anchorDockPreviewPosition", default: true)
     static let preventDockHide = Key<Bool>("preventDockHide", default: false)
     static let preventSwitcherHide = Key<Bool>("preventSwitcherHide", default: false)
     static let requireShiftTabToGoBack = Key<Bool>("requireShiftTabToGoBack", default: false)
     static let shouldHideOnDockItemClick = Key<Bool>("shouldHideOnDockItemClick", default: false)
     static let dockClickAction = Key<DockClickAction>("dockClickAction", default: .hide)
     static let enableCmdRightClickQuit = Key<Bool>("enableCmdRightClickQuit", default: true)
+    static let quitAppOnWindowClose = Key<Bool>("quitAppOnWindowClose", default: false)
     static let enableDockScrollGesture = Key<Bool>("enableDockScrollGesture", default: false)
     static let dockIconMediaScrollBehavior = Key<DockIconMediaScrollBehavior>("dockIconMediaScrollBehavior", default: .adjustVolume)
     static let mediaWidgetScrollBehavior = Key<MediaWidgetScrollBehavior>("mediaWidgetScrollBehavior", default: .seekPlayback)
     static let mediaWidgetScrollDirection = Key<MediaWidgetScrollDirection>("mediaWidgetScrollDirection", default: .vertical)
 
-    static let screenCaptureCacheLifespan = Key<CGFloat>("screenCaptureCacheLifespan", default: 60)
+    static let screenCaptureCacheLifespan = Key<CGFloat>("screenCaptureCacheLifespan", default: 30)
     static let windowProcessingDebounceInterval = Key<CGFloat>("windowProcessingDebounceInterval", default: 0.3)
     static let windowPreviewImageScale = Key<CGFloat>("windowPreviewImageScale", default: 1)
     static let windowImageCaptureQuality = Key<WindowImageCaptureQuality>("windowImageCaptureQuality", default: .nominal)
@@ -171,8 +173,8 @@ extension Defaults.Keys {
 
     static let previewMaxColumns = Key<Int>("previewMaxColumns", default: 2) // For left/right dock
     static let previewMaxRows = Key<Int>("previewMaxRows", default: 1) // For bottom dock only
-    static let switcherMaxRows = Key<Int>("switcherMaxRows", default: 2) // For window switcher
-    static let windowSwitcherScrollDirection = Key<WindowSwitcherScrollDirection>("windowSwitcherScrollDirection", default: .horizontal)
+    static let switcherMaxRows = Key<Int>("switcherMaxRows", default: 8) // For window switcher
+    static let windowSwitcherScrollDirection = Key<WindowSwitcherScrollDirection>("windowSwitcherScrollDirection", default: .vertical)
 
     static let windowSwitcherPlacementStrategy = Key<WindowSwitcherPlacementStrategy>("windowSwitcherPlacementStrategy", default: .screenWithMouse)
     static let windowSwitcherControlPosition = Key<WindowSwitcherControlPosition>("windowSwitcherControlPosition", default: .topTrailing)
@@ -590,7 +592,6 @@ enum MediaWidgetScrollBehavior: String, CaseIterable, Defaults.Serializable {
     }
 }
 
-// Window switcher scroll direction
 enum WindowSwitcherScrollDirection: String, CaseIterable, Defaults.Serializable {
     case horizontal
     case vertical
@@ -598,9 +599,9 @@ enum WindowSwitcherScrollDirection: String, CaseIterable, Defaults.Serializable 
     var localizedName: String {
         switch self {
         case .horizontal:
-            String(localized: "Horizontal", comment: "Window switcher scroll direction option")
+            String(localized: "Horizontal", comment: "Scroll direction option")
         case .vertical:
-            String(localized: "Vertical", comment: "Window switcher scroll direction option")
+            String(localized: "Vertical", comment: "Scroll direction option")
         }
     }
 }

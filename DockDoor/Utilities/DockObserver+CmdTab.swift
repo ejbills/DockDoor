@@ -144,8 +144,7 @@ extension DockObserver {
         Task { @MainActor [weak self] in
             guard let self else { return }
 
-            let initialIndex = Defaults[.cmdTabAutoSelectFirstWindow] && !cachedWindows.isEmpty ? 0 : -1
-            previewCoordinator.windowSwitcherCoordinator.setIndex(to: initialIndex, shouldScroll: false)
+            let initialIndex = Defaults[.cmdTabAutoSelectFirstWindow] && !cachedWindows.isEmpty ? 0 : nil
             previewCoordinator.showWindow(
                 appName: appName,
                 windows: cachedWindows,
@@ -159,7 +158,8 @@ extension DockObserver {
                 },
                 bundleIdentifier: bundleId,
                 bypassDockMouseValidation: true,
-                dockPositionOverride: .cmdTab
+                dockPositionOverride: .cmdTab,
+                initialIndex: initialIndex
             )
         }
 

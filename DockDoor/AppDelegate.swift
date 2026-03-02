@@ -168,9 +168,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     @objc private func handleSystemWake() {
-        // activate application to re-assert window level on wake from sleep (fixes window rendering issues, dock preview not rendering after sleep)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+        // Re-assert window level on wake (fixes window rendering issues)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+            guard let self else { return }
             NSApp.activate(ignoringOtherApps: true)
+            dockObserver?.reset()
+            keybindHelper?.reset()
+            appClosureObserver?.reset()
         }
     }
 

@@ -15,17 +15,13 @@ extension WindowPreviewHoverContainer {
         isMockPreviewActive: Bool,
         sharedPanelWindowSize: CGSize
     ) -> CGPoint {
-        if Defaults[.allowDynamicImageSizing] {
-            // Use the old dynamic sizing logic based on actual window aspect ratios
+        if Defaults[.allowDynamicImageSizing], !isWindowSwitcherActive {
+            // Scale preview dimensions to match actual window aspect ratios (dock previews only)
             let thickness = isMockPreviewActive ? 200 : sharedPanelWindowSize.height
-            var maxWidth: CGFloat = 300 // Default/min
-            var maxHeight: CGFloat = 300 // Default/min
+            var maxWidth: CGFloat = 300
+            var maxHeight: CGFloat = 300
 
-            let orientationIsHorizontal: Bool = if isWindowSwitcherActive {
-                Defaults[.windowSwitcherScrollDirection] == .horizontal
-            } else {
-                dockPosition == .bottom || dockPosition == .cmdTab
-            }
+            let orientationIsHorizontal = dockPosition == .bottom || dockPosition == .cmdTab
             let maxAspectRatio: CGFloat = 1.5
 
             for window in windows {
@@ -53,97 +49,56 @@ extension WindowPreviewHoverContainer {
         }
     }
 
+    private static func computeRenderedDimension(
+        image: CGImage,
+        thickness: CGFloat,
+        maxDimensions: CGSize,
+        isHorizontal: Bool
+    ) -> CGSize {
+        let aspectRatio = CGFloat(image.width) / CGFloat(image.height)
+        if isHorizontal {
+            let width = min(thickness * aspectRatio, maxDimensions.width)
+            return CGSize(width: width, height: thickness)
+        } else {
+            let height = min(thickness / aspectRatio, maxDimensions.height)
+            return CGSize(width: thickness, height: height)
+        }
+    }
+
     static func precomputeWindowDimensions(
         windows: [WindowInfo],
         overallMaxDimensions: CGPoint,
         bestGuessMonitor: NSScreen,
         dockPosition: DockPosition,
         isWindowSwitcherActive: Bool,
-        previewMaxColumns: Int,
-        previewMaxRows: Int,
-        switcherMaxRows: Int
+        effectiveMaxColumns: Int,
+        effectiveMaxRows: Int
     ) -> [Int: WindowDimensions] {
         var dimensionsMap: [Int: WindowDimensions] = [:]
 
-        if Defaults[.allowDynamicImageSizing] {
-            let orientationIsHorizontal: Bool = if isWindowSwitcherActive {
-                Defaults[.windowSwitcherScrollDirection] == .horizontal
-            } else {
-                dockPosition == .bottom || dockPosition == .cmdTab
-            }
+        if Defaults[.allowDynamicImageSizing], !isWindowSwitcherActive {
+            let orientationIsHorizontal: Bool = dockPosition == .bottom || dockPosition == .cmdTab
+            let maxDims = CGSize(width: overallMaxDimensions.x, height: overallMaxDimensions.y)
+            let thickness: CGFloat = orientationIsHorizontal ? overallMaxDimensions.y : overallMaxDimensions.x
 
-            let (effectiveMaxColumns, effectiveMaxRows) = calculateEffectiveMaxColumnsAndRows(
-                bestGuessMonitor: bestGuessMonitor,
-                overallMaxDimensions: overallMaxDimensions,
-                dockPosition: dockPosition,
-                isWindowSwitcherActive: isWindowSwitcherActive,
-                previewMaxColumns: previewMaxColumns,
-                previewMaxRows: previewMaxRows,
-                switcherMaxRows: switcherMaxRows,
-                totalItems: windows.count
-            )
-
-            let windowChunks = createWindowChunks(
-                totalWindows: windows.count,
-                isHorizontal: orientationIsHorizontal,
-                maxColumns: effectiveMaxColumns,
-                maxRows: effectiveMaxRows
-            )
-
-            for (_, chunk) in windowChunks.enumerated() {
-                var unifiedHeight: CGFloat = 0
-                var unifiedWidth: CGFloat = 0
-
-                if orientationIsHorizontal {
-                    let thickness = overallMaxDimensions.y
-                    for windowIndex in chunk {
-                        guard windowIndex < windows.count,
-                              let cgImage = windows[windowIndex].image else { continue }
-
-                        let originalSize = CGSize(width: cgImage.width, height: cgImage.height)
-                        let aspectRatio = originalSize.width / originalSize.height
-
-                        let rawWidthAtThickness = thickness * aspectRatio
-                        let widthAtThickness = min(rawWidthAtThickness, thickness * 1.5)
-
-                        unifiedWidth = max(unifiedWidth, widthAtThickness)
-                    }
-                    unifiedHeight = thickness
-                } else {
-                    let thickness = overallMaxDimensions.x
-                    for windowIndex in chunk {
-                        guard windowIndex < windows.count,
-                              let cgImage = windows[windowIndex].image else { continue }
-
-                        let originalSize = CGSize(width: cgImage.width, height: cgImage.height)
-                        let aspectRatio = originalSize.width / originalSize.height
-
-                        let rawWidthAtThickness = thickness * aspectRatio
-                        let widthAtThickness = min(rawWidthAtThickness, thickness * 1.5)
-
-                        unifiedWidth = max(unifiedWidth, widthAtThickness)
-                    }
-                    unifiedWidth = thickness
-                }
-
-                let maxDims = CGSize(width: overallMaxDimensions.x, height: overallMaxDimensions.y)
-
-                for windowIndex in chunk {
-                    guard windowIndex < windows.count else { continue }
-
-                    if windows[windowIndex].image != nil {
-                        let windowSize = if orientationIsHorizontal {
-                            CGSize(width: 0, height: max(unifiedHeight, 50))
-                        } else {
-                            CGSize(width: max(unifiedWidth, 50), height: 0)
-                        }
-
-                        dimensionsMap[windowIndex] = WindowDimensions(size: windowSize, maxDimensions: maxDims)
+            for (index, window) in windows.enumerated() {
+                if let cgImage = window.image {
+                    let rendered = computeRenderedDimension(
+                        image: cgImage,
+                        thickness: thickness,
+                        maxDimensions: maxDims,
+                        isHorizontal: orientationIsHorizontal
+                    )
+                    let windowSize = if orientationIsHorizontal {
+                        CGSize(width: rendered.width, height: max(rendered.height, 50))
                     } else {
-                        let fallbackSize = CGSize(width: min(300, overallMaxDimensions.x),
-                                                  height: min(300, overallMaxDimensions.y))
-                        dimensionsMap[windowIndex] = WindowDimensions(size: fallbackSize, maxDimensions: maxDims)
+                        CGSize(width: max(rendered.width, 50), height: rendered.height)
                     }
+                    dimensionsMap[index] = WindowDimensions(size: windowSize, maxDimensions: maxDims)
+                } else {
+                    let fallbackSize = CGSize(width: min(300, overallMaxDimensions.x),
+                                              height: min(300, overallMaxDimensions.y))
+                    dimensionsMap[index] = WindowDimensions(size: fallbackSize, maxDimensions: maxDims)
                 }
             }
         } else {
@@ -183,6 +138,7 @@ extension WindowPreviewHoverContainer {
 
     // MARK: - Helper Functions
 
+    /// Computes the actual rendered dimension (width for horizontal flow, height for vertical) of a single window card.
     /// Calculates the effective maximum columns and rows based on screen size and user settings
     /// - Parameters:
     ///   - bestGuessMonitor: The screen to calculate for
@@ -206,7 +162,7 @@ extension WindowPreviewHoverContainer {
     ) -> (maxColumns: Int, maxRows: Int) {
         let screenWidth = bestGuessMonitor.frame.width * 0.75
         let screenHeight = bestGuessMonitor.frame.height * 0.75
-        let itemSpacing: CGFloat = 24
+        let itemSpacing = HoverContainerPadding.itemSpacing
         let globalPadding: CGFloat = 40
 
         let previewWidth = overallMaxDimensions.x
@@ -348,7 +304,7 @@ extension WindowPreviewHoverContainer {
 
         let bestGuessMonitor = NSScreen.main ?? NSScreen.screens.first!
         let isHorizontalFlow: Bool = if isWindowSwitcherActive {
-            Defaults[.windowSwitcherScrollDirection] == .horizontal
+            true
         } else {
             dockPosition.isHorizontalFlow
         }

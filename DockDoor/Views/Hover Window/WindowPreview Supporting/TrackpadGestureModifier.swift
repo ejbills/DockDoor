@@ -1,4 +1,5 @@
 import Cocoa
+import Defaults
 import SwiftUI
 
 struct TrackpadGestureModifier: ViewModifier {
@@ -6,6 +7,7 @@ struct TrackpadGestureModifier: ViewModifier {
     var onSwipeDown: () -> Void
     var onSwipeLeft: () -> Void
     var onSwipeRight: () -> Void
+    var onScrollingChanged: ((Bool) -> Void)?
 
     @State private var isHovering = false
 
@@ -20,7 +22,8 @@ struct TrackpadGestureModifier: ViewModifier {
                     onSwipeUp: onSwipeUp,
                     onSwipeDown: onSwipeDown,
                     onSwipeLeft: onSwipeLeft,
-                    onSwipeRight: onSwipeRight
+                    onSwipeRight: onSwipeRight,
+                    onScrollingChanged: onScrollingChanged
                 )
                 .frame(width: 0, height: 0)
             )
@@ -33,6 +36,7 @@ struct TrackpadEventMonitor: NSViewRepresentable {
     var onSwipeDown: () -> Void
     var onSwipeLeft: () -> Void
     var onSwipeRight: () -> Void
+    var onScrollingChanged: ((Bool) -> Void)?
 
     func makeNSView(context: Context) -> NSView {
         let view = NSView(frame: .zero)
@@ -48,7 +52,8 @@ struct TrackpadEventMonitor: NSViewRepresentable {
             onSwipeUp: onSwipeUp,
             onSwipeDown: onSwipeDown,
             onSwipeLeft: onSwipeLeft,
-            onSwipeRight: onSwipeRight
+            onSwipeRight: onSwipeRight,
+            onScrollingChanged: onScrollingChanged
         )
     }
 
@@ -58,6 +63,7 @@ struct TrackpadEventMonitor: NSViewRepresentable {
         var onSwipeDown: () -> Void
         var onSwipeLeft: () -> Void
         var onSwipeRight: () -> Void
+        var onScrollingChanged: ((Bool) -> Void)?
 
         private var scrollMonitor: Any?
         private var cumulativeScrollX: CGFloat = 0
@@ -65,17 +71,21 @@ struct TrackpadEventMonitor: NSViewRepresentable {
         private var isScrolling = false
         private var isNaturalScrolling = false
         private var scrollEndTimer: Timer?
+        private var scrollCooldownTimer: Timer?
+        private let swipeThreshold: CGFloat = Defaults[.gestureSwipeThreshold]
 
         init(
             onSwipeUp: @escaping () -> Void,
             onSwipeDown: @escaping () -> Void,
             onSwipeLeft: @escaping () -> Void,
-            onSwipeRight: @escaping () -> Void
+            onSwipeRight: @escaping () -> Void,
+            onScrollingChanged: ((Bool) -> Void)?
         ) {
             self.onSwipeUp = onSwipeUp
             self.onSwipeDown = onSwipeDown
             self.onSwipeLeft = onSwipeLeft
             self.onSwipeRight = onSwipeRight
+            self.onScrollingChanged = onScrollingChanged
             setupMonitor()
         }
 
@@ -84,6 +94,7 @@ struct TrackpadEventMonitor: NSViewRepresentable {
                 NSEvent.removeMonitor(monitor)
             }
             scrollEndTimer?.invalidate()
+            scrollCooldownTimer?.invalidate()
         }
 
         private func setupMonitor() {
@@ -104,6 +115,8 @@ struct TrackpadEventMonitor: NSViewRepresentable {
                 isScrolling = true
                 isNaturalScrolling = event.isDirectionInvertedFromDevice
                 scrollEndTimer?.invalidate()
+                scrollCooldownTimer?.invalidate()
+                onScrollingChanged?(true)
 
             case .changed:
                 cumulativeScrollX += event.scrollingDeltaX
@@ -132,17 +145,15 @@ struct TrackpadEventMonitor: NSViewRepresentable {
             guard isScrolling else { return }
             isScrolling = false
 
-            let minDelta: CGFloat = 50
-
             let normalizedY = isNaturalScrolling ? -cumulativeScrollY : cumulativeScrollY
 
-            if abs(cumulativeScrollY) > abs(cumulativeScrollX), abs(cumulativeScrollY) > minDelta {
+            if abs(cumulativeScrollY) > abs(cumulativeScrollX), abs(cumulativeScrollY) > swipeThreshold {
                 if normalizedY > 0 {
                     DispatchQueue.main.async { self.onSwipeUp() }
                 } else {
                     DispatchQueue.main.async { self.onSwipeDown() }
                 }
-            } else if abs(cumulativeScrollX) > abs(cumulativeScrollY), abs(cumulativeScrollX) > minDelta {
+            } else if abs(cumulativeScrollX) > abs(cumulativeScrollY), abs(cumulativeScrollX) > swipeThreshold {
                 if cumulativeScrollX < 0 {
                     DispatchQueue.main.async { self.onSwipeLeft() }
                 } else {
@@ -152,12 +163,18 @@ struct TrackpadEventMonitor: NSViewRepresentable {
 
             cumulativeScrollX = 0
             cumulativeScrollY = 0
+
+            scrollCooldownTimer?.invalidate()
+            scrollCooldownTimer = Timer.scheduledTimer(withTimeInterval: 0.3, repeats: false) { [weak self] _ in
+                self?.onScrollingChanged?(false)
+            }
         }
     }
 }
 
 extension View {
     func onTrackpadSwipe(
+        onScrollingChanged: ((Bool) -> Void)? = nil,
         onSwipeUp: @escaping () -> Void = {},
         onSwipeDown: @escaping () -> Void = {},
         onSwipeLeft: @escaping () -> Void = {},
@@ -167,7 +184,8 @@ extension View {
             onSwipeUp: onSwipeUp,
             onSwipeDown: onSwipeDown,
             onSwipeLeft: onSwipeLeft,
-            onSwipeRight: onSwipeRight
+            onSwipeRight: onSwipeRight,
+            onScrollingChanged: onScrollingChanged
         ))
     }
 }

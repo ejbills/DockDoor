@@ -8,6 +8,7 @@ struct AdvancedSettingsView: View {
     @Default(.preventPreviewReentryDuringFadeOut) var preventPreviewReentryDuringFadeOut
     @Default(.inactivityTimeout) var inactivityTimeout
     @Default(.windowProcessingDebounceInterval) var windowProcessingDebounceInterval
+    @Default(.anchorDockPreviewPosition) var anchorDockPreviewPosition
     @Default(.preventDockHide) var preventDockHide
     @Default(.raisedWindowLevel) var raisedWindowLevel
 
@@ -71,6 +72,14 @@ struct AdvancedSettingsView: View {
                         askUserToRestartApplication()
                     }
                 })
+
+                Toggle(isOn: $anchorDockPreviewPosition) {
+                    Text("Anchor preview to initial dock icon position")
+                }
+                Text("Keeps the preview pinned where the dock icon was when first hovered, preventing it from jumping when the dock auto-hides.")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .padding(.leading, 20)
 
                 Toggle(isOn: $preventDockHide) { Text("Prevent dock from hiding during previews") }
                 Toggle(isOn: $raisedWindowLevel) { Text("Show preview above app labels").onChange(of: raisedWindowLevel) { _ in askUserToRestartApplication() } }

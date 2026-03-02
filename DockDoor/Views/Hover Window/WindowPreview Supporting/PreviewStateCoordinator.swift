@@ -46,6 +46,9 @@ class PreviewStateCoordinator: ObservableObject {
 
     @Published var overallMaxPreviewDimension: CGPoint = .zero
     @Published var windowDimensionsMap: [Int: WindowPreviewHoverContainer.WindowDimensions] = [:]
+    @Published var effectiveGridColumns: Int = 1
+    @Published var effectiveGridRows: Int = 1
+    @Published var expectedContentSize: CGSize = .zero
     @Published var frameRefreshRequestId: UUID?
     private var lastKnownBestGuessMonitor: NSScreen?
 
@@ -247,19 +250,97 @@ class PreviewStateCoordinator: ObservableObject {
             sharedPanelWindowSize: panelSize
         )
 
+        let (cols, rows) = WindowPreviewHoverContainer.calculateEffectiveMaxColumnsAndRows(
+            bestGuessMonitor: bestGuessMonitor,
+            overallMaxDimensions: newOverallMaxDimension,
+            dockPosition: dockPosition,
+            isWindowSwitcherActive: windowSwitcherActive,
+            previewMaxColumns: Defaults[.previewMaxColumns],
+            previewMaxRows: Defaults[.previewMaxRows],
+            switcherMaxRows: Defaults[.switcherMaxRows],
+            totalItems: windows.count
+        )
+
         let newDimensionsMap = WindowPreviewHoverContainer.precomputeWindowDimensions(
             windows: windows,
             overallMaxDimensions: newOverallMaxDimension,
             bestGuessMonitor: bestGuessMonitor,
             dockPosition: dockPosition,
             isWindowSwitcherActive: windowSwitcherActive,
-            previewMaxColumns: Defaults[.previewMaxColumns],
-            previewMaxRows: Defaults[.previewMaxRows],
-            switcherMaxRows: Defaults[.switcherMaxRows]
+            effectiveMaxColumns: cols,
+            effectiveMaxRows: rows
         )
 
         overallMaxPreviewDimension = newOverallMaxDimension
         windowDimensionsMap = newDimensionsMap
+        effectiveGridColumns = cols
+        effectiveGridRows = rows
+
+        let compactThreshold = Defaults[.dockPreviewCompactThreshold]
+        let wouldUseCompactMode = Defaults[.disableImagePreview]
+            || (compactThreshold > 0 && windows.count >= compactThreshold)
+
+        if Defaults[.allowDynamicImageSizing], !windowSwitcherActive, !wouldUseCompactMode {
+            expectedContentSize = Self.computeExpectedContentSize(
+                windowCount: windows.count,
+                dimensionsMap: newDimensionsMap,
+                isHorizontal: dockPosition.isHorizontalFlow,
+                maxColumns: cols,
+                maxRows: rows
+            )
+        } else {
+            expectedContentSize = .zero
+        }
+    }
+
+    private static func computeExpectedContentSize(
+        windowCount: Int,
+        dimensionsMap: [Int: WindowPreviewHoverContainer.WindowDimensions],
+        isHorizontal: Bool,
+        maxColumns: Int,
+        maxRows: Int
+    ) -> CGSize {
+        guard windowCount > 0 else { return .zero }
+
+        let itemSpacing = HoverContainerPadding.itemSpacing
+        let padding = HoverContainerPadding.totalPerSide()
+
+        let chunks = WindowPreviewHoverContainer.chunkArray(
+            items: Array(0 ..< windowCount),
+            isHorizontal: isHorizontal,
+            maxColumns: maxColumns,
+            maxRows: maxRows
+        )
+
+        if isHorizontal {
+            var maxRowWidth: CGFloat = 0
+
+            for row in chunks {
+                var rowWidth: CGFloat = 0
+                for windowIndex in row {
+                    let dims = dimensionsMap[windowIndex]
+                    rowWidth += dims?.size.width ?? dims?.maxDimensions.width ?? 0
+                }
+                rowWidth += CGFloat(max(0, row.count - 1)) * itemSpacing
+                maxRowWidth = max(maxRowWidth, rowWidth)
+            }
+
+            return CGSize(width: maxRowWidth + padding * 2, height: 0)
+        } else {
+            var maxColHeight: CGFloat = 0
+
+            for col in chunks {
+                var colHeight: CGFloat = 0
+                for windowIndex in col {
+                    let dims = dimensionsMap[windowIndex]
+                    colHeight += dims?.size.height ?? dims?.maxDimensions.height ?? 0
+                }
+                colHeight += CGFloat(max(0, col.count - 1)) * itemSpacing
+                maxColHeight = max(maxColHeight, colHeight)
+            }
+
+            return CGSize(width: 0, height: maxColHeight + padding * 2)
+        }
     }
 
     @MainActor
@@ -310,7 +391,7 @@ class PreviewStateCoordinator: ObservableObject {
             return
         }
 
-        let forwardDirection: ArrowDirection = Defaults[.windowSwitcherScrollDirection] == .vertical ? .down : .right
+        let forwardDirection: ArrowDirection = .right
         currIndex = WindowPreviewHoverContainer.navigateWindowSwitcher(
             from: currIndex,
             direction: forwardDirection,
@@ -336,7 +417,7 @@ class PreviewStateCoordinator: ObservableObject {
             return
         }
 
-        let backwardDirection: ArrowDirection = Defaults[.windowSwitcherScrollDirection] == .vertical ? .up : .left
+        let backwardDirection: ArrowDirection = .left
         currIndex = WindowPreviewHoverContainer.navigateWindowSwitcher(
             from: currIndex,
             direction: backwardDirection,

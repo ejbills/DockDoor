@@ -13,6 +13,7 @@ struct DockPreviewAppearanceSection: View {
     @Default(.useEmbeddedDockPreviewElements) var useEmbeddedDockPreviewElements
     @Default(.previewMaxColumns) var previewMaxColumns
     @Default(.previewMaxRows) var previewMaxRows
+    @Default(.allowDynamicImageSizing) var allowDynamicImageSizing
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -90,6 +91,16 @@ struct DockPreviewAppearanceSection: View {
                     Text("Embed controls in preview frames")
                 }
                 Text("Places traffic light buttons and window titles directly inside the dock preview frames for a more compact and minimal appearance.")
+                    .font(.footnote)
+                    .foregroundColor(.gray)
+                    .padding(.leading, 20)
+            }
+
+            VStack(alignment: .leading) {
+                Toggle(isOn: $allowDynamicImageSizing) {
+                    Text("Allow dynamic image sizing")
+                }
+                Text("Previews scale dynamically to window proportions, overriding fixed frame constraints.")
                     .font(.footnote)
                     .foregroundColor(.gray)
                     .padding(.leading, 20)
