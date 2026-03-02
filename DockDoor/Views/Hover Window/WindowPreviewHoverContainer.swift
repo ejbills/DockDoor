@@ -1030,7 +1030,8 @@ struct WindowPreviewHoverContainer: View {
             isHorizontal: isHorizontal,
             maxColumns: maxColumns,
             maxRows: maxRows,
-            reverse: shouldReverse
+            reverse: shouldReverse,
+            fillToLimit: previewStateCoordinator.windowSwitcherActive && Defaults[.windowSwitcherScrollDirection] == .vertical
         )
 
         return chunks.isEmpty ? [[]] : chunks

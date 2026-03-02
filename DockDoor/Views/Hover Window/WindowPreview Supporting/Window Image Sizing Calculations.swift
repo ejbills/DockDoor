@@ -177,12 +177,8 @@ extension WindowPreviewHoverContainer {
         if isWindowSwitcherActive {
             let isVertical = Defaults[.windowSwitcherScrollDirection] == .vertical
             if isVertical {
+                effectiveMaxColumns = min(switcherMaxRows, calculatedMaxColumns)
                 effectiveMaxRows = calculatedMaxRows
-                if let totalItems, totalItems <= calculatedMaxRows {
-                    effectiveMaxColumns = 1
-                } else {
-                    effectiveMaxColumns = switcherMaxRows
-                }
             } else {
                 effectiveMaxColumns = calculatedMaxColumns
                 if let totalItems, totalItems <= calculatedMaxColumns {
@@ -215,7 +211,8 @@ extension WindowPreviewHoverContainer {
         isHorizontal: Bool,
         maxColumns: Int,
         maxRows: Int,
-        reverse: Bool = false
+        reverse: Bool = false,
+        fillToLimit: Bool = false
     ) -> [[T]] {
         let totalItems = items.count
 
@@ -226,41 +223,37 @@ extension WindowPreviewHoverContainer {
         var chunks: [[T]]
 
         if isHorizontal {
-            let actualRowsNeeded = min(maxRows, Int(ceil(Double(totalItems) / Double(maxColumns))))
-            let itemsPerRow = Int(ceil(Double(totalItems) / Double(actualRowsNeeded)))
+            let itemsPerRow: Int
+            if fillToLimit {
+                itemsPerRow = maxColumns
+            } else {
+                let actualRowsNeeded = min(maxRows, Int(ceil(Double(totalItems) / Double(maxColumns))))
+                itemsPerRow = Int(ceil(Double(totalItems) / Double(actualRowsNeeded)))
+            }
+
 
             chunks = []
             var startIndex = 0
-
-            for _ in 0 ..< actualRowsNeeded {
-                guard startIndex < totalItems else { break }
-
+            while startIndex < totalItems {
                 let endIndex = min(startIndex + itemsPerRow, totalItems)
-                let rowItems = Array(items[startIndex ..< endIndex])
-
-                if !rowItems.isEmpty {
-                    chunks.append(rowItems)
-                }
-
+                chunks.append(Array(items[startIndex ..< endIndex]))
                 startIndex = endIndex
             }
         } else {
-            let actualColumnsNeeded = min(maxColumns, Int(ceil(Double(totalItems) / Double(maxRows))))
-            let itemsPerColumn = Int(ceil(Double(totalItems) / Double(actualColumnsNeeded)))
+            let itemsPerColumn: Int
+            if fillToLimit {
+                itemsPerColumn = maxRows
+            } else {
+                let actualColumnsNeeded = min(maxColumns, Int(ceil(Double(totalItems) / Double(maxRows))))
+                itemsPerColumn = Int(ceil(Double(totalItems) / Double(actualColumnsNeeded)))
+            }
+
 
             chunks = []
             var startIndex = 0
-
-            for _ in 0 ..< actualColumnsNeeded {
-                guard startIndex < totalItems else { break }
-
+            while startIndex < totalItems {
                 let endIndex = min(startIndex + itemsPerColumn, totalItems)
-                let columnItems = Array(items[startIndex ..< endIndex])
-
-                if !columnItems.isEmpty {
-                    chunks.append(columnItems)
-                }
-
+                chunks.append(Array(items[startIndex ..< endIndex]))
                 startIndex = endIndex
             }
         }
@@ -322,6 +315,7 @@ extension WindowPreviewHoverContainer {
 
         let shouldReverse = (dockPosition == .bottom || dockPosition == .right) && !isWindowSwitcherActive
 
+        let isVerticalScroll = isWindowSwitcherActive && Defaults[.windowSwitcherScrollDirection] == .vertical
         return navigateInGrid(
             from: currentIndex,
             direction: direction,
@@ -329,7 +323,8 @@ extension WindowPreviewHoverContainer {
             isHorizontal: isHorizontalFlow,
             maxColumns: maxColumns,
             maxRows: maxRows,
-            reverse: shouldReverse
+            reverse: shouldReverse,
+            fillToLimit: isVerticalScroll
         )
     }
 
@@ -342,14 +337,15 @@ extension WindowPreviewHoverContainer {
         isHorizontal: Bool,
         maxColumns: Int,
         maxRows: Int,
-        reverse: Bool = false
+        reverse: Bool = false,
+        fillToLimit: Bool = false
     ) -> Int {
         guard totalItems > 0, currentIndex >= 0, currentIndex < totalItems else {
             return currentIndex
         }
 
         let items = Array(0 ..< totalItems)
-        let chunks = chunkArray(items: items, isHorizontal: isHorizontal, maxColumns: maxColumns, maxRows: maxRows, reverse: reverse)
+        let chunks = chunkArray(items: items, isHorizontal: isHorizontal, maxColumns: maxColumns, maxRows: maxRows, reverse: reverse, fillToLimit: fillToLimit)
 
         var currentChunkIndex = 0
         var currentPositionInChunk = 0
