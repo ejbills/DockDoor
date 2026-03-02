@@ -7,7 +7,6 @@ import UniformTypeIdentifiers
 struct MainSettingsView: View {
     @Default(.showMenuBarIcon) var showMenuBarIcon
     @Default(.showAnimations) var showAnimations
-    @Default(.ignoreAppsWithSingleWindow) var ignoreAppsWithSingleWindow
     @Default(.sortMinimizedToEnd) var sortMinimizedToEnd
 
     var body: some View {
@@ -55,14 +54,6 @@ struct MainSettingsView: View {
                 )) {
                     Text("Reduce motion")
                 }
-
-                Toggle(isOn: $ignoreAppsWithSingleWindow, label: {
-                    Text("Ignore apps with one window")
-                })
-                Text("Prevents apps that only ever have a single window from appearing in previews.")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-                    .padding(.leading, 20)
 
                 Toggle(isOn: $sortMinimizedToEnd, label: {
                     Text("Sort minimized/hidden windows to end")

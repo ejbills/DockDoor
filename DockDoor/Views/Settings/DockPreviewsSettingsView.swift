@@ -15,6 +15,7 @@ struct DockPreviewsSettingsView: View {
     @Default(.enableCmdRightClickQuit) var enableCmdRightClickQuit
     @Default(.quitAppOnWindowClose) var quitAppOnWindowClose
     @Default(.bufferFromDock) var bufferFromDock
+    @Default(.ignoreAppsWithSingleWindow) var ignoreAppsWithSingleWindow
 
     var body: some View {
         BaseSettingsView {
@@ -73,6 +74,12 @@ struct DockPreviewsSettingsView: View {
 
                 Toggle(isOn: $groupAppInstancesInDock) { Text("Group multiple app instances together") }
                 Text("Show windows from all instances of an app when hovering its dock icon.")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .padding(.leading, 20)
+
+                Toggle(isOn: $ignoreAppsWithSingleWindow) { Text("Ignore apps with one window") }
+                Text("Prevents apps that only ever have a single window from appearing in previews.")
                     .font(.caption)
                     .foregroundColor(.secondary)
                     .padding(.leading, 20)

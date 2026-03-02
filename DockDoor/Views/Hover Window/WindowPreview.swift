@@ -202,7 +202,6 @@ struct WindowPreview: View {
                 Color.clear
             } else if useLivePreview {
                 LivePreviewImage(windowID: windowInfo.id, fallbackImage: windowInfo.image, quality: quality, frameRate: frameRate)
-                    .scaledToFit()
             } else if let cgImage = windowInfo.image {
                 Image(decorative: cgImage, scale: 1.0)
                     .resizable()

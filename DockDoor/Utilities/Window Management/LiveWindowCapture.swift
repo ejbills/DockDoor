@@ -42,6 +42,7 @@ private struct LivePreviewImageCached: View {
             if let image = capture.capturedImage ?? capture.lastFrame ?? fallbackImage {
                 Image(decorative: image, scale: 1.0)
                     .resizable()
+                    .scaledToFit()
             }
         }
         .task {
@@ -71,6 +72,7 @@ private struct LivePreviewImageFresh: View {
             if let image = capture.capturedImage ?? fallbackImage {
                 Image(decorative: image, scale: 1.0)
                     .resizable()
+                    .scaledToFit()
             }
         }
         .task {
