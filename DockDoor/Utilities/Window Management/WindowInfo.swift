@@ -224,6 +224,22 @@ extension WindowInfo {
         return (screen, currentSize)
     }
 
+    func currentWindowFrame() -> CGRect? {
+        guard let currentPosition = try? axElement.position(),
+              let currentSize = try? axElement.size()
+        else {
+            return nil
+        }
+
+        let primaryScreenMaxY = NSScreen.screens.first?.frame.maxY ?? NSScreen.main?.frame.maxY ?? 0
+        return CGRect(
+            x: currentPosition.x,
+            y: primaryScreenMaxY - currentPosition.y - currentSize.height,
+            width: currentSize.width,
+            height: currentSize.height
+        )
+    }
+
     private func applyWindowFrame(_ targetFrame: CGRect, on screen: NSScreen) {
         let primaryScreenMaxY = NSScreen.screens.first?.frame.maxY ?? screen.frame.maxY
         let axY = primaryScreenMaxY - targetFrame.maxY
@@ -238,6 +254,17 @@ extension WindowInfo {
 
         try? axElement.setAttribute(kAXPositionAttribute, positionValue)
         try? axElement.setAttribute(kAXSizeAttribute, sizeValue)
+    }
+
+    func setWindowFrame(_ targetFrame: CGRect) {
+        guard let screen = NSScreen.screens.first(where: { $0.frame.intersects(targetFrame) })
+            ?? currentWindowPlacementContext()?.screen
+            ?? NSScreen.main
+        else {
+            return
+        }
+
+        applyWindowFrame(targetFrame, on: screen)
     }
 
     private func positionWindow(rect: WindowPositionRect) {

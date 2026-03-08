@@ -38,6 +38,8 @@ struct DockScrollGestureSection: View {
 
 struct TitleBarScrollGestureSection: View {
     @Default(.enableTitleBarScrollGesture) var enableTitleBarScrollGesture
+    @Default(.titleBarScrollCenteredWindowScale) var titleBarScrollCenteredWindowScale
+    @Default(.titleBarScrollRestoreWindowInterval) var titleBarScrollRestoreWindowInterval
 
     var body: some View {
         SettingsGroup(header: "Title Bar Scroll Gesture") {
@@ -51,9 +53,37 @@ struct TitleBarScrollGestureSection: View {
                 }
 
                 if enableTitleBarScrollGesture {
-                    Text("Scroll up on a focused window title bar to maximize it, scroll down to center it at 80% size, and scroll left or right to switch desktop spaces.")
+                    let centeredWindowScaleBinding = Binding<Double>(
+                        get: { Double(titleBarScrollCenteredWindowScale) },
+                        set: { titleBarScrollCenteredWindowScale = CGFloat($0) }
+                    )
+
+                    let restoreIntervalBinding = Binding<Double>(
+                        get: { Double(titleBarScrollRestoreWindowInterval) },
+                        set: { titleBarScrollRestoreWindowInterval = CGFloat($0) }
+                    )
+
+                    Text("Scroll up on a focused window title bar to maximize it, scroll down to center it using the configured window size, and scroll left or right to switch desktop spaces. Repeat the same up/down scroll within the configured restore time to restore the previous window size.")
                         .font(.caption)
                         .foregroundColor(.secondary)
+
+                    sliderSetting(
+                        title: "Centered Window Size",
+                        value: centeredWindowScaleBinding,
+                        range: 0.5 ... 1,
+                        step: 0.05,
+                        unit: "",
+                        formatter: NumberFormatter.percentFormatter
+                    )
+
+                    sliderSetting(
+                        title: "Restore Window Time",
+                        value: restoreIntervalBinding,
+                        range: 0.5 ... 3,
+                        step: 0.1,
+                        unit: "seconds",
+                        formatter: NumberFormatter.oneDecimalFormatter
+                    )
                 }
             }
         }

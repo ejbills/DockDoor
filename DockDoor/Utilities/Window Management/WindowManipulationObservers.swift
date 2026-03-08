@@ -385,15 +385,32 @@ func axObserverCallback(observer: AXObserver, element: AXUIElement, notification
 }
 
 final class TitleBarScrollObserver {
+    private enum VerticalScrollAction {
+        case maximize
+        case center
+    }
+
+    private struct PendingRestoreState {
+        let windowId: CGWindowID
+        let processIdentifier: pid_t
+        let action: VerticalScrollAction
+        let originalFrame: CGRect
+        let expirationDate: Date
+    }
+
     private var eventTap: CFMachPort?
     private var eventTapRunLoopSource: CFRunLoopSource?
     private var lastScrollActionTime = Date.distantPast
+    private var pendingRestoreState: PendingRestoreState?
 
     private let scrollActionDebounceInterval: TimeInterval = 0.35
     private let minimumScrollDelta: Double = 0.15
     private let fallbackTitleBarHeight: CGFloat = 48
     private let maximumTitleBarHeight: CGFloat = 72
-    private let centeredWindowScale: CGFloat = 0.8
+
+    private var centeredWindowScale: CGFloat {
+        min(max(Defaults[.titleBarScrollCenteredWindowScale], 0.2), 1.0)
+    }
 
     init() {
         setupEventTap()
@@ -495,12 +512,49 @@ final class TitleBarScrollObserver {
         }
 
         if normalizedDeltaY > 0 {
-            focusedWindow.zoom()
+            handleVerticalScroll(.maximize, for: focusedWindow, now: now)
         } else {
-            focusedWindow.centerWindow(scale: centeredWindowScale)
+            handleVerticalScroll(.center, for: focusedWindow, now: now)
         }
 
         return true
+    }
+
+    private func handleVerticalScroll(_ action: VerticalScrollAction, for window: WindowInfo, now: Date) {
+        if let pendingRestoreState,
+           pendingRestoreState.windowId == window.id,
+           pendingRestoreState.processIdentifier == window.app.processIdentifier,
+           pendingRestoreState.action == action,
+           pendingRestoreState.expirationDate > now
+        {
+            window.setWindowFrame(pendingRestoreState.originalFrame)
+            self.pendingRestoreState = nil
+            return
+        }
+
+        guard let originalFrame = window.currentWindowFrame() else {
+            performVerticalScrollAction(action, on: window)
+            pendingRestoreState = nil
+            return
+        }
+
+        performVerticalScrollAction(action, on: window)
+        pendingRestoreState = PendingRestoreState(
+            windowId: window.id,
+            processIdentifier: window.app.processIdentifier,
+            action: action,
+            originalFrame: originalFrame,
+            expirationDate: now.addingTimeInterval(Double(Defaults[.titleBarScrollRestoreWindowInterval]))
+        )
+    }
+
+    private func performVerticalScrollAction(_ action: VerticalScrollAction, on window: WindowInfo) {
+        switch action {
+        case .maximize:
+            window.zoom()
+        case .center:
+            window.centerWindow(scale: centeredWindowScale)
+        }
     }
 
     private func isPointInTitleBar(_ point: CGPoint, window: WindowInfo, windowFrame: CGRect) -> Bool {
