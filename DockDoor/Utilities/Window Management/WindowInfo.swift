@@ -202,17 +202,14 @@ extension WindowInfo {
         }
     }
 
-    private func positionWindow(rect: WindowPositionRect) {
-        // Get current window position directly from AXUIElement
+    private func currentWindowPlacementContext() -> (screen: NSScreen, size: CGSize)? {
         guard let currentPosition = try? axElement.position(),
               let currentSize = try? axElement.size()
         else {
-            return
+            return nil
         }
 
-        // Find the screen containing this window
         guard let screen = NSScreen.screens.first(where: { screen in
-            // Convert AX coordinates to screen coordinates for comparison
             let screenTop = screen.frame.origin.y + screen.frame.height
             let windowBottomLeft = CGPoint(
                 x: currentPosition.x,
@@ -221,23 +218,18 @@ extension WindowInfo {
             let windowFrame = CGRect(origin: windowBottomLeft, size: currentSize)
             return screen.frame.intersects(windowFrame)
         }) ?? NSScreen.main else {
-            return
+            return nil
         }
 
-        // Use visibleFrame to respect menu bar and dock
-        let visibleFrame = screen.visibleFrame
+        return (screen, currentSize)
+    }
 
-        // Calculate target frame in Cocoa coordinates
-        let targetFrame = rect.frame(in: visibleFrame, currentSize: currentSize)
-
-        // Convert position: Cocoa uses bottom-left origin, AX uses top-left origin from primary screen
-        // Primary screen's maxY in Cocoa = 0 in AX coordinates
+    private func applyWindowFrame(_ targetFrame: CGRect, on screen: NSScreen) {
         let primaryScreenMaxY = NSScreen.screens.first?.frame.maxY ?? screen.frame.maxY
         let axY = primaryScreenMaxY - targetFrame.maxY
         let newPosition = CGPoint(x: targetFrame.origin.x, y: axY)
         let newSize = CGSize(width: targetFrame.width, height: targetFrame.height)
 
-        // Create AXValue wrapped values
         guard let positionValue = AXValue.from(point: newPosition),
               let sizeValue = AXValue.from(size: newSize)
         else {
@@ -246,6 +238,16 @@ extension WindowInfo {
 
         try? axElement.setAttribute(kAXPositionAttribute, positionValue)
         try? axElement.setAttribute(kAXSizeAttribute, sizeValue)
+    }
+
+    private func positionWindow(rect: WindowPositionRect) {
+        guard let context = currentWindowPlacementContext() else {
+            return
+        }
+
+        let visibleFrame = context.screen.visibleFrame
+        let targetFrame = rect.frame(in: visibleFrame, currentSize: context.size)
+        applyWindowFrame(targetFrame, on: context.screen)
     }
 
     func fillLeftHalf() {
@@ -282,6 +284,21 @@ extension WindowInfo {
 
     func centerWindow() {
         positionWindow(rect: .center)
+    }
+
+    func centerWindow(scale: CGFloat) {
+        guard let context = currentWindowPlacementContext() else {
+            return
+        }
+
+        let visibleFrame = context.screen.visibleFrame
+        let clampedScale = min(max(scale, 0.2), 1.0)
+        let targetSize = CGSize(
+            width: visibleFrame.width * clampedScale,
+            height: visibleFrame.height * clampedScale
+        )
+        let targetFrame = WindowPositionRect.center.frame(in: visibleFrame, currentSize: targetSize)
+        applyWindowFrame(targetFrame, on: context.screen)
     }
 
     func bringToFront() {

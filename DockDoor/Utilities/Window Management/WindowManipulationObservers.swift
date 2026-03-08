@@ -1,4 +1,5 @@
 import ApplicationServices
+import Carbon
 import Cocoa
 import Defaults
 
@@ -380,5 +381,198 @@ func axObserverCallback(observer: AXObserver, element: AXUIElement, notification
 
         pendingNotifications[key] = workItem
         axObserverWorkQueue.asyncAfter(deadline: .now() + windowProcessingDebounceInterval, execute: workItem)
+    }
+}
+
+final class TitleBarScrollObserver {
+    private var eventTap: CFMachPort?
+    private var eventTapRunLoopSource: CFRunLoopSource?
+    private var lastScrollActionTime = Date.distantPast
+
+    private let scrollActionDebounceInterval: TimeInterval = 0.35
+    private let minimumScrollDelta: Double = 0.15
+    private let fallbackTitleBarHeight: CGFloat = 48
+    private let maximumTitleBarHeight: CGFloat = 72
+    private let centeredWindowScale: CGFloat = 0.8
+
+    init() {
+        setupEventTap()
+    }
+
+    deinit {
+        removeEventTap()
+    }
+
+    private func setupEventTap() {
+        let eventMask: CGEventMask = 1 << CGEventType.scrollWheel.rawValue
+
+        guard let eventTap = CGEvent.tapCreate(
+            tap: .cghidEventTap,
+            place: .tailAppendEventTap,
+            options: .defaultTap,
+            eventsOfInterest: eventMask,
+            callback: { proxy, type, event, refcon -> Unmanaged<CGEvent>? in
+                guard let refcon else { return Unmanaged.passUnretained(event) }
+                let observer = Unmanaged<TitleBarScrollObserver>.fromOpaque(refcon).takeUnretainedValue()
+                return observer.eventTapCallback(proxy: proxy, type: type, event: event)
+            },
+            userInfo: Unmanaged.passUnretained(self).toOpaque()
+        ) else {
+            print("Failed to create title bar scroll event tap")
+            return
+        }
+
+        let runLoopSource = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, eventTap, 0)
+        CFRunLoopAddSource(CFRunLoopGetCurrent(), runLoopSource, .commonModes)
+
+        self.eventTap = eventTap
+        eventTapRunLoopSource = runLoopSource
+    }
+
+    private func removeEventTap() {
+        if let eventTap {
+            CGEvent.tapEnable(tap: eventTap, enable: false)
+        }
+
+        if let eventTapRunLoopSource {
+            CFRunLoopRemoveSource(CFRunLoopGetCurrent(), eventTapRunLoopSource, .commonModes)
+        }
+
+        eventTap = nil
+        eventTapRunLoopSource = nil
+    }
+
+    private func eventTapCallback(proxy _: CGEventTapProxy, type: CGEventType, event: CGEvent) -> Unmanaged<CGEvent>? {
+        if let passthrough = reEnableIfNeeded(tap: eventTap, type: type, event: event) {
+            return passthrough
+        }
+
+        guard type == .scrollWheel,
+              Defaults[.enableTitleBarScrollGesture],
+              handleTitleBarScroll(event)
+        else {
+            return Unmanaged.passUnretained(event)
+        }
+
+        return nil
+    }
+
+    private func handleTitleBarScroll(_ event: CGEvent) -> Bool {
+        let deltaX = event.getDoubleValueField(.scrollWheelEventDeltaAxis2)
+        let deltaY = event.getDoubleValueField(.scrollWheelEventDeltaAxis1)
+
+        guard abs(deltaX) > minimumScrollDelta || abs(deltaY) > minimumScrollDelta else {
+            return false
+        }
+
+        let mouseLocation = NSEvent.mouseLocation
+
+        guard let focusedWindow = WindowUtil.getFocusedWindowForFrontmostApp(),
+              let focusedWindowFrame = cocoaFrame(for: focusedWindow.axElement),
+              isPointInTitleBar(mouseLocation, window: focusedWindow, windowFrame: focusedWindowFrame)
+        else {
+            return false
+        }
+
+        let nsEvent = NSEvent(cgEvent: event)
+        let isNaturalScrolling = nsEvent?.isDirectionInvertedFromDevice ?? false
+        let normalizedDeltaX = isNaturalScrolling ? -deltaX : deltaX
+        let normalizedDeltaY = isNaturalScrolling ? -deltaY : deltaY
+
+        let now = Date()
+        guard now.timeIntervalSince(lastScrollActionTime) >= scrollActionDebounceInterval else {
+            return true
+        }
+        lastScrollActionTime = now
+
+        if abs(normalizedDeltaX) > abs(normalizedDeltaY) {
+            if normalizedDeltaX > 0 {
+                switchToNextSpace()
+            } else {
+                switchToPreviousSpace()
+            }
+            return true
+        }
+
+        if normalizedDeltaY > 0 {
+            focusedWindow.zoom()
+        } else {
+            focusedWindow.centerWindow(scale: centeredWindowScale)
+        }
+
+        return true
+    }
+
+    private func isPointInTitleBar(_ point: CGPoint, window: WindowInfo, windowFrame: CGRect) -> Bool {
+        guard windowFrame.contains(point) else {
+            return false
+        }
+
+        let titleBarHeight = resolvedTitleBarHeight(for: window, windowFrame: windowFrame)
+        let titleBarFrame = CGRect(
+            x: windowFrame.minX,
+            y: windowFrame.maxY - titleBarHeight,
+            width: windowFrame.width,
+            height: titleBarHeight
+        )
+        return titleBarFrame.contains(point)
+    }
+
+    private func resolvedTitleBarHeight(for window: WindowInfo, windowFrame: CGRect) -> CGFloat {
+        let closeButton = window.closeButton ?? ((try? window.axElement.closeButton()) ?? nil)
+        guard let closeButton,
+              let closeButtonFrame = cocoaFrame(for: closeButton)
+        else {
+            return fallbackTitleBarHeight
+        }
+
+        let inferredHeight = windowFrame.maxY - closeButtonFrame.minY + 12
+        return min(max(inferredHeight, fallbackTitleBarHeight), maximumTitleBarHeight)
+    }
+
+    private func cocoaFrame(for element: AXUIElement) -> CGRect? {
+        guard let position = try? element.position(),
+              let size = try? element.size()
+        else {
+            return nil
+        }
+
+        let primaryScreenMaxY = NSScreen.screens.first?.frame.maxY ?? NSScreen.main?.frame.maxY ?? 0
+        return CGRect(
+            x: position.x,
+            y: primaryScreenMaxY - position.y - size.height,
+            width: size.width,
+            height: size.height
+        )
+    }
+
+    private func switchToPreviousSpace() {
+        postControlArrowKey(CGKeyCode(kVK_LeftArrow))
+    }
+
+    private func switchToNextSpace() {
+        postControlArrowKey(CGKeyCode(kVK_RightArrow))
+    }
+
+    private func postControlArrowKey(_ keyCode: CGKeyCode) {
+        guard let source = CGEventSource(stateID: .combinedSessionState) else {
+            return
+        }
+
+        let controlDown = CGEvent(keyboardEventSource: source, virtualKey: CGKeyCode(kVK_Control), keyDown: true)
+        controlDown?.flags = .maskControl
+
+        let arrowDown = CGEvent(keyboardEventSource: source, virtualKey: keyCode, keyDown: true)
+        arrowDown?.flags = .maskControl
+
+        let arrowUp = CGEvent(keyboardEventSource: source, virtualKey: keyCode, keyDown: false)
+        arrowUp?.flags = .maskControl
+
+        let controlUp = CGEvent(keyboardEventSource: source, virtualKey: CGKeyCode(kVK_Control), keyDown: false)
+
+        controlDown?.post(tap: .cghidEventTap)
+        arrowDown?.post(tap: .cghidEventTap)
+        arrowUp?.post(tap: .cghidEventTap)
+        controlUp?.post(tap: .cghidEventTap)
     }
 }

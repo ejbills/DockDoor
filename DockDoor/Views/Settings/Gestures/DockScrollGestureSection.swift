@@ -35,3 +35,27 @@ struct DockScrollGestureSection: View {
         }
     }
 }
+
+struct TitleBarScrollGestureSection: View {
+    @Default(.enableTitleBarScrollGesture) var enableTitleBarScrollGesture
+
+    var body: some View {
+        SettingsGroup(header: "Title Bar Scroll Gesture") {
+            VStack(alignment: .leading, spacing: 12) {
+                Toggle(isOn: $enableTitleBarScrollGesture) {
+                    HStack(spacing: 8) {
+                        Image(systemName: "rectangle.tophalf.inset.filled")
+                            .foregroundColor(.accentColor)
+                        Text("Enable scroll gestures on active window title bars")
+                    }
+                }
+
+                if enableTitleBarScrollGesture {
+                    Text("Scroll up on a focused window title bar to maximize it, scroll down to center it at 80% size, and scroll left or right to switch desktop spaces.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+            }
+        }
+    }
+}

@@ -10,6 +10,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var windowSeeder: WindowSeeder?
     private var previewCoordinator: SharedPreviewWindowCoordinator?
     private var keybindHelper: KeybindHelper?
+    private var titleBarScrollObserver: TitleBarScrollObserver?
     private var activeAppIndicator: ActiveAppIndicatorCoordinator?
     private var statusBarItem: NSStatusItem?
     private var updaterController: SPUStandardUpdaterController
@@ -55,6 +56,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         } else {
             removeMenuBar()
         }
+
+        titleBarScrollObserver = TitleBarScrollObserver()
 
         if !Defaults[.launched] {
             handleFirstTimeLaunch()

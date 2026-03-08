@@ -577,6 +577,34 @@ extension WindowUtil {
         }
     }
 
+    static func getFocusedWindowForFrontmostApp() -> WindowInfo? {
+        guard let frontmostApp = NSWorkspace.shared.frontmostApplication else {
+            return nil
+        }
+
+        let appElement = AXUIElementCreateApplication(frontmostApp.processIdentifier)
+        let focusedWindow = (try? appElement.focusedWindow()) ?? nil
+        let focusedWindowId = focusedWindow.flatMap { try? $0.cgWindowId() }
+
+        let cachedWindows = readCachedWindows(for: frontmostApp.processIdentifier)
+        if let focusedWindowId,
+           let cachedMatch = cachedWindows.first(where: { $0.id == focusedWindowId })
+        {
+            return cachedMatch
+        }
+
+        let allWindows = getAllWindowsOfAllApps()
+        if let focusedWindowId,
+           let anyMatch = allWindows.first(where: { $0.id == focusedWindowId })
+        {
+            return anyMatch
+        }
+
+        return getWindowsForFrontmostApp(from: allWindows)
+            .sorted { $0.lastAccessedTime > $1.lastAccessedTime }
+            .first
+    }
+
     /// Returns whether a single window belongs to one of the given active Spaces.
     static func windowBelongsToActiveSpace(_ windowInfo: WindowInfo, activeSpaceIDs: Set<Int>) -> Bool {
         let windowSpaces = Set(windowInfo.id.cgsSpaces().map { Int($0) })
