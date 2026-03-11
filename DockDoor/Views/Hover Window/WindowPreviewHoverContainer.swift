@@ -260,11 +260,7 @@ struct WindowPreviewHoverContainer: View {
     private func windowGridContent() -> some View {
         let calculatedMaxDimension = previewStateCoordinator.overallMaxPreviewDimension
         let calculatedDimensionsMap = previewStateCoordinator.windowDimensionsMap
-        let orientationIsHorizontal: Bool = if previewStateCoordinator.windowSwitcherActive {
-            true
-        } else {
-            dockPosition.isHorizontalFlow
-        }
+        let orientationIsHorizontal = dockPosition.previewIsHorizontalFlow(windowSwitcherActive: previewStateCoordinator.windowSwitcherActive)
         let scrollAxis: Axis.Set = if shouldUseCompactMode {
             .vertical
         } else if previewStateCoordinator.windowSwitcherActive {
@@ -987,11 +983,7 @@ struct WindowPreviewHoverContainer: View {
     }
 
     private func createChunkedItems() -> [[FlowItem]] {
-        let isHorizontal: Bool = if previewStateCoordinator.windowSwitcherActive {
-            true
-        } else {
-            dockPosition.isHorizontalFlow
-        }
+        let isHorizontal = dockPosition.previewIsHorizontalFlow(windowSwitcherActive: previewStateCoordinator.windowSwitcherActive)
 
         var itemsToProcess: [FlowItem] = []
 

@@ -8,7 +8,7 @@ struct DynamicWindowFrameModifier: ViewModifier {
 
     func body(content: Content) -> some View {
         if allowDynamicSizing {
-            let isHorizontalFlow = dockPosition.isHorizontalFlow || windowSwitcherActive
+            let isHorizontalFlow = dockPosition.previewIsHorizontalFlow(windowSwitcherActive: windowSwitcherActive)
 
             if isHorizontalFlow {
                 content

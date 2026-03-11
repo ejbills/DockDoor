@@ -20,6 +20,17 @@ enum DockPosition {
             true
         }
     }
+
+    /// 预览布局方向：窗口切换始终横向，侧边 Dock 可强制单行横向
+    func previewIsHorizontalFlow(windowSwitcherActive: Bool) -> Bool {
+        if windowSwitcherActive {
+            return true
+        }
+        if Defaults[.forceSingleRowForSideDock], (self == .left || self == .right) {
+            return true
+        }
+        return isHorizontalFlow
+    }
 }
 
 class DockUtils {

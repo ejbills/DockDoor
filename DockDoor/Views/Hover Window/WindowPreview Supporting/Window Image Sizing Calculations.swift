@@ -21,7 +21,15 @@ extension WindowPreviewHoverContainer {
             var maxWidth: CGFloat = 300
             var maxHeight: CGFloat = 300
 
-            let orientationIsHorizontal = dockPosition == .bottom || dockPosition == .cmdTab
+            let forceSingleRowForSideDock = Defaults[.forceSingleRowForSideDock]
+            let isSideDock = dockPosition == .left || dockPosition == .right
+            let orientationIsHorizontal: Bool = if isWindowSwitcherActive {
+                true
+            } else if forceSingleRowForSideDock, isSideDock {
+                true
+            } else {
+                dockPosition == .bottom || dockPosition == .cmdTab
+            }
             let maxAspectRatio: CGFloat = 1.5
 
             for window in windows {
@@ -77,7 +85,15 @@ extension WindowPreviewHoverContainer {
         var dimensionsMap: [Int: WindowDimensions] = [:]
 
         if Defaults[.allowDynamicImageSizing], !isWindowSwitcherActive {
-            let orientationIsHorizontal: Bool = dockPosition == .bottom || dockPosition == .cmdTab
+            let forceSingleRowForSideDock = Defaults[.forceSingleRowForSideDock]
+            let isSideDock = dockPosition == .left || dockPosition == .right
+            let orientationIsHorizontal: Bool = if isWindowSwitcherActive {
+                true
+            } else if forceSingleRowForSideDock, isSideDock {
+                true
+            } else {
+                dockPosition == .bottom || dockPosition == .cmdTab
+            }
             let maxDims = CGSize(width: overallMaxDimensions.x, height: overallMaxDimensions.y)
             let thickness: CGFloat = orientationIsHorizontal ? overallMaxDimensions.y : overallMaxDimensions.x
 
@@ -170,6 +186,8 @@ extension WindowPreviewHoverContainer {
 
         let calculatedMaxColumns = max(1, Int((screenWidth - globalPadding + itemSpacing) / (previewWidth + itemSpacing)))
         let calculatedMaxRows = max(1, Int((screenHeight - globalPadding + itemSpacing) / (previewHeight + itemSpacing)))
+        let forceSingleRowForSideDock = Defaults[.forceSingleRowForSideDock]
+        let isSideDock = dockPosition == .left || dockPosition == .right
 
         var effectiveMaxColumns: Int
         var effectiveMaxRows: Int
@@ -190,6 +208,9 @@ extension WindowPreviewHoverContainer {
         } else if dockPosition == .bottom || dockPosition == .cmdTab {
             effectiveMaxColumns = calculatedMaxColumns
             effectiveMaxRows = (dockPosition == .cmdTab) ? 1 : previewMaxRows
+        } else if forceSingleRowForSideDock, isSideDock {
+            effectiveMaxColumns = min(previewMaxColumns, calculatedMaxColumns)
+            effectiveMaxRows = 1
         } else {
             effectiveMaxColumns = previewMaxColumns
             effectiveMaxRows = calculatedMaxRows
@@ -294,11 +315,7 @@ extension WindowPreviewHoverContainer {
         }
 
         let bestGuessMonitor = NSScreen.main ?? NSScreen.screens.first!
-        let isHorizontalFlow: Bool = if isWindowSwitcherActive {
-            true
-        } else {
-            dockPosition.isHorizontalFlow
-        }
+        let isHorizontalFlow = dockPosition.previewIsHorizontalFlow(windowSwitcherActive: isWindowSwitcherActive)
 
         let (maxColumns, maxRows) = calculateEffectiveMaxColumnsAndRows(
             bestGuessMonitor: bestGuessMonitor,

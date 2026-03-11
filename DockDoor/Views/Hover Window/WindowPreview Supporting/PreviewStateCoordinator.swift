@@ -284,7 +284,7 @@ class PreviewStateCoordinator: ObservableObject {
             expectedContentSize = Self.computeExpectedContentSize(
                 windowCount: windows.count,
                 dimensionsMap: newDimensionsMap,
-                isHorizontal: dockPosition.isHorizontalFlow,
+                isHorizontal: dockPosition.previewIsHorizontalFlow(windowSwitcherActive: windowSwitcherActive),
                 maxColumns: cols,
                 maxRows: rows
             )
