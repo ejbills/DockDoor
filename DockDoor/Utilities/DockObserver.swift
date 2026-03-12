@@ -331,8 +331,8 @@ final class DockObserver {
                         }
                     }
 
-                    previewCoordinator.mergeWindowsIfShowing(
-                        for: currentAppPID,
+                    previewCoordinator.mergeWindowsIfNeeded(
+                        currentAppPID,
                         windows: freshWindows,
                         dockPosition: dockPosition,
                         bestGuessMonitor: monitor

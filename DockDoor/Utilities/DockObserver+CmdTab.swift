@@ -187,8 +187,8 @@ extension DockObserver {
                         guard let self else { return }
                         guard let screen = screenOrigin.screen() else { return }
 
-                        previewCoordinator.mergeWindowsIfShowing(
-                            for: appPID,
+                        previewCoordinator.mergeWindowsIfNeeded(
+                            appPID,
                             windows: freshWindows,
                             dockPosition: .cmdTab,
                             bestGuessMonitor: screen
