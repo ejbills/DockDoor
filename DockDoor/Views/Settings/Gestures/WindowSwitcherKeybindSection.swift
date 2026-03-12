@@ -9,6 +9,7 @@ struct WindowSwitcherKeybindSection: View {
     @Default(.alternateKeybindKey) var alternateKeybindKey
     @Default(.alternateKeybindMode) var alternateKeybindMode
     @Default(.requireShiftTabToGoBack) var requireShiftTabToGoBack
+    @Default(.switcherBackwardModifier) var switcherBackwardModifier
 
     @StateObject private var keybindModel = KeybindModel()
     @State private var showingAddBlacklistAppSheet = false
@@ -37,10 +38,26 @@ struct WindowSwitcherKeybindSection: View {
                 Divider()
 
                 VStack(alignment: .leading, spacing: 8) {
-                    Toggle(isOn: $requireShiftTabToGoBack) {
-                        Text("Require Shift+Tab to go back in Switcher")
+                    HStack {
+                        Text("Backward Key")
+                        Spacer()
+                        Picker("", selection: $switcherBackwardModifier) {
+                            ForEach(SwitcherBackwardModifier.allCases) { modifier in
+                                Text(modifier.localizedName).tag(modifier)
+                            }
+                        }
+                        .labelsHidden()
+                        .pickerStyle(.menu)
+                        .frame(maxWidth: 160)
                     }
-                    Text("When enabled, pressing Shift alone won't go back. Use Shift+Tab (or modifier+Shift+Tab when release-to-select is on) to navigate backward.")
+                    Text("The modifier key used to navigate backward in the window switcher.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+
+                    Toggle(isOn: $requireShiftTabToGoBack) {
+                        Text("Require \(switcherBackwardModifier.localizedName)+Tab to go back in Switcher")
+                    }
+                    Text("When enabled, pressing the backward key alone won't go back. Use it with Tab (or modifier+backward key+Tab when release-to-select is on) to navigate backward.")
                         .font(.caption)
                         .foregroundColor(.secondary)
                         .padding(.leading, 20)

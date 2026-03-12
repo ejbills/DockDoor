@@ -31,6 +31,7 @@ extension Defaults.Keys {
     static let preventDockHide = Key<Bool>("preventDockHide", default: false)
     static let preventSwitcherHide = Key<Bool>("preventSwitcherHide", default: false)
     static let requireShiftTabToGoBack = Key<Bool>("requireShiftTabToGoBack", default: false)
+    static let switcherBackwardModifier = Key<SwitcherBackwardModifier>("switcherBackwardModifier", default: .shift)
     static let shouldHideOnDockItemClick = Key<Bool>("shouldHideOnDockItemClick", default: false)
     static let dockClickAction = Key<DockClickAction>("dockClickAction", default: .hide)
     static let enableCmdRightClickQuit = Key<Bool>("enableCmdRightClickQuit", default: true)
@@ -932,6 +933,37 @@ enum WindowSwitcherLivePreviewScope: String, CaseIterable, Defaults.Serializable
             String(localized: "All windows from the selected app get live preview")
         case .allWindows:
             String(localized: "All windows get live preview (may cause lag with many windows)")
+        }
+    }
+}
+
+enum SwitcherBackwardModifier: String, CaseIterable, Defaults.Serializable, Identifiable {
+    case shift
+    case control
+    case option
+    case command
+
+    var id: String { rawValue }
+
+    var localizedName: String {
+        switch self {
+        case .shift:
+            String(localized: "Shift ⇧")
+        case .control:
+            String(localized: "Control ⌃")
+        case .option:
+            String(localized: "Option ⌥")
+        case .command:
+            String(localized: "Command ⌘")
+        }
+    }
+
+    var eventFlag: CGEventFlags {
+        switch self {
+        case .shift: .maskShift
+        case .control: .maskControl
+        case .option: .maskAlternate
+        case .command: .maskCommand
         }
     }
 }

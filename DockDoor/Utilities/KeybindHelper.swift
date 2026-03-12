@@ -569,7 +569,8 @@ class KeybindHelper {
         let hasCmd = flags.contains(.maskCommand)
 
         let currentSwitcherModifierIsPressed = (wantsAlt == hasAlt) && (wantsCtrl == hasCtrl) && (wantsCmd == hasCmd)
-        let currentShiftState = flags.contains(.maskShift)
+        let backwardFlag = Defaults[.switcherBackwardModifier].eventFlag
+        let currentShiftState = flags.contains(backwardFlag)
 
         return (currentSwitcherModifierIsPressed, currentShiftState)
     }
@@ -713,7 +714,8 @@ class KeybindHelper {
 
         if previewIsCurrentlyVisible {
             if keyCode == kVK_Tab {
-                let isShiftPressed = flags.contains(.maskShift)
+                let backwardFlag = Defaults[.switcherBackwardModifier].eventFlag
+                let isShiftPressed = flags.contains(backwardFlag)
 
                 return (true, { @MainActor in
                     if self.previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive {
