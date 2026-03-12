@@ -159,7 +159,6 @@ final class SharedPreviewWindowCoordinator: NSPanel {
     @MainActor
     @discardableResult
     func mergeWindowsIfShowing(for pid: pid_t? = nil, windows: [WindowInfo], dockPosition: DockPosition, bestGuessMonitor: NSScreen) -> Bool {
-        guard isVisible else { return false }
         guard windowSwitcherCoordinator.windowSwitcherActive || currentlyDisplayedPID == pid else { return false }
         windowSwitcherCoordinator.mergeWindows(windows, dockPosition: dockPosition, bestGuessMonitor: bestGuessMonitor)
         return true
