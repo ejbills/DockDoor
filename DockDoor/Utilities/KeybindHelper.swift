@@ -393,6 +393,21 @@ class KeybindHelper {
             let keyCode = event.getIntegerValueField(.keyboardEventKeycode)
             let flags = event.flags
 
+            let backwardKeyCode = Defaults[.switcherBackwardKeyCode]
+            if Self.eventFlagForKeyCode(backwardKeyCode) == nil,
+               keyCode == Int64(backwardKeyCode),
+               previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive
+            {
+                Task { @MainActor [weak self] in
+                    guard let self else { return }
+                    handleModifierEvent(
+                        currentSwitcherModifierIsPressed: isSwitcherModifierKeyPressed,
+                        currentShiftState: true
+                    )
+                }
+                return nil
+            }
+
             // Detect Cmd+Tab press to start on-demand polling for the switcher
             if Defaults[.enableCmdTabEnhancements],
                keyCode == Int64(kVK_Tab),
@@ -550,14 +565,34 @@ class KeybindHelper {
                 }
             }
 
+        case .keyUp:
+            let backwardKeyCode = Defaults[.switcherBackwardKeyCode]
+            if Self.eventFlagForKeyCode(backwardKeyCode) == nil,
+               event.getIntegerValueField(.keyboardEventKeycode) == Int64(backwardKeyCode)
+            {
+                Task { @MainActor [weak self] in
+                    self?.isShiftKeyPressedGeneral = false
+                    self?.cancelHeldKeyRepeatTask()
+                }
+            }
+
         default:
             break
         }
         return Unmanaged.passUnretained(event)
     }
 
+    private static func eventFlagForKeyCode(_ keyCode: UInt16) -> CGEventFlags? {
+        switch Int(keyCode) {
+        case kVK_Shift, kVK_RightShift: .maskShift
+        case kVK_Control, kVK_RightControl: .maskControl
+        case kVK_Option, kVK_RightOption: .maskAlternate
+        case kVK_Command, kVK_RightCommand: .maskCommand
+        default: nil
+        }
+    }
+
     private func updateModifierStatesFromFlags(event: CGEvent, keyBoardShortcutSaved: UserKeyBind) -> (currentSwitcherModifierIsPressed: Bool, currentShiftState: Bool) {
-        // Interpret saved mask by checking presence of standard CGEventFlag bits
         let saved = keyBoardShortcutSaved.modifierFlags
         let wantsAlt = (saved & Int(CGEventFlags.maskAlternate.rawValue)) != 0
         let wantsCtrl = (saved & Int(CGEventFlags.maskControl.rawValue)) != 0
@@ -568,9 +603,17 @@ class KeybindHelper {
         let hasCtrl = flags.contains(.maskControl)
         let hasCmd = flags.contains(.maskCommand)
 
-        let currentSwitcherModifierIsPressed = (wantsAlt == hasAlt) && (wantsCtrl == hasCtrl) && (wantsCmd == hasCmd)
-        let backwardFlag = Defaults[.switcherBackwardModifier].eventFlag
-        let currentShiftState = flags.contains(backwardFlag)
+        let backwardFlag = Self.eventFlagForKeyCode(Defaults[.switcherBackwardKeyCode])
+        let altMatch = backwardFlag == .maskAlternate || (wantsAlt == hasAlt)
+        let ctrlMatch = backwardFlag == .maskControl || (wantsCtrl == hasCtrl)
+        let cmdMatch = backwardFlag == .maskCommand || (wantsCmd == hasCmd)
+        let currentSwitcherModifierIsPressed = altMatch && ctrlMatch && cmdMatch
+
+        let currentShiftState: Bool = if let flag = backwardFlag {
+            flags.contains(flag)
+        } else {
+            isShiftKeyPressedGeneral
+        }
 
         return (currentSwitcherModifierIsPressed, currentShiftState)
     }
@@ -714,8 +757,7 @@ class KeybindHelper {
 
         if previewIsCurrentlyVisible {
             if keyCode == kVK_Tab {
-                let backwardFlag = Defaults[.switcherBackwardModifier].eventFlag
-                let isShiftPressed = flags.contains(backwardFlag)
+                let isShiftPressed = isShiftKeyPressedGeneral
 
                 return (true, { @MainActor in
                     if self.previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive {
@@ -821,7 +863,7 @@ class KeybindHelper {
            keyCode == keyBoardShortcutSaved.keyCode,
            !isSwitcherModifierKeyPressed,
            keyBoardShortcutSaved.modifierFlags != 0,
-           !flags.hasSuperfluousModifiers(ignoring: [.maskShift, .maskAlphaShift, .maskNumericPad])
+           !flags.hasSuperfluousModifiers(ignoring: [Self.eventFlagForKeyCode(Defaults[.switcherBackwardKeyCode]) ?? .maskShift, .maskAlphaShift, .maskNumericPad])
         {
             if WindowUtil.shouldIgnoreKeybindForFrontmostApp() { return (false, nil) }
             return (true, { await self.handleKeybindActivation() })

@@ -3,7 +3,6 @@ import Carbon
 
 enum KeyboardLabel {
     static func localizedKey(for keyCode: UInt16) -> String {
-        // Handle special keys that don't translate well
         switch keyCode {
         case 48: return String(localized: "Tab")
         case 36: return String(localized: "Return")
@@ -11,6 +10,12 @@ enum KeyboardLabel {
         case 53: return String(localized: "Escape")
         case 49: return String(localized: "Space")
         case 76: return String(localized: "Enter")
+        case 56, 60: return "⇧"
+        case 59, 62: return "⌃"
+        case 58, 61: return "⌥"
+        case 55, 54: return "⌘"
+        case 57: return "⇪"
+        case 63: return "Fn"
         default: break
         }
 

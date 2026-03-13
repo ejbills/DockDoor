@@ -4,9 +4,10 @@ import SwiftUI
 struct KeyCaptureButton: View {
     @Binding var keyCode: UInt16
     var emptyLabel: String? = nil
+    var captureModifiers: Bool = false
 
     @State private var isCapturing = false
-    @State private var keyMonitor: Any? = nil
+    @State private var monitors: [Any] = []
 
     var body: some View {
         if isCapturing {
@@ -34,25 +35,37 @@ struct KeyCaptureButton: View {
         return KeyboardLabel.localizedKey(for: keyCode)
     }
 
-    private func startCapture() {
-        if let monitor = keyMonitor {
+    private func stopCapture() {
+        isCapturing = false
+        for monitor in monitors {
             NSEvent.removeMonitor(monitor)
         }
+        monitors = []
+    }
+
+    private func startCapture() {
+        stopCapture()
         isCapturing = true
 
-        keyMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { event in
-            defer {
-                isCapturing = false
-                if let monitor = keyMonitor {
-                    NSEvent.removeMonitor(monitor)
-                    keyMonitor = nil
-                }
+        monitors.append(NSEvent.addLocalMonitorForEvents(matching: .keyDown) { event in
+            if event.keyCode == UInt16(kVK_Escape) {
+                stopCapture()
+                return nil
             }
-
-            if event.keyCode == UInt16(kVK_Escape) { return nil }
-
             keyCode = event.keyCode
+            stopCapture()
             return nil
+        }!)
+
+        if captureModifiers {
+            monitors.append(NSEvent.addLocalMonitorForEvents(matching: .flagsChanged) { event in
+                let modifierKeyCodes: Set<UInt16> = [54, 55, 56, 57, 58, 59, 60, 61, 62, 63]
+                if modifierKeyCodes.contains(event.keyCode) {
+                    keyCode = event.keyCode
+                    stopCapture()
+                }
+                return event
+            }!)
         }
     }
 }
