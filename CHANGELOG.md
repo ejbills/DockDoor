@@ -38,20 +38,16 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://dockdoor.net/donate</div>
 
-<a id="1.32.1.1"></a>
-# [Release 1.32.1.1](https://github.com/ejbills/DockDoor/releases/tag/1.32.1.1) - 2026-03-13
+<a id="1.32.2"></a>
+# [Release 1.32.2](https://github.com/ejbills/DockDoor/releases/tag/1.32.2) - 2026-03-13
 
 ## 🔧 Improvements & Stability
-- Customizable window switcher backward key
-  - Choose Shift, Control, Option, or Command
-  - Setting available in Gestures preferences
-
-## 🐛 Bug Fixes
-- Window counts update reliably in hover previews
-- Title and controls positioned correctly in parallel layouts
+- Fully customizable backward key in window switcher
+  - Any key can be assigned, not just modifiers
+  - Reset button to restore default
 
 
-[Changes][1.32.1.1]
+[Changes][1.32.2]
 
 
 <a id="1.32.1"></a>
@@ -1957,7 +1953,7 @@ v1.0
 [Changes][releases]
 
 
-[1.32.1.1]: https://github.com/ejbills/DockDoor/compare/1.32.1...1.32.1.1
+[1.32.2]: https://github.com/ejbills/DockDoor/compare/1.32.1...1.32.2
 [1.32.1]: https://github.com/ejbills/DockDoor/compare/1.32...1.32.1
 [1.32]: https://github.com/ejbills/DockDoor/compare/1.31.2...1.32
 [1.31.2]: https://github.com/ejbills/DockDoor/compare/1.31.1...1.31.2
