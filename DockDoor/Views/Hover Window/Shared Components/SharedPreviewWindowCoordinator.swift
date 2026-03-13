@@ -155,11 +155,10 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         orderOut(nil)
     }
 
-    /// Merges fresh windows only if the preview is visible and showing the expected app (or window switcher is active).
+    /// Merges fresh windows if currently displaying the expected app.
     @MainActor
     @discardableResult
-    func mergeWindowsIfShowing(for pid: pid_t? = nil, windows: [WindowInfo], dockPosition: DockPosition, bestGuessMonitor: NSScreen) -> Bool {
-        guard isVisible else { return false }
+    func mergeWindowsIfNeeded(_ pid: pid_t? = nil, windows: [WindowInfo], dockPosition: DockPosition, bestGuessMonitor: NSScreen) -> Bool {
         guard windowSwitcherCoordinator.windowSwitcherActive || currentlyDisplayedPID == pid else { return false }
         windowSwitcherCoordinator.mergeWindows(windows, dockPosition: dockPosition, bestGuessMonitor: bestGuessMonitor)
         return true

@@ -228,6 +228,7 @@ class PreviewStateCoordinator: ObservableObject {
         if windowsWereAdded, let monitor = lastKnownBestGuessMonitor {
             let dockPosition = DockUtils.getDockPosition()
             recomputeAndPublishDimensions(dockPosition: dockPosition, bestGuessMonitor: monitor)
+            frameRefreshRequestId = UUID()
         }
     }
 
