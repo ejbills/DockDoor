@@ -412,6 +412,22 @@ final class TitleBarScrollObserver {
         min(max(Defaults[.titleBarScrollCenteredWindowScale], 0.2), 1.0)
     }
 
+    private var centeredWindowWidthScale: CGFloat {
+        min(max(Defaults[.titleBarScrollCenteredWindowWidthScale], 0.2), 1.0)
+    }
+
+    private var centeredWindowHeightScale: CGFloat {
+        min(max(Defaults[.titleBarScrollCenteredWindowHeightScale], 0.2), 1.0)
+    }
+
+    private var centeredWindowLockAspectRatio: Bool {
+        Defaults[.titleBarScrollCenteredWindowLockAspectRatio]
+    }
+
+    private var centeredWindowSizingMode: TitleBarCenteredWindowSizingMode {
+        Defaults[.titleBarScrollCenteredWindowSizingMode]
+    }
+
     init() {
         setupEventTap()
     }
@@ -553,7 +569,12 @@ final class TitleBarScrollObserver {
         case .maximize:
             window.zoom()
         case .center:
-            window.centerWindow(scale: centeredWindowScale)
+            switch centeredWindowSizingMode {
+            case .uniform:
+                window.centerWindow(scale: centeredWindowScale)
+            case .separate:
+                window.centerWindow(widthScale: centeredWindowWidthScale, heightScale: centeredWindowHeightScale, lockAspectRatio: centeredWindowLockAspectRatio)
+            }
         }
     }
 

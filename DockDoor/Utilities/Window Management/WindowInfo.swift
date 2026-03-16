@@ -328,6 +328,39 @@ extension WindowInfo {
         applyWindowFrame(targetFrame, on: context.screen)
     }
 
+    func centerWindow(widthScale: CGFloat, heightScale: CGFloat, lockAspectRatio: Bool) {
+        guard let context = currentWindowPlacementContext() else {
+            return
+        }
+
+        let visibleFrame = context.screen.visibleFrame
+
+        let clampedWidthScale = min(max(widthScale, 0.2), 1.0)
+        let clampedHeightScale = min(max(heightScale, 0.2), 1.0)
+
+        let maxWidth = visibleFrame.width * clampedWidthScale
+        let maxHeight = visibleFrame.height * clampedHeightScale
+
+        let targetSize: CGSize
+        if lockAspectRatio {
+            let currentSize = context.size
+            guard currentSize.width > 0, currentSize.height > 0 else {
+                targetSize = CGSize(width: maxWidth, height: maxHeight)
+                let targetFrame = WindowPositionRect.center.frame(in: visibleFrame, currentSize: targetSize)
+                applyWindowFrame(targetFrame, on: context.screen)
+                return
+            }
+
+            let scaleFactor = min(maxWidth / currentSize.width, maxHeight / currentSize.height)
+            targetSize = CGSize(width: currentSize.width * scaleFactor, height: currentSize.height * scaleFactor)
+        } else {
+            targetSize = CGSize(width: maxWidth, height: maxHeight)
+        }
+
+        let targetFrame = WindowPositionRect.center.frame(in: visibleFrame, currentSize: targetSize)
+        applyWindowFrame(targetFrame, on: context.screen)
+    }
+
     func bringToFront() {
         let maxRetries = 3
         var retryCount = 0

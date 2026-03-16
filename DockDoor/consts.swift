@@ -38,6 +38,10 @@ extension Defaults.Keys {
     static let enableDockScrollGesture = Key<Bool>("enableDockScrollGesture", default: false)
     static let enableTitleBarScrollGesture = Key<Bool>("enableTitleBarScrollGesture", default: false)
     static let titleBarScrollCenteredWindowScale = Key<CGFloat>("titleBarScrollCenteredWindowScale", default: 0.8)
+    static let titleBarScrollCenteredWindowSizingMode = Key<TitleBarCenteredWindowSizingMode>("titleBarScrollCenteredWindowSizingMode", default: .uniform)
+    static let titleBarScrollCenteredWindowWidthScale = Key<CGFloat>("titleBarScrollCenteredWindowWidthScale", default: 0.8)
+    static let titleBarScrollCenteredWindowHeightScale = Key<CGFloat>("titleBarScrollCenteredWindowHeightScale", default: 0.8)
+    static let titleBarScrollCenteredWindowLockAspectRatio = Key<Bool>("titleBarScrollCenteredWindowLockAspectRatio", default: false)
     static let titleBarScrollRestoreWindowInterval = Key<CGFloat>("titleBarScrollRestoreWindowInterval", default: 1.5)
     static let dockIconMediaScrollBehavior = Key<DockIconMediaScrollBehavior>("dockIconMediaScrollBehavior", default: .adjustVolume)
     static let mediaWidgetScrollBehavior = Key<MediaWidgetScrollBehavior>("mediaWidgetScrollBehavior", default: .seekPlayback)
@@ -577,6 +581,20 @@ enum DockIconMediaScrollBehavior: String, CaseIterable, Defaults.Serializable {
             String(localized: "Adjust volume", comment: "Dock icon media scroll option")
         case .activateHide:
             String(localized: "Activate/Hide (same as other apps)", comment: "Dock icon media scroll option")
+        }
+    }
+}
+
+enum TitleBarCenteredWindowSizingMode: String, CaseIterable, Defaults.Serializable {
+    case uniform
+    case separate
+
+    var localizedName: String {
+        switch self {
+        case .uniform:
+            String(localized: "Whole window", comment: "Title bar centered window sizing mode")
+        case .separate:
+            String(localized: "Width & height", comment: "Title bar centered window sizing mode")
         }
     }
 }
