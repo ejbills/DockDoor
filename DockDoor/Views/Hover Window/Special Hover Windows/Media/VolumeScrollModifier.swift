@@ -69,24 +69,11 @@ struct MediaScrollModifier: ViewModifier {
         mediaInfo.currentTime = newTime
 
         seekDebounceWork?.cancel()
-        let work = DispatchWorkItem { [bundleIdentifier, mediaInfo] in
+        let work = DispatchWorkItem { [mediaInfo] in
             let finalTime = mediaInfo.currentTime
             mediaInfo.isSeeking = false
             mediaInfo.seekAccumulatedDelta = 0
-
-            let appName = bundleIdentifier == appleMusicAppIdentifier ? "Music" : "Spotify"
-
-            let script = """
-            tell application "\(appName)"
-                if it is running then
-                    try
-                        set player position to \(finalTime)
-                    end try
-                end if
-            end tell
-            """
-
-            OSAScriptRunner.runFireAndForget(script)
+            mediaInfo.seek(to: finalTime)
         }
         seekDebounceWork = work
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2, execute: work)

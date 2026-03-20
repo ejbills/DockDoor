@@ -24,7 +24,9 @@ struct ApplicationReturnType {
 }
 
 func handleSelectedDockItemChangedNotification(observer _: AXObserver, element _: AXUIElement, notificationName _: CFString, context: UnsafeMutableRawPointer?) {
-    DockObserver.activeInstance?.processSelectedDockItemChanged()
+    DispatchQueue.main.async {
+        DockObserver.activeInstance?.processSelectedDockItemChanged()
+    }
 }
 
 final class DockObserver {
@@ -56,10 +58,9 @@ final class DockObserver {
     private var lastScrollActionTime: Date = .distantPast
     private let scrollActionDebounceInterval: TimeInterval = 0.3
 
-    private static func isSpecialControlsApp(_ bundleId: String?) -> Bool {
-        bundleId == spotifyAppIdentifier ||
-            bundleId == appleMusicAppIdentifier ||
-            bundleId == calendarAppIdentifier
+    @MainActor private static func isSpecialControlsApp(_ bundleId: String?) -> Bool {
+        (bundleId == calendarAppIdentifier && Defaults[.enableCalendarWidget]) ||
+            (isMediaApp(bundleId) && Defaults[.enableMediaWidget])
     }
 
     static func isDockVisible() -> Bool {
@@ -203,7 +204,7 @@ final class DockObserver {
         }
     }
 
-    func processSelectedDockItemChanged() {
+    @MainActor func processSelectedDockItemChanged() {
         let currentMouseLocation = DockObserver.getMousePosition()
         let appUnderMouseElement = DebugLogger.measureSlow("getDockItemAppStatusUnderMouse", thresholdMs: 100) {
             getDockItemAppStatusUnderMouse()
@@ -216,11 +217,16 @@ final class DockObserver {
         }
 
         if case let .notRunning(bundleIdentifier) = appUnderMouseElement.status {
-            if bundleIdentifier == calendarAppIdentifier, Defaults[.showSpecialAppControls], Defaults[.enableDockPreviews] {
+            let isCalendar = bundleIdentifier == calendarAppIdentifier && Defaults[.enableCalendarWidget]
+            let isActiveMedia = bundleIdentifier == MediaRemoteService.shared.activeBundleIdentifier && Defaults[.enableMediaWidget]
+            if isCalendar || isActiveMedia, Defaults[.showSpecialAppControls], Defaults[.enableDockPreviews] {
                 let mouseScreen = NSScreen.screenContainingMouse(currentMouseLocation)
                 let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
                 let appName = NSWorkspace.shared.urlForApplication(withBundleIdentifier: bundleIdentifier)
-                    .flatMap { Bundle(url: $0)?.localizedName } ?? "Unknown"
+                    .flatMap { Bundle(url: $0) }
+                    .flatMap { $0.infoDictionary?["CFBundleDisplayName"] as? String ?? $0.infoDictionary?["CFBundleName"] as? String }
+                    ?? MediaRemoteService.shared.activeAppName
+                    ?? "Unknown"
                 previewCoordinator.showWindow(
                     appName: appName,
                     windows: [],
@@ -834,7 +840,7 @@ final class DockObserver {
         let isNaturalScrolling = nsEvent?.isDirectionInvertedFromDevice ?? false
         let normalizedDeltaY = isNaturalScrolling ? -deltaY : deltaY
 
-        if isMediaApp(app.bundleIdentifier) {
+        if app.bundleIdentifier == spotifyAppIdentifier || app.bundleIdentifier == appleMusicAppIdentifier {
             if Defaults[.dockIconMediaScrollBehavior] == .adjustVolume {
                 handleVolumeScroll(deltaY: normalizedDeltaY)
                 return true

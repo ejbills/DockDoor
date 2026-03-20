@@ -111,7 +111,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         return bundleId == calendarAppIdentifier
     }
 
-    private func getEmbeddedContentType(for bundleIdentifier: String?) -> EmbeddedContentType {
+    @MainActor private func getEmbeddedContentType(for bundleIdentifier: String?) -> EmbeddedContentType {
         guard let bundleId = bundleIdentifier else { return .none }
 
         if isMediaApp(bundleId) {
@@ -610,7 +610,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
 
             switch actualAppContentType {
             case let .media(mediaBundleId):
-                if Defaults[.showSpecialAppControls] {
+                if Defaults[.showSpecialAppControls], Defaults[.enableMediaWidget] {
                     let hasValidWindows = windows.contains { !$0.isMinimized && !$0.isHidden }
                     let shouldUseBigControlsForNoValidWindows = Defaults[.showBigControlsWhenNoValidWindows] &&
                         (windows.isEmpty || !hasValidWindows)
@@ -630,7 +630,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
                     }
                 }
             case let .calendar(calendarBundleId):
-                if Defaults[.showSpecialAppControls] {
+                if Defaults[.showSpecialAppControls], Defaults[.enableCalendarWidget] {
                     let hasValidWindows = windows.contains { !$0.isMinimized && !$0.isHidden }
                     let shouldUseBigControlsForNoValidWindows = Defaults[.showBigControlsWhenNoValidWindows] &&
                         (windows.isEmpty || !hasValidWindows)

@@ -14,9 +14,12 @@ let spotifyAppIdentifier = "com.spotify.client"
 let appleMusicAppIdentifier = "com.apple.Music"
 let calendarAppIdentifier = "com.apple.iCal"
 
-func isMediaApp(_ bundleIdentifier: String?) -> Bool {
+@MainActor func isMediaApp(_ bundleIdentifier: String?) -> Bool {
     guard let bundleId = bundleIdentifier else { return false }
-    return bundleId == spotifyAppIdentifier || bundleId == appleMusicAppIdentifier
+    if bundleId == spotifyAppIdentifier || bundleId == appleMusicAppIdentifier {
+        return true
+    }
+    return bundleId == MediaRemoteService.shared.activeBundleIdentifier
 }
 
 extension Defaults.Keys {
@@ -66,6 +69,8 @@ extension Defaults.Keys {
     static let aeroShakeAction = Key<AeroShakeAction>("aeroShakeAction", default: .none)
 
     static let showSpecialAppControls = Key<Bool>("showSpecialAppControls", default: true)
+    static let enableMediaWidget = Key<Bool>("enableMediaWidget", default: true)
+    static let enableCalendarWidget = Key<Bool>("enableCalendarWidget", default: true)
     static let useEmbeddedMediaControls = Key<Bool>("useEmbeddedMediaControls", default: false)
     static let useEmbeddedDockPreviewElements = Key<Bool>("useEmbeddedDockPreviewElements", default: false)
     static let disableDockStyleTrafficLights = Key<Bool>("disableDockStyleTrafficLights", default: false)

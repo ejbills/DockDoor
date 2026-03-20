@@ -56,6 +56,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             removeMenuBar()
         }
 
+        MediaRemoteService.shared.start()
+
         if !Defaults[.launched] {
             handleFirstTimeLaunch()
         } else {

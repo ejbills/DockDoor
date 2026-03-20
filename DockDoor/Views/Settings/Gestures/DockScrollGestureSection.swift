@@ -24,12 +24,16 @@ struct DockScrollGestureSection: View {
 
                     Divider()
 
-                    Picker("Music/Spotify behavior:", selection: $dockIconMediaScrollBehavior) {
+                    Picker("Music & Spotify dock icon scroll:", selection: $dockIconMediaScrollBehavior) {
                         ForEach(DockIconMediaScrollBehavior.allCases, id: \.self) { behavior in
                             Text(behavior.localizedName).tag(behavior)
                         }
                     }
                     .pickerStyle(.menu)
+
+                    Text("Only applies when scrolling directly on Apple Music or Spotify dock icons.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
                 }
             }
         }

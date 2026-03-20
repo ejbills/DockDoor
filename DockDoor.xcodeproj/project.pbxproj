@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B3C9F20484F14266B941AFB170B66530 /* MediaRemoteService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC298B81953848F481EE849906E0AE77 /* MediaRemoteService.swift */; };
 		0531F8D22C3CC04600327808 /* AppearanceSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0531F8D12C3CC04600327808 /* AppearanceSettingsView.swift */; };
 		0596C2C32C3E060D00DCABEF /* PrivateApis.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0596C2C22C3E060D00DCABEF /* PrivateApis.swift */; };
 		05C0C7182C60629C000ADAC6 /* AXUIElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C0C7172C60629C000ADAC6 /* AXUIElement.swift */; };
@@ -196,6 +197,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		AC298B81953848F481EE849906E0AE77 /* MediaRemoteService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaRemoteService.swift; sourceTree = "<group>"; };
 		0531F8D12C3CC04600327808 /* AppearanceSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceSettingsView.swift; sourceTree = "<group>"; };
 		0596C2C22C3E060D00DCABEF /* PrivateApis.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateApis.swift; sourceTree = "<group>"; };
 		05C0C7172C60629C000ADAC6 /* AXUIElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AXUIElement.swift; sourceTree = "<group>"; };
@@ -608,6 +610,7 @@
 			isa = PBXGroup;
 			children = (
 				205C45E5266848C9B4F622AA /* ActiveAppIndicator */,
+				B9D4DE2A3A39438AB1F2C1F4E515D038 /* Media */,
 				BB5D35532ED4C4CC006ECE15 /* DebugLogger.swift */,
 				BB21067C2E83565A002F87D6 /* KeyboardLabel.swift */,
 				BBDF65722E7E212400DD6D6D /* DockObserver+CmdTab.swift */,
@@ -625,6 +628,14 @@
 				F098F8107F464776B5C18294427CAECD /* ScriptCommands.swift */,
 			);
 			path = Utilities;
+			sourceTree = "<group>";
+		};
+		B9D4DE2A3A39438AB1F2C1F4E515D038 /* Media */ = {
+			isa = PBXGroup;
+			children = (
+				AC298B81953848F481EE849906E0AE77 /* MediaRemoteService.swift */,
+			);
+			path = Media;
 			sourceTree = "<group>";
 		};
 		BB15E1E62C8F8C8D002ECFB9 /* Help */ = {
@@ -968,6 +979,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B3C9F20484F14266B941AFB170B66530 /* MediaRemoteService.swift in Sources */,
 				B376D66B467C4587915220BC80D3B9CB /* ScriptCommands.swift in Sources */,
 				1A04FA16AC74448F83D0F964 /* ActiveAppIndicatorCoordinator.swift in Sources */,
 				C3D4E5F6789012345678901B /* ActiveAppIndicatorDockDetection.swift in Sources */,
