@@ -10,6 +10,7 @@ struct WindowSwitcherAppearanceSection: View {
     @Default(.switcherUseMonochromeTrafficLights) var switcherUseMonochromeTrafficLights
     @Default(.switcherDisableDockStyleTrafficLights) var switcherDisableDockStyleTrafficLights
     @Default(.switcherMaxRows) var switcherMaxRows
+    @Default(.switcherIgnoreScreenLimit) var switcherIgnoreScreenLimit
     @Default(.windowSwitcherScrollDirection) var windowSwitcherScrollDirection
 
     var body: some View {
@@ -111,6 +112,13 @@ struct WindowSwitcherAppearanceSection: View {
                 Text(windowSwitcherScrollDirection == .horizontal
                     ? String(localized: "Controls how many rows of windows are shown in the window switcher. Windows are distributed across rows automatically.")
                     : String(localized: "Controls how many columns of windows are shown in the window switcher. Windows are distributed across columns automatically."))
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+
+                Toggle(isOn: $switcherIgnoreScreenLimit) {
+                    Text("Ignore screen size limit")
+                }
+                Text("Allow columns/rows to exceed what fits on screen. May cause previews to extend beyond screen edges.")
                     .font(.caption)
                     .foregroundColor(.secondary)
             }

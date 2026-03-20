@@ -187,7 +187,7 @@ extension WindowPreviewHoverContainer {
         if isWindowSwitcherActive {
             let isVertical = Defaults[.windowSwitcherScrollDirection] == .vertical
             if isVertical {
-                effectiveMaxColumns = min(switcherMaxRows, calculatedMaxColumns)
+                effectiveMaxColumns = Defaults[.switcherIgnoreScreenLimit] ? switcherMaxRows : min(switcherMaxRows, calculatedMaxColumns)
                 effectiveMaxRows = calculatedMaxRows
             } else {
                 effectiveMaxColumns = calculatedMaxColumns
