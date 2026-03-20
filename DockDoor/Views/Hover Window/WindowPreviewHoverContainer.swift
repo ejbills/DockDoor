@@ -640,6 +640,11 @@ struct WindowPreviewHoverContainer: View {
         currentMaxDimensionForPreviews: CGPoint,
         currentDimensionsMapForPreviews: [Int: WindowDimensions]
     ) -> some View {
+        let cachedFilteredIndices = filteredWindowIndices()
+        let appearance = PreviewAppearanceSettings.resolve(
+            windowSwitcherActive: previewStateCoordinator.windowSwitcherActive,
+            dockPosition: dockPosition
+        )
         ScrollView(scrollAxis, showsIndicators: false) {
             Group {
                 // Show no results view when search is active and no results found
@@ -647,18 +652,21 @@ struct WindowPreviewHoverContainer: View {
                     noResultsView()
                 } else if shouldUseCompactMode {
                     // Compact mode: simple vertical list
+                    let flowItems = createFlowItems(filteredIndices: cachedFilteredIndices)
                     LazyVStack(spacing: 4) {
-                        ForEach(createFlowItems(), id: \.id) { item in
+                        ForEach(flowItems, id: \.id) { item in
                             buildFlowItem(
                                 item: item,
                                 isHorizontal: isHorizontal,
                                 currentMaxDimensionForPreviews: currentMaxDimensionForPreviews,
-                                currentDimensionsMapForPreviews: currentDimensionsMapForPreviews
+                                currentDimensionsMapForPreviews: currentDimensionsMapForPreviews,
+                                filteredIndices: cachedFilteredIndices,
+                                appearance: appearance
                             )
                         }
                     }
                 } else if isHorizontal {
-                    let chunkedItems = createChunkedItems()
+                    let chunkedItems = createChunkedItems(filteredIndices: cachedFilteredIndices)
                     LazyVStack(alignment: .leading, spacing: HoverContainerPadding.itemSpacing) {
                         ForEach(Array(chunkedItems.enumerated()), id: \.offset) { index, rowItems in
                             LazyHStack(spacing: HoverContainerPadding.itemSpacing) {
@@ -667,14 +675,16 @@ struct WindowPreviewHoverContainer: View {
                                         item: item,
                                         isHorizontal: isHorizontal,
                                         currentMaxDimensionForPreviews: currentMaxDimensionForPreviews,
-                                        currentDimensionsMapForPreviews: currentDimensionsMapForPreviews
+                                        currentDimensionsMapForPreviews: currentDimensionsMapForPreviews,
+                                        filteredIndices: cachedFilteredIndices,
+                                        appearance: appearance
                                     )
                                 }
                             }
                         }
                     }
                 } else {
-                    let chunkedItems = createChunkedItems()
+                    let chunkedItems = createChunkedItems(filteredIndices: cachedFilteredIndices)
                     LazyHStack(alignment: .top, spacing: HoverContainerPadding.itemSpacing) {
                         ForEach(Array(chunkedItems.enumerated()), id: \.offset) { index, colItems in
                             LazyVStack(spacing: HoverContainerPadding.itemSpacing) {
@@ -683,7 +693,9 @@ struct WindowPreviewHoverContainer: View {
                                         item: item,
                                         isHorizontal: isHorizontal,
                                         currentMaxDimensionForPreviews: currentMaxDimensionForPreviews,
-                                        currentDimensionsMapForPreviews: currentDimensionsMapForPreviews
+                                        currentDimensionsMapForPreviews: currentDimensionsMapForPreviews,
+                                        filteredIndices: cachedFilteredIndices,
+                                        appearance: appearance
                                     )
                                 }
                             }
@@ -695,7 +707,7 @@ struct WindowPreviewHoverContainer: View {
             .globalPadding(20)
         }
         .padding(2)
-        .animation(showAnimations ? .smooth(duration: 0.1) : nil, value: previewStateCoordinator.windows)
+        .animation(showAnimations ? .smooth(duration: 0.1) : nil, value: previewStateCoordinator.windows.count)
         .onChange(of: previewStateCoordinator.currIndex) { newIndex in
             guard previewStateCoordinator.shouldScrollToIndex else { return }
 
@@ -972,21 +984,21 @@ struct WindowPreviewHoverContainer: View {
         previewStateCoordinator.filteredWindowIndices()
     }
 
-    private func createFlowItems() -> [FlowItem] {
+    private func createFlowItems(filteredIndices: [Int]) -> [FlowItem] {
         var allItems: [FlowItem] = []
 
         if embeddedContentType != .none {
             allItems.append(.embedded)
         }
 
-        for index in filteredWindowIndices() {
+        for index in filteredIndices {
             allItems.append(.window(index))
         }
 
         return allItems
     }
 
-    private func createChunkedItems() -> [[FlowItem]] {
+    private func createChunkedItems(filteredIndices: [Int]) -> [[FlowItem]] {
         let isHorizontal: Bool = if previewStateCoordinator.windowSwitcherActive {
             true
         } else {
@@ -999,7 +1011,7 @@ struct WindowPreviewHoverContainer: View {
             itemsToProcess.append(.embedded)
         }
 
-        for index in filteredWindowIndices() {
+        for index in filteredIndices {
             itemsToProcess.append(.window(index))
         }
 
@@ -1042,11 +1054,13 @@ struct WindowPreviewHoverContainer: View {
         item: FlowItem,
         isHorizontal: Bool,
         currentMaxDimensionForPreviews: CGPoint,
-        currentDimensionsMapForPreviews: [Int: WindowDimensions]
+        currentDimensionsMapForPreviews: [Int: WindowDimensions],
+        filteredIndices: [Int],
+        appearance: PreviewAppearanceSettings
     ) -> some View {
         switch item {
         case .embedded:
-            let firstWindowIndex = filteredWindowIndices().first ?? 0
+            let firstWindowIndex = filteredIndices.first ?? 0
             let firstWindow = previewStateCoordinator.windows.first
             let firstWindowDimensions = currentDimensionsMapForPreviews[firstWindowIndex]
 
@@ -1066,7 +1080,8 @@ struct WindowPreviewHoverContainer: View {
                     mockPreviewActive: mockPreviewActive,
                     onHoverIndexChange: nil,
                     useLivePreview: false,
-                    skeletonMode: true
+                    skeletonMode: true,
+                    appearance: appearance
                 )
                 .overlay { embeddedContentView() }
                 .id("\(appName)-embedded")
@@ -1123,7 +1138,8 @@ struct WindowPreviewHoverContainer: View {
                         windowSwitcherActive: previewStateCoordinator.windowSwitcherActive,
                         mockPreviewActive: mockPreviewActive,
                         onTap: onWindowTap,
-                        onHoverIndexChange: handleHoverIndexChange
+                        onHoverIndexChange: handleHoverIndexChange,
+                        appearance: appearance
                     )
                     .id("\(appName)-\(index)")
                 } else {
@@ -1143,7 +1159,8 @@ struct WindowPreviewHoverContainer: View {
                         showAppIconOnly: effectiveShowAppIconOnly,
                         mockPreviewActive: mockPreviewActive,
                         onHoverIndexChange: handleHoverIndexChange,
-                        useLivePreview: useLivePreview
+                        useLivePreview: useLivePreview,
+                        appearance: appearance
                     )
                     .id("\(appName)-\(index)")
                     .gesture(

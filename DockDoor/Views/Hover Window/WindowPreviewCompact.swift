@@ -12,40 +12,13 @@ struct WindowPreviewCompact: View {
     let mockPreviewActive: Bool
     let onTap: (() -> Void)?
     let onHoverIndexChange: ((Int?, CGPoint?) -> Void)?
+    var appearance: PreviewAppearanceSettings
 
     @Default(.previewWidth) private var previewWidth
     @Default(.compactModeTitleFormat) private var titleFormat
     @Default(.compactModeItemSize) private var itemSize
     @Default(.compactModeHideTrafficLights) private var hideTrafficLights
-
-    // MARK: - Dock Preview Appearance Settings
-
-    @Default(.trafficLightButtonsVisibility) private var trafficLightButtonsVisibility
-    @Default(.enabledTrafficLightButtons) private var enabledTrafficLightButtons
-    @Default(.useMonochromeTrafficLights) private var useMonochromeTrafficLights
-
-    // MARK: - Window Switcher Appearance Settings
-
-    @Default(.switcherTrafficLightButtonsVisibility) private var switcherTrafficLightButtonsVisibility
-    @Default(.switcherEnabledTrafficLightButtons) private var switcherEnabledTrafficLightButtons
-    @Default(.switcherUseMonochromeTrafficLights) private var switcherUseMonochromeTrafficLights
-
-    // MARK: - Cmd+Tab Appearance Settings
-
-    @Default(.cmdTabTrafficLightButtonsVisibility) private var cmdTabTrafficLightButtonsVisibility
-    @Default(.cmdTabEnabledTrafficLightButtons) private var cmdTabEnabledTrafficLightButtons
-    @Default(.cmdTabUseMonochromeTrafficLights) private var cmdTabUseMonochromeTrafficLights
-
-    @Default(.selectionOpacity) private var selectionOpacity
-    @Default(.unselectedContentOpacity) private var unselectedContentOpacity
-    @Default(.hoverHighlightColor) private var hoverHighlightColor
-    @Default(.showMinimizedHiddenLabels) private var showMinimizedHiddenLabels
-    @Default(.hidePreviewCardBackground) private var hidePreviewCardBackground
     @Default(.enableTitleMarquee) private var enableTitleMarquee
-    @Default(.showAnimations) private var showAnimations
-    @Default(.showActiveWindowBorder) private var showActiveWindowBorder
-    @Default(.activeAppIndicatorColor) private var activeAppIndicatorColor
-    @Default(.globalPaddingMultiplier) private var globalPaddingMultiplier
 
     @State private var isHovering = false
 
@@ -55,7 +28,7 @@ struct WindowPreviewCompact: View {
 
     /// Checks if this window is the currently active (focused) window on the system and adds a border if so.
     private var isActiveWindow: Bool {
-        guard showActiveWindowBorder else { return false }
+        guard appearance.showActiveWindowBorder else { return false }
         guard windowInfo.app.isActive else { return false }
         guard let focusedWindow = try? windowInfo.appAxElement.focusedWindow(),
               let focusedWindowID = try? focusedWindow.cgWindowId()
@@ -76,8 +49,8 @@ struct WindowPreviewCompact: View {
     }
 
     private var stateIndicator: String? {
-        guard showMinimizedHiddenLabels,
-              effectiveTrafficLightVisibility != .never
+        guard appearance.showMinimizedHiddenLabels,
+              appearance.trafficLightVisibility != .never
         else { return nil }
         if windowInfo.isMinimized {
             return "Minimized"
@@ -85,38 +58,6 @@ struct WindowPreviewCompact: View {
             return "Hidden"
         }
         return nil
-    }
-
-    // MARK: - Context-based appearance settings
-
-    private var effectiveTrafficLightVisibility: TrafficLightButtonsVisibility {
-        if windowSwitcherActive {
-            switcherTrafficLightButtonsVisibility
-        } else if dockPosition == .cmdTab {
-            cmdTabTrafficLightButtonsVisibility
-        } else {
-            trafficLightButtonsVisibility
-        }
-    }
-
-    private var effectiveEnabledTrafficLightButtons: Set<WindowAction> {
-        if windowSwitcherActive {
-            switcherEnabledTrafficLightButtons
-        } else if dockPosition == .cmdTab {
-            cmdTabEnabledTrafficLightButtons
-        } else {
-            enabledTrafficLightButtons
-        }
-    }
-
-    private var effectiveUseMonochromeTrafficLights: Bool {
-        if windowSwitcherActive {
-            switcherUseMonochromeTrafficLights
-        } else if dockPosition == .cmdTab {
-            cmdTabUseMonochromeTrafficLights
-        } else {
-            useMonochromeTrafficLights
-        }
     }
 
     var body: some View {
@@ -168,17 +109,17 @@ struct WindowPreviewCompact: View {
             // Traffic light buttons
             if !hideTrafficLights,
                windowInfo.closeButton != nil,
-               effectiveTrafficLightVisibility != .never,
-               !showMinimizedHiddenLabels || (!windowInfo.isMinimized && !windowInfo.isHidden)
+               appearance.trafficLightVisibility != .never,
+               !appearance.showMinimizedHiddenLabels || (!windowInfo.isMinimized && !windowInfo.isHidden)
             {
                 TrafficLightButtons(
-                    displayMode: effectiveTrafficLightVisibility,
+                    displayMode: appearance.trafficLightVisibility,
                     hoveringOverParentWindow: isSelected || isHovering,
                     onWindowAction: handleWindowAction,
                     pillStyling: true,
                     mockPreviewActive: mockPreviewActive,
-                    enabledButtons: effectiveEnabledTrafficLightButtons,
-                    useMonochrome: effectiveUseMonochromeTrafficLights
+                    enabledButtons: appearance.enabledTrafficLightButtons,
+                    useMonochrome: appearance.useMonochromeTrafficLights
                 )
             }
         }
@@ -186,35 +127,35 @@ struct WindowPreviewCompact: View {
         .frame(width: previewWidth, height: itemSize.rowHeight, alignment: .leading)
         .clipped()
         .background {
-            let cornerRadius = uniformCardRadius ? CardRadius.base + (CardRadius.innerPadding * globalPaddingMultiplier) : CardRadius.fallback
+            let cornerRadius = uniformCardRadius ? CardRadius.base + (CardRadius.innerPadding * appearance.globalPaddingMultiplier) : CardRadius.fallback
 
-            if !hidePreviewCardBackground {
+            if !appearance.hidePreviewCardBackground {
                 BlurView(variant: 18)
                     .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
                     .borderedBackground(.primary.opacity(0.1), lineWidth: 1.75, cornerRadius: cornerRadius)
                     .padding(.horizontal, -CardRadius.innerPadding)
                     .overlay {
                         if isSelected || isHovering {
-                            let highlightColor = hoverHighlightColor ?? Color(nsColor: .controlAccentColor)
+                            let highlightColor = appearance.hoverHighlightColor ?? Color(nsColor: .controlAccentColor)
                             RoundedRectangle(cornerRadius: cornerRadius)
-                                .fill(highlightColor.opacity(selectionOpacity))
+                                .fill(highlightColor.opacity(appearance.selectionOpacity))
                                 .padding(.horizontal, -CardRadius.innerPadding)
                         }
                     }
                     .overlay {
                         if isActiveWindow {
                             RoundedRectangle(cornerRadius: cornerRadius)
-                                .strokeBorder(activeAppIndicatorColor, lineWidth: 2.5)
+                                .strokeBorder(appearance.activeAppIndicatorColor, lineWidth: 2.5)
                                 .padding(.horizontal, -CardRadius.innerPadding)
                         }
                     }
             }
         }
-        .opacity((isSelected || isHovering) ? 1.0 : unselectedContentOpacity)
+        .opacity((isSelected || isHovering) ? 1.0 : appearance.unselectedContentOpacity)
         .contentShape(Rectangle())
         .onContinuousHover { phase in
             let setHoverState: (Bool) -> Void = { newState in
-                if showAnimations {
+                if appearance.showAnimations {
                     withAnimation(.snappy(duration: 0.175)) { isHovering = newState }
                 } else {
                     isHovering = newState

@@ -49,7 +49,8 @@ class PreviewStateCoordinator: ObservableObject {
     @Published var effectiveGridColumns: Int = 1
     @Published var effectiveGridRows: Int = 1
     @Published var expectedContentSize: CGSize = .zero
-    @Published var frameRefreshRequestId: UUID?
+
+    var onFrameRefreshNeeded: (() -> Void)?
     private var lastKnownBestGuessMonitor: NSScreen?
 
     enum WindowState {
@@ -157,7 +158,7 @@ class PreviewStateCoordinator: ObservableObject {
         recomputeAndPublishDimensions(dockPosition: dockPosition, bestGuessMonitor: bestGuessMonitor)
 
         if windows.count != previousWindowCount {
-            frameRefreshRequestId = UUID()
+            onFrameRefreshNeeded?()
         }
     }
 
@@ -194,7 +195,7 @@ class PreviewStateCoordinator: ObservableObject {
         if let monitor = lastKnownBestGuessMonitor {
             let dockPosition = DockUtils.getDockPosition()
             recomputeAndPublishDimensions(dockPosition: dockPosition, bestGuessMonitor: monitor)
-            frameRefreshRequestId = UUID()
+            onFrameRefreshNeeded?()
         }
     }
 
@@ -228,7 +229,7 @@ class PreviewStateCoordinator: ObservableObject {
         if windowsWereAdded, let monitor = lastKnownBestGuessMonitor {
             let dockPosition = DockUtils.getDockPosition()
             recomputeAndPublishDimensions(dockPosition: dockPosition, bestGuessMonitor: monitor)
-            frameRefreshRequestId = UUID()
+            onFrameRefreshNeeded?()
         }
     }
 

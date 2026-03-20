@@ -1,4 +1,3 @@
-import Combine
 import Defaults
 import Sparkle
 import SwiftUI
@@ -36,7 +35,6 @@ final class SharedPreviewWindowCoordinator: NSPanel {
     private(set) var hasScreenRecordingPermission: Bool = PermissionsChecker.hasScreenRecordingPermission()
 
     var pinnedWindows: [String: (window: NSWindow, info: PinnedWindowInfo)] = [:]
-    private var frameRefreshCancellable: AnyCancellable?
 
     init() {
         let styleMask: NSWindow.StyleMask = [.nonactivatingPanel, .fullSizeContentView, .borderless]
@@ -78,12 +76,9 @@ final class SharedPreviewWindowCoordinator: NSPanel {
     }
 
     private func setupFrameRefreshObserver() {
-        frameRefreshCancellable = windowSwitcherCoordinator.$frameRefreshRequestId
-            .compactMap { $0 }
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                self?.refreshPanelFrameToFitContent()
-            }
+        windowSwitcherCoordinator.onFrameRefreshNeeded = { [weak self] in
+            self?.refreshPanelFrameToFitContent()
+        }
     }
 
     func updateSearchWindow(with text: String) {
