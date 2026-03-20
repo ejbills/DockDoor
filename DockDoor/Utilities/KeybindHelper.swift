@@ -795,7 +795,7 @@ class KeybindHelper {
                 return (true, { @MainActor in
                     self.previewCoordinator.navigateWithArrowKey(direction: dir)
                 })
-            case Int64(kVK_Return), Int64(kVK_ANSI_KeypadEnter):
+            case Int64(Defaults[.windowSwitcherSelectionKeyCode]), Int64(kVK_ANSI_KeypadEnter):
                 if previewCoordinator.windowSwitcherCoordinator.currIndex >= 0 {
                     return (true, makeEnterSelectionTask())
                 }

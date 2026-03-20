@@ -14,6 +14,7 @@ struct DockPreviewAppearanceSection: View {
     @Default(.previewMaxColumns) var previewMaxColumns
     @Default(.previewMaxRows) var previewMaxRows
     @Default(.allowDynamicImageSizing) var allowDynamicImageSizing
+    @Default(.windowTitleFontSize) var windowTitleFontSize
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -66,6 +67,13 @@ struct DockPreviewAppearanceSection: View {
                         .font(.footnote)
                         .foregroundColor(.gray)
                         .padding(.leading, 20)
+                }
+
+                Picker("Window Title Font Size", selection: $windowTitleFontSize) {
+                    ForEach(WindowTitleFontSize.allCases) { size in
+                        Text(size.localizedName)
+                            .tag(size)
+                    }
                 }
             }
 

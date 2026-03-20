@@ -140,6 +140,7 @@ extension Defaults.Keys {
     static let windowTitleVisibility = Key<WindowTitleVisibility>("windowTitleVisibility", default: .alwaysVisible)
     static let windowTitlePosition = Key<WindowTitlePosition>("windowTitlePosition", default: .bottomLeft)
     static let enableTitleMarquee = Key<Bool>("enableTitleMarquee", default: true)
+    static let windowTitleFontSize = Key<WindowTitleFontSize>("windowTitleFontSize", default: .system)
     static let trafficLightButtonsVisibility = Key<TrafficLightButtonsVisibility>("trafficLightButtonsVisibility", default: .dimmedOnPreviewHover)
     static let trafficLightButtonsPosition = Key<TrafficLightButtonsPosition>("trafficLightButtonsPosition", default: .topLeft)
     static let enabledTrafficLightButtons = Key<Set<WindowAction>>("enabledTrafficLightButtons", default: [.quit, .close, .minimize, .toggleFullScreen])
@@ -244,6 +245,10 @@ extension Defaults.Keys {
 
     static let cmdShortcut3Key = Key<UInt16>("cmdShortcut3Key", default: UInt16(kVK_ANSI_Q))
     static let cmdShortcut3Action = Key<WindowAction>("cmdShortcut3Action", default: .quit)
+
+    // MARK: - Window Switcher Selection Key
+
+    static let windowSwitcherSelectionKeyCode = Key<UInt16>("windowSwitcherSelectionKeyCode", default: UInt16(kVK_Return))
 
     // MARK: - Alternate Window Switcher Keybind (shares modifier with primary keybind)
 
@@ -804,6 +809,61 @@ enum CompactModeTitleFormat: String, CaseIterable, Defaults.Serializable, Identi
             String(localized: "Window Title Only")
         case .appNameOnly:
             String(localized: "App Name Only")
+        }
+    }
+}
+
+enum WindowTitleFontSize: Int, CaseIterable, Defaults.Serializable, Identifiable {
+    case system = 0
+    case caption2 = 1
+    case caption = 2
+    case footnote = 3
+    case subheadline = 4
+    case body = 5
+    case headline = 6
+    case title3 = 7
+    case title2 = 8
+    case title = 9
+
+    var id: Int { rawValue }
+
+    var localizedName: String {
+        switch self {
+        case .system:
+            String(localized: "System Default", comment: "Window title font size option")
+        case .caption2:
+            String(localized: "Caption 2", comment: "Window title font size option")
+        case .caption:
+            String(localized: "Caption", comment: "Window title font size option")
+        case .footnote:
+            String(localized: "Footnote", comment: "Window title font size option")
+        case .subheadline:
+            String(localized: "Subheadline", comment: "Window title font size option")
+        case .body:
+            String(localized: "Body", comment: "Window title font size option")
+        case .headline:
+            String(localized: "Headline", comment: "Window title font size option")
+        case .title3:
+            String(localized: "Title 3", comment: "Window title font size option")
+        case .title2:
+            String(localized: "Title 2", comment: "Window title font size option")
+        case .title:
+            String(localized: "Title", comment: "Window title font size option")
+        }
+    }
+
+    var font: Font {
+        switch self {
+        case .system: .subheadline
+        case .caption2: .caption2
+        case .caption: .caption
+        case .footnote: .footnote
+        case .subheadline: .subheadline
+        case .body: .body
+        case .headline: .headline
+        case .title3: .title3
+        case .title2: .title2
+        case .title: .title
         }
     }
 }

@@ -74,6 +74,7 @@ struct WindowPreview: View {
     @Default(.windowSwitcherLivePreviewFrameRate) var windowSwitcherLivePreviewFrameRate
     @Default(.showAnimations) var showAnimations
     @Default(.globalPaddingMultiplier) var globalPaddingMultiplier
+    @Default(.windowTitleFontSize) var windowTitleFontSize
 
     @State private var isHoveringOverDockPeekPreview = false
     @State private var isHoveringOverWindowSwitcherPreview = false
@@ -255,7 +256,7 @@ struct WindowPreview: View {
         let titleContent = Group {
             if hasTitle, let title = titleToShow {
                 MarqueeText(text: title, startDelay: 1)
-                    .font(.subheadline)
+                    .font(windowTitleFontSize.font)
                     .padding(4)
                     .if(!effectiveDisableDockStyleTitles) { view in
                         view.materialPill()
@@ -274,9 +275,12 @@ struct WindowPreview: View {
                     enabledButtons: effectiveEnabledTrafficLightButtons,
                     useMonochrome: effectiveUseMonochromeTrafficLights
                 )
-            } else if windowInfo.isMinimized || windowInfo.isHidden, showMinimizedHiddenLabels {
+            } else if windowInfo.isMinimized || windowInfo.isHidden,
+                      showMinimizedHiddenLabels,
+                      effectiveTrafficLightVisibility != .never
+            {
                 Text(windowInfo.isMinimized ? "Minimized" : "Hidden")
-                    .font(.subheadline)
+                    .font(windowTitleFontSize.font)
                     .italic()
                     .foregroundStyle(.secondary)
                     .padding(4)
@@ -468,7 +472,7 @@ struct WindowPreview: View {
                shouldShowWindowTitle
             {
                 MarqueeText(text: windowTitle, startDelay: 1)
-                    .font(.subheadline)
+                    .font(windowTitleFontSize.font)
                     .foregroundStyle(.secondary)
                     .lineLimit(1)
             }
@@ -494,9 +498,12 @@ struct WindowPreview: View {
                     enabledButtons: effectiveEnabledTrafficLightButtons,
                     useMonochrome: effectiveUseMonochromeTrafficLights
                 )
-            } else if windowInfo.isMinimized || windowInfo.isHidden, showMinimizedHiddenLabels {
+            } else if windowInfo.isMinimized || windowInfo.isHidden,
+                      showMinimizedHiddenLabels,
+                      effectiveTrafficLightVisibility != .never
+            {
                 Text(windowInfo.isMinimized ? "Minimized" : "Hidden")
-                    .font(.subheadline)
+                    .font(windowTitleFontSize.font)
                     .italic()
                     .foregroundStyle(.secondary)
                     .padding(4)
@@ -543,7 +550,7 @@ struct WindowPreview: View {
         let titleContent = Group {
             if hasTitle, let title = titleToShow {
                 MarqueeText(text: title, startDelay: 1)
-                    .font(.subheadline)
+                    .font(windowTitleFontSize.font)
                     .padding(4)
                     .if(!effectiveDisableDockStyleTitles) { view in
                         view.materialPill()
@@ -562,9 +569,12 @@ struct WindowPreview: View {
                     enabledButtons: effectiveEnabledTrafficLightButtons,
                     useMonochrome: effectiveUseMonochromeTrafficLights
                 )
-            } else if windowInfo.isMinimized || windowInfo.isHidden, showMinimizedHiddenLabels {
+            } else if windowInfo.isMinimized || windowInfo.isHidden,
+                      showMinimizedHiddenLabels,
+                      effectiveTrafficLightVisibility != .never
+            {
                 Text(windowInfo.isMinimized ? "Minimized" : "Hidden")
-                    .font(.subheadline)
+                    .font(windowTitleFontSize.font)
                     .italic()
                     .foregroundStyle(.secondary)
                     .padding(4)

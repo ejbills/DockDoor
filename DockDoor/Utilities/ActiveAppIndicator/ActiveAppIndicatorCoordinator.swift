@@ -175,9 +175,10 @@ final class ActiveAppIndicatorCoordinator {
 
         if newDockSize != lastKnownDockSize {
             lastKnownDockSize = newDockSize
-            updateDockVisibilityState()
             scheduleDelayedUpdate()
         }
+
+        updateDockVisibilityState()
     }
 
     // MARK: - Dock Item Change Notifications
