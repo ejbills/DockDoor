@@ -105,6 +105,7 @@ private class WindowSwitchingCoordinator {
                 selectedWindow.bringToFront()
             }
             coordinator.deactivateKeybindSession()
+            previewCoordinator.hideWindow()
             shouldSelectImmediately = false
             return
         }
@@ -370,8 +371,7 @@ class KeybindHelper {
                 DockObserver.activeInstance?.stopCmdTabPolling()
 
                 if Defaults[.enableCmdTabEnhancements], lastCmdTabObservedActive,
-                   previewCoordinator.isVisible,
-                   !previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive
+                   previewCoordinator.isVisible
                 {
                     Task { @MainActor in
                         if self.previewCoordinator.windowSwitcherCoordinator.currIndex >= 0 {
@@ -379,6 +379,7 @@ class KeybindHelper {
                         } else {
                             self.previewCoordinator.hideWindow()
                         }
+                        self.windowSwitchingCoordinator.cancelSwitching(previewCoordinator: self.previewCoordinator)
                     }
                 }
                 lastCmdTabObservedActive = false
