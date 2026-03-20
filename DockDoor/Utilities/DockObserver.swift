@@ -209,10 +209,33 @@ final class DockObserver {
             getDockItemAppStatusUnderMouse()
         }
 
-        guard case let .success(currentApp) = appUnderMouseElement.status,
-              let dockItemElement = appUnderMouseElement.dockItemElement,
-              !previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive
+        guard !previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive,
+              let dockItemElement = appUnderMouseElement.dockItemElement
         else {
+            return
+        }
+
+        if case let .notRunning(bundleIdentifier) = appUnderMouseElement.status {
+            if bundleIdentifier == calendarAppIdentifier, Defaults[.showSpecialAppControls], Defaults[.enableDockPreviews] {
+                let mouseScreen = NSScreen.screenContainingMouse(currentMouseLocation)
+                let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
+                let appName = NSWorkspace.shared.urlForApplication(withBundleIdentifier: bundleIdentifier)
+                    .flatMap { Bundle(url: $0)?.localizedName } ?? "Unknown"
+                previewCoordinator.showWindow(
+                    appName: appName,
+                    windows: [],
+                    mouseLocation: convertedMouseLocation,
+                    mouseScreen: mouseScreen,
+                    dockItemElement: dockItemElement,
+                    overrideDelay: false,
+                    onWindowTap: { [weak self] in self?.hideWindowAndResetLastApp() },
+                    bundleIdentifier: bundleIdentifier
+                )
+            }
+            return
+        }
+
+        guard case let .success(currentApp) = appUnderMouseElement.status else {
             return
         }
 

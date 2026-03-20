@@ -118,6 +118,7 @@
 		BB52EDF02C5BEFE3006A64A4 /* HiddenModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB52EDEF2C5BEFE3006A64A4 /* HiddenModifier.swift */; };
 		BB5349C32EE7C3F5004B1FDD /* WindowPreviewCompact.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB5349C22EE7C3F5004B1FDD /* WindowPreviewCompact.swift */; };
 		BB5349C52EE7D160004B1FDD /* WindowPreviewInteractionModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB5349C42EE7D160004B1FDD /* WindowPreviewInteractionModifier.swift */; };
+		BB5C36562F6CEE9E00BE947F /* MediaRemoteAdapter in Frameworks */ = {isa = PBXBuildFile; productRef = BB5C36552F6CEE9E00BE947F /* MediaRemoteAdapter */; };
 		BB5D35542ED4C4CC006ECE15 /* DebugLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB5D35532ED4C4CC006ECE15 /* DebugLogger.swift */; };
 		BB6021D22D1E613800D47C86 /* Window Image Sizing Calculations.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6021D12D1E613100D47C86 /* Window Image Sizing Calculations.swift */; };
 		BB638EFA2E0216DA0010077D /* MediaControlsEmbeddedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB638EF92E0216DA0010077D /* MediaControlsEmbeddedView.swift */; };
@@ -390,6 +391,7 @@
 				BB3968002C2A6C44004F1AB6 /* SmoothGradient in Frameworks */,
 				BB1CBD5B2C1BA8DC003969BC /* Defaults in Frameworks */,
 				3A1622B82C8C0EE200D318EE /* Kroma in Frameworks */,
+				BB5C36562F6CEE9E00BE947F /* MediaRemoteAdapter in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -872,6 +874,7 @@
 				3A1622A22C8BFF3800D318EE /* Pow */,
 				3A1622B72C8C0EE200D318EE /* Kroma */,
 				BBBD4AF72C8D71560074FFCF /* ConfettiSwiftUI */,
+				BB5C36552F6CEE9E00BE947F /* MediaRemoteAdapter */,
 			);
 			productName = DockDoor;
 			productReference = BB157B652C0E31CE00997315 /* DockDoor.app */;
@@ -911,6 +914,7 @@
 				3A1622A12C8BFF3800D318EE /* XCRemoteSwiftPackageReference "Pow" */,
 				3A1622B62C8C0EE200D318EE /* XCRemoteSwiftPackageReference "Kroma" */,
 				BBBD4AF62C8D71560074FFCF /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */,
+				BB5C36542F6CEE9E00BE947F /* XCRemoteSwiftPackageReference "mediaremote-adapter" */,
 			);
 			productRefGroup = BB157B662C0E31CE00997315 /* Products */;
 			projectDirPath = "";
@@ -1434,6 +1438,14 @@
 				minimumVersion = 1.0.0;
 			};
 		};
+		BB5C36542F6CEE9E00BE947F /* XCRemoteSwiftPackageReference "mediaremote-adapter" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ejbills/mediaremote-adapter.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 		BBBD4AF62C8D71560074FFCF /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/simibac/ConfettiSwiftUI";
@@ -1477,6 +1489,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = BB3967FE2C2A6C44004F1AB6 /* XCRemoteSwiftPackageReference "SmoothGradient" */;
 			productName = SmoothGradient;
+		};
+		BB5C36552F6CEE9E00BE947F /* MediaRemoteAdapter */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BB5C36542F6CEE9E00BE947F /* XCRemoteSwiftPackageReference "mediaremote-adapter" */;
+			productName = MediaRemoteAdapter;
 		};
 		BBBD4AF72C8D71560074FFCF /* ConfettiSwiftUI */ = {
 			isa = XCSwiftPackageProductDependency;

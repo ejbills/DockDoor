@@ -1,5 +1,5 @@
 {
-  "originHash" : "1aa9fb48d4e0797930115961711b1ca1ddd436584bad9f72d944d4e056bc886f",
+  "originHash" : "991867b2082c546cd603d703e2188d002ec3167729b4831ac83e92b6c1f97725",
   "pins" : [
     {
       "identity" : "confettiswiftui",
@@ -35,6 +35,15 @@
       "state" : {
         "branch" : "main",
         "revision" : "a04ec1c363be3627734f6dad757d82f5d4fa8fcc"
+      }
+    },
+    {
+      "identity" : "mediaremote-adapter",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ejbills/mediaremote-adapter.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "a6d707dd19f1204b831531760b116b621afe7a6b"
       }
     },
     {
