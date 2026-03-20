@@ -172,8 +172,8 @@ final class SharedPreviewWindowCoordinator: NSPanel {
 
         let expectedSize = windowSwitcherCoordinator.expectedContentSize
         let newSize = CGSize(
-            width: expectedSize.width > 0 ? expectedSize.width : fittingSize.width,
-            height: expectedSize.height > 0 ? expectedSize.height : fittingSize.height
+            width: expectedSize.width > 0 ? max(expectedSize.width, fittingSize.width) : fittingSize.width,
+            height: expectedSize.height > 0 ? max(expectedSize.height, fittingSize.height) : fittingSize.height
         )
         guard newSize != frame.size else { return }
 
@@ -316,8 +316,8 @@ final class SharedPreviewWindowCoordinator: NSPanel {
 
             let expectedSize = windowSwitcherCoordinator.expectedContentSize
             newHoverWindowSize = CGSize(
-                width: expectedSize.width > 0 ? expectedSize.width : fittingSize.width,
-                height: expectedSize.height > 0 ? expectedSize.height : fittingSize.height
+                width: expectedSize.width > 0 ? max(expectedSize.width, fittingSize.width) : fittingSize.width,
+                height: expectedSize.height > 0 ? max(expectedSize.height, fittingSize.height) : fittingSize.height
             )
         }
 
@@ -722,6 +722,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
             let activeDockPosition = dockPositionOverride ?? DockUtils.getDockPosition()
             currentDockPosition = activeDockPosition
 
+            windowSwitcherCoordinator.hasEmbeddedContent = embeddedContentType != .none
             windowSwitcherCoordinator.setWindows(windows, dockPosition: activeDockPosition, bestGuessMonitor: screen)
 
             if let initialIndex {

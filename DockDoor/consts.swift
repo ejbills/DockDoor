@@ -71,7 +71,7 @@ extension Defaults.Keys {
     static let showSpecialAppControls = Key<Bool>("showSpecialAppControls", default: true)
     static let enableMediaWidget = Key<Bool>("enableMediaWidget", default: true)
     static let enableCalendarWidget = Key<Bool>("enableCalendarWidget", default: true)
-    static let useEmbeddedMediaControls = Key<Bool>("useEmbeddedMediaControls", default: false)
+    static let useEmbeddedMediaControls = Key<Bool>("useEmbeddedMediaControls", default: true)
     static let useEmbeddedDockPreviewElements = Key<Bool>("useEmbeddedDockPreviewElements", default: false)
     static let disableDockStyleTrafficLights = Key<Bool>("disableDockStyleTrafficLights", default: false)
     static let disableDockStyleTitles = Key<Bool>("disableDockStyleTitles", default: false)

@@ -149,7 +149,7 @@ struct WindowPreviewHoverContainer: View {
             }
         }
 
-        return min(300, minWidth)
+        return minWidth
     }
 
     private var shouldUseCompactMode: Bool {
@@ -987,12 +987,12 @@ struct WindowPreviewHoverContainer: View {
     private func createFlowItems(filteredIndices: [Int]) -> [FlowItem] {
         var allItems: [FlowItem] = []
 
-        if embeddedContentType != .none {
-            allItems.append(.embedded)
-        }
-
         for index in filteredIndices {
             allItems.append(.window(index))
+        }
+
+        if embeddedContentType != .none {
+            allItems.append(.embedded)
         }
 
         return allItems
@@ -1007,12 +1007,12 @@ struct WindowPreviewHoverContainer: View {
 
         var itemsToProcess: [FlowItem] = []
 
-        if embeddedContentType != .none {
-            itemsToProcess.append(.embedded)
-        }
-
         for index in filteredIndices {
             itemsToProcess.append(.window(index))
+        }
+
+        if embeddedContentType != .none {
+            itemsToProcess.append(.embedded)
         }
 
         var (maxColumns, maxRows) = WindowPreviewHoverContainer.calculateEffectiveMaxColumnsAndRows(
@@ -1060,35 +1060,13 @@ struct WindowPreviewHoverContainer: View {
     ) -> some View {
         switch item {
         case .embedded:
-            let firstWindowIndex = filteredIndices.first ?? 0
-            let firstWindow = previewStateCoordinator.windows.first
-            let firstWindowDimensions = currentDimensionsMapForPreviews[firstWindowIndex]
-
-            if isHorizontal, let window = firstWindow, let dimensions = firstWindowDimensions {
-                WindowPreview(
-                    windowInfo: window,
-                    onTap: nil,
-                    index: firstWindowIndex,
-                    dockPosition: dockPosition,
-                    bestGuessMonitor: bestGuessMonitor,
-                    uniformCardRadius: uniformCardRadius,
-                    handleWindowAction: { _ in },
-                    currIndex: -1,
-                    windowSwitcherActive: previewStateCoordinator.windowSwitcherActive,
-                    dimensions: dimensions,
-                    showAppIconOnly: false,
-                    mockPreviewActive: mockPreviewActive,
-                    onHoverIndexChange: nil,
-                    useLivePreview: false,
-                    skeletonMode: true,
-                    appearance: appearance
+            let dims = currentDimensionsMapForPreviews[filteredIndices.first ?? 0]
+            embeddedContentView()
+                .frame(
+                    minWidth: isHorizontal ? nil : dims?.size.width,
+                    minHeight: isHorizontal ? dims?.size.height : nil
                 )
-                .overlay { embeddedContentView() }
                 .id("\(appName)-embedded")
-            } else {
-                embeddedContentView()
-                    .id("\(appName)-embedded")
-            }
         case let .window(index):
             let windows = previewStateCoordinator.windows
             if index < windows.count {

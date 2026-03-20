@@ -35,6 +35,11 @@ struct MediaControlsSkeleton: View {
                 }
             }
 
+            RoundedRectangle(cornerRadius: 5)
+                .fill(Color.primary.opacity(MediaControlsLayout.skeletonOpacity))
+                .frame(height: 6)
+                .frame(height: 10)
+
             HStack(spacing: MediaControlsLayout.embeddedMediaButtonsSpacing) {
                 ForEach(0 ..< 3, id: \.self) { index in
                     Circle()

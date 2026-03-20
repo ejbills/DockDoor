@@ -17,30 +17,36 @@ extension WindowPreviewHoverContainer {
     ) -> CGPoint {
         if Defaults[.allowDynamicImageSizing], !isWindowSwitcherActive {
             // Scale preview dimensions to match actual window aspect ratios (dock previews only)
-            let thickness = isMockPreviewActive ? 200 : sharedPanelWindowSize.height
+            let orientationIsHorizontal = dockPosition == .bottom || dockPosition == .cmdTab
+            let thickness: CGFloat = if isMockPreviewActive {
+                200
+            } else if orientationIsHorizontal {
+                sharedPanelWindowSize.height
+            } else {
+                sharedPanelWindowSize.width
+            }
             var maxWidth: CGFloat = 300
             var maxHeight: CGFloat = 300
-
-            let orientationIsHorizontal = dockPosition == .bottom || dockPosition == .cmdTab
             let maxAspectRatio: CGFloat = 1.5
+            let minAspectRatio: CGFloat = 1.0 / maxAspectRatio
 
             for window in windows {
                 if let cgImage = window.image {
                     let cgSize = CGSize(width: cgImage.width, height: cgImage.height)
                     if orientationIsHorizontal {
                         let rawWidthBasedOnHeight = (cgSize.width * thickness) / cgSize.height
-                        let widthBasedOnHeight = min(rawWidthBasedOnHeight, thickness * maxAspectRatio)
+                        let widthBasedOnHeight = max(min(rawWidthBasedOnHeight, thickness * maxAspectRatio), thickness * minAspectRatio)
                         maxWidth = max(maxWidth, widthBasedOnHeight)
                         maxHeight = thickness
                     } else {
                         let rawHeightBasedOnWidth = (cgSize.height * thickness) / cgSize.width
-                        let heightBasedOnWidth = min(rawHeightBasedOnWidth, thickness * maxAspectRatio)
+                        let heightBasedOnWidth = max(min(rawHeightBasedOnWidth, thickness * maxAspectRatio), thickness * minAspectRatio)
                         maxHeight = max(maxHeight, heightBasedOnWidth)
                         maxWidth = thickness
                     }
                 }
             }
-            return CGPoint(x: max(1, maxWidth), y: max(1, maxHeight)) // Ensure positive dimensions
+            return CGPoint(x: max(1, maxWidth), y: max(1, maxHeight))
         } else {
             // Use fixed sizing from user settings
             let width = Defaults[.previewWidth]
@@ -56,11 +62,15 @@ extension WindowPreviewHoverContainer {
         isHorizontal: Bool
     ) -> CGSize {
         let aspectRatio = CGFloat(image.width) / CGFloat(image.height)
+        let maxAspectRatio: CGFloat = 1.5
+        let minAspectRatio: CGFloat = 1.0 / maxAspectRatio
+
+        let clampedRatio = max(min(aspectRatio, maxAspectRatio), minAspectRatio)
         if isHorizontal {
-            let width = min(thickness * aspectRatio, maxDimensions.width)
+            let width = min(thickness * clampedRatio, maxDimensions.width)
             return CGSize(width: width, height: thickness)
         } else {
-            let height = min(thickness / aspectRatio, maxDimensions.height)
+            let height = min(thickness / clampedRatio, maxDimensions.height)
             return CGSize(width: thickness, height: height)
         }
     }

@@ -62,6 +62,17 @@ struct MediaControlsEmbeddedView: View {
                     Spacer(minLength: 0)
                 }
 
+                SimpleProgressBar(
+                    value: Binding(
+                        get: { mediaInfo.currentTime },
+                        set: { newValue in mediaInfo.seek(to: newValue) }
+                    ),
+                    range: 0 ... max(mediaInfo.duration, 1),
+                    barColor: .primary.opacity(0.5),
+                    backgroundColor: .primary.opacity(0.1)
+                )
+                .frame(height: 10)
+
                 MediaControlButtonRow(
                     mediaInfo: mediaInfo,
                     spacing: MediaControlsLayout.embeddedMediaButtonsSpacing,

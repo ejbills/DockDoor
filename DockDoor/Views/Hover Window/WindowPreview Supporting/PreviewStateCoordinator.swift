@@ -49,6 +49,7 @@ class PreviewStateCoordinator: ObservableObject {
     @Published var effectiveGridColumns: Int = 1
     @Published var effectiveGridRows: Int = 1
     @Published var expectedContentSize: CGSize = .zero
+    var hasEmbeddedContent: Bool = false
 
     var onFrameRefreshNeeded: (() -> Void)?
     private var lastKnownBestGuessMonitor: NSScreen?
@@ -288,19 +289,23 @@ class PreviewStateCoordinator: ObservableObject {
                 dimensionsMap: newDimensionsMap,
                 isHorizontal: dockPosition.isHorizontalFlow,
                 maxColumns: cols,
-                maxRows: rows
+                maxRows: rows,
+                hasEmbeddedContent: hasEmbeddedContent
             )
         } else {
             expectedContentSize = .zero
         }
     }
 
+    private static let estimatedEmbeddedWidgetHeight: CGFloat = 100
+
     private static func computeExpectedContentSize(
         windowCount: Int,
         dimensionsMap: [Int: WindowPreviewHoverContainer.WindowDimensions],
         isHorizontal: Bool,
         maxColumns: Int,
-        maxRows: Int
+        maxRows: Int,
+        hasEmbeddedContent: Bool = false
     ) -> CGSize {
         guard windowCount > 0 else { return .zero }
 
@@ -313,6 +318,14 @@ class PreviewStateCoordinator: ObservableObject {
             maxColumns: maxColumns,
             maxRows: maxRows
         )
+
+        // Collect both flow-axis total and cross-axis max from all windows
+        var maxItemWidth: CGFloat = 0
+        var maxItemHeight: CGFloat = 0
+        for dim in dimensionsMap.values {
+            maxItemWidth = max(maxItemWidth, dim.size.width)
+            maxItemHeight = max(maxItemHeight, dim.size.height)
+        }
 
         if isHorizontal {
             var maxRowWidth: CGFloat = 0
@@ -327,7 +340,12 @@ class PreviewStateCoordinator: ObservableObject {
                 maxRowWidth = max(maxRowWidth, rowWidth)
             }
 
-            return CGSize(width: maxRowWidth + padding * 2, height: 0)
+            if hasEmbeddedContent, let firstDims = dimensionsMap[0] {
+                maxRowWidth += firstDims.size.width + itemSpacing
+            }
+
+            // Provide both axes: flow width from item sum, cross height from tallest preview
+            return CGSize(width: maxRowWidth + padding * 2, height: maxItemHeight + padding * 2)
         } else {
             var maxColHeight: CGFloat = 0
 
@@ -341,7 +359,12 @@ class PreviewStateCoordinator: ObservableObject {
                 maxColHeight = max(maxColHeight, colHeight)
             }
 
-            return CGSize(width: 0, height: maxColHeight + padding * 2)
+            if hasEmbeddedContent {
+                maxColHeight += estimatedEmbeddedWidgetHeight + itemSpacing
+            }
+
+            // Provide both axes: flow height from item sum, cross width from widest preview
+            return CGSize(width: maxItemWidth + padding * 2, height: maxColHeight + padding * 2)
         }
     }
 
