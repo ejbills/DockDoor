@@ -10,6 +10,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var windowSeeder: WindowSeeder?
     private var previewCoordinator: SharedPreviewWindowCoordinator?
     private var keybindHelper: KeybindHelper?
+    private var dockIntellihideManager: DockIntellihideManager?
     private var activeAppIndicator: ActiveAppIndicatorCoordinator?
     private var statusBarItem: NSStatusItem?
     private var updaterController: SPUStandardUpdaterController
@@ -81,6 +82,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             if Defaults[.showActiveAppIndicator] {
                 activeAppIndicator = ActiveAppIndicatorCoordinator()
             }
+
+            dockIntellihideManager = DockIntellihideManager()
 
             if updater.automaticallyChecksForUpdates {
                 print("AppDelegate: Automatic updates enabled, checking in background.")
@@ -175,6 +178,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             dockObserver?.reset()
             keybindHelper?.reset()
             appClosureObserver?.reset()
+            dockIntellihideManager?.refreshNow()
         }
     }
 
