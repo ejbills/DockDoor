@@ -14,6 +14,7 @@ struct DockIntellihideContext {
     let releaseRegion: CGRect
 }
 
+/// Resolves the window and Dock geometry that the intellihide policy needs.
 final class DockIntellihideGeometry {
     private let fallbackDockThickness: CGFloat = 72
     private let releasePadding: CGFloat = 2
@@ -26,6 +27,8 @@ final class DockIntellihideGeometry {
     private var cachedDockThickness: [String: CGFloat] = [:]
     private var cachedDockFrame: CGRect?
     private var lastLiveDockFrameRefreshAt: Date?
+
+    // MARK: - Window Sampling
 
     func sample(for app: NSRunningApplication) -> DockIntellihideWindowSample? {
         let appElement = AXUIElementCreateApplication(app.processIdentifier)
@@ -47,6 +50,8 @@ final class DockIntellihideGeometry {
             isFullscreen: (try? window.isFullscreen()) ?? false
         )
     }
+
+    // MARK: - Transition Detection
 
     func shouldForceHideTransition(from oldSample: DockIntellihideWindowSample?, to newSample: DockIntellihideWindowSample, dockInfluenceRegion: CGRect, minimumFrameDeltaToDetectTransition: CGFloat) -> Bool {
         guard let oldSample else { return false }
@@ -74,14 +79,18 @@ final class DockIntellihideGeometry {
         return oldSample.frame.intersects(dockInfluenceRegion) || newSample.frame.intersects(dockInfluenceRegion)
     }
 
+    // MARK: - Screen and Dock Resolution
+
     func screen(for frame: CGRect) -> NSScreen? {
-        if let containingScreen = NSScreen.screens.first(where: { axScreenFrame(for: $0).contains(frame.center) }) {
+        let screenFrames = axScreenFrames()
+
+        if let containingScreen = screenFrames.first(where: { $0.frame.contains(frame.center) })?.screen {
             return containingScreen
         }
 
-        return NSScreen.screens.max { lhs, rhs in
-            axScreenFrame(for: lhs).intersection(frame).area < axScreenFrame(for: rhs).intersection(frame).area
-        }
+        return screenFrames.max { lhs, rhs in
+            lhs.frame.intersection(frame).area < rhs.frame.intersection(frame).area
+        }?.screen
     }
 
     func dockContext(preferCached: Bool) -> DockIntellihideContext? {
@@ -89,11 +98,17 @@ final class DockIntellihideGeometry {
 
         let position = DockUtils.getDockPosition()
         let dockFrame = resolvedDockFrame(preferCached: preferCached)
+        // We keep separate enter/leave regions so the Dock does not flicker when a
+        // window edge sits right on the boundary.
         let dockRegion = stabilizedDockRegion(for: screen, position: position, dockFrame: dockFrame)
         let releaseRegion = releaseRegion(for: dockRegion, position: position)
         return DockIntellihideContext(screen: screen, dockRegion: dockRegion, releaseRegion: releaseRegion)
     }
 
+    /// AX window frames use the same global, top-left-origin coordinate space as
+    /// CG event taps. Checking against only the top slice lets the manager hide
+    /// immediately for title-bar double-click zoom/fullscreen without reacting to
+    /// ordinary double-clicks inside the content area.
     func titleBarRegion(for frame: CGRect, detectionHeight: CGFloat) -> CGRect {
         let height = min(detectionHeight, frame.height)
         return CGRect(x: frame.minX, y: frame.minY, width: frame.width, height: height)
@@ -245,14 +260,27 @@ final class DockIntellihideGeometry {
         }
     }
 
+    // AppKit screen frames use a bottom-left origin while AX window frames and Dock
+    // item frames use a top-left origin, so convert screen bounds once here.
+    private func axScreenFrames() -> [(screen: NSScreen, frame: CGRect)] {
+        let screens = NSScreen.screens
+        let globalMaxY = screens.map(\.frame.maxY).max() ?? NSScreen.main?.frame.maxY ?? 0
+
+        return screens.map { screen in
+            (
+                screen,
+                CGRect(
+                    x: screen.frame.minX,
+                    y: globalMaxY - screen.frame.maxY,
+                    width: screen.frame.width,
+                    height: screen.frame.height
+                )
+            )
+        }
+    }
+
     private func axScreenFrame(for screen: NSScreen) -> CGRect {
-        let globalMaxY = NSScreen.screens.map(\.frame.maxY).max() ?? NSScreen.main?.frame.maxY ?? 0
-        return CGRect(
-            x: screen.frame.minX,
-            y: globalMaxY - screen.frame.maxY,
-            width: screen.frame.width,
-            height: screen.frame.height
-        )
+        axScreenFrames().first(where: { $0.screen.uniqueIdentifier() == screen.uniqueIdentifier() })?.frame ?? screen.frame
     }
 }
 

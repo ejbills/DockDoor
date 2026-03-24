@@ -55,6 +55,11 @@ class DockUtils {
     }
 }
 
+/// Central owner for native Dock auto-hide mutations.
+///
+/// Preview UI and the optional GNOME-style intellihide feature both flow through
+/// this service so DockDoor only has one place that mutates the Dock's autohide
+/// state.
 final class DockAutoHideManager {
     static let shared = DockAutoHideManager()
 
@@ -80,6 +85,8 @@ final class DockAutoHideManager {
     private var lastSample: DockIntellihideWindowSample?
     private var forceHideUntil: Date?
 
+    // MARK: - Lifecycle
+
     private init() {
         defaultsObserver = Defaults.observe(keys: .enableDockIntellihide) { [weak self] in
             DispatchQueue.main.async {
@@ -95,6 +102,8 @@ final class DockAutoHideManager {
         titleBarClickMonitor.stop()
         restoreManagedDockState(force: true)
     }
+
+    // MARK: - Public API
 
     func preventDockHiding(_ windowSwitcherActive: Bool = false) {
         previewRequestsVisibleDock = Defaults[.preventDockHide] && !windowSwitcherActive
@@ -132,6 +141,8 @@ final class DockAutoHideManager {
         restoreManagedDockState(force: true)
     }
 
+    // MARK: - Configuration
+
     private func reconfigureIntellihide() {
         if Defaults[.enableDockIntellihide] {
             startEvaluating()
@@ -145,6 +156,8 @@ final class DockAutoHideManager {
 
         refreshNow()
     }
+
+    // MARK: - Evaluation Loop
 
     private func startEvaluating() {
         guard evaluationTimer == nil else { return }
@@ -175,6 +188,8 @@ final class DockAutoHideManager {
         evaluateDockVisibility()
     }
 
+    // MARK: - Dock State Management
+
     private func captureOriginalDockStateIfNeeded() {
         if !isManagingDock {
             wasAutoHideEnabled = CoreDockGetAutoHideEnabled()
@@ -190,14 +205,11 @@ final class DockAutoHideManager {
         lastAppliedAutoHideState = nil
     }
 
+    // MARK: - Intellihide Policy
+
     private func evaluateDockVisibility() {
-        guard let frontmostApp = NSWorkspace.shared.frontmostApplication,
-              frontmostApp.activationPolicy == .regular,
-              frontmostApp.bundleIdentifier != Bundle.main.bundleIdentifier,
-              frontmostApp.bundleIdentifier != "com.apple.dock"
-        else {
-            lastSample = nil
-            forceHideUntil = nil
+        guard let frontmostApp = eligibleFrontmostApp() else {
+            clearTransientState()
             applyAutoHide(false)
             return
         }
@@ -207,8 +219,7 @@ final class DockAutoHideManager {
                 applyAutoHide(true)
                 return
             }
-            lastSample = nil
-            forceHideUntil = nil
+            clearTransientState()
             applyAutoHide(false)
             return
         }
@@ -219,7 +230,7 @@ final class DockAutoHideManager {
         }
 
         guard let windowScreen = geometry.screen(for: sample.frame),
-              let dockContext = geometry.dockContext(preferCached: lastAppliedAutoHideState == true || forceHideUntil != nil)
+              let dockContext = geometry.dockContext(preferCached: shouldPreferCachedDockContext())
         else {
             applyAutoHide(false)
             return
@@ -257,11 +268,30 @@ final class DockAutoHideManager {
         applyAutoHide(shouldHide)
     }
 
-    private func handleTitleBarDoubleClick(at location: CGPoint) {
-        guard Defaults[.enableDockIntellihide],
-              let frontmostApp = NSWorkspace.shared.frontmostApplication,
+    private func eligibleFrontmostApp() -> NSRunningApplication? {
+        guard let frontmostApp = NSWorkspace.shared.frontmostApplication,
               frontmostApp.activationPolicy == .regular,
               frontmostApp.bundleIdentifier != Bundle.main.bundleIdentifier,
+              frontmostApp.bundleIdentifier != DockAccessibility.dockBundleIdentifier
+        else {
+            return nil
+        }
+
+        return frontmostApp
+    }
+
+    private func clearTransientState() {
+        lastSample = nil
+        forceHideUntil = nil
+    }
+
+    private func shouldPreferCachedDockContext() -> Bool {
+        lastAppliedAutoHideState == true || forceHideUntil != nil
+    }
+
+    private func handleTitleBarDoubleClick(at location: CGPoint) {
+        guard Defaults[.enableDockIntellihide],
+              let frontmostApp = eligibleFrontmostApp(),
               let sample = geometry.sample(for: frontmostApp)
         else {
             return
@@ -273,14 +303,22 @@ final class DockAutoHideManager {
         }
     }
 
+    // MARK: - Applying Dock State
+
     private func applyAutoHide(_ enabled: Bool, force: Bool = false) {
-        captureOriginalDockStateIfNeeded()
+        let currentState = CoreDockGetAutoHideEnabled()
+
+        if !force, currentState == enabled, !isManagingDock {
+            lastAppliedAutoHideState = enabled
+            return
+        }
 
         if !force, lastAppliedAutoHideState == enabled {
             return
         }
 
-        let currentState = CoreDockGetAutoHideEnabled()
+        captureOriginalDockStateIfNeeded()
+
         if force || currentState != enabled {
             CoreDockSetAutoHideEnabled(enabled)
         }

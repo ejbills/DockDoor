@@ -1,6 +1,8 @@
 import ApplicationServices
 import Cocoa
 
+/// Reports global double-click locations so Dock auto-hide policy can decide
+/// whether the interaction happened in the focused window's title bar.
 final class DockTitleBarClickMonitor {
     private static let eventTapCallback: CGEventTapCallBack = { _, type, event, refcon in
         guard let refcon else { return Unmanaged.passUnretained(event) }
@@ -12,6 +14,8 @@ final class DockTitleBarClickMonitor {
 
     private var eventTap: CFMachPort?
     private var runLoopSource: CFRunLoopSource?
+
+    // MARK: - Lifecycle
 
     init(onDoubleClick: @escaping (CGPoint) -> Void) {
         self.onDoubleClick = onDoubleClick
@@ -56,6 +60,8 @@ final class DockTitleBarClickMonitor {
         eventTap = nil
         runLoopSource = nil
     }
+
+    // MARK: - Event Handling
 
     private func handleEvent(type: CGEventType, event: CGEvent) -> Unmanaged<CGEvent>? {
         if let passthrough = reEnableIfNeeded(tap: eventTap, type: type, event: event) {
