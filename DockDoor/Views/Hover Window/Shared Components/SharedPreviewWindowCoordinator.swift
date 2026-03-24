@@ -17,7 +17,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
     weak static var activeInstance: SharedPreviewWindowCoordinator?
 
     let windowSwitcherCoordinator = PreviewStateCoordinator()
-    private let dockManager = DockAutoHideManager()
+    private let dockManager = DockAutoHideManager.shared
     private var searchWindow: SearchWindow?
 
     private var appName: String = ""

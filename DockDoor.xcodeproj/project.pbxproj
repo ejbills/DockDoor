@@ -11,7 +11,7 @@
 		0596C2C32C3E060D00DCABEF /* PrivateApis.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0596C2C22C3E060D00DCABEF /* PrivateApis.swift */; };
 		05C0C7182C60629C000ADAC6 /* AXUIElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C0C7172C60629C000ADAC6 /* AXUIElement.swift */; };
 		0BBE0D8202DA47F4940C1E96 /* DockScrollGestureSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08FF50AD1AA8499F8C7E2A7E /* DockScrollGestureSection.swift */; };
-		D0C1D0C12F10000100000001 /* DockIntellihideManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C1D0C12F10000100000002 /* DockIntellihideManager.swift */; };
+		D0C1D0C12F10000100000001 /* DockAccessibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C1D0C12F10000100000002 /* DockAccessibility.swift */; };
 		18D7DFD6690D45C8A63982D2 /* SettingsLinkRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF95019606449008856E149 /* SettingsLinkRow.swift */; };
 		19186F88AF6644B3962A052F /* GeneralAppearanceSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1531BE8CC50A472986E31058 /* GeneralAppearanceSection.swift */; };
 		1A04FA16AC74448F83D0F964 /* ActiveAppIndicatorCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6F87422D4714171AD2CCC4A /* ActiveAppIndicatorCoordinator.swift */; };
@@ -187,6 +187,8 @@
 		C3D4E5F6789012345678901B /* ActiveAppIndicatorDockDetection.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4E5F6789012345678901234 /* ActiveAppIndicatorDockDetection.swift */; };
 		C71AFDC5AA42466BA6ACF360 /* DockPreviewAppearanceSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47CABF9DD43A4C468597DEFB /* DockPreviewAppearanceSection.swift */; };
 		D096400ED7404496AEDA58A9 /* SettingsIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DE26FD426284948A71EBACC /* SettingsIcon.swift */; };
+		D0C1D0C22F10000100000001 /* DockIntellihideGeometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C1D0C22F10000100000002 /* DockIntellihideGeometry.swift */; };
+		D0C1D0C32F10000100000001 /* DockTitleBarClickMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C1D0C32F10000100000002 /* DockTitleBarClickMonitor.swift */; };
 		D4B28EF578BC4053BF908A5A /* CmdKeyShortcutsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6AA4630D2D54CD7AB622B27 /* CmdKeyShortcutsSection.swift */; };
 		D9F56880CB0E4365980B4DDD87BB20AC /* WindowSwitcherBehaviorSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2361530A12344D0090E22EC428DC77D0 /* WindowSwitcherBehaviorSettingsView.swift */; };
 		EBE2166867324098AFE30B239FF83CE8 /* CmdTabSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C808769D1048FF95FCDA50FA52116A /* CmdTabSettingsView.swift */; };
@@ -200,7 +202,7 @@
 		0596C2C22C3E060D00DCABEF /* PrivateApis.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateApis.swift; sourceTree = "<group>"; };
 		05C0C7172C60629C000ADAC6 /* AXUIElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AXUIElement.swift; sourceTree = "<group>"; };
 		08FF50AD1AA8499F8C7E2A7E /* DockScrollGestureSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockScrollGestureSection.swift; sourceTree = "<group>"; };
-		D0C1D0C12F10000100000002 /* DockIntellihideManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockIntellihideManager.swift; sourceTree = "<group>"; };
+		D0C1D0C12F10000100000002 /* DockAccessibility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockAccessibility.swift; sourceTree = "<group>"; };
 		0970FA03935B41E59919A618 /* SettingsSliderRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSliderRow.swift; sourceTree = "<group>"; };
 		0BD01DB1CA624D4F834C60EE /* SettingsNote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsNote.swift; sourceTree = "<group>"; };
 		0FCC42884D0A48E6B9FB1E34 /* CompactModeSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompactModeSection.swift; sourceTree = "<group>"; };
@@ -370,6 +372,8 @@
 		C6F87422D4714171AD2CCC4A /* ActiveAppIndicatorCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveAppIndicatorCoordinator.swift; sourceTree = "<group>"; };
 		CBBBAA129E24438589330D3B /* WindowSwitcherAppearanceSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowSwitcherAppearanceSection.swift; sourceTree = "<group>"; };
 		CC5D1784E68A4052A122B9019AA9C150 /* WidgetHoverContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetHoverContainer.swift; sourceTree = "<group>"; };
+		D0C1D0C22F10000100000002 /* DockIntellihideGeometry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockIntellihideGeometry.swift; sourceTree = "<group>"; };
+		D0C1D0C32F10000100000002 /* DockTitleBarClickMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockTitleBarClickMonitor.swift; sourceTree = "<group>"; };
 		D4E5F6789012345678901234 /* ActiveAppIndicatorDockDetection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveAppIndicatorDockDetection.swift; sourceTree = "<group>"; };
 		D924F5BAEF564CC1AF84527876E14356 /* Glow.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Glow.wav; sourceTree = "<group>"; };
 		E3584B7313E241EF997A4EE5 /* AdvancedAppearanceSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedAppearanceSection.swift; sourceTree = "<group>"; };
@@ -615,8 +619,10 @@
 				BBAC6B412D15F71E00A0F370 /* Window Management */,
 				BB44474E2C507F920047EB92 /* LimitedTaskGroup.swift */,
 				0596C2C22C3E060D00DCABEF /* PrivateApis.swift */,
+				D0C1D0C12F10000100000002 /* DockAccessibility.swift */,
 				BB2567C52C10C5F000C0C93E /* DockUtils.swift */,
-				D0C1D0C12F10000100000002 /* DockIntellihideManager.swift */,
+				D0C1D0C22F10000100000002 /* DockIntellihideGeometry.swift */,
+				D0C1D0C32F10000100000002 /* DockTitleBarClickMonitor.swift */,
 				BB157B7A2C0E343000997315 /* SystemPreferencesHelper.swift */,
 				BB157B7F2C0E8E6700997315 /* MessageUtil.swift */,
 				BB157B812C0EB29E00997315 /* DockObserver.swift */,
@@ -1070,7 +1076,9 @@
 				BBF6C6252C1B4B4500BF1D40 /* StringMatchingUtil.swift in Sources */,
 				BB638F1C2E0218D10010077D /* CalendarFullView.swift in Sources */,
 				0596C2C32C3E060D00DCABEF /* PrivateApis.swift in Sources */,
-				D0C1D0C12F10000100000001 /* DockIntellihideManager.swift in Sources */,
+				D0C1D0C12F10000100000001 /* DockAccessibility.swift in Sources */,
+				D0C1D0C22F10000100000001 /* DockIntellihideGeometry.swift in Sources */,
+				D0C1D0C32F10000100000001 /* DockTitleBarClickMonitor.swift in Sources */,
 				BB15E1E22C8E9435002ECFB9 /* FluidGradient.swift in Sources */,
 				BB638F142E0218BB0010077D /* SharedHoverAppTitle.swift in Sources */,
 				8895D7565ED747F8A435CF5E207647C7 /* WidgetHoverContainer.swift in Sources */,
@@ -1286,7 +1294,7 @@
 				CURRENT_PROJECT_VERSION = 1.18.3;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"DockDoor/Preview Content\"";
-				DEVELOPMENT_TEAM = 2Q775S63Q3;
+				DEVELOPMENT_TEAM = Q6TD3V2P2V;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_RESOURCE_ACCESS_AUDIO_INPUT = NO;
@@ -1310,7 +1318,7 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MARKETING_VERSION = 1.18.3;
-				PRODUCT_BUNDLE_IDENTIFIER = com.ethanbills.DockDoor.debug;
+				PRODUCT_BUNDLE_IDENTIFIER = com.igormajstorovic.DockDoor;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RUNTIME_EXCEPTION_ALLOW_DYLD_ENVIRONMENT_VARIABLES = NO;
 				RUNTIME_EXCEPTION_ALLOW_JIT = NO;
@@ -1337,7 +1345,7 @@
 				CURRENT_PROJECT_VERSION = 1.18.3;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"DockDoor/Preview Content\"";
-				DEVELOPMENT_TEAM = 2Q775S63Q3;
+				DEVELOPMENT_TEAM = Q6TD3V2P2V;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_RESOURCE_ACCESS_AUDIO_INPUT = NO;
@@ -1361,7 +1369,7 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MARKETING_VERSION = 1.18.3;
-				PRODUCT_BUNDLE_IDENTIFIER = com.ethanbills.DockDoor;
+				PRODUCT_BUNDLE_IDENTIFIER = com.igormajstorovic.DockDoor;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RUNTIME_EXCEPTION_ALLOW_DYLD_ENVIRONMENT_VARIABLES = NO;
 				RUNTIME_EXCEPTION_ALLOW_JIT = NO;

@@ -113,6 +113,7 @@ class WindowManipulationObservers {
 
     @objc private func activeSpaceDidChange(_ notification: Notification) {
         DebugLogger.log("activeSpaceDidChange")
+        DockAutoHideManager.shared.refreshNow()
         if Defaults[.showActiveAppIndicator] {
             ActiveAppIndicatorCoordinator.shared?.handleSpaceChanged()
         }
@@ -129,6 +130,7 @@ class WindowManipulationObservers {
             return
         }
 
+        DockAutoHideManager.shared.refreshNow()
         previewCoordinator.hideWindow()
 
         if let dockObserver = DockObserver.activeInstance,
