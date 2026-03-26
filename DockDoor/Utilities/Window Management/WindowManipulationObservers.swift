@@ -225,6 +225,21 @@ class WindowManipulationObservers {
                 }
             }
         case kAXUIElementDestroyedNotification:
+            // App is hidden — AXUIElementDestroyed is a side-effect of the
+            // hide transition, not a real window close. Skip validation.
+            if app.isHidden {
+                DebugLogger.log("processAXNotification", details: "Skipping destroy — app is hidden, pid=\(pid)")
+                return
+            }
+
+            // macOS cannot close a minimized window natively; if all cached
+            // windows are minimized the destroy notification is spurious.
+            let cached = WindowUtil.readCachedWindows(for: pid)
+            if !cached.isEmpty, cached.allSatisfy(\.isMinimized) {
+                DebugLogger.log("processAXNotification", details: "Skipping destroy — all windows minimized, pid=\(pid), count=\(cached.count)")
+                return
+            }
+
             handleWindowEvent(element: element, app: app, notification: notificationName, validate: true)
         case kAXWindowResizedNotification, kAXWindowMovedNotification:
             handleWindowEvent(element: element, app: app, notification: notificationName, validate: false) { [weak self] windowSet in
