@@ -233,6 +233,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 appClosureObserver?.reset()
                 dockLocker?.reset()
             }
+        }
     }
 
     @objc func openSettingsWindow(_ sender: Any?) {

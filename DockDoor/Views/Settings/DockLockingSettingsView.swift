@@ -86,5 +86,4 @@ struct DockLockingSettingsView: View {
             text: "Dock Locking is useful when \"Displays have separate Spaces\" is enabled in System Settings > Desktop & Dock. This prevents the Dock from jumping between monitors."
         )
     }
-
 }

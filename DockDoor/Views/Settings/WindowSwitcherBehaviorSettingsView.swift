@@ -286,5 +286,4 @@ struct WindowSwitcherBehaviorSettingsView: View {
             WindowSwitcherAppearanceSection()
         }
     }
-
 }
