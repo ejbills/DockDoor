@@ -1,12 +1,22 @@
-name: Tests
+name: Build & Test
 on: pull_request
 
 jobs:
-  test:
+  build:
     runs-on: macos-26
     steps:
       - uses: actions/checkout@v4
       - name: Resolve packages
         run: xcodebuild -resolvePackageDependencies -project DockDoor.xcodeproj -scheme DockDoor
+      - name: Build
+        run: xcodebuild build -project DockDoor.xcodeproj -scheme DockDoor -destination 'platform=macOS' CODE_SIGN_IDENTITY=- CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
+
+  test:
+    runs-on: macos-26
+    needs: build
+    steps:
+      - uses: actions/checkout@v4
+      - name: Resolve packages
+        run: xcodebuild -resolvePackageDependencies -project DockDoor.xcodeproj -scheme DockDoor
       - name: Run tests
-        run: xcodebuild test -project DockDoor.xcodeproj -scheme DockDoor -destination 'platform=macOS'
+        run: xcodebuild test -project DockDoor.xcodeproj -scheme DockDoor -destination 'platform=macOS' CODE_SIGN_IDENTITY=- CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
