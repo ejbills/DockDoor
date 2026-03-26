@@ -177,6 +177,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             dockObserver?.reset()
             keybindHelper?.reset()
             appClosureObserver?.reset()
+            DockAutoHideManager.shared.refreshNow()
         }
     }
 

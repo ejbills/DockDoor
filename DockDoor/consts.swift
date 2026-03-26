@@ -32,6 +32,7 @@ extension Defaults.Keys {
     static let useDelayOnlyForInitialOpen = Key<Bool>("useDelayOnlyForInitialOpen", default: false)
     static let anchorDockPreviewPosition = Key<Bool>("anchorDockPreviewPosition", default: true)
     static let preventDockHide = Key<Bool>("preventDockHide", default: false)
+    static let enableDockIntellihide = Key<Bool>("enableDockIntellihide", default: false)
     static let preventSwitcherHide = Key<Bool>("preventSwitcherHide", default: false)
     static let requireShiftTabToGoBack = Key<Bool>("requireShiftTabToGoBack", default: false)
     static let switcherBackwardKeyCode = Key<UInt16>("switcherBackwardKeyCode", default: 56)

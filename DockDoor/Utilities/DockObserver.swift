@@ -112,7 +112,7 @@ final class DockObserver {
             return
         }
 
-        let currentDockApp = NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.dock").first
+        let currentDockApp = DockAccessibility.dockApplication()
 
         if currentDockApp?.processIdentifier != currentDockPID {
             reset()
@@ -153,14 +153,12 @@ final class DockObserver {
     }
 
     private func setupSelectedDockItemObserver() {
-        guard let dockApp = NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.dock").first else {
+        guard let dockApp = DockAccessibility.dockApplication() else {
             return
         }
 
         let dockAppPID = dockApp.processIdentifier
         currentDockPID = dockAppPID
-
-        let dockAppElement = AXUIElementCreateApplication(dockAppPID)
 
         guard AXIsProcessTrusted() else {
             MessageUtil.showAlert(
@@ -175,9 +173,7 @@ final class DockObserver {
             return
         }
 
-        guard let children = try? dockAppElement.children(), let axList = children.first(where: { element in
-            try! element.role() == kAXListRole
-        }) else {
+        guard let axList = DockAccessibility.dockList()?.element else {
             return
         }
 
