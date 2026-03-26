@@ -988,16 +988,30 @@ extension WindowUtil {
         updateDesktopSpaceWindowCache(with: info)
     }
 
+    private static let minUsableImageDimension = 10
+
     static func updateDesktopSpaceWindowCache(with windowInfo: WindowInfo) {
         desktopSpaceWindowCacheManager.updateCache(pid: windowInfo.app.processIdentifier) { windowSet in
             if let matchingWindow = windowSet.first(where: { $0.axElement == windowInfo.axElement }) {
                 var matchingWindowCopy = matchingWindow
                 matchingWindowCopy.windowName = windowInfo.windowName
-                matchingWindowCopy.image = windowInfo.image
-                matchingWindowCopy.imageCapturedTime = windowInfo.imageCapturedTime
                 matchingWindowCopy.spaceID = windowInfo.spaceID
                 matchingWindowCopy.isMinimized = windowInfo.isMinimized
                 matchingWindowCopy.isHidden = windowInfo.isHidden
+
+                let newImageIsTiny: Bool
+                if let img = windowInfo.image {
+                    newImageIsTiny = img.width < minUsableImageDimension || img.height < minUsableImageDimension
+                } else {
+                    newImageIsTiny = true
+                }
+
+                if newImageIsTiny, matchingWindow.image != nil {
+                    // Keep the existing cached image instead of replacing with a degenerate one
+                } else {
+                    matchingWindowCopy.image = windowInfo.image
+                    matchingWindowCopy.imageCapturedTime = windowInfo.imageCapturedTime
+                }
 
                 windowSet.remove(matchingWindow)
                 windowSet.insert(matchingWindowCopy)
