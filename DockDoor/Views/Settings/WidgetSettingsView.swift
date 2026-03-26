@@ -14,6 +14,7 @@ private struct CalendarItem: Identifiable {
 struct WidgetSettingsView: View {
     @Default(.showSpecialAppControls) var showSpecialAppControls
     @Default(.enableMediaWidget) var enableMediaWidget
+    @Default(.enableUniversalMediaDetection) var enableUniversalMediaDetection
     @Default(.enableCalendarWidget) var enableCalendarWidget
     @Default(.useEmbeddedMediaControls) var useEmbeddedMediaControls
     @Default(.showBigControlsWhenNoValidWindows) var showBigControlsWhenNoValidWindows
@@ -74,6 +75,17 @@ struct WidgetSettingsView: View {
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                                 .padding(.leading, 40)
+
+                            if enableMediaWidget {
+                                Toggle(isOn: $enableUniversalMediaDetection) {
+                                    Text("Universal media detection")
+                                }
+                                .padding(.leading, 40)
+                                Text("Detect media from any app (browsers, third-party players, etc.). Disable to limit to Spotify and Apple Music only.")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                                    .padding(.leading, 60)
+                            }
 
                             Toggle(isOn: $enableCalendarWidget) {
                                 Text("Calendar widget")

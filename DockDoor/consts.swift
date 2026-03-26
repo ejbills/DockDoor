@@ -70,6 +70,7 @@ extension Defaults.Keys {
 
     static let showSpecialAppControls = Key<Bool>("showSpecialAppControls", default: true)
     static let enableMediaWidget = Key<Bool>("enableMediaWidget", default: true)
+    static let enableUniversalMediaDetection = Key<Bool>("enableUniversalMediaDetection", default: true)
     static let enableCalendarWidget = Key<Bool>("enableCalendarWidget", default: true)
     static let useEmbeddedMediaControls = Key<Bool>("useEmbeddedMediaControls", default: true)
     static let useEmbeddedDockPreviewElements = Key<Bool>("useEmbeddedDockPreviewElements", default: false)

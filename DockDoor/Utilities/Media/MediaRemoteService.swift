@@ -1,5 +1,6 @@
 import AppKit
 import Combine
+import Defaults
 import Foundation
 import MediaRemoteAdapter
 
@@ -17,11 +18,15 @@ final class MediaRemoteService: ObservableObject {
     @Published private(set) var isPlaying: Bool = false
     @Published private(set) var elapsedTime: TimeInterval = 0
     @Published private(set) var duration: TimeInterval = 0
-    @Published private(set) var playbackRate: Double = 0
 
     private var lastTrackIdentifier: String = ""
 
     var hasActiveMedia: Bool { title.isEmpty == false }
+
+    var isUniversalSource: Bool {
+        guard let id = activeBundleIdentifier else { return false }
+        return id != spotifyAppIdentifier && id != appleMusicAppIdentifier
+    }
 
     private init() {}
 
@@ -80,7 +85,6 @@ final class MediaRemoteService: ObservableObject {
 
         activeBundleIdentifier = payload.bundleIdentifier
         activeAppName = payload.applicationName
-        playbackRate = payload.playbackRate ?? ((payload.isPlaying ?? false) ? 1.0 : 0.0)
         isPlaying = payload.isPlaying ?? false
         duration = (payload.durationMicros ?? 0) / 1_000_000.0
 
@@ -97,10 +101,6 @@ final class MediaRemoteService: ObservableObject {
         } else if let incoming = payload.artwork, artwork == nil {
             artwork = incoming
         }
-
-        if let elapsed = payload.currentElapsedTime {
-            elapsedTime = elapsed
-        }
     }
 
     private func clearState() {
@@ -113,7 +113,6 @@ final class MediaRemoteService: ObservableObject {
         isPlaying = false
         elapsedTime = 0
         duration = 0
-        playbackRate = 0
         lastTrackIdentifier = ""
     }
 }
