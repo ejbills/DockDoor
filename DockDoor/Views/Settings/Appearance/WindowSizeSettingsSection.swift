@@ -19,6 +19,7 @@ struct WindowSizeSliderView: View {
     @Default(.previewWidth) var previewWidth
     @Default(.previewHeight) var previewHeight
     @Default(.lockAspectRatio) var lockAspectRatio
+    @Default(.allowDynamicImageSizing) var allowDynamicImageSizing
 
     private let aspectRatio: CGFloat = 16.0 / 10.0
 
@@ -33,6 +34,13 @@ struct WindowSizeSliderView: View {
                 }
                 updateWindowSize()
             }
+
+            Toggle(isOn: $allowDynamicImageSizing) {
+                Text("Dynamic image sizing")
+            }
+            Text("Scale previews to match actual window proportions instead of using fixed dimensions.")
+                .font(.caption)
+                .foregroundColor(.secondary)
 
             sliderSetting(
                 title: "Preview Width",
