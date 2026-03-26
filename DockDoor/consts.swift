@@ -16,10 +16,12 @@ let calendarAppIdentifier = "com.apple.iCal"
 
 @MainActor func isMediaApp(_ bundleIdentifier: String?) -> Bool {
     guard let bundleId = bundleIdentifier else { return false }
-    if bundleId == spotifyAppIdentifier || bundleId == appleMusicAppIdentifier {
-        return true
+    switch Defaults[.mediaDetectionMode] {
+    case .universal:
+        return bundleId == MediaRemoteService.shared.activeBundleIdentifier
+    case .appleScriptOnly:
+        return bundleId == spotifyAppIdentifier || bundleId == appleMusicAppIdentifier
     }
-    return bundleId == MediaRemoteService.shared.activeBundleIdentifier
 }
 
 extension Defaults.Keys {
@@ -70,7 +72,7 @@ extension Defaults.Keys {
 
     static let showSpecialAppControls = Key<Bool>("showSpecialAppControls", default: true)
     static let enableMediaWidget = Key<Bool>("enableMediaWidget", default: true)
-    static let enableUniversalMediaDetection = Key<Bool>("enableUniversalMediaDetection", default: true)
+    static let mediaDetectionMode = Key<MediaDetectionMode>("mediaDetectionMode", default: .universal)
     static let enableCalendarWidget = Key<Bool>("enableCalendarWidget", default: true)
     static let useEmbeddedMediaControls = Key<Bool>("useEmbeddedMediaControls", default: true)
     static let useEmbeddedDockPreviewElements = Key<Bool>("useEmbeddedDockPreviewElements", default: false)
@@ -571,6 +573,29 @@ enum DockClickAction: String, CaseIterable, Defaults.Serializable {
             String(localized: "Minimize windows", comment: "Dock click action option")
         case .hide:
             String(localized: "Hide application", comment: "Dock click action option")
+        }
+    }
+}
+
+enum MediaDetectionMode: String, CaseIterable, Defaults.Serializable {
+    case universal
+    case appleScriptOnly
+
+    var localizedName: String {
+        switch self {
+        case .universal:
+            String(localized: "Universal (any app)", comment: "Media detection mode option")
+        case .appleScriptOnly:
+            String(localized: "Spotify & Apple Music only", comment: "Media detection mode option")
+        }
+    }
+
+    var localizedDescription: String {
+        switch self {
+        case .universal:
+            String(localized: "Shows controls for whichever app is currently playing — browsers, third-party players, etc. Only one source is active at a time.", comment: "Media detection mode description")
+        case .appleScriptOnly:
+            String(localized: "Only shows controls for Spotify and Apple Music. Each app gets its own controls that work independently, even when other apps are playing audio.", comment: "Media detection mode description")
         }
     }
 }

@@ -1032,7 +1032,6 @@ struct WindowPreviewHoverContainer: View {
 
         if mockPreviewActive {
             maxRows = 1
-            maxColumns = 1
         }
 
         let shouldReverse = (dockPosition == .bottom || dockPosition == .right) && !previewStateCoordinator.windowSwitcherActive

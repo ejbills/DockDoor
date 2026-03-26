@@ -19,6 +19,8 @@ final class MediaRemoteService: ObservableObject {
     @Published private(set) var elapsedTime: TimeInterval = 0
     @Published private(set) var duration: TimeInterval = 0
 
+    let trackInfoDidChange = PassthroughSubject<Void, Never>()
+
     private var lastTrackIdentifier: String = ""
 
     var hasActiveMedia: Bool { title.isEmpty == false }
@@ -101,6 +103,8 @@ final class MediaRemoteService: ObservableObject {
         } else if let incoming = payload.artwork, artwork == nil {
             artwork = incoming
         }
+
+        trackInfoDidChange.send()
     }
 
     private func clearState() {

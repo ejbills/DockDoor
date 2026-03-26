@@ -17,6 +17,9 @@ struct CmdTabSettingsView: View {
 
                 if enableCmdTabEnhancements {
                     configurationSection
+
+                    SettingsMockPreview(context: .cmdTab)
+
                     appearanceSection
                 }
             }

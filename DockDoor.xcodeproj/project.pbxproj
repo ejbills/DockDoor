@@ -60,6 +60,7 @@
 		B376D66B467C4587915220BC80D3B9CB /* ScriptCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = F098F8107F464776B5C18294427CAECD /* ScriptCommands.swift */; };
 		B3C9F20484F14266B941AFB170B66530 /* MediaRemoteService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC298B81953848F481EE849906E0AE77 /* MediaRemoteService.swift */; };
 		B84941090B484695B105D967 /* SettingsGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4258675B29E4A22ACF92845 /* SettingsGroup.swift */; };
+		BC531F7D6159457386B0B9A594D74E0C /* SettingsMockPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6BF9BDC596A48798C66EA25EBAA85EE /* SettingsMockPreview.swift */; };
 		BB0036D02D24AAD20072C61E /* CGPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0036CF2D24AAD10072C61E /* CGPoint.swift */; };
 		BB04405B2C77A013009F1D33 /* GradientColorPaletteSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB04405A2C77A011009F1D33 /* GradientColorPaletteSettings.swift */; };
 		BB04405E2C77A87F009F1D33 /* PreferencesProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB04405D2C77A87E009F1D33 /* PreferencesProtocol.swift */; };
@@ -391,6 +392,7 @@
 		E3584B7313E241EF997A4EE5 /* AdvancedAppearanceSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedAppearanceSection.swift; sourceTree = "<group>"; };
 		F098F8107F464776B5C18294427CAECD /* ScriptCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptCommands.swift; sourceTree = "<group>"; };
 		F4258675B29E4A22ACF92845 /* SettingsGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsGroup.swift; sourceTree = "<group>"; };
+		B6BF9BDC596A48798C66EA25EBAA85EE /* SettingsMockPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsMockPreview.swift; sourceTree = "<group>"; };
 		F6AA4630D2D54CD7AB622B27 /* CmdKeyShortcutsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CmdKeyShortcutsSection.swift; sourceTree = "<group>"; };
 		FB59EE0D7419468CABBAD220 /* CmdTabAppearanceSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CmdTabAppearanceSection.swift; sourceTree = "<group>"; };
 		FCF95019606449008856E149 /* SettingsLinkRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsLinkRow.swift; sourceTree = "<group>"; };
@@ -698,6 +700,7 @@
 				0BD01DB1CA624D4F834C60EE /* SettingsNote.swift */,
 				FCF95019606449008856E149 /* SettingsLinkRow.swift */,
 				1F2844BF18EB4D089A62A368 /* SupportLinksSection.swift */,
+				B6BF9BDC596A48798C66EA25EBAA85EE /* SettingsMockPreview.swift */,
 			);
 			path = "Shared Components";
 			sourceTree = "<group>";
@@ -1122,6 +1125,7 @@
 				BB90A5ED2DFA13E000857722 /* CalendarInfo.swift in Sources */,
 				BB2885012E81B5B60048A09B /* SettingsIllustratedRow.swift in Sources */,
 				B84941090B484695B105D967 /* SettingsGroup.swift in Sources */,
+				BC531F7D6159457386B0B9A594D74E0C /* SettingsMockPreview.swift in Sources */,
 				D096400ED7404496AEDA58A9 /* SettingsIcon.swift in Sources */,
 				9DA27E8E83A84AECA8AD3BBD /* SettingsToggleRow.swift in Sources */,
 				F0796B6D96ED42D58D75BB8A /* SettingsSliderRow.swift in Sources */,

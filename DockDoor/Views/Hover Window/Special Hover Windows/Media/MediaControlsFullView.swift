@@ -38,7 +38,9 @@ struct MediaControlsFullView: View {
         ) {
             mediaControlsContent()
         }
-        .pinnable(appName: appName, bundleIdentifier: bundleIdentifier, type: .media)
+        .if(!isPinnedMode) { view in
+            view.pinnable(appName: appName, bundleIdentifier: bundleIdentifier, type: .media)
+        }
         .if(isMediaApp(bundleIdentifier)) { view in
             view.mediaScrollable(bundleIdentifier: bundleIdentifier, mediaInfo: mediaInfo)
         }

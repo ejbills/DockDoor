@@ -42,9 +42,10 @@ struct MediaControlsSkeleton: View {
 
             HStack(spacing: MediaControlsLayout.embeddedMediaButtonsSpacing) {
                 ForEach(0 ..< 3, id: \.self) { index in
-                    Circle()
+                    let dim: CGFloat = index == 1 ? 28 : 24
+                    RoundedRectangle(cornerRadius: dim * 0.3, style: .continuous)
                         .fill(Color.primary.opacity(MediaControlsLayout.skeletonOpacity))
-                        .frame(width: index == 1 ? 28 : 24, height: index == 1 ? 28 : 24)
+                        .frame(width: dim, height: dim)
                 }
             }
         }
@@ -89,7 +90,7 @@ struct MediaControlsSkeleton: View {
             HStack(spacing: MediaControlsLayout.mediaButtonsSpacing) {
                 Spacer()
                 ForEach(0 ..< 5, id: \.self) { _ in
-                    Circle()
+                    RoundedRectangle(cornerRadius: 8, style: .continuous)
                         .fill(Color.primary.opacity(MediaControlsLayout.skeletonOpacity))
                         .frame(width: 28, height: 28)
                 }

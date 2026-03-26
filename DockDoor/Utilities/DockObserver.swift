@@ -221,7 +221,7 @@ final class DockObserver {
             let mr = MediaRemoteService.shared
             let isActiveMedia = bundleIdentifier == mr.activeBundleIdentifier
                 && Defaults[.enableMediaWidget]
-                && (!mr.isUniversalSource || Defaults[.enableUniversalMediaDetection])
+                && (!mr.isUniversalSource || Defaults[.mediaDetectionMode] == .universal)
             if isCalendar || isActiveMedia, Defaults[.showSpecialAppControls], Defaults[.enableDockPreviews] {
                 let mouseScreen = NSScreen.screenContainingMouse(currentMouseLocation)
                 let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
