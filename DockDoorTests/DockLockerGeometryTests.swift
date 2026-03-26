@@ -1,3 +1,4 @@
+import CoreGraphics
 @testable import DockDoor
 import Testing
 
