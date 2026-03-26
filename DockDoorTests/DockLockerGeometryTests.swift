@@ -219,6 +219,18 @@ struct TriggerZoneCalculationTests {
         #expect(zone.rect.maxY == 1440)
         #expect(zone.rect.height == 7)
     }
+
+    @Test func unsupportedDockPosition_NoZones() {
+        let frames = [
+            CGRect(x: 0, y: 0, width: 1920, height: 1080),
+            CGRect(x: 1920, y: 0, width: 1920, height: 1080),
+        ]
+        // .unknown, .cmdTab, .cli, and .top are not supported dock positions for locking
+        let zones = DockLockerGeometry.calculateTriggerZones(
+            screenFrames: frames, lockedScreenIndex: 0, dockPosition: .unknown
+        )
+        #expect(zones.isEmpty)
+    }
 }
 
 // MARK: - Nudge Direction Tests

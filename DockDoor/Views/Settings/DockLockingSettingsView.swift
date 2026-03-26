@@ -44,7 +44,7 @@ struct DockLockingSettingsView: View {
             VStack(alignment: .leading, spacing: 10) {
                 Picker("Lock Dock to", selection: $lockedDockScreenIdentifier) {
                     ForEach(NSScreen.screens, id: \.self) { screen in
-                        Text(screenDisplayName(screen)).tag(screen.uniqueIdentifier())
+                        Text(screen.displayName).tag(screen.uniqueIdentifier())
                     }
                     if !lockedDockScreenIdentifier.isEmpty,
                        !NSScreen.screens.contains(where: { $0.uniqueIdentifier() == lockedDockScreenIdentifier })
@@ -87,18 +87,4 @@ struct DockLockingSettingsView: View {
         )
     }
 
-    // MARK: - Helpers
-
-    private func screenDisplayName(_ screen: NSScreen) -> String {
-        let isMain = screen == NSScreen.main
-        var name = screen.localizedName
-        if name.isEmpty {
-            if let displayID = screen.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? CGDirectDisplayID {
-                name = String(format: NSLocalizedString("Display %u", comment: "Generic display name with CGDirectDisplayID"), displayID)
-            } else {
-                name = String(localized: "Unknown Display")
-            }
-        }
-        return name + (isMain ? " (Main)" : "")
-    }
 }

@@ -2,33 +2,6 @@ import ApplicationServices
 import Cocoa
 import Defaults
 
-// MARK: - DockLockModifier
-
-enum DockLockModifier: Int, CaseIterable, Codable, Defaults.Serializable {
-    case option = 0
-    case control = 1
-    case shift = 2
-    case command = 3
-
-    var cgEventFlag: CGEventFlags {
-        switch self {
-        case .option: .maskAlternate
-        case .control: .maskControl
-        case .shift: .maskShift
-        case .command: .maskCommand
-        }
-    }
-
-    var localizedName: String {
-        switch self {
-        case .option: String(localized: "Option (\u{2325})")
-        case .control: String(localized: "Control (\u{2303})")
-        case .shift: String(localized: "Shift (\u{21E7})")
-        case .command: String(localized: "Command (\u{2318})")
-        }
-    }
-}
-
 // MARK: - Geometry Types (testable, no system dependencies)
 
 struct TriggerZone: Equatable {
@@ -98,6 +71,12 @@ enum DockLockerGeometry {
               lockedScreenIndex >= 0,
               lockedScreenIndex < screenFrames.count
         else { return [] }
+
+        // Only bottom, left, and right dock positions are supported on modern macOS.
+        // .top, .cmdTab, .cli, and .unknown do not have dock trigger edges to block.
+        guard dockPosition == .bottom || dockPosition == .left || dockPosition == .right else {
+            return []
+        }
 
         var zones: [TriggerZone] = []
 
@@ -236,6 +215,7 @@ final class DockLocker {
     private var healthCheckTimer: Timer?
     private var cachedTriggerZones: [TriggerZone] = []
     private var settingsObserver: Defaults.Observation?
+    private var screenSettingsObserver: Defaults.Observation?
     private var screenObserver: Any?
 
     init() {
@@ -251,6 +231,7 @@ final class DockLocker {
         healthCheckTimer?.invalidate()
         removeEventTap()
         settingsObserver?.invalidate()
+        screenSettingsObserver?.invalidate()
         if let screenObserver {
             NotificationCenter.default.removeObserver(screenObserver)
         }
@@ -321,11 +302,14 @@ final class DockLocker {
 
         for zone in cachedTriggerZones {
             if zone.rect.contains(cursorPos) {
-                let newPos = CGPoint(
+                // Modify the event location in-place so all downstream consumers
+                // (including WindowServer/Dock) see the nudged position, not the original.
+                let nudgedPos = CGPoint(
                     x: cursorPos.x + zone.nudgeVector.dx,
                     y: cursorPos.y + zone.nudgeVector.dy
                 )
-                CGWarpMouseCursorPosition(newPos)
+                event.location = nudgedPos
+                CGWarpMouseCursorPosition(nudgedPos)
                 return Unmanaged.passUnretained(event)
             }
         }
@@ -411,6 +395,9 @@ final class DockLocker {
             guard let currentEvent = CGEvent(source: nil) else { return }
             let savedPosition = currentEvent.location
 
+            // Disconnect cursor from mouse input during warp to prevent interference
+            CGAssociateMouseAndMouseCursorPosition(0)
+
             CGWarpMouseCursorPosition(targetPoint)
 
             // Post synthetic mouse move so WindowServer registers the position
@@ -420,7 +407,7 @@ final class DockLocker {
 
             usleep(150_000) // 150ms for Dock to migrate
 
-            // Restore cursor
+            // Restore cursor and re-associate with mouse input
             CGWarpMouseCursorPosition(savedPosition)
             CGAssociateMouseAndMouseCursorPosition(1)
         }
@@ -434,6 +421,12 @@ final class DockLocker {
         ) { [weak self] in
             DispatchQueue.main.async {
                 self?.refreshTriggerZones()
+            }
+        }
+
+        // Only reanchor when the locked screen changes, not when the modifier key changes
+        screenSettingsObserver = Defaults.observe(.lockedDockScreenIdentifier) { [weak self] _ in
+            DispatchQueue.main.async {
                 self?.reanchorDock()
             }
         }
@@ -454,7 +447,8 @@ final class DockLocker {
         if !lockedIdentifier.isEmpty,
            NSScreen.findScreen(byIdentifier: lockedIdentifier) == nil
         {
-            // Locked screen disconnected — disable locking but keep identifier for reconnect
+            // Locked screen disconnected — disable locking. Identifier is preserved so user
+            // can re-enable without re-selecting the screen when it reconnects.
             Defaults[.enableDockLocking] = false
             return
         }

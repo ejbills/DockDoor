@@ -287,6 +287,33 @@ extension Defaults.Keys {
     static let alternateKeybindMode = Key<SwitcherInvocationMode>("alternateKeybindMode", default: .activeAppOnly)
 }
 
+// MARK: Dock Locking
+
+enum DockLockModifier: Int, CaseIterable, Codable, Defaults.Serializable {
+    case option = 0
+    case control = 1
+    case shift = 2
+    case command = 3
+
+    var cgEventFlag: CGEventFlags {
+        switch self {
+        case .option: .maskAlternate
+        case .control: .maskControl
+        case .shift: .maskShift
+        case .command: .maskCommand
+        }
+    }
+
+    var localizedName: String {
+        switch self {
+        case .option: String(localized: "Option (\u{2325})")
+        case .control: String(localized: "Control (\u{2303})")
+        case .shift: String(localized: "Shift (\u{21E7})")
+        case .command: String(localized: "Command (\u{2318})")
+        }
+    }
+}
+
 // MARK: Display Configurations
 
 enum WindowImageCaptureQuality: String, CaseIterable, Defaults.Serializable {
