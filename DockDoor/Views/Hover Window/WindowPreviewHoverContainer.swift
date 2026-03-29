@@ -369,6 +369,7 @@ struct WindowPreviewHoverContainer: View {
                             }
                         }
                         .contentShape(Rectangle())
+                        .onTapGesture { activateAppFromTitle() }
 
                         let shouldShowUpdateElements = updateAvailable && !mockPreviewActive
 
@@ -404,6 +405,7 @@ struct WindowPreviewHoverContainer: View {
                             }
                         }
                         .contentShape(Rectangle())
+                        .onTapGesture { activateAppFromTitle() }
 
                         let shouldShowUpdateElements = updateAvailable && !mockPreviewActive
 
@@ -436,6 +438,8 @@ struct WindowPreviewHoverContainer: View {
                                 hoverTitleLabelView(labelSize: labelSize)
                             }
                         }
+                        .contentShape(Rectangle())
+                        .onTapGesture { activateAppFromTitle() }
 
                         let shouldShowUpdateElements = updateAvailable && !mockPreviewActive
 
@@ -827,6 +831,12 @@ struct WindowPreviewHoverContainer: View {
         } else if appIcon != nil {
             DispatchQueue.main.async { appIcon = nil }
         }
+    }
+
+    private func activateAppFromTitle() {
+        guard let app = previewStateCoordinator.windows.first?.app else { return }
+        if app.isHidden { app.unhide() }
+        app.activate(options: [.activateIgnoringOtherApps])
     }
 
     private func closeAllWindows() {

@@ -34,7 +34,12 @@ struct MediaControlsFullView: View {
             isPinnedMode: isPinnedMode,
             appIcon: appIcon,
             hoveringAppIcon: hoveringAppIcon,
-            highlightColor: dominantArtworkColor
+            highlightColor: dominantArtworkColor,
+            onTitleTap: {
+                guard let app = NSRunningApplication.runningApplications(withBundleIdentifier: bundleIdentifier).first else { return }
+                if app.isHidden { app.unhide() }
+                app.activate(options: [.activateIgnoringOtherApps])
+            }
         ) {
             mediaControlsContent()
         }

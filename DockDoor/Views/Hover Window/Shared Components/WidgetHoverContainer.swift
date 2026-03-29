@@ -10,6 +10,7 @@ struct WidgetHoverContainer<Content: View>: View {
     let appIcon: NSImage?
     let hoveringAppIcon: Bool
     let highlightColor: Color?
+    let onTitleTap: (() -> Void)?
     let content: Content
 
     @Default(.showAppName) private var showAppTitleData
@@ -24,6 +25,7 @@ struct WidgetHoverContainer<Content: View>: View {
         appIcon: NSImage?,
         hoveringAppIcon: Bool,
         highlightColor: Color? = nil,
+        onTitleTap: (() -> Void)? = nil,
         @ViewBuilder content: () -> Content
     ) {
         self.appName = appName
@@ -34,6 +36,7 @@ struct WidgetHoverContainer<Content: View>: View {
         self.appIcon = appIcon
         self.hoveringAppIcon = hoveringAppIcon
         self.highlightColor = highlightColor
+        self.onTitleTap = onTitleTap
         self.content = content()
     }
 
@@ -49,7 +52,8 @@ struct WidgetHoverContainer<Content: View>: View {
         SharedHoverAppTitle(
             appName: appName,
             appIcon: appIcon,
-            hoveringAppIcon: hoveringAppIcon
+            hoveringAppIcon: hoveringAppIcon,
+            onTap: onTitleTap
         )
     }
 
