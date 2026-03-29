@@ -25,6 +25,7 @@ struct PreviewAppearanceSettings {
     let showAnimations: Bool
     let globalPaddingMultiplier: CGFloat
     let windowTitleFontSize: WindowTitleFontSize
+    let trafficLightButtonScale: CGFloat
     let livePreviewQuality: LivePreviewQuality
     let livePreviewFrameRate: LivePreviewFrameRate
 
@@ -135,6 +136,7 @@ struct PreviewAppearanceSettings {
             showAnimations: Defaults[.showAnimations],
             globalPaddingMultiplier: Defaults[.globalPaddingMultiplier],
             windowTitleFontSize: Defaults[.windowTitleFontSize],
+            trafficLightButtonScale: Defaults[.trafficLightButtonScale],
             livePreviewQuality: quality,
             livePreviewFrameRate: frameRate
         )
@@ -257,7 +259,8 @@ struct WindowPreview: View {
                     pillStyling: !appearance.disableDockStyleTrafficLights,
                     mockPreviewActive: mockPreviewActive,
                     enabledButtons: appearance.enabledTrafficLightButtons,
-                    useMonochrome: appearance.useMonochromeTrafficLights
+                    useMonochrome: appearance.useMonochromeTrafficLights,
+                    buttonScale: appearance.trafficLightButtonScale
                 )
             } else if windowInfo.isMinimized || windowInfo.isHidden,
                       appearance.showMinimizedHiddenLabels,
@@ -306,6 +309,38 @@ struct WindowPreview: View {
                         }
                     }
                     .padding(8)
+                }
+            case .centeredTitleTopControlsBottom:
+                VStack {
+                    HStack {
+                        Spacer()
+                        titleContent
+                        Spacer()
+                    }
+                    .padding(.top, 8)
+                    Spacer()
+                    HStack {
+                        Spacer()
+                        controlsContent
+                        Spacer()
+                    }
+                    .padding(.bottom, 8)
+                }
+            case .centeredControlsTopTitleBottom:
+                VStack {
+                    HStack {
+                        Spacer()
+                        controlsContent
+                        Spacer()
+                    }
+                    .padding(.top, 8)
+                    Spacer()
+                    HStack {
+                        Spacer()
+                        titleContent
+                        Spacer()
+                    }
+                    .padding(.bottom, 8)
                 }
             case .diagonalTopLeftBottomRight:
                 VStack {
@@ -497,7 +532,15 @@ struct WindowPreview: View {
         }
 
         return HStack(spacing: 4) {
-            if isLeadingControls {
+            if appearance.controlPosition.isCentered {
+                Spacer(minLength: 0)
+                if showTitleContent {
+                    appIconContent
+                    titleAndSubtitleContent
+                }
+                if showControlsContent { controlsContent }
+                Spacer(minLength: 0)
+            } else if isLeadingControls {
                 if showControlsContent { controlsContent }
                 Spacer(minLength: 8)
                 if showTitleContent {
@@ -551,7 +594,8 @@ struct WindowPreview: View {
                     pillStyling: !appearance.disableDockStyleTrafficLights,
                     mockPreviewActive: mockPreviewActive,
                     enabledButtons: appearance.enabledTrafficLightButtons,
-                    useMonochrome: appearance.useMonochromeTrafficLights
+                    useMonochrome: appearance.useMonochromeTrafficLights,
+                    buttonScale: appearance.trafficLightButtonScale
                 )
             } else if windowInfo.isMinimized || windowInfo.isHidden,
                       appearance.showMinimizedHiddenLabels,
@@ -568,19 +612,30 @@ struct WindowPreview: View {
         }
 
         if hasTitle || hasTrafficLights {
-            return AnyView(
-                HStack(spacing: 4) {
-                    if isLeadingControls {
-                        if showControlsContent { controlsContent }
-                        Spacer(minLength: 8)
+            if appearance.controlPosition.isCentered {
+                return AnyView(
+                    HStack(spacing: 4) {
+                        Spacer(minLength: 0)
                         if showTitleContent { titleContent }
-                    } else {
-                        if showTitleContent { titleContent }
-                        Spacer(minLength: 8)
                         if showControlsContent { controlsContent }
+                        Spacer(minLength: 0)
                     }
-                }
-            )
+                )
+            } else {
+                return AnyView(
+                    HStack(spacing: 4) {
+                        if isLeadingControls {
+                            if showControlsContent { controlsContent }
+                            Spacer(minLength: 8)
+                            if showTitleContent { titleContent }
+                        } else {
+                            if showTitleContent { titleContent }
+                            Spacer(minLength: 8)
+                            if showControlsContent { controlsContent }
+                        }
+                    }
+                )
+            }
         } else {
             return AnyView(EmptyView())
         }

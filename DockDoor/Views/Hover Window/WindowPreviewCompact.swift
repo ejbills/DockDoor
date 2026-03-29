@@ -115,7 +115,8 @@ struct WindowPreviewCompact: View {
                     pillStyling: true,
                     mockPreviewActive: mockPreviewActive,
                     enabledButtons: appearance.enabledTrafficLightButtons,
-                    useMonochrome: appearance.useMonochromeTrafficLights
+                    useMonochrome: appearance.useMonochromeTrafficLights,
+                    buttonScale: appearance.trafficLightButtonScale
                 )
             }
         }

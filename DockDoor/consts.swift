@@ -154,6 +154,7 @@ extension Defaults.Keys {
     static let trafficLightButtonsPosition = Key<TrafficLightButtonsPosition>("trafficLightButtonsPosition", default: .topLeft)
     static let enabledTrafficLightButtons = Key<Set<WindowAction>>("enabledTrafficLightButtons", default: [.quit, .close, .minimize, .toggleFullScreen])
     static let useMonochromeTrafficLights = Key<Bool>("useMonochromeTrafficLights", default: false)
+    static let trafficLightButtonScale = Key<CGFloat>("trafficLightButtonScale", default: 1.0)
     static let showMinimizedHiddenLabels = Key<Bool>("showMinimizedHiddenLabels", default: true)
 
     // MARK: - Window Switcher Appearance Settings
@@ -412,6 +413,8 @@ enum WindowSwitcherControlPosition: String, CaseIterable, Defaults.Serializable 
     case topTrailing
     case bottomLeading
     case bottomTrailing
+    case centeredTitleTopControlsBottom
+    case centeredControlsTopTitleBottom
     case diagonalTopLeftBottomRight
     case diagonalTopRightBottomLeft
     case diagonalBottomLeftTopRight
@@ -431,6 +434,10 @@ enum WindowSwitcherControlPosition: String, CaseIterable, Defaults.Serializable 
             String(localized: "At bottom - Title on left, controls on right")
         case .bottomTrailing:
             String(localized: "At bottom - Controls on left, title on right")
+        case .centeredTitleTopControlsBottom:
+            String(localized: "Centered - Title top, controls bottom")
+        case .centeredControlsTopTitleBottom:
+            String(localized: "Centered - Controls top, title bottom")
         case .diagonalTopLeftBottomRight:
             String(localized: "Diagonal - Title top left, controls bottom right")
         case .diagonalTopRightBottomLeft:
@@ -453,6 +460,7 @@ enum WindowSwitcherControlPosition: String, CaseIterable, Defaults.Serializable 
     var showsOnTop: Bool {
         switch self {
         case .topLeading, .topTrailing,
+             .centeredTitleTopControlsBottom, .centeredControlsTopTitleBottom,
              .diagonalTopLeftBottomRight, .diagonalTopRightBottomLeft,
              .diagonalBottomLeftTopRight, .diagonalBottomRightTopLeft,
              .parallelTopLeftBottomLeft, .parallelTopRightBottomRight,
@@ -466,6 +474,7 @@ enum WindowSwitcherControlPosition: String, CaseIterable, Defaults.Serializable 
     var showsOnBottom: Bool {
         switch self {
         case .bottomLeading, .bottomTrailing,
+             .centeredTitleTopControlsBottom, .centeredControlsTopTitleBottom,
              .diagonalTopLeftBottomRight, .diagonalTopRightBottomLeft,
              .diagonalBottomLeftTopRight, .diagonalBottomRightTopLeft,
              .parallelTopLeftBottomLeft, .parallelTopRightBottomRight,
@@ -485,12 +494,25 @@ enum WindowSwitcherControlPosition: String, CaseIterable, Defaults.Serializable 
         return offset
     }
 
+    var isCentered: Bool {
+        switch self {
+        case .centeredTitleTopControlsBottom, .centeredControlsTopTitleBottom:
+            true
+        default:
+            false
+        }
+    }
+
     var topConfiguration: (isLeadingControls: Bool, showTitle: Bool, showControls: Bool) {
         switch self {
         case .topLeading, .bottomLeading:
             (false, true, true)
         case .topTrailing, .bottomTrailing:
             (true, true, true)
+        case .centeredTitleTopControlsBottom:
+            (false, true, false)
+        case .centeredControlsTopTitleBottom:
+            (false, false, true)
         case .diagonalTopLeftBottomRight, .parallelTopLeftBottomLeft:
             (false, true, false)
         case .diagonalTopRightBottomLeft, .parallelTopRightBottomRight:
@@ -508,6 +530,10 @@ enum WindowSwitcherControlPosition: String, CaseIterable, Defaults.Serializable 
             (false, true, true)
         case .topTrailing, .bottomTrailing:
             (true, true, true)
+        case .centeredTitleTopControlsBottom:
+            (false, false, true)
+        case .centeredControlsTopTitleBottom:
+            (false, true, false)
         case .diagonalTopLeftBottomRight:
             (false, false, true)
         case .diagonalTopRightBottomLeft:
