@@ -108,6 +108,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func applicationWillTerminate(_ notification: Notification) {
+        wakeRecoveryTask?.cancel()
         WindowUtil.saveWindowOrderFromCache()
         URLCache.shared.removeAllCachedResponses()
     }
@@ -169,14 +170,39 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
+    private var wakeRecoveryTask: Task<Void, Never>?
+
     @objc private func handleSystemWake() {
-        // Re-assert window level on wake (fixes window rendering issues)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
-            guard let self else { return }
-            NSApp.activate(ignoringOtherApps: true)
-            dockObserver?.reset()
-            keybindHelper?.reset()
-            appClosureObserver?.reset()
+        wakeRecoveryTask?.cancel()
+
+        wakeRecoveryTask = Task {
+            var delay: UInt64 = 1_000_000_000 // 1s
+            var totalWaited: UInt64 = 0
+            let maxWait: UInt64 = 15_000_000_000 // 15s
+
+            while !Task.isCancelled, totalWaited < maxWait {
+                try? await Task.sleep(nanoseconds: delay)
+                guard !Task.isCancelled else { return }
+                totalWaited += delay
+
+                if isAccessibilityReady() {
+                    DebugLogger.log("Wake recovery", details: "AX canary passed after \(totalWaited / 1_000_000)ms")
+                    break
+                }
+
+                DebugLogger.log("Wake recovery", details: "AX canary failed after \(totalWaited / 1_000_000)ms, backing off")
+                delay = min(delay * 2, maxWait - totalWaited)
+            }
+
+            guard !Task.isCancelled else { return }
+
+            await MainActor.run { [weak self] in
+                guard let self else { return }
+                NSApp.activate(ignoringOtherApps: true)
+                dockObserver?.reset()
+                keybindHelper?.reset()
+                appClosureObserver?.reset()
+            }
         }
     }
 

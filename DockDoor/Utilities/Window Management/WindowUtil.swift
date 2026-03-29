@@ -1055,7 +1055,7 @@ extension WindowUtil {
             var purifiedSet = existingWindowsSet
             for window in existingWindowsSet {
                 if window.isMinimized || window.isHidden {
-                    DebugLogger.log("purifyAppCache", details: "Skipping validation for \(window.isMinimized ? "minimized" : "hidden") window (id=\(window.id), app=\(window.app?.localizedName ?? "Unknown"))")
+                    DebugLogger.log("purifyAppCache", details: "Skipping validation for \(window.isMinimized ? "minimized" : "hidden") window (id=\(window.id), app=\(window.app.localizedName ?? "Unknown"))")
                     continue
                 }
                 if !isValidElement(window.axElement) {

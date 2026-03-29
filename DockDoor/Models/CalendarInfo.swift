@@ -52,8 +52,8 @@ class DailyCalendarInfo: ObservableObject {
     func reloadData() {
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }
-            self.eventAuthStatus = EKEventStore.authorizationStatus(for: .event)
-            self.fetchDataBasedOnCurrentPermissions()
+            eventAuthStatus = EKEventStore.authorizationStatus(for: .event)
+            fetchDataBasedOnCurrentPermissions()
         }
     }
 
