@@ -999,11 +999,10 @@ extension WindowUtil {
                 matchingWindowCopy.isMinimized = windowInfo.isMinimized
                 matchingWindowCopy.isHidden = windowInfo.isHidden
 
-                let newImageIsTiny: Bool
-                if let img = windowInfo.image {
-                    newImageIsTiny = img.width < minUsableImageDimension || img.height < minUsableImageDimension
+                let newImageIsTiny: Bool = if let img = windowInfo.image {
+                    img.width < minUsableImageDimension || img.height < minUsableImageDimension
                 } else {
-                    newImageIsTiny = true
+                    true
                 }
 
                 if newImageIsTiny, matchingWindow.image != nil {

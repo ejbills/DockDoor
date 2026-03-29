@@ -10,6 +10,7 @@ struct DockPreviewAppearanceSection: View {
     @Default(.windowTitleVisibility) var windowTitleVisibility
     @Default(.disableDockStyleTitles) var disableDockStyleTitles
     @Default(.disableDockStyleTrafficLights) var disableDockStyleTrafficLights
+    @Default(.showMassActionButtons) var showMassActionButtons
     @Default(.useEmbeddedDockPreviewElements) var useEmbeddedDockPreviewElements
     @Default(.previewMaxColumns) var previewMaxColumns
     @Default(.previewMaxRows) var previewMaxRows
@@ -85,6 +86,19 @@ struct DockPreviewAppearanceSection: View {
                     Text("Disable dock styling on traffic light buttons")
                 }
                 Text("Removes the pill-shaped background styling from traffic light buttons in dock previews for a cleaner look.")
+                    .font(.footnote)
+                    .foregroundColor(.gray)
+                    .padding(.leading, 20)
+            }
+
+            Divider().padding(.vertical, 2)
+            Text("Mass Action Buttons").font(.headline).padding(.bottom, -2)
+
+            VStack(alignment: .leading) {
+                Toggle(isOn: $showMassActionButtons) {
+                    Text("Show Close All and Minimize All buttons")
+                }
+                Text("Displays Close All and Minimize All buttons when hovering the app icon in dock previews.")
                     .font(.footnote)
                     .foregroundColor(.gray)
                     .padding(.leading, 20)

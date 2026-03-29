@@ -88,6 +88,7 @@ struct WindowPreviewHoverContainer: View {
     @Default(.cmdTabCompactThreshold) var cmdTabCompactThreshold
 
     // Force list view settings
+    @Default(.showMassActionButtons) var showMassActionButtons
     @Default(.disableImagePreview) var disableImagePreview
     @Default(.previewWidth) var previewWidth
 
@@ -373,7 +374,7 @@ struct WindowPreviewHoverContainer: View {
 
                         Group {
                             update(shouldShowUpdateElements)
-                            massOperations(hoveringAppIcon && !updateAvailable)
+                            massOperations(hoveringAppIcon && !updateAvailable && showMassActionButtons)
                         }
                         .padding(.leading, 4)
                     }
@@ -408,7 +409,7 @@ struct WindowPreviewHoverContainer: View {
 
                         Group {
                             update(shouldShowUpdateElements)
-                            massOperations(hoveringAppIcon && !updateAvailable)
+                            massOperations(hoveringAppIcon && !updateAvailable && showMassActionButtons)
                         }
                         .padding(.leading, 4)
                     }
@@ -440,7 +441,7 @@ struct WindowPreviewHoverContainer: View {
 
                         Group {
                             update(shouldShowUpdateElements)
-                            massOperations(hoveringAppIcon && !updateAvailable)
+                            massOperations(hoveringAppIcon && !updateAvailable && showMassActionButtons)
                         }
                         .padding(.leading, 4)
                     }

@@ -62,15 +62,11 @@ extension WindowPreviewHoverContainer {
         isHorizontal: Bool
     ) -> CGSize {
         let aspectRatio = CGFloat(image.width) / CGFloat(image.height)
-        let maxAspectRatio: CGFloat = 1.5
-        let minAspectRatio: CGFloat = 1.0 / maxAspectRatio
-
-        let clampedRatio = max(min(aspectRatio, maxAspectRatio), minAspectRatio)
         if isHorizontal {
-            let width = min(thickness * clampedRatio, maxDimensions.width)
+            let width = min(thickness * aspectRatio, maxDimensions.width)
             return CGSize(width: width, height: thickness)
         } else {
-            let height = min(thickness / clampedRatio, maxDimensions.height)
+            let height = min(thickness / aspectRatio, maxDimensions.height)
             return CGSize(width: thickness, height: height)
         }
     }
@@ -106,8 +102,8 @@ extension WindowPreviewHoverContainer {
                     }
                     dimensionsMap[index] = WindowDimensions(size: windowSize, maxDimensions: maxDims)
                 } else {
-                    let fallbackSize = CGSize(width: min(300, overallMaxDimensions.x),
-                                              height: min(300, overallMaxDimensions.y))
+                    let compactRowHeight: CGFloat = 36
+                    let fallbackSize = CGSize(width: min(300, maxDims.width), height: compactRowHeight)
                     dimensionsMap[index] = WindowDimensions(size: fallbackSize, maxDimensions: maxDims)
                 }
             }

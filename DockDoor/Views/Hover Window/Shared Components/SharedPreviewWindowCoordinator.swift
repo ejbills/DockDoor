@@ -170,11 +170,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         let screen = NSScreen.screenContainingMouse(NSEvent.mouseLocation)
         let screenFrame = screen.frame
 
-        let expectedSize = windowSwitcherCoordinator.expectedContentSize
-        let newSize = CGSize(
-            width: expectedSize.width > 0 ? max(expectedSize.width, fittingSize.width) : fittingSize.width,
-            height: expectedSize.height > 0 ? max(expectedSize.height, fittingSize.height) : fittingSize.height
-        )
+        let newSize = fittingSize
         guard newSize != frame.size else { return }
 
         let wasClampedToTop = frame.maxY >= screenFrame.maxY - 1
@@ -314,11 +310,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
             elapsed = renderStartTime.map { (CFAbsoluteTimeGetCurrent() - $0) * 1000 } ?? 0
             DebugLogger.log("PreviewRender", details: "fittingSize done: \(fittingSize) (+\(String(format: "%.1f", elapsed))ms)")
 
-            let expectedSize = windowSwitcherCoordinator.expectedContentSize
-            newHoverWindowSize = CGSize(
-                width: expectedSize.width > 0 ? max(expectedSize.width, fittingSize.width) : fittingSize.width,
-                height: expectedSize.height > 0 ? max(expectedSize.height, fittingSize.height) : fittingSize.height
-            )
+            newHoverWindowSize = fittingSize
         }
 
         let position: CGPoint

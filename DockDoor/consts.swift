@@ -79,6 +79,7 @@ extension Defaults.Keys {
     static let disableDockStyleTrafficLights = Key<Bool>("disableDockStyleTrafficLights", default: false)
     static let disableDockStyleTitles = Key<Bool>("disableDockStyleTitles", default: false)
     static let showBigControlsWhenNoValidWindows = Key<Bool>("showBigControlsWhenNoValidWindows", default: true)
+    static let showMassActionButtons = Key<Bool>("showMassActionButtons", default: true)
     static let enablePinning = Key<Bool>("enablePinning", default: true)
 
     static let persistedWindowOrder = Key<[WindowOrderPersistence.PersistedWindowEntry]>("persistedWindowOrder", default: [])
