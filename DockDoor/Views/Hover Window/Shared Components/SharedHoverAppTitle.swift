@@ -6,8 +6,6 @@ struct SharedHoverAppTitle: View {
     let appName: String
     let appIcon: NSImage?
     let hoveringAppIcon: Bool
-    var onTap: (() -> Void)? = nil
-
     @Default(.showAppName) var showAppTitleData
     @Default(.showAppIconOnly) var showAppIconOnly
     @Default(.appNameStyle) var appNameStyle
@@ -73,9 +71,6 @@ struct SharedHoverAppTitle: View {
                 }
             }
             .contentShape(Rectangle())
-            .onTapGesture {
-                onTap?()
-            }
         }
     }
 

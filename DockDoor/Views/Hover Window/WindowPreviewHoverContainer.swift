@@ -236,6 +236,10 @@ struct WindowPreviewHoverContainer: View {
         BaseHoverContainer(bestGuessMonitor: bestGuessMonitor, mockPreviewActive: mockPreviewActive) {
             windowGridContent()
         }
+        .contentShape(Rectangle())
+        .onTapGesture {
+            activateApp()
+        }
         .padding(.top, (!previewStateCoordinator.windowSwitcherActive && effectiveAppNameStyle == .popover && effectiveShowAppName) ? 30 : 0)
         .onAppear {
             loadAppIcon()
@@ -369,7 +373,6 @@ struct WindowPreviewHoverContainer: View {
                             }
                         }
                         .contentShape(Rectangle())
-                        .onTapGesture { activateAppFromTitle() }
 
                         let shouldShowUpdateElements = updateAvailable && !mockPreviewActive
 
@@ -405,7 +408,6 @@ struct WindowPreviewHoverContainer: View {
                             }
                         }
                         .contentShape(Rectangle())
-                        .onTapGesture { activateAppFromTitle() }
 
                         let shouldShowUpdateElements = updateAvailable && !mockPreviewActive
 
@@ -439,7 +441,6 @@ struct WindowPreviewHoverContainer: View {
                             }
                         }
                         .contentShape(Rectangle())
-                        .onTapGesture { activateAppFromTitle() }
 
                         let shouldShowUpdateElements = updateAvailable && !mockPreviewActive
 
@@ -833,7 +834,7 @@ struct WindowPreviewHoverContainer: View {
         }
     }
 
-    private func activateAppFromTitle() {
+    private func activateApp() {
         guard let app = previewStateCoordinator.windows.first?.app else { return }
         if app.isHidden { app.unhide() }
         app.activate(options: [.activateIgnoringOtherApps])
