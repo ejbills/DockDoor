@@ -463,18 +463,6 @@ extension WindowUtil {
 
     static func isValidElement(_ element: AXUIElement) -> Bool {
         DebugLogger.measureSlow("isValidElement", thresholdMs: 50) {
-            // Minimized/hidden windows may lose geometry but are still valid
-            if (try? element.isMinimized()) == true {
-                let wid = (try? element.cgWindowId()) ?? 0
-                DebugLogger.log("isValidElement", details: "Preserving minimized window (id=\(wid))")
-                return true
-            }
-            if let pid = try? element.pid(), let app = NSRunningApplication(processIdentifier: pid), app.isHidden {
-                let wid = (try? element.cgWindowId()) ?? 0
-                DebugLogger.log("isValidElement", details: "Preserving hidden app window (id=\(wid), app=\(app.localizedName ?? "Unknown"))")
-                return true
-            }
-
             // Fast path: check geometry
             do {
                 let position = try element.position()
@@ -591,6 +579,10 @@ extension WindowUtil {
 
     /// Returns whether a single window belongs to one of the given active Spaces.
     static func windowBelongsToActiveSpace(_ windowInfo: WindowInfo, activeSpaceIDs: Set<Int>) -> Bool {
+        if windowInfo.isMinimized || windowInfo.isHidden {
+            return true
+        }
+
         let windowSpaces = Set(windowInfo.id.cgsSpaces().map { Int($0) })
 
         if !windowSpaces.isEmpty {
@@ -599,11 +591,6 @@ extension WindowUtil {
 
         if let spaceID = windowInfo.spaceID {
             return activeSpaceIDs.contains(spaceID)
-        }
-
-        // Minimized/hidden windows with no space info are kept (space tracking lost on minimize)
-        if windowInfo.isMinimized || windowInfo.isHidden {
-            return true
         }
 
         return false
@@ -1054,10 +1041,6 @@ extension WindowUtil {
 
             var purifiedSet = existingWindowsSet
             for window in existingWindowsSet {
-                if window.isMinimized || window.isHidden {
-                    DebugLogger.log("purifyAppCache", details: "Skipping validation for \(window.isMinimized ? "minimized" : "hidden") window (id=\(window.id), app=\(window.app.localizedName ?? "Unknown"))")
-                    continue
-                }
                 if !isValidElement(window.axElement) {
                     purifiedSet.remove(window)
                     desktopSpaceWindowCacheManager.removeFromCache(pid: pid, windowId: window.id)
