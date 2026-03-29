@@ -149,15 +149,15 @@ struct TrackpadEventMonitor: NSViewRepresentable {
 
             if abs(cumulativeScrollY) > abs(cumulativeScrollX), abs(cumulativeScrollY) > swipeThreshold {
                 if normalizedY > 0 {
-                    DispatchQueue.main.async { self.onSwipeUp() }
+                    DispatchQueue.main.async { [weak self] in self?.onSwipeUp() }
                 } else {
-                    DispatchQueue.main.async { self.onSwipeDown() }
+                    DispatchQueue.main.async { [weak self] in self?.onSwipeDown() }
                 }
             } else if abs(cumulativeScrollX) > abs(cumulativeScrollY), abs(cumulativeScrollX) > swipeThreshold {
                 if cumulativeScrollX < 0 {
-                    DispatchQueue.main.async { self.onSwipeLeft() }
+                    DispatchQueue.main.async { [weak self] in self?.onSwipeLeft() }
                 } else {
-                    DispatchQueue.main.async { self.onSwipeRight() }
+                    DispatchQueue.main.async { [weak self] in self?.onSwipeRight() }
                 }
             }
 

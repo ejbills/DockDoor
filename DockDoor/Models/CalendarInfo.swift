@@ -35,9 +35,8 @@ class DailyCalendarInfo: ObservableObject {
                 }
             }
         } else {
-            // If status is already determined, fetch data immediately.
-            DispatchQueue.main.async {
-                self.fetchDataBasedOnCurrentPermissions()
+            DispatchQueue.main.async { [weak self] in
+                self?.fetchDataBasedOnCurrentPermissions()
             }
         }
     }
@@ -51,7 +50,8 @@ class DailyCalendarInfo: ObservableObject {
     }
 
     func reloadData() {
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
             self.eventAuthStatus = EKEventStore.authorizationStatus(for: .event)
             self.fetchDataBasedOnCurrentPermissions()
         }
@@ -59,7 +59,9 @@ class DailyCalendarInfo: ObservableObject {
 
     private func fetchTodaysEvents() {
         guard eventAuthStatus == .authorized else {
-            if !events.isEmpty { DispatchQueue.main.async { self.events = [] } }
+            if !events.isEmpty {
+                DispatchQueue.main.async { [weak self] in self?.events = [] }
+            }
             return
         }
 
@@ -70,14 +72,16 @@ class DailyCalendarInfo: ObservableObject {
 
         let startOfDay = Calendar.current.startOfDay(for: Date())
         guard let endOfDay = Calendar.current.date(byAdding: .day, value: 1, to: startOfDay) else {
-            if !events.isEmpty { DispatchQueue.main.async { self.events = [] } }
+            if !events.isEmpty {
+                DispatchQueue.main.async { [weak self] in self?.events = [] }
+            }
             return
         }
 
         let predicate = eventStore.predicateForEvents(withStart: startOfDay, end: endOfDay, calendars: calendars)
         let ekEvents = eventStore.events(matching: predicate)
 
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [weak self] in
             let newEvents = ekEvents.map {
                 Event(
                     title: $0.title,
@@ -88,7 +92,7 @@ class DailyCalendarInfo: ObservableObject {
                 )
             }.sorted(by: { $0.startDate < $1.startDate })
 
-            self.events = newEvents
+            self?.events = newEvents
         }
     }
 }
