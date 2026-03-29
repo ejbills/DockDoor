@@ -166,8 +166,8 @@ extension WindowPreviewHoverContainer {
         switcherMaxRows: Int,
         totalItems: Int? = nil
     ) -> (maxColumns: Int, maxRows: Int) {
-        let screenWidth = bestGuessMonitor.frame.width * 0.90
-        let screenHeight = bestGuessMonitor.frame.height * 0.90
+        let screenWidth = bestGuessMonitor.frame.width
+        let screenHeight = bestGuessMonitor.frame.height
         let itemSpacing = HoverContainerPadding.itemSpacing
         let globalPadding: CGFloat = 40
 
