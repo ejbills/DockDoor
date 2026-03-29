@@ -9,7 +9,7 @@ class PreviewStateCoordinator: ObservableObject {
     // MARK: - Keybind Session Tracking
 
     /// Tracks whether the window switcher was activated via keybind (not just visible)
-    @Published private(set) var isKeybindSessionActive: Bool = false
+    private(set) var isKeybindSessionActive: Bool = false
 
     @MainActor
     func activateKeybindSession() {
@@ -24,11 +24,11 @@ class PreviewStateCoordinator: ObservableObject {
 
     // MARK: - UI State
 
-    @Published var hasMovedSinceOpen: Bool = false
+    var hasMovedSinceOpen: Bool = false
     var initialHoverLocation: CGPoint?
-    @Published var fullWindowPreviewActive: Bool = false
+    var fullWindowPreviewActive: Bool = false
     @Published var windows: [WindowInfo] = []
-    @Published var shouldScrollToIndex: Bool = true
+    var shouldScrollToIndex: Bool = true
 
     @Published var searchQuery: String = "" {
         didSet {
@@ -44,11 +44,22 @@ class PreviewStateCoordinator: ObservableObject {
         !searchQuery.isEmpty
     }
 
-    @Published var overallMaxPreviewDimension: CGPoint = .zero
-    @Published var windowDimensionsMap: [Int: WindowPreviewHoverContainer.WindowDimensions] = [:]
-    @Published var effectiveGridColumns: Int = 1
-    @Published var effectiveGridRows: Int = 1
-    @Published var expectedContentSize: CGSize = .zero
+    struct DimensionState: Equatable {
+        var overallMaxPreviewDimension: CGPoint = .zero
+        var windowDimensionsMap: [Int: WindowPreviewHoverContainer.WindowDimensions] = [:]
+        var effectiveGridColumns: Int = 1
+        var effectiveGridRows: Int = 1
+
+        static func == (lhs: Self, rhs: Self) -> Bool {
+            lhs.overallMaxPreviewDimension == rhs.overallMaxPreviewDimension
+                && lhs.effectiveGridColumns == rhs.effectiveGridColumns
+                && lhs.effectiveGridRows == rhs.effectiveGridRows
+                && lhs.windowDimensionsMap.count == rhs.windowDimensionsMap.count
+        }
+    }
+
+    @Published var dimensionState = DimensionState()
+    var expectedContentSize: CGSize = .zero
     var hasEmbeddedContent: Bool = false
 
     var onFrameRefreshNeeded: (() -> Void)?
@@ -274,10 +285,12 @@ class PreviewStateCoordinator: ObservableObject {
             effectiveMaxRows: rows
         )
 
-        overallMaxPreviewDimension = newOverallMaxDimension
-        windowDimensionsMap = newDimensionsMap
-        effectiveGridColumns = cols
-        effectiveGridRows = rows
+        dimensionState = DimensionState(
+            overallMaxPreviewDimension: newOverallMaxDimension,
+            windowDimensionsMap: newDimensionsMap,
+            effectiveGridColumns: cols,
+            effectiveGridRows: rows
+        )
 
         let compactThreshold = Defaults[.dockPreviewCompactThreshold]
         let wouldUseCompactMode = Defaults[.disableImagePreview]

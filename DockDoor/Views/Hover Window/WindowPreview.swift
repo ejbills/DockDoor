@@ -149,7 +149,7 @@ struct WindowPreview: View {
     let bestGuessMonitor: NSScreen
     let uniformCardRadius: Bool
     let handleWindowAction: (WindowAction) -> Void
-    var currIndex: Int
+    var isSelected: Bool
     var windowSwitcherActive: Bool
     let dimensions: WindowPreviewHoverContainer.WindowDimensions
     let showAppIconOnly: Bool
@@ -588,12 +588,7 @@ struct WindowPreview: View {
 
     @ViewBuilder
     private var previewCoreContent: some View {
-        let isSelectedByKeyboardInDock = !windowSwitcherActive && (index == currIndex)
-        let isSelectedByKeyboardInSwitcher = windowSwitcherActive && (index == currIndex)
-
-        let finalIsSelected = isSelectedByKeyboardInSwitcher ||
-            isSelectedByKeyboardInDock ||
-            isHoveringOverDockPeekPreview
+        let finalIsSelected = isSelected || isHoveringOverDockPeekPreview
 
         ZStack(alignment: .topLeading) {
             VStack(alignment: .leading, spacing: 0) {

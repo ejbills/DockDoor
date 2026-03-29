@@ -134,7 +134,7 @@ struct WindowPreviewHoverContainer: View {
     }
 
     private var minimumEmbeddedWidth: CGFloat {
-        let calculatedDimensionsMap = previewStateCoordinator.windowDimensionsMap
+        let calculatedDimensionsMap = previewStateCoordinator.dimensionState.windowDimensionsMap
 
         guard !calculatedDimensionsMap.isEmpty else {
             // Fallback to skeleton width if no windows
@@ -259,8 +259,8 @@ struct WindowPreviewHoverContainer: View {
 
     @ViewBuilder
     private func windowGridContent() -> some View {
-        let calculatedMaxDimension = previewStateCoordinator.overallMaxPreviewDimension
-        let calculatedDimensionsMap = previewStateCoordinator.windowDimensionsMap
+        let calculatedMaxDimension = previewStateCoordinator.dimensionState.overallMaxPreviewDimension
+        let calculatedDimensionsMap = previewStateCoordinator.dimensionState.windowDimensionsMap
         let orientationIsHorizontal: Bool = if previewStateCoordinator.windowSwitcherActive {
             true
         } else {
@@ -1018,7 +1018,7 @@ struct WindowPreviewHoverContainer: View {
 
         var (maxColumns, maxRows) = WindowPreviewHoverContainer.calculateEffectiveMaxColumnsAndRows(
             bestGuessMonitor: bestGuessMonitor,
-            overallMaxDimensions: previewStateCoordinator.overallMaxPreviewDimension,
+            overallMaxDimensions: previewStateCoordinator.dimensionState.overallMaxPreviewDimension,
             dockPosition: dockPosition,
             isWindowSwitcherActive: previewStateCoordinator.windowSwitcherActive,
             previewMaxColumns: previewMaxColumns,
@@ -1103,6 +1103,8 @@ struct WindowPreviewHoverContainer: View {
                 // Use compact mode if: container threshold triggered OR per-window fallback (no image and no live preview)
                 let useCompactForThisWindow = shouldUseCompactMode || (windowInfo.image == nil && !useLivePreview)
 
+                let isSelected = index == previewStateCoordinator.currIndex
+
                 if useCompactForThisWindow {
                     WindowPreviewCompact(
                         windowInfo: windowInfo,
@@ -1112,7 +1114,7 @@ struct WindowPreviewHoverContainer: View {
                         handleWindowAction: { action in
                             handleWindowAction(action, at: index)
                         },
-                        currIndex: previewStateCoordinator.currIndex,
+                        isSelected: isSelected,
                         windowSwitcherActive: previewStateCoordinator.windowSwitcherActive,
                         mockPreviewActive: mockPreviewActive,
                         onTap: onWindowTap,
@@ -1131,7 +1133,7 @@ struct WindowPreviewHoverContainer: View {
                         handleWindowAction: { action in
                             handleWindowAction(action, at: index)
                         },
-                        currIndex: previewStateCoordinator.currIndex,
+                        isSelected: isSelected,
                         windowSwitcherActive: previewStateCoordinator.windowSwitcherActive,
                         dimensions: getDimensions(for: index, dimensionsMap: currentDimensionsMapForPreviews),
                         showAppIconOnly: effectiveShowAppIconOnly,

@@ -7,7 +7,7 @@ struct WindowPreviewCompact: View {
     let dockPosition: DockPosition
     let uniformCardRadius: Bool
     let handleWindowAction: (WindowAction) -> Void
-    let currIndex: Int
+    let isSelected: Bool
     let windowSwitcherActive: Bool
     let mockPreviewActive: Bool
     let onTap: (() -> Void)?
@@ -21,10 +21,6 @@ struct WindowPreviewCompact: View {
     @Default(.enableTitleMarquee) private var enableTitleMarquee
 
     @State private var isHovering = false
-
-    private var isSelected: Bool {
-        index == currIndex
-    }
 
     /// Checks if this window is the currently active (focused) window on the system and adds a border if so.
     private var isActiveWindow: Bool {

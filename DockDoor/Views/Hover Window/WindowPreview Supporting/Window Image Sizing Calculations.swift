@@ -166,8 +166,8 @@ extension WindowPreviewHoverContainer {
         switcherMaxRows: Int,
         totalItems: Int? = nil
     ) -> (maxColumns: Int, maxRows: Int) {
-        let screenWidth = bestGuessMonitor.frame.width * 0.75
-        let screenHeight = bestGuessMonitor.frame.height * 0.75
+        let screenWidth = bestGuessMonitor.frame.width * 0.90
+        let screenHeight = bestGuessMonitor.frame.height * 0.90
         let itemSpacing = HoverContainerPadding.itemSpacing
         let globalPadding: CGFloat = 40
 
@@ -308,7 +308,7 @@ extension WindowPreviewHoverContainer {
 
         let (maxColumns, maxRows) = calculateEffectiveMaxColumnsAndRows(
             bestGuessMonitor: bestGuessMonitor,
-            overallMaxDimensions: coordinator.overallMaxPreviewDimension,
+            overallMaxDimensions: coordinator.dimensionState.overallMaxPreviewDimension,
             dockPosition: dockPosition,
             isWindowSwitcherActive: isWindowSwitcherActive,
             previewMaxColumns: Defaults[.previewMaxColumns],
