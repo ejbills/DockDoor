@@ -8,6 +8,18 @@ private weak var activeWindowManipulationObserversInstance: WindowManipulationOb
 private var pendingNotifications: [String: DispatchWorkItem] = [:]
 private let windowProcessingDebounceInterval: TimeInterval = Defaults[.windowProcessingDebounceInterval]
 private let axObserverWorkQueue = DispatchQueue(label: "ddObsWorkQueue", qos: .userInitiated)
+// Only forward AX notifications that can actually change Dock overlap state.
+private let dockAutoHideRelevantNotifications: Set<String> = [
+    kAXWindowMovedNotification as String,
+    kAXWindowResizedNotification as String,
+    kAXFocusedWindowChangedNotification as String,
+    kAXMainWindowChangedNotification as String,
+    kAXWindowMiniaturizedNotification as String,
+    kAXWindowDeminiaturizedNotification as String,
+    kAXApplicationHiddenNotification as String,
+    kAXApplicationShownNotification as String,
+    kAXUIElementDestroyedNotification as String,
+]
 
 class WindowManipulationObservers {
     private let previewCoordinator: SharedPreviewWindowCoordinator
@@ -101,6 +113,7 @@ class WindowManipulationObservers {
         DebugLogger.log("appDidTerminate", details: "App: \(app.localizedName ?? "Unknown") (PID: \(app.processIdentifier))")
         WindowUtil.purgeAppCache(with: app.processIdentifier)
         removeObserver(for: app.processIdentifier)
+        DockAutoHideManager.shared.handleWorkspaceContextChange()
 
         if !Defaults[.keepPreviewOnAppTerminate] {
             previewCoordinator.hideWindow()
@@ -113,7 +126,7 @@ class WindowManipulationObservers {
 
     @objc private func activeSpaceDidChange(_ notification: Notification) {
         DebugLogger.log("activeSpaceDidChange")
-        DockAutoHideManager.shared.refreshNow()
+        DockAutoHideManager.shared.handleWorkspaceContextChange()
         if Defaults[.showActiveAppIndicator] {
             ActiveAppIndicatorCoordinator.shared?.handleSpaceChanged()
         }
@@ -130,7 +143,7 @@ class WindowManipulationObservers {
             return
         }
 
-        DockAutoHideManager.shared.refreshNow()
+        DockAutoHideManager.shared.handleWorkspaceContextChange()
         previewCoordinator.hideWindow()
 
         if let dockObserver = DockObserver.activeInstance,
@@ -146,6 +159,10 @@ class WindowManipulationObservers {
                 WindowUtil.updateWindowDateTime(element: focusedWindow, app: app)
             }
         }
+    }
+
+    func forwardDockAutoHideNotification(element: AXUIElement, notificationName: String, app: NSRunningApplication) {
+        DockAutoHideManager.shared.handleWindowObservation(notificationName: notificationName, app: app, element: element)
     }
 
     private func createObserverForApp(_ app: NSRunningApplication) {
@@ -367,6 +384,13 @@ func axObserverCallback(observer: AXObserver, element: AXUIElement, notification
     let pid = pid_t(Int(bitPattern: userData))
     let notification = notificationName as String
     let key = "\(pid)-\(notification)"
+
+    if dockAutoHideRelevantNotifications.contains(notification),
+       let app = NSRunningApplication(processIdentifier: pid),
+       let observerInstance = activeWindowManipulationObserversInstance
+    {
+        observerInstance.forwardDockAutoHideNotification(element: element, notificationName: notification, app: app)
+    }
 
     axObserverWorkQueue.async {
         pendingNotifications[key]?.cancel()

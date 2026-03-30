@@ -2,8 +2,6 @@ import ApplicationServices
 import Cocoa
 
 struct DockIntellihideWindowSample: Equatable {
-    let pid: pid_t
-    let windowID: CGWindowID?
     let frame: CGRect
     let isFullscreen: Bool
 }
@@ -21,7 +19,7 @@ final class DockIntellihideGeometry {
     private let bottomDockVisualPadding: CGFloat = 2
     private let sideDockVisualPadding: CGFloat = 2
     // Dock AX geometry is expensive to read and changes rarely, so keep a short
-    // live refresh interval instead of walking the Dock tree on every poll.
+    // live refresh interval instead of walking the Dock tree on every observer burst.
     private let liveDockFrameRefreshInterval: TimeInterval = 0.35
 
     private var cachedDockThickness: [String: CGFloat] = [:]
@@ -30,10 +28,15 @@ final class DockIntellihideGeometry {
 
     // MARK: - Window Sampling
 
-    func sample(for app: NSRunningApplication) -> DockIntellihideWindowSample? {
+    func sample(for app: NSRunningApplication, preferredWindow: AXUIElement? = nil) -> DockIntellihideWindowSample? {
         let appElement = AXUIElementCreateApplication(app.processIdentifier)
 
-        guard let window = try? appElement.focusedWindow(),
+        // Move/resize observers already know which AX window changed, so prefer
+        // that element over refetching the focused window and potentially racing
+        // against focus updates mid-gesture.
+        let window = resolvedWindow(for: appElement, preferredWindow: preferredWindow)
+
+        guard let window,
               let position = try? window.position(),
               let size = try? window.size()
         else {
@@ -44,39 +47,9 @@ final class DockIntellihideGeometry {
         guard !frame.isNull, !frame.isEmpty else { return nil }
 
         return DockIntellihideWindowSample(
-            pid: app.processIdentifier,
-            windowID: try? window.cgWindowId(),
             frame: frame,
             isFullscreen: (try? window.isFullscreen()) ?? false
         )
-    }
-
-    // MARK: - Transition Detection
-
-    func shouldForceHideTransition(from oldSample: DockIntellihideWindowSample?, to newSample: DockIntellihideWindowSample, dockInfluenceRegion: CGRect, minimumFrameDeltaToDetectTransition: CGFloat) -> Bool {
-        guard let oldSample else { return false }
-        guard oldSample.pid == newSample.pid else { return false }
-
-        if let oldWindowID = oldSample.windowID, let newWindowID = newSample.windowID, oldWindowID != newWindowID {
-            return false
-        }
-
-        if oldSample.isFullscreen != newSample.isFullscreen {
-            return true
-        }
-
-        let deltaX = abs(oldSample.frame.origin.x - newSample.frame.origin.x)
-        let deltaY = abs(oldSample.frame.origin.y - newSample.frame.origin.y)
-        let deltaWidth = abs(oldSample.frame.size.width - newSample.frame.size.width)
-        let deltaHeight = abs(oldSample.frame.size.height - newSample.frame.size.height)
-
-        let hasMeaningfulFrameChange = deltaX > minimumFrameDeltaToDetectTransition ||
-            deltaY > minimumFrameDeltaToDetectTransition ||
-            deltaWidth > minimumFrameDeltaToDetectTransition ||
-            deltaHeight > minimumFrameDeltaToDetectTransition
-
-        guard hasMeaningfulFrameChange else { return false }
-        return oldSample.frame.intersects(dockInfluenceRegion) || newSample.frame.intersects(dockInfluenceRegion)
     }
 
     // MARK: - Screen and Dock Resolution
@@ -281,6 +254,16 @@ final class DockIntellihideGeometry {
 
     private func axScreenFrame(for screen: NSScreen) -> CGRect {
         axScreenFrames().first(where: { $0.screen.uniqueIdentifier() == screen.uniqueIdentifier() })?.frame ?? screen.frame
+    }
+
+    private func resolvedWindow(for appElement: AXUIElement, preferredWindow: AXUIElement?) -> AXUIElement? {
+        if let preferredWindow,
+           (try? preferredWindow.role()) == kAXWindowRole as String
+        {
+            return preferredWindow
+        }
+
+        return try? appElement.focusedWindow()
     }
 }
 

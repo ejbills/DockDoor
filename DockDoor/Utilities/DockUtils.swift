@@ -59,14 +59,14 @@ class DockUtils {
 ///
 /// Preview UI and the optional GNOME-style intellihide feature both flow through
 /// this service so DockDoor only has one place that mutates the Dock's autohide
-/// state.
+/// state. Intellihide is fully event-driven: workspace and AX observers trigger
+/// reevaluations directly, and move/resize gestures use a one-shot settle delay
+/// instead of a repeating polling loop.
 final class DockAutoHideManager {
     static let shared = DockAutoHideManager()
 
-    private let pollInterval: TimeInterval = 0.15
-    private let transitionHideDuration: TimeInterval = 0.75
+    private let interactionSettleDelay: TimeInterval = 0.18
     private let titleBarHideDuration: TimeInterval = 1.1
-    private let minimumFrameDeltaToDetectTransition: CGFloat = 2
     private let titleBarDetectionHeight: CGFloat = 80
 
     private var wasAutoHideEnabled: Bool?
@@ -75,15 +75,12 @@ final class DockAutoHideManager {
     private var lastAppliedAutoHideState: Bool?
 
     private var defaultsObserver: Defaults.Observation?
-    private var evaluationTimer: Timer?
     private var hasPendingRefresh = false
+    private var scheduledEvaluation: DispatchWorkItem?
     private let geometry = DockIntellihideGeometry()
     private lazy var titleBarClickMonitor = DockTitleBarClickMonitor { [weak self] location in
         self?.handleTitleBarDoubleClick(at: location)
     }
-
-    private var lastSample: DockIntellihideWindowSample?
-    private var forceHideUntil: Date?
 
     // MARK: - Lifecycle
 
@@ -98,7 +95,7 @@ final class DockAutoHideManager {
 
     deinit {
         defaultsObserver = nil
-        stopEvaluating()
+        cancelScheduledEvaluation()
         titleBarClickMonitor.stop()
         restoreManagedDockState(force: true)
     }
@@ -107,6 +104,9 @@ final class DockAutoHideManager {
 
     func preventDockHiding(_ windowSwitcherActive: Bool = false) {
         previewRequestsVisibleDock = Defaults[.preventDockHide] && !windowSwitcherActive
+        if previewRequestsVisibleDock {
+            cancelScheduledEvaluation()
+        }
         refreshNow()
     }
 
@@ -134,44 +134,41 @@ final class DockAutoHideManager {
 
     func cleanup() {
         previewRequestsVisibleDock = false
-        stopEvaluating()
+        cancelScheduledEvaluation()
         titleBarClickMonitor.stop()
-        lastSample = nil
-        forceHideUntil = nil
         restoreManagedDockState(force: true)
+    }
+
+    func handleWorkspaceContextChange() {
+        guard Defaults[.enableDockIntellihide] || isManagingDock else { return }
+        cancelScheduledEvaluation()
+        refreshNow()
+    }
+
+    func handleWindowObservation(notificationName: String, app: NSRunningApplication, element: AXUIElement) {
+        guard Defaults[.enableDockIntellihide] || isManagingDock else { return }
+
+        if Thread.isMainThread {
+            handleWindowObservationOnMain(notificationName: notificationName, app: app, element: element)
+            return
+        }
+
+        DispatchQueue.main.async { [weak self] in
+            self?.handleWindowObservationOnMain(notificationName: notificationName, app: app, element: element)
+        }
     }
 
     // MARK: - Configuration
 
     private func reconfigureIntellihide() {
         if Defaults[.enableDockIntellihide] {
-            startEvaluating()
             titleBarClickMonitor.start()
         } else {
-            stopEvaluating()
+            cancelScheduledEvaluation()
             titleBarClickMonitor.stop()
-            lastSample = nil
-            forceHideUntil = nil
         }
 
         refreshNow()
-    }
-
-    // MARK: - Evaluation Loop
-
-    private func startEvaluating() {
-        guard evaluationTimer == nil else { return }
-
-        let timer = Timer(timeInterval: pollInterval, repeats: true) { [weak self] _ in
-            self?.applyCurrentPolicy()
-        }
-        evaluationTimer = timer
-        RunLoop.main.add(timer, forMode: .common)
-    }
-
-    private func stopEvaluating() {
-        evaluationTimer?.invalidate()
-        evaluationTimer = nil
     }
 
     private func applyCurrentPolicy() {
@@ -209,7 +206,6 @@ final class DockAutoHideManager {
 
     private func evaluateDockVisibility() {
         guard let frontmostApp = eligibleFrontmostApp() else {
-            clearTransientState()
             applyAutoHide(false)
             return
         }
@@ -219,7 +215,6 @@ final class DockAutoHideManager {
                 applyAutoHide(true)
                 return
             }
-            clearTransientState()
             applyAutoHide(false)
             return
         }
@@ -237,27 +232,9 @@ final class DockAutoHideManager {
         }
 
         guard windowScreen.uniqueIdentifier() == dockContext.screen.uniqueIdentifier() else {
-            forceHideUntil = nil
             applyAutoHide(false)
             return
         }
-
-        if geometry.shouldForceHideTransition(
-            from: lastSample,
-            to: sample,
-            dockInfluenceRegion: dockContext.releaseRegion,
-            minimumFrameDeltaToDetectTransition: minimumFrameDeltaToDetectTransition
-        ) {
-            forceHideUntil = Date().addingTimeInterval(transitionHideDuration)
-        }
-
-        lastSample = sample
-
-        if let forceHideUntil, forceHideUntil > Date() {
-            applyAutoHide(true)
-            return
-        }
-        forceHideUntil = nil
 
         let shouldHide = if lastAppliedAutoHideState == true {
             sample.frame.intersects(dockContext.releaseRegion)
@@ -280,13 +257,69 @@ final class DockAutoHideManager {
         return frontmostApp
     }
 
-    private func clearTransientState() {
-        lastSample = nil
-        forceHideUntil = nil
+    private func shouldPreferCachedDockContext() -> Bool {
+        lastAppliedAutoHideState == true
     }
 
-    private func shouldPreferCachedDockContext() -> Bool {
-        lastAppliedAutoHideState == true || forceHideUntil != nil
+    private func handleWindowObservationOnMain(notificationName: String, app: NSRunningApplication, element: AXUIElement) {
+        if previewRequestsVisibleDock {
+            refreshNow()
+            return
+        }
+
+        switch notificationName {
+        case kAXWindowMovedNotification, kAXWindowResizedNotification:
+            handleInteractiveWindowFrameChange(for: app, window: element)
+        case kAXFocusedWindowChangedNotification,
+             kAXMainWindowChangedNotification,
+             kAXWindowMiniaturizedNotification,
+             kAXWindowDeminiaturizedNotification,
+             kAXApplicationHiddenNotification,
+             kAXApplicationShownNotification,
+             kAXUIElementDestroyedNotification:
+            handleWorkspaceContextChange()
+        default:
+            break
+        }
+    }
+
+    private func handleInteractiveWindowFrameChange(for app: NSRunningApplication, window: AXUIElement) {
+        guard Defaults[.enableDockIntellihide],
+              let frontmostApp = eligibleFrontmostApp(),
+              frontmostApp.processIdentifier == app.processIdentifier
+        else {
+            return
+        }
+
+        guard let sample = geometry.sample(for: app, preferredWindow: window) else {
+            refreshNow()
+            return
+        }
+
+        if sample.isFullscreen {
+            cancelScheduledEvaluation()
+            applyAutoHide(true)
+            return
+        }
+
+        guard let windowScreen = geometry.screen(for: sample.frame),
+              let dockContext = geometry.dockContext(preferCached: true)
+        else {
+            refreshNow()
+            return
+        }
+
+        guard windowScreen.uniqueIdentifier() == dockContext.screen.uniqueIdentifier() else {
+            cancelScheduledEvaluation()
+            applyAutoHide(false)
+            return
+        }
+
+        // While a window is actively moving or resizing on the Dock-bearing
+        // display, keep the Dock hidden and re-evaluate once the stream of
+        // AX notifications settles.
+        applyAutoHide(true)
+        scheduleEvaluation(after: interactionSettleDelay)
     }
 
     private func handleTitleBarDoubleClick(at location: CGPoint) {
@@ -298,9 +331,26 @@ final class DockAutoHideManager {
         }
 
         if geometry.titleBarRegion(for: sample.frame, detectionHeight: titleBarDetectionHeight).contains(location) {
-            forceHideUntil = Date().addingTimeInterval(titleBarHideDuration)
+            scheduleEvaluation(after: titleBarHideDuration)
             applyAutoHide(true)
         }
+    }
+
+    private func scheduleEvaluation(after delay: TimeInterval) {
+        cancelScheduledEvaluation()
+
+        let workItem = DispatchWorkItem { [weak self] in
+            self?.scheduledEvaluation = nil
+            self?.refreshNow()
+        }
+
+        scheduledEvaluation = workItem
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: workItem)
+    }
+
+    private func cancelScheduledEvaluation() {
+        scheduledEvaluation?.cancel()
+        scheduledEvaluation = nil
     }
 
     // MARK: - Applying Dock State

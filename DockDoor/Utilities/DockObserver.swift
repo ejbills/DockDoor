@@ -152,11 +152,11 @@ final class DockObserver {
     }
 
     private func setupSelectedDockItemObserver() {
-        guard let dockApp = DockAccessibility.dockApplication() else {
+        guard let dockContext = DockAccessibility.dockList() else {
             return
         }
 
-        let dockAppPID = dockApp.processIdentifier
+        let dockAppPID = dockContext.app.processIdentifier
         currentDockPID = dockAppPID
 
         guard AXIsProcessTrusted() else {
@@ -172,10 +172,6 @@ final class DockObserver {
             return
         }
 
-        guard let axList = DockAccessibility.dockList()?.element else {
-            return
-        }
-
         if AXObserverCreate(dockAppPID, handleSelectedDockItemChangedNotification, &axObserver) != .success {
             return
         }
@@ -183,10 +179,10 @@ final class DockObserver {
         guard let axObserver else { return }
 
         do {
-            try axList.subscribeToNotification(axObserver, kAXSelectedChildrenChangedNotification) {
+            try dockContext.element.subscribeToNotification(axObserver, kAXSelectedChildrenChangedNotification) {
                 CFRunLoopAddSource(CFRunLoopGetCurrent(), AXObserverGetRunLoopSource(axObserver), .commonModes)
             }
-            subscribedDockList = axList
+            subscribedDockList = dockContext.element
         } catch {
             return
         }
@@ -342,22 +338,14 @@ final class DockObserver {
 
     /// Returns the currently selected (hovered) dock item, if any.
     private func getSelectedDockItem() -> AXUIElement? {
-        guard let dockAppPID = currentDockPID else {
-            return nil
-        }
-
-        let dockAppElement = AXUIElementCreateApplication(dockAppPID)
-
-        var dockItems: CFTypeRef?
-        guard AXUIElementCopyAttributeValue(dockAppElement, kAXChildrenAttribute as CFString, &dockItems) == .success,
-              let dockItems = dockItems as? [AXUIElement],
-              !dockItems.isEmpty
-        else {
+        // Reuse the subscribed Dock list when possible so hover handling does not
+        // need to rediscover the Dock tree on every selected-item change.
+        guard let dockList = subscribedDockList ?? DockAccessibility.dockList()?.element else {
             return nil
         }
 
         var selectedChildren: CFTypeRef?
-        guard AXUIElementCopyAttributeValue(dockItems.first!, kAXSelectedChildrenAttribute as CFString, &selectedChildren) == .success,
+        guard AXUIElementCopyAttributeValue(dockList, kAXSelectedChildrenAttribute as CFString, &selectedChildren) == .success,
               let selected = selectedChildren as? [AXUIElement],
               let hoveredItem = selected.first
         else {
@@ -378,28 +366,13 @@ final class DockObserver {
 
     /// Returns all dock item children from the dock list.
     private func getAllDockItemChildren() -> [AXUIElement]? {
-        guard let dockAppPID = currentDockPID else {
-            return nil
+        if let dockList = subscribedDockList,
+           let children = try? dockList.children()
+        {
+            return children
         }
 
-        let dockAppElement = AXUIElementCreateApplication(dockAppPID)
-
-        var dockItems: CFTypeRef?
-        guard AXUIElementCopyAttributeValue(dockAppElement, kAXChildrenAttribute as CFString, &dockItems) == .success,
-              let dockItemsList = dockItems as? [AXUIElement],
-              let dockList = dockItemsList.first
-        else {
-            return nil
-        }
-
-        var children: CFTypeRef?
-        guard AXUIElementCopyAttributeValue(dockList, kAXChildrenAttribute as CFString, &children) == .success,
-              let dockChildren = children as? [AXUIElement]
-        else {
-            return nil
-        }
-
-        return dockChildren
+        return DockAccessibility.dockItems()
     }
 
     /// Finds the instance index of a hovered dock item among all dock items with the same bundle identifier.

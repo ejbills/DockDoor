@@ -232,7 +232,7 @@ final class ActiveAppIndicatorCoordinator {
     private func handleActiveAppChanged(_ app: NSRunningApplication) {
         currentActiveApp = app
 
-        guard app.bundleIdentifier != "com.apple.dock" else {
+        guard app.bundleIdentifier != DockAccessibility.dockBundleIdentifier else {
             indicatorWindow?.orderOut(self)
             return
         }
