@@ -28,6 +28,8 @@ extension View {
         mask {
             if !disable {
                 GeometryReader { geo in
+                    let containerSize = axis == .horizontal ? geo.size.width : geo.size.height
+                    let fadeLength = min(fadeLength, containerSize * 0.05)
                     DynStack(direction: axis, spacing: 0) {
                         if #available(macOS 14.0, *) {
                             SmoothLinearGradient(

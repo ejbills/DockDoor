@@ -105,6 +105,7 @@ private class WindowSwitchingCoordinator {
                 selectedWindow.bringToFront()
             }
             coordinator.deactivateKeybindSession()
+            previewCoordinator.hideWindow()
             shouldSelectImmediately = false
             return
         }
@@ -370,8 +371,7 @@ class KeybindHelper {
                 DockObserver.activeInstance?.stopCmdTabPolling()
 
                 if Defaults[.enableCmdTabEnhancements], lastCmdTabObservedActive,
-                   previewCoordinator.isVisible,
-                   !previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive
+                   previewCoordinator.isVisible
                 {
                     Task { @MainActor in
                         if self.previewCoordinator.windowSwitcherCoordinator.currIndex >= 0 {
@@ -379,6 +379,7 @@ class KeybindHelper {
                         } else {
                             self.previewCoordinator.hideWindow()
                         }
+                        self.windowSwitchingCoordinator.cancelSwitching(previewCoordinator: self.previewCoordinator)
                     }
                 }
                 lastCmdTabObservedActive = false
@@ -782,6 +783,9 @@ class KeybindHelper {
 
             switch keyCode {
             case Int64(kVK_LeftArrow), Int64(kVK_RightArrow), Int64(kVK_UpArrow), Int64(kVK_DownArrow):
+                if !flags.intersection([.maskControl, .maskCommand, .maskAlternate, .maskShift]).isEmpty {
+                    return (false, nil)
+                }
                 let dir: ArrowDirection = switch keyCode {
                 case Int64(kVK_LeftArrow):
                     .left
@@ -795,7 +799,7 @@ class KeybindHelper {
                 return (true, { @MainActor in
                     self.previewCoordinator.navigateWithArrowKey(direction: dir)
                 })
-            case Int64(kVK_Return), Int64(kVK_ANSI_KeypadEnter):
+            case Int64(Defaults[.windowSwitcherSelectionKeyCode]), Int64(kVK_ANSI_KeypadEnter):
                 if previewCoordinator.windowSwitcherCoordinator.currIndex >= 0 {
                     return (true, makeEnterSelectionTask())
                 }

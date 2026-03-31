@@ -25,6 +25,9 @@ struct DockPreviewsSettingsView: View {
                 if enableDockPreviews {
                     windowDisplaySection
                     dockInteractionSection
+
+                    SettingsMockPreview(context: .dock)
+
                     dockAppearanceSection
                 }
             }

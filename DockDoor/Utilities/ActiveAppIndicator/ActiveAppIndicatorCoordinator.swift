@@ -20,6 +20,8 @@ final class ActiveAppIndicatorCoordinator {
     private var delayedUpdateTimer: Timer?
     private let delayedUpdateInterval: TimeInterval = 0.6
 
+    private static let animationDuration: TimeInterval = 0.25
+
     // Dock state tracking
     private var lastKnownDockPosition: DockPosition
     private var lastKnownDockSize: CGFloat
@@ -132,10 +134,10 @@ final class ActiveAppIndicatorCoordinator {
 
         if isVisible {
             if let app = currentActiveApp {
-                updateIndicatorPosition(for: app)
+                updateIndicatorPosition(for: app, widenFromCenter: true)
             }
         } else {
-            indicatorWindow?.orderOut(self)
+            animateHideIndicator()
         }
     }
 
@@ -169,9 +171,10 @@ final class ActiveAppIndicatorCoordinator {
 
         if newDockSize != lastKnownDockSize {
             lastKnownDockSize = newDockSize
-            updateDockVisibilityState()
             scheduleDelayedUpdate()
         }
+
+        updateDockVisibilityState()
     }
 
     // MARK: - Dock Item Change Notifications
@@ -202,7 +205,7 @@ final class ActiveAppIndicatorCoordinator {
     private func notifyDockPositionChanged(newPosition: DockPosition) {
         // Hide indicator if dock moved to unsupported position
         if !ActiveAppIndicatorPositioning.isSupported(newPosition) {
-            indicatorWindow?.orderOut(self)
+            animateHideIndicator()
         } else if let app = currentActiveApp {
             // Dock moved to a supported position - reposition indicator
             updateIndicatorPosition(for: app)
@@ -230,21 +233,22 @@ final class ActiveAppIndicatorCoordinator {
     // MARK: - Active App Handling
 
     private func handleActiveAppChanged(_ app: NSRunningApplication) {
+        let previousApp = currentActiveApp
         currentActiveApp = app
 
         guard app.bundleIdentifier != DockAccessibility.dockBundleIdentifier else {
-            indicatorWindow?.orderOut(self)
+            animateHideIndicator()
             return
         }
 
         isDockCurrentlyVisible = DockObserver.isDockVisible()
 
-        // Update immediately (for instant response when clicking dock icons) and schedule a delayed update to handle dock width changing
-        updateIndicatorPosition(for: app)
+        let isNewApp = previousApp?.bundleIdentifier != app.bundleIdentifier
+        updateIndicatorPosition(for: app, widenFromCenter: isNewApp)
         scheduleDelayedUpdate()
     }
 
-    private func updateIndicatorPosition(for app: NSRunningApplication) {
+    private func updateIndicatorPosition(for app: NSRunningApplication, widenFromCenter: Bool = false) {
         guard isDockCurrentlyVisible else {
             indicatorWindow?.orderOut(self)
             return
@@ -266,11 +270,53 @@ final class ActiveAppIndicatorCoordinator {
             return
         }
 
-        ActiveAppIndicatorDockDetection.positionIndicator(
-            indicatorWindow,
+        guard let targetFrame = ActiveAppIndicatorDockDetection.calculateIndicatorFrame(
             relativeTo: dockItemFrame,
             dockPosition: dockPosition
+        ) else {
+            indicatorWindow.orderOut(nil)
+            return
+        }
+
+        if widenFromCenter {
+            let collapsed = ActiveAppIndicatorDockDetection.collapsedFrame(
+                from: targetFrame,
+                dockPosition: dockPosition
+            )
+            indicatorWindow.setFrame(collapsed, display: false)
+            indicatorWindow.alphaValue = 1
+            indicatorWindow.orderFront(self)
+
+            NSAnimationContext.runAnimationGroup { context in
+                context.duration = Self.animationDuration
+                context.timingFunction = CAMediaTimingFunction(name: .easeOut)
+                indicatorWindow.animator().setFrame(targetFrame, display: true)
+            }
+        } else {
+            NSAnimationContext.runAnimationGroup { context in
+                context.duration = Self.animationDuration
+                context.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+                indicatorWindow.animator().setFrame(targetFrame, display: true)
+            }
+            indicatorWindow.orderFront(self)
+        }
+    }
+
+    private func animateHideIndicator() {
+        guard let indicatorWindow, indicatorWindow.isVisible else { return }
+
+        let dockPosition = DockUtils.getDockPosition()
+        let collapsed = ActiveAppIndicatorDockDetection.collapsedFrame(
+            from: indicatorWindow.frame,
+            dockPosition: dockPosition
         )
-        indicatorWindow.orderFront(self)
+
+        NSAnimationContext.runAnimationGroup({ context in
+            context.duration = Self.animationDuration
+            context.timingFunction = CAMediaTimingFunction(name: .easeIn)
+            indicatorWindow.animator().setFrame(collapsed, display: true)
+        }, completionHandler: {
+            indicatorWindow.orderOut(nil)
+        })
     }
 }

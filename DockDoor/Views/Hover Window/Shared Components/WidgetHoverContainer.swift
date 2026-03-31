@@ -92,7 +92,16 @@ struct WidgetHoverContainer<Content: View>: View {
         .overlay(alignment: .topLeading) {
             appTitleOverlay
         }
-        .dockStyle()
+        .background {
+            RoundedRectangle(cornerRadius: CardRadius.container, style: .continuous)
+                .fill(.thinMaterial)
+        }
+        .clipShape(RoundedRectangle(cornerRadius: CardRadius.container, style: .continuous))
+        .overlay {
+            RoundedRectangle(cornerRadius: CardRadius.container, style: .continuous)
+                .strokeBorder(Color.primary.opacity(0.19), lineWidth: 1.75)
+        }
+        .padding(HoverContainerPadding.dockStyleOuter)
         .padding(.top, (appNameStyle == .popover && showAppTitleData) ? 30 : 0)
     }
 }

@@ -17,30 +17,36 @@ extension WindowPreviewHoverContainer {
     ) -> CGPoint {
         if Defaults[.allowDynamicImageSizing], !isWindowSwitcherActive {
             // Scale preview dimensions to match actual window aspect ratios (dock previews only)
-            let thickness = isMockPreviewActive ? 200 : sharedPanelWindowSize.height
+            let orientationIsHorizontal = dockPosition == .bottom || dockPosition == .cmdTab
+            let thickness: CGFloat = if isMockPreviewActive {
+                200
+            } else if orientationIsHorizontal {
+                sharedPanelWindowSize.height
+            } else {
+                sharedPanelWindowSize.width
+            }
             var maxWidth: CGFloat = 300
             var maxHeight: CGFloat = 300
-
-            let orientationIsHorizontal = dockPosition == .bottom || dockPosition == .cmdTab
             let maxAspectRatio: CGFloat = 1.5
+            let minAspectRatio: CGFloat = 1.0 / maxAspectRatio
 
             for window in windows {
                 if let cgImage = window.image {
                     let cgSize = CGSize(width: cgImage.width, height: cgImage.height)
                     if orientationIsHorizontal {
                         let rawWidthBasedOnHeight = (cgSize.width * thickness) / cgSize.height
-                        let widthBasedOnHeight = min(rawWidthBasedOnHeight, thickness * maxAspectRatio)
+                        let widthBasedOnHeight = max(min(rawWidthBasedOnHeight, thickness * maxAspectRatio), thickness * minAspectRatio)
                         maxWidth = max(maxWidth, widthBasedOnHeight)
                         maxHeight = thickness
                     } else {
                         let rawHeightBasedOnWidth = (cgSize.height * thickness) / cgSize.width
-                        let heightBasedOnWidth = min(rawHeightBasedOnWidth, thickness * maxAspectRatio)
+                        let heightBasedOnWidth = max(min(rawHeightBasedOnWidth, thickness * maxAspectRatio), thickness * minAspectRatio)
                         maxHeight = max(maxHeight, heightBasedOnWidth)
                         maxWidth = thickness
                     }
                 }
             }
-            return CGPoint(x: max(1, maxWidth), y: max(1, maxHeight)) // Ensure positive dimensions
+            return CGPoint(x: max(1, maxWidth), y: max(1, maxHeight))
         } else {
             // Use fixed sizing from user settings
             let width = Defaults[.previewWidth]
@@ -96,8 +102,8 @@ extension WindowPreviewHoverContainer {
                     }
                     dimensionsMap[index] = WindowDimensions(size: windowSize, maxDimensions: maxDims)
                 } else {
-                    let fallbackSize = CGSize(width: min(300, overallMaxDimensions.x),
-                                              height: min(300, overallMaxDimensions.y))
+                    let compactRowHeight: CGFloat = 36
+                    let fallbackSize = CGSize(width: min(300, maxDims.width), height: compactRowHeight)
                     dimensionsMap[index] = WindowDimensions(size: fallbackSize, maxDimensions: maxDims)
                 }
             }
@@ -160,8 +166,8 @@ extension WindowPreviewHoverContainer {
         switcherMaxRows: Int,
         totalItems: Int? = nil
     ) -> (maxColumns: Int, maxRows: Int) {
-        let screenWidth = bestGuessMonitor.frame.width * 0.75
-        let screenHeight = bestGuessMonitor.frame.height * 0.75
+        let screenWidth = bestGuessMonitor.frame.width
+        let screenHeight = bestGuessMonitor.frame.height
         let itemSpacing = HoverContainerPadding.itemSpacing
         let globalPadding: CGFloat = 40
 
@@ -177,7 +183,7 @@ extension WindowPreviewHoverContainer {
         if isWindowSwitcherActive {
             let isVertical = Defaults[.windowSwitcherScrollDirection] == .vertical
             if isVertical {
-                effectiveMaxColumns = min(switcherMaxRows, calculatedMaxColumns)
+                effectiveMaxColumns = Defaults[.switcherIgnoreScreenLimit] ? switcherMaxRows : min(switcherMaxRows, calculatedMaxColumns)
                 effectiveMaxRows = calculatedMaxRows
             } else {
                 effectiveMaxColumns = calculatedMaxColumns
@@ -302,7 +308,7 @@ extension WindowPreviewHoverContainer {
 
         let (maxColumns, maxRows) = calculateEffectiveMaxColumnsAndRows(
             bestGuessMonitor: bestGuessMonitor,
-            overallMaxDimensions: coordinator.overallMaxPreviewDimension,
+            overallMaxDimensions: coordinator.dimensionState.overallMaxPreviewDimension,
             dockPosition: dockPosition,
             isWindowSwitcherActive: isWindowSwitcherActive,
             previewMaxColumns: Defaults[.previewMaxColumns],

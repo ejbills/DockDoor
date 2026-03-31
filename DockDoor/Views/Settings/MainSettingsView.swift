@@ -136,6 +136,7 @@ struct MainSettingsView: View {
 
                 Defaults[.showSpecialAppControls] = Defaults.Keys.showSpecialAppControls.defaultValue
                 Defaults[.showBigControlsWhenNoValidWindows] = Defaults.Keys.showBigControlsWhenNoValidWindows.defaultValue
+                Defaults[.showMassActionButtons] = Defaults.Keys.showMassActionButtons.defaultValue
                 Defaults[.useEmbeddedMediaControls] = Defaults.Keys.useEmbeddedMediaControls.defaultValue
                 Defaults[.enablePinning] = Defaults.Keys.enablePinning.defaultValue
                 Defaults[.filteredCalendarIdentifiers] = Defaults.Keys.filteredCalendarIdentifiers.defaultValue

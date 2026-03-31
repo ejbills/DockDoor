@@ -45,7 +45,7 @@
 - Fully customizable backward key in window switcher
   - Any key can be assigned, not just modifiers
   - Reset button to restore default
-
+- Window counts update reliably in hover previews. (thanks [@ScavengerCoA](https://github.com/ScavengerCoA))
 
 [Changes][1.32.2]
 

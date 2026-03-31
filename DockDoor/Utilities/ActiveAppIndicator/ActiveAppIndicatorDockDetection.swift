@@ -115,4 +115,84 @@ enum ActiveAppIndicatorDockDetection {
 
         indicatorWindow.setFrame(indicatorFrame, display: true)
     }
+
+    /// Calculates the indicator frame without applying it to the window.
+    static func calculateIndicatorFrame(
+        relativeTo dockItemFrame: CGRect,
+        dockPosition: DockPosition
+    ) -> CGRect? {
+        let indicatorThickness: CGFloat
+        let indicatorOffset: CGFloat
+        let indicatorLength: CGFloat
+
+        let dockSize = DockUtils.getDockSize()
+        let autoSize = calculateAutoSize(
+            dockSize: dockSize,
+            dockPosition: dockPosition
+        )
+
+        if Defaults[.activeAppIndicatorAutoSize] {
+            indicatorThickness = autoSize.height
+            indicatorOffset = autoSize.offset
+        } else {
+            indicatorThickness = Defaults[.activeAppIndicatorHeight]
+            indicatorOffset = Defaults[.activeAppIndicatorOffset]
+        }
+
+        if Defaults[.activeAppIndicatorAutoLength] {
+            indicatorLength = autoSize.length
+        } else {
+            indicatorLength = Defaults[.activeAppIndicatorLength]
+        }
+
+        guard
+            let screen = NSScreen.screens.first(where: {
+                $0.frame.contains(dockItemFrame.origin)
+            }) ?? NSScreen.main
+        else {
+            return nil
+        }
+
+        guard
+            var indicatorFrame =
+            ActiveAppIndicatorPositioning.calculateIndicatorFrame(
+                for: dockItemFrame,
+                dockPosition: dockPosition,
+                indicatorThickness: indicatorThickness,
+                indicatorOffset: indicatorOffset,
+                indicatorLength: indicatorLength,
+                on: screen
+            )
+        else {
+            return nil
+        }
+
+        indicatorFrame.origin.x += Defaults[.activeAppIndicatorShift]
+        return indicatorFrame
+    }
+
+    /// Returns a collapsed version of a frame (zero length, centered at the same position).
+    static func collapsedFrame(
+        from frame: CGRect,
+        dockPosition: DockPosition
+    ) -> CGRect {
+        switch dockPosition {
+        case .bottom:
+            CGRect(
+                x: frame.midX,
+                y: frame.origin.y,
+                width: 0,
+                height: frame.height
+            )
+        case .left, .right:
+            CGRect(
+                x: frame.origin.x,
+                y: frame.midY,
+                width: frame.width,
+                height: 0
+            )
+        default:
+            frame
+        }
+    }
 }

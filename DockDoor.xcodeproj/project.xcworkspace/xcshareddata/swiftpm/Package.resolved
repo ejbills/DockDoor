@@ -1,5 +1,5 @@
 {
-  "originHash" : "1aa9fb48d4e0797930115961711b1ca1ddd436584bad9f72d944d4e056bc886f",
+  "originHash" : "1b261da7acee249a5defec03b08f927083532032ac200d932e37ccbe891cb52c",
   "pins" : [
     {
       "identity" : "confettiswiftui",
@@ -16,7 +16,7 @@
       "location" : "https://github.com/sindresorhus/Defaults",
       "state" : {
         "branch" : "main",
-        "revision" : "752bcb9eb2e110fa9d82826c99857b0e9a76fb1d"
+        "revision" : "5bfac4928f000fabdbef7e4ed0251399bb0841c9"
       }
     },
     {
@@ -25,7 +25,7 @@
       "location" : "https://github.com/kaishin/Kroma.git",
       "state" : {
         "branch" : "main",
-        "revision" : "b67827e4b746eef1bb0b42adc241ca245b195edd"
+        "revision" : "d8aa3c173d23cf602a97b0648c9e240b9a86cbc4"
       }
     },
     {
@@ -35,6 +35,15 @@
       "state" : {
         "branch" : "main",
         "revision" : "a04ec1c363be3627734f6dad757d82f5d4fa8fcc"
+      }
+    },
+    {
+      "identity" : "mediaremote-adapter",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ejbills/mediaremote-adapter.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "b4ae765bbfa111f1e8fad240a8ea74f01e91d325"
       }
     },
     {
@@ -60,8 +69,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/sparkle-project/Sparkle",
       "state" : {
-        "revision" : "5581748cef2bae787496fe6d61139aebe0a451f6",
-        "version" : "2.8.1"
+        "revision" : "21d8df80440b1ca3b65fa82e40782f1e5a9e6ba2",
+        "version" : "2.9.0"
       }
     },
     {
@@ -69,8 +78,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/swiftlang/swift-syntax",
       "state" : {
-        "revision" : "4799286537280063c85a32f09884cfbca301b1a1",
-        "version" : "602.0.0"
+        "revision" : "2b59c0c741e9184ab057fd22950b491076d42e91",
+        "version" : "603.0.0"
       }
     }
   ],

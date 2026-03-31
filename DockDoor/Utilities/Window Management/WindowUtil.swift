@@ -579,6 +579,10 @@ extension WindowUtil {
 
     /// Returns whether a single window belongs to one of the given active Spaces.
     static func windowBelongsToActiveSpace(_ windowInfo: WindowInfo, activeSpaceIDs: Set<Int>) -> Bool {
+        if windowInfo.isMinimized || windowInfo.isHidden {
+            return true
+        }
+
         let windowSpaces = Set(windowInfo.id.cgsSpaces().map { Int($0) })
 
         if !windowSpaces.isEmpty {
@@ -587,11 +591,6 @@ extension WindowUtil {
 
         if let spaceID = windowInfo.spaceID {
             return activeSpaceIDs.contains(spaceID)
-        }
-
-        // Minimized/hidden windows with no space info are kept (space tracking lost on minimize)
-        if windowInfo.isMinimized || windowInfo.isHidden {
-            return true
         }
 
         return false
@@ -988,16 +987,29 @@ extension WindowUtil {
         updateDesktopSpaceWindowCache(with: info)
     }
 
+    private static let minUsableImageDimension = 10
+
     static func updateDesktopSpaceWindowCache(with windowInfo: WindowInfo) {
         desktopSpaceWindowCacheManager.updateCache(pid: windowInfo.app.processIdentifier) { windowSet in
             if let matchingWindow = windowSet.first(where: { $0.axElement == windowInfo.axElement }) {
                 var matchingWindowCopy = matchingWindow
                 matchingWindowCopy.windowName = windowInfo.windowName
-                matchingWindowCopy.image = windowInfo.image
-                matchingWindowCopy.imageCapturedTime = windowInfo.imageCapturedTime
                 matchingWindowCopy.spaceID = windowInfo.spaceID
                 matchingWindowCopy.isMinimized = windowInfo.isMinimized
                 matchingWindowCopy.isHidden = windowInfo.isHidden
+
+                let newImageIsTiny: Bool = if let img = windowInfo.image {
+                    img.width < minUsableImageDimension || img.height < minUsableImageDimension
+                } else {
+                    true
+                }
+
+                if newImageIsTiny, matchingWindow.image != nil {
+                    // Keep the existing cached image instead of replacing with a degenerate one
+                } else {
+                    matchingWindowCopy.image = windowInfo.image
+                    matchingWindowCopy.imageCapturedTime = windowInfo.imageCapturedTime
+                }
 
                 windowSet.remove(matchingWindow)
                 windowSet.insert(matchingWindowCopy)

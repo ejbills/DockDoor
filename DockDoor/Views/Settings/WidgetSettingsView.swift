@@ -13,6 +13,9 @@ private struct CalendarItem: Identifiable {
 
 struct WidgetSettingsView: View {
     @Default(.showSpecialAppControls) var showSpecialAppControls
+    @Default(.enableMediaWidget) var enableMediaWidget
+    @Default(.mediaDetectionMode) var mediaDetectionMode
+    @Default(.enableCalendarWidget) var enableCalendarWidget
     @Default(.useEmbeddedMediaControls) var useEmbeddedMediaControls
     @Default(.showBigControlsWhenNoValidWindows) var showBigControlsWhenNoValidWindows
     @Default(.enablePinning) var enablePinning
@@ -57,49 +60,41 @@ struct WidgetSettingsView: View {
     var body: some View {
         BaseSettingsView {
             VStack(alignment: .leading, spacing: 16) {
-                SettingsGroup(header: "General") {
+                SettingsGroup(header: "Widget Controls") {
                     VStack(alignment: .leading, spacing: 10) {
                         Toggle(isOn: $showSpecialAppControls) {
-                            Text("Show media/calendar controls on Dock hover")
+                            Text("Enable widget controls on Dock hover")
                         }
-                        Text("For supported apps (Music, Spotify, Calendar), show interactive controls instead of window previews when hovering their Dock icons.")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                            .padding(.leading, 20)
 
                         if showSpecialAppControls {
-                            Toggle(isOn: $useEmbeddedMediaControls) {
-                                Text("Embed controls with window previews (if previews shown)")
+                            Toggle(isOn: $enableMediaWidget) {
+                                Text("Media controls")
                             }
                             .padding(.leading, 20)
-                            Text("If enabled, controls integrate with previews when possible.")
+                            Text("Show now playing controls when hovering the active media source's Dock icon. Works with any app.")
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                                 .padding(.leading, 40)
 
-                            Toggle(isOn: $showBigControlsWhenNoValidWindows) {
-                                Text("Show big controls when no valid windows")
-                            }
-                            .padding(.leading, 20)
-                            .disabled(!useEmbeddedMediaControls)
-                            Text(useEmbeddedMediaControls ?
-                                "When embedded mode is enabled, show big controls instead of embedded ones if all windows are minimized/hidden or there are no windows." :
-                                "This setting only applies when \"Embed controls with window previews\" is enabled above.")
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                                .padding(.leading, 40)
-                                .opacity(useEmbeddedMediaControls ? 1.0 : 0.6)
-
-                            Toggle(isOn: $enablePinning) {
-                                Text("Enable Pinning")
-                            }
-                            .padding(.leading, 20)
-                            .onChange(of: enablePinning) { isEnabled in
-                                if !isEnabled {
-                                    SharedPreviewWindowCoordinator.activeInstance?.unpinAll()
+                            if enableMediaWidget {
+                                Picker("Detection mode:", selection: $mediaDetectionMode) {
+                                    ForEach(MediaDetectionMode.allCases, id: \.self) { mode in
+                                        Text(mode.localizedName).tag(mode)
+                                    }
                                 }
+                                .pickerStyle(.menu)
+                                .padding(.leading, 40)
+                                Text(mediaDetectionMode.localizedDescription)
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                                    .padding(.leading, 40)
                             }
-                            Text("Allow special app controls to be pinned to the screen via right-click menu.")
+
+                            Toggle(isOn: $enableCalendarWidget) {
+                                Text("Calendar widget")
+                            }
+                            .padding(.leading, 20)
+                            Text("Show today's events when hovering the Calendar Dock icon.")
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                                 .padding(.leading, 40)
@@ -108,31 +103,56 @@ struct WidgetSettingsView: View {
                 }
 
                 if showSpecialAppControls {
-                    SettingsGroup(header: "Media") {
+                    SettingsGroup(header: "Display") {
                         VStack(alignment: .leading, spacing: 10) {
-                            Picker("Scroll behavior:", selection: $mediaWidgetScrollBehavior) {
+                            Toggle(isOn: $useEmbeddedMediaControls) {
+                                Text("Embed controls alongside window previews")
+                            }
+                            Text("Show controls inline with window previews when both are available.")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                                .padding(.leading, 20)
+
+                            Toggle(isOn: $showBigControlsWhenNoValidWindows) {
+                                Text("Use full-size controls when no windows are open")
+                            }
+                            .disabled(!useEmbeddedMediaControls)
+                            .opacity(useEmbeddedMediaControls ? 1.0 : 0.6)
+
+                            Toggle(isOn: $enablePinning) {
+                                Text("Allow pinning controls to screen")
+                            }
+                            .onChange(of: enablePinning) { isEnabled in
+                                if !isEnabled {
+                                    SharedPreviewWindowCoordinator.activeInstance?.unpinAll()
+                                }
+                            }
+                            Text("Right-click a media or calendar widget to pin it.")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                                .padding(.leading, 20)
+                        }
+                    }
+
+                    SettingsGroup(header: "Media Widget Scroll") {
+                        VStack(alignment: .leading, spacing: 10) {
+                            Text("Controls what happens when you scroll on the media widget preview.")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+
+                            Picker("Behavior:", selection: $mediaWidgetScrollBehavior) {
                                 ForEach(MediaWidgetScrollBehavior.allCases, id: \.self) { behavior in
                                     Text(behavior.localizedName).tag(behavior)
                                 }
                             }
                             .pickerStyle(.menu)
 
-                            Text("When scrolling on the media widget preview, choose whether to adjust system volume or seek through the track.")
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-
-                            Picker("Scroll direction:", selection: $mediaWidgetScrollDirection) {
+                            Picker("Direction:", selection: $mediaWidgetScrollDirection) {
                                 ForEach(MediaWidgetScrollDirection.allCases, id: \.self) { direction in
                                     Text(direction.localizedName).tag(direction)
                                 }
                             }
                             .pickerStyle(.menu)
-                            .padding(.leading, 20)
-
-                            Text("Choose whether vertical or horizontal scrolling controls the media widget.")
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                                .padding(.leading, 20)
 
                             if mediaWidgetScrollDirection == .horizontal {
                                 HStack(spacing: 6) {
@@ -142,7 +162,6 @@ struct WidgetSettingsView: View {
                                         .font(.caption)
                                 }
                                 .foregroundColor(.orange)
-                                .padding(.leading, 20)
                             }
                         }
                     }

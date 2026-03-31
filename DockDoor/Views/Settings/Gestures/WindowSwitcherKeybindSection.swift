@@ -1,3 +1,4 @@
+import Carbon.HIToolbox
 import Defaults
 import SwiftUI
 
@@ -10,6 +11,7 @@ struct WindowSwitcherKeybindSection: View {
     @Default(.alternateKeybindMode) var alternateKeybindMode
     @Default(.requireShiftTabToGoBack) var requireShiftTabToGoBack
     @Default(.switcherBackwardKeyCode) var switcherBackwardKeyCode
+    @Default(.windowSwitcherSelectionKeyCode) var selectionKeyCode
 
     @StateObject private var keybindModel = KeybindModel()
     @State private var showingAddBlacklistAppSheet = false
@@ -59,6 +61,12 @@ struct WindowSwitcherKeybindSection: View {
                 }
                 .disabled(!enableWindowSwitcher)
                 .opacity(enableWindowSwitcher ? 1.0 : 0.5)
+
+                Divider()
+
+                selectionKeySection
+                    .disabled(!enableWindowSwitcher)
+                    .opacity(enableWindowSwitcher ? 1.0 : 0.5)
 
                 Divider()
 
@@ -171,6 +179,23 @@ struct WindowSwitcherKeybindSection: View {
             .allowsHitTesting(false)
             .frame(width: 0, height: 0)
         )
+    }
+
+    // MARK: - Selection Key Section
+
+    private var selectionKeySection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                Text("Selection Key")
+                Spacer()
+                KeyCaptureButton(keyCode: $selectionKeyCode)
+                Button("Reset") { selectionKeyCode = UInt16(kVK_Return) }
+                    .buttonStyle(.bordered)
+            }
+            Text("The key used to select and bring to front the highlighted window in the switcher.")
+                .font(.caption)
+                .foregroundColor(.secondary)
+        }
     }
 
     // MARK: - Alternate Shortcuts Section

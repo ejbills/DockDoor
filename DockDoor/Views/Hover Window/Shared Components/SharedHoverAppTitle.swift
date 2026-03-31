@@ -6,7 +6,6 @@ struct SharedHoverAppTitle: View {
     let appName: String
     let appIcon: NSImage?
     let hoveringAppIcon: Bool
-
     @Default(.showAppName) var showAppTitleData
     @Default(.showAppIconOnly) var showAppIconOnly
     @Default(.appNameStyle) var appNameStyle
@@ -71,6 +70,7 @@ struct SharedHoverAppTitle: View {
                     .animation(showAnimations ? .smooth(duration: 0.15) : nil, value: hoveringAppIcon)
                 }
             }
+            .contentShape(Rectangle())
         }
     }
 

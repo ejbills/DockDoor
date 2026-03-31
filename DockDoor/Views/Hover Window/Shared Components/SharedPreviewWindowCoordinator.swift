@@ -1,4 +1,3 @@
-import Combine
 import Defaults
 import Sparkle
 import SwiftUI
@@ -36,7 +35,6 @@ final class SharedPreviewWindowCoordinator: NSPanel {
     private(set) var hasScreenRecordingPermission: Bool = PermissionsChecker.hasScreenRecordingPermission()
 
     var pinnedWindows: [String: (window: NSWindow, info: PinnedWindowInfo)] = [:]
-    private var frameRefreshCancellable: AnyCancellable?
 
     init() {
         let styleMask: NSWindow.StyleMask = [.nonactivatingPanel, .fullSizeContentView, .borderless]
@@ -78,12 +76,9 @@ final class SharedPreviewWindowCoordinator: NSPanel {
     }
 
     private func setupFrameRefreshObserver() {
-        frameRefreshCancellable = windowSwitcherCoordinator.$frameRefreshRequestId
-            .compactMap { $0 }
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                self?.refreshPanelFrameToFitContent()
-            }
+        windowSwitcherCoordinator.onFrameRefreshNeeded = { [weak self] in
+            self?.refreshPanelFrameToFitContent()
+        }
     }
 
     func updateSearchWindow(with text: String) {
@@ -116,7 +111,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         return bundleId == calendarAppIdentifier
     }
 
-    private func getEmbeddedContentType(for bundleIdentifier: String?) -> EmbeddedContentType {
+    @MainActor private func getEmbeddedContentType(for bundleIdentifier: String?) -> EmbeddedContentType {
         guard let bundleId = bundleIdentifier else { return .none }
 
         if isMediaApp(bundleId) {
@@ -175,11 +170,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         let screen = NSScreen.screenContainingMouse(NSEvent.mouseLocation)
         let screenFrame = screen.frame
 
-        let expectedSize = windowSwitcherCoordinator.expectedContentSize
-        let newSize = CGSize(
-            width: expectedSize.width > 0 ? expectedSize.width : fittingSize.width,
-            height: expectedSize.height > 0 ? expectedSize.height : fittingSize.height
-        )
+        let newSize = fittingSize
         guard newSize != frame.size else { return }
 
         let wasClampedToTop = frame.maxY >= screenFrame.maxY - 1
@@ -319,11 +310,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
             elapsed = renderStartTime.map { (CFAbsoluteTimeGetCurrent() - $0) * 1000 } ?? 0
             DebugLogger.log("PreviewRender", details: "fittingSize done: \(fittingSize) (+\(String(format: "%.1f", elapsed))ms)")
 
-            let expectedSize = windowSwitcherCoordinator.expectedContentSize
-            newHoverWindowSize = CGSize(
-                width: expectedSize.width > 0 ? expectedSize.width : fittingSize.width,
-                height: expectedSize.height > 0 ? expectedSize.height : fittingSize.height
-            )
+            newHoverWindowSize = fittingSize
         }
 
         let position: CGPoint
@@ -615,7 +602,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
 
             switch actualAppContentType {
             case let .media(mediaBundleId):
-                if Defaults[.showSpecialAppControls] {
+                if Defaults[.showSpecialAppControls], Defaults[.enableMediaWidget] {
                     let hasValidWindows = windows.contains { !$0.isMinimized && !$0.isHidden }
                     let shouldUseBigControlsForNoValidWindows = Defaults[.showBigControlsWhenNoValidWindows] &&
                         (windows.isEmpty || !hasValidWindows)
@@ -635,7 +622,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
                     }
                 }
             case let .calendar(calendarBundleId):
-                if Defaults[.showSpecialAppControls] {
+                if Defaults[.showSpecialAppControls], Defaults[.enableCalendarWidget] {
                     let hasValidWindows = windows.contains { !$0.isMinimized && !$0.isHidden }
                     let shouldUseBigControlsForNoValidWindows = Defaults[.showBigControlsWhenNoValidWindows] &&
                         (windows.isEmpty || !hasValidWindows)
@@ -727,6 +714,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
             let activeDockPosition = dockPositionOverride ?? DockUtils.getDockPosition()
             currentDockPosition = activeDockPosition
 
+            windowSwitcherCoordinator.hasEmbeddedContent = embeddedContentType != .none
             windowSwitcherCoordinator.setWindows(windows, dockPosition: activeDockPosition, bestGuessMonitor: screen)
 
             if let initialIndex {

@@ -35,6 +35,9 @@ struct WindowSwitcherBehaviorSettingsView: View {
                     searchAndInputSection
                     sortingAndGroupingSection
                     placementSection
+
+                    SettingsMockPreview(context: .windowSwitcher)
+
                     appearanceSection
                 }
             }

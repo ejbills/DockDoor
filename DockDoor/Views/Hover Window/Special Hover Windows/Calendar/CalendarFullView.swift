@@ -27,6 +27,8 @@ struct CalendarFullView: View {
         ) {
             CalendarContentView(calendarInfo: calendarInfo)
         }
-        .pinnable(appName: appName, bundleIdentifier: bundleIdentifier, type: .calendar)
+        .if(!isPinnedMode) { view in
+            view.pinnable(appName: appName, bundleIdentifier: bundleIdentifier, type: .calendar)
+        }
     }
 }

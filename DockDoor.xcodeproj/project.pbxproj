@@ -59,7 +59,9 @@
 		A1B2C3D4E5F6789012345678 /* ActiveAppIndicatorWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C3D4E5F67890123456789A /* ActiveAppIndicatorWindow.swift */; };
 		A1B2C3D4E5F6A89012345679 /* EnabledButtonsCheckboxes.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C3D4E5F6A890123456789B /* EnabledButtonsCheckboxes.swift */; };
 		B376D66B467C4587915220BC80D3B9CB /* ScriptCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = F098F8107F464776B5C18294427CAECD /* ScriptCommands.swift */; };
+		B3C9F20484F14266B941AFB170B66530 /* MediaRemoteService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC298B81953848F481EE849906E0AE77 /* MediaRemoteService.swift */; };
 		B84941090B484695B105D967 /* SettingsGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4258675B29E4A22ACF92845 /* SettingsGroup.swift */; };
+		BC531F7D6159457386B0B9A594D74E0C /* SettingsMockPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6BF9BDC596A48798C66EA25EBAA85EE /* SettingsMockPreview.swift */; };
 		BB0036D02D24AAD20072C61E /* CGPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0036CF2D24AAD10072C61E /* CGPoint.swift */; };
 		BB04405B2C77A013009F1D33 /* GradientColorPaletteSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB04405A2C77A011009F1D33 /* GradientColorPaletteSettings.swift */; };
 		BB04405E2C77A87F009F1D33 /* PreferencesProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB04405D2C77A87E009F1D33 /* PreferencesProtocol.swift */; };
@@ -119,6 +121,8 @@
 		BB52EDF02C5BEFE3006A64A4 /* HiddenModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB52EDEF2C5BEFE3006A64A4 /* HiddenModifier.swift */; };
 		BB5349C32EE7C3F5004B1FDD /* WindowPreviewCompact.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB5349C22EE7C3F5004B1FDD /* WindowPreviewCompact.swift */; };
 		BB5349C52EE7D160004B1FDD /* WindowPreviewInteractionModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB5349C42EE7D160004B1FDD /* WindowPreviewInteractionModifier.swift */; };
+		BB5C36562F6CEE9E00BE947F /* MediaRemoteAdapter in Frameworks */ = {isa = PBXBuildFile; productRef = BB5C36552F6CEE9E00BE947F /* MediaRemoteAdapter */; };
+		BB5C36572F6D793700BE947F /* MediaRemoteAdapter in Embed Frameworks */ = {isa = PBXBuildFile; productRef = BB5C36552F6CEE9E00BE947F /* MediaRemoteAdapter */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		BB5D35542ED4C4CC006ECE15 /* DebugLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB5D35532ED4C4CC006ECE15 /* DebugLogger.swift */; };
 		BB6021D22D1E613800D47C86 /* Window Image Sizing Calculations.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6021D12D1E613100D47C86 /* Window Image Sizing Calculations.swift */; };
 		BB638EFA2E0216DA0010077D /* MediaControlsEmbeddedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB638EF92E0216DA0010077D /* MediaControlsEmbeddedView.swift */; };
@@ -197,6 +201,20 @@
 		FEBF808E6ABA4DE7983FCACD /* SettingsPickerRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C341C31333F4619A4E79449 /* SettingsPickerRow.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		BB5C36582F6D793700BE947F /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				BB5C36572F6D793700BE947F /* MediaRemoteAdapter in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		0531F8D12C3CC04600327808 /* AppearanceSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceSettingsView.swift; sourceTree = "<group>"; };
 		0596C2C22C3E060D00DCABEF /* PrivateApis.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateApis.swift; sourceTree = "<group>"; };
@@ -244,6 +262,7 @@
 		99C808769D1048FF95FCDA50FA52116A /* CmdTabSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CmdTabSettingsView.swift; sourceTree = "<group>"; };
 		9DE26FD426284948A71EBACC /* SettingsIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsIcon.swift; sourceTree = "<group>"; };
 		A4E8BB47686D4EF6B89131D2EB26FEE8 /* DockDoor.sdef */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.sdef; path = DockDoor.sdef; sourceTree = "<group>"; };
+		AC298B81953848F481EE849906E0AE77 /* MediaRemoteService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaRemoteService.swift; sourceTree = "<group>"; };
 		B056906A7ACD4903BD5E1627B359AE2C /* AdvancedSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedSettingsView.swift; sourceTree = "<group>"; };
 		B2C3D4E5F67890123456789A /* ActiveAppIndicatorWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveAppIndicatorWindow.swift; sourceTree = "<group>"; };
 		B2C3D4E5F6A890123456789B /* EnabledButtonsCheckboxes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnabledButtonsCheckboxes.swift; sourceTree = "<group>"; };
@@ -379,6 +398,7 @@
 		E3584B7313E241EF997A4EE5 /* AdvancedAppearanceSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedAppearanceSection.swift; sourceTree = "<group>"; };
 		F098F8107F464776B5C18294427CAECD /* ScriptCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptCommands.swift; sourceTree = "<group>"; };
 		F4258675B29E4A22ACF92845 /* SettingsGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsGroup.swift; sourceTree = "<group>"; };
+		B6BF9BDC596A48798C66EA25EBAA85EE /* SettingsMockPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsMockPreview.swift; sourceTree = "<group>"; };
 		F6AA4630D2D54CD7AB622B27 /* CmdKeyShortcutsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CmdKeyShortcutsSection.swift; sourceTree = "<group>"; };
 		FB59EE0D7419468CABBAD220 /* CmdTabAppearanceSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CmdTabAppearanceSection.swift; sourceTree = "<group>"; };
 		FCF95019606449008856E149 /* SettingsLinkRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsLinkRow.swift; sourceTree = "<group>"; };
@@ -396,6 +416,7 @@
 				BB3968002C2A6C44004F1AB6 /* SmoothGradient in Frameworks */,
 				BB1CBD5B2C1BA8DC003969BC /* Defaults in Frameworks */,
 				3A1622B82C8C0EE200D318EE /* Kroma in Frameworks */,
+				BB5C36562F6CEE9E00BE947F /* MediaRemoteAdapter in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -542,6 +563,14 @@
 			path = Appearance;
 			sourceTree = "<group>";
 		};
+		B9D4DE2A3A39438AB1F2C1F4E515D038 /* Media */ = {
+			isa = PBXGroup;
+			children = (
+				AC298B81953848F481EE849906E0AE77 /* MediaRemoteService.swift */,
+			);
+			path = Media;
+			sourceTree = "<group>";
+		};
 		BB0036D12D24AAE60072C61E /* CoreGraphics */ = {
 			isa = PBXGroup;
 			children = (
@@ -612,6 +641,7 @@
 			isa = PBXGroup;
 			children = (
 				205C45E5266848C9B4F622AA /* ActiveAppIndicator */,
+				B9D4DE2A3A39438AB1F2C1F4E515D038 /* Media */,
 				BB5D35532ED4C4CC006ECE15 /* DebugLogger.swift */,
 				BB21067C2E83565A002F87D6 /* KeyboardLabel.swift */,
 				BBDF65722E7E212400DD6D6D /* DockObserver+CmdTab.swift */,
@@ -679,6 +709,7 @@
 				0BD01DB1CA624D4F834C60EE /* SettingsNote.swift */,
 				FCF95019606449008856E149 /* SettingsLinkRow.swift */,
 				1F2844BF18EB4D089A62A368 /* SupportLinksSection.swift */,
+				B6BF9BDC596A48798C66EA25EBAA85EE /* SettingsMockPreview.swift */,
 			);
 			path = "Shared Components";
 			sourceTree = "<group>";
@@ -867,6 +898,7 @@
 				BB157B612C0E31CE00997315 /* Sources */,
 				BB157B622C0E31CE00997315 /* Frameworks */,
 				BB157B632C0E31CE00997315 /* Resources */,
+				BB5C36582F6D793700BE947F /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -881,6 +913,7 @@
 				3A1622A22C8BFF3800D318EE /* Pow */,
 				3A1622B72C8C0EE200D318EE /* Kroma */,
 				BBBD4AF72C8D71560074FFCF /* ConfettiSwiftUI */,
+				BB5C36552F6CEE9E00BE947F /* MediaRemoteAdapter */,
 			);
 			productName = DockDoor;
 			productReference = BB157B652C0E31CE00997315 /* DockDoor.app */;
@@ -920,6 +953,7 @@
 				3A1622A12C8BFF3800D318EE /* XCRemoteSwiftPackageReference "Pow" */,
 				3A1622B62C8C0EE200D318EE /* XCRemoteSwiftPackageReference "Kroma" */,
 				BBBD4AF62C8D71560074FFCF /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */,
+				BB5C36542F6CEE9E00BE947F /* XCRemoteSwiftPackageReference "mediaremote-adapter" */,
 			);
 			productRefGroup = BB157B662C0E31CE00997315 /* Products */;
 			projectDirPath = "";
@@ -973,6 +1007,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B3C9F20484F14266B941AFB170B66530 /* MediaRemoteService.swift in Sources */,
 				B376D66B467C4587915220BC80D3B9CB /* ScriptCommands.swift in Sources */,
 				1A04FA16AC74448F83D0F964 /* ActiveAppIndicatorCoordinator.swift in Sources */,
 				C3D4E5F6789012345678901B /* ActiveAppIndicatorDockDetection.swift in Sources */,
@@ -1102,6 +1137,7 @@
 				BB90A5ED2DFA13E000857722 /* CalendarInfo.swift in Sources */,
 				BB2885012E81B5B60048A09B /* SettingsIllustratedRow.swift in Sources */,
 				B84941090B484695B105D967 /* SettingsGroup.swift in Sources */,
+				BC531F7D6159457386B0B9A594D74E0C /* SettingsMockPreview.swift in Sources */,
 				D096400ED7404496AEDA58A9 /* SettingsIcon.swift in Sources */,
 				9DA27E8E83A84AECA8AD3BBD /* SettingsToggleRow.swift in Sources */,
 				F0796B6D96ED42D58D75BB8A /* SettingsSliderRow.swift in Sources */,
@@ -1446,6 +1482,14 @@
 				minimumVersion = 1.0.0;
 			};
 		};
+		BB5C36542F6CEE9E00BE947F /* XCRemoteSwiftPackageReference "mediaremote-adapter" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ejbills/mediaremote-adapter.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 		BBBD4AF62C8D71560074FFCF /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/simibac/ConfettiSwiftUI";
@@ -1489,6 +1533,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = BB3967FE2C2A6C44004F1AB6 /* XCRemoteSwiftPackageReference "SmoothGradient" */;
 			productName = SmoothGradient;
+		};
+		BB5C36552F6CEE9E00BE947F /* MediaRemoteAdapter */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BB5C36542F6CEE9E00BE947F /* XCRemoteSwiftPackageReference "mediaremote-adapter" */;
+			productName = MediaRemoteAdapter;
 		};
 		BBBD4AF72C8D71560074FFCF /* ConfettiSwiftUI */ = {
 			isa = XCSwiftPackageProductDependency;
