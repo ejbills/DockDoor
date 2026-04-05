@@ -25,6 +25,22 @@ final class MediaRemoteService: ObservableObject {
     private var lastSeekTime: Date?
     private let seekDebounceInterval: TimeInterval = 1.5
 
+    private var currentTrackInfo: TrackInfo?
+
+    /// After a seek, we interpolate locally until the next track info event arrives.
+    private var seekBase: (position: TimeInterval, date: Date, rate: Double)?
+
+    var interpolatedElapsedTime: TimeInterval {
+        if let seek = seekBase,
+           let seekTime = lastSeekTime,
+           Date().timeIntervalSince(seekTime) < seekDebounceInterval
+        {
+            let elapsed = Date().timeIntervalSince(seek.date)
+            return max(0, seek.position + elapsed * seek.rate)
+        }
+        return currentTrackInfo?.payload.currentElapsedTime ?? 0
+    }
+
     var hasActiveMedia: Bool { !title.isEmpty }
 
     var isUniversalSource: Bool {
@@ -40,15 +56,6 @@ final class MediaRemoteService: ObservableObject {
         controller.onTrackInfoReceived = { [weak self] trackInfo in
             DispatchQueue.main.async {
                 self?.handleTrackInfo(trackInfo)
-            }
-        }
-        controller.onPlaybackTimeUpdate = { [weak self] time in
-            Task { @MainActor in
-                guard let self else { return }
-                let shouldIgnore = self.lastSeekTime.map { Date().timeIntervalSince($0) < self.seekDebounceInterval } ?? false
-                if !shouldIgnore {
-                    self.elapsedTime = time
-                }
             }
         }
     }
@@ -90,7 +97,9 @@ final class MediaRemoteService: ObservableObject {
     }
 
     func seek(to seconds: TimeInterval) {
-        lastSeekTime = Date()
+        let now = Date()
+        lastSeekTime = now
+        seekBase = (position: seconds, date: now, rate: playbackRate)
         elapsedTime = seconds
         controller.setTime(seconds: seconds)
     }
@@ -98,16 +107,24 @@ final class MediaRemoteService: ObservableObject {
     // MARK: - Private
 
     private func handleTrackInfo(_ trackInfo: TrackInfo?) {
-        guard let payload = trackInfo?.payload else {
+        guard let trackInfo else {
+            currentTrackInfo = nil
+            seekBase = nil
             clearState()
             return
         }
+
+        currentTrackInfo = trackInfo
+        let payload = trackInfo.payload
 
         let incomingRate = payload.playbackRate ?? ((payload.isPlaying ?? false) ? 1.0 : 0.0)
         let incomingDuration = (payload.durationMicros ?? 0) / 1_000_000.0
         let incomingElapsed = payload.currentElapsedTime ?? 0
 
         let shouldIgnorePosition = lastSeekTime.map { Date().timeIntervalSince($0) < seekDebounceInterval } ?? false
+        if !shouldIgnorePosition {
+            seekBase = nil
+        }
 
         let sameSource = payload.bundleIdentifier == activeBundleIdentifier
         let sameTrack = sameSource && payload.title == title && payload.artist == artist
@@ -151,6 +168,8 @@ final class MediaRemoteService: ObservableObject {
     }
 
     private func clearState() {
+        currentTrackInfo = nil
+        seekBase = nil
         activeBundleIdentifier = nil
         activeAppName = nil
         title = ""

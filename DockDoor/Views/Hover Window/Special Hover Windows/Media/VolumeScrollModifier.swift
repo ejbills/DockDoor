@@ -59,7 +59,7 @@ struct MediaScrollModifier: ViewModifier {
     private func handleSeekScroll(deltaY: CGFloat) {
         if !mediaInfo.isSeeking {
             mediaInfo.isSeeking = true
-            mediaInfo.seekBaseTime = mediaInfo.currentTime
+            mediaInfo.seekBaseTime = mediaInfo.displayTime
             mediaInfo.seekAccumulatedDelta = 0
         }
 

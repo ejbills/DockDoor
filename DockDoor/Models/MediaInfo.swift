@@ -131,6 +131,15 @@ final class MediaInfo: ObservableObject {
     @Published var duration: TimeInterval = 0
     @Published var appName: String = ""
 
+    /// Reads interpolated position from MediaRemoteService on demand (for TimelineView).
+    /// Falls back to `currentTime` for AppleScript sources or when seeking.
+    var displayTime: TimeInterval {
+        if isUsingMediaRemote, !isSeeking {
+            return MediaRemoteService.shared.interpolatedElapsedTime
+        }
+        return currentTime
+    }
+
     // MARK: - Seek State
 
     var isSeeking: Bool = false
@@ -163,7 +172,6 @@ final class MediaInfo: ObservableObject {
     private var artworkFetchTask: Task<Void, Never>?
     private(set) var isUsingMediaRemote: Bool = false
     private var mrDataSubscription: AnyCancellable?
-    private var mrTimeSubscription: AnyCancellable?
 
     private static let delimiter = "〈♫DOCKDOOR♫〉"
 
@@ -189,7 +197,6 @@ final class MediaInfo: ObservableObject {
 
     private func determineDataSource() {
         mrDataSubscription = nil
-        mrTimeSubscription = nil
 
         let isNativeMediaApp = currentApp == spotifyAppIdentifier || currentApp == appleMusicAppIdentifier
         let mode = Defaults[.mediaDetectionMode]
@@ -212,27 +219,11 @@ final class MediaInfo: ObservableObject {
             .sink { [weak self] _ in
                 self?.syncFromMediaRemote()
             }
-
-        mrTimeSubscription = mr.$elapsedTime
-            .sink { [weak self] newTime in
-                guard let self, isUsingMediaRemote, !isSeeking else { return }
-                guard mr.activeBundleIdentifier == currentApp else { return }
-                if abs(newTime - currentTime) > 0.5 || !isPlaying {
-                    lastPolledTime = newTime
-                    lastPollDate = Date()
-                    interpolatedTime = newTime
-                } else {
-                    lastPolledTime = newTime
-                    lastPollDate = Date()
-                }
-                currentTime = newTime
-            }
     }
 
     private func switchToAppleScript() {
         isUsingMediaRemote = false
         mrDataSubscription = nil
-        mrTimeSubscription = nil
         Task { [weak self] in
             await self?.fetchMediaData()
             guard let self, activeViewCount > 0 else { return }
@@ -271,7 +262,6 @@ final class MediaInfo: ObservableObject {
         if activeViewCount == 0 {
             stopPeriodicUpdates()
             mrDataSubscription = nil
-            mrTimeSubscription = nil
             isUsingMediaRemote = false
         }
     }
@@ -557,6 +547,11 @@ final class MediaInfo: ObservableObject {
     }
 
     private func updateInterpolatedTime() {
+        if isUsingMediaRemote {
+            interpolatedTime = MediaRemoteService.shared.interpolatedElapsedTime
+            return
+        }
+
         guard isPlaying else {
             interpolatedTime = currentTime
             return
