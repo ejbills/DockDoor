@@ -105,6 +105,7 @@ extension Defaults.Keys {
     static let enableMouseHoverInSwitcher = Key<Bool>("enableMouseHoverInSwitcher", default: true)
     static let mouseHoverAutoScrollSpeed = Key<CGFloat>("mouseHoverAutoScrollSpeed", default: 4.0)
     static let keepPreviewOnAppTerminate = Key<Bool>("keepPreviewOnAppTerminate", default: false)
+    static let enableVimMotions = Key<Bool>("enableVimMotions", default: false)
     static let enableWindowSwitcherSearch = Key<Bool>("enableWindowSwitcherSearch", default: false)
     static let searchTriggerKey = Key<UInt16>("searchTriggerKey", default: UInt16(kVK_ANSI_Slash))
     static let compactModeTitleFormat = Key<CompactModeTitleFormat>("compactModeTitleFormat", default: .appNameAndTitle)
@@ -143,6 +144,7 @@ extension Defaults.Keys {
     static let hideHoverContainerBackground = Key<Bool>("hideHoverContainerBackground", default: false)
     static let hideWidgetContainerBackground = Key<Bool>("hideWidgetContainerBackground", default: false)
     static let useOpaquePreviewBackground = Key<Bool>("useOpaquePreviewBackground", default: false)
+    static let customBackgroundColor = Key<Color?>("customBackgroundColor", default: nil)
     static let appAppearanceMode = Key<AppAppearanceMode>("appAppearanceMode", default: .system)
     static let showActiveWindowBorder = Key<Bool>("showActiveWindowBorder", default: false)
 

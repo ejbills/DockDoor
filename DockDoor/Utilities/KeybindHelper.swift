@@ -475,6 +475,25 @@ class KeybindHelper {
                         } else {
                             return Unmanaged.passUnretained(event)
                         }
+                    case Int64(kVK_ANSI_H), Int64(kVK_ANSI_L):
+                        if Defaults[.enableVimMotions], hasSelection {
+                            let dir: ArrowDirection = keyCode == Int64(kVK_ANSI_H) ? .left : .right
+                            Task { @MainActor in
+                                self.previewCoordinator.navigateWithArrowKey(direction: dir)
+                            }
+                            return nil
+                        } else {
+                            return Unmanaged.passUnretained(event)
+                        }
+                    case Int64(kVK_ANSI_J):
+                        if Defaults[.enableVimMotions], hasSelection {
+                            Task { @MainActor in
+                                self.previewCoordinator.windowSwitcherCoordinator.setIndex(to: -1)
+                            }
+                            return nil
+                        } else {
+                            return Unmanaged.passUnretained(event)
+                        }
                     default:
                         // Allow activation via customizable Cmd+key (when not yet focused) and
                         // Command-based actions when a preview is focused
@@ -803,6 +822,21 @@ class KeybindHelper {
                 return (true, { @MainActor in
                     self.previewCoordinator.navigateWithArrowKey(direction: dir)
                 })
+            case Int64(kVK_ANSI_H), Int64(kVK_ANSI_J), Int64(kVK_ANSI_K), Int64(kVK_ANSI_L):
+                if Defaults[.enableVimMotions],
+                   !previewCoordinator.isSearchWindowFocused,
+                   flags.intersection([.maskControl, .maskCommand, .maskAlternate, .maskShift]).isEmpty
+                {
+                    let dir: ArrowDirection = switch keyCode {
+                    case Int64(kVK_ANSI_H): .left
+                    case Int64(kVK_ANSI_L): .right
+                    case Int64(kVK_ANSI_K): .up
+                    default: .down
+                    }
+                    return (true, { @MainActor in
+                        self.previewCoordinator.navigateWithArrowKey(direction: dir)
+                    })
+                }
             case Int64(Defaults[.windowSwitcherSelectionKeyCode]), Int64(kVK_ANSI_KeypadEnter):
                 if previewCoordinator.windowSwitcherCoordinator.currIndex >= 0 {
                     return (true, makeEnterSelectionTask())

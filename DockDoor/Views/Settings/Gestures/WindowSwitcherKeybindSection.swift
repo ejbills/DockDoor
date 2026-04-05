@@ -12,6 +12,7 @@ struct WindowSwitcherKeybindSection: View {
     @Default(.requireShiftTabToGoBack) var requireShiftTabToGoBack
     @Default(.switcherBackwardKeyCode) var switcherBackwardKeyCode
     @Default(.windowSwitcherSelectionKeyCode) var selectionKeyCode
+    @Default(.enableVimMotions) var enableVimMotions
 
     @StateObject private var keybindModel = KeybindModel()
     @State private var showingAddBlacklistAppSheet = false
@@ -67,6 +68,20 @@ struct WindowSwitcherKeybindSection: View {
                 selectionKeySection
                     .disabled(!enableWindowSwitcher)
                     .opacity(enableWindowSwitcher ? 1.0 : 0.5)
+
+                Divider()
+
+                VStack(alignment: .leading, spacing: 8) {
+                    Toggle(isOn: $enableVimMotions) {
+                        Text("Enable Vim Motions")
+                    }
+                    Text("Use H/J/K/L keys to navigate left/down/up/right in the window switcher. Disabled while search is focused.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                        .padding(.leading, 20)
+                }
+                .disabled(!enableWindowSwitcher)
+                .opacity(enableWindowSwitcher ? 1.0 : 0.5)
 
                 Divider()
 

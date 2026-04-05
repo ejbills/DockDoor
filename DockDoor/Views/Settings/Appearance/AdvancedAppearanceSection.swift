@@ -6,6 +6,7 @@ struct AdvancedAppearanceSection: View {
     @Default(.hoverHighlightColor) var hoverHighlightColor
     @Default(.dockPreviewBackgroundOpacity) var dockPreviewBackgroundOpacity
     @Default(.useOpaquePreviewBackground) var useOpaquePreviewBackground
+    @Default(.customBackgroundColor) var customBackgroundColor
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -41,29 +42,47 @@ struct AdvancedAppearanceSection: View {
 
             SettingsGroup(header: "Dock Preview Transparency") {
                 VStack(alignment: .leading, spacing: 10) {
-                    VStack(alignment: .leading) {
-                        Toggle(isOn: $useOpaquePreviewBackground) {
-                            Text("Use opaque background")
+                    HStack {
+                        ColorPicker("Custom Background Color", selection: Binding(
+                            get: { customBackgroundColor ?? Color(nsColor: .windowBackgroundColor) },
+                            set: { customBackgroundColor = $0 }
+                        ))
+                        Button(action: {
+                            Defaults.reset(.customBackgroundColor)
+                        }) {
+                            Text("Reset")
                         }
-                        Text("Replaces the blurred/transparent background with a solid color. Useful for accessibility or readability.")
-                            .font(.footnote)
-                            .foregroundColor(.gray)
-                            .padding(.leading, 20)
+                        .buttonStyle(AccentButtonStyle(small: true))
                     }
+                    Text("Override the default blurred background with a solid custom color.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
 
-                    if !useOpaquePreviewBackground {
-                        Text("Control the transparency of the dock preview background. Lower values make the preview more transparent, which can help prevent it from blocking window content.")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
+                    if customBackgroundColor == nil {
+                        VStack(alignment: .leading) {
+                            Toggle(isOn: $useOpaquePreviewBackground) {
+                                Text("Use opaque background")
+                            }
+                            Text("Replaces the blurred/transparent background with a solid color. Useful for accessibility or readability.")
+                                .font(.footnote)
+                                .foregroundColor(.gray)
+                                .padding(.leading, 20)
+                        }
 
-                        sliderSetting(
-                            title: "Background Opacity",
-                            value: $dockPreviewBackgroundOpacity,
-                            range: 0 ... 1.0,
-                            step: 0.05,
-                            unit: "",
-                            formatter: NumberFormatter.percentFormatter
-                        )
+                        if !useOpaquePreviewBackground {
+                            Text("Control the transparency of the dock preview background. Lower values make the preview more transparent, which can help prevent it from blocking window content.")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+
+                            sliderSetting(
+                                title: "Background Opacity",
+                                value: $dockPreviewBackgroundOpacity,
+                                range: 0 ... 1.0,
+                                step: 0.05,
+                                unit: "",
+                                formatter: NumberFormatter.percentFormatter
+                            )
+                        }
                     }
                 }
             }
