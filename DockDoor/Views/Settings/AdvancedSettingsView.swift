@@ -10,6 +10,7 @@ struct AdvancedSettingsView: View {
     @Default(.windowProcessingDebounceInterval) var windowProcessingDebounceInterval
     @Default(.anchorDockPreviewPosition) var anchorDockPreviewPosition
     @Default(.preventDockHide) var preventDockHide
+    @Default(.enableDockIntellihide) var enableDockIntellihide
     @Default(.raisedWindowLevel) var raisedWindowLevel
     @Default(.disableMinWindowSizeFilter) var disableMinWindowSizeFilter
 
@@ -83,6 +84,15 @@ struct AdvancedSettingsView: View {
                     .padding(.leading, 20)
 
                 Toggle(isOn: $preventDockHide) { Text("Prevent dock from hiding during previews") }
+
+                Toggle(isOn: $enableDockIntellihide) {
+                    Text("Enable GNOME-style intelligent dock hiding")
+                }
+                Text("Shows the Dock only when the focused window is clear of the Dock edge. Dragging, resizing, split-view moves, and fullscreen transitions temporarily hide it.")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .padding(.leading, 20)
+
                 Toggle(isOn: $raisedWindowLevel) { Text("Show preview above app labels").onChange(of: raisedWindowLevel) { _ in askUserToRestartApplication() } }
 
                 Toggle(isOn: $disableMinWindowSizeFilter) {

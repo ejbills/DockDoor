@@ -7,64 +7,7 @@ enum ActiveAppIndicatorDockDetection {
     /// - Parameter app: The running application to find in the dock.
     /// - Returns: The frame of the dock item, or nil if not found.
     static func getDockItemFrame(for app: NSRunningApplication) -> CGRect? {
-        guard let bundleIdentifier = app.bundleIdentifier else { return nil }
-
-        // Get the Dock application
-        guard
-            let dockApp = NSRunningApplication.runningApplications(
-                withBundleIdentifier: "com.apple.dock"
-            ).first
-        else {
-            return nil
-        }
-
-        let dockElement = AXUIElementCreateApplication(
-            dockApp.processIdentifier
-        )
-
-        // Navigate to the dock's list of items
-        guard let children = try? dockElement.children(),
-              let axList = children.first(where: { element in
-                  (try? element.role()) == kAXListRole
-              }),
-              let dockItems = try? axList.children()
-        else {
-            return nil
-        }
-
-        // Find the dock item for this app
-        for item in dockItems {
-            guard let subrole = try? item.subrole(),
-                  subrole == "AXApplicationDockItem"
-            else { continue }
-
-            // Check if this is our app by comparing bundle identifiers
-            if let itemURL = try? item.attribute(kAXURLAttribute, NSURL.self)?
-                .absoluteURL,
-                let itemBundle = Bundle(url: itemURL),
-                itemBundle.bundleIdentifier == bundleIdentifier
-            {
-                return getFrameForDockItem(item)
-            }
-
-            // Check by running app if bundle ID check failed
-            if let itemTitle = try? item.title(),
-               itemTitle == app.localizedName
-            {
-                return getFrameForDockItem(item)
-            }
-        }
-
-        return nil
-    }
-
-    /// Gets the frame for a dock item from accessibility.
-    private static func getFrameForDockItem(_ item: AXUIElement) -> CGRect? {
-        guard let position = try? item.position(),
-              let size = try? item.size()
-        else { return nil }
-
-        return CGRect(origin: position, size: size)
+        DockAccessibility.applicationDockItemFrame(for: app)
     }
 
     /// Calculates indicator height, offset, and length based on dock size and position.
