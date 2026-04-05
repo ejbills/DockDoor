@@ -38,6 +38,45 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://dockdoor.net/donate</div>
 
+<a id="1.33"></a>
+# [Release 1.33](https://github.com/ejbills/DockDoor/releases/tag/1.33) - 2026-04-05
+
+## ✨ New Features
+- Universal media controls
+  - Works with any app playing audio
+  - Choose universal or Spotify/Apple Music only
+- Filter windows by current monitor
+  - Supported in dock, switcher, and Cmd+Tab
+- Live appearance preview restored in settings
+
+## 🔧 Improvements & Stability
+- Toggle media and calendar widgets independently
+- Progress bar in embedded media widget
+- Active app indicator animates smoothly
+- Centered layout options for window controls/titles
+- Option to increase the size of traffic light buttons (scaling)
+- Customizable window switcher selection key
+- Option to hide Close All / Minimize All buttons
+- Option to show small windows (under 100px, for example the copy progress window for finder)
+- Clicking preview background focuses the app
+- Check for Updates in menu bar
+- Settings reopen after settings-triggered restart
+- Window title font size setting
+
+## 🐛 Bug Fixes
+- Cmd+Tab preview no longer stuck on screen in most scenarios
+- Reliable recovery after sleep/wake cycles
+- Minimized windows kept when filtering by Space
+- Ctrl+Arrow still switches Spaces in switcher while preview is active
+- Preview dismisses correctly on Space change
+- Search bar no longer renders without a window
+- Window previews no longer flash blank briefly
+- Fixed memory leaks in audio device listener
+
+
+[Changes][1.33]
+
+
 <a id="1.32.2"></a>
 # [Release 1.32.2](https://github.com/ejbills/DockDoor/releases/tag/1.32.2) - 2026-03-13
 
@@ -1953,6 +1992,7 @@ v1.0
 [Changes][releases]
 
 
+[1.33]: https://github.com/ejbills/DockDoor/compare/1.32.2...1.33
 [1.32.2]: https://github.com/ejbills/DockDoor/compare/1.32.1...1.32.2
 [1.32.1]: https://github.com/ejbills/DockDoor/compare/1.32...1.32.1
 [1.32]: https://github.com/ejbills/DockDoor/compare/1.31.2...1.32
