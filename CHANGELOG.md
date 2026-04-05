@@ -38,6 +38,15 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://dockdoor.net/donate</div>
 
+<a id="1.33.1"></a>
+# [Release 1.33.1](https://github.com/ejbills/DockDoor/releases/tag/1.33.1) - 2026-04-05
+
+- Sync translations with Crowdin submissions
+
+
+[Changes][1.33.1]
+
+
 <a id="1.33"></a>
 # [Release 1.33](https://github.com/ejbills/DockDoor/releases/tag/1.33) - 2026-04-05
 
@@ -1992,6 +2001,7 @@ v1.0
 [Changes][releases]
 
 
+[1.33.1]: https://github.com/ejbills/DockDoor/compare/1.33...1.33.1
 [1.33]: https://github.com/ejbills/DockDoor/compare/1.32.2...1.33
 [1.32.2]: https://github.com/ejbills/DockDoor/compare/1.32.1...1.32.2
 [1.32.1]: https://github.com/ejbills/DockDoor/compare/1.32...1.32.1
