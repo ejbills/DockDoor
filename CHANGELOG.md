@@ -38,6 +38,26 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://dockdoor.net/donate</div>
 
+<a id="1.34"></a>
+# [Release 1.34](https://github.com/ejbills/DockDoor/releases/tag/1.34) - 2026-04-05
+
+## ✨ New Features
+- Vim-style navigation in window switcher
+  - Use H/J/K/L to move between windows
+  - Automatically disabled while searching
+- Custom background color for previews
+  - Pick any color via the new color picker
+  - Replaces the default blur or opaque background
+
+## 🔧 Improvements & Stability
+- Smoother media playback progress tracking
+  - Progress bar updates more reliably during playback
+  - Seeking snaps to the correct position instantly
+
+
+[Changes][1.34]
+
+
 <a id="1.33.1"></a>
 # [Release 1.33.1](https://github.com/ejbills/DockDoor/releases/tag/1.33.1) - 2026-04-05
 
@@ -2001,6 +2021,7 @@ v1.0
 [Changes][releases]
 
 
+[1.34]: https://github.com/ejbills/DockDoor/compare/1.33.1...1.34
 [1.33.1]: https://github.com/ejbills/DockDoor/compare/1.33...1.33.1
 [1.33]: https://github.com/ejbills/DockDoor/compare/1.32.2...1.33
 [1.32.2]: https://github.com/ejbills/DockDoor/compare/1.32.1...1.32.2
