@@ -25,9 +25,7 @@
 		3A105FD92C1C049E0015EC66 /* dockStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A105FD82C1C049E0015EC66 /* dockStyle.swift */; };
 		3A105FDD2C1C0EE20015EC66 /* DynStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A105FDC2C1C0EE20015EC66 /* DynStack.swift */; };
 		3A1622982C8BF71000D318EE /* SwiftUIWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A1622972C8BF71000D318EE /* SwiftUIWindow.swift */; };
-		3A1622A32C8BFF3800D318EE /* Pow in Frameworks */ = {isa = PBXBuildFile; productRef = 3A1622A22C8BFF3800D318EE /* Pow */; };
 		3A1622B52C8C09A700D318EE /* AccentButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A1622B42C8C09A700D318EE /* AccentButton.swift */; };
-		3A1622B82C8C0EE200D318EE /* Kroma in Frameworks */ = {isa = PBXBuildFile; productRef = 3A1622B72C8C0EE200D318EE /* Kroma */; };
 		3A1622BA2C8C0FF100D318EE /* NoBtnStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A1622B92C8C0FF100D318EE /* NoBtnStyle.swift */; };
 		3A1622BC2C8C1B8600D318EE /* FirstTimeViewAppIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A1622BB2C8C1B8600D318EE /* FirstTimeViewAppIcon.swift */; };
 		3A1622C12C8D57AF00D318EE /* PermissionsChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A1622C02C8D57AF00D318EE /* PermissionsChecker.swift */; };
@@ -60,7 +58,6 @@
 		B376D66B467C4587915220BC80D3B9CB /* ScriptCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = F098F8107F464776B5C18294427CAECD /* ScriptCommands.swift */; };
 		B3C9F20484F14266B941AFB170B66530 /* MediaRemoteService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC298B81953848F481EE849906E0AE77 /* MediaRemoteService.swift */; };
 		B84941090B484695B105D967 /* SettingsGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4258675B29E4A22ACF92845 /* SettingsGroup.swift */; };
-		BC531F7D6159457386B0B9A594D74E0C /* SettingsMockPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6BF9BDC596A48798C66EA25EBAA85EE /* SettingsMockPreview.swift */; };
 		BB0036D02D24AAD20072C61E /* CGPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0036CF2D24AAD10072C61E /* CGPoint.swift */; };
 		BB04405B2C77A013009F1D33 /* GradientColorPaletteSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB04405A2C77A011009F1D33 /* GradientColorPaletteSettings.swift */; };
 		BB04405E2C77A87F009F1D33 /* PreferencesProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB04405D2C77A87E009F1D33 /* PreferencesProtocol.swift */; };
@@ -186,6 +183,7 @@
 		BBFAD73A2C287A9C0092F5F1 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = BBFAD7392C287A9C0092F5F1 /* Sparkle */; };
 		BBFAD73C2C287C770092F5F1 /* UpdateSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBFAD73B2C287C770092F5F1 /* UpdateSettingsView.swift */; };
 		BC0F8F0EB2D94C2499CACB3CD7EAE3FC /* KeyCaptureButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FD74FFBE5824DE3919DDDD461D39E30 /* KeyCaptureButton.swift */; };
+		BC531F7D6159457386B0B9A594D74E0C /* SettingsMockPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6BF9BDC596A48798C66EA25EBAA85EE /* SettingsMockPreview.swift */; };
 		C119BDF22C2AFA7600E06E18 /* WindowSwitcherSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C119BDF12C2AFA7600E06E18 /* WindowSwitcherSettingsView.swift */; };
 		C3D4E5F6789012345678901B /* ActiveAppIndicatorDockDetection.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4E5F6789012345678901234 /* ActiveAppIndicatorDockDetection.swift */; };
 		C71AFDC5AA42466BA6ACF360 /* DockPreviewAppearanceSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47CABF9DD43A4C468597DEFB /* DockPreviewAppearanceSection.swift */; };
@@ -262,6 +260,7 @@
 		B056906A7ACD4903BD5E1627B359AE2C /* AdvancedSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedSettingsView.swift; sourceTree = "<group>"; };
 		B2C3D4E5F67890123456789A /* ActiveAppIndicatorWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveAppIndicatorWindow.swift; sourceTree = "<group>"; };
 		B2C3D4E5F6A890123456789B /* EnabledButtonsCheckboxes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnabledButtonsCheckboxes.swift; sourceTree = "<group>"; };
+		B6BF9BDC596A48798C66EA25EBAA85EE /* SettingsMockPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsMockPreview.swift; sourceTree = "<group>"; };
 		B8E0D699507444D3985957B6 /* WindowSwitcherGesturesSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowSwitcherGesturesSection.swift; sourceTree = "<group>"; };
 		BB0036CF2D24AAD10072C61E /* CGPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGPoint.swift; sourceTree = "<group>"; };
 		BB04405A2C77A011009F1D33 /* GradientColorPaletteSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientColorPaletteSettings.swift; sourceTree = "<group>"; };
@@ -392,7 +391,6 @@
 		E3584B7313E241EF997A4EE5 /* AdvancedAppearanceSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedAppearanceSection.swift; sourceTree = "<group>"; };
 		F098F8107F464776B5C18294427CAECD /* ScriptCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptCommands.swift; sourceTree = "<group>"; };
 		F4258675B29E4A22ACF92845 /* SettingsGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsGroup.swift; sourceTree = "<group>"; };
-		B6BF9BDC596A48798C66EA25EBAA85EE /* SettingsMockPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsMockPreview.swift; sourceTree = "<group>"; };
 		F6AA4630D2D54CD7AB622B27 /* CmdKeyShortcutsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CmdKeyShortcutsSection.swift; sourceTree = "<group>"; };
 		FB59EE0D7419468CABBAD220 /* CmdTabAppearanceSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CmdTabAppearanceSection.swift; sourceTree = "<group>"; };
 		FCF95019606449008856E149 /* SettingsLinkRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsLinkRow.swift; sourceTree = "<group>"; };
@@ -405,11 +403,9 @@
 			files = (
 				BBBD4AF82C8D71560074FFCF /* ConfettiSwiftUI in Frameworks */,
 				BB33E68C2C24C72F00A21D69 /* LaunchAtLogin in Frameworks */,
-				3A1622A32C8BFF3800D318EE /* Pow in Frameworks */,
 				BBFAD73A2C287A9C0092F5F1 /* Sparkle in Frameworks */,
 				BB3968002C2A6C44004F1AB6 /* SmoothGradient in Frameworks */,
 				BB1CBD5B2C1BA8DC003969BC /* Defaults in Frameworks */,
-				3A1622B82C8C0EE200D318EE /* Kroma in Frameworks */,
 				BB5C36562F6CEE9E00BE947F /* MediaRemoteAdapter in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -901,8 +897,6 @@
 				BB33E68B2C24C72F00A21D69 /* LaunchAtLogin */,
 				BBFAD7392C287A9C0092F5F1 /* Sparkle */,
 				BB3967FF2C2A6C44004F1AB6 /* SmoothGradient */,
-				3A1622A22C8BFF3800D318EE /* Pow */,
-				3A1622B72C8C0EE200D318EE /* Kroma */,
 				BBBD4AF72C8D71560074FFCF /* ConfettiSwiftUI */,
 				BB5C36552F6CEE9E00BE947F /* MediaRemoteAdapter */,
 			);
@@ -941,8 +935,6 @@
 				BB33E68A2C24C72F00A21D69 /* XCRemoteSwiftPackageReference "LaunchAtLogin-Modern" */,
 				BBFAD7382C287A9C0092F5F1 /* XCRemoteSwiftPackageReference "Sparkle" */,
 				BB3967FE2C2A6C44004F1AB6 /* XCRemoteSwiftPackageReference "SmoothGradient" */,
-				3A1622A12C8BFF3800D318EE /* XCRemoteSwiftPackageReference "Pow" */,
-				3A1622B62C8C0EE200D318EE /* XCRemoteSwiftPackageReference "Kroma" */,
 				BBBD4AF62C8D71560074FFCF /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */,
 				BB5C36542F6CEE9E00BE947F /* XCRemoteSwiftPackageReference "mediaremote-adapter" */,
 			);
@@ -1430,22 +1422,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		3A1622A12C8BFF3800D318EE /* XCRemoteSwiftPackageReference "Pow" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/EmergeTools/Pow.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.4;
-			};
-		};
-		3A1622B62C8C0EE200D318EE /* XCRemoteSwiftPackageReference "Kroma" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/kaishin/Kroma.git";
-			requirement = {
-				branch = main;
-				kind = branch;
-			};
-		};
 		BB1CBD592C1BA8DC003969BC /* XCRemoteSwiftPackageReference "Defaults" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/sindresorhus/Defaults";
@@ -1497,16 +1473,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		3A1622A22C8BFF3800D318EE /* Pow */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 3A1622A12C8BFF3800D318EE /* XCRemoteSwiftPackageReference "Pow" */;
-			productName = Pow;
-		};
-		3A1622B72C8C0EE200D318EE /* Kroma */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 3A1622B62C8C0EE200D318EE /* XCRemoteSwiftPackageReference "Kroma" */;
-			productName = Kroma;
-		};
 		BB1CBD5A2C1BA8DC003969BC /* Defaults */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = BB1CBD592C1BA8DC003969BC /* XCRemoteSwiftPackageReference "Defaults" */;

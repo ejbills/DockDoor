@@ -49,6 +49,7 @@ struct WindowPreviewHoverContainer: View {
     let updateAvailable: Bool
     let embeddedContentType: EmbeddedContentType
     let hasScreenRecordingPermission: Bool
+    let appearanceOverride: PreviewAppearanceSettings?
 
     @ObservedObject var previewStateCoordinator: PreviewStateCoordinator
 
@@ -117,7 +118,8 @@ struct WindowPreviewHoverContainer: View {
          mockPreviewActive: Bool,
          updateAvailable: Bool,
          embeddedContentType: EmbeddedContentType = .none,
-         hasScreenRecordingPermission: Bool)
+         hasScreenRecordingPermission: Bool,
+         appearanceOverride: PreviewAppearanceSettings? = nil)
     {
         self.appName = appName
         self.onWindowTap = onWindowTap
@@ -131,6 +133,7 @@ struct WindowPreviewHoverContainer: View {
         self.updateAvailable = updateAvailable
         self.embeddedContentType = embeddedContentType
         self.hasScreenRecordingPermission = hasScreenRecordingPermission
+        self.appearanceOverride = appearanceOverride
     }
 
     private var minimumEmbeddedWidth: CGFloat {
@@ -647,7 +650,7 @@ struct WindowPreviewHoverContainer: View {
         currentDimensionsMapForPreviews: [Int: WindowDimensions]
     ) -> some View {
         let cachedFilteredIndices = filteredWindowIndices()
-        let appearance = PreviewAppearanceSettings.resolve(
+        let appearance = appearanceOverride ?? PreviewAppearanceSettings.resolve(
             windowSwitcherActive: previewStateCoordinator.windowSwitcherActive,
             dockPosition: dockPosition
         )
@@ -1042,7 +1045,7 @@ struct WindowPreviewHoverContainer: View {
             return itemsToProcess.isEmpty ? [[]] : [itemsToProcess]
         }
 
-        if mockPreviewActive {
+        if mockPreviewActive, previewStateCoordinator.windowSwitcherActive {
             maxRows = 1
         }
 

@@ -6,6 +6,7 @@ struct CmdTabSettingsView: View {
     @Default(.cmdTabCycleKey) var cmdTabCycleKey
     @Default(.cmdTabBackwardCycleKey) var cmdTabBackwardCycleKey
     @Default(.showWindowsFromCurrentSpaceOnlyInCmdTab) var showWindowsFromCurrentSpaceOnlyInCmdTab
+    @Default(.showWindowsFromCurrentMonitorOnlyInCmdTab) var showWindowsFromCurrentMonitorOnlyInCmdTab
     @Default(.cmdTabSortOrder) var cmdTabSortOrder
     @Default(.cmdTabAutoSelectFirstWindow) var cmdTabAutoSelectFirstWindow
     @Default(.includeHiddenWindowsInCmdTab) var includeHiddenWindowsInCmdTab
@@ -17,6 +18,7 @@ struct CmdTabSettingsView: View {
 
                 if enableCmdTabEnhancements {
                     configurationSection
+                    windowDisplaySection
 
                     SettingsMockPreview(context: .cmdTab)
 
@@ -77,14 +79,28 @@ struct CmdTabSettingsView: View {
                     }
                 }
 
+                Toggle(isOn: $cmdTabAutoSelectFirstWindow) { Text("Automatically select first window") }
+                Text("When Cmd+Tab opens, highlight the first window preview automatically.")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .padding(.leading, 20)
+            }
+        }
+    }
+
+    // MARK: - Window Display
+
+    private var windowDisplaySection: some View {
+        SettingsGroup(header: "Window Display") {
+            VStack(alignment: .leading, spacing: 10) {
                 Toggle(isOn: $showWindowsFromCurrentSpaceOnlyInCmdTab) { Text("Show windows from current Space only") }
                 Text("Only display windows that are in the current virtual desktop/Space.")
                     .font(.caption)
                     .foregroundColor(.secondary)
                     .padding(.leading, 20)
 
-                Toggle(isOn: $cmdTabAutoSelectFirstWindow) { Text("Automatically select first window") }
-                Text("When Cmd+Tab opens, highlight the first window preview automatically.")
+                Toggle(isOn: $showWindowsFromCurrentMonitorOnlyInCmdTab) { Text("Show windows from current monitor only") }
+                Text("Only display windows that are on the same display as the mouse cursor.")
                     .font(.caption)
                     .foregroundColor(.secondary)
                     .padding(.leading, 20)

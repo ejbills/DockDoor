@@ -71,6 +71,10 @@ private class WindowSwitchingCoordinator {
             windows = WindowUtil.filterWindowsByCurrentSpace(windows)
         }
 
+        if mode == .allWindows, Defaults[.showWindowsFromCurrentMonitorOnlyInSwitcher] {
+            windows = WindowUtil.filterWindowsByCurrentMonitor(windows)
+        }
+
         let filterByApp = (mode == .activeAppOnly || mode == .activeAppCurrentSpace)
             || (mode == .allWindows && Defaults[.limitSwitcherToFrontmostApp])
         if filterByApp {

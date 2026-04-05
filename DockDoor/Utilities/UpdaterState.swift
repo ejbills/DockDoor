@@ -152,7 +152,7 @@ final class UpdaterState: NSObject, SPUUpdaterDelegate, ObservableObject {
                 case .onLatestVersion, .onNewerThanLatestVersion:
                     self.updateStatus = .noUpdates
                     return
-                case .systemIsTooOld, .systemIsTooNew, .unknown:
+                case .systemIsTooOld, .systemIsTooNew, .hardwareDoesNotSupportARM64, .unknown:
                     break // fall through to error handling below
                 @unknown default:
                     break

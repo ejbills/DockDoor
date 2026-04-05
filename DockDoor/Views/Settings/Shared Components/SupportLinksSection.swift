@@ -47,7 +47,7 @@ struct SupportLinksSection: View {
                 title: "Contribute Translation",
                 description: "Help make DockDoor available in your language",
                 icon: "globe",
-                destination: URL(string: "https://crowdin.com/project/dockdoor/invite?h=895e3c085646d3c07fa36a97044668e02149115")!,
+                destination: URL(string: "https://crowdin.com/project/dockdoor")!,
                 iconColor: .blue
             )
 

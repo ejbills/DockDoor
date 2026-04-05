@@ -134,6 +134,10 @@ extension DockObserver {
             cachedWindows = WindowUtil.filterWindowsByCurrentSpace(cachedWindows)
         }
 
+        if Defaults[.showWindowsFromCurrentMonitorOnlyInCmdTab] {
+            cachedWindows = WindowUtil.filterWindowsByCurrentMonitor(cachedWindows)
+        }
+
         if !Defaults[.includeHiddenWindowsInCmdTab] {
             cachedWindows = cachedWindows.filter { !$0.isHidden && !$0.isMinimized }
         }
@@ -175,6 +179,10 @@ extension DockObserver {
 
                     if Defaults[.showWindowsFromCurrentSpaceOnlyInCmdTab] {
                         windows = WindowUtil.filterWindowsByCurrentSpace(windows)
+                    }
+
+                    if Defaults[.showWindowsFromCurrentMonitorOnlyInCmdTab] {
+                        windows = WindowUtil.filterWindowsByCurrentMonitor(windows)
                     }
 
                     if !Defaults[.includeHiddenWindowsInCmdTab] {

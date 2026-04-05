@@ -123,9 +123,22 @@ func isValidCGWindowCandidate(_ id: CGWindowID, in candidates: [[String: AnyObje
     return true
 }
 
-// Returns the set of currently active Space IDs across all displays by
-// inspecting on-screen, layer-0 windows and unioning their space IDs.
+// Returns the set of currently active Space IDs across all displays.
 func currentActiveSpaceIDs() -> Set<Int> {
+    // Primary: ask macOS directly for the current space per display
+    if let displays = CGSCopyManagedDisplaySpaces(CGSMainConnectionID()) as? [[String: AnyObject]] {
+        var result = Set<Int>()
+        for display in displays {
+            if let currentSpace = display["Current Space"] as? [String: AnyObject],
+               let spaceID = (currentSpace["ManagedSpaceID"] as? NSNumber)?.intValue
+            {
+                result.insert(spaceID)
+            }
+        }
+        if !result.isEmpty { return result }
+    }
+
+    // Fallback: infer from on-screen windows
     var result = Set<Int>()
     guard let list = CGWindowListCopyWindowInfo([.excludeDesktopElements], kCGNullWindowID) as? [[String: AnyObject]] else { return result }
     for desc in list {

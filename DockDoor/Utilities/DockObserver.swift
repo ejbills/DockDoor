@@ -294,6 +294,10 @@ final class DockObserver {
             cachedWindows = WindowUtil.filterWindowsByCurrentSpace(cachedWindows)
         }
 
+        if Defaults[.showWindowsFromCurrentMonitorOnly], !cachedWindows.isEmpty {
+            cachedWindows = WindowUtil.filterWindowsByCurrentMonitor(cachedWindows, mouseLocation: currentMouseLocation)
+        }
+
         if !Defaults[.includeHiddenWindowsInDockPreview] {
             cachedWindows = cachedWindows.filter { !$0.isHidden && !$0.isMinimized }
         }
@@ -338,6 +342,10 @@ final class DockObserver {
 
                 if Defaults[.showWindowsFromCurrentSpaceOnly] {
                     windows = WindowUtil.filterWindowsByCurrentSpace(windows)
+                }
+
+                if Defaults[.showWindowsFromCurrentMonitorOnly] {
+                    windows = WindowUtil.filterWindowsByCurrentMonitor(windows, mouseLocation: currentMouseLocation)
                 }
 
                 if !Defaults[.includeHiddenWindowsInDockPreview] {

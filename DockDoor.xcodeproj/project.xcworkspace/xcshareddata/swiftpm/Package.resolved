@@ -1,5 +1,5 @@
 {
-  "originHash" : "1b261da7acee249a5defec03b08f927083532032ac200d932e37ccbe891cb52c",
+  "originHash" : "25f40b762215a3088477e922d70d7d4725c1d13ef524d58154df623535380736",
   "pins" : [
     {
       "identity" : "confettiswiftui",
@@ -17,15 +17,6 @@
       "state" : {
         "branch" : "main",
         "revision" : "5bfac4928f000fabdbef7e4ed0251399bb0841c9"
-      }
-    },
-    {
-      "identity" : "kroma",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/kaishin/Kroma.git",
-      "state" : {
-        "branch" : "main",
-        "revision" : "d8aa3c173d23cf602a97b0648c9e240b9a86cbc4"
       }
     },
     {
@@ -47,15 +38,6 @@
       }
     },
     {
-      "identity" : "pow",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/EmergeTools/Pow.git",
-      "state" : {
-        "revision" : "a504eb6d144bcf49f4f33029a2795345cb39e6b4",
-        "version" : "1.0.5"
-      }
-    },
-    {
       "identity" : "smoothgradient",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/raymondjavaxx/SmoothGradient",
@@ -69,8 +51,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/sparkle-project/Sparkle",
       "state" : {
-        "revision" : "21d8df80440b1ca3b65fa82e40782f1e5a9e6ba2",
-        "version" : "2.9.0"
+        "revision" : "066e75a8b3e99962685d6a90cdd5293ebffd9261",
+        "version" : "2.9.1"
       }
     },
     {

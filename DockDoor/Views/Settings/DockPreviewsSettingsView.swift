@@ -4,6 +4,7 @@ import SwiftUI
 struct DockPreviewsSettingsView: View {
     @Default(.enableDockPreviews) var enableDockPreviews
     @Default(.showWindowsFromCurrentSpaceOnly) var showWindowsFromCurrentSpaceOnly
+    @Default(.showWindowsFromCurrentMonitorOnly) var showWindowsFromCurrentMonitorOnly
     @Default(.windowPreviewSortOrder) var windowPreviewSortOrder
     @Default(.keepPreviewOnAppTerminate) var keepPreviewOnAppTerminate
     @Default(.groupAppInstancesInDock) var groupAppInstancesInDock
@@ -56,6 +57,12 @@ struct DockPreviewsSettingsView: View {
             VStack(alignment: .leading, spacing: 10) {
                 Toggle(isOn: $showWindowsFromCurrentSpaceOnly) { Text("Show windows from current Space only") }
                 Text("Only display windows that are in the current virtual desktop/Space.")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .padding(.leading, 20)
+
+                Toggle(isOn: $showWindowsFromCurrentMonitorOnly) { Text("Show windows from current monitor only") }
+                Text("Only display windows that are on the same display as the Dock icon you're hovering.")
                     .font(.caption)
                     .foregroundColor(.secondary)
                     .padding(.leading, 20)

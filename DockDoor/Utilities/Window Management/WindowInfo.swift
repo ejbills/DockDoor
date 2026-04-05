@@ -12,6 +12,7 @@ struct WindowInfo: Identifiable, Hashable {
     var appAxElement: AXUIElement
     var closeButton: AXUIElement?
     var spaceID: Int?
+    var screenIdentifier: String?
     var lastAccessedTime: Date
     var creationTime: Date
     var imageCapturedTime: Date
@@ -20,7 +21,7 @@ struct WindowInfo: Identifiable, Hashable {
 
     private var _scWindow: SCWindow?
 
-    init(windowProvider: WindowPropertiesProviding, app: NSRunningApplication, image: CGImage?, axElement: AXUIElement, appAxElement: AXUIElement, closeButton: AXUIElement?, lastAccessedTime: Date, creationTime: Date? = nil, imageCapturedTime: Date? = nil, spaceID: Int? = nil, isMinimized: Bool, isHidden: Bool) {
+    init(windowProvider: WindowPropertiesProviding, app: NSRunningApplication, image: CGImage?, axElement: AXUIElement, appAxElement: AXUIElement, closeButton: AXUIElement?, lastAccessedTime: Date, creationTime: Date? = nil, imageCapturedTime: Date? = nil, spaceID: Int? = nil, screenIdentifier: String? = nil, isMinimized: Bool, isHidden: Bool) {
         id = windowProvider.windowID
         self.windowProvider = windowProvider
         self.app = app
@@ -30,6 +31,7 @@ struct WindowInfo: Identifiable, Hashable {
         self.appAxElement = appAxElement
         self.closeButton = closeButton
         self.spaceID = spaceID
+        self.screenIdentifier = screenIdentifier
         self.lastAccessedTime = lastAccessedTime
         self.creationTime = creationTime ?? lastAccessedTime
         self.imageCapturedTime = imageCapturedTime ?? lastAccessedTime
