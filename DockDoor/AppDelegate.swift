@@ -100,6 +100,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let seeder = WindowSeeder()
         seeder.run()
         windowSeeder = seeder
+
+        if Defaults[.reopenSettingsAfterRestart] {
+            Defaults[.reopenSettingsAfterRestart] = false
+            openSettingsWindow(nil)
+        }
     }
 
     func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {

@@ -1,5 +1,6 @@
 import ApplicationServices
 import Cocoa
+import Defaults
 
 // Minimal provider used when we only have a CGWindowID (no SCWindow available)
 struct AXFallbackProvider: WindowPropertiesProviding {
@@ -95,7 +96,8 @@ func isValidAXWindowCandidate(_ axWindow: AXUIElement) -> Bool {
            ![kAXStandardWindowSubrole, kAXDialogSubrole].contains(subrole)
         { return false }
         if let s = try? axWindow.size(), let p = try? axWindow.position() {
-            if s == .zero || s.width < AXMinWindowSize.width || s.height < AXMinWindowSize.height { return false }
+            if s == .zero { return false }
+            if !Defaults[.disableMinWindowSizeFilter], s.width < AXMinWindowSize.width || s.height < AXMinWindowSize.height { return false }
             if !p.x.isFinite || !p.y.isFinite { return false }
         }
         return true
