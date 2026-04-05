@@ -1,6 +1,5 @@
 import AppKit
 import Combine
-import Defaults
 import Foundation
 import MediaRemoteAdapter
 
@@ -16,37 +15,53 @@ final class MediaRemoteService: ObservableObject {
     @Published private(set) var album: String = ""
     @Published private(set) var artwork: NSImage?
     @Published private(set) var isPlaying: Bool = false
+    @Published private(set) var playbackRate: Double = 0
     @Published private(set) var elapsedTime: TimeInterval = 0
     @Published private(set) var duration: TimeInterval = 0
 
     let trackInfoDidChange = PassthroughSubject<Void, Never>()
 
-    private var lastTrackIdentifier: String = ""
+    private var isActive = false
+    private var lastSeekTime: Date?
+    private let seekDebounceInterval: TimeInterval = 1.5
 
-    var hasActiveMedia: Bool { title.isEmpty == false }
+    var hasActiveMedia: Bool { !title.isEmpty }
 
     var isUniversalSource: Bool {
         guard let id = activeBundleIdentifier else { return false }
         return id != spotifyAppIdentifier && id != appleMusicAppIdentifier
     }
 
-    private init() {}
+    private init() {
+        setupController()
+    }
 
-    func start() {
+    private func setupController() {
         controller.onTrackInfoReceived = { [weak self] trackInfo in
-            Task { @MainActor in
+            DispatchQueue.main.async {
                 self?.handleTrackInfo(trackInfo)
             }
         }
-        controller.onPlaybackTimeUpdate = { [weak self] elapsed in
+        controller.onPlaybackTimeUpdate = { [weak self] time in
             Task { @MainActor in
-                self?.elapsedTime = elapsed
+                guard let self else { return }
+                let shouldIgnore = self.lastSeekTime.map { Date().timeIntervalSince($0) < self.seekDebounceInterval } ?? false
+                if !shouldIgnore {
+                    self.elapsedTime = time
+                }
             }
         }
+    }
+
+    func activate() {
+        guard !isActive else { return }
+        isActive = true
         controller.startListening()
     }
 
-    func stop() {
+    func deactivate() {
+        guard isActive else { return }
+        isActive = false
         controller.stopListening()
     }
 
@@ -65,14 +80,17 @@ final class MediaRemoteService: ObservableObject {
     }
 
     func nextTrack() {
+        elapsedTime = 0
         controller.nextTrack()
     }
 
     func previousTrack() {
+        elapsedTime = 0
         controller.previousTrack()
     }
 
     func seek(to seconds: TimeInterval) {
+        lastSeekTime = Date()
         elapsedTime = seconds
         controller.setTime(seconds: seconds)
     }
@@ -85,23 +103,48 @@ final class MediaRemoteService: ObservableObject {
             return
         }
 
-        activeBundleIdentifier = payload.bundleIdentifier
-        activeAppName = payload.applicationName
-        isPlaying = payload.isPlaying ?? false
-        duration = (payload.durationMicros ?? 0) / 1_000_000.0
+        let incomingRate = payload.playbackRate ?? ((payload.isPlaying ?? false) ? 1.0 : 0.0)
+        let incomingDuration = (payload.durationMicros ?? 0) / 1_000_000.0
+        let incomingElapsed = payload.currentElapsedTime ?? 0
 
-        let newIdentifier = payload.uniqueIdentifier
-        let trackChanged = newIdentifier != lastTrackIdentifier
-        lastTrackIdentifier = newIdentifier
+        let shouldIgnorePosition = lastSeekTime.map { Date().timeIntervalSince($0) < seekDebounceInterval } ?? false
 
-        title = payload.title ?? ""
-        artist = payload.artist ?? ""
-        album = payload.album ?? ""
+        let sameSource = payload.bundleIdentifier == activeBundleIdentifier
+        let sameTrack = sameSource && payload.title == title && payload.artist == artist
+        let resolvedArtwork: NSImage? = if let incoming = payload.artwork {
+            incoming
+        } else if sameTrack || sameSource {
+            artwork
+        } else {
+            nil
+        }
 
-        if trackChanged {
-            artwork = payload.artwork
-        } else if let incoming = payload.artwork, artwork == nil {
-            artwork = incoming
+        let metadataChanged = payload.title != title ||
+            payload.artist != artist ||
+            payload.album != album ||
+            payload.applicationName != activeAppName ||
+            payload.bundleIdentifier != activeBundleIdentifier ||
+            incomingDuration != duration ||
+            incomingRate != playbackRate ||
+            resolvedArtwork !== artwork
+
+        if metadataChanged {
+            activeBundleIdentifier = payload.bundleIdentifier
+            activeAppName = payload.applicationName
+            title = payload.title ?? ""
+            artist = payload.artist ?? ""
+            album = payload.album ?? ""
+            playbackRate = incomingRate
+            isPlaying = incomingRate > 0
+            duration = incomingDuration
+            artwork = resolvedArtwork
+        } else if incomingRate != playbackRate {
+            playbackRate = incomingRate
+            isPlaying = incomingRate > 0
+        }
+
+        if !shouldIgnorePosition {
+            elapsedTime = incomingElapsed
         }
 
         trackInfoDidChange.send()
@@ -115,8 +158,8 @@ final class MediaRemoteService: ObservableObject {
         album = ""
         artwork = nil
         isPlaying = false
+        playbackRate = 0
         elapsedTime = 0
         duration = 0
-        lastTrackIdentifier = ""
     }
 }

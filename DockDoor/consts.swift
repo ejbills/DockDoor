@@ -29,7 +29,7 @@ extension Defaults.Keys {
     static let previewHeight = Key<CGFloat>("previewHeight", default: 187.5)
     static let lockAspectRatio = Key<Bool>("lockAspectRatio", default: true)
     static let bufferFromDock = Key<CGFloat>("bufferFromDock", default: CoreDockIsMagnificationEnabled() ? -25 : DockUtils.getDockPosition() == .right ? -18 : -20)
-    static let globalPaddingMultiplier = Key<CGFloat>("globalPaddingMultiplier", default: 1.0)
+    static let globalPaddingMultiplier = Key<CGFloat>("globalPaddingMultiplier", default: 0.7)
     static let hoverWindowOpenDelay = Key<CGFloat>("openDelay", default: 0.2)
     static let useDelayOnlyForInitialOpen = Key<Bool>("useDelayOnlyForInitialOpen", default: false)
     static let anchorDockPreviewPosition = Key<Bool>("anchorDockPreviewPosition", default: true)

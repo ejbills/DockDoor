@@ -292,6 +292,7 @@ final class MediaInfo: ObservableObject {
     }
 
     func nextTrack() {
+        currentTime = 0
         if isUsingMediaRemote {
             MediaRemoteService.shared.nextTrack()
         } else {
@@ -300,6 +301,7 @@ final class MediaInfo: ObservableObject {
     }
 
     func previousTrack() {
+        currentTime = 0
         if isUsingMediaRemote {
             MediaRemoteService.shared.previousTrack()
         } else {
