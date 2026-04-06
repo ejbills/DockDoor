@@ -806,7 +806,7 @@ class KeybindHelper {
 
             switch keyCode {
             case Int64(kVK_LeftArrow), Int64(kVK_RightArrow), Int64(kVK_UpArrow), Int64(kVK_DownArrow):
-                if !flags.intersection([.maskControl, .maskCommand, .maskAlternate, .maskShift]).isEmpty {
+                if Defaults[.passArrowsThroughToSystem], flags.contains(.maskControl) {
                     return (false, nil)
                 }
                 let dir: ArrowDirection = switch keyCode {

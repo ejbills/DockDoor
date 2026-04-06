@@ -13,6 +13,7 @@ struct WindowSwitcherKeybindSection: View {
     @Default(.switcherBackwardKeyCode) var switcherBackwardKeyCode
     @Default(.windowSwitcherSelectionKeyCode) var selectionKeyCode
     @Default(.enableVimMotions) var enableVimMotions
+    @Default(.passArrowsThroughToSystem) var passArrowsThroughToSystem
 
     @StateObject private var keybindModel = KeybindModel()
     @State private var showingAddBlacklistAppSheet = false
@@ -76,6 +77,14 @@ struct WindowSwitcherKeybindSection: View {
                         Text("Enable Vim Motions")
                     }
                     Text("Use H/J/K/L keys to navigate left/down/up/right in the window switcher. Disabled while search is focused.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                        .padding(.leading, 20)
+
+                    Toggle(isOn: $passArrowsThroughToSystem) {
+                        Text("Pass Arrow Keys Through to System")
+                    }
+                    Text("When enabled, Ctrl+Arrow keys will be passed through to the system instead of navigating the switcher. Useful for Spaces switching.")
                         .font(.caption)
                         .foregroundColor(.secondary)
                         .padding(.leading, 20)
