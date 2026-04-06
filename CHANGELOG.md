@@ -38,6 +38,17 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://dockdoor.net/donate</div>
 
+<a id="1.34.1"></a>
+# [Release 1.34.1](https://github.com/ejbills/DockDoor/releases/tag/1.34.1) - 2026-04-06
+
+## 🐛 Bug Fixes
+- Arrow keys work in window switcher again
+  - New option to pass Ctrl+Arrow to macOS Spaces in window switcher keybind settings, if required
+
+
+[Changes][1.34.1]
+
+
 <a id="1.34"></a>
 # [Release 1.34](https://github.com/ejbills/DockDoor/releases/tag/1.34) - 2026-04-05
 
@@ -2021,6 +2032,7 @@ v1.0
 [Changes][releases]
 
 
+[1.34.1]: https://github.com/ejbills/DockDoor/compare/1.34...1.34.1
 [1.34]: https://github.com/ejbills/DockDoor/compare/1.33.1...1.34
 [1.33.1]: https://github.com/ejbills/DockDoor/compare/1.33...1.33.1
 [1.33]: https://github.com/ejbills/DockDoor/compare/1.32.2...1.33
