@@ -215,7 +215,6 @@ final class DockLocker {
     private var healthCheckTimer: Timer?
     private var cachedTriggerZones: [TriggerZone] = []
     private var settingsObserver: Defaults.Observation?
-    private var screenSettingsObserver: Defaults.Observation?
     private var screenObserver: Any?
 
     init() {
@@ -224,14 +223,12 @@ final class DockLocker {
         startHealthCheckTimer()
         observeSettings()
         observeScreenChanges()
-        reanchorDock()
     }
 
     deinit {
         healthCheckTimer?.invalidate()
         removeEventTap()
         settingsObserver?.invalidate()
-        screenSettingsObserver?.invalidate()
         if let screenObserver {
             NotificationCenter.default.removeObserver(screenObserver)
         }
@@ -241,7 +238,6 @@ final class DockLocker {
         removeEventTap()
         refreshTriggerZones()
         setupEventTap()
-        reanchorDock()
     }
 
     // MARK: - Event Tap
@@ -304,12 +300,14 @@ final class DockLocker {
             if zone.rect.contains(cursorPos) {
                 // Modify the event location in-place so all downstream consumers
                 // (including WindowServer/Dock) see the nudged position, not the original.
+                // Only modify the event — do NOT call CGWarpMouseCursorPosition here,
+                // as the warp generates a new mouseMoved event that re-enters this callback,
+                // causing a feedback loop that traps the cursor.
                 let nudgedPos = CGPoint(
                     x: cursorPos.x + zone.nudgeVector.dx,
                     y: cursorPos.y + zone.nudgeVector.dy
                 )
                 event.location = nudgedPos
-                CGWarpMouseCursorPosition(nudgedPos)
                 return Unmanaged.passUnretained(event)
             }
         }
@@ -368,51 +366,6 @@ final class DockLocker {
         )
     }
 
-    // MARK: - Dock Reanchoring
-
-    private func reanchorDock() {
-        let lockedIdentifier = Defaults[.lockedDockScreenIdentifier]
-        guard !lockedIdentifier.isEmpty,
-              let lockedScreen = NSScreen.findScreen(byIdentifier: lockedIdentifier)
-        else { return }
-
-        let dockPosition = DockUtils.getDockPosition()
-        let cgFrame = lockedScreen.cgFrame
-
-        let targetPoint: CGPoint
-        switch dockPosition {
-        case .bottom:
-            targetPoint = CGPoint(x: cgFrame.midX, y: cgFrame.maxY - 1)
-        case .left:
-            targetPoint = CGPoint(x: cgFrame.minX + 1, y: cgFrame.midY)
-        case .right:
-            targetPoint = CGPoint(x: cgFrame.maxX - 1, y: cgFrame.midY)
-        default:
-            return
-        }
-
-        DispatchQueue.global(qos: .userInitiated).async {
-            guard let currentEvent = CGEvent(source: nil) else { return }
-            let savedPosition = currentEvent.location
-
-            // Disconnect cursor from mouse input during warp to prevent interference
-            CGAssociateMouseAndMouseCursorPosition(0)
-
-            CGWarpMouseCursorPosition(targetPoint)
-
-            // Post synthetic mouse move so WindowServer registers the position
-            if let moveEvent = CGEvent(mouseEventSource: nil, mouseType: .mouseMoved, mouseCursorPosition: targetPoint, mouseButton: .left) {
-                moveEvent.post(tap: .cghidEventTap)
-            }
-
-            usleep(150_000) // 150ms for Dock to migrate
-
-            // Restore cursor and re-associate with mouse input
-            CGWarpMouseCursorPosition(savedPosition)
-            CGAssociateMouseAndMouseCursorPosition(1)
-        }
-    }
-
     // MARK: - Observers
 
     private func observeSettings() {
@@ -421,13 +374,6 @@ final class DockLocker {
         ) { [weak self] in
             DispatchQueue.main.async {
                 self?.refreshTriggerZones()
-            }
-        }
-
-        // Only reanchor when the locked screen changes, not when the modifier key changes
-        screenSettingsObserver = Defaults.observe(.lockedDockScreenIdentifier) { [weak self] _ in
-            DispatchQueue.main.async {
-                self?.reanchorDock()
             }
         }
     }
@@ -454,6 +400,5 @@ final class DockLocker {
         }
 
         refreshTriggerZones()
-        reanchorDock()
     }
 }

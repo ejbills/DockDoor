@@ -63,6 +63,11 @@ struct DockLockingSettingsView: View {
                         .padding(.leading, 20)
                 }
 
+                Text("After changing the locked screen, move your cursor to the bottom of that screen to relocate the Dock.")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .padding(.leading, 20)
+
                 Picker("Bypass modifier key", selection: $dockLockOverrideModifier) {
                     ForEach(DockLockModifier.allCases, id: \.rawValue) { modifier in
                         Text(modifier.localizedName).tag(modifier.rawValue)
@@ -83,7 +88,7 @@ struct DockLockingSettingsView: View {
     private var noteSection: some View {
         SettingsNote(
             icon: "info.circle",
-            text: "Dock Locking is useful when \"Displays have separate Spaces\" is enabled in System Settings > Desktop & Dock. This prevents the Dock from jumping between monitors."
+            text: "Dock Locking is useful in a multi-monitor setup where \"Displays have separate Spaces\" is enabled in System Settings → Desktop & Dock → Mission Control. The Dock won't jump to another monitor while this feature is enabled."
         )
     }
 }
