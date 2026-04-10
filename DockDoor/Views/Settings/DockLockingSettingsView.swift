@@ -6,6 +6,11 @@ struct DockLockingSettingsView: View {
     @Default(.lockedDockScreenIdentifier) var lockedDockScreenIdentifier
     @Default(.dockLockOverrideModifier) var dockLockOverrideModifier
 
+    private var isLockedScreenDisconnected: Bool {
+        !lockedDockScreenIdentifier.isEmpty
+            && !NSScreen.screens.contains { $0.uniqueIdentifier() == lockedDockScreenIdentifier }
+    }
+
     var body: some View {
         BaseSettingsView {
             VStack(alignment: .leading, spacing: 16) {
@@ -46,27 +51,21 @@ struct DockLockingSettingsView: View {
                     ForEach(NSScreen.screens, id: \.self) { screen in
                         Text(screen.displayName).tag(screen.uniqueIdentifier())
                     }
-                    if !lockedDockScreenIdentifier.isEmpty,
-                       !NSScreen.screens.contains(where: { $0.uniqueIdentifier() == lockedDockScreenIdentifier })
-                    {
+                    if isLockedScreenDisconnected {
                         Text("Disconnected Display").tag(lockedDockScreenIdentifier)
                     }
                 }
                 .pickerStyle(.menu)
 
-                if !lockedDockScreenIdentifier.isEmpty,
-                   !NSScreen.screens.contains(where: { $0.uniqueIdentifier() == lockedDockScreenIdentifier })
-                {
+                if isLockedScreenDisconnected {
                     Text("This display is currently disconnected. Dock locking will be disabled until it reconnects.")
                         .font(.caption)
                         .foregroundColor(.secondary)
-                        .padding(.leading, 20)
                 }
 
                 Text("After changing the locked screen, move your cursor to the bottom of that screen to relocate the Dock.")
                     .font(.caption)
                     .foregroundColor(.secondary)
-                    .padding(.leading, 20)
 
                 Picker("Bypass modifier key", selection: $dockLockOverrideModifier) {
                     ForEach(DockLockModifier.allCases, id: \.rawValue) { modifier in
@@ -78,7 +77,6 @@ struct DockLockingSettingsView: View {
                 Text("Hold this key to temporarily allow the Dock to move freely.")
                     .font(.caption)
                     .foregroundColor(.secondary)
-                    .padding(.leading, 20)
             }
         }
     }

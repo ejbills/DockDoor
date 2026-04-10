@@ -2,7 +2,7 @@ import ApplicationServices
 import Cocoa
 import Defaults
 
-// MARK: - Geometry Types (testable, no system dependencies)
+// MARK: - Geometry Types
 
 struct TriggerZone: Equatable {
     let rect: CGRect
@@ -54,7 +54,7 @@ struct EdgeInterval: Equatable {
     }
 }
 
-// MARK: - Trigger Zone Calculation (pure geometry, testable)
+// MARK: - Trigger Zone Calculation
 
 enum DockLockerGeometry {
     private static let triggerDepth: CGFloat = 7
@@ -72,8 +72,6 @@ enum DockLockerGeometry {
               lockedScreenIndex < screenFrames.count
         else { return [] }
 
-        // Only bottom, left, and right dock positions are supported on modern macOS.
-        // .top, .cmdTab, .cli, and .unknown do not have dock trigger edges to block.
         guard dockPosition == .bottom || dockPosition == .left || dockPosition == .right else {
             return []
         }
@@ -103,7 +101,6 @@ enum DockLockerGeometry {
         return zones
     }
 
-    /// Compute exposed intervals along the dock edge of a screen.
     static func exposedIntervals(
         for frame: CGRect,
         dockPosition: DockPosition,
@@ -212,21 +209,20 @@ enum DockLockerGeometry {
 final class DockLocker {
     private var eventTap: CFMachPort?
     private var runLoopSource: CFRunLoopSource?
-    private var healthCheckTimer: Timer?
     private var cachedTriggerZones: [TriggerZone] = []
     private var settingsObserver: Defaults.Observation?
     private var screenObserver: Any?
 
     init() {
         refreshTriggerZones()
-        setupEventTap()
-        startHealthCheckTimer()
+        if !cachedTriggerZones.isEmpty {
+            setupEventTap()
+        }
         observeSettings()
         observeScreenChanges()
     }
 
     deinit {
-        healthCheckTimer?.invalidate()
         removeEventTap()
         settingsObserver?.invalidate()
         if let screenObserver {
@@ -237,7 +233,9 @@ final class DockLocker {
     func reset() {
         removeEventTap()
         refreshTriggerZones()
-        setupEventTap()
+        if !cachedTriggerZones.isEmpty {
+            setupEventTap()
+        }
     }
 
     // MARK: - Event Tap
@@ -249,6 +247,10 @@ final class DockLocker {
             (1 << CGEventType.rightMouseDragged.rawValue) |
             (1 << CGEventType.otherMouseDragged.rawValue)
 
+        // Session-level head-insert: intercepts cursor position before WindowServer
+        // passes it to Dock. DockObserver uses HID-level tail-append for different
+        // reasons (observing raw clicks/scrolls); here we need to modify events
+        // before they reach the Dock trigger logic.
         guard let tap = CGEvent.tapCreate(
             tap: .cgSessionEventTap,
             place: .headInsertEventTap,
@@ -284,11 +286,11 @@ final class DockLocker {
     }
 
     private func eventTapCallback(proxy _: CGEventTapProxy, type: CGEventType, event: CGEvent) -> Unmanaged<CGEvent>? {
+        // reEnableIfNeeded handles tap re-enable on tapDisabledByTimeout
         if let passthrough = reEnableIfNeeded(tap: eventTap, type: type, event: event) {
             return passthrough
         }
 
-        // Check override modifier bypass
         let modifier = DockLockModifier(rawValue: Defaults[.dockLockOverrideModifier]) ?? .option
         if event.flags.contains(modifier.cgEventFlag) {
             return Unmanaged.passUnretained(event)
@@ -298,11 +300,7 @@ final class DockLocker {
 
         for zone in cachedTriggerZones {
             if zone.rect.contains(cursorPos) {
-                // Modify the event location in-place so all downstream consumers
-                // (including WindowServer/Dock) see the nudged position, not the original.
-                // Only modify the event — do NOT call CGWarpMouseCursorPosition here,
-                // as the warp generates a new mouseMoved event that re-enters this callback,
-                // causing a feedback loop that traps the cursor.
+                // Modify in-place; CGWarpMouseCursorPosition would re-enter the callback
                 let nudgedPos = CGPoint(
                     x: cursorPos.x + zone.nudgeVector.dx,
                     y: cursorPos.y + zone.nudgeVector.dy
@@ -313,26 +311,6 @@ final class DockLocker {
         }
 
         return Unmanaged.passUnretained(event)
-    }
-
-    // MARK: - Health Check
-
-    private func startHealthCheckTimer() {
-        healthCheckTimer?.invalidate()
-        healthCheckTimer = Timer.scheduledTimer(withTimeInterval: 5.0, repeats: true) { [weak self] _ in
-            self?.performHealthCheck()
-        }
-    }
-
-    private func performHealthCheck() {
-        if let eventTap {
-            if !CGEvent.tapIsEnabled(tap: eventTap) {
-                removeEventTap()
-                setupEventTap()
-            }
-        } else {
-            setupEventTap()
-        }
     }
 
     // MARK: - Trigger Zone Calculation
@@ -373,7 +351,13 @@ final class DockLocker {
             keys: .lockedDockScreenIdentifier, .dockLockOverrideModifier
         ) { [weak self] in
             DispatchQueue.main.async {
-                self?.refreshTriggerZones()
+                guard let self else { return }
+                self.refreshTriggerZones()
+                if self.cachedTriggerZones.isEmpty {
+                    self.removeEventTap()
+                } else if self.eventTap == nil {
+                    self.setupEventTap()
+                }
             }
         }
     }
@@ -393,12 +377,15 @@ final class DockLocker {
         if !lockedIdentifier.isEmpty,
            NSScreen.findScreen(byIdentifier: lockedIdentifier) == nil
         {
-            // Locked screen disconnected — disable locking. Identifier is preserved so user
-            // can re-enable without re-selecting the screen when it reconnects.
             Defaults[.enableDockLocking] = false
             return
         }
 
         refreshTriggerZones()
+        if cachedTriggerZones.isEmpty {
+            removeEventTap()
+        } else if eventTap == nil {
+            setupEventTap()
+        }
     }
 }
