@@ -16,6 +16,7 @@ struct WindowSwitcherBehaviorSettingsView: View {
     @Default(.showWindowsFromCurrentSpaceOnlyInSwitcher) var showWindowsFromCurrentSpaceOnlyInSwitcher
     @Default(.showWindowsFromCurrentMonitorOnlyInSwitcher) var showWindowsFromCurrentMonitorOnlyInSwitcher
     @Default(.windowSwitcherSortOrder) var windowSwitcherSortOrder
+    @Default(.windowSwitcherSortGroups) var windowSwitcherSortGroups
     @Default(.groupedAppsInSwitcher) var groupedAppsInSwitcher
     @Default(.windowSwitcherPlacementStrategy) var placementStrategy
     @Default(.pinnedScreenIdentifier) var pinnedScreenIdentifier
@@ -25,6 +26,9 @@ struct WindowSwitcherBehaviorSettingsView: View {
     @Default(.enableShiftWindowSwitcherPlacement) var enableShiftWindowSwitcherPlacement
 
     @State private var showGroupedAppsSheet: Bool = false
+    @State private var showSortGroupSheet: Bool = false
+    @State private var editingSortGroupIndex: Int?
+    @State private var draftSortGroup = WindowSwitcherSortGroup()
 
     var body: some View {
         BaseSettingsView {
@@ -49,6 +53,17 @@ struct WindowSwitcherBehaviorSettingsView: View {
                 selectedApps: $groupedAppsInSwitcher,
                 title: "Group Windows by App",
                 description: "Selected apps will show only their most recent window in the switcher.",
+                selectionMode: AppPickerSheet.SelectionMode.include
+            )
+        }
+        .sheet(isPresented: $showSortGroupSheet, onDismiss: commitSortGroupDraft) {
+            AppPickerSheet(
+                selectedApps: Binding(
+                    get: { draftSortGroup.bundleIdentifiers },
+                    set: { draftSortGroup.bundleIdentifiers = $0 }
+                ),
+                title: editingSortGroupIndex == nil ? "Create Custom Sort Group" : "Edit Custom Sort Group",
+                description: "Select at least two apps. Apps in the same sort group stay adjacent in the Window Switcher, and apps already used in another group stay with the first group.",
                 selectionMode: AppPickerSheet.SelectionMode.include
             )
         }
@@ -194,6 +209,89 @@ struct WindowSwitcherBehaviorSettingsView: View {
                     .font(.caption)
                     .foregroundColor(.secondary)
                     .padding(.leading, 20)
+
+                Divider()
+                    .padding(.vertical, 4)
+
+                VStack(alignment: .leading, spacing: 8) {
+                    HStack {
+                        Text("Custom app sort groups")
+                        Spacer()
+                        Button("Add Group") {
+                            startCreatingSortGroup()
+                        }
+                        .buttonStyle(AccentButtonStyle(small: true))
+                    }
+
+                    if windowSwitcherSortGroups.isEmpty {
+                        Text("No custom sort groups configured.")
+                            .foregroundColor(.secondary)
+                            .padding(.leading, 20)
+                    } else {
+                        VStack(alignment: .leading, spacing: 8) {
+                            ForEach(Array(windowSwitcherSortGroups.enumerated()), id: \.element.id) { index, group in
+                                HStack(alignment: .top, spacing: 12) {
+                                    VStack(alignment: .leading, spacing: 4) {
+                                        Text(sortGroupSummary(for: group))
+                                            .lineLimit(2)
+
+                                        Text(group.isPinned
+                                            ? "\(group.appCount) app\(group.appCount == 1 ? "" : "s") (pinned)"
+                                            : "\(group.appCount) app\(group.appCount == 1 ? "" : "s")")
+                                            .font(.caption)
+                                            .foregroundColor(.secondary)
+                                    }
+
+                                    Spacer()
+
+                                    Button(group.isPinned ? "Unpin" : "Pin") {
+                                        toggleSortGroupPin(at: index)
+                                    }
+                                    .buttonStyle(AccentButtonStyle(color: group.isPinned ? .orange : .accentColor, small: true))
+
+                                    Button("Edit") {
+                                        startEditingSortGroup(at: index)
+                                    }
+                                    .buttonStyle(AccentButtonStyle(small: true))
+
+                                    DangerButton(
+                                        action: {
+                                            removeSortGroup(at: index)
+                                        },
+                                        label: {
+                                            Text("Remove")
+                                        },
+                                        small: true
+                                    )
+                                }
+                                .padding(.leading, 20)
+                            }
+
+                            HStack {
+                                Spacer()
+                                DangerButton(action: clearSortGroups) {
+                                    Text("Clear All")
+                                }
+                            }
+                            .padding(.leading, 20)
+                        }
+                    }
+
+                    Text("When one app in a custom group appears in the sorted list, the rest of that group is kept next to it while preserving the selected sort order inside the group.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                        .padding(.leading, 20)
+
+                    Text("Pinned custom groups always stay at the top of the switcher, ahead of unpinned groups and ungrouped windows.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                        .padding(.leading, 20)
+
+                    Text("Each custom sort group needs at least two apps.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                        .padding(.leading, 20)
+                }
             }
         }
     }
@@ -300,5 +398,109 @@ struct WindowSwitcherBehaviorSettingsView: View {
             }
         }
         return name + (isMain ? " (Main)" : "")
+    }
+
+    private func startCreatingSortGroup() {
+        editingSortGroupIndex = nil
+        draftSortGroup = WindowSwitcherSortGroup()
+        showSortGroupSheet = true
+    }
+
+    private func startEditingSortGroup(at index: Int) {
+        guard windowSwitcherSortGroups.indices.contains(index) else { return }
+        editingSortGroupIndex = index
+        draftSortGroup = windowSwitcherSortGroups[index]
+        showSortGroupSheet = true
+    }
+
+    private func commitSortGroupDraft() {
+        defer {
+            editingSortGroupIndex = nil
+            draftSortGroup = WindowSwitcherSortGroup()
+        }
+
+        let trimmedBundleIdentifiers = uniqueBundleIdentifiers(from: draftSortGroup.bundleIdentifiers)
+        guard !trimmedBundleIdentifiers.isEmpty || editingSortGroupIndex != nil else { return }
+
+        var updatedGroups = windowSwitcherSortGroups
+
+        if let editingSortGroupIndex, updatedGroups.indices.contains(editingSortGroupIndex) {
+            if trimmedBundleIdentifiers.isEmpty {
+                updatedGroups.remove(at: editingSortGroupIndex)
+            } else {
+                updatedGroups[editingSortGroupIndex].bundleIdentifiers = trimmedBundleIdentifiers
+            }
+        } else if !trimmedBundleIdentifiers.isEmpty {
+            updatedGroups.append(WindowSwitcherSortGroup(bundleIdentifiers: trimmedBundleIdentifiers))
+        }
+
+        windowSwitcherSortGroups = normalizeSortGroups(updatedGroups)
+    }
+
+    private func normalizeSortGroups(_ groups: [WindowSwitcherSortGroup]) -> [WindowSwitcherSortGroup] {
+        var seenBundleIdentifiers = Set<String>()
+
+        return groups.compactMap { group in
+            let filteredBundleIdentifiers = group.bundleIdentifiers.filter { bundleIdentifier in
+                guard !bundleIdentifier.isEmpty else { return false }
+                return seenBundleIdentifiers.insert(bundleIdentifier).inserted
+            }
+
+            guard filteredBundleIdentifiers.count >= 2 else { return nil }
+
+            var updatedGroup = group
+            updatedGroup.bundleIdentifiers = filteredBundleIdentifiers
+            return updatedGroup
+        }
+    }
+
+    private func uniqueBundleIdentifiers(from bundleIdentifiers: [String]) -> [String] {
+        var seenBundleIdentifiers = Set<String>()
+        return bundleIdentifiers.filter { bundleIdentifier in
+            guard !bundleIdentifier.isEmpty else { return false }
+            return seenBundleIdentifiers.insert(bundleIdentifier).inserted
+        }
+    }
+
+    private func removeSortGroup(at index: Int) {
+        guard windowSwitcherSortGroups.indices.contains(index) else { return }
+        windowSwitcherSortGroups.remove(at: index)
+    }
+
+    private func toggleSortGroupPin(at index: Int) {
+        guard windowSwitcherSortGroups.indices.contains(index) else { return }
+        windowSwitcherSortGroups[index].isPinned.toggle()
+    }
+
+    private func clearSortGroups() {
+        windowSwitcherSortGroups.removeAll()
+    }
+
+    private func sortGroupSummary(for group: WindowSwitcherSortGroup) -> String {
+        let resolvedAppNames = group.bundleIdentifiers.map(resolveAppName(for:))
+        let previewNames = Array(resolvedAppNames.prefix(2))
+        let remainingCount = max(0, resolvedAppNames.count - previewNames.count)
+
+        if previewNames.isEmpty {
+            return "Unknown Apps"
+        }
+
+        if remainingCount > 0 {
+            return previewNames.joined(separator: ", ") + " + \(remainingCount) more"
+        }
+
+        return previewNames.joined(separator: ", ")
+    }
+
+    private func resolveAppName(for bundleIdentifier: String) -> String {
+        guard let appURL = NSWorkspace.shared.urlForApplication(withBundleIdentifier: bundleIdentifier),
+              let bundle = Bundle(url: appURL)
+        else {
+            return bundleIdentifier
+        }
+
+        return bundle.object(forInfoDictionaryKey: "CFBundleDisplayName") as? String ??
+            bundle.object(forInfoDictionaryKey: "CFBundleName") as? String ??
+            bundleIdentifier
     }
 }

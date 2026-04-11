@@ -1136,7 +1136,21 @@ extension WindowUtil {
 
     /// Centralized sorting for window switcher context (all apps windows)
     static func sortWindowsForSwitcher(_ windows: [WindowInfo]) -> [WindowInfo] {
-        sortWindowsWithOptions(windows, sortOrder: Defaults[.windowSwitcherSortOrder])
+        let sortedWindows = sortWindowsWithOptions(windows, sortOrder: Defaults[.windowSwitcherSortOrder])
+        return applyCustomSwitcherSortGroups(sortedWindows)
+    }
+
+    static func switcherSortGroupIndex(for bundleIdentifier: String?) -> Int? {
+        switcherSortGroupInfo(for: bundleIdentifier)?.index
+    }
+
+    static func switcherSortGroupIsPinned(for bundleIdentifier: String?) -> Bool {
+        switcherSortGroupInfo(for: bundleIdentifier)?.isPinned ?? false
+    }
+
+    private static func switcherSortGroupInfo(for bundleIdentifier: String?) -> (index: Int, isPinned: Bool)? {
+        guard let bundleIdentifier else { return nil }
+        return switcherSortGroupLookup()[bundleIdentifier]
     }
 
     /// Core sorting logic with configurable options
@@ -1181,6 +1195,82 @@ extension WindowUtil {
         }
 
         return sortedWindows
+    }
+
+    /// Keeps apps in the same custom sort group adjacent while preserving the primary sort order.
+    /// Pinned groups are emitted first, ordered by where they would naturally have appeared.
+    private static func applyCustomSwitcherSortGroups(_ windows: [WindowInfo]) -> [WindowInfo] {
+        let groups = normalizedSwitcherSortGroups()
+        let bundleToGroupIndex = switcherSortGroupLookup(groups: groups)
+        guard !bundleToGroupIndex.isEmpty else { return windows }
+
+        var groupedWindows: [Int: [WindowInfo]] = [:]
+        var firstWindowPositionByGroup: [Int: Int] = [:]
+
+        for (position, window) in windows.enumerated() {
+            guard let bundleIdentifier = window.app.bundleIdentifier,
+                  let groupInfo = bundleToGroupIndex[bundleIdentifier]
+            else { continue }
+            groupedWindows[groupInfo.index, default: []].append(window)
+            firstWindowPositionByGroup[groupInfo.index] = min(firstWindowPositionByGroup[groupInfo.index] ?? position, position)
+        }
+
+        var emittedGroups = Set<Int>()
+        var result: [WindowInfo] = []
+
+        let pinnedGroupIndices = groupedWindows.keys.filter { groups[$0].isPinned }.sorted {
+            (firstWindowPositionByGroup[$0] ?? Int.max) < (firstWindowPositionByGroup[$1] ?? Int.max)
+        }
+
+        for groupIndex in pinnedGroupIndices {
+            emittedGroups.insert(groupIndex)
+            result.append(contentsOf: groupedWindows[groupIndex] ?? [])
+        }
+
+        for window in windows {
+            guard let bundleIdentifier = window.app.bundleIdentifier,
+                  let groupInfo = bundleToGroupIndex[bundleIdentifier]
+            else {
+                result.append(window)
+                continue
+            }
+
+            let groupIndex = groupInfo.index
+            guard !emittedGroups.contains(groupIndex) else { continue }
+            emittedGroups.insert(groupIndex)
+            result.append(contentsOf: groupedWindows[groupIndex] ?? [])
+        }
+
+        return result
+    }
+
+    private static func switcherSortGroupLookup(groups: [WindowSwitcherSortGroup] = normalizedSwitcherSortGroups()) -> [String: (index: Int, isPinned: Bool)] {
+        var bundleToGroupIndex: [String: (index: Int, isPinned: Bool)] = [:]
+
+        for (groupIndex, group) in groups.enumerated() {
+            for bundleIdentifier in group.bundleIdentifiers {
+                bundleToGroupIndex[bundleIdentifier] = (groupIndex, group.isPinned)
+            }
+        }
+
+        return bundleToGroupIndex
+    }
+
+    private static func normalizedSwitcherSortGroups() -> [WindowSwitcherSortGroup] {
+        var seenBundleIdentifiers = Set<String>()
+
+        return Defaults[.windowSwitcherSortGroups].compactMap { group in
+            let uniqueBundleIdentifiers = group.bundleIdentifiers.filter { bundleIdentifier in
+                guard !bundleIdentifier.isEmpty else { return false }
+                return seenBundleIdentifiers.insert(bundleIdentifier).inserted
+            }
+
+            guard uniqueBundleIdentifiers.count >= 2 else { return nil }
+
+            var updatedGroup = group
+            updatedGroup.bundleIdentifiers = uniqueBundleIdentifiers
+            return updatedGroup
+        }
     }
 
     /// Groups windows by app for selected apps, keeping only the most recently used window for each grouped app.

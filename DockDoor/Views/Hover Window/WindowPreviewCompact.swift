@@ -12,6 +12,9 @@ struct WindowPreviewCompact: View {
     let mockPreviewActive: Bool
     let onTap: (() -> Void)?
     let onHoverIndexChange: ((Int?, CGPoint?) -> Void)?
+    let customSortGroupIndex: Int?
+    let isCustomSortGroupPinned: Bool
+    let onToggleCustomSortGroupPin: (() -> Void)?
     var appearance: PreviewAppearanceSettings
 
     @Default(.previewWidth) private var previewWidth
@@ -54,6 +57,10 @@ struct WindowPreviewCompact: View {
             return "Hidden"
         }
         return nil
+    }
+
+    private var showsCustomSortGroupBorder: Bool {
+        windowSwitcherActive && customSortGroupIndex != nil
     }
 
     var body: some View {
@@ -102,22 +109,31 @@ struct WindowPreviewCompact: View {
 
             Spacer(minLength: 0)
 
-            // Traffic light buttons
-            if !hideTrafficLights,
-               windowInfo.closeButton != nil,
-               appearance.trafficLightVisibility != .never,
-               !appearance.showMinimizedHiddenLabels || (!windowInfo.isMinimized && !windowInfo.isHidden)
-            {
-                TrafficLightButtons(
-                    displayMode: appearance.trafficLightVisibility,
-                    hoveringOverParentWindow: isSelected || isHovering,
-                    onWindowAction: handleWindowAction,
-                    pillStyling: true,
-                    mockPreviewActive: mockPreviewActive,
-                    enabledButtons: appearance.enabledTrafficLightButtons,
-                    useMonochrome: appearance.useMonochromeTrafficLights,
-                    buttonScale: appearance.trafficLightButtonScale
-                )
+            HStack(spacing: 6) {
+                if let onToggleCustomSortGroupPin, showsCustomSortGroupBorder {
+                    CustomSortGroupPinButton(
+                        color: appearance.customSortGroupBorderColor,
+                        isPinned: isCustomSortGroupPinned,
+                        action: onToggleCustomSortGroupPin
+                    )
+                }
+
+                if !hideTrafficLights,
+                   windowInfo.closeButton != nil,
+                   appearance.trafficLightVisibility != .never,
+                   !appearance.showMinimizedHiddenLabels || (!windowInfo.isMinimized && !windowInfo.isHidden)
+                {
+                    TrafficLightButtons(
+                        displayMode: appearance.trafficLightVisibility,
+                        hoveringOverParentWindow: isSelected || isHovering,
+                        onWindowAction: handleWindowAction,
+                        pillStyling: true,
+                        mockPreviewActive: mockPreviewActive,
+                        enabledButtons: appearance.enabledTrafficLightButtons,
+                        useMonochrome: appearance.useMonochromeTrafficLights,
+                        buttonScale: appearance.trafficLightButtonScale
+                    )
+                }
             }
         }
         .padding(.vertical, 8)
@@ -137,6 +153,21 @@ struct WindowPreviewCompact: View {
                             RoundedRectangle(cornerRadius: cornerRadius)
                                 .fill(highlightColor.opacity(appearance.selectionOpacity))
                                 .padding(.horizontal, -CardRadius.innerPadding)
+                        }
+                    }
+                    .overlay {
+                        if showsCustomSortGroupBorder {
+                            RoundedRectangle(cornerRadius: cornerRadius)
+                                .strokeBorder(
+                                    appearance.customSortGroupBorderColor.opacity(isCustomSortGroupPinned ? 0.95 : 0.55),
+                                    lineWidth: isCustomSortGroupPinned ? 2.5 : 1.75
+                                )
+                                .padding(.horizontal, -CardRadius.innerPadding)
+                                .shadow(
+                                    color: appearance.customSortGroupBorderColor.opacity(isCustomSortGroupPinned ? 0.32 : 0.18),
+                                    radius: isCustomSortGroupPinned ? 6 : 3
+                                )
+                                .animation(appearance.showAnimations ? .snappy(duration: 0.18) : nil, value: isCustomSortGroupPinned)
                         }
                     }
                     .overlay {

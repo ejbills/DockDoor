@@ -22,6 +22,7 @@ struct PreviewAppearanceSettings {
     let previewHoverAction: PreviewHoverAction
     let showActiveWindowBorder: Bool
     let activeAppIndicatorColor: Color
+    let customSortGroupBorderColor: Color
     let showAnimations: Bool
     let globalPaddingMultiplier: CGFloat
     let windowTitleFontSize: WindowTitleFontSize
@@ -133,6 +134,7 @@ struct PreviewAppearanceSettings {
             previewHoverAction: Defaults[.previewHoverAction],
             showActiveWindowBorder: Defaults[.showActiveWindowBorder],
             activeAppIndicatorColor: Defaults[.activeAppIndicatorColor],
+            customSortGroupBorderColor: Defaults[.windowSwitcherCustomSortGroupBorderColor],
             showAnimations: Defaults[.showAnimations],
             globalPaddingMultiplier: Defaults[.globalPaddingMultiplier],
             windowTitleFontSize: Defaults[.windowTitleFontSize],
@@ -140,6 +142,33 @@ struct PreviewAppearanceSettings {
             livePreviewQuality: quality,
             livePreviewFrameRate: frameRate
         )
+    }
+}
+
+struct CustomSortGroupPinButton: View {
+    let color: Color
+    let isPinned: Bool
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            Image(systemName: isPinned ? "pin.fill" : "pin")
+                .font(.system(size: 11, weight: .semibold))
+                .foregroundStyle(color)
+                .padding(.horizontal, 7)
+                .padding(.vertical, 5)
+                .background {
+                    Capsule(style: .continuous)
+                        .fill(color.opacity(isPinned ? 0.22 : 0.14))
+                }
+                .overlay {
+                    Capsule(style: .continuous)
+                        .strokeBorder(color.opacity(isPinned ? 0.9 : 0.5), lineWidth: 1)
+                }
+        }
+        .buttonStyle(.plain)
+        .help(isPinned ? "Unpin custom sort group" : "Pin custom sort group to top")
+        .accessibilityLabel(isPinned ? "Unpin custom sort group" : "Pin custom sort group to top")
     }
 }
 
@@ -158,6 +187,9 @@ struct WindowPreview: View {
     let mockPreviewActive: Bool
     let onHoverIndexChange: ((Int?, CGPoint?) -> Void)?
     let useLivePreview: Bool
+    let customSortGroupIndex: Int?
+    let isCustomSortGroupPinned: Bool
+    let onToggleCustomSortGroupPin: (() -> Void)?
     var skeletonMode: Bool = false
     var appearance: PreviewAppearanceSettings
 
@@ -176,6 +208,10 @@ struct WindowPreview: View {
               let focusedWindowID = try? focusedWindow.cgWindowId()
         else { return false }
         return windowInfo.id == focusedWindowID
+    }
+
+    private var showsCustomSortGroupBorder: Bool {
+        windowSwitcherActive && customSortGroupIndex != nil
     }
 
     @ViewBuilder
@@ -507,27 +543,37 @@ struct WindowPreview: View {
         }
 
         let controlsContent = Group {
-            if windowInfo.closeButton != nil && (appearance.showMinimizedHiddenLabels ? (!windowInfo.isMinimized && !windowInfo.isHidden) : true) {
-                TrafficLightButtons(
-                    displayMode: appearance.trafficLightVisibility,
-                    hoveringOverParentWindow: selected || isHoveringOverWindowSwitcherPreview,
-                    onWindowAction: handleWindowAction,
-                    pillStyling: !appearance.disableDockStyleTrafficLights,
-                    mockPreviewActive: mockPreviewActive,
-                    enabledButtons: appearance.enabledTrafficLightButtons,
-                    useMonochrome: appearance.useMonochromeTrafficLights
-                )
-            } else if windowInfo.isMinimized || windowInfo.isHidden,
-                      appearance.showMinimizedHiddenLabels,
-                      appearance.trafficLightVisibility != .never
-            {
-                Text(windowInfo.isMinimized ? "Minimized" : "Hidden")
-                    .font(appearance.windowTitleFontSize.font)
-                    .italic()
-                    .foregroundStyle(.secondary)
-                    .padding(4)
-                    .materialPill()
-                    .frame(height: 34)
+            HStack(spacing: 6) {
+                if let onToggleCustomSortGroupPin, showsCustomSortGroupBorder {
+                    CustomSortGroupPinButton(
+                        color: appearance.customSortGroupBorderColor,
+                        isPinned: isCustomSortGroupPinned,
+                        action: onToggleCustomSortGroupPin
+                    )
+                }
+
+                if windowInfo.closeButton != nil && (appearance.showMinimizedHiddenLabels ? (!windowInfo.isMinimized && !windowInfo.isHidden) : true) {
+                    TrafficLightButtons(
+                        displayMode: appearance.trafficLightVisibility,
+                        hoveringOverParentWindow: selected || isHoveringOverWindowSwitcherPreview,
+                        onWindowAction: handleWindowAction,
+                        pillStyling: !appearance.disableDockStyleTrafficLights,
+                        mockPreviewActive: mockPreviewActive,
+                        enabledButtons: appearance.enabledTrafficLightButtons,
+                        useMonochrome: appearance.useMonochromeTrafficLights
+                    )
+                } else if windowInfo.isMinimized || windowInfo.isHidden,
+                          appearance.showMinimizedHiddenLabels,
+                          appearance.trafficLightVisibility != .never
+                {
+                    Text(windowInfo.isMinimized ? "Minimized" : "Hidden")
+                        .font(appearance.windowTitleFontSize.font)
+                        .italic()
+                        .foregroundStyle(.secondary)
+                        .padding(4)
+                        .materialPill()
+                        .frame(height: 34)
+                }
             }
         }
 
@@ -696,6 +742,21 @@ struct WindowPreview: View {
                                 RoundedRectangle(cornerRadius: cornerRadius)
                                     .fill(highlightColor.opacity(appearance.selectionOpacity))
                                     .padding(-CardRadius.innerPadding)
+                            }
+                        }
+                        .overlay {
+                            if showsCustomSortGroupBorder {
+                                RoundedRectangle(cornerRadius: cornerRadius)
+                                    .strokeBorder(
+                                        appearance.customSortGroupBorderColor.opacity(isCustomSortGroupPinned ? 0.95 : 0.55),
+                                        lineWidth: isCustomSortGroupPinned ? 2.5 : 1.75
+                                    )
+                                    .padding(-CardRadius.innerPadding)
+                                    .shadow(
+                                        color: appearance.customSortGroupBorderColor.opacity(isCustomSortGroupPinned ? 0.32 : 0.18),
+                                        radius: isCustomSortGroupPinned ? 6 : 3
+                                    )
+                                    .animation(appearance.showAnimations ? .snappy(duration: 0.18) : nil, value: isCustomSortGroupPinned)
                             }
                         }
                         .overlay {

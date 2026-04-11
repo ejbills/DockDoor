@@ -12,6 +12,7 @@ struct WindowSwitcherAppearanceSection: View {
     @Default(.switcherMaxRows) var switcherMaxRows
     @Default(.switcherIgnoreScreenLimit) var switcherIgnoreScreenLimit
     @Default(.windowSwitcherScrollDirection) var windowSwitcherScrollDirection
+    @Default(.windowSwitcherCustomSortGroupBorderColor) var windowSwitcherCustomSortGroupBorderColor
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -122,6 +123,21 @@ struct WindowSwitcherAppearanceSection: View {
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
+
+            Divider().padding(.vertical, 2)
+            Text("Custom Sort Groups").font(.headline).padding(.bottom, -2)
+
+            HStack {
+                ColorPicker("Group Border Color", selection: $windowSwitcherCustomSortGroupBorderColor)
+                Button("Reset") {
+                    Defaults.reset(.windowSwitcherCustomSortGroupBorderColor)
+                }
+                .buttonStyle(AccentButtonStyle(small: true))
+            }
+
+            Text("Applies to the border and pin control for windows that belong to a custom sort group.")
+                .font(.caption)
+                .foregroundColor(.secondary)
         }
     }
 }

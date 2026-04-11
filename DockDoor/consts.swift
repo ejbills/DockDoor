@@ -24,6 +24,42 @@ let calendarAppIdentifier = "com.apple.iCal"
     }
 }
 
+struct WindowSwitcherSortGroup: Codable, Defaults.Serializable, Hashable, Identifiable {
+    var id: UUID
+    var bundleIdentifiers: [String]
+    var isPinned: Bool
+
+    init(id: UUID = UUID(), bundleIdentifiers: [String] = [], isPinned: Bool = false) {
+        self.id = id
+        self.bundleIdentifiers = bundleIdentifiers
+        self.isPinned = isPinned
+    }
+
+    enum CodingKeys: String, CodingKey {
+        case id
+        case bundleIdentifiers
+        case isPinned
+    }
+
+    init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decodeIfPresent(UUID.self, forKey: .id) ?? UUID()
+        bundleIdentifiers = try container.decodeIfPresent([String].self, forKey: .bundleIdentifiers) ?? []
+        isPinned = try container.decodeIfPresent(Bool.self, forKey: .isPinned) ?? false
+    }
+
+    func encode(to encoder: any Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(id, forKey: .id)
+        try container.encode(bundleIdentifiers, forKey: .bundleIdentifiers)
+        try container.encode(isPinned, forKey: .isPinned)
+    }
+
+    var appCount: Int {
+        bundleIdentifiers.count
+    }
+}
+
 extension Defaults.Keys {
     static let previewWidth = Key<CGFloat>("previewWidth", default: 300)
     static let previewHeight = Key<CGFloat>("previewHeight", default: 187.5)
@@ -94,6 +130,7 @@ extension Defaults.Keys {
     static let showWindowsFromCurrentSpaceOnlyInSwitcher = Key<Bool>("showWindowsFromCurrentSpaceOnlyInSwitcher", default: false)
     static let showWindowsFromCurrentMonitorOnlyInSwitcher = Key<Bool>("showWindowsFromCurrentMonitorOnlyInSwitcher", default: false)
     static let windowSwitcherSortOrder = Key<WindowPreviewSortOrder>("windowSwitcherSortOrder", default: .recentlyUsed)
+    static let windowSwitcherSortGroups = Key<[WindowSwitcherSortGroup]>("windowSwitcherSortGroups", default: [])
     static let showWindowsFromCurrentSpaceOnlyInCmdTab = Key<Bool>("showWindowsFromCurrentSpaceOnlyInCmdTab", default: false)
     static let showWindowsFromCurrentMonitorOnlyInCmdTab = Key<Bool>("showWindowsFromCurrentMonitorOnlyInCmdTab", default: false)
     static let cmdTabSortOrder = Key<WindowPreviewSortOrder>("cmdTabSortOrder", default: .recentlyUsed)
@@ -173,6 +210,7 @@ extension Defaults.Keys {
     static let switcherEnabledTrafficLightButtons = Key<Set<WindowAction>>("switcherEnabledTrafficLightButtons", default: [.quit, .close, .minimize, .toggleFullScreen])
     static let switcherUseMonochromeTrafficLights = Key<Bool>("switcherUseMonochromeTrafficLights", default: false)
     static let switcherDisableDockStyleTrafficLights = Key<Bool>("switcherDisableDockStyleTrafficLights", default: false)
+    static let windowSwitcherCustomSortGroupBorderColor = Key<Color>("windowSwitcherCustomSortGroupBorderColor", default: .orange)
 
     // MARK: - Cmd+Tab Appearance Settings
 

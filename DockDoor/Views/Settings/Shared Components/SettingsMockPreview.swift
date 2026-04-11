@@ -198,6 +198,7 @@ struct SettingsMockPreview: View {
             previewHoverAction: previewHoverAction,
             showActiveWindowBorder: showActiveWindowBorder,
             activeAppIndicatorColor: activeAppIndicatorColor,
+            customSortGroupBorderColor: Defaults[.windowSwitcherCustomSortGroupBorderColor],
             showAnimations: showAnimations,
             globalPaddingMultiplier: globalPaddingMultiplier,
             windowTitleFontSize: windowTitleFontSize,

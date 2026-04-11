@@ -235,6 +235,46 @@ struct WindowPreviewHoverContainer: View {
         previewStateCoordinator.setIndex(to: hoveredIndex, shouldScroll: false)
     }
 
+    private func customSortGroupIndex(for windowInfo: WindowInfo) -> Int? {
+        guard previewStateCoordinator.windowSwitcherActive else { return nil }
+        return WindowUtil.switcherSortGroupIndex(for: windowInfo.app.bundleIdentifier)
+    }
+
+    private func customSortGroupIsPinned(for windowInfo: WindowInfo) -> Bool {
+        guard previewStateCoordinator.windowSwitcherActive else { return false }
+        return WindowUtil.switcherSortGroupIsPinned(for: windowInfo.app.bundleIdentifier)
+    }
+
+    private func togglePinnedCustomSortGroup(for windowInfo: WindowInfo) {
+        Task { @MainActor in
+            var sortGroups = Defaults[.windowSwitcherSortGroups]
+            guard let bundleIdentifier = windowInfo.app.bundleIdentifier,
+                  let groupIndex = sortGroups.firstIndex(where: { $0.bundleIdentifiers.contains(bundleIdentifier) })
+            else { return }
+
+            sortGroups[groupIndex].isPinned.toggle()
+            Defaults[.windowSwitcherSortGroups] = sortGroups
+
+            let selectedWindowID = (previewStateCoordinator.currIndex >= 0 && previewStateCoordinator.currIndex < previewStateCoordinator.windows.count)
+                ? previewStateCoordinator.windows[previewStateCoordinator.currIndex].id
+                : nil
+
+            let resortedWindows = WindowUtil.sortWindowsForSwitcher(previewStateCoordinator.windows)
+            previewStateCoordinator.setWindows(
+                resortedWindows,
+                dockPosition: dockPosition,
+                bestGuessMonitor: bestGuessMonitor,
+                isMockPreviewActive: mockPreviewActive
+            )
+
+            if let selectedWindowID,
+               let newIndex = resortedWindows.firstIndex(where: { $0.id == selectedWindowID })
+            {
+                previewStateCoordinator.setIndex(to: newIndex)
+            }
+        }
+    }
+
     var body: some View {
         BaseHoverContainer(bestGuessMonitor: bestGuessMonitor, mockPreviewActive: mockPreviewActive) {
             windowGridContent()
@@ -1085,6 +1125,7 @@ struct WindowPreviewHoverContainer: View {
             let windows = previewStateCoordinator.windows
             if index < windows.count {
                 let windowInfo = windows[index]
+                let customSortGroupIndex = customSortGroupIndex(for: windowInfo)
 
                 // Compute live preview eligibility once
                 let useLivePreview: Bool = {
@@ -1133,6 +1174,9 @@ struct WindowPreviewHoverContainer: View {
                         mockPreviewActive: mockPreviewActive,
                         onTap: onWindowTap,
                         onHoverIndexChange: handleHoverIndexChange,
+                        customSortGroupIndex: customSortGroupIndex,
+                        isCustomSortGroupPinned: customSortGroupIsPinned(for: windowInfo),
+                        onToggleCustomSortGroupPin: customSortGroupIndex != nil ? { togglePinnedCustomSortGroup(for: windowInfo) } : nil,
                         appearance: appearance
                     )
                     .id("\(appName)-\(index)")
@@ -1154,6 +1198,9 @@ struct WindowPreviewHoverContainer: View {
                         mockPreviewActive: mockPreviewActive,
                         onHoverIndexChange: handleHoverIndexChange,
                         useLivePreview: useLivePreview,
+                        customSortGroupIndex: customSortGroupIndex,
+                        isCustomSortGroupPinned: customSortGroupIsPinned(for: windowInfo),
+                        onToggleCustomSortGroupPin: customSortGroupIndex != nil ? { togglePinnedCustomSortGroup(for: windowInfo) } : nil,
                         appearance: appearance
                     )
                     .id("\(appName)-\(index)")

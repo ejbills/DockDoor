@@ -39,6 +39,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         applyAppearanceMode(Defaults[.appAppearanceMode])
+        let isFirstLaunch = !Defaults[.launched]
 
         // Set global AX timeout to prevent hangs from unresponsive apps
         AXUIElementSetMessagingTimeout(AXUIElementCreateSystemWide(), 1.0)
@@ -58,7 +59,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         MediaRemoteService.shared.activate()
 
-        if !Defaults[.launched] {
+        if isFirstLaunch {
             handleFirstTimeLaunch()
         } else {
             let currentPreviewCoordinator = SharedPreviewWindowCoordinator()
@@ -105,6 +106,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             Defaults[.reopenSettingsAfterRestart] = false
             openSettingsWindow(nil)
         }
+        #if DEBUG
+            if !Defaults[.reopenSettingsAfterRestart], !isFirstLaunch {
+                openSettingsWindow(nil)
+            }
+        #endif
     }
 
     func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
