@@ -7,5 +7,5 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/nicklockwood/SwiftFormat", from: "0.54.3"),
     ],
-    targets: [.target(name: "BuildTools", path: "", exclude: ["Package.resolved", ".build"])]
+    targets: [.target(name: "BuildTools", path: "", exclude: ["Package.resolved"])]
 )
