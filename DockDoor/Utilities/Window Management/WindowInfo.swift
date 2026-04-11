@@ -203,30 +203,22 @@ extension WindowInfo {
     }
 
     private func currentWindowPlacementContext() -> (screen: NSScreen, size: CGSize)? {
-        guard let currentPosition = try? axElement.position(),
-              let currentSize = try? axElement.size()
+        guard let currentSize = try? axElement.size(),
+              let windowFrame = Self.currentWindowFrame(for: axElement)
         else {
             return nil
         }
 
-        guard let screen = NSScreen.screens.first(where: { screen in
-            let screenTop = screen.frame.origin.y + screen.frame.height
-            let windowBottomLeft = CGPoint(
-                x: currentPosition.x,
-                y: screenTop - currentPosition.y - currentSize.height
-            )
-            let windowFrame = CGRect(origin: windowBottomLeft, size: currentSize)
-            return screen.frame.intersects(windowFrame)
-        }) ?? NSScreen.main else {
+        guard let screen = NSScreen.screens.first(where: { $0.frame.intersects(windowFrame) }) ?? NSScreen.main else {
             return nil
         }
 
         return (screen, currentSize)
     }
 
-    func currentWindowFrame() -> CGRect? {
-        guard let currentPosition = try? axElement.position(),
-              let currentSize = try? axElement.size()
+    static func currentWindowFrame(for element: AXUIElement) -> CGRect? {
+        guard let currentPosition = try? element.position(),
+              let currentSize = try? element.size()
         else {
             return nil
         }
@@ -238,6 +230,10 @@ extension WindowInfo {
             width: currentSize.width,
             height: currentSize.height
         )
+    }
+
+    func currentWindowFrame() -> CGRect? {
+        Self.currentWindowFrame(for: axElement)
     }
 
     private func applyWindowFrame(_ targetFrame: CGRect, on screen: NSScreen) {

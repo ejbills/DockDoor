@@ -66,7 +66,7 @@ extension Defaults.Keys {
     static let allowDynamicImageSizing = Key<Bool>("allowDynamicImageSizing", default: false)
     static let tapEquivalentInterval = Key<CGFloat>("tapEquivalentInterval", default: 1.5)
     static let fadeOutDuration = Key<CGFloat>("fadeOutDuration", default: 0.4)
-    static let preventPreviewReentryDuringFadeOut = Key<Bool>("preventPreviewReentryDuringFadeOut", default: true)
+    static let preventPreviewReentryDuringFadeOut = Key<Bool>("preventPreviewReentryDuringFadeOut", default: false)
     static let inactivityTimeout = Key<CGFloat>("inactivityTimeout", default: 0.2)
     static let previewHoverAction = Key<PreviewHoverAction>("previewHoverAction", default: .none)
     static let aeroShakeAction = Key<AeroShakeAction>("aeroShakeAction", default: .none)
@@ -180,7 +180,6 @@ extension Defaults.Keys {
 
     static let previewMaxColumns = Key<Int>("previewMaxColumns", default: 2) // For left/right dock
     static let previewMaxRows = Key<Int>("previewMaxRows", default: 1) // For bottom dock only
-    static let forceSingleRowForSideDock = Key<Bool>("forceSingleRowForSideDock", default: true) // 左右 Dock 强制单行横向布局
     static let switcherMaxRows = Key<Int>("switcherMaxRows", default: 8) // For window switcher
     static let windowSwitcherScrollDirection = Key<WindowSwitcherScrollDirection>("windowSwitcherScrollDirection", default: .vertical)
 

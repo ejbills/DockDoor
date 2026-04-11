@@ -14,7 +14,6 @@ struct DockPreviewAppearanceSection: View {
     @Default(.previewMaxColumns) var previewMaxColumns
     @Default(.previewMaxRows) var previewMaxRows
     @Default(.allowDynamicImageSizing) var allowDynamicImageSizing
-    @Default(.forceSingleRowForSideDock) var forceSingleRowForSideDock
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -108,16 +107,6 @@ struct DockPreviewAppearanceSection: View {
             }
 
             VStack(alignment: .leading, spacing: 4) {
-                VStack(alignment: .leading) {
-                    Toggle(isOn: $forceSingleRowForSideDock) {
-                        Text("Force single row for side dock")
-                    }
-                    Text("When Dock is on the left or right, keep previews in one horizontal row and enable horizontal scrolling.")
-                        .font(.footnote)
-                        .foregroundColor(.gray)
-                        .padding(.leading, 20)
-                }
-
                 let previewMaxRowsBinding = Binding<Double>(
                     get: { Double(previewMaxRows) },
                     set: { previewMaxRows = Int($0) }
