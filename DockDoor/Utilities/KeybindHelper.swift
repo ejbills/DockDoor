@@ -441,7 +441,8 @@ class KeybindHelper {
                         Task { @MainActor in
                             self.previewCoordinator.hideWindow()
                         }
-                        return nil
+                        // Pass Escape through so the Dock can dismiss the system switcher too
+                        return Unmanaged.passUnretained(event)
                     case Int64(kVK_LeftArrow):
                         if hasSelection {
                             Task { @MainActor in
