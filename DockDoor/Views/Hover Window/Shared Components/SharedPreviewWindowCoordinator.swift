@@ -320,7 +320,6 @@ final class SharedPreviewWindowCoordinator: NSPanel {
             elapsed = renderStartTime.map { (CFAbsoluteTimeGetCurrent() - $0) * 1000 } ?? 0
             DebugLogger.log("PreviewRender", details: "fittingSize done: \(fittingSize) (+\(String(format: "%.1f", elapsed))ms)")
 
-            let dockPos = dockPositionOverride ?? DockUtils.getDockPosition()
             let expectedSize = windowSwitcherCoordinator.expectedContentSize
             newHoverWindowSize = CGSize(
                 width: expectedSize.width > 0 ? expectedSize.width : fittingSize.width,
