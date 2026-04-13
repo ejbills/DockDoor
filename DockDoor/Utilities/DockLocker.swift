@@ -210,7 +210,6 @@ final class DockLocker {
     private var eventTap: CFMachPort?
     private var runLoopSource: CFRunLoopSource?
     private var cachedTriggerZones: [TriggerZone] = []
-    private var settingsObserver: Defaults.Observation?
     private var screenObserver: Any?
 
     init() {
@@ -218,13 +217,11 @@ final class DockLocker {
         if !cachedTriggerZones.isEmpty {
             setupEventTap()
         }
-        observeSettings()
         observeScreenChanges()
     }
 
     deinit {
         removeEventTap()
-        settingsObserver?.invalidate()
         if let screenObserver {
             NotificationCenter.default.removeObserver(screenObserver)
         }
@@ -345,22 +342,6 @@ final class DockLocker {
     }
 
     // MARK: - Observers
-
-    private func observeSettings() {
-        settingsObserver = Defaults.observe(
-            keys: .lockedDockScreenIdentifier, .dockLockOverrideModifier
-        ) { [weak self] in
-            DispatchQueue.main.async {
-                guard let self else { return }
-                self.refreshTriggerZones()
-                if self.cachedTriggerZones.isEmpty {
-                    self.removeEventTap()
-                } else if self.eventTap == nil {
-                    self.setupEventTap()
-                }
-            }
-        }
-    }
 
     private func observeScreenChanges() {
         screenObserver = NotificationCenter.default.addObserver(

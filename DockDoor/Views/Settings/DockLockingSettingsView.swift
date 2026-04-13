@@ -38,6 +38,7 @@ struct DockLockingSettingsView: View {
                 if isOn, lockedDockScreenIdentifier.isEmpty {
                     lockedDockScreenIdentifier = NSScreen.main?.uniqueIdentifier() ?? ""
                 }
+                askUserToRestartApplication()
             }
         }
     }
