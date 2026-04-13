@@ -9,6 +9,9 @@ enum SharedHoverUtils {
         {
             return icon
         }
+        if let appURL = NSWorkspace.shared.urlForApplication(withBundleIdentifier: bundleIdentifier) {
+            return NSWorkspace.shared.icon(forFile: appURL.path)
+        }
         return nil
     }
 }

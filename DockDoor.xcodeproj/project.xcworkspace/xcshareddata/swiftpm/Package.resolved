@@ -1,5 +1,5 @@
 {
-  "originHash" : "1aa9fb48d4e0797930115961711b1ca1ddd436584bad9f72d944d4e056bc886f",
+  "originHash" : "25f40b762215a3088477e922d70d7d4725c1d13ef524d58154df623535380736",
   "pins" : [
     {
       "identity" : "confettiswiftui",
@@ -20,15 +20,6 @@
       }
     },
     {
-      "identity" : "kroma",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/kaishin/Kroma.git",
-      "state" : {
-        "branch" : "main",
-        "revision" : "d8aa3c173d23cf602a97b0648c9e240b9a86cbc4"
-      }
-    },
-    {
       "identity" : "launchatlogin-modern",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/sindresorhus/LaunchAtLogin-Modern",
@@ -38,12 +29,12 @@
       }
     },
     {
-      "identity" : "pow",
+      "identity" : "mediaremote-adapter",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/EmergeTools/Pow.git",
+      "location" : "https://github.com/ejbills/mediaremote-adapter.git",
       "state" : {
-        "revision" : "1b4b1dda28c50b95f0872927ee2226fe8b58950e",
-        "version" : "1.0.6"
+        "branch" : "master",
+        "revision" : "b8ce5d15898299d4d314413a3c4e3a1f3f678fa2"
       }
     },
     {

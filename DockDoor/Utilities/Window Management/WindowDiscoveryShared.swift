@@ -1,5 +1,6 @@
 import ApplicationServices
 import Cocoa
+import Defaults
 
 // Minimal provider used when we only have a CGWindowID (no SCWindow available)
 struct AXFallbackProvider: WindowPropertiesProviding {
@@ -95,7 +96,8 @@ func isValidAXWindowCandidate(_ axWindow: AXUIElement) -> Bool {
            ![kAXStandardWindowSubrole, kAXDialogSubrole].contains(subrole)
         { return false }
         if let s = try? axWindow.size(), let p = try? axWindow.position() {
-            if s == .zero || s.width < AXMinWindowSize.width || s.height < AXMinWindowSize.height { return false }
+            if s == .zero { return false }
+            if !Defaults[.disableMinWindowSizeFilter], s.width < AXMinWindowSize.width || s.height < AXMinWindowSize.height { return false }
             if !p.x.isFinite || !p.y.isFinite { return false }
         }
         return true
@@ -123,9 +125,22 @@ func isValidCGWindowCandidate(_ id: CGWindowID, in candidates: [[String: AnyObje
     return true
 }
 
-// Returns the set of currently active Space IDs across all displays by
-// inspecting on-screen, layer-0 windows and unioning their space IDs.
+// Returns the set of currently active Space IDs across all displays.
 func currentActiveSpaceIDs() -> Set<Int> {
+    // Primary: ask macOS directly for the current space per display
+    if let displays = CGSCopyManagedDisplaySpaces(CGSMainConnectionID()) as? [[String: AnyObject]] {
+        var result = Set<Int>()
+        for display in displays {
+            if let currentSpace = display["Current Space"] as? [String: AnyObject],
+               let spaceID = (currentSpace["ManagedSpaceID"] as? NSNumber)?.intValue
+            {
+                result.insert(spaceID)
+            }
+        }
+        if !result.isEmpty { return result }
+    }
+
+    // Fallback: infer from on-screen windows
     var result = Set<Int>()
     guard let list = CGWindowListCopyWindowInfo([.excludeDesktopElements], kCGNullWindowID) as? [[String: AnyObject]] else { return result }
     for desc in list {

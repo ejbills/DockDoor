@@ -1,8 +1,10 @@
 import Defaults
 import Foundation
+import os.log
 
 /// Debug logger for tracking performance-critical operations
 enum DebugLogger {
+    private static let log = OSLog(subsystem: Bundle.main.bundleIdentifier ?? "DockDoor", category: "Debug")
     private static let queue = DispatchQueue(label: "DebugLogger", qos: .utility)
     private static let logFileURL: URL = {
         let tempDir = FileManager.default.temporaryDirectory
@@ -12,6 +14,8 @@ enum DebugLogger {
     private static func formattedTimestamp() -> String { Date.now.description }
 
     private static func writeToFile(_ line: String) {
+        os_log("%{public}@", log: log, type: .debug, line)
+
         queue.async {
             guard let data = (line + "\n").data(using: .utf8) else { return }
 
@@ -24,8 +28,6 @@ enum DebugLogger {
             } else {
                 try? data.write(to: logFileURL, options: .atomic)
             }
-
-            print(line)
         }
     }
 

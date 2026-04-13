@@ -71,6 +71,10 @@ private class WindowSwitchingCoordinator {
             windows = WindowUtil.filterWindowsByCurrentSpace(windows)
         }
 
+        if mode == .allWindows, Defaults[.showWindowsFromCurrentMonitorOnlyInSwitcher] {
+            windows = WindowUtil.filterWindowsByCurrentMonitor(windows)
+        }
+
         let filterByApp = (mode == .activeAppOnly || mode == .activeAppCurrentSpace)
             || (mode == .allWindows && Defaults[.limitSwitcherToFrontmostApp])
         if filterByApp {
@@ -105,6 +109,7 @@ private class WindowSwitchingCoordinator {
                 selectedWindow.bringToFront()
             }
             coordinator.deactivateKeybindSession()
+            previewCoordinator.hideWindow()
             shouldSelectImmediately = false
             return
         }
@@ -370,8 +375,7 @@ class KeybindHelper {
                 DockObserver.activeInstance?.stopCmdTabPolling()
 
                 if Defaults[.enableCmdTabEnhancements], lastCmdTabObservedActive,
-                   previewCoordinator.isVisible,
-                   !previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive
+                   previewCoordinator.isVisible
                 {
                     Task { @MainActor in
                         if self.previewCoordinator.windowSwitcherCoordinator.currIndex >= 0 {
@@ -379,6 +383,7 @@ class KeybindHelper {
                         } else {
                             self.previewCoordinator.hideWindow()
                         }
+                        self.windowSwitchingCoordinator.cancelSwitching(previewCoordinator: self.previewCoordinator)
                     }
                 }
                 lastCmdTabObservedActive = false
@@ -392,6 +397,21 @@ class KeybindHelper {
         case .keyDown:
             let keyCode = event.getIntegerValueField(.keyboardEventKeycode)
             let flags = event.flags
+
+            let backwardKeyCode = Defaults[.switcherBackwardKeyCode]
+            if Self.eventFlagForKeyCode(backwardKeyCode) == nil,
+               keyCode == Int64(backwardKeyCode),
+               previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive
+            {
+                Task { @MainActor [weak self] in
+                    guard let self else { return }
+                    handleModifierEvent(
+                        currentSwitcherModifierIsPressed: isSwitcherModifierKeyPressed,
+                        currentShiftState: true
+                    )
+                }
+                return nil
+            }
 
             // Detect Cmd+Tab press to start on-demand polling for the switcher
             if Defaults[.enableCmdTabEnhancements],
@@ -421,7 +441,8 @@ class KeybindHelper {
                         Task { @MainActor in
                             self.previewCoordinator.hideWindow()
                         }
-                        return nil
+                        // Pass Escape through so the Dock can dismiss the system switcher too
+                        return Unmanaged.passUnretained(event)
                     case Int64(kVK_LeftArrow):
                         if hasSelection {
                             Task { @MainActor in
@@ -448,6 +469,25 @@ class KeybindHelper {
                         // If a preview is selected, first Down just deselects and is consumed.
                         // Subsequent Down (with no selection) is passed through to system Exposé.
                         if hasSelection {
+                            Task { @MainActor in
+                                self.previewCoordinator.windowSwitcherCoordinator.setIndex(to: -1)
+                            }
+                            return nil
+                        } else {
+                            return Unmanaged.passUnretained(event)
+                        }
+                    case Int64(kVK_ANSI_H), Int64(kVK_ANSI_L):
+                        if Defaults[.enableVimMotions], hasSelection {
+                            let dir: ArrowDirection = keyCode == Int64(kVK_ANSI_H) ? .left : .right
+                            Task { @MainActor in
+                                self.previewCoordinator.navigateWithArrowKey(direction: dir)
+                            }
+                            return nil
+                        } else {
+                            return Unmanaged.passUnretained(event)
+                        }
+                    case Int64(kVK_ANSI_J):
+                        if Defaults[.enableVimMotions], hasSelection {
                             Task { @MainActor in
                                 self.previewCoordinator.windowSwitcherCoordinator.setIndex(to: -1)
                             }
@@ -550,14 +590,34 @@ class KeybindHelper {
                 }
             }
 
+        case .keyUp:
+            let backwardKeyCode = Defaults[.switcherBackwardKeyCode]
+            if Self.eventFlagForKeyCode(backwardKeyCode) == nil,
+               event.getIntegerValueField(.keyboardEventKeycode) == Int64(backwardKeyCode)
+            {
+                Task { @MainActor [weak self] in
+                    self?.isShiftKeyPressedGeneral = false
+                    self?.cancelHeldKeyRepeatTask()
+                }
+            }
+
         default:
             break
         }
         return Unmanaged.passUnretained(event)
     }
 
+    private static func eventFlagForKeyCode(_ keyCode: UInt16) -> CGEventFlags? {
+        switch Int(keyCode) {
+        case kVK_Shift, kVK_RightShift: .maskShift
+        case kVK_Control, kVK_RightControl: .maskControl
+        case kVK_Option, kVK_RightOption: .maskAlternate
+        case kVK_Command, kVK_RightCommand: .maskCommand
+        default: nil
+        }
+    }
+
     private func updateModifierStatesFromFlags(event: CGEvent, keyBoardShortcutSaved: UserKeyBind) -> (currentSwitcherModifierIsPressed: Bool, currentShiftState: Bool) {
-        // Interpret saved mask by checking presence of standard CGEventFlag bits
         let saved = keyBoardShortcutSaved.modifierFlags
         let wantsAlt = (saved & Int(CGEventFlags.maskAlternate.rawValue)) != 0
         let wantsCtrl = (saved & Int(CGEventFlags.maskControl.rawValue)) != 0
@@ -568,8 +628,17 @@ class KeybindHelper {
         let hasCtrl = flags.contains(.maskControl)
         let hasCmd = flags.contains(.maskCommand)
 
-        let currentSwitcherModifierIsPressed = (wantsAlt == hasAlt) && (wantsCtrl == hasCtrl) && (wantsCmd == hasCmd)
-        let currentShiftState = flags.contains(.maskShift)
+        let backwardFlag = Self.eventFlagForKeyCode(Defaults[.switcherBackwardKeyCode])
+        let altMatch = backwardFlag == .maskAlternate || (wantsAlt == hasAlt)
+        let ctrlMatch = backwardFlag == .maskControl || (wantsCtrl == hasCtrl)
+        let cmdMatch = backwardFlag == .maskCommand || (wantsCmd == hasCmd)
+        let currentSwitcherModifierIsPressed = altMatch && ctrlMatch && cmdMatch
+
+        let currentShiftState: Bool = if let flag = backwardFlag {
+            flags.contains(flag)
+        } else {
+            isShiftKeyPressedGeneral
+        }
 
         return (currentSwitcherModifierIsPressed, currentShiftState)
     }
@@ -713,7 +782,7 @@ class KeybindHelper {
 
         if previewIsCurrentlyVisible {
             if keyCode == kVK_Tab {
-                let isShiftPressed = flags.contains(.maskShift)
+                let isShiftPressed = isShiftKeyPressedGeneral
 
                 return (true, { @MainActor in
                     if self.previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive {
@@ -738,6 +807,9 @@ class KeybindHelper {
 
             switch keyCode {
             case Int64(kVK_LeftArrow), Int64(kVK_RightArrow), Int64(kVK_UpArrow), Int64(kVK_DownArrow):
+                if Defaults[.passArrowsThroughToSystem], flags.contains(.maskControl) {
+                    return (false, nil)
+                }
                 let dir: ArrowDirection = switch keyCode {
                 case Int64(kVK_LeftArrow):
                     .left
@@ -751,7 +823,22 @@ class KeybindHelper {
                 return (true, { @MainActor in
                     self.previewCoordinator.navigateWithArrowKey(direction: dir)
                 })
-            case Int64(kVK_Return), Int64(kVK_ANSI_KeypadEnter):
+            case Int64(kVK_ANSI_H), Int64(kVK_ANSI_J), Int64(kVK_ANSI_K), Int64(kVK_ANSI_L):
+                if Defaults[.enableVimMotions],
+                   !previewCoordinator.isSearchWindowFocused,
+                   flags.intersection([.maskControl, .maskCommand, .maskAlternate, .maskShift]).isEmpty
+                {
+                    let dir: ArrowDirection = switch keyCode {
+                    case Int64(kVK_ANSI_H): .left
+                    case Int64(kVK_ANSI_L): .right
+                    case Int64(kVK_ANSI_K): .up
+                    default: .down
+                    }
+                    return (true, { @MainActor in
+                        self.previewCoordinator.navigateWithArrowKey(direction: dir)
+                    })
+                }
+            case Int64(Defaults[.windowSwitcherSelectionKeyCode]), Int64(kVK_ANSI_KeypadEnter):
                 if previewCoordinator.windowSwitcherCoordinator.currIndex >= 0 {
                     return (true, makeEnterSelectionTask())
                 }
@@ -819,7 +906,7 @@ class KeybindHelper {
            keyCode == keyBoardShortcutSaved.keyCode,
            !isSwitcherModifierKeyPressed,
            keyBoardShortcutSaved.modifierFlags != 0,
-           !flags.hasSuperfluousModifiers(ignoring: [.maskShift, .maskAlphaShift, .maskNumericPad])
+           !flags.hasSuperfluousModifiers(ignoring: [Self.eventFlagForKeyCode(Defaults[.switcherBackwardKeyCode]) ?? .maskShift, .maskAlphaShift, .maskNumericPad])
         {
             if WindowUtil.shouldIgnoreKeybindForFrontmostApp() { return (false, nil) }
             return (true, { await self.handleKeybindActivation() })

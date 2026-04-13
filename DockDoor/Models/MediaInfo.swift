@@ -1,4 +1,6 @@
 import AppKit
+import Combine
+import Defaults
 import Foundation
 
 // MARK: - OSAScript Helper
@@ -129,6 +131,15 @@ final class MediaInfo: ObservableObject {
     @Published var duration: TimeInterval = 0
     @Published var appName: String = ""
 
+    /// Reads interpolated position from MediaRemoteService on demand (for TimelineView).
+    /// Falls back to `currentTime` for AppleScript sources or when seeking.
+    var displayTime: TimeInterval {
+        if isUsingMediaRemote, !isSeeking {
+            return MediaRemoteService.shared.interpolatedElapsedTime
+        }
+        return currentTime
+    }
+
     // MARK: - Seek State
 
     var isSeeking: Bool = false
@@ -159,6 +170,8 @@ final class MediaInfo: ObservableObject {
     private var interpolatedTime: TimeInterval = 0
 
     private var artworkFetchTask: Task<Void, Never>?
+    private(set) var isUsingMediaRemote: Bool = false
+    private var mrDataSubscription: AnyCancellable?
 
     private static let delimiter = "〈♫DOCKDOOR♫〉"
 
@@ -170,18 +183,77 @@ final class MediaInfo: ObservableObject {
         case appleMusicAppIdentifier:
             appName = "Music"
         default:
-            break
+            appName = MediaRemoteService.shared.activeAppName ?? ""
         }
     }
 
     func viewAppeared() {
         activeViewCount += 1
+
         if activeViewCount == 1 {
-            Task { [weak self] in
-                await self?.fetchMediaData()
-                guard let self, activeViewCount > 0 else { return }
-                startPeriodicUpdates()
+            determineDataSource()
+        }
+    }
+
+    private func determineDataSource() {
+        mrDataSubscription = nil
+
+        let isNativeMediaApp = currentApp == spotifyAppIdentifier || currentApp == appleMusicAppIdentifier
+        let mode = Defaults[.mediaDetectionMode]
+
+        if mode == .universal {
+            switchToMediaRemote()
+        } else if isNativeMediaApp {
+            switchToAppleScript()
+        }
+    }
+
+    private func switchToMediaRemote() {
+        isUsingMediaRemote = true
+        stopPeriodicUpdates()
+        syncFromMediaRemote()
+
+        let mr = MediaRemoteService.shared
+
+        mrDataSubscription = mr.trackInfoDidChange
+            .sink { [weak self] _ in
+                self?.syncFromMediaRemote()
             }
+    }
+
+    private func switchToAppleScript() {
+        isUsingMediaRemote = false
+        mrDataSubscription = nil
+        Task { [weak self] in
+            await self?.fetchMediaData()
+            guard let self, activeViewCount > 0 else { return }
+            startPeriodicUpdates()
+        }
+    }
+
+    private func syncFromMediaRemote() {
+        guard isUsingMediaRemote, !isSeeking else { return }
+
+        let mr = MediaRemoteService.shared
+        guard mr.activeBundleIdentifier == currentApp else { return }
+
+        let trackChanged = mr.title != title || mr.artist != artist
+
+        if trackChanged {
+            clearLyrics()
+        }
+
+        title = mr.title
+        artist = mr.artist
+        album = mr.album
+        isPlaying = mr.isPlaying
+        duration = mr.duration
+        appName = mr.activeAppName ?? appName
+
+        if trackChanged {
+            artwork = mr.artwork
+        } else if let incoming = mr.artwork, artwork == nil {
+            artwork = incoming
         }
     }
 
@@ -189,6 +261,8 @@ final class MediaInfo: ObservableObject {
         activeViewCount = max(0, activeViewCount - 1)
         if activeViewCount == 0 {
             stopPeriodicUpdates()
+            mrDataSubscription = nil
+            isUsingMediaRemote = false
         }
     }
 
@@ -200,28 +274,44 @@ final class MediaInfo: ObservableObject {
     }
 
     func playPause() {
-        executeMediaCommand("playpause")
+        if isUsingMediaRemote {
+            MediaRemoteService.shared.togglePlayPause()
+        } else {
+            executeMediaCommand("playpause")
+        }
     }
 
     func nextTrack() {
-        executeMediaCommand("next track")
+        currentTime = 0
+        if isUsingMediaRemote {
+            MediaRemoteService.shared.nextTrack()
+        } else {
+            executeMediaCommand("next track")
+        }
     }
 
     func previousTrack() {
-        executeMediaCommand("previous track")
+        currentTime = 0
+        if isUsingMediaRemote {
+            MediaRemoteService.shared.previousTrack()
+        } else {
+            executeMediaCommand("previous track")
+        }
     }
 
     func seek(to position: TimeInterval) {
-        let script = buildSeekScript(position: position)
-        OSAScriptRunner.runFireAndForget(script)
         currentTime = position
-
-        // Reset interpolation timing after seeking
         lastPolledTime = position
         lastPollDate = Date()
         interpolatedTime = position
-
         updateCurrentLyricIndex()
+
+        if isUsingMediaRemote {
+            MediaRemoteService.shared.seek(to: position)
+        } else {
+            let script = buildSeekScript(position: position)
+            OSAScriptRunner.runFireAndForget(script)
+        }
     }
 
     // MARK: - Lyrics Methods
@@ -234,39 +324,40 @@ final class MediaInfo: ObservableObject {
             return
         }
 
-        // Prevent duplicate fetches for the same track
-        guard trackKey != lastFetchedTrack || lyrics.isEmpty else {
-            return
-        }
+        guard trackKey != lastFetchedTrack else { return }
 
-        // Cancel any existing fetch task
         currentFetchTask?.cancel()
+        currentFetchTask = nil
 
-        // Wait a moment to let any pending cancellations complete
-        try? await Task.sleep(nanoseconds: 100_000_000) // 0.1 second
-
-        isLoadingLyrics = true
         lastFetchedTrack = trackKey
+        isLoadingLyrics = true
 
-        let fetchTask = Task {
-            try await self.fetchLyricsFromNetwork()
+        let fetchTask = Task { [weak self] () throws -> [LyricLine] in
+            try await Task.sleep(nanoseconds: 200_000_000)
+            guard let self, !Task.isCancelled else { throw CancellationError() }
+            return try await self.fetchLyricsFromNetwork()
         }
 
         currentFetchTask = fetchTask
 
         do {
             let fetchedLyrics = try await fetchTask.value
+            guard lastFetchedTrack == trackKey else { return }
             lyrics = fetchedLyrics
             hasLyrics = !lyrics.isEmpty
             isLoadingLyrics = false
 
             if hasLyrics {
                 startLyricsTimer()
-                startPeriodicUpdates() // Restart with higher frequency
+                startPeriodicUpdates()
             }
         } catch {
+            guard lastFetchedTrack == trackKey else { return }
             if !Task.isCancelled {
-                clearLyrics()
+                lyrics = []
+                currentLyricIndex = nil
+                hasLyrics = false
+                isLoadingLyrics = false
             }
         }
     }
@@ -456,6 +547,11 @@ final class MediaInfo: ObservableObject {
     }
 
     private func updateInterpolatedTime() {
+        if isUsingMediaRemote {
+            interpolatedTime = MediaRemoteService.shared.interpolatedElapsedTime
+            return
+        }
+
         guard isPlaying else {
             interpolatedTime = currentTime
             return
@@ -512,7 +608,7 @@ final class MediaInfo: ObservableObject {
     // MARK: - Private Methods
 
     private func startPeriodicUpdates() {
-        guard activeViewCount > 0 else { return }
+        guard activeViewCount > 0, !isUsingMediaRemote else { return }
         updateTimer?.invalidate()
         let updateInterval: TimeInterval = hasLyrics ? 0.5 : 1.0
         updateTimer = Timer.scheduledTimer(withTimeInterval: updateInterval, repeats: true) { [weak self] _ in

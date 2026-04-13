@@ -92,7 +92,7 @@ class MouseTrackingNSView: NSView {
             guard let self, let window else { return }
 
             let currentMouseLocation = NSEvent.mouseLocation
-            let windowFrame = window.frame
+            let windowFrame = window.frame.insetBy(dx: HoverContainerPadding.container, dy: HoverContainerPadding.container)
 
             let isMouseOverDockIcon = checkIfMouseIsOverDockIcon()
 

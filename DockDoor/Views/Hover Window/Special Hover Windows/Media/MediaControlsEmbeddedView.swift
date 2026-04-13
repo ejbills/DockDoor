@@ -62,6 +62,19 @@ struct MediaControlsEmbeddedView: View {
                     Spacer(minLength: 0)
                 }
 
+                TimelineView(.periodic(from: .now, by: mediaInfo.isPlaying ? 0.25 : 1.0)) { _ in
+                    SimpleProgressBar(
+                        value: Binding(
+                            get: { mediaInfo.displayTime },
+                            set: { newValue in mediaInfo.seek(to: newValue) }
+                        ),
+                        range: 0 ... max(mediaInfo.duration, 1),
+                        barColor: .primary.opacity(0.5),
+                        backgroundColor: .primary.opacity(0.1)
+                    )
+                    .frame(height: 10)
+                }
+
                 MediaControlButtonRow(
                     mediaInfo: mediaInfo,
                     spacing: MediaControlsLayout.embeddedMediaButtonsSpacing,

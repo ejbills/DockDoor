@@ -1,3 +1,4 @@
+import Carbon.HIToolbox
 import Defaults
 import SwiftUI
 
@@ -9,6 +10,10 @@ struct WindowSwitcherKeybindSection: View {
     @Default(.alternateKeybindKey) var alternateKeybindKey
     @Default(.alternateKeybindMode) var alternateKeybindMode
     @Default(.requireShiftTabToGoBack) var requireShiftTabToGoBack
+    @Default(.switcherBackwardKeyCode) var switcherBackwardKeyCode
+    @Default(.windowSwitcherSelectionKeyCode) var selectionKeyCode
+    @Default(.enableVimMotions) var enableVimMotions
+    @Default(.passArrowsThroughToSystem) var passArrowsThroughToSystem
 
     @StateObject private var keybindModel = KeybindModel()
     @State private var showingAddBlacklistAppSheet = false
@@ -37,10 +42,49 @@ struct WindowSwitcherKeybindSection: View {
                 Divider()
 
                 VStack(alignment: .leading, spacing: 8) {
-                    Toggle(isOn: $requireShiftTabToGoBack) {
-                        Text("Require Shift+Tab to go back in Switcher")
+                    HStack {
+                        Text("Backward Key")
+                        Spacer()
+                        KeyCaptureButton(keyCode: $switcherBackwardKeyCode, captureModifiers: true)
+                        Button("Reset") { switcherBackwardKeyCode = 56 }
+                            .buttonStyle(.bordered)
                     }
-                    Text("When enabled, pressing Shift alone won't go back. Use Shift+Tab (or modifier+Shift+Tab when release-to-select is on) to navigate backward.")
+                    Text("The key used to navigate backward in the window switcher.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+
+                    Toggle(isOn: $requireShiftTabToGoBack) {
+                        Text("Require \(KeyboardLabel.localizedKey(for: switcherBackwardKeyCode))+Tab to go back in Switcher")
+                    }
+                    Text("When enabled, pressing the backward key alone won't go back. Use it with Tab to navigate backward.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                        .padding(.leading, 20)
+                }
+                .disabled(!enableWindowSwitcher)
+                .opacity(enableWindowSwitcher ? 1.0 : 0.5)
+
+                Divider()
+
+                selectionKeySection
+                    .disabled(!enableWindowSwitcher)
+                    .opacity(enableWindowSwitcher ? 1.0 : 0.5)
+
+                Divider()
+
+                VStack(alignment: .leading, spacing: 8) {
+                    Toggle(isOn: $enableVimMotions) {
+                        Text("Enable Vim Motions")
+                    }
+                    Text("Use H/J/K/L keys to navigate left/down/up/right in the window switcher. Disabled while search is focused.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                        .padding(.leading, 20)
+
+                    Toggle(isOn: $passArrowsThroughToSystem) {
+                        Text("Pass Arrow Keys Through to System")
+                    }
+                    Text("When enabled, Ctrl+Arrow keys will be passed through to the system instead of navigating the switcher. Useful for Spaces switching.")
                         .font(.caption)
                         .foregroundColor(.secondary)
                         .padding(.leading, 20)
@@ -159,6 +203,23 @@ struct WindowSwitcherKeybindSection: View {
             .allowsHitTesting(false)
             .frame(width: 0, height: 0)
         )
+    }
+
+    // MARK: - Selection Key Section
+
+    private var selectionKeySection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                Text("Selection Key")
+                Spacer()
+                KeyCaptureButton(keyCode: $selectionKeyCode)
+                Button("Reset") { selectionKeyCode = UInt16(kVK_Return) }
+                    .buttonStyle(.bordered)
+            }
+            Text("The key used to select and bring to front the highlighted window in the switcher.")
+                .font(.caption)
+                .foregroundColor(.secondary)
+        }
     }
 
     // MARK: - Alternate Shortcuts Section

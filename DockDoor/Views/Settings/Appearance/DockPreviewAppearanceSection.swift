@@ -10,10 +10,11 @@ struct DockPreviewAppearanceSection: View {
     @Default(.windowTitleVisibility) var windowTitleVisibility
     @Default(.disableDockStyleTitles) var disableDockStyleTitles
     @Default(.disableDockStyleTrafficLights) var disableDockStyleTrafficLights
+    @Default(.showMassActionButtons) var showMassActionButtons
     @Default(.useEmbeddedDockPreviewElements) var useEmbeddedDockPreviewElements
     @Default(.previewMaxColumns) var previewMaxColumns
     @Default(.previewMaxRows) var previewMaxRows
-    @Default(.allowDynamicImageSizing) var allowDynamicImageSizing
+    @Default(.windowTitleFontSize) var windowTitleFontSize
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -67,6 +68,13 @@ struct DockPreviewAppearanceSection: View {
                         .foregroundColor(.gray)
                         .padding(.leading, 20)
                 }
+
+                Picker("Window Title Font Size", selection: $windowTitleFontSize) {
+                    ForEach(WindowTitleFontSize.allCases) { size in
+                        Text(size.localizedName)
+                            .tag(size)
+                    }
+                }
             }
 
             Divider().padding(.vertical, 2)
@@ -84,6 +92,19 @@ struct DockPreviewAppearanceSection: View {
             }
 
             Divider().padding(.vertical, 2)
+            Text("Mass Action Buttons").font(.headline).padding(.bottom, -2)
+
+            VStack(alignment: .leading) {
+                Toggle(isOn: $showMassActionButtons) {
+                    Text("Show Close All and Minimize All buttons")
+                }
+                Text("Displays Close All and Minimize All buttons when hovering the app icon in dock previews.")
+                    .font(.footnote)
+                    .foregroundColor(.gray)
+                    .padding(.leading, 20)
+            }
+
+            Divider().padding(.vertical, 2)
             Text("Dock Preview Layout").font(.headline).padding(.bottom, -2)
 
             VStack(alignment: .leading) {
@@ -91,16 +112,6 @@ struct DockPreviewAppearanceSection: View {
                     Text("Embed controls in preview frames")
                 }
                 Text("Places traffic light buttons and window titles directly inside the dock preview frames for a more compact and minimal appearance.")
-                    .font(.footnote)
-                    .foregroundColor(.gray)
-                    .padding(.leading, 20)
-            }
-
-            VStack(alignment: .leading) {
-                Toggle(isOn: $allowDynamicImageSizing) {
-                    Text("Allow dynamic image sizing")
-                }
-                Text("Previews scale dynamically to window proportions, overriding fixed frame constraints.")
                     .font(.footnote)
                     .foregroundColor(.gray)
                     .padding(.leading, 20)

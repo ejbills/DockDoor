@@ -65,6 +65,10 @@ func CGSCopySpacesForWindows(
     _ windowIDs: CFArray
 ) -> CFArray?
 
+// Private: returns managed display spaces info (current space per display)
+@_silgen_name("CGSCopyManagedDisplaySpaces")
+func CGSCopyManagedDisplaySpaces(_ cid: CGSConnectionID) -> CFArray?
+
 // Private: get window level
 @_silgen_name("CGSGetWindowLevel")
 func CGSGetWindowLevel(

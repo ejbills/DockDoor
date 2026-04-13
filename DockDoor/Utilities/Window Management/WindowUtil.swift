@@ -362,7 +362,7 @@ extension WindowUtil {
         }
     }
 
-    static func updateCachedWindowState(_ windowInfo: WindowInfo, isMinimized: Bool? = nil, isHidden: Bool? = nil, spaceID: Int?? = nil) {
+    static func updateCachedWindowState(_ windowInfo: WindowInfo, isMinimized: Bool? = nil, isHidden: Bool? = nil, spaceID: Int?? = nil, screenIdentifier: String?? = nil) {
         desktopSpaceWindowCacheManager.updateCache(pid: windowInfo.app.processIdentifier) { windowSet in
             if let existingIndex = windowSet.firstIndex(of: windowInfo) {
                 var updatedWindow = windowSet[existingIndex]
@@ -374,6 +374,9 @@ extension WindowUtil {
                 }
                 if let spaceID {
                     updatedWindow.spaceID = spaceID
+                }
+                if let screenIdentifier {
+                    updatedWindow.screenIdentifier = screenIdentifier
                 }
                 windowSet.remove(at: existingIndex)
                 windowSet.insert(updatedWindow)
@@ -617,18 +620,31 @@ extension WindowUtil {
             return activeSpaceIDs.contains(spaceID)
         }
 
-        // Minimized/hidden windows with no space info are kept (space tracking lost on minimize)
-        if windowInfo.isMinimized || windowInfo.isHidden {
-            return true
-        }
-
-        return false
+        return windowInfo.isMinimized || windowInfo.isHidden
     }
 
     /// Filters windows to only include those in the current Space.
     static func filterWindowsByCurrentSpace(_ windows: [WindowInfo]) -> [WindowInfo] {
         let activeSpaceIDs = currentActiveSpaceIDs()
         return windows.filter { windowBelongsToActiveSpace($0, activeSpaceIDs: activeSpaceIDs) }
+    }
+
+    static func screenIdentifier(forWindowAt cgPosition: CGPoint) -> String? {
+        NSScreen.screenContainingMouse(cgPosition).uniqueIdentifier()
+    }
+
+    static func windowBelongsToScreen(_ windowInfo: WindowInfo, screenIdentifier: String) -> Bool {
+        if let winScreen = windowInfo.screenIdentifier {
+            return winScreen == screenIdentifier
+        }
+        return windowInfo.isMinimized || windowInfo.isHidden
+    }
+
+    static func filterWindowsByCurrentMonitor(_ windows: [WindowInfo], mouseLocation: CGPoint? = nil) -> [WindowInfo] {
+        let mouse = mouseLocation ?? CGEvent(source: nil)?.location ?? .zero
+        let currentScreen = NSScreen.screenContainingMouse(mouse)
+        let id = currentScreen.uniqueIdentifier()
+        return windows.filter { windowBelongsToScreen($0, screenIdentifier: id) }
     }
 
     static func getActiveWindows(of app: NSRunningApplication, context: WindowFetchContext = .dockPreview, ignoreSingleWindowFilter: Bool = false) async throws -> [WindowInfo] {
@@ -835,8 +851,7 @@ extension WindowUtil {
         guard window.owningApplication != nil,
               window.isOnScreen,
               window.windowLayer == 0,
-              window.frame.size.width >= 100,
-              window.frame.size.height >= 100
+              Defaults[.disableMinWindowSizeFilter] || (window.frame.size.width >= AXMinWindowSize.width && window.frame.size.height >= AXMinWindowSize.height)
         else { return }
 
         guard let bundleId = app.bundleIdentifier else {
@@ -913,6 +928,7 @@ extension WindowUtil {
                 lastAccessedTime: lastAccessedTime,
                 creationTime: creationTime,
                 spaceID: window.windowID.cgsSpaces().first.map { Int($0) },
+                screenIdentifier: screenIdentifier(forWindowAt: window.frame.origin),
                 isMinimized: minimizedState,
                 isHidden: hiddenState
             )
@@ -1003,6 +1019,7 @@ extension WindowUtil {
             lastAccessedTime: persistedData?.lastAccessedTime ?? Date(),
             creationTime: persistedData?.creationTime,
             spaceID: cgID.cgsSpaces().first.map { Int($0) },
+            screenIdentifier: (try? axWindow.position()).flatMap { screenIdentifier(forWindowAt: $0) },
             isMinimized: minimizedState,
             isHidden: hiddenState
         )
@@ -1016,16 +1033,34 @@ extension WindowUtil {
         updateDesktopSpaceWindowCache(with: info)
     }
 
+    private static let minUsableImageDimension = 10
+
     static func updateDesktopSpaceWindowCache(with windowInfo: WindowInfo) {
         desktopSpaceWindowCacheManager.updateCache(pid: windowInfo.app.processIdentifier) { windowSet in
             if let matchingWindow = windowSet.first(where: { $0.axElement == windowInfo.axElement }) {
                 var matchingWindowCopy = matchingWindow
                 matchingWindowCopy.windowName = windowInfo.windowName
-                matchingWindowCopy.image = windowInfo.image
-                matchingWindowCopy.imageCapturedTime = windowInfo.imageCapturedTime
-                matchingWindowCopy.spaceID = windowInfo.spaceID
+                if let newSpaceID = windowInfo.spaceID {
+                    matchingWindowCopy.spaceID = newSpaceID
+                }
+                if let newScreen = windowInfo.screenIdentifier {
+                    matchingWindowCopy.screenIdentifier = newScreen
+                }
                 matchingWindowCopy.isMinimized = windowInfo.isMinimized
                 matchingWindowCopy.isHidden = windowInfo.isHidden
+
+                let newImageIsTiny: Bool = if let img = windowInfo.image {
+                    img.width < minUsableImageDimension || img.height < minUsableImageDimension
+                } else {
+                    true
+                }
+
+                if newImageIsTiny, matchingWindow.image != nil {
+                    // Keep the existing cached image instead of replacing with a degenerate one
+                } else {
+                    matchingWindowCopy.image = windowInfo.image
+                    matchingWindowCopy.imageCapturedTime = windowInfo.imageCapturedTime
+                }
 
                 windowSet.remove(matchingWindow)
                 windowSet.insert(matchingWindowCopy)

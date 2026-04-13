@@ -88,6 +88,8 @@ class SearchWindow: NSPanel, NSTextFieldDelegate {
     }
 
     func showSearch(relativeTo window: NSWindow) {
+        guard window.isVisible else { return }
+
         let frame = window.frame
         if frame.width <= 0 || frame.height <= 0 {
             DispatchQueue.main.async { [weak self] in

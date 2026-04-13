@@ -14,9 +14,14 @@ let spotifyAppIdentifier = "com.spotify.client"
 let appleMusicAppIdentifier = "com.apple.Music"
 let calendarAppIdentifier = "com.apple.iCal"
 
-func isMediaApp(_ bundleIdentifier: String?) -> Bool {
+@MainActor func isMediaApp(_ bundleIdentifier: String?) -> Bool {
     guard let bundleId = bundleIdentifier else { return false }
-    return bundleId == spotifyAppIdentifier || bundleId == appleMusicAppIdentifier
+    switch Defaults[.mediaDetectionMode] {
+    case .universal:
+        return bundleId == MediaRemoteService.shared.activeBundleIdentifier
+    case .appleScriptOnly:
+        return bundleId == spotifyAppIdentifier || bundleId == appleMusicAppIdentifier
+    }
 }
 
 extension Defaults.Keys {
@@ -24,13 +29,14 @@ extension Defaults.Keys {
     static let previewHeight = Key<CGFloat>("previewHeight", default: 187.5)
     static let lockAspectRatio = Key<Bool>("lockAspectRatio", default: true)
     static let bufferFromDock = Key<CGFloat>("bufferFromDock", default: CoreDockIsMagnificationEnabled() ? -25 : DockUtils.getDockPosition() == .right ? -18 : -20)
-    static let globalPaddingMultiplier = Key<CGFloat>("globalPaddingMultiplier", default: 1.0)
+    static let globalPaddingMultiplier = Key<CGFloat>("globalPaddingMultiplier", default: 0.7)
     static let hoverWindowOpenDelay = Key<CGFloat>("openDelay", default: 0.2)
     static let useDelayOnlyForInitialOpen = Key<Bool>("useDelayOnlyForInitialOpen", default: false)
     static let anchorDockPreviewPosition = Key<Bool>("anchorDockPreviewPosition", default: true)
     static let preventDockHide = Key<Bool>("preventDockHide", default: false)
     static let preventSwitcherHide = Key<Bool>("preventSwitcherHide", default: false)
     static let requireShiftTabToGoBack = Key<Bool>("requireShiftTabToGoBack", default: false)
+    static let switcherBackwardKeyCode = Key<UInt16>("switcherBackwardKeyCode", default: 56)
     static let shouldHideOnDockItemClick = Key<Bool>("shouldHideOnDockItemClick", default: false)
     static let dockClickAction = Key<DockClickAction>("dockClickAction", default: .hide)
     static let enableCmdRightClickQuit = Key<Bool>("enableCmdRightClickQuit", default: true)
@@ -72,11 +78,15 @@ extension Defaults.Keys {
     static let aeroShakeAction = Key<AeroShakeAction>("aeroShakeAction", default: .none)
 
     static let showSpecialAppControls = Key<Bool>("showSpecialAppControls", default: true)
-    static let useEmbeddedMediaControls = Key<Bool>("useEmbeddedMediaControls", default: false)
+    static let enableMediaWidget = Key<Bool>("enableMediaWidget", default: true)
+    static let mediaDetectionMode = Key<MediaDetectionMode>("mediaDetectionMode", default: .universal)
+    static let enableCalendarWidget = Key<Bool>("enableCalendarWidget", default: true)
+    static let useEmbeddedMediaControls = Key<Bool>("useEmbeddedMediaControls", default: true)
     static let useEmbeddedDockPreviewElements = Key<Bool>("useEmbeddedDockPreviewElements", default: false)
     static let disableDockStyleTrafficLights = Key<Bool>("disableDockStyleTrafficLights", default: false)
     static let disableDockStyleTitles = Key<Bool>("disableDockStyleTitles", default: false)
     static let showBigControlsWhenNoValidWindows = Key<Bool>("showBigControlsWhenNoValidWindows", default: true)
+    static let showMassActionButtons = Key<Bool>("showMassActionButtons", default: true)
     static let enablePinning = Key<Bool>("enablePinning", default: true)
 
     static let persistedWindowOrder = Key<[WindowOrderPersistence.PersistedWindowEntry]>("persistedWindowOrder", default: [])
@@ -86,10 +96,13 @@ extension Defaults.Keys {
     static let instantWindowSwitcher = Key<Bool>("instantWindowSwitcher", default: false)
     static let enableDockPreviews = Key<Bool>("enableDockPreviews", default: true)
     static let showWindowsFromCurrentSpaceOnly = Key<Bool>("showWindowsFromCurrentSpaceOnly", default: false)
+    static let showWindowsFromCurrentMonitorOnly = Key<Bool>("showWindowsFromCurrentMonitorOnly", default: false)
     static let windowPreviewSortOrder = Key<WindowPreviewSortOrder>("windowPreviewSortOrder", default: .recentlyUsed)
     static let showWindowsFromCurrentSpaceOnlyInSwitcher = Key<Bool>("showWindowsFromCurrentSpaceOnlyInSwitcher", default: false)
+    static let showWindowsFromCurrentMonitorOnlyInSwitcher = Key<Bool>("showWindowsFromCurrentMonitorOnlyInSwitcher", default: false)
     static let windowSwitcherSortOrder = Key<WindowPreviewSortOrder>("windowSwitcherSortOrder", default: .recentlyUsed)
     static let showWindowsFromCurrentSpaceOnlyInCmdTab = Key<Bool>("showWindowsFromCurrentSpaceOnlyInCmdTab", default: false)
+    static let showWindowsFromCurrentMonitorOnlyInCmdTab = Key<Bool>("showWindowsFromCurrentMonitorOnlyInCmdTab", default: false)
     static let cmdTabSortOrder = Key<WindowPreviewSortOrder>("cmdTabSortOrder", default: .recentlyUsed)
     static let sortMinimizedToEnd = Key<Bool>("sortMinimizedToEnd", default: false)
     static let enableCmdTabEnhancements = Key<Bool>("enableCmdTabEnhancements", default: false)
@@ -99,6 +112,8 @@ extension Defaults.Keys {
     static let enableMouseHoverInSwitcher = Key<Bool>("enableMouseHoverInSwitcher", default: true)
     static let mouseHoverAutoScrollSpeed = Key<CGFloat>("mouseHoverAutoScrollSpeed", default: 4.0)
     static let keepPreviewOnAppTerminate = Key<Bool>("keepPreviewOnAppTerminate", default: false)
+    static let enableVimMotions = Key<Bool>("enableVimMotions", default: false)
+    static let passArrowsThroughToSystem = Key<Bool>("passArrowsThroughToSystem", default: false)
     static let enableWindowSwitcherSearch = Key<Bool>("enableWindowSwitcherSearch", default: false)
     static let searchTriggerKey = Key<UInt16>("searchTriggerKey", default: UInt16(kVK_ANSI_Slash))
     static let compactModeTitleFormat = Key<CompactModeTitleFormat>("compactModeTitleFormat", default: .appNameAndTitle)
@@ -120,6 +135,8 @@ extension Defaults.Keys {
     static let showMenuBarIcon = Key<Bool>("showMenuBarIcon", default: true)
     static let raisedWindowLevel = Key<Bool>("raisedWindowLevel", default: true)
     static let launched = Key<Bool>("launched", default: false)
+    static let reopenSettingsAfterRestart = Key<Bool>("reopenSettingsAfterRestart", default: false)
+    static let disableMinWindowSizeFilter = Key<Bool>("disableMinWindowSizeFilter", default: false)
     static let Int64maskCommand = Key<Int>("Int64maskCommand", default: 1_048_840)
     static let Int64maskControl = Key<Int>("Int64maskControl", default: 262_401)
     static let Int64maskAlternate = Key<Int>("Int64maskAlternate", default: 524_576)
@@ -135,6 +152,7 @@ extension Defaults.Keys {
     static let hideHoverContainerBackground = Key<Bool>("hideHoverContainerBackground", default: false)
     static let hideWidgetContainerBackground = Key<Bool>("hideWidgetContainerBackground", default: false)
     static let useOpaquePreviewBackground = Key<Bool>("useOpaquePreviewBackground", default: false)
+    static let customBackgroundColor = Key<Color?>("customBackgroundColor", default: nil)
     static let appAppearanceMode = Key<AppAppearanceMode>("appAppearanceMode", default: .system)
     static let showActiveWindowBorder = Key<Bool>("showActiveWindowBorder", default: false)
 
@@ -146,10 +164,12 @@ extension Defaults.Keys {
     static let windowTitleVisibility = Key<WindowTitleVisibility>("windowTitleVisibility", default: .alwaysVisible)
     static let windowTitlePosition = Key<WindowTitlePosition>("windowTitlePosition", default: .bottomLeft)
     static let enableTitleMarquee = Key<Bool>("enableTitleMarquee", default: true)
+    static let windowTitleFontSize = Key<WindowTitleFontSize>("windowTitleFontSize", default: .system)
     static let trafficLightButtonsVisibility = Key<TrafficLightButtonsVisibility>("trafficLightButtonsVisibility", default: .dimmedOnPreviewHover)
     static let trafficLightButtonsPosition = Key<TrafficLightButtonsPosition>("trafficLightButtonsPosition", default: .topLeft)
     static let enabledTrafficLightButtons = Key<Set<WindowAction>>("enabledTrafficLightButtons", default: [.quit, .close, .minimize, .toggleFullScreen])
     static let useMonochromeTrafficLights = Key<Bool>("useMonochromeTrafficLights", default: false)
+    static let trafficLightButtonScale = Key<CGFloat>("trafficLightButtonScale", default: 1.0)
     static let showMinimizedHiddenLabels = Key<Bool>("showMinimizedHiddenLabels", default: true)
 
     // MARK: - Window Switcher Appearance Settings
@@ -181,6 +201,7 @@ extension Defaults.Keys {
     static let previewMaxColumns = Key<Int>("previewMaxColumns", default: 2) // For left/right dock
     static let previewMaxRows = Key<Int>("previewMaxRows", default: 1) // For bottom dock only
     static let switcherMaxRows = Key<Int>("switcherMaxRows", default: 8) // For window switcher
+    static let switcherIgnoreScreenLimit = Key<Bool>("switcherIgnoreScreenLimit", default: false)
     static let windowSwitcherScrollDirection = Key<WindowSwitcherScrollDirection>("windowSwitcherScrollDirection", default: .vertical)
 
     static let windowSwitcherPlacementStrategy = Key<WindowSwitcherPlacementStrategy>("windowSwitcherPlacementStrategy", default: .screenWithMouse)
@@ -250,6 +271,10 @@ extension Defaults.Keys {
 
     static let cmdShortcut3Key = Key<UInt16>("cmdShortcut3Key", default: UInt16(kVK_ANSI_Q))
     static let cmdShortcut3Action = Key<WindowAction>("cmdShortcut3Action", default: .quit)
+
+    // MARK: - Window Switcher Selection Key
+
+    static let windowSwitcherSelectionKeyCode = Key<UInt16>("windowSwitcherSelectionKeyCode", default: UInt16(kVK_Return))
 
     // MARK: - Alternate Window Switcher Keybind (shares modifier with primary keybind)
 
@@ -403,6 +428,8 @@ enum WindowSwitcherControlPosition: String, CaseIterable, Defaults.Serializable 
     case topTrailing
     case bottomLeading
     case bottomTrailing
+    case centeredTitleTopControlsBottom
+    case centeredControlsTopTitleBottom
     case diagonalTopLeftBottomRight
     case diagonalTopRightBottomLeft
     case diagonalBottomLeftTopRight
@@ -422,6 +449,10 @@ enum WindowSwitcherControlPosition: String, CaseIterable, Defaults.Serializable 
             String(localized: "At bottom - Title on left, controls on right")
         case .bottomTrailing:
             String(localized: "At bottom - Controls on left, title on right")
+        case .centeredTitleTopControlsBottom:
+            String(localized: "Centered - Title top, controls bottom")
+        case .centeredControlsTopTitleBottom:
+            String(localized: "Centered - Controls top, title bottom")
         case .diagonalTopLeftBottomRight:
             String(localized: "Diagonal - Title top left, controls bottom right")
         case .diagonalTopRightBottomLeft:
@@ -444,6 +475,7 @@ enum WindowSwitcherControlPosition: String, CaseIterable, Defaults.Serializable 
     var showsOnTop: Bool {
         switch self {
         case .topLeading, .topTrailing,
+             .centeredTitleTopControlsBottom, .centeredControlsTopTitleBottom,
              .diagonalTopLeftBottomRight, .diagonalTopRightBottomLeft,
              .diagonalBottomLeftTopRight, .diagonalBottomRightTopLeft,
              .parallelTopLeftBottomLeft, .parallelTopRightBottomRight,
@@ -457,6 +489,7 @@ enum WindowSwitcherControlPosition: String, CaseIterable, Defaults.Serializable 
     var showsOnBottom: Bool {
         switch self {
         case .bottomLeading, .bottomTrailing,
+             .centeredTitleTopControlsBottom, .centeredControlsTopTitleBottom,
              .diagonalTopLeftBottomRight, .diagonalTopRightBottomLeft,
              .diagonalBottomLeftTopRight, .diagonalBottomRightTopLeft,
              .parallelTopLeftBottomLeft, .parallelTopRightBottomRight,
@@ -476,12 +509,25 @@ enum WindowSwitcherControlPosition: String, CaseIterable, Defaults.Serializable 
         return offset
     }
 
+    var isCentered: Bool {
+        switch self {
+        case .centeredTitleTopControlsBottom, .centeredControlsTopTitleBottom:
+            true
+        default:
+            false
+        }
+    }
+
     var topConfiguration: (isLeadingControls: Bool, showTitle: Bool, showControls: Bool) {
         switch self {
         case .topLeading, .bottomLeading:
             (false, true, true)
         case .topTrailing, .bottomTrailing:
             (true, true, true)
+        case .centeredTitleTopControlsBottom:
+            (false, true, false)
+        case .centeredControlsTopTitleBottom:
+            (false, false, true)
         case .diagonalTopLeftBottomRight, .parallelTopLeftBottomLeft:
             (false, true, false)
         case .diagonalTopRightBottomLeft, .parallelTopRightBottomRight:
@@ -499,6 +545,10 @@ enum WindowSwitcherControlPosition: String, CaseIterable, Defaults.Serializable 
             (false, true, true)
         case .topTrailing, .bottomTrailing:
             (true, true, true)
+        case .centeredTitleTopControlsBottom:
+            (false, false, true)
+        case .centeredControlsTopTitleBottom:
+            (false, true, false)
         case .diagonalTopLeftBottomRight:
             (false, false, true)
         case .diagonalTopRightBottomLeft:
@@ -565,6 +615,29 @@ enum DockClickAction: String, CaseIterable, Defaults.Serializable {
             String(localized: "Minimize windows", comment: "Dock click action option")
         case .hide:
             String(localized: "Hide application", comment: "Dock click action option")
+        }
+    }
+}
+
+enum MediaDetectionMode: String, CaseIterable, Defaults.Serializable {
+    case universal
+    case appleScriptOnly
+
+    var localizedName: String {
+        switch self {
+        case .universal:
+            String(localized: "Universal (any app)", comment: "Media detection mode option")
+        case .appleScriptOnly:
+            String(localized: "Spotify & Apple Music only", comment: "Media detection mode option")
+        }
+    }
+
+    var localizedDescription: String {
+        switch self {
+        case .universal:
+            String(localized: "Shows controls for whichever app is currently playing — browsers, third-party players, etc. Only one source is active at a time.", comment: "Media detection mode description")
+        case .appleScriptOnly:
+            String(localized: "Only shows controls for Spotify and Apple Music. Each app gets its own controls that work independently, even when other apps are playing audio.", comment: "Media detection mode description")
         }
     }
 }
@@ -824,6 +897,61 @@ enum CompactModeTitleFormat: String, CaseIterable, Defaults.Serializable, Identi
             String(localized: "Window Title Only")
         case .appNameOnly:
             String(localized: "App Name Only")
+        }
+    }
+}
+
+enum WindowTitleFontSize: Int, CaseIterable, Defaults.Serializable, Identifiable {
+    case system = 0
+    case caption2 = 1
+    case caption = 2
+    case footnote = 3
+    case subheadline = 4
+    case body = 5
+    case headline = 6
+    case title3 = 7
+    case title2 = 8
+    case title = 9
+
+    var id: Int { rawValue }
+
+    var localizedName: String {
+        switch self {
+        case .system:
+            String(localized: "System Default", comment: "Window title font size option")
+        case .caption2:
+            String(localized: "Caption 2", comment: "Window title font size option")
+        case .caption:
+            String(localized: "Caption", comment: "Window title font size option")
+        case .footnote:
+            String(localized: "Footnote", comment: "Window title font size option")
+        case .subheadline:
+            String(localized: "Subheadline", comment: "Window title font size option")
+        case .body:
+            String(localized: "Body", comment: "Window title font size option")
+        case .headline:
+            String(localized: "Headline", comment: "Window title font size option")
+        case .title3:
+            String(localized: "Title 3", comment: "Window title font size option")
+        case .title2:
+            String(localized: "Title 2", comment: "Window title font size option")
+        case .title:
+            String(localized: "Title", comment: "Window title font size option")
+        }
+    }
+
+    var font: Font {
+        switch self {
+        case .system: .subheadline
+        case .caption2: .caption2
+        case .caption: .caption
+        case .footnote: .footnote
+        case .subheadline: .subheadline
+        case .body: .body
+        case .headline: .headline
+        case .title3: .title3
+        case .title2: .title2
+        case .title: .title
         }
     }
 }

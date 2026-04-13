@@ -11,6 +11,7 @@ struct AdvancedSettingsView: View {
     @Default(.anchorDockPreviewPosition) var anchorDockPreviewPosition
     @Default(.preventDockHide) var preventDockHide
     @Default(.raisedWindowLevel) var raisedWindowLevel
+    @Default(.disableMinWindowSizeFilter) var disableMinWindowSizeFilter
 
     @Default(.windowImageCaptureQuality) var windowImageCaptureQuality
     @Default(.screenCaptureCacheLifespan) var screenCaptureCacheLifespan
@@ -83,6 +84,14 @@ struct AdvancedSettingsView: View {
 
                 Toggle(isOn: $preventDockHide) { Text("Prevent dock from hiding during previews") }
                 Toggle(isOn: $raisedWindowLevel) { Text("Show preview above app labels").onChange(of: raisedWindowLevel) { _ in askUserToRestartApplication() } }
+
+                Toggle(isOn: $disableMinWindowSizeFilter) {
+                    Text("Show small windows (under 100px)")
+                }
+                Text("Includes small windows like Finder's copy progress dialog in previews.")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .padding(.leading, 20)
 
                 Toggle(isOn: $preventPreviewReentryDuringFadeOut) {
                     Text("Prevent preview reappearance during fade-out")

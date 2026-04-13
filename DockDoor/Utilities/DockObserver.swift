@@ -25,7 +25,9 @@ struct ApplicationReturnType {
 }
 
 func handleSelectedDockItemChangedNotification(observer _: AXObserver, element _: AXUIElement, notificationName _: CFString, context: UnsafeMutableRawPointer?) {
-    DockObserver.activeInstance?.processSelectedDockItemChanged()
+    DispatchQueue.main.async {
+        DockObserver.activeInstance?.processSelectedDockItemChanged()
+    }
 }
 
 final class DockObserver {
@@ -97,10 +99,9 @@ final class DockObserver {
         Defaults[.titleBarScrollCenteredWindowSizingMode]
     }
 
-    private static func isSpecialControlsApp(_ bundleId: String?) -> Bool {
-        bundleId == spotifyAppIdentifier ||
-            bundleId == appleMusicAppIdentifier ||
-            bundleId == calendarAppIdentifier
+    @MainActor private static func isSpecialControlsApp(_ bundleId: String?) -> Bool {
+        (bundleId == calendarAppIdentifier && Defaults[.enableCalendarWidget]) ||
+            (isMediaApp(bundleId) && Defaults[.enableMediaWidget])
     }
 
     static func isDockVisible() -> Bool {
@@ -244,16 +245,47 @@ final class DockObserver {
         }
     }
 
-    func processSelectedDockItemChanged() {
+    @MainActor func processSelectedDockItemChanged() {
         let currentMouseLocation = DockObserver.getMousePosition()
         let appUnderMouseElement = DebugLogger.measureSlow("getDockItemAppStatusUnderMouse", thresholdMs: 100) {
             getDockItemAppStatusUnderMouse()
         }
 
-        guard case let .success(currentApp) = appUnderMouseElement.status,
-              let dockItemElement = appUnderMouseElement.dockItemElement,
-              !previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive
+        guard !previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive,
+              let dockItemElement = appUnderMouseElement.dockItemElement
         else {
+            return
+        }
+
+        if case let .notRunning(bundleIdentifier) = appUnderMouseElement.status {
+            let isCalendar = bundleIdentifier == calendarAppIdentifier && Defaults[.enableCalendarWidget]
+            let mr = MediaRemoteService.shared
+            let isActiveMedia = bundleIdentifier == mr.activeBundleIdentifier
+                && Defaults[.enableMediaWidget]
+                && (!mr.isUniversalSource || Defaults[.mediaDetectionMode] == .universal)
+            if isCalendar || isActiveMedia, Defaults[.showSpecialAppControls], Defaults[.enableDockPreviews] {
+                let mouseScreen = NSScreen.screenContainingMouse(currentMouseLocation)
+                let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
+                let appName = NSWorkspace.shared.urlForApplication(withBundleIdentifier: bundleIdentifier)
+                    .flatMap { Bundle(url: $0) }
+                    .flatMap { $0.infoDictionary?["CFBundleDisplayName"] as? String ?? $0.infoDictionary?["CFBundleName"] as? String }
+                    ?? MediaRemoteService.shared.activeAppName
+                    ?? "Unknown"
+                previewCoordinator.showWindow(
+                    appName: appName,
+                    windows: [],
+                    mouseLocation: convertedMouseLocation,
+                    mouseScreen: mouseScreen,
+                    dockItemElement: dockItemElement,
+                    overrideDelay: false,
+                    onWindowTap: { [weak self] in self?.hideWindowAndResetLastApp() },
+                    bundleIdentifier: bundleIdentifier
+                )
+            }
+            return
+        }
+
+        guard case let .success(currentApp) = appUnderMouseElement.status else {
             return
         }
 
@@ -303,6 +335,10 @@ final class DockObserver {
             cachedWindows = WindowUtil.filterWindowsByCurrentSpace(cachedWindows)
         }
 
+        if Defaults[.showWindowsFromCurrentMonitorOnly], !cachedWindows.isEmpty {
+            cachedWindows = WindowUtil.filterWindowsByCurrentMonitor(cachedWindows, mouseLocation: currentMouseLocation)
+        }
+
         if !Defaults[.includeHiddenWindowsInDockPreview] {
             cachedWindows = cachedWindows.filter { !$0.isHidden && !$0.isMinimized }
         }
@@ -349,6 +385,10 @@ final class DockObserver {
                     windows = WindowUtil.filterWindowsByCurrentSpace(windows)
                 }
 
+                if Defaults[.showWindowsFromCurrentMonitorOnly] {
+                    windows = WindowUtil.filterWindowsByCurrentMonitor(windows, mouseLocation: currentMouseLocation)
+                }
+
                 if !Defaults[.includeHiddenWindowsInDockPreview] {
                     windows = windows.filter { !$0.isHidden && !$0.isMinimized }
                 }
@@ -372,8 +412,8 @@ final class DockObserver {
                         }
                     }
 
-                    previewCoordinator.mergeWindowsIfShowing(
-                        for: currentAppPID,
+                    previewCoordinator.mergeWindowsIfNeeded(
+                        currentAppPID,
                         windows: freshWindows,
                         dockPosition: dockPosition,
                         bestGuessMonitor: monitor
@@ -856,7 +896,7 @@ final class DockObserver {
         let isNaturalScrolling = nsEvent?.isDirectionInvertedFromDevice ?? false
         let normalizedDeltaY = isNaturalScrolling ? -deltaY : deltaY
 
-        if isMediaApp(app.bundleIdentifier) {
+        if app.bundleIdentifier == spotifyAppIdentifier || app.bundleIdentifier == appleMusicAppIdentifier {
             if Defaults[.dockIconMediaScrollBehavior] == .adjustVolume {
                 handleVolumeScroll(deltaY: normalizedDeltaY)
                 return true

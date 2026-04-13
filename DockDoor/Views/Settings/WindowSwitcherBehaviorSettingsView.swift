@@ -14,6 +14,7 @@ struct WindowSwitcherBehaviorSettingsView: View {
     @Default(.useClassicWindowOrdering) var useClassicWindowOrdering
     @Default(.limitSwitcherToFrontmostApp) var limitSwitcherToFrontmostApp
     @Default(.showWindowsFromCurrentSpaceOnlyInSwitcher) var showWindowsFromCurrentSpaceOnlyInSwitcher
+    @Default(.showWindowsFromCurrentMonitorOnlyInSwitcher) var showWindowsFromCurrentMonitorOnlyInSwitcher
     @Default(.windowSwitcherSortOrder) var windowSwitcherSortOrder
     @Default(.groupedAppsInSwitcher) var groupedAppsInSwitcher
     @Default(.windowSwitcherPlacementStrategy) var placementStrategy
@@ -32,9 +33,13 @@ struct WindowSwitcherBehaviorSettingsView: View {
 
                 if enableWindowSwitcher {
                     behaviorSection
+                    windowDisplaySection
                     searchAndInputSection
                     sortingAndGroupingSection
                     placementSection
+
+                    SettingsMockPreview(context: .windowSwitcher)
+
                     appearanceSection
                 }
             }
@@ -75,8 +80,6 @@ struct WindowSwitcherBehaviorSettingsView: View {
                     .foregroundColor(.secondary)
                     .padding(.leading, 20)
 
-                Toggle(isOn: $includeHiddenWindowsInSwitcher) { Text("Include hidden/minimized windows") }
-
                 Toggle(isOn: Binding(
                     get: { !preventSwitcherHide },
                     set: { preventSwitcherHide = !$0 }
@@ -87,6 +90,26 @@ struct WindowSwitcherBehaviorSettingsView: View {
                     .font(.caption)
                     .foregroundColor(.secondary)
                     .padding(.leading, 20)
+            }
+        }
+    }
+
+    // MARK: - Window Display
+
+    private var windowDisplaySection: some View {
+        SettingsGroup(header: "Window Display") {
+            VStack(alignment: .leading, spacing: 10) {
+                Toggle(isOn: $showWindowsFromCurrentSpaceOnlyInSwitcher) { Text("Show windows from current Space only") }
+                Text("Only display windows that are in the current virtual desktop/Space.")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .padding(.leading, 20)
+
+                Toggle(isOn: $showWindowsFromCurrentMonitorOnlyInSwitcher) { Text("Show windows from current monitor only") }
+                Text("Only display windows that are on the same display as the mouse cursor.")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .padding(.leading, 20)
 
                 Toggle(isOn: $limitSwitcherToFrontmostApp) { Text("Limit to active app only") }
                 Text("Only show windows from the currently active/frontmost application.")
@@ -94,11 +117,7 @@ struct WindowSwitcherBehaviorSettingsView: View {
                     .foregroundColor(.secondary)
                     .padding(.leading, 20)
 
-                Toggle(isOn: $showWindowsFromCurrentSpaceOnlyInSwitcher) { Text("Show windows from current Space only") }
-                Text("Only display windows that are in the current virtual desktop/Space.")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-                    .padding(.leading, 20)
+                Toggle(isOn: $includeHiddenWindowsInSwitcher) { Text("Include hidden/minimized windows") }
             }
         }
     }

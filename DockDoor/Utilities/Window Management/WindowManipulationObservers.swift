@@ -113,6 +113,9 @@ class WindowManipulationObservers {
 
     @objc private func activeSpaceDidChange(_ notification: Notification) {
         DebugLogger.log("activeSpaceDidChange")
+        Task { @MainActor in
+            previewCoordinator.hideWindow()
+        }
         if Defaults[.showActiveAppIndicator] {
             ActiveAppIndicatorCoordinator.shared?.handleSpaceChanged()
         }
@@ -222,6 +225,9 @@ class WindowManipulationObservers {
                 let windowID = try? element.cgWindowId()
                 update(windowSet: &windowSet, matching: windowID, element: element) { window in
                     window.spaceID = window.id.cgsSpaces().first.map { Int($0) }
+                    if let pos = try? element.position() {
+                        window.screenIdentifier = WindowUtil.screenIdentifier(forWindowAt: pos)
+                    }
                 }
             }
         case kAXUIElementDestroyedNotification:
@@ -232,6 +238,9 @@ class WindowManipulationObservers {
                 let windowID = try? element.cgWindowId()
                 update(windowSet: &windowSet, matching: windowID, element: element) { window in
                     window.spaceID = window.id.cgsSpaces().first.map { Int($0) }
+                    if let pos = try? element.position() {
+                        window.screenIdentifier = WindowUtil.screenIdentifier(forWindowAt: pos)
+                    }
                 }
             }
         case kAXWindowMiniaturizedNotification, kAXWindowDeminiaturizedNotification:
@@ -241,7 +250,6 @@ class WindowManipulationObservers {
                 guard let self else { return }
                 update(windowSet: &windowSet, matching: windowID, element: element) { window in
                     window.isMinimized = minimizedState ?? false
-                    window.spaceID = window.id.cgsSpaces().first.map { Int($0) }
                 }
             }
             if Defaults[.showActiveAppIndicator] {
@@ -258,7 +266,9 @@ class WindowManipulationObservers {
                         windowSet = Set(windowSet.map { window in
                             var updated = window
                             updated.isHidden = true
-                            updated.spaceID = updated.id.cgsSpaces().first.map { Int($0) }
+                            if let freshSpace = updated.id.cgsSpaces().first.map({ Int($0) }) {
+                                updated.spaceID = freshSpace
+                            }
                             return updated
                         })
                     }
@@ -270,6 +280,9 @@ class WindowManipulationObservers {
                     var updated = window
                     updated.isHidden = false
                     updated.spaceID = updated.id.cgsSpaces().first.map { Int($0) }
+                    if let pos = try? updated.axElement.position() {
+                        updated.screenIdentifier = WindowUtil.screenIdentifier(forWindowAt: pos)
+                    }
                     return updated
                 })
             }

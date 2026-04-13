@@ -56,6 +56,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             removeMenuBar()
         }
 
+        MediaRemoteService.shared.activate()
+
         if !Defaults[.launched] {
             handleFirstTimeLaunch()
         } else {
@@ -99,6 +101,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let seeder = WindowSeeder()
         seeder.run()
         windowSeeder = seeder
+
+        if Defaults[.reopenSettingsAfterRestart] {
+            Defaults[.reopenSettingsAfterRestart] = false
+            openSettingsWindow(nil)
+        }
     }
 
     func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
@@ -107,6 +114,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func applicationWillTerminate(_ notification: Notification) {
+        wakeRecoveryTask?.cancel()
         WindowUtil.saveWindowOrderFromCache()
         URLCache.shared.removeAllCachedResponses()
     }
@@ -135,6 +143,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let menu = NSMenu()
         menu.addItem(NSMenuItem(title: String(localized: "Open Settings"), action: #selector(openSettingsWindow(_:)), keyEquivalent: ""))
         menu.addItem(NSMenuItem.separator())
+        menu.addItem(NSMenuItem(title: String(localized: "Check for Updates…"), action: #selector(checkForUpdatesWrapper), keyEquivalent: ""))
         menu.addItem(NSMenuItem(title: String(localized: "Support DockDoor"), action: #selector(openDonationPage), keyEquivalent: ""))
         menu.addItem(NSMenuItem.separator())
         menu.addItem(NSMenuItem(title: String(localized: "Restart DockDoor"), action: #selector(restartAppWrapper), keyEquivalent: ""))
@@ -162,20 +171,49 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         restartApp()
     }
 
+    @objc private func checkForUpdatesWrapper() {
+        updater.checkForUpdates()
+    }
+
     @objc private func openDonationPage() {
         if let url = URL(string: "https://dockdoor.net/donate") {
             NSWorkspace.shared.open(url)
         }
     }
 
+    private var wakeRecoveryTask: Task<Void, Never>?
+
     @objc private func handleSystemWake() {
-        // Re-assert window level on wake (fixes window rendering issues)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
-            guard let self else { return }
-            NSApp.activate(ignoringOtherApps: true)
-            dockObserver?.reset()
-            keybindHelper?.reset()
-            appClosureObserver?.reset()
+        wakeRecoveryTask?.cancel()
+
+        wakeRecoveryTask = Task {
+            var delay: UInt64 = 1_000_000_000 // 1s
+            var totalWaited: UInt64 = 0
+            let maxWait: UInt64 = 15_000_000_000 // 15s
+
+            while !Task.isCancelled, totalWaited < maxWait {
+                try? await Task.sleep(nanoseconds: delay)
+                guard !Task.isCancelled else { return }
+                totalWaited += delay
+
+                if isAccessibilityReady() {
+                    DebugLogger.log("Wake recovery", details: "AX canary passed after \(totalWaited / 1_000_000)ms")
+                    break
+                }
+
+                DebugLogger.log("Wake recovery", details: "AX canary failed after \(totalWaited / 1_000_000)ms, backing off")
+                delay = min(delay * 2, maxWait - totalWaited)
+            }
+
+            guard !Task.isCancelled else { return }
+
+            await MainActor.run { [weak self] in
+                guard let self else { return }
+                NSApp.activate(ignoringOtherApps: true)
+                dockObserver?.reset()
+                keybindHelper?.reset()
+                appClosureObserver?.reset()
+            }
         }
     }
 

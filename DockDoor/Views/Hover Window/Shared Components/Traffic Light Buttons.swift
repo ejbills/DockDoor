@@ -11,6 +11,7 @@ struct TrafficLightButtons: View {
     let mockPreviewActive: Bool
     let enabledButtons: Set<WindowAction>
     let useMonochrome: Bool
+    var buttonScale: CGFloat = 1.0
     @State private var isHovering = false
 
     var body: some View {
@@ -86,6 +87,7 @@ struct TrafficLightButtons: View {
         }
         .foregroundStyle(color, fillColor)
         .font(.headline)
+        .scaleEffect(buttonScale)
         .contentShape(Rectangle())
         .onTapGesture {
             onWindowAction(action)
@@ -98,6 +100,7 @@ extension AppearanceSettingsView {
         @Default(.enabledTrafficLightButtons) private var enabledButtons
         @Default(.useMonochromeTrafficLights) private var useMonochrome
         @Default(.trafficLightButtonsVisibility) private var trafficLightButtonsVisibility
+        @Default(.trafficLightButtonScale) private var buttonScale
 
         private let buttonDescriptions: [(WindowAction, String)] = [
             (.quit, String(localized: "Quit")),
@@ -128,7 +131,8 @@ extension AppearanceSettingsView {
                                 pillStyling: true,
                                 mockPreviewActive: false,
                                 enabledButtons: enabledButtons,
-                                useMonochrome: useMonochrome
+                                useMonochrome: useMonochrome,
+                                buttonScale: buttonScale
                             )
                         }
 
@@ -202,6 +206,15 @@ extension AppearanceSettingsView {
 
                     Toggle("Use Monochrome Colors", isOn: $useMonochrome)
                         .padding(.top, 4)
+
+                    sliderSetting(
+                        title: "Button Scale",
+                        value: $buttonScale,
+                        range: 0.75 ... 2.0,
+                        step: 0.05,
+                        unit: "×",
+                        formatter: NumberFormatter.twoDecimalFormatter
+                    )
                 }
             }
         }

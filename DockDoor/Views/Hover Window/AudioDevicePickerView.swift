@@ -11,6 +11,7 @@ final class AudioDeviceManager: ObservableObject {
     @Published var currentDevice: AudioOutputDevice?
 
     private let systemID = AudioObjectID(kAudioObjectSystemObject)
+    private var listenerBlock: AudioObjectPropertyListenerBlock?
 
     init() {
         refresh()
@@ -66,9 +67,9 @@ final class AudioDeviceManager: ObservableObject {
                                                  mElement: kAudioObjectPropertyElementMaster)
         AudioObjectGetPropertyData(systemID, &defAddr, 0, nil, &defSize, &defID)
 
-        DispatchQueue.main.async {
-            self.devices = list
-            self.currentDevice = list.first(where: { $0.id == defID })
+        DispatchQueue.main.async { [weak self] in
+            self?.devices = list
+            self?.currentDevice = list.first(where: { $0.id == defID })
         }
     }
 
@@ -79,25 +80,28 @@ final class AudioDeviceManager: ObservableObject {
                                               mScope: kAudioObjectPropertyScopeGlobal,
                                               mElement: kAudioObjectPropertyElementMaster)
         if AudioObjectSetPropertyData(AudioObjectID(kAudioObjectSystemObject), &addr, 0, nil, size, &id) == noErr {
-            DispatchQueue.main.async { self.currentDevice = device }
+            DispatchQueue.main.async { [weak self] in self?.currentDevice = device }
         }
     }
 
     private func startListening() {
+        let block: AudioObjectPropertyListenerBlock = { [weak self] _, _ in
+            self?.refresh()
+        }
+        listenerBlock = block
         var addr = AudioObjectPropertyAddress(mSelector: kAudioHardwarePropertyDefaultOutputDevice,
                                               mScope: kAudioObjectPropertyScopeGlobal,
                                               mElement: kAudioObjectPropertyElementMaster)
-        AudioObjectAddPropertyListenerBlock(systemID, &addr, DispatchQueue.main) { _, _ in
-            self.refresh()
-            return noErr
-        }
+        AudioObjectAddPropertyListenerBlock(systemID, &addr, DispatchQueue.main, block)
     }
 
     private func stopListening() {
+        guard let block = listenerBlock else { return }
         var addr = AudioObjectPropertyAddress(mSelector: kAudioHardwarePropertyDefaultOutputDevice,
                                               mScope: kAudioObjectPropertyScopeGlobal,
                                               mElement: kAudioObjectPropertyElementMaster)
-        AudioObjectRemovePropertyListenerBlock(systemID, &addr, DispatchQueue.main) {}
+        AudioObjectRemovePropertyListenerBlock(systemID, &addr, DispatchQueue.main, block)
+        listenerBlock = nil
     }
 }
 

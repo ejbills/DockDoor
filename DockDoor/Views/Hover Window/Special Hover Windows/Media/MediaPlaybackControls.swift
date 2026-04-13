@@ -24,33 +24,36 @@ struct MediaPlaybackControls: View {
     }
 
     var body: some View {
-        HStack(alignment: .center, spacing: 8) {
-            Text(formatTime(mediaInfo.currentTime))
+        TimelineView(.periodic(from: .now, by: mediaInfo.isPlaying ? 0.25 : 1.0)) { _ in
+            let time = mediaInfo.displayTime
+            HStack(alignment: .center, spacing: 8) {
+                Text(formatTime(time))
 
-            SimpleProgressBar(
-                value: Binding(
-                    get: { mediaInfo.currentTime },
-                    set: { newValue in
-                        mediaInfo.seek(to: newValue)
-                    }
-                ),
-                range: 0 ... max(mediaInfo.duration, 1),
-                barColor: .primary.opacity(0.8),
-                backgroundColor: .secondary.opacity(0.8)
-            )
-            .frame(height: MediaControlsLayout.progressBarHeight)
+                SimpleProgressBar(
+                    value: Binding(
+                        get: { mediaInfo.displayTime },
+                        set: { newValue in
+                            mediaInfo.seek(to: newValue)
+                        }
+                    ),
+                    range: 0 ... max(mediaInfo.duration, 1),
+                    barColor: .primary.opacity(0.8),
+                    backgroundColor: .secondary.opacity(0.8)
+                )
+                .frame(height: MediaControlsLayout.progressBarHeight)
 
-            Text("-\(formatTime(max(0, mediaInfo.duration - mediaInfo.currentTime)))")
+                Text("-\(formatTime(max(0, mediaInfo.duration - time)))")
+            }
+            .font(.caption)
+            .monospacedDigit()
         }
-        .font(.caption)
-        .monospacedDigit()
 
         if isExpanded {
             VStack(spacing: 12) {
                 HStack(spacing: showingLyrics ? MediaControlsLayout.mediaButtonsSpacing - 5 : MediaControlsLayout.mediaButtonsSpacing) {
                     MediaControlButton(systemName: "backward.fill", isTitle: false, action: { mediaInfo.previousTrack() })
                     MediaControlButton(systemName: "gobackward.15", isTitle: true, action: {
-                        let newTime = max(0, mediaInfo.currentTime - 15)
+                        let newTime = max(0, mediaInfo.displayTime - 15)
                         mediaInfo.seek(to: newTime)
                     })
 
@@ -64,7 +67,7 @@ struct MediaPlaybackControls: View {
                                        .animation(showAnimations ? .easeInOut(duration: 0.15) : nil, value: mediaInfo.isPlaying)
 
                     MediaControlButton(systemName: "goforward.15", isTitle: true, action: {
-                        let newTime = min(mediaInfo.duration, mediaInfo.currentTime + 15)
+                        let newTime = min(mediaInfo.duration, mediaInfo.displayTime + 15)
                         mediaInfo.seek(to: newTime)
                     })
                     MediaControlButton(systemName: "forward.fill", isTitle: false, action: { mediaInfo.nextTrack() })
@@ -87,7 +90,7 @@ struct MediaPlaybackControls: View {
             HStack(spacing: showingLyrics ? MediaControlsLayout.mediaButtonsSpacing - 5 : MediaControlsLayout.mediaButtonsSpacing) {
                 MediaControlButton(systemName: "backward.fill", isTitle: false, action: { mediaInfo.previousTrack() })
                 MediaControlButton(systemName: "gobackward.15", isTitle: true, action: {
-                    let newTime = max(0, mediaInfo.currentTime - 15)
+                    let newTime = max(0, mediaInfo.displayTime - 15)
                     mediaInfo.seek(to: newTime)
                 })
 
@@ -101,7 +104,7 @@ struct MediaPlaybackControls: View {
                                    .animation(showAnimations ? .easeInOut(duration: 0.15) : nil, value: mediaInfo.isPlaying)
 
                 MediaControlButton(systemName: "goforward.15", isTitle: true, action: {
-                    let newTime = min(mediaInfo.duration, mediaInfo.currentTime + 15)
+                    let newTime = min(mediaInfo.duration, mediaInfo.displayTime + 15)
                     mediaInfo.seek(to: newTime)
                 })
                 MediaControlButton(systemName: "forward.fill", isTitle: false, action: { mediaInfo.nextTrack() })

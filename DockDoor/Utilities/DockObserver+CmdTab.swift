@@ -134,6 +134,10 @@ extension DockObserver {
             cachedWindows = WindowUtil.filterWindowsByCurrentSpace(cachedWindows)
         }
 
+        if Defaults[.showWindowsFromCurrentMonitorOnlyInCmdTab] {
+            cachedWindows = WindowUtil.filterWindowsByCurrentMonitor(cachedWindows)
+        }
+
         if !Defaults[.includeHiddenWindowsInCmdTab] {
             cachedWindows = cachedWindows.filter { !$0.isHidden && !$0.isMinimized }
         }
@@ -177,6 +181,10 @@ extension DockObserver {
                         windows = WindowUtil.filterWindowsByCurrentSpace(windows)
                     }
 
+                    if Defaults[.showWindowsFromCurrentMonitorOnlyInCmdTab] {
+                        windows = WindowUtil.filterWindowsByCurrentMonitor(windows)
+                    }
+
                     if !Defaults[.includeHiddenWindowsInCmdTab] {
                         windows = windows.filter { !$0.isHidden && !$0.isMinimized }
                     }
@@ -187,8 +195,8 @@ extension DockObserver {
                         guard let self else { return }
                         guard let screen = screenOrigin.screen() else { return }
 
-                        previewCoordinator.mergeWindowsIfShowing(
-                            for: appPID,
+                        previewCoordinator.mergeWindowsIfNeeded(
+                            appPID,
                             windows: freshWindows,
                             dockPosition: .cmdTab,
                             bestGuessMonitor: screen

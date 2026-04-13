@@ -9,6 +9,7 @@ func askUserToRestartApplication() {
         actions: [.ok, .cancel],
         completion: { result in
             if result == .ok {
+                Defaults[.reopenSettingsAfterRestart] = true
                 let appDelegate = NSApplication.shared.delegate as! AppDelegate
                 appDelegate.restartApp()
             }
