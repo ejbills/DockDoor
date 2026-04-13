@@ -87,7 +87,7 @@ struct DockLockingSettingsView: View {
     private var noteSection: some View {
         SettingsNote(
             icon: "info.circle",
-            text: "Dock Locking is useful in a multi-monitor setup where \"Displays have separate Spaces\" is enabled in System Settings → Desktop & Dock → Mission Control. The Dock won't jump to another monitor while this feature is enabled."
+            text: "Dock Locking works best with a bottom-positioned Dock in a multi-monitor setup where \"Displays have separate Spaces\" is enabled in System Settings → Desktop & Dock → Mission Control. The Dock won't jump to another monitor while this feature is enabled."
         )
     }
 }
