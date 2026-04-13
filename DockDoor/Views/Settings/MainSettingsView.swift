@@ -86,6 +86,7 @@ struct MainSettingsView: View {
                 Defaults[.fadeOutDuration] = Defaults.Keys.fadeOutDuration.defaultValue
                 Defaults[.tapEquivalentInterval] = Defaults.Keys.tapEquivalentInterval.defaultValue
                 Defaults[.preventDockHide] = Defaults.Keys.preventDockHide.defaultValue
+                Defaults[.enableDockIntellihide] = Defaults.Keys.enableDockIntellihide.defaultValue
                 Defaults[.screenCaptureCacheLifespan] = Defaults.Keys.screenCaptureCacheLifespan.defaultValue
                 Defaults[.windowPreviewImageScale] = Defaults.Keys.windowPreviewImageScale.defaultValue
                 Defaults[.bufferFromDock] = Defaults.Keys.bufferFromDock.defaultValue

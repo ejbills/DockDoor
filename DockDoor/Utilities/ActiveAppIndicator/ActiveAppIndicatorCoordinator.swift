@@ -88,18 +88,12 @@ final class ActiveAppIndicatorCoordinator {
     }
 
     private func setupDockLayoutObserver() {
-        guard let dockApp = NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.dock").first else {
+        guard let dockContext = DockAccessibility.dockList() else {
             return
         }
 
-        let dockPID = dockApp.processIdentifier
-        let dockElement = AXUIElementCreateApplication(dockPID)
-
-        guard let children = try? dockElement.children(),
-              let dockList = children.first(where: { (try? $0.role()) == kAXListRole })
-        else {
-            return
-        }
+        let dockPID = dockContext.app.processIdentifier
+        let dockList = dockContext.element
 
         var observer: AXObserver?
         guard AXObserverCreate(dockPID, { _, _, _, refcon in
@@ -242,7 +236,7 @@ final class ActiveAppIndicatorCoordinator {
         let previousApp = currentActiveApp
         currentActiveApp = app
 
-        guard app.bundleIdentifier != "com.apple.dock" else {
+        guard app.bundleIdentifier != DockAccessibility.dockBundleIdentifier else {
             animateHideIndicator()
             return
         }

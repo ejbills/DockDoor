@@ -50,7 +50,7 @@ extension DockObserver {
     }
 
     private func attemptCmdTabSubscription() {
-        guard let dockApp = NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.dock").first else {
+        guard let dockApp = DockAccessibility.dockApplication() else {
             return
         }
 
@@ -110,7 +110,7 @@ extension DockObserver {
 
     func processCmdTabSwitcherChanged() {
         guard Defaults[.enableCmdTabEnhancements] else { return }
-        guard let dockApp = NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.dock").first else {
+        guard let dockApp = DockAccessibility.dockApplication() else {
             return
         }
 
