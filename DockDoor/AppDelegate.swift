@@ -11,6 +11,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var previewCoordinator: SharedPreviewWindowCoordinator?
     private var keybindHelper: KeybindHelper?
     private var activeAppIndicator: ActiveAppIndicatorCoordinator?
+    private var dockLocker: DockLocker?
     private var statusBarItem: NSStatusItem?
     private var updaterController: SPUStandardUpdaterController
     @ObservedObject var updaterState: UpdaterState
@@ -83,6 +84,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
             if Defaults[.showActiveAppIndicator] {
                 activeAppIndicator = ActiveAppIndicatorCoordinator()
+            }
+
+            if Defaults[.enableDockLocking] {
+                dockLocker = DockLocker()
             }
 
             if updater.automaticallyChecksForUpdates {
@@ -213,6 +218,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 dockObserver?.reset()
                 keybindHelper?.reset()
                 appClosureObserver?.reset()
+                dockLocker?.reset()
             }
         }
     }

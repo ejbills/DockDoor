@@ -49,6 +49,11 @@ extension Defaults.Keys {
     static let titleBarScrollCenteredWindowHeightScale = Key<CGFloat>("titleBarScrollCenteredWindowHeightScale", default: 0.8)
     static let titleBarScrollCenteredWindowLockAspectRatio = Key<Bool>("titleBarScrollCenteredWindowLockAspectRatio", default: false)
     static let titleBarScrollRestoreWindowInterval = Key<CGFloat>("titleBarScrollRestoreWindowInterval", default: 1.5)
+
+    // Dock Locking
+    static let enableDockLocking = Key<Bool>("enableDockLocking", default: false)
+    static let lockedDockScreenIdentifier = Key<String>("lockedDockScreenIdentifier", default: "")
+    static let dockLockOverrideModifier = Key<Int>("dockLockOverrideModifier", default: DockLockModifier.option.rawValue)
     static let dockIconMediaScrollBehavior = Key<DockIconMediaScrollBehavior>("dockIconMediaScrollBehavior", default: .adjustVolume)
     static let mediaWidgetScrollBehavior = Key<MediaWidgetScrollBehavior>("mediaWidgetScrollBehavior", default: .seekPlayback)
     static let mediaWidgetScrollDirection = Key<MediaWidgetScrollDirection>("mediaWidgetScrollDirection", default: .vertical)
@@ -280,6 +285,33 @@ extension Defaults.Keys {
 
     static let alternateKeybindKey = Key<UInt16>("alternateKeybindKey", default: 0)
     static let alternateKeybindMode = Key<SwitcherInvocationMode>("alternateKeybindMode", default: .activeAppOnly)
+}
+
+// MARK: Dock Locking
+
+enum DockLockModifier: Int, CaseIterable, Codable, Defaults.Serializable {
+    case option = 0
+    case control = 1
+    case shift = 2
+    case command = 3
+
+    var cgEventFlag: CGEventFlags {
+        switch self {
+        case .option: .maskAlternate
+        case .control: .maskControl
+        case .shift: .maskShift
+        case .command: .maskCommand
+        }
+    }
+
+    var localizedName: String {
+        switch self {
+        case .option: String(localized: "Option (\u{2325})")
+        case .control: String(localized: "Control (\u{2303})")
+        case .shift: String(localized: "Shift (\u{21E7})")
+        case .command: String(localized: "Command (\u{2318})")
+        }
+    }
 }
 
 // MARK: Display Configurations

@@ -218,7 +218,7 @@ struct WindowSwitcherBehaviorSettingsView: View {
                 if placementStrategy == .pinnedToScreen {
                     Picker("Pin to", selection: $pinnedScreenIdentifier) {
                         ForEach(NSScreen.screens, id: \.self) { screen in
-                            Text(screenDisplayName(screen)).tag(screen.uniqueIdentifier())
+                            Text(screen.displayName).tag(screen.uniqueIdentifier())
                         }
                         if !pinnedScreenIdentifier.isEmpty,
                            !NSScreen.screens.contains(where: { $0.uniqueIdentifier() == pinnedScreenIdentifier })
@@ -285,20 +285,5 @@ struct WindowSwitcherBehaviorSettingsView: View {
         SettingsGroup(header: "Appearance") {
             WindowSwitcherAppearanceSection()
         }
-    }
-
-    // MARK: - Helper Functions
-
-    private func screenDisplayName(_ screen: NSScreen) -> String {
-        let isMain = screen == NSScreen.main
-        var name = screen.localizedName
-        if name.isEmpty {
-            if let displayID = screen.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? CGDirectDisplayID {
-                name = String(format: NSLocalizedString("Display %u", comment: "Generic display name with CGDirectDisplayID"), displayID)
-            } else {
-                name = String(localized: "Unknown Display")
-            }
-        }
-        return name + (isMain ? " (Main)" : "")
     }
 }
