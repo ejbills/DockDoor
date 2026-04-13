@@ -67,7 +67,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             let needsDockObserver = Defaults[.enableDockPreviews] ||
                 Defaults[.shouldHideOnDockItemClick] ||
                 Defaults[.enableCmdRightClickQuit] ||
-                Defaults[.enableDockScrollGesture]
+                Defaults[.enableDockScrollGesture] ||
+                Defaults[.enableTitleBarScrollGesture]
 
             if needsDockObserver {
                 let dockObs = DockObserver(previewCoordinator: currentPreviewCoordinator)

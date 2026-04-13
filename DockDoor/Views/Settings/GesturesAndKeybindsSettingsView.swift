@@ -6,6 +6,7 @@ struct GesturesAndKeybindsSettingsView: View {
         BaseSettingsView {
             VStack(alignment: .leading, spacing: 16) {
                 DockScrollGestureSection()
+                TitleBarScrollGestureSection()
                 DockPreviewGesturesSection()
                 GestureSettingsSection()
                 MouseActionsSection()
