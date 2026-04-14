@@ -3,7 +3,6 @@ import SwiftUI
 
 struct GeneralAppearanceSection: View {
     @Default(.uniformCardRadius) var uniformCardRadius
-    @Default(.useLiquidGlass) var useLiquidGlass
     @Default(.globalPaddingMultiplier) var globalPaddingMultiplier
     @Default(.unselectedContentOpacity) var unselectedContentOpacity
     @Default(.enableTitleMarquee) var enableTitleMarquee
@@ -25,12 +24,6 @@ struct GeneralAppearanceSection: View {
                 .pickerStyle(.segmented)
                 .onChange(of: appAppearanceMode) { newMode in
                     applyAppearanceMode(newMode)
-                }
-
-                if #available(macOS 26.0, *) {
-                    Toggle(isOn: $useLiquidGlass) {
-                        Text("Use Liquid Glass (macOS 26+)")
-                    }
                 }
 
                 sliderSetting(

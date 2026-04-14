@@ -21,6 +21,8 @@
 		2F764043EDC3435AB84C170E /* WindowSwitcherKeybindSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AB041F2D3174C8D9DA2111E /* WindowSwitcherKeybindSection.swift */; };
 		337B1BB3E0E1C17462D34C74 /* AppPickerSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE87C548D56298ADFB3F389 /* AppPickerSheet.swift */; };
 		341691AA2EE37A6D004AFFC9 /* LiveWindowCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 341691A92EE37A6D004AFFC9 /* LiveWindowCapture.swift */; };
+		3B8F4B391DEB4E549EFDE29102C715F9 /* DockBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C82F0A273F48F78EFDC8DC3C7837F1 /* DockBackgroundView.swift */; };
+		6E5F51AECE82454288FCA85E2A5955DA /* BackgroundAppearanceSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = C65CC65D33734884A7E3F8E7B99C98CA /* BackgroundAppearanceSection.swift */; };
 		3A105FD62C1BED660015EC66 /* BlurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A105FD52C1BED660015EC66 /* BlurView.swift */; };
 		3A105FD92C1C049E0015EC66 /* dockStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A105FD82C1C049E0015EC66 /* dockStyle.swift */; };
 		3A105FDD2C1C0EE20015EC66 /* DynStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A105FDC2C1C0EE20015EC66 /* DynStack.swift */; };
@@ -240,6 +242,8 @@
 		27DC8C152CFA4DA7005F8F31 /* NumberFormatter+Convenience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NumberFormatter+Convenience.swift"; sourceTree = "<group>"; };
 		2FBA5BBE4DFA460FBF54D30E /* SettingsToggleRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsToggleRow.swift; sourceTree = "<group>"; };
 		341691A92EE37A6D004AFFC9 /* LiveWindowCapture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveWindowCapture.swift; sourceTree = "<group>"; };
+		F0C82F0A273F48F78EFDC8DC3C7837F1 /* DockBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockBackgroundView.swift; sourceTree = "<group>"; };
+		C65CC65D33734884A7E3F8E7B99C98CA /* BackgroundAppearanceSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundAppearanceSection.swift; sourceTree = "<group>"; };
 		3A105FD52C1BED660015EC66 /* BlurView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurView.swift; sourceTree = "<group>"; };
 		3A105FD82C1C049E0015EC66 /* dockStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dockStyle.swift; sourceTree = "<group>"; };
 		3A105FDC2C1C0EE20015EC66 /* DynStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynStack.swift; sourceTree = "<group>"; };
@@ -488,6 +492,7 @@
 				3A1622BF2C8D579F00D318EE /* PermissionsView */,
 				BB04405C2C77A878009F1D33 /* Defaults */,
 				3A105FD52C1BED660015EC66 /* BlurView.swift */,
+				F0C82F0A273F48F78EFDC8DC3C7837F1 /* DockBackgroundView.swift */,
 				3A105FDC2C1C0EE20015EC66 /* DynStack.swift */,
 				BB3967FC2C291D5A004F1AB6 /* StackedShadow.swift */,
 				BB3968012C2A6CC2004F1AB6 /* Marquee.swift */,
@@ -580,6 +585,7 @@
 				CBBBAA129E24438589330D3B /* WindowSwitcherAppearanceSection.swift */,
 				FB59EE0D7419468CABBAD220 /* CmdTabAppearanceSection.swift */,
 				E3584B7313E241EF997A4EE5 /* AdvancedAppearanceSection.swift */,
+				C65CC65D33734884A7E3F8E7B99C98CA /* BackgroundAppearanceSection.swift */,
 				B2C3D4E5F6A890123456789B /* EnabledButtonsCheckboxes.swift */,
 			);
 			path = Appearance;
@@ -1110,6 +1116,7 @@
 				05C0C7182C60629C000ADAC6 /* AXUIElement.swift in Sources */,
 				3A1622C12C8D57AF00D318EE /* PermissionsChecker.swift in Sources */,
 				3A105FD62C1BED660015EC66 /* BlurView.swift in Sources */,
+				3B8F4B391DEB4E549EFDE29102C715F9 /* DockBackgroundView.swift in Sources */,
 				BBB6C5302DF3C884009E93C4 /* MediaInfo.swift in Sources */,
 				BB0440622C77AE8D009F1D33 /* GradientColorPaletteSettingsView.swift in Sources */,
 				BB1CBD5D2C1BCA4F003969BC /* Misc Utils.swift in Sources */,
@@ -1198,6 +1205,7 @@
 				2D6F6684A9E141A8B88927D3 /* WindowSwitcherAppearanceSection.swift in Sources */,
 				700F49963BB641ABBB0F8605 /* CmdTabAppearanceSection.swift in Sources */,
 				2F26AC46A07D4343B2723D83 /* AdvancedAppearanceSection.swift in Sources */,
+				6E5F51AECE82454288FCA85E2A5955DA /* BackgroundAppearanceSection.swift in Sources */,
 				A1B2C3D4E5F6A89012345679 /* EnabledButtonsCheckboxes.swift in Sources */,
 				0BBE0D8202DA47F4940C1E96 /* DockScrollGestureSection.swift in Sources */,
 				8A65164BC27F4A60A6FA765B /* DockPreviewGesturesSection.swift in Sources */,
