@@ -148,7 +148,12 @@ extension DockObserver {
         Task { @MainActor [weak self] in
             guard let self else { return }
 
-            let initialIndex = Defaults[.cmdTabAutoSelectFirstWindow] && !cachedWindows.isEmpty ? 0 : nil
+            if cachedWindows.isEmpty {
+                previewCoordinator.hideWindow()
+                return
+            }
+
+            let initialIndex = Defaults[.cmdTabAutoSelectFirstWindow] ? 0 : nil
             previewCoordinator.showWindow(
                 appName: appName,
                 windows: cachedWindows,
