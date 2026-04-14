@@ -24,6 +24,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
     var mouseIsWithinPreviewWindow: Bool = false
     private var onWindowTap: (() -> Void)?
     private var fullPreviewWindow: NSPanel?
+    private var pendingShowWorkItem: DispatchWorkItem?
 
     var windowSize: CGSize = getWindowSize()
 
@@ -124,6 +125,9 @@ final class SharedPreviewWindowCoordinator: NSPanel {
     }
 
     func hideWindow() {
+        pendingShowWorkItem?.cancel()
+        pendingShowWorkItem = nil
+
         // Always restore dock auto-hide state, even if the preview isn't visible.
         dockManager.restoreDockState()
 
@@ -851,7 +855,8 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         let shouldSkipDelay = overrideDelay || (Defaults[.useDelayOnlyForInitialOpen] && isVisible)
         let delay = shouldSkipDelay ? 0 : Defaults[.hoverWindowOpenDelay]
 
-        let workItem = { [weak self, renderStartTime] in
+        pendingShowWorkItem?.cancel()
+        let workItem = DispatchWorkItem { [weak self, renderStartTime] in
             guard let self else { return }
 
             // Check if mouse entered the preview window and we're trying to show a different app
@@ -888,7 +893,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
                 self?.performDisplay(appName: appName, windows: windows, mouseLocation: mouseLocation, mouseScreen: mouseScreen, dockItemElement: dockItemElement, centeredHoverWindowState: centeredHoverWindowState, onWindowTap: onWindowTap, bundleIdentifier: bundleIdentifier, dockPositionOverride: dockPositionOverride, initialIndex: initialIndex, dockItemFrameOverride: dockItemFrameOverride, renderStartTime: renderStartTime)
             }
         }
-
+        pendingShowWorkItem = workItem
         DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: workItem)
     }
 }
