@@ -45,6 +45,6 @@ struct CalendarEmbeddedView: View {
         }
         .padding(12)
         .frame(minWidth: idealWidth ?? 200, alignment: .center)
-        .dockStyle(cornerRadius: CardRadius.inner, variant: 18, outerPadding: 0)
+        .dockStyle(cornerRadius: CardRadius.inner, outerPadding: 0)
     }
 }

@@ -455,7 +455,7 @@ struct WindowPreviewHoverContainer: View {
                     }
                     .padding(.vertical, 5)
                     .padding(.horizontal, 10)
-                    .dockStyle(cornerRadius: 10, frostedTranslucentLayer: true)
+                    .dockStyle(cornerRadius: 10)
                     .contentShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
                     .onHover { hover in
                         hoveringAppIcon = hover

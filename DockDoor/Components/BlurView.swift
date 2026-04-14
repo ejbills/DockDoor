@@ -39,6 +39,7 @@ class LiquidGlassContainerView: NSView {
     override func removeFromSuperview() {
         for backdrop in backdropLayers {
             backdrop.removeObserver(self, forKeyPath: "windowServerAware")
+            backdrop.removeObserver(self, forKeyPath: "scale")
         }
         backdropLayers.removeAll()
         super.removeFromSuperview()
@@ -67,6 +68,7 @@ class LiquidGlassContainerView: NSView {
     private func setBackdropProperties(in layer: CALayer) {
         if NSStringFromClass(type(of: layer)).contains("CABackdropLayer") {
             layer.setValue(true, forKey: "windowServerAware")
+            layer.setValue(1.0, forKey: "scale")
         }
         layer.sublayers?.forEach { setBackdropProperties(in: $0) }
     }
@@ -76,6 +78,7 @@ class LiquidGlassContainerView: NSView {
         backdropLayers = collectBackdropLayers(in: layer)
         for backdrop in backdropLayers {
             backdrop.addObserver(self, forKeyPath: "windowServerAware", options: [.old, .new], context: nil)
+            backdrop.addObserver(self, forKeyPath: "scale", options: [.old, .new], context: nil)
         }
     }
 
@@ -88,6 +91,10 @@ class LiquidGlassContainerView: NSView {
         if keyPath == "windowServerAware" {
             if change?[.newKey] as? Bool == false {
                 configureBackdropLayers()
+            }
+        } else if keyPath == "scale" {
+            if let newVal = change?[.newKey] as? Double, newVal != 1.0, let layer = object as? CALayer {
+                layer.setValue(1.0, forKey: "scale")
             }
         } else {
             super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)

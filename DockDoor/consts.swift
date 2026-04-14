@@ -161,6 +161,17 @@ extension Defaults.Keys {
     static let appAppearanceMode = Key<AppAppearanceMode>("appAppearanceMode", default: .system)
     static let showActiveWindowBorder = Key<Bool>("showActiveWindowBorder", default: false)
 
+    // MARK: - Glass Effect
+
+    static let dockBackgroundStyle = Key<DockBackgroundStyle>("dockBackgroundStyle", default: .liquidGlass)
+    static let dockGlassOpacity = Key<CGFloat>("dockGlassOpacity", default: 0.95)
+    static let dockGlassBlurRadius = Key<CGFloat>("dockGlassBlurRadius", default: 0)
+    static let dockGlassSaturation = Key<CGFloat>("dockGlassSaturation", default: 1.0)
+    static let dockBackgroundTintOpacity = Key<CGFloat>("dockBackgroundTintOpacity", default: 0.3)
+    static let dockBackgroundBorderOpacity = Key<CGFloat>("dockBackgroundBorderOpacity", default: 0.15)
+    static let dockBackgroundBorderWidth = Key<CGFloat>("dockBackgroundBorderWidth", default: 1)
+    static let dockBackgroundMaterial = Key<DockBackgroundMaterial>("dockBackgroundMaterial", default: .ultraThin)
+
     // MARK: - Dock Preview Appearance Settings
 
     static let showWindowTitle = Key<Bool>("showWindowTitle", default: true)
@@ -1115,4 +1126,49 @@ enum WindowSwitcherLivePreviewScope: String, CaseIterable, Defaults.Serializable
             String(localized: "All windows get live preview (may cause lag with many windows)")
         }
     }
+}
+
+// MARK: - Dock Background
+
+enum DockBackgroundMaterial: String, CaseIterable, Defaults.Serializable {
+    case ultraThin, thin, regular, thick, ultraThick
+
+    var displayName: String {
+        switch self {
+        case .ultraThin: "Ultra Thin"
+        case .thin: "Thin"
+        case .regular: "Regular"
+        case .thick: "Thick"
+        case .ultraThick: "Ultra Thick"
+        }
+    }
+
+    var swiftUIMaterial: Material {
+        switch self {
+        case .ultraThin: .ultraThinMaterial
+        case .thin: .thinMaterial
+        case .regular: .regularMaterial
+        case .thick: .thickMaterial
+        case .ultraThick: .ultraThickMaterial
+        }
+    }
+}
+
+enum DockBackgroundStyle: String, CaseIterable, Defaults.Serializable {
+    case liquidGlass
+    case frostedMaterial
+    case clear
+
+    var displayName: String {
+        switch self {
+        case .liquidGlass: "Liquid Glass"
+        case .frostedMaterial: "Frosted"
+        case .clear: "Clear"
+        }
+    }
+
+    @available(macOS 26.0, *)
+    static var allAvailable: [DockBackgroundStyle] { allCases }
+
+    static var preTahoe: [DockBackgroundStyle] { [.frostedMaterial, .clear] }
 }
