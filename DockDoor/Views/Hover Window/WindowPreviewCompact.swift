@@ -45,6 +45,9 @@ struct WindowPreviewCompact: View {
     }
 
     private var stateIndicator: String? {
+        if windowInfo.isWindowlessApp {
+            return String(localized: "No Open Windows", comment: "Label for running apps without any open windows in the window switcher")
+        }
         guard appearance.showMinimizedHiddenLabels,
               appearance.trafficLightVisibility != .never
         else { return nil }

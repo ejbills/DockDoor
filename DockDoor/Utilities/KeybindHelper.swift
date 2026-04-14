@@ -93,6 +93,10 @@ private class WindowSwitchingCoordinator {
             windows = WindowUtil.groupWindowsByApp(windows)
         }
 
+        if !isActiveAppMode, Defaults[.showWindowlessAppsInSwitcher] {
+            windows.append(contentsOf: WindowUtil.getWindowlessRunningApps(existingWindows: windows))
+        }
+
         guard !windows.isEmpty else { return }
 
         currentSessionId = UUID()

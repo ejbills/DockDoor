@@ -351,6 +351,10 @@ final class DockObserver {
         let currentAppPID = currentApp.processIdentifier
         let currentAppBundleId = currentApp.bundleIdentifier
 
+        if cachedWindows.isEmpty, Defaults[.showWindowlessAppsInDockPreview] {
+            cachedWindows = [WindowInfo.windowlessEntry(for: currentApp)]
+        }
+
         let shouldShowCachedPreview = !cachedWindows.isEmpty ||
             (Self.isSpecialControlsApp(currentApp.bundleIdentifier) && Defaults[.showSpecialAppControls])
 

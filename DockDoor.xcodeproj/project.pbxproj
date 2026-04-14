@@ -122,6 +122,7 @@
 		BB52EDF02C5BEFE3006A64A4 /* HiddenModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB52EDEF2C5BEFE3006A64A4 /* HiddenModifier.swift */; };
 		BB5349C32EE7C3F5004B1FDD /* WindowPreviewCompact.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB5349C22EE7C3F5004B1FDD /* WindowPreviewCompact.swift */; };
 		BB5349C52EE7D160004B1FDD /* WindowPreviewInteractionModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB5349C42EE7D160004B1FDD /* WindowPreviewInteractionModifier.swift */; };
+		B5247D12ACED4D439B680104EC99DB30 /* WindowlessAppPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033B1F63CB464113ADA3868696F486CF /* WindowlessAppPreview.swift */; };
 		BB5C36562F6CEE9E00BE947F /* MediaRemoteAdapter in Frameworks */ = {isa = PBXBuildFile; productRef = BB5C36552F6CEE9E00BE947F /* MediaRemoteAdapter */; };
 		BB5C36572F6D793700BE947F /* MediaRemoteAdapter in Embed Frameworks */ = {isa = PBXBuildFile; productRef = BB5C36552F6CEE9E00BE947F /* MediaRemoteAdapter */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		BB5D35542ED4C4CC006ECE15 /* DebugLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB5D35532ED4C4CC006ECE15 /* DebugLogger.swift */; };
@@ -341,6 +342,7 @@
 		BB52EDEF2C5BEFE3006A64A4 /* HiddenModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HiddenModifier.swift; sourceTree = "<group>"; };
 		BB5349C22EE7C3F5004B1FDD /* WindowPreviewCompact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowPreviewCompact.swift; sourceTree = "<group>"; };
 		BB5349C42EE7D160004B1FDD /* WindowPreviewInteractionModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowPreviewInteractionModifier.swift; sourceTree = "<group>"; };
+		033B1F63CB464113ADA3868696F486CF /* WindowlessAppPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowlessAppPreview.swift; sourceTree = "<group>"; };
 		BB5D35532ED4C4CC006ECE15 /* DebugLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugLogger.swift; sourceTree = "<group>"; };
 		BB6021D12D1E613100D47C86 /* Window Image Sizing Calculations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Window Image Sizing Calculations.swift"; sourceTree = "<group>"; };
 		BB638EF92E0216DA0010077D /* MediaControlsEmbeddedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaControlsEmbeddedView.swift; sourceTree = "<group>"; };
@@ -762,6 +764,7 @@
 				BB4B444A2C372A4C006680DC /* WindowPreview.swift */,
 				BB5349C22EE7C3F5004B1FDD /* WindowPreviewCompact.swift */,
 				BB5349C42EE7D160004B1FDD /* WindowPreviewInteractionModifier.swift */,
+				033B1F63CB464113ADA3868696F486CF /* WindowlessAppPreview.swift */,
 			);
 			path = "Hover Window";
 			sourceTree = "<group>";
@@ -1238,6 +1241,7 @@
 				BB638F262E0218FE0010077D /* CalendarPermissionView.swift in Sources */,
 				BB2106762E834F25002F87D6 /* CmdTabFocusFullOverlayView.swift in Sources */,
 				BB5349C32EE7C3F5004B1FDD /* WindowPreviewCompact.swift in Sources */,
+				B5247D12ACED4D439B680104EC99DB30 /* WindowlessAppPreview.swift in Sources */,
 				AA11001122334455AA110022 /* DockLocker.swift in Sources */,
 				AA11001122334455AA110044 /* DockLockingSettingsView.swift in Sources */,
 			);

@@ -149,8 +149,12 @@ extension DockObserver {
             guard let self else { return }
 
             if cachedWindows.isEmpty {
-                previewCoordinator.hideWindow()
-                return
+                if let app = resolvedApp, Defaults[.showWindowlessAppsInCmdTab] {
+                    cachedWindows = [WindowInfo.windowlessEntry(for: app)]
+                } else {
+                    previewCoordinator.hideWindow()
+                    return
+                }
             }
 
             let initialIndex = Defaults[.cmdTabAutoSelectFirstWindow] ? 0 : nil

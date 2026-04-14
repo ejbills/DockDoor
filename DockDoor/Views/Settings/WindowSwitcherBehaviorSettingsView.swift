@@ -23,6 +23,7 @@ struct WindowSwitcherBehaviorSettingsView: View {
     @Default(.windowSwitcherVerticalOffsetPercent) var windowSwitcherVerticalOffsetPercent
     @Default(.windowSwitcherAnchorToTop) var windowSwitcherAnchorToTop
     @Default(.enableShiftWindowSwitcherPlacement) var enableShiftWindowSwitcherPlacement
+    @Default(.showWindowlessAppsInSwitcher) var showWindowlessAppsInSwitcher
 
     @State private var showGroupedAppsSheet: Bool = false
 
@@ -118,6 +119,12 @@ struct WindowSwitcherBehaviorSettingsView: View {
                     .padding(.leading, 20)
 
                 Toggle(isOn: $includeHiddenWindowsInSwitcher) { Text("Include hidden/minimized windows") }
+
+                Toggle(isOn: $showWindowlessAppsInSwitcher) { Text("Show running apps with no open windows") }
+                Text("Dock-visible apps without any windows will appear as icon-only entries at the end.")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .padding(.leading, 20)
             }
         }
     }

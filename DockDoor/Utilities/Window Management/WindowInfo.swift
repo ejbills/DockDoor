@@ -18,6 +18,7 @@ struct WindowInfo: Identifiable, Hashable {
     var imageCapturedTime: Date
     var isMinimized: Bool
     var isHidden: Bool
+    private(set) var isWindowlessApp: Bool
 
     private var _scWindow: SCWindow?
 
@@ -37,6 +38,7 @@ struct WindowInfo: Identifiable, Hashable {
         self.imageCapturedTime = imageCapturedTime ?? lastAccessedTime
         self.isMinimized = isMinimized
         self.isHidden = isHidden
+        isWindowlessApp = false
         _scWindow = windowProvider as? SCWindow
     }
 
@@ -45,6 +47,7 @@ struct WindowInfo: Identifiable, Hashable {
 
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
+        hasher.combine(app.processIdentifier)
     }
 
     static func == (lhs: WindowInfo, rhs: WindowInfo) -> Bool {
@@ -55,8 +58,36 @@ struct WindowInfo: Identifiable, Hashable {
 }
 
 extension WindowInfo {
+    static func windowlessEntry(for app: NSRunningApplication) -> WindowInfo {
+        let pid = app.processIdentifier
+        let appAX = AXUIElementCreateApplication(pid)
+        let provider = MockPreviewWindow(
+            windowID: 0,
+            frame: .zero,
+            title: app.localizedName,
+            owningApplicationBundleIdentifier: app.bundleIdentifier,
+            owningApplicationProcessID: pid,
+            isOnScreen: false,
+            windowLayer: 0
+        )
+        var info = WindowInfo(
+            windowProvider: provider,
+            app: app,
+            image: nil,
+            axElement: appAX,
+            appAxElement: appAX,
+            closeButton: nil,
+            lastAccessedTime: .distantPast,
+            isMinimized: false,
+            isHidden: false
+        )
+        info.isWindowlessApp = true
+        return info
+    }
+
     @discardableResult
     mutating func toggleMinimize() -> Bool? {
+        guard !isWindowlessApp else { return nil }
         if isMinimized {
             if app.isHidden {
                 app.unhide()
@@ -85,6 +116,7 @@ extension WindowInfo {
 
     @discardableResult
     mutating func toggleHidden() -> Bool? {
+        guard !isWindowlessApp else { return nil }
         let newHiddenState = !isHidden
 
         do {
@@ -103,6 +135,7 @@ extension WindowInfo {
     }
 
     mutating func toggleFullScreen() {
+        guard !isWindowlessApp else { return }
         if let isCurrentlyInFullScreen = try? axElement.isFullscreen() {
             do {
                 try axElement.setAttribute(kAXFullscreenAttribute, !isCurrentlyInFullScreen)
@@ -360,6 +393,10 @@ extension WindowInfo {
     }
 
     func bringToFront() {
+        guard !isWindowlessApp else {
+            app.activate(options: [.activateIgnoringOtherApps])
+            return
+        }
         let maxRetries = 3
         var retryCount = 0
 
@@ -399,6 +436,7 @@ extension WindowInfo {
     }
 
     func close() {
+        guard !isWindowlessApp else { return }
         guard closeButton != nil else {
             print("Error: closeButton is nil.")
             return

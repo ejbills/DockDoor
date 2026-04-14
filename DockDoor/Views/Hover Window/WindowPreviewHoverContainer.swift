@@ -1119,7 +1119,21 @@ struct WindowPreviewHoverContainer: View {
 
                 let isSelected = index == previewStateCoordinator.currIndex
 
-                if useCompactForThisWindow {
+                if windowInfo.isWindowlessApp, !shouldUseCompactMode {
+                    WindowlessAppPreview(
+                        windowInfo: windowInfo,
+                        index: index,
+                        dockPosition: dockPosition,
+                        uniformCardRadius: uniformCardRadius,
+                        isSelected: isSelected,
+                        windowSwitcherActive: previewStateCoordinator.windowSwitcherActive,
+                        dimensions: getDimensions(for: index, dimensionsMap: currentDimensionsMapForPreviews),
+                        onTap: onWindowTap,
+                        onHoverIndexChange: handleHoverIndexChange,
+                        appearance: appearance
+                    )
+                    .id("\(appName)-\(index)")
+                } else if useCompactForThisWindow {
                     WindowPreviewCompact(
                         windowInfo: windowInfo,
                         index: index,

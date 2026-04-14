@@ -580,6 +580,22 @@ extension WindowUtil {
         }
     }
 
+    static func getWindowlessRunningApps(existingWindows: [WindowInfo]) -> [WindowInfo] {
+        let pidsWithWindows = Set(existingWindows.map(\.app.processIdentifier))
+        let ownBundleId = Bundle.main.bundleIdentifier
+
+        return NSWorkspace.shared.runningApplications
+            .filter { app in
+                app.activationPolicy == .regular &&
+                    !pidsWithWindows.contains(app.processIdentifier) &&
+                    !filteredBundleIdentifiers.contains(app.bundleIdentifier ?? "") &&
+                    !isAppFiltered(app) &&
+                    app.bundleIdentifier != ownBundleId
+            }
+            .sorted { ($0.localizedName ?? "") < ($1.localizedName ?? "") }
+            .map { WindowInfo.windowlessEntry(for: $0) }
+    }
+
     static func getFocusedWindowForFrontmostApp() -> WindowInfo? {
         guard let frontmostApp = NSWorkspace.shared.frontmostApplication else {
             return nil
