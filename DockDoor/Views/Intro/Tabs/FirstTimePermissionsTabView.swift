@@ -4,10 +4,6 @@ struct FirstTimePermissionsTabView: View {
     var nextTab: () -> Void
     @StateObject private var permissionsChecker = PermissionsChecker()
 
-    private var bothPermissionsGranted: Bool {
-        permissionsChecker.accessibilityPermission && permissionsChecker.screenRecordingPermission
-    }
-
     var body: some View {
         VStack(spacing: 12) {
             Text("Let's set things up")
@@ -15,7 +11,10 @@ struct FirstTimePermissionsTabView: View {
                 .fontWeight(.bold)
 
             VStack(spacing: 4) {
-                Text("Click each button below to open System Settings")
+                Text("Click each button below to open System Settings.")
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+                Text("No data ever leaves your device.")
                     .font(.subheadline)
                     .foregroundColor(.secondary)
 
@@ -41,7 +40,7 @@ struct FirstTimePermissionsTabView: View {
 
                 EnabledActionRowView(
                     title: String(localized: "Screen Recording"),
-                    description: String(localized: "For window preview images"),
+                    description: String(localized: "Optional — for window preview images"),
                     isGranted: permissionsChecker.screenRecordingPermission,
                     iconName: "record.circle",
                     action: { SystemPreferencesHelper.openScreenRecordingPreferences() },
@@ -52,23 +51,22 @@ struct FirstTimePermissionsTabView: View {
             Spacer().frame(height: 4)
 
             VStack(spacing: 8) {
+                HStack(spacing: 4) {
+                    Image(systemName: "info.circle.fill")
+                        .foregroundColor(.secondary)
+                        .font(.caption)
+                    Text("Permission changes may not appear here until the app restarts")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+
                 Button(action: nextTab) {
                     HStack {
-                        Text(bothPermissionsGranted ? "Continue" : "Grant both permissions to continue")
-                        if bothPermissionsGranted {
-                            Image(systemName: "arrow.right")
-                        }
+                        Text("Continue")
+                        Image(systemName: "arrow.right")
                     }
                 }
                 .buttonStyle(AccentButtonStyle())
-                .disabled(!bothPermissionsGranted)
-                .opacity(bothPermissionsGranted ? 1 : 0.5)
-
-                if !bothPermissionsGranted {
-                    Text("Toggle both permissions in System Settings, then return here")
-                        .font(.caption2)
-                        .foregroundColor(.secondary)
-                }
             }
         }
         .padding(.horizontal, 32)

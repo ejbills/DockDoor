@@ -247,8 +247,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let currentMouseLocation = CGEvent(source: nil)?.location ?? .zero
         let screen = NSScreen.screenContainingMouse(currentMouseLocation)
 
-        Defaults[.launched] = true
-
         if !Defaults[.showAnimations] || NSWorkspace.shared.accessibilityDisplayShouldReduceMotion {
             showOnboardingWindow(on: screen)
             return

@@ -37,18 +37,7 @@ class PermissionsChecker: ObservableObject {
     }
 
     private static func checkScreenRecordingPermissionFromCG() -> Bool {
-        let stream = CGDisplayStream(
-            dispatchQueueDisplay: CGMainDisplayID(),
-            outputWidth: 1,
-            outputHeight: 1,
-            pixelFormat: Int32(kCVPixelFormatType_32BGRA),
-            properties: nil,
-            queue: DispatchQueue.main,
-            handler: { _, _, _, _ in }
-        )
-        let hasPermission = (stream != nil)
-        stream?.stop()
-        return hasPermission
+        CGPreflightScreenCaptureAccess()
     }
 
     private func startTimer() {
