@@ -75,6 +75,12 @@ For full details, features, and documentation, please visit **[dockdoor.net](htt
 ![Window Switcher Layouts 1](/resources/variations/windowswitcher1.png)
 ![Window Switcher Layouts 2](/resources/variations/windowswitcher2.png)
 
+### Dock Locking
+
+![Dock Locking](/resources/dockLocking.png)
+
+Lock the Dock to a specific monitor in multi-display setups so it stops jumping between screens.
+
 ### Calendar Integration
 
 ![Window Switcher Layouts](/resources/calendar.png)
