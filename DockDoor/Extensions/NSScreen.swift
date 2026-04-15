@@ -1,7 +1,7 @@
 import Cocoa
 
 extension NSScreen {
-    static func screenContainingMouse(_ point: CGPoint) -> NSScreen {
+    static func screenFromQuartzPoint(_ point: CGPoint) -> NSScreen {
         let screens = NSScreen.screens
         let pointInScreenCoordinates = CGPoint(x: point.x, y: NSScreen.screens.first!.frame.maxY - point.y)
 

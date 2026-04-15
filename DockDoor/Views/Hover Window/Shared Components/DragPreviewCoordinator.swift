@@ -12,7 +12,7 @@ final class DragPreviewCoordinator {
     func startDragging(windowInfo: WindowInfo, at location: CGPoint) {
         endDragging()
 
-        initialScreenForDrag = NSScreen.screenContainingMouse(location)
+        initialScreenForDrag = NSScreen.screenFromQuartzPoint(location)
         dragStartLocation = location
 
         guard let image = windowInfo.image else { return }

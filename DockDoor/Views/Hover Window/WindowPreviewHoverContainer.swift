@@ -336,7 +336,7 @@ struct WindowPreviewHoverContainer: View {
         guard index < previewStateCoordinator.windows.count else { return }
         let window = previewStateCoordinator.windows[index]
 
-        let currentScreen = NSScreen.screenContainingMouse(location)
+        let currentScreen = NSScreen.screenFromQuartzPoint(location)
         let globalLocation = DockObserver.cgPointFromNSPoint(location, forScreen: currentScreen)
 
         let finalPosition = CGPoint(

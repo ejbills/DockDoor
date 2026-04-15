@@ -120,7 +120,7 @@ enum DockDoorCommands {
             guard let windows = try? await WindowUtil.getActiveWindows(of: app, context: .dockPreview) else { return }
 
             let mouseLocation = position ?? NSEvent.mouseLocation
-            let screen = NSScreen.screenContainingMouse(mouseLocation)
+            let screen = NSScreen.screenFromQuartzPoint(mouseLocation)
 
             coordinator.showWindow(
                 appName: app.localizedName ?? "Unknown",

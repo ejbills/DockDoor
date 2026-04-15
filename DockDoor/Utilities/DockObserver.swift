@@ -275,7 +275,7 @@ final class DockObserver {
                 && Defaults[.enableMediaWidget]
                 && (!mr.isUniversalSource || Defaults[.mediaDetectionMode] == .universal)
             if isCalendar || isActiveMedia, Defaults[.showSpecialAppControls], Defaults[.enableDockPreviews] {
-                let mouseScreen = NSScreen.screenContainingMouse(currentMouseLocation)
+                let mouseScreen = NSScreen.screenFromQuartzPoint(currentMouseLocation)
                 let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
                 let appName = NSWorkspace.shared.urlForApplication(withBundleIdentifier: bundleIdentifier)
                     .flatMap { Bundle(url: $0) }
@@ -356,7 +356,7 @@ final class DockObserver {
 
         guard Defaults[.enableDockPreviews] else { return }
 
-        let mouseScreen = NSScreen.screenContainingMouse(currentMouseLocation)
+        let mouseScreen = NSScreen.screenFromQuartzPoint(currentMouseLocation)
         let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
         let screenOrigin = mouseScreen.frame.origin
         let currentAppPID = currentApp.processIdentifier
@@ -853,7 +853,7 @@ final class DockObserver {
 
             do {
                 let windows = try await WindowUtil.getActiveWindows(of: app)
-                let mouseScreen = NSScreen.screenContainingMouse(currentMouseLocation)
+                let mouseScreen = NSScreen.screenFromQuartzPoint(currentMouseLocation)
                 let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
 
                 previewCoordinator.showWindow(
@@ -871,7 +871,7 @@ final class DockObserver {
             } catch {
                 // If we can't get windows, still show the preview for special apps if enabled
                 if Self.isSpecialControlsApp(app.bundleIdentifier), Defaults[.showSpecialAppControls] {
-                    let mouseScreen = NSScreen.screenContainingMouse(currentMouseLocation)
+                    let mouseScreen = NSScreen.screenFromQuartzPoint(currentMouseLocation)
                     let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
 
                     previewCoordinator.showWindow(
