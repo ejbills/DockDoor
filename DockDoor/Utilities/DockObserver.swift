@@ -1,4 +1,5 @@
 import ApplicationServices
+import Carbon.HIToolbox.Events
 import Cocoa
 import Defaults
 
@@ -30,6 +31,26 @@ func handleSelectedDockItemChangedNotification(observer _: AXObserver, element _
 }
 
 final class DockObserver {
+    private enum VerticalScrollAction {
+        case maximize
+        case center
+    }
+
+    private struct PendingRestoreState {
+        let windowId: CGWindowID
+        let processIdentifier: pid_t
+        let action: VerticalScrollAction
+        let originalFrame: CGRect
+        let expirationDate: Date
+    }
+
+    private struct CachedTitleBarInfo {
+        let window: WindowInfo
+        let windowFrame: CGRect
+        let titleBarRect: CGRect
+        let timestamp: Date
+    }
+
     weak static var activeInstance: DockObserver?
     let previewCoordinator: SharedPreviewWindowCoordinator
 
@@ -55,8 +76,39 @@ final class DockObserver {
     var lastHoveredAppHadWindows: Bool = false
 
     // Scroll gesture state
-    private var lastScrollActionTime: Date = .distantPast
-    private let scrollActionDebounceInterval: TimeInterval = 0.3
+    private var lastDockScrollActionTime: Date = .distantPast
+    private let dockScrollActionDebounceInterval: TimeInterval = 0.3
+    private var lastTitleBarScrollActionTime: Date = .distantPast
+    private var pendingTitleBarRestoreState: PendingRestoreState?
+
+    private let titleBarScrollActionDebounceInterval: TimeInterval = 0.35
+    private let minimumTitleBarScrollDelta: Double = 0.15
+    private let fallbackTitleBarHeight: CGFloat = 48
+    private let maximumTitleBarHeight: CGFloat = 72
+
+    private var cachedTitleBarInfo: CachedTitleBarInfo?
+    private var titleBarRefreshScheduled = false
+    private let titleBarCacheMaxAge: TimeInterval = 1.0
+
+    private var centeredWindowScale: CGFloat {
+        min(max(Defaults[.titleBarScrollCenteredWindowScale], 0.2), 1.0)
+    }
+
+    private var centeredWindowWidthScale: CGFloat {
+        min(max(Defaults[.titleBarScrollCenteredWindowWidthScale], 0.2), 1.0)
+    }
+
+    private var centeredWindowHeightScale: CGFloat {
+        min(max(Defaults[.titleBarScrollCenteredWindowHeightScale], 0.2), 1.0)
+    }
+
+    private var centeredWindowLockAspectRatio: Bool {
+        Defaults[.titleBarScrollCenteredWindowLockAspectRatio]
+    }
+
+    private var centeredWindowSizingMode: TitleBarCenteredWindowSizingMode {
+        Defaults[.titleBarScrollCenteredWindowSizingMode]
+    }
 
     @MainActor private static func isSpecialControlsApp(_ bundleId: String?) -> Bool {
         (bundleId == calendarAppIdentifier && Defaults[.enableCalendarWidget]) ||
@@ -309,6 +361,10 @@ final class DockObserver {
         let screenOrigin = mouseScreen.frame.origin
         let currentAppPID = currentApp.processIdentifier
         let currentAppBundleId = currentApp.bundleIdentifier
+
+        if cachedWindows.isEmpty, Defaults[.showWindowlessAppsInDockPreview] {
+            cachedWindows = [WindowInfo.windowlessEntry(for: currentApp)]
+        }
 
         let shouldShowCachedPreview = !cachedWindows.isEmpty ||
             (Self.isSpecialControlsApp(currentApp.bundleIdentifier) && Defaults[.showSpecialAppControls])
@@ -626,6 +682,10 @@ final class DockObserver {
         }
 
         if type == .scrollWheel {
+            if Defaults[.enableTitleBarScrollGesture], handleTitleBarScroll(event) {
+                return nil
+            }
+
             guard Defaults[.enableDockScrollGesture] else {
                 return Unmanaged.passUnretained(event)
             }
@@ -859,10 +919,10 @@ final class DockObserver {
         }
 
         let now = Date()
-        guard now.timeIntervalSince(lastScrollActionTime) >= scrollActionDebounceInterval else {
+        guard now.timeIntervalSince(lastDockScrollActionTime) >= dockScrollActionDebounceInterval else {
             return true // Still consume the event during debounce
         }
-        lastScrollActionTime = now
+        lastDockScrollActionTime = now
 
         if normalizedDeltaY > 0 {
             activateApp(app)
@@ -895,5 +955,189 @@ final class DockObserver {
             app.hide()
             previewCoordinator.hideWindow()
         }
+    }
+
+    private func scheduleTitleBarCacheRefresh() {
+        guard !titleBarRefreshScheduled else { return }
+        titleBarRefreshScheduled = true
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            titleBarRefreshScheduled = false
+            refreshTitleBarCache()
+        }
+    }
+
+    private func refreshTitleBarCache() {
+        guard let focusedWindow = WindowUtil.getFocusedWindowForFrontmostApp(),
+              let windowFrame = focusedWindow.currentWindowFrame()
+        else {
+            cachedTitleBarInfo = nil
+            return
+        }
+
+        let titleBarHeight = resolvedTitleBarHeight(for: focusedWindow, windowFrame: windowFrame)
+        let titleBarRect = CGRect(
+            x: windowFrame.minX,
+            y: windowFrame.maxY - titleBarHeight,
+            width: windowFrame.width,
+            height: titleBarHeight
+        )
+
+        cachedTitleBarInfo = CachedTitleBarInfo(
+            window: focusedWindow,
+            windowFrame: windowFrame,
+            titleBarRect: titleBarRect,
+            timestamp: Date()
+        )
+    }
+
+    private func handleTitleBarScroll(_ event: CGEvent) -> Bool {
+        let deltaX = event.getDoubleValueField(.scrollWheelEventDeltaAxis2)
+        let deltaY = event.getDoubleValueField(.scrollWheelEventDeltaAxis1)
+
+        guard abs(deltaX) > minimumTitleBarScrollDelta || abs(deltaY) > minimumTitleBarScrollDelta else {
+            return false
+        }
+
+        if event.getIntegerValueField(.scrollWheelEventMomentumPhase) != 0 {
+            return false
+        }
+
+        if let cached = cachedTitleBarInfo, Date().timeIntervalSince(cached.timestamp) > titleBarCacheMaxAge {
+            cachedTitleBarInfo = nil
+        }
+
+        if cachedTitleBarInfo == nil {
+            scheduleTitleBarCacheRefresh()
+            return false
+        }
+
+        guard let cached = cachedTitleBarInfo,
+              cached.titleBarRect.contains(NSEvent.mouseLocation)
+        else {
+            return false
+        }
+
+        let nsEvent = NSEvent(cgEvent: event)
+        let isNaturalScrolling = nsEvent?.isDirectionInvertedFromDevice ?? false
+        let normalizedDeltaX = isNaturalScrolling ? -deltaX : deltaX
+        let normalizedDeltaY = isNaturalScrolling ? -deltaY : deltaY
+
+        let now = Date()
+        guard now.timeIntervalSince(lastTitleBarScrollActionTime) >= titleBarScrollActionDebounceInterval else {
+            return true
+        }
+        lastTitleBarScrollActionTime = now
+
+        let window = cached.window
+
+        if abs(normalizedDeltaX) > abs(normalizedDeltaY) {
+            DispatchQueue.main.async { [weak self] in
+                if normalizedDeltaX > 0 {
+                    self?.switchToNextSpace()
+                } else {
+                    self?.switchToPreviousSpace()
+                }
+            }
+            return true
+        }
+
+        DispatchQueue.main.async { [weak self] in
+            if normalizedDeltaY > 0 {
+                self?.handleTitleBarVerticalScroll(.maximize, for: window, now: now)
+            } else {
+                self?.handleTitleBarVerticalScroll(.center, for: window, now: now)
+            }
+        }
+
+        return true
+    }
+
+    private func handleTitleBarVerticalScroll(_ action: VerticalScrollAction, for window: WindowInfo, now: Date) {
+        if let pendingTitleBarRestoreState,
+           pendingTitleBarRestoreState.windowId == window.id,
+           pendingTitleBarRestoreState.processIdentifier == window.app.processIdentifier,
+           pendingTitleBarRestoreState.action == action,
+           pendingTitleBarRestoreState.expirationDate > now
+        {
+            window.setWindowFrame(pendingTitleBarRestoreState.originalFrame)
+            self.pendingTitleBarRestoreState = nil
+            return
+        }
+
+        guard let originalFrame = window.currentWindowFrame() else {
+            performTitleBarVerticalScrollAction(action, on: window)
+            pendingTitleBarRestoreState = nil
+            return
+        }
+
+        performTitleBarVerticalScrollAction(action, on: window)
+        pendingTitleBarRestoreState = PendingRestoreState(
+            windowId: window.id,
+            processIdentifier: window.app.processIdentifier,
+            action: action,
+            originalFrame: originalFrame,
+            expirationDate: now.addingTimeInterval(Double(Defaults[.titleBarScrollRestoreWindowInterval]))
+        )
+    }
+
+    private func performTitleBarVerticalScrollAction(_ action: VerticalScrollAction, on window: WindowInfo) {
+        switch action {
+        case .maximize:
+            window.zoom()
+        case .center:
+            switch centeredWindowSizingMode {
+            case .uniform:
+                window.centerWindow(scale: centeredWindowScale)
+            case .separate:
+                window.centerWindow(
+                    widthScale: centeredWindowWidthScale,
+                    heightScale: centeredWindowHeightScale,
+                    lockAspectRatio: centeredWindowLockAspectRatio
+                )
+            }
+        }
+    }
+
+    private func resolvedTitleBarHeight(for window: WindowInfo, windowFrame: CGRect) -> CGFloat {
+        let closeButton = window.closeButton ?? ((try? window.axElement.closeButton()) ?? nil)
+        guard let closeButton,
+              let closeButtonFrame = WindowInfo.currentWindowFrame(for: closeButton)
+        else {
+            return fallbackTitleBarHeight
+        }
+
+        let inferredHeight = windowFrame.maxY - closeButtonFrame.minY + 12
+        return min(max(inferredHeight, fallbackTitleBarHeight), maximumTitleBarHeight)
+    }
+
+    private func switchToPreviousSpace() {
+        postControlArrowKey(CGKeyCode(kVK_LeftArrow))
+    }
+
+    private func switchToNextSpace() {
+        postControlArrowKey(CGKeyCode(kVK_RightArrow))
+    }
+
+    private func postControlArrowKey(_ keyCode: CGKeyCode) {
+        guard let source = CGEventSource(stateID: .combinedSessionState) else {
+            return
+        }
+
+        let controlDown = CGEvent(keyboardEventSource: source, virtualKey: CGKeyCode(kVK_Control), keyDown: true)
+        controlDown?.flags = .maskControl
+
+        let arrowDown = CGEvent(keyboardEventSource: source, virtualKey: keyCode, keyDown: true)
+        arrowDown?.flags = .maskControl
+
+        let arrowUp = CGEvent(keyboardEventSource: source, virtualKey: keyCode, keyDown: false)
+        arrowUp?.flags = .maskControl
+
+        let controlUp = CGEvent(keyboardEventSource: source, virtualKey: CGKeyCode(kVK_Control), keyDown: false)
+
+        controlDown?.post(tap: .cghidEventTap)
+        arrowDown?.post(tap: .cghidEventTap)
+        arrowUp?.post(tap: .cghidEventTap)
+        controlUp?.post(tap: .cghidEventTap)
     }
 }

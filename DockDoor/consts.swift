@@ -78,6 +78,18 @@ extension Defaults.Keys {
     static let enableCmdRightClickQuit = Key<Bool>("enableCmdRightClickQuit", default: true)
     static let quitAppOnWindowClose = Key<Bool>("quitAppOnWindowClose", default: false)
     static let enableDockScrollGesture = Key<Bool>("enableDockScrollGesture", default: false)
+    static let enableTitleBarScrollGesture = Key<Bool>("enableTitleBarScrollGesture", default: false)
+    static let titleBarScrollCenteredWindowScale = Key<CGFloat>("titleBarScrollCenteredWindowScale", default: 0.8)
+    static let titleBarScrollCenteredWindowSizingMode = Key<TitleBarCenteredWindowSizingMode>("titleBarScrollCenteredWindowSizingMode", default: .uniform)
+    static let titleBarScrollCenteredWindowWidthScale = Key<CGFloat>("titleBarScrollCenteredWindowWidthScale", default: 0.8)
+    static let titleBarScrollCenteredWindowHeightScale = Key<CGFloat>("titleBarScrollCenteredWindowHeightScale", default: 0.8)
+    static let titleBarScrollCenteredWindowLockAspectRatio = Key<Bool>("titleBarScrollCenteredWindowLockAspectRatio", default: false)
+    static let titleBarScrollRestoreWindowInterval = Key<CGFloat>("titleBarScrollRestoreWindowInterval", default: 1.5)
+
+    // Dock Locking
+    static let enableDockLocking = Key<Bool>("enableDockLocking", default: false)
+    static let lockedDockScreenIdentifier = Key<String>("lockedDockScreenIdentifier", default: "")
+    static let dockLockOverrideModifier = Key<Int>("dockLockOverrideModifier", default: DockLockModifier.option.rawValue)
     static let dockIconMediaScrollBehavior = Key<DockIconMediaScrollBehavior>("dockIconMediaScrollBehavior", default: .adjustVolume)
     static let mediaWidgetScrollBehavior = Key<MediaWidgetScrollBehavior>("mediaWidgetScrollBehavior", default: .seekPlayback)
     static let mediaWidgetScrollDirection = Key<MediaWidgetScrollDirection>("mediaWidgetScrollDirection", default: .vertical)
@@ -159,6 +171,9 @@ extension Defaults.Keys {
     static let includeHiddenWindowsInSwitcher = Key<Bool>("includeHiddenWindowsInSwitcher", default: true)
     static let includeHiddenWindowsInDockPreview = Key<Bool>("includeHiddenWindowsInDockPreview", default: true)
     static let includeHiddenWindowsInCmdTab = Key<Bool>("includeHiddenWindowsInCmdTab", default: true)
+    static let showWindowlessAppsInSwitcher = Key<Bool>("showWindowlessAppsInSwitcher", default: true)
+    static let showWindowlessAppsInDockPreview = Key<Bool>("showWindowlessAppsInDockPreview", default: false)
+    static let showWindowlessAppsInCmdTab = Key<Bool>("showWindowlessAppsInCmdTab", default: false)
     static let ignoreAppsWithSingleWindow = Key<Bool>("ignoreAppsWithSingleWindow", default: false)
     static let groupAppInstancesInDock = Key<Bool>("groupAppInstancesInDock", default: true)
     static let useLiquidGlass = Key<Bool>("useLiquidGlass", default: true)
@@ -185,6 +200,17 @@ extension Defaults.Keys {
     static let customBackgroundColor = Key<Color?>("customBackgroundColor", default: nil)
     static let appAppearanceMode = Key<AppAppearanceMode>("appAppearanceMode", default: .system)
     static let showActiveWindowBorder = Key<Bool>("showActiveWindowBorder", default: false)
+
+    // MARK: - Glass Effect
+
+    static let dockBackgroundStyle = Key<DockBackgroundStyle>("dockBackgroundStyle", default: .liquidGlass)
+    static let dockGlassOpacity = Key<CGFloat>("dockGlassOpacity", default: 0.95)
+    static let dockGlassBlurRadius = Key<CGFloat>("dockGlassBlurRadius", default: 0)
+    static let dockGlassSaturation = Key<CGFloat>("dockGlassSaturation", default: 1.0)
+    static let dockBackgroundTintOpacity = Key<CGFloat>("dockBackgroundTintOpacity", default: 0.3)
+    static let dockBackgroundBorderOpacity = Key<CGFloat>("dockBackgroundBorderOpacity", default: 0.15)
+    static let dockBackgroundBorderWidth = Key<CGFloat>("dockBackgroundBorderWidth", default: 1)
+    static let dockBackgroundMaterial = Key<DockBackgroundMaterial>("dockBackgroundMaterial", default: .ultraThin)
 
     // MARK: - Dock Preview Appearance Settings
 
@@ -311,6 +337,33 @@ extension Defaults.Keys {
 
     static let alternateKeybindKey = Key<UInt16>("alternateKeybindKey", default: 0)
     static let alternateKeybindMode = Key<SwitcherInvocationMode>("alternateKeybindMode", default: .activeAppOnly)
+}
+
+// MARK: Dock Locking
+
+enum DockLockModifier: Int, CaseIterable, Codable, Defaults.Serializable {
+    case option = 0
+    case control = 1
+    case shift = 2
+    case command = 3
+
+    var cgEventFlag: CGEventFlags {
+        switch self {
+        case .option: .maskAlternate
+        case .control: .maskControl
+        case .shift: .maskShift
+        case .command: .maskCommand
+        }
+    }
+
+    var localizedName: String {
+        switch self {
+        case .option: String(localized: "Option (\u{2325})")
+        case .control: String(localized: "Control (\u{2303})")
+        case .shift: String(localized: "Shift (\u{21E7})")
+        case .command: String(localized: "Command (\u{2318})")
+        }
+    }
 }
 
 // MARK: Display Configurations
@@ -684,6 +737,20 @@ enum DockIconMediaScrollBehavior: String, CaseIterable, Defaults.Serializable {
             String(localized: "Adjust volume", comment: "Dock icon media scroll option")
         case .activateHide:
             String(localized: "Activate/Hide (same as other apps)", comment: "Dock icon media scroll option")
+        }
+    }
+}
+
+enum TitleBarCenteredWindowSizingMode: String, CaseIterable, Defaults.Serializable {
+    case uniform
+    case separate
+
+    var localizedName: String {
+        switch self {
+        case .uniform:
+            String(localized: "Whole window", comment: "Title bar centered window sizing mode")
+        case .separate:
+            String(localized: "Width & height", comment: "Title bar centered window sizing mode")
         }
     }
 }
@@ -1100,4 +1167,49 @@ enum WindowSwitcherLivePreviewScope: String, CaseIterable, Defaults.Serializable
             String(localized: "All windows get live preview (may cause lag with many windows)")
         }
     }
+}
+
+// MARK: - Dock Background
+
+enum DockBackgroundMaterial: String, CaseIterable, Defaults.Serializable {
+    case ultraThin, thin, regular, thick, ultraThick
+
+    var displayName: String {
+        switch self {
+        case .ultraThin: "Ultra Thin"
+        case .thin: "Thin"
+        case .regular: "Regular"
+        case .thick: "Thick"
+        case .ultraThick: "Ultra Thick"
+        }
+    }
+
+    var swiftUIMaterial: Material {
+        switch self {
+        case .ultraThin: .ultraThinMaterial
+        case .thin: .thinMaterial
+        case .regular: .regularMaterial
+        case .thick: .thickMaterial
+        case .ultraThick: .ultraThickMaterial
+        }
+    }
+}
+
+enum DockBackgroundStyle: String, CaseIterable, Defaults.Serializable {
+    case liquidGlass
+    case frostedMaterial
+    case clear
+
+    var displayName: String {
+        switch self {
+        case .liquidGlass: "Liquid Glass"
+        case .frostedMaterial: "Frosted"
+        case .clear: "Clear"
+        }
+    }
+
+    @available(macOS 26.0, *)
+    static var allAvailable: [DockBackgroundStyle] { allCases }
+
+    static var preTahoe: [DockBackgroundStyle] { [.frostedMaterial, .clear] }
 }

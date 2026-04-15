@@ -532,6 +532,7 @@ struct WindowPreview: View {
                     .lineLimit(1)
             }
         }
+        .padding(.trailing, 8)
 
         let appIconContent = Group {
             if let appIcon = windowInfo.app.icon {

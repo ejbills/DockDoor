@@ -102,7 +102,18 @@ class WindowManipulationObservers {
         WindowUtil.purgeAppCache(with: app.processIdentifier)
         removeObserver(for: app.processIdentifier)
 
-        if !Defaults[.keepPreviewOnAppTerminate] {
+        let coordinator = previewCoordinator.windowSwitcherCoordinator
+        if coordinator.isKeybindSessionActive {
+            let pid = app.processIdentifier
+            for i in stride(from: coordinator.windows.count - 1, through: 0, by: -1) {
+                if coordinator.windows[i].app.processIdentifier == pid {
+                    coordinator.removeWindow(at: i)
+                }
+            }
+            if coordinator.windows.isEmpty {
+                previewCoordinator.hideWindow()
+            }
+        } else if !Defaults[.keepPreviewOnAppTerminate] {
             previewCoordinator.hideWindow()
         }
 
@@ -132,7 +143,9 @@ class WindowManipulationObservers {
             return
         }
 
-        previewCoordinator.hideWindow()
+        if !previewCoordinator.windowSwitcherCoordinator.isKeybindSessionActive {
+            previewCoordinator.hideWindow()
+        }
 
         if let dockObserver = DockObserver.activeInstance,
            let currentClickedPID = dockObserver.currentClickedAppPID,

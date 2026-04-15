@@ -9,6 +9,7 @@ struct DockPreviewsSettingsView: View {
     @Default(.keepPreviewOnAppTerminate) var keepPreviewOnAppTerminate
     @Default(.groupAppInstancesInDock) var groupAppInstancesInDock
     @Default(.includeHiddenWindowsInDockPreview) var includeHiddenWindowsInDockPreview
+    @Default(.showWindowlessAppsInDockPreview) var showWindowlessAppsInDockPreview
     @Default(.previewHoverAction) var previewHoverAction
     @Default(.tapEquivalentInterval) var tapEquivalentInterval
     @Default(.shouldHideOnDockItemClick) var shouldHideOnDockItemClick
@@ -75,6 +76,12 @@ struct DockPreviewsSettingsView: View {
                 .pickerStyle(.menu)
 
                 Toggle(isOn: $includeHiddenWindowsInDockPreview) { Text("Include hidden/minimized windows") }
+
+                Toggle(isOn: $showWindowlessAppsInDockPreview) { Text("Show preview for apps with no open windows") }
+                Text("Show a placeholder preview when hovering dock apps that have no windows.")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .padding(.leading, 20)
 
                 Toggle(isOn: $keepPreviewOnAppTerminate) { Text("Keep preview when app terminates") }
                 Text("Remove only terminated app's windows instead of hiding the entire preview.")

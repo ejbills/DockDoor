@@ -131,7 +131,10 @@ struct WindowPreviewInteractionModifier: ViewModifier {
     // MARK: - Tap Handling
 
     private func handleWindowTap() {
-        if windowInfo.isMinimized {
+        if windowInfo.isWindowlessApp {
+            windowInfo.app.activate(options: [.activateIgnoringOtherApps])
+            onTap?()
+        } else if windowInfo.isMinimized {
             handleWindowAction(.minimize)
         } else if windowInfo.isHidden {
             handleWindowAction(.hide)

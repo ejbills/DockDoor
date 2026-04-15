@@ -1,4 +1,5 @@
 import ConfettiSwiftUI
+import Defaults
 import SwiftUI
 
 struct FirstTimeCongratsTabView: View {
@@ -34,6 +35,7 @@ struct FirstTimeCongratsTabView: View {
                     .padding(.horizontal)
 
                 Button(action: {
+                    Defaults[.launched] = true
                     let appDelegate = NSApplication.shared.delegate as! AppDelegate
                     appDelegate.restartApp()
                 }) {

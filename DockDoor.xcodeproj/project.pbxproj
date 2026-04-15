@@ -21,6 +21,8 @@
 		2F764043EDC3435AB84C170E /* WindowSwitcherKeybindSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AB041F2D3174C8D9DA2111E /* WindowSwitcherKeybindSection.swift */; };
 		337B1BB3E0E1C17462D34C74 /* AppPickerSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE87C548D56298ADFB3F389 /* AppPickerSheet.swift */; };
 		341691AA2EE37A6D004AFFC9 /* LiveWindowCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 341691A92EE37A6D004AFFC9 /* LiveWindowCapture.swift */; };
+		3B8F4B391DEB4E549EFDE29102C715F9 /* DockBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C82F0A273F48F78EFDC8DC3C7837F1 /* DockBackgroundView.swift */; };
+		6E5F51AECE82454288FCA85E2A5955DA /* BackgroundAppearanceSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = C65CC65D33734884A7E3F8E7B99C98CA /* BackgroundAppearanceSection.swift */; };
 		3A105FD62C1BED660015EC66 /* BlurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A105FD52C1BED660015EC66 /* BlurView.swift */; };
 		3A105FD92C1C049E0015EC66 /* dockStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A105FD82C1C049E0015EC66 /* dockStyle.swift */; };
 		3A105FDD2C1C0EE20015EC66 /* DynStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A105FDC2C1C0EE20015EC66 /* DynStack.swift */; };
@@ -55,6 +57,9 @@
 		A093F1E5F59748358F395814 /* SettingsNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD01DB1CA624D4F834C60EE /* SettingsNote.swift */; };
 		A1B2C3D4E5F6789012345678 /* ActiveAppIndicatorWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C3D4E5F67890123456789A /* ActiveAppIndicatorWindow.swift */; };
 		A1B2C3D4E5F6A89012345679 /* EnabledButtonsCheckboxes.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C3D4E5F6A890123456789B /* EnabledButtonsCheckboxes.swift */; };
+		AA11001122334455AA110022 /* DockLocker.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11001122334455AA110011 /* DockLocker.swift */; };
+		AA11001122334455AA110044 /* DockLockingSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11001122334455AA110033 /* DockLockingSettingsView.swift */; };
+		AA11001122334455AA110066 /* DockLockerGeometryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11001122334455AA110055 /* DockLockerGeometryTests.swift */; };
 		B376D66B467C4587915220BC80D3B9CB /* ScriptCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = F098F8107F464776B5C18294427CAECD /* ScriptCommands.swift */; };
 		B3C9F20484F14266B941AFB170B66530 /* MediaRemoteService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC298B81953848F481EE849906E0AE77 /* MediaRemoteService.swift */; };
 		B84941090B484695B105D967 /* SettingsGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4258675B29E4A22ACF92845 /* SettingsGroup.swift */; };
@@ -117,6 +122,7 @@
 		BB52EDF02C5BEFE3006A64A4 /* HiddenModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB52EDEF2C5BEFE3006A64A4 /* HiddenModifier.swift */; };
 		BB5349C32EE7C3F5004B1FDD /* WindowPreviewCompact.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB5349C22EE7C3F5004B1FDD /* WindowPreviewCompact.swift */; };
 		BB5349C52EE7D160004B1FDD /* WindowPreviewInteractionModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB5349C42EE7D160004B1FDD /* WindowPreviewInteractionModifier.swift */; };
+		B5247D12ACED4D439B680104EC99DB30 /* WindowlessAppPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033B1F63CB464113ADA3868696F486CF /* WindowlessAppPreview.swift */; };
 		BB5C36562F6CEE9E00BE947F /* MediaRemoteAdapter in Frameworks */ = {isa = PBXBuildFile; productRef = BB5C36552F6CEE9E00BE947F /* MediaRemoteAdapter */; };
 		BB5C36572F6D793700BE947F /* MediaRemoteAdapter in Embed Frameworks */ = {isa = PBXBuildFile; productRef = BB5C36552F6CEE9E00BE947F /* MediaRemoteAdapter */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		BB5D35542ED4C4CC006ECE15 /* DebugLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB5D35532ED4C4CC006ECE15 /* DebugLogger.swift */; };
@@ -196,6 +202,16 @@
 		FEBF808E6ABA4DE7983FCACD /* SettingsPickerRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C341C31333F4619A4E79449 /* SettingsPickerRow.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		AA11001122334455AA1100EE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BB157B5D2C0E31CE00997315 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = BB157B642C0E31CE00997315;
+			remoteInfo = DockDoor;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXCopyFilesBuildPhase section */
 		BB5C36582F6D793700BE947F /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -227,6 +243,8 @@
 		27DC8C152CFA4DA7005F8F31 /* NumberFormatter+Convenience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NumberFormatter+Convenience.swift"; sourceTree = "<group>"; };
 		2FBA5BBE4DFA460FBF54D30E /* SettingsToggleRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsToggleRow.swift; sourceTree = "<group>"; };
 		341691A92EE37A6D004AFFC9 /* LiveWindowCapture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveWindowCapture.swift; sourceTree = "<group>"; };
+		F0C82F0A273F48F78EFDC8DC3C7837F1 /* DockBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockBackgroundView.swift; sourceTree = "<group>"; };
+		C65CC65D33734884A7E3F8E7B99C98CA /* BackgroundAppearanceSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundAppearanceSection.swift; sourceTree = "<group>"; };
 		3A105FD52C1BED660015EC66 /* BlurView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurView.swift; sourceTree = "<group>"; };
 		3A105FD82C1C049E0015EC66 /* dockStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dockStyle.swift; sourceTree = "<group>"; };
 		3A105FDC2C1C0EE20015EC66 /* DynStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynStack.swift; sourceTree = "<group>"; };
@@ -256,6 +274,10 @@
 		99C808769D1048FF95FCDA50FA52116A /* CmdTabSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CmdTabSettingsView.swift; sourceTree = "<group>"; };
 		9DE26FD426284948A71EBACC /* SettingsIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsIcon.swift; sourceTree = "<group>"; };
 		A4E8BB47686D4EF6B89131D2EB26FEE8 /* DockDoor.sdef */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.sdef; path = DockDoor.sdef; sourceTree = "<group>"; };
+		AA11001122334455AA110011 /* DockLocker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockLocker.swift; sourceTree = "<group>"; };
+		AA11001122334455AA110033 /* DockLockingSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockLockingSettingsView.swift; sourceTree = "<group>"; };
+		AA11001122334455AA110055 /* DockLockerGeometryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockLockerGeometryTests.swift; sourceTree = "<group>"; };
+		AA11001122334455AA110100 /* DockDoorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DockDoorTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		AC298B81953848F481EE849906E0AE77 /* MediaRemoteService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaRemoteService.swift; sourceTree = "<group>"; };
 		B056906A7ACD4903BD5E1627B359AE2C /* AdvancedSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedSettingsView.swift; sourceTree = "<group>"; };
 		B2C3D4E5F67890123456789A /* ActiveAppIndicatorWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveAppIndicatorWindow.swift; sourceTree = "<group>"; };
@@ -320,6 +342,7 @@
 		BB52EDEF2C5BEFE3006A64A4 /* HiddenModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HiddenModifier.swift; sourceTree = "<group>"; };
 		BB5349C22EE7C3F5004B1FDD /* WindowPreviewCompact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowPreviewCompact.swift; sourceTree = "<group>"; };
 		BB5349C42EE7D160004B1FDD /* WindowPreviewInteractionModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowPreviewInteractionModifier.swift; sourceTree = "<group>"; };
+		033B1F63CB464113ADA3868696F486CF /* WindowlessAppPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowlessAppPreview.swift; sourceTree = "<group>"; };
 		BB5D35532ED4C4CC006ECE15 /* DebugLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugLogger.swift; sourceTree = "<group>"; };
 		BB6021D12D1E613100D47C86 /* Window Image Sizing Calculations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Window Image Sizing Calculations.swift"; sourceTree = "<group>"; };
 		BB638EF92E0216DA0010077D /* MediaControlsEmbeddedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaControlsEmbeddedView.swift; sourceTree = "<group>"; };
@@ -397,6 +420,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		AA11001122334455AA1100AA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		BB157B622C0E31CE00997315 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -464,6 +494,7 @@
 				3A1622BF2C8D579F00D318EE /* PermissionsView */,
 				BB04405C2C77A878009F1D33 /* Defaults */,
 				3A105FD52C1BED660015EC66 /* BlurView.swift */,
+				F0C82F0A273F48F78EFDC8DC3C7837F1 /* DockBackgroundView.swift */,
 				3A105FDC2C1C0EE20015EC66 /* DynStack.swift */,
 				BB3967FC2C291D5A004F1AB6 /* StackedShadow.swift */,
 				BB3968012C2A6CC2004F1AB6 /* Marquee.swift */,
@@ -538,6 +569,14 @@
 			path = Tabs;
 			sourceTree = "<group>";
 		};
+		AA11001122334455AA110077 /* DockDoorTests */ = {
+			isa = PBXGroup;
+			children = (
+				AA11001122334455AA110055 /* DockLockerGeometryTests.swift */,
+			);
+			path = DockDoorTests;
+			sourceTree = "<group>";
+		};
 		AABBCC112233445566778899 /* Appearance */ = {
 			isa = PBXGroup;
 			children = (
@@ -548,6 +587,7 @@
 				CBBBAA129E24438589330D3B /* WindowSwitcherAppearanceSection.swift */,
 				FB59EE0D7419468CABBAD220 /* CmdTabAppearanceSection.swift */,
 				E3584B7313E241EF997A4EE5 /* AdvancedAppearanceSection.swift */,
+				C65CC65D33734884A7E3F8E7B99C98CA /* BackgroundAppearanceSection.swift */,
 				B2C3D4E5F6A890123456789B /* EnabledButtonsCheckboxes.swift */,
 			);
 			path = Appearance;
@@ -586,6 +626,7 @@
 			children = (
 				3A1622992C8BFCE800D318EE /* Assets */,
 				BB157B672C0E31CE00997315 /* DockDoor */,
+				AA11001122334455AA110077 /* DockDoorTests */,
 				BB157B662C0E31CE00997315 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -594,6 +635,7 @@
 			isa = PBXGroup;
 			children = (
 				BB157B652C0E31CE00997315 /* DockDoor.app */,
+				AA11001122334455AA110100 /* DockDoorTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -647,6 +689,7 @@
 				BBF6C6262C1B4B4500BF1D40 /* StringMatchingUtil.swift */,
 				BB1CBD5C2C1BCA4F003969BC /* Misc Utils.swift */,
 				F098F8107F464776B5C18294427CAECD /* ScriptCommands.swift */,
+				AA11001122334455AA110011 /* DockLocker.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -721,6 +764,7 @@
 				BB4B444A2C372A4C006680DC /* WindowPreview.swift */,
 				BB5349C22EE7C3F5004B1FDD /* WindowPreviewCompact.swift */,
 				BB5349C42EE7D160004B1FDD /* WindowPreviewInteractionModifier.swift */,
+				033B1F63CB464113ADA3868696F486CF /* WindowlessAppPreview.swift */,
 			);
 			path = "Hover Window";
 			sourceTree = "<group>";
@@ -870,6 +914,7 @@
 				BB6CAB7E2EB3F0020080E537 /* SettingsView.swift */,
 				BB7CD3CC2EE66EE800412546 /* GesturesAndKeybindsSettingsView.swift */,
 				BB709B3A2EF21493007809A2 /* WidgetSettingsView.swift */,
+				AA11001122334455AA110033 /* DockLockingSettingsView.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -877,6 +922,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		AA11001122334455AA110088 /* DockDoorTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AA11001122334455AA1100DD /* Build configuration list for PBXNativeTarget "DockDoorTests" */;
+			buildPhases = (
+				AA11001122334455AA110099 /* Sources */,
+				AA11001122334455AA1100AA /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				AA11001122334455AA1100FF /* PBXTargetDependency */,
+			);
+			name = DockDoorTests;
+			productName = DockDoorTests;
+			productReference = AA11001122334455AA110100 /* DockDoorTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		BB157B642C0E31CE00997315 /* DockDoor */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = BB157B742C0E31CF00997315 /* Build configuration list for PBXNativeTarget "DockDoor" */;
@@ -914,6 +976,10 @@
 				LastSwiftUpdateCheck = 1540;
 				LastUpgradeCheck = 2600;
 				TargetAttributes = {
+					AA11001122334455AA110088 = {
+						CreatedOnToolsVersion = 15.4;
+						TestTargetID = BB157B642C0E31CE00997315;
+					};
 					BB157B642C0E31CE00997315 = {
 						CreatedOnToolsVersion = 15.4;
 					};
@@ -943,6 +1009,7 @@
 			projectRoot = "";
 			targets = (
 				BB157B642C0E31CE00997315 /* DockDoor */,
+				AA11001122334455AA110088 /* DockDoorTests */,
 			);
 		};
 /* End PBXProject section */
@@ -986,6 +1053,14 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		AA11001122334455AA110099 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AA11001122334455AA110066 /* DockLockerGeometryTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		BB157B612C0E31CE00997315 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1044,6 +1119,7 @@
 				05C0C7182C60629C000ADAC6 /* AXUIElement.swift in Sources */,
 				3A1622C12C8D57AF00D318EE /* PermissionsChecker.swift in Sources */,
 				3A105FD62C1BED660015EC66 /* BlurView.swift in Sources */,
+				3B8F4B391DEB4E549EFDE29102C715F9 /* DockBackgroundView.swift in Sources */,
 				BBB6C5302DF3C884009E93C4 /* MediaInfo.swift in Sources */,
 				BB0440622C77AE8D009F1D33 /* GradientColorPaletteSettingsView.swift in Sources */,
 				BB1CBD5D2C1BCA4F003969BC /* Misc Utils.swift in Sources */,
@@ -1132,6 +1208,7 @@
 				2D6F6684A9E141A8B88927D3 /* WindowSwitcherAppearanceSection.swift in Sources */,
 				700F49963BB641ABBB0F8605 /* CmdTabAppearanceSection.swift in Sources */,
 				2F26AC46A07D4343B2723D83 /* AdvancedAppearanceSection.swift in Sources */,
+				6E5F51AECE82454288FCA85E2A5955DA /* BackgroundAppearanceSection.swift in Sources */,
 				A1B2C3D4E5F6A89012345679 /* EnabledButtonsCheckboxes.swift in Sources */,
 				0BBE0D8202DA47F4940C1E96 /* DockScrollGestureSection.swift in Sources */,
 				8A65164BC27F4A60A6FA765B /* DockPreviewGesturesSection.swift in Sources */,
@@ -1164,12 +1241,61 @@
 				BB638F262E0218FE0010077D /* CalendarPermissionView.swift in Sources */,
 				BB2106762E834F25002F87D6 /* CmdTabFocusFullOverlayView.swift in Sources */,
 				BB5349C32EE7C3F5004B1FDD /* WindowPreviewCompact.swift in Sources */,
+				B5247D12ACED4D439B680104EC99DB30 /* WindowlessAppPreview.swift in Sources */,
+				AA11001122334455AA110022 /* DockLocker.swift in Sources */,
+				AA11001122334455AA110044 /* DockLockingSettingsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		AA11001122334455AA1100FF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = BB157B642C0E31CE00997315 /* DockDoor */;
+			targetProxy = AA11001122334455AA1100EE /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		AA11001122334455AA1100BB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = 25DV56692Y;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.5;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ethanbills.DockDoorTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.10;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DockDoor.app/Contents/MacOS/DockDoor";
+			};
+			name = Debug;
+		};
+		AA11001122334455AA1100CC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = 25DV56692Y;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.5;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ethanbills.DockDoorTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.10;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DockDoor.app/Contents/MacOS/DockDoor";
+			};
+			name = Release;
+		};
 		BB157B722C0E31CF00997315 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1304,7 +1430,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				AUTOMATION_APPLE_EVENTS = YES;
 				CODE_SIGN_ENTITLEMENTS = DockDoor/DockDoorDebug.entitlements;
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1.18.3;
@@ -1336,6 +1462,7 @@
 				MARKETING_VERSION = 1.18.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ethanbills.DockDoor.debug;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				RUNTIME_EXCEPTION_ALLOW_DYLD_ENVIRONMENT_VARIABLES = NO;
 				RUNTIME_EXCEPTION_ALLOW_JIT = NO;
 				RUNTIME_EXCEPTION_ALLOW_UNSIGNED_EXECUTABLE_MEMORY = NO;
@@ -1401,6 +1528,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		AA11001122334455AA1100DD /* Build configuration list for PBXNativeTarget "DockDoorTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AA11001122334455AA1100BB /* Debug */,
+				AA11001122334455AA1100CC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		BB157B602C0E31CE00997315 /* Build configuration list for PBXProject "DockDoor" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

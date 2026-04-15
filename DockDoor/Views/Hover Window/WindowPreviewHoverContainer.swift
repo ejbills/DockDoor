@@ -495,7 +495,7 @@ struct WindowPreviewHoverContainer: View {
                     }
                     .padding(.vertical, 5)
                     .padding(.horizontal, 10)
-                    .dockStyle(cornerRadius: 10, frostedTranslucentLayer: true)
+                    .dockStyle(cornerRadius: 10)
                     .contentShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
                     .onHover { hover in
                         hoveringAppIcon = hover
@@ -1160,7 +1160,21 @@ struct WindowPreviewHoverContainer: View {
 
                 let isSelected = index == previewStateCoordinator.currIndex
 
-                if useCompactForThisWindow {
+                if windowInfo.isWindowlessApp, !shouldUseCompactMode {
+                    WindowlessAppPreview(
+                        windowInfo: windowInfo,
+                        index: index,
+                        dockPosition: dockPosition,
+                        uniformCardRadius: uniformCardRadius,
+                        isSelected: isSelected,
+                        windowSwitcherActive: previewStateCoordinator.windowSwitcherActive,
+                        dimensions: getDimensions(for: index, dimensionsMap: currentDimensionsMapForPreviews),
+                        onTap: onWindowTap,
+                        onHoverIndexChange: handleHoverIndexChange,
+                        appearance: appearance
+                    )
+                    .id("\(appName)-\(index)")
+                } else if useCompactForThisWindow {
                     WindowPreviewCompact(
                         windowInfo: windowInfo,
                         index: index,

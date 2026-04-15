@@ -100,6 +100,9 @@ struct MainSettingsView: View {
                 Defaults[.includeHiddenWindowsInSwitcher] = Defaults.Keys.includeHiddenWindowsInSwitcher.defaultValue
                 Defaults[.includeHiddenWindowsInDockPreview] = Defaults.Keys.includeHiddenWindowsInDockPreview.defaultValue
                 Defaults[.includeHiddenWindowsInCmdTab] = Defaults.Keys.includeHiddenWindowsInCmdTab.defaultValue
+                Defaults[.showWindowlessAppsInSwitcher] = Defaults.Keys.showWindowlessAppsInSwitcher.defaultValue
+                Defaults[.showWindowlessAppsInDockPreview] = Defaults.Keys.showWindowlessAppsInDockPreview.defaultValue
+                Defaults[.showWindowlessAppsInCmdTab] = Defaults.Keys.showWindowlessAppsInCmdTab.defaultValue
                 Defaults[.useClassicWindowOrdering] = Defaults.Keys.useClassicWindowOrdering.defaultValue
                 Defaults[.limitSwitcherToFrontmostApp] = Defaults.Keys.limitSwitcherToFrontmostApp.defaultValue
                 Defaults[.fullscreenAppBlacklist] = Defaults.Keys.fullscreenAppBlacklist.defaultValue
@@ -138,6 +141,10 @@ struct MainSettingsView: View {
                 Defaults[.showMassActionButtons] = Defaults.Keys.showMassActionButtons.defaultValue
                 Defaults[.useEmbeddedMediaControls] = Defaults.Keys.useEmbeddedMediaControls.defaultValue
                 Defaults[.enablePinning] = Defaults.Keys.enablePinning.defaultValue
+
+                Defaults[.enableDockLocking] = Defaults.Keys.enableDockLocking.defaultValue
+                Defaults[.lockedDockScreenIdentifier] = Defaults.Keys.lockedDockScreenIdentifier.defaultValue
+                Defaults[.dockLockOverrideModifier] = Defaults.Keys.dockLockOverrideModifier.defaultValue
                 Defaults[.filteredCalendarIdentifiers] = Defaults.Keys.filteredCalendarIdentifiers.defaultValue
                 Defaults[.groupAppInstancesInDock] = Defaults.Keys.groupAppInstancesInDock.defaultValue
 

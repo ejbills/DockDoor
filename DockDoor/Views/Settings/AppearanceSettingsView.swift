@@ -18,6 +18,8 @@ struct AppearanceSettingsView: View {
 
                 WindowSizeSettingsSection()
 
+                BackgroundAppearanceSection()
+
                 GeneralAppearanceSection()
 
                 CompactModeSection(hasScreenRecordingPermission: permissionsChecker.screenRecordingPermission)

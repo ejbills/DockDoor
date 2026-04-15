@@ -10,6 +10,7 @@ struct CmdTabSettingsView: View {
     @Default(.cmdTabSortOrder) var cmdTabSortOrder
     @Default(.cmdTabAutoSelectFirstWindow) var cmdTabAutoSelectFirstWindow
     @Default(.includeHiddenWindowsInCmdTab) var includeHiddenWindowsInCmdTab
+    @Default(.showWindowlessAppsInCmdTab) var showWindowlessAppsInCmdTab
 
     var body: some View {
         BaseSettingsView {
@@ -106,6 +107,12 @@ struct CmdTabSettingsView: View {
                     .padding(.leading, 20)
 
                 Toggle(isOn: $includeHiddenWindowsInCmdTab) { Text("Include hidden/minimized windows") }
+
+                Toggle(isOn: $showWindowlessAppsInCmdTab) { Text("Show preview for apps with no open windows") }
+                Text("Show a placeholder preview when Cmd+Tab lands on an app that has no windows.")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .padding(.leading, 20)
 
                 Picker("Window sort order", selection: $cmdTabSortOrder) {
                     ForEach(WindowPreviewSortOrder.allCases.filter { !$0.isWindowSwitcherOnly }) { order in

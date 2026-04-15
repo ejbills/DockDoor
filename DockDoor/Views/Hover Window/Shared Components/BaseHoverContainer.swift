@@ -41,7 +41,7 @@ struct BaseHoverContainer<Content: View>: View {
     var body: some View {
         content
             .if(!preventDockStyling) { view in
-                view.dockStyle(highlightColor: highlightColor, backgroundOpacity: shouldHideBackground ? 0 : dockPreviewBackgroundOpacity, frostedTranslucentLayer: true)
+                view.dockStyle(highlightColor: highlightColor, backgroundOpacity: shouldHideBackground ? 0 : dockPreviewBackgroundOpacity)
             }
             .padding(.all, mockPreviewActive ? 0 : HoverContainerPadding.container)
             .frame(maxWidth: bestGuessMonitor.visibleFrame.width, maxHeight: bestGuessMonitor.visibleFrame.height, alignment: .topLeading)

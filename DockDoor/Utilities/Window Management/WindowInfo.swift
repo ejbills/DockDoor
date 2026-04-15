@@ -18,6 +18,7 @@ struct WindowInfo: Identifiable, Hashable {
     var imageCapturedTime: Date
     var isMinimized: Bool
     var isHidden: Bool
+    private(set) var isWindowlessApp: Bool
 
     private var _scWindow: SCWindow?
 
@@ -37,6 +38,7 @@ struct WindowInfo: Identifiable, Hashable {
         self.imageCapturedTime = imageCapturedTime ?? lastAccessedTime
         self.isMinimized = isMinimized
         self.isHidden = isHidden
+        isWindowlessApp = false
         _scWindow = windowProvider as? SCWindow
     }
 
@@ -45,6 +47,7 @@ struct WindowInfo: Identifiable, Hashable {
 
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
+        hasher.combine(app.processIdentifier)
     }
 
     static func == (lhs: WindowInfo, rhs: WindowInfo) -> Bool {
@@ -55,8 +58,36 @@ struct WindowInfo: Identifiable, Hashable {
 }
 
 extension WindowInfo {
+    static func windowlessEntry(for app: NSRunningApplication) -> WindowInfo {
+        let pid = app.processIdentifier
+        let appAX = AXUIElementCreateApplication(pid)
+        let provider = MockPreviewWindow(
+            windowID: 0,
+            frame: .zero,
+            title: app.localizedName,
+            owningApplicationBundleIdentifier: app.bundleIdentifier,
+            owningApplicationProcessID: pid,
+            isOnScreen: false,
+            windowLayer: 0
+        )
+        var info = WindowInfo(
+            windowProvider: provider,
+            app: app,
+            image: nil,
+            axElement: appAX,
+            appAxElement: appAX,
+            closeButton: nil,
+            lastAccessedTime: .distantPast,
+            isMinimized: false,
+            isHidden: false
+        )
+        info.isWindowlessApp = true
+        return info
+    }
+
     @discardableResult
     mutating func toggleMinimize() -> Bool? {
+        guard !isWindowlessApp else { return nil }
         if isMinimized {
             if app.isHidden {
                 app.unhide()
@@ -85,6 +116,7 @@ extension WindowInfo {
 
     @discardableResult
     mutating func toggleHidden() -> Bool? {
+        guard !isWindowlessApp else { return nil }
         let newHiddenState = !isHidden
 
         do {
@@ -103,6 +135,7 @@ extension WindowInfo {
     }
 
     mutating func toggleFullScreen() {
+        guard !isWindowlessApp else { return }
         if let isCurrentlyInFullScreen = try? axElement.isFullscreen() {
             do {
                 try axElement.setAttribute(kAXFullscreenAttribute, !isCurrentlyInFullScreen)
@@ -204,42 +237,46 @@ extension WindowInfo {
         }
     }
 
-    private func positionWindow(rect: WindowPositionRect) {
-        // Get current window position directly from AXUIElement
-        guard let currentPosition = try? axElement.position(),
-              let currentSize = try? axElement.size()
+    private func currentWindowPlacementContext() -> (screen: NSScreen, size: CGSize)? {
+        guard let currentSize = try? axElement.size(),
+              let windowFrame = Self.currentWindowFrame(for: axElement)
         else {
-            return
+            return nil
         }
 
-        // Find the screen containing this window
-        guard let screen = NSScreen.screens.first(where: { screen in
-            // Convert AX coordinates to screen coordinates for comparison
-            let screenTop = screen.frame.origin.y + screen.frame.height
-            let windowBottomLeft = CGPoint(
-                x: currentPosition.x,
-                y: screenTop - currentPosition.y - currentSize.height
-            )
-            let windowFrame = CGRect(origin: windowBottomLeft, size: currentSize)
-            return screen.frame.intersects(windowFrame)
-        }) ?? NSScreen.main else {
-            return
+        guard let screen = NSScreen.screens.first(where: { $0.frame.intersects(windowFrame) }) ?? NSScreen.main else {
+            return nil
         }
 
-        // Use visibleFrame to respect menu bar and dock
-        let visibleFrame = screen.visibleFrame
+        return (screen, currentSize)
+    }
 
-        // Calculate target frame in Cocoa coordinates
-        let targetFrame = rect.frame(in: visibleFrame, currentSize: currentSize)
+    static func currentWindowFrame(for element: AXUIElement) -> CGRect? {
+        guard let currentPosition = try? element.position(),
+              let currentSize = try? element.size()
+        else {
+            return nil
+        }
 
-        // Convert position: Cocoa uses bottom-left origin, AX uses top-left origin from primary screen
-        // Primary screen's maxY in Cocoa = 0 in AX coordinates
+        let primaryScreenMaxY = NSScreen.screens.first?.frame.maxY ?? NSScreen.main?.frame.maxY ?? 0
+        return CGRect(
+            x: currentPosition.x,
+            y: primaryScreenMaxY - currentPosition.y - currentSize.height,
+            width: currentSize.width,
+            height: currentSize.height
+        )
+    }
+
+    func currentWindowFrame() -> CGRect? {
+        Self.currentWindowFrame(for: axElement)
+    }
+
+    private func applyWindowFrame(_ targetFrame: CGRect, on screen: NSScreen) {
         let primaryScreenMaxY = NSScreen.screens.first?.frame.maxY ?? screen.frame.maxY
         let axY = primaryScreenMaxY - targetFrame.maxY
         let newPosition = CGPoint(x: targetFrame.origin.x, y: axY)
         let newSize = CGSize(width: targetFrame.width, height: targetFrame.height)
 
-        // Create AXValue wrapped values
         guard let positionValue = AXValue.from(point: newPosition),
               let sizeValue = AXValue.from(size: newSize)
         else {
@@ -248,6 +285,27 @@ extension WindowInfo {
 
         try? axElement.setAttribute(kAXPositionAttribute, positionValue)
         try? axElement.setAttribute(kAXSizeAttribute, sizeValue)
+    }
+
+    func setWindowFrame(_ targetFrame: CGRect) {
+        guard let screen = NSScreen.screens.first(where: { $0.frame.intersects(targetFrame) })
+            ?? currentWindowPlacementContext()?.screen
+            ?? NSScreen.main
+        else {
+            return
+        }
+
+        applyWindowFrame(targetFrame, on: screen)
+    }
+
+    private func positionWindow(rect: WindowPositionRect) {
+        guard let context = currentWindowPlacementContext() else {
+            return
+        }
+
+        let visibleFrame = context.screen.visibleFrame
+        let targetFrame = rect.frame(in: visibleFrame, currentSize: context.size)
+        applyWindowFrame(targetFrame, on: context.screen)
     }
 
     func fillLeftHalf() {
@@ -286,7 +344,59 @@ extension WindowInfo {
         positionWindow(rect: .center)
     }
 
+    func centerWindow(scale: CGFloat) {
+        guard let context = currentWindowPlacementContext() else {
+            return
+        }
+
+        let visibleFrame = context.screen.visibleFrame
+        let clampedScale = min(max(scale, 0.2), 1.0)
+        let targetSize = CGSize(
+            width: visibleFrame.width * clampedScale,
+            height: visibleFrame.height * clampedScale
+        )
+        let targetFrame = WindowPositionRect.center.frame(in: visibleFrame, currentSize: targetSize)
+        applyWindowFrame(targetFrame, on: context.screen)
+    }
+
+    func centerWindow(widthScale: CGFloat, heightScale: CGFloat, lockAspectRatio: Bool) {
+        guard let context = currentWindowPlacementContext() else {
+            return
+        }
+
+        let visibleFrame = context.screen.visibleFrame
+
+        let clampedWidthScale = min(max(widthScale, 0.2), 1.0)
+        let clampedHeightScale = min(max(heightScale, 0.2), 1.0)
+
+        let maxWidth = visibleFrame.width * clampedWidthScale
+        let maxHeight = visibleFrame.height * clampedHeightScale
+
+        let targetSize: CGSize
+        if lockAspectRatio {
+            let currentSize = context.size
+            guard currentSize.width > 0, currentSize.height > 0 else {
+                targetSize = CGSize(width: maxWidth, height: maxHeight)
+                let targetFrame = WindowPositionRect.center.frame(in: visibleFrame, currentSize: targetSize)
+                applyWindowFrame(targetFrame, on: context.screen)
+                return
+            }
+
+            let scaleFactor = min(maxWidth / currentSize.width, maxHeight / currentSize.height)
+            targetSize = CGSize(width: currentSize.width * scaleFactor, height: currentSize.height * scaleFactor)
+        } else {
+            targetSize = CGSize(width: maxWidth, height: maxHeight)
+        }
+
+        let targetFrame = WindowPositionRect.center.frame(in: visibleFrame, currentSize: targetSize)
+        applyWindowFrame(targetFrame, on: context.screen)
+    }
+
     func bringToFront() {
+        guard !isWindowlessApp else {
+            app.activate(options: [.activateIgnoringOtherApps])
+            return
+        }
         let maxRetries = 3
         var retryCount = 0
 
@@ -326,6 +436,7 @@ extension WindowInfo {
     }
 
     func close() {
+        guard !isWindowlessApp else { return }
         guard closeButton != nil else {
             print("Error: closeButton is nil.")
             return
