@@ -144,8 +144,10 @@ enum WindowAction: String, Hashable, CaseIterable, Defaults.Serializable {
 
         case .close:
             let pid = window.app.processIdentifier
+            let finder = NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.finder")
             if Defaults[.quitAppOnWindowClose],
-               WindowUtil.readCachedWindows(for: pid).count <= 1
+               WindowUtil.readCachedWindows(for: pid).count <= 1,
+               finder.first?.processIdentifier != pid
             {
                 window.quit(force: NSEvent.modifierFlags.contains(.option))
                 if keepPreviewOnQuit {
