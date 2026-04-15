@@ -44,6 +44,13 @@ final class DockObserver {
         let expirationDate: Date
     }
 
+    private struct CachedTitleBarInfo {
+        let window: WindowInfo
+        let windowFrame: CGRect
+        let titleBarRect: CGRect
+        let timestamp: Date
+    }
+
     weak static var activeInstance: DockObserver?
     let previewCoordinator: SharedPreviewWindowCoordinator
 
@@ -78,6 +85,10 @@ final class DockObserver {
     private let minimumTitleBarScrollDelta: Double = 0.15
     private let fallbackTitleBarHeight: CGFloat = 48
     private let maximumTitleBarHeight: CGFloat = 72
+
+    private var cachedTitleBarInfo: CachedTitleBarInfo?
+    private var titleBarRefreshScheduled = false
+    private let titleBarCacheMaxAge: TimeInterval = 1.0
 
     private var centeredWindowScale: CGFloat {
         min(max(Defaults[.titleBarScrollCenteredWindowScale], 0.2), 1.0)
@@ -946,6 +957,40 @@ final class DockObserver {
         }
     }
 
+    private func scheduleTitleBarCacheRefresh() {
+        guard !titleBarRefreshScheduled else { return }
+        titleBarRefreshScheduled = true
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            titleBarRefreshScheduled = false
+            refreshTitleBarCache()
+        }
+    }
+
+    private func refreshTitleBarCache() {
+        guard let focusedWindow = WindowUtil.getFocusedWindowForFrontmostApp(),
+              let windowFrame = focusedWindow.currentWindowFrame()
+        else {
+            cachedTitleBarInfo = nil
+            return
+        }
+
+        let titleBarHeight = resolvedTitleBarHeight(for: focusedWindow, windowFrame: windowFrame)
+        let titleBarRect = CGRect(
+            x: windowFrame.minX,
+            y: windowFrame.maxY - titleBarHeight,
+            width: windowFrame.width,
+            height: titleBarHeight
+        )
+
+        cachedTitleBarInfo = CachedTitleBarInfo(
+            window: focusedWindow,
+            windowFrame: windowFrame,
+            titleBarRect: titleBarRect,
+            timestamp: Date()
+        )
+    }
+
     private func handleTitleBarScroll(_ event: CGEvent) -> Bool {
         let deltaX = event.getDoubleValueField(.scrollWheelEventDeltaAxis2)
         let deltaY = event.getDoubleValueField(.scrollWheelEventDeltaAxis1)
@@ -954,11 +999,21 @@ final class DockObserver {
             return false
         }
 
-        let mouseLocation = NSEvent.mouseLocation
+        if event.getIntegerValueField(.scrollWheelEventMomentumPhase) != 0 {
+            return false
+        }
 
-        guard let focusedWindow = WindowUtil.getFocusedWindowForFrontmostApp(),
-              let focusedWindowFrame = focusedWindow.currentWindowFrame(),
-              isPointInTitleBar(mouseLocation, window: focusedWindow, windowFrame: focusedWindowFrame)
+        if let cached = cachedTitleBarInfo, Date().timeIntervalSince(cached.timestamp) > titleBarCacheMaxAge {
+            cachedTitleBarInfo = nil
+        }
+
+        if cachedTitleBarInfo == nil {
+            scheduleTitleBarCacheRefresh()
+            return false
+        }
+
+        guard let cached = cachedTitleBarInfo,
+              cached.titleBarRect.contains(NSEvent.mouseLocation)
         else {
             return false
         }
@@ -974,19 +1029,25 @@ final class DockObserver {
         }
         lastTitleBarScrollActionTime = now
 
+        let window = cached.window
+
         if abs(normalizedDeltaX) > abs(normalizedDeltaY) {
-            if normalizedDeltaX > 0 {
-                switchToNextSpace()
-            } else {
-                switchToPreviousSpace()
+            DispatchQueue.main.async { [weak self] in
+                if normalizedDeltaX > 0 {
+                    self?.switchToNextSpace()
+                } else {
+                    self?.switchToPreviousSpace()
+                }
             }
             return true
         }
 
-        if normalizedDeltaY > 0 {
-            handleTitleBarVerticalScroll(.maximize, for: focusedWindow, now: now)
-        } else {
-            handleTitleBarVerticalScroll(.center, for: focusedWindow, now: now)
+        DispatchQueue.main.async { [weak self] in
+            if normalizedDeltaY > 0 {
+                self?.handleTitleBarVerticalScroll(.maximize, for: window, now: now)
+            } else {
+                self?.handleTitleBarVerticalScroll(.center, for: window, now: now)
+            }
         }
 
         return true
@@ -1036,21 +1097,6 @@ final class DockObserver {
                 )
             }
         }
-    }
-
-    private func isPointInTitleBar(_ point: CGPoint, window: WindowInfo, windowFrame: CGRect) -> Bool {
-        guard windowFrame.contains(point) else {
-            return false
-        }
-
-        let titleBarHeight = resolvedTitleBarHeight(for: window, windowFrame: windowFrame)
-        let titleBarFrame = CGRect(
-            x: windowFrame.minX,
-            y: windowFrame.maxY - titleBarHeight,
-            width: windowFrame.width,
-            height: titleBarHeight
-        )
-        return titleBarFrame.contains(point)
     }
 
     private func resolvedTitleBarHeight(for window: WindowInfo, windowFrame: CGRect) -> CGFloat {

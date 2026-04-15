@@ -239,10 +239,7 @@ final class DockLocker {
 
     private func setupEventTap() {
         let eventMask: CGEventMask =
-            (1 << CGEventType.mouseMoved.rawValue) |
-            (1 << CGEventType.leftMouseDragged.rawValue) |
-            (1 << CGEventType.rightMouseDragged.rawValue) |
-            (1 << CGEventType.otherMouseDragged.rawValue)
+            (1 << CGEventType.mouseMoved.rawValue)
 
         // Session-level head-insert: intercepts cursor position before WindowServer
         // passes it to Dock. DockObserver uses HID-level tail-append for different
