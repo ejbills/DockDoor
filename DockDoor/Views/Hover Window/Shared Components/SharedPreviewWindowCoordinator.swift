@@ -827,7 +827,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         let window = coordinator.windows[coordinator.currIndex]
         let originalIndex = coordinator.currIndex
 
-        let result = action.perform(on: window, keepPreviewOnQuit: false)
+        let result = action.perform(on: window, keepPreviewOnQuit: true)
 
         switch result {
         case .dismissed:
@@ -836,7 +836,13 @@ final class SharedPreviewWindowCoordinator: NSPanel {
             coordinator.updateWindow(at: originalIndex, with: updatedWindow)
         case .windowRemoved:
             coordinator.removeWindow(at: originalIndex)
-        case .appWindowsRemoved, .noChange:
+        case let .appWindowsRemoved(pid):
+            for i in stride(from: coordinator.windows.count - 1, through: 0, by: -1) {
+                if coordinator.windows[i].app.processIdentifier == pid {
+                    coordinator.removeWindow(at: i)
+                }
+            }
+        case .noChange:
             break
         }
     }

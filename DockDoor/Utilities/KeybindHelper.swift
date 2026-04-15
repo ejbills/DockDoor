@@ -777,9 +777,17 @@ class KeybindHelper {
                     preventSwitcherHideOnRelease = true
                     return (true, { @MainActor in
                         await self.previewCoordinator.performActionOnCurrentWindow(action: action)
-                        self.windowSwitchingCoordinator.cancelSwitching(previewCoordinator: self.previewCoordinator)
-                        self.preventSwitcherHideOnRelease = false
-                        self.hasProcessedModifierRelease = true
+                        if action == .quit {
+                            if self.previewCoordinator.windowSwitcherCoordinator.windows.isEmpty {
+                                self.windowSwitchingCoordinator.cancelSwitching(previewCoordinator: self.previewCoordinator)
+                                self.preventSwitcherHideOnRelease = false
+                                self.hasProcessedModifierRelease = true
+                            }
+                        } else {
+                            self.windowSwitchingCoordinator.cancelSwitching(previewCoordinator: self.previewCoordinator)
+                            self.preventSwitcherHideOnRelease = false
+                            self.hasProcessedModifierRelease = true
+                        }
                     })
                 }
             }
