@@ -22,6 +22,10 @@ struct WindowPreviewCompact: View {
 
     @State private var isHovering = false
 
+    private var safariProfileBadgeStyle: WindowTitleBadgeStyle? {
+        windowInfo.safariProfileBadgeStyle
+    }
+
     /// Checks if this window is the currently active (focused) window on the system and adds a border if so.
     private var isActiveWindow: Bool {
         guard appearance.showActiveWindowBorder else { return false }
@@ -81,11 +85,11 @@ struct WindowPreviewCompact: View {
                     if let state = stateIndicator {
                         stateText(state)
                     } else if let title = windowTitle {
-                        titleText(title, isPrimary: false)
+                        titleText(title, isPrimary: false, badgeStyle: safariProfileBadgeStyle)
                     }
 
                 case .titleOnly:
-                    titleText(windowTitle ?? appName, isPrimary: true)
+                    titleText(windowTitle ?? appName, isPrimary: true, badgeStyle: windowTitle == nil ? nil : safariProfileBadgeStyle)
                     // Show state below the title
                     if let state = stateIndicator {
                         stateText(state)
@@ -179,16 +183,36 @@ struct WindowPreviewCompact: View {
     }
 
     @ViewBuilder
-    private func titleText(_ text: String, isPrimary: Bool) -> some View {
+    private func titleText(_ text: String, isPrimary: Bool, badgeStyle: WindowTitleBadgeStyle? = nil) -> some View {
         let font = isPrimary ? itemSize.primaryFont : itemSize.secondaryFont
-        if enableTitleMarquee {
+        let defaultForeground = isPrimary ? Color.primary : .secondary
+
+        if let badgeStyle {
+            if enableTitleMarquee {
+                MarqueeText(text: text, startDelay: 1)
+                    .font(font)
+                    .foregroundStyle(badgeStyle.foregroundColor)
+                    .padding(.horizontal, 6)
+                    .padding(.vertical, 3)
+                    .materialPill(backgroundColor: badgeStyle.backgroundColor, borderColor: badgeStyle.borderColor)
+            } else {
+                Text(text)
+                    .font(font)
+                    .foregroundStyle(badgeStyle.foregroundColor)
+                    .lineLimit(1)
+                    .truncationMode(.tail)
+                    .padding(.horizontal, 6)
+                    .padding(.vertical, 3)
+                    .materialPill(backgroundColor: badgeStyle.backgroundColor, borderColor: badgeStyle.borderColor)
+            }
+        } else if enableTitleMarquee {
             MarqueeText(text: text, startDelay: 1)
                 .font(font)
-                .foregroundStyle(isPrimary ? .primary : .secondary)
+                .foregroundStyle(defaultForeground)
         } else {
             Text(text)
                 .font(font)
-                .foregroundStyle(isPrimary ? .primary : .secondary)
+                .foregroundStyle(defaultForeground)
                 .lineLimit(1)
                 .truncationMode(.tail)
         }
