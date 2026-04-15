@@ -179,6 +179,27 @@ struct WindowPreview: View {
     }
 
     @ViewBuilder
+    private func windowTitleLabel(_ title: String, defaultForegroundColor: Color, applyDefaultPill: Bool) -> some View {
+        if let badgeStyle = windowInfo.safariProfileBadgeStyle {
+            MarqueeText(text: title, startDelay: 1)
+                .font(appearance.windowTitleFontSize.font)
+                .foregroundStyle(badgeStyle.foregroundColor)
+                .lineLimit(1)
+                .padding(4)
+                .materialPill(backgroundColor: badgeStyle.backgroundColor, borderColor: badgeStyle.borderColor)
+        } else {
+            MarqueeText(text: title, startDelay: 1)
+                .font(appearance.windowTitleFontSize.font)
+                .foregroundStyle(defaultForegroundColor)
+                .lineLimit(1)
+                .padding(4)
+                .if(applyDefaultPill) { view in
+                    view.materialPill()
+                }
+        }
+    }
+
+    @ViewBuilder
     private func windowContent(isMinimized: Bool, isHidden: Bool, isSelected: Bool) -> some View {
         let inactive = (isMinimized || isHidden) && appearance.showMinimizedHiddenLabels
         let quality = appearance.livePreviewQuality
@@ -241,12 +262,7 @@ struct WindowPreview: View {
 
         let titleContent = Group {
             if hasTitle, let title = titleToShow {
-                MarqueeText(text: title, startDelay: 1)
-                    .font(appearance.windowTitleFontSize.font)
-                    .padding(4)
-                    .if(!appearance.disableDockStyleTitles) { view in
-                        view.materialPill()
-                    }
+                windowTitleLabel(title, defaultForegroundColor: .primary, applyDefaultPill: !appearance.disableDockStyleTitles)
             }
         }
 
@@ -490,10 +506,7 @@ struct WindowPreview: View {
                windowTitle != windowInfo.app.localizedName,
                shouldShowWindowTitle
             {
-                MarqueeText(text: windowTitle, startDelay: 1)
-                    .font(appearance.windowTitleFontSize.font)
-                    .foregroundStyle(.secondary)
-                    .lineLimit(1)
+                windowTitleLabel(windowTitle, defaultForegroundColor: .secondary, applyDefaultPill: false)
             }
         }
         .padding(.trailing, 8)
@@ -577,12 +590,7 @@ struct WindowPreview: View {
 
         let titleContent = Group {
             if hasTitle, let title = titleToShow {
-                MarqueeText(text: title, startDelay: 1)
-                    .font(appearance.windowTitleFontSize.font)
-                    .padding(4)
-                    .if(!appearance.disableDockStyleTitles) { view in
-                        view.materialPill()
-                    }
+                windowTitleLabel(title, defaultForegroundColor: .primary, applyDefaultPill: !appearance.disableDockStyleTitles)
             }
         }
 

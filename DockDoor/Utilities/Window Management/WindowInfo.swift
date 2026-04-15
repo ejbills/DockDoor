@@ -1,6 +1,8 @@
 import ApplicationServices
 import Cocoa
 import ScreenCaptureKit
+import SQLite3
+import SwiftUI
 
 struct WindowInfo: Identifiable, Hashable {
     let id: CGWindowID
@@ -57,6 +59,194 @@ struct WindowInfo: Identifiable, Hashable {
     }
 }
 
+struct WindowTitleBadgeStyle {
+    let backgroundColor: Color
+    let borderColor: Color
+    let foregroundColor: Color
+}
+
+private enum SafariProfileColorResolver {
+    private static let safariBundleIdentifier = "com.apple.Safari"
+    private static let safariTabsDatabaseURL = URL(fileURLWithPath: NSHomeDirectory())
+        .appendingPathComponent("Library/Containers/com.apple.Safari/Data/Library/Safari/SafariTabs.db")
+
+    private static let cacheLock = NSLock()
+    private static var cachedProfilesByName: [String: NSColor] = [:]
+    private static var cachedDatabaseModificationDate: Date?
+
+    static func color(for window: WindowInfo) -> NSColor? {
+        guard window.app.bundleIdentifier == safariBundleIdentifier,
+              let windowTitle = window.windowName?.trimmingCharacters(in: .whitespacesAndNewlines),
+              !windowTitle.isEmpty
+        else {
+            return nil
+        }
+
+        let profilesByName = loadProfilesIfNeeded()
+        guard let matchedProfileName = matchingProfileName(in: windowTitle, availableProfileNames: Array(profilesByName.keys)) else {
+            return nil
+        }
+
+        return profilesByName[matchedProfileName]
+    }
+
+    private static func loadProfilesIfNeeded() -> [String: NSColor] {
+        cacheLock.lock()
+        defer { cacheLock.unlock() }
+
+        let modificationDate = (try? FileManager.default.attributesOfItem(atPath: safariTabsDatabaseURL.path)[.modificationDate]) as? Date
+        if modificationDate == cachedDatabaseModificationDate, !cachedProfilesByName.isEmpty {
+            return cachedProfilesByName
+        }
+
+        let loadedProfiles = loadProfilesFromDatabase()
+        cachedProfilesByName = loadedProfiles
+        cachedDatabaseModificationDate = modificationDate
+        return loadedProfiles
+    }
+
+    private static func matchingProfileName(in title: String, availableProfileNames: [String]) -> String? {
+        let trimmedTitle = title.trimmingCharacters(in: .whitespacesAndNewlines)
+
+        for profileName in availableProfileNames.sorted(by: { $0.count > $1.count }) {
+            let trimmedProfileName = profileName.trimmingCharacters(in: .whitespacesAndNewlines)
+            guard !trimmedProfileName.isEmpty else { continue }
+
+            if trimmedTitle == trimmedProfileName ||
+                trimmedTitle.hasPrefix(trimmedProfileName + " —") ||
+                trimmedTitle.hasPrefix(trimmedProfileName + " –") ||
+                trimmedTitle.hasPrefix(trimmedProfileName + " -")
+            {
+                return profileName
+            }
+        }
+
+        return nil
+    }
+
+    private static func loadProfilesFromDatabase() -> [String: NSColor] {
+        guard FileManager.default.fileExists(atPath: safariTabsDatabaseURL.path) else {
+            return [:]
+        }
+
+        var database: OpaquePointer?
+        let openResult = sqlite3_open_v2(
+            safariTabsDatabaseURL.path,
+            &database,
+            SQLITE_OPEN_READONLY | SQLITE_OPEN_NOMUTEX,
+            nil
+        )
+
+        guard openResult == SQLITE_OK, let database else {
+            sqlite3_close(database)
+            return [:]
+        }
+
+        defer { sqlite3_close(database) }
+        sqlite3_busy_timeout(database, 50)
+
+        let query = """
+        SELECT b.title, s.value
+        FROM settings s
+        JOIN bookmarks b ON b.id = s.parent
+        WHERE s.key = 'ProfileColor'
+          AND s.deleted = 0
+          AND b.deleted = 0
+          AND b.title IS NOT NULL
+          AND b.title != ''
+        """
+
+        var statement: OpaquePointer?
+        guard sqlite3_prepare_v2(database, query, -1, &statement, nil) == SQLITE_OK, let statement else {
+            sqlite3_finalize(statement)
+            return [:]
+        }
+
+        defer { sqlite3_finalize(statement) }
+
+        var resolvedProfiles: [String: NSColor] = [:]
+
+        while sqlite3_step(statement) == SQLITE_ROW {
+            guard let titleCString = sqlite3_column_text(statement, 0) else {
+                continue
+            }
+
+            let profileName = String(cString: titleCString).trimmingCharacters(in: .whitespacesAndNewlines)
+            guard !profileName.isEmpty else {
+                continue
+            }
+
+            let blobLength = Int(sqlite3_column_bytes(statement, 1))
+            guard blobLength > 0, let blobPointer = sqlite3_column_blob(statement, 1) else {
+                continue
+            }
+
+            let archivedValue = Data(bytes: blobPointer, count: blobLength)
+            if let color = decodeColor(from: archivedValue) {
+                resolvedProfiles[profileName] = color
+            }
+        }
+
+        return resolvedProfiles
+    }
+
+    private static func decodeColor(from archivedValue: Data) -> NSColor? {
+        guard let plist = try? PropertyListSerialization.propertyList(from: archivedValue, options: [], format: nil) as? [String: Any],
+              let objects = plist["$objects"] as? [Any],
+              let top = plist["$top"] as? [String: Any],
+              let root = resolveArchivedObject(at: top["root"], objects: objects) as? [String: Any]
+        else {
+            return nil
+        }
+
+        let colorName = resolveArchivedObject(at: root["colorName"], objects: objects) as? String
+        if colorName == "clear" {
+            return nil
+        }
+
+        guard let red = (resolveArchivedObject(at: root["redComponent"], objects: objects) as? NSNumber)?.doubleValue,
+              let green = (resolveArchivedObject(at: root["greenComponent"], objects: objects) as? NSNumber)?.doubleValue,
+              let blue = (resolveArchivedObject(at: root["blueComponent"], objects: objects) as? NSNumber)?.doubleValue,
+              let alpha = (resolveArchivedObject(at: root["alphaComponent"], objects: objects) as? NSNumber)?.doubleValue
+        else {
+            return nil
+        }
+
+        return NSColor(
+            calibratedRed: CGFloat(red),
+            green: CGFloat(green),
+            blue: CGFloat(blue),
+            alpha: CGFloat(alpha)
+        )
+    }
+
+    private static func resolveArchivedObject(at reference: Any?, objects: [Any]) -> Any? {
+        guard let reference else {
+            return nil
+        }
+
+        if let index = archivedObjectIndex(from: reference), objects.indices.contains(index) {
+            return objects[index]
+        }
+
+        return reference
+    }
+
+    private static func archivedObjectIndex(from reference: Any) -> Int? {
+        if let number = reference as? NSNumber {
+            return number.intValue
+        }
+
+        let description = String(describing: reference)
+        guard let valueRange = description.range(of: "value = ") else {
+            return nil
+        }
+
+        let digits = description[valueRange.upperBound...].prefix { $0.isNumber }
+        return Int(digits)
+    }
+}
+
 extension WindowInfo {
     static func windowlessEntry(for app: NSRunningApplication) -> WindowInfo {
         let pid = app.processIdentifier
@@ -83,6 +273,20 @@ extension WindowInfo {
         )
         info.isWindowlessApp = true
         return info
+    }
+
+    var safariProfileBadgeStyle: WindowTitleBadgeStyle? {
+        guard let badgeColor = SafariProfileColorResolver.color(for: self) else {
+            return nil
+        }
+
+        let backgroundColor = Color(nsColor: badgeColor)
+
+        return WindowTitleBadgeStyle(
+            backgroundColor: backgroundColor,
+            borderColor: backgroundColor.darker(by: 0.18),
+            foregroundColor: badgeColor.preferredPillForegroundColor
+        )
     }
 
     @discardableResult

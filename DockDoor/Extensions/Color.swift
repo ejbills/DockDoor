@@ -36,3 +36,18 @@ extension Color {
         return shades
     }
 }
+
+extension NSColor {
+    var preferredPillForegroundColor: Color {
+        guard let resolvedColor = usingColorSpace(.extendedSRGB) ?? usingColorSpace(.deviceRGB) else {
+            return .white
+        }
+
+        let luminance =
+            (0.2126 * resolvedColor.redComponent) +
+            (0.7152 * resolvedColor.greenComponent) +
+            (0.0722 * resolvedColor.blueComponent)
+
+        return luminance > 0.6 ? Color.black.opacity(0.78) : .white
+    }
+}
