@@ -649,9 +649,12 @@ final class DockObserver {
     }
 
     private func setupEventTap() {
-        let eventMask: CGEventMask = (1 << CGEventType.leftMouseDown.rawValue) |
-            (1 << CGEventType.rightMouseDown.rawValue) |
-            (1 << CGEventType.scrollWheel.rawValue)
+        var eventMask: CGEventMask = (1 << CGEventType.leftMouseDown.rawValue) |
+            (1 << CGEventType.rightMouseDown.rawValue)
+
+        if Defaults[.enableDockScrollGesture] || Defaults[.enableTitleBarScrollGesture] {
+            eventMask |= (1 << CGEventType.scrollWheel.rawValue)
+        }
 
         guard let eventTap = CGEvent.tapCreate(
             tap: .cghidEventTap,
