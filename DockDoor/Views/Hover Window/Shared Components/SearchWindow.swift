@@ -5,11 +5,13 @@ import SwiftUI
 struct SearchFieldView: View {
     let searchField: NSTextField
     @Default(.globalPaddingMultiplier) private var globalPaddingMultiplier
+    @State private var backgroundAppearance: BackgroundAppearance = .resolve()
 
     var body: some View {
         ZStack {
-            BlurView(variant: 18, frostedTranslucentLayer: false)
-                .clipShape(RoundedRectangle(cornerRadius: CardRadius.base + (CardRadius.innerPadding * globalPaddingMultiplier)))
+            let cornerRadius = CardRadius.base + (CardRadius.innerPadding * globalPaddingMultiplier)
+            BlurView(cornerRadius: cornerRadius, appearance: backgroundAppearance)
+                .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
 
             HStack(spacing: 8) {
                 Image(systemName: "magnifyingglass")
@@ -22,6 +24,12 @@ struct SearchFieldView: View {
             .padding(.horizontal, 12)
         }
         .frame(height: 40)
+        .task {
+            for await _ in Defaults.updates(BackgroundAppearance.observedKeys, initial: true) {
+                let updated = BackgroundAppearance.resolve()
+                if updated != backgroundAppearance { backgroundAppearance = updated }
+            }
+        }
     }
 }
 

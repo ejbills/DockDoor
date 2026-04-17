@@ -127,6 +127,7 @@ struct WindowPreview: View, Equatable {
     let useLivePreview: Bool
     var skeletonMode: Bool = false
     var appearance: PreviewAppearanceSettings
+    let backgroundAppearance: BackgroundAppearance
 
     @State private var isHoveringOverDockPeekPreview = false
     @State private var isHoveringOverWindowSwitcherPreview = false
@@ -142,6 +143,7 @@ struct WindowPreview: View, Equatable {
             && l.uniformCardRadius == r.uniformCardRadius && l.showAppIconOnly == r.showAppIconOnly
             && l.windowSwitcherActive == r.windowSwitcherActive
             && l.appearance == r.appearance && l.windowInfo.viewSnapshot == r.windowInfo.viewSnapshot
+            && l.backgroundAppearance == r.backgroundAppearance
     }
 
     private var isActiveWindow: Bool {
@@ -220,7 +222,7 @@ struct WindowPreview: View, Equatable {
                     .font(appearance.windowTitleFontSize.font)
                     .padding(4)
                     .if(!appearance.disableDockStyleTitles) { view in
-                        view.materialPill()
+                        view.materialPill(backgroundAppearance: backgroundAppearance)
                     }
             }
         }
@@ -235,7 +237,8 @@ struct WindowPreview: View, Equatable {
                     mockPreviewActive: mockPreviewActive,
                     enabledButtons: appearance.enabledTrafficLightButtons,
                     useMonochrome: appearance.useMonochromeTrafficLights,
-                    buttonScale: appearance.trafficLightButtonScale
+                    buttonScale: appearance.trafficLightButtonScale,
+                    backgroundAppearance: backgroundAppearance
                 )
             } else if windowInfo.isMinimized || windowInfo.isHidden,
                       appearance.showMinimizedHiddenLabels,
@@ -246,7 +249,7 @@ struct WindowPreview: View, Equatable {
                     .italic()
                     .foregroundStyle(.secondary)
                     .padding(4)
-                    .materialPill()
+                    .materialPill(backgroundAppearance: backgroundAppearance)
                     .frame(height: 34)
             }
         }
@@ -491,7 +494,8 @@ struct WindowPreview: View, Equatable {
                     pillStyling: !appearance.disableDockStyleTrafficLights,
                     mockPreviewActive: mockPreviewActive,
                     enabledButtons: appearance.enabledTrafficLightButtons,
-                    useMonochrome: appearance.useMonochromeTrafficLights
+                    useMonochrome: appearance.useMonochromeTrafficLights,
+                    backgroundAppearance: backgroundAppearance
                 )
             } else if windowInfo.isMinimized || windowInfo.isHidden,
                       appearance.showMinimizedHiddenLabels,
@@ -502,7 +506,7 @@ struct WindowPreview: View, Equatable {
                     .italic()
                     .foregroundStyle(.secondary)
                     .padding(4)
-                    .materialPill()
+                    .materialPill(backgroundAppearance: backgroundAppearance)
                     .frame(height: 34)
             }
         }
@@ -556,7 +560,7 @@ struct WindowPreview: View, Equatable {
                     .font(appearance.windowTitleFontSize.font)
                     .padding(4)
                     .if(!appearance.disableDockStyleTitles) { view in
-                        view.materialPill()
+                        view.materialPill(backgroundAppearance: backgroundAppearance)
                     }
             }
         }
@@ -571,7 +575,8 @@ struct WindowPreview: View, Equatable {
                     mockPreviewActive: mockPreviewActive,
                     enabledButtons: appearance.enabledTrafficLightButtons,
                     useMonochrome: appearance.useMonochromeTrafficLights,
-                    buttonScale: appearance.trafficLightButtonScale
+                    buttonScale: appearance.trafficLightButtonScale,
+                    backgroundAppearance: backgroundAppearance
                 )
             } else if windowInfo.isMinimized || windowInfo.isHidden,
                       appearance.showMinimizedHiddenLabels,
@@ -582,7 +587,7 @@ struct WindowPreview: View, Equatable {
                     .italic()
                     .foregroundStyle(.secondary)
                     .padding(4)
-                    .materialPill()
+                    .materialPill(backgroundAppearance: backgroundAppearance)
                     .frame(height: 34)
             }
         }
@@ -662,7 +667,7 @@ struct WindowPreview: View, Equatable {
                 let cornerRadius = uniformCardRadius ? CardRadius.base + (CardRadius.innerPadding * appearance.globalPaddingMultiplier) : 8.0
 
                 if !appearance.hidePreviewCardBackground {
-                    BlurView(variant: 18)
+                    BlurView(cornerRadius: cornerRadius, appearance: backgroundAppearance)
                         .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
                         .borderedBackground(.primary.opacity(0.1), lineWidth: 1.75, cornerRadius: cornerRadius)
                         .padding(-CardRadius.innerPadding)

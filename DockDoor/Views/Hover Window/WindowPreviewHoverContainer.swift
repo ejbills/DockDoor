@@ -107,6 +107,7 @@ struct WindowPreviewHoverContainer: View {
     @State private var edgeScrollDirection: CGFloat = 0
     @State private var cachedScrollView: NSScrollView?
     @State private var cachedAppearance: PreviewAppearanceSettings? = nil
+    @State private var backgroundAppearance: BackgroundAppearance = .resolve()
 
     init(appName: String,
          onWindowTap: (() -> Void)?,
@@ -237,9 +238,12 @@ struct WindowPreviewHoverContainer: View {
     }
 
     var body: some View {
-        BaseHoverContainer(bestGuessMonitor: bestGuessMonitor, mockPreviewActive: mockPreviewActive) {
-            windowGridContent()
-        }
+        BaseHoverContainer(
+            bestGuessMonitor: bestGuessMonitor,
+            mockPreviewActive: mockPreviewActive,
+            content: { windowGridContent() },
+            backgroundAppearance: backgroundAppearance
+        )
         .contentShape(Rectangle())
         .onTapGesture {
             activateApp()
@@ -264,12 +268,15 @@ struct WindowPreviewHoverContainer: View {
             }
         }
         .task(id: previewStateCoordinator.windowSwitcherActive) {
-            for await _ in Defaults.updates(PreviewAppearanceSettings.observedKeys, initial: true) {
+            let keys = PreviewAppearanceSettings.observedKeys + BackgroundAppearance.observedKeys
+            for await _ in Defaults.updates(keys, initial: true) {
                 let updated = PreviewAppearanceSettings.resolve(
                     windowSwitcherActive: previewStateCoordinator.windowSwitcherActive,
                     dockPosition: dockPosition
                 )
                 if updated != cachedAppearance { cachedAppearance = updated }
+                let updatedBg = BackgroundAppearance.resolve()
+                if updatedBg != backgroundAppearance { backgroundAppearance = updatedBg }
             }
         }
     }
@@ -465,7 +472,7 @@ struct WindowPreviewHoverContainer: View {
                     }
                     .padding(.vertical, 5)
                     .padding(.horizontal, 10)
-                    .dockStyle(cornerRadius: 10)
+                    .dockStyle(backgroundAppearance: backgroundAppearance, cornerRadius: 10)
                     .contentShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
                     .onHover { hover in
                         hoveringAppIcon = hover
@@ -1138,7 +1145,8 @@ struct WindowPreviewHoverContainer: View {
                         dimensions: getDimensions(for: index, dimensionsMap: currentDimensionsMapForPreviews),
                         onTap: onWindowTap,
                         onHoverIndexChange: handleHoverIndexChange,
-                        appearance: appearance
+                        appearance: appearance,
+                        backgroundAppearance: backgroundAppearance
                     )
                     .equatable()
                     .id(itemID)
@@ -1156,7 +1164,8 @@ struct WindowPreviewHoverContainer: View {
                         mockPreviewActive: mockPreviewActive,
                         onTap: onWindowTap,
                         onHoverIndexChange: handleHoverIndexChange,
-                        appearance: appearance
+                        appearance: appearance,
+                        backgroundAppearance: backgroundAppearance
                     )
                     .equatable()
                     .id(itemID)
@@ -1178,7 +1187,8 @@ struct WindowPreviewHoverContainer: View {
                         mockPreviewActive: mockPreviewActive,
                         onHoverIndexChange: handleHoverIndexChange,
                         useLivePreview: useLivePreview,
-                        appearance: appearance
+                        appearance: appearance,
+                        backgroundAppearance: backgroundAppearance
                     )
                     .equatable()
                     .id(itemID)

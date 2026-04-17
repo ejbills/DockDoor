@@ -6,6 +6,7 @@ struct MediaLyricsView: View {
     let width: CGFloat
     let maxHeight: CGFloat
     let isFullMode: Bool
+    let backgroundAppearance: BackgroundAppearance
 
     @Default(.showAnimations) var showAnimations
 
@@ -134,7 +135,7 @@ struct MediaLyricsView: View {
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .dockStyle().opacity(0.3)
+            .dockStyle(backgroundAppearance: backgroundAppearance).opacity(0.3)
         }
     }
 

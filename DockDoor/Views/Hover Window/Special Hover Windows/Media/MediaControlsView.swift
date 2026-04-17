@@ -81,6 +81,7 @@ struct MediaControlsView: View {
     @Namespace private var lyricsExpansionNamespace
 
     @State private var artworkRotation: Double = 0.0
+    @State private var backgroundAppearance: BackgroundAppearance = .resolve()
 
     init(appName: String,
          bundleIdentifier: String,
@@ -155,6 +156,12 @@ struct MediaControlsView: View {
         .onDisappear {
             mediaInfo.viewDisappeared()
         }
+        .task {
+            for await _ in Defaults.updates(BackgroundAppearance.observedKeys, initial: true) {
+                let updated = BackgroundAppearance.resolve()
+                if updated != backgroundAppearance { backgroundAppearance = updated }
+            }
+        }
     }
 
     @ViewBuilder
@@ -167,7 +174,8 @@ struct MediaControlsView: View {
                 dominantArtworkColor: dominantArtworkColor,
                 artworkRotation: artworkRotation,
                 isLoadingMediaInfo: isLoadingMediaInfo,
-                idealWidth: idealWidth
+                idealWidth: idealWidth,
+                backgroundAppearance: backgroundAppearance
             )
         } else {
             MediaControlsFullView(
@@ -187,7 +195,8 @@ struct MediaControlsView: View {
                 isLoadingMediaInfo: isLoadingMediaInfo,
                 appIcon: appIcon,
                 hoveringAppIcon: hoveringAppIcon,
-                hoveringWindowTitle: hoveringWindowTitle
+                hoveringWindowTitle: hoveringWindowTitle,
+                backgroundAppearance: backgroundAppearance
             )
         }
     }

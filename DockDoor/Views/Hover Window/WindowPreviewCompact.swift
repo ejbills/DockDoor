@@ -13,6 +13,7 @@ struct WindowPreviewCompact: View, Equatable {
     let onTap: (() -> Void)?
     let onHoverIndexChange: ((Int?, CGPoint?) -> Void)?
     var appearance: PreviewAppearanceSettings
+    let backgroundAppearance: BackgroundAppearance
 
     @State private var isHovering = false
 
@@ -22,6 +23,7 @@ struct WindowPreviewCompact: View, Equatable {
             && l.windowSwitcherActive == r.windowSwitcherActive
             && l.appearance == r.appearance
             && l.windowInfo.viewSnapshot == r.windowInfo.viewSnapshot
+            && l.backgroundAppearance == r.backgroundAppearance
     }
 
     /// Checks if this window is the currently active (focused) window on the system and adds a border if so.
@@ -121,7 +123,8 @@ struct WindowPreviewCompact: View, Equatable {
                     mockPreviewActive: mockPreviewActive,
                     enabledButtons: appearance.enabledTrafficLightButtons,
                     useMonochrome: appearance.useMonochromeTrafficLights,
-                    buttonScale: appearance.trafficLightButtonScale
+                    buttonScale: appearance.trafficLightButtonScale,
+                    backgroundAppearance: backgroundAppearance
                 )
             }
         }
@@ -132,7 +135,7 @@ struct WindowPreviewCompact: View, Equatable {
             let cornerRadius = uniformCardRadius ? CardRadius.base + (CardRadius.innerPadding * appearance.globalPaddingMultiplier) : CardRadius.fallback
 
             if !appearance.hidePreviewCardBackground {
-                BlurView(variant: 18)
+                BlurView(cornerRadius: cornerRadius, appearance: backgroundAppearance)
                     .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
                     .borderedBackground(.primary.opacity(0.1), lineWidth: 1.75, cornerRadius: cornerRadius)
                     .padding(.horizontal, -CardRadius.innerPadding)

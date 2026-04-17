@@ -29,6 +29,7 @@ struct CalendarView: View {
     @State private var appIcon: NSImage? = nil
     @State private var hoveringAppIcon = false
     @State private var hoveringWindowTitle = false
+    @State private var backgroundAppearance: BackgroundAppearance = .resolve()
 
     init(appName: String,
          bundleIdentifier: String,
@@ -55,7 +56,8 @@ struct CalendarView: View {
                 CalendarEmbeddedView(
                     calendarInfo: calendarInfo,
                     uniformCardRadius: uniformCardRadius,
-                    idealWidth: idealWidth
+                    idealWidth: idealWidth,
+                    backgroundAppearance: backgroundAppearance
                 )
             } else {
                 CalendarFullView(
@@ -68,12 +70,19 @@ struct CalendarView: View {
                     isPinnedMode: isPinnedMode,
                     appIcon: appIcon,
                     hoveringAppIcon: hoveringAppIcon,
-                    hoveringWindowTitle: hoveringWindowTitle
+                    hoveringWindowTitle: hoveringWindowTitle,
+                    backgroundAppearance: backgroundAppearance
                 )
             }
         }
         .onAppear {
             loadAppIcon()
+        }
+        .task {
+            for await _ in Defaults.updates(BackgroundAppearance.observedKeys, initial: true) {
+                let updated = BackgroundAppearance.resolve()
+                if updated != backgroundAppearance { backgroundAppearance = updated }
+            }
         }
     }
 

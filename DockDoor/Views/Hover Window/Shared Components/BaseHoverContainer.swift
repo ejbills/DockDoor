@@ -24,14 +24,23 @@ struct BaseHoverContainer<Content: View>: View {
     let highlightColor: Color?
     let preventDockStyling: Bool
     let isWidget: Bool
+    let backgroundAppearance: BackgroundAppearance
 
-    init(bestGuessMonitor: NSScreen, mockPreviewActive: Bool = false, @ViewBuilder content: () -> Content, highlightColor: Color? = nil, preventDockStyling: Bool = false, isWidget: Bool = false) {
+    init(bestGuessMonitor: NSScreen,
+         mockPreviewActive: Bool = false,
+         @ViewBuilder content: () -> Content,
+         highlightColor: Color? = nil,
+         preventDockStyling: Bool = false,
+         isWidget: Bool = false,
+         backgroundAppearance: BackgroundAppearance)
+    {
         self.bestGuessMonitor = bestGuessMonitor
         self.mockPreviewActive = mockPreviewActive
         self.content = content()
         self.highlightColor = highlightColor
         self.preventDockStyling = preventDockStyling
         self.isWidget = isWidget
+        self.backgroundAppearance = backgroundAppearance
     }
 
     private var shouldHideBackground: Bool {
@@ -41,7 +50,11 @@ struct BaseHoverContainer<Content: View>: View {
     var body: some View {
         content
             .if(!preventDockStyling) { view in
-                view.dockStyle(highlightColor: highlightColor, backgroundOpacity: shouldHideBackground ? 0 : dockPreviewBackgroundOpacity)
+                view.dockStyle(
+                    backgroundAppearance: backgroundAppearance,
+                    highlightColor: highlightColor,
+                    backgroundOpacity: shouldHideBackground ? 0 : dockPreviewBackgroundOpacity
+                )
             }
             .padding(.all, mockPreviewActive ? 0 : HoverContainerPadding.container)
             .frame(maxWidth: bestGuessMonitor.visibleFrame.width, maxHeight: bestGuessMonitor.visibleFrame.height, alignment: .topLeading)
