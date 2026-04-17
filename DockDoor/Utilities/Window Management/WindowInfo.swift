@@ -55,6 +55,26 @@ struct WindowInfo: Identifiable, Hashable {
             lhs.app.processIdentifier == rhs.app.processIdentifier &&
             lhs.axElement == rhs.axElement
     }
+
+    struct ViewSnapshot: Equatable {
+        let id: CGWindowID
+        let pid: pid_t
+        let windowName: String?
+        let isMinimized: Bool
+        let isHidden: Bool
+        let imagePointer: UnsafeRawPointer?
+    }
+
+    var viewSnapshot: ViewSnapshot {
+        ViewSnapshot(
+            id: id,
+            pid: app.processIdentifier,
+            windowName: windowName,
+            isMinimized: isMinimized,
+            isHidden: isHidden,
+            imagePointer: image.map { Unmanaged.passUnretained($0).toOpaque() }
+        )
+    }
 }
 
 extension WindowInfo {

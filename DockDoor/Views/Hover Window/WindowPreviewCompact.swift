@@ -1,7 +1,7 @@
 import Defaults
 import SwiftUI
 
-struct WindowPreviewCompact: View {
+struct WindowPreviewCompact: View, Equatable {
     let windowInfo: WindowInfo
     let index: Int
     let dockPosition: DockPosition
@@ -14,13 +14,15 @@ struct WindowPreviewCompact: View {
     let onHoverIndexChange: ((Int?, CGPoint?) -> Void)?
     var appearance: PreviewAppearanceSettings
 
-    @Default(.previewWidth) private var previewWidth
-    @Default(.compactModeTitleFormat) private var titleFormat
-    @Default(.compactModeItemSize) private var itemSize
-    @Default(.compactModeHideTrafficLights) private var hideTrafficLights
-    @Default(.enableTitleMarquee) private var enableTitleMarquee
-
     @State private var isHovering = false
+
+    static func == (l: Self, r: Self) -> Bool {
+        l.index == r.index && l.isSelected == r.isSelected
+            && l.uniformCardRadius == r.uniformCardRadius
+            && l.windowSwitcherActive == r.windowSwitcherActive
+            && l.appearance == r.appearance
+            && l.windowInfo.viewSnapshot == r.windowInfo.viewSnapshot
+    }
 
     /// Checks if this window is the currently active (focused) window on the system and adds a border if so.
     private var isActiveWindow: Bool {
@@ -66,18 +68,18 @@ struct WindowPreviewCompact: View {
                 Image(nsImage: appIcon)
                     .resizable()
                     .scaledToFit()
-                    .frame(width: itemSize.iconSize, height: itemSize.iconSize)
+                    .frame(width: appearance.compactModeItemSize.iconSize, height: appearance.compactModeItemSize.iconSize)
             } else {
                 Image(systemName: "app.fill")
                     .resizable()
                     .scaledToFit()
-                    .frame(width: itemSize.iconSize, height: itemSize.iconSize)
+                    .frame(width: appearance.compactModeItemSize.iconSize, height: appearance.compactModeItemSize.iconSize)
                     .foregroundStyle(.secondary)
             }
 
             // Title content based on format
             VStack(alignment: .leading, spacing: 2) {
-                switch titleFormat {
+                switch appearance.compactModeTitleFormat {
                 case .appNameAndTitle:
                     titleText(appName, isPrimary: true)
                     // Show state instead of window title when minimized/hidden
@@ -106,7 +108,7 @@ struct WindowPreviewCompact: View {
             Spacer(minLength: 0)
 
             // Traffic light buttons
-            if !hideTrafficLights,
+            if !appearance.compactModeHideTrafficLights,
                windowInfo.closeButton != nil,
                appearance.trafficLightVisibility != .never,
                !appearance.showMinimizedHiddenLabels || (!windowInfo.isMinimized && !windowInfo.isHidden)
@@ -124,7 +126,7 @@ struct WindowPreviewCompact: View {
             }
         }
         .padding(.vertical, 8)
-        .frame(width: previewWidth, height: itemSize.rowHeight, alignment: .leading)
+        .frame(width: appearance.previewWidth, height: appearance.compactModeItemSize.rowHeight, alignment: .leading)
         .clipped()
         .background {
             let cornerRadius = uniformCardRadius ? CardRadius.base + (CardRadius.innerPadding * appearance.globalPaddingMultiplier) : CardRadius.fallback
@@ -183,8 +185,8 @@ struct WindowPreviewCompact: View {
 
     @ViewBuilder
     private func titleText(_ text: String, isPrimary: Bool) -> some View {
-        let font = isPrimary ? itemSize.primaryFont : itemSize.secondaryFont
-        if enableTitleMarquee {
+        let font = isPrimary ? appearance.compactModeItemSize.primaryFont : appearance.compactModeItemSize.secondaryFont
+        if appearance.enableTitleMarquee {
             MarqueeText(text: text, startDelay: 1)
                 .font(font)
                 .foregroundStyle(isPrimary ? .primary : .secondary)
@@ -200,7 +202,7 @@ struct WindowPreviewCompact: View {
     @ViewBuilder
     private func stateText(_ text: String) -> some View {
         Text(text)
-            .font(itemSize.secondaryFont)
+            .font(appearance.compactModeItemSize.secondaryFont)
             .foregroundStyle(.secondary)
             .italic()
     }

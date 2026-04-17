@@ -1,7 +1,7 @@
 import Defaults
 import SwiftUI
 
-struct WindowlessAppPreview: View {
+struct WindowlessAppPreview: View, Equatable {
     let windowInfo: WindowInfo
     let index: Int
     let dockPosition: DockPosition
@@ -14,6 +14,14 @@ struct WindowlessAppPreview: View {
     var appearance: PreviewAppearanceSettings
 
     @State private var isHovering = false
+
+    static func == (l: Self, r: Self) -> Bool {
+        l.index == r.index && l.isSelected == r.isSelected
+            && l.uniformCardRadius == r.uniformCardRadius
+            && l.dimensions == r.dimensions
+            && l.appearance == r.appearance
+            && l.windowInfo.viewSnapshot == r.windowInfo.viewSnapshot
+    }
 
     private var appName: String {
         windowInfo.app.localizedName ?? "Unknown"

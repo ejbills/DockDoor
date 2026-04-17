@@ -2,7 +2,7 @@ import Defaults
 import SwiftUI
 import UniformTypeIdentifiers
 
-struct PreviewAppearanceSettings {
+struct PreviewAppearanceSettings: Equatable {
     let trafficLightVisibility: TrafficLightButtonsVisibility
     let enabledTrafficLightButtons: Set<WindowAction>
     let useMonochromeTrafficLights: Bool
@@ -28,6 +28,11 @@ struct PreviewAppearanceSettings {
     let trafficLightButtonScale: CGFloat
     let livePreviewQuality: LivePreviewQuality
     let livePreviewFrameRate: LivePreviewFrameRate
+    let previewWidth: CGFloat
+    let compactModeTitleFormat: CompactModeTitleFormat
+    let compactModeItemSize: CompactModeItemSize
+    let compactModeHideTrafficLights: Bool
+    let enableTitleMarquee: Bool
 
     var isDiagonalPosition: Bool {
         switch controlPosition {
@@ -39,90 +44,47 @@ struct PreviewAppearanceSettings {
         }
     }
 
+    static let observedKeys: [Defaults._AnyKey] = [
+        .trafficLightButtonsVisibility, .switcherTrafficLightButtonsVisibility, .cmdTabTrafficLightButtonsVisibility,
+        .enabledTrafficLightButtons, .switcherEnabledTrafficLightButtons, .cmdTabEnabledTrafficLightButtons,
+        .useMonochromeTrafficLights, .switcherUseMonochromeTrafficLights, .cmdTabUseMonochromeTrafficLights,
+        .showWindowTitle, .switcherShowWindowTitle, .cmdTabShowWindowTitle,
+        .windowTitleVisibility, .switcherWindowTitleVisibility, .cmdTabWindowTitleVisibility,
+        .dockPreviewControlPosition, .windowSwitcherControlPosition, .cmdTabControlPosition,
+        .useEmbeddedDockPreviewElements, .cmdTabUseEmbeddedDockPreviewElements,
+        .disableDockStyleTrafficLights, .switcherDisableDockStyleTrafficLights, .cmdTabDisableDockStyleTrafficLights,
+        .disableDockStyleTitles, .cmdTabDisableDockStyleTitles,
+        .dockLivePreviewQuality, .windowSwitcherLivePreviewQuality,
+        .dockLivePreviewFrameRate, .windowSwitcherLivePreviewFrameRate,
+        .showMinimizedHiddenLabels, .selectionOpacity, .unselectedContentOpacity, .hoverHighlightColor,
+        .allowDynamicImageSizing, .hidePreviewCardBackground, .tapEquivalentInterval, .previewHoverAction,
+        .showActiveWindowBorder, .activeAppIndicatorColor, .showAnimations, .globalPaddingMultiplier,
+        .windowTitleFontSize, .trafficLightButtonScale,
+        .previewWidth, .compactModeTitleFormat, .compactModeItemSize, .compactModeHideTrafficLights, .enableTitleMarquee,
+    ]
+
     static func resolve(windowSwitcherActive: Bool, dockPosition: DockPosition) -> PreviewAppearanceSettings {
         let isCmdTab = dockPosition == .cmdTab
-
-        let trafficLightVisibility: TrafficLightButtonsVisibility = if windowSwitcherActive {
-            Defaults[.switcherTrafficLightButtonsVisibility]
-        } else if isCmdTab {
-            Defaults[.cmdTabTrafficLightButtonsVisibility]
-        } else {
-            Defaults[.trafficLightButtonsVisibility]
+        func pick<T: Defaults.Serializable>(
+            _ base: Defaults.Key<T>,
+            switcher: Defaults.Key<T>? = nil,
+            cmdTab: Defaults.Key<T>? = nil
+        ) -> T {
+            if windowSwitcherActive, let switcher { return Defaults[switcher] }
+            if isCmdTab, let cmdTab { return Defaults[cmdTab] }
+            return Defaults[base]
         }
-
-        let enabledButtons: Set<WindowAction> = if windowSwitcherActive {
-            Defaults[.switcherEnabledTrafficLightButtons]
-        } else if isCmdTab {
-            Defaults[.cmdTabEnabledTrafficLightButtons]
-        } else {
-            Defaults[.enabledTrafficLightButtons]
-        }
-
-        let monochrome: Bool = if windowSwitcherActive {
-            Defaults[.switcherUseMonochromeTrafficLights]
-        } else if isCmdTab {
-            Defaults[.cmdTabUseMonochromeTrafficLights]
-        } else {
-            Defaults[.useMonochromeTrafficLights]
-        }
-
-        let showTitle: Bool = if windowSwitcherActive {
-            Defaults[.switcherShowWindowTitle]
-        } else if isCmdTab {
-            Defaults[.cmdTabShowWindowTitle]
-        } else {
-            Defaults[.showWindowTitle]
-        }
-
-        let titleVisibility: WindowTitleVisibility = if windowSwitcherActive {
-            Defaults[.switcherWindowTitleVisibility]
-        } else if isCmdTab {
-            Defaults[.cmdTabWindowTitleVisibility]
-        } else {
-            Defaults[.windowTitleVisibility]
-        }
-
-        let controlPos: WindowSwitcherControlPosition = if windowSwitcherActive {
-            Defaults[.windowSwitcherControlPosition]
-        } else if isCmdTab {
-            Defaults[.cmdTabControlPosition]
-        } else {
-            Defaults[.dockPreviewControlPosition]
-        }
-
-        let disableStyleTrafficLights: Bool = if windowSwitcherActive {
-            Defaults[.switcherDisableDockStyleTrafficLights]
-        } else if isCmdTab {
-            Defaults[.cmdTabDisableDockStyleTrafficLights]
-        } else {
-            Defaults[.disableDockStyleTrafficLights]
-        }
-
-        let disableStyleTitles: Bool = if isCmdTab {
-            Defaults[.cmdTabDisableDockStyleTitles]
-        } else {
-            Defaults[.disableDockStyleTitles]
-        }
-
-        let useEmbedded: Bool = if isCmdTab {
-            Defaults[.cmdTabUseEmbeddedDockPreviewElements]
-        } else {
-            Defaults[.useEmbeddedDockPreviewElements]
-        }
-
-        let quality = windowSwitcherActive ? Defaults[.windowSwitcherLivePreviewQuality] : Defaults[.dockLivePreviewQuality]
-        let frameRate = windowSwitcherActive ? Defaults[.windowSwitcherLivePreviewFrameRate] : Defaults[.dockLivePreviewFrameRate]
 
         return PreviewAppearanceSettings(
-            trafficLightVisibility: trafficLightVisibility,
-            enabledTrafficLightButtons: enabledButtons,
-            useMonochromeTrafficLights: monochrome,
-            showWindowTitle: showTitle,
-            windowTitleVisibility: titleVisibility,
-            controlPosition: controlPos,
-            useEmbeddedElements: useEmbedded,
-            disableDockStyleTrafficLights: disableStyleTrafficLights,
-            disableDockStyleTitles: disableStyleTitles,
+            trafficLightVisibility: pick(.trafficLightButtonsVisibility, switcher: .switcherTrafficLightButtonsVisibility, cmdTab: .cmdTabTrafficLightButtonsVisibility),
+            enabledTrafficLightButtons: pick(.enabledTrafficLightButtons, switcher: .switcherEnabledTrafficLightButtons, cmdTab: .cmdTabEnabledTrafficLightButtons),
+            useMonochromeTrafficLights: pick(.useMonochromeTrafficLights, switcher: .switcherUseMonochromeTrafficLights, cmdTab: .cmdTabUseMonochromeTrafficLights),
+            showWindowTitle: pick(.showWindowTitle, switcher: .switcherShowWindowTitle, cmdTab: .cmdTabShowWindowTitle),
+            windowTitleVisibility: pick(.windowTitleVisibility, switcher: .switcherWindowTitleVisibility, cmdTab: .cmdTabWindowTitleVisibility),
+            controlPosition: pick(.dockPreviewControlPosition, switcher: .windowSwitcherControlPosition, cmdTab: .cmdTabControlPosition),
+            useEmbeddedElements: pick(.useEmbeddedDockPreviewElements, cmdTab: .cmdTabUseEmbeddedDockPreviewElements),
+            disableDockStyleTrafficLights: pick(.disableDockStyleTrafficLights, switcher: .switcherDisableDockStyleTrafficLights, cmdTab: .cmdTabDisableDockStyleTrafficLights),
+            disableDockStyleTitles: pick(.disableDockStyleTitles, cmdTab: .cmdTabDisableDockStyleTitles),
             showMinimizedHiddenLabels: Defaults[.showMinimizedHiddenLabels],
             selectionOpacity: Defaults[.selectionOpacity],
             unselectedContentOpacity: Defaults[.unselectedContentOpacity],
@@ -137,13 +99,18 @@ struct PreviewAppearanceSettings {
             globalPaddingMultiplier: Defaults[.globalPaddingMultiplier],
             windowTitleFontSize: Defaults[.windowTitleFontSize],
             trafficLightButtonScale: Defaults[.trafficLightButtonScale],
-            livePreviewQuality: quality,
-            livePreviewFrameRate: frameRate
+            livePreviewQuality: pick(.dockLivePreviewQuality, switcher: .windowSwitcherLivePreviewQuality),
+            livePreviewFrameRate: pick(.dockLivePreviewFrameRate, switcher: .windowSwitcherLivePreviewFrameRate),
+            previewWidth: Defaults[.previewWidth],
+            compactModeTitleFormat: Defaults[.compactModeTitleFormat],
+            compactModeItemSize: Defaults[.compactModeItemSize],
+            compactModeHideTrafficLights: Defaults[.compactModeHideTrafficLights],
+            enableTitleMarquee: Defaults[.enableTitleMarquee]
         )
     }
 }
 
-struct WindowPreview: View {
+struct WindowPreview: View, Equatable {
     let windowInfo: WindowInfo
     let onTap: (() -> Void)?
     let index: Int
@@ -168,6 +135,14 @@ struct WindowPreview: View {
     @State private var isDraggingOver = false
     @State private var dragTimer: Timer?
     @State private var highlightOpacity = 0.0
+
+    static func == (l: Self, r: Self) -> Bool {
+        l.index == r.index && l.isSelected == r.isSelected && l.useLivePreview == r.useLivePreview
+            && l.skeletonMode == r.skeletonMode && l.dimensions == r.dimensions
+            && l.uniformCardRadius == r.uniformCardRadius && l.showAppIconOnly == r.showAppIconOnly
+            && l.windowSwitcherActive == r.windowSwitcherActive
+            && l.appearance == r.appearance && l.windowInfo.viewSnapshot == r.windowInfo.viewSnapshot
+    }
 
     private var isActiveWindow: Bool {
         guard appearance.showActiveWindowBorder else { return false }

@@ -3,7 +3,7 @@ import Defaults
 
 // Holds logic related to precomputing image thumbnail sizes
 extension WindowPreviewHoverContainer {
-    struct WindowDimensions {
+    struct WindowDimensions: Equatable {
         let size: CGSize
         let maxDimensions: CGSize
     }
