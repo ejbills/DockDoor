@@ -671,7 +671,7 @@ struct WindowPreviewHoverContainer: View {
                 } else if shouldUseCompactMode {
                     // Compact mode: simple vertical list
                     let flowItems = createFlowItems(filteredIndices: cachedFilteredIndices)
-                    VStack(spacing: 4) {
+                    LazyVStack(spacing: 4) {
                         ForEach(flowItems, id: \.id) { item in
                             buildFlowItem(
                                 item: item,
@@ -685,9 +685,9 @@ struct WindowPreviewHoverContainer: View {
                     }
                 } else if isHorizontal {
                     let chunkedItems = createChunkedItems(filteredIndices: cachedFilteredIndices)
-                    VStack(alignment: .leading, spacing: HoverContainerPadding.itemSpacing) {
+                    LazyVStack(alignment: .leading, spacing: HoverContainerPadding.itemSpacing) {
                         ForEach(Array(chunkedItems.enumerated()), id: \.offset) { index, rowItems in
-                            HStack(spacing: HoverContainerPadding.itemSpacing) {
+                            LazyHStack(spacing: HoverContainerPadding.itemSpacing) {
                                 ForEach(rowItems, id: \.id) { item in
                                     buildFlowItem(
                                         item: item,
@@ -703,9 +703,9 @@ struct WindowPreviewHoverContainer: View {
                     }
                 } else {
                     let chunkedItems = createChunkedItems(filteredIndices: cachedFilteredIndices)
-                    HStack(alignment: .top, spacing: HoverContainerPadding.itemSpacing) {
+                    LazyHStack(alignment: .top, spacing: HoverContainerPadding.itemSpacing) {
                         ForEach(Array(chunkedItems.enumerated()), id: \.offset) { index, colItems in
-                            VStack(spacing: HoverContainerPadding.itemSpacing) {
+                            LazyVStack(spacing: HoverContainerPadding.itemSpacing) {
                                 ForEach(colItems, id: \.id) { item in
                                     buildFlowItem(
                                         item: item,
