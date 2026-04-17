@@ -44,7 +44,8 @@ struct WindowSwitcherAppearanceSection: View {
                             pillStyling: !switcherDisableDockStyleTrafficLights,
                             mockPreviewActive: false,
                             enabledButtons: switcherEnabledTrafficLightButtons,
-                            useMonochrome: switcherUseMonochromeTrafficLights
+                            useMonochrome: switcherUseMonochromeTrafficLights,
+                            backgroundAppearance: .resolve()
                         )
                     }
                     EnabledButtonsCheckboxes(

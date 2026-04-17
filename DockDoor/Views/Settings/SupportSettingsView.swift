@@ -153,9 +153,10 @@ struct SupportSettingsView: View {
 
     private var lastCheckDescription: String {
         if let lastCheck = updaterState.lastUpdateCheckDate {
-            "Last checked: \(lastCheck.formatted(date: .abbreviated, time: .shortened))"
+            let formatted = lastCheck.formatted(date: .abbreviated, time: .shortened)
+            return String(localized: "Last checked: \(formatted)")
         } else {
-            "No recent checks"
+            return String(localized: "No recent checks")
         }
     }
 

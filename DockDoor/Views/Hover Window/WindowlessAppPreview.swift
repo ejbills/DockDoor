@@ -1,7 +1,7 @@
 import Defaults
 import SwiftUI
 
-struct WindowlessAppPreview: View {
+struct WindowlessAppPreview: View, Equatable {
     let windowInfo: WindowInfo
     let index: Int
     let dockPosition: DockPosition
@@ -12,8 +12,18 @@ struct WindowlessAppPreview: View {
     let onTap: (() -> Void)?
     let onHoverIndexChange: ((Int?, CGPoint?) -> Void)?
     var appearance: PreviewAppearanceSettings
+    let backgroundAppearance: BackgroundAppearance
 
     @State private var isHovering = false
+
+    static func == (l: Self, r: Self) -> Bool {
+        l.index == r.index && l.isSelected == r.isSelected
+            && l.uniformCardRadius == r.uniformCardRadius
+            && l.dimensions == r.dimensions
+            && l.appearance == r.appearance
+            && l.windowInfo.viewSnapshot == r.windowInfo.viewSnapshot
+            && l.backgroundAppearance == r.backgroundAppearance
+    }
 
     private var appName: String {
         windowInfo.app.localizedName ?? "Unknown"
@@ -61,7 +71,7 @@ struct WindowlessAppPreview: View {
             let cornerRadius = uniformCardRadius ? CardRadius.base + (CardRadius.innerPadding * appearance.globalPaddingMultiplier) : 8.0
 
             if !appearance.hidePreviewCardBackground {
-                BlurView(variant: 18)
+                BlurView(cornerRadius: cornerRadius, appearance: backgroundAppearance)
                     .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
                     .borderedBackground(.primary.opacity(0.1), lineWidth: 1.75, cornerRadius: cornerRadius)
                     .padding(-CardRadius.innerPadding)

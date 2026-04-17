@@ -12,6 +12,7 @@ struct TrafficLightButtons: View {
     let enabledButtons: Set<WindowAction>
     let useMonochrome: Bool
     var buttonScale: CGFloat = 1.0
+    let backgroundAppearance: BackgroundAppearance
     @State private var isHovering = false
 
     var body: some View {
@@ -62,7 +63,7 @@ struct TrafficLightButtons: View {
             }
         }
         .if(pillStyling && opacity > 0 && displayMode != .never && enabledButtons.count > 0) { view in
-            view.materialPill()
+            view.materialPill(backgroundAppearance: backgroundAppearance)
         }
     }
 
@@ -132,7 +133,8 @@ extension AppearanceSettingsView {
                                 mockPreviewActive: false,
                                 enabledButtons: enabledButtons,
                                 useMonochrome: useMonochrome,
-                                buttonScale: buttonScale
+                                buttonScale: buttonScale,
+                                backgroundAppearance: .resolve()
                             )
                         }
 

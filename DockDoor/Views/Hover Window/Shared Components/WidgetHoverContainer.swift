@@ -10,6 +10,7 @@ struct WidgetHoverContainer<Content: View>: View {
     let appIcon: NSImage?
     let hoveringAppIcon: Bool
     let highlightColor: Color?
+    let backgroundAppearance: BackgroundAppearance
     let content: Content
 
     @Default(.showAppName) private var showAppTitleData
@@ -24,6 +25,7 @@ struct WidgetHoverContainer<Content: View>: View {
         appIcon: NSImage?,
         hoveringAppIcon: Bool,
         highlightColor: Color? = nil,
+        backgroundAppearance: BackgroundAppearance,
         @ViewBuilder content: () -> Content
     ) {
         self.appName = appName
@@ -34,6 +36,7 @@ struct WidgetHoverContainer<Content: View>: View {
         self.appIcon = appIcon
         self.hoveringAppIcon = hoveringAppIcon
         self.highlightColor = highlightColor
+        self.backgroundAppearance = backgroundAppearance
         self.content = content()
     }
 
@@ -49,7 +52,8 @@ struct WidgetHoverContainer<Content: View>: View {
         SharedHoverAppTitle(
             appName: appName,
             appIcon: appIcon,
-            hoveringAppIcon: hoveringAppIcon
+            hoveringAppIcon: hoveringAppIcon,
+            backgroundAppearance: backgroundAppearance
         )
     }
 
@@ -80,7 +84,8 @@ struct WidgetHoverContainer<Content: View>: View {
                 }
             },
             highlightColor: highlightColor,
-            isWidget: true
+            isWidget: true,
+            backgroundAppearance: backgroundAppearance
         )
     }
 
@@ -93,8 +98,7 @@ struct WidgetHoverContainer<Content: View>: View {
             appTitleOverlay
         }
         .background {
-            RoundedRectangle(cornerRadius: CardRadius.container, style: .continuous)
-                .fill(.thinMaterial)
+            BlurView(cornerRadius: CardRadius.container, appearance: backgroundAppearance)
         }
         .clipShape(RoundedRectangle(cornerRadius: CardRadius.container, style: .continuous))
         .overlay {

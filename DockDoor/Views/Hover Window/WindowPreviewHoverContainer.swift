@@ -106,6 +106,8 @@ struct WindowPreviewHoverContainer: View {
     @State private var edgeScrollTimer: Timer?
     @State private var edgeScrollDirection: CGFloat = 0
     @State private var cachedScrollView: NSScrollView?
+    @State private var cachedAppearance: PreviewAppearanceSettings? = nil
+    @State private var backgroundAppearance: BackgroundAppearance = .resolve()
 
     init(appName: String,
          onWindowTap: (() -> Void)?,
@@ -236,9 +238,12 @@ struct WindowPreviewHoverContainer: View {
     }
 
     var body: some View {
-        BaseHoverContainer(bestGuessMonitor: bestGuessMonitor, mockPreviewActive: mockPreviewActive) {
-            windowGridContent()
-        }
+        BaseHoverContainer(
+            bestGuessMonitor: bestGuessMonitor,
+            mockPreviewActive: mockPreviewActive,
+            content: { windowGridContent() },
+            backgroundAppearance: backgroundAppearance
+        )
         .contentShape(Rectangle())
         .onTapGesture {
             activateApp()
@@ -260,6 +265,18 @@ struct WindowPreviewHoverContainer: View {
             if !isActive {
                 previewStateCoordinator.searchQuery = ""
                 stopEdgeScroll()
+            }
+        }
+        .task(id: previewStateCoordinator.windowSwitcherActive) {
+            let keys = PreviewAppearanceSettings.observedKeys + BackgroundAppearance.observedKeys
+            for await _ in Defaults.updates(keys, initial: true) {
+                let updated = PreviewAppearanceSettings.resolve(
+                    windowSwitcherActive: previewStateCoordinator.windowSwitcherActive,
+                    dockPosition: dockPosition
+                )
+                if updated != cachedAppearance { cachedAppearance = updated }
+                let updatedBg = BackgroundAppearance.resolve()
+                if updatedBg != backgroundAppearance { backgroundAppearance = updatedBg }
             }
         }
     }
@@ -336,7 +353,7 @@ struct WindowPreviewHoverContainer: View {
         guard index < previewStateCoordinator.windows.count else { return }
         let window = previewStateCoordinator.windows[index]
 
-        let currentScreen = NSScreen.screenContainingMouse(location)
+        let currentScreen = NSScreen.screenFromQuartzPoint(location)
         let globalLocation = DockObserver.cgPointFromNSPoint(location, forScreen: currentScreen)
 
         let finalPosition = CGPoint(
@@ -455,7 +472,7 @@ struct WindowPreviewHoverContainer: View {
                     }
                     .padding(.vertical, 5)
                     .padding(.horizontal, 10)
-                    .dockStyle(cornerRadius: 10)
+                    .dockStyle(backgroundAppearance: backgroundAppearance, cornerRadius: 10)
                     .contentShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
                     .onHover { hover in
                         hoveringAppIcon = hover
@@ -650,13 +667,12 @@ struct WindowPreviewHoverContainer: View {
         currentDimensionsMapForPreviews: [Int: WindowDimensions]
     ) -> some View {
         let cachedFilteredIndices = filteredWindowIndices()
-        let appearance = appearanceOverride ?? PreviewAppearanceSettings.resolve(
+        let appearance = appearanceOverride ?? cachedAppearance ?? PreviewAppearanceSettings.resolve(
             windowSwitcherActive: previewStateCoordinator.windowSwitcherActive,
             dockPosition: dockPosition
         )
         ScrollView(scrollAxis, showsIndicators: false) {
             Group {
-                // Show no results view when search is active and no results found
                 if shouldShowNoResultsView() {
                     noResultsView()
                 } else if shouldUseCompactMode {
@@ -719,7 +735,6 @@ struct WindowPreviewHoverContainer: View {
         .animation(showAnimations ? .smooth(duration: 0.1) : nil, value: previewStateCoordinator.windows.count)
         .onChange(of: previewStateCoordinator.currIndex) { newIndex in
             guard previewStateCoordinator.shouldScrollToIndex else { return }
-
             scrollProxy.scrollTo("\(appName)-\(newIndex)", anchor: .center)
         }
     }
@@ -1021,11 +1036,10 @@ struct WindowPreviewHoverContainer: View {
         }
 
         var itemsToProcess: [FlowItem] = []
-
+        itemsToProcess.reserveCapacity(filteredIndices.count + (embeddedContentType != .none ? 1 : 0))
         for index in filteredIndices {
             itemsToProcess.append(.window(index))
         }
-
         if embeddedContentType != .none {
             itemsToProcess.append(.embedded)
         }
@@ -1119,6 +1133,7 @@ struct WindowPreviewHoverContainer: View {
 
                 let isSelected = index == previewStateCoordinator.currIndex
 
+                let itemID = "\(appName)-\(index)"
                 if windowInfo.isWindowlessApp, !shouldUseCompactMode {
                     WindowlessAppPreview(
                         windowInfo: windowInfo,
@@ -1130,9 +1145,11 @@ struct WindowPreviewHoverContainer: View {
                         dimensions: getDimensions(for: index, dimensionsMap: currentDimensionsMapForPreviews),
                         onTap: onWindowTap,
                         onHoverIndexChange: handleHoverIndexChange,
-                        appearance: appearance
+                        appearance: appearance,
+                        backgroundAppearance: backgroundAppearance
                     )
-                    .id("\(appName)-\(index)")
+                    .equatable()
+                    .id(itemID)
                 } else if useCompactForThisWindow {
                     WindowPreviewCompact(
                         windowInfo: windowInfo,
@@ -1147,9 +1164,11 @@ struct WindowPreviewHoverContainer: View {
                         mockPreviewActive: mockPreviewActive,
                         onTap: onWindowTap,
                         onHoverIndexChange: handleHoverIndexChange,
-                        appearance: appearance
+                        appearance: appearance,
+                        backgroundAppearance: backgroundAppearance
                     )
-                    .id("\(appName)-\(index)")
+                    .equatable()
+                    .id(itemID)
                 } else {
                     WindowPreview(
                         windowInfo: windowInfo,
@@ -1168,9 +1187,11 @@ struct WindowPreviewHoverContainer: View {
                         mockPreviewActive: mockPreviewActive,
                         onHoverIndexChange: handleHoverIndexChange,
                         useLivePreview: useLivePreview,
-                        appearance: appearance
+                        appearance: appearance,
+                        backgroundAppearance: backgroundAppearance
                     )
-                    .id("\(appName)-\(index)")
+                    .equatable()
+                    .id(itemID)
                     .gesture(
                         DragGesture(minimumDistance: 3, coordinateSpace: .global)
                             .onChanged { value in

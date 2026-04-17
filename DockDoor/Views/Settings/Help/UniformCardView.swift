@@ -1,3 +1,4 @@
+import Defaults
 import SwiftUI
 
 struct UniformCardView: View {
@@ -5,6 +6,8 @@ struct UniformCardView: View {
     let description: LocalizedStringKey
     let buttonTitle: LocalizedStringKey
     let buttonLink: String
+
+    @State private var backgroundAppearance: BackgroundAppearance = .resolve()
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -31,7 +34,13 @@ struct UniformCardView: View {
         }
         .padding(16)
         .frame(maxWidth: .infinity)
-        .dockStyle(cornerRadius: 16)
+        .dockStyle(backgroundAppearance: backgroundAppearance, cornerRadius: 16)
         .modifier(FluidGradientBorder(cornerRadius: 18, lineWidth: 2))
+        .task {
+            for await _ in Defaults.updates(BackgroundAppearance.observedKeys, initial: true) {
+                let updated = BackgroundAppearance.resolve()
+                if updated != backgroundAppearance { backgroundAppearance = updated }
+            }
+        }
     }
 }

@@ -191,7 +191,7 @@ private class WindowSwitchingCoordinator {
         case .screenWithLastActiveWindow:
             showWindowLambda(nil, nil)
         case .screenWithMouse:
-            let mouseScreen = NSScreen.screenContainingMouse(currentMouseLocation)
+            let mouseScreen = NSScreen.screenFromQuartzPoint(currentMouseLocation)
             let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
             showWindowLambda(convertedMouseLocation, mouseScreen)
         }
@@ -204,7 +204,7 @@ private class WindowSwitchingCoordinator {
             return pinnedScreen
         }
         let mouseLocation = DockObserver.getMousePosition()
-        return NSScreen.screenContainingMouse(mouseLocation)
+        return NSScreen.screenFromQuartzPoint(mouseLocation)
     }
 
     @MainActor

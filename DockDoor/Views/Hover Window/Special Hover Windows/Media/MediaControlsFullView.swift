@@ -19,6 +19,7 @@ struct MediaControlsFullView: View {
     let appIcon: NSImage?
     let hoveringAppIcon: Bool
     let hoveringWindowTitle: Bool
+    let backgroundAppearance: BackgroundAppearance
 
     @Default(.showAnimations) var showAnimations
 
@@ -34,7 +35,8 @@ struct MediaControlsFullView: View {
             isPinnedMode: isPinnedMode,
             appIcon: appIcon,
             hoveringAppIcon: hoveringAppIcon,
-            highlightColor: dominantArtworkColor
+            highlightColor: dominantArtworkColor,
+            backgroundAppearance: backgroundAppearance
         ) {
             mediaControlsContent()
         }
@@ -182,7 +184,8 @@ struct MediaControlsFullView: View {
                     mediaInfo: mediaInfo,
                     width: MediaControlsLayout.fullLyricsViewWidth + 80,
                     maxHeight: 300,
-                    isFullMode: true
+                    isFullMode: true,
+                    backgroundAppearance: backgroundAppearance
                 )
             }
         }

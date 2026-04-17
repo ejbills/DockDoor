@@ -1,7 +1,9 @@
+import Defaults
 import SwiftUI
 
 struct ScreenRecordingWarningView: View {
     @State private var displayExplanation: Bool = false
+    @State private var backgroundAppearance: BackgroundAppearance = .resolve()
 
     var body: some View {
         VStack(spacing: 16) {
@@ -43,6 +45,12 @@ struct ScreenRecordingWarningView: View {
             }
             .frame(maxWidth: 300)
         }
-        .dockStyle(cornerRadius: 18)
+        .dockStyle(backgroundAppearance: backgroundAppearance, cornerRadius: 18)
+        .task {
+            for await _ in Defaults.updates(BackgroundAppearance.observedKeys, initial: true) {
+                let updated = BackgroundAppearance.resolve()
+                if updated != backgroundAppearance { backgroundAppearance = updated }
+            }
+        }
     }
 }

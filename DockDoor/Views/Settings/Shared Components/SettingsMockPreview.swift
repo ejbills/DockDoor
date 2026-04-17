@@ -82,6 +82,14 @@ struct SettingsMockPreview: View {
     @Default(.windowTitleFontSize) private var windowTitleFontSize
     @Default(.trafficLightButtonScale) private var trafficLightButtonScale
 
+    // MARK: - Compact mode settings
+
+    @Default(.previewWidth) private var previewWidth
+    @Default(.compactModeTitleFormat) private var compactModeTitleFormat
+    @Default(.compactModeItemSize) private var compactModeItemSize
+    @Default(.compactModeHideTrafficLights) private var compactModeHideTrafficLights
+    @Default(.enableTitleMarquee) private var enableTitleMarquee
+
     // MARK: - Header settings (used by container)
 
     @Default(.showAppName) private var showAppName
@@ -203,7 +211,12 @@ struct SettingsMockPreview: View {
             windowTitleFontSize: windowTitleFontSize,
             trafficLightButtonScale: trafficLightButtonScale,
             livePreviewQuality: quality,
-            livePreviewFrameRate: frameRate
+            livePreviewFrameRate: frameRate,
+            previewWidth: previewWidth,
+            compactModeTitleFormat: compactModeTitleFormat,
+            compactModeItemSize: compactModeItemSize,
+            compactModeHideTrafficLights: compactModeHideTrafficLights,
+            enableTitleMarquee: enableTitleMarquee
         )
     }
 

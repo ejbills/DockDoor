@@ -17,6 +17,7 @@ enum CardRadius {
 }
 
 struct DockStyleModifier: ViewModifier {
+    let backgroundAppearance: BackgroundAppearance
     let cornerRadius: Double
     let highlightColor: Color?
     let backgroundOpacity: CGFloat
@@ -26,7 +27,12 @@ struct DockStyleModifier: ViewModifier {
         content
             .background {
                 ZStack {
-                    DockBackgroundView(cornerRadius: cornerRadius)
+                    BlurView(cornerRadius: cornerRadius, appearance: backgroundAppearance)
+                        .borderedBackground(
+                            .white.opacity(backgroundAppearance.borderOpacity),
+                            lineWidth: backgroundAppearance.borderWidth,
+                            shape: RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                        )
                         .opacity(backgroundOpacity)
                     if let hc = highlightColor {
                         FluidGradient(blobs: hc.generateShades(count: 3), highlights: hc.generateShades(count: 3), speed: 0.5, blur: 0.75)
@@ -39,7 +45,19 @@ struct DockStyleModifier: ViewModifier {
 }
 
 extension View {
-    func dockStyle(cornerRadius: Double = CardRadius.container, highlightColor: Color? = nil, backgroundOpacity: CGFloat = 1.0, outerPadding: CGFloat = HoverContainerPadding.dockStyleOuter) -> some View {
-        modifier(DockStyleModifier(cornerRadius: cornerRadius, highlightColor: highlightColor, backgroundOpacity: backgroundOpacity, outerPadding: outerPadding))
+    func dockStyle(
+        backgroundAppearance: BackgroundAppearance,
+        cornerRadius: Double = CardRadius.container,
+        highlightColor: Color? = nil,
+        backgroundOpacity: CGFloat = 1.0,
+        outerPadding: CGFloat = HoverContainerPadding.dockStyleOuter
+    ) -> some View {
+        modifier(DockStyleModifier(
+            backgroundAppearance: backgroundAppearance,
+            cornerRadius: cornerRadius,
+            highlightColor: highlightColor,
+            backgroundOpacity: backgroundOpacity,
+            outerPadding: outerPadding
+        ))
     }
 }

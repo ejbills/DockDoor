@@ -245,7 +245,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     private func handleFirstTimeLaunch() {
         let currentMouseLocation = CGEvent(source: nil)?.location ?? .zero
-        let screen = NSScreen.screenContainingMouse(currentMouseLocation)
+        let screen = NSScreen.screenFromQuartzPoint(currentMouseLocation)
 
         if !Defaults[.showAnimations] || NSWorkspace.shared.accessibilityDisplayShouldReduceMotion {
             showOnboardingWindow(on: screen)

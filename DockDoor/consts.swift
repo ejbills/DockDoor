@@ -139,7 +139,6 @@ extension Defaults.Keys {
     static let showWindowlessAppsInCmdTab = Key<Bool>("showWindowlessAppsInCmdTab", default: false)
     static let ignoreAppsWithSingleWindow = Key<Bool>("ignoreAppsWithSingleWindow", default: false)
     static let groupAppInstancesInDock = Key<Bool>("groupAppInstancesInDock", default: true)
-    static let useLiquidGlass = Key<Bool>("useLiquidGlass", default: true)
     static let showMenuBarIcon = Key<Bool>("showMenuBarIcon", default: true)
     static let raisedWindowLevel = Key<Bool>("raisedWindowLevel", default: true)
     static let launched = Key<Bool>("launched", default: false)
