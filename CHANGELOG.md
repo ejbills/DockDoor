@@ -38,6 +38,20 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://dockdoor.net/donate</div>
 
+<a id="1.35.1"></a>
+# [Release 1.35.1](https://github.com/ejbills/DockDoor/releases/tag/1.35.1) - 2026-04-17
+
+## 🔧 Improvements & Stability
+- Smoother window preview scrolling
+- More consistent backgrounds across hover windows
+- Smoother scrolling title marquee
+- Fewer redraws when settings are unchanged
+- Unified background styling in widgets and search
+
+
+[Changes][1.35.1]
+
+
 <a id="1.35"></a>
 # [Release 1.35](https://github.com/ejbills/DockDoor/releases/tag/1.35) - 2026-04-16
 
@@ -2061,6 +2075,7 @@ v1.0
 [Changes][releases]
 
 
+[1.35.1]: https://github.com/ejbills/DockDoor/compare/1.35...1.35.1
 [1.35]: https://github.com/ejbills/DockDoor/compare/1.34.1...1.35
 [1.34.1]: https://github.com/ejbills/DockDoor/compare/1.34...1.34.1
 [1.34]: https://github.com/ejbills/DockDoor/compare/1.33.1...1.34
