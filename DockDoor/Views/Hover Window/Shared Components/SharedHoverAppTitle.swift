@@ -6,6 +6,7 @@ struct SharedHoverAppTitle: View {
     let appName: String
     let appIcon: NSImage?
     let hoveringAppIcon: Bool
+    let backgroundAppearance: BackgroundAppearance
     @Default(.showAppName) var showAppTitleData
     @Default(.showAppIconOnly) var showAppIconOnly
     @Default(.appNameStyle) var appNameStyle
@@ -63,7 +64,7 @@ struct SharedHoverAppTitle: View {
                         }
                         .padding(.vertical, 5)
                         .padding(.horizontal, 10)
-                        .dockStyle(cornerRadius: 10)
+                        .dockStyle(backgroundAppearance: backgroundAppearance, cornerRadius: 10)
                         Spacer()
                     }
                     .offset(y: -30)

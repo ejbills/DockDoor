@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DockDoor Docs - AppleScript & Automation Guide</title>
+    <meta name="description" content="DockDoor scripting documentation. Control DockDoor with AppleScript, automate window management, and integrate with third-party tools like Logitech Options+.">
+    <link rel="canonical" href="https://dockdoor.net/docs">
+    <link rel="icon" href="/Assets/Assets.xcassets/AppIcon.appiconset/AppIcon-iOS-Default-512x512@1x.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .docs-hero {
+            padding: 8rem 0 3rem;
+            text-align: center;
+        }
+        .docs-hero h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            letter-spacing: -0.025em;
+            margin-bottom: 0.75rem;
+        }
+        .docs-hero p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .docs-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 2rem 6rem;
+        }
+        .docs-section {
+            margin-bottom: 4rem;
+        }
+        .docs-section h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+        .docs-section h3 {
+            font-size: 1.35rem;
+            font-weight: 600;
+            margin: 2rem 0 0.75rem;
+            color: var(--text-primary);
+        }
+        .docs-section p, .docs-section li {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 0.75rem;
+        }
+        .docs-section ul, .docs-section ol {
+            padding-left: 1.5rem;
+            margin-bottom: 1.25rem;
+        }
+        .docs-section li {
+            margin-bottom: 0.4rem;
+        }
+        .docs-callout {
+            background: var(--light-gray);
+            border-radius: var(--radius);
+            padding: 1.25rem 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .docs-callout p {
+            margin-bottom: 0;
+        }
+        .docs-callout strong {
+            color: var(--text-primary);
+        }
+        pre {
+            background: var(--dark);
+            color: #f0f0f0;
+            border-radius: var(--radius);
+            padding: 1.25rem 1.5rem;
+            overflow-x: auto;
+            margin: 1rem 0 1.5rem;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        code {
+            font-family: 'SF Mono', 'Fira Code', 'Menlo', monospace;
+            font-size: 0.88em;
+        }
+        p code, li code {
+            background: var(--light-gray);
+            padding: 0.15em 0.4em;
+            border-radius: 5px;
+            color: var(--text-primary);
+        }
+        .command-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0 1.5rem;
+            font-size: 0.95rem;
+        }
+        .command-table th,
+        .command-table td {
+            text-align: left;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #e5e5ea;
+        }
+        .command-table th {
+            font-weight: 600;
+            color: var(--text-primary);
+            background: var(--light-gray);
+        }
+        .command-table td {
+            color: var(--text-secondary);
+        }
+        .command-table td code {
+            white-space: nowrap;
+        }
+        .docs-toc {
+            background: var(--light-gray);
+            border-radius: var(--radius);
+            padding: 1.5rem 2rem;
+            margin-bottom: 3rem;
+        }
+        .docs-toc h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin: 0 0 0.75rem;
+            color: var(--text-primary);
+        }
+        .docs-toc ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .docs-toc li {
+            margin-bottom: 0.4rem;
+        }
+        .docs-toc a {
+            color: var(--primary);
+            font-size: 0.95rem;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header id="header">
+        <div class="container header-container">
+            <a href="index.html" class="logo">
+                <img src="/Assets/Assets.xcassets/AppIcon.appiconset/AppIcon-iOS-Default-512x512@1x.png" alt="DockDoor Logo">
+                <span class="logo-text" data-text="DockDoor">DockDoor</span>
+            </a>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="index.html#privacy" class="nav-link">Privacy</a></li>
+                    <li><a href="index.html#features" class="nav-link">Features</a></li>
+                    <li><a href="index.html#faq" class="nav-link">FAQ</a></li>
+                    <li><a href="docs.html" class="nav-link active">Docs</a></li>
+                    <li><a href="donate.html" class="nav-link">Donate</a></li>
+                </ul>
+            </nav>
+            <div class="header-actions">
+                <a href="index.html#download" class="btn btn-primary">Download</a>
+                <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Toggle mobile menu">&#9776;</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="docs-hero">
+        <div class="container">
+            <h1>Documentation</h1>
+            <p>Control DockDoor with AppleScript, the CLI, and third-party automation tools.</p>
+        </div>
+    </section>
+
+    <!-- Content -->
+    <div class="docs-content">
+
+        <nav class="docs-toc">
+            <h3>On this page</h3>
+            <ul>
+                <li><a href="#quickstart">Quick Start</a></li>
+                <li><a href="#commands">Command Reference</a></li>
+                <li><a href="#window-actions">Window Actions</a></li>
+                <li><a href="#queries">Querying Windows & Apps</a></li>
+                <li><a href="#third-party">Third-Party Integration</a></li>
+                <li><a href="#cli">CLI Usage</a></li>
+            </ul>
+        </nav>
+
+        <!-- Quick Start -->
+        <section class="docs-section" id="quickstart">
+            <h2>Quick Start</h2>
+            <p>DockDoor has full AppleScript support. Every command follows the same pattern:</p>
+<pre>tell application "DockDoor" to &lt;command&gt;</pre>
+            <p>Try it right now in Terminal:</p>
+<pre>osascript -e 'tell application "DockDoor" to show switcher'</pre>
+            <p>This opens the Window Switcher. You can also get a full list of commands:</p>
+<pre>osascript -e 'tell application "DockDoor" to get help'</pre>
+        </section>
+
+        <!-- Command Reference -->
+        <section class="docs-section" id="commands">
+            <h2>Command Reference</h2>
+
+            <h3>Preview Commands</h3>
+            <table class="command-table">
+                <thead>
+                    <tr><th>Command</th><th>Description</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><code>show preview "App"</code></td><td>Show dock-style preview for an app</td></tr>
+                    <tr><td><code>show preview "id" by "bundle"</code></td><td>Look up app by bundle ID</td></tr>
+                    <tr><td><code>show preview "123" by "pid"</code></td><td>Look up app by process ID</td></tr>
+                    <tr><td><code>hide preview</code></td><td>Hide the current preview window</td></tr>
+                    <tr><td><code>show switcher</code></td><td>Open the Window Switcher</td></tr>
+                </tbody>
+            </table>
+
+            <p><code>show preview</code> also accepts optional parameters:</p>
+            <ul>
+                <li><code>at "x,y"</code> &mdash; position the preview at specific coordinates</li>
+                <li><code>dock frame "x,y,w,h"</code> &mdash; position relative to a dock icon rect</li>
+                <li><code>with delay true</code> &mdash; use the configured hover delay</li>
+            </ul>
+
+<pre>-- Show Safari preview at a specific position
+tell application "DockDoor" to show preview "Safari" at "500,400"
+
+-- Show by bundle ID with hover delay
+tell application "DockDoor" to show preview "com.apple.Safari" by "bundle" with delay true</pre>
+        </section>
+
+        <!-- Window Actions -->
+        <section class="docs-section" id="window-actions">
+            <h2>Window Actions</h2>
+            <p>All window commands accept a window ID (number) or <code>"active"</code> for the frontmost window.</p>
+
+            <table class="command-table">
+                <thead>
+                    <tr><th>Command</th><th>Description</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><code>focus window "active"</code></td><td>Bring window to front</td></tr>
+                    <tr><td><code>minimize window "active"</code></td><td>Minimize / unminimize</td></tr>
+                    <tr><td><code>close window "active"</code></td><td>Close the window</td></tr>
+                    <tr><td><code>maximize window "active"</code></td><td>Fill the screen</td></tr>
+                    <tr><td><code>hide window "active"</code></td><td>Hide / unhide the app</td></tr>
+                    <tr><td><code>toggle fullscreen "active"</code></td><td>Toggle fullscreen mode</td></tr>
+                    <tr><td><code>center window "active"</code></td><td>Center on screen</td></tr>
+                    <tr><td><code>position window "active" to "left"</code></td><td>Snap to screen region</td></tr>
+                </tbody>
+            </table>
+
+            <p>Position values: <code>left</code>, <code>right</code>, <code>top</code>, <code>bottom</code>, <code>top-left</code>, <code>top-right</code>, <code>bottom-left</code>, <code>bottom-right</code>.</p>
+
+<pre>-- Snap active window to the left half
+tell application "DockDoor" to position window "active" to "left"
+
+-- Close a specific window by ID
+tell application "DockDoor" to close window "12345"
+
+-- Center and focus a window
+tell application "DockDoor"
+    center window "67890"
+    focus window "67890"
+end tell</pre>
+        </section>
+
+        <!-- Queries -->
+        <section class="docs-section" id="queries">
+            <h2>Querying Windows & Apps</h2>
+            <p>These commands return JSON, making them easy to parse in scripts.</p>
+
+            <table class="command-table">
+                <thead>
+                    <tr><th>Command</th><th>Description</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><code>list apps</code></td><td>All running apps with window counts</td></tr>
+                    <tr><td><code>list windows</code></td><td>All windows across all apps</td></tr>
+                    <tr><td><code>list windows "Safari"</code></td><td>Windows for a specific app</td></tr>
+                    <tr><td><code>get active window</code></td><td>Info about the frontmost window</td></tr>
+                    <tr><td><code>get window "12345"</code></td><td>Window info with cached preview image (base64)</td></tr>
+                    <tr><td><code>get windows</code></td><td>All windows with preview images</td></tr>
+                </tbody>
+            </table>
+
+<pre>-- Get active window info
+osascript -e 'tell application "DockDoor" to get active window'
+
+-- List all Safari windows (returns JSON)
+osascript -e 'tell application "DockDoor" to list windows "Safari"'
+
+-- List all apps
+osascript -e 'tell application "DockDoor" to list apps'</pre>
+        </section>
+
+        <!-- Third-Party Integration -->
+        <section class="docs-section" id="third-party">
+            <h2>Third-Party Integration</h2>
+
+            <h3>Logitech Options+, BetterTouchTool & Other Macro Tools</h3>
+            <p>If you use software that maps mouse buttons or macros to keyboard shortcuts, you may find that DockDoor's Window Switcher doesn't respond. This happens because macro software often simulates key presses differently than a physical keyboard &mdash; the modifier key (Option, Command) is pressed and released instantly rather than held down.</p>
+
+            <p>The fix is to use DockDoor's AppleScript command instead of simulating a keyboard shortcut:</p>
+
+            <div class="docs-callout">
+                <p><strong>Map your mouse button to run this AppleScript:</strong></p>
+            </div>
+<pre>tell application "DockDoor" to show switcher</pre>
+
+            <p>This opens the Window Switcher directly, bypassing keyboard event detection entirely. It works with any automation tool that can run AppleScript.</p>
+
+            <h3>Setup: Logitech Options+</h3>
+            <ol>
+                <li>Open Logi Options+ and select your mouse</li>
+                <li>Click the button you want to customize</li>
+                <li>Choose <strong>Smart Actions</strong></li>
+                <li>Add an action &rarr; select <strong>AppleScript</strong></li>
+                <li>Paste: <code>tell application "DockDoor" to show switcher</code></li>
+            </ol>
+
+            <h3>Setup: BetterTouchTool</h3>
+            <ol>
+                <li>Open BetterTouchTool preferences</li>
+                <li>Select your input device and add a new trigger</li>
+                <li>Set the action to <strong>Run AppleScript (blocking)</strong></li>
+                <li>Paste: <code>tell application "DockDoor" to show switcher</code></li>
+            </ol>
+
+            <h3>Setup: Karabiner-Elements</h3>
+            <p>In your <code>karabiner.json</code> complex modification, use <code>shell_command</code>:</p>
+<pre>{
+    "type": "basic",
+    "from": { "key_code": "tab", "modifiers": { "mandatory": ["option"] } },
+    "to": [
+        { "shell_command": "osascript -e 'tell application \"DockDoor\" to show switcher'" }
+    ]
+}</pre>
+        </section>
+
+        <!-- CLI -->
+        <section class="docs-section" id="cli">
+            <h2>CLI Usage</h2>
+            <p>Every AppleScript command can be run from Terminal with <code>osascript -e</code>:</p>
+
+<pre># Open the window switcher
+osascript -e 'tell application "DockDoor" to show switcher'
+
+# Show preview for an app
+osascript -e 'tell application "DockDoor" to show preview "Finder"'
+
+# Snap active window to right half
+osascript -e 'tell application "DockDoor" to position window "active" to "right"'
+
+# Get all windows as JSON
+osascript -e 'tell application "DockDoor" to list windows'
+
+# Get built-in help
+osascript -e 'tell application "DockDoor" to get help'</pre>
+        </section>
+
+    </div>
+
+    <!-- Script -->
+    <script src="scripts.js"></script>
+</body>
+
+</html>

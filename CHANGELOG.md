@@ -38,6 +38,49 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://dockdoor.net/donate</div>
 
+<a id="1.35.1"></a>
+# [Release 1.35.1](https://github.com/ejbills/DockDoor/releases/tag/1.35.1) - 2026-04-17
+
+## 🔧 Improvements & Stability
+- Smoother window preview scrolling
+- More consistent backgrounds across hover windows
+- Smoother scrolling title marquee
+- Fewer redraws when settings are unchanged
+- Unified background styling in widgets and search
+
+
+[Changes][1.35.1]
+
+
+<a id="1.35"></a>
+# [Release 1.35](https://github.com/ejbills/DockDoor/releases/tag/1.35) - 2026-04-16
+
+## ✨ New Features
+- Dock Locking! Lock the Dock in place on a certain display - no strings attached. Thanks [@mattwilkinsonn](https://github.com/mattwilkinsonn)!
+- Scroll on the title bar of any window to resize or center - thanks [@hunn1](https://github.com/hunn1) and [@lasncc2](https://github.com/lasncc2)!
+- Running apps with no windows appear in switcher, feature is opt-in for dock previews and cmd-tab
+- Customizable Liquid Glass dock preview background appearance controls
+
+## 🔧 Improvements & Stability
+- App name no longer crowded in window switcher
+- Preview stays visible after quitting an app
+- Cmd-tab preview hidden on app with no windows
+- Onboarding improvements
+- More reliable screen recording permission detection
+- Localized "last update check" text
+
+## 🐛 Bug Fixes
+- Cmd+Tab preview now appears on the correct screen
+- Finder no longer quits unexpectedly
+- Scroll gesture no longer stalls the interface for Logitech mice with horizontal scrolling
+- Stale previews no longer linger after hiding
+- More stable Liquid Glass rendering
+- Misc improvements and patches
+
+
+[Changes][1.35]
+
+
 <a id="1.34.1"></a>
 # [Release 1.34.1](https://github.com/ejbills/DockDoor/releases/tag/1.34.1) - 2026-04-06
 
@@ -2032,6 +2075,8 @@ v1.0
 [Changes][releases]
 
 
+[1.35.1]: https://github.com/ejbills/DockDoor/compare/1.35...1.35.1
+[1.35]: https://github.com/ejbills/DockDoor/compare/1.34.1...1.35
 [1.34.1]: https://github.com/ejbills/DockDoor/compare/1.34...1.34.1
 [1.34]: https://github.com/ejbills/DockDoor/compare/1.33.1...1.34
 [1.33.1]: https://github.com/ejbills/DockDoor/compare/1.33...1.33.1

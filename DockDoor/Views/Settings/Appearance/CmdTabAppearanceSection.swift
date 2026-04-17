@@ -85,7 +85,8 @@ struct CmdTabAppearanceSection: View {
                             pillStyling: true,
                             mockPreviewActive: false,
                             enabledButtons: cmdTabEnabledTrafficLightButtons,
-                            useMonochrome: cmdTabUseMonochromeTrafficLights
+                            useMonochrome: cmdTabUseMonochromeTrafficLights,
+                            backgroundAppearance: .resolve()
                         )
                     }
                     EnabledButtonsCheckboxes(

@@ -4,7 +4,9 @@ import SwiftUI
 // Pure UI state container for window preview presentation
 class PreviewStateCoordinator: ObservableObject {
     @Published var currIndex: Int = -1
-    @Published var windowSwitcherActive: Bool = false
+    @Published var windowSwitcherActive: Bool = false {
+        didSet { invalidateFilterCache() }
+    }
 
     // MARK: - Keybind Session Tracking
 
@@ -27,11 +29,15 @@ class PreviewStateCoordinator: ObservableObject {
     var hasMovedSinceOpen: Bool = false
     var initialHoverLocation: CGPoint?
     var fullWindowPreviewActive: Bool = false
-    @Published var windows: [WindowInfo] = []
+    @Published var windows: [WindowInfo] = [] {
+        didSet { invalidateFilterCache() }
+    }
+
     var shouldScrollToIndex: Bool = true
 
     @Published var searchQuery: String = "" {
         didSet {
+            invalidateFilterCache()
             if windowSwitcherActive {
                 Task { @MainActor in
                     updateIndexForSearch()
@@ -39,6 +45,9 @@ class PreviewStateCoordinator: ObservableObject {
             }
         }
     }
+
+    private var cachedFilteredIndices: [Int]?
+    private func invalidateFilterCache() { cachedFilteredIndices = nil }
 
     var hasActiveSearch: Bool {
         !searchQuery.isEmpty
@@ -396,19 +405,23 @@ class PreviewStateCoordinator: ObservableObject {
     /// Returns the indices of windows that match the current search query.
     /// If no search is active, returns all window indices.
     func filteredWindowIndices() -> [Int] {
-        guard windowSwitcherActive, !searchQuery.isEmpty else {
-            return Array(windows.indices)
-        }
+        if let cached = cachedFilteredIndices { return cached }
 
-        let query = searchQuery.lowercased()
-        let fuzziness = Defaults[.searchFuzziness]
-
-        return windows.enumerated().compactMap { idx, win in
-            let appName = win.app.localizedName?.lowercased() ?? ""
-            let windowTitle = (win.windowName ?? "").lowercased()
-            return (StringMatchingUtil.fuzzyMatch(query: query, target: appName, fuzziness: fuzziness) ||
-                StringMatchingUtil.fuzzyMatch(query: query, target: windowTitle, fuzziness: fuzziness)) ? idx : nil
+        let result: [Int]
+        if !windowSwitcherActive || searchQuery.isEmpty {
+            result = Array(windows.indices)
+        } else {
+            let query = searchQuery.lowercased()
+            let fuzziness = Defaults[.searchFuzziness]
+            result = windows.enumerated().compactMap { idx, win in
+                let appName = win.app.localizedName?.lowercased() ?? ""
+                let windowTitle = (win.windowName ?? "").lowercased()
+                return (StringMatchingUtil.fuzzyMatch(query: query, target: appName, fuzziness: fuzziness) ||
+                    StringMatchingUtil.fuzzyMatch(query: query, target: windowTitle, fuzziness: fuzziness)) ? idx : nil
+            }
         }
+        cachedFilteredIndices = result
+        return result
     }
 
     // MARK: - Keyboard Navigation

@@ -648,7 +648,7 @@ extension WindowUtil {
     }
 
     static func screenIdentifier(forWindowAt cgPosition: CGPoint) -> String? {
-        NSScreen.screenContainingMouse(cgPosition).uniqueIdentifier()
+        NSScreen.screenFromQuartzPoint(cgPosition).uniqueIdentifier()
     }
 
     static func windowBelongsToScreen(_ windowInfo: WindowInfo, screenIdentifier: String) -> Bool {
@@ -660,7 +660,7 @@ extension WindowUtil {
 
     static func filterWindowsByCurrentMonitor(_ windows: [WindowInfo], mouseLocation: CGPoint? = nil) -> [WindowInfo] {
         let mouse = mouseLocation ?? CGEvent(source: nil)?.location ?? .zero
-        let currentScreen = NSScreen.screenContainingMouse(mouse)
+        let currentScreen = NSScreen.screenFromQuartzPoint(mouse)
         let id = currentScreen.uniqueIdentifier()
         return windows.filter { windowBelongsToScreen($0, screenIdentifier: id) }
     }

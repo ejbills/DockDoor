@@ -171,7 +171,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         hostingView.layoutSubtreeIfNeeded()
         let fittingSize = hostingView.fittingSize
 
-        let screen = NSScreen.screenContainingMouse(NSEvent.mouseLocation)
+        let screen = NSScreen.screenFromQuartzPoint(NSEvent.mouseLocation)
         let screenFrame = screen.frame
 
         let newSize = fittingSize

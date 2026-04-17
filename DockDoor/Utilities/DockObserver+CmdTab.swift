@@ -143,7 +143,7 @@ extension DockObserver {
         }
 
         let elementPos = try? selectedItem.element.position()
-        let bestScreen = elementPos?.screen() ?? NSScreen.main!
+        let bestScreen = if let elementPos { NSScreen.screenFromQuartzPoint(elementPos) } else { NSScreen.main! }
 
         Task { @MainActor [weak self] in
             guard let self else { return }

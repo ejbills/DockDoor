@@ -1,8 +1,10 @@
+import Defaults
 import SwiftUI
 
 struct FirstTimeView: View {
     static let transition: AnyTransition = .offset(y: 24).combined(with: .opacity)
     @State private var tabIndex = 0
+    @State private var backgroundAppearance: BackgroundAppearance = .resolve()
 
     var body: some View {
         ZStack {
@@ -25,8 +27,14 @@ struct FirstTimeView: View {
                 .ignoresSafeArea(.all)
         }
         .background {
-            BlurView()
+            BlurView(appearance: backgroundAppearance)
                 .ignoresSafeArea(.all)
+        }
+        .task {
+            for await _ in Defaults.updates(BackgroundAppearance.observedKeys, initial: true) {
+                let updated = BackgroundAppearance.resolve()
+                if updated != backgroundAppearance { backgroundAppearance = updated }
+            }
         }
     }
 

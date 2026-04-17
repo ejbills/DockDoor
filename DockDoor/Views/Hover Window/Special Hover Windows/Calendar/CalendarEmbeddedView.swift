@@ -5,6 +5,7 @@ struct CalendarEmbeddedView: View {
     @ObservedObject var calendarInfo: DailyCalendarInfo
     let uniformCardRadius: Bool
     let idealWidth: CGFloat?
+    let backgroundAppearance: BackgroundAppearance
 
     @Environment(\.openURL) private var openURL
 
@@ -45,6 +46,6 @@ struct CalendarEmbeddedView: View {
         }
         .padding(12)
         .frame(minWidth: idealWidth ?? 200, alignment: .center)
-        .dockStyle(cornerRadius: CardRadius.inner, outerPadding: 0)
+        .dockStyle(backgroundAppearance: backgroundAppearance, cornerRadius: CardRadius.inner, outerPadding: 0)
     }
 }
