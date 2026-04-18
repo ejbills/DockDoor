@@ -5,10 +5,12 @@ import SwiftUI
 struct FiltersSettingsView: View {
     @Default(.appNameFilters) var appNameFilters
     @Default(.windowTitleFilters) var windowTitleFilters
+    @Default(.widgetAppFilters) var widgetAppFilters
     @Default(.customAppDirectories) var customAppDirectories
 
     @State private var showingAddFilterSheet = false
     @State private var showingAppPickerSheet = false
+    @State private var showingWidgetAppPickerSheet = false
     @State private var showingDirectoryPicker = false
     @State private var newFilter = FilterEntry(text: "")
 
@@ -224,6 +226,67 @@ struct FiltersSettingsView: View {
                         }
                     }
                 }
+
+                // Widget App Filters Section
+                SettingsGroup(header: "Widget App Filters") {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Disable dock hover widgets for selected apps while keeping their regular previews. Useful for browsers that expose media sessions like YouTube.")
+                            .font(.footnote)
+                            .foregroundColor(.secondary)
+                            .padding(.bottom, 4)
+
+                        if widgetAppFilters.isEmpty {
+                            Text("Widgets enabled for all apps")
+                                .foregroundColor(.secondary)
+                                .padding(.vertical, 8)
+                        } else {
+                            ScrollView {
+                                VStack(alignment: .leading, spacing: 4) {
+                                    ForEach(widgetAppFilters, id: \.self) { filter in
+                                        HStack {
+                                            Text(filter)
+                                                .lineLimit(1)
+
+                                            Spacer()
+
+                                            Button(action: {
+                                                widgetAppFilters.removeAll { $0 == filter }
+                                            }) {
+                                                Image(systemName: "xmark.circle.fill")
+                                                    .foregroundColor(.secondary)
+                                            }
+                                            .buttonStyle(.plain)
+                                        }
+                                        .padding(.vertical, 2)
+                                    }
+                                }
+                                .padding(8)
+                            }
+                            .frame(maxHeight: 120)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 8)
+                                    .stroke(Color.gray.opacity(0.25), lineWidth: 1)
+                            )
+                        }
+
+                        HStack {
+                            Button("Select Apps to Disable Widgets For...") {
+                                showingWidgetAppPickerSheet = true
+                            }
+                            .buttonStyle(AccentButtonStyle(color: .accentColor))
+
+                            Spacer()
+
+                            if !widgetAppFilters.isEmpty {
+                                DangerButton(action: {
+                                    widgetAppFilters.removeAll()
+                                }) {
+                                    Text("Clear All")
+                                }
+                            }
+                        }
+                    }
+                }
             }
             .sheet(isPresented: $showingAddFilterSheet) {
                 AddFilterSheet(
@@ -241,6 +304,14 @@ struct FiltersSettingsView: View {
                     selectedApps: $appNameFilters,
                     title: "Application Filters",
                     description: "Uncheck apps to hide them from DockDoor previews.",
+                    selectionMode: .exclude
+                )
+            }
+            .sheet(isPresented: $showingWidgetAppPickerSheet) {
+                AppPickerSheet(
+                    selectedApps: $widgetAppFilters,
+                    title: "Widget App Filters",
+                    description: "Uncheck apps to disable dock hover widgets for them while keeping regular previews.",
                     selectionMode: .exclude
                 )
             }
