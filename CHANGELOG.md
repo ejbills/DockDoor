@@ -38,6 +38,29 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://dockdoor.net/donate</div>
 
+<a id="1.36"></a>
+# [Release 1.36](https://github.com/ejbills/DockDoor/releases/tag/1.36) - 2026-04-20
+
+## ✨ New Features
+- Searchable settings across all pages
+- Disable dock widgets per app
+- Mouse Follows Focus in Window Switcher
+
+## 🔧 Improvements & Stability
+- Search bar auto-focus option in switcher
+- Control app activation on wake from sleep
+
+## 🐛 Bug Fixes
+- No flash when clicking dock to minimize
+- Scroll fade only shows when scrolled
+- Media scroll only responds over widget
+- Glass background corner artifacts resolved
+- Compact mode highlight and edge clicks fixed
+
+
+[Changes][1.36]
+
+
 <a id="1.35.1"></a>
 # [Release 1.35.1](https://github.com/ejbills/DockDoor/releases/tag/1.35.1) - 2026-04-17
 
@@ -2075,6 +2098,7 @@ v1.0
 [Changes][releases]
 
 
+[1.36]: https://github.com/ejbills/DockDoor/compare/1.35.1...1.36
 [1.35.1]: https://github.com/ejbills/DockDoor/compare/1.35...1.35.1
 [1.35]: https://github.com/ejbills/DockDoor/compare/1.34.1...1.35
 [1.34.1]: https://github.com/ejbills/DockDoor/compare/1.34...1.34.1
