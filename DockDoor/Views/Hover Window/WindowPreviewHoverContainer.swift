@@ -142,8 +142,8 @@ struct WindowPreviewHoverContainer: View {
         let calculatedDimensionsMap = previewStateCoordinator.dimensionState.windowDimensionsMap
 
         guard !calculatedDimensionsMap.isEmpty else {
-            // Fallback to skeleton width if no windows
-            return MediaControlsLayout.embeddedArtworkSize + MediaControlsLayout.artworkTextSpacing + 165
+            let fallback = MediaControlsLayout.embeddedArtworkSize + MediaControlsLayout.artworkTextSpacing + 165
+            return shouldUseCompactMode ? previewWidth : fallback
         }
 
         var minWidth = 0.0
@@ -153,6 +153,10 @@ struct WindowPreviewHoverContainer: View {
             if minWidth == 0 || width < minWidth {
                 minWidth = width
             }
+        }
+
+        if shouldUseCompactMode {
+            return previewWidth
         }
 
         return minWidth
@@ -676,18 +680,32 @@ struct WindowPreviewHoverContainer: View {
                 if shouldShowNoResultsView() {
                     noResultsView()
                 } else if shouldUseCompactMode {
-                    // Compact mode: simple vertical list
                     let flowItems = createFlowItems(filteredIndices: cachedFilteredIndices)
-                    LazyVStack(spacing: 4) {
-                        ForEach(flowItems, id: \.id) { item in
-                            buildFlowItem(
-                                item: item,
-                                isHorizontal: isHorizontal,
-                                currentMaxDimensionForPreviews: currentMaxDimensionForPreviews,
-                                currentDimensionsMapForPreviews: currentDimensionsMapForPreviews,
-                                filteredIndices: cachedFilteredIndices,
-                                appearance: appearance
-                            )
+                    if previewStateCoordinator.windowSwitcherActive {
+                        LazyVStack(spacing: 4) {
+                            ForEach(flowItems, id: \.id) { item in
+                                buildFlowItem(
+                                    item: item,
+                                    isHorizontal: isHorizontal,
+                                    currentMaxDimensionForPreviews: currentMaxDimensionForPreviews,
+                                    currentDimensionsMapForPreviews: currentDimensionsMapForPreviews,
+                                    filteredIndices: cachedFilteredIndices,
+                                    appearance: appearance
+                                )
+                            }
+                        }
+                    } else {
+                        VStack(spacing: 4) {
+                            ForEach(flowItems, id: \.id) { item in
+                                buildFlowItem(
+                                    item: item,
+                                    isHorizontal: isHorizontal,
+                                    currentMaxDimensionForPreviews: currentMaxDimensionForPreviews,
+                                    currentDimensionsMapForPreviews: currentDimensionsMapForPreviews,
+                                    filteredIndices: cachedFilteredIndices,
+                                    appearance: appearance
+                                )
+                            }
                         }
                     }
                 } else if isHorizontal {
@@ -1091,9 +1109,11 @@ struct WindowPreviewHoverContainer: View {
             let dims = currentDimensionsMapForPreviews[filteredIndices.first ?? 0]
             embeddedContentView()
                 .frame(
-                    minWidth: isHorizontal ? nil : dims?.size.width,
-                    minHeight: isHorizontal ? dims?.size.height : nil
+                    minWidth: shouldUseCompactMode ? nil : (isHorizontal ? nil : dims?.size.width),
+                    maxWidth: shouldUseCompactMode ? appearance.previewWidth + 2 * CardRadius.innerPadding : nil,
+                    minHeight: isHorizontal ? (shouldUseCompactMode ? nil : dims?.size.height) : nil
                 )
+                .fixedSize(horizontal: false, vertical: shouldUseCompactMode)
                 .id("\(appName)-embedded")
         case let .window(index):
             let windows = previewStateCoordinator.windows

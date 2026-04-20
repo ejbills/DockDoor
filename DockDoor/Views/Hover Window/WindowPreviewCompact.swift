@@ -17,6 +17,10 @@ struct WindowPreviewCompact: View, Equatable {
 
     @State private var isHovering = false
 
+    private var isHighlighted: Bool {
+        isSelected || (!windowSwitcherActive && isHovering)
+    }
+
     static func == (l: Self, r: Self) -> Bool {
         l.index == r.index && l.isSelected == r.isSelected
             && l.uniformCardRadius == r.uniformCardRadius
@@ -140,7 +144,7 @@ struct WindowPreviewCompact: View, Equatable {
                     .borderedBackground(.primary.opacity(0.1), lineWidth: 1.75, cornerRadius: cornerRadius)
                     .padding(.horizontal, -CardRadius.innerPadding)
                     .overlay {
-                        if isSelected || isHovering {
+                        if isHighlighted {
                             let highlightColor = appearance.hoverHighlightColor ?? Color(nsColor: .controlAccentColor)
                             RoundedRectangle(cornerRadius: cornerRadius)
                                 .fill(highlightColor.opacity(appearance.selectionOpacity))
@@ -156,7 +160,8 @@ struct WindowPreviewCompact: View, Equatable {
                     }
             }
         }
-        .opacity((isSelected || isHovering) ? 1.0 : appearance.unselectedContentOpacity)
+        .opacity(isHighlighted ? 1.0 : appearance.unselectedContentOpacity)
+        .padding(.horizontal, CardRadius.innerPadding)
         .contentShape(Rectangle())
         .onContinuousHover { phase in
             let setHoverState: (Bool) -> Void = { newState in
