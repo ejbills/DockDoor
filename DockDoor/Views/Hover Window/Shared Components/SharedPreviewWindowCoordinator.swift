@@ -124,9 +124,13 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         return .none
     }
 
-    func hideWindow() {
+    func cancelPendingShow() {
         pendingShowWorkItem?.cancel()
         pendingShowWorkItem = nil
+    }
+
+    func hideWindow() {
+        cancelPendingShow()
 
         // Always restore dock auto-hide state, even if the preview isn't visible.
         dockManager.restoreDockState()
