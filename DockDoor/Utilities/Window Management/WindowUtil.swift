@@ -260,15 +260,22 @@ enum WindowUtil {
         PermissionsChecker.hasScreenRecordingPermission()
     }
 
-    static func isAppFiltered(_ app: NSRunningApplication) -> Bool {
-        let filters = Defaults[.appNameFilters]
+    static func matchesAppFilters(bundleIdentifier: String?, appName: String, filters: [String]) -> Bool {
         guard !filters.isEmpty else { return false }
 
-        let bundleId = app.bundleIdentifier ?? ""
-        let appName = app.localizedName ?? ""
+        if let bundleIdentifier, filters.contains(bundleIdentifier) {
+            return true
+        }
 
-        // Check bundle ID (new format) or app name (legacy format)
-        return filters.contains(bundleId) || filters.contains(where: { $0.caseInsensitiveCompare(appName) == .orderedSame })
+        return filters.contains(where: { $0.caseInsensitiveCompare(appName) == .orderedSame })
+    }
+
+    static func isAppFiltered(_ app: NSRunningApplication) -> Bool {
+        matchesAppFilters(
+            bundleIdentifier: app.bundleIdentifier,
+            appName: app.localizedName ?? "",
+            filters: Defaults[.appNameFilters]
+        )
     }
 
     /// Returns window IDs that are cached with fresh images (within cache lifespan)

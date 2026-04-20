@@ -600,8 +600,13 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         var finalEmbeddedContentType: EmbeddedContentType = .none
         var useBigStandaloneViewInstead = false
         var viewForBigStandalone: AnyView?
+        let widgetsAreFiltered = WindowUtil.matchesAppFilters(
+            bundleIdentifier: bundleIdentifier,
+            appName: appName,
+            filters: Defaults[.widgetAppFilters]
+        )
 
-        if let bundleId = bundleIdentifier {
+        if let bundleId = bundleIdentifier, !widgetsAreFiltered {
             let actualAppContentType = getEmbeddedContentType(for: bundleId)
 
             switch actualAppContentType {
