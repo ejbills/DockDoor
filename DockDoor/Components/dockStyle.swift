@@ -39,6 +39,7 @@ struct DockStyleModifier: ViewModifier {
                             .opacity(0.2 * backgroundOpacity)
                     }
                 }
+                .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
             }
             .padding(outerPadding)
     }
