@@ -18,7 +18,11 @@ struct MediaControlsEmbeddedView: View {
         compactEmbeddedDisplayCore()
             .animation(showAnimations ? .smooth(duration: 0.125) : nil, value: isLoadingMediaInfo)
             .padding(12)
-            .frame(minWidth: idealWidth ?? (MediaControlsLayout.embeddedArtworkSize + MediaControlsLayout.artworkTextSpacing + 165), alignment: .center)
+            .frame(
+                minWidth: idealWidth ?? (MediaControlsLayout.embeddedArtworkSize + MediaControlsLayout.artworkTextSpacing + 165),
+                maxWidth: idealWidth,
+                alignment: .center
+            )
             .dockStyle(backgroundAppearance: backgroundAppearance, cornerRadius: CardRadius.inner, outerPadding: 0)
             .if(isMediaApp(bundleIdentifier)) { view in
                 view.mediaScrollable(bundleIdentifier: bundleIdentifier, mediaInfo: mediaInfo)

@@ -96,6 +96,8 @@ struct LiquidGlassRepresentable: NSViewRepresentable {
         container.tintOpacity = tintOpacity
         container.blurRadius = blurRadius
         container.saturation = saturation
+        container.updateCornerRadius()
+        container.applyGlassOpacity()
         return container
     }
 
@@ -129,11 +131,19 @@ class LiquidGlassContainerView: NSView {
 
     override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
+        wantsLayer = true
+        layer?.cornerRadius = cornerRadius
+        layer?.cornerCurve = .continuous
+        layer?.masksToBounds = true
         setupGlass()
     }
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
+        wantsLayer = true
+        layer?.cornerRadius = cornerRadius
+        layer?.cornerCurve = .continuous
+        layer?.masksToBounds = true
         setupGlass()
     }
 
@@ -151,23 +161,18 @@ class LiquidGlassContainerView: NSView {
     }
 
     func updateCornerRadius() {
-        glass?.cornerRadius = cornerRadius
-        tintLayer?.layer?.cornerRadius = cornerRadius
+        layer?.cornerRadius = cornerRadius
     }
 
     private func setupGlass() {
         let tint = NSView()
         tint.translatesAutoresizingMaskIntoConstraints = false
         tint.wantsLayer = true
-        tint.layer?.cornerRadius = cornerRadius
-        tint.layer?.cornerCurve = .continuous
-        tint.layer?.masksToBounds = true
         addSubview(tint)
 
         let glassView = NSGlassEffectView()
         glassView.style = .clear
         glassView.translatesAutoresizingMaskIntoConstraints = false
-        glassView.cornerRadius = cornerRadius
         addSubview(glassView)
 
         for view in [tint, glassView] {
