@@ -232,6 +232,10 @@ extension Defaults.Keys {
     static let dockPreviewControlPosition = Key<WindowSwitcherControlPosition>("dockPreviewControlPosition", default: .topTrailing)
     static let pinnedScreenIdentifier = Key<String>("pinnedScreenIdentifier", default: NSScreen.main?.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? String ?? "")
 
+    // MARK: - Mouse Follows Focus
+
+    static let mouseFollowsFocusMode = Key<MouseFollowsFocusMode>("mouseFollowsFocusMode", default: .never)
+
     // MARK: - Window Switcher Filters
 
     static let limitSwitcherToFrontmostApp = Key<Bool>("limitSwitcherToFrontmostApp", default: false)
@@ -466,6 +470,23 @@ enum WindowSwitcherPlacementStrategy: String, CaseIterable, Defaults.Serializabl
             String(localized: "Screen with last active window", comment: "Window switcher placement option")
         case .pinnedToScreen:
             String(localized: "Pinned to screen", comment: "Window switcher placement option")
+        }
+    }
+}
+
+enum MouseFollowsFocusMode: String, CaseIterable, Defaults.Serializable {
+    case never
+    case always
+    case differentDisplayOnly
+
+    var localizedName: String {
+        switch self {
+        case .never:
+            String(localized: "Never", comment: "Mouse follows focus mode option")
+        case .always:
+            String(localized: "Always", comment: "Mouse follows focus mode option")
+        case .differentDisplayOnly:
+            String(localized: "Only when switching displays", comment: "Mouse follows focus mode option")
         }
     }
 }

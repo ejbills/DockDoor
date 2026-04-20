@@ -24,6 +24,7 @@ struct WindowSwitcherBehaviorSettingsView: View {
     @Default(.windowSwitcherAnchorToTop) var windowSwitcherAnchorToTop
     @Default(.enableShiftWindowSwitcherPlacement) var enableShiftWindowSwitcherPlacement
     @Default(.showWindowlessAppsInSwitcher) var showWindowlessAppsInSwitcher
+    @Default(.mouseFollowsFocusMode) var mouseFollowsFocusMode
 
     @State private var showGroupedAppsSheet: Bool = false
 
@@ -88,6 +89,17 @@ struct WindowSwitcherBehaviorSettingsView: View {
 
                 Toggle(isOn: $useClassicWindowOrdering) { Text("Start on second window") }
                 Text("Highlight the second window instead of the first when opening.")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .padding(.leading, 20)
+
+                Picker(String(localized: "Mouse follows focus", comment: "Mouse follows focus setting label"), selection: $mouseFollowsFocusMode) {
+                    ForEach(MouseFollowsFocusMode.allCases, id: \.self) {
+                        Text($0.localizedName).tag($0)
+                    }
+                }
+                .pickerStyle(.menu)
+                Text("Move the cursor to the center of the selected window.")
                     .font(.caption)
                     .foregroundColor(.secondary)
                     .padding(.leading, 20)

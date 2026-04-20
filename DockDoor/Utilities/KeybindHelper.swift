@@ -111,6 +111,7 @@ private class WindowSwitchingCoordinator {
         if shouldSelectImmediately {
             if let selectedWindow = coordinator.getCurrentWindow() {
                 selectedWindow.bringToFront()
+                selectedWindow.warpMouseToCenterIfNeeded()
             }
             coordinator.deactivateKeybindSession()
             previewCoordinator.hideWindow()
@@ -748,6 +749,7 @@ class KeybindHelper {
                         self.windowSwitchingCoordinator.cancelSwitching(previewCoordinator: self.previewCoordinator)
                     } else if let selectedWindow = self.windowSwitchingCoordinator.selectCurrentWindow(previewCoordinator: self.previewCoordinator) {
                         selectedWindow.bringToFront()
+                        selectedWindow.warpMouseToCenterIfNeeded()
                         self.previewCoordinator.hideWindow()
                     }
                 }
@@ -776,7 +778,7 @@ class KeybindHelper {
                 if let action = getActionForCmdShortcut(keyCode: keyCode) {
                     preventSwitcherHideOnRelease = true
                     return (true, { @MainActor in
-                        await self.previewCoordinator.performActionOnCurrentWindow(action: action)
+                        self.previewCoordinator.performActionOnCurrentWindow(action: action)
                         if action == .quit {
                             if self.previewCoordinator.windowSwitcherCoordinator.windows.isEmpty {
                                 self.windowSwitchingCoordinator.cancelSwitching(previewCoordinator: self.previewCoordinator)
@@ -971,6 +973,7 @@ class KeybindHelper {
 
             if let selectedWindow = self.windowSwitchingCoordinator.selectCurrentWindow(previewCoordinator: self.previewCoordinator) {
                 selectedWindow.bringToFront()
+                selectedWindow.warpMouseToCenterIfNeeded()
                 self.previewCoordinator.hideWindow()
             } else {
                 self.previewCoordinator.selectAndBringToFrontCurrentWindow()
