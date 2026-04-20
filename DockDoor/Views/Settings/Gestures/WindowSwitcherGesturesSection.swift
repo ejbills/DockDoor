@@ -16,6 +16,7 @@ struct WindowSwitcherGesturesSection: View {
                         Text("Enable gestures in window switcher")
                     }
                 }
+                .settingsSearchTarget("gestures.switcherGestures")
 
                 if enableWindowSwitcherGestures {
                     Text("Swipe up or down on window previews in the keyboard-activated window switcher. Only vertical swipes are recognized, unless in compact mode.")

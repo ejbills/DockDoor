@@ -15,6 +15,7 @@ struct DockScrollGestureSection: View {
                         Text("Enable scroll gestures on dock icons")
                     }
                 }
+                .settingsSearchTarget("gestures.dockScroll")
 
                 if enableDockScrollGesture {
                     Text("Scroll up on a dock icon to bring the app to front, scroll down to hide all its windows.")
@@ -30,6 +31,7 @@ struct DockScrollGestureSection: View {
                         }
                     }
                     .pickerStyle(.menu)
+                    .settingsSearchTarget("gestures.musicScroll")
 
                     Text("Only applies when scrolling directly on Apple Music or Spotify dock icons.")
                         .font(.caption)
@@ -59,6 +61,7 @@ struct TitleBarScrollGestureSection: View {
                         Text("Enable scroll gestures on active window title bars")
                     }
                 }
+                .settingsSearchTarget("gestures.titleBarScroll")
 
                 if enableTitleBarScrollGesture {
                     let centeredWindowScaleBinding = Binding<Double>(
@@ -91,6 +94,7 @@ struct TitleBarScrollGestureSection: View {
                         }
                     }
                     .pickerStyle(.segmented)
+                    .settingsSearchTarget("gestures.centeredSizingMode")
 
                     Group {
                         switch titleBarScrollCenteredWindowSizingMode {
@@ -103,11 +107,13 @@ struct TitleBarScrollGestureSection: View {
                                 unit: "",
                                 formatter: NumberFormatter.percentFormatter
                             )
+                            .settingsSearchTarget("gestures.centeredWindowSize")
 
                         case .separate:
                             Toggle(isOn: $titleBarScrollCenteredWindowLockAspectRatio) {
                                 Text(String(localized: "Lock aspect ratio (uniform scaling)", comment: "Keep current window aspect ratio when centering; results in uniform scaling"))
                             }
+                            .settingsSearchTarget("gestures.centeredLockAspect")
 
                             if titleBarScrollCenteredWindowLockAspectRatio {
                                 Text(String(localized: "When enabled, the current window keeps its aspect ratio. The width and height percentages are treated as maximum bounds; if they differ, the result often matches uniform scaling to the smaller bound.", comment: "Explanation for lock aspect ratio behavior in title bar scroll centered window sizing"))
@@ -123,6 +129,7 @@ struct TitleBarScrollGestureSection: View {
                                 unit: "",
                                 formatter: NumberFormatter.percentFormatter
                             )
+                            .settingsSearchTarget("gestures.centeredWidth")
 
                             sliderSetting(
                                 title: "Centered Window Height",
@@ -132,6 +139,7 @@ struct TitleBarScrollGestureSection: View {
                                 unit: "",
                                 formatter: NumberFormatter.percentFormatter
                             )
+                            .settingsSearchTarget("gestures.centeredHeight")
                         }
                     }
 
@@ -143,6 +151,7 @@ struct TitleBarScrollGestureSection: View {
                         unit: "seconds",
                         formatter: NumberFormatter.oneDecimalFormatter
                     )
+                    .settingsSearchTarget("gestures.restoreTime")
                 }
             }
         }

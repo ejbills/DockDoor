@@ -68,6 +68,7 @@ struct WindowSwitcherBehaviorSettingsView: View {
             ) {
                 Text("The Window Switcher (often Alt/Cmd-Tab) lets you quickly cycle between open app windows with a keyboard shortcut.")
             }
+            .settingsSearchTarget("windowSwitcher.enable")
             .onChange(of: enableWindowSwitcher) { _ in askUserToRestartApplication() }
         }
     }
@@ -78,6 +79,7 @@ struct WindowSwitcherBehaviorSettingsView: View {
         SettingsGroup(header: "Behavior") {
             VStack(alignment: .leading, spacing: 10) {
                 Toggle(isOn: $instantWindowSwitcher) { Text("Show Window Switcher instantly") }
+                    .settingsSearchTarget("windowSwitcher.instant")
                 Text("May feel snappier but can cause flickering if you quickly release the key.")
                     .font(.caption)
                     .foregroundColor(.secondary)
@@ -87,8 +89,10 @@ struct WindowSwitcherBehaviorSettingsView: View {
                     get: { !preventSwitcherHide },
                     set: { preventSwitcherHide = !$0 }
                 )) { Text("Release initializer key to select window") }
+                    .settingsSearchTarget("windowSwitcher.releaseToSelect")
 
                 Toggle(isOn: $useClassicWindowOrdering) { Text("Start on second window") }
+                    .settingsSearchTarget("windowSwitcher.startOnSecond")
                 Text("Highlight the second window instead of the first when opening.")
                     .font(.caption)
                     .foregroundColor(.secondary)
@@ -100,6 +104,7 @@ struct WindowSwitcherBehaviorSettingsView: View {
                     }
                 }
                 .pickerStyle(.menu)
+                .settingsSearchTarget("windowSwitcher.mouseFollowsFocus")
                 Text("Move the cursor to the center of the selected window.")
                     .font(.caption)
                     .foregroundColor(.secondary)
@@ -114,26 +119,31 @@ struct WindowSwitcherBehaviorSettingsView: View {
         SettingsGroup(header: "Window Display") {
             VStack(alignment: .leading, spacing: 10) {
                 Toggle(isOn: $showWindowsFromCurrentSpaceOnlyInSwitcher) { Text("Show windows from current Space only") }
+                    .settingsSearchTarget("windowSwitcher.currentSpaceOnly")
                 Text("Only display windows that are in the current virtual desktop/Space.")
                     .font(.caption)
                     .foregroundColor(.secondary)
                     .padding(.leading, 20)
 
                 Toggle(isOn: $showWindowsFromCurrentMonitorOnlyInSwitcher) { Text("Show windows from current monitor only") }
+                    .settingsSearchTarget("windowSwitcher.currentMonitorOnly")
                 Text("Only display windows that are on the same display as the mouse cursor.")
                     .font(.caption)
                     .foregroundColor(.secondary)
                     .padding(.leading, 20)
 
                 Toggle(isOn: $limitSwitcherToFrontmostApp) { Text("Limit to active app only") }
+                    .settingsSearchTarget("windowSwitcher.limitToFrontmost")
                 Text("Only show windows from the currently active/frontmost application.")
                     .font(.caption)
                     .foregroundColor(.secondary)
                     .padding(.leading, 20)
 
                 Toggle(isOn: $includeHiddenWindowsInSwitcher) { Text("Include hidden/minimized windows") }
+                    .settingsSearchTarget("windowSwitcher.includeHidden")
 
                 Toggle(isOn: $showWindowlessAppsInSwitcher) { Text("Show running apps with no open windows") }
+                    .settingsSearchTarget("windowSwitcher.showWindowless")
                 Text("Dock-visible apps without any windows will appear as icon-only entries at the end.")
                     .font(.caption)
                     .foregroundColor(.secondary)
@@ -148,8 +158,10 @@ struct WindowSwitcherBehaviorSettingsView: View {
         SettingsGroup(header: "Search & Input") {
             VStack(alignment: .leading, spacing: 10) {
                 Toggle(isOn: $enableWindowSwitcherSearch) { Text("Enable search") }
+                    .settingsSearchTarget("windowSwitcher.enableSearch")
                 if enableWindowSwitcherSearch {
                     Toggle(isOn: $focusSearchOnWindowSwitcherOpen) { Text("Focus search on open") }
+                        .settingsSearchTarget("windowSwitcher.focusSearch")
                         .padding(.leading, 20)
                     Text("Automatically focus the search bar when the window switcher opens.")
                         .font(.caption)
@@ -173,6 +185,7 @@ struct WindowSwitcherBehaviorSettingsView: View {
                 }
 
                 Toggle(isOn: $enableMouseHoverInSwitcher) { Text("Enable mouse hover selection") }
+                    .settingsSearchTarget("windowSwitcher.mouseHover")
                 Text("Select and scroll to windows when hovering with mouse.")
                     .font(.caption)
                     .foregroundColor(.secondary)
@@ -203,24 +216,28 @@ struct WindowSwitcherBehaviorSettingsView: View {
                     }
                 }
                 .pickerStyle(.menu)
+                .settingsSearchTarget("windowSwitcher.sortOrder")
 
-                HStack {
-                    Text("Group windows by app")
-                    Spacer()
-                    if !groupedAppsInSwitcher.isEmpty {
-                        Text("\(groupedAppsInSwitcher.count) app\(groupedAppsInSwitcher.count == 1 ? "" : "s")")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
+                VStack(alignment: .leading, spacing: 4) {
+                    HStack {
+                        Text("Group windows by app")
+                        Spacer()
+                        if !groupedAppsInSwitcher.isEmpty {
+                            Text("\(groupedAppsInSwitcher.count) app\(groupedAppsInSwitcher.count == 1 ? "" : "s")")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                        Button("Select...") {
+                            showGroupedAppsSheet = true
+                        }
+                        .buttonStyle(AccentButtonStyle(small: true))
                     }
-                    Button("Select...") {
-                        showGroupedAppsSheet = true
-                    }
-                    .buttonStyle(AccentButtonStyle(small: true))
+                    Text("Selected apps show only their most recent window. All windows shown in active-app-only mode.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                        .padding(.leading, 20)
                 }
-                Text("Selected apps show only their most recent window. All windows shown in active-app-only mode.")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-                    .padding(.leading, 20)
+                .settingsSearchTarget("windowSwitcher.groupByApp")
             }
         }
     }
@@ -236,6 +253,7 @@ struct WindowSwitcherBehaviorSettingsView: View {
                     }
                 }
                 .pickerStyle(.menu)
+                .settingsSearchTarget("windowSwitcher.placement")
                 .onChange(of: placementStrategy) { newStrategy in
                     if newStrategy == .pinnedToScreen, pinnedScreenIdentifier.isEmpty {
                         pinnedScreenIdentifier = NSScreen.main?.uniqueIdentifier() ?? ""
@@ -269,6 +287,7 @@ struct WindowSwitcherBehaviorSettingsView: View {
                 Toggle(isOn: $enableShiftWindowSwitcherPlacement) {
                     Text("Offset position")
                 }
+                .settingsSearchTarget("windowSwitcher.offsetPosition")
 
                 if enableShiftWindowSwitcherPlacement {
                     Toggle(isOn: $windowSwitcherAnchorToTop) {

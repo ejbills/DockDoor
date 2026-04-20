@@ -20,6 +20,7 @@ struct ActiveAppIndicatorSettingsView: View {
             Toggle(isOn: $showActiveAppIndicator) {
                 Text("Show active app indicator below dock icon")
             }
+            .settingsSearchTarget("general.activeAppIndicator")
             .onChange(of: showActiveAppIndicator) { _ in askUserToRestartApplication() }
 
             Text(
@@ -41,6 +42,7 @@ struct ActiveAppIndicatorSettingsView: View {
                         }
                         .buttonStyle(AccentButtonStyle(small: true))
                     }
+                    .settingsSearchTarget("general.indicatorColor")
                     .padding(.leading, 20)
 
                     HStack {
@@ -62,6 +64,7 @@ struct ActiveAppIndicatorSettingsView: View {
                     Toggle(isOn: $activeAppIndicatorAutoSize) {
                         Text("Automatically set height and offset")
                     }
+                    .settingsSearchTarget("general.indicatorAutoSize")
                     .padding(.leading, 20)
 
                     if !activeAppIndicatorAutoSize {
@@ -78,6 +81,7 @@ struct ActiveAppIndicatorSettingsView: View {
                                 return f
                             }()
                         )
+                        .settingsSearchTarget("general.indicatorHeight")
                         .padding(.leading, 40)
 
                         sliderSetting(
@@ -94,12 +98,14 @@ struct ActiveAppIndicatorSettingsView: View {
                                 return f
                             }()
                         )
+                        .settingsSearchTarget("general.indicatorOffset")
                         .padding(.leading, 40)
                     }
 
                     Toggle(isOn: $activeAppIndicatorAutoLength) {
                         Text("Automatically set length")
                     }
+                    .settingsSearchTarget("general.indicatorAutoLength")
                     .padding(.leading, 20)
 
                     if !activeAppIndicatorAutoLength {
@@ -116,6 +122,7 @@ struct ActiveAppIndicatorSettingsView: View {
                                 return f
                             }()
                         )
+                        .settingsSearchTarget("general.indicatorLength")
                         .padding(.leading, 40)
                     }
 
@@ -133,6 +140,7 @@ struct ActiveAppIndicatorSettingsView: View {
                             return f
                         }()
                     )
+                    .settingsSearchTarget("general.indicatorShift")
                     .padding(.leading, 20)
 
                     HStack(spacing: 8) {

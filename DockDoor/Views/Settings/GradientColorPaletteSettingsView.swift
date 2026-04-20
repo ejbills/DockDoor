@@ -44,6 +44,7 @@ struct GradientColorPaletteSettingsView: View {
                     .frame(width: 30, height: 30)
             }
         }
+        .settingsSearchTarget("appearance.gradientColors")
 
         sliderSetting(title: "Animation speed",
                       value: $storedSettings.speed,
@@ -51,6 +52,7 @@ struct GradientColorPaletteSettingsView: View {
                       step: 0.05,
                       unit: "seconds",
                       formatter: NumberFormatter.twoDecimalFormatter)
+            .settingsSearchTarget("appearance.gradientSpeed")
 
         sliderSetting(title: "Blur amount",
                       value: $storedSettings.blur,
@@ -58,6 +60,7 @@ struct GradientColorPaletteSettingsView: View {
                       step: 0.05,
                       unit: "amount",
                       formatter: NumberFormatter.twoDecimalFormatter)
+            .settingsSearchTarget("appearance.gradientBlur")
             .onAppear {
                 setupColorDebounce()
             }

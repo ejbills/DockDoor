@@ -22,6 +22,7 @@ struct DockPreviewAppearanceSection: View {
             Toggle(isOn: $showAppName) {
                 Text("Show App Header")
             }
+            .settingsSearchTarget("appearance.dockShowAppHeader")
 
             if showAppName {
                 Picker(String(localized: "App Header Style"), selection: $appNameStyle) {
@@ -30,10 +31,12 @@ struct DockPreviewAppearanceSection: View {
                             .tag(style)
                     }
                 }
+                .settingsSearchTarget("appearance.dockAppHeaderStyle")
 
                 Toggle(isOn: $showAppIconOnly) {
                     Text("Show App Icon Only")
                 }
+                .settingsSearchTarget("appearance.dockShowAppIconOnly")
             }
 
             Divider().padding(.vertical, 2)
@@ -46,10 +49,12 @@ struct DockPreviewAppearanceSection: View {
                 }
             }
             .pickerStyle(MenuPickerStyle())
+            .settingsSearchTarget("appearance.dockControlPosition")
 
             Toggle(isOn: $showWindowTitle) {
                 Text("Show Window Title")
             }
+            .settingsSearchTarget("appearance.dockShowWindowTitle")
 
             if showWindowTitle {
                 Picker("Window Title Visibility", selection: $windowTitleVisibility) {
@@ -58,11 +63,13 @@ struct DockPreviewAppearanceSection: View {
                             .tag(visibility)
                     }
                 }
+                .settingsSearchTarget("appearance.dockWindowTitleVisibility")
 
                 VStack(alignment: .leading) {
                     Toggle(isOn: $disableDockStyleTitles) {
                         Text("Disable dock styling on window titles")
                     }
+                    .settingsSearchTarget("appearance.dockDisableTitleStyling")
                     Text("Removes the pill-shaped background styling from window titles in dock previews for a cleaner look.")
                         .font(.footnote)
                         .foregroundColor(.gray)
@@ -75,6 +82,7 @@ struct DockPreviewAppearanceSection: View {
                             .tag(size)
                     }
                 }
+                .settingsSearchTarget("appearance.dockWindowTitleFontSize")
             }
 
             Divider().padding(.vertical, 2)
@@ -85,6 +93,7 @@ struct DockPreviewAppearanceSection: View {
                 Toggle(isOn: $disableDockStyleTrafficLights) {
                     Text("Disable dock styling on traffic light buttons")
                 }
+                .settingsSearchTarget("appearance.dockDisableTrafficLightStyling")
                 Text("Removes the pill-shaped background styling from traffic light buttons in dock previews for a cleaner look.")
                     .font(.footnote)
                     .foregroundColor(.gray)
@@ -98,6 +107,7 @@ struct DockPreviewAppearanceSection: View {
                 Toggle(isOn: $showMassActionButtons) {
                     Text("Show Close All and Minimize All buttons")
                 }
+                .settingsSearchTarget("appearance.dockMassActionButtons")
                 Text("Displays Close All and Minimize All buttons when hovering the app icon in dock previews.")
                     .font(.footnote)
                     .foregroundColor(.gray)
@@ -111,6 +121,7 @@ struct DockPreviewAppearanceSection: View {
                 Toggle(isOn: $useEmbeddedDockPreviewElements) {
                     Text("Embed controls in preview frames")
                 }
+                .settingsSearchTarget("appearance.dockEmbedControls")
                 Text("Places traffic light buttons and window titles directly inside the dock preview frames for a more compact and minimal appearance.")
                     .font(.footnote)
                     .foregroundColor(.gray)
@@ -135,6 +146,7 @@ struct DockPreviewAppearanceSection: View {
                         return f
                     }()
                 )
+                .settingsSearchTarget("appearance.dockMaxRows")
 
                 let previewMaxColumnsBinding = Binding<Double>(
                     get: { Double(previewMaxColumns) },
@@ -153,6 +165,7 @@ struct DockPreviewAppearanceSection: View {
                         return f
                     }()
                 )
+                .settingsSearchTarget("appearance.dockMaxColumns")
 
                 Text(String(localized: "Controls how many rows/columns of windows are shown in dock previews. Only the relevant setting applies based on dock position."))
                     .font(.caption)

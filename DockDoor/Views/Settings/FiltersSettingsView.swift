@@ -100,6 +100,7 @@ struct FiltersSettingsView: View {
                         }
                     }
                 }
+                .settingsSearchTarget("filters.appDirectories")
 
                 // App Filters Section
                 SettingsGroup(header: "Application Filters") {
@@ -161,6 +162,7 @@ struct FiltersSettingsView: View {
                         }
                     }
                 }
+                .settingsSearchTarget("filters.appFilters")
 
                 // Window Title Filters Section
                 SettingsGroup(header: "Window Title Filters") {
@@ -226,6 +228,7 @@ struct FiltersSettingsView: View {
                         }
                     }
                 }
+                .settingsSearchTarget("filters.windowTitle")
 
                 // Widget App Filters Section
                 SettingsGroup(header: "Widget App Filters") {
@@ -287,6 +290,7 @@ struct FiltersSettingsView: View {
                         }
                     }
                 }
+                .settingsSearchTarget("filters.widgetApps")
             }
             .sheet(isPresented: $showingAddFilterSheet) {
                 AddFilterSheet(

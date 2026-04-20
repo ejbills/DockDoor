@@ -57,37 +57,47 @@ struct AdvancedSettingsView: View {
         SettingsGroup(header: "Performance Tuning") {
             VStack(alignment: .leading, spacing: 10) {
                 sliderSetting(title: "Preview Window Open Delay", value: $hoverWindowOpenDelay, range: 0 ... 2, step: 0.1, unit: "seconds", formatter: NumberFormatter.oneDecimalFormatter)
+                    .settingsSearchTarget("advanced.openDelay")
 
                 Toggle(isOn: $useDelayOnlyForInitialOpen) {
                     Text("Only use delay for initial window opening")
                 }
+                .settingsSearchTarget("advanced.delayOnlyInitial")
                 Text("Switching between dock icons while a preview is already open will show previews instantly.")
                     .font(.caption)
                     .foregroundColor(.secondary)
                     .padding(.leading, 20)
 
                 sliderSetting(title: "Preview Window Fade Out Duration", value: $fadeOutDuration, range: 0 ... 2, step: 0.1, unit: "seconds", formatter: NumberFormatter.oneDecimalFormatter)
+                    .settingsSearchTarget("advanced.fadeOut")
                 sliderSetting(title: "Preview Window Inactivity Timer", value: $inactivityTimeout, range: 0 ... 3, step: 0.1, unit: "seconds", formatter: NumberFormatter.oneDecimalFormatter)
+                    .settingsSearchTarget("advanced.inactivity")
                 sliderSetting(title: "Window Processing Debounce Interval", value: $windowProcessingDebounceInterval, range: 0 ... 3, step: 0.1, unit: "seconds", formatter: NumberFormatter.oneDecimalFormatter, onEditingChanged: { isEditing in
                     if !isEditing {
                         askUserToRestartApplication()
                     }
                 })
+                .settingsSearchTarget("advanced.debounce")
 
                 Toggle(isOn: $anchorDockPreviewPosition) {
                     Text("Anchor preview to initial dock icon position")
                 }
+                .settingsSearchTarget("advanced.anchorPosition")
                 Text("Keeps the preview pinned where the dock icon was when first hovered, preventing it from jumping when the dock auto-hides.")
                     .font(.caption)
                     .foregroundColor(.secondary)
                     .padding(.leading, 20)
 
                 Toggle(isOn: $preventDockHide) { Text("Prevent dock from hiding during previews") }
-                Toggle(isOn: $raisedWindowLevel) { Text("Show preview above app labels").onChange(of: raisedWindowLevel) { _ in askUserToRestartApplication() } }
+                    .settingsSearchTarget("advanced.preventDockHide")
+                Toggle(isOn: $raisedWindowLevel) { Text("Show preview above app labels") }
+                    .settingsSearchTarget("advanced.raisedLevel")
+                    .onChange(of: raisedWindowLevel) { _ in askUserToRestartApplication() }
 
                 Toggle(isOn: $disableMinWindowSizeFilter) {
                     Text("Show small windows (under 100px)")
                 }
+                .settingsSearchTarget("advanced.smallWindows")
                 Text("Includes small windows like Finder's copy progress dialog in previews.")
                     .font(.caption)
                     .foregroundColor(.secondary)
@@ -96,6 +106,7 @@ struct AdvancedSettingsView: View {
                 Toggle(isOn: $preventPreviewReentryDuringFadeOut) {
                     Text("Prevent preview reappearance during fade-out")
                 }
+                .settingsSearchTarget("advanced.preventReentry")
                 Text("Moving the mouse back over the preview during fade-out will not reactivate it.")
                     .font(.caption)
                     .foregroundColor(.secondary)
@@ -115,9 +126,12 @@ struct AdvancedSettingsView: View {
                     }
                 }
                 .pickerStyle(MenuPickerStyle())
+                .settingsSearchTarget("advanced.captureQuality")
 
                 sliderSetting(title: "Window Image Cache Lifespan", value: $screenCaptureCacheLifespan, range: 0 ... 60, step: 10, unit: "seconds")
+                    .settingsSearchTarget("advanced.cacheLifespan")
                 sliderSetting(title: "Window Image Resolution Scale (1=Best)", value: $windowPreviewImageScale, range: 1 ... 4, step: 1, unit: "")
+                    .settingsSearchTarget("advanced.imageScale")
             }
         }
     }
@@ -128,6 +142,7 @@ struct AdvancedSettingsView: View {
         SettingsGroup(header: "Live Preview") {
             VStack(alignment: .leading, spacing: 10) {
                 Toggle(isOn: $enableLivePreview) { Text("Enable Live Preview (Video)") }
+                    .settingsSearchTarget("advanced.livePreview")
                     .onChange(of: enableLivePreview) { newValue in
                         if !newValue {
                             Task { await LiveCaptureManager.shared.stopAllStreams() }
@@ -153,6 +168,7 @@ struct AdvancedSettingsView: View {
         SettingsGroup(header: "Dock Live Preview") {
             VStack(alignment: .leading, spacing: 10) {
                 Toggle(isOn: $enableLivePreviewForDock) { Text("Enable for Dock Preview") }
+                    .settingsSearchTarget("advanced.livePreviewDock")
 
                 if enableLivePreviewForDock {
                     Picker("Quality", selection: $dockLivePreviewQuality) {
@@ -181,6 +197,7 @@ struct AdvancedSettingsView: View {
         SettingsGroup(header: "Switcher Live Preview") {
             VStack(alignment: .leading, spacing: 10) {
                 Toggle(isOn: $enableLivePreviewForWindowSwitcher) { Text("Enable for Window Switcher") }
+                    .settingsSearchTarget("advanced.livePreviewSwitcher")
 
                 if enableLivePreviewForWindowSwitcher {
                     Picker("Quality", selection: $windowSwitcherLivePreviewQuality) {
@@ -308,6 +325,7 @@ struct AdvancedSettingsView: View {
             .gesture(TapGesture().onEnded {
                 isKeepAliveFieldFocused = false
             }, including: .gesture)
+            .settingsSearchTarget("advanced.streamKeepAlive")
         }
     }
 }

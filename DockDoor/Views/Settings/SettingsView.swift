@@ -92,8 +92,8 @@ extension SettingsManager: NSWindowDelegate {
                 splitViewController.splitViewItems.first?.isCollapsed = false
                 splitViewController.splitViewItems.first?.canCollapse = false
                 splitViewController.splitViewItems.first?.holdingPriority = .defaultHigh
-                splitViewController.splitViewItems.first?.minimumThickness = 200
-                splitViewController.splitViewItems.first?.maximumThickness = 200
+                splitViewController.splitViewItems.first?.minimumThickness = 270
+                splitViewController.splitViewItems.first?.maximumThickness = 270
             }
         }
     }
@@ -111,6 +111,8 @@ extension SettingsManager: NSWindowDelegate {
 
 struct SettingsView: View {
     @State private var selectedTab = "General"
+    @StateObject private var searchEngine = SettingsSearchEngine()
+    @State private var scrollTarget: String?
     @ObservedObject var updaterState: UpdaterState
 
     init(updaterState: UpdaterState) {
@@ -119,41 +121,81 @@ struct SettingsView: View {
 
     var body: some View {
         NavigationSplitView(columnVisibility: .constant(.all), sidebar: {
-            List(selection: $selectedTab) {
-                Label(String(localized: "General", comment: "Settings tab title"), systemImage: "gearshape.fill")
-                    .tag("General")
-
-                Section(String(localized: "Features", comment: "Settings section header")) {
-                    Label(String(localized: "Dock Previews", comment: "Settings tab title"), systemImage: "dock.rectangle")
-                        .tag("DockPreviews")
-                    Label(String(localized: "Window Switcher", comment: "Settings tab title"), systemImage: "uiwindow.split.2x1")
-                        .tag("WindowSwitcher")
-                    Label(String(localized: "Cmd+Tab", comment: "Settings tab title"), systemImage: "command")
-                        .tag("CmdTab")
-                    Label(String(localized: "Dock Locking", comment: "Settings tab title"), systemImage: "lock.fill")
-                        .tag("DockLocking")
+            VStack(spacing: 0) {
+                HStack(spacing: 8) {
+                    Image(systemName: "magnifyingglass")
+                        .font(.system(size: 12))
+                        .foregroundStyle(.tertiary)
+                    TextField(String(localized: "Search settings…", comment: "Settings search placeholder"), text: $searchEngine.query)
+                        .textFieldStyle(.plain)
+                        .font(.system(size: 12))
+                    if !searchEngine.query.isEmpty {
+                        Button {
+                            searchEngine.query = ""
+                        } label: {
+                            Image(systemName: "xmark.circle.fill")
+                                .font(.system(size: 12))
+                                .foregroundStyle(.secondary)
+                        }
+                        .buttonStyle(.plain)
+                    }
                 }
+                .padding(.horizontal, 12)
+                .padding(.vertical, 8)
 
-                Section(String(localized: "Customization", comment: "Settings section header")) {
-                    Label(String(localized: "Appearance", comment: "Settings Tab"), systemImage: "wand.and.stars.inverse")
-                        .tag("Appearance")
-                    Label(String(localized: "Gestures & Keybinds", comment: "Settings tab title"), systemImage: "hand.draw.fill")
-                        .tag("GesturesKeybinds")
-                    Label(String(localized: "Filters", comment: "Filters tab title"), systemImage: "air.purifier")
-                        .tag("Filters")
-                    Label(String(localized: "Widgets", comment: "Widget settings tab title"), systemImage: "square.grid.2x2")
-                        .tag("Widgets")
-                }
+                Divider()
 
-                Section(String(localized: "System", comment: "Settings section header")) {
-                    Label(String(localized: "Advanced", comment: "Settings tab title"), systemImage: "slider.horizontal.3")
-                        .tag("Advanced")
-                    Label(String(localized: "Support", comment: "Settings tab title"), systemImage: "lifepreserver.fill")
-                        .tag("Support")
+                if searchEngine.isSearching {
+                    SettingsSearchResultsView(engine: searchEngine) { item in
+                        selectedTab = item.tab
+                        searchEngine.query = ""
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
+                            scrollTarget = item.id
+                        }
+                    }
+                } else {
+                    List(selection: $selectedTab) {
+                        Spacer()
+                            .frame(height: 1)
+                            .listRowBackground(Color.clear)
+                            .listRowSeparator(.hidden)
+
+                        Label(String(localized: "General", comment: "Settings tab title"), systemImage: "gearshape.fill")
+                            .tag("General")
+
+                        Section(String(localized: "Features", comment: "Settings section header")) {
+                            Label(String(localized: "Dock Previews", comment: "Settings tab title"), systemImage: "dock.rectangle")
+                                .tag("DockPreviews")
+                            Label(String(localized: "Window Switcher", comment: "Settings tab title"), systemImage: "uiwindow.split.2x1")
+                                .tag("WindowSwitcher")
+                            Label(String(localized: "Cmd+Tab", comment: "Settings tab title"), systemImage: "command")
+                                .tag("CmdTab")
+                            Label(String(localized: "Dock Locking", comment: "Settings tab title"), systemImage: "lock.fill")
+                                .tag("DockLocking")
+                        }
+
+                        Section(String(localized: "Customization", comment: "Settings section header")) {
+                            Label(String(localized: "Appearance", comment: "Settings Tab"), systemImage: "wand.and.stars.inverse")
+                                .tag("Appearance")
+                            Label(String(localized: "Gestures & Keybinds", comment: "Settings tab title"), systemImage: "hand.draw.fill")
+                                .tag("GesturesKeybinds")
+                            Label(String(localized: "Filters", comment: "Filters tab title"), systemImage: "air.purifier")
+                                .tag("Filters")
+                            Label(String(localized: "Widgets", comment: "Widget settings tab title"), systemImage: "square.grid.2x2")
+                                .tag("Widgets")
+                        }
+
+                        Section(String(localized: "System", comment: "Settings section header")) {
+                            Label(String(localized: "Advanced", comment: "Settings tab title"), systemImage: "slider.horizontal.3")
+                                .tag("Advanced")
+                            Label(String(localized: "Support", comment: "Settings tab title"), systemImage: "lifepreserver.fill")
+                                .tag("Support")
+                        }
+                    }
+                    .listStyle(.sidebar)
                 }
             }
-            .listStyle(.sidebar)
-            .frame(width: 200)
+            .frame(minWidth: 270, maxWidth: 270)
             .modifier(HideSidebarToggleModifier())
         }, detail: {
             Group {
@@ -184,7 +226,14 @@ struct SettingsView: View {
                     MainSettingsView()
                 }
             }
-            .navigationSplitViewColumnWidth(min: 700, ideal: 700)
+            .environment(\.settingsScrollTarget, scrollTarget)
+            .onChange(of: scrollTarget) { newTarget in
+                if newTarget != nil {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                        scrollTarget = nil
+                    }
+                }
+            }
         })
     }
 }

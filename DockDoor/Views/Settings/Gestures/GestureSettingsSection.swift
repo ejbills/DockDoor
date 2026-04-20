@@ -24,6 +24,7 @@ struct GestureSettingsSection: View {
                         return f
                     }()
                 )
+                .settingsSearchTarget("gestures.sensitivity")
                 Text("Lower values make gestures more sensitive. Higher values require longer swipes. Applies to both dock previews and window switcher.")
                     .font(.caption)
                     .foregroundColor(.secondary)

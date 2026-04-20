@@ -28,6 +28,7 @@ struct WindowSizeSliderView: View {
             Toggle(isOn: $lockAspectRatio) {
                 Text("Lock aspect ratio (16:10)")
             }
+            .settingsSearchTarget("appearance.lockAspect")
             .onChange(of: lockAspectRatio) { newValue in
                 if newValue {
                     previewHeight = previewWidth / aspectRatio
@@ -38,6 +39,7 @@ struct WindowSizeSliderView: View {
             Toggle(isOn: $allowDynamicImageSizing) {
                 Text("Dynamic image sizing")
             }
+            .settingsSearchTarget("appearance.dynamicSizing")
             Text("Scale previews to match actual window proportions instead of using fixed dimensions.")
                 .font(.caption)
                 .foregroundColor(.secondary)
@@ -55,6 +57,7 @@ struct WindowSizeSliderView: View {
                     return f
                 }()
             )
+            .settingsSearchTarget("appearance.previewWidth")
             .onChange(of: previewWidth) { _ in
                 if lockAspectRatio {
                     previewHeight = previewWidth / aspectRatio
@@ -75,6 +78,7 @@ struct WindowSizeSliderView: View {
                     return f
                 }()
             )
+            .settingsSearchTarget("appearance.previewHeight")
             .disabled(lockAspectRatio)
             .onChange(of: previewHeight) { _ in
                 if lockAspectRatio {

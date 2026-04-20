@@ -65,11 +65,13 @@ struct WidgetSettingsView: View {
                         Toggle(isOn: $showSpecialAppControls) {
                             Text("Enable widget controls on Dock hover")
                         }
+                        .settingsSearchTarget("widgets.enable")
 
                         if showSpecialAppControls {
                             Toggle(isOn: $enableMediaWidget) {
                                 Text("Media controls")
                             }
+                            .settingsSearchTarget("widgets.media")
                             .padding(.leading, 20)
                             Text("Show now playing controls when hovering the active media source's Dock icon. Works with any app.")
                                 .font(.caption)
@@ -83,6 +85,7 @@ struct WidgetSettingsView: View {
                                     }
                                 }
                                 .pickerStyle(.menu)
+                                .settingsSearchTarget("widgets.detectionMode")
                                 .padding(.leading, 40)
                                 Text(mediaDetectionMode.localizedDescription)
                                     .font(.caption)
@@ -93,6 +96,7 @@ struct WidgetSettingsView: View {
                             Toggle(isOn: $enableCalendarWidget) {
                                 Text("Calendar widget")
                             }
+                            .settingsSearchTarget("widgets.calendar")
                             .padding(.leading, 20)
                             Text("Show today's events when hovering the Calendar Dock icon.")
                                 .font(.caption)
@@ -108,6 +112,7 @@ struct WidgetSettingsView: View {
                             Toggle(isOn: $useEmbeddedMediaControls) {
                                 Text("Embed controls alongside window previews")
                             }
+                            .settingsSearchTarget("widgets.embedded")
                             Text("Show controls inline with window previews when both are available.")
                                 .font(.caption)
                                 .foregroundColor(.secondary)
@@ -116,12 +121,14 @@ struct WidgetSettingsView: View {
                             Toggle(isOn: $showBigControlsWhenNoValidWindows) {
                                 Text("Use full-size controls when no windows are open")
                             }
+                            .settingsSearchTarget("widgets.fullSize")
                             .disabled(!useEmbeddedMediaControls)
                             .opacity(useEmbeddedMediaControls ? 1.0 : 0.6)
 
                             Toggle(isOn: $enablePinning) {
                                 Text("Allow pinning controls to screen")
                             }
+                            .settingsSearchTarget("widgets.pinning")
                             .onChange(of: enablePinning) { isEnabled in
                                 if !isEnabled {
                                     SharedPreviewWindowCoordinator.activeInstance?.unpinAll()
@@ -146,6 +153,7 @@ struct WidgetSettingsView: View {
                                 }
                             }
                             .pickerStyle(.menu)
+                            .settingsSearchTarget("widgets.scrollBehavior")
 
                             Picker("Direction:", selection: $mediaWidgetScrollDirection) {
                                 ForEach(MediaWidgetScrollDirection.allCases, id: \.self) { direction in
@@ -153,6 +161,7 @@ struct WidgetSettingsView: View {
                                 }
                             }
                             .pickerStyle(.menu)
+                            .settingsSearchTarget("widgets.scrollDirection")
 
                             if mediaWidgetScrollDirection == .horizontal {
                                 HStack(spacing: 6) {

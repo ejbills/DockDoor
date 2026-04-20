@@ -47,6 +47,7 @@ struct CmdKeyShortcutsSection: View {
                 .buttonStyle(AccentButtonStyle(small: true))
                 .padding(.top, 4)
             }
+            .settingsSearchTarget("gestures.cmdShortcuts")
         }
     }
 

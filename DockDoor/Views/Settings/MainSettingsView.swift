@@ -42,14 +42,17 @@ struct MainSettingsView: View {
         SettingsGroup(header: "Application Basics") {
             VStack(alignment: .leading, spacing: 10) {
                 LaunchAtLogin.Toggle(String(localized: "Launch DockDoor at login"))
+                    .settingsSearchTarget("general.launchAtLogin")
 
                 Toggle(isOn: $showMenuBarIcon, label: { Text("Show menu bar icon") })
+                    .settingsSearchTarget("general.menuBarIcon")
                     .onChange(of: showMenuBarIcon) { isOn in
                         let appDelegate = NSApplication.shared.delegate as! AppDelegate
                         if isOn { appDelegate.setupMenuBar() } else { appDelegate.removeMenuBar() }
                     }
 
                 Toggle(isOn: $activateOnWake, label: { Text("Restore settings window to front on wake from sleep") })
+                    .settingsSearchTarget("general.activateOnWake")
 
                 Toggle(isOn: Binding(
                     get: { !showAnimations },
@@ -57,14 +60,18 @@ struct MainSettingsView: View {
                 )) {
                     Text("Reduce motion")
                 }
+                .settingsSearchTarget("general.reduceMotion")
 
-                Toggle(isOn: $sortMinimizedToEnd, label: {
-                    Text("Sort minimized/hidden windows to end")
-                })
-                Text("Minimized and hidden windows will appear after all visible windows in previews and switcher.")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-                    .padding(.leading, 20)
+                VStack(alignment: .leading, spacing: 0) {
+                    Toggle(isOn: $sortMinimizedToEnd, label: {
+                        Text("Sort minimized/hidden windows to end")
+                    })
+                    Text("Minimized and hidden windows will appear after all visible windows in previews and switcher.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                        .padding(.leading, 20)
+                }
+                .settingsSearchTarget("general.sortMinimized")
             }
         }
     }

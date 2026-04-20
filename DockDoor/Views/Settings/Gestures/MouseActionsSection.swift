@@ -28,6 +28,7 @@ struct MouseActionsSection: View {
                     }
                     .pickerStyle(.menu)
                     .labelsHidden()
+                    .settingsSearchTarget("gestures.middleClick")
                 }
 
                 Text("Action performed when middle-clicking on a window preview.")

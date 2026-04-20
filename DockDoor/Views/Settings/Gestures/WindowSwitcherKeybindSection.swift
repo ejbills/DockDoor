@@ -49,6 +49,7 @@ struct WindowSwitcherKeybindSection: View {
                         Button("Reset") { switcherBackwardKeyCode = 56 }
                             .buttonStyle(.bordered)
                     }
+                    .settingsSearchTarget("gestures.backwardKey")
                     Text("The key used to navigate backward in the window switcher.")
                         .font(.caption)
                         .foregroundColor(.secondary)
@@ -56,6 +57,7 @@ struct WindowSwitcherKeybindSection: View {
                     Toggle(isOn: $requireShiftTabToGoBack) {
                         Text("Require \(KeyboardLabel.localizedKey(for: switcherBackwardKeyCode))+Tab to go back in Switcher")
                     }
+                    .settingsSearchTarget("gestures.requireShiftTab")
                     Text("When enabled, pressing the backward key alone won't go back. Use it with Tab to navigate backward.")
                         .font(.caption)
                         .foregroundColor(.secondary)
@@ -76,6 +78,7 @@ struct WindowSwitcherKeybindSection: View {
                     Toggle(isOn: $enableVimMotions) {
                         Text("Enable Vim Motions")
                     }
+                    .settingsSearchTarget("gestures.vimMotions")
                     Text("Use H/J/K/L keys to navigate left/down/up/right in the window switcher. Disabled while search is focused.")
                         .font(.caption)
                         .foregroundColor(.secondary)
@@ -84,6 +87,7 @@ struct WindowSwitcherKeybindSection: View {
                     Toggle(isOn: $passArrowsThroughToSystem) {
                         Text("Pass Arrow Keys Through to System")
                     }
+                    .settingsSearchTarget("gestures.arrowPassthrough")
                     Text("When enabled, Ctrl+Arrow keys will be passed through to the system instead of navigating the switcher. Useful for Spaces switching.")
                         .font(.caption)
                         .foregroundColor(.secondary)
@@ -118,6 +122,7 @@ struct WindowSwitcherKeybindSection: View {
                             KeyCaptureButton(keyCode: $searchTriggerKey)
                         }
                     }
+                    .settingsSearchTarget("gestures.searchTriggerKey")
                     .disabled(!enableWindowSwitcher)
                     .opacity(enableWindowSwitcher ? 1.0 : 0.5)
                 }
@@ -132,7 +137,9 @@ struct WindowSwitcherKeybindSection: View {
 
                     fullscreenAppBlacklistView
                 }
+                .settingsSearchTarget("gestures.fullscreenBlacklist")
             }
+            .settingsSearchTarget("gestures.switcherKeybind")
         }
         .onAppear {
             keybindModel.modifierKey = Defaults[.UserKeybind].modifierFlags
@@ -216,6 +223,7 @@ struct WindowSwitcherKeybindSection: View {
                 Button("Reset") { selectionKeyCode = UInt16(kVK_Return) }
                     .buttonStyle(.bordered)
             }
+            .settingsSearchTarget("gestures.selectionKey")
             Text("The key used to select and bring to front the highlighted window in the switcher.")
                 .font(.caption)
                 .foregroundColor(.secondary)
@@ -262,6 +270,7 @@ struct WindowSwitcherKeybindSection: View {
                 .frame(maxWidth: 200)
             }
         }
+        .settingsSearchTarget("gestures.alternateShortcut")
     }
 
     // MARK: - Fullscreen App Blacklist

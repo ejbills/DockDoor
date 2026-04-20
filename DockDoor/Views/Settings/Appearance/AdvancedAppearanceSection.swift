@@ -28,6 +28,7 @@ struct AdvancedAppearanceSection: View {
                         }
                         .buttonStyle(AccentButtonStyle(small: true))
                     }
+                    .settingsSearchTarget("appearance.hoverHighlightColor")
 
                     sliderSetting(
                         title: "Background Opacity",
@@ -37,6 +38,7 @@ struct AdvancedAppearanceSection: View {
                         unit: "",
                         formatter: NumberFormatter.percentFormatter
                     )
+                    .settingsSearchTarget("appearance.selectionOpacity")
                 }
             }
 
@@ -54,6 +56,7 @@ struct AdvancedAppearanceSection: View {
                         }
                         .buttonStyle(AccentButtonStyle(small: true))
                     }
+                    .settingsSearchTarget("appearance.customBackgroundColor")
                     Text("Override the default blurred background with a solid custom color.")
                         .font(.caption)
                         .foregroundColor(.secondary)
@@ -63,6 +66,7 @@ struct AdvancedAppearanceSection: View {
                             Toggle(isOn: $useOpaquePreviewBackground) {
                                 Text("Use opaque background")
                             }
+                            .settingsSearchTarget("appearance.opaqueBackground")
                             Text("Replaces the blurred/transparent background with a solid color. Useful for accessibility or readability.")
                                 .font(.footnote)
                                 .foregroundColor(.gray)
@@ -82,6 +86,7 @@ struct AdvancedAppearanceSection: View {
                                 unit: "",
                                 formatter: NumberFormatter.percentFormatter
                             )
+                            .settingsSearchTarget("appearance.dockPreviewOpacity")
                         }
                     }
                 }

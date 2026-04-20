@@ -30,6 +30,7 @@ struct CompactModeSection: View {
                     )) {
                         Text("Always use compact mode")
                     }
+                    .settingsSearchTarget("appearance.compactMode")
                     .disabled(!hasScreenRecordingPermission)
 
                     if !hasScreenRecordingPermission {
@@ -57,18 +58,21 @@ struct CompactModeSection: View {
                         value: $windowSwitcherCompactThreshold,
                         description: "Switch to compact list in window switcher when window count reaches threshold."
                     )
+                    .settingsSearchTarget("appearance.compactThresholdSwitcher")
 
                     compactThresholdSlider(
                         title: "Dock Previews",
                         value: $dockPreviewCompactThreshold,
                         description: "Switch to compact list in dock previews when window count reaches threshold."
                     )
+                    .settingsSearchTarget("appearance.compactThresholdDock")
 
                     compactThresholdSlider(
                         title: "Cmd+Tab Enhancement",
                         value: $cmdTabCompactThreshold,
                         description: "Switch to compact list in Cmd+Tab overlay when window count reaches threshold."
                     )
+                    .settingsSearchTarget("appearance.compactThresholdCmdTab")
                 }
 
                 Divider().padding(.vertical, 2)
@@ -80,6 +84,7 @@ struct CompactModeSection: View {
                     }
                 }
                 .pickerStyle(.menu)
+                .settingsSearchTarget("appearance.compactItemSize")
 
                 Picker("Title Format", selection: $compactModeTitleFormat) {
                     ForEach(CompactModeTitleFormat.allCases) { format in
@@ -87,9 +92,11 @@ struct CompactModeSection: View {
                     }
                 }
                 .pickerStyle(.menu)
+                .settingsSearchTarget("appearance.compactTitleFormat")
 
                 VStack(alignment: .leading, spacing: 4) {
                     Toggle("Hide Traffic Lights", isOn: $compactModeHideTrafficLights)
+                        .settingsSearchTarget("appearance.hideTrafficLights")
                     Text("Hides the close, minimize, and other window control buttons in compact mode to provide more room for window titles.")
                         .font(.caption)
                         .foregroundColor(.secondary)

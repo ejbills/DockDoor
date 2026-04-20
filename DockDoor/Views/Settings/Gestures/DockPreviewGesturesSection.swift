@@ -17,6 +17,7 @@ struct DockPreviewGesturesSection: View {
                         Text("Enable gestures on dock window previews")
                     }
                 }
+                .settingsSearchTarget("gestures.dockPreview")
 
                 if enableDockPreviewGestures {
                     Text("Swipe on window previews in the dock popup. Direction is relative to dock position — swipe towards the dock (e.g., down when dock is at bottom, left when dock is on left).")
@@ -32,6 +33,7 @@ struct DockPreviewGesturesSection: View {
                         description: "Swipe toward the dock edge",
                         action: $dockSwipeTowardsDockAction
                     )
+                    .settingsSearchTarget("gestures.swipeTowardsDock")
 
                     GestureDirectionRow(
                         direction: "Away from Dock",
@@ -39,6 +41,7 @@ struct DockPreviewGesturesSection: View {
                         description: "Swipe away from the dock edge",
                         action: $dockSwipeAwayFromDockAction
                     )
+                    .settingsSearchTarget("gestures.swipeAwayFromDock")
 
                     Divider()
 
@@ -66,6 +69,7 @@ struct DockPreviewGesturesSection: View {
                         .pickerStyle(.menu)
                         .labelsHidden()
                     }
+                    .settingsSearchTarget("gestures.aeroShake")
 
                     Button("Reset to Defaults") {
                         dockSwipeTowardsDockAction = Defaults.Keys.dockSwipeTowardsDockAction.defaultValue

@@ -35,6 +35,7 @@ struct BackgroundAppearanceSection: View {
                     .pickerStyle(.segmented)
                     .labelsHidden()
                     .frame(maxWidth: 250)
+                    .settingsSearchTarget("appearance.backgroundStyle")
                 }
 
                 if isFrosted {
@@ -51,6 +52,7 @@ struct BackgroundAppearanceSection: View {
                         .labelsHidden()
                         .frame(maxWidth: 150)
                     }
+                    .settingsSearchTarget("appearance.material")
                 }
 
                 if isGlass {
@@ -126,6 +128,7 @@ struct BackgroundAppearanceSection: View {
                         .padding(.top, 6)
                     }
                     .font(.body)
+                    .settingsSearchTarget("appearance.glassTuning")
                 }
             }
         }

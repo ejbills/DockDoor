@@ -19,6 +19,7 @@ struct CmdTabAppearanceSection: View {
         VStack(alignment: .leading, spacing: 10) {
             // App Header section
             Toggle("Show App Header", isOn: $cmdTabShowAppName)
+                .settingsSearchTarget("appearance.cmdTabShowAppHeader")
 
             if cmdTabShowAppName {
                 Picker("App Header Style", selection: $cmdTabAppNameStyle) {
@@ -27,7 +28,9 @@ struct CmdTabAppearanceSection: View {
                             .tag(style)
                     }
                 }
+                .settingsSearchTarget("appearance.cmdTabAppHeaderStyle")
                 Toggle("Show App Icon Only", isOn: $cmdTabShowAppIconOnly)
+                    .settingsSearchTarget("appearance.cmdTabShowAppIconOnly")
             }
 
             // Toolbar section
@@ -41,8 +44,10 @@ struct CmdTabAppearanceSection: View {
                 }
             }
             .pickerStyle(MenuPickerStyle())
+            .settingsSearchTarget("appearance.cmdTabControlPosition")
 
             Toggle("Show Window Title", isOn: $cmdTabShowWindowTitle)
+                .settingsSearchTarget("appearance.cmdTabShowWindowTitle")
 
             if cmdTabShowWindowTitle {
                 Picker("Window Title Visibility", selection: $cmdTabWindowTitleVisibility) {
@@ -51,11 +56,13 @@ struct CmdTabAppearanceSection: View {
                             .tag(visibility)
                     }
                 }
+                .settingsSearchTarget("appearance.cmdTabWindowTitleVisibility")
 
                 VStack(alignment: .leading) {
                     Toggle(isOn: $cmdTabDisableDockStyleTitles) {
                         Text("Disable dock styling on window titles")
                     }
+                    .settingsSearchTarget("appearance.cmdTabDisableTitleStyling")
                     Text("Removes the pill-shaped background styling from window titles.")
                         .font(.footnote)
                         .foregroundColor(.gray)
@@ -73,6 +80,7 @@ struct CmdTabAppearanceSection: View {
                         .tag(visibility)
                 }
             }
+            .settingsSearchTarget("appearance.cmdTabTrafficLightVisibility")
 
             if cmdTabTrafficLightButtonsVisibility != .never {
                 Text("Enabled Buttons")
@@ -96,11 +104,13 @@ struct CmdTabAppearanceSection: View {
                     )
                 }
                 Toggle("Use Monochrome Colors", isOn: $cmdTabUseMonochromeTrafficLights)
+                    .settingsSearchTarget("appearance.cmdTabMonochrome")
 
                 VStack(alignment: .leading) {
                     Toggle(isOn: $cmdTabDisableDockStyleTrafficLights) {
                         Text("Disable dock styling on traffic light buttons")
                     }
+                    .settingsSearchTarget("appearance.cmdTabDisableTrafficLightStyling")
                     Text("Removes the pill-shaped background styling from traffic light buttons.")
                         .font(.footnote)
                         .foregroundColor(.gray)
@@ -116,6 +126,7 @@ struct CmdTabAppearanceSection: View {
                 Toggle(isOn: $cmdTabUseEmbeddedDockPreviewElements) {
                     Text("Embed controls in preview frames")
                 }
+                .settingsSearchTarget("appearance.cmdTabEmbedControls")
                 Text("Places traffic light buttons and window titles directly inside the preview frames.")
                     .font(.footnote)
                     .foregroundColor(.gray)

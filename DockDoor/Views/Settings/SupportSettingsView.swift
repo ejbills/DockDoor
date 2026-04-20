@@ -31,6 +31,7 @@ struct SupportSettingsView: View {
                     isGranted: permissionsChecker.accessibilityPermission,
                     action: { SystemPreferencesHelper.openAccessibilityPreferences() }
                 )
+                .settingsSearchTarget("support.accessibility")
 
                 Divider().padding(.leading, 40)
 
@@ -41,6 +42,7 @@ struct SupportSettingsView: View {
                     isGranted: permissionsChecker.screenRecordingPermission,
                     action: { SystemPreferencesHelper.openScreenRecordingPreferences() }
                 )
+                .settingsSearchTarget("support.screenRecording")
             }
 
             Text("Changes to permissions require an app restart to take effect.")
@@ -96,6 +98,7 @@ struct SupportSettingsView: View {
                     .labelsHidden()
                     .frame(width: 100)
                 }
+                .settingsSearchTarget("support.updateChannel")
 
                 Divider().padding(.leading, 40)
 
@@ -119,6 +122,7 @@ struct SupportSettingsView: View {
                     .buttonStyle(AccentButtonStyle(small: true))
                     .disabled(!updaterState.canCheckForUpdates)
                 }
+                .settingsSearchTarget("support.checkForUpdates")
 
                 Divider().padding(.leading, 40)
 
@@ -142,11 +146,13 @@ struct SupportSettingsView: View {
                     ))
                     .labelsHidden()
                 }
+                .settingsSearchTarget("support.automaticUpdates")
 
                 Divider().padding(.leading, 40)
 
                 // Debug logging
                 DebugLoggingRow()
+                    .settingsSearchTarget("support.debugLogging")
             }
         }
     }

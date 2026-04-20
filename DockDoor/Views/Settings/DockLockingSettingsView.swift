@@ -34,6 +34,7 @@ struct DockLockingSettingsView: View {
             ) {
                 Text("Prevent the Dock from jumping to other monitors when your cursor reaches the screen edge.")
             }
+            .settingsSearchTarget("dockLocking.enable")
             .onChange(of: enableDockLocking) { isOn in
                 if isOn, lockedDockScreenIdentifier.isEmpty {
                     lockedDockScreenIdentifier = NSScreen.main?.uniqueIdentifier() ?? ""
@@ -57,6 +58,7 @@ struct DockLockingSettingsView: View {
                     }
                 }
                 .pickerStyle(.menu)
+                .settingsSearchTarget("dockLocking.screen")
 
                 if isLockedScreenDisconnected {
                     Text("This display is currently disconnected. Dock locking will be disabled until it reconnects.")
@@ -74,6 +76,7 @@ struct DockLockingSettingsView: View {
                     }
                 }
                 .pickerStyle(.menu)
+                .settingsSearchTarget("dockLocking.bypass")
 
                 Text("Hold this key to temporarily allow the Dock to move freely.")
                     .font(.caption)

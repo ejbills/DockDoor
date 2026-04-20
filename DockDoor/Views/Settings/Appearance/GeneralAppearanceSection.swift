@@ -22,6 +22,7 @@ struct GeneralAppearanceSection: View {
                     }
                 }
                 .pickerStyle(.segmented)
+                .settingsSearchTarget("appearance.theme")
                 .onChange(of: appAppearanceMode) { newMode in
                     applyAppearanceMode(newMode)
                 }
@@ -39,6 +40,7 @@ struct GeneralAppearanceSection: View {
                         return f
                     }()
                 )
+                .settingsSearchTarget("appearance.spacingScale")
 
                 sliderSetting(
                     title: "Unselected Content Opacity",
@@ -48,11 +50,13 @@ struct GeneralAppearanceSection: View {
                     unit: "",
                     formatter: NumberFormatter.percentFormatter
                 )
+                .settingsSearchTarget("appearance.unselectedOpacity")
 
                 VStack(alignment: .leading) {
                     Toggle(isOn: $uniformCardRadius) {
                         Text("Rounded corners")
                     }
+                    .settingsSearchTarget("appearance.roundedCorners")
                     Text("Round the corners of window preview images for a modern look.")
                         .font(.footnote)
                         .foregroundColor(.gray)
@@ -63,6 +67,7 @@ struct GeneralAppearanceSection: View {
                     Toggle(isOn: $enableTitleMarquee) {
                         Text("Scroll long titles (marquee)")
                     }
+                    .settingsSearchTarget("appearance.marquee")
                     Text("When disabled, long titles remain static instead of scrolling.")
                         .font(.footnote)
                         .foregroundColor(.gray)
@@ -73,6 +78,7 @@ struct GeneralAppearanceSection: View {
                     Toggle(isOn: $showMinimizedHiddenLabels) {
                         Text("Distinguish minimized/hidden windows")
                     }
+                    .settingsSearchTarget("appearance.distinguishMinimized")
                     Text("When enabled, shows visual indicators and dims minimized/hidden windows. When disabled, treats them as normal windows with full functionality.")
                         .font(.footnote)
                         .foregroundColor(.gray)
@@ -83,6 +89,7 @@ struct GeneralAppearanceSection: View {
                     Toggle(isOn: $hidePreviewCardBackground) {
                         Text("Hide preview card background")
                     }
+                    .settingsSearchTarget("appearance.hidePreviewBackground")
                     Text("Removes the background panel from individual window previews.")
                         .font(.footnote)
                         .foregroundColor(.gray)
@@ -93,6 +100,7 @@ struct GeneralAppearanceSection: View {
                     Toggle(isOn: $hideHoverContainerBackground) {
                         Text("Hide hover container background")
                     }
+                    .settingsSearchTarget("appearance.hideContainerBackground")
                     Text("Removes the container background from window preview panels.")
                         .font(.footnote)
                         .foregroundColor(.gray)
@@ -103,6 +111,7 @@ struct GeneralAppearanceSection: View {
                     Toggle(isOn: $hideWidgetContainerBackground) {
                         Text("Hide widget container background")
                     }
+                    .settingsSearchTarget("appearance.hideWidgetBackground")
                     Text("Removes the container background from widget panels (media controls, calendar).")
                         .font(.footnote)
                         .foregroundColor(.gray)
@@ -113,6 +122,7 @@ struct GeneralAppearanceSection: View {
                     Toggle(isOn: $showActiveWindowBorder) {
                         Text("Show active window border")
                     }
+                    .settingsSearchTarget("appearance.activeBorder")
                     Text("Highlights the currently focused window with a colored border.")
                         .font(.footnote)
                         .foregroundColor(.gray)

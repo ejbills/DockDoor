@@ -22,6 +22,7 @@ struct WindowSwitcherAppearanceSection: View {
                 }
             }
             .pickerStyle(MenuPickerStyle())
+            .settingsSearchTarget("appearance.switcherControlPosition")
 
             Divider().padding(.vertical, 2)
             Text("Traffic Light Buttons").font(.headline).padding(.bottom, -2)
@@ -32,6 +33,7 @@ struct WindowSwitcherAppearanceSection: View {
                         .tag(visibility)
                 }
             }
+            .settingsSearchTarget("appearance.switcherTrafficLightVisibility")
 
             if switcherTrafficLightButtonsVisibility != .never {
                 Text("Enabled Buttons")
@@ -55,11 +57,13 @@ struct WindowSwitcherAppearanceSection: View {
                     )
                 }
                 Toggle("Use Monochrome Colors", isOn: $switcherUseMonochromeTrafficLights)
+                    .settingsSearchTarget("appearance.switcherMonochrome")
 
                 VStack(alignment: .leading) {
                     Toggle(isOn: $switcherDisableDockStyleTrafficLights) {
                         Text("Disable dock styling on traffic light buttons")
                     }
+                    .settingsSearchTarget("appearance.switcherDisableTrafficLightStyling")
                     Text("Removes the pill-shaped background styling from traffic light buttons.")
                         .font(.footnote)
                         .foregroundColor(.gray)
@@ -70,6 +74,7 @@ struct WindowSwitcherAppearanceSection: View {
             Text("Window Title").font(.headline).padding(.bottom, -2)
 
             Toggle("Show Window Title", isOn: $switcherShowWindowTitle)
+                .settingsSearchTarget("appearance.switcherShowWindowTitle")
 
             if switcherShowWindowTitle {
                 Picker("Visibility", selection: $switcherWindowTitleVisibility) {
@@ -78,6 +83,7 @@ struct WindowSwitcherAppearanceSection: View {
                             .tag(visibility)
                     }
                 }
+                .settingsSearchTarget("appearance.switcherWindowTitleVisibility")
             }
 
             Divider().padding(.vertical, 2)
@@ -88,6 +94,7 @@ struct WindowSwitcherAppearanceSection: View {
                     Text(direction.localizedName).tag(direction)
                 }
             }
+            .settingsSearchTarget("appearance.switcherScrollDirection")
 
             VStack(alignment: .leading, spacing: 4) {
                 let switcherMaxRowsBinding = Binding<Double>(
@@ -109,6 +116,7 @@ struct WindowSwitcherAppearanceSection: View {
                         return f
                     }()
                 )
+                .settingsSearchTarget("appearance.switcherMaxRows")
 
                 Text(windowSwitcherScrollDirection == .horizontal
                     ? String(localized: "Controls how many rows of windows are shown in the window switcher. Windows are distributed across rows automatically.")
@@ -119,6 +127,7 @@ struct WindowSwitcherAppearanceSection: View {
                 Toggle(isOn: $switcherIgnoreScreenLimit) {
                     Text("Ignore screen size limit")
                 }
+                .settingsSearchTarget("appearance.switcherIgnoreScreenLimit")
                 Text("Allow columns/rows to exceed what fits on screen. May cause previews to extend beyond screen edges.")
                     .font(.caption)
                     .foregroundColor(.secondary)
