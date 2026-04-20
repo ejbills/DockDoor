@@ -6,21 +6,18 @@ struct MediaScrollModifier: ViewModifier {
     @ObservedObject var mediaInfo: MediaInfo
     @State private var scrollMonitor: Any?
     @State private var seekDebounceWork: DispatchWorkItem?
-    @State private var isHovered: Bool = false
+    @State private var hitTestView: NSView?
 
     func body(content: Content) -> some View {
         content
-            .onHover { hovering in
-                isHovered = hovering
-            }
+            .background(ScrollHitTestHelper(view: $hitTestView))
             .onAppear { setupMonitor() }
             .onDisappear { removeMonitor() }
     }
 
     private func setupMonitor() {
         scrollMonitor = NSEvent.addLocalMonitorForEvents(matching: .scrollWheel) { event in
-            handleScroll(event)
-            return event
+            handleScroll(event) ? nil : event
         }
     }
 
@@ -31,13 +28,18 @@ struct MediaScrollModifier: ViewModifier {
         }
     }
 
-    private func handleScroll(_ event: NSEvent) {
-        guard isHovered else { return }
-        guard event.window != nil else { return }
+    @discardableResult
+    private func handleScroll(_ event: NSEvent) -> Bool {
+        guard let hitTestView,
+              let viewWindow = hitTestView.window,
+              event.window == viewWindow else { return false }
+
+        let locationInView = hitTestView.convert(event.locationInWindow, from: nil)
+        guard hitTestView.bounds.contains(locationInView) else { return false }
 
         let isHorizontal = Defaults[.mediaWidgetScrollDirection] == .horizontal
         let delta: CGFloat = isHorizontal ? event.scrollingDeltaX : event.scrollingDeltaY
-        guard abs(delta) > 0.5 else { return }
+        guard abs(delta) > 0.5 else { return false }
 
         let normalizedDelta: CGFloat = if isHorizontal {
             event.isDirectionInvertedFromDevice ? delta : -delta
@@ -54,6 +56,8 @@ struct MediaScrollModifier: ViewModifier {
         case .seekPlayback:
             handleSeekScroll(deltaY: normalizedDelta)
         }
+
+        return true
     }
 
     private func handleSeekScroll(deltaY: CGFloat) {
@@ -77,6 +81,22 @@ struct MediaScrollModifier: ViewModifier {
         }
         seekDebounceWork = work
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2, execute: work)
+    }
+}
+
+private struct ScrollHitTestHelper: NSViewRepresentable {
+    @Binding var view: NSView?
+
+    func makeNSView(context: Context) -> NSView {
+        let nsView = NSView()
+        DispatchQueue.main.async { view = nsView }
+        return nsView
+    }
+
+    func updateNSView(_ nsView: NSView, context: Context) {
+        if view !== nsView {
+            DispatchQueue.main.async { view = nsView }
+        }
     }
 }
 
