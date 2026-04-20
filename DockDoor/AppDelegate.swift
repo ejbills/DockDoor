@@ -214,7 +214,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
             await MainActor.run { [weak self] in
                 guard let self else { return }
-                NSApp.activate(ignoringOtherApps: true)
+                if Defaults[.activateOnWake] {
+                    NSApp.activate(ignoringOtherApps: true)
+                }
                 dockObserver?.reset()
                 keybindHelper?.reset()
                 appClosureObserver?.reset()

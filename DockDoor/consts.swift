@@ -143,6 +143,7 @@ extension Defaults.Keys {
     static let raisedWindowLevel = Key<Bool>("raisedWindowLevel", default: true)
     static let launched = Key<Bool>("launched", default: false)
     static let reopenSettingsAfterRestart = Key<Bool>("reopenSettingsAfterRestart", default: false)
+    static let activateOnWake = Key<Bool>("activateOnWake", default: true)
     static let disableMinWindowSizeFilter = Key<Bool>("disableMinWindowSizeFilter", default: false)
     static let Int64maskCommand = Key<Int>("Int64maskCommand", default: 1_048_840)
     static let Int64maskControl = Key<Int>("Int64maskControl", default: 262_401)
