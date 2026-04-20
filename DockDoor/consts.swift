@@ -120,6 +120,7 @@ extension Defaults.Keys {
     static let enableVimMotions = Key<Bool>("enableVimMotions", default: false)
     static let passArrowsThroughToSystem = Key<Bool>("passArrowsThroughToSystem", default: false)
     static let enableWindowSwitcherSearch = Key<Bool>("enableWindowSwitcherSearch", default: false)
+    static let focusSearchOnWindowSwitcherOpen = Key<Bool>("focusSearchOnWindowSwitcherOpen", default: false)
     static let searchTriggerKey = Key<UInt16>("searchTriggerKey", default: UInt16(kVK_ANSI_Slash))
     static let compactModeTitleFormat = Key<CompactModeTitleFormat>("compactModeTitleFormat", default: .appNameAndTitle)
     static let compactModeItemSize = Key<CompactModeItemSize>("compactModeItemSize", default: .medium)

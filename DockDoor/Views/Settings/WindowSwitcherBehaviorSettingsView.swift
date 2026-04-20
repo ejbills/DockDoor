@@ -6,6 +6,7 @@ struct WindowSwitcherBehaviorSettingsView: View {
     @Default(.enableWindowSwitcher) var enableWindowSwitcher
     @Default(.instantWindowSwitcher) var instantWindowSwitcher
     @Default(.enableWindowSwitcherSearch) var enableWindowSwitcherSearch
+    @Default(.focusSearchOnWindowSwitcherOpen) var focusSearchOnWindowSwitcherOpen
     @Default(.searchFuzziness) var searchFuzziness
     @Default(.preventSwitcherHide) var preventSwitcherHide
     @Default(.enableMouseHoverInSwitcher) var enableMouseHoverInSwitcher
@@ -148,6 +149,13 @@ struct WindowSwitcherBehaviorSettingsView: View {
             VStack(alignment: .leading, spacing: 10) {
                 Toggle(isOn: $enableWindowSwitcherSearch) { Text("Enable search") }
                 if enableWindowSwitcherSearch {
+                    Toggle(isOn: $focusSearchOnWindowSwitcherOpen) { Text("Focus search on open") }
+                        .padding(.leading, 20)
+                    Text("Automatically focus the search bar when the window switcher opens.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                        .padding(.leading, 20)
+
                     HStack {
                         Text("Search Fuzziness")
                         Slider(value: Binding(

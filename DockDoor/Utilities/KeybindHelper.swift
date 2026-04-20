@@ -196,6 +196,10 @@ private class WindowSwitchingCoordinator {
             let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
             showWindowLambda(convertedMouseLocation, mouseScreen)
         }
+
+        if Defaults[.focusSearchOnWindowSwitcherOpen], Defaults[.enableWindowSwitcherSearch] {
+            previewCoordinator.focusSearchWindow()
+        }
     }
 
     private func getTargetScreenForSwitcher() -> NSScreen {
@@ -986,6 +990,9 @@ class KeybindHelper {
         guard Defaults[.enableWindowSwitcher] else { return }
         hasProcessedModifierRelease = false
         currentInvocationMode = mode
+        if Defaults[.focusSearchOnWindowSwitcherOpen], Defaults[.enableWindowSwitcherSearch] {
+            preventSwitcherHideOnRelease = true
+        }
         Task { @MainActor in
             await windowSwitchingCoordinator.handleWindowSwitching(
                 previewCoordinator: previewCoordinator,
