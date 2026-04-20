@@ -1246,6 +1246,10 @@ header {
         display: flex;
         justify-content: center;
     }
+
+    .from-dev-section {
+        order: 3;
+    }
     
     .hero-actions {
         justify-content: center;
@@ -2159,6 +2163,38 @@ details[open] .faq-question i {
 
 .from-dev-featured .from-dev-price {
     color: #3b82f6;
+}
+
+@media (max-width: 768px) {
+    .from-dev-cards {
+        flex-direction: column;
+        width: 100%;
+        gap: 0.5rem;
+    }
+
+    .from-dev-card {
+        width: 100%;
+        display: flex;
+        padding: 0.75rem;
+        border-radius: 12px;
+        gap: 0.75rem;
+    }
+
+    .from-dev-featured {
+        padding: 0.75rem;
+        padding-top: 1.5rem;
+    }
+
+    .from-dev-content {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .from-dev-description {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 }
 
 /* Nav Pro link */
