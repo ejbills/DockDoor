@@ -7,6 +7,7 @@ enum MediaControlsLayout {
     static let artworkSize: CGFloat = 55
     static let artworkCornerRadius: CGFloat = 6
     static let artworkTextSpacing: CGFloat = 12
+    static let compactContentWidth: CGFloat = 280
     static let mediaButtonsSpacing: CGFloat = 20
     static let progressBarHeight: CGFloat = 20
     static let skeletonOpacity: Double = 0.25
@@ -108,19 +109,17 @@ struct MediaControlsView: View {
             coreContent()
         }
         .onAppear {
-            isLoadingMediaInfo = true
             loadAppIcon()
             mediaInfo.viewAppeared()
             if let artwork = mediaInfo.artwork {
                 dominantArtworkColor = artwork.averageColor()
             }
             hasAppeared = false
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) { // allows the swiftui content to fix its frame size before cached media is returned
-                if !mediaInfo.title.isEmpty {
-                    withAnimation(showAnimations ? .smooth(duration: 0.225) : nil) {
-                        isLoadingMediaInfo = false
-                    }
-                }
+
+            if mediaInfo.title.isEmpty {
+                isLoadingMediaInfo = true
+            } else {
+                isLoadingMediaInfo = false
             }
         }
         .onChange(of: mediaInfo.artwork) { newArtwork in
