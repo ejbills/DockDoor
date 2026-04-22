@@ -130,7 +130,7 @@ final class MediaRemoteService: ObservableObject {
         let sameTrack = sameSource && payload.title == title && payload.artist == artist
         let resolvedArtwork: NSImage? = if let incoming = payload.artwork {
             incoming
-        } else if sameTrack || sameSource {
+        } else if sameTrack {
             artwork
         } else {
             nil

@@ -693,6 +693,10 @@ final class MediaInfo: ObservableObject {
 
         currentTime = newCurrentTime
 
+        if trackChanged {
+            artwork = nil
+        }
+
         if components.count > 6, !components[6].isEmpty {
             artworkFetchTask?.cancel()
             artworkFetchTask = Task {
