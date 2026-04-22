@@ -3,6 +3,7 @@ import SwiftUI
 
 struct WidgetHoverContainer<Content: View>: View {
     let appName: String
+    let bundleIdentifier: String
     let bestGuessMonitor: NSScreen
     let dockPosition: DockPosition
     let dockItemElement: AXUIElement?
@@ -18,6 +19,7 @@ struct WidgetHoverContainer<Content: View>: View {
 
     init(
         appName: String,
+        bundleIdentifier: String,
         bestGuessMonitor: NSScreen,
         dockPosition: DockPosition,
         dockItemElement: AXUIElement?,
@@ -29,6 +31,7 @@ struct WidgetHoverContainer<Content: View>: View {
         @ViewBuilder content: () -> Content
     ) {
         self.appName = appName
+        self.bundleIdentifier = bundleIdentifier
         self.bestGuessMonitor = bestGuessMonitor
         self.dockPosition = dockPosition
         self.dockItemElement = dockItemElement
@@ -87,6 +90,10 @@ struct WidgetHoverContainer<Content: View>: View {
             isWidget: true,
             backgroundAppearance: backgroundAppearance
         )
+        .contentShape(Rectangle())
+        .onTapGesture {
+            activateApp()
+        }
     }
 
     private var pinnedContent: some View {
@@ -107,5 +114,15 @@ struct WidgetHoverContainer<Content: View>: View {
         }
         .padding(HoverContainerPadding.dockStyleOuter)
         .padding(.top, (appNameStyle == .popover && showAppTitleData) ? 30 : 0)
+        .contentShape(Rectangle())
+        .onTapGesture {
+            activateApp()
+        }
+    }
+
+    private func activateApp() {
+        guard let app = NSRunningApplication.runningApplications(withBundleIdentifier: bundleIdentifier).first else { return }
+        if app.isHidden { app.unhide() }
+        app.activate(options: [.activateIgnoringOtherApps])
     }
 }

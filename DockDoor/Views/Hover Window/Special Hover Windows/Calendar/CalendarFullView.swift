@@ -19,6 +19,7 @@ struct CalendarFullView: View {
     var body: some View {
         WidgetHoverContainer(
             appName: appName,
+            bundleIdentifier: bundleIdentifier,
             bestGuessMonitor: bestGuessMonitor,
             dockPosition: dockPosition,
             dockItemElement: dockItemElement,

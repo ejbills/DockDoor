@@ -7,6 +7,7 @@ struct MarqueeText: View {
     var maxWidth: Double?
 
     @State private var textSize: CGSize = .zero
+    @State private var containerWidth: CGFloat = 0
     @Default(.enableTitleMarquee) private var enableTitleMarquee
 
     init(text: String, startDelay: Double = 3.0, maxWidth: Double? = nil) {
@@ -15,39 +16,50 @@ struct MarqueeText: View {
         self.maxWidth = maxWidth
     }
 
-    @State private var renderedSize: CGSize = .zero
-
     private var measured: Bool { textSize != .zero }
 
     private var available: CGFloat {
         if let maxWidth { return CGFloat(maxWidth) }
-        return renderedSize.width
+        return containerWidth
     }
 
     private var shouldScroll: Bool {
         enableTitleMarquee && measured && available > 0 && textSize.width > available
     }
 
+    private var outerWidth: CGFloat? {
+        if let maxWidth { return CGFloat(maxWidth) }
+        guard measured, containerWidth > 0 else { return nil }
+        if shouldScroll { return containerWidth }
+        return min(textSize.width, containerWidth)
+    }
+
     var body: some View {
-        Group {
-            if shouldScroll {
-                MarqueeNativeBridge(
-                    text: text,
-                    textWidth: textSize.width,
-                    maxWidth: available,
-                    delay: startDelay,
-                    speed: 15,
-                    spacing: 8,
-                    fadeLength: 4
-                )
-                .frame(width: available, height: textSize.height)
-            } else {
-                Text(text)
-                    .lineLimit(1)
-                    .truncationMode(.tail)
+        GeometryReader { geo in
+            Group {
+                if shouldScroll {
+                    MarqueeNativeBridge(
+                        text: text,
+                        textWidth: textSize.width,
+                        maxWidth: available,
+                        delay: startDelay,
+                        speed: 15,
+                        spacing: 8,
+                        fadeLength: 4
+                    )
+                    .frame(width: available, height: textSize.height)
+                } else {
+                    Text(text)
+                        .lineLimit(1)
+                        .truncationMode(.tail)
+                }
+            }
+            .onAppear { containerWidth = geo.size.width }
+            .onChange(of: geo.size.width) { newWidth in
+                containerWidth = newWidth
             }
         }
-        .measure($renderedSize)
+        .frame(width: outerWidth, height: measured ? textSize.height : nil)
         .background {
             Text(text)
                 .lineLimit(1)
