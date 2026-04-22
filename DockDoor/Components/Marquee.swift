@@ -108,7 +108,6 @@ final class MarqueeNativeView: NSView {
     private var duplicateHost: NSHostingView<AnyView>?
     private var activeConfig: Config?
     private var laidOutConfig: Config?
-    private var scrolling = false
     private var didSetup = false
 
     private func setupIfNeeded() {
@@ -130,7 +129,11 @@ final class MarqueeNativeView: NSView {
 
     override func viewDidMoveToWindow() {
         super.viewDidMoveToWindow()
-        if window == nil { scrolling = false }
+        if window == nil {
+            scrollContainer.layer?.removeAnimation(forKey: "marquee")
+        } else if let config = laidOutConfig {
+            startAnimation(config)
+        }
     }
 
     func configure(
@@ -148,7 +151,7 @@ final class MarqueeNativeView: NSView {
             duplicateHost?.rootView = content
             return
         }
-        scrolling = false
+        scrollContainer.layer?.removeAnimation(forKey: "marquee")
         activeConfig = config
 
         if primaryHost == nil {
@@ -176,7 +179,6 @@ final class MarqueeNativeView: NSView {
         let stride = tw + sp
         let hostW = tw + 100
 
-        // Offset text by fadeLength so it starts after the fade zone
         primaryHost?.frame = CGRect(x: fl, y: 0, width: hostW, height: h)
         duplicateHost?.frame = CGRect(x: fl + stride, y: 0, width: hostW, height: h)
         let totalW = fl + stride + hostW
@@ -191,33 +193,26 @@ final class MarqueeNativeView: NSView {
         mask.locations = [0, NSNumber(value: r), NSNumber(value: 1 - r), 1]
         layer?.mask = mask
 
-        scrolling = true
-        runScrollCycle(config)
+        startAnimation(config)
     }
 
-    private func runScrollCycle(_ config: Config) {
-        guard scrolling else { return }
+    private func startAnimation(_ config: Config) {
+        scrollContainer.layer?.removeAnimation(forKey: "marquee")
+        guard window != nil else { return }
 
         let dist = config.textWidth + config.spacing
-        let duration = Double(dist) / config.speed
+        let scrollDuration = dist / config.speed
+        let totalDuration = config.delay + scrollDuration
+        let delayFrac = config.delay / totalDuration
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + config.delay) { [weak self] in
-            guard let self, scrolling else { return }
+        let anim = CAKeyframeAnimation(keyPath: "transform.tx")
+        anim.values = [0.0, 0.0, -dist]
+        anim.keyTimes = [0, NSNumber(value: delayFrac), 1.0]
+        anim.duration = totalDuration
+        anim.repeatCount = .infinity
+        anim.calculationMode = .linear
 
-            NSAnimationContext.runAnimationGroup { ctx in
-                ctx.duration = duration
-                ctx.timingFunction = CAMediaTimingFunction(name: .linear)
-                ctx.allowsImplicitAnimation = true
-                self.scrollContainer.animator().frame.origin.x = -dist
-            } completionHandler: { [weak self] in
-                guard let self, scrolling else { return }
-                CATransaction.begin()
-                CATransaction.setDisableActions(true)
-                scrollContainer.frame.origin.x = 0
-                CATransaction.commit()
-                runScrollCycle(config)
-            }
-        }
+        scrollContainer.layer?.add(anim, forKey: "marquee")
     }
 
     private struct Config: Equatable {
