@@ -454,10 +454,11 @@ class KeybindHelper {
                flags.contains(.maskCommand)
             {
                 let keyBoardShortcutSaved: UserKeyBind = Defaults[.UserKeybind]
-                let isCustomKeybind = (keyCode == keyBoardShortcutSaved.keyCode) &&
+                let isActiveCustomKeybind = Defaults[.enableWindowSwitcher] &&
+                    (keyCode == keyBoardShortcutSaved.keyCode) &&
                     (keyBoardShortcutSaved.modifierFlags & Int(CGEventFlags.maskCommand.rawValue)) != 0
 
-                if !isCustomKeybind {
+                if !isActiveCustomKeybind {
                     DockObserver.activeInstance?.startCmdTabPolling()
                 }
             }
