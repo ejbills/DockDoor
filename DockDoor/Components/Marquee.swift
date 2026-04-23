@@ -4,14 +4,18 @@ struct MarqueeText: View {
     var text: String
     var startDelay: Double
     var maxWidth: Double?
+    var truncationMode: Text.TruncationMode
+    var enableScrolling: Bool
 
     @State private var textSize: CGSize = .zero
     @State private var containerWidth: CGFloat = 0
 
-    init(text: String, startDelay: Double = 3.0, maxWidth: Double? = nil) {
+    init(text: String, startDelay: Double = 3.0, maxWidth: Double? = nil, truncationMode: Text.TruncationMode = .tail, enableScrolling: Bool = true) {
         self.text = text
         self.startDelay = startDelay
         self.maxWidth = maxWidth
+        self.truncationMode = truncationMode
+        self.enableScrolling = enableScrolling
     }
 
     private var measured: Bool { textSize != .zero }
@@ -22,7 +26,7 @@ struct MarqueeText: View {
     }
 
     private var shouldScroll: Bool {
-        measured && available > 0 && textSize.width > available
+        enableScrolling && measured && available > 0 && textSize.width > available
     }
 
     private var outerWidth: CGFloat? {
@@ -45,7 +49,7 @@ struct MarqueeText: View {
                 } else {
                     Text(text)
                         .lineLimit(1)
-                        .truncationMode(.tail)
+                        .truncationMode(truncationMode)
                 }
             }
             .onAppear { containerWidth = geo.size.width }

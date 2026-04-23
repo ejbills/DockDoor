@@ -161,11 +161,11 @@ struct WindowPreview: View, Equatable {
         case .marquee:
             MarqueeText(text: text, startDelay: 1)
         case .truncateTail:
-            Text(text).lineLimit(1).truncationMode(.tail)
+            MarqueeText(text: text, truncationMode: .tail, enableScrolling: false)
         case .truncateMiddle:
-            Text(text).lineLimit(1).truncationMode(.middle)
+            MarqueeText(text: text, truncationMode: .middle, enableScrolling: false)
         case .truncateHead:
-            Text(text).lineLimit(1).truncationMode(.head)
+            MarqueeText(text: text, truncationMode: .head, enableScrolling: false)
         }
     }
 
