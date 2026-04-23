@@ -716,7 +716,7 @@ struct WindowPreviewHoverContainer: View {
                     let chunkedItems = createChunkedItems(filteredIndices: cachedFilteredIndices)
                     LazyVStack(alignment: .leading, spacing: HoverContainerPadding.itemSpacing) {
                         ForEach(Array(chunkedItems.enumerated()), id: \.offset) { index, rowItems in
-                            LazyHStack(spacing: HoverContainerPadding.itemSpacing) {
+                            HStack(spacing: HoverContainerPadding.itemSpacing) {
                                 ForEach(rowItems, id: \.id) { item in
                                     buildFlowItem(
                                         item: item,
@@ -734,7 +734,7 @@ struct WindowPreviewHoverContainer: View {
                     let chunkedItems = createChunkedItems(filteredIndices: cachedFilteredIndices)
                     LazyHStack(alignment: .top, spacing: HoverContainerPadding.itemSpacing) {
                         ForEach(Array(chunkedItems.enumerated()), id: \.offset) { index, colItems in
-                            LazyVStack(spacing: HoverContainerPadding.itemSpacing) {
+                            VStack(spacing: HoverContainerPadding.itemSpacing) {
                                 ForEach(colItems, id: \.id) { item in
                                     buildFlowItem(
                                         item: item,
