@@ -5,7 +5,7 @@ struct GeneralAppearanceSection: View {
     @Default(.uniformCardRadius) var uniformCardRadius
     @Default(.globalPaddingMultiplier) var globalPaddingMultiplier
     @Default(.unselectedContentOpacity) var unselectedContentOpacity
-    @Default(.enableTitleMarquee) var enableTitleMarquee
+    @Default(.titleOverflowStyle) var titleOverflowStyle
     @Default(.showMinimizedHiddenLabels) var showMinimizedHiddenLabels
     @Default(.hidePreviewCardBackground) var hidePreviewCardBackground
     @Default(.hideHoverContainerBackground) var hideHoverContainerBackground
@@ -64,11 +64,13 @@ struct GeneralAppearanceSection: View {
                 }
 
                 VStack(alignment: .leading) {
-                    Toggle(isOn: $enableTitleMarquee) {
-                        Text("Scroll long titles (marquee)")
+                    Picker("Long title overflow", selection: $titleOverflowStyle) {
+                        ForEach(TitleOverflowStyle.allCases, id: \.self) { style in
+                            Text(style.localizedName).tag(style)
+                        }
                     }
                     .settingsSearchTarget("appearance.marquee")
-                    Text("When disabled, long titles remain static instead of scrolling.")
+                    Text("How to display window titles that are too long to fit.")
                         .font(.footnote)
                         .foregroundColor(.gray)
                         .padding(.leading, 20)

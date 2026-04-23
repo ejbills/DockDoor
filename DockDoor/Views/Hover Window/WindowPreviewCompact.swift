@@ -194,16 +194,20 @@ struct WindowPreviewCompact: View, Equatable {
     @ViewBuilder
     private func titleText(_ text: String, isPrimary: Bool) -> some View {
         let font = isPrimary ? appearance.compactModeItemSize.primaryFont : appearance.compactModeItemSize.secondaryFont
-        if appearance.enableTitleMarquee {
+        switch appearance.titleOverflowStyle {
+        case .marquee:
             MarqueeText(text: text, startDelay: 1)
                 .font(font)
                 .foregroundStyle(isPrimary ? .primary : .secondary)
-        } else {
-            Text(text)
-                .font(font)
-                .foregroundStyle(isPrimary ? .primary : .secondary)
-                .lineLimit(1)
-                .truncationMode(.tail)
+        case .truncateTail:
+            Text(text).font(font).foregroundStyle(isPrimary ? .primary : .secondary)
+                .lineLimit(1).truncationMode(.tail)
+        case .truncateMiddle:
+            Text(text).font(font).foregroundStyle(isPrimary ? .primary : .secondary)
+                .lineLimit(1).truncationMode(.middle)
+        case .truncateHead:
+            Text(text).font(font).foregroundStyle(isPrimary ? .primary : .secondary)
+                .lineLimit(1).truncationMode(.head)
         }
     }
 

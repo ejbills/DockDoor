@@ -525,7 +525,7 @@ struct WindowPreviewHoverContainer: View {
                 Button {
                     closeAllWindows()
                 } label: {
-                    MarqueeText(text: "Close All", startDelay: 1)
+                    Text("Close All")
                         .font(.caption)
                         .lineLimit(1)
                 }
@@ -534,7 +534,7 @@ struct WindowPreviewHoverContainer: View {
                 Button {
                     minimizeAllWindows()
                 } label: {
-                    MarqueeText(text: "Minimize All", startDelay: 1)
+                    Text("Minimize All")
                         .font(.caption)
                         .lineLimit(1)
                 }

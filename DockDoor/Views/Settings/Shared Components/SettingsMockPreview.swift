@@ -88,7 +88,7 @@ struct SettingsMockPreview: View {
     @Default(.compactModeTitleFormat) private var compactModeTitleFormat
     @Default(.compactModeItemSize) private var compactModeItemSize
     @Default(.compactModeHideTrafficLights) private var compactModeHideTrafficLights
-    @Default(.enableTitleMarquee) private var enableTitleMarquee
+    @Default(.titleOverflowStyle) private var titleOverflowStyle
 
     // MARK: - Header settings (used by container)
 
@@ -216,7 +216,7 @@ struct SettingsMockPreview: View {
             compactModeTitleFormat: compactModeTitleFormat,
             compactModeItemSize: compactModeItemSize,
             compactModeHideTrafficLights: compactModeHideTrafficLights,
-            enableTitleMarquee: enableTitleMarquee
+            titleOverflowStyle: titleOverflowStyle
         )
     }
 

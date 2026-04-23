@@ -183,7 +183,7 @@ extension Defaults.Keys {
     static let windowTitleDisplayCondition = Key<WindowTitleDisplayCondition>("windowTitleDisplayCondition", default: .all)
     static let windowTitleVisibility = Key<WindowTitleVisibility>("windowTitleVisibility", default: .alwaysVisible)
     static let windowTitlePosition = Key<WindowTitlePosition>("windowTitlePosition", default: .bottomLeft)
-    static let enableTitleMarquee = Key<Bool>("enableTitleMarquee", default: true)
+    static let titleOverflowStyle = Key<TitleOverflowStyle>("titleOverflowStyle", default: .truncateMiddle)
     static let windowTitleFontSize = Key<WindowTitleFontSize>("windowTitleFontSize", default: .system)
     static let trafficLightButtonsVisibility = Key<TrafficLightButtonsVisibility>("trafficLightButtonsVisibility", default: .dimmedOnPreviewHover)
     static let trafficLightButtonsPosition = Key<TrafficLightButtonsPosition>("trafficLightButtonsPosition", default: .topLeft)
@@ -414,6 +414,26 @@ enum WindowTitleVisibility: String, CaseIterable, Defaults.Serializable {
             String(localized: "When hovering over the preview", comment: "Window title visibility option")
         case .alwaysVisible:
             String(localized: "Always visible", comment: "Window title visibility option")
+        }
+    }
+}
+
+enum TitleOverflowStyle: String, CaseIterable, Defaults.Serializable {
+    case truncateTail
+    case truncateMiddle
+    case truncateHead
+    case marquee
+
+    var localizedName: String {
+        switch self {
+        case .truncateTail:
+            String(localized: "Truncate end", comment: "Title overflow style option")
+        case .truncateMiddle:
+            String(localized: "Truncate middle", comment: "Title overflow style option")
+        case .truncateHead:
+            String(localized: "Truncate start", comment: "Title overflow style option")
+        case .marquee:
+            String(localized: "Marquee (scrolling)", comment: "Title overflow style option")
         }
     }
 }

@@ -580,9 +580,9 @@ enum SettingsSearchCatalog {
         ),
         SettingsSearchItem(
             id: "appearance.marquee",
-            title: String(localized: "Scroll long titles (marquee)"),
-            description: String(localized: "When disabled, long titles remain static instead of scrolling."),
-            keywords: ["marquee", "scroll", "title", "animate"],
+            title: String(localized: "Long title overflow"),
+            description: String(localized: "How to display window titles that are too long to fit."),
+            keywords: ["marquee", "scroll", "title", "truncate", "overflow"],
             tab: "Appearance",
             section: String(localized: "General Appearance"),
             icon: "text.badge.star"

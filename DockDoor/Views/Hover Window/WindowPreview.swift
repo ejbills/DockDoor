@@ -32,7 +32,7 @@ struct PreviewAppearanceSettings: Equatable {
     let compactModeTitleFormat: CompactModeTitleFormat
     let compactModeItemSize: CompactModeItemSize
     let compactModeHideTrafficLights: Bool
-    let enableTitleMarquee: Bool
+    let titleOverflowStyle: TitleOverflowStyle
 
     var isDiagonalPosition: Bool {
         switch controlPosition {
@@ -60,7 +60,7 @@ struct PreviewAppearanceSettings: Equatable {
         .allowDynamicImageSizing, .hidePreviewCardBackground, .tapEquivalentInterval, .previewHoverAction,
         .showActiveWindowBorder, .activeAppIndicatorColor, .showAnimations, .globalPaddingMultiplier,
         .windowTitleFontSize, .trafficLightButtonScale,
-        .previewWidth, .compactModeTitleFormat, .compactModeItemSize, .compactModeHideTrafficLights, .enableTitleMarquee,
+        .previewWidth, .compactModeTitleFormat, .compactModeItemSize, .compactModeHideTrafficLights, .titleOverflowStyle,
     ]
 
     static func resolve(windowSwitcherActive: Bool, dockPosition: DockPosition) -> PreviewAppearanceSettings {
@@ -105,7 +105,7 @@ struct PreviewAppearanceSettings: Equatable {
             compactModeTitleFormat: Defaults[.compactModeTitleFormat],
             compactModeItemSize: Defaults[.compactModeItemSize],
             compactModeHideTrafficLights: Defaults[.compactModeHideTrafficLights],
-            enableTitleMarquee: Defaults[.enableTitleMarquee]
+            titleOverflowStyle: Defaults[.titleOverflowStyle]
         )
     }
 }
@@ -153,6 +153,20 @@ struct WindowPreview: View, Equatable {
               let focusedWindowID = try? focusedWindow.cgWindowId()
         else { return false }
         return windowInfo.id == focusedWindowID
+    }
+
+    @ViewBuilder
+    private func titleLabel(_ text: String) -> some View {
+        switch appearance.titleOverflowStyle {
+        case .marquee:
+            MarqueeText(text: text, startDelay: 1)
+        case .truncateTail:
+            Text(text).lineLimit(1).truncationMode(.tail)
+        case .truncateMiddle:
+            Text(text).lineLimit(1).truncationMode(.middle)
+        case .truncateHead:
+            Text(text).lineLimit(1).truncationMode(.head)
+        }
     }
 
     @ViewBuilder
@@ -218,7 +232,7 @@ struct WindowPreview: View, Equatable {
 
         let titleContent = Group {
             if hasTitle, let title = titleToShow {
-                MarqueeText(text: title, startDelay: 1)
+                titleLabel(title)
                     .font(appearance.windowTitleFontSize.font)
                     .padding(4)
                     .if(!appearance.disableDockStyleTitles) { view in
@@ -468,10 +482,9 @@ struct WindowPreview: View, Equatable {
                windowTitle != windowInfo.app.localizedName,
                shouldShowWindowTitle
             {
-                MarqueeText(text: windowTitle, startDelay: 1)
+                titleLabel(windowTitle)
                     .font(appearance.windowTitleFontSize.font)
                     .foregroundStyle(.secondary)
-                    .lineLimit(1)
             }
         }
         .padding(.trailing, 8)
@@ -556,7 +569,7 @@ struct WindowPreview: View, Equatable {
 
         let titleContent = Group {
             if hasTitle, let title = titleToShow {
-                MarqueeText(text: title, startDelay: 1)
+                titleLabel(title)
                     .font(appearance.windowTitleFontSize.font)
                     .padding(4)
                     .if(!appearance.disableDockStyleTitles) { view in
