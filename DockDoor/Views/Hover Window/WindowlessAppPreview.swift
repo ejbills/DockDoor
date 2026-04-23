@@ -29,32 +29,64 @@ struct WindowlessAppPreview: View, Equatable {
         windowInfo.app.localizedName ?? "Unknown"
     }
 
-    var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            HStack(spacing: 4) {
-                if let appIcon = windowInfo.app.icon {
-                    Image(nsImage: appIcon)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 35, height: 35)
-                }
+    private func titleBar(isLeadingControls: Bool) -> some View {
+        let shouldShowSubtitle = appearance.showWindowTitle &&
+            (appearance.windowTitleVisibility == .alwaysVisible || isSelected || isHovering)
 
-                VStack(alignment: .leading, spacing: 0) {
-                    Text(appName)
-                        .foregroundStyle(.primary)
-                        .lineLimit(1)
-
-                    Text(String(localized: "No Open Windows", comment: "Label for running apps without any open windows in the window switcher"))
-                        .font(appearance.windowTitleFontSize.font)
-                        .foregroundStyle(.secondary)
-                        .italic()
-                        .lineLimit(1)
-                }
-                .padding(.trailing, 8)
-
+        return HStack(spacing: 4) {
+            if appearance.controlPosition.isCentered {
+                Spacer(minLength: 0)
+                appIcon
+                titleContent(showSubtitle: shouldShowSubtitle)
+                Spacer(minLength: 0)
+            } else if isLeadingControls {
+                Spacer(minLength: 8)
+                appIcon
+                titleContent(showSubtitle: shouldShowSubtitle)
+            } else {
+                appIcon
+                titleContent(showSubtitle: shouldShowSubtitle)
                 Spacer(minLength: 0)
             }
-            .padding(.bottom, 4)
+        }
+    }
+
+    @ViewBuilder
+    private var appIcon: some View {
+        if let appIcon = windowInfo.app.icon {
+            Image(nsImage: appIcon)
+                .resizable()
+                .scaledToFit()
+                .frame(width: 35, height: 35)
+        }
+    }
+
+    private func titleContent(showSubtitle: Bool) -> some View {
+        VStack(alignment: .leading, spacing: 0) {
+            Text(appName)
+                .foregroundStyle(.primary)
+                .lineLimit(1)
+
+            if showSubtitle {
+                Text(String(localized: "No Open Windows", comment: "Label for running apps without any open windows in the window switcher"))
+                    .font(appearance.windowTitleFontSize.font)
+                    .foregroundStyle(.secondary)
+                    .italic()
+                    .lineLimit(1)
+            }
+        }
+        .padding(.trailing, 8)
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            if appearance.controlPosition.showsOnTop {
+                let config = appearance.controlPosition.topConfiguration
+                if config.showTitle {
+                    titleBar(isLeadingControls: config.isLeadingControls)
+                        .padding(.bottom, 4)
+                }
+            }
 
             iconContent
                 .clipShape(RoundedRectangle(cornerRadius: CardRadius.image, style: .continuous))
@@ -65,6 +97,14 @@ struct WindowlessAppPreview: View, Equatable {
                     windowSwitcherActive: windowSwitcherActive
                 )
                 .opacity(isSelected ? 1.0 : appearance.unselectedContentOpacity)
+
+            if appearance.controlPosition.showsOnBottom {
+                let config = appearance.controlPosition.bottomConfiguration
+                if config.showTitle {
+                    titleBar(isLeadingControls: config.isLeadingControls)
+                        .padding(.top, 4)
+                }
+            }
         }
         .frame(maxWidth: (dimensions?.maxDimensions.width ?? 0) > 0 ? dimensions!.maxDimensions.width : nil)
         .background {
