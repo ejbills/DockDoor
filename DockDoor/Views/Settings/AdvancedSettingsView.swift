@@ -12,6 +12,7 @@ struct AdvancedSettingsView: View {
     @Default(.preventDockHide) var preventDockHide
     @Default(.raisedWindowLevel) var raisedWindowLevel
     @Default(.disableMinWindowSizeFilter) var disableMinWindowSizeFilter
+    @Default(.openNewWindowForWindowlessApps) var openNewWindowForWindowlessApps
 
     @Default(.windowImageCaptureQuality) var windowImageCaptureQuality
     @Default(.screenCaptureCacheLifespan) var screenCaptureCacheLifespan
@@ -108,6 +109,15 @@ struct AdvancedSettingsView: View {
                 }
                 .settingsSearchTarget("advanced.preventReentry")
                 Text("Moving the mouse back over the preview during fade-out will not reactivate it.")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .padding(.leading, 20)
+
+                Toggle(isOn: $openNewWindowForWindowlessApps) {
+                    Text(String(localized: "Open a new window when clicking windowless apps", comment: "Setting to auto-open new window for apps with no windows"))
+                }
+                .settingsSearchTarget("advanced.openNewWindow")
+                Text(String(localized: "Automatically sends ⌘N to open a new window when activating an app with no windows.", comment: "Description for open new window setting"))
                     .font(.caption)
                     .foregroundColor(.secondary)
                     .padding(.leading, 20)

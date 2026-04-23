@@ -711,6 +711,13 @@ final class DockObserver {
                 return nil
             }
 
+            if type == .leftMouseDown, event.flags.contains(.maskShift),
+               app.bundleIdentifier != Bundle.main.bundleIdentifier
+            {
+                handleShiftClickNewWindow(app: app)
+                return nil
+            }
+
             if type == .leftMouseDown, !previewCoordinator.mouseIsWithinPreviewWindow {
                 let shouldIntercept = handleDockClick(app: app)
                 if shouldIntercept {
@@ -807,6 +814,14 @@ final class DockObserver {
         }
 
         return false
+    }
+
+    private func handleShiftClickNewWindow(app: NSRunningApplication) {
+        previewCoordinator.cancelPendingShow()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) { [weak self] in
+            self?.previewCoordinator.hideWindow()
+        }
+        WindowUtil.activateAndOpenNewWindow(app: app)
     }
 
     private func hideAppWindows(windows: [WindowInfo], app: NSRunningApplication, appName: String) {

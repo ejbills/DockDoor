@@ -1302,6 +1302,13 @@ extension WindowUtil {
         keyUp?.flags = .maskCommand
         keyUp?.postToPid(app.processIdentifier)
     }
+
+    static func activateAndOpenNewWindow(app: NSRunningApplication) {
+        app.activate(options: [.activateIgnoringOtherApps])
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+            openNewWindow(app: app)
+        }
+    }
 }
 
 // MARK: - Private Helper Methods

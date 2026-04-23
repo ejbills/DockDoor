@@ -1538,6 +1538,15 @@ enum SettingsSearchCatalog {
             icon: "arrow.uturn.backward"
         ),
         SettingsSearchItem(
+            id: "advanced.openNewWindow",
+            title: String(localized: "Open a new window when clicking windowless apps"),
+            description: String(localized: "Automatically sends ⌘N to open a new window when activating an app with no windows."),
+            keywords: ["windowless", "new window", "open", "cmd+n"],
+            tab: "Advanced",
+            section: String(localized: "Performance Tuning"),
+            icon: "plus.rectangle.on.rectangle"
+        ),
+        SettingsSearchItem(
             id: "advanced.captureQuality",
             title: String(localized: "Window Image Capture Quality"),
             keywords: ["quality", "capture", "resolution", "image"],

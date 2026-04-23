@@ -145,10 +145,31 @@ struct WindowlessAppPreview: View, Equatable {
             }
         }
         .onTapGesture {
-            windowInfo.app.activate(options: [.activateIgnoringOtherApps])
+            if NSEvent.modifierFlags.contains(.shift) {
+                WindowUtil.activateAndOpenNewWindow(app: windowInfo.app)
+                onTap?()
+                return
+            }
+
+            if Defaults[.openNewWindowForWindowlessApps] {
+                WindowUtil.activateAndOpenNewWindow(app: windowInfo.app)
+            } else {
+                windowInfo.app.activate(options: [.activateIgnoringOtherApps])
+            }
             onTap?()
         }
         .contextMenu {
+            Button(action: {
+                WindowUtil.activateAndOpenNewWindow(app: windowInfo.app)
+            }) {
+                Label(
+                    String(localized: "Open New Window", comment: "Context menu action to open a new window for the app"),
+                    systemImage: "plus.rectangle.on.rectangle"
+                )
+            }
+
+            Divider()
+
             Button(role: .destructive, action: {
                 if NSEvent.modifierFlags.contains(.option) {
                     windowInfo.app.forceTerminate()

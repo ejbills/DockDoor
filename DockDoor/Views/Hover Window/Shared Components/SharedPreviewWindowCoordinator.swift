@@ -774,6 +774,11 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         let selectedWindow = coordinator.windows[currentIndex]
         selectedWindow.bringToFront()
         selectedWindow.warpMouseToCenterIfNeeded()
+
+        if selectedWindow.isWindowlessApp, Defaults[.openNewWindowForWindowlessApps] {
+            WindowUtil.activateAndOpenNewWindow(app: selectedWindow.app)
+        }
+
         hideWindow()
     }
 
