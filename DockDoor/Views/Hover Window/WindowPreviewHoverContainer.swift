@@ -323,7 +323,7 @@ struct WindowPreviewHoverContainer: View {
                     }
             }
             .overlay {
-                if !mockPreviewActive, !isDragging, dockPosition != .cmdTab {
+                if !mockPreviewActive, !isDragging {
                     WindowDismissalContainer(appName: appName,
                                              bestGuessMonitor: bestGuessMonitor,
                                              dockPosition: dockPosition,

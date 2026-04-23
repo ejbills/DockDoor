@@ -74,16 +74,14 @@ struct WidgetHoverContainer<Content: View>: View {
                 }
                 .padding(.top, (appNameStyle == .popover && showAppTitleData) ? 30 : 0)
                 .overlay {
-                    if dockPosition != .cmdTab {
-                        WindowDismissalContainer(
-                            appName: appName,
-                            bestGuessMonitor: bestGuessMonitor,
-                            dockPosition: dockPosition,
-                            dockItemElement: dockItemElement,
-                            minimizeAllWindowsCallback: { _ in }
-                        )
-                        .allowsHitTesting(false)
-                    }
+                    WindowDismissalContainer(
+                        appName: appName,
+                        bestGuessMonitor: bestGuessMonitor,
+                        dockPosition: dockPosition,
+                        dockItemElement: dockItemElement,
+                        minimizeAllWindowsCallback: { _ in }
+                    )
+                    .allowsHitTesting(false)
                 }
             },
             highlightColor: highlightColor,
