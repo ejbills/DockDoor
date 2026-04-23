@@ -89,6 +89,7 @@ private class WindowSwitchingCoordinator {
 
         // Group windows for selected apps (only in multi-app modes)
         let isActiveAppMode = (mode == .activeAppOnly || mode == .activeAppCurrentSpace)
+            || (mode == .allWindows && Defaults[.limitSwitcherToFrontmostApp])
         if !isActiveAppMode {
             windows = WindowUtil.groupWindowsByApp(windows)
         }
