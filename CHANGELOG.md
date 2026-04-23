@@ -38,6 +38,36 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://dockdoor.net/donate</div>
 
+<a id="1.37"></a>
+# [Release 1.37](https://github.com/ejbills/DockDoor/releases/tag/1.37) - 2026-04-23
+
+## ✨ New Features
+- Shift+click on an icon in the dock opens a new app window - default OFF
+- Auto-open windows for windowless apps when selected in switcher
+
+## 🔧 Improvements & Stability
+- Apps with no windows now respect relevant appearance options
+- Fix window previews rendering too wide
+- Fix music widget rendering in random sizes
+- Window titles no longer scroll, now they truncate in the center by default
+  - Customizable title overflow styles for window titles - can configure types of truncation or switch back to marquee for window titles
+
+## 🐛 Bug Fixes
+- Improved Cmd+Tab reliability
+  - Works when window switcher is off
+  - App matching works correctly
+  - Previews dismiss properly
+- Tapping music widget background now switches apps correctly
+- Media widget no longer resizes on hover
+- Title styles no longer inflate preview width
+- Fix artwork being stale when new media has no artwork
+- Window switcher respects limit to active app only for windowless apps
+- Cmd-tab preview should no longer remain on screen consistently (better coverage)
+
+
+[Changes][1.37]
+
+
 <a id="1.36"></a>
 # [Release 1.36](https://github.com/ejbills/DockDoor/releases/tag/1.36) - 2026-04-20
 
@@ -2098,6 +2128,7 @@ v1.0
 [Changes][releases]
 
 
+[1.37]: https://github.com/ejbills/DockDoor/compare/1.36...1.37
 [1.36]: https://github.com/ejbills/DockDoor/compare/1.35.1...1.36
 [1.35.1]: https://github.com/ejbills/DockDoor/compare/1.35...1.35.1
 [1.35]: https://github.com/ejbills/DockDoor/compare/1.34.1...1.35
