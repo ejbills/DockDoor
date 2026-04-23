@@ -57,11 +57,7 @@ extension DockObserver {
         let dockAppPID = dockApp.processIdentifier
         let dockAppElement = AXUIElementCreateApplication(dockAppPID)
 
-        guard let children = try? dockAppElement.children(),
-              let processSwitcherList = children.first(where: { element in
-                  (try? element.subrole()) == "AXProcessSwitcherList"
-              })
-        else {
+        guard let processSwitcherList = findCmdTabSwitcherElement(in: dockAppElement) else {
             return
         }
 
