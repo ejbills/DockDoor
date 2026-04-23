@@ -3,6 +3,15 @@
     <channel>
         <title>DockDoor</title>
         <item>
+            <title>1.37</title>
+            <pubDate>Thu, 23 Apr 2026 13:57:15 -0700</pubDate>
+            <sparkle:releaseNotesLink>https://dockdoor.net/CHANGELOG.html</sparkle:releaseNotesLink>
+            <sparkle:version>1.37</sparkle:version>
+            <sparkle:shortVersionString>1.37</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/ejbills/DockDoor/releases/download/1.37/DockDoor.dmg" length="21652098" type="application/octet-stream" sparkle:edSignature="KaDJP/TuaBhnlvNhxoR8Mu/eTo6TqnoTMestGOpHlF+V0ieDELtF1QiD/W7m3od/7Mm3Ve2jHlbhvmTDqPZ5DA==" />
+        </item>
+    <item>
             <title>1.36.0.4</title>
             <pubDate>Thu, 23 Apr 2026 13:29:58 -0700</pubDate>
             <sparkle:releaseNotesLink>https://dockdoor.net/CHANGELOG.html</sparkle:releaseNotesLink>
@@ -11,15 +20,6 @@
             <sparkle:shortVersionString>1.36.0.4 beta</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
             <enclosure url="https://github.com/ejbills/DockDoor/releases/download/1.36.0.4/DockDoor.dmg" length="21640886" type="application/octet-stream" sparkle:edSignature="VlyCex3G5rWECHURN6FtROX2rAkJJqTHnTI1JJ+kzXveBaQfWnmuQK4g6nQ07dDxlixFK8kdJEC5vlBXDiMzAw==" />
-        </item>
-    <item>
-            <title>1.36</title>
-            <pubDate>Mon, 20 Apr 2026 15:52:46 -0700</pubDate>
-            <sparkle:releaseNotesLink>https://dockdoor.net/CHANGELOG.html</sparkle:releaseNotesLink>
-            <sparkle:version>1.36</sparkle:version>
-            <sparkle:shortVersionString>1.36</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/ejbills/DockDoor/releases/download/1.36/DockDoor.dmg" length="21623018" type="application/octet-stream" sparkle:edSignature="fNZ19Or6zGEpunzWu0Pz4m3cn5n6GB2MiRNo2RLl+2sduCrCLdmb8IIEcQkGPZN2d4mm1CcQSOo6y+gx6rc2CQ==" />
         </item>
     </channel>
 </rss>
