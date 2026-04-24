@@ -42,8 +42,8 @@
 # [Release 1.37](https://github.com/ejbills/DockDoor/releases/tag/1.37) - 2026-04-23
 
 ## ✨ New Features
-- Shift+click on an icon in the dock opens a new app window - default OFF
-- Auto-open windows for windowless apps when selected in switcher
+- Shift+click on an icon in the dock opens a new app window 
+- Auto-open windows for windowless apps when selected in switcher - default OFF
 
 ## 🔧 Improvements & Stability
 - Apps with no windows now respect relevant appearance options
