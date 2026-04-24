@@ -218,10 +218,23 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     @objc func openSettingsWindow(_ sender: Any?) {
+        if NSApp.mainMenu == nil {
+            NSApp.mainMenu = MainMenuBuilder.buildSettingsMenu()
+        }
         NSApp.setActivationPolicy(.regular)
         NSApp.activate(ignoringOtherApps: true)
 
         settingsManager?.showSettings()
+    }
+
+    @objc func handleSettingsTabMenu(_ sender: NSMenuItem) {
+        guard let tab = sender.representedObject as? String else { return }
+        settingsManager?.showSettings()
+        NotificationCenter.default.post(
+            name: .dockDoorSelectSettingsTab,
+            object: nil,
+            userInfo: ["tab": tab]
+        )
     }
 
     func closeSettingsWindow() {
@@ -306,5 +319,188 @@ extension AppDelegate: NSWindowDelegate {
         if let window = notification.object as? NSWindow, window == onboardingWindow {
             onboardingWindow = nil
         }
+    }
+}
+
+extension Notification.Name {
+    static let dockDoorSelectSettingsTab = Notification.Name("DockDoor.SelectSettingsTab")
+}
+
+enum MainMenuBuilder {
+    static func buildSettingsMenu() -> NSMenu {
+        let mainMenu = NSMenu()
+
+        mainMenu.addItem(buildAppMenuItem())
+        mainMenu.addItem(buildEditMenuItem())
+        mainMenu.addItem(buildSettingsNavMenuItem())
+        mainMenu.addItem(buildWindowMenuItem())
+        mainMenu.addItem(buildHelpMenuItem())
+
+        return mainMenu
+    }
+
+    private static func buildAppMenuItem() -> NSMenuItem {
+        let item = NSMenuItem()
+        let menu = NSMenu()
+
+        menu.addItem(withTitle: String(localized: "About DockDoor", comment: "Main menu item"),
+                     action: #selector(NSApplication.orderFrontStandardAboutPanel(_:)),
+                     keyEquivalent: "")
+        menu.addItem(.separator())
+
+        let settingsItem = NSMenuItem(
+            title: String(localized: "Settings…", comment: "Main menu item"),
+            action: #selector(AppDelegate.openSettingsWindow(_:)),
+            keyEquivalent: ","
+        )
+        settingsItem.target = NSApp.delegate
+        menu.addItem(settingsItem)
+        menu.addItem(.separator())
+
+        let servicesItem = NSMenuItem(
+            title: String(localized: "Services", comment: "Main menu item"),
+            action: nil, keyEquivalent: ""
+        )
+        let servicesMenu = NSMenu()
+        servicesItem.submenu = servicesMenu
+        NSApp.servicesMenu = servicesMenu
+        menu.addItem(servicesItem)
+        menu.addItem(.separator())
+
+        menu.addItem(withTitle: String(localized: "Hide DockDoor", comment: "Main menu item"),
+                     action: #selector(NSApplication.hide(_:)), keyEquivalent: "h")
+        let hideOthers = NSMenuItem(
+            title: String(localized: "Hide Others", comment: "Main menu item"),
+            action: #selector(NSApplication.hideOtherApplications(_:)),
+            keyEquivalent: "h"
+        )
+        hideOthers.keyEquivalentModifierMask = [.command, .option]
+        menu.addItem(hideOthers)
+        menu.addItem(withTitle: String(localized: "Show All", comment: "Main menu item"),
+                     action: #selector(NSApplication.unhideAllApplications(_:)), keyEquivalent: "")
+        menu.addItem(.separator())
+        menu.addItem(withTitle: String(localized: "Quit DockDoor", comment: "Main menu item"),
+                     action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
+
+        item.submenu = menu
+        return item
+    }
+
+    private static func buildEditMenuItem() -> NSMenuItem {
+        let item = NSMenuItem()
+        let menu = NSMenu(title: String(localized: "Edit", comment: "Main menu title"))
+
+        menu.addItem(withTitle: String(localized: "Undo", comment: "Main menu item"),
+                     action: Selector(("undo:")), keyEquivalent: "z")
+        let redo = NSMenuItem(title: String(localized: "Redo", comment: "Main menu item"),
+                              action: Selector(("redo:")), keyEquivalent: "z")
+        redo.keyEquivalentModifierMask = [.command, .shift]
+        menu.addItem(redo)
+        menu.addItem(.separator())
+        menu.addItem(withTitle: String(localized: "Cut", comment: "Main menu item"),
+                     action: #selector(NSText.cut(_:)), keyEquivalent: "x")
+        menu.addItem(withTitle: String(localized: "Copy", comment: "Main menu item"),
+                     action: #selector(NSText.copy(_:)), keyEquivalent: "c")
+        menu.addItem(withTitle: String(localized: "Paste", comment: "Main menu item"),
+                     action: #selector(NSText.paste(_:)), keyEquivalent: "v")
+        menu.addItem(withTitle: String(localized: "Delete", comment: "Main menu item"),
+                     action: #selector(NSText.delete(_:)), keyEquivalent: "")
+        menu.addItem(withTitle: String(localized: "Select All", comment: "Main menu item"),
+                     action: #selector(NSText.selectAll(_:)), keyEquivalent: "a")
+
+        item.submenu = menu
+        return item
+    }
+
+    private static func buildSettingsNavMenuItem() -> NSMenuItem {
+        let item = NSMenuItem()
+        let menu = NSMenu(title: String(localized: "Go", comment: "Main menu title"))
+
+        menu.addItem(tabItem(title: String(localized: "General", comment: "Settings tab title"),
+                             tab: "General", keyEquivalent: "1"))
+        menu.addItem(.separator())
+
+        menu.addItem(sectionHeader(String(localized: "Features", comment: "Settings section header")))
+        menu.addItem(tabItem(title: String(localized: "Dock Previews", comment: "Settings tab title"),
+                             tab: "DockPreviews", keyEquivalent: "2"))
+        menu.addItem(tabItem(title: String(localized: "Window Switcher", comment: "Settings tab title"),
+                             tab: "WindowSwitcher", keyEquivalent: "3"))
+        menu.addItem(tabItem(title: String(localized: "Cmd+Tab", comment: "Settings tab title"),
+                             tab: "CmdTab", keyEquivalent: "4"))
+        menu.addItem(tabItem(title: String(localized: "Dock Locking", comment: "Settings tab title"),
+                             tab: "DockLocking", keyEquivalent: "5"))
+        menu.addItem(.separator())
+
+        menu.addItem(sectionHeader(String(localized: "Customization", comment: "Settings section header")))
+        menu.addItem(tabItem(title: String(localized: "Appearance", comment: "Settings Tab"),
+                             tab: "Appearance", keyEquivalent: "6"))
+        menu.addItem(tabItem(title: String(localized: "Gestures & Keybinds", comment: "Settings tab title"),
+                             tab: "GesturesKeybinds", keyEquivalent: "7"))
+        menu.addItem(tabItem(title: String(localized: "Filters", comment: "Filters tab title"),
+                             tab: "Filters", keyEquivalent: "8"))
+        menu.addItem(tabItem(title: String(localized: "Widgets", comment: "Widget settings tab title"),
+                             tab: "Widgets", keyEquivalent: "9"))
+        menu.addItem(.separator())
+
+        menu.addItem(sectionHeader(String(localized: "System", comment: "Settings section header")))
+        menu.addItem(tabItem(title: String(localized: "Advanced", comment: "Settings tab title"),
+                             tab: "Advanced", keyEquivalent: "0"))
+        menu.addItem(tabItem(title: String(localized: "Support", comment: "Settings tab title"),
+                             tab: "Support", keyEquivalent: ""))
+
+        item.submenu = menu
+        return item
+    }
+
+    private static func buildWindowMenuItem() -> NSMenuItem {
+        let item = NSMenuItem()
+        let menu = NSMenu(title: String(localized: "Window", comment: "Main menu title"))
+
+        menu.addItem(withTitle: String(localized: "Minimize", comment: "Main menu item"),
+                     action: #selector(NSWindow.performMiniaturize(_:)), keyEquivalent: "m")
+        menu.addItem(withTitle: String(localized: "Zoom", comment: "Main menu item"),
+                     action: #selector(NSWindow.performZoom(_:)), keyEquivalent: "")
+        menu.addItem(.separator())
+        menu.addItem(withTitle: String(localized: "Bring All to Front", comment: "Main menu item"),
+                     action: #selector(NSApplication.arrangeInFront(_:)), keyEquivalent: "")
+
+        NSApp.windowsMenu = menu
+        item.submenu = menu
+        return item
+    }
+
+    private static func buildHelpMenuItem() -> NSMenuItem {
+        let item = NSMenuItem()
+        let menu = NSMenu(title: String(localized: "Help", comment: "Main menu title"))
+
+        let support = NSMenuItem(
+            title: String(localized: "DockDoor Help", comment: "Main menu item"),
+            action: #selector(AppDelegate.handleSettingsTabMenu(_:)),
+            keyEquivalent: "?"
+        )
+        support.representedObject = "Support"
+        support.target = NSApp.delegate
+        menu.addItem(support)
+
+        NSApp.helpMenu = menu
+        item.submenu = menu
+        return item
+    }
+
+    private static func tabItem(title: String, tab: String, keyEquivalent: String) -> NSMenuItem {
+        let item = NSMenuItem(
+            title: title,
+            action: #selector(AppDelegate.handleSettingsTabMenu(_:)),
+            keyEquivalent: keyEquivalent
+        )
+        item.representedObject = tab
+        item.target = NSApp.delegate
+        return item
+    }
+
+    private static func sectionHeader(_ title: String) -> NSMenuItem {
+        let item = NSMenuItem(title: title, action: nil, keyEquivalent: "")
+        item.isEnabled = false
+        return item
     }
 }
