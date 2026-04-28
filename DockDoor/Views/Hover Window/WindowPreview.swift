@@ -263,8 +263,10 @@ struct WindowPreview: View, Equatable {
                     .italic()
                     .foregroundStyle(.secondary)
                     .padding(4)
-                    .materialPill(backgroundAppearance: backgroundAppearance)
-                    .frame(height: 34)
+                    .if(!appearance.disableDockStyleTitles) { view in
+                        view.materialPill(backgroundAppearance: backgroundAppearance)
+                        .frame(height: 34)
+                    }
             }
         }
 
@@ -519,8 +521,10 @@ struct WindowPreview: View, Equatable {
                     .italic()
                     .foregroundStyle(.secondary)
                     .padding(4)
-                    .materialPill(backgroundAppearance: backgroundAppearance)
-                    .frame(height: 34)
+                    .if(!appearance.disableDockStyleTitles) { view in
+                        view.materialPill(backgroundAppearance: backgroundAppearance)
+                        .frame(height: 34)
+                    }
             }
         }
 
@@ -600,8 +604,10 @@ struct WindowPreview: View, Equatable {
                     .italic()
                     .foregroundStyle(.secondary)
                     .padding(4)
-                    .materialPill(backgroundAppearance: backgroundAppearance)
-                    .frame(height: 34)
+                    .if(!appearance.disableDockStyleTitles) { view in
+                        view.materialPill(backgroundAppearance: backgroundAppearance)
+                        .frame(height: 34)
+                    }
             }
         }
 
