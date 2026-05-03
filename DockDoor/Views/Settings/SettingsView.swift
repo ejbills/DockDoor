@@ -235,11 +235,6 @@ struct SettingsView: View {
                 }
             }
         })
-        .onReceive(NotificationCenter.default.publisher(for: .dockDoorSelectSettingsTab)) { note in
-            if let tab = note.userInfo?["tab"] as? String {
-                selectedTab = tab
-            }
-        }
     }
 }
 
