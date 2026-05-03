@@ -64,6 +64,7 @@ private class WindowSwitchingCoordinator {
         shouldSelectImmediately = false
 
         var windows = WindowUtil.getAllWindowsOfAllApps()
+        let windowsForWindowlessDetection = windows
 
         let filterBySpace = (mode == .currentSpaceOnly || mode == .activeAppCurrentSpace)
             || (mode == .allWindows && Defaults[.showWindowsFromCurrentSpaceOnlyInSwitcher])
@@ -95,7 +96,7 @@ private class WindowSwitchingCoordinator {
         }
 
         if !isActiveAppMode, Defaults[.showWindowlessAppsInSwitcher] {
-            windows.append(contentsOf: WindowUtil.getWindowlessRunningApps(existingWindows: windows))
+            windows.append(contentsOf: WindowUtil.getWindowlessRunningApps(existingWindows: windowsForWindowlessDetection))
         }
 
         guard !windows.isEmpty else { return }

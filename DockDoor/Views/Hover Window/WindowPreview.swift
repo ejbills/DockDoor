@@ -265,7 +265,7 @@ struct WindowPreview: View, Equatable {
                     .padding(4)
                     .if(!appearance.disableDockStyleTitles) { view in
                         view.materialPill(backgroundAppearance: backgroundAppearance)
-                        .frame(height: 34)
+                            .frame(height: 34)
                     }
             }
         }
@@ -523,7 +523,7 @@ struct WindowPreview: View, Equatable {
                     .padding(4)
                     .if(!appearance.disableDockStyleTitles) { view in
                         view.materialPill(backgroundAppearance: backgroundAppearance)
-                        .frame(height: 34)
+                            .frame(height: 34)
                     }
             }
         }
@@ -606,7 +606,7 @@ struct WindowPreview: View, Equatable {
                     .padding(4)
                     .if(!appearance.disableDockStyleTitles) { view in
                         view.materialPill(backgroundAppearance: backgroundAppearance)
-                        .frame(height: 34)
+                            .frame(height: 34)
                     }
             }
         }
