@@ -803,7 +803,7 @@ final class DockObserver {
                 // This prevents native dock's restore from confusing our logic
                 let needsRestore = restorationNeededAtClickTime || currentlyHasMinimizedWindows
 
-                if needsRestore {
+                if needsRestore, Defaults[.restoreAllMinimizedWindowsOnDockClick] {
                     DebugLogger.log("DockClick", details: "\(appName): restoring (needsRestore=true, minimized=\(currentlyHasMinimizedWindows))")
                     restoreAppWindows(windows: windows, app: app, appName: appName)
                 } else if wasFrontmostOnHover, !windows.isEmpty {
