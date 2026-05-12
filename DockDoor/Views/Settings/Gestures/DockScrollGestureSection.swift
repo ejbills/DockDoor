@@ -44,6 +44,7 @@ struct DockScrollGestureSection: View {
 
 struct TitleBarScrollGestureSection: View {
     @Default(.enableTitleBarScrollGesture) var enableTitleBarScrollGesture
+    @Default(.titleBarVerticalScrollBehavior) var titleBarVerticalScrollBehavior
     @Default(.titleBarScrollCenteredWindowScale) var titleBarScrollCenteredWindowScale
     @Default(.titleBarScrollCenteredWindowSizingMode) var titleBarScrollCenteredWindowSizingMode
     @Default(.titleBarScrollCenteredWindowWidthScale) var titleBarScrollCenteredWindowWidthScale
@@ -84,9 +85,17 @@ struct TitleBarScrollGestureSection: View {
                         set: { titleBarScrollRestoreWindowInterval = CGFloat($0) }
                     )
 
-                    Text("Scroll up on a focused window title bar to maximize it, scroll down to center it using the configured window size, and scroll left or right to switch desktop spaces. Repeat the same up/down scroll within the configured restore time to restore the previous window size.")
+                    Text(titleBarScrollDescription)
                         .font(.caption)
                         .foregroundColor(.secondary)
+
+                    Picker("Vertical Scroll Behavior", selection: $titleBarVerticalScrollBehavior) {
+                        ForEach(TitleBarVerticalScrollBehavior.allCases, id: \.self) { behavior in
+                            Text(behavior.localizedName).tag(behavior)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                    .settingsSearchTarget("gestures.verticalScrollBehavior")
 
                     Picker("Centered Window Sizing", selection: $titleBarScrollCenteredWindowSizingMode) {
                         ForEach(TitleBarCenteredWindowSizingMode.allCases, id: \.self) { mode in
@@ -143,17 +152,28 @@ struct TitleBarScrollGestureSection: View {
                         }
                     }
 
-                    sliderSetting(
-                        title: "Restore Window Time",
-                        value: restoreIntervalBinding,
-                        range: 0.5 ... 3,
-                        step: 0.1,
-                        unit: "seconds",
-                        formatter: NumberFormatter.oneDecimalFormatter
-                    )
-                    .settingsSearchTarget("gestures.restoreTime")
+                    if titleBarVerticalScrollBehavior == .resizeAndCenter {
+                        sliderSetting(
+                            title: "Restore Window Time",
+                            value: restoreIntervalBinding,
+                            range: 0.5 ... 3,
+                            step: 0.1,
+                            unit: "seconds",
+                            formatter: NumberFormatter.oneDecimalFormatter
+                        )
+                        .settingsSearchTarget("gestures.restoreTime")
+                    }
                 }
             }
+        }
+    }
+
+    private var titleBarScrollDescription: String {
+        switch titleBarVerticalScrollBehavior {
+        case .resizeAndCenter:
+            String(localized: "Scroll up on a focused window title bar to maximize it, scroll down to center it using the configured window size, and scroll left or right to switch desktop spaces. Repeat the same up/down scroll within the configured restore time to restore the previous window size.")
+        case .maximizeAndRestore:
+            String(localized: "Scroll up on a focused window title bar to maximize it and remember the original size. Scroll down to restore the remembered size; if no remembered size exists, the window is centered using the configured size. Scroll left or right to switch desktop spaces.")
         }
     }
 }

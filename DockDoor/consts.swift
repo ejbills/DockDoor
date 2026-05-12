@@ -43,12 +43,14 @@ extension Defaults.Keys {
     static let quitAppOnWindowClose = Key<Bool>("quitAppOnWindowClose", default: false)
     static let enableDockScrollGesture = Key<Bool>("enableDockScrollGesture", default: false)
     static let enableTitleBarScrollGesture = Key<Bool>("enableTitleBarScrollGesture", default: false)
+    static let titleBarVerticalScrollBehavior = Key<TitleBarVerticalScrollBehavior>("titleBarVerticalScrollBehavior", default: .resizeAndCenter)
     static let titleBarScrollCenteredWindowScale = Key<CGFloat>("titleBarScrollCenteredWindowScale", default: 0.8)
     static let titleBarScrollCenteredWindowSizingMode = Key<TitleBarCenteredWindowSizingMode>("titleBarScrollCenteredWindowSizingMode", default: .uniform)
     static let titleBarScrollCenteredWindowWidthScale = Key<CGFloat>("titleBarScrollCenteredWindowWidthScale", default: 0.8)
     static let titleBarScrollCenteredWindowHeightScale = Key<CGFloat>("titleBarScrollCenteredWindowHeightScale", default: 0.8)
     static let titleBarScrollCenteredWindowLockAspectRatio = Key<Bool>("titleBarScrollCenteredWindowLockAspectRatio", default: false)
     static let titleBarScrollRestoreWindowInterval = Key<CGFloat>("titleBarScrollRestoreWindowInterval", default: 1.5)
+    static let titleBarScrollPersistentRestoreFrames = Key<[TitleBarScrollPersistentRestoreFrame]>("titleBarScrollPersistentRestoreFrames", default: [])
 
     // Dock Locking
     static let enableDockLocking = Key<Bool>("enableDockLocking", default: false)
@@ -758,6 +760,48 @@ enum TitleBarCenteredWindowSizingMode: String, CaseIterable, Defaults.Serializab
         case .separate:
             String(localized: "Width & height", comment: "Title bar centered window sizing mode")
         }
+    }
+}
+
+enum TitleBarVerticalScrollBehavior: String, CaseIterable, Defaults.Serializable {
+    case resizeAndCenter
+    case maximizeAndRestore
+
+    var localizedName: String {
+        switch self {
+        case .resizeAndCenter:
+            String(localized: "Resize & Center", comment: "Title bar vertical scroll behavior option")
+        case .maximizeAndRestore:
+            String(localized: "Maximize & Restore", comment: "Title bar vertical scroll behavior option")
+        }
+    }
+}
+
+struct TitleBarScrollPersistentRestoreFrame: Codable, Defaults.Serializable, Equatable {
+    let bundleIdentifier: String
+    let windowTitle: String
+    let x: Double
+    let y: Double
+    let width: Double
+    let height: Double
+    let updatedAt: Date
+
+    var identityKey: String {
+        "\(bundleIdentifier)|\(windowTitle)"
+    }
+
+    var originalFrame: CGRect {
+        CGRect(x: x, y: y, width: width, height: height)
+    }
+
+    init(bundleIdentifier: String, windowTitle: String, originalFrame: CGRect, updatedAt: Date) {
+        self.bundleIdentifier = bundleIdentifier
+        self.windowTitle = windowTitle
+        x = Double(originalFrame.origin.x)
+        y = Double(originalFrame.origin.y)
+        width = Double(originalFrame.width)
+        height = Double(originalFrame.height)
+        self.updatedAt = updatedAt
     }
 }
 

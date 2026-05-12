@@ -51,6 +51,12 @@ final class DockObserver {
         let timestamp: Date
     }
 
+    private struct RuntimeRestoreFrame {
+        let windowId: CGWindowID
+        let processIdentifier: pid_t
+        let originalFrame: CGRect
+    }
+
     weak static var activeInstance: DockObserver?
     let previewCoordinator: SharedPreviewWindowCoordinator
 
@@ -67,6 +73,7 @@ final class DockObserver {
 
     private var eventTap: CFMachPort?
     private var eventTapRunLoopSource: CFRunLoopSource?
+    private var scrollGestureSettingsObserver: Defaults.Observation?
 
     // Dock click behavior state
     var currentClickedAppPID: pid_t?
@@ -80,11 +87,14 @@ final class DockObserver {
     private let dockScrollActionDebounceInterval: TimeInterval = 0.3
     private var lastTitleBarScrollActionTime: Date = .distantPast
     private var pendingTitleBarRestoreState: PendingRestoreState?
+    private var runtimeTitleBarRestoreFrames: [String: RuntimeRestoreFrame] = [:]
 
     private let titleBarScrollActionDebounceInterval: TimeInterval = 0.35
     private let minimumTitleBarScrollDelta: Double = 0.15
     private let fallbackTitleBarHeight: CGFloat = 48
     private let maximumTitleBarHeight: CGFloat = 72
+    private let titleBarFrameTolerance: CGFloat = 8
+    private let maximumPersistentTitleBarRestoreFrames = 50
 
     private var cachedTitleBarInfo: CachedTitleBarInfo?
     private var titleBarRefreshScheduled = false
@@ -115,6 +125,10 @@ final class DockObserver {
             (isMediaApp(bundleId) && Defaults[.enableMediaWidget])
     }
 
+    private var titleBarVerticalScrollBehavior: TitleBarVerticalScrollBehavior {
+        Defaults[.titleBarVerticalScrollBehavior]
+    }
+
     static func isDockVisible() -> Bool {
         if let frontmostApp = NSWorkspace.shared.frontmostApplication,
            WindowUtil.isAppInFullscreen(frontmostApp)
@@ -129,6 +143,7 @@ final class DockObserver {
         DockObserver.activeInstance = self
         setupSelectedDockItemObserver()
         startHealthCheckTimer()
+        observeScrollGestureSettings()
         enableDockClickDetection()
     }
 
@@ -139,6 +154,7 @@ final class DockObserver {
         healthCheckTimer?.invalidate()
         teardownObserver()
         teardownCmdTabObserver()
+        scrollGestureSettingsObserver?.invalidate()
 
         removeEventTap()
     }
@@ -154,8 +170,7 @@ final class DockObserver {
         teardownObserver()
         teardownCmdTabObserver()
         setupSelectedDockItemObserver()
-        removeEventTap()
-        setupEventTap()
+        refreshEventTap()
     }
 
     private func performHealthCheck() {
@@ -636,6 +651,23 @@ final class DockObserver {
         setupEventTap()
     }
 
+    private func observeScrollGestureSettings() {
+        scrollGestureSettingsObserver?.invalidate()
+        scrollGestureSettingsObserver = Defaults.observe(
+            keys: .enableDockScrollGesture,
+            .enableTitleBarScrollGesture
+        ) { [weak self] in
+            DispatchQueue.main.async {
+                self?.refreshEventTap()
+            }
+        }
+    }
+
+    private func refreshEventTap() {
+        removeEventTap()
+        setupEventTap()
+    }
+
     private func removeEventTap() {
         if let eventTap {
             CGEvent.tapEnable(tap: eventTap, enable: false)
@@ -1022,7 +1054,9 @@ final class DockObserver {
             return false
         }
 
-        if let cached = cachedTitleBarInfo, Date().timeIntervalSince(cached.timestamp) > titleBarCacheMaxAge {
+        let now = Date()
+
+        if let cached = cachedTitleBarInfo, now.timeIntervalSince(cached.timestamp) > titleBarCacheMaxAge {
             cachedTitleBarInfo = nil
         }
 
@@ -1042,7 +1076,6 @@ final class DockObserver {
         let normalizedDeltaX = isNaturalScrolling ? -deltaX : deltaX
         let normalizedDeltaY = isNaturalScrolling ? -deltaY : deltaY
 
-        let now = Date()
         guard now.timeIntervalSince(lastTitleBarScrollActionTime) >= titleBarScrollActionDebounceInterval else {
             return true
         }
@@ -1073,24 +1106,37 @@ final class DockObserver {
     }
 
     private func handleTitleBarVerticalScroll(_ action: VerticalScrollAction, for window: WindowInfo, now: Date) {
+        switch titleBarVerticalScrollBehavior {
+        case .resizeAndCenter:
+            handleTimedTitleBarVerticalScroll(action, for: window, now: now)
+        case .maximizeAndRestore:
+            handlePersistentTitleBarVerticalScroll(action, for: window, now: now)
+        }
+    }
+
+    private func handleTimedTitleBarVerticalScroll(_ action: VerticalScrollAction, for window: WindowInfo, now: Date) {
         if let pendingTitleBarRestoreState,
            pendingTitleBarRestoreState.windowId == window.id,
            pendingTitleBarRestoreState.processIdentifier == window.app.processIdentifier,
            pendingTitleBarRestoreState.action == action,
            pendingTitleBarRestoreState.expirationDate > now
         {
-            window.setWindowFrame(pendingTitleBarRestoreState.originalFrame)
+            _ = window.setWindowFrame(pendingTitleBarRestoreState.originalFrame)
             self.pendingTitleBarRestoreState = nil
             return
         }
 
         guard let originalFrame = window.currentWindowFrame() else {
-            performTitleBarVerticalScrollAction(action, on: window)
+            _ = performTitleBarVerticalScrollAction(action, on: window, originalFrame: nil)
             pendingTitleBarRestoreState = nil
             return
         }
 
-        performTitleBarVerticalScrollAction(action, on: window)
+        guard performTitleBarVerticalScrollAction(action, on: window, originalFrame: originalFrame) else {
+            pendingTitleBarRestoreState = nil
+            return
+        }
+
         pendingTitleBarRestoreState = PendingRestoreState(
             windowId: window.id,
             processIdentifier: window.app.processIdentifier,
@@ -1100,22 +1146,169 @@ final class DockObserver {
         )
     }
 
-    private func performTitleBarVerticalScrollAction(_ action: VerticalScrollAction, on window: WindowInfo) {
+    private func handlePersistentTitleBarVerticalScroll(_ action: VerticalScrollAction, for window: WindowInfo, now: Date) {
         switch action {
         case .maximize:
-            window.zoom()
+            guard let originalFrame = restoreFrame(for: window) ?? window.currentWindowFrame() else {
+                _ = performTitleBarVerticalScrollAction(.maximize, on: window, originalFrame: nil)
+                return
+            }
+
+            guard performTitleBarVerticalScrollAction(.maximize, on: window, originalFrame: originalFrame) else {
+                removeRestoreFrame(for: window)
+                return
+            }
+            saveRestoreFrameIfNeeded(originalFrame, for: window, now: now)
+
+        case .center:
+            if let originalFrame = restoreFrame(for: window) {
+                if let appliedFrame = window.setWindowFrame(originalFrame),
+                   titleBarFrame(appliedFrame, matches: originalFrame)
+                {
+                    removeRestoreFrame(for: window)
+                }
+            } else {
+                _ = performTitleBarVerticalScrollAction(.center, on: window, originalFrame: nil)
+            }
+        }
+    }
+
+    private func performTitleBarVerticalScrollAction(_ action: VerticalScrollAction, on window: WindowInfo, originalFrame: CGRect?) -> Bool {
+        let targetFrame: CGRect?
+        let appliedFrame: CGRect?
+
+        switch action {
+        case .maximize:
+            targetFrame = window.targetFrame(for: .full)
+            appliedFrame = window.zoom()
         case .center:
             switch centeredWindowSizingMode {
             case .uniform:
-                window.centerWindow(scale: centeredWindowScale)
+                targetFrame = window.centeredWindowTargetFrame(scale: centeredWindowScale)
+                appliedFrame = window.centerWindow(scale: centeredWindowScale)
             case .separate:
-                window.centerWindow(
+                targetFrame = window.centeredWindowTargetFrame(
+                    widthScale: centeredWindowWidthScale,
+                    heightScale: centeredWindowHeightScale,
+                    lockAspectRatio: centeredWindowLockAspectRatio
+                )
+                appliedFrame = window.centerWindow(
                     widthScale: centeredWindowWidthScale,
                     heightScale: centeredWindowHeightScale,
                     lockAspectRatio: centeredWindowLockAspectRatio
                 )
             }
         }
+
+        guard let targetFrame, let appliedFrame else {
+            return false
+        }
+
+        guard titleBarFrame(appliedFrame, matches: targetFrame) else {
+            if let originalFrame {
+                _ = window.setWindowFrame(originalFrame)
+            }
+            return false
+        }
+
+        return true
+    }
+
+    private func saveRestoreFrameIfNeeded(_ originalFrame: CGRect, for window: WindowInfo, now: Date) {
+        let runtimeKey = runtimeRestoreKey(for: window)
+        if runtimeTitleBarRestoreFrames[runtimeKey] == nil {
+            runtimeTitleBarRestoreFrames[runtimeKey] = RuntimeRestoreFrame(
+                windowId: window.id,
+                processIdentifier: window.app.processIdentifier,
+                originalFrame: originalFrame
+            )
+        }
+
+        guard let persistentKey = persistentRestoreKey(for: window),
+              !Defaults[.titleBarScrollPersistentRestoreFrames].contains(where: { $0.identityKey == persistentKey }),
+              let bundleIdentifier = window.app.bundleIdentifier,
+              let windowTitle = normalizedWindowTitle(for: window)
+        else {
+            return
+        }
+
+        var frames = Defaults[.titleBarScrollPersistentRestoreFrames]
+        frames.append(TitleBarScrollPersistentRestoreFrame(
+            bundleIdentifier: bundleIdentifier,
+            windowTitle: windowTitle,
+            originalFrame: originalFrame,
+            updatedAt: now
+        ))
+        Defaults[.titleBarScrollPersistentRestoreFrames] = trimmedPersistentRestoreFrames(frames)
+    }
+
+    private func restoreFrame(for window: WindowInfo) -> CGRect? {
+        let runtimeKey = runtimeRestoreKey(for: window)
+        if let runtimeFrame = runtimeTitleBarRestoreFrames[runtimeKey],
+           runtimeFrame.windowId == window.id,
+           runtimeFrame.processIdentifier == window.app.processIdentifier
+        {
+            return runtimeFrame.originalFrame
+        }
+
+        guard let persistentKey = persistentRestoreKey(for: window),
+              let persistentFrame = Defaults[.titleBarScrollPersistentRestoreFrames].first(where: { $0.identityKey == persistentKey })
+        else {
+            return nil
+        }
+
+        return persistentFrame.originalFrame
+    }
+
+    private func removeRestoreFrame(for window: WindowInfo) {
+        runtimeTitleBarRestoreFrames.removeValue(forKey: runtimeRestoreKey(for: window))
+
+        guard let persistentKey = persistentRestoreKey(for: window) else {
+            return
+        }
+
+        Defaults[.titleBarScrollPersistentRestoreFrames] = Defaults[.titleBarScrollPersistentRestoreFrames]
+            .filter { $0.identityKey != persistentKey }
+    }
+
+    private func runtimeRestoreKey(for window: WindowInfo) -> String {
+        "\(window.app.processIdentifier)|\(window.id)"
+    }
+
+    private func persistentRestoreKey(for window: WindowInfo) -> String? {
+        guard let bundleIdentifier = window.app.bundleIdentifier,
+              let windowTitle = normalizedWindowTitle(for: window)
+        else {
+            return nil
+        }
+
+        return "\(bundleIdentifier)|\(windowTitle)"
+    }
+
+    private func normalizedWindowTitle(for window: WindowInfo) -> String? {
+        let title = (window.windowName ?? (try? window.axElement.title()) ?? "")
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+        return title.isEmpty ? nil : title
+    }
+
+    private func trimmedPersistentRestoreFrames(_ frames: [TitleBarScrollPersistentRestoreFrame]) -> [TitleBarScrollPersistentRestoreFrame] {
+        var seenKeys = Set<String>()
+        return frames
+            .sorted { $0.updatedAt > $1.updatedAt }
+            .filter { frame in
+                guard !seenKeys.contains(frame.identityKey) else {
+                    return false
+                }
+                seenKeys.insert(frame.identityKey)
+                return true
+            }
+            .prefix(maximumPersistentTitleBarRestoreFrames)
+            .map { $0 }
+    }
+
+    private func titleBarFrame(_ appliedFrame: CGRect, matches targetFrame: CGRect) -> Bool {
+        abs(appliedFrame.width - targetFrame.width) <= titleBarFrameTolerance &&
+            abs(appliedFrame.height - targetFrame.height) <= titleBarFrameTolerance
     }
 
     private func resolvedTitleBarHeight(for window: WindowInfo, windowFrame: CGRect) -> CGFloat {

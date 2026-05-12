@@ -168,7 +168,8 @@ extension WindowInfo {
         }
     }
 
-    func zoom() {
+    @discardableResult
+    func zoom() -> CGRect? {
         positionWindow(rect: .full)
     }
 
@@ -292,7 +293,8 @@ extension WindowInfo {
         Self.currentWindowFrame(for: axElement)
     }
 
-    private func applyWindowFrame(_ targetFrame: CGRect, on screen: NSScreen) {
+    @discardableResult
+    private func applyWindowFrame(_ targetFrame: CGRect, on screen: NSScreen) -> CGRect? {
         let primaryScreenMaxY = NSScreen.screens.first?.frame.maxY ?? screen.frame.maxY
         let axY = primaryScreenMaxY - targetFrame.maxY
         let newPosition = CGPoint(x: targetFrame.origin.x, y: axY)
@@ -301,32 +303,43 @@ extension WindowInfo {
         guard let positionValue = AXValue.from(point: newPosition),
               let sizeValue = AXValue.from(size: newSize)
         else {
-            return
+            return nil
         }
 
         try? axElement.setAttribute(kAXPositionAttribute, positionValue)
         try? axElement.setAttribute(kAXSizeAttribute, sizeValue)
+        return currentWindowFrame()
     }
 
-    func setWindowFrame(_ targetFrame: CGRect) {
+    @discardableResult
+    func setWindowFrame(_ targetFrame: CGRect) -> CGRect? {
         guard let screen = NSScreen.screens.first(where: { $0.frame.intersects(targetFrame) })
             ?? currentWindowPlacementContext()?.screen
             ?? NSScreen.main
         else {
-            return
+            return nil
         }
 
-        applyWindowFrame(targetFrame, on: screen)
+        return applyWindowFrame(targetFrame, on: screen)
     }
 
-    private func positionWindow(rect: WindowPositionRect) {
+    @discardableResult
+    private func positionWindow(rect: WindowPositionRect) -> CGRect? {
         guard let context = currentWindowPlacementContext() else {
-            return
+            return nil
         }
 
         let visibleFrame = context.screen.visibleFrame
         let targetFrame = rect.frame(in: visibleFrame, currentSize: context.size)
-        applyWindowFrame(targetFrame, on: context.screen)
+        return applyWindowFrame(targetFrame, on: context.screen)
+    }
+
+    func targetFrame(for rect: WindowPositionRect) -> CGRect? {
+        guard let context = currentWindowPlacementContext() else {
+            return nil
+        }
+
+        return rect.frame(in: context.screen.visibleFrame, currentSize: context.size)
     }
 
     func fillLeftHalf() {
@@ -365,31 +378,68 @@ extension WindowInfo {
         positionWindow(rect: .center)
     }
 
-    func centerWindow(scale: CGFloat) {
-        guard let context = currentWindowPlacementContext() else {
-            return
+    @discardableResult
+    func centerWindow(scale: CGFloat) -> CGRect? {
+        guard let context = currentWindowPlacementContext(),
+              let targetFrame = centeredWindowTargetFrame(scale: scale, context: context)
+        else {
+            return nil
         }
 
+        return applyWindowFrame(targetFrame, on: context.screen)
+    }
+
+    func centeredWindowTargetFrame(scale: CGFloat) -> CGRect? {
+        guard let context = currentWindowPlacementContext() else {
+            return nil
+        }
+
+        return centeredWindowTargetFrame(scale: scale, context: context)
+    }
+
+    private func centeredWindowTargetFrame(scale: CGFloat, context: (screen: NSScreen, size: CGSize)) -> CGRect? {
         let visibleFrame = context.screen.visibleFrame
         let clampedScale = min(max(scale, 0.2), 1.0)
         let targetSize = CGSize(
             width: visibleFrame.width * clampedScale,
             height: visibleFrame.height * clampedScale
         )
-        let targetFrame = WindowPositionRect.center.frame(in: visibleFrame, currentSize: targetSize)
-        applyWindowFrame(targetFrame, on: context.screen)
+        return WindowPositionRect.center.frame(in: visibleFrame, currentSize: targetSize)
     }
 
-    func centerWindow(widthScale: CGFloat, heightScale: CGFloat, lockAspectRatio: Bool) {
-        guard let context = currentWindowPlacementContext() else {
-            return
+    @discardableResult
+    func centerWindow(widthScale: CGFloat, heightScale: CGFloat, lockAspectRatio: Bool) -> CGRect? {
+        guard let context = currentWindowPlacementContext(),
+              let targetFrame = centeredWindowTargetFrame(
+                  widthScale: widthScale,
+                  heightScale: heightScale,
+                  lockAspectRatio: lockAspectRatio,
+                  context: context
+              )
+        else {
+            return nil
         }
 
-        let visibleFrame = context.screen.visibleFrame
+        return applyWindowFrame(targetFrame, on: context.screen)
+    }
 
+    func centeredWindowTargetFrame(widthScale: CGFloat, heightScale: CGFloat, lockAspectRatio: Bool) -> CGRect? {
+        guard let context = currentWindowPlacementContext() else {
+            return nil
+        }
+
+        return centeredWindowTargetFrame(
+            widthScale: widthScale,
+            heightScale: heightScale,
+            lockAspectRatio: lockAspectRatio,
+            context: context
+        )
+    }
+
+    private func centeredWindowTargetFrame(widthScale: CGFloat, heightScale: CGFloat, lockAspectRatio: Bool, context: (screen: NSScreen, size: CGSize)) -> CGRect? {
+        let visibleFrame = context.screen.visibleFrame
         let clampedWidthScale = min(max(widthScale, 0.2), 1.0)
         let clampedHeightScale = min(max(heightScale, 0.2), 1.0)
-
         let maxWidth = visibleFrame.width * clampedWidthScale
         let maxHeight = visibleFrame.height * clampedHeightScale
 
@@ -397,10 +447,7 @@ extension WindowInfo {
         if lockAspectRatio {
             let currentSize = context.size
             guard currentSize.width > 0, currentSize.height > 0 else {
-                targetSize = CGSize(width: maxWidth, height: maxHeight)
-                let targetFrame = WindowPositionRect.center.frame(in: visibleFrame, currentSize: targetSize)
-                applyWindowFrame(targetFrame, on: context.screen)
-                return
+                return WindowPositionRect.center.frame(in: visibleFrame, currentSize: CGSize(width: maxWidth, height: maxHeight))
             }
 
             let scaleFactor = min(maxWidth / currentSize.width, maxHeight / currentSize.height)
@@ -409,8 +456,7 @@ extension WindowInfo {
             targetSize = CGSize(width: maxWidth, height: maxHeight)
         }
 
-        let targetFrame = WindowPositionRect.center.frame(in: visibleFrame, currentSize: targetSize)
-        applyWindowFrame(targetFrame, on: context.screen)
+        return WindowPositionRect.center.frame(in: visibleFrame, currentSize: targetSize)
     }
 
     func bringToFront() {

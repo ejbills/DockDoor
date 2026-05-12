@@ -1194,6 +1194,15 @@ enum SettingsSearchCatalog {
         ),
         // Title Bar Scroll - additional
         SettingsSearchItem(
+            id: "gestures.verticalScrollBehavior",
+            title: String(localized: "Vertical Scroll Behavior"),
+            description: String(localized: "Choose how vertical title bar scroll gestures resize, center, maximize, and restore windows."),
+            keywords: ["vertical", "scroll", "behavior", "maximize", "restore", "center"],
+            tab: "GesturesKeybinds",
+            section: String(localized: "Title Bar Scroll Gesture"),
+            icon: "arrow.up.arrow.down.square"
+        ),
+        SettingsSearchItem(
             id: "gestures.centeredSizingMode",
             title: String(localized: "Centered Window Sizing"),
             keywords: ["centered", "sizing", "uniform", "separate"],

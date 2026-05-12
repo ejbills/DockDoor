@@ -1014,6 +1014,8 @@
 				Base,
 				he,
 				fr,
+				"zh-Hans",
+				"zh-Hant",
 			);
 			mainGroup = BB157B5C2C0E31CE00997315;
 			packageReferences = (
