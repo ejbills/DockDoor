@@ -1151,19 +1151,17 @@ final class DockObserver {
         case .maximize:
             let currentFrame = window.currentWindowFrame()
             let maximizeTargetFrame = window.targetFrame(for: .full)
-            let isAlreadyMaximized: Bool
-            if let currentFrame, let maximizeTargetFrame {
-                isAlreadyMaximized = titleBarFrame(currentFrame, matches: maximizeTargetFrame, includePosition: true)
+            let isAlreadyMaximized: Bool = if let currentFrame, let maximizeTargetFrame {
+                titleBarFrame(currentFrame, matches: maximizeTargetFrame, includePosition: true)
             } else {
-                isAlreadyMaximized = false
+                false
             }
 
             // 窗口被手动拖到其他屏幕后，当前 frame 应成为新的恢复点。
-            let originalFrame: CGRect?
-            if isAlreadyMaximized {
-                originalFrame = restoreFrame(for: window) ?? currentFrame
+            let originalFrame: CGRect? = if isAlreadyMaximized {
+                restoreFrame(for: window) ?? currentFrame
             } else {
-                originalFrame = currentFrame ?? restoreFrame(for: window)
+                currentFrame ?? restoreFrame(for: window)
             }
 
             guard let originalFrame else {
