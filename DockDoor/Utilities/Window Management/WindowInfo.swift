@@ -266,11 +266,48 @@ extension WindowInfo {
             return nil
         }
 
-        guard let screen = NSScreen.screens.first(where: { $0.frame.intersects(windowFrame) }) ?? NSScreen.main else {
+        guard let screen = Self.bestScreen(for: windowFrame) ?? NSScreen.main else {
             return nil
         }
 
         return (screen, currentSize)
+    }
+
+    private static var axCoordinateBaseMaxY: CGFloat {
+        let mainDisplayID = CGMainDisplayID()
+        let mainDisplayScreen = NSScreen.screens.first { screen in
+            guard let screenNumber = screen.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? NSNumber else {
+                return false
+            }
+            return screenNumber.uint32Value == mainDisplayID
+        }
+
+        guard let primaryScreen = mainDisplayScreen ?? NSScreen.screens.first else {
+            return 0
+        }
+
+        return primaryScreen.frame.origin == .zero ? primaryScreen.frame.maxY : primaryScreen.frame.height
+    }
+
+    private static func bestScreen(for frame: CGRect) -> NSScreen? {
+        let intersectingScreens = NSScreen.screens.compactMap { screen -> (screen: NSScreen, area: CGFloat)? in
+            let intersection = screen.frame.intersection(frame)
+            guard !intersection.isNull, intersection.width > 0, intersection.height > 0 else {
+                return nil
+            }
+            return (screen, intersection.width * intersection.height)
+        }
+
+        if let bestMatch = intersectingScreens.max(by: { $0.area < $1.area })?.screen {
+            return bestMatch
+        }
+
+        let frameCenter = CGPoint(x: frame.midX, y: frame.midY)
+        return NSScreen.screens.min { first, second in
+            let firstCenter = CGPoint(x: first.frame.midX, y: first.frame.midY)
+            let secondCenter = CGPoint(x: second.frame.midX, y: second.frame.midY)
+            return frameCenter.distance(to: firstCenter) < frameCenter.distance(to: secondCenter)
+        }
     }
 
     static func currentWindowFrame(for element: AXUIElement) -> CGRect? {
@@ -280,10 +317,9 @@ extension WindowInfo {
             return nil
         }
 
-        let primaryScreenMaxY = NSScreen.screens.first?.frame.maxY ?? NSScreen.main?.frame.maxY ?? 0
         return CGRect(
             x: currentPosition.x,
-            y: primaryScreenMaxY - currentPosition.y - currentSize.height,
+            y: axCoordinateBaseMaxY - currentPosition.y - currentSize.height,
             width: currentSize.width,
             height: currentSize.height
         )
@@ -295,8 +331,7 @@ extension WindowInfo {
 
     @discardableResult
     private func applyWindowFrame(_ targetFrame: CGRect, on screen: NSScreen) -> CGRect? {
-        let primaryScreenMaxY = NSScreen.screens.first?.frame.maxY ?? screen.frame.maxY
-        let axY = primaryScreenMaxY - targetFrame.maxY
+        let axY = Self.axCoordinateBaseMaxY - targetFrame.maxY
         let newPosition = CGPoint(x: targetFrame.origin.x, y: axY)
         let newSize = CGSize(width: targetFrame.width, height: targetFrame.height)
 
@@ -313,7 +348,7 @@ extension WindowInfo {
 
     @discardableResult
     func setWindowFrame(_ targetFrame: CGRect) -> CGRect? {
-        guard let screen = NSScreen.screens.first(where: { $0.frame.intersects(targetFrame) })
+        guard let screen = Self.bestScreen(for: targetFrame)
             ?? currentWindowPlacementContext()?.screen
             ?? NSScreen.main
         else {

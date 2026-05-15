@@ -1149,7 +1149,24 @@ final class DockObserver {
     private func handlePersistentTitleBarVerticalScroll(_ action: VerticalScrollAction, for window: WindowInfo, now: Date) {
         switch action {
         case .maximize:
-            guard let originalFrame = restoreFrame(for: window) ?? window.currentWindowFrame() else {
+            let currentFrame = window.currentWindowFrame()
+            let maximizeTargetFrame = window.targetFrame(for: .full)
+            let isAlreadyMaximized: Bool
+            if let currentFrame, let maximizeTargetFrame {
+                isAlreadyMaximized = titleBarFrame(currentFrame, matches: maximizeTargetFrame, includePosition: true)
+            } else {
+                isAlreadyMaximized = false
+            }
+
+            // 窗口被手动拖到其他屏幕后，当前 frame 应成为新的恢复点。
+            let originalFrame: CGRect?
+            if isAlreadyMaximized {
+                originalFrame = restoreFrame(for: window) ?? currentFrame
+            } else {
+                originalFrame = currentFrame ?? restoreFrame(for: window)
+            }
+
+            guard let originalFrame else {
                 _ = performTitleBarVerticalScrollAction(.maximize, on: window, originalFrame: nil)
                 return
             }
@@ -1158,12 +1175,12 @@ final class DockObserver {
                 removeRestoreFrame(for: window)
                 return
             }
-            saveRestoreFrameIfNeeded(originalFrame, for: window, now: now)
+            saveRestoreFrame(originalFrame, for: window, now: now)
 
         case .center:
             if let originalFrame = restoreFrame(for: window) {
                 if let appliedFrame = window.setWindowFrame(originalFrame),
-                   titleBarFrame(appliedFrame, matches: originalFrame)
+                   titleBarFrame(appliedFrame, matches: originalFrame, includePosition: true)
                 {
                     removeRestoreFrame(for: window)
                 }
@@ -1214,18 +1231,15 @@ final class DockObserver {
         return true
     }
 
-    private func saveRestoreFrameIfNeeded(_ originalFrame: CGRect, for window: WindowInfo, now: Date) {
+    private func saveRestoreFrame(_ originalFrame: CGRect, for window: WindowInfo, now: Date) {
         let runtimeKey = runtimeRestoreKey(for: window)
-        if runtimeTitleBarRestoreFrames[runtimeKey] == nil {
-            runtimeTitleBarRestoreFrames[runtimeKey] = RuntimeRestoreFrame(
-                windowId: window.id,
-                processIdentifier: window.app.processIdentifier,
-                originalFrame: originalFrame
-            )
-        }
+        runtimeTitleBarRestoreFrames[runtimeKey] = RuntimeRestoreFrame(
+            windowId: window.id,
+            processIdentifier: window.app.processIdentifier,
+            originalFrame: originalFrame
+        )
 
         guard let persistentKey = persistentRestoreKey(for: window),
-              !Defaults[.titleBarScrollPersistentRestoreFrames].contains(where: { $0.identityKey == persistentKey }),
               let bundleIdentifier = window.app.bundleIdentifier,
               let windowTitle = normalizedWindowTitle(for: window)
         else {
@@ -1233,6 +1247,7 @@ final class DockObserver {
         }
 
         var frames = Defaults[.titleBarScrollPersistentRestoreFrames]
+            .filter { $0.identityKey != persistentKey }
         frames.append(TitleBarScrollPersistentRestoreFrame(
             bundleIdentifier: bundleIdentifier,
             windowTitle: windowTitle,
@@ -1306,9 +1321,21 @@ final class DockObserver {
             .map { $0 }
     }
 
-    private func titleBarFrame(_ appliedFrame: CGRect, matches targetFrame: CGRect) -> Bool {
-        abs(appliedFrame.width - targetFrame.width) <= titleBarFrameTolerance &&
+    private func titleBarFrame(
+        _ appliedFrame: CGRect,
+        matches targetFrame: CGRect,
+        includePosition: Bool = false
+    ) -> Bool {
+        let sizeMatches = abs(appliedFrame.width - targetFrame.width) <= titleBarFrameTolerance &&
             abs(appliedFrame.height - targetFrame.height) <= titleBarFrameTolerance
+
+        guard includePosition else {
+            return sizeMatches
+        }
+
+        return sizeMatches &&
+            abs(appliedFrame.minX - targetFrame.minX) <= titleBarFrameTolerance &&
+            abs(appliedFrame.minY - targetFrame.minY) <= titleBarFrameTolerance
     }
 
     private func resolvedTitleBarHeight(for window: WindowInfo, windowFrame: CGRect) -> CGFloat {
