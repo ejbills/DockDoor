@@ -25,14 +25,6 @@ enum SettingsSearchCatalog {
             icon: "menubar.rectangle"
         ),
         SettingsSearchItem(
-            id: "general.activateOnWake",
-            title: String(localized: "Restore settings window to front on wake from sleep"),
-            keywords: ["wake", "sleep", "restore"],
-            tab: "General",
-            section: String(localized: "Application Basics"),
-            icon: "moon.zzz"
-        ),
-        SettingsSearchItem(
             id: "general.reduceMotion",
             title: String(localized: "Reduce motion"),
             keywords: ["animation", "animations", "motion", "accessibility"],

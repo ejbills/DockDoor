@@ -8,7 +8,6 @@ struct MainSettingsView: View {
     @Default(.showMenuBarIcon) var showMenuBarIcon
     @Default(.showAnimations) var showAnimations
     @Default(.sortMinimizedToEnd) var sortMinimizedToEnd
-    @Default(.activateOnWake) var activateOnWake
 
     var body: some View {
         BaseSettingsView {
@@ -50,9 +49,6 @@ struct MainSettingsView: View {
                         let appDelegate = NSApplication.shared.delegate as! AppDelegate
                         if isOn { appDelegate.setupMenuBar() } else { appDelegate.removeMenuBar() }
                     }
-
-                Toggle(isOn: $activateOnWake, label: { Text("Restore settings window to front on wake from sleep") })
-                    .settingsSearchTarget("general.activateOnWake")
 
                 Toggle(isOn: Binding(
                     get: { !showAnimations },
@@ -105,7 +101,6 @@ struct MainSettingsView: View {
                 Defaults[.previewHoverAction] = Defaults.Keys.previewHoverAction.defaultValue
 
                 showMenuBarIcon = Defaults.Keys.showMenuBarIcon.defaultValue
-                activateOnWake = Defaults.Keys.activateOnWake.defaultValue
                 Defaults[.enableWindowSwitcher] = Defaults.Keys.enableWindowSwitcher.defaultValue
                 Defaults[.instantWindowSwitcher] = Defaults.Keys.instantWindowSwitcher.defaultValue
                 Defaults[.includeHiddenWindowsInSwitcher] = Defaults.Keys.includeHiddenWindowsInSwitcher.defaultValue
