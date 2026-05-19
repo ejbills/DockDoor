@@ -355,7 +355,8 @@ final class DockLocker {
         if !lockedIdentifier.isEmpty,
            NSScreen.findScreen(byIdentifier: lockedIdentifier) == nil
         {
-            Defaults[.enableDockLocking] = false
+            cachedTriggerZones = []
+            removeEventTap()
             return
         }
 
