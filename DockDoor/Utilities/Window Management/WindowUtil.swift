@@ -392,6 +392,21 @@ extension WindowUtil {
             }
         }
     }
+
+    @discardableResult
+    static func moveWindowToCurrentManagedSpace(_ windowInfo: WindowInfo, mouseLocation: CGPoint = NSEvent.mouseLocation) -> Bool {
+        guard !windowInfo.isWindowlessApp,
+              let targetSpaceID = WindowSpaces.currentManagedSpaceID(mouseLocation: mouseLocation)
+        else {
+            return false
+        }
+
+        let moved = WindowSpaces.move(windowID: windowInfo.id, toManagedSpace: targetSpaceID)
+        if moved {
+            updateCachedWindowState(windowInfo, spaceID: .some(Int(targetSpaceID)))
+        }
+        return moved
+    }
 }
 
 // MARK: - Window Capture

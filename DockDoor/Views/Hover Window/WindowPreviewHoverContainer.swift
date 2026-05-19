@@ -360,9 +360,11 @@ struct WindowPreviewHoverContainer: View {
     private func handleWindowDrop(at location: CGPoint, for index: Int) {
         guard index < previewStateCoordinator.windows.count else { return }
         let window = previewStateCoordinator.windows[index]
+        guard !window.isWindowlessApp else { return }
 
         let currentScreen = NSScreen.screenFromQuartzPoint(location)
         let globalLocation = DockObserver.cgPointFromNSPoint(location, forScreen: currentScreen)
+        window.moveToCurrentManagedSpace(mouseLocation: location)
 
         let finalPosition = CGPoint(
             x: globalLocation.x,
@@ -371,6 +373,10 @@ struct WindowPreviewHoverContainer: View {
 
         if let positionValue = AXValue.from(point: finalPosition) {
             try? window.axElement.setAttribute(kAXPositionAttribute, positionValue)
+            WindowUtil.updateCachedWindowState(
+                window,
+                screenIdentifier: .some(currentScreen.uniqueIdentifier())
+            )
             window.bringToFront()
             onWindowTap?()
         }

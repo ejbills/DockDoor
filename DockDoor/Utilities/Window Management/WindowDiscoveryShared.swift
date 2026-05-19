@@ -155,6 +155,100 @@ func currentActiveSpaceIDs() -> Set<Int> {
     return result
 }
 
+enum WindowSpaces {
+    private struct ManagedDisplay {
+        let identifier: String
+        let currentSpaceID: CGSSpaceID?
+        let spaceIDs: Set<CGSSpaceID>
+    }
+
+    private static func spaceID(from dictionary: [String: AnyObject]?) -> CGSSpaceID? {
+        if let managedSpaceID = dictionary?["ManagedSpaceID"] as? NSNumber {
+            return managedSpaceID.uint64Value
+        }
+        if let id64 = dictionary?["id64"] as? NSNumber {
+            return id64.uint64Value
+        }
+        return nil
+    }
+
+    private static func managedDisplays() -> [ManagedDisplay] {
+        guard let displays = CGSCopyManagedDisplaySpaces(CGSMainConnectionID()) as? [[String: AnyObject]] else {
+            return []
+        }
+
+        return displays.compactMap { display in
+            guard let identifier = display["Display Identifier"] as? String else { return nil }
+            let currentSpace = display["Current Space"] as? [String: AnyObject]
+            let spaces = display["Spaces"] as? [[String: AnyObject]] ?? []
+
+            return ManagedDisplay(
+                identifier: identifier,
+                currentSpaceID: spaceID(from: currentSpace),
+                spaceIDs: Set(spaces.compactMap { spaceID(from: $0) })
+            )
+        }
+    }
+
+    private static func displayIdentifiers(for screen: NSScreen) -> Set<String> {
+        guard let screenNumber = screen.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? NSNumber else {
+            return []
+        }
+
+        let displayID = CGDirectDisplayID(screenNumber.uint32Value)
+        var identifiers: Set<String> = [String(displayID)]
+
+        if let uuid = CGDisplayCreateUUIDFromDisplayID(displayID)?.takeRetainedValue(),
+           let uuidString = CFUUIDCreateString(nil, uuid) as String?
+        {
+            identifiers.insert(uuidString)
+        }
+
+        return identifiers
+    }
+
+    private static func screenContainingMouse(_ mouseLocation: CGPoint) -> NSScreen? {
+        NSScreen.screens.first { screen in
+            NSPointInRect(mouseLocation, screen.frame)
+        }
+    }
+
+    static func currentManagedSpaceID(mouseLocation: CGPoint = NSEvent.mouseLocation) -> CGSSpaceID? {
+        let displays = managedDisplays()
+        guard !displays.isEmpty else { return nil }
+
+        if let mouseScreen = screenContainingMouse(mouseLocation) {
+            let screenIdentifiers = displayIdentifiers(for: mouseScreen)
+                .map { $0.lowercased() }
+
+            if let display = displays.first(where: { display in
+                screenIdentifiers.contains(display.identifier.lowercased())
+            }) {
+                return display.currentSpaceID
+            }
+        }
+
+        return displays.first?.currentSpaceID
+    }
+
+    @discardableResult
+    static func move(windowID: CGWindowID, toManagedSpace targetSpaceID: CGSSpaceID) -> Bool {
+        let displays = managedDisplays()
+        guard displays.contains(where: { display in
+            display.currentSpaceID == targetSpaceID || display.spaceIDs.contains(targetSpaceID)
+        }) else {
+            DebugLogger.log("WindowSpaces.move", details: "Target Space \(targetSpaceID) not found")
+            return false
+        }
+
+        if windowID.cgsSpaces().contains(targetSpaceID) {
+            return true
+        }
+
+        return SLSMoveWindowsToManagedSpace([windowID], targetSpaceID)
+    }
+}
+
 // Decide if a window should be accepted considering on-screen state,
 // ScreenCaptureKit presence, multi-Space, and window/app state.
 func shouldAcceptWindow(axWindow: AXUIElement,

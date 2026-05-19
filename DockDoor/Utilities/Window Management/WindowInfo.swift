@@ -413,6 +413,11 @@ extension WindowInfo {
         applyWindowFrame(targetFrame, on: context.screen)
     }
 
+    @discardableResult
+    func moveToCurrentManagedSpace(mouseLocation: CGPoint = NSEvent.mouseLocation) -> Bool {
+        WindowUtil.moveWindowToCurrentManagedSpace(self, mouseLocation: mouseLocation)
+    }
+
     func bringToFront() {
         guard !isWindowlessApp else {
             app.activate(options: [.activateIgnoringOtherApps])
