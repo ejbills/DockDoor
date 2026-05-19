@@ -82,6 +82,7 @@ struct WindowPreviewHoverContainer: View {
     @Default(.enableLivePreview) var enableLivePreview
     @Default(.enableLivePreviewForDock) var enableLivePreviewForDock
     @Default(.enableLivePreviewForWindowSwitcher) var enableLivePreviewForWindowSwitcher
+    @Default(.stageManagerOptimization) var stageManagerOptimization
 
     // Compact mode thresholds (0 = disabled, 1+ = enable when window count >= threshold)
     @Default(.windowSwitcherCompactThreshold) var windowSwitcherCompactThreshold
@@ -1153,8 +1154,16 @@ struct WindowPreviewHoverContainer: View {
                     return true
                 }()
 
-                // Use compact mode if: container threshold triggered OR per-window fallback (no image and no live preview)
-                let useCompactForThisWindow = shouldUseCompactMode || (windowInfo.image == nil && !useLivePreview)
+                let shouldShowStageManagerMissingPreviewTip = stageManagerOptimization &&
+                    hasScreenRecordingPermission &&
+                    !disableImagePreview &&
+                    windowInfo.image == nil &&
+                    !useLivePreview &&
+                    !windowInfo.isWindowlessApp
+
+                // Use compact mode if: container threshold triggered OR per-window fallback (no image and no live preview).
+                let useCompactForThisWindow = shouldUseCompactMode ||
+                    (windowInfo.image == nil && !useLivePreview && !shouldShowStageManagerMissingPreviewTip)
 
                 let isSelected = index == previewStateCoordinator.currIndex
 
@@ -1212,6 +1221,7 @@ struct WindowPreviewHoverContainer: View {
                         mockPreviewActive: mockPreviewActive,
                         onHoverIndexChange: handleHoverIndexChange,
                         useLivePreview: useLivePreview,
+                        showStageManagerMissingPreviewTip: shouldShowStageManagerMissingPreviewTip,
                         appearance: appearance,
                         backgroundAppearance: backgroundAppearance
                     )

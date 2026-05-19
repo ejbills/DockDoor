@@ -175,6 +175,8 @@ final class WindowLiveCapture: ObservableObject {
     }
 
     private func startStream(for window: SCWindow) async {
+        guard isWindowVisibleOnAnyScreen(window) else { return }
+
         let filter = SCContentFilter(desktopIndependentWindow: window)
 
         let config = SCStreamConfiguration()
@@ -269,6 +271,11 @@ final class WindowLiveCapture: ObservableObject {
         guard stopGeneration == generationAtStop else { return }
 
         await stopAndCleanup()
+    }
+
+    private func isWindowVisibleOnAnyScreen(_ window: SCWindow) -> Bool {
+        guard !window.frame.isEmpty else { return false }
+        return NSScreen.screens.contains { $0.frame.intersects(window.frame) }
     }
 
     func stopCapture() async {

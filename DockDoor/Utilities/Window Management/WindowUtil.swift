@@ -283,9 +283,14 @@ enum WindowUtil {
         let cacheLifespan = Defaults[.screenCaptureCacheLifespan]
         let windows = cachedWindows ?? desktopSpaceWindowCacheManager.readCache(pid: pid)
         return Set(windows.compactMap { window -> CGWindowID? in
-            guard window.image != nil,
+            guard let image = window.image,
                   Date().timeIntervalSince(window.imageCapturedTime) <= cacheLifespan
             else { return nil }
+            if stageManagerOptimizationEnabled,
+               isLikelyBadStageManagerCapture(image, axWindow: window.axElement)
+            {
+                return nil
+            }
             return window.id
         })
     }
@@ -300,6 +305,10 @@ enum WindowUtil {
         code: 1,
         userInfo: [NSLocalizedDescriptionKey: "Error encountered during image capture"]
     )
+
+    private static var stageManagerOptimizationEnabled: Bool {
+        Defaults[.stageManagerOptimization]
+    }
 }
 
 // MARK: - Cache Management
@@ -410,6 +419,39 @@ extension WindowUtil {
         )
     }
 
+    private static func captureWindowImage(window: SCWindow, axWindow: AXUIElement, transformedThumbnail: Bool, forceRefresh: Bool = false) async throws -> CGImage {
+        if transformedThumbnail {
+            guard let pid = window.owningApplication?.processID else {
+                throw captureError
+            }
+            return try captureTransformedWindowImage(
+                windowID: window.windowID,
+                pid: pid,
+                windowTitle: window.title,
+                axWindow: axWindow
+            )
+        }
+        return try await captureWindowImage(window: window, forceRefresh: forceRefresh)
+    }
+
+    private static func captureTransformedWindowImage(windowID: CGWindowID, pid: pid_t, windowTitle: String?, axWindow: AXUIElement) throws -> CGImage {
+        if let cachedImage = cachedWindowImage(windowID: windowID, pid: pid, windowTitle: windowTitle),
+           !isLikelyBadStageManagerCapture(cachedImage, axWindow: axWindow)
+        {
+            return cachedImage
+        }
+
+        throw captureError
+    }
+
+    private static func cachedWindowImage(windowID: CGWindowID, pid: pid_t, windowTitle: String?) -> CGImage? {
+        let cachedWindows = desktopSpaceWindowCacheManager.readCache(pid: pid)
+        if let exactMatch = cachedWindows.first(where: { $0.id == windowID && (windowTitle == nil || $0.windowName == windowTitle) }) {
+            return exactMatch.image
+        }
+        return cachedWindows.first(where: { $0.id == windowID })?.image
+    }
+
     static func captureWindowImage(windowID: CGWindowID, pid: pid_t, windowTitle: String? = nil, forceRefresh: Bool = false) async throws -> CGImage {
         // CGSHWCaptureWindowList requires screen recording permission
         guard hasScreenRecordingPermission() else {
@@ -423,7 +465,11 @@ extension WindowUtil {
                 let cachedImage = cachedWindow.image
             {
                 let cacheLifespan = Defaults[.screenCaptureCacheLifespan]
-                if Date().timeIntervalSince(cachedWindow.imageCapturedTime) <= cacheLifespan {
+                let cachedImageIsUsable = !stageManagerOptimizationEnabled ||
+                    !isLikelyBadStageManagerCapture(cachedImage, axWindow: cachedWindow.axElement)
+                if cachedImageIsUsable,
+                   Date().timeIntervalSince(cachedWindow.imageCapturedTime) <= cacheLifespan
+                {
                     return cachedImage
                 }
             }
@@ -869,9 +915,13 @@ extension WindowUtil {
     static func captureAndCacheWindowInfo(window: SCWindow, app: NSRunningApplication, skipWindowIDs: Set<CGWindowID> = []) async throws {
         let windowID = window.windowID
         let pid = app.processIdentifier
+        let appElement = AXUIElementCreateApplication(pid)
+        let stageManagerOptimizationEnabled = Self.stageManagerOptimizationEnabled
 
         // Fast path: skip if pre-computed by caller as fresh cached
-        if skipWindowIDs.contains(windowID) { return }
+        if skipWindowIDs.contains(windowID),
+           !stageManagerOptimizationEnabled || !isFocusedWindow(appAxElement: appElement, app: app, windowID: windowID)
+        { return }
 
         guard window.owningApplication != nil,
               window.isOnScreen,
@@ -919,8 +969,6 @@ extension WindowUtil {
             }
         }
 
-        let appElement = AXUIElementCreateApplication(pid)
-
         guard let axWindows = try? appElement.windows(), !axWindows.isEmpty else {
             return
         }
@@ -958,9 +1006,21 @@ extension WindowUtil {
                 isHidden: hiddenState
             )
 
-            if let image = try? await captureWindowImage(window: window) {
-                windowInfo.image = image
-                windowInfo.imageCapturedTime = Date()
+            if stageManagerOptimizationEnabled {
+                let focusedWindow = isFocusedWindow(windowRef, appAxElement: appElement, app: app, windowID: window.windowID)
+                let transformedThumbnail = !focusedWindow &&
+                    isLikelyTransformedThumbnail(frame: window.frame, axWindow: windowRef)
+                if let image = try? await captureWindowImage(window: window, axWindow: windowRef, transformedThumbnail: transformedThumbnail, forceRefresh: focusedWindow) {
+                    if focusedWindow || !isLikelyBadStageManagerCapture(image, axWindow: windowRef) {
+                        windowInfo.image = image
+                        windowInfo.imageCapturedTime = Date()
+                    }
+                }
+            } else {
+                if let image = try? await captureWindowImage(window: window) {
+                    windowInfo.image = image
+                    windowInfo.imageCapturedTime = Date()
+                }
             }
             updateDesktopSpaceWindowCache(with: windowInfo)
         }
@@ -975,12 +1035,15 @@ extension WindowUtil {
         existingCachedIDs: Set<CGWindowID> = []
     ) async throws {
         let pid = app.processIdentifier
+        let stageManagerOptimizationEnabled = Self.stageManagerOptimizationEnabled
 
         // Quick window ID check first (fast path)
         var cgID: CGWindowID = 0
         if _AXUIElementGetWindow(axWindow, &cgID) == .success, cgID != 0 {
             // Skip if already cached with fresh image (pre-computed by caller)
-            if skipWindowIDs.contains(cgID) { return }
+            if skipWindowIDs.contains(cgID),
+               !stageManagerOptimizationEnabled || !isFocusedWindow(appAxElement: appAxElement, app: app, windowID: cgID)
+            { return }
             guard !excludeWindowIDs.contains(cgID) else { return }
         }
 
@@ -1050,7 +1113,32 @@ extension WindowUtil {
         )
         info.windowName = windowTitle
 
-        if let image = try? await captureWindowImage(windowID: cgID, pid: pid, windowTitle: windowTitle) {
+        if stageManagerOptimizationEnabled {
+            let focusedWindow = isFocusedWindow(axWindow, appAxElement: appAxElement, app: app, windowID: cgID)
+            let transformedThumbnail: Bool = if focusedWindow {
+                false
+            } else if let frame = cgFrame(from: cgEntry) {
+                isLikelyTransformedThumbnail(frame: frame, axWindow: axWindow)
+            } else {
+                false
+            }
+
+            let image: CGImage? = if transformedThumbnail {
+                try? captureTransformedWindowImage(
+                    windowID: cgID,
+                    pid: pid,
+                    windowTitle: windowTitle,
+                    axWindow: axWindow
+                )
+            } else {
+                try? await captureWindowImage(windowID: cgID, pid: pid, windowTitle: windowTitle, forceRefresh: focusedWindow)
+            }
+
+            if let image, focusedWindow || !isLikelyBadStageManagerCapture(image, axWindow: axWindow) {
+                info.image = image
+                info.imageCapturedTime = Date()
+            }
+        } else if let image = try? await captureWindowImage(windowID: cgID, pid: pid, windowTitle: windowTitle) {
             info.image = image
             info.imageCapturedTime = Date()
         }
@@ -1059,8 +1147,173 @@ extension WindowUtil {
     }
 
     private static let minUsableImageDimension = 10
+    private static let transformedThumbnailAreaRatioThreshold: CGFloat = 0.65
+    private static let sparseCaptureSampleSize = 96
+    private static let sparseCaptureContentAreaThreshold: CGFloat = 0.35
+    private static let sparseCaptureContentPixelThreshold: CGFloat = 0.20
+    private static let undersizedCaptureAreaRatioThreshold: CGFloat = 0.45
+    private static let undersizedCaptureDimensionRatioThreshold: CGFloat = 0.65
+
+    private static func cgFrame(from cgEntry: [String: AnyObject]) -> CGRect? {
+        guard let bounds = cgEntry[kCGWindowBounds as String] as? [String: AnyObject] else { return nil }
+        let x = CGFloat((bounds["X"] as? NSNumber)?.doubleValue ?? 0)
+        let y = CGFloat((bounds["Y"] as? NSNumber)?.doubleValue ?? 0)
+        let width = CGFloat((bounds["Width"] as? NSNumber)?.doubleValue ?? 0)
+        let height = CGFloat((bounds["Height"] as? NSNumber)?.doubleValue ?? 0)
+        guard width > 0, height > 0 else { return nil }
+        return CGRect(x: x, y: y, width: width, height: height)
+    }
+
+    private static func isLikelyTransformedThumbnail(frame: CGRect, axWindow: AXUIElement) -> Bool {
+        guard let axSize = try? axWindow.size(),
+              axSize.width > 0,
+              axSize.height > 0,
+              frame.width > 0,
+              frame.height > 0
+        else { return false }
+
+        let areaRatio = (frame.width * frame.height) / (axSize.width * axSize.height)
+        let widthDelta = axSize.width - frame.width
+        let heightDelta = axSize.height - frame.height
+        return areaRatio < transformedThumbnailAreaRatioThreshold && (widthDelta > 120 || heightDelta > 120)
+    }
+
+    private static func isFocusedWindow(_ axWindow: AXUIElement, appAxElement: AXUIElement, app: NSRunningApplication, windowID: CGWindowID) -> Bool {
+        guard isAppFrontmost(app) else { return false }
+        guard let focusedWindow = try? appAxElement.focusedWindow() else { return false }
+        if CFEqual(focusedWindow, axWindow) { return true }
+        return (try? focusedWindow.cgWindowId()) == windowID
+    }
+
+    private static func isFocusedWindow(appAxElement: AXUIElement, app: NSRunningApplication, windowID: CGWindowID) -> Bool {
+        guard isAppFrontmost(app) else { return false }
+        guard let focusedWindow = try? appAxElement.focusedWindow() else { return false }
+        return (try? focusedWindow.cgWindowId()) == windowID
+    }
+
+    private static func isAppFrontmost(_ app: NSRunningApplication) -> Bool {
+        guard app.isActive || NSWorkspace.shared.frontmostApplication?.processIdentifier == app.processIdentifier else { return false }
+        return true
+    }
+
+    private static func isLikelyBadStageManagerCapture(_ image: CGImage, axWindow: AXUIElement) -> Bool {
+        isLikelyUndersizedStageManagerCapture(image, axWindow: axWindow) || isLikelySparseStageManagerCapture(image)
+    }
+
+    private static func isLikelyUndersizedStageManagerCapture(_ image: CGImage, axWindow: AXUIElement) -> Bool {
+        guard let axSize = try? axWindow.size(),
+              axSize.width > 0,
+              axSize.height > 0,
+              image.width > 0,
+              image.height > 0
+        else { return false }
+
+        let previewScale = max(1, Defaults[.windowPreviewImageScale])
+        let expectedWidth = axSize.width / previewScale
+        let expectedHeight = axSize.height / previewScale
+        guard expectedWidth > 0, expectedHeight > 0 else { return false }
+
+        let widthRatio = CGFloat(image.width) / expectedWidth
+        let heightRatio = CGFloat(image.height) / expectedHeight
+        let areaRatio = (CGFloat(image.width) * CGFloat(image.height)) / (expectedWidth * expectedHeight)
+
+        return areaRatio < undersizedCaptureAreaRatioThreshold &&
+            (widthRatio < undersizedCaptureDimensionRatioThreshold || heightRatio < undersizedCaptureDimensionRatioThreshold)
+    }
+
+    private static func isLikelySparseStageManagerCapture(_ image: CGImage) -> Bool {
+        let sampleSize = sparseCaptureSampleSize
+        let bytesPerPixel = 4
+        let bytesPerRow = sampleSize * bytesPerPixel
+        var pixels = [UInt8](repeating: 0, count: sampleSize * bytesPerRow)
+        let colorSpace = CGColorSpaceCreateDeviceRGB()
+        let bitmapInfo = CGImageAlphaInfo.premultipliedLast.rawValue
+
+        let rendered = pixels.withUnsafeMutableBytes { buffer in
+            guard let baseAddress = buffer.baseAddress,
+                  let context = CGContext(
+                      data: baseAddress,
+                      width: sampleSize,
+                      height: sampleSize,
+                      bitsPerComponent: 8,
+                      bytesPerRow: bytesPerRow,
+                      space: colorSpace,
+                      bitmapInfo: bitmapInfo
+                  )
+            else { return false }
+
+            context.interpolationQuality = .low
+            context.draw(image, in: CGRect(x: 0, y: 0, width: sampleSize, height: sampleSize))
+            return true
+        }
+        guard rendered else { return false }
+
+        let background = averageCornerColor(in: pixels, sampleSize: sampleSize, bytesPerRow: bytesPerRow)
+        var minX = sampleSize
+        var minY = sampleSize
+        var maxX = -1
+        var maxY = -1
+        var contentPixels = 0
+
+        for y in 0 ..< sampleSize {
+            for x in 0 ..< sampleSize {
+                let offset = y * bytesPerRow + x * bytesPerPixel
+                let alpha = pixels[offset + 3]
+                guard alpha > 16 else { continue }
+
+                let distance = abs(Int(pixels[offset]) - background.red) +
+                    abs(Int(pixels[offset + 1]) - background.green) +
+                    abs(Int(pixels[offset + 2]) - background.blue)
+                guard distance > 60 else { continue }
+
+                contentPixels += 1
+                minX = min(minX, x)
+                minY = min(minY, y)
+                maxX = max(maxX, x)
+                maxY = max(maxY, y)
+            }
+        }
+
+        guard contentPixels > 0, maxX >= minX, maxY >= minY else { return false }
+
+        let totalArea = CGFloat(sampleSize * sampleSize)
+        let contentArea = CGFloat((maxX - minX + 1) * (maxY - minY + 1)) / totalArea
+        let contentPixelRatio = CGFloat(contentPixels) / totalArea
+        return contentArea < sparseCaptureContentAreaThreshold && contentPixelRatio < sparseCaptureContentPixelThreshold
+    }
+
+    private static func averageCornerColor(in pixels: [UInt8], sampleSize: Int, bytesPerRow: Int) -> (red: Int, green: Int, blue: Int) {
+        let cornerSize = 8
+        let bytesPerPixel = 4
+        var red = 0
+        var green = 0
+        var blue = 0
+        var count = 0
+
+        func accumulate(xRange: Range<Int>, yRange: Range<Int>) {
+            for y in yRange {
+                for x in xRange {
+                    let offset = y * bytesPerRow + x * bytesPerPixel
+                    red += Int(pixels[offset])
+                    green += Int(pixels[offset + 1])
+                    blue += Int(pixels[offset + 2])
+                    count += 1
+                }
+            }
+        }
+
+        accumulate(xRange: 0 ..< cornerSize, yRange: 0 ..< cornerSize)
+        accumulate(xRange: sampleSize - cornerSize ..< sampleSize, yRange: 0 ..< cornerSize)
+        accumulate(xRange: 0 ..< cornerSize, yRange: sampleSize - cornerSize ..< sampleSize)
+        accumulate(xRange: sampleSize - cornerSize ..< sampleSize, yRange: sampleSize - cornerSize ..< sampleSize)
+
+        guard count > 0 else { return (0, 0, 0) }
+        return (red / count, green / count, blue / count)
+    }
 
     static func updateDesktopSpaceWindowCache(with windowInfo: WindowInfo) {
+        let stageManagerOptimizationEnabled = Self.stageManagerOptimizationEnabled
+
         desktopSpaceWindowCacheManager.updateCache(pid: windowInfo.app.processIdentifier) { windowSet in
             if let matchingWindow = windowSet.first(where: { $0.axElement == windowInfo.axElement }) {
                 var matchingWindowCopy = matchingWindow
@@ -1080,7 +1333,21 @@ extension WindowUtil {
                     true
                 }
 
-                if newImageIsTiny, matchingWindow.image != nil {
+                let newImageIsBadStageManagerCapture = stageManagerOptimizationEnabled && (windowInfo.image.map {
+                    isLikelyBadStageManagerCapture($0, axWindow: windowInfo.axElement)
+                } ?? true)
+
+                if stageManagerOptimizationEnabled, newImageIsTiny || newImageIsBadStageManagerCapture {
+                    if let existingImage = matchingWindow.image,
+                       isLikelyBadStageManagerCapture(existingImage, axWindow: matchingWindow.axElement)
+                    {
+                        matchingWindowCopy.image = nil
+                        matchingWindowCopy.imageCapturedTime = windowInfo.imageCapturedTime
+                    } else if matchingWindow.image == nil {
+                        matchingWindowCopy.image = nil
+                        matchingWindowCopy.imageCapturedTime = windowInfo.imageCapturedTime
+                    }
+                } else if newImageIsTiny, matchingWindow.image != nil {
                     // Keep the existing cached image instead of replacing with a degenerate one
                 } else {
                     matchingWindowCopy.image = windowInfo.image
@@ -1090,7 +1357,14 @@ extension WindowUtil {
                 windowSet.remove(matchingWindow)
                 windowSet.insert(matchingWindowCopy)
             } else {
-                windowSet.insert(windowInfo)
+                var windowToInsert = windowInfo
+                if stageManagerOptimizationEnabled,
+                   let image = windowToInsert.image,
+                   isLikelyBadStageManagerCapture(image, axWindow: windowToInsert.axElement)
+                {
+                    windowToInsert.image = nil
+                }
+                windowSet.insert(windowToInsert)
             }
         }
     }
@@ -1293,6 +1567,8 @@ extension WindowUtil {
     }
 
     static func openNewWindow(app: NSRunningApplication) {
+        guard app.activationPolicy == .regular, !app.isTerminated else { return }
+
         let source = CGEventSource(stateID: .combinedSessionState)
         let keyDown = CGEvent(keyboardEventSource: source, virtualKey: 0x2D, keyDown: true)
         keyDown?.flags = .maskCommand

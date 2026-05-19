@@ -25,6 +25,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
     private var onWindowTap: (() -> Void)?
     private var fullPreviewWindow: NSPanel?
     private var pendingShowWorkItem: DispatchWorkItem?
+    private var pendingFrameRefreshWorkItem: DispatchWorkItem?
 
     var windowSize: CGSize = getWindowSize()
 
@@ -78,7 +79,9 @@ final class SharedPreviewWindowCoordinator: NSPanel {
 
     private func setupFrameRefreshObserver() {
         windowSwitcherCoordinator.onFrameRefreshNeeded = { [weak self] in
-            self?.refreshPanelFrameToFitContent()
+            DispatchQueue.main.async {
+                self?.schedulePanelFrameRefresh()
+            }
         }
     }
 
@@ -168,12 +171,19 @@ final class SharedPreviewWindowCoordinator: NSPanel {
     }
 
     /// Refreshes the panel frame to match SwiftUI content's intrinsic size after window count changes.
-    @MainActor
+    private func schedulePanelFrameRefresh() {
+        pendingFrameRefreshWorkItem?.cancel()
+        let workItem = DispatchWorkItem { [weak self] in
+            self?.refreshPanelFrameToFitContent()
+        }
+        pendingFrameRefreshWorkItem = workItem
+        DispatchQueue.main.async(execute: workItem)
+    }
+
     private func refreshPanelFrameToFitContent() {
         guard let hostingView = contentView else { return }
 
-        hostingView.layoutSubtreeIfNeeded()
-        let fittingSize = hostingView.fittingSize
+        let fittingSize = measuredContentSize(for: hostingView)
 
         let screen = NSScreen.screenFromQuartzPoint(NSEvent.mouseLocation)
         let screenFrame = screen.frame
@@ -216,6 +226,14 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         }
     }
 
+    private func measuredContentSize(for view: NSView) -> CGSize {
+        let expectedSize = windowSwitcherCoordinator.expectedContentSize
+        if expectedSize.width > 0, expectedSize.height > 0 {
+            return expectedSize
+        }
+        return view.fittingSize
+    }
+
     @MainActor
     private func performShowView(_ view: some View,
                                  mouseLocation: CGPoint?,
@@ -226,12 +244,6 @@ final class SharedPreviewWindowCoordinator: NSPanel {
                                  dockItemFrameOverride: CGRect? = nil)
     {
         let hostingView = NSHostingView(rootView: view)
-
-        if let oldContentView = contentView {
-            oldContentView.removeFromSuperview()
-        }
-        contentView = hostingView
-
         let newHoverWindowSize = hostingView.fittingSize
         let position: CGPoint
 
@@ -259,6 +271,11 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         } else {
             position = centerWindowOnScreen(size: newHoverWindowSize, screen: mouseScreen)
         }
+
+        if let oldContentView = contentView {
+            oldContentView.removeFromSuperview()
+        }
+        contentView = hostingView
 
         let finalFrame = CGRect(origin: position, size: newHoverWindowSize)
         applyWindowFrame(finalFrame, animated: true, dockPositionOverride: dockPositionOverride)
@@ -300,20 +317,12 @@ final class SharedPreviewWindowCoordinator: NSPanel {
                                                     hasScreenRecordingPermission: hasScreenRecordingPermission)
         let newHostingView = NSHostingView(rootView: hoverView)
 
-        if let oldContentView = contentView {
-            oldContentView.removeFromSuperview()
-        }
-        contentView = newHostingView
-
-        let previousFrame = frame
-        setFrame(CGRect(origin: previousFrame.origin, size: CGSize(width: 1, height: 1)), display: false)
-
         elapsed = renderStartTime.map { (CFAbsoluteTimeGetCurrent() - $0) * 1000 } ?? 0
         DebugLogger.log("PreviewRender", details: "calculating fittingSize (+\(String(format: "%.1f", elapsed))ms)")
 
         let newHoverWindowSize: CGSize
         do {
-            let fittingSize = newHostingView.fittingSize
+            let fittingSize = measuredContentSize(for: newHostingView)
 
             elapsed = renderStartTime.map { (CFAbsoluteTimeGetCurrent() - $0) * 1000 } ?? 0
             DebugLogger.log("PreviewRender", details: "fittingSize done: \(fittingSize) (+\(String(format: "%.1f", elapsed))ms)")
@@ -344,6 +353,12 @@ final class SharedPreviewWindowCoordinator: NSPanel {
                 position = centerWindowOnScreen(size: newHoverWindowSize, screen: mouseScreen)
             }
         }
+
+        if let oldContentView = contentView {
+            oldContentView.removeFromSuperview()
+        }
+        contentView = newHostingView
+
         let finalFrame = CGRect(origin: position, size: newHoverWindowSize)
 
         setFrame(finalFrame, display: false)
@@ -395,7 +410,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         fullPreviewWindow?.contentView = hostingView
 
         fullPreviewWindow?.setFrame(flippedIconRect, display: true)
-        fullPreviewWindow?.makeKeyAndOrderFront(nil)
+        fullPreviewWindow?.orderFront(nil)
     }
 
     @MainActor
@@ -571,7 +586,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         }
 
         alphaValue = 1.0
-        makeKeyAndOrderFront(nil)
+        orderFront(nil)
     }
 
     @MainActor

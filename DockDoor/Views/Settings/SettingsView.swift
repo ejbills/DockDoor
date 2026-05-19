@@ -55,6 +55,10 @@ class SettingsManager: NSObject, ObservableObject {
 }
 
 extension SettingsManager: NSToolbarDelegate {
+    func toolbar(_ toolbar: NSToolbar, itemForItemIdentifier itemIdentifier: NSToolbarItem.Identifier, willBeInsertedIntoToolbar flag: Bool) -> NSToolbarItem? {
+        nil
+    }
+
     func toolbarDefaultItemIdentifiers(_ toolbar: NSToolbar) -> [NSToolbarItem.Identifier] {
         []
     }

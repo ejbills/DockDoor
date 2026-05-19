@@ -97,7 +97,10 @@ extension AXUIElement {
             let windows = DebugLogger.measureSlow("appElement.windows()", thresholdMs: 50, details: "PID: \(pid)") {
                 try? appElement.windows()
             }
-            if let windows { set.formUnion(windows) }
+            if let windows, !windows.isEmpty {
+                set.formUnion(windows)
+                return Array(set)
+            }
 
             let brute = windowsByBruteForce(pid)
             set.formUnion(brute)

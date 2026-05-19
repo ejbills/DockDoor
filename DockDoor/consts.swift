@@ -64,6 +64,7 @@ extension Defaults.Keys {
     static let windowImageCaptureQuality = Key<WindowImageCaptureQuality>("windowImageCaptureQuality", default: .nominal)
 
     static let enableLivePreview = Key<Bool>("enableLivePreview", default: false)
+    static let stageManagerOptimization = Key<Bool>("stageManagerOptimization", default: false)
     static let enableLivePreviewForDock = Key<Bool>("enableLivePreviewForDock", default: true)
     static let enableLivePreviewForWindowSwitcher = Key<Bool>("enableLivePreviewForWindowSwitcher", default: false)
     static let dockLivePreviewQuality = Key<LivePreviewQuality>("dockLivePreviewQuality", default: .high)

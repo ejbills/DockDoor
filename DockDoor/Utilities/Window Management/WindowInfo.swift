@@ -423,18 +423,13 @@ extension WindowInfo {
 
         func attemptActivation() -> Bool {
             do {
-                var psn = ProcessSerialNumber()
-                _ = GetProcessForPID(app.processIdentifier, &psn)
-                _ = _SLPSSetFrontProcessWithOptions(&psn, UInt32(id), SLPSMode.userGenerated.rawValue)
-
-                WindowUtil.makeKeyWindow(&psn, windowID: id)
-
+                app.activate(options: [.activateIgnoringOtherApps])
                 try axElement.performAction(kAXRaiseAction)
                 try axElement.setAttribute(kAXMainWindowAttribute, true)
 
                 return true
             } catch {
-                print("Attempt \(retryCount + 1) failed to bring window to front: \(error)")
+                DebugLogger.log("WindowInfo", details: "Attempt \(retryCount + 1) failed to bring window to front: \(error)")
                 if error is AxError {
                     WindowUtil.removeWindowFromDesktopSpaceCache(with: id, in: app.processIdentifier)
                 }
@@ -453,7 +448,7 @@ extension WindowInfo {
             }
         }
 
-        print("Failed to bring window to front after \(maxRetries) attempts")
+        DebugLogger.log("WindowInfo", details: "Failed to bring window to front after \(maxRetries) attempts")
     }
 
     func warpMouseToCenterIfNeeded() {

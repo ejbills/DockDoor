@@ -1571,6 +1571,15 @@ enum SettingsSearchCatalog {
             icon: "arrow.up.left.and.arrow.down.right"
         ),
         SettingsSearchItem(
+            id: "advanced.stageManagerOptimization",
+            title: String(localized: "Optimization for Stage Manager"),
+            description: String(localized: "If DockDoor is opened while other apps are already minimized to the Stage Manager sidebar, bring them to front at least once to make them display properly."),
+            keywords: ["stage manager", "sidebar", "minimized", "thumbnail", "preview", "optimization"],
+            tab: "Advanced",
+            section: String(localized: "Stage Manager"),
+            icon: "rectangle.3.group"
+        ),
+        SettingsSearchItem(
             id: "advanced.livePreview",
             title: String(localized: "Enable Live Preview (Video)"),
             description: String(localized: "Window previews show live video instead of static screenshots. Uses ScreenCaptureKit for real-time capture."),

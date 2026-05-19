@@ -101,6 +101,12 @@ extension WindowPreviewHoverContainer {
                         CGSize(width: max(rendered.width, 50), height: rendered.height)
                     }
                     dimensionsMap[index] = WindowDimensions(size: windowSize, maxDimensions: maxDims)
+                } else if Defaults[.stageManagerOptimization] {
+                    let fallbackSize = CGSize(
+                        width: min(Defaults[.previewWidth], maxDims.width),
+                        height: min(Defaults[.previewHeight], maxDims.height)
+                    )
+                    dimensionsMap[index] = WindowDimensions(size: fallbackSize, maxDimensions: maxDims)
                 } else {
                     let compactRowHeight: CGFloat = 36
                     let fallbackSize = CGSize(width: min(300, maxDims.width), height: compactRowHeight)

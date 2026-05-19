@@ -31,7 +31,7 @@ final class UpdaterState: NSObject, SPUUpdaterDelegate, ObservableObject {
 
     @Published var updateStatus: UpdateStatus = .noUpdates {
         didSet {
-            print("UpdaterState: updateStatus changed to: \(updateStatus)")
+            DebugLogger.log("UpdaterState", details: "updateStatus changed to: \(updateStatus)")
         }
     }
 
@@ -40,7 +40,7 @@ final class UpdaterState: NSObject, SPUUpdaterDelegate, ObservableObject {
             bindUpdaterProperties()
             if let updater {
                 isAutomaticChecksEnabled = updater.automaticallyChecksForUpdates
-                print("UpdaterState: Initialized with \(updateChannel.displayName)")
+                DebugLogger.log("UpdaterState", details: "Initialized with \(updateChannel.displayName)")
             }
         }
     }
@@ -122,7 +122,7 @@ final class UpdaterState: NSObject, SPUUpdaterDelegate, ObservableObject {
         // Reset update status when switching channels
         updateStatus = .noUpdates
 
-        print("UpdaterState: Switched to \(channel.displayName) channel")
+        DebugLogger.log("UpdaterState", details: "Switched to \(channel.displayName) channel")
     }
 
     func updater(_ updater: SPUUpdater, didFindValidUpdate item: SUAppcastItem) {
@@ -182,6 +182,6 @@ final class UpdaterState: NSObject, SPUUpdaterDelegate, ObservableObject {
     }
 
     func updater(_ updater: SPUUpdater, willShowModalAlert alert: NSAlert) {
-        print("UpdaterState (SPUUpdaterDelegate): updater:willShowModalAlert. Alert: \(alert.messageText)")
+        DebugLogger.log("UpdaterState", details: "updater:willShowModalAlert. Alert: \(alert.messageText)")
     }
 }

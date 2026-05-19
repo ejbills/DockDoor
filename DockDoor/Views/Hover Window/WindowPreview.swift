@@ -125,6 +125,7 @@ struct WindowPreview: View, Equatable {
     let mockPreviewActive: Bool
     let onHoverIndexChange: ((Int?, CGPoint?) -> Void)?
     let useLivePreview: Bool
+    let showStageManagerMissingPreviewTip: Bool
     var skeletonMode: Bool = false
     var appearance: PreviewAppearanceSettings
     let backgroundAppearance: BackgroundAppearance
@@ -139,6 +140,7 @@ struct WindowPreview: View, Equatable {
 
     static func == (l: Self, r: Self) -> Bool {
         l.index == r.index && l.isSelected == r.isSelected && l.useLivePreview == r.useLivePreview
+            && l.showStageManagerMissingPreviewTip == r.showStageManagerMissingPreviewTip
             && l.skeletonMode == r.skeletonMode && l.dimensions == r.dimensions
             && l.uniformCardRadius == r.uniformCardRadius && l.showAppIconOnly == r.showAppIconOnly
             && l.windowSwitcherActive == r.windowSwitcherActive
@@ -171,7 +173,7 @@ struct WindowPreview: View, Equatable {
 
     @ViewBuilder
     private func windowContent(isMinimized: Bool, isHidden: Bool, isSelected: Bool) -> some View {
-        let inactive = (isMinimized || isHidden) && appearance.showMinimizedHiddenLabels
+        let inactive = (isMinimized || isHidden) && appearance.showMinimizedHiddenLabels && !showStageManagerMissingPreviewTip
         let quality = appearance.livePreviewQuality
         let frameRate = appearance.livePreviewFrameRate
 
@@ -184,6 +186,9 @@ struct WindowPreview: View, Equatable {
                 Image(decorative: cgImage, scale: 1.0)
                     .resizable()
                     .scaledToFit()
+            } else if showStageManagerMissingPreviewTip {
+                StageManagerMissingPreviewTip()
+                    .frame(width: dimensions.size.width, height: dimensions.size.height)
             }
         }
         .markHidden(isHidden: inactive || (windowSwitcherActive && !isSelected))
@@ -873,5 +878,36 @@ struct WindowPreview: View, Equatable {
         dragTimer = nil
         isDraggingOver = false
         highlightOpacity = 0.0
+    }
+}
+
+private struct StageManagerMissingPreviewTip: View {
+    var body: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: CardRadius.image, style: .continuous)
+                .fill(Color.primary.opacity(0.045))
+                .overlay {
+                    RoundedRectangle(cornerRadius: CardRadius.image, style: .continuous)
+                        .strokeBorder(Color.primary.opacity(0.08), style: StrokeStyle(lineWidth: 1, dash: [4, 4]))
+                }
+
+            VStack(spacing: 8) {
+                Image(systemName: "rectangle.on.rectangle")
+                    .font(.title2)
+                    .symbolRenderingMode(.hierarchical)
+
+                Text(String(
+                    localized: "Bring this app to the front once to activate its preview.",
+                    comment: "Tip shown when Stage Manager optimization has no cached thumbnail yet"
+                ))
+                .font(.caption)
+                .lineLimit(3)
+                .minimumScaleFactor(0.8)
+            }
+            .foregroundStyle(.secondary)
+            .multilineTextAlignment(.center)
+            .padding(.horizontal, 18)
+            .padding(.vertical, 12)
+        }
     }
 }

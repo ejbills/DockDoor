@@ -19,6 +19,7 @@ struct AdvancedSettingsView: View {
     @Default(.windowPreviewImageScale) var windowPreviewImageScale
 
     @Default(.enableLivePreview) var enableLivePreview
+    @Default(.stageManagerOptimization) var stageManagerOptimization
     @Default(.enableLivePreviewForDock) var enableLivePreviewForDock
     @Default(.enableLivePreviewForWindowSwitcher) var enableLivePreviewForWindowSwitcher
     @Default(.dockLivePreviewQuality) var dockLivePreviewQuality
@@ -36,9 +37,10 @@ struct AdvancedSettingsView: View {
             VStack(alignment: .leading, spacing: 16) {
                 performanceTuningSection
                 previewQualitySection
+                stageManagerOptimizationSection
                 livePreviewSection
 
-                if enableLivePreview {
+                if enableLivePreview, !stageManagerOptimization {
                     dockLivePreviewSection
                     switcherLivePreviewSection
                     streamManagementSection
@@ -48,6 +50,10 @@ struct AdvancedSettingsView: View {
         .onAppear {
             if livePreviewStreamKeepAlive > 0 {
                 lastKeepAliveDuration = livePreviewStreamKeepAlive
+            }
+            if stageManagerOptimization, enableLivePreview {
+                enableLivePreview = false
+                Task { await LiveCaptureManager.shared.stopAllStreams() }
             }
         }
     }
@@ -146,6 +152,29 @@ struct AdvancedSettingsView: View {
         }
     }
 
+    // MARK: - Stage Manager
+
+    private var stageManagerOptimizationSection: some View {
+        SettingsGroup(header: "Stage Manager") {
+            VStack(alignment: .leading, spacing: 10) {
+                Toggle(isOn: $stageManagerOptimization) {
+                    Text("Optimization for Stage Manager")
+                }
+                .settingsSearchTarget("advanced.stageManagerOptimization")
+                .onChange(of: stageManagerOptimization) { newValue in
+                    if newValue, enableLivePreview {
+                        enableLivePreview = false
+                        Task { await LiveCaptureManager.shared.stopAllStreams() }
+                    }
+                }
+                Text("If DockDoor is opened while other apps are already minimized to the Stage Manager sidebar, bring them to front at least once to make them display properly.")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .padding(.leading, 20)
+            }
+        }
+    }
+
     // MARK: - Live Preview
 
     private var livePreviewSection: some View {
@@ -153,11 +182,18 @@ struct AdvancedSettingsView: View {
             VStack(alignment: .leading, spacing: 10) {
                 Toggle(isOn: $enableLivePreview) { Text("Enable Live Preview (Video)") }
                     .settingsSearchTarget("advanced.livePreview")
+                    .disabled(stageManagerOptimization)
                     .onChange(of: enableLivePreview) { newValue in
                         if !newValue {
                             Task { await LiveCaptureManager.shared.stopAllStreams() }
                         }
                     }
+                if stageManagerOptimization {
+                    Text("Live preview cannot be turned on when Optimization for Stage Manager is on.")
+                        .font(.caption)
+                        .foregroundColor(.red)
+                        .padding(.leading, 20)
+                }
                 Text("Window previews show live video instead of static screenshots. Uses ScreenCaptureKit for real-time capture.")
                     .font(.caption)
                     .foregroundColor(.secondary)
