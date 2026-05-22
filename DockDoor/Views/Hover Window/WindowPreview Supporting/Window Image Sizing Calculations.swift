@@ -8,6 +8,10 @@ extension WindowPreviewHoverContainer {
         let maxDimensions: CGSize
     }
 
+    static let dynamicMaxAspectRatio: CGFloat = 1.5
+    static let dynamicSwitcherMinimumImageWidth: CGFloat = 50
+    static let dynamicSwitcherMinimumCardWidth: CGFloat = 240
+
     static func calculateOverallMaxDimensions(
         windows: [WindowInfo],
         dockPosition: DockPosition,
@@ -15,8 +19,25 @@ extension WindowPreviewHoverContainer {
         isMockPreviewActive: Bool,
         sharedPanelWindowSize: CGSize
     ) -> CGPoint {
-        if Defaults[.allowDynamicImageSizing], !isWindowSwitcherActive {
-            // Scale preview dimensions to match actual window aspect ratios (dock previews only)
+        if Defaults[.allowDynamicImageSizing] {
+            if isWindowSwitcherActive {
+                let maxHeight = max(1, Defaults[.previewHeight])
+                let maxWidth = max(1, Defaults[.previewWidth])
+                let minImageWidth = min(maxWidth, dynamicSwitcherMinimumImageWidth)
+                let minCardWidth = min(maxWidth, dynamicSwitcherMinimumCardWidth)
+
+                var widestWindow = minImageWidth
+                for window in windows {
+                    guard let cgImage = window.image else { continue }
+                    let aspectRatio = CGFloat(cgImage.width) / CGFloat(cgImage.height)
+                    let width = min(max(maxHeight * aspectRatio, minImageWidth), maxWidth)
+                    widestWindow = max(widestWindow, width)
+                }
+
+                return CGPoint(x: max(1, min(max(widestWindow, minCardWidth), maxWidth)), y: maxHeight)
+            }
+
+            // Scale preview dimensions to match actual window aspect ratios.
             let orientationIsHorizontal = dockPosition == .bottom || dockPosition == .cmdTab
             let thickness: CGFloat = if isMockPreviewActive {
                 200
@@ -27,20 +48,19 @@ extension WindowPreviewHoverContainer {
             }
             var maxWidth: CGFloat = 300
             var maxHeight: CGFloat = 300
-            let maxAspectRatio: CGFloat = 1.5
-            let minAspectRatio: CGFloat = 1.0 / maxAspectRatio
+            let minAspectRatio: CGFloat = 1.0 / dynamicMaxAspectRatio
 
             for window in windows {
                 if let cgImage = window.image {
                     let cgSize = CGSize(width: cgImage.width, height: cgImage.height)
                     if orientationIsHorizontal {
                         let rawWidthBasedOnHeight = (cgSize.width * thickness) / cgSize.height
-                        let widthBasedOnHeight = max(min(rawWidthBasedOnHeight, thickness * maxAspectRatio), thickness * minAspectRatio)
+                        let widthBasedOnHeight = max(min(rawWidthBasedOnHeight, thickness * dynamicMaxAspectRatio), thickness * minAspectRatio)
                         maxWidth = max(maxWidth, widthBasedOnHeight)
                         maxHeight = thickness
                     } else {
                         let rawHeightBasedOnWidth = (cgSize.height * thickness) / cgSize.width
-                        let heightBasedOnWidth = max(min(rawHeightBasedOnWidth, thickness * maxAspectRatio), thickness * minAspectRatio)
+                        let heightBasedOnWidth = max(min(rawHeightBasedOnWidth, thickness * dynamicMaxAspectRatio), thickness * minAspectRatio)
                         maxHeight = max(maxHeight, heightBasedOnWidth)
                         maxWidth = thickness
                     }
@@ -82,10 +102,53 @@ extension WindowPreviewHoverContainer {
     ) -> [Int: WindowDimensions] {
         var dimensionsMap: [Int: WindowDimensions] = [:]
 
-        if Defaults[.allowDynamicImageSizing], !isWindowSwitcherActive {
-            let orientationIsHorizontal: Bool = dockPosition == .bottom || dockPosition == .cmdTab
+        if Defaults[.allowDynamicImageSizing] {
+            let orientationIsHorizontal: Bool = isWindowSwitcherActive ? true : dockPosition == .bottom || dockPosition == .cmdTab
             let maxDims = CGSize(width: overallMaxDimensions.x, height: overallMaxDimensions.y)
             let thickness: CGFloat = orientationIsHorizontal ? overallMaxDimensions.y : overallMaxDimensions.x
+
+            if isWindowSwitcherActive {
+                let fillToLimit = Defaults[.windowSwitcherScrollDirection] == .vertical
+                let chunks = chunkArray(
+                    items: Array(windows.indices),
+                    isHorizontal: true,
+                    maxColumns: effectiveMaxColumns,
+                    maxRows: effectiveMaxRows,
+                    fillToLimit: fillToLimit
+                )
+                let minImageWidth = min(maxDims.width, dynamicSwitcherMinimumImageWidth)
+
+                for chunk in chunks {
+                    let fittedHeights = chunk.compactMap { index -> CGFloat? in
+                        guard index < windows.count, let cgImage = windows[index].image else { return nil }
+                        return computeRenderedDimension(
+                            image: cgImage,
+                            thickness: thickness,
+                            maxDimensions: maxDims,
+                            isHorizontal: true
+                        ).height
+                    }
+                    let rowHeight = min(maxDims.height, max(fittedHeights.max() ?? maxDims.height, 50))
+
+                    for index in chunk {
+                        guard index < windows.count else { continue }
+                        if let cgImage = windows[index].image {
+                            let aspectRatio = CGFloat(cgImage.width) / CGFloat(cgImage.height)
+                            let width = min(max(rowHeight * aspectRatio, minImageWidth), maxDims.width)
+                            dimensionsMap[index] = WindowDimensions(
+                                size: CGSize(width: width, height: rowHeight),
+                                maxDimensions: maxDims
+                            )
+                        } else {
+                            let compactRowHeight: CGFloat = 36
+                            let fallbackSize = CGSize(width: min(300, maxDims.width), height: compactRowHeight)
+                            dimensionsMap[index] = WindowDimensions(size: fallbackSize, maxDimensions: maxDims)
+                        }
+                    }
+                }
+
+                return dimensionsMap
+            }
 
             for (index, window) in windows.enumerated() {
                 if let cgImage = window.image {

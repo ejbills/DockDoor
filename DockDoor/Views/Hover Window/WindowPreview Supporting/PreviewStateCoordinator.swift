@@ -301,18 +301,25 @@ class PreviewStateCoordinator: ObservableObject {
             effectiveGridRows: rows
         )
 
-        let compactThreshold = Defaults[.dockPreviewCompactThreshold]
+        let compactThreshold = if windowSwitcherActive {
+            Defaults[.windowSwitcherCompactThreshold]
+        } else if dockPosition == .cmdTab {
+            Defaults[.cmdTabCompactThreshold]
+        } else {
+            Defaults[.dockPreviewCompactThreshold]
+        }
         let wouldUseCompactMode = Defaults[.disableImagePreview]
             || (compactThreshold > 0 && windows.count >= compactThreshold)
 
-        if Defaults[.allowDynamicImageSizing], !windowSwitcherActive, !wouldUseCompactMode {
+        if Defaults[.allowDynamicImageSizing], !wouldUseCompactMode {
             expectedContentSize = Self.computeExpectedContentSize(
                 windowCount: windows.count,
                 dimensionsMap: newDimensionsMap,
-                isHorizontal: dockPosition.isHorizontalFlow,
+                isHorizontal: windowSwitcherActive ? true : dockPosition.isHorizontalFlow,
                 maxColumns: cols,
                 maxRows: rows,
-                hasEmbeddedContent: hasEmbeddedContent
+                hasEmbeddedContent: hasEmbeddedContent,
+                fillToLimit: windowSwitcherActive && Defaults[.windowSwitcherScrollDirection] == .vertical
             )
         } else {
             expectedContentSize = .zero
@@ -327,7 +334,8 @@ class PreviewStateCoordinator: ObservableObject {
         isHorizontal: Bool,
         maxColumns: Int,
         maxRows: Int,
-        hasEmbeddedContent: Bool = false
+        hasEmbeddedContent: Bool = false,
+        fillToLimit: Bool = false
     ) -> CGSize {
         guard windowCount > 0 else { return .zero }
 
@@ -338,7 +346,8 @@ class PreviewStateCoordinator: ObservableObject {
             items: Array(0 ..< windowCount),
             isHorizontal: isHorizontal,
             maxColumns: maxColumns,
-            maxRows: maxRows
+            maxRows: maxRows,
+            fillToLimit: fillToLimit
         )
 
         // Collect both flow-axis total and cross-axis max from all windows

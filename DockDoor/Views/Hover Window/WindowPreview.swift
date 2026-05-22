@@ -155,6 +155,17 @@ struct WindowPreview: View, Equatable {
         return windowInfo.id == focusedWindowID
     }
 
+    private var dynamicSwitcherCardWidth: CGFloat? {
+        guard windowSwitcherActive, appearance.allowDynamicImageSizing, dimensions.size.width > 0 else {
+            return nil
+        }
+        let chromeWidth = min(
+            dimensions.maxDimensions.width,
+            WindowPreviewHoverContainer.dynamicSwitcherMinimumCardWidth
+        )
+        return max(dimensions.size.width, chromeWidth)
+    }
+
     @ViewBuilder
     private func titleLabel(_ text: String) -> some View {
         switch appearance.titleOverflowStyle {
@@ -199,7 +210,7 @@ struct WindowPreview: View, Equatable {
         .animation(appearance.showAnimations ? .easeInOut(duration: 0.15) : nil, value: inactive)
         .clipShape(RoundedRectangle(cornerRadius: CardRadius.image, style: .continuous))
         .dynamicWindowFrame(
-            allowDynamicSizing: appearance.allowDynamicImageSizing && !windowSwitcherActive,
+            allowDynamicSizing: appearance.allowDynamicImageSizing,
             dimensions: dimensions,
             dockPosition: dockPosition,
             windowSwitcherActive: windowSwitcherActive
@@ -644,6 +655,7 @@ struct WindowPreview: View, Equatable {
     @ViewBuilder
     private var previewCoreContent: some View {
         let finalIsSelected = isSelected || isHoveringOverDockPeekPreview
+        let switcherCardWidth = dynamicSwitcherCardWidth
 
         ZStack(alignment: .topLeading) {
             VStack(alignment: .leading, spacing: 0) {
@@ -666,6 +678,9 @@ struct WindowPreview: View, Equatable {
                     isHidden: windowInfo.isHidden,
                     isSelected: finalIsSelected
                 )
+                .if(switcherCardWidth != nil) { view in
+                    view.frame(width: switcherCardWidth, alignment: .center)
+                }
 
                 if !appearance.useEmbeddedElements || windowSwitcherActive,
                    appearance.controlPosition.showsOnBottom
@@ -681,7 +696,12 @@ struct WindowPreview: View, Equatable {
                     .padding(.top, 4)
                 }
             }
-            .frame(maxWidth: dimensions.maxDimensions.width > 0 ? dimensions.maxDimensions.width : nil)
+            .if(switcherCardWidth != nil) { view in
+                view.frame(width: switcherCardWidth, alignment: .center)
+            }
+            .if(switcherCardWidth == nil) { view in
+                view.frame(maxWidth: dimensions.maxDimensions.width > 0 ? dimensions.maxDimensions.width : nil)
+            }
             .background {
                 let cornerRadius = uniformCardRadius ? CardRadius.base + (CardRadius.innerPadding * appearance.globalPaddingMultiplier) : 8.0
 

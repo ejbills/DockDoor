@@ -10,7 +10,15 @@ struct DynamicWindowFrameModifier: ViewModifier {
         if allowDynamicSizing {
             let isHorizontalFlow = dockPosition.isHorizontalFlow || windowSwitcherActive
 
-            if isHorizontalFlow {
+            if windowSwitcherActive {
+                content
+                    .frame(
+                        width: dimensions.size.width > 0 ? dimensions.size.width : nil,
+                        height: dimensions.size.height > 0 ? dimensions.size.height : nil,
+                        alignment: .center
+                    )
+                    .frame(maxWidth: dimensions.maxDimensions.width, maxHeight: dimensions.maxDimensions.height)
+            } else if isHorizontalFlow {
                 content
                     .frame(height: dimensions.size.height > 0 ? dimensions.size.height : nil)
                     .scaledToFit()
