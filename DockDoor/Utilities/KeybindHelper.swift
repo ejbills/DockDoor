@@ -885,7 +885,7 @@ class KeybindHelper {
             case Int64(kVK_ANSI_H), Int64(kVK_ANSI_J), Int64(kVK_ANSI_K), Int64(kVK_ANSI_L):
                 if Defaults[.enableVimMotions],
                    !previewCoordinator.isSearchWindowFocused,
-                   flags.intersection([.maskControl, .maskCommand, .maskAlternate, .maskShift]).isEmpty
+                   allowsVimMotionNavigation(flags: flags, keyBoardShortcutSaved: keyBoardShortcutSaved)
                 {
                     let dir: ArrowDirection = switch keyCode {
                     case Int64(kVK_ANSI_H): .left
@@ -972,6 +972,27 @@ class KeybindHelper {
         }
 
         return (false, nil)
+    }
+
+    private func allowsVimMotionNavigation(flags: CGEventFlags, keyBoardShortcutSaved: UserKeyBind) -> Bool {
+        var allowedModifiers: CGEventFlags = [.maskShift, .maskAlphaShift, .maskNumericPad]
+        let saved = keyBoardShortcutSaved.modifierFlags
+
+        if (saved & Int(CGEventFlags.maskAlternate.rawValue)) != 0 {
+            allowedModifiers.insert(.maskAlternate)
+        }
+        if (saved & Int(CGEventFlags.maskControl.rawValue)) != 0 {
+            allowedModifiers.insert(.maskControl)
+        }
+        if (saved & Int(CGEventFlags.maskCommand.rawValue)) != 0 {
+            allowedModifiers.insert(.maskCommand)
+        }
+        if let backwardFlag = Self.eventFlagForKeyCode(Defaults[.switcherBackwardKeyCode]) {
+            allowedModifiers.insert(backwardFlag)
+        }
+
+        let activeModifiers = flags.intersection([.maskControl, .maskCommand, .maskAlternate, .maskShift])
+        return activeModifiers.subtracting(allowedModifiers).isEmpty
     }
 
     private func makeEnterSelectionTask() -> (() async -> Void) {
