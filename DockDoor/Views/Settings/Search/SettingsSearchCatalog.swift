@@ -224,6 +224,14 @@ enum SettingsSearchCatalog {
             icon: "cursorarrow.click.2"
         ),
         SettingsSearchItem(
+            id: "dockPreviews.restoreAllMinimizedOnClick",
+            title: String(localized: "Restore all minimized windows on dock icon click"),
+            keywords: ["restore", "click", "minimize", "open"],
+            tab: "DockPreviews",
+            section: String(localized: "Dock Interaction"),
+            icon: "rectangle.stack"
+        ),
+        SettingsSearchItem(
             id: "dockPreviews.cmdRightClickQuit",
             title: String(localized: "CMD + Right Click on dock icon to quit app"),
             keywords: ["quit", "right click", "command", "force"],

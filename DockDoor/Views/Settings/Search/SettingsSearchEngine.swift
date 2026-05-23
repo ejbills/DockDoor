@@ -1,3 +1,4 @@
+import Defaults
 import SwiftUI
 
 final class SettingsSearchEngine: ObservableObject {
@@ -51,7 +52,7 @@ final class SettingsSearchEngine: ObservableObject {
         let tokens = trimmed.lowercased().split(separator: " ").map(String.init)
         var scored: [SettingsSearchResult] = []
 
-        for item in items {
+        for item in items where isAvailable(item) {
             let titleLower = item.title.lowercased()
             let descLower = item.description.lowercased()
             let keywordsLower = item.keywords.map { $0.lowercased() }
@@ -91,5 +92,14 @@ final class SettingsSearchEngine: ObservableObject {
         }
 
         results = scored
+    }
+
+    private func isAvailable(_ item: SettingsSearchItem) -> Bool {
+        switch item.id {
+        case "dockPreviews.restoreAllMinimizedOnClick":
+            Defaults[.dockClickAction] == .minimize
+        default:
+            true
+        }
     }
 }

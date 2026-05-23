@@ -39,6 +39,7 @@ extension Defaults.Keys {
     static let switcherBackwardKeyCode = Key<UInt16>("switcherBackwardKeyCode", default: 56)
     static let shouldHideOnDockItemClick = Key<Bool>("shouldHideOnDockItemClick", default: false)
     static let dockClickAction = Key<DockClickAction>("dockClickAction", default: .hide)
+    static let restoreAllMinimizedWindowsOnDockClick = Key<Bool>("restoreAllMinimizedWindowsOnDockClick", default: true)
     static let enableCmdRightClickQuit = Key<Bool>("enableCmdRightClickQuit", default: true)
     static let quitAppOnWindowClose = Key<Bool>("quitAppOnWindowClose", default: false)
     static let enableDockScrollGesture = Key<Bool>("enableDockScrollGesture", default: false)
