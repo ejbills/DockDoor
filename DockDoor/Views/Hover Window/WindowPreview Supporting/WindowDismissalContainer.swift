@@ -188,7 +188,7 @@ class MouseTrackingNSView: NSView {
     private func performHideWindow(preventLastAppClear: Bool = false) {
         DispatchQueue.main.async { [weak self] in
             guard self != nil else { return }
-            SharedPreviewWindowCoordinator.activeInstance?.hideWindow()
+            SharedPreviewWindowCoordinator.activeInstance?.hideWindow(cancelPendingShow: false)
         }
     }
 }

@@ -145,6 +145,7 @@ extension Defaults.Keys {
     static let ignoreAppsWithSingleWindowInCmdTab = Key<Bool>("ignoreAppsWithSingleWindowInCmdTab", default: false)
     static let groupAppInstancesInDock = Key<Bool>("groupAppInstancesInDock", default: true)
     static let showMenuBarIcon = Key<Bool>("showMenuBarIcon", default: true)
+    static let hideDockDoorProBanner = Key<Bool>("hideDockDoorProBanner", default: false)
     static let raisedWindowLevel = Key<Bool>("raisedWindowLevel", default: true)
     static let launched = Key<Bool>("launched", default: false)
     static let reopenSettingsAfterRestart = Key<Bool>("reopenSettingsAfterRestart", default: false)
