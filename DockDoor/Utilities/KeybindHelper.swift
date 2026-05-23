@@ -390,7 +390,7 @@ class KeybindHelper {
             // Track Command up/down explicitly for Cmd+Tab fallback behavior
             let cmdNowDown = event.flags.contains(.maskCommand)
             if isCommandKeyCurrentlyDown, !cmdNowDown {
-                DockObserver.activeInstance?.stopCmdTabPolling()
+                DockObserver.activeInstance?.teardownCmdTabObserver()
 
                 if Defaults[.enableCmdTabEnhancements], lastCmdTabObservedActive {
                     let actionAlreadyHandled = cmdTabActionPerformed
@@ -433,6 +433,7 @@ class KeybindHelper {
         case .keyDown:
             let keyCode = event.getIntegerValueField(.keyboardEventKeycode)
             let flags = event.flags
+            let shouldRouteCmdTabToWindowSwitcher = isCmdTabWindowSwitcherKeybind(keyCode: keyCode, flags: flags)
 
             let backwardKeyCode = Defaults[.switcherBackwardKeyCode]
             if Self.eventFlagForKeyCode(backwardKeyCode) == nil,
@@ -454,18 +455,17 @@ class KeybindHelper {
                keyCode == Int64(kVK_Tab),
                flags.contains(.maskCommand)
             {
-                let keyBoardShortcutSaved: UserKeyBind = Defaults[.UserKeybind]
-                let isActiveCustomKeybind = Defaults[.enableWindowSwitcher] &&
-                    (keyCode == keyBoardShortcutSaved.keyCode) &&
-                    (keyBoardShortcutSaved.modifierFlags & Int(CGEventFlags.maskCommand.rawValue)) != 0
-
-                if !isActiveCustomKeybind {
+                if !shouldRouteCmdTabToWindowSwitcher {
                     DockObserver.activeInstance?.startCmdTabPolling()
                 }
             }
 
             // If system Cmd+Tab switcher is active, optionally handle arrows when enhancements are enabled
-            if DockObserver.isCmdTabSwitcherActive {
+            if DockObserver.isCmdTabSwitcherActive, shouldRouteCmdTabToWindowSwitcher {
+                DockObserver.activeInstance?.teardownCmdTabObserver()
+                lastCmdTabObservedActive = false
+                cmdTabActionPerformed = false
+            } else if DockObserver.isCmdTabSwitcherActive {
                 lastCmdTabObservedActive = true
                 if Defaults[.enableCmdTabEnhancements],
                    previewCoordinator.isVisible
@@ -656,6 +656,32 @@ class KeybindHelper {
         }
     }
 
+    private func isCmdTabWindowSwitcherKeybind(keyCode: Int64, flags: CGEventFlags) -> Bool {
+        guard keyCode == Int64(kVK_Tab), flags.contains(.maskCommand) else { return false }
+        guard usesCmdTabWindowSwitcherKeybind() else { return false }
+        return modifierFlagsMatch(Defaults[.UserKeybind].modifierFlags, flags: flags)
+    }
+
+    private func usesCmdTabWindowSwitcherKeybind() -> Bool {
+        guard Defaults[.enableWindowSwitcher] else { return false }
+
+        let keybind = Defaults[.UserKeybind]
+        let usesCommand = (keybind.modifierFlags & Int(CGEventFlags.maskCommand.rawValue)) != 0
+        guard usesCommand else { return false }
+
+        return keybind.keyCode == UInt16(kVK_Tab) || Defaults[.alternateKeybindKey] == UInt16(kVK_Tab)
+    }
+
+    private func modifierFlagsMatch(_ saved: Int, flags: CGEventFlags) -> Bool {
+        let wantsAlt = (saved & Int(CGEventFlags.maskAlternate.rawValue)) != 0
+        let wantsCtrl = (saved & Int(CGEventFlags.maskControl.rawValue)) != 0
+        let wantsCmd = (saved & Int(CGEventFlags.maskCommand.rawValue)) != 0
+
+        return wantsAlt == flags.contains(.maskAlternate) &&
+            wantsCtrl == flags.contains(.maskControl) &&
+            wantsCmd == flags.contains(.maskCommand)
+    }
+
     private func updateModifierStatesFromFlags(event: CGEvent, keyBoardShortcutSaved: UserKeyBind) -> (currentSwitcherModifierIsPressed: Bool, currentShiftState: Bool) {
         let saved = keyBoardShortcutSaved.modifierFlags
         let wantsAlt = (saved & Int(CGEventFlags.maskAlternate.rawValue)) != 0
@@ -685,7 +711,10 @@ class KeybindHelper {
     @MainActor
     private func handleModifierEvent(currentSwitcherModifierIsPressed: Bool, currentShiftState: Bool) {
         // If system Cmd+Tab switcher is active, do not engage DockDoor's own switcher logic
-        if DockObserver.isCmdTabSwitcherActive { return }
+        if DockObserver.isCmdTabSwitcherActive {
+            guard usesCmdTabWindowSwitcherKeybind() else { return }
+            DockObserver.activeInstance?.teardownCmdTabObserver()
+        }
         let oldSwitcherModifierState = isSwitcherModifierKeyPressed
         let oldShiftState = isShiftKeyPressedGeneral
 
@@ -824,7 +853,13 @@ class KeybindHelper {
             guard Defaults[.enableWindowSwitcher] else { return (false, nil) }
             if WindowUtil.shouldIgnoreKeybindForFrontmostApp() { return (false, nil) }
             switcherSessionActive = true
-            return (true, { await self.handleKeybindActivation(mode: .allWindows) })
+            return (true, {
+                await self.handleKeybindActivation(
+                    mode: .allWindows,
+                    isModifierPressed: true,
+                    isShiftPressed: flags.contains(.maskShift)
+                )
+            })
         }
 
         // Check alternate keybind (shares same modifier as primary keybind)
@@ -835,7 +870,13 @@ class KeybindHelper {
                 if WindowUtil.shouldIgnoreKeybindForFrontmostApp() { return (false, nil) }
                 switcherSessionActive = true
                 let mode = Defaults[.alternateKeybindMode]
-                return (true, { await self.handleKeybindActivation(mode: mode) })
+                return (true, {
+                    await self.handleKeybindActivation(
+                        mode: mode,
+                        isModifierPressed: true,
+                        isShiftPressed: flags.contains(.maskShift)
+                    )
+                })
             }
         }
 
@@ -1019,18 +1060,28 @@ class KeybindHelper {
     }
 
     @MainActor
-    private func handleKeybindActivation(mode: SwitcherInvocationMode = .allWindows) {
+    private func handleKeybindActivation(
+        mode: SwitcherInvocationMode = .allWindows,
+        isModifierPressed: Bool? = nil,
+        isShiftPressed: Bool? = nil
+    ) {
         guard Defaults[.enableWindowSwitcher] else { return }
         hasProcessedModifierRelease = false
         currentInvocationMode = mode
+        let modifierPressedForActivation = isModifierPressed ?? isSwitcherModifierKeyPressed
+        let shiftPressedForActivation = isShiftPressed ?? isShiftKeyPressedGeneral
+        if modifierPressedForActivation {
+            isSwitcherModifierKeyPressed = true
+        }
+        isShiftKeyPressedGeneral = shiftPressedForActivation
         if Defaults[.focusSearchOnWindowSwitcherOpen], Defaults[.enableWindowSwitcherSearch] {
             preventSwitcherHideOnRelease = true
         }
         Task { @MainActor in
             await windowSwitchingCoordinator.handleWindowSwitching(
                 previewCoordinator: previewCoordinator,
-                isModifierPressed: self.isSwitcherModifierKeyPressed,
-                isShiftPressed: self.isShiftKeyPressedGeneral,
+                isModifierPressed: modifierPressedForActivation,
+                isShiftPressed: shiftPressedForActivation,
                 mode: mode
             )
         }
