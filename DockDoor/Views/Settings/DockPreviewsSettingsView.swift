@@ -148,9 +148,11 @@ struct DockPreviewsSettingsView: View {
                     .pickerStyle(MenuPickerStyle())
                     .padding(.leading, 20)
 
-                    Toggle(isOn: $restoreAllMinimizedWindowsOnDockClick) { Text("Restore all minimized windows on dock icon click") }
-                        .settingsSearchTarget("dockPreviews.restoreAllMinimizedOnClick")
-                        .padding(.leading, 20)
+                    if dockClickAction == .minimize {
+                        Toggle(isOn: $restoreAllMinimizedWindowsOnDockClick) { Text("Restore all minimized windows on dock icon click") }
+                            .settingsSearchTarget("dockPreviews.restoreAllMinimizedOnClick")
+                            .padding(.leading, 20)
+                    }
                 }
 
                 Toggle(isOn: $enableCmdRightClickQuit) { Text("CMD + Right Click on dock icon to quit app") }
