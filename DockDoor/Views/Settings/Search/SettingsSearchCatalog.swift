@@ -1417,17 +1417,17 @@ enum SettingsSearchCatalog {
         ),
         SettingsSearchItem(
             id: "widgets.embedded",
-            title: String(localized: "Embed controls alongside window previews"),
-            description: String(localized: "Show controls inline with window previews when both are available."),
-            keywords: ["embed", "inline", "alongside"],
+            title: String(localized: "Show widget controls alongside window previews"),
+            description: String(localized: "Keeps window previews visible when widget controls are shown."),
+            keywords: ["embed", "inline", "alongside", "previews"],
             tab: "Widgets",
             section: String(localized: "Display"),
             icon: "rectangle.on.rectangle"
         ),
         SettingsSearchItem(
             id: "widgets.fullSize",
-            title: String(localized: "Use full-size controls when no windows are open"),
-            keywords: ["full", "size", "big", "large"],
+            title: String(localized: "Use full-size controls when all windows are minimized or hidden"),
+            keywords: ["full", "size", "big", "large", "minimized", "hidden"],
             tab: "Widgets",
             section: String(localized: "Display"),
             icon: "rectangle.expand.vertical"

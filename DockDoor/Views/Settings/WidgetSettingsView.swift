@@ -110,16 +110,16 @@ struct WidgetSettingsView: View {
                     SettingsGroup(header: "Display") {
                         VStack(alignment: .leading, spacing: 10) {
                             Toggle(isOn: $useEmbeddedMediaControls) {
-                                Text("Embed controls alongside window previews")
+                                Text("Show widget controls alongside window previews")
                             }
                             .settingsSearchTarget("widgets.embedded")
-                            Text("Show controls inline with window previews when both are available.")
+                            Text("Keeps window previews visible when widget controls are shown.")
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                                 .padding(.leading, 20)
 
                             Toggle(isOn: $showBigControlsWhenNoValidWindows) {
-                                Text("Use full-size controls when no windows are open")
+                                Text("Use full-size controls when all windows are minimized or hidden")
                             }
                             .settingsSearchTarget("widgets.fullSize")
                             .disabled(!useEmbeddedMediaControls)
