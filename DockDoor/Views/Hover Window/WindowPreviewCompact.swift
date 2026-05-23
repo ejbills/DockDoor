@@ -14,6 +14,7 @@ struct WindowPreviewCompact: View, Equatable {
     let onHoverIndexChange: ((Int?, CGPoint?) -> Void)?
     var appearance: PreviewAppearanceSettings
     let backgroundAppearance: BackgroundAppearance
+    let focusedWindowID: CGWindowID?
 
     @State private var isHovering = false
 
@@ -28,15 +29,13 @@ struct WindowPreviewCompact: View, Equatable {
             && l.appearance == r.appearance
             && l.windowInfo.viewSnapshot == r.windowInfo.viewSnapshot
             && l.backgroundAppearance == r.backgroundAppearance
+            && l.focusedWindowID == r.focusedWindowID
     }
 
     /// Checks if this window is the currently active (focused) window on the system and adds a border if so.
     private var isActiveWindow: Bool {
         guard appearance.showActiveWindowBorder else { return false }
         guard windowInfo.app.isActive else { return false }
-        guard let focusedWindow = try? windowInfo.appAxElement.focusedWindow(),
-              let focusedWindowID = try? focusedWindow.cgWindowId()
-        else { return false }
         return windowInfo.id == focusedWindowID
     }
 
@@ -67,6 +66,22 @@ struct WindowPreviewCompact: View, Equatable {
         return nil
     }
 
+    private var shouldShowTrafficLightButtons: Bool {
+        guard !appearance.compactModeHideTrafficLights else { return false }
+        guard appearance.trafficLightVisibility != .never else { return false }
+
+        if windowInfo.isWindowlessApp {
+            return appearance.showWindowlessAppQuitButton
+        }
+
+        return windowInfo.closeButton != nil &&
+            (!appearance.showMinimizedHiddenLabels || (!windowInfo.isMinimized && !windowInfo.isHidden))
+    }
+
+    private var enabledTrafficLightButtons: Set<WindowAction> {
+        windowInfo.isWindowlessApp ? [.quit] : appearance.enabledTrafficLightButtons
+    }
+
     var body: some View {
         HStack(spacing: 10) {
             // App icon
@@ -83,30 +98,32 @@ struct WindowPreviewCompact: View, Equatable {
                     .foregroundStyle(.secondary)
             }
 
-            // Title content based on format
-            VStack(alignment: .leading, spacing: 2) {
-                switch appearance.compactModeTitleFormat {
-                case .appNameAndTitle:
-                    titleText(appName, isPrimary: true)
-                    // Show state instead of window title when minimized/hidden
-                    if let state = stateIndicator {
-                        stateText(state)
-                    } else if let title = windowTitle {
-                        titleText(title, isPrimary: false)
-                    }
+            if appearance.showAppHeader {
+                // Title content based on format
+                VStack(alignment: .leading, spacing: 2) {
+                    switch appearance.compactModeTitleFormat {
+                    case .appNameAndTitle:
+                        titleText(appName, isPrimary: true)
+                        // Show state instead of window title when minimized/hidden
+                        if let state = stateIndicator {
+                            stateText(state)
+                        } else if let title = windowTitle {
+                            titleText(title, isPrimary: false)
+                        }
 
-                case .titleOnly:
-                    titleText(windowTitle ?? appName, isPrimary: true)
-                    // Show state below the title
-                    if let state = stateIndicator {
-                        stateText(state)
-                    }
+                    case .titleOnly:
+                        titleText(windowTitle ?? appName, isPrimary: true)
+                        // Show state below the title
+                        if let state = stateIndicator {
+                            stateText(state)
+                        }
 
-                case .appNameOnly:
-                    titleText(appName, isPrimary: true)
-                    // Show state below app name
-                    if let state = stateIndicator {
-                        stateText(state)
+                    case .appNameOnly:
+                        titleText(appName, isPrimary: true)
+                        // Show state below app name
+                        if let state = stateIndicator {
+                            stateText(state)
+                        }
                     }
                 }
             }
@@ -114,18 +131,14 @@ struct WindowPreviewCompact: View, Equatable {
             Spacer(minLength: 0)
 
             // Traffic light buttons
-            if !appearance.compactModeHideTrafficLights,
-               windowInfo.closeButton != nil,
-               appearance.trafficLightVisibility != .never,
-               !appearance.showMinimizedHiddenLabels || (!windowInfo.isMinimized && !windowInfo.isHidden)
-            {
+            if shouldShowTrafficLightButtons {
                 TrafficLightButtons(
                     displayMode: appearance.trafficLightVisibility,
                     hoveringOverParentWindow: isSelected || isHovering,
                     onWindowAction: handleWindowAction,
                     pillStyling: true,
                     mockPreviewActive: mockPreviewActive,
-                    enabledButtons: appearance.enabledTrafficLightButtons,
+                    enabledButtons: enabledTrafficLightButtons,
                     useMonochrome: appearance.useMonochromeTrafficLights,
                     buttonScale: appearance.trafficLightButtonScale,
                     backgroundAppearance: backgroundAppearance

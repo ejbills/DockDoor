@@ -11,6 +11,7 @@ struct WindowlessAppPreview: View, Equatable {
     let dimensions: WindowPreviewHoverContainer.WindowDimensions?
     let onTap: (() -> Void)?
     let onHoverIndexChange: ((Int?, CGPoint?) -> Void)?
+    let handleWindowAction: (WindowAction) -> Void
     var appearance: PreviewAppearanceSettings
     let backgroundAppearance: BackgroundAppearance
 
@@ -29,26 +30,64 @@ struct WindowlessAppPreview: View, Equatable {
         windowInfo.app.localizedName ?? "Unknown"
     }
 
-    private func titleBar(isLeadingControls: Bool) -> some View {
+    private var switcherToolbarHorizontalPadding: CGFloat {
+        CardRadius.switcherToolbarHorizontalPadding(
+            uniformCardRadius: windowSwitcherActive && uniformCardRadius
+        )
+    }
+
+    private var shouldShowQuitButton: Bool {
+        appearance.showWindowlessAppQuitButton &&
+            appearance.trafficLightVisibility != .never
+    }
+
+    private func toolbarContent(isLeadingControls: Bool, showTitleContent: Bool, showControlsContent: Bool) -> some View {
         let shouldShowSubtitle = appearance.showWindowTitle &&
             (appearance.windowTitleVisibility == .alwaysVisible || isSelected || isHovering)
+        let shouldShowTitle = appearance.showAppHeader && showTitleContent
+        let shouldShowControls = shouldShowQuitButton && showControlsContent
 
         return HStack(spacing: 4) {
             if appearance.controlPosition.isCentered {
                 Spacer(minLength: 0)
-                appIcon
-                titleContent(showSubtitle: shouldShowSubtitle)
+                if shouldShowTitle {
+                    appIcon
+                    titleContent(showSubtitle: shouldShowSubtitle)
+                }
+                if shouldShowControls { quitButton(alignment: .center) }
                 Spacer(minLength: 0)
             } else if isLeadingControls {
+                if shouldShowControls { quitButton(alignment: .leading) }
                 Spacer(minLength: 8)
-                appIcon
-                titleContent(showSubtitle: shouldShowSubtitle)
+                if shouldShowTitle {
+                    appIcon
+                    titleContent(showSubtitle: shouldShowSubtitle)
+                }
             } else {
-                appIcon
-                titleContent(showSubtitle: shouldShowSubtitle)
+                if shouldShowTitle {
+                    appIcon
+                    titleContent(showSubtitle: shouldShowSubtitle)
+                }
                 Spacer(minLength: 0)
+                if shouldShowControls { quitButton(alignment: .trailing) }
             }
         }
+    }
+
+    private func quitButton(alignment: Alignment) -> some View {
+        TrafficLightButtons(
+            displayMode: appearance.trafficLightVisibility,
+            hoveringOverParentWindow: isSelected || isHovering,
+            onWindowAction: handleWindowAction,
+            pillStyling: !appearance.disableDockStyleTrafficLights,
+            mockPreviewActive: false,
+            enabledButtons: [.quit],
+            useMonochrome: appearance.useMonochromeTrafficLights,
+            buttonScale: appearance.trafficLightButtonScale,
+            backgroundAppearance: backgroundAppearance
+        )
+        .frame(minWidth: 34, minHeight: 34, alignment: alignment)
+        .contentShape(Rectangle())
     }
 
     @ViewBuilder
@@ -82,9 +121,14 @@ struct WindowlessAppPreview: View, Equatable {
         VStack(alignment: .leading, spacing: 0) {
             if appearance.controlPosition.showsOnTop {
                 let config = appearance.controlPosition.topConfiguration
-                if config.showTitle {
-                    titleBar(isLeadingControls: config.isLeadingControls)
-                        .padding(.bottom, 4)
+                if (appearance.showAppHeader && config.showTitle) || (shouldShowQuitButton && config.showControls) {
+                    toolbarContent(
+                        isLeadingControls: config.isLeadingControls,
+                        showTitleContent: config.showTitle,
+                        showControlsContent: config.showControls
+                    )
+                    .padding(.horizontal, switcherToolbarHorizontalPadding)
+                    .padding(.bottom, 4)
                 }
             }
 
@@ -100,9 +144,14 @@ struct WindowlessAppPreview: View, Equatable {
 
             if appearance.controlPosition.showsOnBottom {
                 let config = appearance.controlPosition.bottomConfiguration
-                if config.showTitle {
-                    titleBar(isLeadingControls: config.isLeadingControls)
-                        .padding(.top, 4)
+                if (appearance.showAppHeader && config.showTitle) || (shouldShowQuitButton && config.showControls) {
+                    toolbarContent(
+                        isLeadingControls: config.isLeadingControls,
+                        showTitleContent: config.showTitle,
+                        showControlsContent: config.showControls
+                    )
+                    .padding(.horizontal, switcherToolbarHorizontalPadding)
+                    .padding(.top, 4)
                 }
             }
         }

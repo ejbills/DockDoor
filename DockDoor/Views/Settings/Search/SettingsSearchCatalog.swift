@@ -589,6 +589,15 @@ enum SettingsSearchCatalog {
             icon: "eye.trianglebadge.exclamationmark"
         ),
         SettingsSearchItem(
+            id: "appearance.windowlessQuitButton",
+            title: String(localized: "Show quit button for apps with no open windows"),
+            description: String(localized: "Shows a quit-only control on previews for running apps with no open windows."),
+            keywords: ["windowless", "quit", "button", "running", "no windows"],
+            tab: "Appearance",
+            section: String(localized: "General Appearance"),
+            icon: "power"
+        ),
+        SettingsSearchItem(
             id: "appearance.hidePreviewBackground",
             title: String(localized: "Hide preview card background"),
             description: String(localized: "Removes the background panel from individual window previews."),
@@ -905,6 +914,15 @@ enum SettingsSearchCatalog {
             icon: "rectangle.grid.2x1"
         ),
         // Window Switcher Appearance
+        SettingsSearchItem(
+            id: "appearance.switcherShowAppHeader",
+            title: String(localized: "Show App Header"),
+            description: String(localized: "Show app header in the window switcher."),
+            keywords: ["app", "header", "name", "switcher"],
+            tab: "Appearance",
+            section: String(localized: "Window Switcher Appearance"),
+            icon: "textformat"
+        ),
         SettingsSearchItem(
             id: "appearance.switcherControlPosition",
             title: String(localized: "Position Window Controls"),

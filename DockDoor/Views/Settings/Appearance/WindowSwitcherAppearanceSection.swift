@@ -3,6 +3,7 @@ import SwiftUI
 
 struct WindowSwitcherAppearanceSection: View {
     @Default(.windowSwitcherControlPosition) var windowSwitcherControlPosition
+    @Default(.switcherShowAppHeader) var switcherShowAppHeader
     @Default(.switcherShowWindowTitle) var switcherShowWindowTitle
     @Default(.switcherWindowTitleVisibility) var switcherWindowTitleVisibility
     @Default(.switcherTrafficLightButtonsVisibility) var switcherTrafficLightButtonsVisibility
@@ -16,6 +17,12 @@ struct WindowSwitcherAppearanceSection: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
+            Toggle("Show App Header", isOn: $switcherShowAppHeader)
+                .settingsSearchTarget("appearance.switcherShowAppHeader")
+
+            Divider().padding(.vertical, 2)
+            Text("Window Switcher Toolbar").font(.headline).padding(.bottom, -2)
+
             Picker("Position Window Controls", selection: $windowSwitcherControlPosition) {
                 ForEach(WindowSwitcherControlPosition.allCases, id: \.self) { position in
                     Text(position.localizedName)
@@ -71,21 +78,24 @@ struct WindowSwitcherAppearanceSection: View {
                 }
             }
 
-            Divider().padding(.vertical, 2)
-            Text("Window Title").font(.headline).padding(.bottom, -2)
+            Group {
+                Divider().padding(.vertical, 2)
+                Text("Window Title").font(.headline).padding(.bottom, -2)
 
-            Toggle("Show Window Title", isOn: $switcherShowWindowTitle)
-                .settingsSearchTarget("appearance.switcherShowWindowTitle")
+                Toggle("Show Window Title", isOn: $switcherShowWindowTitle)
+                    .settingsSearchTarget("appearance.switcherShowWindowTitle")
 
-            if switcherShowWindowTitle {
-                Picker("Visibility", selection: $switcherWindowTitleVisibility) {
-                    ForEach(WindowTitleVisibility.allCases, id: \.self) { visibility in
-                        Text(visibility.localizedName)
-                            .tag(visibility)
+                if switcherShowWindowTitle {
+                    Picker("Visibility", selection: $switcherWindowTitleVisibility) {
+                        ForEach(WindowTitleVisibility.allCases, id: \.self) { visibility in
+                            Text(visibility.localizedName)
+                                .tag(visibility)
+                        }
                     }
+                    .settingsSearchTarget("appearance.switcherWindowTitleVisibility")
                 }
-                .settingsSearchTarget("appearance.switcherWindowTitleVisibility")
             }
+            .disabled(!switcherShowAppHeader)
 
             Divider().padding(.vertical, 2)
             Text("Preview Layout (Switcher)").font(.headline).padding(.bottom, -2)

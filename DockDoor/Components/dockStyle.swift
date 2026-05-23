@@ -14,6 +14,11 @@ enum CardRadius {
     static var inner: Double { outer(for: innerPadding) }
     static var container: Double { outer(for: outerPadding) }
     static var image: Double { max(fallback, inner - innerPadding) }
+
+    static func switcherToolbarHorizontalPadding(uniformCardRadius: Bool) -> CGFloat {
+        guard uniformCardRadius else { return 0 }
+        return CGFloat(innerPadding / 2)
+    }
 }
 
 struct DockStyleModifier: ViewModifier {

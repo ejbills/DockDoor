@@ -53,7 +53,11 @@ struct TrafficLightButtons: View {
                 }
                 .padding(4)
                 .opacity(opacity)
+                .if(pillStyling && opacity > 0 && enabledButtons.count > 0) { view in
+                    view.materialPill(backgroundAppearance: backgroundAppearance)
+                }
                 .allowsHitTesting(opacity != 0)
+                .contentShape(Rectangle())
                 .simultaneousGesture(TapGesture())
                 .onHover { isHovering in
                     withAnimation(.snappy(duration: 0.175)) {
@@ -61,9 +65,6 @@ struct TrafficLightButtons: View {
                     }
                 }
             }
-        }
-        .if(pillStyling && opacity > 0 && displayMode != .never && enabledButtons.count > 0) { view in
-            view.materialPill(backgroundAppearance: backgroundAppearance)
         }
     }
 
@@ -89,6 +90,7 @@ struct TrafficLightButtons: View {
         .foregroundStyle(color, fillColor)
         .font(.headline)
         .scaleEffect(buttonScale)
+        .frame(width: 17 * buttonScale, height: 17 * buttonScale)
         .contentShape(Rectangle())
         .onTapGesture {
             onWindowAction(action)

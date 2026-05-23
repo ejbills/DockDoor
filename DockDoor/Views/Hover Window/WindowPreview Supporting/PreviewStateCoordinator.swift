@@ -1,3 +1,4 @@
+import ApplicationServices
 import Defaults
 import SwiftUI
 
@@ -33,6 +34,8 @@ class PreviewStateCoordinator: ObservableObject {
         didSet { invalidateFilterCache() }
     }
 
+    @Published private(set) var focusedWindowID: CGWindowID?
+
     var shouldScrollToIndex: Bool = true
 
     @Published var searchQuery: String = "" {
@@ -48,6 +51,23 @@ class PreviewStateCoordinator: ObservableObject {
 
     private var cachedFilteredIndices: [Int]?
     private func invalidateFilterCache() { cachedFilteredIndices = nil }
+
+    @MainActor
+    func setFocusedWindowID(_ windowID: CGWindowID?) {
+        focusedWindowID = windowID
+    }
+
+    @MainActor
+    func refreshFocusedWindowID(from newWindows: [WindowInfo]? = nil) {
+        focusedWindowID = Self.currentFocusedWindowID(in: newWindows ?? windows)
+    }
+
+    private static func currentFocusedWindowID(in windows: [WindowInfo]) -> CGWindowID? {
+        guard let activeAppWindow = windows.first(where: { $0.app.isActive }),
+              let focusedWindow = try? activeAppWindow.appAxElement.focusedWindow()
+        else { return nil }
+        return try? focusedWindow.cgWindowId()
+    }
 
     var hasActiveSearch: Bool {
         !searchQuery.isEmpty
@@ -122,6 +142,7 @@ class PreviewStateCoordinator: ObservableObject {
     @MainActor
     func setWindows(_ newWindows: [WindowInfo], dockPosition: DockPosition, bestGuessMonitor: NSScreen, isMockPreviewActive: Bool = false) {
         windows = newWindows
+        refreshFocusedWindowID(from: newWindows)
         lastKnownBestGuessMonitor = bestGuessMonitor
 
         if currIndex >= windows.count {
@@ -176,6 +197,7 @@ class PreviewStateCoordinator: ObservableObject {
         }
 
         lastKnownBestGuessMonitor = bestGuessMonitor
+        refreshFocusedWindowID()
         recomputeAndPublishDimensions(dockPosition: dockPosition, bestGuessMonitor: bestGuessMonitor)
 
         if windows.count != previousWindowCount {

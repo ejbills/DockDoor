@@ -46,6 +46,7 @@ struct SettingsMockPreview: View {
     @Default(.switcherTrafficLightButtonsVisibility) private var switcherTrafficLightVisibility
     @Default(.switcherEnabledTrafficLightButtons) private var switcherEnabledTrafficLightButtons
     @Default(.switcherUseMonochromeTrafficLights) private var switcherUseMonochrome
+    @Default(.switcherShowAppHeader) private var switcherShowAppHeader
     @Default(.switcherShowWindowTitle) private var switcherShowWindowTitle
     @Default(.switcherWindowTitleVisibility) private var switcherWindowTitleVisibility
     @Default(.windowSwitcherControlPosition) private var switcherControlPosition
@@ -89,6 +90,7 @@ struct SettingsMockPreview: View {
     @Default(.compactModeTitleFormat) private var compactModeTitleFormat
     @Default(.compactModeItemSize) private var compactModeItemSize
     @Default(.compactModeHideTrafficLights) private var compactModeHideTrafficLights
+    @Default(.showWindowlessAppQuitButton) private var showWindowlessAppQuitButton
     @Default(.titleOverflowStyle) private var titleOverflowStyle
 
     // MARK: - Header settings (used by container)
@@ -193,6 +195,7 @@ struct SettingsMockPreview: View {
             trafficLightVisibility: trafficLightVisibility,
             enabledTrafficLightButtons: enabledButtons,
             useMonochromeTrafficLights: monochrome,
+            showAppHeader: isWindowSwitcher ? switcherShowAppHeader : true,
             showWindowTitle: showTitle,
             windowTitleVisibility: titleVisibility,
             controlPosition: controlPos,
@@ -219,6 +222,7 @@ struct SettingsMockPreview: View {
             compactModeTitleFormat: compactModeTitleFormat,
             compactModeItemSize: compactModeItemSize,
             compactModeHideTrafficLights: compactModeHideTrafficLights,
+            showWindowlessAppQuitButton: showWindowlessAppQuitButton,
             titleOverflowStyle: titleOverflowStyle
         )
     }

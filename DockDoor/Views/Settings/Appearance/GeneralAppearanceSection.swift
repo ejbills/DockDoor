@@ -7,6 +7,7 @@ struct GeneralAppearanceSection: View {
     @Default(.unselectedContentOpacity) var unselectedContentOpacity
     @Default(.titleOverflowStyle) var titleOverflowStyle
     @Default(.showMinimizedHiddenLabels) var showMinimizedHiddenLabels
+    @Default(.showWindowlessAppQuitButton) var showWindowlessAppQuitButton
     @Default(.hidePreviewCardBackground) var hidePreviewCardBackground
     @Default(.hideHoverContainerBackground) var hideHoverContainerBackground
     @Default(.hideWidgetContainerBackground) var hideWidgetContainerBackground
@@ -82,6 +83,17 @@ struct GeneralAppearanceSection: View {
                     }
                     .settingsSearchTarget("appearance.distinguishMinimized")
                     Text("When enabled, shows visual indicators and dims minimized/hidden windows. When disabled, treats them as normal windows with full functionality.")
+                        .font(.footnote)
+                        .foregroundColor(.gray)
+                        .padding(.leading, 20)
+                }
+
+                VStack(alignment: .leading) {
+                    Toggle(isOn: $showWindowlessAppQuitButton) {
+                        Text("Show quit button for apps with no open windows")
+                    }
+                    .settingsSearchTarget("appearance.windowlessQuitButton")
+                    Text("Shows a quit-only control on previews for running apps with no open windows.")
                         .font(.footnote)
                         .foregroundColor(.gray)
                         .padding(.leading, 20)

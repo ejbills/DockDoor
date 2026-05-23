@@ -125,6 +125,7 @@ extension Defaults.Keys {
     static let compactModeTitleFormat = Key<CompactModeTitleFormat>("compactModeTitleFormat", default: .appNameAndTitle)
     static let compactModeItemSize = Key<CompactModeItemSize>("compactModeItemSize", default: .medium)
     static let compactModeHideTrafficLights = Key<Bool>("compactModeHideTrafficLights", default: false)
+    static let showWindowlessAppQuitButton = Key<Bool>("showWindowlessAppQuitButton", default: true)
 
     // Per-feature compact mode thresholds (0 = disabled, 1+ = enable when window count >= threshold)
     static let windowSwitcherCompactThreshold = Key<Int>("windowSwitcherCompactThreshold", default: 0)
@@ -194,6 +195,7 @@ extension Defaults.Keys {
 
     // MARK: - Window Switcher Appearance Settings
 
+    static let switcherShowAppHeader = Key<Bool>("switcherShowAppHeader", default: true)
     static let switcherShowWindowTitle = Key<Bool>("switcherShowWindowTitle", default: true)
     static let switcherWindowTitleVisibility = Key<WindowTitleVisibility>("switcherWindowTitleVisibility", default: .alwaysVisible)
     static let switcherTrafficLightButtonsVisibility = Key<TrafficLightButtonsVisibility>("switcherTrafficLightButtonsVisibility", default: .dimmedOnPreviewHover)

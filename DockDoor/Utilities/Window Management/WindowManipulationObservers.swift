@@ -232,6 +232,11 @@ class WindowManipulationObservers {
 
         switch notificationName {
         case kAXFocusedUIElementChangedNotification, kAXFocusedWindowChangedNotification, kAXMainWindowChangedNotification:
+            let appAX = AXUIElementCreateApplication(app.processIdentifier)
+            let focusedWindowID = (try? appAX.focusedWindow()).flatMap { try? $0.cgWindowId() }
+            Task { @MainActor [weak self] in
+                self?.previewCoordinator.windowSwitcherCoordinator.setFocusedWindowID(focusedWindowID)
+            }
             updateTimestampIfAppActive(element: element, app: app)
             handleWindowEvent(element: element, app: app, notification: notificationName, validate: false) { [weak self] windowSet in
                 guard let self else { return }

@@ -106,6 +106,7 @@ struct WindowPreviewHoverContainer: View {
     @State private var edgeScrollTimer: Timer?
     @State private var edgeScrollDirection: CGFloat = 0
     @State private var cachedScrollView: NSScrollView?
+    @State private var edgeScrollHoverSize: CGSize = .zero
     @State private var scrolledFromStart = false
     @State private var dynamicFadeEnabled = false
     @State private var cachedAppearance: PreviewAppearanceSettings? = nil
@@ -210,7 +211,6 @@ struct WindowPreviewHoverContainer: View {
     }
 
     private var effectiveShouldShowHeader: Bool {
-        // Window switcher doesn't show the container header
         if previewStateCoordinator.windowSwitcherActive {
             return false
         }
@@ -366,9 +366,15 @@ struct WindowPreviewHoverContainer: View {
                         .clipShape(RoundedRectangle(cornerRadius: CardRadius.container, style: .continuous))
                 }
             }
-            .overlay {
-                if enableMouseHoverInSwitcher, previewStateCoordinator.windowSwitcherActive {
-                    edgeScrollZones(isHorizontal: orientationIsHorizontal)
+            .measure($edgeScrollHoverSize)
+            .onContinuousHover { phase in
+                guard enableMouseHoverInSwitcher, previewStateCoordinator.windowSwitcherActive else { return }
+
+                switch phase {
+                case let .active(location):
+                    handleEdgeScrollHover(at: location, isHorizontal: orientationIsHorizontal)
+                case .ended:
+                    stopEdgeScroll()
                 }
             }
         }
@@ -841,49 +847,43 @@ struct WindowPreviewHoverContainer: View {
         return nil
     }
 
-    @ViewBuilder
-    private func edgeScrollZones(isHorizontal: Bool) -> some View {
+    private func handleEdgeScrollHover(at location: CGPoint, isHorizontal: Bool) {
         let edgeSize: CGFloat = 50
+        let toolbarExclusion: CGFloat = 46
+        let appearance = appearanceOverride ?? cachedAppearance ?? PreviewAppearanceSettings.resolve(
+            windowSwitcherActive: previewStateCoordinator.windowSwitcherActive,
+            dockPosition: dockPosition
+        )
+        let topExclusion = appearance.controlPosition.showsOnTop ? toolbarExclusion : 0
+        let bottomExclusion = appearance.controlPosition.showsOnBottom ? toolbarExclusion : 0
+        let width = edgeScrollHoverSize.width
+        let height = edgeScrollHoverSize.height
+
+        guard width > 0, height > 0 else {
+            stopEdgeScroll()
+            return
+        }
+
+        guard location.y >= topExclusion, location.y <= height - bottomExclusion else {
+            stopEdgeScroll()
+            return
+        }
 
         if isHorizontal {
-            HStack {
-                // Leading edge
-                Color.clear
-                    .frame(width: edgeSize)
-                    .contentShape(Rectangle())
-                    .onHover { hovering in
-                        if hovering { startEdgeScroll(direction: -1, isHorizontal: true) }
-                        else { stopEdgeScroll() }
-                    }
-                Spacer()
-                // Trailing edge
-                Color.clear
-                    .frame(width: edgeSize)
-                    .contentShape(Rectangle())
-                    .onHover { hovering in
-                        if hovering { startEdgeScroll(direction: 1, isHorizontal: true) }
-                        else { stopEdgeScroll() }
-                    }
+            if location.x <= edgeSize {
+                startEdgeScroll(direction: -1, isHorizontal: true)
+            } else if location.x >= width - edgeSize {
+                startEdgeScroll(direction: 1, isHorizontal: true)
+            } else {
+                stopEdgeScroll()
             }
         } else {
-            VStack {
-                // Top edge
-                Color.clear
-                    .frame(height: edgeSize)
-                    .contentShape(Rectangle())
-                    .onHover { hovering in
-                        if hovering { startEdgeScroll(direction: -1, isHorizontal: false) }
-                        else { stopEdgeScroll() }
-                    }
-                Spacer()
-                // Bottom edge
-                Color.clear
-                    .frame(height: edgeSize)
-                    .contentShape(Rectangle())
-                    .onHover { hovering in
-                        if hovering { startEdgeScroll(direction: 1, isHorizontal: false) }
-                        else { stopEdgeScroll() }
-                    }
+            if location.y <= topExclusion + edgeSize {
+                startEdgeScroll(direction: -1, isHorizontal: false)
+            } else if location.y >= height - bottomExclusion - edgeSize {
+                startEdgeScroll(direction: 1, isHorizontal: false)
+            } else {
+                stopEdgeScroll()
             }
         }
     }
@@ -1194,6 +1194,9 @@ struct WindowPreviewHoverContainer: View {
                         dimensions: getDimensions(for: index, dimensionsMap: currentDimensionsMapForPreviews),
                         onTap: onWindowTap,
                         onHoverIndexChange: handleHoverIndexChange,
+                        handleWindowAction: { action in
+                            handleWindowAction(action, at: index)
+                        },
                         appearance: appearance,
                         backgroundAppearance: backgroundAppearance
                     )
@@ -1214,7 +1217,8 @@ struct WindowPreviewHoverContainer: View {
                         onTap: onWindowTap,
                         onHoverIndexChange: handleHoverIndexChange,
                         appearance: appearance,
-                        backgroundAppearance: backgroundAppearance
+                        backgroundAppearance: backgroundAppearance,
+                        focusedWindowID: previewStateCoordinator.focusedWindowID
                     )
                     .equatable()
                     .id(itemID)
@@ -1238,7 +1242,8 @@ struct WindowPreviewHoverContainer: View {
                         onDragHoverIndexChange: handleDragHoverIndexChange,
                         useLivePreview: useLivePreview,
                         appearance: appearance,
-                        backgroundAppearance: backgroundAppearance
+                        backgroundAppearance: backgroundAppearance,
+                        focusedWindowID: previewStateCoordinator.focusedWindowID
                     )
                     .equatable()
                     .id(itemID)
