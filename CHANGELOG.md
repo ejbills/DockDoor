@@ -38,6 +38,41 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://dockdoor.net/donate</div>
 
+<a id="1.38"></a>
+# [Release 1.38](https://github.com/ejbills/DockDoor/releases/tag/1.38) - 2026-05-23
+
+## ✨ New Features
+- Drag previews to move windows between Spaces
+- Control Window Switcher app icon size
+- Choose whether dock clicks restore minimized windows
+- Ignore single-window apps in Cmd+Tab previews
+- Leave Product Hunt reviews from General settings
+
+## 🔧 Improvements & Stability
+- Window Switcher previews better match window shapes
+- Drag-hover now updates Window Switcher selection
+- Fullscreen and tiling actions focus targeted windows
+- Minimized labels respect pill styling settings
+- Removed wake activation to prevent surprise focus
+- Widget settings wording is clearer
+- Updated translations across supported languages
+
+## 🐛 Bug Fixes
+- Fixed Dock Locking disabling after display changes
+- Fixed other-Space windows appearing windowless
+- Fixed Vim motions with custom switcher modifiers
+- Fixed stream keep-alive duration selection
+- Fixed rounded-corner icon alignment issues
+- Fixed last-window close quit behavior
+- Fixed custom Cmd+Tab routing conflicts
+- Fixed helper-owned app windows being missed
+- Fixed dock hover preview cancellation race
+
+
+
+[Changes][1.38]
+
+
 <a id="1.37"></a>
 # [Release 1.37](https://github.com/ejbills/DockDoor/releases/tag/1.37) - 2026-04-23
 
@@ -2128,6 +2163,7 @@ v1.0
 [Changes][releases]
 
 
+[1.38]: https://github.com/ejbills/DockDoor/compare/1.37...1.38
 [1.37]: https://github.com/ejbills/DockDoor/compare/1.36...1.37
 [1.36]: https://github.com/ejbills/DockDoor/compare/1.35.1...1.36
 [1.35.1]: https://github.com/ejbills/DockDoor/compare/1.35...1.35.1
