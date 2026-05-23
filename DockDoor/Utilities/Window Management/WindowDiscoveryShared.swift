@@ -1,6 +1,7 @@
 import ApplicationServices
 import Cocoa
 import Defaults
+import ScreenCaptureKit
 
 // Minimal provider used when we only have a CGWindowID (no SCWindow available)
 struct AXFallbackProvider: WindowPropertiesProviding {
@@ -14,11 +15,321 @@ struct AXFallbackProvider: WindowPropertiesProviding {
     var windowLayer: Int { 0 }
 }
 
+struct WindowCandidateAttributes {
+    let title: String?
+    let role: String?
+    let subrole: String?
+    let size: CGSize?
+    let position: CGPoint?
+
+    init(axWindow: AXUIElement) {
+        title = try? axWindow.title()
+        role = try? axWindow.role()
+        subrole = try? axWindow.subrole()
+        size = try? axWindow.size()
+        position = try? axWindow.position()
+    }
+}
+
+enum WindowOwnerResolver {
+    static func ownerApp(for window: SCWindow) -> NSRunningApplication? {
+        guard let pid = window.owningApplication?.processID else { return nil }
+        return NSRunningApplication(processIdentifier: pid)
+    }
+
+    static func windowBelongsToDisplayApp(_ window: SCWindow, displayApp: NSRunningApplication) -> Bool {
+        guard let owner = ownerApp(for: window) else { return false }
+        return ownerBelongsToDisplayApp(owner, displayApp: displayApp)
+    }
+
+    static func ownerBelongsToDisplayApp(_ owner: NSRunningApplication, displayApp: NSRunningApplication) -> Bool {
+        if owner.processIdentifier == displayApp.processIdentifier {
+            return true
+        }
+
+        if bundleFamilyMatches(owner.bundleIdentifier, displayApp.bundleIdentifier) {
+            return true
+        }
+
+        return executableRootsMatch(owner: owner, displayApp: displayApp)
+    }
+
+    static func displayApp(forOwner owner: NSRunningApplication) -> NSRunningApplication {
+        let candidates = NSWorkspace.shared.runningApplications.filter {
+            $0.activationPolicy == .regular && ownerBelongsToDisplayApp(owner, displayApp: $0)
+        }
+
+        if let parentBundleApp = candidates
+            .filter({ $0.processIdentifier != owner.processIdentifier && bundleIsParent($0.bundleIdentifier, of: owner.bundleIdentifier) })
+            .sorted(by: { displayAppScore($0, forOwner: owner) > displayAppScore($1, forOwner: owner) })
+            .first
+        {
+            return parentBundleApp
+        }
+
+        return candidates.sorted { first, second in
+            displayAppScore(first, forOwner: owner) > displayAppScore(second, forOwner: owner)
+        }.first ?? owner
+    }
+
+    static func isAuxiliaryOwner(_ owner: NSRunningApplication) -> Bool {
+        displayApp(forOwner: owner).processIdentifier != owner.processIdentifier
+    }
+
+    private static func bundleFamilyMatches(_ ownerBundle: String?, _ displayBundle: String?) -> Bool {
+        guard let ownerBundle, let displayBundle else { return false }
+        return ownerBundle == displayBundle ||
+            ownerBundle.hasPrefix(displayBundle + ".") ||
+            displayBundle.hasPrefix(ownerBundle + ".")
+    }
+
+    private static func bundleIsParent(_ parentBundle: String?, of childBundle: String?) -> Bool {
+        guard let parentBundle, let childBundle else { return false }
+        return childBundle.hasPrefix(parentBundle + ".")
+    }
+
+    private static func executableRootsMatch(owner: NSRunningApplication, displayApp: NSRunningApplication) -> Bool {
+        guard let ownerPath = owner.executableURL?.standardizedFileURL.path,
+              let displayPath = displayApp.executableURL?.standardizedFileURL.path
+        else { return false }
+
+        let ownerComponents = ownerPath.split(separator: "/")
+        let displayComponents = displayPath.split(separator: "/")
+        let commonPrefixCount = zip(ownerComponents, displayComponents).prefix { $0 == $1 }.count
+
+        return commonPrefixCount >= 5
+    }
+
+    private static func displayAppScore(_ displayApp: NSRunningApplication, forOwner owner: NSRunningApplication) -> Int {
+        var score = 0
+        if owner.processIdentifier == displayApp.processIdentifier { score += 100 }
+        if owner.bundleIdentifier == displayApp.bundleIdentifier { score += 80 }
+        if let ownerBundle = owner.bundleIdentifier,
+           let displayBundle = displayApp.bundleIdentifier,
+           ownerBundle.hasPrefix(displayBundle + ".")
+        {
+            score += 90
+            score += max(0, 30 - (displayBundle.count / 4))
+        } else if bundleFamilyMatches(owner.bundleIdentifier, displayApp.bundleIdentifier) {
+            score += 50
+        }
+        if executableRootsMatch(owner: owner, displayApp: displayApp) { score += 10 }
+        return score
+    }
+}
+
+enum WindowCandidateDiscriminator {
+    private static let minimumSize = CGSize(width: 100, height: 50)
+    private static let normalLevel = CGWindowLevelForKey(.normalWindow)
+    private static let floatingLevel = CGWindowLevelForKey(.floatingWindow)
+    private static let unknownSubrole = "AXUnknown"
+    private static let documentWindowSubrole = "AXDocumentWindow"
+
+    static func hasUsableSize(_ size: CGSize?) -> Bool {
+        guard let size, size.width > 0, size.height > 0 else { return false }
+        if Defaults[.disableMinWindowSizeFilter] { return true }
+        return size.width >= minimumSize.width && size.height >= minimumSize.height
+    }
+
+    static func hasUsableGeometry(_ attributes: WindowCandidateAttributes) -> Bool {
+        guard hasUsableSize(attributes.size) else { return false }
+        if let position = attributes.position {
+            return position.x.isFinite && position.y.isFinite
+        }
+        return true
+    }
+
+    static func isActualWindow(app: NSRunningApplication,
+                               windowID: CGWindowID,
+                               level: Int32,
+                               attributes: WindowCandidateAttributes) -> Bool
+    {
+        rejectionReason(app: app, windowID: windowID, level: level, attributes: attributes) == nil
+    }
+
+    static func rejectionReason(app: NSRunningApplication,
+                                windowID: CGWindowID,
+                                level: Int32,
+                                attributes: WindowCandidateAttributes) -> String?
+    {
+        guard windowID != 0 else { return "missing CGWindowID" }
+        return potentialRejectionReason(app: app, level: level, attributes: attributes)
+    }
+
+    static func isPotentialAXWindow(app: NSRunningApplication,
+                                    level: Int32?,
+                                    attributes: WindowCandidateAttributes) -> Bool
+    {
+        potentialRejectionReason(app: app, level: level, attributes: attributes) == nil
+    }
+
+    private static func potentialRejectionReason(app: NSRunningApplication,
+                                                 level: Int32?,
+                                                 attributes: WindowCandidateAttributes) -> String?
+    {
+        guard hasUsableGeometry(attributes) else { return "unusable geometry" }
+
+        let specialApp = books(app) ||
+            keynote(app) ||
+            preview(app, attributes.subrole) ||
+            iina(app) ||
+            openFLStudio(app, attributes.title) ||
+            (level.map { crossoverWindow(app, attributes.role, attributes.subrole, $0) } ?? false) ||
+            (level.map { alwaysOnTopScrcpy(app, $0, attributes.role, attributes.subrole) } ?? false)
+
+        let standardSubrole = [kAXStandardWindowSubrole, kAXDialogSubrole].contains(attributes.subrole)
+        let appSpecificSubrole = openBoard(app) ||
+            adobeAudition(app, attributes.subrole) ||
+            adobeAfterEffects(app, attributes.subrole) ||
+            steam(app, attributes.title, attributes.role) ||
+            worldOfWarcraft(app, attributes.role) ||
+            battleNetBootstrapper(app, attributes.role) ||
+            firefox(app, attributes.role, attributes.size) ||
+            vlcFullscreenVideo(app, attributes.role) ||
+            sanGuoShaAirWD(app) ||
+            dvdFab(app) ||
+            drBetotte(app) ||
+            androidEmulator(app, attributes.title) ||
+            autocad(app, attributes.subrole)
+
+        guard specialApp || standardSubrole || appSpecificSubrole else {
+            return "subrole is not standard/dialog and no app-specific rule matched"
+        }
+
+        if !specialApp {
+            guard mustHaveIfJetBrainsApp(app, attributes.title, attributes.subrole, attributes.size),
+                  mustHaveIfSteam(app, attributes.title, attributes.role),
+                  mustHaveIfFusion360(app, attributes.title),
+                  mustHaveIfColorSlurp(app, attributes.subrole)
+            else { return "app-specific hard requirement failed" }
+        }
+
+        return nil
+    }
+
+    private static func hasNonEmptyTitle(_ title: String?) -> Bool {
+        guard let title else { return false }
+        return !title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    }
+
+    private static func mustHaveIfFusion360(_ app: NSRunningApplication, _ title: String?) -> Bool {
+        app.bundleIdentifier != "com.autodesk.fusion360" || hasNonEmptyTitle(title)
+    }
+
+    private static func mustHaveIfJetBrainsApp(_ app: NSRunningApplication, _ title: String?, _ subrole: String?, _ size: CGSize?) -> Bool {
+        guard let bundleIdentifier = app.bundleIdentifier,
+              bundleIdentifier.hasPrefix("com.jetbrains.") || bundleIdentifier.hasPrefix("com.google.android.studio")
+        else { return true }
+
+        return (subrole == kAXStandardWindowSubrole || hasNonEmptyTitle(title)) &&
+            (size?.width ?? 0) > 100 &&
+            (size?.height ?? 0) > 100
+    }
+
+    private static func mustHaveIfColorSlurp(_ app: NSRunningApplication, _ subrole: String?) -> Bool {
+        app.bundleIdentifier != "com.IdeaPunch.ColorSlurp" || subrole == kAXStandardWindowSubrole
+    }
+
+    private static func iina(_ app: NSRunningApplication) -> Bool {
+        app.bundleIdentifier == "com.colliderli.iina"
+    }
+
+    private static func keynote(_ app: NSRunningApplication) -> Bool {
+        app.bundleIdentifier == "com.apple.iWork.Keynote"
+    }
+
+    private static func preview(_ app: NSRunningApplication, _ subrole: String?) -> Bool {
+        app.bundleIdentifier == "com.apple.Preview" && [kAXStandardWindowSubrole, kAXDialogSubrole].contains(subrole)
+    }
+
+    private static func openFLStudio(_ app: NSRunningApplication, _ title: String?) -> Bool {
+        app.bundleIdentifier == "com.image-line.flstudio" && hasNonEmptyTitle(title)
+    }
+
+    private static func openBoard(_ app: NSRunningApplication) -> Bool {
+        app.bundleIdentifier == "org.oe-f.OpenBoard"
+    }
+
+    private static func adobeAudition(_ app: NSRunningApplication, _ subrole: String?) -> Bool {
+        app.bundleIdentifier == "com.adobe.Audition" && subrole == kAXFloatingWindowSubrole
+    }
+
+    private static func adobeAfterEffects(_ app: NSRunningApplication, _ subrole: String?) -> Bool {
+        app.bundleIdentifier == "com.adobe.AfterEffects" && subrole == kAXFloatingWindowSubrole
+    }
+
+    private static func books(_ app: NSRunningApplication) -> Bool {
+        app.bundleIdentifier == "com.apple.iBooksX"
+    }
+
+    private static func worldOfWarcraft(_ app: NSRunningApplication, _ role: String?) -> Bool {
+        app.bundleIdentifier == "com.blizzard.worldofwarcraft" && role == kAXWindowRole
+    }
+
+    private static func battleNetBootstrapper(_ app: NSRunningApplication, _ role: String?) -> Bool {
+        app.bundleIdentifier == "net.battle.bootstrapper" && role == kAXWindowRole
+    }
+
+    private static func drBetotte(_ app: NSRunningApplication) -> Bool {
+        app.bundleIdentifier == "com.ssworks.drbetotte"
+    }
+
+    private static func dvdFab(_ app: NSRunningApplication) -> Bool {
+        app.bundleIdentifier == "com.goland.dvdfab.macos"
+    }
+
+    private static func sanGuoShaAirWD(_ app: NSRunningApplication) -> Bool {
+        app.bundleIdentifier == "SanGuoShaAirWD"
+    }
+
+    private static func steam(_ app: NSRunningApplication, _ title: String?, _ role: String?) -> Bool {
+        app.bundleIdentifier == "com.valvesoftware.steam" && hasNonEmptyTitle(title) && role != nil
+    }
+
+    private static func mustHaveIfSteam(_ app: NSRunningApplication, _ title: String?, _ role: String?) -> Bool {
+        app.bundleIdentifier != "com.valvesoftware.steam" || (hasNonEmptyTitle(title) && role != nil)
+    }
+
+    private static func firefox(_ app: NSRunningApplication, _ role: String?, _ size: CGSize?) -> Bool {
+        (app.bundleIdentifier?.hasPrefix("org.mozilla.firefox") ?? false) &&
+            role == kAXWindowRole &&
+            (size?.height ?? 0) > 400
+    }
+
+    private static func vlcFullscreenVideo(_ app: NSRunningApplication, _ role: String?) -> Bool {
+        (app.bundleIdentifier?.hasPrefix("org.videolan.vlc") ?? false) && role == kAXWindowRole
+    }
+
+    private static func androidEmulator(_ app: NSRunningApplication, _ title: String?) -> Bool {
+        guard app.bundleIdentifier == nil, hasNonEmptyTitle(title) else { return false }
+        return app.executableURL?.lastPathComponent.range(of: "qemu-system[^/]*$", options: .regularExpression) != nil
+    }
+
+    private static func crossoverWindow(_ app: NSRunningApplication, _ role: String?, _ subrole: String?, _ level: Int32) -> Bool {
+        app.bundleIdentifier == nil &&
+            role == kAXWindowRole &&
+            subrole == unknownSubrole &&
+            level == normalLevel &&
+            (app.executableURL?.lastPathComponent == "wine64-preloader" || (app.executableURL?.absoluteString.contains("/winetemp-") ?? false))
+    }
+
+    private static func alwaysOnTopScrcpy(_ app: NSRunningApplication, _ level: Int32, _ role: String?, _ subrole: String?) -> Bool {
+        app.executableURL?.lastPathComponent == "scrcpy" &&
+            level == floatingLevel &&
+            role == kAXWindowRole &&
+            subrole == kAXStandardWindowSubrole
+    }
+
+    private static func autocad(_ app: NSRunningApplication, _ subrole: String?) -> Bool {
+        (app.bundleIdentifier?.hasPrefix("com.autodesk.AutoCAD") ?? false) && subrole == documentWindowSubrole
+    }
+}
+
 /// Heuristic mapping from AX window to CG window when _AXUIElementGetWindow fails
-func mapAXToCG(axWindow: AXUIElement, candidates: [[String: AnyObject]], excluding: Set<CGWindowID>) -> CGWindowID? {
-    let axTitle = (try? axWindow.title())?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-    let axPos = try? axWindow.position()
-    let axSize = try? axWindow.size()
+func mapAXToCG(attributes: WindowCandidateAttributes, candidates: [[String: AnyObject]], excluding: Set<CGWindowID>) -> CGWindowID? {
+    let axTitle = attributes.title?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+    let axPos = attributes.position
+    let axSize = attributes.size
 
     // 1) Exact title match among unused candidates
     if !axTitle.isEmpty {
@@ -67,13 +378,16 @@ func mapAXToCG(axWindow: AXUIElement, candidates: [[String: AnyObject]], excludi
 
 // MARK: - Shared Helper Functions
 
-/// Returns CG window candidates for a given PID on layer 0
+/// Returns CG window candidates for a given PID.
 func getCGWindowCandidates(for pid: pid_t) -> [[String: AnyObject]] {
     let cgAll = (CGWindowListCopyWindowInfo([.excludeDesktopElements], kCGNullWindowID) as? [[String: AnyObject]]) ?? []
     return cgAll.filter { desc in
         let owner = (desc[kCGWindowOwnerPID as String] as? NSNumber)?.int32Value ?? 0
-        let layer = (desc[kCGWindowLayer as String] as? NSNumber)?.intValue ?? 0
-        return owner == pid && layer == 0
+        return owner == pid
+    }.sorted { first, second in
+        let firstLayer = (first[kCGWindowLayer as String] as? NSNumber)?.intValue ?? 0
+        let secondLayer = (second[kCGWindowLayer as String] as? NSNumber)?.intValue ?? 0
+        return firstLayer == 0 && secondLayer != 0
     }
 }
 
@@ -89,27 +403,6 @@ func findCGEntry(for windowID: CGWindowID, in candidates: [[String: AnyObject]])
 
 let AXMinWindowSize: CGSize = .init(width: 100, height: 100)
 
-func isValidAXWindowCandidate(_ axWindow: AXUIElement) -> Bool {
-    DebugLogger.measureSlow("isValidAXWindowCandidate", thresholdMs: 50) {
-        if let role = try? axWindow.role(), role != kAXWindowRole { return false }
-        if let subrole = try? axWindow.subrole(),
-           ![kAXStandardWindowSubrole, kAXDialogSubrole].contains(subrole)
-        { return false }
-        if let s = try? axWindow.size(), let p = try? axWindow.position() {
-            if s == .zero { return false }
-            if !Defaults[.disableMinWindowSizeFilter], s.width < AXMinWindowSize.width || s.height < AXMinWindowSize.height { return false }
-            if !p.x.isFinite || !p.y.isFinite { return false }
-        }
-        return true
-    }
-}
-
-func isAtLeastNormalLevel(_ id: CGWindowID) -> Bool {
-    let level = id.cgsLevel()
-    let normalLevel = CGWindowLevelForKey(.normalWindow)
-    return level >= Int32(normalLevel)
-}
-
 func isValidCGWindowCandidate(_ id: CGWindowID, in candidates: [[String: AnyObject]]) -> Bool {
     guard let match = candidates.first(where: { desc -> Bool in
         let wid = CGWindowID((desc[kCGWindowNumber as String] as? NSNumber)?.uint32Value ?? 0)
@@ -120,7 +413,7 @@ func isValidCGWindowCandidate(_ id: CGWindowID, in candidates: [[String: AnyObje
     let rw = CGFloat((bounds?["Width"] as? NSNumber)?.doubleValue ?? 0)
     let rh = CGFloat((bounds?["Height"] as? NSNumber)?.doubleValue ?? 0)
     let alpha = CGFloat((match[kCGWindowAlpha as String] as? NSNumber)?.doubleValue ?? 1.0)
-    if rw < AXMinWindowSize.width || rh < AXMinWindowSize.height { return false }
+    if !WindowCandidateDiscriminator.hasUsableSize(CGSize(width: rw, height: rh)) { return false }
     if alpha <= 0.01 { return false }
     return true
 }

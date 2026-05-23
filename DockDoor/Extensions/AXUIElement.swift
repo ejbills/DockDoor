@@ -69,7 +69,7 @@ extension AXUIElement {
         try attribute(kAXWindowsAttribute, [AXUIElement].self)
     }
 
-    static func windowsByBruteForce(_ pid: pid_t) -> [AXUIElement] {
+    static func windowsByBruteForce(_ pid: pid_t, app: NSRunningApplication? = nil) -> [AXUIElement] {
         DebugLogger.measureSlow("windowsByBruteForce", thresholdMs: 100, details: "PID: \(pid)") {
             var token = Data(count: 20)
             token.replaceSubrange(0 ..< 4, with: withUnsafeBytes(of: pid) { Data($0) })
@@ -79,9 +79,22 @@ extension AXUIElement {
             var results: [AXUIElement] = []
             for axId: AXUIElementID in 0 ..< 1000 {
                 token.replaceSubrange(12 ..< 20, with: withUnsafeBytes(of: axId) { Data($0) })
-                if let el = _AXUIElementCreateWithRemoteToken(token as CFData)?.takeRetainedValue(),
-                   let subrole = try? el.subrole(),
-                   [kAXStandardWindowSubrole, kAXDialogSubrole].contains(subrole)
+                guard let el = _AXUIElementCreateWithRemoteToken(token as CFData)?.takeRetainedValue() else {
+                    continue
+                }
+
+                if let app {
+                    let windowID = (try? el.cgWindowId()) ?? 0
+                    let attributes = WindowCandidateAttributes(axWindow: el)
+                    if WindowCandidateDiscriminator.isPotentialAXWindow(
+                        app: app,
+                        level: windowID == 0 ? nil : windowID.cgsLevel(),
+                        attributes: attributes
+                    ) {
+                        results.append(el)
+                    }
+                } else if let subrole = try? el.subrole(),
+                          [kAXStandardWindowSubrole, kAXDialogSubrole].contains(subrole)
                 {
                     results.append(el)
                 }
@@ -90,7 +103,7 @@ extension AXUIElement {
         }
     }
 
-    static func allWindows(_ pid: pid_t, appElement: AXUIElement) -> [AXUIElement] {
+    static func allWindows(_ pid: pid_t, appElement: AXUIElement, app: NSRunningApplication? = nil) -> [AXUIElement] {
         DebugLogger.measureSlow("allWindows", thresholdMs: 200, details: "PID: \(pid)") {
             var set = Set<AXUIElement>()
 
@@ -99,7 +112,7 @@ extension AXUIElement {
             }
             if let windows { set.formUnion(windows) }
 
-            let brute = windowsByBruteForce(pid)
+            let brute = windowsByBruteForce(pid, app: app)
             set.formUnion(brute)
 
             return Array(set)

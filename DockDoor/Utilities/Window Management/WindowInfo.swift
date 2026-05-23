@@ -13,6 +13,7 @@ struct WindowInfo: Identifiable, Hashable {
     let id: CGWindowID
     let windowProvider: WindowPropertiesProviding
     let app: NSRunningApplication
+    let ownerApp: NSRunningApplication
     var windowName: String?
     var image: CGImage?
     var axElement: AXUIElement
@@ -29,10 +30,11 @@ struct WindowInfo: Identifiable, Hashable {
 
     private var _scWindow: SCWindow?
 
-    init(windowProvider: WindowPropertiesProviding, app: NSRunningApplication, image: CGImage?, axElement: AXUIElement, appAxElement: AXUIElement, closeButton: AXUIElement?, lastAccessedTime: Date, creationTime: Date? = nil, imageCapturedTime: Date? = nil, spaceID: Int? = nil, screenIdentifier: String? = nil, isMinimized: Bool, isHidden: Bool) {
+    init(windowProvider: WindowPropertiesProviding, app: NSRunningApplication, ownerApp: NSRunningApplication? = nil, image: CGImage?, axElement: AXUIElement, appAxElement: AXUIElement, closeButton: AXUIElement?, lastAccessedTime: Date, creationTime: Date? = nil, imageCapturedTime: Date? = nil, spaceID: Int? = nil, screenIdentifier: String? = nil, isMinimized: Bool, isHidden: Bool) {
         id = windowProvider.windowID
         self.windowProvider = windowProvider
         self.app = app
+        self.ownerApp = ownerApp ?? app
         windowName = (try? axElement.title()) ?? windowProvider.title
         self.image = image
         self.axElement = axElement
@@ -437,7 +439,7 @@ extension WindowInfo {
         func attemptActivation() -> Bool {
             do {
                 var psn = ProcessSerialNumber()
-                _ = GetProcessForPID(app.processIdentifier, &psn)
+                _ = GetProcessForPID(ownerApp.processIdentifier, &psn)
                 _ = _SLPSSetFrontProcessWithOptions(&psn, UInt32(id), SLPSMode.userGenerated.rawValue)
 
                 WindowUtil.makeKeyWindow(&psn, windowID: id)

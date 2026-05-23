@@ -361,7 +361,7 @@ class WindowManipulationObservers {
                     }
                     stateAdjustment?(&windowSet)
                     if notification == (kAXUIElementDestroyedNotification as String),
-                       didDestroyCachedWindow(
+                       self.didDestroyCachedWindow(
                            element,
                            previousWindows: previousWindows
                        )

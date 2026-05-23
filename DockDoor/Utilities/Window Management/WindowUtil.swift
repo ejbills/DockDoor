@@ -609,6 +609,7 @@ extension WindowUtil {
             .filter { app in
                 app.activationPolicy == .regular &&
                     !pidsWithWindows.contains(app.processIdentifier) &&
+                    !WindowOwnerResolver.isAuxiliaryOwner(app) &&
                     !filteredBundleIdentifiers.contains(app.bundleIdentifier ?? "") &&
                     !isAppFiltered(app) &&
                     app.bundleIdentifier != ownBundleId
@@ -696,7 +697,9 @@ extension WindowUtil {
         if !Defaults[.disableImagePreview], hasScreenRecordingPermission() {
             if let content = await getShareableContent(onScreenWindowsOnly: true) {
                 // Build set of SCK window IDs
-                let appWindows = content.windows.filter { $0.owningApplication?.processID == app.processIdentifier }
+                let appWindows = content.windows.filter {
+                    WindowOwnerResolver.windowBelongsToDisplayApp($0, displayApp: app)
+                }
                 sckWindowIDs = Set(appWindows.map(\.windowID))
 
                 // Pre-compute fresh cached IDs to avoid repeated cache reads
@@ -704,7 +707,7 @@ extension WindowUtil {
 
                 // Process SCK windows with limited concurrency
                 await LimitedConcurrency.forEachNonThrowing(appWindows, maxConcurrent: 4, timeout: 10) { window in
-                    try await captureAndCacheWindowInfo(window: window, app: app, skipWindowIDs: freshCachedIDs)
+                    try await captureAndCacheWindowInfo(window: window, displayApp: app, skipWindowIDs: freshCachedIDs)
                 }
             }
         }
@@ -738,7 +741,7 @@ extension WindowUtil {
     ) async -> Int {
         let pid = app.processIdentifier
 
-        guard let bundleId = app.bundleIdentifier, !filteredBundleIdentifiers.contains(bundleId) else {
+        if let bundleId = app.bundleIdentifier, filteredBundleIdentifiers.contains(bundleId) {
             purgeAppCache(with: pid)
             return 0
         }
@@ -749,7 +752,7 @@ extension WindowUtil {
         }
 
         let appAX = AXUIElementCreateApplication(pid)
-        let axWindows = AXUIElement.allWindows(pid, appElement: appAX)
+        let axWindows = AXUIElement.allWindows(pid, appElement: appAX, app: app)
         guard !axWindows.isEmpty else { return 0 }
 
         // Read cache once and compute sets to skip redundant processing
@@ -776,15 +779,14 @@ extension WindowUtil {
         if hasScreenRecordingPermission() {
             if let content = await getShareableContent(onScreenWindowsOnly: false) {
                 let appWindows = content.windows.filter { window in
-                    guard let scApp = window.owningApplication else { return false }
-                    return scApp.processID == app.processIdentifier
+                    WindowOwnerResolver.windowBelongsToDisplayApp(window, displayApp: app)
                 }
 
                 // Pre-compute fresh cached IDs to avoid repeated cache reads
                 let freshCachedIDs = freshCachedWindowIDs(for: app.processIdentifier)
 
                 await LimitedConcurrency.forEachNonThrowing(appWindows, maxConcurrent: 4, timeout: 10) { window in
-                    try await captureAndCacheWindowInfo(window: window, app: app, skipWindowIDs: freshCachedIDs)
+                    try await captureAndCacheWindowInfo(window: window, displayApp: app, skipWindowIDs: freshCachedIDs)
                 }
             }
         }
@@ -806,16 +808,16 @@ extension WindowUtil {
 
         if hasScreenRecordingPermission() {
             if let content = await getShareableContent(onScreenWindowsOnly: false) {
-                let windowAppPairs: [(window: SCWindow, app: NSRunningApplication)] = content.windows.compactMap { window in
+                let windowAppPairs: [(window: SCWindow, displayApp: NSRunningApplication, ownerApp: NSRunningApplication)] = content.windows.compactMap { window in
                     guard let scApp = window.owningApplication,
                           !filteredBundleIdentifiers.contains(scApp.bundleIdentifier),
-                          let nsApp = NSRunningApplication(processIdentifier: scApp.processID)
+                          let ownerApp = NSRunningApplication(processIdentifier: scApp.processID)
                     else { return nil }
-                    return (window, nsApp)
+                    return (window, WindowOwnerResolver.displayApp(forOwner: ownerApp), ownerApp)
                 }
 
                 for pair in windowAppPairs {
-                    processedPIDs.insert(pair.app.processIdentifier)
+                    processedPIDs.insert(pair.displayApp.processIdentifier)
                 }
 
                 // Pre-compute fresh cached IDs per app to avoid repeated cache reads
@@ -828,8 +830,13 @@ extension WindowUtil {
                 }()
 
                 await LimitedConcurrency.forEachNonThrowing(windowAppPairs, maxConcurrent: 4, timeout: 10) { pair in
-                    let skipIDs = freshCachedIDsByPID[pair.app.processIdentifier] ?? []
-                    try await captureAndCacheWindowInfo(window: pair.window, app: pair.app, skipWindowIDs: skipIDs)
+                    let skipIDs = freshCachedIDsByPID[pair.displayApp.processIdentifier] ?? []
+                    try await captureAndCacheWindowInfo(
+                        window: pair.window,
+                        displayApp: pair.displayApp,
+                        ownerApp: pair.ownerApp,
+                        skipWindowIDs: skipIDs
+                    )
                 }
             }
         }
@@ -837,6 +844,7 @@ extension WindowUtil {
         // AX fallback
         let runningApps = NSWorkspace.shared.runningApplications.filter {
             $0.activationPolicy == .regular &&
+                !WindowOwnerResolver.isAuxiliaryOwner($0) &&
                 !filteredBundleIdentifiers.contains($0.bundleIdentifier ?? "") &&
                 !isAppFiltered($0)
         }
@@ -885,31 +893,45 @@ extension WindowUtil {
         }
     }
 
-    static func captureAndCacheWindowInfo(window: SCWindow, app: NSRunningApplication, skipWindowIDs: Set<CGWindowID> = []) async throws {
+    static func captureAndCacheWindowInfo(
+        window: SCWindow,
+        displayApp: NSRunningApplication,
+        ownerApp: NSRunningApplication? = nil,
+        skipWindowIDs: Set<CGWindowID> = []
+    ) async throws {
         let windowID = window.windowID
-        let pid = app.processIdentifier
+        guard let ownerApp = ownerApp ?? WindowOwnerResolver.ownerApp(for: window) else {
+            return
+        }
+        let displayPid = displayApp.processIdentifier
+        let ownerPid = ownerApp.processIdentifier
 
         // Fast path: skip if pre-computed by caller as fresh cached
-        if skipWindowIDs.contains(windowID) { return }
-
-        guard window.owningApplication != nil,
-              window.isOnScreen,
-              window.windowLayer == 0,
-              Defaults[.disableMinWindowSizeFilter] || (window.frame.size.width >= AXMinWindowSize.width && window.frame.size.height >= AXMinWindowSize.height)
-        else { return }
-
-        guard let bundleId = app.bundleIdentifier else {
-            purgeAppCache(with: pid)
+        if skipWindowIDs.contains(windowID) {
             return
         }
 
-        if filteredBundleIdentifiers.contains(bundleId) {
-            purgeAppCache(with: pid)
+        guard window.owningApplication != nil else {
+            return
+        }
+        guard window.isOnScreen else {
+            return
+        }
+        guard window.windowLayer == 0 else {
+            return
+        }
+        guard Defaults[.disableMinWindowSizeFilter] || (window.frame.size.width >= AXMinWindowSize.width && window.frame.size.height >= AXMinWindowSize.height) else {
             return
         }
 
-        if isAppFiltered(app) {
-            purgeAppCache(with: pid)
+        let bundleId = displayApp.bundleIdentifier
+        if let bundleId, filteredBundleIdentifiers.contains(bundleId) {
+            purgeAppCache(with: displayPid)
+            return
+        }
+
+        if isAppFiltered(displayApp) {
+            purgeAppCache(with: displayPid)
             return
         }
 
@@ -918,14 +940,14 @@ extension WindowUtil {
             if !windowTitleFilters.isEmpty {
                 for filter in windowTitleFilters {
                     if windowTitle.lowercased().contains(filter.lowercased()) {
-                        removeWindowFromDesktopSpaceCache(with: windowID, in: pid)
+                        removeWindowFromDesktopSpaceCache(with: windowID, in: displayPid)
                         return
                     }
                 }
             }
         }
 
-        desktopSpaceWindowCacheManager.updateCache(pid: pid) { windowSet in
+        desktopSpaceWindowCacheManager.updateCache(pid: displayPid) { windowSet in
             windowSet = windowSet.filter { cachedWindow in
                 if let cachedTitle = cachedWindow.windowName {
                     for filter in Defaults[.windowTitleFilters] {
@@ -938,9 +960,10 @@ extension WindowUtil {
             }
         }
 
-        let appElement = AXUIElementCreateApplication(pid)
+        let ownerAppElement = AXUIElementCreateApplication(ownerPid)
 
-        guard let axWindows = try? appElement.windows(), !axWindows.isEmpty else {
+        let axWindows = AXUIElement.allWindows(ownerPid, appElement: ownerAppElement, app: displayApp)
+        guard !axWindows.isEmpty else {
             return
         }
 
@@ -951,23 +974,34 @@ extension WindowUtil {
         let closeButton = try? windowRef.closeButton()
         let minimizeButton = try? windowRef.minimizeButton()
         let minimizedState = (try? windowRef.isMinimized()) ?? false
-        let hiddenState = app.isHidden
-        let shouldWindowBeCaptured = (closeButton != nil) || (minimizeButton != nil)
+        let hiddenState = displayApp.isHidden
+        let attributes = WindowCandidateAttributes(axWindow: windowRef)
+        let shouldWindowBeCaptured = (closeButton != nil) ||
+            (minimizeButton != nil) ||
+            WindowCandidateDiscriminator.isActualWindow(
+                app: displayApp,
+                windowID: windowID,
+                level: windowID.cgsLevel(),
+                attributes: attributes
+            )
 
         if shouldWindowBeCaptured {
-            let persistedData = WindowOrderPersistence.getPersistedTimestamp(
-                bundleIdentifier: bundleId,
-                windowTitle: window.title
-            )
+            let persistedData = bundleId.flatMap {
+                WindowOrderPersistence.getPersistedTimestamp(
+                    bundleIdentifier: $0,
+                    windowTitle: window.title
+                )
+            }
             let lastAccessedTime = persistedData?.lastAccessedTime ?? Date.now
             let creationTime = persistedData?.creationTime
 
             var windowInfo = WindowInfo(
                 windowProvider: window,
-                app: app,
+                app: displayApp,
+                ownerApp: ownerApp,
                 image: nil,
                 axElement: windowRef,
-                appAxElement: appElement,
+                appAxElement: ownerAppElement,
                 closeButton: closeButton,
                 lastAccessedTime: lastAccessedTime,
                 creationTime: creationTime,
@@ -999,11 +1033,15 @@ extension WindowUtil {
         var cgID: CGWindowID = 0
         if _AXUIElementGetWindow(axWindow, &cgID) == .success, cgID != 0 {
             // Skip if already cached with fresh image (pre-computed by caller)
-            if skipWindowIDs.contains(cgID) { return }
-            guard !excludeWindowIDs.contains(cgID) else { return }
+            if skipWindowIDs.contains(cgID) {
+                return
+            }
+            guard !excludeWindowIDs.contains(cgID) else {
+                return
+            }
         }
 
-        guard isValidAXWindowCandidate(axWindow) else { return }
+        let attributes = WindowCandidateAttributes(axWindow: axWindow)
 
         let cgCandidates = getCGWindowCandidates(for: pid)
         // Use pre-computed cached IDs if provided, otherwise read from cache
@@ -1012,26 +1050,42 @@ extension WindowUtil {
             : existingCachedIDs
 
         if cgID == 0 {
-            if let mapped = mapAXToCG(axWindow: axWindow, candidates: cgCandidates, excluding: usedIDs) {
+            if let mapped = mapAXToCG(attributes: attributes, candidates: cgCandidates, excluding: usedIDs) {
                 cgID = mapped
             } else {
                 return
             }
         }
 
-        guard !excludeWindowIDs.contains(cgID), !usedIDs.contains(cgID) else { return }
-        guard isAtLeastNormalLevel(cgID) else { return }
+        guard !excludeWindowIDs.contains(cgID) else {
+            return
+        }
+        guard !usedIDs.contains(cgID) else {
+            return
+        }
+        guard WindowCandidateDiscriminator.isActualWindow(
+            app: app,
+            windowID: cgID,
+            level: cgID.cgsLevel(),
+            attributes: attributes
+        ) else {
+            return
+        }
 
         let titleFilters = Defaults[.windowTitleFilters]
         if !titleFilters.isEmpty {
-            let cgTitle = cgID.cgsTitle() ?? ""
-            if titleFilters.contains(where: { cgTitle.lowercased().contains($0.lowercased()) }) {
+            let title = attributes.title ?? cgID.cgsTitle() ?? ""
+            if titleFilters.contains(where: { title.lowercased().contains($0.lowercased()) }) {
                 return
             }
         }
 
-        guard isValidCGWindowCandidate(cgID, in: cgCandidates) else { return }
-        guard let cgEntry = findCGEntry(for: cgID, in: cgCandidates) else { return }
+        guard isValidCGWindowCandidate(cgID, in: cgCandidates) else {
+            return
+        }
+        guard let cgEntry = findCGEntry(for: cgID, in: cgCandidates) else {
+            return
+        }
 
         let activeSpaceIDs = currentActiveSpaceIDs()
         guard shouldAcceptWindow(
@@ -1041,9 +1095,11 @@ extension WindowUtil {
             app: app,
             activeSpaceIDs: activeSpaceIDs,
             scBacked: false
-        ) else { return }
+        ) else {
+            return
+        }
 
-        let windowTitle = (try? axWindow.title()) ?? cgID.cgsTitle()
+        let windowTitle = attributes.title ?? cgID.cgsTitle()
         let minimizedState = (try? axWindow.isMinimized()) ?? false
         let hiddenState = app.isHidden
 
@@ -1063,7 +1119,7 @@ extension WindowUtil {
             lastAccessedTime: persistedData?.lastAccessedTime ?? Date(),
             creationTime: persistedData?.creationTime,
             spaceID: cgID.cgsSpaces().first.map { Int($0) },
-            screenIdentifier: (try? axWindow.position()).flatMap { screenIdentifier(forWindowAt: $0) },
+            screenIdentifier: attributes.position.flatMap { screenIdentifier(forWindowAt: $0) },
             isMinimized: minimizedState,
             isHidden: hiddenState
         )
