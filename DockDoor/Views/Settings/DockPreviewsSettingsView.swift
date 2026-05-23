@@ -153,7 +153,7 @@ struct DockPreviewsSettingsView: View {
 
                 Toggle(isOn: $quitAppOnWindowClose) { Text("Quit app when closing its last window") }
                     .settingsSearchTarget("dockPreviews.quitOnClose")
-                Text("When an app has only one window left, closing it from the preview will quit the app. Hold Option to force quit. Useful as a replacement for Swift Quit.")
+                Text("When an app has only one window left, closing it will quit the app. Useful as a replacement for Swift Quit.")
                     .font(.caption)
                     .foregroundColor(.secondary)
                     .padding(.leading, 20)

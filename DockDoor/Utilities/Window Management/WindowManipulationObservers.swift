@@ -355,16 +355,40 @@ class WindowManipulationObservers {
             guard let self else { return }
             DebugLogger.measure("updateWindowCache", details: "App: \(app.localizedName ?? "Unknown"), Notification: \(notification), Validate: \(effectiveValidate)") {
                 WindowUtil.updateWindowCache(for: app) { windowSet in
+                    let previousWindows = windowSet
                     if effectiveValidate {
                         windowSet = windowSet.filter { WindowUtil.isValidElement($0.axElement) }
                     }
                     stateAdjustment?(&windowSet)
+                    if notification == (kAXUIElementDestroyedNotification as String),
+                       didDestroyCachedWindow(
+                           element,
+                           previousWindows: previousWindows
+                       )
+                    {
+                        WindowUtil.quitAppOnLastWindowCloseIfNeeded(
+                            app: app,
+                            previousWindowCount: previousWindows.count,
+                            remainingWindowCount: windowSet.count
+                        )
+                    }
                 }
             }
             cacheUpdateWorkItem = nil
         }
         cacheUpdateWorkItem = (workItem, hasStateAdjustment, effectiveValidate)
         axObserverWorkQueue.asyncAfter(deadline: .now() + windowProcessingDebounceInterval, execute: workItem)
+    }
+
+    private func didDestroyCachedWindow(_ destroyedElement: AXUIElement, previousWindows: Set<WindowInfo>) -> Bool {
+        if previousWindows.contains(where: { $0.axElement == destroyedElement }) {
+            return true
+        }
+
+        guard let destroyedWindowID = try? destroyedElement.cgWindowId() else {
+            return false
+        }
+        return previousWindows.contains { $0.id == destroyedWindowID }
     }
 
     private func update(windowSet: inout Set<WindowInfo>,

@@ -3,6 +3,12 @@ import Cocoa
 import Defaults
 import ScreenCaptureKit
 
+enum WindowCloseResult {
+    case closed
+    case appQuit
+    case noChange
+}
+
 struct WindowInfo: Identifiable, Hashable {
     let id: CGWindowID
     let windowProvider: WindowPropertiesProviding
@@ -485,18 +491,29 @@ extension WindowInfo {
         CGAssociateMouseAndMouseCursorPosition(1)
     }
 
-    func close() {
-        guard !isWindowlessApp else { return }
+    @discardableResult
+    func close() -> WindowCloseResult {
+        guard !isWindowlessApp else { return .noChange }
         guard closeButton != nil else {
             print("Error: closeButton is nil.")
-            return
+            return .noChange
         }
 
+        let previousWindowCount = WindowUtil.readCachedWindows(for: app.processIdentifier).count
         do {
             try closeButton?.performAction(kAXPressAction)
             WindowUtil.removeWindowFromDesktopSpaceCache(with: id, in: app.processIdentifier)
+            if WindowUtil.quitAppOnLastWindowCloseIfNeeded(
+                app: app,
+                previousWindowCount: previousWindowCount,
+                remainingWindowCount: max(previousWindowCount - 1, 0)
+            ) {
+                return .appQuit
+            }
+            return .closed
         } catch {
             print("Error closing window")
+            return .noChange
         }
     }
 

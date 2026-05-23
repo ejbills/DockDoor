@@ -11,6 +11,7 @@ struct CmdTabSettingsView: View {
     @Default(.cmdTabAutoSelectFirstWindow) var cmdTabAutoSelectFirstWindow
     @Default(.includeHiddenWindowsInCmdTab) var includeHiddenWindowsInCmdTab
     @Default(.showWindowlessAppsInCmdTab) var showWindowlessAppsInCmdTab
+    @Default(.ignoreAppsWithSingleWindowInCmdTab) var ignoreAppsWithSingleWindowInCmdTab
 
     var body: some View {
         BaseSettingsView {
@@ -118,6 +119,13 @@ struct CmdTabSettingsView: View {
                 Toggle(isOn: $showWindowlessAppsInCmdTab) { Text("Show preview for apps with no open windows") }
                     .settingsSearchTarget("cmdTab.showWindowless")
                 Text("Show a placeholder preview when Cmd+Tab lands on an app that has no windows.")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .padding(.leading, 20)
+
+                Toggle(isOn: $ignoreAppsWithSingleWindowInCmdTab) { Text("Ignore apps with one window") }
+                    .settingsSearchTarget("cmdTab.ignoreSingleWindow")
+                Text("Prevents apps with a single window from appearing in Cmd+Tab previews.")
                     .font(.caption)
                     .foregroundColor(.secondary)
                     .padding(.leading, 20)

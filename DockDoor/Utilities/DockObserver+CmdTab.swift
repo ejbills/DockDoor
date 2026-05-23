@@ -126,6 +126,8 @@ extension DockObserver {
             cachedWindows = WindowUtil.readCachedWindows(for: app.processIdentifier, sortedBy: .cmdTab)
         }
 
+        let shouldIgnoreSingleWindowApp = Defaults[.ignoreAppsWithSingleWindowInCmdTab] && cachedWindows.count == 1
+
         if Defaults[.showWindowsFromCurrentSpaceOnlyInCmdTab] {
             cachedWindows = WindowUtil.filterWindowsByCurrentSpace(cachedWindows)
         }
@@ -143,6 +145,11 @@ extension DockObserver {
 
         Task { @MainActor [weak self] in
             guard let self else { return }
+
+            if shouldIgnoreSingleWindowApp {
+                previewCoordinator.hideWindow()
+                return
+            }
 
             if cachedWindows.isEmpty {
                 if let app = resolvedApp, Defaults[.showWindowlessAppsInCmdTab] {

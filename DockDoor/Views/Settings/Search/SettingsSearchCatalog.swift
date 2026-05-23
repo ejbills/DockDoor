@@ -225,7 +225,7 @@ enum SettingsSearchCatalog {
         SettingsSearchItem(
             id: "dockPreviews.quitOnClose",
             title: String(localized: "Quit app when closing its last window"),
-            description: String(localized: "When an app has only one window left, closing it from the preview will quit the app. Hold Option to force quit. Useful as a replacement for Swift Quit."),
+            description: String(localized: "When an app has only one window left, closing it will quit the app. Useful as a replacement for Swift Quit."),
             keywords: ["quit", "close", "last window"],
             tab: "DockPreviews",
             section: String(localized: "Dock Interaction"),
@@ -464,6 +464,15 @@ enum SettingsSearchCatalog {
             tab: "CmdTab",
             section: String(localized: "Window Display"),
             icon: "macwindow.badge.plus"
+        ),
+        SettingsSearchItem(
+            id: "cmdTab.ignoreSingleWindow",
+            title: String(localized: "Ignore apps with one window"),
+            description: String(localized: "Prevents apps with a single window from appearing in Cmd+Tab previews."),
+            keywords: ["single", "one", "window", "ignore"],
+            tab: "CmdTab",
+            section: String(localized: "Window Display"),
+            icon: "macwindow.badge.minus"
         ),
         SettingsSearchItem(
             id: "cmdTab.sortOrder",

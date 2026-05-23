@@ -144,20 +144,17 @@ enum WindowAction: String, Hashable, CaseIterable, Defaults.Serializable {
 
         case .close:
             let pid = window.app.processIdentifier
-            let finder = NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.finder")
-            if Defaults[.quitAppOnWindowClose],
-               WindowUtil.readCachedWindows(for: pid).count <= 1,
-               finder.first?.processIdentifier != pid
-            {
-                window.quit(force: NSEvent.modifierFlags.contains(.option))
+            switch window.close() {
+            case .appQuit:
                 if keepPreviewOnQuit {
                     return .appWindowsRemoved(pid: pid)
                 } else {
                     return .dismissed
                 }
-            } else {
-                window.close()
+            case .closed:
                 return .windowRemoved
+            case .noChange:
+                return .noChange
             }
 
         case .minimize:
@@ -717,7 +714,14 @@ extension WindowUtil {
 
         // Purify cache and return
         if let finalWindows = await WindowUtil.purifyAppCache(with: app.processIdentifier, removeAll: false) {
-            guard ignoreSingleWindowFilter || !Defaults[.ignoreAppsWithSingleWindow] || finalWindows.count > 1 else { return [] }
+            let shouldIgnoreSingleWindowApp = switch context {
+            case .dockPreview:
+                Defaults[.ignoreAppsWithSingleWindow]
+            case .cmdTab:
+                Defaults[.ignoreAppsWithSingleWindowInCmdTab]
+            }
+
+            guard ignoreSingleWindowFilter || !shouldIgnoreSingleWindowApp || finalWindows.count > 1 else { return [] }
             return sortWindows(finalWindows, for: context)
         }
 
@@ -1143,6 +1147,27 @@ extension WindowUtil {
 
     static func purgeAppCache(with pid: pid_t) {
         desktopSpaceWindowCacheManager.writeCache(pid: pid, windowSet: [])
+    }
+
+    @discardableResult
+    static func quitAppOnLastWindowCloseIfNeeded(app: NSRunningApplication,
+                                                 previousWindowCount: Int,
+                                                 remainingWindowCount: Int) -> Bool
+    {
+        guard Defaults[.quitAppOnWindowClose],
+              app.bundleIdentifier != "com.apple.finder",
+              previousWindowCount > 0,
+              remainingWindowCount == 0
+        else {
+            return false
+        }
+
+        DebugLogger.log("quitAppOnLastWindowClose", details: "App: \(app.localizedName ?? "Unknown") (PID: \(app.processIdentifier))")
+        DispatchQueue.main.async {
+            app.terminate()
+            purgeAppCache(with: app.processIdentifier)
+        }
+        return true
     }
 
     /// Checks if the frontmost application is fullscreen and in the blacklist
