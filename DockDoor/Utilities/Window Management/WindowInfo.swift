@@ -159,6 +159,7 @@ extension WindowInfo {
         guard !isWindowlessApp else { return }
         if let isCurrentlyInFullScreen = try? axElement.isFullscreen() {
             do {
+                bringToFront()
                 try axElement.setAttribute(kAXFullscreenAttribute, !isCurrentlyInFullScreen)
             } catch {
                 print("Failed to toggle full screen")
@@ -306,6 +307,7 @@ extension WindowInfo {
 
         try? axElement.setAttribute(kAXPositionAttribute, positionValue)
         try? axElement.setAttribute(kAXSizeAttribute, sizeValue)
+        bringToFront()
     }
 
     func setWindowFrame(_ targetFrame: CGRect) {
