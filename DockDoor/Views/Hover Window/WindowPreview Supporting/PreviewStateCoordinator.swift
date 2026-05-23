@@ -566,6 +566,8 @@ class PreviewStateCoordinator: ObservableObject {
     func initializeForWindowSwitcher(with newWindows: [WindowInfo], dockPosition: DockPosition, bestGuessMonitor: NSScreen) {
         setWindows(newWindows, dockPosition: dockPosition, bestGuessMonitor: bestGuessMonitor)
         searchQuery = ""
+        hasMovedSinceOpen = false
+        initialHoverLocation = NSEvent.mouseLocation
 
         if !windows.isEmpty {
             if Defaults[.useClassicWindowOrdering], windows.count >= 2 {

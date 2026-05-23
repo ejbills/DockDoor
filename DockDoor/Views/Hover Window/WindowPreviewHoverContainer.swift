@@ -243,6 +243,23 @@ struct WindowPreviewHoverContainer: View {
         previewStateCoordinator.setIndex(to: hoveredIndex, shouldScroll: false)
     }
 
+    private func handleDragHoverIndexChange(_ hoveredIndex: Int?) {
+        guard enableMouseHoverInSwitcher else { return }
+        guard let hoveredIndex else { return }
+        guard hoveredIndex != previewStateCoordinator.currIndex else { return }
+
+        if !previewStateCoordinator.hasMovedSinceOpen,
+           let initial = previewStateCoordinator.initialHoverLocation
+        {
+            let screenLocation = NSEvent.mouseLocation
+            let distance = hypot(screenLocation.x - initial.x, screenLocation.y - initial.y)
+            guard distance > 1 else { return }
+            previewStateCoordinator.hasMovedSinceOpen = true
+        }
+
+        previewStateCoordinator.setIndex(to: hoveredIndex, shouldScroll: false)
+    }
+
     var body: some View {
         BaseHoverContainer(
             bestGuessMonitor: bestGuessMonitor,
@@ -1218,6 +1235,7 @@ struct WindowPreviewHoverContainer: View {
                         showAppIconOnly: effectiveShowAppIconOnly,
                         mockPreviewActive: mockPreviewActive,
                         onHoverIndexChange: handleHoverIndexChange,
+                        onDragHoverIndexChange: handleDragHoverIndexChange,
                         useLivePreview: useLivePreview,
                         appearance: appearance,
                         backgroundAppearance: backgroundAppearance

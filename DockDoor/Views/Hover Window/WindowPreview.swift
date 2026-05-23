@@ -124,6 +124,7 @@ struct WindowPreview: View, Equatable {
     let showAppIconOnly: Bool
     let mockPreviewActive: Bool
     let onHoverIndexChange: ((Int?, CGPoint?) -> Void)?
+    let onDragHoverIndexChange: ((Int?) -> Void)?
     let useLivePreview: Bool
     var skeletonMode: Bool = false
     var appearance: PreviewAppearanceSettings
@@ -779,7 +780,11 @@ struct WindowPreview: View, Equatable {
         }
         .onChange(of: isDraggingOver) { isOver in
             if isOver {
-                startDragTimer()
+                if windowSwitcherActive {
+                    onDragHoverIndexChange?(index)
+                } else {
+                    startDragTimer()
+                }
             } else {
                 cancelDragTimer()
             }
