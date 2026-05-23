@@ -967,6 +967,15 @@ enum SettingsSearchCatalog {
             icon: "arrow.left.and.right"
         ),
         SettingsSearchItem(
+            id: "appearance.switcherEmbedControls",
+            title: String(localized: "Embed controls in preview frames"),
+            description: String(localized: "Places traffic light buttons and window titles directly inside the window switcher preview frames."),
+            keywords: ["embed", "controls", "frame", "switcher"],
+            tab: "Appearance",
+            section: String(localized: "Window Switcher Appearance"),
+            icon: "rectangle.inset.filled"
+        ),
+        SettingsSearchItem(
             id: "appearance.switcherMaxRows",
             title: String(localized: "Max Rows"),
             description: String(localized: "Controls how many rows of windows are shown in the window switcher."),

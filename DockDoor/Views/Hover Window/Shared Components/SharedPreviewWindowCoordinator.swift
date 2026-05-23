@@ -318,7 +318,17 @@ final class SharedPreviewWindowCoordinator: NSPanel {
             elapsed = renderStartTime.map { (CFAbsoluteTimeGetCurrent() - $0) * 1000 } ?? 0
             DebugLogger.log("PreviewRender", details: "fittingSize done: \(fittingSize) (+\(String(format: "%.1f", elapsed))ms)")
 
-            newHoverWindowSize = fittingSize
+            let expectedContentSize = windowSwitcherCoordinator.expectedContentSize
+            let targetSize = expectedContentSize == .zero
+                ? fittingSize
+                : CGSize(
+                    width: max(fittingSize.width, expectedContentSize.width),
+                    height: max(fittingSize.height, expectedContentSize.height)
+                )
+            newHoverWindowSize = CGSize(
+                width: min(targetSize.width, mouseScreen.visibleFrame.width),
+                height: min(targetSize.height, mouseScreen.visibleFrame.height)
+            )
         }
 
         let position: CGPoint

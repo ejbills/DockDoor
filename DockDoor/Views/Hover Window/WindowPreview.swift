@@ -51,7 +51,7 @@ struct PreviewAppearanceSettings: Equatable {
         .showWindowTitle, .switcherShowWindowTitle, .cmdTabShowWindowTitle,
         .windowTitleVisibility, .switcherWindowTitleVisibility, .cmdTabWindowTitleVisibility,
         .dockPreviewControlPosition, .windowSwitcherControlPosition, .cmdTabControlPosition,
-        .useEmbeddedDockPreviewElements, .cmdTabUseEmbeddedDockPreviewElements,
+        .useEmbeddedDockPreviewElements, .switcherUseEmbeddedDockPreviewElements, .cmdTabUseEmbeddedDockPreviewElements,
         .disableDockStyleTrafficLights, .switcherDisableDockStyleTrafficLights, .cmdTabDisableDockStyleTrafficLights,
         .disableDockStyleTitles, .cmdTabDisableDockStyleTitles,
         .dockLivePreviewQuality, .windowSwitcherLivePreviewQuality,
@@ -82,7 +82,7 @@ struct PreviewAppearanceSettings: Equatable {
             showWindowTitle: pick(.showWindowTitle, switcher: .switcherShowWindowTitle, cmdTab: .cmdTabShowWindowTitle),
             windowTitleVisibility: pick(.windowTitleVisibility, switcher: .switcherWindowTitleVisibility, cmdTab: .cmdTabWindowTitleVisibility),
             controlPosition: pick(.dockPreviewControlPosition, switcher: .windowSwitcherControlPosition, cmdTab: .cmdTabControlPosition),
-            useEmbeddedElements: pick(.useEmbeddedDockPreviewElements, cmdTab: .cmdTabUseEmbeddedDockPreviewElements),
+            useEmbeddedElements: pick(.useEmbeddedDockPreviewElements, switcher: .switcherUseEmbeddedDockPreviewElements, cmdTab: .cmdTabUseEmbeddedDockPreviewElements),
             disableDockStyleTrafficLights: pick(.disableDockStyleTrafficLights, switcher: .switcherDisableDockStyleTrafficLights, cmdTab: .cmdTabDisableDockStyleTrafficLights),
             disableDockStyleTitles: pick(.disableDockStyleTitles, cmdTab: .cmdTabDisableDockStyleTitles),
             showMinimizedHiddenLabels: Defaults[.showMinimizedHiddenLabels],
@@ -220,8 +220,39 @@ struct WindowPreview: View, Equatable {
 
     @ViewBuilder
     private func embeddedControlsOverlay(_ selected: Bool) -> some View {
-        if !windowSwitcherActive {
+        if windowSwitcherActive {
+            embeddedWindowSwitcherControls(selected)
+        } else {
             embeddedDockPreviewControls(selected)
+        }
+    }
+
+    @ViewBuilder
+    private func embeddedWindowSwitcherControls(_ selected: Bool) -> some View {
+        VStack(spacing: 0) {
+            if appearance.controlPosition.showsOnTop {
+                let config = appearance.controlPosition.topConfiguration
+                windowSwitcherContent(
+                    selected,
+                    isLeadingControls: config.isLeadingControls,
+                    showTitleContent: config.showTitle,
+                    showControlsContent: config.showControls
+                )
+                .padding(8)
+            }
+
+            Spacer()
+
+            if appearance.controlPosition.showsOnBottom {
+                let config = appearance.controlPosition.bottomConfiguration
+                windowSwitcherContent(
+                    selected,
+                    isLeadingControls: config.isLeadingControls,
+                    showTitleContent: config.showTitle,
+                    showControlsContent: config.showControls
+                )
+                .padding(8)
+            }
         }
     }
 
@@ -659,7 +690,7 @@ struct WindowPreview: View, Equatable {
 
         ZStack(alignment: .topLeading) {
             VStack(alignment: .leading, spacing: 0) {
-                if !appearance.useEmbeddedElements || windowSwitcherActive,
+                if !appearance.useEmbeddedElements,
                    appearance.controlPosition.showsOnTop
                 {
                     let config = appearance.controlPosition.topConfiguration
@@ -682,7 +713,7 @@ struct WindowPreview: View, Equatable {
                     view.frame(width: switcherCardWidth, alignment: .center)
                 }
 
-                if !appearance.useEmbeddedElements || windowSwitcherActive,
+                if !appearance.useEmbeddedElements,
                    appearance.controlPosition.showsOnBottom
                 {
                     let config = appearance.controlPosition.bottomConfiguration
@@ -737,7 +768,7 @@ struct WindowPreview: View, Equatable {
                     .opacity(highlightOpacity)
             }
 
-            if !windowSwitcherActive, appearance.useEmbeddedElements {
+            if appearance.useEmbeddedElements {
                 embeddedControlsOverlay(finalIsSelected)
             }
         }

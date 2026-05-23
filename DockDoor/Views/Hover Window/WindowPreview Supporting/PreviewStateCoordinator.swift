@@ -312,6 +312,14 @@ class PreviewStateCoordinator: ObservableObject {
             || (compactThreshold > 0 && windows.count >= compactThreshold)
 
         if Defaults[.allowDynamicImageSizing], !wouldUseCompactMode {
+            let minimumItemWidth = if windowSwitcherActive {
+                min(
+                    newOverallMaxDimension.x,
+                    WindowPreviewHoverContainer.dynamicSwitcherMinimumCardWidth
+                )
+            } else {
+                CGFloat.zero
+            }
             expectedContentSize = Self.computeExpectedContentSize(
                 windowCount: windows.count,
                 dimensionsMap: newDimensionsMap,
@@ -319,7 +327,8 @@ class PreviewStateCoordinator: ObservableObject {
                 maxColumns: cols,
                 maxRows: rows,
                 hasEmbeddedContent: hasEmbeddedContent,
-                fillToLimit: windowSwitcherActive && Defaults[.windowSwitcherScrollDirection] == .vertical
+                fillToLimit: windowSwitcherActive && Defaults[.windowSwitcherScrollDirection] == .vertical,
+                minimumItemWidth: minimumItemWidth
             )
         } else {
             expectedContentSize = .zero
@@ -335,7 +344,8 @@ class PreviewStateCoordinator: ObservableObject {
         maxColumns: Int,
         maxRows: Int,
         hasEmbeddedContent: Bool = false,
-        fillToLimit: Bool = false
+        fillToLimit: Bool = false,
+        minimumItemWidth: CGFloat = 0
     ) -> CGSize {
         guard windowCount > 0 else { return .zero }
 
@@ -354,7 +364,7 @@ class PreviewStateCoordinator: ObservableObject {
         var maxItemWidth: CGFloat = 0
         var maxItemHeight: CGFloat = 0
         for dim in dimensionsMap.values {
-            maxItemWidth = max(maxItemWidth, dim.size.width)
+            maxItemWidth = max(maxItemWidth, max(dim.size.width, minimumItemWidth))
             maxItemHeight = max(maxItemHeight, dim.size.height)
         }
 
@@ -365,14 +375,15 @@ class PreviewStateCoordinator: ObservableObject {
                 var rowWidth: CGFloat = 0
                 for windowIndex in row {
                     let dims = dimensionsMap[windowIndex]
-                    rowWidth += dims?.size.width ?? dims?.maxDimensions.width ?? 0
+                    let itemWidth = dims?.size.width ?? dims?.maxDimensions.width ?? 0
+                    rowWidth += max(itemWidth, minimumItemWidth)
                 }
                 rowWidth += CGFloat(max(0, row.count - 1)) * itemSpacing
                 maxRowWidth = max(maxRowWidth, rowWidth)
             }
 
             if hasEmbeddedContent, let firstDims = dimensionsMap[0] {
-                maxRowWidth += firstDims.size.width + itemSpacing
+                maxRowWidth += max(firstDims.size.width, minimumItemWidth) + itemSpacing
             }
 
             // Provide both axes: flow width from item sum, cross height from tallest preview

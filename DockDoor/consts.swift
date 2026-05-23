@@ -199,6 +199,7 @@ extension Defaults.Keys {
     static let switcherTrafficLightButtonsVisibility = Key<TrafficLightButtonsVisibility>("switcherTrafficLightButtonsVisibility", default: .dimmedOnPreviewHover)
     static let switcherEnabledTrafficLightButtons = Key<Set<WindowAction>>("switcherEnabledTrafficLightButtons", default: [.quit, .close, .minimize, .toggleFullScreen])
     static let switcherUseMonochromeTrafficLights = Key<Bool>("switcherUseMonochromeTrafficLights", default: false)
+    static let switcherUseEmbeddedDockPreviewElements = Key<Bool>("switcherUseEmbeddedDockPreviewElements", default: false)
     static let switcherDisableDockStyleTrafficLights = Key<Bool>("switcherDisableDockStyleTrafficLights", default: false)
 
     // MARK: - Cmd+Tab Appearance Settings

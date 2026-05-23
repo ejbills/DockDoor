@@ -8,6 +8,7 @@ struct WindowSwitcherAppearanceSection: View {
     @Default(.switcherTrafficLightButtonsVisibility) var switcherTrafficLightButtonsVisibility
     @Default(.switcherEnabledTrafficLightButtons) var switcherEnabledTrafficLightButtons
     @Default(.switcherUseMonochromeTrafficLights) var switcherUseMonochromeTrafficLights
+    @Default(.switcherUseEmbeddedDockPreviewElements) var switcherUseEmbeddedDockPreviewElements
     @Default(.switcherDisableDockStyleTrafficLights) var switcherDisableDockStyleTrafficLights
     @Default(.switcherMaxRows) var switcherMaxRows
     @Default(.switcherIgnoreScreenLimit) var switcherIgnoreScreenLimit
@@ -88,6 +89,17 @@ struct WindowSwitcherAppearanceSection: View {
 
             Divider().padding(.vertical, 2)
             Text("Preview Layout (Switcher)").font(.headline).padding(.bottom, -2)
+
+            VStack(alignment: .leading) {
+                Toggle(isOn: $switcherUseEmbeddedDockPreviewElements) {
+                    Text("Embed controls in preview frames")
+                }
+                .settingsSearchTarget("appearance.switcherEmbedControls")
+                Text("Places traffic light buttons and window titles directly inside the window switcher preview frames.")
+                    .font(.footnote)
+                    .foregroundColor(.gray)
+                    .padding(.leading, 20)
+            }
 
             Picker("Scroll Direction", selection: $windowSwitcherScrollDirection) {
                 ForEach(WindowSwitcherScrollDirection.allCases, id: \.self) { direction in

@@ -49,6 +49,7 @@ struct SettingsMockPreview: View {
     @Default(.switcherShowWindowTitle) private var switcherShowWindowTitle
     @Default(.switcherWindowTitleVisibility) private var switcherWindowTitleVisibility
     @Default(.windowSwitcherControlPosition) private var switcherControlPosition
+    @Default(.switcherUseEmbeddedDockPreviewElements) private var switcherUseEmbedded
     @Default(.switcherDisableDockStyleTrafficLights) private var switcherDisableStyleTrafficLights
     @Default(.windowSwitcherLivePreviewQuality) private var switcherLivePreviewQuality
     @Default(.windowSwitcherLivePreviewFrameRate) private var switcherLivePreviewFrameRate
@@ -177,7 +178,9 @@ struct SettingsMockPreview: View {
             dockDisableStyleTitles
         }
 
-        let useEmbedded: Bool = if isCmdTab {
+        let useEmbedded: Bool = if isWindowSwitcher {
+            switcherUseEmbedded
+        } else if isCmdTab {
             cmdTabUseEmbedded
         } else {
             dockUseEmbedded

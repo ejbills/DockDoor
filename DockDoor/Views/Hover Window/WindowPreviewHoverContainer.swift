@@ -720,7 +720,8 @@ struct WindowPreviewHoverContainer: View {
                     }
                 } else if isHorizontal {
                     let chunkedItems = createChunkedItems(filteredIndices: cachedFilteredIndices)
-                    LazyVStack(alignment: .leading, spacing: HoverContainerPadding.itemSpacing) {
+                    let rowAlignment: HorizontalAlignment = previewStateCoordinator.windowSwitcherActive && appearance.allowDynamicImageSizing ? .center : .leading
+                    LazyVStack(alignment: rowAlignment, spacing: HoverContainerPadding.itemSpacing) {
                         ForEach(Array(chunkedItems.enumerated()), id: \.offset) { index, rowItems in
                             HStack(spacing: HoverContainerPadding.itemSpacing) {
                                 ForEach(rowItems, id: \.id) { item in
