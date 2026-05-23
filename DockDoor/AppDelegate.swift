@@ -142,6 +142,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         menu.addItem(NSMenuItem.separator())
         menu.addItem(NSMenuItem(title: String(localized: "Check for Updates…"), action: #selector(checkForUpdatesWrapper), keyEquivalent: ""))
         menu.addItem(NSMenuItem(title: String(localized: "Support DockDoor"), action: #selector(openDonationPage), keyEquivalent: ""))
+        menu.addItem(NSMenuItem(title: String(localized: "Leave a Review"), action: #selector(openReviewPage), keyEquivalent: ""))
         menu.addItem(NSMenuItem.separator())
         menu.addItem(NSMenuItem(title: String(localized: "Restart DockDoor"), action: #selector(restartAppWrapper), keyEquivalent: ""))
         menu.addItem(NSMenuItem(title: String(localized: "Quit DockDoor"), action: #selector(quitAppWrapper), keyEquivalent: "q"))
@@ -174,6 +175,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     @objc private func openDonationPage() {
         if let url = URL(string: "https://dockdoor.net/donate") {
+            NSWorkspace.shared.open(url)
+        }
+    }
+
+    @objc private func openReviewPage() {
+        if let url = URL(string: "https://www.producthunt.com/products/dockdoor/reviews") {
             NSWorkspace.shared.open(url)
         }
     }

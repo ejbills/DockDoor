@@ -14,6 +14,17 @@ struct SupportLinksSection: View {
             Divider().padding(.leading, 40)
 
             SettingsLinkRow(
+                title: "Leave a Review",
+                description: "Share your experience on Product Hunt",
+                icon: "star.bubble.fill",
+                destination: URL(string: "https://www.producthunt.com/products/dockdoor/reviews")!,
+                iconColor: .orange
+            )
+            .settingsSearchTarget("general.leaveReview")
+
+            Divider().padding(.leading, 40)
+
+            SettingsLinkRow(
                 title: "Join our Discord",
                 description: "Discuss features and get help from the community",
                 icon: "bubble.left.and.bubble.right.fill",

@@ -9,6 +9,15 @@ enum SettingsSearchCatalog {
 
     private static let generalItems: [SettingsSearchItem] = [
         SettingsSearchItem(
+            id: "general.leaveReview",
+            title: String(localized: "Leave a Review"),
+            description: String(localized: "Share your experience on Product Hunt"),
+            keywords: ["review", "product hunt", "rating", "feedback"],
+            tab: "General",
+            section: String(localized: "Support & Contributions"),
+            icon: "star.bubble.fill"
+        ),
+        SettingsSearchItem(
             id: "general.launchAtLogin",
             title: String(localized: "Launch DockDoor at login"),
             keywords: ["startup", "boot", "open", "auto"],
