@@ -30,6 +30,7 @@ struct AdvancedSettingsView: View {
 
     @FocusState private var isKeepAliveFieldFocused: Bool
     @State private var lastKeepAliveDuration: Int = 5
+    @State private var keepAliveDurationText = "5"
 
     var body: some View {
         BaseSettingsView {
@@ -48,6 +49,7 @@ struct AdvancedSettingsView: View {
         .onAppear {
             if livePreviewStreamKeepAlive > 0 {
                 lastKeepAliveDuration = livePreviewStreamKeepAlive
+                keepAliveDurationText = "\(livePreviewStreamKeepAlive)"
             }
         }
     }
@@ -253,8 +255,7 @@ struct AdvancedSettingsView: View {
 
                 HStack(spacing: 0) {
                     Button(action: {
-                        livePreviewStreamKeepAlive = 0
-                        isKeepAliveFieldFocused = false
+                        setKeepAliveMode(0)
                     }) {
                         Text("Immediately close")
                             .padding(.horizontal, 12)
@@ -267,24 +268,22 @@ struct AdvancedSettingsView: View {
                     .contentShape(Rectangle())
 
                     HStack(spacing: 4) {
-                        TextField("", value: Binding(
-                            get: { livePreviewStreamKeepAlive > 0 ? livePreviewStreamKeepAlive : lastKeepAliveDuration },
-                            set: {
-                                let newValue = max(1, $0)
-                                lastKeepAliveDuration = newValue
-
-                                if livePreviewStreamKeepAlive > 0 {
-                                    livePreviewStreamKeepAlive = newValue
-                                }
-                            }
-                        ), formatter: NumberFormatter())
+                        TextField("", text: $keepAliveDurationText)
                             .textFieldStyle(.roundedBorder)
                             .frame(width: 40)
                             .multilineTextAlignment(.center)
                             .focused($isKeepAliveFieldFocused)
+                            .onSubmit {
+                                commitKeepAliveDurationText()
+                            }
+                            .onChange(of: keepAliveDurationText) { _ in
+                                updateKeepAliveDurationFromText()
+                            }
                             .onChange(of: isKeepAliveFieldFocused) { focused in
-                                if focused, livePreviewStreamKeepAlive <= 0 {
-                                    livePreviewStreamKeepAlive = lastKeepAliveDuration
+                                if focused {
+                                    selectKeepAliveDuration()
+                                } else {
+                                    commitKeepAliveDurationText()
                                 }
                             }
                         Text("seconds")
@@ -295,14 +294,11 @@ struct AdvancedSettingsView: View {
                     .background(livePreviewStreamKeepAlive > 0 ? Color.accentColor : Color.secondary.opacity(0.15))
                     .contentShape(Rectangle())
                     .onTapGesture {
-                        if livePreviewStreamKeepAlive <= 0 {
-                            livePreviewStreamKeepAlive = lastKeepAliveDuration
-                        }
+                        selectKeepAliveDuration()
                     }
 
                     Button(action: {
-                        livePreviewStreamKeepAlive = -1
-                        isKeepAliveFieldFocused = false
+                        setKeepAliveMode(-1)
                     }) {
                         Text("Keep Open")
                             .padding(.horizontal, 12)
@@ -320,6 +316,10 @@ struct AdvancedSettingsView: View {
                         .stroke(Color.secondary.opacity(0.3), lineWidth: 1)
                 )
                 .onChange(of: livePreviewStreamKeepAlive) { newValue in
+                    if newValue > 0 {
+                        lastKeepAliveDuration = newValue
+                        keepAliveDurationText = "\(newValue)"
+                    }
                     if newValue == 0 {
                         Task { await LiveCaptureManager.shared.stopAllStreams() }
                     }
@@ -331,11 +331,52 @@ struct AdvancedSettingsView: View {
                     .onTapGesture { isKeepAliveFieldFocused = false }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
-            .contentShape(Rectangle())
-            .gesture(TapGesture().onEnded {
-                isKeepAliveFieldFocused = false
-            }, including: .gesture)
             .settingsSearchTarget("advanced.streamKeepAlive")
         }
+    }
+
+    private func setKeepAliveMode(_ value: Int) {
+        livePreviewStreamKeepAlive = value
+        isKeepAliveFieldFocused = false
+
+        if value > 0 {
+            lastKeepAliveDuration = value
+            keepAliveDurationText = "\(value)"
+        }
+    }
+
+    private func selectKeepAliveDuration() {
+        let duration = positiveKeepAliveDuration() ?? lastKeepAliveDuration
+        setKeepAliveMode(duration)
+    }
+
+    private func updateKeepAliveDurationFromText() {
+        guard let duration = positiveKeepAliveDuration() else { return }
+
+        lastKeepAliveDuration = duration
+
+        if livePreviewStreamKeepAlive > 0 {
+            livePreviewStreamKeepAlive = duration
+        }
+    }
+
+    private func commitKeepAliveDurationText() {
+        guard let duration = positiveKeepAliveDuration() else {
+            keepAliveDurationText = "\(lastKeepAliveDuration)"
+            return
+        }
+
+        lastKeepAliveDuration = duration
+        keepAliveDurationText = "\(duration)"
+
+        if livePreviewStreamKeepAlive > 0 {
+            livePreviewStreamKeepAlive = duration
+        }
+    }
+
+    private func positiveKeepAliveDuration() -> Int? {
+        let text = keepAliveDurationText.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard let duration = Int(text) else { return nil }
+        return max(1, duration)
     }
 }
