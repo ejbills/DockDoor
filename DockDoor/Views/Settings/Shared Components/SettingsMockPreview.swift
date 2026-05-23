@@ -49,6 +49,7 @@ struct SettingsMockPreview: View {
     @Default(.switcherShowAppHeader) private var switcherShowAppHeader
     @Default(.switcherShowWindowTitle) private var switcherShowWindowTitle
     @Default(.switcherWindowTitleVisibility) private var switcherWindowTitleVisibility
+    @Default(.switcherAppIconSize) private var switcherAppIconSize
     @Default(.windowSwitcherControlPosition) private var switcherControlPosition
     @Default(.switcherUseEmbeddedDockPreviewElements) private var switcherUseEmbedded
     @Default(.switcherDisableDockStyleTrafficLights) private var switcherDisableStyleTrafficLights
@@ -215,6 +216,7 @@ struct SettingsMockPreview: View {
             showAnimations: showAnimations,
             globalPaddingMultiplier: globalPaddingMultiplier,
             windowTitleFontSize: windowTitleFontSize,
+            switcherAppIconSize: isWindowSwitcher ? switcherAppIconSize : 0,
             trafficLightButtonScale: trafficLightButtonScale,
             livePreviewQuality: quality,
             livePreviewFrameRate: frameRate,

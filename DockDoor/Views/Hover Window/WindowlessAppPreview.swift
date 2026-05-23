@@ -41,6 +41,14 @@ struct WindowlessAppPreview: View, Equatable {
             appearance.trafficLightVisibility != .never
     }
 
+    private func switcherAppIconSize(hasSecondaryLabel: Bool) -> CGFloat {
+        if appearance.switcherAppIconSize > 0 {
+            return min(max(appearance.switcherAppIconSize, 16), 64)
+        }
+
+        return hasSecondaryLabel ? 35 : 20
+    }
+
     private func toolbarContent(isLeadingControls: Bool, showTitleContent: Bool, showControlsContent: Bool) -> some View {
         let shouldShowSubtitle = appearance.showWindowTitle &&
             (appearance.windowTitleVisibility == .alwaysVisible || isSelected || isHovering)
@@ -51,7 +59,7 @@ struct WindowlessAppPreview: View, Equatable {
             if appearance.controlPosition.isCentered {
                 Spacer(minLength: 0)
                 if shouldShowTitle {
-                    appIcon
+                    appIcon(hasSecondaryLabel: shouldShowSubtitle)
                     titleContent(showSubtitle: shouldShowSubtitle)
                 }
                 if shouldShowControls { quitButton(alignment: .center) }
@@ -60,12 +68,12 @@ struct WindowlessAppPreview: View, Equatable {
                 if shouldShowControls { quitButton(alignment: .leading) }
                 Spacer(minLength: 8)
                 if shouldShowTitle {
-                    appIcon
+                    appIcon(hasSecondaryLabel: shouldShowSubtitle)
                     titleContent(showSubtitle: shouldShowSubtitle)
                 }
             } else {
                 if shouldShowTitle {
-                    appIcon
+                    appIcon(hasSecondaryLabel: shouldShowSubtitle)
                     titleContent(showSubtitle: shouldShowSubtitle)
                 }
                 Spacer(minLength: 0)
@@ -91,12 +99,14 @@ struct WindowlessAppPreview: View, Equatable {
     }
 
     @ViewBuilder
-    private var appIcon: some View {
+    private func appIcon(hasSecondaryLabel: Bool) -> some View {
+        let appIconSize = switcherAppIconSize(hasSecondaryLabel: hasSecondaryLabel)
+
         if let appIcon = windowInfo.app.icon {
             Image(nsImage: appIcon)
                 .resizable()
                 .scaledToFit()
-                .frame(width: 35, height: 35)
+                .frame(width: appIconSize, height: appIconSize)
         }
     }
 

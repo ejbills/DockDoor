@@ -6,6 +6,7 @@ struct WindowSwitcherAppearanceSection: View {
     @Default(.switcherShowAppHeader) var switcherShowAppHeader
     @Default(.switcherShowWindowTitle) var switcherShowWindowTitle
     @Default(.switcherWindowTitleVisibility) var switcherWindowTitleVisibility
+    @Default(.switcherAppIconSize) var switcherAppIconSize
     @Default(.switcherTrafficLightButtonsVisibility) var switcherTrafficLightButtonsVisibility
     @Default(.switcherEnabledTrafficLightButtons) var switcherEnabledTrafficLightButtons
     @Default(.switcherUseMonochromeTrafficLights) var switcherUseMonochromeTrafficLights
@@ -15,10 +16,53 @@ struct WindowSwitcherAppearanceSection: View {
     @Default(.switcherIgnoreScreenLimit) var switcherIgnoreScreenLimit
     @Default(.windowSwitcherScrollDirection) var windowSwitcherScrollDirection
 
+    private var automaticAppIconSizeBinding: Binding<Bool> {
+        Binding(
+            get: { switcherAppIconSize == 0 },
+            set: { useAutomaticSize in
+                switcherAppIconSize = useAutomaticSize ? 0 : 35
+            }
+        )
+    }
+
+    private var customAppIconSizeBinding: Binding<CGFloat> {
+        Binding(
+            get: { switcherAppIconSize > 0 ? switcherAppIconSize : 35 },
+            set: { switcherAppIconSize = $0 }
+        )
+    }
+
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             Toggle("Show App Header", isOn: $switcherShowAppHeader)
                 .settingsSearchTarget("appearance.switcherShowAppHeader")
+
+            if switcherShowAppHeader {
+                VStack(alignment: .leading, spacing: 6) {
+                    HStack {
+                        Text("App Icon Size")
+                        Spacer()
+                        Toggle("Automatic", isOn: automaticAppIconSizeBinding)
+                    }
+
+                    if switcherAppIconSize > 0 {
+                        sliderSetting(
+                            title: "Size",
+                            value: customAppIconSizeBinding,
+                            range: 16.0 ... 64.0,
+                            step: 1.0,
+                            unit: "pt",
+                            formatter: {
+                                let f = NumberFormatter()
+                                f.minimumFractionDigits = 0
+                                f.maximumFractionDigits = 0
+                                return f
+                            }()
+                        )
+                    }
+                }
+                .settingsSearchTarget("appearance.switcherAppIconSize")
+            }
 
             Divider().padding(.vertical, 2)
             Text("Window Switcher Toolbar").font(.headline).padding(.bottom, -2)

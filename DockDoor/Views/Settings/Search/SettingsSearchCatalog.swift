@@ -942,6 +942,14 @@ enum SettingsSearchCatalog {
             icon: "textformat"
         ),
         SettingsSearchItem(
+            id: "appearance.switcherAppIconSize",
+            title: String(localized: "App Icon Size"),
+            keywords: ["app", "icon", "size", "header", "switcher", "title"],
+            tab: "Appearance",
+            section: String(localized: "Window Switcher Appearance"),
+            icon: "app"
+        ),
+        SettingsSearchItem(
             id: "appearance.switcherControlPosition",
             title: String(localized: "Position Window Controls"),
             description: String(localized: "Position of window controls in the switcher."),

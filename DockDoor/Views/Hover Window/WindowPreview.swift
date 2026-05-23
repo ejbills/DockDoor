@@ -26,6 +26,7 @@ struct PreviewAppearanceSettings: Equatable {
     let showAnimations: Bool
     let globalPaddingMultiplier: CGFloat
     let windowTitleFontSize: WindowTitleFontSize
+    let switcherAppIconSize: CGFloat
     let trafficLightButtonScale: CGFloat
     let livePreviewQuality: LivePreviewQuality
     let livePreviewFrameRate: LivePreviewFrameRate
@@ -62,7 +63,7 @@ struct PreviewAppearanceSettings: Equatable {
         .showMinimizedHiddenLabels, .selectionOpacity, .unselectedContentOpacity, .hoverHighlightColor,
         .allowDynamicImageSizing, .hidePreviewCardBackground, .tapEquivalentInterval, .previewHoverAction,
         .showActiveWindowBorder, .activeAppIndicatorColor, .showAnimations, .globalPaddingMultiplier,
-        .windowTitleFontSize, .trafficLightButtonScale,
+        .windowTitleFontSize, .switcherAppIconSize, .trafficLightButtonScale,
         .previewWidth, .compactModeTitleFormat, .compactModeItemSize, .compactModeHideTrafficLights,
         .showWindowlessAppQuitButton, .titleOverflowStyle,
     ]
@@ -103,6 +104,7 @@ struct PreviewAppearanceSettings: Equatable {
             showAnimations: Defaults[.showAnimations],
             globalPaddingMultiplier: Defaults[.globalPaddingMultiplier],
             windowTitleFontSize: Defaults[.windowTitleFontSize],
+            switcherAppIconSize: Defaults[.switcherAppIconSize],
             trafficLightButtonScale: Defaults[.trafficLightButtonScale],
             livePreviewQuality: pick(.dockLivePreviewQuality, switcher: .windowSwitcherLivePreviewQuality),
             livePreviewFrameRate: pick(.dockLivePreviewFrameRate, switcher: .windowSwitcherLivePreviewFrameRate),
@@ -191,6 +193,14 @@ struct WindowPreview: View, Equatable {
         return (windowInfo.isMinimized || windowInfo.isHidden) &&
             appearance.showMinimizedHiddenLabels &&
             appearance.trafficLightVisibility != .never
+    }
+
+    private func switcherAppIconSize(hasSecondaryLabel: Bool) -> CGFloat {
+        if appearance.switcherAppIconSize > 0 {
+            return min(max(appearance.switcherAppIconSize, 16), 64)
+        }
+
+        return hasSecondaryLabel ? 35 : 20
     }
 
     @ViewBuilder
@@ -548,6 +558,11 @@ struct WindowPreview: View, Equatable {
         let shouldShowControls = showControlsContent && hasWindowSwitcherControlContent
         let shouldShowWindowTitle = appearance.showWindowTitle &&
             (appearance.windowTitleVisibility == .alwaysVisible || selected || isHoveringOverWindowSwitcherPreview)
+        let windowTitle = windowInfo.windowName
+        let hasWindowTitleLabel = shouldShowWindowTitle &&
+            windowTitle?.isEmpty == false &&
+            windowTitle != windowInfo.app.localizedName
+        let appIconSize = switcherAppIconSize(hasSecondaryLabel: hasWindowTitleLabel)
 
         let titleAndSubtitleContent = VStack(alignment: .leading, spacing: 0) {
             if !showAppIconOnly {
@@ -556,11 +571,7 @@ struct WindowPreview: View, Equatable {
                     .lineLimit(1)
             }
 
-            if let windowTitle = windowInfo.windowName,
-               !windowTitle.isEmpty,
-               windowTitle != windowInfo.app.localizedName,
-               shouldShowWindowTitle
-            {
+            if let windowTitle, hasWindowTitleLabel {
                 titleLabel(windowTitle)
                     .font(appearance.windowTitleFontSize.font)
                     .foregroundStyle(.secondary)
@@ -573,7 +584,7 @@ struct WindowPreview: View, Equatable {
                 Image(nsImage: appIcon)
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 35, height: 35)
+                    .frame(width: appIconSize, height: appIconSize)
             }
         }
 

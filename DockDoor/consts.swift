@@ -199,6 +199,7 @@ extension Defaults.Keys {
     static let switcherShowAppHeader = Key<Bool>("switcherShowAppHeader", default: true)
     static let switcherShowWindowTitle = Key<Bool>("switcherShowWindowTitle", default: true)
     static let switcherWindowTitleVisibility = Key<WindowTitleVisibility>("switcherWindowTitleVisibility", default: .alwaysVisible)
+    static let switcherAppIconSize = Key<CGFloat>("switcherAppIconSize", default: 0)
     static let switcherTrafficLightButtonsVisibility = Key<TrafficLightButtonsVisibility>("switcherTrafficLightButtonsVisibility", default: .dimmedOnPreviewHover)
     static let switcherEnabledTrafficLightButtons = Key<Set<WindowAction>>("switcherEnabledTrafficLightButtons", default: [.quit, .close, .minimize, .toggleFullScreen])
     static let switcherUseMonochromeTrafficLights = Key<Bool>("switcherUseMonochromeTrafficLights", default: false)
