@@ -305,7 +305,9 @@ extension WindowUtil {
     /// Reads cached windows for an app without triggering any SCK/AX fetches.
     /// Returns immediately with whatever is in cache, sorted by the given context.
     static func readCachedWindows(for pid: pid_t, sortedBy context: WindowFetchContext = .dockPreview) -> [WindowInfo] {
-        let cached = desktopSpaceWindowCacheManager.readCache(pid: pid)
+        let cached = desktopSpaceWindowCacheManager.readCache(pid: pid).filter {
+            WindowOwnerResolver.ownerBelongsToDisplayApp($0.ownerApp, displayApp: $0.app)
+        }
         return sortWindows(cached, for: context)
     }
 
@@ -1192,7 +1194,9 @@ extension WindowUtil {
 
             var purifiedSet = existingWindowsSet
             for window in existingWindowsSet {
-                if !isValidElement(window.axElement) {
+                if !isValidElement(window.axElement) ||
+                    !WindowOwnerResolver.ownerBelongsToDisplayApp(window.ownerApp, displayApp: window.app)
+                {
                     purifiedSet.remove(window)
                     desktopSpaceWindowCacheManager.removeFromCache(pid: pid, windowId: window.id)
                 }

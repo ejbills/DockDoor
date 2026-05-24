@@ -47,7 +47,11 @@ enum WindowOwnerResolver {
             return true
         }
 
-        if bundleFamilyMatches(owner.bundleIdentifier, displayApp.bundleIdentifier) {
+        guard canResolveThroughDisplayApp(owner) else {
+            return false
+        }
+
+        if helperBundleBelongsToDisplayApp(owner.bundleIdentifier, displayApp.bundleIdentifier) {
             return true
         }
 
@@ -55,6 +59,10 @@ enum WindowOwnerResolver {
     }
 
     static func displayApp(forOwner owner: NSRunningApplication) -> NSRunningApplication {
+        guard canResolveThroughDisplayApp(owner) else {
+            return owner
+        }
+
         let candidates = NSWorkspace.shared.runningApplications.filter {
             $0.activationPolicy == .regular && ownerBelongsToDisplayApp(owner, displayApp: $0)
         }
@@ -73,14 +81,21 @@ enum WindowOwnerResolver {
     }
 
     static func isAuxiliaryOwner(_ owner: NSRunningApplication) -> Bool {
-        displayApp(forOwner: owner).processIdentifier != owner.processIdentifier
+        guard canResolveThroughDisplayApp(owner) else {
+            return false
+        }
+
+        return displayApp(forOwner: owner).processIdentifier != owner.processIdentifier
     }
 
-    private static func bundleFamilyMatches(_ ownerBundle: String?, _ displayBundle: String?) -> Bool {
+    private static func canResolveThroughDisplayApp(_ owner: NSRunningApplication) -> Bool {
+        owner.activationPolicy != .regular
+    }
+
+    private static func helperBundleBelongsToDisplayApp(_ ownerBundle: String?, _ displayBundle: String?) -> Bool {
         guard let ownerBundle, let displayBundle else { return false }
         return ownerBundle == displayBundle ||
-            ownerBundle.hasPrefix(displayBundle + ".") ||
-            displayBundle.hasPrefix(ownerBundle + ".")
+            ownerBundle.hasPrefix(displayBundle + ".")
     }
 
     private static func bundleIsParent(_ parentBundle: String?, of childBundle: String?) -> Bool {
@@ -110,7 +125,7 @@ enum WindowOwnerResolver {
         {
             score += 90
             score += max(0, 30 - (displayBundle.count / 4))
-        } else if bundleFamilyMatches(owner.bundleIdentifier, displayApp.bundleIdentifier) {
+        } else if helperBundleBelongsToDisplayApp(owner.bundleIdentifier, displayApp.bundleIdentifier) {
             score += 50
         }
         if executableRootsMatch(owner: owner, displayApp: displayApp) { score += 10 }
