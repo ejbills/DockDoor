@@ -38,6 +38,18 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://dockdoor.net/donate</div>
 
+<a id="1.38.1"></a>
+# [Release 1.38.1](https://github.com/ejbills/DockDoor/releases/tag/1.38.1) - 2026-05-24
+
+## 🐛 Bug Fixes
+- Separate instances of the same app no longer get ignored
+- Dock background style names now have translation registration
+- Sync translations with Crowdin entries
+
+
+[Changes][1.38.1]
+
+
 <a id="1.38"></a>
 # [Release 1.38](https://github.com/ejbills/DockDoor/releases/tag/1.38) - 2026-05-23
 
@@ -2163,6 +2175,7 @@ v1.0
 [Changes][releases]
 
 
+[1.38.1]: https://github.com/ejbills/DockDoor/compare/1.38...1.38.1
 [1.38]: https://github.com/ejbills/DockDoor/compare/1.37...1.38
 [1.37]: https://github.com/ejbills/DockDoor/compare/1.36...1.37
 [1.36]: https://github.com/ejbills/DockDoor/compare/1.35.1...1.36
