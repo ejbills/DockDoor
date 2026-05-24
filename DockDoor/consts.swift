@@ -1188,11 +1188,16 @@ enum DockBackgroundMaterial: String, CaseIterable, Defaults.Serializable {
 
     var displayName: String {
         switch self {
-        case .ultraThin: "Ultra Thin"
-        case .thin: "Thin"
-        case .regular: "Regular"
-        case .thick: "Thick"
-        case .ultraThick: "Ultra Thick"
+        case .ultraThin:
+            String(localized: "Ultra Thin", comment: "Dock background material thickness option")
+        case .thin:
+            String(localized: "Thin", comment: "Dock background material thickness option")
+        case .regular:
+            String(localized: "Regular", comment: "Dock background material thickness option")
+        case .thick:
+            String(localized: "Thick", comment: "Dock background material thickness option")
+        case .ultraThick:
+            String(localized: "Ultra Thick", comment: "Dock background material thickness option")
         }
     }
 
@@ -1214,9 +1219,12 @@ enum DockBackgroundStyle: String, CaseIterable, Defaults.Serializable {
 
     var displayName: String {
         switch self {
-        case .liquidGlass: "Liquid Glass"
-        case .frostedMaterial: "Frosted"
-        case .clear: "Clear"
+        case .liquidGlass:
+            String(localized: "Liquid Glass", comment: "Dock background style option")
+        case .frostedMaterial:
+            String(localized: "Frosted", comment: "Dock background style option")
+        case .clear:
+            String(localized: "Clear", comment: "Dock background style option")
         }
     }
 
