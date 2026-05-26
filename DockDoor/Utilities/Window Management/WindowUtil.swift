@@ -1347,12 +1347,12 @@ extension WindowUtil {
         var result: [WindowInfo] = []
 
         for window in windows {
-            let bundleId = window.app.bundleIdentifier ?? ""
+            let bundleIds = groupingBundleIdentifiers(for: window)
 
-            if groupedApps.contains(bundleId) {
+            if let groupedBundleId = bundleIds.first(where: { groupedApps.contains($0) }) {
                 // This is a grouped app - only keep the first window we see
-                if !seenGroupedApps.contains(bundleId) {
-                    seenGroupedApps.insert(bundleId)
+                if !seenGroupedApps.contains(groupedBundleId) {
+                    seenGroupedApps.insert(groupedBundleId)
                     result.append(window)
                 }
                 // Skip subsequent windows of this grouped app
@@ -1362,6 +1362,14 @@ extension WindowUtil {
             }
         }
         return result
+    }
+
+    private static func groupingBundleIdentifiers(for window: WindowInfo) -> [String] {
+        [
+            window.app.bundleIdentifier,
+            window.ownerApp.bundleIdentifier,
+            WindowOwnerResolver.displayApp(forOwner: window.ownerApp).bundleIdentifier,
+        ].compactMap { $0 }
     }
 }
 

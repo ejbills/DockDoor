@@ -89,7 +89,7 @@ enum WindowOwnerResolver {
     }
 
     private static func canResolveThroughDisplayApp(_ owner: NSRunningApplication) -> Bool {
-        owner.activationPolicy != .regular
+        owner.activationPolicy != .regular || owner.bundleIdentifier == nil
     }
 
     private static func helperBundleBelongsToDisplayApp(_ ownerBundle: String?, _ displayBundle: String?) -> Bool {
@@ -204,7 +204,7 @@ enum WindowCandidateDiscriminator {
             sanGuoShaAirWD(app) ||
             dvdFab(app) ||
             drBetotte(app) ||
-            androidEmulator(app, attributes.title) ||
+            androidEmulator(app, attributes.title, attributes.role, level) ||
             autocad(app, attributes.subrole)
 
         guard specialApp || standardSubrole || appSpecificSubrole else {
@@ -315,8 +315,15 @@ enum WindowCandidateDiscriminator {
         (app.bundleIdentifier?.hasPrefix("org.videolan.vlc") ?? false) && role == kAXWindowRole
     }
 
-    private static func androidEmulator(_ app: NSRunningApplication, _ title: String?) -> Bool {
-        guard app.bundleIdentifier == nil, hasNonEmptyTitle(title) else { return false }
+    private static func androidEmulator(_ app: NSRunningApplication, _ title: String?, _ role: String?, _ level: Int32?) -> Bool {
+        let title = title?.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard app.bundleIdentifier == nil,
+              role == kAXWindowRole,
+              let title,
+              !title.isEmpty,
+              title != "Window",
+              level == nil || level == normalLevel
+        else { return false }
         return app.executableURL?.lastPathComponent.range(of: "qemu-system[^/]*$", options: .regularExpression) != nil
     }
 
