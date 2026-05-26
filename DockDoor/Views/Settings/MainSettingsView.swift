@@ -146,6 +146,14 @@ struct MainSettingsView: View {
                 Defaults[.searchTriggerKey] = Defaults.Keys.searchTriggerKey.defaultValue
 
                 Defaults[.showSpecialAppControls] = Defaults.Keys.showSpecialAppControls.defaultValue
+                Defaults[.enableDockItemWidgets] = Defaults.Keys.enableDockItemWidgets.defaultValue
+                Defaults[.enableFolderWidget] = Defaults.Keys.enableFolderWidget.defaultValue
+                Defaults[.folderWidgetDefaultSortOrder] = Defaults.Keys.folderWidgetDefaultSortOrder.defaultValue
+                Defaults[.folderWidgetDefaultSortReversed] = Defaults.Keys.folderWidgetDefaultSortReversed.defaultValue
+                Defaults[.folderWidgetRememberSortPerFolder] = Defaults.Keys.folderWidgetRememberSortPerFolder.defaultValue
+                Defaults[.folderWidgetSortOrders] = Defaults.Keys.folderWidgetSortOrders.defaultValue
+                Defaults[.folderWidgetSortReversed] = Defaults.Keys.folderWidgetSortReversed.defaultValue
+                Defaults[.folderWidgetShowHiddenFiles] = Defaults.Keys.folderWidgetShowHiddenFiles.defaultValue
                 Defaults[.showBigControlsWhenNoValidWindows] = Defaults.Keys.showBigControlsWhenNoValidWindows.defaultValue
                 Defaults[.showMassActionButtons] = Defaults.Keys.showMassActionButtons.defaultValue
                 Defaults[.useEmbeddedMediaControls] = Defaults.Keys.useEmbeddedMediaControls.defaultValue

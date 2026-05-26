@@ -88,6 +88,15 @@ extension Defaults.Keys {
     static let enableMediaWidget = Key<Bool>("enableMediaWidget", default: true)
     static let mediaDetectionMode = Key<MediaDetectionMode>("mediaDetectionMode", default: .universal)
     static let enableCalendarWidget = Key<Bool>("enableCalendarWidget", default: true)
+    static let enableDockItemWidgets = Key<Bool>("enableDockItemWidgets", default: true)
+    static let enableFolderWidget = Key<Bool>("enableFolderWidget", default: true)
+    static let folderWidgetDefaultSortOrder = Key<FolderWidgetSortOrder>("folderWidgetDefaultSortOrder", default: .dateModified)
+    static let folderWidgetDefaultSortReversed = Key<Bool>("folderWidgetDefaultSortReversed", default: true)
+    static let folderWidgetRememberSortPerFolder = Key<Bool>("folderWidgetRememberSortPerFolder", default: true)
+    static let folderWidgetSortOrders = Key<[String: FolderWidgetSortOrder]>("folderWidgetSortOrders", default: [:])
+    static let folderWidgetSortReversed = Key<[String: Bool]>("folderWidgetSortReversed", default: [:])
+    static let folderWidgetShowHiddenFiles = Key<Bool>("folderWidgetShowHiddenFiles", default: false)
+    static let folderWidgetAuthorizedBookmarks = Key<[String: String]>("folderWidgetAuthorizedBookmarks", default: [:])
     static let useEmbeddedMediaControls = Key<Bool>("useEmbeddedMediaControls", default: true)
     static let useEmbeddedDockPreviewElements = Key<Bool>("useEmbeddedDockPreviewElements", default: false)
     static let disableDockStyleTrafficLights = Key<Bool>("disableDockStyleTrafficLights", default: false)
@@ -822,6 +831,39 @@ enum MediaWidgetScrollDirection: String, CaseIterable, Defaults.Serializable {
             String(localized: "Vertical", comment: "Media widget scroll direction option")
         case .horizontal:
             String(localized: "Horizontal", comment: "Media widget scroll direction option")
+        }
+    }
+}
+
+enum FolderWidgetSortOrder: String, CaseIterable, Defaults.Serializable {
+    case dateModified
+    case name
+    case kind
+    case size
+
+    var localizedName: String {
+        switch self {
+        case .dateModified:
+            String(localized: "Date Modified", comment: "Folder widget sort option")
+        case .name:
+            String(localized: "Name", comment: "Folder widget sort option")
+        case .kind:
+            String(localized: "Kind", comment: "Folder widget sort option")
+        case .size:
+            String(localized: "Size", comment: "Folder widget sort option")
+        }
+    }
+
+    var iconName: String {
+        switch self {
+        case .dateModified:
+            "calendar"
+        case .name:
+            "textformat.abc"
+        case .kind:
+            "doc"
+        case .size:
+            "scalemass"
         }
     }
 }

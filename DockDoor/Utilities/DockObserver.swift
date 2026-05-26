@@ -24,6 +24,12 @@ struct ApplicationReturnType {
     let dockItemElement: AXUIElement?
 }
 
+struct FolderDockItemInfo {
+    let url: URL
+    let title: String
+    let dockItemElement: AXUIElement
+}
+
 func handleSelectedDockItemChangedNotification(observer _: AXObserver, element _: AXUIElement, notificationName _: CFString, context: UnsafeMutableRawPointer?) {
     DispatchQueue.main.async {
         DockObserver.activeInstance?.processSelectedDockItemChanged()
@@ -258,12 +264,20 @@ final class DockObserver {
 
     @MainActor func processSelectedDockItemChanged() {
         let currentMouseLocation = DockObserver.getMousePosition()
+
+        guard !previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive else {
+            return
+        }
+
+        if handleHoveredFolderDockItemIfNeeded(mouseLocation: currentMouseLocation) {
+            return
+        }
+
         let appUnderMouseElement = DebugLogger.measureSlow("getDockItemAppStatusUnderMouse", thresholdMs: 100) {
             getDockItemAppStatusUnderMouse()
         }
 
-        guard !previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive,
-              let dockItemElement = appUnderMouseElement.dockItemElement
+        guard let dockItemElement = appUnderMouseElement.dockItemElement
         else {
             return
         }
@@ -440,6 +454,40 @@ final class DockObserver {
         }
     }
 
+    @MainActor
+    private func handleHoveredFolderDockItemIfNeeded(mouseLocation: CGPoint) -> Bool {
+        guard let folderItem = getHoveredFolderDockItem() else { return false }
+
+        guard Defaults[.enableDockPreviews],
+              Defaults[.enableDockItemWidgets],
+              Defaults[.enableFolderWidget]
+        else {
+            return true
+        }
+
+        let accessibleURL: URL
+        if let url = FolderWidgetAuthorization.accessibleURL(for: folderItem.url) {
+            accessibleURL = url
+        } else if let url = FolderWidgetAuthorization.requestAccess(to: folderItem.url) {
+            accessibleURL = url
+        } else {
+            return true
+        }
+
+        let mouseScreen = NSScreen.screenFromQuartzPoint(mouseLocation)
+        let convertedMouseLocation = DockObserver.nsPointFromCGPoint(mouseLocation, forScreen: mouseScreen)
+
+        previewCoordinator.showFolderWidget(
+            folderURL: accessibleURL,
+            folderName: folderItem.title,
+            mouseLocation: convertedMouseLocation,
+            mouseScreen: mouseScreen,
+            dockItemElement: folderItem.dockItemElement
+        )
+
+        return true
+    }
+
     /// Returns the currently selected (hovered) dock item, if any.
     private func getSelectedDockItem() -> AXUIElement? {
         guard let dockAppPID = currentDockPID else {
@@ -467,6 +515,10 @@ final class DockObserver {
         return hoveredItem
     }
 
+    func getHoveredDockItemElement() -> AXUIElement? {
+        getSelectedDockItem()
+    }
+
     func getHoveredApplicationDockItem() -> AXUIElement? {
         guard let item = getSelectedDockItem(),
               (try? item.subrole()) == "AXApplicationDockItem"
@@ -474,6 +526,19 @@ final class DockObserver {
             return nil
         }
         return item
+    }
+
+    func getHoveredFolderDockItem() -> FolderDockItemInfo? {
+        guard let item = getSelectedDockItem() else { return nil }
+        guard (try? item.subrole()) != "AXApplicationDockItem" else { return nil }
+        guard let url = try? item.attribute(kAXURLAttribute, NSURL.self)?.absoluteURL else { return nil }
+        guard url.pathExtension != "app" else { return nil }
+
+        let values = try? url.resourceValues(forKeys: [.isDirectoryKey])
+        guard values?.isDirectory == true else { return nil }
+
+        let title = (try? item.title()) ?? FileManager.default.displayName(atPath: url.path)
+        return FolderDockItemInfo(url: url, title: title, dockItemElement: item)
     }
 
     /// Returns all dock item children from the dock list.

@@ -874,6 +874,78 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         }
     }
 
+    func showFolderWidget(
+        folderURL: URL,
+        folderName: String,
+        mouseLocation: CGPoint? = nil,
+        mouseScreen: NSScreen? = nil,
+        dockItemElement: AXUIElement?
+    ) {
+        let shouldSkipDelay = Defaults[.useDelayOnlyForInitialOpen] && isVisible
+        let delay = shouldSkipDelay ? 0 : Defaults[.hoverWindowOpenDelay]
+
+        pendingShowWorkItem?.cancel()
+        let workItem = DispatchWorkItem { [weak self] in
+            guard let self else { return }
+
+            if let dockItemElement {
+                guard let currentDockItem = DockObserver.activeInstance?.getHoveredDockItemElement(),
+                      currentDockItem == dockItemElement
+                else { return }
+            }
+
+            Task { @MainActor [weak self] in
+                guard let self else { return }
+
+                let screen = mouseScreen ?? NSScreen.main!
+                let activeDockPosition = DockUtils.getDockPosition()
+                currentDockPosition = activeDockPosition
+                appName = folderName
+                currentlyDisplayedPID = nil
+                onWindowTap = nil
+                hideFullPreviewWindow()
+                searchWindow?.hideSearch()
+                windowSwitcherCoordinator.setWindows([], dockPosition: activeDockPosition, bestGuessMonitor: screen)
+                windowSwitcherCoordinator.setShowing(.both, toState: false)
+
+                var dockIconRect: CGRect?
+                if let dockItemElement,
+                   let position = try? dockItemElement.position(),
+                   let size = try? dockItemElement.size()
+                {
+                    let rect = CGRect(origin: position, size: size)
+                    dockIconRect = rect
+                    anchoredDockItem = (element: dockItemElement, iconRect: rect)
+                } else {
+                    anchoredDockItem = nil
+                }
+
+                let view = FolderWidgetContainerView(
+                    folderURL: folderURL,
+                    folderName: folderName,
+                    bestGuessMonitor: screen,
+                    dockPosition: activeDockPosition,
+                    dockItemElement: dockItemElement,
+                    backgroundAppearance: BackgroundAppearance.resolve()
+                )
+
+                performShowView(
+                    view,
+                    mouseLocation: mouseLocation,
+                    mouseScreen: screen,
+                    dockItemElement: dockItemElement,
+                    dockIconRect: dockIconRect,
+                    dockPositionOverride: activeDockPosition
+                )
+
+                dockManager.preventDockHiding(false)
+            }
+        }
+
+        pendingShowWorkItem = workItem
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: workItem)
+    }
+
     func showWindow(appName: String, windows: [WindowInfo], mouseLocation: CGPoint? = nil, mouseScreen: NSScreen? = nil,
                     dockItemElement: AXUIElement?,
                     overrideDelay: Bool = false, centeredHoverWindowState: PreviewStateCoordinator.WindowState? = nil,

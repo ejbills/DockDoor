@@ -50,6 +50,7 @@
 		81BFDF0D2EE815FD00D56F65 /* CompactModeWarningBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81BFDF0C2EE815FD00D56F65 /* CompactModeWarningBanner.swift */; };
 		83E26DB067D2426086683147 /* ActiveAppIndicatorSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D264F468F734971AE701690 /* ActiveAppIndicatorSettingsView.swift */; };
 		8895D7565ED747F8A435CF5E207647C7 /* WidgetHoverContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC5D1784E68A4052A122B9019AA9C150 /* WidgetHoverContainer.swift */; };
+		A4C2F91474874A3A9CE0FBA825CC44EC /* FolderWidgetModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91CF9A1A6F9A48AABC07761494454213 /* FolderWidgetModel.swift */; };
 		8A65164BC27F4A60A6FA765B /* DockPreviewGesturesSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55363085DBBF4BEEB6AB0DA1 /* DockPreviewGesturesSection.swift */; };
 		8EADE9C50DA94FA4B8E1E1F5 /* CompactModeSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FCC42884D0A48E6B9FB1E34 /* CompactModeSection.swift */; };
 		9DA27E8E83A84AECA8AD3BBD /* SettingsToggleRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FBA5BBE4DFA460FBF54D30E /* SettingsToggleRow.swift */; };
@@ -178,6 +179,7 @@
 		BBC5BDF42E45A708003A0D64 /* SwiftUIUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBC5BDF32E45A708003A0D64 /* SwiftUIUtils.swift */; };
 		BBCFAE402C266234002E1516 /* FirstTimeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBCFAE3F2C266234002E1516 /* FirstTimeView.swift */; };
 		BBDF65732E7E212400DD6D6D /* DockObserver+CmdTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBDF65722E7E212400DD6D6D /* DockObserver+CmdTab.swift */; };
+		FCBBC228D4CD4709BB381A80A93F3406 /* FolderWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBECBD93A13645B2A46E546AC58BD1A4 /* FolderWidgetView.swift */; };
 		BBE033CC2DD92061006417B0 /* CGimage.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE033CB2DD92061006417B0 /* CGimage.swift */; };
 		BBE153BE2D2126D000CD3D4A /* MaterialPill.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE153BD2D2126C000CD3D4A /* MaterialPill.swift */; };
 		BBE153C02D21FA2700CD3D4A /* StyledGroupBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE153BF2D21FA2300CD3D4A /* StyledGroupBox.swift */; };
@@ -272,6 +274,7 @@
 		7FD74FFBE5824DE3919DDDD461D39E30 /* KeyCaptureButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyCaptureButton.swift; sourceTree = "<group>"; };
 		800055332EFC0DDF005CAB72 /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
 		81BFDF0C2EE815FD00D56F65 /* CompactModeWarningBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompactModeWarningBanner.swift; sourceTree = "<group>"; };
+		91CF9A1A6F9A48AABC07761494454213 /* FolderWidgetModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderWidgetModel.swift; sourceTree = "<group>"; };
 		8B7C6D5E4F3A2B1098765432 /* ActiveAppIndicatorPositioning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveAppIndicatorPositioning.swift; sourceTree = "<group>"; };
 		970D8CBC36D84F14B8E6E83487035CFB /* DockPreviewsSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockPreviewsSettingsView.swift; sourceTree = "<group>"; };
 		99C808769D1048FF95FCDA50FA52116A /* CmdTabSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CmdTabSettingsView.swift; sourceTree = "<group>"; };
@@ -400,6 +403,7 @@
 		BBC5BDF32E45A708003A0D64 /* SwiftUIUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIUtils.swift; sourceTree = "<group>"; };
 		BBCFAE3F2C266234002E1516 /* FirstTimeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstTimeView.swift; sourceTree = "<group>"; };
 		BBDF65722E7E212400DD6D6D /* DockObserver+CmdTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DockObserver+CmdTab.swift"; sourceTree = "<group>"; };
+		DBECBD93A13645B2A46E546AC58BD1A4 /* FolderWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderWidgetView.swift; sourceTree = "<group>"; };
 		BBE033CB2DD92061006417B0 /* CGimage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGimage.swift; sourceTree = "<group>"; };
 		BBE153BD2D2126C000CD3D4A /* MaterialPill.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaterialPill.swift; sourceTree = "<group>"; };
 		BBE153BF2D21FA2300CD3D4A /* StyledGroupBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyledGroupBox.swift; sourceTree = "<group>"; };
@@ -739,10 +743,20 @@
 			isa = PBXGroup;
 			children = (
 				BB638F0D2E0217560010077D /* Calendar */,
+				148128F9F9F04C5E988ED084A0C21E7E /* Folder */,
 				BB638EF82E0216D00010077D /* Media */,
 				BB377C3B2DFD194400FA93DA /* Pinnable */,
 			);
 			path = "Special Hover Windows";
+			sourceTree = "<group>";
+		};
+		148128F9F9F04C5E988ED084A0C21E7E /* Folder */ = {
+			isa = PBXGroup;
+			children = (
+				91CF9A1A6F9A48AABC07761494454213 /* FolderWidgetModel.swift */,
+				DBECBD93A13645B2A46E546AC58BD1A4 /* FolderWidgetView.swift */,
+			);
+			path = Folder;
 			sourceTree = "<group>";
 		};
 		BB2884FE2E81AFCB0048A09B /* Shared Components */ = {
@@ -1135,6 +1149,7 @@
 				BB157B802C0E8E6700997315 /* MessageUtil.swift in Sources */,
 				BB638F242E0218F80010077D /* CalendarEmptyState.swift in Sources */,
 				BB709B3B2EF21493007809A2 /* WidgetSettingsView.swift in Sources */,
+				A4C2F91474874A3A9CE0FBA825CC44EC /* FolderWidgetModel.swift in Sources */,
 				BB638F1A2E0218CD0010077D /* CalendarEmbeddedView.swift in Sources */,
 				05C0C7182C60629C000ADAC6 /* AXUIElement.swift in Sources */,
 				3A1622C12C8D57AF00D318EE /* PermissionsChecker.swift in Sources */,
@@ -1197,6 +1212,7 @@
 				BB15E1E22C8E9435002ECFB9 /* FluidGradient.swift in Sources */,
 				BB638F142E0218BB0010077D /* SharedHoverAppTitle.swift in Sources */,
 				8895D7565ED747F8A435CF5E207647C7 /* WidgetHoverContainer.swift in Sources */,
+				FCBBC228D4CD4709BB381A80A93F3406 /* FolderWidgetView.swift in Sources */,
 				BB15E1E32C8E9435002ECFB9 /* ResizableLayer.swift in Sources */,
 				BB15E1E42C8E9435002ECFB9 /* FluidGradientView.swift in Sources */,
 				BB15E1E52C8E9435002ECFB9 /* BlobLayer.swift in Sources */,
