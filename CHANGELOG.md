@@ -38,6 +38,26 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://dockdoor.net/donate</div>
 
+<a id="1.39"></a>
+# [Release 1.39](https://github.com/ejbills/DockDoor/releases/tag/1.39) - 2026-05-26
+
+## ✨ New Features
+- Folder previews when hovering Dock folders
+  - Browse contents directly from the Dock
+  - Sort by name, date, kind, or size
+  - Remember sort order per folder
+- Bring app windows to your current Space
+  - New traffic light button on previews
+  - New scroll-on-dock-icon action
+
+## 🐛 Bug Fixes
+- Hover delay no longer cancels when sliding between Dock icons
+- More accurate grouping for helper-owned windows
+
+
+[Changes][1.39]
+
+
 <a id="1.38.1"></a>
 # [Release 1.38.1](https://github.com/ejbills/DockDoor/releases/tag/1.38.1) - 2026-05-24
 
@@ -2175,6 +2195,7 @@ v1.0
 [Changes][releases]
 
 
+[1.39]: https://github.com/ejbills/DockDoor/compare/1.38.1...1.39
 [1.38.1]: https://github.com/ejbills/DockDoor/compare/1.38...1.38.1
 [1.38]: https://github.com/ejbills/DockDoor/compare/1.37...1.38
 [1.37]: https://github.com/ejbills/DockDoor/compare/1.36...1.37
