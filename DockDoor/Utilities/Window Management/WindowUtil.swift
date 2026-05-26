@@ -35,6 +35,7 @@ enum WindowAction: String, Hashable, CaseIterable, Defaults.Serializable {
     case hide
     case openNewWindow
     case maximize
+    case bringToCurrentSpace
 
     // Window positioning actions
     case fillLeftHalf
@@ -66,6 +67,8 @@ enum WindowAction: String, Hashable, CaseIterable, Defaults.Serializable {
             String(localized: "Open New Window", comment: "Window action")
         case .maximize:
             String(localized: "Maximize", comment: "Window action")
+        case .bringToCurrentSpace:
+            String(localized: "Bring to Current Space", comment: "Window action")
         case .fillLeftHalf:
             String(localized: "Fill Left Half", comment: "Window action")
         case .fillRightHalf:
@@ -98,6 +101,7 @@ enum WindowAction: String, Hashable, CaseIterable, Defaults.Serializable {
         case .hide: "eye.slash"
         case .openNewWindow: "plus.rectangle.on.rectangle"
         case .maximize: "arrow.up.backward.and.arrow.down.forward"
+        case .bringToCurrentSpace: "arrow.right.to.line"
         case .fillLeftHalf: "rectangle.lefthalf.filled"
         case .fillRightHalf: "rectangle.righthalf.filled"
         case .fillTopHalf: "rectangle.tophalf.filled"
@@ -183,6 +187,12 @@ enum WindowAction: String, Hashable, CaseIterable, Defaults.Serializable {
         case .maximize:
             window.zoom()
             return .dismissed
+
+        case .bringToCurrentSpace:
+            if WindowUtil.moveWindowToCurrentManagedSpace(window) {
+                return .dismissed
+            }
+            return .noChange
 
         case .fillLeftHalf:
             window.fillLeftHalf()
@@ -405,6 +415,42 @@ extension WindowUtil {
             updateCachedWindowState(windowInfo, spaceID: .some(Int(targetSpaceID)))
         }
         return moved
+    }
+
+    @discardableResult
+    static func moveAppWindowsToCurrentManagedSpace(for app: NSRunningApplication, mouseLocation: CGPoint = NSEvent.mouseLocation) -> Bool {
+        guard let targetSpaceID = WindowSpaces.currentManagedSpaceID(mouseLocation: mouseLocation) else {
+            return false
+        }
+
+        let windows = desktopSpaceWindowCacheManager.readCache(pid: app.processIdentifier)
+        let appWindows = windows.filter { !$0.isWindowlessApp }
+        let mostRecentWindow = appWindows.max { first, second in
+            first.lastAccessedTime < second.lastAccessedTime
+        }
+
+        var movedAnyWindow = false
+        for window in appWindows {
+            let moved = WindowSpaces.move(windowID: window.id, toManagedSpace: targetSpaceID)
+            if moved {
+                updateCachedWindowState(window, spaceID: .some(Int(targetSpaceID)))
+                movedAnyWindow = true
+            }
+        }
+
+        if movedAnyWindow, var mostRecentWindow {
+            if app.isHidden {
+                app.unhide()
+            }
+
+            if mostRecentWindow.isMinimized {
+                _ = mostRecentWindow.toggleMinimize()
+            } else {
+                mostRecentWindow.bringToFront()
+            }
+        }
+
+        return movedAnyWindow
     }
 }
 

@@ -930,6 +930,20 @@ final class DockObserver {
         let isNaturalScrolling = nsEvent?.isDirectionInvertedFromDevice ?? false
         let normalizedDeltaY = isNaturalScrolling ? -deltaY : deltaY
 
+        if Defaults[.dockIconScrollBehavior] == .bringAppWindowsToCurrentSpace {
+            let now = Date()
+            guard now.timeIntervalSince(lastDockScrollActionTime) >= dockScrollActionDebounceInterval else {
+                return true
+            }
+            lastDockScrollActionTime = now
+
+            WindowUtil.moveAppWindowsToCurrentManagedSpace(for: app)
+            Task { @MainActor in
+                previewCoordinator.hideWindow()
+            }
+            return true
+        }
+
         if app.bundleIdentifier == spotifyAppIdentifier || app.bundleIdentifier == appleMusicAppIdentifier {
             if Defaults[.dockIconMediaScrollBehavior] == .adjustVolume {
                 handleVolumeScroll(deltaY: normalizedDeltaY)

@@ -45,6 +45,11 @@ struct TrafficLightButtons: View {
                                   color: useMonochrome ? .secondary : Color(hex: "0a5a4a"),
                                   fillColor: useMonochrome ? monochromeFillColor : .teal)
                     }
+                    if enabledButtons.contains(.bringToCurrentSpace) {
+                        buttonFor(action: .bringToCurrentSpace, symbol: "arrow.right",
+                                  color: useMonochrome ? .secondary : Color(hex: "1b3a8a"),
+                                  fillColor: useMonochrome ? monochromeFillColor : .indigo)
+                    }
                     if enabledButtons.contains(.openNewWindow) {
                         buttonFor(action: .openNewWindow, symbol: "plus",
                                   color: useMonochrome ? .secondary : Color(hex: "0050A0"),
@@ -111,8 +116,15 @@ extension AppearanceSettingsView {
             (.minimize, String(localized: "Minimize")),
             (.toggleFullScreen, String(localized: "Fullscreen")),
             (.maximize, String(localized: "Maximize")),
+            (.bringToCurrentSpace, String(localized: "Bring to Current Space")),
             (.openNewWindow, String(localized: "New Window")),
         ]
+
+        private var buttonRows: [[(WindowAction, String)]] {
+            stride(from: 0, to: buttonDescriptions.count, by: 3).map { start in
+                Array(buttonDescriptions[start ..< min(start + 3, buttonDescriptions.count)])
+            }
+        }
 
         var body: some View {
             Picker("Traffic Light Buttons Visibility", selection: $trafficLightButtonsVisibility) {
@@ -141,68 +153,38 @@ extension AppearanceSettingsView {
                         }
 
                         VStack(alignment: .leading, spacing: 8) {
-                            HStack(spacing: 12) {
-                                ForEach(buttonDescriptions.prefix(3), id: \.0) { action, label in
-                                    Toggle(isOn: Binding(
-                                        get: { enabledButtons.contains(action) },
-                                        set: { isEnabled in
-                                            if isEnabled {
-                                                enabledButtons.insert(action)
-                                            } else {
-                                                enabledButtons.remove(action)
+                            ForEach(buttonRows.indices, id: \.self) { rowIndex in
+                                HStack(spacing: 12) {
+                                    ForEach(buttonRows[rowIndex], id: \.0) { action, label in
+                                        Toggle(isOn: Binding(
+                                            get: { enabledButtons.contains(action) },
+                                            set: { isEnabled in
+                                                if isEnabled {
+                                                    enabledButtons.insert(action)
+                                                } else {
+                                                    enabledButtons.remove(action)
 
-                                                if enabledButtons.isEmpty {
-                                                    MessageUtil.showAlert(
-                                                        title: String(localized: "All buttons removed"),
-                                                        message: String(localized: "Your traffic lights will be set to disabled automatically."),
-                                                        actions: [.ok, .cancel]
-                                                    ) { action in
-                                                        switch action {
-                                                        case .ok:
-                                                            trafficLightButtonsVisibility = .never
-                                                        case .cancel:
-                                                            break
+                                                    if enabledButtons.isEmpty {
+                                                        MessageUtil.showAlert(
+                                                            title: String(localized: "All buttons removed"),
+                                                            message: String(localized: "Your traffic lights will be set to disabled automatically."),
+                                                            actions: [.ok, .cancel]
+                                                        ) { action in
+                                                            switch action {
+                                                            case .ok:
+                                                                trafficLightButtonsVisibility = .never
+                                                            case .cancel:
+                                                                break
+                                                            }
                                                         }
                                                     }
                                                 }
                                             }
+                                        )) {
+                                            Text(label)
                                         }
-                                    )) {
-                                        Text(label)
+                                        .toggleStyle(CheckboxToggleStyle())
                                     }
-                                    .toggleStyle(CheckboxToggleStyle())
-                                }
-                            }
-                            HStack(spacing: 12) {
-                                ForEach(buttonDescriptions.suffix(3), id: \.0) { action, label in
-                                    Toggle(isOn: Binding(
-                                        get: { enabledButtons.contains(action) },
-                                        set: { isEnabled in
-                                            if isEnabled {
-                                                enabledButtons.insert(action)
-                                            } else {
-                                                enabledButtons.remove(action)
-
-                                                if enabledButtons.isEmpty {
-                                                    MessageUtil.showAlert(
-                                                        title: String(localized: "All buttons removed"),
-                                                        message: String(localized: "Your traffic lights will be set to disabled automatically."),
-                                                        actions: [.ok, .cancel]
-                                                    ) { action in
-                                                        switch action {
-                                                        case .ok:
-                                                            trafficLightButtonsVisibility = .never
-                                                        case .cancel:
-                                                            break
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    )) {
-                                        Text(label)
-                                    }
-                                    .toggleStyle(CheckboxToggleStyle())
                                 }
                             }
                         }

@@ -3,6 +3,7 @@ import SwiftUI
 
 struct DockScrollGestureSection: View {
     @Default(.enableDockScrollGesture) var enableDockScrollGesture
+    @Default(.dockIconScrollBehavior) var dockIconScrollBehavior
     @Default(.dockIconMediaScrollBehavior) var dockIconMediaScrollBehavior
 
     var body: some View {
@@ -18,12 +19,20 @@ struct DockScrollGestureSection: View {
                 .settingsSearchTarget("gestures.dockScroll")
 
                 if enableDockScrollGesture {
-                    Text("Scroll up on a dock icon to bring the app to front, scroll down to hide all its windows.")
+                    Text("Choose what happens when scrolling directly on a dock icon.")
                         .font(.caption)
                         .foregroundColor(.secondary)
                         .padding(.bottom, 4)
 
                     Divider()
+
+                    Picker("Dock icon scroll:", selection: $dockIconScrollBehavior) {
+                        ForEach(DockIconScrollBehavior.allCases, id: \.self) { behavior in
+                            Text(behavior.localizedName).tag(behavior)
+                        }
+                    }
+                    .pickerStyle(.menu)
+                    .settingsSearchTarget("gestures.dockIconScroll")
 
                     Picker("Music & Spotify dock icon scroll:", selection: $dockIconMediaScrollBehavior) {
                         ForEach(DockIconMediaScrollBehavior.allCases, id: \.self) { behavior in

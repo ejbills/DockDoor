@@ -1149,7 +1149,7 @@ enum SettingsSearchCatalog {
         SettingsSearchItem(
             id: "gestures.dockScroll",
             title: String(localized: "Enable scroll gestures on dock icons"),
-            description: String(localized: "Scroll up on a dock icon to bring the app to front, scroll down to hide all its windows."),
+            description: String(localized: "Choose what happens when scrolling directly on a dock icon."),
             keywords: ["scroll", "dock", "gesture", "hide", "front"],
             tab: "GesturesKeybinds",
             section: String(localized: "Dock Icon Scroll Gesture"),
@@ -1236,6 +1236,15 @@ enum SettingsSearchCatalog {
             icon: "hand.draw"
         ),
         // Dock Scroll - additional
+        SettingsSearchItem(
+            id: "gestures.dockIconScroll",
+            title: String(localized: "Dock icon scroll:"),
+            description: String(localized: "Choose what happens when scrolling directly on a dock icon."),
+            keywords: ["scroll", "dock", "space", "desktop", "activate", "hide"],
+            tab: "GesturesKeybinds",
+            section: String(localized: "Dock Icon Scroll Gesture"),
+            icon: "dock.rectangle"
+        ),
         SettingsSearchItem(
             id: "gestures.musicScroll",
             title: String(localized: "Music & Spotify dock icon scroll"),

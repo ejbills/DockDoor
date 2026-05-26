@@ -11,49 +11,38 @@ struct EnabledButtonsCheckboxes: View {
         (.minimize, String(localized: "Minimize")),
         (.toggleFullScreen, String(localized: "Fullscreen")),
         (.maximize, String(localized: "Maximize")),
+        (.bringToCurrentSpace, String(localized: "Bring to Current Space")),
         (.openNewWindow, String(localized: "New Window")),
     ]
 
+    private var buttonRows: [[(WindowAction, String)]] {
+        stride(from: 0, to: buttonDescriptions.count, by: 3).map { start in
+            Array(buttonDescriptions[start ..< min(start + 3, buttonDescriptions.count)])
+        }
+    }
+
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            HStack(spacing: 12) {
-                ForEach(buttonDescriptions.prefix(3), id: \.0) { action, label in
-                    Toggle(isOn: Binding(
-                        get: { enabledButtons.contains(action) },
-                        set: { isEnabled in
-                            if isEnabled {
-                                enabledButtons.insert(action)
-                            } else {
-                                enabledButtons.remove(action)
-                                if enabledButtons.isEmpty {
-                                    visibilityBinding = .never
+            ForEach(buttonRows.indices, id: \.self) { rowIndex in
+                HStack(spacing: 12) {
+                    ForEach(buttonRows[rowIndex], id: \.0) { action, label in
+                        Toggle(isOn: Binding(
+                            get: { enabledButtons.contains(action) },
+                            set: { isEnabled in
+                                if isEnabled {
+                                    enabledButtons.insert(action)
+                                } else {
+                                    enabledButtons.remove(action)
+                                    if enabledButtons.isEmpty {
+                                        visibilityBinding = .never
+                                    }
                                 }
                             }
+                        )) {
+                            Text(label)
                         }
-                    )) {
-                        Text(label)
+                        .toggleStyle(CheckboxToggleStyle())
                     }
-                    .toggleStyle(CheckboxToggleStyle())
-                }
-            }
-            HStack(spacing: 12) {
-                ForEach(buttonDescriptions.suffix(3), id: \.0) { action, label in
-                    Toggle(isOn: Binding(
-                        get: { enabledButtons.contains(action) },
-                        set: { isEnabled in
-                            if isEnabled {
-                                enabledButtons.insert(action)
-                            } else {
-                                enabledButtons.remove(action)
-                                if enabledButtons.isEmpty {
-                                    visibilityBinding = .never
-                                }
-                            }
-                        }
-                    )) {
-                        Text(label)
-                    }
-                    .toggleStyle(CheckboxToggleStyle())
                 }
             }
         }

@@ -55,6 +55,7 @@ extension Defaults.Keys {
     static let enableDockLocking = Key<Bool>("enableDockLocking", default: false)
     static let lockedDockScreenIdentifier = Key<String>("lockedDockScreenIdentifier", default: "")
     static let dockLockOverrideModifier = Key<Int>("dockLockOverrideModifier", default: DockLockModifier.option.rawValue)
+    static let dockIconScrollBehavior = Key<DockIconScrollBehavior>("dockIconScrollBehavior", default: .activateHide)
     static let dockIconMediaScrollBehavior = Key<DockIconMediaScrollBehavior>("dockIconMediaScrollBehavior", default: .adjustVolume)
     static let mediaWidgetScrollBehavior = Key<MediaWidgetScrollBehavior>("mediaWidgetScrollBehavior", default: .seekPlayback)
     static let mediaWidgetScrollDirection = Key<MediaWidgetScrollDirection>("mediaWidgetScrollDirection", default: .vertical)
@@ -734,6 +735,20 @@ enum MediaDetectionMode: String, CaseIterable, Defaults.Serializable {
             String(localized: "Shows controls for whichever app is currently playing — browsers, third-party players, etc. Only one source is active at a time.", comment: "Media detection mode description")
         case .appleScriptOnly:
             String(localized: "Only shows controls for Spotify and Apple Music. Each app gets its own controls that work independently, even when other apps are playing audio.", comment: "Media detection mode description")
+        }
+    }
+}
+
+enum DockIconScrollBehavior: String, CaseIterable, Defaults.Serializable {
+    case activateHide
+    case bringAppWindowsToCurrentSpace
+
+    var localizedName: String {
+        switch self {
+        case .activateHide:
+            String(localized: "Activate/Hide", comment: "Dock icon scroll option")
+        case .bringAppWindowsToCurrentSpace:
+            String(localized: "Bring App Windows to Current Space", comment: "Dock icon scroll option")
         }
     }
 }
