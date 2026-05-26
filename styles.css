@@ -514,6 +514,181 @@ header {
     }
 }
 
+/* Product Split Section */
+.product-split-section {
+    background: var(--light);
+    padding-block: 3rem;
+}
+
+.product-split-disclosure {
+    max-width: 900px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.product-split-disclosure:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.product-split-summary {
+    position: relative;
+    display: block;
+    padding: 1.5rem 4rem 1.5rem 1.75rem;
+    cursor: pointer;
+    list-style: none;
+    border-radius: var(--radius-lg);
+    background: rgba(255, 255, 255, 0.92);
+}
+
+.product-split-summary::-webkit-details-marker {
+    display: none;
+}
+
+.product-split-summary-icon {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.75rem;
+    color: var(--primary);
+    font-size: 1.25rem;
+    line-height: 1;
+    transition: var(--transition);
+}
+
+.product-split-disclosure[open] .product-split-summary-icon {
+    transform: rotate(180deg);
+}
+
+.product-split-summary .section-kicker {
+    display: block;
+    margin-bottom: 0.35rem;
+    color: var(--primary);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-align: left;
+    text-transform: uppercase;
+}
+
+.product-split-title {
+    display: block;
+    margin-bottom: 0.45rem;
+    text-align: left;
+    font-size: 1.75rem;
+}
+
+.product-split-subtitle {
+    display: block;
+    max-width: 760px;
+    margin: 0;
+    text-align: left;
+    font-size: 1rem;
+}
+
+.product-split-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+    padding: 0 1.5rem 1.5rem;
+    background: rgba(255, 255, 255, 0.92);
+    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+    animation: productSplitReveal 0.28s ease;
+}
+
+@keyframes productSplitReveal {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.product-split-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-height: 220px;
+    padding: 1.5rem;
+    background: var(--light);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: var(--radius);
+    box-shadow: none;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.product-split-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(0, 122, 255, 0.22);
+}
+
+.product-split-card-pro {
+    background: #f8fbff;
+    border-color: rgba(0, 122, 255, 0.18);
+}
+
+.product-split-label {
+    margin-bottom: 1rem;
+    color: var(--primary);
+    font-size: 0.8125rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.product-split-card h3 {
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+    font-size: 1.5rem;
+    line-height: 1.08;
+    letter-spacing: -0.025em;
+}
+
+.product-split-card p {
+    color: var(--text-secondary);
+    line-height: 1.55;
+}
+
+.product-split-card .btn {
+    margin-top: auto;
+}
+
+@media (max-width: 900px) {
+    .product-split-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .product-split-summary {
+        padding: 1.5rem 3.25rem 1.5rem 1.25rem;
+    }
+
+    .product-split-summary-icon {
+        top: 1.5rem;
+        right: 1.25rem;
+    }
+
+    .product-split-title {
+        font-size: 1.45rem;
+    }
+
+    .product-split-grid {
+        padding: 0 1rem 1rem;
+    }
+
+    .product-split-card {
+        min-height: 0;
+    }
+}
+
 /* Keyboard Control Section - Apple Style */
 .keyboard-content {
     text-align: center;
@@ -2215,4 +2390,3 @@ details[open] .faq-question i {
     border-radius: 4px;
     line-height: 1.4;
 }
-
