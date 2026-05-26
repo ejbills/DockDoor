@@ -115,6 +115,7 @@ final class ActiveAppIndicatorCoordinator {
         let refcon = Unmanaged.passUnretained(self).toOpaque()
         AXObserverAddNotification(observer, dockList, kAXUIElementDestroyedNotification as CFString, refcon)
         AXObserverAddNotification(observer, dockList, kAXCreatedNotification as CFString, refcon)
+        AXObserverAddNotification(observer, dockList, kAXSelectedChildrenChangedNotification as CFString, refcon)
 
         CFRunLoopAddSource(CFRunLoopGetMain(), AXObserverGetRunLoopSource(observer), .defaultMode)
 
@@ -157,6 +158,7 @@ final class ActiveAppIndicatorCoordinator {
         if let observer = dockLayoutObserver, let dockList = observedDockList {
             AXObserverRemoveNotification(observer, dockList, kAXUIElementDestroyedNotification as CFString)
             AXObserverRemoveNotification(observer, dockList, kAXCreatedNotification as CFString)
+            AXObserverRemoveNotification(observer, dockList, kAXSelectedChildrenChangedNotification as CFString)
         }
         dockLayoutObserver = nil
         observedDockList = nil

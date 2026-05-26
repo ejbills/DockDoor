@@ -36,21 +36,31 @@ class DockUtils {
         }
     }
 
-    /// Returns the dock size in pixels based on the screen's visible frame.
-    static func getDockSize() -> CGFloat {
-        guard let screen = NSScreen.main else { return 0 }
+    /// Returns the dock size in points based on the screen's visible frame.
+    static func getDockSize(on screen: NSScreen? = nil) -> CGFloat {
         let dockPosition = getDockPosition()
+
+        if let screen {
+            return dockSize(on: screen, dockPosition: dockPosition)
+        }
+
+        return NSScreen.screens
+            .map { dockSize(on: $0, dockPosition: dockPosition) }
+            .max() ?? 0
+    }
+
+    private static func dockSize(on screen: NSScreen, dockPosition: DockPosition) -> CGFloat {
         switch dockPosition {
         case .right:
-            return screen.frame.width - screen.visibleFrame.width
+            screen.frame.maxX - screen.visibleFrame.maxX
         case .left:
-            return screen.visibleFrame.origin.x
+            screen.visibleFrame.minX - screen.frame.minX
         case .bottom:
-            return screen.visibleFrame.origin.y
+            screen.visibleFrame.minY - screen.frame.minY
         case .top:
-            return screen.frame.height - screen.visibleFrame.maxY
+            screen.frame.maxY - screen.visibleFrame.maxY
         case .cmdTab, .cli, .unknown:
-            return 0
+            0
         }
     }
 }

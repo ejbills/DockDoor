@@ -67,6 +67,18 @@ enum ActiveAppIndicatorDockDetection {
         return CGRect(origin: position, size: size)
     }
 
+    private static func appKitFrame(fromAccessibilityFrame frame: CGRect) -> CGRect {
+        let screen = NSScreen.screenFromQuartzPoint(
+            CGPoint(x: frame.midX, y: frame.midY)
+        )
+        let appKitOrigin = DockObserver.nsPointFromCGPoint(
+            CGPoint(x: frame.minX, y: frame.maxY),
+            forScreen: screen
+        )
+
+        return CGRect(origin: appKitOrigin, size: frame.size)
+    }
+
     /// Calculates indicator height, offset, and length based on dock size and position.
     /// Values derived from testing for dock sizes 36-156.
     /// - Parameters:
@@ -121,7 +133,13 @@ enum ActiveAppIndicatorDockDetection {
         let indicatorOffset: CGFloat
         let indicatorLength: CGFloat
 
-        let dockSize = DockUtils.getDockSize()
+        let appKitDockItemFrame = appKitFrame(fromAccessibilityFrame: dockItemFrame)
+        guard let screen = CGPoint(
+            x: appKitDockItemFrame.midX,
+            y: appKitDockItemFrame.midY
+        ).screen() else { return }
+
+        let dockSize = DockUtils.getDockSize(on: screen)
         let autoSize = calculateAutoSize(
             dockSize: dockSize,
             dockPosition: dockPosition
@@ -142,25 +160,15 @@ enum ActiveAppIndicatorDockDetection {
             indicatorLength = Defaults[.activeAppIndicatorLength]
         }
 
-        // Get the screen containing the dock
-        guard
-            let screen = NSScreen.screens.first(where: {
-                $0.frame.contains(dockItemFrame.origin)
-            }) ?? NSScreen.main
-        else {
-            return
-        }
-
         // Calculate the indicator frame using the positioning module
         guard
             var indicatorFrame =
             ActiveAppIndicatorPositioning.calculateIndicatorFrame(
-                for: dockItemFrame,
+                for: appKitDockItemFrame,
                 dockPosition: dockPosition,
                 indicatorThickness: indicatorThickness,
                 indicatorOffset: indicatorOffset,
-                indicatorLength: indicatorLength,
-                on: screen
+                indicatorLength: indicatorLength
             )
         else {
             indicatorWindow.orderOut(nil)
@@ -182,7 +190,13 @@ enum ActiveAppIndicatorDockDetection {
         let indicatorOffset: CGFloat
         let indicatorLength: CGFloat
 
-        let dockSize = DockUtils.getDockSize()
+        let appKitDockItemFrame = appKitFrame(fromAccessibilityFrame: dockItemFrame)
+        guard let screen = CGPoint(
+            x: appKitDockItemFrame.midX,
+            y: appKitDockItemFrame.midY
+        ).screen() else { return nil }
+
+        let dockSize = DockUtils.getDockSize(on: screen)
         let autoSize = calculateAutoSize(
             dockSize: dockSize,
             dockPosition: dockPosition
@@ -203,22 +217,13 @@ enum ActiveAppIndicatorDockDetection {
         }
 
         guard
-            let screen = NSScreen.screens.first(where: {
-                $0.frame.contains(dockItemFrame.origin)
-            }) ?? NSScreen.main
-        else {
-            return nil
-        }
-
-        guard
             var indicatorFrame =
             ActiveAppIndicatorPositioning.calculateIndicatorFrame(
-                for: dockItemFrame,
+                for: appKitDockItemFrame,
                 dockPosition: dockPosition,
                 indicatorThickness: indicatorThickness,
                 indicatorOffset: indicatorOffset,
-                indicatorLength: indicatorLength,
-                on: screen
+                indicatorLength: indicatorLength
             )
         else {
             return nil
