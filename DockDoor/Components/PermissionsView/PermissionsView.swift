@@ -1,9 +1,11 @@
+import Defaults
 import SwiftUI
 
 struct PermissionsView: View {
     var nextTab: (() -> Void)?
     var disableShine: Bool = false
     var showSkipOption: Bool = true
+    @Default(.disableImagePreview) private var disableImagePreview
     @StateObject private var permissionsChecker = PermissionsChecker()
 
     var body: some View {
@@ -30,7 +32,7 @@ struct PermissionsView: View {
                 if showSkipOption, !permissionsChecker.screenRecordingPermission {
                     HStack {
                         Spacer()
-                        Button(action: { nextTab?() }) {
+                        Button(action: skipScreenRecording) {
                             Text("Skip (use list view only)")
                                 .font(.caption)
                         }
@@ -66,5 +68,10 @@ struct PermissionsView: View {
 
     private func openScreenRecordingPreferences() {
         SystemPreferencesHelper.openScreenRecordingPreferences()
+    }
+
+    private func skipScreenRecording() {
+        disableImagePreview = true
+        nextTab?()
     }
 }

@@ -1,7 +1,9 @@
+import Defaults
 import SwiftUI
 
 struct FirstTimePermissionsTabView: View {
     var nextTab: () -> Void
+    @Default(.disableImagePreview) private var disableImagePreview
     @StateObject private var permissionsChecker = PermissionsChecker()
 
     var body: some View {
@@ -60,7 +62,7 @@ struct FirstTimePermissionsTabView: View {
                         .foregroundColor(.secondary)
                 }
 
-                Button(action: nextTab) {
+                Button(action: continueToNextTab) {
                     HStack {
                         Text("Continue")
                         Image(systemName: "arrow.right")
@@ -71,6 +73,13 @@ struct FirstTimePermissionsTabView: View {
         }
         .padding(.horizontal, 32)
         .padding(.vertical, 16)
+    }
+
+    private func continueToNextTab() {
+        if !permissionsChecker.screenRecordingPermission {
+            disableImagePreview = true
+        }
+        nextTab()
     }
 }
 

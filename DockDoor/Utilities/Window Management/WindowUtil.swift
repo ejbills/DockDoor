@@ -267,6 +267,10 @@ enum WindowUtil {
         PermissionsChecker.hasScreenRecordingPermission()
     }
 
+    static func shouldCaptureWindowImages() -> Bool {
+        !Defaults[.disableImagePreview] && hasScreenRecordingPermission()
+    }
+
     static func matchesAppFilters(bundleIdentifier: String?, appName: String, filters: [String]) -> Bool {
         guard !filters.isEmpty else { return false }
 
@@ -472,7 +476,7 @@ extension WindowUtil {
 
     static func captureWindowImage(windowID: CGWindowID, pid: pid_t, windowTitle: String? = nil, forceRefresh: Bool = false) async throws -> CGImage {
         // CGSHWCaptureWindowList requires screen recording permission
-        guard hasScreenRecordingPermission() else {
+        guard shouldCaptureWindowImages() else {
             throw captureError
         }
 
@@ -742,7 +746,7 @@ extension WindowUtil {
         var sckWindowIDs = Set<CGWindowID>()
 
         // Skip SCK if user has disabled image previews (compact mode only) or screen recording permission not granted
-        if !Defaults[.disableImagePreview], hasScreenRecordingPermission() {
+        if shouldCaptureWindowImages() {
             if let content = await getShareableContent(onScreenWindowsOnly: true) {
                 // Build set of SCK window IDs
                 let appWindows = content.windows.filter {
@@ -824,7 +828,7 @@ extension WindowUtil {
     }
 
     static func updateNewWindowsForApp(_ app: NSRunningApplication) async {
-        if hasScreenRecordingPermission() {
+        if shouldCaptureWindowImages() {
             if let content = await getShareableContent(onScreenWindowsOnly: false) {
                 let appWindows = content.windows.filter { window in
                     WindowOwnerResolver.windowBelongsToDisplayApp(window, displayApp: app)
@@ -854,7 +858,7 @@ extension WindowUtil {
     static func updateAllWindowsInCurrentSpace() async {
         var processedPIDs = Set<pid_t>()
 
-        if hasScreenRecordingPermission() {
+        if shouldCaptureWindowImages() {
             if let content = await getShareableContent(onScreenWindowsOnly: false) {
                 let windowAppPairs: [(window: SCWindow, displayApp: NSRunningApplication, ownerApp: NSRunningApplication)] = content.windows.compactMap { window in
                     guard let scApp = window.owningApplication,
@@ -914,6 +918,7 @@ extension WindowUtil {
     private static func refreshAXFallbackWindowImages(for pid: pid_t) async {
         let windows = desktopSpaceWindowCacheManager.readCache(pid: pid)
         guard !windows.isEmpty else { return }
+        guard shouldCaptureWindowImages() else { return }
 
         // Pre-compute fresh cached IDs to skip - use already-fetched windows
         let freshCachedIDs = freshCachedWindowIDs(for: pid, from: windows)

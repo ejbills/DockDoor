@@ -166,7 +166,7 @@ final class WindowLiveCapture: ObservableObject {
     func startCapture() async {
         stopGeneration += 1
         guard stream == nil else { return }
-        guard WindowUtil.hasScreenRecordingPermission() else { return }
+        guard WindowUtil.shouldCaptureWindowImages() else { return }
 
         guard let content = await WindowUtil.getShareableContent(onScreenWindowsOnly: false),
               let scWindow = content.windows.first(where: { $0.windowID == windowID })
