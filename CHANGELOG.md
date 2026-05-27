@@ -38,6 +38,21 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://dockdoor.net/donate</div>
 
+<a id="1.39.1"></a>
+# [Release 1.39.1](https://github.com/ejbills/DockDoor/releases/tag/1.39.1) - 2026-05-27
+
+## 🔧 Improvements & Stability
+- Skipping screen recording no longer repeatedly asks for permission
+- More reliable accessibility queries on background threads (crash fix)
+
+## 🐛 Bug Fixes
+- Active app indicator positions correctly across multiple displays
+- Folders no longer re-prompt for permission after denial (choose folder prompt)
+
+
+[Changes][1.39.1]
+
+
 <a id="1.39"></a>
 # [Release 1.39](https://github.com/ejbills/DockDoor/releases/tag/1.39) - 2026-05-26
 
@@ -2195,6 +2210,7 @@ v1.0
 [Changes][releases]
 
 
+[1.39.1]: https://github.com/ejbills/DockDoor/compare/1.39...1.39.1
 [1.39]: https://github.com/ejbills/DockDoor/compare/1.38.1...1.39
 [1.38.1]: https://github.com/ejbills/DockDoor/compare/1.38...1.38.1
 [1.38]: https://github.com/ejbills/DockDoor/compare/1.37...1.38
