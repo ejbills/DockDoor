@@ -31,7 +31,22 @@ extension AXUIElement {
 
     func attribute<T>(_ key: String, _ _: T.Type) throws -> T? {
         var value: AnyObject?
-        return try axCallWhichCanThrow(AXUIElementCopyAttributeValue(self, key as CFString, &value), &value) as? T
+        let result: AXError = if needsMainThreadAXAccess {
+            DispatchQueue.main.sync {
+                AXUIElementCopyAttributeValue(self, key as CFString, &value)
+            }
+        } else {
+            AXUIElementCopyAttributeValue(self, key as CFString, &value)
+        }
+        return try axCallWhichCanThrow(result, &value) as? T
+    }
+
+    private var needsMainThreadAXAccess: Bool {
+        guard !Thread.isMainThread else { return false }
+
+        var pid = pid_t(0)
+        guard AXUIElementGetPid(self, &pid) == .success else { return false }
+        return pid == ProcessInfo.processInfo.processIdentifier
     }
 
     private func value<T>(_ key: String, _ target: T, _ type: AXValueType) throws -> T? {
@@ -171,12 +186,26 @@ extension AXUIElement {
 
     func setAttribute(_ key: String, _ value: Any) throws {
         var unused: Void = ()
-        try axCallWhichCanThrow(AXUIElementSetAttributeValue(self, key as CFString, value as CFTypeRef), &unused)
+        let result: AXError = if needsMainThreadAXAccess {
+            DispatchQueue.main.sync {
+                AXUIElementSetAttributeValue(self, key as CFString, value as CFTypeRef)
+            }
+        } else {
+            AXUIElementSetAttributeValue(self, key as CFString, value as CFTypeRef)
+        }
+        try axCallWhichCanThrow(result, &unused)
     }
 
     func performAction(_ action: String) throws {
         var unused: Void = ()
-        try axCallWhichCanThrow(AXUIElementPerformAction(self, action as CFString), &unused)
+        let result: AXError = if needsMainThreadAXAccess {
+            DispatchQueue.main.sync {
+                AXUIElementPerformAction(self, action as CFString)
+            }
+        } else {
+            AXUIElementPerformAction(self, action as CFString)
+        }
+        try axCallWhichCanThrow(result, &unused)
     }
 }
 

@@ -465,12 +465,7 @@ final class DockObserver {
             return true
         }
 
-        let accessibleURL: URL
-        if let url = FolderWidgetAuthorization.accessibleURL(for: folderItem.url) {
-            accessibleURL = url
-        } else if let url = FolderWidgetAuthorization.requestAccess(to: folderItem.url) {
-            accessibleURL = url
-        } else {
+        guard let accessibleURL = FolderWidgetAuthorization.accessibleURL(for: folderItem.url) else {
             return true
         }
 
