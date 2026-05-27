@@ -115,6 +115,7 @@ final class ActiveAppIndicatorCoordinator {
         let refcon = Unmanaged.passUnretained(self).toOpaque()
         AXObserverAddNotification(observer, dockList, kAXUIElementDestroyedNotification as CFString, refcon)
         AXObserverAddNotification(observer, dockList, kAXCreatedNotification as CFString, refcon)
+        AXObserverAddNotification(observer, dockList, kAXSelectedChildrenChangedNotification as CFString, refcon)
 
         CFRunLoopAddSource(CFRunLoopGetMain(), AXObserverGetRunLoopSource(observer), .defaultMode)
 
@@ -123,6 +124,7 @@ final class ActiveAppIndicatorCoordinator {
     }
 
     private func handleDockLayoutChanged() {
+        hideIndicatorIfDockChangedScreens()
         scheduleDelayedUpdate()
     }
 
@@ -157,6 +159,7 @@ final class ActiveAppIndicatorCoordinator {
         if let observer = dockLayoutObserver, let dockList = observedDockList {
             AXObserverRemoveNotification(observer, dockList, kAXUIElementDestroyedNotification as CFString)
             AXObserverRemoveNotification(observer, dockList, kAXCreatedNotification as CFString)
+            AXObserverRemoveNotification(observer, dockList, kAXSelectedChildrenChangedNotification as CFString)
         }
         dockLayoutObserver = nil
         observedDockList = nil
@@ -203,6 +206,38 @@ final class ActiveAppIndicatorCoordinator {
                 updateIndicatorPosition(for: app)
             }
         }
+    }
+
+    private func hideIndicatorIfDockChangedScreens() {
+        guard let indicatorWindow,
+              indicatorWindow.isVisible,
+              indicatorWindow.alphaValue > 0,
+              let app = currentActiveApp,
+              let currentScreen = CGPoint(
+                  x: indicatorWindow.frame.midX,
+                  y: indicatorWindow.frame.midY
+              ).screen()
+        else {
+            return
+        }
+
+        let dockPosition = DockUtils.getDockPosition()
+        guard ActiveAppIndicatorPositioning.isSupported(dockPosition),
+              let dockItemFrame = ActiveAppIndicatorDockDetection.getDockItemFrame(for: app),
+              let targetFrame = ActiveAppIndicatorDockDetection.calculateIndicatorFrame(
+                  relativeTo: dockItemFrame,
+                  dockPosition: dockPosition
+              ),
+              let targetScreen = CGPoint(
+                  x: targetFrame.midX,
+                  y: targetFrame.midY
+              ).screen(),
+              currentScreen.uniqueIdentifier() != targetScreen.uniqueIdentifier()
+        else {
+            return
+        }
+
+        indicatorWindow.alphaValue = 0
     }
 
     // MARK: - Dock Orientation Notifications
@@ -298,6 +333,10 @@ final class ActiveAppIndicatorCoordinator {
                 context.timingFunction = CAMediaTimingFunction(name: .easeOut)
                 indicatorWindow.animator().setFrame(targetFrame, display: true)
             }
+        } else if indicatorWindow.alphaValue == 0 {
+            indicatorWindow.setFrame(targetFrame, display: false)
+            indicatorWindow.alphaValue = 1
+            indicatorWindow.orderFront(self)
         } else {
             NSAnimationContext.runAnimationGroup { context in
                 context.duration = Self.animationDuration
