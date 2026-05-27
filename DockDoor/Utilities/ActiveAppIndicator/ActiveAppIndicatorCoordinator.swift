@@ -19,7 +19,6 @@ final class ActiveAppIndicatorCoordinator {
 
     private var delayedUpdateTimer: Timer?
     private let delayedUpdateInterval: TimeInterval = 0.6
-    private var shouldFadeInAfterDockScreenChange = false
 
     private static let animationDuration: TimeInterval = 0.25
 
@@ -239,7 +238,6 @@ final class ActiveAppIndicatorCoordinator {
         }
 
         indicatorWindow.alphaValue = 0
-        shouldFadeInAfterDockScreenChange = true
     }
 
     // MARK: - Dock Orientation Notifications
@@ -328,7 +326,6 @@ final class ActiveAppIndicatorCoordinator {
             )
             indicatorWindow.setFrame(collapsed, display: false)
             indicatorWindow.alphaValue = 1
-            shouldFadeInAfterDockScreenChange = false
             indicatorWindow.orderFront(self)
 
             NSAnimationContext.runAnimationGroup { context in
@@ -336,18 +333,10 @@ final class ActiveAppIndicatorCoordinator {
                 context.timingFunction = CAMediaTimingFunction(name: .easeOut)
                 indicatorWindow.animator().setFrame(targetFrame, display: true)
             }
-        } else if shouldFadeInAfterDockScreenChange {
+        } else if indicatorWindow.alphaValue == 0 {
             indicatorWindow.setFrame(targetFrame, display: false)
-            indicatorWindow.alphaValue = 0
+            indicatorWindow.alphaValue = 1
             indicatorWindow.orderFront(self)
-
-            NSAnimationContext.runAnimationGroup({ context in
-                context.duration = Self.animationDuration
-                context.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
-                indicatorWindow.animator().alphaValue = 1
-            }, completionHandler: { [weak self] in
-                self?.shouldFadeInAfterDockScreenChange = false
-            })
         } else {
             NSAnimationContext.runAnimationGroup { context in
                 context.duration = Self.animationDuration
