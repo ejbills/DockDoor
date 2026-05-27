@@ -19,6 +19,7 @@ final class ActiveAppIndicatorCoordinator {
 
     private var delayedUpdateTimer: Timer?
     private let delayedUpdateInterval: TimeInterval = 0.6
+    private var shouldFadeInAfterDockScreenChange = false
 
     private static let animationDuration: TimeInterval = 0.25
 
@@ -124,6 +125,7 @@ final class ActiveAppIndicatorCoordinator {
     }
 
     private func handleDockLayoutChanged() {
+        hideIndicatorIfDockChangedScreens()
         scheduleDelayedUpdate()
     }
 
@@ -205,6 +207,39 @@ final class ActiveAppIndicatorCoordinator {
                 updateIndicatorPosition(for: app)
             }
         }
+    }
+
+    private func hideIndicatorIfDockChangedScreens() {
+        guard let indicatorWindow,
+              indicatorWindow.isVisible,
+              indicatorWindow.alphaValue > 0,
+              let app = currentActiveApp,
+              let currentScreen = CGPoint(
+                  x: indicatorWindow.frame.midX,
+                  y: indicatorWindow.frame.midY
+              ).screen()
+        else {
+            return
+        }
+
+        let dockPosition = DockUtils.getDockPosition()
+        guard ActiveAppIndicatorPositioning.isSupported(dockPosition),
+              let dockItemFrame = ActiveAppIndicatorDockDetection.getDockItemFrame(for: app),
+              let targetFrame = ActiveAppIndicatorDockDetection.calculateIndicatorFrame(
+                  relativeTo: dockItemFrame,
+                  dockPosition: dockPosition
+              ),
+              let targetScreen = CGPoint(
+                  x: targetFrame.midX,
+                  y: targetFrame.midY
+              ).screen(),
+              currentScreen.uniqueIdentifier() != targetScreen.uniqueIdentifier()
+        else {
+            return
+        }
+
+        indicatorWindow.alphaValue = 0
+        shouldFadeInAfterDockScreenChange = true
     }
 
     // MARK: - Dock Orientation Notifications
@@ -293,6 +328,7 @@ final class ActiveAppIndicatorCoordinator {
             )
             indicatorWindow.setFrame(collapsed, display: false)
             indicatorWindow.alphaValue = 1
+            shouldFadeInAfterDockScreenChange = false
             indicatorWindow.orderFront(self)
 
             NSAnimationContext.runAnimationGroup { context in
@@ -300,6 +336,18 @@ final class ActiveAppIndicatorCoordinator {
                 context.timingFunction = CAMediaTimingFunction(name: .easeOut)
                 indicatorWindow.animator().setFrame(targetFrame, display: true)
             }
+        } else if shouldFadeInAfterDockScreenChange {
+            indicatorWindow.setFrame(targetFrame, display: false)
+            indicatorWindow.alphaValue = 0
+            indicatorWindow.orderFront(self)
+
+            NSAnimationContext.runAnimationGroup({ context in
+                context.duration = Self.animationDuration
+                context.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+                indicatorWindow.animator().alphaValue = 1
+            }, completionHandler: { [weak self] in
+                self?.shouldFadeInAfterDockScreenChange = false
+            })
         } else {
             NSAnimationContext.runAnimationGroup { context in
                 context.duration = Self.animationDuration
