@@ -38,6 +38,21 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://dockdoor.net/donate</div>
 
+<a id="1.39.2"></a>
+# [Release 1.39.2](https://github.com/ejbills/DockDoor/releases/tag/1.39.2) - 2026-05-31
+
+## 🔧 Improvements & Stability
+- Sort folder previews by date added
+
+## 🐛 Bug Fixes
+- Window previews return after granting screen recording
+- - Fix for users who experienced 'stuck' compact mode
+- Compact mode no longer skips items with keyboard controls
+
+
+[Changes][1.39.2]
+
+
 <a id="1.39.1"></a>
 # [Release 1.39.1](https://github.com/ejbills/DockDoor/releases/tag/1.39.1) - 2026-05-27
 
@@ -2210,6 +2225,7 @@ v1.0
 [Changes][releases]
 
 
+[1.39.2]: https://github.com/ejbills/DockDoor/compare/1.39.1...1.39.2
 [1.39.1]: https://github.com/ejbills/DockDoor/compare/1.39...1.39.1
 [1.39]: https://github.com/ejbills/DockDoor/compare/1.38.1...1.39
 [1.38.1]: https://github.com/ejbills/DockDoor/compare/1.38...1.38.1
