@@ -269,6 +269,7 @@ extension Defaults.Keys {
     static let filteredCalendarIdentifiers = Key<[String]>("filteredCalendarIdentifiers", default: [])
     static let hasSeenCmdTabFocusHint = Key<Bool>("hasSeenCmdTabFocusHint", default: false)
     static let disableImagePreview = Key<Bool>("disableImagePreview", default: false)
+    static let lastKnownScreenRecordingPermission = Key<Bool>("lastKnownScreenRecordingPermission", default: false)
     static let debugMode = Key<Bool>("debugMode", default: false)
 
     // MARK: - Active App Indicator

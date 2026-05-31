@@ -41,6 +41,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         applyAppearanceMode(Defaults[.appAppearanceMode])
 
+        reconcileImagePreviewWithPermission()
+
         // Set global AX timeout to prevent hangs from unresponsive apps
         AXUIElementSetMessagingTimeout(AXUIElementCreateSystemWide(), 1.0)
 
@@ -102,6 +104,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if Defaults[.reopenSettingsAfterRestart] {
             Defaults[.reopenSettingsAfterRestart] = false
             openSettingsWindow(nil)
+        }
+    }
+
+    // Clear the onboarding skip's disableImagePreview only when permission was newly granted since last launch, so skip-then-grant users get previews back without overriding a deliberate "Always use compact mode" choice.
+    private func reconcileImagePreviewWithPermission() {
+        let hasPermission = WindowUtil.hasScreenRecordingPermission()
+        let hadPermission = Defaults[.lastKnownScreenRecordingPermission]
+        Defaults[.lastKnownScreenRecordingPermission] = hasPermission
+
+        if hasPermission, !hadPermission, Defaults[.disableImagePreview] {
+            Defaults[.disableImagePreview] = false
         }
     }
 
