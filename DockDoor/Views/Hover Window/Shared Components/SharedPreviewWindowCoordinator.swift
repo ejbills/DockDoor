@@ -803,7 +803,9 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         coordinator.initialHoverLocation = nil
 
         let threshold = Defaults[.windowSwitcherCompactThreshold]
-        let isListViewMode = coordinator.windowSwitcherActive && threshold > 0 && coordinator.windows.count >= threshold
+        let forcedCompact = Defaults[.disableImagePreview] || !hasScreenRecordingPermission
+        let isListViewMode = coordinator.windowSwitcherActive
+            && (forcedCompact || (threshold > 0 && coordinator.windows.count >= threshold))
 
         // Handle list view navigation (up/down only, with filtering support)
         if isListViewMode {
