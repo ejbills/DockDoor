@@ -838,6 +838,7 @@ enum MediaWidgetScrollDirection: String, CaseIterable, Defaults.Serializable {
 
 enum FolderWidgetSortOrder: String, CaseIterable, Defaults.Serializable {
     case dateModified
+    case dateAdded
     case name
     case kind
     case size
@@ -846,6 +847,8 @@ enum FolderWidgetSortOrder: String, CaseIterable, Defaults.Serializable {
         switch self {
         case .dateModified:
             String(localized: "Date Modified", comment: "Folder widget sort option")
+        case .dateAdded:
+            String(localized: "Date Added", comment: "Folder widget sort option")
         case .name:
             String(localized: "Name", comment: "Folder widget sort option")
         case .kind:
@@ -859,6 +862,8 @@ enum FolderWidgetSortOrder: String, CaseIterable, Defaults.Serializable {
         switch self {
         case .dateModified:
             "calendar"
+        case .dateAdded:
+            "calendar.badge.plus"
         case .name:
             "textformat.abc"
         case .kind:

@@ -7,6 +7,7 @@ struct FolderWidgetItem: Identifiable, Hashable {
     let name: String
     let isDirectory: Bool
     let modifiedDate: Date
+    let addedDate: Date
     let size: Int64
     let localizedKind: String
 
@@ -42,6 +43,7 @@ enum FolderWidgetLoader {
                     includingPropertiesForKeys: [
                         .isDirectoryKey,
                         .contentModificationDateKey,
+                        .addedToDirectoryDateKey,
                         .fileSizeKey,
                         .totalFileAllocatedSizeKey,
                         .localizedTypeDescriptionKey,
@@ -53,6 +55,7 @@ enum FolderWidgetLoader {
                     let values = try? itemURL.resourceValues(forKeys: [
                         .isDirectoryKey,
                         .contentModificationDateKey,
+                        .addedToDirectoryDateKey,
                         .fileSizeKey,
                         .totalFileAllocatedSizeKey,
                         .localizedTypeDescriptionKey,
@@ -63,6 +66,7 @@ enum FolderWidgetLoader {
                         name: itemURL.lastPathComponent,
                         isDirectory: values?.isDirectory ?? false,
                         modifiedDate: values?.contentModificationDate ?? .distantPast,
+                        addedDate: values?.addedToDirectoryDate ?? .distantPast,
                         size: Int64(values?.totalFileAllocatedSize ?? values?.fileSize ?? 0),
                         localizedKind: values?.localizedTypeDescription ?? ""
                     )

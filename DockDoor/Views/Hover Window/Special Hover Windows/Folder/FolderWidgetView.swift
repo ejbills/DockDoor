@@ -342,6 +342,8 @@ struct FolderWidgetPanelView: View {
             switch sortOrder {
             case .dateModified:
                 lhs.modifiedDate < rhs.modifiedDate
+            case .dateAdded:
+                lhs.addedDate < rhs.addedDate
             case .name:
                 lhs.name.localizedStandardCompare(rhs.name) == .orderedAscending
             case .kind:
