@@ -286,7 +286,9 @@ final class DockLocker {
         }
 
         let modifier = DockLockModifier(rawValue: Defaults[.dockLockOverrideModifier]) ?? .option
-        if event.flags.contains(modifier.cgEventFlag) {
+        // mouseMoved events don't reliably carry held modifier flags, so also query live keyboard state.
+        let activeFlags = event.flags.union(CGEventSource.flagsState(.combinedSessionState))
+        if activeFlags.contains(modifier.cgEventFlag) {
             return Unmanaged.passUnretained(event)
         }
 
