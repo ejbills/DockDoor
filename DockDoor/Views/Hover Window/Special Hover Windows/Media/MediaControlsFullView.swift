@@ -26,9 +26,13 @@ struct MediaControlsFullView: View {
     @State private var initialContentSize: CGSize = .zero
     @State private var hasSetInitialSize: Bool = false
 
+    private var displayAppName: String {
+        mediaInfo.appName.isEmpty ? appName : mediaInfo.appName
+    }
+
     var body: some View {
         WidgetHoverContainer(
-            appName: appName,
+            appName: displayAppName,
             bundleIdentifier: bundleIdentifier,
             bestGuessMonitor: bestGuessMonitor,
             dockPosition: dockPosition,

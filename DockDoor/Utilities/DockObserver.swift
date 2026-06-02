@@ -285,7 +285,8 @@ final class DockObserver {
         if case let .notRunning(bundleIdentifier) = appUnderMouseElement.status {
             let isCalendar = bundleIdentifier == calendarAppIdentifier && Defaults[.enableCalendarWidget]
             let mr = MediaRemoteService.shared
-            let isActiveMedia = bundleIdentifier == mr.activeBundleIdentifier
+            let mediaSourceMatches = mr.matchesMediaSource(bundleIdentifier: bundleIdentifier)
+            let isActiveMedia = mediaSourceMatches
                 && Defaults[.enableMediaWidget]
                 && (!mr.isUniversalSource || Defaults[.mediaDetectionMode] == .universal)
             if isCalendar || isActiveMedia, Defaults[.showSpecialAppControls], Defaults[.enableDockPreviews] {

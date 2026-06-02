@@ -48,6 +48,26 @@ final class MediaRemoteService: ObservableObject {
         return id != spotifyAppIdentifier && id != appleMusicAppIdentifier
     }
 
+    func matchesMediaSource(bundleIdentifier: String?) -> Bool {
+        guard hasActiveMedia, let bundleIdentifier else { return false }
+
+        if activeBundleIdentifier == bundleIdentifier {
+            return true
+        }
+
+        if normalizedContains(activeBundleIdentifier, bundleIdentifier) ||
+            normalizedContains(bundleIdentifier, activeBundleIdentifier)
+        {
+            return true
+        }
+
+        guard let dockAppName = appDisplayName(for: bundleIdentifier) else {
+            return false
+        }
+        return normalizedContains(activeAppName, dockAppName) ||
+            normalizedContains(dockAppName, activeAppName)
+    }
+
     private init() {
         setupController()
     }
@@ -165,6 +185,23 @@ final class MediaRemoteService: ObservableObject {
         }
 
         trackInfoDidChange.send()
+    }
+
+    private func normalizedContains(_ haystack: String?, _ needle: String?) -> Bool {
+        guard let haystack, let needle else { return false }
+        let normalizedHaystack = haystack.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        let normalizedNeedle = needle.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        guard !normalizedHaystack.isEmpty, !normalizedNeedle.isEmpty else { return false }
+        return normalizedHaystack.contains(normalizedNeedle)
+    }
+
+    private func appDisplayName(for bundleIdentifier: String) -> String? {
+        NSWorkspace.shared.urlForApplication(withBundleIdentifier: bundleIdentifier)
+            .flatMap { Bundle(url: $0) }
+            .flatMap {
+                $0.object(forInfoDictionaryKey: "CFBundleDisplayName") as? String ??
+                    $0.object(forInfoDictionaryKey: "CFBundleName") as? String
+            }
     }
 
     private func clearState() {

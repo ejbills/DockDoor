@@ -183,7 +183,7 @@ final class MediaInfo: ObservableObject {
         case appleMusicAppIdentifier:
             appName = "Music"
         default:
-            appName = MediaRemoteService.shared.activeAppName ?? ""
+            appName = displayAppNameFromMediaRemote() ?? ""
         }
     }
 
@@ -235,7 +235,7 @@ final class MediaInfo: ObservableObject {
         guard isUsingMediaRemote, !isSeeking else { return }
 
         let mr = MediaRemoteService.shared
-        guard mr.activeBundleIdentifier == currentApp else { return }
+        guard mr.matchesMediaSource(bundleIdentifier: currentApp) else { return }
 
         let trackChanged = mr.title != title || mr.artist != artist
 
@@ -248,13 +248,36 @@ final class MediaInfo: ObservableObject {
         album = mr.album
         isPlaying = mr.isPlaying
         duration = mr.duration
-        appName = mr.activeAppName ?? appName
+        appName = displayAppNameFromMediaRemote() ?? appName
 
         if trackChanged {
             artwork = mr.artwork
         } else if let incoming = mr.artwork, artwork == nil {
             artwork = incoming
         }
+    }
+
+    private func displayAppNameFromMediaRemote() -> String? {
+        let mr = MediaRemoteService.shared
+        let sourceName = mr.activeAppName
+        let dockName = appDisplayName(for: currentApp)
+
+        if let sourceName, let dockName,
+           sourceName.range(of: dockName, options: [.caseInsensitive, .diacriticInsensitive]) != nil
+        {
+            return dockName
+        }
+
+        return sourceName ?? dockName
+    }
+
+    private func appDisplayName(for bundleIdentifier: String) -> String? {
+        NSWorkspace.shared.urlForApplication(withBundleIdentifier: bundleIdentifier)
+            .flatMap { Bundle(url: $0) }
+            .flatMap {
+                $0.object(forInfoDictionaryKey: "CFBundleDisplayName") as? String ??
+                    $0.object(forInfoDictionaryKey: "CFBundleName") as? String
+            }
     }
 
     func viewDisappeared() {

@@ -18,7 +18,7 @@ let calendarAppIdentifier = "com.apple.iCal"
     guard let bundleId = bundleIdentifier else { return false }
     switch Defaults[.mediaDetectionMode] {
     case .universal:
-        return bundleId == MediaRemoteService.shared.activeBundleIdentifier
+        return MediaRemoteService.shared.matchesMediaSource(bundleIdentifier: bundleId)
     case .appleScriptOnly:
         return bundleId == spotifyAppIdentifier || bundleId == appleMusicAppIdentifier
     }
