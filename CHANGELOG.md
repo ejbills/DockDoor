@@ -38,6 +38,19 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://dockdoor.net/donate</div>
 
+<a id="1.39.3"></a>
+# [Release 1.39.3](https://github.com/ejbills/DockDoor/releases/tag/1.39.3) - 2026-06-02
+
+## 🐛 Bug Fixes
+- Fixed universal media source matching
+  - More reliable detection in universal mode
+  - Fix high CPU for nintendo music center
+- Dock lock unlock shortcut now reliable
+
+
+[Changes][1.39.3]
+
+
 <a id="1.39.2"></a>
 # [Release 1.39.2](https://github.com/ejbills/DockDoor/releases/tag/1.39.2) - 2026-05-31
 
@@ -2225,6 +2238,7 @@ v1.0
 [Changes][releases]
 
 
+[1.39.3]: https://github.com/ejbills/DockDoor/compare/1.39.2...1.39.3
 [1.39.2]: https://github.com/ejbills/DockDoor/compare/1.39.1...1.39.2
 [1.39.1]: https://github.com/ejbills/DockDoor/compare/1.39...1.39.1
 [1.39]: https://github.com/ejbills/DockDoor/compare/1.38.1...1.39
