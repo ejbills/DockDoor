@@ -750,6 +750,29 @@ extension WindowUtil {
             return []
         }
 
+        let contextName = switch context {
+        case .dockPreview: "dockPreview"
+        case .cmdTab: "cmdTab"
+        }
+
+        DebugLogger.log("WindowRefresh", details: "begin, context: \(contextName), app: \(app.localizedName ?? "Unknown"), PID: \(app.processIdentifier)")
+        do {
+            let windows = try await desktopSpaceWindowCacheManager.withCoordinatorNotificationsSuppressed(for: app.processIdentifier) {
+                try await getActiveWindowsUpdatingCache(
+                    of: app,
+                    context: context,
+                    ignoreSingleWindowFilter: ignoreSingleWindowFilter
+                )
+            }
+            DebugLogger.log("WindowRefresh", details: "end, context: \(contextName), app: \(app.localizedName ?? "Unknown"), PID: \(app.processIdentifier), windows: \(windows.count)")
+            return windows
+        } catch {
+            DebugLogger.log("WindowRefresh", details: "failed, context: \(contextName), app: \(app.localizedName ?? "Unknown"), PID: \(app.processIdentifier), error: \(error)")
+            throw error
+        }
+    }
+
+    private static func getActiveWindowsUpdatingCache(of app: NSRunningApplication, context: WindowFetchContext, ignoreSingleWindowFilter: Bool) async throws -> [WindowInfo] {
         var sckWindowIDs = Set<CGWindowID>()
 
         // Skip SCK if user has disabled image previews (compact mode only) or screen recording permission not granted

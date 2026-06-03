@@ -5,7 +5,15 @@ import SwiftUI
 
 class SpaceWindowCacheManager {
     private var windowCache: [pid_t: Set<WindowInfo>] = [:]
+    private var coordinatorNotificationSuppressionCounts: [pid_t: Int] = [:]
     private let cacheLock = NSLock()
+
+    private func logSuppressedCoordinatorPublish(pid: pid_t, reason: String, oldCount: Int, newCount: Int, depth: Int) {
+        DebugLogger.log(
+            "WindowCachePublish",
+            details: "suppressed \(reason), PID: \(pid), old: \(oldCount), new: \(newCount), depth: \(depth)"
+        )
+    }
 
     private func notifyCoordinatorOfRemovedWindows(_ removedWindows: Set<WindowInfo>) {
         if !removedWindows.isEmpty {
@@ -52,11 +60,51 @@ class SpaceWindowCacheManager {
         return windowCache[pid] ?? []
     }
 
+    func withCoordinatorNotificationsSuppressed<T>(
+        for pid: pid_t,
+        operation: () async throws -> T
+    ) async throws -> T {
+        cacheLock.lock()
+        let depth = coordinatorNotificationSuppressionCounts[pid, default: 0] + 1
+        coordinatorNotificationSuppressionCounts[pid] = depth
+        cacheLock.unlock()
+        DebugLogger.log("WindowCachePublish", details: "suppress begin, PID: \(pid), depth: \(depth)")
+
+        defer {
+            var remainingCount = 0
+            cacheLock.lock()
+            remainingCount = (coordinatorNotificationSuppressionCounts[pid] ?? 1) - 1
+            if remainingCount > 0 {
+                coordinatorNotificationSuppressionCounts[pid] = remainingCount
+            } else {
+                coordinatorNotificationSuppressionCounts.removeValue(forKey: pid)
+            }
+            cacheLock.unlock()
+            DebugLogger.log("WindowCachePublish", details: "suppress end, PID: \(pid), depth: \(remainingCount)")
+        }
+
+        return try await operation()
+    }
+
     func writeCache(pid: pid_t, windowSet: Set<WindowInfo>) {
         cacheLock.lock()
         defer { cacheLock.unlock() }
         let oldWindowSet = windowCache[pid] ?? []
         windowCache[pid] = windowSet
+
+        let suppressionDepth = coordinatorNotificationSuppressionCounts[pid] ?? 0
+        guard suppressionDepth == 0 else {
+            if oldWindowSet != windowSet {
+                logSuppressedCoordinatorPublish(
+                    pid: pid,
+                    reason: "write",
+                    oldCount: oldWindowSet.count,
+                    newCount: windowSet.count,
+                    depth: suppressionDepth
+                )
+            }
+            return
+        }
 
         let oldWindowIDs = Set(oldWindowSet.map(\.id))
         let newWindowIDs = Set(windowSet.map(\.id))
@@ -91,6 +139,20 @@ class SpaceWindowCacheManager {
         let oldWindowSet = currentWindowSet
         update(&currentWindowSet)
         windowCache[pid] = currentWindowSet
+
+        let suppressionDepth = coordinatorNotificationSuppressionCounts[pid] ?? 0
+        guard suppressionDepth == 0 else {
+            if oldWindowSet != currentWindowSet {
+                logSuppressedCoordinatorPublish(
+                    pid: pid,
+                    reason: "update",
+                    oldCount: oldWindowSet.count,
+                    newCount: currentWindowSet.count,
+                    depth: suppressionDepth
+                )
+            }
+            return
+        }
 
         let oldWindowIDs = Set(oldWindowSet.map(\.id))
         let newWindowIDs = Set(currentWindowSet.map(\.id))
@@ -129,6 +191,17 @@ class SpaceWindowCacheManager {
                 windowCache.removeValue(forKey: pid)
             } else {
                 windowCache[pid] = windowSet
+            }
+            let suppressionDepth = coordinatorNotificationSuppressionCounts[pid] ?? 0
+            guard suppressionDepth == 0 else {
+                logSuppressedCoordinatorPublish(
+                    pid: pid,
+                    reason: "remove",
+                    oldCount: windowSet.count + 1,
+                    newCount: windowSet.count,
+                    depth: suppressionDepth
+                )
+                return
             }
             notifyCoordinatorOfRemovedWindows([windowToRemove])
         }

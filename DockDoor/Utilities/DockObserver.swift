@@ -442,12 +442,13 @@ final class DockObserver {
                         }
                     }
 
-                    previewCoordinator.mergeWindowsIfNeeded(
+                    let didMerge = previewCoordinator.mergeWindowsIfNeeded(
                         currentAppPID,
                         windows: freshWindows,
                         dockPosition: dockPosition,
                         bestGuessMonitor: monitor
                     )
+                    DebugLogger.log("WindowRefresh", details: "dock hover final merge, PID: \(currentAppPID), windows: \(freshWindows.count), merged: \(didMerge)")
                 }
             } catch {
                 DebugLogger.log("DockObserver", details: "Failed to fetch windows for dock hover: \(error)")

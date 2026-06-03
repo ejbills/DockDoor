@@ -207,12 +207,13 @@ extension DockObserver {
                         guard let self else { return }
                         guard let screen = screenOrigin.screen() else { return }
 
-                        previewCoordinator.mergeWindowsIfNeeded(
+                        let didMerge = previewCoordinator.mergeWindowsIfNeeded(
                             appPID,
                             windows: freshWindows,
                             dockPosition: .cmdTab,
                             bestGuessMonitor: screen
                         )
+                        DebugLogger.log("WindowRefresh", details: "Cmd+Tab final merge, PID: \(appPID), windows: \(freshWindows.count), merged: \(didMerge)")
                     }
                 } catch {
                     DebugLogger.log("DockObserver+CmdTab", details: "Failed to fetch windows for Cmd+Tab: \(error)")
