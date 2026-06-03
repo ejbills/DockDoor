@@ -187,7 +187,6 @@ enum WindowCandidateDiscriminator {
         let specialApp = books(app) ||
             keynote(app) ||
             preview(app, attributes.subrole) ||
-            iina(app) ||
             openFLStudio(app, attributes.title) ||
             (level.map { crossoverWindow(app, attributes.role, attributes.subrole, $0) } ?? false) ||
             (level.map { alwaysOnTopScrcpy(app, $0, attributes.role, attributes.subrole) } ?? false)
@@ -243,10 +242,6 @@ enum WindowCandidateDiscriminator {
 
     private static func mustHaveIfColorSlurp(_ app: NSRunningApplication, _ subrole: String?) -> Bool {
         app.bundleIdentifier != "com.IdeaPunch.ColorSlurp" || subrole == kAXStandardWindowSubrole
-    }
-
-    private static func iina(_ app: NSRunningApplication) -> Bool {
-        app.bundleIdentifier == "com.colliderli.iina"
     }
 
     private static func keynote(_ app: NSRunningApplication) -> Bool {

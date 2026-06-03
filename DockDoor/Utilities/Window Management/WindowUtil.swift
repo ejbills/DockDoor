@@ -1244,10 +1244,33 @@ extension WindowUtil {
             }
 
             var purifiedSet = existingWindowsSet
+            let cgCandidates = getCGWindowCandidates(for: pid)
+            let activeSpaceIDs = currentActiveSpaceIDs()
             for window in existingWindowsSet {
-                if !isValidElement(window.axElement) ||
+                var shouldRemove = !isValidElement(window.axElement) ||
                     !WindowOwnerResolver.ownerBelongsToDisplayApp(window.ownerApp, displayApp: window.app)
-                {
+
+                if !shouldRemove {
+                    if let cgEntry = findCGEntry(for: window.id, in: cgCandidates) {
+                        let hasValidCGWindow = isValidCGWindowCandidate(window.id, in: cgCandidates)
+                        if !hasValidCGWindow, !window.isMinimized, !window.isHidden {
+                            shouldRemove = true
+                        } else if hasValidCGWindow {
+                            shouldRemove = !shouldAcceptWindow(
+                                axWindow: window.axElement,
+                                windowID: window.id,
+                                cgEntry: cgEntry,
+                                app: window.app,
+                                activeSpaceIDs: activeSpaceIDs,
+                                scBacked: window.scWindow != nil
+                            )
+                        }
+                    } else if !window.isMinimized, !window.isHidden {
+                        shouldRemove = true
+                    }
+                }
+
+                if shouldRemove {
                     purifiedSet.remove(window)
                     desktopSpaceWindowCacheManager.removeFromCache(pid: pid, windowId: window.id)
                 }
