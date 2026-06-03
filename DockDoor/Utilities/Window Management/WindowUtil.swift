@@ -319,9 +319,9 @@ extension WindowUtil {
     /// Reads cached windows for an app without triggering any SCK/AX fetches.
     /// Returns immediately with whatever is in cache, sorted by the given context.
     static func readCachedWindows(for pid: pid_t, sortedBy context: WindowFetchContext = .dockPreview) -> [WindowInfo] {
-        let cached = desktopSpaceWindowCacheManager.readCache(pid: pid).filter {
+        let cached = deduplicatedByWindowID(desktopSpaceWindowCacheManager.readCache(pid: pid).filter {
             WindowOwnerResolver.ownerBelongsToDisplayApp($0.ownerApp, displayApp: $0.app)
-        }
+        })
         return sortWindows(cached, for: context)
     }
 
@@ -353,7 +353,14 @@ extension WindowUtil {
         }
 
         desktopSpaceWindowCacheManager.updateCache(pid: app.processIdentifier) { windowSet in
-            if let index = windowSet.firstIndex(where: { $0.axElement == element }) {
+            let windowID = try? element.cgWindowId()
+            if let index = windowSet.firstIndex(where: { cachedWindow in
+                if cachedWindow.axElement == element {
+                    return true
+                }
+                guard let windowID else { return false }
+                return cachedWindow.id == windowID
+            }) {
                 var updatedWindow = windowSet[index]
                 updatedWindow.lastAccessedTime = now
                 windowSet.remove(at: index)
@@ -368,7 +375,7 @@ extension WindowUtil {
     static func updateTimestampOptimistically(for windowInfo: WindowInfo) {
         let now = Date()
         desktopSpaceWindowCacheManager.updateCache(pid: windowInfo.app.processIdentifier) { windowSet in
-            if let index = windowSet.firstIndex(where: { $0.axElement == windowInfo.axElement }) {
+            if let index = windowSet.firstIndex(where: { $0.axElement == windowInfo.axElement || $0.id == windowInfo.id }) {
                 var updatedWindow = windowSet[index]
                 updatedWindow.lastAccessedTime = now
                 windowSet.remove(at: index)
@@ -386,7 +393,7 @@ extension WindowUtil {
 
     static func updateCachedWindowState(_ windowInfo: WindowInfo, isMinimized: Bool? = nil, isHidden: Bool? = nil, spaceID: Int?? = nil, screenIdentifier: String?? = nil) {
         desktopSpaceWindowCacheManager.updateCache(pid: windowInfo.app.processIdentifier) { windowSet in
-            if let existingIndex = windowSet.firstIndex(of: windowInfo) {
+            if let existingIndex = windowSet.firstIndex(where: { $0.id == windowInfo.id || $0.axElement == windowInfo.axElement }) {
                 var updatedWindow = windowSet[existingIndex]
                 if let isMinimized {
                     updatedWindow.isMinimized = isMinimized
@@ -1188,9 +1195,33 @@ extension WindowUtil {
 
     private static let minUsableImageDimension = 10
 
+    private static func preferredCachedWindow(_ first: WindowInfo, _ second: WindowInfo) -> WindowInfo {
+        if first.scWindow == nil, second.scWindow != nil { return second }
+        if first.scWindow != nil, second.scWindow == nil { return first }
+        if first.image == nil, second.image != nil { return second }
+        if first.image != nil, second.image == nil { return first }
+        return first.lastAccessedTime >= second.lastAccessedTime ? first : second
+    }
+
+    private static func deduplicatedByWindowID(_ windows: Set<WindowInfo>) -> Set<WindowInfo> {
+        var windowsByID: [CGWindowID: WindowInfo] = [:]
+        for window in windows {
+            if let existing = windowsByID[window.id] {
+                windowsByID[window.id] = preferredCachedWindow(existing, window)
+            } else {
+                windowsByID[window.id] = window
+            }
+        }
+        return Set(windowsByID.values)
+    }
+
     static func updateDesktopSpaceWindowCache(with windowInfo: WindowInfo) {
         desktopSpaceWindowCacheManager.updateCache(pid: windowInfo.app.processIdentifier) { windowSet in
-            if let matchingWindow = windowSet.first(where: { $0.axElement == windowInfo.axElement }) {
+            let matchingWindows = windowSet.filter { $0.id == windowInfo.id || $0.axElement == windowInfo.axElement }
+            if let matchingWindow = matchingWindows.reduce(nil as WindowInfo?) { best, window in
+                guard let best else { return window }
+                return preferredCachedWindow(best, window)
+            } {
                 var matchingWindowCopy = matchingWindow
                 matchingWindowCopy.windowName = windowInfo.windowName
                 if let newSpaceID = windowInfo.spaceID {
@@ -1215,7 +1246,9 @@ extension WindowUtil {
                     matchingWindowCopy.imageCapturedTime = windowInfo.imageCapturedTime
                 }
 
-                windowSet.remove(matchingWindow)
+                for duplicate in matchingWindows {
+                    windowSet.remove(duplicate)
+                }
                 windowSet.insert(matchingWindowCopy)
             } else {
                 windowSet.insert(windowInfo)
@@ -1275,7 +1308,12 @@ extension WindowUtil {
                     desktopSpaceWindowCacheManager.removeFromCache(pid: pid, windowId: window.id)
                 }
             }
-            return purifiedSet
+
+            let deduplicatedSet = deduplicatedByWindowID(purifiedSet)
+            if deduplicatedSet.count != purifiedSet.count {
+                desktopSpaceWindowCacheManager.writeCache(pid: pid, windowSet: deduplicatedSet)
+            }
+            return deduplicatedSet
         }
     }
 
