@@ -233,9 +233,11 @@ final class DockObserver {
             return
         }
 
-        guard let children = try? dockAppElement.children(), let axList = children.first(where: { element in
-            try! element.role() == kAXListRole
-        }) else {
+        guard let children = try? dockAppElement.children(),
+              let axList = children.first(where: { element in
+                  (try? element.role()) == kAXListRole
+              })
+        else {
             return
         }
 
