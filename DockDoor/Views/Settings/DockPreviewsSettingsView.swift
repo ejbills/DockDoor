@@ -8,6 +8,7 @@ struct DockPreviewsSettingsView: View {
     @Default(.windowPreviewSortOrder) var windowPreviewSortOrder
     @Default(.keepPreviewOnAppTerminate) var keepPreviewOnAppTerminate
     @Default(.groupAppInstancesInDock) var groupAppInstancesInDock
+    @Default(.collapseNativeTabsIntoSingleWindow) var collapseNativeTabsIntoSingleWindow
     @Default(.includeHiddenWindowsInDockPreview) var includeHiddenWindowsInDockPreview
     @Default(.showWindowlessAppsInDockPreview) var showWindowlessAppsInDockPreview
     @Default(.previewHoverAction) var previewHoverAction
@@ -100,6 +101,13 @@ struct DockPreviewsSettingsView: View {
                 Toggle(isOn: $groupAppInstancesInDock) { Text("Group multiple app instances together") }
                     .settingsSearchTarget("dockPreviews.groupInstances")
                 Text("Show windows from all instances of an app when hovering its dock icon.")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .padding(.leading, 20)
+
+                Toggle(isOn: $collapseNativeTabsIntoSingleWindow) { Text("Collapse native tabs into a single window") }
+                    .settingsSearchTarget("dockPreviews.collapseNativeTabs")
+                Text("Show one preview for apps that use native macOS window tabs (e.g. Ghostty, Finder, Terminal) instead of one preview per tab. Restart the app for this to take effect.")
                     .font(.caption)
                     .foregroundColor(.secondary)
                     .padding(.leading, 20)
