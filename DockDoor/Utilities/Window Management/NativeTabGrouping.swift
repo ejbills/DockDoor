@@ -76,9 +76,8 @@ enum NativeTabGrouping {
     }
 
     private static func isBetterRepresentative(_ candidate: Candidate, than current: Candidate) -> Bool {
-        if candidate.recency != current.recency {
-            return candidate.recency > current.recency
-        }
-        return candidate.id > current.id
+        // Most recently accessed wins; the larger window ID breaks ties so the result is
+        // deterministic regardless of input ordering.
+        (candidate.recency, candidate.id) > (current.recency, current.id)
     }
 }

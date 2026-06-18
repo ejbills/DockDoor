@@ -832,7 +832,7 @@ extension WindowUtil {
             }
 
             guard ignoreSingleWindowFilter || !shouldIgnoreSingleWindowApp || finalWindows.count > 1 else { return [] }
-            return sortWindows(Set(collapseNativeTabsIfNeeded(Array(finalWindows))), for: context)
+            return sortWindows(collapseNativeTabsIfNeeded(Array(finalWindows)), for: context)
         }
 
         return []
@@ -1437,6 +1437,10 @@ extension WindowUtil {
 extension WindowUtil {
     /// Centralized sorting for dock preview and cmd+tab contexts (single app windows)
     static func sortWindows(_ windows: Set<WindowInfo>, for context: WindowFetchContext) -> [WindowInfo] {
+        sortWindows(Array(windows), for: context)
+    }
+
+    static func sortWindows(_ windows: [WindowInfo], for context: WindowFetchContext) -> [WindowInfo] {
         let sortOrder: WindowPreviewSortOrder = switch context {
         case .dockPreview:
             Defaults[.windowPreviewSortOrder]
@@ -1444,7 +1448,7 @@ extension WindowUtil {
             Defaults[.cmdTabSortOrder]
         }
 
-        return sortWindowsWithOptions(Array(windows), sortOrder: sortOrder)
+        return sortWindowsWithOptions(windows, sortOrder: sortOrder)
     }
 
     /// Centralized sorting for window switcher context (all apps windows)
