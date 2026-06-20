@@ -15,13 +15,17 @@ struct MediaScrollModifier: ViewModifier {
             .onAppear {
                 setupMonitor()
                 shortcutRegistration = MediaKeyboardShortcutCoordinator.shared.register(mediaInfo)
-                shortcutRegistration?.hostView = hitTestView
             }
+            // `hitTestView` is populated asynchronously by ScrollHitTestHelper, so it's nil at
+            // onAppear; onChange carries the resolved view into the registration. Resetting it on
+            // disappear guarantees this fires again on every reappearance, even if SwiftUI reuses
+            // the same NSView.
             .onChange(of: hitTestView) { newView in
                 shortcutRegistration?.hostView = newView
             }
             .onDisappear {
                 removeMonitor()
+                hitTestView = nil
                 if let shortcutRegistration {
                     MediaKeyboardShortcutCoordinator.shared.unregister(shortcutRegistration)
                     self.shortcutRegistration = nil
