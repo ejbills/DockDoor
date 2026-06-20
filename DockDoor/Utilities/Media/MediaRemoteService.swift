@@ -38,6 +38,8 @@ final class MediaRemoteService: ObservableObject {
     /// (or `seekDebounceInterval` lapses).
     private var playbackIntent: (isPlaying: Bool, date: Date)?
 
+    private var resyncWork: DispatchWorkItem?
+
     var interpolatedElapsedTime: TimeInterval {
         if let seek = seekBase, seek.rate == 0 || isWithinSeekWindow {
             return max(0, seek.position + Date().timeIntervalSince(seek.date) * seek.rate)
@@ -127,6 +129,21 @@ final class MediaRemoteService: ObservableObject {
         seekBase = (position: interpolatedElapsedTime, date: now, rate: rate)
         isPlaying = targetIsPlaying
         playbackRate = rate
+        resyncTrackInfo()
+    }
+
+    /// Pulls a fresh authoritative snapshot shortly after a command so the gate converges onto the
+    /// player's real position promptly, instead of waiting for it to emit a state-change event.
+    private func resyncTrackInfo() {
+        resyncWork?.cancel()
+        let work = DispatchWorkItem { [weak self] in
+            self?.controller.getTrackInfo { [weak self] info in
+                guard let info else { return }
+                self?.handleTrackInfo(info)
+            }
+        }
+        resyncWork = work
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: work)
     }
 
     func nextTrack() {
@@ -180,10 +197,17 @@ final class MediaRemoteService: ObservableObject {
         let sameSource = payload.bundleIdentifier == activeBundleIdentifier
         let sameTrack = sameSource && payload.title == title && payload.artist == artist
 
-        // Hold the pre-pause position while paused (the feed's paused elapsed is unreliable); clear
-        // the hold on resume so the live position flows again. Our own commands seed this above.
+        // Manage the local position base across transitions. While paused, hold the pre-pause
+        // position (the feed's paused elapsed is unreliable). On resume, converge the optimistic
+        // pin onto the feed's live position the moment the player genuinely reports playing, so the
+        // elapsed time doesn't jump when the pin's window lapses onto the feed; `lastSeekTime` is
+        // left untouched so the window still expires on schedule, now onto a matching line.
         if incomingIsPlaying {
-            if seekBase?.rate == 0 { seekBase = nil }
+            if let base = seekBase, base.rate != 0, payload.isPlaying == true, sameTrack {
+                seekBase = (position: incomingElapsed, date: Date(), rate: incomingRate)
+            } else if seekBase?.rate == 0 {
+                seekBase = nil
+            }
         } else if isPlaying, sameTrack {
             lastSeekTime = Date()
             seekBase = (position: priorElapsed, date: Date(), rate: 0)
