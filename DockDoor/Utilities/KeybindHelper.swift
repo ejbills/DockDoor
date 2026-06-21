@@ -18,12 +18,10 @@ struct UserKeyBind: Codable, Defaults.Serializable {
 private class WindowSwitchingCoordinator {
     private var isProcessingSwitcher = false
     private var uiRenderingTask: Task<Void, Never>?
+    private var windowRefreshTask: Task<Void, Never>?
     private var currentSessionId = UUID()
     /// When true, initialization should complete but immediately select the window instead of showing UI
     private var shouldSelectImmediately = false
-
-    private static var lastUpdateAllWindowsTime: Date?
-    private static let updateAllWindowsThrottleInterval: TimeInterval = 60.0
 
     @MainActor
     func handleWindowSwitching(
@@ -62,51 +60,28 @@ private class WindowSwitchingCoordinator {
     ) async {
         // Reset the immediate-select flag at start of initialization
         shouldSelectImmediately = false
-
-        var windows = WindowUtil.getAllWindowsOfAllApps()
-        let windowsForWindowlessDetection = windows
-
-        let filterBySpace = (mode == .currentSpaceOnly || mode == .activeAppCurrentSpace)
-            || (mode == .allWindows && Defaults[.showWindowsFromCurrentSpaceOnlyInSwitcher])
-        if filterBySpace {
-            windows = WindowUtil.filterWindowsByCurrentSpace(windows)
-        }
-
-        if mode == .allWindows, Defaults[.showWindowsFromCurrentMonitorOnlyInSwitcher] {
-            windows = WindowUtil.filterWindowsByCurrentMonitor(windows)
-        }
-
-        let filterByApp = (mode == .activeAppOnly || mode == .activeAppCurrentSpace)
-            || (mode == .allWindows && Defaults[.limitSwitcherToFrontmostApp])
-        if filterByApp {
-            windows = WindowUtil.getWindowsForFrontmostApp(from: windows)
-        }
-
-        if !Defaults[.includeHiddenWindowsInSwitcher] {
-            windows = windows.filter { !$0.isHidden && !$0.isMinimized }
-        }
-
-        windows = WindowUtil.sortWindowsForSwitcher(windows)
-
-        // Group windows for selected apps (only in multi-app modes)
-        let isActiveAppMode = (mode == .activeAppOnly || mode == .activeAppCurrentSpace)
-            || (mode == .allWindows && Defaults[.limitSwitcherToFrontmostApp])
-        if !isActiveAppMode {
-            windows = WindowUtil.groupWindowsByApp(windows)
-        }
-
-        if !isActiveAppMode, Defaults[.showWindowlessAppsInSwitcher] {
-            windows.append(contentsOf: WindowUtil.getWindowlessRunningApps(existingWindows: windowsForWindowlessDetection))
-        }
-
-        guard !windows.isEmpty else { return }
+        windowRefreshTask?.cancel()
 
         currentSessionId = UUID()
         let sessionId = currentSessionId
+        let targetScreen = getTargetScreenForSwitcher()
+        let currentMouseLocation = DockObserver.getMousePosition()
+        let dockPosition = DockUtils.getDockPosition()
+
+        var didRefreshBeforeInitialization = false
+        var windows = buildSwitcherWindows(mode: mode)
+        if windows.isEmpty {
+            // The switcher normally opens from cache. If the cache has nothing usable,
+            // do one discovery pass before giving up so late-observed GUI apps can appear.
+            await WindowUtil.updateAllWindowsInCurrentSpace()
+            guard sessionId == currentSessionId else { return }
+            didRefreshBeforeInitialization = true
+            windows = buildSwitcherWindows(mode: mode)
+        }
+        guard !windows.isEmpty else { return }
 
         let coordinator = previewCoordinator.windowSwitcherCoordinator
-        let targetScreen = getTargetScreenForSwitcher()
-        coordinator.initializeForWindowSwitcher(with: windows, dockPosition: DockUtils.getDockPosition(), bestGuessMonitor: targetScreen)
+        coordinator.initializeForWindowSwitcher(with: windows, dockPosition: dockPosition, bestGuessMonitor: targetScreen)
         coordinator.activateKeybindSession()
 
         // If modifier was released during initialization, immediately select and exit
@@ -124,19 +99,16 @@ private class WindowSwitchingCoordinator {
             return
         }
 
-        let currentMouseLocation = DockObserver.getMousePosition()
-
-        Task.detached(priority: .low) {
-            let now = Date()
-            let shouldUpdate: Bool = if let lastUpdate = WindowSwitchingCoordinator.lastUpdateAllWindowsTime {
-                now.timeIntervalSince(lastUpdate) >= WindowSwitchingCoordinator.updateAllWindowsThrottleInterval
-            } else {
-                true
-            }
-
-            guard shouldUpdate else { return }
-            WindowSwitchingCoordinator.lastUpdateAllWindowsTime = now
-            await WindowUtil.updateAllWindowsInCurrentSpace()
+        if !didRefreshBeforeInitialization {
+            // Non-empty snapshots render immediately; refresh in the background so the
+            // active session can correct stale or missing cache entries without delaying open.
+            scheduleWindowRefresh(
+                previewCoordinator: previewCoordinator,
+                mode: mode,
+                dockPosition: dockPosition,
+                targetScreen: targetScreen,
+                sessionId: sessionId
+            )
         }
 
         uiRenderingTask?.cancel()
@@ -146,22 +118,124 @@ private class WindowSwitchingCoordinator {
             }
             await renderWindowSwitcherUI(
                 previewCoordinator: previewCoordinator,
-                windows: windows,
                 currentMouseLocation: currentMouseLocation,
                 targetScreen: targetScreen,
-                initialIndex: coordinator.currIndex,
                 sessionId: sessionId
             )
         }
     }
 
     @MainActor
+    private func buildSwitcherWindows(mode: SwitcherInvocationMode) -> [WindowInfo] {
+        var windows = WindowUtil.getAllWindowsOfAllApps()
+        let windowsForWindowlessDetection = windows
+
+        let filterBySpace = (mode == .currentSpaceOnly || mode == .activeAppCurrentSpace)
+            || (mode == .allWindows && Defaults[.showWindowsFromCurrentSpaceOnlyInSwitcher])
+        if filterBySpace {
+            windows = WindowUtil.filterWindowsByCurrentSpace(windows)
+        }
+
+        if mode == .allWindows, Defaults[.showWindowsFromCurrentMonitorOnlyInSwitcher] {
+            windows = WindowUtil.filterWindowsByCurrentMonitor(windows)
+        }
+
+        let filterByApp = isActiveAppMode(mode)
+        if filterByApp {
+            windows = WindowUtil.getWindowsForFrontmostApp(from: windows)
+        }
+
+        if !Defaults[.includeHiddenWindowsInSwitcher] {
+            windows = windows.filter { !$0.isHidden && !$0.isMinimized }
+        }
+
+        windows = WindowUtil.sortWindowsForSwitcher(windows)
+
+        if !filterByApp {
+            windows = WindowUtil.groupWindowsByApp(windows)
+        }
+
+        if !filterByApp, Defaults[.showWindowlessAppsInSwitcher] {
+            windows.append(contentsOf: WindowUtil.getWindowlessRunningApps(existingWindows: windowsForWindowlessDetection))
+        }
+
+        return windows
+    }
+
+    private func isActiveAppMode(_ mode: SwitcherInvocationMode) -> Bool {
+        (mode == .activeAppOnly || mode == .activeAppCurrentSpace)
+            || (mode == .allWindows && Defaults[.limitSwitcherToFrontmostApp])
+    }
+
+    @MainActor
+    private func scheduleWindowRefresh(
+        previewCoordinator: SharedPreviewWindowCoordinator,
+        mode: SwitcherInvocationMode,
+        dockPosition: DockPosition,
+        targetScreen: NSScreen,
+        sessionId: UUID
+    ) {
+        windowRefreshTask?.cancel()
+        windowRefreshTask = Task.detached(priority: .low) { [weak self, weak previewCoordinator, mode, dockPosition, targetScreen, sessionId] in
+            await WindowUtil.updateAllWindowsInCurrentSpace()
+            guard !Task.isCancelled else { return }
+
+            await MainActor.run {
+                guard let self, let previewCoordinator else { return }
+                guard sessionId == self.currentSessionId else { return }
+
+                let coordinator = previewCoordinator.windowSwitcherCoordinator
+                guard coordinator.isKeybindSessionActive else { return }
+
+                let freshWindows = self.buildSwitcherWindows(mode: mode)
+                guard !freshWindows.isEmpty else { return }
+
+                self.applyRefreshedSwitcherWindows(
+                    freshWindows,
+                    coordinator: coordinator,
+                    dockPosition: dockPosition,
+                    bestGuessMonitor: targetScreen
+                )
+            }
+        }
+    }
+
+    @MainActor
+    private func applyRefreshedSwitcherWindows(
+        _ freshWindows: [WindowInfo],
+        coordinator: PreviewStateCoordinator,
+        dockPosition: DockPosition,
+        bestGuessMonitor: NSScreen
+    ) {
+        let selectedWindow = coordinator.getCurrentWindow()
+        let previousWindowCount = coordinator.windows.count
+
+        // Replace the global switcher list rather than using the single-app merge path.
+        // Windowless entries can share window ID 0, so preserving the full rebuilt list is safer.
+        coordinator.setWindows(freshWindows, dockPosition: dockPosition, bestGuessMonitor: bestGuessMonitor)
+
+        if let selectedWindow,
+           let newIndex = coordinator.windows.firstIndex(where: { isSameSwitcherWindow($0, selectedWindow) })
+        {
+            coordinator.setIndex(to: newIndex)
+        }
+
+        if coordinator.windows.count != previousWindowCount {
+            coordinator.onFrameRefreshNeeded?()
+        }
+    }
+
+    private func isSameSwitcherWindow(_ first: WindowInfo, _ second: WindowInfo) -> Bool {
+        // Window ID alone is not enough here because placeholder/windowless entries use 0.
+        first.id == second.id &&
+            first.app.processIdentifier == second.app.processIdentifier
+    }
+
+    @MainActor
     private func renderWindowSwitcherUI(
         previewCoordinator: SharedPreviewWindowCoordinator,
-        windows: [WindowInfo],
         currentMouseLocation: CGPoint,
         targetScreen: NSScreen,
-        initialIndex: Int,
         sessionId: UUID
     ) async {
         guard sessionId == currentSessionId else { return }
@@ -172,6 +246,8 @@ private class WindowSwitchingCoordinator {
             return
         }
         let showWindowLambda = { (mouseLocation: NSPoint?, mouseScreen: NSScreen?) in
+            let windows = coordinator.windows
+            guard !windows.isEmpty else { return }
             previewCoordinator.showWindow(
                 appName: "Window Switcher",
                 windows: windows,
@@ -226,6 +302,7 @@ private class WindowSwitchingCoordinator {
         currentSessionId = UUID()
         coordinator.deactivateKeybindSession()
         uiRenderingTask?.cancel()
+        windowRefreshTask?.cancel()
         return selectedWindow
     }
 
@@ -239,6 +316,7 @@ private class WindowSwitchingCoordinator {
         shouldSelectImmediately = false
         previewCoordinator.windowSwitcherCoordinator.deactivateKeybindSession()
         uiRenderingTask?.cancel()
+        windowRefreshTask?.cancel()
     }
 
     /// Signals that the modifier was released during initialization.
@@ -249,6 +327,7 @@ private class WindowSwitchingCoordinator {
         currentSessionId = UUID()
         shouldSelectImmediately = true
         uiRenderingTask?.cancel()
+        windowRefreshTask?.cancel()
     }
 }
 
