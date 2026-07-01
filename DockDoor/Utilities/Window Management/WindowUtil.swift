@@ -647,7 +647,7 @@ extension WindowUtil {
             filteredWindows = getWindowsForFrontmostApp(from: filteredWindows)
         }
 
-        return sortWindowsForSwitcher(filteredWindows)
+        return sortWindowsForSwitcher(collapseNativeTabsIfNeeded(filteredWindows))
     }
 
     static func getWindowsForFrontmostApp(from windows: [WindowInfo]) -> [WindowInfo] {
@@ -744,6 +744,31 @@ extension WindowUtil {
         return windows.filter { windowBelongsToScreen($0, screenIdentifier: id) }
     }
 
+    // Collapses native macOS window-tab groups (e.g. Ghostty, Finder, Terminal) so a tabbed
+    // window appears as a single entry instead of one per tab. Grouping is keyed by process and
+    // frame, so windows from different apps are never merged and passing a multi-app list is safe.
+    static func collapseNativeTabsIfNeeded(_ windows: [WindowInfo]) -> [WindowInfo] {
+        guard Defaults[.collapseNativeTabsIntoSingleWindow] else { return windows }
+
+        let candidates = windows.map { window in
+            NativeTabGrouping.Candidate(
+                id: window.id,
+                pid: window.app.processIdentifier,
+                frame: window.frame,
+                recency: window.lastAccessedTime,
+                groupable: !window.isMinimized
+                    && !window.isHidden
+                    && !window.isWindowlessApp
+                    && window.frame.width > 0
+                    && window.frame.height > 0
+            )
+        }
+
+        let keptIDs = NativeTabGrouping.representativeIDs(from: candidates)
+        guard keptIDs.count < windows.count else { return windows }
+        return windows.filter { keptIDs.contains($0.id) }
+    }
+
     static func getActiveWindows(of app: NSRunningApplication, context: WindowFetchContext = .dockPreview, ignoreSingleWindowFilter: Bool = false) async throws -> [WindowInfo] {
         if isAppFiltered(app) {
             purgeAppCache(with: app.processIdentifier)
@@ -807,7 +832,7 @@ extension WindowUtil {
             }
 
             guard ignoreSingleWindowFilter || !shouldIgnoreSingleWindowApp || finalWindows.count > 1 else { return [] }
-            return sortWindows(finalWindows, for: context)
+            return sortWindows(collapseNativeTabsIfNeeded(Array(finalWindows)), for: context)
         }
 
         return []
@@ -1412,6 +1437,10 @@ extension WindowUtil {
 extension WindowUtil {
     /// Centralized sorting for dock preview and cmd+tab contexts (single app windows)
     static func sortWindows(_ windows: Set<WindowInfo>, for context: WindowFetchContext) -> [WindowInfo] {
+        sortWindows(Array(windows), for: context)
+    }
+
+    static func sortWindows(_ windows: [WindowInfo], for context: WindowFetchContext) -> [WindowInfo] {
         let sortOrder: WindowPreviewSortOrder = switch context {
         case .dockPreview:
             Defaults[.windowPreviewSortOrder]
@@ -1419,7 +1448,7 @@ extension WindowUtil {
             Defaults[.cmdTabSortOrder]
         }
 
-        return sortWindowsWithOptions(Array(windows), sortOrder: sortOrder)
+        return sortWindowsWithOptions(windows, sortOrder: sortOrder)
     }
 
     /// Centralized sorting for window switcher context (all apps windows)

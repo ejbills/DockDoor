@@ -60,6 +60,7 @@
 		AA11001122334455AA110022 /* DockLocker.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11001122334455AA110011 /* DockLocker.swift */; };
 		AA11001122334455AA110044 /* DockLockingSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11001122334455AA110033 /* DockLockingSettingsView.swift */; };
 		AA11001122334455AA110066 /* DockLockerGeometryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11001122334455AA110055 /* DockLockerGeometryTests.swift */; };
+		555110B7F7B99C7BD510DBC7 /* NativeTabGroupingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00D4B366E3CF5338182E065 /* NativeTabGroupingTests.swift */; };
 		B376D66B467C4587915220BC80D3B9CB /* ScriptCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = F098F8107F464776B5C18294427CAECD /* ScriptCommands.swift */; };
 		B3C9F20484F14266B941AFB170B66530 /* MediaRemoteService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC298B81953848F481EE849906E0AE77 /* MediaRemoteService.swift */; };
 		B84941090B484695B105D967 /* SettingsGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4258675B29E4A22ACF92845 /* SettingsGroup.swift */; };
@@ -168,6 +169,7 @@
 		BBA153FC2C12356100119C02 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA153FB2C12356100119C02 /* main.swift */; };
 		BBAC6B452D15FA8900A0F370 /* AXValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBAC6B442D15FA8800A0F370 /* AXValue.swift */; };
 		BBB023AD2EDCCB9100317CF4 /* WindowInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBB023AC2EDCCB9100317CF4 /* WindowInfo.swift */; };
+		F1F4D845DBF89A1AA7266945 /* NativeTabGrouping.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3DF9E4E1388ECA326113A84 /* NativeTabGrouping.swift */; };
 		BBB6C5302DF3C884009E93C4 /* MediaInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBB6C52F2DF3C884009E93C4 /* MediaInfo.swift */; };
 		BBB6C5322DF3C8A4009E93C4 /* MediaControlsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBB6C5312DF3C8A4009E93C4 /* MediaControlsView.swift */; };
 		BBB6C5342DF3C8B4009E93C4 /* BaseHoverContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBB6C5332DF3C8B4009E93C4 /* BaseHoverContainer.swift */; };
@@ -283,6 +285,7 @@
 		AA11001122334455AA110011 /* DockLocker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockLocker.swift; sourceTree = "<group>"; };
 		AA11001122334455AA110033 /* DockLockingSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockLockingSettingsView.swift; sourceTree = "<group>"; };
 		AA11001122334455AA110055 /* DockLockerGeometryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockLockerGeometryTests.swift; sourceTree = "<group>"; };
+		D00D4B366E3CF5338182E065 /* NativeTabGroupingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeTabGroupingTests.swift; sourceTree = "<group>"; };
 		AA11001122334455AA110100 /* DockDoorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DockDoorTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		AC298B81953848F481EE849906E0AE77 /* MediaRemoteService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaRemoteService.swift; sourceTree = "<group>"; };
 		B056906A7ACD4903BD5E1627B359AE2C /* AdvancedSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedSettingsView.swift; sourceTree = "<group>"; };
@@ -393,6 +396,7 @@
 		BBA153FB2C12356100119C02 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		BBAC6B442D15FA8800A0F370 /* AXValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AXValue.swift; sourceTree = "<group>"; };
 		BBB023AC2EDCCB9100317CF4 /* WindowInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowInfo.swift; sourceTree = "<group>"; };
+		A3DF9E4E1388ECA326113A84 /* NativeTabGrouping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeTabGrouping.swift; sourceTree = "<group>"; };
 		BBB6C52F2DF3C884009E93C4 /* MediaInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaInfo.swift; sourceTree = "<group>"; };
 		BBB6C5312DF3C8A4009E93C4 /* MediaControlsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaControlsView.swift; sourceTree = "<group>"; };
 		BBB6C5332DF3C8B4009E93C4 /* BaseHoverContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseHoverContainer.swift; sourceTree = "<group>"; };
@@ -584,6 +588,7 @@
 			isa = PBXGroup;
 			children = (
 				AA11001122334455AA110055 /* DockLockerGeometryTests.swift */,
+				D00D4B366E3CF5338182E065 /* NativeTabGroupingTests.swift */,
 			);
 			path = DockDoorTests;
 			sourceTree = "<group>";
@@ -896,6 +901,7 @@
 				BB49747C2E81CE5100308326 /* WindowSeeder.swift */,
 				BB49747D2F01AB0100308326 /* WindowOrderPersistence.swift */,
 				BBB023AC2EDCCB9100317CF4 /* WindowInfo.swift */,
+				A3DF9E4E1388ECA326113A84 /* NativeTabGrouping.swift */,
 				3A1622972C8BF71000D318EE /* SwiftUIWindow.swift */,
 				BB2CBB082C48128D004502C5 /* SpaceWindowCacheManager.swift */,
 				BB7CA33C2C31F1B00012E303 /* WindowManipulationObservers.swift */,
@@ -1092,6 +1098,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AA11001122334455AA110066 /* DockLockerGeometryTests.swift in Sources */,
+				555110B7F7B99C7BD510DBC7 /* NativeTabGroupingTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1163,6 +1170,7 @@
 				BBDF65732E7E212400DD6D6D /* DockObserver+CmdTab.swift in Sources */,
 				BB3968022C2A6CC2004F1AB6 /* Marquee.swift in Sources */,
 				BBB023AD2EDCCB9100317CF4 /* WindowInfo.swift in Sources */,
+				F1F4D845DBF89A1AA7266945 /* NativeTabGrouping.swift in Sources */,
 				BB709B3D2EF21E9E007809A2 /* VolumeScrollModifier.swift in Sources */,
 				BB0440602C77AD2C009F1D33 /* CodableColor.swift in Sources */,
 				BB52EDF02C5BEFE3006A64A4 /* HiddenModifier.swift in Sources */,

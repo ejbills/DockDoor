@@ -191,6 +191,15 @@ enum SettingsSearchCatalog {
             icon: "square.stack"
         ),
         SettingsSearchItem(
+            id: "dockPreviews.collapseNativeTabs",
+            title: String(localized: "Collapse native tabs into a single window"),
+            description: String(localized: "Show one preview for apps that use native macOS window tabs (e.g. Ghostty, Finder, Terminal) instead of one preview per tab."),
+            keywords: ["tab", "tabs", "native", "collapse", "ghostty", "finder", "terminal"],
+            tab: "DockPreviews",
+            section: String(localized: "Window Display"),
+            icon: "square.on.square"
+        ),
+        SettingsSearchItem(
             id: "dockPreviews.ignoreSingleWindow",
             title: String(localized: "Ignore apps with one window"),
             description: String(localized: "Prevents apps that only ever have a single window from appearing in previews."),
