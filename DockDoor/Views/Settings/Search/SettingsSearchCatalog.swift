@@ -70,7 +70,7 @@ enum SettingsSearchCatalog {
         SettingsSearchItem(
             id: "general.indicatorStyle",
             title: String(localized: "Indicator Style"),
-            keywords: ["indicator", "style", "badge", "window", "count", "number"],
+            keywords: ["indicator", "style", "dots", "window", "count", "number"],
             tab: "General",
             section: String(localized: "Active App Indicator"),
             icon: "number.circle"

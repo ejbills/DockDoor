@@ -119,7 +119,6 @@ enum ActiveAppIndicatorDockDetection {
         return (height, offset, length)
     }
 
-    /// Resolves thickness, offset, and length from settings, dock size, and indicator style.
     private static func resolveMetrics(
         dockSize: CGFloat,
         dockPosition: DockPosition
@@ -129,29 +128,72 @@ enum ActiveAppIndicatorDockDetection {
             dockPosition: dockPosition
         )
 
-        // Auto size controls height and offset
-        var thickness = Defaults[.activeAppIndicatorAutoSize]
+        let thickness = Defaults[.activeAppIndicatorAutoSize]
             ? autoSize.height : Defaults[.activeAppIndicatorHeight]
         let offset = Defaults[.activeAppIndicatorAutoSize]
             ? autoSize.offset : Defaults[.activeAppIndicatorOffset]
-        var length = Defaults[.activeAppIndicatorAutoLength]
+        let length = Defaults[.activeAppIndicatorAutoLength]
             ? autoSize.length : Defaults[.activeAppIndicatorLength]
 
-        // Window count style uses a fixed badge sized to the dock, ignoring height/length settings
-        if Defaults[.activeAppIndicatorStyle] == .windowCount {
-            let badgeHeight: CGFloat = dockSize <= 50 ? 14.0 : 16.0
-            let badgeWidth = badgeHeight * 1.4
-            switch dockPosition {
-            case .bottom:
-                thickness = badgeHeight
-                length = badgeWidth
-            default:
-                thickness = badgeWidth
-                length = badgeHeight
-            }
+        return (thickness, offset, length)
+    }
+
+    static func dotMetrics(
+        dockSize: CGFloat,
+        dockPosition: DockPosition
+    ) -> (dotSize: CGFloat, offset: CGFloat) {
+        let autoSize = calculateAutoSize(
+            dockSize: dockSize,
+            dockPosition: dockPosition
+        )
+        let offset = Defaults[.activeAppIndicatorAutoSize]
+            ? autoSize.offset : Defaults[.activeAppIndicatorOffset]
+        let dotSize: CGFloat = dockSize <= 50 ? 5.0 : 6.0
+        return (dotSize, offset)
+    }
+
+    static func getRunningAppDockItems() -> [(app: NSRunningApplication, frame: CGRect)] {
+        guard
+            let dockApp = NSRunningApplication.runningApplications(
+                withBundleIdentifier: "com.apple.dock"
+            ).first
+        else {
+            return []
         }
 
-        return (thickness, offset, length)
+        let dockElement = AXUIElementCreateApplication(dockApp.processIdentifier)
+
+        guard let children = try? dockElement.children(),
+              let axList = children.first(where: { (try? $0.role()) == kAXListRole }),
+              let dockItems = try? axList.children()
+        else {
+            return []
+        }
+
+        let runningApps = NSWorkspace.shared.runningApplications
+        var results: [(app: NSRunningApplication, frame: CGRect)] = []
+
+        for item in dockItems {
+            guard let subrole = try? item.subrole(),
+                  subrole == "AXApplicationDockItem",
+                  (try? item.appIsRunning()) == true
+            else { continue }
+
+            var matched: NSRunningApplication?
+            if let itemURL = try? item.attribute(kAXURLAttribute, NSURL.self)?.absoluteURL,
+               let bundleIdentifier = Bundle(url: itemURL)?.bundleIdentifier
+            {
+                matched = runningApps.first { $0.bundleIdentifier == bundleIdentifier }
+            }
+            if matched == nil, let itemTitle = try? item.title() {
+                matched = runningApps.first { $0.localizedName == itemTitle }
+            }
+
+            guard let matched, let frame = getFrameForDockItem(item) else { continue }
+            results.append((matched, appKitFrame(fromAccessibilityFrame: frame)))
+        }
+
+        return results
     }
 
     /// Positions the indicator window relative to the dock item.

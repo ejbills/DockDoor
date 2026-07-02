@@ -59,9 +59,9 @@ struct ActiveAppIndicatorSettingsView: View {
                     .settingsSearchTarget("general.indicatorStyle")
                     .padding(.leading, 20)
 
-                    if activeAppIndicatorStyle == .windowCount {
+                    if activeAppIndicatorStyle == .runningAppDots {
                         Text(
-                            "Shows the number of open windows for the active application as a badge."
+                            "Shows a dot under every running application: bright for the frontmost app, dimmed for apps with open windows, black for apps with none."
                         )
                         .font(.caption)
                         .foregroundColor(.secondary)

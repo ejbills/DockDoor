@@ -327,18 +327,16 @@ extension Defaults.Keys {
     static let alternateKeybindMode = Key<SwitcherInvocationMode>("alternateKeybindMode", default: .activeAppOnly)
 }
 
-// MARK: Active App Indicator
-
 enum ActiveAppIndicatorStyle: String, CaseIterable, Defaults.Serializable {
     case bar
-    case windowCount
+    case runningAppDots
 
     var localizedName: String {
         switch self {
         case .bar:
-            String(localized: "Line", comment: "Active app indicator style option")
-        case .windowCount:
-            String(localized: "Window count", comment: "Active app indicator style option")
+            String(localized: "Line (active app)", comment: "Active app indicator style option")
+        case .runningAppDots:
+            String(localized: "Dots (running apps)", comment: "Active app indicator style option")
         }
     }
 }
