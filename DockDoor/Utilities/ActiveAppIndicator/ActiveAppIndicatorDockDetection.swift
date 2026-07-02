@@ -119,6 +119,41 @@ enum ActiveAppIndicatorDockDetection {
         return (height, offset, length)
     }
 
+    /// Resolves thickness, offset, and length from settings, dock size, and indicator style.
+    private static func resolveMetrics(
+        dockSize: CGFloat,
+        dockPosition: DockPosition
+    ) -> (thickness: CGFloat, offset: CGFloat, length: CGFloat) {
+        let autoSize = calculateAutoSize(
+            dockSize: dockSize,
+            dockPosition: dockPosition
+        )
+
+        // Auto size controls height and offset
+        var thickness = Defaults[.activeAppIndicatorAutoSize]
+            ? autoSize.height : Defaults[.activeAppIndicatorHeight]
+        let offset = Defaults[.activeAppIndicatorAutoSize]
+            ? autoSize.offset : Defaults[.activeAppIndicatorOffset]
+        var length = Defaults[.activeAppIndicatorAutoLength]
+            ? autoSize.length : Defaults[.activeAppIndicatorLength]
+
+        // Window count style uses a fixed badge sized to the dock, ignoring height/length settings
+        if Defaults[.activeAppIndicatorStyle] == .windowCount {
+            let badgeHeight: CGFloat = dockSize <= 50 ? 14.0 : 16.0
+            let badgeWidth = badgeHeight * 1.4
+            switch dockPosition {
+            case .bottom:
+                thickness = badgeHeight
+                length = badgeWidth
+            default:
+                thickness = badgeWidth
+                length = badgeHeight
+            }
+        }
+
+        return (thickness, offset, length)
+    }
+
     /// Positions the indicator window relative to the dock item.
     /// - Parameters:
     ///   - indicatorWindow: The window to position.
@@ -129,36 +164,16 @@ enum ActiveAppIndicatorDockDetection {
         relativeTo dockItemFrame: CGRect,
         dockPosition: DockPosition
     ) {
-        let indicatorThickness: CGFloat
-        let indicatorOffset: CGFloat
-        let indicatorLength: CGFloat
-
         let appKitDockItemFrame = appKitFrame(fromAccessibilityFrame: dockItemFrame)
         guard let screen = CGPoint(
             x: appKitDockItemFrame.midX,
             y: appKitDockItemFrame.midY
         ).screen() else { return }
 
-        let dockSize = DockUtils.getDockSize(on: screen)
-        let autoSize = calculateAutoSize(
-            dockSize: dockSize,
+        let metrics = resolveMetrics(
+            dockSize: DockUtils.getDockSize(on: screen),
             dockPosition: dockPosition
         )
-
-        // Auto size controls height and offset
-        if Defaults[.activeAppIndicatorAutoSize] {
-            indicatorThickness = autoSize.height
-            indicatorOffset = autoSize.offset
-        } else {
-            indicatorThickness = Defaults[.activeAppIndicatorHeight]
-            indicatorOffset = Defaults[.activeAppIndicatorOffset]
-        }
-
-        if Defaults[.activeAppIndicatorAutoLength] {
-            indicatorLength = autoSize.length
-        } else {
-            indicatorLength = Defaults[.activeAppIndicatorLength]
-        }
 
         // Calculate the indicator frame using the positioning module
         guard
@@ -166,9 +181,9 @@ enum ActiveAppIndicatorDockDetection {
             ActiveAppIndicatorPositioning.calculateIndicatorFrame(
                 for: appKitDockItemFrame,
                 dockPosition: dockPosition,
-                indicatorThickness: indicatorThickness,
-                indicatorOffset: indicatorOffset,
-                indicatorLength: indicatorLength
+                indicatorThickness: metrics.thickness,
+                indicatorOffset: metrics.offset,
+                indicatorLength: metrics.length
             )
         else {
             indicatorWindow.orderOut(nil)
@@ -186,44 +201,25 @@ enum ActiveAppIndicatorDockDetection {
         relativeTo dockItemFrame: CGRect,
         dockPosition: DockPosition
     ) -> CGRect? {
-        let indicatorThickness: CGFloat
-        let indicatorOffset: CGFloat
-        let indicatorLength: CGFloat
-
         let appKitDockItemFrame = appKitFrame(fromAccessibilityFrame: dockItemFrame)
         guard let screen = CGPoint(
             x: appKitDockItemFrame.midX,
             y: appKitDockItemFrame.midY
         ).screen() else { return nil }
 
-        let dockSize = DockUtils.getDockSize(on: screen)
-        let autoSize = calculateAutoSize(
-            dockSize: dockSize,
+        let metrics = resolveMetrics(
+            dockSize: DockUtils.getDockSize(on: screen),
             dockPosition: dockPosition
         )
-
-        if Defaults[.activeAppIndicatorAutoSize] {
-            indicatorThickness = autoSize.height
-            indicatorOffset = autoSize.offset
-        } else {
-            indicatorThickness = Defaults[.activeAppIndicatorHeight]
-            indicatorOffset = Defaults[.activeAppIndicatorOffset]
-        }
-
-        if Defaults[.activeAppIndicatorAutoLength] {
-            indicatorLength = autoSize.length
-        } else {
-            indicatorLength = Defaults[.activeAppIndicatorLength]
-        }
 
         guard
             var indicatorFrame =
             ActiveAppIndicatorPositioning.calculateIndicatorFrame(
                 for: appKitDockItemFrame,
                 dockPosition: dockPosition,
-                indicatorThickness: indicatorThickness,
-                indicatorOffset: indicatorOffset,
-                indicatorLength: indicatorLength
+                indicatorThickness: metrics.thickness,
+                indicatorOffset: metrics.offset,
+                indicatorLength: metrics.length
             )
         else {
             return nil

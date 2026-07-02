@@ -67,7 +67,8 @@ final class ActiveAppIndicatorCoordinator {
             .activeAppIndicatorHeight,
             .activeAppIndicatorOffset,
             .activeAppIndicatorLength,
-            .activeAppIndicatorShift
+            .activeAppIndicatorShift,
+            .activeAppIndicatorStyle
         ) { [weak self] in
             DispatchQueue.main.async {
                 guard let self, let app = self.currentActiveApp else { return }
@@ -319,6 +320,8 @@ final class ActiveAppIndicatorCoordinator {
             return
         }
 
+        refreshWindowCount(for: app)
+
         if widenFromCenter {
             let collapsed = ActiveAppIndicatorDockDetection.collapsedFrame(
                 from: targetFrame,
@@ -344,6 +347,23 @@ final class ActiveAppIndicatorCoordinator {
                 indicatorWindow.animator().setFrame(targetFrame, display: true)
             }
             indicatorWindow.orderFront(self)
+        }
+    }
+
+    private func refreshWindowCount(for app: NSRunningApplication) {
+        guard Defaults[.activeAppIndicatorStyle] == .windowCount else { return }
+
+        let pid = app.processIdentifier
+        indicatorWindow?.updateWindowCount(WindowUtil.readCachedWindows(for: pid).count)
+
+        // Cache may be stale for apps that haven't been hovered yet - reconcile with a live AX count
+        Task.detached { [weak self] in
+            let axCount = AXUIElement.allWindows(pid, appElement: AXUIElementCreateApplication(pid), app: app).count
+            await MainActor.run {
+                guard let self, currentActiveApp?.processIdentifier == pid else { return }
+                let cachedCount = WindowUtil.readCachedWindows(for: pid).count
+                indicatorWindow?.updateWindowCount(max(axCount, cachedCount))
+            }
         }
     }
 
