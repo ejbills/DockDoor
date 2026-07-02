@@ -67,7 +67,8 @@ final class ActiveAppIndicatorCoordinator {
             .activeAppIndicatorHeight,
             .activeAppIndicatorOffset,
             .activeAppIndicatorLength,
-            .activeAppIndicatorShift
+            .activeAppIndicatorShift,
+            .activeAppIndicatorStyle
         ) { [weak self] in
             DispatchQueue.main.async {
                 guard let self, let app = self.currentActiveApp else { return }
@@ -209,6 +210,7 @@ final class ActiveAppIndicatorCoordinator {
     }
 
     private func hideIndicatorIfDockChangedScreens() {
+        guard Defaults[.activeAppIndicatorStyle] == .bar else { return }
         guard let indicatorWindow,
               indicatorWindow.isVisible,
               indicatorWindow.alphaValue > 0,
@@ -278,7 +280,11 @@ final class ActiveAppIndicatorCoordinator {
         currentActiveApp = app
 
         guard app.bundleIdentifier != "com.apple.dock" else {
-            animateHideIndicator()
+            if Defaults[.activeAppIndicatorStyle] == .runningAppDots {
+                updateRunningAppDots()
+            } else {
+                animateHideIndicator()
+            }
             return
         }
 
@@ -296,6 +302,11 @@ final class ActiveAppIndicatorCoordinator {
         }
 
         guard let indicatorWindow else {
+            return
+        }
+
+        if Defaults[.activeAppIndicatorStyle] == .runningAppDots {
+            updateRunningAppDots()
             return
         }
 
@@ -347,8 +358,113 @@ final class ActiveAppIndicatorCoordinator {
         }
     }
 
+    private func updateRunningAppDots() {
+        guard let indicatorWindow, isDockCurrentlyVisible else {
+            indicatorWindow?.orderOut(self)
+            return
+        }
+
+        let dockPosition = DockUtils.getDockPosition()
+        guard ActiveAppIndicatorPositioning.isSupported(dockPosition) else {
+            indicatorWindow.orderOut(self)
+            return
+        }
+
+        let items = ActiveAppIndicatorDockDetection.getRunningAppDockItems()
+        guard let firstItem = items.first,
+              let screen = CGPoint(
+                  x: firstItem.frame.midX,
+                  y: firstItem.frame.midY
+              ).screen()
+        else {
+            indicatorWindow.orderOut(self)
+            return
+        }
+
+        let metrics = ActiveAppIndicatorDockDetection.dotMetrics(
+            dockSize: DockUtils.getDockSize(on: screen),
+            dockPosition: dockPosition
+        )
+        let panelThickness = metrics.dotSize
+        let frontmostPID = NSWorkspace.shared.frontmostApplication?.processIdentifier
+        let windowedPIDs = Self.pidsWithVisibleWindows()
+
+        var panelFrame: CGRect
+        switch dockPosition {
+        case .bottom:
+            let minX = items.map(\.frame.minX).min()!
+            let maxX = items.map(\.frame.maxX).max()!
+            let y = firstItem.frame.minY - panelThickness - 2 + metrics.offset
+            panelFrame = CGRect(x: minX, y: y, width: maxX - minX, height: panelThickness)
+        case .left:
+            let minY = items.map(\.frame.minY).min()!
+            let maxY = items.map(\.frame.maxY).max()!
+            let x = firstItem.frame.minX - panelThickness - 2 - metrics.offset
+            panelFrame = CGRect(x: x, y: minY, width: panelThickness, height: maxY - minY)
+        case .right:
+            let minY = items.map(\.frame.minY).min()!
+            let maxY = items.map(\.frame.maxY).max()!
+            let x = firstItem.frame.maxX + 2 + metrics.offset
+            panelFrame = CGRect(x: x, y: minY, width: panelThickness, height: maxY - minY)
+        default:
+            indicatorWindow.orderOut(self)
+            return
+        }
+
+        let dots: [DockAppDot] = items.map { item in
+            let pid = item.app.processIdentifier
+            let hasWindows = windowedPIDs.contains(pid)
+                || !WindowUtil.readCachedWindows(for: pid).isEmpty
+            let center = switch dockPosition {
+            case .bottom:
+                CGPoint(x: item.frame.midX - panelFrame.minX, y: panelFrame.height / 2)
+            default:
+                CGPoint(x: panelFrame.width / 2, y: panelFrame.maxY - item.frame.midY)
+            }
+            return DockAppDot(
+                id: pid,
+                center: center,
+                size: metrics.dotSize,
+                hasWindows: hasWindows,
+                isFrontmost: pid == frontmostPID
+            )
+        }
+
+        panelFrame.origin.x += Defaults[.activeAppIndicatorShift]
+
+        indicatorWindow.updateDots(dots)
+        indicatorWindow.setFrame(panelFrame, display: true)
+        indicatorWindow.alphaValue = 1
+        indicatorWindow.orderFront(self)
+    }
+
+    private static func pidsWithVisibleWindows() -> Set<pid_t> {
+        guard let windowList = CGWindowListCopyWindowInfo(
+            [.excludeDesktopElements],
+            kCGNullWindowID
+        ) as? [[String: Any]] else {
+            return []
+        }
+
+        var pids = Set<pid_t>()
+        for entry in windowList {
+            guard let layer = entry[kCGWindowLayer as String] as? Int, layer == 0,
+                  let pid = entry[kCGWindowOwnerPID as String] as? pid_t,
+                  let bounds = entry[kCGWindowBounds as String] as? [String: CGFloat],
+                  bounds["Width", default: 0] >= 64, bounds["Height", default: 0] >= 64
+            else { continue }
+            pids.insert(pid)
+        }
+        return pids
+    }
+
     private func animateHideIndicator() {
         guard let indicatorWindow, indicatorWindow.isVisible else { return }
+
+        guard Defaults[.activeAppIndicatorStyle] == .bar else {
+            indicatorWindow.orderOut(nil)
+            return
+        }
 
         let dockPosition = DockUtils.getDockPosition()
         let collapsed = ActiveAppIndicatorDockDetection.collapsedFrame(
