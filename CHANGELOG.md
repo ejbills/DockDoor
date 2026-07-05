@@ -38,6 +38,37 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://dockdoor.net/donate</div>
 
+<a id="1.39.4"></a>
+# [Release 1.39.4](https://github.com/ejbills/DockDoor/releases/tag/1.39.4) - 2026-07-05
+
+## ✨ New Features
+- Collapse native tabs into one preview
+  - Tabbed apps like Safari, Finder, Terminal, and Ghostty can show a single preview per window instead of one per tab
+  - Turn on "Collapse native tabs into a single window" under Settings > Dock Previews > Window Display, then restart the app
+  - Off by default
+- New glass Variant control for the dock preview
+  - A Variant slider picks between different liquid glass looks for a richer, more reflective background
+  - Find it under Settings > Appearance > Background > Glass Tuning > Variant (macOS 26 and later)
+
+## 🔧 Improvements & Stability
+- Folder preview options moved into dock preview tab
+- Steadier previews with less flicker
+  - Dock and Cmd+Tab previews settle in one clean pass instead of visibly redrawing while they refresh
+- Updated interface translations across languages
+
+## 🐛 Bug Fixes
+- Apps no longer quit by mistake on view changes
+  - With quit-on-last-window-close on, apps like Microsoft Office and Chrome web apps are re-checked before quitting so they aren't closed mid-transition
+- Media widget play/pause responds reliably
+  - The button no longer flickers between states or makes elapsed time jump when you pause or resume
+- Closed or stale windows stop lingering in previews
+  - Each window is re-checked against the system before it's shown
+- Fewer crashes while DockDoor reads your dock items
+
+
+[Changes][1.39.4]
+
+
 <a id="1.39.3"></a>
 # [Release 1.39.3](https://github.com/ejbills/DockDoor/releases/tag/1.39.3) - 2026-06-02
 
@@ -2238,6 +2269,7 @@ v1.0
 [Changes][releases]
 
 
+[1.39.4]: https://github.com/ejbills/DockDoor/compare/1.39.3...1.39.4
 [1.39.3]: https://github.com/ejbills/DockDoor/compare/1.39.2...1.39.3
 [1.39.2]: https://github.com/ejbills/DockDoor/compare/1.39.1...1.39.2
 [1.39.1]: https://github.com/ejbills/DockDoor/compare/1.39...1.39.1
