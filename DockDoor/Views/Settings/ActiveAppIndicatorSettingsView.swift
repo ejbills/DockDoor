@@ -12,7 +12,6 @@ struct ActiveAppIndicatorSettingsView: View {
     @Default(.activeAppIndicatorOffset) var activeAppIndicatorOffset
     @Default(.activeAppIndicatorLength) var activeAppIndicatorLength
     @Default(.activeAppIndicatorShift) var activeAppIndicatorShift
-    @Default(.activeAppIndicatorStyle) var activeAppIndicatorStyle
 
     @State private var currentDockSize: CGFloat = 0
 
@@ -46,28 +45,6 @@ struct ActiveAppIndicatorSettingsView: View {
                     .settingsSearchTarget("general.indicatorColor")
                     .padding(.leading, 20)
 
-                    Picker(
-                        "Indicator Style",
-                        selection: $activeAppIndicatorStyle
-                    ) {
-                        ForEach(ActiveAppIndicatorStyle.allCases, id: \.self) { style in
-                            Text(style.localizedName).tag(style)
-                        }
-                    }
-                    .pickerStyle(.segmented)
-                    .fixedSize()
-                    .settingsSearchTarget("general.indicatorStyle")
-                    .padding(.leading, 20)
-
-                    if activeAppIndicatorStyle == .runningAppDots {
-                        Text(
-                            "Shows a dot under every running application: bright for the frontmost app, dimmed for apps with open windows, black for apps with none."
-                        )
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                        .padding(.leading, 20)
-                    }
-
                     HStack {
                         Text("Current Dock Size:")
                             .foregroundColor(.secondary)
@@ -91,23 +68,21 @@ struct ActiveAppIndicatorSettingsView: View {
                     .padding(.leading, 20)
 
                     if !activeAppIndicatorAutoSize {
-                        if activeAppIndicatorStyle == .bar {
-                            sliderSetting(
-                                title: "Indicator Height",
-                                value: $activeAppIndicatorHeight,
-                                range: 1.0 ... 15.0,
-                                step: 1,
-                                unit: "px",
-                                formatter: {
-                                    let f = NumberFormatter()
-                                    f.minimumFractionDigits = 0
-                                    f.maximumFractionDigits = 0
-                                    return f
-                                }()
-                            )
-                            .settingsSearchTarget("general.indicatorHeight")
-                            .padding(.leading, 40)
-                        }
+                        sliderSetting(
+                            title: "Indicator Height",
+                            value: $activeAppIndicatorHeight,
+                            range: 1.0 ... 15.0,
+                            step: 1,
+                            unit: "px",
+                            formatter: {
+                                let f = NumberFormatter()
+                                f.minimumFractionDigits = 0
+                                f.maximumFractionDigits = 0
+                                return f
+                            }()
+                        )
+                        .settingsSearchTarget("general.indicatorHeight")
+                        .padding(.leading, 40)
 
                         sliderSetting(
                             title: "Position Offset",
@@ -127,30 +102,28 @@ struct ActiveAppIndicatorSettingsView: View {
                         .padding(.leading, 40)
                     }
 
-                    if activeAppIndicatorStyle == .bar {
-                        Toggle(isOn: $activeAppIndicatorAutoLength) {
-                            Text("Automatically set length")
-                        }
-                        .settingsSearchTarget("general.indicatorAutoLength")
-                        .padding(.leading, 20)
+                    Toggle(isOn: $activeAppIndicatorAutoLength) {
+                        Text("Automatically set length")
+                    }
+                    .settingsSearchTarget("general.indicatorAutoLength")
+                    .padding(.leading, 20)
 
-                        if !activeAppIndicatorAutoLength {
-                            sliderSetting(
-                                title: "Indicator Length",
-                                value: $activeAppIndicatorLength,
-                                range: 1.0 ... 110.0,
-                                step: 1.0,
-                                unit: "px",
-                                formatter: {
-                                    let f = NumberFormatter()
-                                    f.minimumFractionDigits = 0
-                                    f.maximumFractionDigits = 0
-                                    return f
-                                }()
-                            )
-                            .settingsSearchTarget("general.indicatorLength")
-                            .padding(.leading, 40)
-                        }
+                    if !activeAppIndicatorAutoLength {
+                        sliderSetting(
+                            title: "Indicator Length",
+                            value: $activeAppIndicatorLength,
+                            range: 1.0 ... 110.0,
+                            step: 1.0,
+                            unit: "px",
+                            formatter: {
+                                let f = NumberFormatter()
+                                f.minimumFractionDigits = 0
+                                f.maximumFractionDigits = 0
+                                return f
+                            }()
+                        )
+                        .settingsSearchTarget("general.indicatorLength")
+                        .padding(.leading, 40)
                     }
 
                     sliderSetting(

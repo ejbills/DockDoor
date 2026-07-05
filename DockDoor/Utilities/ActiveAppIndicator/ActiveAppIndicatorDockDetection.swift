@@ -119,83 +119,6 @@ enum ActiveAppIndicatorDockDetection {
         return (height, offset, length)
     }
 
-    private static func resolveMetrics(
-        dockSize: CGFloat,
-        dockPosition: DockPosition
-    ) -> (thickness: CGFloat, offset: CGFloat, length: CGFloat) {
-        let autoSize = calculateAutoSize(
-            dockSize: dockSize,
-            dockPosition: dockPosition
-        )
-
-        let thickness = Defaults[.activeAppIndicatorAutoSize]
-            ? autoSize.height : Defaults[.activeAppIndicatorHeight]
-        let offset = Defaults[.activeAppIndicatorAutoSize]
-            ? autoSize.offset : Defaults[.activeAppIndicatorOffset]
-        let length = Defaults[.activeAppIndicatorAutoLength]
-            ? autoSize.length : Defaults[.activeAppIndicatorLength]
-
-        return (thickness, offset, length)
-    }
-
-    static func dotMetrics(
-        dockSize: CGFloat,
-        dockPosition: DockPosition
-    ) -> (dotSize: CGFloat, offset: CGFloat) {
-        let autoSize = calculateAutoSize(
-            dockSize: dockSize,
-            dockPosition: dockPosition
-        )
-        let offset = Defaults[.activeAppIndicatorAutoSize]
-            ? autoSize.offset : Defaults[.activeAppIndicatorOffset]
-        let dotSize: CGFloat = dockSize <= 50 ? 5.0 : 6.0
-        return (dotSize, offset)
-    }
-
-    static func getRunningAppDockItems() -> [(app: NSRunningApplication, frame: CGRect)] {
-        guard
-            let dockApp = NSRunningApplication.runningApplications(
-                withBundleIdentifier: "com.apple.dock"
-            ).first
-        else {
-            return []
-        }
-
-        let dockElement = AXUIElementCreateApplication(dockApp.processIdentifier)
-
-        guard let children = try? dockElement.children(),
-              let axList = children.first(where: { (try? $0.role()) == kAXListRole }),
-              let dockItems = try? axList.children()
-        else {
-            return []
-        }
-
-        let runningApps = NSWorkspace.shared.runningApplications
-        var results: [(app: NSRunningApplication, frame: CGRect)] = []
-
-        for item in dockItems {
-            guard let subrole = try? item.subrole(),
-                  subrole == "AXApplicationDockItem",
-                  (try? item.appIsRunning()) == true
-            else { continue }
-
-            var matched: NSRunningApplication?
-            if let itemURL = try? item.attribute(kAXURLAttribute, NSURL.self)?.absoluteURL,
-               let bundleIdentifier = Bundle(url: itemURL)?.bundleIdentifier
-            {
-                matched = runningApps.first { $0.bundleIdentifier == bundleIdentifier }
-            }
-            if matched == nil, let itemTitle = try? item.title() {
-                matched = runningApps.first { $0.localizedName == itemTitle }
-            }
-
-            guard let matched, let frame = getFrameForDockItem(item) else { continue }
-            results.append((matched, appKitFrame(fromAccessibilityFrame: frame)))
-        }
-
-        return results
-    }
-
     /// Positions the indicator window relative to the dock item.
     /// - Parameters:
     ///   - indicatorWindow: The window to position.
@@ -206,16 +129,36 @@ enum ActiveAppIndicatorDockDetection {
         relativeTo dockItemFrame: CGRect,
         dockPosition: DockPosition
     ) {
+        let indicatorThickness: CGFloat
+        let indicatorOffset: CGFloat
+        let indicatorLength: CGFloat
+
         let appKitDockItemFrame = appKitFrame(fromAccessibilityFrame: dockItemFrame)
         guard let screen = CGPoint(
             x: appKitDockItemFrame.midX,
             y: appKitDockItemFrame.midY
         ).screen() else { return }
 
-        let metrics = resolveMetrics(
-            dockSize: DockUtils.getDockSize(on: screen),
+        let dockSize = DockUtils.getDockSize(on: screen)
+        let autoSize = calculateAutoSize(
+            dockSize: dockSize,
             dockPosition: dockPosition
         )
+
+        // Auto size controls height and offset
+        if Defaults[.activeAppIndicatorAutoSize] {
+            indicatorThickness = autoSize.height
+            indicatorOffset = autoSize.offset
+        } else {
+            indicatorThickness = Defaults[.activeAppIndicatorHeight]
+            indicatorOffset = Defaults[.activeAppIndicatorOffset]
+        }
+
+        if Defaults[.activeAppIndicatorAutoLength] {
+            indicatorLength = autoSize.length
+        } else {
+            indicatorLength = Defaults[.activeAppIndicatorLength]
+        }
 
         // Calculate the indicator frame using the positioning module
         guard
@@ -223,9 +166,9 @@ enum ActiveAppIndicatorDockDetection {
             ActiveAppIndicatorPositioning.calculateIndicatorFrame(
                 for: appKitDockItemFrame,
                 dockPosition: dockPosition,
-                indicatorThickness: metrics.thickness,
-                indicatorOffset: metrics.offset,
-                indicatorLength: metrics.length
+                indicatorThickness: indicatorThickness,
+                indicatorOffset: indicatorOffset,
+                indicatorLength: indicatorLength
             )
         else {
             indicatorWindow.orderOut(nil)
@@ -243,25 +186,44 @@ enum ActiveAppIndicatorDockDetection {
         relativeTo dockItemFrame: CGRect,
         dockPosition: DockPosition
     ) -> CGRect? {
+        let indicatorThickness: CGFloat
+        let indicatorOffset: CGFloat
+        let indicatorLength: CGFloat
+
         let appKitDockItemFrame = appKitFrame(fromAccessibilityFrame: dockItemFrame)
         guard let screen = CGPoint(
             x: appKitDockItemFrame.midX,
             y: appKitDockItemFrame.midY
         ).screen() else { return nil }
 
-        let metrics = resolveMetrics(
-            dockSize: DockUtils.getDockSize(on: screen),
+        let dockSize = DockUtils.getDockSize(on: screen)
+        let autoSize = calculateAutoSize(
+            dockSize: dockSize,
             dockPosition: dockPosition
         )
+
+        if Defaults[.activeAppIndicatorAutoSize] {
+            indicatorThickness = autoSize.height
+            indicatorOffset = autoSize.offset
+        } else {
+            indicatorThickness = Defaults[.activeAppIndicatorHeight]
+            indicatorOffset = Defaults[.activeAppIndicatorOffset]
+        }
+
+        if Defaults[.activeAppIndicatorAutoLength] {
+            indicatorLength = autoSize.length
+        } else {
+            indicatorLength = Defaults[.activeAppIndicatorLength]
+        }
 
         guard
             var indicatorFrame =
             ActiveAppIndicatorPositioning.calculateIndicatorFrame(
                 for: appKitDockItemFrame,
                 dockPosition: dockPosition,
-                indicatorThickness: metrics.thickness,
-                indicatorOffset: metrics.offset,
-                indicatorLength: metrics.length
+                indicatorThickness: indicatorThickness,
+                indicatorOffset: indicatorOffset,
+                indicatorLength: indicatorLength
             )
         else {
             return nil

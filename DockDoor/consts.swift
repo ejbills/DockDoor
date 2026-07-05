@@ -283,7 +283,6 @@ extension Defaults.Keys {
     static let activeAppIndicatorOffset = Key<CGFloat>("activeAppIndicatorOffset", default: 5.0)
     static let activeAppIndicatorLength = Key<CGFloat>("activeAppIndicatorLength", default: 40.0)
     static let activeAppIndicatorShift = Key<CGFloat>("activeAppIndicatorShift", default: 0.0)
-    static let activeAppIndicatorStyle = Key<ActiveAppIndicatorStyle>("activeAppIndicatorStyle", default: .bar)
 
     // MARK: - Trackpad Gestures
 
@@ -325,20 +324,6 @@ extension Defaults.Keys {
 
     static let alternateKeybindKey = Key<UInt16>("alternateKeybindKey", default: 0)
     static let alternateKeybindMode = Key<SwitcherInvocationMode>("alternateKeybindMode", default: .activeAppOnly)
-}
-
-enum ActiveAppIndicatorStyle: String, CaseIterable, Defaults.Serializable {
-    case bar
-    case runningAppDots
-
-    var localizedName: String {
-        switch self {
-        case .bar:
-            String(localized: "Line (active app)", comment: "Active app indicator style option")
-        case .runningAppDots:
-            String(localized: "Dots (running apps)", comment: "Active app indicator style option")
-        }
-    }
 }
 
 // MARK: Dock Locking
