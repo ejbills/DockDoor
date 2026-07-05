@@ -779,10 +779,19 @@ enum SettingsSearchCatalog {
             id: "appearance.glassTuning",
             title: String(localized: "Glass Tuning"),
             description: String(localized: "Fine-tune opacity, blur, saturation, tint, and border for glass background style."),
-            keywords: ["glass", "opacity", "blur", "saturation", "tint", "border", "tuning"],
+            keywords: ["glass", "opacity", "blur", "saturation", "tint", "border", "tuning", "variant"],
             tab: "Appearance",
             section: String(localized: "Background"),
             icon: "slider.horizontal.3"
+        ),
+        SettingsSearchItem(
+            id: "appearance.glassVariant",
+            title: String(localized: "Glass Variant"),
+            description: String(localized: "Selects the liquid glass material variant used for the background."),
+            keywords: ["glass", "variant", "liquid", "material", "style", "look"],
+            tab: "Appearance",
+            section: String(localized: "Background"),
+            icon: "sparkles"
         ),
         // Window Background
         SettingsSearchItem(

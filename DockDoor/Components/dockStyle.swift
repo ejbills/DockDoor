@@ -34,7 +34,7 @@ struct DockStyleModifier: ViewModifier {
                 ZStack {
                     BlurView(cornerRadius: cornerRadius, appearance: backgroundAppearance)
                         .borderedBackground(
-                            .white.opacity(backgroundAppearance.borderOpacity),
+                            glassBorderGradient(opacity: backgroundAppearance.borderOpacity),
                             lineWidth: backgroundAppearance.borderWidth,
                             shape: RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
                         )
@@ -48,6 +48,24 @@ struct DockStyleModifier: ViewModifier {
             }
             .padding(outerPadding)
     }
+}
+
+// Directional rim-light stroke that reads as lit glass rather than a flat
+// outline. Stops match Docky's dock chrome at the default border opacity and
+// scale together as the user's borderOpacity knob changes.
+private func glassBorderGradient(opacity: CGFloat) -> LinearGradient {
+    let scale = opacity / 0.15
+    return LinearGradient(
+        colors: [
+            .white.opacity(0.35 * scale),
+            .white.opacity(0.12 * scale),
+            .white.opacity(0.05 * scale),
+            .white.opacity(0.12 * scale),
+            .white.opacity(0.28 * scale),
+        ],
+        startPoint: .topLeading,
+        endPoint: .bottomTrailing
+    )
 }
 
 extension View {

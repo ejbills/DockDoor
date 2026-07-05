@@ -7,6 +7,7 @@ struct BackgroundAppearance: Equatable {
     let glassOpacity: CGFloat
     let glassBlurRadius: CGFloat
     let glassSaturation: CGFloat
+    let glassVariant: Int
     let tintOpacity: CGFloat
     let borderOpacity: CGFloat
     let borderWidth: CGFloat
@@ -15,7 +16,7 @@ struct BackgroundAppearance: Equatable {
 
     static let observedKeys: [Defaults._AnyKey] = [
         .dockBackgroundStyle, .dockBackgroundMaterial,
-        .dockGlassOpacity, .dockGlassBlurRadius, .dockGlassSaturation,
+        .dockGlassOpacity, .dockGlassBlurRadius, .dockGlassSaturation, .dockGlassVariant,
         .dockBackgroundTintOpacity,
         .dockBackgroundBorderOpacity, .dockBackgroundBorderWidth,
         .useOpaquePreviewBackground, .customBackgroundColor,
@@ -28,6 +29,7 @@ struct BackgroundAppearance: Equatable {
             glassOpacity: Defaults[.dockGlassOpacity],
             glassBlurRadius: Defaults[.dockGlassBlurRadius],
             glassSaturation: Defaults[.dockGlassSaturation],
+            glassVariant: Defaults[.dockGlassVariant],
             tintOpacity: Defaults[.dockBackgroundTintOpacity],
             borderOpacity: Defaults[.dockBackgroundBorderOpacity],
             borderWidth: Defaults[.dockBackgroundBorderWidth],
@@ -66,7 +68,8 @@ struct BlurView: View {
                     glassOpacity: appearance.glassOpacity,
                     tintOpacity: appearance.tintOpacity,
                     blurRadius: appearance.glassBlurRadius,
-                    saturation: appearance.glassSaturation
+                    saturation: appearance.glassSaturation,
+                    variant: appearance.glassVariant
                 )
             } else {
                 RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
@@ -88,6 +91,7 @@ struct LiquidGlassRepresentable: NSViewRepresentable {
     var tintOpacity: CGFloat
     var blurRadius: CGFloat
     var saturation: CGFloat
+    var variant: Int
 
     func makeNSView(context: Context) -> LiquidGlassContainerView {
         let container = LiquidGlassContainerView()
@@ -96,6 +100,7 @@ struct LiquidGlassRepresentable: NSViewRepresentable {
         container.tintOpacity = tintOpacity
         container.blurRadius = blurRadius
         container.saturation = saturation
+        container.glassVariant = variant
         container.updateCornerRadius()
         container.applyGlassOpacity()
         return container
@@ -107,8 +112,10 @@ struct LiquidGlassRepresentable: NSViewRepresentable {
         container.blurRadius = blurRadius
         container.saturation = saturation
         container.cornerRadius = cornerRadius
+        container.glassVariant = variant
         container.applyGlassOpacity()
         container.updateCornerRadius()
+        container.applyGlassVariant()
         container.applyBackdropOverrides()
     }
 }
@@ -123,6 +130,7 @@ class LiquidGlassContainerView: NSView {
 
     var blurRadius: CGFloat = 0
     var saturation: CGFloat = 1.0
+    var glassVariant: Int = 4
 
     private var hasConfigured = false
     private var glass: NSGlassEffectView?
@@ -151,6 +159,11 @@ class LiquidGlassContainerView: NSView {
         glass?.alphaValue = glassOpacity
     }
 
+    func applyGlassVariant() {
+        guard let glass else { return }
+        applyGlassVariant(to: glass, variant: glassVariant)
+    }
+
     func applyBackdropOverrides() {
         for backdrop in backdropLayers {
             if blurRadius > 0 {
@@ -172,6 +185,7 @@ class LiquidGlassContainerView: NSView {
 
         let glassView = NSGlassEffectView()
         glassView.style = .clear
+        applyGlassVariant(to: glassView, variant: glassVariant)
         glassView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(glassView)
 
@@ -187,6 +201,16 @@ class LiquidGlassContainerView: NSView {
         tintLayer = tint
         glass = glassView
         updateTintColor()
+    }
+
+    // Selects a private NSGlassEffectView variant for a richer specular look
+    // than the public `.clear`/`.regular` styles expose. No-ops (leaving the
+    // public style) if the selector is unavailable.
+    private func applyGlassVariant(to view: NSView, variant: Int) {
+        let sel = NSSelectorFromString("set_variant:")
+        guard view.responds(to: sel), let imp = view.method(for: sel) else { return }
+        typealias Setter = @convention(c) (NSObject, Selector, Int64) -> Void
+        unsafeBitCast(imp, to: Setter.self)(view, sel, Int64(variant))
     }
 
     override func viewDidMoveToWindow() {

@@ -6,6 +6,7 @@ struct BackgroundAppearanceSection: View {
     @Default(.dockGlassOpacity) var glassOpacity
     @Default(.dockGlassBlurRadius) var blurRadius
     @Default(.dockGlassSaturation) var saturation
+    @Default(.dockGlassVariant) var glassVariant
     @Default(.dockBackgroundTintOpacity) var tintOpacity
     @Default(.dockBackgroundBorderOpacity) var borderOpacity
     @Default(.dockBackgroundBorderWidth) var borderWidth
@@ -58,6 +59,30 @@ struct BackgroundAppearanceSection: View {
                 if isGlass {
                     DisclosureGroup("Glass Tuning") {
                         VStack(alignment: .leading, spacing: 8) {
+                            if #available(macOS 26.0, *) {
+                                HStack {
+                                    Text("Variant")
+                                        .font(.body)
+                                    Spacer()
+                                    Slider(
+                                        value: Binding(
+                                            get: { Double(glassVariant) },
+                                            set: { glassVariant = Int($0.rounded()) }
+                                        ),
+                                        in: 0 ... 19,
+                                        step: 1
+                                    )
+                                    .frame(maxWidth: 160)
+                                    Stepper(value: $glassVariant, in: 0 ... 19) {
+                                        Text("\(glassVariant)")
+                                            .font(.body.monospacedDigit())
+                                            .frame(minWidth: 20, alignment: .trailing)
+                                    }
+                                    .fixedSize()
+                                }
+                                .settingsSearchTarget("appearance.glassVariant")
+                            }
+
                             sliderSetting(
                                 title: "Opacity",
                                 value: $glassOpacity,
@@ -116,6 +141,7 @@ struct BackgroundAppearanceSection: View {
                                         .dockGlassOpacity,
                                         .dockGlassBlurRadius,
                                         .dockGlassSaturation,
+                                        .dockGlassVariant,
                                         .dockBackgroundTintOpacity,
                                         .dockBackgroundBorderOpacity,
                                         .dockBackgroundBorderWidth
