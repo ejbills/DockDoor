@@ -20,6 +20,11 @@ struct DockPreviewsSettingsView: View {
     @Default(.quitAppOnWindowClose) var quitAppOnWindowClose
     @Default(.bufferFromDock) var bufferFromDock
     @Default(.ignoreAppsWithSingleWindow) var ignoreAppsWithSingleWindow
+    @Default(.enableFolderWidget) var enableFolderWidget
+    @Default(.folderWidgetDefaultSortOrder) var folderWidgetDefaultSortOrder
+    @Default(.folderWidgetDefaultSortReversed) var folderWidgetDefaultSortReversed
+    @Default(.folderWidgetRememberSortPerFolder) var folderWidgetRememberSortPerFolder
+    @Default(.folderWidgetShowHiddenFiles) var folderWidgetShowHiddenFiles
 
     var body: some View {
         BaseSettingsView {
@@ -29,6 +34,7 @@ struct DockPreviewsSettingsView: View {
                 if enableDockPreviews {
                     windowDisplaySection
                     dockInteractionSection
+                    folderWidgetSection
 
                     SettingsMockPreview(context: .dock)
 
@@ -118,6 +124,44 @@ struct DockPreviewsSettingsView: View {
                     .font(.caption)
                     .foregroundColor(.secondary)
                     .padding(.leading, 20)
+            }
+        }
+    }
+
+    // MARK: - Folder Previews
+
+    private var folderWidgetSection: some View {
+        SettingsGroup(header: "Folder Previews") {
+            VStack(alignment: .leading, spacing: 10) {
+                Toggle(isOn: $enableFolderWidget) { Text("Show folder contents on hover") }
+                    .settingsSearchTarget("widgets.folder")
+                Text("Preview a folder's contents when hovering it in the Dock.")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .padding(.leading, 20)
+
+                if enableFolderWidget {
+                    Picker("Default sort:", selection: $folderWidgetDefaultSortOrder) {
+                        ForEach(FolderWidgetSortOrder.allCases, id: \.self) { order in
+                            Text(order.localizedName).tag(order)
+                        }
+                    }
+                    .pickerStyle(.menu)
+                    .settingsSearchTarget("widgets.folderSort")
+                    .padding(.leading, 20)
+
+                    Toggle(isOn: $folderWidgetDefaultSortReversed) { Text("Sort descending by default") }
+                        .settingsSearchTarget("widgets.folderSortDirection")
+                        .padding(.leading, 20)
+
+                    Toggle(isOn: $folderWidgetRememberSortPerFolder) { Text("Remember sorting per folder") }
+                        .settingsSearchTarget("widgets.folderRememberSort")
+                        .padding(.leading, 20)
+
+                    Toggle(isOn: $folderWidgetShowHiddenFiles) { Text("Show hidden files") }
+                        .settingsSearchTarget("widgets.folderHiddenFiles")
+                        .padding(.leading, 20)
+                }
             }
         }
     }

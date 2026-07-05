@@ -146,7 +146,6 @@ struct MainSettingsView: View {
                 Defaults[.searchTriggerKey] = Defaults.Keys.searchTriggerKey.defaultValue
 
                 Defaults[.showSpecialAppControls] = Defaults.Keys.showSpecialAppControls.defaultValue
-                Defaults[.enableDockItemWidgets] = Defaults.Keys.enableDockItemWidgets.defaultValue
                 Defaults[.enableFolderWidget] = Defaults.Keys.enableFolderWidget.defaultValue
                 Defaults[.folderWidgetDefaultSortOrder] = Defaults.Keys.folderWidgetDefaultSortOrder.defaultValue
                 Defaults[.folderWidgetDefaultSortReversed] = Defaults.Keys.folderWidgetDefaultSortReversed.defaultValue

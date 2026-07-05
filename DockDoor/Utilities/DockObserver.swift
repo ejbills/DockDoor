@@ -463,7 +463,6 @@ final class DockObserver {
         guard let folderItem = getHoveredFolderDockItem() else { return false }
 
         guard Defaults[.enableDockPreviews],
-              Defaults[.enableDockItemWidgets],
               Defaults[.enableFolderWidget]
         else {
             return true
