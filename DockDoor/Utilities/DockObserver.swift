@@ -773,6 +773,10 @@ final class DockObserver {
             return passthrough
         }
 
+        if previewCoordinator.containsQuartzPoint(event.location) {
+            return Unmanaged.passUnretained(event)
+        }
+
         if type == .scrollWheel {
             if Defaults[.enableTitleBarScrollGesture], handleTitleBarScroll(event) {
                 return nil
