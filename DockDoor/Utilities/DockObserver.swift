@@ -275,6 +275,19 @@ final class DockObserver {
             return
         }
 
+        guard Defaults[.dockPreviewActivationMode] == .hover else {
+            return
+        }
+
+        showPreviewForHoveredDockApp(
+            mouseLocation: currentMouseLocation,
+            overrideDelay: false,
+            refreshLogContext: "dock hover"
+        )
+    }
+
+    @MainActor
+    private func showPreviewForHoveredDockApp(mouseLocation currentMouseLocation: CGPoint, overrideDelay: Bool, refreshLogContext: String) {
         let appUnderMouseElement = DebugLogger.measureSlow("getDockItemAppStatusUnderMouse", thresholdMs: 100) {
             getDockItemAppStatusUnderMouse()
         }
@@ -284,6 +297,8 @@ final class DockObserver {
             return
         }
 
+        guard Defaults[.enableDockPreviews] else { return }
+
         if case let .notRunning(bundleIdentifier) = appUnderMouseElement.status {
             let isCalendar = bundleIdentifier == calendarAppIdentifier && Defaults[.enableCalendarWidget]
             let mr = MediaRemoteService.shared
@@ -291,7 +306,7 @@ final class DockObserver {
             let isActiveMedia = mediaSourceMatches
                 && Defaults[.enableMediaWidget]
                 && (!mr.isUniversalSource || Defaults[.mediaDetectionMode] == .universal)
-            if isCalendar || isActiveMedia, Defaults[.showSpecialAppControls], Defaults[.enableDockPreviews] {
+            if isCalendar || isActiveMedia, Defaults[.showSpecialAppControls] {
                 let mouseScreen = NSScreen.screenFromQuartzPoint(currentMouseLocation)
                 let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
                 let appName = NSWorkspace.shared.urlForApplication(withBundleIdentifier: bundleIdentifier)
@@ -305,7 +320,7 @@ final class DockObserver {
                     mouseLocation: convertedMouseLocation,
                     mouseScreen: mouseScreen,
                     dockItemElement: dockItemElement,
-                    overrideDelay: false,
+                    overrideDelay: overrideDelay,
                     onWindowTap: { [weak self] in self?.hideWindowAndResetLastApp() },
                     bundleIdentifier: bundleIdentifier
                 )
@@ -371,8 +386,6 @@ final class DockObserver {
             cachedWindows = cachedWindows.filter { !$0.isHidden && !$0.isMinimized }
         }
 
-        guard Defaults[.enableDockPreviews] else { return }
-
         let mouseScreen = NSScreen.screenFromQuartzPoint(currentMouseLocation)
         let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
         let screenOrigin = mouseScreen.frame.origin
@@ -393,7 +406,7 @@ final class DockObserver {
                 mouseLocation: convertedMouseLocation,
                 mouseScreen: mouseScreen,
                 dockItemElement: dockItemElement,
-                overrideDelay: false,
+                overrideDelay: overrideDelay,
                 onWindowTap: { [weak self] in
                     self?.hideWindowAndResetLastApp()
                 },
@@ -408,7 +421,7 @@ final class DockObserver {
             do {
                 var windows: [WindowInfo] = []
                 for appInstance in appsToFetchWindowsFrom {
-                    try await windows.append(contentsOf: DebugLogger.measureAsync("getActiveWindows (dock hover)", details: "PID: \(appInstance.processIdentifier)") {
+                    try await windows.append(contentsOf: DebugLogger.measureAsync("getActiveWindows (\(refreshLogContext))", details: "PID: \(appInstance.processIdentifier)") {
                         try await WindowUtil.getActiveWindows(of: appInstance)
                     })
                 }
@@ -450,10 +463,10 @@ final class DockObserver {
                         dockPosition: dockPosition,
                         bestGuessMonitor: monitor
                     )
-                    DebugLogger.log("WindowRefresh", details: "dock hover final merge, PID: \(currentAppPID), windows: \(freshWindows.count), merged: \(didMerge)")
+                    DebugLogger.log("WindowRefresh", details: "\(refreshLogContext) final merge, PID: \(currentAppPID), windows: \(freshWindows.count), merged: \(didMerge)")
                 }
             } catch {
-                DebugLogger.log("DockObserver", details: "Failed to fetch windows for dock hover: \(error)")
+                DebugLogger.log("DockObserver", details: "Failed to fetch windows for \(refreshLogContext): \(error)")
             }
         }
     }
@@ -713,7 +726,8 @@ final class DockObserver {
 
     private func setupEventTap() {
         var eventMask: CGEventMask = (1 << CGEventType.leftMouseDown.rawValue) |
-            (1 << CGEventType.rightMouseDown.rawValue)
+            (1 << CGEventType.rightMouseDown.rawValue) |
+            (1 << CGEventType.otherMouseDown.rawValue)
 
         if Defaults[.enableDockScrollGesture] || Defaults[.enableTitleBarScrollGesture] {
             eventMask |= (1 << CGEventType.scrollWheel.rawValue)
@@ -768,6 +782,10 @@ final class DockObserver {
 
         let appUnderMouse = getDockItemAppStatusUnderMouse()
 
+        if handleDockPreviewActivation(type: type, event: event, appUnderMouse: appUnderMouse) {
+            return nil
+        }
+
         if case let .success(app) = appUnderMouse.status {
             if type == .rightMouseDown, event.flags.contains(.maskCommand), Defaults[.enableCmdRightClickQuit] {
                 handleCmdRightClickQuit(app: app, event: event)
@@ -790,6 +808,49 @@ final class DockObserver {
         }
 
         return Unmanaged.passUnretained(event)
+    }
+
+    private func handleDockPreviewActivation(type: CGEventType, event: CGEvent, appUnderMouse: ApplicationReturnType) -> Bool {
+        guard Defaults[.enableDockPreviews],
+              !previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive,
+              appUnderMouse.dockItemElement != nil
+        else {
+            return false
+        }
+
+        switch appUnderMouse.status {
+        case .success, .notRunning:
+            break
+        case .notFound:
+            return false
+        }
+
+        let shouldActivate = switch Defaults[.dockPreviewActivationMode] {
+        case .hover:
+            false
+        case .middleClick:
+            type == .otherMouseDown &&
+                event.getIntegerValueField(.mouseEventButtonNumber) == Int64(CGMouseButton.center.rawValue)
+        case .modifierClick:
+            type == .leftMouseDown && modifierFlagsExactlyMatch(event.flags, Defaults[.dockPreviewActivationModifier].eventFlag)
+        }
+
+        guard shouldActivate else { return false }
+
+        let mouseLocation = DockObserver.getMousePosition()
+        Task { @MainActor [weak self] in
+            self?.showPreviewForHoveredDockApp(
+                mouseLocation: mouseLocation,
+                overrideDelay: true,
+                refreshLogContext: "dock preview trigger"
+            )
+        }
+        return true
+    }
+
+    private func modifierFlagsExactlyMatch(_ flags: CGEventFlags, _ expectedModifier: CGEventFlags) -> Bool {
+        let activeModifiers = flags.intersection([.maskShift, .maskControl, .maskAlternate, .maskCommand])
+        return activeModifiers == expectedModifier
     }
 
     private func handleDockClick(app: NSRunningApplication) -> Bool {
