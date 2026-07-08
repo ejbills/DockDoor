@@ -300,13 +300,7 @@ final class DockObserver {
         guard Defaults[.enableDockPreviews] else { return }
 
         if case let .notRunning(bundleIdentifier) = appUnderMouseElement.status {
-            let isCalendar = bundleIdentifier == calendarAppIdentifier && Defaults[.enableCalendarWidget]
-            let mr = MediaRemoteService.shared
-            let mediaSourceMatches = mr.matchesMediaSource(bundleIdentifier: bundleIdentifier)
-            let isActiveMedia = mediaSourceMatches
-                && Defaults[.enableMediaWidget]
-                && (!mr.isUniversalSource || Defaults[.mediaDetectionMode] == .universal)
-            if isCalendar || isActiveMedia, Defaults[.showSpecialAppControls] {
+            if canShowSpecialPreview(forNotRunningBundleIdentifier: bundleIdentifier) {
                 let mouseScreen = NSScreen.screenFromQuartzPoint(currentMouseLocation)
                 let convertedMouseLocation = DockObserver.nsPointFromCGPoint(currentMouseLocation, forScreen: mouseScreen)
                 let appName = NSWorkspace.shared.urlForApplication(withBundleIdentifier: bundleIdentifier)
@@ -865,8 +859,12 @@ final class DockObserver {
         }
 
         switch appUnderMouse.status {
-        case .success, .notRunning:
+        case .success:
             break
+        case let .notRunning(bundleIdentifier):
+            guard canShowSpecialPreview(forNotRunningBundleIdentifier: bundleIdentifier) else {
+                return false
+            }
         case .notFound:
             return false
         }
@@ -879,6 +877,19 @@ final class DockObserver {
             )
         }
         return true
+    }
+
+    private func canShowSpecialPreview(forNotRunningBundleIdentifier bundleIdentifier: String) -> Bool {
+        guard Defaults[.showSpecialAppControls] else { return false }
+
+        let isCalendar = bundleIdentifier == calendarAppIdentifier && Defaults[.enableCalendarWidget]
+        let mr = MediaRemoteService.shared
+        let mediaSourceMatches = mr.matchesMediaSource(bundleIdentifier: bundleIdentifier)
+        let isActiveMedia = mediaSourceMatches
+            && Defaults[.enableMediaWidget]
+            && (!mr.isUniversalSource || Defaults[.mediaDetectionMode] == .universal)
+
+        return isCalendar || isActiveMedia
     }
 
     private func modifierFlagsExactlyMatch(_ flags: CGEventFlags, _ expectedModifier: CGEventFlags) -> Bool {
