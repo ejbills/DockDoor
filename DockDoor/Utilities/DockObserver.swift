@@ -271,11 +271,11 @@ final class DockObserver {
             return
         }
 
-        if handleHoveredFolderDockItemIfNeeded(mouseLocation: currentMouseLocation) {
+        guard Defaults[.dockPreviewActivationMode] == .hover else {
             return
         }
 
-        guard Defaults[.dockPreviewActivationMode] == .hover else {
+        if handleHoveredFolderDockItemIfNeeded(mouseLocation: currentMouseLocation) {
             return
         }
 
@@ -475,14 +475,26 @@ final class DockObserver {
     private func handleHoveredFolderDockItemIfNeeded(mouseLocation: CGPoint) -> Bool {
         guard let folderItem = getHoveredFolderDockItem() else { return false }
 
+        _ = showFolderPreviewIfPossible(folderItem: folderItem, mouseLocation: mouseLocation)
+        return true
+    }
+
+    @MainActor
+    private func showHoveredFolderDockItemPreviewIfPossible(mouseLocation: CGPoint) -> Bool {
+        guard let folderItem = getHoveredFolderDockItem() else { return false }
+        return showFolderPreviewIfPossible(folderItem: folderItem, mouseLocation: mouseLocation)
+    }
+
+    @MainActor
+    private func showFolderPreviewIfPossible(folderItem: FolderDockItemInfo, mouseLocation: CGPoint) -> Bool {
         guard Defaults[.enableDockPreviews],
               Defaults[.enableFolderWidget]
         else {
-            return true
+            return false
         }
 
         guard let accessibleURL = FolderWidgetAuthorization.accessibleURL(for: folderItem.url) else {
-            return true
+            return false
         }
 
         let mouseScreen = NSScreen.screenFromQuartzPoint(mouseLocation)
@@ -812,16 +824,8 @@ final class DockObserver {
 
     private func handleDockPreviewActivation(type: CGEventType, event: CGEvent, appUnderMouse: ApplicationReturnType) -> Bool {
         guard Defaults[.enableDockPreviews],
-              !previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive,
-              appUnderMouse.dockItemElement != nil
+              !previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive
         else {
-            return false
-        }
-
-        switch appUnderMouse.status {
-        case .success, .notRunning:
-            break
-        case .notFound:
             return false
         }
 
@@ -838,6 +842,31 @@ final class DockObserver {
         guard shouldActivate else { return false }
 
         let mouseLocation = DockObserver.getMousePosition()
+
+        if let folderItem = getHoveredFolderDockItem() {
+            guard Defaults[.enableFolderWidget],
+                  FolderWidgetAuthorization.accessibleURL(for: folderItem.url) != nil
+            else {
+                return false
+            }
+
+            Task { @MainActor [weak self] in
+                self?.showHoveredFolderDockItemPreviewIfPossible(mouseLocation: mouseLocation)
+            }
+            return true
+        }
+
+        guard appUnderMouse.dockItemElement != nil else {
+            return false
+        }
+
+        switch appUnderMouse.status {
+        case .success, .notRunning:
+            break
+        case .notFound:
+            return false
+        }
+
         Task { @MainActor [weak self] in
             self?.showPreviewForHoveredDockApp(
                 mouseLocation: mouseLocation,

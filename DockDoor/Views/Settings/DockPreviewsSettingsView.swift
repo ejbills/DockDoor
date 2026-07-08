@@ -194,16 +194,15 @@ struct DockPreviewsSettingsView: View {
                     .foregroundColor(.secondary)
                     .padding(.leading, 20)
 
-                if dockPreviewActivationMode == .modifierClick {
-                    Picker("Dock Preview Modifier", selection: $dockPreviewActivationModifier) {
-                        ForEach(DockPreviewActivationModifier.allCases, id: \.self) {
-                            Text($0.localizedName).tag($0)
-                        }
+                Picker("Dock Preview Modifier", selection: $dockPreviewActivationModifier) {
+                    ForEach(DockPreviewActivationModifier.allCases, id: \.self) {
+                        Text($0.localizedName).tag($0)
                     }
-                    .pickerStyle(MenuPickerStyle())
-                    .settingsSearchTarget("dockPreviews.activationModifier")
-                    .padding(.leading, 20)
                 }
+                .pickerStyle(MenuPickerStyle())
+                .settingsSearchTarget("dockPreviews.activationModifier")
+                .padding(.leading, 20)
+                .disabled(dockPreviewActivationMode != .modifierClick)
 
                 Picker("Dock Preview Hover Action", selection: $previewHoverAction) {
                     ForEach(PreviewHoverAction.allCases, id: \.self) { Text($0.localizedName).tag($0) }
