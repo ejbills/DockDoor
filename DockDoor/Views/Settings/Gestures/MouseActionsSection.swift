@@ -18,7 +18,7 @@ struct MouseActionsSection: View {
                     }
 
                     Picker("", selection: $middleClickAction) {
-                        ForEach(WindowAction.gestureActions, id: \.self) { windowAction in
+                        ForEach(WindowAction.middleClickActions, id: \.self) { windowAction in
                             HStack(spacing: 6) {
                                 Image(systemName: windowAction.iconName)
                                 Text(windowAction.localizedName)

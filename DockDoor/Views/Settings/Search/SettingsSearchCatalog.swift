@@ -1221,7 +1221,7 @@ enum SettingsSearchCatalog {
             id: "gestures.middleClick",
             title: String(localized: "Middle Click"),
             description: String(localized: "Action performed when middle-clicking on a window preview."),
-            keywords: ["middle", "click", "mouse", "button"],
+            keywords: ["middle", "click", "mouse", "button", "open", "activate", "window", "app"],
             tab: "GesturesKeybinds",
             section: String(localized: "Mouse Actions"),
             icon: "computermouse"
