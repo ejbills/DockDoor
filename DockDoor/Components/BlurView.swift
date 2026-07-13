@@ -27,7 +27,7 @@ struct BackgroundAppearance: Equatable {
     /// as the border, so `borderedBackground` should be skipped.
     static let syntheticBlurVariant = 20
 
-    var usesSyntheticBlur: Bool { glassVariant == Self.syntheticBlurVariant }
+    var usesSyntheticBlur: Bool { style == .liquidGlass && glassVariant == Self.syntheticBlurVariant }
 
     static func resolve() -> BackgroundAppearance {
         BackgroundAppearance(
@@ -148,6 +148,7 @@ class LiquidGlassContainerView: NSView {
     var blurRadius: CGFloat = 0
     var saturation: CGFloat = 1.0
     var glassVariant: Int = 4
+    private var appliedNativeVariant: Int?
 
     private var hasConfigured = false
     private var glass: NSGlassEffectView?
@@ -184,9 +185,14 @@ class LiquidGlassContainerView: NSView {
 
     func applyGlassVariant() {
         guard let glass else { return }
-        setNativeVariant(on: glass, effectiveNativeVariant)
-        syncBlurUnderlay()
-        refreshBackdropLayers()
+        let target = effectiveNativeVariant
+        let variantChanged = appliedNativeVariant != target
+        if variantChanged {
+            setNativeVariant(on: glass, target)
+            appliedNativeVariant = target
+            syncBlurUnderlay()
+            refreshBackdropLayers()
+        }
     }
 
     /// Sets the corner radius on the clipping container. For variant 20 the
