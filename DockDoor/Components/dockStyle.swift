@@ -28,25 +28,49 @@ struct DockStyleModifier: ViewModifier {
     let backgroundOpacity: CGFloat
     let outerPadding: CGFloat
 
+    private var shape: RoundedRectangle {
+        RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+    }
+
     func body(content: Content) -> some View {
         content
             .background {
                 ZStack {
-                    BlurView(cornerRadius: cornerRadius, appearance: backgroundAppearance)
-                        .borderedBackground(
-                            glassBorderGradient(opacity: backgroundAppearance.borderOpacity),
-                            lineWidth: backgroundAppearance.borderWidth,
-                            shape: RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                        )
-                        .opacity(backgroundOpacity)
+                    glassBackground
                     if let hc = highlightColor {
                         FluidGradient(blobs: hc.generateShades(count: 3), highlights: hc.generateShades(count: 3), speed: 0.5, blur: 0.75)
                             .opacity(0.2 * backgroundOpacity)
                     }
                 }
-                .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
+                .clipShape(shape)
             }
             .padding(outerPadding)
+    }
+
+    /// The synthetic blur variant relies on the glass shader's own edge
+    /// refraction as its border, so it skips `borderedBackground` (which
+    /// insets the content and leaves an un-blurred gap) and uses an overlay
+    /// stroke instead.
+    @ViewBuilder
+    private var glassBackground: some View {
+        if backgroundAppearance.usesSyntheticBlur {
+            BlurView(cornerRadius: cornerRadius, appearance: backgroundAppearance)
+                .overlay {
+                    shape.strokeBorder(
+                        glassBorderGradient(opacity: backgroundAppearance.borderOpacity),
+                        lineWidth: backgroundAppearance.borderWidth
+                    )
+                }
+                .opacity(backgroundOpacity)
+        } else {
+            BlurView(cornerRadius: cornerRadius, appearance: backgroundAppearance)
+                .borderedBackground(
+                    glassBorderGradient(opacity: backgroundAppearance.borderOpacity),
+                    lineWidth: backgroundAppearance.borderWidth,
+                    shape: shape
+                )
+                .opacity(backgroundOpacity)
+        }
     }
 }
 
