@@ -16,10 +16,7 @@ struct MediaScrollModifier: ViewModifier {
                 setupMonitor()
                 shortcutRegistration = MediaKeyboardShortcutCoordinator.shared.register(mediaInfo)
             }
-            // `hitTestView` is populated asynchronously by ScrollHitTestHelper, so it's nil at
-            // onAppear; onChange carries the resolved view into the registration. Resetting it on
-            // disappear guarantees this fires again on every reappearance, even if SwiftUI reuses
-            // the same NSView.
+            // hitTestView resolves asynchronously after onAppear, and is reset on disappear so this refires even when SwiftUI reuses the NSView.
             .onChange(of: hitTestView) { newView in
                 shortcutRegistration?.hostView = newView
             }
@@ -102,52 +99,35 @@ struct MediaScrollModifier: ViewModifier {
     }
 }
 
-/// One live media view's claim on the spacebar shortcut. `hostView` resolves the preview
-/// window the media is rendered in, so the coordinator can scope the shortcut per preview.
-final class MediaShortcutRegistration: Hashable {
+/// One live media view's claim on the spacebar shortcut; `hostView` resolves which preview window it's rendered in.
+final class MediaShortcutRegistration {
     let mediaInfo: MediaInfo
     weak var hostView: NSView?
 
     init(mediaInfo: MediaInfo) {
         self.mediaInfo = mediaInfo
     }
-
-    static func == (lhs: MediaShortcutRegistration, rhs: MediaShortcutRegistration) -> Bool {
-        lhs === rhs
-    }
-
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(ObjectIdentifier(self))
-    }
 }
 
-/// Tracks the media views currently on screen and resolves the spacebar play/pause shortcut.
-///
-/// The decision runs from the global key event tap in `KeybindHelper` (on the main thread) so
-/// the spacebar can be *consumed* — otherwise it would also reach the focused app and, when
-/// that app is the media player, double-toggle playback. The shortcut acts only when a single
-/// preview is on screen rendering exactly one distinct media source; two apps within one
-/// preview (or several previews) is ambiguous, so it's left alone and the key passes through.
+/// Tracks on-screen media views and toggles play/pause from the spacebar, but only when a single visible preview resolves to one distinct media source.
 final class MediaKeyboardShortcutCoordinator {
     static let shared = MediaKeyboardShortcutCoordinator()
 
-    private var registrations: Set<MediaShortcutRegistration> = []
+    private var registrations: [MediaShortcutRegistration] = []
 
     private init() {}
 
     func register(_ mediaInfo: MediaInfo) -> MediaShortcutRegistration {
         let registration = MediaShortcutRegistration(mediaInfo: mediaInfo)
-        registrations.insert(registration)
+        registrations.append(registration)
         return registration
     }
 
     func unregister(_ registration: MediaShortcutRegistration) {
-        registrations.remove(registration)
+        registrations.removeAll { $0 === registration }
     }
 
-    /// Called for a bare spacebar key-down from the global event tap. Returns `true` when an
-    /// unambiguous media preview handled it, signalling the caller to consume the event. The
-    /// toggle is hopped to the main actor since `MediaInfo` is main-actor isolated.
+    /// Returns `true` when a media preview handled the spacebar, signalling the event tap to consume the event.
     func handleSpaceKeyDown() -> Bool {
         guard let mediaInfo = unambiguousVisibleSource() else { return false }
 
@@ -160,23 +140,19 @@ final class MediaKeyboardShortcutCoordinator {
         return true
     }
 
-    /// The single media source to control, or `nil` when the target is ambiguous: the visible
-    /// media views must all live in one preview window and resolve to one distinct source.
+    /// The single media source to control, or `nil` when the target is ambiguous (multiple previews, or multiple sources in one preview).
     private func unambiguousVisibleSource() -> MediaInfo? {
-        var windowID: ObjectIdentifier?
-        var sources: Set<ObjectIdentifier> = []
+        var window: NSWindow?
         var source: MediaInfo?
 
         for registration in registrations {
-            guard let window = registration.hostView?.window else { continue }
+            guard let hostWindow = registration.hostView?.window else { continue }
 
-            let id = ObjectIdentifier(window)
-            if windowID == nil { windowID = id }
-            guard windowID == id else { return nil } // spans multiple previews
+            if window == nil { window = hostWindow }
+            guard window === hostWindow else { return nil }
 
-            sources.insert(ObjectIdentifier(registration.mediaInfo))
-            guard sources.count == 1 else { return nil } // multiple apps in one preview
-            source = registration.mediaInfo
+            if source == nil { source = registration.mediaInfo }
+            guard source === registration.mediaInfo else { return nil }
         }
 
         return source

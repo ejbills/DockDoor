@@ -435,8 +435,7 @@ class KeybindHelper {
             let flags = event.flags
             let shouldRouteCmdTabToWindowSwitcher = isCmdTabWindowSwitcherKeybind(keyCode: keyCode, flags: flags)
 
-            // Bare spacebar toggles play/pause for a visible media preview. Consume it so it
-            // doesn't also reach the focused app (which would double-toggle the media player).
+            // Consume bare spacebar for a visible media preview so it doesn't also reach the focused app and double-toggle playback.
             if keyCode == Int64(kVK_Space),
                event.getIntegerValueField(.keyboardEventAutorepeat) == 0,
                !flags.hasSuperfluousModifiers(),
