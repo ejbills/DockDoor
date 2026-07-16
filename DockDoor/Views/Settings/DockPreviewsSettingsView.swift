@@ -11,6 +11,8 @@ struct DockPreviewsSettingsView: View {
     @Default(.collapseNativeTabsIntoSingleWindow) var collapseNativeTabsIntoSingleWindow
     @Default(.includeHiddenWindowsInDockPreview) var includeHiddenWindowsInDockPreview
     @Default(.showWindowlessAppsInDockPreview) var showWindowlessAppsInDockPreview
+    @Default(.dockPreviewActivationMode) var dockPreviewActivationMode
+    @Default(.dockPreviewActivationModifier) var dockPreviewActivationModifier
     @Default(.previewHoverAction) var previewHoverAction
     @Default(.tapEquivalentInterval) var tapEquivalentInterval
     @Default(.shouldHideOnDockItemClick) var shouldHideOnDockItemClick
@@ -53,7 +55,7 @@ struct DockPreviewsSettingsView: View {
                 title: "Enable Dock Previews",
                 imageName: "DockPreviews"
             ) {
-                Text("Show window previews when hovering over Dock icons.")
+                Text("Show window previews for Dock icons.")
             }
             .settingsSearchTarget("dockPreviews.enable")
             .onChange(of: enableDockPreviews) { _ in askUserToRestartApplication() }
@@ -179,6 +181,29 @@ struct DockPreviewsSettingsView: View {
     private var dockInteractionSection: some View {
         SettingsGroup(header: "Dock Interaction") {
             VStack(alignment: .leading, spacing: 10) {
+                Picker("Dock Preview Trigger", selection: $dockPreviewActivationMode) {
+                    ForEach(DockPreviewActivationMode.allCases, id: \.self) {
+                        Text($0.localizedName).tag($0)
+                    }
+                }
+                .pickerStyle(MenuPickerStyle())
+                .settingsSearchTarget("dockPreviews.activationTrigger")
+
+                Text("Show previews automatically on hover, or require a click trigger on the Dock icon.")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .padding(.leading, 20)
+
+                Picker("Dock Preview Modifier", selection: $dockPreviewActivationModifier) {
+                    ForEach(DockPreviewActivationModifier.allCases, id: \.self) {
+                        Text($0.localizedName).tag($0)
+                    }
+                }
+                .pickerStyle(MenuPickerStyle())
+                .settingsSearchTarget("dockPreviews.activationModifier")
+                .padding(.leading, 20)
+                .disabled(dockPreviewActivationMode != .modifierClick)
+
                 Picker("Dock Preview Hover Action", selection: $previewHoverAction) {
                     ForEach(PreviewHoverAction.allCases, id: \.self) { Text($0.localizedName).tag($0) }
                 }

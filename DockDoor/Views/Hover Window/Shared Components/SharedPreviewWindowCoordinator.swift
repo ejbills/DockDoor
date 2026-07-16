@@ -107,6 +107,33 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         return searchWindow.frame
     }
 
+    func containsQuartzPoint(_ point: CGPoint) -> Bool {
+        guard isVisible else { return false }
+
+        let screen = NSScreen.screenFromQuartzPoint(point)
+        let appKitPoint = DockObserver.nsPointFromCGPoint(point, forScreen: screen)
+        let hitSlop: CGFloat = 2
+
+        if frame.insetBy(dx: -hitSlop, dy: -hitSlop).contains(appKitPoint) {
+            return true
+        }
+
+        if let fullPreviewWindow,
+           fullPreviewWindow.isVisible,
+           fullPreviewWindow.frame.insetBy(dx: -hitSlop, dy: -hitSlop).contains(appKitPoint)
+        {
+            return true
+        }
+
+        if let searchWindowFrame,
+           searchWindowFrame.insetBy(dx: -hitSlop, dy: -hitSlop).contains(appKitPoint)
+        {
+            return true
+        }
+
+        return false
+    }
+
     private func isCalendarApp(bundleIdentifier: String?) -> Bool {
         guard let bundleId = bundleIdentifier else { return false }
         return bundleId == calendarAppIdentifier
