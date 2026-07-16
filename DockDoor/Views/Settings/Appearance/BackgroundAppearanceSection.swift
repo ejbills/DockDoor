@@ -69,11 +69,11 @@ struct BackgroundAppearanceSection: View {
                                             get: { Double(glassVariant) },
                                             set: { glassVariant = Int($0.rounded()) }
                                         ),
-                                        in: 0 ... 19,
+                                        in: 0 ... 20,
                                         step: 1
                                     )
                                     .frame(maxWidth: 160)
-                                    Stepper(value: $glassVariant, in: 0 ... 19) {
+                                    Stepper(value: $glassVariant, in: 0 ... 20) {
                                         Text("\(glassVariant)")
                                             .font(.body.monospacedDigit())
                                             .frame(minWidth: 20, alignment: .trailing)
