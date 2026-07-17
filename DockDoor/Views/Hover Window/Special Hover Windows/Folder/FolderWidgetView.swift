@@ -427,6 +427,9 @@ private struct FolderWidgetItemRow: View {
             RoundedRectangle(cornerRadius: 14, style: .continuous)
                 .strokeBorder(Color.primary.opacity(0.08), lineWidth: 1)
         }
+        .onDrag {
+            NSItemProvider(object: item.url as NSURL)
+        }
     }
 
     private var subtitle: String {
