@@ -275,6 +275,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
                                                   embeddedContentType: EmbeddedContentType = .none,
                                                   dockPositionOverride: DockPosition? = nil,
                                                   dockItemFrameOverride: CGRect? = nil,
+                                                  appIconOverride: NSImage? = nil,
                                                   renderStartTime: CFAbsoluteTime? = nil)
     {
         var elapsed = renderStartTime.map { (CFAbsoluteTimeGetCurrent() - $0) * 1000 } ?? 0
@@ -299,7 +300,8 @@ final class SharedPreviewWindowCoordinator: NSPanel {
                                                     mockPreviewActive: false,
                                                     updateAvailable: updateAvailable,
                                                     embeddedContentType: embeddedContentType,
-                                                    hasScreenRecordingPermission: hasScreenRecordingPermission)
+                                                    hasScreenRecordingPermission: hasScreenRecordingPermission,
+                                                    appIconOverride: appIconOverride)
         let newHostingView = NSHostingView(rootView: hoverView)
 
         if let oldContentView = contentView {
@@ -596,6 +598,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         centeredHoverWindowState: PreviewStateCoordinator.WindowState?,
         onWindowTap: (() -> Void)?,
         bundleIdentifier: String?,
+        appIconOverride: NSImage?,
         dockPositionOverride: DockPosition? = nil,
         initialIndex: Int? = nil,
         dockItemFrameOverride: CGRect? = nil,
@@ -700,6 +703,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
                 centeredHoverWindowState: centeredHoverWindowState,
                 onWindowTap: onWindowTap,
                 embeddedContentType: finalEmbeddedContentType,
+                appIconOverride: appIconOverride,
                 dockPositionOverride: dockPositionOverride,
                 initialIndex: initialIndex,
                 dockItemFrameOverride: dockItemFrameOverride,
@@ -717,6 +721,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
                                    centeredHoverWindowState: PreviewStateCoordinator.WindowState? = nil,
                                    onWindowTap: (() -> Void)?,
                                    embeddedContentType: EmbeddedContentType = .none,
+                                   appIconOverride: NSImage? = nil,
                                    dockPositionOverride: DockPosition? = nil, initialIndex: Int? = nil,
                                    dockItemFrameOverride: CGRect? = nil,
                                    renderStartTime: CFAbsoluteTime? = nil)
@@ -753,7 +758,8 @@ final class SharedPreviewWindowCoordinator: NSPanel {
             updateContentViewSizeAndPosition(mouseLocation: mouseLocation, mouseScreen: screen, dockItemElement: dockItemElement, dockIconRect: dockIconRect, animated: !shouldCenterOnScreen,
                                              centerOnScreen: shouldCenterOnScreen, centeredHoverWindowState: centeredHoverWindowState,
                                              embeddedContentType: embeddedContentType, dockPositionOverride: dockPositionOverride,
-                                             dockItemFrameOverride: dockItemFrameOverride, renderStartTime: renderStartTime)
+                                             dockItemFrameOverride: dockItemFrameOverride, appIconOverride: appIconOverride,
+                                             renderStartTime: renderStartTime)
         }
     }
 
@@ -952,6 +958,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
                     dockItemElement: AXUIElement?,
                     overrideDelay: Bool = false, centeredHoverWindowState: PreviewStateCoordinator.WindowState? = nil,
                     onWindowTap: (() -> Void)? = nil, bundleIdentifier: String? = nil,
+                    appIconOverride: NSImage? = nil,
                     bypassDockMouseValidation: Bool = false,
                     dockPositionOverride: DockPosition? = nil, initialIndex: Int? = nil,
                     dockItemFrameOverride: CGRect? = nil)
@@ -997,7 +1004,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
             }
 
             Task { @MainActor [weak self] in
-                self?.performDisplay(appName: appName, windows: windows, mouseLocation: mouseLocation, mouseScreen: mouseScreen, dockItemElement: dockItemElement, centeredHoverWindowState: centeredHoverWindowState, onWindowTap: onWindowTap, bundleIdentifier: bundleIdentifier, dockPositionOverride: dockPositionOverride, initialIndex: initialIndex, dockItemFrameOverride: dockItemFrameOverride, renderStartTime: renderStartTime)
+                self?.performDisplay(appName: appName, windows: windows, mouseLocation: mouseLocation, mouseScreen: mouseScreen, dockItemElement: dockItemElement, centeredHoverWindowState: centeredHoverWindowState, onWindowTap: onWindowTap, bundleIdentifier: bundleIdentifier, appIconOverride: appIconOverride, dockPositionOverride: dockPositionOverride, initialIndex: initialIndex, dockItemFrameOverride: dockItemFrameOverride, renderStartTime: renderStartTime)
             }
         }
         pendingShowWorkItem = workItem

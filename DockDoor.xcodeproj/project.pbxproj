@@ -61,6 +61,7 @@
 		AA11001122334455AA110044 /* DockLockingSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11001122334455AA110033 /* DockLockingSettingsView.swift */; };
 		AA11001122334455AA110066 /* DockLockerGeometryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11001122334455AA110055 /* DockLockerGeometryTests.swift */; };
 		555110B7F7B99C7BD510DBC7 /* NativeTabGroupingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00D4B366E3CF5338182E065 /* NativeTabGroupingTests.swift */; };
+		B39D72A40F154A60B56D59833FA84307 /* ParallShortcutResolverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D16E857F87064806B362CB6AF2D7014F /* ParallShortcutResolverTests.swift */; };
 		B376D66B467C4587915220BC80D3B9CB /* ScriptCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = F098F8107F464776B5C18294427CAECD /* ScriptCommands.swift */; };
 		B3C9F20484F14266B941AFB170B66530 /* MediaRemoteService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC298B81953848F481EE849906E0AE77 /* MediaRemoteService.swift */; };
 		B84941090B484695B105D967 /* SettingsGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4258675B29E4A22ACF92845 /* SettingsGroup.swift */; };
@@ -286,6 +287,7 @@
 		AA11001122334455AA110033 /* DockLockingSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockLockingSettingsView.swift; sourceTree = "<group>"; };
 		AA11001122334455AA110055 /* DockLockerGeometryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockLockerGeometryTests.swift; sourceTree = "<group>"; };
 		D00D4B366E3CF5338182E065 /* NativeTabGroupingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeTabGroupingTests.swift; sourceTree = "<group>"; };
+		D16E857F87064806B362CB6AF2D7014F /* ParallShortcutResolverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParallShortcutResolverTests.swift; sourceTree = "<group>"; };
 		AA11001122334455AA110100 /* DockDoorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DockDoorTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		AC298B81953848F481EE849906E0AE77 /* MediaRemoteService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaRemoteService.swift; sourceTree = "<group>"; };
 		B056906A7ACD4903BD5E1627B359AE2C /* AdvancedSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedSettingsView.swift; sourceTree = "<group>"; };
@@ -589,6 +591,7 @@
 			children = (
 				AA11001122334455AA110055 /* DockLockerGeometryTests.swift */,
 				D00D4B366E3CF5338182E065 /* NativeTabGroupingTests.swift */,
+				D16E857F87064806B362CB6AF2D7014F /* ParallShortcutResolverTests.swift */,
 			);
 			path = DockDoorTests;
 			sourceTree = "<group>";
@@ -1099,6 +1102,7 @@
 			files = (
 				AA11001122334455AA110066 /* DockLockerGeometryTests.swift in Sources */,
 				555110B7F7B99C7BD510DBC7 /* NativeTabGroupingTests.swift in Sources */,
+				B39D72A40F154A60B56D59833FA84307 /* ParallShortcutResolverTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

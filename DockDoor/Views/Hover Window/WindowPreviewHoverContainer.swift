@@ -50,6 +50,7 @@ struct WindowPreviewHoverContainer: View {
     let embeddedContentType: EmbeddedContentType
     let hasScreenRecordingPermission: Bool
     let appearanceOverride: PreviewAppearanceSettings?
+    let appIconOverride: NSImage?
 
     @ObservedObject var previewStateCoordinator: PreviewStateCoordinator
 
@@ -124,7 +125,8 @@ struct WindowPreviewHoverContainer: View {
          updateAvailable: Bool,
          embeddedContentType: EmbeddedContentType = .none,
          hasScreenRecordingPermission: Bool,
-         appearanceOverride: PreviewAppearanceSettings? = nil)
+         appearanceOverride: PreviewAppearanceSettings? = nil,
+         appIconOverride: NSImage? = nil)
     {
         self.appName = appName
         self.onWindowTap = onWindowTap
@@ -139,6 +141,8 @@ struct WindowPreviewHoverContainer: View {
         self.embeddedContentType = embeddedContentType
         self.hasScreenRecordingPermission = hasScreenRecordingPermission
         self.appearanceOverride = appearanceOverride
+        self.appIconOverride = appIconOverride
+        _appIcon = State(initialValue: appIconOverride)
     }
 
     private var minimumEmbeddedWidth: CGFloat {
@@ -889,6 +893,13 @@ struct WindowPreviewHoverContainer: View {
     }
 
     private func loadAppIcon() {
+        if let appIconOverride {
+            if appIcon != appIconOverride {
+                DispatchQueue.main.async { appIcon = appIconOverride }
+            }
+            return
+        }
+
         guard let app = previewStateCoordinator.windows.first?.app, let bundleID = app.bundleIdentifier else { return }
         if let icon = SharedHoverUtils.loadAppIcon(for: bundleID) {
             DispatchQueue.main.async {

@@ -1,6 +1,7 @@
 import ApplicationServices
 import Carbon.HIToolbox.Events
 import Cocoa
+import Darwin
 import Defaults
 
 struct ApplicationInfo: Sendable {
@@ -22,6 +23,97 @@ struct ApplicationReturnType {
 
     let status: Status
     let dockItemElement: AXUIElement?
+    let allowsBundleInstanceGrouping: Bool
+    let displayNameOverride: String?
+    let appIconOverride: NSImage?
+
+    init(
+        status: Status,
+        dockItemElement: AXUIElement?,
+        allowsBundleInstanceGrouping: Bool = true,
+        displayNameOverride: String? = nil,
+        appIconOverride: NSImage? = nil
+    ) {
+        self.status = status
+        self.dockItemElement = dockItemElement
+        self.allowsBundleInstanceGrouping = allowsBundleInstanceGrouping
+        self.displayNameOverride = displayNameOverride
+        self.appIconOverride = appIconOverride
+    }
+}
+
+enum ParallShortcutResolver {
+    private static let targetBundleIdentifierKey = "ParallAppBundleId"
+
+    static func targetApplication(for shortcutBundle: Bundle) -> NSRunningApplication? {
+        guard let targetBundleIdentifier = shortcutBundle.object(forInfoDictionaryKey: targetBundleIdentifierKey) as? String,
+              let shortcutExecutablePath = shortcutBundle.executableURL?.standardizedFileURL.path
+        else {
+            return nil
+        }
+
+        let targetApps = NSRunningApplication.runningApplications(withBundleIdentifier: targetBundleIdentifier)
+        guard let targetPID = matchingTargetProcessIdentifier(
+            shortcutExecutablePath: shortcutExecutablePath,
+            targetProcessIdentifiers: targetApps.map(\.processIdentifier),
+            parentExecutablePath: parentExecutablePath
+        ) else {
+            return nil
+        }
+
+        return targetApps.first { $0.processIdentifier == targetPID }
+    }
+
+    static func isLaunchedByShortcut(_ app: NSRunningApplication) -> Bool {
+        guard let parentExecutablePath = parentExecutablePath(of: app.processIdentifier),
+              let parentBundle = containingAppBundle(forExecutablePath: parentExecutablePath)
+        else {
+            return false
+        }
+
+        return parentBundle.object(forInfoDictionaryKey: targetBundleIdentifierKey) != nil
+    }
+
+    static func matchingTargetProcessIdentifier(
+        shortcutExecutablePath: String,
+        targetProcessIdentifiers: [pid_t],
+        parentExecutablePath: (pid_t) -> String?
+    ) -> pid_t? {
+        targetProcessIdentifiers.first { targetPID in
+            guard let parentPath = parentExecutablePath(targetPID) else { return false }
+            return URL(fileURLWithPath: parentPath).standardizedFileURL.path == shortcutExecutablePath
+        }
+    }
+
+    private static func parentExecutablePath(of pid: pid_t) -> String? {
+        guard let parentPID = parentProcessIdentifier(of: pid) else { return nil }
+
+        var pathBuffer = [UInt8](repeating: 0, count: Int(MAXPATHLEN) * 4)
+        let pathLength = pathBuffer.withUnsafeMutableBytes {
+            proc_pidpath(parentPID, $0.baseAddress, UInt32($0.count))
+        }
+        guard pathLength > 0 else { return nil }
+        return String(cString: pathBuffer)
+    }
+
+    private static func parentProcessIdentifier(of pid: pid_t) -> pid_t? {
+        var info = proc_bsdinfo()
+        let expectedSize = Int32(MemoryLayout<proc_bsdinfo>.stride)
+        let actualSize = proc_pidinfo(pid, PROC_PIDTBSDINFO, 0, &info, expectedSize)
+        guard actualSize == expectedSize else { return nil }
+        return pid_t(info.pbi_ppid)
+    }
+
+    private static func containingAppBundle(forExecutablePath path: String) -> Bundle? {
+        var candidateURL = URL(fileURLWithPath: path).deletingLastPathComponent()
+        while candidateURL.path != "/" {
+            if candidateURL.pathExtension == "app" {
+                return Bundle(url: candidateURL)
+            }
+            candidateURL.deleteLastPathComponent()
+        }
+        return nil
+    }
 }
 
 struct FolderDockItemInfo {
@@ -324,12 +416,14 @@ final class DockObserver {
         let currentAppInfo = ApplicationInfo(
             processIdentifier: currentApp.processIdentifier,
             bundleIdentifier: currentApp.bundleIdentifier,
-            localizedName: currentApp.localizedName
+            localizedName: appUnderMouseElement.displayNameOverride ?? currentApp.localizedName
         )
+        let appIconOverride = appUnderMouseElement.appIconOverride
 
         // Build list of apps to fetch windows from
         var appsToFetchWindowsFrom: [NSRunningApplication] = []
-        if Defaults[.groupAppInstancesInDock],
+        if appUnderMouseElement.allowsBundleInstanceGrouping,
+           Defaults[.groupAppInstancesInDock],
            let bundleId = currentApp.bundleIdentifier, !bundleId.isEmpty
         {
             let potentialApps = NSRunningApplication.runningApplications(withBundleIdentifier: bundleId)
@@ -397,7 +491,8 @@ final class DockObserver {
                 onWindowTap: { [weak self] in
                     self?.hideWindowAndResetLastApp()
                 },
-                bundleIdentifier: currentAppInfo.bundleIdentifier
+                bundleIdentifier: currentAppInfo.bundleIdentifier,
+                appIconOverride: appIconOverride
             )
             previousStatus = .success(currentApp)
         }
@@ -618,7 +713,18 @@ final class DockObserver {
                 }
             }
 
+            if let bundle, let targetApp = ParallShortcutResolver.targetApplication(for: bundle) {
+                return ApplicationReturnType(
+                    status: .success(targetApp),
+                    dockItemElement: hoveredDockItem,
+                    allowsBundleInstanceGrouping: false,
+                    displayNameOverride: appURL.deletingPathExtension().lastPathComponent,
+                    appIconOverride: NSWorkspace.shared.icon(forFile: appURL.path)
+                )
+            }
+
             let runningApps = NSRunningApplication.runningApplications(withBundleIdentifier: bundleIdentifier)
+                .filter { !ParallShortcutResolver.isLaunchedByShortcut($0) }
 
             // For multiple instances, find the correct one based on dock position
             if runningApps.count > 1 {
