@@ -530,8 +530,8 @@
         },
         "sr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : " - Inactive"
+            "state" : "translated",
+            "value" : " - Деактивиран"
           }
         },
         "sv" : {
@@ -720,7 +720,7 @@
         },
         "sr" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "-%@"
           }
         },
@@ -910,7 +910,7 @@
         },
         "sr" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%@"
           }
         },
@@ -1106,7 +1106,7 @@
         },
         "sr" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%1$@ — %2$@"
           }
         },
@@ -1296,7 +1296,7 @@
         },
         "sr" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%lld"
           }
         },
@@ -2450,8 +2450,8 @@
         },
         "sr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "• Allows for enhanced visual information in the dock"
+            "state" : "translated",
+            "value" : "- Дозвољава напредне визуелне информације у доку"
           }
         },
         "sv" : {
@@ -2641,8 +2641,8 @@
         },
         "sr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "• Enables real-time interaction with dock items"
+            "state" : "translated",
+            "value" : "- Дозволјава тренутне интеракије са стварима у доку"
           }
         },
         "sv" : {
@@ -21447,8 +21447,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Auto-scroll speed:"
+            "state" : "translated",
+            "value" : "자동 스크롤 속도:"
           }
         },
         "nl" : {
@@ -38290,8 +38290,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Collapse native tabs into a single window"
+            "state" : "translated",
+            "value" : "將內建標籤頁摺疊為單一視窗"
           }
         }
       }
@@ -58847,8 +58847,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dots (running apps)"
+            "state" : "translated",
+            "value" : "點（打開的App）"
           }
         }
       }
@@ -71538,8 +71538,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Folder Previews"
+            "state" : "translated",
+            "value" : "Voorbeelden van mappen"
           }
         },
         "no" : {
@@ -71604,8 +71604,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Folder Previews"
+            "state" : "translated",
+            "value" : "Xem trước thư mục"
           }
         },
         "zh-Hans" : {
@@ -71616,8 +71616,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Folder Previews"
+            "state" : "translated",
+            "value" : "檔案夾預覽"
           }
         }
       }
@@ -73701,7 +73701,7 @@
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Chế độ toàn màn hình"
+            "value" : "Chế độ Đầy đủ"
           }
         },
         "zh-Hans" : {
@@ -75918,8 +75918,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Glass Variant"
+            "state" : "translated",
+            "value" : "Glass-variant"
           }
         },
         "no" : {
@@ -75984,8 +75984,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Glass Variant"
+            "state" : "translated",
+            "value" : "Biến thể Liquid Glass"
           }
         },
         "zh-Hans" : {
@@ -75996,8 +75996,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Glass Variant"
+            "state" : "translated",
+            "value" : "玻璃變體"
           }
         }
       }
@@ -81436,8 +81436,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hide Traffic Lights"
+            "state" : "translated",
+            "value" : "윈도우 제어기 숨김"
           }
         },
         "nl" : {
@@ -87997,8 +87997,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Indicator Style"
+            "state" : "translated",
+            "value" : "指示燈樣式"
           }
         }
       }
@@ -93715,8 +93715,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Line (active app)"
+            "state" : "translated",
+            "value" : "線條（最前方的App）"
           }
         }
       }
@@ -124292,8 +124292,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview a folder's contents when hovering it in the Dock."
+            "state" : "translated",
+            "value" : "Bekijk de inhoud van een map door er met de muis er overheen te gaan in het Dock."
           }
         },
         "no" : {
@@ -124358,8 +124358,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview a folder's contents when hovering it in the Dock."
+            "state" : "translated",
+            "value" : "Xem trước nội dung của thư mục khi di chuột qua thư mục đó trên Dock."
           }
         },
         "zh-Hans" : {
@@ -124370,8 +124370,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Preview a folder's contents when hovering it in the Dock."
+            "state" : "translated",
+            "value" : "指標停留在Dock的檔案夾上時顯示內容。"
           }
         }
       }
@@ -147518,8 +147518,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Selects the liquid glass material variant used for the background."
+            "state" : "translated",
+            "value" : " Selecteert de Liquid Glass-variant die voor de achtergrond wordt gebruikt."
           }
         },
         "no" : {
@@ -147584,8 +147584,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Selects the liquid glass material variant used for the background."
+            "state" : "translated",
+            "value" : "Chọn biến thể chất liệu Liquid Glass dùng cho nền."
           }
         },
         "zh-Hans" : {
@@ -147596,8 +147596,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Selects the liquid glass material variant used for the background."
+            "state" : "translated",
+            "value" : "選擇背景使用的Liquid Glass材質變體。"
           }
         }
       }
@@ -152660,8 +152660,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show folder contents on hover"
+            "state" : "translated",
+            "value" : "Toon de mapinhoud bij aanwijzen met de muis"
           }
         },
         "no" : {
@@ -152726,8 +152726,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show folder contents on hover"
+            "state" : "translated",
+            "value" : "Hiển thị nội dung thư mục khi di chuột qua"
           }
         },
         "zh-Hans" : {
@@ -152738,8 +152738,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show folder contents on hover"
+            "state" : "translated",
+            "value" : "指標停留時顯示檔案夾內容"
           }
         }
       }
@@ -154071,8 +154071,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show one preview for apps that use native macOS window tabs (e.g. Ghostty, Finder, Terminal) instead of one preview per tab."
+            "state" : "translated",
+            "value" : "將使用macOS內建視窗標籤頁的App（如Ghostty, Finder, 終端機）顯示為一個預覽，而非每個標籤頁一個預覽。"
           }
         }
       }
@@ -154261,8 +154261,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show one preview for apps that use native macOS window tabs (e.g. Ghostty, Finder, Terminal) instead of one preview per tab. Restart the app for this to take effect."
+            "state" : "translated",
+            "value" : "將使用macOS內建視窗標籤頁的App（如Ghostty, Finder, 終端機）顯示為一個預覽，而非每個標籤頁一個預覽。重新打開App後生效。"
           }
         }
       }
@@ -158446,8 +158446,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Shows a dot under every running application: bright for the frontmost app, dimmed for apps with open windows, black for apps with none."
+            "state" : "translated",
+            "value" : "在每個打開的App下方顯示一個點：視窗在最前方者為亮色，有打開的視窗者為暗色，沒有視窗者為黑色。"
           }
         }
       }
@@ -185432,7 +185432,7 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Variant"
           }
         },
@@ -185498,8 +185498,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Variant"
+            "state" : "translated",
+            "value" : "Biến thể"
           }
         },
         "zh-Hans" : {
@@ -185510,8 +185510,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Variant"
+            "state" : "translated",
+            "value" : "變化"
           }
         }
       }
