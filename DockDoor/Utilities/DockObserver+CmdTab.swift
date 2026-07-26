@@ -123,7 +123,7 @@ extension DockObserver {
 
         var cachedWindows: [WindowInfo] = []
         if let app = resolvedApp {
-            cachedWindows = WindowUtil.readCachedWindows(for: app.processIdentifier, sortedBy: .cmdTab)
+            cachedWindows = WindowUtil.readCachedWindowsForPresentation(for: app.processIdentifier, sortedBy: .cmdTab)
         }
 
         let shouldIgnoreSingleWindowApp = Defaults[.ignoreAppsWithSingleWindowInCmdTab] && cachedWindows.count == 1

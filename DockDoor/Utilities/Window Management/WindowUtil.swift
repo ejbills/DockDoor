@@ -316,12 +316,18 @@ enum WindowUtil {
 // MARK: - Cache Management
 
 extension WindowUtil {
-    /// Reads cached windows without triggering SCK capture or AX window enumeration.
-    /// Native-tab collapsing may query the app's focused AX window.
+    /// Reads cached windows without triggering SCK/AX fetches.
     static func readCachedWindows(for pid: pid_t, sortedBy context: WindowFetchContext = .dockPreview) -> [WindowInfo] {
         let cached = deduplicatedByWindowID(desktopSpaceWindowCacheManager.readCache(pid: pid).filter {
             WindowOwnerResolver.ownerBelongsToDisplayApp($0.ownerApp, displayApp: $0.app)
         })
+        return sortWindows(cached, for: context)
+    }
+
+    /// Reads cached windows for preview and switcher presentation.
+    /// Native-tab collapsing may query the app's focused AX window.
+    static func readCachedWindowsForPresentation(for pid: pid_t, sortedBy context: WindowFetchContext = .dockPreview) -> [WindowInfo] {
+        let cached = readCachedWindows(for: pid, sortedBy: context)
         return sortWindows(collapseNativeTabsIfNeeded(cached), for: context)
     }
 
