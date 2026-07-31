@@ -2,12 +2,13 @@ import Cocoa
 
 extension NSScreen {
     static func screenFromQuartzPoint(_ point: CGPoint) -> NSScreen {
-        let screens = NSScreen.screens
         let pointInScreenCoordinates = CGPoint(x: point.x, y: NSScreen.screens.first!.frame.maxY - point.y)
 
-        return screens.first { screen in
-            NSPointInRect(pointInScreenCoordinates, screen.frame)
-        } ?? NSScreen.main!
+        // NSMouseInRect(_, _, false) is inclusive at a frame's top edge, so a window
+        // flush with the top of a screen still matches; NSPointInRect would exclude it.
+        return NSScreen.screens.first { NSMouseInRect(pointInScreenCoordinates, $0.frame, false) }
+            ?? pointInScreenCoordinates.screen()
+            ?? NSScreen.main!
     }
 
     func convertPoint(fromGlobal point: CGPoint) -> CGPoint {
