@@ -34,7 +34,7 @@
       "location" : "https://github.com/ejbills/mediaremote-adapter.git",
       "state" : {
         "branch" : "master",
-        "revision" : "cf30c4f1af29b5829d859f088f8dbdf12611a046"
+        "revision" : "7bf51d8148e277be625ad93ef5162ea57d598c43"
       }
     },
     {
@@ -51,8 +51,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/sparkle-project/Sparkle",
       "state" : {
-        "revision" : "d46d456107feacc80711b21847b82b07bd9fb46e",
-        "version" : "2.9.3"
+        "revision" : "b6496a74a087257ef5e6da1c5b29a447a60f5bd7",
+        "version" : "2.9.4"
       }
     },
     {
