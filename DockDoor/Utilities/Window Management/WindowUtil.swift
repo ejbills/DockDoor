@@ -1596,15 +1596,17 @@ extension WindowUtil {
 // MARK: - Private Helper Methods
 
 extension WindowUtil {
-    /// Makes a window key by posting raw event bytes to the Window Server
+    /// Makes a window key by posting a synthetic left-click (down then up) to the Window Server.
     /// Ported from https://github.com/Hammerspoon/hammerspoon/issues/370#issuecomment-545545468
     static func makeKeyWindow(_ psn: inout ProcessSerialNumber, windowID: CGWindowID) {
-        var bytes = [UInt8](repeating: 0, count: 0xF8)
+        var bytes = [UInt8](repeating: 0, count: 0x100)
         bytes[0x04] = 0xF8
         bytes[0x3A] = 0x10
         var wid = UInt32(windowID)
         memcpy(&bytes[0x3C], &wid, MemoryLayout<UInt32>.size)
-        memset(&bytes[0x20], 0xFF, 0x10)
+        // Click just outside the frame: makes the window key without hit-testing content (top-left would close Chrome PWA shims).
+        var point = CGPoint(x: -1, y: -1)
+        memcpy(&bytes[0x20], &point, MemoryLayout<CGPoint>.size)
         bytes[0x08] = 0x01
         _ = SLPSPostEventRecordTo(&psn, &bytes)
         bytes[0x08] = 0x02
