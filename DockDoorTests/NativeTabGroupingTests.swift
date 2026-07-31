@@ -1,3 +1,5 @@
+import AppKit
+import ApplicationServices
 import CoreGraphics
 @testable import DockDoor
 import Foundation
@@ -11,6 +13,7 @@ struct NativeTabGroupingTests {
         pid: pid_t = 100,
         frame: CGRect = CGRect(x: 0, y: 0, width: 800, height: 600),
         recency: TimeInterval = 0,
+        isFocused: Bool = false,
         groupable: Bool = true
     ) -> NativeTabGrouping.Candidate {
         NativeTabGrouping.Candidate(
@@ -18,7 +21,36 @@ struct NativeTabGroupingTests {
             pid: pid,
             frame: frame,
             recency: Date(timeIntervalSinceReferenceDate: recency),
+            isFocused: isFocused,
             groupable: groupable
+        )
+    }
+
+    private func window(
+        id: CGWindowID,
+        frame: CGRect,
+        recency: TimeInterval
+    ) -> WindowInfo {
+        let app = NSRunningApplication.current
+        let appElement = AXUIElementCreateApplication(app.processIdentifier)
+        return WindowInfo(
+            windowProvider: MockPreviewWindow(
+                windowID: id,
+                frame: frame,
+                title: "Terminal",
+                owningApplicationBundleIdentifier: app.bundleIdentifier,
+                owningApplicationProcessID: app.processIdentifier,
+                isOnScreen: true,
+                windowLayer: 0
+            ),
+            app: app,
+            image: nil,
+            axElement: appElement,
+            appAxElement: appElement,
+            closeButton: nil,
+            lastAccessedTime: Date(timeIntervalSinceReferenceDate: recency),
+            isMinimized: false,
+            isHidden: false
         )
     }
 
@@ -76,6 +108,93 @@ struct NativeTabGroupingTests {
             candidate(id: 42, frame: frame, recency: 3),
         ])
         #expect(kept == [42])
+    }
+
+    @Test func focusedMemberWinsWhenIdenticalTitlesHaveEqualRecency() {
+        let kept = NativeTabGrouping.representativeIDs(from: [
+            candidate(id: 7, recency: 3),
+            candidate(id: 42, recency: 3, isFocused: true),
+        ])
+        #expect(kept == [42])
+    }
+
+    @Test func focusedMemberWinsAfterRestartWithStaleRecency() {
+        let kept = NativeTabGrouping.representativeIDs(from: [
+            candidate(id: 7, recency: 100),
+            candidate(id: 42, recency: 0, isFocused: true),
+        ])
+        #expect(kept == [42])
+    }
+
+    @Test func focusedMemberWinsAfterRapidlySwitchingAway() {
+        let kept = NativeTabGrouping.representativeIDs(from: [
+            candidate(id: 7, recency: 50),
+            candidate(id: 42, recency: 49, isFocused: true),
+        ])
+        #expect(kept == [42])
+    }
+
+    @Test func collapsesMultipleTabbedWindowsIndependently() {
+        let firstFrame = CGRect(x: 0, y: 0, width: 800, height: 600)
+        let secondFrame = CGRect(x: 100, y: 100, width: 900, height: 700)
+        let groups = NativeTabGrouping.groups(from: [
+            candidate(id: 1, frame: firstFrame, recency: 10),
+            candidate(id: 2, frame: firstFrame, recency: 0, isFocused: true),
+            candidate(id: 3, frame: secondFrame, recency: 2),
+            candidate(id: 4, frame: secondFrame, recency: 8),
+        ])
+
+        #expect(groups == [
+            NativeTabGrouping.Group(representativeID: 2, memberIDs: [1, 2]),
+            NativeTabGrouping.Group(representativeID: 4, memberIDs: [3, 4]),
+        ])
+    }
+
+    @Test func refreshedSwitcherPathPreservesCollapsedMemberIDs() {
+        let frame = CGRect(x: 0, y: 0, width: 800, height: 600)
+        let pid = NSRunningApplication.current.processIdentifier
+        let collapsed = WindowUtil.collapseNativeTabs(
+            [
+                window(id: 1, frame: frame, recency: 10),
+                window(id: 2, frame: frame, recency: 0),
+            ],
+            focusedWindowIDsByPID: [pid: 2]
+        )
+
+        #expect(collapsed.map(\.id) == [2])
+        #expect(collapsed.first?.nativeTabGroupWindowIDs == [1, 2])
+    }
+
+    @Test func cachedSwitcherPathCollapsesBeforeRefresh() {
+        let frame = CGRect(x: 0, y: 0, width: 800, height: 600)
+        let pid = NSRunningApplication.current.processIdentifier
+        let collapsed = WindowUtil.collapseNativeTabs(
+            [
+                window(id: 1, frame: frame, recency: 100),
+                window(id: 2, frame: frame, recency: 0),
+            ],
+            focusedWindowIDsByPID: [pid: 2]
+        )
+
+        #expect(collapsed.map(\.id) == [2])
+    }
+
+    @Test func activationReResolvesCurrentFocusedGroupMember() {
+        let selectedID = NativeTabGrouping.activationWindowID(
+            representativeID: 2,
+            memberIDs: [1, 2],
+            focusedWindowID: 1
+        )
+        #expect(selectedID == 1)
+    }
+
+    @Test func activationKeepsRepresentativeWhenFocusBelongsToAnotherTabbedWindow() {
+        let selectedID = NativeTabGrouping.activationWindowID(
+            representativeID: 2,
+            memberIDs: [1, 2],
+            focusedWindowID: 4
+        )
+        #expect(selectedID == 2)
     }
 
     @Test func emptyInputYieldsEmpty() {
