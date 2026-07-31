@@ -1,5 +1,6 @@
 import AppKit
 import Combine
+import Defaults
 import Foundation
 import MediaRemoteAdapter
 
@@ -39,6 +40,8 @@ final class MediaRemoteService: ObservableObject {
     private var playbackIntent: (isPlaying: Bool, date: Date)?
 
     private var resyncWork: DispatchWorkItem?
+
+    private var mediaWidgetObserver: Defaults.Observation?
 
     var interpolatedElapsedTime: TimeInterval {
         if let seek = seekBase, seek.rate == 0 || isWithinSeekWindow {
@@ -80,6 +83,7 @@ final class MediaRemoteService: ObservableObject {
 
     private init() {
         setupController()
+        observeMediaWidgetSetting()
     }
 
     private func setupController() {
@@ -90,7 +94,29 @@ final class MediaRemoteService: ObservableObject {
         }
     }
 
+    /// Starts and stops the listener as the media widget is toggled, so turning the widget off
+    /// takes effect immediately rather than only at the next launch.
+    private func observeMediaWidgetSetting() {
+        mediaWidgetObserver = Defaults.observe(.enableMediaWidget) { [weak self] change in
+            DispatchQueue.main.async {
+                guard let self else { return }
+                if change.newValue {
+                    self.activate()
+                } else {
+                    self.deactivate()
+                }
+            }
+        }
+    }
+
+    /// `startListening()` spawns a helper process that lives for the rest of the session, so the
+    /// listener must not start while the media widget is disabled — otherwise the helper runs, and
+    /// accumulates memory, for a feature the user has turned off.
+    ///
+    /// The check lives here rather than at the call site so the precondition travels with the
+    /// service instead of relying on every caller to remember it.
     func activate() {
+        guard Defaults[.enableMediaWidget] else { return }
         guard !isActive else { return }
         isActive = true
         controller.startListening()
