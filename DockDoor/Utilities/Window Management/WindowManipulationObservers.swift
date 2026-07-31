@@ -13,6 +13,7 @@ class WindowManipulationObservers {
     private let previewCoordinator: SharedPreviewWindowCoordinator
 
     private var observers: [pid_t: AXObserver] = [:]
+    private var lastKnownWindowPositions: [CGWindowID: CGPoint] = [:]
     private var debouncedTasks: [String: Task<Void, Never>] = [:]
     var cacheUpdateWorkItem: (workItem: DispatchWorkItem, hasStateAdjustment: Bool, needsValidation: Bool)?
     var updateDateTimeWorkItem: DispatchWorkItem?
@@ -249,8 +250,14 @@ class WindowManipulationObservers {
                 }
             }
         case kAXUIElementDestroyedNotification:
+            if let windowID = try? element.cgWindowId() {
+                lastKnownWindowPositions.removeValue(forKey: windowID)
+            }
             handleWindowEvent(element: element, app: app, notification: notificationName, validate: true)
         case kAXWindowResizedNotification, kAXWindowMovedNotification:
+            if let windowID = try? element.cgWindowId(), let position = try? element.position() {
+                lastKnownWindowPositions[windowID] = position
+            }
             handleWindowEvent(element: element, app: app, notification: notificationName, validate: false) { [weak self] windowSet in
                 guard let self else { return }
                 let windowID = try? element.cgWindowId()
@@ -307,10 +314,28 @@ class WindowManipulationObservers {
         case kAXWindowCreatedNotification:
             handleNewWindow(for: pid)
         case kAXTitleChangedNotification:
+            let windowID = try? element.cgWindowId()
+            let position = try? element.position()
+            if let windowID, let position, lastKnownWindowPositions[windowID] == position {
+                var handledInPlace = false
+                let freshTitle = try? element.title()
+                WindowUtil.updateWindowCache(for: app) { windowSet in
+                    guard let existing = windowSet.first(where: { $0.axElement == element }) else { return }
+                    handledInPlace = true
+                    guard let freshTitle, !freshTitle.isEmpty, existing.windowName != freshTitle else { return }
+                    var updated = existing
+                    updated.windowName = freshTitle
+                    windowSet.remove(existing)
+                    windowSet.insert(updated)
+                }
+                if handledInPlace { return }
+            }
+            if let windowID, let position {
+                lastKnownWindowPositions[windowID] = position
+            }
             handleWindowEvent(element: element, app: app, notification: notificationName, validate: false) { [weak self] windowSet in
                 guard let self else { return }
                 guard let role = try? element.role(), role == kAXWindowRole as String else { return }
-                let windowID = try? element.cgWindowId()
                 update(windowSet: &windowSet, matching: windowID, element: element) { window in
                     if let freshTitle = try? window.axElement.title(), !freshTitle.isEmpty {
                         window.windowName = freshTitle

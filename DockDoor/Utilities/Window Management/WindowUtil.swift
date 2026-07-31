@@ -1098,6 +1098,10 @@ extension WindowUtil {
             }
         }
 
+        guard ownerApp.activationPolicy != .prohibited else {
+            return
+        }
+
         let ownerAppElement = AXUIElementCreateApplication(ownerPid)
 
         let axWindows = AXUIElement.allWindows(ownerPid, appElement: ownerAppElement, app: displayApp)
