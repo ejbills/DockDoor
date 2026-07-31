@@ -123,7 +123,7 @@ enum SettingsSearchCatalog {
         SettingsSearchItem(
             id: "dockPreviews.enable",
             title: String(localized: "Enable Dock Previews"),
-            description: String(localized: "Show window previews when hovering over Dock icons."),
+            description: String(localized: "Show window previews for Dock icons."),
             keywords: ["dock", "hover", "preview"],
             tab: "DockPreviews",
             section: "",
@@ -207,6 +207,23 @@ enum SettingsSearchCatalog {
             tab: "DockPreviews",
             section: String(localized: "Window Display"),
             icon: "1.square"
+        ),
+        SettingsSearchItem(
+            id: "dockPreviews.activationTrigger",
+            title: String(localized: "Dock Preview Trigger"),
+            description: String(localized: "Show previews automatically on hover, or require a click trigger on the Dock icon."),
+            keywords: ["trigger", "hover", "middle", "click", "modifier", "dock"],
+            tab: "DockPreviews",
+            section: String(localized: "Dock Interaction"),
+            icon: "cursorarrow.click"
+        ),
+        SettingsSearchItem(
+            id: "dockPreviews.activationModifier",
+            title: String(localized: "Dock Preview Modifier"),
+            keywords: ["modifier", "option", "control", "shift", "command", "click"],
+            tab: "DockPreviews",
+            section: String(localized: "Dock Interaction"),
+            icon: "keyboard"
         ),
         SettingsSearchItem(
             id: "dockPreviews.hoverAction",
@@ -1204,7 +1221,7 @@ enum SettingsSearchCatalog {
             id: "gestures.middleClick",
             title: String(localized: "Middle Click"),
             description: String(localized: "Action performed when middle-clicking on a window preview."),
-            keywords: ["middle", "click", "mouse", "button"],
+            keywords: ["middle", "click", "mouse", "button", "open", "activate", "window", "app"],
             tab: "GesturesKeybinds",
             section: String(localized: "Mouse Actions"),
             icon: "computermouse"

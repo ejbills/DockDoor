@@ -15,6 +15,8 @@ struct WindowlessAppPreview: View, Equatable {
     var appearance: PreviewAppearanceSettings
     let backgroundAppearance: BackgroundAppearance
 
+    @Default(.middleClickAction) private var middleClickAction
+
     @State private var isHovering = false
 
     static func == (l: Self, r: Self) -> Bool {
@@ -216,6 +218,11 @@ struct WindowlessAppPreview: View, Equatable {
                 windowInfo.app.activate(options: [.activateIgnoringOtherApps])
             }
             onTap?()
+        }
+        .onMiddleClick {
+            if middleClickAction != .none {
+                handleWindowAction(middleClickAction)
+            }
         }
         .contextMenu {
             Button(action: {
