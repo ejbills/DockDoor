@@ -16,12 +16,6 @@ struct WidgetSettingsView: View {
     @Default(.enableMediaWidget) var enableMediaWidget
     @Default(.mediaDetectionMode) var mediaDetectionMode
     @Default(.enableCalendarWidget) var enableCalendarWidget
-    @Default(.enableDockItemWidgets) var enableDockItemWidgets
-    @Default(.enableFolderWidget) var enableFolderWidget
-    @Default(.folderWidgetDefaultSortOrder) var folderWidgetDefaultSortOrder
-    @Default(.folderWidgetDefaultSortReversed) var folderWidgetDefaultSortReversed
-    @Default(.folderWidgetRememberSortPerFolder) var folderWidgetRememberSortPerFolder
-    @Default(.folderWidgetShowHiddenFiles) var folderWidgetShowHiddenFiles
     @Default(.useEmbeddedMediaControls) var useEmbeddedMediaControls
     @Default(.showBigControlsWhenNoValidWindows) var showBigControlsWhenNoValidWindows
     @Default(.enablePinning) var enablePinning
@@ -108,57 +102,6 @@ struct WidgetSettingsView: View {
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                                 .padding(.leading, 40)
-                        }
-                    }
-                }
-
-                SettingsGroup(header: "Dock Item Widgets") {
-                    VStack(alignment: .leading, spacing: 10) {
-                        Toggle(isOn: $enableDockItemWidgets) {
-                            Text("Enable Dock item widgets")
-                        }
-                        .settingsSearchTarget("widgets.dockItems")
-
-                        if enableDockItemWidgets {
-                            Toggle(isOn: $enableFolderWidget) {
-                                Text("Folder widget")
-                            }
-                            .settingsSearchTarget("widgets.folder")
-                            .padding(.leading, 20)
-
-                            Text("Show folder contents when hovering folders in the Dock.")
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                                .padding(.leading, 40)
-                        }
-                    }
-                }
-
-                if enableDockItemWidgets, enableFolderWidget {
-                    SettingsGroup(header: "Folder Widget") {
-                        VStack(alignment: .leading, spacing: 10) {
-                            Picker("Default sort:", selection: $folderWidgetDefaultSortOrder) {
-                                ForEach(FolderWidgetSortOrder.allCases, id: \.self) { order in
-                                    Text(order.localizedName).tag(order)
-                                }
-                            }
-                            .pickerStyle(.menu)
-                            .settingsSearchTarget("widgets.folderSort")
-
-                            Toggle(isOn: $folderWidgetDefaultSortReversed) {
-                                Text("Sort descending by default")
-                            }
-                            .settingsSearchTarget("widgets.folderSortDirection")
-
-                            Toggle(isOn: $folderWidgetRememberSortPerFolder) {
-                                Text("Remember sorting per folder")
-                            }
-                            .settingsSearchTarget("widgets.folderRememberSort")
-
-                            Toggle(isOn: $folderWidgetShowHiddenFiles) {
-                                Text("Show hidden files")
-                            }
-                            .settingsSearchTarget("widgets.folderHiddenFiles")
                         }
                     }
                 }

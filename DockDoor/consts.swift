@@ -88,8 +88,7 @@ extension Defaults.Keys {
     static let enableMediaWidget = Key<Bool>("enableMediaWidget", default: true)
     static let mediaDetectionMode = Key<MediaDetectionMode>("mediaDetectionMode", default: .universal)
     static let enableCalendarWidget = Key<Bool>("enableCalendarWidget", default: true)
-    static let enableDockItemWidgets = Key<Bool>("enableDockItemWidgets", default: true)
-    static let enableFolderWidget = Key<Bool>("enableFolderWidget", default: true)
+    static let enableFolderWidget = Key<Bool>("enableFolderWidget", default: false)
     static let folderWidgetDefaultSortOrder = Key<FolderWidgetSortOrder>("folderWidgetDefaultSortOrder", default: .dateModified)
     static let folderWidgetDefaultSortReversed = Key<Bool>("folderWidgetDefaultSortReversed", default: true)
     static let folderWidgetRememberSortPerFolder = Key<Bool>("folderWidgetRememberSortPerFolder", default: true)
@@ -111,6 +110,8 @@ extension Defaults.Keys {
     static let enableWindowSwitcher = Key<Bool>("enableWindowSwitcher", default: true)
     static let instantWindowSwitcher = Key<Bool>("instantWindowSwitcher", default: false)
     static let enableDockPreviews = Key<Bool>("enableDockPreviews", default: true)
+    static let dockPreviewActivationMode = Key<DockPreviewActivationMode>("dockPreviewActivationMode", default: .hover)
+    static let dockPreviewActivationModifier = Key<DockPreviewActivationModifier>("dockPreviewActivationModifier", default: .option)
     static let showWindowsFromCurrentSpaceOnly = Key<Bool>("showWindowsFromCurrentSpaceOnly", default: false)
     static let showWindowsFromCurrentMonitorOnly = Key<Bool>("showWindowsFromCurrentMonitorOnly", default: false)
     static let windowPreviewSortOrder = Key<WindowPreviewSortOrder>("windowPreviewSortOrder", default: .recentlyUsed)
@@ -185,8 +186,9 @@ extension Defaults.Keys {
     static let dockBackgroundStyle = Key<DockBackgroundStyle>("dockBackgroundStyle", default: .liquidGlass)
     static let dockGlassOpacity = Key<CGFloat>("dockGlassOpacity", default: 0.95)
     static let dockGlassBlurRadius = Key<CGFloat>("dockGlassBlurRadius", default: 0)
-    static let dockGlassSaturation = Key<CGFloat>("dockGlassSaturation", default: 1.0)
-    static let dockBackgroundTintOpacity = Key<CGFloat>("dockBackgroundTintOpacity", default: 0.3)
+    static let dockGlassSaturation = Key<CGFloat>("dockGlassSaturation", default: 1.8)
+    static let dockGlassVariant = Key<Int>("dockGlassVariant", default: 4)
+    static let dockBackgroundTintOpacity = Key<CGFloat>("dockBackgroundTintOpacity", default: 0.18)
     static let dockBackgroundBorderOpacity = Key<CGFloat>("dockBackgroundBorderOpacity", default: 0.15)
     static let dockBackgroundBorderWidth = Key<CGFloat>("dockBackgroundBorderWidth", default: 1)
     static let dockBackgroundMaterial = Key<DockBackgroundMaterial>("dockBackgroundMaterial", default: .ultraThin)
@@ -738,6 +740,56 @@ enum DockClickAction: String, CaseIterable, Defaults.Serializable {
             String(localized: "Minimize windows", comment: "Dock click action option")
         case .hide:
             String(localized: "Hide application", comment: "Dock click action option")
+        }
+    }
+}
+
+enum DockPreviewActivationMode: String, CaseIterable, Defaults.Serializable {
+    case hover
+    case middleClick
+    case modifierClick
+
+    var localizedName: String {
+        switch self {
+        case .hover:
+            String(localized: "Hover", comment: "Dock preview activation mode option")
+        case .middleClick:
+            String(localized: "Middle Click", comment: "Dock preview activation mode option")
+        case .modifierClick:
+            String(localized: "Modifier Click", comment: "Dock preview activation mode option")
+        }
+    }
+}
+
+enum DockPreviewActivationModifier: String, CaseIterable, Defaults.Serializable {
+    case option
+    case control
+    case shift
+    case command
+
+    var localizedName: String {
+        switch self {
+        case .option:
+            String(localized: "Option ⌥", comment: "Dock preview activation modifier option")
+        case .control:
+            String(localized: "Control ⌃", comment: "Dock preview activation modifier option")
+        case .shift:
+            String(localized: "Shift ⇧", comment: "Dock preview activation modifier option")
+        case .command:
+            String(localized: "Command ⌘", comment: "Dock preview activation modifier option")
+        }
+    }
+
+    var eventFlag: CGEventFlags {
+        switch self {
+        case .option:
+            .maskAlternate
+        case .control:
+            .maskControl
+        case .shift:
+            .maskShift
+        case .command:
+            .maskCommand
         }
     }
 }

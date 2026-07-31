@@ -28,26 +28,68 @@ struct DockStyleModifier: ViewModifier {
     let backgroundOpacity: CGFloat
     let outerPadding: CGFloat
 
+    private var shape: RoundedRectangle {
+        RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+    }
+
     func body(content: Content) -> some View {
         content
             .background {
                 ZStack {
-                    BlurView(cornerRadius: cornerRadius, appearance: backgroundAppearance)
-                        .borderedBackground(
-                            .white.opacity(backgroundAppearance.borderOpacity),
-                            lineWidth: backgroundAppearance.borderWidth,
-                            shape: RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                        )
-                        .opacity(backgroundOpacity)
+                    glassBackground
                     if let hc = highlightColor {
                         FluidGradient(blobs: hc.generateShades(count: 3), highlights: hc.generateShades(count: 3), speed: 0.5, blur: 0.75)
                             .opacity(0.2 * backgroundOpacity)
                     }
                 }
-                .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
+                .clipShape(shape)
             }
             .padding(outerPadding)
     }
+
+    /// The synthetic blur variant relies on the glass shader's own edge
+    /// refraction as its border, so it skips `borderedBackground` (which
+    /// insets the content and leaves an un-blurred gap) and uses an overlay
+    /// stroke instead.
+    @ViewBuilder
+    private var glassBackground: some View {
+        if backgroundAppearance.usesSyntheticBlur {
+            BlurView(cornerRadius: cornerRadius, appearance: backgroundAppearance)
+                .overlay {
+                    shape.strokeBorder(
+                        glassBorderGradient(opacity: backgroundAppearance.borderOpacity),
+                        lineWidth: backgroundAppearance.borderWidth
+                    )
+                }
+                .opacity(backgroundOpacity)
+        } else {
+            BlurView(cornerRadius: cornerRadius, appearance: backgroundAppearance)
+                .borderedBackground(
+                    glassBorderGradient(opacity: backgroundAppearance.borderOpacity),
+                    lineWidth: backgroundAppearance.borderWidth,
+                    shape: shape
+                )
+                .opacity(backgroundOpacity)
+        }
+    }
+}
+
+// Directional rim-light stroke that reads as lit glass rather than a flat
+// outline. Stops match Docky's dock chrome at the default border opacity and
+// scale together as the user's borderOpacity knob changes.
+private func glassBorderGradient(opacity: CGFloat) -> LinearGradient {
+    let scale = opacity / 0.15
+    return LinearGradient(
+        colors: [
+            .white.opacity(0.35 * scale),
+            .white.opacity(0.12 * scale),
+            .white.opacity(0.05 * scale),
+            .white.opacity(0.12 * scale),
+            .white.opacity(0.28 * scale),
+        ],
+        startPoint: .topLeading,
+        endPoint: .bottomTrailing
+    )
 }
 
 extension View {

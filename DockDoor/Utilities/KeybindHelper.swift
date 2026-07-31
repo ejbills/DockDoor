@@ -435,6 +435,15 @@ class KeybindHelper {
             let flags = event.flags
             let shouldRouteCmdTabToWindowSwitcher = isCmdTabWindowSwitcherKeybind(keyCode: keyCode, flags: flags)
 
+            // Consume bare spacebar for a visible media preview so it doesn't also reach the focused app and double-toggle playback.
+            if keyCode == Int64(kVK_Space),
+               event.getIntegerValueField(.keyboardEventAutorepeat) == 0,
+               !flags.hasSuperfluousModifiers(),
+               MediaKeyboardShortcutCoordinator.shared.handleSpaceKeyDown()
+            {
+                return nil
+            }
+
             let backwardKeyCode = Defaults[.switcherBackwardKeyCode]
             if Self.eventFlagForKeyCode(backwardKeyCode) == nil,
                keyCode == Int64(backwardKeyCode),

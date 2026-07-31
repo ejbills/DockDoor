@@ -33,6 +33,7 @@ enum WindowAction: String, Hashable, CaseIterable, Defaults.Serializable {
     case minimize
     case toggleFullScreen
     case hide
+    case openAppWindow
     case openNewWindow
     case maximize
     case bringToCurrentSpace
@@ -63,6 +64,8 @@ enum WindowAction: String, Hashable, CaseIterable, Defaults.Serializable {
             String(localized: "Toggle Full Screen", comment: "Window action")
         case .hide:
             String(localized: "Hide App", comment: "Window action")
+        case .openAppWindow:
+            String(localized: "Open App Window", comment: "Window action")
         case .openNewWindow:
             String(localized: "Open New Window", comment: "Window action")
         case .maximize:
@@ -99,6 +102,7 @@ enum WindowAction: String, Hashable, CaseIterable, Defaults.Serializable {
         case .minimize: "minus.circle"
         case .toggleFullScreen: "arrow.up.left.and.arrow.down.right"
         case .hide: "eye.slash"
+        case .openAppWindow: "macwindow"
         case .openNewWindow: "plus.rectangle.on.rectangle"
         case .maximize: "arrow.up.backward.and.arrow.down.forward"
         case .bringToCurrentSpace: "arrow.right.to.line"
@@ -118,6 +122,13 @@ enum WindowAction: String, Hashable, CaseIterable, Defaults.Serializable {
     /// Actions that can be assigned to trackpad gestures
     static var gestureActions: [WindowAction] {
         [.none, .close, .minimize, .maximize, .toggleFullScreen, .hide, .quit,
+         .fillLeftHalf, .fillRightHalf, .fillTopHalf, .fillBottomHalf,
+         .fillTopLeftQuarter, .fillTopRightQuarter, .fillBottomLeftQuarter, .fillBottomRightQuarter, .center]
+    }
+
+    /// Actions that can be assigned to middle-clicking a window preview
+    static var middleClickActions: [WindowAction] {
+        [.none, .openAppWindow, .close, .minimize, .maximize, .toggleFullScreen, .hide, .quit,
          .fillLeftHalf, .fillRightHalf, .fillTopHalf, .fillBottomHalf,
          .fillTopLeftQuarter, .fillTopRightQuarter, .fillBottomLeftQuarter, .fillBottomRightQuarter, .center]
     }
@@ -179,6 +190,25 @@ enum WindowAction: String, Hashable, CaseIterable, Defaults.Serializable {
                 return .windowUpdated(updatedWindow)
             }
             return .noChange
+
+        case .openAppWindow:
+            if window.isWindowlessApp {
+                window.app.activate(options: [.activateIgnoringOtherApps])
+                return .dismissed
+            }
+
+            if window.isMinimized {
+                var updatedWindow = window
+                return updatedWindow.toggleMinimize() != nil ? .dismissed : .noChange
+            }
+
+            if window.isHidden {
+                var updatedWindow = window
+                return updatedWindow.toggleHidden() != nil ? .dismissed : .noChange
+            }
+
+            window.bringToFront()
+            return .dismissed
 
         case .openNewWindow:
             WindowUtil.openNewWindow(app: window.app)
@@ -1068,6 +1098,10 @@ extension WindowUtil {
             }
         }
 
+        guard ownerApp.activationPolicy != .prohibited else {
+            return
+        }
+
         let ownerAppElement = AXUIElementCreateApplication(ownerPid)
 
         let axWindows = AXUIElement.allWindows(ownerPid, appElement: ownerAppElement, app: displayApp)
@@ -1383,9 +1417,19 @@ extension WindowUtil {
         }
 
         DebugLogger.log("quitAppOnLastWindowClose", details: "App: \(app.localizedName ?? "Unknown") (PID: \(app.processIdentifier))")
-        DispatchQueue.main.async {
-            app.terminate()
-            purgeAppCache(with: app.processIdentifier)
+        // Re-verify after a delay: apps like MS Office destroy and recreate windows during
+        // view transitions, so the cached count can transiently hit 0 while a new window exists.
+        DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + 0.5) {
+            guard !app.isTerminated else { return }
+            let appAX = AXUIElementCreateApplication(app.processIdentifier)
+            if let liveWindows = try? appAX.windows(), !liveWindows.isEmpty {
+                DebugLogger.log("quitAppOnLastWindowClose", details: "Aborted: \(app.localizedName ?? "Unknown") has \(liveWindows.count) live window(s)")
+                return
+            }
+            DispatchQueue.main.async {
+                app.terminate()
+                purgeAppCache(with: app.processIdentifier)
+            }
         }
         return true
     }
@@ -1586,15 +1630,17 @@ extension WindowUtil {
 // MARK: - Private Helper Methods
 
 extension WindowUtil {
-    /// Makes a window key by posting raw event bytes to the Window Server
+    /// Makes a window key by posting a synthetic left-click (down then up) to the Window Server.
     /// Ported from https://github.com/Hammerspoon/hammerspoon/issues/370#issuecomment-545545468
     static func makeKeyWindow(_ psn: inout ProcessSerialNumber, windowID: CGWindowID) {
-        var bytes = [UInt8](repeating: 0, count: 0xF8)
+        var bytes = [UInt8](repeating: 0, count: 0x100)
         bytes[0x04] = 0xF8
         bytes[0x3A] = 0x10
         var wid = UInt32(windowID)
         memcpy(&bytes[0x3C], &wid, MemoryLayout<UInt32>.size)
-        memset(&bytes[0x20], 0xFF, 0x10)
+        // Click just outside the frame: makes the window key without hit-testing content (top-left would close Chrome PWA shims).
+        var point = CGPoint(x: -1, y: -1)
+        memcpy(&bytes[0x20], &point, MemoryLayout<CGPoint>.size)
         bytes[0x08] = 0x01
         _ = SLPSPostEventRecordTo(&psn, &bytes)
         bytes[0x08] = 0x02

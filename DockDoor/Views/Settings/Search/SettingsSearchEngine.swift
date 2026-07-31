@@ -98,10 +98,8 @@ final class SettingsSearchEngine: ObservableObject {
         switch item.id {
         case "dockPreviews.restoreAllMinimizedOnClick":
             Defaults[.dockClickAction] == .minimize
-        case "widgets.folder":
-            Defaults[.enableDockItemWidgets]
         case "widgets.folderSort", "widgets.folderSortDirection", "widgets.folderRememberSort", "widgets.folderHiddenFiles":
-            Defaults[.enableDockItemWidgets] && Defaults[.enableFolderWidget]
+            Defaults[.enableFolderWidget]
         default:
             true
         }
