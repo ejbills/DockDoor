@@ -12,10 +12,6 @@ struct FolderWidgetItem: Identifiable, Hashable {
     let localizedKind: String
 
     var id: String { url.path }
-
-    var icon: NSImage {
-        NSWorkspace.shared.icon(forFile: url.path)
-    }
 }
 
 enum FolderWidgetAccessState: Equatable {
@@ -143,15 +139,8 @@ enum FolderWidgetAuthorization {
             }
         }
 
-        do {
-            _ = try FileManager.default.contentsOfDirectory(
-                at: url,
-                includingPropertiesForKeys: nil,
-                options: [.skipsHiddenFiles]
-            )
-            return true
-        } catch {
-            return false
-        }
+        guard let dir = opendir(url.path) else { return false }
+        closedir(dir)
+        return true
     }
 }
