@@ -2,9 +2,19 @@ import ApplicationServices
 import Defaults
 import SwiftUI
 
-// Pure UI state container for window preview presentation
-class PreviewStateCoordinator: ObservableObject {
+/// Isolated so index changes only invalidate views that read it, not the entire preview container.
+final class SwitcherSelectionState: ObservableObject {
     @Published var currIndex: Int = -1
+}
+
+/// Pure UI state container for window preview presentation
+class PreviewStateCoordinator: ObservableObject {
+    let selection = SwitcherSelectionState()
+    var currIndex: Int {
+        get { selection.currIndex }
+        set { selection.currIndex = newValue }
+    }
+
     @Published var windowSwitcherActive: Bool = false {
         didSet { invalidateFilterCache() }
     }
@@ -50,7 +60,9 @@ class PreviewStateCoordinator: ObservableObject {
     }
 
     private var cachedFilteredIndices: [Int]?
-    private func invalidateFilterCache() { cachedFilteredIndices = nil }
+    private func invalidateFilterCache() {
+        cachedFilteredIndices = nil
+    }
 
     @MainActor
     func setFocusedWindowID(_ windowID: CGWindowID?) {
@@ -334,27 +346,138 @@ class PreviewStateCoordinator: ObservableObject {
             || (compactThreshold > 0 && windows.count >= compactThreshold)
 
         if Defaults[.allowDynamicImageSizing], !wouldUseCompactMode {
-            let minimumItemWidth = if windowSwitcherActive {
-                min(
-                    newOverallMaxDimension.x,
-                    WindowPreviewHoverContainer.dynamicSwitcherMinimumCardWidth
+            if windowSwitcherActive {
+                expectedContentSize = computeSwitcherContentSize(
+                    dimensionsMap: newDimensionsMap,
+                    maxColumns: cols,
+                    maxRows: rows,
+                    fillToLimit: Defaults[.windowSwitcherScrollDirection] == .vertical,
+                    minimumItemWidth: min(newOverallMaxDimension.x, WindowPreviewHoverContainer.dynamicSwitcherMinimumCardWidth),
+                    dockPosition: dockPosition,
+                    bestGuessMonitor: bestGuessMonitor
                 )
             } else {
-                CGFloat.zero
+                expectedContentSizeIsExact = false
+                expectedContentSize = Self.computeExpectedContentSize(
+                    windowCount: windows.count,
+                    dimensionsMap: newDimensionsMap,
+                    isHorizontal: dockPosition.isHorizontalFlow,
+                    maxColumns: cols,
+                    maxRows: rows,
+                    hasEmbeddedContent: hasEmbeddedContent,
+                    fillToLimit: false,
+                    minimumItemWidth: 0
+                )
             }
-            expectedContentSize = Self.computeExpectedContentSize(
-                windowCount: windows.count,
-                dimensionsMap: newDimensionsMap,
-                isHorizontal: windowSwitcherActive ? true : dockPosition.isHorizontalFlow,
-                maxColumns: cols,
-                maxRows: rows,
-                hasEmbeddedContent: hasEmbeddedContent,
-                fillToLimit: windowSwitcherActive && Defaults[.windowSwitcherScrollDirection] == .vertical,
-                minimumItemWidth: minimumItemWidth
-            )
         } else {
+            expectedContentSizeIsExact = false
             expectedContentSize = .zero
         }
+    }
+
+    /// True when `expectedContentSize` faithfully predicts the laid-out size, letting the panel skip the synchronous fittingSize pass.
+    private(set) var expectedContentSizeIsExact: Bool = false
+
+    @MainActor
+    private func computeSwitcherContentSize(
+        dimensionsMap: [Int: WindowPreviewHoverContainer.WindowDimensions],
+        maxColumns: Int,
+        maxRows: Int,
+        fillToLimit: Bool,
+        minimumItemWidth: CGFloat,
+        dockPosition: DockPosition,
+        bestGuessMonitor: NSScreen
+    ) -> CGSize {
+        expectedContentSizeIsExact = false
+
+        guard !windows.isEmpty, maxColumns > 0, maxRows > 0,
+              windows.allSatisfy({ !$0.isWindowlessApp && $0.image != nil }),
+              dimensionsMap.count == windows.count,
+              let chromeHeight = measureSwitcherCardChromeHeight(
+                  dimensionsMap: dimensionsMap,
+                  dockPosition: dockPosition,
+                  bestGuessMonitor: bestGuessMonitor
+              )
+        else {
+            return Self.computeExpectedContentSize(
+                windowCount: windows.count,
+                dimensionsMap: dimensionsMap,
+                isHorizontal: true,
+                maxColumns: maxColumns,
+                maxRows: maxRows,
+                hasEmbeddedContent: hasEmbeddedContent,
+                fillToLimit: fillToLimit,
+                minimumItemWidth: minimumItemWidth
+            )
+        }
+
+        let itemSpacing = HoverContainerPadding.itemSpacing
+        let padding = HoverContainerPadding.totalPerSide()
+        let chunks = WindowPreviewHoverContainer.chunkArray(
+            items: Array(windows.indices),
+            isHorizontal: true,
+            maxColumns: maxColumns,
+            maxRows: maxRows,
+            fillToLimit: fillToLimit
+        )
+
+        var maxRowWidth: CGFloat = 0
+        var totalHeight: CGFloat = 0
+        for row in chunks {
+            var rowWidth: CGFloat = 0
+            var rowImageHeight: CGFloat = 0
+            for index in row {
+                guard let dims = dimensionsMap[index] else { continue }
+                rowWidth += max(dims.size.width, minimumItemWidth)
+                rowImageHeight = max(rowImageHeight, dims.size.height)
+            }
+            rowWidth += CGFloat(max(0, row.count - 1)) * itemSpacing
+            maxRowWidth = max(maxRowWidth, rowWidth)
+            totalHeight += rowImageHeight + chromeHeight
+        }
+        totalHeight += CGFloat(max(0, chunks.count - 1)) * itemSpacing
+
+        expectedContentSizeIsExact = true
+        return CGSize(width: maxRowWidth + padding * 2, height: totalHeight + padding * 2)
+    }
+
+    /// Measures one skeleton card in the selected state (the tallest case) to learn how much vertical chrome cards add around their image.
+    @MainActor
+    private func measureSwitcherCardChromeHeight(
+        dimensionsMap: [Int: WindowPreviewHoverContainer.WindowDimensions],
+        dockPosition: DockPosition,
+        bestGuessMonitor: NSScreen
+    ) -> CGFloat? {
+        let sampleIndex = windows.indices.first(where: { i in
+            let title = windows[i].windowName
+            return title?.isEmpty == false && title != windows[i].app.localizedName
+        }) ?? 0
+        guard let dims = dimensionsMap[sampleIndex] else { return nil }
+
+        let sample = WindowPreview(
+            windowInfo: windows[sampleIndex],
+            onTap: nil,
+            index: sampleIndex,
+            dockPosition: dockPosition,
+            bestGuessMonitor: bestGuessMonitor,
+            uniformCardRadius: Defaults[.uniformCardRadius],
+            handleWindowAction: { _ in },
+            isSelected: true,
+            windowSwitcherActive: true,
+            dimensions: dims,
+            showAppIconOnly: Defaults[.showAppIconOnly],
+            mockPreviewActive: false,
+            onHoverIndexChange: nil,
+            onDragHoverIndexChange: nil,
+            useLivePreview: false,
+            skeletonMode: true,
+            appearance: PreviewAppearanceSettings.resolve(windowSwitcherActive: true, dockPosition: dockPosition),
+            backgroundAppearance: BackgroundAppearance.resolve(),
+            focusedWindowID: nil
+        )
+        let measured = NSHostingView(rootView: sample).fittingSize
+        guard measured.height > 0 else { return nil }
+        return max(0, measured.height - dims.size.height)
     }
 
     private static let estimatedEmbeddedWidgetHeight: CGFloat = 100

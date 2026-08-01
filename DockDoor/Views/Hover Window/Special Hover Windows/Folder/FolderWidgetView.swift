@@ -41,11 +41,10 @@ struct FolderWidgetPanelView: View {
     @Default(.folderWidgetSortOrders) private var folderSortOrders
     @Default(.folderWidgetSortReversed) private var folderSortReversed
     @Default(.folderWidgetShowHiddenFiles) private var showHiddenFiles
+    @Default(.showAnimations) private var showAnimations
 
-    @State private var accessState: FolderWidgetAccessState = .loading
     @State private var navigationStack: [FolderWidgetLevel] = []
 
-    private let rowHeight: CGFloat = 48
     private let panelWidth: CGFloat = 360
     private let contentHeight: CGFloat = 336
 
@@ -55,15 +54,6 @@ struct FolderWidgetPanelView: View {
 
     private var currentName: String {
         navigationStack.last?.name ?? folderName
-    }
-
-    private var currentItems: [FolderWidgetItem] {
-        switch accessState {
-        case let .accessible(items):
-            sortedItems(items)
-        default:
-            []
-        }
     }
 
     private var sortOrder: FolderWidgetSortOrder {
@@ -80,37 +70,53 @@ struct FolderWidgetPanelView: View {
         VStack(spacing: 10) {
             header
             sortControls
-            content
+
+            ZStack {
+                FolderWidgetListView(
+                    url: currentURL,
+                    sortOrder: sortOrder,
+                    isSortReversed: isSortReversed,
+                    showHiddenFiles: showHiddenFiles,
+                    contentHeight: contentHeight,
+                    onOpenFolder: navigateIntoFolder
+                )
+                .id(currentURL.path)
+                .transition(.opacity)
+            }
+            .frame(height: contentHeight)
+            .animation(navigationAnimation, value: currentURL.path)
         }
         .frame(width: panelWidth)
         .globalPadding(20)
-        .task(id: currentURL.path) {
-            await reload()
-        }
-        .onChange(of: showHiddenFiles) { _ in
-            Task { await reload() }
-        }
+    }
+
+    private var navigationAnimation: Animation? {
+        showAnimations ? .smooth(duration: 0.25) : nil
     }
 
     private var header: some View {
         HStack(spacing: 12) {
-            Image(nsImage: NSWorkspace.shared.icon(forFile: currentURL.path))
-                .resizable()
-                .scaledToFit()
-                .frame(width: 38, height: 38)
+            HStack(spacing: 12) {
+                Image(nsImage: NSWorkspace.shared.icon(forFile: currentURL.path))
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 38, height: 38)
 
-            VStack(alignment: .leading, spacing: 2) {
-                Text(currentName)
-                    .font(.title3)
-                    .fontWeight(.semibold)
-                    .lineLimit(1)
-                    .truncationMode(.middle)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(currentName)
+                        .font(.title3)
+                        .fontWeight(.semibold)
+                        .lineLimit(1)
+                        .truncationMode(.middle)
 
-                Text(String(localized: "Folder"))
-                    .font(.caption2)
-                    .foregroundStyle(.secondary)
+                    Text(String(localized: "Folder"))
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
+            .id(currentURL.path)
+            .transition(.opacity)
 
             Spacer(minLength: 8)
 
@@ -133,7 +139,7 @@ struct FolderWidgetPanelView: View {
         HStack(spacing: 6) {
             if !navigationStack.isEmpty {
                 Button {
-                    _ = navigationStack.popLast()
+                    navigateBack()
                 } label: {
                     Image(systemName: "chevron.left")
                         .font(.system(size: 13, weight: .semibold))
@@ -142,6 +148,7 @@ struct FolderWidgetPanelView: View {
                 }
                 .buttonStyle(.plain)
                 .help(String(localized: "Back"))
+                .transition(.scale(scale: 0.6).combined(with: .opacity))
             }
 
             Menu {
@@ -194,6 +201,75 @@ struct FolderWidgetPanelView: View {
         .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
     }
 
+    private func setSortOrder(_ order: FolderWidgetSortOrder) {
+        if rememberSortPerFolder {
+            folderSortOrders[currentURL.path] = order
+        } else {
+            defaultSortOrder = order
+        }
+    }
+
+    private func setSortReversed(_ reversed: Bool) {
+        if rememberSortPerFolder {
+            folderSortReversed[currentURL.path] = reversed
+        } else {
+            defaultSortReversed = reversed
+        }
+    }
+
+    private func navigateIntoFolder(_ item: FolderWidgetItem) {
+        if let url = FolderWidgetAuthorization.accessibleURL(for: item.url) {
+            push(FolderWidgetLevel(url: url, name: item.name))
+        } else if let url = FolderWidgetAuthorization.requestAccess(to: item.url) {
+            push(FolderWidgetLevel(url: url, name: item.name))
+        }
+    }
+
+    private func push(_ level: FolderWidgetLevel) {
+        withAnimation(showAnimations ? .smooth(duration: 0.25) : nil) {
+            navigationStack.append(level)
+        }
+    }
+
+    private func navigateBack() {
+        withAnimation(showAnimations ? .smooth(duration: 0.25) : nil) {
+            _ = navigationStack.popLast()
+        }
+    }
+}
+
+private struct FolderWidgetListView: View {
+    let url: URL
+    let sortOrder: FolderWidgetSortOrder
+    let isSortReversed: Bool
+    let showHiddenFiles: Bool
+    let contentHeight: CGFloat
+    let onOpenFolder: (FolderWidgetItem) -> Void
+
+    @Default(.showAnimations) private var showAnimations
+
+    @State private var accessState: FolderWidgetAccessState = .loading
+    @State private var sortedItems: [FolderWidgetItem] = []
+    @State private var hasCompletedInitialLoad = false
+
+    private let rowHeight: CGFloat = 48
+
+    var body: some View {
+        content
+            .task {
+                await reload()
+            }
+            .onChange(of: showHiddenFiles) { _ in
+                Task { await reload() }
+            }
+            .onChange(of: sortOrder) { newOrder in
+                resort(order: newOrder, reversed: isSortReversed)
+            }
+            .onChange(of: isSortReversed) { newReversed in
+                resort(order: sortOrder, reversed: newReversed)
+            }
+    }
+
     @ViewBuilder
     private var content: some View {
         switch accessState {
@@ -237,7 +313,7 @@ struct FolderWidgetPanelView: View {
 
     private var itemList: some View {
         let cornerRadius: CGFloat = 16
-        let shouldFeather = CGFloat(currentItems.count) * (rowHeight + 6) > contentHeight
+        let shouldFeather = CGFloat(sortedItems.count) * (rowHeight + 6) > contentHeight
 
         return ZStack {
             RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
@@ -245,10 +321,10 @@ struct FolderWidgetPanelView: View {
 
             ScrollView {
                 LazyVStack(spacing: 6) {
-                    ForEach(currentItems) { item in
+                    ForEach(sortedItems) { item in
                         FolderWidgetItemRow(item: item) {
                             if item.isDirectory {
-                                navigateIntoFolder(item)
+                                onOpenFolder(item)
                             } else {
                                 NSWorkspace.shared.open(item.url)
                                 SharedPreviewWindowCoordinator.activeInstance?.hideWindow()
@@ -299,17 +375,10 @@ struct FolderWidgetPanelView: View {
         .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
     }
 
-    private var sortBinding: Binding<FolderWidgetSortOrder> {
-        Binding(
-            get: { sortOrder },
-            set: { setSortOrder($0) }
-        )
-    }
-
     private func reload() async {
-        await MainActor.run { accessState = .loading }
+        await MainActor.run { applyContentChange { accessState = .loading } }
 
-        let urlToLoad = FolderWidgetAuthorization.resolvedAuthorizedURL(for: currentURL) ?? currentURL
+        let urlToLoad = FolderWidgetAuthorization.resolvedAuthorizedURL(for: url) ?? url
         let didStartAccessing = urlToLoad.startAccessingSecurityScopedResource()
         defer {
             if didStartAccessing {
@@ -318,28 +387,38 @@ struct FolderWidgetPanelView: View {
         }
 
         let result = await FolderWidgetLoader.loadItems(from: urlToLoad, showHiddenFiles: showHiddenFiles)
-        await MainActor.run { accessState = result }
-    }
-
-    private func setSortOrder(_ order: FolderWidgetSortOrder) {
-        if rememberSortPerFolder {
-            folderSortOrders[currentURL.path] = order
-        } else {
-            defaultSortOrder = order
+        await MainActor.run {
+            applyContentChange { accessState = result }
+            resort(order: sortOrder, reversed: isSortReversed)
         }
     }
 
-    private func setSortReversed(_ reversed: Bool) {
-        if rememberSortPerFolder {
-            folderSortReversed[currentURL.path] = reversed
+    private func applyContentChange(_ change: () -> Void) {
+        if showAnimations, hasCompletedInitialLoad {
+            withAnimation(.smooth(duration: 0.25), change)
         } else {
-            defaultSortReversed = reversed
+            change()
         }
     }
 
-    private func sortedItems(_ items: [FolderWidgetItem]) -> [FolderWidgetItem] {
+    private func resort(order: FolderWidgetSortOrder, reversed: Bool) {
+        guard case let .accessible(items) = accessState else {
+            sortedItems = []
+            return
+        }
+
+        Task.detached(priority: .userInitiated) {
+            let sorted = Self.sort(items, order: order, reversed: reversed)
+            await MainActor.run {
+                applyContentChange { sortedItems = sorted }
+                hasCompletedInitialLoad = true
+            }
+        }
+    }
+
+    private static func sort(_ items: [FolderWidgetItem], order: FolderWidgetSortOrder, reversed: Bool) -> [FolderWidgetItem] {
         var sorted = items.sorted { lhs, rhs in
-            switch sortOrder {
+            switch order {
             case .dateModified:
                 lhs.modifiedDate < rhs.modifiedDate
             case .dateAdded:
@@ -353,23 +432,15 @@ struct FolderWidgetPanelView: View {
             }
         }
 
-        if isSortReversed {
+        if reversed {
             sorted.reverse()
         }
 
         return sorted
     }
 
-    private func navigateIntoFolder(_ item: FolderWidgetItem) {
-        if let url = FolderWidgetAuthorization.accessibleURL(for: item.url) {
-            navigationStack.append(FolderWidgetLevel(url: url, name: item.name))
-        } else if let url = FolderWidgetAuthorization.requestAccess(to: item.url) {
-            navigationStack.append(FolderWidgetLevel(url: url, name: item.name))
-        }
-    }
-
     private func requestFolderAccess() {
-        guard FolderWidgetAuthorization.requestAccess(to: currentURL) != nil else { return }
+        guard FolderWidgetAuthorization.requestAccess(to: url) != nil else { return }
         Task { await reload() }
     }
 }
@@ -377,6 +448,11 @@ struct FolderWidgetPanelView: View {
 private struct FolderWidgetItemRow: View {
     let item: FolderWidgetItem
     let action: () -> Void
+
+    @Default(.showAnimations) private var showAnimations
+
+    @State private var icon: NSImage?
+    @State private var isHovering = false
 
     private static let modifiedFormatter: RelativeDateTimeFormatter = {
         let formatter = RelativeDateTimeFormatter()
@@ -387,10 +463,19 @@ private struct FolderWidgetItemRow: View {
     var body: some View {
         Button(action: action) {
             HStack(spacing: 10) {
-                Image(nsImage: item.icon)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 28, height: 28)
+                Group {
+                    if let icon {
+                        Image(nsImage: icon)
+                            .resizable()
+                            .scaledToFit()
+                            .transition(.opacity)
+                    } else {
+                        Color.clear
+                    }
+                }
+                .frame(width: 28, height: 28)
+                .animation(showAnimations ? .easeIn(duration: 0.12) : nil, value: icon)
+                .onAppear { loadIcon() }
 
                 VStack(alignment: .leading, spacing: 2) {
                     Text(item.name)
@@ -421,11 +506,16 @@ private struct FolderWidgetItemRow: View {
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
-        .background(Color.gray.opacity(0.14))
+        .background(Color.gray.opacity(isHovering ? 0.24 : 0.14))
         .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
         .overlay {
             RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .strokeBorder(Color.primary.opacity(0.08), lineWidth: 1)
+                .strokeBorder(Color.primary.opacity(isHovering ? 0.14 : 0.08), lineWidth: 1)
+        }
+        .onHover { hovering in
+            withAnimation(showAnimations ? .snappy(duration: 0.175) : nil) {
+                isHovering = hovering
+            }
         }
     }
 
@@ -435,6 +525,15 @@ private struct FolderWidgetItemRow: View {
             return modified
         }
         return "\(item.localizedKind) - \(modified)"
+    }
+
+    private func loadIcon() {
+        DispatchQueue.global(qos: .userInitiated).async {
+            let loaded = NSWorkspace.shared.icon(forFile: item.url.path)
+            DispatchQueue.main.async {
+                if icon != loaded { icon = loaded }
+            }
+        }
     }
 }
 
