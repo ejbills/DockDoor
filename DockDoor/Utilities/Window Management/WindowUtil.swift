@@ -22,8 +22,13 @@ protocol WindowPropertiesProviding {
 }
 
 extension SCWindow: WindowPropertiesProviding {
-    var owningApplicationBundleIdentifier: String? { owningApplication?.bundleIdentifier }
-    var owningApplicationProcessID: pid_t? { owningApplication?.processID }
+    var owningApplicationBundleIdentifier: String? {
+        owningApplication?.bundleIdentifier
+    }
+
+    var owningApplicationProcessID: pid_t? {
+        owningApplication?.processID
+    }
 }
 
 enum WindowAction: String, Hashable, CaseIterable, Defaults.Serializable {
@@ -49,7 +54,7 @@ enum WindowAction: String, Hashable, CaseIterable, Defaults.Serializable {
     case fillBottomRightQuarter
     case center
 
-    // No action
+    /// No action
     case none
 
     var localizedName: String {
@@ -774,9 +779,9 @@ extension WindowUtil {
         return windows.filter { windowBelongsToScreen($0, screenIdentifier: id) }
     }
 
-    // Collapses native macOS window-tab groups (e.g. Ghostty, Finder, Terminal) so a tabbed
-    // window appears as a single entry instead of one per tab. Grouping is keyed by process and
-    // frame, so windows from different apps are never merged and passing a multi-app list is safe.
+    /// Collapses native macOS window-tab groups (e.g. Ghostty, Finder, Terminal) so a tabbed
+    /// window appears as a single entry instead of one per tab. Grouping is keyed by process and
+    /// frame, so windows from different apps are never merged and passing a multi-app list is safe.
     static func collapseNativeTabsIfNeeded(_ windows: [WindowInfo]) -> [WindowInfo] {
         guard Defaults[.collapseNativeTabsIntoSingleWindow] else { return windows }
 
@@ -913,6 +918,7 @@ extension WindowUtil {
     }
 
     static func updateNewWindowsForApp(_ app: NSRunningApplication) async {
+        WindowManipulationObservers.ensureObserver(for: app)
         if shouldCaptureWindowImages() {
             if let content = await getShareableContent(onScreenWindowsOnly: false) {
                 let appWindows = content.windows.filter { window in
@@ -988,6 +994,7 @@ extension WindowUtil {
 
         for app in runningApps {
             let pid = app.processIdentifier
+            WindowManipulationObservers.ensureObserver(for: app)
             await discoverNewWindowsViaAXFallback(app: app)
             processedPIDs.insert(pid)
         }
