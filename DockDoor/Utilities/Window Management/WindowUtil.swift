@@ -1441,26 +1441,27 @@ extension WindowUtil {
         return true
     }
 
-    /// Checks if the frontmost application is fullscreen and in the blacklist
+    /// Checks if the frontmost application is fullscreen and in the blacklist.
+    /// Runs on every switcher keypress inside the event tap, so the expensive AX
+    /// fullscreen probe only happens when the frontmost app actually matches the blacklist.
     static func shouldIgnoreKeybindForFrontmostApp() -> Bool {
+        let blacklist = Defaults[.fullscreenAppBlacklist]
+        guard !blacklist.isEmpty else { return false }
+
         guard let frontmostApp = NSWorkspace.shared.frontmostApplication else {
             return false
         }
 
-        // Check if the app is in fullscreen mode
-        let isFullscreen = isAppInFullscreen(frontmostApp)
-
-        // Check if the app is in the blacklist
         let appName = frontmostApp.localizedName ?? ""
         let bundleIdentifier = frontmostApp.bundleIdentifier ?? ""
-        let blacklist = Defaults[.fullscreenAppBlacklist]
 
         let isInBlacklist = blacklist.contains { blacklistEntry in
             appName.lowercased().contains(blacklistEntry.lowercased()) ||
                 bundleIdentifier.lowercased().contains(blacklistEntry.lowercased())
         }
+        guard isInBlacklist else { return false }
 
-        return isFullscreen && isInBlacklist
+        return isAppInFullscreen(frontmostApp)
     }
 
     /// Checks if the given application is currently in fullscreen mode
