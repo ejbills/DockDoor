@@ -517,6 +517,9 @@ private struct FolderWidgetItemRow: View {
                 isHovering = hovering
             }
         }
+        .onDrag {
+            NSItemProvider(object: item.url as NSURL)
+        }
     }
 
     private var subtitle: String {
