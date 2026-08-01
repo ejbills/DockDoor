@@ -38,6 +38,43 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://dockdoor.net/donate</div>
 
+<a id="1.39.5"></a>
+# [Release 1.39.5](https://github.com/ejbills/DockDoor/releases/tag/1.39.5) - 2026-08-01
+
+## ✨ New Features
+- Choose how dock previews open
+  - Pick Hover, Middle Click, or Modifier Click with the "Dock Preview Trigger" option in Settings > Dock Previews > Dock Interaction
+  - Modifier Click lets you choose the key with the "Dock Preview Modifier" picker: Option (default), Control, Shift, or Command
+- Press Space to play or pause music in media previews
+  - Works whenever a single media preview is on screen, no mouse needed
+- New Liquid Glass variant 20 with adjustable blur
+  - Combines variant 19's native glass look with working blur and saturation sliders
+  - Find it in Settings > Appearance by moving the glass variant control to 20
+- New "Open App Window" action for middle-clicking a preview
+  - Brings the window to the front, restoring it if minimized or hidden
+  - On previews of apps with no open windows, it opens the app instead
+  - Assign it in Settings > Gestures & Keybinds > Mouse Actions > Middle Click
+
+## 🔧 Improvements & Stability
+- Folder previews are faster and smoother
+- Window switcher opens faster and responds more quickly to selection changes
+- Lower background activity when apps rapidly change window titles, such as plugin windows
+- Updated translations across the app
+- Updated internal components for reliability and security
+
+## 🐛 Bug Fixes
+- No longer crashes Ableton Live's plugin scanner
+  - DockDoor no longer inspects invisible background helper processes
+  - Also prevents similar conflicts with other apps that use background helpers
+- Switching to a Chrome or Brave web app no longer quits it
+  - Also avoids a potential crash when focusing windows on macOS 14.7.4 and later
+- Previews for windows close to the display edge, or any window touching the very top of a screen, appear on the correct monitor in multi-display setups
+- Clicks inside an open preview are no longer mistaken for dock clicks
+
+
+[Changes][1.39.5]
+
+
 <a id="1.39.4"></a>
 # [Release 1.39.4](https://github.com/ejbills/DockDoor/releases/tag/1.39.4) - 2026-07-05
 
@@ -2269,6 +2306,7 @@ v1.0
 [Changes][releases]
 
 
+[1.39.5]: https://github.com/ejbills/DockDoor/compare/1.39.4...1.39.5
 [1.39.4]: https://github.com/ejbills/DockDoor/compare/1.39.3...1.39.4
 [1.39.3]: https://github.com/ejbills/DockDoor/compare/1.39.2...1.39.3
 [1.39.2]: https://github.com/ejbills/DockDoor/compare/1.39.1...1.39.2
