@@ -172,6 +172,15 @@ struct WindowPreviewCompact: View, Equatable {
                         }
                     }
             }
+
+            // Selection border drawn outside the card-background branch so the
+            // selected item stays visible when hidePreviewCardBackground is on.
+            if isHighlighted {
+                let highlightColor = appearance.hoverHighlightColor ?? Color(nsColor: .controlAccentColor)
+                RoundedRectangle(cornerRadius: cornerRadius)
+                    .strokeBorder(highlightColor, lineWidth: 2.5)
+                    .padding(.horizontal, -CardRadius.innerPadding)
+            }
         }
         .opacity(isHighlighted ? 1.0 : appearance.unselectedContentOpacity)
         .padding(.horizontal, CardRadius.innerPadding)
