@@ -23,6 +23,9 @@ private class WindowSwitchingCoordinator {
     /// When true, initialization should complete but immediately select the window instead of showing UI
     private var shouldSelectImmediately = false
 
+    private static var lastUpdateAllWindowsTime: Date?
+    private static let updateAllWindowsThrottleInterval: TimeInterval = 5.0
+
     @MainActor
     func handleWindowSwitching(
         previewCoordinator: SharedPreviewWindowCoordinator,
@@ -68,14 +71,13 @@ private class WindowSwitchingCoordinator {
         let currentMouseLocation = DockObserver.getMousePosition()
         let dockPosition = DockUtils.getDockPosition()
 
-        var didRefreshBeforeInitialization = false
         var windows = buildSwitcherWindows(mode: mode)
         if windows.isEmpty {
             // The switcher normally opens from cache. If the cache has nothing usable,
             // do one discovery pass before giving up so late-observed GUI apps can appear.
+            WindowSwitchingCoordinator.lastUpdateAllWindowsTime = Date()
             await WindowUtil.updateAllWindowsInCurrentSpace()
             guard sessionId == currentSessionId else { return }
-            didRefreshBeforeInitialization = true
             windows = buildSwitcherWindows(mode: mode)
         }
         guard !windows.isEmpty else { return }
@@ -99,18 +101,6 @@ private class WindowSwitchingCoordinator {
             return
         }
 
-        if !didRefreshBeforeInitialization {
-            // Non-empty snapshots render immediately; refresh in the background so the
-            // active session can correct stale or missing cache entries without delaying open.
-            scheduleWindowRefresh(
-                previewCoordinator: previewCoordinator,
-                mode: mode,
-                dockPosition: dockPosition,
-                targetScreen: targetScreen,
-                sessionId: sessionId
-            )
-        }
-
         uiRenderingTask?.cancel()
         uiRenderingTask = Task { @MainActor in
             if !Defaults[.instantWindowSwitcher] {
@@ -118,6 +108,8 @@ private class WindowSwitchingCoordinator {
             }
             await renderWindowSwitcherUI(
                 previewCoordinator: previewCoordinator,
+                mode: mode,
+                dockPosition: dockPosition,
                 currentMouseLocation: currentMouseLocation,
                 targetScreen: targetScreen,
                 sessionId: sessionId
@@ -175,6 +167,14 @@ private class WindowSwitchingCoordinator {
         targetScreen: NSScreen,
         sessionId: UUID
     ) {
+        let now = Date()
+        if let lastUpdate = WindowSwitchingCoordinator.lastUpdateAllWindowsTime,
+           now.timeIntervalSince(lastUpdate) < WindowSwitchingCoordinator.updateAllWindowsThrottleInterval
+        {
+            return
+        }
+        WindowSwitchingCoordinator.lastUpdateAllWindowsTime = now
+
         windowRefreshTask?.cancel()
         windowRefreshTask = Task.detached(priority: .low) { [weak self, weak previewCoordinator, mode, dockPosition, targetScreen, sessionId] in
             await WindowUtil.updateAllWindowsInCurrentSpace()
@@ -234,6 +234,8 @@ private class WindowSwitchingCoordinator {
     @MainActor
     private func renderWindowSwitcherUI(
         previewCoordinator: SharedPreviewWindowCoordinator,
+        mode: SwitcherInvocationMode,
+        dockPosition: DockPosition,
         currentMouseLocation: CGPoint,
         targetScreen: NSScreen,
         sessionId: UUID
@@ -281,6 +283,16 @@ private class WindowSwitchingCoordinator {
         if Defaults[.focusSearchOnWindowSwitcherOpen], Defaults[.enableWindowSwitcherSearch] {
             previewCoordinator.focusSearchWindow()
         }
+
+        // Refresh only once the switcher is actually on screen, so quick press-release
+        // invocations that never render skip the discovery pass entirely.
+        scheduleWindowRefresh(
+            previewCoordinator: previewCoordinator,
+            mode: mode,
+            dockPosition: dockPosition,
+            targetScreen: targetScreen,
+            sessionId: sessionId
+        )
     }
 
     private func getTargetScreenForSwitcher() -> NSScreen {
@@ -341,15 +353,15 @@ class KeybindHelper {
     private var preventSwitcherHideOnRelease: Bool = false
     private var heldKeyRepeatTask: Task<Void, Never>?
 
-    // Track the invocation mode for alternate keybinds
+    /// Track the invocation mode for alternate keybinds
     private var currentInvocationMode: SwitcherInvocationMode = .allWindows
 
     // Track Command key state to detect key-up fallback for lingering previews
     private var isCommandKeyCurrentlyDown: Bool = false
     private var lastCmdTabObservedActive: Bool = false
     private var cmdTabActionPerformed: Bool = false
-    // Set on event tap thread when switcher keybind fires, so other keyDown handlers
-    // can detect the switcher is active without reading MainActor-only state.
+    /// Set on event tap thread when switcher keybind fires, so other keyDown handlers
+    /// can detect the switcher is active without reading MainActor-only state.
     private var switcherSessionActive: Bool = false
 
     private var eventTap: CFMachPort?
