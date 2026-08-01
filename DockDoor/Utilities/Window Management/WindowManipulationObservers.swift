@@ -316,23 +316,24 @@ class WindowManipulationObservers {
         case kAXTitleChangedNotification:
             let windowID = try? element.cgWindowId()
             let position = try? element.position()
-            if let windowID, let position, lastKnownWindowPositions[windowID] == position {
-                var handledInPlace = false
-                let freshTitle = try? element.title()
-                WindowUtil.updateWindowCache(for: app) { windowSet in
-                    guard let existing = windowSet.first(where: { $0.axElement == element }) else { return }
-                    handledInPlace = true
-                    guard let freshTitle, !freshTitle.isEmpty, existing.windowName != freshTitle else { return }
-                    var updated = existing
-                    updated.windowName = freshTitle
-                    windowSet.remove(existing)
-                    windowSet.insert(updated)
-                }
-                if handledInPlace { return }
-            }
             if let windowID, let position {
+                let positionUnchanged = lastKnownWindowPositions[windowID] == position
                 lastKnownWindowPositions[windowID] = position
+                if positionUnchanged {
+                    let freshTitle = try? element.title()
+                    WindowUtil.updateWindowCache(for: app) { windowSet in
+                        guard let existing = windowSet.first(where: { $0.axElement == element }),
+                              let freshTitle, !freshTitle.isEmpty, existing.windowName != freshTitle
+                        else { return }
+                        var updated = existing
+                        updated.windowName = freshTitle
+                        windowSet.remove(existing)
+                        windowSet.insert(updated)
+                    }
+                    return
+                }
             }
+            DebugLogger.log("processAXNotification", details: "Notification: \(notificationName), App: \(app.localizedName ?? "Unknown") (PID: \(pid))")
             handleWindowEvent(element: element, app: app, notification: notificationName, validate: false) { [weak self] windowSet in
                 guard let self else { return }
                 guard let role = try? element.role(), role == kAXWindowRole as String else { return }
