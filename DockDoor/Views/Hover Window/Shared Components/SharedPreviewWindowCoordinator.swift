@@ -156,6 +156,10 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         pendingShowWorkItem = nil
     }
 
+    func restoreDockAutoHideState() {
+        dockManager.restoreDockState()
+    }
+
     func hideWindow(cancelPendingShow shouldCancelPendingShow: Bool = true) {
         if shouldCancelPendingShow {
             cancelPendingShow()

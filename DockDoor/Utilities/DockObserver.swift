@@ -796,6 +796,10 @@ final class DockObserver {
             return nil
         }
 
+        if type == .leftMouseDown, appUnderMouse.dockItemElement != nil {
+            previewCoordinator.restoreDockAutoHideState()
+        }
+
         if case let .success(app) = appUnderMouse.status {
             if type == .rightMouseDown, event.flags.contains(.maskCommand), Defaults[.enableCmdRightClickQuit] {
                 handleCmdRightClickQuit(app: app, event: event)
