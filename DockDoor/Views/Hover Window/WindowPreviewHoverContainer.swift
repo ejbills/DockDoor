@@ -1187,6 +1187,8 @@ struct WindowPreviewHoverContainer: View {
 
             // Compute live preview eligibility once
             let useLivePreview: Bool = {
+                if mockPreviewActive { return false }
+
                 // Check global and context-specific settings
                 let windowSwitcherActive = previewStateCoordinator.windowSwitcherActive
                 let livePreviewEnabledForContext = windowSwitcherActive ? enableLivePreviewForWindowSwitcher : enableLivePreviewForDock
