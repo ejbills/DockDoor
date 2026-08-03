@@ -265,16 +265,28 @@ class PreviewStateCoordinator: ObservableObject {
     @MainActor
     func addWindows(_ newWindowsToAdd: [WindowInfo]) {
         guard !newWindowsToAdd.isEmpty else { return }
-        // Gate additions by PID of the currently displayed windows (if any)
-        guard let currentPid = windows.first?.app.processIdentifier else {
-            // No active windows context; ignore additions to avoid cross-app injection
-            return
+        let gated: [WindowInfo]
+        if isKeybindSessionActive {
+            // The switcher shows every app, so cache discoveries from any PID belong here.
+            gated = newWindowsToAdd
+        } else {
+            // Dock previews are single-app: gate by the displayed PID to avoid cross-app injection.
+            guard let currentPid = windows.first?.app.processIdentifier else { return }
+            gated = newWindowsToAdd.filter { $0.app.processIdentifier == currentPid }
         }
-        let gated: [WindowInfo] = newWindowsToAdd.filter { $0.app.processIdentifier == currentPid }
 
         var windowsWereAdded = false
         for newWin in gated {
-            if !windows.contains(where: { $0.id == newWin.id }) {
+            if isKeybindSessionActive,
+               let placeholderIndex = windows.firstIndex(where: {
+                   $0.isWindowlessApp && $0.app.processIdentifier == newWin.app.processIdentifier
+               })
+            {
+                windows[placeholderIndex] = newWin
+                windowsWereAdded = true
+                continue
+            }
+            if !windows.contains(where: { $0.id == newWin.id && $0.app.processIdentifier == newWin.app.processIdentifier }) {
                 windows.append(newWin)
                 windowsWereAdded = true
             }

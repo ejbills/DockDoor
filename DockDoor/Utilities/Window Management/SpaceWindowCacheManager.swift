@@ -123,7 +123,7 @@ class SpaceWindowCacheManager {
         for windowID in persistingWindowIDs {
             if let oldWindow = oldWindowSet.first(where: { $0.id == windowID }),
                let newWindow = windowSet.first(where: { $0.id == windowID }),
-               oldWindow != newWindow
+               oldWindow != newWindow || oldWindow.viewSnapshot != newWindow.viewSnapshot
             {
                 updatedWindows.append(newWindow)
             }
@@ -171,7 +171,7 @@ class SpaceWindowCacheManager {
         for windowID in persistingWindowIDs {
             if let oldWindow = oldWindowSet.first(where: { $0.id == windowID }),
                let newWindow = currentWindowSet.first(where: { $0.id == windowID }),
-               oldWindow != newWindow
+               oldWindow != newWindow || oldWindow.viewSnapshot != newWindow.viewSnapshot
             {
                 updatedWindows.append(newWindow)
             }
