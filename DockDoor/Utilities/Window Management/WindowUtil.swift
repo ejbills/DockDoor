@@ -1409,7 +1409,12 @@ extension WindowUtil {
                                                  remainingWindowCount: Int) -> Bool
     {
         guard Defaults[.quitAppOnWindowClose],
-              app.bundleIdentifier != "com.apple.finder",
+              shouldQuitAppOnLastWindowClose(
+                  bundleIdentifier: app.bundleIdentifier,
+                  mode: Defaults[.quitAppOnWindowCloseMode],
+                  excludedApps: Defaults[.quitAppOnWindowCloseExcludedApps],
+                  allowedApps: Defaults[.quitAppOnWindowCloseAllowedApps]
+              ),
               previousWindowCount > 0,
               remainingWindowCount == 0
         else {
@@ -1432,6 +1437,23 @@ extension WindowUtil {
             }
         }
         return true
+    }
+
+    static func shouldQuitAppOnLastWindowClose(bundleIdentifier: String?,
+                                               mode: QuitAppOnWindowCloseMode,
+                                               excludedApps: [String],
+                                               allowedApps: [String]) -> Bool
+    {
+        guard bundleIdentifier != "com.apple.finder" else { return false }
+
+        switch mode {
+        case .allAppsExceptSelected:
+            guard let bundleIdentifier else { return true }
+            return !excludedApps.contains(bundleIdentifier)
+        case .selectedAppsOnly:
+            guard let bundleIdentifier else { return false }
+            return allowedApps.contains(bundleIdentifier)
+        }
     }
 
     /// Checks if the frontmost application is fullscreen and in the blacklist
