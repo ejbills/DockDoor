@@ -20,6 +20,9 @@ struct DockPreviewsSettingsView: View {
     @Default(.restoreAllMinimizedWindowsOnDockClick) var restoreAllMinimizedWindowsOnDockClick
     @Default(.enableCmdRightClickQuit) var enableCmdRightClickQuit
     @Default(.quitAppOnWindowClose) var quitAppOnWindowClose
+    @Default(.quitAppOnWindowCloseMode) var quitAppOnWindowCloseMode
+    @Default(.quitAppOnWindowCloseExcludedApps) var quitAppOnWindowCloseExcludedApps
+    @Default(.quitAppOnWindowCloseAllowedApps) var quitAppOnWindowCloseAllowedApps
     @Default(.bufferFromDock) var bufferFromDock
     @Default(.ignoreAppsWithSingleWindow) var ignoreAppsWithSingleWindow
     @Default(.enableFolderWidget) var enableFolderWidget
@@ -27,6 +30,8 @@ struct DockPreviewsSettingsView: View {
     @Default(.folderWidgetDefaultSortReversed) var folderWidgetDefaultSortReversed
     @Default(.folderWidgetRememberSortPerFolder) var folderWidgetRememberSortPerFolder
     @Default(.folderWidgetShowHiddenFiles) var folderWidgetShowHiddenFiles
+
+    @State private var showingQuitAppPickerSheet = false
 
     var body: some View {
         BaseSettingsView {
@@ -43,6 +48,14 @@ struct DockPreviewsSettingsView: View {
                     dockAppearanceSection
                 }
             }
+        }
+        .sheet(isPresented: $showingQuitAppPickerSheet) {
+            AppPickerSheet(
+                selectedApps: quitAppSelection,
+                title: quitAppPickerTitle,
+                description: quitAppPickerDescription,
+                selectionMode: .include
+            )
         }
     }
 
@@ -242,9 +255,80 @@ struct DockPreviewsSettingsView: View {
                     .foregroundColor(.secondary)
                     .padding(.leading, 20)
 
+                if quitAppOnWindowClose {
+                    Picker("Apply quit behavior to", selection: $quitAppOnWindowCloseMode) {
+                        ForEach(QuitAppOnWindowCloseMode.allCases, id: \.self) { mode in
+                            Text(mode.localizedName).tag(mode)
+                        }
+                    }
+                    .pickerStyle(.menu)
+                    .padding(.leading, 20)
+                    .settingsSearchTarget("dockPreviews.quitOnCloseMode")
+
+                    HStack {
+                        Button("Select Apps...") {
+                            showingQuitAppPickerSheet = true
+                        }
+                        .buttonStyle(AccentButtonStyle(color: .accentColor))
+                        .settingsSearchTarget("dockPreviews.quitOnCloseApps")
+
+                        if quitAppSelection.wrappedValue.isEmpty {
+                            Text("No apps selected")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        } else {
+                            Text("\(quitAppSelection.wrappedValue.count) app\(quitAppSelection.wrappedValue.count == 1 ? "" : "s") selected")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                    }
+                    .padding(.leading, 20)
+
+                    Text(quitAppModeDescription)
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                        .padding(.leading, 20)
+                }
+
                 sliderSetting(title: "Window Buffer from Dock (pixels)", value: $bufferFromDock, range: -100 ... 100, step: 5, unit: "px", formatter: { let f = NumberFormatter(); f.allowsFloats = false; f.minimumIntegerDigits = 1; f.maximumFractionDigits = 0; return f }())
                     .settingsSearchTarget("dockPreviews.buffer")
             }
+        }
+    }
+
+    private var quitAppSelection: Binding<[String]> {
+        switch quitAppOnWindowCloseMode {
+        case .allAppsExceptSelected:
+            $quitAppOnWindowCloseExcludedApps
+        case .selectedAppsOnly:
+            $quitAppOnWindowCloseAllowedApps
+        }
+    }
+
+    private var quitAppPickerTitle: String {
+        switch quitAppOnWindowCloseMode {
+        case .allAppsExceptSelected:
+            String(localized: "Apps to Keep Running")
+        case .selectedAppsOnly:
+            String(localized: "Apps to Quit")
+        }
+    }
+
+    private var quitAppPickerDescription: String {
+        switch quitAppOnWindowCloseMode {
+        case .allAppsExceptSelected:
+            String(localized: "Selected apps will stay running when their last window closes.")
+        case .selectedAppsOnly:
+            String(localized: "Selected apps will quit when their last window closes.")
+        }
+    }
+
+    private var quitAppModeDescription: String {
+        switch quitAppOnWindowCloseMode {
+        case .allAppsExceptSelected:
+            String(localized: "Selected apps stay running when their last window closes. Finder always stays running.")
+        case .selectedAppsOnly:
+            String(localized: "Only selected apps quit when their last window closes. Finder always stays running.")
         }
     }
 }

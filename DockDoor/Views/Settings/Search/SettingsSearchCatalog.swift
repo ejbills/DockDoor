@@ -269,10 +269,26 @@ enum SettingsSearchCatalog {
             id: "dockPreviews.quitOnClose",
             title: String(localized: "Quit app when closing its last window"),
             description: String(localized: "When an app has only one window left, closing it will quit the app. Useful as a replacement for Swift Quit."),
-            keywords: ["quit", "close", "last window"],
+            keywords: ["quit", "close", "last window", "allow list", "ignore list", "exclude"],
             tab: "DockPreviews",
             section: String(localized: "Dock Interaction"),
             icon: "xmark.app.fill"
+        ),
+        SettingsSearchItem(
+            id: "dockPreviews.quitOnCloseMode",
+            title: String(localized: "Apply quit behavior to"),
+            keywords: ["quit", "close", "scope", "mode", "allow list", "ignore list"],
+            tab: "DockPreviews",
+            section: String(localized: "Dock Interaction"),
+            icon: "checklist"
+        ),
+        SettingsSearchItem(
+            id: "dockPreviews.quitOnCloseApps",
+            title: String(localized: "Select Apps..."),
+            keywords: ["quit", "close", "apps", "allow list", "ignore list", "exclude"],
+            tab: "DockPreviews",
+            section: String(localized: "Dock Interaction"),
+            icon: "app.badge.checkmark"
         ),
         SettingsSearchItem(
             id: "dockPreviews.buffer",
