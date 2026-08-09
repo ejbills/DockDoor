@@ -23939,8 +23939,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Background"
+            "state" : "translated",
+            "value" : "Tło"
           }
         },
         "pt-BR" : {
@@ -35361,8 +35361,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Close"
+            "state" : "translated",
+            "value" : "Zamknij"
           }
         },
         "pt-BR" : {
@@ -35551,8 +35551,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Close All"
+            "state" : "translated",
+            "value" : "Zamknij wszystkie"
           }
         },
         "pt-BR" : {
@@ -35742,8 +35742,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Close Window"
+            "state" : "translated",
+            "value" : "Zamknij okno"
           }
         },
         "pt-BR" : {
@@ -37082,7 +37082,7 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Cmd+Tab"
           }
         },
@@ -37272,8 +37272,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Cmd+Tab Appearance"
+            "state" : "translated",
+            "value" : "Wygląd Cmd+Tab"
           }
         },
         "pt-BR" : {
@@ -37463,8 +37463,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Cmd+Tab Enhancement"
+            "state" : "translated",
+            "value" : "Ulepszenia Cmd+Tab"
           }
         },
         "pt-BR" : {
@@ -37844,8 +37844,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Cmd+Tab Settings"
+            "state" : "translated",
+            "value" : "Ustawienia Cmd+Tab"
           }
         },
         "pt-BR" : {
@@ -38605,8 +38605,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Color Customization"
+            "state" : "translated",
+            "value" : "Personalizacja kolorów"
           }
         },
         "pt-BR" : {
@@ -38986,7 +38986,7 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Command"
           }
         },
@@ -39367,7 +39367,7 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Command ⌘"
           }
         },
@@ -39937,8 +39937,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Compact Mode"
+            "state" : "translated",
+            "value" : "Tryb kompaktowy"
           }
         },
         "pt-BR" : {
@@ -40127,8 +40127,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Compact Mode (Titles Only)"
+            "state" : "translated",
+            "value" : "Tryb kompaktowy (Tylko Tytuły)"
           }
         },
         "pt-BR" : {
@@ -40507,8 +40507,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Configuration"
+            "state" : "translated",
+            "value" : "Konfiguracja"
           }
         },
         "pt-BR" : {
@@ -40697,8 +40697,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Confirm"
+            "state" : "translated",
+            "value" : "Potwierdź"
           }
         },
         "pt-BR" : {
@@ -40887,8 +40887,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Continue"
+            "state" : "translated",
+            "value" : "Kontynuuj"
           }
         },
         "pt-BR" : {
@@ -41078,8 +41078,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Contribute translation"
+            "state" : "translated",
+            "value" : "Pomóż w tłumaczeniu"
           }
         },
         "pt-BR" : {
@@ -41268,8 +41268,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Contribute Translation"
+            "state" : "translated",
+            "value" : "Pomóż w Tłumaczeniu"
           }
         },
         "pt-BR" : {
@@ -41840,7 +41840,7 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Control"
           }
         },
@@ -42221,7 +42221,7 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Control ⌃"
           }
         },
@@ -45836,8 +45836,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Current Shortcut"
+            "state" : "translated",
+            "value" : "Obecny skrót"
           }
         },
         "pt-BR" : {
@@ -46027,8 +46027,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Current Space Only"
+            "state" : "translated",
+            "value" : "Tylko bieżąca przestrzeń"
           }
         },
         "pt-BR" : {
@@ -46788,8 +46788,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Custom Background Color"
+            "state" : "translated",
+            "value" : "Własny kolor tła"
           }
         },
         "pt-BR" : {
@@ -47360,8 +47360,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dark"
+            "state" : "translated",
+            "value" : "Ciemny"
           }
         },
         "pt-BR" : {
@@ -47551,8 +47551,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Date Added"
+            "state" : "translated",
+            "value" : "Data Dodania"
           }
         },
         "pt-BR" : {
@@ -47742,8 +47742,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Date Modified"
+            "state" : "translated",
+            "value" : "Data Modyfikacji"
           }
         },
         "pt-BR" : {
@@ -48505,8 +48505,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Default sort:"
+            "state" : "translated",
+            "value" : "Domyślne sortowanie:"
           }
         },
         "pt-BR" : {
@@ -48695,8 +48695,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Delete"
+            "state" : "translated",
+            "value" : "Usuń"
           }
         },
         "pt-BR" : {
@@ -48885,8 +48885,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Descending"
+            "state" : "translated",
+            "value" : "Malejąco"
           }
         },
         "pt-BR" : {
@@ -55414,14 +55414,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Preview Modifier"
+            "state" : "translated",
+            "value" : "Dock 预览修饰键"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Preview Modifier"
+            "state" : "translated",
+            "value" : "Dock預覽變更鍵"
           }
         }
       }
@@ -56175,14 +56175,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Preview Trigger"
+            "state" : "translated",
+            "value" : "Dock 预览触发模式"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Preview Trigger"
+            "state" : "translated",
+            "value" : "Dock預覽顯示時機"
           }
         }
       }
@@ -57450,7 +57450,7 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "DockDoor"
           }
         },
@@ -57640,8 +57640,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "DockDoor could not read this folder."
+            "state" : "translated",
+            "value" : "DockDoor nie mógł odczytać tego folderu."
           }
         },
         "pt-BR" : {
@@ -58781,7 +58781,7 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "DockDoor Pro"
           }
         },
@@ -58971,8 +58971,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Done"
+            "state" : "translated",
+            "value" : "Gotowe"
           }
         },
         "pt-BR" : {
@@ -59163,8 +59163,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dots (running apps)"
+            "state" : "translated",
+            "value" : "Punkty (uruchomione aplikacje)"
           }
         },
         "pt-BR" : {
@@ -60878,8 +60878,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Empty folder"
+            "state" : "translated",
+            "value" : "Pusty folder"
           }
         },
         "pt-BR" : {
@@ -76883,8 +76883,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Grant Access"
+            "state" : "translated",
+            "value" : "Przyznaj dostęp"
           }
         },
         "pt-BR" : {
@@ -78790,8 +78790,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Help & Support"
+            "state" : "translated",
+            "value" : "Pomoc i wsparcie"
           }
         },
         "pt-BR" : {
@@ -79933,7 +79933,7 @@
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ukryj"
+            "value" : "Ukryte"
           }
         },
         "pt-BR" : {
@@ -80313,8 +80313,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hide All"
+            "state" : "translated",
+            "value" : "Ukryj wszystkie"
           }
         },
         "pt-BR" : {
@@ -80885,8 +80885,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hide App"
+            "state" : "translated",
+            "value" : "Ukryj aplikację"
           }
         },
         "pt-BR" : {
@@ -81076,8 +81076,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hide application"
+            "state" : "translated",
+            "value" : "Ukryj aplikację"
           }
         },
         "pt-BR" : {
@@ -83988,14 +83988,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hover"
+            "state" : "translated",
+            "value" : "悬停"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hover"
+            "state" : "translated",
+            "value" : "指標停留"
           }
         }
       }
@@ -86405,8 +86405,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Immediately close"
+            "state" : "translated",
+            "value" : "Zamknij natychmiast"
           }
         },
         "pt-BR" : {
@@ -92696,8 +92696,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Leave a Review"
+            "state" : "translated",
+            "value" : "Zostaw opinię"
           }
         },
         "pt-BR" : {
@@ -93267,8 +93267,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "License"
+            "state" : "translated",
+            "value" : "Licencja"
           }
         },
         "pt-BR" : {
@@ -94603,8 +94603,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Live Preview"
+            "state" : "translated",
+            "value" : "Podgląd na żywo"
           }
         },
         "pt-BR" : {
@@ -103042,14 +103042,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Modifier Click"
+            "state" : "translated",
+            "value" : "修饰键点击"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Modifier Click"
+            "state" : "translated",
+            "value" : "按住變更鍵點一下"
           }
         }
       }
@@ -105077,8 +105077,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Never"
+            "state" : "translated",
+            "value" : "Nigdy"
           }
         },
         "pt-BR" : {
@@ -105268,8 +105268,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Never show again"
+            "state" : "translated",
+            "value" : "Nie pokazuj tego ponownie"
           }
         },
         "pt-BR" : {
@@ -105840,8 +105840,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "New Window"
+            "state" : "translated",
+            "value" : "Nowe okno"
           }
         },
         "pt-BR" : {
@@ -106412,8 +106412,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No Action"
+            "state" : "translated",
+            "value" : "Brak akcji"
           }
         },
         "pt-BR" : {
@@ -114468,14 +114468,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open App Window"
+            "state" : "translated",
+            "value" : "打开应用程序窗口"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open App Window"
+            "state" : "translated",
+            "value" : "打開App視窗"
           }
         }
       }
@@ -122785,8 +122785,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Press a key…"
+            "state" : "translated",
+            "value" : "Naciśnij klawisz…"
           }
         },
         "pt-BR" : {
@@ -123739,8 +123739,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Press shortcut…"
+            "state" : "translated",
+            "value" : "Naciśnij skrót…"
           }
         },
         "pt-BR" : {
@@ -130593,8 +130593,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Recently used"
+            "state" : "translated",
+            "value" : "Ostatnio używane"
           }
         },
         "pt-BR" : {
@@ -130783,8 +130783,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reduce motion"
+            "state" : "translated",
+            "value" : "Ogranicz ruch"
           }
         },
         "pt-BR" : {
@@ -137444,8 +137444,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Restart DockDoor"
+            "state" : "translated",
+            "value" : "Zrestartuj DockDoor"
           }
         },
         "pt-BR" : {
@@ -150644,13 +150644,13 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Shift ⇧"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Shift ⇧"
           }
         }
@@ -152867,8 +152867,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show App Name"
+            "state" : "translated",
+            "value" : "Pokaż nazwę aplikacji"
           }
         },
         "pt-BR" : {
@@ -153439,8 +153439,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Close All and Minimize All buttons"
+            "state" : "translated",
+            "value" : "Pokaż przyciski Zamknij wszystkie i Minimalizuj Wszystkie"
           }
         },
         "pt-BR" : {
@@ -154201,8 +154201,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show hidden files"
+            "state" : "translated",
+            "value" : "Pokaż ukryte pliki"
           }
         },
         "pt-BR" : {
@@ -154582,8 +154582,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show menu bar icon"
+            "state" : "translated",
+            "value" : "Pokaż ikonę na pasku menu"
           }
         },
         "pt-BR" : {
@@ -155973,14 +155973,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show previews automatically on hover, or require a click trigger on the Dock icon."
+            "state" : "translated",
+            "value" : "悬停时自动显示预览，或需要在Dock图标上单击触发器。"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show previews automatically on hover, or require a click trigger on the Dock icon."
+            "state" : "translated",
+            "value" : "指標停留時自動顯示預覽，或設定為要按住變更鍵並點一下才顯示。"
           }
         }
       }
@@ -157303,14 +157303,14 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show window previews for Dock icons."
+            "state" : "translated",
+            "value" : "为 Dock 图标显示窗口预览。"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show window previews for Dock icons."
+            "state" : "translated",
+            "value" : "為Dock圖像顯示視窗預覽。"
           }
         }
       }
@@ -157814,8 +157814,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show Window Title"
+            "state" : "translated",
+            "value" : "Pokaż tytuł okna"
           }
         },
         "pt-BR" : {
@@ -163535,8 +163535,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Sorting & Grouping"
+            "state" : "translated",
+            "value" : "Sortowanie i grupowanie"
           }
         },
         "pt-BR" : {
@@ -164106,8 +164106,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Spotify & Apple Music only"
+            "state" : "translated",
+            "value" : "Tylko Spotify i Apple Music"
           }
         },
         "pt-BR" : {
@@ -171160,7 +171160,7 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "System"
           }
         },
@@ -171351,8 +171351,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "System Default"
+            "state" : "translated",
+            "value" : "Domyślne ustawienie systemowe"
           }
         },
         "pt-BR" : {
@@ -171923,8 +171923,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Thanks for supporting DockDoor! 💖"
+            "state" : "translated",
+            "value" : "Dziękujemy za wsparcie DockDoor! 💖"
           }
         },
         "pt-BR" : {
@@ -175922,8 +175922,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Title"
+            "state" : "translated",
+            "value" : "Tytuł"
           }
         },
         "pt-BR" : {
@@ -176113,8 +176113,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Title 2"
+            "state" : "translated",
+            "value" : "Tytuł 2"
           }
         },
         "pt-BR" : {
@@ -176304,8 +176304,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Title 3"
+            "state" : "translated",
+            "value" : "Tytuł 3"
           }
         },
         "pt-BR" : {
@@ -176684,8 +176684,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Title Format"
+            "state" : "translated",
+            "value" : "Format tytułu"
           }
         },
         "pt-BR" : {
@@ -176874,8 +176874,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Today"
+            "state" : "translated",
+            "value" : "Dzisiaj"
           }
         },
         "pt-BR" : {
@@ -184876,8 +184876,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Use Liquid Glass (macOS 26+)"
+            "state" : "translated",
+            "value" : "Użyj Liquid Glass (macOS 26+)"
           }
         },
         "pt-BR" : {
@@ -188880,7 +188880,7 @@
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Co to jest? Okno dla mrówek?"
+            "value" : "Co to jest? Okno dla ANTS?"
           }
         },
         "pt-BR" : {
