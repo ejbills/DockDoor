@@ -500,6 +500,15 @@ enum SettingsSearchCatalog {
             icon: "eye.slash"
         ),
         SettingsSearchItem(
+            id: "cmdTab.restoreMinimized",
+            title: String(localized: "Restore minimized/hidden windows on switch"),
+            description: String(localized: "When Cmd+Tab lands on an app whose windows are all minimized or hidden, automatically restore the most recently used one."),
+            keywords: ["restore", "minimized", "hidden", "deminiaturize", "unhide"],
+            tab: "CmdTab",
+            section: String(localized: "Window Display"),
+            icon: "macwindow"
+        ),
+        SettingsSearchItem(
             id: "cmdTab.showWindowless",
             title: String(localized: "Show preview for apps with no open windows"),
             description: String(localized: "Show a placeholder preview when Cmd+Tab lands on an app that has no windows."),

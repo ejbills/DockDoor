@@ -17,6 +17,7 @@ extension DockObserver {
         cmdTabObserver = nil
         stopCmdTabPolling()
         DockObserver.isCmdTabSwitcherActive = false
+        DockObserver.lastCmdTabTargetApp = nil
     }
 
     // MARK: - On-Demand Polling (Event-Driven)
@@ -118,6 +119,7 @@ extension DockObserver {
         }
 
         let resolvedApp = selectedItem.app
+        DockObserver.lastCmdTabTargetApp = resolvedApp
         let appName = resolvedApp?.localizedName ?? selectedItem.title ?? "Unknown"
         let bundleId = resolvedApp?.bundleIdentifier ?? selectedItem.bundleId
 
@@ -227,6 +229,34 @@ extension DockObserver {
     /// Cached state tracking whether the Cmd+Tab switcher is currently active.
     /// Updated by the AXObserver when the switcher appears/disappears.
     static var isCmdTabSwitcherActive = false
+
+    /// The app the switcher last landed on. Used by the app-level fallback in KeybindHelper:
+    /// when Cmd is released without an explicit window selection and every window of this app is
+    /// minimized / hidden, we restore the most recently used one.
+    static var lastCmdTabTargetApp: NSRunningApplication?
+
+    /// App-level fallback invoked when the Cmd+Tab session ends without an explicit window
+    /// selection (no Enter press, no preview window picked). Mirrors AltTab / Windows Alt+Tab:
+    /// if the app the switcher landed on has *every* window minimized or hidden, deminiaturize the
+    /// most recently used one so the user doesn't end up staring at an empty Dock.
+    ///
+    /// `bringToFront()` already deminiaturizes / unhides first (see `restoreFromPutAwayState()`),
+    /// so a single call is enough here.
+    @MainActor
+    func restoreLastCmdTabAppIfFullyPutAway(targetApp: NSRunningApplication?) {
+        guard Defaults[.restoreMinimizedWindowsOnCmdTab] else { return }
+        guard let app = targetApp else { return }
+
+        let windows = WindowUtil.readCachedWindows(for: app.processIdentifier, sortedBy: .cmdTab)
+        guard !windows.isEmpty else { return }
+
+        let putAway = windows.filter { $0.isPutAway }
+        // Only step in when *every* window is put away — if at least one is already on screen the
+        // native switcher already did its job and yanking a hidden one forward would be wrong.
+        guard putAway.count == windows.count, let target = putAway.first else { return }
+
+        target.bringToFront()
+    }
 
     private func getSelectedCmdTabItem(dockElement: AXUIElement) -> (element: AXUIElement, app: NSRunningApplication?, bundleId: String?, title: String?)? {
         guard let appSwitcherElement = findCmdTabSwitcherElement(in: dockElement) else {
