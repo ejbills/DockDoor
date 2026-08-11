@@ -20,12 +20,19 @@ enum NativeTabGrouping {
         let id: CGWindowID
         let pid: pid_t
         let frame: CGRect
-        /// Used to pick which member represents its group; the most recently accessed window
-        /// (typically the active tab) wins.
+        /// Used to pick which member represents its group when none is focused.
         let recency: Date
+        /// Whether the application currently reports this member through
+        /// `kAXFocusedWindowAttribute`.
+        let isFocused: Bool
         /// Whether this window may be collapsed into a group. Minimized, hidden, windowless,
         /// and zero-sized windows are never collapsed and are always kept as-is.
         let groupable: Bool
+    }
+
+    struct Group: Equatable {
+        let representativeID: CGWindowID
+        let memberIDs: Set<CGWindowID>
     }
 
     private struct GroupKey: Hashable {
@@ -36,18 +43,14 @@ enum NativeTabGrouping {
         let height: Int
     }
 
-    /// Returns the window IDs to keep: every non-groupable window, plus a single representative
-    /// per detected tab group.
-    ///
-    /// The representative is the most recently accessed window in the group; ties are broken by
-    /// the larger window ID so the result is deterministic regardless of input ordering.
-    static func representativeIDs(from candidates: [Candidate]) -> Set<CGWindowID> {
-        var keptIDs = Set<CGWindowID>()
-        var representativeByGroup: [GroupKey: Candidate] = [:]
+    /// Returns every detected group with its selected representative and complete membership.
+    static func groups(from candidates: [Candidate]) -> [Group] {
+        var standaloneGroups: [Group] = []
+        var membersByGroup: [GroupKey: [Candidate]] = [:]
 
         for candidate in candidates {
             guard candidate.groupable else {
-                keptIDs.insert(candidate.id)
+                standaloneGroups.append(Group(representativeID: candidate.id, memberIDs: [candidate.id]))
                 continue
             }
 
@@ -59,25 +62,45 @@ enum NativeTabGrouping {
                 height: Int(candidate.frame.size.height.rounded())
             )
 
-            if let current = representativeByGroup[key] {
-                if isBetterRepresentative(candidate, than: current) {
-                    representativeByGroup[key] = candidate
-                }
-            } else {
-                representativeByGroup[key] = candidate
+            membersByGroup[key, default: []].append(candidate)
+        }
+
+        let collapsedGroups = membersByGroup.values.map { members in
+            let representative = members.dropFirst().reduce(members[0]) { current, candidate in
+                isBetterRepresentative(candidate, than: current) ? candidate : current
             }
+            return Group(
+                representativeID: representative.id,
+                memberIDs: Set(members.map(\.id))
+            )
         }
 
-        for representative in representativeByGroup.values {
-            keptIDs.insert(representative.id)
+        return (standaloneGroups + collapsedGroups).sorted {
+            $0.representativeID < $1.representativeID
         }
+    }
 
-        return keptIDs
+    /// Returns the window IDs to keep: every non-groupable window, plus a single representative
+    /// per detected tab group.
+    static func representativeIDs(from candidates: [Candidate]) -> Set<CGWindowID> {
+        Set(groups(from: candidates).map(\.representativeID))
+    }
+
+    static func activationWindowID(
+        representativeID: CGWindowID,
+        memberIDs: Set<CGWindowID>,
+        focusedWindowID: CGWindowID?
+    ) -> CGWindowID {
+        guard let focusedWindowID, memberIDs.contains(focusedWindowID) else {
+            return representativeID
+        }
+        return focusedWindowID
     }
 
     private static func isBetterRepresentative(_ candidate: Candidate, than current: Candidate) -> Bool {
-        // Most recently accessed wins; the larger window ID breaks ties so the result is
-        // deterministic regardless of input ordering.
-        (candidate.recency, candidate.id) > (current.recency, current.id)
+        if candidate.isFocused != current.isFocused {
+            return candidate.isFocused
+        }
+        return (candidate.recency, candidate.id) > (current.recency, current.id)
     }
 }

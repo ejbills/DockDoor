@@ -27,10 +27,11 @@ struct WindowInfo: Identifiable, Hashable {
     var isMinimized: Bool
     var isHidden: Bool
     private(set) var isWindowlessApp: Bool
+    var nativeTabGroupWindowIDs: Set<CGWindowID>
 
     private var _scWindow: SCWindow?
 
-    init(windowProvider: WindowPropertiesProviding, app: NSRunningApplication, ownerApp: NSRunningApplication? = nil, image: CGImage?, axElement: AXUIElement, appAxElement: AXUIElement, closeButton: AXUIElement?, lastAccessedTime: Date, creationTime: Date? = nil, imageCapturedTime: Date? = nil, spaceID: Int? = nil, screenIdentifier: String? = nil, isMinimized: Bool, isHidden: Bool) {
+    init(windowProvider: WindowPropertiesProviding, app: NSRunningApplication, ownerApp: NSRunningApplication? = nil, image: CGImage?, axElement: AXUIElement, appAxElement: AXUIElement, closeButton: AXUIElement?, lastAccessedTime: Date, creationTime: Date? = nil, imageCapturedTime: Date? = nil, spaceID: Int? = nil, screenIdentifier: String? = nil, isMinimized: Bool, isHidden: Bool, nativeTabGroupWindowIDs: Set<CGWindowID> = []) {
         id = windowProvider.windowID
         self.windowProvider = windowProvider
         self.app = app
@@ -48,6 +49,7 @@ struct WindowInfo: Identifiable, Hashable {
         self.isMinimized = isMinimized
         self.isHidden = isHidden
         isWindowlessApp = false
+        self.nativeTabGroupWindowIDs = nativeTabGroupWindowIDs
         _scWindow = windowProvider as? SCWindow
     }
 
@@ -71,6 +73,7 @@ struct WindowInfo: Identifiable, Hashable {
         let windowName: String?
         let isMinimized: Bool
         let isHidden: Bool
+        let nativeTabGroupWindowIDs: Set<CGWindowID>
         let imagePointer: UnsafeRawPointer?
     }
 
@@ -81,6 +84,7 @@ struct WindowInfo: Identifiable, Hashable {
             windowName: windowName,
             isMinimized: isMinimized,
             isHidden: isHidden,
+            nativeTabGroupWindowIDs: nativeTabGroupWindowIDs,
             imagePointer: image.map { Unmanaged.passUnretained($0).toOpaque() }
         )
     }
@@ -436,30 +440,46 @@ extension WindowInfo {
         let maxRetries = 3
         var retryCount = 0
 
-        func attemptActivation() -> Bool {
+        func activationTarget() -> (id: CGWindowID, element: AXUIElement) {
+            guard nativeTabGroupWindowIDs.count > 1,
+                  let focusedWindow = (try? AXUIElementCreateApplication(app.processIdentifier).focusedWindow()) ?? nil,
+                  let focusedWindowID = (try? focusedWindow.cgWindowId()) ?? nil,
+                  NativeTabGrouping.activationWindowID(
+                      representativeID: id,
+                      memberIDs: nativeTabGroupWindowIDs,
+                      focusedWindowID: focusedWindowID
+                  ) == focusedWindowID
+            else {
+                return (id, axElement)
+            }
+            return (focusedWindowID, focusedWindow)
+        }
+
+        func attemptActivation() -> CGWindowID? {
+            let target = activationTarget()
             do {
                 var psn = ProcessSerialNumber()
                 _ = GetProcessForPID(ownerApp.processIdentifier, &psn)
-                _ = _SLPSSetFrontProcessWithOptions(&psn, UInt32(id), SLPSMode.userGenerated.rawValue)
+                _ = _SLPSSetFrontProcessWithOptions(&psn, UInt32(target.id), SLPSMode.userGenerated.rawValue)
 
-                WindowUtil.makeKeyWindow(&psn, windowID: id)
+                WindowUtil.makeKeyWindow(&psn, windowID: target.id)
 
-                try axElement.performAction(kAXRaiseAction)
-                try axElement.setAttribute(kAXMainWindowAttribute, true)
+                try target.element.performAction(kAXRaiseAction)
+                try target.element.setAttribute(kAXMainWindowAttribute, true)
 
-                return true
+                return target.id
             } catch {
                 print("Attempt \(retryCount + 1) failed to bring window to front: \(error)")
                 if error is AxError {
-                    WindowUtil.removeWindowFromDesktopSpaceCache(with: id, in: app.processIdentifier)
+                    WindowUtil.removeWindowFromDesktopSpaceCache(with: target.id, in: app.processIdentifier)
                 }
-                return false
+                return nil
             }
         }
 
         while retryCount < maxRetries {
-            if attemptActivation() {
-                WindowUtil.updateTimestampOptimistically(for: self)
+            if let activatedWindowID = attemptActivation() {
+                WindowUtil.updateTimestampOptimistically(for: self, activatedWindowID: activatedWindowID)
                 return
             }
             retryCount += 1

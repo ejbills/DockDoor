@@ -351,13 +351,19 @@ enum WindowUtil {
 // MARK: - Cache Management
 
 extension WindowUtil {
-    /// Reads cached windows for an app without triggering any SCK/AX fetches.
-    /// Returns immediately with whatever is in cache, sorted by the given context.
+    /// Reads cached windows without triggering SCK/AX fetches.
     static func readCachedWindows(for pid: pid_t, sortedBy context: WindowFetchContext = .dockPreview) -> [WindowInfo] {
         let cached = deduplicatedByWindowID(desktopSpaceWindowCacheManager.readCache(pid: pid).filter {
             WindowOwnerResolver.ownerBelongsToDisplayApp($0.ownerApp, displayApp: $0.app)
         })
         return sortWindows(cached, for: context)
+    }
+
+    /// Reads cached windows for preview and switcher presentation.
+    /// Native-tab collapsing may query the app's focused AX window.
+    static func readCachedWindowsForPresentation(for pid: pid_t, sortedBy context: WindowFetchContext = .dockPreview) -> [WindowInfo] {
+        let cached = readCachedWindows(for: pid, sortedBy: context)
+        return sortWindows(collapseNativeTabsIfNeeded(cached), for: context)
     }
 
     static func saveWindowOrderFromCache() {
@@ -407,10 +413,13 @@ extension WindowUtil {
     }
 
     /// Updates window timestamp optimistically and records breadcrumb for observer deduplication
-    static func updateTimestampOptimistically(for windowInfo: WindowInfo) {
+    static func updateTimestampOptimistically(for windowInfo: WindowInfo, activatedWindowID: CGWindowID? = nil) {
         let now = Date()
+        let windowID = activatedWindowID ?? windowInfo.id
         desktopSpaceWindowCacheManager.updateCache(pid: windowInfo.app.processIdentifier) { windowSet in
-            if let index = windowSet.firstIndex(where: { $0.axElement == windowInfo.axElement || $0.id == windowInfo.id }) {
+            if let index = windowSet.firstIndex(where: {
+                $0.id == windowID || (windowID == windowInfo.id && $0.axElement == windowInfo.axElement)
+            }) {
                 var updatedWindow = windowSet[index]
                 updatedWindow.lastAccessedTime = now
                 windowSet.remove(at: index)
@@ -785,12 +794,30 @@ extension WindowUtil {
     static func collapseNativeTabsIfNeeded(_ windows: [WindowInfo]) -> [WindowInfo] {
         guard Defaults[.collapseNativeTabsIntoSingleWindow] else { return windows }
 
+        var focusedWindowIDsByPID: [pid_t: CGWindowID] = [:]
+        for pid in Set(windows.map(\.app.processIdentifier)) {
+            let appElement = AXUIElementCreateApplication(pid)
+            if let focusedWindow = (try? appElement.focusedWindow()) ?? nil,
+               let focusedWindowID = (try? focusedWindow.cgWindowId()) ?? nil
+            {
+                focusedWindowIDsByPID[pid] = focusedWindowID
+            }
+        }
+
+        return collapseNativeTabs(windows, focusedWindowIDsByPID: focusedWindowIDsByPID)
+    }
+
+    static func collapseNativeTabs(
+        _ windows: [WindowInfo],
+        focusedWindowIDsByPID: [pid_t: CGWindowID]
+    ) -> [WindowInfo] {
         let candidates = windows.map { window in
             NativeTabGrouping.Candidate(
                 id: window.id,
                 pid: window.app.processIdentifier,
                 frame: window.frame,
                 recency: window.lastAccessedTime,
+                isFocused: focusedWindowIDsByPID[window.app.processIdentifier] == window.id,
                 groupable: !window.isMinimized
                     && !window.isHidden
                     && !window.isWindowlessApp
@@ -799,9 +826,18 @@ extension WindowUtil {
             )
         }
 
-        let keptIDs = NativeTabGrouping.representativeIDs(from: candidates)
-        guard keptIDs.count < windows.count else { return windows }
-        return windows.filter { keptIDs.contains($0.id) }
+        let groupsByRepresentative = Dictionary(
+            uniqueKeysWithValues: NativeTabGrouping.groups(from: candidates).map {
+                ($0.representativeID, $0.memberIDs)
+            }
+        )
+
+        return windows.compactMap { window in
+            guard let memberIDs = groupsByRepresentative[window.id] else { return nil }
+            var representative = window
+            representative.nativeTabGroupWindowIDs = memberIDs.count > 1 ? memberIDs : []
+            return representative
+        }
     }
 
     static func getActiveWindows(of app: NSRunningApplication, context: WindowFetchContext = .dockPreview, ignoreSingleWindowFilter: Bool = false) async throws -> [WindowInfo] {

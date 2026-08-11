@@ -355,7 +355,7 @@ final class DockObserver {
 
         var cachedWindows: [WindowInfo] = []
         for appInstance in appsToFetchWindowsFrom {
-            cachedWindows.append(contentsOf: WindowUtil.readCachedWindows(for: appInstance.processIdentifier))
+            cachedWindows.append(contentsOf: WindowUtil.readCachedWindowsForPresentation(for: appInstance.processIdentifier))
         }
 
         lastHoveredPID = currentApp.processIdentifier
