@@ -234,6 +234,15 @@ enum SettingsSearchCatalog {
             icon: "cursorarrow.click"
         ),
         SettingsSearchItem(
+            id: "dockPreviews.keepOnHoverActivation",
+            title: String(localized: "Keep preview open after hover activation"),
+            description: String(localized: "Keep Dock previews visible while the pointer remains over them after a hover brings a window to the front."),
+            keywords: ["hover", "activate", "front", "keep", "preview", "windows"],
+            tab: "DockPreviews",
+            section: String(localized: "Dock Interaction"),
+            icon: "rectangle.on.rectangle"
+        ),
+        SettingsSearchItem(
             id: "dockPreviews.hoverDelay",
             title: String(localized: "Preview Hover Action Delay"),
             keywords: ["delay", "tap", "interval"],
