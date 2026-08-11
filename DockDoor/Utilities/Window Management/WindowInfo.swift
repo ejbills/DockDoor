@@ -114,23 +114,62 @@ extension WindowInfo {
         return info
     }
 
+    /// True when macOS has "put the window away" — it is either miniaturized into the Dock or
+    /// belongs to a hidden app. In both states the window is absent from the WindowServer's
+    /// on-screen list, so the focus primitives used by `bringToFront()`
+    /// (`_SLPSSetFrontProcessWithOptions`, `makeKeyWindow`, `kAXRaiseAction`) silently no-op.
+    var isPutAway: Bool { isMinimized || isHidden }
+
+    /// Puts a minimized / hidden window back on screen so it can actually be focused.
+    ///
+    /// This mirrors what AltTab does at the top of `Window.focus()`: deminiaturize first, then run
+    /// the normal front-process + raise sequence. Without it, selecting a minimized window in the
+    /// switcher only activates the owning app and the window stays in the Dock.
+    ///
+    /// - Returns: `false` only when the deminiaturize write failed; a window that needed no
+    ///   restoring at all still returns `true`.
+    @discardableResult
+    func restoreFromPutAwayState() -> Bool {
+        guard !isWindowlessApp else { return false }
+
+        var didRestore = false
+
+        if app.isHidden {
+            app.unhide()
+            WindowUtil.updateCachedWindowState(self, isHidden: false)
+            didRestore = true
+        }
+
+        // Prefer the live AX state over the cached flag: the cache can lag a few hundred ms behind
+        // and writing kAXMinimized = false on an already-restored window makes some apps replay the
+        // genie animation.
+        let minimizedNow = (try? axElement.isMinimized()) ?? isMinimized
+        if minimizedNow {
+            do {
+                try axElement.setAttribute(kAXMinimizedAttribute, false)
+                WindowUtil.updateCachedWindowState(self, isMinimized: false)
+                didRestore = true
+            } catch {
+                DebugLogger.log("WindowInfo", details: "Failed to deminiaturize window \(id): \(error)")
+                return false
+            }
+        }
+
+        if didRestore {
+            app.activate()
+        }
+
+        return true
+    }
+
     @discardableResult
     mutating func toggleMinimize() -> Bool? {
         guard !isWindowlessApp else { return nil }
         if isMinimized {
-            if app.isHidden {
-                app.unhide()
-            }
-            do {
-                try axElement.setAttribute(kAXMinimizedAttribute, false)
-                app.activate()
-                bringToFront()
-                isMinimized = false
-                WindowUtil.updateCachedWindowState(self, isMinimized: false)
-                return false
-            } catch {
-                return nil
-            }
+            guard restoreFromPutAwayState() else { return nil }
+            bringToFront()
+            isMinimized = false
+            return false
         } else {
             do {
                 try axElement.setAttribute(kAXMinimizedAttribute, true)
@@ -433,6 +472,12 @@ extension WindowInfo {
             app.activate(options: [.activateIgnoringOtherApps])
             return
         }
+        // A minimized / hidden window is absent from the WindowServer's on-screen list, so the
+        // focus primitives below (`_SLPSSetFrontProcessWithOptions`, `makeKeyWindow`,
+        // `kAXRaiseAction`) silently no-op on it — the app merely activates while the window stays
+        // in the Dock. Deminiaturize / unhide first (mirrors AltTab's Window.focus()) so the
+        // subsequent raise actually lands on the right window.
+        restoreFromPutAwayState()
         let maxRetries = 3
         var retryCount = 0
 

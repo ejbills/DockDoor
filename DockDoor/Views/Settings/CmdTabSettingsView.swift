@@ -10,6 +10,7 @@ struct CmdTabSettingsView: View {
     @Default(.cmdTabSortOrder) var cmdTabSortOrder
     @Default(.cmdTabAutoSelectFirstWindow) var cmdTabAutoSelectFirstWindow
     @Default(.includeHiddenWindowsInCmdTab) var includeHiddenWindowsInCmdTab
+    @Default(.restoreMinimizedWindowsOnCmdTab) var restoreMinimizedWindowsOnCmdTab
     @Default(.showWindowlessAppsInCmdTab) var showWindowlessAppsInCmdTab
     @Default(.ignoreAppsWithSingleWindowInCmdTab) var ignoreAppsWithSingleWindowInCmdTab
 
@@ -115,6 +116,13 @@ struct CmdTabSettingsView: View {
 
                 Toggle(isOn: $includeHiddenWindowsInCmdTab) { Text("Include hidden/minimized windows") }
                     .settingsSearchTarget("cmdTab.includeHidden")
+
+                Toggle(isOn: $restoreMinimizedWindowsOnCmdTab) { Text("Restore minimized/hidden windows on switch") }
+                    .settingsSearchTarget("cmdTab.restoreMinimized")
+                Text("When Cmd+Tab lands on an app whose windows are all minimized or hidden, automatically restore the most recently used one instead of leaving it in the Dock.")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .padding(.leading, 20)
 
                 Toggle(isOn: $showWindowlessAppsInCmdTab) { Text("Show preview for apps with no open windows") }
                     .settingsSearchTarget("cmdTab.showWindowless")

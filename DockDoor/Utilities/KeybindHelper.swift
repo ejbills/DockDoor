@@ -481,6 +481,8 @@ class KeybindHelper {
             // Track Command up/down explicitly for Cmd+Tab fallback behavior
             let cmdNowDown = event.flags.contains(.maskCommand)
             if isCommandKeyCurrentlyDown, !cmdNowDown {
+                // Capture the app the switcher last landed on *before* teardown clears it.
+                let cmdTabTargetApp = DockObserver.lastCmdTabTargetApp
                 DockObserver.activeInstance?.teardownCmdTabObserver()
 
                 if Defaults[.enableCmdTabEnhancements], lastCmdTabObservedActive {
@@ -493,6 +495,9 @@ class KeybindHelper {
                             self.previewCoordinator.selectAndBringToFrontCurrentWindow()
                         } else {
                             self.previewCoordinator.hideWindow()
+                            // App-level fallback: if Cmd+Tab landed on an app whose windows are all
+                            // minimized / hidden, restore the most recently used one.
+                            DockObserver.activeInstance?.restoreLastCmdTabAppIfFullyPutAway(targetApp: cmdTabTargetApp)
                         }
                         self.windowSwitchingCoordinator.cancelSwitching(previewCoordinator: self.previewCoordinator)
                     }
