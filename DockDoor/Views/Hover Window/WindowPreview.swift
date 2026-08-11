@@ -21,6 +21,7 @@ struct PreviewAppearanceSettings: Equatable {
     let hidePreviewCardBackground: Bool
     let tapEquivalentInterval: Double
     let previewHoverAction: PreviewHoverAction
+    let keepPreviewOnHoverActivation: Bool
     let showActiveWindowBorder: Bool
     let activeAppIndicatorColor: Color
     let showAnimations: Bool
@@ -61,7 +62,7 @@ struct PreviewAppearanceSettings: Equatable {
         .dockLivePreviewQuality, .windowSwitcherLivePreviewQuality,
         .dockLivePreviewFrameRate, .windowSwitcherLivePreviewFrameRate,
         .showMinimizedHiddenLabels, .selectionOpacity, .unselectedContentOpacity, .hoverHighlightColor,
-        .allowDynamicImageSizing, .hidePreviewCardBackground, .tapEquivalentInterval, .previewHoverAction,
+        .allowDynamicImageSizing, .hidePreviewCardBackground, .tapEquivalentInterval, .previewHoverAction, .keepPreviewOnHoverActivation,
         .showActiveWindowBorder, .activeAppIndicatorColor, .showAnimations, .globalPaddingMultiplier,
         .windowTitleFontSize, .switcherAppIconSize, .trafficLightButtonScale,
         .previewWidth, .compactModeTitleFormat, .compactModeItemSize, .compactModeHideTrafficLights,
@@ -99,6 +100,7 @@ struct PreviewAppearanceSettings: Equatable {
             hidePreviewCardBackground: Defaults[.hidePreviewCardBackground],
             tapEquivalentInterval: Defaults[.tapEquivalentInterval],
             previewHoverAction: Defaults[.previewHoverAction],
+            keepPreviewOnHoverActivation: Defaults[.keepPreviewOnHoverActivation],
             showActiveWindowBorder: Defaults[.showActiveWindowBorder],
             activeAppIndicatorColor: Defaults[.activeAppIndicatorColor],
             showAnimations: Defaults[.showAnimations],
@@ -965,7 +967,9 @@ struct WindowPreview: View, Equatable {
             handleWindowAction(.hide)
         } else {
             windowInfo.bringToFront()
-            onTap?()
+            if !appearance.keepPreviewOnHoverActivation {
+                onTap?()
+            }
         }
     }
 

@@ -14,6 +14,7 @@ struct DockPreviewsSettingsView: View {
     @Default(.dockPreviewActivationMode) var dockPreviewActivationMode
     @Default(.dockPreviewActivationModifier) var dockPreviewActivationModifier
     @Default(.previewHoverAction) var previewHoverAction
+    @Default(.keepPreviewOnHoverActivation) var keepPreviewOnHoverActivation
     @Default(.tapEquivalentInterval) var tapEquivalentInterval
     @Default(.shouldHideOnDockItemClick) var shouldHideOnDockItemClick
     @Default(.dockClickAction) var dockClickAction
@@ -209,6 +210,17 @@ struct DockPreviewsSettingsView: View {
                 }
                 .pickerStyle(MenuPickerStyle())
                 .settingsSearchTarget("dockPreviews.hoverAction")
+
+                Toggle(isOn: $keepPreviewOnHoverActivation) {
+                    Text("Keep preview open after hover activation")
+                }
+                .disabled(previewHoverAction != .tap)
+                .settingsSearchTarget("dockPreviews.keepOnHoverActivation")
+
+                Text("Keep Dock previews visible while the pointer remains over them after a hover brings a window to the front.")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .padding(.leading, 20)
 
                 sliderSetting(title: "Preview Hover Action Delay", value: $tapEquivalentInterval, range: 0 ... 2, step: 0.1, unit: "seconds", formatter: NumberFormatter.oneDecimalFormatter)
                     .disabled(previewHoverAction == .none)
