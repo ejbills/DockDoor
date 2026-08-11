@@ -191,7 +191,12 @@ enum WindowCandidateDiscriminator {
             (level.map { crossoverWindow(app, attributes.role, attributes.subrole, $0) } ?? false) ||
             (level.map { alwaysOnTopScrcpy(app, $0, attributes.role, attributes.subrole) } ?? false)
 
-        let standardSubrole = [kAXStandardWindowSubrole, kAXDialogSubrole].contains(attributes.subrole)
+        // Floating panels pass the subrole check but are not switchable app windows
+        // (e.g. Outlook's meeting-reminder toast is an AXDialog at floating level 3).
+        // The SC discovery path already enforces windowLayer == 0; this keeps the AX
+        // path consistent. Apps that legitimately float have explicit rules below.
+        let isNormalLevel = level == nil || level == normalLevel
+        let standardSubrole = isNormalLevel && [kAXStandardWindowSubrole, kAXDialogSubrole].contains(attributes.subrole)
         let appSpecificSubrole = openBoard(app) ||
             adobeAudition(app, attributes.subrole) ||
             adobeAfterEffects(app, attributes.subrole) ||
@@ -207,7 +212,7 @@ enum WindowCandidateDiscriminator {
             autocad(app, attributes.subrole)
 
         guard specialApp || standardSubrole || appSpecificSubrole else {
-            return "subrole is not standard/dialog and no app-specific rule matched"
+            return "subrole is not standard/dialog at normal level and no app-specific rule matched"
         }
 
         if !specialApp {
