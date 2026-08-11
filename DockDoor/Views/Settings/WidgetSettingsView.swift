@@ -8,7 +8,9 @@ private struct CalendarItem: Identifiable {
     let color: CGColor
     let accountName: String
 
-    var calendarIdentifier: String { id }
+    var calendarIdentifier: String {
+        id
+    }
 }
 
 struct WidgetSettingsView: View {
@@ -27,13 +29,13 @@ struct WidgetSettingsView: View {
     @State private var isLoadingCalendars = true
     @State private var authorizationStatus: EKAuthorizationStatus = .notDetermined
 
-    private let eventStore = EKEventStore()
+    private static let eventStore = EKEventStore()
 
     private func loadCalendars() async -> [CalendarItem] {
         await Task.detached(priority: .userInitiated) {
             let eventStore = EKEventStore()
 
-            let calendars = eventStore.calendars(for: .event)
+            return eventStore.calendars(for: .event)
                 .map { cal in
                     CalendarItem(
                         id: cal.calendarIdentifier,
@@ -43,8 +45,6 @@ struct WidgetSettingsView: View {
                     )
                 }
                 .sorted { $0.title.localizedStandardCompare($1.title) == .orderedAscending }
-
-            return calendars
         }.value
     }
 
@@ -305,7 +305,7 @@ struct WidgetSettingsView: View {
 
                     if authorizationStatus == .notDetermined {
                         await withCheckedContinuation { continuation in
-                            eventStore.requestAccess(to: .event) { _, _ in
+                            Self.eventStore.requestAccess(to: .event) { _, _ in
                                 continuation.resume()
                             }
                         }

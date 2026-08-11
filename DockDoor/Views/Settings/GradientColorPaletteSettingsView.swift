@@ -152,6 +152,7 @@ struct GradientColorPaletteSettingsView: View {
     }
 
     private func setupColorDebounce() {
+        cancellables.removeAll()
         colorUpdatePublisher
             .debounce(for: .milliseconds(100), scheduler: DispatchQueue.main)
             .sink { newColor in

@@ -99,9 +99,12 @@ extension SettingsManager: NSWindowDelegate {
     }
 
     func windowWillClose(_ notification: Notification) {
-        if let window = notification.object as? NSWindow {
-            let windowID = CGWindowID(window.windowNumber)
-            WindowUtil.removeWindowFromDesktopSpaceCache(with: windowID, in: ProcessInfo.processInfo.processIdentifier)
+        let pid = ProcessInfo.processInfo.processIdentifier
+        WindowUtil.purgeAppCache(with: pid)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 11) { [weak self] in
+            if self?.settingsWindowController == nil {
+                WindowUtil.purgeAppCache(with: pid)
+            }
         }
         settingsWindowController?.window?.contentViewController = nil
         settingsWindowController = nil

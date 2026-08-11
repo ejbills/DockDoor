@@ -22,8 +22,13 @@ protocol WindowPropertiesProviding {
 }
 
 extension SCWindow: WindowPropertiesProviding {
-    var owningApplicationBundleIdentifier: String? { owningApplication?.bundleIdentifier }
-    var owningApplicationProcessID: pid_t? { owningApplication?.processID }
+    var owningApplicationBundleIdentifier: String? {
+        owningApplication?.bundleIdentifier
+    }
+
+    var owningApplicationProcessID: pid_t? {
+        owningApplication?.processID
+    }
 }
 
 enum WindowAction: String, Hashable, CaseIterable, Defaults.Serializable {
@@ -49,7 +54,7 @@ enum WindowAction: String, Hashable, CaseIterable, Defaults.Serializable {
     case fillBottomRightQuarter
     case center
 
-    // No action
+    /// No action
     case none
 
     var localizedName: String {
@@ -774,9 +779,9 @@ extension WindowUtil {
         return windows.filter { windowBelongsToScreen($0, screenIdentifier: id) }
     }
 
-    // Collapses native macOS window-tab groups (e.g. Ghostty, Finder, Terminal) so a tabbed
-    // window appears as a single entry instead of one per tab. Grouping is keyed by process and
-    // frame, so windows from different apps are never merged and passing a multi-app list is safe.
+    /// Collapses native macOS window-tab groups (e.g. Ghostty, Finder, Terminal) so a tabbed
+    /// window appears as a single entry instead of one per tab. Grouping is keyed by process and
+    /// frame, so windows from different apps are never merged and passing a multi-app list is safe.
     static func collapseNativeTabsIfNeeded(_ windows: [WindowInfo]) -> [WindowInfo] {
         guard Defaults[.collapseNativeTabsIntoSingleWindow] else { return windows }
 
@@ -913,6 +918,7 @@ extension WindowUtil {
     }
 
     static func updateNewWindowsForApp(_ app: NSRunningApplication) async {
+        WindowManipulationObservers.ensureObserver(for: app)
         if shouldCaptureWindowImages() {
             if let content = await getShareableContent(onScreenWindowsOnly: false) {
                 let appWindows = content.windows.filter { window in
@@ -988,6 +994,7 @@ extension WindowUtil {
 
         for app in runningApps {
             let pid = app.processIdentifier
+            WindowManipulationObservers.ensureObserver(for: app)
             await discoverNewWindowsViaAXFallback(app: app)
             processedPIDs.insert(pid)
         }
@@ -1434,26 +1441,27 @@ extension WindowUtil {
         return true
     }
 
-    /// Checks if the frontmost application is fullscreen and in the blacklist
+    /// Checks if the frontmost application is fullscreen and in the blacklist.
+    /// Runs on every switcher keypress inside the event tap, so the expensive AX
+    /// fullscreen probe only happens when the frontmost app actually matches the blacklist.
     static func shouldIgnoreKeybindForFrontmostApp() -> Bool {
+        let blacklist = Defaults[.fullscreenAppBlacklist]
+        guard !blacklist.isEmpty else { return false }
+
         guard let frontmostApp = NSWorkspace.shared.frontmostApplication else {
             return false
         }
 
-        // Check if the app is in fullscreen mode
-        let isFullscreen = isAppInFullscreen(frontmostApp)
-
-        // Check if the app is in the blacklist
         let appName = frontmostApp.localizedName ?? ""
         let bundleIdentifier = frontmostApp.bundleIdentifier ?? ""
-        let blacklist = Defaults[.fullscreenAppBlacklist]
 
         let isInBlacklist = blacklist.contains { blacklistEntry in
             appName.lowercased().contains(blacklistEntry.lowercased()) ||
                 bundleIdentifier.lowercased().contains(blacklistEntry.lowercased())
         }
+        guard isInBlacklist else { return false }
 
-        return isFullscreen && isInBlacklist
+        return isAppInFullscreen(frontmostApp)
     }
 
     /// Checks if the given application is currently in fullscreen mode

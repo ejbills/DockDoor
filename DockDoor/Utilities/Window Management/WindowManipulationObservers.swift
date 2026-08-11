@@ -163,6 +163,19 @@ class WindowManipulationObservers {
         }
     }
 
+    /// Creates an observer for apps discovered outside the didLaunch notification path
+    /// (e.g. terminal-spawned GUI processes), so they become event-driven after first contact.
+    static func ensureObserver(for app: NSRunningApplication) {
+        guard app.activationPolicy == .regular else { return }
+        DispatchQueue.main.async {
+            guard let instance = activeWindowManipulationObserversInstance,
+                  instance.observers[app.processIdentifier] == nil,
+                  !app.isTerminated
+            else { return }
+            instance.createObserverForApp(app)
+        }
+    }
+
     private func createObserverForApp(_ app: NSRunningApplication) {
         let pid = app.processIdentifier
 

@@ -3,7 +3,7 @@ import SwiftUI
 
 struct KeyCaptureButton: View {
     @Binding var keyCode: UInt16
-    var emptyLabel: String? = nil
+    var emptyLabel: String?
     var captureModifiers: Bool = false
 
     @State private var isCapturing = false
@@ -15,6 +15,9 @@ struct KeyCaptureButton: View {
                 .font(.system(size: 12))
                 .foregroundColor(.accentColor)
                 .frame(minWidth: 50)
+                .onDisappear {
+                    stopCapture()
+                }
         } else {
             Button(action: startCapture) {
                 Text(displayLabel)
