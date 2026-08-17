@@ -100,6 +100,9 @@ struct WindowPreviewInteractionModifier: ViewModifier {
     // MARK: - Tap Handling
 
     private func handleWindowTap() {
+        // Avoid activating the target while the temporarily pinned Dock reduces the usable screen area.
+        SharedPreviewWindowCoordinator.activeInstance?.restoreDockAutoHideState()
+
         if NSEvent.modifierFlags.contains(.shift) {
             WindowUtil.activateAndOpenNewWindow(app: windowInfo.app)
             onTap?()
