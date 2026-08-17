@@ -797,6 +797,7 @@ final class DockObserver {
         }
 
         if type == .leftMouseDown, appUnderMouse.dockItemElement != nil {
+            previewCoordinator.cancelPendingShow()
             previewCoordinator.restoreDockAutoHideState()
         }
 
