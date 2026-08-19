@@ -433,6 +433,15 @@ extension WindowInfo {
             app.activate(options: [.activateIgnoringOtherApps])
             return
         }
+
+        // Also activate via the public API so third-party window/space managers
+        // (e.g. AeroSpace, yabai) that observe standard app-activation
+        // notifications learn about the focus change. The private SLPS/AX calls
+        // below raise the exact window but are invisible to those observers,
+        // which can leave a window that lives in a currently-hidden managed
+        // space activated at the process level yet never scrolled into view.
+        ownerApp.activate(options: [.activateIgnoringOtherApps])
+
         let maxRetries = 3
         var retryCount = 0
 
