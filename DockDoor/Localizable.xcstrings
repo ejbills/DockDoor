@@ -42981,8 +42981,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Controls how many columns of windows are shown in the window switcher. Windows are distributed across columns automatically."
+            "state" : "translated",
+            "value" : "Kontroluje ile kolumn okien jest wyświetlanych w przełączniku okna. Okna są rozdzielane automatycznie."
           }
         },
         "pt-BR" : {
@@ -43361,8 +43361,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Controls how many rows of windows are shown in the window switcher."
+            "state" : "translated",
+            "value" : "Kontroluje ile wierszy okien jest wyświetlanych w przełączniku okna."
           }
         },
         "pt-BR" : {
@@ -55342,8 +55342,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Preview Modifier"
+            "state" : "translated",
+            "value" : "Dock-voorbeeldinstelling"
           }
         },
         "no" : {
@@ -56103,8 +56103,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dock Preview Trigger"
+            "state" : "translated",
+            "value" : "Dock-voorbeeld trigger"
           }
         },
         "no" : {
@@ -83916,8 +83916,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hover"
+            "state" : "translated",
+            "value" : "Aanwijzen"
           }
         },
         "no" : {
@@ -102970,8 +102970,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Modifier Click"
+            "state" : "translated",
+            "value" : "Klikinstelling"
           }
         },
         "no" : {
@@ -114396,8 +114396,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Open App Window"
+            "state" : "translated",
+            "value" : "Open app-venster"
           }
         },
         "no" : {
@@ -150572,7 +150572,7 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Shift ⇧"
           }
         },
@@ -155901,8 +155901,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show previews automatically on hover, or require a click trigger on the Dock icon."
+            "state" : "translated",
+            "value" : "Toon voorbeelden automatisch bij het aanwijzen met de muis, of stel in dat er eerst op het Dock-pictogram moet worden geklikt."
           }
         },
         "no" : {
@@ -157231,8 +157231,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Show window previews for Dock icons."
+            "state" : "translated",
+            "value" : "Venster-voorbeelden weergeven voor Dock-pictogrammen."
           }
         },
         "no" : {
