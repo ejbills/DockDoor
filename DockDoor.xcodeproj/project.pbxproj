@@ -130,7 +130,10 @@
 		BB5C36562F6CEE9E00BE947F /* MediaRemoteAdapter in Frameworks */ = {isa = PBXBuildFile; productRef = BB5C36552F6CEE9E00BE947F /* MediaRemoteAdapter */; };
 		BB5C36572F6D793700BE947F /* MediaRemoteAdapter in Embed Frameworks */ = {isa = PBXBuildFile; productRef = BB5C36552F6CEE9E00BE947F /* MediaRemoteAdapter */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		BB5D35542ED4C4CC006ECE15 /* DebugLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB5D35532ED4C4CC006ECE15 /* DebugLogger.swift */; };
+		5B2D3F0C6E7A4B1C9D4E3F20 /* EventTapThread.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1C2E9B4D5F4A0B8C3D2E1F /* EventTapThread.swift */; };
+		443E688EEFE745A7B807C50D /* DebugTestHarness.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE0A3B3EF43E44C0871AB2E0 /* DebugTestHarness.swift */; };
 		BB6021D22D1E613800D47C86 /* Window Image Sizing Calculations.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6021D12D1E613100D47C86 /* Window Image Sizing Calculations.swift */; };
+		4D0B2C3E5F6A7B8C9D0E1F2A /* CardGridScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C9A1B2D4E5F6A7B8C9D0E1F /* CardGridScrollView.swift */; };
 		BB638EFA2E0216DA0010077D /* MediaControlsEmbeddedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB638EF92E0216DA0010077D /* MediaControlsEmbeddedView.swift */; };
 		BB638EFC2E0216DE0010077D /* MediaControlsFullView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB638EFB2E0216DE0010077D /* MediaControlsFullView.swift */; };
 		BB638F002E0216FA0010077D /* MediaArtworkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB638EFF2E0216FA0010077D /* MediaArtworkView.swift */; };
@@ -356,7 +359,10 @@
 		BB5349C22EE7C3F5004B1FDD /* WindowPreviewCompact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowPreviewCompact.swift; sourceTree = "<group>"; };
 		BB5349C42EE7D160004B1FDD /* WindowPreviewInteractionModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowPreviewInteractionModifier.swift; sourceTree = "<group>"; };
 		BB5D35532ED4C4CC006ECE15 /* DebugLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugLogger.swift; sourceTree = "<group>"; };
+		7A1C2E9B4D5F4A0B8C3D2E1F /* EventTapThread.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTapThread.swift; sourceTree = "<group>"; };
+		DE0A3B3EF43E44C0871AB2E0 /* DebugTestHarness.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugTestHarness.swift; sourceTree = "<group>"; };
 		BB6021D12D1E613100D47C86 /* Window Image Sizing Calculations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Window Image Sizing Calculations.swift"; sourceTree = "<group>"; };
+		3C9A1B2D4E5F6A7B8C9D0E1F /* CardGridScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardGridScrollView.swift; sourceTree = "<group>"; };
 		BB638EF92E0216DA0010077D /* MediaControlsEmbeddedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaControlsEmbeddedView.swift; sourceTree = "<group>"; };
 		BB638EFB2E0216DE0010077D /* MediaControlsFullView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaControlsFullView.swift; sourceTree = "<group>"; };
 		BB638EFF2E0216FA0010077D /* MediaArtworkView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaArtworkView.swift; sourceTree = "<group>"; };
@@ -712,6 +718,8 @@
 				205C45E5266848C9B4F622AA /* ActiveAppIndicator */,
 				B9D4DE2A3A39438AB1F2C1F4E515D038 /* Media */,
 				BB5D35532ED4C4CC006ECE15 /* DebugLogger.swift */,
+				7A1C2E9B4D5F4A0B8C3D2E1F /* EventTapThread.swift */,
+				DE0A3B3EF43E44C0871AB2E0 /* DebugTestHarness.swift */,
 				BB21067C2E83565A002F87D6 /* KeyboardLabel.swift */,
 				BBDF65722E7E212400DD6D6D /* DockObserver+CmdTab.swift */,
 				BBBAA15A2DE6998B00FF8F8F /* UpdaterState.swift */,
@@ -816,6 +824,7 @@
 				BB0CBE392DD8179200D55437 /* MouseEventModifier.swift */,
 				BB3D6EAD2C82E4AE00FFE584 /* WindowDismissalContainer.swift */,
 				BB6021D12D1E613100D47C86 /* Window Image Sizing Calculations.swift */,
+				3C9A1B2D4E5F6A7B8C9D0E1F /* CardGridScrollView.swift */,
 			);
 			path = "WindowPreview Supporting";
 			sourceTree = "<group>";
@@ -1115,6 +1124,8 @@
 				83E26DB067D2426086683147 /* ActiveAppIndicatorSettingsView.swift in Sources */,
 				0531F8D22C3CC04600327808 /* AppearanceSettingsView.swift in Sources */,
 				BB5D35542ED4C4CC006ECE15 /* DebugLogger.swift in Sources */,
+				5B2D3F0C6E7A4B1C9D4E3F20 /* EventTapThread.swift in Sources */,
+				443E688EEFE745A7B807C50D /* DebugTestHarness.swift in Sources */,
 				BB638EFA2E0216DA0010077D /* MediaControlsEmbeddedView.swift in Sources */,
 				3A1622982C8BF71000D318EE /* SwiftUIWindow.swift in Sources */,
 				BB638F082E0217250010077D /* MediaPlaybackControls.swift in Sources */,
@@ -1195,6 +1206,7 @@
 				BBA153F62C115DDA00119C02 /* AppDelegate.swift in Sources */,
 				BB918BB52CF7613400931236 /* CGRect.swift in Sources */,
 				BB6021D22D1E613800D47C86 /* Window Image Sizing Calculations.swift in Sources */,
+				4D0B2C3E5F6A7B8C9D0E1F2A /* CardGridScrollView.swift in Sources */,
 				3A1622CA2C8D5E4600D318EE /* FirstTimeIntroTabView.swift in Sources */,
 				BB1865562DD57F1E000F34AD /* SupportSettingsView.swift in Sources */,
 				BB638F062E02170B0010077D /* MediaProgressBar.swift in Sources */,

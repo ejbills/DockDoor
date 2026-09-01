@@ -9,6 +9,21 @@ private var pendingNotifications: [String: DispatchWorkItem] = [:]
 private let windowProcessingDebounceInterval: TimeInterval = Defaults[.windowProcessingDebounceInterval]
 private let axObserverWorkQueue = DispatchQueue(label: "ddObsWorkQueue", qos: .userInitiated)
 
+private let observedAXNotifications: [String] = [
+    kAXWindowCreatedNotification,
+    kAXUIElementDestroyedNotification,
+    kAXWindowMiniaturizedNotification,
+    kAXWindowDeminiaturizedNotification,
+    kAXApplicationHiddenNotification,
+    kAXApplicationShownNotification,
+    kAXWindowResizedNotification,
+    kAXWindowMovedNotification,
+    kAXMainWindowChangedNotification,
+    kAXFocusedUIElementChangedNotification,
+    kAXFocusedWindowChangedNotification,
+    kAXTitleChangedNotification,
+]
+
 class WindowManipulationObservers {
     private let previewCoordinator: SharedPreviewWindowCoordinator
 
@@ -185,19 +200,9 @@ class WindowManipulationObservers {
             guard result == .success, let observer else { return }
 
             let appElement = AXUIElementCreateApplication(pid)
-
-            AXObserverAddNotification(observer, appElement, kAXWindowCreatedNotification as CFString, UnsafeMutableRawPointer(bitPattern: Int(pid)))
-            AXObserverAddNotification(observer, appElement, kAXUIElementDestroyedNotification as CFString, UnsafeMutableRawPointer(bitPattern: Int(pid)))
-            AXObserverAddNotification(observer, appElement, kAXWindowMiniaturizedNotification as CFString, UnsafeMutableRawPointer(bitPattern: Int(pid)))
-            AXObserverAddNotification(observer, appElement, kAXWindowDeminiaturizedNotification as CFString, UnsafeMutableRawPointer(bitPattern: Int(pid)))
-            AXObserverAddNotification(observer, appElement, kAXApplicationHiddenNotification as CFString, UnsafeMutableRawPointer(bitPattern: Int(pid)))
-            AXObserverAddNotification(observer, appElement, kAXApplicationShownNotification as CFString, UnsafeMutableRawPointer(bitPattern: Int(pid)))
-            AXObserverAddNotification(observer, appElement, kAXWindowResizedNotification as CFString, UnsafeMutableRawPointer(bitPattern: Int(pid)))
-            AXObserverAddNotification(observer, appElement, kAXWindowMovedNotification as CFString, UnsafeMutableRawPointer(bitPattern: Int(pid)))
-            AXObserverAddNotification(observer, appElement, kAXMainWindowChangedNotification as CFString, UnsafeMutableRawPointer(bitPattern: Int(pid)))
-            AXObserverAddNotification(observer, appElement, kAXFocusedUIElementChangedNotification as CFString, UnsafeMutableRawPointer(bitPattern: Int(pid)))
-            AXObserverAddNotification(observer, appElement, kAXFocusedWindowChangedNotification as CFString, UnsafeMutableRawPointer(bitPattern: Int(pid)))
-            AXObserverAddNotification(observer, appElement, kAXTitleChangedNotification as CFString, UnsafeMutableRawPointer(bitPattern: Int(pid)))
+            for notification in observedAXNotifications {
+                AXObserverAddNotification(observer, appElement, notification as CFString, UnsafeMutableRawPointer(bitPattern: Int(pid)))
+            }
 
             CFRunLoopAddSource(CFRunLoopGetMain(), AXObserverGetRunLoopSource(observer), .defaultMode)
 
@@ -213,25 +218,16 @@ class WindowManipulationObservers {
         guard let observer = observers[pid] else { return }
 
         let appElement = AXUIElementCreateApplication(pid)
-
-        AXObserverRemoveNotification(observer, appElement, kAXWindowCreatedNotification as CFString)
-        AXObserverRemoveNotification(observer, appElement, kAXUIElementDestroyedNotification as CFString)
-        AXObserverRemoveNotification(observer, appElement, kAXWindowMiniaturizedNotification as CFString)
-        AXObserverRemoveNotification(observer, appElement, kAXWindowDeminiaturizedNotification as CFString)
-        AXObserverRemoveNotification(observer, appElement, kAXApplicationHiddenNotification as CFString)
-        AXObserverRemoveNotification(observer, appElement, kAXApplicationShownNotification as CFString)
-        AXObserverRemoveNotification(observer, appElement, kAXMainWindowChangedNotification as CFString)
-        AXObserverRemoveNotification(observer, appElement, kAXFocusedUIElementChangedNotification as CFString)
-        AXObserverRemoveNotification(observer, appElement, kAXFocusedWindowChangedNotification as CFString)
-        AXObserverRemoveNotification(observer, appElement, kAXWindowResizedNotification as CFString)
-        AXObserverRemoveNotification(observer, appElement, kAXWindowMovedNotification as CFString)
-        AXObserverRemoveNotification(observer, appElement, kAXTitleChangedNotification as CFString)
+        for notification in observedAXNotifications {
+            AXObserverRemoveNotification(observer, appElement, notification as CFString)
+        }
 
         observers.removeValue(forKey: pid)
     }
 
     func handleNewWindow(for pid: pid_t) {
-        debounce(key: "windowCreation") {
+        let delay = AXResponsiveness.isUnresponsive(pid) ? AXResponsiveness.backoff : windowProcessingDebounceInterval
+        debounce(key: "windowCreation", delay: delay) {
             if let app = NSRunningApplication(processIdentifier: pid) {
                 DebugLogger.log("handleNewWindow", details: "App: \(app.localizedName ?? "Unknown") (PID: \(pid))")
                 await DebugLogger.measureAsync("updateNewWindowsForApp", details: "PID: \(pid)") {

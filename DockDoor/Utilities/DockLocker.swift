@@ -261,8 +261,8 @@ final class DockLocker {
             return
         }
 
-        let source = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, tap, 0)
-        CFRunLoopAddSource(CFRunLoopGetCurrent(), source, .commonModes)
+        let source = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, tap, 0)!
+        EventTapThread.shared.add(source)
         eventTap = tap
         runLoopSource = source
     }
@@ -271,7 +271,7 @@ final class DockLocker {
         if let eventTap {
             CGEvent.tapEnable(tap: eventTap, enable: false)
             if let runLoopSource {
-                CFRunLoopRemoveSource(CFRunLoopGetCurrent(), runLoopSource, .commonModes)
+                EventTapThread.shared.remove(runLoopSource)
             }
             CFMachPortInvalidate(eventTap)
         }

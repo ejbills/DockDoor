@@ -8,12 +8,40 @@ import Cocoa
 
 // NOTE: Borrows code from https://github.com/lwouis/alt-tab-macos/blob/master/src/api-wrappers/AXUIElement.swift
 
+enum AXResponsiveness {
+    private static let lock = NSLock()
+    private static var unresponsiveUntil: [pid_t: Date] = [:]
+    static let backoff: TimeInterval = 5
+
+    static func markUnresponsive(_ pid: pid_t) {
+        guard pid > 0, pid != ProcessInfo.processInfo.processIdentifier else { return }
+        lock.lock()
+        unresponsiveUntil[pid] = Date().addingTimeInterval(backoff)
+        lock.unlock()
+        DebugLogger.log("AXResponsiveness", details: "PID \(pid) unresponsive, backing off \(Int(backoff))s")
+    }
+
+    static func isUnresponsive(_ pid: pid_t) -> Bool {
+        lock.lock()
+        defer { lock.unlock() }
+        guard let until = unresponsiveUntil[pid] else { return false }
+        if until > Date() { return true }
+        unresponsiveUntil.removeValue(forKey: pid)
+        return false
+    }
+}
+
 extension AXUIElement {
     func axCallWhichCanThrow<T>(_ result: AXError, _ successValue: inout T) throws -> T? {
         switch result {
         case .success: return successValue
         // .cannotComplete can happen if the app is unresponsive; we throw in that case to retry until the call succeeds
-        case .cannotComplete: throw AxError.runtimeError
+        case .cannotComplete:
+            var pid = pid_t(0)
+            if AXUIElementGetPid(self, &pid) == .success {
+                AXResponsiveness.markUnresponsive(pid)
+            }
+            throw AxError.runtimeError
         // for other errors it's pointless to retry
         default: return nil
         }
@@ -92,11 +120,24 @@ extension AXUIElement {
             token.replaceSubrange(8 ..< 12, with: withUnsafeBytes(of: Int32(0x636F_636F)) { Data($0) })
 
             var results: [AXUIElement] = []
+            var consecutiveTimeouts = 0
             for axId: AXUIElementID in 0 ..< 1000 {
+                if AXResponsiveness.isUnresponsive(pid) { break }
                 token.replaceSubrange(12 ..< 20, with: withUnsafeBytes(of: axId) { Data($0) })
                 guard let el = _AXUIElementCreateWithRemoteToken(token as CFData)?.takeRetainedValue() else {
                     continue
                 }
+
+                let role: String?
+                do {
+                    role = try el.role()
+                    consecutiveTimeouts = 0
+                } catch {
+                    consecutiveTimeouts += 1
+                    if consecutiveTimeouts >= 2 { break }
+                    continue
+                }
+                guard role == kAXWindowRole as String else { continue }
 
                 if let app {
                     let windowID = (try? el.cgWindowId()) ?? 0
@@ -118,17 +159,39 @@ extension AXUIElement {
         }
     }
 
-    static func allWindows(_ pid: pid_t, appElement: AXUIElement, app: NSRunningApplication? = nil) -> [AXUIElement] {
-        DebugLogger.measureSlow("allWindows", thresholdMs: 200, details: "PID: \(pid)") {
+    static func allWindows(_ pid: pid_t, appElement: AXUIElement, app: NSRunningApplication? = nil, cgCandidates: [[String: AnyObject]]? = nil) -> [AXUIElement] {
+        guard !AXResponsiveness.isUnresponsive(pid) else { return [] }
+
+        return DebugLogger.measureSlow("allWindows", thresholdMs: 200, details: "PID: \(pid)") {
             var set = Set<AXUIElement>()
 
-            let windows = DebugLogger.measureSlow("appElement.windows()", thresholdMs: 50, details: "PID: \(pid)") {
-                try? appElement.windows()
+            let windows: [AXUIElement]?
+            do {
+                windows = try DebugLogger.measureSlow("appElement.windows()", thresholdMs: 50, details: "PID: \(pid)") {
+                    try appElement.windows()
+                }
+            } catch {
+                return []
             }
             if let windows { set.formUnion(windows) }
 
-            let brute = windowsByBruteForce(pid, app: app)
-            set.formUnion(brute)
+            // Brute force exists to reach windows the AX list omits (typically other Spaces); invisible helper windows on the current Space never justify it.
+            let candidates = cgCandidates ?? getCGWindowCandidates(for: pid)
+            let knownIDs = Set(set.compactMap { try? $0.cgWindowId() })
+            let activeSpaces = currentActiveSpaceIDs()
+            let hasUnreachedWindow = candidates.contains { desc in
+                let windowID = CGWindowID((desc[kCGWindowNumber as String] as? NSNumber)?.uint32Value ?? 0)
+                guard (desc[kCGWindowLayer as String] as? NSNumber)?.intValue == 0,
+                      !knownIDs.contains(windowID),
+                      isValidCGWindowCandidate(windowID, in: candidates)
+                else { return false }
+                let isOnscreen = (desc[kCGWindowIsOnscreen as String] as? NSNumber)?.boolValue ?? false
+                let spaces = Set(windowID.cgsSpaces().map { Int($0) })
+                return isOnscreen || spaces.isEmpty || spaces.isDisjoint(with: activeSpaces)
+            }
+            if hasUnreachedWindow {
+                set.formUnion(windowsByBruteForce(pid, app: app))
+            }
 
             return Array(set)
         }

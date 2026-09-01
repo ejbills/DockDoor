@@ -20,6 +20,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         updaterController.updater
     }
 
+    #if DEBUG
+        private var debugHarness: DebugTestHarness?
+    #endif
     private var cinematicOverlay: CinematicOverlay?
     private var onboardingWindow: NSWindow?
     private var settingsManager: SettingsManager?
@@ -46,10 +49,18 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // Set global AX timeout to prevent hangs from unresponsive apps
         AXUIElementSetMessagingTimeout(AXUIElementCreateSystemWide(), 1.0)
 
-        NSWorkspace.shared.notificationCenter.addObserver(
+        for name in [NSWorkspace.didWakeNotification, NSWorkspace.screensDidWakeNotification, NSWorkspace.sessionDidBecomeActiveNotification] {
+            NSWorkspace.shared.notificationCenter.addObserver(
+                self,
+                selector: #selector(handleSystemWake),
+                name: name,
+                object: nil
+            )
+        }
+        NotificationCenter.default.addObserver(
             self,
-            selector: #selector(handleSystemWake),
-            name: NSWorkspace.didWakeNotification,
+            selector: #selector(handleScreenParametersChanged),
+            name: NSApplication.didChangeScreenParametersNotification,
             object: nil
         )
 
@@ -105,6 +116,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             Defaults[.reopenSettingsAfterRestart] = false
             openSettingsWindow(nil)
         }
+
+        #if DEBUG
+            debugHarness = DebugTestHarness(hooks: .init(
+                simulateWake: { [weak self] in self?.handleSystemWake() },
+                resetKeybind: { [weak self] in self?.keybindHelper?.reset() },
+                switcherSessionActive: { [weak self] in self?.previewCoordinator?.windowSwitcherCoordinator.isKeybindSessionActive ?? false },
+                previewVisible: { [weak self] in self?.previewCoordinator?.isVisible ?? false },
+                previewWindowCount: { [weak self] in self?.previewCoordinator?.windowSwitcherCoordinator.windows.count ?? 0 }
+            ))
+        #endif
     }
 
     // Clear the onboarding skip's disableImagePreview only when permission was newly granted since last launch, so skip-then-grant users get previews back without overriding a deliberate "Always use compact mode" choice.
@@ -199,6 +220,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     private var wakeRecoveryTask: Task<Void, Never>?
+    private var screenParametersDebounce: DispatchWorkItem?
+
+    @objc private func handleScreenParametersChanged() {
+        screenParametersDebounce?.cancel()
+        let workItem = DispatchWorkItem { [weak self] in self?.handleSystemWake() }
+        screenParametersDebounce = workItem
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: workItem)
+    }
 
     @objc private func handleSystemWake() {
         wakeRecoveryTask?.cancel()
@@ -227,7 +256,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             await MainActor.run { [weak self] in
                 guard let self else { return }
                 dockObserver?.reset()
-                keybindHelper?.reset()
+                keybindHelper?.recover()
                 appClosureObserver?.reset()
                 dockLocker?.reset()
             }

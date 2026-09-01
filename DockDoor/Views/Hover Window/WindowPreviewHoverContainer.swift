@@ -115,7 +115,7 @@ struct WindowPreviewHoverContainer: View {
     @State private var lastShakeCheck: Date = .init()
     @State private var edgeScrollTimer: Timer?
     @State private var edgeScrollDirection: CGFloat = 0
-    @State private var cachedScrollView: NSScrollView?
+    @State private var cachedScrollView: CardGridScrollView.ContainerView?
     @State private var edgeScrollHoverSize: CGSize = .zero
     @State private var scrolledFromStart = false
     @State private var dynamicFadeEnabled = false
@@ -333,61 +333,57 @@ struct WindowPreviewHoverContainer: View {
             orientationIsHorizontal ? .horizontal : .vertical
         }
 
-        ScrollViewReader { scrollProxy in
-            buildFlowStack(
-                scrollProxy: scrollProxy,
-                orientationIsHorizontal,
-                scrollAxis: scrollAxis,
-                currentMaxDimensionForPreviews: calculatedMaxDimension,
-                currentDimensionsMapForPreviews: calculatedDimensionsMap
-            )
-            .fadeOnEdges(axis: scrollAxis == .horizontal ? .horizontal : .vertical, fadeLength: 20, disableLeading: dynamicFadeEnabled && !scrolledFromStart)
-            .padding(.top, (!previewStateCoordinator.windowSwitcherActive && effectiveAppNameStyle == .default && effectiveShowAppName) ? 25 : 0)
-            .overlay(alignment: effectiveAppNameStyle == .popover ? .top : .topLeading) {
-                hoverTitleBaseView(labelSize: measureString(appName, fontSize: 14))
-                    .onHover { isHovered in
-                        hoveringWindowTitle = isHovered
-                    }
+        buildFlowStack(
+            orientationIsHorizontal,
+            currentMaxDimensionForPreviews: calculatedMaxDimension,
+            currentDimensionsMapForPreviews: calculatedDimensionsMap
+        )
+        .fadeOnEdges(axis: scrollAxis == .horizontal ? .horizontal : .vertical, fadeLength: 20, disableLeading: dynamicFadeEnabled && !scrolledFromStart)
+        .padding(.top, (!previewStateCoordinator.windowSwitcherActive && effectiveAppNameStyle == .default && effectiveShowAppName) ? 25 : 0)
+        .overlay(alignment: effectiveAppNameStyle == .popover ? .top : .topLeading) {
+            hoverTitleBaseView(labelSize: measureString(appName, fontSize: 14))
+                .onHover { isHovered in
+                    hoveringWindowTitle = isHovered
+                }
+        }
+        .overlay {
+            if !mockPreviewActive, !isDragging {
+                WindowDismissalContainer(appName: appName,
+                                         bestGuessMonitor: bestGuessMonitor,
+                                         dockPosition: dockPosition,
+                                         dockItemElement: dockItemElement,
+                                         dockItemFrameOverride: dockItemFrameOverride,
+                                         originalMouseLocation: mouseLocation,
+                                         minimizeAllWindowsCallback: { wasAppActiveBeforeClick in
+                                             minimizeAllWindows(wasAppActiveBeforeClick: wasAppActiveBeforeClick)
+                                         })
+                                         .allowsHitTesting(false)
             }
-            .overlay {
-                if !mockPreviewActive, !isDragging {
-                    WindowDismissalContainer(appName: appName,
-                                             bestGuessMonitor: bestGuessMonitor,
-                                             dockPosition: dockPosition,
-                                             dockItemElement: dockItemElement,
-                                             dockItemFrameOverride: dockItemFrameOverride,
-                                             originalMouseLocation: mouseLocation,
-                                             minimizeAllWindowsCallback: { wasAppActiveBeforeClick in
-                                                 minimizeAllWindows(wasAppActiveBeforeClick: wasAppActiveBeforeClick)
-                                             })
-                                             .allowsHitTesting(false)
+        }
+        .overlay {
+            SelectionReader(selection: previewStateCoordinator.selection) { currIndex in
+                if dockPosition == .cmdTab,
+                   Defaults[.enableCmdTabEnhancements],
+                   !Defaults[.hasSeenCmdTabFocusHint],
+                   !previewStateCoordinator.windowSwitcherActive,
+                   currIndex < 0
+                {
+                    CmdTabFocusFullOverlayView()
+                        .transition(.opacity)
+                        .allowsHitTesting(false)
+                        .clipShape(RoundedRectangle(cornerRadius: CardRadius.container, style: .continuous))
                 }
             }
-            .overlay {
-                SelectionReader(selection: previewStateCoordinator.selection) { currIndex in
-                    if dockPosition == .cmdTab,
-                       Defaults[.enableCmdTabEnhancements],
-                       !Defaults[.hasSeenCmdTabFocusHint],
-                       !previewStateCoordinator.windowSwitcherActive,
-                       currIndex < 0
-                    {
-                        CmdTabFocusFullOverlayView()
-                            .transition(.opacity)
-                            .allowsHitTesting(false)
-                            .clipShape(RoundedRectangle(cornerRadius: CardRadius.container, style: .continuous))
-                    }
-                }
-            }
-            .measure($edgeScrollHoverSize)
-            .onContinuousHover { phase in
-                guard enableMouseHoverInSwitcher, previewStateCoordinator.windowSwitcherActive else { return }
+        }
+        .measure($edgeScrollHoverSize)
+        .onContinuousHover { phase in
+            guard enableMouseHoverInSwitcher, previewStateCoordinator.windowSwitcherActive else { return }
 
-                switch phase {
-                case let .active(location):
-                    handleEdgeScrollHover(at: location, isHorizontal: orientationIsHorizontal)
-                case .ended:
-                    stopEdgeScroll()
-                }
+            switch phase {
+            case let .active(location):
+                handleEdgeScrollHover(at: location, isHorizontal: orientationIsHorizontal)
+            case .ended:
+                stopEdgeScroll()
             }
         }
     }
@@ -709,9 +705,7 @@ struct WindowPreviewHoverContainer: View {
 
     @ViewBuilder
     private func buildFlowStack(
-        scrollProxy: ScrollViewProxy,
         _ isHorizontal: Bool,
-        scrollAxis: Axis.Set,
         currentMaxDimensionForPreviews: CGPoint,
         currentDimensionsMapForPreviews: [Int: WindowDimensions]
     ) -> some View {
@@ -720,92 +714,41 @@ struct WindowPreviewHoverContainer: View {
             windowSwitcherActive: previewStateCoordinator.windowSwitcherActive,
             dockPosition: dockPosition
         )
-        ScrollView(scrollAxis, showsIndicators: false) {
-            Group {
-                if shouldShowNoResultsView() {
-                    noResultsView()
-                } else if shouldUseCompactMode {
-                    let flowItems = createFlowItems(filteredIndices: cachedFilteredIndices)
-                    if previewStateCoordinator.windowSwitcherActive {
-                        LazyVStack(spacing: 4) {
-                            ForEach(flowItems, id: \.id) { item in
-                                buildFlowItem(
-                                    item: item,
-                                    isHorizontal: isHorizontal,
-                                    currentMaxDimensionForPreviews: currentMaxDimensionForPreviews,
-                                    currentDimensionsMapForPreviews: currentDimensionsMapForPreviews,
-                                    filteredIndices: cachedFilteredIndices,
-                                    appearance: appearance
-                                )
-                            }
-                        }
-                    } else {
-                        VStack(spacing: 4) {
-                            ForEach(flowItems, id: \.id) { item in
-                                buildFlowItem(
-                                    item: item,
-                                    isHorizontal: isHorizontal,
-                                    currentMaxDimensionForPreviews: currentMaxDimensionForPreviews,
-                                    currentDimensionsMapForPreviews: currentDimensionsMapForPreviews,
-                                    filteredIndices: cachedFilteredIndices,
-                                    appearance: appearance
-                                )
-                            }
-                        }
-                    }
-                } else if isHorizontal {
-                    let chunkedItems = createChunkedItems(filteredIndices: cachedFilteredIndices)
-                    let rowAlignment: HorizontalAlignment = previewStateCoordinator.windowSwitcherActive && appearance.allowDynamicImageSizing ? .center : .leading
-                    LazyVStack(alignment: rowAlignment, spacing: HoverContainerPadding.itemSpacing) {
-                        ForEach(Array(chunkedItems.enumerated()), id: \.offset) { index, rowItems in
-                            HStack(spacing: HoverContainerPadding.itemSpacing) {
-                                ForEach(rowItems, id: \.id) { item in
-                                    buildFlowItem(
-                                        item: item,
-                                        isHorizontal: isHorizontal,
-                                        currentMaxDimensionForPreviews: currentMaxDimensionForPreviews,
-                                        currentDimensionsMapForPreviews: currentDimensionsMapForPreviews,
-                                        filteredIndices: cachedFilteredIndices,
-                                        appearance: appearance
-                                    )
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    let chunkedItems = createChunkedItems(filteredIndices: cachedFilteredIndices)
-                    LazyHStack(alignment: .top, spacing: HoverContainerPadding.itemSpacing) {
-                        ForEach(Array(chunkedItems.enumerated()), id: \.offset) { index, colItems in
-                            VStack(spacing: HoverContainerPadding.itemSpacing) {
-                                ForEach(colItems, id: \.id) { item in
-                                    buildFlowItem(
-                                        item: item,
-                                        isHorizontal: isHorizontal,
-                                        currentMaxDimensionForPreviews: currentMaxDimensionForPreviews,
-                                        currentDimensionsMapForPreviews: currentDimensionsMapForPreviews,
-                                        filteredIndices: cachedFilteredIndices,
-                                        appearance: appearance
-                                    )
-                                }
-                            }
-                        }
-                    }
+        if shouldShowNoResultsView() {
+            noResultsView()
+                .globalPadding(20)
+                .padding(2)
+        } else {
+            let lines: [[FlowItem]] = shouldUseCompactMode
+                ? createFlowItems(filteredIndices: cachedFilteredIndices).map { [$0] }
+                : createChunkedItems(filteredIndices: cachedFilteredIndices)
+            let layout = CardGridScrollView.Layout(
+                lines: lines,
+                isHorizontal: shouldUseCompactMode || isHorizontal,
+                centerLines: previewStateCoordinator.windowSwitcherActive && appearance.allowDynamicImageSizing && !shouldUseCompactMode,
+                spacing: shouldUseCompactMode ? 4 : HoverContainerPadding.itemSpacing,
+                inset: 20 * appearance.globalPaddingMultiplier,
+                dimensions: currentDimensionsMapForPreviews,
+                appearance: appearance,
+                compact: shouldUseCompactMode
+            )
+            CardGridScrollView(
+                layout: layout,
+                contentKey: previewStateCoordinator.windows.map(\.viewSnapshot),
+                coordinator: previewStateCoordinator,
+                scrolledFromStart: $scrolledFromStart,
+                makeCard: { item in
+                    AnyView(buildFlowItem(
+                        item: item,
+                        isHorizontal: isHorizontal,
+                        currentMaxDimensionForPreviews: currentMaxDimensionForPreviews,
+                        currentDimensionsMapForPreviews: currentDimensionsMapForPreviews,
+                        filteredIndices: cachedFilteredIndices,
+                        appearance: appearance
+                    ))
                 }
-            }
-            .frame(alignment: .topLeading)
-            .globalPadding(20)
-        }
-        .trackScrollOffset(axis: scrollAxis, scrolledFromStart: $scrolledFromStart)
-        .padding(2)
-        .animation(showAnimations ? .smooth(duration: 0.1) : nil, value: previewStateCoordinator.windows.count)
-        .background {
-            SelectionReader(selection: previewStateCoordinator.selection) { currIndex in
-                Color.clear
-                    .onChange(of: currIndex) { newIndex in
-                        guard previewStateCoordinator.shouldScrollToIndex else { return }
-                        scrollProxy.scrollTo("\(appName)-\(newIndex)", anchor: .center)
-                    }
-            }
+            )
+            .padding(2)
         }
     }
 
@@ -832,29 +775,13 @@ struct WindowPreviewHoverContainer: View {
     }
 
     private func smoothScrollBy(direction: CGFloat, isHorizontal: Bool) {
-        guard let scrollView = cachedScrollView,
-              let documentView = scrollView.documentView
-        else { return }
-
-        let scrollAmount: CGFloat = mouseHoverAutoScrollSpeed * direction
-        let clipView = scrollView.contentView
-        var newOrigin = clipView.bounds.origin
-
-        if isHorizontal {
-            newOrigin.x += scrollAmount
-            newOrigin.x = max(0, min(newOrigin.x, documentView.frame.width - clipView.bounds.width))
-        } else {
-            newOrigin.y += scrollAmount
-            newOrigin.y = max(0, min(newOrigin.y, documentView.frame.height - clipView.bounds.height))
-        }
-
-        clipView.setBoundsOrigin(newOrigin)
+        cachedScrollView?.scrollBy(mouseHoverAutoScrollSpeed * direction)
     }
 
-    private func findScrollView(in view: NSView?) -> NSScrollView? {
+    private func findScrollView(in view: NSView?) -> CardGridScrollView.ContainerView? {
         guard let view else { return nil }
-        if let scrollView = view as? NSScrollView {
-            return scrollView
+        if let container = view as? CardGridScrollView.ContainerView {
+            return container
         }
         for subview in view.subviews {
             if let found = findScrollView(in: subview) {

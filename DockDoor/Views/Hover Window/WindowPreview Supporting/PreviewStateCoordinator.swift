@@ -224,6 +224,34 @@ class PreviewStateCoordinator: ObservableObject {
     }
 
     @MainActor
+    func applyCacheChanges(removed: [WindowInfo], added: [WindowInfo], updated: [WindowInfo]) {
+        guard !windows.isEmpty else { return }
+
+        if !updated.isEmpty {
+            var merged = windows
+            var changed = false
+            for fresh in updated {
+                guard let index = merged.firstIndex(where: { $0.id == fresh.id && $0.app.processIdentifier == fresh.app.processIdentifier }),
+                      merged[index].viewSnapshot != fresh.viewSnapshot || merged[index] != fresh
+                else { continue }
+                merged[index] = fresh
+                changed = true
+            }
+            if changed {
+                windows = merged
+            }
+        }
+
+        for window in removed {
+            removeWindow(byAx: window.axElement)
+        }
+
+        if !added.isEmpty {
+            addWindows(added)
+        }
+    }
+
+    @MainActor
     func removeWindow(at indexToRemove: Int) {
         guard indexToRemove >= 0, indexToRemove < windows.count else { return }
 

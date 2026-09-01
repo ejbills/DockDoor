@@ -11,7 +11,15 @@ enum DebugLogger {
         return tempDir.appendingPathComponent("DockDoor-Debug.log")
     }()
 
-    private static func formattedTimestamp() -> String { Date.now.description }
+    private static let timestampFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
+        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss.SSS"
+        return formatter
+    }()
+
+    private static func formattedTimestamp() -> String { timestampFormatter.string(from: Date()) }
 
     private static func writeToFile(_ line: String) {
         os_log("%{public}@", log: log, type: .debug, line)

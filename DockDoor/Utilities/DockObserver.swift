@@ -190,6 +190,15 @@ final class DockObserver {
             reset()
         }
 
+        if let subscribedElement = subscribedDockList,
+           let children = try? AXUIElementCreateApplication(currentDockPID).children(),
+           let currentList = children.first(where: { (try? $0.role()) == kAXListRole }),
+           !CFEqual(currentList, subscribedElement)
+        {
+            reset()
+            return
+        }
+
         // Check event tap health
         if let eventTap {
             if !CGEvent.tapIsEnabled(tap: eventTap) {
@@ -722,7 +731,7 @@ final class DockObserver {
         if let eventTap {
             CGEvent.tapEnable(tap: eventTap, enable: false)
             if let eventTapRunLoopSource {
-                CFRunLoopRemoveSource(CFRunLoopGetCurrent(), eventTapRunLoopSource, .commonModes)
+                EventTapThread.shared.remove(eventTapRunLoopSource)
             }
             CFMachPortInvalidate(eventTap)
         }
@@ -730,7 +739,29 @@ final class DockObserver {
         eventTapRunLoopSource = nil
     }
 
+    private static let dockProximityBand: CGFloat = 220
+
+    private func isPointNearDock(_ point: CGPoint) -> Bool {
+        let position = DockUtils.getDockPosition()
+        var displayCount: UInt32 = 0
+        var displays = [CGDirectDisplayID](repeating: 0, count: 16)
+        guard CGGetActiveDisplayList(16, &displays, &displayCount) == .success else { return true }
+        for display in displays.prefix(Int(displayCount)) {
+            let bounds = CGDisplayBounds(display)
+            guard bounds.contains(point) else { continue }
+            switch position {
+            case .left: return point.x - bounds.minX <= Self.dockProximityBand
+            case .right: return bounds.maxX - point.x <= Self.dockProximityBand
+            case .bottom: return bounds.maxY - point.y <= Self.dockProximityBand
+            case .top: return point.y - bounds.minY <= Self.dockProximityBand
+            default: return true
+            }
+        }
+        return false
+    }
+
     private func setupEventTap() {
+        guard eventTap == nil else { return }
         var eventMask: CGEventMask = (1 << CGEventType.leftMouseDown.rawValue) |
             (1 << CGEventType.rightMouseDown.rawValue) |
             (1 << CGEventType.otherMouseDown.rawValue)
@@ -755,8 +786,8 @@ final class DockObserver {
             return
         }
 
-        let runLoopSource = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, eventTap, 0)
-        CFRunLoopAddSource(CFRunLoopGetCurrent(), runLoopSource, .commonModes)
+        let runLoopSource = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, eventTap, 0)!
+        EventTapThread.shared.add(runLoopSource)
 
         self.eventTap = eventTap
         eventTapRunLoopSource = runLoopSource
@@ -776,7 +807,7 @@ final class DockObserver {
                 return nil
             }
 
-            guard Defaults[.enableDockScrollGesture] else {
+            guard Defaults[.enableDockScrollGesture], isPointNearDock(event.location) else {
                 return Unmanaged.passUnretained(event)
             }
 
@@ -790,6 +821,10 @@ final class DockObserver {
             return Unmanaged.passUnretained(event)
         }
 
+        guard isPointNearDock(event.location) else {
+            return Unmanaged.passUnretained(event)
+        }
+
         let appUnderMouse = getDockItemAppStatusUnderMouse()
 
         if handleDockPreviewActivation(type: type, event: event, appUnderMouse: appUnderMouse) {
@@ -797,7 +832,7 @@ final class DockObserver {
         }
 
         if type == .leftMouseDown, appUnderMouse.dockItemElement != nil {
-            previewCoordinator.restoreDockAutoHideState()
+            DispatchQueue.main.async { [weak self] in self?.previewCoordinator.restoreDockAutoHideState() }
         }
 
         if case let .success(app) = appUnderMouse.status {
@@ -954,7 +989,7 @@ final class DockObserver {
         let restorationNeededAtClickTime = restorationNeededFromHover || hasMinimizedWindowsAtClickTime || app.isHidden
 
         lastHoveredPID = nil
-        previewCoordinator.cancelPendingShow()
+        DispatchQueue.main.async { [weak self] in self?.previewCoordinator.cancelPendingShow() }
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) { [weak self] in
             guard let self else { return }
@@ -989,11 +1024,13 @@ final class DockObserver {
     }
 
     private func handleShiftClickNewWindow(app: NSRunningApplication) {
-        previewCoordinator.cancelPendingShow()
+        DispatchQueue.main.async { [weak self] in
+            self?.previewCoordinator.cancelPendingShow()
+            WindowUtil.activateAndOpenNewWindow(app: app)
+        }
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) { [weak self] in
             self?.previewCoordinator.hideWindow()
         }
-        WindowUtil.activateAndOpenNewWindow(app: app)
     }
 
     private func hideAppWindows(windows: [WindowInfo], app: NSRunningApplication, appName: String) {

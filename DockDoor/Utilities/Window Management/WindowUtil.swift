@@ -581,6 +581,11 @@ extension WindowUtil {
 
     static func isValidElement(_ element: AXUIElement) -> Bool {
         DebugLogger.measureSlow("isValidElement", thresholdMs: 50) {
+            var pid = pid_t(0)
+            if AXUIElementGetPid(element, &pid) == .success, AXResponsiveness.isUnresponsive(pid) {
+                return true
+            }
+
             // Fast path: check geometry
             do {
                 let position = try element.position()
@@ -589,7 +594,7 @@ extension WindowUtil {
                     return true
                 }
             } catch AxError.runtimeError {
-                return false
+                return true
             } catch {
                 // Geometry check failed, fall through to AX windows list validation
             }
@@ -893,8 +898,13 @@ extension WindowUtil {
             return 0
         }
 
+        if AXResponsiveness.isUnresponsive(pid) {
+            return 0
+        }
+
         let appAX = AXUIElementCreateApplication(pid)
-        let axWindows = AXUIElement.allWindows(pid, appElement: appAX, app: app)
+        let cgCandidates = getCGWindowCandidates(for: pid)
+        let axWindows = AXUIElement.allWindows(pid, appElement: appAX, app: app, cgCandidates: cgCandidates)
         guard !axWindows.isEmpty else { return 0 }
 
         // Read cache once and compute sets to skip redundant processing
@@ -910,7 +920,8 @@ extension WindowUtil {
                 app: app,
                 excludeWindowIDs: excludeWindowIDs,
                 skipWindowIDs: freshCachedIDs,
-                existingCachedIDs: allCachedIDs
+                existingCachedIDs: allCachedIDs,
+                cgCandidates: cgCandidates
             )
         }
 
@@ -951,12 +962,15 @@ extension WindowUtil {
 
         if shouldCaptureWindowImages() {
             if let content = await getShareableContent(onScreenWindowsOnly: false) {
+                var displayAppsByOwner: [pid_t: NSRunningApplication] = [:]
                 let windowAppPairs: [(window: SCWindow, displayApp: NSRunningApplication, ownerApp: NSRunningApplication)] = content.windows.compactMap { window in
                     guard let scApp = window.owningApplication,
                           !filteredBundleIdentifiers.contains(scApp.bundleIdentifier),
                           let ownerApp = NSRunningApplication(processIdentifier: scApp.processID)
                     else { return nil }
-                    return (window, WindowOwnerResolver.displayApp(forOwner: ownerApp), ownerApp)
+                    let displayApp = displayAppsByOwner[ownerApp.processIdentifier] ?? WindowOwnerResolver.displayApp(forOwner: ownerApp)
+                    displayAppsByOwner[ownerApp.processIdentifier] = displayApp
+                    return (window, displayApp, ownerApp)
                 }
 
                 for pair in windowAppPairs {
@@ -1105,19 +1119,23 @@ extension WindowUtil {
             }
         }
 
-        guard ownerApp.activationPolicy != .prohibited else {
+        guard ownerApp.activationPolicy != .prohibited, !AXResponsiveness.isUnresponsive(ownerPid) else {
             return
         }
 
         let ownerAppElement = AXUIElementCreateApplication(ownerPid)
 
-        let axWindows = AXUIElement.allWindows(ownerPid, appElement: ownerAppElement, app: displayApp)
-        guard !axWindows.isEmpty else {
-            return
-        }
-
-        guard let windowRef = findWindow(matchingWindow: window, in: axWindows) else {
-            return
+        let windowRef: AXUIElement
+        if let cached = desktopSpaceWindowCacheManager.readCache(pid: displayPid).first(where: { $0.id == windowID }),
+           isValidElement(cached.axElement)
+        {
+            windowRef = cached.axElement
+        } else {
+            let axWindows = AXUIElement.allWindows(ownerPid, appElement: ownerAppElement, app: displayApp)
+            guard let matched = findWindow(matchingWindow: window, in: axWindows) else {
+                return
+            }
+            windowRef = matched
         }
 
         let closeButton = try? windowRef.closeButton()
@@ -1174,7 +1192,8 @@ extension WindowUtil {
         app: NSRunningApplication,
         excludeWindowIDs: Set<CGWindowID>,
         skipWindowIDs: Set<CGWindowID> = [],
-        existingCachedIDs: Set<CGWindowID> = []
+        existingCachedIDs: Set<CGWindowID> = [],
+        cgCandidates: [[String: AnyObject]]? = nil
     ) async throws {
         let pid = app.processIdentifier
 
@@ -1192,7 +1211,7 @@ extension WindowUtil {
 
         let attributes = WindowCandidateAttributes(axWindow: axWindow)
 
-        let cgCandidates = getCGWindowCandidates(for: pid)
+        let cgCandidates = cgCandidates ?? getCGWindowCandidates(for: pid)
         // Use pre-computed cached IDs if provided, otherwise read from cache
         let usedIDs = existingCachedIDs.isEmpty
             ? Set<CGWindowID>(desktopSpaceWindowCacheManager.readCache(pid: pid).map(\.id))
@@ -1365,6 +1384,10 @@ extension WindowUtil {
                 return nil
             }
 
+            if AXResponsiveness.isUnresponsive(pid) {
+                return existingWindowsSet
+            }
+
             var purifiedSet = existingWindowsSet
             let cgCandidates = getCGWindowCandidates(for: pid)
             let activeSpaceIDs = currentActiveSpaceIDs()
@@ -1408,6 +1431,18 @@ extension WindowUtil {
 
     static func purgeAppCache(with pid: pid_t) {
         desktopSpaceWindowCacheManager.writeCache(pid: pid, windowSet: [])
+    }
+
+    static func purgeAllCaches() {
+        desktopSpaceWindowCacheManager.purgeAll()
+    }
+
+    static func cachedWindowCount() -> Int {
+        desktopSpaceWindowCacheManager.getAllWindows().count
+    }
+
+    static func cachedAppCount() -> Int {
+        desktopSpaceWindowCacheManager.cachedPIDs().count
     }
 
     @discardableResult

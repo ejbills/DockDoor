@@ -15,43 +15,52 @@ class SpaceWindowCacheManager {
         )
     }
 
-    private func notifyCoordinatorOfRemovedWindows(_ removedWindows: Set<WindowInfo>) {
-        if !removedWindows.isEmpty {
-            DispatchQueue.main.async { [weak self] in
-                guard self != nil else { return }
-                if let coordinator = SharedPreviewWindowCoordinator.activeInstance?.windowSwitcherCoordinator {
-                    for removedWindow in removedWindows {
-                        coordinator.removeWindow(byAx: removedWindow.axElement)
-                    }
-                }
-            }
+    private var pendingRemoved: [WindowInfo] = []
+    private var pendingAdded: [WindowInfo] = []
+    private var pendingUpdated: [WindowInfo] = []
+    private var flushScheduled = false
+
+    private func enqueueCoordinatorChanges(removed: Set<WindowInfo> = [], added: Set<WindowInfo> = [], updated: [WindowInfo] = []) {
+        guard !removed.isEmpty || !added.isEmpty || !updated.isEmpty else { return }
+        pendingRemoved.append(contentsOf: removed)
+        pendingAdded.append(contentsOf: added)
+        pendingUpdated.append(contentsOf: updated)
+        guard !flushScheduled else { return }
+        flushScheduled = true
+        DispatchQueue.main.async { [weak self] in
+            self?.flushCoordinatorChanges()
         }
+    }
+
+    private func takePendingCoordinatorChanges() -> (removed: [WindowInfo], added: [WindowInfo], updated: [WindowInfo]) {
+        cacheLock.lock()
+        defer { cacheLock.unlock() }
+        let batch = (pendingRemoved, pendingAdded, pendingUpdated)
+        pendingRemoved.removeAll()
+        pendingAdded.removeAll()
+        pendingUpdated.removeAll()
+        flushScheduled = false
+        return batch
+    }
+
+    private func flushCoordinatorChanges() {
+        let batch = takePendingCoordinatorChanges()
+        guard let coordinator = SharedPreviewWindowCoordinator.activeInstance?.windowSwitcherCoordinator else { return }
+        MainActor.assumeIsolated {
+            coordinator.applyCacheChanges(removed: batch.removed, added: batch.added, updated: batch.updated)
+        }
+    }
+
+    private func notifyCoordinatorOfRemovedWindows(_ removedWindows: Set<WindowInfo>) {
+        enqueueCoordinatorChanges(removed: removedWindows)
     }
 
     private func notifyCoordinatorOfAddedWindows(_ addedWindows: Set<WindowInfo>) {
-        if !addedWindows.isEmpty {
-            DispatchQueue.main.async { [weak self] in
-                guard self != nil else { return }
-                if let coordinator = SharedPreviewWindowCoordinator.activeInstance?.windowSwitcherCoordinator {
-                    coordinator.addWindows(Array(addedWindows))
-                }
-            }
-        }
+        enqueueCoordinatorChanges(added: addedWindows)
     }
 
     private func notifyCoordinatorOfUpdatedWindows(_ updatedWindows: [WindowInfo]) {
-        if !updatedWindows.isEmpty {
-            DispatchQueue.main.async { [weak self] in
-                guard self != nil else { return }
-                if let coordinator = SharedPreviewWindowCoordinator.activeInstance?.windowSwitcherCoordinator {
-                    for updatedWindow in updatedWindows {
-                        if let index = coordinator.windows.firstIndex(where: { $0.id == updatedWindow.id }) {
-                            coordinator.updateWindow(at: index, with: updatedWindow)
-                        }
-                    }
-                }
-            }
-        }
+        enqueueCoordinatorChanges(updated: updatedWindows)
     }
 
     func readCache(pid: pid_t) -> Set<WindowInfo> {
@@ -60,26 +69,35 @@ class SpaceWindowCacheManager {
         return windowCache[pid] ?? []
     }
 
+    private func beginSuppression(for pid: pid_t) -> Int {
+        cacheLock.lock()
+        defer { cacheLock.unlock() }
+        let depth = coordinatorNotificationSuppressionCounts[pid, default: 0] + 1
+        coordinatorNotificationSuppressionCounts[pid] = depth
+        return depth
+    }
+
+    private func endSuppression(for pid: pid_t) -> Int {
+        cacheLock.lock()
+        defer { cacheLock.unlock() }
+        let remainingCount = (coordinatorNotificationSuppressionCounts[pid] ?? 1) - 1
+        if remainingCount > 0 {
+            coordinatorNotificationSuppressionCounts[pid] = remainingCount
+        } else {
+            coordinatorNotificationSuppressionCounts.removeValue(forKey: pid)
+        }
+        return remainingCount
+    }
+
     func withCoordinatorNotificationsSuppressed<T>(
         for pid: pid_t,
         operation: () async throws -> T
     ) async throws -> T {
-        cacheLock.lock()
-        let depth = coordinatorNotificationSuppressionCounts[pid, default: 0] + 1
-        coordinatorNotificationSuppressionCounts[pid] = depth
-        cacheLock.unlock()
+        let depth = beginSuppression(for: pid)
         DebugLogger.log("WindowCachePublish", details: "suppress begin, PID: \(pid), depth: \(depth)")
 
         defer {
-            var remainingCount = 0
-            cacheLock.lock()
-            remainingCount = (coordinatorNotificationSuppressionCounts[pid] ?? 1) - 1
-            if remainingCount > 0 {
-                coordinatorNotificationSuppressionCounts[pid] = remainingCount
-            } else {
-                coordinatorNotificationSuppressionCounts.removeValue(forKey: pid)
-            }
-            cacheLock.unlock()
+            let remainingCount = endSuppression(for: pid)
             DebugLogger.log("WindowCachePublish", details: "suppress end, PID: \(pid), depth: \(remainingCount)")
         }
 
@@ -204,6 +222,18 @@ class SpaceWindowCacheManager {
                 return
             }
             notifyCoordinatorOfRemovedWindows([windowToRemove])
+        }
+    }
+
+    func cachedPIDs() -> [pid_t] {
+        cacheLock.lock()
+        defer { cacheLock.unlock() }
+        return windowCache.keys.filter { !(windowCache[$0]?.isEmpty ?? true) }
+    }
+
+    func purgeAll() {
+        for pid in cachedPIDs() {
+            writeCache(pid: pid, windowSet: [])
         }
     }
 
