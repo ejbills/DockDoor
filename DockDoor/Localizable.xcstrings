@@ -16402,6 +16402,7 @@
       }
     },
     "An additional trigger key using the same modifier, invoking the switcher with a different filter mode." : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -16590,6 +16591,9 @@
           }
         }
       }
+    },
+    "An additional trigger key, with its own modifier if desired, invoking the switcher with a different filter mode." : {
+
     },
     "Anchor preview to initial dock icon position" : {
       "localizations" : {
@@ -44955,6 +44959,9 @@
         }
       }
     },
+    "Copy" : {
+
+    },
     "Creation order (fixed)" : {
       "comment" : "Window preview sort order option",
       "localizations" : {
@@ -47241,6 +47248,9 @@
           }
         }
       }
+    },
+    "Cut" : {
+
     },
     "Dark" : {
       "comment" : "App appearance mode option",
@@ -59425,6 +59435,9 @@
           }
         }
       }
+    },
+    "Edit" : {
+
     },
     "Edit Color" : {
       "localizations" : {
@@ -102867,6 +102880,9 @@
         }
       }
     },
+    "Modifier" : {
+
+    },
     "Modifier Click" : {
       "comment" : "Dock preview activation mode option",
       "localizations" : {
@@ -117527,6 +117543,9 @@
         }
       }
     },
+    "Paste" : {
+
+    },
     "Performance Profiles" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -130669,6 +130688,9 @@
         }
       }
     },
+    "Redo" : {
+
+    },
     "Reduce motion" : {
       "localizations" : {
         "af" : {
@@ -139612,6 +139634,9 @@
         }
       }
     },
+    "Same as main (%@)" : {
+
+    },
     "Saturation" : {
       "localizations" : {
         "af" : {
@@ -145327,6 +145352,9 @@
           }
         }
       }
+    },
+    "Select All" : {
+
     },
     "Select an application:" : {
       "localizations" : {
@@ -181150,6 +181178,9 @@
         }
       }
     },
+    "Undo" : {
+
+    },
     "Universal (any app)" : {
       "comment" : "Media detection mode option",
       "localizations" : {
@@ -195255,6 +195286,9 @@
           }
         }
       }
+    },
+    "Window" : {
+
     },
     "Window Background" : {
       "localizations" : {

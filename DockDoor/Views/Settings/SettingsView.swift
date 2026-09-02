@@ -42,6 +42,7 @@ class SettingsManager: NSObject, ObservableObject {
             window.toolbar = toolbar
 
             settingsWindowController = NSWindowController(window: window)
+            installMainMenuIfNeeded()
         }
 
         settingsWindowController?.showWindow(nil)
@@ -51,6 +52,40 @@ class SettingsManager: NSObject, ObservableObject {
         DispatchQueue.main.async {
             Task { await WindowUtil.updateNewWindowsForApp(.current) }
         }
+    }
+
+    private func installMainMenuIfNeeded() {
+        guard NSApp.mainMenu == nil else { return }
+        let mainMenu = NSMenu()
+
+        let appMenu = NSMenu()
+        appMenu.addItem(withTitle: String(localized: "Quit DockDoor"), action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
+        mainMenu.addItem(NSMenuItem(submenu: appMenu))
+
+        let editMenu = NSMenu(title: String(localized: "Edit"))
+        editMenu.addItem(withTitle: String(localized: "Undo"), action: Selector(("undo:")), keyEquivalent: "z")
+        editMenu.addItem(withTitle: String(localized: "Redo"), action: Selector(("redo:")), keyEquivalent: "Z")
+        editMenu.addItem(.separator())
+        editMenu.addItem(withTitle: String(localized: "Cut"), action: #selector(NSText.cut(_:)), keyEquivalent: "x")
+        editMenu.addItem(withTitle: String(localized: "Copy"), action: #selector(NSText.copy(_:)), keyEquivalent: "c")
+        editMenu.addItem(withTitle: String(localized: "Paste"), action: #selector(NSText.paste(_:)), keyEquivalent: "v")
+        editMenu.addItem(withTitle: String(localized: "Select All"), action: #selector(NSText.selectAll(_:)), keyEquivalent: "a")
+        mainMenu.addItem(NSMenuItem(submenu: editMenu))
+
+        let windowMenu = NSMenu(title: String(localized: "Window"))
+        windowMenu.addItem(withTitle: String(localized: "Close"), action: #selector(NSWindow.performClose(_:)), keyEquivalent: "w")
+        windowMenu.addItem(withTitle: String(localized: "Minimize"), action: #selector(NSWindow.performMiniaturize(_:)), keyEquivalent: "m")
+        mainMenu.addItem(NSMenuItem(submenu: windowMenu))
+
+        NSApp.mainMenu = mainMenu
+        NSApp.windowsMenu = windowMenu
+    }
+}
+
+private extension NSMenuItem {
+    convenience init(submenu: NSMenu) {
+        self.init(title: submenu.title, action: nil, keyEquivalent: "")
+        self.submenu = submenu
     }
 }
 
