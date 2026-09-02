@@ -108,7 +108,10 @@ document.addEventListener('DOMContentLoaded', function() {
             const videoObserver = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
-                        entry.target.play();
+                        const video = entry.target;
+                        video.play().catch(() => {
+                            video.addEventListener('canplay', () => video.play(), { once: true });
+                        });
                     } else {
                         entry.target.pause();
                     }
