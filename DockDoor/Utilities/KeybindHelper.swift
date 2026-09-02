@@ -970,14 +970,8 @@ class KeybindHelper {
                 if let action = getActionForCmdShortcut(keyCode: keyCode) {
                     preventSwitcherHideOnRelease = true
                     return (true, { @MainActor in
-                        self.previewCoordinator.performActionOnCurrentWindow(action: action)
-                        if action == .quit {
-                            if self.previewCoordinator.windowSwitcherCoordinator.windows.isEmpty {
-                                self.windowSwitchingCoordinator.cancelSwitching(previewCoordinator: self.previewCoordinator)
-                                self.preventSwitcherHideOnRelease = false
-                                self.hasProcessedModifierRelease = true
-                            }
-                        } else {
+                        let keepsSwitcherOpen = self.previewCoordinator.performActionOnCurrentWindow(action: action)
+                        if !keepsSwitcherOpen || self.previewCoordinator.windowSwitcherCoordinator.windows.isEmpty {
                             self.windowSwitchingCoordinator.cancelSwitching(previewCoordinator: self.previewCoordinator)
                             self.preventSwitcherHideOnRelease = false
                             self.hasProcessedModifierRelease = true

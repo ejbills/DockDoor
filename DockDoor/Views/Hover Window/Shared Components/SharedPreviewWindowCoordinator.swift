@@ -912,10 +912,11 @@ final class SharedPreviewWindowCoordinator: NSPanel {
     }
 
     @MainActor
-    func performActionOnCurrentWindow(action: WindowAction) {
+    @discardableResult
+    func performActionOnCurrentWindow(action: WindowAction) -> Bool {
         let coordinator = windowSwitcherCoordinator
         guard coordinator.currIndex >= 0, coordinator.currIndex < coordinator.windows.count else {
-            return
+            return false
         }
 
         let window = coordinator.windows[coordinator.currIndex]
@@ -926,6 +927,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         switch result {
         case .dismissed:
             hideWindow()
+            return false
         case let .windowUpdated(updatedWindow):
             coordinator.updateWindow(at: originalIndex, with: updatedWindow)
         case .windowRemoved:
@@ -939,6 +941,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         case .noChange:
             break
         }
+        return true
     }
 
     func showFolderWidget(
