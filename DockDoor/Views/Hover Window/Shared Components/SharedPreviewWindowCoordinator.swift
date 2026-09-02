@@ -32,6 +32,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
     private var currentDockPosition: DockPosition = .bottom
 
     private var anchoredDockItem: (element: AXUIElement, iconRect: CGRect)?
+    private var switcherAnchorCenter: CGPoint?
 
     private(set) var hasScreenRecordingPermission: Bool = PermissionsChecker.hasScreenRecordingPermission()
 
@@ -78,6 +79,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         for name in [NSWindow.didMoveNotification, NSWindow.didResizeNotification, NSWindow.didBecomeKeyNotification, NSWindow.didResignKeyNotification, NSWindow.didExposeNotification] {
             NotificationCenter.default.addObserver(self, selector: #selector(publishTapSnapshot), name: name, object: nil)
         }
+        NotificationCenter.default.addObserver(self, selector: #selector(switcherFrameDidChange), name: NSWindow.didResizeNotification, object: self)
     }
 
     deinit {
@@ -204,6 +206,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         currentlyDisplayedPID = nil
         mouseIsWithinPreviewWindow = false
         anchoredDockItem = nil
+        switcherAnchorCenter = nil
 
         let currentDockPos = DockUtils.getDockPosition()
         let currentScreen = NSScreen.main ?? NSScreen.screens.first!
@@ -235,6 +238,15 @@ final class SharedPreviewWindowCoordinator: NSPanel {
 
         let newSize = fittingSize
         guard newSize != frame.size else { return }
+
+        if let centeredFrame = centeredSwitcherFrame(for: newSize) {
+            let searchFrame = searchWindow.flatMap { $0.isVisible ? $0.targetFrame(relativeTo: centeredFrame, on: self.screen ?? screen) : nil }
+            animateWithUserPreference {
+                self.animator().setFrame(centeredFrame, display: true)
+                if let searchFrame { self.searchWindow?.animator().setFrame(searchFrame, display: true) }
+            }
+            return
+        }
 
         let wasClampedToTop = frame.maxY >= screenFrame.maxY - 1
         let wasClampedToBottom = frame.minY <= screenFrame.minY + 1
@@ -268,6 +280,27 @@ final class SharedPreviewWindowCoordinator: NSPanel {
 
         animateWithUserPreference {
             self.animator().setFrame(CGRect(origin: newOrigin, size: newSize), display: true)
+        }
+    }
+
+    private func centeredSwitcherFrame(for size: CGSize) -> CGRect? {
+        guard let center = switcherAnchorCenter else { return nil }
+        let screen = NSScreen.screens.first { $0.frame.contains(center) } ?? NSScreen.main
+        var origin = CGPoint(x: center.x - size.width / 2, y: center.y - size.height / 2)
+        if let screenFrame = screen?.frame {
+            origin.x = max(screenFrame.minX, min(origin.x, screenFrame.maxX - size.width))
+            origin.y = max(screenFrame.minY, min(origin.y, screenFrame.maxY - size.height))
+        }
+        return CGRect(origin: origin, size: size)
+    }
+
+    @objc private func switcherFrameDidChange() {
+        guard let target = centeredSwitcherFrame(for: frame.size),
+              abs(target.minX - frame.minX) > 0.5 || abs(target.minY - frame.minY) > 0.5
+        else { return }
+        setFrame(target, display: true)
+        if let searchWindow, searchWindow.isVisible {
+            searchWindow.showSearch(relativeTo: self)
         }
     }
 
@@ -419,9 +452,13 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         }
         let finalFrame = CGRect(origin: position, size: newHoverWindowSize)
 
+        switcherAnchorCenter = nil
         setFrame(finalFrame, display: false)
         applyWindowFrame(finalFrame, animated: animated, dockPositionOverride: dockPositionOverride)
         previousHoverWindowOrigin = position
+        if centerOnScreen, windowSwitcherCoordinator.windowSwitcherActive {
+            switcherAnchorCenter = CGPoint(x: finalFrame.midX, y: finalFrame.midY)
+        }
 
         elapsed = renderStartTime.map { (CFAbsoluteTimeGetCurrent() - $0) * 1000 } ?? 0
         DebugLogger.log("PreviewRender", details: "window frame applied, render complete (+\(String(format: "%.1f", elapsed))ms)")

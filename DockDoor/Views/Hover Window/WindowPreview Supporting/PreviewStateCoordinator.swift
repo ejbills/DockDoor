@@ -54,6 +54,7 @@ class PreviewStateCoordinator: ObservableObject {
             if windowSwitcherActive {
                 Task { @MainActor in
                     updateIndexForSearch()
+                    onFrameRefreshNeeded?()
                 }
             }
         }

@@ -106,21 +106,22 @@ class SearchWindow: NSPanel, NSTextFieldDelegate {
             return
         }
 
+        setFrame(targetFrame(relativeTo: frame, on: window.screen), display: false)
+        orderFront(nil)
+    }
+
+    func targetFrame(relativeTo frame: NSRect, on windowScreen: NSScreen?) -> NSRect {
         let searchWidth: CGFloat = 300
         let searchHeight: CGFloat = 40
         let gap: CGFloat = -20
 
-        guard let screen = window.screen ?? NSScreen.main else {
-            // Fallback: position above
-            let searchFrame = NSRect(
+        guard let screen = windowScreen ?? NSScreen.main else {
+            return NSRect(
                 x: frame.midX - searchWidth / 2,
                 y: frame.maxY + gap,
                 width: searchWidth,
                 height: searchHeight
             )
-            setFrame(searchFrame, display: false)
-            orderFront(nil)
-            return
         }
 
         let screenFrame = screen.visibleFrame
@@ -189,8 +190,7 @@ class SearchWindow: NSPanel, NSTextFieldDelegate {
             searchFrame.origin.y = screenFrame.maxY - searchHeight - 10
         }
 
-        setFrame(searchFrame, display: false)
-        orderFront(nil)
+        return searchFrame
     }
 
     func hideSearch() {
