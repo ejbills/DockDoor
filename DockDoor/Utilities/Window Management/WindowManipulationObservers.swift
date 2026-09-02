@@ -262,6 +262,9 @@ class WindowManipulationObservers {
             if let windowID = try? element.cgWindowId() {
                 lastKnownWindowPositions.removeValue(forKey: windowID)
             }
+            if Defaults[.quitAppOnWindowClose], WindowUtil.cachedWindowWasDestroyed(element, pid: pid) {
+                WindowUtil.quitAppOnLastWindowCloseIfNeeded(app: app)
+            }
             handleWindowEvent(element: element, app: app, notification: notificationName, validate: true)
         case kAXWindowResizedNotification, kAXWindowMovedNotification:
             if let windowID = try? element.cgWindowId(), let position = try? element.position() {
@@ -395,17 +398,8 @@ class WindowManipulationObservers {
                         windowSet = windowSet.filter { WindowUtil.isValidElement($0.axElement) }
                     }
                     stateAdjustment?(&windowSet)
-                    if notification == (kAXUIElementDestroyedNotification as String),
-                       self.didDestroyCachedWindow(
-                           element,
-                           previousWindows: previousWindows
-                       )
-                    {
-                        WindowUtil.quitAppOnLastWindowCloseIfNeeded(
-                            app: app,
-                            previousWindowCount: previousWindows.count,
-                            remainingWindowCount: windowSet.count
-                        )
+                    if effectiveValidate, !previousWindows.isEmpty, windowSet.isEmpty {
+                        WindowUtil.quitAppOnLastWindowCloseIfNeeded(app: app)
                     }
                 }
             }
@@ -413,17 +407,6 @@ class WindowManipulationObservers {
         }
         cacheUpdateWorkItem = (workItem, hasStateAdjustment, effectiveValidate)
         axObserverWorkQueue.asyncAfter(deadline: .now() + windowProcessingDebounceInterval, execute: workItem)
-    }
-
-    private func didDestroyCachedWindow(_ destroyedElement: AXUIElement, previousWindows: Set<WindowInfo>) -> Bool {
-        if previousWindows.contains(where: { $0.axElement == destroyedElement }) {
-            return true
-        }
-
-        guard let destroyedWindowID = try? destroyedElement.cgWindowId() else {
-            return false
-        }
-        return previousWindows.contains { $0.id == destroyedWindowID }
     }
 
     private func update(windowSet: inout Set<WindowInfo>,

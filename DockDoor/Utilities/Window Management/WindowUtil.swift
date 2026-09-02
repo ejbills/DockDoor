@@ -1474,35 +1474,87 @@ extension WindowUtil {
         desktopSpaceWindowCacheManager.cachedPIDs().count
     }
 
+    private static let pendingQuitChecksLock = NSLock()
+    private static var pendingQuitChecks = Set<pid_t>()
+
+    static func cachedWindowWasDestroyed(_ element: AXUIElement, pid: pid_t) -> Bool {
+        let cached = desktopSpaceWindowCacheManager.readCache(pid: pid)
+        guard !cached.isEmpty else { return false }
+        if cached.contains(where: { $0.axElement == element }) { return true }
+        guard let windowID = try? element.cgWindowId() else { return false }
+        return cached.contains { $0.id == windowID }
+    }
+
     @discardableResult
-    static func quitAppOnLastWindowCloseIfNeeded(app: NSRunningApplication,
-                                                 previousWindowCount: Int,
-                                                 remainingWindowCount: Int) -> Bool
-    {
+    static func quitAppOnLastWindowCloseIfNeeded(app: NSRunningApplication) -> Bool {
         guard Defaults[.quitAppOnWindowClose],
               app.bundleIdentifier != "com.apple.finder",
-              previousWindowCount > 0,
-              remainingWindowCount == 0
+              !app.isTerminated
         else {
             return false
         }
 
-        DebugLogger.log("quitAppOnLastWindowClose", details: "App: \(app.localizedName ?? "Unknown") (PID: \(app.processIdentifier))")
-        // Re-verify after a delay: apps like MS Office destroy and recreate windows during
-        // view transitions, so the cached count can transiently hit 0 while a new window exists.
-        DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + 0.5) {
-            guard !app.isTerminated else { return }
-            let appAX = AXUIElementCreateApplication(app.processIdentifier)
-            if let liveWindows = try? appAX.windows(), !liveWindows.isEmpty {
-                DebugLogger.log("quitAppOnLastWindowClose", details: "Aborted: \(app.localizedName ?? "Unknown") has \(liveWindows.count) live window(s)")
-                return
+        let pid = app.processIdentifier
+        pendingQuitChecksLock.lock()
+        let scheduled = pendingQuitChecks.insert(pid).inserted
+        pendingQuitChecksLock.unlock()
+        guard scheduled else { return true }
+
+        DebugLogger.log("quitAppOnLastWindowClose", details: "Scheduled: \(app.localizedName ?? "Unknown") (PID: \(pid))")
+        verifyNoWindowsRemain(app: app, attempt: 0, confirmed: false)
+        return true
+    }
+
+    /// Live AX windows are the source of truth, and an AX failure from a busy app is never treated as "no windows".
+    private static func verifyNoWindowsRemain(app: NSRunningApplication, attempt: Int, confirmed: Bool) {
+        let pid = app.processIdentifier
+        let delay: TimeInterval = attempt == 0 ? 0.5 : 1.0
+        DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + delay) {
+            func finish(_ reason: String) {
+                pendingQuitChecksLock.lock()
+                pendingQuitChecks.remove(pid)
+                pendingQuitChecksLock.unlock()
+                DebugLogger.log("quitAppOnLastWindowClose", details: "\(reason): \(app.localizedName ?? "Unknown") (PID: \(pid))")
             }
-            DispatchQueue.main.async {
-                app.terminate()
-                purgeAppCache(with: app.processIdentifier)
+
+            guard !app.isTerminated else { return finish("Already terminated") }
+
+            switch liveAXWindowCount(pid: pid) {
+            case nil:
+                if attempt < 3 {
+                    verifyNoWindowsRemain(app: app, attempt: attempt + 1, confirmed: confirmed)
+                } else {
+                    finish("Aborted, AX unavailable")
+                }
+            case let count? where count > 0:
+                finish("Aborted, \(count) live window(s)")
+            default:
+                if confirmed {
+                    DispatchQueue.main.async {
+                        app.terminate()
+                        purgeAppCache(with: pid)
+                        finish("Terminated")
+                    }
+                } else {
+                    verifyNoWindowsRemain(app: app, attempt: attempt + 1, confirmed: true)
+                }
             }
         }
-        return true
+    }
+
+    private static func liveAXWindowCount(pid: pid_t) -> Int? {
+        var value: AnyObject?
+        switch AXUIElementCopyAttributeValue(AXUIElementCreateApplication(pid), kAXWindowsAttribute as CFString, &value) {
+        case .success:
+            return (value as? [AXUIElement])?.count ?? 0
+        case .noValue:
+            return 0
+        case .cannotComplete:
+            AXResponsiveness.markUnresponsive(pid)
+            return nil
+        default:
+            return nil
+        }
     }
 
     /// Checks if the frontmost application is fullscreen and in the blacklist.

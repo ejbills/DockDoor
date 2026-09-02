@@ -501,15 +501,12 @@ extension WindowInfo {
             return .noChange
         }
 
-        let previousWindowCount = WindowUtil.readCachedWindows(for: app.processIdentifier).count
         do {
             try closeButton?.performAction(kAXPressAction)
             WindowUtil.removeWindowFromDesktopSpaceCache(with: id, in: app.processIdentifier)
-            if WindowUtil.quitAppOnLastWindowCloseIfNeeded(
-                app: app,
-                previousWindowCount: previousWindowCount,
-                remainingWindowCount: max(previousWindowCount - 1, 0)
-            ) {
+            if WindowUtil.readCachedWindows(for: app.processIdentifier).isEmpty,
+               WindowUtil.quitAppOnLastWindowCloseIfNeeded(app: app)
+            {
                 return .appQuit
             }
             return .closed
