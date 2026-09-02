@@ -42,8 +42,8 @@ typealias CGSWindowCount = UInt32
 typealias CGSSpaceID = UInt64
 typealias CGSSpaceMask = UInt64
 
-// All spaces mask (private constant)
-let kCGSAllSpacesMask: CGSSpaceMask = 0xFFFF_FFFF_FFFF_FFFF
+// kCGSSpaceIncludesCurrent | kCGSSpaceIncludesOthers | kCGSSpaceIncludesUser; wider masks return no Spaces for windows on other Spaces
+let kCGSAllSpacesMask: CGSSpaceMask = 7
 
 // Define the private API functions with @_silgen_name
 @_silgen_name("CGSMainConnectionID")

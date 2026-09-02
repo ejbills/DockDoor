@@ -505,6 +505,12 @@ enum WindowSpaces {
         }
     }
 
+    static func allManagedSpaceIDs() -> Set<Int> {
+        Set(managedDisplays().flatMap { display in
+            display.spaceIDs.union(display.currentSpaceID.map { [$0] } ?? []).map { Int($0) }
+        })
+    }
+
     private static func displayIdentifiers(for screen: NSScreen) -> Set<String> {
         guard let screenNumber = screen.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? NSNumber else {
             return []
@@ -587,12 +593,9 @@ func shouldAcceptWindow(axWindow: AXUIElement,
 
     if app.isHidden || axIsFullscreen || axIsMinimized { return true }
 
-    // Window on different Space — but reject if not onscreen and not minimized/fullscreen/hidden (ghost with stale space ID)
+    // Window on a different Space; a window whose only Spaces no longer exist is a ghost with a stale space ID
     if !windowSpaces.isEmpty, windowSpaces.isDisjoint(with: activeSpaceIDs) {
-        if !isOnscreen, !axIsMinimized, !axIsFullscreen, !app.isHidden {
-            return false
-        }
-        return true
+        return !windowSpaces.isDisjoint(with: WindowSpaces.allManagedSpaceIDs())
     }
 
     // Fallback: if AX marks it as main, consider it significant and include.
