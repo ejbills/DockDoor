@@ -266,16 +266,17 @@ struct WindowSwitcherBehaviorSettingsView: View {
                             Text(screen.displayName).tag(screen.uniqueIdentifier())
                         }
                         if !pinnedScreenIdentifier.isEmpty,
-                           !NSScreen.screens.contains(where: { $0.uniqueIdentifier() == pinnedScreenIdentifier })
+                           NSScreen.findScreen(byIdentifier: pinnedScreenIdentifier) == nil
                         {
                             Text("Disconnected Display").tag(pinnedScreenIdentifier)
                         }
                     }
                     .pickerStyle(.menu)
                     .padding(.leading, 20)
+                    .onAppear { NSScreen.migrateScreenIdentifier(.pinnedScreenIdentifier) }
 
                     if !pinnedScreenIdentifier.isEmpty,
-                       !NSScreen.screens.contains(where: { $0.uniqueIdentifier() == pinnedScreenIdentifier })
+                       NSScreen.findScreen(byIdentifier: pinnedScreenIdentifier) == nil
                     {
                         Text("This display is currently disconnected.")
                             .font(.caption)

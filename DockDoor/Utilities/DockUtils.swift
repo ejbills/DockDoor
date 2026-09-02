@@ -36,6 +36,23 @@ class DockUtils {
         }
     }
 
+    static func dockScreen() -> NSScreen? {
+        guard let dockApp = NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.dock").first,
+              let list = try? AXUIElementCreateApplication(dockApp.processIdentifier).children()?
+              .first(where: { (try? $0.role()) == kAXListRole }),
+              let position = try? list.position(),
+              let size = try? list.size()
+        else { return nil }
+
+        let screens = NSScreen.screens
+        guard let index = DockLockerGeometry.screenIndexHoldingDock(
+            dockRect: CGRect(origin: position, size: size),
+            screenFrames: screens.map(\.cgFrame),
+            dockPosition: getDockPosition()
+        ) else { return nil }
+        return screens[index]
+    }
+
     /// Returns the dock size in points based on the screen's visible frame.
     static func getDockSize(on screen: NSScreen? = nil) -> CGFloat {
         let dockPosition = getDockPosition()

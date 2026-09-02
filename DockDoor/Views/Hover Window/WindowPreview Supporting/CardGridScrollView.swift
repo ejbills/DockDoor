@@ -54,6 +54,7 @@ struct CardGridScrollView: NSViewRepresentable {
                 commit()
             }
         }
+
         var onOffsetChange: ((CGFloat) -> Void)?
 
         var contentSize: CGSize = .zero {

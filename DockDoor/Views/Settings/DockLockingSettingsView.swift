@@ -8,7 +8,20 @@ struct DockLockingSettingsView: View {
 
     private var isLockedScreenDisconnected: Bool {
         !lockedDockScreenIdentifier.isEmpty
-            && !NSScreen.screens.contains { $0.uniqueIdentifier() == lockedDockScreenIdentifier }
+            && NSScreen.findScreen(byIdentifier: lockedDockScreenIdentifier) == nil
+    }
+
+    private var isLockedScreenEdgeCovered: Bool {
+        guard NSScreen.screens.count > 1,
+              let screen = NSScreen.findScreen(byIdentifier: lockedDockScreenIdentifier)
+        else { return false }
+        let dockPosition = DockUtils.getDockPosition()
+        guard dockPosition == .bottom || dockPosition == .left || dockPosition == .right else { return false }
+        return DockLockerGeometry.exposedIntervals(
+            for: screen.cgFrame,
+            dockPosition: dockPosition,
+            allFrames: NSScreen.screens.map(\.cgFrame)
+        ).isEmpty
     }
 
     var body: some View {
@@ -37,7 +50,7 @@ struct DockLockingSettingsView: View {
             .settingsSearchTarget("dockLocking.enable")
             .onChange(of: enableDockLocking) { isOn in
                 if isOn, lockedDockScreenIdentifier.isEmpty {
-                    lockedDockScreenIdentifier = NSScreen.main?.uniqueIdentifier() ?? ""
+                    lockedDockScreenIdentifier = NSScreen.systemMainDisplayIdentifier
                 }
                 askUserToRestartApplication()
             }
@@ -50,6 +63,7 @@ struct DockLockingSettingsView: View {
         SettingsGroup(header: "Configuration") {
             VStack(alignment: .leading, spacing: 10) {
                 Picker("Lock Dock to", selection: $lockedDockScreenIdentifier) {
+                    Text("System Main Display").tag(NSScreen.systemMainDisplayIdentifier)
                     ForEach(NSScreen.screens, id: \.self) { screen in
                         Text(screen.displayName).tag(screen.uniqueIdentifier())
                     }
@@ -59,16 +73,21 @@ struct DockLockingSettingsView: View {
                 }
                 .pickerStyle(.menu)
                 .settingsSearchTarget("dockLocking.screen")
+                .onAppear { NSScreen.migrateScreenIdentifier(.lockedDockScreenIdentifier) }
 
                 if isLockedScreenDisconnected {
                     Text("This display is currently disconnected. Dock locking will be disabled until it reconnects.")
                         .font(.caption)
                         .foregroundColor(.secondary)
+                } else if isLockedScreenEdgeCovered {
+                    Text("macOS can't place the Dock on this display because another display sits directly against its Dock edge. Rearrange your displays in System Settings → Displays so part of that edge is free.")
+                        .font(.caption)
+                        .foregroundColor(.orange)
+                } else {
+                    Text("System Main Display follows whichever screen holds the menu bar. DockDoor moves the Dock to the locked screen automatically; you can also push the cursor against that screen's Dock edge.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
                 }
-
-                Text("After changing the locked screen, move your cursor to the bottom of that screen to relocate the Dock.")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
 
                 Picker("Bypass modifier key", selection: $dockLockOverrideModifier) {
                     ForEach(DockLockModifier.allCases, id: \.rawValue) { modifier in

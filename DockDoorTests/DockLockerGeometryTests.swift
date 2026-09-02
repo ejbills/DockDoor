@@ -232,3 +232,69 @@ struct TriggerZoneCalculationTests {
         #expect(zones.isEmpty)
     }
 }
+
+// MARK: - Relocation Tests
+
+struct DockRelocationGeometryTests {
+    // External 2400 wide on top, MacBook 1512 wide centered below (#1334)
+    let wideTop = CGRect(x: -444, y: -982, width: 2400, height: 982)
+    let laptop = CGRect(x: 0, y: 0, width: 1512, height: 982)
+
+    @Test func relocationPathUsesExposedPartOfCoveredEdge() throws {
+        let path = try #require(DockLockerGeometry.relocationPath(
+            lockedFrame: wideTop, dockPosition: .bottom, allFrames: [laptop, wideTop]
+        ))
+        #expect(path.end.y == wideTop.maxY - 1)
+        #expect(path.end.x < laptop.minX || path.end.x > laptop.maxX)
+        #expect(path.start.y < path.end.y)
+        #expect(path.push.dy > 0)
+    }
+
+    @Test func noTriggerZonesWhenLockedEdgeFullyCovered() {
+        let sameWidthTop = CGRect(x: 0, y: -982, width: 1512, height: 982)
+        let zones = DockLockerGeometry.calculateTriggerZones(
+            screenFrames: [laptop, sameWidthTop], lockedScreenIndex: 1, dockPosition: .bottom
+        )
+        #expect(zones.isEmpty)
+        let partlyExposed = DockLockerGeometry.calculateTriggerZones(
+            screenFrames: [laptop, wideTop], lockedScreenIndex: 1, dockPosition: .bottom
+        )
+        #expect(partlyExposed.count == 1)
+    }
+
+    @Test func relocationPathNilWhenEdgeFullyCovered() {
+        let sameWidthTop = CGRect(x: 0, y: -982, width: 1512, height: 982)
+        #expect(DockLockerGeometry.relocationPath(
+            lockedFrame: sameWidthTop, dockPosition: .bottom, allFrames: [laptop, sameWidthTop]
+        ) == nil)
+    }
+
+    @Test func relocationPathLeftDock() throws {
+        let right = CGRect(x: 1512, y: 0, width: 1920, height: 1080)
+        let path = try #require(DockLockerGeometry.relocationPath(
+            lockedFrame: laptop, dockPosition: .left, allFrames: [laptop, right]
+        ))
+        #expect(path.end.x == laptop.minX)
+        #expect(path.push.dx < 0)
+    }
+
+    @Test func dockScreenDetectionHiddenOnTopScreen() {
+        // Hidden bottom Dock on the top screen sits just below that screen's edge, overlapping the laptop
+        let hidden = CGRect(x: 406, y: 0, width: 700, height: 42)
+        #expect(DockLockerGeometry.screenIndexHoldingDock(dockRect: hidden, screenFrames: [laptop, wideTop], dockPosition: .bottom) == 1)
+        let revealedTop = CGRect(x: 406, y: -52, width: 700, height: 42)
+        #expect(DockLockerGeometry.screenIndexHoldingDock(dockRect: revealedTop, screenFrames: [laptop, wideTop], dockPosition: .bottom) == 1)
+        let hiddenLaptop = CGRect(x: 406, y: 982, width: 700, height: 42)
+        #expect(DockLockerGeometry.screenIndexHoldingDock(dockRect: hiddenLaptop, screenFrames: [laptop, wideTop], dockPosition: .bottom) == 0)
+        let revealedLaptop = CGRect(x: 406, y: 930, width: 700, height: 42)
+        #expect(DockLockerGeometry.screenIndexHoldingDock(dockRect: revealedLaptop, screenFrames: [laptop, wideTop], dockPosition: .bottom) == 0)
+    }
+
+    @Test func dockScreenDetectionLeftDock() {
+        let left = CGRect(x: -1512, y: 0, width: 1512, height: 982)
+        let hiddenOnLeft = CGRect(x: -1554, y: 171, width: 42, height: 669)
+        #expect(DockLockerGeometry.screenIndexHoldingDock(dockRect: hiddenOnLeft, screenFrames: [laptop, left], dockPosition: .left) == 1)
+        let revealedOnLaptop = CGRect(x: 10, y: 171, width: 42, height: 669)
+        #expect(DockLockerGeometry.screenIndexHoldingDock(dockRect: revealedOnLaptop, screenFrames: [laptop, left], dockPosition: .left) == 0)
+    }
+}

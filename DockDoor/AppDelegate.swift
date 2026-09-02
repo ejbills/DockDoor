@@ -91,6 +91,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 activeAppIndicator = ActiveAppIndicatorCoordinator()
             }
 
+            NSScreen.migrateScreenIdentifier(.lockedDockScreenIdentifier)
+            NSScreen.migrateScreenIdentifier(.pinnedScreenIdentifier)
             if Defaults[.enableDockLocking] {
                 dockLocker = DockLocker()
             }

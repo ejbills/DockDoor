@@ -13,7 +13,9 @@ struct EdgeInterval: Equatable {
     let start: CGFloat
     let end: CGFloat
 
-    var length: CGFloat { end - start }
+    var length: CGFloat {
+        end - start
+    }
 
     static func merge(_ intervals: [EdgeInterval]) -> [EdgeInterval] {
         guard !intervals.isEmpty else { return [] }
@@ -76,6 +78,13 @@ enum DockLockerGeometry {
             return []
         }
 
+        // macOS refuses to place the Dock on a fully covered edge, so locking there would only strand it.
+        guard !exposedIntervals(
+            for: screenFrames[lockedScreenIndex],
+            dockPosition: dockPosition,
+            allFrames: screenFrames
+        ).isEmpty else { return [] }
+
         var zones: [TriggerZone] = []
 
         for (index, frame) in screenFrames.enumerated() {
@@ -125,6 +134,60 @@ enum DockLockerGeometry {
         }
 
         return EdgeInterval.subtract(from: fullInterval, removing: coveredIntervals)
+    }
+
+    static func relocationPath(
+        lockedFrame: CGRect,
+        dockPosition: DockPosition,
+        allFrames: [CGRect]
+    ) -> (start: CGPoint, end: CGPoint, push: CGVector)? {
+        guard let interval = exposedIntervals(for: lockedFrame, dockPosition: dockPosition, allFrames: allFrames)
+            .max(by: { $0.length < $1.length })
+        else { return nil }
+
+        let along = interval.start + min(60, interval.length / 2)
+        let approach: CGFloat = 80
+
+        switch dockPosition {
+        case .bottom:
+            return (CGPoint(x: along, y: lockedFrame.maxY - approach), CGPoint(x: along, y: lockedFrame.maxY - 1), CGVector(dx: 0, dy: 8))
+        case .left:
+            return (CGPoint(x: lockedFrame.minX + approach, y: along), CGPoint(x: lockedFrame.minX, y: along), CGVector(dx: -8, dy: 0))
+        case .right:
+            return (CGPoint(x: lockedFrame.maxX - approach, y: along), CGPoint(x: lockedFrame.maxX - 1, y: along), CGVector(dx: 8, dy: 0))
+        default:
+            return nil
+        }
+    }
+
+    static func screenIndexHoldingDock(
+        dockRect: CGRect,
+        screenFrames: [CGRect],
+        dockPosition: DockPosition
+    ) -> Int? {
+        var best: (index: Int, distance: CGFloat)?
+
+        for (index, frame) in screenFrames.enumerated() {
+            let distance: CGFloat
+            switch dockPosition {
+            case .bottom:
+                guard dockRect.midX >= frame.minX, dockRect.midX <= frame.maxX else { continue }
+                distance = min(abs(frame.maxY - dockRect.minY), abs(frame.maxY - dockRect.maxY))
+            case .left:
+                guard dockRect.midY >= frame.minY, dockRect.midY <= frame.maxY else { continue }
+                distance = min(abs(frame.minX - dockRect.maxX), abs(frame.minX - dockRect.minX))
+            case .right:
+                guard dockRect.midY >= frame.minY, dockRect.midY <= frame.maxY else { continue }
+                distance = min(abs(frame.maxX - dockRect.minX), abs(frame.maxX - dockRect.maxX))
+            default:
+                return nil
+            }
+            if best == nil || distance < best!.distance {
+                best = (index, distance)
+            }
+        }
+
+        return best?.index
     }
 
     // MARK: - Private Helpers
@@ -211,6 +274,9 @@ final class DockLocker {
     private var runLoopSource: CFRunLoopSource?
     private var cachedTriggerZones: [TriggerZone] = []
     private var screenObserver: Any?
+    private var settingsObserver: Defaults.Observation?
+    private var relocationInProgress = false
+    private var relocationWorkItem: DispatchWorkItem?
 
     init() {
         refreshTriggerZones()
@@ -218,10 +284,17 @@ final class DockLocker {
             setupEventTap()
         }
         observeScreenChanges()
+        settingsObserver = Defaults.observe(.lockedDockScreenIdentifier, options: []) { [weak self] _ in
+            DispatchQueue.main.async { self?.reset() }
+        }
+        DebugLogger.log("DockLocker", details: "init: \(NSScreen.screens.count) screens, \(cachedTriggerZones.count) zones")
+        scheduleRelocation(after: 2)
     }
 
     deinit {
         removeEventTap()
+        settingsObserver?.invalidate()
+        relocationWorkItem?.cancel()
         if let screenObserver {
             NotificationCenter.default.removeObserver(screenObserver)
         }
@@ -233,6 +306,94 @@ final class DockLocker {
         if !cachedTriggerZones.isEmpty {
             setupEventTap()
         }
+        scheduleRelocation(after: 0.5)
+    }
+
+    // MARK: - Relocation
+
+    private func lockedScreen() -> NSScreen? {
+        NSScreen.findScreen(byIdentifier: Defaults[.lockedDockScreenIdentifier])
+    }
+
+    private func scheduleRelocation(after delay: TimeInterval) {
+        relocationWorkItem?.cancel()
+        let item = DispatchWorkItem { [weak self] in self?.relocateDockIfNeeded() }
+        relocationWorkItem = item
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: item)
+    }
+
+    /// macOS only moves the Dock when the cursor pushes against a free stretch of a screen's Dock
+    /// edge, so emulate that push on the locked screen when the Dock is found elsewhere.
+    private func relocateDockIfNeeded() {
+        guard !relocationInProgress, NSScreen.screens.count > 1 else { return }
+        guard let target = lockedScreen() else {
+            DebugLogger.log("DockLocker", details: "Locked screen not connected: \(Defaults[.lockedDockScreenIdentifier])")
+            return
+        }
+
+        let dockPosition = DockUtils.getDockPosition()
+        let frames = NSScreen.screens.map(\.cgFrame)
+        guard let path = DockLockerGeometry.relocationPath(
+            lockedFrame: target.cgFrame,
+            dockPosition: dockPosition,
+            allFrames: frames
+        ) else {
+            DebugLogger.log("DockLocker", details: "Locked screen's Dock edge is fully covered; cannot relocate Dock")
+            return
+        }
+
+        guard let current = DockUtils.dockScreen() else {
+            DebugLogger.log("DockLocker", details: "Could not determine which screen holds the Dock")
+            return
+        }
+        guard current != target else { return }
+
+        let modifier = DockLockModifier(rawValue: Defaults[.dockLockOverrideModifier]) ?? .option
+        guard !CGEventSource.flagsState(.combinedSessionState).contains(modifier.cgEventFlag) else { return }
+        guard !CGEventSource.buttonState(.combinedSessionState, button: .left) else {
+            scheduleRelocation(after: 2)
+            return
+        }
+
+        let origin = CGEvent(source: nil)?.location
+        relocationInProgress = true
+        DebugLogger.log("DockLocker", details: "Relocating Dock from \(current.localizedName) to \(target.localizedName)")
+
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            let steps = 8
+            for step in 0 ... steps {
+                let t = CGFloat(step) / CGFloat(steps)
+                let point = CGPoint(
+                    x: path.start.x + (path.end.x - path.start.x) * t,
+                    y: path.start.y + (path.end.y - path.start.y) * t
+                )
+                Self.postMouseMoved(at: point, delta: CGVector(
+                    dx: (path.end.x - path.start.x) / CGFloat(steps),
+                    dy: (path.end.y - path.start.y) / CGFloat(steps)
+                ))
+                usleep(16000)
+            }
+            for _ in 0 ..< 6 {
+                Self.postMouseMoved(at: path.end, delta: path.push)
+                usleep(16000)
+            }
+            usleep(150_000)
+            if let origin {
+                CGWarpMouseCursorPosition(origin)
+            }
+            DispatchQueue.main.async {
+                self?.relocationInProgress = false
+                let landed = DockUtils.dockScreen()?.localizedName ?? "unknown"
+                DebugLogger.log("DockLocker", details: "Dock now on \(landed)")
+            }
+        }
+    }
+
+    private static func postMouseMoved(at point: CGPoint, delta: CGVector) {
+        guard let event = CGEvent(mouseEventSource: nil, mouseType: .mouseMoved, mouseCursorPosition: point, mouseButton: .left) else { return }
+        event.setIntegerValueField(.mouseEventDeltaX, value: Int64(delta.dx))
+        event.setIntegerValueField(.mouseEventDeltaY, value: Int64(delta.dy))
+        event.post(tap: .cghidEventTap)
     }
 
     // MARK: - Event Tap
@@ -318,19 +479,12 @@ final class DockLocker {
             return
         }
 
-        let lockedIdentifier = Defaults[.lockedDockScreenIdentifier]
-        guard !lockedIdentifier.isEmpty else {
+        guard let locked = lockedScreen(), let lockedIndex = screens.firstIndex(of: locked) else {
             cachedTriggerZones = []
             return
         }
 
         let cgFrames = screens.map(\.cgFrame)
-        let lockedIndex = screens.firstIndex { $0.uniqueIdentifier() == lockedIdentifier }
-
-        guard let lockedIndex else {
-            cachedTriggerZones = []
-            return
-        }
 
         let dockPosition = DockUtils.getDockPosition()
         cachedTriggerZones = DockLockerGeometry.calculateTriggerZones(
@@ -353,10 +507,8 @@ final class DockLocker {
     }
 
     private func handleScreenConfigChanged() {
-        let lockedIdentifier = Defaults[.lockedDockScreenIdentifier]
-        if !lockedIdentifier.isEmpty,
-           NSScreen.findScreen(byIdentifier: lockedIdentifier) == nil
-        {
+        NSScreen.migrateScreenIdentifier(.lockedDockScreenIdentifier)
+        guard !Defaults[.lockedDockScreenIdentifier].isEmpty, lockedScreen() != nil else {
             cachedTriggerZones = []
             removeEventTap()
             return
@@ -368,5 +520,6 @@ final class DockLocker {
         } else if eventTap == nil {
             setupEventTap()
         }
+        scheduleRelocation(after: 1.5)
     }
 }
