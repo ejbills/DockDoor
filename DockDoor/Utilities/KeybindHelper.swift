@@ -1131,11 +1131,11 @@ class KeybindHelper {
                 })
             }
 
-            if !flags.contains(.maskCommand),
-               let nsEvent = NSEvent(cgEvent: event),
-               let characters = nsEvent.characters,
-               !characters.isEmpty
-            {
+            if !flags.contains(.maskCommand) {
+                var length = 0
+                var buffer = [UniChar](repeating: 0, count: 4)
+                event.keyboardGetUnicodeString(maxStringLength: buffer.count, actualStringLength: &length, unicodeString: &buffer)
+                let characters = String(utf16CodeUnits: buffer, count: length)
                 let filteredChars = characters.filter { char in
                     char.isLetter || char.isNumber || char.isWhitespace ||
                         ".,!?-_()[]{}@#$%^&*+=|\\:;\"'<>/~`".contains(char)
