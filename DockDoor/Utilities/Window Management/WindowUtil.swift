@@ -819,6 +819,10 @@ extension WindowUtil {
     static func collapseNativeTabsIfNeeded(_ windows: [WindowInfo]) -> [WindowInfo] {
         guard Defaults[.collapseNativeTabsIntoSingleWindow] else { return windows }
 
+        let onScreenIDs = Set(
+            ((CGWindowListCopyWindowInfo(.optionOnScreenOnly, kCGNullWindowID) as? [[String: Any]]) ?? [])
+                .compactMap { $0[kCGWindowNumber as String] as? CGWindowID }
+        )
         let candidates = windows.map { window in
             NativeTabGrouping.Candidate(
                 id: window.id,
@@ -829,7 +833,8 @@ extension WindowUtil {
                     && !window.isHidden
                     && !window.isWindowlessApp
                     && window.frame.width > 0
-                    && window.frame.height > 0
+                    && window.frame.height > 0,
+                isOnScreen: onScreenIDs.contains(window.id)
             )
         }
 

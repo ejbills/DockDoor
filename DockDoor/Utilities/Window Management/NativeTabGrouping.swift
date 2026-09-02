@@ -10,9 +10,9 @@ import Foundation
 ///
 /// There is no Accessibility attribute that exposes tab-group membership for arbitrary apps,
 /// so membership is inferred from a reliable side effect: the windows in one visible tab group
-/// are stacked at the exact same screen frame. Windows that share a process and an
-/// (integer-rounded) frame are therefore treated as a single group, and callers can keep just
-/// the representative to collapse a tabbed app down to one entry.
+/// are stacked at the exact same screen frame, and only the selected tab is on screen. Windows
+/// that share a process and an (integer-rounded) frame are therefore treated as a single group,
+/// except that on-screen members are always distinct windows and are all kept.
 enum NativeTabGrouping {
     /// The minimal window facts needed to detect tab groups, kept free of Accessibility and
     /// AppKit types so the grouping logic stays pure and unit-testable.
@@ -26,6 +26,7 @@ enum NativeTabGrouping {
         /// Whether this window may be collapsed into a group. Minimized, hidden, windowless,
         /// and zero-sized windows are never collapsed and are always kept as-is.
         let groupable: Bool
+        let isOnScreen: Bool
     }
 
     private struct GroupKey: Hashable {
@@ -36,14 +37,15 @@ enum NativeTabGrouping {
         let height: Int
     }
 
-    /// Returns the window IDs to keep: every non-groupable window, plus a single representative
-    /// per detected tab group.
+    /// Returns the window IDs to keep: every non-groupable window, every on-screen window, plus a
+    /// single representative for each group with no on-screen member.
     ///
     /// The representative is the most recently accessed window in the group; ties are broken by
     /// the larger window ID so the result is deterministic regardless of input ordering.
     static func representativeIDs(from candidates: [Candidate]) -> Set<CGWindowID> {
         var keptIDs = Set<CGWindowID>()
         var representativeByGroup: [GroupKey: Candidate] = [:]
+        var groupsWithOnScreenMember = Set<GroupKey>()
 
         for candidate in candidates {
             guard candidate.groupable else {
@@ -59,6 +61,12 @@ enum NativeTabGrouping {
                 height: Int(candidate.frame.size.height.rounded())
             )
 
+            if candidate.isOnScreen {
+                keptIDs.insert(candidate.id)
+                groupsWithOnScreenMember.insert(key)
+                continue
+            }
+
             if let current = representativeByGroup[key] {
                 if isBetterRepresentative(candidate, than: current) {
                     representativeByGroup[key] = candidate
@@ -68,7 +76,7 @@ enum NativeTabGrouping {
             }
         }
 
-        for representative in representativeByGroup.values {
+        for (key, representative) in representativeByGroup where !groupsWithOnScreenMember.contains(key) {
             keptIDs.insert(representative.id)
         }
 

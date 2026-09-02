@@ -15,6 +15,7 @@ struct WindowInfo: Identifiable, Hashable {
     let app: NSRunningApplication
     let ownerApp: NSRunningApplication
     var windowName: String?
+    var frame: CGRect
     var image: CGImage?
     var axElement: AXUIElement
     var appAxElement: AXUIElement
@@ -36,6 +37,7 @@ struct WindowInfo: Identifiable, Hashable {
         self.app = app
         self.ownerApp = ownerApp ?? app
         windowName = (try? axElement.title()) ?? windowProvider.title
+        frame = windowProvider.frame
         self.image = image
         self.axElement = axElement
         self.appAxElement = appAxElement
@@ -51,7 +53,6 @@ struct WindowInfo: Identifiable, Hashable {
         _scWindow = windowProvider as? SCWindow
     }
 
-    var frame: CGRect { windowProvider.frame }
     var scWindow: SCWindow? { _scWindow }
 
     func hash(into hasher: inout Hasher) {

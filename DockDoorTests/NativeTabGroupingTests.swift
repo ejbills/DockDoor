@@ -11,15 +11,36 @@ struct NativeTabGroupingTests {
         pid: pid_t = 100,
         frame: CGRect = CGRect(x: 0, y: 0, width: 800, height: 600),
         recency: TimeInterval = 0,
-        groupable: Bool = true
+        groupable: Bool = true,
+        isOnScreen: Bool = false
     ) -> NativeTabGrouping.Candidate {
         NativeTabGrouping.Candidate(
             id: id,
             pid: pid,
             frame: frame,
             recency: Date(timeIntervalSinceReferenceDate: recency),
-            groupable: groupable
+            groupable: groupable,
+            isOnScreen: isOnScreen
         )
+    }
+
+    @Test func keepsAllOnScreenWindowsSharingAFrame() {
+        let frame = CGRect(x: 0, y: 0, width: 1512, height: 982)
+        let kept = NativeTabGrouping.representativeIDs(from: [
+            candidate(id: 1, frame: frame, recency: 0, isOnScreen: true),
+            candidate(id: 2, frame: frame, recency: 5, isOnScreen: true),
+        ])
+        #expect(kept == [1, 2])
+    }
+
+    @Test func collapsesOffScreenTabsIntoTheOnScreenWindow() {
+        let frame = CGRect(x: 149, y: 148, width: 1363, height: 694)
+        let kept = NativeTabGrouping.representativeIDs(from: [
+            candidate(id: 1, frame: frame, recency: 9, isOnScreen: false),
+            candidate(id: 2, frame: frame, recency: 1, isOnScreen: true),
+            candidate(id: 3, frame: CGRect(x: 120, y: 119, width: 1363, height: 694), recency: 0, isOnScreen: true),
+        ])
+        #expect(kept == [2, 3])
     }
 
     @Test func collapsesSameFrameSameProcessIntoOne() {
