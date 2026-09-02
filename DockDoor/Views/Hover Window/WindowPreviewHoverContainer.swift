@@ -335,6 +335,7 @@ struct WindowPreviewHoverContainer: View {
 
         buildFlowStack(
             orientationIsHorizontal,
+            scrollAxis: scrollAxis,
             currentMaxDimensionForPreviews: calculatedMaxDimension,
             currentDimensionsMapForPreviews: calculatedDimensionsMap
         )
@@ -706,6 +707,7 @@ struct WindowPreviewHoverContainer: View {
     @ViewBuilder
     private func buildFlowStack(
         _ isHorizontal: Bool,
+        scrollAxis: Axis.Set,
         currentMaxDimensionForPreviews: CGPoint,
         currentDimensionsMapForPreviews: [Int: WindowDimensions]
     ) -> some View {
@@ -725,6 +727,7 @@ struct WindowPreviewHoverContainer: View {
             let layout = CardGridScrollView.Layout(
                 lines: lines,
                 isHorizontal: shouldUseCompactMode || isHorizontal,
+                scrollsVertically: scrollAxis == .vertical,
                 centerLines: previewStateCoordinator.windowSwitcherActive && appearance.allowDynamicImageSizing && !shouldUseCompactMode,
                 spacing: shouldUseCompactMode ? 4 : HoverContainerPadding.itemSpacing,
                 inset: 20 * appearance.globalPaddingMultiplier,

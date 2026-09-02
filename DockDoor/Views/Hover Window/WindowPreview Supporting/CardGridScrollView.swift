@@ -7,6 +7,7 @@ struct CardGridScrollView: NSViewRepresentable {
     struct Layout: Equatable {
         let lines: [[FlowItem]]
         let isHorizontal: Bool
+        let scrollsVertically: Bool
         let centerLines: Bool
         let spacing: CGFloat
         let inset: CGFloat
@@ -22,7 +23,7 @@ struct CardGridScrollView: NSViewRepresentable {
     let makeCard: (FlowItem) -> AnyView
 
     func makeNSView(context: Context) -> ContainerView {
-        let container = ContainerView(scrollsVertically: layout.isHorizontal)
+        let container = ContainerView(scrollsVertically: layout.scrollsVertically)
         context.coordinator.attach(container: container, representable: self)
         return container
     }
@@ -46,7 +47,13 @@ struct CardGridScrollView: NSViewRepresentable {
     /// Scrolling translates the content layer only; view frames are committed once the gesture settles so per-frame work is a single CA transform, while hit-testing and tracking areas stay exact after every gesture.
     final class ContainerView: NSView {
         let contentView = FlippedView()
-        let scrollsVertically: Bool
+        var scrollsVertically: Bool {
+            didSet {
+                guard scrollsVertically != oldValue else { return }
+                setOffset(0)
+                commit()
+            }
+        }
         var onOffsetChange: ((CGFloat) -> Void)?
 
         var contentSize: CGSize = .zero {
@@ -85,7 +92,9 @@ struct CardGridScrollView: NSViewRepresentable {
         }
 
         override func scrollWheel(with event: NSEvent) {
-            var delta = scrollsVertically ? event.scrollingDeltaY : event.scrollingDeltaX
+            let primary = scrollsVertically ? event.scrollingDeltaY : event.scrollingDeltaX
+            let secondary = scrollsVertically ? event.scrollingDeltaX : event.scrollingDeltaY
+            var delta = primary != 0 ? primary : secondary
             if !event.hasPreciseScrollingDeltas { delta *= 10 }
             if delta != 0 { setOffset(offset - delta) }
 
@@ -187,6 +196,7 @@ struct CardGridScrollView: NSViewRepresentable {
             if layout != representable.layout {
                 layout = representable.layout
                 contentKey = representable.contentKey
+                container.scrollsVertically = representable.layout.scrollsVertically
                 rebuild(in: container, representable: representable)
             } else if contentKey != representable.contentKey {
                 contentKey = representable.contentKey
