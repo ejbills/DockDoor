@@ -34,6 +34,7 @@ Effortless Alt+Tab switching and dock previews that respect your privacy.
 
   <ol>
     <li><a href="#about-the-project">About The Project</a></li>
+    <li><a href="#dockdoor-pro">DockDoor Pro</a></li>
     <li><a href="#features">Features</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
@@ -48,6 +49,24 @@ While the native macOS Dock is iconic, it often lacks context when multiple wind
 Built entirely open-source, DockDoor is designed to feel like a native extension of the operating system. Fast, lightweight, and seamlessly integrated!
 
 For full details, features, and documentation, please visit **[dockdoor.net](https://dockdoor.net)** ⭐
+
+<p align="right"><a href="#readme-top">Back to top ⬆️</a></p>
+
+## DockDoor Pro
+
+<a href="https://pro.dockdoor.net"><img src="/resources/pro/scene-previews.webp" alt="DockDoor Pro"/></a>
+
+**DockDoor Free has no paywall and never will.** Every feature in this repo is free, forever.
+
+**[DockDoor Pro](https://pro.dockdoor.net)** is a separate paid app from the same developer for people who want far more extensive control over their system. It replaces the macOS Dock entirely, and buying it is the best way to support DockDoor Free:
+
+- Live window previews with 20+ actions, plus a full Alt+Tab replacement
+- Spring magnification at your display's full refresh rate
+- Folder fan-out, a drag-and-drop file tray with AirDrop, and right-click quick actions
+- Liquid Glass, frosted or clear materials, profiles, and a different dock on every display
+- Widget marketplace with clock, weather, battery, now playing, and community widgets
+
+$20 one-time for 3 Macs. No subscription, 14-day money-back guarantee.
 
 <p align="right"><a href="#readme-top">Back to top ⬆️</a></p>
 

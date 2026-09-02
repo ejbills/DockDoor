@@ -63,12 +63,12 @@
             </a>
             <nav>
                 <ul class="nav-links">
+                    <li><a href="#pro" class="nav-link nav-link-pro">DockDoor Pro</a></li>
                     <li><a href="#privacy" class="nav-link">Privacy</a></li>
                     <li><a href="#features" class="nav-link">Features</a></li>
                     <li><a href="#faq" class="nav-link">FAQ</a></li>
                     <li><a href="docs.html" class="nav-link">Docs</a></li>
                     <li><a href="donate.html" class="nav-link">Donate</a></li>
-                    <li><a href="#free-vs-pro" class="nav-link">Free vs Pro</a></li>
                 </ul>
             </nav>
             <div class="header-actions">
@@ -118,14 +118,6 @@
             <div class="from-dev-section">
                 <span class="from-dev-heading">From the same dev</span>
                 <div class="from-dev-cards">
-                    <a href="https://pro.dockdoor.net" class="from-dev-card from-dev-featured" target="_blank" rel="noopener">
-                        <img src="/resources/dockdoorProIcon.png" alt="DockDoor Pro" class="from-dev-icon">
-                        <div class="from-dev-content">
-                            <span class="from-dev-title">DockDoor Pro</span>
-                            <span class="from-dev-description">Separate paid app; replaces the Dock</span>
-                        </div>
-                        <span class="from-dev-price">$20</span>
-                    </a>
                     <a href="https://apps.apple.com/us/app/lookieloo-rock-your-notch/id6747730721?mt=12" class="from-dev-card" target="_blank">
                         <img src="https://lookielooapp.org/resources/icon.png" alt="LookieLoo" class="from-dev-icon">
                         <div class="from-dev-content">
@@ -136,6 +128,57 @@
                     </a>
                 </div>
             </div>
+        </div>
+    </section>
+
+
+    <!-- DockDoor Pro Showcase -->
+    <section class="pro-section section" id="pro">
+        <div class="container">
+            <div class="pro-top">
+            <div class="pro-intro">
+                <span class="pro-kicker"><img src="/resources/dockdoorProIcon.png" alt="" class="pro-kicker-icon"> From the same developer</span>
+                <h2 class="section-title pro-title">Want the whole Dock, not just previews?</h2>
+                <p class="section-subtitle pro-subtitle">DockDoor Free has no paywall and never will. Pro is a separate app that replaces the macOS Dock entirely for far deeper system control, and buying it is the best way to support the free project.</p>
+                <div class="pro-cta">
+                    <div class="pro-cta-buttons">
+                        <a href="https://pro.dockdoor.net" class="btn btn-pro" target="_blank" rel="noopener">Get DockDoor Pro</a>
+                        <a href="#free-vs-pro" class="btn btn-pro-outline">Learn the difference</a>
+                    </div>
+                    <p class="pro-cta-line">$20 one-time, 3 Macs. No subscription. 14-day money-back guarantee.</p>
+                </div>
+            </div>
+
+            <a href="https://pro.dockdoor.net" class="pro-hero-media" target="_blank" rel="noopener" aria-label="Watch DockDoor Pro in action">
+                <video autoplay muted loop playsinline preload="metadata" poster="/resources/pro/scene-previews.webp">
+                    <source src="/resources/pro/hero-dock.mp4" type="video/mp4">
+                </video>
+            </a>
+            </div>
+
+            <div class="pro-grid">
+                <article class="pro-card">
+                    <video autoplay muted loop playsinline preload="metadata"><source src="/resources/pro/scene-magnify.mp4" type="video/mp4"></video>
+                    <h3>Spring magnification</h3>
+                    <p>Icons scale at your display's full refresh rate with tunable physics.</p>
+                </article>
+                <article class="pro-card">
+                    <video autoplay muted loop playsinline preload="metadata"><source src="/resources/pro/scene-folder.mp4" type="video/mp4"></video>
+                    <h3>Folder fan-out</h3>
+                    <p>Pinned folders bloom into a list or grid without leaving the dock.</p>
+                </article>
+                <article class="pro-card">
+                    <video autoplay muted loop playsinline preload="metadata"><source src="/resources/pro/scene-filetray.mp4" type="video/mp4"></video>
+                    <h3>File tray</h3>
+                    <p>A drag-and-drop shelf with pinned folders and a built-in AirDrop zone.</p>
+                </article>
+                <article class="pro-card">
+                    <video autoplay muted loop playsinline preload="metadata"><source src="/resources/pro/scene-glass.mp4" type="video/mp4"></video>
+                    <h3>Your dock, your look</h3>
+                    <p>Liquid Glass, frosted or clear materials. A different dock on every display.</p>
+                </article>
+            </div>
+
         </div>
     </section>
 
@@ -758,13 +801,12 @@
 
     <section class="product-split-section section" id="free-vs-pro">
         <div class="container">
-            <details class="product-split-disclosure">
-                <summary class="product-split-summary">
+            <div class="product-split-disclosure">
+                <div class="product-split-summary">
                     <span class="section-kicker">DockDoor Free vs Pro</span>
-                    <span class="product-split-summary-icon">↓</span>
                     <span class="section-title product-split-title">Two separate apps. Two different jobs.</span>
                     <span class="section-subtitle product-split-subtitle">DockDoor Free enhances the Dock that ships with macOS. DockDoor Pro is a separate app for users who want to replace the Dock entirely.</span>
-                </summary>
+                </div>
                 <div class="product-split-grid">
                     <article class="product-split-card">
                         <span class="product-split-label">DockDoor Free</span>
@@ -775,10 +817,10 @@
                         <span class="product-split-label">DockDoor Pro</span>
                         <h3>Replaces the Dock.</h3>
                         <p>Runs as its own full Dock with its own icon previews, profiles, widgets, pinned folders and files, marketplace widgets, deep customization, and advanced window workflows.</p>
-                        <a href="https://pro.dockdoor.net" class="btn btn-primary">Explore DockDoor Pro</a>
+                        <a href="https://pro.dockdoor.net" class="btn btn-pro" target="_blank" rel="noopener">Explore DockDoor Pro</a>
                     </article>
                 </div>
-            </details>
+            </div>
         </div>
     </section>
 

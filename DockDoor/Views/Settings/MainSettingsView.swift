@@ -12,6 +12,7 @@ struct MainSettingsView: View {
     var body: some View {
         BaseSettingsView {
             VStack(alignment: .leading, spacing: 24) {
+                DockDoorProBanner()
                 supportAndContributionsSection
                 applicationBasicsSection
                 activeAppIndicatorSection

@@ -4404,6 +4404,9 @@
         }
       }
     },
+    "$20 one-time" : {
+      "comment" : "DockDoor Pro price tag"
+    },
     "1." : {
       "extractionState" : "stale",
       "localizations" : {
@@ -5549,6 +5552,9 @@
           }
         }
       }
+    },
+    "3 Macs · 14-day money-back guarantee" : {
+      "comment" : "DockDoor Pro banner fine print"
     },
     "3." : {
       "extractionState" : "stale",
@@ -7837,6 +7843,7 @@
     },
     "A separate paid app that fully replaces the macOS Dock with profiles, widgets, file tray, media controls with lyrics, and a built-in switcher." : {
       "comment" : "DockDoor Pro banner description",
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -58686,7 +58693,7 @@
       }
     },
     "DockDoor Pro" : {
-      "comment" : "DockDoor Pro banner title",
+      "comment" : "DockDoor Pro banner title\nPro hint trailing label",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -75844,6 +75851,12 @@
         }
       }
     },
+    "Get DockDoor Pro" : {
+      "comment" : "DockDoor Pro banner link"
+    },
+    "Get DockDoor Pro…" : {
+
+    },
     "Get Started" : {
       "localizations" : {
         "af" : {
@@ -92419,6 +92432,7 @@
     },
     "Learn More" : {
       "comment" : "DockDoor Pro banner link",
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -128804,6 +128818,15 @@
         }
       }
     },
+    "Pro lets you restyle the Dock itself: Liquid Glass, frosted or clear materials, spring magnification and per-display layouts." : {
+
+    },
+    "Pro replaces the Dock outright, so you get a separate dock on every display with no jumping at all." : {
+
+    },
+    "Pro ships a full Alt+Tab replacement with live previews, built into the dock itself." : {
+
+    },
     "Profile" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -134324,6 +134347,12 @@
           }
         }
       }
+    },
+    "Replace the Dock entirely with the paid app from the same developer" : {
+
+    },
+    "Replace the macOS Dock entirely. Spring magnification, folder fan-out, a drag-and-drop file tray, per-display docks, a widget marketplace and a full Alt+Tab replacement." : {
+      "comment" : "DockDoor Pro banner description"
     },
     "Replaces the blurred/transparent background with a solid color. Useful for accessibility or readability." : {
       "localizations" : {
@@ -188066,6 +188095,12 @@
           }
         }
       }
+    },
+    "Want more than media and calendar? Pro has a widget marketplace with clock, weather, battery and community-built widgets." : {
+
+    },
+    "Want to replace the whole Dock? See DockDoor Pro" : {
+
     },
     "Want to see for yourself? Review our source code" : {
       "localizations" : {

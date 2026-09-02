@@ -2390,3 +2390,186 @@ details[open] .faq-question i {
     border-radius: 4px;
     line-height: 1.4;
 }
+
+/* DockDoor Pro */
+.btn-pro {
+    background: linear-gradient(135deg, #3b82f6, #6366f1);
+    color: #fff;
+    border: none;
+}
+
+.btn-pro:hover {
+    background: linear-gradient(135deg, #2563eb, #4f46e5);
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+.pro-section {
+    padding-block: 3.5rem;
+    background: linear-gradient(180deg, #0f1117 0%, #1a1d29 100%);
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+}
+
+.pro-section::before {
+    content: "";
+    position: absolute;
+    inset: -40% -20% auto;
+    height: 80%;
+    background: radial-gradient(ellipse at center, rgba(99, 102, 241, 0.28), transparent 60%);
+    pointer-events: none;
+}
+
+.pro-section .container {
+    position: relative;
+}
+
+.pro-top {
+    display: grid;
+    grid-template-columns: 5fr 7fr;
+    gap: 3rem;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.pro-intro {
+    text-align: left;
+}
+
+.pro-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #a5b4fc;
+    margin-bottom: 1.25rem;
+}
+
+.pro-kicker-icon {
+    width: 22px;
+    height: 22px;
+    border-radius: 6px;
+}
+
+.pro-title {
+    color: #fff;
+    font-size: 2.25rem;
+    text-align: left;
+    margin-bottom: 0.875rem;
+}
+
+.pro-subtitle {
+    color: rgba(255, 255, 255, 0.72);
+    font-size: 1.05rem;
+    text-align: left;
+    margin: 0 0 1.25rem;
+}
+
+.pro-hero-media {
+    display: block;
+    margin: 0;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.08);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.pro-hero-media:hover {
+    transform: translateY(-4px);
+}
+
+.pro-hero-media video {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.pro-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+}
+
+.pro-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    padding: 0.75rem;
+    transition: background 0.25s, transform 0.25s;
+}
+
+.pro-card:hover {
+    background: rgba(255, 255, 255, 0.09);
+    transform: translateY(-3px);
+}
+
+.pro-card video {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin-bottom: 0.875rem;
+    background: #000;
+}
+
+.pro-card h3 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 0.35rem;
+    color: #fff;
+}
+
+.pro-card p {
+    font-size: 0.85rem;
+    line-height: 1.45;
+    color: rgba(255, 255, 255, 0.68);
+}
+
+.pro-cta {
+    text-align: left;
+}
+
+.pro-cta-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.btn-pro-outline {
+    background: transparent;
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+}
+
+.btn-pro-outline:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.6);
+    color: #fff;
+}
+
+.pro-cta-line {
+    margin-top: 0.75rem;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+@media (max-width: 1024px) {
+    .pro-top {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .pro-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .pro-grid {
+        grid-template-columns: 1fr;
+    }
+}

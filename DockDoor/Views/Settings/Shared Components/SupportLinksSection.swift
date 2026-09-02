@@ -4,6 +4,17 @@ struct SupportLinksSection: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
             SettingsLinkRow(
+                title: "Get DockDoor Pro",
+                description: "Replace the Dock entirely with the paid app from the same developer",
+                icon: "sparkles",
+                destination: DockDoorPro.url,
+                iconColor: .mint
+            )
+            .settingsSearchTarget("general.dockDoorPro")
+
+            Divider().padding(.leading, 40)
+
+            SettingsLinkRow(
                 title: "Support DockDoor",
                 description: "Help keep the project going with a small donation",
                 icon: "heart.fill",
