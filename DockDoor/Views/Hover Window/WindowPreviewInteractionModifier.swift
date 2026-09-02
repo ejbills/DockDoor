@@ -40,48 +40,8 @@ struct WindowPreviewInteractionModifier: ViewModifier {
                 handleWindowTap()
             }
             .contextMenu {
-                windowContextMenu
+                WindowActionsMenuContent(windowInfo: windowInfo, handleWindowAction: handleWindowAction)
             }
-    }
-
-    @ViewBuilder
-    private var windowContextMenu: some View {
-        if windowInfo.closeButton != nil {
-            Button(action: { handleWindowAction(.minimize) }) {
-                if windowInfo.isMinimized {
-                    Label("Un-minimize", systemImage: "arrow.up.left.and.arrow.down.right.square")
-                } else {
-                    Label("Minimize", systemImage: "minus.square")
-                }
-            }
-
-            Button(action: { handleWindowAction(.toggleFullScreen) }) {
-                Label("Toggle Full Screen", systemImage: "arrow.up.left.and.arrow.down.right.square")
-            }
-
-            Button(action: {
-                WindowUtil.activateAndOpenNewWindow(app: windowInfo.app)
-            }) {
-                Label(
-                    String(localized: "Open New Window", comment: "Context menu action to open a new window for the app"),
-                    systemImage: "plus.rectangle.on.rectangle"
-                )
-            }
-
-            Divider()
-
-            Button(action: { handleWindowAction(.close) }) {
-                Label("Close", systemImage: "xmark.square")
-            }
-
-            Button(role: .destructive, action: { handleWindowAction(.quit) }) {
-                if NSEvent.modifierFlags.contains(.option) {
-                    Label("Force Quit", systemImage: "power")
-                } else {
-                    Label("Quit", systemImage: "minus.square.fill")
-                }
-            }
-        }
     }
 
     // MARK: - Swipe Handling
@@ -182,5 +142,36 @@ extension View {
             handleWindowAction: handleWindowAction,
             onTap: onTap
         ))
+    }
+}
+
+struct WindowActionsMenuContent: View {
+    let windowInfo: WindowInfo
+    let handleWindowAction: (WindowAction) -> Void
+
+    var body: some View {
+        let groups = WindowAction.availableGroups(for: windowInfo)
+        ForEach(groups) { entry in
+            if entry.id != groups.first?.id {
+                Divider()
+            }
+            if entry.id == .arrange {
+                Menu {
+                    actionButtons(entry.actions)
+                } label: {
+                    Label(entry.id.localizedName, systemImage: "rectangle.split.2x2")
+                }
+            } else {
+                actionButtons(entry.actions)
+            }
+        }
+    }
+
+    private func actionButtons(_ actions: [WindowAction]) -> some View {
+        ForEach(actions, id: \.self) { action in
+            Button(role: action == .quit ? .destructive : nil, action: { handleWindowAction(action) }) {
+                Label(action.menuTitle(for: windowInfo), systemImage: action.menuIcon(for: windowInfo))
+            }
+        }
     }
 }

@@ -225,30 +225,7 @@ struct WindowlessAppPreview: View, Equatable {
             }
         }
         .contextMenu {
-            Button(action: {
-                WindowUtil.activateAndOpenNewWindow(app: windowInfo.app)
-            }) {
-                Label(
-                    String(localized: "Open New Window", comment: "Context menu action to open a new window for the app"),
-                    systemImage: "plus.rectangle.on.rectangle"
-                )
-            }
-
-            Divider()
-
-            Button(role: .destructive, action: {
-                if NSEvent.modifierFlags.contains(.option) {
-                    windowInfo.app.forceTerminate()
-                } else {
-                    windowInfo.app.terminate()
-                }
-            }) {
-                if NSEvent.modifierFlags.contains(.option) {
-                    Label("Force Quit", systemImage: "power")
-                } else {
-                    Label("Quit", systemImage: "minus.square.fill")
-                }
-            }
+            WindowActionsMenuContent(windowInfo: windowInfo, handleWindowAction: handleWindowAction)
         }
         .fixedSize()
     }

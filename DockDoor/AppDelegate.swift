@@ -13,6 +13,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var activeAppIndicator: ActiveAppIndicatorCoordinator?
     private var dockLocker: DockLocker?
     private var statusBarItem: NSStatusItem?
+    private let windowActionsMenu = WindowActionsMenuController()
     private var updaterController: SPUStandardUpdaterController
     @ObservedObject var updaterState: UpdaterState
 
@@ -175,6 +176,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         let menu = NSMenu()
         menu.addItem(NSMenuItem(title: String(localized: "Open Settings"), action: #selector(openSettingsWindow(_:)), keyEquivalent: ""))
+        menu.addItem(NSMenuItem.separator())
+        let actionsItem = NSMenuItem(title: windowActionsMenu.menu.title, action: nil, keyEquivalent: "")
+        actionsItem.submenu = windowActionsMenu.menu
+        menu.addItem(actionsItem)
         menu.addItem(NSMenuItem.separator())
         menu.addItem(NSMenuItem(title: String(localized: "Check for Updates…"), action: #selector(checkForUpdatesWrapper), keyEquivalent: ""))
         menu.addItem(NSMenuItem(title: String(localized: "Support DockDoor"), action: #selector(openDonationPage), keyEquivalent: ""))

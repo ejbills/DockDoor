@@ -719,6 +719,10 @@ extension WindowUtil {
         return sortWindowsForSwitcher(collapseNativeTabsIfNeeded(filteredWindows))
     }
 
+    static func getAllWindowsIgnoringSwitcherFilters() -> [WindowInfo] {
+        sortWindowsForSwitcher(desktopSpaceWindowCacheManager.getAllWindows())
+    }
+
     static func getWindowsForFrontmostApp(from windows: [WindowInfo]) -> [WindowInfo] {
         guard let frontmostApp = NSWorkspace.shared.frontmostApplication else {
             return windows

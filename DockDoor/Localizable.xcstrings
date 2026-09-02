@@ -572,6 +572,12 @@
         }
       }
     },
+    " (hidden)" : {
+      "comment" : "Suffix for a hidden window in the actions menu"
+    },
+    " (minimized)" : {
+      "comment" : "Suffix for a minimized window in the actions menu"
+    },
     "-%@" : {
       "localizations" : {
         "af" : {
@@ -18498,6 +18504,9 @@
         }
       }
     },
+    "Application" : {
+      "comment" : "Window action menu group"
+    },
     "Application Basics" : {
       "localizations" : {
         "af" : {
@@ -19829,6 +19838,9 @@
           }
         }
       }
+    },
+    "Arrange" : {
+      "comment" : "Window action menu group"
     },
     "Ascending" : {
       "localizations" : {
@@ -73164,6 +73176,7 @@
       }
     },
     "Force Quit" : {
+      "extractionState" : "stale",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -73352,6 +73365,9 @@
           }
         }
       }
+    },
+    "Force Quit App" : {
+      "comment" : "Window action when option is held"
     },
     "Found a Bug?" : {
       "localizations" : {
@@ -109169,7 +109185,7 @@
       }
     },
     "No Open Windows" : {
-      "comment" : "Label for running apps without any open windows in the window switcher",
+      "comment" : "Label for running apps without any open windows in the window switcher\nWindow actions entry for an app with no windows",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -110308,6 +110324,9 @@
           }
         }
       }
+    },
+    "No Windows" : {
+      "comment" : "Empty window actions menu"
     },
     "No windows match your search" : {
       "localizations" : {
@@ -114691,7 +114710,7 @@
       }
     },
     "Open New Window" : {
-      "comment" : "Context menu action to open a new window for the app\nWindow action",
+      "comment" : "Window action",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -180799,6 +180818,7 @@
       }
     },
     "Un-minimize" : {
+      "comment" : "Window action for an already minimized window",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -181181,6 +181201,9 @@
     "Undo" : {
 
     },
+    "Unhide App" : {
+      "comment" : "Window action for an already hidden app"
+    },
     "Universal (any app)" : {
       "comment" : "Media detection mode option",
       "localizations" : {
@@ -181371,6 +181394,9 @@
           }
         }
       }
+    },
+    "Unknown App" : {
+      "comment" : "Fallback app name"
     },
     "Unknown Display" : {
       "localizations" : {
@@ -182132,6 +182158,9 @@
           }
         }
       }
+    },
+    "Untitled" : {
+      "comment" : "Fallback window title"
     },
     "Up to date" : {
       "localizations" : {
@@ -195288,7 +195317,10 @@
       }
     },
     "Window" : {
-
+      "comment" : "Window action menu group"
+    },
+    "Window Actions" : {
+      "comment" : "Menu bar submenu title"
     },
     "Window Background" : {
       "localizations" : {

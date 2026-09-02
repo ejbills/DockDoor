@@ -77,6 +77,8 @@
 		BB157B6D2C0E31CF00997315 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BB157B6C2C0E31CF00997315 /* Assets.xcassets */; };
 		BB157B702C0E31CF00997315 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BB157B6F2C0E31CF00997315 /* Preview Assets.xcassets */; };
 		BB157B792C0E330100997315 /* WindowUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB157B782C0E330100997315 /* WindowUtil.swift */; };
+		DB8BDF88C55D471D891F3B8C /* WindowActionCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6D02B0085604D66A1A26D4A /* WindowActionCatalog.swift */; };
+		2A8C8DBD14E84871BD3812AB /* WindowActionsMenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22877BDC0B154607B25B3A8B /* WindowActionsMenuController.swift */; };
 		BB157B7B2C0E343000997315 /* SystemPreferencesHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB157B7A2C0E343000997315 /* SystemPreferencesHelper.swift */; };
 		BB157B802C0E8E6700997315 /* MessageUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB157B7F2C0E8E6700997315 /* MessageUtil.swift */; };
 		BB157B822C0EB29E00997315 /* DockObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB157B812C0EB29E00997315 /* DockObserver.swift */; };
@@ -311,6 +313,8 @@
 		BB157B6F2C0E31CF00997315 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		BB157B712C0E31CF00997315 /* DockDoor.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DockDoor.entitlements; sourceTree = "<group>"; };
 		BB157B782C0E330100997315 /* WindowUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowUtil.swift; sourceTree = "<group>"; };
+		B6D02B0085604D66A1A26D4A /* WindowActionCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowActionCatalog.swift; sourceTree = "<group>"; };
+		22877BDC0B154607B25B3A8B /* WindowActionsMenuController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowActionsMenuController.swift; sourceTree = "<group>"; };
 		BB157B7A2C0E343000997315 /* SystemPreferencesHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemPreferencesHelper.swift; sourceTree = "<group>"; };
 		BB157B7F2C0E8E6700997315 /* MessageUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageUtil.swift; sourceTree = "<group>"; };
 		BB157B812C0EB29E00997315 /* DockObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockObserver.swift; sourceTree = "<group>"; };
@@ -735,6 +739,7 @@
 				BB1CBD5C2C1BCA4F003969BC /* Misc Utils.swift */,
 				F098F8107F464776B5C18294427CAECD /* ScriptCommands.swift */,
 				AA11001122334455AA110011 /* DockLocker.swift */,
+				22877BDC0B154607B25B3A8B /* WindowActionsMenuController.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -915,6 +920,7 @@
 				BB2CBB082C48128D004502C5 /* SpaceWindowCacheManager.swift */,
 				BB7CA33C2C31F1B00012E303 /* WindowManipulationObservers.swift */,
 				BB157B782C0E330100997315 /* WindowUtil.swift */,
+				B6D02B0085604D66A1A26D4A /* WindowActionCatalog.swift */,
 			);
 			path = "Window Management";
 			sourceTree = "<group>";
@@ -1289,6 +1295,8 @@
 				EBE2166867324098AFE30B239FF83CE8 /* CmdTabSettingsView.swift in Sources */,
 				5E55EE57430C4695BD7681A73BF3BF9D /* AdvancedSettingsView.swift in Sources */,
 				BB157B792C0E330100997315 /* WindowUtil.swift in Sources */,
+				DB8BDF88C55D471D891F3B8C /* WindowActionCatalog.swift in Sources */,
+				2A8C8DBD14E84871BD3812AB /* WindowActionsMenuController.swift in Sources */,
 				BB15E1EA2C8F8DB4002ECFB9 /* HelpSettingsView.swift in Sources */,
 				BB49747D2E81CE5100308326 /* WindowSeeder.swift in Sources */,
 				BB49747E2F01AB0100308326 /* WindowOrderPersistence.swift in Sources */,
