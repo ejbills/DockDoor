@@ -16,44 +16,43 @@ struct TrafficLightButtons: View {
     @State private var isHovering = false
 
     var body: some View {
-        let monochromeFillColor = colorScheme == .dark ? Color.gray.darker(by: 0.075) : Color.white
         Group {
             if displayMode != .never {
                 HStack(spacing: 6) {
                     if enabledButtons.contains(.quit) {
                         buttonFor(action: .quit, symbol: "power",
-                                  color: useMonochrome ? .secondary : Color(hex: "290133"),
-                                  fillColor: useMonochrome ? monochromeFillColor : .purple)
+                                  color: Color(red: 0.29, green: 0.01, blue: 0.10),
+                                  fillColor: Color(red: 0.88, green: 0.22, blue: 0.42))
                     }
                     if enabledButtons.contains(.close) {
                         buttonFor(action: .close, symbol: "xmark",
-                                  color: useMonochrome ? .secondary : Color(hex: "7e0609"),
-                                  fillColor: useMonochrome ? monochromeFillColor : .red)
+                                  color: Color(red: 0.49, green: 0.02, blue: 0.04),
+                                  fillColor: Color(red: 1.00, green: 0.30, blue: 0.28))
                     }
                     if enabledButtons.contains(.minimize) {
                         buttonFor(action: .minimize, symbol: "minus",
-                                  color: useMonochrome ? .secondary : Color(hex: "985712"),
-                                  fillColor: useMonochrome ? monochromeFillColor : .yellow)
+                                  color: Color(red: 0.60, green: 0.34, blue: 0.07),
+                                  fillColor: Color(red: 1.00, green: 0.80, blue: 0.20))
                     }
                     if enabledButtons.contains(.toggleFullScreen) {
                         buttonFor(action: .toggleFullScreen, symbol: "arrow.up.left.and.arrow.down.right",
-                                  color: useMonochrome ? .secondary : Color(hex: "0d650d"),
-                                  fillColor: useMonochrome ? monochromeFillColor : .green)
+                                  color: Color(red: 0.05, green: 0.40, blue: 0.05),
+                                  fillColor: Color(red: 0.26, green: 0.84, blue: 0.36))
                     }
                     if enabledButtons.contains(.maximize) {
                         buttonFor(action: .maximize, symbol: "arrow.up.to.line",
-                                  color: useMonochrome ? .secondary : Color(hex: "0a5a4a"),
-                                  fillColor: useMonochrome ? monochromeFillColor : .teal)
+                                  color: Color(red: 0.07, green: 0.22, blue: 0.32),
+                                  fillColor: Color(red: 0.25, green: 0.52, blue: 0.72))
                     }
                     if enabledButtons.contains(.bringToCurrentSpace) {
                         buttonFor(action: .bringToCurrentSpace, symbol: "arrow.right",
-                                  color: useMonochrome ? .secondary : Color(hex: "1b3a8a"),
-                                  fillColor: useMonochrome ? monochromeFillColor : .indigo)
+                                  color: Color(red: 0.02, green: 0.24, blue: 0.32),
+                                  fillColor: Color(red: 0.08, green: 0.62, blue: 0.86))
                     }
                     if enabledButtons.contains(.openNewWindow) {
                         buttonFor(action: .openNewWindow, symbol: "plus",
-                                  color: useMonochrome ? .secondary : Color(hex: "0050A0"),
-                                  fillColor: useMonochrome ? monochromeFillColor : .blue)
+                                  color: Color(red: 0.04, green: 0.16, blue: 0.40),
+                                  fillColor: Color(red: 0.42, green: 0.60, blue: 0.98))
                     }
                 }
                 .padding(4)
@@ -87,19 +86,64 @@ struct TrafficLightButtons: View {
     }
 
     private func buttonFor(action: WindowAction, symbol: String, color: Color, fillColor: Color) -> some View {
-        ZStack {
-            Image(systemName: "circle.fill")
-                .foregroundStyle(.secondary)
+        let monochromeFillColor = colorScheme == .dark ? Color.gray.opacity(0.85) : Color.white
+        return ZStack {
+            TrafficLightOrb(base: useMonochrome ? monochromeFillColor : fillColor, diameter: Self.glyphFontSize * 1.0385)
             Image(systemName: "\(symbol).circle.fill")
+                .font(.system(size: Self.glyphFontSize, weight: .bold))
+                .foregroundStyle(useMonochrome ? AnyShapeStyle(.secondary) : AnyShapeStyle(color), .clear)
         }
-        .foregroundStyle(color, fillColor)
-        .font(.headline)
         .scaleEffect(buttonScale)
         .frame(width: 17 * buttonScale, height: 17 * buttonScale)
         .contentShape(Rectangle())
         .onTapGesture {
             onWindowAction(action)
         }
+    }
+
+    private static let glyphFontSize: CGFloat = 13
+}
+
+struct TrafficLightOrb: View {
+    let base: Color
+    let diameter: CGFloat
+
+    private static let bodyShading = 0.16
+
+    private static let rimStops: [Gradient.Stop] = [
+        .init(color: .white.opacity(0.72), location: 0.00),
+        .init(color: .white.opacity(0.66), location: 0.03),
+        .init(color: .white.opacity(0.48), location: 0.07),
+        .init(color: .white.opacity(0.28), location: 0.15),
+        .init(color: .white.opacity(0.15), location: 0.25),
+        .init(color: .white.opacity(0.04), location: 0.37),
+        .init(color: .white.opacity(0.00), location: 0.50),
+        .init(color: .white.opacity(0.03), location: 0.63),
+        .init(color: .white.opacity(0.12), location: 0.75),
+        .init(color: .white.opacity(0.23), location: 0.85),
+        .init(color: .white.opacity(0.40), location: 0.93),
+        .init(color: .white.opacity(0.55), location: 0.97),
+        .init(color: .white.opacity(0.60), location: 1.00),
+    ]
+
+    private static let specularRim = LinearGradient(stops: rimStops, startPoint: .top, endPoint: .bottom)
+
+    var body: some View {
+        Circle()
+            .fill(bodyGradient)
+            .overlay {
+                Circle()
+                    .strokeBorder(Self.specularRim, lineWidth: max(0.5, diameter / 14))
+            }
+            .frame(width: diameter, height: diameter)
+    }
+
+    private var bodyGradient: LinearGradient {
+        LinearGradient(
+            colors: [base.shaded(by: -Self.bodyShading), base.shaded(by: Self.bodyShading)],
+            startPoint: UnitPoint(x: 0.5, y: 0.25),
+            endPoint: UnitPoint(x: 0.5, y: 0.75)
+        )
     }
 }
 

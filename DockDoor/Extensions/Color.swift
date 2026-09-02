@@ -19,6 +19,20 @@ extension Color {
         return Color(nsColor: blended)
     }
 
+    func shaded(by delta: Double) -> Color {
+        guard let resolved = NSColor(self).usingColorSpace(.sRGB) else { return self }
+        let red = Double(resolved.redComponent)
+        let green = Double(resolved.greenComponent)
+        let blue = Double(resolved.blueComponent)
+        let highest = max(red, green, blue)
+
+        func shift(_ channel: Double) -> Double {
+            min(1, max(0, channel + (highest - channel) * delta))
+        }
+
+        return Color(.sRGB, red: shift(red), green: shift(green), blue: shift(blue), opacity: Double(resolved.alphaComponent))
+    }
+
     /// Generates a range of lighter and darker variations of the base color
     func generateShades(count: Int) -> [Color] {
         guard count > 1 else { return [self] }
