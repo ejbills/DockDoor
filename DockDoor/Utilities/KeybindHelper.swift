@@ -391,6 +391,7 @@ class KeybindHelper {
     /// Set on event tap thread when switcher keybind fires, so other keyDown handlers
     /// can detect the switcher is active without reading MainActor-only state.
     private var switcherSessionActive: Bool = false
+    private var activeSessionKeybind: UserKeyBind = Defaults[.UserKeybind]
 
     private var eventTap: CFMachPort?
     private var runLoopSource: CFRunLoopSource?
@@ -523,7 +524,7 @@ class KeybindHelper {
 
         switch type {
         case .flagsChanged:
-            let keyBoardShortcutSaved: UserKeyBind = Defaults[.UserKeybind]
+            let keyBoardShortcutSaved = sessionKeybind()
             let (currentSwitcherModifierIsPressed, currentShiftState) = updateModifierStatesFromFlags(event: event, keyBoardShortcutSaved: keyBoardShortcutSaved)
 
             // Track Command up/down explicitly for Cmd+Tab fallback behavior
@@ -805,20 +806,36 @@ class KeybindHelper {
         }
     }
 
+    private func alternateKeybind() -> UserKeyBind? {
+        let key = Defaults[.alternateKeybindKey]
+        guard key != 0 else { return nil }
+        let modifiers = Defaults[.alternateKeybindModifierFlags]
+        return UserKeyBind(keyCode: key, modifierFlags: modifiers == 0 ? Defaults[.UserKeybind].modifierFlags : modifiers)
+    }
+
+    private func sessionKeybind() -> UserKeyBind {
+        switcherSessionActive ? activeSessionKeybind : Defaults[.UserKeybind]
+    }
+
+    private func beginSwitcherSession(with keybind: UserKeyBind) {
+        activeSessionKeybind = keybind
+        switcherSessionActive = true
+    }
+
     private func isCmdTabWindowSwitcherKeybind(keyCode: Int64, flags: CGEventFlags) -> Bool {
-        guard keyCode == Int64(kVK_Tab), flags.contains(.maskCommand) else { return false }
-        guard usesCmdTabWindowSwitcherKeybind() else { return false }
-        return modifierFlagsMatch(Defaults[.UserKeybind].modifierFlags, flags: flags)
+        guard keyCode == Int64(kVK_Tab), flags.contains(.maskCommand), let keybind = cmdTabKeybind() else { return false }
+        return modifierFlagsMatch(keybind.modifierFlags, flags: flags)
     }
 
     private func usesCmdTabWindowSwitcherKeybind() -> Bool {
-        guard Defaults[.enableWindowSwitcher] else { return false }
+        cmdTabKeybind() != nil
+    }
 
-        let keybind = Defaults[.UserKeybind]
-        let usesCommand = (keybind.modifierFlags & Int(CGEventFlags.maskCommand.rawValue)) != 0
-        guard usesCommand else { return false }
-
-        return keybind.keyCode == UInt16(kVK_Tab) || Defaults[.alternateKeybindKey] == UInt16(kVK_Tab)
+    private func cmdTabKeybind() -> UserKeyBind? {
+        guard Defaults[.enableWindowSwitcher] else { return nil }
+        return [Defaults[.UserKeybind], alternateKeybind()].compactMap { $0 }.first {
+            $0.keyCode == UInt16(kVK_Tab) && ($0.modifierFlags & Int(CGEventFlags.maskCommand.rawValue)) != 0
+        }
     }
 
     private func modifierFlagsMatch(_ saved: Int, flags: CGEventFlags) -> Bool {
@@ -952,11 +969,19 @@ class KeybindHelper {
         let keyCode = event.getIntegerValueField(.keyboardEventKeycode)
         let flags = event.flags
         let keyBoardShortcutSaved: UserKeyBind = Defaults[.UserKeybind]
+        let alternateShortcut = alternateKeybind()
         let snapshot = previewCoordinator.tapSnapshot
         let previewIsCurrentlyVisible = snapshot.isVisible || switcherSessionActive
 
+        let isDesiredModifierPressedNow = modifierFlagsMatch(keyBoardShortcutSaved.modifierFlags, flags: flags)
+        let isExactSwitcherShortcutPressed = keyCode == keyBoardShortcutSaved.keyCode &&
+            (isDesiredModifierPressedNow || keyBoardShortcutSaved.modifierFlags == 0)
+        let isAlternateShortcutPressed = alternateShortcut.map {
+            keyCode == $0.keyCode && modifierFlagsMatch($0.modifierFlags, flags: flags)
+        } ?? false
+
         if previewIsCurrentlyVisible {
-            if keyCode == kVK_Escape {
+            if keyCode == kVK_Escape, !isExactSwitcherShortcutPressed, !isAlternateShortcutPressed {
                 switcherSessionActive = false
                 return (true, { @MainActor in
                     self.windowSwitchingCoordinator.cancelSwitching(previewCoordinator: self.previewCoordinator)
@@ -981,22 +1006,10 @@ class KeybindHelper {
             }
         }
 
-        // Compute desired modifier press based on current event flags to avoid relying solely on flagsChanged ordering
-        let wantsAlt = (keyBoardShortcutSaved.modifierFlags & Int(CGEventFlags.maskAlternate.rawValue)) != 0
-        let wantsCtrl = (keyBoardShortcutSaved.modifierFlags & Int(CGEventFlags.maskControl.rawValue)) != 0
-        let wantsCmd = (keyBoardShortcutSaved.modifierFlags & Int(CGEventFlags.maskCommand.rawValue)) != 0
-        let hasAlt = flags.contains(.maskAlternate)
-        let hasCtrl = flags.contains(.maskControl)
-        let hasCmd = flags.contains(.maskCommand)
-        let isDesiredModifierPressedNow = (wantsAlt == hasAlt) && (wantsCtrl == hasCtrl) && (wantsCmd == hasCmd)
-
-        let isExactSwitcherShortcutPressed = (isDesiredModifierPressedNow && keyCode == keyBoardShortcutSaved.keyCode) ||
-            (!isDesiredModifierPressedNow && keyBoardShortcutSaved.modifierFlags == 0 && keyCode == keyBoardShortcutSaved.keyCode)
-
         if isExactSwitcherShortcutPressed {
             guard Defaults[.enableWindowSwitcher] else { return (false, nil) }
             if WindowUtil.shouldIgnoreKeybindForFrontmostApp() { return (false, nil) }
-            switcherSessionActive = true
+            beginSwitcherSession(with: keyBoardShortcutSaved)
             return (true, {
                 await self.handleKeybindActivation(
                     mode: .allWindows,
@@ -1006,22 +1019,18 @@ class KeybindHelper {
             })
         }
 
-        // Check alternate keybind (shares same modifier as primary keybind)
-        if isDesiredModifierPressedNow {
-            let alternateKey = Defaults[.alternateKeybindKey]
-            if alternateKey != 0, keyCode == alternateKey {
-                guard Defaults[.enableWindowSwitcher] else { return (false, nil) }
-                if WindowUtil.shouldIgnoreKeybindForFrontmostApp() { return (false, nil) }
-                switcherSessionActive = true
-                let mode = Defaults[.alternateKeybindMode]
-                return (true, {
-                    await self.handleKeybindActivation(
-                        mode: mode,
-                        isModifierPressed: true,
-                        isShiftPressed: flags.contains(.maskShift)
-                    )
-                })
-            }
+        if isAlternateShortcutPressed, let alternateShortcut {
+            guard Defaults[.enableWindowSwitcher] else { return (false, nil) }
+            if WindowUtil.shouldIgnoreKeybindForFrontmostApp() { return (false, nil) }
+            beginSwitcherSession(with: alternateShortcut)
+            let mode = Defaults[.alternateKeybindMode]
+            return (true, {
+                await self.handleKeybindActivation(
+                    mode: mode,
+                    isModifierPressed: true,
+                    isShiftPressed: flags.contains(.maskShift)
+                )
+            })
         }
 
         if previewIsCurrentlyVisible {
@@ -1070,7 +1079,7 @@ class KeybindHelper {
             case Int64(kVK_ANSI_H), Int64(kVK_ANSI_J), Int64(kVK_ANSI_K), Int64(kVK_ANSI_L):
                 if Defaults[.enableVimMotions],
                    !snapshot.isSearchFocused,
-                   allowsVimMotionNavigation(flags: flags, keyBoardShortcutSaved: keyBoardShortcutSaved)
+                   allowsVimMotionNavigation(flags: flags, keyBoardShortcutSaved: sessionKeybind())
                 {
                     let dir: ArrowDirection = switch keyCode {
                     case Int64(kVK_ANSI_H): .left
@@ -1147,13 +1156,20 @@ class KeybindHelper {
 
         if previewIsCurrentlyVisible,
            previewCoordinator.windowSwitcherCoordinator.windowSwitcherActive,
-           keyCode == keyBoardShortcutSaved.keyCode,
            !isSwitcherModifierKeyPressed,
-           keyBoardShortcutSaved.modifierFlags != 0,
            !flags.hasSuperfluousModifiers(ignoring: [Self.eventFlagForKeyCode(Defaults[.switcherBackwardKeyCode]) ?? .maskShift, .maskAlphaShift, .maskNumericPad])
         {
-            if WindowUtil.shouldIgnoreKeybindForFrontmostApp() { return (false, nil) }
-            return (true, { await self.handleKeybindActivation() })
+            let retriggerMode: SwitcherInvocationMode? = if keyCode == keyBoardShortcutSaved.keyCode, keyBoardShortcutSaved.modifierFlags != 0 {
+                .allWindows
+            } else if let alternateShortcut, keyCode == alternateShortcut.keyCode, alternateShortcut.modifierFlags != 0 {
+                Defaults[.alternateKeybindMode]
+            } else {
+                nil
+            }
+            if let retriggerMode {
+                if WindowUtil.shouldIgnoreKeybindForFrontmostApp() { return (false, nil) }
+                return (true, { await self.handleKeybindActivation(mode: retriggerMode) })
+            }
         }
 
         return (false, nil)

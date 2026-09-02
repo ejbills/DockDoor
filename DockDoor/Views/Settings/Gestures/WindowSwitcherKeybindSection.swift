@@ -9,6 +9,7 @@ struct WindowSwitcherKeybindSection: View {
     @Default(.fullscreenAppBlacklist) var fullscreenAppBlacklist
     @Default(.alternateKeybindKey) var alternateKeybindKey
     @Default(.alternateKeybindMode) var alternateKeybindMode
+    @Default(.alternateKeybindModifierFlags) var alternateKeybindModifierFlags
     @Default(.requireShiftTabToGoBack) var requireShiftTabToGoBack
     @Default(.switcherBackwardKeyCode) var switcherBackwardKeyCode
     @Default(.windowSwitcherSelectionKeyCode) var selectionKeyCode
@@ -235,20 +236,25 @@ struct WindowSwitcherKeybindSection: View {
     private var alternateShortcutsSection: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Alternate Shortcut").font(.headline)
-            Text("An additional trigger key using the same modifier, invoking the switcher with a different filter mode.")
+            Text("An additional trigger key, with its own modifier if desired, invoking the switcher with a different filter mode.")
                 .font(.caption)
                 .foregroundColor(.secondary)
 
             HStack(spacing: 12) {
-                // Modifier display (from primary keybind)
-                Text(modifierConverter.toString(keybindModel.modifierKey))
-                    .font(.system(size: 12, weight: .medium, design: .monospaced))
-                    .foregroundColor(.secondary)
+                Picker("Modifier", selection: $alternateKeybindModifierFlags) {
+                    Text("Same as main (\(modifierConverter.toString(keybindModel.modifierKey)))").tag(0)
+                    Text("Control ⌃").tag(Defaults[.Int64maskControl])
+                    Text("Option ⌥").tag(Defaults[.Int64maskAlternate])
+                    Text("Command ⌘").tag(Defaults[.Int64maskCommand])
+                }
+                .pickerStyle(.menu)
+                .labelsHidden()
+                .fixedSize()
                 Text("+")
                     .font(.system(size: 12))
                     .foregroundColor(.secondary)
 
-                KeyCaptureButton(keyCode: $alternateKeybindKey, emptyLabel: "Not set")
+                KeyCaptureButton(keyCode: $alternateKeybindKey, emptyLabel: "Not set", allowsEscape: true)
 
                 if alternateKeybindKey != 0 {
                     Button("Clear") {

@@ -322,9 +322,10 @@ extension Defaults.Keys {
 
     static let windowSwitcherSelectionKeyCode = Key<UInt16>("windowSwitcherSelectionKeyCode", default: UInt16(kVK_Return))
 
-    // MARK: - Alternate Window Switcher Keybind (shares modifier with primary keybind)
+    // MARK: - Alternate Window Switcher Keybind (modifier 0 = same as primary keybind)
 
     static let alternateKeybindKey = Key<UInt16>("alternateKeybindKey", default: 0)
+    static let alternateKeybindModifierFlags = Key<Int>("alternateKeybindModifierFlags", default: 0)
     static let alternateKeybindMode = Key<SwitcherInvocationMode>("alternateKeybindMode", default: .activeAppOnly)
 }
 
