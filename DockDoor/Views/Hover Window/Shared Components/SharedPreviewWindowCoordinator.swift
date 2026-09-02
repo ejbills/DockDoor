@@ -313,7 +313,10 @@ final class SharedPreviewWindowCoordinator: NSPanel {
                                  dockPositionOverride: DockPosition? = nil,
                                  dockItemFrameOverride: CGRect? = nil)
     {
-        let hostingView = NSHostingView(rootView: view)
+        let hostingView = NSHostingView(rootView: view.panelPresentationEffect(
+            dockPosition: dockPositionOverride ?? DockUtils.getDockPosition(),
+            animates: PanelPresentationEffect.shouldAnimate(true)
+        ))
 
         if let oldContentView = contentView {
             oldContentView.removeFromSuperview()
@@ -349,7 +352,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         }
 
         let finalFrame = CGRect(origin: position, size: newHoverWindowSize)
-        applyWindowFrame(finalFrame, animated: true, dockPositionOverride: dockPositionOverride)
+        applyWindowFrame(finalFrame)
         previousHoverWindowOrigin = position
     }
 
@@ -386,7 +389,10 @@ final class SharedPreviewWindowCoordinator: NSPanel {
                                                     updateAvailable: updateAvailable,
                                                     embeddedContentType: embeddedContentType,
                                                     hasScreenRecordingPermission: hasScreenRecordingPermission)
-        let newHostingView = NSHostingView(rootView: hoverView)
+        let newHostingView = NSHostingView(rootView: hoverView.panelPresentationEffect(
+            dockPosition: dockPositionOverride ?? DockUtils.getDockPosition(),
+            animates: PanelPresentationEffect.shouldAnimate(animated)
+        ))
 
         if let oldContentView = contentView {
             oldContentView.removeFromSuperview()
@@ -453,8 +459,7 @@ final class SharedPreviewWindowCoordinator: NSPanel {
         let finalFrame = CGRect(origin: position, size: newHoverWindowSize)
 
         switcherAnchorCenter = nil
-        setFrame(finalFrame, display: false)
-        applyWindowFrame(finalFrame, animated: animated, dockPositionOverride: dockPositionOverride)
+        applyWindowFrame(finalFrame)
         previousHoverWindowOrigin = position
         if centerOnScreen, windowSwitcherCoordinator.windowSwitcherActive {
             switcherAnchorCenter = CGPoint(x: finalFrame.midX, y: finalFrame.midY)
@@ -651,38 +656,8 @@ final class SharedPreviewWindowCoordinator: NSPanel {
     }
 
     @MainActor
-    private func applyWindowFrame(_ frame: CGRect, animated: Bool, dockPositionOverride: DockPosition? = nil) {
-        let shouldAnimate = animated && Defaults[.showAnimations]
-
-        if shouldAnimate {
-            // Window is appearing for the first time, apply slide animation
-            let dockPosition = dockPositionOverride ?? DockUtils.getDockPosition()
-            let animationOffset: CGFloat = 7.0
-            var startFrame = frame
-
-            switch dockPosition {
-            case .bottom, .cli:
-                startFrame.origin.y -= animationOffset
-            case .left:
-                startFrame.origin.x -= animationOffset
-            case .right:
-                startFrame.origin.x += animationOffset
-            default:
-                startFrame.origin.y -= animationOffset
-            }
-
-            setFrame(startFrame, display: true)
-            orderFront(nil)
-
-            NSAnimationContext.runAnimationGroup { context in
-                context.duration = 0.175
-                context.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
-                self.animator().setFrame(frame, display: true)
-            }
-        } else {
-            setFrame(frame, display: true)
-        }
-
+    private func applyWindowFrame(_ frame: CGRect) {
+        setFrame(frame, display: true)
         alphaValue = 1.0
         makeKeyAndOrderFront(nil)
         publishTapSnapshot()
