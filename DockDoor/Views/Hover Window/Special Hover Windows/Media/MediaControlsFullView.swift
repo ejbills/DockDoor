@@ -49,7 +49,7 @@ struct MediaControlsFullView: View {
             view.pinnable(appName: appName, bundleIdentifier: bundleIdentifier, type: .media)
         }
         .if(isMediaApp(bundleIdentifier)) { view in
-            view.mediaScrollable(bundleIdentifier: bundleIdentifier, mediaInfo: mediaInfo)
+            view.mediaScrollable(bundleIdentifier: bundleIdentifier, mediaInfo: mediaInfo, handlesSpacebar: !isPinnedMode)
         }
     }
 

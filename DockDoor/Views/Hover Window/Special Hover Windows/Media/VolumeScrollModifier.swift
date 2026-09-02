@@ -3,6 +3,7 @@ import SwiftUI
 
 struct MediaScrollModifier: ViewModifier {
     let bundleIdentifier: String
+    let handlesSpacebar: Bool
     @ObservedObject var mediaInfo: MediaInfo
     @State private var scrollMonitor: Any?
     @State private var seekDebounceWork: DispatchWorkItem?
@@ -14,7 +15,9 @@ struct MediaScrollModifier: ViewModifier {
             .background(ScrollHitTestHelper(view: $hitTestView))
             .onAppear {
                 setupMonitor()
-                shortcutRegistration = MediaKeyboardShortcutCoordinator.shared.register(mediaInfo)
+                if handlesSpacebar {
+                    shortcutRegistration = MediaKeyboardShortcutCoordinator.shared.register(mediaInfo)
+                }
             }
             // hitTestView resolves asynchronously after onAppear, and is reset on disappear so this refires even when SwiftUI reuses the NSView.
             .onChange(of: hitTestView) { newView in
@@ -176,7 +179,7 @@ private struct ScrollHitTestHelper: NSViewRepresentable {
 }
 
 extension View {
-    func mediaScrollable(bundleIdentifier: String, mediaInfo: MediaInfo) -> some View {
-        modifier(MediaScrollModifier(bundleIdentifier: bundleIdentifier, mediaInfo: mediaInfo))
+    func mediaScrollable(bundleIdentifier: String, mediaInfo: MediaInfo, handlesSpacebar: Bool = true) -> some View {
+        modifier(MediaScrollModifier(bundleIdentifier: bundleIdentifier, handlesSpacebar: handlesSpacebar, mediaInfo: mediaInfo))
     }
 }

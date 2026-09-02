@@ -10,6 +10,7 @@ struct MediaControlsEmbeddedView: View {
     let isLoadingMediaInfo: Bool
     let idealWidth: CGFloat?
     let backgroundAppearance: BackgroundAppearance
+    var isPinnedMode: Bool = false
 
     @Default(.uniformCardRadius) var uniformCardRadius
     @Default(.showAnimations) var showAnimations
@@ -25,7 +26,7 @@ struct MediaControlsEmbeddedView: View {
             )
             .dockStyle(backgroundAppearance: backgroundAppearance, cornerRadius: CardRadius.inner, outerPadding: 0)
             .if(isMediaApp(bundleIdentifier)) { view in
-                view.mediaScrollable(bundleIdentifier: bundleIdentifier, mediaInfo: mediaInfo)
+                view.mediaScrollable(bundleIdentifier: bundleIdentifier, mediaInfo: mediaInfo, handlesSpacebar: !isPinnedMode)
             }
     }
 

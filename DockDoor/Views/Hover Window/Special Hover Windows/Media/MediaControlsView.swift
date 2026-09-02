@@ -174,7 +174,8 @@ struct MediaControlsView: View {
                 artworkRotation: artworkRotation,
                 isLoadingMediaInfo: isLoadingMediaInfo,
                 idealWidth: idealWidth,
-                backgroundAppearance: backgroundAppearance
+                backgroundAppearance: backgroundAppearance,
+                isPinnedMode: isPinnedMode
             )
         } else {
             MediaControlsFullView(
