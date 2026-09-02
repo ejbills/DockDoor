@@ -543,9 +543,10 @@ extension WindowUtil {
             connectionID,
             &windowIDUInt32,
             1,
-            [.ignoreGlobalClipShape, qualityOption]
+            [.ignoreGlobalClipShape, .fullSize, qualityOption]
         ) as? [CGImage],
-            let capturedImage = capturedWindows.first
+            let capturedImage = capturedWindows.first,
+            !isFullyTransparent(capturedImage)
         else {
             throw captureError
         }
@@ -577,6 +578,33 @@ extension WindowUtil {
         }
 
         return cgImage
+    }
+
+    private static func isFullyTransparent(_ image: CGImage) -> Bool {
+        let alphaOffset: Int
+        switch image.alphaInfo {
+        case .premultipliedFirst, .first: alphaOffset = 0
+        case .premultipliedLast, .last: alphaOffset = 3
+        default: return false
+        }
+        guard image.bitsPerPixel == 32,
+              let data = image.dataProvider?.data,
+              let bytes = CFDataGetBytePtr(data)
+        else { return false }
+        let length = CFDataGetLength(data)
+        let stepX = max(image.width / 16, 1)
+        let stepY = max(image.height / 16, 1)
+        var y = 0
+        while y < image.height {
+            var x = 0
+            while x < image.width {
+                let offset = y * image.bytesPerRow + x * 4 + alphaOffset
+                if offset < length, bytes[offset] != 0 { return false }
+                x += stepX
+            }
+            y += stepY
+        }
+        return true
     }
 
     static func isValidElement(_ element: AXUIElement) -> Bool {
@@ -633,9 +661,9 @@ extension WindowUtil {
             return matchedWindow
         }
 
-        // Fallback metohd
+        let windowTitle = window.title?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
         for axWindow in axWindows {
-            if let windowTitle = window.title, let axTitle = try? axWindow.title(), isFuzzyMatch(windowTitle: windowTitle, axTitleString: axTitle) {
+            if !windowTitle.isEmpty, let axTitle = try? axWindow.title(), isFuzzyMatch(windowTitle: windowTitle, axTitleString: axTitle) {
                 return axWindow
             }
 
@@ -661,11 +689,12 @@ extension WindowUtil {
     static func isFuzzyMatch(windowTitle: String, axTitleString: String) -> Bool {
         let axTitleWords = axTitleString.lowercased().split(separator: " ")
         let windowTitleWords = windowTitle.lowercased().split(separator: " ")
+        guard !windowTitleWords.isEmpty else { return false }
 
         let matchingWords = axTitleWords.filter { windowTitleWords.contains($0) }
         let matchPercentage = Double(matchingWords.count) / Double(windowTitleWords.count)
 
-        return matchPercentage >= 0.90 || matchPercentage.isNaN || axTitleString.lowercased().contains(windowTitle.lowercased())
+        return matchPercentage >= 0.90 || axTitleString.lowercased().contains(windowTitle.lowercased())
     }
 
     static func findRunningApplicationByName(named applicationName: String) -> NSRunningApplication? {
