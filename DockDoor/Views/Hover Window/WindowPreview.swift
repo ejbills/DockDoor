@@ -910,7 +910,7 @@ struct WindowPreview: View, Equatable {
             )
             .fixedSize()
             .opacity(skeletonMode ? 0 : 1)
-            .allowsHitTesting(!skeletonMode)
+            .allowsHitTesting(!skeletonMode && !mockPreviewActive)
     }
 
     private func cancelFullPreviewHover() {

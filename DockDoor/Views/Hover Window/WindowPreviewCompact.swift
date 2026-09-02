@@ -211,6 +211,7 @@ struct WindowPreviewCompact: View, Equatable {
             handleWindowAction: handleWindowAction,
             onTap: onTap
         )
+        .allowsHitTesting(!mockPreviewActive)
     }
 
     @ViewBuilder

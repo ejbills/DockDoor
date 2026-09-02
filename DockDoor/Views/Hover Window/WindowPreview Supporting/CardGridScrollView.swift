@@ -20,15 +20,18 @@ struct CardGridScrollView: NSViewRepresentable {
     let contentKey: [WindowInfo.ViewSnapshot]
     let coordinator: PreviewStateCoordinator
     @Binding var scrolledFromStart: Bool
+    var isInteractive = true
     let makeCard: (FlowItem) -> AnyView
 
     func makeNSView(context: Context) -> ContainerView {
         let container = ContainerView(scrollsVertically: layout.scrollsVertically)
+        container.isInteractive = isInteractive
         context.coordinator.attach(container: container, representable: self)
         return container
     }
 
     func updateNSView(_ container: ContainerView, context: Context) {
+        container.isInteractive = isInteractive
         context.coordinator.update(representable: self)
     }
 
@@ -56,6 +59,7 @@ struct CardGridScrollView: NSViewRepresentable {
         }
 
         var onOffsetChange: ((CGFloat) -> Void)?
+        var isInteractive = true
 
         var contentSize: CGSize = .zero {
             didSet {
@@ -85,6 +89,10 @@ struct CardGridScrollView: NSViewRepresentable {
         required init?(coder: NSCoder) { nil }
 
         override var isFlipped: Bool { true }
+
+        override func hitTest(_ point: NSPoint) -> NSView? {
+            isInteractive ? super.hitTest(point) : nil
+        }
 
         override func setFrameSize(_ newSize: NSSize) {
             super.setFrameSize(newSize)

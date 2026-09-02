@@ -740,6 +740,7 @@ struct WindowPreviewHoverContainer: View {
                 contentKey: previewStateCoordinator.windows.map(\.viewSnapshot),
                 coordinator: previewStateCoordinator,
                 scrolledFromStart: $scrolledFromStart,
+                isInteractive: !mockPreviewActive,
                 makeCard: { item in
                     AnyView(buildFlowItem(
                         item: item,
