@@ -996,7 +996,7 @@ final class DockObserver {
 
             previewCoordinator.hideWindow()
 
-            Task { @MainActor [weak self] in
+            _ = Task { @MainActor [weak self] in
                 guard let self else { return }
 
                 if !hadAnyWindowsAtClickTime {

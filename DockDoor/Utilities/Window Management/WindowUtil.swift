@@ -1364,10 +1364,11 @@ extension WindowUtil {
     static func updateDesktopSpaceWindowCache(with windowInfo: WindowInfo) {
         desktopSpaceWindowCacheManager.updateCache(pid: windowInfo.app.processIdentifier) { windowSet in
             let matchingWindows = windowSet.filter { $0.id == windowInfo.id || $0.axElement == windowInfo.axElement }
-            if let matchingWindow = matchingWindows.reduce(nil as WindowInfo?) { best, window in
+            let bestMatch = matchingWindows.reduce(nil as WindowInfo?) { best, window in
                 guard let best else { return window }
                 return preferredCachedWindow(best, window)
-            } {
+            }
+            if let matchingWindow = bestMatch {
                 var matchingWindowCopy = matchingWindow
                 matchingWindowCopy.windowName = windowInfo.windowName
                 if let newSpaceID = windowInfo.spaceID {

@@ -208,17 +208,17 @@ private class WindowSwitchingCoordinator {
             await WindowUtil.updateAllWindowsInCurrentSpace()
             guard !Task.isCancelled else { return }
 
-            await MainActor.run {
+            await MainActor.run { [weak self, weak previewCoordinator] in
                 guard let self, let previewCoordinator else { return }
-                guard sessionId == self.currentSessionId else { return }
+                guard sessionId == currentSessionId else { return }
 
                 let coordinator = previewCoordinator.windowSwitcherCoordinator
                 guard coordinator.isKeybindSessionActive else { return }
 
-                let freshWindows = self.buildSwitcherWindows(mode: mode)
+                let freshWindows = buildSwitcherWindows(mode: mode)
                 guard !freshWindows.isEmpty else { return }
 
-                self.applyRefreshedSwitcherWindows(
+                applyRefreshedSwitcherWindows(
                     freshWindows,
                     coordinator: coordinator,
                     dockPosition: dockPosition,
