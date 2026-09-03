@@ -211,7 +211,7 @@ struct CardGridScrollView: NSViewRepresentable {
                 contentKey = representable.contentKey
                 makeCard = representable.makeCard
                 for (item, hostingView) in hostingViews {
-                    hostingView.rootView = representable.makeCard(item)
+                    hostingView.rootView = Self.hostedCard(representable.makeCard(item))
                 }
             }
         }
@@ -227,7 +227,7 @@ struct CardGridScrollView: NSViewRepresentable {
                 hostingViews.removeValue(forKey: item)
             }
             for (item, view) in hostingViews {
-                view.rootView = representable.makeCard(item)
+                view.rootView = Self.hostedCard(representable.makeCard(item))
             }
 
             var sizes: [FlowItem: CGSize] = [:]
@@ -272,12 +272,19 @@ struct CardGridScrollView: NSViewRepresentable {
         @discardableResult
         private func ensureView(for item: FlowItem, in contentView: NSView) -> NSHostingView<AnyView> {
             if let existing = hostingViews[item] { return existing }
-            let view = NSHostingView(rootView: makeCard?(item) ?? AnyView(EmptyView()))
+            let view = NSHostingView(rootView: Self.hostedCard(makeCard?(item) ?? AnyView(EmptyView())))
             view.sizingOptions = []
             if let frame = frames[item] { view.frame = frame }
             contentView.addSubview(view)
             hostingViews[item] = view
             return view
+        }
+
+        private static func hostedCard(_ card: AnyView) -> AnyView {
+            if #available(macOS 15.0, *) {
+                return AnyView(card.allowsWindowActivationEvents(true))
+            }
+            return card
         }
 
         private func materializePending(onlyVisible: Bool) {
