@@ -38,6 +38,76 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://dockdoor.net/donate</div>
 
+<a id="1.40.0"></a>
+# [Release 1.40.0](https://github.com/ejbills/DockDoor/releases/tag/1.40.0) - 2026-09-03
+
+## ✨ New Features
+- Browse and control every window from the menu bar
+  - New "Window Actions" submenu lists every open app and window with actions like minimize, close, quit, and quarter/half placement
+  - Click the DockDoor menu bar icon > Window Actions
+- Bigger right-click menu on previews
+  - Right-clicking a window preview now offers the full set of actions (quarter/half placement, centering, app controls), grouped by Window, Arrange, and Application
+  - Windowless apps get the same full action set in their right-click menu, not just Open New Window and Quit
+- Keep dock previews open after activating a window
+  - New "Keep preview open after hover activation" option in Settings > Dock Previews, for comparing or switching between windows without reopening the preview
+  - Only available when hovering is set to bring windows to the front; off by default
+- New "System Main Display" option for Dock Locking
+  - Settings > Dock Locking > "Lock Dock to" > System Main Display always tracks whichever screen currently has the menu bar
+  - DockDoor now moves the real Dock onto your locked display automatically a couple seconds after login or a display change
+  - Your locked display choice, and your pinned switcher display, now survive reboots reliably
+- Independent modifier and Escape support for the alternate switcher shortcut
+  - Settings > Gestures & Keybinds > Window Switcher > Alternate Shortcut now has its own Control/Option/Command modifier picker
+  - Escape can now be captured as the alternate shortcut key
+- Drag items out of the Folder widget
+  - Click and drag a file or folder from an open Folder widget into Finder, Mail, or another app
+- DockDoor Pro is now easier to find
+  - "Get DockDoor Pro…" added to the menu bar menu, linking to the paid Pro app
+
+## 🔧 Improvements & Stability
+- Faster, smoother window switcher and dock previews, especially with many windows open
+- Window switcher stays in sync with your desktop
+  - Opening the switcher refreshes the window list immediately, including terminal-launched apps like mpv and non-bundled games
+  - Closed windows from separate instances of the same app (e.g. a terminal app launched with special flags) no longer linger as stale entries
+  - Background refresh dropped from a 60-second to a 5-second interval, and no longer resets your current selection
+  - Live preview thumbnails and title updates now reach the switcher while it's open
+- Dock hover and scroll gestures are only intercepted when your cursor is actually near the Dock
+- DockDoor recovers automatically after sleep, screen wake, or a display/resolution change, instead of keybinds or previews going unresponsive
+- DockDoor backs off from an unresponsive app instead of stalling on it
+- "Quit app on last window close" is more reliable and less likely to misfire while an app is still working
+- New windows appear in previews and the switcher faster after being opened, and a slow app opening a window no longer delays detection of new windows in other apps
+- Press Return (not just numpad Enter or your custom key) to select the highlighted window in the switcher
+- Traffic-light-style preview buttons (close, minimize, quit, etc.) now render as glossy macOS 27-style orbs, unless "monochrome" buttons are enabled in Settings > Appearance
+- Settings now warns when your locked display can't hold the Dock because another display blocks its edge, with a suggestion to rearrange displays
+
+## 🐛 Bug Fixes
+- Fixed the Dock staying stuck out of its auto-hide state after clicking a Dock icon
+- Selected window in the switcher/preview now stays visible with an accent border when "Hide card background" is enabled
+- Floating notification-style popups (e.g. Outlook's meeting reminder) no longer show up as window entries
+- Fixed dock preview scrolling being broken
+- Untitled toolbar/overlay windows no longer get mistaken for real app windows
+- Fixed blank/transparent preview thumbnails under Stage Manager
+- Windows on other Spaces now show up correctly and separately instead of merging with the current Space's windows
+- "Quit app on last window close" now reliably triggers when you close the final window, and no longer quits apps that are just briefly busy
+- Apps that quit without a clean termination notice no longer leave stale entries behind
+- Detached native tabs now each show as a separate entry instead of collapsing into one
+- Window titles (e.g. browser tab titles) update more reliably
+- Pinned media widgets no longer intercept the spacebar meant for another app
+- Closing or minimizing a window from the switcher keeps it open until there's nothing left to show
+- Closing the Settings window now cleans up its window tracking more reliably
+- Cmd+W, Cmd+M, and standard Edit menu shortcuts (undo, cut, copy, paste, select all) now work in the Settings window
+- Preview mockups shown in Settings' appearance options no longer respond to clicks or hover as if they were a real window preview
+- Switcher stays centered instead of drifting while you type to filter
+- Fixed a crash that could occur while typing to search in the window switcher
+- Clicking a window in a Dock preview no longer briefly shrinks it, and clicking a Dock icon no longer triggers a stray delayed preview
+- Newly opened windows now reliably replace an app's "no windows" placeholder, even outside an active switcher session
+- Fixed a slight height mismatch in the title pill for minimized/hidden window cards
+- The switcher now closes reliably after external triggers and after releasing its modifier key
+- Fixed a hang that could occur when opening Settings
+
+
+[Changes][1.40.0]
+
+
 <a id="1.39.5"></a>
 # [Release 1.39.5](https://github.com/ejbills/DockDoor/releases/tag/1.39.5) - 2026-08-01
 
@@ -2306,6 +2376,7 @@ v1.0
 [Changes][releases]
 
 
+[1.40.0]: https://github.com/ejbills/DockDoor/compare/1.39.5...1.40.0
 [1.39.5]: https://github.com/ejbills/DockDoor/compare/1.39.4...1.39.5
 [1.39.4]: https://github.com/ejbills/DockDoor/compare/1.39.3...1.39.4
 [1.39.3]: https://github.com/ejbills/DockDoor/compare/1.39.2...1.39.3
