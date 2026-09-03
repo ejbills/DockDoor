@@ -38,6 +38,16 @@
 </style>
 <div class="donation-link" target="_blank">☕ Support kepler.cafe at https://dockdoor.net/donate</div>
 
+<a id="1.40.1"></a>
+# [Release 1.40.1](https://github.com/ejbills/DockDoor/releases/tag/1.40.1) - 2026-09-03
+
+## 🐛 Bug Fixes
+- Hot fix for macos 26.3+ where clicks were not reacting inside dock windows
+
+
+[Changes][1.40.1]
+
+
 <a id="1.40.0"></a>
 # [Release 1.40.0](https://github.com/ejbills/DockDoor/releases/tag/1.40.0) - 2026-09-03
 
@@ -2376,6 +2386,7 @@ v1.0
 [Changes][releases]
 
 
+[1.40.1]: https://github.com/ejbills/DockDoor/compare/1.40.0...1.40.1
 [1.40.0]: https://github.com/ejbills/DockDoor/compare/1.39.5...1.40.0
 [1.39.5]: https://github.com/ejbills/DockDoor/compare/1.39.4...1.39.5
 [1.39.4]: https://github.com/ejbills/DockDoor/compare/1.39.3...1.39.4
