@@ -223,6 +223,7 @@ class WindowManipulationObservers {
 
     private func createObserverForApp(_ app: NSRunningApplication) {
         let pid = app.processIdentifier
+        guard pid != ProcessInfo.processInfo.processIdentifier else { return }
 
         DebugLogger.measure("createObserverForApp", details: "App: \(app.localizedName ?? "Unknown") (PID: \(pid))") {
             var observer: AXObserver?

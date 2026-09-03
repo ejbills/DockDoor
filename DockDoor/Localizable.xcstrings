@@ -89956,6 +89956,9 @@
         }
       }
     },
+    "Keep Dock previews visible while the pointer remains over them after a hover brings a window to the front." : {
+
+    },
     "Keep Open" : {
       "localizations" : {
         "af" : {
@@ -90145,6 +90148,9 @@
           }
         }
       }
+    },
+    "Keep preview open after hover activation" : {
+
     },
     "Keep preview when app terminates" : {
       "localizations" : {
