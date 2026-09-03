@@ -82,6 +82,7 @@ extension Defaults.Keys {
     static let preventPreviewReentryDuringFadeOut = Key<Bool>("preventPreviewReentryDuringFadeOut", default: false)
     static let inactivityTimeout = Key<CGFloat>("inactivityTimeout", default: 0.2)
     static let previewHoverAction = Key<PreviewHoverAction>("previewHoverAction", default: .none)
+    static let keepPreviewOnHoverActivation = Key<Bool>("keepPreviewOnHoverActivation", default: false)
     static let aeroShakeAction = Key<AeroShakeAction>("aeroShakeAction", default: .none)
 
     static let showSpecialAppControls = Key<Bool>("showSpecialAppControls", default: true)

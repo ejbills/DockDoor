@@ -103,6 +103,7 @@ struct MainSettingsView: View {
                 Defaults[.dockPreviewActivationMode] = Defaults.Keys.dockPreviewActivationMode.defaultValue
                 Defaults[.dockPreviewActivationModifier] = Defaults.Keys.dockPreviewActivationModifier.defaultValue
                 Defaults[.previewHoverAction] = Defaults.Keys.previewHoverAction.defaultValue
+                Defaults[.keepPreviewOnHoverActivation] = Defaults.Keys.keepPreviewOnHoverActivation.defaultValue
 
                 showMenuBarIcon = Defaults.Keys.showMenuBarIcon.defaultValue
                 Defaults[.enableWindowSwitcher] = Defaults.Keys.enableWindowSwitcher.defaultValue

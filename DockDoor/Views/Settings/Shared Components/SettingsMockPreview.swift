@@ -78,6 +78,7 @@ struct SettingsMockPreview: View {
     @Default(.hidePreviewCardBackground) private var hidePreviewCardBackground
     @Default(.tapEquivalentInterval) private var tapEquivalentInterval
     @Default(.previewHoverAction) private var previewHoverAction
+    @Default(.keepPreviewOnHoverActivation) private var keepPreviewOnHoverActivation
     @Default(.showActiveWindowBorder) private var showActiveWindowBorder
     @Default(.activeAppIndicatorColor) private var activeAppIndicatorColor
     @Default(.showAnimations) private var showAnimations
@@ -211,6 +212,7 @@ struct SettingsMockPreview: View {
             hidePreviewCardBackground: hidePreviewCardBackground,
             tapEquivalentInterval: tapEquivalentInterval,
             previewHoverAction: previewHoverAction,
+            keepPreviewOnHoverActivation: keepPreviewOnHoverActivation,
             showActiveWindowBorder: showActiveWindowBorder,
             activeAppIndicatorColor: activeAppIndicatorColor,
             showAnimations: showAnimations,

@@ -27,6 +27,16 @@ private let observedAXNotifications: [String] = [
 class WindowManipulationObservers {
     private let previewCoordinator: SharedPreviewWindowCoordinator
 
+    static func shouldDismissPreviewOnAppActivation(
+        isKeybindSessionActive: Bool,
+        keepPreviewOnHoverActivation: Bool,
+        previewHoverAction: PreviewHoverAction,
+        mouseIsWithinPreviewWindow: Bool
+    ) -> Bool {
+        guard !isKeybindSessionActive else { return false }
+        return !(keepPreviewOnHoverActivation && previewHoverAction == .tap && mouseIsWithinPreviewWindow)
+    }
+
     private var observers: [pid_t: AXObserver] = [:]
     private var runningApplicationsObservation: NSKeyValueObservation?
     private var debouncedTasks: [String: Task<Void, Never>] = [:]
@@ -174,7 +184,12 @@ class WindowManipulationObservers {
             return
         }
 
-        if !previewCoordinator.windowSwitcherCoordinator.isKeybindSessionActive {
+        if Self.shouldDismissPreviewOnAppActivation(
+            isKeybindSessionActive: previewCoordinator.windowSwitcherCoordinator.isKeybindSessionActive,
+            keepPreviewOnHoverActivation: Defaults[.keepPreviewOnHoverActivation],
+            previewHoverAction: Defaults[.previewHoverAction],
+            mouseIsWithinPreviewWindow: previewCoordinator.mouseIsWithinPreviewWindow
+        ) {
             previewCoordinator.hideWindow()
         }
 
