@@ -177,7 +177,10 @@ enum DockDoorCommands {
                 dockItemElement: nil,
                 overrideDelay: true,
                 centeredHoverWindowState: .windowSwitcher,
-                onWindowTap: nil
+                onWindowTap: { [weak coordinator] in
+                    wsCoordinator.deactivateKeybindSession()
+                    coordinator?.hideWindow()
+                }
             )
         }
     }

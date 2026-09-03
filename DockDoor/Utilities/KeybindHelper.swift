@@ -997,9 +997,19 @@ class KeybindHelper {
                     return (true, { @MainActor in
                         let keepsSwitcherOpen = self.previewCoordinator.performActionOnCurrentWindow(action: action)
                         if !keepsSwitcherOpen || self.previewCoordinator.windowSwitcherCoordinator.windows.isEmpty {
+                            self.switcherSessionActive = false
                             self.windowSwitchingCoordinator.cancelSwitching(previewCoordinator: self.previewCoordinator)
                             self.preventSwitcherHideOnRelease = false
                             self.hasProcessedModifierRelease = true
+                        } else {
+                            self.preventSwitcherHideOnRelease = false
+
+                            if !Defaults[.preventSwitcherHide], !self.isSwitcherModifierKeyPressed {
+                                self.switcherSessionActive = false
+                                self.windowSwitchingCoordinator.cancelSwitching(previewCoordinator: self.previewCoordinator)
+                                self.hasProcessedModifierRelease = true
+                                self.previewCoordinator.hideWindow()
+                            }
                         }
                     })
                 }
