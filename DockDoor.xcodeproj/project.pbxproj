@@ -41,7 +41,6 @@
 		49327679B03B44DC8FC44058 /* WindowSwitcherGesturesSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8E0D699507444D3985957B6 /* WindowSwitcherGesturesSection.swift */; };
 		4E665A7B0E9F4D458307E40493674B2B /* DockPreviewsSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 970D8CBC36D84F14B8E6E83487035CFB /* DockPreviewsSettingsView.swift */; };
 		555110B7F7B99C7BD510DBC7 /* NativeTabGroupingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00D4B366E3CF5338182E065 /* NativeTabGroupingTests.swift */; };
-		51B451A9B8D84A95B345291D /* PreviewActivationPolicyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 700805FB5E68420AAEDB9C8F /* PreviewActivationPolicyTests.swift */; };
 		5BCC969779654E67A6386C12FC709616 /* Glow.wav in Resources */ = {isa = PBXBuildFile; fileRef = D924F5BAEF564CC1AF84527876E14356 /* Glow.wav */; };
 		5C1867B80C2F46948F5C6336 /* SupportLinksSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2844BF18EB4D089A62A368 /* SupportLinksSection.swift */; };
 		5E55EE57430C4695BD7681A73BF3BF9D /* AdvancedSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B056906A7ACD4903BD5E1627B359AE2C /* AdvancedSettingsView.swift */; };
@@ -291,7 +290,6 @@
 		AA11001122334455AA110011 /* DockLocker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockLocker.swift; sourceTree = "<group>"; };
 		AA11001122334455AA110033 /* DockLockingSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockLockingSettingsView.swift; sourceTree = "<group>"; };
 		AA11001122334455AA110055 /* DockLockerGeometryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockLockerGeometryTests.swift; sourceTree = "<group>"; };
-		700805FB5E68420AAEDB9C8F /* PreviewActivationPolicyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewActivationPolicyTests.swift; sourceTree = "<group>"; };
 		AA11001122334455AA110100 /* DockDoorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DockDoorTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		AC298B81953848F481EE849906E0AE77 /* MediaRemoteService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaRemoteService.swift; sourceTree = "<group>"; };
 		B056906A7ACD4903BD5E1627B359AE2C /* AdvancedSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedSettingsView.swift; sourceTree = "<group>"; };
@@ -612,7 +610,6 @@
 			children = (
 				AA11001122334455AA110055 /* DockLockerGeometryTests.swift */,
 				D00D4B366E3CF5338182E065 /* NativeTabGroupingTests.swift */,
-				700805FB5E68420AAEDB9C8F /* PreviewActivationPolicyTests.swift */,
 			);
 			path = DockDoorTests;
 			sourceTree = "<group>";
@@ -1102,7 +1099,6 @@
 			files = (
 				AA11001122334455AA110066 /* DockLockerGeometryTests.swift in Sources */,
 				555110B7F7B99C7BD510DBC7 /* NativeTabGroupingTests.swift in Sources */,
-				51B451A9B8D84A95B345291D /* PreviewActivationPolicyTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
