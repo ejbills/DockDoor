@@ -922,7 +922,8 @@ extension WindowUtil {
 
     static func discoverWindowsViaAX(
         app: NSRunningApplication,
-        excludeWindowIDs: Set<CGWindowID> = []
+        excludeWindowIDs: Set<CGWindowID> = [],
+        restorePersistedOrder: Bool = true
     ) async -> Int {
         let pid = app.processIdentifier
 
@@ -959,14 +960,15 @@ extension WindowUtil {
                 excludeWindowIDs: excludeWindowIDs,
                 skipWindowIDs: freshCachedIDs,
                 existingCachedIDs: allCachedIDs,
-                cgCandidates: cgCandidates
+                cgCandidates: cgCandidates,
+                restorePersistedOrder: restorePersistedOrder
             )
         }
 
         return axWindows.count
     }
 
-    static func updateNewWindowsForApp(_ app: NSRunningApplication) async {
+    static func updateNewWindowsForApp(_ app: NSRunningApplication, restorePersistedOrder: Bool = true) async {
         WindowManipulationObservers.ensureObserver(for: app)
         if shouldCaptureWindowImages() {
             if let content = await getShareableContent(onScreenWindowsOnly: false) {
@@ -978,13 +980,13 @@ extension WindowUtil {
                 let freshCachedIDs = freshCachedWindowIDs(for: app.processIdentifier)
 
                 await LimitedConcurrency.forEachNonThrowing(appWindows, maxConcurrent: 4, timeout: 10) { window in
-                    try await captureAndCacheWindowInfo(window: window, displayApp: app, skipWindowIDs: freshCachedIDs)
+                    try await captureAndCacheWindowInfo(window: window, displayApp: app, skipWindowIDs: freshCachedIDs, restorePersistedOrder: restorePersistedOrder)
                 }
             }
         }
 
         // AX fallback
-        await discoverNewWindowsViaAXFallback(app: app)
+        _ = await discoverWindowsViaAX(app: app, restorePersistedOrder: restorePersistedOrder)
         await refreshAXFallbackWindowImages(for: app.processIdentifier)
     }
 
@@ -1094,7 +1096,8 @@ extension WindowUtil {
         window: SCWindow,
         displayApp: NSRunningApplication,
         ownerApp: NSRunningApplication? = nil,
-        skipWindowIDs: Set<CGWindowID> = []
+        skipWindowIDs: Set<CGWindowID> = [],
+        restorePersistedOrder: Bool = true
     ) async throws {
         let windowID = window.windowID
         guard let ownerApp = ownerApp ?? WindowOwnerResolver.ownerApp(for: window) else {
@@ -1191,12 +1194,12 @@ extension WindowUtil {
             )
 
         if shouldWindowBeCaptured {
-            let persistedData = bundleId.flatMap {
+            let persistedData = restorePersistedOrder ? bundleId.flatMap {
                 WindowOrderPersistence.getPersistedTimestamp(
                     bundleIdentifier: $0,
                     windowTitle: window.title
                 )
-            }
+            } : nil
             let lastAccessedTime = persistedData?.lastAccessedTime ?? Date.now
             let creationTime = persistedData?.creationTime
 
@@ -1231,8 +1234,80 @@ extension WindowUtil {
         excludeWindowIDs: Set<CGWindowID>,
         skipWindowIDs: Set<CGWindowID> = [],
         existingCachedIDs: Set<CGWindowID> = [],
-        cgCandidates: [[String: AnyObject]]? = nil
+        cgCandidates: [[String: AnyObject]]? = nil,
+        restorePersistedOrder: Bool = true
     ) async throws {
+        guard var info = buildAXWindowInfo(
+            axWindow: axWindow,
+            appAxElement: appAxElement,
+            app: app,
+            excludeWindowIDs: excludeWindowIDs,
+            skipWindowIDs: skipWindowIDs,
+            existingCachedIDs: existingCachedIDs,
+            cgCandidates: cgCandidates,
+            restorePersistedOrder: restorePersistedOrder
+        ) else { return }
+
+        if let image = try? await captureWindowImage(windowID: info.id, pid: app.processIdentifier, windowTitle: info.windowName) {
+            info.image = image
+            info.imageCapturedTime = Date()
+        }
+
+        updateDesktopSpaceWindowCache(with: info)
+    }
+
+    private static let createdWindowRetryDelays: [UInt64] = [0, 100_000_000, 250_000_000, 500_000_000, 1_000_000_000]
+    private static let createdWindowsInFlightLock = NSLock()
+    private static var createdWindowsInFlight = Set<AXUIElement>()
+
+    static func cacheCreatedWindow(axWindow: AXUIElement, app: NSRunningApplication) async {
+        let pid = app.processIdentifier
+        guard app.activationPolicy != .prohibited, !AXResponsiveness.isUnresponsive(pid) else { return }
+        if let bundleId = app.bundleIdentifier, filteredBundleIdentifiers.contains(bundleId) { return }
+        guard !isAppFiltered(app) else { return }
+
+        var cgID: CGWindowID = 0
+        guard _AXUIElementGetWindow(axWindow, &cgID) == .success, cgID != 0 else { return }
+
+        createdWindowsInFlightLock.lock()
+        let alreadyInFlight = !createdWindowsInFlight.insert(axWindow).inserted
+        createdWindowsInFlightLock.unlock()
+        guard !alreadyInFlight else { return }
+        defer {
+            createdWindowsInFlightLock.lock()
+            createdWindowsInFlight.remove(axWindow)
+            createdWindowsInFlightLock.unlock()
+        }
+
+        let appAxElement = AXUIElementCreateApplication(pid)
+        for delay in createdWindowRetryDelays {
+            if delay > 0 {
+                try? await Task.sleep(nanoseconds: delay)
+            }
+            if desktopSpaceWindowCacheManager.readCache(pid: pid).contains(where: { $0.id == cgID }) { return }
+            let cgCandidates = getCGWindowCandidates(for: pid)
+            guard isValidCGWindowCandidate(cgID, in: cgCandidates) else { continue }
+            try? await captureAndCacheAXWindowInfo(
+                axWindow: axWindow,
+                appAxElement: appAxElement,
+                app: app,
+                excludeWindowIDs: [],
+                cgCandidates: cgCandidates,
+                restorePersistedOrder: false
+            )
+        }
+    }
+
+    private static func buildAXWindowInfo(
+        axWindow: AXUIElement,
+        appAxElement: AXUIElement,
+        app: NSRunningApplication,
+        excludeWindowIDs: Set<CGWindowID>,
+        skipWindowIDs: Set<CGWindowID> = [],
+        existingCachedIDs: Set<CGWindowID> = [],
+        cgCandidates: [[String: AnyObject]]? = nil,
+        restorePersistedOrder: Bool = true
+    ) -> WindowInfo? {
         let pid = app.processIdentifier
 
         // Quick window ID check first (fast path)
@@ -1240,10 +1315,10 @@ extension WindowUtil {
         if _AXUIElementGetWindow(axWindow, &cgID) == .success, cgID != 0 {
             // Skip if already cached with fresh image (pre-computed by caller)
             if skipWindowIDs.contains(cgID) {
-                return
+                return nil
             }
             guard !excludeWindowIDs.contains(cgID) else {
-                return
+                return nil
             }
         }
 
@@ -1259,15 +1334,15 @@ extension WindowUtil {
             if let mapped = mapAXToCG(attributes: attributes, candidates: cgCandidates, excluding: usedIDs) {
                 cgID = mapped
             } else {
-                return
+                return nil
             }
         }
 
         guard !excludeWindowIDs.contains(cgID) else {
-            return
+            return nil
         }
         guard !usedIDs.contains(cgID) else {
-            return
+            return nil
         }
         guard WindowCandidateDiscriminator.isActualWindow(
             app: app,
@@ -1275,22 +1350,22 @@ extension WindowUtil {
             level: cgID.cgsLevel(),
             attributes: attributes
         ) else {
-            return
+            return nil
         }
 
         let titleFilters = Defaults[.windowTitleFilters]
         if !titleFilters.isEmpty {
             let title = attributes.title ?? cgID.cgsTitle() ?? ""
             if titleFilters.contains(where: { title.lowercased().contains($0.lowercased()) }) {
-                return
+                return nil
             }
         }
 
         guard isValidCGWindowCandidate(cgID, in: cgCandidates) else {
-            return
+            return nil
         }
         guard let cgEntry = findCGEntry(for: cgID, in: cgCandidates) else {
-            return
+            return nil
         }
 
         let activeSpaceIDs = currentActiveSpaceIDs()
@@ -1302,14 +1377,14 @@ extension WindowUtil {
             activeSpaceIDs: activeSpaceIDs,
             scBacked: false
         ) else {
-            return
+            return nil
         }
 
         let windowTitle = attributes.title ?? cgID.cgsTitle()
         let minimizedState = (try? axWindow.isMinimized()) ?? false
         let hiddenState = app.isHidden
 
-        let persistedData: WindowOrderPersistence.PersistedWindowEntry? = if let bundleId = app.bundleIdentifier {
+        let persistedData: WindowOrderPersistence.PersistedWindowEntry? = if restorePersistedOrder, let bundleId = app.bundleIdentifier {
             WindowOrderPersistence.getPersistedTimestamp(bundleIdentifier: bundleId, windowTitle: windowTitle)
         } else {
             nil
@@ -1330,13 +1405,7 @@ extension WindowUtil {
             isHidden: hiddenState
         )
         info.windowName = windowTitle
-
-        if let image = try? await captureWindowImage(windowID: cgID, pid: pid, windowTitle: windowTitle) {
-            info.image = image
-            info.imageCapturedTime = Date()
-        }
-
-        updateDesktopSpaceWindowCache(with: info)
+        return info
     }
 
     private static let minUsableImageDimension = 10
@@ -1645,9 +1714,9 @@ extension WindowUtil {
             = switch sortOrder
         {
         case .recentlyUsed:
-            windows.sorted { $0.lastAccessedTime > $1.lastAccessedTime }
+            windows.sorted { $0.lastAccessedTime != $1.lastAccessedTime ? $0.lastAccessedTime > $1.lastAccessedTime : $0.id > $1.id }
         case .creationOrder:
-            windows.sorted { $0.creationTime < $1.creationTime }
+            windows.sorted { $0.creationTime != $1.creationTime ? $0.creationTime < $1.creationTime : $0.id < $1.id }
         case .alphabeticalByTitle:
             windows.sorted { ($0.windowName ?? "").localizedCaseInsensitiveCompare($1.windowName ?? "") == .orderedAscending }
         case .alphabeticalByAppName:

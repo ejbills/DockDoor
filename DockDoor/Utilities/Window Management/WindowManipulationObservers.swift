@@ -257,11 +257,11 @@ class WindowManipulationObservers {
 
     func handleNewWindow(for pid: pid_t) {
         let delay = AXResponsiveness.isUnresponsive(pid) ? AXResponsiveness.backoff : windowProcessingDebounceInterval
-        debounce(key: "windowCreation", delay: delay) {
+        debounce(key: "windowCreation-\(pid)", delay: delay) {
             if let app = NSRunningApplication(processIdentifier: pid) {
                 DebugLogger.log("handleNewWindow", details: "App: \(app.localizedName ?? "Unknown") (PID: \(pid))")
                 await DebugLogger.measureAsync("updateNewWindowsForApp", details: "PID: \(pid)") {
-                    await WindowUtil.updateNewWindowsForApp(app)
+                    await WindowUtil.updateNewWindowsForApp(app, restorePersistedOrder: false)
                 }
             }
         }
@@ -351,6 +351,9 @@ class WindowManipulationObservers {
                 })
             }
         case kAXWindowCreatedNotification:
+            Task.detached(priority: .userInitiated) {
+                await WindowUtil.cacheCreatedWindow(axWindow: element, app: app)
+            }
             handleNewWindow(for: pid)
         case kAXTitleChangedNotification:
             let windowID = try? element.cgWindowId()
@@ -462,6 +465,14 @@ func axObserverCallback(observer: AXObserver, element: AXUIElement, notification
     }
 
     axObserverWorkQueue.async {
+        if notification == kAXWindowCreatedNotification,
+           let app = NSRunningApplication(processIdentifier: pid),
+           let observerInstance = activeWindowManipulationObserversInstance
+        {
+            observerInstance.processAXNotification(element: element, notificationName: notification, app: app, pid: pid)
+            return
+        }
+
         pendingNotifications[key]?.cancel()
 
         let workItem = DispatchWorkItem {

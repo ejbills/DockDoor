@@ -12,6 +12,7 @@ enum AXResponsiveness {
     private static let lock = NSLock()
     private static var unresponsiveUntil: [pid_t: Date] = [:]
     static let backoff: TimeInterval = 5
+    static let hangThreshold: TimeInterval = 0.5
 
     static func markUnresponsive(_ pid: pid_t) {
         guard pid > 0, pid != ProcessInfo.processInfo.processIdentifier else { return }
@@ -32,13 +33,13 @@ enum AXResponsiveness {
 }
 
 extension AXUIElement {
-    func axCallWhichCanThrow<T>(_ result: AXError, _ successValue: inout T) throws -> T? {
+    func axCallWhichCanThrow<T>(_ result: AXError, _ successValue: inout T, elapsed: TimeInterval = 0) throws -> T? {
         switch result {
         case .success: return successValue
-        // .cannotComplete can happen if the app is unresponsive; we throw in that case to retry until the call succeeds
+        // An instant .cannotComplete means the element isn't ready yet; only a slow one means the app is hung
         case .cannotComplete:
             var pid = pid_t(0)
-            if AXUIElementGetPid(self, &pid) == .success {
+            if elapsed >= AXResponsiveness.hangThreshold, AXUIElementGetPid(self, &pid) == .success {
                 AXResponsiveness.markUnresponsive(pid)
             }
             throw AxError.runtimeError
@@ -59,6 +60,7 @@ extension AXUIElement {
 
     func attribute<T>(_ key: String, _ _: T.Type) throws -> T? {
         var value: AnyObject?
+        let start = CFAbsoluteTimeGetCurrent()
         let result: AXError = if needsMainThreadAXAccess {
             DispatchQueue.main.sync {
                 AXUIElementCopyAttributeValue(self, key as CFString, &value)
@@ -66,7 +68,7 @@ extension AXUIElement {
         } else {
             AXUIElementCopyAttributeValue(self, key as CFString, &value)
         }
-        return try axCallWhichCanThrow(result, &value) as? T
+        return try axCallWhichCanThrow(result, &value, elapsed: CFAbsoluteTimeGetCurrent() - start) as? T
     }
 
     private var needsMainThreadAXAccess: Bool {
