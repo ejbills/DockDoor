@@ -347,10 +347,10 @@ struct WindowPreview: View, Equatable {
                     .font(appearance.windowTitleFontSize.font)
                     .italic()
                     .foregroundStyle(.secondary)
+                    .frame(height: 17 * appearance.trafficLightButtonScale)
                     .padding(4)
                     .if(!appearance.disableDockStyleTitles) { view in
                         view.materialPill(backgroundAppearance: backgroundAppearance)
-                            .frame(height: 34)
                     }
             }
         }
@@ -608,10 +608,10 @@ struct WindowPreview: View, Equatable {
                     .font(appearance.windowTitleFontSize.font)
                     .italic()
                     .foregroundStyle(.secondary)
+                    .frame(height: 17)
                     .padding(4)
                     .if(!appearance.disableDockStyleTitles) { view in
                         view.materialPill(backgroundAppearance: backgroundAppearance)
-                            .frame(height: 34)
                     }
             }
         }
@@ -695,10 +695,10 @@ struct WindowPreview: View, Equatable {
                     .font(appearance.windowTitleFontSize.font)
                     .italic()
                     .foregroundStyle(.secondary)
+                    .frame(height: 17 * appearance.trafficLightButtonScale)
                     .padding(4)
                     .if(!appearance.disableDockStyleTitles) { view in
                         view.materialPill(backgroundAppearance: backgroundAppearance)
-                            .frame(height: 34)
                     }
             }
         }
