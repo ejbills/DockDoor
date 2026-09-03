@@ -57932,6 +57932,9 @@
         }
       }
     },
+    "DockDoor Free has no paywall and never will. Pro is a separate app that replaces the macOS Dock entirely for far deeper system control, and buying it is the best way to support the free project." : {
+      "comment" : "DockDoor Pro banner description"
+    },
     "DockDoor is open source on GitHub" : {
       "localizations" : {
         "af" : {
@@ -58693,7 +58696,7 @@
       }
     },
     "DockDoor Pro" : {
-      "comment" : "DockDoor Pro banner title\nPro hint trailing label",
+      "comment" : "DockDoor Pro banner title",
       "localizations" : {
         "af" : {
           "stringUnit" : {
@@ -128818,15 +128821,6 @@
         }
       }
     },
-    "Pro lets you restyle the Dock itself: Liquid Glass, frosted or clear materials, spring magnification and per-display layouts." : {
-
-    },
-    "Pro replaces the Dock outright, so you get a separate dock on every display with no jumping at all." : {
-
-    },
-    "Pro ships a full Alt+Tab replacement with live previews, built into the dock itself." : {
-
-    },
     "Profile" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -134350,9 +134344,6 @@
     },
     "Replace the Dock entirely with the paid app from the same developer" : {
 
-    },
-    "Replace the macOS Dock entirely. Spring magnification, folder fan-out, a drag-and-drop file tray, per-display docks, a widget marketplace and a full Alt+Tab replacement." : {
-      "comment" : "DockDoor Pro banner description"
     },
     "Replaces the blurred/transparent background with a solid color. Useful for accessibility or readability." : {
       "localizations" : {
@@ -188095,12 +188086,6 @@
           }
         }
       }
-    },
-    "Want more than media and calendar? Pro has a widget marketplace with clock, weather, battery and community-built widgets." : {
-
-    },
-    "Want to replace the whole Dock? See DockDoor Pro" : {
-
     },
     "Want to see for yourself? Review our source code" : {
       "localizations" : {

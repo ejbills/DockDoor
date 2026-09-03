@@ -306,11 +306,9 @@ class PreviewStateCoordinator: ObservableObject {
 
         var windowsWereAdded = false
         for newWin in gated {
-            if isKeybindSessionActive,
-               let placeholderIndex = windows.firstIndex(where: {
-                   $0.isWindowlessApp && $0.app.processIdentifier == newWin.app.processIdentifier
-               })
-            {
+            if let placeholderIndex = windows.firstIndex(where: {
+                $0.isWindowlessApp && $0.app.processIdentifier == newWin.app.processIdentifier
+            }) {
                 windows[placeholderIndex] = newWin
                 windowsWereAdded = true
                 continue
