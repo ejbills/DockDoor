@@ -21,17 +21,20 @@ struct CardGridScrollView: NSViewRepresentable {
     let coordinator: PreviewStateCoordinator
     @Binding var scrolledFromStart: Bool
     var isInteractive = true
+    var onBackgroundTap: (() -> Void)?
     let makeCard: (FlowItem) -> AnyView
 
     func makeNSView(context: Context) -> ContainerView {
         let container = ContainerView(scrollsVertically: layout.scrollsVertically)
         container.isInteractive = isInteractive
+        container.onBackgroundTap = onBackgroundTap
         context.coordinator.attach(container: container, representable: self)
         return container
     }
 
     func updateNSView(_ container: ContainerView, context: Context) {
         container.isInteractive = isInteractive
+        container.onBackgroundTap = onBackgroundTap
         context.coordinator.update(representable: self)
     }
 
@@ -59,7 +62,9 @@ struct CardGridScrollView: NSViewRepresentable {
         }
 
         var onOffsetChange: ((CGFloat) -> Void)?
+        var onBackgroundTap: (() -> Void)?
         var isInteractive = true
+        private var backgroundClickPending = false
 
         var contentSize: CGSize = .zero {
             didSet {
@@ -92,6 +97,22 @@ struct CardGridScrollView: NSViewRepresentable {
 
         override func hitTest(_ point: NSPoint) -> NSView? {
             isInteractive ? super.hitTest(point) : nil
+        }
+
+        override func mouseDown(with event: NSEvent) {
+            backgroundClickPending = isBackgroundHit(event)
+        }
+
+        override func mouseUp(with event: NSEvent) {
+            defer { backgroundClickPending = false }
+            guard backgroundClickPending, isBackgroundHit(event) else { return }
+            onBackgroundTap?()
+        }
+
+        private func isBackgroundHit(_ event: NSEvent) -> Bool {
+            let point = superview?.convert(event.locationInWindow, from: nil) ?? event.locationInWindow
+            let hit = hitTest(point)
+            return hit === self || hit === contentView
         }
 
         override func setFrameSize(_ newSize: NSSize) {

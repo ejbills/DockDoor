@@ -277,10 +277,6 @@ struct WindowPreviewHoverContainer: View {
             content: { windowGridContent() },
             backgroundAppearance: backgroundAppearance
         )
-        .contentShape(Rectangle())
-        .onTapGesture {
-            activateApp()
-        }
         .padding(.top, (!previewStateCoordinator.windowSwitcherActive && effectiveAppNameStyle == .popover && effectiveShowAppName) ? 30 : 0)
         .onAppear {
             loadAppIcon()
@@ -741,6 +737,7 @@ struct WindowPreviewHoverContainer: View {
                 coordinator: previewStateCoordinator,
                 scrolledFromStart: $scrolledFromStart,
                 isInteractive: !mockPreviewActive,
+                onBackgroundTap: activateApp,
                 makeCard: { item in
                     AnyView(buildFlowItem(
                         item: item,
